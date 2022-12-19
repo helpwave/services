@@ -476,3 +476,6 @@ tags
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/go,vim,goland,intellij,goland+all,goland+iml,intellij+all,intellij+iml,visualstudiocode
+
+.env
+
