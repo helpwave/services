@@ -6,7 +6,7 @@ COPY . /app
 ARG VERSION
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-X main.Version=${VERSION}" -a -o app .
 
-FROM alpine AS production
+FROM scratch AS production
 
 WORKDIR /app
 
@@ -21,4 +21,3 @@ ENV POSTGRES_PORT 5432
 EXPOSE 80
 
 CMD ["./app"]
-
