@@ -5,7 +5,7 @@ SERVICES = user-svc emergency-room-svc
 
 .PHONY: $(SERVICES)
 $(SERVICES):
-	docker build -f ${DOCKERFILE_SERVICES} --build-arg=VERSION=development --build-arg=SERVICE=$@ -t helpwave/$@ .
+	docker build -f ${DOCKERFILE_SERVICES} --build-arg=VERSION=${VERSION} --build-arg=SERVICE=$@ -t helpwave/$@ .
 
 .PHONY: clean
 clean:
