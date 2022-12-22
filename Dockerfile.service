@@ -1,3 +1,6 @@
+# you probably don't want to use this Dockerfile directly,
+# use `make <svc>` instead
+
 # builder builds a go service
 # the build args SERVICE and VERSION must be set!
 FROM golang:1.19 AS builder
