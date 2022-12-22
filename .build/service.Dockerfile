@@ -1,16 +1,26 @@
+# builder builds a go service
+# the build args SERVICE and VERSION must be set!
 FROM golang:1.19 AS builder
 
-WORKDIR /app
-COPY . /app
-
+ARG SERVICE
 ARG VERSION
+
+WORKDIR /build/app
+
+COPY libs /libs
+
+COPY services/$SERVICE/go.* ./
+RUN go mod download
+
+COPY services/$SERVICE /build/app
+
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-X main.Version=${VERSION}" -a -o app .
 
 FROM alpine AS production
 
 WORKDIR /app
 
-COPY --from=builder /app/app .
+COPY --from=builder /build/app/app .
 RUN chmod +x app
 
 ENV PORT 80
@@ -21,4 +31,3 @@ ENV POSTGRES_PORT 5432
 EXPOSE 80
 
 CMD ["./app"]
-
