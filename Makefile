@@ -1,5 +1,5 @@
 VERSION ?= $(shell git log --format="%h" -n 1)
-DOCKERFILE_SERVICES = .build/service.Dockerfile
+DOCKERFILE_SERVICES = Dockerfile.service
 
 SERVICES = user-svc emergency-room-svc
 
