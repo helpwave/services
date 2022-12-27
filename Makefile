@@ -7,6 +7,9 @@ SERVICES = $(subst services/,,$(wildcard services/*))
 $(SERVICES):
 	docker build -f ${DOCKERFILE_SERVICES} --build-arg=VERSION=${VERSION} --build-arg=SERVICE=$@ -t helpwave/$@ .
 
+.PHONY: all
+all: $(SERVICES)
+
 .PHONY: clean
 clean:
 	docker rmi $$(docker images --format '{{.Repository}}:{{.Tag}}' | grep "^helpwave/")
