@@ -1,7 +1,7 @@
 VERSION ?= $(shell git log --format="%h" -n 1)
 DOCKERFILE_SERVICES = Dockerfile.service
 
-SERVICES = user-svc emergency-room-svc
+SERVICES = $(subst services/,,$(wildcard services/*))
 
 .PHONY: $(SERVICES)
 $(SERVICES):
