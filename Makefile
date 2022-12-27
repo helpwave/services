@@ -8,8 +8,7 @@ $(SERVICES):
 	docker build -f ${DOCKERFILE_SERVICES} --build-arg=VERSION=${VERSION} --build-arg=SERVICE=$@ -t helpwave/$@ .
 
 .PHONY: all
-all:
-	$(foreach SERVICE, ${SERVICES}, $(MAKE) ${SERVICE})
+all: $(SERVICES)
 
 .PHONY: clean
 clean:
