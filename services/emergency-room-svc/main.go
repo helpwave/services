@@ -2,9 +2,14 @@ package main
 
 import (
 	"common"
+	"context"
+	"emergency-room-svc/api"
+	"emergency-room-svc/models"
 	"hwgorm"
 	"hwutil"
+	"logging"
 
+	daprcmn "github.com/dapr/go-sdk/service/common"
 	zlog "github.com/rs/zerolog/log"
 )
 
@@ -14,7 +19,7 @@ const ServiceName = "emergency-room-svc"
 var Version string
 
 func main() {
-	common.Setup(ServiceName, Version, true)
+	common.Setup(ServiceName, Version, false)
 
 	hwgorm.SetupDatabase(
 		hwutil.GetEnvOr("POSTGRES_HOST", "localhost"),
@@ -27,7 +32,7 @@ func main() {
 	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
 	service := common.NewDaprService(addr)
 
-	// TODO
+	common.MustAddServiceInvocationHandler(service, "create-emergency-room", createERHandler)
 
 	zlog.Info().Str("addr", addr).Msg("starting dapr service")
 	common.MustStartService(service)
@@ -37,4 +42,47 @@ func main() {
 // Handlers
 //
 
-// TODO
+func createERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+	log, logCtx := common.GetHandlerLogger("createERHandler", ctx)
+
+	// TODO: Auth
+
+	// Parse
+	request := api.CreateERRequestV1{}
+	if err := hwutil.ParseValidJson(in.Data, &request); err != nil {
+		log.Warn().Err(err).Msg("invalid input")
+		return nil, err
+	}
+	log.Debug().Str("body", logging.Formatted(request)).Send()
+
+	// Insert
+	emergencyRoom := models.EmergencyRoom{
+		EmergencyRoomBase: request.EmergencyRoomBase,
+		Departments:       models.UUIDsToDepartments(request.Departments),
+	}
+	log.Debug().Str("model", logging.Formatted(emergencyRoom)).Send()
+
+	db := hwgorm.GetDB(logCtx)
+	db = db.Omit("Departments.*") // do not attempt to upsert Departments, they have to exist already
+
+	result := db.Create(&emergencyRoom)
+	if err := result.Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, err
+	}
+
+	// Response
+	response := api.GetSingleERResponseV1{
+		ID:                emergencyRoom.ID,
+		EmergencyRoomBase: emergencyRoom.EmergencyRoomBase,
+		Departments:       models.DepartmentsToBases(emergencyRoom.Departments),
+	}
+
+	out, err := response.ToContent()
+	if err != nil {
+		log.Error().Err(err).Msg("could not marshall response")
+		return nil, err
+	}
+
+	return out, nil
+}
