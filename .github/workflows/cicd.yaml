@@ -17,7 +17,6 @@ jobs:
     outputs:
       services: ${{ steps.aggregate-changes.outputs.services }}
     steps:
-
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -28,31 +27,31 @@ jobs:
         with:
           files: |
             libs/**
-            
-            -   name: Detected changes in services
-                id: changes-in-services
-                uses: tj-actions/changed-files@v35
-                with:
-                    files: |
-                        services/**
-            
-            -   name: Aggregate changes
-                id: aggregate-changes
-                run: |
-                    if [[ "$libsChanged" == "true" ]]; then
-                      echo "services=$(ls services | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
-                    else
-                      echo "services=$(echo $changesInServices | awk -F / '$1 ~ /services/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
-                    fi
-                env:
-                    libsChanged: ${{ steps.changes-in-libs.outputs.any_changed }}
-                    changesInServices: ${{ steps.changes-in-services.outputs.all_changed_files }}
-            
-            -   name: Summarize
-                run: |
-                    echo "services: $services" >> $GITHUB_STEP_SUMMARY
-                env:
-                    services: ${{ steps.aggregate-changes.outputs.services }}
+
+      - name: Detected changes in services
+        id: changes-in-services
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            services/**
+
+      - name: Aggregate changes
+        id: aggregate-changes
+        run: |
+          if [[ "$libsChanged" == "true" ]]; then
+            echo "services=$(ls services | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
+          else
+            echo "services=$(echo $changesInServices | awk -F / '$1 ~ /services/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
+          fi
+        env:
+          libsChanged: ${{ steps.changes-in-libs.outputs.any_changed }}
+          changesInServices: ${{ steps.changes-in-services.outputs.all_changed_files }}
+
+      - name: Summarize
+        run: |
+          echo "services: $services" >> $GITHUB_STEP_SUMMARY
+        env:
+          services: ${{ steps.aggregate-changes.outputs.services }}
 
   cicd-go:
     needs: detect-changes
