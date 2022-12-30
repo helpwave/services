@@ -34,6 +34,7 @@ func main() {
 
 	common.MustAddServiceInvocationHandler(service, "create-emergency-room", createERHandler)
 	common.MustAddServiceInvocationHandler(service, "get-emergency-room", getERHandler)
+	common.MustAddServiceInvocationHandler(service, "delete-emergency-room", deleteERHandler)
 
 	zlog.Info().Str("addr", addr).Msg("starting dapr service")
 	common.MustStartService(service)
@@ -132,4 +133,37 @@ func getERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Co
 	}
 
 	return out, nil
+}
+
+func deleteERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+	log, logCtx := common.GetHandlerLogger("deleteERHandler", ctx)
+
+	// TODO: Auth
+
+	// Parse
+	request := api.DeleteERRequestV1{}
+	if err := hwutil.ParseValidJson(in.Data, &request); err != nil {
+		log.Warn().Err(err).Msg("invalid input")
+		return nil, err
+	}
+	log.Debug().Str("body", logging.Formatted(request)).Send()
+
+	// Delete
+	emergencyRoom := models.EmergencyRoom{
+		ID: request.ID,
+	}
+	log.Debug().Str("model", logging.Formatted(emergencyRoom)).Send()
+
+	db := hwgorm.GetDB(logCtx)
+
+	result := db.Delete(&emergencyRoom)
+
+	if err := result.Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, err
+	}
+
+	log.Debug().Msgf("result = %v", result)
+
+	return nil, nil
 }

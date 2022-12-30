@@ -26,3 +26,7 @@ type GetSingleERResponseV1 struct {
 func (response GetSingleERResponseV1) ToContent() (*daprcmn.Content, error) {
 	return common.ToContentJson(response, "types.helpwave.de/user-svc/GetSingleERResponseV1")
 }
+
+type DeleteERRequestV1 struct {
+	ID uuid.UUID `json:"id" validate:"required"`
+}
