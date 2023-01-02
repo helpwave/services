@@ -1,4 +1,4 @@
-module hwgorm
+module github.com/helpwave/services/libs/hwgorm
 
 go 1.19
 

@@ -1,4 +1,4 @@
-module hwutil
+module github.com/helpwave/services/libs/hwutil
 
 go 1.19
 

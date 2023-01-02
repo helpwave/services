@@ -1,10 +1,10 @@
-module common
+module github.com/helpwave/services/libs/common
 
 go 1.19
 
 replace (
-	hwutil => ../hwutil
-	logging => ../logging
+	github.com/helpwave/services/libs/hwutil => ../hwutil
+	github.com/helpwave/services/libs/logging => ../logging
 )
 
 require (
@@ -14,8 +14,8 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/joho/godotenv v1.4.0
 	github.com/rs/zerolog v1.28.0
-	hwutil v0.0.0
-	logging v0.0.0
+	github.com/helpwave/services/libs/hwutil v0.0.0
+	github.com/helpwave/services/libs/logging v0.0.0
 )
 
 require (

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"common"
 	"context"
-	"emergency-room-svc/api"
-	"emergency-room-svc/models"
-	"hwgorm"
-	"hwutil"
-	"logging"
+	"github.com/helpwave/services/libs/common"
+	"github.com/helpwave/services/libs/hwgorm"
+	"github.com/helpwave/services/libs/hwutil"
+	"github.com/helpwave/services/libs/logging"
+	"github.com/helpwave/services/services/emergency-room-svc/api"
+	"github.com/helpwave/services/services/emergency-room-svc/models"
 
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	zlog "github.com/rs/zerolog/log"

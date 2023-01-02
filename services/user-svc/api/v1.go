@@ -1,10 +1,11 @@
 package api
 
 import (
-	"common"
-	daprcmn "github.com/dapr/go-sdk/service/common"
 	"github.com/google/uuid"
-	"user-svc/models"
+	"github.com/helpwave/services/libs/common"
+	"github.com/helpwave/services/services/user-svc/models"
+
+	daprcmn "github.com/dapr/go-sdk/service/common"
 )
 
 type CreateUserRequestV1 struct {

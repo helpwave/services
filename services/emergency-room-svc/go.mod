@@ -1,23 +1,23 @@
-module emergency-room-svc
+module github.com/helpwave/services/services/emergency-room-svc
 
 go 1.19
 
 replace (
-	common => ../../libs/common
-	hwgorm => ../../libs/hwgorm
-	hwutil => ../../libs/hwutil
-	logging => ../../libs/logging
+	github.com/helpwave/services/libs/common => ../../libs/common
+	github.com/helpwave/services/libs/hwgorm => ../../libs/hwgorm
+	github.com/helpwave/services/libs/hwutil => ../../libs/hwutil
+	github.com/helpwave/services/libs/logging => ../../libs/logging
 )
 
 require (
-	common v0.0.0
+	github.com/helpwave/services/libs/common v0.0.0
 	github.com/dapr/go-sdk v1.6.0
 	github.com/google/uuid v1.3.0
 	github.com/rs/zerolog v1.28.0
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa
-	hwgorm v0.0.0
-	hwutil v0.0.0
-	logging v0.0.0
+	github.com/helpwave/services/libs/hwgorm v0.0.0
+	github.com/helpwave/services/libs/hwutil v0.0.0
+	github.com/helpwave/services/libs/logging v0.0.0
 )
 
 require (

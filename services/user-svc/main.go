@@ -1,16 +1,16 @@
 package main
 
 import (
-	"common"
 	"context"
 	"errors"
 	"github.com/google/uuid"
+	"github.com/helpwave/services/libs/common"
+	"github.com/helpwave/services/libs/hwgorm"
+	"github.com/helpwave/services/libs/hwutil"
+	"github.com/helpwave/services/libs/logging"
+	"github.com/helpwave/services/services/user-svc/api"
+	"github.com/helpwave/services/services/user-svc/models"
 	"golang.org/x/crypto/bcrypt"
-	"hwgorm"
-	"hwutil"
-	"logging"
-	"user-svc/api"
-	"user-svc/models"
 
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	zlog "github.com/rs/zerolog/log"

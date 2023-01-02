@@ -1,10 +1,10 @@
 package common
 
 import (
+	"github.com/helpwave/services/libs/hwutil"
+	"github.com/helpwave/services/libs/logging"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
-	"hwutil"
-	"logging"
 )
 
 const DevelopmentMode = "development"

@@ -1,9 +1,9 @@
 package api
 
 import (
-	"common"
-	"emergency-room-svc/models"
 	"github.com/google/uuid"
+	"github.com/helpwave/services/libs/common"
+	"github.com/helpwave/services/services/emergency-room-svc/models"
 
 	daprcmn "github.com/dapr/go-sdk/service/common"
 )

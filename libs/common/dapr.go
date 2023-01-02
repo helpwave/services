@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/gorilla/mux"
+	"github.com/helpwave/services/libs/logging"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"logging"
 	"net/http"
 	"regexp"
 

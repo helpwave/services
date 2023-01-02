@@ -2,7 +2,7 @@ package models
 
 import (
 	"github.com/google/uuid"
-	"hwgorm"
+	"github.com/helpwave/services/libs/hwgorm"
 )
 
 type EmergencyRoomBase struct {
