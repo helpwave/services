@@ -33,6 +33,7 @@ func main() {
 	service := common.NewDaprService(addr)
 
 	common.MustAddServiceInvocationHandler(service, "create-emergency-room", createERHandler)
+	common.MustAddServiceInvocationHandler(service, "get-emergency-room", getERHandler)
 
 	zlog.Info().Str("addr", addr).Msg("starting dapr service")
 	common.MustStartService(service)
@@ -70,6 +71,52 @@ func createERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn
 		log.Warn().Err(err).Msg("database error")
 		return nil, err
 	}
+
+	// Response
+	response := api.GetSingleERResponseV1{
+		ID:                emergencyRoom.ID,
+		EmergencyRoomBase: emergencyRoom.EmergencyRoomBase,
+		Departments:       models.DepartmentsToBases(emergencyRoom.Departments),
+	}
+
+	out, err := response.ToContent()
+	if err != nil {
+		log.Error().Err(err).Msg("could not marshall response")
+		return nil, err
+	}
+
+	return out, nil
+}
+
+func getERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+	log, logCtx := common.GetHandlerLogger("getERHandler", ctx)
+
+	// TODO: Auth
+
+	// Parse
+	request := api.GetSingleERRequestV1{}
+	if err := hwutil.ParseValidJson(in.Data, &request); err != nil {
+		log.Warn().Err(err).Msg("invalid input")
+		return nil, err
+	}
+	log.Debug().Str("body", logging.Formatted(request)).Send()
+
+	// Get
+	emergencyRoom := models.EmergencyRoom{
+		ID: request.ID,
+	}
+	log.Debug().Str("model", logging.Formatted(emergencyRoom)).Send()
+
+	db := hwgorm.GetDB(logCtx)
+
+	result := db.First(&emergencyRoom)
+
+	if err := result.Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, err
+	}
+
+	log.Debug().Msgf("result = %v", result)
 
 	// Response
 	response := api.GetSingleERResponseV1{

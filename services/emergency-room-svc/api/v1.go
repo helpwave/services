@@ -13,6 +13,10 @@ type CreateERRequestV1 struct {
 	Departments []uuid.UUID
 }
 
+type GetSingleERRequestV1 struct {
+	ID uuid.UUID `json:"id" validate:"required"`
+}
+
 type GetSingleERResponseV1 struct {
 	ID uuid.UUID `json:"id"`
 	models.EmergencyRoomBase
