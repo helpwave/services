@@ -89,7 +89,7 @@ func createERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn
 }
 
 func getERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
-	log, logCtx := common.GetHandlerLogger("deleteERHandler", ctx)
+	log, logCtx := common.GetHandlerLogger("getERHandler", ctx)
 
 	// TODO: Auth
 
