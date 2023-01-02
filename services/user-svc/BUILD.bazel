@@ -1,0 +1,26 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "user-svc_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/helpwave/services/services/user-svc",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//libs/common",
+        "//libs/hwgorm",
+        "//libs/hwutil",
+        "//libs/logging",
+        "//services/user-svc/api",
+        "//services/user-svc/models",
+        "@com_github_dapr_go_sdk//service/common:go_default_library",
+        "@com_github_google_uuid//:go_default_library",
+        "@com_github_rs_zerolog//log:go_default_library",
+        "@org_golang_x_crypto//bcrypt:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "user-svc",
+    embed = [":user-svc_lib"],
+    visibility = ["//visibility:public"],
+)

@@ -1,0 +1,24 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "emergency-room-svc_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/helpwave/services/services/emergency-room-svc",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//libs/common",
+        "//libs/hwgorm",
+        "//libs/hwutil",
+        "//libs/logging",
+        "//services/emergency-room-svc/api",
+        "//services/emergency-room-svc/models",
+        "@com_github_dapr_go_sdk//service/common:go_default_library",
+        "@com_github_rs_zerolog//log:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "emergency-room-svc",
+    embed = [":emergency-room-svc_lib"],
+    visibility = ["//visibility:public"],
+)

@@ -1,0 +1,24 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "common",
+    srcs = [
+        "dapr.go",
+        "jwt.go",
+        "setup.go",
+    ],
+    importpath = "github.com/helpwave/services/libs/common",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//libs/hwutil",
+        "//libs/logging",
+        "@com_github_dapr_go_sdk//service/common:go_default_library",
+        "@com_github_dapr_go_sdk//service/http:go_default_library",
+        "@com_github_golang_jwt_jwt_v4//:go_default_library",
+        "@com_github_google_uuid//:go_default_library",
+        "@com_github_gorilla_mux//:go_default_library",
+        "@com_github_joho_godotenv//:go_default_library",
+        "@com_github_rs_zerolog//:go_default_library",
+        "@com_github_rs_zerolog//log:go_default_library",
+    ],
+)

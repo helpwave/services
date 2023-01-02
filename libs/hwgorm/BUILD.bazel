@@ -1,0 +1,20 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "hwgorm",
+    srcs = [
+        "logger.go",
+        "point.go",
+        "setup.go",
+    ],
+    importpath = "github.com/helpwave/services/libs/hwgorm",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_jackc_pgconn//:go_default_library",
+        "@com_github_jackc_pgerrcode//:go_default_library",
+        "@com_github_rs_zerolog//log:go_default_library",
+        "@io_gorm_driver_postgres//:go_default_library",
+        "@io_gorm_gorm//:go_default_library",
+        "@io_gorm_gorm//logger:go_default_library",
+    ],
+)

@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "api",
+    srcs = ["v1.go"],
+    importpath = "github.com/helpwave/services/services/emergency-room-svc/api",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//libs/common",
+        "//services/emergency-room-svc/models",
+        "@com_github_dapr_go_sdk//service/common:go_default_library",
+        "@com_github_google_uuid//:go_default_library",
+    ],
+)

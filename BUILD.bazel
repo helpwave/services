@@ -1,0 +1,7 @@
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+# gazelle generates bazel build files based on go.mod files
+# the comment below is metadata for gazelle, do not remove
+
+# gazelle:prefix github.com/helpwave/services
+gazelle(name = "gazelle")
