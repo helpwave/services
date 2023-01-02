@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS rooms_have_departments (
     emergency_room_id UUID NOT NULL,
     department_id UUID NOT NULL,
     FOREIGN KEY (emergency_room_id)
-        REFERENCES emergency_rooms(id),
+        REFERENCES emergency_rooms(id)
+        ON DELETE CASCADE,
     FOREIGN KEY (department_id)
         REFERENCES departments(id)
 );
