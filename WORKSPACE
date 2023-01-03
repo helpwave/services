@@ -32,6 +32,7 @@ load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 
 # apparently something somewhere depends on protobufs (I assume dapr b/c of grcp support)
 # this means we have to also pull this
+# TODO: try to replace this with a pre-built protoc as this takes a very long in the initial build!
 http_archive(
     name = "com_google_protobuf",
     sha256 = "d0f5f605d0d656007ce6c8b5a82df3037e1d8fe8b121ed42e536f569dec16113",
