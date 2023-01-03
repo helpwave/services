@@ -1,0 +1,3 @@
+# see https://bazel.build/run/bazelrc
+
+build --symlink_prefix=.bazel/
