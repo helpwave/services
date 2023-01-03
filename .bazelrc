@@ -1,3 +1,9 @@
 # see https://bazel.build/run/bazelrc
 
+# create all symlinks (to caches, build artifacts, etc.) in a .bazel directory
+# said directory is not tracked by git
 build --symlink_prefix=.bazel/
+
+# we are building docker images, thus we need to pin the platform to linux_amd64
+build --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
+run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
