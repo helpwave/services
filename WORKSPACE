@@ -1,5 +1,10 @@
 # bazel workspace
 
+# give this workspace a name so we can refer to it
+workspace(
+    name = "de_helpwave_services"
+)
+
 # Load the things that let us load other things.
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
