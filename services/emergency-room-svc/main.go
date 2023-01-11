@@ -5,6 +5,7 @@ import (
 	"context"
 	"emergency-room-svc/api"
 	"emergency-room-svc/models"
+	"gorm.io/gorm"
 	"hwgorm"
 	"hwutil"
 	"logging"
@@ -34,6 +35,7 @@ func main() {
 
 	common.MustAddServiceInvocationHandler(service, "create-emergency-room", createERHandler)
 	common.MustAddServiceInvocationHandler(service, "get-emergency-room", getERHandler)
+	common.MustAddServiceInvocationHandler(service, "get-emergency-rooms", getERsHandler)
 	common.MustAddServiceInvocationHandler(service, "delete-emergency-room", deleteERHandler)
 
 	zlog.Info().Str("addr", addr).Msg("starting dapr service")
@@ -133,6 +135,76 @@ func getERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Co
 	}
 
 	return out, nil
+}
+
+func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+	log, logCtx := common.GetHandlerLogger("getERsHandler", ctx)
+
+	// TODO: Auth
+
+	// Parse
+	request := api.GetERsRequestV1{}
+	if err := hwutil.ParseValidJson(in.Data, &request); err != nil {
+		log.Warn().Err(err).Msg("invalid input")
+		return nil, err
+	}
+	log.Debug().Str("body", logging.Formatted(request)).Send()
+
+	// Get
+	db := hwgorm.GetDB(logCtx)
+	db = prepareGetERsQuery(db, &request)
+
+	pageInfo, err := hwgorm.GetPageInfo(db, request.PagedRequest, models.EmergencyRoom{})
+	if err != nil {
+		log.Warn().Err(err).Msg("database error when fetching page information")
+		return nil, err
+	}
+
+	var emergencyRooms []models.EmergencyRoom
+	tx := db.Scopes(hwgorm.Paginate(pageInfo)).Find(&emergencyRooms)
+
+	log.Debug().Msgf("tx = %v", logging.Formatted(tx))
+
+	if err := tx.Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, err
+	}
+
+	// Response
+	response := api.GetERsResponseV1{
+		pageInfo,
+		responses,
+	}
+
+	out, err := response.ToContent()
+	if err != nil {
+		log.Error().Err(err).Msg("could not marshall response")
+		return nil, err
+	}
+
+	return out, nil
+}
+
+func prepareGetERsQuery(db *gorm.DB, request *api.GetERsRequestV1) *gorm.DB {
+	if request.Open != nil {
+		db = db.Where("open = ?", *request.Open)
+	}
+	if request.Utilization != nil {
+		interval := *request.Utilization
+		if interval.Min != nil {
+			db = db.Where("utilization >= ?", *interval.Min)
+		}
+		if interval.Max != nil {
+			db = db.Where("utilization < ?", *interval.Max)
+		}
+	}
+	if request.Location != nil {
+		// TODO
+	}
+	if request.Departments != nil {
+		// TODO
+	}
+	return db
 }
 
 func deleteERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
