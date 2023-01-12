@@ -210,7 +210,8 @@ func whereClausesForERsQuery(db *gorm.DB, request *api.GetERsRequestV1) *gorm.DB
 	if request.Location != nil {
 		location := *request.Location
 		radius := hwgorm.MetersToMiles(100_000) // 100 km radius
-		//                              v---- this is posgres' earthdistance operator
+
+		// `<@>` is posgresql's earthdistance operator
 		db = db.Where("(location <@> point(?, ?)) < ?", location.Long, location.Lat, radius)
 	}
 	return db
