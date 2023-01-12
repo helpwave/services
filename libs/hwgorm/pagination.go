@@ -4,11 +4,15 @@ import (
 	"gorm.io/gorm"
 )
 
+// PagedRequest is sent by the consumer of the API
 type PagedRequest struct {
 	Page     int `json:"page" validate:"required"`
 	PageSize int `json:"pageSize" validate:"required"`
 }
 
+// PageInfo represents a pointer to a page
+// it is thus possible for  pageSize to be
+// greater than the actual length
 type PageInfo struct {
 	Page      int   `json:"page"`
 	PageSize  int   `json:"pageSize"`
