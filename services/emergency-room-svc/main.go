@@ -181,8 +181,8 @@ func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.C
 	}
 
 	response := api.GetERsResponseV1{
-		pageInfo,
-		responses,
+		PageInfo:       pageInfo,
+		EmergencyRooms: responses,
 	}
 
 	out, err := response.ToContent()
