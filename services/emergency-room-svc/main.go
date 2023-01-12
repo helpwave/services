@@ -152,7 +152,7 @@ func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.C
 
 	// Get
 	db := hwgorm.GetDB(logCtx)
-	db = prepareGetERsQuery(db, &request)
+	db = db.Where(whereClausesForERsQuery(db, &request))
 
 	pageInfo, err := hwgorm.GetPageInfo(db, request.PagedRequest, models.EmergencyRoom{})
 	if err != nil {
@@ -161,9 +161,9 @@ func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.C
 	}
 
 	var emergencyRooms []models.EmergencyRoom
-	tx := db.Scopes(hwgorm.Paginate(pageInfo)).Find(&emergencyRooms)
-
-	log.Debug().Msgf("tx = %v", logging.Formatted(tx))
+	tx := db.Scopes(hwgorm.Paginate(pageInfo)).
+		Preload("Departments").
+		Find(&emergencyRooms)
 
 	if err := tx.Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -171,6 +171,15 @@ func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.C
 	}
 
 	// Response
+	responses := make([]api.GetSingleERResponseV1, len(emergencyRooms))
+	for i, emergencyRoom := range emergencyRooms {
+		responses[i] = api.GetSingleERResponseV1{
+			ID:                emergencyRoom.ID,
+			EmergencyRoomBase: emergencyRoom.EmergencyRoomBase,
+			Departments:       models.DepartmentsToBases(emergencyRoom.Departments),
+		}
+	}
+
 	response := api.GetERsResponseV1{
 		pageInfo,
 		responses,
@@ -185,9 +194,9 @@ func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.C
 	return out, nil
 }
 
-func prepareGetERsQuery(db *gorm.DB, request *api.GetERsRequestV1) *gorm.DB {
+func whereClausesForERsQuery(db *gorm.DB, request *api.GetERsRequestV1) *gorm.DB {
 	if request.Open != nil {
-		db = db.Where("open = ?", *request.Open)
+		db = db.Where("is_open = ?", *request.Open)
 	}
 	if request.Utilization != nil {
 		interval := *request.Utilization
@@ -195,14 +204,14 @@ func prepareGetERsQuery(db *gorm.DB, request *api.GetERsRequestV1) *gorm.DB {
 			db = db.Where("utilization >= ?", *interval.Min)
 		}
 		if interval.Max != nil {
-			db = db.Where("utilization < ?", *interval.Max)
+			db = db.Where("utilization <= ?", *interval.Max)
 		}
 	}
 	if request.Location != nil {
-		// TODO
-	}
-	if request.Departments != nil {
-		// TODO
+		location := *request.Location
+		radius := hwgorm.MetersToMiles(100_000)
+		//                              v---- this is posgres' earthdistance operator
+		db = db.Where("(location <@> point(?, ?)) < ?", location.Long, location.Lat, radius)
 	}
 	return db
 }

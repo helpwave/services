@@ -29,17 +29,11 @@ func (response GetSingleERResponseV1) ToContent() (*daprcmn.Content, error) {
 	return common.ToContentJson(response, "types.helpwave.de/user-svc/GetSingleERResponseV1")
 }
 
-type LocationFilterV1 struct {
-	Point  hwgorm.Point `json:"point" validate:"required"`
-	Radius int          `json:"radius" validate:"required"`
-}
-
 type GetERsRequestV1 struct {
 	*hwgorm.PagedRequest
-	Open        *bool               `json:"open"`
-	Utilization *hwutil.IntInterval `json:"utilization"`
-	Location    *LocationFilterV1   `json:"location"`
-	Departments *[]uuid.UUID        `json:"departments"`
+	Open        *bool                        `json:"open"`
+	Utilization *hwutil.InclusiveIntInterval `json:"utilization"`
+	Location    *hwgorm.Point                `json:"location"`
 }
 
 type GetERsResponseV1 struct {

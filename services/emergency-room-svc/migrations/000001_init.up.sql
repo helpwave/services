@@ -1,4 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION cube;
+CREATE EXTENSION earthdistance;
 
 CREATE TABLE IF NOT EXISTS emergency_rooms (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
