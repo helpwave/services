@@ -116,6 +116,37 @@ func GetHandlerLogger(handlerName string, requestContext context.Context) (zerol
 	return logger, logContext
 }
 
+type IntoContent interface {
+	ToContent() (*daprcmn.Content, error)
+}
+
+// HWInvocationHandler is similar to daprcmn.ServiceInvocationHandler
+// it only differs in its return value, which is IntoContent, instead of daprcmn.Content
+type HWInvocationHandler func(ctx context.Context, in *daprcmn.InvocationEvent) (out *IntoContent, err error)
+
+func MustAddHWInvocationHandler(service daprcmn.Service, name string, handlerFn HWInvocationHandler) {
+	// actualHandler lets the handlerFn handle the request,
+	// and, if it exists, converts the output into dapr content
+	actualHandler := func(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+		out, handlerErr := handlerFn(ctx, in)
+
+		if out != nil {
+			content, convErr := (*out).ToContent()
+
+			if convErr != nil {
+				log.Error().Err(convErr).Msg("could not marshall response")
+				return nil, convErr // convErr takes priority over possible handlerErr
+			}
+
+			return content, handlerErr
+		}
+
+		return nil, handlerErr
+	}
+
+	MustAddServiceInvocationHandler(service, name, actualHandler)
+}
+
 func MustAddServiceInvocationHandler(service daprcmn.Service, name string, fn daprcmn.ServiceInvocationHandler) {
 	if err := service.AddServiceInvocationHandler(name, fn); err != nil {
 		log.Fatal().Err(err).Msgf("failed to register %s", name)
