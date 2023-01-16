@@ -5,6 +5,7 @@ import (
 	"context"
 	"emergency-room-svc/api"
 	"emergency-room-svc/models"
+	"gorm.io/gorm"
 	"hwgorm"
 	"hwutil"
 	"logging"
@@ -34,6 +35,7 @@ func main() {
 
 	common.MustAddServiceInvocationHandler(service, "create-emergency-room", createERHandler)
 	common.MustAddServiceInvocationHandler(service, "get-emergency-room", getERHandler)
+	common.MustAddServiceInvocationHandler(service, "get-emergency-rooms", getERsHandler)
 	common.MustAddServiceInvocationHandler(service, "delete-emergency-room", deleteERHandler)
 
 	zlog.Info().Str("addr", addr).Msg("starting dapr service")
@@ -133,6 +135,86 @@ func getERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Co
 	}
 
 	return out, nil
+}
+
+func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+	log, logCtx := common.GetHandlerLogger("getERsHandler", ctx)
+
+	// TODO: Auth
+
+	// Parse
+	request := api.GetERsRequestV1{}
+	if err := hwutil.ParseValidJson(in.Data, &request); err != nil {
+		log.Warn().Err(err).Msg("invalid input")
+		return nil, err
+	}
+	log.Debug().Str("body", logging.Formatted(request)).Send()
+
+	// Get
+	db := hwgorm.GetDB(logCtx)
+	db = db.Where(whereClausesForERsQuery(db, &request))
+
+	pageInfo, err := hwgorm.GetPageInfo(db, request.PagedRequest, models.EmergencyRoom{})
+	if err != nil {
+		log.Warn().Err(err).Msg("database error when fetching page information")
+		return nil, err
+	}
+
+	var emergencyRooms []models.EmergencyRoom
+	tx := db.Scopes(hwgorm.Paginate(pageInfo)).
+		Preload("Departments").
+		Find(&emergencyRooms)
+
+	if err := tx.Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, err
+	}
+
+	// Response
+	responses := make([]api.GetSingleERResponseV1, len(emergencyRooms))
+	for i, emergencyRoom := range emergencyRooms {
+		responses[i] = api.GetSingleERResponseV1{
+			ID:                emergencyRoom.ID,
+			EmergencyRoomBase: emergencyRoom.EmergencyRoomBase,
+			Departments:       models.DepartmentsToBases(emergencyRoom.Departments),
+		}
+	}
+
+	response := api.GetERsResponseV1{
+		PageInfo:       pageInfo,
+		EmergencyRooms: responses,
+	}
+
+	out, err := response.ToContent()
+	if err != nil {
+		log.Error().Err(err).Msg("could not marshall response")
+		return nil, err
+	}
+
+	return out, nil
+}
+
+func whereClausesForERsQuery(db *gorm.DB, request *api.GetERsRequestV1) *gorm.DB {
+	if request.Open != nil {
+		db = db.Where("is_open = ?", *request.Open)
+	}
+	if request.Utilization != nil {
+		interval := *request.Utilization
+		if interval.Min != nil {
+			db = db.Where("utilization >= ?", *interval.Min)
+		}
+		if interval.Max != nil {
+			db = db.Where("utilization <= ?", *interval.Max)
+		}
+	}
+	if request.Location != nil {
+		location := *request.Location
+		radius := hwgorm.MetersToMiles(100_000) // 100 km radius
+
+		// `<@>` is posgresql's earthdistance operator
+		db = db.Where("(location <@> point(?, ?)) < ?", location.Long, location.Lat, radius)
+	}
+	return db
 }
 
 func deleteERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {

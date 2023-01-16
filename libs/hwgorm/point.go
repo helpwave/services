@@ -55,3 +55,8 @@ func (p *Point) Scan(src interface{}) (err error) {
 	}
 	return nil
 }
+
+// MetersToMiles converts meters to miles, as required by postgres
+func MetersToMiles(meters int) float32 {
+	return float32(meters) * 0.000621371192
+}
