@@ -76,8 +76,7 @@ func createERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.
 	}
 
 	// Response
-	var response common.Response
-	response = api.GetSingleERResponseV1{
+	var response common.Response = api.GetSingleERResponseV1{
 		ID:                emergencyRoom.ID,
 		EmergencyRoomBase: emergencyRoom.EmergencyRoomBase,
 		Departments:       models.DepartmentsToBases(emergencyRoom.Departments),
@@ -117,8 +116,7 @@ func getERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Res
 	log.Debug().Msgf("result = %v", result)
 
 	// Response
-	var response common.Response
-	response = api.GetSingleERResponseV1{
+	var response common.Response = api.GetSingleERResponseV1{
 		ID:                emergencyRoom.ID,
 		EmergencyRoomBase: emergencyRoom.EmergencyRoomBase,
 		Departments:       models.DepartmentsToBases(emergencyRoom.Departments),
@@ -170,8 +168,7 @@ func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Re
 		}
 	}
 
-	var response common.Response
-	response = api.GetERsResponseV1{
+	var response common.Response = api.GetERsResponseV1{
 		PageInfo:       pageInfo,
 		EmergencyRooms: responses,
 	}
