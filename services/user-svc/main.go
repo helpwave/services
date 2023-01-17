@@ -101,8 +101,7 @@ func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Respo
 	}
 
 	// Response
-	var response common.Response
-	response = api.CreateUserResponseV1{
+	var response common.Response = api.CreateUserResponseV1{
 		UserID: user.ID,
 	}
 
@@ -156,8 +155,7 @@ func createOrganization(ctx context.Context, in *daprcmn.InvocationEvent) (*comm
 		Msg("created organization")
 
 	// Response
-	var response common.Response
-	response = api.CreateOrgResponseV1{
+	var response common.Response = api.CreateOrgResponseV1{
 		OrganizationBase: orga.OrganizationBase,
 	}
 
