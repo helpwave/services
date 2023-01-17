@@ -24,6 +24,7 @@ FROM alpine AS production
 WORKDIR /app
 
 COPY --from=builder /build/app/app .
+COPY --from=builder /build/app/migrations ./migrations
 RUN chmod +x app
 
 ENV PORT 80
