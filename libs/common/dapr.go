@@ -116,13 +116,13 @@ func GetHandlerLogger(handlerName string, requestContext context.Context) (zerol
 	return logger, logContext
 }
 
-type IntoContent interface {
+type Response interface {
 	ToContent() (*daprcmn.Content, error)
 }
 
 // HWInvocationHandler is similar to daprcmn.ServiceInvocationHandler
-// it only differs in its return value, which is IntoContent, instead of daprcmn.Content
-type HWInvocationHandler func(ctx context.Context, in *daprcmn.InvocationEvent) (out *IntoContent, err error)
+// it only differs in its return value, which is Response, instead of daprcmn.Content
+type HWInvocationHandler func(ctx context.Context, in *daprcmn.InvocationEvent) (out *Response, err error)
 
 func MustAddHWInvocationHandler(service daprcmn.Service, name string, handlerFn HWInvocationHandler) {
 	// actualHandler lets the handlerFn handle the request,

@@ -46,7 +46,7 @@ func main() {
 // Handlers
 //
 
-func createERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.IntoContent, error) {
+func createERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("createERHandler", ctx)
 
 	// TODO: Auth
@@ -76,7 +76,7 @@ func createERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.
 	}
 
 	// Response
-	var response common.IntoContent
+	var response common.Response
 	response = api.GetSingleERResponseV1{
 		ID:                emergencyRoom.ID,
 		EmergencyRoomBase: emergencyRoom.EmergencyRoomBase,
@@ -86,7 +86,7 @@ func createERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.
 	return &response, nil
 }
 
-func getERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.IntoContent, error) {
+func getERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("getERHandler", ctx)
 
 	// TODO: Auth
@@ -117,7 +117,7 @@ func getERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Int
 	log.Debug().Msgf("result = %v", result)
 
 	// Response
-	var response common.IntoContent
+	var response common.Response
 	response = api.GetSingleERResponseV1{
 		ID:                emergencyRoom.ID,
 		EmergencyRoomBase: emergencyRoom.EmergencyRoomBase,
@@ -127,7 +127,7 @@ func getERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Int
 	return &response, nil
 }
 
-func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.IntoContent, error) {
+func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("getERsHandler", ctx)
 
 	// TODO: Auth
@@ -170,7 +170,7 @@ func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.In
 		}
 	}
 
-	var response common.IntoContent
+	var response common.Response
 	response = api.GetERsResponseV1{
 		PageInfo:       pageInfo,
 		EmergencyRooms: responses,
@@ -202,7 +202,7 @@ func whereClausesForERsQuery(db *gorm.DB, request *api.GetERsRequestV1) *gorm.DB
 	return db
 }
 
-func deleteERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.IntoContent, error) {
+func deleteERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("deleteERHandler", ctx)
 
 	// TODO: Auth

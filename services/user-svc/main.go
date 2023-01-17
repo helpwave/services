@@ -46,7 +46,7 @@ func main() {
 // Handlers
 //
 
-func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.IntoContent, error) {
+func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("createUser", ctx)
 
 	// Auth
@@ -101,7 +101,7 @@ func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.IntoC
 	}
 
 	// Response
-	var response common.IntoContent
+	var response common.Response
 	response = api.CreateUserResponseV1{
 		UserID: user.ID,
 	}
@@ -111,7 +111,7 @@ func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.IntoC
 	return &response, nil
 }
 
-func createOrganization(ctx context.Context, in *daprcmn.InvocationEvent) (*common.IntoContent, error) {
+func createOrganization(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("createUser", ctx)
 
 	// Auth
@@ -156,7 +156,7 @@ func createOrganization(ctx context.Context, in *daprcmn.InvocationEvent) (*comm
 		Msg("created organization")
 
 	// Response
-	var response common.IntoContent
+	var response common.Response
 	response = api.CreateOrgResponseV1{
 		OrganizationBase: orga.OrganizationBase,
 	}
