@@ -27,6 +27,8 @@ jobs:
         with:
           files: |
             libs/**
+            .dockerignore
+            Dockerfile.service
 
       - name: Detected changes in services
         id: changes-in-services
