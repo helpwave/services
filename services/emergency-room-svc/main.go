@@ -36,6 +36,7 @@ func main() {
 	common.MustAddServiceInvocationHandler(service, "create-emergency-room", createERHandler)
 	common.MustAddServiceInvocationHandler(service, "get-emergency-room", getERHandler)
 	common.MustAddServiceInvocationHandler(service, "get-emergency-rooms", getERsHandler)
+	common.MustAddServiceInvocationHandler(service, "update-emergency-room", updateERHandler)
 	common.MustAddServiceInvocationHandler(service, "delete-emergency-room", deleteERHandler)
 
 	zlog.Info().Str("addr", addr).Msg("starting dapr service")
@@ -215,6 +216,85 @@ func whereClausesForERsQuery(db *gorm.DB, request *api.GetERsRequestV1) *gorm.DB
 		db = db.Where("(location <@> point(?, ?)) < ?", location.Long, location.Lat, radius)
 	}
 	return db
+}
+func updateERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+	log, logCtx := common.GetHandlerLogger("updateERHandler", ctx)
+
+	// TODO: Auth
+
+	// Parse
+	request := api.UpdateERRequestV1{}
+	if err := hwutil.ParseValidJson(in.Data, &request); err != nil {
+		log.Warn().Err(err).Msg("invalid input")
+		return nil, err
+	}
+	log.Debug().Str("body", logging.Formatted(request)).Send()
+
+	// Update
+	db := hwgorm.GetDB(logCtx)
+
+	emergencyRoom := models.EmergencyRoom{
+		ID: request.ID,
+	}
+
+	updateMap := updatesMap(&request)
+	log.Debug().Msg(logging.Formatted(updateMap))
+
+	appendDepartments := models.UUIDsToDepartments(request.AddDepartments)
+	log.Debug().Msgf("appendDepartments: %s", logging.Formatted(appendDepartments))
+
+	deleteDepartments := models.UUIDsToDepartments(request.RemoveDepartments)
+	log.Debug().Msgf("deleteDepartments: %s", logging.Formatted(deleteDepartments))
+
+	err := db.Transaction(func(tx *gorm.DB) error {
+
+		if err := db.Model(&emergencyRoom).Updates(updateMap).Error; err != nil {
+			return err
+		}
+
+		departments := db.Model(&emergencyRoom).Association("Departments")
+
+		if err := departments.Append(appendDepartments); err != nil {
+			return err
+		}
+
+		if len(deleteDepartments) > 0 {
+			if err := departments.Delete(deleteDepartments); err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, err
+	}
+
+	return nil, nil
+}
+
+func updatesMap(request *api.UpdateERRequestV1) map[string]interface{} {
+	m := make(map[string]interface{})
+
+	if request.Name != nil {
+		m["name"] = *request.Name
+	}
+	if request.Location != nil {
+		m["location"] = *request.Location
+	}
+	if request.DisplayableAddress != nil {
+		m["displayable_address"] = *request.DisplayableAddress
+	}
+	if request.Open != nil {
+		m["open"] = *request.Open
+	}
+	if request.Utilization != nil {
+		m["utilization"] = *request.Utilization
+	}
+
+	return m
 }
 
 func deleteERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
