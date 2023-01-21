@@ -5,10 +5,11 @@ import (
 	"context"
 	"emergency-room-svc/api"
 	"emergency-room-svc/models"
-	"gorm.io/gorm"
 	"hwgorm"
 	"hwutil"
 	"logging"
+
+	"gorm.io/gorm"
 
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	zlog "github.com/rs/zerolog/log"
@@ -36,6 +37,9 @@ func main() {
 	common.MustAddHWInvocationHandler(service, "create-emergency-room", createERHandler)
 	common.MustAddHWInvocationHandler(service, "get-emergency-room", getERHandler)
 	common.MustAddHWInvocationHandler(service, "get-emergency-rooms", getERsHandler)
+	common.MustAddHWInvocationHandler(service, "update-emergency-room", updateERHandler)
+	common.MustAddHWInvocationHandler(service, "add-departments-to-er", addDepartmentsToERHandler)
+	common.MustAddHWInvocationHandler(service, "remove-departments-from-er", removeDepartmentsFromERHandler)
 	common.MustAddHWInvocationHandler(service, "delete-emergency-room", deleteERHandler)
 
 	zlog.Info().Str("addr", addr).Msg("starting dapr service")
@@ -197,6 +201,103 @@ func whereClausesForERsQuery(db *gorm.DB, request *api.GetERsRequestV1) *gorm.DB
 		db = db.Where("(location <@> point(?, ?)) < ?", location.Long, location.Lat, radius)
 	}
 	return db
+}
+
+func updateERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
+	log, logCtx := common.GetHandlerLogger("updateERHandler", ctx)
+
+	// TODO: Auth
+
+	// Parse
+	request := api.UpdateERRequestV1{}
+	if err := hwutil.ParseValidJson(in.Data, &request); err != nil {
+		log.Warn().Err(err).Msg("invalid input")
+		return nil, err
+	}
+	log.Debug().Str("body", logging.Formatted(request)).Send()
+
+	// Update
+	db := hwgorm.GetDB(logCtx)
+
+	emergencyRoom := models.EmergencyRoom{
+		ID: request.ID,
+	}
+
+	updatesMap := request.UpdatesMap()
+	log.Debug().Msg(logging.Formatted(updatesMap))
+
+	if err := db.Model(&emergencyRoom).Updates(updatesMap).Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, err
+	}
+
+	return nil, nil
+}
+
+func addDepartmentsToERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
+	log, logCtx := common.GetHandlerLogger("addDepartmentsToERHandler", ctx)
+
+	// TODO: Auth
+
+	// Parse
+	request := api.AddDepartmentsToERRequestV1{}
+	if err := hwutil.ParseValidJson(in.Data, &request); err != nil {
+		log.Warn().Err(err).Msg("invalid input")
+		return nil, err
+	}
+	log.Debug().Str("body", logging.Formatted(request)).Send()
+
+	// Update
+	db := hwgorm.GetDB(logCtx)
+
+	emergencyRoom := models.EmergencyRoom{
+		ID: request.ID,
+	}
+
+	departmentsToAdd := models.UUIDsToDepartments(request.Departments)
+	log.Debug().Msgf("departmentsToAdd: %s", logging.Formatted(departmentsToAdd))
+
+	if err := db.Model(&emergencyRoom).Association("Departments").Append(departmentsToAdd); err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, err
+	}
+
+	return nil, nil
+}
+
+func removeDepartmentsFromERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
+	log, logCtx := common.GetHandlerLogger("removeDepartmentsFromERHandler", ctx)
+
+	// TODO: Auth
+
+	// Parse
+	request := api.RemoveDepartmentsFromERRequestV1{}
+	if err := hwutil.ParseValidJson(in.Data, &request); err != nil {
+		log.Warn().Err(err).Msg("invalid input")
+		return nil, err
+	}
+	log.Debug().Str("body", logging.Formatted(request)).Send()
+
+	// Update
+	db := hwgorm.GetDB(logCtx)
+
+	emergencyRoom := models.EmergencyRoom{
+		ID: request.ID,
+	}
+
+	departmentsToRemove := models.UUIDsToDepartments(request.Departments)
+	log.Debug().Msgf("departmentsToRemove: %s", logging.Formatted(departmentsToRemove))
+
+	if len(departmentsToRemove) == 0 {
+		return nil, nil
+	}
+
+	if err := db.Model(&emergencyRoom).Association("Departments").Delete(departmentsToRemove); err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, err
+	}
+
+	return nil, nil
 }
 
 func deleteERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {

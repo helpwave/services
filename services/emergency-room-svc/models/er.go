@@ -16,6 +16,5 @@ type EmergencyRoomBase struct {
 type EmergencyRoom struct {
 	ID uuid.UUID `json:"id"`
 	EmergencyRoomBase
-	OrganizationID uuid.UUID    `json:"organizationID" gorm:"default:NULL"`
-	Departments    []Department `json:"-" gorm:"many2many:rooms_have_departments" `
+	Departments []Department `json:"-" gorm:"many2many:rooms_have_departments" `
 }
