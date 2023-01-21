@@ -68,8 +68,41 @@ type UpdateERRequestV1 struct {
 	DisplayableAddress *string       `json:"displayableAddress"`
 	Open               *bool         `json:"open"`
 	Utilization        *int16        `json:"utilization"`
-	AddDepartments     []uuid.UUID   `json:"addDepartments"`
-	RemoveDepartments  []uuid.UUID   `json:"removeDepartments"`
+}
+
+// UpdatesMap is a map only containing the requested updates
+// this is needed due to go's handling of default values
+// and makes it possible for gorm to update a field for an ER
+// with a zero value without it being skipped
+func (request *UpdateERRequestV1) UpdatesMap() map[string]interface{} {
+	m := make(map[string]interface{})
+
+	if request.Name != nil {
+		m["name"] = *request.Name
+	}
+	if request.Location != nil {
+		m["location"] = *request.Location
+	}
+	if request.DisplayableAddress != nil {
+		m["displayable_address"] = *request.DisplayableAddress
+	}
+	if request.Open != nil {
+		m["open"] = *request.Open
+	}
+	if request.Utilization != nil {
+		m["utilization"] = *request.Utilization
+	}
+	return m
+}
+
+type AddDepartmentsToERRequestV1 struct {
+	ID          uuid.UUID   `json:"id" validate:"required"`
+	Departments []uuid.UUID `json:"departments" validate:"required"`
+}
+
+type RemoveDepartmentsFromERRequestV1 struct {
+	ID          uuid.UUID   `json:"id" validate:"required"`
+	Departments []uuid.UUID `json:"departments" validate:"required"`
 }
 
 //
