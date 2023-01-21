@@ -5,10 +5,11 @@ import (
 	"context"
 	"emergency-room-svc/api"
 	"emergency-room-svc/models"
-	"gorm.io/gorm"
 	"hwgorm"
 	"hwutil"
 	"logging"
+
+	"gorm.io/gorm"
 
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	zlog "github.com/rs/zerolog/log"
@@ -33,13 +34,13 @@ func main() {
 	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
 	service := common.NewDaprService(addr)
 
-	common.MustAddServiceInvocationHandler(service, "create-emergency-room", createERHandler)
-	common.MustAddServiceInvocationHandler(service, "get-emergency-room", getERHandler)
-	common.MustAddServiceInvocationHandler(service, "get-emergency-rooms", getERsHandler)
-	common.MustAddServiceInvocationHandler(service, "update-emergency-room", updateERHandler)
-	common.MustAddServiceInvocationHandler(service, "add-departments-to-er", addDepartmentsToERHandler)
-	common.MustAddServiceInvocationHandler(service, "remove-departments-from-er", removeDepartmentsFromERHandler)
-	common.MustAddServiceInvocationHandler(service, "delete-emergency-room", deleteERHandler)
+	common.MustAddHWInvocationHandler(service, "create-emergency-room", createERHandler)
+	common.MustAddHWInvocationHandler(service, "get-emergency-room", getERHandler)
+	common.MustAddHWInvocationHandler(service, "get-emergency-rooms", getERsHandler)
+	common.MustAddHWInvocationHandler(service, "update-emergency-room", updateERHandler)
+	common.MustAddHWInvocationHandler(service, "add-departments-to-er", addDepartmentsToERHandler)
+	common.MustAddHWInvocationHandler(service, "remove-departments-from-er", removeDepartmentsFromERHandler)
+	common.MustAddHWInvocationHandler(service, "delete-emergency-room", deleteERHandler)
 
 	zlog.Info().Str("addr", addr).Msg("starting dapr service")
 	common.MustStartService(service)
@@ -49,7 +50,7 @@ func main() {
 // Handlers
 //
 
-func createERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+func createERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("createERHandler", ctx)
 
 	// TODO: Auth
@@ -79,22 +80,16 @@ func createERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn
 	}
 
 	// Response
-	response := api.GetSingleERResponseV1{
+	var response common.Response = api.GetSingleERResponseV1{
 		ID:                emergencyRoom.ID,
 		EmergencyRoomBase: emergencyRoom.EmergencyRoomBase,
 		Departments:       models.DepartmentsToBases(emergencyRoom.Departments),
 	}
 
-	out, err := response.ToContent()
-	if err != nil {
-		log.Error().Err(err).Msg("could not marshall response")
-		return nil, err
-	}
-
-	return out, nil
+	return &response, nil
 }
 
-func getERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+func getERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("getERHandler", ctx)
 
 	// TODO: Auth
@@ -125,22 +120,16 @@ func getERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Co
 	log.Debug().Msgf("result = %v", result)
 
 	// Response
-	response := api.GetSingleERResponseV1{
+	var response common.Response = api.GetSingleERResponseV1{
 		ID:                emergencyRoom.ID,
 		EmergencyRoomBase: emergencyRoom.EmergencyRoomBase,
 		Departments:       models.DepartmentsToBases(emergencyRoom.Departments),
 	}
 
-	out, err := response.ToContent()
-	if err != nil {
-		log.Error().Err(err).Msg("could not marshall response")
-		return nil, err
-	}
-
-	return out, nil
+	return &response, nil
 }
 
-func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("getERsHandler", ctx)
 
 	// TODO: Auth
@@ -183,18 +172,12 @@ func getERsHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.C
 		}
 	}
 
-	response := api.GetERsResponseV1{
+	var response common.Response = api.GetERsResponseV1{
 		PageInfo:       pageInfo,
 		EmergencyRooms: responses,
 	}
 
-	out, err := response.ToContent()
-	if err != nil {
-		log.Error().Err(err).Msg("could not marshall response")
-		return nil, err
-	}
-
-	return out, nil
+	return &response, nil
 }
 
 func whereClausesForERsQuery(db *gorm.DB, request *api.GetERsRequestV1) *gorm.DB {
@@ -220,7 +203,7 @@ func whereClausesForERsQuery(db *gorm.DB, request *api.GetERsRequestV1) *gorm.DB
 	return db
 }
 
-func updateERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+func updateERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("updateERHandler", ctx)
 
 	// TODO: Auth
@@ -251,7 +234,7 @@ func updateERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn
 	return nil, nil
 }
 
-func addDepartmentsToERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+func addDepartmentsToERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("addDepartmentsToERHandler", ctx)
 
 	// TODO: Auth
@@ -282,7 +265,7 @@ func addDepartmentsToERHandler(ctx context.Context, in *daprcmn.InvocationEvent)
 	return nil, nil
 }
 
-func removeDepartmentsFromERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+func removeDepartmentsFromERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("removeDepartmentsFromERHandler", ctx)
 
 	// TODO: Auth
@@ -317,7 +300,7 @@ func removeDepartmentsFromERHandler(ctx context.Context, in *daprcmn.InvocationE
 	return nil, nil
 }
 
-func deleteERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+func deleteERHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("deleteERHandler", ctx)
 
 	// TODO: Auth

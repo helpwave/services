@@ -35,8 +35,8 @@ func main() {
 	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
 	service := common.NewDaprService(addr)
 
-	common.MustAddServiceInvocationHandler(service, "/v1/create-user", createUser)
-	common.MustAddServiceInvocationHandler(service, "/v1/create-organization", createOrganization)
+	common.MustAddHWInvocationHandler(service, "/v1/create-user", createUser)
+	common.MustAddHWInvocationHandler(service, "/v1/create-organization", createOrganization)
 
 	zlog.Info().Str("addr", addr).Msg("starting dapr service")
 	common.MustStartService(service)
@@ -46,7 +46,7 @@ func main() {
 // Handlers
 //
 
-func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("createUser", ctx)
 
 	// Auth
@@ -101,22 +101,16 @@ func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Cont
 	}
 
 	// Response
-	response := api.CreateUserResponseV1{
+	var response common.Response = api.CreateUserResponseV1{
 		UserID: user.ID,
 	}
 
 	log.Info().Str("user_id", user.ID.String()).Msg("created user")
 
-	out, err := response.ToContent()
-	if err != nil {
-		log.Error().Err(err).Msg("could not marshall response")
-		return nil, err
-	}
-
-	return out, nil
+	return &response, nil
 }
 
-func createOrganization(ctx context.Context, in *daprcmn.InvocationEvent) (*daprcmn.Content, error) {
+func createOrganization(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("createUser", ctx)
 
 	// Auth
@@ -161,15 +155,9 @@ func createOrganization(ctx context.Context, in *daprcmn.InvocationEvent) (*dapr
 		Msg("created organization")
 
 	// Response
-	response := api.CreateOrgResponseV1{
+	var response common.Response = api.CreateOrgResponseV1{
 		OrganizationBase: orga.OrganizationBase,
 	}
 
-	out, err := response.ToContent()
-	if err != nil {
-		log.Error().Err(err).Msg("could not marshall response")
-		return nil, err
-	}
-
-	return out, nil
+	return &response, nil
 }
