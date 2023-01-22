@@ -1,0 +1,52 @@
+# TOOD: Move away from helmfile. Migrate fully to Terraform.
+
+repositories:
+
+  - name: bitnami
+    url:  https://charts.bitnami.com/bitnami
+
+
+releases:
+
+  # TODO: Move away from one PostgreSQL-Server per service.
+  - name: emergency-room-postgres
+    namespace: emergency-room
+    chart: bitnami/postgresql
+    wait: true
+    set:
+      - name: auth.enablePostgresUser
+        value: true
+      - name: auth.postgresPassword
+        value: helpwave
+      - name: auth.database
+        value: emergency-room
+      - name: auth.username
+        value: helpwave
+      # TODO: Use secrets
+      - name: auth.password
+        value: helpwave
+
+  - name: emergency-room-svc
+    namespace: emergency-room
+    chart: ../service
+    wait: true
+    set:
+      - name: app.name
+        value: emergency-room
+      - name: image.repository
+        value: ghcr.io/helpwave/emergency-room-svc
+      - name: image.tag
+        value: edge
+      - name: image.pullPolicy
+        value: Always
+      - name: postgres.host
+        value: emergency-room-postgres-postgresql.emergency-room
+      - name: postgres.user
+        value: postgres
+      # TODO: Use secrets
+      - name: postgres.password
+        value: helpwave
+      - name: postgres.database
+        value: emergency-room
+      - name: service.enabled
+        value: true

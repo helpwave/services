@@ -1,0 +1,6 @@
+nginx:
+  ingressDaprSidecar: nginx-ingress-dapr
+
+api:
+  staging:
+    hostname: staging.api.helpwave.de
