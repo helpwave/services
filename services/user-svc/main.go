@@ -3,14 +3,12 @@ package main
 import (
 	"common"
 	"context"
-	"errors"
+	"github.com/Nerzal/gocloak/v12"
 	"github.com/google/uuid"
-	"golang.org/x/crypto/bcrypt"
-	"hwgorm"
 	"hwutil"
 	"logging"
+	"time"
 	"user-svc/api"
-	"user-svc/models"
 
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	zlog "github.com/rs/zerolog/log"
@@ -21,16 +19,14 @@ const ServiceName = "user-svc"
 // Version is set at compile time
 var Version string
 
+// set in prepareGocloakClient
+var gocloakClient *gocloak.GoCloak
+var realm string
+
 func main() {
 	common.Setup(ServiceName, Version, true)
 
-	hwgorm.SetupDatabase(
-		hwutil.GetEnvOr("POSTGRES_HOST", "localhost"),
-		hwutil.GetEnvOr("POSTGRES_USER", "postgres"),
-		hwutil.GetEnvOr("POSTGRES_PASSWORD", "postgres"),
-		hwutil.GetEnvOr("POSTGRES_DB", "postgres"),
-		hwutil.GetEnvOr("POSTGRES_PORT", "5432"),
-	)
+	prepareGocloakClient()
 
 	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
 	service := common.NewDaprService(addr)
@@ -42,23 +38,48 @@ func main() {
 	common.MustStartService(service)
 }
 
+// use getServiceAccountToken instead
+var lastToken *gocloak.JWT = nil
+var lastTokenExp time.Time
+
+// getServiceAccountToken returns a valid token, or errors trying, do not modify it
+func getServiceAccountToken(logCtx context.Context) (*gocloak.JWT, error) {
+	if lastToken != nil && lastTokenExp.After(time.Now().Add(10*time.Second)) {
+		return lastToken, nil
+	}
+
+	ctx := context.Background()
+	clientID := hwutil.MustGetEnv("CLIENT_ID")
+	clientSecret := hwutil.MustGetEnv("CLIENT_SECRET")
+	token, err := gocloakClient.LoginClient(ctx, clientID, clientSecret, realm)
+	if err == nil {
+		lastToken = token
+		lastTokenExp = hwutil.TimeInNSeconds(token.ExpiresIn)
+		zlog.Ctx(logCtx).Info().Msgf("obtained new token, expires %s", lastTokenExp)
+	}
+	return token, err
+}
+
+func prepareGocloakClient() {
+	realm = hwutil.MustGetEnv("KC_REALM")
+	gocloakClient = gocloak.NewClient(hwutil.MustGetEnv("KC_HOST"))
+
+	token, err := getServiceAccountToken(context.Background())
+
+	if err != nil {
+		zlog.Fatal().Err(err).Send()
+	}
+
+	zlog.Info().Msg("obtained initial access token for service account")
+	zlog.Trace().Msgf("%+v", token)
+}
+
 //
 // Handlers
 //
 
 func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("createUser", ctx)
-
-	// Auth
-	claims, err := common.GetAuthClaims(ctx, logCtx)
-	if err != nil {
-		return nil, err
-	}
-
-	if claims.User.Role != common.Admin {
-		log.Info().Str("user_id", claims.User.ID.String()).Msg("unauthorized access")
-		return nil, errors.New("unauthorized")
-	}
 
 	// Parse
 	request := api.CreateUserRequestV1{}
@@ -67,45 +88,36 @@ func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Respo
 		return nil, err
 	}
 
-	// Validate
-	if request.Organization == uuid.Nil && !request.Admin {
-		log.Warn().Msg("Attempt to create non-admin user without organization")
-		return nil, errors.New("no organization specified for non-admin user")
+	user := gocloak.User{
+		FirstName: gocloak.StringP(request.FirstName),
+		LastName:  gocloak.StringP(request.LastName),
+		Email:     gocloak.StringP(request.Email),
+		Enabled:   gocloak.BoolP(true),
+		Username:  gocloak.StringP(request.Email),
 	}
 
-	// TODO: additional password complexity enforcement
-
-	hashBytes, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
-
+	token, err := getServiceAccountToken(logCtx)
 	if err != nil {
-		log.Error().Err(err).Msg("could not calculate bcrypt hash")
-		return nil, errors.New("an error occurred while generating the password hash")
+		log.Error().Err(err).Msg("could not refresh service token!")
+		return nil, err
 	}
 
-	// Insert
-	user := models.User{
-		UserBase: models.UserBase{
-			Email:          request.Email,
-			FullName:       request.FullName,
-			OrganizationID: request.Organization,
-		},
-		PwBcrypt: string(hashBytes),
+	userID, err := gocloakClient.CreateUser(context.Background(), token.AccessToken, realm, user)
+	if err != nil {
+		log.Warn().Err(err).Msg("could not create new user")
+		return nil, err
 	}
 
-	db := hwgorm.GetDB(logCtx)
-	res := db.Create(&user)
-
-	if err := res.Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
+	userIDUUID, err := uuid.Parse(userID)
+	if err != nil {
+		log.Error().Err(err).Msg("could not parse new user's id")
 		return nil, err
 	}
 
 	// Response
 	var response common.Response = api.CreateUserResponseV1{
-		UserID: user.ID,
+		UserID: userIDUUID,
 	}
-
-	log.Info().Str("user_id", user.ID.String()).Msg("created user")
 
 	return &response, nil
 }
@@ -113,15 +125,10 @@ func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Respo
 func createOrganization(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
 	log, logCtx := common.GetHandlerLogger("createUser", ctx)
 
-	// Auth
-	claims, err := common.GetAuthClaims(ctx, logCtx)
+	// Authentication
+	_, err := common.GetAuthClaims(ctx, logCtx)
 	if err != nil {
 		return nil, err
-	}
-
-	if claims.User.Role != common.Admin {
-		log.Info().Str("user_id", claims.User.ID.String()).Msg("unauthorized access")
-		return nil, errors.New("unauthorized")
 	}
 
 	// Parse
@@ -132,31 +139,11 @@ func createOrganization(ctx context.Context, in *daprcmn.InvocationEvent) (*comm
 	}
 	log.Debug().Str("body", logging.Formatted(request)).Send()
 
-	// Insert
-	orga := models.Organization{
-		OrganizationBase: models.OrganizationBase{
-			LongName:     request.LongName,
-			ShortName:    request.ShortName,
-			ContactEmail: request.ContactEmail,
-		},
-	}
-
-	db := hwgorm.GetDB(logCtx)
-
-	res := db.Create(&orga)
-	if err := res.Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
-		return nil, err
-	}
-
-	log.Info().
-		Str("user_id", claims.User.ID.String()).
-		Str("organization_id", orga.ID.String()).
-		Msg("created organization")
+	// TODO: make request to keycloak
 
 	// Response
 	var response common.Response = api.CreateOrgResponseV1{
-		OrganizationBase: orga.OrganizationBase,
+		// TODO
 	}
 
 	return &response, nil

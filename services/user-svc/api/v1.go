@@ -4,15 +4,13 @@ import (
 	"common"
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	"github.com/google/uuid"
-	"user-svc/models"
 )
 
 type CreateUserRequestV1 struct {
-	Email        string `validate:"required,email"`
-	FullName     string `validate:"required"`
-	Password     string `validate:"required,min=6,max=100"`
-	Admin        bool
-	Organization uuid.UUID
+	Email     string `json:"email" validate:"required,email"`
+	FirstName string `json:"firstName" validate:"required"`
+	LastName  string `json:"lastName" validate:"required"`
+	Password  string `json:"password" validate:"required,min=6,max=100"`
 }
 
 type CreateUserResponseV1 struct {
@@ -30,7 +28,11 @@ type CreateOrgRequestV1 struct {
 }
 
 type CreateOrgResponseV1 struct {
-	models.OrganizationBase
+	ID           uuid.UUID `json:"id"`
+	LongName     string    `json:"longName"`
+	ShortName    string    `json:"shortName"`
+	AvatarUrl    string    `json:"avatarUrl"`
+	ContactEmail string    `json:"contactEmail"`
 }
 
 func (response CreateOrgResponseV1) ToContent() (*daprcmn.Content, error) {
