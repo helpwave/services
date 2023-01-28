@@ -4,13 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
-
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgerrcode"
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"logging"
 )
 
 var database *gorm.DB = nil
@@ -32,7 +31,7 @@ func SetupDatabase(host, user, password, databaseName, port string) {
 	)
 
 	log.Debug().
-		Str("dsn", strings.Replace(postgresDSN, password, "<omitted>", -1)).
+		Str("dsn", logging.Omit(postgresDSN, password)).
 		Msg("dsn generated")
 
 	config := gorm.Config{

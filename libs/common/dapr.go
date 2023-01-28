@@ -91,13 +91,13 @@ func extractAuthToken(ctx context.Context, logCtx context.Context) (string, erro
 	return token, err
 }
 
-func GetAuthClaims(ctx context.Context, logCtx context.Context) (*AccessTokenClaim, error) {
+func GetAuthClaims(ctx context.Context, logCtx context.Context) (*AccessTokenClaims, error) {
 	token, err := extractAuthToken(ctx, logCtx)
 	if err != nil {
 		return nil, err
 	}
 
-	return ValidateAccessToken(token)
+	return VerifyAccessToken(token)
 }
 
 func GetHandlerLogger(handlerName string, requestContext context.Context) (zerolog.Logger, context.Context) {

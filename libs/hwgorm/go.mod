@@ -2,12 +2,15 @@ module hwgorm
 
 go 1.19
 
+replace logging => ../logging
+
 require (
 	github.com/jackc/pgconn v1.13.0
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa
 	github.com/rs/zerolog v1.28.0
 	gorm.io/driver/postgres v1.4.5
 	gorm.io/gorm v1.24.2
+	logging v0.0.0-00010101000000-000000000000
 )
 
 require (

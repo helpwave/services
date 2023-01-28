@@ -1,6 +1,8 @@
 package hwutil
 
-import "os"
+import (
+	"os"
+)
 
 // ReadFileOrEmpty will return the contents of a file or "" in case of error
 func ReadFileOrEmpty(path string) string {

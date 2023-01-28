@@ -3,6 +3,7 @@ package hwutil
 import (
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
+	"time"
 )
 
 var validate *validator.Validate
@@ -19,4 +20,13 @@ func ParseValidJson(buffer []byte, target any) error {
 		return err
 	}
 	return nil
+}
+
+func ParseSeconds(seconds int) time.Duration {
+	return time.Duration(seconds) * time.Second
+}
+
+func TimeInNSeconds(seconds int) time.Time {
+	duration := ParseSeconds(seconds)
+	return time.Now().Add(duration)
 }

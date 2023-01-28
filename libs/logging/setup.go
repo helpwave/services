@@ -1,12 +1,9 @@
 package logging
 
 import (
-	"fmt"
-	"os"
-	"strings"
-
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"os"
 )
 
 func SetupLogging(mode, rawLevel, service, version string) {
@@ -26,9 +23,4 @@ func SetupLogging(mode, rawLevel, service, version string) {
 	log.Logger = log.Level(level)
 	zerolog.DefaultContextLogger = &log.Logger
 	log.Info().Msg("Logging is set up")
-}
-
-// Formatted formats anything but makes sure to encode newlines
-func Formatted(arg any) string {
-	return strings.Replace(fmt.Sprintf("%v", arg), "\n", "\\n", -1)
 }
