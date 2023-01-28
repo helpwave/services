@@ -34,10 +34,7 @@ func Setup(serviceName, version string, auth bool) {
 	}
 
 	if auth {
-		SetupTokenSecrets(
-			mode,
-			hwutil.ReadFileOrEmpty("jwt-private.pem"),
-			hwutil.ReadFileOrEmpty("jwt-public.pem"),
-		)
+		setupKeycloak()
+		// TODO: add keycloak middleware?
 	}
 }
