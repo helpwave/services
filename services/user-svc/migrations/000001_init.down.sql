@@ -1,5 +1,0 @@
-DROP TABLE IF EXISTS global_roles;
-DROP TYPE IF EXISTS global_role;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS organizations;
-DROP EXTENSION IF EXISTS "uuid-ossp";
