@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "127.0.0.1:5432:5432"
+  keycloak:
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      KC_HTTP_ENABLED: true
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_URL_DATABASE: postgres
+      KC_DB_URL_PORT: 5432
+      KC_HOSTNAME_STRICT: false
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - "/etc/ssl/certs/ssl-cert-snakeoil.pem:/cert.pem"
+      - "/etc/ssl/private/ssl-cert-snakeoil.key:/key.pem"
+    ports:
+      - "127.0.0.1:8080:80"

@@ -1,14 +1,22 @@
 VERSION ?= $(shell git log --format="%h" -n 1)
 DOCKERFILE_SERVICES = Dockerfile.service
 
-SERVICES = $(subst services/,,$(wildcard services/*))
+# Go services are build using the Dockerfile.service dockerfile
+GO_SERVICES = $(subst services/,,$(wildcard services/*))
 
-.PHONY: $(SERVICES)
-$(SERVICES):
+# Docker images have their own Dockerfile in the root of the service directory
+DOCKER_IMAGES = $(subst images/,,$(wildcard images/*))
+
+.PHONY: GO_SERVICES
+$(GO_SERVICES):
 	docker build -f ${DOCKERFILE_SERVICES} --build-arg=VERSION=${VERSION} --build-arg=SERVICE=$@ -t helpwave/$@ .
 
+.PHONY: DOCKER_SERVICES
+$(DOCKER_IMAGES):
+	cd images/$@ && docker build -t helpwave/$@ .
+
 .PHONY: all
-all: $(SERVICES)
+all: GO_SERVICES
 
 .PHONY: clean
 clean:

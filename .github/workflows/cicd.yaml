@@ -37,6 +37,13 @@ jobs:
           files: |
             services/**
 
+      - name: Detected changes in images
+        id: changes-in-images
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            images/**
+
       - name: Aggregate changes
         id: aggregate-changes
         run: |
@@ -45,15 +52,19 @@ jobs:
           else
             echo "services=$(echo $changesInServices | awk -F / '$1 ~ /services/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           fi
+          echo "images=$(echo $changesInImages | awk -F / '$1 ~ /images/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
         env:
           libsChanged: ${{ steps.changes-in-libs.outputs.any_changed }}
           changesInServices: ${{ steps.changes-in-services.outputs.all_changed_files }}
+          changesInImages: ${{ steps.changes-in-images.outputs.all_changed_files }}
 
       - name: Summarize
         run: |
           echo "services: $services" >> $GITHUB_STEP_SUMMARY
+          echo "images: $images" >> $GITHUB_STEP_SUMMARY
         env:
           services: ${{ steps.aggregate-changes.outputs.services }}
+          images: ${{ steps.aggregate-changes.outputs.images }}
 
   cicd-go:
     needs: detect-changes
@@ -68,4 +79,19 @@ jobs:
     uses: ./.github/workflows/cicd-go.yaml
     with:
       service: ${{ matrix.service }}
+    secrets: inherit
+
+  cicd-images:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.images != '[]' && needs.detect-changes.outputs.images != '' }}
+    strategy:
+      matrix:
+        image: ${{ fromJson(needs.detect-changes.outputs.images) }}
+    permissions:
+      contents: read
+      pull-requests: read
+      packages: write
+    uses: ./.github/workflows/cicd-images.yaml
+    with:
+      image: ${{ matrix.image }}
     secrets: inherit
