@@ -17,6 +17,10 @@ RUN go mod download
 
 COPY services/$SERVICE /build/app
 
+# create migrations, if it does not exist already
+# allows us to copy it into the production image w/o error
+RUN mkdir -p migrations
+
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-X main.Version=${VERSION}" -a -o app .
 
 FROM alpine AS production
