@@ -1,0 +1,50 @@
+# TODO: Move away from helmfile. Migrate fully to Terraform.
+
+repositories:
+  - name: bitnami
+    url:  https://charts.bitnami.com/bitnami
+
+releases:
+  # TODO: Move away from one PostgreSQL-Server per service.
+  - name: keycloak-postgres
+    namespace: keycloak
+    chart: bitnami/postgresql
+    wait: true
+    set:
+      - name: auth.enablePostgresUser
+        value: true
+      - name: auth.database
+        value: keycloak
+      - name: auth.username
+        value: helpwave
+      # TODO: Use secrets
+      - name: auth.postgresPassword
+        value: helpwave
+      - name: auth.password
+        value: helpwave
+  - name: keycloak
+    namespace: keycloak
+    chart: .
+    wait: true
+    set:
+      - name: keycloak-operator.nameOverride
+        value: "operator"
+      - name: hostnameStrict
+        value: false
+      - name: dbHost
+        value: "keycloak-postgres-postgresql.keycloak"
+      - name: dbPort
+        value: 5432
+      - name: dbDatabase
+        value: "keycloak"
+      # TODO: Use secrets
+      - name: dbUsername
+        value: "helpwave"
+      - name: dbPassword
+        value: "helpwave"
+      - name: ingressDefault
+        value: false
+      - name: httpEnabled
+        value: true
+      - name: tlsUseFakeCert
+        value: true
