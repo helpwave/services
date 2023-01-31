@@ -1,4 +1,4 @@
-# TOOD: Move away from helmfile. Migrate fully to Terraform.
+# TODO: Move away from helmfile. Migrate fully to Terraform.
 
 repositories:
 
@@ -7,25 +7,6 @@ repositories:
 
 
 releases:
-
-  # TODO: Move away from one PostgreSQL-Server per service.
-  - name: user-postgres
-    namespace: user
-    chart: bitnami/postgresql
-    wait: true
-    set:
-      - name: auth.enablePostgresUser
-        value: true
-      - name: auth.postgresPassword
-        value: helpwave
-      - name: auth.database
-        value: user
-      - name: auth.username
-        value: helpwave
-      # TODO: Use secrets
-      - name: auth.password
-        value: helpwave
-
   - name: user-svc
     namespace: user
     chart: ../service
@@ -39,14 +20,5 @@ releases:
         value: edge
       - name: image.pullPolicy
         value: Always
-      - name: postgres.host
-        value: user-postgres-postgresql.user
-      - name: postgres.user
-        value: postgres
-      # TODO: Use secrets
-      - name: postgres.password
-        value: helpwave
-      - name: postgres.database
-        value: user
       - name: service.enabled
         value: true
