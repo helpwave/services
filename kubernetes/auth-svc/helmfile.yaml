@@ -9,7 +9,7 @@ releases:
       - name: app.name
         value: user
       - name: image.repository
-        value: ghcr.io/helpwave/user-svc
+        value: ghcr.io/helpwave/auth-svc
       - name: image.tag
         value: edge
       - name: image.pullPolicy
@@ -19,6 +19,8 @@ releases:
       - name: postgres.disabled
         value: true
       - name: keycloakClientID
-        value: "user-svc"
+        value: "auth-svc"
       - name: keycloakClientSecret
-        value: "notSecretEither" # TODO
+        value: "notReallySecret" # TODO
+      - name: keycloakCallbackURL
+        value: "https://not-deployed-yet/callback" # TODO

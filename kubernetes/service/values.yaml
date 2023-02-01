@@ -1,6 +1,7 @@
 replicaCount: 2
 
 postgres:
+  disabled: false
   host: localhost
   port: 5432
   user: helpwave
@@ -11,7 +12,22 @@ app:
   dapr: true
   name: service
   port: 8080
-  env: development
+  env: production
+
+keyCloakDisabled: false
+
+keycloakURL: "https://keycloak-service.keycloak.svc.cluster.local:8443"
+keycloakRealm: "hw-staging"
+
+# the ID and secret of the client, previously registered in Keycloak
+keycloakClientID: ""
+keycloakClientSecret: ""
+
+# only auth-svc needs this (for now)
+# publicly reachable URL for the callback handler (this service)
+# this has to be: https://<url to this service>/callback
+keycloakCallbackURL: ""
+
 
 image:
   repository: helpwave/service
