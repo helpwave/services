@@ -6,7 +6,7 @@ kind: Secret
 metadata:
   name: {{ include "keycloak.fullname" . }}-db-secret
   labels:
-     {{- include "keycloak-operator.labels" . | nindent 4 }}
+     {{- include "keycloak.labels" . | nindent 4 }}
 type: kubernetes.io/basic-auth
 stringData:
   username: {{ .Values.dbUsername | quote }}
@@ -17,7 +17,7 @@ kind: Keycloak
 metadata:
   name: {{ include "keycloak.fullname" . }}
   labels:
-    {{- include "keycloak-operator.labels" . | nindent 4 }}
+    {{- include "keycloak.labels" . | nindent 4 }}
 spec:
   instances: {{ .Values.instances }}
   db:

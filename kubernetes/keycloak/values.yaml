@@ -30,3 +30,9 @@ dbPassword: ""
 
 # The deployment is, by default, exposed through a basic ingress.
 ingressDefault: true
+
+
+svcAuthSecret: "" # TODO: use vault ("**${vault.**_key_**}**")
+svcAuthCallback: ""
+
+svcUserSecret: "" # TODO: use vault ("**${vault.**_key_**}**")
