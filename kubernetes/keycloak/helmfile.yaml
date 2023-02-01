@@ -33,6 +33,8 @@ releases:
         value: "ghcr.io/helpwave/keycloak"
       - name: keycloak-operator.keycloakImage.tag
         value: "edge"
+      - name: hostname
+        value: "staging-kc.helpwave.de"
       - name: hostnameStrict
         value: false
       - name: dbHost
@@ -46,15 +48,15 @@ releases:
         value: "helpwave"
       - name: dbPassword
         value: "helpwave"
-      - name: ingressDefault
-        value: false
       - name: httpEnabled
         value: true
       - name: tlsUseFakeCert
         value: true
+      - name: ingressCustom
+        value: true
       - name: svcAuthSecret
         value: "notReallySecret" # TODO: use vault ("**${vault.**_key_**}**")
       - name: svcAuthCallback
-        value: "https://yet-to-deploy.cluster/callback" # TODO
+        value: "https://staging-api.helpwave.de/auth-svc/callback" # TODO
       - name: svcUserSecret
         value: "notSecretEither" # TODO: use vault ("**${vault.**_key_**}**")

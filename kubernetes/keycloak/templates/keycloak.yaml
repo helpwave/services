@@ -41,4 +41,4 @@ spec:
     strict: {{ .Values.hostnameStrict | default false }}
     admin: {{ .Values.hostnameAdmin | quote | default "" }}
   ingress:
-    enabled: {{ .Values.ingressDefault | default true }}
+    enabled: {{ .Values.ingressDefault }}

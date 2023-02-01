@@ -29,8 +29,9 @@ dbUsername: ""
 dbPassword: ""
 
 # The deployment is, by default, exposed through a basic ingress.
-ingressDefault: true
-
+# it is not compatible with the nginx ingress
+ingressDefault: false
+ingressCustom: true
 
 svcAuthSecret: "" # TODO: use vault ("**${vault.**_key_**}**")
 svcAuthCallback: ""
