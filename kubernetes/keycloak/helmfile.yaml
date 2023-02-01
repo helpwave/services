@@ -52,3 +52,9 @@ releases:
         value: true
       - name: tlsUseFakeCert
         value: true
+      - name: svcAuthSecret
+        value: "notReallySecret" # TODO: use vault ("**${vault.**_key_**}**")
+      - name: svcAuthCallback
+        value: "https://yet-to-deploy.cluster/callback" # TODO
+      - name: svcUserSecret
+        value: "notSecretEither" # TODO: use vault ("**${vault.**_key_**}**")
