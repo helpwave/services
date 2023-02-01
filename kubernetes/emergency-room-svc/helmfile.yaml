@@ -50,3 +50,5 @@ releases:
         value: emergency-room
       - name: service.enabled
         value: true
+      - name: keycloakDisabled
+        value: true
