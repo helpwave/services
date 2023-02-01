@@ -25,3 +25,4 @@ services:
       - "/etc/ssl/private/ssl-cert-snakeoil.key:/key.pem"
     ports:
       - "127.0.0.1:8080:80"
+    command: "start --optimized"

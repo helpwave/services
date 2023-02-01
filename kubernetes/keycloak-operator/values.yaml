@@ -12,7 +12,7 @@ image:
 
 # The keycloak-operator manages a keycloak image
 keycloakImage:
-  repository: quay.io/keycloak/keycloak # TODO: replace with our custom one
+  repository: quay.io/keycloak/keycloak
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
