@@ -29,6 +29,10 @@ releases:
     set:
       - name: keycloak-operator.nameOverride
         value: "operator"
+      - name: keycloak-operator.keycloakImage.repository
+        value: "ghcr.io/helpwave/keycloak"
+      - name: keycloak-operator.keycloakImage.tag
+        value: "edge"
       - name: hostnameStrict
         value: false
       - name: dbHost
