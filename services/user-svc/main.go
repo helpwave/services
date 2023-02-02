@@ -88,12 +88,19 @@ func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Respo
 		return nil, err
 	}
 
+	credentials := []gocloak.CredentialRepresentation{{
+		Temporary: gocloak.BoolP(false),
+		Type:      gocloak.StringP("password"),
+		Value:     gocloak.StringP(request.Password),
+	}}
+
 	user := gocloak.User{
-		FirstName: gocloak.StringP(request.FirstName),
-		LastName:  gocloak.StringP(request.LastName),
-		Email:     gocloak.StringP(request.Email),
-		Enabled:   gocloak.BoolP(true),
-		Username:  gocloak.StringP(request.Email),
+		FirstName:   gocloak.StringP(request.FirstName),
+		LastName:    gocloak.StringP(request.LastName),
+		Email:       gocloak.StringP(request.Email),
+		Enabled:     gocloak.BoolP(true),
+		Username:    gocloak.StringP(request.Email),
+		Credentials: &credentials,
 	}
 
 	token, err := getServiceAccountToken(logCtx)
@@ -110,25 +117,6 @@ func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Respo
 		return nil, err
 	} else {
 		log.Info().Str("userID", userID).Msg("created new user")
-	}
-
-	err = gocloakClient.SetPassword(kcCtx, token.AccessToken, userID, realm, request.Password, false)
-	if err != nil {
-		log.Error().Str("userID", userID).Err(err).Msg("could not set new user's password")
-
-		// to prevent inconsistent state (every user should have a password),
-		// we remove the user again
-
-		if err := gocloakClient.DeleteUser(kcCtx, token.AccessToken, realm, userID); err != nil {
-			log.
-				Error().
-				Str("userID", userID).
-				Err(err).
-				Msg("can't recover from error: could not remove new user")
-		} else {
-			log.Info().Str("userID", userID).Msg("removed new user due to previous error")
-		}
-		return nil, err
 	}
 
 	userIDUUID, err := uuid.Parse(userID)
