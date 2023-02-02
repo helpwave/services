@@ -61,8 +61,8 @@ func getServiceAccountToken(logCtx context.Context) (*gocloak.JWT, error) {
 }
 
 func prepareGocloakClient() {
-	realm = hwutil.MustGetEnv("KC_REALM")
-	gocloakClient = gocloak.NewClient(hwutil.MustGetEnv("KC_HOST"))
+	realm = common.KeycloakRealm()
+	gocloakClient = gocloak.NewClient(common.KeycloakBaseURL())
 
 	token, err := getServiceAccountToken(context.Background())
 
@@ -102,9 +102,32 @@ func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Respo
 		return nil, err
 	}
 
-	userID, err := gocloakClient.CreateUser(context.Background(), token.AccessToken, realm, user)
+	kcCtx := context.Background()
+
+	userID, err := gocloakClient.CreateUser(kcCtx, token.AccessToken, realm, user)
 	if err != nil {
 		log.Warn().Err(err).Msg("could not create new user")
+		return nil, err
+	} else {
+		log.Info().Str("userID", userID).Msg("created new user")
+	}
+
+	err = gocloakClient.SetPassword(kcCtx, token.AccessToken, userID, realm, request.Password, false)
+	if err != nil {
+		log.Error().Str("userID", userID).Err(err).Msg("could not set new user's password")
+
+		// to prevent inconsistent state (every user should have a password),
+		// we remove the user again
+
+		if err := gocloakClient.DeleteUser(kcCtx, token.AccessToken, realm, userID); err != nil {
+			log.
+				Error().
+				Str("userID", userID).
+				Err(err).
+				Msg("can't recover from error: could not remove new user")
+		} else {
+			log.Info().Str("userID", userID).Msg("removed new user due to previous error")
+		}
 		return nil, err
 	}
 
