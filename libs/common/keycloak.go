@@ -2,6 +2,7 @@ package common
 
 import (
 	"context"
+	"errors"
 	"github.com/coreos/go-oidc"
 	"golang.org/x/oauth2"
 	"hwutil"
@@ -17,11 +18,21 @@ import (
 // To add a claim to this struct please add
 // a client scope (and mapping) to the client in keycloak first
 type AccessTokenClaims struct {
-	// TODO
+	// Sub is the user id
+	Sub        string `json:"sub"`
+	GivenName  string `json:"given_name"`
+	FamilyName string `json:"family_name"`
+	Email      string `json:"email"`
 }
 
 func (a AccessTokenClaims) AsExpected() error {
-	return nil // TODO
+	if len(a.Sub) == 0 {
+		return errors.New("sub missing in token")
+	}
+	if len(a.Email) == 0 {
+		return errors.New("email missing in token")
+	}
+	return nil
 }
 
 // verifier and oauthConfig are set in setupKeycloak
