@@ -60,7 +60,7 @@ resource "helm_release" "nginx" {
 
   set {
     name = "controller.service.loadBalancerIP"
-    value = "${var.gcp_public_ipv4}"
+    value = google_compute_address.staging-ipv4.address
   }
 }
 
@@ -79,7 +79,7 @@ resource "helm_release" "nginx-dapr" {
 
   set {
     name = "api.staging.hostname"
-    value = "staging.api.helpwave.de"
+    value = cloudflare_record.staging-api-helpwave-de.hostname
   }
 
   set {
