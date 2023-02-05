@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"hwutil"
 	"logging"
+	"strconv"
 	"time"
 	"user-svc/api"
 
@@ -32,7 +33,7 @@ func main() {
 	service := common.NewDaprService(addr)
 
 	common.MustAddHWInvocationHandler(service, "/v1/create-user", createUser)
-	common.MustAddHWInvocationHandler(service, "/v1/create-organization", createOrganization)
+	common.MustAddHWInvocationHandler(service, "/v1/create-organization", createOrganizationHandler)
 
 	zlog.Info().Str("addr", addr).Msg("starting dapr service")
 	common.MustStartService(service)
@@ -133,52 +134,8 @@ func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Respo
 	return &response, nil
 }
 
-type OrganizationAttributes struct {
-	HWID         *string
-	LongName     *string
-	ShortName    *string
-	ContactEmail *string
-}
-
-func (a *OrganizationAttributes) toMap() *map[string][]string {
-	m := make(map[string][]string)
-	m["type"] = []string{"organization"}
-
-	if a.HWID != nil {
-		m["hw_id"] = []string{*a.HWID}
-	}
-	if a.LongName != nil {
-		m["long_name"] = []string{*a.LongName}
-	}
-	if a.ShortName != nil {
-		m["short_name"] = []string{*a.ShortName}
-	}
-	if a.ContactEmail != nil {
-		m["contact_email"] = []string{*a.ContactEmail}
-	}
-	return &m
-}
-
-func (a *OrganizationAttributes) fromMap(m map[string][]string) {
-	if arr := m["hw_id"]; len(arr) == 1 {
-		a.HWID = &arr[0]
-	}
-	if arr := m["long_name"]; len(arr) == 1 {
-		a.LongName = &arr[0]
-	}
-	if arr := m["short_name"]; len(arr) == 1 {
-		a.ShortName = &arr[0]
-	}
-	if arr := m["contact_email"]; len(arr) == 1 {
-		a.ContactEmail = &arr[0]
-	}
-}
-
-// createOrganization creates a new organization on behalf of a user
-// it does so by creating a new keycloak group for the organization.
-// The group also has a subgroup for admins, where the requesting user is added to
-func createOrganization(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
-	log, logCtx := common.GetHandlerLogger("createUser", ctx)
+func createOrganizationHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
+	log, logCtx := common.GetHandlerLogger("createOrganizationHandler", ctx)
 
 	// User AuthN
 	claims, err := common.GetAuthClaims(ctx, logCtx)
@@ -197,6 +154,63 @@ func createOrganization(ctx context.Context, in *daprcmn.InvocationEvent) (*comm
 	}
 	log.Debug().Str("body", logging.Formatted(request)).Send()
 
+	res, err := createOrganization(logCtx, request, userID, email, false)
+
+	// Response
+	var response common.Response = res
+
+	return &response, err
+}
+
+type OrganizationAttributes struct {
+	LongName     *string
+	ShortName    *string
+	ContactEmail *string
+	IsPersonal   *bool
+}
+
+func (a *OrganizationAttributes) toMap() *map[string][]string {
+	m := make(map[string][]string)
+	m["type"] = []string{"organization"}
+
+	if a.LongName != nil {
+		m["long_name"] = []string{*a.LongName}
+	}
+	if a.ShortName != nil {
+		m["short_name"] = []string{*a.ShortName}
+	}
+	if a.ContactEmail != nil {
+		m["contact_email"] = []string{*a.ContactEmail}
+	}
+	if a.IsPersonal != nil {
+		m["is_personal"] = []string{strconv.FormatBool(*a.IsPersonal)}
+	}
+	return &m
+}
+
+func (a *OrganizationAttributes) fromMap(m map[string][]string) {
+	if arr := m["long_name"]; len(arr) == 1 {
+		a.LongName = &arr[0]
+	}
+	if arr := m["short_name"]; len(arr) == 1 {
+		a.ShortName = &arr[0]
+	}
+	if arr := m["contact_email"]; len(arr) == 1 {
+		a.ContactEmail = &arr[0]
+	}
+	if arr := m["is_personal"]; len(arr) == 1 {
+		if b, err := strconv.ParseBool(arr[0]); err == nil {
+			a.IsPersonal = &b
+		}
+	}
+}
+
+// createOrganization creates a new organization on behalf of a user
+// it does so by creating a new keycloak group for the organization.
+// The group also has a subgroup for admins, where the requesting user is added to
+func createOrganization(logCtx context.Context, request api.CreateOrgRequestV1, userID string, contactEmail string, isPersonal bool) (*api.CreateOrgResponseV1, error) {
+	log := zlog.Ctx(logCtx)
+
 	// Client AuthN
 	token, err := getServiceAccountToken(logCtx)
 	if err != nil {
@@ -208,7 +222,8 @@ func createOrganization(ctx context.Context, in *daprcmn.InvocationEvent) (*comm
 	attributes := OrganizationAttributes{
 		LongName:     &request.LongName,
 		ShortName:    request.ShortName,
-		ContactEmail: &email,
+		ContactEmail: &contactEmail,
+		IsPersonal:   &isPersonal,
 	}
 
 	// group for the organization
@@ -273,13 +288,12 @@ func createOrganization(ctx context.Context, in *daprcmn.InvocationEvent) (*comm
 		return nil, err
 	}
 
-	// Response
-	var response common.Response = api.CreateOrgResponseV1{
+	return &api.CreateOrgResponseV1{
 		ID:           groupID,
-		LongName:     request.LongName,
-		ShortName:    request.ShortName,
-		ContactEmail: email,
-	}
+		LongName:     *attributes.LongName,
+		ShortName:    attributes.ShortName,
+		ContactEmail: *attributes.ContactEmail,
+		IsPersonal:   isPersonal,
+	}, nil
 
-	return &response, nil
 }

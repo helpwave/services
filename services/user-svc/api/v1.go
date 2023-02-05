@@ -32,6 +32,7 @@ type CreateOrgResponseV1 struct {
 	ShortName    *string `json:"shortName"`
 	AvatarUrl    *string `json:"avatarUrl"`
 	ContactEmail string  `json:"contactEmail"`
+	IsPersonal   bool    `json:"isPersonal"`
 }
 
 func (response CreateOrgResponseV1) ToContent() (*daprcmn.Content, error) {
