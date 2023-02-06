@@ -22,17 +22,17 @@ func (response CreateUserResponseV1) ToContent() (*daprcmn.Content, error) {
 }
 
 type CreateOrgRequestV1 struct {
-	LongName     string `validate:"required"`
-	ShortName    string `gorm:"default:NULL"`
-	ContactEmail string `validate:"required,email"`
+	LongName  string  `json:"longName" validate:"required"`
+	ShortName *string `json:"shortName"`
 }
 
 type CreateOrgResponseV1 struct {
-	ID           uuid.UUID `json:"id"`
-	LongName     string    `json:"longName"`
-	ShortName    string    `json:"shortName"`
-	AvatarUrl    string    `json:"avatarUrl"`
-	ContactEmail string    `json:"contactEmail"`
+	ID           string  `json:"id"`
+	LongName     string  `json:"longName"`
+	ShortName    *string `json:"shortName"`
+	AvatarUrl    *string `json:"avatarUrl"`
+	ContactEmail string  `json:"contactEmail"`
+	IsPersonal   bool    `json:"isPersonal"`
 }
 
 func (response CreateOrgResponseV1) ToContent() (*daprcmn.Content, error) {
