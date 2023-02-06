@@ -12,7 +12,7 @@ resource "google_container_node_pool" "primary_spot_nodes" {
   name = "primary-spot-nodes"
   cluster = google_container_cluster.staging.id
 
-  initial_node_count = 2
+  // initial_node_count = 2
   node_count = 3
   lifecycle {
     ignore_changes = [
