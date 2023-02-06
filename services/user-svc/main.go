@@ -188,6 +188,7 @@ func (a *OrganizationAttributes) toMap() *map[string][]string {
 	return &m
 }
 
+//nolint:golint,unused
 func (a *OrganizationAttributes) fromMap(m map[string][]string) {
 	if arr := m["long_name"]; len(arr) == 1 {
 		a.LongName = &arr[0]
