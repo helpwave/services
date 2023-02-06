@@ -5,7 +5,8 @@ resource "helm_release" "dapr" {
   version = "1.9.5"
 
   depends_on = [
-    google_container_cluster.staging
+    google_container_cluster.staging,
+    google_container_node_pool.primary_spot_nodes
   ]
 
   namespace = "dapr-system"
@@ -24,12 +25,14 @@ resource "helm_release" "nginx" {
   version = "4.4.2"
 
   depends_on = [
-    google_container_cluster.staging
+    google_container_cluster.staging,
+    google_container_node_pool.primary_spot_nodes,
+    helm_release.dapr
   ]
 
   namespace = "nginx"
   create_namespace = true
-  
+
   set {
     name = "controller.replicaCount"
     value = 2
@@ -57,7 +60,7 @@ resource "helm_release" "nginx" {
 
   set {
     name = "controller.service.loadBalancerIP"
-    value = "${var.gcp_public_ipv4}"
+    value = google_compute_address.staging-ipv4.address
   }
 }
 
@@ -76,7 +79,7 @@ resource "helm_release" "nginx-dapr" {
 
   set {
     name = "api.staging.hostname"
-    value = "staging.api.helpwave.de"
+    value = cloudflare_record.staging-api-helpwave-de.hostname
   }
 
   set {

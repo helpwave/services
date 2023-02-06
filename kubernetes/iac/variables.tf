@@ -12,6 +12,10 @@ variable "gcp_zone" {
   default = "europe-west3-b"
 }
 
-variable "gcp_public_ipv4" {
+variable "cf_api_token" {
+  type = string
+}
+
+variable "cf_zone_id" {
   type = string
 }
