@@ -4,14 +4,14 @@ import (
 	"common"
 	"context"
 	"github.com/Nerzal/gocloak/v12"
-	"github.com/google/uuid"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
 	"hwutil"
 	"logging"
 	"strconv"
 	"time"
 	"user-svc/api"
 
-	daprcmn "github.com/dapr/go-sdk/service/common"
 	zlog "github.com/rs/zerolog/log"
 )
 
@@ -25,18 +25,14 @@ var gocloakClient *gocloak.GoCloak
 var realm string
 
 func main() {
-	common.Setup(ServiceName, Version, true)
+	common.Setup(ServiceName, Version, false)
 
 	prepareGocloakClient()
 
 	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
-	service := common.NewDaprService(addr)
-
-	common.MustAddHWInvocationHandler(service, "/v1/create-user", createUser)
-	common.MustAddHWInvocationHandler(service, "/v1/create-organization", createOrganizationHandler)
-
-	zlog.Info().Str("addr", addr).Msg("starting dapr service")
-	common.MustStartService(service)
+	common.StartNewGRPCServer(addr, func(server *grpc.Server) {
+		api.RegisterUserServiceServer(server, &userServiceServer{})
+	})
 }
 
 // use getServiceAccountToken instead
@@ -75,26 +71,24 @@ func prepareGocloakClient() {
 	zlog.Trace().Msgf("%+v", token)
 }
 
-//
-// Handlers
-//
+type userServiceServer struct {
+	api.UnimplementedUserServiceServer
+}
 
-func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
-	log, logCtx := common.GetHandlerLogger("createUser", ctx)
+func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUserRequest) (*api.CreateUserResponse, error) {
+	log := zlog.Logger             // TODO
+	logCtx := context.Background() // TODO
 
-	// Parse
-	request := api.CreateUserRequestV1{}
-	if err := hwutil.ParseValidJson(in.Data, &request); err != nil {
-		log.Warn().Err(err).Msg("invalid input")
-		return nil, err
-	}
+	// TODO: input validation
 
+	// new user's Password
 	credentials := []gocloak.CredentialRepresentation{{
 		Temporary: gocloak.BoolP(false),
 		Type:      gocloak.StringP("password"),
 		Value:     gocloak.StringP(request.Password),
 	}}
 
+	// new user
 	user := gocloak.User{
 		FirstName:   gocloak.StringP(request.FirstName),
 		LastName:    gocloak.StringP(request.LastName),
@@ -104,10 +98,11 @@ func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Respo
 		Credentials: &credentials,
 	}
 
+	// Client AuthN
 	token, err := getServiceAccountToken(logCtx)
 	if err != nil {
 		log.Error().Err(err).Msg("could not refresh service token!")
-		return nil, err
+		return nil, status.Error(500, err.Error())
 	}
 
 	kcCtx := context.Background()
@@ -115,30 +110,23 @@ func createUser(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Respo
 	userID, err := gocloakClient.CreateUser(kcCtx, token.AccessToken, realm, user)
 	if err != nil {
 		log.Warn().Err(err).Msg("could not create new user")
-		return nil, err
+		return nil, status.Error(400, err.Error())
 	} else {
 		log.Info().Str("userID", userID).Msg("created new user")
 	}
 
-	userIDUUID, err := uuid.Parse(userID)
-	if err != nil {
-		log.Error().Err(err).Msg("could not parse new user's id")
-		return nil, err
-	}
-
-	// Response
-	var response common.Response = api.CreateUserResponseV1{
-		UserID: userIDUUID,
-	}
+	response := api.CreateUserResponse{UserID: userID}
 
 	return &response, nil
 }
 
-func createOrganizationHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
-	log, logCtx := common.GetHandlerLogger("createOrganizationHandler", ctx)
+func (userServiceServer) CreateOrganization(ctx context.Context, request *api.CreateOrgRequest) (*api.CreateOrgResponse, error) {
+	logCtx := context.Background() // TODO
+
+	// TODO: input validation
 
 	// User AuthN
-	claims, err := common.GetAuthClaims(ctx, logCtx)
+	claims, err := common.GetAuthClaims(ctx, logCtx) // TODO
 	if err != nil {
 		return nil, err
 	}
@@ -146,20 +134,7 @@ func createOrganizationHandler(ctx context.Context, in *daprcmn.InvocationEvent)
 	userID := claims.Sub
 	email := claims.Email
 
-	// Parse
-	request := api.CreateOrgRequestV1{}
-	if err := hwutil.ParseValidJson(in.Data, &request); err != nil {
-		log.Warn().Err(err).Msg("invalid input")
-		return nil, err
-	}
-	log.Debug().Str("body", logging.Formatted(request)).Send()
-
-	res, err := createOrganization(logCtx, request, userID, email, false)
-
-	// Response
-	var response common.Response = res
-
-	return &response, err
+	return createOrganization(logCtx, request, userID, email, false)
 }
 
 type OrganizationAttributes struct {
@@ -209,22 +184,25 @@ func (a *OrganizationAttributes) fromMap(m map[string][]string) {
 // createOrganization creates a new organization on behalf of a user
 // it does so by creating a new keycloak group for the organization.
 // The group also has a subgroup for admins, where the requesting user is added to
-func createOrganization(logCtx context.Context, request api.CreateOrgRequestV1, userID string, contactEmail string, isPersonal bool) (*api.CreateOrgResponseV1, error) {
+func createOrganization(logCtx context.Context, request *api.CreateOrgRequest, userID string, contactEmail string, isPersonal bool) (*api.CreateOrgResponse, error) {
 	log := zlog.Ctx(logCtx)
 
 	// Client AuthN
 	token, err := getServiceAccountToken(logCtx)
 	if err != nil {
 		log.Error().Err(err).Msg("could not refresh service token!")
-		return nil, err
+		return nil, status.Error(500, err.Error())
 	}
 
 	// data about the organization
 	attributes := OrganizationAttributes{
 		LongName:     &request.LongName,
-		ShortName:    request.ShortName,
 		ContactEmail: &contactEmail,
 		IsPersonal:   &isPersonal,
+	}
+
+	if request.ShortName != "" {
+		attributes.ShortName = &request.ShortName
 	}
 
 	// group for the organization
@@ -243,7 +221,7 @@ func createOrganization(logCtx context.Context, request api.CreateOrgRequestV1, 
 			Str("group", logging.Formatted(group)).
 			Str("userID", userID).
 			Msg("could not create group")
-		return nil, err
+		return nil, status.Error(400, err.Error())
 	} else {
 		log.Info().Str("userID", userID).Str("groupID", groupID).Msg("created new organization")
 	}
@@ -286,15 +264,15 @@ func createOrganization(logCtx context.Context, request api.CreateOrgRequestV1, 
 				Str("userID", userID).
 				Msg("removed new group again")
 		}
-		return nil, err
+		return nil, status.Error(400, err.Error())
 	}
 
-	return &api.CreateOrgResponseV1{
-		ID:           groupID,
+	return &api.CreateOrgResponse{
+		Id:           groupID,
 		LongName:     *attributes.LongName,
-		ShortName:    attributes.ShortName,
+		ShortName:    *attributes.ShortName,
 		ContactEmail: *attributes.ContactEmail,
-		IsPersonal:   isPersonal,
+		IsPersonal:   *attributes.IsPersonal,
 	}, nil
 
 }

@@ -1,0 +1,47 @@
+
+syntax = "proto3";
+
+option go_package = "user-svc/api";
+
+//
+// Create User
+//
+
+message CreateUserRequest {
+	string Email = 1;
+	string FirstName = 2;
+	string LastName = 3;
+	string Password = 4;
+}
+
+message CreateUserResponse {
+	string userID = 1;
+}
+
+//
+// Create Organization
+//
+
+message CreateOrgRequest {
+	string longName = 1;
+	string shortName = 2;
+	string contactEmail = 3;
+}
+
+message CreateOrgResponse {
+	string id = 1;
+	string longName = 2;
+	string shortName = 3;
+	string contactEmail = 4;
+	string avatarUrl = 5;
+	bool isPersonal = 6;
+}
+
+//
+// UserService
+//
+
+service UserService {
+	rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {}
+	rpc CreateOrganization (CreateOrgRequest) returns (CreateOrgResponse) {}
+}
