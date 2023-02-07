@@ -8,10 +8,10 @@ option go_package = "user-svc/api";
 //
 
 message CreateUserRequest {
-	string Email = 1;
-	string FirstName = 2;
-	string LastName = 3;
-	string Password = 4;
+	string Email = 1; //@gotags: validate:"required,email"
+	string FirstName = 2; // @gotags: validate:"required"
+	string LastName = 3; // @gotags: validate:"required"
+	string Password = 4; // @gotags: validate:"required"
 }
 
 message CreateUserResponse {
@@ -23,9 +23,9 @@ message CreateUserResponse {
 //
 
 message CreateOrgRequest {
-	string longName = 1;
+	string longName = 1; // @gotags: validate:"required"
 	string shortName = 2;
-	string contactEmail = 3;
+	string contactEmail = 3; // @gotags: validate:"required"
 }
 
 message CreateOrgResponse {

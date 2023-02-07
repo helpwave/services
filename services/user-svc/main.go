@@ -132,9 +132,8 @@ func (userServiceServer) CreateOrganization(ctx context.Context, request *api.Cr
 	}
 
 	userID := claims.Sub
-	email := claims.Email
 
-	return createOrganization(logCtx, request, userID, email, false)
+	return createOrganization(logCtx, request, userID, false)
 }
 
 type OrganizationAttributes struct {
@@ -184,7 +183,7 @@ func (a *OrganizationAttributes) fromMap(m map[string][]string) {
 // createOrganization creates a new organization on behalf of a user
 // it does so by creating a new keycloak group for the organization.
 // The group also has a subgroup for admins, where the requesting user is added to
-func createOrganization(logCtx context.Context, request *api.CreateOrgRequest, userID string, contactEmail string, isPersonal bool) (*api.CreateOrgResponse, error) {
+func createOrganization(logCtx context.Context, request *api.CreateOrgRequest, userID string, isPersonal bool) (*api.CreateOrgResponse, error) {
 	log := zlog.Ctx(logCtx)
 
 	// Client AuthN
@@ -197,7 +196,7 @@ func createOrganization(logCtx context.Context, request *api.CreateOrgRequest, u
 	// data about the organization
 	attributes := OrganizationAttributes{
 		LongName:     &request.LongName,
-		ContactEmail: &contactEmail,
+		ContactEmail: &request.ContactEmail,
 		IsPersonal:   &isPersonal,
 	}
 
