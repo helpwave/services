@@ -18,72 +18,90 @@ resource "helm_release" "dapr" {
   }
 }
 
-resource "helm_release" "nginx" {
-  name = "nginx-ingress"
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  chart = "ingress-nginx"
-  version = "4.4.2"
+resource "helm_release" "apisix" {
+  name  = "apisix"
+  repository = "https://charts.apiseven.com"
+  chart = "apisix"
 
   depends_on = [
-    google_container_cluster.staging,
-    google_container_node_pool.primary_spot_nodes,
     helm_release.dapr
   ]
 
-  namespace = "nginx"
+  namespace = "apisix"
   create_namespace = true
 
   set {
-    name = "controller.replicaCount"
-    value = 2
+    name  = "gateway.type"
+    value = "LoadBalancer"
   }
 
   set {
-    name = "controller.podAnnotations.dapr\\.io/enabled"
+    name  = "gateway.loadBalancerIP"
+    value = google_compute_address.staging-ipv4.address
+  }
+
+  set {
+    name  = "gateway.tls.enabled"
     value = "true"
   }
 
   set {
-    name = "controller.podAnnotations.dapr\\.io/app-id"
-    value = "nginx-ingress"
+    name = "ingress-controller.enabled"
+    value = "true"
   }
 
   set {
-    name = "controller.podAnnotations.dapr\\.io/app-port"
-    value = "80"
+    name = "ingress-controller.config.apisix.serviceNamespace"
+    value = "apisix"
   }
 
   set {
-    name = "controller.podAnnotations.dapr\\.io/sidecar-listen-addresses"
+    name = "dashboard.enabled"
+    value = "true"
+  }
+
+  // BEGIN OF Dapr podAnnotations
+  set {
+    name = "apisix.podAnnotations.dapr\\.io/enabled"
+    value = "true"
+  }
+
+  set {
+    name = "apisix.podAnnotations.dapr\\.io/sidecar-listen-addresses"
     value = "0.0.0.0"
   }
 
   set {
-    name = "controller.service.loadBalancerIP"
-    value = google_compute_address.staging-ipv4.address
+    name = "apisix.podAnnotations.dapr\\.io/app-id"
+    value = "apisix"
   }
+
+  set {
+    name = "apisix.podAnnotations.dapr\\.io/app-port"
+    value = "9080"
+  }
+
+  set {
+    name = "apisix.podAnnotations.dapr\\.io/enable-metrics"
+    value = "true"
+  }
+
+  set {
+    name = "apisix.podAnnotations.dapr\\.io/metrics-port"
+    value = "9099"
+  }
+  // END OF Dapr podAnnotations
 }
 
-resource "helm_release" "nginx-dapr" {
-  name = "nginx-dapr"
-  chart = "../nginx-dapr"
+# kubectl port-forward <name of the dashboard-pod> 9000:9000
+resource "helm_release" "apisix-dashboard" {
+  name  = "apisix-dashboard"
+  repository = "https://charts.apiseven.com"
+  chart = "apisix-dashboard"
 
   depends_on = [
-    google_container_cluster.staging,
-    helm_release.dapr,
-    helm_release.nginx
+    helm_release.apisix
   ]
 
-  namespace = "nginx"
-  create_namespace = true
-
-  set {
-    name = "api.staging.hostname"
-    value = cloudflare_record.staging-api-helpwave-de.hostname
-  }
-
-  set {
-    name = "nginx.ingressDaprSidecar"
-    value = "nginx-ingress-dapr"
-  }
+  namespace = "apisix"
 }
