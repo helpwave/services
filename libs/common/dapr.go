@@ -3,16 +3,12 @@ package common
 import (
 	"context"
 	"encoding/json"
-	"errors"
+	daprcmn "github.com/dapr/go-sdk/service/common"
+	daprd "github.com/dapr/go-sdk/service/http"
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"logging"
 	"net/http"
-	"regexp"
-
-	daprcmn "github.com/dapr/go-sdk/service/common"
-	daprd "github.com/dapr/go-sdk/service/http"
 )
 
 const TraceParentKey = "traceparent"
@@ -51,53 +47,6 @@ func GetTraceParent(ctx context.Context) (string, bool) {
 		return traceParent, ok
 	}
 	return "", false
-}
-
-func extractAuthToken(ctx context.Context, logCtx context.Context) (string, error) {
-	authHeaderRaw := ctx.Value(AuthHeaderKey)
-	if authHeaderRaw == nil {
-		return "", errors.New("authorization required")
-	}
-	authHeader, ok := authHeaderRaw.(string)
-	if !ok {
-		log.
-			Ctx(logCtx).
-			Error().
-			Msgf("could not convert auth header into string: '%v'", logging.Formatted(authHeaderRaw))
-		return "", errors.New("could not parse authorization header")
-	}
-
-	log.Ctx(logCtx).Trace().Str("auth_header", authHeader).Send()
-
-	regex := regexp.MustCompile(`^Bearer ([a-zA-Z0-9._-]+)$`)
-
-	var err error
-	var token string
-
-	if len(authHeader) == 0 {
-		err = errors.New("authorization required")
-	} else {
-		matches := regex.FindStringSubmatch(authHeader)
-		if len(matches) != 2 {
-			err = errors.New("authorization header invalid")
-		} else {
-			token = matches[1]
-		}
-	}
-
-	if err != nil {
-		log.Ctx(logCtx).Warn().Err(err).Send()
-	}
-	return token, err
-}
-
-func GetAuthClaims(ctx context.Context, logCtx context.Context) (*AccessTokenClaims, error) {
-	token, err := extractAuthToken(ctx, logCtx)
-	if err != nil {
-		return nil, err
-	}
-
-	return VerifyAccessToken(token)
 }
 
 func GetHandlerLogger(handlerName string, requestContext context.Context) (zerolog.Logger, context.Context) {

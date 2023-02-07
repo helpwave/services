@@ -22,6 +22,13 @@ func ParseValidJson(buffer []byte, target any) error {
 	return nil
 }
 
+func Validate(target any) error {
+	if validate == nil {
+		validate = validator.New()
+	}
+	return validate.Struct(target)
+}
+
 func ParseSeconds(seconds int) time.Duration {
 	return time.Duration(seconds) * time.Second
 }

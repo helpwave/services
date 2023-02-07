@@ -5,6 +5,7 @@ import (
 	"context"
 	"github.com/Nerzal/gocloak/v12"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwutil"
 	"logging"
@@ -25,7 +26,7 @@ var gocloakClient *gocloak.GoCloak
 var realm string
 
 func main() {
-	common.Setup(ServiceName, Version, false)
+	common.Setup(ServiceName, Version, true)
 
 	prepareGocloakClient()
 
@@ -102,7 +103,7 @@ func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUser
 	token, err := getServiceAccountToken(logCtx)
 	if err != nil {
 		log.Error().Err(err).Msg("could not refresh service token!")
-		return nil, status.Error(500, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	kcCtx := context.Background()
@@ -110,7 +111,7 @@ func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUser
 	userID, err := gocloakClient.CreateUser(kcCtx, token.AccessToken, realm, user)
 	if err != nil {
 		log.Warn().Err(err).Msg("could not create new user")
-		return nil, status.Error(400, err.Error())
+		return nil, status.Error(codes.InvalidArgument, err.Error())
 	} else {
 		log.Info().Str("userID", userID).Msg("created new user")
 	}
@@ -126,7 +127,7 @@ func (userServiceServer) CreateOrganization(ctx context.Context, request *api.Cr
 	// TODO: input validation
 
 	// User AuthN
-	claims, err := common.GetAuthClaims(ctx, logCtx) // TODO
+	claims, err := common.GetAuthClaims(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -190,7 +191,7 @@ func createOrganization(logCtx context.Context, request *api.CreateOrgRequest, u
 	token, err := getServiceAccountToken(logCtx)
 	if err != nil {
 		log.Error().Err(err).Msg("could not refresh service token!")
-		return nil, status.Error(500, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	// data about the organization
@@ -220,7 +221,7 @@ func createOrganization(logCtx context.Context, request *api.CreateOrgRequest, u
 			Str("group", logging.Formatted(group)).
 			Str("userID", userID).
 			Msg("could not create group")
-		return nil, status.Error(400, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	} else {
 		log.Info().Str("userID", userID).Str("groupID", groupID).Msg("created new organization")
 	}
@@ -263,7 +264,7 @@ func createOrganization(logCtx context.Context, request *api.CreateOrgRequest, u
 				Str("userID", userID).
 				Msg("removed new group again")
 		}
-		return nil, status.Error(400, err.Error())
+		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	return &api.CreateOrgResponse{
@@ -273,5 +274,4 @@ func createOrganization(logCtx context.Context, request *api.CreateOrgRequest, u
 		ContactEmail: *attributes.ContactEmail,
 		IsPersonal:   *attributes.IsPersonal,
 	}, nil
-
 }
