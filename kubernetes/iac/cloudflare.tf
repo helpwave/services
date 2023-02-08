@@ -23,6 +23,7 @@ resource "cloudflare_record" "api-helpwave-de" {
   value = google_compute_address.staging-ipv4.address
   type    = "A"
   comment = "Managed through Terraform"
+  proxied = true
 }
 
 resource "cloudflare_record" "staging-helpwave-de" {
@@ -31,6 +32,7 @@ resource "cloudflare_record" "staging-helpwave-de" {
   value = cloudflare_record.api-helpwave-de.hostname
   type = "CNAME"
   comment = "Managed through Terraform"
+  proxied = true
 }
 
 resource "cloudflare_record" "staging-api-helpwave-de" {
@@ -39,4 +41,5 @@ resource "cloudflare_record" "staging-api-helpwave-de" {
   value = cloudflare_record.api-helpwave-de.hostname
   type = "CNAME"
   comment = "Managed through Terraform"
+  proxied = true
 }
