@@ -21,9 +21,9 @@ var claimsKey = claimsKeyT{}
 
 func StartNewGRPCServer(addr string, registerServerHook func(*grpc.Server)) {
 	// middlewares
-	logging := LoggingUnaryInterceptor
+	logging := loggingUnaryInterceptor
 	auth := grpc_auth.UnaryServerInterceptor(authFunc)
-	validate := ValidateUnaryInterceptor
+	validate := validateUnaryInterceptor
 	chain := grpc_middleware.ChainUnaryServer(logging, auth, validate)
 
 	server := grpc.NewServer(grpc.UnaryInterceptor(chain))
@@ -32,7 +32,6 @@ func StartNewGRPCServer(addr string, registerServerHook func(*grpc.Server)) {
 	if err != nil {
 		zlog.Fatal().Str("addr", addr).Err(err).Send()
 	}
-	// TODO: logging middleware
 
 	zlog.Info().Str("addr", addr).Msg("starting grpc service")
 
@@ -44,6 +43,11 @@ func StartNewGRPCServer(addr string, registerServerHook func(*grpc.Server)) {
 }
 
 func authFunc(ctx context.Context) (context.Context, error) {
+	if !IsKeycloakSetUp() {
+		// skip injecting claims into context
+		return ctx, nil
+	}
+
 	// get token from gRPC metadata
 	token, err := grpc_auth.AuthFromMD(ctx, "bearer")
 
@@ -55,7 +59,6 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	// verify token
 	claims, err := VerifyAccessToken(token)
 	if err != nil {
-		zlog.Warn().Err(err).Msg("invalid token") // TODO: logging
 		return nil, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err)
 	}
 
@@ -72,16 +75,14 @@ func GetAuthClaims(ctx context.Context) (*AccessTokenClaims, error) {
 	}
 }
 
-func ValidateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
 	if err := hwutil.Validate(req); err != nil {
-		// TODO: logging
-		zlog.Warn().Err(err).Send()
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
 	return next(ctx, req)
 }
 
-func LoggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
 	metadata := metautils.ExtractIncoming(ctx)
 
 	// Add request information
@@ -108,7 +109,7 @@ func LoggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 		message := statusError.Message()
 		details := statusError.Details()
 		log.
-			Error().
+			Warn().
 			Err(err).
 			Str("code", code).
 			Interface("details", details).

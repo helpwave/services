@@ -41,6 +41,5 @@ func Setup(serviceName, version string, auth bool) {
 
 	if auth {
 		setupKeycloak()
-		// TODO: add keycloak middleware?
 	}
 }
