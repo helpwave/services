@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwutil"
+	"logging"
 	"net"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
@@ -95,8 +96,15 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 	log := builder.Logger()
 	ctx = log.WithContext(ctx)
 
-	log.Trace().Interface("metadata", metadata).Send() // TODO: redact authentication token
-	log.Debug().Interface("body", req).Send()          // TODO: redact sensitive data
+	log.Trace().Interface("metadata", redactMetadata(metadata)).Send()
+
+	logBody := req
+
+	// custom map instead, if implemented
+	if loggable, ok := req.(logging.Loggable); ok {
+		logBody = loggable.LoggableFields()
+	}
+	log.Debug().Interface("body", logBody).Send()
 
 	// Call next in chain
 	res, err := next(ctx, req)
@@ -123,4 +131,13 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 
 	// pass results back up the interceptor chain
 	return res, err
+}
+
+func redactMetadata(m metautils.NiceMD) metautils.NiceMD {
+	if arr := m["authorization"]; arr != nil {
+		for i := range arr {
+			arr[i] = logging.OmitAll(arr[i])
+		}
+	}
+	return m
 }
