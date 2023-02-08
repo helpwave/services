@@ -1,6 +1,6 @@
 [ -d "api" ] && cd api || exit 0
 
-if ls ./api/*.proto &>/dev/null
+if ls *.proto &>/dev/null
 then
 	protoc --go_out=. \
 			--go_opt=paths=source_relative \

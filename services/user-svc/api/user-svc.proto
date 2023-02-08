@@ -8,7 +8,7 @@ option go_package = "user-svc/api";
 //
 
 message CreateUserRequest {
-	string email = 1; //@gotags: validate:"required,email"
+	string email = 1; // @gotags: validate:"required,email"
 	string firstName = 2; // @gotags: validate:"required"
 	string lastName = 3; // @gotags: validate:"required"
 	string password = 4; // @gotags: validate:"required"

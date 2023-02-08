@@ -25,7 +25,7 @@ type CreateUserRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Email     string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty" validate:"required,email"`         //@gotags: validate:"required,email"
+	Email     string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty" validate:"required,email"`         // @gotags: validate:"required,email"
 	FirstName string `protobuf:"bytes,2,opt,name=firstName,proto3" json:"firstName,omitempty" validate:"required"` // @gotags: validate:"required"
 	LastName  string `protobuf:"bytes,3,opt,name=lastName,proto3" json:"lastName,omitempty" validate:"required"`   // @gotags: validate:"required"
 	Password  string `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty" validate:"required"`   // @gotags: validate:"required"

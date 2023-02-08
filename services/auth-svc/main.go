@@ -5,13 +5,14 @@ import (
 	"context"
 	_ "embed"
 	"emergency-room-svc/api"
-	"errors"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"hwutil"
 	"logging"
 	"net/http"
 	"text/template"
 
-	daprcmn "github.com/dapr/go-sdk/service/common"
 	zlog "github.com/rs/zerolog/log"
 )
 
@@ -36,18 +37,15 @@ func main() {
 	}
 
 	go runHttpServer()
-	runDaprService()
+	runGRPCService()
 }
 
-func runDaprService() {
+func runGRPCService() {
 	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
-	service := common.NewDaprService(addr)
 
-	common.MustAddHWInvocationHandler(service, "/v1/auth-request", authRequestHandler)
-	common.MustAddHWInvocationHandler(service, "/v1/refresh-token", refreshTokenHandler)
-
-	zlog.Info().Str("addr", addr).Msg("starting dapr service")
-	common.MustStartService(service)
+	common.StartNewGRPCServer(addr, func(server *grpc.Server) {
+		api.RegisterAuthServiceServer(server, &authServiceServer{})
+	})
 }
 
 func runHttpServer() {
@@ -59,40 +57,6 @@ func runHttpServer() {
 	if err := http.ListenAndServe(addr, nil); err != http.ErrServerClosed {
 		zlog.Fatal().Err(err).Send()
 	}
-}
-
-func authRequestHandler(ctx context.Context, _ *daprcmn.InvocationEvent) (*common.Response, error) {
-	log, _ := common.GetHandlerLogger("authRequestHandler", ctx)
-
-	url := common.GetAuthCodeURL()
-	log.Info().Msg(url)
-
-	var response common.Response = api.PrelimAuthRequestResponseV1(url)
-	return &response, nil
-}
-
-func refreshTokenHandler(ctx context.Context, in *daprcmn.InvocationEvent) (*common.Response, error) {
-	log, _ := common.GetHandlerLogger("refreshTokenHandler", ctx)
-
-	refreshToken := string(in.Data)
-
-	if refreshToken == "" {
-		return nil, errors.New("refresh token missing")
-	}
-
-	token, err := common.RefreshToken(refreshToken)
-	if err != nil {
-		log.Warn().Err(err).Send()
-		return nil, err
-	}
-
-	var resp common.Response = api.TokenResponseV1{
-		AccessToken:  token.AccessToken,
-		RefreshToken: token.RefreshToken,
-		Exp:          token.Expiry.Unix(),
-	}
-
-	return &resp, nil
 }
 
 func authRequestCallbackHandler(w http.ResponseWriter, r *http.Request) {
@@ -146,4 +110,32 @@ func authRequestCallbackHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error forming response", http.StatusInternalServerError)
 		return
 	}
+}
+
+type authServiceServer struct {
+	api.UnimplementedAuthServiceServer
+}
+
+func (authServiceServer) PrelimAuthRequest(ctx context.Context, _ *api.PrelimAuthRequestRequest) (*api.PrelimAuthRequestResponse, error) {
+	log := zlog.Ctx(ctx)
+
+	url := common.GetAuthCodeURL()
+	log.Info().Msg(url)
+
+	return &api.PrelimAuthRequestResponse{Url: url}, nil
+}
+
+func (authServiceServer) RefreshToken(ctx context.Context, req *api.RefreshTokenRequest) (*api.TokenResponse, error) {
+	refreshToken := req.RefreshToken
+
+	token, err := common.RefreshToken(refreshToken)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	return &api.TokenResponse{
+		AccessToken:  token.AccessToken,
+		RefreshToken: token.RefreshToken,
+		Exp:          token.Expiry.Unix(),
+	}, nil
 }
