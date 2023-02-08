@@ -3,14 +3,15 @@ package common
 import (
 	"context"
 	"errors"
-	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
-	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
+	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwutil"
 	"net"
 
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	zlog "github.com/rs/zerolog/log"
 )
 
@@ -20,10 +21,10 @@ var claimsKey = claimsKeyT{}
 
 func StartNewGRPCServer(addr string, registerServerHook func(*grpc.Server)) {
 	// middlewares
-	// TODO: logging middleware
+	logging := LoggingUnaryInterceptor
 	auth := grpc_auth.UnaryServerInterceptor(authFunc)
 	validate := ValidateUnaryInterceptor
-	chain := grpc_middleware.ChainUnaryServer(auth, validate)
+	chain := grpc_middleware.ChainUnaryServer(logging, auth, validate)
 
 	server := grpc.NewServer(grpc.UnaryInterceptor(chain))
 
@@ -31,6 +32,7 @@ func StartNewGRPCServer(addr string, registerServerHook func(*grpc.Server)) {
 	if err != nil {
 		zlog.Fatal().Str("addr", addr).Err(err).Send()
 	}
+	// TODO: logging middleware
 
 	zlog.Info().Str("addr", addr).Msg("starting grpc service")
 
@@ -72,7 +74,52 @@ func GetAuthClaims(ctx context.Context) (*AccessTokenClaims, error) {
 
 func ValidateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
 	if err := hwutil.Validate(req); err != nil {
+		// TODO: logging
+		zlog.Warn().Err(err).Send()
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
 	return next(ctx, req)
+}
+
+func LoggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	metadata := metautils.ExtractIncoming(ctx)
+
+	// Add request information
+	builder := zlog.
+		With().
+		Str("handler", info.FullMethod).
+		Str("span", metadata.Get("traceparent"))
+
+	// this is the logger that should be used for this request
+	log := builder.Logger()
+	ctx = log.WithContext(ctx)
+
+	log.Trace().Interface("metadata", metadata).Send() // TODO: redact authentication token
+	log.Debug().Interface("body", req).Send()          // TODO: redact sensitive data
+
+	// Call next in chain
+	res, err := next(ctx, req)
+
+	// We are back! Now evaluate response
+
+	if err != nil {
+		statusError := status.Convert(err)
+		code := statusError.Code().String()
+		message := statusError.Message()
+		details := statusError.Details()
+		log.
+			Error().
+			Err(err).
+			Str("code", code).
+			Interface("details", details).
+			Msg(message)
+	} else {
+		log.
+			Info().
+			Str("code", codes.OK.String()).
+			Msg("Ok")
+	}
+
+	// pass results back up the interceptor chain
+	return res, err
 }

@@ -77,10 +77,7 @@ type userServiceServer struct {
 }
 
 func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUserRequest) (*api.CreateUserResponse, error) {
-	log := zlog.Logger             // TODO
-	logCtx := context.Background() // TODO
-
-	// TODO: input validation
+	log := zlog.Ctx(ctx)
 
 	// new user's Password
 	credentials := []gocloak.CredentialRepresentation{{
@@ -100,7 +97,7 @@ func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUser
 	}
 
 	// Client AuthN
-	token, err := getServiceAccountToken(logCtx)
+	token, err := getServiceAccountToken(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("could not refresh service token!")
 		return nil, status.Error(codes.Internal, err.Error())
@@ -122,10 +119,6 @@ func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUser
 }
 
 func (userServiceServer) CreateOrganization(ctx context.Context, request *api.CreateOrgRequest) (*api.CreateOrgResponse, error) {
-	logCtx := context.Background() // TODO
-
-	// TODO: input validation
-
 	// User AuthN
 	claims, err := common.GetAuthClaims(ctx)
 	if err != nil {
@@ -134,7 +127,7 @@ func (userServiceServer) CreateOrganization(ctx context.Context, request *api.Cr
 
 	userID := claims.Sub
 
-	return createOrganization(logCtx, request, userID, false)
+	return createOrganization(ctx, request, userID, false)
 }
 
 type OrganizationAttributes struct {
