@@ -22,6 +22,7 @@ require (
 
 require (
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
+	github.com/fatih/structs v1.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.1 // indirect
