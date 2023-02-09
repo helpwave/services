@@ -25,7 +25,7 @@ message CreateUserResponse {
 message CreateOrgRequest {
 	string longName = 1; // @gotags: validate:"required"
 	string shortName = 2;
-	string contactEmail = 3; // @gotags: validate:"required"
+	string contactEmail = 3; // @gotags: validate:"required,email"
 }
 
 message CreateOrgResponse {

@@ -145,7 +145,7 @@ type CreateOrgRequest struct {
 
 	LongName     string `protobuf:"bytes,1,opt,name=longName,proto3" json:"longName,omitempty" validate:"required"` // @gotags: validate:"required"
 	ShortName    string `protobuf:"bytes,2,opt,name=shortName,proto3" json:"shortName,omitempty"`
-	ContactEmail string `protobuf:"bytes,3,opt,name=contactEmail,proto3" json:"contactEmail,omitempty" validate:"required"` // @gotags: validate:"required"
+	ContactEmail string `protobuf:"bytes,3,opt,name=contactEmail,proto3" json:"contactEmail,omitempty" validate:"required,email"` // @gotags: validate:"required,email"
 }
 
 func (x *CreateOrgRequest) Reset() {
