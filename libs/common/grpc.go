@@ -68,6 +68,10 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	return ctx, nil
 }
 
+// GetAuthClaims extracts AccessTokenClaims from the request context, if they exist
+// They are checked to be as expected and the token it was extracted from was valid.
+// If an error is returned, no access token was extracted for this request.
+// This either means no token was supplied by the client, or Auth was not set up in Setup.
 func GetAuthClaims(ctx context.Context) (*AccessTokenClaims, error) {
 	if res := ctx.Value(claimsKey).(*AccessTokenClaims); res == nil {
 		return nil, errors.New("authentication required")
