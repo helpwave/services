@@ -4,17 +4,12 @@ resource "helm_release" "dapr" {
   chart = "dapr"
   version = "1.9.5"
 
-  depends_on = [
-    google_container_cluster.staging,
-    google_container_node_pool.primary_spot_nodes
-  ]
-
   namespace = "dapr-system"
   create_namespace = true
 
   set {
     name = "global.ha.enabled"
-    value = "false"
+    value = var.dapr_ha
   }
 }
 
@@ -32,17 +27,17 @@ resource "helm_release" "apisix" {
 
   set {
     name  = "gateway.type"
-    value = "LoadBalancer"
+    value = var.apisix_gateway_type
   }
 
   set {
     name  = "gateway.loadBalancerIP"
-    value = google_compute_address.staging-ipv4.address
+    value = var.apisix_gateway_ip
   }
 
   set {
     name  = "gateway.tls.enabled"
-    value = "true"
+    value = var.apisix_gateway_tls
   }
 
   set {
