@@ -9,16 +9,16 @@ import (
 // Thank you mkopriv (https://stackoverflow.com/a/68521736)
 
 type Point struct {
-	Lat  float64 `json:"lat" validate:"required"`
-	Long float64 `json:"long" validate:"required"`
+	Lat  float32 `json:"lat" validate:"required"`
+	Long float32 `json:"long" validate:"required"`
 }
 
 // Value converts a Point into a []byte for the database driver to consume
 func (p Point) Value() (driver.Value, error) {
 	out := []byte{'('}
-	out = strconv.AppendFloat(out, p.Lat, 'f', -1, 64)
+	out = strconv.AppendFloat(out, float64(p.Lat), 'f', -1, 64)
 	out = append(out, ',')
-	out = strconv.AppendFloat(out, p.Long, 'f', -1, 64)
+	out = strconv.AppendFloat(out, float64(p.Long), 'f', -1, 64)
 	out = append(out, ')')
 	return out, nil
 }
@@ -44,12 +44,15 @@ func (p *Point) Scan(src interface{}) (err error) {
 	data = data[1 : len(data)-1] // drop the surrounding parentheses
 	for i := 0; i < len(data); i++ {
 		if data[i] == ',' {
-			if p.Lat, err = strconv.ParseFloat(string(data[:i]), 64); err != nil {
+			var lat, long float64
+			if lat, err = strconv.ParseFloat(string(data[:i]), 64); err != nil {
 				return err
 			}
-			if p.Long, err = strconv.ParseFloat(string(data[i+1:]), 64); err != nil {
+			p.Lat = float32(lat)
+			if long, err = strconv.ParseFloat(string(data[i+1:]), 64); err != nil {
 				return err
 			}
+			p.Long = float32(long)
 			break
 		}
 	}

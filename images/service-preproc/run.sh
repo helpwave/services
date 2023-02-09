@@ -6,6 +6,7 @@ then
 			--go_opt=paths=source_relative \
 			--go-grpc_out=. \
 			--go-grpc_opt=paths=source_relative \
+			--experimental_allow_proto3_optional \
 			*.proto &&
 	protoc-go-inject-tag -input="*.pb.go"
 fi

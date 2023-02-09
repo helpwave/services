@@ -1,22 +1,22 @@
 package models
 
-import "github.com/google/uuid"
-
-type DepartmentBase struct {
-	ID   uuid.UUID `json:"id"`
-	Name string    `json:"name" gorm:"default:NULL"`
-}
+import (
+	"emergency-room-svc/api"
+	"github.com/google/uuid"
+)
 
 type Department struct {
-	DepartmentBase
+	ID    uuid.UUID       `json:"id"`
+	Name  string          `json:"name" gorm:"default:NULL"`
 	Rooms []EmergencyRoom `gorm:"many2many:rooms_have_departments"`
 }
 
-// DepartmentsToBases creates an array of DepartmentsToBases for a given array of Departments
-func DepartmentsToBases(deps []Department) []DepartmentBase {
-	bases := make([]DepartmentBase, len(deps))
+// DepartmentsToBases creates an array of DepartmentBases for a given array of Departments
+func DepartmentsToBases(deps []Department) []*api.DepartmentBase {
+	bases := make([]*api.DepartmentBase, len(deps))
 	for i := range deps {
-		bases[i] = deps[i].DepartmentBase
+		bases[i].Id = deps[i].ID.String()
+		bases[i].Name = deps[i].Name
 	}
 	return bases
 }
@@ -29,4 +29,16 @@ func UUIDsToDepartments(departments []uuid.UUID) []Department {
 	}
 
 	return deps
+}
+
+func StringsToUUIDs(strings []string) ([]uuid.UUID, error) {
+	uuids := make([]uuid.UUID, len(strings))
+	for i := range strings {
+		id, err := uuid.Parse(strings[i])
+		if err != nil {
+			return nil, err
+		}
+		uuids[i] = id
+	}
+	return uuids, nil
 }
