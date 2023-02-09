@@ -20,6 +20,15 @@ type claimsKeyT struct{}
 
 var claimsKey = claimsKeyT{}
 
+// StartNewGRPCServer creates and starts a new GRPC server on addr or panics.
+// Using registerServerHook you are able to register your
+// service server implementation with this grpc server.
+//
+// Example:
+//
+//	common.StartNewGRPCServer(addr, func(server *grpc.Server) {
+//		api.RegisterMyServiceServer(server, &myServiceServer{})
+//	})
 func StartNewGRPCServer(addr string, registerServerHook func(*grpc.Server)) {
 	// middlewares
 	logging := loggingUnaryInterceptor
