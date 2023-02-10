@@ -34,7 +34,7 @@ releases:
       - name: keycloak-operator.keycloakImage.tag
         value: "edge"
       - name: hostname
-        value: "staging-kc.helpwave.de"
+        value: "staging-sso.helpwave.de"
       - name: hostnameStrict
         value: false
       - name: dbHost
