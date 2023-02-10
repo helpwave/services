@@ -39,6 +39,10 @@ func (a AccessTokenClaims) AsExpected() error {
 var verifier *oidc.IDTokenVerifier
 var oauthConfig *oauth2.Config
 
+func IsKeycloakSetUp() bool {
+	return oauthConfig != nil && verifier != nil
+}
+
 func getOAuthConfig() *oauth2.Config {
 	if oauthConfig == nil {
 		zlog.Fatal().Msg("getOAuthConfig called but keycloak not set up, please enable auth for this service")

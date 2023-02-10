@@ -1,0 +1,47 @@
+
+syntax = "proto3";
+
+option go_package = "user-svc/api";
+
+//
+// Create User
+//
+
+message CreateUserRequest {
+	string email = 1; // @gotags: validate:"required,email"
+	string firstName = 2; // @gotags: validate:"required"
+	string lastName = 3; // @gotags: validate:"required"
+	string password = 4; // @gotags: validate:"required"
+}
+
+message CreateUserResponse {
+	string userID = 1;
+}
+
+//
+// Create Organization
+//
+
+message CreateOrgRequest {
+	string longName = 1; // @gotags: validate:"required"
+	string shortName = 2;
+	string contactEmail = 3; // @gotags: validate:"required,email"
+}
+
+message CreateOrgResponse {
+	string id = 1;
+	string longName = 2;
+	string shortName = 3;
+	string contactEmail = 4;
+	string avatarUrl = 5;
+	bool isPersonal = 6;
+}
+
+//
+// UserService
+//
+
+service UserService {
+	rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {}
+	rpc CreateOrganization (CreateOrgRequest) returns (CreateOrgResponse) {}
+}
