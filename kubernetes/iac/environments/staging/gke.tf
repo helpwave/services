@@ -46,3 +46,16 @@ resource "google_container_node_pool" "primary_spot_nodes" {
     }
   }
 }
+
+module "cluster-resources" {
+  source = "../../modules/hw-tf-module-cluster-resources"
+
+  depends_on = [
+    google_container_cluster.staging,
+    google_container_node_pool.primary_spot_nodes,
+    google_compute_address.staging-ipv4
+  ]
+
+  apisix_gateway_type = "LoadBalancer"
+  apisix_gateway_ip = google_compute_address.staging-ipv4.address
+}
