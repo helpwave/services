@@ -20,4 +20,6 @@ module "cluster-resources" {
   depends_on = [
     kubernetes_persistent_volume_v1.hostpath
   ]
+
+  keycloak_hostname = "localhost"
 }

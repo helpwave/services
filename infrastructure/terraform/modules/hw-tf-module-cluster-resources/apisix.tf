@@ -1,3 +1,48 @@
+/*
+  APISIX is an Ingress and API Gateway.
+  We use it to route incoming traffic to the correct service using its CRDs.
+  Before we can apply a variety of plugins.
+
+  cf. https://apisix.apache.org/
+      https://apisix.apache.org/docs/ingress-controller/getting-started/
+      https://apisix.apache.org/docs/helm-chart/apisix/
+*/
+
+//
+// Variables
+//
+
+// The gateway service is where user traffic will turn up.
+// Should it be a NodePort or LoadBalancer Service?
+// cf. https://bit.ly/2ypj7vv
+variable "apisix_gateway_type" {
+  type = string
+  default = "NodePort"
+
+  validation {
+    condition = can(regex("^(NodePort|LoadBalancer)$", var.apisix_gateway_type))
+    error_message = "Must be NodePort or LoadBalancer"
+  }
+}
+
+// In case apisix_gateway_type is "LoadBalancer", set a loadBalancerIP
+// as provided by the load balancer
+variable "apisix_gateway_ip" {
+  type = string
+  default = ""
+}
+
+// Enable TLS for the gateway
+variable "apisix_gateway_tls_enabled" {
+  type = bool
+  default = true
+}
+
+//
+// Helm Releases
+//
+
+// APISIX Ingress Controller
 resource "helm_release" "apisix" {
   name  = "apisix"
   repository = "https://charts.apiseven.com"
@@ -22,7 +67,7 @@ resource "helm_release" "apisix" {
 
   set {
     name  = "gateway.tls.enabled"
-    value = var.apisix_gateway_tls
+    value = var.apisix_gateway_tls_enabled
   }
 
   set {
