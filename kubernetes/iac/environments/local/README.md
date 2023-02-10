@@ -3,6 +3,10 @@
 Apply the cluster-resources module to your local development cluster
 
 ### Port-Forward the APISIX Dashboard or Gateway
-> kubectl port-forward [name of the apisix-dashboard-pod] 9000:9000
 
-> kubectl port-forward [name of the apisix-gateway-pod] 9080:9080
+#### Dashboard
+*Username/Password: admin/admin*
+> kubectl port-forward service/apisix-dashboard 1337:http
+
+#### Gateway
+> kubectl port-forward service/apisix-gateway 8080:apisix-gateway
