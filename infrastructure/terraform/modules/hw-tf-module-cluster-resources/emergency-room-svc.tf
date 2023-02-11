@@ -91,7 +91,7 @@ resource "helm_release" "emergency-room-svc" {
 
   set {
     name  = "postgres.user"
-    value = local.er_svc_db_username
+    value = "postgres"
   }
 
   set {
