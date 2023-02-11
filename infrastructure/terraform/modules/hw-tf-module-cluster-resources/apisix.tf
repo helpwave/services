@@ -12,11 +12,9 @@
 // Variables
 //
 
-// The gateway service is where user traffic will turn up.
-// Should it be a NodePort or LoadBalancer Service?
-// cf. https://bit.ly/2ypj7vv
 variable "apisix_gateway_type" {
   type = string
+  description = "The gateway service is where user traffic will turn up. Should it be a NodePort or LoadBalancer Service?"
   default = "NodePort"
 
   validation {
@@ -25,16 +23,15 @@ variable "apisix_gateway_type" {
   }
 }
 
-// In case apisix_gateway_type is "LoadBalancer", set a loadBalancerIP
-// as provided by the load balancer
 variable "apisix_gateway_ip" {
   type = string
+  description = "In case apisix_gateway_type is LoadBalance, set a loadBalancerIP as provided by the load balancer"
   default = ""
 }
 
-// Enable TLS for the gateway
 variable "apisix_gateway_tls_enabled" {
   type = bool
+  description = "Enable TLS for the gateway"
   default = true
 }
 

@@ -11,10 +11,9 @@
 // Variables
 //
 
-// Should Dapr run in High Availability mode?
-// cf. https://bit.ly/3HSAvvn
 variable "dapr_ha" {
   type = bool
+  description = "Should Dapr run in High Availability mode?"
   default = false
 }
 

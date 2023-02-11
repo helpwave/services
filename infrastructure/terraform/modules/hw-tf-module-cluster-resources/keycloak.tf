@@ -11,17 +11,15 @@
 // Variables
 //
 
-// which tag of our custom keycloak image should be used?
 variable "keycloak_image_tag" {
   type = string
+  description = "Which tag of our custom keycloak image should be used?"
   default = "edge"
 }
 
-// what publicly accessible domain should kc expect to be reachable at?
-// also used for the ingress
-// must be a domain, without path and port
 variable "keycloak_hostname" {
   type = string
+  description = "What publicly accessible domain should kc expect to be reachable at? Also used for the ingress. Must be a domain, without path and port."
   default = "sso.helpwave.de"
 }
 
