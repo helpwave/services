@@ -1,5 +1,10 @@
+locals {
+  apisix_name = "apisix"
+  apisix_namespace = "apisix"
+}
+
 resource "helm_release" "apisix" {
-  name  = "apisix"
+  name  = local.apisix_name
   repository = "https://charts.apiseven.com"
   chart = "apisix"
 
@@ -7,7 +12,7 @@ resource "helm_release" "apisix" {
     helm_release.dapr
   ]
 
-  namespace = "apisix"
+  namespace = local.apisix_namespace
   create_namespace = true
 
   set {
@@ -84,4 +89,49 @@ resource "helm_release" "apisix-dashboard" {
   ]
 
   namespace = "apisix"
+}
+
+resource "kubectl_manifest" "apisix_dapr_upstream" {
+  depends_on = [
+    helm_release.apisix
+  ]
+
+  yaml_body = <<YAML
+apiVersion: apisix.apache.org/v2
+kind: ApisixUpstream
+metadata:
+  name: ${local.apisix_name}-dapr
+  namespace: ${local.apisix_namespace}
+spec:
+  loadbalancer:
+    type: roundrobin
+  portLevelSettings:
+  - port: 3500
+    scheme: http
+  - port: 50001
+    scheme: grpc
+YAML
+}
+
+resource "kubectl_manifest" "apisix_dapr_route" {
+  depends_on = [
+    helm_release.apisix
+  ]
+
+  yaml_body = <<YAML
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: ${local.apisix_name}-dapr
+  namespace: ${local.apisix_namespace}
+spec:
+  http:
+  - backends:
+    - serviceName: ${local.apisix_name}-dapr
+      servicePort: 50001
+    match:
+      paths:
+      - /*
+    name: ${local.apisix_name}-dapr
+YAML
 }

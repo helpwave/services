@@ -19,3 +19,8 @@ variable "cf_api_token" {
 variable "cf_zone_id" {
   type = string
 }
+
+variable "hw_mail" {
+  type = string
+  default = "info@helpwave.de"
+}
