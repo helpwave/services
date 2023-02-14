@@ -15,3 +15,10 @@ provider "helm" {
 provider "cloudflare" {
   api_token = var.cf_api_token
 }
+
+provider "kubectl" {
+  host  = "https://${google_container_cluster.staging.endpoint}"
+  token = data.google_client_config.staging.access_token
+  cluster_ca_certificate = base64decode(google_container_cluster.staging.master_auth.0.cluster_ca_certificate)
+  load_config_file = false
+}
