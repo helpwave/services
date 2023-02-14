@@ -130,6 +130,7 @@ spec:
     - serviceName: ${local.apisix_name}-dapr
       servicePort: 50001
     match:
+      # TODO: Also match against hostnames. Fiddle around with yamlencode inside this yaml :)
       paths:
       - /*
     name: ${local.apisix_name}-dapr
