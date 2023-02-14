@@ -12,7 +12,7 @@ resource "helm_release" "auth-svc" {
   wait = true
 
   depends_on = [
-    // helm_release.apisix,
+    helm_release.dapr,
     helm_release.keycloak
   ]
 
