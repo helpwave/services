@@ -14,8 +14,21 @@ variable "gcp_zone" {
 
 variable "cf_api_token" {
   type = string
+  sensitive = true
 }
 
 variable "cf_zone_id" {
   type = string
+}
+
+variable "cm_cf_api_token" {
+  type = string
+  description = "Cloudflare API token used by cert-manager for ACME DNS01"
+  sensitive = true
+}
+
+variable "cm_acme_email" {
+  type = string
+  default = "info@helpwave.de"
+  description = "E-Mail used by cert-manager for ACME"
 }
