@@ -8,6 +8,10 @@ resource "kubectl_manifest" "cert_cloudflare_api_token_secret" {
     module.cluster-resources
   ]
 
+  sensitive_fields = [
+    "stringData"
+  ]
+
   yaml_body = <<YAML
 apiVersion: v1
 kind: Secret
@@ -16,8 +20,7 @@ metadata:
   namespace: ${local.cert_manager_namespace}
 type: Opaque
 stringData:
-# TODO: The cf_api_token variable is also used by the Cloudflare Terraform Proider, we should use a different here.
-  api-token: ${var.cf_api_token}
+  api-token: ${var.cm_cf_api_token}
 YAML
 }
 
