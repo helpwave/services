@@ -38,7 +38,7 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: ${var.hw_mail}
+    email: ${var.cm_acme_email}
     privateKeySecretRef:
       name: letsencrypt
     solvers:

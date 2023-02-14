@@ -27,7 +27,8 @@ variable "cm_cf_api_token" {
   sensitive = true
 }
 
-variable "hw_mail" {
+variable "cm_acme_email" {
   type = string
   default = "info@helpwave.de"
+  description = "E-Mail used by cert-manager for ACME"
 }
