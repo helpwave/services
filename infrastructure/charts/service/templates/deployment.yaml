@@ -51,6 +51,10 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            {{ if .Values.insecureDisableTLSVerify }}
+            - name: INSECURE_DISABLE_TLS_VERIFY
+              value: "true"
+            {{ end }}
             {{ if not .Values.postgres.disabled }}
             - name: POSTGRES_HOST
               value: {{ .Values.postgres.host }}

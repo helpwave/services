@@ -64,4 +64,9 @@ resource "helm_release" "auth-svc" {
     value = local.auth_svc_callback_url
   }
 
+
+  set {
+    name  = "insecureDisableTLSVerify"
+    value = var.services_insecureDisableTLSVerify
+  }
 }

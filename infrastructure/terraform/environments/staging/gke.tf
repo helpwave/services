@@ -58,4 +58,6 @@ module "cluster-resources" {
 
   apisix_gateway_type = "LoadBalancer"
   apisix_gateway_ip = google_compute_address.staging-ipv4.address
+
+  keycloak_cert = "x-helpwave-de.cert-manager" # TODO: this probably wont work
 }

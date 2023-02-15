@@ -1,22 +1,19 @@
 {{ if .Values.ingressCustom }}
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
 metadata:
-  name: {{ include "keycloak.fullname" . }}-ingress
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+  name: {{ include "keycloak.fullname" . }}-route
 spec:
-  rules:
-    - http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: keycloak-service
-                port:
-                  number: 8443
-      {{ if .Values.hostname }}host: {{ .Values.hostname }}{{ end }}
+  http:
+  - name: kc
+    match:
+    {{ if .Values.hostname }}
+      hosts:
+      - {{ .Values.hostname }}
+    {{ end }}
+      paths:
+      - /*
+    backends:
+    - serviceName: keycloak-service
+      servicePort: 8443
 {{ end }}

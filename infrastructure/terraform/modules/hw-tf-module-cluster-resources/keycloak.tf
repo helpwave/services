@@ -23,6 +23,17 @@ variable "keycloak_hostname" {
   default = "sso.helpwave.de"
 }
 
+variable "keycloak_cert" {
+  type = string
+  description = "Name of the k8s cert that KC should use. If missing a default self-signed cert will be used"
+  default = null
+}
+
+variable "services_insecureDisableTLSVerify" {
+  type = bool
+  default = false
+}
+
 //
 // Locals
 //
@@ -84,7 +95,8 @@ resource "helm_release" "keycloak" {
 
   depends_on = [
     helm_release.apisix,
-    helm_release.keycloak_db
+    helm_release.keycloak_db,
+    kubectl_manifest.coredns_config_map,
   ]
 
   namespace = "keycloak"
@@ -125,8 +137,13 @@ resource "helm_release" "keycloak" {
   }
 
   set {
+    name  = "tlsSecret"
+    value = var.keycloak_cert == null ? "" : var.keycloak_cert
+  }
+
+  set {
     name  = "tlsUseFakeCert"
-    value = true
+    value = var.keycloak_cert == null
   }
 
   set {

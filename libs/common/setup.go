@@ -1,11 +1,14 @@
 package common
 
 import (
+	"crypto/tls"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 	"hwutil"
 	"logging"
 	"math/rand"
+	"net/http"
+	"strings"
 	"time"
 )
 
@@ -37,6 +40,11 @@ func Setup(serviceName, version string, auth bool) {
 
 	if dotenvErr == nil {
 		log.Info().Msg("successfully loaded .env file")
+	}
+
+	if strings.ToLower(hwutil.GetEnvOr("INSECURE_DISABLE_TLS_VERIFY", "false")) == "true" {
+		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+		log.Warn().Msg("InsecureSkipVerify enabled, not verifying certificates!")
 	}
 
 	if auth {

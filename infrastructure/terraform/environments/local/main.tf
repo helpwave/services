@@ -22,5 +22,5 @@ module "cluster-resources" {
     kubectl_manifest.hostpath
   ]
 
-  keycloak_hostname = "localhost"
+  services_insecureDisableTLSVerify = true
 }

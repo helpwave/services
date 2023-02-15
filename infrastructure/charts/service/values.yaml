@@ -16,7 +16,7 @@ app:
 
 keyCloakDisabled: false
 
-keycloakURL: "https://keycloak-service.keycloak.svc.cluster.local:8443"
+keycloakURL: "https://sso.helpwave.de"
 keycloakRealm: "hw-staging"
 
 # the ID and secret of the client, previously registered in Keycloak
@@ -90,3 +90,5 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+insecureDisableTLSVerify: false

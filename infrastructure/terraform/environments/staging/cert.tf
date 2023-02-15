@@ -67,6 +67,8 @@ spec:
     - ${cloudflare_record.api-helpwave-de.hostname}
     - ${cloudflare_record.staging-helpwave-de.hostname}
     - ${cloudflare_record.staging-api-helpwave-de.hostname}
+    - ${cloudflare_record.sso-helpwave-de.hostname}
+    - ${cloudflare_record.staging-sso-helpwave-de.hostname}
   issuerRef:
     name: letsencrypt
     kind: Issuer
@@ -90,6 +92,8 @@ spec:
     - ${cloudflare_record.api-helpwave-de.hostname}
     - ${cloudflare_record.staging-helpwave-de.hostname}
     - ${cloudflare_record.staging-api-helpwave-de.hostname}
+    - ${cloudflare_record.sso-helpwave-de.hostname}
+    - ${cloudflare_record.staging-sso-helpwave-de.hostname}
   secret:
     name: x-helpwave-de
     namespace: cert-manager

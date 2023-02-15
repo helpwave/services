@@ -58,4 +58,8 @@ resource "helm_release" "user-svc" {
     value = local.user_svc_keycloak_client_secret
   }
 
+  set {
+    name  = "insecureDisableTLSVerify"
+    value = var.services_insecureDisableTLSVerify
+  }
 }

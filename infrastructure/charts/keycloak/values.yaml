@@ -19,6 +19,15 @@ httpsPort: 8443
 tlsUseFakeCert: false # if true you can leave tlsSecret empty
 tlsSecret: ""
 
+# additionally to the keycloak service provided by the operator
+# we need another internal service that maps 443 -> 8443.
+# The operator does not allow us to customize its service
+# and using the port 443 in the pod would require the root user
+internalService:
+  enabled: true
+  type: ClusterIP
+  httpsPort: 443
+
 dbVendor: postgres
 dbHost: ""
 dbPort: 5432
