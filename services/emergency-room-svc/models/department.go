@@ -30,15 +30,3 @@ func UUIDsToDepartments(departments []uuid.UUID) []Department {
 
 	return deps
 }
-
-func StringsToUUIDs(strings []string) ([]uuid.UUID, error) {
-	uuids := make([]uuid.UUID, len(strings))
-	for i := range strings {
-		id, err := uuid.Parse(strings[i])
-		if err != nil {
-			return nil, err
-		}
-		uuids[i] = id
-	}
-	return uuids, nil
-}
