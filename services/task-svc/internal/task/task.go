@@ -12,14 +12,14 @@ import (
 )
 
 type Base struct {
-	Name        string `gorm:"column:name"`
-	Description string `gorm:"column:description"`
-	Status      uint32 `gorm:"column:status"`
+	Name        string         `gorm:"column:name"`
+	Description string         `gorm:"column:description"`
+	Status      api.TaskStatus `gorm:"column:status"`
 }
 
 type Task struct {
 	Base
-	Id             uuid.UUID     `gorm:"column:id"`
+	ID             uuid.UUID     `gorm:"column:id"`
 	AssignedUserId uuid.NullUUID `gorm:"column:assigned_user_id;default:NULL"`
 	PatientId      uuid.UUID     `gorm:"column:patient_id"`
 }
@@ -44,8 +44,12 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *api.CreateTaskReques
 	}
 
 	// Check if patient exists
-	if err := db.First(intPatient.Patient{Id: patientId}).Error; err != nil {
-		return nil, status.Error(codes.NotFound, err.Error())
+	if err := db.First(&intPatient.Patient{ID: patientId}).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "patientId not found")
+		}
 	}
 
 	task := Task{
@@ -56,24 +60,22 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *api.CreateTaskReques
 		PatientId: patientId,
 	}
 
-	result := db.Create(&task)
-	if err := result.Error; err != nil {
+	if err := db.Create(&task).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	log.Info().
-		Str("taskId", task.Id.String()).
+		Str("taskId", task.ID.String()).
 		Str("patientId", patientId.String()).
 		Msg("task created for patient")
 
 	return &api.CreateTaskResponse{
-		Id: task.Id.String(),
+		Id: task.ID.String(),
 	}, nil
 }
 
 func (ServiceServer) GetTask(ctx context.Context, req *api.GetTaskRequest) (*api.GetTaskResponse, error) {
-	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -83,23 +85,26 @@ func (ServiceServer) GetTask(ctx context.Context, req *api.GetTaskRequest) (*api
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{Id: id}
-	result := db.First(&task)
-	if err := result.Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
-		return nil, status.Error(codes.Internal, err.Error())
+	task := Task{ID: id}
+	if err := db.First(&task).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
 	}
 
+	// TODO: task.AssignedUserId.UUID.String() should handle the translation to "", seems not to work.
 	assignedUserId := task.AssignedUserId.UUID.String()
 	if !task.AssignedUserId.Valid {
 		assignedUserId = ""
 	}
 
 	return &api.GetTaskResponse{
-		Id:             task.Id.String(),
+		Id:             task.ID.String(),
 		Name:           task.Name,
 		Description:    task.Description,
-		Status:         api.TaskStatus(task.Status),
+		Status:         task.Status,
 		AssignedUserId: assignedUserId,
 		PatientId:      task.PatientId.String(),
 	}, nil
@@ -116,7 +121,7 @@ func (ServiceServer) UpdateTask(ctx context.Context, req *api.UpdateTaskRequest)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{Id: id}
+	task := Task{ID: id}
 	updates := req.UpdatesMap()
 
 	if err := db.Model(&task).Updates(updates).Error; err != nil {
@@ -138,8 +143,8 @@ func (ServiceServer) TaskToInProgress(ctx context.Context, req *api.TaskToInProg
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{Id: id}
-	updates := Task{Base: Base{Status: 1}}
+	task := Task{ID: id}
+	updates := Task{Base: Base{Status: api.TaskStatus_IN_PROGRESS}}
 
 	if err := db.Model(&task).Updates(updates).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -164,8 +169,8 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *api.TaskToDoneRequest)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{Id: id}
-	updates := Task{Base: Base{Status: 2}}
+	task := Task{ID: id}
+	updates := Task{Base: Base{Status: api.TaskStatus_DONE}}
 
 	if err := db.Model(&task).Updates(updates).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -197,7 +202,7 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *api.AssignTaskTo
 
 	// TODO: Check if user exists
 
-	task := Task{Id: id}
+	task := Task{ID: id}
 	updates := Task{AssignedUserId: uuid.NullUUID{UUID: userId, Valid: true}}
 
 	if err := db.Model(task).Updates(updates).Error; err != nil {
@@ -224,7 +229,7 @@ func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *api.Unassign
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{Id: id}
+	task := Task{ID: id}
 	updates := map[string]interface{}{"assigned_user_id": nil}
 
 	if err := db.Model(task).Updates(updates).Error; err != nil {

@@ -7,7 +7,7 @@ option go_package = "task-svc/api";
 //
 
 message CreatePatientRequest {
-	string humanReadableIdentifier = 1;
+	string humanReadableIdentifier = 1; // @gotags: validate:"required"
 }
 
 message CreatePatientResponse {
@@ -19,12 +19,12 @@ message CreatePatientResponse {
 //
 
 message GetPatientRequest {
-	string id = 1;
+	string id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetPatientResponse {
-	string id = 1;
-	string humanReadableIdentifier = 2;
+	string id = 1; // @gotags: validate:"uuid4"
+	string humanReadableIdentifier = 2; // @gotags: validate:"required"
 }
 
 //
@@ -32,8 +32,8 @@ message GetPatientResponse {
 //
 
 message UpdatePatientRequest {
-	string id = 1;
-	optional string humanReadableIdentifier = 2;
+	string id = 1; // @gotags: validate:"uuid4"
+	optional string humanReadableIdentifier = 2; // @gotags: validate:"required"
 }
 
 message UpdatePatientResponse {}

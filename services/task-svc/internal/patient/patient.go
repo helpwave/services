@@ -16,7 +16,7 @@ type Base struct {
 
 type Patient struct {
 	Base
-	Id uuid.UUID `gorm:"column:id"`
+	ID uuid.UUID `gorm:"column:id"`
 }
 
 type ServiceServer struct {
@@ -39,18 +39,17 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *api.CreatePatientRe
 		},
 	}
 
-	result := db.Create(&patient)
-	if err := result.Error; err != nil {
+	if err := db.Create(&patient).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	log.Info().
-		Str("patientId", patient.Id.String()).
+		Str("patientId", patient.ID.String()).
 		Msg("patient created")
 
 	return &api.CreatePatientResponse{
-		Id: patient.Id.String(),
+		Id: patient.ID.String(),
 	}, nil
 }
 
@@ -65,15 +64,18 @@ func (ServiceServer) GetPatient(ctx context.Context, req *api.GetPatientRequest)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient := Patient{Id: id}
-	result := db.First(&patient)
-	if err := result.Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
-		return nil, status.Error(codes.Internal, err.Error())
+	patient := Patient{ID: id}
+	if err := db.First(&patient).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			log.Warn().Err(err).Msg("database error")
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
 	}
 
 	return &api.GetPatientResponse{
-		Id:                      patient.Id.String(),
+		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 	}, nil
 }
@@ -89,7 +91,7 @@ func (ServiceServer) UpdatePatient(ctx context.Context, req *api.UpdatePatientRe
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient := Patient{Id: id}
+	patient := Patient{ID: id}
 	updates := req.UpdatesMap()
 
 	if err := db.Model(&patient).Updates(updates).Error; err != nil {

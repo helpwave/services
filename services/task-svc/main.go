@@ -4,7 +4,6 @@ import (
 	"common"
 	"fmt"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 	"hwgorm"
 	"hwutil"
 	"task-svc/api"
@@ -15,6 +14,7 @@ import (
 
 const ServiceName = "task-svc"
 
+// Version is set at compile time
 var Version string
 
 func main() {
@@ -35,6 +35,5 @@ func main() {
 		api.RegisterTaskServiceServer(server, task.NewServiceServer())
 		api.RegisterPatientServiceServer(server, patient.NewServiceServer())
 		api.RegisterWardServiceServer(server, ward.NewServiceServer())
-		reflection.Register(server)
 	})
 }

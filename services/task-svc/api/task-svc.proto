@@ -13,9 +13,9 @@ enum TaskStatus {
 //
 
 message CreateTaskRequest {
-	string name = 1;
-	string description = 2;
-	string patientId = 3;
+	string name = 1; // @gotags: validate:"required"
+	string description = 2; // @gotags: validate:"required"
+	string patientId = 3; // @gotags: validate:"uuid4"
 }
 
 message CreateTaskResponse {
@@ -27,7 +27,7 @@ message CreateTaskResponse {
 //
 
 message GetTaskRequest {
-	string id = 1;
+	string id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetTaskResponse {
@@ -44,9 +44,9 @@ message GetTaskResponse {
 //
 
 message UpdateTaskRequest {
-	string id = 1; // @gotags: validate:"required,uuid"
-	optional string name = 2;
-	optional string description = 3;
+	string id = 1; // @gotags: validate:"uuid4"
+	optional string name = 2; // @gotags: validate:"required"
+	optional string description = 3; // @gotags: validate:"required"
 }
 
 message UpdateTaskResponse {}
@@ -56,7 +56,7 @@ message UpdateTaskResponse {}
 //
 
 message TaskToInProgressRequest {
-	string id = 1;
+	string id = 1; // @gotags: validate:"uuid4"
 }
 
 message TaskToInProgressResponse {}
@@ -66,7 +66,7 @@ message TaskToInProgressResponse {}
 //
 
 message TaskToDoneRequest {
-	string id = 1;
+	string id = 1; // @gotags: validate:"uuid4"
 }
 
 message TaskToDoneResponse {}
@@ -76,8 +76,8 @@ message TaskToDoneResponse {}
 //
 
 message AssignTaskToUserRequest {
-	string id = 1;
-	string userId = 2;
+	string id = 1; // @gotags: validate:"uuid4"
+	string userId = 2; // @gotags: validate:"uuid4"
 }
 
 message AssignTaskToUserResponse {}
@@ -87,7 +87,7 @@ message AssignTaskToUserResponse {}
 //
 
 message UnassignTaskFromUserRequest {
-	string id = 1;
+	string id = 1; // @gotags: validate:"uuid4"
 }
 
 message UnassignTaskFromUserResponse {}
