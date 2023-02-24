@@ -318,9 +318,9 @@ type UpdateTaskRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`                         // @gotags: validate:"uuid4"
-	Name        *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty" validate:"required"`               // @gotags: validate:"required"
-	Description *string `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty" validate:"required"` // @gotags: validate:"required"
+	Id          string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
+	Name        *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Description *string `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
 }
 
 func (x *UpdateTaskRequest) Reset() {

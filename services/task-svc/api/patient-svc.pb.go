@@ -221,8 +221,8 @@ type UpdatePatientRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                      string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`                                                 // @gotags: validate:"uuid4"
-	HumanReadableIdentifier *string `protobuf:"bytes,2,opt,name=humanReadableIdentifier,proto3,oneof" json:"humanReadableIdentifier,omitempty" validate:"required"` // @gotags: validate:"required"
+	Id                      string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
+	HumanReadableIdentifier *string `protobuf:"bytes,2,opt,name=humanReadableIdentifier,proto3,oneof" json:"humanReadableIdentifier,omitempty"`
 }
 
 func (x *UpdatePatientRequest) Reset() {

@@ -33,7 +33,7 @@ message GetPatientResponse {
 
 message UpdatePatientRequest {
 	string id = 1; // @gotags: validate:"uuid4"
-	optional string humanReadableIdentifier = 2; // @gotags: validate:"required"
+	optional string humanReadableIdentifier = 2;
 }
 
 message UpdatePatientResponse {}

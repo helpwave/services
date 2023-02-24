@@ -45,8 +45,8 @@ message GetTaskResponse {
 
 message UpdateTaskRequest {
 	string id = 1; // @gotags: validate:"uuid4"
-	optional string name = 2; // @gotags: validate:"required"
-	optional string description = 3; // @gotags: validate:"required"
+	optional string name = 2;
+	optional string description = 3;
 }
 
 message UpdateTaskResponse {}
