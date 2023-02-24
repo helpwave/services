@@ -5,7 +5,7 @@ locals {
 }
 
 
-resource "helm_release" "user-svc" {
+/*resource "helm_release" "user-svc" {
   name  = "user-svc"
   chart = "../../../charts/service"
   wait = true
@@ -62,4 +62,4 @@ resource "helm_release" "user-svc" {
     name  = "insecureDisableTLSVerify"
     value = var.services_insecureDisableTLSVerify
   }
-}
+}*/

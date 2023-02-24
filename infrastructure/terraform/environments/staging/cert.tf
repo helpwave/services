@@ -73,6 +73,29 @@ spec:
     name: letsencrypt
     kind: Issuer
     group: cert-manager.io
+  secretTemplate:
+      annotations:
+        replicator.v1.mittwald.de/replicate-to: "keycloak"
+YAML
+}
+
+resource "kubectl_manifest" "cert_secret_x-helpwave-de_keycloak_namespace" {
+  depends_on = [
+    module.cluster-resources
+  ]
+
+  yaml_body = <<YAML
+apiVersion: v1
+kind: Secret
+metadata:
+  name: x-helpwave-de
+  namespace: keycloak
+  annotations:
+    replicator.v1.mittwald.de/replicate-from: cert-manager/x-helpwave-de
+type: kubernetes.io/tls
+data:
+  tls.key: ""
+  tls.crt: ""
 YAML
 }
 
