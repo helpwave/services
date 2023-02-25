@@ -1,3 +1,7 @@
+/*
+  GKE still does not use CoreDNS by default, so we have to deploy it manually
+*/
+
 locals {
   coredns_cluster_ip = "10.83.240.20"
 }

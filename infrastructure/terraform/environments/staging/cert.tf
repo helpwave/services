@@ -79,6 +79,7 @@ spec:
 YAML
 }
 
+// replicate above certificate into the keycloak namespace, so kc can use it
 resource "kubectl_manifest" "cert_secret_x-helpwave-de_keycloak_namespace" {
   depends_on = [
     module.cluster-resources
