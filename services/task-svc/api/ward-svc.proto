@@ -7,7 +7,7 @@ option go_package = "task-svc/api";
 //
 
 message CreateWardRequest {
-	string name = 1;
+	string name = 1; // @gotags: validate:"required"
 }
 
 message CreateWardResponse {
@@ -20,7 +20,7 @@ message CreateWardResponse {
 //
 
 message GetWardRequest {
-	string id = 1;
+	string id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetWardResponse {
@@ -28,9 +28,23 @@ message GetWardResponse {
 	string name = 2;
 }
 
+//
+// UpdateWard
+//
+
+message UpdateWardRequest {
+	string id = 1; // @gotags: validate:"uuid4"
+	optional string name = 2;
+}
+
+message UpdateWardResponse {}
+
+//
 // WardService
+//
 
 service WardService {
 	rpc CreateWard (CreateWardRequest) returns (CreateWardResponse) {}
 	rpc GetWard (GetWardRequest) returns (GetWardResponse) {}
+	rpc UpdateWard (UpdateWardRequest) returns (UpdateWardResponse) {}
 }
