@@ -3,6 +3,7 @@ package hwutil
 import (
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"time"
 )
 
@@ -36,4 +37,16 @@ func ParseSeconds(seconds int) time.Duration {
 func TimeInNSeconds(seconds int) time.Time {
 	duration := ParseSeconds(seconds)
 	return time.Now().Add(duration)
+}
+
+func StringsToUUIDs(strings []string) ([]uuid.UUID, error) {
+	ids := make([]uuid.UUID, len(strings))
+	for _, s := range strings {
+		id, err := uuid.Parse(s)
+		if err != nil {
+			return nil, err
+		}
+		ids = append(ids, id)
+	}
+	return ids, nil
 }

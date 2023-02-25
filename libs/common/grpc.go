@@ -6,6 +6,7 @@ import (
 	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 	"hwutil"
 	"logging"
@@ -46,6 +47,11 @@ func StartNewGRPCServer(addr string, registerServerHook func(*grpc.Server)) {
 	zlog.Info().Str("addr", addr).Msg("starting grpc service")
 
 	registerServerHook(server)
+
+	if Mode == DevelopmentMode {
+		reflection.Register(server)
+		zlog.Warn().Msg("grpc reflection enabled")
+	}
 
 	if err = server.Serve(listener); err != nil {
 		zlog.Fatal().Str("addr", addr).Err(err).Msg("could not start grpc server")

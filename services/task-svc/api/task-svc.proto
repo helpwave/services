@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+option go_package = "task-svc/api";
+
+enum TaskStatus {
+	TODO = 0;
+	IN_PROGRESS = 1;
+	DONE = 2;
+}
+
+//
+// CreateTask
+//
+
+message CreateTaskRequest {
+	string name = 1; // @gotags: validate:"required"
+	string description = 2; // @gotags: validate:"required"
+	string patientId = 3; // @gotags: validate:"uuid4"
+}
+
+message CreateTaskResponse {
+	string id = 1;
+}
+
+//
+// GetTask
+//
+
+message GetTaskRequest {
+	string id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetTaskResponse {
+	string id = 1;
+	string name = 2;
+	string description = 3;
+	TaskStatus status = 4;
+	string assignedUserId = 5;
+	string patientId = 6;
+}
+
+//
+// UpdateTask
+//
+
+message UpdateTaskRequest {
+	string id = 1; // @gotags: validate:"uuid4"
+	optional string name = 2;
+	optional string description = 3;
+}
+
+message UpdateTaskResponse {}
+
+//
+// TaskToInProgress
+//
+
+message TaskToInProgressRequest {
+	string id = 1; // @gotags: validate:"uuid4"
+}
+
+message TaskToInProgressResponse {}
+
+//
+// TaskToDone
+//
+
+message TaskToDoneRequest {
+	string id = 1; // @gotags: validate:"uuid4"
+}
+
+message TaskToDoneResponse {}
+
+//
+// AssignTaskToUser
+//
+
+message AssignTaskToUserRequest {
+	string id = 1; // @gotags: validate:"uuid4"
+	string userId = 2; // @gotags: validate:"uuid4"
+}
+
+message AssignTaskToUserResponse {}
+
+//
+// UnassignTaskFromUser
+//
+
+message UnassignTaskFromUserRequest {
+	string id = 1; // @gotags: validate:"uuid4"
+}
+
+message UnassignTaskFromUserResponse {}
+
+//
+// TaskService
+//
+
+service TaskService {
+	rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse) {}
+	rpc GetTask (GetTaskRequest) returns (GetTaskResponse) {}
+	rpc UpdateTask (UpdateTaskRequest) returns (UpdateTaskResponse) {}
+	rpc TaskToInProgress (TaskToInProgressRequest) returns (TaskToInProgressResponse) {}
+	rpc TaskToDone (TaskToDoneRequest) returns (TaskToDoneResponse) {}
+	rpc AssignTaskToUser(AssignTaskToUserRequest) returns (AssignTaskToUserResponse) {}
+	rpc UnassignTaskFromUser(UnassignTaskFromUserRequest) returns (UnassignTaskFromUserResponse) {}
+}

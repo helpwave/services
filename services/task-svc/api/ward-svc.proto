@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option go_package = "task-svc/api";
+
+//
+// CreateWard
+//
+
+message CreateWardRequest {
+	string name = 1;
+}
+
+message CreateWardResponse {
+	string id = 1;
+	string name = 2;
+}
+
+//
+// GetWard
+//
+
+message GetWardRequest {
+	string id = 1;
+}
+
+message GetWardResponse {
+	string id = 1;
+	string name = 2;
+}
+
+// WardService
+
+service WardService {
+	rpc CreateWard (CreateWardRequest) returns (CreateWardResponse) {}
+	rpc GetWard (GetWardRequest) returns (GetWardResponse) {}
+}

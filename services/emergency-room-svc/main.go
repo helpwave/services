@@ -53,7 +53,7 @@ func (emergencyRoomServiceServer) CreateER(ctx context.Context, req *api.CreateE
 
 	// TODO: Auth
 
-	deps, err := models.StringsToUUIDs(req.Departments)
+	deps, err := hwutil.StringsToUUIDs(req.Departments)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -247,7 +247,7 @@ func (emergencyRoomServiceServer) AddDepartmentsToER(ctx context.Context, req *a
 		ID: id,
 	}
 
-	deps, err := models.StringsToUUIDs(req.Departments)
+	deps, err := hwutil.StringsToUUIDs(req.Departments)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -279,7 +279,7 @@ func (emergencyRoomServiceServer) RemoveDepartmentsFromER(ctx context.Context, r
 		ID: id,
 	}
 
-	deps, err := models.StringsToUUIDs(req.Departments)
+	deps, err := hwutil.StringsToUUIDs(req.Departments)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
