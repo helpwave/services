@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type WardServiceClient interface {
 	CreateWard(ctx context.Context, in *CreateWardRequest, opts ...grpc.CallOption) (*CreateWardResponse, error)
 	GetWard(ctx context.Context, in *GetWardRequest, opts ...grpc.CallOption) (*GetWardResponse, error)
+	UpdateWard(ctx context.Context, in *UpdateWardRequest, opts ...grpc.CallOption) (*UpdateWardResponse, error)
 }
 
 type wardServiceClient struct {
@@ -52,12 +53,22 @@ func (c *wardServiceClient) GetWard(ctx context.Context, in *GetWardRequest, opt
 	return out, nil
 }
 
+func (c *wardServiceClient) UpdateWard(ctx context.Context, in *UpdateWardRequest, opts ...grpc.CallOption) (*UpdateWardResponse, error) {
+	out := new(UpdateWardResponse)
+	err := c.cc.Invoke(ctx, "/WardService/UpdateWard", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WardServiceServer is the server API for WardService service.
 // All implementations must embed UnimplementedWardServiceServer
 // for forward compatibility
 type WardServiceServer interface {
 	CreateWard(context.Context, *CreateWardRequest) (*CreateWardResponse, error)
 	GetWard(context.Context, *GetWardRequest) (*GetWardResponse, error)
+	UpdateWard(context.Context, *UpdateWardRequest) (*UpdateWardResponse, error)
 	mustEmbedUnimplementedWardServiceServer()
 }
 
@@ -70,6 +81,9 @@ func (UnimplementedWardServiceServer) CreateWard(context.Context, *CreateWardReq
 }
 func (UnimplementedWardServiceServer) GetWard(context.Context, *GetWardRequest) (*GetWardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWard not implemented")
+}
+func (UnimplementedWardServiceServer) UpdateWard(context.Context, *UpdateWardRequest) (*UpdateWardResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateWard not implemented")
 }
 func (UnimplementedWardServiceServer) mustEmbedUnimplementedWardServiceServer() {}
 
@@ -120,6 +134,24 @@ func _WardService_GetWard_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WardService_UpdateWard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateWardRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WardServiceServer).UpdateWard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/WardService/UpdateWard",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WardServiceServer).UpdateWard(ctx, req.(*UpdateWardRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WardService_ServiceDesc is the grpc.ServiceDesc for WardService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +166,10 @@ var WardService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetWard",
 			Handler:    _WardService_GetWard_Handler,
+		},
+		{
+			MethodName: "UpdateWard",
+			Handler:    _WardService_UpdateWard_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
