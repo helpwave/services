@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
+	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
@@ -135,8 +136,9 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 		code := statusError.Code().String()
 		message := statusError.Message()
 		details := statusError.Details()
+
 		log.
-			Warn().
+			WithLevel(resolveLogLevelForError(err)).
 			Err(err).
 			Str("code", code).
 			Interface("details", details).
@@ -150,6 +152,16 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 
 	// pass results back up the interceptor chain
 	return res, err
+}
+
+// Primary used to raise the log level on specific errors
+func resolveLogLevelForError(err error) zerolog.Level {
+	statusError := status.Convert(err)
+	if statusError.Code() == codes.Internal {
+		return zerolog.ErrorLevel
+	}
+
+	return zerolog.WarnLevel
 }
 
 func redactMetadata(m metautils.NiceMD) metautils.NiceMD {
