@@ -154,7 +154,7 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 	return res, err
 }
 
-// Primary used to raise the log level on specific errors
+// resolveLogLevelForError is primary used to raise the log level on specific errors
 func resolveLogLevelForError(err error) zerolog.Level {
 	statusError := status.Convert(err)
 	if statusError.Code() == codes.Internal {
