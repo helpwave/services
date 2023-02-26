@@ -122,19 +122,6 @@ resource "helm_release" "apisix" {
   // END OF Dapr podAnnotations
 }
 
-# kubectl port-forward <name of the dashboard-pod> 9000:9000
-/*resource "helm_release" "apisix-dashboard" {
-  name  = "apisix-dashboard"
-  repository = "https://charts.apiseven.com"
-  chart = "apisix-dashboard"
-
-  depends_on = [
-    helm_release.apisix
-  ]
-
-  namespace = "apisix"
-}*/
-
 resource "kubectl_manifest" "apisix_dapr_upstream" {
   depends_on = [
     helm_release.apisix
