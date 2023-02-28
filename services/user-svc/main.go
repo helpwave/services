@@ -113,6 +113,19 @@ func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUser
 		log.Info().Str("userID", userID).Msg("created new user")
 	}
 
+	// Create personal organization
+	_, err = createOrganization(ctx, &api.CreateOrgRequest{
+		LongName:     "Your Personal Organization",
+		ContactEmail: *user.Email,
+	}, userID, true)
+
+	if err != nil {
+		log.Error().
+			Str("userID", userID).
+			Err(err).
+			Msg("could not create personal organization")
+	}
+
 	response := api.CreateUserResponse{UserID: userID}
 
 	return &response, nil
