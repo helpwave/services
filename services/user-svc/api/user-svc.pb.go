@@ -143,8 +143,8 @@ type CreateOrgRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LongName     string `protobuf:"bytes,1,opt,name=longName,proto3" json:"longName,omitempty" validate:"required"` // @gotags: validate:"required"
-	ShortName    string `protobuf:"bytes,2,opt,name=shortName,proto3" json:"shortName,omitempty"`
+	LongName     string `protobuf:"bytes,1,opt,name=longName,proto3" json:"longName,omitempty" validate:"required,gte=4,lte=64"`         // @gotags: validate:"required,gte=4,lte=64"
+	ShortName    string `protobuf:"bytes,2,opt,name=shortName,proto3" json:"shortName,omitempty" validate:"omitempty,gte=2,lte=16"`       // @gotags: validate:"omitempty,gte=2,lte=16"
 	ContactEmail string `protobuf:"bytes,3,opt,name=contactEmail,proto3" json:"contactEmail,omitempty" validate:"required,email"` // @gotags: validate:"required,email"
 }
 
