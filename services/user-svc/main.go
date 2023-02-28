@@ -88,8 +88,9 @@ func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUser
 
 	// new user
 	user := gocloak.User{
-		FirstName:   gocloak.StringP(request.FirstName),
-		LastName:    gocloak.StringP(request.LastName),
+		// as per ADR-004 we use the convention kc.firstName = nickname and kc.lastName = fullName
+		FirstName:   gocloak.StringP(request.Nickname),
+		LastName:    gocloak.StringP(request.FullName),
 		Email:       gocloak.StringP(request.Email),
 		Enabled:     gocloak.BoolP(true),
 		Username:    gocloak.StringP(request.Email),
