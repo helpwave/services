@@ -2,7 +2,6 @@ package common
 
 import (
 	"context"
-	"errors"
 	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
@@ -89,8 +88,9 @@ func authFunc(ctx context.Context) (context.Context, error) {
 // If an error is returned, no access token was extracted for this request.
 // This either means no token was supplied by the client, or Auth was not set up in Setup.
 func GetAuthClaims(ctx context.Context) (*AccessTokenClaims, error) {
-	if res := ctx.Value(claimsKey).(*AccessTokenClaims); res == nil {
-		return nil, errors.New("authentication required")
+	res, ok := ctx.Value(claimsKey).(*AccessTokenClaims)
+	if !ok || res == nil {
+		return nil, status.Error(codes.Unauthenticated, "authentication required")
 	} else {
 		return res, nil
 	}
