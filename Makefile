@@ -10,7 +10,7 @@ DOCKER_IMAGES = $(subst images/,,$(wildcard images/*))
 .PHONY: GO_SERVICES
 $(GO_SERVICES):
 	docker run -v $$(pwd)/services/$@/api:/api ghcr.io/helpwave/service-preproc:edge
-	docker build -f ${DOCKERFILE_SERVICES} --build-arg=VERSION=${VERSION} --build-arg=SERVICE=$@ -t helpwave/$@ .
+	docker build -f ${DOCKERFILE_SERVICES} --build-arg=VERSION=${VERSION} --build-arg=SERVICE=$@ -t ghcr.io/helpwave/$@:edge .
 
 .PHONY: DOCKER_SERVICES
 $(DOCKER_IMAGES):

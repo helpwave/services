@@ -1,0 +1,18 @@
+{{- if and (.Values.internalService.enabled) (.Values.httpEnabled) -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-internal
+  labels:
+    {{- include "keycloak.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.internalService.type }}
+  ports:
+    - port: {{ .Values.internalService.httpsPort }}
+      targetPort: {{ .Values.httpsPort }}
+      protocol: TCP
+      name: https
+  selector:
+    app: keycloak
+    app.kubernetes.io/managed-by: keycloak-operator
+{{- end }}
