@@ -53,11 +53,15 @@ module "cluster-resources" {
   depends_on = [
     google_container_cluster.staging,
     google_container_node_pool.primary_spot_nodes,
-    google_compute_address.staging-ipv4
+    google_compute_address.staging-ipv4,
+    helm_release.coredns,
+    helm_release.cert-manager
   ]
 
   apisix_gateway_type = "LoadBalancer"
   apisix_gateway_ip = google_compute_address.staging-ipv4.address
 
   keycloak_cert = "x-helpwave-de"
+
+  coredns_config_map_name = "coredns-coredns"
 }

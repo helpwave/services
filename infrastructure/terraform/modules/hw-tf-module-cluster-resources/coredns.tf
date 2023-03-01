@@ -6,6 +6,16 @@
 */
 
 //
+// Variables
+//
+
+variable "coredns_config_map_name" {
+  type = string
+  description = "The metadata.name for the CoreDNS configmap"
+  default = "coredns"
+}
+
+//
 // Update Corefile
 //
 
@@ -14,7 +24,7 @@ resource "kubectl_manifest" "coredns_config_map" {
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: coredns
+  name: ${var.coredns_config_map_name}
   namespace: kube-system
 data:
   Corefile: |

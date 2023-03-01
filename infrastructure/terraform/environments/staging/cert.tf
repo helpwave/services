@@ -5,7 +5,7 @@ locals {
 
 resource "kubectl_manifest" "cert_cloudflare_api_token_secret" {
   depends_on = [
-    module.cluster-resources
+    helm_release.cert-manager
   ]
 
   sensitive_fields = [
@@ -26,7 +26,7 @@ YAML
 
 resource "kubectl_manifest" "cert_issuer_letsencrypt" {
   depends_on = [
-    module.cluster-resources
+    helm_release.cert-manager
   ]
 
   yaml_body = <<YAML
@@ -52,7 +52,7 @@ YAML
 
 resource "kubectl_manifest" "cert_certificate_x-helpwave-de" {
   depends_on = [
-    module.cluster-resources
+    helm_release.cert-manager
   ]
 
   yaml_body = <<YAML
