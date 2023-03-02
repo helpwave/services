@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"github.com/Nerzal/gocloak/v12"
-	"google.golang.org/grpc"
+	daprd "github.com/dapr/go-sdk/service/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwutil"
@@ -13,6 +13,7 @@ import (
 	"time"
 	"user-svc/api"
 
+	daprcmn "github.com/dapr/go-sdk/service/common"
 	zlog "github.com/rs/zerolog/log"
 )
 
@@ -31,8 +32,9 @@ func main() {
 	prepareGocloakClient()
 
 	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
-	common.StartNewGRPCServer(addr, func(server *grpc.Server) {
-		api.RegisterUserServiceServer(server, &userServiceServer{})
+	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
+		common.MustAddTopicEventHandler(server, SubUserCreated, OnUserCreated)
+		api.RegisterUserServiceServer(server.GrpcServer(), &userServiceServer{})
 	})
 }
 
@@ -268,4 +270,15 @@ func createOrganization(logCtx context.Context, request *api.CreateOrgRequest, u
 		ContactEmail: *attributes.ContactEmail,
 		IsPersonal:   *attributes.IsPersonal,
 	}, nil
+}
+
+var SubUserCreated = &daprcmn.Subscription{
+	PubsubName: "pubsub",
+	Topic:      "USER_CREATED",
+	Route:      "/pubsub/user_created/v1",
+}
+
+func OnUserCreated(ctx context.Context, e *daprcmn.TopicEvent) (retry bool, err error) {
+	zlog.Info().Interface("e", e).Msg("USER_CREATED")
+	return false, nil
 }

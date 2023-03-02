@@ -12,6 +12,7 @@ import (
 	"logging"
 	"net"
 
+	daprd "github.com/dapr/go-sdk/service/grpc"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	zlog "github.com/rs/zerolog/log"
@@ -27,31 +28,35 @@ var claimsKey = claimsKeyT{}
 //
 // Example:
 //
-//	common.StartNewGRPCServer(addr, func(server *grpc.Server) {
-//		api.RegisterMyServiceServer(server, &myServiceServer{})
+//	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
+//		grpcServer := server.GrpcServer()
+//		api.RegisterMyServiceServer(grpcServer, &myServiceServer{})
 //	})
-func StartNewGRPCServer(addr string, registerServerHook func(*grpc.Server)) {
+func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	// middlewares
-	logging := loggingUnaryInterceptor
-	auth := grpc_auth.UnaryServerInterceptor(authFunc)
-	validate := validateUnaryInterceptor
-	chain := grpc_middleware.ChainUnaryServer(logging, auth, validate)
-
-	server := grpc.NewServer(grpc.UnaryInterceptor(chain))
+	loggingInterceptor := loggingUnaryInterceptor
+	authInterceptor := grpc_auth.UnaryServerInterceptor(authFunc)
+	validateInterceptor := validateUnaryInterceptor
+	chain := grpc_middleware.ChainUnaryServer(loggingInterceptor, authInterceptor, validateInterceptor)
+	grpcServerOption := grpc.UnaryInterceptor(chain)
 
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
 		zlog.Fatal().Str("addr", addr).Err(err).Send()
 	}
 
-	zlog.Info().Str("addr", addr).Msg("starting grpc service")
+	// dapr/grpc service
+	service := daprd.NewServiceWithListener(listener, grpcServerOption).(*daprd.Server)
+	server := service.GrpcServer()
 
-	registerServerHook(server)
+	registerServerHook(service)
 
 	if Mode == DevelopmentMode {
 		reflection.Register(server)
 		zlog.Warn().Msg("grpc reflection enabled")
 	}
+
+	zlog.Info().Str("addr", addr).Msg("starting grpc service")
 
 	if err = server.Serve(listener); err != nil {
 		zlog.Fatal().Str("addr", addr).Err(err).Msg("could not start grpc server")

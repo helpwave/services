@@ -12,6 +12,7 @@ replace (
 require (
 	common v0.0.0
 	github.com/Nerzal/gocloak/v12 v12.0.0
+	github.com/dapr/go-sdk v1.6.1-0.20230224224332-7c5ecee155cc
 	github.com/rs/zerolog v1.28.0
 	google.golang.org/grpc v1.52.3
 	google.golang.org/protobuf v1.28.1

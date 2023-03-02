@@ -3,7 +3,7 @@ package main
 import (
 	"common"
 	"fmt"
-	"google.golang.org/grpc"
+	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwgorm"
 	"hwutil"
 	"task-svc/api"
@@ -31,9 +31,10 @@ func main() {
 	port := hwutil.GetEnvOr("PORT", "8080")
 	addr := hwutil.GetEnvOr("ADDR", fmt.Sprintf(":%s", port))
 
-	common.StartNewGRPCServer(addr, func(server *grpc.Server) {
-		api.RegisterTaskServiceServer(server, task.NewServiceServer())
-		api.RegisterPatientServiceServer(server, patient.NewServiceServer())
-		api.RegisterWardServiceServer(server, ward.NewServiceServer())
+	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
+		grpcServer := server.GrpcServer()
+		api.RegisterTaskServiceServer(grpcServer, task.NewServiceServer())
+		api.RegisterPatientServiceServer(grpcServer, patient.NewServiceServer())
+		api.RegisterWardServiceServer(grpcServer, ward.NewServiceServer())
 	})
 }
