@@ -2,6 +2,7 @@ package common
 
 import (
 	"context"
+	"github.com/dapr/go-sdk/dapr/proto/runtime/v1"
 	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
@@ -115,7 +116,21 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 	builder := zlog.
 		With().
 		Str("handler", info.FullMethod).
-		Str("span", metadata.Get("traceparent"))
+		Str("span", metadata.Get("traceparent")) // TODO: grpc-trace-bin header
+
+	omitBody := false
+
+	// additional information for pub/sub events
+	if req, ok := req.(*runtime.TopicEventRequest); ok {
+		if traceparent, ok := req.GetExtensions().Fields["traceparent"]; ok {
+			builder = builder.Str("span", traceparent.GetStringValue())
+		}
+		builder = builder.Str("eventID", req.Id)
+
+		// at this point in the chain we have no control about what data may be logged for events,
+		// so we can't log anything for privacy and/or legal reasons, the event handler can log though
+		omitBody = true
+	}
 
 	// this is the logger that should be used for this request
 	log := builder.Logger()
@@ -129,7 +144,9 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 	if loggable, ok := req.(logging.Loggable); ok {
 		logBody = loggable.LoggableFields()
 	}
-	log.Debug().Interface("body", logBody).Send()
+	if !omitBody {
+		log.Debug().Interface("body", logBody).Send()
+	}
 
 	// Call next in chain
 	res, err := next(ctx, req)

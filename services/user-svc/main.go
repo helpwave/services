@@ -4,7 +4,6 @@ import (
 	"common"
 	"context"
 	"github.com/Nerzal/gocloak/v12"
-	daprd "github.com/dapr/go-sdk/service/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwutil"
@@ -13,7 +12,9 @@ import (
 	"time"
 	"user-svc/api"
 
+	daprc "github.com/dapr/go-sdk/client"
 	daprcmn "github.com/dapr/go-sdk/service/common"
+	daprd "github.com/dapr/go-sdk/service/grpc"
 	zlog "github.com/rs/zerolog/log"
 )
 
@@ -81,6 +82,12 @@ type userServiceServer struct {
 func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUserRequest) (*api.CreateUserResponse, error) {
 	log := zlog.Ctx(ctx)
 
+	daprClient, err := daprc.NewClient()
+	if err != nil {
+		log.Error().Err(err).Msg("could not create daprClient")
+		return nil, status.Error(codes.Internal, "Internal: "+err.Error())
+	}
+
 	// new user's Password
 	credentials := []gocloak.CredentialRepresentation{{
 		Temporary: gocloak.BoolP(false),
@@ -114,6 +121,15 @@ func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUser
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	} else {
 		log.Info().Str("userID", userID).Msg("created new user")
+	}
+
+	// prepare for event
+	user.ID = &userID
+	user.Credentials = nil
+
+	// publish USER_CREATED event
+	if err := daprClient.PublishEvent(ctx, "pubsub", "USER_CREATED", user); err != nil {
+		log.Error().Err(err).Msg("could not publish USER_CREATED event")
 	}
 
 	response := api.CreateUserResponse{UserID: userID}
@@ -266,7 +282,7 @@ func createOrganization(logCtx context.Context, request *api.CreateOrgRequest, u
 	return &api.CreateOrgResponse{
 		Id:           groupID,
 		LongName:     *attributes.LongName,
-		ShortName:    *attributes.ShortName,
+		ShortName:    hwutil.DerefStringOrEmpty(attributes.ShortName),
 		ContactEmail: *attributes.ContactEmail,
 		IsPersonal:   *attributes.IsPersonal,
 	}, nil
@@ -279,6 +295,24 @@ var SubUserCreated = &daprcmn.Subscription{
 }
 
 func OnUserCreated(ctx context.Context, e *daprcmn.TopicEvent) (retry bool, err error) {
-	zlog.Info().Interface("e", e).Msg("USER_CREATED")
+	log := zlog.Ctx(ctx)
+	log.Trace().Interface("e", e).Msg("USER_CREATED")
+
+	var user gocloak.User
+	if err := hwutil.ParseValidJson(e.RawData, &user); err != nil {
+		log.Error().Err(err).Msg("could not convert USER_CREATED event data to User")
+		return false, err
+	}
+
+	_, err = createOrganization(ctx, &api.CreateOrgRequest{
+		LongName:     "Your Personal Organization",
+		ContactEmail: *user.Email,
+	}, *user.ID, true)
+
+	if err != nil {
+		log.Error().Str("userID", *user.ID).Err(err).Msg("could not create personal organization")
+		return true, err
+	}
+
 	return false, nil
 }
