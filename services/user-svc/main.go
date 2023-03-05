@@ -6,6 +6,7 @@ import (
 	"github.com/Nerzal/gocloak/v12"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 	"hwutil"
 	"logging"
 	"strconv"
@@ -123,18 +124,14 @@ func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUser
 		log.Info().Str("userID", userID).Msg("created new user")
 	}
 
-	// prepare for event
-	user.ID = &userID
-	user.Credentials = nil
+	_ = common.PublishMessage(ctx, daprClient, "pubsub", "USER_CREATED", &api.CreateUserEvent{
+		Id:       userID,
+		Email:    *user.Email,
+		Nickname: *user.FirstName,
+		FullName: *user.LastName,
+	})
 
-	// publish USER_CREATED event
-	if err := daprClient.PublishEvent(ctx, "pubsub", "USER_CREATED", user); err != nil {
-		log.Error().Err(err).Msg("could not publish USER_CREATED event")
-	}
-
-	response := api.CreateUserResponse{UserID: userID}
-
-	return &response, nil
+	return &api.CreateUserResponse{UserID: userID}, nil
 }
 
 func (userServiceServer) CreateOrganization(ctx context.Context, request *api.CreateOrgRequest) (*api.CreateOrgResponse, error) {
@@ -296,21 +293,20 @@ var SubUserCreated = &daprcmn.Subscription{
 
 func OnUserCreated(ctx context.Context, e *daprcmn.TopicEvent) (retry bool, err error) {
 	log := zlog.Ctx(ctx)
-	log.Trace().Interface("e", e).Msg("USER_CREATED")
 
-	var user gocloak.User
-	if err := hwutil.ParseValidJson(e.RawData, &user); err != nil {
-		log.Error().Err(err).Msg("could not convert USER_CREATED event data to User")
+	var user api.CreateUserEvent
+	if err := proto.Unmarshal(e.RawData, &user); err != nil {
+		log.Error().Err(err).Msg("could not convert USER_CREATED event data to CreateUserEvent")
 		return false, err
 	}
 
 	_, err = createOrganization(ctx, &api.CreateOrgRequest{
 		LongName:     "Your Personal Organization",
-		ContactEmail: *user.Email,
-	}, *user.ID, true)
+		ContactEmail: user.Email,
+	}, user.Id, true)
 
 	if err != nil {
-		log.Error().Str("userID", *user.ID).Err(err).Msg("could not create personal organization")
+		log.Error().Str("userID", user.Id).Err(err).Msg("could not create personal organization")
 		return true, err
 	}
 
