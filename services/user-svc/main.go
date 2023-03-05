@@ -124,7 +124,7 @@ func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUser
 		log.Info().Str("userID", userID).Msg("created new user")
 	}
 
-	_ = common.PublishMessage(ctx, daprClient, "pubsub", "USER_CREATED", &api.CreateUserEvent{
+	_ = common.PublishMessage(ctx, daprClient, "pubsub", "USER_CREATED", &api.UserCreatedEvent{
 		Id:       userID,
 		Email:    *user.Email,
 		Nickname: *user.FirstName,
@@ -294,7 +294,7 @@ var SubUserCreated = &daprcmn.Subscription{
 func OnUserCreated(ctx context.Context, e *daprcmn.TopicEvent) (retry bool, err error) {
 	log := zlog.Ctx(ctx)
 
-	var user api.CreateUserEvent
+	var user api.UserCreatedEvent
 	if err := proto.Unmarshal(e.RawData, &user); err != nil {
 		log.Error().Err(err).Msg("could not convert USER_CREATED event data to CreateUserEvent")
 		return false, err
