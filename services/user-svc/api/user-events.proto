@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option go_package = "user-svc/api";
+
+// TOPIC: USER_CREATED
+message UserCreatedEvent {
+	string id = 1;
+	string email = 2;
+	string nickname = 3;
+	string fullName = 4;
+}

@@ -4,15 +4,18 @@ import (
 	"common"
 	"context"
 	"github.com/Nerzal/gocloak/v12"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 	"hwutil"
 	"logging"
 	"strconv"
 	"time"
 	"user-svc/api"
 
+	daprc "github.com/dapr/go-sdk/client"
+	daprcmn "github.com/dapr/go-sdk/service/common"
+	daprd "github.com/dapr/go-sdk/service/grpc"
 	zlog "github.com/rs/zerolog/log"
 )
 
@@ -31,8 +34,9 @@ func main() {
 	prepareGocloakClient()
 
 	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
-	common.StartNewGRPCServer(addr, func(server *grpc.Server) {
-		api.RegisterUserServiceServer(server, &userServiceServer{})
+	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
+		common.MustAddTopicEventHandler(server, SubUserCreated, OnUserCreated)
+		api.RegisterUserServiceServer(server.GrpcServer(), &userServiceServer{})
 	})
 }
 
@@ -79,6 +83,12 @@ type userServiceServer struct {
 func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUserRequest) (*api.CreateUserResponse, error) {
 	log := zlog.Ctx(ctx)
 
+	daprClient, err := daprc.NewClient()
+	if err != nil {
+		log.Error().Err(err).Msg("could not create daprClient")
+		return nil, status.Error(codes.Internal, "Internal: "+err.Error())
+	}
+
 	// new user's Password
 	credentials := []gocloak.CredentialRepresentation{{
 		Temporary: gocloak.BoolP(false),
@@ -114,9 +124,14 @@ func (userServiceServer) CreateUser(ctx context.Context, request *api.CreateUser
 		log.Info().Str("userID", userID).Msg("created new user")
 	}
 
-	response := api.CreateUserResponse{UserID: userID}
+	_ = common.PublishMessage(ctx, daprClient, "pubsub", "USER_CREATED", &api.UserCreatedEvent{
+		Id:       userID,
+		Email:    *user.Email,
+		Nickname: *user.FirstName,
+		FullName: *user.LastName,
+	})
 
-	return &response, nil
+	return &api.CreateUserResponse{UserID: userID}, nil
 }
 
 func (userServiceServer) CreateOrganization(ctx context.Context, request *api.CreateOrgRequest) (*api.CreateOrgResponse, error) {
@@ -264,8 +279,36 @@ func createOrganization(logCtx context.Context, request *api.CreateOrgRequest, u
 	return &api.CreateOrgResponse{
 		Id:           groupID,
 		LongName:     *attributes.LongName,
-		ShortName:    *attributes.ShortName,
+		ShortName:    hwutil.DerefStringOrEmpty(attributes.ShortName),
 		ContactEmail: *attributes.ContactEmail,
 		IsPersonal:   *attributes.IsPersonal,
 	}, nil
+}
+
+var SubUserCreated = &daprcmn.Subscription{
+	PubsubName: "pubsub",
+	Topic:      "USER_CREATED",
+	Route:      "/pubsub/user_created/v1",
+}
+
+func OnUserCreated(ctx context.Context, e *daprcmn.TopicEvent) (retry bool, err error) {
+	log := zlog.Ctx(ctx)
+
+	var user api.UserCreatedEvent
+	if err := proto.Unmarshal(e.RawData, &user); err != nil {
+		log.Error().Err(err).Msg("could not convert USER_CREATED event data to CreateUserEvent")
+		return false, err
+	}
+
+	_, err = createOrganization(ctx, &api.CreateOrgRequest{
+		LongName:     "Your Personal Organization",
+		ContactEmail: user.Email,
+	}, user.Id, true)
+
+	if err != nil {
+		log.Error().Str("userID", user.Id).Err(err).Msg("could not create personal organization")
+		return true, err
+	}
+
+	return false, nil
 }

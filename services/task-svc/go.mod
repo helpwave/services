@@ -11,6 +11,7 @@ replace (
 
 require (
 	common v0.0.0
+	github.com/dapr/go-sdk v1.6.1-0.20230224224332-7c5ecee155cc
 	github.com/google/uuid v1.3.0
 	github.com/rs/zerolog v1.28.0
 	google.golang.org/grpc v1.52.3
@@ -43,7 +44,6 @@ require (
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/pquerna/cachecontrol v0.1.0 // indirect
-	github.com/stretchr/testify v1.8.1 // indirect
 	golang.org/x/crypto v0.0.0-20221012134737-56aed061732a // indirect
 	golang.org/x/net v0.5.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783 // indirect
@@ -52,6 +52,7 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20230104163317-caabf589fcbf // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/postgres v1.4.5 // indirect
 	gorm.io/gorm v1.24.2 // indirect
 	logging v0.0.0 // indirect

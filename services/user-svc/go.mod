@@ -12,6 +12,7 @@ replace (
 require (
 	common v0.0.0
 	github.com/Nerzal/gocloak/v12 v12.0.0
+	github.com/dapr/go-sdk v1.6.1-0.20230224224332-7c5ecee155cc
 	github.com/rs/zerolog v1.28.0
 	google.golang.org/grpc v1.52.3
 	google.golang.org/protobuf v1.28.1
@@ -46,4 +47,5 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20230202175211-008b39050e57 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

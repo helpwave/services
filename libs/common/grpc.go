@@ -2,6 +2,7 @@ package common
 
 import (
 	"context"
+	"github.com/dapr/go-sdk/dapr/proto/runtime/v1"
 	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
@@ -12,6 +13,7 @@ import (
 	"logging"
 	"net"
 
+	daprd "github.com/dapr/go-sdk/service/grpc"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	zlog "github.com/rs/zerolog/log"
@@ -27,31 +29,35 @@ var claimsKey = claimsKeyT{}
 //
 // Example:
 //
-//	common.StartNewGRPCServer(addr, func(server *grpc.Server) {
-//		api.RegisterMyServiceServer(server, &myServiceServer{})
+//	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
+//		grpcServer := server.GrpcServer()
+//		api.RegisterMyServiceServer(grpcServer, &myServiceServer{})
 //	})
-func StartNewGRPCServer(addr string, registerServerHook func(*grpc.Server)) {
+func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	// middlewares
-	logging := loggingUnaryInterceptor
-	auth := grpc_auth.UnaryServerInterceptor(authFunc)
-	validate := validateUnaryInterceptor
-	chain := grpc_middleware.ChainUnaryServer(logging, auth, validate)
-
-	server := grpc.NewServer(grpc.UnaryInterceptor(chain))
+	loggingInterceptor := loggingUnaryInterceptor
+	authInterceptor := grpc_auth.UnaryServerInterceptor(authFunc)
+	validateInterceptor := validateUnaryInterceptor
+	chain := grpc_middleware.ChainUnaryServer(loggingInterceptor, authInterceptor, validateInterceptor)
+	grpcServerOption := grpc.UnaryInterceptor(chain)
 
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
 		zlog.Fatal().Str("addr", addr).Err(err).Send()
 	}
 
-	zlog.Info().Str("addr", addr).Msg("starting grpc service")
+	// dapr/grpc service
+	service := daprd.NewServiceWithListener(listener, grpcServerOption).(*daprd.Server)
+	server := service.GrpcServer()
 
-	registerServerHook(server)
+	registerServerHook(service)
 
 	if Mode == DevelopmentMode {
 		reflection.Register(server)
 		zlog.Warn().Msg("grpc reflection enabled")
 	}
+
+	zlog.Info().Str("addr", addr).Msg("starting grpc service")
 
 	if err = server.Serve(listener); err != nil {
 		zlog.Fatal().Str("addr", addr).Err(err).Msg("could not start grpc server")
@@ -110,7 +116,21 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 	builder := zlog.
 		With().
 		Str("handler", info.FullMethod).
-		Str("span", metadata.Get("traceparent"))
+		Str("span", metadata.Get("traceparent")) // TODO: grpc-trace-bin header
+
+	omitBody := false
+
+	// additional information for pub/sub events
+	if req, ok := req.(*runtime.TopicEventRequest); ok {
+		if traceparent, ok := req.GetExtensions().Fields["traceparent"]; ok {
+			builder = builder.Str("span", traceparent.GetStringValue())
+		}
+		builder = builder.Str("eventID", req.Id)
+
+		// at this point in the chain we have no control about what data may be logged for events,
+		// so we can't log anything for privacy and/or legal reasons, the event handler can log though
+		omitBody = true
+	}
 
 	// this is the logger that should be used for this request
 	log := builder.Logger()
@@ -124,7 +144,9 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 	if loggable, ok := req.(logging.Loggable); ok {
 		logBody = loggable.LoggableFields()
 	}
-	log.Debug().Interface("body", logBody).Send()
+	if !omitBody {
+		log.Debug().Interface("body", logBody).Send()
+	}
 
 	// Call next in chain
 	res, err := next(ctx, req)

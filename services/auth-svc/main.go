@@ -5,7 +5,7 @@ import (
 	"context"
 	_ "embed"
 	"emergency-room-svc/api"
-	"google.golang.org/grpc"
+	daprd "github.com/dapr/go-sdk/service/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwutil"
@@ -43,8 +43,8 @@ func main() {
 func runGRPCService() {
 	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
 
-	common.StartNewGRPCServer(addr, func(server *grpc.Server) {
-		api.RegisterAuthServiceServer(server, &authServiceServer{})
+	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
+		api.RegisterAuthServiceServer(server.GrpcServer(), &authServiceServer{})
 	})
 }
 

@@ -5,8 +5,8 @@ import (
 	"context"
 	"emergency-room-svc/api"
 	"emergency-room-svc/models"
+	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/google/uuid"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
@@ -35,8 +35,8 @@ func main() {
 
 	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
 
-	common.StartNewGRPCServer(addr, func(server *grpc.Server) {
-		api.RegisterEmergencyRoomServiceServer(server, &emergencyRoomServiceServer{})
+	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
+		api.RegisterEmergencyRoomServiceServer(server.GrpcServer(), &emergencyRoomServiceServer{})
 	})
 }
 
