@@ -64,4 +64,7 @@ module "cluster-resources" {
   keycloak_cert = "x-helpwave-de"
 
   coredns_config_map_name = "coredns-coredns"
+
+  api_hostname = cloudflare_record.staging-api-helpwave-de.hostname
+  dashboard_hostname = cloudflare_record.staging-tasks-helpwave-de.hostname
 }

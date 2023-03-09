@@ -5,7 +5,6 @@ locals {
   auth_svc_keycloak_client_secret = "notReallySecret" // TODO: use vault ("**${vault.**_key_**}**")
 }
 
-
 resource "helm_release" "auth-svc" {
   name  = "auth-svc"
   chart = "../../../charts/service"

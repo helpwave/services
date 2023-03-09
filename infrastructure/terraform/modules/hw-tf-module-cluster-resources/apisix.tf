@@ -35,6 +35,12 @@ variable "apisix_gateway_tls_enabled" {
   default = true
 }
 
+variable "api_hostname" {
+  type = string
+  description = "The hostname of the api"
+  default = "api.helpwave.de"
+}
+
 locals {
   apisix_name = "apisix"
   apisix_namespace = "apisix"
@@ -161,7 +167,8 @@ spec:
     - serviceName: ${local.apisix_name}-dapr
       servicePort: 50001
     match:
-      # TODO: Also match against hostnames. Fiddle around with yamlencode inside this yaml :)
+      hosts:
+      - ${var.api_hostname}
       paths:
       - /*
     name: ${local.apisix_name}-dapr
