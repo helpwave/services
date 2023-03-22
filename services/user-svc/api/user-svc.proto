@@ -19,6 +19,21 @@ message CreateUserResponse {
 }
 
 //
+// Update User
+//
+
+message UpdateUserRequest {
+	// if userId is missing the requesting user's id is used
+	optional string userId = 1; // @gotags: validate:"omitempty,uuid4"
+	optional string fullName = 2;
+	optional string nickname = 3;
+	optional string email = 4; // @gotags: validate:"omitempty,email"
+	optional string password = 5;
+}
+
+message UpdateUserResponse {}
+
+//
 // Create Organization
 //
 
@@ -43,5 +58,7 @@ message CreateOrgResponse {
 
 service UserService {
 	rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {}
+	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse) {}
+	
 	rpc CreateOrganization (CreateOrgRequest) returns (CreateOrgResponse) {}
 }

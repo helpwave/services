@@ -44,7 +44,7 @@ func main() {
 var lastToken *gocloak.JWT = nil
 var lastTokenExp time.Time
 
-// getServiceAccountToken returns a valid token, or errors trying, do not modify it
+// getServiceAccountToken returns a valid token, or errors trying, do not mutate the token
 func getServiceAccountToken(logCtx context.Context) (*gocloak.JWT, error) {
 	if lastToken != nil && lastTokenExp.After(time.Now().Add(10*time.Second)) {
 		return lastToken, nil
@@ -144,6 +144,65 @@ func (userServiceServer) CreateOrganization(ctx context.Context, request *api.Cr
 	userID := claims.Sub
 
 	return createOrganization(ctx, request, userID, false)
+}
+
+func (userServiceServer) UpdateUser(ctx context.Context, request *api.UpdateUserRequest) (*api.UpdateUserResponse, error) {
+	log := zlog.Ctx(ctx)
+
+	// User AuthN
+	claims, err := common.GetAuthClaims(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	// Client AuthN
+	token, err := getServiceAccountToken(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("could not refresh service token!")
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	userId := gocloak.StringP(hwutil.DerefStringOr(request.UserId, claims.Sub))
+	if *userId != claims.Sub {
+		return nil, status.Error(codes.InvalidArgument, "you can only update your own account for now")
+	}
+
+	// un-verify email, but never set it to true (in case it is already not verified)
+	var emailVerified *bool = nil
+	if request.Email != nil {
+		emailVerified = gocloak.BoolP(false)
+	}
+
+	// new password
+	var credentials *[]gocloak.CredentialRepresentation = nil
+	if request.Password != nil {
+		credentials = &[]gocloak.CredentialRepresentation{{
+			Temporary: gocloak.BoolP(false),
+			Type:      gocloak.StringP("password"),
+			Value:     request.Password,
+		}}
+	}
+
+	kcUser := gocloak.User{
+		// use requesting user's id as fallback
+		ID:            userId,
+		EmailVerified: emailVerified,
+		// as per ADR-004 we use the convention kc.firstName = nickname and kc.lastName = fullName
+		FirstName:   request.Nickname,
+		LastName:    request.FullName,
+		Email:       request.Email,
+		Username:    request.Email,
+		Credentials: credentials,
+	}
+
+	kcCtx := context.Background()
+	err = gocloakClient.UpdateUser(kcCtx, token.AccessToken, realm, kcUser)
+
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "Invalid: "+err.Error())
+	}
+
+	return &api.UpdateUserResponse{}, nil
 }
 
 type OrganizationAttributes struct {
