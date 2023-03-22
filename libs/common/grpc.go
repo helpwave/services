@@ -19,9 +19,7 @@ import (
 	zlog "github.com/rs/zerolog/log"
 )
 
-type claimsKeyT struct{}
-
-var claimsKey = claimsKeyT{}
+type claimsKey struct{}
 
 // StartNewGRPCServer creates and starts a new GRPC server on addr or panics.
 // Using registerServerHook you are able to register your
@@ -66,6 +64,7 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 
 func authFunc(ctx context.Context) (context.Context, error) {
 	if !IsKeycloakSetUp() {
+		zlog.Ctx(ctx).Trace().Msg("skipping auth middleware, as keycloak is not set up")
 		// skip injecting claims into context
 		return ctx, nil
 	}
@@ -74,6 +73,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	token, err := grpc_auth.AuthFromMD(ctx, "bearer")
 
 	if err != nil {
+		zlog.Ctx(ctx).Trace().Err(err).Msg("no valid auth header found")
 		// nothing to parse, continue to next interceptor
 		return ctx, nil
 	}
@@ -84,7 +84,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 		return nil, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err)
 	}
 
-	ctx = context.WithValue(ctx, claimsKey, &claims)
+	ctx = context.WithValue(ctx, claimsKey{}, claims)
 
 	return ctx, nil
 }
@@ -94,7 +94,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 // If an error is returned, no access token was extracted for this request.
 // This either means no token was supplied by the client, or Auth was not set up in Setup.
 func GetAuthClaims(ctx context.Context) (*AccessTokenClaims, error) {
-	res, ok := ctx.Value(claimsKey).(*AccessTokenClaims)
+	res, ok := ctx.Value(claimsKey{}).(*AccessTokenClaims)
 	if !ok || res == nil {
 		return nil, status.Error(codes.Unauthenticated, "authentication required")
 	} else {
