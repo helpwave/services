@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option go_package = "gen/proto/services/task-svc";
+
+//
+// CreateWard
+//
+
+message CreateWardRequest {
+	string name = 1; // @gotags: validate:"required"
+}
+
+message CreateWardResponse {
+	string id = 1;
+	string name = 2;
+}
+
+//
+// GetWard
+//
+
+message GetWardRequest {
+	string id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetWardResponse {
+	string id = 1;
+	string name = 2;
+}
+
+//
+// UpdateWard
+//
+
+message UpdateWardRequest {
+	string id = 1; // @gotags: validate:"uuid4"
+	optional string name = 2;
+}
+
+message UpdateWardResponse {}
+
+//
+// WardService
+//
+
+service WardService {
+	rpc CreateWard (CreateWardRequest) returns (CreateWardResponse) {}
+	rpc GetWard (GetWardRequest) returns (GetWardResponse) {}
+	rpc UpdateWard (UpdateWardRequest) returns (UpdateWardResponse) {}
+}

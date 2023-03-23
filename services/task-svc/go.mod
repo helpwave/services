@@ -7,6 +7,7 @@ replace (
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
 	logging => ../../libs/logging
+	gen => ../../gen
 )
 
 require (
@@ -18,6 +19,7 @@ require (
 	google.golang.org/protobuf v1.28.1
 	hwgorm v0.0.0
 	hwutil v0.0.0
+	gen v0.0.0
 )
 
 require (

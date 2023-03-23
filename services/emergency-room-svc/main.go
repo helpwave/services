@@ -3,8 +3,8 @@ package main
 import (
 	"common"
 	"context"
-	"emergency-room-svc/api"
 	"emergency-room-svc/models"
+	pb "gen/proto/services/emergency-room-svc"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
@@ -36,7 +36,7 @@ func main() {
 	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
 
 	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
-		api.RegisterEmergencyRoomServiceServer(server.GrpcServer(), &emergencyRoomServiceServer{})
+		pb.RegisterEmergencyRoomServiceServer(server.GrpcServer(), &emergencyRoomServiceServer{})
 	})
 }
 
@@ -45,10 +45,10 @@ func main() {
 //
 
 type emergencyRoomServiceServer struct {
-	api.UnimplementedEmergencyRoomServiceServer
+	pb.UnimplementedEmergencyRoomServiceServer
 }
 
-func (emergencyRoomServiceServer) CreateER(ctx context.Context, req *api.CreateERRequest) (*api.GetSingleERResponse, error) {
+func (emergencyRoomServiceServer) CreateER(ctx context.Context, req *pb.CreateERRequest) (*pb.GetSingleERResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	// TODO: Auth
@@ -82,10 +82,10 @@ func (emergencyRoomServiceServer) CreateER(ctx context.Context, req *api.CreateE
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	return &api.GetSingleERResponse{
+	return &pb.GetSingleERResponse{
 		Id:                 emergencyRoom.ID.String(),
 		Name:               emergencyRoom.Name,
-		Location:           api.FromGormPoint(&emergencyRoom.Location),
+		Location:           pb.FromGormPoint(&emergencyRoom.Location),
 		DisplayableAddress: emergencyRoom.DisplayableAddress,
 		Open:               emergencyRoom.Open,
 		Utilization:        emergencyRoom.Utilization,
@@ -93,7 +93,7 @@ func (emergencyRoomServiceServer) CreateER(ctx context.Context, req *api.CreateE
 	}, nil
 }
 
-func (emergencyRoomServiceServer) GetER(ctx context.Context, req *api.GetSingleERRequest) (*api.GetSingleERResponse, error) {
+func (emergencyRoomServiceServer) GetER(ctx context.Context, req *pb.GetSingleERRequest) (*pb.GetSingleERResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	id, err := uuid.Parse(req.Id)
@@ -118,10 +118,10 @@ func (emergencyRoomServiceServer) GetER(ctx context.Context, req *api.GetSingleE
 
 	log.Debug().Msgf("result = %v", result)
 
-	return &api.GetSingleERResponse{
+	return &pb.GetSingleERResponse{
 		Id:                 emergencyRoom.ID.String(),
 		Name:               emergencyRoom.Name,
-		Location:           api.FromGormPoint(&emergencyRoom.Location),
+		Location:           pb.FromGormPoint(&emergencyRoom.Location),
 		DisplayableAddress: emergencyRoom.DisplayableAddress,
 		Open:               emergencyRoom.Open,
 		Utilization:        emergencyRoom.Utilization,
@@ -130,13 +130,13 @@ func (emergencyRoomServiceServer) GetER(ctx context.Context, req *api.GetSingleE
 
 }
 
-func (emergencyRoomServiceServer) GetERs(ctx context.Context, req *api.GetERsRequest) (*api.GetERsResponse, error) {
+func (emergencyRoomServiceServer) GetERs(ctx context.Context, req *pb.GetERsRequest) (*pb.GetERsResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	db := hwgorm.GetDB(ctx)
 	db = db.Where(whereClausesForERsQuery(db, req))
 
-	pageReq := api.ToGormPagedRequest(req.PagedRequest)
+	pageReq := pb.ToGormPagedRequest(req.PagedRequest)
 
 	pageInfo, err := hwgorm.GetPageInfo(db, &pageReq, models.EmergencyRoom{})
 	if err != nil {
@@ -155,12 +155,12 @@ func (emergencyRoomServiceServer) GetERs(ctx context.Context, req *api.GetERsReq
 	}
 
 	// Response
-	responses := make([]*api.GetSingleERResponse, len(emergencyRooms))
+	responses := make([]*pb.GetSingleERResponse, len(emergencyRooms))
 	for i, emergencyRoom := range emergencyRooms {
-		responses[i] = &api.GetSingleERResponse{
+		responses[i] = &pb.GetSingleERResponse{
 			Id:                 emergencyRoom.ID.String(),
 			Name:               emergencyRoom.Name,
-			Location:           api.FromGormPoint(&emergencyRoom.Location),
+			Location:           pb.FromGormPoint(&emergencyRoom.Location),
 			DisplayableAddress: emergencyRoom.DisplayableAddress,
 			Open:               emergencyRoom.Open,
 			Utilization:        emergencyRoom.Utilization,
@@ -168,8 +168,8 @@ func (emergencyRoomServiceServer) GetERs(ctx context.Context, req *api.GetERsReq
 		}
 	}
 
-	return &api.GetERsResponse{
-		PageInfo: &api.PageInfo{
+	return &pb.GetERsResponse{
+		PageInfo: &pb.PageInfo{
 			Page:      int32(pageInfo.Page),
 			PageSize:  int32(pageInfo.PageSize),
 			TotalSize: pageInfo.TotalSize,
@@ -179,7 +179,7 @@ func (emergencyRoomServiceServer) GetERs(ctx context.Context, req *api.GetERsReq
 	}, nil
 }
 
-func whereClausesForERsQuery(db *gorm.DB, request *api.GetERsRequest) *gorm.DB {
+func whereClausesForERsQuery(db *gorm.DB, request *pb.GetERsRequest) *gorm.DB {
 	if request.Open != nil {
 		db = db.Where("is_open = ?", *request.Open)
 	}
@@ -202,7 +202,7 @@ func whereClausesForERsQuery(db *gorm.DB, request *api.GetERsRequest) *gorm.DB {
 	return db
 }
 
-func (emergencyRoomServiceServer) UpdateER(ctx context.Context, req *api.UpdateERRequest) (*api.UpdateERResponse, error) {
+func (emergencyRoomServiceServer) UpdateER(ctx context.Context, req *pb.UpdateERRequest) (*pb.UpdateERResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	// TODO: Auth
@@ -227,10 +227,10 @@ func (emergencyRoomServiceServer) UpdateER(ctx context.Context, req *api.UpdateE
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	return &api.UpdateERResponse{}, nil
+	return &pb.UpdateERResponse{}, nil
 }
 
-func (emergencyRoomServiceServer) AddDepartmentsToER(ctx context.Context, req *api.AddDepartmentsToERRequest) (*api.AddDepartmentsToERResponse, error) {
+func (emergencyRoomServiceServer) AddDepartmentsToER(ctx context.Context, req *pb.AddDepartmentsToERRequest) (*pb.AddDepartmentsToERResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	// TODO: Auth
@@ -259,10 +259,10 @@ func (emergencyRoomServiceServer) AddDepartmentsToER(ctx context.Context, req *a
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	return &api.AddDepartmentsToERResponse{}, nil
+	return &pb.AddDepartmentsToERResponse{}, nil
 }
 
-func (emergencyRoomServiceServer) RemoveDepartmentsFromER(ctx context.Context, req *api.RemoveDepartmentsFromERRequest) (*api.RemoveDepartmentsFromERResponse, error) {
+func (emergencyRoomServiceServer) RemoveDepartmentsFromER(ctx context.Context, req *pb.RemoveDepartmentsFromERRequest) (*pb.RemoveDepartmentsFromERResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	// TODO: Auth
@@ -287,7 +287,7 @@ func (emergencyRoomServiceServer) RemoveDepartmentsFromER(ctx context.Context, r
 	log.Debug().Msgf("departmentsToRemove: %s", logging.Formatted(departmentsToRemove))
 
 	if len(departmentsToRemove) == 0 {
-		return &api.RemoveDepartmentsFromERResponse{}, nil
+		return &pb.RemoveDepartmentsFromERResponse{}, nil
 	}
 
 	if err := db.Model(&emergencyRoom).Association("Departments").Delete(departmentsToRemove); err != nil {
@@ -295,10 +295,10 @@ func (emergencyRoomServiceServer) RemoveDepartmentsFromER(ctx context.Context, r
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	return &api.RemoveDepartmentsFromERResponse{}, nil
+	return &pb.RemoveDepartmentsFromERResponse{}, nil
 }
 
-func (emergencyRoomServiceServer) DeleteER(ctx context.Context, req *api.DeleteERRequest) (*api.DeleteERResponse, error) {
+func (emergencyRoomServiceServer) DeleteER(ctx context.Context, req *pb.DeleteERRequest) (*pb.DeleteERResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	// TODO: Auth
@@ -325,5 +325,5 @@ func (emergencyRoomServiceServer) DeleteER(ctx context.Context, req *api.DeleteE
 
 	log.Debug().Msgf("result = %v", result)
 
-	return &api.DeleteERResponse{}, nil
+	return &pb.DeleteERResponse{}, nil
 }

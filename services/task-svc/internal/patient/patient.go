@@ -2,12 +2,12 @@ package patient
 
 import (
 	"context"
+	pb "gen/proto/services/task-svc"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
-	"task-svc/api"
 )
 
 type Base struct {
@@ -20,14 +20,14 @@ type Patient struct {
 }
 
 type ServiceServer struct {
-	api.UnimplementedPatientServiceServer
+	pb.UnimplementedPatientServiceServer
 }
 
 func NewServiceServer() *ServiceServer {
 	return &ServiceServer{}
 }
 
-func (ServiceServer) CreatePatient(ctx context.Context, req *api.CreatePatientRequest) (*api.CreatePatientResponse, error) {
+func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientRequest) (*pb.CreatePatientResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
@@ -48,12 +48,12 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *api.CreatePatientRe
 		Str("patientId", patient.ID.String()).
 		Msg("patient created")
 
-	return &api.CreatePatientResponse{
+	return &pb.CreatePatientResponse{
 		Id: patient.ID.String(),
 	}, nil
 }
 
-func (ServiceServer) GetPatient(ctx context.Context, req *api.GetPatientRequest) (*api.GetPatientResponse, error) {
+func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) (*pb.GetPatientResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
@@ -74,13 +74,13 @@ func (ServiceServer) GetPatient(ctx context.Context, req *api.GetPatientRequest)
 		}
 	}
 
-	return &api.GetPatientResponse{
+	return &pb.GetPatientResponse{
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 	}, nil
 }
 
-func (ServiceServer) UpdatePatient(ctx context.Context, req *api.UpdatePatientRequest) (*api.UpdatePatientResponse, error) {
+func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientRequest) (*pb.UpdatePatientResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
@@ -99,5 +99,5 @@ func (ServiceServer) UpdatePatient(ctx context.Context, req *api.UpdatePatientRe
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &api.UpdatePatientResponse{}, nil
+	return &pb.UpdatePatientResponse{}, nil
 }

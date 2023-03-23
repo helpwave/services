@@ -7,6 +7,7 @@ replace (
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
 	logging => ../../libs/logging
+	gen => ../../gen
 )
 
 require (
@@ -20,6 +21,7 @@ require (
 	hwgorm v0.0.0
 	hwutil v0.0.0
 	logging v0.0.0
+	gen v0.0.0
 )
 
 require (

@@ -7,13 +7,16 @@ GO_SERVICES = $(subst services/,,$(wildcard services/*))
 # Docker images have their own Dockerfile in the root of the service directory
 DOCKER_IMAGES = $(subst images/,,$(wildcard images/*))
 
+.PHONY: proto
+proto:
+	buf generate # TODO: replace with docker
+
 .PHONY: GO_SERVICES
-$(GO_SERVICES):
-	docker run -v $$(pwd)/services/$@/api:/api ghcr.io/helpwave/service-preproc:edge
+$(GO_SERVICES): PROTO
 	docker build -f ${DOCKERFILE_SERVICES} --build-arg=VERSION=${VERSION} --build-arg=SERVICE=$@ -t ghcr.io/helpwave/$@:edge .
 
 .PHONY: DOCKER_SERVICES
-$(DOCKER_IMAGES):
+$(DOCKER_IMAGES): PROTO
 	cd images/$@ && docker build -t helpwave/$@ .
 
 .PHONY: all

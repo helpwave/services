@@ -2,12 +2,12 @@ package ward
 
 import (
 	"context"
+	pb "gen/proto/services/task-svc"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
-	"task-svc/api"
 )
 
 type Base struct {
@@ -20,14 +20,14 @@ type Ward struct {
 }
 
 type ServiceServer struct {
-	api.UnimplementedWardServiceServer
+	pb.UnimplementedWardServiceServer
 }
 
 func NewServiceServer() *ServiceServer {
 	return &ServiceServer{}
 }
 
-func (ServiceServer) CreateWard(ctx context.Context, req *api.CreateWardRequest) (*api.CreateWardResponse, error) {
+func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) (*pb.CreateWardResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
@@ -47,13 +47,13 @@ func (ServiceServer) CreateWard(ctx context.Context, req *api.CreateWardRequest)
 		Str("wardId", ward.ID.String()).
 		Msg("ward created")
 
-	return &api.CreateWardResponse{
+	return &pb.CreateWardResponse{
 		Id:   ward.ID.String(),
 		Name: ward.Name,
 	}, nil
 }
 
-func (ServiceServer) GetWard(ctx context.Context, req *api.GetWardRequest) (*api.GetWardResponse, error) {
+func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.GetWardResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -72,13 +72,13 @@ func (ServiceServer) GetWard(ctx context.Context, req *api.GetWardRequest) (*api
 		}
 	}
 
-	return &api.GetWardResponse{
+	return &pb.GetWardResponse{
 		Id:   ward.ID.String(),
 		Name: ward.Name,
 	}, nil
 }
 
-func (ServiceServer) UpdateWard(ctx context.Context, req *api.UpdateWardRequest) (*api.UpdateWardResponse, error) {
+func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) (*pb.UpdateWardResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -95,5 +95,5 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *api.UpdateWardRequest)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &api.UpdateWardResponse{}, nil
+	return &pb.UpdateWardResponse{}, nil
 }
