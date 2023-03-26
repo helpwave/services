@@ -1,5 +1,9 @@
 package api
 
+import (
+	"task-svc/internal/room/models"
+)
+
 func (req *UpdateTaskRequest) UpdatesMap() map[string]interface{} {
 	m := make(map[string]interface{})
 
@@ -42,4 +46,12 @@ func (req *UpdateRoomRequest) UpdatesMap() map[string]interface{} {
 	}
 
 	return m
+}
+
+func BedsToBedsOfRoom(beds []models.Bed) []*BedOfRoom {
+	var bedsOfRoom []*BedOfRoom
+	for _, bed := range beds {
+		bedsOfRoom = append(bedsOfRoom, &BedOfRoom{Id: bed.ID.String()})
+	}
+	return bedsOfRoom
 }

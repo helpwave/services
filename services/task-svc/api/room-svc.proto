@@ -8,7 +8,7 @@ option go_package = "task-svc/api";
 
 message CreateRoomRequest {
 	string name = 1; // @gotags: validate:"required"
-	int32 amountOfBeds = 2; // @gotags: validate:"required"
+	uint32 amountOfBeds = 2; // @gotags: validate:"required"
 }
 
 message CreateRoomResponse {
@@ -50,7 +50,7 @@ message UpdateRoomResponse {}
 
 message AddBedsToRoomRequest {
 	string id = 1; // @gotags: validate:"uuid4"
-	int32 amountOfBeds = 3;
+	uint32 amountOfBeds = 3;
 }
 
 message AddBedsToRoomResponse {}

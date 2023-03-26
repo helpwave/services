@@ -8,22 +8,8 @@ import (
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"task-svc/api"
+	"task-svc/internal/room/models"
 )
-
-type Base struct {
-	Name string `gorm:"column:name"`
-}
-
-type Room struct {
-	Base
-	ID   uuid.UUID `gorm:"column:id"`
-	Beds []Bed     `gorm:"foreignKey:RoomID"`
-}
-
-type Bed struct {
-	ID     uuid.UUID `gorm:"column:id"`
-	RoomID uuid.UUID `gorm:"column:room_id"`
-}
 
 type ServiceServer struct {
 	api.UnimplementedRoomServiceServer
@@ -39,15 +25,14 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *api.CreateRoomRequest)
 
 	// TODO: Auth
 
-	room := Room{
-		Base: Base{
+	room := models.Room{
+		Base: models.Base{
 			Name: req.Name,
 		},
-		Beds: make([]Bed, req.AmountOfBeds),
+		Beds: make([]models.Bed, req.AmountOfBeds),
 	}
 
 	if err := db.Create(&room).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -62,7 +47,6 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *api.CreateRoomRequest)
 }
 
 func (ServiceServer) GetRoom(ctx context.Context, req *api.GetRoomRequest) (*api.GetRoomResponse, error) {
-	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -72,11 +56,10 @@ func (ServiceServer) GetRoom(ctx context.Context, req *api.GetRoomRequest) (*api
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	room := Room{ID: id}
+	room := models.Room{ID: id}
 
 	if err := db.Preload("Beds").First(&room).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
-			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "id not found")
@@ -86,20 +69,11 @@ func (ServiceServer) GetRoom(ctx context.Context, req *api.GetRoomRequest) (*api
 	return &api.GetRoomResponse{
 		Id:   room.ID.String(),
 		Name: room.Name,
-		Beds: BedsToBedsOfRoom(room.Beds),
+		Beds: api.BedsToBedsOfRoom(room.Beds),
 	}, nil
 }
 
-func BedsToBedsOfRoom(beds []Bed) []*api.BedOfRoom {
-	var bedsOfRoom []*api.BedOfRoom
-	for _, bed := range beds {
-		bedsOfRoom = append(bedsOfRoom, &api.BedOfRoom{Id: bed.ID.String()})
-	}
-	return bedsOfRoom
-}
-
 func (ServiceServer) UpdateRoom(ctx context.Context, req *api.UpdateRoomRequest) (*api.UpdateRoomResponse, error) {
-	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -109,11 +83,10 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *api.UpdateRoomRequest)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	room := Room{ID: id}
+	room := models.Room{ID: id}
 	updates := req.UpdatesMap()
 
 	if err := db.Model(&room).Updates(updates).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -131,11 +104,10 @@ func (ServiceServer) AddBedsToRoom(ctx context.Context, req *api.AddBedsToRoomRe
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	room := Room{ID: id}
-	beds := make([]Bed, req.AmountOfBeds)
+	room := models.Room{ID: id}
+	beds := make([]models.Bed, req.AmountOfBeds)
 
 	if err := db.Model(&room).Association("Beds").Append(&beds); err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
