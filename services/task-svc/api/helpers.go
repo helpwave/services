@@ -33,3 +33,13 @@ func (req *UpdateWardRequest) UpdatesMap() map[string]interface{} {
 
 	return m
 }
+
+func (req *UpdateRoomRequest) UpdatesMap() map[string]interface{} {
+	m := make(map[string]interface{})
+
+	if req.Name != nil {
+		m["name"] = req.Name
+	}
+
+	return m
+}
