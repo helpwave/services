@@ -8,6 +8,7 @@ import (
 	"hwutil"
 	"task-svc/api"
 	"task-svc/internal/patient"
+	"task-svc/internal/room"
 	"task-svc/internal/task"
 	"task-svc/internal/ward"
 )
@@ -36,5 +37,6 @@ func main() {
 		api.RegisterTaskServiceServer(grpcServer, task.NewServiceServer())
 		api.RegisterPatientServiceServer(grpcServer, patient.NewServiceServer())
 		api.RegisterWardServiceServer(grpcServer, ward.NewServiceServer())
+		api.RegisterRoomServiceServer(grpcServer, room.NewServiceServer())
 	})
 }
