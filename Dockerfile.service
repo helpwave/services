@@ -11,6 +11,7 @@ ARG VERSION
 WORKDIR /build/app
 
 COPY libs /libs
+COPY gen /gen
 
 COPY services/$SERVICE/go.* ./
 RUN go mod download
