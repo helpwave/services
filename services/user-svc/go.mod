@@ -4,22 +4,22 @@ go 1.19
 
 replace (
 	common => ../../libs/common
+	gen => ../../gen
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
 	logging => ../../libs/logging
-	gen => ../../gen
 )
 
 require (
 	common v0.0.0
+	gen v0.0.0
 	github.com/Nerzal/gocloak/v12 v12.0.0
 	github.com/dapr/go-sdk v1.6.1-0.20230224224332-7c5ecee155cc
 	github.com/rs/zerolog v1.28.0
-	google.golang.org/grpc v1.52.3
-	google.golang.org/protobuf v1.28.1
+	google.golang.org/grpc v1.54.0
+	google.golang.org/protobuf v1.30.0
 	hwutil v0.0.0
 	logging v0.0.0
-	gen v0.0.0
 )
 
 require (
@@ -42,10 +42,10 @@ require (
 	github.com/pquerna/cachecontrol v0.1.0 // indirect
 	github.com/segmentio/ksuid v1.0.4 // indirect
 	golang.org/x/crypto v0.0.0-20221012134737-56aed061732a // indirect
-	golang.org/x/net v0.5.0 // indirect
-	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783 // indirect
-	golang.org/x/sys v0.4.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/net v0.8.0 // indirect
+	golang.org/x/oauth2 v0.4.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/text v0.8.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20230202175211-008b39050e57 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect

@@ -12,11 +12,11 @@ proto:
 	buf generate # TODO: replace with docker
 
 .PHONY: GO_SERVICES
-$(GO_SERVICES): PROTO
+$(GO_SERVICES): proto
 	docker build -f ${DOCKERFILE_SERVICES} --build-arg=VERSION=${VERSION} --build-arg=SERVICE=$@ -t ghcr.io/helpwave/$@:edge .
 
 .PHONY: DOCKER_SERVICES
-$(DOCKER_IMAGES): PROTO
+$(DOCKER_IMAGES): proto
 	cd images/$@ && docker build -t helpwave/$@ .
 
 .PHONY: all
