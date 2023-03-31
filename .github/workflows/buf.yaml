@@ -11,6 +11,24 @@ jobs:
   lint-protos:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: bufbuild/buf-setup-action@v1
       - uses: bufbuild/buf-lint-action@v1
+  generate-protos:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - run: make proto
+      - uses: EndBug/add-and-commit@v9
+        id: commit
+        with:
+          add: 'gen'
+          default_author: github_actions
+          message: 'fix: generate protobufs'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
