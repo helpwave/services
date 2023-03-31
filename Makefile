@@ -9,15 +9,20 @@ DOCKER_IMAGES = $(subst images/,,$(wildcard images/*))
 
 .PHONY: proto
 proto:
-	buf generate # TODO: replace with docker
+	docker run -v $$(pwd):/wd ghcr.io/helpwave/service-preproc:edge lint || true
+	docker run -v $$(pwd):/wd ghcr.io/helpwave/service-preproc:edge generate
+
+.PHONY: proto_lint
+proto_lint:
+	docker run -v $$(pwd):/wd ghcr.io/helpwave/service-preproc:edge lint
 
 .PHONY: GO_SERVICES
 $(GO_SERVICES): proto
 	docker build -f ${DOCKERFILE_SERVICES} --build-arg=VERSION=${VERSION} --build-arg=SERVICE=$@ -t ghcr.io/helpwave/$@:edge .
 
 .PHONY: DOCKER_SERVICES
-$(DOCKER_IMAGES): proto
-	cd images/$@ && docker build -t helpwave/$@ .
+$(DOCKER_IMAGES):
+	cd images/$@ && docker build -t ghcr.io/helpwave/$@:edge .
 
 .PHONY: all
 all: GO_SERVICES

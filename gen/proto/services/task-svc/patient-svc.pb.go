@@ -25,7 +25,7 @@ type CreatePatientRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	HumanReadableIdentifier string `protobuf:"bytes,1,opt,name=humanReadableIdentifier,proto3" json:"humanReadableIdentifier,omitempty"` // @gotags: validate:"required"
+	HumanReadableIdentifier string `protobuf:"bytes,1,opt,name=humanReadableIdentifier,proto3" json:"humanReadableIdentifier,omitempty" validate:"required"` // @gotags: validate:"required"
 }
 
 func (x *CreatePatientRequest) Reset() {
@@ -119,7 +119,7 @@ type GetPatientRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetPatientRequest) Reset() {
@@ -166,8 +166,8 @@ type GetPatientResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                      string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                           // @gotags: validate:"uuid4"
-	HumanReadableIdentifier string `protobuf:"bytes,2,opt,name=humanReadableIdentifier,proto3" json:"humanReadableIdentifier,omitempty"` // @gotags: validate:"required"
+	Id                      string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`                                           // @gotags: validate:"uuid4"
+	HumanReadableIdentifier string `protobuf:"bytes,2,opt,name=humanReadableIdentifier,proto3" json:"humanReadableIdentifier,omitempty" validate:"required"` // @gotags: validate:"required"
 }
 
 func (x *GetPatientResponse) Reset() {
@@ -221,7 +221,7 @@ type UpdatePatientRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                      string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id                      string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 	HumanReadableIdentifier *string `protobuf:"bytes,2,opt,name=humanReadableIdentifier,proto3,oneof" json:"humanReadableIdentifier,omitempty"`
 }
 

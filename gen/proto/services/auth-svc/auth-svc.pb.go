@@ -110,7 +110,7 @@ type RefreshTokenRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RefreshToken string `protobuf:"bytes,1,opt,name=refreshToken,proto3" json:"refreshToken,omitempty"` // @gotags: validate:"required"
+	RefreshToken string `protobuf:"bytes,1,opt,name=refreshToken,proto3" json:"refreshToken,omitempty" validate:"required"` // @gotags: validate:"required"
 }
 
 func (x *RefreshTokenRequest) Reset() {

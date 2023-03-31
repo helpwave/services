@@ -74,9 +74,9 @@ type CreateTaskRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name        string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`               // @gotags: validate:"required"
-	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"` // @gotags: validate:"required"
-	PatientId   string `protobuf:"bytes,3,opt,name=patientId,proto3" json:"patientId,omitempty"`     // @gotags: validate:"uuid4"
+	Name        string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" validate:"required"`               // @gotags: validate:"required"
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty" validate:"required"` // @gotags: validate:"required"
+	PatientId   string `protobuf:"bytes,3,opt,name=patientId,proto3" json:"patientId,omitempty" validate:"uuid4"`     // @gotags: validate:"uuid4"
 }
 
 func (x *CreateTaskRequest) Reset() {
@@ -184,7 +184,7 @@ type GetTaskRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetTaskRequest) Reset() {
@@ -318,7 +318,7 @@ type UpdateTaskRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id          string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 	Name        *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Description *string `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
 }
@@ -419,7 +419,7 @@ type TaskToInProgressRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *TaskToInProgressRequest) Reset() {
@@ -504,7 +504,7 @@ type TaskToDoneRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *TaskToDoneRequest) Reset() {
@@ -589,8 +589,8 @@ type AssignTaskToUserRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`         // @gotags: validate:"uuid4"
-	UserId string `protobuf:"bytes,2,opt,name=userId,proto3" json:"userId,omitempty"` // @gotags: validate:"uuid4"
+	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`         // @gotags: validate:"uuid4"
+	UserId string `protobuf:"bytes,2,opt,name=userId,proto3" json:"userId,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *AssignTaskToUserRequest) Reset() {
@@ -682,7 +682,7 @@ type UnassignTaskFromUserRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *UnassignTaskFromUserRequest) Reset() {

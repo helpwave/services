@@ -25,10 +25,10 @@ type CreateUserRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Email    string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`       // @gotags: validate:"required,email"
-	Nickname string `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"` // @gotags: validate:"required"
-	FullName string `protobuf:"bytes,3,opt,name=fullName,proto3" json:"fullName,omitempty"` // @gotags: validate:"required"
-	Password string `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty"` // @gotags: validate:"required"
+	Email    string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty" validate:"required,email"`       // @gotags: validate:"required,email"
+	Nickname string `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty" validate:"required"` // @gotags: validate:"required"
+	FullName string `protobuf:"bytes,3,opt,name=fullName,proto3" json:"fullName,omitempty" validate:"required"` // @gotags: validate:"required"
+	Password string `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty" validate:"required"` // @gotags: validate:"required"
 }
 
 func (x *CreateUserRequest) Reset() {
@@ -143,9 +143,9 @@ type CreateOrgRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LongName     string `protobuf:"bytes,1,opt,name=longName,proto3" json:"longName,omitempty"`         // @gotags: validate:"required,gte=4,lte=64"
-	ShortName    string `protobuf:"bytes,2,opt,name=shortName,proto3" json:"shortName,omitempty"`       // @gotags: validate:"omitempty,gte=2,lte=16"
-	ContactEmail string `protobuf:"bytes,3,opt,name=contactEmail,proto3" json:"contactEmail,omitempty"` // @gotags: validate:"required,email"
+	LongName     string `protobuf:"bytes,1,opt,name=longName,proto3" json:"longName,omitempty" validate:"required,gte=4,lte=64"`         // @gotags: validate:"required,gte=4,lte=64"
+	ShortName    string `protobuf:"bytes,2,opt,name=shortName,proto3" json:"shortName,omitempty" validate:"omitempty,gte=2,lte=16"`       // @gotags: validate:"omitempty,gte=2,lte=16"
+	ContactEmail string `protobuf:"bytes,3,opt,name=contactEmail,proto3" json:"contactEmail,omitempty" validate:"required,email"` // @gotags: validate:"required,email"
 }
 
 func (x *CreateOrgRequest) Reset() {
