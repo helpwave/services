@@ -1,0 +1,18 @@
+name: Buf
+
+on: pull_request
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  lint-protos:
+    runs-on: ubuntu-latest
+    steps:
+      # Run `git checkout`
+      - uses: actions/checkout@v2
+      # Install the `buf` CLI
+      - uses: bufbuild/buf-setup-action@v1
+      # Lint Protobuf sources
+      - uses: bufbuild/buf-lint-action@v1
