@@ -69,7 +69,7 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 	return &pb.GetRoomResponse{
 		Id:   room.ID.String(),
 		Name: room.Name,
-		Beds: pb.BedsToBedsOfRoom(room.Beds),
+		Beds: BedsToBedsOfRoom(room.Beds),
 	}, nil
 }
 
@@ -119,10 +119,10 @@ func (ServiceServer) AddBedsToRoom(ctx context.Context, req *pb.AddBedsToRoomReq
 	return &pb.AddBedsToRoomResponse{}, err
 }
 
-func BedsToBedsOfRoom(beds []models.Bed) []*BedOfRoom {
-	var bedsOfRoom []*BedOfRoom
+func BedsToBedsOfRoom(beds []models.Bed) []*pb.BedOfRoom {
+	var bedsOfRoom []*pb.BedOfRoom
 	for _, bed := range beds {
-		bedsOfRoom = append(bedsOfRoom, &BedOfRoom{Id: bed.ID.String()})
+		bedsOfRoom = append(bedsOfRoom, &pb.BedOfRoom{Id: bed.ID.String()})
 	}
 	return bedsOfRoom
 }
