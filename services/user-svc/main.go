@@ -147,7 +147,7 @@ func (userServiceServer) CreateOrganization(ctx context.Context, request *pb.Cre
 	return createOrganization(ctx, request, userID, false)
 }
 
-func (userServiceServer) UpdateUser(ctx context.Context, request *api.UpdateUserRequest) (*api.UpdateUserResponse, error) {
+func (userServiceServer) UpdateUser(ctx context.Context, request *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	// User AuthN
@@ -203,7 +203,7 @@ func (userServiceServer) UpdateUser(ctx context.Context, request *api.UpdateUser
 		return nil, status.Errorf(codes.InvalidArgument, "Invalid: "+err.Error())
 	}
 
-	return &api.UpdateUserResponse{}, nil
+	return &pb.UpdateUserResponse{}, nil
 }
 
 type OrganizationAttributes struct {
