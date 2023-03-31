@@ -53,8 +53,13 @@ func StringsToUUIDs(strings []string) ([]uuid.UUID, error) {
 
 // DerefStringOrEmpty returns s or "" if pointer is nil
 func DerefStringOrEmpty(s *string) string {
+	return DerefStringOr(s, "")
+}
+
+// DerefStringOr returns s or alternative if pointer is nil
+func DerefStringOr(s *string, alternative string) string {
 	if s == nil {
-		return ""
+		return alternative
 	} else {
 		return *s
 	}

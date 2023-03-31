@@ -8,6 +8,7 @@ import (
 	"hwgorm"
 	"hwutil"
 	"task-svc/internal/patient"
+	"task-svc/internal/room"
 	"task-svc/internal/task"
 	"task-svc/internal/ward"
 )
@@ -36,5 +37,6 @@ func main() {
 		pb.RegisterTaskServiceServer(grpcServer, task.NewServiceServer())
 		pb.RegisterPatientServiceServer(grpcServer, patient.NewServiceServer())
 		pb.RegisterWardServiceServer(grpcServer, ward.NewServiceServer())
+		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer())
 	})
 }

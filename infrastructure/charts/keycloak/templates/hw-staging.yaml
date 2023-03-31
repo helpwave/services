@@ -42,7 +42,7 @@ spec:
     loginWithEmailAllowed: true
     duplicateEmailsAllowed: false
     resetPasswordAllowed: false
-    editUsernameAllowed: false
+    editUsernameAllowed: true
     bruteForceProtected: true
     permanentLockout: false
     maxFailureWaitSeconds: 900
