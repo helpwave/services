@@ -117,22 +117,22 @@ func (userServiceServer) CreateUser(ctx context.Context, request *pb.CreateUserR
 
 	kcCtx := context.Background()
 
-	userID, err := gocloakClient.CreateUser(kcCtx, token.AccessToken, realm, user)
+	userId, err := gocloakClient.CreateUser(kcCtx, token.AccessToken, realm, user)
 	if err != nil {
 		log.Warn().Err(err).Msg("could not create new user")
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	} else {
-		log.Info().Str("userID", userID).Msg("created new user")
+		log.Info().Str("userId", userId).Msg("created new user")
 	}
 
 	_ = common.PublishMessage(ctx, daprClient, "pubsub", "USER_CREATED", &events.UserCreatedEvent{
-		Id:       userID,
+		Id:       userId,
 		Email:    *user.Email,
 		Nickname: *user.FirstName,
 		FullName: *user.LastName,
 	})
 
-	return &pb.CreateUserResponse{UserID: userID}, nil
+	return &pb.CreateUserResponse{UserId: userId}, nil
 }
 
 func (userServiceServer) CreateOrganization(ctx context.Context, request *pb.CreateOrgRequest) (*pb.CreateOrgResponse, error) {
