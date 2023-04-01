@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: proto/services/task-svc/room-svc.proto
+// source: proto/services/task-svc/room_svc.proto
 
 package task_svc
 
@@ -216,5 +216,5 @@ var RoomService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/services/task-svc/room-svc.proto",
+	Metadata: "proto/services/task-svc/room_svc.proto",
 }

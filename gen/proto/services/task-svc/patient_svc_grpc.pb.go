@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: proto/services/task-svc/patient-svc.proto
+// source: proto/services/task-svc/patient_svc.proto
 
 package task_svc
 
@@ -179,5 +179,5 @@ var PatientService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/services/task-svc/patient-svc.proto",
+	Metadata: "proto/services/task-svc/patient_svc.proto",
 }
