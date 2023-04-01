@@ -9,12 +9,12 @@ DOCKER_IMAGES = $(subst images/,,$(wildcard images/*))
 
 .PHONY: proto
 proto:
-	docker run -v $$(pwd):/wd ghcr.io/helpwave/service-preproc:edge lint || true
-	docker run -v $$(pwd):/wd ghcr.io/helpwave/service-preproc:edge generate
+	docker run --rm -v $$(pwd):/wd ghcr.io/helpwave/service-preproc:edge lint || true
+	docker run --rm -v $$(pwd):/wd ghcr.io/helpwave/service-preproc:edge generate
 
 .PHONY: proto_lint
 proto_lint:
-	docker run -v $$(pwd):/wd ghcr.io/helpwave/service-preproc:edge lint
+	docker run --rm -v $$(pwd):/wd ghcr.io/helpwave/service-preproc:edge lint
 
 .PHONY: GO_SERVICES
 $(GO_SERVICES): proto
