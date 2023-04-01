@@ -144,7 +144,7 @@ func (ServiceServer) TaskToInProgress(ctx context.Context, req *pb.TaskToInProgr
 	}
 
 	task := Task{ID: id}
-	updates := Task{Base: Base{Status: pb.TaskStatus_IN_PROGRESS}}
+	updates := Task{Base: Base{Status: pb.TaskStatus_TASK_STATUS_IN_PROGRESS}}
 
 	if err := db.Model(&task).Updates(updates).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -170,7 +170,7 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) 
 	}
 
 	task := Task{ID: id}
-	updates := Task{Base: Base{Status: pb.TaskStatus_DONE}}
+	updates := Task{Base: Base{Status: pb.TaskStatus_TASK_STATUS_DONE}}
 
 	if err := db.Model(&task).Updates(updates).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
