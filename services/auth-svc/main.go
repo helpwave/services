@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	_ "embed"
-	pb "gen/proto/services/auth-svc"
+	pb "gen/proto/services/auth_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
