@@ -9,5 +9,5 @@ message UserCreatedEvent {
 	string id = 1;
 	string email = 2;
 	string nickname = 3;
-	string fullName = 4;
+	string full_name = 4;
 }

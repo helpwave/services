@@ -17,7 +17,7 @@ message Point {
 message CreateERRequest {
 	string name = 1; // @gotags: validate:"required"
 	Point location = 2; // @gotags: validate:"required"
-	string displayableAddress = 3; // @gotags: validate:"required"
+	string displayable_address = 3; // @gotags: validate:"required"
 	bool open = 4;
 	int32 utilization = 5; // @gotags: validate:"required"
 	repeated string departments = 6; // @gotags: validate:"dive,uuid"
@@ -40,7 +40,7 @@ message GetSingleERResponse {
 	string id = 1;
 	string name = 2;
 	Point location = 3;
-	string displayableAddress = 4;
+	string displayable_address = 4;
 	bool open = 5;
 	int32 utilization = 6;
 	repeated DepartmentBase departments = 7;
@@ -59,27 +59,27 @@ message InclusiveIntInterval {
 // TODO: move to hwgorm
 message PagedRequest {
 	int32 page = 1; // @gotags: validate:"required"
-	int32 pageSize = 2; // @gotags: validate:"required"
+	int32 page_size = 2; // @gotags: validate:"required"
 }
 
 // TODO: move to hwgorm
 message PageInfo {
 	int32 page = 1;
-	int32 pageSize = 2;
-	int64 totalSize = 3;
-	bool lastPage = 4;
+	int32 page_size = 2;
+	int64 total_size = 3;
+	bool last_page = 4;
 }
 
 message GetERsRequest {
-	optional PagedRequest pagedRequest = 1;
+	optional PagedRequest paged_request = 1;
 	optional bool open = 2;
 	optional InclusiveIntInterval utilization = 3;
 	optional Point location = 4;
 }
 
 message GetERsResponse {
-	PageInfo pageInfo = 1;
-	repeated GetSingleERResponse emergencyRooms = 2;
+	PageInfo page_info = 1;
+	repeated GetSingleERResponse emergency_rooms = 2;
 }
 
 //
@@ -90,7 +90,7 @@ message UpdateERRequest {
 	string id = 1; // @gotags: validate:"required,uuid"
 	optional string name = 2;
 	optional Point location = 3;
-	optional string displayableAddress = 4;
+	optional string displayable_address = 4;
 	optional bool open = 5;
 	optional int32 utilization = 6;
 }

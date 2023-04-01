@@ -17,7 +17,7 @@ enum TaskStatus {
 message CreateTaskRequest {
 	string name = 1; // @gotags: validate:"required"
 	string description = 2; // @gotags: validate:"required"
-	string patientId = 3; // @gotags: validate:"uuid4"
+	string patient_id = 3; // @gotags: validate:"uuid4"
 }
 
 message CreateTaskResponse {
@@ -37,8 +37,8 @@ message GetTaskResponse {
 	string name = 2;
 	string description = 3;
 	TaskStatus status = 4;
-	string assignedUserId = 5;
-	string patientId = 6;
+	string assigned_user_id = 5;
+	string patient_id = 6;
 }
 
 //
@@ -79,7 +79,7 @@ message TaskToDoneResponse {}
 
 message AssignTaskToUserRequest {
 	string id = 1; // @gotags: validate:"uuid4"
-	string userId = 2; // @gotags: validate:"uuid4"
+	string user_id = 2; // @gotags: validate:"uuid4"
 }
 
 message AssignTaskToUserResponse {}

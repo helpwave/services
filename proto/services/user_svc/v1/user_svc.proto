@@ -11,12 +11,12 @@ option go_package = "gen/proto/services/user-svc";
 message CreateUserRequest {
 	string email = 1; // @gotags: validate:"required,email"
 	string nickname = 2; // @gotags: validate:"required"
-	string fullName = 3; // @gotags: validate:"required"
+	string full_name = 3; // @gotags: validate:"required"
 	string password = 4; // @gotags: validate:"required"
 }
 
 message CreateUserResponse {
-	string userID = 1;
+	string user_id = 1;
 }
 
 //
@@ -25,8 +25,8 @@ message CreateUserResponse {
 
 message UpdateUserRequest {
 	// if userId is missing the requesting user's id is used
-	optional string userId = 1; // @gotags: validate:"omitempty,uuid4"
-	optional string fullName = 2;
+	optional string user_id = 1; // @gotags: validate:"omitempty,uuid4"
+	optional string full_name = 2;
 	optional string nickname = 3;
 	optional string email = 4; // @gotags: validate:"omitempty,email"
 	optional string password = 5;
@@ -39,18 +39,18 @@ message UpdateUserResponse {}
 //
 
 message CreateOrgRequest {
-	string longName = 1; // @gotags: validate:"required,gte=4,lte=64"
-	string shortName = 2; // @gotags: validate:"omitempty,gte=2,lte=16"
-	string contactEmail = 3; // @gotags: validate:"required,email"
+	string long_name = 1; // @gotags: validate:"required,gte=4,lte=64"
+	string short_name = 2; // @gotags: validate:"omitempty,gte=2,lte=16"
+	string contact_email = 3; // @gotags: validate:"required,email"
 }
 
 message CreateOrgResponse {
 	string id = 1;
-	string longName = 2;
-	string shortName = 3;
-	string contactEmail = 4;
-	string avatarUrl = 5;
-	bool isPersonal = 6;
+	string long_name = 2;
+	string short_name = 3;
+	string contact_email = 4;
+	string avatar_url = 5;
+	bool is_personal = 6;
 }
 
 //
