@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: proto/services/emergency-room-svc/emergency-room-svc.proto
+// source: proto/services/emergency-room-svc/emergency_room_svc.proto
 
 package emergency_room_svc
 
@@ -327,5 +327,5 @@ var EmergencyRoomService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/services/emergency-room-svc/emergency-room-svc.proto",
+	Metadata: "proto/services/emergency-room-svc/emergency_room_svc.proto",
 }
