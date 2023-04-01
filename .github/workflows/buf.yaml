@@ -1,6 +1,9 @@
 name: Buf
 
 on:
+  push:
+    branches: [ '*' ]
+    tags: [ 'v*' ]
   pull_request:
 
 permissions:
@@ -31,3 +34,12 @@ jobs:
       - name: Break if files have changed
         if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: exit 1
+      - name: Upload docs
+        if: success() && github.ref == 'refs/heads/main'
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: 'hw-proto-docs'
+          directory: 'proto_docs'
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
