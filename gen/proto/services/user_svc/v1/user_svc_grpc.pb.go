@@ -30,7 +30,7 @@ const (
 type UserServiceClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error)
-	CreateOrganization(ctx context.Context, in *CreateOrgRequest, opts ...grpc.CallOption) (*CreateOrgResponse, error)
+	CreateOrganization(ctx context.Context, in *CreateOrganizationRequest, opts ...grpc.CallOption) (*CreateOrganizationResponse, error)
 }
 
 type userServiceClient struct {
@@ -59,8 +59,8 @@ func (c *userServiceClient) UpdateUser(ctx context.Context, in *UpdateUserReques
 	return out, nil
 }
 
-func (c *userServiceClient) CreateOrganization(ctx context.Context, in *CreateOrgRequest, opts ...grpc.CallOption) (*CreateOrgResponse, error) {
-	out := new(CreateOrgResponse)
+func (c *userServiceClient) CreateOrganization(ctx context.Context, in *CreateOrganizationRequest, opts ...grpc.CallOption) (*CreateOrganizationResponse, error) {
+	out := new(CreateOrganizationResponse)
 	err := c.cc.Invoke(ctx, UserService_CreateOrganization_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (c *userServiceClient) CreateOrganization(ctx context.Context, in *CreateOr
 type UserServiceServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
-	CreateOrganization(context.Context, *CreateOrgRequest) (*CreateOrgResponse, error)
+	CreateOrganization(context.Context, *CreateOrganizationRequest) (*CreateOrganizationResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -88,7 +88,7 @@ func (UnimplementedUserServiceServer) CreateUser(context.Context, *CreateUserReq
 func (UnimplementedUserServiceServer) UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
 }
-func (UnimplementedUserServiceServer) CreateOrganization(context.Context, *CreateOrgRequest) (*CreateOrgResponse, error) {
+func (UnimplementedUserServiceServer) CreateOrganization(context.Context, *CreateOrganizationRequest) (*CreateOrganizationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateOrganization not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
@@ -141,7 +141,7 @@ func _UserService_UpdateUser_Handler(srv interface{}, ctx context.Context, dec f
 }
 
 func _UserService_CreateOrganization_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateOrgRequest)
+	in := new(CreateOrganizationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -153,7 +153,7 @@ func _UserService_CreateOrganization_Handler(srv interface{}, ctx context.Contex
 		FullMethod: UserService_CreateOrganization_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).CreateOrganization(ctx, req.(*CreateOrgRequest))
+		return srv.(UserServiceServer).CreateOrganization(ctx, req.(*CreateOrganizationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
