@@ -12,8 +12,8 @@ import (
 	"strconv"
 	"time"
 
-	events "gen/proto/libs/events"
-	pb "gen/proto/services/user-svc"
+	events "gen/proto/libs/events/v1"
+	pb "gen/proto/services/user_svc/v1"
 	daprc "github.com/dapr/go-sdk/client"
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	daprd "github.com/dapr/go-sdk/service/grpc"

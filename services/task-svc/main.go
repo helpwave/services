@@ -3,7 +3,7 @@ package main
 import (
 	"common"
 	"fmt"
-	pb "gen/proto/services/task-svc"
+	pb "gen/proto/services/task_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwgorm"
 	"hwutil"

@@ -4,7 +4,8 @@ import (
 	"common"
 	"context"
 	"emergency-room-svc/models"
-	pb "gen/proto/services/emergency-room-svc"
+	"gen/proto/services/emergency_room_svc/v1"
+	pb "gen/proto/services/emergency_room_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
@@ -85,7 +86,7 @@ func (emergencyRoomServiceServer) CreateER(ctx context.Context, req *pb.CreateER
 	return &pb.GetSingleERResponse{
 		Id:                 emergencyRoom.ID.String(),
 		Name:               emergencyRoom.Name,
-		Location:           pb.FromGormPoint(&emergencyRoom.Location),
+		Location:           emergency_room_svc.FromGormPoint(&emergencyRoom.Location),
 		DisplayableAddress: emergencyRoom.DisplayableAddress,
 		Open:               emergencyRoom.Open,
 		Utilization:        emergencyRoom.Utilization,
@@ -121,7 +122,7 @@ func (emergencyRoomServiceServer) GetER(ctx context.Context, req *pb.GetSingleER
 	return &pb.GetSingleERResponse{
 		Id:                 emergencyRoom.ID.String(),
 		Name:               emergencyRoom.Name,
-		Location:           pb.FromGormPoint(&emergencyRoom.Location),
+		Location:           emergency_room_svc.FromGormPoint(&emergencyRoom.Location),
 		DisplayableAddress: emergencyRoom.DisplayableAddress,
 		Open:               emergencyRoom.Open,
 		Utilization:        emergencyRoom.Utilization,
@@ -136,7 +137,7 @@ func (emergencyRoomServiceServer) GetERs(ctx context.Context, req *pb.GetERsRequ
 	db := hwgorm.GetDB(ctx)
 	db = db.Where(whereClausesForERsQuery(db, req))
 
-	pageReq := pb.ToGormPagedRequest(req.PagedRequest)
+	pageReq := emergency_room_svc.ToGormPagedRequest(req.PagedRequest)
 
 	pageInfo, err := hwgorm.GetPageInfo(db, &pageReq, models.EmergencyRoom{})
 	if err != nil {
@@ -160,7 +161,7 @@ func (emergencyRoomServiceServer) GetERs(ctx context.Context, req *pb.GetERsRequ
 		responses[i] = &pb.GetSingleERResponse{
 			Id:                 emergencyRoom.ID.String(),
 			Name:               emergencyRoom.Name,
-			Location:           pb.FromGormPoint(&emergencyRoom.Location),
+			Location:           emergency_room_svc.FromGormPoint(&emergencyRoom.Location),
 			DisplayableAddress: emergencyRoom.DisplayableAddress,
 			Open:               emergencyRoom.Open,
 			Utilization:        emergencyRoom.Utilization,

@@ -2,7 +2,7 @@ package room
 
 import (
 	"context"
-	pb "gen/proto/services/task-svc"
+	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"

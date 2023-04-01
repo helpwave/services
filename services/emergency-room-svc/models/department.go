@@ -1,7 +1,7 @@
 package models
 
 import (
-	pb "gen/proto/services/emergency-room-svc"
+	pb "gen/proto/services/emergency_room_svc/v1"
 	"github.com/google/uuid"
 )
 
