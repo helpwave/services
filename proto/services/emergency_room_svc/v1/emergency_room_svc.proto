@@ -23,6 +23,16 @@ message CreateERRequest {
 	repeated string departments = 6; // @gotags: validate:"dive,uuid"
 }
 
+message CreateERResponse {
+	string id = 1;
+	string name = 2;
+	Point location = 3;
+	string displayable_address = 4;
+	bool open = 5;
+	int32 utilization = 6;
+	repeated DepartmentBase departments = 7;
+}
+
 //
 // Get Single
 //
@@ -132,7 +142,7 @@ message DeleteERResponse {}
 
 
 service EmergencyRoomService {
-	rpc CreateER(CreateERRequest) returns (GetERResponse) {}
+	rpc CreateER(CreateERRequest) returns (CreateERResponse) {}
 	rpc GetER (GetERRequest) returns (GetERResponse) {}
 	rpc GetERs (GetERsRequest) returns (GetERsResponse) {}
 	rpc UpdateER (UpdateERRequest) returns (UpdateERResponse) {}
