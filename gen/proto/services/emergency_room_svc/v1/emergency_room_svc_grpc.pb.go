@@ -32,7 +32,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type EmergencyRoomServiceClient interface {
-	CreateER(ctx context.Context, in *CreateERRequest, opts ...grpc.CallOption) (*GetERResponse, error)
+	CreateER(ctx context.Context, in *CreateERRequest, opts ...grpc.CallOption) (*CreateERResponse, error)
 	GetER(ctx context.Context, in *GetERRequest, opts ...grpc.CallOption) (*GetERResponse, error)
 	GetERs(ctx context.Context, in *GetERsRequest, opts ...grpc.CallOption) (*GetERsResponse, error)
 	UpdateER(ctx context.Context, in *UpdateERRequest, opts ...grpc.CallOption) (*UpdateERResponse, error)
@@ -49,8 +49,8 @@ func NewEmergencyRoomServiceClient(cc grpc.ClientConnInterface) EmergencyRoomSer
 	return &emergencyRoomServiceClient{cc}
 }
 
-func (c *emergencyRoomServiceClient) CreateER(ctx context.Context, in *CreateERRequest, opts ...grpc.CallOption) (*GetERResponse, error) {
-	out := new(GetERResponse)
+func (c *emergencyRoomServiceClient) CreateER(ctx context.Context, in *CreateERRequest, opts ...grpc.CallOption) (*CreateERResponse, error) {
+	out := new(CreateERResponse)
 	err := c.cc.Invoke(ctx, EmergencyRoomService_CreateER_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -116,7 +116,7 @@ func (c *emergencyRoomServiceClient) DeleteER(ctx context.Context, in *DeleteERR
 // All implementations must embed UnimplementedEmergencyRoomServiceServer
 // for forward compatibility
 type EmergencyRoomServiceServer interface {
-	CreateER(context.Context, *CreateERRequest) (*GetERResponse, error)
+	CreateER(context.Context, *CreateERRequest) (*CreateERResponse, error)
 	GetER(context.Context, *GetERRequest) (*GetERResponse, error)
 	GetERs(context.Context, *GetERsRequest) (*GetERsResponse, error)
 	UpdateER(context.Context, *UpdateERRequest) (*UpdateERResponse, error)
@@ -130,7 +130,7 @@ type EmergencyRoomServiceServer interface {
 type UnimplementedEmergencyRoomServiceServer struct {
 }
 
-func (UnimplementedEmergencyRoomServiceServer) CreateER(context.Context, *CreateERRequest) (*GetERResponse, error) {
+func (UnimplementedEmergencyRoomServiceServer) CreateER(context.Context, *CreateERRequest) (*CreateERResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateER not implemented")
 }
 func (UnimplementedEmergencyRoomServiceServer) GetER(context.Context, *GetERRequest) (*GetERResponse, error) {
