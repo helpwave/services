@@ -1,0 +1,37 @@
+
+syntax = "proto3";
+
+option go_package = "gen/proto/services/auth-svc";
+
+//
+// PrelimAuthRequest
+//
+
+message PrelimAuthRequestRequest {}
+
+message PrelimAuthRequestResponse {
+	string url = 1;
+}
+
+//
+// (Refresh)-Token
+//
+
+message RefreshTokenRequest {
+	string refreshToken = 1; // @gotags: validate:"required"
+}
+
+message TokenResponse {
+	string accessToken = 1;
+	string refreshToken = 2;
+	int64 exp = 3;
+}
+
+//
+// AuthService
+//
+
+service AuthService {
+	rpc PrelimAuthRequest(PrelimAuthRequestRequest) returns (PrelimAuthRequestResponse) {}
+	rpc RefreshToken(RefreshTokenRequest) returns (TokenResponse) {}
+}

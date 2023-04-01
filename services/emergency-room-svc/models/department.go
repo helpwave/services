@@ -1,7 +1,7 @@
 package models
 
 import (
-	"emergency-room-svc/api"
+	pb "gen/proto/services/emergency-room-svc"
 	"github.com/google/uuid"
 )
 
@@ -12,8 +12,8 @@ type Department struct {
 }
 
 // DepartmentsToBases creates an array of DepartmentBases for a given array of Departments
-func DepartmentsToBases(deps []Department) []*api.DepartmentBase {
-	bases := make([]*api.DepartmentBase, len(deps))
+func DepartmentsToBases(deps []Department) []*pb.DepartmentBase {
+	bases := make([]*pb.DepartmentBase, len(deps))
 	for i := range deps {
 		bases[i].Id = deps[i].ID.String()
 		bases[i].Name = deps[i].Name

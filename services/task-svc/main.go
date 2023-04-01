@@ -3,10 +3,10 @@ package main
 import (
 	"common"
 	"fmt"
+	pb "gen/proto/services/task-svc"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwgorm"
 	"hwutil"
-	"task-svc/api"
 	"task-svc/internal/patient"
 	"task-svc/internal/room"
 	"task-svc/internal/task"
@@ -34,9 +34,9 @@ func main() {
 
 	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
-		api.RegisterTaskServiceServer(grpcServer, task.NewServiceServer())
-		api.RegisterPatientServiceServer(grpcServer, patient.NewServiceServer())
-		api.RegisterWardServiceServer(grpcServer, ward.NewServiceServer())
-		api.RegisterRoomServiceServer(grpcServer, room.NewServiceServer())
+		pb.RegisterTaskServiceServer(grpcServer, task.NewServiceServer())
+		pb.RegisterPatientServiceServer(grpcServer, patient.NewServiceServer())
+		pb.RegisterWardServiceServer(grpcServer, ward.NewServiceServer())
+		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer())
 	})
 }

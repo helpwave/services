@@ -2,24 +2,24 @@ package room
 
 import (
 	"context"
+	pb "gen/proto/services/task-svc"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
-	"task-svc/api"
 	"task-svc/internal/room/models"
 )
 
 type ServiceServer struct {
-	api.UnimplementedRoomServiceServer
+	pb.UnimplementedRoomServiceServer
 }
 
 func NewServiceServer() *ServiceServer {
 	return &ServiceServer{}
 }
 
-func (ServiceServer) CreateRoom(ctx context.Context, req *api.CreateRoomRequest) (*api.CreateRoomResponse, error) {
+func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) (*pb.CreateRoomResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
@@ -41,12 +41,12 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *api.CreateRoomRequest)
 		Int("beds", len(room.Beds)).
 		Msg("room created")
 
-	return &api.CreateRoomResponse{
+	return &pb.CreateRoomResponse{
 		Id: room.ID.String(),
 	}, nil
 }
 
-func (ServiceServer) GetRoom(ctx context.Context, req *api.GetRoomRequest) (*api.GetRoomResponse, error) {
+func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.GetRoomResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -66,14 +66,14 @@ func (ServiceServer) GetRoom(ctx context.Context, req *api.GetRoomRequest) (*api
 		}
 	}
 
-	return &api.GetRoomResponse{
+	return &pb.GetRoomResponse{
 		Id:   room.ID.String(),
 		Name: room.Name,
-		Beds: api.BedsToBedsOfRoom(room.Beds),
+		Beds: BedsToBedsOfRoom(room.Beds),
 	}, nil
 }
 
-func (ServiceServer) UpdateRoom(ctx context.Context, req *api.UpdateRoomRequest) (*api.UpdateRoomResponse, error) {
+func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) (*pb.UpdateRoomResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -90,10 +90,10 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *api.UpdateRoomRequest)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &api.UpdateRoomResponse{}, nil
+	return &pb.UpdateRoomResponse{}, nil
 }
 
-func (ServiceServer) AddBedsToRoom(ctx context.Context, req *api.AddBedsToRoomRequest) (*api.AddBedsToRoomResponse, error) {
+func (ServiceServer) AddBedsToRoom(ctx context.Context, req *pb.AddBedsToRoomRequest) (*pb.AddBedsToRoomResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
@@ -116,5 +116,13 @@ func (ServiceServer) AddBedsToRoom(ctx context.Context, req *api.AddBedsToRoomRe
 		Int("beds", len(beds)).
 		Msg("beds added")
 
-	return &api.AddBedsToRoomResponse{}, err
+	return &pb.AddBedsToRoomResponse{}, err
+}
+
+func BedsToBedsOfRoom(beds []models.Bed) []*pb.BedOfRoom {
+	var bedsOfRoom []*pb.BedOfRoom
+	for _, bed := range beds {
+		bedsOfRoom = append(bedsOfRoom, &pb.BedOfRoom{Id: bed.ID.String()})
+	}
+	return bedsOfRoom
 }

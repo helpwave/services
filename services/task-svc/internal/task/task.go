@@ -2,19 +2,19 @@ package task
 
 import (
 	"context"
+	pb "gen/proto/services/task-svc"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
-	"task-svc/api"
 	intPatient "task-svc/internal/patient"
 )
 
 type Base struct {
-	Name        string         `gorm:"column:name"`
-	Description string         `gorm:"column:description"`
-	Status      api.TaskStatus `gorm:"column:status"`
+	Name        string        `gorm:"column:name"`
+	Description string        `gorm:"column:description"`
+	Status      pb.TaskStatus `gorm:"column:status"`
 }
 
 type Task struct {
@@ -25,14 +25,14 @@ type Task struct {
 }
 
 type ServiceServer struct {
-	api.UnimplementedTaskServiceServer
+	pb.UnimplementedTaskServiceServer
 }
 
 func NewServiceServer() *ServiceServer {
 	return &ServiceServer{}
 }
 
-func (s ServiceServer) CreateTask(ctx context.Context, req *api.CreateTaskRequest) (*api.CreateTaskResponse, error) {
+func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.CreateTaskResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
@@ -70,12 +70,12 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *api.CreateTaskReques
 		Str("patientId", patientId.String()).
 		Msg("task created for patient")
 
-	return &api.CreateTaskResponse{
+	return &pb.CreateTaskResponse{
 		Id: task.ID.String(),
 	}, nil
 }
 
-func (ServiceServer) GetTask(ctx context.Context, req *api.GetTaskRequest) (*api.GetTaskResponse, error) {
+func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.GetTaskResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -100,7 +100,7 @@ func (ServiceServer) GetTask(ctx context.Context, req *api.GetTaskRequest) (*api
 		assignedUserId = ""
 	}
 
-	return &api.GetTaskResponse{
+	return &pb.GetTaskResponse{
 		Id:             task.ID.String(),
 		Name:           task.Name,
 		Description:    task.Description,
@@ -110,7 +110,7 @@ func (ServiceServer) GetTask(ctx context.Context, req *api.GetTaskRequest) (*api
 	}, nil
 }
 
-func (ServiceServer) UpdateTask(ctx context.Context, req *api.UpdateTaskRequest) (*api.UpdateTaskResponse, error) {
+func (ServiceServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) (*pb.UpdateTaskResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
@@ -129,10 +129,10 @@ func (ServiceServer) UpdateTask(ctx context.Context, req *api.UpdateTaskRequest)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &api.UpdateTaskResponse{}, nil
+	return &pb.UpdateTaskResponse{}, nil
 }
 
-func (ServiceServer) TaskToInProgress(ctx context.Context, req *api.TaskToInProgressRequest) (*api.TaskToInProgressResponse, error) {
+func (ServiceServer) TaskToInProgress(ctx context.Context, req *pb.TaskToInProgressRequest) (*pb.TaskToInProgressResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
@@ -144,7 +144,7 @@ func (ServiceServer) TaskToInProgress(ctx context.Context, req *api.TaskToInProg
 	}
 
 	task := Task{ID: id}
-	updates := Task{Base: Base{Status: api.TaskStatus_IN_PROGRESS}}
+	updates := Task{Base: Base{Status: pb.TaskStatus_IN_PROGRESS}}
 
 	if err := db.Model(&task).Updates(updates).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -155,10 +155,10 @@ func (ServiceServer) TaskToInProgress(ctx context.Context, req *api.TaskToInProg
 		Str("taskId", id.String()).
 		Msg("task to in-progress")
 
-	return &api.TaskToInProgressResponse{}, nil
+	return &pb.TaskToInProgressResponse{}, nil
 }
 
-func (ServiceServer) TaskToDone(ctx context.Context, req *api.TaskToDoneRequest) (*api.TaskToDoneResponse, error) {
+func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) (*pb.TaskToDoneResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
@@ -170,7 +170,7 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *api.TaskToDoneRequest)
 	}
 
 	task := Task{ID: id}
-	updates := Task{Base: Base{Status: api.TaskStatus_DONE}}
+	updates := Task{Base: Base{Status: pb.TaskStatus_DONE}}
 
 	if err := db.Model(&task).Updates(updates).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -181,10 +181,10 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *api.TaskToDoneRequest)
 		Str("taskId", id.String()).
 		Msg("task to done")
 
-	return &api.TaskToDoneResponse{}, nil
+	return &pb.TaskToDoneResponse{}, nil
 }
 
-func (ServiceServer) AssignTaskToUser(ctx context.Context, req *api.AssignTaskToUserRequest) (*api.AssignTaskToUserResponse, error) {
+func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToUserRequest) (*pb.AssignTaskToUserResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
@@ -215,10 +215,10 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *api.AssignTaskTo
 		Str("userId", userId.String()).
 		Msg("user assigned")
 
-	return &api.AssignTaskToUserResponse{}, nil
+	return &pb.AssignTaskToUserResponse{}, nil
 }
 
-func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *api.UnassignTaskFromUserRequest) (*api.UnassignTaskFromUserResponse, error) {
+func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignTaskFromUserRequest) (*pb.UnassignTaskFromUserResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
@@ -241,5 +241,5 @@ func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *api.Unassign
 		Str("taskId", id.String()).
 		Msg("user unassigned")
 
-	return &api.UnassignTaskFromUserResponse{}, nil
+	return &pb.UnassignTaskFromUserResponse{}, nil
 }

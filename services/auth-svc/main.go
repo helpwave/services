@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	_ "embed"
-	"emergency-room-svc/api"
+	pb "gen/proto/services/auth-svc"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -44,7 +44,7 @@ func runGRPCService() {
 	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
 
 	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
-		api.RegisterAuthServiceServer(server.GrpcServer(), &authServiceServer{})
+		pb.RegisterAuthServiceServer(server.GrpcServer(), &authServiceServer{})
 	})
 }
 
@@ -113,19 +113,19 @@ func authRequestCallbackHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 type authServiceServer struct {
-	api.UnimplementedAuthServiceServer
+	pb.UnimplementedAuthServiceServer
 }
 
-func (authServiceServer) PrelimAuthRequest(ctx context.Context, _ *api.PrelimAuthRequestRequest) (*api.PrelimAuthRequestResponse, error) {
+func (authServiceServer) PrelimAuthRequest(ctx context.Context, _ *pb.PrelimAuthRequestRequest) (*pb.PrelimAuthRequestResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	url := common.GetAuthCodeURL()
 	log.Info().Msg(url)
 
-	return &api.PrelimAuthRequestResponse{Url: url}, nil
+	return &pb.PrelimAuthRequestResponse{Url: url}, nil
 }
 
-func (authServiceServer) RefreshToken(ctx context.Context, req *api.RefreshTokenRequest) (*api.TokenResponse, error) {
+func (authServiceServer) RefreshToken(ctx context.Context, req *pb.RefreshTokenRequest) (*pb.TokenResponse, error) {
 	refreshToken := req.RefreshToken
 
 	token, err := common.RefreshToken(refreshToken)
@@ -133,7 +133,7 @@ func (authServiceServer) RefreshToken(ctx context.Context, req *api.RefreshToken
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	return &api.TokenResponse{
+	return &pb.TokenResponse{
 		AccessToken:  token.AccessToken,
 		RefreshToken: token.RefreshToken,
 		Exp:          token.Expiry.Unix(),
