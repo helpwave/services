@@ -20,6 +20,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// This event will be published by the user-svc after a new user was created
 // TOPIC: USER_CREATED
 type UserCreatedEvent struct {
 	state         protoimpl.MessageState

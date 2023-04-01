@@ -28,6 +28,9 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
 	PrelimAuthRequest(ctx context.Context, in *PrelimAuthRequestRequest, opts ...grpc.CallOption) (*PrelimAuthRequestResponse, error)
+	// Once an Access Token became stale, you can request a new one here using the Refresh Token.
+	// You should make sure the refresh token is still valid.
+	// More in <a href="https://wiki.helpwave.de/doc/authentication-jedzCcERwF">the wiki</a>
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error)
 }
 
@@ -62,6 +65,9 @@ func (c *authServiceClient) RefreshToken(ctx context.Context, in *RefreshTokenRe
 // for forward compatibility
 type AuthServiceServer interface {
 	PrelimAuthRequest(context.Context, *PrelimAuthRequestRequest) (*PrelimAuthRequestResponse, error)
+	// Once an Access Token became stale, you can request a new one here using the Refresh Token.
+	// You should make sure the refresh token is still valid.
+	// More in <a href="https://wiki.helpwave.de/doc/authentication-jedzCcERwF">the wiki</a>
 	RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }

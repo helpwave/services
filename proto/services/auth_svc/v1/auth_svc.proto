@@ -8,9 +8,11 @@ option go_package = "gen/proto/services/auth-svc";
 // PrelimAuthRequest
 //
 
+// More in <a href="https://wiki.helpwave.de/doc/authentication-jedzCcERwF">the wiki</a>
 message PrelimAuthRequestRequest {}
 
 message PrelimAuthRequestResponse {
+	// the Authorization Request URL including Client ID, Scopes and so on. Start the Auth Flow by redirecting here.
 	string url = 1;
 }
 
@@ -18,14 +20,18 @@ message PrelimAuthRequestResponse {
 // (Refresh)-Token
 //
 
+// Once an Access Token became stale, you can request a new one here using the Refresh Token.
+// You should make sure the refresh token is still valid.
+// More in <a href="https://wiki.helpwave.de/doc/authentication-jedzCcERwF">the wiki</a>
 message RefreshTokenRequest {
 	string refresh_token = 1; // @gotags: validate:"required"
 }
 
+// New set of tokens
 message RefreshTokenResponse {
 	string access_token = 1;
 	string refresh_token = 2;
-	int64 exp = 3;
+	int64 exp = 3; // expiry (unix) timestamp of the Access Token
 }
 
 //
