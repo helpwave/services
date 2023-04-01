@@ -63,6 +63,7 @@ type PrelimAuthRequestResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// the Authorization Request URL including Client ID, Scopes and so on. Start the Auth Flow by redirecting here.
 	Url string `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
 }
 
@@ -152,6 +153,7 @@ func (x *RefreshTokenRequest) GetRefreshToken() string {
 	return ""
 }
 
+// New set of tokens
 type RefreshTokenResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -159,7 +161,7 @@ type RefreshTokenResponse struct {
 
 	AccessToken  string `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
 	RefreshToken string `protobuf:"bytes,2,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
-	Exp          int64  `protobuf:"varint,3,opt,name=exp,proto3" json:"exp,omitempty"`
+	Exp          int64  `protobuf:"varint,3,opt,name=exp,proto3" json:"exp,omitempty"` // expiry (unix) timestamp of the Access Token
 }
 
 func (x *RefreshTokenResponse) Reset() {
