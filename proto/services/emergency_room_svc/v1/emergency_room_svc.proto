@@ -27,7 +27,7 @@ message CreateERRequest {
 // Get Single
 //
 
-message GetSingleERRequest {
+message GetERRequest {
 	string id = 1; // @gotags: validate:"required,uuid"
 }
 
@@ -36,7 +36,7 @@ message DepartmentBase {
 	string name = 2;
 }
 
-message GetSingleERResponse {
+message GetERResponse {
 	string id = 1;
 	string name = 2;
 	Point location = 3;
@@ -79,7 +79,7 @@ message GetERsRequest {
 
 message GetERsResponse {
 	PageInfo page_info = 1;
-	repeated GetSingleERResponse emergency_rooms = 2;
+	repeated GetERResponse emergency_rooms = 2;
 }
 
 //
@@ -132,8 +132,8 @@ message DeleteERResponse {}
 
 
 service EmergencyRoomService {
-	rpc CreateER(CreateERRequest) returns (GetSingleERResponse) {}
-	rpc GetER (GetSingleERRequest) returns (GetSingleERResponse) {}
+	rpc CreateER(CreateERRequest) returns (GetERResponse) {}
+	rpc GetER (GetERRequest) returns (GetERResponse) {}
 	rpc GetERs (GetERsRequest) returns (GetERsResponse) {}
 	rpc UpdateER (UpdateERRequest) returns (UpdateERResponse) {}
 	rpc AddDepartmentsToER (AddDepartmentsToERRequest) returns (AddDepartmentsToERResponse) {}

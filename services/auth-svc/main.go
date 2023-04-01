@@ -125,7 +125,7 @@ func (authServiceServer) PrelimAuthRequest(ctx context.Context, _ *pb.PrelimAuth
 	return &pb.PrelimAuthRequestResponse{Url: url}, nil
 }
 
-func (authServiceServer) RefreshToken(ctx context.Context, req *pb.RefreshTokenRequest) (*pb.TokenResponse, error) {
+func (authServiceServer) RefreshToken(ctx context.Context, req *pb.RefreshTokenRequest) (*pb.RefreshTokenResponse, error) {
 	refreshToken := req.RefreshToken
 
 	token, err := common.RefreshToken(refreshToken)
@@ -133,7 +133,7 @@ func (authServiceServer) RefreshToken(ctx context.Context, req *pb.RefreshTokenR
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	return &pb.TokenResponse{
+	return &pb.RefreshTokenResponse{
 		AccessToken:  token.AccessToken,
 		RefreshToken: token.RefreshToken,
 		Exp:          token.Expiry.Unix(),

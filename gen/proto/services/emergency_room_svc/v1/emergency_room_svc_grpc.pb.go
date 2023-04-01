@@ -32,8 +32,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type EmergencyRoomServiceClient interface {
-	CreateER(ctx context.Context, in *CreateERRequest, opts ...grpc.CallOption) (*GetSingleERResponse, error)
-	GetER(ctx context.Context, in *GetSingleERRequest, opts ...grpc.CallOption) (*GetSingleERResponse, error)
+	CreateER(ctx context.Context, in *CreateERRequest, opts ...grpc.CallOption) (*GetERResponse, error)
+	GetER(ctx context.Context, in *GetERRequest, opts ...grpc.CallOption) (*GetERResponse, error)
 	GetERs(ctx context.Context, in *GetERsRequest, opts ...grpc.CallOption) (*GetERsResponse, error)
 	UpdateER(ctx context.Context, in *UpdateERRequest, opts ...grpc.CallOption) (*UpdateERResponse, error)
 	AddDepartmentsToER(ctx context.Context, in *AddDepartmentsToERRequest, opts ...grpc.CallOption) (*AddDepartmentsToERResponse, error)
@@ -49,8 +49,8 @@ func NewEmergencyRoomServiceClient(cc grpc.ClientConnInterface) EmergencyRoomSer
 	return &emergencyRoomServiceClient{cc}
 }
 
-func (c *emergencyRoomServiceClient) CreateER(ctx context.Context, in *CreateERRequest, opts ...grpc.CallOption) (*GetSingleERResponse, error) {
-	out := new(GetSingleERResponse)
+func (c *emergencyRoomServiceClient) CreateER(ctx context.Context, in *CreateERRequest, opts ...grpc.CallOption) (*GetERResponse, error) {
+	out := new(GetERResponse)
 	err := c.cc.Invoke(ctx, EmergencyRoomService_CreateER_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -58,8 +58,8 @@ func (c *emergencyRoomServiceClient) CreateER(ctx context.Context, in *CreateERR
 	return out, nil
 }
 
-func (c *emergencyRoomServiceClient) GetER(ctx context.Context, in *GetSingleERRequest, opts ...grpc.CallOption) (*GetSingleERResponse, error) {
-	out := new(GetSingleERResponse)
+func (c *emergencyRoomServiceClient) GetER(ctx context.Context, in *GetERRequest, opts ...grpc.CallOption) (*GetERResponse, error) {
+	out := new(GetERResponse)
 	err := c.cc.Invoke(ctx, EmergencyRoomService_GetER_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -116,8 +116,8 @@ func (c *emergencyRoomServiceClient) DeleteER(ctx context.Context, in *DeleteERR
 // All implementations must embed UnimplementedEmergencyRoomServiceServer
 // for forward compatibility
 type EmergencyRoomServiceServer interface {
-	CreateER(context.Context, *CreateERRequest) (*GetSingleERResponse, error)
-	GetER(context.Context, *GetSingleERRequest) (*GetSingleERResponse, error)
+	CreateER(context.Context, *CreateERRequest) (*GetERResponse, error)
+	GetER(context.Context, *GetERRequest) (*GetERResponse, error)
 	GetERs(context.Context, *GetERsRequest) (*GetERsResponse, error)
 	UpdateER(context.Context, *UpdateERRequest) (*UpdateERResponse, error)
 	AddDepartmentsToER(context.Context, *AddDepartmentsToERRequest) (*AddDepartmentsToERResponse, error)
@@ -130,10 +130,10 @@ type EmergencyRoomServiceServer interface {
 type UnimplementedEmergencyRoomServiceServer struct {
 }
 
-func (UnimplementedEmergencyRoomServiceServer) CreateER(context.Context, *CreateERRequest) (*GetSingleERResponse, error) {
+func (UnimplementedEmergencyRoomServiceServer) CreateER(context.Context, *CreateERRequest) (*GetERResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateER not implemented")
 }
-func (UnimplementedEmergencyRoomServiceServer) GetER(context.Context, *GetSingleERRequest) (*GetSingleERResponse, error) {
+func (UnimplementedEmergencyRoomServiceServer) GetER(context.Context, *GetERRequest) (*GetERResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetER not implemented")
 }
 func (UnimplementedEmergencyRoomServiceServer) GetERs(context.Context, *GetERsRequest) (*GetERsResponse, error) {
@@ -183,7 +183,7 @@ func _EmergencyRoomService_CreateER_Handler(srv interface{}, ctx context.Context
 }
 
 func _EmergencyRoomService_GetER_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetSingleERRequest)
+	in := new(GetERRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -195,7 +195,7 @@ func _EmergencyRoomService_GetER_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: EmergencyRoomService_GetER_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EmergencyRoomServiceServer).GetER(ctx, req.(*GetSingleERRequest))
+		return srv.(EmergencyRoomServiceServer).GetER(ctx, req.(*GetERRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
