@@ -8,5 +8,5 @@ If you only want to lint your changes run `make proto_lint`.
 
 The proto files are also used for API documentation. `make proto` will generate `/proto_docs`.
 
-Said documentation is available [here](https://hw-proto-docs.pages.dev)
+Said documentation is available [here](https://proto.helpwave.de/)
 
