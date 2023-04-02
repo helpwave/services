@@ -174,3 +174,40 @@ spec:
     name: ${local.apisix_name}-dapr
 YAML
 }
+
+resource "kubectl_manifest" "apisix_task-svc_route" {
+  depends_on = [
+    helm_release.apisix
+  ]
+
+  yaml_body = <<YAML
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: task-svc
+  namespace: ${local.apisix_namespace}
+spec:
+  http:
+  - backends:
+    - serviceName: ${local.apisix_name}-dapr
+      servicePort: 50001
+    match:
+      hosts:
+      - ${var.api_hostname}
+      paths:
+      - /task-svc/*
+      - /tasks-svc/*
+    name: task-svc
+    plugins:
+      - name: cors
+        enable: true
+      - name: grpc-web
+        enable: true
+      - name: proxy-rewrite
+        enable: true
+        config:
+          headers:
+            set:
+              dapr-app-id: "task.task"
+YAML
+}
