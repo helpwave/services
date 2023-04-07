@@ -12,6 +12,7 @@ jobs:
     outputs:
       breaking: ${{ steps.breaking.outputs.breaking }}
       new-package: ${{ steps.new-package.outputs.new-package }}
+      commit: ${{ steps.commit.outputs.sha }}
     steps:
     - name: Clone Repo
       uses: actions/checkout@v3
@@ -41,3 +42,6 @@ jobs:
         else
           echo "new-package=true" >> $GITHUB_OUTPUT
         fi
+    - name: Get SHA
+      id: commit
+      run: echo "sha=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
