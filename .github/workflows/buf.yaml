@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: make proto
-      - name: Break if generated protos are not checked in
+      - name: Break if generated go modules are not checked in
         run: git diff --quiet gen
       - name: Upload docs
         if: success() && github.ref == 'refs/heads/main'
