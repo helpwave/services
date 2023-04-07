@@ -135,7 +135,7 @@ func (userServiceServer) CreateUser(ctx context.Context, request *pb.CreateUserR
 	return &pb.CreateUserResponse{UserId: userId}, nil
 }
 
-func (userServiceServer) CreateOrganization(ctx context.Context, request *pb.CreateOrgRequest) (*pb.CreateOrgResponse, error) {
+func (userServiceServer) CreateOrganization(ctx context.Context, request *pb.CreateOrganizationRequest) (*pb.CreateOrganizationResponse, error) {
 	// User AuthN
 	claims, err := common.GetAuthClaims(ctx)
 	if err != nil {
@@ -253,7 +253,7 @@ func (a *OrganizationAttributes) fromMap(m map[string][]string) {
 // createOrganization creates a new organization on behalf of a user
 // it does so by creating a new keycloak group for the organization.
 // The group also has a subgroup for admins, where the requesting user is added to
-func createOrganization(logCtx context.Context, request *pb.CreateOrgRequest, userID string, isPersonal bool) (*pb.CreateOrgResponse, error) {
+func createOrganization(logCtx context.Context, request *pb.CreateOrganizationRequest, userID string, isPersonal bool) (*pb.CreateOrganizationResponse, error) {
 	log := zlog.Ctx(logCtx)
 
 	// Client AuthN
@@ -336,7 +336,7 @@ func createOrganization(logCtx context.Context, request *pb.CreateOrgRequest, us
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	return &pb.CreateOrgResponse{
+	return &pb.CreateOrganizationResponse{
 		Id:           groupID,
 		LongName:     *attributes.LongName,
 		ShortName:    hwutil.DerefStringOrEmpty(attributes.ShortName),
@@ -360,7 +360,7 @@ func OnUserCreated(ctx context.Context, e *daprcmn.TopicEvent) (retry bool, err 
 		return false, err
 	}
 
-	_, err = createOrganization(ctx, &pb.CreateOrgRequest{
+	_, err = createOrganization(ctx, &pb.CreateOrganizationRequest{
 		LongName:     "Your Personal Organization",
 		ContactEmail: user.Email,
 	}, user.Id, true)

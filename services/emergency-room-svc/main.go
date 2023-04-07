@@ -49,7 +49,7 @@ type emergencyRoomServiceServer struct {
 	pb.UnimplementedEmergencyRoomServiceServer
 }
 
-func (emergencyRoomServiceServer) CreateER(ctx context.Context, req *pb.CreateERRequest) (*pb.GetSingleERResponse, error) {
+func (emergencyRoomServiceServer) CreateER(ctx context.Context, req *pb.CreateERRequest) (*pb.CreateERResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	// TODO: Auth
@@ -83,7 +83,7 @@ func (emergencyRoomServiceServer) CreateER(ctx context.Context, req *pb.CreateER
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	return &pb.GetSingleERResponse{
+	return &pb.CreateERResponse{
 		Id:                 emergencyRoom.ID.String(),
 		Name:               emergencyRoom.Name,
 		Location:           emergency_room_svc.FromGormPoint(&emergencyRoom.Location),
@@ -94,7 +94,7 @@ func (emergencyRoomServiceServer) CreateER(ctx context.Context, req *pb.CreateER
 	}, nil
 }
 
-func (emergencyRoomServiceServer) GetER(ctx context.Context, req *pb.GetSingleERRequest) (*pb.GetSingleERResponse, error) {
+func (emergencyRoomServiceServer) GetER(ctx context.Context, req *pb.GetERRequest) (*pb.GetERResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	id, err := uuid.Parse(req.Id)
@@ -119,7 +119,7 @@ func (emergencyRoomServiceServer) GetER(ctx context.Context, req *pb.GetSingleER
 
 	log.Debug().Msgf("result = %v", result)
 
-	return &pb.GetSingleERResponse{
+	return &pb.GetERResponse{
 		Id:                 emergencyRoom.ID.String(),
 		Name:               emergencyRoom.Name,
 		Location:           emergency_room_svc.FromGormPoint(&emergencyRoom.Location),
@@ -156,9 +156,9 @@ func (emergencyRoomServiceServer) GetERs(ctx context.Context, req *pb.GetERsRequ
 	}
 
 	// Response
-	responses := make([]*pb.GetSingleERResponse, len(emergencyRooms))
+	responses := make([]*pb.GetERResponse, len(emergencyRooms))
 	for i, emergencyRoom := range emergencyRooms {
-		responses[i] = &pb.GetSingleERResponse{
+		responses[i] = &pb.GetERResponse{
 			Id:                 emergencyRoom.ID.String(),
 			Name:               emergencyRoom.Name,
 			Location:           emergency_room_svc.FromGormPoint(&emergencyRoom.Location),
