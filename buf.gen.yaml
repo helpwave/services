@@ -13,3 +13,5 @@ plugins:
     out: proto_docs
   - plugin: buf.build/community/stephenh-ts-proto
     out: gen/ts
+  - plugin: buf.build/protocolbuffers/dart
+    out: gen/dart
