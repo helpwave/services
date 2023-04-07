@@ -10,8 +10,7 @@ jobs:
   check-preconditions:
     runs-on: ubuntu-latest
     outputs:
-      breaking: ${{ steps.breaking.outputs.breaking }}
-      new-package: ${{ steps.new-package.outputs.new-package }}
+      bump: ${{ steps.bump.outputs.bump }}
       commit: ${{ steps.commit.outputs.sha }}
     steps:
     - name: Clone Repo
@@ -45,3 +44,18 @@ jobs:
     - name: Get SHA
       id: commit
       run: echo "sha=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
+    - name: Get Bump
+      id: bump
+      run: |
+        BUMP="patch"
+        if [ "$BREAKING" = "true" ]; then
+          BUMP="major"
+        elif [ "$NEW_PKG" = "true" ]; then
+          BUMP="minor"
+        else
+          BUMP="patch"
+        fi
+        echo "bump=$BUMP" >> $GITHUB_OUTPUT
+      env:
+        BREAKING: ${{ steps.breaking.outputs.breaking }}
+        NEW_PKG: ${{ steps.new-package.outputs.new-package }}
