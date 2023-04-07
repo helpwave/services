@@ -20,6 +20,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// More in <a href="https://wiki.helpwave.de/doc/authentication-jedzCcERwF">the wiki</a>
 type PrelimAuthRequestRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -106,6 +107,9 @@ func (x *PrelimAuthRequestResponse) GetUrl() string {
 	return ""
 }
 
+// Once an Access Token became stale, you can request a new one here using the Refresh Token.
+// You should make sure the refresh token is still valid.
+// More in <a href="https://wiki.helpwave.de/doc/authentication-jedzCcERwF">the wiki</a>
 type RefreshTokenRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
