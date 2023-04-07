@@ -23,12 +23,12 @@ jobs:
       # Only deletions are allowed. Breaking updates must happen in a new version of the package(s) in question.
       # This is just a sanity check!
       # For example it allows you to delete files from the latest version of a package (depending on context that might even be ok).
-      run: buf breaking --against '.git#branch=main' --error-format json | jq .type | if grep -v -q \"FILE_NO_DELETE\"; then exit 1; fi
+      run: buf breaking --against '.git#ref=HEAD^' --error-format json | jq .type | if grep -v -q \"FILE_NO_DELETE\"; then exit 1; fi
     - name: Has breakage?
       id: breaking
       # We previously checked if any illegal breakage occurred, now check if we have breakage _at all_
       # If so, we publish this as a _major_ release
-      run: buf breaking --against '.git#branch=main' && echo "breaking=false" >> $GITHUB_OUTPUT || echo "breaking=true" >> $GITHUB_OUTPUT
+      run: buf breaking --against '.git#ref=HEAD^' && echo "breaking=false" >> $GITHUB_OUTPUT || echo "breaking=true" >> $GITHUB_OUTPUT
     - name: Has new package?
       id: new-package
       run: |
