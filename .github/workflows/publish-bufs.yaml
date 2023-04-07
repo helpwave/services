@@ -32,8 +32,8 @@ jobs:
     - name: Has new package?
       id: new-package
       run: |
-        last_tree=$(git ls-tree -d -r --name-only HEAD^ proto) # directory tree of proto in old commit
-        current_tree=$(find proto -type d) # directory tree of proto right now
+        last_tree=$(git ls-tree -d -r --name-only HEAD^ proto | sort) # directory tree of proto in old commit
+        current_tree=$(find proto -type d | sort) # directory tree of proto right now
         new_dirs=$(comm -13 <(echo "$last_tree") <(echo "$current_tree")) # filter out lines, which are "-3": common (i.e. unchanged) or "-1": only in the last tree (i.e. removed) 
         echo $new_dirs
         if [ -z "$new_dirs" ]; then
