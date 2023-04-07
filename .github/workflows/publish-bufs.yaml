@@ -9,11 +9,35 @@ on:
 jobs:
   check-preconditions:
     runs-on: ubuntu-latest
+    outputs:
+      breaking: ${{ steps.breaking.outputs.breaking }}
+      new-package: ${{ steps.new-package.outputs.new-package }}
     steps:
     - name: Clone Repo
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
     - uses: bufbuild/buf-setup-action@v1
     - uses: bufbuild/buf-lint-action@v1
     - name: Check for illegal breakage
       # Only deletions are allowed. Breaking updates must happen in a new version of the package(s) in question.
+      # This is just a sanity check!
+      # For example it allows you to delete files from the latest version of a package (depending on context that might even be ok).
       run: buf breaking --against '.git#branch=main' --error-format json | jq .type | if grep -v -q \"FILE_NO_DELETE\"; then exit 1; fi
+    - name: Has breakage?
+      id: breaking
+      # We previously checked if any illegal breakage occurred, now check if we have breakage _at all_
+      # If so, we publish this as a _major_ release
+      run: buf breaking --against '.git#branch=main' && echo "breaking=false" >> $GITHUB_OUTPUT || echo "breaking=true" >> $GITHUB_OUTPUT
+    - name: Has new package?
+      id: new-package
+      run: |
+        last_tree=$(git ls-tree -d -r --name-only HEAD^ proto) # directory tree of proto in old commit
+        current_tree=$(find proto -type d) # directory tree of proto right now
+        new_dirs=$(comm -13 <(echo "$last_tree") <(echo "$current_tree")) # filter out lines, which are "-3": common (i.e. unchanged) or "-1": only in the last tree (i.e. removed) 
+        echo $new_dirs
+        if [ -z "$new_dirs" ]; then
+          echo "new-package=false" >> $GITHUB_OUTPUT
+        else
+          echo "new-package=true" >> $GITHUB_OUTPUT
+        fi
