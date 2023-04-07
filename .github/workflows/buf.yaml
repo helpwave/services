@@ -37,3 +37,11 @@ jobs:
           projectName: 'hw-proto-docs'
           directory: 'proto_docs'
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+  breakage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: bufbuild/buf-setup-action@v1
+      - uses: bufbuild/buf-breaking-action@v1
+        with:
+          against: 'https://github.com/${{ github.repository }}.git#branch=main'
