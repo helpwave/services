@@ -24,17 +24,9 @@ jobs:
       deployments: write
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       - run: make proto
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v35
-        with:
-          files: gen
-      - name: Break if files have changed
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
-        run: exit 1
+      - name: Break if generated protos are not checked in
+        run: git diff --quiet gen
       - name: Upload docs
         if: success() && github.ref == 'refs/heads/main'
         uses: cloudflare/pages-action@1
