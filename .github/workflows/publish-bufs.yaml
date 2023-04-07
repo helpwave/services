@@ -63,6 +63,8 @@ jobs:
   ts:
     needs: check-preconditions
     runs-on: ubuntu-latest
+    permissions:
+        packages: write
     steps:
     - name: Clone Repo
       uses: actions/checkout@v3
