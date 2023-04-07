@@ -1,0 +1,19 @@
+name: Publish Bufs
+
+on:
+  push:
+    branches: [ 'main' ]
+    paths:
+    - proto/**/*.proto
+
+jobs:
+  check-preconditions:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone Repo
+      uses: actions/checkout@v3
+    - uses: bufbuild/buf-setup-action@v1
+    - uses: bufbuild/buf-lint-action@v1
+    - name: Check for illegal breakage
+      # Only deletions are allowed. Breaking updates must happen in a new version of the package(s) in question.
+      run: buf breaking --against '.git#branch=main' --error-format json | jq .type | if grep -v -q \"FILE_NO_DELETE\"; then exit 1; fi
