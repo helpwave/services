@@ -11,3 +11,5 @@ plugins:
     opt: paths=source_relative
   - plugin: buf.build/community/pseudomuto-doc
     out: proto_docs
+  - plugin: buf.build/community/stephenh-ts-proto
+    out: gen/ts
