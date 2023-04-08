@@ -43,7 +43,7 @@ jobs:
         fi
     - name: Get SHA
       id: commit
-      run: echo "sha=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
+      run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
     - name: Get Bump
       id: bump
       run: |
