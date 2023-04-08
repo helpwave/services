@@ -38,6 +38,7 @@ message UpdateUserResponse {}
 // Create Organization
 //
 
+// Just some test comment for to trigger the ci
 message CreateOrganizationRequest {
 	string long_name = 1; // @gotags: validate:"required,gte=4,lte=64"
 	string short_name = 2; // @gotags: validate:"omitempty,gte=2,lte=16"
@@ -60,6 +61,6 @@ message CreateOrganizationResponse {
 service UserService {
 	rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {}
 	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse) {}
-	
+
 	rpc CreateOrganization (CreateOrganizationRequest) returns (CreateOrganizationResponse) {}
 }
