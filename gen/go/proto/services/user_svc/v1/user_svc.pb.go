@@ -256,6 +256,7 @@ func (*UpdateUserResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{3}
 }
 
+// Just some test comment for to trigger the ci
 type CreateOrganizationRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

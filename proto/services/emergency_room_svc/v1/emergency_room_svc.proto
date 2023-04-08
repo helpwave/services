@@ -140,7 +140,6 @@ message DeleteERRequest {
 
 message DeleteERResponse {}
 
-
 service EmergencyRoomService {
 	rpc CreateER(CreateERRequest) returns (CreateERResponse) {}
 	rpc GetER (GetERRequest) returns (GetERResponse) {}
