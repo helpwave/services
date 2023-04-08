@@ -105,6 +105,18 @@ jobs:
         wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
         chmod +x /usr/local/bin/semver
     - uses: dart-lang/setup-dart@v1
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v1'
+      with:
+        version: '>= 363.0.0'
+    - name: Auth Service Account
+      env:
+        KEY_FILE: ${{ secrets.PUB_DEV_KEY }}
+      run: |
+        echo "$KEY_FILE" > key-file.json
+        gcloud auth activate-service-account --key-file=key-file.json
+        rm key-file.json
+        gcloud auth print-identity-token --audiences=https://pub.dev | dart pub token add https://pub.dev
     - name: Bump version
       working-directory: gen/dart
       env:
