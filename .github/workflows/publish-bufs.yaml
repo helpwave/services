@@ -90,3 +90,38 @@ jobs:
         message: 'chore(proto-ts): bump version'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dart:
+    needs: check-preconditions
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - name: Clone Repo
+      uses: actions/checkout@v3
+    - name: Install tools
+      run: |
+        pip install yq
+        wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
+        chmod +x /usr/local/bin/semver
+    - uses: dart-lang/setup-dart@v1
+    - name: Bump version
+      working-directory: gen/dart
+      env:
+        BUMP: ${{ needs.check-preconditions.outputs.bump }}
+        SHA: ${{ needs.check-preconditions.outputs.commit }}
+      run: |
+        VERSION=$(cat pubspec.yaml | yq .version -r)
+        NEW_VERSION=$(semver bump $BUMP $VERSION)
+        NEW_VERSION=$(semver bump prerel $SHA.0 $NEW_VERSION)
+        sed "s/version:.*/version: $NEW_VERSION/" pubspec.yaml -i
+    - name: Publish to pub.dev
+      working-directory: gen/dart
+      run: dart pub publish -f
+    - uses: EndBug/add-and-commit@v9
+      with:
+        add: gen/dart/pubspec.yaml
+        default_author: github_actions
+        message: 'chore(proto-dart): bump version'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
