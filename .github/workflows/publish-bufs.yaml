@@ -70,6 +70,8 @@ jobs:
     steps:
     - name: Clone Repo
       uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.HELPWAVE_BOT_PAT }}
     - uses: actions/setup-node@v3
       with:
         node-version: '18.x'
@@ -100,6 +102,8 @@ jobs:
     steps:
     - name: Clone Repo
       uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.HELPWAVE_BOT_PAT }}
     - name: Install tools
       run: |
         pip install yq
