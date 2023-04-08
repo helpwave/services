@@ -72,17 +72,17 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: '18.x'
-        registry-url: 'https://npm.pkg.github.com'
+        registry-url: 'https://registry.npmjs.org'
     - name: Bump version
       working-directory: gen/ts
       run: npm version pre$BUMP --preid $SHA
       env:
         BUMP: ${{ needs.check-preconditions.outputs.bump }}
         SHA: ${{ needs.check-preconditions.outputs.commit }}
-    - run: npm publish
+    - run: npm publish --access public
       working-directory: gen/ts
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     - uses: EndBug/add-and-commit@v9
       with:
         add: gen/ts/package.json
