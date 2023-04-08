@@ -1,0 +1,92 @@
+name: Publish Bufs
+
+on:
+  push:
+    branches: [ 'main' ]
+    paths:
+    - proto/**/*.proto
+
+jobs:
+  check-preconditions:
+    runs-on: ubuntu-latest
+    outputs:
+      bump: ${{ steps.bump.outputs.bump }}
+      commit: ${{ steps.commit.outputs.sha }}
+    steps:
+    - name: Clone Repo
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
+    - uses: bufbuild/buf-setup-action@v1
+    - uses: bufbuild/buf-lint-action@v1
+    - name: Check for illegal breakage
+      # Only deletions are allowed. Breaking updates must happen in a new version of the package(s) in question.
+      # This is just a sanity check!
+      # For example it allows you to delete files from the latest version of a package (depending on context that might even be ok).
+      run: buf breaking --against '.git#ref=HEAD^' --error-format json | jq .type | if grep -v -q \"FILE_NO_DELETE\"; then exit 1; fi
+    - name: Has breakage?
+      id: breaking
+      # We previously checked if any illegal breakage occurred, now check if we have breakage _at all_
+      # If so, we publish this as a _major_ release
+      run: buf breaking --against '.git#ref=HEAD^' && echo "breaking=false" >> $GITHUB_OUTPUT || echo "breaking=true" >> $GITHUB_OUTPUT
+    - name: Has new package?
+      id: new-package
+      run: |
+        last_tree=$(git ls-tree -d -r --name-only HEAD^ proto | sort) # directory tree of proto in old commit
+        current_tree=$(find proto -type d | sort) # directory tree of proto right now
+        new_dirs=$(comm -13 <(echo "$last_tree") <(echo "$current_tree")) # filter out lines, which are "-3": common (i.e. unchanged) or "-1": only in the last tree (i.e. removed) 
+        echo $new_dirs
+        if [ -z "$new_dirs" ]; then
+          echo "new-package=false" >> $GITHUB_OUTPUT
+        else
+          echo "new-package=true" >> $GITHUB_OUTPUT
+        fi
+    - name: Get SHA
+      id: commit
+      run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+    - name: Get Bump
+      id: bump
+      run: |
+        BUMP="patch"
+        if [ "$BREAKING" = "true" ]; then
+          BUMP="major"
+        elif [ "$NEW_PKG" = "true" ]; then
+          BUMP="minor"
+        else
+          BUMP="patch"
+        fi
+        echo "bump=$BUMP" >> $GITHUB_OUTPUT
+      env:
+        BREAKING: ${{ steps.breaking.outputs.breaking }}
+        NEW_PKG: ${{ steps.new-package.outputs.new-package }}
+
+  ts:
+    needs: check-preconditions
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
+    steps:
+    - name: Clone Repo
+      uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+        registry-url: 'https://npm.pkg.github.com'
+    - name: Bump version
+      working-directory: gen/ts
+      run: npm version pre$BUMP --preid $SHA
+      env:
+        BUMP: ${{ needs.check-preconditions.outputs.bump }}
+        SHA: ${{ needs.check-preconditions.outputs.commit }}
+    - run: npm publish
+      working-directory: gen/ts
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: EndBug/add-and-commit@v9
+      with:
+        add: gen/ts/package.json
+        default_author: github_actions
+        message: 'chore(proto-ts): bump version'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

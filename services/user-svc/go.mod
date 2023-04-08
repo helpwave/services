@@ -4,7 +4,7 @@ go 1.19
 
 replace (
 	common => ../../libs/common
-	gen => ../../gen
+	gen => ../../gen/go
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
 	logging => ../../libs/logging

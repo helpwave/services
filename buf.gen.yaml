@@ -3,11 +3,15 @@ managed:
   enabled: true
 plugins:
   - plugin: buf.build/grpc/go
-    out: gen
+    out: gen/go
     opt:
       - paths=source_relative
   - plugin: buf.build/protocolbuffers/go
-    out: gen
+    out: gen/go
     opt: paths=source_relative
   - plugin: buf.build/community/pseudomuto-doc
     out: proto_docs
+  - plugin: buf.build/community/stephenh-ts-proto
+    out: gen/ts
+  - plugin: buf.build/protocolbuffers/dart
+    out: gen/dart
