@@ -110,12 +110,11 @@ jobs:
       with:
         version: '>= 363.0.0'
     - name: Auth Service Account
-      env:
-        KEY_FILE: ${{ secrets.PUB_DEV_KEY }}
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: ${{ secrets.PUB_DEV_KEY }}
+    - name: Set pub.dev token
       run: |
-        echo "$KEY_FILE" > key-file.json
-        gcloud auth activate-service-account --key-file=key-file.json
-        rm key-file.json
         gcloud auth print-identity-token --audiences=https://pub.dev | dart pub token add https://pub.dev
     - name: Bump version
       working-directory: gen/dart
