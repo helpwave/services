@@ -207,7 +207,6 @@ spec:
         enable: true
         config:
           headers:
-            set:
-              dapr-app-id: "task.task"
+            dapr-app-id: task.task
 YAML
 }
