@@ -20,7 +20,8 @@ jobs:
         fetch-depth: 2
     - uses: bufbuild/buf-setup-action@v1
     - uses: bufbuild/buf-lint-action@v1
-    - name: Check for illegal breakage
+    # TODO (arm-versioning): Arm versioning by remove the comment of ONLY the next line
+    # - name: Check for illegal breakage
       # Only deletions are allowed. Breaking updates must happen in a new version of the package(s) in question.
       # This is just a sanity check!
       # For example it allows you to delete files from the latest version of a package (depending on context that might even be ok).
