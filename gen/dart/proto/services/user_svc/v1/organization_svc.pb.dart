@@ -15,6 +15,7 @@ class CreateOrganizationRequest extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'longName')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'shortName')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'contactEmail')
+    ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isPersonal')
     ..hasRequiredFields = false
   ;
 
@@ -23,6 +24,7 @@ class CreateOrganizationRequest extends $pb.GeneratedMessage {
     $core.String? longName,
     $core.String? shortName,
     $core.String? contactEmail,
+    $core.bool? isPersonal,
   }) {
     final _result = create();
     if (longName != null) {
@@ -33,6 +35,9 @@ class CreateOrganizationRequest extends $pb.GeneratedMessage {
     }
     if (contactEmail != null) {
       _result.contactEmail = contactEmail;
+    }
+    if (isPersonal != null) {
+      _result.isPersonal = isPersonal;
     }
     return _result;
   }
@@ -83,6 +88,15 @@ class CreateOrganizationRequest extends $pb.GeneratedMessage {
   $core.bool hasContactEmail() => $_has(2);
   @$pb.TagNumber(3)
   void clearContactEmail() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get isPersonal => $_getBF(3);
+  @$pb.TagNumber(4)
+  set isPersonal($core.bool v) { $_setBool(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasIsPersonal() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearIsPersonal() => clearField(4);
 }
 
 class CreateOrganizationResponse extends $pb.GeneratedMessage {
@@ -121,6 +135,156 @@ class CreateOrganizationResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static CreateOrganizationResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateOrganizationResponse>(create);
   static CreateOrganizationResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
+class CreateOrganizationForUserRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateOrganizationForUserRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'longName')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'shortName')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'contactEmail')
+    ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isPersonal')
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
+    ..hasRequiredFields = false
+  ;
+
+  CreateOrganizationForUserRequest._() : super();
+  factory CreateOrganizationForUserRequest({
+    $core.String? longName,
+    $core.String? shortName,
+    $core.String? contactEmail,
+    $core.bool? isPersonal,
+    $core.String? userId,
+  }) {
+    final _result = create();
+    if (longName != null) {
+      _result.longName = longName;
+    }
+    if (shortName != null) {
+      _result.shortName = shortName;
+    }
+    if (contactEmail != null) {
+      _result.contactEmail = contactEmail;
+    }
+    if (isPersonal != null) {
+      _result.isPersonal = isPersonal;
+    }
+    if (userId != null) {
+      _result.userId = userId;
+    }
+    return _result;
+  }
+  factory CreateOrganizationForUserRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateOrganizationForUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateOrganizationForUserRequest clone() => CreateOrganizationForUserRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateOrganizationForUserRequest copyWith(void Function(CreateOrganizationForUserRequest) updates) => super.copyWith((message) => updates(message as CreateOrganizationForUserRequest)) as CreateOrganizationForUserRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static CreateOrganizationForUserRequest create() => CreateOrganizationForUserRequest._();
+  CreateOrganizationForUserRequest createEmptyInstance() => create();
+  static $pb.PbList<CreateOrganizationForUserRequest> createRepeated() => $pb.PbList<CreateOrganizationForUserRequest>();
+  @$core.pragma('dart2js:noInline')
+  static CreateOrganizationForUserRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateOrganizationForUserRequest>(create);
+  static CreateOrganizationForUserRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get longName => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set longName($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasLongName() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearLongName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get shortName => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set shortName($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasShortName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearShortName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get contactEmail => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set contactEmail($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasContactEmail() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearContactEmail() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get isPersonal => $_getBF(3);
+  @$pb.TagNumber(4)
+  set isPersonal($core.bool v) { $_setBool(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasIsPersonal() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearIsPersonal() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get userId => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set userId($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasUserId() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearUserId() => clearField(5);
+}
+
+class CreateOrganizationForUserResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateOrganizationForUserResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  CreateOrganizationForUserResponse._() : super();
+  factory CreateOrganizationForUserResponse({
+    $core.String? id,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    return _result;
+  }
+  factory CreateOrganizationForUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateOrganizationForUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateOrganizationForUserResponse clone() => CreateOrganizationForUserResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateOrganizationForUserResponse copyWith(void Function(CreateOrganizationForUserResponse) updates) => super.copyWith((message) => updates(message as CreateOrganizationForUserResponse)) as CreateOrganizationForUserResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static CreateOrganizationForUserResponse create() => CreateOrganizationForUserResponse._();
+  CreateOrganizationForUserResponse createEmptyInstance() => create();
+  static $pb.PbList<CreateOrganizationForUserResponse> createRepeated() => $pb.PbList<CreateOrganizationForUserResponse>();
+  @$core.pragma('dart2js:noInline')
+  static CreateOrganizationForUserResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateOrganizationForUserResponse>(create);
+  static CreateOrganizationForUserResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
@@ -358,6 +522,10 @@ class OrganizationServiceApi {
   $async.Future<CreateOrganizationResponse> createOrganization($pb.ClientContext? ctx, CreateOrganizationRequest request) {
     var emptyResponse = CreateOrganizationResponse();
     return _client.invoke<CreateOrganizationResponse>(ctx, 'OrganizationService', 'CreateOrganization', request, emptyResponse);
+  }
+  $async.Future<CreateOrganizationForUserResponse> createOrganizationForUser($pb.ClientContext? ctx, CreateOrganizationForUserRequest request) {
+    var emptyResponse = CreateOrganizationForUserResponse();
+    return _client.invoke<CreateOrganizationForUserResponse>(ctx, 'OrganizationService', 'CreateOrganizationForUser', request, emptyResponse);
   }
   $async.Future<GetOrganizationResponse> getOrganization($pb.ClientContext? ctx, GetOrganizationRequest request) {
     var emptyResponse = GetOrganizationResponse();

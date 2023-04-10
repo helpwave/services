@@ -2,7 +2,6 @@ package main
 
 import (
 	"common"
-	"fmt"
 	pb "gen/proto/services/user_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwgorm"
@@ -27,12 +26,14 @@ func main() {
 		hwutil.GetEnvOr("POSTGRES_PORT", "5432"),
 	)
 
-	port := hwutil.GetEnvOr("PORT", "8080")
-	addr := hwutil.GetEnvOr("ADDR", fmt.Sprintf(":%s", port))
-
-	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
+	common.StartNewGRPCServer(hwutil.GetAddr(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
-		pb.RegisterUserServiceServer(server.GrpcServer(), user.NewServiceServer())
-		pb.RegisterOrganizationServiceServer(grpcServer, organization.NewServiceServer())
+
+		daprClient := common.MustNewDaprGRPCClient()
+
+		pb.RegisterUserServiceServer(grpcServer, user.NewServiceServer())
+
+		common.MustAddTopicEventHandler(server, organization.UserCreatedEventSubscription, organization.HandleUserCreatedEvent)
+		pb.RegisterOrganizationServiceServer(grpcServer, organization.NewServiceServer(daprClient))
 	})
 }

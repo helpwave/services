@@ -3,11 +3,16 @@ package organization
 import (
 	"common"
 	"context"
+	"fmt"
+	"gen/proto/libs/events/v1"
 	pb "gen/proto/services/user_svc/v1"
+	daprc "github.com/dapr/go-sdk/client"
+	daprcmn "github.com/dapr/go-sdk/service/common"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"
 	"hwgorm"
 )
@@ -33,17 +38,24 @@ type Member struct {
 	OrganizationID uuid.UUID `gorm:"column:organization_id"`
 }
 
-type ServiceServer struct {
-	pb.UnimplementedOrganizationServiceServer
+var UserCreatedEventSubscription = &daprcmn.Subscription{
+	PubsubName: "pubsub",
+	Topic:      "USER_CREATED",
+	Route:      "/pubsub/user_created/v1",
 }
 
-func NewServiceServer() *ServiceServer {
-	return &ServiceServer{}
+type ServiceServer struct {
+	pb.UnimplementedOrganizationServiceServer
+	daprClient *daprc.GRPCClient
+}
+
+func NewServiceServer(daprClient *daprc.GRPCClient) *ServiceServer {
+	return &ServiceServer{
+		daprClient: daprClient,
+	}
 }
 
 func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrganizationRequest) (*pb.CreateOrganizationResponse, error) {
-	db := hwgorm.GetDB(ctx)
-
 	claims, err := common.GetAuthClaims(ctx)
 	if err != nil {
 		return nil, err
@@ -54,31 +66,16 @@ func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrg
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	var organization Organization
-	err = db.Transaction(func(tx *gorm.DB) error {
-		organizationPtr, err := CreateOrganization(
-			ctx,
-			tx,
-			Base{
-				LongName:     req.LongName,
-				ShortName:    req.ShortName,
-				ContactEmail: req.ContactEmail,
-				IsPersonal:   false,
-			},
-			userID,
-		)
-		if err != nil {
-			return err
-		}
-
-		organization = *organizationPtr
-
-		if err := AddUserToOrganization(ctx, tx, userID, organization.ID); err != nil {
-			return err
-		}
-
-		return nil
-	})
+	organization, err := CreateOrganizationAndAddUser(
+		ctx,
+		Base{
+			LongName:     req.LongName,
+			ShortName:    req.ShortName,
+			ContactEmail: req.ContactEmail,
+			IsPersonal:   req.IsPersonal,
+		},
+		userID,
+	)
 
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
@@ -88,9 +85,39 @@ func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrg
 		}
 	}
 
-	// TODO: Dispatch OrganizationCreatedEvent & UserJoinedOrganizationEvent
-
 	return &pb.CreateOrganizationResponse{
+		Id: organization.ID.String(),
+	}, nil
+}
+
+// CreateOrganizationForUser internal method for other services
+// TODO: Make sure that internal methods are not exposed via API gateway
+func (s ServiceServer) CreateOrganizationForUser(ctx context.Context, req *pb.CreateOrganizationForUserRequest) (*pb.CreateOrganizationForUserResponse, error) {
+	userID, err := uuid.Parse(req.UserId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	organization, err := CreateOrganizationAndAddUser(
+		ctx,
+		Base{
+			LongName:     req.LongName,
+			ShortName:    req.ShortName,
+			ContactEmail: req.ContactEmail,
+			IsPersonal:   req.IsPersonal,
+		},
+		userID,
+	)
+
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
+	}
+
+	return &pb.CreateOrganizationForUserResponse{
 		Id: organization.ID.String(),
 	}, nil
 }
@@ -129,6 +156,44 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 		IsPersonal:   false,
 		Members:      members,
 	}, nil
+}
+
+func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UUID) (*Organization, error) {
+	db := hwgorm.GetDB(ctx)
+
+	var organization Organization
+	err := db.Transaction(func(tx *gorm.DB) error {
+		organizationPtr, err := CreateOrganization(ctx, tx, attr, userID)
+		if err != nil {
+			return err
+		}
+
+		organization = *organizationPtr
+
+		if err := AddUserToOrganization(ctx, tx, userID, organization.ID); err != nil {
+			return err
+		}
+
+		userCreatedEvent := &events.OrganizationCreatedEvent{
+			Id: organization.ID.String(),
+		}
+
+		daprClient := common.MustNewDaprGRPCClient()
+
+		if err := common.PublishMessage(ctx, daprClient, "pubsub", "ORGANIZATION_CREATED", userCreatedEvent); err != nil {
+			return err
+		}
+
+		// TODO: Dispatch UserJoinedOrganizationEvent
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &organization, nil
 }
 
 func CreateOrganization(ctx context.Context, db *gorm.DB, attr Base, creatorUserId uuid.UUID) (*Organization, error) {
@@ -190,4 +255,32 @@ func GetOrganizationById(db *gorm.DB, id uuid.UUID) (*Organization, error) {
 	}
 
 	return &organization, nil
+}
+
+func HandleUserCreatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry bool, err error) {
+	log := zlog.Ctx(ctx)
+
+	var payload events.UserCreatedEvent
+	if err := proto.Unmarshal(evt.RawData, &payload); err != nil {
+		log.Error().Err(err).Msg("could not convert USER_CREATED event data to UserCreatedEvent")
+		return true, err
+	}
+
+	userId, err := uuid.Parse(payload.Id)
+	if err != nil {
+		log.Error().Err(err).Msg("could not convert Id of USER_CREATED event to UUID")
+		return true, err
+	}
+
+	if _, err := CreateOrganizationAndAddUser(ctx, Base{
+		LongName:     fmt.Sprintf("%s personal organization", payload.Nickname),
+		ShortName:    payload.Nickname,
+		ContactEmail: payload.Email,
+		IsPersonal:   true,
+	}, userId); err != nil {
+		log.Error().Err(err).Str("userId", userId.String()).Msg("could not create organization")
+		return true, err
+	}
+
+	return false, nil
 }
