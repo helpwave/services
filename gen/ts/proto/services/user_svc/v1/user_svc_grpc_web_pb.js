@@ -199,5 +199,66 @@ proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.updateUser =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.GetUserRequest,
+ *   !proto.proto.services.user_svc.v1.GetUserResponse>}
+ */
+const methodDescriptor_UserService_GetUser = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.UserService/GetUser',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.GetUserRequest,
+  proto.proto.services.user_svc.v1.GetUserResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.GetUserRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.GetUserResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.GetUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.GetUserResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.GetUserResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.UserServiceClient.prototype.getUser =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.UserService/GetUser',
+      request,
+      metadata || {},
+      methodDescriptor_UserService_GetUser,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.GetUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.GetUserResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.getUser =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.UserService/GetUser',
+      request,
+      metadata || {},
+      methodDescriptor_UserService_GetUser);
+};
+
+
 module.exports = proto.proto.services.user_svc.v1;
 
