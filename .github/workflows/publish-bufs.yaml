@@ -50,7 +50,8 @@ jobs:
       run: |
         BUMP="patch"
         if [ "$BREAKING" = "true" ]; then
-          BUMP="major"
+          # TODO (arm-versioning): Arm versioning by replacing the following "minor" with "major"
+          BUMP="minor"
         elif [ "$NEW_PKG" = "true" ]; then
           BUMP="minor"
         else
