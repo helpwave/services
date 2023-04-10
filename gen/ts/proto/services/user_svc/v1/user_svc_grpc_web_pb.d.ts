@@ -22,13 +22,6 @@ export class UserServiceClient {
                response: proto_services_user_svc_v1_user_svc_pb.UpdateUserResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_user_svc_pb.UpdateUserResponse>;
 
-  createOrganization(
-    request: proto_services_user_svc_v1_user_svc_pb.CreateOrganizationRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: proto_services_user_svc_v1_user_svc_pb.CreateOrganizationResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_user_svc_pb.CreateOrganizationResponse>;
-
 }
 
 export class UserServicePromiseClient {
@@ -45,11 +38,6 @@ export class UserServicePromiseClient {
     request: proto_services_user_svc_v1_user_svc_pb.UpdateUserRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_user_svc_v1_user_svc_pb.UpdateUserResponse>;
-
-  createOrganization(
-    request: proto_services_user_svc_v1_user_svc_pb.CreateOrganizationRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_user_svc_v1_user_svc_pb.CreateOrganizationResponse>;
 
 }
 

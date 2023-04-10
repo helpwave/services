@@ -10,30 +10,27 @@ import 'dart:async' as $async;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'dart:core' as $core;
-import 'user_svc.pb.dart' as $6;
+import 'user_svc.pb.dart' as $7;
 import 'user_svc.pbjson.dart';
 
 export 'user_svc.pb.dart';
 
 abstract class UserServiceBase extends $pb.GeneratedService {
-  $async.Future<$6.CreateUserResponse> createUser($pb.ServerContext ctx, $6.CreateUserRequest request);
-  $async.Future<$6.UpdateUserResponse> updateUser($pb.ServerContext ctx, $6.UpdateUserRequest request);
-  $async.Future<$6.CreateOrganizationResponse> createOrganization($pb.ServerContext ctx, $6.CreateOrganizationRequest request);
+  $async.Future<$7.CreateUserResponse> createUser($pb.ServerContext ctx, $7.CreateUserRequest request);
+  $async.Future<$7.UpdateUserResponse> updateUser($pb.ServerContext ctx, $7.UpdateUserRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
-      case 'CreateUser': return $6.CreateUserRequest();
-      case 'UpdateUser': return $6.UpdateUserRequest();
-      case 'CreateOrganization': return $6.CreateOrganizationRequest();
+      case 'CreateUser': return $7.CreateUserRequest();
+      case 'UpdateUser': return $7.UpdateUserRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String method, $pb.GeneratedMessage request) {
     switch (method) {
-      case 'CreateUser': return this.createUser(ctx, request as $6.CreateUserRequest);
-      case 'UpdateUser': return this.updateUser(ctx, request as $6.UpdateUserRequest);
-      case 'CreateOrganization': return this.createOrganization(ctx, request as $6.CreateOrganizationRequest);
+      case 'CreateUser': return this.createUser(ctx, request as $7.CreateUserRequest);
+      case 'UpdateUser': return this.updateUser(ctx, request as $7.UpdateUserRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
