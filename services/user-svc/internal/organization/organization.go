@@ -1,12 +1,10 @@
 package organization
 
 import (
+	"common"
 	"context"
-	"errors"
-	"fmt"
 	pb "gen/proto/services/user_svc/v1"
 	"github.com/google/uuid"
-	"github.com/rs/zerolog"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -31,8 +29,8 @@ type Organization struct {
 
 type Member struct {
 	ID             uuid.UUID `gorm:"primaryKey,column:id"`
-	UserID         uuid.UUID `gorm:"primaryKey,column:user_id"`
-	OrganizationID uuid.UUID `gorm:"primaryKey,column:organization_id"`
+	UserID         uuid.UUID `gorm:"column:user_id"`
+	OrganizationID uuid.UUID `gorm:"column:organization_id"`
 }
 
 type ServiceServer struct {
@@ -44,30 +42,30 @@ func NewServiceServer() *ServiceServer {
 }
 
 func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrganizationRequest) (*pb.CreateOrganizationResponse, error) {
-	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
-	// TODO: Auth. Remove next line.
-	randomUserId := uuid.New()
+	claims, err := common.GetAuthClaims(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	userID, err := uuid.Parse(claims.Sub)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
 	var organization Organization
-	err := db.Transaction(func(tx *gorm.DB) error {
+	err = db.Transaction(func(tx *gorm.DB) error {
 		organizationPtr, err := CreateOrganization(
-			log,
+			ctx,
 			tx,
-			struct {
-				LongName     string
-				ShortName    string
-				ContactEmail string
-				AvatarUrl    string
-				IsPersonal   bool
-			}{
+			Base{
 				LongName:     req.LongName,
 				ShortName:    req.ShortName,
 				ContactEmail: req.ContactEmail,
 				IsPersonal:   false,
 			},
-			randomUserId,
+			userID,
 		)
 		if err != nil {
 			return err
@@ -75,7 +73,7 @@ func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrg
 
 		organization = *organizationPtr
 
-		if err := AddUserToOrganization(log, tx, randomUserId, organization.ID); err != nil {
+		if err := AddUserToOrganization(ctx, tx, userID, organization.ID); err != nil {
 			return err
 		}
 
@@ -83,7 +81,11 @@ func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrg
 	})
 
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
 	}
 
 	// TODO: Dispatch OrganizationCreatedEvent & UserJoinedOrganizationEvent
@@ -96,6 +98,8 @@ func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrg
 func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizationRequest) (*pb.GetOrganizationResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
+	// TODO: Auth
+
 	id, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -103,17 +107,18 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 
 	organization, err := GetOrganizationById(db, id)
 	if err != nil {
-		return nil, err
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
 	}
 
-	fmt.Println(organization.Members)
-
+	// TODO: Move members out of GetOrganizationResponse into GetMembers with pagination
 	var members []*pb.Member
 	for _, member := range organization.Members {
 		members = append(members, &pb.Member{UserId: member.UserID.String()})
 	}
-
-	fmt.Println(members)
 
 	return &pb.GetOrganizationResponse{
 		Id:           organization.ID.String(),
@@ -126,13 +131,11 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 	}, nil
 }
 
-func CreateOrganization(log *zerolog.Logger, db *gorm.DB, attr struct {
-	LongName     string
-	ShortName    string
-	ContactEmail string
-	AvatarUrl    string
-	IsPersonal   bool
-}, creatorUserId uuid.UUID) (*Organization, error) {
+func CreateOrganization(ctx context.Context, db *gorm.DB, attr Base, creatorUserId uuid.UUID) (*Organization, error) {
+	log := zlog.Ctx(ctx)
+
+	// TODO: Auth
+
 	organization := Organization{
 		Base: Base{
 			LongName:     attr.LongName,
@@ -151,15 +154,16 @@ func CreateOrganization(log *zerolog.Logger, db *gorm.DB, attr struct {
 
 	log.Info().
 		Str("organizationId", organization.ID.String()).
-		Str("userId", organization.ID.String()).
+		Str("userId", creatorUserId.String()).
 		Msg("organization created")
 
 	return &organization, nil
 }
 
-func AddUserToOrganization(log *zerolog.Logger, db *gorm.DB, userId uuid.UUID, organizationId uuid.UUID) error {
-	organization := Organization{ID: organizationId}
+func AddUserToOrganization(ctx context.Context, db *gorm.DB, userId uuid.UUID, organizationId uuid.UUID) error {
+	log := zlog.Ctx(ctx)
 
+	organization := Organization{ID: organizationId}
 	member := Member{
 		UserID: userId,
 	}
@@ -182,11 +186,7 @@ func GetOrganizationById(db *gorm.DB, id uuid.UUID) (*Organization, error) {
 	organization := Organization{ID: id}
 
 	if err := db.Preload("Members").First(&organization).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, err
-		} else {
-			return nil, errors.New("id not found")
-		}
+		return nil, err
 	}
 
 	return &organization, nil
