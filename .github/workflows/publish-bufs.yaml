@@ -20,11 +20,13 @@ jobs:
         fetch-depth: 2
     - uses: bufbuild/buf-setup-action@v1
     - uses: bufbuild/buf-lint-action@v1
-    - name: Check for illegal breakage
+    # TODO (arm-versioning): Arm versioning by remove the comment of ONLY the next line
+    # - name: Check for illegal breakage
       # Only deletions are allowed. Breaking updates must happen in a new version of the package(s) in question.
       # This is just a sanity check!
       # For example it allows you to delete files from the latest version of a package (depending on context that might even be ok).
-      run: buf breaking --against '.git#ref=HEAD^' --error-format json | jq .type | if grep -v -q \"FILE_NO_DELETE\"; then exit 1; fi
+      # TODO (arm-versioning): Arm versioning by remove the comment of the next line
+      # run: buf breaking --against '.git#ref=HEAD^' --error-format json | jq .type | if grep -v -q \"FILE_NO_DELETE\"; then exit 1; fi
     - name: Has breakage?
       id: breaking
       # We previously checked if any illegal breakage occurred, now check if we have breakage _at all_
@@ -50,7 +52,8 @@ jobs:
       run: |
         BUMP="patch"
         if [ "$BREAKING" = "true" ]; then
-          BUMP="major"
+          # TODO (arm-versioning): Arm versioning by replacing the following "minor" with "major"
+          BUMP="minor"
         elif [ "$NEW_PKG" = "true" ]; then
           BUMP="minor"
         else
