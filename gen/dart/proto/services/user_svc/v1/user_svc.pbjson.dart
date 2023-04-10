@@ -22,6 +22,20 @@ const CreateUserResponse$json = const {
 
 /// Descriptor for `CreateUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createUserResponseDescriptor = $convert.base64Decode('ChJDcmVhdGVVc2VyUmVzcG9uc2U=');
+@$core.Deprecated('Use getUserRequestDescriptor instead')
+const GetUserRequest$json = const {
+  '1': 'GetUserRequest',
+};
+
+/// Descriptor for `GetUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getUserRequestDescriptor = $convert.base64Decode('Cg5HZXRVc2VyUmVxdWVzdA==');
+@$core.Deprecated('Use getUserResponseDescriptor instead')
+const GetUserResponse$json = const {
+  '1': 'GetUserResponse',
+};
+
+/// Descriptor for `GetUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getUserResponseDescriptor = $convert.base64Decode('Cg9HZXRVc2VyUmVzcG9uc2U=');
 @$core.Deprecated('Use updateUserRequestDescriptor instead')
 const UpdateUserRequest$json = const {
   '1': 'UpdateUserRequest',
@@ -41,6 +55,7 @@ const $core.Map<$core.String, $core.dynamic> UserServiceBase$json = const {
   '2': const [
     const {'1': 'CreateUser', '2': '.proto.services.user_svc.v1.CreateUserRequest', '3': '.proto.services.user_svc.v1.CreateUserResponse', '4': const {}},
     const {'1': 'UpdateUser', '2': '.proto.services.user_svc.v1.UpdateUserRequest', '3': '.proto.services.user_svc.v1.UpdateUserResponse', '4': const {}},
+    const {'1': 'GetUser', '2': '.proto.services.user_svc.v1.GetUserRequest', '3': '.proto.services.user_svc.v1.GetUserResponse', '4': const {}},
   ],
 };
 
@@ -50,7 +65,9 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> UserServic
   '.proto.services.user_svc.v1.CreateUserResponse': CreateUserResponse$json,
   '.proto.services.user_svc.v1.UpdateUserRequest': UpdateUserRequest$json,
   '.proto.services.user_svc.v1.UpdateUserResponse': UpdateUserResponse$json,
+  '.proto.services.user_svc.v1.GetUserRequest': GetUserRequest$json,
+  '.proto.services.user_svc.v1.GetUserResponse': GetUserResponse$json,
 };
 
 /// Descriptor for `UserService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List userServiceDescriptor = $convert.base64Decode('CgtVc2VyU2VydmljZRJtCgpDcmVhdGVVc2VyEi0ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQ3JlYXRlVXNlclJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5DcmVhdGVVc2VyUmVzcG9uc2UiABJtCgpVcGRhdGVVc2VyEi0ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuVXBkYXRlVXNlclJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5VcGRhdGVVc2VyUmVzcG9uc2UiAA==');
+final $typed_data.Uint8List userServiceDescriptor = $convert.base64Decode('CgtVc2VyU2VydmljZRJtCgpDcmVhdGVVc2VyEi0ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQ3JlYXRlVXNlclJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5DcmVhdGVVc2VyUmVzcG9uc2UiABJtCgpVcGRhdGVVc2VyEi0ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuVXBkYXRlVXNlclJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5VcGRhdGVVc2VyUmVzcG9uc2UiABJkCgdHZXRVc2VyEioucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0VXNlclJlcXVlc3QaKy5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRVc2VyUmVzcG9uc2UiAA==');
