@@ -20,9 +20,3 @@ In the context of a service directory you should be able to use
 ```
 to build the corresponding docker image as well.
 
-## Temporary advises
-
-### Arm versioning
-
-[We disarmed the versioning for pre-production.](https://github.com/helpwave/services/issues/125).
-To arm the versioning, search for "arm-versioning" in the codebase.
