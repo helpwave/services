@@ -3,6 +3,7 @@ package main
 import (
 	"common"
 	"context"
+	"errors"
 	"gen/proto/libs/events/v1"
 	pb "gen/proto/services/ory_svc/v1"
 	daprc "github.com/dapr/go-sdk/client"
@@ -10,8 +11,6 @@ import (
 	daprd "github.com/dapr/go-sdk/service/http"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"hwutil"
 	"net/http"
 )
@@ -24,6 +23,13 @@ var Version string
 var DaprPubsub string
 
 var daprClient *daprc.GRPCClient
+
+func newErrAndLog(ctx context.Context, msg string) error {
+	log := zlog.Ctx(ctx)
+	err := errors.New(msg)
+	log.Warn().Err(err).Send()
+	return err
+}
 
 func main() {
 	common.Setup(ServiceName, Version, false)
@@ -45,11 +51,11 @@ func main() {
 
 func afterRegistrationWebhookHandler(ctx context.Context, in *daprcmn.InvocationEvent) (out *daprcmn.Content, err error) {
 	if in.Verb != http.MethodPost {
-		return nil, status.Error(codes.InvalidArgument, "invalid method")
+		return nil, newErrAndLog(ctx, "invalid method")
 	}
 
 	if in.ContentType != "application/json" {
-		return nil, status.Error(codes.InvalidArgument, "invalid content-type")
+		return nil, newErrAndLog(ctx, "invalid content-type")
 	}
 
 	var payload pb.AfterRegistrationWebhookPayload
@@ -59,7 +65,7 @@ func afterRegistrationWebhookHandler(ctx context.Context, in *daprcmn.Invocation
 
 	userID, err := uuid.Parse(payload.UserId)
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		return nil, err
 	}
 
 	userCreatedEvent := &events.UserCreatedEvent{
@@ -70,7 +76,7 @@ func afterRegistrationWebhookHandler(ctx context.Context, in *daprcmn.Invocation
 	}
 
 	if err := common.PublishMessage(ctx, daprClient, DaprPubsub, "USER_CREATED", userCreatedEvent); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	return nil, nil // 200 OK
