@@ -26,7 +26,7 @@ func main() {
 		hwutil.GetEnvOr("POSTGRES_PORT", "5432"),
 	)
 
-	common.StartNewGRPCServer(hwutil.GetAddr(), func(server *daprd.Server) {
+	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
 		daprClient := common.MustNewDaprGRPCClient()

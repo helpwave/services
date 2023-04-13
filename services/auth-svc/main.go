@@ -41,7 +41,7 @@ func main() {
 }
 
 func runGRPCService() {
-	common.StartNewGRPCServer(hwutil.GetAddr(), func(server *daprd.Server) {
+	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		pb.RegisterAuthServiceServer(server.GrpcServer(), &authServiceServer{})
 	})
 }

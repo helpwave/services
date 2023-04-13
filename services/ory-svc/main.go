@@ -32,7 +32,7 @@ func main() {
 
 	daprClient = common.MustNewDaprGRPCClient()
 
-	addr := hwutil.GetAddr()
+	addr := common.ResolveAddrFromEnv()
 	service := daprd.NewService(addr)
 
 	if err := service.AddServiceInvocationHandler("/after_registration_webhook", afterRegistrationWebhookHandler); err != nil {
