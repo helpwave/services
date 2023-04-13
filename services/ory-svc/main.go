@@ -3,7 +3,6 @@ package main
 import (
 	"common"
 	"context"
-	"encoding/json"
 	"gen/proto/libs/events/v1"
 	pb "gen/proto/services/ory_svc/v1"
 	daprc "github.com/dapr/go-sdk/client"
@@ -54,8 +53,8 @@ func afterRegistrationWebhookHandler(ctx context.Context, in *daprcmn.Invocation
 	}
 
 	var payload pb.AfterRegistrationWebhookPayload
-	if err := json.Unmarshal(in.Data, &payload); err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+	if err := hwutil.ParseValidJson(in.Data, &payload); err != nil {
+		return nil, err
 	}
 
 	userID, err := uuid.Parse(payload.UserId)
