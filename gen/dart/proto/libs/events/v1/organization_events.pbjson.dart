@@ -13,8 +13,9 @@ const OrganizationCreatedEvent$json = const {
   '1': 'OrganizationCreatedEvent',
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'user_id', '3': 2, '4': 1, '5': 9, '10': 'userId'},
   ],
 };
 
 /// Descriptor for `OrganizationCreatedEvent`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List organizationCreatedEventDescriptor = $convert.base64Decode('ChhPcmdhbml6YXRpb25DcmVhdGVkRXZlbnQSDgoCaWQYASABKAlSAmlk');
+final $typed_data.Uint8List organizationCreatedEventDescriptor = $convert.base64Decode('ChhPcmdhbml6YXRpb25DcmVhdGVkRXZlbnQSDgoCaWQYASABKAlSAmlkEhcKB3VzZXJfaWQYAiABKAlSBnVzZXJJZA==');

@@ -75,7 +75,8 @@ proto.proto.libs.events.v1.OrganizationCreatedEvent.prototype.toObject = functio
  */
 proto.proto.libs.events.v1.OrganizationCreatedEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, "")
+    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    userId: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -116,6 +117,10 @@ proto.proto.libs.events.v1.OrganizationCreatedEvent.deserializeBinaryFromReader 
       var value = /** @type {string} */ (reader.readString());
       msg.setId(value);
       break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUserId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -152,6 +157,13 @@ proto.proto.libs.events.v1.OrganizationCreatedEvent.serializeBinaryToWriter = fu
       f
     );
   }
+  f = message.getUserId();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -170,6 +182,24 @@ proto.proto.libs.events.v1.OrganizationCreatedEvent.prototype.getId = function()
  */
 proto.proto.libs.events.v1.OrganizationCreatedEvent.prototype.setId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string user_id = 2;
+ * @return {string}
+ */
+proto.proto.libs.events.v1.OrganizationCreatedEvent.prototype.getUserId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.libs.events.v1.OrganizationCreatedEvent} returns this
+ */
+proto.proto.libs.events.v1.OrganizationCreatedEvent.prototype.setUserId = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

@@ -175,7 +175,8 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UU
 		}
 
 		userCreatedEvent := &events.OrganizationCreatedEvent{
-			Id: organization.ID.String(),
+			Id:     organization.ID.String(),
+			UserId: userID.String(),
 		}
 
 		daprClient := common.MustNewDaprGRPCClient()

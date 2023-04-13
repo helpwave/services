@@ -6,6 +6,9 @@ export class OrganizationCreatedEvent extends jspb.Message {
   getId(): string;
   setId(value: string): OrganizationCreatedEvent;
 
+  getUserId(): string;
+  setUserId(value: string): OrganizationCreatedEvent;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): OrganizationCreatedEvent.AsObject;
   static toObject(includeInstance: boolean, msg: OrganizationCreatedEvent): OrganizationCreatedEvent.AsObject;
@@ -17,6 +20,7 @@ export class OrganizationCreatedEvent extends jspb.Message {
 export namespace OrganizationCreatedEvent {
   export type AsObject = {
     id: string,
+    userId: string,
   }
 }
 
