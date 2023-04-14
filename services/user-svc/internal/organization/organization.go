@@ -142,9 +142,9 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 	}
 
 	// TODO: Move members out of GetOrganizationResponse into GetMembers with pagination
-	var members []*pb.Member
+	var members []*pb.GetOrganizationMember
 	for _, member := range organization.Members {
-		members = append(members, &pb.Member{UserId: member.UserID.String()})
+		members = append(members, &pb.GetOrganizationMember{UserId: member.UserID.String()})
 	}
 
 	return &pb.GetOrganizationResponse{

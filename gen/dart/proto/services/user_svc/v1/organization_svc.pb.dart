@@ -296,14 +296,14 @@ class CreateOrganizationForUserResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 }
 
-class Member extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Member', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
+class GetOrganizationMember extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetOrganizationMember', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
     ..hasRequiredFields = false
   ;
 
-  Member._() : super();
-  factory Member({
+  GetOrganizationMember._() : super();
+  factory GetOrganizationMember({
     $core.String? userId,
   }) {
     final _result = create();
@@ -312,26 +312,26 @@ class Member extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory Member.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Member.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory GetOrganizationMember.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetOrganizationMember.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  Member clone() => Member()..mergeFromMessage(this);
+  GetOrganizationMember clone() => GetOrganizationMember()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Member copyWith(void Function(Member) updates) => super.copyWith((message) => updates(message as Member)) as Member; // ignore: deprecated_member_use
+  GetOrganizationMember copyWith(void Function(GetOrganizationMember) updates) => super.copyWith((message) => updates(message as GetOrganizationMember)) as GetOrganizationMember; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static Member create() => Member._();
-  Member createEmptyInstance() => create();
-  static $pb.PbList<Member> createRepeated() => $pb.PbList<Member>();
+  static GetOrganizationMember create() => GetOrganizationMember._();
+  GetOrganizationMember createEmptyInstance() => create();
+  static $pb.PbList<GetOrganizationMember> createRepeated() => $pb.PbList<GetOrganizationMember>();
   @$core.pragma('dart2js:noInline')
-  static Member getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Member>(create);
-  static Member? _defaultInstance;
+  static GetOrganizationMember getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetOrganizationMember>(create);
+  static GetOrganizationMember? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get userId => $_getSZ(0);
@@ -398,7 +398,7 @@ class GetOrganizationResponse extends $pb.GeneratedMessage {
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'contactEmail')
     ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'avatarUrl')
     ..aOB(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isPersonal')
-    ..pc<Member>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'members', $pb.PbFieldType.PM, subBuilder: Member.create)
+    ..pc<GetOrganizationMember>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'members', $pb.PbFieldType.PM, subBuilder: GetOrganizationMember.create)
     ..hasRequiredFields = false
   ;
 
@@ -410,7 +410,7 @@ class GetOrganizationResponse extends $pb.GeneratedMessage {
     $core.String? contactEmail,
     $core.String? avatarUrl,
     $core.bool? isPersonal,
-    $core.Iterable<Member>? members,
+    $core.Iterable<GetOrganizationMember>? members,
   }) {
     final _result = create();
     if (id != null) {
@@ -512,7 +512,7 @@ class GetOrganizationResponse extends $pb.GeneratedMessage {
   void clearIsPersonal() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.List<Member> get members => $_getList(6);
+  $core.List<GetOrganizationMember> get members => $_getList(6);
 }
 
 class AddMemberRequest extends $pb.GeneratedMessage {

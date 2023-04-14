@@ -102,19 +102,19 @@ export namespace CreateOrganizationForUserResponse {
   }
 }
 
-export class Member extends jspb.Message {
+export class GetOrganizationMember extends jspb.Message {
   getUserId(): string;
-  setUserId(value: string): Member;
+  setUserId(value: string): GetOrganizationMember;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Member.AsObject;
-  static toObject(includeInstance: boolean, msg: Member): Member.AsObject;
-  static serializeBinaryToWriter(message: Member, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Member;
-  static deserializeBinaryFromReader(message: Member, reader: jspb.BinaryReader): Member;
+  toObject(includeInstance?: boolean): GetOrganizationMember.AsObject;
+  static toObject(includeInstance: boolean, msg: GetOrganizationMember): GetOrganizationMember.AsObject;
+  static serializeBinaryToWriter(message: GetOrganizationMember, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetOrganizationMember;
+  static deserializeBinaryFromReader(message: GetOrganizationMember, reader: jspb.BinaryReader): GetOrganizationMember;
 }
 
-export namespace Member {
+export namespace GetOrganizationMember {
   export type AsObject = {
     userId: string,
   }
@@ -157,10 +157,10 @@ export class GetOrganizationResponse extends jspb.Message {
   getIsPersonal(): boolean;
   setIsPersonal(value: boolean): GetOrganizationResponse;
 
-  getMembersList(): Array<Member>;
-  setMembersList(value: Array<Member>): GetOrganizationResponse;
+  getMembersList(): Array<GetOrganizationMember>;
+  setMembersList(value: Array<GetOrganizationMember>): GetOrganizationResponse;
   clearMembersList(): GetOrganizationResponse;
-  addMembers(value?: Member, index?: number): Member;
+  addMembers(value?: GetOrganizationMember, index?: number): GetOrganizationMember;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetOrganizationResponse.AsObject;
@@ -178,7 +178,7 @@ export namespace GetOrganizationResponse {
     contactEmail: string,
     avatarUrl: string,
     isPersonal: boolean,
-    membersList: Array<Member.AsObject>,
+    membersList: Array<GetOrganizationMember.AsObject>,
   }
 }
 
