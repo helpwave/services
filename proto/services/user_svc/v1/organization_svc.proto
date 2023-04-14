@@ -22,7 +22,7 @@ message CreateOrganizationResponse {
 // GetOrganization
 //
 
-message Member {
+message GetOrganizationMember {
 	string user_id = 1;
 }
 
@@ -37,8 +37,59 @@ message GetOrganizationResponse {
 	string contact_email = 4;
 	string avatar_url = 5;
 	bool is_personal = 6;
-	repeated Member members = 7;
+	repeated GetOrganizationMember members = 7;
 }
+
+//
+// GetOrganizationsByUser
+//
+
+message GetOrganizationsByUserMember {
+	string user_id = 1;
+}
+
+message GetOrganizationsByUserRequest {
+}
+
+message GetOrganizationsByUserResponse {
+	string id = 1;
+	string long_name = 2;
+	string short_name = 3;
+	string contact_email = 4;
+	string avatar_url = 5;
+	bool is_personal = 6;
+	repeated GetOrganizationsByUserMember members = 7;
+}
+
+//
+//  UpdateOrganization
+//
+
+message UpdateOrganizationMember {
+	string user_id = 1;
+}
+
+message UpdateOrganizationRequest {
+	string id = 1;
+    optional string long_name = 2;
+    optional string short_name = 3;
+    optional string contact_email = 4;
+    optional string avatar_url = 5;
+    optional bool is_personal = 6;
+    optional repeated UpdateOrganizationMember members = 7;
+}
+
+message UpdateOrganizationResponse {}
+
+//
+//  DeleteOrganization
+//
+
+message DeleteOrganizationRequest {
+	string id = 1;
+}
+
+message DeleteOrganizationResponse {}
 
 //
 //  OrganizationService
@@ -47,4 +98,7 @@ message GetOrganizationResponse {
 service OrganizationService {
 	rpc CreateOrganization (CreateOrganizationRequest) returns (CreateOrganizationResponse) {}
 	rpc GetOrganization (GetOrganizationRequest) returns (GetOrganizationResponse) {}
+	rpc GetOrganizationsByUser (GetOrganizationsByUserRequest) returns (GetOrganizationsByUserResponse) {}
+	rpc UpdateOrganization (UpdateOrganizationRequest) returns (UpdateOrganizationResponse) {}
+	rpc DeleteOrganization (DeleteOrganizationRequest) returns (DeleteOrganizationResponse) {}
 }
