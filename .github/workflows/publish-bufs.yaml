@@ -5,7 +5,7 @@ on:
     branches: [ 'main' ]
     paths:
     - proto/**/*.proto
-    - gen/**/*
+    - gen/*/proto/**/*
 
 jobs:
   check-preconditions:
