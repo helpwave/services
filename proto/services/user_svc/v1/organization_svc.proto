@@ -58,6 +58,39 @@ message GetOrganizationResponse {
 }
 
 //
+// AddMember
+//
+
+message AddMemberRequest {
+	string id = 1;
+	string user_id = 2;
+}
+
+message AddMemberResponse {}
+
+//
+// RemoveMember
+//
+
+message RemoveMemberRequest {
+	string id = 1;
+	string user_id = 2;
+}
+
+message RemoveMemberResponse{}
+
+//
+// InviteMember
+//
+
+message InviteMemberRequest {
+	string id = 1;
+	string email = 2;
+}
+
+message InviteMemberResponse {}
+
+//
 //  OrganizationService
 //
 
@@ -65,4 +98,7 @@ service OrganizationService {
 	rpc CreateOrganization (CreateOrganizationRequest) returns (CreateOrganizationResponse) {}
 	rpc CreateOrganizationForUser (CreateOrganizationForUserRequest) returns (CreateOrganizationForUserResponse) {}
 	rpc GetOrganization (GetOrganizationRequest) returns (GetOrganizationResponse) {}
+	rpc AddMember (AddMemberRequest) returns (AddMemberResponse) {}
+	rpc RemoveMember (RemoveMemberRequest) returns (RemoveMemberResponse) {}
+	rpc InviteMember (InviteMemberRequest) returns (InviteMemberResponse) {}
 }
