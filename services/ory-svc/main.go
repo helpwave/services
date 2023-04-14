@@ -60,12 +60,12 @@ func afterRegistrationWebhookHandler(ctx context.Context, in *daprcmn.Invocation
 
 	var payload pb.AfterRegistrationWebhookPayload
 	if err := hwutil.ParseValidJson(in.Data, &payload); err != nil {
-		return nil, err
+		return nil, newErrAndLog(ctx, err.Error())
 	}
 
 	userID, err := uuid.Parse(payload.UserId)
 	if err != nil {
-		return nil, err
+		return nil, newErrAndLog(ctx, err.Error())
 	}
 
 	userCreatedEvent := &events.UserCreatedEvent{
@@ -76,7 +76,7 @@ func afterRegistrationWebhookHandler(ctx context.Context, in *daprcmn.Invocation
 	}
 
 	if err := common.PublishMessage(ctx, daprClient, DaprPubsub, "USER_CREATED", userCreatedEvent); err != nil {
-		return nil, err
+		return nil, newErrAndLog(ctx, err.Error())
 	}
 
 	return nil, nil // 200 OK
