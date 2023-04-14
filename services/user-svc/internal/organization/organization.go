@@ -158,6 +158,21 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 	}, nil
 }
 
+func (s ServiceServer) AddMember(ctx context.Context, req *pb.AddMemberRequest) (*pb.AddMemberResponse, error) {
+	// TODO
+	return nil, status.Errorf(codes.Unimplemented, "method AddMember not implemented")
+}
+
+func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberRequest) (*pb.RemoveMemberResponse, error) {
+	// TODO
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveMember not implemented")
+}
+
+func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberRequest) (*pb.InviteMemberResponse, error) {
+	// TODO
+	return nil, status.Errorf(codes.Unimplemented, "method InviteMember not implemented")
+}
+
 func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UUID) (*Organization, error) {
 	db := hwgorm.GetDB(ctx)
 

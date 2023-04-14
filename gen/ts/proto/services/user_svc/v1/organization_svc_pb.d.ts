@@ -182,3 +182,111 @@ export namespace GetOrganizationResponse {
   }
 }
 
+export class AddMemberRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): AddMemberRequest;
+
+  getUserId(): string;
+  setUserId(value: string): AddMemberRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AddMemberRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: AddMemberRequest): AddMemberRequest.AsObject;
+  static serializeBinaryToWriter(message: AddMemberRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AddMemberRequest;
+  static deserializeBinaryFromReader(message: AddMemberRequest, reader: jspb.BinaryReader): AddMemberRequest;
+}
+
+export namespace AddMemberRequest {
+  export type AsObject = {
+    id: string,
+    userId: string,
+  }
+}
+
+export class AddMemberResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AddMemberResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: AddMemberResponse): AddMemberResponse.AsObject;
+  static serializeBinaryToWriter(message: AddMemberResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AddMemberResponse;
+  static deserializeBinaryFromReader(message: AddMemberResponse, reader: jspb.BinaryReader): AddMemberResponse;
+}
+
+export namespace AddMemberResponse {
+  export type AsObject = {
+  }
+}
+
+export class RemoveMemberRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): RemoveMemberRequest;
+
+  getUserId(): string;
+  setUserId(value: string): RemoveMemberRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RemoveMemberRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: RemoveMemberRequest): RemoveMemberRequest.AsObject;
+  static serializeBinaryToWriter(message: RemoveMemberRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RemoveMemberRequest;
+  static deserializeBinaryFromReader(message: RemoveMemberRequest, reader: jspb.BinaryReader): RemoveMemberRequest;
+}
+
+export namespace RemoveMemberRequest {
+  export type AsObject = {
+    id: string,
+    userId: string,
+  }
+}
+
+export class RemoveMemberResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RemoveMemberResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: RemoveMemberResponse): RemoveMemberResponse.AsObject;
+  static serializeBinaryToWriter(message: RemoveMemberResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RemoveMemberResponse;
+  static deserializeBinaryFromReader(message: RemoveMemberResponse, reader: jspb.BinaryReader): RemoveMemberResponse;
+}
+
+export namespace RemoveMemberResponse {
+  export type AsObject = {
+  }
+}
+
+export class InviteMemberRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): InviteMemberRequest;
+
+  getEmail(): string;
+  setEmail(value: string): InviteMemberRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): InviteMemberRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: InviteMemberRequest): InviteMemberRequest.AsObject;
+  static serializeBinaryToWriter(message: InviteMemberRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): InviteMemberRequest;
+  static deserializeBinaryFromReader(message: InviteMemberRequest, reader: jspb.BinaryReader): InviteMemberRequest;
+}
+
+export namespace InviteMemberRequest {
+  export type AsObject = {
+    id: string,
+    email: string,
+  }
+}
+
+export class InviteMemberResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): InviteMemberResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: InviteMemberResponse): InviteMemberResponse.AsObject;
+  static serializeBinaryToWriter(message: InviteMemberResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): InviteMemberResponse;
+  static deserializeBinaryFromReader(message: InviteMemberResponse, reader: jspb.BinaryReader): InviteMemberResponse;
+}
+
+export namespace InviteMemberResponse {
+  export type AsObject = {
+  }
+}
+

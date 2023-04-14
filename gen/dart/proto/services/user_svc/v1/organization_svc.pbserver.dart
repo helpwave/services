@@ -19,12 +19,18 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
   $async.Future<$6.CreateOrganizationResponse> createOrganization($pb.ServerContext ctx, $6.CreateOrganizationRequest request);
   $async.Future<$6.CreateOrganizationForUserResponse> createOrganizationForUser($pb.ServerContext ctx, $6.CreateOrganizationForUserRequest request);
   $async.Future<$6.GetOrganizationResponse> getOrganization($pb.ServerContext ctx, $6.GetOrganizationRequest request);
+  $async.Future<$6.AddMemberResponse> addMember($pb.ServerContext ctx, $6.AddMemberRequest request);
+  $async.Future<$6.RemoveMemberResponse> removeMember($pb.ServerContext ctx, $6.RemoveMemberRequest request);
+  $async.Future<$6.InviteMemberResponse> inviteMember($pb.ServerContext ctx, $6.InviteMemberRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
       case 'CreateOrganization': return $6.CreateOrganizationRequest();
       case 'CreateOrganizationForUser': return $6.CreateOrganizationForUserRequest();
       case 'GetOrganization': return $6.GetOrganizationRequest();
+      case 'AddMember': return $6.AddMemberRequest();
+      case 'RemoveMember': return $6.RemoveMemberRequest();
+      case 'InviteMember': return $6.InviteMemberRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
@@ -34,6 +40,9 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
       case 'CreateOrganization': return this.createOrganization(ctx, request as $6.CreateOrganizationRequest);
       case 'CreateOrganizationForUser': return this.createOrganizationForUser(ctx, request as $6.CreateOrganizationForUserRequest);
       case 'GetOrganization': return this.getOrganization(ctx, request as $6.GetOrganizationRequest);
+      case 'AddMember': return this.addMember(ctx, request as $6.AddMemberRequest);
+      case 'RemoveMember': return this.removeMember(ctx, request as $6.RemoveMemberRequest);
+      case 'InviteMember': return this.inviteMember(ctx, request as $6.InviteMemberRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
