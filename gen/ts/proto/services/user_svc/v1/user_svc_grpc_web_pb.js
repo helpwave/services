@@ -260,5 +260,66 @@ proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.getUser =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.ReadPublicProfileRequest,
+ *   !proto.proto.services.user_svc.v1.ReadPublicProfileResponse>}
+ */
+const methodDescriptor_UserService_ReadPublicProfile = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.UserService/ReadPublicProfile',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.ReadPublicProfileRequest,
+  proto.proto.services.user_svc.v1.ReadPublicProfileResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.ReadPublicProfileRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.ReadPublicProfileResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.ReadPublicProfileRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.ReadPublicProfileResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.ReadPublicProfileResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.UserServiceClient.prototype.readPublicProfile =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.UserService/ReadPublicProfile',
+      request,
+      metadata || {},
+      methodDescriptor_UserService_ReadPublicProfile,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.ReadPublicProfileRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.ReadPublicProfileResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.readPublicProfile =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.UserService/ReadPublicProfile',
+      request,
+      metadata || {},
+      methodDescriptor_UserService_ReadPublicProfile);
+};
+
+
 module.exports = proto.proto.services.user_svc.v1;
 

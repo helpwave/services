@@ -86,3 +86,31 @@ export namespace UpdateUserResponse {
   }
 }
 
+export class ReadPublicProfileRequest extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ReadPublicProfileRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ReadPublicProfileRequest): ReadPublicProfileRequest.AsObject;
+  static serializeBinaryToWriter(message: ReadPublicProfileRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReadPublicProfileRequest;
+  static deserializeBinaryFromReader(message: ReadPublicProfileRequest, reader: jspb.BinaryReader): ReadPublicProfileRequest;
+}
+
+export namespace ReadPublicProfileRequest {
+  export type AsObject = {
+  }
+}
+
+export class ReadPublicProfileResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ReadPublicProfileResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: ReadPublicProfileResponse): ReadPublicProfileResponse.AsObject;
+  static serializeBinaryToWriter(message: ReadPublicProfileResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReadPublicProfileResponse;
+  static deserializeBinaryFromReader(message: ReadPublicProfileResponse, reader: jspb.BinaryReader): ReadPublicProfileResponse;
+}
+
+export namespace ReadPublicProfileResponse {
+  export type AsObject = {
+  }
+}
+
