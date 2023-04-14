@@ -2,6 +2,7 @@ package common
 
 import (
 	"crypto/tls"
+	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 	"hwutil"
@@ -50,4 +51,15 @@ func Setup(serviceName, version string, auth bool) {
 	if auth {
 		setupKeycloak()
 	}
+}
+
+// ResolveAddrFromEnv uses the "PORT" and "ADDR" env variables to
+// build the address that can be used by an HTTP or gRPC server.
+// The address will always be in the "(ADDR):PORT" format.
+// If "ADDR" is not set, the "ADDR" part of the format will be "".
+// If "PORT" is not set, the fallback is "8080".
+func ResolveAddrFromEnv() string {
+	port := hwutil.GetEnvOr("PORT", "8080")
+	fallbackAddr := fmt.Sprintf(":%s", port)
+	return hwutil.GetEnvOr("ADDR", fallbackAddr)
 }

@@ -17,11 +17,13 @@ export 'organization_svc.pb.dart';
 
 abstract class OrganizationServiceBase extends $pb.GeneratedService {
   $async.Future<$6.CreateOrganizationResponse> createOrganization($pb.ServerContext ctx, $6.CreateOrganizationRequest request);
+  $async.Future<$6.CreateOrganizationForUserResponse> createOrganizationForUser($pb.ServerContext ctx, $6.CreateOrganizationForUserRequest request);
   $async.Future<$6.GetOrganizationResponse> getOrganization($pb.ServerContext ctx, $6.GetOrganizationRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
       case 'CreateOrganization': return $6.CreateOrganizationRequest();
+      case 'CreateOrganizationForUser': return $6.CreateOrganizationForUserRequest();
       case 'GetOrganization': return $6.GetOrganizationRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
@@ -30,6 +32,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String method, $pb.GeneratedMessage request) {
     switch (method) {
       case 'CreateOrganization': return this.createOrganization(ctx, request as $6.CreateOrganizationRequest);
+      case 'CreateOrganizationForUser': return this.createOrganizationForUser(ctx, request as $6.CreateOrganizationForUserRequest);
       case 'GetOrganization': return this.getOrganization(ctx, request as $6.GetOrganizationRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }

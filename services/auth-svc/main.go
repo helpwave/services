@@ -41,9 +41,7 @@ func main() {
 }
 
 func runGRPCService() {
-	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
-
-	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
+	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		pb.RegisterAuthServiceServer(server.GrpcServer(), &authServiceServer{})
 	})
 }

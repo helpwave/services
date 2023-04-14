@@ -15,11 +15,12 @@ const CreateOrganizationRequest$json = const {
     const {'1': 'long_name', '3': 1, '4': 1, '5': 9, '10': 'longName'},
     const {'1': 'short_name', '3': 2, '4': 1, '5': 9, '10': 'shortName'},
     const {'1': 'contact_email', '3': 3, '4': 1, '5': 9, '10': 'contactEmail'},
+    const {'1': 'is_personal', '3': 4, '4': 1, '5': 8, '10': 'isPersonal'},
   ],
 };
 
 /// Descriptor for `CreateOrganizationRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createOrganizationRequestDescriptor = $convert.base64Decode('ChlDcmVhdGVPcmdhbml6YXRpb25SZXF1ZXN0EhsKCWxvbmdfbmFtZRgBIAEoCVIIbG9uZ05hbWUSHQoKc2hvcnRfbmFtZRgCIAEoCVIJc2hvcnROYW1lEiMKDWNvbnRhY3RfZW1haWwYAyABKAlSDGNvbnRhY3RFbWFpbA==');
+final $typed_data.Uint8List createOrganizationRequestDescriptor = $convert.base64Decode('ChlDcmVhdGVPcmdhbml6YXRpb25SZXF1ZXN0EhsKCWxvbmdfbmFtZRgBIAEoCVIIbG9uZ05hbWUSHQoKc2hvcnRfbmFtZRgCIAEoCVIJc2hvcnROYW1lEiMKDWNvbnRhY3RfZW1haWwYAyABKAlSDGNvbnRhY3RFbWFpbBIfCgtpc19wZXJzb25hbBgEIAEoCFIKaXNQZXJzb25hbA==');
 @$core.Deprecated('Use createOrganizationResponseDescriptor instead')
 const CreateOrganizationResponse$json = const {
   '1': 'CreateOrganizationResponse',
@@ -30,6 +31,30 @@ const CreateOrganizationResponse$json = const {
 
 /// Descriptor for `CreateOrganizationResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createOrganizationResponseDescriptor = $convert.base64Decode('ChpDcmVhdGVPcmdhbml6YXRpb25SZXNwb25zZRIOCgJpZBgBIAEoCVICaWQ=');
+@$core.Deprecated('Use createOrganizationForUserRequestDescriptor instead')
+const CreateOrganizationForUserRequest$json = const {
+  '1': 'CreateOrganizationForUserRequest',
+  '2': const [
+    const {'1': 'long_name', '3': 1, '4': 1, '5': 9, '10': 'longName'},
+    const {'1': 'short_name', '3': 2, '4': 1, '5': 9, '10': 'shortName'},
+    const {'1': 'contact_email', '3': 3, '4': 1, '5': 9, '10': 'contactEmail'},
+    const {'1': 'is_personal', '3': 4, '4': 1, '5': 8, '10': 'isPersonal'},
+    const {'1': 'user_id', '3': 5, '4': 1, '5': 9, '10': 'userId'},
+  ],
+};
+
+/// Descriptor for `CreateOrganizationForUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createOrganizationForUserRequestDescriptor = $convert.base64Decode('CiBDcmVhdGVPcmdhbml6YXRpb25Gb3JVc2VyUmVxdWVzdBIbCglsb25nX25hbWUYASABKAlSCGxvbmdOYW1lEh0KCnNob3J0X25hbWUYAiABKAlSCXNob3J0TmFtZRIjCg1jb250YWN0X2VtYWlsGAMgASgJUgxjb250YWN0RW1haWwSHwoLaXNfcGVyc29uYWwYBCABKAhSCmlzUGVyc29uYWwSFwoHdXNlcl9pZBgFIAEoCVIGdXNlcklk');
+@$core.Deprecated('Use createOrganizationForUserResponseDescriptor instead')
+const CreateOrganizationForUserResponse$json = const {
+  '1': 'CreateOrganizationForUserResponse',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `CreateOrganizationForUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createOrganizationForUserResponseDescriptor = $convert.base64Decode('CiFDcmVhdGVPcmdhbml6YXRpb25Gb3JVc2VyUmVzcG9uc2USDgoCaWQYASABKAlSAmlk');
 @$core.Deprecated('Use memberDescriptor instead')
 const Member$json = const {
   '1': 'Member',
@@ -70,6 +95,7 @@ const $core.Map<$core.String, $core.dynamic> OrganizationServiceBase$json = cons
   '1': 'OrganizationService',
   '2': const [
     const {'1': 'CreateOrganization', '2': '.proto.services.user_svc.v1.CreateOrganizationRequest', '3': '.proto.services.user_svc.v1.CreateOrganizationResponse', '4': const {}},
+    const {'1': 'CreateOrganizationForUser', '2': '.proto.services.user_svc.v1.CreateOrganizationForUserRequest', '3': '.proto.services.user_svc.v1.CreateOrganizationForUserResponse', '4': const {}},
     const {'1': 'GetOrganization', '2': '.proto.services.user_svc.v1.GetOrganizationRequest', '3': '.proto.services.user_svc.v1.GetOrganizationResponse', '4': const {}},
   ],
 };
@@ -78,10 +104,12 @@ const $core.Map<$core.String, $core.dynamic> OrganizationServiceBase$json = cons
 const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> OrganizationServiceBase$messageJson = const {
   '.proto.services.user_svc.v1.CreateOrganizationRequest': CreateOrganizationRequest$json,
   '.proto.services.user_svc.v1.CreateOrganizationResponse': CreateOrganizationResponse$json,
+  '.proto.services.user_svc.v1.CreateOrganizationForUserRequest': CreateOrganizationForUserRequest$json,
+  '.proto.services.user_svc.v1.CreateOrganizationForUserResponse': CreateOrganizationForUserResponse$json,
   '.proto.services.user_svc.v1.GetOrganizationRequest': GetOrganizationRequest$json,
   '.proto.services.user_svc.v1.GetOrganizationResponse': GetOrganizationResponse$json,
   '.proto.services.user_svc.v1.Member': Member$json,
 };
 
 /// Descriptor for `OrganizationService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List organizationServiceDescriptor = $convert.base64Decode('ChNPcmdhbml6YXRpb25TZXJ2aWNlEoUBChJDcmVhdGVPcmdhbml6YXRpb24SNS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5DcmVhdGVPcmdhbml6YXRpb25SZXF1ZXN0GjYucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQ3JlYXRlT3JnYW5pemF0aW9uUmVzcG9uc2UiABJ8Cg9HZXRPcmdhbml6YXRpb24SMi5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRPcmdhbml6YXRpb25SZXF1ZXN0GjMucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0T3JnYW5pemF0aW9uUmVzcG9uc2UiAA==');
+final $typed_data.Uint8List organizationServiceDescriptor = $convert.base64Decode('ChNPcmdhbml6YXRpb25TZXJ2aWNlEoUBChJDcmVhdGVPcmdhbml6YXRpb24SNS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5DcmVhdGVPcmdhbml6YXRpb25SZXF1ZXN0GjYucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQ3JlYXRlT3JnYW5pemF0aW9uUmVzcG9uc2UiABKaAQoZQ3JlYXRlT3JnYW5pemF0aW9uRm9yVXNlchI8LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkNyZWF0ZU9yZ2FuaXphdGlvbkZvclVzZXJSZXF1ZXN0Gj0ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQ3JlYXRlT3JnYW5pemF0aW9uRm9yVXNlclJlc3BvbnNlIgASfAoPR2V0T3JnYW5pemF0aW9uEjIucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0T3JnYW5pemF0aW9uUmVxdWVzdBozLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkdldE9yZ2FuaXphdGlvblJlc3BvbnNlIgA=');

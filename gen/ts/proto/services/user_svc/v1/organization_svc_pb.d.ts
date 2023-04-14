@@ -12,6 +12,9 @@ export class CreateOrganizationRequest extends jspb.Message {
   getContactEmail(): string;
   setContactEmail(value: string): CreateOrganizationRequest;
 
+  getIsPersonal(): boolean;
+  setIsPersonal(value: boolean): CreateOrganizationRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateOrganizationRequest.AsObject;
   static toObject(includeInstance: boolean, msg: CreateOrganizationRequest): CreateOrganizationRequest.AsObject;
@@ -25,6 +28,7 @@ export namespace CreateOrganizationRequest {
     longName: string,
     shortName: string,
     contactEmail: string,
+    isPersonal: boolean,
   }
 }
 
@@ -41,6 +45,58 @@ export class CreateOrganizationResponse extends jspb.Message {
 }
 
 export namespace CreateOrganizationResponse {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class CreateOrganizationForUserRequest extends jspb.Message {
+  getLongName(): string;
+  setLongName(value: string): CreateOrganizationForUserRequest;
+
+  getShortName(): string;
+  setShortName(value: string): CreateOrganizationForUserRequest;
+
+  getContactEmail(): string;
+  setContactEmail(value: string): CreateOrganizationForUserRequest;
+
+  getIsPersonal(): boolean;
+  setIsPersonal(value: boolean): CreateOrganizationForUserRequest;
+
+  getUserId(): string;
+  setUserId(value: string): CreateOrganizationForUserRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CreateOrganizationForUserRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: CreateOrganizationForUserRequest): CreateOrganizationForUserRequest.AsObject;
+  static serializeBinaryToWriter(message: CreateOrganizationForUserRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CreateOrganizationForUserRequest;
+  static deserializeBinaryFromReader(message: CreateOrganizationForUserRequest, reader: jspb.BinaryReader): CreateOrganizationForUserRequest;
+}
+
+export namespace CreateOrganizationForUserRequest {
+  export type AsObject = {
+    longName: string,
+    shortName: string,
+    contactEmail: string,
+    isPersonal: boolean,
+    userId: string,
+  }
+}
+
+export class CreateOrganizationForUserResponse extends jspb.Message {
+  getId(): string;
+  setId(value: string): CreateOrganizationForUserResponse;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CreateOrganizationForUserResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: CreateOrganizationForUserResponse): CreateOrganizationForUserResponse.AsObject;
+  static serializeBinaryToWriter(message: CreateOrganizationForUserResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CreateOrganizationForUserResponse;
+  static deserializeBinaryFromReader(message: CreateOrganizationForUserResponse, reader: jspb.BinaryReader): CreateOrganizationForUserResponse;
+}
+
+export namespace CreateOrganizationForUserResponse {
   export type AsObject = {
     id: string,
   }
