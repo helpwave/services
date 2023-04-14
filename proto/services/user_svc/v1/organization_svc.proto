@@ -39,7 +39,7 @@ message CreateOrganizationForUserResponse {
 // GetOrganization
 //
 
-message Member {
+message GetOrganizationMember {
 	string user_id = 1;
 }
 
@@ -54,7 +54,7 @@ message GetOrganizationResponse {
 	string contact_email = 4;
 	string avatar_url = 5;
 	bool is_personal = 6;
-	repeated Member members = 7;
+	repeated GetOrganizationMember members = 7;
 }
 
 //
@@ -62,8 +62,8 @@ message GetOrganizationResponse {
 //
 
 message AddMemberRequest {
-	string id = 1;
-	string user_id = 2;
+	string id = 1; // @gotags: validate:"uuid4"
+	string user_id = 2; // @gotags: validate:"uuid4"
 }
 
 message AddMemberResponse {}
@@ -73,8 +73,8 @@ message AddMemberResponse {}
 //
 
 message RemoveMemberRequest {
-	string id = 1;
-	string user_id = 2;
+	string id = 1; // @gotags: validate:"uuid4"
+	string user_id = 2; // @gotags: validate:"uuid4"
 }
 
 message RemoveMemberResponse{}
@@ -84,8 +84,8 @@ message RemoveMemberResponse{}
 //
 
 message InviteMemberRequest {
-	string id = 1;
-	string email = 2;
+	string id = 1;  // @gotags: validate:"uuid4"
+	string email = 2; // @gotags: validate:"required,email"
 }
 
 message InviteMemberResponse {}

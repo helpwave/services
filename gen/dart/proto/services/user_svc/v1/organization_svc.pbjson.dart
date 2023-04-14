@@ -55,16 +55,16 @@ const CreateOrganizationForUserResponse$json = const {
 
 /// Descriptor for `CreateOrganizationForUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createOrganizationForUserResponseDescriptor = $convert.base64Decode('CiFDcmVhdGVPcmdhbml6YXRpb25Gb3JVc2VyUmVzcG9uc2USDgoCaWQYASABKAlSAmlk');
-@$core.Deprecated('Use memberDescriptor instead')
-const Member$json = const {
-  '1': 'Member',
+@$core.Deprecated('Use getOrganizationMemberDescriptor instead')
+const GetOrganizationMember$json = const {
+  '1': 'GetOrganizationMember',
   '2': const [
     const {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
   ],
 };
 
-/// Descriptor for `Member`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List memberDescriptor = $convert.base64Decode('CgZNZW1iZXISFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklk');
+/// Descriptor for `GetOrganizationMember`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getOrganizationMemberDescriptor = $convert.base64Decode('ChVHZXRPcmdhbml6YXRpb25NZW1iZXISFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklk');
 @$core.Deprecated('Use getOrganizationRequestDescriptor instead')
 const GetOrganizationRequest$json = const {
   '1': 'GetOrganizationRequest',
@@ -85,12 +85,12 @@ const GetOrganizationResponse$json = const {
     const {'1': 'contact_email', '3': 4, '4': 1, '5': 9, '10': 'contactEmail'},
     const {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '10': 'avatarUrl'},
     const {'1': 'is_personal', '3': 6, '4': 1, '5': 8, '10': 'isPersonal'},
-    const {'1': 'members', '3': 7, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.Member', '10': 'members'},
+    const {'1': 'members', '3': 7, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.GetOrganizationMember', '10': 'members'},
   ],
 };
 
 /// Descriptor for `GetOrganizationResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getOrganizationResponseDescriptor = $convert.base64Decode('ChdHZXRPcmdhbml6YXRpb25SZXNwb25zZRIOCgJpZBgBIAEoCVICaWQSGwoJbG9uZ19uYW1lGAIgASgJUghsb25nTmFtZRIdCgpzaG9ydF9uYW1lGAMgASgJUglzaG9ydE5hbWUSIwoNY29udGFjdF9lbWFpbBgEIAEoCVIMY29udGFjdEVtYWlsEh0KCmF2YXRhcl91cmwYBSABKAlSCWF2YXRhclVybBIfCgtpc19wZXJzb25hbBgGIAEoCFIKaXNQZXJzb25hbBI8CgdtZW1iZXJzGAcgAygLMiIucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuTWVtYmVyUgdtZW1iZXJz');
+final $typed_data.Uint8List getOrganizationResponseDescriptor = $convert.base64Decode('ChdHZXRPcmdhbml6YXRpb25SZXNwb25zZRIOCgJpZBgBIAEoCVICaWQSGwoJbG9uZ19uYW1lGAIgASgJUghsb25nTmFtZRIdCgpzaG9ydF9uYW1lGAMgASgJUglzaG9ydE5hbWUSIwoNY29udGFjdF9lbWFpbBgEIAEoCVIMY29udGFjdEVtYWlsEh0KCmF2YXRhcl91cmwYBSABKAlSCWF2YXRhclVybBIfCgtpc19wZXJzb25hbBgGIAEoCFIKaXNQZXJzb25hbBJLCgdtZW1iZXJzGAcgAygLMjEucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0T3JnYW5pemF0aW9uTWVtYmVyUgdtZW1iZXJz');
 @$core.Deprecated('Use addMemberRequestDescriptor instead')
 const AddMemberRequest$json = const {
   '1': 'AddMemberRequest',
@@ -165,7 +165,7 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> Organizati
   '.proto.services.user_svc.v1.CreateOrganizationForUserResponse': CreateOrganizationForUserResponse$json,
   '.proto.services.user_svc.v1.GetOrganizationRequest': GetOrganizationRequest$json,
   '.proto.services.user_svc.v1.GetOrganizationResponse': GetOrganizationResponse$json,
-  '.proto.services.user_svc.v1.Member': Member$json,
+  '.proto.services.user_svc.v1.GetOrganizationMember': GetOrganizationMember$json,
   '.proto.services.user_svc.v1.AddMemberRequest': AddMemberRequest$json,
   '.proto.services.user_svc.v1.AddMemberResponse': AddMemberResponse$json,
   '.proto.services.user_svc.v1.RemoveMemberRequest': RemoveMemberRequest$json,
