@@ -29,6 +29,13 @@ export class UserServiceClient {
                response: proto_services_user_svc_v1_user_svc_pb.GetUserResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_user_svc_pb.GetUserResponse>;
 
+  readPublicProfile(
+    request: proto_services_user_svc_v1_user_svc_pb.ReadPublicProfileRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_user_svc_v1_user_svc_pb.ReadPublicProfileResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_user_svc_pb.ReadPublicProfileResponse>;
+
 }
 
 export class UserServicePromiseClient {
@@ -50,6 +57,11 @@ export class UserServicePromiseClient {
     request: proto_services_user_svc_v1_user_svc_pb.GetUserRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_user_svc_v1_user_svc_pb.GetUserResponse>;
+
+  readPublicProfile(
+    request: proto_services_user_svc_v1_user_svc_pb.ReadPublicProfileRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_user_svc_v1_user_svc_pb.ReadPublicProfileResponse>;
 
 }
 

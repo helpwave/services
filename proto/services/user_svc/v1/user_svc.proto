@@ -41,6 +41,18 @@ message UpdateUserResponse {
 }
 
 //
+// ReadPublicProfile
+//
+
+message ReadPublicProfileRequest {
+	// TODO
+}
+
+message ReadPublicProfileResponse {
+	// TODO
+}
+
+//
 // UserService
 //
 
@@ -48,4 +60,5 @@ service UserService {
 	rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {}
 	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse) {}
 	rpc GetUser (GetUserRequest) returns (GetUserResponse) {}
+	rpc ReadPublicProfile (ReadPublicProfileRequest) returns (ReadPublicProfileResponse) {}
 }
