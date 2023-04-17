@@ -53,7 +53,7 @@ func Setup(serviceName, version string, auth bool) {
 	if auth {
 		if strings.ToLower(hwutil.GetEnvOr("INSECURE_FAKE_TOKEN_ENABLE", "false")) == "true" && Mode == DevelopmentMode {
 			InsecureFakeTokenEnable = true
-			log.Warn().Msg("INSECURE_FAKE_TOKEN_ENABLE is set to true, accepting fake tokens")
+			log.Error().Msg("INSECURE_FAKE_TOKEN_ENABLE is set to true, accepting fake tokens")
 		}
 
 		setupAuth()
