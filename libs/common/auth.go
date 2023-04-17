@@ -84,9 +84,6 @@ func setupAuth() {
 // The claim is checked to be as expected.
 // Service must be set up with auth!
 func VerifyIDToken(token string) (*IDTokenClaims, error) {
-	// technically this method is meant to be used to verify identity tokens,
-	// but we use it for access tokens instead as keycloak uses similar JWTs for access tokens
-	//
 	// Verify() verifies formal validity, proper signing, usage of the correct keys, ...
 	// and still exposes .Claims() for us to access non-standard ID token claims
 	idToken, err := getIDTokenVerifier().Verify(context.Background(), token)

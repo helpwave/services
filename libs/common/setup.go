@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	Mode            string // Mode is set in Setup()
-	FakeTokenEnable = false
+	Mode                    string // Mode is set in Setup()
+	InsecureFakeTokenEnable = false
 )
 
 const DevelopmentMode = "development"
@@ -51,9 +51,9 @@ func Setup(serviceName, version string, auth bool) {
 	}
 
 	if auth {
-		if strings.ToLower(hwutil.GetEnvOr("FAKE_TOKEN_ENABLE", "false")) == "true" && Mode == DevelopmentMode {
-			FakeTokenEnable = true
-			log.Warn().Msg("FAKE_TOKEN_ENABLE is set to true, accepting fake tokens")
+		if strings.ToLower(hwutil.GetEnvOr("INSECURE_FAKE_TOKEN_ENABLE", "false")) == "true" && Mode == DevelopmentMode {
+			InsecureFakeTokenEnable = true
+			log.Warn().Msg("INSECURE_FAKE_TOKEN_ENABLE is set to true, accepting fake tokens")
 		}
 
 		setupAuth()
