@@ -61,7 +61,7 @@ func isAuthSetUp() bool {
 func setupAuth() {
 	issuerUrl := hwutil.GetEnvOr("OAUTH_ISSUER_URL", DEFAULT_OAUTH_ISSUER_URL)
 	if issuerUrl != DEFAULT_OAUTH_ISSUER_URL {
-		zlog.Warn().Str("OAUTH_ISSUER_URL", issuerUrl).Msg("Using auth without the default OAuth issuer url")
+		zlog.Warn().Str("OAUTH_ISSUER_URL", issuerUrl).Msg("using custom OAuth issuer url")
 	}
 
 	provider, err := oidc.NewProvider(context.Background(), issuerUrl)

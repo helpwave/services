@@ -85,7 +85,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 
 	// If FakeTokenEnable is true and Mode is development,
 	// we accept unverified Base64 encoded json structure in the schema of IDTokenClaims as well.
-	// This allows the client to pass self-defined "Fake ID Token Claims" without go through our auth provider.
+	// This allows the client to pass self-defined "Fake ID Token Claims" without going through our auth provider.
 	// JUST FOR DEVELOPMENT AND STAGING PURPOSES
 	// ... already checked Mode == DevelopmentMode in setup(), just to be sure ...
 	if claims == nil && err != nil && FakeTokenEnable && Mode == DevelopmentMode {
