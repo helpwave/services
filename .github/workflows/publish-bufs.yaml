@@ -109,6 +109,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         token: ${{ secrets.HELPWAVE_BOT_PAT }}
+        ref: main # TODO: Commit all changes in one commit. Should prevents branch behind error as well.
     - name: Install tools
       run: |
         pip install yq
