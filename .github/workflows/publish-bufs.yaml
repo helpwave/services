@@ -98,7 +98,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   dart:
-    needs: ts # TODO: Commit all changes in one commit. Should prevents branch behind error as well.
+    needs:
+    - check-preconditions
+    - ts # TODO: Commit all changes in one commit. Should prevents branch behind error as well.
     runs-on: ubuntu-latest
     permissions:
       contents: write
