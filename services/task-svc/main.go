@@ -18,7 +18,7 @@ const ServiceName = "task-svc"
 var Version string
 
 func main() {
-	common.Setup(ServiceName, Version, false)
+	common.Setup(ServiceName, Version, true)
 
 	hwgorm.SetupDatabase(
 		hwutil.GetEnvOr("POSTGRES_HOST", "localhost"),
