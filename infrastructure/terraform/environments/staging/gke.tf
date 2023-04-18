@@ -61,8 +61,6 @@ module "cluster-resources" {
   apisix_gateway_type = "LoadBalancer"
   apisix_gateway_ip = google_compute_address.staging-ipv4.address
 
-  keycloak_cert = "x-helpwave-de"
-
   coredns_config_map_name = "coredns-coredns"
 
   api_hostname = cloudflare_record.staging-api-helpwave-de.hostname

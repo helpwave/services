@@ -1,6 +1,0 @@
-dependencies:
-- name: keycloak-operator
-  repository: file://../keycloak-operator
-  version: 0.1.0
-digest: sha256:f2f520bcc7d9348ef43b8686c3b50ca604021e9f2b0e268b6dcd25d8fa4c5896
-generated: "2023-01-31T17:09:48.703388121+01:00"

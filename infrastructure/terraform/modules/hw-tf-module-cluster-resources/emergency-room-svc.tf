@@ -80,11 +80,6 @@ resource "helm_release" "emergency-room-svc" {
   }
 
   set {
-    name  = "keycloakDisabled"
-    value = true
-  }
-
-  set {
     name  = "postgres.host"
     value = "emergency-room-postgres-postgresql.emergency-room"
   }
