@@ -22,12 +22,26 @@ export class WardServiceClient {
                response: proto_services_task_svc_v1_ward_svc_pb.GetWardResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_ward_svc_pb.GetWardResponse>;
 
+  getWardByOrganization(
+    request: proto_services_task_svc_v1_ward_svc_pb.GetWardByOrganizationRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_ward_svc_pb.GetWardByOrganizationResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_ward_svc_pb.GetWardByOrganizationResponse>;
+
   updateWard(
     request: proto_services_task_svc_v1_ward_svc_pb.UpdateWardRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
                response: proto_services_task_svc_v1_ward_svc_pb.UpdateWardResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_ward_svc_pb.UpdateWardResponse>;
+
+  deleteWard(
+    request: proto_services_task_svc_v1_ward_svc_pb.DeleteWardRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_ward_svc_pb.DeleteWardResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_ward_svc_pb.DeleteWardResponse>;
 
 }
 
@@ -46,10 +60,20 @@ export class WardServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_ward_svc_pb.GetWardResponse>;
 
+  getWardByOrganization(
+    request: proto_services_task_svc_v1_ward_svc_pb.GetWardByOrganizationRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_ward_svc_pb.GetWardByOrganizationResponse>;
+
   updateWard(
     request: proto_services_task_svc_v1_ward_svc_pb.UpdateWardRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_ward_svc_pb.UpdateWardResponse>;
+
+  deleteWard(
+    request: proto_services_task_svc_v1_ward_svc_pb.DeleteWardRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_ward_svc_pb.DeleteWardResponse>;
 
 }
 

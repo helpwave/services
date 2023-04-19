@@ -14,7 +14,7 @@ class UserCreatedEvent extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'email')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'nickname')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'fullName')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
@@ -23,7 +23,7 @@ class UserCreatedEvent extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? email,
     $core.String? nickname,
-    $core.String? fullName,
+    $core.String? name,
   }) {
     final _result = create();
     if (id != null) {
@@ -35,8 +35,8 @@ class UserCreatedEvent extends $pb.GeneratedMessage {
     if (nickname != null) {
       _result.nickname = nickname;
     }
-    if (fullName != null) {
-      _result.fullName = fullName;
+    if (name != null) {
+      _result.name = name;
     }
     return _result;
   }
@@ -89,12 +89,12 @@ class UserCreatedEvent extends $pb.GeneratedMessage {
   void clearNickname() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get fullName => $_getSZ(3);
+  $core.String get name => $_getSZ(3);
   @$pb.TagNumber(4)
-  set fullName($core.String v) { $_setString(3, v); }
+  set name($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasFullName() => $_has(3);
+  $core.bool hasName() => $_has(3);
   @$pb.TagNumber(4)
-  void clearFullName() => clearField(4);
+  void clearName() => clearField(4);
 }
 

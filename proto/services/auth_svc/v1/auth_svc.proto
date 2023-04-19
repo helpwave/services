@@ -12,26 +12,9 @@ option go_package = "gen/proto/services/auth-svc";
 message PrelimAuthRequestRequest {}
 
 message PrelimAuthRequestResponse {
-	// the Authorization Request URL including Client ID, Scopes and so on. Start the Auth Flow by redirecting here.
+	// The Authorization Request URL including Client ID, Scopes and so on. Start the Auth Flow by redirecting here.
+	// State and PKCE should be populated by the client
 	string url = 1;
-}
-
-//
-// (Refresh)-Token
-//
-
-// Once an Access Token became stale, you can request a new one here using the Refresh Token.
-// You should make sure the refresh token is still valid.
-// More in <a href="https://wiki.helpwave.de/doc/authentication-jedzCcERwF">the wiki</a>
-message RefreshTokenRequest {
-	string refresh_token = 1; // @gotags: validate:"required"
-}
-
-// New set of tokens
-message RefreshTokenResponse {
-	string access_token = 1;
-	string refresh_token = 2;
-	int64 exp = 3; // expiry (unix) timestamp of the Access Token
 }
 
 //
@@ -40,5 +23,4 @@ message RefreshTokenResponse {
 
 service AuthService {
 	rpc PrelimAuthRequest(PrelimAuthRequestRequest) returns (PrelimAuthRequestResponse) {}
-	rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {}
 }

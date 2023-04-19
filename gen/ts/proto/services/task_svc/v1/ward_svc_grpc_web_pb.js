@@ -202,6 +202,67 @@ proto.proto.services.task_svc.v1.WardServicePromiseClient.prototype.getWard =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetWardByOrganizationRequest,
+ *   !proto.proto.services.task_svc.v1.GetWardByOrganizationResponse>}
+ */
+const methodDescriptor_WardService_GetWardByOrganization = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.WardService/GetWardByOrganization',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetWardByOrganizationRequest,
+  proto.proto.services.task_svc.v1.GetWardByOrganizationResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetWardByOrganizationRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetWardByOrganizationResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetWardByOrganizationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetWardByOrganizationResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetWardByOrganizationResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.WardServiceClient.prototype.getWardByOrganization =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.WardService/GetWardByOrganization',
+      request,
+      metadata || {},
+      methodDescriptor_WardService_GetWardByOrganization,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetWardByOrganizationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetWardByOrganizationResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.WardServicePromiseClient.prototype.getWardByOrganization =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.WardService/GetWardByOrganization',
+      request,
+      metadata || {},
+      methodDescriptor_WardService_GetWardByOrganization);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.task_svc.v1.UpdateWardRequest,
  *   !proto.proto.services.task_svc.v1.UpdateWardResponse>}
  */
@@ -257,6 +318,67 @@ proto.proto.services.task_svc.v1.WardServicePromiseClient.prototype.updateWard =
       request,
       metadata || {},
       methodDescriptor_WardService_UpdateWard);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.DeleteWardRequest,
+ *   !proto.proto.services.task_svc.v1.DeleteWardResponse>}
+ */
+const methodDescriptor_WardService_DeleteWard = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.WardService/DeleteWard',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.DeleteWardRequest,
+  proto.proto.services.task_svc.v1.DeleteWardResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.DeleteWardRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.DeleteWardResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.DeleteWardRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.DeleteWardResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.DeleteWardResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.WardServiceClient.prototype.deleteWard =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.WardService/DeleteWard',
+      request,
+      metadata || {},
+      methodDescriptor_WardService_DeleteWard,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.DeleteWardRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.DeleteWardResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.WardServicePromiseClient.prototype.deleteWard =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.WardService/DeleteWard',
+      request,
+      metadata || {},
+      methodDescriptor_WardService_DeleteWard);
 };
 
 

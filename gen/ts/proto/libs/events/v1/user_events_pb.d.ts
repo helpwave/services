@@ -12,8 +12,8 @@ export class UserCreatedEvent extends jspb.Message {
   getNickname(): string;
   setNickname(value: string): UserCreatedEvent;
 
-  getFullName(): string;
-  setFullName(value: string): UserCreatedEvent;
+  getName(): string;
+  setName(value: string): UserCreatedEvent;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UserCreatedEvent.AsObject;
@@ -28,7 +28,7 @@ export namespace UserCreatedEvent {
     id: string,
     email: string,
     nickname: string,
-    fullName: string,
+    name: string,
   }
 }
 

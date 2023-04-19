@@ -12,9 +12,26 @@ message CreateOrganizationRequest {
 	string long_name = 1; // @gotags: validate:"required,gte=4,lte=64"
 	string short_name = 2; // @gotags: validate:"omitempty,gte=2,lte=16"
 	string contact_email = 3; // @gotags: validate:"required,email"
+	bool is_personal = 4; // @gotags: validate:"required"
 }
 
 message CreateOrganizationResponse {
+	string id = 1;
+}
+
+//
+// CreateOrganizationForUser
+//
+
+message CreateOrganizationForUserRequest {
+	string long_name = 1; // @gotags: validate:"required,gte=4,lte=64"
+	string short_name = 2; // @gotags: validate:"omitempty,gte=2,lte=16"
+	string contact_email = 3; // @gotags: validate:"required,email"
+	bool is_personal = 4; // @gotags: validate:"required"
+	string user_id = 5; // @gotags: validate:"uuid4"
+}
+
+message CreateOrganizationForUserResponse {
 	string id = 1;
 }
 
@@ -49,6 +66,7 @@ message GetOrganizationsByUserMember {
 }
 
 message GetOrganizationsByUserRequest {
+	string user_id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetOrganizationsByUserResponse {
@@ -65,10 +83,6 @@ message GetOrganizationsByUserResponse {
 //  UpdateOrganization
 //
 
-message UpdateOrganizationMember {
-	string user_id = 1;
-}
-
 message UpdateOrganizationRequest {
 	string id = 1;
     optional string long_name = 2;
@@ -76,7 +90,6 @@ message UpdateOrganizationRequest {
     optional string contact_email = 4;
     optional string avatar_url = 5;
     optional bool is_personal = 6;
-    optional repeated UpdateOrganizationMember members = 7;
 }
 
 message UpdateOrganizationResponse {}
@@ -92,13 +105,50 @@ message DeleteOrganizationRequest {
 message DeleteOrganizationResponse {}
 
 //
+// AddMember
+//
+
+message AddMemberRequest {
+	string id = 1; // @gotags: validate:"uuid4"
+	string user_id = 2; // @gotags: validate:"uuid4"
+}
+
+message AddMemberResponse {}
+
+//
+// RemoveMember
+//
+
+message RemoveMemberRequest {
+	string id = 1; // @gotags: validate:"uuid4"
+	string user_id = 2; // @gotags: validate:"uuid4"
+}
+
+message RemoveMemberResponse{}
+
+//
+// InviteMember
+//
+
+message InviteMemberRequest {
+	string id = 1;  // @gotags: validate:"uuid4"
+	string email = 2; // @gotags: validate:"required,email"
+}
+
+message InviteMemberResponse {}
+
+//
 //  OrganizationService
 //
 
 service OrganizationService {
 	rpc CreateOrganization (CreateOrganizationRequest) returns (CreateOrganizationResponse) {}
+	rpc CreateOrganizationForUser (CreateOrganizationForUserRequest) returns (CreateOrganizationForUserResponse) {}
 	rpc GetOrganization (GetOrganizationRequest) returns (GetOrganizationResponse) {}
 	rpc GetOrganizationsByUser (GetOrganizationsByUserRequest) returns (GetOrganizationsByUserResponse) {}
 	rpc UpdateOrganization (UpdateOrganizationRequest) returns (UpdateOrganizationResponse) {}
 	rpc DeleteOrganization (DeleteOrganizationRequest) returns (DeleteOrganizationResponse) {}
+	rpc AddMember (AddMemberRequest) returns (AddMemberResponse) {}
+	rpc RemoveMember (RemoveMemberRequest) returns (RemoveMemberResponse) {}
+	rpc InviteMember (InviteMemberRequest) returns (InviteMemberResponse) {}
 }

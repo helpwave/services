@@ -184,6 +184,64 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
   static UpdateUserResponse? _defaultInstance;
 }
 
+class ReadPublicProfileRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ReadPublicProfileRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  ReadPublicProfileRequest._() : super();
+  factory ReadPublicProfileRequest() => create();
+  factory ReadPublicProfileRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ReadPublicProfileRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ReadPublicProfileRequest clone() => ReadPublicProfileRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ReadPublicProfileRequest copyWith(void Function(ReadPublicProfileRequest) updates) => super.copyWith((message) => updates(message as ReadPublicProfileRequest)) as ReadPublicProfileRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ReadPublicProfileRequest create() => ReadPublicProfileRequest._();
+  ReadPublicProfileRequest createEmptyInstance() => create();
+  static $pb.PbList<ReadPublicProfileRequest> createRepeated() => $pb.PbList<ReadPublicProfileRequest>();
+  @$core.pragma('dart2js:noInline')
+  static ReadPublicProfileRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReadPublicProfileRequest>(create);
+  static ReadPublicProfileRequest? _defaultInstance;
+}
+
+class ReadPublicProfileResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ReadPublicProfileResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  ReadPublicProfileResponse._() : super();
+  factory ReadPublicProfileResponse() => create();
+  factory ReadPublicProfileResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ReadPublicProfileResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ReadPublicProfileResponse clone() => ReadPublicProfileResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ReadPublicProfileResponse copyWith(void Function(ReadPublicProfileResponse) updates) => super.copyWith((message) => updates(message as ReadPublicProfileResponse)) as ReadPublicProfileResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ReadPublicProfileResponse create() => ReadPublicProfileResponse._();
+  ReadPublicProfileResponse createEmptyInstance() => create();
+  static $pb.PbList<ReadPublicProfileResponse> createRepeated() => $pb.PbList<ReadPublicProfileResponse>();
+  @$core.pragma('dart2js:noInline')
+  static ReadPublicProfileResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReadPublicProfileResponse>(create);
+  static ReadPublicProfileResponse? _defaultInstance;
+}
+
 class UserServiceApi {
   $pb.RpcClient _client;
   UserServiceApi(this._client);
@@ -199,6 +257,10 @@ class UserServiceApi {
   $async.Future<GetUserResponse> getUser($pb.ClientContext? ctx, GetUserRequest request) {
     var emptyResponse = GetUserResponse();
     return _client.invoke<GetUserResponse>(ctx, 'UserService', 'GetUser', request, emptyResponse);
+  }
+  $async.Future<ReadPublicProfileResponse> readPublicProfile($pb.ClientContext? ctx, ReadPublicProfileRequest request) {
+    var emptyResponse = ReadPublicProfileResponse();
+    return _client.invoke<ReadPublicProfileResponse>(ctx, 'UserService', 'ReadPublicProfile', request, emptyResponse);
   }
 }
 

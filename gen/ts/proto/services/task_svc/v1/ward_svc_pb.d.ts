@@ -82,6 +82,66 @@ export namespace GetWardResponse {
   }
 }
 
+export class GetWardByOrganizationWard extends jspb.Message {
+  getId(): string;
+  setId(value: string): GetWardByOrganizationWard;
+
+  getName(): string;
+  setName(value: string): GetWardByOrganizationWard;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetWardByOrganizationWard.AsObject;
+  static toObject(includeInstance: boolean, msg: GetWardByOrganizationWard): GetWardByOrganizationWard.AsObject;
+  static serializeBinaryToWriter(message: GetWardByOrganizationWard, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetWardByOrganizationWard;
+  static deserializeBinaryFromReader(message: GetWardByOrganizationWard, reader: jspb.BinaryReader): GetWardByOrganizationWard;
+}
+
+export namespace GetWardByOrganizationWard {
+  export type AsObject = {
+    id: string,
+    name: string,
+  }
+}
+
+export class GetWardByOrganizationRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): GetWardByOrganizationRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetWardByOrganizationRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetWardByOrganizationRequest): GetWardByOrganizationRequest.AsObject;
+  static serializeBinaryToWriter(message: GetWardByOrganizationRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetWardByOrganizationRequest;
+  static deserializeBinaryFromReader(message: GetWardByOrganizationRequest, reader: jspb.BinaryReader): GetWardByOrganizationRequest;
+}
+
+export namespace GetWardByOrganizationRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class GetWardByOrganizationResponse extends jspb.Message {
+  getWardsList(): Array<GetWardByOrganizationWard>;
+  setWardsList(value: Array<GetWardByOrganizationWard>): GetWardByOrganizationResponse;
+  clearWardsList(): GetWardByOrganizationResponse;
+  addWards(value?: GetWardByOrganizationWard, index?: number): GetWardByOrganizationWard;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetWardByOrganizationResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetWardByOrganizationResponse): GetWardByOrganizationResponse.AsObject;
+  static serializeBinaryToWriter(message: GetWardByOrganizationResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetWardByOrganizationResponse;
+  static deserializeBinaryFromReader(message: GetWardByOrganizationResponse, reader: jspb.BinaryReader): GetWardByOrganizationResponse;
+}
+
+export namespace GetWardByOrganizationResponse {
+  export type AsObject = {
+    wardsList: Array<GetWardByOrganizationWard.AsObject>,
+  }
+}
+
 export class UpdateWardRequest extends jspb.Message {
   getId(): string;
   setId(value: string): UpdateWardRequest;
@@ -121,6 +181,38 @@ export class UpdateWardResponse extends jspb.Message {
 }
 
 export namespace UpdateWardResponse {
+  export type AsObject = {
+  }
+}
+
+export class DeleteWardRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): DeleteWardRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeleteWardRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: DeleteWardRequest): DeleteWardRequest.AsObject;
+  static serializeBinaryToWriter(message: DeleteWardRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeleteWardRequest;
+  static deserializeBinaryFromReader(message: DeleteWardRequest, reader: jspb.BinaryReader): DeleteWardRequest;
+}
+
+export namespace DeleteWardRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class DeleteWardResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeleteWardResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: DeleteWardResponse): DeleteWardResponse.AsObject;
+  static serializeBinaryToWriter(message: DeleteWardResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeleteWardResponse;
+  static deserializeBinaryFromReader(message: DeleteWardResponse, reader: jspb.BinaryReader): DeleteWardResponse;
+}
+
+export namespace DeleteWardResponse {
   export type AsObject = {
   }
 }

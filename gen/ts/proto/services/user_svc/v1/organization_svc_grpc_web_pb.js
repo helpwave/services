@@ -141,6 +141,67 @@ proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.crea
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.CreateOrganizationForUserRequest,
+ *   !proto.proto.services.user_svc.v1.CreateOrganizationForUserResponse>}
+ */
+const methodDescriptor_OrganizationService_CreateOrganizationForUser = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/CreateOrganizationForUser',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.CreateOrganizationForUserRequest,
+  proto.proto.services.user_svc.v1.CreateOrganizationForUserResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.CreateOrganizationForUserRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.CreateOrganizationForUserResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.CreateOrganizationForUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.CreateOrganizationForUserResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.CreateOrganizationForUserResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.createOrganizationForUser =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/CreateOrganizationForUser',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_CreateOrganizationForUser,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.CreateOrganizationForUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.CreateOrganizationForUserResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.createOrganizationForUser =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/CreateOrganizationForUser',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_CreateOrganizationForUser);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.user_svc.v1.GetOrganizationRequest,
  *   !proto.proto.services.user_svc.v1.GetOrganizationResponse>}
  */
@@ -196,6 +257,372 @@ proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.getO
       request,
       metadata || {},
       methodDescriptor_OrganizationService_GetOrganization);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.GetOrganizationsByUserRequest,
+ *   !proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse>}
+ */
+const methodDescriptor_OrganizationService_GetOrganizationsByUser = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/GetOrganizationsByUser',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.GetOrganizationsByUserRequest,
+  proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.GetOrganizationsByUserRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.GetOrganizationsByUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.getOrganizationsByUser =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/GetOrganizationsByUser',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_GetOrganizationsByUser,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.GetOrganizationsByUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.getOrganizationsByUser =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/GetOrganizationsByUser',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_GetOrganizationsByUser);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.UpdateOrganizationRequest,
+ *   !proto.proto.services.user_svc.v1.UpdateOrganizationResponse>}
+ */
+const methodDescriptor_OrganizationService_UpdateOrganization = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/UpdateOrganization',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.UpdateOrganizationRequest,
+  proto.proto.services.user_svc.v1.UpdateOrganizationResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.UpdateOrganizationRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.UpdateOrganizationResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.UpdateOrganizationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.UpdateOrganizationResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.UpdateOrganizationResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.updateOrganization =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/UpdateOrganization',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_UpdateOrganization,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.UpdateOrganizationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.UpdateOrganizationResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.updateOrganization =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/UpdateOrganization',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_UpdateOrganization);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.DeleteOrganizationRequest,
+ *   !proto.proto.services.user_svc.v1.DeleteOrganizationResponse>}
+ */
+const methodDescriptor_OrganizationService_DeleteOrganization = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/DeleteOrganization',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.DeleteOrganizationRequest,
+  proto.proto.services.user_svc.v1.DeleteOrganizationResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.DeleteOrganizationRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.DeleteOrganizationResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.DeleteOrganizationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.DeleteOrganizationResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.DeleteOrganizationResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.deleteOrganization =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/DeleteOrganization',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_DeleteOrganization,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.DeleteOrganizationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.DeleteOrganizationResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.deleteOrganization =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/DeleteOrganization',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_DeleteOrganization);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.AddMemberRequest,
+ *   !proto.proto.services.user_svc.v1.AddMemberResponse>}
+ */
+const methodDescriptor_OrganizationService_AddMember = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/AddMember',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.AddMemberRequest,
+  proto.proto.services.user_svc.v1.AddMemberResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.AddMemberRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.AddMemberResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.AddMemberRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.AddMemberResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.AddMemberResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.addMember =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/AddMember',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_AddMember,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.AddMemberRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.AddMemberResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.addMember =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/AddMember',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_AddMember);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.RemoveMemberRequest,
+ *   !proto.proto.services.user_svc.v1.RemoveMemberResponse>}
+ */
+const methodDescriptor_OrganizationService_RemoveMember = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/RemoveMember',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.RemoveMemberRequest,
+  proto.proto.services.user_svc.v1.RemoveMemberResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.RemoveMemberRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.RemoveMemberResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.RemoveMemberRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.RemoveMemberResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.RemoveMemberResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.removeMember =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/RemoveMember',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_RemoveMember,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.RemoveMemberRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.RemoveMemberResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.removeMember =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/RemoveMember',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_RemoveMember);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.InviteMemberRequest,
+ *   !proto.proto.services.user_svc.v1.InviteMemberResponse>}
+ */
+const methodDescriptor_OrganizationService_InviteMember = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/InviteMember',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.InviteMemberRequest,
+  proto.proto.services.user_svc.v1.InviteMemberResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.InviteMemberRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.InviteMemberResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.InviteMemberRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.InviteMemberResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.InviteMemberResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.inviteMember =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/InviteMember',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_InviteMember,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.InviteMemberRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.InviteMemberResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.inviteMember =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/InviteMember',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_InviteMember);
 };
 
 

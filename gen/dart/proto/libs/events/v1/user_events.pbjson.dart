@@ -15,9 +15,9 @@ const UserCreatedEvent$json = const {
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     const {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
     const {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
-    const {'1': 'full_name', '3': 4, '4': 1, '5': 9, '10': 'fullName'},
+    const {'1': 'name', '3': 4, '4': 1, '5': 9, '10': 'name'},
   ],
 };
 
 /// Descriptor for `UserCreatedEvent`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List userCreatedEventDescriptor = $convert.base64Decode('ChBVc2VyQ3JlYXRlZEV2ZW50Eg4KAmlkGAEgASgJUgJpZBIUCgVlbWFpbBgCIAEoCVIFZW1haWwSGgoIbmlja25hbWUYAyABKAlSCG5pY2tuYW1lEhsKCWZ1bGxfbmFtZRgEIAEoCVIIZnVsbE5hbWU=');
+final $typed_data.Uint8List userCreatedEventDescriptor = $convert.base64Decode('ChBVc2VyQ3JlYXRlZEV2ZW50Eg4KAmlkGAEgASgJUgJpZBIUCgVlbWFpbBgCIAEoCVIFZW1haWwSGgoIbmlja25hbWUYAyABKAlSCG5pY2tuYW1lEhIKBG5hbWUYBCABKAlSBG5hbWU=');

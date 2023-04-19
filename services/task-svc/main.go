@@ -2,7 +2,6 @@ package main
 
 import (
 	"common"
-	"fmt"
 	pb "gen/proto/services/task_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwgorm"
@@ -19,7 +18,7 @@ const ServiceName = "task-svc"
 var Version string
 
 func main() {
-	common.Setup(ServiceName, Version, false)
+	common.Setup(ServiceName, Version, true)
 
 	hwgorm.SetupDatabase(
 		hwutil.GetEnvOr("POSTGRES_HOST", "localhost"),
@@ -29,10 +28,7 @@ func main() {
 		hwutil.GetEnvOr("POSTGRES_PORT", "5432"),
 	)
 
-	port := hwutil.GetEnvOr("PORT", "8080")
-	addr := hwutil.GetEnvOr("ADDR", fmt.Sprintf(":%s", port))
-
-	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
+	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 		pb.RegisterTaskServiceServer(grpcServer, task.NewServiceServer())
 		pb.RegisterPatientServiceServer(grpcServer, patient.NewServiceServer())
