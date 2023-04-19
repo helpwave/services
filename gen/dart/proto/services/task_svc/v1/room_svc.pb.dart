@@ -118,14 +118,14 @@ class CreateRoomResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 }
 
-class BedOfRoom extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'BedOfRoom', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+class GetRoomBedOfRoom extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRoomBedOfRoom', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
-  BedOfRoom._() : super();
-  factory BedOfRoom({
+  GetRoomBedOfRoom._() : super();
+  factory GetRoomBedOfRoom({
     $core.String? id,
   }) {
     final _result = create();
@@ -134,26 +134,26 @@ class BedOfRoom extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory BedOfRoom.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory BedOfRoom.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory GetRoomBedOfRoom.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRoomBedOfRoom.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  BedOfRoom clone() => BedOfRoom()..mergeFromMessage(this);
+  GetRoomBedOfRoom clone() => GetRoomBedOfRoom()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  BedOfRoom copyWith(void Function(BedOfRoom) updates) => super.copyWith((message) => updates(message as BedOfRoom)) as BedOfRoom; // ignore: deprecated_member_use
+  GetRoomBedOfRoom copyWith(void Function(GetRoomBedOfRoom) updates) => super.copyWith((message) => updates(message as GetRoomBedOfRoom)) as GetRoomBedOfRoom; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static BedOfRoom create() => BedOfRoom._();
-  BedOfRoom createEmptyInstance() => create();
-  static $pb.PbList<BedOfRoom> createRepeated() => $pb.PbList<BedOfRoom>();
+  static GetRoomBedOfRoom create() => GetRoomBedOfRoom._();
+  GetRoomBedOfRoom createEmptyInstance() => create();
+  static $pb.PbList<GetRoomBedOfRoom> createRepeated() => $pb.PbList<GetRoomBedOfRoom>();
   @$core.pragma('dart2js:noInline')
-  static BedOfRoom getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BedOfRoom>(create);
-  static BedOfRoom? _defaultInstance;
+  static GetRoomBedOfRoom getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomBedOfRoom>(create);
+  static GetRoomBedOfRoom? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
@@ -216,7 +216,7 @@ class GetRoomResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRoomResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
-    ..pc<BedOfRoom>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: BedOfRoom.create)
+    ..pc<GetRoomBedOfRoom>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: GetRoomBedOfRoom.create)
     ..hasRequiredFields = false
   ;
 
@@ -224,7 +224,7 @@ class GetRoomResponse extends $pb.GeneratedMessage {
   factory GetRoomResponse({
     $core.String? id,
     $core.String? name,
-    $core.Iterable<BedOfRoom>? beds,
+    $core.Iterable<GetRoomBedOfRoom>? beds,
   }) {
     final _result = create();
     if (id != null) {
@@ -278,7 +278,397 @@ class GetRoomResponse extends $pb.GeneratedMessage {
   void clearName() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.List<BedOfRoom> get beds => $_getList(2);
+  $core.List<GetRoomBedOfRoom> get beds => $_getList(2);
+}
+
+class GetRoomsBedOfRooms extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRoomsBedOfRooms', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  GetRoomsBedOfRooms._() : super();
+  factory GetRoomsBedOfRooms({
+    $core.String? id,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    return _result;
+  }
+  factory GetRoomsBedOfRooms.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRoomsBedOfRooms.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRoomsBedOfRooms clone() => GetRoomsBedOfRooms()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRoomsBedOfRooms copyWith(void Function(GetRoomsBedOfRooms) updates) => super.copyWith((message) => updates(message as GetRoomsBedOfRooms)) as GetRoomsBedOfRooms; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsBedOfRooms create() => GetRoomsBedOfRooms._();
+  GetRoomsBedOfRooms createEmptyInstance() => create();
+  static $pb.PbList<GetRoomsBedOfRooms> createRepeated() => $pb.PbList<GetRoomsBedOfRooms>();
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsBedOfRooms getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomsBedOfRooms>(create);
+  static GetRoomsBedOfRooms? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
+class GetRoomsRoom extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRoomsRoom', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
+    ..pc<GetRoomsBedOfRooms>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: GetRoomsBedOfRooms.create)
+    ..hasRequiredFields = false
+  ;
+
+  GetRoomsRoom._() : super();
+  factory GetRoomsRoom({
+    $core.String? id,
+    $core.String? name,
+    $core.Iterable<GetRoomsBedOfRooms>? beds,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    if (name != null) {
+      _result.name = name;
+    }
+    if (beds != null) {
+      _result.beds.addAll(beds);
+    }
+    return _result;
+  }
+  factory GetRoomsRoom.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRoomsRoom.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRoomsRoom clone() => GetRoomsRoom()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRoomsRoom copyWith(void Function(GetRoomsRoom) updates) => super.copyWith((message) => updates(message as GetRoomsRoom)) as GetRoomsRoom; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsRoom create() => GetRoomsRoom._();
+  GetRoomsRoom createEmptyInstance() => create();
+  static $pb.PbList<GetRoomsRoom> createRepeated() => $pb.PbList<GetRoomsRoom>();
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsRoom getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomsRoom>(create);
+  static GetRoomsRoom? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.List<GetRoomsBedOfRooms> get beds => $_getList(2);
+}
+
+class GetRoomsRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRoomsRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  GetRoomsRequest._() : super();
+  factory GetRoomsRequest() => create();
+  factory GetRoomsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRoomsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRoomsRequest clone() => GetRoomsRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRoomsRequest copyWith(void Function(GetRoomsRequest) updates) => super.copyWith((message) => updates(message as GetRoomsRequest)) as GetRoomsRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsRequest create() => GetRoomsRequest._();
+  GetRoomsRequest createEmptyInstance() => create();
+  static $pb.PbList<GetRoomsRequest> createRepeated() => $pb.PbList<GetRoomsRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomsRequest>(create);
+  static GetRoomsRequest? _defaultInstance;
+}
+
+class GetRoomsResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRoomsResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..pc<GetRoomsRoom>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'rooms', $pb.PbFieldType.PM, subBuilder: GetRoomsRoom.create)
+    ..hasRequiredFields = false
+  ;
+
+  GetRoomsResponse._() : super();
+  factory GetRoomsResponse({
+    $core.Iterable<GetRoomsRoom>? rooms,
+  }) {
+    final _result = create();
+    if (rooms != null) {
+      _result.rooms.addAll(rooms);
+    }
+    return _result;
+  }
+  factory GetRoomsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRoomsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRoomsResponse clone() => GetRoomsResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRoomsResponse copyWith(void Function(GetRoomsResponse) updates) => super.copyWith((message) => updates(message as GetRoomsResponse)) as GetRoomsResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsResponse create() => GetRoomsResponse._();
+  GetRoomsResponse createEmptyInstance() => create();
+  static $pb.PbList<GetRoomsResponse> createRepeated() => $pb.PbList<GetRoomsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomsResponse>(create);
+  static GetRoomsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<GetRoomsRoom> get rooms => $_getList(0);
+}
+
+class GetRoomsByWardBedOfRooms extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRoomsByWardBedOfRooms', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  GetRoomsByWardBedOfRooms._() : super();
+  factory GetRoomsByWardBedOfRooms({
+    $core.String? id,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    return _result;
+  }
+  factory GetRoomsByWardBedOfRooms.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRoomsByWardBedOfRooms.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRoomsByWardBedOfRooms clone() => GetRoomsByWardBedOfRooms()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRoomsByWardBedOfRooms copyWith(void Function(GetRoomsByWardBedOfRooms) updates) => super.copyWith((message) => updates(message as GetRoomsByWardBedOfRooms)) as GetRoomsByWardBedOfRooms; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsByWardBedOfRooms create() => GetRoomsByWardBedOfRooms._();
+  GetRoomsByWardBedOfRooms createEmptyInstance() => create();
+  static $pb.PbList<GetRoomsByWardBedOfRooms> createRepeated() => $pb.PbList<GetRoomsByWardBedOfRooms>();
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsByWardBedOfRooms getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomsByWardBedOfRooms>(create);
+  static GetRoomsByWardBedOfRooms? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
+class GetRoomsByWardRoom extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRoomsByWardRoom', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
+    ..pc<GetRoomsBedOfRooms>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: GetRoomsBedOfRooms.create)
+    ..hasRequiredFields = false
+  ;
+
+  GetRoomsByWardRoom._() : super();
+  factory GetRoomsByWardRoom({
+    $core.String? id,
+    $core.String? name,
+    $core.Iterable<GetRoomsBedOfRooms>? beds,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    if (name != null) {
+      _result.name = name;
+    }
+    if (beds != null) {
+      _result.beds.addAll(beds);
+    }
+    return _result;
+  }
+  factory GetRoomsByWardRoom.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRoomsByWardRoom.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRoomsByWardRoom clone() => GetRoomsByWardRoom()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRoomsByWardRoom copyWith(void Function(GetRoomsByWardRoom) updates) => super.copyWith((message) => updates(message as GetRoomsByWardRoom)) as GetRoomsByWardRoom; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsByWardRoom create() => GetRoomsByWardRoom._();
+  GetRoomsByWardRoom createEmptyInstance() => create();
+  static $pb.PbList<GetRoomsByWardRoom> createRepeated() => $pb.PbList<GetRoomsByWardRoom>();
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsByWardRoom getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomsByWardRoom>(create);
+  static GetRoomsByWardRoom? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.List<GetRoomsBedOfRooms> get beds => $_getList(2);
+}
+
+class GetRoomsByWardRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRoomsByWardRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'wardId')
+    ..hasRequiredFields = false
+  ;
+
+  GetRoomsByWardRequest._() : super();
+  factory GetRoomsByWardRequest({
+    $core.String? wardId,
+  }) {
+    final _result = create();
+    if (wardId != null) {
+      _result.wardId = wardId;
+    }
+    return _result;
+  }
+  factory GetRoomsByWardRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRoomsByWardRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRoomsByWardRequest clone() => GetRoomsByWardRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRoomsByWardRequest copyWith(void Function(GetRoomsByWardRequest) updates) => super.copyWith((message) => updates(message as GetRoomsByWardRequest)) as GetRoomsByWardRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsByWardRequest create() => GetRoomsByWardRequest._();
+  GetRoomsByWardRequest createEmptyInstance() => create();
+  static $pb.PbList<GetRoomsByWardRequest> createRepeated() => $pb.PbList<GetRoomsByWardRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsByWardRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomsByWardRequest>(create);
+  static GetRoomsByWardRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get wardId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set wardId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasWardId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWardId() => clearField(1);
+}
+
+class GetRoomsByWardResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRoomsByWardResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..pc<GetRoomsRoom>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'rooms', $pb.PbFieldType.PM, subBuilder: GetRoomsRoom.create)
+    ..hasRequiredFields = false
+  ;
+
+  GetRoomsByWardResponse._() : super();
+  factory GetRoomsByWardResponse({
+    $core.Iterable<GetRoomsRoom>? rooms,
+  }) {
+    final _result = create();
+    if (rooms != null) {
+      _result.rooms.addAll(rooms);
+    }
+    return _result;
+  }
+  factory GetRoomsByWardResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRoomsByWardResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRoomsByWardResponse clone() => GetRoomsByWardResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRoomsByWardResponse copyWith(void Function(GetRoomsByWardResponse) updates) => super.copyWith((message) => updates(message as GetRoomsByWardResponse)) as GetRoomsByWardResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsByWardResponse create() => GetRoomsByWardResponse._();
+  GetRoomsByWardResponse createEmptyInstance() => create();
+  static $pb.PbList<GetRoomsByWardResponse> createRepeated() => $pb.PbList<GetRoomsByWardResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetRoomsByWardResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomsByWardResponse>(create);
+  static GetRoomsByWardResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<GetRoomsRoom> get rooms => $_getList(0);
 }
 
 class UpdateRoomRequest extends $pb.GeneratedMessage {

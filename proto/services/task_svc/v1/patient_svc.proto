@@ -30,6 +30,51 @@ message GetPatientResponse {
 }
 
 //
+// GetPatients
+//
+
+message GetPatientsPatient {
+	string id = 1;
+	string human_readable_identifier = 2;
+}
+
+message GetPatientsRequest {}
+
+message GetPatientsResponse {
+	repeated GetPatientsPatient patients = 1;
+}
+
+//
+// GetPatientByBed
+//
+
+message GetPatientByBedRequest {
+	string bed_id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetPatientByBedResponse {
+	string id = 1;
+	string human_readable_identifier = 2;
+}
+
+//
+// GetPatientsByWard
+//
+
+message GetPatientsByWardPatient {
+	string id = 1;
+	string human_readable_identifier = 2;
+}
+
+message GetPatientsByWardRequest {
+	string ward_id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetPatientsByWardResponse {
+	repeated GetPatientsByWardPatient patients = 1;
+}
+
+//
 // UpdatePatient
 //
 
@@ -41,6 +86,27 @@ message UpdatePatientRequest {
 message UpdatePatientResponse {}
 
 //
+// AssignBed
+//
+
+message AssignBedRequest {
+	string id = 1; // @gotags: validate:"uuid4"
+	string bed_id = 2; // @gotags: validate:"uuid4"
+}
+
+message AssignBedResponse {}
+
+//
+// UnassignBed
+//
+
+message UnassignBedRequest {
+	string id = 1; // @gotags: validate:"uuid4"
+}
+
+message UnassignBedResponse {}
+
+//
 // PatientService
 //
 
@@ -48,4 +114,6 @@ service PatientService {
 	rpc CreatePatient(CreatePatientRequest) returns (CreatePatientResponse) {}
 	rpc GetPatient(GetPatientRequest) returns (GetPatientResponse) {}
 	rpc UpdatePatient(UpdatePatientRequest) returns (UpdatePatientResponse) {}
+	rpc AssignBed(AssignBedRequest) returns (AssignBedResponse) {}
+	rpc UnassignBed(UnassignBedRequest) returns (UnassignBedResponse) {}
 }

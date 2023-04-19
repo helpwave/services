@@ -68,6 +68,41 @@ const GetTaskResponse$json = const {
 
 /// Descriptor for `GetTaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getTaskResponseDescriptor = $convert.base64Decode('Cg9HZXRUYXNrUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uEj4KBnN0YXR1cxgEIAEoDjImLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlRhc2tTdGF0dXNSBnN0YXR1cxIoChBhc3NpZ25lZF91c2VyX2lkGAUgASgJUg5hc3NpZ25lZFVzZXJJZBIdCgpwYXRpZW50X2lkGAYgASgJUglwYXRpZW50SWQ=');
+@$core.Deprecated('Use getTasksByPatientTaskDescriptor instead')
+const GetTasksByPatientTask$json = const {
+  '1': 'GetTasksByPatientTask',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    const {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
+    const {'1': 'status', '3': 4, '4': 1, '5': 14, '6': '.proto.services.task_svc.v1.TaskStatus', '10': 'status'},
+    const {'1': 'assigned_user_id', '3': 5, '4': 1, '5': 9, '10': 'assignedUserId'},
+    const {'1': 'patient_id', '3': 6, '4': 1, '5': 9, '10': 'patientId'},
+  ],
+};
+
+/// Descriptor for `GetTasksByPatientTask`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getTasksByPatientTaskDescriptor = $convert.base64Decode('ChVHZXRUYXNrc0J5UGF0aWVudFRhc2sSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uEj4KBnN0YXR1cxgEIAEoDjImLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlRhc2tTdGF0dXNSBnN0YXR1cxIoChBhc3NpZ25lZF91c2VyX2lkGAUgASgJUg5hc3NpZ25lZFVzZXJJZBIdCgpwYXRpZW50X2lkGAYgASgJUglwYXRpZW50SWQ=');
+@$core.Deprecated('Use getTasksByPatientRequestDescriptor instead')
+const GetTasksByPatientRequest$json = const {
+  '1': 'GetTasksByPatientRequest',
+  '2': const [
+    const {'1': 'patient_id', '3': 1, '4': 1, '5': 9, '10': 'patientId'},
+  ],
+};
+
+/// Descriptor for `GetTasksByPatientRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getTasksByPatientRequestDescriptor = $convert.base64Decode('ChhHZXRUYXNrc0J5UGF0aWVudFJlcXVlc3QSHQoKcGF0aWVudF9pZBgBIAEoCVIJcGF0aWVudElk');
+@$core.Deprecated('Use getTasksByPatientResponseDescriptor instead')
+const GetTasksByPatientResponse$json = const {
+  '1': 'GetTasksByPatientResponse',
+  '2': const [
+    const {'1': 'tasks', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetTasksByPatientTask', '10': 'tasks'},
+  ],
+};
+
+/// Descriptor for `GetTasksByPatientResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getTasksByPatientResponseDescriptor = $convert.base64Decode('ChlHZXRUYXNrc0J5UGF0aWVudFJlc3BvbnNlEkcKBXRhc2tzGAEgAygLMjEucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0VGFza3NCeVBhdGllbnRUYXNrUgV0YXNrcw==');
 @$core.Deprecated('Use updateTaskRequestDescriptor instead')
 const UpdateTaskRequest$json = const {
   '1': 'UpdateTaskRequest',

@@ -19,12 +19,16 @@ abstract class PatientServiceBase extends $pb.GeneratedService {
   $async.Future<$2.CreatePatientResponse> createPatient($pb.ServerContext ctx, $2.CreatePatientRequest request);
   $async.Future<$2.GetPatientResponse> getPatient($pb.ServerContext ctx, $2.GetPatientRequest request);
   $async.Future<$2.UpdatePatientResponse> updatePatient($pb.ServerContext ctx, $2.UpdatePatientRequest request);
+  $async.Future<$2.AssignBedResponse> assignBed($pb.ServerContext ctx, $2.AssignBedRequest request);
+  $async.Future<$2.UnassignBedResponse> unassignBed($pb.ServerContext ctx, $2.UnassignBedRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
       case 'CreatePatient': return $2.CreatePatientRequest();
       case 'GetPatient': return $2.GetPatientRequest();
       case 'UpdatePatient': return $2.UpdatePatientRequest();
+      case 'AssignBed': return $2.AssignBedRequest();
+      case 'UnassignBed': return $2.UnassignBedRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
@@ -34,6 +38,8 @@ abstract class PatientServiceBase extends $pb.GeneratedService {
       case 'CreatePatient': return this.createPatient(ctx, request as $2.CreatePatientRequest);
       case 'GetPatient': return this.getPatient(ctx, request as $2.GetPatientRequest);
       case 'UpdatePatient': return this.updatePatient(ctx, request as $2.UpdatePatientRequest);
+      case 'AssignBed': return this.assignBed(ctx, request as $2.AssignBedRequest);
+      case 'UnassignBed': return this.unassignBed(ctx, request as $2.UnassignBedRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }

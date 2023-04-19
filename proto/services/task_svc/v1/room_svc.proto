@@ -21,7 +21,7 @@ message CreateRoomResponse {
 // GetRoom
 //
 
-message BedOfRoom {
+message GetRoomBedOfRoom {
 	string id = 1;
 }
 
@@ -32,7 +32,49 @@ message GetRoomRequest {
 message GetRoomResponse {
 	string id = 1;
 	string name = 2;
-	repeated BedOfRoom beds = 3;
+	repeated GetRoomBedOfRoom beds = 3;
+}
+
+//
+// GetRooms
+//
+
+message GetRoomsBedOfRooms {
+	string id = 1;
+}
+
+message GetRoomsRoom {
+	string id = 1;
+	string name = 2;
+	repeated GetRoomsBedOfRooms beds = 3;
+}
+
+message GetRoomsRequest {}
+
+message GetRoomsResponse {
+	repeated GetRoomsRoom rooms = 1;
+}
+
+//
+// GetRoomsByWard
+//
+
+message GetRoomsByWardBedOfRooms {
+	string id = 1;
+}
+
+message GetRoomsByWardRoom {
+	string id = 1;
+	string name = 2;
+	repeated GetRoomsBedOfRooms beds = 3;
+}
+
+message GetRoomsByWardRequest {
+	string ward_id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetRoomsByWardResponse {
+	repeated GetRoomsRoom rooms = 1;
 }
 
 //

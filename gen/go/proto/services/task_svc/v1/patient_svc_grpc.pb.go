@@ -22,6 +22,8 @@ const (
 	PatientService_CreatePatient_FullMethodName = "/proto.services.task_svc.v1.PatientService/CreatePatient"
 	PatientService_GetPatient_FullMethodName    = "/proto.services.task_svc.v1.PatientService/GetPatient"
 	PatientService_UpdatePatient_FullMethodName = "/proto.services.task_svc.v1.PatientService/UpdatePatient"
+	PatientService_AssignBed_FullMethodName     = "/proto.services.task_svc.v1.PatientService/AssignBed"
+	PatientService_UnassignBed_FullMethodName   = "/proto.services.task_svc.v1.PatientService/UnassignBed"
 )
 
 // PatientServiceClient is the client API for PatientService service.
@@ -31,6 +33,8 @@ type PatientServiceClient interface {
 	CreatePatient(ctx context.Context, in *CreatePatientRequest, opts ...grpc.CallOption) (*CreatePatientResponse, error)
 	GetPatient(ctx context.Context, in *GetPatientRequest, opts ...grpc.CallOption) (*GetPatientResponse, error)
 	UpdatePatient(ctx context.Context, in *UpdatePatientRequest, opts ...grpc.CallOption) (*UpdatePatientResponse, error)
+	AssignBed(ctx context.Context, in *AssignBedRequest, opts ...grpc.CallOption) (*AssignBedResponse, error)
+	UnassignBed(ctx context.Context, in *UnassignBedRequest, opts ...grpc.CallOption) (*UnassignBedResponse, error)
 }
 
 type patientServiceClient struct {
@@ -68,6 +72,24 @@ func (c *patientServiceClient) UpdatePatient(ctx context.Context, in *UpdatePati
 	return out, nil
 }
 
+func (c *patientServiceClient) AssignBed(ctx context.Context, in *AssignBedRequest, opts ...grpc.CallOption) (*AssignBedResponse, error) {
+	out := new(AssignBedResponse)
+	err := c.cc.Invoke(ctx, PatientService_AssignBed_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *patientServiceClient) UnassignBed(ctx context.Context, in *UnassignBedRequest, opts ...grpc.CallOption) (*UnassignBedResponse, error) {
+	out := new(UnassignBedResponse)
+	err := c.cc.Invoke(ctx, PatientService_UnassignBed_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PatientServiceServer is the server API for PatientService service.
 // All implementations must embed UnimplementedPatientServiceServer
 // for forward compatibility
@@ -75,6 +97,8 @@ type PatientServiceServer interface {
 	CreatePatient(context.Context, *CreatePatientRequest) (*CreatePatientResponse, error)
 	GetPatient(context.Context, *GetPatientRequest) (*GetPatientResponse, error)
 	UpdatePatient(context.Context, *UpdatePatientRequest) (*UpdatePatientResponse, error)
+	AssignBed(context.Context, *AssignBedRequest) (*AssignBedResponse, error)
+	UnassignBed(context.Context, *UnassignBedRequest) (*UnassignBedResponse, error)
 	mustEmbedUnimplementedPatientServiceServer()
 }
 
@@ -90,6 +114,12 @@ func (UnimplementedPatientServiceServer) GetPatient(context.Context, *GetPatient
 }
 func (UnimplementedPatientServiceServer) UpdatePatient(context.Context, *UpdatePatientRequest) (*UpdatePatientResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePatient not implemented")
+}
+func (UnimplementedPatientServiceServer) AssignBed(context.Context, *AssignBedRequest) (*AssignBedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AssignBed not implemented")
+}
+func (UnimplementedPatientServiceServer) UnassignBed(context.Context, *UnassignBedRequest) (*UnassignBedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnassignBed not implemented")
 }
 func (UnimplementedPatientServiceServer) mustEmbedUnimplementedPatientServiceServer() {}
 
@@ -158,6 +188,42 @@ func _PatientService_UpdatePatient_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PatientService_AssignBed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AssignBedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PatientServiceServer).AssignBed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PatientService_AssignBed_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PatientServiceServer).AssignBed(ctx, req.(*AssignBedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PatientService_UnassignBed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnassignBedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PatientServiceServer).UnassignBed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PatientService_UnassignBed_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PatientServiceServer).UnassignBed(ctx, req.(*UnassignBedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PatientService_ServiceDesc is the grpc.ServiceDesc for PatientService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +242,14 @@ var PatientService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdatePatient",
 			Handler:    _PatientService_UpdatePatient_Handler,
+		},
+		{
+			MethodName: "AssignBed",
+			Handler:    _PatientService_AssignBed_Handler,
+		},
+		{
+			MethodName: "UnassignBed",
+			Handler:    _PatientService_UnassignBed_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
