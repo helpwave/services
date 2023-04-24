@@ -80,183 +80,61 @@ proto.proto.services.user_svc.v1.UserServicePromiseClient =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.user_svc.v1.CreateUserRequest,
- *   !proto.proto.services.user_svc.v1.CreateUserResponse>}
+ *   !proto.proto.services.user_svc.v1.ReadSelfRequest,
+ *   !proto.proto.services.user_svc.v1.ReadSelfResponse>}
  */
-const methodDescriptor_UserService_CreateUser = new grpc.web.MethodDescriptor(
-  '/proto.services.user_svc.v1.UserService/CreateUser',
+const methodDescriptor_UserService_ReadSelf = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.UserService/ReadSelf',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.user_svc.v1.CreateUserRequest,
-  proto.proto.services.user_svc.v1.CreateUserResponse,
+  proto.proto.services.user_svc.v1.ReadSelfRequest,
+  proto.proto.services.user_svc.v1.ReadSelfResponse,
   /**
-   * @param {!proto.proto.services.user_svc.v1.CreateUserRequest} request
+   * @param {!proto.proto.services.user_svc.v1.ReadSelfRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.user_svc.v1.CreateUserResponse.deserializeBinary
+  proto.proto.services.user_svc.v1.ReadSelfResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.user_svc.v1.CreateUserRequest} request The
+ * @param {!proto.proto.services.user_svc.v1.ReadSelfRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.CreateUserResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.ReadSelfResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.CreateUserResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.ReadSelfResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.user_svc.v1.UserServiceClient.prototype.createUser =
+proto.proto.services.user_svc.v1.UserServiceClient.prototype.readSelf =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.user_svc.v1.UserService/CreateUser',
+      '/proto.services.user_svc.v1.UserService/ReadSelf',
       request,
       metadata || {},
-      methodDescriptor_UserService_CreateUser,
+      methodDescriptor_UserService_ReadSelf,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.user_svc.v1.CreateUserRequest} request The
+ * @param {!proto.proto.services.user_svc.v1.ReadSelfRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.user_svc.v1.CreateUserResponse>}
+ * @return {!Promise<!proto.proto.services.user_svc.v1.ReadSelfResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.createUser =
+proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.readSelf =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.user_svc.v1.UserService/CreateUser',
+      '/proto.services.user_svc.v1.UserService/ReadSelf',
       request,
       metadata || {},
-      methodDescriptor_UserService_CreateUser);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.user_svc.v1.UpdateUserRequest,
- *   !proto.proto.services.user_svc.v1.UpdateUserResponse>}
- */
-const methodDescriptor_UserService_UpdateUser = new grpc.web.MethodDescriptor(
-  '/proto.services.user_svc.v1.UserService/UpdateUser',
-  grpc.web.MethodType.UNARY,
-  proto.proto.services.user_svc.v1.UpdateUserRequest,
-  proto.proto.services.user_svc.v1.UpdateUserResponse,
-  /**
-   * @param {!proto.proto.services.user_svc.v1.UpdateUserRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.proto.services.user_svc.v1.UpdateUserResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.proto.services.user_svc.v1.UpdateUserRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.UpdateUserResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.UpdateUserResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.proto.services.user_svc.v1.UserServiceClient.prototype.updateUser =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.user_svc.v1.UserService/UpdateUser',
-      request,
-      metadata || {},
-      methodDescriptor_UserService_UpdateUser,
-      callback);
-};
-
-
-/**
- * @param {!proto.proto.services.user_svc.v1.UpdateUserRequest} request The
- *     request proto
- * @param {?Object<string, string>=} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.proto.services.user_svc.v1.UpdateUserResponse>}
- *     Promise that resolves to the response
- */
-proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.updateUser =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.user_svc.v1.UserService/UpdateUser',
-      request,
-      metadata || {},
-      methodDescriptor_UserService_UpdateUser);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.user_svc.v1.GetUserRequest,
- *   !proto.proto.services.user_svc.v1.GetUserResponse>}
- */
-const methodDescriptor_UserService_GetUser = new grpc.web.MethodDescriptor(
-  '/proto.services.user_svc.v1.UserService/GetUser',
-  grpc.web.MethodType.UNARY,
-  proto.proto.services.user_svc.v1.GetUserRequest,
-  proto.proto.services.user_svc.v1.GetUserResponse,
-  /**
-   * @param {!proto.proto.services.user_svc.v1.GetUserRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.proto.services.user_svc.v1.GetUserResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.proto.services.user_svc.v1.GetUserRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.GetUserResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.GetUserResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.proto.services.user_svc.v1.UserServiceClient.prototype.getUser =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.user_svc.v1.UserService/GetUser',
-      request,
-      metadata || {},
-      methodDescriptor_UserService_GetUser,
-      callback);
-};
-
-
-/**
- * @param {!proto.proto.services.user_svc.v1.GetUserRequest} request The
- *     request proto
- * @param {?Object<string, string>=} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.proto.services.user_svc.v1.GetUserResponse>}
- *     Promise that resolves to the response
- */
-proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.getUser =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.user_svc.v1.UserService/GetUser',
-      request,
-      metadata || {},
-      methodDescriptor_UserService_GetUser);
+      methodDescriptor_UserService_ReadSelf);
 };
 
 
@@ -318,6 +196,67 @@ proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.readPublicPr
       request,
       metadata || {},
       methodDescriptor_UserService_ReadPublicProfile);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.UpdateUserRequest,
+ *   !proto.proto.services.user_svc.v1.UpdateUserResponse>}
+ */
+const methodDescriptor_UserService_UpdateUser = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.UserService/UpdateUser',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.UpdateUserRequest,
+  proto.proto.services.user_svc.v1.UpdateUserResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.UpdateUserRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.UpdateUserResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.UpdateUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.UpdateUserResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.UpdateUserResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.UserServiceClient.prototype.updateUser =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.UserService/UpdateUser',
+      request,
+      metadata || {},
+      methodDescriptor_UserService_UpdateUser,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.UpdateUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.UpdateUserResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.updateUser =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.UserService/UpdateUser',
+      request,
+      metadata || {},
+      methodDescriptor_UserService_UpdateUser);
 };
 
 

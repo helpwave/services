@@ -8,41 +8,70 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
-@$core.Deprecated('Use createUserRequestDescriptor instead')
-const CreateUserRequest$json = const {
-  '1': 'CreateUserRequest',
+@$core.Deprecated('Use readSelfOrganizationDescriptor instead')
+const ReadSelfOrganization$json = const {
+  '1': 'ReadSelfOrganization',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
 };
 
-/// Descriptor for `CreateUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createUserRequestDescriptor = $convert.base64Decode('ChFDcmVhdGVVc2VyUmVxdWVzdA==');
-@$core.Deprecated('Use createUserResponseDescriptor instead')
-const CreateUserResponse$json = const {
-  '1': 'CreateUserResponse',
+/// Descriptor for `ReadSelfOrganization`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List readSelfOrganizationDescriptor = $convert.base64Decode('ChRSZWFkU2VsZk9yZ2FuaXphdGlvbhIOCgJpZBgBIAEoCVICaWQ=');
+@$core.Deprecated('Use readSelfRequestDescriptor instead')
+const ReadSelfRequest$json = const {
+  '1': 'ReadSelfRequest',
 };
 
-/// Descriptor for `CreateUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createUserResponseDescriptor = $convert.base64Decode('ChJDcmVhdGVVc2VyUmVzcG9uc2U=');
-@$core.Deprecated('Use getUserRequestDescriptor instead')
-const GetUserRequest$json = const {
-  '1': 'GetUserRequest',
+/// Descriptor for `ReadSelfRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List readSelfRequestDescriptor = $convert.base64Decode('Cg9SZWFkU2VsZlJlcXVlc3Q=');
+@$core.Deprecated('Use readSelfResponseDescriptor instead')
+const ReadSelfResponse$json = const {
+  '1': 'ReadSelfResponse',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    const {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
+    const {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '10': 'avatarUrl'},
+    const {'1': 'organizations', '3': 5, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.ReadSelfOrganization', '10': 'organizations'},
+  ],
 };
 
-/// Descriptor for `GetUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getUserRequestDescriptor = $convert.base64Decode('Cg5HZXRVc2VyUmVxdWVzdA==');
-@$core.Deprecated('Use getUserResponseDescriptor instead')
-const GetUserResponse$json = const {
-  '1': 'GetUserResponse',
+/// Descriptor for `ReadSelfResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List readSelfResponseDescriptor = $convert.base64Decode('ChBSZWFkU2VsZlJlc3BvbnNlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhoKCG5pY2tuYW1lGAMgASgJUghuaWNrbmFtZRIdCgphdmF0YXJfdXJsGAQgASgJUglhdmF0YXJVcmwSVgoNb3JnYW5pemF0aW9ucxgFIAMoCzIwLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLlJlYWRTZWxmT3JnYW5pemF0aW9uUg1vcmdhbml6YXRpb25z');
+@$core.Deprecated('Use readPublicProfileRequestDescriptor instead')
+const ReadPublicProfileRequest$json = const {
+  '1': 'ReadPublicProfileRequest',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
 };
 
-/// Descriptor for `GetUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getUserResponseDescriptor = $convert.base64Decode('Cg9HZXRVc2VyUmVzcG9uc2U=');
+/// Descriptor for `ReadPublicProfileRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List readPublicProfileRequestDescriptor = $convert.base64Decode('ChhSZWFkUHVibGljUHJvZmlsZVJlcXVlc3QSDgoCaWQYASABKAlSAmlk');
+@$core.Deprecated('Use readPublicProfileResponseDescriptor instead')
+const ReadPublicProfileResponse$json = const {
+  '1': 'ReadPublicProfileResponse',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    const {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
+    const {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '10': 'avatarUrl'},
+  ],
+};
+
+/// Descriptor for `ReadPublicProfileResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List readPublicProfileResponseDescriptor = $convert.base64Decode('ChlSZWFkUHVibGljUHJvZmlsZVJlc3BvbnNlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhoKCG5pY2tuYW1lGAMgASgJUghuaWNrbmFtZRIdCgphdmF0YXJfdXJsGAQgASgJUglhdmF0YXJVcmw=');
 @$core.Deprecated('Use updateUserRequestDescriptor instead')
 const UpdateUserRequest$json = const {
   '1': 'UpdateUserRequest',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
 };
 
 /// Descriptor for `UpdateUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateUserRequestDescriptor = $convert.base64Decode('ChFVcGRhdGVVc2VyUmVxdWVzdA==');
+final $typed_data.Uint8List updateUserRequestDescriptor = $convert.base64Decode('ChFVcGRhdGVVc2VyUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQ=');
 @$core.Deprecated('Use updateUserResponseDescriptor instead')
 const UpdateUserResponse$json = const {
   '1': 'UpdateUserResponse',
@@ -50,41 +79,25 @@ const UpdateUserResponse$json = const {
 
 /// Descriptor for `UpdateUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateUserResponseDescriptor = $convert.base64Decode('ChJVcGRhdGVVc2VyUmVzcG9uc2U=');
-@$core.Deprecated('Use readPublicProfileRequestDescriptor instead')
-const ReadPublicProfileRequest$json = const {
-  '1': 'ReadPublicProfileRequest',
-};
-
-/// Descriptor for `ReadPublicProfileRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List readPublicProfileRequestDescriptor = $convert.base64Decode('ChhSZWFkUHVibGljUHJvZmlsZVJlcXVlc3Q=');
-@$core.Deprecated('Use readPublicProfileResponseDescriptor instead')
-const ReadPublicProfileResponse$json = const {
-  '1': 'ReadPublicProfileResponse',
-};
-
-/// Descriptor for `ReadPublicProfileResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List readPublicProfileResponseDescriptor = $convert.base64Decode('ChlSZWFkUHVibGljUHJvZmlsZVJlc3BvbnNl');
 const $core.Map<$core.String, $core.dynamic> UserServiceBase$json = const {
   '1': 'UserService',
   '2': const [
-    const {'1': 'CreateUser', '2': '.proto.services.user_svc.v1.CreateUserRequest', '3': '.proto.services.user_svc.v1.CreateUserResponse', '4': const {}},
-    const {'1': 'UpdateUser', '2': '.proto.services.user_svc.v1.UpdateUserRequest', '3': '.proto.services.user_svc.v1.UpdateUserResponse', '4': const {}},
-    const {'1': 'GetUser', '2': '.proto.services.user_svc.v1.GetUserRequest', '3': '.proto.services.user_svc.v1.GetUserResponse', '4': const {}},
+    const {'1': 'ReadSelf', '2': '.proto.services.user_svc.v1.ReadSelfRequest', '3': '.proto.services.user_svc.v1.ReadSelfResponse', '4': const {}},
     const {'1': 'ReadPublicProfile', '2': '.proto.services.user_svc.v1.ReadPublicProfileRequest', '3': '.proto.services.user_svc.v1.ReadPublicProfileResponse', '4': const {}},
+    const {'1': 'UpdateUser', '2': '.proto.services.user_svc.v1.UpdateUserRequest', '3': '.proto.services.user_svc.v1.UpdateUserResponse', '4': const {}},
   ],
 };
 
 @$core.Deprecated('Use userServiceDescriptor instead')
 const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> UserServiceBase$messageJson = const {
-  '.proto.services.user_svc.v1.CreateUserRequest': CreateUserRequest$json,
-  '.proto.services.user_svc.v1.CreateUserResponse': CreateUserResponse$json,
-  '.proto.services.user_svc.v1.UpdateUserRequest': UpdateUserRequest$json,
-  '.proto.services.user_svc.v1.UpdateUserResponse': UpdateUserResponse$json,
-  '.proto.services.user_svc.v1.GetUserRequest': GetUserRequest$json,
-  '.proto.services.user_svc.v1.GetUserResponse': GetUserResponse$json,
+  '.proto.services.user_svc.v1.ReadSelfRequest': ReadSelfRequest$json,
+  '.proto.services.user_svc.v1.ReadSelfResponse': ReadSelfResponse$json,
+  '.proto.services.user_svc.v1.ReadSelfOrganization': ReadSelfOrganization$json,
   '.proto.services.user_svc.v1.ReadPublicProfileRequest': ReadPublicProfileRequest$json,
   '.proto.services.user_svc.v1.ReadPublicProfileResponse': ReadPublicProfileResponse$json,
+  '.proto.services.user_svc.v1.UpdateUserRequest': UpdateUserRequest$json,
+  '.proto.services.user_svc.v1.UpdateUserResponse': UpdateUserResponse$json,
 };
 
 /// Descriptor for `UserService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List userServiceDescriptor = $convert.base64Decode('CgtVc2VyU2VydmljZRJtCgpDcmVhdGVVc2VyEi0ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQ3JlYXRlVXNlclJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5DcmVhdGVVc2VyUmVzcG9uc2UiABJtCgpVcGRhdGVVc2VyEi0ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuVXBkYXRlVXNlclJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5VcGRhdGVVc2VyUmVzcG9uc2UiABJkCgdHZXRVc2VyEioucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0VXNlclJlcXVlc3QaKy5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRVc2VyUmVzcG9uc2UiABKCAQoRUmVhZFB1YmxpY1Byb2ZpbGUSNC5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5SZWFkUHVibGljUHJvZmlsZVJlcXVlc3QaNS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5SZWFkUHVibGljUHJvZmlsZVJlc3BvbnNlIgA=');
+final $typed_data.Uint8List userServiceDescriptor = $convert.base64Decode('CgtVc2VyU2VydmljZRJnCghSZWFkU2VsZhIrLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLlJlYWRTZWxmUmVxdWVzdBosLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLlJlYWRTZWxmUmVzcG9uc2UiABKCAQoRUmVhZFB1YmxpY1Byb2ZpbGUSNC5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5SZWFkUHVibGljUHJvZmlsZVJlcXVlc3QaNS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5SZWFkUHVibGljUHJvZmlsZVJlc3BvbnNlIgASbQoKVXBkYXRlVXNlchItLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLlVwZGF0ZVVzZXJSZXF1ZXN0Gi4ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuVXBkYXRlVXNlclJlc3BvbnNlIgA=');

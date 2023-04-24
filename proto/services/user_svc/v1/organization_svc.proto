@@ -84,7 +84,7 @@ message GetOrganizationsByUserResponse {
 //
 
 message UpdateOrganizationRequest {
-	string id = 1;
+	string id = 1;  // @gotags: validate:"uuid4"
     optional string long_name = 2;
     optional string short_name = 3;
     optional string contact_email = 4;
@@ -99,7 +99,7 @@ message UpdateOrganizationResponse {}
 //
 
 message DeleteOrganizationRequest {
-	string id = 1;
+	string id = 1;  // @gotags: validate:"uuid4"
 }
 
 message DeleteOrganizationResponse {}
