@@ -10,36 +10,36 @@ import 'dart:async' as $async;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'dart:core' as $core;
-import 'patient_svc.pb.dart' as $2;
+import 'patient_svc.pb.dart' as $3;
 import 'patient_svc.pbjson.dart';
 
 export 'patient_svc.pb.dart';
 
 abstract class PatientServiceBase extends $pb.GeneratedService {
-  $async.Future<$2.CreatePatientResponse> createPatient($pb.ServerContext ctx, $2.CreatePatientRequest request);
-  $async.Future<$2.GetPatientResponse> getPatient($pb.ServerContext ctx, $2.GetPatientRequest request);
-  $async.Future<$2.UpdatePatientResponse> updatePatient($pb.ServerContext ctx, $2.UpdatePatientRequest request);
-  $async.Future<$2.AssignBedResponse> assignBed($pb.ServerContext ctx, $2.AssignBedRequest request);
-  $async.Future<$2.UnassignBedResponse> unassignBed($pb.ServerContext ctx, $2.UnassignBedRequest request);
+  $async.Future<$3.CreatePatientResponse> createPatient($pb.ServerContext ctx, $3.CreatePatientRequest request);
+  $async.Future<$3.GetPatientResponse> getPatient($pb.ServerContext ctx, $3.GetPatientRequest request);
+  $async.Future<$3.UpdatePatientResponse> updatePatient($pb.ServerContext ctx, $3.UpdatePatientRequest request);
+  $async.Future<$3.AssignBedResponse> assignBed($pb.ServerContext ctx, $3.AssignBedRequest request);
+  $async.Future<$3.UnassignBedResponse> unassignBed($pb.ServerContext ctx, $3.UnassignBedRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
-      case 'CreatePatient': return $2.CreatePatientRequest();
-      case 'GetPatient': return $2.GetPatientRequest();
-      case 'UpdatePatient': return $2.UpdatePatientRequest();
-      case 'AssignBed': return $2.AssignBedRequest();
-      case 'UnassignBed': return $2.UnassignBedRequest();
+      case 'CreatePatient': return $3.CreatePatientRequest();
+      case 'GetPatient': return $3.GetPatientRequest();
+      case 'UpdatePatient': return $3.UpdatePatientRequest();
+      case 'AssignBed': return $3.AssignBedRequest();
+      case 'UnassignBed': return $3.UnassignBedRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String method, $pb.GeneratedMessage request) {
     switch (method) {
-      case 'CreatePatient': return this.createPatient(ctx, request as $2.CreatePatientRequest);
-      case 'GetPatient': return this.getPatient(ctx, request as $2.GetPatientRequest);
-      case 'UpdatePatient': return this.updatePatient(ctx, request as $2.UpdatePatientRequest);
-      case 'AssignBed': return this.assignBed(ctx, request as $2.AssignBedRequest);
-      case 'UnassignBed': return this.unassignBed(ctx, request as $2.UnassignBedRequest);
+      case 'CreatePatient': return this.createPatient(ctx, request as $3.CreatePatientRequest);
+      case 'GetPatient': return this.getPatient(ctx, request as $3.GetPatientRequest);
+      case 'UpdatePatient': return this.updatePatient(ctx, request as $3.UpdatePatientRequest);
+      case 'AssignBed': return this.assignBed(ctx, request as $3.AssignBedRequest);
+      case 'UnassignBed': return this.unassignBed(ctx, request as $3.UnassignBedRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }

@@ -10,42 +10,42 @@ import 'dart:async' as $async;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'dart:core' as $core;
-import 'task_svc.pb.dart' as $4;
+import 'task_svc.pb.dart' as $5;
 import 'task_svc.pbjson.dart';
 
 export 'task_svc.pb.dart';
 
 abstract class TaskServiceBase extends $pb.GeneratedService {
-  $async.Future<$4.CreateTaskResponse> createTask($pb.ServerContext ctx, $4.CreateTaskRequest request);
-  $async.Future<$4.GetTaskResponse> getTask($pb.ServerContext ctx, $4.GetTaskRequest request);
-  $async.Future<$4.UpdateTaskResponse> updateTask($pb.ServerContext ctx, $4.UpdateTaskRequest request);
-  $async.Future<$4.TaskToInProgressResponse> taskToInProgress($pb.ServerContext ctx, $4.TaskToInProgressRequest request);
-  $async.Future<$4.TaskToDoneResponse> taskToDone($pb.ServerContext ctx, $4.TaskToDoneRequest request);
-  $async.Future<$4.AssignTaskToUserResponse> assignTaskToUser($pb.ServerContext ctx, $4.AssignTaskToUserRequest request);
-  $async.Future<$4.UnassignTaskFromUserResponse> unassignTaskFromUser($pb.ServerContext ctx, $4.UnassignTaskFromUserRequest request);
+  $async.Future<$5.CreateTaskResponse> createTask($pb.ServerContext ctx, $5.CreateTaskRequest request);
+  $async.Future<$5.GetTaskResponse> getTask($pb.ServerContext ctx, $5.GetTaskRequest request);
+  $async.Future<$5.UpdateTaskResponse> updateTask($pb.ServerContext ctx, $5.UpdateTaskRequest request);
+  $async.Future<$5.TaskToInProgressResponse> taskToInProgress($pb.ServerContext ctx, $5.TaskToInProgressRequest request);
+  $async.Future<$5.TaskToDoneResponse> taskToDone($pb.ServerContext ctx, $5.TaskToDoneRequest request);
+  $async.Future<$5.AssignTaskToUserResponse> assignTaskToUser($pb.ServerContext ctx, $5.AssignTaskToUserRequest request);
+  $async.Future<$5.UnassignTaskFromUserResponse> unassignTaskFromUser($pb.ServerContext ctx, $5.UnassignTaskFromUserRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
-      case 'CreateTask': return $4.CreateTaskRequest();
-      case 'GetTask': return $4.GetTaskRequest();
-      case 'UpdateTask': return $4.UpdateTaskRequest();
-      case 'TaskToInProgress': return $4.TaskToInProgressRequest();
-      case 'TaskToDone': return $4.TaskToDoneRequest();
-      case 'AssignTaskToUser': return $4.AssignTaskToUserRequest();
-      case 'UnassignTaskFromUser': return $4.UnassignTaskFromUserRequest();
+      case 'CreateTask': return $5.CreateTaskRequest();
+      case 'GetTask': return $5.GetTaskRequest();
+      case 'UpdateTask': return $5.UpdateTaskRequest();
+      case 'TaskToInProgress': return $5.TaskToInProgressRequest();
+      case 'TaskToDone': return $5.TaskToDoneRequest();
+      case 'AssignTaskToUser': return $5.AssignTaskToUserRequest();
+      case 'UnassignTaskFromUser': return $5.UnassignTaskFromUserRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String method, $pb.GeneratedMessage request) {
     switch (method) {
-      case 'CreateTask': return this.createTask(ctx, request as $4.CreateTaskRequest);
-      case 'GetTask': return this.getTask(ctx, request as $4.GetTaskRequest);
-      case 'UpdateTask': return this.updateTask(ctx, request as $4.UpdateTaskRequest);
-      case 'TaskToInProgress': return this.taskToInProgress(ctx, request as $4.TaskToInProgressRequest);
-      case 'TaskToDone': return this.taskToDone(ctx, request as $4.TaskToDoneRequest);
-      case 'AssignTaskToUser': return this.assignTaskToUser(ctx, request as $4.AssignTaskToUserRequest);
-      case 'UnassignTaskFromUser': return this.unassignTaskFromUser(ctx, request as $4.UnassignTaskFromUserRequest);
+      case 'CreateTask': return this.createTask(ctx, request as $5.CreateTaskRequest);
+      case 'GetTask': return this.getTask(ctx, request as $5.GetTaskRequest);
+      case 'UpdateTask': return this.updateTask(ctx, request as $5.UpdateTaskRequest);
+      case 'TaskToInProgress': return this.taskToInProgress(ctx, request as $5.TaskToInProgressRequest);
+      case 'TaskToDone': return this.taskToDone(ctx, request as $5.TaskToDoneRequest);
+      case 'AssignTaskToUser': return this.assignTaskToUser(ctx, request as $5.AssignTaskToUserRequest);
+      case 'UnassignTaskFromUser': return this.unassignTaskFromUser(ctx, request as $5.UnassignTaskFromUserRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }

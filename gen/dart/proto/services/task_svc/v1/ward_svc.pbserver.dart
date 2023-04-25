@@ -10,36 +10,36 @@ import 'dart:async' as $async;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'dart:core' as $core;
-import 'ward_svc.pb.dart' as $5;
+import 'ward_svc.pb.dart' as $6;
 import 'ward_svc.pbjson.dart';
 
 export 'ward_svc.pb.dart';
 
 abstract class WardServiceBase extends $pb.GeneratedService {
-  $async.Future<$5.CreateWardResponse> createWard($pb.ServerContext ctx, $5.CreateWardRequest request);
-  $async.Future<$5.GetWardResponse> getWard($pb.ServerContext ctx, $5.GetWardRequest request);
-  $async.Future<$5.GetWardByOrganizationResponse> getWardByOrganization($pb.ServerContext ctx, $5.GetWardByOrganizationRequest request);
-  $async.Future<$5.UpdateWardResponse> updateWard($pb.ServerContext ctx, $5.UpdateWardRequest request);
-  $async.Future<$5.DeleteWardResponse> deleteWard($pb.ServerContext ctx, $5.DeleteWardRequest request);
+  $async.Future<$6.CreateWardResponse> createWard($pb.ServerContext ctx, $6.CreateWardRequest request);
+  $async.Future<$6.GetWardResponse> getWard($pb.ServerContext ctx, $6.GetWardRequest request);
+  $async.Future<$6.GetWardByOrganizationResponse> getWardByOrganization($pb.ServerContext ctx, $6.GetWardByOrganizationRequest request);
+  $async.Future<$6.UpdateWardResponse> updateWard($pb.ServerContext ctx, $6.UpdateWardRequest request);
+  $async.Future<$6.DeleteWardResponse> deleteWard($pb.ServerContext ctx, $6.DeleteWardRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
-      case 'CreateWard': return $5.CreateWardRequest();
-      case 'GetWard': return $5.GetWardRequest();
-      case 'GetWardByOrganization': return $5.GetWardByOrganizationRequest();
-      case 'UpdateWard': return $5.UpdateWardRequest();
-      case 'DeleteWard': return $5.DeleteWardRequest();
+      case 'CreateWard': return $6.CreateWardRequest();
+      case 'GetWard': return $6.GetWardRequest();
+      case 'GetWardByOrganization': return $6.GetWardByOrganizationRequest();
+      case 'UpdateWard': return $6.UpdateWardRequest();
+      case 'DeleteWard': return $6.DeleteWardRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String method, $pb.GeneratedMessage request) {
     switch (method) {
-      case 'CreateWard': return this.createWard(ctx, request as $5.CreateWardRequest);
-      case 'GetWard': return this.getWard(ctx, request as $5.GetWardRequest);
-      case 'GetWardByOrganization': return this.getWardByOrganization(ctx, request as $5.GetWardByOrganizationRequest);
-      case 'UpdateWard': return this.updateWard(ctx, request as $5.UpdateWardRequest);
-      case 'DeleteWard': return this.deleteWard(ctx, request as $5.DeleteWardRequest);
+      case 'CreateWard': return this.createWard(ctx, request as $6.CreateWardRequest);
+      case 'GetWard': return this.getWard(ctx, request as $6.GetWardRequest);
+      case 'GetWardByOrganization': return this.getWardByOrganization(ctx, request as $6.GetWardByOrganizationRequest);
+      case 'UpdateWard': return this.updateWard(ctx, request as $6.UpdateWardRequest);
+      case 'DeleteWard': return this.deleteWard(ctx, request as $6.DeleteWardRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
