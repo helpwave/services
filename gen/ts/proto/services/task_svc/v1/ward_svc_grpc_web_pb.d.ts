@@ -22,12 +22,12 @@ export class WardServiceClient {
                response: proto_services_task_svc_v1_ward_svc_pb.GetWardResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_ward_svc_pb.GetWardResponse>;
 
-  getWardByOrganization(
-    request: proto_services_task_svc_v1_ward_svc_pb.GetWardByOrganizationRequest,
+  getWards(
+    request: proto_services_task_svc_v1_ward_svc_pb.GetWardsRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: proto_services_task_svc_v1_ward_svc_pb.GetWardByOrganizationResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_ward_svc_pb.GetWardByOrganizationResponse>;
+               response: proto_services_task_svc_v1_ward_svc_pb.GetWardsResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_ward_svc_pb.GetWardsResponse>;
 
   updateWard(
     request: proto_services_task_svc_v1_ward_svc_pb.UpdateWardRequest,
@@ -60,10 +60,10 @@ export class WardServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_ward_svc_pb.GetWardResponse>;
 
-  getWardByOrganization(
-    request: proto_services_task_svc_v1_ward_svc_pb.GetWardByOrganizationRequest,
+  getWards(
+    request: proto_services_task_svc_v1_ward_svc_pb.GetWardsRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_task_svc_v1_ward_svc_pb.GetWardByOrganizationResponse>;
+  ): Promise<proto_services_task_svc_v1_ward_svc_pb.GetWardsResponse>;
 
   updateWard(
     request: proto_services_task_svc_v1_ward_svc_pb.UpdateWardRequest,

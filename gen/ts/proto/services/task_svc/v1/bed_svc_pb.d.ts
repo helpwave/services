@@ -38,24 +38,6 @@ export namespace CreateBedResponse {
   }
 }
 
-export class BulkCreateBedsBed extends jspb.Message {
-  getId(): string;
-  setId(value: string): BulkCreateBedsBed;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): BulkCreateBedsBed.AsObject;
-  static toObject(includeInstance: boolean, msg: BulkCreateBedsBed): BulkCreateBedsBed.AsObject;
-  static serializeBinaryToWriter(message: BulkCreateBedsBed, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): BulkCreateBedsBed;
-  static deserializeBinaryFromReader(message: BulkCreateBedsBed, reader: jspb.BinaryReader): BulkCreateBedsBed;
-}
-
-export namespace BulkCreateBedsBed {
-  export type AsObject = {
-    id: string,
-  }
-}
-
 export class BulkCreateBedsRequest extends jspb.Message {
   getRoomId(): string;
   setRoomId(value: string): BulkCreateBedsRequest;
@@ -79,10 +61,10 @@ export namespace BulkCreateBedsRequest {
 }
 
 export class BulkCreateBedsResponse extends jspb.Message {
-  getBedsList(): Array<BulkCreateBedsBed>;
-  setBedsList(value: Array<BulkCreateBedsBed>): BulkCreateBedsResponse;
+  getBedsList(): Array<BulkCreateBedsResponse.Bed>;
+  setBedsList(value: Array<BulkCreateBedsResponse.Bed>): BulkCreateBedsResponse;
   clearBedsList(): BulkCreateBedsResponse;
-  addBeds(value?: BulkCreateBedsBed, index?: number): BulkCreateBedsBed;
+  addBeds(value?: BulkCreateBedsResponse.Bed, index?: number): BulkCreateBedsResponse.Bed;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BulkCreateBedsResponse.AsObject;
@@ -94,8 +76,27 @@ export class BulkCreateBedsResponse extends jspb.Message {
 
 export namespace BulkCreateBedsResponse {
   export type AsObject = {
-    bedsList: Array<BulkCreateBedsBed.AsObject>,
+    bedsList: Array<BulkCreateBedsResponse.Bed.AsObject>,
   }
+
+  export class Bed extends jspb.Message {
+    getId(): string;
+    setId(value: string): Bed;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Bed.AsObject;
+    static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
+    static serializeBinaryToWriter(message: Bed, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Bed;
+    static deserializeBinaryFromReader(message: Bed, reader: jspb.BinaryReader): Bed;
+  }
+
+  export namespace Bed {
+    export type AsObject = {
+      id: string,
+    }
+  }
+
 }
 
 export class GetBedRequest extends jspb.Message {
@@ -138,28 +139,6 @@ export namespace GetBedResponse {
   }
 }
 
-export class GetBedsBed extends jspb.Message {
-  getId(): string;
-  setId(value: string): GetBedsBed;
-
-  getRoomId(): string;
-  setRoomId(value: string): GetBedsBed;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetBedsBed.AsObject;
-  static toObject(includeInstance: boolean, msg: GetBedsBed): GetBedsBed.AsObject;
-  static serializeBinaryToWriter(message: GetBedsBed, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetBedsBed;
-  static deserializeBinaryFromReader(message: GetBedsBed, reader: jspb.BinaryReader): GetBedsBed;
-}
-
-export namespace GetBedsBed {
-  export type AsObject = {
-    id: string,
-    roomId: string,
-  }
-}
-
 export class GetBedsRequest extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetBedsRequest.AsObject;
@@ -175,10 +154,10 @@ export namespace GetBedsRequest {
 }
 
 export class GetBedsResponse extends jspb.Message {
-  getBedsList(): Array<GetBedsBed>;
-  setBedsList(value: Array<GetBedsBed>): GetBedsResponse;
+  getBedsList(): Array<GetBedsResponse.Bed>;
+  setBedsList(value: Array<GetBedsResponse.Bed>): GetBedsResponse;
   clearBedsList(): GetBedsResponse;
-  addBeds(value?: GetBedsBed, index?: number): GetBedsBed;
+  addBeds(value?: GetBedsResponse.Bed, index?: number): GetBedsResponse.Bed;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetBedsResponse.AsObject;
@@ -190,26 +169,31 @@ export class GetBedsResponse extends jspb.Message {
 
 export namespace GetBedsResponse {
   export type AsObject = {
-    bedsList: Array<GetBedsBed.AsObject>,
+    bedsList: Array<GetBedsResponse.Bed.AsObject>,
   }
-}
 
-export class GetBedsByRoomBed extends jspb.Message {
-  getId(): string;
-  setId(value: string): GetBedsByRoomBed;
+  export class Bed extends jspb.Message {
+    getId(): string;
+    setId(value: string): Bed;
 
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetBedsByRoomBed.AsObject;
-  static toObject(includeInstance: boolean, msg: GetBedsByRoomBed): GetBedsByRoomBed.AsObject;
-  static serializeBinaryToWriter(message: GetBedsByRoomBed, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetBedsByRoomBed;
-  static deserializeBinaryFromReader(message: GetBedsByRoomBed, reader: jspb.BinaryReader): GetBedsByRoomBed;
-}
+    getRoomId(): string;
+    setRoomId(value: string): Bed;
 
-export namespace GetBedsByRoomBed {
-  export type AsObject = {
-    id: string,
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Bed.AsObject;
+    static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
+    static serializeBinaryToWriter(message: Bed, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Bed;
+    static deserializeBinaryFromReader(message: Bed, reader: jspb.BinaryReader): Bed;
   }
+
+  export namespace Bed {
+    export type AsObject = {
+      id: string,
+      roomId: string,
+    }
+  }
+
 }
 
 export class GetBedsByRoomRequest extends jspb.Message {
@@ -231,10 +215,10 @@ export namespace GetBedsByRoomRequest {
 }
 
 export class GetBedsByRoomResponse extends jspb.Message {
-  getBedsList(): Array<GetBedsByRoomBed>;
-  setBedsList(value: Array<GetBedsByRoomBed>): GetBedsByRoomResponse;
+  getBedsList(): Array<GetBedsByRoomResponse.Bed>;
+  setBedsList(value: Array<GetBedsByRoomResponse.Bed>): GetBedsByRoomResponse;
   clearBedsList(): GetBedsByRoomResponse;
-  addBeds(value?: GetBedsByRoomBed, index?: number): GetBedsByRoomBed;
+  addBeds(value?: GetBedsByRoomResponse.Bed, index?: number): GetBedsByRoomResponse.Bed;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetBedsByRoomResponse.AsObject;
@@ -246,8 +230,27 @@ export class GetBedsByRoomResponse extends jspb.Message {
 
 export namespace GetBedsByRoomResponse {
   export type AsObject = {
-    bedsList: Array<GetBedsByRoomBed.AsObject>,
+    bedsList: Array<GetBedsByRoomResponse.Bed.AsObject>,
   }
+
+  export class Bed extends jspb.Message {
+    getId(): string;
+    setId(value: string): Bed;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Bed.AsObject;
+    static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
+    static serializeBinaryToWriter(message: Bed, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Bed;
+    static deserializeBinaryFromReader(message: Bed, reader: jspb.BinaryReader): Bed;
+  }
+
+  export namespace Bed {
+    export type AsObject = {
+      id: string,
+    }
+  }
+
 }
 
 export class UpdateBedRequest extends jspb.Message {

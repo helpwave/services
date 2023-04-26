@@ -202,61 +202,61 @@ proto.proto.services.task_svc.v1.WardServicePromiseClient.prototype.getWard =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.task_svc.v1.GetWardByOrganizationRequest,
- *   !proto.proto.services.task_svc.v1.GetWardByOrganizationResponse>}
+ *   !proto.proto.services.task_svc.v1.GetWardsRequest,
+ *   !proto.proto.services.task_svc.v1.GetWardsResponse>}
  */
-const methodDescriptor_WardService_GetWardByOrganization = new grpc.web.MethodDescriptor(
-  '/proto.services.task_svc.v1.WardService/GetWardByOrganization',
+const methodDescriptor_WardService_GetWards = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.WardService/GetWards',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.task_svc.v1.GetWardByOrganizationRequest,
-  proto.proto.services.task_svc.v1.GetWardByOrganizationResponse,
+  proto.proto.services.task_svc.v1.GetWardsRequest,
+  proto.proto.services.task_svc.v1.GetWardsResponse,
   /**
-   * @param {!proto.proto.services.task_svc.v1.GetWardByOrganizationRequest} request
+   * @param {!proto.proto.services.task_svc.v1.GetWardsRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.task_svc.v1.GetWardByOrganizationResponse.deserializeBinary
+  proto.proto.services.task_svc.v1.GetWardsResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.task_svc.v1.GetWardByOrganizationRequest} request The
+ * @param {!proto.proto.services.task_svc.v1.GetWardsRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetWardByOrganizationResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetWardsResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetWardByOrganizationResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetWardsResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.task_svc.v1.WardServiceClient.prototype.getWardByOrganization =
+proto.proto.services.task_svc.v1.WardServiceClient.prototype.getWards =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.task_svc.v1.WardService/GetWardByOrganization',
+      '/proto.services.task_svc.v1.WardService/GetWards',
       request,
       metadata || {},
-      methodDescriptor_WardService_GetWardByOrganization,
+      methodDescriptor_WardService_GetWards,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.task_svc.v1.GetWardByOrganizationRequest} request The
+ * @param {!proto.proto.services.task_svc.v1.GetWardsRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.task_svc.v1.GetWardByOrganizationResponse>}
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetWardsResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.task_svc.v1.WardServicePromiseClient.prototype.getWardByOrganization =
+proto.proto.services.task_svc.v1.WardServicePromiseClient.prototype.getWards =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.task_svc.v1.WardService/GetWardByOrganization',
+      '/proto.services.task_svc.v1.WardService/GetWards',
       request,
       metadata || {},
-      methodDescriptor_WardService_GetWardByOrganization);
+      methodDescriptor_WardService_GetWards);
 };
 
 

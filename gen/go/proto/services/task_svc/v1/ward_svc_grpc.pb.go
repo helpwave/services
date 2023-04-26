@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	WardService_CreateWard_FullMethodName            = "/proto.services.task_svc.v1.WardService/CreateWard"
-	WardService_GetWard_FullMethodName               = "/proto.services.task_svc.v1.WardService/GetWard"
-	WardService_GetWardByOrganization_FullMethodName = "/proto.services.task_svc.v1.WardService/GetWardByOrganization"
-	WardService_UpdateWard_FullMethodName            = "/proto.services.task_svc.v1.WardService/UpdateWard"
-	WardService_DeleteWard_FullMethodName            = "/proto.services.task_svc.v1.WardService/DeleteWard"
+	WardService_CreateWard_FullMethodName = "/proto.services.task_svc.v1.WardService/CreateWard"
+	WardService_GetWard_FullMethodName    = "/proto.services.task_svc.v1.WardService/GetWard"
+	WardService_GetWards_FullMethodName   = "/proto.services.task_svc.v1.WardService/GetWards"
+	WardService_UpdateWard_FullMethodName = "/proto.services.task_svc.v1.WardService/UpdateWard"
+	WardService_DeleteWard_FullMethodName = "/proto.services.task_svc.v1.WardService/DeleteWard"
 )
 
 // WardServiceClient is the client API for WardService service.
@@ -32,7 +32,7 @@ const (
 type WardServiceClient interface {
 	CreateWard(ctx context.Context, in *CreateWardRequest, opts ...grpc.CallOption) (*CreateWardResponse, error)
 	GetWard(ctx context.Context, in *GetWardRequest, opts ...grpc.CallOption) (*GetWardResponse, error)
-	GetWardByOrganization(ctx context.Context, in *GetWardByOrganizationRequest, opts ...grpc.CallOption) (*GetWardByOrganizationResponse, error)
+	GetWards(ctx context.Context, in *GetWardsRequest, opts ...grpc.CallOption) (*GetWardsResponse, error)
 	UpdateWard(ctx context.Context, in *UpdateWardRequest, opts ...grpc.CallOption) (*UpdateWardResponse, error)
 	DeleteWard(ctx context.Context, in *DeleteWardRequest, opts ...grpc.CallOption) (*DeleteWardResponse, error)
 }
@@ -63,9 +63,9 @@ func (c *wardServiceClient) GetWard(ctx context.Context, in *GetWardRequest, opt
 	return out, nil
 }
 
-func (c *wardServiceClient) GetWardByOrganization(ctx context.Context, in *GetWardByOrganizationRequest, opts ...grpc.CallOption) (*GetWardByOrganizationResponse, error) {
-	out := new(GetWardByOrganizationResponse)
-	err := c.cc.Invoke(ctx, WardService_GetWardByOrganization_FullMethodName, in, out, opts...)
+func (c *wardServiceClient) GetWards(ctx context.Context, in *GetWardsRequest, opts ...grpc.CallOption) (*GetWardsResponse, error) {
+	out := new(GetWardsResponse)
+	err := c.cc.Invoke(ctx, WardService_GetWards_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func (c *wardServiceClient) DeleteWard(ctx context.Context, in *DeleteWardReques
 type WardServiceServer interface {
 	CreateWard(context.Context, *CreateWardRequest) (*CreateWardResponse, error)
 	GetWard(context.Context, *GetWardRequest) (*GetWardResponse, error)
-	GetWardByOrganization(context.Context, *GetWardByOrganizationRequest) (*GetWardByOrganizationResponse, error)
+	GetWards(context.Context, *GetWardsRequest) (*GetWardsResponse, error)
 	UpdateWard(context.Context, *UpdateWardRequest) (*UpdateWardResponse, error)
 	DeleteWard(context.Context, *DeleteWardRequest) (*DeleteWardResponse, error)
 	mustEmbedUnimplementedWardServiceServer()
@@ -112,8 +112,8 @@ func (UnimplementedWardServiceServer) CreateWard(context.Context, *CreateWardReq
 func (UnimplementedWardServiceServer) GetWard(context.Context, *GetWardRequest) (*GetWardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWard not implemented")
 }
-func (UnimplementedWardServiceServer) GetWardByOrganization(context.Context, *GetWardByOrganizationRequest) (*GetWardByOrganizationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetWardByOrganization not implemented")
+func (UnimplementedWardServiceServer) GetWards(context.Context, *GetWardsRequest) (*GetWardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWards not implemented")
 }
 func (UnimplementedWardServiceServer) UpdateWard(context.Context, *UpdateWardRequest) (*UpdateWardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateWard not implemented")
@@ -170,20 +170,20 @@ func _WardService_GetWard_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _WardService_GetWardByOrganization_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetWardByOrganizationRequest)
+func _WardService_GetWards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWardsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(WardServiceServer).GetWardByOrganization(ctx, in)
+		return srv.(WardServiceServer).GetWards(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: WardService_GetWardByOrganization_FullMethodName,
+		FullMethod: WardService_GetWards_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WardServiceServer).GetWardByOrganization(ctx, req.(*GetWardByOrganizationRequest))
+		return srv.(WardServiceServer).GetWards(ctx, req.(*GetWardsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -240,8 +240,8 @@ var WardService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _WardService_GetWard_Handler,
 		},
 		{
-			MethodName: "GetWardByOrganization",
-			Handler:    _WardService_GetWardByOrganization_Handler,
+			MethodName: "GetWards",
+			Handler:    _WardService_GetWards_Handler,
 		},
 		{
 			MethodName: "UpdateWard",

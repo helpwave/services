@@ -20,17 +20,17 @@ message CreateBedResponse {
 // BulkCreateBeds
 //
 
-message BulkCreateBedsBed {
-	string id = 1;
-}
-
 message BulkCreateBedsRequest {
 	string room_id = 1; // @gotags: validate:"uuid4"
 	uint32 amount_of_beds = 2; // @gotags: validate:"required"
 }
 
 message BulkCreateBedsResponse {
-	repeated BulkCreateBedsBed beds = 1;
+	repeated Bed beds = 1;
+
+	message Bed {
+		string id = 1;
+	}
 }
 
 //
@@ -50,32 +50,32 @@ message GetBedResponse {
 // GetBeds
 //
 
-message GetBedsBed {
-	string id = 1;
-	string room_id = 2;
-}
-
 // TODO: Scope by organization
 message GetBedsRequest {}
 
 message GetBedsResponse {
-	repeated GetBedsBed beds = 1;
+	repeated Bed beds = 1;
+
+	message Bed {
+		string id = 1;
+		string room_id = 2;
+	}
 }
 
 //
 // GetBedsByRoom
 //
 
-message GetBedsByRoomBed {
-	string id = 1;
-}
-
 message GetBedsByRoomRequest {
 	string room_id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetBedsByRoomResponse {
-	repeated GetBedsByRoomBed beds = 1;
+	repeated Bed beds = 1;
+
+	message Bed {
+		string id = 1;
+	}
 }
 
 //

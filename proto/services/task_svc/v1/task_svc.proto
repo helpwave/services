@@ -46,21 +46,21 @@ message GetTaskResponse {
 // GetTaskByPatient
 //
 
-message GetTasksByPatientTask {
-	string id = 1;
-	string name = 2;
-	string description = 3;
-	TaskStatus status = 4;
-	string assigned_user_id = 5;
-	string patient_id = 6;
-}
-
 message GetTasksByPatientRequest {
 	string patient_id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetTasksByPatientResponse {
-	repeated GetTasksByPatientTask tasks = 1;
+	repeated Task tasks = 1;
+
+	message Task {
+		string id = 1;
+		string name = 2;
+		string description = 3;
+		TaskStatus status = 4;
+		string assigned_user_id = 5;
+		string patient_id = 6;
+	}
 }
 
 //

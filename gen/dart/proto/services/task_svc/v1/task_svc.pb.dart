@@ -300,8 +300,55 @@ class GetTaskResponse extends $pb.GeneratedMessage {
   void clearPatientId() => clearField(6);
 }
 
-class GetTasksByPatientTask extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetTasksByPatientTask', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+class GetTasksByPatientRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetTasksByPatientRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'patientId')
+    ..hasRequiredFields = false
+  ;
+
+  GetTasksByPatientRequest._() : super();
+  factory GetTasksByPatientRequest({
+    $core.String? patientId,
+  }) {
+    final _result = create();
+    if (patientId != null) {
+      _result.patientId = patientId;
+    }
+    return _result;
+  }
+  factory GetTasksByPatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetTasksByPatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetTasksByPatientRequest clone() => GetTasksByPatientRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetTasksByPatientRequest copyWith(void Function(GetTasksByPatientRequest) updates) => super.copyWith((message) => updates(message as GetTasksByPatientRequest)) as GetTasksByPatientRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetTasksByPatientRequest create() => GetTasksByPatientRequest._();
+  GetTasksByPatientRequest createEmptyInstance() => create();
+  static $pb.PbList<GetTasksByPatientRequest> createRepeated() => $pb.PbList<GetTasksByPatientRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetTasksByPatientRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTasksByPatientRequest>(create);
+  static GetTasksByPatientRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get patientId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set patientId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasPatientId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPatientId() => clearField(1);
+}
+
+class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetTasksByPatientResponse.Task', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'description')
@@ -311,8 +358,8 @@ class GetTasksByPatientTask extends $pb.GeneratedMessage {
     ..hasRequiredFields = false
   ;
 
-  GetTasksByPatientTask._() : super();
-  factory GetTasksByPatientTask({
+  GetTasksByPatientResponse_Task._() : super();
+  factory GetTasksByPatientResponse_Task({
     $core.String? id,
     $core.String? name,
     $core.String? description,
@@ -341,26 +388,26 @@ class GetTasksByPatientTask extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory GetTasksByPatientTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetTasksByPatientTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory GetTasksByPatientResponse_Task.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetTasksByPatientResponse_Task.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetTasksByPatientTask clone() => GetTasksByPatientTask()..mergeFromMessage(this);
+  GetTasksByPatientResponse_Task clone() => GetTasksByPatientResponse_Task()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetTasksByPatientTask copyWith(void Function(GetTasksByPatientTask) updates) => super.copyWith((message) => updates(message as GetTasksByPatientTask)) as GetTasksByPatientTask; // ignore: deprecated_member_use
+  GetTasksByPatientResponse_Task copyWith(void Function(GetTasksByPatientResponse_Task) updates) => super.copyWith((message) => updates(message as GetTasksByPatientResponse_Task)) as GetTasksByPatientResponse_Task; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static GetTasksByPatientTask create() => GetTasksByPatientTask._();
-  GetTasksByPatientTask createEmptyInstance() => create();
-  static $pb.PbList<GetTasksByPatientTask> createRepeated() => $pb.PbList<GetTasksByPatientTask>();
+  static GetTasksByPatientResponse_Task create() => GetTasksByPatientResponse_Task._();
+  GetTasksByPatientResponse_Task createEmptyInstance() => create();
+  static $pb.PbList<GetTasksByPatientResponse_Task> createRepeated() => $pb.PbList<GetTasksByPatientResponse_Task>();
   @$core.pragma('dart2js:noInline')
-  static GetTasksByPatientTask getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTasksByPatientTask>(create);
-  static GetTasksByPatientTask? _defaultInstance;
+  static GetTasksByPatientResponse_Task getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTasksByPatientResponse_Task>(create);
+  static GetTasksByPatientResponse_Task? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
@@ -417,62 +464,15 @@ class GetTasksByPatientTask extends $pb.GeneratedMessage {
   void clearPatientId() => clearField(6);
 }
 
-class GetTasksByPatientRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetTasksByPatientRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'patientId')
-    ..hasRequiredFields = false
-  ;
-
-  GetTasksByPatientRequest._() : super();
-  factory GetTasksByPatientRequest({
-    $core.String? patientId,
-  }) {
-    final _result = create();
-    if (patientId != null) {
-      _result.patientId = patientId;
-    }
-    return _result;
-  }
-  factory GetTasksByPatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetTasksByPatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetTasksByPatientRequest clone() => GetTasksByPatientRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetTasksByPatientRequest copyWith(void Function(GetTasksByPatientRequest) updates) => super.copyWith((message) => updates(message as GetTasksByPatientRequest)) as GetTasksByPatientRequest; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static GetTasksByPatientRequest create() => GetTasksByPatientRequest._();
-  GetTasksByPatientRequest createEmptyInstance() => create();
-  static $pb.PbList<GetTasksByPatientRequest> createRepeated() => $pb.PbList<GetTasksByPatientRequest>();
-  @$core.pragma('dart2js:noInline')
-  static GetTasksByPatientRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTasksByPatientRequest>(create);
-  static GetTasksByPatientRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get patientId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set patientId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasPatientId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearPatientId() => clearField(1);
-}
-
 class GetTasksByPatientResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetTasksByPatientResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..pc<GetTasksByPatientTask>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'tasks', $pb.PbFieldType.PM, subBuilder: GetTasksByPatientTask.create)
+    ..pc<GetTasksByPatientResponse_Task>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'tasks', $pb.PbFieldType.PM, subBuilder: GetTasksByPatientResponse_Task.create)
     ..hasRequiredFields = false
   ;
 
   GetTasksByPatientResponse._() : super();
   factory GetTasksByPatientResponse({
-    $core.Iterable<GetTasksByPatientTask>? tasks,
+    $core.Iterable<GetTasksByPatientResponse_Task>? tasks,
   }) {
     final _result = create();
     if (tasks != null) {
@@ -502,7 +502,7 @@ class GetTasksByPatientResponse extends $pb.GeneratedMessage {
   static GetTasksByPatientResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<GetTasksByPatientTask> get tasks => $_getList(0);
+  $core.List<GetTasksByPatientResponse_Task> get tasks => $_getList(0);
 }
 
 class UpdateTaskRequest extends $pb.GeneratedMessage {

@@ -18,7 +18,7 @@ export 'ward_svc.pb.dart';
 abstract class WardServiceBase extends $pb.GeneratedService {
   $async.Future<$6.CreateWardResponse> createWard($pb.ServerContext ctx, $6.CreateWardRequest request);
   $async.Future<$6.GetWardResponse> getWard($pb.ServerContext ctx, $6.GetWardRequest request);
-  $async.Future<$6.GetWardByOrganizationResponse> getWardByOrganization($pb.ServerContext ctx, $6.GetWardByOrganizationRequest request);
+  $async.Future<$6.GetWardsResponse> getWards($pb.ServerContext ctx, $6.GetWardsRequest request);
   $async.Future<$6.UpdateWardResponse> updateWard($pb.ServerContext ctx, $6.UpdateWardRequest request);
   $async.Future<$6.DeleteWardResponse> deleteWard($pb.ServerContext ctx, $6.DeleteWardRequest request);
 
@@ -26,7 +26,7 @@ abstract class WardServiceBase extends $pb.GeneratedService {
     switch (method) {
       case 'CreateWard': return $6.CreateWardRequest();
       case 'GetWard': return $6.GetWardRequest();
-      case 'GetWardByOrganization': return $6.GetWardByOrganizationRequest();
+      case 'GetWards': return $6.GetWardsRequest();
       case 'UpdateWard': return $6.UpdateWardRequest();
       case 'DeleteWard': return $6.DeleteWardRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
@@ -37,7 +37,7 @@ abstract class WardServiceBase extends $pb.GeneratedService {
     switch (method) {
       case 'CreateWard': return this.createWard(ctx, request as $6.CreateWardRequest);
       case 'GetWard': return this.getWard(ctx, request as $6.GetWardRequest);
-      case 'GetWardByOrganization': return this.getWardByOrganization(ctx, request as $6.GetWardByOrganizationRequest);
+      case 'GetWards': return this.getWards(ctx, request as $6.GetWardsRequest);
       case 'UpdateWard': return this.updateWard(ctx, request as $6.UpdateWardRequest);
       case 'DeleteWard': return this.deleteWard(ctx, request as $6.DeleteWardRequest);
       default: throw $core.ArgumentError('Unknown method: $method');

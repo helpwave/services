@@ -29,12 +29,12 @@ export class RoomServiceClient {
                response: proto_services_task_svc_v1_room_svc_pb.UpdateRoomResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_room_svc_pb.UpdateRoomResponse>;
 
-  addBedsToRoom(
-    request: proto_services_task_svc_v1_room_svc_pb.AddBedsToRoomRequest,
+  deleteRoom(
+    request: proto_services_task_svc_v1_room_svc_pb.DeleteRoomRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: proto_services_task_svc_v1_room_svc_pb.AddBedsToRoomResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_room_svc_pb.AddBedsToRoomResponse>;
+               response: proto_services_task_svc_v1_room_svc_pb.DeleteRoomResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_room_svc_pb.DeleteRoomResponse>;
 
 }
 
@@ -58,10 +58,10 @@ export class RoomServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_room_svc_pb.UpdateRoomResponse>;
 
-  addBedsToRoom(
-    request: proto_services_task_svc_v1_room_svc_pb.AddBedsToRoomRequest,
+  deleteRoom(
+    request: proto_services_task_svc_v1_room_svc_pb.DeleteRoomRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_task_svc_v1_room_svc_pb.AddBedsToRoomResponse>;
+  ): Promise<proto_services_task_svc_v1_room_svc_pb.DeleteRoomResponse>;
 
 }
 

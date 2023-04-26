@@ -27,21 +27,7 @@ message GetPatientRequest {
 message GetPatientResponse {
 	string id = 1; // @gotags: validate:"uuid4"
 	string human_readable_identifier = 2; // @gotags: validate:"required"
-}
-
-//
-// GetPatients
-//
-
-message GetPatientsPatient {
-	string id = 1;
-	string human_readable_identifier = 2;
-}
-
-message GetPatientsRequest {}
-
-message GetPatientsResponse {
-	repeated GetPatientsPatient patients = 1;
+	optional string bed_id = 3;
 }
 
 //
@@ -55,23 +41,25 @@ message GetPatientByBedRequest {
 message GetPatientByBedResponse {
 	string id = 1;
 	string human_readable_identifier = 2;
+	optional string bed_id = 3;
 }
 
 //
 // GetPatientsByWard
 //
 
-message GetPatientsByWardPatient {
-	string id = 1;
-	string human_readable_identifier = 2;
-}
-
 message GetPatientsByWardRequest {
 	string ward_id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetPatientsByWardResponse {
-	repeated GetPatientsByWardPatient patients = 1;
+	repeated Patient patients = 1;
+
+	message Patient {
+		string id = 1;
+		string human_readable_identifier = 2;
+		optional string bed_id = 3;
+	}
 }
 
 //
@@ -113,6 +101,11 @@ message UnassignBedResponse {}
 service PatientService {
 	rpc CreatePatient(CreatePatientRequest) returns (CreatePatientResponse) {}
 	rpc GetPatient(GetPatientRequest) returns (GetPatientResponse) {}
+	rpc GetPatientByBed(GetPatientByBedRequest) returns (GetPatientByBedResponse) {}
+
+	// TODO: Should this method be really a part of this service?
+	rpc GetPatientsByWard(GetPatientsByWardRequest) returns (GetPatientsByWardResponse) {}
+
 	rpc UpdatePatient(UpdatePatientRequest) returns (UpdatePatientResponse) {}
 	rpc AssignBed(AssignBedRequest) returns (AssignBedResponse) {}
 	rpc UnassignBed(UnassignBedRequest) returns (UnassignBedResponse) {}

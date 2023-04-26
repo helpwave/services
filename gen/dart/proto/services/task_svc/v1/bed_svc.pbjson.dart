@@ -28,16 +28,6 @@ const CreateBedResponse$json = const {
 
 /// Descriptor for `CreateBedResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createBedResponseDescriptor = $convert.base64Decode('ChFDcmVhdGVCZWRSZXNwb25zZRIOCgJpZBgBIAEoCVICaWQ=');
-@$core.Deprecated('Use bulkCreateBedsBedDescriptor instead')
-const BulkCreateBedsBed$json = const {
-  '1': 'BulkCreateBedsBed',
-  '2': const [
-    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-  ],
-};
-
-/// Descriptor for `BulkCreateBedsBed`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List bulkCreateBedsBedDescriptor = $convert.base64Decode('ChFCdWxrQ3JlYXRlQmVkc0JlZBIOCgJpZBgBIAEoCVICaWQ=');
 @$core.Deprecated('Use bulkCreateBedsRequestDescriptor instead')
 const BulkCreateBedsRequest$json = const {
   '1': 'BulkCreateBedsRequest',
@@ -53,12 +43,21 @@ final $typed_data.Uint8List bulkCreateBedsRequestDescriptor = $convert.base64Dec
 const BulkCreateBedsResponse$json = const {
   '1': 'BulkCreateBedsResponse',
   '2': const [
-    const {'1': 'beds', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.BulkCreateBedsBed', '10': 'beds'},
+    const {'1': 'beds', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.BulkCreateBedsResponse.Bed', '10': 'beds'},
+  ],
+  '3': const [BulkCreateBedsResponse_Bed$json],
+};
+
+@$core.Deprecated('Use bulkCreateBedsResponseDescriptor instead')
+const BulkCreateBedsResponse_Bed$json = const {
+  '1': 'Bed',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
   ],
 };
 
 /// Descriptor for `BulkCreateBedsResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List bulkCreateBedsResponseDescriptor = $convert.base64Decode('ChZCdWxrQ3JlYXRlQmVkc1Jlc3BvbnNlEkEKBGJlZHMYASADKAsyLS5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5CdWxrQ3JlYXRlQmVkc0JlZFIEYmVkcw==');
+final $typed_data.Uint8List bulkCreateBedsResponseDescriptor = $convert.base64Decode('ChZCdWxrQ3JlYXRlQmVkc1Jlc3BvbnNlEkoKBGJlZHMYASADKAsyNi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5CdWxrQ3JlYXRlQmVkc1Jlc3BvbnNlLkJlZFIEYmVkcxoVCgNCZWQSDgoCaWQYASABKAlSAmlk');
 @$core.Deprecated('Use getBedRequestDescriptor instead')
 const GetBedRequest$json = const {
   '1': 'GetBedRequest',
@@ -80,17 +79,6 @@ const GetBedResponse$json = const {
 
 /// Descriptor for `GetBedResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getBedResponseDescriptor = $convert.base64Decode('Cg5HZXRCZWRSZXNwb25zZRIOCgJpZBgBIAEoCVICaWQSFwoHcm9vbV9pZBgCIAEoCVIGcm9vbUlk');
-@$core.Deprecated('Use getBedsBedDescriptor instead')
-const GetBedsBed$json = const {
-  '1': 'GetBedsBed',
-  '2': const [
-    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    const {'1': 'room_id', '3': 2, '4': 1, '5': 9, '10': 'roomId'},
-  ],
-};
-
-/// Descriptor for `GetBedsBed`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getBedsBedDescriptor = $convert.base64Decode('CgpHZXRCZWRzQmVkEg4KAmlkGAEgASgJUgJpZBIXCgdyb29tX2lkGAIgASgJUgZyb29tSWQ=');
 @$core.Deprecated('Use getBedsRequestDescriptor instead')
 const GetBedsRequest$json = const {
   '1': 'GetBedsRequest',
@@ -102,22 +90,22 @@ final $typed_data.Uint8List getBedsRequestDescriptor = $convert.base64Decode('Cg
 const GetBedsResponse$json = const {
   '1': 'GetBedsResponse',
   '2': const [
-    const {'1': 'beds', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetBedsBed', '10': 'beds'},
+    const {'1': 'beds', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetBedsResponse.Bed', '10': 'beds'},
+  ],
+  '3': const [GetBedsResponse_Bed$json],
+};
+
+@$core.Deprecated('Use getBedsResponseDescriptor instead')
+const GetBedsResponse_Bed$json = const {
+  '1': 'Bed',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'room_id', '3': 2, '4': 1, '5': 9, '10': 'roomId'},
   ],
 };
 
 /// Descriptor for `GetBedsResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getBedsResponseDescriptor = $convert.base64Decode('Cg9HZXRCZWRzUmVzcG9uc2USOgoEYmVkcxgBIAMoCzImLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldEJlZHNCZWRSBGJlZHM=');
-@$core.Deprecated('Use getBedsByRoomBedDescriptor instead')
-const GetBedsByRoomBed$json = const {
-  '1': 'GetBedsByRoomBed',
-  '2': const [
-    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-  ],
-};
-
-/// Descriptor for `GetBedsByRoomBed`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getBedsByRoomBedDescriptor = $convert.base64Decode('ChBHZXRCZWRzQnlSb29tQmVkEg4KAmlkGAEgASgJUgJpZA==');
+final $typed_data.Uint8List getBedsResponseDescriptor = $convert.base64Decode('Cg9HZXRCZWRzUmVzcG9uc2USQwoEYmVkcxgBIAMoCzIvLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldEJlZHNSZXNwb25zZS5CZWRSBGJlZHMaLgoDQmVkEg4KAmlkGAEgASgJUgJpZBIXCgdyb29tX2lkGAIgASgJUgZyb29tSWQ=');
 @$core.Deprecated('Use getBedsByRoomRequestDescriptor instead')
 const GetBedsByRoomRequest$json = const {
   '1': 'GetBedsByRoomRequest',
@@ -132,12 +120,21 @@ final $typed_data.Uint8List getBedsByRoomRequestDescriptor = $convert.base64Deco
 const GetBedsByRoomResponse$json = const {
   '1': 'GetBedsByRoomResponse',
   '2': const [
-    const {'1': 'beds', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetBedsByRoomBed', '10': 'beds'},
+    const {'1': 'beds', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetBedsByRoomResponse.Bed', '10': 'beds'},
+  ],
+  '3': const [GetBedsByRoomResponse_Bed$json],
+};
+
+@$core.Deprecated('Use getBedsByRoomResponseDescriptor instead')
+const GetBedsByRoomResponse_Bed$json = const {
+  '1': 'Bed',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
   ],
 };
 
 /// Descriptor for `GetBedsByRoomResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getBedsByRoomResponseDescriptor = $convert.base64Decode('ChVHZXRCZWRzQnlSb29tUmVzcG9uc2USQAoEYmVkcxgBIAMoCzIsLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldEJlZHNCeVJvb21CZWRSBGJlZHM=');
+final $typed_data.Uint8List getBedsByRoomResponseDescriptor = $convert.base64Decode('ChVHZXRCZWRzQnlSb29tUmVzcG9uc2USSQoEYmVkcxgBIAMoCzI1LnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldEJlZHNCeVJvb21SZXNwb25zZS5CZWRSBGJlZHMaFQoDQmVkEg4KAmlkGAEgASgJUgJpZA==');
 @$core.Deprecated('Use updateBedRequestDescriptor instead')
 const UpdateBedRequest$json = const {
   '1': 'UpdateBedRequest',
@@ -195,15 +192,15 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> BedService
   '.proto.services.task_svc.v1.CreateBedResponse': CreateBedResponse$json,
   '.proto.services.task_svc.v1.BulkCreateBedsRequest': BulkCreateBedsRequest$json,
   '.proto.services.task_svc.v1.BulkCreateBedsResponse': BulkCreateBedsResponse$json,
-  '.proto.services.task_svc.v1.BulkCreateBedsBed': BulkCreateBedsBed$json,
+  '.proto.services.task_svc.v1.BulkCreateBedsResponse.Bed': BulkCreateBedsResponse_Bed$json,
   '.proto.services.task_svc.v1.GetBedRequest': GetBedRequest$json,
   '.proto.services.task_svc.v1.GetBedResponse': GetBedResponse$json,
   '.proto.services.task_svc.v1.GetBedsRequest': GetBedsRequest$json,
   '.proto.services.task_svc.v1.GetBedsResponse': GetBedsResponse$json,
-  '.proto.services.task_svc.v1.GetBedsBed': GetBedsBed$json,
+  '.proto.services.task_svc.v1.GetBedsResponse.Bed': GetBedsResponse_Bed$json,
   '.proto.services.task_svc.v1.GetBedsByRoomRequest': GetBedsByRoomRequest$json,
   '.proto.services.task_svc.v1.GetBedsByRoomResponse': GetBedsByRoomResponse$json,
-  '.proto.services.task_svc.v1.GetBedsByRoomBed': GetBedsByRoomBed$json,
+  '.proto.services.task_svc.v1.GetBedsByRoomResponse.Bed': GetBedsByRoomResponse_Bed$json,
   '.proto.services.task_svc.v1.UpdateBedRequest': UpdateBedRequest$json,
   '.proto.services.task_svc.v1.UpdateBedResponse': UpdateBedResponse$json,
   '.proto.services.task_svc.v1.DeleteBedRequest': DeleteBedRequest$json,

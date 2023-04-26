@@ -28,25 +28,25 @@ message GetWardRequest {
 message GetWardResponse {
 	string id = 1;
 	string name = 2;
+	string organization_id = 3;
 }
 
 //
-// GetWardByOrganization
+// GetWards
 //
 
-message GetWardByOrganizationWard {
-	string id = 1;
-	string name = 2;
-}
+// TODO: Scope by organization
+message GetWardsRequest {}
 
-message GetWardByOrganizationRequest {
-	string id = 1; // @gotags: validate:"uuid4"
-}
+message GetWardsResponse {
+    repeated Ward wards = 1;
 
-message GetWardByOrganizationResponse {
-    repeated GetWardByOrganizationWard wards = 1;
+	message Ward {
+		string id = 1;
+		string name = 2;
+		string organization_id = 3;
+	}
 }
-
 
 //
 // UpdateWard
@@ -77,7 +77,7 @@ message DeleteWardResponse {}
 service WardService {
 	rpc CreateWard (CreateWardRequest) returns (CreateWardResponse) {}
 	rpc GetWard (GetWardRequest) returns (GetWardResponse) {}
-	rpc GetWardByOrganization (GetWardByOrganizationRequest) returns (GetWardByOrganizationResponse) {}
+	rpc GetWards(GetWardsRequest) returns (GetWardsResponse) {}
 	rpc UpdateWard (UpdateWardRequest) returns (UpdateWardResponse) {}
 	rpc DeleteWard (DeleteWardRequest) returns (DeleteWardResponse) {}
 }
