@@ -10,7 +10,7 @@ option go_package = "gen/proto/services/task-svc";
 
 message CreateRoomRequest {
   string name = 1; // @gotags: validate:"required"
-  string ward_id = 2;
+  string ward_id = 2; // @gotags: validate:"required"
 }
 
 message CreateRoomResponse {
