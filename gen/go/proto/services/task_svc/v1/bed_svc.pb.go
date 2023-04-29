@@ -318,7 +318,6 @@ func (x *GetBedResponse) GetRoomId() string {
 	return ""
 }
 
-// TODO: Scope by organization
 type GetBedsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

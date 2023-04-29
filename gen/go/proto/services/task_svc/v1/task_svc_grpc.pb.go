@@ -21,11 +21,20 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	TaskService_CreateTask_FullMethodName           = "/proto.services.task_svc.v1.TaskService/CreateTask"
 	TaskService_GetTask_FullMethodName              = "/proto.services.task_svc.v1.TaskService/GetTask"
+	TaskService_GetTasksByPatient_FullMethodName    = "/proto.services.task_svc.v1.TaskService/GetTasksByPatient"
 	TaskService_UpdateTask_FullMethodName           = "/proto.services.task_svc.v1.TaskService/UpdateTask"
+	TaskService_AddSubTask_FullMethodName           = "/proto.services.task_svc.v1.TaskService/AddSubTask"
+	TaskService_RemoveSubTask_FullMethodName        = "/proto.services.task_svc.v1.TaskService/RemoveSubTask"
+	TaskService_SubTaskToToDo_FullMethodName        = "/proto.services.task_svc.v1.TaskService/SubTaskToToDo"
+	TaskService_SubTaskToDone_FullMethodName        = "/proto.services.task_svc.v1.TaskService/SubTaskToDone"
+	TaskService_TaskToToDo_FullMethodName           = "/proto.services.task_svc.v1.TaskService/TaskToToDo"
 	TaskService_TaskToInProgress_FullMethodName     = "/proto.services.task_svc.v1.TaskService/TaskToInProgress"
 	TaskService_TaskToDone_FullMethodName           = "/proto.services.task_svc.v1.TaskService/TaskToDone"
 	TaskService_AssignTaskToUser_FullMethodName     = "/proto.services.task_svc.v1.TaskService/AssignTaskToUser"
 	TaskService_UnassignTaskFromUser_FullMethodName = "/proto.services.task_svc.v1.TaskService/UnassignTaskFromUser"
+	TaskService_PublishTask_FullMethodName          = "/proto.services.task_svc.v1.TaskService/PublishTask"
+	TaskService_UnpublishTask_FullMethodName        = "/proto.services.task_svc.v1.TaskService/UnpublishTask"
+	TaskService_DeleteTask_FullMethodName           = "/proto.services.task_svc.v1.TaskService/DeleteTask"
 )
 
 // TaskServiceClient is the client API for TaskService service.
@@ -34,11 +43,20 @@ const (
 type TaskServiceClient interface {
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error)
 	GetTask(ctx context.Context, in *GetTaskRequest, opts ...grpc.CallOption) (*GetTaskResponse, error)
+	GetTasksByPatient(ctx context.Context, in *GetTasksByPatientRequest, opts ...grpc.CallOption) (*GetTasksByPatientResponse, error)
 	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*UpdateTaskResponse, error)
+	AddSubTask(ctx context.Context, in *AddSubTaskRequest, opts ...grpc.CallOption) (*AddSubTaskResponse, error)
+	RemoveSubTask(ctx context.Context, in *RemoveSubTaskRequest, opts ...grpc.CallOption) (*RemoveSubTaskResponse, error)
+	SubTaskToToDo(ctx context.Context, in *SubTaskToToDoRequest, opts ...grpc.CallOption) (*SubTaskToToDoResponse, error)
+	SubTaskToDone(ctx context.Context, in *SubTaskToDoneRequest, opts ...grpc.CallOption) (*SubTaskToDoneResponse, error)
+	TaskToToDo(ctx context.Context, in *TaskToToDoRequest, opts ...grpc.CallOption) (*TaskToToDoResponse, error)
 	TaskToInProgress(ctx context.Context, in *TaskToInProgressRequest, opts ...grpc.CallOption) (*TaskToInProgressResponse, error)
 	TaskToDone(ctx context.Context, in *TaskToDoneRequest, opts ...grpc.CallOption) (*TaskToDoneResponse, error)
 	AssignTaskToUser(ctx context.Context, in *AssignTaskToUserRequest, opts ...grpc.CallOption) (*AssignTaskToUserResponse, error)
 	UnassignTaskFromUser(ctx context.Context, in *UnassignTaskFromUserRequest, opts ...grpc.CallOption) (*UnassignTaskFromUserResponse, error)
+	PublishTask(ctx context.Context, in *PublishTaskRequest, opts ...grpc.CallOption) (*PublishTaskResponse, error)
+	UnpublishTask(ctx context.Context, in *UnpublishTaskRequest, opts ...grpc.CallOption) (*UnpublishTaskResponse, error)
+	DeleteTask(ctx context.Context, in *DeleteTaskRequest, opts ...grpc.CallOption) (*DeleteTaskResponse, error)
 }
 
 type taskServiceClient struct {
@@ -67,9 +85,63 @@ func (c *taskServiceClient) GetTask(ctx context.Context, in *GetTaskRequest, opt
 	return out, nil
 }
 
+func (c *taskServiceClient) GetTasksByPatient(ctx context.Context, in *GetTasksByPatientRequest, opts ...grpc.CallOption) (*GetTasksByPatientResponse, error) {
+	out := new(GetTasksByPatientResponse)
+	err := c.cc.Invoke(ctx, TaskService_GetTasksByPatient_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *taskServiceClient) UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*UpdateTaskResponse, error) {
 	out := new(UpdateTaskResponse)
 	err := c.cc.Invoke(ctx, TaskService_UpdateTask_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) AddSubTask(ctx context.Context, in *AddSubTaskRequest, opts ...grpc.CallOption) (*AddSubTaskResponse, error) {
+	out := new(AddSubTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_AddSubTask_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) RemoveSubTask(ctx context.Context, in *RemoveSubTaskRequest, opts ...grpc.CallOption) (*RemoveSubTaskResponse, error) {
+	out := new(RemoveSubTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_RemoveSubTask_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) SubTaskToToDo(ctx context.Context, in *SubTaskToToDoRequest, opts ...grpc.CallOption) (*SubTaskToToDoResponse, error) {
+	out := new(SubTaskToToDoResponse)
+	err := c.cc.Invoke(ctx, TaskService_SubTaskToToDo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) SubTaskToDone(ctx context.Context, in *SubTaskToDoneRequest, opts ...grpc.CallOption) (*SubTaskToDoneResponse, error) {
+	out := new(SubTaskToDoneResponse)
+	err := c.cc.Invoke(ctx, TaskService_SubTaskToDone_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) TaskToToDo(ctx context.Context, in *TaskToToDoRequest, opts ...grpc.CallOption) (*TaskToToDoResponse, error) {
+	out := new(TaskToToDoResponse)
+	err := c.cc.Invoke(ctx, TaskService_TaskToToDo_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,17 +184,53 @@ func (c *taskServiceClient) UnassignTaskFromUser(ctx context.Context, in *Unassi
 	return out, nil
 }
 
+func (c *taskServiceClient) PublishTask(ctx context.Context, in *PublishTaskRequest, opts ...grpc.CallOption) (*PublishTaskResponse, error) {
+	out := new(PublishTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_PublishTask_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) UnpublishTask(ctx context.Context, in *UnpublishTaskRequest, opts ...grpc.CallOption) (*UnpublishTaskResponse, error) {
+	out := new(UnpublishTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_UnpublishTask_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) DeleteTask(ctx context.Context, in *DeleteTaskRequest, opts ...grpc.CallOption) (*DeleteTaskResponse, error) {
+	out := new(DeleteTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_DeleteTask_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TaskServiceServer is the server API for TaskService service.
 // All implementations must embed UnimplementedTaskServiceServer
 // for forward compatibility
 type TaskServiceServer interface {
 	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error)
 	GetTask(context.Context, *GetTaskRequest) (*GetTaskResponse, error)
+	GetTasksByPatient(context.Context, *GetTasksByPatientRequest) (*GetTasksByPatientResponse, error)
 	UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskResponse, error)
+	AddSubTask(context.Context, *AddSubTaskRequest) (*AddSubTaskResponse, error)
+	RemoveSubTask(context.Context, *RemoveSubTaskRequest) (*RemoveSubTaskResponse, error)
+	SubTaskToToDo(context.Context, *SubTaskToToDoRequest) (*SubTaskToToDoResponse, error)
+	SubTaskToDone(context.Context, *SubTaskToDoneRequest) (*SubTaskToDoneResponse, error)
+	TaskToToDo(context.Context, *TaskToToDoRequest) (*TaskToToDoResponse, error)
 	TaskToInProgress(context.Context, *TaskToInProgressRequest) (*TaskToInProgressResponse, error)
 	TaskToDone(context.Context, *TaskToDoneRequest) (*TaskToDoneResponse, error)
 	AssignTaskToUser(context.Context, *AssignTaskToUserRequest) (*AssignTaskToUserResponse, error)
 	UnassignTaskFromUser(context.Context, *UnassignTaskFromUserRequest) (*UnassignTaskFromUserResponse, error)
+	PublishTask(context.Context, *PublishTaskRequest) (*PublishTaskResponse, error)
+	UnpublishTask(context.Context, *UnpublishTaskRequest) (*UnpublishTaskResponse, error)
+	DeleteTask(context.Context, *DeleteTaskRequest) (*DeleteTaskResponse, error)
 	mustEmbedUnimplementedTaskServiceServer()
 }
 
@@ -136,8 +244,26 @@ func (UnimplementedTaskServiceServer) CreateTask(context.Context, *CreateTaskReq
 func (UnimplementedTaskServiceServer) GetTask(context.Context, *GetTaskRequest) (*GetTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTask not implemented")
 }
+func (UnimplementedTaskServiceServer) GetTasksByPatient(context.Context, *GetTasksByPatientRequest) (*GetTasksByPatientResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTasksByPatient not implemented")
+}
 func (UnimplementedTaskServiceServer) UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
+}
+func (UnimplementedTaskServiceServer) AddSubTask(context.Context, *AddSubTaskRequest) (*AddSubTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddSubTask not implemented")
+}
+func (UnimplementedTaskServiceServer) RemoveSubTask(context.Context, *RemoveSubTaskRequest) (*RemoveSubTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveSubTask not implemented")
+}
+func (UnimplementedTaskServiceServer) SubTaskToToDo(context.Context, *SubTaskToToDoRequest) (*SubTaskToToDoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubTaskToToDo not implemented")
+}
+func (UnimplementedTaskServiceServer) SubTaskToDone(context.Context, *SubTaskToDoneRequest) (*SubTaskToDoneResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubTaskToDone not implemented")
+}
+func (UnimplementedTaskServiceServer) TaskToToDo(context.Context, *TaskToToDoRequest) (*TaskToToDoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TaskToToDo not implemented")
 }
 func (UnimplementedTaskServiceServer) TaskToInProgress(context.Context, *TaskToInProgressRequest) (*TaskToInProgressResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TaskToInProgress not implemented")
@@ -150,6 +276,15 @@ func (UnimplementedTaskServiceServer) AssignTaskToUser(context.Context, *AssignT
 }
 func (UnimplementedTaskServiceServer) UnassignTaskFromUser(context.Context, *UnassignTaskFromUserRequest) (*UnassignTaskFromUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UnassignTaskFromUser not implemented")
+}
+func (UnimplementedTaskServiceServer) PublishTask(context.Context, *PublishTaskRequest) (*PublishTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PublishTask not implemented")
+}
+func (UnimplementedTaskServiceServer) UnpublishTask(context.Context, *UnpublishTaskRequest) (*UnpublishTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnpublishTask not implemented")
+}
+func (UnimplementedTaskServiceServer) DeleteTask(context.Context, *DeleteTaskRequest) (*DeleteTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTask not implemented")
 }
 func (UnimplementedTaskServiceServer) mustEmbedUnimplementedTaskServiceServer() {}
 
@@ -200,6 +335,24 @@ func _TaskService_GetTask_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TaskService_GetTasksByPatient_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTasksByPatientRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).GetTasksByPatient(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_GetTasksByPatient_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).GetTasksByPatient(ctx, req.(*GetTasksByPatientRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _TaskService_UpdateTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateTaskRequest)
 	if err := dec(in); err != nil {
@@ -214,6 +367,96 @@ func _TaskService_UpdateTask_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TaskServiceServer).UpdateTask(ctx, req.(*UpdateTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_AddSubTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddSubTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).AddSubTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_AddSubTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).AddSubTask(ctx, req.(*AddSubTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_RemoveSubTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveSubTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).RemoveSubTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_RemoveSubTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).RemoveSubTask(ctx, req.(*RemoveSubTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_SubTaskToToDo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubTaskToToDoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).SubTaskToToDo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_SubTaskToToDo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).SubTaskToToDo(ctx, req.(*SubTaskToToDoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_SubTaskToDone_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubTaskToDoneRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).SubTaskToDone(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_SubTaskToDone_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).SubTaskToDone(ctx, req.(*SubTaskToDoneRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_TaskToToDo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskToToDoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).TaskToToDo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_TaskToToDo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).TaskToToDo(ctx, req.(*TaskToToDoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -290,6 +533,60 @@ func _TaskService_UnassignTaskFromUser_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TaskService_PublishTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PublishTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).PublishTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_PublishTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).PublishTask(ctx, req.(*PublishTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_UnpublishTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnpublishTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).UnpublishTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_UnpublishTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).UnpublishTask(ctx, req.(*UnpublishTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_DeleteTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).DeleteTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_DeleteTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).DeleteTask(ctx, req.(*DeleteTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TaskService_ServiceDesc is the grpc.ServiceDesc for TaskService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -306,8 +603,32 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TaskService_GetTask_Handler,
 		},
 		{
+			MethodName: "GetTasksByPatient",
+			Handler:    _TaskService_GetTasksByPatient_Handler,
+		},
+		{
 			MethodName: "UpdateTask",
 			Handler:    _TaskService_UpdateTask_Handler,
+		},
+		{
+			MethodName: "AddSubTask",
+			Handler:    _TaskService_AddSubTask_Handler,
+		},
+		{
+			MethodName: "RemoveSubTask",
+			Handler:    _TaskService_RemoveSubTask_Handler,
+		},
+		{
+			MethodName: "SubTaskToToDo",
+			Handler:    _TaskService_SubTaskToToDo_Handler,
+		},
+		{
+			MethodName: "SubTaskToDone",
+			Handler:    _TaskService_SubTaskToDone_Handler,
+		},
+		{
+			MethodName: "TaskToToDo",
+			Handler:    _TaskService_TaskToToDo_Handler,
 		},
 		{
 			MethodName: "TaskToInProgress",
@@ -324,6 +645,18 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UnassignTaskFromUser",
 			Handler:    _TaskService_UnassignTaskFromUser_Handler,
+		},
+		{
+			MethodName: "PublishTask",
+			Handler:    _TaskService_PublishTask_Handler,
+		},
+		{
+			MethodName: "UnpublishTask",
+			Handler:    _TaskService_UnpublishTask_Handler,
+		},
+		{
+			MethodName: "DeleteTask",
+			Handler:    _TaskService_DeleteTask_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

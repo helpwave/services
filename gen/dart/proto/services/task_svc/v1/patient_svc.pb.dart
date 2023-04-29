@@ -13,16 +13,21 @@ import 'package:protobuf/protobuf.dart' as $pb;
 class CreatePatientRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreatePatientRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'humanReadableIdentifier')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
   CreatePatientRequest._() : super();
   factory CreatePatientRequest({
     $core.String? humanReadableIdentifier,
+    $core.String? notes,
   }) {
     final _result = create();
     if (humanReadableIdentifier != null) {
       _result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (notes != null) {
+      _result.notes = notes;
     }
     return _result;
   }
@@ -55,6 +60,15 @@ class CreatePatientRequest extends $pb.GeneratedMessage {
   $core.bool hasHumanReadableIdentifier() => $_has(0);
   @$pb.TagNumber(1)
   void clearHumanReadableIdentifier() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get notes => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set notes($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasNotes() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearNotes() => clearField(2);
 }
 
 class CreatePatientResponse extends $pb.GeneratedMessage {
@@ -155,7 +169,8 @@ class GetPatientResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetPatientResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'humanReadableIdentifier')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bedId')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notes')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bedId')
     ..hasRequiredFields = false
   ;
 
@@ -163,6 +178,7 @@ class GetPatientResponse extends $pb.GeneratedMessage {
   factory GetPatientResponse({
     $core.String? id,
     $core.String? humanReadableIdentifier,
+    $core.String? notes,
     $core.String? bedId,
   }) {
     final _result = create();
@@ -171,6 +187,9 @@ class GetPatientResponse extends $pb.GeneratedMessage {
     }
     if (humanReadableIdentifier != null) {
       _result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (notes != null) {
+      _result.notes = notes;
     }
     if (bedId != null) {
       _result.bedId = bedId;
@@ -217,13 +236,22 @@ class GetPatientResponse extends $pb.GeneratedMessage {
   void clearHumanReadableIdentifier() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get bedId => $_getSZ(2);
+  $core.String get notes => $_getSZ(2);
   @$pb.TagNumber(3)
-  set bedId($core.String v) { $_setString(2, v); }
+  set notes($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasBedId() => $_has(2);
+  $core.bool hasNotes() => $_has(2);
   @$pb.TagNumber(3)
-  void clearBedId() => clearField(3);
+  void clearNotes() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get bedId => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set bedId($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasBedId() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearBedId() => clearField(4);
 }
 
 class GetPatientByBedRequest extends $pb.GeneratedMessage {
@@ -277,7 +305,8 @@ class GetPatientByBedResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetPatientByBedResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'humanReadableIdentifier')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bedId')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notes')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bedId')
     ..hasRequiredFields = false
   ;
 
@@ -285,6 +314,7 @@ class GetPatientByBedResponse extends $pb.GeneratedMessage {
   factory GetPatientByBedResponse({
     $core.String? id,
     $core.String? humanReadableIdentifier,
+    $core.String? notes,
     $core.String? bedId,
   }) {
     final _result = create();
@@ -293,6 +323,9 @@ class GetPatientByBedResponse extends $pb.GeneratedMessage {
     }
     if (humanReadableIdentifier != null) {
       _result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (notes != null) {
+      _result.notes = notes;
     }
     if (bedId != null) {
       _result.bedId = bedId;
@@ -339,13 +372,22 @@ class GetPatientByBedResponse extends $pb.GeneratedMessage {
   void clearHumanReadableIdentifier() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get bedId => $_getSZ(2);
+  $core.String get notes => $_getSZ(2);
   @$pb.TagNumber(3)
-  set bedId($core.String v) { $_setString(2, v); }
+  set notes($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasBedId() => $_has(2);
+  $core.bool hasNotes() => $_has(2);
   @$pb.TagNumber(3)
-  void clearBedId() => clearField(3);
+  void clearNotes() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get bedId => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set bedId($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasBedId() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearBedId() => clearField(4);
 }
 
 class GetPatientsByWardRequest extends $pb.GeneratedMessage {
@@ -399,7 +441,8 @@ class GetPatientsByWardResponse_Patient extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetPatientsByWardResponse.Patient', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'humanReadableIdentifier')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bedId')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notes')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bedId')
     ..hasRequiredFields = false
   ;
 
@@ -407,6 +450,7 @@ class GetPatientsByWardResponse_Patient extends $pb.GeneratedMessage {
   factory GetPatientsByWardResponse_Patient({
     $core.String? id,
     $core.String? humanReadableIdentifier,
+    $core.String? notes,
     $core.String? bedId,
   }) {
     final _result = create();
@@ -415,6 +459,9 @@ class GetPatientsByWardResponse_Patient extends $pb.GeneratedMessage {
     }
     if (humanReadableIdentifier != null) {
       _result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (notes != null) {
+      _result.notes = notes;
     }
     if (bedId != null) {
       _result.bedId = bedId;
@@ -461,13 +508,22 @@ class GetPatientsByWardResponse_Patient extends $pb.GeneratedMessage {
   void clearHumanReadableIdentifier() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get bedId => $_getSZ(2);
+  $core.String get notes => $_getSZ(2);
   @$pb.TagNumber(3)
-  set bedId($core.String v) { $_setString(2, v); }
+  set notes($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasBedId() => $_has(2);
+  $core.bool hasNotes() => $_has(2);
   @$pb.TagNumber(3)
-  void clearBedId() => clearField(3);
+  void clearNotes() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get bedId => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set bedId($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasBedId() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearBedId() => clearField(4);
 }
 
 class GetPatientsByWardResponse extends $pb.GeneratedMessage {
@@ -515,6 +571,7 @@ class UpdatePatientRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UpdatePatientRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'humanReadableIdentifier')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -522,6 +579,7 @@ class UpdatePatientRequest extends $pb.GeneratedMessage {
   factory UpdatePatientRequest({
     $core.String? id,
     $core.String? humanReadableIdentifier,
+    $core.String? notes,
   }) {
     final _result = create();
     if (id != null) {
@@ -529,6 +587,9 @@ class UpdatePatientRequest extends $pb.GeneratedMessage {
     }
     if (humanReadableIdentifier != null) {
       _result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (notes != null) {
+      _result.notes = notes;
     }
     return _result;
   }
@@ -570,6 +631,15 @@ class UpdatePatientRequest extends $pb.GeneratedMessage {
   $core.bool hasHumanReadableIdentifier() => $_has(1);
   @$pb.TagNumber(2)
   void clearHumanReadableIdentifier() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get notes => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set notes($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasNotes() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearNotes() => clearField(3);
 }
 
 class UpdatePatientResponse extends $pb.GeneratedMessage {
@@ -767,6 +837,82 @@ class UnassignBedResponse extends $pb.GeneratedMessage {
   static UnassignBedResponse? _defaultInstance;
 }
 
+class DischargePatientRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DischargePatientRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  DischargePatientRequest._() : super();
+  factory DischargePatientRequest({
+    $core.String? id,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    return _result;
+  }
+  factory DischargePatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DischargePatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DischargePatientRequest clone() => DischargePatientRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DischargePatientRequest copyWith(void Function(DischargePatientRequest) updates) => super.copyWith((message) => updates(message as DischargePatientRequest)) as DischargePatientRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DischargePatientRequest create() => DischargePatientRequest._();
+  DischargePatientRequest createEmptyInstance() => create();
+  static $pb.PbList<DischargePatientRequest> createRepeated() => $pb.PbList<DischargePatientRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DischargePatientRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DischargePatientRequest>(create);
+  static DischargePatientRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
+class DischargePatientResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DischargePatientResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  DischargePatientResponse._() : super();
+  factory DischargePatientResponse() => create();
+  factory DischargePatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DischargePatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DischargePatientResponse clone() => DischargePatientResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DischargePatientResponse copyWith(void Function(DischargePatientResponse) updates) => super.copyWith((message) => updates(message as DischargePatientResponse)) as DischargePatientResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DischargePatientResponse create() => DischargePatientResponse._();
+  DischargePatientResponse createEmptyInstance() => create();
+  static $pb.PbList<DischargePatientResponse> createRepeated() => $pb.PbList<DischargePatientResponse>();
+  @$core.pragma('dart2js:noInline')
+  static DischargePatientResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DischargePatientResponse>(create);
+  static DischargePatientResponse? _defaultInstance;
+}
+
 class PatientServiceApi {
   $pb.RpcClient _client;
   PatientServiceApi(this._client);
@@ -798,6 +944,10 @@ class PatientServiceApi {
   $async.Future<UnassignBedResponse> unassignBed($pb.ClientContext? ctx, UnassignBedRequest request) {
     var emptyResponse = UnassignBedResponse();
     return _client.invoke<UnassignBedResponse>(ctx, 'PatientService', 'UnassignBed', request, emptyResponse);
+  }
+  $async.Future<DischargePatientResponse> dischargePatient($pb.ClientContext? ctx, DischargePatientRequest request) {
+    var emptyResponse = DischargePatientResponse();
+    return _client.invoke<DischargePatientResponse>(ctx, 'PatientService', 'DischargePatient', request, emptyResponse);
   }
 }
 

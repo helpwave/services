@@ -13,11 +13,12 @@ const CreateRoomRequest$json = const {
   '1': 'CreateRoomRequest',
   '2': const [
     const {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
+    const {'1': 'ward_id', '3': 2, '4': 1, '5': 9, '10': 'wardId'},
   ],
 };
 
 /// Descriptor for `CreateRoomRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createRoomRequestDescriptor = $convert.base64Decode('ChFDcmVhdGVSb29tUmVxdWVzdBISCgRuYW1lGAEgASgJUgRuYW1l');
+final $typed_data.Uint8List createRoomRequestDescriptor = $convert.base64Decode('ChFDcmVhdGVSb29tUmVxdWVzdBISCgRuYW1lGAEgASgJUgRuYW1lEhcKB3dhcmRfaWQYAiABKAlSBndhcmRJZA==');
 @$core.Deprecated('Use createRoomResponseDescriptor instead')
 const CreateRoomResponse$json = const {
   '1': 'CreateRoomResponse',
@@ -185,6 +186,8 @@ const $core.Map<$core.String, $core.dynamic> RoomServiceBase$json = const {
   '2': const [
     const {'1': 'CreateRoom', '2': '.proto.services.task_svc.v1.CreateRoomRequest', '3': '.proto.services.task_svc.v1.CreateRoomResponse', '4': const {}},
     const {'1': 'GetRoom', '2': '.proto.services.task_svc.v1.GetRoomRequest', '3': '.proto.services.task_svc.v1.GetRoomResponse', '4': const {}},
+    const {'1': 'GetRooms', '2': '.proto.services.task_svc.v1.GetRoomsRequest', '3': '.proto.services.task_svc.v1.GetRoomsResponse', '4': const {}},
+    const {'1': 'GetRoomsByWard', '2': '.proto.services.task_svc.v1.GetRoomsByWardRequest', '3': '.proto.services.task_svc.v1.GetRoomsByWardResponse', '4': const {}},
     const {'1': 'UpdateRoom', '2': '.proto.services.task_svc.v1.UpdateRoomRequest', '3': '.proto.services.task_svc.v1.UpdateRoomResponse', '4': const {}},
     const {'1': 'DeleteRoom', '2': '.proto.services.task_svc.v1.DeleteRoomRequest', '3': '.proto.services.task_svc.v1.DeleteRoomResponse', '4': const {}},
   ],
@@ -197,6 +200,14 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> RoomServic
   '.proto.services.task_svc.v1.GetRoomRequest': GetRoomRequest$json,
   '.proto.services.task_svc.v1.GetRoomResponse': GetRoomResponse$json,
   '.proto.services.task_svc.v1.GetRoomResponse.Bed': GetRoomResponse_Bed$json,
+  '.proto.services.task_svc.v1.GetRoomsRequest': GetRoomsRequest$json,
+  '.proto.services.task_svc.v1.GetRoomsResponse': GetRoomsResponse$json,
+  '.proto.services.task_svc.v1.GetRoomsResponse.Room': GetRoomsResponse_Room$json,
+  '.proto.services.task_svc.v1.GetRoomsResponse.Room.Bed': GetRoomsResponse_Room_Bed$json,
+  '.proto.services.task_svc.v1.GetRoomsByWardRequest': GetRoomsByWardRequest$json,
+  '.proto.services.task_svc.v1.GetRoomsByWardResponse': GetRoomsByWardResponse$json,
+  '.proto.services.task_svc.v1.GetRoomsByWardResponse.Room': GetRoomsByWardResponse_Room$json,
+  '.proto.services.task_svc.v1.GetRoomsByWardResponse.Room.Bed': GetRoomsByWardResponse_Room_Bed$json,
   '.proto.services.task_svc.v1.UpdateRoomRequest': UpdateRoomRequest$json,
   '.proto.services.task_svc.v1.UpdateRoomResponse': UpdateRoomResponse$json,
   '.proto.services.task_svc.v1.DeleteRoomRequest': DeleteRoomRequest$json,
@@ -204,4 +215,4 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> RoomServic
 };
 
 /// Descriptor for `RoomService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List roomServiceDescriptor = $convert.base64Decode('CgtSb29tU2VydmljZRJtCgpDcmVhdGVSb29tEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuQ3JlYXRlUm9vbVJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5DcmVhdGVSb29tUmVzcG9uc2UiABJkCgdHZXRSb29tEioucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0Um9vbVJlcXVlc3QaKy5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRSb29tUmVzcG9uc2UiABJtCgpVcGRhdGVSb29tEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVXBkYXRlUm9vbVJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5VcGRhdGVSb29tUmVzcG9uc2UiABJtCgpEZWxldGVSb29tEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuRGVsZXRlUm9vbVJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVSb29tUmVzcG9uc2UiAA==');
+final $typed_data.Uint8List roomServiceDescriptor = $convert.base64Decode('CgtSb29tU2VydmljZRJtCgpDcmVhdGVSb29tEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuQ3JlYXRlUm9vbVJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5DcmVhdGVSb29tUmVzcG9uc2UiABJkCgdHZXRSb29tEioucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0Um9vbVJlcXVlc3QaKy5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRSb29tUmVzcG9uc2UiABJnCghHZXRSb29tcxIrLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFJvb21zUmVxdWVzdBosLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFJvb21zUmVzcG9uc2UiABJ5Cg5HZXRSb29tc0J5V2FyZBIxLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFJvb21zQnlXYXJkUmVxdWVzdBoyLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFJvb21zQnlXYXJkUmVzcG9uc2UiABJtCgpVcGRhdGVSb29tEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVXBkYXRlUm9vbVJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5VcGRhdGVSb29tUmVzcG9uc2UiABJtCgpEZWxldGVSb29tEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuRGVsZXRlUm9vbVJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVSb29tUmVzcG9uc2UiAA==');

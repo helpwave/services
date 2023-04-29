@@ -57,6 +57,13 @@ export class PatientServiceClient {
                response: proto_services_task_svc_v1_patient_svc_pb.UnassignBedResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_patient_svc_pb.UnassignBedResponse>;
 
+  dischargePatient(
+    request: proto_services_task_svc_v1_patient_svc_pb.DischargePatientRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_patient_svc_pb.DischargePatientResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_patient_svc_pb.DischargePatientResponse>;
+
 }
 
 export class PatientServicePromiseClient {
@@ -98,6 +105,11 @@ export class PatientServicePromiseClient {
     request: proto_services_task_svc_v1_patient_svc_pb.UnassignBedRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_patient_svc_pb.UnassignBedResponse>;
+
+  dischargePatient(
+    request: proto_services_task_svc_v1_patient_svc_pb.DischargePatientRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_patient_svc_pb.DischargePatientResponse>;
 
 }
 

@@ -13,16 +13,21 @@ import 'package:protobuf/protobuf.dart' as $pb;
 class CreateRoomRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateRoomRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'wardId')
     ..hasRequiredFields = false
   ;
 
   CreateRoomRequest._() : super();
   factory CreateRoomRequest({
     $core.String? name,
+    $core.String? wardId,
   }) {
     final _result = create();
     if (name != null) {
       _result.name = name;
+    }
+    if (wardId != null) {
+      _result.wardId = wardId;
     }
     return _result;
   }
@@ -55,6 +60,15 @@ class CreateRoomRequest extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
   void clearName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get wardId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set wardId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasWardId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearWardId() => clearField(2);
 }
 
 class CreateRoomResponse extends $pb.GeneratedMessage {
@@ -918,6 +932,14 @@ class RoomServiceApi {
   $async.Future<GetRoomResponse> getRoom($pb.ClientContext? ctx, GetRoomRequest request) {
     var emptyResponse = GetRoomResponse();
     return _client.invoke<GetRoomResponse>(ctx, 'RoomService', 'GetRoom', request, emptyResponse);
+  }
+  $async.Future<GetRoomsResponse> getRooms($pb.ClientContext? ctx, GetRoomsRequest request) {
+    var emptyResponse = GetRoomsResponse();
+    return _client.invoke<GetRoomsResponse>(ctx, 'RoomService', 'GetRooms', request, emptyResponse);
+  }
+  $async.Future<GetRoomsByWardResponse> getRoomsByWard($pb.ClientContext? ctx, GetRoomsByWardRequest request) {
+    var emptyResponse = GetRoomsByWardResponse();
+    return _client.invoke<GetRoomsByWardResponse>(ctx, 'RoomService', 'GetRoomsByWard', request, emptyResponse);
   }
   $async.Future<UpdateRoomResponse> updateRoom($pb.ClientContext? ctx, UpdateRoomRequest request) {
     var emptyResponse = UpdateRoomResponse();
