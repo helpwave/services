@@ -6,6 +6,7 @@ import (
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwgorm"
 	"hwutil"
+	"task-svc/internal/bed"
 	"task-svc/internal/patient"
 	"task-svc/internal/room"
 	"task-svc/internal/task"
@@ -34,5 +35,6 @@ func main() {
 		pb.RegisterPatientServiceServer(grpcServer, patient.NewServiceServer())
 		pb.RegisterWardServiceServer(grpcServer, ward.NewServiceServer())
 		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer())
+		pb.RegisterBedServiceServer(grpcServer, bed.NewServiceServer())
 	})
 }
