@@ -19,10 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	RoomService_CreateRoom_FullMethodName    = "/proto.services.task_svc.v1.RoomService/CreateRoom"
-	RoomService_GetRoom_FullMethodName       = "/proto.services.task_svc.v1.RoomService/GetRoom"
-	RoomService_UpdateRoom_FullMethodName    = "/proto.services.task_svc.v1.RoomService/UpdateRoom"
-	RoomService_AddBedsToRoom_FullMethodName = "/proto.services.task_svc.v1.RoomService/AddBedsToRoom"
+	RoomService_CreateRoom_FullMethodName     = "/proto.services.task_svc.v1.RoomService/CreateRoom"
+	RoomService_GetRoom_FullMethodName        = "/proto.services.task_svc.v1.RoomService/GetRoom"
+	RoomService_GetRooms_FullMethodName       = "/proto.services.task_svc.v1.RoomService/GetRooms"
+	RoomService_GetRoomsByWard_FullMethodName = "/proto.services.task_svc.v1.RoomService/GetRoomsByWard"
+	RoomService_UpdateRoom_FullMethodName     = "/proto.services.task_svc.v1.RoomService/UpdateRoom"
+	RoomService_DeleteRoom_FullMethodName     = "/proto.services.task_svc.v1.RoomService/DeleteRoom"
 )
 
 // RoomServiceClient is the client API for RoomService service.
@@ -31,8 +33,10 @@ const (
 type RoomServiceClient interface {
 	CreateRoom(ctx context.Context, in *CreateRoomRequest, opts ...grpc.CallOption) (*CreateRoomResponse, error)
 	GetRoom(ctx context.Context, in *GetRoomRequest, opts ...grpc.CallOption) (*GetRoomResponse, error)
+	GetRooms(ctx context.Context, in *GetRoomsRequest, opts ...grpc.CallOption) (*GetRoomsResponse, error)
+	GetRoomsByWard(ctx context.Context, in *GetRoomsByWardRequest, opts ...grpc.CallOption) (*GetRoomsByWardResponse, error)
 	UpdateRoom(ctx context.Context, in *UpdateRoomRequest, opts ...grpc.CallOption) (*UpdateRoomResponse, error)
-	AddBedsToRoom(ctx context.Context, in *AddBedsToRoomRequest, opts ...grpc.CallOption) (*AddBedsToRoomResponse, error)
+	DeleteRoom(ctx context.Context, in *DeleteRoomRequest, opts ...grpc.CallOption) (*DeleteRoomResponse, error)
 }
 
 type roomServiceClient struct {
@@ -61,6 +65,24 @@ func (c *roomServiceClient) GetRoom(ctx context.Context, in *GetRoomRequest, opt
 	return out, nil
 }
 
+func (c *roomServiceClient) GetRooms(ctx context.Context, in *GetRoomsRequest, opts ...grpc.CallOption) (*GetRoomsResponse, error) {
+	out := new(GetRoomsResponse)
+	err := c.cc.Invoke(ctx, RoomService_GetRooms_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *roomServiceClient) GetRoomsByWard(ctx context.Context, in *GetRoomsByWardRequest, opts ...grpc.CallOption) (*GetRoomsByWardResponse, error) {
+	out := new(GetRoomsByWardResponse)
+	err := c.cc.Invoke(ctx, RoomService_GetRoomsByWard_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *roomServiceClient) UpdateRoom(ctx context.Context, in *UpdateRoomRequest, opts ...grpc.CallOption) (*UpdateRoomResponse, error) {
 	out := new(UpdateRoomResponse)
 	err := c.cc.Invoke(ctx, RoomService_UpdateRoom_FullMethodName, in, out, opts...)
@@ -70,9 +92,9 @@ func (c *roomServiceClient) UpdateRoom(ctx context.Context, in *UpdateRoomReques
 	return out, nil
 }
 
-func (c *roomServiceClient) AddBedsToRoom(ctx context.Context, in *AddBedsToRoomRequest, opts ...grpc.CallOption) (*AddBedsToRoomResponse, error) {
-	out := new(AddBedsToRoomResponse)
-	err := c.cc.Invoke(ctx, RoomService_AddBedsToRoom_FullMethodName, in, out, opts...)
+func (c *roomServiceClient) DeleteRoom(ctx context.Context, in *DeleteRoomRequest, opts ...grpc.CallOption) (*DeleteRoomResponse, error) {
+	out := new(DeleteRoomResponse)
+	err := c.cc.Invoke(ctx, RoomService_DeleteRoom_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -85,8 +107,10 @@ func (c *roomServiceClient) AddBedsToRoom(ctx context.Context, in *AddBedsToRoom
 type RoomServiceServer interface {
 	CreateRoom(context.Context, *CreateRoomRequest) (*CreateRoomResponse, error)
 	GetRoom(context.Context, *GetRoomRequest) (*GetRoomResponse, error)
+	GetRooms(context.Context, *GetRoomsRequest) (*GetRoomsResponse, error)
+	GetRoomsByWard(context.Context, *GetRoomsByWardRequest) (*GetRoomsByWardResponse, error)
 	UpdateRoom(context.Context, *UpdateRoomRequest) (*UpdateRoomResponse, error)
-	AddBedsToRoom(context.Context, *AddBedsToRoomRequest) (*AddBedsToRoomResponse, error)
+	DeleteRoom(context.Context, *DeleteRoomRequest) (*DeleteRoomResponse, error)
 	mustEmbedUnimplementedRoomServiceServer()
 }
 
@@ -100,11 +124,17 @@ func (UnimplementedRoomServiceServer) CreateRoom(context.Context, *CreateRoomReq
 func (UnimplementedRoomServiceServer) GetRoom(context.Context, *GetRoomRequest) (*GetRoomResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRoom not implemented")
 }
+func (UnimplementedRoomServiceServer) GetRooms(context.Context, *GetRoomsRequest) (*GetRoomsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRooms not implemented")
+}
+func (UnimplementedRoomServiceServer) GetRoomsByWard(context.Context, *GetRoomsByWardRequest) (*GetRoomsByWardResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRoomsByWard not implemented")
+}
 func (UnimplementedRoomServiceServer) UpdateRoom(context.Context, *UpdateRoomRequest) (*UpdateRoomResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateRoom not implemented")
 }
-func (UnimplementedRoomServiceServer) AddBedsToRoom(context.Context, *AddBedsToRoomRequest) (*AddBedsToRoomResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddBedsToRoom not implemented")
+func (UnimplementedRoomServiceServer) DeleteRoom(context.Context, *DeleteRoomRequest) (*DeleteRoomResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteRoom not implemented")
 }
 func (UnimplementedRoomServiceServer) mustEmbedUnimplementedRoomServiceServer() {}
 
@@ -155,6 +185,42 @@ func _RoomService_GetRoom_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RoomService_GetRooms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRoomsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoomServiceServer).GetRooms(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RoomService_GetRooms_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoomServiceServer).GetRooms(ctx, req.(*GetRoomsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RoomService_GetRoomsByWard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRoomsByWardRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoomServiceServer).GetRoomsByWard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RoomService_GetRoomsByWard_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoomServiceServer).GetRoomsByWard(ctx, req.(*GetRoomsByWardRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _RoomService_UpdateRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateRoomRequest)
 	if err := dec(in); err != nil {
@@ -173,20 +239,20 @@ func _RoomService_UpdateRoom_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _RoomService_AddBedsToRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddBedsToRoomRequest)
+func _RoomService_DeleteRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRoomRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RoomServiceServer).AddBedsToRoom(ctx, in)
+		return srv.(RoomServiceServer).DeleteRoom(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: RoomService_AddBedsToRoom_FullMethodName,
+		FullMethod: RoomService_DeleteRoom_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RoomServiceServer).AddBedsToRoom(ctx, req.(*AddBedsToRoomRequest))
+		return srv.(RoomServiceServer).DeleteRoom(ctx, req.(*DeleteRoomRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -207,12 +273,20 @@ var RoomService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _RoomService_GetRoom_Handler,
 		},
 		{
+			MethodName: "GetRooms",
+			Handler:    _RoomService_GetRooms_Handler,
+		},
+		{
+			MethodName: "GetRoomsByWard",
+			Handler:    _RoomService_GetRoomsByWard_Handler,
+		},
+		{
 			MethodName: "UpdateRoom",
 			Handler:    _RoomService_UpdateRoom_Handler,
 		},
 		{
-			MethodName: "AddBedsToRoom",
-			Handler:    _RoomService_AddBedsToRoom_Handler,
+			MethodName: "DeleteRoom",
+			Handler:    _RoomService_DeleteRoom_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

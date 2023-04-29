@@ -2,63 +2,126 @@ import * as jspb from 'google-protobuf'
 
 
 
-export class CreateUserRequest extends jspb.Message {
+export class ReadSelfOrganization extends jspb.Message {
+  getId(): string;
+  setId(value: string): ReadSelfOrganization;
+
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CreateUserRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: CreateUserRequest): CreateUserRequest.AsObject;
-  static serializeBinaryToWriter(message: CreateUserRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CreateUserRequest;
-  static deserializeBinaryFromReader(message: CreateUserRequest, reader: jspb.BinaryReader): CreateUserRequest;
+  toObject(includeInstance?: boolean): ReadSelfOrganization.AsObject;
+  static toObject(includeInstance: boolean, msg: ReadSelfOrganization): ReadSelfOrganization.AsObject;
+  static serializeBinaryToWriter(message: ReadSelfOrganization, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReadSelfOrganization;
+  static deserializeBinaryFromReader(message: ReadSelfOrganization, reader: jspb.BinaryReader): ReadSelfOrganization;
 }
 
-export namespace CreateUserRequest {
+export namespace ReadSelfOrganization {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class ReadSelfRequest extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ReadSelfRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ReadSelfRequest): ReadSelfRequest.AsObject;
+  static serializeBinaryToWriter(message: ReadSelfRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReadSelfRequest;
+  static deserializeBinaryFromReader(message: ReadSelfRequest, reader: jspb.BinaryReader): ReadSelfRequest;
+}
+
+export namespace ReadSelfRequest {
   export type AsObject = {
   }
 }
 
-export class CreateUserResponse extends jspb.Message {
+export class ReadSelfResponse extends jspb.Message {
+  getId(): string;
+  setId(value: string): ReadSelfResponse;
+
+  getName(): string;
+  setName(value: string): ReadSelfResponse;
+
+  getNickname(): string;
+  setNickname(value: string): ReadSelfResponse;
+
+  getAvatarUrl(): string;
+  setAvatarUrl(value: string): ReadSelfResponse;
+
+  getOrganizationsList(): Array<ReadSelfOrganization>;
+  setOrganizationsList(value: Array<ReadSelfOrganization>): ReadSelfResponse;
+  clearOrganizationsList(): ReadSelfResponse;
+  addOrganizations(value?: ReadSelfOrganization, index?: number): ReadSelfOrganization;
+
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CreateUserResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: CreateUserResponse): CreateUserResponse.AsObject;
-  static serializeBinaryToWriter(message: CreateUserResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CreateUserResponse;
-  static deserializeBinaryFromReader(message: CreateUserResponse, reader: jspb.BinaryReader): CreateUserResponse;
+  toObject(includeInstance?: boolean): ReadSelfResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: ReadSelfResponse): ReadSelfResponse.AsObject;
+  static serializeBinaryToWriter(message: ReadSelfResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReadSelfResponse;
+  static deserializeBinaryFromReader(message: ReadSelfResponse, reader: jspb.BinaryReader): ReadSelfResponse;
 }
 
-export namespace CreateUserResponse {
+export namespace ReadSelfResponse {
   export type AsObject = {
+    id: string,
+    name: string,
+    nickname: string,
+    avatarUrl: string,
+    organizationsList: Array<ReadSelfOrganization.AsObject>,
   }
 }
 
-export class GetUserRequest extends jspb.Message {
+export class ReadPublicProfileRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): ReadPublicProfileRequest;
+
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetUserRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetUserRequest): GetUserRequest.AsObject;
-  static serializeBinaryToWriter(message: GetUserRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetUserRequest;
-  static deserializeBinaryFromReader(message: GetUserRequest, reader: jspb.BinaryReader): GetUserRequest;
+  toObject(includeInstance?: boolean): ReadPublicProfileRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ReadPublicProfileRequest): ReadPublicProfileRequest.AsObject;
+  static serializeBinaryToWriter(message: ReadPublicProfileRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReadPublicProfileRequest;
+  static deserializeBinaryFromReader(message: ReadPublicProfileRequest, reader: jspb.BinaryReader): ReadPublicProfileRequest;
 }
 
-export namespace GetUserRequest {
+export namespace ReadPublicProfileRequest {
   export type AsObject = {
+    id: string,
   }
 }
 
-export class GetUserResponse extends jspb.Message {
+export class ReadPublicProfileResponse extends jspb.Message {
+  getId(): string;
+  setId(value: string): ReadPublicProfileResponse;
+
+  getName(): string;
+  setName(value: string): ReadPublicProfileResponse;
+
+  getNickname(): string;
+  setNickname(value: string): ReadPublicProfileResponse;
+
+  getAvatarUrl(): string;
+  setAvatarUrl(value: string): ReadPublicProfileResponse;
+
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetUserResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetUserResponse): GetUserResponse.AsObject;
-  static serializeBinaryToWriter(message: GetUserResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetUserResponse;
-  static deserializeBinaryFromReader(message: GetUserResponse, reader: jspb.BinaryReader): GetUserResponse;
+  toObject(includeInstance?: boolean): ReadPublicProfileResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: ReadPublicProfileResponse): ReadPublicProfileResponse.AsObject;
+  static serializeBinaryToWriter(message: ReadPublicProfileResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReadPublicProfileResponse;
+  static deserializeBinaryFromReader(message: ReadPublicProfileResponse, reader: jspb.BinaryReader): ReadPublicProfileResponse;
 }
 
-export namespace GetUserResponse {
+export namespace ReadPublicProfileResponse {
   export type AsObject = {
+    id: string,
+    name: string,
+    nickname: string,
+    avatarUrl: string,
   }
 }
 
 export class UpdateUserRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): UpdateUserRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateUserRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateUserRequest): UpdateUserRequest.AsObject;
@@ -69,6 +132,7 @@ export class UpdateUserRequest extends jspb.Message {
 
 export namespace UpdateUserRequest {
   export type AsObject = {
+    id: string,
   }
 }
 
@@ -82,34 +146,6 @@ export class UpdateUserResponse extends jspb.Message {
 }
 
 export namespace UpdateUserResponse {
-  export type AsObject = {
-  }
-}
-
-export class ReadPublicProfileRequest extends jspb.Message {
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): ReadPublicProfileRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: ReadPublicProfileRequest): ReadPublicProfileRequest.AsObject;
-  static serializeBinaryToWriter(message: ReadPublicProfileRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): ReadPublicProfileRequest;
-  static deserializeBinaryFromReader(message: ReadPublicProfileRequest, reader: jspb.BinaryReader): ReadPublicProfileRequest;
-}
-
-export namespace ReadPublicProfileRequest {
-  export type AsObject = {
-  }
-}
-
-export class ReadPublicProfileResponse extends jspb.Message {
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): ReadPublicProfileResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: ReadPublicProfileResponse): ReadPublicProfileResponse.AsObject;
-  static serializeBinaryToWriter(message: ReadPublicProfileResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): ReadPublicProfileResponse;
-  static deserializeBinaryFromReader(message: ReadPublicProfileResponse, reader: jspb.BinaryReader): ReadPublicProfileResponse;
-}
-
-export namespace ReadPublicProfileResponse {
   export type AsObject = {
   }
 }
