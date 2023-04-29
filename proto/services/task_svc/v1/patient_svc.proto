@@ -9,12 +9,12 @@ option go_package = "gen/proto/services/task-svc";
 //
 
 message CreatePatientRequest {
-    string human_readable_identifier = 1; // @gotags: validate:"required"
-    string notes = 2;
+  string human_readable_identifier = 1; // @gotags: validate:"required"
+  string notes = 2;
 }
 
 message CreatePatientResponse {
-    string id = 1;
+  string id = 1;
 }
 
 //
@@ -22,14 +22,14 @@ message CreatePatientResponse {
 //
 
 message GetPatientRequest {
-    string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetPatientResponse {
-    string id = 1; // @gotags: validate:"uuid4"
-    string human_readable_identifier = 2; // @gotags: validate:"required"
-    string notes = 3;
-    optional string bed_id = 4;
+  string id = 1; // @gotags: validate:"uuid4"
+  string human_readable_identifier = 2; // @gotags: validate:"required"
+  string notes = 3;
+  optional string bed_id = 4;
 }
 
 //
@@ -37,14 +37,14 @@ message GetPatientResponse {
 //
 
 message GetPatientByBedRequest {
-    string bed_id = 1; // @gotags: validate:"uuid4"
+  string bed_id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetPatientByBedResponse {
-    string id = 1;
-    string human_readable_identifier = 2;
-    string notes = 3;
-    optional string bed_id = 4;
+  string id = 1;
+  string human_readable_identifier = 2;
+  string notes = 3;
+  optional string bed_id = 4;
 }
 
 //
@@ -52,18 +52,18 @@ message GetPatientByBedResponse {
 //
 
 message GetPatientsByWardRequest {
-    string ward_id = 1; // @gotags: validate:"uuid4"
+  string ward_id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetPatientsByWardResponse {
-    repeated Patient patients = 1;
+  repeated Patient patients = 1;
 
-    message Patient {
-        string id = 1;
-        string human_readable_identifier = 2;
-        string notes = 3;
-        optional string bed_id = 4;
-    }
+  message Patient {
+    string id = 1;
+    string human_readable_identifier = 2;
+    string notes = 3;
+    optional string bed_id = 4;
+  }
 }
 
 //
@@ -71,9 +71,9 @@ message GetPatientsByWardResponse {
 //
 
 message UpdatePatientRequest {
-    string id = 1; // @gotags: validate:"uuid4"
-    optional string human_readable_identifier = 2;
-    string notes = 3;
+  string id = 1; // @gotags: validate:"uuid4"
+  optional string human_readable_identifier = 2;
+  string notes = 3;
 }
 
 message UpdatePatientResponse {}
@@ -83,8 +83,8 @@ message UpdatePatientResponse {}
 //
 
 message AssignBedRequest {
-    string id = 1; // @gotags: validate:"uuid4"
-    string bed_id = 2; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
+  string bed_id = 2; // @gotags: validate:"uuid4"
 }
 
 message AssignBedResponse {}
@@ -94,7 +94,7 @@ message AssignBedResponse {}
 //
 
 message UnassignBedRequest {
-    string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message UnassignBedResponse {}
@@ -104,7 +104,7 @@ message UnassignBedResponse {}
 //
 
 message DischargePatientRequest {
-    string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message DischargePatientResponse {}
@@ -114,12 +114,12 @@ message DischargePatientResponse {}
 //
 
 service PatientService {
-    rpc CreatePatient(CreatePatientRequest) returns (CreatePatientResponse) {}
-    rpc GetPatient(GetPatientRequest) returns (GetPatientResponse) {}
-    rpc GetPatientByBed(GetPatientByBedRequest) returns (GetPatientByBedResponse) {}
-    rpc GetPatientsByWard(GetPatientsByWardRequest) returns (GetPatientsByWardResponse) {}
-    rpc UpdatePatient(UpdatePatientRequest) returns (UpdatePatientResponse) {}
-    rpc AssignBed(AssignBedRequest) returns (AssignBedResponse) {}
-    rpc UnassignBed(UnassignBedRequest) returns (UnassignBedResponse) {}
-    rpc DischargePatient(DischargePatientRequest) returns (DischargePatientResponse) {}
+  rpc CreatePatient(CreatePatientRequest) returns (CreatePatientResponse) {}
+  rpc GetPatient(GetPatientRequest) returns (GetPatientResponse) {}
+  rpc GetPatientByBed(GetPatientByBedRequest) returns (GetPatientByBedResponse) {}
+  rpc GetPatientsByWard(GetPatientsByWardRequest) returns (GetPatientsByWardResponse) {}
+  rpc UpdatePatient(UpdatePatientRequest) returns (UpdatePatientResponse) {}
+  rpc AssignBed(AssignBedRequest) returns (AssignBedResponse) {}
+  rpc UnassignBed(UnassignBedRequest) returns (UnassignBedResponse) {}
+  rpc DischargePatient(DischargePatientRequest) returns (DischargePatientResponse) {}
 }

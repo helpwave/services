@@ -5,10 +5,10 @@ package proto.services.task_svc.v1;
 option go_package = "gen/proto/services/task-svc";
 
 enum TaskStatus {
-	TASK_STATUS_UNSPECIFIED = 0;
-	TASK_STATUS_TODO = 1;
-	TASK_STATUS_IN_PROGRESS = 2;
-	TASK_STATUS_DONE = 3;
+  TASK_STATUS_UNSPECIFIED = 0;
+  TASK_STATUS_TODO = 1;
+  TASK_STATUS_IN_PROGRESS = 2;
+  TASK_STATUS_DONE = 3;
 }
 
 //
@@ -16,14 +16,14 @@ enum TaskStatus {
 //
 
 message CreateTaskRequest {
-	string name = 1; // @gotags: validate:"required"
-	string description = 2; // @gotags: validate:"required"
-	string patient_id = 3; // @gotags: validate:"uuid4"
-    bool public = 4; // default: true
+  string name = 1; // @gotags: validate:"required"
+  string description = 2; // @gotags: validate:"required"
+  string patient_id = 3; // @gotags: validate:"uuid4"
+  bool public = 4; // default: true
 }
 
 message CreateTaskResponse {
-	string id = 1;
+  string id = 1;
 }
 
 //
@@ -31,24 +31,24 @@ message CreateTaskResponse {
 //
 
 message GetTaskRequest {
-	string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetTaskResponse {
-	string id = 1;
-	string name = 2;
-	string description = 3;
-	TaskStatus status = 4;
-	string assigned_user_id = 5;
-	string patient_id = 6;
-    bool public = 7;
-    repeated SubTask subtasks = 8;
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  TaskStatus status = 4;
+  string assigned_user_id = 5;
+  string patient_id = 6;
+  bool public = 7;
+  repeated SubTask subtasks = 8;
 
-    message SubTask {
-        string id = 1;
-        string title = 2;
-        bool done = 3;
-    }
+  message SubTask {
+    string id = 1;
+    string title = 2;
+    bool done = 3;
+  }
 }
 
 //
@@ -56,28 +56,28 @@ message GetTaskResponse {
 //
 
 message GetTasksByPatientRequest {
-	string patient_id = 1; // @gotags: validate:"uuid4"
+  string patient_id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetTasksByPatientResponse {
-	repeated Task tasks = 1;
+  repeated Task tasks = 1;
 
-	message Task {
-		string id = 1;
-		string name = 2;
-		string description = 3;
-		TaskStatus status = 4;
-		string assigned_user_id = 5;
-		string patient_id = 6;
-        bool public = 7;
-        repeated SubTask subtasks = 8;
+  message Task {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    TaskStatus status = 4;
+    string assigned_user_id = 5;
+    string patient_id = 6;
+    bool public = 7;
+    repeated SubTask subtasks = 8;
 
-        message SubTask {
-            string id = 1;
-            string title = 2;
-            bool done = 3;
-        }
-	}
+    message SubTask {
+      string id = 1;
+      string title = 2;
+      bool done = 3;
+    }
+  }
 }
 
 //
@@ -85,9 +85,9 @@ message GetTasksByPatientResponse {
 //
 
 message UpdateTaskRequest {
-	string id = 1; // @gotags: validate:"uuid4"
-	optional string name = 2;
-	optional string description = 3;
+  string id = 1; // @gotags: validate:"uuid4"
+  optional string name = 2;
+  optional string description = 3;
 }
 
 message UpdateTaskResponse {}
@@ -97,13 +97,13 @@ message UpdateTaskResponse {}
 //
 
 message AddSubTaskRequest {
-	string title = 1;
-    string task_id = 2; // @gotags: validate:"uuid4"
-    optional bool done = 3; // default: false
+  string title = 1;
+  string task_id = 2; // @gotags: validate:"uuid4"
+  optional bool done = 3; // default: false
 }
 
 message AddSubTaskResponse {
-    string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 //
@@ -111,7 +111,7 @@ message AddSubTaskResponse {
 //
 
 message RemoveSubTaskRequest {
-    string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message RemoveSubTaskResponse {}
@@ -121,7 +121,7 @@ message RemoveSubTaskResponse {}
 //
 
 message SubTaskToToDoRequest {
-    string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message SubTaskToToDoResponse {}
@@ -131,7 +131,7 @@ message SubTaskToToDoResponse {}
 //
 
 message SubTaskToDoneRequest {
-    string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message SubTaskToDoneResponse {}
@@ -141,7 +141,7 @@ message SubTaskToDoneResponse {}
 //
 
 message TaskToToDoRequest {
-	string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message TaskToToDoResponse {}
@@ -151,7 +151,7 @@ message TaskToToDoResponse {}
 //
 
 message TaskToInProgressRequest {
-	string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message TaskToInProgressResponse {}
@@ -161,7 +161,7 @@ message TaskToInProgressResponse {}
 //
 
 message TaskToDoneRequest {
-	string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message TaskToDoneResponse {}
@@ -171,8 +171,8 @@ message TaskToDoneResponse {}
 //
 
 message AssignTaskToUserRequest {
-	string id = 1; // @gotags: validate:"uuid4"
-	string user_id = 2; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
+  string user_id = 2; // @gotags: validate:"uuid4"
 }
 
 message AssignTaskToUserResponse {}
@@ -182,27 +182,27 @@ message AssignTaskToUserResponse {}
 //
 
 message UnassignTaskFromUserRequest {
-	string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message UnassignTaskFromUserResponse {}
 
 //
-// PublishTask 
+// PublishTask
 //
 
 message PublishTaskRequest {
-	string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message PublishTaskResponse {}
 
 //
-// UnpublishTask 
+// UnpublishTask
 //
 
 message UnpublishTaskRequest {
-	string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message UnpublishTaskResponse {}
@@ -213,7 +213,7 @@ message UnpublishTaskResponse {}
 //
 
 message DeleteTaskRequest {
-	string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message DeleteTaskResponse {}
@@ -224,20 +224,20 @@ message DeleteTaskResponse {}
 //
 
 service TaskService {
-	rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse) {}
-	rpc GetTask (GetTaskRequest) returns (GetTaskResponse) {}
-	rpc GetTasksByPatient (GetTasksByPatientRequest) returns (GetTasksByPatientResponse) {}
-	rpc UpdateTask (UpdateTaskRequest) returns (UpdateTaskResponse) {}
-	rpc AddSubTask (AddSubTaskRequest) returns (AddSubTaskResponse) {}
-	rpc RemoveSubTask (RemoveSubTaskRequest) returns (RemoveSubTaskResponse) {}
-	rpc SubTaskToToDo (SubTaskToToDoRequest) returns (SubTaskToToDoResponse) {}
-	rpc SubTaskToDone (SubTaskToDoneRequest) returns (SubTaskToDoneResponse) {}
-	rpc TaskToToDo (TaskToToDoRequest) returns (TaskToToDoResponse) {}
-	rpc TaskToInProgress (TaskToInProgressRequest) returns (TaskToInProgressResponse) {}
-	rpc TaskToDone (TaskToDoneRequest) returns (TaskToDoneResponse) {}
-	rpc AssignTaskToUser (AssignTaskToUserRequest) returns (AssignTaskToUserResponse) {}
-	rpc UnassignTaskFromUser (UnassignTaskFromUserRequest) returns (UnassignTaskFromUserResponse) {}
-	rpc PublishTask (PublishTaskRequest) returns (PublishTaskResponse) {}
-	rpc UnpublishTask (UnpublishTaskRequest) returns (UnpublishTaskResponse) {}
-	rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse) {}
+  rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse) {}
+  rpc GetTask (GetTaskRequest) returns (GetTaskResponse) {}
+  rpc GetTasksByPatient (GetTasksByPatientRequest) returns (GetTasksByPatientResponse) {}
+  rpc UpdateTask (UpdateTaskRequest) returns (UpdateTaskResponse) {}
+  rpc AddSubTask (AddSubTaskRequest) returns (AddSubTaskResponse) {}
+  rpc RemoveSubTask (RemoveSubTaskRequest) returns (RemoveSubTaskResponse) {}
+  rpc SubTaskToToDo (SubTaskToToDoRequest) returns (SubTaskToToDoResponse) {}
+  rpc SubTaskToDone (SubTaskToDoneRequest) returns (SubTaskToDoneResponse) {}
+  rpc TaskToToDo (TaskToToDoRequest) returns (TaskToToDoResponse) {}
+  rpc TaskToInProgress (TaskToInProgressRequest) returns (TaskToInProgressResponse) {}
+  rpc TaskToDone (TaskToDoneRequest) returns (TaskToDoneResponse) {}
+  rpc AssignTaskToUser (AssignTaskToUserRequest) returns (AssignTaskToUserResponse) {}
+  rpc UnassignTaskFromUser (UnassignTaskFromUserRequest) returns (UnassignTaskFromUserResponse) {}
+  rpc PublishTask (PublishTaskRequest) returns (PublishTaskResponse) {}
+  rpc UnpublishTask (UnpublishTaskRequest) returns (UnpublishTaskResponse) {}
+  rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse) {}
 }

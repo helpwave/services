@@ -9,18 +9,18 @@ option go_package = "gen/proto/services/user-svc";
 //
 
 message ReadSelfOrganization {
-    string id = 1;
+  string id = 1;
 }
 
 // User gets resolved from current authentication context
 message ReadSelfRequest {}
 
 message ReadSelfResponse {
-    string id = 1;
-    string name = 2;
-    string nickname = 3;
-    string avatar_url = 4;
-    repeated ReadSelfOrganization organizations = 5;
+  string id = 1;
+  string name = 2;
+  string nickname = 3;
+  string avatar_url = 4;
+  repeated ReadSelfOrganization organizations = 5;
 }
 
 //
@@ -28,14 +28,14 @@ message ReadSelfResponse {
 //
 
 message ReadPublicProfileRequest {
-    string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message ReadPublicProfileResponse {
-    string id = 1;
-    string name = 2;
-    string nickname = 3;
-    string avatar_url = 4;
+  string id = 1;
+  string name = 2;
+  string nickname = 3;
+  string avatar_url = 4;
 }
 
 //
@@ -43,9 +43,9 @@ message ReadPublicProfileResponse {
 //
 
 message UpdateUserRequest {
-    string id = 1; // @gotags: validate:"uuid4"
-    // TODO: Avatar handling via an image/assets service
-    // TODO: Storagae localization related settings: language, units
+  string id = 1; // @gotags: validate:"uuid4"
+  // TODO: Avatar handling via an image/assets service
+  // TODO: Storagae localization related settings: language, units
 }
 
 message UpdateUserResponse {}
@@ -55,7 +55,7 @@ message UpdateUserResponse {}
 //
 
 service UserService {
-    rpc ReadSelf (ReadSelfRequest) returns (ReadSelfResponse) {}
-    rpc ReadPublicProfile (ReadPublicProfileRequest) returns (ReadPublicProfileResponse) {}
-    rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse) {}
+  rpc ReadSelf (ReadSelfRequest) returns (ReadSelfResponse) {}
+  rpc ReadPublicProfile (ReadPublicProfileRequest) returns (ReadPublicProfileResponse) {}
+  rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse) {}
 }

@@ -9,11 +9,11 @@ option go_package = "gen/proto/services/task-svc";
 //
 
 message CreateBedRequest {
-    string room_id = 1; // @gotags: validate:"uuid4"
+  string room_id = 1; // @gotags: validate:"uuid4"
 }
 
 message CreateBedResponse {
-    string id = 1;
+  string id = 1;
 }
 
 //
@@ -21,16 +21,16 @@ message CreateBedResponse {
 //
 
 message BulkCreateBedsRequest {
-    string room_id = 1; // @gotags: validate:"uuid4"
-    uint32 amount_of_beds = 2; // @gotags: validate:"required"
+  string room_id = 1; // @gotags: validate:"uuid4"
+  uint32 amount_of_beds = 2; // @gotags: validate:"required"
 }
 
 message BulkCreateBedsResponse {
-    repeated Bed beds = 1;
+  repeated Bed beds = 1;
 
-    message Bed {
-        string id = 1;
-    }
+  message Bed {
+    string id = 1;
+  }
 }
 
 //
@@ -38,12 +38,12 @@ message BulkCreateBedsResponse {
 //
 
 message GetBedRequest {
-    string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetBedResponse {
-    string id = 1;
-    string room_id = 2;
+  string id = 1;
+  string room_id = 2;
 }
 
 //
@@ -53,12 +53,12 @@ message GetBedResponse {
 message GetBedsRequest {}
 
 message GetBedsResponse {
-    repeated Bed beds = 1;
+  repeated Bed beds = 1;
 
-    message Bed {
-        string id = 1;
-        string room_id = 2;
-    }
+  message Bed {
+    string id = 1;
+    string room_id = 2;
+  }
 }
 
 //
@@ -66,15 +66,15 @@ message GetBedsResponse {
 //
 
 message GetBedsByRoomRequest {
-    string room_id = 1; // @gotags: validate:"uuid4"
+  string room_id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetBedsByRoomResponse {
-    repeated Bed beds = 1;
+  repeated Bed beds = 1;
 
-    message Bed {
-        string id = 1;
-    }
+  message Bed {
+    string id = 1;
+  }
 }
 
 //
@@ -82,8 +82,8 @@ message GetBedsByRoomResponse {
 //
 
 message UpdateBedRequest {
-    string id = 1; // @gotags: validate:"uuid4"
-    optional string room_id = 2;
+  string id = 1; // @gotags: validate:"uuid4"
+  optional string room_id = 2;
 }
 
 message UpdateBedResponse {}
@@ -93,7 +93,7 @@ message UpdateBedResponse {}
 //
 
 message DeleteBedRequest {
-    string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message DeleteBedResponse {}
@@ -103,11 +103,11 @@ message DeleteBedResponse {}
 //
 
 service BedService {
-    rpc CreateBed(CreateBedRequest) returns (CreateBedResponse) {}
-    rpc BulkCreateBeds(BulkCreateBedsRequest) returns (BulkCreateBedsResponse) {}
-    rpc GetBed(GetBedRequest) returns (GetBedResponse) {}
-    rpc GetBeds(GetBedsRequest) returns (GetBedsResponse) {}
-    rpc GetBedsByRoom(GetBedsByRoomRequest) returns (GetBedsByRoomResponse) {}
-    rpc UpdateBed(UpdateBedRequest) returns (UpdateBedResponse) {}
-    rpc DeleteBed(DeleteBedRequest) returns (DeleteBedResponse) {}
+  rpc CreateBed(CreateBedRequest) returns (CreateBedResponse) {}
+  rpc BulkCreateBeds(BulkCreateBedsRequest) returns (BulkCreateBedsResponse) {}
+  rpc GetBed(GetBedRequest) returns (GetBedResponse) {}
+  rpc GetBeds(GetBedsRequest) returns (GetBedsResponse) {}
+  rpc GetBedsByRoom(GetBedsByRoomRequest) returns (GetBedsByRoomResponse) {}
+  rpc UpdateBed(UpdateBedRequest) returns (UpdateBedResponse) {}
+  rpc DeleteBed(DeleteBedRequest) returns (DeleteBedResponse) {}
 }
