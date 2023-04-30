@@ -15,9 +15,6 @@ require (
 	gen v0.0.0
 	github.com/dapr/go-sdk v1.6.1-0.20230224224332-7c5ecee155cc
 	github.com/rs/zerolog v1.28.0
-	google.golang.org/grpc v1.54.0
-	hwutil v0.0.0
-	logging v0.0.0
 )
 
 require (
@@ -41,7 +38,10 @@ require (
 	golang.org/x/text v0.8.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20230110181048-76db0878b65f // indirect
+	google.golang.org/grpc v1.54.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	hwutil v0.0.0 // indirect
+	logging v0.0.0 // indirect
 )

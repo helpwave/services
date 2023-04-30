@@ -9,8 +9,8 @@ option go_package = "gen/proto/services/ory-svc";
 //
 
 message AfterRegistrationWebhookPayload {
-	string user_id = 1; // @gotags: validate:"uuid4" json:"userId"
-	string email = 2; // @gotags: validate:"required,email" json:"email"
-	string nickname = 3; // @gotags: validate:"required" json:"nickname"
-	string name = 4; // @gotags: validate:"required" json:"name"
+  string user_id = 1; // @gotags: validate:"uuid4" json:"userId"
+  string email = 2; // @gotags: validate:"required,email" json:"email"
+  string nickname = 3; // @gotags: validate:"required" json:"nickname"
+  string name = 4; // @gotags: validate:"required" json:"name"
 }

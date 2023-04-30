@@ -13,8 +13,10 @@ import (
 	"time"
 )
 
-// Mode is set in Setup
-var Mode string
+var (
+	Mode                    string // Mode is set in Setup()
+	InsecureFakeTokenEnable = false
+)
 
 const DevelopmentMode = "development"
 const ProductionMode = "production"
@@ -49,7 +51,12 @@ func Setup(serviceName, version string, auth bool) {
 	}
 
 	if auth {
-		setupKeycloak()
+		if strings.ToLower(hwutil.GetEnvOr("INSECURE_FAKE_TOKEN_ENABLE", "false")) == "true" {
+			InsecureFakeTokenEnable = true
+			log.Error().Msg("INSECURE_FAKE_TOKEN_ENABLE is set to true, accepting fake tokens")
+		}
+
+		setupAuth()
 	}
 }
 

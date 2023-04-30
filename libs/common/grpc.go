@@ -2,9 +2,15 @@ package common
 
 import (
 	"context"
+	"encoding/base64"
 	"github.com/dapr/go-sdk/dapr/proto/runtime/v1"
+	daprd "github.com/dapr/go-sdk/service/grpc"
+	"github.com/google/uuid"
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
 	"github.com/rs/zerolog"
+	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
@@ -12,14 +18,11 @@ import (
 	"hwutil"
 	"logging"
 	"net"
-
-	daprd "github.com/dapr/go-sdk/service/grpc"
-	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
-	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
-	zlog "github.com/rs/zerolog/log"
 )
 
 type claimsKey struct{}
+
+type userIDKey struct{}
 
 // StartNewGRPCServer creates and starts a new GRPC server on addr or panics.
 // Using registerServerHook you are able to register your
@@ -63,8 +66,8 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 }
 
 func authFunc(ctx context.Context) (context.Context, error) {
-	if !IsKeycloakSetUp() {
-		zlog.Ctx(ctx).Trace().Msg("skipping auth middleware, as keycloak is not set up")
+	if !isAuthSetUp() {
+		zlog.Ctx(ctx).Trace().Msg("skipping auth middleware, as auth is not set up")
 		// skip injecting claims into context
 		return ctx, nil
 	}
@@ -74,29 +77,79 @@ func authFunc(ctx context.Context) (context.Context, error) {
 
 	if err != nil {
 		zlog.Ctx(ctx).Trace().Err(err).Msg("no valid auth header found")
-		// nothing to parse, continue to next interceptor
-		return ctx, nil
+		return nil, status.Errorf(codes.Unauthenticated, "no auth token: %v", err)
 	}
 
 	// verify token
-	claims, err := VerifyAccessToken(token)
+	claims, err := VerifyIDToken(token)
+
+	// If InsecureFakeTokenEnable is true and Mode is development,
+	// we accept unverified Base64 encoded json structure in the schema of IDTokenClaims as well.
+	// This allows the client to pass self-defined "Fake ID Token Claims" without going through our auth provider.
+	// ONLY FOR NON-PUBLIC DEVELOPMENT AND STAGING ENVIRONMENTS
+	if claims == nil && err != nil && InsecureFakeTokenEnable {
+		claims, err = VerifyFakeToken(token)
+	}
+
 	if err != nil {
 		return nil, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err)
 	}
 
 	ctx = context.WithValue(ctx, claimsKey{}, claims)
 
+	// parse and cache userID
+	userID, err := uuid.Parse(claims.Sub)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "invalid userID")
+	}
+
+	ctx = context.WithValue(ctx, userIDKey{}, userID)
+
+	// Append userID to the logger
+	log := zlog.Ctx(ctx).With().Str("userID", userID.String()).Logger()
+	ctx = log.WithContext(ctx)
+
 	return ctx, nil
+}
+
+// VerifyFakeToken accepts a Base64 encoded json structure with the schema of IDTokenClaims
+func VerifyFakeToken(token string) (*IDTokenClaims, error) {
+	plainToken, err := base64.StdEncoding.DecodeString(token)
+	if err != nil {
+		return nil, err
+	}
+
+	claims := IDTokenClaims{}
+	if err := hwutil.ParseValidJson(plainToken, &claims); err != nil {
+		return nil, err
+	}
+
+	if err = claims.AsExpected(); err != nil {
+		return nil, err
+	}
+
+	zlog.Warn().Interface("claims", claims).Msg("fake token was verified")
+
+	return &claims, err
 }
 
 // GetAuthClaims extracts AccessTokenClaims from the request context, if they exist
 // They are checked to be as expected and the token it was extracted from was valid.
 // If an error is returned, no access token was extracted for this request.
 // This either means no token was supplied by the client, or Auth was not set up in Setup.
-func GetAuthClaims(ctx context.Context) (*AccessTokenClaims, error) {
-	res, ok := ctx.Value(claimsKey{}).(*AccessTokenClaims)
+func GetAuthClaims(ctx context.Context) (*IDTokenClaims, error) {
+	res, ok := ctx.Value(claimsKey{}).(*IDTokenClaims)
 	if !ok || res == nil {
 		return nil, status.Error(codes.Unauthenticated, "authentication required")
+	} else {
+		return res, nil
+	}
+}
+
+func GetUserID(ctx context.Context) (uuid.UUID, error) {
+	res, ok := ctx.Value(userIDKey{}).(uuid.UUID)
+	if !ok {
+		return uuid.UUID{}, status.Error(codes.Unauthenticated, "userID not in context, set up auth")
 	} else {
 		return res, nil
 	}

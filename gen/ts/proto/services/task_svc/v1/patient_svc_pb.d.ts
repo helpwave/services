@@ -6,6 +6,9 @@ export class CreatePatientRequest extends jspb.Message {
   getHumanReadableIdentifier(): string;
   setHumanReadableIdentifier(value: string): CreatePatientRequest;
 
+  getNotes(): string;
+  setNotes(value: string): CreatePatientRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreatePatientRequest.AsObject;
   static toObject(includeInstance: boolean, msg: CreatePatientRequest): CreatePatientRequest.AsObject;
@@ -17,6 +20,7 @@ export class CreatePatientRequest extends jspb.Message {
 export namespace CreatePatientRequest {
   export type AsObject = {
     humanReadableIdentifier: string,
+    notes: string,
   }
 }
 
@@ -63,6 +67,14 @@ export class GetPatientResponse extends jspb.Message {
   getHumanReadableIdentifier(): string;
   setHumanReadableIdentifier(value: string): GetPatientResponse;
 
+  getNotes(): string;
+  setNotes(value: string): GetPatientResponse;
+
+  getBedId(): string;
+  setBedId(value: string): GetPatientResponse;
+  hasBedId(): boolean;
+  clearBedId(): GetPatientResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPatientResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetPatientResponse): GetPatientResponse.AsObject;
@@ -75,7 +87,145 @@ export namespace GetPatientResponse {
   export type AsObject = {
     id: string,
     humanReadableIdentifier: string,
+    notes: string,
+    bedId?: string,
   }
+
+  export enum BedIdCase { 
+    _BED_ID_NOT_SET = 0,
+    BED_ID = 4,
+  }
+}
+
+export class GetPatientByBedRequest extends jspb.Message {
+  getBedId(): string;
+  setBedId(value: string): GetPatientByBedRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPatientByBedRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPatientByBedRequest): GetPatientByBedRequest.AsObject;
+  static serializeBinaryToWriter(message: GetPatientByBedRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPatientByBedRequest;
+  static deserializeBinaryFromReader(message: GetPatientByBedRequest, reader: jspb.BinaryReader): GetPatientByBedRequest;
+}
+
+export namespace GetPatientByBedRequest {
+  export type AsObject = {
+    bedId: string,
+  }
+}
+
+export class GetPatientByBedResponse extends jspb.Message {
+  getId(): string;
+  setId(value: string): GetPatientByBedResponse;
+
+  getHumanReadableIdentifier(): string;
+  setHumanReadableIdentifier(value: string): GetPatientByBedResponse;
+
+  getNotes(): string;
+  setNotes(value: string): GetPatientByBedResponse;
+
+  getBedId(): string;
+  setBedId(value: string): GetPatientByBedResponse;
+  hasBedId(): boolean;
+  clearBedId(): GetPatientByBedResponse;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPatientByBedResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPatientByBedResponse): GetPatientByBedResponse.AsObject;
+  static serializeBinaryToWriter(message: GetPatientByBedResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPatientByBedResponse;
+  static deserializeBinaryFromReader(message: GetPatientByBedResponse, reader: jspb.BinaryReader): GetPatientByBedResponse;
+}
+
+export namespace GetPatientByBedResponse {
+  export type AsObject = {
+    id: string,
+    humanReadableIdentifier: string,
+    notes: string,
+    bedId?: string,
+  }
+
+  export enum BedIdCase { 
+    _BED_ID_NOT_SET = 0,
+    BED_ID = 4,
+  }
+}
+
+export class GetPatientsByWardRequest extends jspb.Message {
+  getWardId(): string;
+  setWardId(value: string): GetPatientsByWardRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPatientsByWardRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPatientsByWardRequest): GetPatientsByWardRequest.AsObject;
+  static serializeBinaryToWriter(message: GetPatientsByWardRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPatientsByWardRequest;
+  static deserializeBinaryFromReader(message: GetPatientsByWardRequest, reader: jspb.BinaryReader): GetPatientsByWardRequest;
+}
+
+export namespace GetPatientsByWardRequest {
+  export type AsObject = {
+    wardId: string,
+  }
+}
+
+export class GetPatientsByWardResponse extends jspb.Message {
+  getPatientsList(): Array<GetPatientsByWardResponse.Patient>;
+  setPatientsList(value: Array<GetPatientsByWardResponse.Patient>): GetPatientsByWardResponse;
+  clearPatientsList(): GetPatientsByWardResponse;
+  addPatients(value?: GetPatientsByWardResponse.Patient, index?: number): GetPatientsByWardResponse.Patient;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPatientsByWardResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPatientsByWardResponse): GetPatientsByWardResponse.AsObject;
+  static serializeBinaryToWriter(message: GetPatientsByWardResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPatientsByWardResponse;
+  static deserializeBinaryFromReader(message: GetPatientsByWardResponse, reader: jspb.BinaryReader): GetPatientsByWardResponse;
+}
+
+export namespace GetPatientsByWardResponse {
+  export type AsObject = {
+    patientsList: Array<GetPatientsByWardResponse.Patient.AsObject>,
+  }
+
+  export class Patient extends jspb.Message {
+    getId(): string;
+    setId(value: string): Patient;
+
+    getHumanReadableIdentifier(): string;
+    setHumanReadableIdentifier(value: string): Patient;
+
+    getNotes(): string;
+    setNotes(value: string): Patient;
+
+    getBedId(): string;
+    setBedId(value: string): Patient;
+    hasBedId(): boolean;
+    clearBedId(): Patient;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Patient.AsObject;
+    static toObject(includeInstance: boolean, msg: Patient): Patient.AsObject;
+    static serializeBinaryToWriter(message: Patient, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Patient;
+    static deserializeBinaryFromReader(message: Patient, reader: jspb.BinaryReader): Patient;
+  }
+
+  export namespace Patient {
+    export type AsObject = {
+      id: string,
+      humanReadableIdentifier: string,
+      notes: string,
+      bedId?: string,
+    }
+
+    export enum BedIdCase { 
+      _BED_ID_NOT_SET = 0,
+      BED_ID = 4,
+    }
+  }
+
 }
 
 export class UpdatePatientRequest extends jspb.Message {
@@ -86,6 +236,9 @@ export class UpdatePatientRequest extends jspb.Message {
   setHumanReadableIdentifier(value: string): UpdatePatientRequest;
   hasHumanReadableIdentifier(): boolean;
   clearHumanReadableIdentifier(): UpdatePatientRequest;
+
+  getNotes(): string;
+  setNotes(value: string): UpdatePatientRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdatePatientRequest.AsObject;
@@ -99,6 +252,7 @@ export namespace UpdatePatientRequest {
   export type AsObject = {
     id: string,
     humanReadableIdentifier?: string,
+    notes: string,
   }
 
   export enum HumanReadableIdentifierCase { 
@@ -117,6 +271,106 @@ export class UpdatePatientResponse extends jspb.Message {
 }
 
 export namespace UpdatePatientResponse {
+  export type AsObject = {
+  }
+}
+
+export class AssignBedRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): AssignBedRequest;
+
+  getBedId(): string;
+  setBedId(value: string): AssignBedRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AssignBedRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: AssignBedRequest): AssignBedRequest.AsObject;
+  static serializeBinaryToWriter(message: AssignBedRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AssignBedRequest;
+  static deserializeBinaryFromReader(message: AssignBedRequest, reader: jspb.BinaryReader): AssignBedRequest;
+}
+
+export namespace AssignBedRequest {
+  export type AsObject = {
+    id: string,
+    bedId: string,
+  }
+}
+
+export class AssignBedResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AssignBedResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: AssignBedResponse): AssignBedResponse.AsObject;
+  static serializeBinaryToWriter(message: AssignBedResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AssignBedResponse;
+  static deserializeBinaryFromReader(message: AssignBedResponse, reader: jspb.BinaryReader): AssignBedResponse;
+}
+
+export namespace AssignBedResponse {
+  export type AsObject = {
+  }
+}
+
+export class UnassignBedRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): UnassignBedRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UnassignBedRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UnassignBedRequest): UnassignBedRequest.AsObject;
+  static serializeBinaryToWriter(message: UnassignBedRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UnassignBedRequest;
+  static deserializeBinaryFromReader(message: UnassignBedRequest, reader: jspb.BinaryReader): UnassignBedRequest;
+}
+
+export namespace UnassignBedRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class UnassignBedResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UnassignBedResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: UnassignBedResponse): UnassignBedResponse.AsObject;
+  static serializeBinaryToWriter(message: UnassignBedResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UnassignBedResponse;
+  static deserializeBinaryFromReader(message: UnassignBedResponse, reader: jspb.BinaryReader): UnassignBedResponse;
+}
+
+export namespace UnassignBedResponse {
+  export type AsObject = {
+  }
+}
+
+export class DischargePatientRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): DischargePatientRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DischargePatientRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: DischargePatientRequest): DischargePatientRequest.AsObject;
+  static serializeBinaryToWriter(message: DischargePatientRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DischargePatientRequest;
+  static deserializeBinaryFromReader(message: DischargePatientRequest, reader: jspb.BinaryReader): DischargePatientRequest;
+}
+
+export namespace DischargePatientRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class DischargePatientResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DischargePatientResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: DischargePatientResponse): DischargePatientResponse.AsObject;
+  static serializeBinaryToWriter(message: DischargePatientResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DischargePatientResponse;
+  static deserializeBinaryFromReader(message: DischargePatientResponse, reader: jspb.BinaryReader): DischargePatientResponse;
+}
+
+export namespace DischargePatientResponse {
   export type AsObject = {
   }
 }

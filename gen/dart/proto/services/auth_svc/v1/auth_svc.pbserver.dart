@@ -17,12 +17,10 @@ export 'auth_svc.pb.dart';
 
 abstract class AuthServiceBase extends $pb.GeneratedService {
   $async.Future<$0.PrelimAuthRequestResponse> prelimAuthRequest($pb.ServerContext ctx, $0.PrelimAuthRequestRequest request);
-  $async.Future<$0.RefreshTokenResponse> refreshToken($pb.ServerContext ctx, $0.RefreshTokenRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
       case 'PrelimAuthRequest': return $0.PrelimAuthRequestRequest();
-      case 'RefreshToken': return $0.RefreshTokenRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
@@ -30,7 +28,6 @@ abstract class AuthServiceBase extends $pb.GeneratedService {
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String method, $pb.GeneratedMessage request) {
     switch (method) {
       case 'PrelimAuthRequest': return this.prelimAuthRequest(ctx, request as $0.PrelimAuthRequestRequest);
-      case 'RefreshToken': return this.refreshToken(ctx, request as $0.RefreshTokenRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }

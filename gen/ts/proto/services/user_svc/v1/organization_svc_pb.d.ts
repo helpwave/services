@@ -182,6 +182,205 @@ export namespace GetOrganizationResponse {
   }
 }
 
+export class GetOrganizationsByUserMember extends jspb.Message {
+  getUserId(): string;
+  setUserId(value: string): GetOrganizationsByUserMember;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetOrganizationsByUserMember.AsObject;
+  static toObject(includeInstance: boolean, msg: GetOrganizationsByUserMember): GetOrganizationsByUserMember.AsObject;
+  static serializeBinaryToWriter(message: GetOrganizationsByUserMember, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetOrganizationsByUserMember;
+  static deserializeBinaryFromReader(message: GetOrganizationsByUserMember, reader: jspb.BinaryReader): GetOrganizationsByUserMember;
+}
+
+export namespace GetOrganizationsByUserMember {
+  export type AsObject = {
+    userId: string,
+  }
+}
+
+export class GetOrganizationsByUserRequest extends jspb.Message {
+  getUserId(): string;
+  setUserId(value: string): GetOrganizationsByUserRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetOrganizationsByUserRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetOrganizationsByUserRequest): GetOrganizationsByUserRequest.AsObject;
+  static serializeBinaryToWriter(message: GetOrganizationsByUserRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetOrganizationsByUserRequest;
+  static deserializeBinaryFromReader(message: GetOrganizationsByUserRequest, reader: jspb.BinaryReader): GetOrganizationsByUserRequest;
+}
+
+export namespace GetOrganizationsByUserRequest {
+  export type AsObject = {
+    userId: string,
+  }
+}
+
+export class GetOrganizationsByUserResponse extends jspb.Message {
+  getId(): string;
+  setId(value: string): GetOrganizationsByUserResponse;
+
+  getLongName(): string;
+  setLongName(value: string): GetOrganizationsByUserResponse;
+
+  getShortName(): string;
+  setShortName(value: string): GetOrganizationsByUserResponse;
+
+  getContactEmail(): string;
+  setContactEmail(value: string): GetOrganizationsByUserResponse;
+
+  getAvatarUrl(): string;
+  setAvatarUrl(value: string): GetOrganizationsByUserResponse;
+
+  getIsPersonal(): boolean;
+  setIsPersonal(value: boolean): GetOrganizationsByUserResponse;
+
+  getMembersList(): Array<GetOrganizationsByUserMember>;
+  setMembersList(value: Array<GetOrganizationsByUserMember>): GetOrganizationsByUserResponse;
+  clearMembersList(): GetOrganizationsByUserResponse;
+  addMembers(value?: GetOrganizationsByUserMember, index?: number): GetOrganizationsByUserMember;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetOrganizationsByUserResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetOrganizationsByUserResponse): GetOrganizationsByUserResponse.AsObject;
+  static serializeBinaryToWriter(message: GetOrganizationsByUserResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetOrganizationsByUserResponse;
+  static deserializeBinaryFromReader(message: GetOrganizationsByUserResponse, reader: jspb.BinaryReader): GetOrganizationsByUserResponse;
+}
+
+export namespace GetOrganizationsByUserResponse {
+  export type AsObject = {
+    id: string,
+    longName: string,
+    shortName: string,
+    contactEmail: string,
+    avatarUrl: string,
+    isPersonal: boolean,
+    membersList: Array<GetOrganizationsByUserMember.AsObject>,
+  }
+}
+
+export class UpdateOrganizationRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): UpdateOrganizationRequest;
+
+  getLongName(): string;
+  setLongName(value: string): UpdateOrganizationRequest;
+  hasLongName(): boolean;
+  clearLongName(): UpdateOrganizationRequest;
+
+  getShortName(): string;
+  setShortName(value: string): UpdateOrganizationRequest;
+  hasShortName(): boolean;
+  clearShortName(): UpdateOrganizationRequest;
+
+  getContactEmail(): string;
+  setContactEmail(value: string): UpdateOrganizationRequest;
+  hasContactEmail(): boolean;
+  clearContactEmail(): UpdateOrganizationRequest;
+
+  getAvatarUrl(): string;
+  setAvatarUrl(value: string): UpdateOrganizationRequest;
+  hasAvatarUrl(): boolean;
+  clearAvatarUrl(): UpdateOrganizationRequest;
+
+  getIsPersonal(): boolean;
+  setIsPersonal(value: boolean): UpdateOrganizationRequest;
+  hasIsPersonal(): boolean;
+  clearIsPersonal(): UpdateOrganizationRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdateOrganizationRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdateOrganizationRequest): UpdateOrganizationRequest.AsObject;
+  static serializeBinaryToWriter(message: UpdateOrganizationRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdateOrganizationRequest;
+  static deserializeBinaryFromReader(message: UpdateOrganizationRequest, reader: jspb.BinaryReader): UpdateOrganizationRequest;
+}
+
+export namespace UpdateOrganizationRequest {
+  export type AsObject = {
+    id: string,
+    longName?: string,
+    shortName?: string,
+    contactEmail?: string,
+    avatarUrl?: string,
+    isPersonal?: boolean,
+  }
+
+  export enum LongNameCase { 
+    _LONG_NAME_NOT_SET = 0,
+    LONG_NAME = 2,
+  }
+
+  export enum ShortNameCase { 
+    _SHORT_NAME_NOT_SET = 0,
+    SHORT_NAME = 3,
+  }
+
+  export enum ContactEmailCase { 
+    _CONTACT_EMAIL_NOT_SET = 0,
+    CONTACT_EMAIL = 4,
+  }
+
+  export enum AvatarUrlCase { 
+    _AVATAR_URL_NOT_SET = 0,
+    AVATAR_URL = 5,
+  }
+
+  export enum IsPersonalCase { 
+    _IS_PERSONAL_NOT_SET = 0,
+    IS_PERSONAL = 6,
+  }
+}
+
+export class UpdateOrganizationResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdateOrganizationResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdateOrganizationResponse): UpdateOrganizationResponse.AsObject;
+  static serializeBinaryToWriter(message: UpdateOrganizationResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdateOrganizationResponse;
+  static deserializeBinaryFromReader(message: UpdateOrganizationResponse, reader: jspb.BinaryReader): UpdateOrganizationResponse;
+}
+
+export namespace UpdateOrganizationResponse {
+  export type AsObject = {
+  }
+}
+
+export class DeleteOrganizationRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): DeleteOrganizationRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeleteOrganizationRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: DeleteOrganizationRequest): DeleteOrganizationRequest.AsObject;
+  static serializeBinaryToWriter(message: DeleteOrganizationRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeleteOrganizationRequest;
+  static deserializeBinaryFromReader(message: DeleteOrganizationRequest, reader: jspb.BinaryReader): DeleteOrganizationRequest;
+}
+
+export namespace DeleteOrganizationRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class DeleteOrganizationResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeleteOrganizationResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: DeleteOrganizationResponse): DeleteOrganizationResponse.AsObject;
+  static serializeBinaryToWriter(message: DeleteOrganizationResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeleteOrganizationResponse;
+  static deserializeBinaryFromReader(message: DeleteOrganizationResponse, reader: jspb.BinaryReader): DeleteOrganizationResponse;
+}
+
+export namespace DeleteOrganizationResponse {
+  export type AsObject = {
+  }
+}
+
 export class AddMemberRequest extends jspb.Message {
   getId(): string;
   setId(value: string): AddMemberRequest;
