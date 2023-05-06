@@ -31,3 +31,7 @@ all: GO_SERVICES
 clean:
 	docker rmi $$(docker images --format '{{.Repository}}:{{.Tag}}' | grep "^helpwave/")
 	yes | docker image prune
+
+.PHONE: migrate-up
+migrate-up:
+	docker run --rm -v $$(pwd)/services/$(SERVICE)/migrations:/migrations --network host migrate/migrate -path=/migrations/ -database postgres://postgres:postgres@localhost:5432/$(SERVICE)?sslmode=disable up

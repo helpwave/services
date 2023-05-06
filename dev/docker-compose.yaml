@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+
+  postgres:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:6
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: tech@helpwave.de
+      PGADMIN_DEFAULT_PASSWORD: tech@helpwave.de
+    ports:
+      - "5433:80"
