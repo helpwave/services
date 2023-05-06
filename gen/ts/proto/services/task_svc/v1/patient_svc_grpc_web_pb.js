@@ -504,5 +504,66 @@ proto.proto.services.task_svc.v1.PatientServicePromiseClient.prototype.unassignB
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.DischargePatientRequest,
+ *   !proto.proto.services.task_svc.v1.DischargePatientResponse>}
+ */
+const methodDescriptor_PatientService_DischargePatient = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.PatientService/DischargePatient',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.DischargePatientRequest,
+  proto.proto.services.task_svc.v1.DischargePatientResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.DischargePatientRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.DischargePatientResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.DischargePatientRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.DischargePatientResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.DischargePatientResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.PatientServiceClient.prototype.dischargePatient =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.PatientService/DischargePatient',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_DischargePatient,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.DischargePatientRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.DischargePatientResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.PatientServicePromiseClient.prototype.dischargePatient =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.PatientService/DischargePatient',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_DischargePatient);
+};
+
+
 module.exports = proto.proto.services.task_svc.v1;
 

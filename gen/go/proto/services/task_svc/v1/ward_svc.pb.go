@@ -232,7 +232,6 @@ func (x *GetWardResponse) GetOrganizationId() string {
 	return ""
 }
 
-// TODO: Scope by organization
 type GetWardsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

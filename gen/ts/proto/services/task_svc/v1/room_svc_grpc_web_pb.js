@@ -202,6 +202,128 @@ proto.proto.services.task_svc.v1.RoomServicePromiseClient.prototype.getRoom =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetRoomsRequest,
+ *   !proto.proto.services.task_svc.v1.GetRoomsResponse>}
+ */
+const methodDescriptor_RoomService_GetRooms = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.RoomService/GetRooms',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetRoomsRequest,
+  proto.proto.services.task_svc.v1.GetRoomsResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetRoomsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetRoomsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetRoomsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetRoomsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetRoomsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.RoomServiceClient.prototype.getRooms =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.RoomService/GetRooms',
+      request,
+      metadata || {},
+      methodDescriptor_RoomService_GetRooms,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetRoomsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetRoomsResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.RoomServicePromiseClient.prototype.getRooms =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.RoomService/GetRooms',
+      request,
+      metadata || {},
+      methodDescriptor_RoomService_GetRooms);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetRoomsByWardRequest,
+ *   !proto.proto.services.task_svc.v1.GetRoomsByWardResponse>}
+ */
+const methodDescriptor_RoomService_GetRoomsByWard = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.RoomService/GetRoomsByWard',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetRoomsByWardRequest,
+  proto.proto.services.task_svc.v1.GetRoomsByWardResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetRoomsByWardRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetRoomsByWardResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetRoomsByWardRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetRoomsByWardResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetRoomsByWardResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.RoomServiceClient.prototype.getRoomsByWard =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.RoomService/GetRoomsByWard',
+      request,
+      metadata || {},
+      methodDescriptor_RoomService_GetRoomsByWard,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetRoomsByWardRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetRoomsByWardResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.RoomServicePromiseClient.prototype.getRoomsByWard =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.RoomService/GetRoomsByWard',
+      request,
+      metadata || {},
+      methodDescriptor_RoomService_GetRoomsByWard);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.task_svc.v1.UpdateRoomRequest,
  *   !proto.proto.services.task_svc.v1.UpdateRoomResponse>}
  */

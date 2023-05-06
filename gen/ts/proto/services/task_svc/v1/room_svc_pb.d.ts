@@ -6,6 +6,9 @@ export class CreateRoomRequest extends jspb.Message {
   getName(): string;
   setName(value: string): CreateRoomRequest;
 
+  getWardId(): string;
+  setWardId(value: string): CreateRoomRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateRoomRequest.AsObject;
   static toObject(includeInstance: boolean, msg: CreateRoomRequest): CreateRoomRequest.AsObject;
@@ -17,6 +20,7 @@ export class CreateRoomRequest extends jspb.Message {
 export namespace CreateRoomRequest {
   export type AsObject = {
     name: string,
+    wardId: string,
   }
 }
 

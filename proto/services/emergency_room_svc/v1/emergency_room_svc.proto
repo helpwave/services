@@ -10,27 +10,27 @@ option go_package = "gen/proto/services/emergency-room-svc";
 
 // TODO: move somewhere else
 message Point {
-	float lat = 1; // @gotags: validate:"required"
-	float long = 2; // @gotags: validate:"required"
+  float lat = 1; // @gotags: validate:"required"
+  float long = 2; // @gotags: validate:"required"
 }
 
 message CreateERRequest {
-	string name = 1; // @gotags: validate:"required"
-	Point location = 2; // @gotags: validate:"required"
-	string displayable_address = 3; // @gotags: validate:"required"
-	bool open = 4;
-	int32 utilization = 5; // @gotags: validate:"required"
-	repeated string departments = 6; // @gotags: validate:"dive,uuid"
+  string name = 1; // @gotags: validate:"required"
+  Point location = 2; // @gotags: validate:"required"
+  string displayable_address = 3; // @gotags: validate:"required"
+  bool open = 4;
+  int32 utilization = 5; // @gotags: validate:"required"
+  repeated string departments = 6; // @gotags: validate:"dive,uuid"
 }
 
 message CreateERResponse {
-	string id = 1;
-	string name = 2;
-	Point location = 3;
-	string displayable_address = 4;
-	bool open = 5;
-	int32 utilization = 6;
-	repeated DepartmentBase departments = 7;
+  string id = 1;
+  string name = 2;
+  Point location = 3;
+  string displayable_address = 4;
+  bool open = 5;
+  int32 utilization = 6;
+  repeated DepartmentBase departments = 7;
 }
 
 //
@@ -38,22 +38,22 @@ message CreateERResponse {
 //
 
 message GetERRequest {
-	string id = 1; // @gotags: validate:"required,uuid"
+  string id = 1; // @gotags: validate:"required,uuid"
 }
 
 message DepartmentBase {
-	string id = 1;
-	string name = 2;
+  string id = 1;
+  string name = 2;
 }
 
 message GetERResponse {
-	string id = 1;
-	string name = 2;
-	Point location = 3;
-	string displayable_address = 4;
-	bool open = 5;
-	int32 utilization = 6;
-	repeated DepartmentBase departments = 7;
+  string id = 1;
+  string name = 2;
+  Point location = 3;
+  string displayable_address = 4;
+  bool open = 5;
+  int32 utilization = 6;
+  repeated DepartmentBase departments = 7;
 }
 
 //
@@ -62,34 +62,34 @@ message GetERResponse {
 
 // TODO: move somewhere else
 message InclusiveIntInterval {
-	optional int32 min = 1;
-	optional int32 max = 2;
+  optional int32 min = 1;
+  optional int32 max = 2;
 }
 
 // TODO: move to hwgorm
 message PagedRequest {
-	int32 page = 1; // @gotags: validate:"required"
-	int32 page_size = 2; // @gotags: validate:"required"
+  int32 page = 1; // @gotags: validate:"required"
+  int32 page_size = 2; // @gotags: validate:"required"
 }
 
 // TODO: move to hwgorm
 message PageInfo {
-	int32 page = 1;
-	int32 page_size = 2;
-	int64 total_size = 3;
-	bool last_page = 4;
+  int32 page = 1;
+  int32 page_size = 2;
+  int64 total_size = 3;
+  bool last_page = 4;
 }
 
 message GetERsRequest {
-	optional PagedRequest paged_request = 1;
-	optional bool open = 2;
-	optional InclusiveIntInterval utilization = 3;
-	optional Point location = 4;
+  optional PagedRequest paged_request = 1;
+  optional bool open = 2;
+  optional InclusiveIntInterval utilization = 3;
+  optional Point location = 4;
 }
 
 message GetERsResponse {
-	PageInfo page_info = 1;
-	repeated GetERResponse emergency_rooms = 2;
+  PageInfo page_info = 1;
+  repeated GetERResponse emergency_rooms = 2;
 }
 
 //
@@ -97,12 +97,12 @@ message GetERsResponse {
 //
 
 message UpdateERRequest {
-	string id = 1; // @gotags: validate:"required,uuid"
-	optional string name = 2;
-	optional Point location = 3;
-	optional string displayable_address = 4;
-	optional bool open = 5;
-	optional int32 utilization = 6;
+  string id = 1; // @gotags: validate:"required,uuid"
+  optional string name = 2;
+  optional Point location = 3;
+  optional string displayable_address = 4;
+  optional bool open = 5;
+  optional int32 utilization = 6;
 }
 
 message UpdateERResponse {}
@@ -112,8 +112,8 @@ message UpdateERResponse {}
 //
 
 message AddDepartmentsToERRequest {
-	string id = 1; // @gotags: validate:"required,uuid"
-	repeated string departments = 2; // @gotags: validate:"required"
+  string id = 1; // @gotags: validate:"required,uuid"
+  repeated string departments = 2; // @gotags: validate:"required"
 }
 
 message AddDepartmentsToERResponse {}
@@ -124,8 +124,8 @@ message AddDepartmentsToERResponse {}
 //
 
 message RemoveDepartmentsFromERRequest {
-	string id = 1; // @gotags: validate:"required,uuid"
-	repeated string departments = 2; // @gotags: validate:"required"
+  string id = 1; // @gotags: validate:"required,uuid"
+  repeated string departments = 2; // @gotags: validate:"required"
 }
 
 message RemoveDepartmentsFromERResponse {}
@@ -135,17 +135,17 @@ message RemoveDepartmentsFromERResponse {}
 //
 
 message DeleteERRequest {
-	string id = 1; // @gotags: validate:"required,uuid"
+  string id = 1; // @gotags: validate:"required,uuid"
 }
 
 message DeleteERResponse {}
 
 service EmergencyRoomService {
-	rpc CreateER(CreateERRequest) returns (CreateERResponse) {}
-	rpc GetER (GetERRequest) returns (GetERResponse) {}
-	rpc GetERs (GetERsRequest) returns (GetERsResponse) {}
-	rpc UpdateER (UpdateERRequest) returns (UpdateERResponse) {}
-	rpc AddDepartmentsToER (AddDepartmentsToERRequest) returns (AddDepartmentsToERResponse) {}
-	rpc RemoveDepartmentsFromER (RemoveDepartmentsFromERRequest) returns (RemoveDepartmentsFromERResponse) {}
-	rpc DeleteER (DeleteERRequest) returns (DeleteERResponse) {}
+  rpc CreateER(CreateERRequest) returns (CreateERResponse) {}
+  rpc GetER (GetERRequest) returns (GetERResponse) {}
+  rpc GetERs (GetERsRequest) returns (GetERsResponse) {}
+  rpc UpdateER (UpdateERRequest) returns (UpdateERResponse) {}
+  rpc AddDepartmentsToER (AddDepartmentsToERRequest) returns (AddDepartmentsToERResponse) {}
+  rpc RemoveDepartmentsFromER (RemoveDepartmentsFromERRequest) returns (RemoveDepartmentsFromERResponse) {}
+  rpc DeleteER (DeleteERRequest) returns (DeleteERResponse) {}
 }

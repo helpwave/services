@@ -427,7 +427,8 @@ proto.proto.services.task_svc.v1.CreateRoomRequest.prototype.toObject = function
  */
 proto.proto.services.task_svc.v1.CreateRoomRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    name: jspb.Message.getFieldWithDefault(msg, 1, "")
+    name: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    wardId: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -468,6 +469,10 @@ proto.proto.services.task_svc.v1.CreateRoomRequest.deserializeBinaryFromReader =
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setWardId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -504,6 +509,13 @@ proto.proto.services.task_svc.v1.CreateRoomRequest.serializeBinaryToWriter = fun
       f
     );
   }
+  f = message.getWardId();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -522,6 +534,24 @@ proto.proto.services.task_svc.v1.CreateRoomRequest.prototype.getName = function(
  */
 proto.proto.services.task_svc.v1.CreateRoomRequest.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string ward_id = 2;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.CreateRoomRequest.prototype.getWardId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.CreateRoomRequest} returns this
+ */
+proto.proto.services.task_svc.v1.CreateRoomRequest.prototype.setWardId = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
