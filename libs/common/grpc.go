@@ -155,6 +155,11 @@ func GetUserID(ctx context.Context) (uuid.UUID, error) {
 	}
 }
 
+func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
+	// TODO: Resolve organizationID via middleware
+	return uuid.MustParse("3b25c6f5-4705-4074-9fc6-a50c28eba406"), nil
+}
+
 func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
 	if err := hwutil.Validate(req); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())

@@ -29,7 +29,6 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 		Base: models.Base{
 			Name: req.Name,
 		},
-		Beds: make([]models.Bed, req.AmountOfBeds),
 	}
 
 	if err := db.Create(&room).Error; err != nil {
@@ -69,7 +68,6 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 	return &pb.GetRoomResponse{
 		Id:   room.ID.String(),
 		Name: room.Name,
-		Beds: BedsToBedsOfRoom(room.Beds),
 	}, nil
 }
 
@@ -91,38 +89,4 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 	}
 
 	return &pb.UpdateRoomResponse{}, nil
-}
-
-func (ServiceServer) AddBedsToRoom(ctx context.Context, req *pb.AddBedsToRoomRequest) (*pb.AddBedsToRoomResponse, error) {
-	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
-
-	// TODO: Auth
-
-	id, err := uuid.Parse(req.Id)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
-
-	room := models.Room{ID: id}
-	beds := make([]models.Bed, req.AmountOfBeds)
-
-	if err := db.Model(&room).Association("Beds").Append(&beds); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	log.Info().
-		Str("roomId", room.ID.String()).
-		Int("beds", len(beds)).
-		Msg("beds added")
-
-	return &pb.AddBedsToRoomResponse{}, err
-}
-
-func BedsToBedsOfRoom(beds []models.Bed) []*pb.BedOfRoom {
-	var bedsOfRoom []*pb.BedOfRoom
-	for _, bed := range beds {
-		bedsOfRoom = append(bedsOfRoom, &pb.BedOfRoom{Id: bed.ID.String()})
-	}
-	return bedsOfRoom
 }
