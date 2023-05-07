@@ -1,6 +1,7 @@
 package patient
 
 import (
+	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
@@ -16,7 +17,8 @@ type Base struct {
 
 type Patient struct {
 	Base
-	ID uuid.UUID `gorm:"column:id"`
+	ID             uuid.UUID `gorm:"column:id"`
+	OrganizationID uuid.UUID `gorm:"column:organization_id"`
 }
 
 type ServiceServer struct {
@@ -33,10 +35,16 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientReq
 
 	// TODO: Auth
 
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	patient := Patient{
 		Base: Base{
 			HumanReadableIdentifier: req.HumanReadableIdentifier,
 		},
+		OrganizationID: organizationID,
 	}
 
 	if err := db.Create(&patient).Error; err != nil {
