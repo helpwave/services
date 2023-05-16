@@ -203,7 +203,7 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			// Probably already deleted
-			return nil, nil
+			return &pb.DeleteBedResponse{}, err
 		}
 	}
 

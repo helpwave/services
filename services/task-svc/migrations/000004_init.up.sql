@@ -1,2 +1,3 @@
 ALTER TABLE beds
-	ADD organization_id uuid NOT NULL;
+	ADD COLUMN IF NOT EXISTS
+	organization_id uuid NOT NULL;
