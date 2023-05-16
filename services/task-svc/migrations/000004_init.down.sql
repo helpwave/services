@@ -1,1 +1,2 @@
-DROP TABLE IF EXISTS beds;
+ALTER TABLE beds
+	DROP COLUMN organization_id;
