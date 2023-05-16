@@ -43,3 +43,11 @@ func (x *UpdateRoomRequest) UpdatesMap() map[string]interface{} {
 
 	return m
 }
+
+func (r *UpdateBedRequest) UpdatesMap() map[string]interface{} {
+	m := make(map[string]interface{})
+
+	/* Empty for later extension and use */
+
+	return m
+}
