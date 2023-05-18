@@ -1,0 +1,2 @@
+daprd: /usr/bin/daprd --app-id $DAPR_APP_ID --config /usr/local/apisix/dapr.yaml --log-level debug --app-port 9080 --metrics-port 9099 --dapr-internal-grpc-port 35001
+apisix: /usr/bin/apisix init && exec /usr/local/openresty/bin/openresty -p /usr/local/apisix -g 'daemon off;'

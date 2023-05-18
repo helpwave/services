@@ -1,0 +1,19 @@
+# fly.toml app configuration file generated for maxrs-gateway on 2023-05-23T21:58:30+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+primary_region = "ams"
+
+[build]
+  dockerfile = "../Dockerfile.apisix"
+
+[[services]]
+  internal_port = 9080
+  protocol = "tcp"
+  auto_stop_machines = true
+  auto_start_machines = true
+
+  [[services.ports]]
+    handlers = ["tls"]
+    port = 443

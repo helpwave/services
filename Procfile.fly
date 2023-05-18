@@ -1,0 +1,2 @@
+daprd: daprd --log-level debug --app-id $DAPR_APP_ID --config dapr.yaml --app-port 80 --dapr-internal-grpc-port 35001
+app: ./app
