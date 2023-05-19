@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS tasks (
 	description text  NOT NULL DEFAULT '',
 	status integer NOT NULL,
 	assigned_user_id uuid DEFAULT uuid_nil(),
-	patient_id uuid NOT NULL
+	patient_id uuid NOT NULL,
+	public bool NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS patients (
