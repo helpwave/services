@@ -474,7 +474,7 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 
 	log.Info().
 		Str("taskId", id.String()).
-		Msg("publish task")
+		Msg("task published")
 
 	return &pb.PublishTaskResponse{}, nil
 }
