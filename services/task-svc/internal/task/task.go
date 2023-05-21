@@ -234,7 +234,7 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "patientId not found")
+			return nil, status.Error(codes.InvalidArgument, "taskId not found")
 		}
 	}
 
