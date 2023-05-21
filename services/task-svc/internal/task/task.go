@@ -30,7 +30,7 @@ type Task struct {
 type Subtask struct {
 	ID     uuid.UUID `gorm:"column:id"`
 	TaskID uuid.UUID `gorm:"column:task_id"`
-	Title  string    `gorm:"column:name"`
+	Name   string    `gorm:"column:name"`
 	Done   bool      `gorm:"column:done;default:False"`
 }
 
@@ -114,7 +114,7 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		return &pb.GetTaskResponse_SubTask{
 			Id:    subtask.ID.String(),
 			Done:  subtask.Done,
-			Title: subtask.Title,
+			Title: subtask.Name,
 		}
 	})
 
@@ -155,7 +155,7 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 			return &pb.GetTasksByPatientResponse_Task_SubTask{
 				Id:    subtask.ID.String(),
 				Done:  subtask.Done,
-				Title: subtask.Title,
+				Title: subtask.Name,
 			}
 		})
 		return &pb.GetTasksByPatientResponse_Task{
@@ -242,7 +242,7 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 	if req.Done != nil {
 		done = *req.Done
 	}
-	subtask := Subtask{Title: req.Title, TaskID: taskId, Done: done}
+	subtask := Subtask{Name: req.Title, TaskID: taskId, Done: done}
 
 	if err := db.Create(&subtask).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -439,9 +439,8 @@ func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignT
 	}
 
 	task := Task{ID: id}
-	updates := map[string]interface{}{"assigned_user_id": nil}
 
-	if err := db.Model(task).Updates(updates).Error; err != nil {
+	if err := db.Model(task).Update("assigned_user_id", nil).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -465,9 +464,8 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 	}
 
 	task := Task{ID: id}
-	updates := map[string]interface{}{"public": true}
 
-	if err := db.Model(&task).Updates(updates).Error; err != nil {
+	if err := db.Model(&task).Update("public", true).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -491,9 +489,8 @@ func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskReq
 	}
 
 	task := Task{ID: id}
-	updates := map[string]interface{}{"public": false}
 
-	if err := db.Model(&task).Updates(updates).Error; err != nil {
+	if err := db.Model(&task).Update("public", false).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
