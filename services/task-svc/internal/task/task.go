@@ -500,7 +500,7 @@ func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskReq
 
 	log.Info().
 		Str("taskId", id.String()).
-		Msg("unpublish task")
+		Msg("task unpublished")
 
 	return &pb.UnpublishTaskResponse{}, nil
 }
