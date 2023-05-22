@@ -78,6 +78,29 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 	}, nil
 }
 
+func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb.GetWardsResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	// TODO: Auth
+
+	// TODO get from parameters later on
+	const organizationID = ""
+	var wards []Ward
+	if err := db.Where("organization_id = ?", organizationID).Find(&wards).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+
+	// TODO update later
+	var mappedWards []*pb.GetWardsResponse_Ward
+	return &pb.GetWardsResponse{
+		Wards: mappedWards,
+	}, nil
+}
+
 func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) (*pb.UpdateWardResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
@@ -96,4 +119,23 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 	}
 
 	return &pb.UpdateWardResponse{}, nil
+}
+
+func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	// TODO: Auth
+
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	ward := Ward{ID: id}
+
+	if err := db.Delete(&ward).Error; err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &pb.DeleteWardResponse{}, nil
 }
