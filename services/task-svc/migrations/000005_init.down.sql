@@ -1,3 +1,4 @@
-DROP TABLE IF EXISTS subtasks;
+ALTER TABLE tasks
+	DROP COLUMN public;
 
-DROP TABLE IF EXISTS tasks;
+DROP TABLE IF EXISTS subtasks;
