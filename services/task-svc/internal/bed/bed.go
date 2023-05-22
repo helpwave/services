@@ -20,7 +20,9 @@ func NewServiceServer() *ServiceServer {
 	return &ServiceServer{}
 }
 
-type Base struct{}
+type Base struct {
+	/* Empty for later extension and use */
+}
 
 type Bed struct {
 	Base
@@ -200,7 +202,8 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
+			// Probably already deleted
+			return &pb.DeleteBedResponse{}, err
 		}
 	}
 
@@ -216,5 +219,5 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 		Str("bedId", bedID.String()).
 		Msg("bed deleted")
 
-	return nil, err
+	return &pb.DeleteBedResponse{}, err
 }
