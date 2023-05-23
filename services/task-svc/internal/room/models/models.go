@@ -8,8 +8,9 @@ type Base struct {
 
 type Room struct {
 	Base
-	ID   uuid.UUID `gorm:"column:id"`
-	Beds []Bed     `gorm:"foreignKey:RoomID"`
+	ID             uuid.UUID `gorm:"column:id"`
+	OrganizationID uuid.UUID `gorm:"column:organization_id"`
+	Beds           []Bed     `gorm:"foreignKey:RoomID"`
 }
 
 type Bed struct {

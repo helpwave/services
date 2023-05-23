@@ -1,6 +1,7 @@
 package ward
 
 import (
+	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
@@ -16,7 +17,8 @@ type Base struct {
 
 type Ward struct {
 	Base
-	ID uuid.UUID `gorm:"column:id"`
+	ID             uuid.UUID `gorm:"column:id"`
+	OrganizationID uuid.UUID `gorm:"column:organization_id"`
 }
 
 type ServiceServer struct {
@@ -33,10 +35,16 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 
 	// TODO: Auth
 
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	ward := Ward{
 		Base: Base{
 			Name: req.GetName(),
 		},
+		OrganizationID: organizationID,
 	}
 
 	if err := db.Create(&ward).Error; err != nil {
