@@ -1,6 +1,7 @@
 package task
 
 import (
+	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
@@ -21,6 +22,7 @@ type Base struct {
 type Task struct {
 	Base
 	ID             uuid.UUID     `gorm:"column:id"`
+	OrganizationID uuid.UUID     `gorm:"column:organization_id"`
 	AssignedUserId uuid.NullUUID `gorm:"column:assigned_user_id;default:NULL"`
 	PatientId      uuid.UUID     `gorm:"column:patient_id"`
 	Subtasks       []Subtask     `gorm:"foreignKey:TaskID"`
@@ -48,6 +50,11 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 
 	// TODO: Auth
 
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	patientId, err := uuid.Parse(req.PatientId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -67,7 +74,8 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 			Name:        req.Name,
 			Description: req.Description,
 		},
-		PatientId: patientId,
+		PatientId:      patientId,
+		OrganizationID: organizationID,
 	}
 
 	if err := db.Create(&task).Error; err != nil {

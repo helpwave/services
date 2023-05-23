@@ -1,6 +1,7 @@
 package room
 
 import (
+	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
@@ -25,10 +26,16 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 
 	// TODO: Auth
 
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	room := models.Room{
 		Base: models.Base{
 			Name: req.Name,
 		},
+		OrganizationID: organizationID,
 	}
 
 	if err := db.Create(&room).Error; err != nil {
