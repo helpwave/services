@@ -61,6 +61,7 @@ class CreateWardResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateWardResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'organizationId')
     ..hasRequiredFields = false
   ;
 
@@ -68,6 +69,7 @@ class CreateWardResponse extends $pb.GeneratedMessage {
   factory CreateWardResponse({
     $core.String? id,
     $core.String? name,
+    $core.String? organizationId,
   }) {
     final _result = create();
     if (id != null) {
@@ -75,6 +77,9 @@ class CreateWardResponse extends $pb.GeneratedMessage {
     }
     if (name != null) {
       _result.name = name;
+    }
+    if (organizationId != null) {
+      _result.organizationId = organizationId;
     }
     return _result;
   }
@@ -116,6 +121,15 @@ class CreateWardResponse extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
   void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get organizationId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set organizationId($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasOrganizationId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearOrganizationId() => clearField(3);
 }
 
 class GetWardRequest extends $pb.GeneratedMessage {
@@ -242,11 +256,20 @@ class GetWardResponse extends $pb.GeneratedMessage {
 
 class GetWardsRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetWardsRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'organizationId')
     ..hasRequiredFields = false
   ;
 
   GetWardsRequest._() : super();
-  factory GetWardsRequest() => create();
+  factory GetWardsRequest({
+    $core.String? organizationId,
+  }) {
+    final _result = create();
+    if (organizationId != null) {
+      _result.organizationId = organizationId;
+    }
+    return _result;
+  }
   factory GetWardsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetWardsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
@@ -267,6 +290,15 @@ class GetWardsRequest extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static GetWardsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetWardsRequest>(create);
   static GetWardsRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get organizationId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set organizationId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasOrganizationId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearOrganizationId() => clearField(1);
 }
 
 class GetWardsResponse_Ward extends $pb.GeneratedMessage {

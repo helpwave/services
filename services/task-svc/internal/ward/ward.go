@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
+	"hwutil"
 )
 
 type Base struct {
@@ -56,8 +57,9 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 		Msg("ward created")
 
 	return &pb.CreateWardResponse{
-		Id:   ward.ID.String(),
-		Name: ward.Name,
+		Id:             ward.ID.String(),
+		Name:           ward.Name,
+		OrganizationId: ward.OrganizationID.String(),
 	}, nil
 }
 
@@ -81,8 +83,9 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 	}
 
 	return &pb.GetWardResponse{
-		Id:   ward.ID.String(),
-		Name: ward.Name,
+		Id:             ward.ID.String(),
+		Name:           ward.Name,
+		OrganizationId: ward.OrganizationID.String(),
 	}, nil
 }
 
@@ -91,8 +94,11 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 
 	// TODO: Auth
 
-	// TODO get from parameters later on
-	const organizationID = ""
+	organizationID, err := uuid.Parse(req.OrganizationId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
 	var wards []Ward
 	if err := db.Where("organization_id = ?", organizationID).Find(&wards).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
@@ -102,10 +108,14 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 		}
 	}
 
-	// TODO update later
-	var mappedWards []*pb.GetWardsResponse_Ward
 	return &pb.GetWardsResponse{
-		Wards: mappedWards,
+		Wards: hwutil.Map(wards, func(ward Ward) *pb.GetWardsResponse_Ward {
+			return &pb.GetWardsResponse_Ward{
+				Id:             ward.ID.String(),
+				Name:           ward.Name,
+				OrganizationId: ward.OrganizationID.String(),
+			}
+		}),
 	}, nil
 }
 

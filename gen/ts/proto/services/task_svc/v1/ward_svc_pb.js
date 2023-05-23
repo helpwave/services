@@ -426,7 +426,8 @@ proto.proto.services.task_svc.v1.CreateWardResponse.prototype.toObject = functio
 proto.proto.services.task_svc.v1.CreateWardResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 2, "")
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    organizationId: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -471,6 +472,10 @@ proto.proto.services.task_svc.v1.CreateWardResponse.deserializeBinaryFromReader 
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setOrganizationId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -514,6 +519,13 @@ proto.proto.services.task_svc.v1.CreateWardResponse.serializeBinaryToWriter = fu
       f
     );
   }
+  f = message.getOrganizationId();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
 };
 
 
@@ -550,6 +562,24 @@ proto.proto.services.task_svc.v1.CreateWardResponse.prototype.getName = function
  */
 proto.proto.services.task_svc.v1.CreateWardResponse.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string organization_id = 3;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.CreateWardResponse.prototype.getOrganizationId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.CreateWardResponse} returns this
+ */
+proto.proto.services.task_svc.v1.CreateWardResponse.prototype.setOrganizationId = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -905,7 +935,7 @@ proto.proto.services.task_svc.v1.GetWardsRequest.prototype.toObject = function(o
  */
 proto.proto.services.task_svc.v1.GetWardsRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+    organizationId: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -942,6 +972,10 @@ proto.proto.services.task_svc.v1.GetWardsRequest.deserializeBinaryFromReader = f
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setOrganizationId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -971,6 +1005,31 @@ proto.proto.services.task_svc.v1.GetWardsRequest.prototype.serializeBinary = fun
  */
 proto.proto.services.task_svc.v1.GetWardsRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getOrganizationId();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string organization_id = 1;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.GetWardsRequest.prototype.getOrganizationId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.GetWardsRequest} returns this
+ */
+proto.proto.services.task_svc.v1.GetWardsRequest.prototype.setOrganizationId = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 

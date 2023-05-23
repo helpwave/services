@@ -15,6 +15,7 @@ message CreateWardRequest {
 message CreateWardResponse {
   string id = 1;
   string name = 2;
+  string organization_id = 3;
 }
 
 //
@@ -35,7 +36,9 @@ message GetWardResponse {
 // GetWards
 //
 
-message GetWardsRequest {}
+message GetWardsRequest {
+  string organization_id = 1;
+}
 
 message GetWardsResponse {
   repeated Ward wards = 1;
