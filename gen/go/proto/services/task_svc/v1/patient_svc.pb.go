@@ -174,7 +174,7 @@ type GetPatientResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                      string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`                                                                               // @gotags: validate:"uuid4"
+	Id                      string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`                                                                            // @gotags: validate:"uuid4"
 	HumanReadableIdentifier string  `protobuf:"bytes,2,opt,name=human_readable_identifier,json=humanReadableIdentifier,proto3" json:"human_readable_identifier,omitempty" validate:"required"` // @gotags: validate:"required"
 	Notes                   string  `protobuf:"bytes,3,opt,name=notes,proto3" json:"notes,omitempty"`
 	BedId                   *string `protobuf:"bytes,4,opt,name=bed_id,json=bedId,proto3,oneof" json:"bed_id,omitempty"`
