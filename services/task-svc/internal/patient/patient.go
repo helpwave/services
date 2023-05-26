@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
+	"task-svc/internal/room/models"
 )
 
 type Base struct {
@@ -21,6 +22,7 @@ type Patient struct {
 	ID             uuid.UUID `gorm:"column:id"`
 	Notes          string    `gorm:"column:notes"`
 	OrganizationID uuid.UUID `gorm:"column:organization_id"`
+	BedID          uuid.UUID `gorm:"column:bed_id"`
 }
 
 type ServiceServer struct {
@@ -84,10 +86,12 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 		}
 	}
 
+	bedID := patient.BedID.String()
 	return &pb.GetPatientResponse{
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
+		BedId:                   &bedID,
 	}, nil
 }
 
@@ -103,7 +107,7 @@ func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBe
 	}
 
 	patient := Patient{}
-	if err := db.Joins("beds").Joins("patients").Where("beds.id = ?", bedID).First(&patient).Error; err != nil {
+	if err := db.Where("bed_id = ?", bedID).First(&patient).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
@@ -116,6 +120,7 @@ func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBe
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
+		BedId:                   &req.BedId,
 	}, nil
 }
 
@@ -142,10 +147,12 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 
 	return &pb.GetPatientsByWardResponse{
 		Patients: hwutil.Map(patients, func(patient Patient) *pb.GetPatientsByWardResponse_Patient {
+			bedID := patient.BedID.String()
 			return &pb.GetPatientsByWardResponse_Patient{
 				Id:                      patient.ID.String(),
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
 				Notes:                   patient.Notes,
+				BedId:                   &bedID,
 			}
 		}),
 	}, nil
@@ -189,9 +196,8 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	// Check whether patient exits
-	patient := Patient{ID: id}
-	if err := db.Model(&patient).Error; err != nil {
+	// Check whether bed exits
+	if err := db.Model(models.Bed{ID: bedID}).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
@@ -200,7 +206,8 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 		}
 	}
 
-	if err := db.Joins("beds").Where("id = ?", bedID).Update("patient_id", id).Error; err != nil {
+	patient := Patient{ID: id}
+	if err := db.Model(&patient).Update("bed_id", bedID).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
@@ -223,7 +230,8 @@ func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := db.Joins("beds").Joins("patients").Where("patients.id = ?", id).Update("beds.patient_id", nil).Error; err != nil {
+	patient := Patient{ID: id}
+	if err := db.Model(&patient).Update("bed_id", nil).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
@@ -247,7 +255,7 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 	}
 
 	// Unassign Patient from bed
-	if err := db.Joins("beds").Joins("patients").Where("patients.id = ?", id).Update("beds.patient_id", nil).Error; err != nil {
+	if err := db.Model(&Patient{ID: id}).Update("bed_id", nil).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
