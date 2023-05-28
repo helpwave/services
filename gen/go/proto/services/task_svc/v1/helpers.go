@@ -14,6 +14,20 @@ func (r *UpdateTaskRequest) UpdatesMap() map[string]interface{} {
 	return m
 }
 
+func (r *UpdateSubTaskRequest) UpdatesMap() map[string]interface{} {
+	m := make(map[string]interface{})
+
+	if r.Title != nil {
+		m["name"] = *r.Title
+	}
+
+	if r.Done != nil {
+		m["done"] = *r.Done
+	}
+
+	return m
+}
+
 func (x *UpdatePatientRequest) UpdatesMap() map[string]interface{} {
 	m := make(map[string]interface{})
 
