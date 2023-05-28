@@ -25,10 +25,10 @@ type CreateOrganizationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LongName     string `protobuf:"bytes,1,opt,name=long_name,json=longName,proto3" json:"long_name,omitempty" validate:"required,gte=4,lte=64"`             // @gotags: validate:"required,gte=4,lte=64"
-	ShortName    string `protobuf:"bytes,2,opt,name=short_name,json=shortName,proto3" json:"short_name,omitempty" validate:"omitempty,gte=2,lte=16"`          // @gotags: validate:"omitempty,gte=2,lte=16"
+	LongName     string `protobuf:"bytes,1,opt,name=long_name,json=longName,proto3" json:"long_name,omitempty" validate:"required,gte=4,lte=64"`      // @gotags: validate:"required,gte=4,lte=64"
+	ShortName    string `protobuf:"bytes,2,opt,name=short_name,json=shortName,proto3" json:"short_name,omitempty" validate:"omitempty,gte=2,lte=16"`  // @gotags: validate:"omitempty,gte=2,lte=16"
 	ContactEmail string `protobuf:"bytes,3,opt,name=contact_email,json=contactEmail,proto3" json:"contact_email,omitempty" validate:"required,email"` // @gotags: validate:"required,email"
-	IsPersonal   bool   `protobuf:"varint,4,opt,name=is_personal,json=isPersonal,proto3" json:"is_personal,omitempty" validate:"required"`      // @gotags: validate:"required"
+	IsPersonal   bool   `protobuf:"varint,4,opt,name=is_personal,json=isPersonal,proto3" json:"is_personal,omitempty" validate:"required"`            // @gotags: validate:"required"
 }
 
 func (x *CreateOrganizationRequest) Reset() {
@@ -143,11 +143,11 @@ type CreateOrganizationForUserRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LongName     string `protobuf:"bytes,1,opt,name=long_name,json=longName,proto3" json:"long_name,omitempty" validate:"required,gte=4,lte=64"`             // @gotags: validate:"required,gte=4,lte=64"
-	ShortName    string `protobuf:"bytes,2,opt,name=short_name,json=shortName,proto3" json:"short_name,omitempty" validate:"omitempty,gte=2,lte=16"`          // @gotags: validate:"omitempty,gte=2,lte=16"
+	LongName     string `protobuf:"bytes,1,opt,name=long_name,json=longName,proto3" json:"long_name,omitempty" validate:"required,gte=4,lte=64"`      // @gotags: validate:"required,gte=4,lte=64"
+	ShortName    string `protobuf:"bytes,2,opt,name=short_name,json=shortName,proto3" json:"short_name,omitempty" validate:"omitempty,gte=2,lte=16"`  // @gotags: validate:"omitempty,gte=2,lte=16"
 	ContactEmail string `protobuf:"bytes,3,opt,name=contact_email,json=contactEmail,proto3" json:"contact_email,omitempty" validate:"required,email"` // @gotags: validate:"required,email"
-	IsPersonal   bool   `protobuf:"varint,4,opt,name=is_personal,json=isPersonal,proto3" json:"is_personal,omitempty" validate:"required"`      // @gotags: validate:"required"
-	UserId       string `protobuf:"bytes,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" validate:"uuid4"`                   // @gotags: validate:"uuid4"
+	IsPersonal   bool   `protobuf:"varint,4,opt,name=is_personal,json=isPersonal,proto3" json:"is_personal,omitempty" validate:"required"`            // @gotags: validate:"required"
+	UserId       string `protobuf:"bytes,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" validate:"uuid4"`                            // @gotags: validate:"uuid4"
 }
 
 func (x *CreateOrganizationForUserRequest) Reset() {
@@ -1043,7 +1043,7 @@ type InviteMemberRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id    string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`       // @gotags: validate:"uuid4"
+	Id    string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`                // @gotags: validate:"uuid4"
 	Email string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty" validate:"required,email"` // @gotags: validate:"required,email"
 }
 

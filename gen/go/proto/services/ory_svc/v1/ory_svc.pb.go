@@ -26,9 +26,9 @@ type AfterRegistrationWebhookPayload struct {
 	unknownFields protoimpl.UnknownFields
 
 	UserId   string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"userId" validate:"uuid4"` // @gotags: validate:"uuid4" json:"userId"
-	Email    string `protobuf:"bytes,2,opt,name=email,proto3" json:"email" validate:"required,email"`                 // @gotags: validate:"required,email" json:"email"
-	Nickname string `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname" validate:"required"`           // @gotags: validate:"required" json:"nickname"
-	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name" validate:"required"`                   // @gotags: validate:"required" json:"name"
+	Email    string `protobuf:"bytes,2,opt,name=email,proto3" json:"email" validate:"required,email"`       // @gotags: validate:"required,email" json:"email"
+	Nickname string `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname" validate:"required"`       // @gotags: validate:"required" json:"nickname"
+	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name" validate:"required"`               // @gotags: validate:"required" json:"name"
 }
 
 func (x *AfterRegistrationWebhookPayload) Reset() {
