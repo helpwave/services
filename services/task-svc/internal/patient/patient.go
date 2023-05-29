@@ -202,7 +202,7 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
+			return nil, status.Error(codes.InvalidArgument, "bed_id not found")
 		}
 	}
 
