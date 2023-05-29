@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/coreos/go-oidc"
+	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"hwutil"
@@ -40,6 +41,9 @@ type IDTokenClaims struct {
 
 	// Claim: email
 	Email string `json:"email"`
+
+	// Claim organizations
+	Organizations []uuid.UUID `json:"organizations"`
 }
 
 func (t IDTokenClaims) AsExpected() error {
