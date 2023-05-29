@@ -23,7 +23,7 @@ jobs:
 
       - name: Detected changes in libs
         id: changes-in-libs
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v36
         with:
           files: |
             libs/**
@@ -32,14 +32,14 @@ jobs:
 
       - name: Detected changes in services
         id: changes-in-services
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v36
         with:
           files: |
             services/**
 
       - name: Detected changes in images
         id: changes-in-images
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v36
         with:
           files: |
             images/**
