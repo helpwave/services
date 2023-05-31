@@ -1019,7 +1019,6 @@ class UpdateSubTaskRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UpdateSubTaskRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'title')
-    ..aOB(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'done')
     ..hasRequiredFields = false
   ;
 
@@ -1027,7 +1026,6 @@ class UpdateSubTaskRequest extends $pb.GeneratedMessage {
   factory UpdateSubTaskRequest({
     $core.String? id,
     $core.String? title,
-    $core.bool? done,
   }) {
     final _result = create();
     if (id != null) {
@@ -1035,9 +1033,6 @@ class UpdateSubTaskRequest extends $pb.GeneratedMessage {
     }
     if (title != null) {
       _result.title = title;
-    }
-    if (done != null) {
-      _result.done = done;
     }
     return _result;
   }
@@ -1079,15 +1074,6 @@ class UpdateSubTaskRequest extends $pb.GeneratedMessage {
   $core.bool hasTitle() => $_has(1);
   @$pb.TagNumber(2)
   void clearTitle() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.bool get done => $_getBF(2);
-  @$pb.TagNumber(3)
-  set done($core.bool v) { $_setBool(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasDone() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearDone() => clearField(3);
 }
 
 class UpdateSubTaskResponse extends $pb.GeneratedMessage {

@@ -403,11 +403,6 @@ export class UpdateSubTaskRequest extends jspb.Message {
   hasTitle(): boolean;
   clearTitle(): UpdateSubTaskRequest;
 
-  getDone(): boolean;
-  setDone(value: boolean): UpdateSubTaskRequest;
-  hasDone(): boolean;
-  clearDone(): UpdateSubTaskRequest;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateSubTaskRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateSubTaskRequest): UpdateSubTaskRequest.AsObject;
@@ -420,17 +415,11 @@ export namespace UpdateSubTaskRequest {
   export type AsObject = {
     id: string,
     title?: string,
-    done?: boolean,
   }
 
   export enum TitleCase { 
     _TITLE_NOT_SET = 0,
     TITLE = 2,
-  }
-
-  export enum DoneCase { 
-    _DONE_NOT_SET = 0,
-    DONE = 3,
   }
 }
 

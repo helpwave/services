@@ -3655,8 +3655,7 @@ proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.toObject = funct
 proto.proto.services.task_svc.v1.UpdateSubTaskRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    title: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    done: jspb.Message.getBooleanFieldWithDefault(msg, 3, false)
+    title: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -3701,10 +3700,6 @@ proto.proto.services.task_svc.v1.UpdateSubTaskRequest.deserializeBinaryFromReade
       var value = /** @type {string} */ (reader.readString());
       msg.setTitle(value);
       break;
-    case 3:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setDone(value);
-      break;
     default:
       reader.skipField();
       break;
@@ -3745,13 +3740,6 @@ proto.proto.services.task_svc.v1.UpdateSubTaskRequest.serializeBinaryToWriter = 
   if (f != null) {
     writer.writeString(
       2,
-      f
-    );
-  }
-  f = /** @type {boolean} */ (jspb.Message.getField(message, 3));
-  if (f != null) {
-    writer.writeBool(
-      3,
       f
     );
   }
@@ -3809,42 +3797,6 @@ proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.clearTitle = fun
  */
 proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.hasTitle = function() {
   return jspb.Message.getField(this, 2) != null;
-};
-
-
-/**
- * optional bool done = 3;
- * @return {boolean}
- */
-proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.getDone = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 3, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.proto.services.task_svc.v1.UpdateSubTaskRequest} returns this
- */
-proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.setDone = function(value) {
-  return jspb.Message.setField(this, 3, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.proto.services.task_svc.v1.UpdateSubTaskRequest} returns this
- */
-proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.clearDone = function() {
-  return jspb.Message.setField(this, 3, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.hasDone = function() {
-  return jspb.Message.getField(this, 3) != null;
 };
 
 

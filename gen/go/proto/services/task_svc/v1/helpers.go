@@ -22,10 +22,6 @@ func (r *UpdateSubTaskRequest) UpdatesMap() map[string]interface{} {
 		m["name"] = *r.Title
 	}
 
-	if r.Done != nil {
-		m["done"] = *r.Done
-	}
-
 	return m
 }
 
