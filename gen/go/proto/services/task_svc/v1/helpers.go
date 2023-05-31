@@ -18,6 +18,7 @@ func (r *UpdateSubTaskRequest) UpdatesMap() map[string]interface{} {
 	m := make(map[string]interface{})
 
 	if r.Title != nil {
+		// TODO: https://github.com/helpwave/services/issues/172
 		m["name"] = *r.Title
 	}
 
