@@ -130,7 +130,6 @@ message UpdateSubTaskRequest{
 
 message UpdateSubTaskResponse {}
 
-
 //
 // SubTaskToToDo
 //
