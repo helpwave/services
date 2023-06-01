@@ -1555,7 +1555,7 @@ proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.prototype.toObject = fu
 proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    title: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     done: jspb.Message.getBooleanFieldWithDefault(msg, 3, false)
   };
 
@@ -1599,7 +1599,7 @@ proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.deserializeBinaryFromRe
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setTitle(value);
+      msg.setName(value);
       break;
     case 3:
       var value = /** @type {boolean} */ (reader.readBool());
@@ -1641,7 +1641,7 @@ proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.serializeBinaryToWriter
       f
     );
   }
-  f = message.getTitle();
+  f = message.getName();
   if (f.length > 0) {
     writer.writeString(
       2,
@@ -1677,10 +1677,10 @@ proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.prototype.setId = funct
 
 
 /**
- * optional string title = 2;
+ * optional string name = 2;
  * @return {string}
  */
-proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.prototype.getTitle = function() {
+proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.prototype.getName = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
@@ -1689,7 +1689,7 @@ proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.prototype.getTitle = fu
  * @param {string} value
  * @return {!proto.proto.services.task_svc.v1.GetTaskResponse.SubTask} returns this
  */
-proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.prototype.setTitle = function(value) {
+proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
 };
 
@@ -2367,7 +2367,7 @@ proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask.prototyp
 proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    title: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     done: jspb.Message.getBooleanFieldWithDefault(msg, 3, false)
   };
 
@@ -2411,7 +2411,7 @@ proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask.deserial
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setTitle(value);
+      msg.setName(value);
       break;
     case 3:
       var value = /** @type {boolean} */ (reader.readBool());
@@ -2453,7 +2453,7 @@ proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask.serializ
       f
     );
   }
-  f = message.getTitle();
+  f = message.getName();
   if (f.length > 0) {
     writer.writeString(
       2,
@@ -2489,10 +2489,10 @@ proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask.prototyp
 
 
 /**
- * optional string title = 2;
+ * optional string name = 2;
  * @return {string}
  */
-proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask.prototype.getTitle = function() {
+proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask.prototype.getName = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
@@ -2501,7 +2501,7 @@ proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask.prototyp
  * @param {string} value
  * @return {!proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask} returns this
  */
-proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask.prototype.setTitle = function(value) {
+proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
 };
 
@@ -3085,7 +3085,7 @@ proto.proto.services.task_svc.v1.AddSubTaskRequest.prototype.toObject = function
  */
 proto.proto.services.task_svc.v1.AddSubTaskRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    title: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    name: jspb.Message.getFieldWithDefault(msg, 1, ""),
     taskId: jspb.Message.getFieldWithDefault(msg, 2, ""),
     done: jspb.Message.getBooleanFieldWithDefault(msg, 3, false)
   };
@@ -3126,7 +3126,7 @@ proto.proto.services.task_svc.v1.AddSubTaskRequest.deserializeBinaryFromReader =
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setTitle(value);
+      msg.setName(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
@@ -3165,7 +3165,7 @@ proto.proto.services.task_svc.v1.AddSubTaskRequest.prototype.serializeBinary = f
  */
 proto.proto.services.task_svc.v1.AddSubTaskRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getTitle();
+  f = message.getName();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -3190,10 +3190,10 @@ proto.proto.services.task_svc.v1.AddSubTaskRequest.serializeBinaryToWriter = fun
 
 
 /**
- * optional string title = 1;
+ * optional string name = 1;
  * @return {string}
  */
-proto.proto.services.task_svc.v1.AddSubTaskRequest.prototype.getTitle = function() {
+proto.proto.services.task_svc.v1.AddSubTaskRequest.prototype.getName = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -3202,7 +3202,7 @@ proto.proto.services.task_svc.v1.AddSubTaskRequest.prototype.getTitle = function
  * @param {string} value
  * @return {!proto.proto.services.task_svc.v1.AddSubTaskRequest} returns this
  */
-proto.proto.services.task_svc.v1.AddSubTaskRequest.prototype.setTitle = function(value) {
+proto.proto.services.task_svc.v1.AddSubTaskRequest.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
@@ -3655,7 +3655,7 @@ proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.toObject = funct
 proto.proto.services.task_svc.v1.UpdateSubTaskRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    title: jspb.Message.getFieldWithDefault(msg, 2, "")
+    name: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -3698,7 +3698,7 @@ proto.proto.services.task_svc.v1.UpdateSubTaskRequest.deserializeBinaryFromReade
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setTitle(value);
+      msg.setName(value);
       break;
     default:
       reader.skipField();
@@ -3765,10 +3765,10 @@ proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.setId = function
 
 
 /**
- * optional string title = 2;
+ * optional string name = 2;
  * @return {string}
  */
-proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.getTitle = function() {
+proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.getName = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
@@ -3777,7 +3777,7 @@ proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.getTitle = funct
  * @param {string} value
  * @return {!proto.proto.services.task_svc.v1.UpdateSubTaskRequest} returns this
  */
-proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.setTitle = function(value) {
+proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.setName = function(value) {
   return jspb.Message.setField(this, 2, value);
 };
 
@@ -3786,7 +3786,7 @@ proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.setTitle = funct
  * Clears the field making it undefined.
  * @return {!proto.proto.services.task_svc.v1.UpdateSubTaskRequest} returns this
  */
-proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.clearTitle = function() {
+proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.clearName = function() {
   return jspb.Message.setField(this, 2, undefined);
 };
 
@@ -3795,7 +3795,7 @@ proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.clearTitle = fun
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.hasTitle = function() {
+proto.proto.services.task_svc.v1.UpdateSubTaskRequest.prototype.hasName = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
