@@ -281,6 +281,26 @@ func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskReq
 	return &pb.RemoveSubTaskResponse{}, nil
 }
 
+func (ServiceServer) UpdateSubTask(ctx context.Context, req *pb.UpdateSubTaskRequest) (*pb.UpdateSubTaskResponse, error) {
+	log := zlog.Ctx(ctx)
+	db := hwgorm.GetDB(ctx)
+
+	subtaskID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	subtask := Subtask{ID: subtaskID}
+	updates := req.UpdatesMap()
+
+	if err := db.Model(&subtask).Updates(updates).Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &pb.UpdateSubTaskResponse{}, nil
+}
+
 func (ServiceServer) SubTaskToToDo(ctx context.Context, req *pb.SubTaskToToDoRequest) (*pb.SubTaskToToDoResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)

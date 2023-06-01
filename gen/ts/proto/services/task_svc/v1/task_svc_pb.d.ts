@@ -394,6 +394,49 @@ export namespace RemoveSubTaskResponse {
   }
 }
 
+export class UpdateSubTaskRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): UpdateSubTaskRequest;
+
+  getTitle(): string;
+  setTitle(value: string): UpdateSubTaskRequest;
+  hasTitle(): boolean;
+  clearTitle(): UpdateSubTaskRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdateSubTaskRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdateSubTaskRequest): UpdateSubTaskRequest.AsObject;
+  static serializeBinaryToWriter(message: UpdateSubTaskRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdateSubTaskRequest;
+  static deserializeBinaryFromReader(message: UpdateSubTaskRequest, reader: jspb.BinaryReader): UpdateSubTaskRequest;
+}
+
+export namespace UpdateSubTaskRequest {
+  export type AsObject = {
+    id: string,
+    title?: string,
+  }
+
+  export enum TitleCase { 
+    _TITLE_NOT_SET = 0,
+    TITLE = 2,
+  }
+}
+
+export class UpdateSubTaskResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdateSubTaskResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdateSubTaskResponse): UpdateSubTaskResponse.AsObject;
+  static serializeBinaryToWriter(message: UpdateSubTaskResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdateSubTaskResponse;
+  static deserializeBinaryFromReader(message: UpdateSubTaskResponse, reader: jspb.BinaryReader): UpdateSubTaskResponse;
+}
+
+export namespace UpdateSubTaskResponse {
+  export type AsObject = {
+  }
+}
+
 export class SubTaskToToDoRequest extends jspb.Message {
   getId(): string;
   setId(value: string): SubTaskToToDoRequest;

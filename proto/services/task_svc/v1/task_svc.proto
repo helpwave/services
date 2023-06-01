@@ -116,6 +116,18 @@ message RemoveSubTaskRequest {
 
 message RemoveSubTaskResponse {}
 
+
+//
+// UpdateSubTask
+//
+
+message UpdateSubTaskRequest{
+  string id = 1; // @gotags: validate:"uuid4"
+  optional string title = 2;
+}
+
+message UpdateSubTaskResponse {}
+
 //
 // SubTaskToToDo
 //
@@ -230,6 +242,7 @@ service TaskService {
   rpc UpdateTask (UpdateTaskRequest) returns (UpdateTaskResponse) {}
   rpc AddSubTask (AddSubTaskRequest) returns (AddSubTaskResponse) {}
   rpc RemoveSubTask (RemoveSubTaskRequest) returns (RemoveSubTaskResponse) {}
+  rpc UpdateSubTask (UpdateSubTaskRequest) returns (UpdateSubTaskResponse) {}
   rpc SubTaskToToDo (SubTaskToToDoRequest) returns (SubTaskToToDoResponse) {}
   rpc SubTaskToDone (SubTaskToDoneRequest) returns (SubTaskToDoneResponse) {}
   rpc TaskToToDo (TaskToToDoRequest) returns (TaskToToDoResponse) {}
