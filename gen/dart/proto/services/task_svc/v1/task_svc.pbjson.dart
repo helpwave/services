@@ -75,13 +75,13 @@ const GetTaskResponse_SubTask$json = const {
   '1': 'SubTask',
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    const {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
+    const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     const {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
   ],
 };
 
 /// Descriptor for `GetTaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getTaskResponseDescriptor = $convert.base64Decode('Cg9HZXRUYXNrUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uEj4KBnN0YXR1cxgEIAEoDjImLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlRhc2tTdGF0dXNSBnN0YXR1cxIoChBhc3NpZ25lZF91c2VyX2lkGAUgASgJUg5hc3NpZ25lZFVzZXJJZBIdCgpwYXRpZW50X2lkGAYgASgJUglwYXRpZW50SWQSFgoGcHVibGljGAcgASgIUgZwdWJsaWMSTwoIc3VidGFza3MYCCADKAsyMy5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRUYXNrUmVzcG9uc2UuU3ViVGFza1IIc3VidGFza3MaQwoHU3ViVGFzaxIOCgJpZBgBIAEoCVICaWQSFAoFdGl0bGUYAiABKAlSBXRpdGxlEhIKBGRvbmUYAyABKAhSBGRvbmU=');
+final $typed_data.Uint8List getTaskResponseDescriptor = $convert.base64Decode('Cg9HZXRUYXNrUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uEj4KBnN0YXR1cxgEIAEoDjImLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlRhc2tTdGF0dXNSBnN0YXR1cxIoChBhc3NpZ25lZF91c2VyX2lkGAUgASgJUg5hc3NpZ25lZFVzZXJJZBIdCgpwYXRpZW50X2lkGAYgASgJUglwYXRpZW50SWQSFgoGcHVibGljGAcgASgIUgZwdWJsaWMSTwoIc3VidGFza3MYCCADKAsyMy5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRUYXNrUmVzcG9uc2UuU3ViVGFza1IIc3VidGFza3MaQQoHU3ViVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRISCgRkb25lGAMgASgIUgRkb25l');
 @$core.Deprecated('Use getTasksByPatientRequestDescriptor instead')
 const GetTasksByPatientRequest$json = const {
   '1': 'GetTasksByPatientRequest',
@@ -122,13 +122,13 @@ const GetTasksByPatientResponse_Task_SubTask$json = const {
   '1': 'SubTask',
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    const {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
+    const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     const {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
   ],
 };
 
 /// Descriptor for `GetTasksByPatientResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getTasksByPatientResponseDescriptor = $convert.base64Decode('ChlHZXRUYXNrc0J5UGF0aWVudFJlc3BvbnNlElAKBXRhc2tzGAEgAygLMjoucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0VGFza3NCeVBhdGllbnRSZXNwb25zZS5UYXNrUgV0YXNrcxqSAwoEVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCgtkZXNjcmlwdGlvbhgDIAEoCVILZGVzY3JpcHRpb24SPgoGc3RhdHVzGAQgASgOMiYucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVGFza1N0YXR1c1IGc3RhdHVzEigKEGFzc2lnbmVkX3VzZXJfaWQYBSABKAlSDmFzc2lnbmVkVXNlcklkEh0KCnBhdGllbnRfaWQYBiABKAlSCXBhdGllbnRJZBIWCgZwdWJsaWMYByABKAhSBnB1YmxpYxJeCghzdWJ0YXNrcxgIIAMoCzJCLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFRhc2tzQnlQYXRpZW50UmVzcG9uc2UuVGFzay5TdWJUYXNrUghzdWJ0YXNrcxpDCgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSEgoEZG9uZRgDIAEoCFIEZG9uZQ==');
+final $typed_data.Uint8List getTasksByPatientResponseDescriptor = $convert.base64Decode('ChlHZXRUYXNrc0J5UGF0aWVudFJlc3BvbnNlElAKBXRhc2tzGAEgAygLMjoucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0VGFza3NCeVBhdGllbnRSZXNwb25zZS5UYXNrUgV0YXNrcxqQAwoEVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCgtkZXNjcmlwdGlvbhgDIAEoCVILZGVzY3JpcHRpb24SPgoGc3RhdHVzGAQgASgOMiYucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVGFza1N0YXR1c1IGc3RhdHVzEigKEGFzc2lnbmVkX3VzZXJfaWQYBSABKAlSDmFzc2lnbmVkVXNlcklkEh0KCnBhdGllbnRfaWQYBiABKAlSCXBhdGllbnRJZBIWCgZwdWJsaWMYByABKAhSBnB1YmxpYxJeCghzdWJ0YXNrcxgIIAMoCzJCLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFRhc2tzQnlQYXRpZW50UmVzcG9uc2UuVGFzay5TdWJUYXNrUghzdWJ0YXNrcxpBCgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhIKBGRvbmUYAyABKAhSBGRvbmU=');
 @$core.Deprecated('Use updateTaskRequestDescriptor instead')
 const UpdateTaskRequest$json = const {
   '1': 'UpdateTaskRequest',
@@ -156,7 +156,7 @@ final $typed_data.Uint8List updateTaskResponseDescriptor = $convert.base64Decode
 const AddSubTaskRequest$json = const {
   '1': 'AddSubTaskRequest',
   '2': const [
-    const {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
+    const {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
     const {'1': 'task_id', '3': 2, '4': 1, '5': 9, '10': 'taskId'},
     const {'1': 'done', '3': 3, '4': 1, '5': 8, '9': 0, '10': 'done', '17': true},
   ],
@@ -166,7 +166,7 @@ const AddSubTaskRequest$json = const {
 };
 
 /// Descriptor for `AddSubTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List addSubTaskRequestDescriptor = $convert.base64Decode('ChFBZGRTdWJUYXNrUmVxdWVzdBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSFwoHdGFza19pZBgCIAEoCVIGdGFza0lkEhcKBGRvbmUYAyABKAhIAFIEZG9uZYgBAUIHCgVfZG9uZQ==');
+final $typed_data.Uint8List addSubTaskRequestDescriptor = $convert.base64Decode('ChFBZGRTdWJUYXNrUmVxdWVzdBISCgRuYW1lGAEgASgJUgRuYW1lEhcKB3Rhc2tfaWQYAiABKAlSBnRhc2tJZBIXCgRkb25lGAMgASgISABSBGRvbmWIAQFCBwoFX2RvbmU=');
 @$core.Deprecated('Use addSubTaskResponseDescriptor instead')
 const AddSubTaskResponse$json = const {
   '1': 'AddSubTaskResponse',
@@ -199,15 +199,15 @@ const UpdateSubTaskRequest$json = const {
   '1': 'UpdateSubTaskRequest',
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    const {'1': 'title', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'title', '17': true},
+    const {'1': 'name', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'name', '17': true},
   ],
   '8': const [
-    const {'1': '_title'},
+    const {'1': '_name'},
   ],
 };
 
 /// Descriptor for `UpdateSubTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateSubTaskRequestDescriptor = $convert.base64Decode('ChRVcGRhdGVTdWJUYXNrUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSGQoFdGl0bGUYAiABKAlIAFIFdGl0bGWIAQFCCAoGX3RpdGxl');
+final $typed_data.Uint8List updateSubTaskRequestDescriptor = $convert.base64Decode('ChRVcGRhdGVTdWJUYXNrUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSFwoEbmFtZRgCIAEoCUgAUgRuYW1liAEBQgcKBV9uYW1l');
 @$core.Deprecated('Use updateSubTaskResponseDescriptor instead')
 const UpdateSubTaskResponse$json = const {
   '1': 'UpdateSubTaskResponse',

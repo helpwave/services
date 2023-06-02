@@ -200,7 +200,7 @@ class GetTaskRequest extends $pb.GeneratedMessage {
 class GetTaskResponse_SubTask extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetTaskResponse.SubTask', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'title')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
     ..aOB(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'done')
     ..hasRequiredFields = false
   ;
@@ -208,15 +208,15 @@ class GetTaskResponse_SubTask extends $pb.GeneratedMessage {
   GetTaskResponse_SubTask._() : super();
   factory GetTaskResponse_SubTask({
     $core.String? id,
-    $core.String? title,
+    $core.String? name,
     $core.bool? done,
   }) {
     final _result = create();
     if (id != null) {
       _result.id = id;
     }
-    if (title != null) {
-      _result.title = title;
+    if (name != null) {
+      _result.name = name;
     }
     if (done != null) {
       _result.done = done;
@@ -254,13 +254,13 @@ class GetTaskResponse_SubTask extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get title => $_getSZ(1);
+  $core.String get name => $_getSZ(1);
   @$pb.TagNumber(2)
-  set title($core.String v) { $_setString(1, v); }
+  set name($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasTitle() => $_has(1);
+  $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
-  void clearTitle() => clearField(2);
+  void clearName() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.bool get done => $_getBF(2);
@@ -461,7 +461,7 @@ class GetTasksByPatientRequest extends $pb.GeneratedMessage {
 class GetTasksByPatientResponse_Task_SubTask extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetTasksByPatientResponse.Task.SubTask', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'title')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
     ..aOB(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'done')
     ..hasRequiredFields = false
   ;
@@ -469,15 +469,15 @@ class GetTasksByPatientResponse_Task_SubTask extends $pb.GeneratedMessage {
   GetTasksByPatientResponse_Task_SubTask._() : super();
   factory GetTasksByPatientResponse_Task_SubTask({
     $core.String? id,
-    $core.String? title,
+    $core.String? name,
     $core.bool? done,
   }) {
     final _result = create();
     if (id != null) {
       _result.id = id;
     }
-    if (title != null) {
-      _result.title = title;
+    if (name != null) {
+      _result.name = name;
     }
     if (done != null) {
       _result.done = done;
@@ -515,13 +515,13 @@ class GetTasksByPatientResponse_Task_SubTask extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get title => $_getSZ(1);
+  $core.String get name => $_getSZ(1);
   @$pb.TagNumber(2)
-  set title($core.String v) { $_setString(1, v); }
+  set name($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasTitle() => $_has(1);
+  $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
-  void clearTitle() => clearField(2);
+  void clearName() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.bool get done => $_getBF(2);
@@ -819,7 +819,7 @@ class UpdateTaskResponse extends $pb.GeneratedMessage {
 
 class AddSubTaskRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AddSubTaskRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'title')
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'taskId')
     ..aOB(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'done')
     ..hasRequiredFields = false
@@ -827,13 +827,13 @@ class AddSubTaskRequest extends $pb.GeneratedMessage {
 
   AddSubTaskRequest._() : super();
   factory AddSubTaskRequest({
-    $core.String? title,
+    $core.String? name,
     $core.String? taskId,
     $core.bool? done,
   }) {
     final _result = create();
-    if (title != null) {
-      _result.title = title;
+    if (name != null) {
+      _result.name = name;
     }
     if (taskId != null) {
       _result.taskId = taskId;
@@ -865,13 +865,13 @@ class AddSubTaskRequest extends $pb.GeneratedMessage {
   static AddSubTaskRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get title => $_getSZ(0);
+  $core.String get name => $_getSZ(0);
   @$pb.TagNumber(1)
-  set title($core.String v) { $_setString(0, v); }
+  set name($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasTitle() => $_has(0);
+  $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
-  void clearTitle() => clearField(1);
+  void clearName() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get taskId => $_getSZ(1);
@@ -1018,21 +1018,21 @@ class RemoveSubTaskResponse extends $pb.GeneratedMessage {
 class UpdateSubTaskRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UpdateSubTaskRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'title')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
   UpdateSubTaskRequest._() : super();
   factory UpdateSubTaskRequest({
     $core.String? id,
-    $core.String? title,
+    $core.String? name,
   }) {
     final _result = create();
     if (id != null) {
       _result.id = id;
     }
-    if (title != null) {
-      _result.title = title;
+    if (name != null) {
+      _result.name = name;
     }
     return _result;
   }
@@ -1067,13 +1067,13 @@ class UpdateSubTaskRequest extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get title => $_getSZ(1);
+  $core.String get name => $_getSZ(1);
   @$pb.TagNumber(2)
-  set title($core.String v) { $_setString(1, v); }
+  set name($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasTitle() => $_has(1);
+  $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
-  void clearTitle() => clearField(2);
+  void clearName() => clearField(2);
 }
 
 class UpdateSubTaskResponse extends $pb.GeneratedMessage {

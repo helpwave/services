@@ -120,9 +120,9 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 
 	var subtasks = hwutil.Map(task.Subtasks, func(subtask Subtask) *pb.GetTaskResponse_SubTask {
 		return &pb.GetTaskResponse_SubTask{
-			Id:    subtask.ID.String(),
-			Done:  subtask.Done,
-			Title: subtask.Name,
+			Id:   subtask.ID.String(),
+			Done: subtask.Done,
+			Name: subtask.Name,
 		}
 	})
 
@@ -161,9 +161,9 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 	var mappedTasks = hwutil.Map(tasks, func(task Task) *pb.GetTasksByPatientResponse_Task {
 		var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask Subtask) *pb.GetTasksByPatientResponse_Task_SubTask {
 			return &pb.GetTasksByPatientResponse_Task_SubTask{
-				Id:    subtask.ID.String(),
-				Done:  subtask.Done,
-				Title: subtask.Name,
+				Id:   subtask.ID.String(),
+				Done: subtask.Done,
+				Name: subtask.Name,
 			}
 		})
 		return &pb.GetTasksByPatientResponse_Task{
@@ -250,7 +250,7 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 	if req.Done != nil {
 		done = *req.Done
 	}
-	subtask := Subtask{Name: req.Title, TaskID: taskId, Done: done}
+	subtask := Subtask{Name: req.Name, TaskID: taskId, Done: done}
 
 	if err := db.Create(&subtask).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")

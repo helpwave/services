@@ -119,8 +119,8 @@ export namespace GetTaskResponse {
     getId(): string;
     setId(value: string): SubTask;
 
-    getTitle(): string;
-    setTitle(value: string): SubTask;
+    getName(): string;
+    setName(value: string): SubTask;
 
     getDone(): boolean;
     setDone(value: boolean): SubTask;
@@ -136,7 +136,7 @@ export namespace GetTaskResponse {
   export namespace SubTask {
     export type AsObject = {
       id: string,
-      title: string,
+      name: string,
       done: boolean,
     }
   }
@@ -231,8 +231,8 @@ export namespace GetTasksByPatientResponse {
       getId(): string;
       setId(value: string): SubTask;
 
-      getTitle(): string;
-      setTitle(value: string): SubTask;
+      getName(): string;
+      setName(value: string): SubTask;
 
       getDone(): boolean;
       setDone(value: boolean): SubTask;
@@ -248,7 +248,7 @@ export namespace GetTasksByPatientResponse {
     export namespace SubTask {
       export type AsObject = {
         id: string,
-        title: string,
+        name: string,
         done: boolean,
       }
     }
@@ -312,8 +312,8 @@ export namespace UpdateTaskResponse {
 }
 
 export class AddSubTaskRequest extends jspb.Message {
-  getTitle(): string;
-  setTitle(value: string): AddSubTaskRequest;
+  getName(): string;
+  setName(value: string): AddSubTaskRequest;
 
   getTaskId(): string;
   setTaskId(value: string): AddSubTaskRequest;
@@ -333,7 +333,7 @@ export class AddSubTaskRequest extends jspb.Message {
 
 export namespace AddSubTaskRequest {
   export type AsObject = {
-    title: string,
+    name: string,
     taskId: string,
     done?: boolean,
   }
@@ -398,10 +398,10 @@ export class UpdateSubTaskRequest extends jspb.Message {
   getId(): string;
   setId(value: string): UpdateSubTaskRequest;
 
-  getTitle(): string;
-  setTitle(value: string): UpdateSubTaskRequest;
-  hasTitle(): boolean;
-  clearTitle(): UpdateSubTaskRequest;
+  getName(): string;
+  setName(value: string): UpdateSubTaskRequest;
+  hasName(): boolean;
+  clearName(): UpdateSubTaskRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateSubTaskRequest.AsObject;
@@ -414,12 +414,12 @@ export class UpdateSubTaskRequest extends jspb.Message {
 export namespace UpdateSubTaskRequest {
   export type AsObject = {
     id: string,
-    title?: string,
+    name?: string,
   }
 
-  export enum TitleCase { 
-    _TITLE_NOT_SET = 0,
-    TITLE = 2,
+  export enum NameCase { 
+    _NAME_NOT_SET = 0,
+    NAME = 2,
   }
 }
 

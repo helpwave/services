@@ -46,7 +46,7 @@ message GetTaskResponse {
 
   message SubTask {
     string id = 1;
-    string title = 2;
+    string name = 2;
     bool done = 3;
   }
 }
@@ -74,7 +74,7 @@ message GetTasksByPatientResponse {
 
     message SubTask {
       string id = 1;
-      string title = 2;
+      string name = 2;
       bool done = 3;
     }
   }
@@ -97,7 +97,7 @@ message UpdateTaskResponse {}
 //
 
 message AddSubTaskRequest {
-  string title = 1;
+  string name = 1;
   string task_id = 2; // @gotags: validate:"uuid4"
   optional bool done = 3; // default: false
 }
@@ -123,7 +123,7 @@ message RemoveSubTaskResponse {}
 
 message UpdateSubTaskRequest{
   string id = 1; // @gotags: validate:"uuid4"
-  optional string title = 2;
+  optional string name = 2;
 }
 
 message UpdateSubTaskResponse {}
