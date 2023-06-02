@@ -27,9 +27,6 @@ export class CreateWardResponse extends jspb.Message {
   getName(): string;
   setName(value: string): CreateWardResponse;
 
-  getOrganizationId(): string;
-  setOrganizationId(value: string): CreateWardResponse;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateWardResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreateWardResponse): CreateWardResponse.AsObject;
@@ -42,7 +39,6 @@ export namespace CreateWardResponse {
   export type AsObject = {
     id: string,
     name: string,
-    organizationId: string,
   }
 }
 
@@ -71,9 +67,6 @@ export class GetWardResponse extends jspb.Message {
   getName(): string;
   setName(value: string): GetWardResponse;
 
-  getOrganizationId(): string;
-  setOrganizationId(value: string): GetWardResponse;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetWardResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetWardResponse): GetWardResponse.AsObject;
@@ -86,14 +79,10 @@ export namespace GetWardResponse {
   export type AsObject = {
     id: string,
     name: string,
-    organizationId: string,
   }
 }
 
 export class GetWardsRequest extends jspb.Message {
-  getOrganizationId(): string;
-  setOrganizationId(value: string): GetWardsRequest;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetWardsRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetWardsRequest): GetWardsRequest.AsObject;
@@ -104,7 +93,6 @@ export class GetWardsRequest extends jspb.Message {
 
 export namespace GetWardsRequest {
   export type AsObject = {
-    organizationId: string,
   }
 }
 
@@ -134,9 +122,6 @@ export namespace GetWardsResponse {
     getName(): string;
     setName(value: string): Ward;
 
-    getOrganizationId(): string;
-    setOrganizationId(value: string): Ward;
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Ward.AsObject;
     static toObject(includeInstance: boolean, msg: Ward): Ward.AsObject;
@@ -149,7 +134,6 @@ export namespace GetWardsResponse {
     export type AsObject = {
       id: string,
       name: string,
-      organizationId: string,
     }
   }
 

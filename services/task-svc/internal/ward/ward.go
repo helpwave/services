@@ -57,9 +57,8 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 		Msg("ward created")
 
 	return &pb.CreateWardResponse{
-		Id:             ward.ID.String(),
-		Name:           ward.Name,
-		OrganizationId: ward.OrganizationID.String(),
+		Id:   ward.ID.String(),
+		Name: ward.Name,
 	}, nil
 }
 
@@ -83,9 +82,8 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 	}
 
 	return &pb.GetWardResponse{
-		Id:             ward.ID.String(),
-		Name:           ward.Name,
-		OrganizationId: ward.OrganizationID.String(),
+		Id:   ward.ID.String(),
+		Name: ward.Name,
 	}, nil
 }
 
@@ -94,9 +92,9 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 
 	// TODO: Auth
 
-	organizationID, err := uuid.Parse(req.OrganizationId)
+	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		return nil, err
 	}
 
 	var wards []Ward
@@ -111,9 +109,8 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 	return &pb.GetWardsResponse{
 		Wards: hwutil.Map(wards, func(ward Ward) *pb.GetWardsResponse_Ward {
 			return &pb.GetWardsResponse_Ward{
-				Id:             ward.ID.String(),
-				Name:           ward.Name,
-				OrganizationId: ward.OrganizationID.String(),
+				Id:   ward.ID.String(),
+				Name: ward.Name,
 			}
 		}),
 	}, nil

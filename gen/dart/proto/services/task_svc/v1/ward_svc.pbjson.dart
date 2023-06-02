@@ -24,12 +24,11 @@ const CreateWardResponse$json = const {
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    const {'1': 'organization_id', '3': 3, '4': 1, '5': 9, '10': 'organizationId'},
   ],
 };
 
 /// Descriptor for `CreateWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createWardResponseDescriptor = $convert.base64Decode('ChJDcmVhdGVXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSJwoPb3JnYW5pemF0aW9uX2lkGAMgASgJUg5vcmdhbml6YXRpb25JZA==');
+final $typed_data.Uint8List createWardResponseDescriptor = $convert.base64Decode('ChJDcmVhdGVXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWU=');
 @$core.Deprecated('Use getWardRequestDescriptor instead')
 const GetWardRequest$json = const {
   '1': 'GetWardRequest',
@@ -46,22 +45,18 @@ const GetWardResponse$json = const {
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    const {'1': 'organization_id', '3': 3, '4': 1, '5': 9, '10': 'organizationId'},
   ],
 };
 
 /// Descriptor for `GetWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getWardResponseDescriptor = $convert.base64Decode('Cg9HZXRXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSJwoPb3JnYW5pemF0aW9uX2lkGAMgASgJUg5vcmdhbml6YXRpb25JZA==');
+final $typed_data.Uint8List getWardResponseDescriptor = $convert.base64Decode('Cg9HZXRXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWU=');
 @$core.Deprecated('Use getWardsRequestDescriptor instead')
 const GetWardsRequest$json = const {
   '1': 'GetWardsRequest',
-  '2': const [
-    const {'1': 'organization_id', '3': 1, '4': 1, '5': 9, '10': 'organizationId'},
-  ],
 };
 
 /// Descriptor for `GetWardsRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getWardsRequestDescriptor = $convert.base64Decode('Cg9HZXRXYXJkc1JlcXVlc3QSJwoPb3JnYW5pemF0aW9uX2lkGAEgASgJUg5vcmdhbml6YXRpb25JZA==');
+final $typed_data.Uint8List getWardsRequestDescriptor = $convert.base64Decode('Cg9HZXRXYXJkc1JlcXVlc3Q=');
 @$core.Deprecated('Use getWardsResponseDescriptor instead')
 const GetWardsResponse$json = const {
   '1': 'GetWardsResponse',
@@ -77,12 +72,11 @@ const GetWardsResponse_Ward$json = const {
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    const {'1': 'organization_id', '3': 3, '4': 1, '5': 9, '10': 'organizationId'},
   ],
 };
 
 /// Descriptor for `GetWardsResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getWardsResponseDescriptor = $convert.base64Decode('ChBHZXRXYXJkc1Jlc3BvbnNlEkcKBXdhcmRzGAEgAygLMjEucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0V2FyZHNSZXNwb25zZS5XYXJkUgV3YXJkcxpTCgRXYXJkEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEicKD29yZ2FuaXphdGlvbl9pZBgDIAEoCVIOb3JnYW5pemF0aW9uSWQ=');
+final $typed_data.Uint8List getWardsResponseDescriptor = $convert.base64Decode('ChBHZXRXYXJkc1Jlc3BvbnNlEkcKBXdhcmRzGAEgAygLMjEucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0V2FyZHNSZXNwb25zZS5XYXJkUgV3YXJkcxoqCgRXYXJkEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1l');
 @$core.Deprecated('Use updateWardRequestDescriptor instead')
 const UpdateWardRequest$json = const {
   '1': 'UpdateWardRequest',

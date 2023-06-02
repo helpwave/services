@@ -15,7 +15,6 @@ message CreateWardRequest {
 message CreateWardResponse {
   string id = 1;
   string name = 2;
-  string organization_id = 3;
 }
 
 //
@@ -29,16 +28,13 @@ message GetWardRequest {
 message GetWardResponse {
   string id = 1;
   string name = 2;
-  string organization_id = 3;
 }
 
 //
 // GetWards
 //
 
-message GetWardsRequest {
-  string organization_id = 1;
-}
+message GetWardsRequest {}
 
 message GetWardsResponse {
   repeated Ward wards = 1;
@@ -46,7 +42,6 @@ message GetWardsResponse {
   message Ward {
     string id = 1;
     string name = 2;
-    string organization_id = 3;
   }
 }
 
@@ -60,7 +55,6 @@ message UpdateWardRequest {
 }
 
 message UpdateWardResponse {}
-
 
 //
 // DeleteWard
