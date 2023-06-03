@@ -697,34 +697,34 @@ export namespace PublishTaskResponse {
   }
 }
 
-export class UnpublishTaskRequest extends jspb.Message {
+export class UnPublishTaskRequest extends jspb.Message {
   getId(): string;
-  setId(value: string): UnpublishTaskRequest;
+  setId(value: string): UnPublishTaskRequest;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): UnpublishTaskRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: UnpublishTaskRequest): UnpublishTaskRequest.AsObject;
-  static serializeBinaryToWriter(message: UnpublishTaskRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): UnpublishTaskRequest;
-  static deserializeBinaryFromReader(message: UnpublishTaskRequest, reader: jspb.BinaryReader): UnpublishTaskRequest;
+  toObject(includeInstance?: boolean): UnPublishTaskRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UnPublishTaskRequest): UnPublishTaskRequest.AsObject;
+  static serializeBinaryToWriter(message: UnPublishTaskRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UnPublishTaskRequest;
+  static deserializeBinaryFromReader(message: UnPublishTaskRequest, reader: jspb.BinaryReader): UnPublishTaskRequest;
 }
 
-export namespace UnpublishTaskRequest {
+export namespace UnPublishTaskRequest {
   export type AsObject = {
     id: string,
   }
 }
 
-export class UnpublishTaskResponse extends jspb.Message {
+export class UnPublishTaskResponse extends jspb.Message {
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): UnpublishTaskResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: UnpublishTaskResponse): UnpublishTaskResponse.AsObject;
-  static serializeBinaryToWriter(message: UnpublishTaskResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): UnpublishTaskResponse;
-  static deserializeBinaryFromReader(message: UnpublishTaskResponse, reader: jspb.BinaryReader): UnpublishTaskResponse;
+  toObject(includeInstance?: boolean): UnPublishTaskResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: UnPublishTaskResponse): UnPublishTaskResponse.AsObject;
+  static serializeBinaryToWriter(message: UnPublishTaskResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UnPublishTaskResponse;
+  static deserializeBinaryFromReader(message: UnPublishTaskResponse, reader: jspb.BinaryReader): UnPublishTaskResponse;
 }
 
-export namespace UnpublishTaskResponse {
+export namespace UnPublishTaskResponse {
   export type AsObject = {
   }
 }

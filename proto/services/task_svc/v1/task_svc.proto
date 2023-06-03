@@ -210,14 +210,14 @@ message PublishTaskRequest {
 message PublishTaskResponse {}
 
 //
-// UnpublishTask
+// UnPublishTask
 //
 
-message UnpublishTaskRequest {
+message UnPublishTaskRequest {
   string id = 1; // @gotags: validate:"uuid4"
 }
 
-message UnpublishTaskResponse {}
+message UnPublishTaskResponse {}
 
 
 //
@@ -251,6 +251,6 @@ service TaskService {
   rpc AssignTaskToUser (AssignTaskToUserRequest) returns (AssignTaskToUserResponse) {}
   rpc UnassignTaskFromUser (UnassignTaskFromUserRequest) returns (UnassignTaskFromUserResponse) {}
   rpc PublishTask (PublishTaskRequest) returns (PublishTaskResponse) {}
-  rpc UnpublishTask (UnpublishTaskRequest) returns (UnpublishTaskResponse) {}
+  rpc UnPublishTask (UnPublishTaskRequest) returns (UnPublishTaskResponse) {}
   rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse) {}
 }

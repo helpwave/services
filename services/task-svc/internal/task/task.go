@@ -505,7 +505,7 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 	return &pb.PublishTaskResponse{}, nil
 }
 
-func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskRequest) (*pb.UnpublishTaskResponse, error) {
+func (ServiceServer) UnPublishTask(ctx context.Context, req *pb.UnPublishTaskRequest) (*pb.UnPublishTaskResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
@@ -527,5 +527,5 @@ func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskReq
 		Str("taskId", id.String()).
 		Msg("task unpublished")
 
-	return &pb.UnpublishTaskResponse{}, nil
+	return &pb.UnPublishTaskResponse{}, nil
 }
