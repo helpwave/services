@@ -28,7 +28,6 @@ message GetWardRequest {
 message GetWardResponse {
   string id = 1;
   string name = 2;
-  string organization_id = 3;
 }
 
 //
@@ -43,7 +42,6 @@ message GetWardsResponse {
   message Ward {
     string id = 1;
     string name = 2;
-    string organization_id = 3;
   }
 }
 
@@ -57,7 +55,6 @@ message UpdateWardRequest {
 }
 
 message UpdateWardResponse {}
-
 
 //
 // DeleteWard
