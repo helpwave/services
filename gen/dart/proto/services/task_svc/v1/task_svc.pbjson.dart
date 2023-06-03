@@ -352,23 +352,23 @@ const PublishTaskResponse$json = const {
 
 /// Descriptor for `PublishTaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List publishTaskResponseDescriptor = $convert.base64Decode('ChNQdWJsaXNoVGFza1Jlc3BvbnNl');
-@$core.Deprecated('Use unpublishTaskRequestDescriptor instead')
-const UnpublishTaskRequest$json = const {
-  '1': 'UnpublishTaskRequest',
+@$core.Deprecated('Use unPublishTaskRequestDescriptor instead')
+const UnPublishTaskRequest$json = const {
+  '1': 'UnPublishTaskRequest',
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
   ],
 };
 
-/// Descriptor for `UnpublishTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List unpublishTaskRequestDescriptor = $convert.base64Decode('ChRVbnB1Ymxpc2hUYXNrUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQ=');
-@$core.Deprecated('Use unpublishTaskResponseDescriptor instead')
-const UnpublishTaskResponse$json = const {
-  '1': 'UnpublishTaskResponse',
+/// Descriptor for `UnPublishTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List unPublishTaskRequestDescriptor = $convert.base64Decode('ChRVblB1Ymxpc2hUYXNrUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQ=');
+@$core.Deprecated('Use unPublishTaskResponseDescriptor instead')
+const UnPublishTaskResponse$json = const {
+  '1': 'UnPublishTaskResponse',
 };
 
-/// Descriptor for `UnpublishTaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List unpublishTaskResponseDescriptor = $convert.base64Decode('ChVVbnB1Ymxpc2hUYXNrUmVzcG9uc2U=');
+/// Descriptor for `UnPublishTaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List unPublishTaskResponseDescriptor = $convert.base64Decode('ChVVblB1Ymxpc2hUYXNrUmVzcG9uc2U=');
 @$core.Deprecated('Use deleteTaskRequestDescriptor instead')
 const DeleteTaskRequest$json = const {
   '1': 'DeleteTaskRequest',
@@ -404,7 +404,7 @@ const $core.Map<$core.String, $core.dynamic> TaskServiceBase$json = const {
     const {'1': 'AssignTaskToUser', '2': '.proto.services.task_svc.v1.AssignTaskToUserRequest', '3': '.proto.services.task_svc.v1.AssignTaskToUserResponse', '4': const {}},
     const {'1': 'UnassignTaskFromUser', '2': '.proto.services.task_svc.v1.UnassignTaskFromUserRequest', '3': '.proto.services.task_svc.v1.UnassignTaskFromUserResponse', '4': const {}},
     const {'1': 'PublishTask', '2': '.proto.services.task_svc.v1.PublishTaskRequest', '3': '.proto.services.task_svc.v1.PublishTaskResponse', '4': const {}},
-    const {'1': 'UnpublishTask', '2': '.proto.services.task_svc.v1.UnpublishTaskRequest', '3': '.proto.services.task_svc.v1.UnpublishTaskResponse', '4': const {}},
+    const {'1': 'UnPublishTask', '2': '.proto.services.task_svc.v1.UnPublishTaskRequest', '3': '.proto.services.task_svc.v1.UnPublishTaskResponse', '4': const {}},
     const {'1': 'DeleteTask', '2': '.proto.services.task_svc.v1.DeleteTaskRequest', '3': '.proto.services.task_svc.v1.DeleteTaskResponse', '4': const {}},
   ],
 };
@@ -444,11 +444,11 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> TaskServic
   '.proto.services.task_svc.v1.UnassignTaskFromUserResponse': UnassignTaskFromUserResponse$json,
   '.proto.services.task_svc.v1.PublishTaskRequest': PublishTaskRequest$json,
   '.proto.services.task_svc.v1.PublishTaskResponse': PublishTaskResponse$json,
-  '.proto.services.task_svc.v1.UnpublishTaskRequest': UnpublishTaskRequest$json,
-  '.proto.services.task_svc.v1.UnpublishTaskResponse': UnpublishTaskResponse$json,
+  '.proto.services.task_svc.v1.UnPublishTaskRequest': UnPublishTaskRequest$json,
+  '.proto.services.task_svc.v1.UnPublishTaskResponse': UnPublishTaskResponse$json,
   '.proto.services.task_svc.v1.DeleteTaskRequest': DeleteTaskRequest$json,
   '.proto.services.task_svc.v1.DeleteTaskResponse': DeleteTaskResponse$json,
 };
 
 /// Descriptor for `TaskService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List taskServiceDescriptor = $convert.base64Decode('CgtUYXNrU2VydmljZRJtCgpDcmVhdGVUYXNrEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuQ3JlYXRlVGFza1JlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5DcmVhdGVUYXNrUmVzcG9uc2UiABJkCgdHZXRUYXNrEioucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0VGFza1JlcXVlc3QaKy5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRUYXNrUmVzcG9uc2UiABKCAQoRR2V0VGFza3NCeVBhdGllbnQSNC5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRUYXNrc0J5UGF0aWVudFJlcXVlc3QaNS5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRUYXNrc0J5UGF0aWVudFJlc3BvbnNlIgASbQoKVXBkYXRlVGFzaxItLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlVwZGF0ZVRhc2tSZXF1ZXN0Gi4ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVXBkYXRlVGFza1Jlc3BvbnNlIgASbQoKQWRkU3ViVGFzaxItLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkFkZFN1YlRhc2tSZXF1ZXN0Gi4ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuQWRkU3ViVGFza1Jlc3BvbnNlIgASdgoNUmVtb3ZlU3ViVGFzaxIwLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlJlbW92ZVN1YlRhc2tSZXF1ZXN0GjEucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuUmVtb3ZlU3ViVGFza1Jlc3BvbnNlIgASdgoNVXBkYXRlU3ViVGFzaxIwLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlVwZGF0ZVN1YlRhc2tSZXF1ZXN0GjEucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVXBkYXRlU3ViVGFza1Jlc3BvbnNlIgASdgoNU3ViVGFza1RvVG9EbxIwLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlN1YlRhc2tUb1RvRG9SZXF1ZXN0GjEucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuU3ViVGFza1RvVG9Eb1Jlc3BvbnNlIgASdgoNU3ViVGFza1RvRG9uZRIwLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlN1YlRhc2tUb0RvbmVSZXF1ZXN0GjEucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuU3ViVGFza1RvRG9uZVJlc3BvbnNlIgASbQoKVGFza1RvVG9EbxItLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlRhc2tUb1RvRG9SZXF1ZXN0Gi4ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVGFza1RvVG9Eb1Jlc3BvbnNlIgASfwoQVGFza1RvSW5Qcm9ncmVzcxIzLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlRhc2tUb0luUHJvZ3Jlc3NSZXF1ZXN0GjQucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVGFza1RvSW5Qcm9ncmVzc1Jlc3BvbnNlIgASbQoKVGFza1RvRG9uZRItLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlRhc2tUb0RvbmVSZXF1ZXN0Gi4ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVGFza1RvRG9uZVJlc3BvbnNlIgASfwoQQXNzaWduVGFza1RvVXNlchIzLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkFzc2lnblRhc2tUb1VzZXJSZXF1ZXN0GjQucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuQXNzaWduVGFza1RvVXNlclJlc3BvbnNlIgASiwEKFFVuYXNzaWduVGFza0Zyb21Vc2VyEjcucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVW5hc3NpZ25UYXNrRnJvbVVzZXJSZXF1ZXN0GjgucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVW5hc3NpZ25UYXNrRnJvbVVzZXJSZXNwb25zZSIAEnAKC1B1Ymxpc2hUYXNrEi4ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuUHVibGlzaFRhc2tSZXF1ZXN0Gi8ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuUHVibGlzaFRhc2tSZXNwb25zZSIAEnYKDVVucHVibGlzaFRhc2sSMC5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5VbnB1Ymxpc2hUYXNrUmVxdWVzdBoxLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlVucHVibGlzaFRhc2tSZXNwb25zZSIAEm0KCkRlbGV0ZVRhc2sSLS5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVUYXNrUmVxdWVzdBouLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkRlbGV0ZVRhc2tSZXNwb25zZSIA');
+final $typed_data.Uint8List taskServiceDescriptor = $convert.base64Decode('CgtUYXNrU2VydmljZRJtCgpDcmVhdGVUYXNrEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuQ3JlYXRlVGFza1JlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5DcmVhdGVUYXNrUmVzcG9uc2UiABJkCgdHZXRUYXNrEioucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0VGFza1JlcXVlc3QaKy5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRUYXNrUmVzcG9uc2UiABKCAQoRR2V0VGFza3NCeVBhdGllbnQSNC5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRUYXNrc0J5UGF0aWVudFJlcXVlc3QaNS5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRUYXNrc0J5UGF0aWVudFJlc3BvbnNlIgASbQoKVXBkYXRlVGFzaxItLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlVwZGF0ZVRhc2tSZXF1ZXN0Gi4ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVXBkYXRlVGFza1Jlc3BvbnNlIgASbQoKQWRkU3ViVGFzaxItLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkFkZFN1YlRhc2tSZXF1ZXN0Gi4ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuQWRkU3ViVGFza1Jlc3BvbnNlIgASdgoNUmVtb3ZlU3ViVGFzaxIwLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlJlbW92ZVN1YlRhc2tSZXF1ZXN0GjEucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuUmVtb3ZlU3ViVGFza1Jlc3BvbnNlIgASdgoNVXBkYXRlU3ViVGFzaxIwLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlVwZGF0ZVN1YlRhc2tSZXF1ZXN0GjEucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVXBkYXRlU3ViVGFza1Jlc3BvbnNlIgASdgoNU3ViVGFza1RvVG9EbxIwLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlN1YlRhc2tUb1RvRG9SZXF1ZXN0GjEucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuU3ViVGFza1RvVG9Eb1Jlc3BvbnNlIgASdgoNU3ViVGFza1RvRG9uZRIwLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlN1YlRhc2tUb0RvbmVSZXF1ZXN0GjEucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuU3ViVGFza1RvRG9uZVJlc3BvbnNlIgASbQoKVGFza1RvVG9EbxItLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlRhc2tUb1RvRG9SZXF1ZXN0Gi4ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVGFza1RvVG9Eb1Jlc3BvbnNlIgASfwoQVGFza1RvSW5Qcm9ncmVzcxIzLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlRhc2tUb0luUHJvZ3Jlc3NSZXF1ZXN0GjQucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVGFza1RvSW5Qcm9ncmVzc1Jlc3BvbnNlIgASbQoKVGFza1RvRG9uZRItLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlRhc2tUb0RvbmVSZXF1ZXN0Gi4ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVGFza1RvRG9uZVJlc3BvbnNlIgASfwoQQXNzaWduVGFza1RvVXNlchIzLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkFzc2lnblRhc2tUb1VzZXJSZXF1ZXN0GjQucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuQXNzaWduVGFza1RvVXNlclJlc3BvbnNlIgASiwEKFFVuYXNzaWduVGFza0Zyb21Vc2VyEjcucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVW5hc3NpZ25UYXNrRnJvbVVzZXJSZXF1ZXN0GjgucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVW5hc3NpZ25UYXNrRnJvbVVzZXJSZXNwb25zZSIAEnAKC1B1Ymxpc2hUYXNrEi4ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuUHVibGlzaFRhc2tSZXF1ZXN0Gi8ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuUHVibGlzaFRhc2tSZXNwb25zZSIAEnYKDVVuUHVibGlzaFRhc2sSMC5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5VblB1Ymxpc2hUYXNrUmVxdWVzdBoxLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlVuUHVibGlzaFRhc2tSZXNwb25zZSIAEm0KCkRlbGV0ZVRhc2sSLS5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVUYXNrUmVxdWVzdBouLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkRlbGV0ZVRhc2tSZXNwb25zZSIA');

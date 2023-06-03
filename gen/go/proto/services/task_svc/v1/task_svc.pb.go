@@ -1511,7 +1511,7 @@ func (*PublishTaskResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_task_svc_v1_task_svc_proto_rawDescGZIP(), []int{29}
 }
 
-type UnpublishTaskRequest struct {
+type UnPublishTaskRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -1519,8 +1519,8 @@ type UnpublishTaskRequest struct {
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
-func (x *UnpublishTaskRequest) Reset() {
-	*x = UnpublishTaskRequest{}
+func (x *UnPublishTaskRequest) Reset() {
+	*x = UnPublishTaskRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_services_task_svc_v1_task_svc_proto_msgTypes[30]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1528,13 +1528,13 @@ func (x *UnpublishTaskRequest) Reset() {
 	}
 }
 
-func (x *UnpublishTaskRequest) String() string {
+func (x *UnPublishTaskRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UnpublishTaskRequest) ProtoMessage() {}
+func (*UnPublishTaskRequest) ProtoMessage() {}
 
-func (x *UnpublishTaskRequest) ProtoReflect() protoreflect.Message {
+func (x *UnPublishTaskRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_task_svc_v1_task_svc_proto_msgTypes[30]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1546,26 +1546,26 @@ func (x *UnpublishTaskRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UnpublishTaskRequest.ProtoReflect.Descriptor instead.
-func (*UnpublishTaskRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use UnPublishTaskRequest.ProtoReflect.Descriptor instead.
+func (*UnPublishTaskRequest) Descriptor() ([]byte, []int) {
 	return file_proto_services_task_svc_v1_task_svc_proto_rawDescGZIP(), []int{30}
 }
 
-func (x *UnpublishTaskRequest) GetId() string {
+func (x *UnPublishTaskRequest) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-type UnpublishTaskResponse struct {
+type UnPublishTaskResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *UnpublishTaskResponse) Reset() {
-	*x = UnpublishTaskResponse{}
+func (x *UnPublishTaskResponse) Reset() {
+	*x = UnPublishTaskResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_services_task_svc_v1_task_svc_proto_msgTypes[31]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1573,13 +1573,13 @@ func (x *UnpublishTaskResponse) Reset() {
 	}
 }
 
-func (x *UnpublishTaskResponse) String() string {
+func (x *UnPublishTaskResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UnpublishTaskResponse) ProtoMessage() {}
+func (*UnPublishTaskResponse) ProtoMessage() {}
 
-func (x *UnpublishTaskResponse) ProtoReflect() protoreflect.Message {
+func (x *UnPublishTaskResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_services_task_svc_v1_task_svc_proto_msgTypes[31]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1591,8 +1591,8 @@ func (x *UnpublishTaskResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UnpublishTaskResponse.ProtoReflect.Descriptor instead.
-func (*UnpublishTaskResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use UnPublishTaskResponse.ProtoReflect.Descriptor instead.
+func (*UnPublishTaskResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_task_svc_v1_task_svc_proto_rawDescGZIP(), []int{31}
 }
 
@@ -2054,9 +2054,9 @@ var file_proto_services_task_svc_v1_task_svc_proto_rawDesc = []byte{
 	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x15, 0x0a, 0x13, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68,
 	0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x26, 0x0a, 0x14,
-	0x55, 0x6e, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71,
+	0x55, 0x6e, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71,
 	0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x02, 0x69, 0x64, 0x22, 0x17, 0x0a, 0x15, 0x55, 0x6e, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73,
+	0x52, 0x02, 0x69, 0x64, 0x22, 0x17, 0x0a, 0x15, 0x55, 0x6e, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73,
 	0x68, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x23, 0x0a,
 	0x11, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65,
 	0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02,
@@ -2181,13 +2181,13 @@ var file_proto_services_task_svc_v1_task_svc_proto_rawDesc = []byte{
 	0x74, 0x1a, 0x2f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
 	0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x50,
 	0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x00, 0x12, 0x76, 0x0a, 0x0d, 0x55, 0x6e, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73,
+	0x73, 0x65, 0x22, 0x00, 0x12, 0x76, 0x0a, 0x0d, 0x55, 0x6e, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73,
 	0x68, 0x54, 0x61, 0x73, 0x6b, 0x12, 0x30, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65,
 	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e,
-	0x76, 0x31, 0x2e, 0x55, 0x6e, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x54, 0x61, 0x73, 0x6b,
+	0x76, 0x31, 0x2e, 0x55, 0x6e, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x54, 0x61, 0x73, 0x6b,
 	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e,
 	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76,
-	0x63, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x54, 0x61,
+	0x63, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x54, 0x61,
 	0x73, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x6d, 0x0a, 0x0a,
 	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x54, 0x61, 0x73, 0x6b, 0x12, 0x2d, 0x2e, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b,
@@ -2258,8 +2258,8 @@ var file_proto_services_task_svc_v1_task_svc_proto_goTypes = []interface{}{
 	(*UnassignTaskFromUserResponse)(nil),           // 28: proto.services.task_svc.v1.UnassignTaskFromUserResponse
 	(*PublishTaskRequest)(nil),                     // 29: proto.services.task_svc.v1.PublishTaskRequest
 	(*PublishTaskResponse)(nil),                    // 30: proto.services.task_svc.v1.PublishTaskResponse
-	(*UnpublishTaskRequest)(nil),                   // 31: proto.services.task_svc.v1.UnpublishTaskRequest
-	(*UnpublishTaskResponse)(nil),                  // 32: proto.services.task_svc.v1.UnpublishTaskResponse
+	(*UnPublishTaskRequest)(nil),                   // 31: proto.services.task_svc.v1.UnPublishTaskRequest
+	(*UnPublishTaskResponse)(nil),                  // 32: proto.services.task_svc.v1.UnPublishTaskResponse
 	(*DeleteTaskRequest)(nil),                      // 33: proto.services.task_svc.v1.DeleteTaskRequest
 	(*DeleteTaskResponse)(nil),                     // 34: proto.services.task_svc.v1.DeleteTaskResponse
 	(*GetTaskResponse_SubTask)(nil),                // 35: proto.services.task_svc.v1.GetTaskResponse.SubTask
@@ -2287,7 +2287,7 @@ var file_proto_services_task_svc_v1_task_svc_proto_depIdxs = []int32{
 	25, // 17: proto.services.task_svc.v1.TaskService.AssignTaskToUser:input_type -> proto.services.task_svc.v1.AssignTaskToUserRequest
 	27, // 18: proto.services.task_svc.v1.TaskService.UnassignTaskFromUser:input_type -> proto.services.task_svc.v1.UnassignTaskFromUserRequest
 	29, // 19: proto.services.task_svc.v1.TaskService.PublishTask:input_type -> proto.services.task_svc.v1.PublishTaskRequest
-	31, // 20: proto.services.task_svc.v1.TaskService.UnpublishTask:input_type -> proto.services.task_svc.v1.UnpublishTaskRequest
+	31, // 20: proto.services.task_svc.v1.TaskService.UnPublishTask:input_type -> proto.services.task_svc.v1.UnPublishTaskRequest
 	33, // 21: proto.services.task_svc.v1.TaskService.DeleteTask:input_type -> proto.services.task_svc.v1.DeleteTaskRequest
 	2,  // 22: proto.services.task_svc.v1.TaskService.CreateTask:output_type -> proto.services.task_svc.v1.CreateTaskResponse
 	4,  // 23: proto.services.task_svc.v1.TaskService.GetTask:output_type -> proto.services.task_svc.v1.GetTaskResponse
@@ -2304,7 +2304,7 @@ var file_proto_services_task_svc_v1_task_svc_proto_depIdxs = []int32{
 	26, // 34: proto.services.task_svc.v1.TaskService.AssignTaskToUser:output_type -> proto.services.task_svc.v1.AssignTaskToUserResponse
 	28, // 35: proto.services.task_svc.v1.TaskService.UnassignTaskFromUser:output_type -> proto.services.task_svc.v1.UnassignTaskFromUserResponse
 	30, // 36: proto.services.task_svc.v1.TaskService.PublishTask:output_type -> proto.services.task_svc.v1.PublishTaskResponse
-	32, // 37: proto.services.task_svc.v1.TaskService.UnpublishTask:output_type -> proto.services.task_svc.v1.UnpublishTaskResponse
+	32, // 37: proto.services.task_svc.v1.TaskService.UnPublishTask:output_type -> proto.services.task_svc.v1.UnPublishTaskResponse
 	34, // 38: proto.services.task_svc.v1.TaskService.DeleteTask:output_type -> proto.services.task_svc.v1.DeleteTaskResponse
 	22, // [22:39] is the sub-list for method output_type
 	5,  // [5:22] is the sub-list for method input_type
@@ -2680,7 +2680,7 @@ func file_proto_services_task_svc_v1_task_svc_proto_init() {
 			}
 		}
 		file_proto_services_task_svc_v1_task_svc_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UnpublishTaskRequest); i {
+			switch v := v.(*UnPublishTaskRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2692,7 +2692,7 @@ func file_proto_services_task_svc_v1_task_svc_proto_init() {
 			}
 		}
 		file_proto_services_task_svc_v1_task_svc_proto_msgTypes[31].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UnpublishTaskResponse); i {
+			switch v := v.(*UnPublishTaskResponse); i {
 			case 0:
 				return &v.state
 			case 1:

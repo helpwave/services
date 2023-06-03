@@ -34,7 +34,7 @@ const (
 	TaskService_AssignTaskToUser_FullMethodName     = "/proto.services.task_svc.v1.TaskService/AssignTaskToUser"
 	TaskService_UnassignTaskFromUser_FullMethodName = "/proto.services.task_svc.v1.TaskService/UnassignTaskFromUser"
 	TaskService_PublishTask_FullMethodName          = "/proto.services.task_svc.v1.TaskService/PublishTask"
-	TaskService_UnpublishTask_FullMethodName        = "/proto.services.task_svc.v1.TaskService/UnpublishTask"
+	TaskService_UnPublishTask_FullMethodName        = "/proto.services.task_svc.v1.TaskService/UnPublishTask"
 	TaskService_DeleteTask_FullMethodName           = "/proto.services.task_svc.v1.TaskService/DeleteTask"
 )
 
@@ -57,7 +57,7 @@ type TaskServiceClient interface {
 	AssignTaskToUser(ctx context.Context, in *AssignTaskToUserRequest, opts ...grpc.CallOption) (*AssignTaskToUserResponse, error)
 	UnassignTaskFromUser(ctx context.Context, in *UnassignTaskFromUserRequest, opts ...grpc.CallOption) (*UnassignTaskFromUserResponse, error)
 	PublishTask(ctx context.Context, in *PublishTaskRequest, opts ...grpc.CallOption) (*PublishTaskResponse, error)
-	UnpublishTask(ctx context.Context, in *UnpublishTaskRequest, opts ...grpc.CallOption) (*UnpublishTaskResponse, error)
+	UnPublishTask(ctx context.Context, in *UnPublishTaskRequest, opts ...grpc.CallOption) (*UnPublishTaskResponse, error)
 	DeleteTask(ctx context.Context, in *DeleteTaskRequest, opts ...grpc.CallOption) (*DeleteTaskResponse, error)
 }
 
@@ -204,9 +204,9 @@ func (c *taskServiceClient) PublishTask(ctx context.Context, in *PublishTaskRequ
 	return out, nil
 }
 
-func (c *taskServiceClient) UnpublishTask(ctx context.Context, in *UnpublishTaskRequest, opts ...grpc.CallOption) (*UnpublishTaskResponse, error) {
-	out := new(UnpublishTaskResponse)
-	err := c.cc.Invoke(ctx, TaskService_UnpublishTask_FullMethodName, in, out, opts...)
+func (c *taskServiceClient) UnPublishTask(ctx context.Context, in *UnPublishTaskRequest, opts ...grpc.CallOption) (*UnPublishTaskResponse, error) {
+	out := new(UnPublishTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_UnPublishTask_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -241,7 +241,7 @@ type TaskServiceServer interface {
 	AssignTaskToUser(context.Context, *AssignTaskToUserRequest) (*AssignTaskToUserResponse, error)
 	UnassignTaskFromUser(context.Context, *UnassignTaskFromUserRequest) (*UnassignTaskFromUserResponse, error)
 	PublishTask(context.Context, *PublishTaskRequest) (*PublishTaskResponse, error)
-	UnpublishTask(context.Context, *UnpublishTaskRequest) (*UnpublishTaskResponse, error)
+	UnPublishTask(context.Context, *UnPublishTaskRequest) (*UnPublishTaskResponse, error)
 	DeleteTask(context.Context, *DeleteTaskRequest) (*DeleteTaskResponse, error)
 	mustEmbedUnimplementedTaskServiceServer()
 }
@@ -295,8 +295,8 @@ func (UnimplementedTaskServiceServer) UnassignTaskFromUser(context.Context, *Una
 func (UnimplementedTaskServiceServer) PublishTask(context.Context, *PublishTaskRequest) (*PublishTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PublishTask not implemented")
 }
-func (UnimplementedTaskServiceServer) UnpublishTask(context.Context, *UnpublishTaskRequest) (*UnpublishTaskResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UnpublishTask not implemented")
+func (UnimplementedTaskServiceServer) UnPublishTask(context.Context, *UnPublishTaskRequest) (*UnPublishTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnPublishTask not implemented")
 }
 func (UnimplementedTaskServiceServer) DeleteTask(context.Context, *DeleteTaskRequest) (*DeleteTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTask not implemented")
@@ -584,20 +584,20 @@ func _TaskService_PublishTask_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TaskService_UnpublishTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UnpublishTaskRequest)
+func _TaskService_UnPublishTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnPublishTaskRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TaskServiceServer).UnpublishTask(ctx, in)
+		return srv.(TaskServiceServer).UnPublishTask(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TaskService_UnpublishTask_FullMethodName,
+		FullMethod: TaskService_UnPublishTask_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServiceServer).UnpublishTask(ctx, req.(*UnpublishTaskRequest))
+		return srv.(TaskServiceServer).UnPublishTask(ctx, req.(*UnPublishTaskRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -688,8 +688,8 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TaskService_PublishTask_Handler,
 		},
 		{
-			MethodName: "UnpublishTask",
-			Handler:    _TaskService_UnpublishTask_Handler,
+			MethodName: "UnPublishTask",
+			Handler:    _TaskService_UnPublishTask_Handler,
 		},
 		{
 			MethodName: "DeleteTask",

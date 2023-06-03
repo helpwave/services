@@ -995,61 +995,61 @@ proto.proto.services.task_svc.v1.TaskServicePromiseClient.prototype.publishTask 
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.task_svc.v1.UnpublishTaskRequest,
- *   !proto.proto.services.task_svc.v1.UnpublishTaskResponse>}
+ *   !proto.proto.services.task_svc.v1.UnPublishTaskRequest,
+ *   !proto.proto.services.task_svc.v1.UnPublishTaskResponse>}
  */
-const methodDescriptor_TaskService_UnpublishTask = new grpc.web.MethodDescriptor(
-  '/proto.services.task_svc.v1.TaskService/UnpublishTask',
+const methodDescriptor_TaskService_UnPublishTask = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.TaskService/UnPublishTask',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.task_svc.v1.UnpublishTaskRequest,
-  proto.proto.services.task_svc.v1.UnpublishTaskResponse,
+  proto.proto.services.task_svc.v1.UnPublishTaskRequest,
+  proto.proto.services.task_svc.v1.UnPublishTaskResponse,
   /**
-   * @param {!proto.proto.services.task_svc.v1.UnpublishTaskRequest} request
+   * @param {!proto.proto.services.task_svc.v1.UnPublishTaskRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.task_svc.v1.UnpublishTaskResponse.deserializeBinary
+  proto.proto.services.task_svc.v1.UnPublishTaskResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.task_svc.v1.UnpublishTaskRequest} request The
+ * @param {!proto.proto.services.task_svc.v1.UnPublishTaskRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.UnpublishTaskResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.UnPublishTaskResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.UnpublishTaskResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.UnPublishTaskResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.task_svc.v1.TaskServiceClient.prototype.unpublishTask =
+proto.proto.services.task_svc.v1.TaskServiceClient.prototype.unPublishTask =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.task_svc.v1.TaskService/UnpublishTask',
+      '/proto.services.task_svc.v1.TaskService/UnPublishTask',
       request,
       metadata || {},
-      methodDescriptor_TaskService_UnpublishTask,
+      methodDescriptor_TaskService_UnPublishTask,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.task_svc.v1.UnpublishTaskRequest} request The
+ * @param {!proto.proto.services.task_svc.v1.UnPublishTaskRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.task_svc.v1.UnpublishTaskResponse>}
+ * @return {!Promise<!proto.proto.services.task_svc.v1.UnPublishTaskResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.task_svc.v1.TaskServicePromiseClient.prototype.unpublishTask =
+proto.proto.services.task_svc.v1.TaskServicePromiseClient.prototype.unPublishTask =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.task_svc.v1.TaskService/UnpublishTask',
+      '/proto.services.task_svc.v1.TaskService/UnPublishTask',
       request,
       metadata || {},
-      methodDescriptor_TaskService_UnpublishTask);
+      methodDescriptor_TaskService_UnPublishTask);
 };
 
 

@@ -1727,14 +1727,14 @@ class PublishTaskResponse extends $pb.GeneratedMessage {
   static PublishTaskResponse? _defaultInstance;
 }
 
-class UnpublishTaskRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UnpublishTaskRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+class UnPublishTaskRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UnPublishTaskRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
-  UnpublishTaskRequest._() : super();
-  factory UnpublishTaskRequest({
+  UnPublishTaskRequest._() : super();
+  factory UnPublishTaskRequest({
     $core.String? id,
   }) {
     final _result = create();
@@ -1743,26 +1743,26 @@ class UnpublishTaskRequest extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory UnpublishTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UnpublishTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory UnPublishTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UnPublishTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  UnpublishTaskRequest clone() => UnpublishTaskRequest()..mergeFromMessage(this);
+  UnPublishTaskRequest clone() => UnPublishTaskRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  UnpublishTaskRequest copyWith(void Function(UnpublishTaskRequest) updates) => super.copyWith((message) => updates(message as UnpublishTaskRequest)) as UnpublishTaskRequest; // ignore: deprecated_member_use
+  UnPublishTaskRequest copyWith(void Function(UnPublishTaskRequest) updates) => super.copyWith((message) => updates(message as UnPublishTaskRequest)) as UnPublishTaskRequest; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static UnpublishTaskRequest create() => UnpublishTaskRequest._();
-  UnpublishTaskRequest createEmptyInstance() => create();
-  static $pb.PbList<UnpublishTaskRequest> createRepeated() => $pb.PbList<UnpublishTaskRequest>();
+  static UnPublishTaskRequest create() => UnPublishTaskRequest._();
+  UnPublishTaskRequest createEmptyInstance() => create();
+  static $pb.PbList<UnPublishTaskRequest> createRepeated() => $pb.PbList<UnPublishTaskRequest>();
   @$core.pragma('dart2js:noInline')
-  static UnpublishTaskRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UnpublishTaskRequest>(create);
-  static UnpublishTaskRequest? _defaultInstance;
+  static UnPublishTaskRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UnPublishTaskRequest>(create);
+  static UnPublishTaskRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
@@ -1774,33 +1774,33 @@ class UnpublishTaskRequest extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 }
 
-class UnpublishTaskResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UnpublishTaskResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+class UnPublishTaskResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UnPublishTaskResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
-  UnpublishTaskResponse._() : super();
-  factory UnpublishTaskResponse() => create();
-  factory UnpublishTaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UnpublishTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  UnPublishTaskResponse._() : super();
+  factory UnPublishTaskResponse() => create();
+  factory UnPublishTaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UnPublishTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  UnpublishTaskResponse clone() => UnpublishTaskResponse()..mergeFromMessage(this);
+  UnPublishTaskResponse clone() => UnPublishTaskResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  UnpublishTaskResponse copyWith(void Function(UnpublishTaskResponse) updates) => super.copyWith((message) => updates(message as UnpublishTaskResponse)) as UnpublishTaskResponse; // ignore: deprecated_member_use
+  UnPublishTaskResponse copyWith(void Function(UnPublishTaskResponse) updates) => super.copyWith((message) => updates(message as UnPublishTaskResponse)) as UnPublishTaskResponse; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static UnpublishTaskResponse create() => UnpublishTaskResponse._();
-  UnpublishTaskResponse createEmptyInstance() => create();
-  static $pb.PbList<UnpublishTaskResponse> createRepeated() => $pb.PbList<UnpublishTaskResponse>();
+  static UnPublishTaskResponse create() => UnPublishTaskResponse._();
+  UnPublishTaskResponse createEmptyInstance() => create();
+  static $pb.PbList<UnPublishTaskResponse> createRepeated() => $pb.PbList<UnPublishTaskResponse>();
   @$core.pragma('dart2js:noInline')
-  static UnpublishTaskResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UnpublishTaskResponse>(create);
-  static UnpublishTaskResponse? _defaultInstance;
+  static UnPublishTaskResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UnPublishTaskResponse>(create);
+  static UnPublishTaskResponse? _defaultInstance;
 }
 
 class DeleteTaskRequest extends $pb.GeneratedMessage {
@@ -1943,9 +1943,9 @@ class TaskServiceApi {
     var emptyResponse = PublishTaskResponse();
     return _client.invoke<PublishTaskResponse>(ctx, 'TaskService', 'PublishTask', request, emptyResponse);
   }
-  $async.Future<UnpublishTaskResponse> unpublishTask($pb.ClientContext? ctx, UnpublishTaskRequest request) {
-    var emptyResponse = UnpublishTaskResponse();
-    return _client.invoke<UnpublishTaskResponse>(ctx, 'TaskService', 'UnpublishTask', request, emptyResponse);
+  $async.Future<UnPublishTaskResponse> unPublishTask($pb.ClientContext? ctx, UnPublishTaskRequest request) {
+    var emptyResponse = UnPublishTaskResponse();
+    return _client.invoke<UnPublishTaskResponse>(ctx, 'TaskService', 'UnPublishTask', request, emptyResponse);
   }
   $async.Future<DeleteTaskResponse> deleteTask($pb.ClientContext? ctx, DeleteTaskRequest request) {
     var emptyResponse = DeleteTaskResponse();

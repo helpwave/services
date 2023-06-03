@@ -113,12 +113,12 @@ export class TaskServiceClient {
                response: proto_services_task_svc_v1_task_svc_pb.PublishTaskResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_svc_pb.PublishTaskResponse>;
 
-  unpublishTask(
-    request: proto_services_task_svc_v1_task_svc_pb.UnpublishTaskRequest,
+  unPublishTask(
+    request: proto_services_task_svc_v1_task_svc_pb.UnPublishTaskRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: proto_services_task_svc_v1_task_svc_pb.UnpublishTaskResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_svc_pb.UnpublishTaskResponse>;
+               response: proto_services_task_svc_v1_task_svc_pb.UnPublishTaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_svc_pb.UnPublishTaskResponse>;
 
   deleteTask(
     request: proto_services_task_svc_v1_task_svc_pb.DeleteTaskRequest,
@@ -209,10 +209,10 @@ export class TaskServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_task_svc_pb.PublishTaskResponse>;
 
-  unpublishTask(
-    request: proto_services_task_svc_v1_task_svc_pb.UnpublishTaskRequest,
+  unPublishTask(
+    request: proto_services_task_svc_v1_task_svc_pb.UnPublishTaskRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_task_svc_v1_task_svc_pb.UnpublishTaskResponse>;
+  ): Promise<proto_services_task_svc_v1_task_svc_pb.UnPublishTaskResponse>;
 
   deleteTask(
     request: proto_services_task_svc_v1_task_svc_pb.DeleteTaskRequest,

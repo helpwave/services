@@ -31,7 +31,7 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
   $async.Future<$5.AssignTaskToUserResponse> assignTaskToUser($pb.ServerContext ctx, $5.AssignTaskToUserRequest request);
   $async.Future<$5.UnassignTaskFromUserResponse> unassignTaskFromUser($pb.ServerContext ctx, $5.UnassignTaskFromUserRequest request);
   $async.Future<$5.PublishTaskResponse> publishTask($pb.ServerContext ctx, $5.PublishTaskRequest request);
-  $async.Future<$5.UnpublishTaskResponse> unpublishTask($pb.ServerContext ctx, $5.UnpublishTaskRequest request);
+  $async.Future<$5.UnPublishTaskResponse> unPublishTask($pb.ServerContext ctx, $5.UnPublishTaskRequest request);
   $async.Future<$5.DeleteTaskResponse> deleteTask($pb.ServerContext ctx, $5.DeleteTaskRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
@@ -51,7 +51,7 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
       case 'AssignTaskToUser': return $5.AssignTaskToUserRequest();
       case 'UnassignTaskFromUser': return $5.UnassignTaskFromUserRequest();
       case 'PublishTask': return $5.PublishTaskRequest();
-      case 'UnpublishTask': return $5.UnpublishTaskRequest();
+      case 'UnPublishTask': return $5.UnPublishTaskRequest();
       case 'DeleteTask': return $5.DeleteTaskRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
@@ -74,7 +74,7 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
       case 'AssignTaskToUser': return this.assignTaskToUser(ctx, request as $5.AssignTaskToUserRequest);
       case 'UnassignTaskFromUser': return this.unassignTaskFromUser(ctx, request as $5.UnassignTaskFromUserRequest);
       case 'PublishTask': return this.publishTask(ctx, request as $5.PublishTaskRequest);
-      case 'UnpublishTask': return this.unpublishTask(ctx, request as $5.UnpublishTaskRequest);
+      case 'UnPublishTask': return this.unPublishTask(ctx, request as $5.UnPublishTaskRequest);
       case 'DeleteTask': return this.deleteTask(ctx, request as $5.DeleteTaskRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
