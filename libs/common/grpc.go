@@ -3,7 +3,6 @@ package common
 import (
 	"context"
 	"encoding/base64"
-	"errors"
 	"github.com/dapr/go-sdk/dapr/proto/runtime/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/google/uuid"
@@ -136,7 +135,7 @@ func handleOrganizationIDForAuthFunc(ctx context.Context) (context.Context, erro
 
 	if !hwutil.Contains(claims.Organizations, organizationID) {
 		zlog.Ctx(ctx).Info().Str("organizationID", organizationID.String()).Msg("organization in header was not part of claims")
-		return nil, errors.New("no access to this organization")
+		return nil, status.Errorf(codes.Unauthenticated, "no access to this organization")
 	}
 
 	ctx = context.WithValue(ctx, organizationIDKey{}, organizationID)
@@ -192,7 +191,7 @@ func GetUserID(ctx context.Context) (uuid.UUID, error) {
 func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
 	res, ok := ctx.Value(organizationIDKey{}).(uuid.UUID)
 	if !ok {
-		return uuid.UUID{}, status.Error(codes.Unauthenticated, "organizationID not in context, set up auth")
+		return uuid.UUID{}, status.Error(codes.Internal, "organizationID not in context, set up auth")
 	} else {
 		return res, nil
 	}
