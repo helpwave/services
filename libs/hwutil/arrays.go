@@ -7,3 +7,12 @@ func Map[K any, V any](vs []K, f func(K) V) []V {
 	}
 	return vsm
 }
+
+func Contains[K comparable](vs []K, f K) bool {
+	for _, v := range vs {
+		if v == f {
+			return true
+		}
+	}
+	return false
+}
