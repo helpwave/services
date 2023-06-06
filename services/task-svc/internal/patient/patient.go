@@ -19,10 +19,10 @@ type Base struct {
 
 type Patient struct {
 	Base
-	ID             uuid.UUID `gorm:"column:id"`
-	Notes          string    `gorm:"column:notes"`
-	OrganizationID uuid.UUID `gorm:"column:organization_id"`
-	BedID          uuid.UUID `gorm:"column:bed_id"`
+	ID             uuid.UUID   `gorm:"column:id"`
+	Notes          string      `gorm:"column:notes"`
+	OrganizationID uuid.UUID   `gorm:"column:organization_id"`
+	Bed            *models.Bed `gorm:"foreignKey:ID"`
 }
 
 type ServiceServer struct {
@@ -49,6 +49,7 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientReq
 			HumanReadableIdentifier: req.HumanReadableIdentifier,
 		},
 		OrganizationID: organizationID,
+		Bed:            nil,
 	}
 
 	if err := db.Create(&patient).Error; err != nil {
@@ -86,12 +87,16 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 		}
 	}
 
-	bedID := patient.BedID.String()
+	var bedIdRef *string = nil
+	if patient.Bed != nil {
+		var bedId = patient.Bed.ID.String()
+		bedIdRef = &bedId
+	}
 	return &pb.GetPatientResponse{
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
-		BedId:                   &bedID,
+		BedId:                   bedIdRef,
 	}, nil
 }
 
@@ -147,12 +152,16 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 
 	return &pb.GetPatientsByWardResponse{
 		Patients: hwutil.Map(patients, func(patient Patient) *pb.GetPatientsByWardResponse_Patient {
-			bedID := patient.BedID.String()
+			var bedIDRef *string = nil
+			if patient.Bed != nil {
+				var bedId = patient.Bed.ID.String()
+				bedIDRef = &bedId
+			}
 			return &pb.GetPatientsByWardResponse_Patient{
 				Id:                      patient.ID.String(),
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
 				Notes:                   patient.Notes,
-				BedId:                   &bedID,
+				BedId:                   bedIDRef,
 			}
 		}),
 	}, nil
@@ -197,7 +206,9 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 	}
 
 	// Check whether bed exits
-	if err := db.Model(models.Bed{ID: bedID}).Error; err != nil {
+	// TODO fix this, it is using the wrong database (patient) not bed
+	bed := models.Bed{ID: bedID}
+	if err := db.Model(&bed).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
@@ -207,12 +218,12 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 	}
 
 	patient := Patient{ID: id}
-	if err := db.Model(&patient).Update("bed_id", bedID).Error; err != nil {
+	if err := db.Model(&patient).Update("bed_id", bed).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
+			return nil, status.Error(codes.InvalidArgument, "patient id not found")
 		}
 	}
 
