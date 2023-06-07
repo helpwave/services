@@ -26,12 +26,15 @@ The claims are defined [here](libs/common/auth.go#L37).
 
 Here is an example fake-token that can be used as the bearer authorization token.
 ```
-eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSJ9
+eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19
 ---
 # decoded
 {
   "sub": "18159713-5d4e-4ad5-94ad-fbb6bb147984",
-  "email": "testine.test@helpwave.de"
+  "email": "testine.test@helpwave.de",
+  "organizations": [
+  	"3b25c6f5-4705-4074-9fc6-a50c28eba406"
+  ]
 }
 ````
 
