@@ -1,4 +1,4 @@
-CREATE TYPE state AS ENUM ('accepted', 'rejected', 'pending');
+CREATE TYPE invitation_state AS ENUM ('accepted', 'rejected', 'pending');
 
 CREATE TABLE IF NOT EXISTS invitations  (
 	id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),

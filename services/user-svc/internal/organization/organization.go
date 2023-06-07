@@ -17,12 +17,12 @@ import (
 	"hwgorm"
 )
 
-type State string
+type InvitationState string
 
 const (
-	Accepted State = "accepted"
-	rejected State = "rejected"
-	Pending  State = "pending"
+	Accepted InvitationState = "accepted"
+	rejected InvitationState = "rejected"
+	Pending  InvitationState = "pending"
 )
 
 type Base struct {
@@ -38,7 +38,7 @@ type Organization struct {
 	ID              uuid.UUID    `gorm:"column:id"`
 	CreatedByUserId uuid.UUID    `gorm:"column:created_by_user_id"`
 	Members         []Member     `gorm:"foreignKey:OrganizationID"`
-	Invitations     []Invitation `gorm:"foreignKey:OrganizationId"`
+	Invitations     []Invitation `gorm:"foreignKey:OrganizationID"`
 }
 
 type Member struct {
@@ -48,10 +48,10 @@ type Member struct {
 }
 
 type Invitation struct {
-	ID             uuid.UUID `gorm:"column:id"`
-	OrganizationId uuid.UUID `gorm:"column:organization_id"`
-	Email          string    `gorm:"column:email"`
-	State          State     `gorm:"column:state"`
+	ID             uuid.UUID       `gorm:"column:id"`
+	OrganizationID uuid.UUID       `gorm:"column:organization_id"`
+	Email          string          `gorm:"column:email"`
+	State          InvitationState `gorm:"column:state"`
 }
 
 var UserCreatedEventSubscription = &daprcmn.Subscription{
@@ -195,7 +195,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 
 	invite := Invitation{
 		Email:          req.Email,
-		OrganizationId: organizationId,
+		OrganizationID: organizationId,
 		State:          Pending,
 	}
 
@@ -213,6 +213,11 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
+
+	log.Info().
+		Str("E-mail", req.Email).
+		Str("organizationId", organizationId.String()).
+		Msg("invitation created for user")
 
 	return &pb.InviteMemberResponse{}, nil
 }
