@@ -22,7 +22,8 @@ type Patient struct {
 	ID             uuid.UUID   `gorm:"column:id"`
 	Notes          string      `gorm:"column:notes"`
 	OrganizationID uuid.UUID   `gorm:"column:organization_id"`
-	Bed            *models.Bed `gorm:"foreignKey:ID"`
+	BedID          uuid.UUID   `gorm:"column:bed_id"`
+	Bed            *models.Bed `gorm:"foreignKey:BedID"`
 }
 
 type ServiceServer struct {
@@ -206,9 +207,8 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 	}
 
 	// Check whether bed exits
-	// TODO fix this, it is using the wrong database (patient) not bed
 	bed := models.Bed{ID: bedID}
-	if err := db.Model(&bed).Error; err != nil {
+	if err := db.First(&bed).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
@@ -218,7 +218,7 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 	}
 
 	patient := Patient{ID: id}
-	if err := db.Model(&patient).Update("bed_id", bed).Error; err != nil {
+	if err := db.Model(&patient).Update("bed_id", bed.ID).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())

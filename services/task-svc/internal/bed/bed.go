@@ -27,7 +27,7 @@ type Base struct {
 type Bed struct {
 	Base
 	ID             uuid.UUID `gorm:"column:id"`
-	OrganizationID uuid.UUID `gorm:"organization_id"`
+	OrganizationID uuid.UUID `gorm:"column:organization_id"`
 	RoomID         uuid.UUID `gorm:"column:room_id"`
 }
 

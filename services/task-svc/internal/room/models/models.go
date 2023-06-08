@@ -15,6 +15,7 @@ type Room struct {
 
 type Bed struct {
 	ID             uuid.UUID `gorm:"column:id"`
-	RoomID         *Room     `gorm:"foreignKey:ID"`
+	RoomID         uuid.UUID `gorm:"column:room_id"`
+	Room           *Room     `gorm:"foreignKey:ID"`
 	OrganizationID uuid.UUID `gorm:"column:organization_id"`
 }
