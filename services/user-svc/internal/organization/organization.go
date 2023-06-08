@@ -21,7 +21,7 @@ type InvitationState string
 
 const (
 	Accepted InvitationState = "accepted"
-	rejected InvitationState = "rejected"
+	Rejected InvitationState = "rejected"
 	Pending  InvitationState = "pending"
 )
 
