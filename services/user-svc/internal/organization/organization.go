@@ -38,6 +38,13 @@ type Member struct {
 	OrganizationID uuid.UUID `gorm:"column:organization_id"`
 }
 
+type Membership struct {
+	ID             uuid.UUID    `gorm:"primaryKey,column:id"`
+	UserID         uuid.UUID    `gorm:"column:user_id"`
+	OrganizationID Organization `gorm:"foreignKey:ID"`
+	IsAdmin        bool         `gorm:"column:is_admin;default:False"`
+}
+
 var UserCreatedEventSubscription = &daprcmn.Subscription{
 	PubsubName: "pubsub",
 	Topic:      "USER_CREATED",
