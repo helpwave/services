@@ -19,6 +19,7 @@ type Patient struct {
 	Base
 	ID             uuid.UUID `gorm:"column:id"`
 	OrganizationID uuid.UUID `gorm:"column:organization_id"`
+	IsDischarged   bool      `gorm:"column:is_discharged;default:False"`
 }
 
 type ServiceServer struct {
@@ -109,3 +110,5 @@ func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientReq
 
 	return &pb.UpdatePatientResponse{}, nil
 }
+
+// TODO wait for discharge method to be added and then change the discharge attribute there
