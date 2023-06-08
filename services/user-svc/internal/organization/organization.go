@@ -215,9 +215,9 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	}
 
 	log.Info().
-		Str("E-mail", req.Email).
+		Str("email", req.Email). // TODO: Revisited for privacy reasons
 		Str("organizationId", organizationId.String()).
-		Msg("invitation created for user")
+		Msg("user invited to organization")
 
 	return &pb.InviteMemberResponse{}, nil
 }
