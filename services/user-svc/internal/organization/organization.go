@@ -250,7 +250,7 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &pb.AcceptInviteResponse{}, nil
+	return &pb.AcceptInvitationResponse{}, nil
 }
 
 func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UUID) (*Organization, error) {
