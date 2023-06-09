@@ -626,5 +626,66 @@ proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.invi
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.AcceptInviteRequest,
+ *   !proto.proto.services.user_svc.v1.AcceptInviteResponse>}
+ */
+const methodDescriptor_OrganizationService_AcceptInvite = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/AcceptInvite',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.AcceptInviteRequest,
+  proto.proto.services.user_svc.v1.AcceptInviteResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.AcceptInviteRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.AcceptInviteResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.AcceptInviteRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.AcceptInviteResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.AcceptInviteResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.acceptInvite =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/AcceptInvite',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_AcceptInvite,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.AcceptInviteRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.AcceptInviteResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.acceptInvite =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/AcceptInvite',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_AcceptInvite);
+};
+
+
 module.exports = proto.proto.services.user_svc.v1;
 

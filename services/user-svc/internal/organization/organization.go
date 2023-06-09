@@ -222,6 +222,37 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	return &pb.InviteMemberResponse{}, nil
 }
 
+func (s ServiceServer) AcceptInvite(ctx context.Context, req *pb.AcceptInviteRequest) (*pb.AcceptInviteResponse, error) {
+	db := hwgorm.GetDB(ctx)
+	log := zlog.Ctx(ctx)
+
+	InvitationId, err := uuid.Parse(req.InvitationId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	invitation := Invitation{
+		ID: InvitationId,
+	}
+
+	// Check if invite exists
+	_, err = GetInvitationById(db, InvitationId)
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "invite not found")
+		}
+	}
+
+	if err := db.Model(&invitation).Update("state", Accepted).Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &pb.AcceptInviteResponse{}, nil
+}
+
 func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UUID) (*Organization, error) {
 	db := hwgorm.GetDB(ctx)
 
@@ -320,6 +351,18 @@ func GetOrganizationById(db *gorm.DB, id uuid.UUID) (*Organization, error) {
 	}
 
 	return &organization, nil
+}
+
+func GetInvitationById(db *gorm.DB, id uuid.UUID) (*Invitation, error) {
+	invite := Invitation{
+		ID: id,
+	}
+
+	if err := db.First(&invite).Error; err != nil {
+		return nil, err
+	}
+
+	return &invite, nil
 }
 
 func HandleUserCreatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry bool, err error) {

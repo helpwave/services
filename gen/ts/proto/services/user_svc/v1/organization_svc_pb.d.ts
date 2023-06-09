@@ -489,3 +489,35 @@ export namespace InviteMemberResponse {
   }
 }
 
+export class AcceptInviteRequest extends jspb.Message {
+  getInvitationId(): string;
+  setInvitationId(value: string): AcceptInviteRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AcceptInviteRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: AcceptInviteRequest): AcceptInviteRequest.AsObject;
+  static serializeBinaryToWriter(message: AcceptInviteRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AcceptInviteRequest;
+  static deserializeBinaryFromReader(message: AcceptInviteRequest, reader: jspb.BinaryReader): AcceptInviteRequest;
+}
+
+export namespace AcceptInviteRequest {
+  export type AsObject = {
+    invitationId: string,
+  }
+}
+
+export class AcceptInviteResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AcceptInviteResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: AcceptInviteResponse): AcceptInviteResponse.AsObject;
+  static serializeBinaryToWriter(message: AcceptInviteResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AcceptInviteResponse;
+  static deserializeBinaryFromReader(message: AcceptInviteResponse, reader: jspb.BinaryReader): AcceptInviteResponse;
+}
+
+export namespace AcceptInviteResponse {
+  export type AsObject = {
+  }
+}
+

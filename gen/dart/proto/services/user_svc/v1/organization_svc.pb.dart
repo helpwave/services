@@ -1226,6 +1226,82 @@ class InviteMemberResponse extends $pb.GeneratedMessage {
   static InviteMemberResponse? _defaultInstance;
 }
 
+class AcceptInviteRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AcceptInviteRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'invitationId')
+    ..hasRequiredFields = false
+  ;
+
+  AcceptInviteRequest._() : super();
+  factory AcceptInviteRequest({
+    $core.String? invitationId,
+  }) {
+    final _result = create();
+    if (invitationId != null) {
+      _result.invitationId = invitationId;
+    }
+    return _result;
+  }
+  factory AcceptInviteRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AcceptInviteRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AcceptInviteRequest clone() => AcceptInviteRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AcceptInviteRequest copyWith(void Function(AcceptInviteRequest) updates) => super.copyWith((message) => updates(message as AcceptInviteRequest)) as AcceptInviteRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static AcceptInviteRequest create() => AcceptInviteRequest._();
+  AcceptInviteRequest createEmptyInstance() => create();
+  static $pb.PbList<AcceptInviteRequest> createRepeated() => $pb.PbList<AcceptInviteRequest>();
+  @$core.pragma('dart2js:noInline')
+  static AcceptInviteRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AcceptInviteRequest>(create);
+  static AcceptInviteRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get invitationId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set invitationId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasInvitationId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearInvitationId() => clearField(1);
+}
+
+class AcceptInviteResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AcceptInviteResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  AcceptInviteResponse._() : super();
+  factory AcceptInviteResponse() => create();
+  factory AcceptInviteResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AcceptInviteResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AcceptInviteResponse clone() => AcceptInviteResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AcceptInviteResponse copyWith(void Function(AcceptInviteResponse) updates) => super.copyWith((message) => updates(message as AcceptInviteResponse)) as AcceptInviteResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static AcceptInviteResponse create() => AcceptInviteResponse._();
+  AcceptInviteResponse createEmptyInstance() => create();
+  static $pb.PbList<AcceptInviteResponse> createRepeated() => $pb.PbList<AcceptInviteResponse>();
+  @$core.pragma('dart2js:noInline')
+  static AcceptInviteResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AcceptInviteResponse>(create);
+  static AcceptInviteResponse? _defaultInstance;
+}
+
 class OrganizationServiceApi {
   $pb.RpcClient _client;
   OrganizationServiceApi(this._client);
@@ -1265,6 +1341,10 @@ class OrganizationServiceApi {
   $async.Future<InviteMemberResponse> inviteMember($pb.ClientContext? ctx, InviteMemberRequest request) {
     var emptyResponse = InviteMemberResponse();
     return _client.invoke<InviteMemberResponse>(ctx, 'OrganizationService', 'InviteMember', request, emptyResponse);
+  }
+  $async.Future<AcceptInviteResponse> acceptInvite($pb.ClientContext? ctx, AcceptInviteRequest request) {
+    var emptyResponse = AcceptInviteResponse();
+    return _client.invoke<AcceptInviteResponse>(ctx, 'OrganizationService', 'AcceptInvite', request, emptyResponse);
   }
 }
 
