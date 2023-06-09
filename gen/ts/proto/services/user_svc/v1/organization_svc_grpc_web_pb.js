@@ -629,33 +629,33 @@ proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.invi
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.user_svc.v1.AcceptInviteRequest,
- *   !proto.proto.services.user_svc.v1.AcceptInviteResponse>}
+ *   !proto.proto.services.user_svc.v1.AcceptInvitationRequest,
+ *   !proto.proto.services.user_svc.v1.AcceptInvitationResponse>}
  */
 const methodDescriptor_OrganizationService_AcceptInvitation = new grpc.web.MethodDescriptor(
   '/proto.services.user_svc.v1.OrganizationService/AcceptInvitation',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.user_svc.v1.AcceptInviteRequest,
-  proto.proto.services.user_svc.v1.AcceptInviteResponse,
+  proto.proto.services.user_svc.v1.AcceptInvitationRequest,
+  proto.proto.services.user_svc.v1.AcceptInvitationResponse,
   /**
-   * @param {!proto.proto.services.user_svc.v1.AcceptInviteRequest} request
+   * @param {!proto.proto.services.user_svc.v1.AcceptInvitationRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.user_svc.v1.AcceptInviteResponse.deserializeBinary
+  proto.proto.services.user_svc.v1.AcceptInvitationResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.user_svc.v1.AcceptInviteRequest} request The
+ * @param {!proto.proto.services.user_svc.v1.AcceptInvitationRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.AcceptInviteResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.AcceptInvitationResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.AcceptInviteResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.AcceptInvitationResponse>|undefined}
  *     The XHR Node Readable Stream
  */
 proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.acceptInvitation =
@@ -670,11 +670,11 @@ proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.acceptInvit
 
 
 /**
- * @param {!proto.proto.services.user_svc.v1.AcceptInviteRequest} request The
+ * @param {!proto.proto.services.user_svc.v1.AcceptInvitationRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.user_svc.v1.AcceptInviteResponse>}
+ * @return {!Promise<!proto.proto.services.user_svc.v1.AcceptInvitationResponse>}
  *     Promise that resolves to the response
  */
 proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.acceptInvitation =

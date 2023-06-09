@@ -140,11 +140,11 @@ message InviteMemberResponse {}
 //
 // AcceptInvite
 //
-message AcceptInviteRequest {
+message AcceptInvitationRequest {
   string invitation_id = 1;  // @gotags: validate:"uuid4"
 }
 
-message AcceptInviteResponse {}
+message AcceptInvitationResponse {}
 
 
 //
@@ -161,5 +161,5 @@ service OrganizationService {
   rpc AddMember (AddMemberRequest) returns (AddMemberResponse) {}
   rpc RemoveMember (RemoveMemberRequest) returns (RemoveMemberResponse) {}
   rpc InviteMember (InviteMemberRequest) returns (InviteMemberResponse) {}
-  rpc AcceptInvitation  (AcceptInviteRequest) returns (AcceptInviteResponse) {}
+  rpc AcceptInvitation  (AcceptInvitationRequest) returns (AcceptInvitationResponse) {}
 }

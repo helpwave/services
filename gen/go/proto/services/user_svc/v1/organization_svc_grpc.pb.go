@@ -44,7 +44,7 @@ type OrganizationServiceClient interface {
 	AddMember(ctx context.Context, in *AddMemberRequest, opts ...grpc.CallOption) (*AddMemberResponse, error)
 	RemoveMember(ctx context.Context, in *RemoveMemberRequest, opts ...grpc.CallOption) (*RemoveMemberResponse, error)
 	InviteMember(ctx context.Context, in *InviteMemberRequest, opts ...grpc.CallOption) (*InviteMemberResponse, error)
-	AcceptInvitation(ctx context.Context, in *AcceptInviteRequest, opts ...grpc.CallOption) (*AcceptInviteResponse, error)
+	AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*AcceptInvitationResponse, error)
 }
 
 type organizationServiceClient struct {
@@ -136,8 +136,8 @@ func (c *organizationServiceClient) InviteMember(ctx context.Context, in *Invite
 	return out, nil
 }
 
-func (c *organizationServiceClient) AcceptInvitation(ctx context.Context, in *AcceptInviteRequest, opts ...grpc.CallOption) (*AcceptInviteResponse, error) {
-	out := new(AcceptInviteResponse)
+func (c *organizationServiceClient) AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*AcceptInvitationResponse, error) {
+	out := new(AcceptInvitationResponse)
 	err := c.cc.Invoke(ctx, OrganizationService_AcceptInvitation_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -158,7 +158,7 @@ type OrganizationServiceServer interface {
 	AddMember(context.Context, *AddMemberRequest) (*AddMemberResponse, error)
 	RemoveMember(context.Context, *RemoveMemberRequest) (*RemoveMemberResponse, error)
 	InviteMember(context.Context, *InviteMemberRequest) (*InviteMemberResponse, error)
-	AcceptInvitation(context.Context, *AcceptInviteRequest) (*AcceptInviteResponse, error)
+	AcceptInvitation(context.Context, *AcceptInvitationRequest) (*AcceptInvitationResponse, error)
 	mustEmbedUnimplementedOrganizationServiceServer()
 }
 
@@ -193,7 +193,7 @@ func (UnimplementedOrganizationServiceServer) RemoveMember(context.Context, *Rem
 func (UnimplementedOrganizationServiceServer) InviteMember(context.Context, *InviteMemberRequest) (*InviteMemberResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InviteMember not implemented")
 }
-func (UnimplementedOrganizationServiceServer) AcceptInvitation(context.Context, *AcceptInviteRequest) (*AcceptInviteResponse, error) {
+func (UnimplementedOrganizationServiceServer) AcceptInvitation(context.Context, *AcceptInvitationRequest) (*AcceptInvitationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AcceptInvitation not implemented")
 }
 func (UnimplementedOrganizationServiceServer) mustEmbedUnimplementedOrganizationServiceServer() {}
@@ -372,7 +372,7 @@ func _OrganizationService_InviteMember_Handler(srv interface{}, ctx context.Cont
 }
 
 func _OrganizationService_AcceptInvitation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AcceptInviteRequest)
+	in := new(AcceptInvitationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -384,7 +384,7 @@ func _OrganizationService_AcceptInvitation_Handler(srv interface{}, ctx context.
 		FullMethod: OrganizationService_AcceptInvitation_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrganizationServiceServer).AcceptInvitation(ctx, req.(*AcceptInviteRequest))
+		return srv.(OrganizationServiceServer).AcceptInvitation(ctx, req.(*AcceptInvitationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
