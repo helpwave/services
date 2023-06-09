@@ -153,12 +153,13 @@ func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardR
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
+
 	wardId, err := uuid.Parse(req.WardId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	rooms := []models.Room{}
+	var rooms []models.Room
 	if err := db.Preload("Beds").Find(&rooms, "ward_id = ?", wardId).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -205,14 +206,7 @@ func (ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest) 
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	// Do we need to delete the beds when we delete room?
-
-	bed := models.Bed{RoomID: id}
-
-	if err := db.Delete(&bed).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
-		return nil, status.Error(codes.Internal, err.Error())
-	}
+	// TODO: Handle beds
 
 	return &pb.DeleteRoomResponse{}, nil
 }
