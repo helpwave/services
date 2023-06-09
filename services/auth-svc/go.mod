@@ -1,4 +1,4 @@
-module emergency-room-svc
+module auth-svc
 
 go 1.19
 
