@@ -632,8 +632,8 @@ proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.invi
  *   !proto.proto.services.user_svc.v1.AcceptInviteRequest,
  *   !proto.proto.services.user_svc.v1.AcceptInviteResponse>}
  */
-const methodDescriptor_OrganizationService_AcceptInvite = new grpc.web.MethodDescriptor(
-  '/proto.services.user_svc.v1.OrganizationService/AcceptInvite',
+const methodDescriptor_OrganizationService_AcceptInvitation = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/AcceptInvitation',
   grpc.web.MethodType.UNARY,
   proto.proto.services.user_svc.v1.AcceptInviteRequest,
   proto.proto.services.user_svc.v1.AcceptInviteResponse,
@@ -658,13 +658,13 @@ const methodDescriptor_OrganizationService_AcceptInvite = new grpc.web.MethodDes
  * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.AcceptInviteResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.acceptInvite =
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.acceptInvitation =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.user_svc.v1.OrganizationService/AcceptInvite',
+      '/proto.services.user_svc.v1.OrganizationService/AcceptInvitation',
       request,
       metadata || {},
-      methodDescriptor_OrganizationService_AcceptInvite,
+      methodDescriptor_OrganizationService_AcceptInvitation,
       callback);
 };
 
@@ -677,13 +677,13 @@ proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.acceptInvit
  * @return {!Promise<!proto.proto.services.user_svc.v1.AcceptInviteResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.acceptInvite =
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.acceptInvitation =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.user_svc.v1.OrganizationService/AcceptInvite',
+      '/proto.services.user_svc.v1.OrganizationService/AcceptInvitation',
       request,
       metadata || {},
-      methodDescriptor_OrganizationService_AcceptInvite);
+      methodDescriptor_OrganizationService_AcceptInvitation);
 };
 
 

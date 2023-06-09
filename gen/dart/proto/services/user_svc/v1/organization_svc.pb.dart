@@ -1342,9 +1342,9 @@ class OrganizationServiceApi {
     var emptyResponse = InviteMemberResponse();
     return _client.invoke<InviteMemberResponse>(ctx, 'OrganizationService', 'InviteMember', request, emptyResponse);
   }
-  $async.Future<AcceptInviteResponse> acceptInvite($pb.ClientContext? ctx, AcceptInviteRequest request) {
+  $async.Future<AcceptInviteResponse> acceptInvitation($pb.ClientContext? ctx, AcceptInviteRequest request) {
     var emptyResponse = AcceptInviteResponse();
-    return _client.invoke<AcceptInviteResponse>(ctx, 'OrganizationService', 'AcceptInvite', request, emptyResponse);
+    return _client.invoke<AcceptInviteResponse>(ctx, 'OrganizationService', 'AcceptInvitation', request, emptyResponse);
   }
 }
 

@@ -222,7 +222,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	return &pb.InviteMemberResponse{}, nil
 }
 
-func (s ServiceServer) AcceptInvite(ctx context.Context, req *pb.AcceptInviteRequest) (*pb.AcceptInviteResponse, error) {
+func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInviteRequest) (*pb.AcceptInviteResponse, error) {
 	db := hwgorm.GetDB(ctx)
 	log := zlog.Ctx(ctx)
 
