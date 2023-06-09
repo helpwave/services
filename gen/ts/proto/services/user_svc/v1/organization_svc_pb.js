@@ -3647,7 +3647,7 @@ proto.proto.services.user_svc.v1.InviteMemberRequest.prototype.toObject = functi
  */
 proto.proto.services.user_svc.v1.InviteMemberRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    organizationId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     email: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
@@ -3687,7 +3687,7 @@ proto.proto.services.user_svc.v1.InviteMemberRequest.deserializeBinaryFromReader
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setId(value);
+      msg.setOrganizationId(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
@@ -3722,7 +3722,7 @@ proto.proto.services.user_svc.v1.InviteMemberRequest.prototype.serializeBinary =
  */
 proto.proto.services.user_svc.v1.InviteMemberRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getOrganizationId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -3740,10 +3740,10 @@ proto.proto.services.user_svc.v1.InviteMemberRequest.serializeBinaryToWriter = f
 
 
 /**
- * optional string id = 1;
+ * optional string organization_id = 1;
  * @return {string}
  */
-proto.proto.services.user_svc.v1.InviteMemberRequest.prototype.getId = function() {
+proto.proto.services.user_svc.v1.InviteMemberRequest.prototype.getOrganizationId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -3752,7 +3752,7 @@ proto.proto.services.user_svc.v1.InviteMemberRequest.prototype.getId = function(
  * @param {string} value
  * @return {!proto.proto.services.user_svc.v1.InviteMemberRequest} returns this
  */
-proto.proto.services.user_svc.v1.InviteMemberRequest.prototype.setId = function(value) {
+proto.proto.services.user_svc.v1.InviteMemberRequest.prototype.setOrganizationId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 

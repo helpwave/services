@@ -454,8 +454,8 @@ export namespace RemoveMemberResponse {
 }
 
 export class InviteMemberRequest extends jspb.Message {
-  getId(): string;
-  setId(value: string): InviteMemberRequest;
+  getOrganizationId(): string;
+  setOrganizationId(value: string): InviteMemberRequest;
 
   getEmail(): string;
   setEmail(value: string): InviteMemberRequest;
@@ -470,7 +470,7 @@ export class InviteMemberRequest extends jspb.Message {
 
 export namespace InviteMemberRequest {
   export type AsObject = {
-    id: string,
+    organizationId: string,
     email: string,
   }
 }
