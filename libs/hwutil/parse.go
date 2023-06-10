@@ -64,3 +64,11 @@ func DerefStringOr(s *string, alternative string) string {
 		return *s
 	}
 }
+
+func UUIDToStringPtr(u *uuid.UUID) *string {
+	var s string
+	if u != nil {
+		s = u.String()
+	}
+	return &s
+}

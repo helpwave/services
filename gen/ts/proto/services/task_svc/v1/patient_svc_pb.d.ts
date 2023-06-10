@@ -239,6 +239,8 @@ export class UpdatePatientRequest extends jspb.Message {
 
   getNotes(): string;
   setNotes(value: string): UpdatePatientRequest;
+  hasNotes(): boolean;
+  clearNotes(): UpdatePatientRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdatePatientRequest.AsObject;
@@ -252,12 +254,17 @@ export namespace UpdatePatientRequest {
   export type AsObject = {
     id: string,
     humanReadableIdentifier?: string,
-    notes: string,
+    notes?: string,
   }
 
   export enum HumanReadableIdentifierCase { 
     _HUMAN_READABLE_IDENTIFIER_NOT_SET = 0,
     HUMAN_READABLE_IDENTIFIER = 2,
+  }
+
+  export enum NotesCase { 
+    _NOTES_NOT_SET = 0,
+    NOTES = 3,
   }
 }
 
