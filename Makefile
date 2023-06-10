@@ -11,7 +11,7 @@ ifeq ($(OS),Windows_NT)
     # Windows
     WORKING_DIRECTORY := $(shell cd)
 else
-    # Linux
+    # Unix
     WORKING_DIRECTORY := $$(pwd)
 endif
 
