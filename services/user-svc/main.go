@@ -16,7 +16,7 @@ const ServiceName = "user-svc"
 var Version string
 
 func main() {
-	common.Setup(ServiceName, Version, false) // TODO: enable auth when KC -> ory migration is done
+	common.Setup(ServiceName, Version, true)
 
 	hwgorm.SetupDatabase(
 		hwutil.GetEnvOr("POSTGRES_HOST", "localhost"),
