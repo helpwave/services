@@ -15,15 +15,14 @@ import (
 
 type Base struct {
 	HumanReadableIdentifier string `gorm:"column:human_readable_identifier"`
+	Notes                   string `gorm:"column:notes"`
 }
 
 type Patient struct {
 	Base
-	ID             uuid.UUID   `gorm:"column:id"`
-	Notes          string      `gorm:"column:notes"`
-	OrganizationID uuid.UUID   `gorm:"column:organization_id"`
-	BedID          uuid.UUID   `gorm:"column:bed_id"`
-	Bed            *models.Bed `gorm:"foreignKey:BedID"`
+	ID             uuid.UUID  `gorm:"column:id"`
+	OrganizationID uuid.UUID  `gorm:"column:organization_id"`
+	BedID          *uuid.UUID `gorm:"column:bed_id;default:NULL"`
 }
 
 type ServiceServer struct {
@@ -48,9 +47,9 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientReq
 	patient := Patient{
 		Base: Base{
 			HumanReadableIdentifier: req.HumanReadableIdentifier,
+			Notes:                   req.Notes,
 		},
 		OrganizationID: organizationID,
-		Bed:            nil,
 	}
 
 	if err := db.Create(&patient).Error; err != nil {
@@ -88,16 +87,11 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 		}
 	}
 
-	var bedIdRef *string = nil
-	if patient.Bed != nil {
-		var bedId = patient.Bed.ID.String()
-		bedIdRef = &bedId
-	}
 	return &pb.GetPatientResponse{
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
-		BedId:                   bedIdRef,
+		BedId:                   hwutil.UUIDToStringPtr(patient.BedID),
 	}, nil
 }
 
@@ -153,16 +147,11 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 
 	return &pb.GetPatientsByWardResponse{
 		Patients: hwutil.Map(patients, func(patient Patient) *pb.GetPatientsByWardResponse_Patient {
-			var bedIDRef *string = nil
-			if patient.Bed != nil {
-				var bedId = patient.Bed.ID.String()
-				bedIDRef = &bedId
-			}
 			return &pb.GetPatientsByWardResponse_Patient{
 				Id:                      patient.ID.String(),
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
 				Notes:                   patient.Notes,
-				BedId:                   bedIDRef,
+				BedId:                   hwutil.UUIDToStringPtr(patient.BedID),
 			}
 		}),
 	}, nil
@@ -227,6 +216,11 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 		}
 	}
 
+	log.Info().
+		Str("patientId", patient.ID.String()).
+		Str("bedId", bed.ID.String()).
+		Msg("assigned bed to patient")
+
 	return &pb.AssignBedResponse{}, nil
 }
 
@@ -251,6 +245,10 @@ func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest
 		}
 	}
 
+	log.Info().
+		Str("patientId", patient.ID.String()).
+		Msg("unassigned bed from patient")
+
 	return &pb.UnassignBedResponse{}, nil
 }
 
@@ -274,6 +272,10 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 			return nil, status.Error(codes.InvalidArgument, "id not found")
 		}
 	}
+
+	log.Info().
+		Str("patientId", id.String()).
+		Msg("patient discharged")
 
 	return &pb.DischargePatientResponse{}, nil
 }
