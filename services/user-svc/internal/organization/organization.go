@@ -226,7 +226,7 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 	db := hwgorm.GetDB(ctx)
 	log := zlog.Ctx(ctx)
 
-	InvitationId, err := uuid.Parse(req.InvitationId)
+	invitationId, err := uuid.Parse(req.InvitationId)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
