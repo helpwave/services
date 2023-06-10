@@ -1138,19 +1138,19 @@ class RemoveMemberResponse extends $pb.GeneratedMessage {
 
 class InviteMemberRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'InviteMemberRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'organizationId')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'email')
     ..hasRequiredFields = false
   ;
 
   InviteMemberRequest._() : super();
   factory InviteMemberRequest({
-    $core.String? id,
+    $core.String? organizationId,
     $core.String? email,
   }) {
     final _result = create();
-    if (id != null) {
-      _result.id = id;
+    if (organizationId != null) {
+      _result.organizationId = organizationId;
     }
     if (email != null) {
       _result.email = email;
@@ -1179,13 +1179,13 @@ class InviteMemberRequest extends $pb.GeneratedMessage {
   static InviteMemberRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get organizationId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set organizationId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasOrganizationId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearOrganizationId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get email => $_getSZ(1);

@@ -446,6 +446,67 @@ proto.proto.services.task_svc.v1.TaskServicePromiseClient.prototype.removeSubTas
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.UpdateSubTaskRequest,
+ *   !proto.proto.services.task_svc.v1.UpdateSubTaskResponse>}
+ */
+const methodDescriptor_TaskService_UpdateSubTask = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.TaskService/UpdateSubTask',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.UpdateSubTaskRequest,
+  proto.proto.services.task_svc.v1.UpdateSubTaskResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.UpdateSubTaskRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.UpdateSubTaskResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.UpdateSubTaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.UpdateSubTaskResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.UpdateSubTaskResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.TaskServiceClient.prototype.updateSubTask =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskService/UpdateSubTask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_UpdateSubTask,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.UpdateSubTaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.UpdateSubTaskResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.TaskServicePromiseClient.prototype.updateSubTask =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskService/UpdateSubTask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_UpdateSubTask);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.task_svc.v1.SubTaskToToDoRequest,
  *   !proto.proto.services.task_svc.v1.SubTaskToToDoResponse>}
  */

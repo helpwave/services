@@ -22,6 +22,7 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
   $async.Future<$5.UpdateTaskResponse> updateTask($pb.ServerContext ctx, $5.UpdateTaskRequest request);
   $async.Future<$5.AddSubTaskResponse> addSubTask($pb.ServerContext ctx, $5.AddSubTaskRequest request);
   $async.Future<$5.RemoveSubTaskResponse> removeSubTask($pb.ServerContext ctx, $5.RemoveSubTaskRequest request);
+  $async.Future<$5.UpdateSubTaskResponse> updateSubTask($pb.ServerContext ctx, $5.UpdateSubTaskRequest request);
   $async.Future<$5.SubTaskToToDoResponse> subTaskToToDo($pb.ServerContext ctx, $5.SubTaskToToDoRequest request);
   $async.Future<$5.SubTaskToDoneResponse> subTaskToDone($pb.ServerContext ctx, $5.SubTaskToDoneRequest request);
   $async.Future<$5.TaskToToDoResponse> taskToToDo($pb.ServerContext ctx, $5.TaskToToDoRequest request);
@@ -41,6 +42,7 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
       case 'UpdateTask': return $5.UpdateTaskRequest();
       case 'AddSubTask': return $5.AddSubTaskRequest();
       case 'RemoveSubTask': return $5.RemoveSubTaskRequest();
+      case 'UpdateSubTask': return $5.UpdateSubTaskRequest();
       case 'SubTaskToToDo': return $5.SubTaskToToDoRequest();
       case 'SubTaskToDone': return $5.SubTaskToDoneRequest();
       case 'TaskToToDo': return $5.TaskToToDoRequest();
@@ -63,6 +65,7 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
       case 'UpdateTask': return this.updateTask(ctx, request as $5.UpdateTaskRequest);
       case 'AddSubTask': return this.addSubTask(ctx, request as $5.AddSubTaskRequest);
       case 'RemoveSubTask': return this.removeSubTask(ctx, request as $5.RemoveSubTaskRequest);
+      case 'UpdateSubTask': return this.updateSubTask(ctx, request as $5.UpdateSubTaskRequest);
       case 'SubTaskToToDo': return this.subTaskToToDo(ctx, request as $5.SubTaskToToDoRequest);
       case 'SubTaskToDone': return this.subTaskToDone(ctx, request as $5.SubTaskToDoneRequest);
       case 'TaskToToDo': return this.taskToToDo(ctx, request as $5.TaskToToDoRequest);
