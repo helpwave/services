@@ -160,5 +160,5 @@ service OrganizationService {
   rpc AddMember (AddMemberRequest) returns (AddMemberResponse) {}
   rpc RemoveMember (RemoveMemberRequest) returns (RemoveMemberResponse) {}
   rpc InviteMember (InviteMemberRequest) returns (InviteMemberResponse) {}
-  rpc AcceptInvitation  (AcceptInvitationRequest) returns (AcceptInvitationResponse) {}
+  rpc AcceptInvitation (AcceptInvitationRequest) returns (AcceptInvitationResponse) {}
 }
