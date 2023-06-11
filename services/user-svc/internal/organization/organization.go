@@ -193,13 +193,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	invite := Invitation{
-		Email:          req.Email,
-		OrganizationID: organizationId,
-		State:          Pending,
-	}
-
-	// Check if organisation exists
+	// Check if an organization exists
 	_, err = GetOrganizationById(db, organizationId)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
@@ -209,15 +203,32 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		}
 	}
 
-	if err := db.Create(&invite).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
-		return nil, status.Error(codes.Internal, err.Error())
-	}
+	// check if already an invitation exists
+	invite := Invitation{}
 
-	log.Info().
-		Str("email", req.Email). // TODO: Revisited for privacy reasons
-		Str("organizationId", organizationId.String()).
-		Msg("user invited to organization")
+	if err := db.Where("email = ? AND organization_id = ?", req.Email, organizationId).First(&invite).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			log.Warn().Err(err).Msg("database error")
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			// create invitation because doesn't exist
+			invite = Invitation{
+				Email:          req.Email,
+				OrganizationID: organizationId,
+				State:          Pending,
+			}
+
+			if err := db.Create(&invite).Error; err != nil {
+				log.Warn().Err(err).Msg("database error")
+				return nil, status.Error(codes.Internal, err.Error())
+			}
+
+			log.Info().
+				Str("email", req.Email). // TODO: Revisited for privacy reasons
+				Str("organizationId", organizationId.String()).
+				Msg("user invited to organization")
+		}
+	}
 
 	return &pb.InviteMemberResponse{}, nil
 }
