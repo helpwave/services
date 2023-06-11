@@ -213,13 +213,13 @@ final $typed_data.Uint8List removeMemberResponseDescriptor = $convert.base64Deco
 const InviteMemberRequest$json = const {
   '1': 'InviteMemberRequest',
   '2': const [
-    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'organization_id', '3': 1, '4': 1, '5': 9, '10': 'organizationId'},
     const {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
   ],
 };
 
 /// Descriptor for `InviteMemberRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List inviteMemberRequestDescriptor = $convert.base64Decode('ChNJbnZpdGVNZW1iZXJSZXF1ZXN0Eg4KAmlkGAEgASgJUgJpZBIUCgVlbWFpbBgCIAEoCVIFZW1haWw=');
+final $typed_data.Uint8List inviteMemberRequestDescriptor = $convert.base64Decode('ChNJbnZpdGVNZW1iZXJSZXF1ZXN0EicKD29yZ2FuaXphdGlvbl9pZBgBIAEoCVIOb3JnYW5pemF0aW9uSWQSFAoFZW1haWwYAiABKAlSBWVtYWls');
 @$core.Deprecated('Use inviteMemberResponseDescriptor instead')
 const InviteMemberResponse$json = const {
   '1': 'InviteMemberResponse',

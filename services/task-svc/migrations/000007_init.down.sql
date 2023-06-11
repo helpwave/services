@@ -1,2 +1,2 @@
-ALTER TABLE patients
-	DROP COLUMN is_discharged;
+ALTER TABLE rooms
+	DROP COLUMN ward_id;

@@ -1,2 +1,2 @@
-ALTER TABLE patients
-	ADD is_discharged bool NOT NULL DEFAULT False;
+ALTER TABLE rooms
+	ADD ward_id uuid NOT NULL;

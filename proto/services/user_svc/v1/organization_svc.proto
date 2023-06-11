@@ -131,7 +131,7 @@ message RemoveMemberResponse{}
 //
 
 message InviteMemberRequest {
-  string id = 1;  // @gotags: validate:"uuid4"
+  string organization_id = 1;  // @gotags: validate:"uuid4"
   string email = 2; // @gotags: validate:"required,email"
 }
 
