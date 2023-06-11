@@ -23,7 +23,7 @@ type Patient struct {
 	ID             uuid.UUID  `gorm:"column:id"`
 	OrganizationID uuid.UUID  `gorm:"column:organization_id"`
 	BedID          *uuid.UUID `gorm:"column:bed_id;default:NULL"`
-	IsDischarged   bool      `gorm:"column:is_discharged;default:False"`
+	IsDischarged   bool       `gorm:"column:is_discharged;default:False"`
 }
 
 type ServiceServer struct {
@@ -208,7 +208,11 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 	}
 
 	patient := Patient{ID: id}
-	if err := db.Model(&patient).Update("bed_id", bed.ID).Error; err != nil {
+	updates := map[string]interface{}{
+		"bed_id":        bed.ID,
+		"is_discharged": true, // Maybe this needs to be set explicitly somewhere?
+	}
+	if err := db.Model(&patient).Updates(updates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
@@ -264,8 +268,12 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	// Unassign Patient from bed
-	if err := db.Model(&Patient{ID: id}).Update("bed_id", nil).Error; err != nil {
+	updates := map[string]interface{}{
+		"bed_id":        nil,
+		"is_discharged": true,
+	}
+	// Unassign Patient from bed and set to discharged
+	if err := db.Model(&Patient{ID: id}).Updates(updates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
