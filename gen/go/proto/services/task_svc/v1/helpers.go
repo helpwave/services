@@ -31,6 +31,10 @@ func (x *UpdatePatientRequest) UpdatesMap() map[string]interface{} {
 		m["human_readable_identifier"] = x.HumanReadableIdentifier
 	}
 
+	if x.Notes != nil {
+		m["notes"] = x.Notes
+	}
+
 	return m
 }
 
