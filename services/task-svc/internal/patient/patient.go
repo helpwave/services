@@ -8,6 +8,7 @@ import (
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"gorm.io/plugin/soft_delete"
 	"hwgorm"
 	"hwutil"
 	"task-svc/internal/room/models"
@@ -20,10 +21,10 @@ type Base struct {
 
 type Patient struct {
 	Base
-	ID             uuid.UUID  `gorm:"column:id"`
-	OrganizationID uuid.UUID  `gorm:"column:organization_id"`
-	BedID          *uuid.UUID `gorm:"column:bed_id;default:NULL"`
-	IsDischarged   bool       `gorm:"column:is_discharged;default:False"`
+	ID             uuid.UUID             `gorm:"column:id"`
+	OrganizationID uuid.UUID             `gorm:"column:organization_id"`
+	BedID          *uuid.UUID            `gorm:"column:bed_id;default:NULL"`
+	IsDischarged   soft_delete.DeletedAt `gorm:"column:is_discharged;softDelete:flag;default:0"`
 }
 
 type ServiceServer struct {
@@ -208,11 +209,7 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 	}
 
 	patient := Patient{ID: id}
-	updates := map[string]interface{}{
-		"bed_id":        bed.ID,
-		"is_discharged": true, // Maybe this needs to be set explicitly somewhere?
-	}
-	if err := db.Model(&patient).Updates(updates).Error; err != nil {
+	if err := db.Model(&patient).Update("bed_id", bed.ID).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
@@ -270,7 +267,7 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 
 	updates := map[string]interface{}{
 		"bed_id":        nil,
-		"is_discharged": true,
+		"is_discharged": 1,
 	}
 	// Unassign Patient from bed and set to discharged
 	if err := db.Model(&Patient{ID: id}).Updates(updates).Error; err != nil {
