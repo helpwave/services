@@ -231,12 +231,13 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	invitation := Invitation{
-		ID: InvitationId,
+	claims, err := common.GetAuthClaims(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	// Check if invite exists
-	_, err = GetInvitationById(db, InvitationId)
+	currentInvitation, err := GetInvitationById(db, invitationId)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -245,7 +246,39 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 		}
 	}
 
+	// Validate invite request
+	if currentInvitation.Email != claims.Email {
+		return nil, status.Error(codes.InvalidArgument, "e-mail does not match")
+	}
+
+	if currentInvitation.State == Accepted {
+		return &pb.AcceptInvitationResponse{}, nil
+	} else if currentInvitation.State != Pending {
+		return nil, status.Error(codes.InvalidArgument, "invitation was rejected")
+	}
+
+	// Update invitation state
+	invitation := Invitation{
+		ID: invitationId,
+	}
+
 	if err := db.Model(&invitation).Update("state", Accepted).Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	userID, err := uuid.Parse(claims.Sub)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	// Add user to organization
+	member := Member{
+		UserID:         userID,
+		OrganizationID: currentInvitation.OrganizationID,
+	}
+
+	if err := db.Create(&member).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
