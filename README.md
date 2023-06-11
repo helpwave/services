@@ -9,7 +9,7 @@ helpwave's microservices
    > Postgres username and password: `postgres`:`postgres`
 
    > pgAdmin username and password: `tech@helpwave.de`:`tech@helpwave.de`
-3. Go to your 'service/' of choice
+3. Go to your [services/](services/) of choice `cd services/<service>/`
 4. Run `make SERVICE=task-svc migrate-up` to run the migrations or do it manually by [installing migrate](https://github.com/golang-migrate/migrate)
 5. Copy the environment variables of `.env.example` to '.env' and configure them
 6. Run the service
@@ -18,7 +18,7 @@ helpwave's microservices
 ### Fake token
 
 Every service that is using auth, as the ability to use something called fake-tokens.
-A fake-token are Base64 encoded claims of our ID Token to[services-local-dev](services-local-dev) not rely on our OAuth2.0 provider
+A fake-token are Base64 encoded claims of our ID Token to [services-local-dev](services-local-dev) not rely on our OAuth2.0 provider
 during local development. With the environment variable `INSECURE_FAKE_TOKEN_ENABLE=true` set,
 this fast-path gets activated.
 
@@ -55,6 +55,16 @@ In the context of a service directory you should be able to use
  make this
 ```
 to build the corresponding docker image as well.
+
+## Migrations
+We use [migrate](https://github.com/golang-migrate/migrate) to handle changes to our database tables
+It uses change versioning, e.g.
+- `000009_init.up.sql` contains all changes from version 8 to 9
+- `000009_init.down.sql` contains all changes from version 9 to 8 in reverse order from
+```
+migrate -path services/<service>/migrations/ -database postgres://postgres:postgres@localhost:5432/<service>?sslmode=disable up [version]
+migrate -path services/<service>/migrations/ -database postgres://postgres:postgres@localhost:5432/<service>?sslmode=disable down [version]
+```
 
 ## Temporary advises
 
