@@ -10,8 +10,8 @@ helpwave's microservices
 
    > pgAdmin username and password: `tech@helpwave.de`:`tech@helpwave.de`
 3. Go to your [services/](services/) of choice `cd services/<service>/`
-4. Run `make SERVICE=task-svc migrate-up` to run the migrations or do it manually by [installing migrate](https://github.com/golang-migrate/migrate)
-5. Copy the environment variables of `.env.example` to '.env' and configure them
+4. Copy the environment variables of `.env.example` to '.env' and configure them
+5. Run `./migrate.sh task-svc up` to run the migrations or do it manually by [installing migrate](https://github.com/golang-migrate/migrate)
 6. Run the service
    > Most of our services can be run via `go run main.go`. In the future, we will provide some more convenient ways to setup all services directly via Dapr.
 
@@ -65,6 +65,28 @@ It uses change versioning, e.g.
 migrate -path services/<service>/migrations/ -database postgres://postgres:postgres@localhost:5432/<service>?sslmode=disable up [version]
 migrate -path services/<service>/migrations/ -database postgres://postgres:postgres@localhost:5432/<service>?sslmode=disable down [version]
 ```
+
+### `migrate.sh` - Running migrate/migrate inside docker
+
+_Recommended_
+
+If you don't want to install migrate/migrate directly on your machine, you can use our `migrate.sh` script.
+This script automatically discovers the migration folder and env file and passes them alongside
+you arguments into migrate/migrate running in a container.
+
+`migrate.sh` will use the database setup of the passed service. Therefore, a .env file is required.
+
+#### Usage
+`./migrate.sh [service] [... arguments for migrate/migrate]`
+
+- `[service]` must be one of the services inside `/services/`
+- `[... arguments for migrate/migrate]` gets passed directly to migrate/migrate
+
+
+#### Examples:
+- Migrate the task-svc database all the way up `./migrate.sh task-svc up`
+- Migrate the task-svc database one down: `./migrate.sh task-svc down 1`
+- Current migration version of the task-svc database: `./migrate.sh task-svc version`
 
 ## Temporary advises
 
