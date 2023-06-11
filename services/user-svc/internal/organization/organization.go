@@ -193,11 +193,6 @@ func (s ServiceServer) AddMember(ctx context.Context, req *pb.AddMemberRequest) 
 		return nil, err
 	}
 
-	// Make the creating user admin of the organization
-	if err := ChangeMembershipAdminStatus(db, userID, organizationID, false); err != nil {
-		return nil, err
-	}
-
 	log.Info().
 		Str("userID", userID.String()).
 		Str("organizationID", organizationID.String()).
