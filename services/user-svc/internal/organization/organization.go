@@ -17,12 +17,12 @@ import (
 	"hwgorm"
 )
 
-type InvitationState string
+type InvitationState = string
 
 const (
-	Accepted InvitationState = "accepted"
-	Rejected InvitationState = "rejected"
-	Pending  InvitationState = "pending"
+	InvitationStateAccepted InvitationState = "accepted"
+	InvitationStateRejected InvitationState = "rejected"
+	InvitationStatePending  InvitationState = "pending"
 )
 
 type Base struct {
@@ -206,7 +206,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	// check if already an invitation exists
 	invite := Invitation{}
 
-	if err := db.Where("(email = ? AND organization_id = ?) AND (state IN ?)", req.Email, organizationId, []string{"pending", "accepted"}).First(&invite).Error; err != nil {
+	if err := db.Where("(email = ? AND organization_id = ?) AND (state IN ?)", req.Email, organizationId, []string{InvitationStatePending, InvitationStateAccepted}).First(&invite).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
@@ -215,7 +215,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 			invite = Invitation{
 				Email:          req.Email,
 				OrganizationID: organizationId,
-				State:          Pending,
+				State:          InvitationStatePending,
 			}
 
 			if err := db.Create(&invite).Error; err != nil {
@@ -262,10 +262,10 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 		return nil, status.Error(codes.InvalidArgument, "e-mail does not match")
 	}
 
-	if currentInvitation.State == Accepted {
+	if currentInvitation.State == InvitationStateAccepted {
 		return &pb.AcceptInvitationResponse{}, nil
-	} else if currentInvitation.State != Pending {
-		return nil, status.Error(codes.InvalidArgument, "invitation was rejected")
+	} else if currentInvitation.State != InvitationStatePending {
+		return nil, status.Error(codes.InvalidArgument, "only pending invitations can be accepted")
 	}
 
 	// Update invitation state
@@ -273,7 +273,7 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 		ID: invitationId,
 	}
 
-	if err := db.Model(&invitation).Update("state", Accepted).Error; err != nil {
+	if err := db.Model(&invitation).Update("state", InvitationStateAccepted).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
