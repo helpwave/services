@@ -37,14 +37,15 @@ type Organization struct {
 	Base
 	ID              uuid.UUID    `gorm:"column:id"`
 	CreatedByUserId uuid.UUID    `gorm:"column:created_by_user_id"`
-	Members         []Member     `gorm:"foreignKey:OrganizationID"`
+	Members         []Membership `gorm:"foreignKey:OrganizationID"`
 	Invitations     []Invitation `gorm:"foreignKey:OrganizationID"`
 }
 
-type Member struct {
+type Membership struct {
 	ID             uuid.UUID `gorm:"primaryKey,column:id"`
 	UserID         uuid.UUID `gorm:"column:user_id"`
 	OrganizationID uuid.UUID `gorm:"column:organization_id"`
+	IsAdmin        bool      `gorm:"column:is_admin;default:False"`
 }
 
 type Invitation struct {
@@ -175,13 +176,60 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 }
 
 func (s ServiceServer) AddMember(ctx context.Context, req *pb.AddMemberRequest) (*pb.AddMemberResponse, error) {
-	// TODO
-	return nil, status.Errorf(codes.Unimplemented, "method AddMember not implemented")
+	log := zlog.Ctx(ctx)
+	db := hwgorm.GetDB(ctx)
+
+	userID, err := uuid.Parse(req.UserId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	organizationID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	if err := AddUserToOrganization(ctx, db, userID, organizationID); err != nil {
+		return nil, err
+	}
+
+	log.Info().
+		Str("userID", userID.String()).
+		Str("organizationID", organizationID.String()).
+		Msg("user added to organization")
+
+	return &pb.AddMemberResponse{}, nil
 }
 
 func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberRequest) (*pb.RemoveMemberResponse, error) {
-	// TODO
-	return nil, status.Errorf(codes.Unimplemented, "method RemoveMember not implemented")
+	log := zlog.Ctx(ctx)
+	db := hwgorm.GetDB(ctx)
+
+	userID, err := uuid.Parse(req.UserId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	organizationID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	member := Membership{
+		UserID:         userID,
+		OrganizationID: organizationID,
+	}
+	if err := db.Delete(&member).Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	log.Info().
+		Str("userID", userID.String()).
+		Str("organizationID", organizationID.String()).
+		Msg("user removed from organization")
+
+	return &pb.RemoveMemberResponse{}, nil
 }
 
 func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberRequest) (*pb.InviteMemberResponse, error) {
@@ -238,6 +286,11 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UU
 			return err
 		}
 
+		// Make the creating user admin of the organization
+		if err := ChangeMembershipAdminStatus(db, userID, organization.ID, true); err != nil {
+			return err
+		}
+
 		userCreatedEvent := &events.OrganizationCreatedEvent{
 			Id:     organization.ID.String(),
 			UserId: userID.String(),
@@ -275,7 +328,7 @@ func CreateOrganization(ctx context.Context, db *gorm.DB, attr Base, creatorUser
 			IsPersonal:   attr.IsPersonal,
 		},
 		CreatedByUserId: creatorUserId,
-		Members:         []Member{},
+		Members:         []Membership{},
 	}
 
 	if err := db.Create(&organization).Error; err != nil {
@@ -294,7 +347,7 @@ func AddUserToOrganization(ctx context.Context, db *gorm.DB, userId uuid.UUID, o
 	log := zlog.Ctx(ctx)
 
 	organization := Organization{ID: organizationId}
-	member := Member{
+	member := Membership{
 		UserID: userId,
 	}
 
@@ -348,4 +401,17 @@ func HandleUserCreatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry
 	}
 
 	return false, nil
+}
+
+func ChangeMembershipAdminStatus(db *gorm.DB, userID uuid.UUID, organizationID uuid.UUID, isAdmin bool) error {
+	member := Membership{
+		OrganizationID: organizationID,
+		UserID:         userID,
+	}
+
+	if err := db.First(&member).Update("is_admin", isAdmin).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
