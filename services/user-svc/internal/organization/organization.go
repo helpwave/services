@@ -230,7 +230,9 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		}
 	}
 
-	return &pb.InviteMemberResponse{}, nil
+	return &pb.InviteMemberResponse{
+		Id: invite.ID.String(),
+	}, nil
 }
 
 func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvitationRequest) (*pb.AcceptInvitationResponse, error) {

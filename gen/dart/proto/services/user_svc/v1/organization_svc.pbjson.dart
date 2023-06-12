@@ -223,10 +223,13 @@ final $typed_data.Uint8List inviteMemberRequestDescriptor = $convert.base64Decod
 @$core.Deprecated('Use inviteMemberResponseDescriptor instead')
 const InviteMemberResponse$json = const {
   '1': 'InviteMemberResponse',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
 };
 
 /// Descriptor for `InviteMemberResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List inviteMemberResponseDescriptor = $convert.base64Decode('ChRJbnZpdGVNZW1iZXJSZXNwb25zZQ==');
+final $typed_data.Uint8List inviteMemberResponseDescriptor = $convert.base64Decode('ChRJbnZpdGVNZW1iZXJSZXNwb25zZRIOCgJpZBgBIAEoCVICaWQ=');
 @$core.Deprecated('Use acceptInvitationRequestDescriptor instead')
 const AcceptInvitationRequest$json = const {
   '1': 'AcceptInvitationRequest',

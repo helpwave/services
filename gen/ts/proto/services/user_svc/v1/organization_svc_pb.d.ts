@@ -476,6 +476,9 @@ export namespace InviteMemberRequest {
 }
 
 export class InviteMemberResponse extends jspb.Message {
+  getId(): string;
+  setId(value: string): InviteMemberResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): InviteMemberResponse.AsObject;
   static toObject(includeInstance: boolean, msg: InviteMemberResponse): InviteMemberResponse.AsObject;
@@ -486,6 +489,7 @@ export class InviteMemberResponse extends jspb.Message {
 
 export namespace InviteMemberResponse {
   export type AsObject = {
+    id: string,
   }
 }
 

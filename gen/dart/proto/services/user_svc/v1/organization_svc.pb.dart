@@ -1199,11 +1199,20 @@ class InviteMemberRequest extends $pb.GeneratedMessage {
 
 class InviteMemberResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'InviteMemberResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
   InviteMemberResponse._() : super();
-  factory InviteMemberResponse() => create();
+  factory InviteMemberResponse({
+    $core.String? id,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    return _result;
+  }
   factory InviteMemberResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory InviteMemberResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
@@ -1224,6 +1233,15 @@ class InviteMemberResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static InviteMemberResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<InviteMemberResponse>(create);
   static InviteMemberResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
 }
 
 class AcceptInvitationRequest extends $pb.GeneratedMessage {
