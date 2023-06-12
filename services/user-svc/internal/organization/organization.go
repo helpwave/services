@@ -206,7 +206,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	// check if already an invitation exists
 	invite := Invitation{}
 
-	if err := db.Where("email = ? AND organization_id = ?", req.Email, organizationId).First(&invite).Error; err != nil {
+	if err := db.Where("(email = ? AND organization_id = ?) AND (state IN ?)", req.Email, organizationId, []string{"pending", "accepted"}).First(&invite).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
