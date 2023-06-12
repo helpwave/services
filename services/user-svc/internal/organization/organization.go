@@ -278,19 +278,13 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	userID, err := uuid.Parse(claims.Sub)
+	userID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	// Add user to organization
-	member := Member{
-		UserID:         userID,
-		OrganizationID: currentInvitation.OrganizationID,
-	}
-
-	if err := db.Create(&member).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
+	if err := AddUserToOrganization(ctx, db, userID, currentInvitation.OrganizationID); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
