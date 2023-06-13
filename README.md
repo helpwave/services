@@ -88,6 +88,34 @@ you arguments into migrate/migrate running in a container.
 - Migrate the task-svc database one down: `./migrate.sh task-svc down 1`
 - Current migration version of the task-svc database: `./migrate.sh task-svc version`
 
+## Enviroment variables
+Every service should contain a `.env.example` file which should be copied to a usable `.env` file
+
+Default Variables:
+```
+# The mode used, options available
+#  development, production
+MODE=development
+
+# The following levels are available:
+#  trace, debug, info, warn, error, fatal, panic
+LOG_LEVEL=debug
+
+# The port on which the the service will listen on (default: 8080)
+PORT=8080
+
+# Database Related Configurations
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=postgres
+
+# For development purposes
+INSECURE_FAKE_TOKEN_ENABLE=true
+OAUTH_CLIENT_ID=
+```
+
 ## Temporary advises
 
 ### Example for service to service communication via Dapr and gRPC
