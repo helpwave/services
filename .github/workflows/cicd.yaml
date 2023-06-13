@@ -95,3 +95,14 @@ jobs:
     with:
       image: ${{ matrix.image }}
     secrets: inherit
+
+  fly-deploy:
+    needs: detect-changes
+    if: ${{ github.event_name != 'pull_request' && needs.detect-changes.outputs.services != '[]' && needs.detect-changes.outputs.services != '' }}
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.detect-changes.outputs.services) }}
+    uses: ./.github/workflows/fly-deploy.yaml
+    with:
+      service: ${{ matrix.service }}
+    secrets: inherit
