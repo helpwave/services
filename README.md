@@ -113,7 +113,7 @@ POSTGRES_DB=postgres
 
 # For development purposes
 INSECURE_FAKE_TOKEN_ENABLE=true
-OAUTH_CLIENT_ID=
+OAUTH_CLIENT_ID=425f8b8d-c786-4ff7-b2bf-e52f505fb588
 ```
 
 ## Temporary advises
