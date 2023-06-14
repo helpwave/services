@@ -105,4 +105,6 @@ jobs:
     uses: ./.github/workflows/fly-deploy.yaml
     with:
       service: ${{ matrix.service }}
+      # TODO: Introduce deployment environments to get rid of the fixed prefix
+      app: helpwave-staging-${{ matrix.service }}
     secrets: inherit
