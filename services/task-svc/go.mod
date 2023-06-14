@@ -17,6 +17,8 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/rs/zerolog v1.28.0
 	google.golang.org/grpc v1.54.0
+	gorm.io/gorm v1.24.2
+	gorm.io/plugin/soft_delete v1.2.1
 	hwgorm v0.0.0
 	hwutil v0.0.0
 )
@@ -56,6 +58,5 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/postgres v1.4.5 // indirect
-	gorm.io/gorm v1.24.2 // indirect
 	logging v0.0.0 // indirect
 )

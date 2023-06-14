@@ -122,15 +122,16 @@ const UpdatePatientRequest$json = const {
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     const {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'humanReadableIdentifier', '17': true},
-    const {'1': 'notes', '3': 3, '4': 1, '5': 9, '10': 'notes'},
+    const {'1': 'notes', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'notes', '17': true},
   ],
   '8': const [
     const {'1': '_human_readable_identifier'},
+    const {'1': '_notes'},
   ],
 };
 
 /// Descriptor for `UpdatePatientRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updatePatientRequestDescriptor = $convert.base64Decode('ChRVcGRhdGVQYXRpZW50UmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSPwoZaHVtYW5fcmVhZGFibGVfaWRlbnRpZmllchgCIAEoCUgAUhdodW1hblJlYWRhYmxlSWRlbnRpZmllcogBARIUCgVub3RlcxgDIAEoCVIFbm90ZXNCHAoaX2h1bWFuX3JlYWRhYmxlX2lkZW50aWZpZXI=');
+final $typed_data.Uint8List updatePatientRequestDescriptor = $convert.base64Decode('ChRVcGRhdGVQYXRpZW50UmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSPwoZaHVtYW5fcmVhZGFibGVfaWRlbnRpZmllchgCIAEoCUgAUhdodW1hblJlYWRhYmxlSWRlbnRpZmllcogBARIZCgVub3RlcxgDIAEoCUgBUgVub3Rlc4gBAUIcChpfaHVtYW5fcmVhZGFibGVfaWRlbnRpZmllckIICgZfbm90ZXM=');
 @$core.Deprecated('Use updatePatientResponseDescriptor instead')
 const UpdatePatientResponse$json = const {
   '1': 'UpdatePatientResponse',

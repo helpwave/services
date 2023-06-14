@@ -1,0 +1,4 @@
+ALTER TABLE tasks
+	DROP COLUMN public;
+
+DROP TABLE IF EXISTS subtasks;

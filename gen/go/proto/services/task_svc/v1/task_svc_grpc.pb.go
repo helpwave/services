@@ -25,6 +25,7 @@ const (
 	TaskService_UpdateTask_FullMethodName           = "/proto.services.task_svc.v1.TaskService/UpdateTask"
 	TaskService_AddSubTask_FullMethodName           = "/proto.services.task_svc.v1.TaskService/AddSubTask"
 	TaskService_RemoveSubTask_FullMethodName        = "/proto.services.task_svc.v1.TaskService/RemoveSubTask"
+	TaskService_UpdateSubTask_FullMethodName        = "/proto.services.task_svc.v1.TaskService/UpdateSubTask"
 	TaskService_SubTaskToToDo_FullMethodName        = "/proto.services.task_svc.v1.TaskService/SubTaskToToDo"
 	TaskService_SubTaskToDone_FullMethodName        = "/proto.services.task_svc.v1.TaskService/SubTaskToDone"
 	TaskService_TaskToToDo_FullMethodName           = "/proto.services.task_svc.v1.TaskService/TaskToToDo"
@@ -47,6 +48,7 @@ type TaskServiceClient interface {
 	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*UpdateTaskResponse, error)
 	AddSubTask(ctx context.Context, in *AddSubTaskRequest, opts ...grpc.CallOption) (*AddSubTaskResponse, error)
 	RemoveSubTask(ctx context.Context, in *RemoveSubTaskRequest, opts ...grpc.CallOption) (*RemoveSubTaskResponse, error)
+	UpdateSubTask(ctx context.Context, in *UpdateSubTaskRequest, opts ...grpc.CallOption) (*UpdateSubTaskResponse, error)
 	SubTaskToToDo(ctx context.Context, in *SubTaskToToDoRequest, opts ...grpc.CallOption) (*SubTaskToToDoResponse, error)
 	SubTaskToDone(ctx context.Context, in *SubTaskToDoneRequest, opts ...grpc.CallOption) (*SubTaskToDoneResponse, error)
 	TaskToToDo(ctx context.Context, in *TaskToToDoRequest, opts ...grpc.CallOption) (*TaskToToDoResponse, error)
@@ -115,6 +117,15 @@ func (c *taskServiceClient) AddSubTask(ctx context.Context, in *AddSubTaskReques
 func (c *taskServiceClient) RemoveSubTask(ctx context.Context, in *RemoveSubTaskRequest, opts ...grpc.CallOption) (*RemoveSubTaskResponse, error) {
 	out := new(RemoveSubTaskResponse)
 	err := c.cc.Invoke(ctx, TaskService_RemoveSubTask_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) UpdateSubTask(ctx context.Context, in *UpdateSubTaskRequest, opts ...grpc.CallOption) (*UpdateSubTaskResponse, error) {
+	out := new(UpdateSubTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_UpdateSubTask_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -221,6 +232,7 @@ type TaskServiceServer interface {
 	UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskResponse, error)
 	AddSubTask(context.Context, *AddSubTaskRequest) (*AddSubTaskResponse, error)
 	RemoveSubTask(context.Context, *RemoveSubTaskRequest) (*RemoveSubTaskResponse, error)
+	UpdateSubTask(context.Context, *UpdateSubTaskRequest) (*UpdateSubTaskResponse, error)
 	SubTaskToToDo(context.Context, *SubTaskToToDoRequest) (*SubTaskToToDoResponse, error)
 	SubTaskToDone(context.Context, *SubTaskToDoneRequest) (*SubTaskToDoneResponse, error)
 	TaskToToDo(context.Context, *TaskToToDoRequest) (*TaskToToDoResponse, error)
@@ -255,6 +267,9 @@ func (UnimplementedTaskServiceServer) AddSubTask(context.Context, *AddSubTaskReq
 }
 func (UnimplementedTaskServiceServer) RemoveSubTask(context.Context, *RemoveSubTaskRequest) (*RemoveSubTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveSubTask not implemented")
+}
+func (UnimplementedTaskServiceServer) UpdateSubTask(context.Context, *UpdateSubTaskRequest) (*UpdateSubTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSubTask not implemented")
 }
 func (UnimplementedTaskServiceServer) SubTaskToToDo(context.Context, *SubTaskToToDoRequest) (*SubTaskToToDoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubTaskToToDo not implemented")
@@ -403,6 +418,24 @@ func _TaskService_RemoveSubTask_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TaskServiceServer).RemoveSubTask(ctx, req.(*RemoveSubTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_UpdateSubTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateSubTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).UpdateSubTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_UpdateSubTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).UpdateSubTask(ctx, req.(*UpdateSubTaskRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -617,6 +650,10 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveSubTask",
 			Handler:    _TaskService_RemoveSubTask_Handler,
+		},
+		{
+			MethodName: "UpdateSubTask",
+			Handler:    _TaskService_UpdateSubTask_Handler,
 		},
 		{
 			MethodName: "SubTaskToToDo",
