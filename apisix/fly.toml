@@ -1,0 +1,14 @@
+primary_region = "ams"
+
+[build]
+  dockerfile = "../Dockerfile.apisix"
+
+[[services]]
+  internal_port = 9080
+  protocol = "tcp"
+  auto_stop_machines = true
+  auto_start_machines = true
+
+  [[services.ports]]
+    handlers = ["tls"]
+    port = 443

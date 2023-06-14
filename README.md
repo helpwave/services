@@ -56,6 +56,22 @@ In the context of a service directory you should be able to use
 ```
 to build the corresponding docker image as well.
 
+### Our images
+
+#### Dockerfile.apisix
+
+This image includes our APISX configuration and the daprd process. As in `Dockerfile.standalone`,
+these two processes are running side by side in the container via [hivemind](https://github.com/DarthSim/hivemind). 
+
+#### Dockerfile.service
+
+This image contains "just" the service. The Dapr sidecar needs to be deployed separately.
+
+#### Dockerfile.standalone
+
+This image contains the service including the daprd sidecar. These two processes are running
+side by side in the container via [hivemind](https://github.com/DarthSim/hivemind).
+
 ## Migrations
 We use [migrate](https://github.com/golang-migrate/migrate) to handle changes to our database tables
 It uses change versioning, e.g.
@@ -118,3 +134,7 @@ if err != nil {
 
 [We disarmed the versioning for pre-production.](https://github.com/helpwave/services/issues/125).
 To arm the versioning, search for "arm-versioning" in the codebase.
+
+## Deployment
+
+[See infrastructure/README.md](infrastructure/README.md)
