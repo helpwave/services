@@ -46,7 +46,7 @@ RUN wget -q -O migrate.tgz https://github.com/golang-migrate/migrate/releases/do
 # RUN wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O - | /bin/bash && \
 #     dapr init --slim --runtime-version $DAPR_VERSION
 
-# add daprd temporarily from helpwave/tmp-dapr-dist
+# add daprd temporarily from helpwave/tmp-dapr-dist; our pull request is approved but not merged yet https://github.com/dapr/components-contrib/pull/2883
 ADD --chmod=100 https://github.com/helpwave/tmp-dapr-dist/raw/main/linux_amd64/release/daprd /root/.dapr/bin/daprd
 RUN echo -n "56ff6bbcfc551d2cedb06a30a8fa32fb14f6efe2995b38316a991b0c5e048e15 /root/.dapr/bin/daprd" | sha256sum --check --status
 

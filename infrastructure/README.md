@@ -2,7 +2,7 @@
 
 ## Fly.io
 
-We are moved to [Fly.io](https://fly.io/) since https://github.com/helpwave/services/issues/164.
+We moved to [Fly.io](https://fly.io/) since https://github.com/helpwave/services/issues/164.
 
 ### To-dos
 - Use FLY_APP_ID env for DAPR_APP_ID
@@ -102,16 +102,16 @@ routes:
     uri: /user-svc/*
     service_id: user-svc
     plugins:
-  	  cors:
+      cors:
         # TODO: Scope to grpc-web spec
-	    allow_origins: "**"
-	    allow_methods: "**"
-	    allow_headers: "**"
-	    expose_headers: "**"
-	    max_age: 5
-	    allow_credential: true
-	    _meta:
-		  priority: -1
+        allow_origins: "**"
+        allow_methods: "**"
+        allow_headers: "**"
+        expose_headers: "**"
+        max_age: 5
+        allow_credential: true
+        _meta:
+          priority: -1
 ...
 ```
 
