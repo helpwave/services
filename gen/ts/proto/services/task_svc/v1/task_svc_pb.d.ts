@@ -119,8 +119,8 @@ export namespace GetTaskResponse {
     getId(): string;
     setId(value: string): SubTask;
 
-    getTitle(): string;
-    setTitle(value: string): SubTask;
+    getName(): string;
+    setName(value: string): SubTask;
 
     getDone(): boolean;
     setDone(value: boolean): SubTask;
@@ -136,7 +136,7 @@ export namespace GetTaskResponse {
   export namespace SubTask {
     export type AsObject = {
       id: string,
-      title: string,
+      name: string,
       done: boolean,
     }
   }
@@ -231,8 +231,8 @@ export namespace GetTasksByPatientResponse {
       getId(): string;
       setId(value: string): SubTask;
 
-      getTitle(): string;
-      setTitle(value: string): SubTask;
+      getName(): string;
+      setName(value: string): SubTask;
 
       getDone(): boolean;
       setDone(value: boolean): SubTask;
@@ -248,7 +248,7 @@ export namespace GetTasksByPatientResponse {
     export namespace SubTask {
       export type AsObject = {
         id: string,
-        title: string,
+        name: string,
         done: boolean,
       }
     }
@@ -312,8 +312,8 @@ export namespace UpdateTaskResponse {
 }
 
 export class AddSubTaskRequest extends jspb.Message {
-  getTitle(): string;
-  setTitle(value: string): AddSubTaskRequest;
+  getName(): string;
+  setName(value: string): AddSubTaskRequest;
 
   getTaskId(): string;
   setTaskId(value: string): AddSubTaskRequest;
@@ -333,7 +333,7 @@ export class AddSubTaskRequest extends jspb.Message {
 
 export namespace AddSubTaskRequest {
   export type AsObject = {
-    title: string,
+    name: string,
     taskId: string,
     done?: boolean,
   }
@@ -390,6 +390,49 @@ export class RemoveSubTaskResponse extends jspb.Message {
 }
 
 export namespace RemoveSubTaskResponse {
+  export type AsObject = {
+  }
+}
+
+export class UpdateSubTaskRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): UpdateSubTaskRequest;
+
+  getName(): string;
+  setName(value: string): UpdateSubTaskRequest;
+  hasName(): boolean;
+  clearName(): UpdateSubTaskRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdateSubTaskRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdateSubTaskRequest): UpdateSubTaskRequest.AsObject;
+  static serializeBinaryToWriter(message: UpdateSubTaskRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdateSubTaskRequest;
+  static deserializeBinaryFromReader(message: UpdateSubTaskRequest, reader: jspb.BinaryReader): UpdateSubTaskRequest;
+}
+
+export namespace UpdateSubTaskRequest {
+  export type AsObject = {
+    id: string,
+    name?: string,
+  }
+
+  export enum NameCase { 
+    _NAME_NOT_SET = 0,
+    NAME = 2,
+  }
+}
+
+export class UpdateSubTaskResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdateSubTaskResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdateSubTaskResponse): UpdateSubTaskResponse.AsObject;
+  static serializeBinaryToWriter(message: UpdateSubTaskResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdateSubTaskResponse;
+  static deserializeBinaryFromReader(message: UpdateSubTaskResponse, reader: jspb.BinaryReader): UpdateSubTaskResponse;
+}
+
+export namespace UpdateSubTaskResponse {
   export type AsObject = {
   }
 }

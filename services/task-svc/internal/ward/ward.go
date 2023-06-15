@@ -1,6 +1,7 @@
 package ward
 
 import (
+	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
@@ -8,6 +9,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
+	"hwutil"
 )
 
 type Base struct {
@@ -16,7 +18,8 @@ type Base struct {
 
 type Ward struct {
 	Base
-	ID uuid.UUID `gorm:"column:id"`
+	ID             uuid.UUID `gorm:"column:id"`
+	OrganizationID uuid.UUID `gorm:"column:organization_id"`
 }
 
 type ServiceServer struct {
@@ -33,10 +36,16 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 
 	// TODO: Auth
 
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	ward := Ward{
 		Base: Base{
 			Name: req.GetName(),
 		},
+		OrganizationID: organizationID,
 	}
 
 	if err := db.Create(&ward).Error; err != nil {
@@ -78,6 +87,35 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 	}, nil
 }
 
+func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb.GetWardsResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	// TODO: Auth
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var wards []Ward
+	if err := db.Where("organization_id = ?", organizationID).Find(&wards).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+
+	return &pb.GetWardsResponse{
+		Wards: hwutil.Map(wards, func(ward Ward) *pb.GetWardsResponse_Ward {
+			return &pb.GetWardsResponse_Ward{
+				Id:   ward.ID.String(),
+				Name: ward.Name,
+			}
+		}),
+	}, nil
+}
+
 func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) (*pb.UpdateWardResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
@@ -96,4 +134,23 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 	}
 
 	return &pb.UpdateWardResponse{}, nil
+}
+
+func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	// TODO: Auth
+
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	ward := Ward{ID: id}
+
+	if err := db.Delete(&ward).Error; err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &pb.DeleteWardResponse{}, nil
 }

@@ -23,6 +23,7 @@ import (
 type claimsKey struct{}
 
 type userIDKey struct{}
+type organizationIDKey struct{}
 
 // StartNewGRPCServer creates and starts a new GRPC server on addr or panics.
 // Using registerServerHook you are able to register your
@@ -109,7 +110,39 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	log := zlog.Ctx(ctx).With().Str("userID", userID.String()).Logger()
 	ctx = log.WithContext(ctx)
 
-	return ctx, nil
+	return handleOrganizationIDForAuthFunc(ctx)
+}
+
+// handleOrganizationIDForAuthFunc is a part of our auth middleware.
+// The claims are signed. Therefore, we can match the user provided
+// organizationID from the headers against the organizationIDs inside the claim.
+func handleOrganizationIDForAuthFunc(ctx context.Context) (context.Context, error) {
+	organizationIDStr, err := OrganizationIDFromMD(ctx)
+	if err != nil {
+		zlog.Ctx(ctx).Trace().Err(err).Msg("no valid organization header found")
+		return nil, err
+	}
+
+	organizationID, err := uuid.Parse(organizationIDStr)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "invalid organizationID")
+	}
+
+	claims, err := GetAuthClaims(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if !hwutil.Contains(claims.Organizations, organizationID) {
+		zlog.Ctx(ctx).Info().Str("organizationID", organizationID.String()).Msg("organization in header was not part of claims")
+		return nil, status.Errorf(codes.Unauthenticated, "no access to this organization")
+	}
+
+	ctx = context.WithValue(ctx, organizationIDKey{}, organizationID)
+
+	// Append organizationID to the logger
+	log := zlog.Ctx(ctx).With().Str("organizationID", organizationID.String()).Logger()
+	return log.WithContext(ctx), nil
 }
 
 // VerifyFakeToken accepts a Base64 encoded json structure with the schema of IDTokenClaims
@@ -150,6 +183,15 @@ func GetUserID(ctx context.Context) (uuid.UUID, error) {
 	res, ok := ctx.Value(userIDKey{}).(uuid.UUID)
 	if !ok {
 		return uuid.UUID{}, status.Error(codes.Unauthenticated, "userID not in context, set up auth")
+	} else {
+		return res, nil
+	}
+}
+
+func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
+	res, ok := ctx.Value(organizationIDKey{}).(uuid.UUID)
+	if !ok {
+		return uuid.UUID{}, status.Error(codes.Internal, "organizationID not in context, set up auth")
 	} else {
 		return res, nil
 	}
@@ -246,4 +288,14 @@ func redactMetadata(m metautils.NiceMD) metautils.NiceMD {
 		}
 	}
 	return m
+}
+
+// OrganizationIDFromMD retrieves the user defined organizationID
+// from the metadata of the request
+func OrganizationIDFromMD(ctx context.Context) (string, error) {
+	val := metautils.ExtractIncoming(ctx).Get("X-Organization")
+	if val == "" {
+		return "", status.Errorf(codes.Unauthenticated, "Request unauthenticated")
+	}
+	return val, nil
 }

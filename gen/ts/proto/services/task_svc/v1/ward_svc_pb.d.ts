@@ -67,9 +67,6 @@ export class GetWardResponse extends jspb.Message {
   getName(): string;
   setName(value: string): GetWardResponse;
 
-  getOrganizationId(): string;
-  setOrganizationId(value: string): GetWardResponse;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetWardResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetWardResponse): GetWardResponse.AsObject;
@@ -82,7 +79,6 @@ export namespace GetWardResponse {
   export type AsObject = {
     id: string,
     name: string,
-    organizationId: string,
   }
 }
 
@@ -126,9 +122,6 @@ export namespace GetWardsResponse {
     getName(): string;
     setName(value: string): Ward;
 
-    getOrganizationId(): string;
-    setOrganizationId(value: string): Ward;
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Ward.AsObject;
     static toObject(includeInstance: boolean, msg: Ward): Ward.AsObject;
@@ -141,7 +134,6 @@ export namespace GetWardsResponse {
     export type AsObject = {
       id: string,
       name: string,
-      organizationId: string,
     }
   }
 

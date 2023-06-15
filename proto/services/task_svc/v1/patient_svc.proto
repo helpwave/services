@@ -73,7 +73,7 @@ message GetPatientsByWardResponse {
 message UpdatePatientRequest {
   string id = 1; // @gotags: validate:"uuid4"
   optional string human_readable_identifier = 2;
-  string notes = 3;
+  optional string notes = 3;
 }
 
 message UpdatePatientResponse {}

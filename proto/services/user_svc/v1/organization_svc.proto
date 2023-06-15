@@ -131,11 +131,22 @@ message RemoveMemberResponse{}
 //
 
 message InviteMemberRequest {
-  string id = 1;  // @gotags: validate:"uuid4"
+  string organization_id = 1; // @gotags: validate:"uuid4"
   string email = 2; // @gotags: validate:"required,email"
 }
 
-message InviteMemberResponse {}
+message InviteMemberResponse {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+//
+// AcceptInvite
+//
+message AcceptInvitationRequest {
+  string invitation_id = 1;  // @gotags: validate:"uuid4"
+}
+
+message AcceptInvitationResponse {}
 
 //
 //  OrganizationService
@@ -151,4 +162,5 @@ service OrganizationService {
   rpc AddMember (AddMemberRequest) returns (AddMemberResponse) {}
   rpc RemoveMember (RemoveMemberRequest) returns (RemoveMemberResponse) {}
   rpc InviteMember (InviteMemberRequest) returns (InviteMemberResponse) {}
+  rpc AcceptInvitation (AcceptInvitationRequest) returns (AcceptInvitationResponse) {}
 }

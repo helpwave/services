@@ -1,0 +1,10 @@
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: daprConfig
+spec:
+  nameResolution:
+    component: "kubernetes"
+    configuration:
+      # https://fly.io/docs/reference/private-networking/#fly-internal-addresses
+      template: "helpwave-staging-{{.ID}}.internal:{{.Port}}"

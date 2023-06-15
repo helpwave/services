@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+
+  postgres:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:6
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: tech@helpwave.de
+      PGADMIN_DEFAULT_PASSWORD: tech@helpwave.de
+    ports:
+      - "5433:80"
+
+  apisix:
+    build:
+      context: ..
+      dockerfile: Dockerfile.apisix
+    profiles:
+      - full
+    restart: unless-stopped
+    volumes:
+      - ../apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro
+      - ./dapr.yaml:/usr/local/apisix/dapr.yaml:ro
+    ports:
+      - "9080:9080"
+
+  task-svc:
+    build:
+      context: ..
+      dockerfile: Dockerfile.standalone
+      args:
+        - SERVICE=task-svc
+    profiles:
+      - full
+    volumes:
+      - ./dapr.yaml:/app/dapr.yaml:ro
+    restart: unless-stopped
+    environment:
+      INSECURE_FAKE_TOKEN_ENABLE: true
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: task-svc

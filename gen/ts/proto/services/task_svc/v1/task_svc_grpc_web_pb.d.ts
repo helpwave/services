@@ -50,6 +50,13 @@ export class TaskServiceClient {
                response: proto_services_task_svc_v1_task_svc_pb.RemoveSubTaskResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_svc_pb.RemoveSubTaskResponse>;
 
+  updateSubTask(
+    request: proto_services_task_svc_v1_task_svc_pb.UpdateSubTaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_task_svc_pb.UpdateSubTaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_svc_pb.UpdateSubTaskResponse>;
+
   subTaskToToDo(
     request: proto_services_task_svc_v1_task_svc_pb.SubTaskToToDoRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -156,6 +163,11 @@ export class TaskServicePromiseClient {
     request: proto_services_task_svc_v1_task_svc_pb.RemoveSubTaskRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_task_svc_pb.RemoveSubTaskResponse>;
+
+  updateSubTask(
+    request: proto_services_task_svc_v1_task_svc_pb.UpdateSubTaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_task_svc_pb.UpdateSubTaskResponse>;
 
   subTaskToToDo(
     request: proto_services_task_svc_v1_task_svc_pb.SubTaskToToDoRequest,

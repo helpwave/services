@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/coreos/go-oidc"
+	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"hwutil"
@@ -40,6 +41,9 @@ type IDTokenClaims struct {
 
 	// Claim: email
 	Email string `json:"email"`
+
+	// Claim: organizations
+	Organizations []uuid.UUID `json:"organizations"`
 }
 
 func (t IDTokenClaims) AsExpected() error {
@@ -70,8 +74,17 @@ func setupAuth() {
 		zlog.Fatal().Err(err).Send()
 	}
 
+	// We are doing this if/else to fail when
+	// InsecureFakeTokenEnable is false and env OAUTH_CLIENT_ID is not set
+	var clientId string
+	if InsecureFakeTokenEnable {
+		clientId = "fake_oauth_client_id"
+	} else {
+		clientId = hwutil.MustGetEnv("OAUTH_CLIENT_ID")
+	}
+
 	oauthConfig = &oauth2.Config{
-		ClientID: hwutil.MustGetEnv("OAUTH_CLIENT_ID"),
+		ClientID: clientId,
 		Endpoint: provider.Endpoint(),
 	}
 
