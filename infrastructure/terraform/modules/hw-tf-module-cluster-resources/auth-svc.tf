@@ -1,10 +1,3 @@
-
-locals {
-  auth_svc_callback_url = "https://api.helpwave.de/auth-svc/callback" // TODO
-  auth_svc_keycloak_client_id = "auth-svc"
-  auth_svc_keycloak_client_secret = "notReallySecret" // TODO: use vault ("**${vault.**_key_**}**")
-}
-
 resource "helm_release" "auth-svc" {
   name  = "auth-svc"
   chart = "../../../charts/service"
@@ -12,7 +5,6 @@ resource "helm_release" "auth-svc" {
 
   depends_on = [
     helm_release.dapr,
-    helm_release.keycloak
   ]
 
   namespace = "auth"
@@ -47,22 +39,6 @@ resource "helm_release" "auth-svc" {
     name  = "postgres.disabled"
     value = true
   }
-
-  set {
-    name  = "keycloakClientID"
-    value = local.auth_svc_keycloak_client_id
-  }
-
-  set {
-    name  = "keycloakClientSecret"
-    value = local.auth_svc_keycloak_client_secret
-  }
-
-  set {
-    name  = "keycloakCallbackURL"
-    value = local.auth_svc_callback_url
-  }
-
 
   set {
     name  = "insecureDisableTLSVerify"

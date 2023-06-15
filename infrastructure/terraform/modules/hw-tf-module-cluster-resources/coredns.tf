@@ -37,9 +37,6 @@ data:
 
         # our changes to the default Corefile:
 
-        rewrite name sso.helpwave.de keycloak-internal.keycloak.svc.cluster.local
-        rewrite name staging-sso.helpwave.de sso.helpwave.de
-
         # end of changes
 
         kubernetes cluster.local in-addr.arpa ip6.arpa {

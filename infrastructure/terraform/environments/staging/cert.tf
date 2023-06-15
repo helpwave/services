@@ -67,38 +67,12 @@ spec:
     - ${cloudflare_record.api-helpwave-de.hostname}
     - ${cloudflare_record.staging-helpwave-de.hostname}
     - ${cloudflare_record.staging-api-helpwave-de.hostname}
-    - ${cloudflare_record.sso-helpwave-de.hostname}
-    - ${cloudflare_record.staging-sso-helpwave-de.hostname}
     - ${cloudflare_record.tasks-helpwave-de.hostname}
     - ${cloudflare_record.staging-tasks-helpwave-de.hostname}
   issuerRef:
     name: letsencrypt
     kind: Issuer
     group: cert-manager.io
-  secretTemplate:
-      annotations:
-        replicator.v1.mittwald.de/replicate-to: "keycloak"
-YAML
-}
-
-// replicate above certificate into the keycloak namespace, so kc can use it
-resource "kubectl_manifest" "cert_secret_x-helpwave-de_keycloak_namespace" {
-  depends_on = [
-    module.cluster-resources
-  ]
-
-  yaml_body = <<YAML
-apiVersion: v1
-kind: Secret
-metadata:
-  name: x-helpwave-de
-  namespace: keycloak
-  annotations:
-    replicator.v1.mittwald.de/replicate-from: cert-manager/x-helpwave-de
-type: kubernetes.io/tls
-data:
-  tls.key: ""
-  tls.crt: ""
 YAML
 }
 
@@ -118,8 +92,6 @@ spec:
     - ${cloudflare_record.api-helpwave-de.hostname}
     - ${cloudflare_record.staging-helpwave-de.hostname}
     - ${cloudflare_record.staging-api-helpwave-de.hostname}
-    - ${cloudflare_record.sso-helpwave-de.hostname}
-    - ${cloudflare_record.staging-sso-helpwave-de.hostname}
     - ${cloudflare_record.tasks-helpwave-de.hostname}
     - ${cloudflare_record.staging-tasks-helpwave-de.hostname}
   secret:

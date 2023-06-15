@@ -14,21 +14,6 @@ app:
   port: 8080
   env: production
 
-keyCloakDisabled: false
-
-keycloakURL: "https://sso.helpwave.de"
-keycloakRealm: "hw-staging"
-
-# the ID and secret of the client, previously registered in Keycloak
-keycloakClientID: ""
-keycloakClientSecret: ""
-
-# only auth-svc needs this (for now)
-# publicly reachable URL for the callback handler (this service)
-# this has to be: https://<url to this service>/callback
-keycloakCallbackURL: ""
-
-
 image:
   repository: helpwave/service
   pullPolicy: IfNotPresent
