@@ -100,6 +100,8 @@ jobs:
     needs: detect-changes
     if: ${{ github.event_name != 'pull_request' && needs.detect-changes.outputs.services != '[]' && needs.detect-changes.outputs.services != '' }}
     strategy:
+      fail-fast: false
+      max-parallel: 2
       matrix:
         service: ${{ fromJson(needs.detect-changes.outputs.services) }}
     uses: ./.github/workflows/fly-deploy.yaml
