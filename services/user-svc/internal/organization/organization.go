@@ -16,7 +16,6 @@ import (
 	"gorm.io/gorm"
 	"hwgorm"
 	"hwutil"
-	"strings"
 )
 
 type InvitationState = string
@@ -357,7 +356,7 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 	var invitationsResponse []*pb.GetInvitationsByUserResponse_Invitation
 
 	filter := db.Where("email = ?", claims.Email)
-	if strings.TrimSpace(req.State) != "" {
+	if req.State != nil {
 		filter = filter.Where("state = ?", req.State)
 	}
 

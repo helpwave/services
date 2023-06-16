@@ -153,7 +153,7 @@ message AcceptInvitationResponse {}
 //
 
 message GetInvitationsByUserRequest {
-  string state = 2;
+  optional string state = 1;
 }
 
 message GetInvitationsByUserResponse {

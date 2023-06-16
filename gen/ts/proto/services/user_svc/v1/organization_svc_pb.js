@@ -4278,7 +4278,7 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.prototype.toObject 
  */
 proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    state: jspb.Message.getFieldWithDefault(msg, 2, "")
+    state: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -4315,7 +4315,7 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.deserializeBinaryFr
     }
     var field = reader.getFieldNumber();
     switch (field) {
-    case 2:
+    case 1:
       var value = /** @type {string} */ (reader.readString());
       msg.setState(value);
       break;
@@ -4348,10 +4348,10 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.prototype.serialize
  */
 proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getState();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 1));
+  if (f != null) {
     writer.writeString(
-      2,
+      1,
       f
     );
   }
@@ -4359,11 +4359,11 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.serializeBinaryToWr
 
 
 /**
- * optional string state = 2;
+ * optional string state = 1;
  * @return {string}
  */
 proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.prototype.getState = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
@@ -4372,7 +4372,25 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.prototype.getState 
  * @return {!proto.proto.services.user_svc.v1.GetInvitationsByUserRequest} returns this
  */
 proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.prototype.setState = function(value) {
-  return jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setField(this, 1, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.user_svc.v1.GetInvitationsByUserRequest} returns this
+ */
+proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.prototype.clearState = function() {
+  return jspb.Message.setField(this, 1, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.prototype.hasState = function() {
+  return jspb.Message.getField(this, 1) != null;
 };
 
 

@@ -251,12 +251,15 @@ final $typed_data.Uint8List acceptInvitationResponseDescriptor = $convert.base64
 const GetInvitationsByUserRequest$json = const {
   '1': 'GetInvitationsByUserRequest',
   '2': const [
-    const {'1': 'state', '3': 2, '4': 1, '5': 9, '10': 'state'},
+    const {'1': 'state', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'state', '17': true},
+  ],
+  '8': const [
+    const {'1': '_state'},
   ],
 };
 
 /// Descriptor for `GetInvitationsByUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getInvitationsByUserRequestDescriptor = $convert.base64Decode('ChtHZXRJbnZpdGF0aW9uc0J5VXNlclJlcXVlc3QSFAoFc3RhdGUYAiABKAlSBXN0YXRl');
+final $typed_data.Uint8List getInvitationsByUserRequestDescriptor = $convert.base64Decode('ChtHZXRJbnZpdGF0aW9uc0J5VXNlclJlcXVlc3QSGQoFc3RhdGUYASABKAlIAFIFc3RhdGWIAQFCCAoGX3N0YXRl');
 @$core.Deprecated('Use getInvitationsByUserResponseDescriptor instead')
 const GetInvitationsByUserResponse$json = const {
   '1': 'GetInvitationsByUserResponse',

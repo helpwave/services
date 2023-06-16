@@ -528,6 +528,8 @@ export namespace AcceptInvitationResponse {
 export class GetInvitationsByUserRequest extends jspb.Message {
   getState(): string;
   setState(value: string): GetInvitationsByUserRequest;
+  hasState(): boolean;
+  clearState(): GetInvitationsByUserRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetInvitationsByUserRequest.AsObject;
@@ -539,7 +541,12 @@ export class GetInvitationsByUserRequest extends jspb.Message {
 
 export namespace GetInvitationsByUserRequest {
   export type AsObject = {
-    state: string,
+    state?: string,
+  }
+
+  export enum StateCase { 
+    _STATE_NOT_SET = 0,
+    STATE = 1,
   }
 }
 

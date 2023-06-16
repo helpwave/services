@@ -1322,7 +1322,7 @@ class AcceptInvitationResponse extends $pb.GeneratedMessage {
 
 class GetInvitationsByUserRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetInvitationsByUserRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'state')
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'state')
     ..hasRequiredFields = false
   ;
 
@@ -1357,14 +1357,14 @@ class GetInvitationsByUserRequest extends $pb.GeneratedMessage {
   static GetInvitationsByUserRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetInvitationsByUserRequest>(create);
   static GetInvitationsByUserRequest? _defaultInstance;
 
-  @$pb.TagNumber(2)
+  @$pb.TagNumber(1)
   $core.String get state => $_getSZ(0);
-  @$pb.TagNumber(2)
+  @$pb.TagNumber(1)
   set state($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(2)
+  @$pb.TagNumber(1)
   $core.bool hasState() => $_has(0);
-  @$pb.TagNumber(2)
-  void clearState() => clearField(2);
+  @$pb.TagNumber(1)
+  void clearState() => clearField(1);
 }
 
 class GetInvitationsByUserResponse_Invitation extends $pb.GeneratedMessage {
