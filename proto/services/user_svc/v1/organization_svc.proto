@@ -136,7 +136,7 @@ message InviteMemberRequest {
 }
 
 message InviteMemberResponse {
-  string id = 1; // @gotags: validate:"uuid4"
+  string id = 1;
 }
 
 //
@@ -147,6 +147,26 @@ message AcceptInvitationRequest {
 }
 
 message AcceptInvitationResponse {}
+
+//
+// GetInvitationsByUser
+//
+
+message GetInvitationsByUserRequest {
+  string state = 2;
+}
+
+message GetInvitationsByUserResponse {
+
+  repeated Invitation invitations = 1;
+
+  message Invitation{
+    string id = 1;
+    string email = 2;
+    string organization_id = 3;
+    string state = 4;
+  }
+}
 
 //
 //  OrganizationService
@@ -163,4 +183,5 @@ service OrganizationService {
   rpc RemoveMember (RemoveMemberRequest) returns (RemoveMemberResponse) {}
   rpc InviteMember (InviteMemberRequest) returns (InviteMemberResponse) {}
   rpc AcceptInvitation (AcceptInvitationRequest) returns (AcceptInvitationResponse) {}
+  rpc GetInvitationsByUser(GetInvitationsByUserRequest) returns (GetInvitationsByUserResponse) {}
 }

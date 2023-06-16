@@ -78,6 +78,13 @@ export class OrganizationServiceClient {
                response: proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationResponse>;
 
+  getInvitationsByUser(
+    request: proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByUserRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByUserResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByUserResponse>;
+
 }
 
 export class OrganizationServicePromiseClient {
@@ -134,6 +141,11 @@ export class OrganizationServicePromiseClient {
     request: proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationResponse>;
+
+  getInvitationsByUser(
+    request: proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByUserRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByUserResponse>;
 
 }
 

@@ -1098,7 +1098,7 @@ type InviteMemberResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
 func (x *InviteMemberResponse) Reset() {
@@ -1224,6 +1224,171 @@ func (x *AcceptInvitationResponse) ProtoReflect() protoreflect.Message {
 // Deprecated: Use AcceptInvitationResponse.ProtoReflect.Descriptor instead.
 func (*AcceptInvitationResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_user_svc_v1_organization_svc_proto_rawDescGZIP(), []int{21}
+}
+
+type GetInvitationsByUserRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	State string `protobuf:"bytes,2,opt,name=state,proto3" json:"state,omitempty"`
+}
+
+func (x *GetInvitationsByUserRequest) Reset() {
+	*x = GetInvitationsByUserRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_user_svc_v1_organization_svc_proto_msgTypes[22]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetInvitationsByUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetInvitationsByUserRequest) ProtoMessage() {}
+
+func (x *GetInvitationsByUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_user_svc_v1_organization_svc_proto_msgTypes[22]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetInvitationsByUserRequest.ProtoReflect.Descriptor instead.
+func (*GetInvitationsByUserRequest) Descriptor() ([]byte, []int) {
+	return file_proto_services_user_svc_v1_organization_svc_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *GetInvitationsByUserRequest) GetState() string {
+	if x != nil {
+		return x.State
+	}
+	return ""
+}
+
+type GetInvitationsByUserResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Invitations []*GetInvitationsByUserResponse_Invitation `protobuf:"bytes,1,rep,name=invitations,proto3" json:"invitations,omitempty"`
+}
+
+func (x *GetInvitationsByUserResponse) Reset() {
+	*x = GetInvitationsByUserResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_user_svc_v1_organization_svc_proto_msgTypes[23]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetInvitationsByUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetInvitationsByUserResponse) ProtoMessage() {}
+
+func (x *GetInvitationsByUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_user_svc_v1_organization_svc_proto_msgTypes[23]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetInvitationsByUserResponse.ProtoReflect.Descriptor instead.
+func (*GetInvitationsByUserResponse) Descriptor() ([]byte, []int) {
+	return file_proto_services_user_svc_v1_organization_svc_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *GetInvitationsByUserResponse) GetInvitations() []*GetInvitationsByUserResponse_Invitation {
+	if x != nil {
+		return x.Invitations
+	}
+	return nil
+}
+
+type GetInvitationsByUserResponse_Invitation struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id             string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Email          string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	OrganizationId string `protobuf:"bytes,3,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty"`
+	State          string `protobuf:"bytes,4,opt,name=state,proto3" json:"state,omitempty"`
+}
+
+func (x *GetInvitationsByUserResponse_Invitation) Reset() {
+	*x = GetInvitationsByUserResponse_Invitation{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_user_svc_v1_organization_svc_proto_msgTypes[24]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetInvitationsByUserResponse_Invitation) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetInvitationsByUserResponse_Invitation) ProtoMessage() {}
+
+func (x *GetInvitationsByUserResponse_Invitation) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_user_svc_v1_organization_svc_proto_msgTypes[24]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetInvitationsByUserResponse_Invitation.ProtoReflect.Descriptor instead.
+func (*GetInvitationsByUserResponse_Invitation) Descriptor() ([]byte, []int) {
+	return file_proto_services_user_svc_v1_organization_svc_proto_rawDescGZIP(), []int{23, 0}
+}
+
+func (x *GetInvitationsByUserResponse_Invitation) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *GetInvitationsByUserResponse_Invitation) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *GetInvitationsByUserResponse_Invitation) GetOrganizationId() string {
+	if x != nil {
+		return x.OrganizationId
+	}
+	return ""
+}
+
+func (x *GetInvitationsByUserResponse_Invitation) GetState() string {
+	if x != nil {
+		return x.State
+	}
+	return ""
 }
 
 var File_proto_services_user_svc_v1_organization_svc_proto protoreflect.FileDescriptor
@@ -1361,7 +1526,26 @@ var file_proto_services_user_svc_v1_organization_svc_proto_rawDesc = []byte{
 	0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x69, 0x6e,
 	0x76, 0x69, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x22, 0x1a, 0x0a, 0x18, 0x41, 0x63,
 	0x63, 0x65, 0x70, 0x74, 0x49, 0x6e, 0x76, 0x69, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xb3, 0x0a, 0x0a, 0x13, 0x4f, 0x72, 0x67, 0x61, 0x6e,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x33, 0x0a, 0x1b, 0x47, 0x65, 0x74, 0x49, 0x6e, 0x76,
+	0x69, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0x79, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x73, 0x74, 0x61, 0x74, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x73, 0x74, 0x61, 0x74, 0x65, 0x22, 0xf8, 0x01, 0x0a, 0x1c,
+	0x47, 0x65, 0x74, 0x49, 0x6e, 0x76, 0x69, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0x79,
+	0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x65, 0x0a, 0x0b,
+	0x69, 0x6e, 0x76, 0x69, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x43, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x73, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47,
+	0x65, 0x74, 0x49, 0x6e, 0x76, 0x69, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0x79, 0x55,
+	0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x2e, 0x49, 0x6e, 0x76, 0x69,
+	0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0b, 0x69, 0x6e, 0x76, 0x69, 0x74, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x1a, 0x71, 0x0a, 0x0a, 0x49, 0x6e, 0x76, 0x69, 0x74, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69,
+	0x64, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x27, 0x0a, 0x0f, 0x6f, 0x72, 0x67, 0x61, 0x6e,
+	0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0e, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64,
+	0x12, 0x14, 0x0a, 0x05, 0x73, 0x74, 0x61, 0x74, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x05, 0x73, 0x74, 0x61, 0x74, 0x65, 0x32, 0xc1, 0x0b, 0x0a, 0x13, 0x4f, 0x72, 0x67, 0x61, 0x6e,
 	0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x85,
 	0x01, 0x0a, 0x12, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a,
 	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x35, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65,
@@ -1444,22 +1628,30 @@ var file_proto_services_user_svc_v1_organization_svc_proto_rawDesc = []byte{
 	0x75, 0x65, 0x73, 0x74, 0x1a, 0x34, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72,
 	0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76,
 	0x31, 0x2e, 0x41, 0x63, 0x63, 0x65, 0x70, 0x74, 0x49, 0x6e, 0x76, 0x69, 0x74, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0xda, 0x01, 0x0a,
-	0x1e, 0x63, 0x6f, 0x6d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x73, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x42,
-	0x14, 0x4f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x76, 0x63,
-	0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x67, 0x65, 0x6e, 0x2f, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x75, 0x73, 0x65, 0x72,
-	0x2d, 0x73, 0x76, 0x63, 0xa2, 0x02, 0x03, 0x50, 0x53, 0x55, 0xaa, 0x02, 0x19, 0x50, 0x72, 0x6f,
-	0x74, 0x6f, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x55, 0x73, 0x65, 0x72,
-	0x53, 0x76, 0x63, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x19, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x5c, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5c, 0x55, 0x73, 0x65, 0x72, 0x53, 0x76, 0x63, 0x5c,
-	0x56, 0x31, 0xe2, 0x02, 0x25, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x5c, 0x53, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x73, 0x5c, 0x55, 0x73, 0x65, 0x72, 0x53, 0x76, 0x63, 0x5c, 0x56, 0x31, 0x5c, 0x47,
-	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1c, 0x50, 0x72, 0x6f,
-	0x74, 0x6f, 0x3a, 0x3a, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x3a, 0x3a, 0x55, 0x73,
-	0x65, 0x72, 0x53, 0x76, 0x63, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x8b, 0x01, 0x0a,
+	0x14, 0x47, 0x65, 0x74, 0x49, 0x6e, 0x76, 0x69, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42,
+	0x79, 0x55, 0x73, 0x65, 0x72, 0x12, 0x37, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x73, 0x76, 0x63, 0x2e,
+	0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x49, 0x6e, 0x76, 0x69, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x42, 0x79, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x38,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e,
+	0x75, 0x73, 0x65, 0x72, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x49,
+	0x6e, 0x76, 0x69, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0x79, 0x55, 0x73, 0x65, 0x72,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0xda, 0x01, 0x0a, 0x1e, 0x63,
+	0x6f, 0x6d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x73, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x42, 0x14, 0x4f,
+	0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x76, 0x63, 0x50, 0x72,
+	0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x67, 0x65, 0x6e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x2d, 0x73,
+	0x76, 0x63, 0xa2, 0x02, 0x03, 0x50, 0x53, 0x55, 0xaa, 0x02, 0x19, 0x50, 0x72, 0x6f, 0x74, 0x6f,
+	0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x53, 0x76,
+	0x63, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x19, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x5c, 0x53, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x73, 0x5c, 0x55, 0x73, 0x65, 0x72, 0x53, 0x76, 0x63, 0x5c, 0x56, 0x31,
+	0xe2, 0x02, 0x25, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x5c, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x73, 0x5c, 0x55, 0x73, 0x65, 0x72, 0x53, 0x76, 0x63, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42,
+	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1c, 0x50, 0x72, 0x6f, 0x74, 0x6f,
+	0x3a, 0x3a, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x3a, 0x3a, 0x55, 0x73, 0x65, 0x72,
+	0x53, 0x76, 0x63, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1474,59 +1666,65 @@ func file_proto_services_user_svc_v1_organization_svc_proto_rawDescGZIP() []byte
 	return file_proto_services_user_svc_v1_organization_svc_proto_rawDescData
 }
 
-var file_proto_services_user_svc_v1_organization_svc_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_proto_services_user_svc_v1_organization_svc_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
 var file_proto_services_user_svc_v1_organization_svc_proto_goTypes = []interface{}{
-	(*CreateOrganizationRequest)(nil),         // 0: proto.services.user_svc.v1.CreateOrganizationRequest
-	(*CreateOrganizationResponse)(nil),        // 1: proto.services.user_svc.v1.CreateOrganizationResponse
-	(*CreateOrganizationForUserRequest)(nil),  // 2: proto.services.user_svc.v1.CreateOrganizationForUserRequest
-	(*CreateOrganizationForUserResponse)(nil), // 3: proto.services.user_svc.v1.CreateOrganizationForUserResponse
-	(*GetOrganizationMember)(nil),             // 4: proto.services.user_svc.v1.GetOrganizationMember
-	(*GetOrganizationRequest)(nil),            // 5: proto.services.user_svc.v1.GetOrganizationRequest
-	(*GetOrganizationResponse)(nil),           // 6: proto.services.user_svc.v1.GetOrganizationResponse
-	(*GetOrganizationsByUserMember)(nil),      // 7: proto.services.user_svc.v1.GetOrganizationsByUserMember
-	(*GetOrganizationsByUserRequest)(nil),     // 8: proto.services.user_svc.v1.GetOrganizationsByUserRequest
-	(*GetOrganizationsByUserResponse)(nil),    // 9: proto.services.user_svc.v1.GetOrganizationsByUserResponse
-	(*UpdateOrganizationRequest)(nil),         // 10: proto.services.user_svc.v1.UpdateOrganizationRequest
-	(*UpdateOrganizationResponse)(nil),        // 11: proto.services.user_svc.v1.UpdateOrganizationResponse
-	(*DeleteOrganizationRequest)(nil),         // 12: proto.services.user_svc.v1.DeleteOrganizationRequest
-	(*DeleteOrganizationResponse)(nil),        // 13: proto.services.user_svc.v1.DeleteOrganizationResponse
-	(*AddMemberRequest)(nil),                  // 14: proto.services.user_svc.v1.AddMemberRequest
-	(*AddMemberResponse)(nil),                 // 15: proto.services.user_svc.v1.AddMemberResponse
-	(*RemoveMemberRequest)(nil),               // 16: proto.services.user_svc.v1.RemoveMemberRequest
-	(*RemoveMemberResponse)(nil),              // 17: proto.services.user_svc.v1.RemoveMemberResponse
-	(*InviteMemberRequest)(nil),               // 18: proto.services.user_svc.v1.InviteMemberRequest
-	(*InviteMemberResponse)(nil),              // 19: proto.services.user_svc.v1.InviteMemberResponse
-	(*AcceptInvitationRequest)(nil),           // 20: proto.services.user_svc.v1.AcceptInvitationRequest
-	(*AcceptInvitationResponse)(nil),          // 21: proto.services.user_svc.v1.AcceptInvitationResponse
+	(*CreateOrganizationRequest)(nil),               // 0: proto.services.user_svc.v1.CreateOrganizationRequest
+	(*CreateOrganizationResponse)(nil),              // 1: proto.services.user_svc.v1.CreateOrganizationResponse
+	(*CreateOrganizationForUserRequest)(nil),        // 2: proto.services.user_svc.v1.CreateOrganizationForUserRequest
+	(*CreateOrganizationForUserResponse)(nil),       // 3: proto.services.user_svc.v1.CreateOrganizationForUserResponse
+	(*GetOrganizationMember)(nil),                   // 4: proto.services.user_svc.v1.GetOrganizationMember
+	(*GetOrganizationRequest)(nil),                  // 5: proto.services.user_svc.v1.GetOrganizationRequest
+	(*GetOrganizationResponse)(nil),                 // 6: proto.services.user_svc.v1.GetOrganizationResponse
+	(*GetOrganizationsByUserMember)(nil),            // 7: proto.services.user_svc.v1.GetOrganizationsByUserMember
+	(*GetOrganizationsByUserRequest)(nil),           // 8: proto.services.user_svc.v1.GetOrganizationsByUserRequest
+	(*GetOrganizationsByUserResponse)(nil),          // 9: proto.services.user_svc.v1.GetOrganizationsByUserResponse
+	(*UpdateOrganizationRequest)(nil),               // 10: proto.services.user_svc.v1.UpdateOrganizationRequest
+	(*UpdateOrganizationResponse)(nil),              // 11: proto.services.user_svc.v1.UpdateOrganizationResponse
+	(*DeleteOrganizationRequest)(nil),               // 12: proto.services.user_svc.v1.DeleteOrganizationRequest
+	(*DeleteOrganizationResponse)(nil),              // 13: proto.services.user_svc.v1.DeleteOrganizationResponse
+	(*AddMemberRequest)(nil),                        // 14: proto.services.user_svc.v1.AddMemberRequest
+	(*AddMemberResponse)(nil),                       // 15: proto.services.user_svc.v1.AddMemberResponse
+	(*RemoveMemberRequest)(nil),                     // 16: proto.services.user_svc.v1.RemoveMemberRequest
+	(*RemoveMemberResponse)(nil),                    // 17: proto.services.user_svc.v1.RemoveMemberResponse
+	(*InviteMemberRequest)(nil),                     // 18: proto.services.user_svc.v1.InviteMemberRequest
+	(*InviteMemberResponse)(nil),                    // 19: proto.services.user_svc.v1.InviteMemberResponse
+	(*AcceptInvitationRequest)(nil),                 // 20: proto.services.user_svc.v1.AcceptInvitationRequest
+	(*AcceptInvitationResponse)(nil),                // 21: proto.services.user_svc.v1.AcceptInvitationResponse
+	(*GetInvitationsByUserRequest)(nil),             // 22: proto.services.user_svc.v1.GetInvitationsByUserRequest
+	(*GetInvitationsByUserResponse)(nil),            // 23: proto.services.user_svc.v1.GetInvitationsByUserResponse
+	(*GetInvitationsByUserResponse_Invitation)(nil), // 24: proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation
 }
 var file_proto_services_user_svc_v1_organization_svc_proto_depIdxs = []int32{
 	4,  // 0: proto.services.user_svc.v1.GetOrganizationResponse.members:type_name -> proto.services.user_svc.v1.GetOrganizationMember
 	7,  // 1: proto.services.user_svc.v1.GetOrganizationsByUserResponse.members:type_name -> proto.services.user_svc.v1.GetOrganizationsByUserMember
-	0,  // 2: proto.services.user_svc.v1.OrganizationService.CreateOrganization:input_type -> proto.services.user_svc.v1.CreateOrganizationRequest
-	2,  // 3: proto.services.user_svc.v1.OrganizationService.CreateOrganizationForUser:input_type -> proto.services.user_svc.v1.CreateOrganizationForUserRequest
-	5,  // 4: proto.services.user_svc.v1.OrganizationService.GetOrganization:input_type -> proto.services.user_svc.v1.GetOrganizationRequest
-	8,  // 5: proto.services.user_svc.v1.OrganizationService.GetOrganizationsByUser:input_type -> proto.services.user_svc.v1.GetOrganizationsByUserRequest
-	10, // 6: proto.services.user_svc.v1.OrganizationService.UpdateOrganization:input_type -> proto.services.user_svc.v1.UpdateOrganizationRequest
-	12, // 7: proto.services.user_svc.v1.OrganizationService.DeleteOrganization:input_type -> proto.services.user_svc.v1.DeleteOrganizationRequest
-	14, // 8: proto.services.user_svc.v1.OrganizationService.AddMember:input_type -> proto.services.user_svc.v1.AddMemberRequest
-	16, // 9: proto.services.user_svc.v1.OrganizationService.RemoveMember:input_type -> proto.services.user_svc.v1.RemoveMemberRequest
-	18, // 10: proto.services.user_svc.v1.OrganizationService.InviteMember:input_type -> proto.services.user_svc.v1.InviteMemberRequest
-	20, // 11: proto.services.user_svc.v1.OrganizationService.AcceptInvitation:input_type -> proto.services.user_svc.v1.AcceptInvitationRequest
-	1,  // 12: proto.services.user_svc.v1.OrganizationService.CreateOrganization:output_type -> proto.services.user_svc.v1.CreateOrganizationResponse
-	3,  // 13: proto.services.user_svc.v1.OrganizationService.CreateOrganizationForUser:output_type -> proto.services.user_svc.v1.CreateOrganizationForUserResponse
-	6,  // 14: proto.services.user_svc.v1.OrganizationService.GetOrganization:output_type -> proto.services.user_svc.v1.GetOrganizationResponse
-	9,  // 15: proto.services.user_svc.v1.OrganizationService.GetOrganizationsByUser:output_type -> proto.services.user_svc.v1.GetOrganizationsByUserResponse
-	11, // 16: proto.services.user_svc.v1.OrganizationService.UpdateOrganization:output_type -> proto.services.user_svc.v1.UpdateOrganizationResponse
-	13, // 17: proto.services.user_svc.v1.OrganizationService.DeleteOrganization:output_type -> proto.services.user_svc.v1.DeleteOrganizationResponse
-	15, // 18: proto.services.user_svc.v1.OrganizationService.AddMember:output_type -> proto.services.user_svc.v1.AddMemberResponse
-	17, // 19: proto.services.user_svc.v1.OrganizationService.RemoveMember:output_type -> proto.services.user_svc.v1.RemoveMemberResponse
-	19, // 20: proto.services.user_svc.v1.OrganizationService.InviteMember:output_type -> proto.services.user_svc.v1.InviteMemberResponse
-	21, // 21: proto.services.user_svc.v1.OrganizationService.AcceptInvitation:output_type -> proto.services.user_svc.v1.AcceptInvitationResponse
-	12, // [12:22] is the sub-list for method output_type
-	2,  // [2:12] is the sub-list for method input_type
-	2,  // [2:2] is the sub-list for extension type_name
-	2,  // [2:2] is the sub-list for extension extendee
-	0,  // [0:2] is the sub-list for field type_name
+	24, // 2: proto.services.user_svc.v1.GetInvitationsByUserResponse.invitations:type_name -> proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation
+	0,  // 3: proto.services.user_svc.v1.OrganizationService.CreateOrganization:input_type -> proto.services.user_svc.v1.CreateOrganizationRequest
+	2,  // 4: proto.services.user_svc.v1.OrganizationService.CreateOrganizationForUser:input_type -> proto.services.user_svc.v1.CreateOrganizationForUserRequest
+	5,  // 5: proto.services.user_svc.v1.OrganizationService.GetOrganization:input_type -> proto.services.user_svc.v1.GetOrganizationRequest
+	8,  // 6: proto.services.user_svc.v1.OrganizationService.GetOrganizationsByUser:input_type -> proto.services.user_svc.v1.GetOrganizationsByUserRequest
+	10, // 7: proto.services.user_svc.v1.OrganizationService.UpdateOrganization:input_type -> proto.services.user_svc.v1.UpdateOrganizationRequest
+	12, // 8: proto.services.user_svc.v1.OrganizationService.DeleteOrganization:input_type -> proto.services.user_svc.v1.DeleteOrganizationRequest
+	14, // 9: proto.services.user_svc.v1.OrganizationService.AddMember:input_type -> proto.services.user_svc.v1.AddMemberRequest
+	16, // 10: proto.services.user_svc.v1.OrganizationService.RemoveMember:input_type -> proto.services.user_svc.v1.RemoveMemberRequest
+	18, // 11: proto.services.user_svc.v1.OrganizationService.InviteMember:input_type -> proto.services.user_svc.v1.InviteMemberRequest
+	20, // 12: proto.services.user_svc.v1.OrganizationService.AcceptInvitation:input_type -> proto.services.user_svc.v1.AcceptInvitationRequest
+	22, // 13: proto.services.user_svc.v1.OrganizationService.GetInvitationsByUser:input_type -> proto.services.user_svc.v1.GetInvitationsByUserRequest
+	1,  // 14: proto.services.user_svc.v1.OrganizationService.CreateOrganization:output_type -> proto.services.user_svc.v1.CreateOrganizationResponse
+	3,  // 15: proto.services.user_svc.v1.OrganizationService.CreateOrganizationForUser:output_type -> proto.services.user_svc.v1.CreateOrganizationForUserResponse
+	6,  // 16: proto.services.user_svc.v1.OrganizationService.GetOrganization:output_type -> proto.services.user_svc.v1.GetOrganizationResponse
+	9,  // 17: proto.services.user_svc.v1.OrganizationService.GetOrganizationsByUser:output_type -> proto.services.user_svc.v1.GetOrganizationsByUserResponse
+	11, // 18: proto.services.user_svc.v1.OrganizationService.UpdateOrganization:output_type -> proto.services.user_svc.v1.UpdateOrganizationResponse
+	13, // 19: proto.services.user_svc.v1.OrganizationService.DeleteOrganization:output_type -> proto.services.user_svc.v1.DeleteOrganizationResponse
+	15, // 20: proto.services.user_svc.v1.OrganizationService.AddMember:output_type -> proto.services.user_svc.v1.AddMemberResponse
+	17, // 21: proto.services.user_svc.v1.OrganizationService.RemoveMember:output_type -> proto.services.user_svc.v1.RemoveMemberResponse
+	19, // 22: proto.services.user_svc.v1.OrganizationService.InviteMember:output_type -> proto.services.user_svc.v1.InviteMemberResponse
+	21, // 23: proto.services.user_svc.v1.OrganizationService.AcceptInvitation:output_type -> proto.services.user_svc.v1.AcceptInvitationResponse
+	23, // 24: proto.services.user_svc.v1.OrganizationService.GetInvitationsByUser:output_type -> proto.services.user_svc.v1.GetInvitationsByUserResponse
+	14, // [14:25] is the sub-list for method output_type
+	3,  // [3:14] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_services_user_svc_v1_organization_svc_proto_init() }
@@ -1799,6 +1997,42 @@ func file_proto_services_user_svc_v1_organization_svc_proto_init() {
 				return nil
 			}
 		}
+		file_proto_services_user_svc_v1_organization_svc_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetInvitationsByUserRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_services_user_svc_v1_organization_svc_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetInvitationsByUserResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_services_user_svc_v1_organization_svc_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetInvitationsByUserResponse_Invitation); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	file_proto_services_user_svc_v1_organization_svc_proto_msgTypes[10].OneofWrappers = []interface{}{}
 	type x struct{}
@@ -1807,7 +2041,7 @@ func file_proto_services_user_svc_v1_organization_svc_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_services_user_svc_v1_organization_svc_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   22,
+			NumMessages:   25,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
