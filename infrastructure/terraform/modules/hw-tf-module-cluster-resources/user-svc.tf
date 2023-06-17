@@ -1,7 +1,7 @@
 
-locals {
-  user_svc_keycloak_client_id = "user-svc"
-  user_svc_keycloak_client_secret = "notSecretEither" // TODO: use vault ("**${vault.**_key_**}**")
+variable "services_insecureDisableTLSVerify" {
+  type = bool
+  default = false
 }
 
 resource "helm_release" "user-svc" {
@@ -11,7 +11,6 @@ resource "helm_release" "user-svc" {
 
   depends_on = [
     helm_release.dapr,
-    helm_release.keycloak
   ]
 
   namespace = "user"
@@ -45,16 +44,6 @@ resource "helm_release" "user-svc" {
   set {
     name  = "postgres.disabled"
     value = true
-  }
-
-  set {
-    name  = "keycloakClientID"
-    value = local.user_svc_keycloak_client_id
-  }
-
-  set {
-    name  = "keycloakClientSecret"
-    value = local.user_svc_keycloak_client_secret
   }
 
   set {
