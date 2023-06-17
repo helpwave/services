@@ -381,6 +381,38 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 	}, nil
 }
 
+func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInvitationRequest) (*pb.DeclineInvitationResponse, error) {
+	db := hwgorm.GetDB(ctx)
+	log := zlog.Ctx(ctx)
+
+	invitationId, err := uuid.Parse(req.InvitationId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	// Check if invite exists
+	_, err = GetInvitationById(db, invitationId)
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "invite not found")
+		}
+	}
+
+	// Update invitation state
+	invitation := Invitation{
+		ID: invitationId,
+	}
+
+	if err := db.Model(&invitation).Update("state", InvitationStateRejected).Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &pb.DeclineInvitationResponse{}, nil
+}
+
 func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UUID) (*Organization, error) {
 	db := hwgorm.GetDB(ctx)
 

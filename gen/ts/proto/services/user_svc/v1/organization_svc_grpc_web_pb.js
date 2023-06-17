@@ -748,5 +748,66 @@ proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.getI
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.DeclineInvitationRequest,
+ *   !proto.proto.services.user_svc.v1.DeclineInvitationResponse>}
+ */
+const methodDescriptor_OrganizationService_DeclineInvitation = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/DeclineInvitation',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.DeclineInvitationRequest,
+  proto.proto.services.user_svc.v1.DeclineInvitationResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.DeclineInvitationRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.DeclineInvitationResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.DeclineInvitationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.DeclineInvitationResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.DeclineInvitationResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.declineInvitation =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/DeclineInvitation',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_DeclineInvitation,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.DeclineInvitationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.DeclineInvitationResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.declineInvitation =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/DeclineInvitation',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_DeclineInvitation);
+};
+
+
 module.exports = proto.proto.services.user_svc.v1;
 

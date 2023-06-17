@@ -1497,6 +1497,82 @@ class GetInvitationsByUserResponse extends $pb.GeneratedMessage {
   $core.List<GetInvitationsByUserResponse_Invitation> get invitations => $_getList(0);
 }
 
+class DeclineInvitationRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeclineInvitationRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'invitationId')
+    ..hasRequiredFields = false
+  ;
+
+  DeclineInvitationRequest._() : super();
+  factory DeclineInvitationRequest({
+    $core.String? invitationId,
+  }) {
+    final _result = create();
+    if (invitationId != null) {
+      _result.invitationId = invitationId;
+    }
+    return _result;
+  }
+  factory DeclineInvitationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeclineInvitationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DeclineInvitationRequest clone() => DeclineInvitationRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DeclineInvitationRequest copyWith(void Function(DeclineInvitationRequest) updates) => super.copyWith((message) => updates(message as DeclineInvitationRequest)) as DeclineInvitationRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DeclineInvitationRequest create() => DeclineInvitationRequest._();
+  DeclineInvitationRequest createEmptyInstance() => create();
+  static $pb.PbList<DeclineInvitationRequest> createRepeated() => $pb.PbList<DeclineInvitationRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DeclineInvitationRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeclineInvitationRequest>(create);
+  static DeclineInvitationRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get invitationId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set invitationId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasInvitationId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearInvitationId() => clearField(1);
+}
+
+class DeclineInvitationResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeclineInvitationResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  DeclineInvitationResponse._() : super();
+  factory DeclineInvitationResponse() => create();
+  factory DeclineInvitationResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeclineInvitationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DeclineInvitationResponse clone() => DeclineInvitationResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DeclineInvitationResponse copyWith(void Function(DeclineInvitationResponse) updates) => super.copyWith((message) => updates(message as DeclineInvitationResponse)) as DeclineInvitationResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DeclineInvitationResponse create() => DeclineInvitationResponse._();
+  DeclineInvitationResponse createEmptyInstance() => create();
+  static $pb.PbList<DeclineInvitationResponse> createRepeated() => $pb.PbList<DeclineInvitationResponse>();
+  @$core.pragma('dart2js:noInline')
+  static DeclineInvitationResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeclineInvitationResponse>(create);
+  static DeclineInvitationResponse? _defaultInstance;
+}
+
 class OrganizationServiceApi {
   $pb.RpcClient _client;
   OrganizationServiceApi(this._client);
@@ -1544,6 +1620,10 @@ class OrganizationServiceApi {
   $async.Future<GetInvitationsByUserResponse> getInvitationsByUser($pb.ClientContext? ctx, GetInvitationsByUserRequest request) {
     var emptyResponse = GetInvitationsByUserResponse();
     return _client.invoke<GetInvitationsByUserResponse>(ctx, 'OrganizationService', 'GetInvitationsByUser', request, emptyResponse);
+  }
+  $async.Future<DeclineInvitationResponse> declineInvitation($pb.ClientContext? ctx, DeclineInvitationRequest request) {
+    var emptyResponse = DeclineInvitationResponse();
+    return _client.invoke<DeclineInvitationResponse>(ctx, 'OrganizationService', 'DeclineInvitation', request, emptyResponse);
   }
 }
 

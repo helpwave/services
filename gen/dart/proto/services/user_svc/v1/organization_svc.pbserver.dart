@@ -27,6 +27,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
   $async.Future<$7.InviteMemberResponse> inviteMember($pb.ServerContext ctx, $7.InviteMemberRequest request);
   $async.Future<$7.AcceptInvitationResponse> acceptInvitation($pb.ServerContext ctx, $7.AcceptInvitationRequest request);
   $async.Future<$7.GetInvitationsByUserResponse> getInvitationsByUser($pb.ServerContext ctx, $7.GetInvitationsByUserRequest request);
+  $async.Future<$7.DeclineInvitationResponse> declineInvitation($pb.ServerContext ctx, $7.DeclineInvitationRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
@@ -41,6 +42,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
       case 'InviteMember': return $7.InviteMemberRequest();
       case 'AcceptInvitation': return $7.AcceptInvitationRequest();
       case 'GetInvitationsByUser': return $7.GetInvitationsByUserRequest();
+      case 'DeclineInvitation': return $7.DeclineInvitationRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
@@ -58,6 +60,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
       case 'InviteMember': return this.inviteMember(ctx, request as $7.InviteMemberRequest);
       case 'AcceptInvitation': return this.acceptInvitation(ctx, request as $7.AcceptInvitationRequest);
       case 'GetInvitationsByUser': return this.getInvitationsByUser(ctx, request as $7.GetInvitationsByUserRequest);
+      case 'DeclineInvitation': return this.declineInvitation(ctx, request as $7.DeclineInvitationRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
