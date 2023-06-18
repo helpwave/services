@@ -362,14 +362,14 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UU
 			return err
 		}
 
-		userCreatedEvent := &events.OrganizationCreatedEvent{
+		organizationCreatedEvent := &events.OrganizationCreatedEvent{
 			Id:     organization.ID.String(),
 			UserId: userID.String(),
 		}
 
 		daprClient := common.MustNewDaprGRPCClient()
 
-		if err := common.PublishMessage(ctx, daprClient, "pubsub", "ORGANIZATION_CREATED", userCreatedEvent); err != nil {
+		if err := common.PublishMessage(ctx, daprClient, "pubsub", "ORGANIZATION_CREATED", organizationCreatedEvent); err != nil {
 			return err
 		}
 
