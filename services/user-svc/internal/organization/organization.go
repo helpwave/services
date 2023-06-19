@@ -364,6 +364,8 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "invalid state")
 		}
 	}
 
