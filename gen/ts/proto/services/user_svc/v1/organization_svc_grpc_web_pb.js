@@ -687,5 +687,66 @@ proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.acce
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.GetInvitationsByUserRequest,
+ *   !proto.proto.services.user_svc.v1.GetInvitationsByUserResponse>}
+ */
+const methodDescriptor_OrganizationService_GetInvitationsByUser = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/GetInvitationsByUser',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.GetInvitationsByUserRequest,
+  proto.proto.services.user_svc.v1.GetInvitationsByUserResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.GetInvitationsByUserRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.GetInvitationsByUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.GetInvitationsByUserResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.GetInvitationsByUserResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.getInvitationsByUser =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/GetInvitationsByUser',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_GetInvitationsByUser,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.GetInvitationsByUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.GetInvitationsByUserResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.getInvitationsByUser =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/GetInvitationsByUser',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_GetInvitationsByUser);
+};
+
+
 module.exports = proto.proto.services.user_svc.v1;
 

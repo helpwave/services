@@ -247,6 +247,41 @@ const AcceptInvitationResponse$json = const {
 
 /// Descriptor for `AcceptInvitationResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List acceptInvitationResponseDescriptor = $convert.base64Decode('ChhBY2NlcHRJbnZpdGF0aW9uUmVzcG9uc2U=');
+@$core.Deprecated('Use getInvitationsByUserRequestDescriptor instead')
+const GetInvitationsByUserRequest$json = const {
+  '1': 'GetInvitationsByUserRequest',
+  '2': const [
+    const {'1': 'state', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'state', '17': true},
+  ],
+  '8': const [
+    const {'1': '_state'},
+  ],
+};
+
+/// Descriptor for `GetInvitationsByUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getInvitationsByUserRequestDescriptor = $convert.base64Decode('ChtHZXRJbnZpdGF0aW9uc0J5VXNlclJlcXVlc3QSGQoFc3RhdGUYASABKAlIAFIFc3RhdGWIAQFCCAoGX3N0YXRl');
+@$core.Deprecated('Use getInvitationsByUserResponseDescriptor instead')
+const GetInvitationsByUserResponse$json = const {
+  '1': 'GetInvitationsByUserResponse',
+  '2': const [
+    const {'1': 'invitations', '3': 1, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation', '10': 'invitations'},
+  ],
+  '3': const [GetInvitationsByUserResponse_Invitation$json],
+};
+
+@$core.Deprecated('Use getInvitationsByUserResponseDescriptor instead')
+const GetInvitationsByUserResponse_Invitation$json = const {
+  '1': 'Invitation',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
+    const {'1': 'organization_id', '3': 3, '4': 1, '5': 9, '10': 'organizationId'},
+    const {'1': 'state', '3': 4, '4': 1, '5': 9, '10': 'state'},
+  ],
+};
+
+/// Descriptor for `GetInvitationsByUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getInvitationsByUserResponseDescriptor = $convert.base64Decode('ChxHZXRJbnZpdGF0aW9uc0J5VXNlclJlc3BvbnNlEmUKC2ludml0YXRpb25zGAEgAygLMkMucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0SW52aXRhdGlvbnNCeVVzZXJSZXNwb25zZS5JbnZpdGF0aW9uUgtpbnZpdGF0aW9ucxpxCgpJbnZpdGF0aW9uEg4KAmlkGAEgASgJUgJpZBIUCgVlbWFpbBgCIAEoCVIFZW1haWwSJwoPb3JnYW5pemF0aW9uX2lkGAMgASgJUg5vcmdhbml6YXRpb25JZBIUCgVzdGF0ZRgEIAEoCVIFc3RhdGU=');
 const $core.Map<$core.String, $core.dynamic> OrganizationServiceBase$json = const {
   '1': 'OrganizationService',
   '2': const [
@@ -260,6 +295,7 @@ const $core.Map<$core.String, $core.dynamic> OrganizationServiceBase$json = cons
     const {'1': 'RemoveMember', '2': '.proto.services.user_svc.v1.RemoveMemberRequest', '3': '.proto.services.user_svc.v1.RemoveMemberResponse', '4': const {}},
     const {'1': 'InviteMember', '2': '.proto.services.user_svc.v1.InviteMemberRequest', '3': '.proto.services.user_svc.v1.InviteMemberResponse', '4': const {}},
     const {'1': 'AcceptInvitation', '2': '.proto.services.user_svc.v1.AcceptInvitationRequest', '3': '.proto.services.user_svc.v1.AcceptInvitationResponse', '4': const {}},
+    const {'1': 'GetInvitationsByUser', '2': '.proto.services.user_svc.v1.GetInvitationsByUserRequest', '3': '.proto.services.user_svc.v1.GetInvitationsByUserResponse', '4': const {}},
   ],
 };
 
@@ -287,7 +323,10 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> Organizati
   '.proto.services.user_svc.v1.InviteMemberResponse': InviteMemberResponse$json,
   '.proto.services.user_svc.v1.AcceptInvitationRequest': AcceptInvitationRequest$json,
   '.proto.services.user_svc.v1.AcceptInvitationResponse': AcceptInvitationResponse$json,
+  '.proto.services.user_svc.v1.GetInvitationsByUserRequest': GetInvitationsByUserRequest$json,
+  '.proto.services.user_svc.v1.GetInvitationsByUserResponse': GetInvitationsByUserResponse$json,
+  '.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation': GetInvitationsByUserResponse_Invitation$json,
 };
 
 /// Descriptor for `OrganizationService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List organizationServiceDescriptor = $convert.base64Decode('ChNPcmdhbml6YXRpb25TZXJ2aWNlEoUBChJDcmVhdGVPcmdhbml6YXRpb24SNS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5DcmVhdGVPcmdhbml6YXRpb25SZXF1ZXN0GjYucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQ3JlYXRlT3JnYW5pemF0aW9uUmVzcG9uc2UiABKaAQoZQ3JlYXRlT3JnYW5pemF0aW9uRm9yVXNlchI8LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkNyZWF0ZU9yZ2FuaXphdGlvbkZvclVzZXJSZXF1ZXN0Gj0ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQ3JlYXRlT3JnYW5pemF0aW9uRm9yVXNlclJlc3BvbnNlIgASfAoPR2V0T3JnYW5pemF0aW9uEjIucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0T3JnYW5pemF0aW9uUmVxdWVzdBozLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkdldE9yZ2FuaXphdGlvblJlc3BvbnNlIgASkQEKFkdldE9yZ2FuaXphdGlvbnNCeVVzZXISOS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRPcmdhbml6YXRpb25zQnlVc2VyUmVxdWVzdBo6LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkdldE9yZ2FuaXphdGlvbnNCeVVzZXJSZXNwb25zZSIAEoUBChJVcGRhdGVPcmdhbml6YXRpb24SNS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5VcGRhdGVPcmdhbml6YXRpb25SZXF1ZXN0GjYucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuVXBkYXRlT3JnYW5pemF0aW9uUmVzcG9uc2UiABKFAQoSRGVsZXRlT3JnYW5pemF0aW9uEjUucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuRGVsZXRlT3JnYW5pemF0aW9uUmVxdWVzdBo2LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkRlbGV0ZU9yZ2FuaXphdGlvblJlc3BvbnNlIgASagoJQWRkTWVtYmVyEiwucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQWRkTWVtYmVyUmVxdWVzdBotLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkFkZE1lbWJlclJlc3BvbnNlIgAScwoMUmVtb3ZlTWVtYmVyEi8ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuUmVtb3ZlTWVtYmVyUmVxdWVzdBowLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLlJlbW92ZU1lbWJlclJlc3BvbnNlIgAScwoMSW52aXRlTWVtYmVyEi8ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuSW52aXRlTWVtYmVyUmVxdWVzdBowLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkludml0ZU1lbWJlclJlc3BvbnNlIgASfwoQQWNjZXB0SW52aXRhdGlvbhIzLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkFjY2VwdEludml0YXRpb25SZXF1ZXN0GjQucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQWNjZXB0SW52aXRhdGlvblJlc3BvbnNlIgA=');
+final $typed_data.Uint8List organizationServiceDescriptor = $convert.base64Decode('ChNPcmdhbml6YXRpb25TZXJ2aWNlEoUBChJDcmVhdGVPcmdhbml6YXRpb24SNS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5DcmVhdGVPcmdhbml6YXRpb25SZXF1ZXN0GjYucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQ3JlYXRlT3JnYW5pemF0aW9uUmVzcG9uc2UiABKaAQoZQ3JlYXRlT3JnYW5pemF0aW9uRm9yVXNlchI8LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkNyZWF0ZU9yZ2FuaXphdGlvbkZvclVzZXJSZXF1ZXN0Gj0ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQ3JlYXRlT3JnYW5pemF0aW9uRm9yVXNlclJlc3BvbnNlIgASfAoPR2V0T3JnYW5pemF0aW9uEjIucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0T3JnYW5pemF0aW9uUmVxdWVzdBozLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkdldE9yZ2FuaXphdGlvblJlc3BvbnNlIgASkQEKFkdldE9yZ2FuaXphdGlvbnNCeVVzZXISOS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRPcmdhbml6YXRpb25zQnlVc2VyUmVxdWVzdBo6LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkdldE9yZ2FuaXphdGlvbnNCeVVzZXJSZXNwb25zZSIAEoUBChJVcGRhdGVPcmdhbml6YXRpb24SNS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5VcGRhdGVPcmdhbml6YXRpb25SZXF1ZXN0GjYucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuVXBkYXRlT3JnYW5pemF0aW9uUmVzcG9uc2UiABKFAQoSRGVsZXRlT3JnYW5pemF0aW9uEjUucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuRGVsZXRlT3JnYW5pemF0aW9uUmVxdWVzdBo2LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkRlbGV0ZU9yZ2FuaXphdGlvblJlc3BvbnNlIgASagoJQWRkTWVtYmVyEiwucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQWRkTWVtYmVyUmVxdWVzdBotLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkFkZE1lbWJlclJlc3BvbnNlIgAScwoMUmVtb3ZlTWVtYmVyEi8ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuUmVtb3ZlTWVtYmVyUmVxdWVzdBowLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLlJlbW92ZU1lbWJlclJlc3BvbnNlIgAScwoMSW52aXRlTWVtYmVyEi8ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuSW52aXRlTWVtYmVyUmVxdWVzdBowLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkludml0ZU1lbWJlclJlc3BvbnNlIgASfwoQQWNjZXB0SW52aXRhdGlvbhIzLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkFjY2VwdEludml0YXRpb25SZXF1ZXN0GjQucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQWNjZXB0SW52aXRhdGlvblJlc3BvbnNlIgASiwEKFEdldEludml0YXRpb25zQnlVc2VyEjcucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0SW52aXRhdGlvbnNCeVVzZXJSZXF1ZXN0GjgucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0SW52aXRhdGlvbnNCeVVzZXJSZXNwb25zZSIA');

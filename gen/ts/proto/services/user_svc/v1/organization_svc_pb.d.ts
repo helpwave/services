@@ -525,3 +525,79 @@ export namespace AcceptInvitationResponse {
   }
 }
 
+export class GetInvitationsByUserRequest extends jspb.Message {
+  getState(): string;
+  setState(value: string): GetInvitationsByUserRequest;
+  hasState(): boolean;
+  clearState(): GetInvitationsByUserRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetInvitationsByUserRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetInvitationsByUserRequest): GetInvitationsByUserRequest.AsObject;
+  static serializeBinaryToWriter(message: GetInvitationsByUserRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetInvitationsByUserRequest;
+  static deserializeBinaryFromReader(message: GetInvitationsByUserRequest, reader: jspb.BinaryReader): GetInvitationsByUserRequest;
+}
+
+export namespace GetInvitationsByUserRequest {
+  export type AsObject = {
+    state?: string,
+  }
+
+  export enum StateCase { 
+    _STATE_NOT_SET = 0,
+    STATE = 1,
+  }
+}
+
+export class GetInvitationsByUserResponse extends jspb.Message {
+  getInvitationsList(): Array<GetInvitationsByUserResponse.Invitation>;
+  setInvitationsList(value: Array<GetInvitationsByUserResponse.Invitation>): GetInvitationsByUserResponse;
+  clearInvitationsList(): GetInvitationsByUserResponse;
+  addInvitations(value?: GetInvitationsByUserResponse.Invitation, index?: number): GetInvitationsByUserResponse.Invitation;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetInvitationsByUserResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetInvitationsByUserResponse): GetInvitationsByUserResponse.AsObject;
+  static serializeBinaryToWriter(message: GetInvitationsByUserResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetInvitationsByUserResponse;
+  static deserializeBinaryFromReader(message: GetInvitationsByUserResponse, reader: jspb.BinaryReader): GetInvitationsByUserResponse;
+}
+
+export namespace GetInvitationsByUserResponse {
+  export type AsObject = {
+    invitationsList: Array<GetInvitationsByUserResponse.Invitation.AsObject>,
+  }
+
+  export class Invitation extends jspb.Message {
+    getId(): string;
+    setId(value: string): Invitation;
+
+    getEmail(): string;
+    setEmail(value: string): Invitation;
+
+    getOrganizationId(): string;
+    setOrganizationId(value: string): Invitation;
+
+    getState(): string;
+    setState(value: string): Invitation;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Invitation.AsObject;
+    static toObject(includeInstance: boolean, msg: Invitation): Invitation.AsObject;
+    static serializeBinaryToWriter(message: Invitation, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Invitation;
+    static deserializeBinaryFromReader(message: Invitation, reader: jspb.BinaryReader): Invitation;
+  }
+
+  export namespace Invitation {
+    export type AsObject = {
+      id: string,
+      email: string,
+      organizationId: string,
+      state: string,
+    }
+  }
+
+}
+

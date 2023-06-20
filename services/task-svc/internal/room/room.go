@@ -120,7 +120,7 @@ func (ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*pb
 
 	// TODO: Auth
 
-	rooms := []models.Room{}
+	var rooms []models.Room
 	if err := db.Preload("Beds").Find(&rooms).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())

@@ -15,6 +15,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"
 	"hwgorm"
+	"hwutil"
 )
 
 type InvitationState = string
@@ -339,6 +340,46 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 	}
 
 	return &pb.AcceptInvitationResponse{}, nil
+}
+
+func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvitationsByUserRequest) (*pb.GetInvitationsByUserResponse, error) {
+	db := hwgorm.GetDB(ctx)
+	log := zlog.Ctx(ctx)
+
+	claims, err := common.GetAuthClaims(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	var invitations []Invitation
+	var invitationsResponse []*pb.GetInvitationsByUserResponse_Invitation
+
+	filter := db.Where("email = ?", claims.Email)
+	if req.State != nil {
+		filter = filter.Where("state = ?", req.State)
+	}
+
+	if err := filter.Find(&invitations).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			log.Warn().Err(err).Msg("database error")
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "invalid state")
+		}
+	}
+
+	invitationsResponse = hwutil.Map(invitations, func(invitation Invitation) *pb.GetInvitationsByUserResponse_Invitation {
+		return &pb.GetInvitationsByUserResponse_Invitation{
+			Id:             invitation.ID.String(),
+			Email:          invitation.Email,
+			OrganizationId: invitation.OrganizationID.String(),
+			State:          invitation.State,
+		}
+	})
+
+	return &pb.GetInvitationsByUserResponse{
+		Invitations: invitationsResponse,
+	}, nil
 }
 
 func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UUID) (*Organization, error) {
