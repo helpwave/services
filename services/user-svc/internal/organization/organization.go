@@ -343,7 +343,6 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 }
 
 func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvitationsByUserRequest) (*pb.GetInvitationsByUserResponse, error) {
-
 	db := hwgorm.GetDB(ctx)
 	log := zlog.Ctx(ctx)
 
