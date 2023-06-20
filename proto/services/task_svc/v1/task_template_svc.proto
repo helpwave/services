@@ -14,7 +14,7 @@ message CreateTaskTemplateRequest {
   bool public = 3;
   optional string user_id = 4;
   optional string ward_id = 5;
-  optional SubTask subtasks = 6; // When passed, every subtask is a seperate entity
+  repeated SubTask subtasks = 6; // When passed, every subtask is a seperate entity
 
   message SubTask {
     string name = 1;

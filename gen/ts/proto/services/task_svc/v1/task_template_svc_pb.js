@@ -35,7 +35,7 @@ goog.exportSymbol('proto.proto.services.task_svc.v1.CreateTaskTemplateResponse',
  * @constructor
  */
 proto.proto.services.task_svc.v1.CreateTaskTemplateRequest = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.repeatedFields_, null);
 };
 goog.inherits(proto.proto.services.task_svc.v1.CreateTaskTemplateRequest, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -88,6 +88,13 @@ if (goog.DEBUG && !COMPILED) {
   proto.proto.services.task_svc.v1.CreateTaskTemplateResponse.displayName = 'proto.proto.services.task_svc.v1.CreateTaskTemplateResponse';
 }
 
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.repeatedFields_ = [6];
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -124,7 +131,8 @@ proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.toObject = function(i
     pb_public: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
     userId: jspb.Message.getFieldWithDefault(msg, 4, ""),
     wardId: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    subtasks: (f = msg.getSubtasks()) && proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask.toObject(includeInstance, f)
+    subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
+    proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask.toObject, includeInstance)
   };
 
   if (includeInstance) {
@@ -184,7 +192,7 @@ proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.deserializeBinaryFrom
     case 6:
       var value = new proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask;
       reader.readMessage(value,proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask.deserializeBinaryFromReader);
-      msg.setSubtasks(value);
+      msg.addSubtasks(value);
       break;
     default:
       reader.skipField();
@@ -250,9 +258,9 @@ proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.serializeBinaryToWrit
       f
     );
   }
-  f = message.getSubtasks();
-  if (f != null) {
-    writer.writeMessage(
+  f = message.getSubtasksList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
       6,
       f,
       proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask.serializeBinaryToWriter
@@ -518,39 +526,40 @@ proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.hasWardId =
 
 
 /**
- * optional SubTask subtasks = 6;
- * @return {?proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask}
+ * repeated SubTask subtasks = 6;
+ * @return {!Array<!proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask>}
  */
-proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.getSubtasks = function() {
-  return /** @type{?proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask} */ (
-    jspb.Message.getWrapperField(this, proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask, 6));
+proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.getSubtasksList = function() {
+  return /** @type{!Array<!proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask, 6));
 };
 
 
 /**
- * @param {?proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask|undefined} value
+ * @param {!Array<!proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask>} value
  * @return {!proto.proto.services.task_svc.v1.CreateTaskTemplateRequest} returns this
 */
-proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.setSubtasks = function(value) {
-  return jspb.Message.setWrapperField(this, 6, value);
+proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.setSubtasksList = function(value) {
+  return jspb.Message.setRepeatedWrapperField(this, 6, value);
 };
 
 
 /**
- * Clears the message field making it undefined.
+ * @param {!proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask}
+ */
+proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.addSubtasks = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 6, opt_value, proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
  * @return {!proto.proto.services.task_svc.v1.CreateTaskTemplateRequest} returns this
  */
-proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.clearSubtasks = function() {
-  return this.setSubtasks(undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.hasSubtasks = function() {
-  return jspb.Message.getField(this, 6) != null;
+proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.clearSubtasksList = function() {
+  return this.setSubtasksList([]);
 };
 
 

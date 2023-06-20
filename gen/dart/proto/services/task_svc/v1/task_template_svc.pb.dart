@@ -64,7 +64,7 @@ class CreateTaskTemplateRequest extends $pb.GeneratedMessage {
     ..aOB(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'public')
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
     ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'wardId')
-    ..aOM<CreateTaskTemplateRequest_SubTask>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'subtasks', subBuilder: CreateTaskTemplateRequest_SubTask.create)
+    ..pc<CreateTaskTemplateRequest_SubTask>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: CreateTaskTemplateRequest_SubTask.create)
     ..hasRequiredFields = false
   ;
 
@@ -75,7 +75,7 @@ class CreateTaskTemplateRequest extends $pb.GeneratedMessage {
     $core.bool? public,
     $core.String? userId,
     $core.String? wardId,
-    CreateTaskTemplateRequest_SubTask? subtasks,
+    $core.Iterable<CreateTaskTemplateRequest_SubTask>? subtasks,
   }) {
     final _result = create();
     if (name != null) {
@@ -94,7 +94,7 @@ class CreateTaskTemplateRequest extends $pb.GeneratedMessage {
       _result.wardId = wardId;
     }
     if (subtasks != null) {
-      _result.subtasks = subtasks;
+      _result.subtasks.addAll(subtasks);
     }
     return _result;
   }
@@ -165,15 +165,7 @@ class CreateTaskTemplateRequest extends $pb.GeneratedMessage {
   void clearWardId() => clearField(5);
 
   @$pb.TagNumber(6)
-  CreateTaskTemplateRequest_SubTask get subtasks => $_getN(5);
-  @$pb.TagNumber(6)
-  set subtasks(CreateTaskTemplateRequest_SubTask v) { setField(6, v); }
-  @$pb.TagNumber(6)
-  $core.bool hasSubtasks() => $_has(5);
-  @$pb.TagNumber(6)
-  void clearSubtasks() => clearField(6);
-  @$pb.TagNumber(6)
-  CreateTaskTemplateRequest_SubTask ensureSubtasks() => $_ensure(5);
+  $core.List<CreateTaskTemplateRequest_SubTask> get subtasks => $_getList(5);
 }
 
 class CreateTaskTemplateResponse extends $pb.GeneratedMessage {

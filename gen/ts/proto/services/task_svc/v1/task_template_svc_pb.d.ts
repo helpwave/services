@@ -22,10 +22,10 @@ export class CreateTaskTemplateRequest extends jspb.Message {
   hasWardId(): boolean;
   clearWardId(): CreateTaskTemplateRequest;
 
-  getSubtasks(): CreateTaskTemplateRequest.SubTask | undefined;
-  setSubtasks(value?: CreateTaskTemplateRequest.SubTask): CreateTaskTemplateRequest;
-  hasSubtasks(): boolean;
-  clearSubtasks(): CreateTaskTemplateRequest;
+  getSubtasksList(): Array<CreateTaskTemplateRequest.SubTask>;
+  setSubtasksList(value: Array<CreateTaskTemplateRequest.SubTask>): CreateTaskTemplateRequest;
+  clearSubtasksList(): CreateTaskTemplateRequest;
+  addSubtasks(value?: CreateTaskTemplateRequest.SubTask, index?: number): CreateTaskTemplateRequest.SubTask;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateTaskTemplateRequest.AsObject;
@@ -42,7 +42,7 @@ export namespace CreateTaskTemplateRequest {
     pb_public: boolean,
     userId?: string,
     wardId?: string,
-    subtasks?: CreateTaskTemplateRequest.SubTask.AsObject,
+    subtasksList: Array<CreateTaskTemplateRequest.SubTask.AsObject>,
   }
 
   export class SubTask extends jspb.Message {
@@ -72,11 +72,6 @@ export namespace CreateTaskTemplateRequest {
   export enum WardIdCase { 
     _WARD_ID_NOT_SET = 0,
     WARD_ID = 5,
-  }
-
-  export enum SubtasksCase { 
-    _SUBTASKS_NOT_SET = 0,
-    SUBTASKS = 6,
   }
 }
 

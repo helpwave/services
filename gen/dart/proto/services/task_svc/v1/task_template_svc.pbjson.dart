@@ -17,13 +17,12 @@ const CreateTaskTemplateRequest$json = const {
     const {'1': 'public', '3': 3, '4': 1, '5': 8, '10': 'public'},
     const {'1': 'user_id', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'userId', '17': true},
     const {'1': 'ward_id', '3': 5, '4': 1, '5': 9, '9': 1, '10': 'wardId', '17': true},
-    const {'1': 'subtasks', '3': 6, '4': 1, '5': 11, '6': '.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask', '9': 2, '10': 'subtasks', '17': true},
+    const {'1': 'subtasks', '3': 6, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask', '10': 'subtasks'},
   ],
   '3': const [CreateTaskTemplateRequest_SubTask$json],
   '8': const [
     const {'1': '_user_id'},
     const {'1': '_ward_id'},
-    const {'1': '_subtasks'},
   ],
 };
 
@@ -36,7 +35,7 @@ const CreateTaskTemplateRequest_SubTask$json = const {
 };
 
 /// Descriptor for `CreateTaskTemplateRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createTaskTemplateRequestDescriptor = $convert.base64Decode('ChlDcmVhdGVUYXNrVGVtcGxhdGVSZXF1ZXN0EhIKBG5hbWUYASABKAlSBG5hbWUSIAoLZGVzY3JpcHRpb24YAiABKAlSC2Rlc2NyaXB0aW9uEhYKBnB1YmxpYxgDIAEoCFIGcHVibGljEhwKB3VzZXJfaWQYBCABKAlIAFIGdXNlcklkiAEBEhwKB3dhcmRfaWQYBSABKAlIAVIGd2FyZElkiAEBEl4KCHN1YnRhc2tzGAYgASgLMj0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuQ3JlYXRlVGFza1RlbXBsYXRlUmVxdWVzdC5TdWJUYXNrSAJSCHN1YnRhc2tziAEBGh0KB1N1YlRhc2sSEgoEbmFtZRgBIAEoCVIEbmFtZUIKCghfdXNlcl9pZEIKCghfd2FyZF9pZEILCglfc3VidGFza3M=');
+final $typed_data.Uint8List createTaskTemplateRequestDescriptor = $convert.base64Decode('ChlDcmVhdGVUYXNrVGVtcGxhdGVSZXF1ZXN0EhIKBG5hbWUYASABKAlSBG5hbWUSIAoLZGVzY3JpcHRpb24YAiABKAlSC2Rlc2NyaXB0aW9uEhYKBnB1YmxpYxgDIAEoCFIGcHVibGljEhwKB3VzZXJfaWQYBCABKAlIAFIGdXNlcklkiAEBEhwKB3dhcmRfaWQYBSABKAlIAVIGd2FyZElkiAEBElkKCHN1YnRhc2tzGAYgAygLMj0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuQ3JlYXRlVGFza1RlbXBsYXRlUmVxdWVzdC5TdWJUYXNrUghzdWJ0YXNrcxodCgdTdWJUYXNrEhIKBG5hbWUYASABKAlSBG5hbWVCCgoIX3VzZXJfaWRCCgoIX3dhcmRfaWQ=');
 @$core.Deprecated('Use createTaskTemplateResponseDescriptor instead')
 const CreateTaskTemplateResponse$json = const {
   '1': 'CreateTaskTemplateResponse',
