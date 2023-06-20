@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package proto.services.task_svc.v1;
+
+option go_package = "gen/proto/services/task-svc";
+
+///
+/// CreateTaskTemplate
+///
+
+message CreateTaskTemplateRequest {
+  string name = 1; // @gotags: validate:"required"
+  string description = 2; // @gotags: validate:"required"
+  bool public = 3;
+  optional string user_id = 4;
+  optional string ward_id = 5;
+  optional SubTask subtasks = 6; // When passed, every subtask is a seperate entity
+
+  message SubTask {
+    string name = 1;
+  }
+}
+
+message CreateTaskTemplateResponse {
+  string id = 1;
+}
+
+
+
+service TaskTemplateService {
+  rpc CreateTaskTemplate (CreateTaskTemplateRequest) returns (CreateTaskTemplateResponse) {}
+}
