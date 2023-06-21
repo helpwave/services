@@ -343,7 +343,6 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 }
 
 func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvitationsByUserRequest) (*pb.GetInvitationsByUserResponse, error) {
-
 	db := hwgorm.GetDB(ctx)
 	log := zlog.Ctx(ctx)
 
@@ -364,6 +363,8 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "invalid state")
 		}
 	}
 
@@ -434,14 +435,14 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UU
 			return err
 		}
 
-		userCreatedEvent := &events.OrganizationCreatedEvent{
+		organizationCreatedEvent := &events.OrganizationCreatedEvent{
 			Id:     organization.ID.String(),
 			UserId: userID.String(),
 		}
 
 		daprClient := common.MustNewDaprGRPCClient()
 
-		if err := common.PublishMessage(ctx, daprClient, "pubsub", "ORGANIZATION_CREATED", userCreatedEvent); err != nil {
+		if err := common.PublishMessage(ctx, daprClient, "pubsub", "ORGANIZATION_CREATED", organizationCreatedEvent); err != nil {
 			return err
 		}
 
