@@ -12,9 +12,8 @@ message CreateTaskTemplateRequest {
   string name = 1; // @gotags: validate:"required"
   string description = 2; // @gotags: validate:"required"
   bool public = 3;
-  optional string user_id = 4;
-  optional string ward_id = 5;
-  repeated SubTask subtasks = 6; // When passed, every subtask is a seperate entity
+  optional string ward_id = 4;
+  repeated SubTask subtasks = 5; // When passed, every subtask is a seperate entity
 
   message SubTask {
     string name = 1;
@@ -24,8 +23,6 @@ message CreateTaskTemplateRequest {
 message CreateTaskTemplateResponse {
   string id = 1;
 }
-
-
 
 service TaskTemplateService {
   rpc CreateTaskTemplate (CreateTaskTemplateRequest) returns (CreateTaskTemplateResponse) {}

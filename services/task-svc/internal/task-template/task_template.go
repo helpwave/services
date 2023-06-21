@@ -1,6 +1,7 @@
 package task_template
 
 import (
+	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
@@ -20,7 +21,7 @@ type TaskTemplate struct {
 	Base
 	ID       uuid.UUID             `gorm:"column:id"`
 	Public   bool                  `gorm:"column:is_public"`
-	UserID   *uuid.UUID            `gorm:"column:user_id;default:NULL"`
+	UserID   uuid.UUID             `gorm:"column:user_id"`
 	WardID   *uuid.UUID            `gorm:"column:ward_id;default:NULL"`
 	SubTasks []TaskTemplateSubtask `gorm:"foreignKey:TaskTemplateID"`
 }
@@ -43,26 +44,14 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
-	var userID *uuid.UUID
-	if req.UserId != nil {
-		parsedUserID, err := uuid.Parse(*req.UserId)
-		if err != nil {
-			return nil, err
-		}
-		userID = &parsedUserID
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, err
 	}
 
-	var wardID *uuid.UUID
-	if req.WardId != nil {
-		parsedWardId, err := uuid.Parse(*req.WardId)
-		if err != nil {
-			return nil, err
-		}
-		wardID = &parsedWardId
-	}
-
-	if req.WardId == nil && req.UserId == nil {
-		return nil, status.Error(codes.InvalidArgument, "either wardID or userID must be set")
+	wardID, err := hwutil.StringToUUIDPtr(req.WardId)
+	if err != nil {
+		return nil, err
 	}
 
 	// authenticate the userID

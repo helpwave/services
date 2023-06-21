@@ -12,11 +12,6 @@ export class CreateTaskTemplateRequest extends jspb.Message {
   getPublic(): boolean;
   setPublic(value: boolean): CreateTaskTemplateRequest;
 
-  getUserId(): string;
-  setUserId(value: string): CreateTaskTemplateRequest;
-  hasUserId(): boolean;
-  clearUserId(): CreateTaskTemplateRequest;
-
   getWardId(): string;
   setWardId(value: string): CreateTaskTemplateRequest;
   hasWardId(): boolean;
@@ -40,7 +35,6 @@ export namespace CreateTaskTemplateRequest {
     name: string,
     description: string,
     pb_public: boolean,
-    userId?: string,
     wardId?: string,
     subtasksList: Array<CreateTaskTemplateRequest.SubTask.AsObject>,
   }
@@ -64,14 +58,9 @@ export namespace CreateTaskTemplateRequest {
   }
 
 
-  export enum UserIdCase { 
-    _USER_ID_NOT_SET = 0,
-    USER_ID = 4,
-  }
-
   export enum WardIdCase { 
     _WARD_ID_NOT_SET = 0,
-    WARD_ID = 5,
+    WARD_ID = 4,
   }
 }
 

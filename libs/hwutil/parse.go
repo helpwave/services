@@ -72,3 +72,15 @@ func UUIDToStringPtr(u *uuid.UUID) *string {
 	}
 	return &s
 }
+
+func StringToUUIDPtr(s *string) (*uuid.UUID, error) {
+	var uPtr *uuid.UUID
+	if s != nil {
+		u, err := uuid.Parse(*s)
+		if err != nil {
+			return nil, err
+		}
+		uPtr = &u
+	}
+	return uPtr, nil
+}
