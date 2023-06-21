@@ -3,10 +3,10 @@ CREATE TABLE IF NOT EXISTS task_templates (
 	name text NOT NULL,
 	description text  NOT NULL,
 	is_public boolean NOT NULL,
-    ward_id uuid,
-    user_id uuid,
+    ward_id uuid NULL DEFAULT NULL,
+    user_id uuid NULL DEFAULT NULL,
 	FOREIGN KEY (ward_id)
-		REFERENCES wards(id)
+		REFERENCES wards (id)
 		ON DELETE CASCADE
 );
 
@@ -15,6 +15,6 @@ CREATE TABLE IF NOT EXISTS task_template_subtasks (
 	task_template_id uuid NOT NULL,
 	name text NOT NULL,
 	FOREIGN KEY (task_template_id)
-		REFERENCES task_templates(id)
+		REFERENCES task_templates (id)
 		ON DELETE CASCADE
 );

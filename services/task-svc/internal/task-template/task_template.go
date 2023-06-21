@@ -43,38 +43,38 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
-	var userID uuid.UUID
+	var userID *uuid.UUID
 	if req.UserId != nil {
-		var err error
-		userID, err = uuid.Parse(*req.UserId)
+		parsedUserID, err := uuid.Parse(*req.UserId)
 		if err != nil {
 			return nil, err
 		}
+		userID = &parsedUserID
 	}
 
-	var wardID uuid.UUID
+	var wardID *uuid.UUID
 	if req.WardId != nil {
-		var err error
-		wardID, err = uuid.Parse(*req.WardId)
+		parsedWardId, err := uuid.Parse(*req.WardId)
 		if err != nil {
 			return nil, err
 		}
+		wardID = &parsedWardId
 	}
 
-	/*
-		if req.WardId == nil && req.UserId == nil {
-			return nil, status.Error(codes.InvalidArgument, "either wardID or userID must be set")
-		}*/
+	if req.WardId == nil && req.UserId == nil {
+		return nil, status.Error(codes.InvalidArgument, "either wardID or userID must be set")
+	}
 
-	// authenticate the userID or wardID
+	// authenticate the userID
 
 	taskTemplate := TaskTemplate{
 		Base:   Base{Name: req.Name, Description: req.Description},
 		Public: req.Public,
-		UserID: &userID,
-		WardID: &wardID,
+		UserID: userID,
+		WardID: wardID,
 	}
 
+	// This also implicitly checks the wardID because of the foreignKey constraint in the sql
 	if err := db.Create(&taskTemplate).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
