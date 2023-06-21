@@ -391,14 +391,30 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	claims, err := common.GetAuthClaims(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	// Check if invite exists
-	_, err = GetInvitationById(db, invitationId)
+	currentInvitation, err := GetInvitationById(db, invitationId)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "invite not found")
 		}
+	}
+
+	// Validate invite request
+	if currentInvitation.Email != claims.Email {
+		return nil, status.Error(codes.InvalidArgument, "e-mail does not match")
+	}
+
+	if currentInvitation.State == InvitationStateRejected {
+		return &pb.DeclineInvitationResponse{}, nil
+	} else if currentInvitation.State != InvitationStatePending {
+		return nil, status.Error(codes.InvalidArgument, "only pending invitations can be rejected")
 	}
 
 	// Update invitation state
