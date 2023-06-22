@@ -301,11 +301,7 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 	// Check if invite exists
 	currentInvitation, err := GetInvitationByIdAndEmail(db, claims.Email, invitationId)
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "invite not found")
-		}
+		return nil, err
 	}
 
 	if currentInvitation.State == InvitationStateAccepted {
@@ -394,11 +390,7 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 	// Check if invite exists
 	currentInvitation, err := GetInvitationByIdAndEmail(db, claims.Email, invitationId)
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "invite not found")
-		}
+		return nil, err
 	}
 
 	if currentInvitation.State == InvitationStateRejected {
@@ -532,7 +524,7 @@ func GetInvitationByIdAndEmail(db *gorm.DB, email string, id uuid.UUID) (*Invita
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "invitation not found")
+			return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("invitation with id %s and email %s not found", id, email))
 		}
 	}
 
