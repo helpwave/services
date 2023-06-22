@@ -525,18 +525,6 @@ func GetOrganizationById(db *gorm.DB, id uuid.UUID) (*Organization, error) {
 	return &organization, nil
 }
 
-func GetInvitationById(db *gorm.DB, id uuid.UUID) (*Invitation, error) {
-	invitation := Invitation{
-		ID: id,
-	}
-
-	if err := db.First(&invitation).Error; err != nil {
-		return nil, err
-	}
-
-	return &invitation, nil
-}
-
 func GetInvitationByIdAndEmail(db *gorm.DB, email string, id uuid.UUID) (*Invitation, error) {
 
 	var invitation Invitation
