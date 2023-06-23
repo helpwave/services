@@ -517,6 +517,18 @@ func GetOrganizationById(db *gorm.DB, id uuid.UUID) (*Organization, error) {
 	return &organization, nil
 }
 
+func GetInvitationById(db *gorm.DB, id uuid.UUID) (*Invitation, error) {
+	invitation := Invitation{
+		ID: id,
+	}
+
+	if err := db.First(&invitation).Error; err != nil {
+		return nil, err
+	}
+
+	return &invitation, nil
+}
+
 func GetInvitationByIdAndEmail(db *gorm.DB, email string, id uuid.UUID) (*Invitation, error) {
 
 	var invitation Invitation
@@ -524,7 +536,7 @@ func GetInvitationByIdAndEmail(db *gorm.DB, email string, id uuid.UUID) (*Invita
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("invitation with id %s and email %s not found", id, email))
+			return nil, status.Error(codes.InvalidArgument, err.Error())
 		}
 	}
 
