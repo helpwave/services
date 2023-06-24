@@ -1,9 +1,13 @@
-///
+//
 //  Generated code. Do not modify.
 //  source: proto/services/task_svc/v1/bed_svc.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
+
+// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: constant_identifier_names, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
 import 'dart:async' as $async;
 import 'dart:core' as $core;
@@ -11,23 +15,16 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class CreateBedRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateBedRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'roomId')
+  factory CreateBedRequest() => create();
+  CreateBedRequest._() : super();
+  factory CreateBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateBedRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'roomId')
     ..hasRequiredFields = false
   ;
 
-  CreateBedRequest._() : super();
-  factory CreateBedRequest({
-    $core.String? roomId,
-  }) {
-    final _result = create();
-    if (roomId != null) {
-      _result.roomId = roomId;
-    }
-    return _result;
-  }
-  factory CreateBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreateBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -37,8 +34,10 @@ class CreateBedRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  CreateBedRequest copyWith(void Function(CreateBedRequest) updates) => super.copyWith((message) => updates(message as CreateBedRequest)) as CreateBedRequest; // ignore: deprecated_member_use
+  CreateBedRequest copyWith(void Function(CreateBedRequest) updates) => super.copyWith((message) => updates(message as CreateBedRequest)) as CreateBedRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static CreateBedRequest create() => CreateBedRequest._();
   CreateBedRequest createEmptyInstance() => create();
@@ -58,23 +57,16 @@ class CreateBedRequest extends $pb.GeneratedMessage {
 }
 
 class CreateBedResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateBedResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+  factory CreateBedResponse() => create();
+  CreateBedResponse._() : super();
+  factory CreateBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
-  CreateBedResponse._() : super();
-  factory CreateBedResponse({
-    $core.String? id,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    return _result;
-  }
-  factory CreateBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreateBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -84,8 +76,10 @@ class CreateBedResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  CreateBedResponse copyWith(void Function(CreateBedResponse) updates) => super.copyWith((message) => updates(message as CreateBedResponse)) as CreateBedResponse; // ignore: deprecated_member_use
+  CreateBedResponse copyWith(void Function(CreateBedResponse) updates) => super.copyWith((message) => updates(message as CreateBedResponse)) as CreateBedResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static CreateBedResponse create() => CreateBedResponse._();
   CreateBedResponse createEmptyInstance() => create();
@@ -105,28 +99,17 @@ class CreateBedResponse extends $pb.GeneratedMessage {
 }
 
 class BulkCreateBedsRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'BulkCreateBedsRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'roomId')
-    ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'amountOfBeds', $pb.PbFieldType.OU3)
+  factory BulkCreateBedsRequest() => create();
+  BulkCreateBedsRequest._() : super();
+  factory BulkCreateBedsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory BulkCreateBedsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BulkCreateBedsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'roomId')
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'amountOfBeds', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
-  BulkCreateBedsRequest._() : super();
-  factory BulkCreateBedsRequest({
-    $core.String? roomId,
-    $core.int? amountOfBeds,
-  }) {
-    final _result = create();
-    if (roomId != null) {
-      _result.roomId = roomId;
-    }
-    if (amountOfBeds != null) {
-      _result.amountOfBeds = amountOfBeds;
-    }
-    return _result;
-  }
-  factory BulkCreateBedsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory BulkCreateBedsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -136,8 +119,10 @@ class BulkCreateBedsRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  BulkCreateBedsRequest copyWith(void Function(BulkCreateBedsRequest) updates) => super.copyWith((message) => updates(message as BulkCreateBedsRequest)) as BulkCreateBedsRequest; // ignore: deprecated_member_use
+  BulkCreateBedsRequest copyWith(void Function(BulkCreateBedsRequest) updates) => super.copyWith((message) => updates(message as BulkCreateBedsRequest)) as BulkCreateBedsRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static BulkCreateBedsRequest create() => BulkCreateBedsRequest._();
   BulkCreateBedsRequest createEmptyInstance() => create();
@@ -166,23 +151,16 @@ class BulkCreateBedsRequest extends $pb.GeneratedMessage {
 }
 
 class BulkCreateBedsResponse_Bed extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'BulkCreateBedsResponse.Bed', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+  factory BulkCreateBedsResponse_Bed() => create();
+  BulkCreateBedsResponse_Bed._() : super();
+  factory BulkCreateBedsResponse_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory BulkCreateBedsResponse_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BulkCreateBedsResponse.Bed', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
-  BulkCreateBedsResponse_Bed._() : super();
-  factory BulkCreateBedsResponse_Bed({
-    $core.String? id,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    return _result;
-  }
-  factory BulkCreateBedsResponse_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory BulkCreateBedsResponse_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -192,8 +170,10 @@ class BulkCreateBedsResponse_Bed extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  BulkCreateBedsResponse_Bed copyWith(void Function(BulkCreateBedsResponse_Bed) updates) => super.copyWith((message) => updates(message as BulkCreateBedsResponse_Bed)) as BulkCreateBedsResponse_Bed; // ignore: deprecated_member_use
+  BulkCreateBedsResponse_Bed copyWith(void Function(BulkCreateBedsResponse_Bed) updates) => super.copyWith((message) => updates(message as BulkCreateBedsResponse_Bed)) as BulkCreateBedsResponse_Bed;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static BulkCreateBedsResponse_Bed create() => BulkCreateBedsResponse_Bed._();
   BulkCreateBedsResponse_Bed createEmptyInstance() => create();
@@ -213,23 +193,16 @@ class BulkCreateBedsResponse_Bed extends $pb.GeneratedMessage {
 }
 
 class BulkCreateBedsResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'BulkCreateBedsResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..pc<BulkCreateBedsResponse_Bed>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: BulkCreateBedsResponse_Bed.create)
+  factory BulkCreateBedsResponse() => create();
+  BulkCreateBedsResponse._() : super();
+  factory BulkCreateBedsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory BulkCreateBedsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BulkCreateBedsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..pc<BulkCreateBedsResponse_Bed>(1, _omitFieldNames ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: BulkCreateBedsResponse_Bed.create)
     ..hasRequiredFields = false
   ;
 
-  BulkCreateBedsResponse._() : super();
-  factory BulkCreateBedsResponse({
-    $core.Iterable<BulkCreateBedsResponse_Bed>? beds,
-  }) {
-    final _result = create();
-    if (beds != null) {
-      _result.beds.addAll(beds);
-    }
-    return _result;
-  }
-  factory BulkCreateBedsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory BulkCreateBedsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -239,8 +212,10 @@ class BulkCreateBedsResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  BulkCreateBedsResponse copyWith(void Function(BulkCreateBedsResponse) updates) => super.copyWith((message) => updates(message as BulkCreateBedsResponse)) as BulkCreateBedsResponse; // ignore: deprecated_member_use
+  BulkCreateBedsResponse copyWith(void Function(BulkCreateBedsResponse) updates) => super.copyWith((message) => updates(message as BulkCreateBedsResponse)) as BulkCreateBedsResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static BulkCreateBedsResponse create() => BulkCreateBedsResponse._();
   BulkCreateBedsResponse createEmptyInstance() => create();
@@ -254,23 +229,16 @@ class BulkCreateBedsResponse extends $pb.GeneratedMessage {
 }
 
 class GetBedRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetBedRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+  factory GetBedRequest() => create();
+  GetBedRequest._() : super();
+  factory GetBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
-  GetBedRequest._() : super();
-  factory GetBedRequest({
-    $core.String? id,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    return _result;
-  }
-  factory GetBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -280,8 +248,10 @@ class GetBedRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetBedRequest copyWith(void Function(GetBedRequest) updates) => super.copyWith((message) => updates(message as GetBedRequest)) as GetBedRequest; // ignore: deprecated_member_use
+  GetBedRequest copyWith(void Function(GetBedRequest) updates) => super.copyWith((message) => updates(message as GetBedRequest)) as GetBedRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetBedRequest create() => GetBedRequest._();
   GetBedRequest createEmptyInstance() => create();
@@ -301,28 +271,17 @@ class GetBedRequest extends $pb.GeneratedMessage {
 }
 
 class GetBedResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetBedResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'roomId')
+  factory GetBedResponse() => create();
+  GetBedResponse._() : super();
+  factory GetBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'roomId')
     ..hasRequiredFields = false
   ;
 
-  GetBedResponse._() : super();
-  factory GetBedResponse({
-    $core.String? id,
-    $core.String? roomId,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (roomId != null) {
-      _result.roomId = roomId;
-    }
-    return _result;
-  }
-  factory GetBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -332,8 +291,10 @@ class GetBedResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetBedResponse copyWith(void Function(GetBedResponse) updates) => super.copyWith((message) => updates(message as GetBedResponse)) as GetBedResponse; // ignore: deprecated_member_use
+  GetBedResponse copyWith(void Function(GetBedResponse) updates) => super.copyWith((message) => updates(message as GetBedResponse)) as GetBedResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetBedResponse create() => GetBedResponse._();
   GetBedResponse createEmptyInstance() => create();
@@ -362,14 +323,15 @@ class GetBedResponse extends $pb.GeneratedMessage {
 }
 
 class GetBedsRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetBedsRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+  factory GetBedsRequest() => create();
+  GetBedsRequest._() : super();
+  factory GetBedsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetBedsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
-  GetBedsRequest._() : super();
-  factory GetBedsRequest() => create();
-  factory GetBedsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetBedsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -379,8 +341,10 @@ class GetBedsRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetBedsRequest copyWith(void Function(GetBedsRequest) updates) => super.copyWith((message) => updates(message as GetBedsRequest)) as GetBedsRequest; // ignore: deprecated_member_use
+  GetBedsRequest copyWith(void Function(GetBedsRequest) updates) => super.copyWith((message) => updates(message as GetBedsRequest)) as GetBedsRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetBedsRequest create() => GetBedsRequest._();
   GetBedsRequest createEmptyInstance() => create();
@@ -391,28 +355,17 @@ class GetBedsRequest extends $pb.GeneratedMessage {
 }
 
 class GetBedsResponse_Bed extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetBedsResponse.Bed', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'roomId')
+  factory GetBedsResponse_Bed() => create();
+  GetBedsResponse_Bed._() : super();
+  factory GetBedsResponse_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetBedsResponse_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedsResponse.Bed', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'roomId')
     ..hasRequiredFields = false
   ;
 
-  GetBedsResponse_Bed._() : super();
-  factory GetBedsResponse_Bed({
-    $core.String? id,
-    $core.String? roomId,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (roomId != null) {
-      _result.roomId = roomId;
-    }
-    return _result;
-  }
-  factory GetBedsResponse_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetBedsResponse_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -422,8 +375,10 @@ class GetBedsResponse_Bed extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetBedsResponse_Bed copyWith(void Function(GetBedsResponse_Bed) updates) => super.copyWith((message) => updates(message as GetBedsResponse_Bed)) as GetBedsResponse_Bed; // ignore: deprecated_member_use
+  GetBedsResponse_Bed copyWith(void Function(GetBedsResponse_Bed) updates) => super.copyWith((message) => updates(message as GetBedsResponse_Bed)) as GetBedsResponse_Bed;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetBedsResponse_Bed create() => GetBedsResponse_Bed._();
   GetBedsResponse_Bed createEmptyInstance() => create();
@@ -452,23 +407,16 @@ class GetBedsResponse_Bed extends $pb.GeneratedMessage {
 }
 
 class GetBedsResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetBedsResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..pc<GetBedsResponse_Bed>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: GetBedsResponse_Bed.create)
+  factory GetBedsResponse() => create();
+  GetBedsResponse._() : super();
+  factory GetBedsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetBedsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..pc<GetBedsResponse_Bed>(1, _omitFieldNames ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: GetBedsResponse_Bed.create)
     ..hasRequiredFields = false
   ;
 
-  GetBedsResponse._() : super();
-  factory GetBedsResponse({
-    $core.Iterable<GetBedsResponse_Bed>? beds,
-  }) {
-    final _result = create();
-    if (beds != null) {
-      _result.beds.addAll(beds);
-    }
-    return _result;
-  }
-  factory GetBedsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetBedsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -478,8 +426,10 @@ class GetBedsResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetBedsResponse copyWith(void Function(GetBedsResponse) updates) => super.copyWith((message) => updates(message as GetBedsResponse)) as GetBedsResponse; // ignore: deprecated_member_use
+  GetBedsResponse copyWith(void Function(GetBedsResponse) updates) => super.copyWith((message) => updates(message as GetBedsResponse)) as GetBedsResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetBedsResponse create() => GetBedsResponse._();
   GetBedsResponse createEmptyInstance() => create();
@@ -493,23 +443,16 @@ class GetBedsResponse extends $pb.GeneratedMessage {
 }
 
 class GetBedsByRoomRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetBedsByRoomRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'roomId')
+  factory GetBedsByRoomRequest() => create();
+  GetBedsByRoomRequest._() : super();
+  factory GetBedsByRoomRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetBedsByRoomRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedsByRoomRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'roomId')
     ..hasRequiredFields = false
   ;
 
-  GetBedsByRoomRequest._() : super();
-  factory GetBedsByRoomRequest({
-    $core.String? roomId,
-  }) {
-    final _result = create();
-    if (roomId != null) {
-      _result.roomId = roomId;
-    }
-    return _result;
-  }
-  factory GetBedsByRoomRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetBedsByRoomRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -519,8 +462,10 @@ class GetBedsByRoomRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetBedsByRoomRequest copyWith(void Function(GetBedsByRoomRequest) updates) => super.copyWith((message) => updates(message as GetBedsByRoomRequest)) as GetBedsByRoomRequest; // ignore: deprecated_member_use
+  GetBedsByRoomRequest copyWith(void Function(GetBedsByRoomRequest) updates) => super.copyWith((message) => updates(message as GetBedsByRoomRequest)) as GetBedsByRoomRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetBedsByRoomRequest create() => GetBedsByRoomRequest._();
   GetBedsByRoomRequest createEmptyInstance() => create();
@@ -540,23 +485,16 @@ class GetBedsByRoomRequest extends $pb.GeneratedMessage {
 }
 
 class GetBedsByRoomResponse_Bed extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetBedsByRoomResponse.Bed', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+  factory GetBedsByRoomResponse_Bed() => create();
+  GetBedsByRoomResponse_Bed._() : super();
+  factory GetBedsByRoomResponse_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetBedsByRoomResponse_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedsByRoomResponse.Bed', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
-  GetBedsByRoomResponse_Bed._() : super();
-  factory GetBedsByRoomResponse_Bed({
-    $core.String? id,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    return _result;
-  }
-  factory GetBedsByRoomResponse_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetBedsByRoomResponse_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -566,8 +504,10 @@ class GetBedsByRoomResponse_Bed extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetBedsByRoomResponse_Bed copyWith(void Function(GetBedsByRoomResponse_Bed) updates) => super.copyWith((message) => updates(message as GetBedsByRoomResponse_Bed)) as GetBedsByRoomResponse_Bed; // ignore: deprecated_member_use
+  GetBedsByRoomResponse_Bed copyWith(void Function(GetBedsByRoomResponse_Bed) updates) => super.copyWith((message) => updates(message as GetBedsByRoomResponse_Bed)) as GetBedsByRoomResponse_Bed;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetBedsByRoomResponse_Bed create() => GetBedsByRoomResponse_Bed._();
   GetBedsByRoomResponse_Bed createEmptyInstance() => create();
@@ -587,23 +527,16 @@ class GetBedsByRoomResponse_Bed extends $pb.GeneratedMessage {
 }
 
 class GetBedsByRoomResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetBedsByRoomResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..pc<GetBedsByRoomResponse_Bed>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: GetBedsByRoomResponse_Bed.create)
+  factory GetBedsByRoomResponse() => create();
+  GetBedsByRoomResponse._() : super();
+  factory GetBedsByRoomResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetBedsByRoomResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedsByRoomResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..pc<GetBedsByRoomResponse_Bed>(1, _omitFieldNames ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: GetBedsByRoomResponse_Bed.create)
     ..hasRequiredFields = false
   ;
 
-  GetBedsByRoomResponse._() : super();
-  factory GetBedsByRoomResponse({
-    $core.Iterable<GetBedsByRoomResponse_Bed>? beds,
-  }) {
-    final _result = create();
-    if (beds != null) {
-      _result.beds.addAll(beds);
-    }
-    return _result;
-  }
-  factory GetBedsByRoomResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetBedsByRoomResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -613,8 +546,10 @@ class GetBedsByRoomResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetBedsByRoomResponse copyWith(void Function(GetBedsByRoomResponse) updates) => super.copyWith((message) => updates(message as GetBedsByRoomResponse)) as GetBedsByRoomResponse; // ignore: deprecated_member_use
+  GetBedsByRoomResponse copyWith(void Function(GetBedsByRoomResponse) updates) => super.copyWith((message) => updates(message as GetBedsByRoomResponse)) as GetBedsByRoomResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetBedsByRoomResponse create() => GetBedsByRoomResponse._();
   GetBedsByRoomResponse createEmptyInstance() => create();
@@ -628,28 +563,17 @@ class GetBedsByRoomResponse extends $pb.GeneratedMessage {
 }
 
 class UpdateBedRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UpdateBedRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'roomId')
+  factory UpdateBedRequest() => create();
+  UpdateBedRequest._() : super();
+  factory UpdateBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateBedRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'roomId')
     ..hasRequiredFields = false
   ;
 
-  UpdateBedRequest._() : super();
-  factory UpdateBedRequest({
-    $core.String? id,
-    $core.String? roomId,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (roomId != null) {
-      _result.roomId = roomId;
-    }
-    return _result;
-  }
-  factory UpdateBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UpdateBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -659,8 +583,10 @@ class UpdateBedRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  UpdateBedRequest copyWith(void Function(UpdateBedRequest) updates) => super.copyWith((message) => updates(message as UpdateBedRequest)) as UpdateBedRequest; // ignore: deprecated_member_use
+  UpdateBedRequest copyWith(void Function(UpdateBedRequest) updates) => super.copyWith((message) => updates(message as UpdateBedRequest)) as UpdateBedRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static UpdateBedRequest create() => UpdateBedRequest._();
   UpdateBedRequest createEmptyInstance() => create();
@@ -689,14 +615,15 @@ class UpdateBedRequest extends $pb.GeneratedMessage {
 }
 
 class UpdateBedResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UpdateBedResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+  factory UpdateBedResponse() => create();
+  UpdateBedResponse._() : super();
+  factory UpdateBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
-  UpdateBedResponse._() : super();
-  factory UpdateBedResponse() => create();
-  factory UpdateBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UpdateBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -706,8 +633,10 @@ class UpdateBedResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  UpdateBedResponse copyWith(void Function(UpdateBedResponse) updates) => super.copyWith((message) => updates(message as UpdateBedResponse)) as UpdateBedResponse; // ignore: deprecated_member_use
+  UpdateBedResponse copyWith(void Function(UpdateBedResponse) updates) => super.copyWith((message) => updates(message as UpdateBedResponse)) as UpdateBedResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static UpdateBedResponse create() => UpdateBedResponse._();
   UpdateBedResponse createEmptyInstance() => create();
@@ -718,23 +647,16 @@ class UpdateBedResponse extends $pb.GeneratedMessage {
 }
 
 class DeleteBedRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeleteBedRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+  factory DeleteBedRequest() => create();
+  DeleteBedRequest._() : super();
+  factory DeleteBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteBedRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
-  DeleteBedRequest._() : super();
-  factory DeleteBedRequest({
-    $core.String? id,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    return _result;
-  }
-  factory DeleteBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DeleteBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -744,8 +666,10 @@ class DeleteBedRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  DeleteBedRequest copyWith(void Function(DeleteBedRequest) updates) => super.copyWith((message) => updates(message as DeleteBedRequest)) as DeleteBedRequest; // ignore: deprecated_member_use
+  DeleteBedRequest copyWith(void Function(DeleteBedRequest) updates) => super.copyWith((message) => updates(message as DeleteBedRequest)) as DeleteBedRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static DeleteBedRequest create() => DeleteBedRequest._();
   DeleteBedRequest createEmptyInstance() => create();
@@ -765,14 +689,15 @@ class DeleteBedRequest extends $pb.GeneratedMessage {
 }
 
 class DeleteBedResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeleteBedResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+  factory DeleteBedResponse() => create();
+  DeleteBedResponse._() : super();
+  factory DeleteBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
-  DeleteBedResponse._() : super();
-  factory DeleteBedResponse() => create();
-  factory DeleteBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DeleteBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -782,8 +707,10 @@ class DeleteBedResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  DeleteBedResponse copyWith(void Function(DeleteBedResponse) updates) => super.copyWith((message) => updates(message as DeleteBedResponse)) as DeleteBedResponse; // ignore: deprecated_member_use
+  DeleteBedResponse copyWith(void Function(DeleteBedResponse) updates) => super.copyWith((message) => updates(message as DeleteBedResponse)) as DeleteBedResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static DeleteBedResponse create() => DeleteBedResponse._();
   DeleteBedResponse createEmptyInstance() => create();
@@ -797,33 +724,29 @@ class BedServiceApi {
   $pb.RpcClient _client;
   BedServiceApi(this._client);
 
-  $async.Future<CreateBedResponse> createBed($pb.ClientContext? ctx, CreateBedRequest request) {
-    var emptyResponse = CreateBedResponse();
-    return _client.invoke<CreateBedResponse>(ctx, 'BedService', 'CreateBed', request, emptyResponse);
-  }
-  $async.Future<BulkCreateBedsResponse> bulkCreateBeds($pb.ClientContext? ctx, BulkCreateBedsRequest request) {
-    var emptyResponse = BulkCreateBedsResponse();
-    return _client.invoke<BulkCreateBedsResponse>(ctx, 'BedService', 'BulkCreateBeds', request, emptyResponse);
-  }
-  $async.Future<GetBedResponse> getBed($pb.ClientContext? ctx, GetBedRequest request) {
-    var emptyResponse = GetBedResponse();
-    return _client.invoke<GetBedResponse>(ctx, 'BedService', 'GetBed', request, emptyResponse);
-  }
-  $async.Future<GetBedsResponse> getBeds($pb.ClientContext? ctx, GetBedsRequest request) {
-    var emptyResponse = GetBedsResponse();
-    return _client.invoke<GetBedsResponse>(ctx, 'BedService', 'GetBeds', request, emptyResponse);
-  }
-  $async.Future<GetBedsByRoomResponse> getBedsByRoom($pb.ClientContext? ctx, GetBedsByRoomRequest request) {
-    var emptyResponse = GetBedsByRoomResponse();
-    return _client.invoke<GetBedsByRoomResponse>(ctx, 'BedService', 'GetBedsByRoom', request, emptyResponse);
-  }
-  $async.Future<UpdateBedResponse> updateBed($pb.ClientContext? ctx, UpdateBedRequest request) {
-    var emptyResponse = UpdateBedResponse();
-    return _client.invoke<UpdateBedResponse>(ctx, 'BedService', 'UpdateBed', request, emptyResponse);
-  }
-  $async.Future<DeleteBedResponse> deleteBed($pb.ClientContext? ctx, DeleteBedRequest request) {
-    var emptyResponse = DeleteBedResponse();
-    return _client.invoke<DeleteBedResponse>(ctx, 'BedService', 'DeleteBed', request, emptyResponse);
-  }
+  $async.Future<CreateBedResponse> createBed($pb.ClientContext? ctx, CreateBedRequest request) =>
+    _client.invoke<CreateBedResponse>(ctx, 'BedService', 'CreateBed', request, CreateBedResponse())
+  ;
+  $async.Future<BulkCreateBedsResponse> bulkCreateBeds($pb.ClientContext? ctx, BulkCreateBedsRequest request) =>
+    _client.invoke<BulkCreateBedsResponse>(ctx, 'BedService', 'BulkCreateBeds', request, BulkCreateBedsResponse())
+  ;
+  $async.Future<GetBedResponse> getBed($pb.ClientContext? ctx, GetBedRequest request) =>
+    _client.invoke<GetBedResponse>(ctx, 'BedService', 'GetBed', request, GetBedResponse())
+  ;
+  $async.Future<GetBedsResponse> getBeds($pb.ClientContext? ctx, GetBedsRequest request) =>
+    _client.invoke<GetBedsResponse>(ctx, 'BedService', 'GetBeds', request, GetBedsResponse())
+  ;
+  $async.Future<GetBedsByRoomResponse> getBedsByRoom($pb.ClientContext? ctx, GetBedsByRoomRequest request) =>
+    _client.invoke<GetBedsByRoomResponse>(ctx, 'BedService', 'GetBedsByRoom', request, GetBedsByRoomResponse())
+  ;
+  $async.Future<UpdateBedResponse> updateBed($pb.ClientContext? ctx, UpdateBedRequest request) =>
+    _client.invoke<UpdateBedResponse>(ctx, 'BedService', 'UpdateBed', request, UpdateBedResponse())
+  ;
+  $async.Future<DeleteBedResponse> deleteBed($pb.ClientContext? ctx, DeleteBedRequest request) =>
+    _client.invoke<DeleteBedResponse>(ctx, 'BedService', 'DeleteBed', request, DeleteBedResponse())
+  ;
 }
 
+
+const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
+const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

@@ -1,9 +1,13 @@
-///
+//
 //  Generated code. Do not modify.
 //  source: proto/services/emergency_room_svc/v1/emergency_room_svc.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
+
+// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: constant_identifier_names, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
 import 'dart:async' as $async;
 import 'dart:core' as $core;
@@ -12,28 +16,17 @@ import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class Point extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Point', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..a<$core.double>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'lat', $pb.PbFieldType.OF)
-    ..a<$core.double>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'long', $pb.PbFieldType.OF)
+  factory Point() => create();
+  Point._() : super();
+  factory Point.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Point.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Point', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..a<$core.double>(1, _omitFieldNames ? '' : 'lat', $pb.PbFieldType.OF)
+    ..a<$core.double>(2, _omitFieldNames ? '' : 'long', $pb.PbFieldType.OF)
     ..hasRequiredFields = false
   ;
 
-  Point._() : super();
-  factory Point({
-    $core.double? lat,
-    $core.double? long,
-  }) {
-    final _result = create();
-    if (lat != null) {
-      _result.lat = lat;
-    }
-    if (long != null) {
-      _result.long = long;
-    }
-    return _result;
-  }
-  factory Point.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Point.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -43,8 +36,10 @@ class Point extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Point copyWith(void Function(Point) updates) => super.copyWith((message) => updates(message as Point)) as Point; // ignore: deprecated_member_use
+  Point copyWith(void Function(Point) updates) => super.copyWith((message) => updates(message as Point)) as Point;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static Point create() => Point._();
   Point createEmptyInstance() => create();
@@ -73,48 +68,21 @@ class Point extends $pb.GeneratedMessage {
 }
 
 class CreateERRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateERRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
-    ..aOM<Point>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'location', subBuilder: Point.create)
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayableAddress')
-    ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'open')
-    ..a<$core.int>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'utilization', $pb.PbFieldType.O3)
-    ..pPS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departments')
+  factory CreateERRequest() => create();
+  CreateERRequest._() : super();
+  factory CreateERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateERRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'name')
+    ..aOM<Point>(2, _omitFieldNames ? '' : 'location', subBuilder: Point.create)
+    ..aOS(3, _omitFieldNames ? '' : 'displayableAddress')
+    ..aOB(4, _omitFieldNames ? '' : 'open')
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'utilization', $pb.PbFieldType.O3)
+    ..pPS(6, _omitFieldNames ? '' : 'departments')
     ..hasRequiredFields = false
   ;
 
-  CreateERRequest._() : super();
-  factory CreateERRequest({
-    $core.String? name,
-    Point? location,
-    $core.String? displayableAddress,
-    $core.bool? open,
-    $core.int? utilization,
-    $core.Iterable<$core.String>? departments,
-  }) {
-    final _result = create();
-    if (name != null) {
-      _result.name = name;
-    }
-    if (location != null) {
-      _result.location = location;
-    }
-    if (displayableAddress != null) {
-      _result.displayableAddress = displayableAddress;
-    }
-    if (open != null) {
-      _result.open = open;
-    }
-    if (utilization != null) {
-      _result.utilization = utilization;
-    }
-    if (departments != null) {
-      _result.departments.addAll(departments);
-    }
-    return _result;
-  }
-  factory CreateERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreateERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -124,8 +92,10 @@ class CreateERRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  CreateERRequest copyWith(void Function(CreateERRequest) updates) => super.copyWith((message) => updates(message as CreateERRequest)) as CreateERRequest; // ignore: deprecated_member_use
+  CreateERRequest copyWith(void Function(CreateERRequest) updates) => super.copyWith((message) => updates(message as CreateERRequest)) as CreateERRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static CreateERRequest create() => CreateERRequest._();
   CreateERRequest createEmptyInstance() => create();
@@ -186,53 +156,22 @@ class CreateERRequest extends $pb.GeneratedMessage {
 }
 
 class CreateERResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateERResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
-    ..aOM<Point>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'location', subBuilder: Point.create)
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayableAddress')
-    ..aOB(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'open')
-    ..a<$core.int>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'utilization', $pb.PbFieldType.O3)
-    ..pc<DepartmentBase>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departments', $pb.PbFieldType.PM, subBuilder: DepartmentBase.create)
+  factory CreateERResponse() => create();
+  CreateERResponse._() : super();
+  factory CreateERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateERResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOM<Point>(3, _omitFieldNames ? '' : 'location', subBuilder: Point.create)
+    ..aOS(4, _omitFieldNames ? '' : 'displayableAddress')
+    ..aOB(5, _omitFieldNames ? '' : 'open')
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'utilization', $pb.PbFieldType.O3)
+    ..pc<DepartmentBase>(7, _omitFieldNames ? '' : 'departments', $pb.PbFieldType.PM, subBuilder: DepartmentBase.create)
     ..hasRequiredFields = false
   ;
 
-  CreateERResponse._() : super();
-  factory CreateERResponse({
-    $core.String? id,
-    $core.String? name,
-    Point? location,
-    $core.String? displayableAddress,
-    $core.bool? open,
-    $core.int? utilization,
-    $core.Iterable<DepartmentBase>? departments,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (name != null) {
-      _result.name = name;
-    }
-    if (location != null) {
-      _result.location = location;
-    }
-    if (displayableAddress != null) {
-      _result.displayableAddress = displayableAddress;
-    }
-    if (open != null) {
-      _result.open = open;
-    }
-    if (utilization != null) {
-      _result.utilization = utilization;
-    }
-    if (departments != null) {
-      _result.departments.addAll(departments);
-    }
-    return _result;
-  }
-  factory CreateERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreateERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -242,8 +181,10 @@ class CreateERResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  CreateERResponse copyWith(void Function(CreateERResponse) updates) => super.copyWith((message) => updates(message as CreateERResponse)) as CreateERResponse; // ignore: deprecated_member_use
+  CreateERResponse copyWith(void Function(CreateERResponse) updates) => super.copyWith((message) => updates(message as CreateERResponse)) as CreateERResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static CreateERResponse create() => CreateERResponse._();
   CreateERResponse createEmptyInstance() => create();
@@ -313,23 +254,16 @@ class CreateERResponse extends $pb.GeneratedMessage {
 }
 
 class GetERRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetERRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+  factory GetERRequest() => create();
+  GetERRequest._() : super();
+  factory GetERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetERRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
-  GetERRequest._() : super();
-  factory GetERRequest({
-    $core.String? id,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    return _result;
-  }
-  factory GetERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -339,8 +273,10 @@ class GetERRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetERRequest copyWith(void Function(GetERRequest) updates) => super.copyWith((message) => updates(message as GetERRequest)) as GetERRequest; // ignore: deprecated_member_use
+  GetERRequest copyWith(void Function(GetERRequest) updates) => super.copyWith((message) => updates(message as GetERRequest)) as GetERRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetERRequest create() => GetERRequest._();
   GetERRequest createEmptyInstance() => create();
@@ -360,28 +296,17 @@ class GetERRequest extends $pb.GeneratedMessage {
 }
 
 class DepartmentBase extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DepartmentBase', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
+  factory DepartmentBase() => create();
+  DepartmentBase._() : super();
+  factory DepartmentBase.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DepartmentBase.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DepartmentBase', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
-  DepartmentBase._() : super();
-  factory DepartmentBase({
-    $core.String? id,
-    $core.String? name,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (name != null) {
-      _result.name = name;
-    }
-    return _result;
-  }
-  factory DepartmentBase.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DepartmentBase.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -391,8 +316,10 @@ class DepartmentBase extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  DepartmentBase copyWith(void Function(DepartmentBase) updates) => super.copyWith((message) => updates(message as DepartmentBase)) as DepartmentBase; // ignore: deprecated_member_use
+  DepartmentBase copyWith(void Function(DepartmentBase) updates) => super.copyWith((message) => updates(message as DepartmentBase)) as DepartmentBase;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static DepartmentBase create() => DepartmentBase._();
   DepartmentBase createEmptyInstance() => create();
@@ -421,53 +348,22 @@ class DepartmentBase extends $pb.GeneratedMessage {
 }
 
 class GetERResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetERResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
-    ..aOM<Point>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'location', subBuilder: Point.create)
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayableAddress')
-    ..aOB(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'open')
-    ..a<$core.int>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'utilization', $pb.PbFieldType.O3)
-    ..pc<DepartmentBase>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departments', $pb.PbFieldType.PM, subBuilder: DepartmentBase.create)
+  factory GetERResponse() => create();
+  GetERResponse._() : super();
+  factory GetERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetERResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOM<Point>(3, _omitFieldNames ? '' : 'location', subBuilder: Point.create)
+    ..aOS(4, _omitFieldNames ? '' : 'displayableAddress')
+    ..aOB(5, _omitFieldNames ? '' : 'open')
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'utilization', $pb.PbFieldType.O3)
+    ..pc<DepartmentBase>(7, _omitFieldNames ? '' : 'departments', $pb.PbFieldType.PM, subBuilder: DepartmentBase.create)
     ..hasRequiredFields = false
   ;
 
-  GetERResponse._() : super();
-  factory GetERResponse({
-    $core.String? id,
-    $core.String? name,
-    Point? location,
-    $core.String? displayableAddress,
-    $core.bool? open,
-    $core.int? utilization,
-    $core.Iterable<DepartmentBase>? departments,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (name != null) {
-      _result.name = name;
-    }
-    if (location != null) {
-      _result.location = location;
-    }
-    if (displayableAddress != null) {
-      _result.displayableAddress = displayableAddress;
-    }
-    if (open != null) {
-      _result.open = open;
-    }
-    if (utilization != null) {
-      _result.utilization = utilization;
-    }
-    if (departments != null) {
-      _result.departments.addAll(departments);
-    }
-    return _result;
-  }
-  factory GetERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -477,8 +373,10 @@ class GetERResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetERResponse copyWith(void Function(GetERResponse) updates) => super.copyWith((message) => updates(message as GetERResponse)) as GetERResponse; // ignore: deprecated_member_use
+  GetERResponse copyWith(void Function(GetERResponse) updates) => super.copyWith((message) => updates(message as GetERResponse)) as GetERResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetERResponse create() => GetERResponse._();
   GetERResponse createEmptyInstance() => create();
@@ -548,28 +446,17 @@ class GetERResponse extends $pb.GeneratedMessage {
 }
 
 class InclusiveIntInterval extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'InclusiveIntInterval', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'min', $pb.PbFieldType.O3)
-    ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'max', $pb.PbFieldType.O3)
+  factory InclusiveIntInterval() => create();
+  InclusiveIntInterval._() : super();
+  factory InclusiveIntInterval.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory InclusiveIntInterval.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'InclusiveIntInterval', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'min', $pb.PbFieldType.O3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'max', $pb.PbFieldType.O3)
     ..hasRequiredFields = false
   ;
 
-  InclusiveIntInterval._() : super();
-  factory InclusiveIntInterval({
-    $core.int? min,
-    $core.int? max,
-  }) {
-    final _result = create();
-    if (min != null) {
-      _result.min = min;
-    }
-    if (max != null) {
-      _result.max = max;
-    }
-    return _result;
-  }
-  factory InclusiveIntInterval.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory InclusiveIntInterval.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -579,8 +466,10 @@ class InclusiveIntInterval extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  InclusiveIntInterval copyWith(void Function(InclusiveIntInterval) updates) => super.copyWith((message) => updates(message as InclusiveIntInterval)) as InclusiveIntInterval; // ignore: deprecated_member_use
+  InclusiveIntInterval copyWith(void Function(InclusiveIntInterval) updates) => super.copyWith((message) => updates(message as InclusiveIntInterval)) as InclusiveIntInterval;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static InclusiveIntInterval create() => InclusiveIntInterval._();
   InclusiveIntInterval createEmptyInstance() => create();
@@ -609,28 +498,17 @@ class InclusiveIntInterval extends $pb.GeneratedMessage {
 }
 
 class PagedRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'PagedRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'page', $pb.PbFieldType.O3)
-    ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'pageSize', $pb.PbFieldType.O3)
+  factory PagedRequest() => create();
+  PagedRequest._() : super();
+  factory PagedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PagedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PagedRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'page', $pb.PbFieldType.O3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'pageSize', $pb.PbFieldType.O3)
     ..hasRequiredFields = false
   ;
 
-  PagedRequest._() : super();
-  factory PagedRequest({
-    $core.int? page,
-    $core.int? pageSize,
-  }) {
-    final _result = create();
-    if (page != null) {
-      _result.page = page;
-    }
-    if (pageSize != null) {
-      _result.pageSize = pageSize;
-    }
-    return _result;
-  }
-  factory PagedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PagedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -640,8 +518,10 @@ class PagedRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  PagedRequest copyWith(void Function(PagedRequest) updates) => super.copyWith((message) => updates(message as PagedRequest)) as PagedRequest; // ignore: deprecated_member_use
+  PagedRequest copyWith(void Function(PagedRequest) updates) => super.copyWith((message) => updates(message as PagedRequest)) as PagedRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static PagedRequest create() => PagedRequest._();
   PagedRequest createEmptyInstance() => create();
@@ -670,38 +550,19 @@ class PagedRequest extends $pb.GeneratedMessage {
 }
 
 class PageInfo extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'PageInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'page', $pb.PbFieldType.O3)
-    ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'pageSize', $pb.PbFieldType.O3)
-    ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'totalSize')
-    ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'lastPage')
+  factory PageInfo() => create();
+  PageInfo._() : super();
+  factory PageInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PageInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PageInfo', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'page', $pb.PbFieldType.O3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'pageSize', $pb.PbFieldType.O3)
+    ..aInt64(3, _omitFieldNames ? '' : 'totalSize')
+    ..aOB(4, _omitFieldNames ? '' : 'lastPage')
     ..hasRequiredFields = false
   ;
 
-  PageInfo._() : super();
-  factory PageInfo({
-    $core.int? page,
-    $core.int? pageSize,
-    $fixnum.Int64? totalSize,
-    $core.bool? lastPage,
-  }) {
-    final _result = create();
-    if (page != null) {
-      _result.page = page;
-    }
-    if (pageSize != null) {
-      _result.pageSize = pageSize;
-    }
-    if (totalSize != null) {
-      _result.totalSize = totalSize;
-    }
-    if (lastPage != null) {
-      _result.lastPage = lastPage;
-    }
-    return _result;
-  }
-  factory PageInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PageInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -711,8 +572,10 @@ class PageInfo extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  PageInfo copyWith(void Function(PageInfo) updates) => super.copyWith((message) => updates(message as PageInfo)) as PageInfo; // ignore: deprecated_member_use
+  PageInfo copyWith(void Function(PageInfo) updates) => super.copyWith((message) => updates(message as PageInfo)) as PageInfo;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static PageInfo create() => PageInfo._();
   PageInfo createEmptyInstance() => create();
@@ -759,38 +622,19 @@ class PageInfo extends $pb.GeneratedMessage {
 }
 
 class GetERsRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetERsRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..aOM<PagedRequest>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'pagedRequest', subBuilder: PagedRequest.create)
-    ..aOB(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'open')
-    ..aOM<InclusiveIntInterval>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'utilization', subBuilder: InclusiveIntInterval.create)
-    ..aOM<Point>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'location', subBuilder: Point.create)
+  factory GetERsRequest() => create();
+  GetERsRequest._() : super();
+  factory GetERsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetERsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetERsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..aOM<PagedRequest>(1, _omitFieldNames ? '' : 'pagedRequest', subBuilder: PagedRequest.create)
+    ..aOB(2, _omitFieldNames ? '' : 'open')
+    ..aOM<InclusiveIntInterval>(3, _omitFieldNames ? '' : 'utilization', subBuilder: InclusiveIntInterval.create)
+    ..aOM<Point>(4, _omitFieldNames ? '' : 'location', subBuilder: Point.create)
     ..hasRequiredFields = false
   ;
 
-  GetERsRequest._() : super();
-  factory GetERsRequest({
-    PagedRequest? pagedRequest,
-    $core.bool? open,
-    InclusiveIntInterval? utilization,
-    Point? location,
-  }) {
-    final _result = create();
-    if (pagedRequest != null) {
-      _result.pagedRequest = pagedRequest;
-    }
-    if (open != null) {
-      _result.open = open;
-    }
-    if (utilization != null) {
-      _result.utilization = utilization;
-    }
-    if (location != null) {
-      _result.location = location;
-    }
-    return _result;
-  }
-  factory GetERsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetERsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -800,8 +644,10 @@ class GetERsRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetERsRequest copyWith(void Function(GetERsRequest) updates) => super.copyWith((message) => updates(message as GetERsRequest)) as GetERsRequest; // ignore: deprecated_member_use
+  GetERsRequest copyWith(void Function(GetERsRequest) updates) => super.copyWith((message) => updates(message as GetERsRequest)) as GetERsRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetERsRequest create() => GetERsRequest._();
   GetERsRequest createEmptyInstance() => create();
@@ -854,28 +700,17 @@ class GetERsRequest extends $pb.GeneratedMessage {
 }
 
 class GetERsResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetERsResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..aOM<PageInfo>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'pageInfo', subBuilder: PageInfo.create)
-    ..pc<GetERResponse>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'emergencyRooms', $pb.PbFieldType.PM, subBuilder: GetERResponse.create)
+  factory GetERsResponse() => create();
+  GetERsResponse._() : super();
+  factory GetERsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetERsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetERsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..aOM<PageInfo>(1, _omitFieldNames ? '' : 'pageInfo', subBuilder: PageInfo.create)
+    ..pc<GetERResponse>(2, _omitFieldNames ? '' : 'emergencyRooms', $pb.PbFieldType.PM, subBuilder: GetERResponse.create)
     ..hasRequiredFields = false
   ;
 
-  GetERsResponse._() : super();
-  factory GetERsResponse({
-    PageInfo? pageInfo,
-    $core.Iterable<GetERResponse>? emergencyRooms,
-  }) {
-    final _result = create();
-    if (pageInfo != null) {
-      _result.pageInfo = pageInfo;
-    }
-    if (emergencyRooms != null) {
-      _result.emergencyRooms.addAll(emergencyRooms);
-    }
-    return _result;
-  }
-  factory GetERsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetERsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -885,8 +720,10 @@ class GetERsResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetERsResponse copyWith(void Function(GetERsResponse) updates) => super.copyWith((message) => updates(message as GetERsResponse)) as GetERsResponse; // ignore: deprecated_member_use
+  GetERsResponse copyWith(void Function(GetERsResponse) updates) => super.copyWith((message) => updates(message as GetERsResponse)) as GetERsResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetERsResponse create() => GetERsResponse._();
   GetERsResponse createEmptyInstance() => create();
@@ -911,48 +748,21 @@ class GetERsResponse extends $pb.GeneratedMessage {
 }
 
 class UpdateERRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UpdateERRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
-    ..aOM<Point>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'location', subBuilder: Point.create)
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayableAddress')
-    ..aOB(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'open')
-    ..a<$core.int>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'utilization', $pb.PbFieldType.O3)
+  factory UpdateERRequest() => create();
+  UpdateERRequest._() : super();
+  factory UpdateERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateERRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOM<Point>(3, _omitFieldNames ? '' : 'location', subBuilder: Point.create)
+    ..aOS(4, _omitFieldNames ? '' : 'displayableAddress')
+    ..aOB(5, _omitFieldNames ? '' : 'open')
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'utilization', $pb.PbFieldType.O3)
     ..hasRequiredFields = false
   ;
 
-  UpdateERRequest._() : super();
-  factory UpdateERRequest({
-    $core.String? id,
-    $core.String? name,
-    Point? location,
-    $core.String? displayableAddress,
-    $core.bool? open,
-    $core.int? utilization,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (name != null) {
-      _result.name = name;
-    }
-    if (location != null) {
-      _result.location = location;
-    }
-    if (displayableAddress != null) {
-      _result.displayableAddress = displayableAddress;
-    }
-    if (open != null) {
-      _result.open = open;
-    }
-    if (utilization != null) {
-      _result.utilization = utilization;
-    }
-    return _result;
-  }
-  factory UpdateERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UpdateERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -962,8 +772,10 @@ class UpdateERRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  UpdateERRequest copyWith(void Function(UpdateERRequest) updates) => super.copyWith((message) => updates(message as UpdateERRequest)) as UpdateERRequest; // ignore: deprecated_member_use
+  UpdateERRequest copyWith(void Function(UpdateERRequest) updates) => super.copyWith((message) => updates(message as UpdateERRequest)) as UpdateERRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static UpdateERRequest create() => UpdateERRequest._();
   UpdateERRequest createEmptyInstance() => create();
@@ -1030,14 +842,15 @@ class UpdateERRequest extends $pb.GeneratedMessage {
 }
 
 class UpdateERResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UpdateERResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+  factory UpdateERResponse() => create();
+  UpdateERResponse._() : super();
+  factory UpdateERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateERResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
-  UpdateERResponse._() : super();
-  factory UpdateERResponse() => create();
-  factory UpdateERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UpdateERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1047,8 +860,10 @@ class UpdateERResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  UpdateERResponse copyWith(void Function(UpdateERResponse) updates) => super.copyWith((message) => updates(message as UpdateERResponse)) as UpdateERResponse; // ignore: deprecated_member_use
+  UpdateERResponse copyWith(void Function(UpdateERResponse) updates) => super.copyWith((message) => updates(message as UpdateERResponse)) as UpdateERResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static UpdateERResponse create() => UpdateERResponse._();
   UpdateERResponse createEmptyInstance() => create();
@@ -1059,28 +874,17 @@ class UpdateERResponse extends $pb.GeneratedMessage {
 }
 
 class AddDepartmentsToERRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AddDepartmentsToERRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..pPS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departments')
+  factory AddDepartmentsToERRequest() => create();
+  AddDepartmentsToERRequest._() : super();
+  factory AddDepartmentsToERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AddDepartmentsToERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AddDepartmentsToERRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..pPS(2, _omitFieldNames ? '' : 'departments')
     ..hasRequiredFields = false
   ;
 
-  AddDepartmentsToERRequest._() : super();
-  factory AddDepartmentsToERRequest({
-    $core.String? id,
-    $core.Iterable<$core.String>? departments,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (departments != null) {
-      _result.departments.addAll(departments);
-    }
-    return _result;
-  }
-  factory AddDepartmentsToERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory AddDepartmentsToERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1090,8 +894,10 @@ class AddDepartmentsToERRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  AddDepartmentsToERRequest copyWith(void Function(AddDepartmentsToERRequest) updates) => super.copyWith((message) => updates(message as AddDepartmentsToERRequest)) as AddDepartmentsToERRequest; // ignore: deprecated_member_use
+  AddDepartmentsToERRequest copyWith(void Function(AddDepartmentsToERRequest) updates) => super.copyWith((message) => updates(message as AddDepartmentsToERRequest)) as AddDepartmentsToERRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static AddDepartmentsToERRequest create() => AddDepartmentsToERRequest._();
   AddDepartmentsToERRequest createEmptyInstance() => create();
@@ -1114,14 +920,15 @@ class AddDepartmentsToERRequest extends $pb.GeneratedMessage {
 }
 
 class AddDepartmentsToERResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AddDepartmentsToERResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+  factory AddDepartmentsToERResponse() => create();
+  AddDepartmentsToERResponse._() : super();
+  factory AddDepartmentsToERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AddDepartmentsToERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AddDepartmentsToERResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
-  AddDepartmentsToERResponse._() : super();
-  factory AddDepartmentsToERResponse() => create();
-  factory AddDepartmentsToERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory AddDepartmentsToERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1131,8 +938,10 @@ class AddDepartmentsToERResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  AddDepartmentsToERResponse copyWith(void Function(AddDepartmentsToERResponse) updates) => super.copyWith((message) => updates(message as AddDepartmentsToERResponse)) as AddDepartmentsToERResponse; // ignore: deprecated_member_use
+  AddDepartmentsToERResponse copyWith(void Function(AddDepartmentsToERResponse) updates) => super.copyWith((message) => updates(message as AddDepartmentsToERResponse)) as AddDepartmentsToERResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static AddDepartmentsToERResponse create() => AddDepartmentsToERResponse._();
   AddDepartmentsToERResponse createEmptyInstance() => create();
@@ -1143,28 +952,17 @@ class AddDepartmentsToERResponse extends $pb.GeneratedMessage {
 }
 
 class RemoveDepartmentsFromERRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RemoveDepartmentsFromERRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..pPS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'departments')
+  factory RemoveDepartmentsFromERRequest() => create();
+  RemoveDepartmentsFromERRequest._() : super();
+  factory RemoveDepartmentsFromERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RemoveDepartmentsFromERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RemoveDepartmentsFromERRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..pPS(2, _omitFieldNames ? '' : 'departments')
     ..hasRequiredFields = false
   ;
 
-  RemoveDepartmentsFromERRequest._() : super();
-  factory RemoveDepartmentsFromERRequest({
-    $core.String? id,
-    $core.Iterable<$core.String>? departments,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (departments != null) {
-      _result.departments.addAll(departments);
-    }
-    return _result;
-  }
-  factory RemoveDepartmentsFromERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory RemoveDepartmentsFromERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1174,8 +972,10 @@ class RemoveDepartmentsFromERRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  RemoveDepartmentsFromERRequest copyWith(void Function(RemoveDepartmentsFromERRequest) updates) => super.copyWith((message) => updates(message as RemoveDepartmentsFromERRequest)) as RemoveDepartmentsFromERRequest; // ignore: deprecated_member_use
+  RemoveDepartmentsFromERRequest copyWith(void Function(RemoveDepartmentsFromERRequest) updates) => super.copyWith((message) => updates(message as RemoveDepartmentsFromERRequest)) as RemoveDepartmentsFromERRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static RemoveDepartmentsFromERRequest create() => RemoveDepartmentsFromERRequest._();
   RemoveDepartmentsFromERRequest createEmptyInstance() => create();
@@ -1198,14 +998,15 @@ class RemoveDepartmentsFromERRequest extends $pb.GeneratedMessage {
 }
 
 class RemoveDepartmentsFromERResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RemoveDepartmentsFromERResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+  factory RemoveDepartmentsFromERResponse() => create();
+  RemoveDepartmentsFromERResponse._() : super();
+  factory RemoveDepartmentsFromERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RemoveDepartmentsFromERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RemoveDepartmentsFromERResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
-  RemoveDepartmentsFromERResponse._() : super();
-  factory RemoveDepartmentsFromERResponse() => create();
-  factory RemoveDepartmentsFromERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory RemoveDepartmentsFromERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1215,8 +1016,10 @@ class RemoveDepartmentsFromERResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  RemoveDepartmentsFromERResponse copyWith(void Function(RemoveDepartmentsFromERResponse) updates) => super.copyWith((message) => updates(message as RemoveDepartmentsFromERResponse)) as RemoveDepartmentsFromERResponse; // ignore: deprecated_member_use
+  RemoveDepartmentsFromERResponse copyWith(void Function(RemoveDepartmentsFromERResponse) updates) => super.copyWith((message) => updates(message as RemoveDepartmentsFromERResponse)) as RemoveDepartmentsFromERResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static RemoveDepartmentsFromERResponse create() => RemoveDepartmentsFromERResponse._();
   RemoveDepartmentsFromERResponse createEmptyInstance() => create();
@@ -1227,23 +1030,16 @@ class RemoveDepartmentsFromERResponse extends $pb.GeneratedMessage {
 }
 
 class DeleteERRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeleteERRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+  factory DeleteERRequest() => create();
+  DeleteERRequest._() : super();
+  factory DeleteERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteERRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
-  DeleteERRequest._() : super();
-  factory DeleteERRequest({
-    $core.String? id,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    return _result;
-  }
-  factory DeleteERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DeleteERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1253,8 +1049,10 @@ class DeleteERRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  DeleteERRequest copyWith(void Function(DeleteERRequest) updates) => super.copyWith((message) => updates(message as DeleteERRequest)) as DeleteERRequest; // ignore: deprecated_member_use
+  DeleteERRequest copyWith(void Function(DeleteERRequest) updates) => super.copyWith((message) => updates(message as DeleteERRequest)) as DeleteERRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static DeleteERRequest create() => DeleteERRequest._();
   DeleteERRequest createEmptyInstance() => create();
@@ -1274,14 +1072,15 @@ class DeleteERRequest extends $pb.GeneratedMessage {
 }
 
 class DeleteERResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeleteERResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
+  factory DeleteERResponse() => create();
+  DeleteERResponse._() : super();
+  factory DeleteERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteERResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.emergency_room_svc.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
-  DeleteERResponse._() : super();
-  factory DeleteERResponse() => create();
-  factory DeleteERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DeleteERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1291,8 +1090,10 @@ class DeleteERResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  DeleteERResponse copyWith(void Function(DeleteERResponse) updates) => super.copyWith((message) => updates(message as DeleteERResponse)) as DeleteERResponse; // ignore: deprecated_member_use
+  DeleteERResponse copyWith(void Function(DeleteERResponse) updates) => super.copyWith((message) => updates(message as DeleteERResponse)) as DeleteERResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static DeleteERResponse create() => DeleteERResponse._();
   DeleteERResponse createEmptyInstance() => create();
@@ -1306,33 +1107,29 @@ class EmergencyRoomServiceApi {
   $pb.RpcClient _client;
   EmergencyRoomServiceApi(this._client);
 
-  $async.Future<CreateERResponse> createER($pb.ClientContext? ctx, CreateERRequest request) {
-    var emptyResponse = CreateERResponse();
-    return _client.invoke<CreateERResponse>(ctx, 'EmergencyRoomService', 'CreateER', request, emptyResponse);
-  }
-  $async.Future<GetERResponse> getER($pb.ClientContext? ctx, GetERRequest request) {
-    var emptyResponse = GetERResponse();
-    return _client.invoke<GetERResponse>(ctx, 'EmergencyRoomService', 'GetER', request, emptyResponse);
-  }
-  $async.Future<GetERsResponse> getERs($pb.ClientContext? ctx, GetERsRequest request) {
-    var emptyResponse = GetERsResponse();
-    return _client.invoke<GetERsResponse>(ctx, 'EmergencyRoomService', 'GetERs', request, emptyResponse);
-  }
-  $async.Future<UpdateERResponse> updateER($pb.ClientContext? ctx, UpdateERRequest request) {
-    var emptyResponse = UpdateERResponse();
-    return _client.invoke<UpdateERResponse>(ctx, 'EmergencyRoomService', 'UpdateER', request, emptyResponse);
-  }
-  $async.Future<AddDepartmentsToERResponse> addDepartmentsToER($pb.ClientContext? ctx, AddDepartmentsToERRequest request) {
-    var emptyResponse = AddDepartmentsToERResponse();
-    return _client.invoke<AddDepartmentsToERResponse>(ctx, 'EmergencyRoomService', 'AddDepartmentsToER', request, emptyResponse);
-  }
-  $async.Future<RemoveDepartmentsFromERResponse> removeDepartmentsFromER($pb.ClientContext? ctx, RemoveDepartmentsFromERRequest request) {
-    var emptyResponse = RemoveDepartmentsFromERResponse();
-    return _client.invoke<RemoveDepartmentsFromERResponse>(ctx, 'EmergencyRoomService', 'RemoveDepartmentsFromER', request, emptyResponse);
-  }
-  $async.Future<DeleteERResponse> deleteER($pb.ClientContext? ctx, DeleteERRequest request) {
-    var emptyResponse = DeleteERResponse();
-    return _client.invoke<DeleteERResponse>(ctx, 'EmergencyRoomService', 'DeleteER', request, emptyResponse);
-  }
+  $async.Future<CreateERResponse> createER($pb.ClientContext? ctx, CreateERRequest request) =>
+    _client.invoke<CreateERResponse>(ctx, 'EmergencyRoomService', 'CreateER', request, CreateERResponse())
+  ;
+  $async.Future<GetERResponse> getER($pb.ClientContext? ctx, GetERRequest request) =>
+    _client.invoke<GetERResponse>(ctx, 'EmergencyRoomService', 'GetER', request, GetERResponse())
+  ;
+  $async.Future<GetERsResponse> getERs($pb.ClientContext? ctx, GetERsRequest request) =>
+    _client.invoke<GetERsResponse>(ctx, 'EmergencyRoomService', 'GetERs', request, GetERsResponse())
+  ;
+  $async.Future<UpdateERResponse> updateER($pb.ClientContext? ctx, UpdateERRequest request) =>
+    _client.invoke<UpdateERResponse>(ctx, 'EmergencyRoomService', 'UpdateER', request, UpdateERResponse())
+  ;
+  $async.Future<AddDepartmentsToERResponse> addDepartmentsToER($pb.ClientContext? ctx, AddDepartmentsToERRequest request) =>
+    _client.invoke<AddDepartmentsToERResponse>(ctx, 'EmergencyRoomService', 'AddDepartmentsToER', request, AddDepartmentsToERResponse())
+  ;
+  $async.Future<RemoveDepartmentsFromERResponse> removeDepartmentsFromER($pb.ClientContext? ctx, RemoveDepartmentsFromERRequest request) =>
+    _client.invoke<RemoveDepartmentsFromERResponse>(ctx, 'EmergencyRoomService', 'RemoveDepartmentsFromER', request, RemoveDepartmentsFromERResponse())
+  ;
+  $async.Future<DeleteERResponse> deleteER($pb.ClientContext? ctx, DeleteERRequest request) =>
+    _client.invoke<DeleteERResponse>(ctx, 'EmergencyRoomService', 'DeleteER', request, DeleteERResponse())
+  ;
 }
 
+
+const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
+const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

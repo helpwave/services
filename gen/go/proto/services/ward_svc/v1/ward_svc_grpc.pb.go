@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: proto/services/task_svc/v1/ward_svc.proto
+// source: proto/services/ward_svc/v1/ward_svc.proto
 
-package task_svc
+package ward_svc
 
 import (
 	context "context"
@@ -19,11 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	WardService_CreateWard_FullMethodName = "/proto.services.task_svc.v1.WardService/CreateWard"
-	WardService_GetWard_FullMethodName    = "/proto.services.task_svc.v1.WardService/GetWard"
-	WardService_GetWards_FullMethodName   = "/proto.services.task_svc.v1.WardService/GetWards"
-	WardService_UpdateWard_FullMethodName = "/proto.services.task_svc.v1.WardService/UpdateWard"
-	WardService_DeleteWard_FullMethodName = "/proto.services.task_svc.v1.WardService/DeleteWard"
+	WardService_CreateWard_FullMethodName       = "/proto.services.ward_svc.v1.WardService/CreateWard"
+	WardService_GetWard_FullMethodName          = "/proto.services.ward_svc.v1.WardService/GetWard"
+	WardService_GetWards_FullMethodName         = "/proto.services.ward_svc.v1.WardService/GetWards"
+	WardService_UpdateWard_FullMethodName       = "/proto.services.ward_svc.v1.WardService/UpdateWard"
+	WardService_DeleteWard_FullMethodName       = "/proto.services.ward_svc.v1.WardService/DeleteWard"
+	WardService_GetWardOverviews_FullMethodName = "/proto.services.ward_svc.v1.WardService/GetWardOverviews"
 )
 
 // WardServiceClient is the client API for WardService service.
@@ -35,6 +36,7 @@ type WardServiceClient interface {
 	GetWards(ctx context.Context, in *GetWardsRequest, opts ...grpc.CallOption) (*GetWardsResponse, error)
 	UpdateWard(ctx context.Context, in *UpdateWardRequest, opts ...grpc.CallOption) (*UpdateWardResponse, error)
 	DeleteWard(ctx context.Context, in *DeleteWardRequest, opts ...grpc.CallOption) (*DeleteWardResponse, error)
+	GetWardOverviews(ctx context.Context, in *GetWardOverviewsRequest, opts ...grpc.CallOption) (*GetWardOverviewsResponse, error)
 }
 
 type wardServiceClient struct {
@@ -90,6 +92,15 @@ func (c *wardServiceClient) DeleteWard(ctx context.Context, in *DeleteWardReques
 	return out, nil
 }
 
+func (c *wardServiceClient) GetWardOverviews(ctx context.Context, in *GetWardOverviewsRequest, opts ...grpc.CallOption) (*GetWardOverviewsResponse, error) {
+	out := new(GetWardOverviewsResponse)
+	err := c.cc.Invoke(ctx, WardService_GetWardOverviews_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WardServiceServer is the server API for WardService service.
 // All implementations must embed UnimplementedWardServiceServer
 // for forward compatibility
@@ -99,6 +110,7 @@ type WardServiceServer interface {
 	GetWards(context.Context, *GetWardsRequest) (*GetWardsResponse, error)
 	UpdateWard(context.Context, *UpdateWardRequest) (*UpdateWardResponse, error)
 	DeleteWard(context.Context, *DeleteWardRequest) (*DeleteWardResponse, error)
+	GetWardOverviews(context.Context, *GetWardOverviewsRequest) (*GetWardOverviewsResponse, error)
 	mustEmbedUnimplementedWardServiceServer()
 }
 
@@ -120,6 +132,9 @@ func (UnimplementedWardServiceServer) UpdateWard(context.Context, *UpdateWardReq
 }
 func (UnimplementedWardServiceServer) DeleteWard(context.Context, *DeleteWardRequest) (*DeleteWardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteWard not implemented")
+}
+func (UnimplementedWardServiceServer) GetWardOverviews(context.Context, *GetWardOverviewsRequest) (*GetWardOverviewsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWardOverviews not implemented")
 }
 func (UnimplementedWardServiceServer) mustEmbedUnimplementedWardServiceServer() {}
 
@@ -224,11 +239,29 @@ func _WardService_DeleteWard_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WardService_GetWardOverviews_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWardOverviewsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WardServiceServer).GetWardOverviews(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WardService_GetWardOverviews_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WardServiceServer).GetWardOverviews(ctx, req.(*GetWardOverviewsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WardService_ServiceDesc is the grpc.ServiceDesc for WardService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var WardService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.services.task_svc.v1.WardService",
+	ServiceName: "proto.services.ward_svc.v1.WardService",
 	HandlerType: (*WardServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -251,7 +284,11 @@ var WardService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "DeleteWard",
 			Handler:    _WardService_DeleteWard_Handler,
 		},
+		{
+			MethodName: "GetWardOverviews",
+			Handler:    _WardService_GetWardOverviews_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/services/task_svc/v1/ward_svc.proto",
+	Metadata: "proto/services/ward_svc/v1/ward_svc.proto",
 }

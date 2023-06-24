@@ -138,7 +138,7 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 	}
 
 	var patients []Patient
-	if err := db.Joins("wards").Joins("rooms").Joins("beds").Joins("patients").Where("wards.id = ?", wardID).Find(&patients).Error; err != nil {
+	if err := db.Joins("wards").Joins("rooms").Joins("beds").Joins("patients").Where("beds.ward_id = ?", wardID).Find(&patients).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())

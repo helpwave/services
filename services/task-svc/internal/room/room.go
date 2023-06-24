@@ -26,8 +26,6 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
-	// TODO: Auth
-
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
@@ -37,6 +35,8 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
+
+	// TODO: RPC, check if ward exist
 
 	room := models.Room{
 		Base: models.Base{
