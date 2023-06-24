@@ -1,9 +1,13 @@
-///
+//
 //  Generated code. Do not modify.
 //  source: proto/services/task_svc/v1/patient_svc.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
+
+// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: constant_identifier_names, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
 import 'dart:async' as $async;
 import 'dart:core' as $core;
@@ -11,28 +15,17 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class CreatePatientRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreatePatientRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'humanReadableIdentifier')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notes')
+  factory CreatePatientRequest() => create();
+  CreatePatientRequest._() : super();
+  factory CreatePatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreatePatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePatientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'humanReadableIdentifier')
+    ..aOS(2, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
-  CreatePatientRequest._() : super();
-  factory CreatePatientRequest({
-    $core.String? humanReadableIdentifier,
-    $core.String? notes,
-  }) {
-    final _result = create();
-    if (humanReadableIdentifier != null) {
-      _result.humanReadableIdentifier = humanReadableIdentifier;
-    }
-    if (notes != null) {
-      _result.notes = notes;
-    }
-    return _result;
-  }
-  factory CreatePatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreatePatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -42,8 +35,10 @@ class CreatePatientRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  CreatePatientRequest copyWith(void Function(CreatePatientRequest) updates) => super.copyWith((message) => updates(message as CreatePatientRequest)) as CreatePatientRequest; // ignore: deprecated_member_use
+  CreatePatientRequest copyWith(void Function(CreatePatientRequest) updates) => super.copyWith((message) => updates(message as CreatePatientRequest)) as CreatePatientRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static CreatePatientRequest create() => CreatePatientRequest._();
   CreatePatientRequest createEmptyInstance() => create();
@@ -72,23 +67,16 @@ class CreatePatientRequest extends $pb.GeneratedMessage {
 }
 
 class CreatePatientResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreatePatientResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+  factory CreatePatientResponse() => create();
+  CreatePatientResponse._() : super();
+  factory CreatePatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreatePatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePatientResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
-  CreatePatientResponse._() : super();
-  factory CreatePatientResponse({
-    $core.String? id,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    return _result;
-  }
-  factory CreatePatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreatePatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -98,8 +86,10 @@ class CreatePatientResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  CreatePatientResponse copyWith(void Function(CreatePatientResponse) updates) => super.copyWith((message) => updates(message as CreatePatientResponse)) as CreatePatientResponse; // ignore: deprecated_member_use
+  CreatePatientResponse copyWith(void Function(CreatePatientResponse) updates) => super.copyWith((message) => updates(message as CreatePatientResponse)) as CreatePatientResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static CreatePatientResponse create() => CreatePatientResponse._();
   CreatePatientResponse createEmptyInstance() => create();
@@ -119,23 +109,16 @@ class CreatePatientResponse extends $pb.GeneratedMessage {
 }
 
 class GetPatientRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetPatientRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+  factory GetPatientRequest() => create();
+  GetPatientRequest._() : super();
+  factory GetPatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
-  GetPatientRequest._() : super();
-  factory GetPatientRequest({
-    $core.String? id,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    return _result;
-  }
-  factory GetPatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetPatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -145,8 +128,10 @@ class GetPatientRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetPatientRequest copyWith(void Function(GetPatientRequest) updates) => super.copyWith((message) => updates(message as GetPatientRequest)) as GetPatientRequest; // ignore: deprecated_member_use
+  GetPatientRequest copyWith(void Function(GetPatientRequest) updates) => super.copyWith((message) => updates(message as GetPatientRequest)) as GetPatientRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetPatientRequest create() => GetPatientRequest._();
   GetPatientRequest createEmptyInstance() => create();
@@ -166,38 +151,19 @@ class GetPatientRequest extends $pb.GeneratedMessage {
 }
 
 class GetPatientResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetPatientResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'humanReadableIdentifier')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notes')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bedId')
+  factory GetPatientResponse() => create();
+  GetPatientResponse._() : super();
+  factory GetPatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
+    ..aOS(3, _omitFieldNames ? '' : 'notes')
+    ..aOS(4, _omitFieldNames ? '' : 'bedId')
     ..hasRequiredFields = false
   ;
 
-  GetPatientResponse._() : super();
-  factory GetPatientResponse({
-    $core.String? id,
-    $core.String? humanReadableIdentifier,
-    $core.String? notes,
-    $core.String? bedId,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (humanReadableIdentifier != null) {
-      _result.humanReadableIdentifier = humanReadableIdentifier;
-    }
-    if (notes != null) {
-      _result.notes = notes;
-    }
-    if (bedId != null) {
-      _result.bedId = bedId;
-    }
-    return _result;
-  }
-  factory GetPatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetPatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -207,8 +173,10 @@ class GetPatientResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetPatientResponse copyWith(void Function(GetPatientResponse) updates) => super.copyWith((message) => updates(message as GetPatientResponse)) as GetPatientResponse; // ignore: deprecated_member_use
+  GetPatientResponse copyWith(void Function(GetPatientResponse) updates) => super.copyWith((message) => updates(message as GetPatientResponse)) as GetPatientResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetPatientResponse create() => GetPatientResponse._();
   GetPatientResponse createEmptyInstance() => create();
@@ -255,23 +223,16 @@ class GetPatientResponse extends $pb.GeneratedMessage {
 }
 
 class GetPatientByBedRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetPatientByBedRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bedId')
+  factory GetPatientByBedRequest() => create();
+  GetPatientByBedRequest._() : super();
+  factory GetPatientByBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPatientByBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientByBedRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'bedId')
     ..hasRequiredFields = false
   ;
 
-  GetPatientByBedRequest._() : super();
-  factory GetPatientByBedRequest({
-    $core.String? bedId,
-  }) {
-    final _result = create();
-    if (bedId != null) {
-      _result.bedId = bedId;
-    }
-    return _result;
-  }
-  factory GetPatientByBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetPatientByBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -281,8 +242,10 @@ class GetPatientByBedRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetPatientByBedRequest copyWith(void Function(GetPatientByBedRequest) updates) => super.copyWith((message) => updates(message as GetPatientByBedRequest)) as GetPatientByBedRequest; // ignore: deprecated_member_use
+  GetPatientByBedRequest copyWith(void Function(GetPatientByBedRequest) updates) => super.copyWith((message) => updates(message as GetPatientByBedRequest)) as GetPatientByBedRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetPatientByBedRequest create() => GetPatientByBedRequest._();
   GetPatientByBedRequest createEmptyInstance() => create();
@@ -302,38 +265,19 @@ class GetPatientByBedRequest extends $pb.GeneratedMessage {
 }
 
 class GetPatientByBedResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetPatientByBedResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'humanReadableIdentifier')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notes')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bedId')
+  factory GetPatientByBedResponse() => create();
+  GetPatientByBedResponse._() : super();
+  factory GetPatientByBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPatientByBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientByBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
+    ..aOS(3, _omitFieldNames ? '' : 'notes')
+    ..aOS(4, _omitFieldNames ? '' : 'bedId')
     ..hasRequiredFields = false
   ;
 
-  GetPatientByBedResponse._() : super();
-  factory GetPatientByBedResponse({
-    $core.String? id,
-    $core.String? humanReadableIdentifier,
-    $core.String? notes,
-    $core.String? bedId,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (humanReadableIdentifier != null) {
-      _result.humanReadableIdentifier = humanReadableIdentifier;
-    }
-    if (notes != null) {
-      _result.notes = notes;
-    }
-    if (bedId != null) {
-      _result.bedId = bedId;
-    }
-    return _result;
-  }
-  factory GetPatientByBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetPatientByBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -343,8 +287,10 @@ class GetPatientByBedResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetPatientByBedResponse copyWith(void Function(GetPatientByBedResponse) updates) => super.copyWith((message) => updates(message as GetPatientByBedResponse)) as GetPatientByBedResponse; // ignore: deprecated_member_use
+  GetPatientByBedResponse copyWith(void Function(GetPatientByBedResponse) updates) => super.copyWith((message) => updates(message as GetPatientByBedResponse)) as GetPatientByBedResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetPatientByBedResponse create() => GetPatientByBedResponse._();
   GetPatientByBedResponse createEmptyInstance() => create();
@@ -391,23 +337,16 @@ class GetPatientByBedResponse extends $pb.GeneratedMessage {
 }
 
 class GetPatientsByWardRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetPatientsByWardRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'wardId')
+  factory GetPatientsByWardRequest() => create();
+  GetPatientsByWardRequest._() : super();
+  factory GetPatientsByWardRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPatientsByWardRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientsByWardRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'wardId')
     ..hasRequiredFields = false
   ;
 
-  GetPatientsByWardRequest._() : super();
-  factory GetPatientsByWardRequest({
-    $core.String? wardId,
-  }) {
-    final _result = create();
-    if (wardId != null) {
-      _result.wardId = wardId;
-    }
-    return _result;
-  }
-  factory GetPatientsByWardRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetPatientsByWardRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -417,8 +356,10 @@ class GetPatientsByWardRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetPatientsByWardRequest copyWith(void Function(GetPatientsByWardRequest) updates) => super.copyWith((message) => updates(message as GetPatientsByWardRequest)) as GetPatientsByWardRequest; // ignore: deprecated_member_use
+  GetPatientsByWardRequest copyWith(void Function(GetPatientsByWardRequest) updates) => super.copyWith((message) => updates(message as GetPatientsByWardRequest)) as GetPatientsByWardRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetPatientsByWardRequest create() => GetPatientsByWardRequest._();
   GetPatientsByWardRequest createEmptyInstance() => create();
@@ -438,38 +379,19 @@ class GetPatientsByWardRequest extends $pb.GeneratedMessage {
 }
 
 class GetPatientsByWardResponse_Patient extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetPatientsByWardResponse.Patient', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'humanReadableIdentifier')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notes')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bedId')
+  factory GetPatientsByWardResponse_Patient() => create();
+  GetPatientsByWardResponse_Patient._() : super();
+  factory GetPatientsByWardResponse_Patient.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPatientsByWardResponse_Patient.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientsByWardResponse.Patient', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
+    ..aOS(3, _omitFieldNames ? '' : 'notes')
+    ..aOS(4, _omitFieldNames ? '' : 'bedId')
     ..hasRequiredFields = false
   ;
 
-  GetPatientsByWardResponse_Patient._() : super();
-  factory GetPatientsByWardResponse_Patient({
-    $core.String? id,
-    $core.String? humanReadableIdentifier,
-    $core.String? notes,
-    $core.String? bedId,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (humanReadableIdentifier != null) {
-      _result.humanReadableIdentifier = humanReadableIdentifier;
-    }
-    if (notes != null) {
-      _result.notes = notes;
-    }
-    if (bedId != null) {
-      _result.bedId = bedId;
-    }
-    return _result;
-  }
-  factory GetPatientsByWardResponse_Patient.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetPatientsByWardResponse_Patient.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -479,8 +401,10 @@ class GetPatientsByWardResponse_Patient extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetPatientsByWardResponse_Patient copyWith(void Function(GetPatientsByWardResponse_Patient) updates) => super.copyWith((message) => updates(message as GetPatientsByWardResponse_Patient)) as GetPatientsByWardResponse_Patient; // ignore: deprecated_member_use
+  GetPatientsByWardResponse_Patient copyWith(void Function(GetPatientsByWardResponse_Patient) updates) => super.copyWith((message) => updates(message as GetPatientsByWardResponse_Patient)) as GetPatientsByWardResponse_Patient;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetPatientsByWardResponse_Patient create() => GetPatientsByWardResponse_Patient._();
   GetPatientsByWardResponse_Patient createEmptyInstance() => create();
@@ -527,23 +451,16 @@ class GetPatientsByWardResponse_Patient extends $pb.GeneratedMessage {
 }
 
 class GetPatientsByWardResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetPatientsByWardResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..pc<GetPatientsByWardResponse_Patient>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'patients', $pb.PbFieldType.PM, subBuilder: GetPatientsByWardResponse_Patient.create)
+  factory GetPatientsByWardResponse() => create();
+  GetPatientsByWardResponse._() : super();
+  factory GetPatientsByWardResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPatientsByWardResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientsByWardResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..pc<GetPatientsByWardResponse_Patient>(1, _omitFieldNames ? '' : 'patients', $pb.PbFieldType.PM, subBuilder: GetPatientsByWardResponse_Patient.create)
     ..hasRequiredFields = false
   ;
 
-  GetPatientsByWardResponse._() : super();
-  factory GetPatientsByWardResponse({
-    $core.Iterable<GetPatientsByWardResponse_Patient>? patients,
-  }) {
-    final _result = create();
-    if (patients != null) {
-      _result.patients.addAll(patients);
-    }
-    return _result;
-  }
-  factory GetPatientsByWardResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetPatientsByWardResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -553,8 +470,10 @@ class GetPatientsByWardResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetPatientsByWardResponse copyWith(void Function(GetPatientsByWardResponse) updates) => super.copyWith((message) => updates(message as GetPatientsByWardResponse)) as GetPatientsByWardResponse; // ignore: deprecated_member_use
+  GetPatientsByWardResponse copyWith(void Function(GetPatientsByWardResponse) updates) => super.copyWith((message) => updates(message as GetPatientsByWardResponse)) as GetPatientsByWardResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static GetPatientsByWardResponse create() => GetPatientsByWardResponse._();
   GetPatientsByWardResponse createEmptyInstance() => create();
@@ -568,33 +487,18 @@ class GetPatientsByWardResponse extends $pb.GeneratedMessage {
 }
 
 class UpdatePatientRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UpdatePatientRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'humanReadableIdentifier')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notes')
+  factory UpdatePatientRequest() => create();
+  UpdatePatientRequest._() : super();
+  factory UpdatePatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdatePatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePatientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
+    ..aOS(3, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
-  UpdatePatientRequest._() : super();
-  factory UpdatePatientRequest({
-    $core.String? id,
-    $core.String? humanReadableIdentifier,
-    $core.String? notes,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (humanReadableIdentifier != null) {
-      _result.humanReadableIdentifier = humanReadableIdentifier;
-    }
-    if (notes != null) {
-      _result.notes = notes;
-    }
-    return _result;
-  }
-  factory UpdatePatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UpdatePatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -604,8 +508,10 @@ class UpdatePatientRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  UpdatePatientRequest copyWith(void Function(UpdatePatientRequest) updates) => super.copyWith((message) => updates(message as UpdatePatientRequest)) as UpdatePatientRequest; // ignore: deprecated_member_use
+  UpdatePatientRequest copyWith(void Function(UpdatePatientRequest) updates) => super.copyWith((message) => updates(message as UpdatePatientRequest)) as UpdatePatientRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static UpdatePatientRequest create() => UpdatePatientRequest._();
   UpdatePatientRequest createEmptyInstance() => create();
@@ -643,14 +549,15 @@ class UpdatePatientRequest extends $pb.GeneratedMessage {
 }
 
 class UpdatePatientResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UpdatePatientResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+  factory UpdatePatientResponse() => create();
+  UpdatePatientResponse._() : super();
+  factory UpdatePatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdatePatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePatientResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
-  UpdatePatientResponse._() : super();
-  factory UpdatePatientResponse() => create();
-  factory UpdatePatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UpdatePatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -660,8 +567,10 @@ class UpdatePatientResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  UpdatePatientResponse copyWith(void Function(UpdatePatientResponse) updates) => super.copyWith((message) => updates(message as UpdatePatientResponse)) as UpdatePatientResponse; // ignore: deprecated_member_use
+  UpdatePatientResponse copyWith(void Function(UpdatePatientResponse) updates) => super.copyWith((message) => updates(message as UpdatePatientResponse)) as UpdatePatientResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static UpdatePatientResponse create() => UpdatePatientResponse._();
   UpdatePatientResponse createEmptyInstance() => create();
@@ -672,28 +581,17 @@ class UpdatePatientResponse extends $pb.GeneratedMessage {
 }
 
 class AssignBedRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AssignBedRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bedId')
+  factory AssignBedRequest() => create();
+  AssignBedRequest._() : super();
+  factory AssignBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AssignBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AssignBedRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'bedId')
     ..hasRequiredFields = false
   ;
 
-  AssignBedRequest._() : super();
-  factory AssignBedRequest({
-    $core.String? id,
-    $core.String? bedId,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (bedId != null) {
-      _result.bedId = bedId;
-    }
-    return _result;
-  }
-  factory AssignBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory AssignBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -703,8 +601,10 @@ class AssignBedRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  AssignBedRequest copyWith(void Function(AssignBedRequest) updates) => super.copyWith((message) => updates(message as AssignBedRequest)) as AssignBedRequest; // ignore: deprecated_member_use
+  AssignBedRequest copyWith(void Function(AssignBedRequest) updates) => super.copyWith((message) => updates(message as AssignBedRequest)) as AssignBedRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static AssignBedRequest create() => AssignBedRequest._();
   AssignBedRequest createEmptyInstance() => create();
@@ -733,14 +633,15 @@ class AssignBedRequest extends $pb.GeneratedMessage {
 }
 
 class AssignBedResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AssignBedResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+  factory AssignBedResponse() => create();
+  AssignBedResponse._() : super();
+  factory AssignBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AssignBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AssignBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
-  AssignBedResponse._() : super();
-  factory AssignBedResponse() => create();
-  factory AssignBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory AssignBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -750,8 +651,10 @@ class AssignBedResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  AssignBedResponse copyWith(void Function(AssignBedResponse) updates) => super.copyWith((message) => updates(message as AssignBedResponse)) as AssignBedResponse; // ignore: deprecated_member_use
+  AssignBedResponse copyWith(void Function(AssignBedResponse) updates) => super.copyWith((message) => updates(message as AssignBedResponse)) as AssignBedResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static AssignBedResponse create() => AssignBedResponse._();
   AssignBedResponse createEmptyInstance() => create();
@@ -762,23 +665,16 @@ class AssignBedResponse extends $pb.GeneratedMessage {
 }
 
 class UnassignBedRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UnassignBedRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+  factory UnassignBedRequest() => create();
+  UnassignBedRequest._() : super();
+  factory UnassignBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UnassignBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UnassignBedRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
-  UnassignBedRequest._() : super();
-  factory UnassignBedRequest({
-    $core.String? id,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    return _result;
-  }
-  factory UnassignBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UnassignBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -788,8 +684,10 @@ class UnassignBedRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  UnassignBedRequest copyWith(void Function(UnassignBedRequest) updates) => super.copyWith((message) => updates(message as UnassignBedRequest)) as UnassignBedRequest; // ignore: deprecated_member_use
+  UnassignBedRequest copyWith(void Function(UnassignBedRequest) updates) => super.copyWith((message) => updates(message as UnassignBedRequest)) as UnassignBedRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static UnassignBedRequest create() => UnassignBedRequest._();
   UnassignBedRequest createEmptyInstance() => create();
@@ -809,14 +707,15 @@ class UnassignBedRequest extends $pb.GeneratedMessage {
 }
 
 class UnassignBedResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UnassignBedResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+  factory UnassignBedResponse() => create();
+  UnassignBedResponse._() : super();
+  factory UnassignBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UnassignBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UnassignBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
-  UnassignBedResponse._() : super();
-  factory UnassignBedResponse() => create();
-  factory UnassignBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UnassignBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -826,8 +725,10 @@ class UnassignBedResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  UnassignBedResponse copyWith(void Function(UnassignBedResponse) updates) => super.copyWith((message) => updates(message as UnassignBedResponse)) as UnassignBedResponse; // ignore: deprecated_member_use
+  UnassignBedResponse copyWith(void Function(UnassignBedResponse) updates) => super.copyWith((message) => updates(message as UnassignBedResponse)) as UnassignBedResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static UnassignBedResponse create() => UnassignBedResponse._();
   UnassignBedResponse createEmptyInstance() => create();
@@ -838,23 +739,16 @@ class UnassignBedResponse extends $pb.GeneratedMessage {
 }
 
 class DischargePatientRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DischargePatientRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+  factory DischargePatientRequest() => create();
+  DischargePatientRequest._() : super();
+  factory DischargePatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DischargePatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DischargePatientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
-  DischargePatientRequest._() : super();
-  factory DischargePatientRequest({
-    $core.String? id,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    return _result;
-  }
-  factory DischargePatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DischargePatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -864,8 +758,10 @@ class DischargePatientRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  DischargePatientRequest copyWith(void Function(DischargePatientRequest) updates) => super.copyWith((message) => updates(message as DischargePatientRequest)) as DischargePatientRequest; // ignore: deprecated_member_use
+  DischargePatientRequest copyWith(void Function(DischargePatientRequest) updates) => super.copyWith((message) => updates(message as DischargePatientRequest)) as DischargePatientRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static DischargePatientRequest create() => DischargePatientRequest._();
   DischargePatientRequest createEmptyInstance() => create();
@@ -885,14 +781,15 @@ class DischargePatientRequest extends $pb.GeneratedMessage {
 }
 
 class DischargePatientResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DischargePatientResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+  factory DischargePatientResponse() => create();
+  DischargePatientResponse._() : super();
+  factory DischargePatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DischargePatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DischargePatientResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
-  DischargePatientResponse._() : super();
-  factory DischargePatientResponse() => create();
-  factory DischargePatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DischargePatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -902,8 +799,10 @@ class DischargePatientResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  DischargePatientResponse copyWith(void Function(DischargePatientResponse) updates) => super.copyWith((message) => updates(message as DischargePatientResponse)) as DischargePatientResponse; // ignore: deprecated_member_use
+  DischargePatientResponse copyWith(void Function(DischargePatientResponse) updates) => super.copyWith((message) => updates(message as DischargePatientResponse)) as DischargePatientResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static DischargePatientResponse create() => DischargePatientResponse._();
   DischargePatientResponse createEmptyInstance() => create();
@@ -917,37 +816,32 @@ class PatientServiceApi {
   $pb.RpcClient _client;
   PatientServiceApi(this._client);
 
-  $async.Future<CreatePatientResponse> createPatient($pb.ClientContext? ctx, CreatePatientRequest request) {
-    var emptyResponse = CreatePatientResponse();
-    return _client.invoke<CreatePatientResponse>(ctx, 'PatientService', 'CreatePatient', request, emptyResponse);
-  }
-  $async.Future<GetPatientResponse> getPatient($pb.ClientContext? ctx, GetPatientRequest request) {
-    var emptyResponse = GetPatientResponse();
-    return _client.invoke<GetPatientResponse>(ctx, 'PatientService', 'GetPatient', request, emptyResponse);
-  }
-  $async.Future<GetPatientByBedResponse> getPatientByBed($pb.ClientContext? ctx, GetPatientByBedRequest request) {
-    var emptyResponse = GetPatientByBedResponse();
-    return _client.invoke<GetPatientByBedResponse>(ctx, 'PatientService', 'GetPatientByBed', request, emptyResponse);
-  }
-  $async.Future<GetPatientsByWardResponse> getPatientsByWard($pb.ClientContext? ctx, GetPatientsByWardRequest request) {
-    var emptyResponse = GetPatientsByWardResponse();
-    return _client.invoke<GetPatientsByWardResponse>(ctx, 'PatientService', 'GetPatientsByWard', request, emptyResponse);
-  }
-  $async.Future<UpdatePatientResponse> updatePatient($pb.ClientContext? ctx, UpdatePatientRequest request) {
-    var emptyResponse = UpdatePatientResponse();
-    return _client.invoke<UpdatePatientResponse>(ctx, 'PatientService', 'UpdatePatient', request, emptyResponse);
-  }
-  $async.Future<AssignBedResponse> assignBed($pb.ClientContext? ctx, AssignBedRequest request) {
-    var emptyResponse = AssignBedResponse();
-    return _client.invoke<AssignBedResponse>(ctx, 'PatientService', 'AssignBed', request, emptyResponse);
-  }
-  $async.Future<UnassignBedResponse> unassignBed($pb.ClientContext? ctx, UnassignBedRequest request) {
-    var emptyResponse = UnassignBedResponse();
-    return _client.invoke<UnassignBedResponse>(ctx, 'PatientService', 'UnassignBed', request, emptyResponse);
-  }
-  $async.Future<DischargePatientResponse> dischargePatient($pb.ClientContext? ctx, DischargePatientRequest request) {
-    var emptyResponse = DischargePatientResponse();
-    return _client.invoke<DischargePatientResponse>(ctx, 'PatientService', 'DischargePatient', request, emptyResponse);
-  }
+  $async.Future<CreatePatientResponse> createPatient($pb.ClientContext? ctx, CreatePatientRequest request) =>
+    _client.invoke<CreatePatientResponse>(ctx, 'PatientService', 'CreatePatient', request, CreatePatientResponse())
+  ;
+  $async.Future<GetPatientResponse> getPatient($pb.ClientContext? ctx, GetPatientRequest request) =>
+    _client.invoke<GetPatientResponse>(ctx, 'PatientService', 'GetPatient', request, GetPatientResponse())
+  ;
+  $async.Future<GetPatientByBedResponse> getPatientByBed($pb.ClientContext? ctx, GetPatientByBedRequest request) =>
+    _client.invoke<GetPatientByBedResponse>(ctx, 'PatientService', 'GetPatientByBed', request, GetPatientByBedResponse())
+  ;
+  $async.Future<GetPatientsByWardResponse> getPatientsByWard($pb.ClientContext? ctx, GetPatientsByWardRequest request) =>
+    _client.invoke<GetPatientsByWardResponse>(ctx, 'PatientService', 'GetPatientsByWard', request, GetPatientsByWardResponse())
+  ;
+  $async.Future<UpdatePatientResponse> updatePatient($pb.ClientContext? ctx, UpdatePatientRequest request) =>
+    _client.invoke<UpdatePatientResponse>(ctx, 'PatientService', 'UpdatePatient', request, UpdatePatientResponse())
+  ;
+  $async.Future<AssignBedResponse> assignBed($pb.ClientContext? ctx, AssignBedRequest request) =>
+    _client.invoke<AssignBedResponse>(ctx, 'PatientService', 'AssignBed', request, AssignBedResponse())
+  ;
+  $async.Future<UnassignBedResponse> unassignBed($pb.ClientContext? ctx, UnassignBedRequest request) =>
+    _client.invoke<UnassignBedResponse>(ctx, 'PatientService', 'UnassignBed', request, UnassignBedResponse())
+  ;
+  $async.Future<DischargePatientResponse> dischargePatient($pb.ClientContext? ctx, DischargePatientRequest request) =>
+    _client.invoke<DischargePatientResponse>(ctx, 'PatientService', 'DischargePatient', request, DischargePatientResponse())
+  ;
 }
 
+
+const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
+const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package proto.services.task_svc.v1;
+package proto.services.ward_svc.v1;
 
-option go_package = "gen/proto/services/task-svc";
+option go_package = "gen/proto/services/ward-svc";
 
 //
 // CreateWard
@@ -67,6 +67,25 @@ message DeleteWardRequest {
 message DeleteWardResponse {}
 
 //
+// GetWardsOverview
+//
+
+message GetWardsOverviewRequest {}
+
+message GetWardsOverviewResponse {
+  repeated Ward wards = 1;
+
+  message Ward {
+    string id = 1;
+    string name = 2;
+    uint32 unscheduled = 3;
+    uint32 in_progress = 4;
+    uint32 done = 5;
+    uint32 bed_count = 6;
+  }
+}
+
+//
 // WardService
 //
 
@@ -76,4 +95,5 @@ service WardService {
   rpc GetWards(GetWardsRequest) returns (GetWardsResponse) {}
   rpc UpdateWard (UpdateWardRequest) returns (UpdateWardResponse) {}
   rpc DeleteWard (DeleteWardRequest) returns (DeleteWardResponse) {}
+  rpc GetWardsOverview (GetWardsOverviewRequest) returns (GetWardsOverviewResponse) {}
 }

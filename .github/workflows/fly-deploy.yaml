@@ -42,4 +42,4 @@ jobs:
       - name: Setup flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy
-        run: flyctl deploy --config services/${{ inputs.service }}/fly.toml --app ${{ inputs.app }} --remote-only
+        run: flyctl deploy --config services/${{ inputs.service }}/fly.toml --app ${{ inputs.app }} --local-only

@@ -10,7 +10,6 @@ import (
 	"task-svc/internal/patient"
 	"task-svc/internal/room"
 	"task-svc/internal/task"
-	"task-svc/internal/ward"
 )
 
 const ServiceName = "task-svc"
@@ -33,7 +32,6 @@ func main() {
 		grpcServer := server.GrpcServer()
 		pb.RegisterTaskServiceServer(grpcServer, task.NewServiceServer())
 		pb.RegisterPatientServiceServer(grpcServer, patient.NewServiceServer())
-		pb.RegisterWardServiceServer(grpcServer, ward.NewServiceServer())
 		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer())
 		pb.RegisterBedServiceServer(grpcServer, bed.NewServiceServer())
 	})

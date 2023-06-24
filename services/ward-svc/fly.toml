@@ -1,0 +1,17 @@
+primary_region = "ams"
+
+[build]
+  dockerfile = "../../Dockerfile.standalone"
+
+[build.args]
+  SERVICE = "ward-svc"
+
+[env]
+  INSECURE_FAKE_TOKEN_ENABLE=true
+
+[deploy]
+  release_command = "./run-migrations.sh"
+
+[[services]]
+  auto_stop_machines = false
+  auto_start_machines = false

@@ -3,7 +3,9 @@ package common
 import (
 	"context"
 	"github.com/rs/zerolog/log"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 	"reflect"
 	"time"
@@ -60,9 +62,16 @@ func MustNewDaprGRPCClient() *daprc.GRPCClient {
 }
 
 // PrepCtxForSvcToSvcCall returns a context that can be used with Dapr specific service to service gRPC calls
-func PrepCtxForSvcToSvcCall(parentCtx context.Context, targetDaprAppId string) (context.Context, context.CancelFunc) {
+func PrepCtxForSvcToSvcCall(parentCtx context.Context, targetDaprAppId string) (context.Context, context.CancelFunc, error) {
+	md, ok := metadata.FromIncomingContext(parentCtx)
+	if !ok {
+		return nil, nil, status.Errorf(codes.Internal, "No incoming metadata in context")
+	}
+	outgoingCtx := metadata.NewOutgoingContext(parentCtx, md)
+
 	timeout := time.Second * 3
-	ctx, cancel := context.WithTimeout(parentCtx, timeout)
+	ctx, cancel := context.WithTimeout(outgoingCtx, timeout)
 	ctx = metadata.AppendToOutgoingContext(ctx, "dapr-app-id", targetDaprAppId)
-	return ctx, cancel
+
+	return ctx, cancel, nil
 }
