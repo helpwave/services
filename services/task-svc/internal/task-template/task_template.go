@@ -54,7 +54,6 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		return nil, err
 	}
 
-	// authenticate the userID
 	taskTemplate := TaskTemplate{
 		Base:   Base{Name: req.Name, Description: req.Description},
 		Public: req.Public,
