@@ -301,7 +301,11 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 	// Check if invite exists
 	currentInvitation, err := GetInvitationByIdAndEmail(db, claims.Email, invitationId)
 	if err != nil {
-		return nil, err
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
 	}
 
 	if currentInvitation.State == InvitationStateAccepted {
@@ -390,7 +394,11 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 	// Check if invite exists
 	currentInvitation, err := GetInvitationByIdAndEmail(db, claims.Email, invitationId)
 	if err != nil {
-		return nil, err
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
 	}
 
 	if currentInvitation.State == InvitationStateRejected {
@@ -533,11 +541,7 @@ func GetInvitationByIdAndEmail(db *gorm.DB, email string, id uuid.UUID) (*Invita
 
 	var invitation Invitation
 	if err := db.Where("id = ? AND email = ?", id, email).First(&invitation).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, err.Error())
-		}
+		return nil, err
 	}
 
 	return &invitation, nil
