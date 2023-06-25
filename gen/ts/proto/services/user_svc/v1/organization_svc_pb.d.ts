@@ -601,3 +601,35 @@ export namespace GetInvitationsByUserResponse {
 
 }
 
+export class DeclineInvitationRequest extends jspb.Message {
+  getInvitationId(): string;
+  setInvitationId(value: string): DeclineInvitationRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeclineInvitationRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: DeclineInvitationRequest): DeclineInvitationRequest.AsObject;
+  static serializeBinaryToWriter(message: DeclineInvitationRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeclineInvitationRequest;
+  static deserializeBinaryFromReader(message: DeclineInvitationRequest, reader: jspb.BinaryReader): DeclineInvitationRequest;
+}
+
+export namespace DeclineInvitationRequest {
+  export type AsObject = {
+    invitationId: string,
+  }
+}
+
+export class DeclineInvitationResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeclineInvitationResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: DeclineInvitationResponse): DeclineInvitationResponse.AsObject;
+  static serializeBinaryToWriter(message: DeclineInvitationResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeclineInvitationResponse;
+  static deserializeBinaryFromReader(message: DeclineInvitationResponse, reader: jspb.BinaryReader): DeclineInvitationResponse;
+}
+
+export namespace DeclineInvitationResponse {
+  export type AsObject = {
+  }
+}
+

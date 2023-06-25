@@ -169,6 +169,17 @@ message GetInvitationsByUserResponse {
 }
 
 //
+// DeclineInvitation
+//
+
+message DeclineInvitationRequest {
+  string invitation_id = 1;  // @gotags: validate:"uuid4"
+}
+
+message DeclineInvitationResponse {}
+
+
+//
 //  OrganizationService
 //
 
@@ -184,4 +195,5 @@ service OrganizationService {
   rpc InviteMember (InviteMemberRequest) returns (InviteMemberResponse) {}
   rpc AcceptInvitation (AcceptInvitationRequest) returns (AcceptInvitationResponse) {}
   rpc GetInvitationsByUser(GetInvitationsByUserRequest) returns (GetInvitationsByUserResponse) {}
+  rpc DeclineInvitation(DeclineInvitationRequest) returns (DeclineInvitationResponse) {}
 }
