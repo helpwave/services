@@ -1,15 +1,20 @@
-///
+//
 //  Generated code. Do not modify.
 //  source: proto/services/task_svc/v1/task_svc.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,deprecated_member_use_from_same_package,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
+
+// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
 import 'dart:async' as $async;
+import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'dart:core' as $core;
 import 'task_svc.pb.dart' as $5;
 import 'task_svc.pbjson.dart';
 
@@ -34,8 +39,8 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
   $async.Future<$5.UnpublishTaskResponse> unpublishTask($pb.ServerContext ctx, $5.UnpublishTaskRequest request);
   $async.Future<$5.DeleteTaskResponse> deleteTask($pb.ServerContext ctx, $5.DeleteTaskRequest request);
 
-  $pb.GeneratedMessage createRequest($core.String method) {
-    switch (method) {
+  $pb.GeneratedMessage createRequest($core.String methodName) {
+    switch (methodName) {
       case 'CreateTask': return $5.CreateTaskRequest();
       case 'GetTask': return $5.GetTaskRequest();
       case 'GetTasksByPatient': return $5.GetTasksByPatientRequest();
@@ -53,12 +58,12 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
       case 'PublishTask': return $5.PublishTaskRequest();
       case 'UnpublishTask': return $5.UnpublishTaskRequest();
       case 'DeleteTask': return $5.DeleteTaskRequest();
-      default: throw $core.ArgumentError('Unknown method: $method');
+      default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
-  $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String method, $pb.GeneratedMessage request) {
-    switch (method) {
+  $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
+    switch (methodName) {
       case 'CreateTask': return this.createTask(ctx, request as $5.CreateTaskRequest);
       case 'GetTask': return this.getTask(ctx, request as $5.GetTaskRequest);
       case 'GetTasksByPatient': return this.getTasksByPatient(ctx, request as $5.GetTasksByPatientRequest);
@@ -76,7 +81,7 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
       case 'PublishTask': return this.publishTask(ctx, request as $5.PublishTaskRequest);
       case 'UnpublishTask': return this.unpublishTask(ctx, request as $5.UnpublishTaskRequest);
       case 'DeleteTask': return this.deleteTask(ctx, request as $5.DeleteTaskRequest);
-      default: throw $core.ArgumentError('Unknown method: $method');
+      default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
