@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS task_templates (
 	name text NOT NULL,
 	description text  NOT NULL,
 	is_public boolean NOT NULL,
-    ward_id uuid DEFAULT NULL,
-    user_id uuid NOT NULL,
+	ward_id uuid DEFAULT NULL,
+	user_id uuid NOT NULL,
 	FOREIGN KEY (ward_id)
 		REFERENCES wards (id)
 		ON DELETE CASCADE
