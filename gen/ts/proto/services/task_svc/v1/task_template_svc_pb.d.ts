@@ -82,3 +82,67 @@ export namespace CreateTaskTemplateResponse {
   }
 }
 
+export class DeleteTaskTemplateRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): DeleteTaskTemplateRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeleteTaskTemplateRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: DeleteTaskTemplateRequest): DeleteTaskTemplateRequest.AsObject;
+  static serializeBinaryToWriter(message: DeleteTaskTemplateRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeleteTaskTemplateRequest;
+  static deserializeBinaryFromReader(message: DeleteTaskTemplateRequest, reader: jspb.BinaryReader): DeleteTaskTemplateRequest;
+}
+
+export namespace DeleteTaskTemplateRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class DeleteTaskTemplateResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeleteTaskTemplateResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: DeleteTaskTemplateResponse): DeleteTaskTemplateResponse.AsObject;
+  static serializeBinaryToWriter(message: DeleteTaskTemplateResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeleteTaskTemplateResponse;
+  static deserializeBinaryFromReader(message: DeleteTaskTemplateResponse, reader: jspb.BinaryReader): DeleteTaskTemplateResponse;
+}
+
+export namespace DeleteTaskTemplateResponse {
+  export type AsObject = {
+  }
+}
+
+export class DeleteTaskTemplateSubTaskRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): DeleteTaskTemplateSubTaskRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeleteTaskTemplateSubTaskRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: DeleteTaskTemplateSubTaskRequest): DeleteTaskTemplateSubTaskRequest.AsObject;
+  static serializeBinaryToWriter(message: DeleteTaskTemplateSubTaskRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeleteTaskTemplateSubTaskRequest;
+  static deserializeBinaryFromReader(message: DeleteTaskTemplateSubTaskRequest, reader: jspb.BinaryReader): DeleteTaskTemplateSubTaskRequest;
+}
+
+export namespace DeleteTaskTemplateSubTaskRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class DeleteTaskTemplateSubTaskResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeleteTaskTemplateSubTaskResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: DeleteTaskTemplateSubTaskResponse): DeleteTaskTemplateSubTaskResponse.AsObject;
+  static serializeBinaryToWriter(message: DeleteTaskTemplateSubTaskResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeleteTaskTemplateSubTaskResponse;
+  static deserializeBinaryFromReader(message: DeleteTaskTemplateSubTaskResponse, reader: jspb.BinaryReader): DeleteTaskTemplateSubTaskResponse;
+}
+
+export namespace DeleteTaskTemplateSubTaskResponse {
+  export type AsObject = {
+  }
+}
+
