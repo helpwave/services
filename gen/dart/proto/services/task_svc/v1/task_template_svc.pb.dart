@@ -289,7 +289,6 @@ class GetAllTaskTemplatesByWardResponse_TaskTemplate extends $pb.GeneratedMessag
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOB(4, _omitFieldNames ? '' : 'isPublic')
-    ..aOS(5, _omitFieldNames ? '' : 'wardId')
     ..aOS(6, _omitFieldNames ? '' : 'userId')
     ..pc<GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask>(7, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask.create)
     ..hasRequiredFields = false
@@ -352,26 +351,17 @@ class GetAllTaskTemplatesByWardResponse_TaskTemplate extends $pb.GeneratedMessag
   @$pb.TagNumber(4)
   void clearIsPublic() => clearField(4);
 
-  @$pb.TagNumber(5)
-  $core.String get wardId => $_getSZ(4);
-  @$pb.TagNumber(5)
-  set wardId($core.String v) { $_setString(4, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasWardId() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearWardId() => clearField(5);
-
   @$pb.TagNumber(6)
-  $core.String get userId => $_getSZ(5);
+  $core.String get userId => $_getSZ(4);
   @$pb.TagNumber(6)
-  set userId($core.String v) { $_setString(5, v); }
+  set userId($core.String v) { $_setString(4, v); }
   @$pb.TagNumber(6)
-  $core.bool hasUserId() => $_has(5);
+  $core.bool hasUserId() => $_has(4);
   @$pb.TagNumber(6)
   void clearUserId() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.List<GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask> get subtasks => $_getList(6);
+  $core.List<GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask> get subtasks => $_getList(5);
 }
 
 class GetAllTaskTemplatesByWardResponse extends $pb.GeneratedMessage {

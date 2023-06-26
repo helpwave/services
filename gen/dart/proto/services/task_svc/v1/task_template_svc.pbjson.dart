@@ -87,13 +87,11 @@ const GetAllTaskTemplatesByWardResponse_TaskTemplate$json = {
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
     {'1': 'is_public', '3': 4, '4': 1, '5': 8, '10': 'isPublic'},
-    {'1': 'ward_id', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'wardId', '17': true},
-    {'1': 'user_id', '3': 6, '4': 1, '5': 9, '9': 1, '10': 'userId', '17': true},
+    {'1': 'user_id', '3': 6, '4': 1, '5': 9, '9': 0, '10': 'userId', '17': true},
     {'1': 'subtasks', '3': 7, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask', '10': 'subtasks'},
   ],
   '3': [GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask$json],
   '8': [
-    {'1': '_ward_id'},
     {'1': '_user_id'},
   ],
 };
@@ -112,14 +110,14 @@ const GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask$json = {
 final $typed_data.Uint8List getAllTaskTemplatesByWardResponseDescriptor = $convert.base64Decode(
     'CiFHZXRBbGxUYXNrVGVtcGxhdGVzQnlXYXJkUmVzcG9uc2USaAoJdGVtcGxhdGVzGAEgAygLMk'
     'oucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0QWxsVGFza1RlbXBsYXRlc0J5V2FyZFJl'
-    'c3BvbnNlLlRhc2tUZW1wbGF0ZVIJdGVtcGxhdGVzGo4DCgxUYXNrVGVtcGxhdGUSDgoCaWQYAS'
+    'c3BvbnNlLlRhc2tUZW1wbGF0ZVIJdGVtcGxhdGVzGuQCCgxUYXNrVGVtcGxhdGUSDgoCaWQYAS'
     'ABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2Ny'
-    'aXB0aW9uEhsKCWlzX3B1YmxpYxgEIAEoCFIIaXNQdWJsaWMSHAoHd2FyZF9pZBgFIAEoCUgAUg'
-    'Z3YXJkSWSIAQESHAoHdXNlcl9pZBgGIAEoCUgBUgZ1c2VySWSIAQESbgoIc3VidGFza3MYByAD'
-    'KAsyUi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRBbGxUYXNrVGVtcGxhdGVzQnlXYX'
-    'JkUmVzcG9uc2UuVGFza1RlbXBsYXRlLlN1YlRhc2tSCHN1YnRhc2tzGlcKB1N1YlRhc2sSDgoC'
-    'aWQYASABKAlSAmlkEigKEHRhc2tfdGVtcGxhdGVfaWQYAiABKAlSDnRhc2tUZW1wbGF0ZUlkEh'
-    'IKBG5hbWUYAyABKAlSBG5hbWVCCgoIX3dhcmRfaWRCCgoIX3VzZXJfaWQ=');
+    'aXB0aW9uEhsKCWlzX3B1YmxpYxgEIAEoCFIIaXNQdWJsaWMSHAoHdXNlcl9pZBgGIAEoCUgAUg'
+    'Z1c2VySWSIAQESbgoIc3VidGFza3MYByADKAsyUi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52'
+    'MS5HZXRBbGxUYXNrVGVtcGxhdGVzQnlXYXJkUmVzcG9uc2UuVGFza1RlbXBsYXRlLlN1YlRhc2'
+    'tSCHN1YnRhc2tzGlcKB1N1YlRhc2sSDgoCaWQYASABKAlSAmlkEigKEHRhc2tfdGVtcGxhdGVf'
+    'aWQYAiABKAlSDnRhc2tUZW1wbGF0ZUlkEhIKBG5hbWUYAyABKAlSBG5hbWVCCgoIX3VzZXJfaW'
+    'Q=');
 
 const $core.Map<$core.String, $core.dynamic> TaskTemplateServiceBase$json = {
   '1': 'TaskTemplateService',

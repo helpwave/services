@@ -132,11 +132,6 @@ export namespace GetAllTaskTemplatesByWardResponse {
     getIsPublic(): boolean;
     setIsPublic(value: boolean): TaskTemplate;
 
-    getWardId(): string;
-    setWardId(value: string): TaskTemplate;
-    hasWardId(): boolean;
-    clearWardId(): TaskTemplate;
-
     getUserId(): string;
     setUserId(value: string): TaskTemplate;
     hasUserId(): boolean;
@@ -161,7 +156,6 @@ export namespace GetAllTaskTemplatesByWardResponse {
       name: string,
       description: string,
       isPublic: boolean,
-      wardId?: string,
       userId?: string,
       subtasksList: Array<GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask.AsObject>,
     }
@@ -192,11 +186,6 @@ export namespace GetAllTaskTemplatesByWardResponse {
       }
     }
 
-
-    export enum WardIdCase { 
-      _WARD_ID_NOT_SET = 0,
-      WARD_ID = 5,
-    }
 
     export enum UserIdCase { 
       _USER_ID_NOT_SET = 0,

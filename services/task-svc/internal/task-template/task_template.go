@@ -122,7 +122,6 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 			Name:        taskTemplate.Name,
 			Description: taskTemplate.Description,
 			IsPublic:    taskTemplate.Public,
-			WardId:      hwutil.UUIDToStringPtr(taskTemplate.WardID),
 			UserId:      hwutil.UUIDToStringPtr(&taskTemplate.UserID),
 			Subtasks:    mappedSubtasks,
 		}

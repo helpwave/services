@@ -1028,7 +1028,6 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate.
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
     isPublic: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
-    wardId: jspb.Message.getFieldWithDefault(msg, 5, ""),
     userId: jspb.Message.getFieldWithDefault(msg, 6, ""),
     subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
     proto.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask.toObject, includeInstance)
@@ -1083,10 +1082,6 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate.
     case 4:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsPublic(value);
-      break;
-    case 5:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setWardId(value);
       break;
     case 6:
       var value = /** @type {string} */ (reader.readString());
@@ -1151,13 +1146,6 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate.
   if (f) {
     writer.writeBool(
       4,
-      f
-    );
-  }
-  f = /** @type {string} */ (jspb.Message.getField(message, 5));
-  if (f != null) {
-    writer.writeString(
-      5,
       f
     );
   }
@@ -1438,42 +1426,6 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate.
  */
 proto.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate.prototype.setIsPublic = function(value) {
   return jspb.Message.setProto3BooleanField(this, 4, value);
-};
-
-
-/**
- * optional string ward_id = 5;
- * @return {string}
- */
-proto.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate.prototype.getWardId = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate} returns this
- */
-proto.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate.prototype.setWardId = function(value) {
-  return jspb.Message.setField(this, 5, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate} returns this
- */
-proto.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate.prototype.clearWardId = function() {
-  return jspb.Message.setField(this, 5, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate.prototype.hasWardId = function() {
-  return jspb.Message.getField(this, 5) != null;
 };
 
 

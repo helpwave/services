@@ -41,7 +41,6 @@ message GetAllTaskTemplatesByWardResponse {
     string name = 2;
     string description = 3;
     bool is_public = 4;
-    optional string ward_id = 5;
     optional string user_id = 6;
     repeated SubTask subtasks = 7;
 
