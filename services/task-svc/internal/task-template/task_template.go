@@ -88,3 +88,47 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		Id: taskTemplate.ID.String(),
 	}, nil
 }
+
+func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetAllTaskTemplatesByWardRequest) (*pb.GetAllTaskTemplatesByWardResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	// TODO: Auth
+
+	wardId, err := uuid.Parse(req.WardId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	var taskTemplates []TaskTemplate
+
+	if err := db.Preload("Subtasks").Where("ward_id = ?", wardId).Find(&taskTemplates).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+
+	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate TaskTemplate) *pb.GetAllTaskTemplatesByWardResponse_TaskTemplate {
+		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(subtask TaskTemplateSubtask) *pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask {
+			return &pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask{
+				Id:             subtask.ID.String(),
+				TaskTemplateId: subtask.TaskTemplateID.String(),
+				Name:           subtask.Name,
+			}
+		})
+		return &pb.GetAllTaskTemplatesByWardResponse_TaskTemplate{
+			Id:          taskTemplate.ID.String(),
+			Name:        taskTemplate.Name,
+			Description: taskTemplate.Description,
+			IsPublic:    taskTemplate.Public,
+			WardId:      hwutil.UUIDToStringPtr(taskTemplate.WardID),
+			UserId:      hwutil.UUIDToStringPtr(&taskTemplate.UserID),
+			Subtasks:    mappedSubtasks,
+		}
+	})
+
+	return &pb.GetAllTaskTemplatesByWardResponse{
+		Templates: mappedTaskTemplates,
+	}, nil
+}
