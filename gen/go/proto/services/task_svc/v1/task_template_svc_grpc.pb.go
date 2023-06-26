@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	TaskTemplateService_CreateTaskTemplate_FullMethodName = "/proto.services.task_svc.v1.TaskTemplateService/CreateTaskTemplate"
+	TaskTemplateService_CreateTaskTemplate_FullMethodName        = "/proto.services.task_svc.v1.TaskTemplateService/CreateTaskTemplate"
+	TaskTemplateService_GetAllTaskTemplatesByUser_FullMethodName = "/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByUser"
 )
 
 // TaskTemplateServiceClient is the client API for TaskTemplateService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TaskTemplateServiceClient interface {
 	CreateTaskTemplate(ctx context.Context, in *CreateTaskTemplateRequest, opts ...grpc.CallOption) (*CreateTaskTemplateResponse, error)
+	GetAllTaskTemplatesByUser(ctx context.Context, in *GetAllTaskTemplatesByUserRequest, opts ...grpc.CallOption) (*GetAllTaskTemplatesByUserResponse, error)
 }
 
 type taskTemplateServiceClient struct {
@@ -46,11 +48,21 @@ func (c *taskTemplateServiceClient) CreateTaskTemplate(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *taskTemplateServiceClient) GetAllTaskTemplatesByUser(ctx context.Context, in *GetAllTaskTemplatesByUserRequest, opts ...grpc.CallOption) (*GetAllTaskTemplatesByUserResponse, error) {
+	out := new(GetAllTaskTemplatesByUserResponse)
+	err := c.cc.Invoke(ctx, TaskTemplateService_GetAllTaskTemplatesByUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TaskTemplateServiceServer is the server API for TaskTemplateService service.
 // All implementations must embed UnimplementedTaskTemplateServiceServer
 // for forward compatibility
 type TaskTemplateServiceServer interface {
 	CreateTaskTemplate(context.Context, *CreateTaskTemplateRequest) (*CreateTaskTemplateResponse, error)
+	GetAllTaskTemplatesByUser(context.Context, *GetAllTaskTemplatesByUserRequest) (*GetAllTaskTemplatesByUserResponse, error)
 	mustEmbedUnimplementedTaskTemplateServiceServer()
 }
 
@@ -60,6 +72,9 @@ type UnimplementedTaskTemplateServiceServer struct {
 
 func (UnimplementedTaskTemplateServiceServer) CreateTaskTemplate(context.Context, *CreateTaskTemplateRequest) (*CreateTaskTemplateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTaskTemplate not implemented")
+}
+func (UnimplementedTaskTemplateServiceServer) GetAllTaskTemplatesByUser(context.Context, *GetAllTaskTemplatesByUserRequest) (*GetAllTaskTemplatesByUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllTaskTemplatesByUser not implemented")
 }
 func (UnimplementedTaskTemplateServiceServer) mustEmbedUnimplementedTaskTemplateServiceServer() {}
 
@@ -92,6 +107,24 @@ func _TaskTemplateService_CreateTaskTemplate_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TaskTemplateService_GetAllTaskTemplatesByUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllTaskTemplatesByUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskTemplateServiceServer).GetAllTaskTemplatesByUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskTemplateService_GetAllTaskTemplatesByUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskTemplateServiceServer).GetAllTaskTemplatesByUser(ctx, req.(*GetAllTaskTemplatesByUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TaskTemplateService_ServiceDesc is the grpc.ServiceDesc for TaskTemplateService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +135,10 @@ var TaskTemplateService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateTaskTemplate",
 			Handler:    _TaskTemplateService_CreateTaskTemplate_Handler,
+		},
+		{
+			MethodName: "GetAllTaskTemplatesByUser",
+			Handler:    _TaskTemplateService_GetAllTaskTemplatesByUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -22,10 +22,12 @@ export 'task_template_svc.pb.dart';
 
 abstract class TaskTemplateServiceBase extends $pb.GeneratedService {
   $async.Future<$6.CreateTaskTemplateResponse> createTaskTemplate($pb.ServerContext ctx, $6.CreateTaskTemplateRequest request);
+  $async.Future<$6.GetAllTaskTemplatesByUserResponse> getAllTaskTemplatesByUser($pb.ServerContext ctx, $6.GetAllTaskTemplatesByUserRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
       case 'CreateTaskTemplate': return $6.CreateTaskTemplateRequest();
+      case 'GetAllTaskTemplatesByUser': return $6.GetAllTaskTemplatesByUserRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
@@ -33,6 +35,7 @@ abstract class TaskTemplateServiceBase extends $pb.GeneratedService {
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
       case 'CreateTaskTemplate': return this.createTaskTemplate(ctx, request as $6.CreateTaskTemplateRequest);
+      case 'GetAllTaskTemplatesByUser': return this.getAllTaskTemplatesByUser(ctx, request as $6.GetAllTaskTemplatesByUserRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }

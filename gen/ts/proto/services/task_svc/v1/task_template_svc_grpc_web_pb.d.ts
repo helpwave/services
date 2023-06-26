@@ -15,6 +15,13 @@ export class TaskTemplateServiceClient {
                response: proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateResponse>;
 
+  getAllTaskTemplatesByUser(
+    request: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserResponse>;
+
 }
 
 export class TaskTemplateServicePromiseClient {
@@ -26,6 +33,11 @@ export class TaskTemplateServicePromiseClient {
     request: proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateResponse>;
+
+  getAllTaskTemplatesByUser(
+    request: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserResponse>;
 
 }
 
