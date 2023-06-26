@@ -88,3 +88,47 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		Id: taskTemplate.ID.String(),
 	}, nil
 }
+
+func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskTemplateRequest) (*pb.UpdateTaskTemplateResponse, error) {
+	log := zlog.Ctx(ctx)
+	db := hwgorm.GetDB(ctx)
+
+	// TODO: Auth
+
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	taskTemplate := TaskTemplate{ID: id}
+	updates := req.UpdatesMap()
+
+	if err := db.Model(&taskTemplate).Updates(updates).Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &pb.UpdateTaskTemplateResponse{}, nil
+}
+
+func (ServiceServer) UpdateTaskTemplateSubtask(ctx context.Context, req *pb.UpdateTaskTemplateSubTaskRequest) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
+	log := zlog.Ctx(ctx)
+	db := hwgorm.GetDB(ctx)
+
+	// TODO: Auth
+
+	id, err := uuid.Parse(req.SubtaskId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	taskTemplate := TaskTemplateSubtask{ID: id}
+	updates := req.UpdatesMap()
+
+	if err := db.Model(&taskTemplate).Updates(updates).Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &pb.UpdateTaskTemplateSubTaskResponse{}, nil
+}

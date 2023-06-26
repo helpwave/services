@@ -15,6 +15,20 @@ export class TaskTemplateServiceClient {
                response: proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateResponse>;
 
+  updateTaskTemplate(
+    request: proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateResponse>;
+
+  updateTaskTemplateSubTask(
+    request: proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateSubTaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateSubTaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateSubTaskResponse>;
+
 }
 
 export class TaskTemplateServicePromiseClient {
@@ -26,6 +40,16 @@ export class TaskTemplateServicePromiseClient {
     request: proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateResponse>;
+
+  updateTaskTemplate(
+    request: proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateResponse>;
+
+  updateTaskTemplateSubTask(
+    request: proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateSubTaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateSubTaskResponse>;
 
 }
 

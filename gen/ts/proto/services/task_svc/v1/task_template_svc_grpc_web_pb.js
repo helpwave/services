@@ -138,5 +138,127 @@ proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.crea
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.UpdateTaskTemplateRequest,
+ *   !proto.proto.services.task_svc.v1.UpdateTaskTemplateResponse>}
+ */
+const methodDescriptor_TaskTemplateService_UpdateTaskTemplate = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplate',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.UpdateTaskTemplateRequest,
+  proto.proto.services.task_svc.v1.UpdateTaskTemplateResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.UpdateTaskTemplateRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.UpdateTaskTemplateResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.UpdateTaskTemplateRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.UpdateTaskTemplateResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.UpdateTaskTemplateResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.TaskTemplateServiceClient.prototype.updateTaskTemplate =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplate',
+      request,
+      metadata || {},
+      methodDescriptor_TaskTemplateService_UpdateTaskTemplate,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.UpdateTaskTemplateRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.UpdateTaskTemplateResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.updateTaskTemplate =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplate',
+      request,
+      metadata || {},
+      methodDescriptor_TaskTemplateService_UpdateTaskTemplate);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.UpdateTaskTemplateSubTaskRequest,
+ *   !proto.proto.services.task_svc.v1.UpdateTaskTemplateSubTaskResponse>}
+ */
+const methodDescriptor_TaskTemplateService_UpdateTaskTemplateSubTask = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplateSubTask',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.UpdateTaskTemplateSubTaskRequest,
+  proto.proto.services.task_svc.v1.UpdateTaskTemplateSubTaskResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.UpdateTaskTemplateSubTaskRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.UpdateTaskTemplateSubTaskResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.UpdateTaskTemplateSubTaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.UpdateTaskTemplateSubTaskResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.UpdateTaskTemplateSubTaskResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.TaskTemplateServiceClient.prototype.updateTaskTemplateSubTask =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplateSubTask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskTemplateService_UpdateTaskTemplateSubTask,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.UpdateTaskTemplateSubTaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.UpdateTaskTemplateSubTaskResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.updateTaskTemplateSubTask =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplateSubTask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskTemplateService_UpdateTaskTemplateSubTask);
+};
+
+
 module.exports = proto.proto.services.task_svc.v1;
 
