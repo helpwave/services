@@ -19,11 +19,12 @@ type Base struct {
 
 type TaskTemplate struct {
 	Base
-	ID       uuid.UUID             `gorm:"column:id"`
-	Public   bool                  `gorm:"column:is_public"`
-	UserID   uuid.UUID             `gorm:"column:user_id"`
-	WardID   *uuid.UUID            `gorm:"column:ward_id;default:NULL"`
-	SubTasks []TaskTemplateSubtask `gorm:"foreignKey:TaskTemplateID"`
+	ID             uuid.UUID             `gorm:"column:id"`
+	OrganizationID uuid.UUID             `gorm:"column:organization_id"`
+	Public         bool                  `gorm:"column:is_public"`
+	UserID         uuid.UUID             `gorm:"column:user_id"`
+	WardID         *uuid.UUID            `gorm:"column:ward_id;default:NULL"`
+	SubTasks       []TaskTemplateSubtask `gorm:"foreignKey:TaskTemplateID"`
 }
 
 type TaskTemplateSubtask struct {
@@ -44,6 +45,11 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
+	organitaionID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	userID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -55,10 +61,11 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	}
 
 	taskTemplate := TaskTemplate{
-		Base:   Base{Name: req.Name, Description: req.Description},
-		Public: req.Public,
-		UserID: userID,
-		WardID: wardID,
+		Base:           Base{Name: req.Name, Description: req.Description},
+		OrganizationID: organitaionID,
+		Public:         req.Public,
+		UserID:         userID,
+		WardID:         wardID,
 	}
 
 	// This also implicitly checks the wardID because of the foreignKey constraint in the sql
@@ -86,5 +93,46 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 
 	return &pb.CreateTaskTemplateResponse{
 		Id: taskTemplate.ID.String(),
+	}, nil
+}
+
+func (ServiceServer) GetAllTaskTemplates(ctx context.Context, req *pb.GetAllTaskTemplatesRequest) (*pb.GetAllTaskTemplatesResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	organizationId, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	var taskTemplates []TaskTemplate
+
+	if err := db.Preload("Subtasks").Where("organization_id = ?", organizationId).Where("is_public = ?", true).Find(&taskTemplates).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+
+	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate TaskTemplate) *pb.GetAllTaskTemplatesResponse_TaskTemplate {
+		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(subtask TaskTemplateSubtask) *pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask {
+			return &pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask{
+				Id:             subtask.ID.String(),
+				TaskTemplateId: subtask.TaskTemplateID.String(),
+				Name:           subtask.Name,
+			}
+		})
+		return &pb.GetAllTaskTemplatesResponse_TaskTemplate{
+			Id:          taskTemplate.ID.String(),
+			Name:        taskTemplate.Name,
+			Description: taskTemplate.Description,
+			IsPublic:    taskTemplate.Public,
+			UserId:      hwutil.UUIDToStringPtr(&taskTemplate.UserID),
+			Subtasks:    mappedSubtasks,
+		}
+	})
+
+	return &pb.GetAllTaskTemplatesResponse{
+		Templates: mappedTaskTemplates,
 	}, nil
 }

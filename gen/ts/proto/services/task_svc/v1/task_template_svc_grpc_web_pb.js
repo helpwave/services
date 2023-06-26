@@ -138,5 +138,66 @@ proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.crea
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetAllTaskTemplatesRequest,
+ *   !proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse>}
+ */
+const methodDescriptor_TaskTemplateService_GetAllTaskTemplates = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplates',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetAllTaskTemplatesRequest,
+  proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.TaskTemplateServiceClient.prototype.getAllTaskTemplates =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplates',
+      request,
+      metadata || {},
+      methodDescriptor_TaskTemplateService_GetAllTaskTemplates,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.getAllTaskTemplates =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplates',
+      request,
+      metadata || {},
+      methodDescriptor_TaskTemplateService_GetAllTaskTemplates);
+};
+
+
 module.exports = proto.proto.services.task_svc.v1;
 
