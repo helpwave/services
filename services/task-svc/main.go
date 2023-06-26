@@ -10,6 +10,7 @@ import (
 	"task-svc/internal/patient"
 	"task-svc/internal/room"
 	"task-svc/internal/task"
+	"task-svc/internal/task-template"
 	"task-svc/internal/ward"
 )
 
@@ -36,5 +37,6 @@ func main() {
 		pb.RegisterWardServiceServer(grpcServer, ward.NewServiceServer())
 		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer())
 		pb.RegisterBedServiceServer(grpcServer, bed.NewServiceServer())
+		pb.RegisterTaskTemplateServiceServer(grpcServer, task_template.NewServiceServer())
 	})
 }

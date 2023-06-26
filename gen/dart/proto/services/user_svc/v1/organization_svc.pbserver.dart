@@ -15,57 +15,57 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'organization_svc.pb.dart' as $7;
+import 'organization_svc.pb.dart' as $8;
 import 'organization_svc.pbjson.dart';
 
 export 'organization_svc.pb.dart';
 
 abstract class OrganizationServiceBase extends $pb.GeneratedService {
-  $async.Future<$7.CreateOrganizationResponse> createOrganization($pb.ServerContext ctx, $7.CreateOrganizationRequest request);
-  $async.Future<$7.CreateOrganizationForUserResponse> createOrganizationForUser($pb.ServerContext ctx, $7.CreateOrganizationForUserRequest request);
-  $async.Future<$7.GetOrganizationResponse> getOrganization($pb.ServerContext ctx, $7.GetOrganizationRequest request);
-  $async.Future<$7.GetOrganizationsByUserResponse> getOrganizationsByUser($pb.ServerContext ctx, $7.GetOrganizationsByUserRequest request);
-  $async.Future<$7.UpdateOrganizationResponse> updateOrganization($pb.ServerContext ctx, $7.UpdateOrganizationRequest request);
-  $async.Future<$7.DeleteOrganizationResponse> deleteOrganization($pb.ServerContext ctx, $7.DeleteOrganizationRequest request);
-  $async.Future<$7.AddMemberResponse> addMember($pb.ServerContext ctx, $7.AddMemberRequest request);
-  $async.Future<$7.RemoveMemberResponse> removeMember($pb.ServerContext ctx, $7.RemoveMemberRequest request);
-  $async.Future<$7.InviteMemberResponse> inviteMember($pb.ServerContext ctx, $7.InviteMemberRequest request);
-  $async.Future<$7.AcceptInvitationResponse> acceptInvitation($pb.ServerContext ctx, $7.AcceptInvitationRequest request);
-  $async.Future<$7.GetInvitationsByUserResponse> getInvitationsByUser($pb.ServerContext ctx, $7.GetInvitationsByUserRequest request);
-  $async.Future<$7.DeclineInvitationResponse> declineInvitation($pb.ServerContext ctx, $7.DeclineInvitationRequest request);
+  $async.Future<$8.CreateOrganizationResponse> createOrganization($pb.ServerContext ctx, $8.CreateOrganizationRequest request);
+  $async.Future<$8.CreateOrganizationForUserResponse> createOrganizationForUser($pb.ServerContext ctx, $8.CreateOrganizationForUserRequest request);
+  $async.Future<$8.GetOrganizationResponse> getOrganization($pb.ServerContext ctx, $8.GetOrganizationRequest request);
+  $async.Future<$8.GetOrganizationsByUserResponse> getOrganizationsByUser($pb.ServerContext ctx, $8.GetOrganizationsByUserRequest request);
+  $async.Future<$8.UpdateOrganizationResponse> updateOrganization($pb.ServerContext ctx, $8.UpdateOrganizationRequest request);
+  $async.Future<$8.DeleteOrganizationResponse> deleteOrganization($pb.ServerContext ctx, $8.DeleteOrganizationRequest request);
+  $async.Future<$8.AddMemberResponse> addMember($pb.ServerContext ctx, $8.AddMemberRequest request);
+  $async.Future<$8.RemoveMemberResponse> removeMember($pb.ServerContext ctx, $8.RemoveMemberRequest request);
+  $async.Future<$8.InviteMemberResponse> inviteMember($pb.ServerContext ctx, $8.InviteMemberRequest request);
+  $async.Future<$8.AcceptInvitationResponse> acceptInvitation($pb.ServerContext ctx, $8.AcceptInvitationRequest request);
+  $async.Future<$8.GetInvitationsByUserResponse> getInvitationsByUser($pb.ServerContext ctx, $8.GetInvitationsByUserRequest request);
+  $async.Future<$8.DeclineInvitationResponse> declineInvitation($pb.ServerContext ctx, $8.DeclineInvitationRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
-      case 'CreateOrganization': return $7.CreateOrganizationRequest();
-      case 'CreateOrganizationForUser': return $7.CreateOrganizationForUserRequest();
-      case 'GetOrganization': return $7.GetOrganizationRequest();
-      case 'GetOrganizationsByUser': return $7.GetOrganizationsByUserRequest();
-      case 'UpdateOrganization': return $7.UpdateOrganizationRequest();
-      case 'DeleteOrganization': return $7.DeleteOrganizationRequest();
-      case 'AddMember': return $7.AddMemberRequest();
-      case 'RemoveMember': return $7.RemoveMemberRequest();
-      case 'InviteMember': return $7.InviteMemberRequest();
-      case 'AcceptInvitation': return $7.AcceptInvitationRequest();
-      case 'GetInvitationsByUser': return $7.GetInvitationsByUserRequest();
-      case 'DeclineInvitation': return $7.DeclineInvitationRequest();
+      case 'CreateOrganization': return $8.CreateOrganizationRequest();
+      case 'CreateOrganizationForUser': return $8.CreateOrganizationForUserRequest();
+      case 'GetOrganization': return $8.GetOrganizationRequest();
+      case 'GetOrganizationsByUser': return $8.GetOrganizationsByUserRequest();
+      case 'UpdateOrganization': return $8.UpdateOrganizationRequest();
+      case 'DeleteOrganization': return $8.DeleteOrganizationRequest();
+      case 'AddMember': return $8.AddMemberRequest();
+      case 'RemoveMember': return $8.RemoveMemberRequest();
+      case 'InviteMember': return $8.InviteMemberRequest();
+      case 'AcceptInvitation': return $8.AcceptInvitationRequest();
+      case 'GetInvitationsByUser': return $8.GetInvitationsByUserRequest();
+      case 'DeclineInvitation': return $8.DeclineInvitationRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
-      case 'CreateOrganization': return this.createOrganization(ctx, request as $7.CreateOrganizationRequest);
-      case 'CreateOrganizationForUser': return this.createOrganizationForUser(ctx, request as $7.CreateOrganizationForUserRequest);
-      case 'GetOrganization': return this.getOrganization(ctx, request as $7.GetOrganizationRequest);
-      case 'GetOrganizationsByUser': return this.getOrganizationsByUser(ctx, request as $7.GetOrganizationsByUserRequest);
-      case 'UpdateOrganization': return this.updateOrganization(ctx, request as $7.UpdateOrganizationRequest);
-      case 'DeleteOrganization': return this.deleteOrganization(ctx, request as $7.DeleteOrganizationRequest);
-      case 'AddMember': return this.addMember(ctx, request as $7.AddMemberRequest);
-      case 'RemoveMember': return this.removeMember(ctx, request as $7.RemoveMemberRequest);
-      case 'InviteMember': return this.inviteMember(ctx, request as $7.InviteMemberRequest);
-      case 'AcceptInvitation': return this.acceptInvitation(ctx, request as $7.AcceptInvitationRequest);
-      case 'GetInvitationsByUser': return this.getInvitationsByUser(ctx, request as $7.GetInvitationsByUserRequest);
-      case 'DeclineInvitation': return this.declineInvitation(ctx, request as $7.DeclineInvitationRequest);
+      case 'CreateOrganization': return this.createOrganization(ctx, request as $8.CreateOrganizationRequest);
+      case 'CreateOrganizationForUser': return this.createOrganizationForUser(ctx, request as $8.CreateOrganizationForUserRequest);
+      case 'GetOrganization': return this.getOrganization(ctx, request as $8.GetOrganizationRequest);
+      case 'GetOrganizationsByUser': return this.getOrganizationsByUser(ctx, request as $8.GetOrganizationsByUserRequest);
+      case 'UpdateOrganization': return this.updateOrganization(ctx, request as $8.UpdateOrganizationRequest);
+      case 'DeleteOrganization': return this.deleteOrganization(ctx, request as $8.DeleteOrganizationRequest);
+      case 'AddMember': return this.addMember(ctx, request as $8.AddMemberRequest);
+      case 'RemoveMember': return this.removeMember(ctx, request as $8.RemoveMemberRequest);
+      case 'InviteMember': return this.inviteMember(ctx, request as $8.InviteMemberRequest);
+      case 'AcceptInvitation': return this.acceptInvitation(ctx, request as $8.AcceptInvitationRequest);
+      case 'GetInvitationsByUser': return this.getInvitationsByUser(ctx, request as $8.GetInvitationsByUserRequest);
+      case 'DeclineInvitation': return this.declineInvitation(ctx, request as $8.DeclineInvitationRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
