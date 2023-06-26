@@ -57,10 +57,37 @@ const CreateTaskTemplateResponse$json = {
 final $typed_data.Uint8List createTaskTemplateResponseDescriptor = $convert.base64Decode(
     'ChpDcmVhdGVUYXNrVGVtcGxhdGVSZXNwb25zZRIOCgJpZBgBIAEoCVICaWQ=');
 
+@$core.Deprecated('Use createTaskTemplateSubTaskRequestDescriptor instead')
+const CreateTaskTemplateSubTaskRequest$json = {
+  '1': 'CreateTaskTemplateSubTaskRequest',
+  '2': [
+    {'1': 'task_template_id', '3': 1, '4': 1, '5': 9, '10': 'taskTemplateId'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+  ],
+};
+
+/// Descriptor for `CreateTaskTemplateSubTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createTaskTemplateSubTaskRequestDescriptor = $convert.base64Decode(
+    'CiBDcmVhdGVUYXNrVGVtcGxhdGVTdWJUYXNrUmVxdWVzdBIoChB0YXNrX3RlbXBsYXRlX2lkGA'
+    'EgASgJUg50YXNrVGVtcGxhdGVJZBISCgRuYW1lGAIgASgJUgRuYW1l');
+
+@$core.Deprecated('Use createTaskTemplateSubTaskResponseDescriptor instead')
+const CreateTaskTemplateSubTaskResponse$json = {
+  '1': 'CreateTaskTemplateSubTaskResponse',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `CreateTaskTemplateSubTaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createTaskTemplateSubTaskResponseDescriptor = $convert.base64Decode(
+    'CiFDcmVhdGVUYXNrVGVtcGxhdGVTdWJUYXNrUmVzcG9uc2USDgoCaWQYASABKAlSAmlk');
+
 const $core.Map<$core.String, $core.dynamic> TaskTemplateServiceBase$json = {
   '1': 'TaskTemplateService',
   '2': [
     {'1': 'CreateTaskTemplate', '2': '.proto.services.task_svc.v1.CreateTaskTemplateRequest', '3': '.proto.services.task_svc.v1.CreateTaskTemplateResponse', '4': {}},
+    {'1': 'CreateTaskTemplateSubTask', '2': '.proto.services.task_svc.v1.CreateTaskTemplateSubTaskRequest', '3': '.proto.services.task_svc.v1.CreateTaskTemplateSubTaskResponse', '4': {}},
   ],
 };
 
@@ -69,11 +96,16 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> TaskTempla
   '.proto.services.task_svc.v1.CreateTaskTemplateRequest': CreateTaskTemplateRequest$json,
   '.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask': CreateTaskTemplateRequest_SubTask$json,
   '.proto.services.task_svc.v1.CreateTaskTemplateResponse': CreateTaskTemplateResponse$json,
+  '.proto.services.task_svc.v1.CreateTaskTemplateSubTaskRequest': CreateTaskTemplateSubTaskRequest$json,
+  '.proto.services.task_svc.v1.CreateTaskTemplateSubTaskResponse': CreateTaskTemplateSubTaskResponse$json,
 };
 
 /// Descriptor for `TaskTemplateService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
 final $typed_data.Uint8List taskTemplateServiceDescriptor = $convert.base64Decode(
     'ChNUYXNrVGVtcGxhdGVTZXJ2aWNlEoUBChJDcmVhdGVUYXNrVGVtcGxhdGUSNS5wcm90by5zZX'
     'J2aWNlcy50YXNrX3N2Yy52MS5DcmVhdGVUYXNrVGVtcGxhdGVSZXF1ZXN0GjYucHJvdG8uc2Vy'
-    'dmljZXMudGFza19zdmMudjEuQ3JlYXRlVGFza1RlbXBsYXRlUmVzcG9uc2UiAA==');
+    'dmljZXMudGFza19zdmMudjEuQ3JlYXRlVGFza1RlbXBsYXRlUmVzcG9uc2UiABKaAQoZQ3JlYX'
+    'RlVGFza1RlbXBsYXRlU3ViVGFzaxI8LnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkNyZWF0'
+    'ZVRhc2tUZW1wbGF0ZVN1YlRhc2tSZXF1ZXN0Gj0ucHJvdG8uc2VydmljZXMudGFza19zdmMudj'
+    'EuQ3JlYXRlVGFza1RlbXBsYXRlU3ViVGFza1Jlc3BvbnNlIgA=');
 

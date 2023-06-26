@@ -174,12 +174,109 @@ class CreateTaskTemplateResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 }
 
+class CreateTaskTemplateSubTaskRequest extends $pb.GeneratedMessage {
+  factory CreateTaskTemplateSubTaskRequest() => create();
+  CreateTaskTemplateSubTaskRequest._() : super();
+  factory CreateTaskTemplateSubTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateTaskTemplateSubTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateTaskTemplateSubTaskRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'taskTemplateId')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateTaskTemplateSubTaskRequest clone() => CreateTaskTemplateSubTaskRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateTaskTemplateSubTaskRequest copyWith(void Function(CreateTaskTemplateSubTaskRequest) updates) => super.copyWith((message) => updates(message as CreateTaskTemplateSubTaskRequest)) as CreateTaskTemplateSubTaskRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreateTaskTemplateSubTaskRequest create() => CreateTaskTemplateSubTaskRequest._();
+  CreateTaskTemplateSubTaskRequest createEmptyInstance() => create();
+  static $pb.PbList<CreateTaskTemplateSubTaskRequest> createRepeated() => $pb.PbList<CreateTaskTemplateSubTaskRequest>();
+  @$core.pragma('dart2js:noInline')
+  static CreateTaskTemplateSubTaskRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateTaskTemplateSubTaskRequest>(create);
+  static CreateTaskTemplateSubTaskRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get taskTemplateId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set taskTemplateId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasTaskTemplateId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTaskTemplateId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+}
+
+class CreateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
+  factory CreateTaskTemplateSubTaskResponse() => create();
+  CreateTaskTemplateSubTaskResponse._() : super();
+  factory CreateTaskTemplateSubTaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateTaskTemplateSubTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateTaskTemplateSubTaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateTaskTemplateSubTaskResponse clone() => CreateTaskTemplateSubTaskResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateTaskTemplateSubTaskResponse copyWith(void Function(CreateTaskTemplateSubTaskResponse) updates) => super.copyWith((message) => updates(message as CreateTaskTemplateSubTaskResponse)) as CreateTaskTemplateSubTaskResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreateTaskTemplateSubTaskResponse create() => CreateTaskTemplateSubTaskResponse._();
+  CreateTaskTemplateSubTaskResponse createEmptyInstance() => create();
+  static $pb.PbList<CreateTaskTemplateSubTaskResponse> createRepeated() => $pb.PbList<CreateTaskTemplateSubTaskResponse>();
+  @$core.pragma('dart2js:noInline')
+  static CreateTaskTemplateSubTaskResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateTaskTemplateSubTaskResponse>(create);
+  static CreateTaskTemplateSubTaskResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
 class TaskTemplateServiceApi {
   $pb.RpcClient _client;
   TaskTemplateServiceApi(this._client);
 
   $async.Future<CreateTaskTemplateResponse> createTaskTemplate($pb.ClientContext? ctx, CreateTaskTemplateRequest request) =>
     _client.invoke<CreateTaskTemplateResponse>(ctx, 'TaskTemplateService', 'CreateTaskTemplate', request, CreateTaskTemplateResponse())
+  ;
+  $async.Future<CreateTaskTemplateSubTaskResponse> createTaskTemplateSubTask($pb.ClientContext? ctx, CreateTaskTemplateSubTaskRequest request) =>
+    _client.invoke<CreateTaskTemplateSubTaskResponse>(ctx, 'TaskTemplateService', 'CreateTaskTemplateSubTask', request, CreateTaskTemplateSubTaskResponse())
   ;
 }
 

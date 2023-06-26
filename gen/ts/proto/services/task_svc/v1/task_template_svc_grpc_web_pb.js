@@ -138,5 +138,66 @@ proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.crea
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.CreateTaskTemplateSubTaskRequest,
+ *   !proto.proto.services.task_svc.v1.CreateTaskTemplateSubTaskResponse>}
+ */
+const methodDescriptor_TaskTemplateService_CreateTaskTemplateSubTask = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.TaskTemplateService/CreateTaskTemplateSubTask',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.CreateTaskTemplateSubTaskRequest,
+  proto.proto.services.task_svc.v1.CreateTaskTemplateSubTaskResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.CreateTaskTemplateSubTaskRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.CreateTaskTemplateSubTaskResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.CreateTaskTemplateSubTaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.CreateTaskTemplateSubTaskResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.CreateTaskTemplateSubTaskResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.TaskTemplateServiceClient.prototype.createTaskTemplateSubTask =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskTemplateService/CreateTaskTemplateSubTask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskTemplateService_CreateTaskTemplateSubTask,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.CreateTaskTemplateSubTaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.CreateTaskTemplateSubTaskResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.createTaskTemplateSubTask =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskTemplateService/CreateTaskTemplateSubTask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskTemplateService_CreateTaskTemplateSubTask);
+};
+
+
 module.exports = proto.proto.services.task_svc.v1;
 

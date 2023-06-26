@@ -82,3 +82,43 @@ export namespace CreateTaskTemplateResponse {
   }
 }
 
+export class CreateTaskTemplateSubTaskRequest extends jspb.Message {
+  getTaskTemplateId(): string;
+  setTaskTemplateId(value: string): CreateTaskTemplateSubTaskRequest;
+
+  getName(): string;
+  setName(value: string): CreateTaskTemplateSubTaskRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CreateTaskTemplateSubTaskRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: CreateTaskTemplateSubTaskRequest): CreateTaskTemplateSubTaskRequest.AsObject;
+  static serializeBinaryToWriter(message: CreateTaskTemplateSubTaskRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CreateTaskTemplateSubTaskRequest;
+  static deserializeBinaryFromReader(message: CreateTaskTemplateSubTaskRequest, reader: jspb.BinaryReader): CreateTaskTemplateSubTaskRequest;
+}
+
+export namespace CreateTaskTemplateSubTaskRequest {
+  export type AsObject = {
+    taskTemplateId: string,
+    name: string,
+  }
+}
+
+export class CreateTaskTemplateSubTaskResponse extends jspb.Message {
+  getId(): string;
+  setId(value: string): CreateTaskTemplateSubTaskResponse;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CreateTaskTemplateSubTaskResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: CreateTaskTemplateSubTaskResponse): CreateTaskTemplateSubTaskResponse.AsObject;
+  static serializeBinaryToWriter(message: CreateTaskTemplateSubTaskResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CreateTaskTemplateSubTaskResponse;
+  static deserializeBinaryFromReader(message: CreateTaskTemplateSubTaskResponse, reader: jspb.BinaryReader): CreateTaskTemplateSubTaskResponse;
+}
+
+export namespace CreateTaskTemplateSubTaskResponse {
+  export type AsObject = {
+    id: string,
+  }
+}
+

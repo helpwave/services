@@ -88,3 +88,33 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		Id: taskTemplate.ID.String(),
 	}, nil
 }
+
+func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.CreateTaskTemplateSubTaskRequest) (*pb.CreateTaskTemplateSubTaskResponse, error) {
+	log := zlog.Ctx(ctx)
+	db := hwgorm.GetDB(ctx)
+
+	taskTemplateID, err := uuid.Parse(req.TaskTemplateId)
+	if err != nil {
+		return nil, err
+	}
+
+	taskTemplateSubtask := TaskTemplateSubtask{
+		TaskTemplateID: taskTemplateID,
+		Name:           req.Name,
+	}
+
+	// implicitly checks the existence of the ward through the foreign key constraint
+	if err := db.Create(&taskTemplateSubtask).Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	log.Info().
+		Str("taskTemplateId", taskTemplateSubtask.TaskTemplateID.String()).
+		Str("taskTemplateSubTaskId", taskTemplateSubtask.ID.String()).
+		Msg("taskTemplateSubtask created")
+
+	return &pb.CreateTaskTemplateSubTaskResponse{
+		Id: taskTemplateSubtask.ID.String(),
+	}, nil
+}
