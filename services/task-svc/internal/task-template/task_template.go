@@ -45,7 +45,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
-	organitaionID, err := common.GetOrganizationID(ctx)
+	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 
 	taskTemplate := TaskTemplate{
 		Base:           Base{Name: req.Name, Description: req.Description},
-		OrganizationID: organitaionID,
+		OrganizationID: organizationID,
 		Public:         req.Public,
 		UserID:         userID,
 		WardID:         wardID,
@@ -70,7 +70,6 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 
 	// This also implicitly checks the wardID because of the foreignKey constraint in the sql
 	if err := db.Create(&taskTemplate).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -83,7 +82,6 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 
 	taskTemplate.SubTasks = append(taskTemplate.SubTasks, subtasks...)
 	if err := db.Save(&taskTemplate).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -151,7 +149,6 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 	taskTemplate := TaskTemplate{ID: id}
 
 	if err := db.Delete(&taskTemplate).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -188,7 +185,6 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 }
 
 func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskTemplateRequest) (*pb.UpdateTaskTemplateResponse, error) {
-	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -202,7 +198,6 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 	updates := req.UpdatesMap()
 
 	if err := db.Model(&taskTemplate).Updates(updates).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -210,7 +205,6 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 }
 
 func (ServiceServer) UpdateTaskTemplateSubtask(ctx context.Context, req *pb.UpdateTaskTemplateSubTaskRequest) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
-	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -224,7 +218,6 @@ func (ServiceServer) UpdateTaskTemplateSubtask(ctx context.Context, req *pb.Upda
 	updates := req.UpdatesMap()
 
 	if err := db.Model(&taskTemplate).Updates(updates).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
