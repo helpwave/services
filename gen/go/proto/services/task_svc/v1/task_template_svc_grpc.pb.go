@@ -20,8 +20,9 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	TaskTemplateService_CreateTaskTemplate_FullMethodName        = "/proto.services.task_svc.v1.TaskTemplateService/CreateTaskTemplate"
-	TaskTemplateService_UpdateTaskTemplate_FullMethodName        = "/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplate"
-	TaskTemplateService_UpdateTaskTemplateSubTask_FullMethodName = "/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplateSubTask"
+	TaskTemplateService_GetAllTaskTemplates_FullMethodName       = "/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplates"
+	TaskTemplateService_DeleteTaskTemplate_FullMethodName        = "/proto.services.task_svc.v1.TaskTemplateService/DeleteTaskTemplate"
+	TaskTemplateService_DeleteTaskTemplateSubTask_FullMethodName = "/proto.services.task_svc.v1.TaskTemplateService/DeleteTaskTemplateSubTask"
 )
 
 // TaskTemplateServiceClient is the client API for TaskTemplateService service.
@@ -29,8 +30,9 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TaskTemplateServiceClient interface {
 	CreateTaskTemplate(ctx context.Context, in *CreateTaskTemplateRequest, opts ...grpc.CallOption) (*CreateTaskTemplateResponse, error)
-	UpdateTaskTemplate(ctx context.Context, in *UpdateTaskTemplateRequest, opts ...grpc.CallOption) (*UpdateTaskTemplateResponse, error)
-	UpdateTaskTemplateSubTask(ctx context.Context, in *UpdateTaskTemplateSubTaskRequest, opts ...grpc.CallOption) (*UpdateTaskTemplateSubTaskResponse, error)
+	GetAllTaskTemplates(ctx context.Context, in *GetAllTaskTemplatesRequest, opts ...grpc.CallOption) (*GetAllTaskTemplatesResponse, error)
+	DeleteTaskTemplate(ctx context.Context, in *DeleteTaskTemplateRequest, opts ...grpc.CallOption) (*DeleteTaskTemplateResponse, error)
+	DeleteTaskTemplateSubTask(ctx context.Context, in *DeleteTaskTemplateSubTaskRequest, opts ...grpc.CallOption) (*DeleteTaskTemplateSubTaskResponse, error)
 }
 
 type taskTemplateServiceClient struct {
@@ -50,18 +52,27 @@ func (c *taskTemplateServiceClient) CreateTaskTemplate(ctx context.Context, in *
 	return out, nil
 }
 
-func (c *taskTemplateServiceClient) UpdateTaskTemplate(ctx context.Context, in *UpdateTaskTemplateRequest, opts ...grpc.CallOption) (*UpdateTaskTemplateResponse, error) {
-	out := new(UpdateTaskTemplateResponse)
-	err := c.cc.Invoke(ctx, TaskTemplateService_UpdateTaskTemplate_FullMethodName, in, out, opts...)
+func (c *taskTemplateServiceClient) GetAllTaskTemplates(ctx context.Context, in *GetAllTaskTemplatesRequest, opts ...grpc.CallOption) (*GetAllTaskTemplatesResponse, error) {
+	out := new(GetAllTaskTemplatesResponse)
+	err := c.cc.Invoke(ctx, TaskTemplateService_GetAllTaskTemplates_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *taskTemplateServiceClient) UpdateTaskTemplateSubTask(ctx context.Context, in *UpdateTaskTemplateSubTaskRequest, opts ...grpc.CallOption) (*UpdateTaskTemplateSubTaskResponse, error) {
-	out := new(UpdateTaskTemplateSubTaskResponse)
-	err := c.cc.Invoke(ctx, TaskTemplateService_UpdateTaskTemplateSubTask_FullMethodName, in, out, opts...)
+func (c *taskTemplateServiceClient) DeleteTaskTemplate(ctx context.Context, in *DeleteTaskTemplateRequest, opts ...grpc.CallOption) (*DeleteTaskTemplateResponse, error) {
+	out := new(DeleteTaskTemplateResponse)
+	err := c.cc.Invoke(ctx, TaskTemplateService_DeleteTaskTemplate_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskTemplateServiceClient) DeleteTaskTemplateSubTask(ctx context.Context, in *DeleteTaskTemplateSubTaskRequest, opts ...grpc.CallOption) (*DeleteTaskTemplateSubTaskResponse, error) {
+	out := new(DeleteTaskTemplateSubTaskResponse)
+	err := c.cc.Invoke(ctx, TaskTemplateService_DeleteTaskTemplateSubTask_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +84,9 @@ func (c *taskTemplateServiceClient) UpdateTaskTemplateSubTask(ctx context.Contex
 // for forward compatibility
 type TaskTemplateServiceServer interface {
 	CreateTaskTemplate(context.Context, *CreateTaskTemplateRequest) (*CreateTaskTemplateResponse, error)
-	UpdateTaskTemplate(context.Context, *UpdateTaskTemplateRequest) (*UpdateTaskTemplateResponse, error)
-	UpdateTaskTemplateSubTask(context.Context, *UpdateTaskTemplateSubTaskRequest) (*UpdateTaskTemplateSubTaskResponse, error)
+	GetAllTaskTemplates(context.Context, *GetAllTaskTemplatesRequest) (*GetAllTaskTemplatesResponse, error)
+	DeleteTaskTemplate(context.Context, *DeleteTaskTemplateRequest) (*DeleteTaskTemplateResponse, error)
+	DeleteTaskTemplateSubTask(context.Context, *DeleteTaskTemplateSubTaskRequest) (*DeleteTaskTemplateSubTaskResponse, error)
 	mustEmbedUnimplementedTaskTemplateServiceServer()
 }
 
@@ -85,11 +97,14 @@ type UnimplementedTaskTemplateServiceServer struct {
 func (UnimplementedTaskTemplateServiceServer) CreateTaskTemplate(context.Context, *CreateTaskTemplateRequest) (*CreateTaskTemplateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTaskTemplate not implemented")
 }
-func (UnimplementedTaskTemplateServiceServer) UpdateTaskTemplate(context.Context, *UpdateTaskTemplateRequest) (*UpdateTaskTemplateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateTaskTemplate not implemented")
+func (UnimplementedTaskTemplateServiceServer) GetAllTaskTemplates(context.Context, *GetAllTaskTemplatesRequest) (*GetAllTaskTemplatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllTaskTemplates not implemented")
 }
-func (UnimplementedTaskTemplateServiceServer) UpdateTaskTemplateSubTask(context.Context, *UpdateTaskTemplateSubTaskRequest) (*UpdateTaskTemplateSubTaskResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateTaskTemplateSubTask not implemented")
+func (UnimplementedTaskTemplateServiceServer) DeleteTaskTemplate(context.Context, *DeleteTaskTemplateRequest) (*DeleteTaskTemplateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTaskTemplate not implemented")
+}
+func (UnimplementedTaskTemplateServiceServer) DeleteTaskTemplateSubTask(context.Context, *DeleteTaskTemplateSubTaskRequest) (*DeleteTaskTemplateSubTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTaskTemplateSubTask not implemented")
 }
 func (UnimplementedTaskTemplateServiceServer) mustEmbedUnimplementedTaskTemplateServiceServer() {}
 
@@ -122,38 +137,56 @@ func _TaskTemplateService_CreateTaskTemplate_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TaskTemplateService_UpdateTaskTemplate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateTaskTemplateRequest)
+func _TaskTemplateService_GetAllTaskTemplates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllTaskTemplatesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TaskTemplateServiceServer).UpdateTaskTemplate(ctx, in)
+		return srv.(TaskTemplateServiceServer).GetAllTaskTemplates(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TaskTemplateService_UpdateTaskTemplate_FullMethodName,
+		FullMethod: TaskTemplateService_GetAllTaskTemplates_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskTemplateServiceServer).UpdateTaskTemplate(ctx, req.(*UpdateTaskTemplateRequest))
+		return srv.(TaskTemplateServiceServer).GetAllTaskTemplates(ctx, req.(*GetAllTaskTemplatesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TaskTemplateService_UpdateTaskTemplateSubTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateTaskTemplateSubTaskRequest)
+func _TaskTemplateService_DeleteTaskTemplate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteTaskTemplateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TaskTemplateServiceServer).UpdateTaskTemplateSubTask(ctx, in)
+		return srv.(TaskTemplateServiceServer).DeleteTaskTemplate(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TaskTemplateService_UpdateTaskTemplateSubTask_FullMethodName,
+		FullMethod: TaskTemplateService_DeleteTaskTemplate_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskTemplateServiceServer).UpdateTaskTemplateSubTask(ctx, req.(*UpdateTaskTemplateSubTaskRequest))
+		return srv.(TaskTemplateServiceServer).DeleteTaskTemplate(ctx, req.(*DeleteTaskTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskTemplateService_DeleteTaskTemplateSubTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteTaskTemplateSubTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskTemplateServiceServer).DeleteTaskTemplateSubTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskTemplateService_DeleteTaskTemplateSubTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskTemplateServiceServer).DeleteTaskTemplateSubTask(ctx, req.(*DeleteTaskTemplateSubTaskRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -170,12 +203,16 @@ var TaskTemplateService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TaskTemplateService_CreateTaskTemplate_Handler,
 		},
 		{
-			MethodName: "UpdateTaskTemplate",
-			Handler:    _TaskTemplateService_UpdateTaskTemplate_Handler,
+			MethodName: "GetAllTaskTemplates",
+			Handler:    _TaskTemplateService_GetAllTaskTemplates_Handler,
 		},
 		{
-			MethodName: "UpdateTaskTemplateSubTask",
-			Handler:    _TaskTemplateService_UpdateTaskTemplateSubTask_Handler,
+			MethodName: "DeleteTaskTemplate",
+			Handler:    _TaskTemplateService_DeleteTaskTemplate_Handler,
+		},
+		{
+			MethodName: "DeleteTaskTemplateSubTask",
+			Handler:    _TaskTemplateService_DeleteTaskTemplateSubTask_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
