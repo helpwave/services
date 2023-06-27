@@ -15,12 +15,47 @@ export class TaskTemplateServiceClient {
                response: proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateResponse>;
 
-  getAllTaskTemplatesByUser(
-    request: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserRequest,
+  getAllTaskTemplates(
+    request: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserResponse>;
+               response: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesResponse>;
+
+  deleteTaskTemplate(
+    request: proto_services_task_svc_v1_task_template_svc_pb.DeleteTaskTemplateRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_task_template_svc_pb.DeleteTaskTemplateResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.DeleteTaskTemplateResponse>;
+
+  deleteTaskTemplateSubTask(
+    request: proto_services_task_svc_v1_task_template_svc_pb.DeleteTaskTemplateSubTaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_task_template_svc_pb.DeleteTaskTemplateSubTaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.DeleteTaskTemplateSubTaskResponse>;
+
+  updateTaskTemplate(
+    request: proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateResponse>;
+
+  updateTaskTemplateSubTask(
+    request: proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateSubTaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateSubTaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateSubTaskResponse>;
+
+  createTaskTemplateSubTask(
+    request: proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateSubTaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateSubTaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateSubTaskResponse>;
 
 }
 
@@ -34,10 +69,35 @@ export class TaskTemplateServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateResponse>;
 
-  getAllTaskTemplatesByUser(
-    request: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserRequest,
+  getAllTaskTemplates(
+    request: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserResponse>;
+  ): Promise<proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesResponse>;
+
+  deleteTaskTemplate(
+    request: proto_services_task_svc_v1_task_template_svc_pb.DeleteTaskTemplateRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_task_template_svc_pb.DeleteTaskTemplateResponse>;
+
+  deleteTaskTemplateSubTask(
+    request: proto_services_task_svc_v1_task_template_svc_pb.DeleteTaskTemplateSubTaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_task_template_svc_pb.DeleteTaskTemplateSubTaskResponse>;
+
+  updateTaskTemplate(
+    request: proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateResponse>;
+
+  updateTaskTemplateSubTask(
+    request: proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateSubTaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_task_template_svc_pb.UpdateTaskTemplateSubTaskResponse>;
+
+  createTaskTemplateSubTask(
+    request: proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateSubTaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateSubTaskResponse>;
 
 }
 
