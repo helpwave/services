@@ -107,6 +107,10 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	log.Info().
+		Str("taskTemplateId", taskTemplate.ID.String()).
+		Msg("taskTemplate deleted")
+
 	return &pb.DeleteTaskTemplateResponse{}, nil
 }
 
@@ -124,9 +128,13 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 	taskTemplateSubtask := TaskTemplateSubtask{ID: id}
 
 	if err := db.Delete(&taskTemplateSubtask).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
+
+	log.Info().
+		Str("taskTemplateSubtaskId", taskTemplateSubtask.ID.String()).
+		Str("taskTemplateId", taskTemplateSubtask.TaskTemplateID.String()).
+		Msg("taskTemplateSubtask deleted")
 
 	return &pb.DeleteTaskTemplateSubTaskResponse{}, nil
 }

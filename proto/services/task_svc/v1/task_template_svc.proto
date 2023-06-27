@@ -30,7 +30,7 @@ message CreateTaskTemplateResponse {
 ///
 
 message DeleteTaskTemplateRequest {
-  string id = 1; // @gotags: validate:"required"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message DeleteTaskTemplateResponse {
@@ -42,7 +42,7 @@ message DeleteTaskTemplateResponse {
 ///
 
 message DeleteTaskTemplateSubTaskRequest {
-  string id = 1; // @gotags: validate:"required"
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message DeleteTaskTemplateSubTaskResponse {
