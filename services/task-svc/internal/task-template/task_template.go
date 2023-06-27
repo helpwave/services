@@ -136,3 +136,53 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, req *pb.GetAllTask
 		Templates: mappedTaskTemplates,
 	}, nil
 }
+
+func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskTemplateRequest) (*pb.DeleteTaskTemplateResponse, error) {
+	log := zlog.Ctx(ctx)
+	db := hwgorm.GetDB(ctx)
+
+	// TODO: Auth
+
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	taskTemplate := TaskTemplate{ID: id}
+
+	if err := db.Delete(&taskTemplate).Error; err != nil {
+		log.Warn().Err(err).Msg("database error")
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	log.Info().
+		Str("taskTemplateId", taskTemplate.ID.String()).
+		Msg("taskTemplate deleted")
+
+	return &pb.DeleteTaskTemplateResponse{}, nil
+}
+
+func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.DeleteTaskTemplateSubTaskRequest) (*pb.DeleteTaskTemplateSubTaskResponse, error) {
+	log := zlog.Ctx(ctx)
+	db := hwgorm.GetDB(ctx)
+
+	// TODO: Auth
+
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	taskTemplateSubtask := TaskTemplateSubtask{ID: id}
+
+	if err := db.Delete(&taskTemplateSubtask).Error; err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	log.Info().
+		Str("taskTemplateSubtaskId", taskTemplateSubtask.ID.String()).
+		Str("taskTemplateId", taskTemplateSubtask.TaskTemplateID.String()).
+		Msg("taskTemplateSubtask deleted")
+
+	return &pb.DeleteTaskTemplateSubTaskResponse{}, nil
+}

@@ -52,7 +52,33 @@ message GetAllTaskTemplatesResponse {
 }
 
 
+
+///
+/// DeleteTaskTemplate
+///
+
+message DeleteTaskTemplateRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+message DeleteTaskTemplateResponse {
+}
+
+
+///
+/// DeleteTaskTemplateSubTask
+///
+
+message DeleteTaskTemplateSubTaskRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+message DeleteTaskTemplateSubTaskResponse {
+}
+
 service TaskTemplateService {
   rpc CreateTaskTemplate (CreateTaskTemplateRequest) returns (CreateTaskTemplateResponse) {}
   rpc GetAllTaskTemplates (GetAllTaskTemplatesRequest) returns (GetAllTaskTemplatesResponse) {}
+  rpc DeleteTaskTemplate (DeleteTaskTemplateRequest) returns (DeleteTaskTemplateResponse) {}
+  rpc DeleteTaskTemplateSubTask (DeleteTaskTemplateSubTaskRequest) returns (DeleteTaskTemplateSubTaskResponse) {}
 }
