@@ -25,6 +25,7 @@ const (
 	TaskTemplateService_DeleteTaskTemplateSubTask_FullMethodName = "/proto.services.task_svc.v1.TaskTemplateService/DeleteTaskTemplateSubTask"
 	TaskTemplateService_UpdateTaskTemplate_FullMethodName        = "/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplate"
 	TaskTemplateService_UpdateTaskTemplateSubTask_FullMethodName = "/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplateSubTask"
+	TaskTemplateService_CreateTaskTemplateSubTask_FullMethodName = "/proto.services.task_svc.v1.TaskTemplateService/CreateTaskTemplateSubTask"
 )
 
 // TaskTemplateServiceClient is the client API for TaskTemplateService service.
@@ -37,6 +38,7 @@ type TaskTemplateServiceClient interface {
 	DeleteTaskTemplateSubTask(ctx context.Context, in *DeleteTaskTemplateSubTaskRequest, opts ...grpc.CallOption) (*DeleteTaskTemplateSubTaskResponse, error)
 	UpdateTaskTemplate(ctx context.Context, in *UpdateTaskTemplateRequest, opts ...grpc.CallOption) (*UpdateTaskTemplateResponse, error)
 	UpdateTaskTemplateSubTask(ctx context.Context, in *UpdateTaskTemplateSubTaskRequest, opts ...grpc.CallOption) (*UpdateTaskTemplateSubTaskResponse, error)
+	CreateTaskTemplateSubTask(ctx context.Context, in *CreateTaskTemplateSubTaskRequest, opts ...grpc.CallOption) (*CreateTaskTemplateSubTaskResponse, error)
 }
 
 type taskTemplateServiceClient struct {
@@ -101,6 +103,15 @@ func (c *taskTemplateServiceClient) UpdateTaskTemplateSubTask(ctx context.Contex
 	return out, nil
 }
 
+func (c *taskTemplateServiceClient) CreateTaskTemplateSubTask(ctx context.Context, in *CreateTaskTemplateSubTaskRequest, opts ...grpc.CallOption) (*CreateTaskTemplateSubTaskResponse, error) {
+	out := new(CreateTaskTemplateSubTaskResponse)
+	err := c.cc.Invoke(ctx, TaskTemplateService_CreateTaskTemplateSubTask_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TaskTemplateServiceServer is the server API for TaskTemplateService service.
 // All implementations must embed UnimplementedTaskTemplateServiceServer
 // for forward compatibility
@@ -111,6 +122,7 @@ type TaskTemplateServiceServer interface {
 	DeleteTaskTemplateSubTask(context.Context, *DeleteTaskTemplateSubTaskRequest) (*DeleteTaskTemplateSubTaskResponse, error)
 	UpdateTaskTemplate(context.Context, *UpdateTaskTemplateRequest) (*UpdateTaskTemplateResponse, error)
 	UpdateTaskTemplateSubTask(context.Context, *UpdateTaskTemplateSubTaskRequest) (*UpdateTaskTemplateSubTaskResponse, error)
+	CreateTaskTemplateSubTask(context.Context, *CreateTaskTemplateSubTaskRequest) (*CreateTaskTemplateSubTaskResponse, error)
 	mustEmbedUnimplementedTaskTemplateServiceServer()
 }
 
@@ -135,6 +147,9 @@ func (UnimplementedTaskTemplateServiceServer) UpdateTaskTemplate(context.Context
 }
 func (UnimplementedTaskTemplateServiceServer) UpdateTaskTemplateSubTask(context.Context, *UpdateTaskTemplateSubTaskRequest) (*UpdateTaskTemplateSubTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTaskTemplateSubTask not implemented")
+}
+func (UnimplementedTaskTemplateServiceServer) CreateTaskTemplateSubTask(context.Context, *CreateTaskTemplateSubTaskRequest) (*CreateTaskTemplateSubTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTaskTemplateSubTask not implemented")
 }
 func (UnimplementedTaskTemplateServiceServer) mustEmbedUnimplementedTaskTemplateServiceServer() {}
 
@@ -257,6 +272,24 @@ func _TaskTemplateService_UpdateTaskTemplateSubTask_Handler(srv interface{}, ctx
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TaskTemplateService_CreateTaskTemplateSubTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTaskTemplateSubTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskTemplateServiceServer).CreateTaskTemplateSubTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskTemplateService_CreateTaskTemplateSubTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskTemplateServiceServer).CreateTaskTemplateSubTask(ctx, req.(*CreateTaskTemplateSubTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TaskTemplateService_ServiceDesc is the grpc.ServiceDesc for TaskTemplateService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -287,6 +320,10 @@ var TaskTemplateService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateTaskTemplateSubTask",
 			Handler:    _TaskTemplateService_UpdateTaskTemplateSubTask_Handler,
+		},
+		{
+			MethodName: "CreateTaskTemplateSubTask",
+			Handler:    _TaskTemplateService_CreateTaskTemplateSubTask_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
