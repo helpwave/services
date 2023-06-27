@@ -6,6 +6,7 @@ import (
 	pb "gen/proto/services/task_svc/v1"
 	"hwgorm"
 	"hwutil"
+	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/room/models"
 
 	"github.com/google/uuid"
@@ -106,7 +107,7 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 	}
 
 	room := models.Room{ID: id}
-	updates := req.UpdatesMap()
+	updates := pbhelpers.UpdatesMapForUpdateRoomRequest(req)
 
 	if err := db.Model(&room).Updates(updates).Error; err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -115,7 +116,7 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 	return &pb.UpdateRoomResponse{}, nil
 }
 
-func (ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*pb.GetRoomsResponse, error) {
+func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.GetRoomsResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth

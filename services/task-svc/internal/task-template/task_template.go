@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
+	pbhelpers "proto_helpers/task_svc/v1"
 )
 
 type Base struct {
@@ -195,7 +196,7 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 	}
 
 	taskTemplate := TaskTemplate{ID: id}
-	updates := req.UpdatesMap()
+	updates := pbhelpers.UpdatesMapForUpdateTaskTemplateRequest(req)
 
 	if err := db.Model(&taskTemplate).Updates(updates).Error; err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -215,7 +216,7 @@ func (ServiceServer) UpdateTaskTemplateSubtask(ctx context.Context, req *pb.Upda
 	}
 
 	taskTemplate := TaskTemplateSubtask{ID: id}
-	updates := req.UpdatesMap()
+	updates := pbhelpers.UpdatesMapForUpdateTaskTemplateSubTaskRequest(req)
 
 	if err := db.Model(&taskTemplate).Updates(updates).Error; err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
