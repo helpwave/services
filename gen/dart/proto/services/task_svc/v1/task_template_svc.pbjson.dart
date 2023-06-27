@@ -267,13 +267,9 @@ const GetAllTaskTemplatesByUserResponse_TaskTemplate$json = {
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
     {'1': 'is_public', '3': 4, '4': 1, '5': 8, '10': 'isPublic'},
-    {'1': 'user_id', '3': 6, '4': 1, '5': 9, '9': 0, '10': 'userId', '17': true},
     {'1': 'subtasks', '3': 7, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate.SubTask', '10': 'subtasks'},
   ],
   '3': [GetAllTaskTemplatesByUserResponse_TaskTemplate_SubTask$json],
-  '8': [
-    {'1': '_user_id'},
-  ],
 };
 
 @$core.Deprecated('Use getAllTaskTemplatesByUserResponseDescriptor instead')
@@ -290,14 +286,13 @@ const GetAllTaskTemplatesByUserResponse_TaskTemplate_SubTask$json = {
 final $typed_data.Uint8List getAllTaskTemplatesByUserResponseDescriptor = $convert.base64Decode(
     'CiFHZXRBbGxUYXNrVGVtcGxhdGVzQnlVc2VyUmVzcG9uc2USaAoJdGVtcGxhdGVzGAEgAygLMk'
     'oucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0QWxsVGFza1RlbXBsYXRlc0J5VXNlclJl'
-    'c3BvbnNlLlRhc2tUZW1wbGF0ZVIJdGVtcGxhdGVzGuQCCgxUYXNrVGVtcGxhdGUSDgoCaWQYAS'
+    'c3BvbnNlLlRhc2tUZW1wbGF0ZVIJdGVtcGxhdGVzGroCCgxUYXNrVGVtcGxhdGUSDgoCaWQYAS'
     'ABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2Ny'
-    'aXB0aW9uEhsKCWlzX3B1YmxpYxgEIAEoCFIIaXNQdWJsaWMSHAoHdXNlcl9pZBgGIAEoCUgAUg'
-    'Z1c2VySWSIAQESbgoIc3VidGFza3MYByADKAsyUi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52'
-    'MS5HZXRBbGxUYXNrVGVtcGxhdGVzQnlVc2VyUmVzcG9uc2UuVGFza1RlbXBsYXRlLlN1YlRhc2'
-    'tSCHN1YnRhc2tzGlcKB1N1YlRhc2sSDgoCaWQYASABKAlSAmlkEigKEHRhc2tfdGVtcGxhdGVf'
-    'aWQYAiABKAlSDnRhc2tUZW1wbGF0ZUlkEhIKBG5hbWUYAyABKAlSBG5hbWVCCgoIX3VzZXJfaW'
-    'Q=');
+    'aXB0aW9uEhsKCWlzX3B1YmxpYxgEIAEoCFIIaXNQdWJsaWMSbgoIc3VidGFza3MYByADKAsyUi'
+    '5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRBbGxUYXNrVGVtcGxhdGVzQnlVc2VyUmVz'
+    'cG9uc2UuVGFza1RlbXBsYXRlLlN1YlRhc2tSCHN1YnRhc2tzGlcKB1N1YlRhc2sSDgoCaWQYAS'
+    'ABKAlSAmlkEigKEHRhc2tfdGVtcGxhdGVfaWQYAiABKAlSDnRhc2tUZW1wbGF0ZUlkEhIKBG5h'
+    'bWUYAyABKAlSBG5hbWU=');
 
 const $core.Map<$core.String, $core.dynamic> TaskTemplateServiceBase$json = {
   '1': 'TaskTemplateService',

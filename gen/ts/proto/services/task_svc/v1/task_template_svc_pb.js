@@ -3473,7 +3473,6 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate.
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
     isPublic: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
-    userId: jspb.Message.getFieldWithDefault(msg, 6, ""),
     subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
     proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate.SubTask.toObject, includeInstance)
   };
@@ -3527,10 +3526,6 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate.
     case 4:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsPublic(value);
-      break;
-    case 6:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setUserId(value);
       break;
     case 7:
       var value = new proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate.SubTask;
@@ -3591,13 +3586,6 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate.
   if (f) {
     writer.writeBool(
       4,
-      f
-    );
-  }
-  f = /** @type {string} */ (jspb.Message.getField(message, 6));
-  if (f != null) {
-    writer.writeString(
-      6,
       f
     );
   }
@@ -3871,42 +3859,6 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate.
  */
 proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate.prototype.setIsPublic = function(value) {
   return jspb.Message.setProto3BooleanField(this, 4, value);
-};
-
-
-/**
- * optional string user_id = 6;
- * @return {string}
- */
-proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate.prototype.getUserId = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate} returns this
- */
-proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate.prototype.setUserId = function(value) {
-  return jspb.Message.setField(this, 6, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate} returns this
- */
-proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate.prototype.clearUserId = function() {
-  return jspb.Message.setField(this, 6, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate.prototype.hasUserId = function() {
-  return jspb.Message.getField(this, 6) != null;
 };
 
 

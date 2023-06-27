@@ -442,11 +442,6 @@ export namespace GetAllTaskTemplatesByUserResponse {
     getIsPublic(): boolean;
     setIsPublic(value: boolean): TaskTemplate;
 
-    getUserId(): string;
-    setUserId(value: string): TaskTemplate;
-    hasUserId(): boolean;
-    clearUserId(): TaskTemplate;
-
     getSubtasksList(): Array<GetAllTaskTemplatesByUserResponse.TaskTemplate.SubTask>;
     setSubtasksList(value: Array<GetAllTaskTemplatesByUserResponse.TaskTemplate.SubTask>): TaskTemplate;
     clearSubtasksList(): TaskTemplate;
@@ -466,7 +461,6 @@ export namespace GetAllTaskTemplatesByUserResponse {
       name: string,
       description: string,
       isPublic: boolean,
-      userId?: string,
       subtasksList: Array<GetAllTaskTemplatesByUserResponse.TaskTemplate.SubTask.AsObject>,
     }
 
@@ -496,11 +490,6 @@ export namespace GetAllTaskTemplatesByUserResponse {
       }
     }
 
-
-    export enum UserIdCase { 
-      _USER_ID_NOT_SET = 0,
-      USER_ID = 6,
-    }
   }
 
 }

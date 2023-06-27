@@ -925,7 +925,6 @@ class GetAllTaskTemplatesByUserResponse_TaskTemplate extends $pb.GeneratedMessag
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOB(4, _omitFieldNames ? '' : 'isPublic')
-    ..aOS(6, _omitFieldNames ? '' : 'userId')
     ..pc<GetAllTaskTemplatesByUserResponse_TaskTemplate_SubTask>(7, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetAllTaskTemplatesByUserResponse_TaskTemplate_SubTask.create)
     ..hasRequiredFields = false
   ;
@@ -987,17 +986,8 @@ class GetAllTaskTemplatesByUserResponse_TaskTemplate extends $pb.GeneratedMessag
   @$pb.TagNumber(4)
   void clearIsPublic() => clearField(4);
 
-  @$pb.TagNumber(6)
-  $core.String get userId => $_getSZ(4);
-  @$pb.TagNumber(6)
-  set userId($core.String v) { $_setString(4, v); }
-  @$pb.TagNumber(6)
-  $core.bool hasUserId() => $_has(4);
-  @$pb.TagNumber(6)
-  void clearUserId() => clearField(6);
-
   @$pb.TagNumber(7)
-  $core.List<GetAllTaskTemplatesByUserResponse_TaskTemplate_SubTask> get subtasks => $_getList(5);
+  $core.List<GetAllTaskTemplatesByUserResponse_TaskTemplate_SubTask> get subtasks => $_getList(4);
 }
 
 class GetAllTaskTemplatesByUserResponse extends $pb.GeneratedMessage {

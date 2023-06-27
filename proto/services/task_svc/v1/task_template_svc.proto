@@ -118,7 +118,7 @@ message CreateTaskTemplateSubTaskResponse {
 }
 
 ///
-/// GetAllTaskTemplatesByWard
+/// GetAllTaskTemplatesByUser
 ///
 
 message GetAllTaskTemplatesByUserRequest {
@@ -133,7 +133,6 @@ message GetAllTaskTemplatesByUserResponse {
     string name = 2;
     string description = 3;
     bool is_public = 4;
-    optional string user_id = 6;
     repeated SubTask subtasks = 7;
 
     message SubTask {
