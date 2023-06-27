@@ -1,2 +1,2 @@
 ALTER TABLE task_templates
-	ADD organization_id uuid NOT NULL;
+	ADD COLUMN organization_id uuid NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000';

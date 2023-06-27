@@ -106,7 +106,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, req *pb.GetAllTask
 
 	var taskTemplates []TaskTemplate
 
-	if err := db.Preload("Subtasks").Where("organization_id = ?", organizationId).Where("is_public = ?", true).Find(&taskTemplates).Error; err != nil {
+	if err := db.Preload("Subtasks").Where("organization_id = ?", organizationID).Where("is_public = ?", true).Find(&taskTemplates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
