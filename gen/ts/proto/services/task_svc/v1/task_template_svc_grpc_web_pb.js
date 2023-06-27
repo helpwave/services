@@ -141,122 +141,61 @@ proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.crea
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.task_svc.v1.DeleteTaskTemplateRequest,
- *   !proto.proto.services.task_svc.v1.DeleteTaskTemplateResponse>}
+ *   !proto.proto.services.task_svc.v1.GetAllTaskTemplatesRequest,
+ *   !proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse>}
  */
-const methodDescriptor_TaskTemplateService_DeleteTaskTemplate = new grpc.web.MethodDescriptor(
-  '/proto.services.task_svc.v1.TaskTemplateService/DeleteTaskTemplate',
+const methodDescriptor_TaskTemplateService_GetAllTaskTemplates = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplates',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.task_svc.v1.DeleteTaskTemplateRequest,
-  proto.proto.services.task_svc.v1.DeleteTaskTemplateResponse,
+  proto.proto.services.task_svc.v1.GetAllTaskTemplatesRequest,
+  proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse,
   /**
-   * @param {!proto.proto.services.task_svc.v1.DeleteTaskTemplateRequest} request
+   * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.task_svc.v1.DeleteTaskTemplateResponse.deserializeBinary
+  proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.task_svc.v1.DeleteTaskTemplateRequest} request The
+ * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.DeleteTaskTemplateResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.DeleteTaskTemplateResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.task_svc.v1.TaskTemplateServiceClient.prototype.deleteTaskTemplate =
+proto.proto.services.task_svc.v1.TaskTemplateServiceClient.prototype.getAllTaskTemplates =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.task_svc.v1.TaskTemplateService/DeleteTaskTemplate',
+      '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplates',
       request,
       metadata || {},
-      methodDescriptor_TaskTemplateService_DeleteTaskTemplate,
+      methodDescriptor_TaskTemplateService_GetAllTaskTemplates,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.task_svc.v1.DeleteTaskTemplateRequest} request The
+ * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.task_svc.v1.DeleteTaskTemplateResponse>}
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.deleteTaskTemplate =
+proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.getAllTaskTemplates =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.task_svc.v1.TaskTemplateService/DeleteTaskTemplate',
+      '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplates',
       request,
       metadata || {},
-      methodDescriptor_TaskTemplateService_DeleteTaskTemplate);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.task_svc.v1.DeleteTaskTemplateSubTaskRequest,
- *   !proto.proto.services.task_svc.v1.DeleteTaskTemplateSubTaskResponse>}
- */
-const methodDescriptor_TaskTemplateService_DeleteTaskTemplateSubTask = new grpc.web.MethodDescriptor(
-  '/proto.services.task_svc.v1.TaskTemplateService/DeleteTaskTemplateSubTask',
-  grpc.web.MethodType.UNARY,
-  proto.proto.services.task_svc.v1.DeleteTaskTemplateSubTaskRequest,
-  proto.proto.services.task_svc.v1.DeleteTaskTemplateSubTaskResponse,
-  /**
-   * @param {!proto.proto.services.task_svc.v1.DeleteTaskTemplateSubTaskRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.proto.services.task_svc.v1.DeleteTaskTemplateSubTaskResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.proto.services.task_svc.v1.DeleteTaskTemplateSubTaskRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.DeleteTaskTemplateSubTaskResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.DeleteTaskTemplateSubTaskResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.proto.services.task_svc.v1.TaskTemplateServiceClient.prototype.deleteTaskTemplateSubTask =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.task_svc.v1.TaskTemplateService/DeleteTaskTemplateSubTask',
-      request,
-      metadata || {},
-      methodDescriptor_TaskTemplateService_DeleteTaskTemplateSubTask,
-      callback);
-};
-
-
-/**
- * @param {!proto.proto.services.task_svc.v1.DeleteTaskTemplateSubTaskRequest} request The
- *     request proto
- * @param {?Object<string, string>=} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.proto.services.task_svc.v1.DeleteTaskTemplateSubTaskResponse>}
- *     Promise that resolves to the response
- */
-proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.deleteTaskTemplateSubTask =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.task_svc.v1.TaskTemplateService/DeleteTaskTemplateSubTask',
-      request,
-      metadata || {},
-      methodDescriptor_TaskTemplateService_DeleteTaskTemplateSubTask);
+      methodDescriptor_TaskTemplateService_GetAllTaskTemplates);
 };
 
 

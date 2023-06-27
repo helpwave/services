@@ -26,6 +26,34 @@ message CreateTaskTemplateResponse {
 
 
 ///
+/// GetAllTaskTemplates
+///
+
+message GetAllTaskTemplatesRequest {
+}
+
+message GetAllTaskTemplatesResponse {
+  repeated TaskTemplate templates = 1;
+
+  message TaskTemplate {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    bool is_public = 4;
+    optional string user_id = 6;
+    repeated SubTask subtasks = 7;
+
+    message SubTask {
+      string id = 1;
+      string task_template_id = 2;
+      string name = 3;
+    }
+  }
+}
+
+
+
+///
 /// DeleteTaskTemplate
 ///
 
@@ -50,6 +78,7 @@ message DeleteTaskTemplateSubTaskResponse {
 
 service TaskTemplateService {
   rpc CreateTaskTemplate (CreateTaskTemplateRequest) returns (CreateTaskTemplateResponse) {}
+  rpc GetAllTaskTemplates (GetAllTaskTemplatesRequest) returns (GetAllTaskTemplatesResponse) {}
   rpc DeleteTaskTemplate (DeleteTaskTemplateRequest) returns (DeleteTaskTemplateResponse) {}
   rpc DeleteTaskTemplateSubTask (DeleteTaskTemplateSubTaskRequest) returns (DeleteTaskTemplateSubTaskResponse) {}
 }
