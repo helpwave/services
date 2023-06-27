@@ -504,5 +504,66 @@ proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.crea
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserRequest,
+ *   !proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse>}
+ */
+const methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByUser = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByUser',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserRequest,
+  proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.TaskTemplateServiceClient.prototype.getAllTaskTemplatesByUser =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByUser',
+      request,
+      metadata || {},
+      methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByUser,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.getAllTaskTemplatesByUser =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByUser',
+      request,
+      metadata || {},
+      methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByUser);
+};
+
+
 module.exports = proto.proto.services.task_svc.v1;
 

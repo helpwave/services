@@ -265,7 +265,7 @@ func (ServiceServer) GetAllTaskTemplatesByUser(ctx context.Context, req *pb.GetA
 
 	var taskTemplates []TaskTemplate
 
-	if err := db.Preload("Subtasks").Where("user_id = ?", userId).Find(&taskTemplates).Error; err != nil {
+	if err := db.Preload("SubTasks").Where("user_id = ?", userId).Find(&taskTemplates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
