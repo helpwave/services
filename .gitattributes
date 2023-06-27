@@ -1,2 +1,2 @@
-gen/** linguist-generated
-
+gen/** linguist-generated=true
+gen/**/helpers.go linguist-generated=false

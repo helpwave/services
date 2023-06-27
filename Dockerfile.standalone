@@ -1,0 +1,77 @@
+# you probably don't want to use this Dockerfile directly,
+# use `make <svc>` instead
+
+# builder builds a go service
+# the build args SERVICE and VERSION must be set!
+FROM golang:1.19 AS builder
+
+ARG SERVICE
+ARG VERSION
+
+WORKDIR /build/app
+
+COPY libs /libs
+COPY gen /gen
+
+COPY services/$SERVICE/go.* ./
+RUN go mod download
+
+COPY services/$SERVICE /build/app
+
+# create migrations, if it does not exist already
+# allows us to copy it into the production image w/o error
+RUN mkdir -p migrations
+
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-X main.Version=${VERSION}" -a -o app .
+
+FROM debian AS deps
+
+ARG HIVEMIND_VERSION=1.1.0
+ARG MIGRATE_VERSION=4.15.2
+ARG DAPR_VERSION=1.10.7
+
+RUN apt update && \
+	apt install -y wget
+
+# get hivemind
+RUN wget -q -O hivemind.gz https://github.com/DarthSim/hivemind/releases/download/v$HIVEMIND_VERSION/hivemind-v$HIVEMIND_VERSION-linux-amd64.gz && \
+	gunzip hivemind.gz && \
+    chmod +x hivemind
+
+# get migrate
+RUN wget -q -O migrate.tgz https://github.com/golang-migrate/migrate/releases/download/v$MIGRATE_VERSION/migrate.linux-amd64.tar.gz && \
+	tar -xzvf migrate.tgz migrate
+
+# install Dapr
+# RUN wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O - | /bin/bash && \
+#     dapr init --slim --runtime-version $DAPR_VERSION
+
+# add daprd temporarily from helpwave/tmp-dapr-dist; our pull request is approved but not merged yet https://github.com/dapr/components-contrib/pull/2883
+ADD --chmod=100 https://github.com/helpwave/tmp-dapr-dist/raw/main/linux_amd64/release/daprd /root/.dapr/bin/daprd
+RUN echo -n "56ff6bbcfc551d2cedb06a30a8fa32fb14f6efe2995b38316a991b0c5e048e15 /root/.dapr/bin/daprd" | sha256sum --check --status
+
+FROM alpine AS production
+
+ARG SERVICE
+
+WORKDIR /app
+
+# copy deps
+COPY --from=deps /hivemind /usr/bin/hivemind
+COPY --from=deps /migrate /usr/bin/migrate
+COPY --from=deps /root/.dapr/bin/daprd /usr/bin/daprd
+COPY dapr.yaml dapr.yaml
+COPY Procfile.standalone Procfile
+
+# copy app
+COPY --from=builder /build/app/app .
+COPY --from=builder /build/app/migrations ./migrations
+COPY docker-run-migrations.sh ./run-migrations.sh
+RUN chmod +x app run-migrations.sh
+
+ENV DAPR_APP_ID=$SERVICE
+ENV ADDR 127.0.0.1:80
+ENV MODE development
+ENV LOG_LEVEL debug
+
+CMD hivemind

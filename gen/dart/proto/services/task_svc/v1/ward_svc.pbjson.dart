@@ -1,94 +1,185 @@
-///
+//
 //  Generated code. Do not modify.
 //  source: proto/services/task_svc/v1/ward_svc.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,deprecated_member_use_from_same_package,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
-import 'dart:core' as $core;
+// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: constant_identifier_names, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+
 import 'dart:convert' as $convert;
+import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
+
 @$core.Deprecated('Use createWardRequestDescriptor instead')
-const CreateWardRequest$json = const {
+const CreateWardRequest$json = {
   '1': 'CreateWardRequest',
-  '2': const [
-    const {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
+  '2': [
+    {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
   ],
 };
 
 /// Descriptor for `CreateWardRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createWardRequestDescriptor = $convert.base64Decode('ChFDcmVhdGVXYXJkUmVxdWVzdBISCgRuYW1lGAEgASgJUgRuYW1l');
+final $typed_data.Uint8List createWardRequestDescriptor = $convert.base64Decode(
+    'ChFDcmVhdGVXYXJkUmVxdWVzdBISCgRuYW1lGAEgASgJUgRuYW1l');
+
 @$core.Deprecated('Use createWardResponseDescriptor instead')
-const CreateWardResponse$json = const {
+const CreateWardResponse$json = {
   '1': 'CreateWardResponse',
-  '2': const [
-    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
   ],
 };
 
 /// Descriptor for `CreateWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createWardResponseDescriptor = $convert.base64Decode('ChJDcmVhdGVXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWU=');
+final $typed_data.Uint8List createWardResponseDescriptor = $convert.base64Decode(
+    'ChJDcmVhdGVXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbW'
+    'U=');
+
 @$core.Deprecated('Use getWardRequestDescriptor instead')
-const GetWardRequest$json = const {
+const GetWardRequest$json = {
   '1': 'GetWardRequest',
-  '2': const [
-    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
   ],
 };
 
 /// Descriptor for `GetWardRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getWardRequestDescriptor = $convert.base64Decode('Cg5HZXRXYXJkUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQ=');
+final $typed_data.Uint8List getWardRequestDescriptor = $convert.base64Decode(
+    'Cg5HZXRXYXJkUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQ=');
+
 @$core.Deprecated('Use getWardResponseDescriptor instead')
-const GetWardResponse$json = const {
+const GetWardResponse$json = {
   '1': 'GetWardResponse',
-  '2': const [
-    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
   ],
 };
 
 /// Descriptor for `GetWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getWardResponseDescriptor = $convert.base64Decode('Cg9HZXRXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWU=');
-@$core.Deprecated('Use updateWardRequestDescriptor instead')
-const UpdateWardRequest$json = const {
-  '1': 'UpdateWardRequest',
-  '2': const [
-    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    const {'1': 'name', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'name', '17': true},
+final $typed_data.Uint8List getWardResponseDescriptor = $convert.base64Decode(
+    'Cg9HZXRXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWU=');
+
+@$core.Deprecated('Use getWardsRequestDescriptor instead')
+const GetWardsRequest$json = {
+  '1': 'GetWardsRequest',
+};
+
+/// Descriptor for `GetWardsRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getWardsRequestDescriptor = $convert.base64Decode(
+    'Cg9HZXRXYXJkc1JlcXVlc3Q=');
+
+@$core.Deprecated('Use getWardsResponseDescriptor instead')
+const GetWardsResponse$json = {
+  '1': 'GetWardsResponse',
+  '2': [
+    {'1': 'wards', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetWardsResponse.Ward', '10': 'wards'},
   ],
-  '8': const [
-    const {'1': '_name'},
+  '3': [GetWardsResponse_Ward$json],
+};
+
+@$core.Deprecated('Use getWardsResponseDescriptor instead')
+const GetWardsResponse_Ward$json = {
+  '1': 'Ward',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+  ],
+};
+
+/// Descriptor for `GetWardsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getWardsResponseDescriptor = $convert.base64Decode(
+    'ChBHZXRXYXJkc1Jlc3BvbnNlEkcKBXdhcmRzGAEgAygLMjEucHJvdG8uc2VydmljZXMudGFza1'
+    '9zdmMudjEuR2V0V2FyZHNSZXNwb25zZS5XYXJkUgV3YXJkcxoqCgRXYXJkEg4KAmlkGAEgASgJ'
+    'UgJpZBISCgRuYW1lGAIgASgJUgRuYW1l');
+
+@$core.Deprecated('Use updateWardRequestDescriptor instead')
+const UpdateWardRequest$json = {
+  '1': 'UpdateWardRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'name', '17': true},
+  ],
+  '8': [
+    {'1': '_name'},
   ],
 };
 
 /// Descriptor for `UpdateWardRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateWardRequestDescriptor = $convert.base64Decode('ChFVcGRhdGVXYXJkUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSFwoEbmFtZRgCIAEoCUgAUgRuYW1liAEBQgcKBV9uYW1l');
+final $typed_data.Uint8List updateWardRequestDescriptor = $convert.base64Decode(
+    'ChFVcGRhdGVXYXJkUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSFwoEbmFtZRgCIAEoCUgAUgRuYW'
+    '1liAEBQgcKBV9uYW1l');
+
 @$core.Deprecated('Use updateWardResponseDescriptor instead')
-const UpdateWardResponse$json = const {
+const UpdateWardResponse$json = {
   '1': 'UpdateWardResponse',
 };
 
 /// Descriptor for `UpdateWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateWardResponseDescriptor = $convert.base64Decode('ChJVcGRhdGVXYXJkUmVzcG9uc2U=');
-const $core.Map<$core.String, $core.dynamic> WardServiceBase$json = const {
+final $typed_data.Uint8List updateWardResponseDescriptor = $convert.base64Decode(
+    'ChJVcGRhdGVXYXJkUmVzcG9uc2U=');
+
+@$core.Deprecated('Use deleteWardRequestDescriptor instead')
+const DeleteWardRequest$json = {
+  '1': 'DeleteWardRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `DeleteWardRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deleteWardRequestDescriptor = $convert.base64Decode(
+    'ChFEZWxldGVXYXJkUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQ=');
+
+@$core.Deprecated('Use deleteWardResponseDescriptor instead')
+const DeleteWardResponse$json = {
+  '1': 'DeleteWardResponse',
+};
+
+/// Descriptor for `DeleteWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deleteWardResponseDescriptor = $convert.base64Decode(
+    'ChJEZWxldGVXYXJkUmVzcG9uc2U=');
+
+const $core.Map<$core.String, $core.dynamic> WardServiceBase$json = {
   '1': 'WardService',
-  '2': const [
-    const {'1': 'CreateWard', '2': '.proto.services.task_svc.v1.CreateWardRequest', '3': '.proto.services.task_svc.v1.CreateWardResponse', '4': const {}},
-    const {'1': 'GetWard', '2': '.proto.services.task_svc.v1.GetWardRequest', '3': '.proto.services.task_svc.v1.GetWardResponse', '4': const {}},
-    const {'1': 'UpdateWard', '2': '.proto.services.task_svc.v1.UpdateWardRequest', '3': '.proto.services.task_svc.v1.UpdateWardResponse', '4': const {}},
+  '2': [
+    {'1': 'CreateWard', '2': '.proto.services.task_svc.v1.CreateWardRequest', '3': '.proto.services.task_svc.v1.CreateWardResponse', '4': {}},
+    {'1': 'GetWard', '2': '.proto.services.task_svc.v1.GetWardRequest', '3': '.proto.services.task_svc.v1.GetWardResponse', '4': {}},
+    {'1': 'GetWards', '2': '.proto.services.task_svc.v1.GetWardsRequest', '3': '.proto.services.task_svc.v1.GetWardsResponse', '4': {}},
+    {'1': 'UpdateWard', '2': '.proto.services.task_svc.v1.UpdateWardRequest', '3': '.proto.services.task_svc.v1.UpdateWardResponse', '4': {}},
+    {'1': 'DeleteWard', '2': '.proto.services.task_svc.v1.DeleteWardRequest', '3': '.proto.services.task_svc.v1.DeleteWardResponse', '4': {}},
   ],
 };
 
 @$core.Deprecated('Use wardServiceDescriptor instead')
-const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> WardServiceBase$messageJson = const {
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> WardServiceBase$messageJson = {
   '.proto.services.task_svc.v1.CreateWardRequest': CreateWardRequest$json,
   '.proto.services.task_svc.v1.CreateWardResponse': CreateWardResponse$json,
   '.proto.services.task_svc.v1.GetWardRequest': GetWardRequest$json,
   '.proto.services.task_svc.v1.GetWardResponse': GetWardResponse$json,
+  '.proto.services.task_svc.v1.GetWardsRequest': GetWardsRequest$json,
+  '.proto.services.task_svc.v1.GetWardsResponse': GetWardsResponse$json,
+  '.proto.services.task_svc.v1.GetWardsResponse.Ward': GetWardsResponse_Ward$json,
   '.proto.services.task_svc.v1.UpdateWardRequest': UpdateWardRequest$json,
   '.proto.services.task_svc.v1.UpdateWardResponse': UpdateWardResponse$json,
+  '.proto.services.task_svc.v1.DeleteWardRequest': DeleteWardRequest$json,
+  '.proto.services.task_svc.v1.DeleteWardResponse': DeleteWardResponse$json,
 };
 
 /// Descriptor for `WardService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List wardServiceDescriptor = $convert.base64Decode('CgtXYXJkU2VydmljZRJtCgpDcmVhdGVXYXJkEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuQ3JlYXRlV2FyZFJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5DcmVhdGVXYXJkUmVzcG9uc2UiABJkCgdHZXRXYXJkEioucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0V2FyZFJlcXVlc3QaKy5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRXYXJkUmVzcG9uc2UiABJtCgpVcGRhdGVXYXJkEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVXBkYXRlV2FyZFJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5VcGRhdGVXYXJkUmVzcG9uc2UiAA==');
+final $typed_data.Uint8List wardServiceDescriptor = $convert.base64Decode(
+    'CgtXYXJkU2VydmljZRJtCgpDcmVhdGVXYXJkEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudj'
+    'EuQ3JlYXRlV2FyZFJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5DcmVhdGVX'
+    'YXJkUmVzcG9uc2UiABJkCgdHZXRXYXJkEioucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2'
+    'V0V2FyZFJlcXVlc3QaKy5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRXYXJkUmVzcG9u'
+    'c2UiABJnCghHZXRXYXJkcxIrLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFdhcmRzUm'
+    'VxdWVzdBosLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFdhcmRzUmVzcG9uc2UiABJt'
+    'CgpVcGRhdGVXYXJkEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVXBkYXRlV2FyZFJlcX'
+    'Vlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5VcGRhdGVXYXJkUmVzcG9uc2UiABJt'
+    'CgpEZWxldGVXYXJkEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuRGVsZXRlV2FyZFJlcX'
+    'Vlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVXYXJkUmVzcG9uc2UiAA==');
+

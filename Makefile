@@ -7,14 +7,17 @@ GO_SERVICES = $(subst services/,,$(wildcard services/*))
 # Docker images have their own Dockerfile in the root of the service directory
 DOCKER_IMAGES = $(subst images/,,$(wildcard images/*))
 
+WORKING_DIRECTORY := $(CURDIR)
+export WORKING_DIRECTORY
+
 .PHONY: proto
 proto:
-	docker run --rm -v $$(pwd):/wd ghcr.io/helpwave/service-preproc:edge lint || true
-	docker run --rm -v $$(pwd):/wd ghcr.io/helpwave/service-preproc:edge generate
+	docker run --rm -v $(WORKING_DIRECTORY):/wd ghcr.io/helpwave/service-preproc:edge lint || true
+	docker run --rm -v $(WORKING_DIRECTORY):/wd ghcr.io/helpwave/service-preproc:edge generate
 
 .PHONY: proto_lint
 proto_lint:
-	docker run --rm -v $$(pwd):/wd ghcr.io/helpwave/service-preproc:edge lint
+	docker run --rm -v $(WORKING_DIRECTORY):/wd ghcr.io/helpwave/service-preproc:edge lint
 
 .PHONY: GO_SERVICES
 $(GO_SERVICES): proto

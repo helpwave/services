@@ -80,61 +80,122 @@ proto.proto.services.user_svc.v1.UserServicePromiseClient =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.user_svc.v1.CreateUserRequest,
- *   !proto.proto.services.user_svc.v1.CreateUserResponse>}
+ *   !proto.proto.services.user_svc.v1.ReadSelfRequest,
+ *   !proto.proto.services.user_svc.v1.ReadSelfResponse>}
  */
-const methodDescriptor_UserService_CreateUser = new grpc.web.MethodDescriptor(
-  '/proto.services.user_svc.v1.UserService/CreateUser',
+const methodDescriptor_UserService_ReadSelf = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.UserService/ReadSelf',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.user_svc.v1.CreateUserRequest,
-  proto.proto.services.user_svc.v1.CreateUserResponse,
+  proto.proto.services.user_svc.v1.ReadSelfRequest,
+  proto.proto.services.user_svc.v1.ReadSelfResponse,
   /**
-   * @param {!proto.proto.services.user_svc.v1.CreateUserRequest} request
+   * @param {!proto.proto.services.user_svc.v1.ReadSelfRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.user_svc.v1.CreateUserResponse.deserializeBinary
+  proto.proto.services.user_svc.v1.ReadSelfResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.user_svc.v1.CreateUserRequest} request The
+ * @param {!proto.proto.services.user_svc.v1.ReadSelfRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.CreateUserResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.ReadSelfResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.CreateUserResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.ReadSelfResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.user_svc.v1.UserServiceClient.prototype.createUser =
+proto.proto.services.user_svc.v1.UserServiceClient.prototype.readSelf =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.user_svc.v1.UserService/CreateUser',
+      '/proto.services.user_svc.v1.UserService/ReadSelf',
       request,
       metadata || {},
-      methodDescriptor_UserService_CreateUser,
+      methodDescriptor_UserService_ReadSelf,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.user_svc.v1.CreateUserRequest} request The
+ * @param {!proto.proto.services.user_svc.v1.ReadSelfRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.user_svc.v1.CreateUserResponse>}
+ * @return {!Promise<!proto.proto.services.user_svc.v1.ReadSelfResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.createUser =
+proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.readSelf =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.user_svc.v1.UserService/CreateUser',
+      '/proto.services.user_svc.v1.UserService/ReadSelf',
       request,
       metadata || {},
-      methodDescriptor_UserService_CreateUser);
+      methodDescriptor_UserService_ReadSelf);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.ReadPublicProfileRequest,
+ *   !proto.proto.services.user_svc.v1.ReadPublicProfileResponse>}
+ */
+const methodDescriptor_UserService_ReadPublicProfile = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.UserService/ReadPublicProfile',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.ReadPublicProfileRequest,
+  proto.proto.services.user_svc.v1.ReadPublicProfileResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.ReadPublicProfileRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.ReadPublicProfileResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.ReadPublicProfileRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.ReadPublicProfileResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.ReadPublicProfileResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.UserServiceClient.prototype.readPublicProfile =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.UserService/ReadPublicProfile',
+      request,
+      metadata || {},
+      methodDescriptor_UserService_ReadPublicProfile,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.ReadPublicProfileRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.ReadPublicProfileResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.readPublicProfile =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.UserService/ReadPublicProfile',
+      request,
+      metadata || {},
+      methodDescriptor_UserService_ReadPublicProfile);
 };
 
 
@@ -196,67 +257,6 @@ proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.updateUser =
       request,
       metadata || {},
       methodDescriptor_UserService_UpdateUser);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.user_svc.v1.CreateOrganizationRequest,
- *   !proto.proto.services.user_svc.v1.CreateOrganizationResponse>}
- */
-const methodDescriptor_UserService_CreateOrganization = new grpc.web.MethodDescriptor(
-  '/proto.services.user_svc.v1.UserService/CreateOrganization',
-  grpc.web.MethodType.UNARY,
-  proto.proto.services.user_svc.v1.CreateOrganizationRequest,
-  proto.proto.services.user_svc.v1.CreateOrganizationResponse,
-  /**
-   * @param {!proto.proto.services.user_svc.v1.CreateOrganizationRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.proto.services.user_svc.v1.CreateOrganizationResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.proto.services.user_svc.v1.CreateOrganizationRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.CreateOrganizationResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.CreateOrganizationResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.proto.services.user_svc.v1.UserServiceClient.prototype.createOrganization =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.user_svc.v1.UserService/CreateOrganization',
-      request,
-      metadata || {},
-      methodDescriptor_UserService_CreateOrganization,
-      callback);
-};
-
-
-/**
- * @param {!proto.proto.services.user_svc.v1.CreateOrganizationRequest} request The
- *     request proto
- * @param {?Object<string, string>=} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.proto.services.user_svc.v1.CreateOrganizationResponse>}
- *     Promise that resolves to the response
- */
-proto.proto.services.user_svc.v1.UserServicePromiseClient.prototype.createOrganization =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.user_svc.v1.UserService/CreateOrganization',
-      request,
-      metadata || {},
-      methodDescriptor_UserService_CreateOrganization);
 };
 
 

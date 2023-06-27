@@ -5,7 +5,7 @@ on:
     branches: [ 'main' ]
     paths:
     - proto/**/*.proto
-    - gen/**/*
+    - gen/*/proto/**/*
 
 jobs:
   check-preconditions:
@@ -95,7 +95,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   dart:
-    needs: check-preconditions
+    needs:
+    - check-preconditions
+    - ts # TODO: Commit all changes in one commit. Should prevents branch behind error as well.
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -104,6 +106,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         token: ${{ secrets.HELPWAVE_BOT_PAT }}
+        ref: main # TODO: Commit all changes in one commit. Should prevents branch behind error as well.
     - name: Install tools
       run: |
         pip install yq

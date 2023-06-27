@@ -19,18 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	UserService_CreateUser_FullMethodName         = "/proto.services.user_svc.v1.UserService/CreateUser"
-	UserService_UpdateUser_FullMethodName         = "/proto.services.user_svc.v1.UserService/UpdateUser"
-	UserService_CreateOrganization_FullMethodName = "/proto.services.user_svc.v1.UserService/CreateOrganization"
+	UserService_ReadSelf_FullMethodName          = "/proto.services.user_svc.v1.UserService/ReadSelf"
+	UserService_ReadPublicProfile_FullMethodName = "/proto.services.user_svc.v1.UserService/ReadPublicProfile"
+	UserService_UpdateUser_FullMethodName        = "/proto.services.user_svc.v1.UserService/UpdateUser"
 )
 
 // UserServiceClient is the client API for UserService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
-	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
+	ReadSelf(ctx context.Context, in *ReadSelfRequest, opts ...grpc.CallOption) (*ReadSelfResponse, error)
+	ReadPublicProfile(ctx context.Context, in *ReadPublicProfileRequest, opts ...grpc.CallOption) (*ReadPublicProfileResponse, error)
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error)
-	CreateOrganization(ctx context.Context, in *CreateOrganizationRequest, opts ...grpc.CallOption) (*CreateOrganizationResponse, error)
 }
 
 type userServiceClient struct {
@@ -41,9 +41,18 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 	return &userServiceClient{cc}
 }
 
-func (c *userServiceClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
-	out := new(CreateUserResponse)
-	err := c.cc.Invoke(ctx, UserService_CreateUser_FullMethodName, in, out, opts...)
+func (c *userServiceClient) ReadSelf(ctx context.Context, in *ReadSelfRequest, opts ...grpc.CallOption) (*ReadSelfResponse, error) {
+	out := new(ReadSelfResponse)
+	err := c.cc.Invoke(ctx, UserService_ReadSelf_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) ReadPublicProfile(ctx context.Context, in *ReadPublicProfileRequest, opts ...grpc.CallOption) (*ReadPublicProfileResponse, error) {
+	out := new(ReadPublicProfileResponse)
+	err := c.cc.Invoke(ctx, UserService_ReadPublicProfile_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -59,22 +68,13 @@ func (c *userServiceClient) UpdateUser(ctx context.Context, in *UpdateUserReques
 	return out, nil
 }
 
-func (c *userServiceClient) CreateOrganization(ctx context.Context, in *CreateOrganizationRequest, opts ...grpc.CallOption) (*CreateOrganizationResponse, error) {
-	out := new(CreateOrganizationResponse)
-	err := c.cc.Invoke(ctx, UserService_CreateOrganization_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
-	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
+	ReadSelf(context.Context, *ReadSelfRequest) (*ReadSelfResponse, error)
+	ReadPublicProfile(context.Context, *ReadPublicProfileRequest) (*ReadPublicProfileResponse, error)
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
-	CreateOrganization(context.Context, *CreateOrganizationRequest) (*CreateOrganizationResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -82,14 +82,14 @@ type UserServiceServer interface {
 type UnimplementedUserServiceServer struct {
 }
 
-func (UnimplementedUserServiceServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
+func (UnimplementedUserServiceServer) ReadSelf(context.Context, *ReadSelfRequest) (*ReadSelfResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReadSelf not implemented")
+}
+func (UnimplementedUserServiceServer) ReadPublicProfile(context.Context, *ReadPublicProfileRequest) (*ReadPublicProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReadPublicProfile not implemented")
 }
 func (UnimplementedUserServiceServer) UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
-}
-func (UnimplementedUserServiceServer) CreateOrganization(context.Context, *CreateOrganizationRequest) (*CreateOrganizationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateOrganization not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -104,20 +104,38 @@ func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
 	s.RegisterService(&UserService_ServiceDesc, srv)
 }
 
-func _UserService_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateUserRequest)
+func _UserService_ReadSelf_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReadSelfRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).CreateUser(ctx, in)
+		return srv.(UserServiceServer).ReadSelf(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserService_CreateUser_FullMethodName,
+		FullMethod: UserService_ReadSelf_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).CreateUser(ctx, req.(*CreateUserRequest))
+		return srv.(UserServiceServer).ReadSelf(ctx, req.(*ReadSelfRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_ReadPublicProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReadPublicProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).ReadPublicProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_ReadPublicProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).ReadPublicProfile(ctx, req.(*ReadPublicProfileRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -140,24 +158,6 @@ func _UserService_UpdateUser_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_CreateOrganization_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateOrganizationRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).CreateOrganization(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: UserService_CreateOrganization_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).CreateOrganization(ctx, req.(*CreateOrganizationRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -166,16 +166,16 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateUser",
-			Handler:    _UserService_CreateUser_Handler,
+			MethodName: "ReadSelf",
+			Handler:    _UserService_ReadSelf_Handler,
+		},
+		{
+			MethodName: "ReadPublicProfile",
+			Handler:    _UserService_ReadPublicProfile_Handler,
 		},
 		{
 			MethodName: "UpdateUser",
 			Handler:    _UserService_UpdateUser_Handler,
-		},
-		{
-			MethodName: "CreateOrganization",
-			Handler:    _UserService_CreateOrganization_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

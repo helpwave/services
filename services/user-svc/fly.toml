@@ -1,0 +1,14 @@
+primary_region = "ams"
+
+[build]
+  dockerfile = "../../Dockerfile.standalone"
+
+[build.args]
+  SERVICE = "user-svc"
+
+[env]
+  INSECURE_FAKE_TOKEN_ENABLE=true
+
+[[services]]
+  auto_stop_machines = false
+  auto_start_machines = false

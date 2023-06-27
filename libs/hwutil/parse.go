@@ -64,3 +64,23 @@ func DerefStringOr(s *string, alternative string) string {
 		return *s
 	}
 }
+
+func UUIDToStringPtr(u *uuid.UUID) *string {
+	var s string
+	if u != nil {
+		s = u.String()
+	}
+	return &s
+}
+
+func StringToUUIDPtr(s *string) (*uuid.UUID, error) {
+	var uPtr *uuid.UUID
+	if s != nil {
+		u, err := uuid.Parse(*s)
+		if err != nil {
+			return nil, err
+		}
+		uPtr = &u
+	}
+	return uPtr, nil
+}

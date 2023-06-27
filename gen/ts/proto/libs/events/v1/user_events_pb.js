@@ -78,7 +78,7 @@ proto.proto.libs.events.v1.UserCreatedEvent.toObject = function(includeInstance,
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     email: jspb.Message.getFieldWithDefault(msg, 2, ""),
     nickname: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    fullName: jspb.Message.getFieldWithDefault(msg, 4, "")
+    name: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -129,7 +129,7 @@ proto.proto.libs.events.v1.UserCreatedEvent.deserializeBinaryFromReader = functi
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
-      msg.setFullName(value);
+      msg.setName(value);
       break;
     default:
       reader.skipField();
@@ -181,7 +181,7 @@ proto.proto.libs.events.v1.UserCreatedEvent.serializeBinaryToWriter = function(m
       f
     );
   }
-  f = message.getFullName();
+  f = message.getName();
   if (f.length > 0) {
     writer.writeString(
       4,
@@ -246,10 +246,10 @@ proto.proto.libs.events.v1.UserCreatedEvent.prototype.setNickname = function(val
 
 
 /**
- * optional string full_name = 4;
+ * optional string name = 4;
  * @return {string}
  */
-proto.proto.libs.events.v1.UserCreatedEvent.prototype.getFullName = function() {
+proto.proto.libs.events.v1.UserCreatedEvent.prototype.getName = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
@@ -258,7 +258,7 @@ proto.proto.libs.events.v1.UserCreatedEvent.prototype.getFullName = function() {
  * @param {string} value
  * @return {!proto.proto.libs.events.v1.UserCreatedEvent} returns this
  */
-proto.proto.libs.events.v1.UserCreatedEvent.prototype.setFullName = function(value) {
+proto.proto.libs.events.v1.UserCreatedEvent.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 4, value);
 };
 

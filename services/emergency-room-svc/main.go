@@ -34,9 +34,7 @@ func main() {
 		hwutil.GetEnvOr("POSTGRES_PORT", "5432"),
 	)
 
-	addr := ":" + hwutil.GetEnvOr("PORT", "8080")
-
-	common.StartNewGRPCServer(addr, func(server *daprd.Server) {
+	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		pb.RegisterEmergencyRoomServiceServer(server.GrpcServer(), &emergencyRoomServiceServer{})
 	})
 }

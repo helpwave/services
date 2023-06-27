@@ -85,25 +85,3 @@ resource "cloudflare_record" "staging-tasks-helpwave-de" {
   # Unproxied for now. See top.
   proxied = false
 }
-
-//
-// Keycloak
-//
-
-resource "cloudflare_record" "sso-helpwave-de" {
-  zone_id = var.cf_zone_id
-  name = "sso"
-  value = cloudflare_record.api-helpwave-de.hostname
-  type = "CNAME"
-  comment = "Managed through Terraform"
-  proxied = true
-}
-
-resource "cloudflare_record" "staging-sso-helpwave-de" {
-  zone_id = var.cf_zone_id
-  name = "staging-sso"
-  value = cloudflare_record.sso-helpwave-de.hostname
-  type = "CNAME"
-  comment = "Managed through Terraform"
-  proxied = true
-}

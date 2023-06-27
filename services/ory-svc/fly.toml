@@ -1,0 +1,11 @@
+primary_region = "ams"
+
+[build]
+  dockerfile = "../../Dockerfile.standalone"
+
+[build.args]
+  SERVICE = "ory-svc"
+
+[[services]]
+  auto_stop_machines = false
+  auto_start_machines = false

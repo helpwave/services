@@ -67,20 +67,6 @@ spec:
             - name: POSTGRES_DB
               value: {{ .Values.postgres.database }}
             {{ end }}
-            {{ if not .Values.keyCloakDisabled }}
-            - name: KEYCLOAK_URL
-              value: {{ .Values.keycloakURL | quote }}
-            - name: KEYCLOAK_REALM
-              value: {{ .Values.keycloakRealm | quote }}
-            - name: CLIENT_ID
-              value: {{ .Values.keycloakClientID | quote }}
-            - name: CLIENT_SECRET
-              value: {{ .Values.keycloakClientSecret | quote }}
-            {{ if .Values.keycloakCallbackURL }}
-            - name: CALLBACK_URL
-              value: {{ .Values.keycloakCallbackURL | quote }}
-            {{ end }}
-            {{ end }}
             - name: PORT
               value: {{ .Values.app.port | quote }}
             - name: MODE

@@ -80,11 +80,6 @@ resource "helm_release" "task-svc" {
   }
 
   set {
-    name  = "keycloakDisabled"
-    value = true
-  }
-
-  set {
     name  = "postgres.host"
     value = "task-postgres-postgresql.task"
   }
