@@ -99,7 +99,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 func (ServiceServer) GetAllTaskTemplates(ctx context.Context, req *pb.GetAllTaskTemplatesRequest) (*pb.GetAllTaskTemplatesResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
-	organizationId, err := common.GetOrganizationID(ctx)
+	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
