@@ -26,6 +26,85 @@ message CreateTaskTemplateResponse {
 
 
 ///
+/// GetAllTaskTemplates
+///
+
+message GetAllTaskTemplatesRequest {
+}
+
+message GetAllTaskTemplatesResponse {
+  repeated TaskTemplate templates = 1;
+
+  message TaskTemplate {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    bool is_public = 4;
+    optional string user_id = 6;
+    repeated SubTask subtasks = 7;
+
+    message SubTask {
+      string id = 1;
+      string task_template_id = 2;
+      string name = 3;
+    }
+  }
+}
+
+
+
+///
+/// DeleteTaskTemplate
+///
+
+message DeleteTaskTemplateRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+message DeleteTaskTemplateResponse {
+}
+
+
+///
+/// DeleteTaskTemplateSubTask
+///
+
+message DeleteTaskTemplateSubTaskRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+message DeleteTaskTemplateSubTaskResponse {
+}
+
+
+///
+/// UpdateTaskTemplate
+///
+
+message UpdateTaskTemplateRequest {
+  string id = 1; // @gotags: validate:"required"
+  optional string name = 2;
+  optional string description = 3;
+}
+
+message UpdateTaskTemplateResponse {
+}
+
+
+///
+/// UpdateTaskTemplateSubTask
+///
+
+message UpdateTaskTemplateSubTaskRequest {
+  string subtask_id = 1; // @gotags: validate:"required"
+  optional string name = 2;
+}
+
+message UpdateTaskTemplateSubTaskResponse {
+}
+
+
+///
 /// CreateTaskTemplateSubTask
 ///
 
@@ -40,5 +119,10 @@ message CreateTaskTemplateSubTaskResponse {
 
 service TaskTemplateService {
   rpc CreateTaskTemplate (CreateTaskTemplateRequest) returns (CreateTaskTemplateResponse) {}
+  rpc GetAllTaskTemplates (GetAllTaskTemplatesRequest) returns (GetAllTaskTemplatesResponse) {}
+  rpc DeleteTaskTemplate (DeleteTaskTemplateRequest) returns (DeleteTaskTemplateResponse) {}
+  rpc DeleteTaskTemplateSubTask (DeleteTaskTemplateSubTaskRequest) returns (DeleteTaskTemplateSubTaskResponse) {}
+  rpc UpdateTaskTemplate (UpdateTaskTemplateRequest) returns (UpdateTaskTemplateResponse) {}
+  rpc UpdateTaskTemplateSubTask (UpdateTaskTemplateSubTaskRequest) returns (UpdateTaskTemplateSubTaskResponse) {}
   rpc CreateTaskTemplateSubTask (CreateTaskTemplateSubTaskRequest) returns (CreateTaskTemplateSubTaskResponse) {}
 }
