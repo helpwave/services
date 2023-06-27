@@ -27,6 +27,7 @@ abstract class TaskTemplateServiceBase extends $pb.GeneratedService {
   $async.Future<$6.DeleteTaskTemplateSubTaskResponse> deleteTaskTemplateSubTask($pb.ServerContext ctx, $6.DeleteTaskTemplateSubTaskRequest request);
   $async.Future<$6.UpdateTaskTemplateResponse> updateTaskTemplate($pb.ServerContext ctx, $6.UpdateTaskTemplateRequest request);
   $async.Future<$6.UpdateTaskTemplateSubTaskResponse> updateTaskTemplateSubTask($pb.ServerContext ctx, $6.UpdateTaskTemplateSubTaskRequest request);
+  $async.Future<$6.CreateTaskTemplateSubTaskResponse> createTaskTemplateSubTask($pb.ServerContext ctx, $6.CreateTaskTemplateSubTaskRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
@@ -36,6 +37,7 @@ abstract class TaskTemplateServiceBase extends $pb.GeneratedService {
       case 'DeleteTaskTemplateSubTask': return $6.DeleteTaskTemplateSubTaskRequest();
       case 'UpdateTaskTemplate': return $6.UpdateTaskTemplateRequest();
       case 'UpdateTaskTemplateSubTask': return $6.UpdateTaskTemplateSubTaskRequest();
+      case 'CreateTaskTemplateSubTask': return $6.CreateTaskTemplateSubTaskRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
@@ -48,6 +50,7 @@ abstract class TaskTemplateServiceBase extends $pb.GeneratedService {
       case 'DeleteTaskTemplateSubTask': return this.deleteTaskTemplateSubTask(ctx, request as $6.DeleteTaskTemplateSubTaskRequest);
       case 'UpdateTaskTemplate': return this.updateTaskTemplate(ctx, request as $6.UpdateTaskTemplateRequest);
       case 'UpdateTaskTemplateSubTask': return this.updateTaskTemplateSubTask(ctx, request as $6.UpdateTaskTemplateSubTaskRequest);
+      case 'CreateTaskTemplateSubTask': return this.createTaskTemplateSubTask(ctx, request as $6.CreateTaskTemplateSubTaskRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }

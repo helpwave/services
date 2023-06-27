@@ -94,7 +94,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	}, nil
 }
 
-func (ServiceServer) GetAllTaskTemplates(ctx context.Context, req *pb.GetAllTaskTemplatesRequest) (*pb.GetAllTaskTemplatesResponse, error) {
+func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTemplatesRequest) (*pb.GetAllTaskTemplatesResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
@@ -222,4 +222,33 @@ func (ServiceServer) UpdateTaskTemplateSubtask(ctx context.Context, req *pb.Upda
 	}
 
 	return &pb.UpdateTaskTemplateSubTaskResponse{}, nil
+}
+
+func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.CreateTaskTemplateSubTaskRequest) (*pb.CreateTaskTemplateSubTaskResponse, error) {
+	log := zlog.Ctx(ctx)
+	db := hwgorm.GetDB(ctx)
+
+	taskTemplateID, err := uuid.Parse(req.TaskTemplateId)
+	if err != nil {
+		return nil, err
+	}
+
+	taskTemplateSubtask := TaskTemplateSubtask{
+		TaskTemplateID: taskTemplateID,
+		Name:           req.Name,
+	}
+
+	// implicitly checks the existence of the ward through the foreign key constraint
+	if err := db.Create(&taskTemplateSubtask).Error; err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	log.Info().
+		Str("taskTemplateId", taskTemplateSubtask.TaskTemplateID.String()).
+		Str("taskTemplateSubTaskId", taskTemplateSubtask.ID.String()).
+		Msg("taskTemplateSubtask created")
+
+	return &pb.CreateTaskTemplateSubTaskResponse{
+		Id: taskTemplateSubtask.ID.String(),
+	}, nil
 }

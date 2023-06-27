@@ -103,6 +103,20 @@ message UpdateTaskTemplateSubTaskRequest {
 message UpdateTaskTemplateSubTaskResponse {
 }
 
+
+///
+/// CreateTaskTemplateSubTask
+///
+
+message CreateTaskTemplateSubTaskRequest {
+  string task_template_id = 1; // @gotags: validate:"required"
+  string name = 2; // @gotags: validate:"required"
+}
+
+message CreateTaskTemplateSubTaskResponse {
+  string id = 1;
+}
+
 service TaskTemplateService {
   rpc CreateTaskTemplate (CreateTaskTemplateRequest) returns (CreateTaskTemplateResponse) {}
   rpc GetAllTaskTemplates (GetAllTaskTemplatesRequest) returns (GetAllTaskTemplatesResponse) {}
@@ -110,4 +124,5 @@ service TaskTemplateService {
   rpc DeleteTaskTemplateSubTask (DeleteTaskTemplateSubTaskRequest) returns (DeleteTaskTemplateSubTaskResponse) {}
   rpc UpdateTaskTemplate (UpdateTaskTemplateRequest) returns (UpdateTaskTemplateResponse) {}
   rpc UpdateTaskTemplateSubTask (UpdateTaskTemplateSubTaskRequest) returns (UpdateTaskTemplateSubTaskResponse) {}
+  rpc CreateTaskTemplateSubTask (CreateTaskTemplateSubTaskRequest) returns (CreateTaskTemplateSubTaskResponse) {}
 }
