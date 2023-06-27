@@ -28,6 +28,30 @@ func UpdatesMapForUpdateSubTaskRequest(r *pb.UpdateSubTaskRequest) map[string]in
 	return m
 }
 
+func UpdatesMapForUpdateTaskTemplateRequest(r *pb.UpdateTaskTemplateRequest) map[string]interface{} {
+	m := make(map[string]interface{})
+
+	if r.Name != nil {
+		m["name"] = *r.Name
+	}
+
+	if r.Description != nil {
+		m["description"] = *r.Description
+	}
+
+	return m
+}
+
+func UpdatesMapForUpdateTaskTemplateSubTaskRequest(r *pb.UpdateTaskTemplateSubTaskRequest) map[string]interface{} {
+	m := make(map[string]interface{})
+
+	if r.Name != nil {
+		m["name"] = *r.Name
+	}
+
+	return m
+}
+
 func UpdatesMapForUpdatePatientRequest(r *pb.UpdatePatientRequest) map[string]interface{} {
 	m := make(map[string]interface{})
 
