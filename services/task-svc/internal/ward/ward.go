@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
+	pbhelpers "proto_helpers/task_svc/v1"
 )
 
 type Base struct {
@@ -127,7 +128,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 	}
 
 	ward := Ward{ID: id}
-	updates := req.UpdatesMap()
+	updates := pbhelpers.UpdatesMapForUpdateWardRequest(req)
 
 	if err := db.Model(&ward).Updates(updates).Error; err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
