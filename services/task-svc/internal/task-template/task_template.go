@@ -101,7 +101,7 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 
 	var taskTemplates []TaskTemplate
 
-	if err := db.Preload("Subtasks").Where("ward_id = ?", wardId).Find(&taskTemplates).Error; err != nil {
+	if err := db.Preload("SubTasks").Where("ward_id = ?", wardId).Find(&taskTemplates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
