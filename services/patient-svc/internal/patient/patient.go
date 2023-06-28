@@ -3,7 +3,7 @@ package patient
 import (
 	"common"
 	"context"
-	pb "gen/proto/services/task_svc/v1"
+	pb "gen/proto/services/patient_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
@@ -11,8 +11,7 @@ import (
 	"gorm.io/plugin/soft_delete"
 	"hwgorm"
 	"hwutil"
-	pbhelpers "proto_helpers/task_svc/v1"
-	"task-svc/internal/room/models"
+	pbhelpers "proto_helpers/patient_svc/v1"
 )
 
 type Base struct {
@@ -138,6 +137,7 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
+	// TODO fix this later by fetching all beds
 	var patients []Patient
 	if err := db.Joins("wards").Joins("rooms").Joins("beds").Joins("patients").Where("wards.id = ?", wardID).Find(&patients).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
@@ -198,19 +198,10 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	// Check whether bed exits
-	bed := models.Bed{ID: bedID}
-	if err := db.First(&bed).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
-			log.Warn().Err(err).Msg("database error")
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "bed_id not found")
-		}
-	}
+	// TODO Check whether bed exits
 
 	patient := Patient{ID: id}
-	if err := db.Model(&patient).Update("bed_id", bed.ID).Error; err != nil {
+	if err := db.Model(&patient).Update("bed_id", bedID).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
@@ -221,7 +212,7 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 
 	log.Info().
 		Str("patientId", patient.ID.String()).
-		Str("bedId", bed.ID.String()).
+		Str("bedId", patient.BedID.String()).
 		Msg("assigned bed to patient")
 
 	return &pb.AssignBedResponse{}, nil

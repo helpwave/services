@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS patients;
+DROP EXTENSION IF EXISTS "uuid-ossp";

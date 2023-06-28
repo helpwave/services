@@ -52,20 +52,6 @@ func UpdatesMapForUpdateTaskTemplateSubTaskRequest(r *pb.UpdateTaskTemplateSubTa
 	return m
 }
 
-func UpdatesMapForUpdatePatientRequest(r *pb.UpdatePatientRequest) map[string]interface{} {
-	m := make(map[string]interface{})
-
-	if r.HumanReadableIdentifier != nil {
-		m["human_readable_identifier"] = r.HumanReadableIdentifier
-	}
-
-	if r.Notes != nil {
-		m["notes"] = r.Notes
-	}
-
-	return m
-}
-
 func UpdatesMapForUpdateWardRequest(r *pb.UpdateWardRequest) map[string]interface{} {
 	m := make(map[string]interface{})
 

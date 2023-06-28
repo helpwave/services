@@ -2,18 +2,14 @@ package main
 
 import (
 	"common"
-	pb "gen/proto/services/task_svc/v1"
+	pb "gen/proto/services/patient_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwgorm"
 	"hwutil"
-	"task-svc/internal/bed"
-	"task-svc/internal/room"
-	"task-svc/internal/task"
-	"task-svc/internal/task-template"
-	"task-svc/internal/ward"
+	"patient-svc/internal/patient"
 )
 
-const ServiceName = "task-svc"
+const ServiceName = "patient-svc"
 
 // Version is set at compile time
 var Version string
@@ -31,10 +27,6 @@ func main() {
 
 	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
-		pb.RegisterTaskServiceServer(grpcServer, task.NewServiceServer())
-		pb.RegisterWardServiceServer(grpcServer, ward.NewServiceServer())
-		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer())
-		pb.RegisterBedServiceServer(grpcServer, bed.NewServiceServer())
-		pb.RegisterTaskTemplateServiceServer(grpcServer, task_template.NewServiceServer())
+		pb.RegisterPatientServiceServer(grpcServer, patient.NewServiceServer())
 	})
 }

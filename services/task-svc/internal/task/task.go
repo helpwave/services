@@ -11,7 +11,6 @@ import (
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
-	intPatient "task-svc/internal/patient"
 )
 
 type Base struct {
@@ -61,14 +60,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	// Check if patient exists
-	if err := db.First(&intPatient.Patient{ID: patientId}).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "patientId not found")
-		}
-	}
+	// TODO Check if patient exists
 
 	task := Task{
 		Base: Base{
