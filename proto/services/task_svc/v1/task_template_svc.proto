@@ -117,6 +117,32 @@ message CreateTaskTemplateSubTaskResponse {
   string id = 1;
 }
 
+///
+/// GetAllTaskTemplatesByUser
+///
+
+message GetAllTaskTemplatesByUserRequest {
+  string user_id = 1;
+}
+
+message GetAllTaskTemplatesByUserResponse {
+  repeated TaskTemplate templates = 1;
+
+  message TaskTemplate {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    bool is_public = 4;
+    repeated SubTask subtasks = 7;
+
+    message SubTask {
+      string id = 1;
+      string task_template_id = 2;
+      string name = 3;
+    }
+  }
+}
+
 service TaskTemplateService {
   rpc CreateTaskTemplate (CreateTaskTemplateRequest) returns (CreateTaskTemplateResponse) {}
   rpc GetAllTaskTemplates (GetAllTaskTemplatesRequest) returns (GetAllTaskTemplatesResponse) {}
@@ -125,4 +151,5 @@ service TaskTemplateService {
   rpc UpdateTaskTemplate (UpdateTaskTemplateRequest) returns (UpdateTaskTemplateResponse) {}
   rpc UpdateTaskTemplateSubTask (UpdateTaskTemplateSubTaskRequest) returns (UpdateTaskTemplateSubTaskResponse) {}
   rpc CreateTaskTemplateSubTask (CreateTaskTemplateSubTaskRequest) returns (CreateTaskTemplateSubTaskResponse) {}
+  rpc GetAllTaskTemplatesByUser (GetAllTaskTemplatesByUserRequest) returns (GetAllTaskTemplatesByUserResponse) {}
 }

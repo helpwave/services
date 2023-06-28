@@ -105,7 +105,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 
 	var taskTemplates []TaskTemplate
 
-	if err := db.Preload("Subtasks").Where("organization_id = ?", organizationID).Where("is_public = ?", true).Find(&taskTemplates).Error; err != nil {
+	if err := db.Preload("SubTasks").Where("organization_id = ?", organizationID).Where("is_public = ?", true).Find(&taskTemplates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -251,5 +251,47 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 
 	return &pb.CreateTaskTemplateSubTaskResponse{
 		Id: taskTemplateSubtask.ID.String(),
+	}, nil
+}
+
+func (ServiceServer) GetAllTaskTemplatesByUser(ctx context.Context, req *pb.GetAllTaskTemplatesByUserRequest) (*pb.GetAllTaskTemplatesByUserResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	// TODO: Auth
+
+	userId, err := uuid.Parse(req.UserId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	var taskTemplates []TaskTemplate
+
+	if err := db.Preload("SubTasks").Where("user_id = ?", userId).Find(&taskTemplates).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+
+	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate TaskTemplate) *pb.GetAllTaskTemplatesByUserResponse_TaskTemplate {
+		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(subtask TaskTemplateSubtask) *pb.GetAllTaskTemplatesByUserResponse_TaskTemplate_SubTask {
+			return &pb.GetAllTaskTemplatesByUserResponse_TaskTemplate_SubTask{
+				Id:             subtask.ID.String(),
+				TaskTemplateId: subtask.TaskTemplateID.String(),
+				Name:           subtask.Name,
+			}
+		})
+		return &pb.GetAllTaskTemplatesByUserResponse_TaskTemplate{
+			Id:          taskTemplate.ID.String(),
+			Name:        taskTemplate.Name,
+			Description: taskTemplate.Description,
+			IsPublic:    taskTemplate.Public,
+			Subtasks:    mappedSubtasks,
+		}
+	})
+
+	return &pb.GetAllTaskTemplatesByUserResponse{
+		Templates: mappedTaskTemplates,
 	}, nil
 }
