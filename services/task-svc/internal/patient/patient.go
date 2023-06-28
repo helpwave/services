@@ -11,6 +11,7 @@ import (
 	"gorm.io/plugin/soft_delete"
 	"hwgorm"
 	"hwutil"
+	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/room/models"
 )
 
@@ -171,7 +172,7 @@ func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientReq
 	}
 
 	patient := Patient{ID: id}
-	updates := req.UpdatesMap()
+	updates := pbhelpers.UpdatesMapForUpdatePatientRequest(req)
 
 	if err := db.Model(&patient).Updates(updates).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")

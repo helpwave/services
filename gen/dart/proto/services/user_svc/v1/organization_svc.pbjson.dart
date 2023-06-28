@@ -366,6 +366,28 @@ final $typed_data.Uint8List getInvitationsByUserResponseDescriptor = $convert.ba
     'VlbWFpbBgCIAEoCVIFZW1haWwSJwoPb3JnYW5pemF0aW9uX2lkGAMgASgJUg5vcmdhbml6YXRp'
     'b25JZBIUCgVzdGF0ZRgEIAEoCVIFc3RhdGU=');
 
+@$core.Deprecated('Use declineInvitationRequestDescriptor instead')
+const DeclineInvitationRequest$json = {
+  '1': 'DeclineInvitationRequest',
+  '2': [
+    {'1': 'invitation_id', '3': 1, '4': 1, '5': 9, '10': 'invitationId'},
+  ],
+};
+
+/// Descriptor for `DeclineInvitationRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List declineInvitationRequestDescriptor = $convert.base64Decode(
+    'ChhEZWNsaW5lSW52aXRhdGlvblJlcXVlc3QSIwoNaW52aXRhdGlvbl9pZBgBIAEoCVIMaW52aX'
+    'RhdGlvbklk');
+
+@$core.Deprecated('Use declineInvitationResponseDescriptor instead')
+const DeclineInvitationResponse$json = {
+  '1': 'DeclineInvitationResponse',
+};
+
+/// Descriptor for `DeclineInvitationResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List declineInvitationResponseDescriptor = $convert.base64Decode(
+    'ChlEZWNsaW5lSW52aXRhdGlvblJlc3BvbnNl');
+
 const $core.Map<$core.String, $core.dynamic> OrganizationServiceBase$json = {
   '1': 'OrganizationService',
   '2': [
@@ -380,6 +402,7 @@ const $core.Map<$core.String, $core.dynamic> OrganizationServiceBase$json = {
     {'1': 'InviteMember', '2': '.proto.services.user_svc.v1.InviteMemberRequest', '3': '.proto.services.user_svc.v1.InviteMemberResponse', '4': {}},
     {'1': 'AcceptInvitation', '2': '.proto.services.user_svc.v1.AcceptInvitationRequest', '3': '.proto.services.user_svc.v1.AcceptInvitationResponse', '4': {}},
     {'1': 'GetInvitationsByUser', '2': '.proto.services.user_svc.v1.GetInvitationsByUserRequest', '3': '.proto.services.user_svc.v1.GetInvitationsByUserResponse', '4': {}},
+    {'1': 'DeclineInvitation', '2': '.proto.services.user_svc.v1.DeclineInvitationRequest', '3': '.proto.services.user_svc.v1.DeclineInvitationResponse', '4': {}},
   ],
 };
 
@@ -410,6 +433,8 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> Organizati
   '.proto.services.user_svc.v1.GetInvitationsByUserRequest': GetInvitationsByUserRequest$json,
   '.proto.services.user_svc.v1.GetInvitationsByUserResponse': GetInvitationsByUserResponse$json,
   '.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation': GetInvitationsByUserResponse_Invitation$json,
+  '.proto.services.user_svc.v1.DeclineInvitationRequest': DeclineInvitationRequest$json,
+  '.proto.services.user_svc.v1.DeclineInvitationResponse': DeclineInvitationResponse$json,
 };
 
 /// Descriptor for `OrganizationService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
@@ -440,5 +465,7 @@ final $typed_data.Uint8List organizationServiceDescriptor = $convert.base64Decod
     'QucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQWNjZXB0SW52aXRhdGlvblJlc3BvbnNlIgAS'
     'iwEKFEdldEludml0YXRpb25zQnlVc2VyEjcucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2'
     'V0SW52aXRhdGlvbnNCeVVzZXJSZXF1ZXN0GjgucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEu'
-    'R2V0SW52aXRhdGlvbnNCeVVzZXJSZXNwb25zZSIA');
+    'R2V0SW52aXRhdGlvbnNCeVVzZXJSZXNwb25zZSIAEoIBChFEZWNsaW5lSW52aXRhdGlvbhI0Ln'
+    'Byb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkRlY2xpbmVJbnZpdGF0aW9uUmVxdWVzdBo1LnBy'
+    'b3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkRlY2xpbmVJbnZpdGF0aW9uUmVzcG9uc2UiAA==');
 

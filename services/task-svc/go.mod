@@ -8,6 +8,7 @@ replace (
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
 	logging => ../../libs/logging
+	proto_helpers => ../../libs/proto_helpers
 )
 
 require (
@@ -21,6 +22,7 @@ require (
 	gorm.io/plugin/soft_delete v1.2.1
 	hwgorm v0.0.0
 	hwutil v0.0.0
+	proto_helpers v0.0.0
 )
 
 require (

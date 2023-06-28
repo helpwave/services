@@ -7,14 +7,7 @@ GO_SERVICES = $(subst services/,,$(wildcard services/*))
 # Docker images have their own Dockerfile in the root of the service directory
 DOCKER_IMAGES = $(subst images/,,$(wildcard images/*))
 
-ifeq ($(OS),Windows_NT)
-    # Windows
-    WORKING_DIRECTORY := $(shell cd)
-else
-    # Unix
-    WORKING_DIRECTORY := $$(pwd)
-endif
-
+WORKING_DIRECTORY := $(CURDIR)
 export WORKING_DIRECTORY
 
 .PHONY: proto

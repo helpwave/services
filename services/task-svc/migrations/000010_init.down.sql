@@ -1,6 +1,2 @@
-CREATE TABLE IF NOT EXISTS wards (
-	 id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-	 name text NOT NULL,
-	 organization_id uuid NOT NULL
-);
-
+DROP TABLE task_template_subtasks;
+DROP TABLE task_templates;
