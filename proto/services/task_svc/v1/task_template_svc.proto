@@ -39,7 +39,7 @@ message GetAllTaskTemplatesResponse {
     string name = 2;
     string description = 3;
     bool is_public = 4;
-    optional string user_id = 6;
+    optional string created_by = 6;
     repeated SubTask subtasks = 7;
 
     message SubTask {
@@ -117,14 +117,14 @@ message CreateTaskTemplateSubTaskResponse {
 }
 
 ///
-/// GetAllTaskTemplatesByUser
+/// GetAllTaskTemplatesByCreator
 ///
 
-message GetAllTaskTemplatesByUserRequest {
-  string user_id = 1;
+message GetAllTaskTemplatesByCreatorRequest {
+  string created_by = 1;
 }
 
-message GetAllTaskTemplatesByUserResponse {
+message GetAllTaskTemplatesByCreatorResponse {
   repeated TaskTemplate templates = 1;
 
   message TaskTemplate {
@@ -159,7 +159,7 @@ message GetAllTaskTemplatesByWardResponse {
     string name = 2;
     string description = 3;
     bool is_public = 4;
-    optional string user_id = 6;
+    optional string created_by = 6;
     repeated SubTask subtasks = 7;
 
     message SubTask {
@@ -178,6 +178,6 @@ service TaskTemplateService {
   rpc UpdateTaskTemplate (UpdateTaskTemplateRequest) returns (UpdateTaskTemplateResponse) {}
   rpc UpdateTaskTemplateSubTask (UpdateTaskTemplateSubTaskRequest) returns (UpdateTaskTemplateSubTaskResponse) {}
   rpc CreateTaskTemplateSubTask (CreateTaskTemplateSubTaskRequest) returns (CreateTaskTemplateSubTaskResponse) {}
-  rpc GetAllTaskTemplatesByUser (GetAllTaskTemplatesByUserRequest) returns (GetAllTaskTemplatesByUserResponse) {}
+  rpc GetAllTaskTemplatesByCreator (GetAllTaskTemplatesByCreatorRequest) returns (GetAllTaskTemplatesByCreatorResponse) {}
   rpc GetAllTaskTemplatesByWard (GetAllTaskTemplatesByWardRequest) returns (GetAllTaskTemplatesByWardResponse) {}
 }

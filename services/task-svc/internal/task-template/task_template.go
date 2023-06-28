@@ -22,7 +22,7 @@ type TaskTemplate struct {
 	Base
 	ID             uuid.UUID             `gorm:"column:id"`
 	OrganizationID uuid.UUID             `gorm:"column:organization_id"`
-	UserID         uuid.UUID             `gorm:"column:user_id"`
+	CreatedBy      uuid.UUID             `gorm:"column:created_by"`
 	WardID         *uuid.UUID            `gorm:"column:ward_id;default:NULL"`
 	SubTasks       []TaskTemplateSubtask `gorm:"foreignKey:TaskTemplateID"`
 }
@@ -63,7 +63,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	taskTemplate := TaskTemplate{
 		Base:           Base{Name: req.Name, Description: req.Description},
 		OrganizationID: organizationID,
-		UserID:         userID,
+		CreatedBy:      userID,
 		WardID:         wardID,
 	}
 
@@ -103,7 +103,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 
 	var taskTemplates []TaskTemplate
 
-	if err := db.Preload("SubTasks").Where("organization_id = ?", organizationID).Where("is_public = ?", true).Find(&taskTemplates).Error; err != nil {
+	if err := db.Preload("SubTasks").Where("organization_id = ?", organizationID).Find(&taskTemplates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -124,7 +124,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 			Name:        taskTemplate.Name,
 			Description: taskTemplate.Description,
 			IsPublic:    taskTemplate.WardID != nil,
-			UserId:      hwutil.UUIDToStringPtr(&taskTemplate.UserID),
+			CreatedBy:   hwutil.UUIDToStringPtr(&taskTemplate.CreatedBy),
 			Subtasks:    mappedSubtasks,
 		}
 	})
@@ -252,19 +252,19 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 	}, nil
 }
 
-func (ServiceServer) GetAllTaskTemplatesByUser(ctx context.Context, req *pb.GetAllTaskTemplatesByUserRequest) (*pb.GetAllTaskTemplatesByUserResponse, error) {
+func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.GetAllTaskTemplatesByCreatorRequest) (*pb.GetAllTaskTemplatesByCreatorResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
 
-	userId, err := uuid.Parse(req.UserId)
+	createdBy, err := uuid.Parse(req.CreatedBy)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	var taskTemplates []TaskTemplate
 
-	if err := db.Preload("SubTasks").Where("user_id = ?", userId).Find(&taskTemplates).Error; err != nil {
+	if err := db.Preload("SubTasks").Where("created_by = ?", createdBy).Find(&taskTemplates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -272,15 +272,15 @@ func (ServiceServer) GetAllTaskTemplatesByUser(ctx context.Context, req *pb.GetA
 		}
 	}
 
-	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate TaskTemplate) *pb.GetAllTaskTemplatesByUserResponse_TaskTemplate {
-		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(subtask TaskTemplateSubtask) *pb.GetAllTaskTemplatesByUserResponse_TaskTemplate_SubTask {
-			return &pb.GetAllTaskTemplatesByUserResponse_TaskTemplate_SubTask{
+	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate TaskTemplate) *pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate {
+		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(subtask TaskTemplateSubtask) *pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask {
+			return &pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask{
 				Id:             subtask.ID.String(),
 				TaskTemplateId: subtask.TaskTemplateID.String(),
 				Name:           subtask.Name,
 			}
 		})
-		return &pb.GetAllTaskTemplatesByUserResponse_TaskTemplate{
+		return &pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate{
 			Id:          taskTemplate.ID.String(),
 			Name:        taskTemplate.Name,
 			Description: taskTemplate.Description,
@@ -289,7 +289,7 @@ func (ServiceServer) GetAllTaskTemplatesByUser(ctx context.Context, req *pb.GetA
 		}
 	})
 
-	return &pb.GetAllTaskTemplatesByUserResponse{
+	return &pb.GetAllTaskTemplatesByCreatorResponse{
 		Templates: mappedTaskTemplates,
 	}, nil
 }
@@ -325,7 +325,7 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 			Name:        taskTemplate.Name,
 			Description: taskTemplate.Description,
 			IsPublic:    taskTemplate.WardID != nil,
-			UserId:      hwutil.UUIDToStringPtr(&taskTemplate.UserID),
+			CreatedBy:   hwutil.UUIDToStringPtr(&taskTemplate.CreatedBy),
 			Subtasks:    mappedSubtasks,
 		}
 	})
