@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
+	pbhelpers "proto_helpers/task_svc/v1"
 	intPatient "task-svc/internal/patient"
 )
 
@@ -195,7 +196,7 @@ func (ServiceServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) 
 	}
 
 	task := Task{ID: id}
-	updates := req.UpdatesMap()
+	updates := pbhelpers.UpdatesMapForUpdateTaskRequest(req)
 
 	if err := db.Model(&task).Updates(updates).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -291,7 +292,7 @@ func (ServiceServer) UpdateSubTask(ctx context.Context, req *pb.UpdateSubTaskReq
 	}
 
 	subtask := Subtask{ID: subtaskID}
-	updates := req.UpdatesMap()
+	updates := pbhelpers.UpdatesMapForUpdateSubTaskRequest(req)
 
 	if err := db.Model(&subtask).Updates(updates).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")

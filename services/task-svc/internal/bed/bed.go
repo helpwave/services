@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
+	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/room/models"
 )
 
@@ -173,7 +174,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 	}
 
 	bed := models.Bed{ID: bedID}
-	updates := req.UpdatesMap()
+	updates := pbhelpers.UpdatesMapForUpdateBedRequest(req)
 	// TODO: respect req.RoomID in this or another method
 
 	if err := db.Model(&bed).Updates(updates).Error; err != nil {
