@@ -143,6 +143,34 @@ message GetAllTaskTemplatesByUserResponse {
   }
 }
 
+
+///
+/// GetAllTaskTemplatesByWard
+///
+
+message GetAllTaskTemplatesByWardRequest {
+  string ward_id = 1;
+}
+
+message GetAllTaskTemplatesByWardResponse {
+  repeated TaskTemplate templates = 1;
+
+  message TaskTemplate {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    bool is_public = 4;
+    optional string user_id = 6;
+    repeated SubTask subtasks = 7;
+
+    message SubTask {
+      string id = 1;
+      string task_template_id = 2;
+      string name = 3;
+    }
+  }
+}
+
 service TaskTemplateService {
   rpc CreateTaskTemplate (CreateTaskTemplateRequest) returns (CreateTaskTemplateResponse) {}
   rpc GetAllTaskTemplates (GetAllTaskTemplatesRequest) returns (GetAllTaskTemplatesResponse) {}
@@ -152,4 +180,5 @@ service TaskTemplateService {
   rpc UpdateTaskTemplateSubTask (UpdateTaskTemplateSubTaskRequest) returns (UpdateTaskTemplateSubTaskResponse) {}
   rpc CreateTaskTemplateSubTask (CreateTaskTemplateSubTaskRequest) returns (CreateTaskTemplateSubTaskResponse) {}
   rpc GetAllTaskTemplatesByUser (GetAllTaskTemplatesByUserRequest) returns (GetAllTaskTemplatesByUserResponse) {}
+  rpc GetAllTaskTemplatesByWard (GetAllTaskTemplatesByWardRequest) returns (GetAllTaskTemplatesByWardResponse) {}
 }
