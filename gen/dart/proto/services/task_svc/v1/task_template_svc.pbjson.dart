@@ -294,6 +294,68 @@ final $typed_data.Uint8List getAllTaskTemplatesByUserResponseDescriptor = $conve
     'ABKAlSAmlkEigKEHRhc2tfdGVtcGxhdGVfaWQYAiABKAlSDnRhc2tUZW1wbGF0ZUlkEhIKBG5h'
     'bWUYAyABKAlSBG5hbWU=');
 
+@$core.Deprecated('Use getAllTaskTemplatesByWardRequestDescriptor instead')
+const GetAllTaskTemplatesByWardRequest$json = {
+  '1': 'GetAllTaskTemplatesByWardRequest',
+  '2': [
+    {'1': 'ward_id', '3': 1, '4': 1, '5': 9, '10': 'wardId'},
+  ],
+};
+
+/// Descriptor for `GetAllTaskTemplatesByWardRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getAllTaskTemplatesByWardRequestDescriptor = $convert.base64Decode(
+    'CiBHZXRBbGxUYXNrVGVtcGxhdGVzQnlXYXJkUmVxdWVzdBIXCgd3YXJkX2lkGAEgASgJUgZ3YX'
+    'JkSWQ=');
+
+@$core.Deprecated('Use getAllTaskTemplatesByWardResponseDescriptor instead')
+const GetAllTaskTemplatesByWardResponse$json = {
+  '1': 'GetAllTaskTemplatesByWardResponse',
+  '2': [
+    {'1': 'templates', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate', '10': 'templates'},
+  ],
+  '3': [GetAllTaskTemplatesByWardResponse_TaskTemplate$json],
+};
+
+@$core.Deprecated('Use getAllTaskTemplatesByWardResponseDescriptor instead')
+const GetAllTaskTemplatesByWardResponse_TaskTemplate$json = {
+  '1': 'TaskTemplate',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'is_public', '3': 4, '4': 1, '5': 8, '10': 'isPublic'},
+    {'1': 'user_id', '3': 6, '4': 1, '5': 9, '9': 0, '10': 'userId', '17': true},
+    {'1': 'subtasks', '3': 7, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask', '10': 'subtasks'},
+  ],
+  '3': [GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask$json],
+  '8': [
+    {'1': '_user_id'},
+  ],
+};
+
+@$core.Deprecated('Use getAllTaskTemplatesByWardResponseDescriptor instead')
+const GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask$json = {
+  '1': 'SubTask',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'task_template_id', '3': 2, '4': 1, '5': 9, '10': 'taskTemplateId'},
+    {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
+  ],
+};
+
+/// Descriptor for `GetAllTaskTemplatesByWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getAllTaskTemplatesByWardResponseDescriptor = $convert.base64Decode(
+    'CiFHZXRBbGxUYXNrVGVtcGxhdGVzQnlXYXJkUmVzcG9uc2USaAoJdGVtcGxhdGVzGAEgAygLMk'
+    'oucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0QWxsVGFza1RlbXBsYXRlc0J5V2FyZFJl'
+    'c3BvbnNlLlRhc2tUZW1wbGF0ZVIJdGVtcGxhdGVzGuQCCgxUYXNrVGVtcGxhdGUSDgoCaWQYAS'
+    'ABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIAoLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2Ny'
+    'aXB0aW9uEhsKCWlzX3B1YmxpYxgEIAEoCFIIaXNQdWJsaWMSHAoHdXNlcl9pZBgGIAEoCUgAUg'
+    'Z1c2VySWSIAQESbgoIc3VidGFza3MYByADKAsyUi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52'
+    'MS5HZXRBbGxUYXNrVGVtcGxhdGVzQnlXYXJkUmVzcG9uc2UuVGFza1RlbXBsYXRlLlN1YlRhc2'
+    'tSCHN1YnRhc2tzGlcKB1N1YlRhc2sSDgoCaWQYASABKAlSAmlkEigKEHRhc2tfdGVtcGxhdGVf'
+    'aWQYAiABKAlSDnRhc2tUZW1wbGF0ZUlkEhIKBG5hbWUYAyABKAlSBG5hbWVCCgoIX3VzZXJfaW'
+    'Q=');
+
 const $core.Map<$core.String, $core.dynamic> TaskTemplateServiceBase$json = {
   '1': 'TaskTemplateService',
   '2': [
@@ -305,6 +367,7 @@ const $core.Map<$core.String, $core.dynamic> TaskTemplateServiceBase$json = {
     {'1': 'UpdateTaskTemplateSubTask', '2': '.proto.services.task_svc.v1.UpdateTaskTemplateSubTaskRequest', '3': '.proto.services.task_svc.v1.UpdateTaskTemplateSubTaskResponse', '4': {}},
     {'1': 'CreateTaskTemplateSubTask', '2': '.proto.services.task_svc.v1.CreateTaskTemplateSubTaskRequest', '3': '.proto.services.task_svc.v1.CreateTaskTemplateSubTaskResponse', '4': {}},
     {'1': 'GetAllTaskTemplatesByUser', '2': '.proto.services.task_svc.v1.GetAllTaskTemplatesByUserRequest', '3': '.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse', '4': {}},
+    {'1': 'GetAllTaskTemplatesByWard', '2': '.proto.services.task_svc.v1.GetAllTaskTemplatesByWardRequest', '3': '.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse', '4': {}},
   ],
 };
 
@@ -331,6 +394,10 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> TaskTempla
   '.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse': GetAllTaskTemplatesByUserResponse$json,
   '.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate': GetAllTaskTemplatesByUserResponse_TaskTemplate$json,
   '.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.TaskTemplate.SubTask': GetAllTaskTemplatesByUserResponse_TaskTemplate_SubTask$json,
+  '.proto.services.task_svc.v1.GetAllTaskTemplatesByWardRequest': GetAllTaskTemplatesByWardRequest$json,
+  '.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse': GetAllTaskTemplatesByWardResponse$json,
+  '.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate': GetAllTaskTemplatesByWardResponse_TaskTemplate$json,
+  '.proto.services.task_svc.v1.GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask': GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask$json,
 };
 
 /// Descriptor for `TaskTemplateService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
@@ -356,5 +423,8 @@ final $typed_data.Uint8List taskTemplateServiceDescriptor = $convert.base64Decod
     'Yy52MS5DcmVhdGVUYXNrVGVtcGxhdGVTdWJUYXNrUmVzcG9uc2UiABKaAQoZR2V0QWxsVGFza1'
     'RlbXBsYXRlc0J5VXNlchI8LnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldEFsbFRhc2tU'
     'ZW1wbGF0ZXNCeVVzZXJSZXF1ZXN0Gj0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0QW'
-    'xsVGFza1RlbXBsYXRlc0J5VXNlclJlc3BvbnNlIgA=');
+    'xsVGFza1RlbXBsYXRlc0J5VXNlclJlc3BvbnNlIgASmgEKGUdldEFsbFRhc2tUZW1wbGF0ZXNC'
+    'eVdhcmQSPC5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRBbGxUYXNrVGVtcGxhdGVzQn'
+    'lXYXJkUmVxdWVzdBo9LnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldEFsbFRhc2tUZW1w'
+    'bGF0ZXNCeVdhcmRSZXNwb25zZSIA');
 

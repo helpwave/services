@@ -299,8 +299,6 @@ func (ServiceServer) GetAllTaskTemplatesByUser(ctx context.Context, req *pb.GetA
 func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetAllTaskTemplatesByWardRequest) (*pb.GetAllTaskTemplatesByWardResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
-	// TODO: Auth
-
 	wardId, err := uuid.Parse(req.WardId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
