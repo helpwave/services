@@ -265,13 +265,10 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 				switch task.Status {
 				case task_svc_pb.TaskStatus_TASK_STATUS_TODO:
 					tasksTodo++
-					break
 				case task_svc_pb.TaskStatus_TASK_STATUS_IN_PROGRESS:
 					tasksInProgress++
-					break
 				case task_svc_pb.TaskStatus_TASK_STATUS_DONE:
 					tasksDone++
-					break
 				}
 			}
 		}
