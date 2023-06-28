@@ -61,6 +61,8 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		return nil, err
 	}
 
+	// TODO: Check if ward exists
+
 	taskTemplate := TaskTemplate{
 		Base:           Base{Name: req.Name, Description: req.Description},
 		OrganizationID: organizationID,

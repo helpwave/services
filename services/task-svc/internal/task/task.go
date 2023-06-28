@@ -74,6 +74,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		Base: Base{
 			Name:        req.Name,
 			Description: req.Description,
+			Status:      pb.TaskStatus_TASK_STATUS_TODO,
 		},
 		PatientId:      patientId,
 		OrganizationID: organizationID,

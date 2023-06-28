@@ -139,7 +139,13 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 	}
 
 	var patients []Patient
-	if err := db.Joins("wards").Joins("rooms").Joins("beds").Joins("patients").Where("beds.ward_id = ?", wardID).Find(&patients).Error; err != nil {
+	if err := db.
+		Table("patients").
+		Joins("JOIN beds ON beds.id = patients.bed_id").
+		Joins("JOIN rooms ON rooms.id = beds.room_id").
+		Where("rooms.ward_id = ?", wardID).
+		Find(&patients).
+		Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())

@@ -168,20 +168,21 @@ const GetWardOverviewsResponse_Ward$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'unscheduled', '3': 3, '4': 1, '5': 13, '10': 'unscheduled'},
-    {'1': 'in_progress', '3': 4, '4': 1, '5': 13, '10': 'inProgress'},
-    {'1': 'done', '3': 5, '4': 1, '5': 13, '10': 'done'},
-    {'1': 'bed_count', '3': 6, '4': 1, '5': 13, '10': 'bedCount'},
+    {'1': 'bed_count', '3': 3, '4': 1, '5': 13, '10': 'bedCount'},
+    {'1': 'tasks_todo', '3': 4, '4': 1, '5': 13, '10': 'tasksTodo'},
+    {'1': 'tasks_in_progress', '3': 5, '4': 1, '5': 13, '10': 'tasksInProgress'},
+    {'1': 'tasks_done', '3': 6, '4': 1, '5': 13, '10': 'tasksDone'},
   ],
 };
 
 /// Descriptor for `GetWardOverviewsResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getWardOverviewsResponseDescriptor = $convert.base64Decode(
     'ChhHZXRXYXJkT3ZlcnZpZXdzUmVzcG9uc2USTwoFd2FyZHMYASADKAsyOS5wcm90by5zZXJ2aW'
-    'Nlcy53YXJkX3N2Yy52MS5HZXRXYXJkT3ZlcnZpZXdzUmVzcG9uc2UuV2FyZFIFd2FyZHMangEK'
-    'BFdhcmQSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIAoLdW5zY2hlZHVsZW'
-    'QYAyABKA1SC3Vuc2NoZWR1bGVkEh8KC2luX3Byb2dyZXNzGAQgASgNUgppblByb2dyZXNzEhIK'
-    'BGRvbmUYBSABKA1SBGRvbmUSGwoJYmVkX2NvdW50GAYgASgNUghiZWRDb3VudA==');
+    'Nlcy53YXJkX3N2Yy52MS5HZXRXYXJkT3ZlcnZpZXdzUmVzcG9uc2UuV2FyZFIFd2FyZHMasQEK'
+    'BFdhcmQSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSGwoJYmVkX2NvdW50GA'
+    'MgASgNUghiZWRDb3VudBIdCgp0YXNrc190b2RvGAQgASgNUgl0YXNrc1RvZG8SKgoRdGFza3Nf'
+    'aW5fcHJvZ3Jlc3MYBSABKA1SD3Rhc2tzSW5Qcm9ncmVzcxIdCgp0YXNrc19kb25lGAYgASgNUg'
+    'l0YXNrc0RvbmU=');
 
 const $core.Map<$core.String, $core.dynamic> WardServiceBase$json = {
   '1': 'WardService',

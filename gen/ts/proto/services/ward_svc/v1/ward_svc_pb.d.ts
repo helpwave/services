@@ -254,17 +254,17 @@ export namespace GetWardOverviewsResponse {
     getName(): string;
     setName(value: string): Ward;
 
-    getUnscheduled(): number;
-    setUnscheduled(value: number): Ward;
-
-    getInProgress(): number;
-    setInProgress(value: number): Ward;
-
-    getDone(): number;
-    setDone(value: number): Ward;
-
     getBedCount(): number;
     setBedCount(value: number): Ward;
+
+    getTasksTodo(): number;
+    setTasksTodo(value: number): Ward;
+
+    getTasksInProgress(): number;
+    setTasksInProgress(value: number): Ward;
+
+    getTasksDone(): number;
+    setTasksDone(value: number): Ward;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Ward.AsObject;
@@ -278,10 +278,10 @@ export namespace GetWardOverviewsResponse {
     export type AsObject = {
       id: string,
       name: string,
-      unscheduled: number,
-      inProgress: number,
-      done: number,
       bedCount: number,
+      tasksTodo: number,
+      tasksInProgress: number,
+      tasksDone: number,
     }
   }
 

@@ -521,10 +521,10 @@ class GetWardOverviewsResponse_Ward extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetWardOverviewsResponse.Ward', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.ward_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'unscheduled', $pb.PbFieldType.OU3)
-    ..a<$core.int>(4, _omitFieldNames ? '' : 'inProgress', $pb.PbFieldType.OU3)
-    ..a<$core.int>(5, _omitFieldNames ? '' : 'done', $pb.PbFieldType.OU3)
-    ..a<$core.int>(6, _omitFieldNames ? '' : 'bedCount', $pb.PbFieldType.OU3)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'bedCount', $pb.PbFieldType.OU3)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'tasksTodo', $pb.PbFieldType.OU3)
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'tasksInProgress', $pb.PbFieldType.OU3)
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'tasksDone', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -568,40 +568,40 @@ class GetWardOverviewsResponse_Ward extends $pb.GeneratedMessage {
   void clearName() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.int get unscheduled => $_getIZ(2);
+  $core.int get bedCount => $_getIZ(2);
   @$pb.TagNumber(3)
-  set unscheduled($core.int v) { $_setUnsignedInt32(2, v); }
+  set bedCount($core.int v) { $_setUnsignedInt32(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasUnscheduled() => $_has(2);
+  $core.bool hasBedCount() => $_has(2);
   @$pb.TagNumber(3)
-  void clearUnscheduled() => clearField(3);
+  void clearBedCount() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.int get inProgress => $_getIZ(3);
+  $core.int get tasksTodo => $_getIZ(3);
   @$pb.TagNumber(4)
-  set inProgress($core.int v) { $_setUnsignedInt32(3, v); }
+  set tasksTodo($core.int v) { $_setUnsignedInt32(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasInProgress() => $_has(3);
+  $core.bool hasTasksTodo() => $_has(3);
   @$pb.TagNumber(4)
-  void clearInProgress() => clearField(4);
+  void clearTasksTodo() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.int get done => $_getIZ(4);
+  $core.int get tasksInProgress => $_getIZ(4);
   @$pb.TagNumber(5)
-  set done($core.int v) { $_setUnsignedInt32(4, v); }
+  set tasksInProgress($core.int v) { $_setUnsignedInt32(4, v); }
   @$pb.TagNumber(5)
-  $core.bool hasDone() => $_has(4);
+  $core.bool hasTasksInProgress() => $_has(4);
   @$pb.TagNumber(5)
-  void clearDone() => clearField(5);
+  void clearTasksInProgress() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.int get bedCount => $_getIZ(5);
+  $core.int get tasksDone => $_getIZ(5);
   @$pb.TagNumber(6)
-  set bedCount($core.int v) { $_setUnsignedInt32(5, v); }
+  set tasksDone($core.int v) { $_setUnsignedInt32(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasBedCount() => $_has(5);
+  $core.bool hasTasksDone() => $_has(5);
   @$pb.TagNumber(6)
-  void clearBedCount() => clearField(6);
+  void clearTasksDone() => clearField(6);
 }
 
 class GetWardOverviewsResponse extends $pb.GeneratedMessage {

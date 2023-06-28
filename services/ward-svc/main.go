@@ -83,9 +83,10 @@ func GetWardsForOrganization(ctx context.Context) ([]*Ward, error) {
 
 type ServiceServer struct {
 	pb.UnimplementedWardServiceServer
-	roomSvc task_svc_pb.RoomServiceClient
-	bedSvc  task_svc_pb.BedServiceClient
-	taskSvc task_svc_pb.TaskServiceClient
+	roomSvc    task_svc_pb.RoomServiceClient
+	bedSvc     task_svc_pb.BedServiceClient
+	taskSvc    task_svc_pb.TaskServiceClient
+	patientSvc task_svc_pb.PatientServiceClient
 }
 
 func NewServiceServer(daprClient *daprc.GRPCClient) *ServiceServer {
@@ -93,6 +94,7 @@ func NewServiceServer(daprClient *daprc.GRPCClient) *ServiceServer {
 	service.roomSvc = task_svc_pb.NewRoomServiceClient(daprClient.GrpcClientConn())
 	service.bedSvc = task_svc_pb.NewBedServiceClient(daprClient.GrpcClientConn())
 	service.taskSvc = task_svc_pb.NewTaskServiceClient(daprClient.GrpcClientConn())
+	service.patientSvc = task_svc_pb.NewPatientServiceClient(daprClient.GrpcClientConn())
 	return &service
 }
 
@@ -228,14 +230,14 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 	defer cancel()
 
 	resWards := hwutil.Map(wards, func(ward *Ward) *pb.GetWardOverviewsResponse_Ward {
-		res, err := s.roomSvc.GetRoomsByWard(ctx, &task_svc_pb.GetRoomsByWardRequest{WardId: ward.ID.String()})
+		getRoomsByWardRes, err := s.roomSvc.GetRoomsByWard(ctx, &task_svc_pb.GetRoomsByWardRequest{WardId: ward.ID.String()})
 		if err != nil {
 			log.Error().Err(err).Send()
 			return nil
 		}
 
 		var bedCount uint32
-		for _, room := range res.Rooms {
+		for _, room := range getRoomsByWardRes.Rooms {
 			res, err := s.bedSvc.GetBedsByRoom(ctx, &task_svc_pb.GetBedsByRoomRequest{RoomId: room.Id})
 			if err != nil {
 				log.Error().Err(err).Send()
@@ -244,10 +246,43 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 			bedCount += uint32(len(res.Beds))
 		}
 
+		getPatientsByWardRes, err := s.patientSvc.GetPatientsByWard(ctx, &task_svc_pb.GetPatientsByWardRequest{WardId: ward.ID.String()})
+		if err != nil {
+			log.Error().Err(err).Send()
+			return nil
+		}
+
+		var tasksTodo uint32
+		var tasksInProgress uint32
+		var tasksDone uint32
+		for _, patient := range getPatientsByWardRes.Patients {
+			res, err := s.taskSvc.GetTasksByPatient(ctx, &task_svc_pb.GetTasksByPatientRequest{PatientId: patient.Id})
+			if err != nil {
+				log.Error().Err(err).Send()
+				return nil
+			}
+			for _, task := range res.Tasks {
+				switch task.Status {
+				case task_svc_pb.TaskStatus_TASK_STATUS_TODO:
+					tasksTodo++
+					break
+				case task_svc_pb.TaskStatus_TASK_STATUS_IN_PROGRESS:
+					tasksInProgress++
+					break
+				case task_svc_pb.TaskStatus_TASK_STATUS_DONE:
+					tasksDone++
+					break
+				}
+			}
+		}
+
 		return &pb.GetWardOverviewsResponse_Ward{
-			Id:       ward.ID.String(),
-			Name:     ward.Name,
-			BedCount: bedCount,
+			Id:              ward.ID.String(),
+			Name:            ward.Name,
+			BedCount:        bedCount,
+			TasksTodo:       tasksTodo,
+			TasksInProgress: tasksInProgress,
+			TasksDone:       tasksDone,
 		}
 	})
 

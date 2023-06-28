@@ -2097,10 +2097,10 @@ proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.toObject = functi
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    unscheduled: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    inProgress: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    done: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    bedCount: jspb.Message.getFieldWithDefault(msg, 6, 0)
+    bedCount: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    tasksTodo: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    tasksInProgress: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    tasksDone: jspb.Message.getFieldWithDefault(msg, 6, 0)
   };
 
   if (includeInstance) {
@@ -2147,19 +2147,19 @@ proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.deserializeBinary
       break;
     case 3:
       var value = /** @type {number} */ (reader.readUint32());
-      msg.setUnscheduled(value);
+      msg.setBedCount(value);
       break;
     case 4:
       var value = /** @type {number} */ (reader.readUint32());
-      msg.setInProgress(value);
+      msg.setTasksTodo(value);
       break;
     case 5:
       var value = /** @type {number} */ (reader.readUint32());
-      msg.setDone(value);
+      msg.setTasksInProgress(value);
       break;
     case 6:
       var value = /** @type {number} */ (reader.readUint32());
-      msg.setBedCount(value);
+      msg.setTasksDone(value);
       break;
     default:
       reader.skipField();
@@ -2204,28 +2204,28 @@ proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.serializeBinaryTo
       f
     );
   }
-  f = message.getUnscheduled();
+  f = message.getBedCount();
   if (f !== 0) {
     writer.writeUint32(
       3,
       f
     );
   }
-  f = message.getInProgress();
+  f = message.getTasksTodo();
   if (f !== 0) {
     writer.writeUint32(
       4,
       f
     );
   }
-  f = message.getDone();
+  f = message.getTasksInProgress();
   if (f !== 0) {
     writer.writeUint32(
       5,
       f
     );
   }
-  f = message.getBedCount();
+  f = message.getTasksDone();
   if (f !== 0) {
     writer.writeUint32(
       6,
@@ -2272,10 +2272,10 @@ proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.setName
 
 
 /**
- * optional uint32 unscheduled = 3;
+ * optional uint32 bed_count = 3;
  * @return {number}
  */
-proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.getUnscheduled = function() {
+proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.getBedCount = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
@@ -2284,16 +2284,16 @@ proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.getUnsc
  * @param {number} value
  * @return {!proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward} returns this
  */
-proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.setUnscheduled = function(value) {
+proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.setBedCount = function(value) {
   return jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
 /**
- * optional uint32 in_progress = 4;
+ * optional uint32 tasks_todo = 4;
  * @return {number}
  */
-proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.getInProgress = function() {
+proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.getTasksTodo = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
@@ -2302,16 +2302,16 @@ proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.getInPr
  * @param {number} value
  * @return {!proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward} returns this
  */
-proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.setInProgress = function(value) {
+proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.setTasksTodo = function(value) {
   return jspb.Message.setProto3IntField(this, 4, value);
 };
 
 
 /**
- * optional uint32 done = 5;
+ * optional uint32 tasks_in_progress = 5;
  * @return {number}
  */
-proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.getDone = function() {
+proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.getTasksInProgress = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
 };
 
@@ -2320,16 +2320,16 @@ proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.getDone
  * @param {number} value
  * @return {!proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward} returns this
  */
-proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.setDone = function(value) {
+proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.setTasksInProgress = function(value) {
   return jspb.Message.setProto3IntField(this, 5, value);
 };
 
 
 /**
- * optional uint32 bed_count = 6;
+ * optional uint32 tasks_done = 6;
  * @return {number}
  */
-proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.getBedCount = function() {
+proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.getTasksDone = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
 };
 
@@ -2338,7 +2338,7 @@ proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.getBedC
  * @param {number} value
  * @return {!proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward} returns this
  */
-proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.setBedCount = function(value) {
+proto.proto.services.ward_svc.v1.GetWardOverviewsResponse.Ward.prototype.setTasksDone = function(value) {
   return jspb.Message.setProto3IntField(this, 6, value);
 };
 
