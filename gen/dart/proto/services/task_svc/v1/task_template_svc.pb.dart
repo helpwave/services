@@ -65,7 +65,6 @@ class CreateTaskTemplateRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateTaskTemplateRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'name')
     ..aOS(2, _omitFieldNames ? '' : 'description')
-    ..aOB(3, _omitFieldNames ? '' : 'public')
     ..aOS(4, _omitFieldNames ? '' : 'wardId')
     ..pc<CreateTaskTemplateRequest_SubTask>(5, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: CreateTaskTemplateRequest_SubTask.create)
     ..hasRequiredFields = false
@@ -110,26 +109,17 @@ class CreateTaskTemplateRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearDescription() => clearField(2);
 
-  @$pb.TagNumber(3)
-  $core.bool get public => $_getBF(2);
-  @$pb.TagNumber(3)
-  set public($core.bool v) { $_setBool(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasPublic() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearPublic() => clearField(3);
-
   @$pb.TagNumber(4)
-  $core.String get wardId => $_getSZ(3);
+  $core.String get wardId => $_getSZ(2);
   @$pb.TagNumber(4)
-  set wardId($core.String v) { $_setString(3, v); }
+  set wardId($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(4)
-  $core.bool hasWardId() => $_has(3);
+  $core.bool hasWardId() => $_has(2);
   @$pb.TagNumber(4)
   void clearWardId() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.List<CreateTaskTemplateRequest_SubTask> get subtasks => $_getList(4);
+  $core.List<CreateTaskTemplateRequest_SubTask> get subtasks => $_getList(3);
 }
 
 class CreateTaskTemplateResponse extends $pb.GeneratedMessage {

@@ -612,7 +612,6 @@ proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.toObject = function(i
   var f, obj = {
     name: jspb.Message.getFieldWithDefault(msg, 1, ""),
     description: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    pb_public: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
     wardId: jspb.Message.getFieldWithDefault(msg, 4, ""),
     subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
     proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask.toObject, includeInstance)
@@ -659,10 +658,6 @@ proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.deserializeBinaryFrom
     case 2:
       var value = /** @type {string} */ (reader.readString());
       msg.setDescription(value);
-      break;
-    case 3:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setPublic(value);
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
@@ -713,13 +708,6 @@ proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.serializeBinaryToWrit
   if (f.length > 0) {
     writer.writeString(
       2,
-      f
-    );
-  }
-  f = message.getPublic();
-  if (f) {
-    writer.writeBool(
-      3,
       f
     );
   }
@@ -904,24 +892,6 @@ proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.getDescript
  */
 proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.setDescription = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
-};
-
-
-/**
- * optional bool public = 3;
- * @return {boolean}
- */
-proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.getPublic = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 3, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.proto.services.task_svc.v1.CreateTaskTemplateRequest} returns this
- */
-proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.setPublic = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 3, value);
 };
 
 

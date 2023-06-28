@@ -19,7 +19,6 @@ const CreateTaskTemplateRequest$json = {
   '2': [
     {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
     {'1': 'description', '3': 2, '4': 1, '5': 9, '10': 'description'},
-    {'1': 'public', '3': 3, '4': 1, '5': 8, '10': 'public'},
     {'1': 'ward_id', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'wardId', '17': true},
     {'1': 'subtasks', '3': 5, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.CreateTaskTemplateRequest.SubTask', '10': 'subtasks'},
   ],
@@ -40,10 +39,10 @@ const CreateTaskTemplateRequest_SubTask$json = {
 /// Descriptor for `CreateTaskTemplateRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createTaskTemplateRequestDescriptor = $convert.base64Decode(
     'ChlDcmVhdGVUYXNrVGVtcGxhdGVSZXF1ZXN0EhIKBG5hbWUYASABKAlSBG5hbWUSIAoLZGVzY3'
-    'JpcHRpb24YAiABKAlSC2Rlc2NyaXB0aW9uEhYKBnB1YmxpYxgDIAEoCFIGcHVibGljEhwKB3dh'
-    'cmRfaWQYBCABKAlIAFIGd2FyZElkiAEBElkKCHN1YnRhc2tzGAUgAygLMj0ucHJvdG8uc2Vydm'
-    'ljZXMudGFza19zdmMudjEuQ3JlYXRlVGFza1RlbXBsYXRlUmVxdWVzdC5TdWJUYXNrUghzdWJ0'
-    'YXNrcxodCgdTdWJUYXNrEhIKBG5hbWUYASABKAlSBG5hbWVCCgoIX3dhcmRfaWQ=');
+    'JpcHRpb24YAiABKAlSC2Rlc2NyaXB0aW9uEhwKB3dhcmRfaWQYBCABKAlIAFIGd2FyZElkiAEB'
+    'ElkKCHN1YnRhc2tzGAUgAygLMj0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuQ3JlYXRlVG'
+    'Fza1RlbXBsYXRlUmVxdWVzdC5TdWJUYXNrUghzdWJ0YXNrcxodCgdTdWJUYXNrEhIKBG5hbWUY'
+    'ASABKAlSBG5hbWVCCgoIX3dhcmRfaWQ=');
 
 @$core.Deprecated('Use createTaskTemplateResponseDescriptor instead')
 const CreateTaskTemplateResponse$json = {

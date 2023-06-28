@@ -22,7 +22,6 @@ type TaskTemplate struct {
 	Base
 	ID             uuid.UUID             `gorm:"column:id"`
 	OrganizationID uuid.UUID             `gorm:"column:organization_id"`
-	Public         bool                  `gorm:"column:is_public"`
 	UserID         uuid.UUID             `gorm:"column:user_id"`
 	WardID         *uuid.UUID            `gorm:"column:ward_id;default:NULL"`
 	SubTasks       []TaskTemplateSubtask `gorm:"foreignKey:TaskTemplateID"`
@@ -64,7 +63,6 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	taskTemplate := TaskTemplate{
 		Base:           Base{Name: req.Name, Description: req.Description},
 		OrganizationID: organizationID,
-		Public:         req.Public,
 		UserID:         userID,
 		WardID:         wardID,
 	}
@@ -125,7 +123,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 			Id:          taskTemplate.ID.String(),
 			Name:        taskTemplate.Name,
 			Description: taskTemplate.Description,
-			IsPublic:    taskTemplate.Public,
+			IsPublic:    taskTemplate.WardID != nil,
 			UserId:      hwutil.UUIDToStringPtr(&taskTemplate.UserID),
 			Subtasks:    mappedSubtasks,
 		}
@@ -286,7 +284,7 @@ func (ServiceServer) GetAllTaskTemplatesByUser(ctx context.Context, req *pb.GetA
 			Id:          taskTemplate.ID.String(),
 			Name:        taskTemplate.Name,
 			Description: taskTemplate.Description,
-			IsPublic:    taskTemplate.Public,
+			IsPublic:    taskTemplate.WardID != nil,
 			Subtasks:    mappedSubtasks,
 		}
 	})
@@ -326,7 +324,7 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 			Id:          taskTemplate.ID.String(),
 			Name:        taskTemplate.Name,
 			Description: taskTemplate.Description,
-			IsPublic:    taskTemplate.Public,
+			IsPublic:    taskTemplate.WardID != nil,
 			UserId:      hwutil.UUIDToStringPtr(&taskTemplate.UserID),
 			Subtasks:    mappedSubtasks,
 		}

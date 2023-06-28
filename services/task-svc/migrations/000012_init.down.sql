@@ -1,0 +1,2 @@
+ALTER TABLE IF EXISTS task_templates
+	ADD COLUMN is_public boolean NOT NULL DEFAULT FALSE;

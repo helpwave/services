@@ -9,9 +9,6 @@ export class CreateTaskTemplateRequest extends jspb.Message {
   getDescription(): string;
   setDescription(value: string): CreateTaskTemplateRequest;
 
-  getPublic(): boolean;
-  setPublic(value: boolean): CreateTaskTemplateRequest;
-
   getWardId(): string;
   setWardId(value: string): CreateTaskTemplateRequest;
   hasWardId(): boolean;
@@ -34,7 +31,6 @@ export namespace CreateTaskTemplateRequest {
   export type AsObject = {
     name: string,
     description: string,
-    pb_public: boolean,
     wardId?: string,
     subtasksList: Array<CreateTaskTemplateRequest.SubTask.AsObject>,
   }
