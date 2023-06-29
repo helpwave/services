@@ -28,6 +28,30 @@ type Patient struct {
 	IsDischarged   soft_delete.DeletedAt `gorm:"column:is_discharged;softDelete:flag;default:0"`
 }
 
+// GetPatientsByWardForOrganization
+// TODO: Move into repository
+func GetPatientsByWardForOrganization(ctx context.Context, wardID uuid.UUID) ([]Patient, error) {
+	db := hwgorm.GetDB(ctx)
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var patients []Patient
+	if err := db.
+		Table("patients").
+		Joins("JOIN beds ON beds.id = patients.bed_id").
+		Joins("JOIN rooms ON rooms.id = beds.room_id").
+		Where("rooms.ward_id = ? AND rooms.organization_id = ?", wardID, organizationID).
+		Find(&patients).
+		Error; err != nil {
+		return nil, err
+	}
+
+	return patients, nil
+}
+
 type ServiceServer struct {
 	pb.UnimplementedPatientServiceServer
 }
@@ -128,9 +152,6 @@ func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBe
 }
 
 func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsByWardRequest) (*pb.GetPatientsByWardResponse, error) {
-	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
-
 	// TODO: Auth
 
 	wardID, err := uuid.Parse(req.WardId)
@@ -138,10 +159,9 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var patients []Patient
-	if err := db.Joins("wards").Joins("rooms").Joins("beds").Joins("patients").Where("wards.id = ?", wardID).Find(&patients).Error; err != nil {
+	patients, err := GetPatientsByWardForOrganization(ctx, wardID)
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
-			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "id not found")

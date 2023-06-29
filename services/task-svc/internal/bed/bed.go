@@ -32,6 +32,24 @@ type Bed struct {
 	RoomID         uuid.UUID `gorm:"column:room_id"`
 }
 
+// GetBedsByRoomForOrganization
+// TODO: Move into repository
+func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]Bed, error) {
+	db := hwgorm.GetDB(ctx)
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var beds []Bed
+	if err := db.Where("organization_id = ? AND room_id = ?", organizationID.String(), roomID.String()).Find(&beds).Error; err != nil {
+		return nil, err
+	}
+
+	return beds, nil
+}
+
 func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*pb.CreateBedResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
@@ -131,20 +149,13 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 }
 
 func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomRequest) (*pb.GetBedsByRoomResponse, error) {
-	db := hwgorm.GetDB(ctx)
-
-	organizationID, err := common.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
-
 	roomID, err := uuid.Parse(req.RoomId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var beds []Bed
-	if err := db.Where("organization_id = ? AND room_id = ?", organizationID.String(), roomID.String()).Find(&beds).Error; err != nil {
+	beds, err := GetBedsByRoomForOrganization(ctx, roomID)
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {

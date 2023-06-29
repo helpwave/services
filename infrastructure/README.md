@@ -21,8 +21,8 @@ __Pre-Requirements__
 __1. Create a new App__
 
 ```shell
-fly launch
-	--build-args SERVICE=user-svc
+flyctllaunch
+	--build-arg SERVICE=user-svc
 	--dockerfile ../../Dockerfile.standalone
 	--env INSECURE_FAKE_TOKEN_ENABLE=true # When deployed on staging
 	--internal-port 80
@@ -57,13 +57,13 @@ primary_region = "ams"
 
 __4. Create database__
 
-Connect to postgres cli via `fly postgres connect --app <APP_NAME_OF_POSTGRES>`
+Connect to postgres cli via `flyctl postgres connect --app <APP_NAME_OF_POSTGRES>`
 and run `CREATE DATABASE "user-svc";` afterwards.
 
 __5. Set secrets__
 
 ```shell
- fly secrets set
+ flyctl secrets set
  	--app helpwave-staging-user-svc
  	POSTGRES_PASSWORD=<PASSWORD>
  	POSTGRES_HOST=<HOST>
@@ -74,7 +74,7 @@ __5. Set secrets__
 __6. Deploy service__
 
 ```shell
-fly deploy
+flyctl deploy
 	--config services/user-svc/fly.toml
 	--app helpwave-staging-user-svc
 	# --local-only # Optional. When omitted, the image will be build directly on Fly
@@ -117,4 +117,4 @@ routes:
 
 __8. Deploy APISIX__
 
-`fly deploy --config apisix/fly.toml --app helpwave-staging-gateway`
+`flyctl deploy --config apisix/fly.toml --app helpwave-staging-gateway`

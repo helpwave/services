@@ -37,6 +37,24 @@ type Subtask struct {
 	Done   bool      `gorm:"column:done;default:False"`
 }
 
+// GetTasksByPatientForOrganization
+// TODO: Move into repository
+func GetTasksByPatientForOrganization(ctx context.Context, patientID uuid.UUID) ([]Task, error) {
+	db := hwgorm.GetDB(ctx)
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var tasks []Task
+	if err := db.Preload("Subtasks").Where("patient_id = ? AND organization_id = ?", patientID, organizationID).Find(&tasks).Error; err != nil {
+		return nil, err
+	}
+
+	return tasks, nil
+}
+
 type ServiceServer struct {
 	pb.UnimplementedTaskServiceServer
 }
@@ -74,6 +92,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		Base: Base{
 			Name:        req.Name,
 			Description: req.Description,
+			Status:      pb.TaskStatus_TASK_STATUS_TODO,
 		},
 		PatientId:      patientId,
 		OrganizationID: organizationID,
@@ -140,18 +159,15 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 }
 
 func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPatientRequest) (*pb.GetTasksByPatientResponse, error) {
-	db := hwgorm.GetDB(ctx)
-
 	// TODO: Auth
 
-	patientId, err := uuid.Parse(req.PatientId)
+	patientID, err := uuid.Parse(req.PatientId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var tasks []Task
-
-	if err := db.Preload("Subtasks").Where("patient_id = ?", patientId).Find(&tasks).Error; err != nil {
+	tasks, err := GetTasksByPatientForOrganization(ctx, patientID)
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
