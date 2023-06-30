@@ -237,4 +237,9 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 	})
 
 	return &pb.GetWardOverviewsResponse{Wards: resWards}, err
+
+}
+
+func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsRequest) (*pb.GetWardDetailsResponse, error) {
+	return nil, nil
 }
