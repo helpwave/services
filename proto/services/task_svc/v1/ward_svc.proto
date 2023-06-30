@@ -66,6 +66,39 @@ message DeleteWardRequest {
 
 message DeleteWardResponse {}
 
+
+message GetWardDetailsRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetWardDetailsResponse {
+  string id = 1; // @gotags: validate:"uuid4"
+  string name = 2;
+  repeated Room rooms = 3;
+  repeated TaskTemplate task_templates = 4;
+
+  message Bed {
+    string id = 1;
+  }
+
+  message Subtask {
+    string id = 1;
+    string name = 2;
+  }
+
+  message Room {
+    string name = 1;
+    repeated Bed beds = 2;
+  }
+
+  message TaskTemplate {
+    string id = 1;
+    string name = 2;
+    repeated Subtask subtasks = 3;
+  }
+}
+
+
 //
 // WardService
 //
@@ -76,4 +109,5 @@ service WardService {
   rpc GetWards(GetWardsRequest) returns (GetWardsResponse) {}
   rpc UpdateWard (UpdateWardRequest) returns (UpdateWardResponse) {}
   rpc DeleteWard (DeleteWardRequest) returns (DeleteWardResponse) {}
+  rpc GetWardDetails (GetWardDetailsRequest) returns (GetWardDetailsResponse) {}
 }

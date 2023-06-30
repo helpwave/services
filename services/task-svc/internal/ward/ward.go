@@ -155,3 +155,7 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 
 	return &pb.DeleteWardResponse{}, nil
 }
+
+func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsRequest) (*pb.GetWardDetailsResponse, error) {
+	return nil, nil
+}
