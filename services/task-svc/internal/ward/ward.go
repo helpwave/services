@@ -12,9 +12,11 @@ import (
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/bed"
+	bedmodels "task-svc/internal/bed/models"
 	"task-svc/internal/patient"
 	roommodels "task-svc/internal/room/models"
 	"task-svc/internal/task"
+	templatemodels "task-svc/internal/task-template/models"
 	"task-svc/internal/ward/models"
 	wardmodels "task-svc/internal/ward/models"
 )
@@ -233,5 +235,69 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 }
 
 func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsRequest) (*pb.GetWardDetailsResponse, error) {
-	return nil, nil
+
+	wardID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	wardRepository := wardmodels.NewWardRepositoryWithDB(hwgorm.GetDB(ctx))
+	ward, err := wardRepository.GetWardById(wardID)
+	if err != nil {
+		return nil, err
+	}
+
+	roomRepository := roommodels.NewRoomRepositoryWithDB(hwgorm.GetDB(ctx))
+	rooms, err := roomRepository.GetRoomByWard(wardID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	bedRepository := bedmodels.NewRoomRepositoryWithDB(hwgorm.GetDB(ctx))
+	var mappedRooms = hwutil.Map(rooms, func(room roommodels.Room) *pb.GetWardDetailsResponse_Room {
+		beds, _ := bedRepository.GetBedsByRoom(room.ID)
+
+		var mappedBeds = hwutil.Map(beds, func(bed bedmodels.Bed) *pb.GetWardDetailsResponse_Bed {
+			return &pb.GetWardDetailsResponse_Bed{
+				Id: bed.ID.String(),
+			}
+		})
+
+		return &pb.GetWardDetailsResponse_Room{
+			Beds: mappedBeds,
+			Name: room.Name,
+		}
+	})
+
+	templateRepository := templatemodels.NewTemplateRepositoryWithDB(hwgorm.GetDB(ctx))
+	taskTemplates, err := templateRepository.GetTemplateByWard(wardID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate templatemodels.TaskTemplate) *pb.GetWardDetailsResponse_TaskTemplate {
+		taskTemplateSubtasks, _ := templateRepository.GetSubTasksByTemplate(taskTemplate.ID)
+
+		var mappedSubtasks = hwutil.Map(taskTemplateSubtasks, func(taskTemplateSubtask templatemodels.TaskTemplateSubtask) *pb.GetWardDetailsResponse_Subtask {
+			return &pb.GetWardDetailsResponse_Subtask{
+				Name: taskTemplateSubtask.Name,
+				Id:   taskTemplateSubtask.ID.String(),
+			}
+		})
+
+		return &pb.GetWardDetailsResponse_TaskTemplate{
+			Id:       taskTemplate.ID.String(),
+			Name:     taskTemplate.Name,
+			Subtasks: mappedSubtasks,
+		}
+	})
+
+	return &pb.GetWardDetailsResponse{
+		Id:            ward.ID.String(),
+		Name:          ward.Name,
+		Rooms:         mappedRooms,
+		TaskTemplates: mappedTaskTemplates,
+	}, nil
 }

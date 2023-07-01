@@ -15,12 +15,12 @@ func NewRoomRepositoryWithDB(db *gorm.DB) *BedRepository {
 	}
 }
 
-func (r *BedRepository) GetByRoom(roomID uuid.UUID) ([]Bed, error) {
-	var rooms []Bed
+func (r *BedRepository) GetBedsByRoom(roomID uuid.UUID) ([]Bed, error) {
+	var beds []Bed
 
-	if err := r.db.Find(Bed{RoomID: roomID}).Error; err != nil {
+	if err := r.db.Where("room_id = ?", roomID).Find(&beds).Error; err != nil {
 		return nil, err
 	}
 
-	return rooms, nil
+	return beds, nil
 }
