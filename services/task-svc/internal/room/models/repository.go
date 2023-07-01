@@ -40,3 +40,13 @@ func (r *RoomRepository) GetByWardForOrganization(ctx context.Context, wardID uu
 
 	return rooms, nil
 }
+
+func (r *RoomRepository) GetByWard(wardID uuid.UUID) ([]Room, error) {
+	var rooms []Room
+
+	if err := r.db.Find(Room{WardID: wardID}).Error; err != nil {
+		return nil, err
+	}
+
+	return rooms, nil
+}
