@@ -119,25 +119,6 @@ message GetWardOverviewsResponse {
 }
 
 //
-// GetWardsOverview
-//
-
-message GetWardOverviewsRequest {}
-
-message GetWardOverviewsResponse {
-  repeated Ward wards = 1;
-
-  message Ward {
-    string id = 1;
-    string name = 2;
-    uint32 bed_count = 3;
-    uint32 tasks_todo = 4;
-    uint32 tasks_in_progress = 5;
-    uint32 tasks_done = 6;
-  }
-}
-
-//
 // WardService
 //
 
