@@ -53,38 +53,6 @@ func GetWardsForOrganization(ctx context.Context) ([]*models.Ward, error) {
 	return wards, err
 }
 
-func GetWardByIdForOrganization(ctx context.Context, id uuid.UUID) (*Ward, error) {
-	db := hwgorm.GetDB(ctx)
-
-	organizationID, err := common.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	ward := Ward{ID: id, OrganizationID: organizationID}
-	if err := db.First(&ward).Error; err != nil {
-		return nil, err
-	}
-
-	return &ward, nil
-}
-
-func GetWardsForOrganization(ctx context.Context) ([]*Ward, error) {
-	db := hwgorm.GetDB(ctx)
-
-	organizationID, err := common.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	var wards []*Ward
-	if err := db.Where("organization_id = ?", organizationID).Find(&wards).Error; err != nil {
-		return nil, err
-	}
-
-	return wards, err
-}
-
 type ServiceServer struct {
 	pb.UnimplementedWardServiceServer
 }
