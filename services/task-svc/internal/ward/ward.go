@@ -21,38 +21,6 @@ import (
 	wardmodels "task-svc/internal/ward/models"
 )
 
-func GetWardByIdForOrganization(ctx context.Context, id uuid.UUID) (*models.Ward, error) {
-	db := hwgorm.GetDB(ctx)
-
-	organizationID, err := common.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	ward := models.Ward{ID: id, OrganizationID: organizationID}
-	if err := db.First(&ward).Error; err != nil {
-		return nil, err
-	}
-
-	return &ward, nil
-}
-
-func GetWardsForOrganization(ctx context.Context) ([]*models.Ward, error) {
-	db := hwgorm.GetDB(ctx)
-
-	organizationID, err := common.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	var wards []*models.Ward
-	if err := db.Where("organization_id = ?", organizationID).Find(&wards).Error; err != nil {
-		return nil, err
-	}
-
-	return wards, err
-}
-
 type ServiceServer struct {
 	pb.UnimplementedWardServiceServer
 }
@@ -97,7 +65,8 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	ward, err := GetWardByIdForOrganization(ctx, id)
+	wardRepository := wardmodels.NewWardRepositoryWithDB(hwgorm.GetDB(ctx))
+	ward, err := wardRepository.GetWardByIdForOrganization(ctx, id)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -113,7 +82,9 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 }
 
 func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb.GetWardsResponse, error) {
-	wards, err := GetWardsForOrganization(ctx)
+	wardRepository := wardmodels.NewWardRepositoryWithDB(hwgorm.GetDB(ctx))
+	wards, err := wardRepository.GetWardsForOrganization(ctx)
+
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -160,7 +131,8 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	ward, err := GetWardByIdForOrganization(ctx, id)
+	wardRepository := wardmodels.NewWardRepositoryWithDB(hwgorm.GetDB(ctx))
+	ward, err := wardRepository.GetWardByIdForOrganization(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -173,7 +145,8 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 }
 
 func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOverviewsRequest) (*pb.GetWardOverviewsResponse, error) {
-	wards, err := GetWardsForOrganization(ctx)
+	wardRepository := wardmodels.NewWardRepositoryWithDB(hwgorm.GetDB(ctx))
+	wards, err := wardRepository.GetWardsForOrganization(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -262,9 +235,12 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 	}
 
 	bedRepository := bedmodels.NewRoomRepositoryWithDB(hwgorm.GetDB(ctx))
-	var mappedRooms = hwutil.Map(rooms, func(room roommodels.Room) *pb.GetWardDetailsResponse_Room {
-		beds, _ := bedRepository.GetBedsByRoom(room.ID)
+	mappedRooms, err := hwutil.MapWithErr(rooms, func(room roommodels.Room) (*pb.GetWardDetailsResponse_Room, error) {
+		beds, err := bedRepository.GetBedsByRoom(room.ID)
+		if err != nil {
+			return nil, err
 
+		}
 		var mappedBeds = hwutil.Map(beds, func(bed bedmodels.Bed) *pb.GetWardDetailsResponse_Bed {
 			return &pb.GetWardDetailsResponse_Bed{
 				Id: bed.ID.String(),
@@ -274,8 +250,16 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		return &pb.GetWardDetailsResponse_Room{
 			Beds: mappedBeds,
 			Name: room.Name,
-		}
+		}, nil
 	})
+
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
+	}
 
 	templateRepository := templatemodels.NewTemplateRepositoryWithDB(hwgorm.GetDB(ctx))
 	taskTemplates, err := templateRepository.GetTemplateByWard(wardID)
