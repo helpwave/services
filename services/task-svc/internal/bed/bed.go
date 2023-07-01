@@ -39,6 +39,24 @@ func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]mode
 	return beds, nil
 }
 
+// GetBedsByRoomForOrganization
+// TODO: Move into repository
+func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]Bed, error) {
+	db := hwgorm.GetDB(ctx)
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var beds []Bed
+	if err := db.Where("organization_id = ? AND room_id = ?", organizationID.String(), roomID.String()).Find(&beds).Error; err != nil {
+		return nil, err
+	}
+
+	return beds, nil
+}
+
 func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*pb.CreateBedResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)

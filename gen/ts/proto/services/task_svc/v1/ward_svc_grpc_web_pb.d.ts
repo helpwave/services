@@ -50,13 +50,6 @@ export class WardServiceClient {
                response: proto_services_task_svc_v1_ward_svc_pb.GetWardOverviewsResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_ward_svc_pb.GetWardOverviewsResponse>;
 
-  getWardDetails(
-    request: proto_services_task_svc_v1_ward_svc_pb.GetWardDetailsRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: proto_services_task_svc_v1_ward_svc_pb.GetWardDetailsResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_ward_svc_pb.GetWardDetailsResponse>;
-
 }
 
 export class WardServicePromiseClient {
@@ -93,11 +86,6 @@ export class WardServicePromiseClient {
     request: proto_services_task_svc_v1_ward_svc_pb.GetWardOverviewsRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_ward_svc_pb.GetWardOverviewsResponse>;
-
-  getWardDetails(
-    request: proto_services_task_svc_v1_ward_svc_pb.GetWardDetailsRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_task_svc_v1_ward_svc_pb.GetWardDetailsResponse>;
 
 }
 

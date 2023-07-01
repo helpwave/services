@@ -25,7 +25,6 @@ const (
 	WardService_UpdateWard_FullMethodName       = "/proto.services.task_svc.v1.WardService/UpdateWard"
 	WardService_DeleteWard_FullMethodName       = "/proto.services.task_svc.v1.WardService/DeleteWard"
 	WardService_GetWardOverviews_FullMethodName = "/proto.services.task_svc.v1.WardService/GetWardOverviews"
-	WardService_GetWardDetails_FullMethodName   = "/proto.services.task_svc.v1.WardService/GetWardDetails"
 )
 
 // WardServiceClient is the client API for WardService service.
@@ -38,7 +37,6 @@ type WardServiceClient interface {
 	UpdateWard(ctx context.Context, in *UpdateWardRequest, opts ...grpc.CallOption) (*UpdateWardResponse, error)
 	DeleteWard(ctx context.Context, in *DeleteWardRequest, opts ...grpc.CallOption) (*DeleteWardResponse, error)
 	GetWardOverviews(ctx context.Context, in *GetWardOverviewsRequest, opts ...grpc.CallOption) (*GetWardOverviewsResponse, error)
-	GetWardDetails(ctx context.Context, in *GetWardDetailsRequest, opts ...grpc.CallOption) (*GetWardDetailsResponse, error)
 }
 
 type wardServiceClient struct {
@@ -103,15 +101,6 @@ func (c *wardServiceClient) GetWardOverviews(ctx context.Context, in *GetWardOve
 	return out, nil
 }
 
-func (c *wardServiceClient) GetWardDetails(ctx context.Context, in *GetWardDetailsRequest, opts ...grpc.CallOption) (*GetWardDetailsResponse, error) {
-	out := new(GetWardDetailsResponse)
-	err := c.cc.Invoke(ctx, WardService_GetWardDetails_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // WardServiceServer is the server API for WardService service.
 // All implementations must embed UnimplementedWardServiceServer
 // for forward compatibility
@@ -122,7 +111,6 @@ type WardServiceServer interface {
 	UpdateWard(context.Context, *UpdateWardRequest) (*UpdateWardResponse, error)
 	DeleteWard(context.Context, *DeleteWardRequest) (*DeleteWardResponse, error)
 	GetWardOverviews(context.Context, *GetWardOverviewsRequest) (*GetWardOverviewsResponse, error)
-	GetWardDetails(context.Context, *GetWardDetailsRequest) (*GetWardDetailsResponse, error)
 	mustEmbedUnimplementedWardServiceServer()
 }
 
@@ -147,9 +135,6 @@ func (UnimplementedWardServiceServer) DeleteWard(context.Context, *DeleteWardReq
 }
 func (UnimplementedWardServiceServer) GetWardOverviews(context.Context, *GetWardOverviewsRequest) (*GetWardOverviewsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWardOverviews not implemented")
-}
-func (UnimplementedWardServiceServer) GetWardDetails(context.Context, *GetWardDetailsRequest) (*GetWardDetailsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetWardDetails not implemented")
 }
 func (UnimplementedWardServiceServer) mustEmbedUnimplementedWardServiceServer() {}
 
@@ -272,24 +257,6 @@ func _WardService_GetWardOverviews_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _WardService_GetWardDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetWardDetailsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(WardServiceServer).GetWardDetails(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: WardService_GetWardDetails_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WardServiceServer).GetWardDetails(ctx, req.(*GetWardDetailsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // WardService_ServiceDesc is the grpc.ServiceDesc for WardService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -320,10 +287,6 @@ var WardService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetWardOverviews",
 			Handler:    _WardService_GetWardOverviews_Handler,
-		},
-		{
-			MethodName: "GetWardDetails",
-			Handler:    _WardService_GetWardDetails_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
