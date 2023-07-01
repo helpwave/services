@@ -25,7 +25,6 @@ func (r *TemplateRepository) GetTemplateByWard(wardID uuid.UUID) ([]TaskTemplate
 }
 
 func (r *TemplateRepository) GetSubTasksByTemplate(templateID uuid.UUID) ([]TaskTemplateSubtask, error) {
-
 	var taskTemplateSubtask []TaskTemplateSubtask
 	if err := r.db.Where("task_template_id = ?", templateID).Find(&taskTemplateSubtask).Error; err != nil {
 		return nil, err
