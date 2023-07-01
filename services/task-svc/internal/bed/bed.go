@@ -21,20 +21,9 @@ func NewServiceServer() *ServiceServer {
 	return &ServiceServer{}
 }
 
-type Base struct {
-	/* Empty for later extension and use */
-}
-
-type Bed struct {
-	Base
-	ID             uuid.UUID `gorm:"column:id"`
-	OrganizationID uuid.UUID `gorm:"column:organization_id"`
-	RoomID         uuid.UUID `gorm:"column:room_id"`
-}
-
 // GetBedsByRoomForOrganization
 // TODO: Move into repository
-func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]Bed, error) {
+func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]models.Bed, error) {
 	db := hwgorm.GetDB(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
@@ -42,7 +31,7 @@ func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]Bed,
 		return nil, err
 	}
 
-	var beds []Bed
+	var beds []models.Bed
 	if err := db.Where("organization_id = ? AND room_id = ?", organizationID.String(), roomID.String()).Find(&beds).Error; err != nil {
 		return nil, err
 	}
@@ -74,7 +63,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		}
 	}
 
-	bed := Bed{RoomID: roomID, OrganizationID: organizationID}
+	bed := models.Bed{RoomID: roomID, OrganizationID: organizationID}
 	if err := db.Create(&bed).Error; err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -102,7 +91,7 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed := Bed{ID: id}
+	bed := models.Bed{ID: id}
 	if err := db.Where("organization_id = ?", organizationID).First(&bed).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -125,7 +114,7 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 		return nil, err
 	}
 
-	var beds []Bed
+	var beds []models.Bed
 	if err := db.Where("organization_id = ?", organizationID.String()).Find(&beds).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -209,7 +198,7 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed := Bed{ID: bedID}
+	bed := models.Bed{ID: bedID}
 	if err := db.Where("organization_id = ?", organizationID).First(&bed).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
