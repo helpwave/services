@@ -2,7 +2,10 @@ module hwgorm
 
 go 1.19
 
-replace logging => ../logging
+replace (
+	logging => ../logging
+	hwutil => ../hwutil
+)
 
 require (
 	github.com/jackc/pgconn v1.13.0
@@ -11,6 +14,7 @@ require (
 	gorm.io/driver/postgres v1.4.5
 	gorm.io/gorm v1.24.2
 	logging v0.0.0-00010101000000-000000000000
+	hwutil v0.0.0
 )
 
 require (
