@@ -243,14 +243,22 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 	wardRepository := wardmodels.NewWardRepositoryWithDB(hwgorm.GetDB(ctx))
 	ward, err := wardRepository.GetWardById(wardID)
 	if err != nil {
-		return nil, err
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
 	}
 
 	roomRepository := roommodels.NewRoomRepositoryWithDB(hwgorm.GetDB(ctx))
 	rooms, err := roomRepository.GetRoomByWard(wardID)
 
 	if err != nil {
-		return nil, err
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
 	}
 
 	bedRepository := bedmodels.NewRoomRepositoryWithDB(hwgorm.GetDB(ctx))
@@ -273,11 +281,19 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 	taskTemplates, err := templateRepository.GetTemplateByWard(wardID)
 
 	if err != nil {
-		return nil, err
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
 	}
 
-	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate templatemodels.TaskTemplate) *pb.GetWardDetailsResponse_TaskTemplate {
-		taskTemplateSubtasks, _ := templateRepository.GetSubTasksByTemplate(taskTemplate.ID)
+	mappedTaskTemplates, err := hwutil.MapWithErr(taskTemplates, func(taskTemplate templatemodels.TaskTemplate) (*pb.GetWardDetailsResponse_TaskTemplate, error) {
+		taskTemplateSubtasks, err := templateRepository.GetSubTasksByTemplate(taskTemplate.ID)
+
+		if err != nil {
+			return nil, err
+		}
 
 		var mappedSubtasks = hwutil.Map(taskTemplateSubtasks, func(taskTemplateSubtask templatemodels.TaskTemplateSubtask) *pb.GetWardDetailsResponse_Subtask {
 			return &pb.GetWardDetailsResponse_Subtask{
@@ -290,8 +306,16 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 			Id:       taskTemplate.ID.String(),
 			Name:     taskTemplate.Name,
 			Subtasks: mappedSubtasks,
-		}
+		}, nil
 	})
+
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
+	}
 
 	return &pb.GetWardDetailsResponse{
 		Id:            ward.ID.String(),
