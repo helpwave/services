@@ -214,3 +214,76 @@ export namespace DeleteWardResponse {
   }
 }
 
+export class GetWardOverviewsRequest extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetWardOverviewsRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetWardOverviewsRequest): GetWardOverviewsRequest.AsObject;
+  static serializeBinaryToWriter(message: GetWardOverviewsRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetWardOverviewsRequest;
+  static deserializeBinaryFromReader(message: GetWardOverviewsRequest, reader: jspb.BinaryReader): GetWardOverviewsRequest;
+}
+
+export namespace GetWardOverviewsRequest {
+  export type AsObject = {
+  }
+}
+
+export class GetWardOverviewsResponse extends jspb.Message {
+  getWardsList(): Array<GetWardOverviewsResponse.Ward>;
+  setWardsList(value: Array<GetWardOverviewsResponse.Ward>): GetWardOverviewsResponse;
+  clearWardsList(): GetWardOverviewsResponse;
+  addWards(value?: GetWardOverviewsResponse.Ward, index?: number): GetWardOverviewsResponse.Ward;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetWardOverviewsResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetWardOverviewsResponse): GetWardOverviewsResponse.AsObject;
+  static serializeBinaryToWriter(message: GetWardOverviewsResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetWardOverviewsResponse;
+  static deserializeBinaryFromReader(message: GetWardOverviewsResponse, reader: jspb.BinaryReader): GetWardOverviewsResponse;
+}
+
+export namespace GetWardOverviewsResponse {
+  export type AsObject = {
+    wardsList: Array<GetWardOverviewsResponse.Ward.AsObject>,
+  }
+
+  export class Ward extends jspb.Message {
+    getId(): string;
+    setId(value: string): Ward;
+
+    getName(): string;
+    setName(value: string): Ward;
+
+    getBedCount(): number;
+    setBedCount(value: number): Ward;
+
+    getTasksTodo(): number;
+    setTasksTodo(value: number): Ward;
+
+    getTasksInProgress(): number;
+    setTasksInProgress(value: number): Ward;
+
+    getTasksDone(): number;
+    setTasksDone(value: number): Ward;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Ward.AsObject;
+    static toObject(includeInstance: boolean, msg: Ward): Ward.AsObject;
+    static serializeBinaryToWriter(message: Ward, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Ward;
+    static deserializeBinaryFromReader(message: Ward, reader: jspb.BinaryReader): Ward;
+  }
+
+  export namespace Ward {
+    export type AsObject = {
+      id: string,
+      name: string,
+      bedCount: number,
+      tasksTodo: number,
+      tasksInProgress: number,
+      tasksDone: number,
+    }
+  }
+
+}
+
