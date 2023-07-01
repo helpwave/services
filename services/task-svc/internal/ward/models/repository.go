@@ -16,7 +16,6 @@ func NewWardRepositoryWithDB(db *gorm.DB) *WardRepository {
 }
 
 func (r *WardRepository) GetWardById(id uuid.UUID) (*Ward, error) {
-
 	ward := Ward{ID: id}
 	if err := r.db.First(&ward).Error; err != nil {
 		return nil, err
