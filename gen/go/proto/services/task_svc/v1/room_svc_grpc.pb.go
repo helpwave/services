@@ -19,12 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	RoomService_CreateRoom_FullMethodName     = "/proto.services.task_svc.v1.RoomService/CreateRoom"
-	RoomService_GetRoom_FullMethodName        = "/proto.services.task_svc.v1.RoomService/GetRoom"
-	RoomService_GetRooms_FullMethodName       = "/proto.services.task_svc.v1.RoomService/GetRooms"
-	RoomService_GetRoomsByWard_FullMethodName = "/proto.services.task_svc.v1.RoomService/GetRoomsByWard"
-	RoomService_UpdateRoom_FullMethodName     = "/proto.services.task_svc.v1.RoomService/UpdateRoom"
-	RoomService_DeleteRoom_FullMethodName     = "/proto.services.task_svc.v1.RoomService/DeleteRoom"
+	RoomService_CreateRoom_FullMethodName             = "/proto.services.task_svc.v1.RoomService/CreateRoom"
+	RoomService_GetRoom_FullMethodName                = "/proto.services.task_svc.v1.RoomService/GetRoom"
+	RoomService_GetRooms_FullMethodName               = "/proto.services.task_svc.v1.RoomService/GetRooms"
+	RoomService_GetRoomsByWard_FullMethodName         = "/proto.services.task_svc.v1.RoomService/GetRoomsByWard"
+	RoomService_UpdateRoom_FullMethodName             = "/proto.services.task_svc.v1.RoomService/UpdateRoom"
+	RoomService_DeleteRoom_FullMethodName             = "/proto.services.task_svc.v1.RoomService/DeleteRoom"
+	RoomService_GetRoomOverviewsByWard_FullMethodName = "/proto.services.task_svc.v1.RoomService/GetRoomOverviewsByWard"
 )
 
 // RoomServiceClient is the client API for RoomService service.
@@ -37,6 +38,7 @@ type RoomServiceClient interface {
 	GetRoomsByWard(ctx context.Context, in *GetRoomsByWardRequest, opts ...grpc.CallOption) (*GetRoomsByWardResponse, error)
 	UpdateRoom(ctx context.Context, in *UpdateRoomRequest, opts ...grpc.CallOption) (*UpdateRoomResponse, error)
 	DeleteRoom(ctx context.Context, in *DeleteRoomRequest, opts ...grpc.CallOption) (*DeleteRoomResponse, error)
+	GetRoomOverviewsByWard(ctx context.Context, in *GetRoomOverviewsByWardRequest, opts ...grpc.CallOption) (*GetRoomOverviewsByWardResponse, error)
 }
 
 type roomServiceClient struct {
@@ -101,6 +103,15 @@ func (c *roomServiceClient) DeleteRoom(ctx context.Context, in *DeleteRoomReques
 	return out, nil
 }
 
+func (c *roomServiceClient) GetRoomOverviewsByWard(ctx context.Context, in *GetRoomOverviewsByWardRequest, opts ...grpc.CallOption) (*GetRoomOverviewsByWardResponse, error) {
+	out := new(GetRoomOverviewsByWardResponse)
+	err := c.cc.Invoke(ctx, RoomService_GetRoomOverviewsByWard_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RoomServiceServer is the server API for RoomService service.
 // All implementations must embed UnimplementedRoomServiceServer
 // for forward compatibility
@@ -111,6 +122,7 @@ type RoomServiceServer interface {
 	GetRoomsByWard(context.Context, *GetRoomsByWardRequest) (*GetRoomsByWardResponse, error)
 	UpdateRoom(context.Context, *UpdateRoomRequest) (*UpdateRoomResponse, error)
 	DeleteRoom(context.Context, *DeleteRoomRequest) (*DeleteRoomResponse, error)
+	GetRoomOverviewsByWard(context.Context, *GetRoomOverviewsByWardRequest) (*GetRoomOverviewsByWardResponse, error)
 	mustEmbedUnimplementedRoomServiceServer()
 }
 
@@ -135,6 +147,9 @@ func (UnimplementedRoomServiceServer) UpdateRoom(context.Context, *UpdateRoomReq
 }
 func (UnimplementedRoomServiceServer) DeleteRoom(context.Context, *DeleteRoomRequest) (*DeleteRoomResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteRoom not implemented")
+}
+func (UnimplementedRoomServiceServer) GetRoomOverviewsByWard(context.Context, *GetRoomOverviewsByWardRequest) (*GetRoomOverviewsByWardResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRoomOverviewsByWard not implemented")
 }
 func (UnimplementedRoomServiceServer) mustEmbedUnimplementedRoomServiceServer() {}
 
@@ -257,6 +272,24 @@ func _RoomService_DeleteRoom_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RoomService_GetRoomOverviewsByWard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRoomOverviewsByWardRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoomServiceServer).GetRoomOverviewsByWard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RoomService_GetRoomOverviewsByWard_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoomServiceServer).GetRoomOverviewsByWard(ctx, req.(*GetRoomOverviewsByWardRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // RoomService_ServiceDesc is the grpc.ServiceDesc for RoomService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -287,6 +320,10 @@ var RoomService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteRoom",
 			Handler:    _RoomService_DeleteRoom_Handler,
+		},
+		{
+			MethodName: "GetRoomOverviewsByWard",
+			Handler:    _RoomService_GetRoomOverviewsByWard_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -14,6 +14,7 @@ import (
 	patientModels "task-svc/internal/patient/models"
 	roomModels "task-svc/internal/room/models"
 	intTask "task-svc/internal/task"
+	taskModels "task-svc/internal/task/models"
 )
 
 // GetPatientsByWardForOrganization
@@ -319,8 +320,8 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		return nil, err
 	}
 
-	var mappedTasks = hwutil.Map(tasks, func(task intTask.Task) *pb.GetPatientDetailsResponse_Task {
-		var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask intTask.Subtask) *pb.GetPatientDetailsResponse_Task_SubTask {
+	var mappedTasks = hwutil.Map(tasks, func(task taskModels.Task) *pb.GetPatientDetailsResponse_Task {
+		var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask taskModels.Subtask) *pb.GetPatientDetailsResponse_Task_SubTask {
 			return &pb.GetPatientDetailsResponse_Task_SubTask{
 				Id:   subtask.ID.String(),
 				Done: subtask.Done,

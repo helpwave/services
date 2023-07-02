@@ -443,5 +443,66 @@ proto.proto.services.task_svc.v1.RoomServicePromiseClient.prototype.deleteRoom =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetRoomOverviewsByWardRequest,
+ *   !proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse>}
+ */
+const methodDescriptor_RoomService_GetRoomOverviewsByWard = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.RoomService/GetRoomOverviewsByWard',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetRoomOverviewsByWardRequest,
+  proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetRoomOverviewsByWardRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetRoomOverviewsByWardRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.RoomServiceClient.prototype.getRoomOverviewsByWard =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.RoomService/GetRoomOverviewsByWard',
+      request,
+      metadata || {},
+      methodDescriptor_RoomService_GetRoomOverviewsByWard,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetRoomOverviewsByWardRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.RoomServicePromiseClient.prototype.getRoomOverviewsByWard =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.RoomService/GetRoomOverviewsByWard',
+      request,
+      metadata || {},
+      methodDescriptor_RoomService_GetRoomOverviewsByWard);
+};
+
+
 module.exports = proto.proto.services.task_svc.v1;
 

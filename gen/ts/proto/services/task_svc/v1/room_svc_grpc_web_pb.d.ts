@@ -50,6 +50,13 @@ export class RoomServiceClient {
                response: proto_services_task_svc_v1_room_svc_pb.DeleteRoomResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_room_svc_pb.DeleteRoomResponse>;
 
+  getRoomOverviewsByWard(
+    request: proto_services_task_svc_v1_room_svc_pb.GetRoomOverviewsByWardRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_room_svc_pb.GetRoomOverviewsByWardResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_room_svc_pb.GetRoomOverviewsByWardResponse>;
+
 }
 
 export class RoomServicePromiseClient {
@@ -86,6 +93,11 @@ export class RoomServicePromiseClient {
     request: proto_services_task_svc_v1_room_svc_pb.DeleteRoomRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_room_svc_pb.DeleteRoomResponse>;
+
+  getRoomOverviewsByWard(
+    request: proto_services_task_svc_v1_room_svc_pb.GetRoomOverviewsByWardRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_room_svc_pb.GetRoomOverviewsByWardResponse>;
 
 }
 

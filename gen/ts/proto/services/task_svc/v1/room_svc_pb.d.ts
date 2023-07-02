@@ -374,3 +374,131 @@ export namespace DeleteRoomResponse {
   }
 }
 
+export class GetRoomOverviewsByWardRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): GetRoomOverviewsByWardRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetRoomOverviewsByWardRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetRoomOverviewsByWardRequest): GetRoomOverviewsByWardRequest.AsObject;
+  static serializeBinaryToWriter(message: GetRoomOverviewsByWardRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetRoomOverviewsByWardRequest;
+  static deserializeBinaryFromReader(message: GetRoomOverviewsByWardRequest, reader: jspb.BinaryReader): GetRoomOverviewsByWardRequest;
+}
+
+export namespace GetRoomOverviewsByWardRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class GetRoomOverviewsByWardResponse extends jspb.Message {
+  getRoomsList(): Array<GetRoomOverviewsByWardResponse.Room>;
+  setRoomsList(value: Array<GetRoomOverviewsByWardResponse.Room>): GetRoomOverviewsByWardResponse;
+  clearRoomsList(): GetRoomOverviewsByWardResponse;
+  addRooms(value?: GetRoomOverviewsByWardResponse.Room, index?: number): GetRoomOverviewsByWardResponse.Room;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetRoomOverviewsByWardResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetRoomOverviewsByWardResponse): GetRoomOverviewsByWardResponse.AsObject;
+  static serializeBinaryToWriter(message: GetRoomOverviewsByWardResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetRoomOverviewsByWardResponse;
+  static deserializeBinaryFromReader(message: GetRoomOverviewsByWardResponse, reader: jspb.BinaryReader): GetRoomOverviewsByWardResponse;
+}
+
+export namespace GetRoomOverviewsByWardResponse {
+  export type AsObject = {
+    roomsList: Array<GetRoomOverviewsByWardResponse.Room.AsObject>,
+  }
+
+  export class Room extends jspb.Message {
+    getId(): string;
+    setId(value: string): Room;
+
+    getName(): string;
+    setName(value: string): Room;
+
+    getBedsList(): Array<GetRoomOverviewsByWardResponse.Room.Bed>;
+    setBedsList(value: Array<GetRoomOverviewsByWardResponse.Room.Bed>): Room;
+    clearBedsList(): Room;
+    addBeds(value?: GetRoomOverviewsByWardResponse.Room.Bed, index?: number): GetRoomOverviewsByWardResponse.Room.Bed;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Room.AsObject;
+    static toObject(includeInstance: boolean, msg: Room): Room.AsObject;
+    static serializeBinaryToWriter(message: Room, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Room;
+    static deserializeBinaryFromReader(message: Room, reader: jspb.BinaryReader): Room;
+  }
+
+  export namespace Room {
+    export type AsObject = {
+      id: string,
+      name: string,
+      bedsList: Array<GetRoomOverviewsByWardResponse.Room.Bed.AsObject>,
+    }
+
+    export class Bed extends jspb.Message {
+      getId(): string;
+      setId(value: string): Bed;
+
+      getPatient(): GetRoomOverviewsByWardResponse.Room.Bed.Patient | undefined;
+      setPatient(value?: GetRoomOverviewsByWardResponse.Room.Bed.Patient): Bed;
+      hasPatient(): boolean;
+      clearPatient(): Bed;
+
+      serializeBinary(): Uint8Array;
+      toObject(includeInstance?: boolean): Bed.AsObject;
+      static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
+      static serializeBinaryToWriter(message: Bed, writer: jspb.BinaryWriter): void;
+      static deserializeBinary(bytes: Uint8Array): Bed;
+      static deserializeBinaryFromReader(message: Bed, reader: jspb.BinaryReader): Bed;
+    }
+
+    export namespace Bed {
+      export type AsObject = {
+        id: string,
+        patient?: GetRoomOverviewsByWardResponse.Room.Bed.Patient.AsObject,
+      }
+
+      export class Patient extends jspb.Message {
+        getId(): string;
+        setId(value: string): Patient;
+
+        getTasksUnscheduled(): number;
+        setTasksUnscheduled(value: number): Patient;
+
+        getTasksInProgress(): number;
+        setTasksInProgress(value: number): Patient;
+
+        getTasksDone(): number;
+        setTasksDone(value: number): Patient;
+
+        serializeBinary(): Uint8Array;
+        toObject(includeInstance?: boolean): Patient.AsObject;
+        static toObject(includeInstance: boolean, msg: Patient): Patient.AsObject;
+        static serializeBinaryToWriter(message: Patient, writer: jspb.BinaryWriter): void;
+        static deserializeBinary(bytes: Uint8Array): Patient;
+        static deserializeBinaryFromReader(message: Patient, reader: jspb.BinaryReader): Patient;
+      }
+
+      export namespace Patient {
+        export type AsObject = {
+          id: string,
+          tasksUnscheduled: number,
+          tasksInProgress: number,
+          tasksDone: number,
+        }
+      }
+
+
+      export enum PatientCase { 
+        _PATIENT_NOT_SET = 0,
+        PATIENT = 2,
+      }
+    }
+
+  }
+
+}
+
