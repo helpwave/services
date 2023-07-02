@@ -9,42 +9,73 @@ import (
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"logging"
+	"hwutil"
 )
 
 var database *gorm.DB = nil
 
-// SetupDatabase tries to connect to the database and sets DB, else it exits the process
-// you can access the database instance using GetDB
-func SetupDatabase(host, user, password, databaseName, port string) {
-	log.Info().
-		Str("host", host).
-		Str("user", user).
-		Str("password", "<omitted>").
-		Str("database", databaseName).
-		Str("port", port).
-		Msg("connecting to postgres...")
+// SetupDatabaseByEnvs prefers the env POSTGRES_DSN and will be configured the database connection accordingly.
+// When this env does not exist, a fallback to the following envs with proper default values will take place.
+// [NAME_OF_THE_ENV] (DEFAULT)
+// POSTGRES_HOST (localhost)
+// POSTGRES_USER (postgres)
+// POSTGRES_PASSWORD (postgres)
+// POSTGRES_DB (postgres)
+// POSTGRES_PORT (5432)
+func SetupDatabaseByEnvs() {
+	log.Info().Msg("connecting to postgres ...")
 
-	postgresDSN := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s",
-		host, user, password, databaseName, port,
-	)
+	dsn := hwutil.GetEnvOr("POSTGRES_DSN", "")
+	if dsn == "" {
+		dsn = buildDsnFromEnvs()
+		log.Debug().Msg("POSTGRES_DSN env not found, build dsn from POSTGRES_HOST, ... envs")
+	}
 
-	log.Debug().
-		Str("dsn", logging.Omit(postgresDSN, password)).
-		Msg("dsn generated")
+	db, err := OpenDatabaseByDSN(dsn)
+	if err != nil {
+		log.Fatal().Err(err).Msg("could not connect to postgres")
+	}
 
+	database = db
+
+	log.Info().Msg("connected to postgres")
+}
+
+// OpenDatabaseByDSN finally tries to connect to the database using the passed DSN
+func OpenDatabaseByDSN(dsn string) (*gorm.DB, error) {
 	config := gorm.Config{
 		Logger: GormLogger{},
 	}
-
-	db, dbErr := gorm.Open(postgres.Open(postgresDSN), &config)
-	if dbErr != nil {
-		log.Fatal().Err(dbErr).Msg("Could not connect to database: ")
+	db, err := gorm.Open(postgres.Open(dsn), &config)
+	if err != nil {
+		return nil, err
 	}
-	log.Info().Msg("connected to db")
+	return db, nil
+}
 
-	database = db
+// buildDsnFromEnvs resolves the DSN by the following envs with proper default values
+// [NAME_OF_THE_ENV] (DEFAULT)
+// POSTGRES_HOST (localhost)
+// POSTGRES_USER (postgres)
+// POSTGRES_PASSWORD (postgres)
+// POSTGRES_DB (postgres)
+// POSTGRES_PORT (5432)
+func buildDsnFromEnvs() string {
+	host,
+		user,
+		password,
+		databaseName,
+		port :=
+		hwutil.GetEnvOr("POSTGRES_HOST", "localhost"),
+		hwutil.GetEnvOr("POSTGRES_USER", "postgres"),
+		hwutil.GetEnvOr("POSTGRES_PASSWORD", "postgres"),
+		hwutil.GetEnvOr("POSTGRES_DB", "postgres"),
+		hwutil.GetEnvOr("POSTGRES_PORT", "5432")
+
+	return fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s",
+		host, user, password, databaseName, port,
+	)
 }
 
 func GetDB(logCtx context.Context) *gorm.DB {
