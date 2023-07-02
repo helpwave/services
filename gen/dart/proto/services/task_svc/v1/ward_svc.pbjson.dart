@@ -144,6 +144,46 @@ const DeleteWardResponse$json = {
 final $typed_data.Uint8List deleteWardResponseDescriptor = $convert.base64Decode(
     'ChJEZWxldGVXYXJkUmVzcG9uc2U=');
 
+@$core.Deprecated('Use getWardOverviewsRequestDescriptor instead')
+const GetWardOverviewsRequest$json = {
+  '1': 'GetWardOverviewsRequest',
+};
+
+/// Descriptor for `GetWardOverviewsRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getWardOverviewsRequestDescriptor = $convert.base64Decode(
+    'ChdHZXRXYXJkT3ZlcnZpZXdzUmVxdWVzdA==');
+
+@$core.Deprecated('Use getWardOverviewsResponseDescriptor instead')
+const GetWardOverviewsResponse$json = {
+  '1': 'GetWardOverviewsResponse',
+  '2': [
+    {'1': 'wards', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetWardOverviewsResponse.Ward', '10': 'wards'},
+  ],
+  '3': [GetWardOverviewsResponse_Ward$json],
+};
+
+@$core.Deprecated('Use getWardOverviewsResponseDescriptor instead')
+const GetWardOverviewsResponse_Ward$json = {
+  '1': 'Ward',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'bed_count', '3': 3, '4': 1, '5': 13, '10': 'bedCount'},
+    {'1': 'tasks_todo', '3': 4, '4': 1, '5': 13, '10': 'tasksTodo'},
+    {'1': 'tasks_in_progress', '3': 5, '4': 1, '5': 13, '10': 'tasksInProgress'},
+    {'1': 'tasks_done', '3': 6, '4': 1, '5': 13, '10': 'tasksDone'},
+  ],
+};
+
+/// Descriptor for `GetWardOverviewsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getWardOverviewsResponseDescriptor = $convert.base64Decode(
+    'ChhHZXRXYXJkT3ZlcnZpZXdzUmVzcG9uc2USTwoFd2FyZHMYASADKAsyOS5wcm90by5zZXJ2aW'
+    'Nlcy50YXNrX3N2Yy52MS5HZXRXYXJkT3ZlcnZpZXdzUmVzcG9uc2UuV2FyZFIFd2FyZHMasQEK'
+    'BFdhcmQSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSGwoJYmVkX2NvdW50GA'
+    'MgASgNUghiZWRDb3VudBIdCgp0YXNrc190b2RvGAQgASgNUgl0YXNrc1RvZG8SKgoRdGFza3Nf'
+    'aW5fcHJvZ3Jlc3MYBSABKA1SD3Rhc2tzSW5Qcm9ncmVzcxIdCgp0YXNrc19kb25lGAYgASgNUg'
+    'l0YXNrc0RvbmU=');
+
 const $core.Map<$core.String, $core.dynamic> WardServiceBase$json = {
   '1': 'WardService',
   '2': [
@@ -152,6 +192,7 @@ const $core.Map<$core.String, $core.dynamic> WardServiceBase$json = {
     {'1': 'GetWards', '2': '.proto.services.task_svc.v1.GetWardsRequest', '3': '.proto.services.task_svc.v1.GetWardsResponse', '4': {}},
     {'1': 'UpdateWard', '2': '.proto.services.task_svc.v1.UpdateWardRequest', '3': '.proto.services.task_svc.v1.UpdateWardResponse', '4': {}},
     {'1': 'DeleteWard', '2': '.proto.services.task_svc.v1.DeleteWardRequest', '3': '.proto.services.task_svc.v1.DeleteWardResponse', '4': {}},
+    {'1': 'GetWardOverviews', '2': '.proto.services.task_svc.v1.GetWardOverviewsRequest', '3': '.proto.services.task_svc.v1.GetWardOverviewsResponse', '4': {}},
   ],
 };
 
@@ -168,6 +209,9 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> WardServic
   '.proto.services.task_svc.v1.UpdateWardResponse': UpdateWardResponse$json,
   '.proto.services.task_svc.v1.DeleteWardRequest': DeleteWardRequest$json,
   '.proto.services.task_svc.v1.DeleteWardResponse': DeleteWardResponse$json,
+  '.proto.services.task_svc.v1.GetWardOverviewsRequest': GetWardOverviewsRequest$json,
+  '.proto.services.task_svc.v1.GetWardOverviewsResponse': GetWardOverviewsResponse$json,
+  '.proto.services.task_svc.v1.GetWardOverviewsResponse.Ward': GetWardOverviewsResponse_Ward$json,
 };
 
 /// Descriptor for `WardService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
@@ -181,5 +225,8 @@ final $typed_data.Uint8List wardServiceDescriptor = $convert.base64Decode(
     'CgpVcGRhdGVXYXJkEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVXBkYXRlV2FyZFJlcX'
     'Vlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5VcGRhdGVXYXJkUmVzcG9uc2UiABJt'
     'CgpEZWxldGVXYXJkEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuRGVsZXRlV2FyZFJlcX'
-    'Vlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVXYXJkUmVzcG9uc2UiAA==');
+    'Vlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVXYXJkUmVzcG9uc2UiABJ/'
+    'ChBHZXRXYXJkT3ZlcnZpZXdzEjMucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0V2FyZE'
+    '92ZXJ2aWV3c1JlcXVlc3QaNC5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRXYXJkT3Zl'
+    'cnZpZXdzUmVzcG9uc2UiAA==');
 

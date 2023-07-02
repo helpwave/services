@@ -43,6 +43,13 @@ export class WardServiceClient {
                response: proto_services_task_svc_v1_ward_svc_pb.DeleteWardResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_ward_svc_pb.DeleteWardResponse>;
 
+  getWardOverviews(
+    request: proto_services_task_svc_v1_ward_svc_pb.GetWardOverviewsRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_ward_svc_pb.GetWardOverviewsResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_ward_svc_pb.GetWardOverviewsResponse>;
+
 }
 
 export class WardServicePromiseClient {
@@ -74,6 +81,11 @@ export class WardServicePromiseClient {
     request: proto_services_task_svc_v1_ward_svc_pb.DeleteWardRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_ward_svc_pb.DeleteWardResponse>;
+
+  getWardOverviews(
+    request: proto_services_task_svc_v1_ward_svc_pb.GetWardOverviewsRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_ward_svc_pb.GetWardOverviewsResponse>;
 
 }
 
