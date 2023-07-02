@@ -565,5 +565,66 @@ proto.proto.services.task_svc.v1.PatientServicePromiseClient.prototype.discharge
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetPatientDetailsRequest,
+ *   !proto.proto.services.task_svc.v1.GetPatientDetailsResponse>}
+ */
+const methodDescriptor_PatientService_GetPatientDetails = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.PatientService/GetPatientDetails',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetPatientDetailsRequest,
+  proto.proto.services.task_svc.v1.GetPatientDetailsResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetPatientDetailsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetPatientDetailsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetPatientDetailsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetPatientDetailsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetPatientDetailsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.PatientServiceClient.prototype.getPatientDetails =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.PatientService/GetPatientDetails',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientDetails,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetPatientDetailsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetPatientDetailsResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.PatientServicePromiseClient.prototype.getPatientDetails =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.PatientService/GetPatientDetails',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientDetails);
+};
+
+
 module.exports = proto.proto.services.task_svc.v1;
 
