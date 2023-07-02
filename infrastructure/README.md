@@ -64,7 +64,7 @@ fly postgres attach --app <APP_NAME> --variable-name POSTGRES_DSN <POSTGRES_APP_
 __4. Deploy service__
 
 ```shell
-fly deploy
+flyctl deploy
 	--config services/user-svc/fly.toml
 	--app helpwave-staging-user-svc
 	# --local-only # Optional. When omitted, the image will be build directly on Fly

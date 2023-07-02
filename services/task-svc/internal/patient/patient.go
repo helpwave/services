@@ -40,6 +40,30 @@ func GetPatientsByWardForOrganization(ctx context.Context, wardID uuid.UUID) ([]
 	return patients, nil
 }
 
+// GetPatientsByWardForOrganization
+// TODO: Move into repository
+func GetPatientsByWardForOrganization(ctx context.Context, wardID uuid.UUID) ([]Patient, error) {
+	db := hwgorm.GetDB(ctx)
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var patients []Patient
+	if err := db.
+		Table("patients").
+		Joins("JOIN beds ON beds.id = patients.bed_id").
+		Joins("JOIN rooms ON rooms.id = beds.room_id").
+		Where("rooms.ward_id = ? AND rooms.organization_id = ?", wardID, organizationID).
+		Find(&patients).
+		Error; err != nil {
+		return nil, err
+	}
+
+	return patients, nil
+}
+
 type ServiceServer struct {
 	pb.UnimplementedPatientServiceServer
 }
