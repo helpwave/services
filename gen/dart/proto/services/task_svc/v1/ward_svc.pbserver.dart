@@ -27,6 +27,7 @@ abstract class WardServiceBase extends $pb.GeneratedService {
   $async.Future<$7.UpdateWardResponse> updateWard($pb.ServerContext ctx, $7.UpdateWardRequest request);
   $async.Future<$7.DeleteWardResponse> deleteWard($pb.ServerContext ctx, $7.DeleteWardRequest request);
   $async.Future<$7.GetWardOverviewsResponse> getWardOverviews($pb.ServerContext ctx, $7.GetWardOverviewsRequest request);
+  $async.Future<$7.GetWardDetailsResponse> getWardDetails($pb.ServerContext ctx, $7.GetWardDetailsRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
@@ -36,6 +37,7 @@ abstract class WardServiceBase extends $pb.GeneratedService {
       case 'UpdateWard': return $7.UpdateWardRequest();
       case 'DeleteWard': return $7.DeleteWardRequest();
       case 'GetWardOverviews': return $7.GetWardOverviewsRequest();
+      case 'GetWardDetails': return $7.GetWardDetailsRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
@@ -48,6 +50,7 @@ abstract class WardServiceBase extends $pb.GeneratedService {
       case 'UpdateWard': return this.updateWard(ctx, request as $7.UpdateWardRequest);
       case 'DeleteWard': return this.deleteWard(ctx, request as $7.DeleteWardRequest);
       case 'GetWardOverviews': return this.getWardOverviews(ctx, request as $7.GetWardOverviewsRequest);
+      case 'GetWardDetails': return this.getWardDetails(ctx, request as $7.GetWardDetailsRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
