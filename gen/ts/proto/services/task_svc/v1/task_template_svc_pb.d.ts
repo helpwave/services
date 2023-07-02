@@ -9,9 +9,6 @@ export class CreateTaskTemplateRequest extends jspb.Message {
   getDescription(): string;
   setDescription(value: string): CreateTaskTemplateRequest;
 
-  getPublic(): boolean;
-  setPublic(value: boolean): CreateTaskTemplateRequest;
-
   getWardId(): string;
   setWardId(value: string): CreateTaskTemplateRequest;
   hasWardId(): boolean;
@@ -34,7 +31,6 @@ export namespace CreateTaskTemplateRequest {
   export type AsObject = {
     name: string,
     description: string,
-    pb_public: boolean,
     wardId?: string,
     subtasksList: Array<CreateTaskTemplateRequest.SubTask.AsObject>,
   }
@@ -128,10 +124,10 @@ export namespace GetAllTaskTemplatesResponse {
     getIsPublic(): boolean;
     setIsPublic(value: boolean): TaskTemplate;
 
-    getUserId(): string;
-    setUserId(value: string): TaskTemplate;
-    hasUserId(): boolean;
-    clearUserId(): TaskTemplate;
+    getCreatedBy(): string;
+    setCreatedBy(value: string): TaskTemplate;
+    hasCreatedBy(): boolean;
+    clearCreatedBy(): TaskTemplate;
 
     getSubtasksList(): Array<GetAllTaskTemplatesResponse.TaskTemplate.SubTask>;
     setSubtasksList(value: Array<GetAllTaskTemplatesResponse.TaskTemplate.SubTask>): TaskTemplate;
@@ -152,7 +148,7 @@ export namespace GetAllTaskTemplatesResponse {
       name: string,
       description: string,
       isPublic: boolean,
-      userId?: string,
+      createdBy?: string,
       subtasksList: Array<GetAllTaskTemplatesResponse.TaskTemplate.SubTask.AsObject>,
     }
 
@@ -183,9 +179,9 @@ export namespace GetAllTaskTemplatesResponse {
     }
 
 
-    export enum UserIdCase { 
-      _USER_ID_NOT_SET = 0,
-      USER_ID = 6,
+    export enum CreatedByCase { 
+      _CREATED_BY_NOT_SET = 0,
+      CREATED_BY = 6,
     }
   }
 
@@ -392,41 +388,41 @@ export namespace CreateTaskTemplateSubTaskResponse {
   }
 }
 
-export class GetAllTaskTemplatesByUserRequest extends jspb.Message {
-  getUserId(): string;
-  setUserId(value: string): GetAllTaskTemplatesByUserRequest;
+export class GetAllTaskTemplatesByCreatorRequest extends jspb.Message {
+  getCreatedBy(): string;
+  setCreatedBy(value: string): GetAllTaskTemplatesByCreatorRequest;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetAllTaskTemplatesByUserRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesByUserRequest): GetAllTaskTemplatesByUserRequest.AsObject;
-  static serializeBinaryToWriter(message: GetAllTaskTemplatesByUserRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetAllTaskTemplatesByUserRequest;
-  static deserializeBinaryFromReader(message: GetAllTaskTemplatesByUserRequest, reader: jspb.BinaryReader): GetAllTaskTemplatesByUserRequest;
+  toObject(includeInstance?: boolean): GetAllTaskTemplatesByCreatorRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesByCreatorRequest): GetAllTaskTemplatesByCreatorRequest.AsObject;
+  static serializeBinaryToWriter(message: GetAllTaskTemplatesByCreatorRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetAllTaskTemplatesByCreatorRequest;
+  static deserializeBinaryFromReader(message: GetAllTaskTemplatesByCreatorRequest, reader: jspb.BinaryReader): GetAllTaskTemplatesByCreatorRequest;
 }
 
-export namespace GetAllTaskTemplatesByUserRequest {
+export namespace GetAllTaskTemplatesByCreatorRequest {
   export type AsObject = {
-    userId: string,
+    createdBy: string,
   }
 }
 
-export class GetAllTaskTemplatesByUserResponse extends jspb.Message {
-  getTemplatesList(): Array<GetAllTaskTemplatesByUserResponse.TaskTemplate>;
-  setTemplatesList(value: Array<GetAllTaskTemplatesByUserResponse.TaskTemplate>): GetAllTaskTemplatesByUserResponse;
-  clearTemplatesList(): GetAllTaskTemplatesByUserResponse;
-  addTemplates(value?: GetAllTaskTemplatesByUserResponse.TaskTemplate, index?: number): GetAllTaskTemplatesByUserResponse.TaskTemplate;
+export class GetAllTaskTemplatesByCreatorResponse extends jspb.Message {
+  getTemplatesList(): Array<GetAllTaskTemplatesByCreatorResponse.TaskTemplate>;
+  setTemplatesList(value: Array<GetAllTaskTemplatesByCreatorResponse.TaskTemplate>): GetAllTaskTemplatesByCreatorResponse;
+  clearTemplatesList(): GetAllTaskTemplatesByCreatorResponse;
+  addTemplates(value?: GetAllTaskTemplatesByCreatorResponse.TaskTemplate, index?: number): GetAllTaskTemplatesByCreatorResponse.TaskTemplate;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetAllTaskTemplatesByUserResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesByUserResponse): GetAllTaskTemplatesByUserResponse.AsObject;
-  static serializeBinaryToWriter(message: GetAllTaskTemplatesByUserResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetAllTaskTemplatesByUserResponse;
-  static deserializeBinaryFromReader(message: GetAllTaskTemplatesByUserResponse, reader: jspb.BinaryReader): GetAllTaskTemplatesByUserResponse;
+  toObject(includeInstance?: boolean): GetAllTaskTemplatesByCreatorResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesByCreatorResponse): GetAllTaskTemplatesByCreatorResponse.AsObject;
+  static serializeBinaryToWriter(message: GetAllTaskTemplatesByCreatorResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetAllTaskTemplatesByCreatorResponse;
+  static deserializeBinaryFromReader(message: GetAllTaskTemplatesByCreatorResponse, reader: jspb.BinaryReader): GetAllTaskTemplatesByCreatorResponse;
 }
 
-export namespace GetAllTaskTemplatesByUserResponse {
+export namespace GetAllTaskTemplatesByCreatorResponse {
   export type AsObject = {
-    templatesList: Array<GetAllTaskTemplatesByUserResponse.TaskTemplate.AsObject>,
+    templatesList: Array<GetAllTaskTemplatesByCreatorResponse.TaskTemplate.AsObject>,
   }
 
   export class TaskTemplate extends jspb.Message {
@@ -442,10 +438,10 @@ export namespace GetAllTaskTemplatesByUserResponse {
     getIsPublic(): boolean;
     setIsPublic(value: boolean): TaskTemplate;
 
-    getSubtasksList(): Array<GetAllTaskTemplatesByUserResponse.TaskTemplate.SubTask>;
-    setSubtasksList(value: Array<GetAllTaskTemplatesByUserResponse.TaskTemplate.SubTask>): TaskTemplate;
+    getSubtasksList(): Array<GetAllTaskTemplatesByCreatorResponse.TaskTemplate.SubTask>;
+    setSubtasksList(value: Array<GetAllTaskTemplatesByCreatorResponse.TaskTemplate.SubTask>): TaskTemplate;
     clearSubtasksList(): TaskTemplate;
-    addSubtasks(value?: GetAllTaskTemplatesByUserResponse.TaskTemplate.SubTask, index?: number): GetAllTaskTemplatesByUserResponse.TaskTemplate.SubTask;
+    addSubtasks(value?: GetAllTaskTemplatesByCreatorResponse.TaskTemplate.SubTask, index?: number): GetAllTaskTemplatesByCreatorResponse.TaskTemplate.SubTask;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): TaskTemplate.AsObject;
@@ -461,7 +457,7 @@ export namespace GetAllTaskTemplatesByUserResponse {
       name: string,
       description: string,
       isPublic: boolean,
-      subtasksList: Array<GetAllTaskTemplatesByUserResponse.TaskTemplate.SubTask.AsObject>,
+      subtasksList: Array<GetAllTaskTemplatesByCreatorResponse.TaskTemplate.SubTask.AsObject>,
     }
 
     export class SubTask extends jspb.Message {
@@ -544,10 +540,10 @@ export namespace GetAllTaskTemplatesByWardResponse {
     getIsPublic(): boolean;
     setIsPublic(value: boolean): TaskTemplate;
 
-    getUserId(): string;
-    setUserId(value: string): TaskTemplate;
-    hasUserId(): boolean;
-    clearUserId(): TaskTemplate;
+    getCreatedBy(): string;
+    setCreatedBy(value: string): TaskTemplate;
+    hasCreatedBy(): boolean;
+    clearCreatedBy(): TaskTemplate;
 
     getSubtasksList(): Array<GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask>;
     setSubtasksList(value: Array<GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask>): TaskTemplate;
@@ -568,7 +564,7 @@ export namespace GetAllTaskTemplatesByWardResponse {
       name: string,
       description: string,
       isPublic: boolean,
-      userId?: string,
+      createdBy?: string,
       subtasksList: Array<GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask.AsObject>,
     }
 
@@ -599,9 +595,9 @@ export namespace GetAllTaskTemplatesByWardResponse {
     }
 
 
-    export enum UserIdCase { 
-      _USER_ID_NOT_SET = 0,
-      USER_ID = 6,
+    export enum CreatedByCase { 
+      _CREATED_BY_NOT_SET = 0,
+      CREATED_BY = 6,
     }
   }
 

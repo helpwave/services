@@ -28,7 +28,7 @@ abstract class TaskTemplateServiceBase extends $pb.GeneratedService {
   $async.Future<$6.UpdateTaskTemplateResponse> updateTaskTemplate($pb.ServerContext ctx, $6.UpdateTaskTemplateRequest request);
   $async.Future<$6.UpdateTaskTemplateSubTaskResponse> updateTaskTemplateSubTask($pb.ServerContext ctx, $6.UpdateTaskTemplateSubTaskRequest request);
   $async.Future<$6.CreateTaskTemplateSubTaskResponse> createTaskTemplateSubTask($pb.ServerContext ctx, $6.CreateTaskTemplateSubTaskRequest request);
-  $async.Future<$6.GetAllTaskTemplatesByUserResponse> getAllTaskTemplatesByUser($pb.ServerContext ctx, $6.GetAllTaskTemplatesByUserRequest request);
+  $async.Future<$6.GetAllTaskTemplatesByCreatorResponse> getAllTaskTemplatesByCreator($pb.ServerContext ctx, $6.GetAllTaskTemplatesByCreatorRequest request);
   $async.Future<$6.GetAllTaskTemplatesByWardResponse> getAllTaskTemplatesByWard($pb.ServerContext ctx, $6.GetAllTaskTemplatesByWardRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
@@ -40,7 +40,7 @@ abstract class TaskTemplateServiceBase extends $pb.GeneratedService {
       case 'UpdateTaskTemplate': return $6.UpdateTaskTemplateRequest();
       case 'UpdateTaskTemplateSubTask': return $6.UpdateTaskTemplateSubTaskRequest();
       case 'CreateTaskTemplateSubTask': return $6.CreateTaskTemplateSubTaskRequest();
-      case 'GetAllTaskTemplatesByUser': return $6.GetAllTaskTemplatesByUserRequest();
+      case 'GetAllTaskTemplatesByCreator': return $6.GetAllTaskTemplatesByCreatorRequest();
       case 'GetAllTaskTemplatesByWard': return $6.GetAllTaskTemplatesByWardRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
@@ -55,7 +55,7 @@ abstract class TaskTemplateServiceBase extends $pb.GeneratedService {
       case 'UpdateTaskTemplate': return this.updateTaskTemplate(ctx, request as $6.UpdateTaskTemplateRequest);
       case 'UpdateTaskTemplateSubTask': return this.updateTaskTemplateSubTask(ctx, request as $6.UpdateTaskTemplateSubTaskRequest);
       case 'CreateTaskTemplateSubTask': return this.createTaskTemplateSubTask(ctx, request as $6.CreateTaskTemplateSubTaskRequest);
-      case 'GetAllTaskTemplatesByUser': return this.getAllTaskTemplatesByUser(ctx, request as $6.GetAllTaskTemplatesByUserRequest);
+      case 'GetAllTaskTemplatesByCreator': return this.getAllTaskTemplatesByCreator(ctx, request as $6.GetAllTaskTemplatesByCreatorRequest);
       case 'GetAllTaskTemplatesByWard': return this.getAllTaskTemplatesByWard(ctx, request as $6.GetAllTaskTemplatesByWardRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
