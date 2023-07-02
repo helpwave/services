@@ -507,61 +507,61 @@ proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.crea
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserRequest,
- *   !proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse>}
+ *   !proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest,
+ *   !proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorResponse>}
  */
-const methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByUser = new grpc.web.MethodDescriptor(
-  '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByUser',
+const methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByCreator = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserRequest,
-  proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse,
+  proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest,
+  proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorResponse,
   /**
-   * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserRequest} request
+   * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse.deserializeBinary
+  proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserRequest} request The
+ * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.task_svc.v1.TaskTemplateServiceClient.prototype.getAllTaskTemplatesByUser =
+proto.proto.services.task_svc.v1.TaskTemplateServiceClient.prototype.getAllTaskTemplatesByCreator =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByUser',
+      '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator',
       request,
       metadata || {},
-      methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByUser,
+      methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByCreator,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserRequest} request The
+ * @param {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByUserResponse>}
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.getAllTaskTemplatesByUser =
+proto.proto.services.task_svc.v1.TaskTemplateServicePromiseClient.prototype.getAllTaskTemplatesByCreator =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByUser',
+      '/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator',
       request,
       metadata || {},
-      methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByUser);
+      methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByCreator);
 };
 
 

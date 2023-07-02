@@ -241,6 +241,86 @@ const DischargePatientResponse$json = {
 final $typed_data.Uint8List dischargePatientResponseDescriptor = $convert.base64Decode(
     'ChhEaXNjaGFyZ2VQYXRpZW50UmVzcG9uc2U=');
 
+@$core.Deprecated('Use getPatientDetailsRequestDescriptor instead')
+const GetPatientDetailsRequest$json = {
+  '1': 'GetPatientDetailsRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `GetPatientDetailsRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPatientDetailsRequestDescriptor = $convert.base64Decode(
+    'ChhHZXRQYXRpZW50RGV0YWlsc1JlcXVlc3QSDgoCaWQYASABKAlSAmlk');
+
+@$core.Deprecated('Use getPatientDetailsResponseDescriptor instead')
+const GetPatientDetailsResponse$json = {
+  '1': 'GetPatientDetailsResponse',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'human_readable_identifier', '3': 3, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
+    {'1': 'notes', '3': 4, '4': 1, '5': 9, '10': 'notes'},
+    {'1': 'tasks', '3': 5, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetPatientDetailsResponse.Task', '10': 'tasks'},
+  ],
+  '3': [GetPatientDetailsResponse_Task$json],
+  '4': [GetPatientDetailsResponse_TaskStatus$json],
+};
+
+@$core.Deprecated('Use getPatientDetailsResponseDescriptor instead')
+const GetPatientDetailsResponse_Task$json = {
+  '1': 'Task',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'status', '3': 4, '4': 1, '5': 14, '6': '.proto.services.task_svc.v1.GetPatientDetailsResponse.TaskStatus', '10': 'status'},
+    {'1': 'assigned_user_id', '3': 5, '4': 1, '5': 9, '10': 'assignedUserId'},
+    {'1': 'patient_id', '3': 6, '4': 1, '5': 9, '10': 'patientId'},
+    {'1': 'public', '3': 7, '4': 1, '5': 8, '10': 'public'},
+    {'1': 'subtasks', '3': 8, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.SubTask', '10': 'subtasks'},
+  ],
+  '3': [GetPatientDetailsResponse_Task_SubTask$json],
+};
+
+@$core.Deprecated('Use getPatientDetailsResponseDescriptor instead')
+const GetPatientDetailsResponse_Task_SubTask$json = {
+  '1': 'SubTask',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
+  ],
+};
+
+@$core.Deprecated('Use getPatientDetailsResponseDescriptor instead')
+const GetPatientDetailsResponse_TaskStatus$json = {
+  '1': 'TaskStatus',
+  '2': [
+    {'1': 'TASK_STATUS_UNSPECIFIED', '2': 0},
+    {'1': 'TASK_STATUS_TODO', '2': 1},
+    {'1': 'TASK_STATUS_IN_PROGRESS', '2': 2},
+    {'1': 'TASK_STATUS_DONE', '2': 3},
+  ],
+};
+
+/// Descriptor for `GetPatientDetailsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPatientDetailsResponseDescriptor = $convert.base64Decode(
+    'ChlHZXRQYXRpZW50RGV0YWlsc1Jlc3BvbnNlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgAS'
+    'gJUgRuYW1lEjoKGWh1bWFuX3JlYWRhYmxlX2lkZW50aWZpZXIYAyABKAlSF2h1bWFuUmVhZGFi'
+    'bGVJZGVudGlmaWVyEhQKBW5vdGVzGAQgASgJUgVub3RlcxJQCgV0YXNrcxgFIAMoCzI6LnByb3'
+    'RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnREZXRhaWxzUmVzcG9uc2UuVGFza1IF'
+    'dGFza3MaqgMKBFRhc2sSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIAoLZG'
+    'VzY3JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uElgKBnN0YXR1cxgEIAEoDjJALnByb3RvLnNl'
+    'cnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnREZXRhaWxzUmVzcG9uc2UuVGFza1N0YXR1c1'
+    'IGc3RhdHVzEigKEGFzc2lnbmVkX3VzZXJfaWQYBSABKAlSDmFzc2lnbmVkVXNlcklkEh0KCnBh'
+    'dGllbnRfaWQYBiABKAlSCXBhdGllbnRJZBIWCgZwdWJsaWMYByABKAhSBnB1YmxpYxJeCghzdW'
+    'J0YXNrcxgIIAMoCzJCLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnREZXRh'
+    'aWxzUmVzcG9uc2UuVGFzay5TdWJUYXNrUghzdWJ0YXNrcxpBCgdTdWJUYXNrEg4KAmlkGAEgAS'
+    'gJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhIKBGRvbmUYAyABKAhSBGRvbmUicgoKVGFza1N0'
+    'YXR1cxIbChdUQVNLX1NUQVRVU19VTlNQRUNJRklFRBAAEhQKEFRBU0tfU1RBVFVTX1RPRE8QAR'
+    'IbChdUQVNLX1NUQVRVU19JTl9QUk9HUkVTUxACEhQKEFRBU0tfU1RBVFVTX0RPTkUQAw==');
+
 const $core.Map<$core.String, $core.dynamic> PatientServiceBase$json = {
   '1': 'PatientService',
   '2': [
@@ -252,6 +332,7 @@ const $core.Map<$core.String, $core.dynamic> PatientServiceBase$json = {
     {'1': 'AssignBed', '2': '.proto.services.task_svc.v1.AssignBedRequest', '3': '.proto.services.task_svc.v1.AssignBedResponse', '4': {}},
     {'1': 'UnassignBed', '2': '.proto.services.task_svc.v1.UnassignBedRequest', '3': '.proto.services.task_svc.v1.UnassignBedResponse', '4': {}},
     {'1': 'DischargePatient', '2': '.proto.services.task_svc.v1.DischargePatientRequest', '3': '.proto.services.task_svc.v1.DischargePatientResponse', '4': {}},
+    {'1': 'GetPatientDetails', '2': '.proto.services.task_svc.v1.GetPatientDetailsRequest', '3': '.proto.services.task_svc.v1.GetPatientDetailsResponse', '4': {}},
   ],
 };
 
@@ -274,6 +355,10 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> PatientSer
   '.proto.services.task_svc.v1.UnassignBedResponse': UnassignBedResponse$json,
   '.proto.services.task_svc.v1.DischargePatientRequest': DischargePatientRequest$json,
   '.proto.services.task_svc.v1.DischargePatientResponse': DischargePatientResponse$json,
+  '.proto.services.task_svc.v1.GetPatientDetailsRequest': GetPatientDetailsRequest$json,
+  '.proto.services.task_svc.v1.GetPatientDetailsResponse': GetPatientDetailsResponse$json,
+  '.proto.services.task_svc.v1.GetPatientDetailsResponse.Task': GetPatientDetailsResponse_Task$json,
+  '.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.SubTask': GetPatientDetailsResponse_Task_SubTask$json,
 };
 
 /// Descriptor for `PatientService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
@@ -295,5 +380,7 @@ final $typed_data.Uint8List patientServiceDescriptor = $convert.base64Decode(
     'MS5VbmFzc2lnbkJlZFJlcXVlc3QaLy5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5VbmFzc2'
     'lnbkJlZFJlc3BvbnNlIgASfwoQRGlzY2hhcmdlUGF0aWVudBIzLnByb3RvLnNlcnZpY2VzLnRh'
     'c2tfc3ZjLnYxLkRpc2NoYXJnZVBhdGllbnRSZXF1ZXN0GjQucHJvdG8uc2VydmljZXMudGFza1'
-    '9zdmMudjEuRGlzY2hhcmdlUGF0aWVudFJlc3BvbnNlIgA=');
+    '9zdmMudjEuRGlzY2hhcmdlUGF0aWVudFJlc3BvbnNlIgASggEKEUdldFBhdGllbnREZXRhaWxz'
+    'EjQucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0UGF0aWVudERldGFpbHNSZXF1ZXN0Gj'
+    'UucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0UGF0aWVudERldGFpbHNSZXNwb25zZSIA');
 

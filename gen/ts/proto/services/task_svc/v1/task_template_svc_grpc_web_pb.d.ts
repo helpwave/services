@@ -57,12 +57,12 @@ export class TaskTemplateServiceClient {
                response: proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateSubTaskResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateSubTaskResponse>;
 
-  getAllTaskTemplatesByUser(
-    request: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserRequest,
+  getAllTaskTemplatesByCreator(
+    request: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByCreatorRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserResponse>;
+               response: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByCreatorResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByCreatorResponse>;
 
   getAllTaskTemplatesByWard(
     request: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByWardRequest,
@@ -113,10 +113,10 @@ export class TaskTemplateServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_task_template_svc_pb.CreateTaskTemplateSubTaskResponse>;
 
-  getAllTaskTemplatesByUser(
-    request: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserRequest,
+  getAllTaskTemplatesByCreator(
+    request: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByCreatorRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByUserResponse>;
+  ): Promise<proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByCreatorResponse>;
 
   getAllTaskTemplatesByWard(
     request: proto_services_task_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByWardRequest,

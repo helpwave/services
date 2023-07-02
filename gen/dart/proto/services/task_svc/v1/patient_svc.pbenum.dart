@@ -9,3 +9,28 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
+import 'dart:core' as $core;
+
+import 'package:protobuf/protobuf.dart' as $pb;
+
+class GetPatientDetailsResponse_TaskStatus extends $pb.ProtobufEnum {
+  static const GetPatientDetailsResponse_TaskStatus TASK_STATUS_UNSPECIFIED = GetPatientDetailsResponse_TaskStatus._(0, _omitEnumNames ? '' : 'TASK_STATUS_UNSPECIFIED');
+  static const GetPatientDetailsResponse_TaskStatus TASK_STATUS_TODO = GetPatientDetailsResponse_TaskStatus._(1, _omitEnumNames ? '' : 'TASK_STATUS_TODO');
+  static const GetPatientDetailsResponse_TaskStatus TASK_STATUS_IN_PROGRESS = GetPatientDetailsResponse_TaskStatus._(2, _omitEnumNames ? '' : 'TASK_STATUS_IN_PROGRESS');
+  static const GetPatientDetailsResponse_TaskStatus TASK_STATUS_DONE = GetPatientDetailsResponse_TaskStatus._(3, _omitEnumNames ? '' : 'TASK_STATUS_DONE');
+
+  static const $core.List<GetPatientDetailsResponse_TaskStatus> values = <GetPatientDetailsResponse_TaskStatus> [
+    TASK_STATUS_UNSPECIFIED,
+    TASK_STATUS_TODO,
+    TASK_STATUS_IN_PROGRESS,
+    TASK_STATUS_DONE,
+  ];
+
+  static final $core.Map<$core.int, GetPatientDetailsResponse_TaskStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static GetPatientDetailsResponse_TaskStatus? valueOf($core.int value) => _byValue[value];
+
+  const GetPatientDetailsResponse_TaskStatus._($core.int v, $core.String n) : super(v, n);
+}
+
+
+const _omitEnumNames = $core.bool.fromEnvironment('protobuf.omit_enum_names');

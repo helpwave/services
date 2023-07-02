@@ -19,15 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	TaskTemplateService_CreateTaskTemplate_FullMethodName        = "/proto.services.task_svc.v1.TaskTemplateService/CreateTaskTemplate"
-	TaskTemplateService_GetAllTaskTemplates_FullMethodName       = "/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplates"
-	TaskTemplateService_DeleteTaskTemplate_FullMethodName        = "/proto.services.task_svc.v1.TaskTemplateService/DeleteTaskTemplate"
-	TaskTemplateService_DeleteTaskTemplateSubTask_FullMethodName = "/proto.services.task_svc.v1.TaskTemplateService/DeleteTaskTemplateSubTask"
-	TaskTemplateService_UpdateTaskTemplate_FullMethodName        = "/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplate"
-	TaskTemplateService_UpdateTaskTemplateSubTask_FullMethodName = "/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplateSubTask"
-	TaskTemplateService_CreateTaskTemplateSubTask_FullMethodName = "/proto.services.task_svc.v1.TaskTemplateService/CreateTaskTemplateSubTask"
-	TaskTemplateService_GetAllTaskTemplatesByUser_FullMethodName = "/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByUser"
-	TaskTemplateService_GetAllTaskTemplatesByWard_FullMethodName = "/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByWard"
+	TaskTemplateService_CreateTaskTemplate_FullMethodName           = "/proto.services.task_svc.v1.TaskTemplateService/CreateTaskTemplate"
+	TaskTemplateService_GetAllTaskTemplates_FullMethodName          = "/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplates"
+	TaskTemplateService_DeleteTaskTemplate_FullMethodName           = "/proto.services.task_svc.v1.TaskTemplateService/DeleteTaskTemplate"
+	TaskTemplateService_DeleteTaskTemplateSubTask_FullMethodName    = "/proto.services.task_svc.v1.TaskTemplateService/DeleteTaskTemplateSubTask"
+	TaskTemplateService_UpdateTaskTemplate_FullMethodName           = "/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplate"
+	TaskTemplateService_UpdateTaskTemplateSubTask_FullMethodName    = "/proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplateSubTask"
+	TaskTemplateService_CreateTaskTemplateSubTask_FullMethodName    = "/proto.services.task_svc.v1.TaskTemplateService/CreateTaskTemplateSubTask"
+	TaskTemplateService_GetAllTaskTemplatesByCreator_FullMethodName = "/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator"
+	TaskTemplateService_GetAllTaskTemplatesByWard_FullMethodName    = "/proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByWard"
 )
 
 // TaskTemplateServiceClient is the client API for TaskTemplateService service.
@@ -41,7 +41,7 @@ type TaskTemplateServiceClient interface {
 	UpdateTaskTemplate(ctx context.Context, in *UpdateTaskTemplateRequest, opts ...grpc.CallOption) (*UpdateTaskTemplateResponse, error)
 	UpdateTaskTemplateSubTask(ctx context.Context, in *UpdateTaskTemplateSubTaskRequest, opts ...grpc.CallOption) (*UpdateTaskTemplateSubTaskResponse, error)
 	CreateTaskTemplateSubTask(ctx context.Context, in *CreateTaskTemplateSubTaskRequest, opts ...grpc.CallOption) (*CreateTaskTemplateSubTaskResponse, error)
-	GetAllTaskTemplatesByUser(ctx context.Context, in *GetAllTaskTemplatesByUserRequest, opts ...grpc.CallOption) (*GetAllTaskTemplatesByUserResponse, error)
+	GetAllTaskTemplatesByCreator(ctx context.Context, in *GetAllTaskTemplatesByCreatorRequest, opts ...grpc.CallOption) (*GetAllTaskTemplatesByCreatorResponse, error)
 	GetAllTaskTemplatesByWard(ctx context.Context, in *GetAllTaskTemplatesByWardRequest, opts ...grpc.CallOption) (*GetAllTaskTemplatesByWardResponse, error)
 }
 
@@ -116,9 +116,9 @@ func (c *taskTemplateServiceClient) CreateTaskTemplateSubTask(ctx context.Contex
 	return out, nil
 }
 
-func (c *taskTemplateServiceClient) GetAllTaskTemplatesByUser(ctx context.Context, in *GetAllTaskTemplatesByUserRequest, opts ...grpc.CallOption) (*GetAllTaskTemplatesByUserResponse, error) {
-	out := new(GetAllTaskTemplatesByUserResponse)
-	err := c.cc.Invoke(ctx, TaskTemplateService_GetAllTaskTemplatesByUser_FullMethodName, in, out, opts...)
+func (c *taskTemplateServiceClient) GetAllTaskTemplatesByCreator(ctx context.Context, in *GetAllTaskTemplatesByCreatorRequest, opts ...grpc.CallOption) (*GetAllTaskTemplatesByCreatorResponse, error) {
+	out := new(GetAllTaskTemplatesByCreatorResponse)
+	err := c.cc.Invoke(ctx, TaskTemplateService_GetAllTaskTemplatesByCreator_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -145,7 +145,7 @@ type TaskTemplateServiceServer interface {
 	UpdateTaskTemplate(context.Context, *UpdateTaskTemplateRequest) (*UpdateTaskTemplateResponse, error)
 	UpdateTaskTemplateSubTask(context.Context, *UpdateTaskTemplateSubTaskRequest) (*UpdateTaskTemplateSubTaskResponse, error)
 	CreateTaskTemplateSubTask(context.Context, *CreateTaskTemplateSubTaskRequest) (*CreateTaskTemplateSubTaskResponse, error)
-	GetAllTaskTemplatesByUser(context.Context, *GetAllTaskTemplatesByUserRequest) (*GetAllTaskTemplatesByUserResponse, error)
+	GetAllTaskTemplatesByCreator(context.Context, *GetAllTaskTemplatesByCreatorRequest) (*GetAllTaskTemplatesByCreatorResponse, error)
 	GetAllTaskTemplatesByWard(context.Context, *GetAllTaskTemplatesByWardRequest) (*GetAllTaskTemplatesByWardResponse, error)
 	mustEmbedUnimplementedTaskTemplateServiceServer()
 }
@@ -175,8 +175,8 @@ func (UnimplementedTaskTemplateServiceServer) UpdateTaskTemplateSubTask(context.
 func (UnimplementedTaskTemplateServiceServer) CreateTaskTemplateSubTask(context.Context, *CreateTaskTemplateSubTaskRequest) (*CreateTaskTemplateSubTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTaskTemplateSubTask not implemented")
 }
-func (UnimplementedTaskTemplateServiceServer) GetAllTaskTemplatesByUser(context.Context, *GetAllTaskTemplatesByUserRequest) (*GetAllTaskTemplatesByUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAllTaskTemplatesByUser not implemented")
+func (UnimplementedTaskTemplateServiceServer) GetAllTaskTemplatesByCreator(context.Context, *GetAllTaskTemplatesByCreatorRequest) (*GetAllTaskTemplatesByCreatorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllTaskTemplatesByCreator not implemented")
 }
 func (UnimplementedTaskTemplateServiceServer) GetAllTaskTemplatesByWard(context.Context, *GetAllTaskTemplatesByWardRequest) (*GetAllTaskTemplatesByWardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllTaskTemplatesByWard not implemented")
@@ -320,20 +320,20 @@ func _TaskTemplateService_CreateTaskTemplateSubTask_Handler(srv interface{}, ctx
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TaskTemplateService_GetAllTaskTemplatesByUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAllTaskTemplatesByUserRequest)
+func _TaskTemplateService_GetAllTaskTemplatesByCreator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllTaskTemplatesByCreatorRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TaskTemplateServiceServer).GetAllTaskTemplatesByUser(ctx, in)
+		return srv.(TaskTemplateServiceServer).GetAllTaskTemplatesByCreator(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TaskTemplateService_GetAllTaskTemplatesByUser_FullMethodName,
+		FullMethod: TaskTemplateService_GetAllTaskTemplatesByCreator_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskTemplateServiceServer).GetAllTaskTemplatesByUser(ctx, req.(*GetAllTaskTemplatesByUserRequest))
+		return srv.(TaskTemplateServiceServer).GetAllTaskTemplatesByCreator(ctx, req.(*GetAllTaskTemplatesByCreatorRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -392,8 +392,8 @@ var TaskTemplateService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TaskTemplateService_CreateTaskTemplateSubTask_Handler,
 		},
 		{
-			MethodName: "GetAllTaskTemplatesByUser",
-			Handler:    _TaskTemplateService_GetAllTaskTemplatesByUser_Handler,
+			MethodName: "GetAllTaskTemplatesByCreator",
+			Handler:    _TaskTemplateService_GetAllTaskTemplatesByCreator_Handler,
 		},
 		{
 			MethodName: "GetAllTaskTemplatesByWard",

@@ -11,7 +11,7 @@ import (
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
-	intPatient "task-svc/internal/patient"
+	patientModels "task-svc/internal/patient/models"
 )
 
 type Base struct {
@@ -80,7 +80,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 	}
 
 	// Check if patient exists
-	if err := db.First(&intPatient.Patient{ID: patientId}).Error; err != nil {
+	if err := db.First(&patientModels.Patient{ID: patientId}).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -545,4 +545,16 @@ func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskReq
 		Msg("task unpublished")
 
 	return &pb.UnpublishTaskResponse{}, nil
+}
+
+func GetTasksByPatient(ctx context.Context, patientId uuid.UUID) ([]Task, error) {
+	db := hwgorm.GetDB(ctx)
+
+	var tasks []Task
+
+	if err := db.Preload("Subtasks").Where("patient_id = ?", patientId).Find(&tasks).Error; err != nil {
+		return nil, err
+	}
+
+	return tasks, nil
 }

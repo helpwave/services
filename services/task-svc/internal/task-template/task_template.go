@@ -11,8 +11,27 @@ import (
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
-	templatemodels "task-svc/internal/task-template/models"
 )
+
+type Base struct {
+	Name        string `gorm:"column:name"`
+	Description string `gorm:"column:description"`
+}
+
+type TaskTemplate struct {
+	Base
+	ID             uuid.UUID             `gorm:"column:id"`
+	OrganizationID uuid.UUID             `gorm:"column:organization_id"`
+	CreatedBy      uuid.UUID             `gorm:"column:created_by"`
+	WardID         *uuid.UUID            `gorm:"column:ward_id;default:NULL"`
+	SubTasks       []TaskTemplateSubtask `gorm:"foreignKey:TaskTemplateID"`
+}
+
+type TaskTemplateSubtask struct {
+	ID             uuid.UUID `gorm:"column:id"`
+	TaskTemplateID uuid.UUID `gorm:"column:task_template_id"`
+	Name           string    `gorm:"column:name"`
+}
 
 type ServiceServer struct {
 	pb.UnimplementedTaskTemplateServiceServer
@@ -41,11 +60,10 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		return nil, err
 	}
 
-	taskTemplate := templatemodels.TaskTemplate{
-		Base:           templatemodels.Base{Name: req.Name, Description: req.Description},
+	taskTemplate := TaskTemplate{
+		Base:           Base{Name: req.Name, Description: req.Description},
 		OrganizationID: organizationID,
-		Public:         req.Public,
-		UserID:         userID,
+		CreatedBy:      userID,
 		WardID:         wardID,
 	}
 
@@ -54,10 +72,10 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	var subtasks []templatemodels.TaskTemplateSubtask
+	var subtasks []TaskTemplateSubtask
 	if req.Subtasks != nil {
-		subtasks = hwutil.Map(req.Subtasks, func(subtask *pb.CreateTaskTemplateRequest_SubTask) templatemodels.TaskTemplateSubtask {
-			return templatemodels.TaskTemplateSubtask{Name: subtask.Name, TaskTemplateID: taskTemplate.ID}
+		subtasks = hwutil.Map(req.Subtasks, func(subtask *pb.CreateTaskTemplateRequest_SubTask) TaskTemplateSubtask {
+			return TaskTemplateSubtask{Name: subtask.Name, TaskTemplateID: taskTemplate.ID}
 		})
 	}
 
@@ -83,9 +101,9 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var taskTemplates []templatemodels.TaskTemplate
+	var taskTemplates []TaskTemplate
 
-	if err := db.Preload("SubTasks").Where("organization_id = ?", organizationID).Where("is_public = ?", true).Find(&taskTemplates).Error; err != nil {
+	if err := db.Preload("SubTasks").Where("organization_id = ?", organizationID).Find(&taskTemplates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -93,8 +111,8 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 		}
 	}
 
-	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate templatemodels.TaskTemplate) *pb.GetAllTaskTemplatesResponse_TaskTemplate {
-		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(subtask templatemodels.TaskTemplateSubtask) *pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask {
+	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate TaskTemplate) *pb.GetAllTaskTemplatesResponse_TaskTemplate {
+		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(subtask TaskTemplateSubtask) *pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask {
 			return &pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask{
 				Id:             subtask.ID.String(),
 				TaskTemplateId: subtask.TaskTemplateID.String(),
@@ -105,8 +123,8 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 			Id:          taskTemplate.ID.String(),
 			Name:        taskTemplate.Name,
 			Description: taskTemplate.Description,
-			IsPublic:    taskTemplate.Public,
-			UserId:      hwutil.UUIDToStringPtr(&taskTemplate.UserID),
+			IsPublic:    taskTemplate.WardID != nil,
+			CreatedBy:   hwutil.UUIDToStringPtr(&taskTemplate.CreatedBy),
 			Subtasks:    mappedSubtasks,
 		}
 	})
@@ -127,7 +145,7 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	taskTemplate := templatemodels.TaskTemplate{ID: id}
+	taskTemplate := TaskTemplate{ID: id}
 
 	if err := db.Delete(&taskTemplate).Error; err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -151,7 +169,7 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	taskTemplateSubtask := templatemodels.TaskTemplateSubtask{ID: id}
+	taskTemplateSubtask := TaskTemplateSubtask{ID: id}
 
 	if err := db.Delete(&taskTemplateSubtask).Error; err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -175,7 +193,7 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	taskTemplate := templatemodels.TaskTemplate{ID: id}
+	taskTemplate := TaskTemplate{ID: id}
 	updates := pbhelpers.UpdatesMapForUpdateTaskTemplateRequest(req)
 
 	if err := db.Model(&taskTemplate).Updates(updates).Error; err != nil {
@@ -195,7 +213,7 @@ func (ServiceServer) UpdateTaskTemplateSubtask(ctx context.Context, req *pb.Upda
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	taskTemplate := templatemodels.TaskTemplateSubtask{ID: id}
+	taskTemplate := TaskTemplateSubtask{ID: id}
 	updates := pbhelpers.UpdatesMapForUpdateTaskTemplateSubTaskRequest(req)
 
 	if err := db.Model(&taskTemplate).Updates(updates).Error; err != nil {
@@ -214,7 +232,7 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 		return nil, err
 	}
 
-	taskTemplateSubtask := templatemodels.TaskTemplateSubtask{
+	taskTemplateSubtask := TaskTemplateSubtask{
 		TaskTemplateID: taskTemplateID,
 		Name:           req.Name,
 	}
@@ -234,19 +252,19 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 	}, nil
 }
 
-func (ServiceServer) GetAllTaskTemplatesByUser(ctx context.Context, req *pb.GetAllTaskTemplatesByUserRequest) (*pb.GetAllTaskTemplatesByUserResponse, error) {
+func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.GetAllTaskTemplatesByCreatorRequest) (*pb.GetAllTaskTemplatesByCreatorResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
 
-	userId, err := uuid.Parse(req.UserId)
+	createdBy, err := uuid.Parse(req.CreatedBy)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var taskTemplates []templatemodels.TaskTemplate
+	var taskTemplates []TaskTemplate
 
-	if err := db.Preload("SubTasks").Where("user_id = ?", userId).Find(&taskTemplates).Error; err != nil {
+	if err := db.Preload("SubTasks").Where("created_by = ?", createdBy).Find(&taskTemplates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -254,24 +272,24 @@ func (ServiceServer) GetAllTaskTemplatesByUser(ctx context.Context, req *pb.GetA
 		}
 	}
 
-	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate templatemodels.TaskTemplate) *pb.GetAllTaskTemplatesByUserResponse_TaskTemplate {
-		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(subtask templatemodels.TaskTemplateSubtask) *pb.GetAllTaskTemplatesByUserResponse_TaskTemplate_SubTask {
-			return &pb.GetAllTaskTemplatesByUserResponse_TaskTemplate_SubTask{
+	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate TaskTemplate) *pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate {
+		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(subtask TaskTemplateSubtask) *pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask {
+			return &pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask{
 				Id:             subtask.ID.String(),
 				TaskTemplateId: subtask.TaskTemplateID.String(),
 				Name:           subtask.Name,
 			}
 		})
-		return &pb.GetAllTaskTemplatesByUserResponse_TaskTemplate{
+		return &pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate{
 			Id:          taskTemplate.ID.String(),
 			Name:        taskTemplate.Name,
 			Description: taskTemplate.Description,
-			IsPublic:    taskTemplate.Public,
+			IsPublic:    taskTemplate.WardID != nil,
 			Subtasks:    mappedSubtasks,
 		}
 	})
 
-	return &pb.GetAllTaskTemplatesByUserResponse{
+	return &pb.GetAllTaskTemplatesByCreatorResponse{
 		Templates: mappedTaskTemplates,
 	}, nil
 }
@@ -284,7 +302,7 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var taskTemplates []templatemodels.TaskTemplate
+	var taskTemplates []TaskTemplate
 
 	if err := db.Preload("SubTasks").Where("ward_id = ?", wardId).Find(&taskTemplates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
@@ -294,8 +312,8 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 		}
 	}
 
-	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate templatemodels.TaskTemplate) *pb.GetAllTaskTemplatesByWardResponse_TaskTemplate {
-		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(subtask templatemodels.TaskTemplateSubtask) *pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask {
+	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate TaskTemplate) *pb.GetAllTaskTemplatesByWardResponse_TaskTemplate {
+		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(subtask TaskTemplateSubtask) *pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask {
 			return &pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask{
 				Id:             subtask.ID.String(),
 				TaskTemplateId: subtask.TaskTemplateID.String(),
@@ -306,8 +324,8 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 			Id:          taskTemplate.ID.String(),
 			Name:        taskTemplate.Name,
 			Description: taskTemplate.Description,
-			IsPublic:    taskTemplate.Public,
-			UserId:      hwutil.UUIDToStringPtr(&taskTemplate.UserID),
+			IsPublic:    taskTemplate.WardID != nil,
+			CreatedBy:   hwutil.UUIDToStringPtr(&taskTemplate.CreatedBy),
 			Subtasks:    mappedSubtasks,
 		}
 	})

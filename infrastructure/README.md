@@ -55,23 +55,13 @@ primary_region = "ams"
   auto_start_machines = false
 ```
 
-__4. Create database__
-
-Connect to postgres cli via `flyctl postgres connect --app <APP_NAME_OF_POSTGRES>`
-and run `CREATE DATABASE "user-svc";` afterwards.
-
-__5. Set secrets__
+__3. Attach database__
 
 ```shell
- flyctl secrets set
- 	--app helpwave-staging-user-svc
- 	POSTGRES_PASSWORD=<PASSWORD>
- 	POSTGRES_HOST=<HOST>
- 	POSTGRES_USER=<USER>
- 	POSTGRES_DB=user-svc
+fly postgres attach --app <APP_NAME> --variable-name POSTGRES_DSN <POSTGRES_APP_NAME>
 ```
 
-__6. Deploy service__
+__4. Deploy service__
 
 ```shell
 flyctl deploy
@@ -80,7 +70,7 @@ flyctl deploy
 	# --local-only # Optional. When omitted, the image will be build directly on Fly
 ```
 
-__7. Configure APISIX__
+__5. Configure APISIX__
 
 `apisix/apisix.yaml`
 ```yaml
@@ -115,6 +105,6 @@ routes:
 ...
 ```
 
-__8. Deploy APISIX__
+__6. Deploy APISIX__
 
 `flyctl deploy --config apisix/fly.toml --app helpwave-staging-gateway`
