@@ -31,8 +31,8 @@ func Contains[K comparable](vs []K, f K) bool {
 
 func CountElements[K any](values []K, condition func(K) bool) int {
 	count := 0
-	for _, num := range values {
-		if condition(num) {
+	for _, value := range values {
+		if condition(value) {
 			count++
 		}
 	}
