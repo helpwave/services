@@ -277,6 +277,9 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 			Beds: beds,
 		}, nil
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	return &pb.GetRoomOverviewsByWardResponse{
 		Rooms: roomsResponse,
