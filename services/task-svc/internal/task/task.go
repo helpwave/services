@@ -12,34 +12,12 @@ import (
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
 	patientModels "task-svc/internal/patient/models"
+	"task-svc/internal/task/models"
 )
-
-type Base struct {
-	Name        string        `gorm:"column:name"`
-	Description string        `gorm:"column:description"`
-	Status      pb.TaskStatus `gorm:"column:status"`
-}
-
-type Task struct {
-	Base
-	ID             uuid.UUID     `gorm:"column:id"`
-	OrganizationID uuid.UUID     `gorm:"column:organization_id"`
-	AssignedUserId uuid.NullUUID `gorm:"column:assigned_user_id;default:NULL"`
-	PatientId      uuid.UUID     `gorm:"column:patient_id"`
-	Subtasks       []Subtask     `gorm:"foreignKey:TaskID"`
-	Public         bool          `gorm:"column:public;default:False"`
-}
-
-type Subtask struct {
-	ID     uuid.UUID `gorm:"column:id"`
-	TaskID uuid.UUID `gorm:"column:task_id"`
-	Name   string    `gorm:"column:name"`
-	Done   bool      `gorm:"column:done;default:False"`
-}
 
 // GetTasksByPatientForOrganization
 // TODO: Move into repository
-func GetTasksByPatientForOrganization(ctx context.Context, patientID uuid.UUID) ([]Task, error) {
+func GetTasksByPatientForOrganization(ctx context.Context, patientID uuid.UUID) ([]models.Task, error) {
 	db := hwgorm.GetDB(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
@@ -47,7 +25,7 @@ func GetTasksByPatientForOrganization(ctx context.Context, patientID uuid.UUID) 
 		return nil, err
 	}
 
-	var tasks []Task
+	var tasks []models.Task
 	if err := db.Preload("Subtasks").Where("patient_id = ? AND organization_id = ?", patientID, organizationID).Find(&tasks).Error; err != nil {
 		return nil, err
 	}
@@ -88,8 +66,8 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		}
 	}
 
-	task := Task{
-		Base: Base{
+	task := models.Task{
+		Base: models.Base{
 			Name:        req.Name,
 			Description: req.Description,
 			Status:      pb.TaskStatus_TASK_STATUS_TODO,
@@ -123,7 +101,7 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{ID: id}
+	task := models.Task{ID: id}
 	if err := db.Preload("Subtasks").First(&task).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -138,7 +116,7 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		assignedUserId = ""
 	}
 
-	var subtasks = hwutil.Map(task.Subtasks, func(subtask Subtask) *pb.GetTaskResponse_SubTask {
+	var subtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTaskResponse_SubTask {
 		return &pb.GetTaskResponse_SubTask{
 			Id:   subtask.ID.String(),
 			Done: subtask.Done,
@@ -175,8 +153,8 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 		}
 	}
 
-	var mappedTasks = hwutil.Map(tasks, func(task Task) *pb.GetTasksByPatientResponse_Task {
-		var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask Subtask) *pb.GetTasksByPatientResponse_Task_SubTask {
+	var mappedTasks = hwutil.Map(tasks, func(task models.Task) *pb.GetTasksByPatientResponse_Task {
+		var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTasksByPatientResponse_Task_SubTask {
 			return &pb.GetTasksByPatientResponse_Task_SubTask{
 				Id:   subtask.ID.String(),
 				Done: subtask.Done,
@@ -211,7 +189,7 @@ func (ServiceServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{ID: id}
+	task := models.Task{ID: id}
 	updates := pbhelpers.UpdatesMapForUpdateTaskRequest(req)
 
 	if err := db.Model(&task).Updates(updates).Error; err != nil {
@@ -233,7 +211,7 @@ func (ServiceServer) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{ID: id}
+	task := models.Task{ID: id}
 
 	if err := db.Delete(&task).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -255,7 +233,7 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 	}
 
 	// Check if task exists
-	if err := db.First(&Task{ID: taskId}).Error; err != nil {
+	if err := db.First(&models.Task{ID: taskId}).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -267,7 +245,7 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 	if req.Done != nil {
 		done = *req.Done
 	}
-	subtask := Subtask{Name: req.Name, TaskID: taskId, Done: done}
+	subtask := models.Subtask{Name: req.Name, TaskID: taskId, Done: done}
 
 	if err := db.Create(&subtask).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -288,7 +266,7 @@ func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	subtask := Subtask{ID: subtaskID}
+	subtask := models.Subtask{ID: subtaskID}
 
 	if err := db.Delete(&subtask).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -307,7 +285,7 @@ func (ServiceServer) UpdateSubTask(ctx context.Context, req *pb.UpdateSubTaskReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	subtask := Subtask{ID: subtaskID}
+	subtask := models.Subtask{ID: subtaskID}
 	updates := pbhelpers.UpdatesMapForUpdateSubTaskRequest(req)
 
 	if err := db.Model(&subtask).Updates(updates).Error; err != nil {
@@ -329,7 +307,7 @@ func (ServiceServer) SubTaskToToDo(ctx context.Context, req *pb.SubTaskToToDoReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	subtask := Subtask{ID: subtaskID}
+	subtask := models.Subtask{ID: subtaskID}
 
 	if err := db.Model(&subtask).Update("done", false).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -350,7 +328,7 @@ func (ServiceServer) SubTaskToDone(ctx context.Context, req *pb.SubTaskToDoneReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	subtask := Subtask{ID: subtaskID}
+	subtask := models.Subtask{ID: subtaskID}
 
 	if err := db.Model(&subtask).Update("done", true).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -371,8 +349,8 @@ func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{ID: id}
-	updates := Task{Base: Base{Status: pb.TaskStatus_TASK_STATUS_TODO}}
+	task := models.Task{ID: id}
+	updates := models.Task{Base: models.Base{Status: pb.TaskStatus_TASK_STATUS_TODO}}
 
 	if err := db.Model(&task).Updates(updates).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -397,8 +375,8 @@ func (ServiceServer) TaskToInProgress(ctx context.Context, req *pb.TaskToInProgr
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{ID: id}
-	updates := Task{Base: Base{Status: pb.TaskStatus_TASK_STATUS_IN_PROGRESS}}
+	task := models.Task{ID: id}
+	updates := models.Task{Base: models.Base{Status: pb.TaskStatus_TASK_STATUS_IN_PROGRESS}}
 
 	if err := db.Model(&task).Updates(updates).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -423,8 +401,8 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{ID: id}
-	updates := Task{Base: Base{Status: pb.TaskStatus_TASK_STATUS_DONE}}
+	task := models.Task{ID: id}
+	updates := models.Task{Base: models.Base{Status: pb.TaskStatus_TASK_STATUS_DONE}}
 
 	if err := db.Model(&task).Updates(updates).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -456,8 +434,8 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 
 	// TODO: Check if user exists
 
-	task := Task{ID: id}
-	updates := Task{AssignedUserId: uuid.NullUUID{UUID: userId, Valid: true}}
+	task := models.Task{ID: id}
+	updates := models.Task{AssignedUserId: uuid.NullUUID{UUID: userId, Valid: true}}
 
 	if err := db.Model(task).Updates(updates).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -483,7 +461,7 @@ func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{ID: id}
+	task := models.Task{ID: id}
 
 	if err := db.Model(task).Update("assigned_user_id", nil).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -508,7 +486,7 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{ID: id}
+	task := models.Task{ID: id}
 
 	if err := db.Model(&task).Update("public", true).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -533,7 +511,7 @@ func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task := Task{ID: id}
+	task := models.Task{ID: id}
 
 	if err := db.Model(&task).Update("public", false).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
@@ -547,10 +525,10 @@ func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskReq
 	return &pb.UnpublishTaskResponse{}, nil
 }
 
-func GetTasksByPatient(ctx context.Context, patientId uuid.UUID) ([]Task, error) {
+func GetTasksByPatient(ctx context.Context, patientId uuid.UUID) ([]models.Task, error) {
 	db := hwgorm.GetDB(ctx)
 
-	var tasks []Task
+	var tasks []models.Task
 
 	if err := db.Preload("Subtasks").Where("patient_id = ?", patientId).Find(&tasks).Error; err != nil {
 		return nil, err

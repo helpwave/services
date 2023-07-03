@@ -104,6 +104,38 @@ message DeleteRoomRequest {
 
 message DeleteRoomResponse {}
 
+
+//
+// GetRoomOverviewsByWard
+//
+
+message GetRoomOverviewsByWardRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetRoomOverviewsByWardResponse {
+  repeated Room rooms = 1;
+
+  message Room {
+    string id = 1;
+    string  name = 2;
+    repeated Bed beds = 3;
+
+    message Bed {
+      string id = 1;
+      optional Patient patient = 2;
+
+      message Patient{
+        string id = 1;
+        uint32 tasks_unscheduled = 2 ;
+        uint32 tasks_in_progress = 3;
+        uint32 tasks_done = 4;
+      }
+    }
+  }
+}
+
+
 //
 // RoomService
 //
@@ -115,4 +147,5 @@ service RoomService {
   rpc GetRoomsByWard(GetRoomsByWardRequest) returns (GetRoomsByWardResponse) {}
   rpc UpdateRoom(UpdateRoomRequest) returns (UpdateRoomResponse) {}
   rpc DeleteRoom(DeleteRoomRequest) returns (DeleteRoomResponse) {}
+  rpc GetRoomOverviewsByWard(GetRoomOverviewsByWardRequest) returns (GetRoomOverviewsByWardResponse) {}
 }

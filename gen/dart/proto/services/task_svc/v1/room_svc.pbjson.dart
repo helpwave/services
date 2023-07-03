@@ -225,6 +225,75 @@ const DeleteRoomResponse$json = {
 final $typed_data.Uint8List deleteRoomResponseDescriptor = $convert.base64Decode(
     'ChJEZWxldGVSb29tUmVzcG9uc2U=');
 
+@$core.Deprecated('Use getRoomOverviewsByWardRequestDescriptor instead')
+const GetRoomOverviewsByWardRequest$json = {
+  '1': 'GetRoomOverviewsByWardRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `GetRoomOverviewsByWardRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRoomOverviewsByWardRequestDescriptor = $convert.base64Decode(
+    'Ch1HZXRSb29tT3ZlcnZpZXdzQnlXYXJkUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQ=');
+
+@$core.Deprecated('Use getRoomOverviewsByWardResponseDescriptor instead')
+const GetRoomOverviewsByWardResponse$json = {
+  '1': 'GetRoomOverviewsByWardResponse',
+  '2': [
+    {'1': 'rooms', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room', '10': 'rooms'},
+  ],
+  '3': [GetRoomOverviewsByWardResponse_Room$json],
+};
+
+@$core.Deprecated('Use getRoomOverviewsByWardResponseDescriptor instead')
+const GetRoomOverviewsByWardResponse_Room$json = {
+  '1': 'Room',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'beds', '3': 3, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed', '10': 'beds'},
+  ],
+  '3': [GetRoomOverviewsByWardResponse_Room_Bed$json],
+};
+
+@$core.Deprecated('Use getRoomOverviewsByWardResponseDescriptor instead')
+const GetRoomOverviewsByWardResponse_Room_Bed$json = {
+  '1': 'Bed',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'patient', '3': 2, '4': 1, '5': 11, '6': '.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient', '9': 0, '10': 'patient', '17': true},
+  ],
+  '3': [GetRoomOverviewsByWardResponse_Room_Bed_Patient$json],
+  '8': [
+    {'1': '_patient'},
+  ],
+};
+
+@$core.Deprecated('Use getRoomOverviewsByWardResponseDescriptor instead')
+const GetRoomOverviewsByWardResponse_Room_Bed_Patient$json = {
+  '1': 'Patient',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'tasks_unscheduled', '3': 2, '4': 1, '5': 13, '10': 'tasksUnscheduled'},
+    {'1': 'tasks_in_progress', '3': 3, '4': 1, '5': 13, '10': 'tasksInProgress'},
+    {'1': 'tasks_done', '3': 4, '4': 1, '5': 13, '10': 'tasksDone'},
+  ],
+};
+
+/// Descriptor for `GetRoomOverviewsByWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRoomOverviewsByWardResponseDescriptor = $convert.base64Decode(
+    'Ch5HZXRSb29tT3ZlcnZpZXdzQnlXYXJkUmVzcG9uc2USVQoFcm9vbXMYASADKAsyPy5wcm90by'
+    '5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRSb29tT3ZlcnZpZXdzQnlXYXJkUmVzcG9uc2UuUm9v'
+    'bVIFcm9vbXMapwMKBFJvb20SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSVw'
+    'oEYmVkcxgDIAMoCzJDLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFJvb21PdmVydmll'
+    'd3NCeVdhcmRSZXNwb25zZS5Sb29tLkJlZFIEYmVkcxqhAgoDQmVkEg4KAmlkGAEgASgJUgJpZB'
+    'JqCgdwYXRpZW50GAIgASgLMksucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0Um9vbU92'
+    'ZXJ2aWV3c0J5V2FyZFJlc3BvbnNlLlJvb20uQmVkLlBhdGllbnRIAFIHcGF0aWVudIgBARqRAQ'
+    'oHUGF0aWVudBIOCgJpZBgBIAEoCVICaWQSKwoRdGFza3NfdW5zY2hlZHVsZWQYAiABKA1SEHRh'
+    'c2tzVW5zY2hlZHVsZWQSKgoRdGFza3NfaW5fcHJvZ3Jlc3MYAyABKA1SD3Rhc2tzSW5Qcm9ncm'
+    'VzcxIdCgp0YXNrc19kb25lGAQgASgNUgl0YXNrc0RvbmVCCgoIX3BhdGllbnQ=');
+
 const $core.Map<$core.String, $core.dynamic> RoomServiceBase$json = {
   '1': 'RoomService',
   '2': [
@@ -234,6 +303,7 @@ const $core.Map<$core.String, $core.dynamic> RoomServiceBase$json = {
     {'1': 'GetRoomsByWard', '2': '.proto.services.task_svc.v1.GetRoomsByWardRequest', '3': '.proto.services.task_svc.v1.GetRoomsByWardResponse', '4': {}},
     {'1': 'UpdateRoom', '2': '.proto.services.task_svc.v1.UpdateRoomRequest', '3': '.proto.services.task_svc.v1.UpdateRoomResponse', '4': {}},
     {'1': 'DeleteRoom', '2': '.proto.services.task_svc.v1.DeleteRoomRequest', '3': '.proto.services.task_svc.v1.DeleteRoomResponse', '4': {}},
+    {'1': 'GetRoomOverviewsByWard', '2': '.proto.services.task_svc.v1.GetRoomOverviewsByWardRequest', '3': '.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse', '4': {}},
   ],
 };
 
@@ -256,6 +326,11 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> RoomServic
   '.proto.services.task_svc.v1.UpdateRoomResponse': UpdateRoomResponse$json,
   '.proto.services.task_svc.v1.DeleteRoomRequest': DeleteRoomRequest$json,
   '.proto.services.task_svc.v1.DeleteRoomResponse': DeleteRoomResponse$json,
+  '.proto.services.task_svc.v1.GetRoomOverviewsByWardRequest': GetRoomOverviewsByWardRequest$json,
+  '.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse': GetRoomOverviewsByWardResponse$json,
+  '.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room': GetRoomOverviewsByWardResponse_Room$json,
+  '.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed': GetRoomOverviewsByWardResponse_Room_Bed$json,
+  '.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient': GetRoomOverviewsByWardResponse_Room_Bed_Patient$json,
 };
 
 /// Descriptor for `RoomService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
@@ -272,5 +347,7 @@ final $typed_data.Uint8List roomServiceDescriptor = $convert.base64Decode(
     'BkYXRlUm9vbVJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5VcGRhdGVSb29t'
     'UmVzcG9uc2UiABJtCgpEZWxldGVSb29tEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuRG'
     'VsZXRlUm9vbVJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVSb29t'
-    'UmVzcG9uc2UiAA==');
+    'UmVzcG9uc2UiABKRAQoWR2V0Um9vbU92ZXJ2aWV3c0J5V2FyZBI5LnByb3RvLnNlcnZpY2VzLn'
+    'Rhc2tfc3ZjLnYxLkdldFJvb21PdmVydmlld3NCeVdhcmRSZXF1ZXN0GjoucHJvdG8uc2Vydmlj'
+    'ZXMudGFza19zdmMudjEuR2V0Um9vbU92ZXJ2aWV3c0J5V2FyZFJlc3BvbnNlIgA=');
 
