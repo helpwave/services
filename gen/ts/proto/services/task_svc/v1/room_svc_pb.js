@@ -3773,9 +3773,10 @@ proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient
 proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    tasksUnscheduled: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    tasksInProgress: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    tasksDone: jspb.Message.getFieldWithDefault(msg, 4, 0)
+    humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    tasksUnscheduled: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    tasksInProgress: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    tasksDone: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
 
   if (includeInstance) {
@@ -3817,14 +3818,18 @@ proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient
       msg.setId(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setTasksUnscheduled(value);
+      var value = /** @type {string} */ (reader.readString());
+      msg.setHumanReadableIdentifier(value);
       break;
     case 3:
       var value = /** @type {number} */ (reader.readUint32());
-      msg.setTasksInProgress(value);
+      msg.setTasksUnscheduled(value);
       break;
     case 4:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setTasksInProgress(value);
+      break;
+    case 5:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setTasksDone(value);
       break;
@@ -3864,24 +3869,31 @@ proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient
       f
     );
   }
-  f = message.getTasksUnscheduled();
-  if (f !== 0) {
-    writer.writeUint32(
+  f = message.getHumanReadableIdentifier();
+  if (f.length > 0) {
+    writer.writeString(
       2,
       f
     );
   }
-  f = message.getTasksInProgress();
+  f = message.getTasksUnscheduled();
   if (f !== 0) {
     writer.writeUint32(
       3,
       f
     );
   }
-  f = message.getTasksDone();
+  f = message.getTasksInProgress();
   if (f !== 0) {
     writer.writeUint32(
       4,
+      f
+    );
+  }
+  f = message.getTasksDone();
+  if (f !== 0) {
+    writer.writeUint32(
+      5,
       f
     );
   }
@@ -3907,28 +3919,28 @@ proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient
 
 
 /**
- * optional uint32 tasks_unscheduled = 2;
+ * optional string human_readable_identifier = 2;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.getHumanReadableIdentifier = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient} returns this
+ */
+proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.setHumanReadableIdentifier = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional uint32 tasks_unscheduled = 3;
  * @return {number}
  */
 proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.getTasksUnscheduled = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/**
- * @param {number} value
- * @return {!proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient} returns this
- */
-proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.setTasksUnscheduled = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
-};
-
-
-/**
- * optional uint32 tasks_in_progress = 3;
- * @return {number}
- */
-proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.getTasksInProgress = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
@@ -3937,16 +3949,16 @@ proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient
  * @param {number} value
  * @return {!proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient} returns this
  */
-proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.setTasksInProgress = function(value) {
+proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.setTasksUnscheduled = function(value) {
   return jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
 /**
- * optional uint32 tasks_done = 4;
+ * optional uint32 tasks_in_progress = 4;
  * @return {number}
  */
-proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.getTasksDone = function() {
+proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.getTasksInProgress = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
@@ -3955,8 +3967,26 @@ proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient
  * @param {number} value
  * @return {!proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient} returns this
  */
-proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.setTasksDone = function(value) {
+proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.setTasksInProgress = function(value) {
   return jspb.Message.setProto3IntField(this, 4, value);
+};
+
+
+/**
+ * optional uint32 tasks_done = 5;
+ * @return {number}
+ */
+proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.getTasksDone = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient} returns this
+ */
+proto.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.setTasksDone = function(value) {
+  return jspb.Message.setProto3IntField(this, 5, value);
 };
 
 

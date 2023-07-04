@@ -623,8 +623,7 @@ proto.proto.services.task_svc.v1.CreateWardResponse.prototype.toObject = functio
  */
 proto.proto.services.task_svc.v1.CreateWardResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 2, "")
+    id: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -665,10 +664,6 @@ proto.proto.services.task_svc.v1.CreateWardResponse.deserializeBinaryFromReader 
       var value = /** @type {string} */ (reader.readString());
       msg.setId(value);
       break;
-    case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setName(value);
-      break;
     default:
       reader.skipField();
       break;
@@ -705,13 +700,6 @@ proto.proto.services.task_svc.v1.CreateWardResponse.serializeBinaryToWriter = fu
       f
     );
   }
-  f = message.getName();
-  if (f.length > 0) {
-    writer.writeString(
-      2,
-      f
-    );
-  }
 };
 
 
@@ -730,24 +718,6 @@ proto.proto.services.task_svc.v1.CreateWardResponse.prototype.getId = function()
  */
 proto.proto.services.task_svc.v1.CreateWardResponse.prototype.setId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
-};
-
-
-/**
- * optional string name = 2;
- * @return {string}
- */
-proto.proto.services.task_svc.v1.CreateWardResponse.prototype.getName = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.proto.services.task_svc.v1.CreateWardResponse} returns this
- */
-proto.proto.services.task_svc.v1.CreateWardResponse.prototype.setName = function(value) {
-  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -2559,7 +2529,7 @@ proto.proto.services.task_svc.v1.GetWardDetailsResponse.Subtask.prototype.setNam
  * @private {!Array<number>}
  * @const
  */
-proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.repeatedFields_ = [2];
+proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.repeatedFields_ = [3];
 
 
 
@@ -2592,7 +2562,8 @@ proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.toObject 
  */
 proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.toObject = function(includeInstance, msg) {
   var f, obj = {
-    name: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     bedsList: jspb.Message.toObjectList(msg.getBedsList(),
     proto.proto.services.task_svc.v1.GetWardDetailsResponse.Bed.toObject, includeInstance)
   };
@@ -2633,9 +2604,13 @@ proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.deserializeBinaryFr
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setName(value);
+      msg.setId(value);
       break;
     case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setName(value);
+      break;
+    case 3:
       var value = new proto.proto.services.task_svc.v1.GetWardDetailsResponse.Bed;
       reader.readMessage(value,proto.proto.services.task_svc.v1.GetWardDetailsResponse.Bed.deserializeBinaryFromReader);
       msg.addBeds(value);
@@ -2669,17 +2644,24 @@ proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.serialize
  */
 proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getName();
+  f = message.getId();
   if (f.length > 0) {
     writer.writeString(
       1,
       f
     );
   }
+  f = message.getName();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
   f = message.getBedsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      2,
+      3,
       f,
       proto.proto.services.task_svc.v1.GetWardDetailsResponse.Bed.serializeBinaryToWriter
     );
@@ -2688,10 +2670,10 @@ proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.serializeBinaryToWr
 
 
 /**
- * optional string name = 1;
+ * optional string id = 1;
  * @return {string}
  */
-proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.getName = function() {
+proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.getId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -2700,18 +2682,36 @@ proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.getName =
  * @param {string} value
  * @return {!proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room} returns this
  */
-proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.setName = function(value) {
+proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.setId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
 /**
- * repeated Bed beds = 2;
+ * optional string name = 2;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.getName = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room} returns this
+ */
+proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.setName = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * repeated Bed beds = 3;
  * @return {!Array<!proto.proto.services.task_svc.v1.GetWardDetailsResponse.Bed>}
  */
 proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.getBedsList = function() {
   return /** @type{!Array<!proto.proto.services.task_svc.v1.GetWardDetailsResponse.Bed>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.proto.services.task_svc.v1.GetWardDetailsResponse.Bed, 2));
+    jspb.Message.getRepeatedWrapperField(this, proto.proto.services.task_svc.v1.GetWardDetailsResponse.Bed, 3));
 };
 
 
@@ -2720,7 +2720,7 @@ proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.getBedsLi
  * @return {!proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room} returns this
 */
 proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.setBedsList = function(value) {
-  return jspb.Message.setRepeatedWrapperField(this, 2, value);
+  return jspb.Message.setRepeatedWrapperField(this, 3, value);
 };
 
 
@@ -2730,7 +2730,7 @@ proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.setBedsLi
  * @return {!proto.proto.services.task_svc.v1.GetWardDetailsResponse.Bed}
  */
 proto.proto.services.task_svc.v1.GetWardDetailsResponse.Room.prototype.addBeds = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 2, opt_value, proto.proto.services.task_svc.v1.GetWardDetailsResponse.Bed, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 3, opt_value, proto.proto.services.task_svc.v1.GetWardDetailsResponse.Bed, opt_index);
 };
 
 

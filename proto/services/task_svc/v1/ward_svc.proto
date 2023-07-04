@@ -14,7 +14,6 @@ message CreateWardRequest {
 
 message CreateWardResponse {
   string id = 1;
-  string name = 2;
 }
 
 //
@@ -87,8 +86,9 @@ message GetWardDetailsResponse {
   }
 
   message Room {
-    string name = 1;
-    repeated Bed beds = 2;
+    string id = 1;
+    string name = 2;
+    repeated Bed beds = 3;
   }
 
   message TaskTemplate {

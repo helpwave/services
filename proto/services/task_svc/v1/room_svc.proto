@@ -127,9 +127,10 @@ message GetRoomOverviewsByWardResponse {
 
       message Patient{
         string id = 1;
-        uint32 tasks_unscheduled = 2 ;
-        uint32 tasks_in_progress = 3;
-        uint32 tasks_done = 4;
+        string human_readable_identifier = 2;
+        uint32 tasks_unscheduled = 3;
+        uint32 tasks_in_progress = 4;
+        uint32 tasks_done = 5;
       }
     }
   }
