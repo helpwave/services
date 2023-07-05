@@ -626,5 +626,66 @@ proto.proto.services.task_svc.v1.PatientServicePromiseClient.prototype.getPatien
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetPatientListRequest,
+ *   !proto.proto.services.task_svc.v1.GetPatientListResponse>}
+ */
+const methodDescriptor_PatientService_GetPatientList = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.PatientService/GetPatientList',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetPatientListRequest,
+  proto.proto.services.task_svc.v1.GetPatientListResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetPatientListRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetPatientListResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetPatientListRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetPatientListResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetPatientListResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.PatientServiceClient.prototype.getPatientList =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.PatientService/GetPatientList',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientList,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetPatientListRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetPatientListResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.PatientServicePromiseClient.prototype.getPatientList =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.PatientService/GetPatientList',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientList);
+};
+
+
 module.exports = proto.proto.services.task_svc.v1;
 

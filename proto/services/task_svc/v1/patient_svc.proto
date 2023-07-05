@@ -152,6 +152,39 @@ message GetPatientDetailsResponse {
   }
 }
 
+//
+// GetPatientList
+//
+
+message GetPatientListRequest {}
+
+message GetPatientListResponse {
+  ActivePatient active = 1;
+  Patient unassigned = 2;
+  Patient discharged = 3;
+
+  message ActivePatient {
+    string id = 1;
+    string human_readable_identifier = 2;
+    Room room = 3;
+    Bed bed = 4;
+  }
+
+  message Patient {
+    string id = 1;
+    string human_readable_identifier = 2;
+  }
+
+  message Room {
+    string id = 1;
+    string name = 2;
+  }
+
+  message Bed {
+    string id = 1;
+    uint32 index = 2;
+  }
+}
 
 //
 // PatientService
@@ -167,4 +200,5 @@ service PatientService {
   rpc UnassignBed(UnassignBedRequest) returns (UnassignBedResponse) {}
   rpc DischargePatient(DischargePatientRequest) returns (DischargePatientResponse) {}
   rpc GetPatientDetails(GetPatientDetailsRequest) returns (GetPatientDetailsResponse) {}
+  rpc GetPatientList(GetPatientListRequest) returns (GetPatientListResponse) {}
 }

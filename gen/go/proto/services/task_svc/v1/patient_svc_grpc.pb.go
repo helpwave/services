@@ -28,6 +28,7 @@ const (
 	PatientService_UnassignBed_FullMethodName       = "/proto.services.task_svc.v1.PatientService/UnassignBed"
 	PatientService_DischargePatient_FullMethodName  = "/proto.services.task_svc.v1.PatientService/DischargePatient"
 	PatientService_GetPatientDetails_FullMethodName = "/proto.services.task_svc.v1.PatientService/GetPatientDetails"
+	PatientService_GetPatientList_FullMethodName    = "/proto.services.task_svc.v1.PatientService/GetPatientList"
 )
 
 // PatientServiceClient is the client API for PatientService service.
@@ -43,6 +44,7 @@ type PatientServiceClient interface {
 	UnassignBed(ctx context.Context, in *UnassignBedRequest, opts ...grpc.CallOption) (*UnassignBedResponse, error)
 	DischargePatient(ctx context.Context, in *DischargePatientRequest, opts ...grpc.CallOption) (*DischargePatientResponse, error)
 	GetPatientDetails(ctx context.Context, in *GetPatientDetailsRequest, opts ...grpc.CallOption) (*GetPatientDetailsResponse, error)
+	GetPatientList(ctx context.Context, in *GetPatientListRequest, opts ...grpc.CallOption) (*GetPatientListResponse, error)
 }
 
 type patientServiceClient struct {
@@ -134,6 +136,15 @@ func (c *patientServiceClient) GetPatientDetails(ctx context.Context, in *GetPat
 	return out, nil
 }
 
+func (c *patientServiceClient) GetPatientList(ctx context.Context, in *GetPatientListRequest, opts ...grpc.CallOption) (*GetPatientListResponse, error) {
+	out := new(GetPatientListResponse)
+	err := c.cc.Invoke(ctx, PatientService_GetPatientList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PatientServiceServer is the server API for PatientService service.
 // All implementations must embed UnimplementedPatientServiceServer
 // for forward compatibility
@@ -147,6 +158,7 @@ type PatientServiceServer interface {
 	UnassignBed(context.Context, *UnassignBedRequest) (*UnassignBedResponse, error)
 	DischargePatient(context.Context, *DischargePatientRequest) (*DischargePatientResponse, error)
 	GetPatientDetails(context.Context, *GetPatientDetailsRequest) (*GetPatientDetailsResponse, error)
+	GetPatientList(context.Context, *GetPatientListRequest) (*GetPatientListResponse, error)
 	mustEmbedUnimplementedPatientServiceServer()
 }
 
@@ -180,6 +192,9 @@ func (UnimplementedPatientServiceServer) DischargePatient(context.Context, *Disc
 }
 func (UnimplementedPatientServiceServer) GetPatientDetails(context.Context, *GetPatientDetailsRequest) (*GetPatientDetailsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPatientDetails not implemented")
+}
+func (UnimplementedPatientServiceServer) GetPatientList(context.Context, *GetPatientListRequest) (*GetPatientListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPatientList not implemented")
 }
 func (UnimplementedPatientServiceServer) mustEmbedUnimplementedPatientServiceServer() {}
 
@@ -356,6 +371,24 @@ func _PatientService_GetPatientDetails_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PatientService_GetPatientList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPatientListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PatientServiceServer).GetPatientList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PatientService_GetPatientList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PatientServiceServer).GetPatientList(ctx, req.(*GetPatientListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PatientService_ServiceDesc is the grpc.ServiceDesc for PatientService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -398,6 +431,10 @@ var PatientService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPatientDetails",
 			Handler:    _PatientService_GetPatientDetails_Handler,
+		},
+		{
+			MethodName: "GetPatientList",
+			Handler:    _PatientService_GetPatientList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
