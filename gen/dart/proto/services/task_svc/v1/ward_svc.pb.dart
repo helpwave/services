@@ -64,7 +64,6 @@ class CreateWardResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateWardResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
@@ -97,15 +96,6 @@ class CreateWardResponse extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get name => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set name($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasName() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearName() => clearField(2);
 }
 
 class GetWardRequest extends $pb.GeneratedMessage {
@@ -623,8 +613,9 @@ class GetWardDetailsResponse_Room extends $pb.GeneratedMessage {
   factory GetWardDetailsResponse_Room.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetWardDetailsResponse.Room', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'name')
-    ..pc<GetWardDetailsResponse_Bed>(2, _omitFieldNames ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: GetWardDetailsResponse_Bed.create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..pc<GetWardDetailsResponse_Bed>(3, _omitFieldNames ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: GetWardDetailsResponse_Bed.create)
     ..hasRequiredFields = false
   ;
 
@@ -650,16 +641,25 @@ class GetWardDetailsResponse_Room extends $pb.GeneratedMessage {
   static GetWardDetailsResponse_Room? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get name => $_getSZ(0);
+  $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String v) { $_setString(0, v); }
+  set id($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasName() => $_has(0);
+  $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearName() => clearField(1);
+  void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.List<GetWardDetailsResponse_Bed> get beds => $_getList(1);
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.List<GetWardDetailsResponse_Bed> get beds => $_getList(2);
 }
 
 class GetWardDetailsResponse_TaskTemplate extends $pb.GeneratedMessage {

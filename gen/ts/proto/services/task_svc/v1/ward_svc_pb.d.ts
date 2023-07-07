@@ -24,9 +24,6 @@ export class CreateWardResponse extends jspb.Message {
   getId(): string;
   setId(value: string): CreateWardResponse;
 
-  getName(): string;
-  setName(value: string): CreateWardResponse;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateWardResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreateWardResponse): CreateWardResponse.AsObject;
@@ -38,7 +35,6 @@ export class CreateWardResponse extends jspb.Message {
 export namespace CreateWardResponse {
   export type AsObject = {
     id: string,
-    name: string,
   }
 }
 
@@ -308,6 +304,9 @@ export namespace GetWardDetailsResponse {
 
 
   export class Room extends jspb.Message {
+    getId(): string;
+    setId(value: string): Room;
+
     getName(): string;
     setName(value: string): Room;
 
@@ -326,6 +325,7 @@ export namespace GetWardDetailsResponse {
 
   export namespace Room {
     export type AsObject = {
+      id: string,
       name: string,
       bedsList: Array<GetWardDetailsResponse.Bed.AsObject>,
     }

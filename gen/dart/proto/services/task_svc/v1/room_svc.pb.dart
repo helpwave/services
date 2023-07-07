@@ -858,9 +858,10 @@ class GetRoomOverviewsByWardResponse_Room_Bed_Patient extends $pb.GeneratedMessa
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRoomOverviewsByWardResponse.Room.Bed.Patient', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..a<$core.int>(2, _omitFieldNames ? '' : 'tasksUnscheduled', $pb.PbFieldType.OU3)
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'tasksInProgress', $pb.PbFieldType.OU3)
-    ..a<$core.int>(4, _omitFieldNames ? '' : 'tasksDone', $pb.PbFieldType.OU3)
+    ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'tasksUnscheduled', $pb.PbFieldType.OU3)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'tasksInProgress', $pb.PbFieldType.OU3)
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'tasksDone', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -895,31 +896,40 @@ class GetRoomOverviewsByWardResponse_Room_Bed_Patient extends $pb.GeneratedMessa
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.int get tasksUnscheduled => $_getIZ(1);
+  $core.String get humanReadableIdentifier => $_getSZ(1);
   @$pb.TagNumber(2)
-  set tasksUnscheduled($core.int v) { $_setUnsignedInt32(1, v); }
+  set humanReadableIdentifier($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasTasksUnscheduled() => $_has(1);
+  $core.bool hasHumanReadableIdentifier() => $_has(1);
   @$pb.TagNumber(2)
-  void clearTasksUnscheduled() => clearField(2);
+  void clearHumanReadableIdentifier() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.int get tasksInProgress => $_getIZ(2);
+  $core.int get tasksUnscheduled => $_getIZ(2);
   @$pb.TagNumber(3)
-  set tasksInProgress($core.int v) { $_setUnsignedInt32(2, v); }
+  set tasksUnscheduled($core.int v) { $_setUnsignedInt32(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasTasksInProgress() => $_has(2);
+  $core.bool hasTasksUnscheduled() => $_has(2);
   @$pb.TagNumber(3)
-  void clearTasksInProgress() => clearField(3);
+  void clearTasksUnscheduled() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.int get tasksDone => $_getIZ(3);
+  $core.int get tasksInProgress => $_getIZ(3);
   @$pb.TagNumber(4)
-  set tasksDone($core.int v) { $_setUnsignedInt32(3, v); }
+  set tasksInProgress($core.int v) { $_setUnsignedInt32(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasTasksDone() => $_has(3);
+  $core.bool hasTasksInProgress() => $_has(3);
   @$pb.TagNumber(4)
-  void clearTasksDone() => clearField(4);
+  void clearTasksInProgress() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get tasksDone => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set tasksDone($core.int v) { $_setUnsignedInt32(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasTasksDone() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearTasksDone() => clearField(5);
 }
 
 class GetRoomOverviewsByWardResponse_Room_Bed extends $pb.GeneratedMessage {

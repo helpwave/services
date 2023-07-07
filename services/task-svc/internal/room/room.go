@@ -250,7 +250,8 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 			var patient *pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient
 			if bed.Patient != nil {
 				patient = &pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient{
-					Id: bed.Patient.ID.String(),
+					Id:                      bed.Patient.ID.String(),
+					HumanReadableIdentifier: bed.Patient.HumanReadableIdentifier,
 					TasksUnscheduled: uint32(hwutil.CountElements(bed.Patient.Tasks, func(task taskModel.Task) bool {
 						return task.Status == pb.TaskStatus_TASK_STATUS_TODO
 					})),

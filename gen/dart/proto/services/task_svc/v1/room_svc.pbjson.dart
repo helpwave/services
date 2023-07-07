@@ -275,9 +275,10 @@ const GetRoomOverviewsByWardResponse_Room_Bed_Patient$json = {
   '1': 'Patient',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'tasks_unscheduled', '3': 2, '4': 1, '5': 13, '10': 'tasksUnscheduled'},
-    {'1': 'tasks_in_progress', '3': 3, '4': 1, '5': 13, '10': 'tasksInProgress'},
-    {'1': 'tasks_done', '3': 4, '4': 1, '5': 13, '10': 'tasksDone'},
+    {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
+    {'1': 'tasks_unscheduled', '3': 3, '4': 1, '5': 13, '10': 'tasksUnscheduled'},
+    {'1': 'tasks_in_progress', '3': 4, '4': 1, '5': 13, '10': 'tasksInProgress'},
+    {'1': 'tasks_done', '3': 5, '4': 1, '5': 13, '10': 'tasksDone'},
   ],
 };
 
@@ -285,14 +286,15 @@ const GetRoomOverviewsByWardResponse_Room_Bed_Patient$json = {
 final $typed_data.Uint8List getRoomOverviewsByWardResponseDescriptor = $convert.base64Decode(
     'Ch5HZXRSb29tT3ZlcnZpZXdzQnlXYXJkUmVzcG9uc2USVQoFcm9vbXMYASADKAsyPy5wcm90by'
     '5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRSb29tT3ZlcnZpZXdzQnlXYXJkUmVzcG9uc2UuUm9v'
-    'bVIFcm9vbXMapwMKBFJvb20SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSVw'
+    'bVIFcm9vbXMa4wMKBFJvb20SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSVw'
     'oEYmVkcxgDIAMoCzJDLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFJvb21PdmVydmll'
-    'd3NCeVdhcmRSZXNwb25zZS5Sb29tLkJlZFIEYmVkcxqhAgoDQmVkEg4KAmlkGAEgASgJUgJpZB'
+    'd3NCeVdhcmRSZXNwb25zZS5Sb29tLkJlZFIEYmVkcxrdAgoDQmVkEg4KAmlkGAEgASgJUgJpZB'
     'JqCgdwYXRpZW50GAIgASgLMksucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0Um9vbU92'
-    'ZXJ2aWV3c0J5V2FyZFJlc3BvbnNlLlJvb20uQmVkLlBhdGllbnRIAFIHcGF0aWVudIgBARqRAQ'
-    'oHUGF0aWVudBIOCgJpZBgBIAEoCVICaWQSKwoRdGFza3NfdW5zY2hlZHVsZWQYAiABKA1SEHRh'
-    'c2tzVW5zY2hlZHVsZWQSKgoRdGFza3NfaW5fcHJvZ3Jlc3MYAyABKA1SD3Rhc2tzSW5Qcm9ncm'
-    'VzcxIdCgp0YXNrc19kb25lGAQgASgNUgl0YXNrc0RvbmVCCgoIX3BhdGllbnQ=');
+    'ZXJ2aWV3c0J5V2FyZFJlc3BvbnNlLlJvb20uQmVkLlBhdGllbnRIAFIHcGF0aWVudIgBARrNAQ'
+    'oHUGF0aWVudBIOCgJpZBgBIAEoCVICaWQSOgoZaHVtYW5fcmVhZGFibGVfaWRlbnRpZmllchgC'
+    'IAEoCVIXaHVtYW5SZWFkYWJsZUlkZW50aWZpZXISKwoRdGFza3NfdW5zY2hlZHVsZWQYAyABKA'
+    '1SEHRhc2tzVW5zY2hlZHVsZWQSKgoRdGFza3NfaW5fcHJvZ3Jlc3MYBCABKA1SD3Rhc2tzSW5Q'
+    'cm9ncmVzcxIdCgp0YXNrc19kb25lGAUgASgNUgl0YXNrc0RvbmVCCgoIX3BhdGllbnQ=');
 
 const $core.Map<$core.String, $core.dynamic> RoomServiceBase$json = {
   '1': 'RoomService',

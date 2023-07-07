@@ -54,8 +54,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 		Msg("ward created")
 
 	return &pb.CreateWardResponse{
-		Id:   ward.ID.String(),
-		Name: ward.Name,
+		Id: ward.ID.String(),
 	}, nil
 }
 
@@ -248,8 +247,9 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		})
 
 		return &pb.GetWardDetailsResponse_Room{
-			Beds: mappedBeds,
+			Id:   room.ID.String(),
 			Name: room.Name,
+			Beds: mappedBeds,
 		}, nil
 	})
 

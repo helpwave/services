@@ -465,6 +465,9 @@ export namespace GetRoomOverviewsByWardResponse {
         getId(): string;
         setId(value: string): Patient;
 
+        getHumanReadableIdentifier(): string;
+        setHumanReadableIdentifier(value: string): Patient;
+
         getTasksUnscheduled(): number;
         setTasksUnscheduled(value: number): Patient;
 
@@ -485,6 +488,7 @@ export namespace GetRoomOverviewsByWardResponse {
       export namespace Patient {
         export type AsObject = {
           id: string,
+          humanReadableIdentifier: string,
           tasksUnscheduled: number,
           tasksInProgress: number,
           tasksDone: number,
