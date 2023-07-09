@@ -67,7 +67,11 @@ COPY Procfile.standalone Procfile
 COPY --from=builder /build/app/app .
 COPY --from=builder /build/app/migrations ./migrations
 COPY docker-run-migrations.sh ./run-migrations.sh
-RUN chmod +x app run-migrations.sh
+
+# fix permissions
+RUN chmod +x \
+	/usr/bin/daprd \
+	run-migrations.sh
 
 ENV DAPR_APP_ID=$SERVICE
 ENV ADDR 127.0.0.1:80

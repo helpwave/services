@@ -21,7 +21,7 @@ __Pre-Requirements__
 __1. Create a new App__
 
 ```shell
-flyctllaunch
+flyctl launch
 	--build-arg SERVICE=user-svc
 	--dockerfile ../../Dockerfile.standalone
 	--env INSECURE_FAKE_TOKEN_ENABLE=true # When deployed on staging
@@ -50,9 +50,27 @@ primary_region = "ams"
 [env]
   INSECURE_FAKE_TOKEN_ENABLE=true
 
+[deploy]
+  strategy = "bluegreen"
+  release_command = "./run-migrations.sh"
+
 [[services]]
   auto_stop_machines = false
   auto_start_machines = false
+
+[checks]
+  [checks.dapr_sidecar]
+    grace_period = "5s"
+    interval = "10s"
+    method = "get"
+    path = "/v1.0/healthz"
+    port = 3500
+    timeout = "2s"
+   type = "http"
+
+[metrics]
+  port = 9090
+  path = "/metrics"
 ```
 
 __3. Attach database__

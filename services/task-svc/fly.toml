@@ -10,8 +10,24 @@ primary_region = "ams"
   INSECURE_FAKE_TOKEN_ENABLE=true
 
 [deploy]
+  strategy = "bluegreen"
   release_command = "./run-migrations.sh"
 
 [[services]]
   auto_stop_machines = false
   auto_start_machines = false
+
+[checks]
+  [checks.dapr_sidecar]
+    grace_period = "5s"
+    interval = "10s"
+    method = "get"
+    path = "/v1.0/healthz"
+    port = 3500
+    timeout = "2s"
+    type = "http"
+
+[metrics]
+  port = 9090
+  path = "/metrics"
+
