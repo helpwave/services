@@ -245,7 +245,7 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.G
 
 	var taskTemplates []models.TaskTemplate
 
-	if err := db.Preload("SubTasks").Where("created_by = ?", createdBy).Find(&taskTemplates).Error; err != nil {
+	if err := db.Preload("SubTasks").Where("created_by = ? AND ward_id IS NULL", createdBy).Find(&taskTemplates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
