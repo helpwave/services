@@ -60,7 +60,7 @@ WORKDIR /app
 COPY --from=deps /hivemind /usr/bin/hivemind
 COPY --from=deps /migrate /usr/bin/migrate
 COPY --from=deps /root/.dapr/bin/daprd /usr/bin/daprd
-COPY dapr.yaml dapr.yaml
+COPY dapr dapr
 COPY Procfile.standalone Procfile
 
 # copy app
