@@ -45,6 +45,6 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy
         run: |
-          flyctl deploy --config services/${{ inputs.service }}/fly.toml --app ${{ inputs.app }} --image ${{ inputs.image }} --remote-only
+          flyctl deploy --config services/${{ inputs.service }}/fly.toml --app ${{ inputs.app }} --remote-only
         env:
           DOCKER_BUILDKIT: 1
