@@ -108,6 +108,6 @@ jobs:
     uses: ./.github/workflows/fly-deploy.yaml
     with:
       service: ${{ matrix.service }}
-      app: ${{ secrets.FLY_ORGANIZATION_NAME }}-${{ matrix.service }}
-      organization: ${{ secrets.FLY_ORGANIZATION_NAME }}
+      app: ${{ vars.FLY_ORGANIZATION_NAME }}-${{ matrix.service }}
+      organization: ${{ vars.FLY_ORGANIZATION_NAME }}
     secrets: inherit
