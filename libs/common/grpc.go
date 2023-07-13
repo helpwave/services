@@ -52,6 +52,13 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	service := daprd.NewServiceWithListener(listener, grpcServerOption).(*daprd.Server)
 	server := service.GrpcServer()
 
+	if err := service.AddHealthCheckHandler("", func(ctx context.Context) error {
+		// We need to implement this. Just return nil == everything OK
+		return nil
+	}); err != nil {
+		zlog.Fatal().Err(err).Send()
+	}
+
 	registerServerHook(service)
 
 	if Mode == DevelopmentMode {
