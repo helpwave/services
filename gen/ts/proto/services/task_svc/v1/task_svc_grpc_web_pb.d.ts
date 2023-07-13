@@ -29,6 +29,13 @@ export class TaskServiceClient {
                response: proto_services_task_svc_v1_task_svc_pb.GetTasksByPatientResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_svc_pb.GetTasksByPatientResponse>;
 
+  getTasksByPatientByStatus(
+    request: proto_services_task_svc_v1_task_svc_pb.GetTasksByPatientByStatusRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_task_svc_pb.GetTasksByPatientByStatusResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_task_svc_pb.GetTasksByPatientByStatusResponse>;
+
   updateTask(
     request: proto_services_task_svc_v1_task_svc_pb.UpdateTaskRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -148,6 +155,11 @@ export class TaskServicePromiseClient {
     request: proto_services_task_svc_v1_task_svc_pb.GetTasksByPatientRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_task_svc_pb.GetTasksByPatientResponse>;
+
+  getTasksByPatientByStatus(
+    request: proto_services_task_svc_v1_task_svc_pb.GetTasksByPatientByStatusRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_task_svc_pb.GetTasksByPatientByStatusResponse>;
 
   updateTask(
     request: proto_services_task_svc_v1_task_svc_pb.UpdateTaskRequest,

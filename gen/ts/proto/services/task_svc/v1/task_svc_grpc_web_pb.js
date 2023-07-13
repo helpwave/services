@@ -263,6 +263,67 @@ proto.proto.services.task_svc.v1.TaskServicePromiseClient.prototype.getTasksByPa
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetTasksByPatientByStatusRequest,
+ *   !proto.proto.services.task_svc.v1.GetTasksByPatientByStatusResponse>}
+ */
+const methodDescriptor_TaskService_GetTasksByPatientByStatus = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.TaskService/GetTasksByPatientByStatus',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetTasksByPatientByStatusRequest,
+  proto.proto.services.task_svc.v1.GetTasksByPatientByStatusResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetTasksByPatientByStatusRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetTasksByPatientByStatusResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetTasksByPatientByStatusRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetTasksByPatientByStatusResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetTasksByPatientByStatusResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.TaskServiceClient.prototype.getTasksByPatientByStatus =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskService/GetTasksByPatientByStatus',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_GetTasksByPatientByStatus,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetTasksByPatientByStatusRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetTasksByPatientByStatusResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.TaskServicePromiseClient.prototype.getTasksByPatientByStatus =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskService/GetTasksByPatientByStatus',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_GetTasksByPatientByStatus);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.task_svc.v1.UpdateTaskRequest,
  *   !proto.proto.services.task_svc.v1.UpdateTaskResponse>}
  */
