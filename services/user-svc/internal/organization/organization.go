@@ -188,7 +188,9 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOr
 	}
 
 	var organizations []Organization
-	err = db.Preload("Organization").Where("user_id = ? OR created_by_user_id = ?", userID, userID).Find(&organizations).Error
+	err = db.Preload("Members").Joins("JOIN memberships ON memberships.organization_id = organizations.id").
+		Where("memberships.user_id = ? OR organizations.created_by_user_id = ?", userID, userID).
+		Find(&organizations).Error
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
