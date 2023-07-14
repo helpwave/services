@@ -19,24 +19,24 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	TaskService_CreateTask_FullMethodName                = "/proto.services.task_svc.v1.TaskService/CreateTask"
-	TaskService_GetTask_FullMethodName                   = "/proto.services.task_svc.v1.TaskService/GetTask"
-	TaskService_GetTasksByPatient_FullMethodName         = "/proto.services.task_svc.v1.TaskService/GetTasksByPatient"
-	TaskService_GetTasksByPatientByStatus_FullMethodName = "/proto.services.task_svc.v1.TaskService/GetTasksByPatientByStatus"
-	TaskService_UpdateTask_FullMethodName                = "/proto.services.task_svc.v1.TaskService/UpdateTask"
-	TaskService_AddSubTask_FullMethodName                = "/proto.services.task_svc.v1.TaskService/AddSubTask"
-	TaskService_RemoveSubTask_FullMethodName             = "/proto.services.task_svc.v1.TaskService/RemoveSubTask"
-	TaskService_UpdateSubTask_FullMethodName             = "/proto.services.task_svc.v1.TaskService/UpdateSubTask"
-	TaskService_SubTaskToToDo_FullMethodName             = "/proto.services.task_svc.v1.TaskService/SubTaskToToDo"
-	TaskService_SubTaskToDone_FullMethodName             = "/proto.services.task_svc.v1.TaskService/SubTaskToDone"
-	TaskService_TaskToToDo_FullMethodName                = "/proto.services.task_svc.v1.TaskService/TaskToToDo"
-	TaskService_TaskToInProgress_FullMethodName          = "/proto.services.task_svc.v1.TaskService/TaskToInProgress"
-	TaskService_TaskToDone_FullMethodName                = "/proto.services.task_svc.v1.TaskService/TaskToDone"
-	TaskService_AssignTaskToUser_FullMethodName          = "/proto.services.task_svc.v1.TaskService/AssignTaskToUser"
-	TaskService_UnassignTaskFromUser_FullMethodName      = "/proto.services.task_svc.v1.TaskService/UnassignTaskFromUser"
-	TaskService_PublishTask_FullMethodName               = "/proto.services.task_svc.v1.TaskService/PublishTask"
-	TaskService_UnpublishTask_FullMethodName             = "/proto.services.task_svc.v1.TaskService/UnpublishTask"
-	TaskService_DeleteTask_FullMethodName                = "/proto.services.task_svc.v1.TaskService/DeleteTask"
+	TaskService_CreateTask_FullMethodName                      = "/proto.services.task_svc.v1.TaskService/CreateTask"
+	TaskService_GetTask_FullMethodName                         = "/proto.services.task_svc.v1.TaskService/GetTask"
+	TaskService_GetTasksByPatient_FullMethodName               = "/proto.services.task_svc.v1.TaskService/GetTasksByPatient"
+	TaskService_GetTasksByPatientSortedByStatus_FullMethodName = "/proto.services.task_svc.v1.TaskService/GetTasksByPatientSortedByStatus"
+	TaskService_UpdateTask_FullMethodName                      = "/proto.services.task_svc.v1.TaskService/UpdateTask"
+	TaskService_AddSubTask_FullMethodName                      = "/proto.services.task_svc.v1.TaskService/AddSubTask"
+	TaskService_RemoveSubTask_FullMethodName                   = "/proto.services.task_svc.v1.TaskService/RemoveSubTask"
+	TaskService_UpdateSubTask_FullMethodName                   = "/proto.services.task_svc.v1.TaskService/UpdateSubTask"
+	TaskService_SubTaskToToDo_FullMethodName                   = "/proto.services.task_svc.v1.TaskService/SubTaskToToDo"
+	TaskService_SubTaskToDone_FullMethodName                   = "/proto.services.task_svc.v1.TaskService/SubTaskToDone"
+	TaskService_TaskToToDo_FullMethodName                      = "/proto.services.task_svc.v1.TaskService/TaskToToDo"
+	TaskService_TaskToInProgress_FullMethodName                = "/proto.services.task_svc.v1.TaskService/TaskToInProgress"
+	TaskService_TaskToDone_FullMethodName                      = "/proto.services.task_svc.v1.TaskService/TaskToDone"
+	TaskService_AssignTaskToUser_FullMethodName                = "/proto.services.task_svc.v1.TaskService/AssignTaskToUser"
+	TaskService_UnassignTaskFromUser_FullMethodName            = "/proto.services.task_svc.v1.TaskService/UnassignTaskFromUser"
+	TaskService_PublishTask_FullMethodName                     = "/proto.services.task_svc.v1.TaskService/PublishTask"
+	TaskService_UnpublishTask_FullMethodName                   = "/proto.services.task_svc.v1.TaskService/UnpublishTask"
+	TaskService_DeleteTask_FullMethodName                      = "/proto.services.task_svc.v1.TaskService/DeleteTask"
 )
 
 // TaskServiceClient is the client API for TaskService service.
@@ -46,7 +46,7 @@ type TaskServiceClient interface {
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error)
 	GetTask(ctx context.Context, in *GetTaskRequest, opts ...grpc.CallOption) (*GetTaskResponse, error)
 	GetTasksByPatient(ctx context.Context, in *GetTasksByPatientRequest, opts ...grpc.CallOption) (*GetTasksByPatientResponse, error)
-	GetTasksByPatientByStatus(ctx context.Context, in *GetTasksByPatientByStatusRequest, opts ...grpc.CallOption) (*GetTasksByPatientByStatusResponse, error)
+	GetTasksByPatientSortedByStatus(ctx context.Context, in *GetTasksByPatientSortedByStatusRequest, opts ...grpc.CallOption) (*GetTasksByPatientSortedByStatusResponse, error)
 	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*UpdateTaskResponse, error)
 	AddSubTask(ctx context.Context, in *AddSubTaskRequest, opts ...grpc.CallOption) (*AddSubTaskResponse, error)
 	RemoveSubTask(ctx context.Context, in *RemoveSubTaskRequest, opts ...grpc.CallOption) (*RemoveSubTaskResponse, error)
@@ -98,9 +98,9 @@ func (c *taskServiceClient) GetTasksByPatient(ctx context.Context, in *GetTasksB
 	return out, nil
 }
 
-func (c *taskServiceClient) GetTasksByPatientByStatus(ctx context.Context, in *GetTasksByPatientByStatusRequest, opts ...grpc.CallOption) (*GetTasksByPatientByStatusResponse, error) {
-	out := new(GetTasksByPatientByStatusResponse)
-	err := c.cc.Invoke(ctx, TaskService_GetTasksByPatientByStatus_FullMethodName, in, out, opts...)
+func (c *taskServiceClient) GetTasksByPatientSortedByStatus(ctx context.Context, in *GetTasksByPatientSortedByStatusRequest, opts ...grpc.CallOption) (*GetTasksByPatientSortedByStatusResponse, error) {
+	out := new(GetTasksByPatientSortedByStatusResponse)
+	err := c.cc.Invoke(ctx, TaskService_GetTasksByPatientSortedByStatus_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -240,7 +240,7 @@ type TaskServiceServer interface {
 	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error)
 	GetTask(context.Context, *GetTaskRequest) (*GetTaskResponse, error)
 	GetTasksByPatient(context.Context, *GetTasksByPatientRequest) (*GetTasksByPatientResponse, error)
-	GetTasksByPatientByStatus(context.Context, *GetTasksByPatientByStatusRequest) (*GetTasksByPatientByStatusResponse, error)
+	GetTasksByPatientSortedByStatus(context.Context, *GetTasksByPatientSortedByStatusRequest) (*GetTasksByPatientSortedByStatusResponse, error)
 	UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskResponse, error)
 	AddSubTask(context.Context, *AddSubTaskRequest) (*AddSubTaskResponse, error)
 	RemoveSubTask(context.Context, *RemoveSubTaskRequest) (*RemoveSubTaskResponse, error)
@@ -271,8 +271,8 @@ func (UnimplementedTaskServiceServer) GetTask(context.Context, *GetTaskRequest) 
 func (UnimplementedTaskServiceServer) GetTasksByPatient(context.Context, *GetTasksByPatientRequest) (*GetTasksByPatientResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTasksByPatient not implemented")
 }
-func (UnimplementedTaskServiceServer) GetTasksByPatientByStatus(context.Context, *GetTasksByPatientByStatusRequest) (*GetTasksByPatientByStatusResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTasksByPatientByStatus not implemented")
+func (UnimplementedTaskServiceServer) GetTasksByPatientSortedByStatus(context.Context, *GetTasksByPatientSortedByStatusRequest) (*GetTasksByPatientSortedByStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTasksByPatientSortedByStatus not implemented")
 }
 func (UnimplementedTaskServiceServer) UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
@@ -383,20 +383,20 @@ func _TaskService_GetTasksByPatient_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TaskService_GetTasksByPatientByStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTasksByPatientByStatusRequest)
+func _TaskService_GetTasksByPatientSortedByStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTasksByPatientSortedByStatusRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TaskServiceServer).GetTasksByPatientByStatus(ctx, in)
+		return srv.(TaskServiceServer).GetTasksByPatientSortedByStatus(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TaskService_GetTasksByPatientByStatus_FullMethodName,
+		FullMethod: TaskService_GetTasksByPatientSortedByStatus_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServiceServer).GetTasksByPatientByStatus(ctx, req.(*GetTasksByPatientByStatusRequest))
+		return srv.(TaskServiceServer).GetTasksByPatientSortedByStatus(ctx, req.(*GetTasksByPatientSortedByStatusRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -673,8 +673,8 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TaskService_GetTasksByPatient_Handler,
 		},
 		{
-			MethodName: "GetTasksByPatientByStatus",
-			Handler:    _TaskService_GetTasksByPatientByStatus_Handler,
+			MethodName: "GetTasksByPatientSortedByStatus",
+			Handler:    _TaskService_GetTasksByPatientSortedByStatus_Handler,
 		},
 		{
 			MethodName: "UpdateTask",

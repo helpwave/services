@@ -178,7 +178,7 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 	}, nil
 }
 
-func (ServiceServer) GetTasksByPatientByStatus(ctx context.Context, req *pb.GetTasksByPatientByStatusRequest) (*pb.GetTasksByPatientByStatusResponse, error) {
+func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *pb.GetTasksByPatientSortedByStatusRequest) (*pb.GetTasksByPatientSortedByStatusResponse, error) {
 	// TODO: Auth
 
 	patientID, err := uuid.Parse(req.PatientId)
@@ -195,16 +195,16 @@ func (ServiceServer) GetTasksByPatientByStatus(ctx context.Context, req *pb.GetT
 		}
 	}
 
-	var mappingFunction = func(tasks []models.Task) []*pb.GetTasksByPatientByStatusResponse_Task {
-		return hwutil.Map(tasks, func(task models.Task) *pb.GetTasksByPatientByStatusResponse_Task {
-			var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTasksByPatientByStatusResponse_Task_SubTask {
-				return &pb.GetTasksByPatientByStatusResponse_Task_SubTask{
+	var mappingFunction = func(tasks []models.Task) []*pb.GetTasksByPatientSortedByStatusResponse_Task {
+		return hwutil.Map(tasks, func(task models.Task) *pb.GetTasksByPatientSortedByStatusResponse_Task {
+			var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask {
+				return &pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask{
 					Id:   subtask.ID.String(),
 					Done: subtask.Done,
 					Name: subtask.Name,
 				}
 			})
-			return &pb.GetTasksByPatientByStatusResponse_Task{
+			return &pb.GetTasksByPatientSortedByStatusResponse_Task{
 				Id:             task.ID.String(),
 				Name:           task.Name,
 				Description:    task.Description,
@@ -216,8 +216,8 @@ func (ServiceServer) GetTasksByPatientByStatus(ctx context.Context, req *pb.GetT
 		})
 	}
 
-	return &pb.GetTasksByPatientByStatusResponse{
-		Unscheduled: mappingFunction(hwutil.Filter(tasks, func(value models.Task) bool {
+	return &pb.GetTasksByPatientSortedByStatusResponse{
+		Todo: mappingFunction(hwutil.Filter(tasks, func(value models.Task) bool {
 			return value.Status == pb.TaskStatus_TASK_STATUS_TODO
 		})),
 		InProgress: mappingFunction(hwutil.Filter(tasks, func(value models.Task) bool {

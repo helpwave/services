@@ -24,7 +24,7 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
   $async.Future<$5.CreateTaskResponse> createTask($pb.ServerContext ctx, $5.CreateTaskRequest request);
   $async.Future<$5.GetTaskResponse> getTask($pb.ServerContext ctx, $5.GetTaskRequest request);
   $async.Future<$5.GetTasksByPatientResponse> getTasksByPatient($pb.ServerContext ctx, $5.GetTasksByPatientRequest request);
-  $async.Future<$5.GetTasksByPatientByStatusResponse> getTasksByPatientByStatus($pb.ServerContext ctx, $5.GetTasksByPatientByStatusRequest request);
+  $async.Future<$5.GetTasksByPatientSortedByStatusResponse> getTasksByPatientSortedByStatus($pb.ServerContext ctx, $5.GetTasksByPatientSortedByStatusRequest request);
   $async.Future<$5.UpdateTaskResponse> updateTask($pb.ServerContext ctx, $5.UpdateTaskRequest request);
   $async.Future<$5.AddSubTaskResponse> addSubTask($pb.ServerContext ctx, $5.AddSubTaskRequest request);
   $async.Future<$5.RemoveSubTaskResponse> removeSubTask($pb.ServerContext ctx, $5.RemoveSubTaskRequest request);
@@ -45,7 +45,7 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
       case 'CreateTask': return $5.CreateTaskRequest();
       case 'GetTask': return $5.GetTaskRequest();
       case 'GetTasksByPatient': return $5.GetTasksByPatientRequest();
-      case 'GetTasksByPatientByStatus': return $5.GetTasksByPatientByStatusRequest();
+      case 'GetTasksByPatientSortedByStatus': return $5.GetTasksByPatientSortedByStatusRequest();
       case 'UpdateTask': return $5.UpdateTaskRequest();
       case 'AddSubTask': return $5.AddSubTaskRequest();
       case 'RemoveSubTask': return $5.RemoveSubTaskRequest();
@@ -69,7 +69,7 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
       case 'CreateTask': return this.createTask(ctx, request as $5.CreateTaskRequest);
       case 'GetTask': return this.getTask(ctx, request as $5.GetTaskRequest);
       case 'GetTasksByPatient': return this.getTasksByPatient(ctx, request as $5.GetTasksByPatientRequest);
-      case 'GetTasksByPatientByStatus': return this.getTasksByPatientByStatus(ctx, request as $5.GetTasksByPatientByStatusRequest);
+      case 'GetTasksByPatientSortedByStatus': return this.getTasksByPatientSortedByStatus(ctx, request as $5.GetTasksByPatientSortedByStatusRequest);
       case 'UpdateTask': return this.updateTask(ctx, request as $5.UpdateTaskRequest);
       case 'AddSubTask': return this.addSubTask(ctx, request as $5.AddSubTaskRequest);
       case 'RemoveSubTask': return this.removeSubTask(ctx, request as $5.RemoveSubTaskRequest);

@@ -90,7 +90,7 @@ message GetTasksByPatientSortedByStatusRequest {
 }
 
 message GetTasksByPatientSortedByStatusResponse {
-  repeated Task unscheduled = 1;
+  repeated Task todo = 1;
   repeated Task in_progress = 2;
   repeated Task done = 3;
 
@@ -271,7 +271,7 @@ service TaskService {
   rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse) {}
   rpc GetTask (GetTaskRequest) returns (GetTaskResponse) {}
   rpc GetTasksByPatient (GetTasksByPatientRequest) returns (GetTasksByPatientResponse) {}
-  rpc GetTasksByPatientByStatus (GetTasksByPatientByStatusRequest) returns (GetTasksByPatientByStatusResponse) {}
+  rpc GetTasksByPatientSortedByStatus (GetTasksByPatientSortedByStatusRequest) returns (GetTasksByPatientSortedByStatusResponse) {}
   rpc UpdateTask (UpdateTaskRequest) returns (UpdateTaskResponse) {}
   rpc AddSubTask (AddSubTaskRequest) returns (AddSubTaskResponse) {}
   rpc RemoveSubTask (RemoveSubTaskRequest) returns (RemoveSubTaskResponse) {}
