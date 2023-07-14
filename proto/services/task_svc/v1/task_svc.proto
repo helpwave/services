@@ -82,14 +82,14 @@ message GetTasksByPatientResponse {
 
 
 //
-// GetTasksByPatientByStatus
+// GetTasksByPatientSortedByStatus
 //
 
-message GetTasksByPatientByStatusRequest {
+message GetTasksByPatientSortedByStatusRequest {
   string patient_id = 1; // @gotags: validate:"uuid4"
 }
 
-message GetTasksByPatientByStatusResponse {
+message GetTasksByPatientSortedByStatusResponse {
   repeated Task unscheduled = 1;
   repeated Task in_progress = 2;
   repeated Task done = 3;
