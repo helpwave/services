@@ -36,14 +36,14 @@ type Base struct {
 
 type Organization struct {
 	Base
-	ID              uuid.UUID    `gorm:"column:id"`
+	ID              uuid.UUID    `gorm:"column:id;default:uuid_generate_v4()"`
 	CreatedByUserId uuid.UUID    `gorm:"column:created_by_user_id"`
 	Members         []Membership `gorm:"foreignKey:OrganizationID"`
 	Invitations     []Invitation `gorm:"foreignKey:OrganizationID"`
 }
 
 type Membership struct {
-	ID             uuid.UUID    `gorm:"primaryKey,column:id"`
+	ID             uuid.UUID    `gorm:"primaryKey,column:id;default:uuid_generate_v4()"`
 	UserID         uuid.UUID    `gorm:"column:user_id"`
 	OrganizationID uuid.UUID    `gorm:"column:organization_id"`
 	Organization   Organization `gorm:"foreignKey:OrganizationID"`
@@ -51,7 +51,7 @@ type Membership struct {
 }
 
 type Invitation struct {
-	ID             uuid.UUID       `gorm:"column:id"`
+	ID             uuid.UUID       `gorm:"column:id;default:uuid_generate_v4()"`
 	OrganizationID uuid.UUID       `gorm:"column:organization_id"`
 	Email          string          `gorm:"column:email"`
 	State          InvitationState `gorm:"column:state"`

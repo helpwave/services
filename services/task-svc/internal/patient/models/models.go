@@ -13,7 +13,7 @@ type Base struct {
 
 type Patient struct {
 	Base
-	ID             uuid.UUID             `gorm:"column:id"`
+	ID             uuid.UUID             `gorm:"column:id;default:uuid_generate_v4()"`
 	OrganizationID uuid.UUID             `gorm:"column:organization_id"`
 	BedID          *uuid.UUID            `gorm:"column:bed_id;default:NULL"`
 	Tasks          []taskModels.Task     `gorm:"foreignKey:PatientId"`
