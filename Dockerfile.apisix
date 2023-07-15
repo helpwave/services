@@ -26,7 +26,7 @@ ENV APISIX_STAND_ALONE=true
 
 COPY --chown=apisix:apisix --from=deps /hivemind /usr/bin/hivemind
 COPY --chown=apisix:apisix --from=deps /root/.dapr/bin/daprd /usr/bin/daprd
-COPY --chown=apisix:apisix dapr.yaml dapr.yaml
+COPY --chown=apisix:apisix dapr/config.yaml dapr/config.yaml
 COPY --chown=apisix:apisix apisix/Procfile.apisix Procfile
 COPY --chown=apisix:apisix apisix/apisix_config.yaml /usr/local/apisix/conf/config.yaml
 COPY --chown=apisix:apisix apisix/apisix.yaml /usr/local/apisix/conf/apisix.yaml

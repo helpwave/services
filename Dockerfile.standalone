@@ -53,6 +53,8 @@ RUN echo -n "56ff6bbcfc551d2cedb06a30a8fa32fb14f6efe2995b38316a991b0c5e048e15 /r
 FROM alpine AS production
 
 ARG SERVICE
+# APP_PROTOCOL can be grpc or http
+ARG APP_PROTOCOL=grpc
 
 WORKDIR /app
 
@@ -60,7 +62,7 @@ WORKDIR /app
 COPY --from=deps /hivemind /usr/bin/hivemind
 COPY --from=deps /migrate /usr/bin/migrate
 COPY --from=deps /root/.dapr/bin/daprd /usr/bin/daprd
-COPY dapr.yaml dapr.yaml
+COPY dapr dapr
 COPY Procfile.standalone Procfile
 
 # copy app
@@ -74,6 +76,7 @@ RUN chmod +x \
 	run-migrations.sh
 
 ENV DAPR_APP_ID=$SERVICE
+ENV APP_PROTOCOL=$APP_PROTOCOL
 ENV ADDR 127.0.0.1:80
 ENV MODE development
 ENV LOG_LEVEL debug
