@@ -4,7 +4,6 @@ import (
 	"common"
 	"context"
 	"emergency-room-svc/models"
-	"gen/proto/services/emergency_room_svc/v1"
 	pb "gen/proto/services/emergency_room_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/google/uuid"
@@ -14,6 +13,7 @@ import (
 	"hwgorm"
 	"hwutil"
 	"logging"
+	pbhelpers "proto_helpers/emergency_room_svc/v1"
 
 	zlog "github.com/rs/zerolog/log"
 )
@@ -26,13 +26,7 @@ var Version string
 func main() {
 	common.Setup(ServiceName, Version, false)
 
-	hwgorm.SetupDatabase(
-		hwutil.GetEnvOr("POSTGRES_HOST", "localhost"),
-		hwutil.GetEnvOr("POSTGRES_USER", "postgres"),
-		hwutil.GetEnvOr("POSTGRES_PASSWORD", "postgres"),
-		hwutil.GetEnvOr("POSTGRES_DB", "postgres"),
-		hwutil.GetEnvOr("POSTGRES_PORT", "5432"),
-	)
+	hwgorm.SetupDatabaseByEnvs()
 
 	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		pb.RegisterEmergencyRoomServiceServer(server.GrpcServer(), &emergencyRoomServiceServer{})
@@ -84,7 +78,7 @@ func (emergencyRoomServiceServer) CreateER(ctx context.Context, req *pb.CreateER
 	return &pb.CreateERResponse{
 		Id:                 emergencyRoom.ID.String(),
 		Name:               emergencyRoom.Name,
-		Location:           emergency_room_svc.FromGormPoint(&emergencyRoom.Location),
+		Location:           pbhelpers.FromGormPoint(&emergencyRoom.Location),
 		DisplayableAddress: emergencyRoom.DisplayableAddress,
 		Open:               emergencyRoom.Open,
 		Utilization:        emergencyRoom.Utilization,
@@ -120,7 +114,7 @@ func (emergencyRoomServiceServer) GetER(ctx context.Context, req *pb.GetERReques
 	return &pb.GetERResponse{
 		Id:                 emergencyRoom.ID.String(),
 		Name:               emergencyRoom.Name,
-		Location:           emergency_room_svc.FromGormPoint(&emergencyRoom.Location),
+		Location:           pbhelpers.FromGormPoint(&emergencyRoom.Location),
 		DisplayableAddress: emergencyRoom.DisplayableAddress,
 		Open:               emergencyRoom.Open,
 		Utilization:        emergencyRoom.Utilization,
@@ -135,7 +129,7 @@ func (emergencyRoomServiceServer) GetERs(ctx context.Context, req *pb.GetERsRequ
 	db := hwgorm.GetDB(ctx)
 	db = db.Where(whereClausesForERsQuery(db, req))
 
-	pageReq := emergency_room_svc.ToGormPagedRequest(req.PagedRequest)
+	pageReq := pbhelpers.ToGormPagedRequest(req.PagedRequest)
 
 	pageInfo, err := hwgorm.GetPageInfo(db, &pageReq, models.EmergencyRoom{})
 	if err != nil {
@@ -159,7 +153,7 @@ func (emergencyRoomServiceServer) GetERs(ctx context.Context, req *pb.GetERsRequ
 		responses[i] = &pb.GetERResponse{
 			Id:                 emergencyRoom.ID.String(),
 			Name:               emergencyRoom.Name,
-			Location:           emergency_room_svc.FromGormPoint(&emergencyRoom.Location),
+			Location:           pbhelpers.FromGormPoint(&emergencyRoom.Location),
 			DisplayableAddress: emergencyRoom.DisplayableAddress,
 			Open:               emergencyRoom.Open,
 			Utilization:        emergencyRoom.Utilization,
@@ -218,7 +212,7 @@ func (emergencyRoomServiceServer) UpdateER(ctx context.Context, req *pb.UpdateER
 		ID: id,
 	}
 
-	updatesMap := req.UpdatesMap()
+	updatesMap := pbhelpers.UpdatesMapForUpdateERRequest(req)
 	log.Debug().Msg(logging.Formatted(updatesMap))
 
 	if err := db.Model(&emergencyRoom).Updates(updatesMap).Error; err != nil {

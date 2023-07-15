@@ -1,11 +1,35 @@
 package hwutil
 
+func Filter[K any](array []K, condition func(value K) bool) []K {
+	var result []K
+
+	for _, value := range array {
+		if condition(value) {
+			result = append(result, value)
+		}
+	}
+
+	return result
+}
+
 func Map[K any, V any](vs []K, f func(K) V) []V {
 	vsm := make([]V, len(vs))
 	for i, v := range vs {
 		vsm[i] = f(v)
 	}
 	return vsm
+}
+
+func MapWithErr[K any, V any](vs []K, f func(K) (V, error)) ([]V, error) {
+	vsm := make([]V, len(vs))
+	for i, v := range vs {
+		v, err := f(v)
+		if err != nil {
+			return nil, err
+		}
+		vsm[i] = v
+	}
+	return vsm, nil
 }
 
 func Contains[K comparable](vs []K, f K) bool {
@@ -15,4 +39,14 @@ func Contains[K comparable](vs []K, f K) bool {
 		}
 	}
 	return false
+}
+
+func CountElements[K any](values []K, condition func(K) bool) int {
+	count := 0
+	for _, value := range values {
+		if condition(value) {
+			count++
+		}
+	}
+	return count
 }

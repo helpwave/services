@@ -64,7 +64,6 @@ class CreateWardResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateWardResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
@@ -97,15 +96,6 @@ class CreateWardResponse extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get name => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set name($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasName() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearName() => clearField(2);
 }
 
 class GetWardRequest extends $pb.GeneratedMessage {
@@ -480,6 +470,474 @@ class DeleteWardResponse extends $pb.GeneratedMessage {
   static DeleteWardResponse? _defaultInstance;
 }
 
+class GetWardDetailsRequest extends $pb.GeneratedMessage {
+  factory GetWardDetailsRequest() => create();
+  GetWardDetailsRequest._() : super();
+  factory GetWardDetailsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetWardDetailsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetWardDetailsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetWardDetailsRequest clone() => GetWardDetailsRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetWardDetailsRequest copyWith(void Function(GetWardDetailsRequest) updates) => super.copyWith((message) => updates(message as GetWardDetailsRequest)) as GetWardDetailsRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetWardDetailsRequest create() => GetWardDetailsRequest._();
+  GetWardDetailsRequest createEmptyInstance() => create();
+  static $pb.PbList<GetWardDetailsRequest> createRepeated() => $pb.PbList<GetWardDetailsRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetWardDetailsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetWardDetailsRequest>(create);
+  static GetWardDetailsRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
+class GetWardDetailsResponse_Bed extends $pb.GeneratedMessage {
+  factory GetWardDetailsResponse_Bed() => create();
+  GetWardDetailsResponse_Bed._() : super();
+  factory GetWardDetailsResponse_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetWardDetailsResponse_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetWardDetailsResponse.Bed', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetWardDetailsResponse_Bed clone() => GetWardDetailsResponse_Bed()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetWardDetailsResponse_Bed copyWith(void Function(GetWardDetailsResponse_Bed) updates) => super.copyWith((message) => updates(message as GetWardDetailsResponse_Bed)) as GetWardDetailsResponse_Bed;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetWardDetailsResponse_Bed create() => GetWardDetailsResponse_Bed._();
+  GetWardDetailsResponse_Bed createEmptyInstance() => create();
+  static $pb.PbList<GetWardDetailsResponse_Bed> createRepeated() => $pb.PbList<GetWardDetailsResponse_Bed>();
+  @$core.pragma('dart2js:noInline')
+  static GetWardDetailsResponse_Bed getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetWardDetailsResponse_Bed>(create);
+  static GetWardDetailsResponse_Bed? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
+class GetWardDetailsResponse_Subtask extends $pb.GeneratedMessage {
+  factory GetWardDetailsResponse_Subtask() => create();
+  GetWardDetailsResponse_Subtask._() : super();
+  factory GetWardDetailsResponse_Subtask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetWardDetailsResponse_Subtask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetWardDetailsResponse.Subtask', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetWardDetailsResponse_Subtask clone() => GetWardDetailsResponse_Subtask()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetWardDetailsResponse_Subtask copyWith(void Function(GetWardDetailsResponse_Subtask) updates) => super.copyWith((message) => updates(message as GetWardDetailsResponse_Subtask)) as GetWardDetailsResponse_Subtask;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetWardDetailsResponse_Subtask create() => GetWardDetailsResponse_Subtask._();
+  GetWardDetailsResponse_Subtask createEmptyInstance() => create();
+  static $pb.PbList<GetWardDetailsResponse_Subtask> createRepeated() => $pb.PbList<GetWardDetailsResponse_Subtask>();
+  @$core.pragma('dart2js:noInline')
+  static GetWardDetailsResponse_Subtask getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetWardDetailsResponse_Subtask>(create);
+  static GetWardDetailsResponse_Subtask? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+}
+
+class GetWardDetailsResponse_Room extends $pb.GeneratedMessage {
+  factory GetWardDetailsResponse_Room() => create();
+  GetWardDetailsResponse_Room._() : super();
+  factory GetWardDetailsResponse_Room.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetWardDetailsResponse_Room.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetWardDetailsResponse.Room', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..pc<GetWardDetailsResponse_Bed>(3, _omitFieldNames ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: GetWardDetailsResponse_Bed.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetWardDetailsResponse_Room clone() => GetWardDetailsResponse_Room()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetWardDetailsResponse_Room copyWith(void Function(GetWardDetailsResponse_Room) updates) => super.copyWith((message) => updates(message as GetWardDetailsResponse_Room)) as GetWardDetailsResponse_Room;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetWardDetailsResponse_Room create() => GetWardDetailsResponse_Room._();
+  GetWardDetailsResponse_Room createEmptyInstance() => create();
+  static $pb.PbList<GetWardDetailsResponse_Room> createRepeated() => $pb.PbList<GetWardDetailsResponse_Room>();
+  @$core.pragma('dart2js:noInline')
+  static GetWardDetailsResponse_Room getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetWardDetailsResponse_Room>(create);
+  static GetWardDetailsResponse_Room? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.List<GetWardDetailsResponse_Bed> get beds => $_getList(2);
+}
+
+class GetWardDetailsResponse_TaskTemplate extends $pb.GeneratedMessage {
+  factory GetWardDetailsResponse_TaskTemplate() => create();
+  GetWardDetailsResponse_TaskTemplate._() : super();
+  factory GetWardDetailsResponse_TaskTemplate.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetWardDetailsResponse_TaskTemplate.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetWardDetailsResponse.TaskTemplate', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..pc<GetWardDetailsResponse_Subtask>(3, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetWardDetailsResponse_Subtask.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetWardDetailsResponse_TaskTemplate clone() => GetWardDetailsResponse_TaskTemplate()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetWardDetailsResponse_TaskTemplate copyWith(void Function(GetWardDetailsResponse_TaskTemplate) updates) => super.copyWith((message) => updates(message as GetWardDetailsResponse_TaskTemplate)) as GetWardDetailsResponse_TaskTemplate;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetWardDetailsResponse_TaskTemplate create() => GetWardDetailsResponse_TaskTemplate._();
+  GetWardDetailsResponse_TaskTemplate createEmptyInstance() => create();
+  static $pb.PbList<GetWardDetailsResponse_TaskTemplate> createRepeated() => $pb.PbList<GetWardDetailsResponse_TaskTemplate>();
+  @$core.pragma('dart2js:noInline')
+  static GetWardDetailsResponse_TaskTemplate getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetWardDetailsResponse_TaskTemplate>(create);
+  static GetWardDetailsResponse_TaskTemplate? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.List<GetWardDetailsResponse_Subtask> get subtasks => $_getList(2);
+}
+
+class GetWardDetailsResponse extends $pb.GeneratedMessage {
+  factory GetWardDetailsResponse() => create();
+  GetWardDetailsResponse._() : super();
+  factory GetWardDetailsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetWardDetailsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetWardDetailsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..pc<GetWardDetailsResponse_Room>(3, _omitFieldNames ? '' : 'rooms', $pb.PbFieldType.PM, subBuilder: GetWardDetailsResponse_Room.create)
+    ..pc<GetWardDetailsResponse_TaskTemplate>(4, _omitFieldNames ? '' : 'taskTemplates', $pb.PbFieldType.PM, subBuilder: GetWardDetailsResponse_TaskTemplate.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetWardDetailsResponse clone() => GetWardDetailsResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetWardDetailsResponse copyWith(void Function(GetWardDetailsResponse) updates) => super.copyWith((message) => updates(message as GetWardDetailsResponse)) as GetWardDetailsResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetWardDetailsResponse create() => GetWardDetailsResponse._();
+  GetWardDetailsResponse createEmptyInstance() => create();
+  static $pb.PbList<GetWardDetailsResponse> createRepeated() => $pb.PbList<GetWardDetailsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetWardDetailsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetWardDetailsResponse>(create);
+  static GetWardDetailsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.List<GetWardDetailsResponse_Room> get rooms => $_getList(2);
+
+  @$pb.TagNumber(4)
+  $core.List<GetWardDetailsResponse_TaskTemplate> get taskTemplates => $_getList(3);
+}
+
+class GetWardOverviewsRequest extends $pb.GeneratedMessage {
+  factory GetWardOverviewsRequest() => create();
+  GetWardOverviewsRequest._() : super();
+  factory GetWardOverviewsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetWardOverviewsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetWardOverviewsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetWardOverviewsRequest clone() => GetWardOverviewsRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetWardOverviewsRequest copyWith(void Function(GetWardOverviewsRequest) updates) => super.copyWith((message) => updates(message as GetWardOverviewsRequest)) as GetWardOverviewsRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetWardOverviewsRequest create() => GetWardOverviewsRequest._();
+  GetWardOverviewsRequest createEmptyInstance() => create();
+  static $pb.PbList<GetWardOverviewsRequest> createRepeated() => $pb.PbList<GetWardOverviewsRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetWardOverviewsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetWardOverviewsRequest>(create);
+  static GetWardOverviewsRequest? _defaultInstance;
+}
+
+class GetWardOverviewsResponse_Ward extends $pb.GeneratedMessage {
+  factory GetWardOverviewsResponse_Ward() => create();
+  GetWardOverviewsResponse_Ward._() : super();
+  factory GetWardOverviewsResponse_Ward.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetWardOverviewsResponse_Ward.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetWardOverviewsResponse.Ward', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'bedCount', $pb.PbFieldType.OU3)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'tasksTodo', $pb.PbFieldType.OU3)
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'tasksInProgress', $pb.PbFieldType.OU3)
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'tasksDone', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetWardOverviewsResponse_Ward clone() => GetWardOverviewsResponse_Ward()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetWardOverviewsResponse_Ward copyWith(void Function(GetWardOverviewsResponse_Ward) updates) => super.copyWith((message) => updates(message as GetWardOverviewsResponse_Ward)) as GetWardOverviewsResponse_Ward;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetWardOverviewsResponse_Ward create() => GetWardOverviewsResponse_Ward._();
+  GetWardOverviewsResponse_Ward createEmptyInstance() => create();
+  static $pb.PbList<GetWardOverviewsResponse_Ward> createRepeated() => $pb.PbList<GetWardOverviewsResponse_Ward>();
+  @$core.pragma('dart2js:noInline')
+  static GetWardOverviewsResponse_Ward getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetWardOverviewsResponse_Ward>(create);
+  static GetWardOverviewsResponse_Ward? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get bedCount => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set bedCount($core.int v) { $_setUnsignedInt32(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasBedCount() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearBedCount() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.int get tasksTodo => $_getIZ(3);
+  @$pb.TagNumber(4)
+  set tasksTodo($core.int v) { $_setUnsignedInt32(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasTasksTodo() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearTasksTodo() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get tasksInProgress => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set tasksInProgress($core.int v) { $_setUnsignedInt32(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasTasksInProgress() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearTasksInProgress() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.int get tasksDone => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set tasksDone($core.int v) { $_setUnsignedInt32(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasTasksDone() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearTasksDone() => clearField(6);
+}
+
+class GetWardOverviewsResponse extends $pb.GeneratedMessage {
+  factory GetWardOverviewsResponse() => create();
+  GetWardOverviewsResponse._() : super();
+  factory GetWardOverviewsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetWardOverviewsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetWardOverviewsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..pc<GetWardOverviewsResponse_Ward>(1, _omitFieldNames ? '' : 'wards', $pb.PbFieldType.PM, subBuilder: GetWardOverviewsResponse_Ward.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetWardOverviewsResponse clone() => GetWardOverviewsResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetWardOverviewsResponse copyWith(void Function(GetWardOverviewsResponse) updates) => super.copyWith((message) => updates(message as GetWardOverviewsResponse)) as GetWardOverviewsResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetWardOverviewsResponse create() => GetWardOverviewsResponse._();
+  GetWardOverviewsResponse createEmptyInstance() => create();
+  static $pb.PbList<GetWardOverviewsResponse> createRepeated() => $pb.PbList<GetWardOverviewsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetWardOverviewsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetWardOverviewsResponse>(create);
+  static GetWardOverviewsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<GetWardOverviewsResponse_Ward> get wards => $_getList(0);
+}
+
 class WardServiceApi {
   $pb.RpcClient _client;
   WardServiceApi(this._client);
@@ -498,6 +956,12 @@ class WardServiceApi {
   ;
   $async.Future<DeleteWardResponse> deleteWard($pb.ClientContext? ctx, DeleteWardRequest request) =>
     _client.invoke<DeleteWardResponse>(ctx, 'WardService', 'DeleteWard', request, DeleteWardResponse())
+  ;
+  $async.Future<GetWardOverviewsResponse> getWardOverviews($pb.ClientContext? ctx, GetWardOverviewsRequest request) =>
+    _client.invoke<GetWardOverviewsResponse>(ctx, 'WardService', 'GetWardOverviews', request, GetWardOverviewsResponse())
+  ;
+  $async.Future<GetWardDetailsResponse> getWardDetails($pb.ClientContext? ctx, GetWardDetailsRequest request) =>
+    _client.invoke<GetWardDetailsResponse>(ctx, 'WardService', 'GetWardDetails', request, GetWardDetailsResponse())
   ;
 }
 

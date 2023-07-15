@@ -588,6 +588,250 @@ class GetTasksByPatientResponse extends $pb.GeneratedMessage {
   $core.List<GetTasksByPatientResponse_Task> get tasks => $_getList(0);
 }
 
+class GetTasksByPatientSortedByStatusRequest extends $pb.GeneratedMessage {
+  factory GetTasksByPatientSortedByStatusRequest() => create();
+  GetTasksByPatientSortedByStatusRequest._() : super();
+  factory GetTasksByPatientSortedByStatusRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetTasksByPatientSortedByStatusRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTasksByPatientSortedByStatusRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'patientId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetTasksByPatientSortedByStatusRequest clone() => GetTasksByPatientSortedByStatusRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetTasksByPatientSortedByStatusRequest copyWith(void Function(GetTasksByPatientSortedByStatusRequest) updates) => super.copyWith((message) => updates(message as GetTasksByPatientSortedByStatusRequest)) as GetTasksByPatientSortedByStatusRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetTasksByPatientSortedByStatusRequest create() => GetTasksByPatientSortedByStatusRequest._();
+  GetTasksByPatientSortedByStatusRequest createEmptyInstance() => create();
+  static $pb.PbList<GetTasksByPatientSortedByStatusRequest> createRepeated() => $pb.PbList<GetTasksByPatientSortedByStatusRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetTasksByPatientSortedByStatusRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTasksByPatientSortedByStatusRequest>(create);
+  static GetTasksByPatientSortedByStatusRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get patientId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set patientId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasPatientId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPatientId() => clearField(1);
+}
+
+class GetTasksByPatientSortedByStatusResponse_Task_SubTask extends $pb.GeneratedMessage {
+  factory GetTasksByPatientSortedByStatusResponse_Task_SubTask() => create();
+  GetTasksByPatientSortedByStatusResponse_Task_SubTask._() : super();
+  factory GetTasksByPatientSortedByStatusResponse_Task_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetTasksByPatientSortedByStatusResponse_Task_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTasksByPatientSortedByStatusResponse.Task.SubTask', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOB(3, _omitFieldNames ? '' : 'done')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetTasksByPatientSortedByStatusResponse_Task_SubTask clone() => GetTasksByPatientSortedByStatusResponse_Task_SubTask()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetTasksByPatientSortedByStatusResponse_Task_SubTask copyWith(void Function(GetTasksByPatientSortedByStatusResponse_Task_SubTask) updates) => super.copyWith((message) => updates(message as GetTasksByPatientSortedByStatusResponse_Task_SubTask)) as GetTasksByPatientSortedByStatusResponse_Task_SubTask;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetTasksByPatientSortedByStatusResponse_Task_SubTask create() => GetTasksByPatientSortedByStatusResponse_Task_SubTask._();
+  GetTasksByPatientSortedByStatusResponse_Task_SubTask createEmptyInstance() => create();
+  static $pb.PbList<GetTasksByPatientSortedByStatusResponse_Task_SubTask> createRepeated() => $pb.PbList<GetTasksByPatientSortedByStatusResponse_Task_SubTask>();
+  @$core.pragma('dart2js:noInline')
+  static GetTasksByPatientSortedByStatusResponse_Task_SubTask getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTasksByPatientSortedByStatusResponse_Task_SubTask>(create);
+  static GetTasksByPatientSortedByStatusResponse_Task_SubTask? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get done => $_getBF(2);
+  @$pb.TagNumber(3)
+  set done($core.bool v) { $_setBool(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDone() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDone() => clearField(3);
+}
+
+class GetTasksByPatientSortedByStatusResponse_Task extends $pb.GeneratedMessage {
+  factory GetTasksByPatientSortedByStatusResponse_Task() => create();
+  GetTasksByPatientSortedByStatusResponse_Task._() : super();
+  factory GetTasksByPatientSortedByStatusResponse_Task.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetTasksByPatientSortedByStatusResponse_Task.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTasksByPatientSortedByStatusResponse.Task', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'description')
+    ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
+    ..aOS(6, _omitFieldNames ? '' : 'patientId')
+    ..aOB(7, _omitFieldNames ? '' : 'public')
+    ..pc<GetTasksByPatientSortedByStatusResponse_Task_SubTask>(8, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTasksByPatientSortedByStatusResponse_Task_SubTask.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetTasksByPatientSortedByStatusResponse_Task clone() => GetTasksByPatientSortedByStatusResponse_Task()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetTasksByPatientSortedByStatusResponse_Task copyWith(void Function(GetTasksByPatientSortedByStatusResponse_Task) updates) => super.copyWith((message) => updates(message as GetTasksByPatientSortedByStatusResponse_Task)) as GetTasksByPatientSortedByStatusResponse_Task;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetTasksByPatientSortedByStatusResponse_Task create() => GetTasksByPatientSortedByStatusResponse_Task._();
+  GetTasksByPatientSortedByStatusResponse_Task createEmptyInstance() => create();
+  static $pb.PbList<GetTasksByPatientSortedByStatusResponse_Task> createRepeated() => $pb.PbList<GetTasksByPatientSortedByStatusResponse_Task>();
+  @$core.pragma('dart2js:noInline')
+  static GetTasksByPatientSortedByStatusResponse_Task getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTasksByPatientSortedByStatusResponse_Task>(create);
+  static GetTasksByPatientSortedByStatusResponse_Task? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get description => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set description($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDescription() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDescription() => clearField(3);
+
+  @$pb.TagNumber(5)
+  $core.String get assignedUserId => $_getSZ(3);
+  @$pb.TagNumber(5)
+  set assignedUserId($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasAssignedUserId() => $_has(3);
+  @$pb.TagNumber(5)
+  void clearAssignedUserId() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get patientId => $_getSZ(4);
+  @$pb.TagNumber(6)
+  set patientId($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasPatientId() => $_has(4);
+  @$pb.TagNumber(6)
+  void clearPatientId() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.bool get public => $_getBF(5);
+  @$pb.TagNumber(7)
+  set public($core.bool v) { $_setBool(5, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasPublic() => $_has(5);
+  @$pb.TagNumber(7)
+  void clearPublic() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.List<GetTasksByPatientSortedByStatusResponse_Task_SubTask> get subtasks => $_getList(6);
+}
+
+class GetTasksByPatientSortedByStatusResponse extends $pb.GeneratedMessage {
+  factory GetTasksByPatientSortedByStatusResponse() => create();
+  GetTasksByPatientSortedByStatusResponse._() : super();
+  factory GetTasksByPatientSortedByStatusResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetTasksByPatientSortedByStatusResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTasksByPatientSortedByStatusResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..pc<GetTasksByPatientSortedByStatusResponse_Task>(1, _omitFieldNames ? '' : 'todo', $pb.PbFieldType.PM, subBuilder: GetTasksByPatientSortedByStatusResponse_Task.create)
+    ..pc<GetTasksByPatientSortedByStatusResponse_Task>(2, _omitFieldNames ? '' : 'inProgress', $pb.PbFieldType.PM, subBuilder: GetTasksByPatientSortedByStatusResponse_Task.create)
+    ..pc<GetTasksByPatientSortedByStatusResponse_Task>(3, _omitFieldNames ? '' : 'done', $pb.PbFieldType.PM, subBuilder: GetTasksByPatientSortedByStatusResponse_Task.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetTasksByPatientSortedByStatusResponse clone() => GetTasksByPatientSortedByStatusResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetTasksByPatientSortedByStatusResponse copyWith(void Function(GetTasksByPatientSortedByStatusResponse) updates) => super.copyWith((message) => updates(message as GetTasksByPatientSortedByStatusResponse)) as GetTasksByPatientSortedByStatusResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetTasksByPatientSortedByStatusResponse create() => GetTasksByPatientSortedByStatusResponse._();
+  GetTasksByPatientSortedByStatusResponse createEmptyInstance() => create();
+  static $pb.PbList<GetTasksByPatientSortedByStatusResponse> createRepeated() => $pb.PbList<GetTasksByPatientSortedByStatusResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetTasksByPatientSortedByStatusResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTasksByPatientSortedByStatusResponse>(create);
+  static GetTasksByPatientSortedByStatusResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<GetTasksByPatientSortedByStatusResponse_Task> get todo => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.List<GetTasksByPatientSortedByStatusResponse_Task> get inProgress => $_getList(1);
+
+  @$pb.TagNumber(3)
+  $core.List<GetTasksByPatientSortedByStatusResponse_Task> get done => $_getList(2);
+}
+
 class UpdateTaskRequest extends $pb.GeneratedMessage {
   factory UpdateTaskRequest() => create();
   UpdateTaskRequest._() : super();
@@ -1706,6 +1950,9 @@ class TaskServiceApi {
   ;
   $async.Future<GetTasksByPatientResponse> getTasksByPatient($pb.ClientContext? ctx, GetTasksByPatientRequest request) =>
     _client.invoke<GetTasksByPatientResponse>(ctx, 'TaskService', 'GetTasksByPatient', request, GetTasksByPatientResponse())
+  ;
+  $async.Future<GetTasksByPatientSortedByStatusResponse> getTasksByPatientSortedByStatus($pb.ClientContext? ctx, GetTasksByPatientSortedByStatusRequest request) =>
+    _client.invoke<GetTasksByPatientSortedByStatusResponse>(ctx, 'TaskService', 'GetTasksByPatientSortedByStatus', request, GetTasksByPatientSortedByStatusResponse())
   ;
   $async.Future<UpdateTaskResponse> updateTask($pb.ClientContext? ctx, UpdateTaskRequest request) =>
     _client.invoke<UpdateTaskResponse>(ctx, 'TaskService', 'UpdateTask', request, UpdateTaskResponse())

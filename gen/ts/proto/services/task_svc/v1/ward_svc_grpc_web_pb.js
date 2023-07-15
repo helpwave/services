@@ -382,5 +382,127 @@ proto.proto.services.task_svc.v1.WardServicePromiseClient.prototype.deleteWard =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetWardOverviewsRequest,
+ *   !proto.proto.services.task_svc.v1.GetWardOverviewsResponse>}
+ */
+const methodDescriptor_WardService_GetWardOverviews = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.WardService/GetWardOverviews',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetWardOverviewsRequest,
+  proto.proto.services.task_svc.v1.GetWardOverviewsResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetWardOverviewsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetWardOverviewsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetWardOverviewsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetWardOverviewsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetWardOverviewsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.WardServiceClient.prototype.getWardOverviews =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.WardService/GetWardOverviews',
+      request,
+      metadata || {},
+      methodDescriptor_WardService_GetWardOverviews,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetWardOverviewsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetWardOverviewsResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.WardServicePromiseClient.prototype.getWardOverviews =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.WardService/GetWardOverviews',
+      request,
+      metadata || {},
+      methodDescriptor_WardService_GetWardOverviews);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetWardDetailsRequest,
+ *   !proto.proto.services.task_svc.v1.GetWardDetailsResponse>}
+ */
+const methodDescriptor_WardService_GetWardDetails = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.WardService/GetWardDetails',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetWardDetailsRequest,
+  proto.proto.services.task_svc.v1.GetWardDetailsResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetWardDetailsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetWardDetailsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetWardDetailsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetWardDetailsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetWardDetailsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.WardServiceClient.prototype.getWardDetails =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.WardService/GetWardDetails',
+      request,
+      metadata || {},
+      methodDescriptor_WardService_GetWardDetails,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetWardDetailsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetWardDetailsResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.WardServicePromiseClient.prototype.getWardDetails =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.WardService/GetWardDetails',
+      request,
+      metadata || {},
+      methodDescriptor_WardService_GetWardDetails);
+};
+
+
 module.exports = proto.proto.services.task_svc.v1;
 

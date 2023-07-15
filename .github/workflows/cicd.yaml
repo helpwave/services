@@ -23,23 +23,24 @@ jobs:
 
       - name: Detected changes in libs
         id: changes-in-libs
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v37
         with:
           files: |
+            .github/**
             libs/**
             .dockerignore
             Dockerfile.service
 
       - name: Detected changes in services
         id: changes-in-services
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v37
         with:
           files: |
             services/**
 
       - name: Detected changes in images
         id: changes-in-images
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v37
         with:
           files: |
             images/**
@@ -107,6 +108,6 @@ jobs:
     uses: ./.github/workflows/fly-deploy.yaml
     with:
       service: ${{ matrix.service }}
-      # TODO: Introduce deployment environments to get rid of the fixed prefix
-      app: helpwave-staging-${{ matrix.service }}
+      app: ${{ vars.FLY_ORGANIZATION_NAME }}-${{ matrix.service }}
+      organization: ${{ vars.FLY_ORGANIZATION_NAME }}
     secrets: inherit

@@ -169,6 +169,71 @@ final $typed_data.Uint8List getTasksByPatientResponseDescriptor = $convert.base6
     'cxpBCgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhIKBGRvbm'
     'UYAyABKAhSBGRvbmU=');
 
+@$core.Deprecated('Use getTasksByPatientSortedByStatusRequestDescriptor instead')
+const GetTasksByPatientSortedByStatusRequest$json = {
+  '1': 'GetTasksByPatientSortedByStatusRequest',
+  '2': [
+    {'1': 'patient_id', '3': 1, '4': 1, '5': 9, '10': 'patientId'},
+  ],
+};
+
+/// Descriptor for `GetTasksByPatientSortedByStatusRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getTasksByPatientSortedByStatusRequestDescriptor = $convert.base64Decode(
+    'CiZHZXRUYXNrc0J5UGF0aWVudFNvcnRlZEJ5U3RhdHVzUmVxdWVzdBIdCgpwYXRpZW50X2lkGA'
+    'EgASgJUglwYXRpZW50SWQ=');
+
+@$core.Deprecated('Use getTasksByPatientSortedByStatusResponseDescriptor instead')
+const GetTasksByPatientSortedByStatusResponse$json = {
+  '1': 'GetTasksByPatientSortedByStatusResponse',
+  '2': [
+    {'1': 'todo', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task', '10': 'todo'},
+    {'1': 'in_progress', '3': 2, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task', '10': 'inProgress'},
+    {'1': 'done', '3': 3, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task', '10': 'done'},
+  ],
+  '3': [GetTasksByPatientSortedByStatusResponse_Task$json],
+};
+
+@$core.Deprecated('Use getTasksByPatientSortedByStatusResponseDescriptor instead')
+const GetTasksByPatientSortedByStatusResponse_Task$json = {
+  '1': 'Task',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'assigned_user_id', '3': 5, '4': 1, '5': 9, '10': 'assignedUserId'},
+    {'1': 'patient_id', '3': 6, '4': 1, '5': 9, '10': 'patientId'},
+    {'1': 'public', '3': 7, '4': 1, '5': 8, '10': 'public'},
+    {'1': 'subtasks', '3': 8, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask', '10': 'subtasks'},
+  ],
+  '3': [GetTasksByPatientSortedByStatusResponse_Task_SubTask$json],
+};
+
+@$core.Deprecated('Use getTasksByPatientSortedByStatusResponseDescriptor instead')
+const GetTasksByPatientSortedByStatusResponse_Task_SubTask$json = {
+  '1': 'SubTask',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
+  ],
+};
+
+/// Descriptor for `GetTasksByPatientSortedByStatusResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getTasksByPatientSortedByStatusResponseDescriptor = $convert.base64Decode(
+    'CidHZXRUYXNrc0J5UGF0aWVudFNvcnRlZEJ5U3RhdHVzUmVzcG9uc2USXAoEdG9kbxgBIAMoCz'
+    'JILnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFRhc2tzQnlQYXRpZW50U29ydGVkQnlT'
+    'dGF0dXNSZXNwb25zZS5UYXNrUgR0b2RvEmkKC2luX3Byb2dyZXNzGAIgAygLMkgucHJvdG8uc2'
+    'VydmljZXMudGFza19zdmMudjEuR2V0VGFza3NCeVBhdGllbnRTb3J0ZWRCeVN0YXR1c1Jlc3Bv'
+    'bnNlLlRhc2tSCmluUHJvZ3Jlc3MSXAoEZG9uZRgDIAMoCzJILnByb3RvLnNlcnZpY2VzLnRhc2'
+    'tfc3ZjLnYxLkdldFRhc2tzQnlQYXRpZW50U29ydGVkQnlTdGF0dXNSZXNwb25zZS5UYXNrUgRk'
+    'b25lGt4CCgRUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2Rlc2'
+    'NyaXB0aW9uGAMgASgJUgtkZXNjcmlwdGlvbhIoChBhc3NpZ25lZF91c2VyX2lkGAUgASgJUg5h'
+    'c3NpZ25lZFVzZXJJZBIdCgpwYXRpZW50X2lkGAYgASgJUglwYXRpZW50SWQSFgoGcHVibGljGA'
+    'cgASgIUgZwdWJsaWMSbAoIc3VidGFza3MYCCADKAsyUC5wcm90by5zZXJ2aWNlcy50YXNrX3N2'
+    'Yy52MS5HZXRUYXNrc0J5UGF0aWVudFNvcnRlZEJ5U3RhdHVzUmVzcG9uc2UuVGFzay5TdWJUYX'
+    'NrUghzdWJ0YXNrcxpBCgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRu'
+    'YW1lEhIKBGRvbmUYAyABKAhSBGRvbmU=');
+
 @$core.Deprecated('Use updateTaskRequestDescriptor instead')
 const UpdateTaskRequest$json = {
   '1': 'UpdateTaskRequest',
@@ -493,6 +558,7 @@ const $core.Map<$core.String, $core.dynamic> TaskServiceBase$json = {
     {'1': 'CreateTask', '2': '.proto.services.task_svc.v1.CreateTaskRequest', '3': '.proto.services.task_svc.v1.CreateTaskResponse', '4': {}},
     {'1': 'GetTask', '2': '.proto.services.task_svc.v1.GetTaskRequest', '3': '.proto.services.task_svc.v1.GetTaskResponse', '4': {}},
     {'1': 'GetTasksByPatient', '2': '.proto.services.task_svc.v1.GetTasksByPatientRequest', '3': '.proto.services.task_svc.v1.GetTasksByPatientResponse', '4': {}},
+    {'1': 'GetTasksByPatientSortedByStatus', '2': '.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusRequest', '3': '.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse', '4': {}},
     {'1': 'UpdateTask', '2': '.proto.services.task_svc.v1.UpdateTaskRequest', '3': '.proto.services.task_svc.v1.UpdateTaskResponse', '4': {}},
     {'1': 'AddSubTask', '2': '.proto.services.task_svc.v1.AddSubTaskRequest', '3': '.proto.services.task_svc.v1.AddSubTaskResponse', '4': {}},
     {'1': 'RemoveSubTask', '2': '.proto.services.task_svc.v1.RemoveSubTaskRequest', '3': '.proto.services.task_svc.v1.RemoveSubTaskResponse', '4': {}},
@@ -521,6 +587,10 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> TaskServic
   '.proto.services.task_svc.v1.GetTasksByPatientResponse': GetTasksByPatientResponse$json,
   '.proto.services.task_svc.v1.GetTasksByPatientResponse.Task': GetTasksByPatientResponse_Task$json,
   '.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask': GetTasksByPatientResponse_Task_SubTask$json,
+  '.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusRequest': GetTasksByPatientSortedByStatusRequest$json,
+  '.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse': GetTasksByPatientSortedByStatusResponse$json,
+  '.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task': GetTasksByPatientSortedByStatusResponse_Task$json,
+  '.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask': GetTasksByPatientSortedByStatusResponse_Task_SubTask$json,
   '.proto.services.task_svc.v1.UpdateTaskRequest': UpdateTaskRequest$json,
   '.proto.services.task_svc.v1.UpdateTaskResponse': UpdateTaskResponse$json,
   '.proto.services.task_svc.v1.AddSubTaskRequest': AddSubTaskRequest$json,
@@ -559,35 +629,38 @@ final $typed_data.Uint8List taskServiceDescriptor = $convert.base64Decode(
     'V0VGFza1JlcXVlc3QaKy5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRUYXNrUmVzcG9u'
     'c2UiABKCAQoRR2V0VGFza3NCeVBhdGllbnQSNC5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS'
     '5HZXRUYXNrc0J5UGF0aWVudFJlcXVlc3QaNS5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5H'
-    'ZXRUYXNrc0J5UGF0aWVudFJlc3BvbnNlIgASbQoKVXBkYXRlVGFzaxItLnByb3RvLnNlcnZpY2'
-    'VzLnRhc2tfc3ZjLnYxLlVwZGF0ZVRhc2tSZXF1ZXN0Gi4ucHJvdG8uc2VydmljZXMudGFza19z'
-    'dmMudjEuVXBkYXRlVGFza1Jlc3BvbnNlIgASbQoKQWRkU3ViVGFzaxItLnByb3RvLnNlcnZpY2'
-    'VzLnRhc2tfc3ZjLnYxLkFkZFN1YlRhc2tSZXF1ZXN0Gi4ucHJvdG8uc2VydmljZXMudGFza19z'
-    'dmMudjEuQWRkU3ViVGFza1Jlc3BvbnNlIgASdgoNUmVtb3ZlU3ViVGFzaxIwLnByb3RvLnNlcn'
-    'ZpY2VzLnRhc2tfc3ZjLnYxLlJlbW92ZVN1YlRhc2tSZXF1ZXN0GjEucHJvdG8uc2VydmljZXMu'
-    'dGFza19zdmMudjEuUmVtb3ZlU3ViVGFza1Jlc3BvbnNlIgASdgoNVXBkYXRlU3ViVGFzaxIwLn'
-    'Byb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlVwZGF0ZVN1YlRhc2tSZXF1ZXN0GjEucHJvdG8u'
-    'c2VydmljZXMudGFza19zdmMudjEuVXBkYXRlU3ViVGFza1Jlc3BvbnNlIgASdgoNU3ViVGFza1'
-    'RvVG9EbxIwLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlN1YlRhc2tUb1RvRG9SZXF1ZXN0'
-    'GjEucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuU3ViVGFza1RvVG9Eb1Jlc3BvbnNlIgASdg'
-    'oNU3ViVGFza1RvRG9uZRIwLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlN1YlRhc2tUb0Rv'
-    'bmVSZXF1ZXN0GjEucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuU3ViVGFza1RvRG9uZVJlc3'
-    'BvbnNlIgASbQoKVGFza1RvVG9EbxItLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlRhc2tU'
-    'b1RvRG9SZXF1ZXN0Gi4ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVGFza1RvVG9Eb1Jlc3'
-    'BvbnNlIgASfwoQVGFza1RvSW5Qcm9ncmVzcxIzLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYx'
-    'LlRhc2tUb0luUHJvZ3Jlc3NSZXF1ZXN0GjQucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVG'
-    'Fza1RvSW5Qcm9ncmVzc1Jlc3BvbnNlIgASbQoKVGFza1RvRG9uZRItLnByb3RvLnNlcnZpY2Vz'
-    'LnRhc2tfc3ZjLnYxLlRhc2tUb0RvbmVSZXF1ZXN0Gi4ucHJvdG8uc2VydmljZXMudGFza19zdm'
-    'MudjEuVGFza1RvRG9uZVJlc3BvbnNlIgASfwoQQXNzaWduVGFza1RvVXNlchIzLnByb3RvLnNl'
-    'cnZpY2VzLnRhc2tfc3ZjLnYxLkFzc2lnblRhc2tUb1VzZXJSZXF1ZXN0GjQucHJvdG8uc2Vydm'
-    'ljZXMudGFza19zdmMudjEuQXNzaWduVGFza1RvVXNlclJlc3BvbnNlIgASiwEKFFVuYXNzaWdu'
-    'VGFza0Zyb21Vc2VyEjcucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVW5hc3NpZ25UYXNrRn'
-    'JvbVVzZXJSZXF1ZXN0GjgucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVW5hc3NpZ25UYXNr'
-    'RnJvbVVzZXJSZXNwb25zZSIAEnAKC1B1Ymxpc2hUYXNrEi4ucHJvdG8uc2VydmljZXMudGFza1'
-    '9zdmMudjEuUHVibGlzaFRhc2tSZXF1ZXN0Gi8ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEu'
-    'UHVibGlzaFRhc2tSZXNwb25zZSIAEnYKDVVucHVibGlzaFRhc2sSMC5wcm90by5zZXJ2aWNlcy'
-    '50YXNrX3N2Yy52MS5VbnB1Ymxpc2hUYXNrUmVxdWVzdBoxLnByb3RvLnNlcnZpY2VzLnRhc2tf'
-    'c3ZjLnYxLlVucHVibGlzaFRhc2tSZXNwb25zZSIAEm0KCkRlbGV0ZVRhc2sSLS5wcm90by5zZX'
-    'J2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVUYXNrUmVxdWVzdBouLnByb3RvLnNlcnZpY2VzLnRh'
-    'c2tfc3ZjLnYxLkRlbGV0ZVRhc2tSZXNwb25zZSIA');
+    'ZXRUYXNrc0J5UGF0aWVudFJlc3BvbnNlIgASrAEKH0dldFRhc2tzQnlQYXRpZW50U29ydGVkQn'
+    'lTdGF0dXMSQi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRUYXNrc0J5UGF0aWVudFNv'
+    'cnRlZEJ5U3RhdHVzUmVxdWVzdBpDLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFRhc2'
+    'tzQnlQYXRpZW50U29ydGVkQnlTdGF0dXNSZXNwb25zZSIAEm0KClVwZGF0ZVRhc2sSLS5wcm90'
+    'by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5VcGRhdGVUYXNrUmVxdWVzdBouLnByb3RvLnNlcnZpY2'
+    'VzLnRhc2tfc3ZjLnYxLlVwZGF0ZVRhc2tSZXNwb25zZSIAEm0KCkFkZFN1YlRhc2sSLS5wcm90'
+    'by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5BZGRTdWJUYXNrUmVxdWVzdBouLnByb3RvLnNlcnZpY2'
+    'VzLnRhc2tfc3ZjLnYxLkFkZFN1YlRhc2tSZXNwb25zZSIAEnYKDVJlbW92ZVN1YlRhc2sSMC5w'
+    'cm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5SZW1vdmVTdWJUYXNrUmVxdWVzdBoxLnByb3RvLn'
+    'NlcnZpY2VzLnRhc2tfc3ZjLnYxLlJlbW92ZVN1YlRhc2tSZXNwb25zZSIAEnYKDVVwZGF0ZVN1'
+    'YlRhc2sSMC5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5VcGRhdGVTdWJUYXNrUmVxdWVzdB'
+    'oxLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlVwZGF0ZVN1YlRhc2tSZXNwb25zZSIAEnYK'
+    'DVN1YlRhc2tUb1RvRG8SMC5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5TdWJUYXNrVG9Ub0'
+    'RvUmVxdWVzdBoxLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlN1YlRhc2tUb1RvRG9SZXNw'
+    'b25zZSIAEnYKDVN1YlRhc2tUb0RvbmUSMC5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5TdW'
+    'JUYXNrVG9Eb25lUmVxdWVzdBoxLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlN1YlRhc2tU'
+    'b0RvbmVSZXNwb25zZSIAEm0KClRhc2tUb1RvRG8SLS5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy'
+    '52MS5UYXNrVG9Ub0RvUmVxdWVzdBouLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlRhc2tU'
+    'b1RvRG9SZXNwb25zZSIAEn8KEFRhc2tUb0luUHJvZ3Jlc3MSMy5wcm90by5zZXJ2aWNlcy50YX'
+    'NrX3N2Yy52MS5UYXNrVG9JblByb2dyZXNzUmVxdWVzdBo0LnByb3RvLnNlcnZpY2VzLnRhc2tf'
+    'c3ZjLnYxLlRhc2tUb0luUHJvZ3Jlc3NSZXNwb25zZSIAEm0KClRhc2tUb0RvbmUSLS5wcm90by'
+    '5zZXJ2aWNlcy50YXNrX3N2Yy52MS5UYXNrVG9Eb25lUmVxdWVzdBouLnByb3RvLnNlcnZpY2Vz'
+    'LnRhc2tfc3ZjLnYxLlRhc2tUb0RvbmVSZXNwb25zZSIAEn8KEEFzc2lnblRhc2tUb1VzZXISMy'
+    '5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5Bc3NpZ25UYXNrVG9Vc2VyUmVxdWVzdBo0LnBy'
+    'b3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkFzc2lnblRhc2tUb1VzZXJSZXNwb25zZSIAEosBCh'
+    'RVbmFzc2lnblRhc2tGcm9tVXNlchI3LnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlVuYXNz'
+    'aWduVGFza0Zyb21Vc2VyUmVxdWVzdBo4LnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLlVuYX'
+    'NzaWduVGFza0Zyb21Vc2VyUmVzcG9uc2UiABJwCgtQdWJsaXNoVGFzaxIuLnByb3RvLnNlcnZp'
+    'Y2VzLnRhc2tfc3ZjLnYxLlB1Ymxpc2hUYXNrUmVxdWVzdBovLnByb3RvLnNlcnZpY2VzLnRhc2'
+    'tfc3ZjLnYxLlB1Ymxpc2hUYXNrUmVzcG9uc2UiABJ2Cg1VbnB1Ymxpc2hUYXNrEjAucHJvdG8u'
+    'c2VydmljZXMudGFza19zdmMudjEuVW5wdWJsaXNoVGFza1JlcXVlc3QaMS5wcm90by5zZXJ2aW'
+    'Nlcy50YXNrX3N2Yy52MS5VbnB1Ymxpc2hUYXNrUmVzcG9uc2UiABJtCgpEZWxldGVUYXNrEi0u'
+    'cHJvdG8uc2VydmljZXMudGFza19zdmMudjEuRGVsZXRlVGFza1JlcXVlc3QaLi5wcm90by5zZX'
+    'J2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVUYXNrUmVzcG9uc2UiAA==');
 

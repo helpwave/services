@@ -21,8 +21,8 @@ __Pre-Requirements__
 __1. Create a new App__
 
 ```shell
-fly launch
-	--build-args SERVICE=user-svc
+flyctl launch
+	--build-arg SERVICE=user-svc
 	--dockerfile ../../Dockerfile.standalone
 	--env INSECURE_FAKE_TOKEN_ENABLE=true # When deployed on staging
 	--internal-port 80
@@ -50,37 +50,45 @@ primary_region = "ams"
 [env]
   INSECURE_FAKE_TOKEN_ENABLE=true
 
+[deploy]
+  strategy = "bluegreen"
+  release_command = "./run-migrations.sh"
+
 [[services]]
   auto_stop_machines = false
   auto_start_machines = false
+
+[checks]
+  [checks.dapr_sidecar]
+    grace_period = "5s"
+    interval = "10s"
+    method = "get"
+    path = "/v1.0/healthz"
+    port = 3500
+    timeout = "2s"
+   type = "http"
+
+[metrics]
+  port = 9090
+  path = "/metrics"
 ```
 
-__4. Create database__
-
-Connect to postgres cli via `fly postgres connect --app <APP_NAME_OF_POSTGRES>`
-and run `CREATE DATABASE "user-svc";` afterwards.
-
-__5. Set secrets__
+__3. Attach database__
 
 ```shell
- fly secrets set
- 	--app helpwave-staging-user-svc
- 	POSTGRES_PASSWORD=<PASSWORD>
- 	POSTGRES_HOST=<HOST>
- 	POSTGRES_USER=<USER>
- 	POSTGRES_DB=user-svc
+fly postgres attach --app <APP_NAME> --variable-name POSTGRES_DSN <POSTGRES_APP_NAME>
 ```
 
-__6. Deploy service__
+__4. Deploy service__
 
 ```shell
-fly deploy
+flyctl deploy
 	--config services/user-svc/fly.toml
 	--app helpwave-staging-user-svc
 	# --local-only # Optional. When omitted, the image will be build directly on Fly
 ```
 
-__7. Configure APISIX__
+__5. Configure APISIX__
 
 `apisix/apisix.yaml`
 ```yaml
@@ -115,6 +123,6 @@ routes:
 ...
 ```
 
-__8. Deploy APISIX__
+__6. Deploy APISIX__
 
-`fly deploy --config apisix/fly.toml --app helpwave-staging-gateway`
+`flyctl deploy --config apisix/fly.toml --app helpwave-staging-gateway`

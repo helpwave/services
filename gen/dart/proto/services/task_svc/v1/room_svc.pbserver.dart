@@ -27,6 +27,7 @@ abstract class RoomServiceBase extends $pb.GeneratedService {
   $async.Future<$4.GetRoomsByWardResponse> getRoomsByWard($pb.ServerContext ctx, $4.GetRoomsByWardRequest request);
   $async.Future<$4.UpdateRoomResponse> updateRoom($pb.ServerContext ctx, $4.UpdateRoomRequest request);
   $async.Future<$4.DeleteRoomResponse> deleteRoom($pb.ServerContext ctx, $4.DeleteRoomRequest request);
+  $async.Future<$4.GetRoomOverviewsByWardResponse> getRoomOverviewsByWard($pb.ServerContext ctx, $4.GetRoomOverviewsByWardRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
@@ -36,6 +37,7 @@ abstract class RoomServiceBase extends $pb.GeneratedService {
       case 'GetRoomsByWard': return $4.GetRoomsByWardRequest();
       case 'UpdateRoom': return $4.UpdateRoomRequest();
       case 'DeleteRoom': return $4.DeleteRoomRequest();
+      case 'GetRoomOverviewsByWard': return $4.GetRoomOverviewsByWardRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
@@ -48,6 +50,7 @@ abstract class RoomServiceBase extends $pb.GeneratedService {
       case 'GetRoomsByWard': return this.getRoomsByWard(ctx, request as $4.GetRoomsByWardRequest);
       case 'UpdateRoom': return this.updateRoom(ctx, request as $4.UpdateRoomRequest);
       case 'DeleteRoom': return this.deleteRoom(ctx, request as $4.DeleteRoomRequest);
+      case 'GetRoomOverviewsByWard': return this.getRoomOverviewsByWard(ctx, request as $4.GetRoomOverviewsByWardRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
