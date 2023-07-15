@@ -38,7 +38,7 @@ type organizationIDKey struct{}
 func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	// middlewares
 	loggingInterceptor := loggingUnaryInterceptor
-	authInterceptor := grpc_auth.UnaryServerInterceptor(authFunc)
+	authInterceptor := authUnaryInterceptor
 	validateInterceptor := validateUnaryInterceptor
 	chain := grpc_middleware.ChainUnaryServer(loggingInterceptor, authInterceptor, validateInterceptor)
 	grpcServerOption := grpc.UnaryInterceptor(chain)
@@ -52,6 +52,13 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	service := daprd.NewServiceWithListener(listener, grpcServerOption).(*daprd.Server)
 	server := service.GrpcServer()
 
+	if err := service.AddHealthCheckHandler("", func(ctx context.Context) error {
+		// We need to implement this. Just return nil == everything OK
+		return nil
+	}); err != nil {
+		zlog.Fatal().Err(err).Send()
+	}
+
 	registerServerHook(service)
 
 	if Mode == DevelopmentMode {
@@ -64,6 +71,27 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	if err = server.Serve(listener); err != nil {
 		zlog.Fatal().Str("addr", addr).Err(err).Msg("could not start grpc server")
 	}
+}
+
+func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	if isUnaryRPCForDaprInternal(info) {
+		zlog.Debug().Msg("skipping auth func, RPC targeted at some internal gRPC service")
+		return next(ctx, req)
+	}
+
+	ctx, err := authFunc(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return next(ctx, req)
+}
+
+// isUnaryRPCForDaprInternal will resolve to true when the incoming RPC is targeted to some Dapr internal "sidecar -> app" gRPC service
+func isUnaryRPCForDaprInternal(info *grpc.UnaryServerInfo) bool {
+	_, isAppCallbackServer := info.Server.(runtime.AppCallbackServer)
+	_, isAppCallbackHealthCheckServer := info.Server.(runtime.AppCallbackHealthCheckServer)
+	return isAppCallbackServer || isAppCallbackHealthCheckServer
 }
 
 func authFunc(ctx context.Context) (context.Context, error) {

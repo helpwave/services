@@ -41,7 +41,7 @@ routes:
         allow_origins: "**"
         allow_methods: "**"
         allow_headers: "**"
-        expose_headers: "**"
+        expose_headers: "grpc-status,grpc-message"
         max_age: 5
         allow_credential: true
         _meta:

@@ -178,6 +178,57 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 	}, nil
 }
 
+func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *pb.GetTasksByPatientSortedByStatusRequest) (*pb.GetTasksByPatientSortedByStatusResponse, error) {
+	// TODO: Auth
+
+	patientID, err := uuid.Parse(req.PatientId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	tasks, err := GetTasksByPatientForOrganization(ctx, patientID)
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+
+	var mappingFunction = func(tasks []models.Task) []*pb.GetTasksByPatientSortedByStatusResponse_Task {
+		return hwutil.Map(tasks, func(task models.Task) *pb.GetTasksByPatientSortedByStatusResponse_Task {
+			var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask {
+				return &pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask{
+					Id:   subtask.ID.String(),
+					Done: subtask.Done,
+					Name: subtask.Name,
+				}
+			})
+			return &pb.GetTasksByPatientSortedByStatusResponse_Task{
+				Id:             task.ID.String(),
+				Name:           task.Name,
+				Description:    task.Description,
+				AssignedUserId: task.AssignedUserId.UUID.String(),
+				PatientId:      task.PatientId.String(),
+				Subtasks:       mappedSubtasks,
+				Public:         task.Public,
+			}
+		})
+	}
+
+	return &pb.GetTasksByPatientSortedByStatusResponse{
+		Todo: mappingFunction(hwutil.Filter(tasks, func(value models.Task) bool {
+			return value.Status == pb.TaskStatus_TASK_STATUS_TODO
+		})),
+		InProgress: mappingFunction(hwutil.Filter(tasks, func(value models.Task) bool {
+			return value.Status == pb.TaskStatus_TASK_STATUS_IN_PROGRESS
+		})),
+		Done: mappingFunction(hwutil.Filter(tasks, func(value models.Task) bool {
+			return value.Status == pb.TaskStatus_TASK_STATUS_DONE
+		})),
+	}, nil
+}
+
 func (ServiceServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) (*pb.UpdateTaskResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)

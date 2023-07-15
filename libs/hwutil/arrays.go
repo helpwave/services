@@ -1,5 +1,17 @@
 package hwutil
 
+func Filter[K any](array []K, condition func(value K) bool) []K {
+	var result []K
+
+	for _, value := range array {
+		if condition(value) {
+			result = append(result, value)
+		}
+	}
+
+	return result
+}
+
 func Map[K any, V any](vs []K, f func(K) V) []V {
 	vsm := make([]V, len(vs))
 	for i, v := range vs {
