@@ -11,6 +11,7 @@ primary_region = "ams"
 
 [deploy]
   strategy = "bluegreen"
+  release_command = "./run-migrations.sh"
 
 [[services]]
   auto_stop_machines = false
