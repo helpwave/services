@@ -1,6 +1,6 @@
 module proto_helpers
 
-go 1.19
+go 1.20
 
 replace (
 	gen => ../../gen/go
