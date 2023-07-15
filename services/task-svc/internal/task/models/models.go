@@ -13,7 +13,7 @@ type Base struct {
 
 type Task struct {
 	Base
-	ID             uuid.UUID     `gorm:"column:id"`
+	ID             uuid.UUID     `gorm:"column:id;default:uuid_generate_v4()"`
 	OrganizationID uuid.UUID     `gorm:"column:organization_id"`
 	AssignedUserId uuid.NullUUID `gorm:"column:assigned_user_id;default:NULL"`
 	PatientId      uuid.UUID     `gorm:"column:patient_id"`
@@ -22,7 +22,7 @@ type Task struct {
 }
 
 type Subtask struct {
-	ID     uuid.UUID `gorm:"column:id"`
+	ID     uuid.UUID `gorm:"column:id;default:uuid_generate_v4()"`
 	TaskID uuid.UUID `gorm:"column:task_id"`
 	Name   string    `gorm:"column:name"`
 	Done   bool      `gorm:"column:done;default:False"`
