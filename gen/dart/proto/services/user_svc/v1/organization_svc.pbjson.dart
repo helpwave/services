@@ -120,19 +120,6 @@ final $typed_data.Uint8List getOrganizationResponseDescriptor = $convert.base64D
     'cHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0T3JnYW5pemF0aW9uTWVtYmVyUgdtZW1iZX'
     'Jz');
 
-@$core.Deprecated('Use getOrganizationsByUserMemberDescriptor instead')
-const GetOrganizationsByUserMember$json = {
-  '1': 'GetOrganizationsByUserMember',
-  '2': [
-    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
-  ],
-};
-
-/// Descriptor for `GetOrganizationsByUserMember`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getOrganizationsByUserMemberDescriptor = $convert.base64Decode(
-    'ChxHZXRPcmdhbml6YXRpb25zQnlVc2VyTWVtYmVyEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZA'
-    '==');
-
 @$core.Deprecated('Use getOrganizationsByUserRequestDescriptor instead')
 const GetOrganizationsByUserRequest$json = {
   '1': 'GetOrganizationsByUserRequest',
@@ -150,24 +137,50 @@ final $typed_data.Uint8List getOrganizationsByUserRequestDescriptor = $convert.b
 const GetOrganizationsByUserResponse$json = {
   '1': 'GetOrganizationsByUserResponse',
   '2': [
+    {'1': 'organizations', '3': 1, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization', '10': 'organizations'},
+  ],
+  '3': [GetOrganizationsByUserResponse_Organization$json],
+};
+
+@$core.Deprecated('Use getOrganizationsByUserResponseDescriptor instead')
+const GetOrganizationsByUserResponse_Organization$json = {
+  '1': 'Organization',
+  '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'long_name', '3': 2, '4': 1, '5': 9, '10': 'longName'},
     {'1': 'short_name', '3': 3, '4': 1, '5': 9, '10': 'shortName'},
     {'1': 'contact_email', '3': 4, '4': 1, '5': 9, '10': 'contactEmail'},
     {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '10': 'avatarUrl'},
     {'1': 'is_personal', '3': 6, '4': 1, '5': 8, '10': 'isPersonal'},
-    {'1': 'members', '3': 7, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.GetOrganizationsByUserMember', '10': 'members'},
+    {'1': 'members', '3': 7, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.Member', '10': 'members'},
+  ],
+  '3': [GetOrganizationsByUserResponse_Organization_Member$json],
+};
+
+@$core.Deprecated('Use getOrganizationsByUserResponseDescriptor instead')
+const GetOrganizationsByUserResponse_Organization_Member$json = {
+  '1': 'Member',
+  '2': [
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+    {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
+    {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '10': 'avatarUrl'},
   ],
 };
 
 /// Descriptor for `GetOrganizationsByUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getOrganizationsByUserResponseDescriptor = $convert.base64Decode(
-    'Ch5HZXRPcmdhbml6YXRpb25zQnlVc2VyUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhsKCWxvbm'
-    'dfbmFtZRgCIAEoCVIIbG9uZ05hbWUSHQoKc2hvcnRfbmFtZRgDIAEoCVIJc2hvcnROYW1lEiMK'
-    'DWNvbnRhY3RfZW1haWwYBCABKAlSDGNvbnRhY3RFbWFpbBIdCgphdmF0YXJfdXJsGAUgASgJUg'
-    'lhdmF0YXJVcmwSHwoLaXNfcGVyc29uYWwYBiABKAhSCmlzUGVyc29uYWwSUgoHbWVtYmVycxgH'
-    'IAMoCzI4LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkdldE9yZ2FuaXphdGlvbnNCeVVzZX'
-    'JNZW1iZXJSB21lbWJlcnM=');
+    'Ch5HZXRPcmdhbml6YXRpb25zQnlVc2VyUmVzcG9uc2USbQoNb3JnYW5pemF0aW9ucxgBIAMoCz'
+    'JHLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkdldE9yZ2FuaXphdGlvbnNCeVVzZXJSZXNw'
+    'b25zZS5Pcmdhbml6YXRpb25SDW9yZ2FuaXphdGlvbnManQMKDE9yZ2FuaXphdGlvbhIOCgJpZB'
+    'gBIAEoCVICaWQSGwoJbG9uZ19uYW1lGAIgASgJUghsb25nTmFtZRIdCgpzaG9ydF9uYW1lGAMg'
+    'ASgJUglzaG9ydE5hbWUSIwoNY29udGFjdF9lbWFpbBgEIAEoCVIMY29udGFjdEVtYWlsEh0KCm'
+    'F2YXRhcl91cmwYBSABKAlSCWF2YXRhclVybBIfCgtpc19wZXJzb25hbBgGIAEoCFIKaXNQZXJz'
+    'b25hbBJoCgdtZW1iZXJzGAcgAygLMk4ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0T3'
+    'JnYW5pemF0aW9uc0J5VXNlclJlc3BvbnNlLk9yZ2FuaXphdGlvbi5NZW1iZXJSB21lbWJlcnMa'
+    'cgoGTWVtYmVyEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIUCgVlbWFpbBgCIAEoCVIFZW1haW'
+    'wSGgoIbmlja25hbWUYAyABKAlSCG5pY2tuYW1lEh0KCmF2YXRhcl91cmwYBCABKAlSCWF2YXRh'
+    'clVybA==');
 
 @$core.Deprecated('Use updateOrganizationRequestDescriptor instead')
 const UpdateOrganizationRequest$json = {
@@ -417,7 +430,8 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> Organizati
   '.proto.services.user_svc.v1.GetOrganizationMember': GetOrganizationMember$json,
   '.proto.services.user_svc.v1.GetOrganizationsByUserRequest': GetOrganizationsByUserRequest$json,
   '.proto.services.user_svc.v1.GetOrganizationsByUserResponse': GetOrganizationsByUserResponse$json,
-  '.proto.services.user_svc.v1.GetOrganizationsByUserMember': GetOrganizationsByUserMember$json,
+  '.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization': GetOrganizationsByUserResponse_Organization$json,
+  '.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.Member': GetOrganizationsByUserResponse_Organization_Member$json,
   '.proto.services.user_svc.v1.UpdateOrganizationRequest': UpdateOrganizationRequest$json,
   '.proto.services.user_svc.v1.UpdateOrganizationResponse': UpdateOrganizationResponse$json,
   '.proto.services.user_svc.v1.DeleteOrganizationRequest': DeleteOrganizationRequest$json,

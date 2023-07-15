@@ -43,10 +43,11 @@ type Organization struct {
 }
 
 type Membership struct {
-	ID             uuid.UUID `gorm:"primaryKey,column:id"`
-	UserID         uuid.UUID `gorm:"column:user_id"`
-	OrganizationID uuid.UUID `gorm:"column:organization_id"`
-	IsAdmin        bool      `gorm:"column:is_admin;default:False"`
+	ID             uuid.UUID    `gorm:"primaryKey,column:id"`
+	UserID         uuid.UUID    `gorm:"column:user_id"`
+	OrganizationID uuid.UUID    `gorm:"column:organization_id"`
+	Organization   Organization `gorm:"foreignKey:OrganizationID"`
+	IsAdmin        bool         `gorm:"column:is_admin;default:False"`
 }
 
 type Invitation struct {
@@ -173,6 +174,52 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 		AvatarUrl:    organization.AvatarUrl,
 		IsPersonal:   false,
 		Members:      members,
+	}, nil
+}
+
+func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOrganizationsByUserRequest) (*pb.GetOrganizationsByUserResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	// TODO: Auth
+
+	userID, err := uuid.Parse(req.UserId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	var organizations []Organization
+	err = db.Preload("Members").Joins("JOIN memberships ON memberships.organization_id = organizations.id").
+		Where("memberships.user_id = ? OR organizations.created_by_user_id = ?", userID, userID).
+		Find(&organizations).Error
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+
+	mappedOrganizations := hwutil.Map(organizations, func(organization Organization) *pb.GetOrganizationsByUserResponse_Organization {
+		return &pb.GetOrganizationsByUserResponse_Organization{
+			Id:           organization.ID.String(),
+			LongName:     organization.LongName,
+			ShortName:    organization.ShortName,
+			ContactEmail: organization.ContactEmail,
+			AvatarUrl:    organization.AvatarUrl,
+			IsPersonal:   false,
+			Members: hwutil.Map(organization.Members, func(membership Membership) *pb.GetOrganizationsByUserResponse_Organization_Member {
+				return &pb.GetOrganizationsByUserResponse_Organization_Member{
+					UserId:    membership.UserID.String(),
+					AvatarUrl: "",
+					Email:     membership.UserID.String() + "@helpwave.de", // TODO replace ones Users are implemented
+					Nickname:  membership.UserID.String(),                  // TODO replace ones Users are implemented
+				}
+			}),
+		}
+	})
+
+	return &pb.GetOrganizationsByUserResponse{
+		Organizations: mappedOrganizations,
 	}, nil
 }
 
