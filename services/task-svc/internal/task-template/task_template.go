@@ -184,7 +184,7 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 	return &pb.UpdateTaskTemplateResponse{}, nil
 }
 
-func (ServiceServer) UpdateTaskTemplateSubtask(ctx context.Context, req *pb.UpdateTaskTemplateSubTaskRequest) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
+func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.UpdateTaskTemplateSubTaskRequest) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
