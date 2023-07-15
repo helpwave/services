@@ -1,4 +1,4 @@
 # Format; See https://devcenter.heroku.com/articles/procfile#procfile-format
 # <process type / name>: <command>
-daprd: daprd --log-level debug --app-id $DAPR_APP_ID --config dapr.yaml --app-port 80 --dapr-internal-grpc-port 35001
+daprd: daprd --log-level debug --enable-app-health-check --app-id $DAPR_APP_ID --config dapr/config.yaml --resources-path dapr/components --app-port 80 --dapr-internal-grpc-port 35001 --app-protocol $APP_PROTOCOL
 app: ./app

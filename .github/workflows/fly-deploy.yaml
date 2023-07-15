@@ -45,8 +45,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: docker/setup-buildx-action@v2
       - name: Configure dapr.yaml
-        run:
-          sed -i "s/helpwave-staging/$organization/g" dapr.yaml
+        run: sed -i "s/helpwave-staging/$organization/g" dapr.yaml
         env:
           organization: ${{ inputs.organization }}
       - name: Setup flyctl

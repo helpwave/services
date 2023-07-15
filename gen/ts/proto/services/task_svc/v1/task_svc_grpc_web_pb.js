@@ -263,6 +263,67 @@ proto.proto.services.task_svc.v1.TaskServicePromiseClient.prototype.getTasksByPa
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusRequest,
+ *   !proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse>}
+ */
+const methodDescriptor_TaskService_GetTasksByPatientSortedByStatus = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusRequest,
+  proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.TaskServiceClient.prototype.getTasksByPatientSortedByStatus =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_GetTasksByPatientSortedByStatus,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.TaskServicePromiseClient.prototype.getTasksByPatientSortedByStatus =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_GetTasksByPatientSortedByStatus);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.task_svc.v1.UpdateTaskRequest,
  *   !proto.proto.services.task_svc.v1.UpdateTaskResponse>}
  */

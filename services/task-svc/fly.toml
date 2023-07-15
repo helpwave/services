@@ -19,7 +19,7 @@ primary_region = "ams"
 
 [checks]
   [checks.dapr_sidecar]
-    grace_period = "5s"
+    grace_period = "15s"
     interval = "10s"
     method = "get"
     path = "/v1.0/healthz"
