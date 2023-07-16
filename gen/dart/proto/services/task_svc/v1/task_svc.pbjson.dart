@@ -35,17 +35,20 @@ const CreateTaskRequest$json = {
   '1': 'CreateTaskRequest',
   '2': [
     {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'description', '3': 2, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'description', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
     {'1': 'patient_id', '3': 3, '4': 1, '5': 9, '10': 'patientId'},
     {'1': 'public', '3': 4, '4': 1, '5': 8, '10': 'public'},
+  ],
+  '8': [
+    {'1': '_description'},
   ],
 };
 
 /// Descriptor for `CreateTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createTaskRequestDescriptor = $convert.base64Decode(
-    'ChFDcmVhdGVUYXNrUmVxdWVzdBISCgRuYW1lGAEgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW9uGA'
-    'IgASgJUgtkZXNjcmlwdGlvbhIdCgpwYXRpZW50X2lkGAMgASgJUglwYXRpZW50SWQSFgoGcHVi'
-    'bGljGAQgASgIUgZwdWJsaWM=');
+    'ChFDcmVhdGVUYXNrUmVxdWVzdBISCgRuYW1lGAEgASgJUgRuYW1lEiUKC2Rlc2NyaXB0aW9uGA'
+    'IgASgJSABSC2Rlc2NyaXB0aW9uiAEBEh0KCnBhdGllbnRfaWQYAyABKAlSCXBhdGllbnRJZBIW'
+    'CgZwdWJsaWMYBCABKAhSBnB1YmxpY0IOCgxfZGVzY3JpcHRpb24=');
 
 @$core.Deprecated('Use createTaskResponseDescriptor instead')
 const CreateTaskResponse$json = {
