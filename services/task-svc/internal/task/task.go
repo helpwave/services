@@ -66,10 +66,14 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		}
 	}
 
+	description := ""
+	if req.Description != nil {
+		description = *req.Description
+	}
 	task := models.Task{
 		Base: models.Base{
 			Name:        req.Name,
-			Description: req.Description,
+			Description: description,
 			Status:      pb.TaskStatus_TASK_STATUS_TODO,
 		},
 		PatientId:      patientId,

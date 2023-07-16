@@ -8,6 +8,8 @@ export class CreateTaskRequest extends jspb.Message {
 
   getDescription(): string;
   setDescription(value: string): CreateTaskRequest;
+  hasDescription(): boolean;
+  clearDescription(): CreateTaskRequest;
 
   getPatientId(): string;
   setPatientId(value: string): CreateTaskRequest;
@@ -26,9 +28,14 @@ export class CreateTaskRequest extends jspb.Message {
 export namespace CreateTaskRequest {
   export type AsObject = {
     name: string,
-    description: string,
+    description?: string,
     patientId: string,
     pb_public: boolean,
+  }
+
+  export enum DescriptionCase { 
+    _DESCRIPTION_NOT_SET = 0,
+    DESCRIPTION = 2,
   }
 }
 

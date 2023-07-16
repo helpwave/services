@@ -7,7 +7,7 @@ import (
 
 type Base struct {
 	Name        string        `gorm:"column:name"`
-	Description string        `gorm:"column:description"`
+	Description string        `gorm:"column:description;default:''"`
 	Status      pb.TaskStatus `gorm:"column:status"`
 }
 
