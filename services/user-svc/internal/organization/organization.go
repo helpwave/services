@@ -16,6 +16,7 @@ import (
 	"gorm.io/gorm"
 	"hwgorm"
 	"hwutil"
+	pbhelpers "proto_helpers/user_svc/v1"
 )
 
 type InvitationState = string
@@ -221,6 +222,41 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOr
 	return &pb.GetOrganizationsByUserResponse{
 		Organizations: mappedOrganizations,
 	}, nil
+}
+
+func (s ServiceServer) UpdateOrganization(ctx context.Context, req *pb.UpdateOrganizationRequest) (*pb.UpdateOrganizationResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	organizationID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	organization := Organization{ID: organizationID}
+	updates := pbhelpers.UpdatesMapForUpdateOrganizationRequest(req)
+
+	if err := db.Model(&organization).Updates(updates).Error; err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &pb.UpdateOrganizationResponse{}, nil
+}
+
+func (s ServiceServer) DeleteOrganization(ctx context.Context, req *pb.DeleteOrganizationRequest) (*pb.DeleteOrganizationResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	organizationID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	organization := Organization{ID: organizationID}
+
+	if err := db.Delete(&organization).Error; err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &pb.DeleteOrganizationResponse{}, nil
 }
 
 func (s ServiceServer) AddMember(ctx context.Context, req *pb.AddMemberRequest) (*pb.AddMemberResponse, error) {

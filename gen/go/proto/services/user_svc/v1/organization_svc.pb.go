@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.31.0
 // 	protoc        (unknown)
-// source: proto/services/user_svc/v1/organization_svc.proto
+// source: proto/services/user_svc/v1/user_svc.proto
 
 package user_svc
 
