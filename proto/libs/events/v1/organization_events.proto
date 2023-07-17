@@ -12,3 +12,9 @@ message OrganizationCreatedEvent {
   // the id of the user that created the organization
   string user_id = 2;
 }
+
+// TOPIC: ORGANIZATION_DELETED
+message OrganizationDeletedEvent {
+  // the id of the deleted organization
+  string id = 1;
+}

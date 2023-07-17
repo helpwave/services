@@ -27,3 +27,15 @@ final $typed_data.Uint8List organizationCreatedEventDescriptor = $convert.base64
     'ChhPcmdhbml6YXRpb25DcmVhdGVkRXZlbnQSDgoCaWQYASABKAlSAmlkEhcKB3VzZXJfaWQYAi'
     'ABKAlSBnVzZXJJZA==');
 
+@$core.Deprecated('Use organizationDeletedEventDescriptor instead')
+const OrganizationDeletedEvent$json = {
+  '1': 'OrganizationDeletedEvent',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `OrganizationDeletedEvent`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List organizationDeletedEventDescriptor = $convert.base64Decode(
+    'ChhPcmdhbml6YXRpb25EZWxldGVkRXZlbnQSDgoCaWQYASABKAlSAmlk');
+
