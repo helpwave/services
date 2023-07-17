@@ -366,8 +366,19 @@ const GetInvitationsByUserResponse_Invitation$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
-    {'1': 'organization_id', '3': 3, '4': 1, '5': 9, '10': 'organizationId'},
+    {'1': 'organization', '3': 3, '4': 1, '5': 11, '6': '.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.Organization', '10': 'organization'},
     {'1': 'state', '3': 4, '4': 1, '5': 9, '10': 'state'},
+  ],
+  '3': [GetInvitationsByUserResponse_Invitation_Organization$json],
+};
+
+@$core.Deprecated('Use getInvitationsByUserResponseDescriptor instead')
+const GetInvitationsByUserResponse_Invitation_Organization$json = {
+  '1': 'Organization',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'long_name', '3': 2, '4': 1, '5': 9, '10': 'longName'},
+    {'1': 'avatar_url', '3': 3, '4': 1, '5': 9, '10': 'avatarUrl'},
   ],
 };
 
@@ -375,9 +386,12 @@ const GetInvitationsByUserResponse_Invitation$json = {
 final $typed_data.Uint8List getInvitationsByUserResponseDescriptor = $convert.base64Decode(
     'ChxHZXRJbnZpdGF0aW9uc0J5VXNlclJlc3BvbnNlEmUKC2ludml0YXRpb25zGAEgAygLMkMucH'
     'JvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0SW52aXRhdGlvbnNCeVVzZXJSZXNwb25zZS5J'
-    'bnZpdGF0aW9uUgtpbnZpdGF0aW9ucxpxCgpJbnZpdGF0aW9uEg4KAmlkGAEgASgJUgJpZBIUCg'
-    'VlbWFpbBgCIAEoCVIFZW1haWwSJwoPb3JnYW5pemF0aW9uX2lkGAMgASgJUg5vcmdhbml6YXRp'
-    'b25JZBIUCgVzdGF0ZRgEIAEoCVIFc3RhdGU=');
+    'bnZpdGF0aW9uUgtpbnZpdGF0aW9ucxqaAgoKSW52aXRhdGlvbhIOCgJpZBgBIAEoCVICaWQSFA'
+    'oFZW1haWwYAiABKAlSBWVtYWlsEnQKDG9yZ2FuaXphdGlvbhgDIAEoCzJQLnByb3RvLnNlcnZp'
+    'Y2VzLnVzZXJfc3ZjLnYxLkdldEludml0YXRpb25zQnlVc2VyUmVzcG9uc2UuSW52aXRhdGlvbi'
+    '5Pcmdhbml6YXRpb25SDG9yZ2FuaXphdGlvbhIUCgVzdGF0ZRgEIAEoCVIFc3RhdGUaWgoMT3Jn'
+    'YW5pemF0aW9uEg4KAmlkGAEgASgJUgJpZBIbCglsb25nX25hbWUYAiABKAlSCGxvbmdOYW1lEh'
+    '0KCmF2YXRhcl91cmwYAyABKAlSCWF2YXRhclVybA==');
 
 @$core.Deprecated('Use declineInvitationRequestDescriptor instead')
 const DeclineInvitationRequest$json = {
@@ -447,6 +461,7 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> Organizati
   '.proto.services.user_svc.v1.GetInvitationsByUserRequest': GetInvitationsByUserRequest$json,
   '.proto.services.user_svc.v1.GetInvitationsByUserResponse': GetInvitationsByUserResponse$json,
   '.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation': GetInvitationsByUserResponse_Invitation$json,
+  '.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.Organization': GetInvitationsByUserResponse_Invitation_Organization$json,
   '.proto.services.user_svc.v1.DeclineInvitationRequest': DeclineInvitationRequest$json,
   '.proto.services.user_svc.v1.DeclineInvitationResponse': DeclineInvitationResponse$json,
 };

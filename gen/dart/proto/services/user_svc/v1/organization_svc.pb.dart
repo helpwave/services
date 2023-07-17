@@ -1254,6 +1254,68 @@ class GetInvitationsByUserRequest extends $pb.GeneratedMessage {
   void clearState() => clearField(1);
 }
 
+class GetInvitationsByUserResponse_Invitation_Organization extends $pb.GeneratedMessage {
+  factory GetInvitationsByUserResponse_Invitation_Organization() => create();
+  GetInvitationsByUserResponse_Invitation_Organization._() : super();
+  factory GetInvitationsByUserResponse_Invitation_Organization.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetInvitationsByUserResponse_Invitation_Organization.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetInvitationsByUserResponse.Invitation.Organization', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'longName')
+    ..aOS(3, _omitFieldNames ? '' : 'avatarUrl')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetInvitationsByUserResponse_Invitation_Organization clone() => GetInvitationsByUserResponse_Invitation_Organization()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetInvitationsByUserResponse_Invitation_Organization copyWith(void Function(GetInvitationsByUserResponse_Invitation_Organization) updates) => super.copyWith((message) => updates(message as GetInvitationsByUserResponse_Invitation_Organization)) as GetInvitationsByUserResponse_Invitation_Organization;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetInvitationsByUserResponse_Invitation_Organization create() => GetInvitationsByUserResponse_Invitation_Organization._();
+  GetInvitationsByUserResponse_Invitation_Organization createEmptyInstance() => create();
+  static $pb.PbList<GetInvitationsByUserResponse_Invitation_Organization> createRepeated() => $pb.PbList<GetInvitationsByUserResponse_Invitation_Organization>();
+  @$core.pragma('dart2js:noInline')
+  static GetInvitationsByUserResponse_Invitation_Organization getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetInvitationsByUserResponse_Invitation_Organization>(create);
+  static GetInvitationsByUserResponse_Invitation_Organization? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get longName => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set longName($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasLongName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearLongName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get avatarUrl => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set avatarUrl($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasAvatarUrl() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAvatarUrl() => clearField(3);
+}
+
 class GetInvitationsByUserResponse_Invitation extends $pb.GeneratedMessage {
   factory GetInvitationsByUserResponse_Invitation() => create();
   GetInvitationsByUserResponse_Invitation._() : super();
@@ -1263,7 +1325,7 @@ class GetInvitationsByUserResponse_Invitation extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetInvitationsByUserResponse.Invitation', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'email')
-    ..aOS(3, _omitFieldNames ? '' : 'organizationId')
+    ..aOM<GetInvitationsByUserResponse_Invitation_Organization>(3, _omitFieldNames ? '' : 'organization', subBuilder: GetInvitationsByUserResponse_Invitation_Organization.create)
     ..aOS(4, _omitFieldNames ? '' : 'state')
     ..hasRequiredFields = false
   ;
@@ -1308,13 +1370,15 @@ class GetInvitationsByUserResponse_Invitation extends $pb.GeneratedMessage {
   void clearEmail() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get organizationId => $_getSZ(2);
+  GetInvitationsByUserResponse_Invitation_Organization get organization => $_getN(2);
   @$pb.TagNumber(3)
-  set organizationId($core.String v) { $_setString(2, v); }
+  set organization(GetInvitationsByUserResponse_Invitation_Organization v) { setField(3, v); }
   @$pb.TagNumber(3)
-  $core.bool hasOrganizationId() => $_has(2);
+  $core.bool hasOrganization() => $_has(2);
   @$pb.TagNumber(3)
-  void clearOrganizationId() => clearField(3);
+  void clearOrganization() => clearField(3);
+  @$pb.TagNumber(3)
+  GetInvitationsByUserResponse_Invitation_Organization ensureOrganization() => $_ensure(2);
 
   @$pb.TagNumber(4)
   $core.String get state => $_getSZ(3);
