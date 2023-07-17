@@ -256,6 +256,16 @@ func (s ServiceServer) DeleteOrganization(ctx context.Context, req *pb.DeleteOrg
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	organizationDeletedEvent := &events.OrganizationDeletedEvent{
+		Id: organizationID.String(),
+	}
+
+	daprClient := common.MustNewDaprGRPCClient()
+
+	if err := common.PublishMessage(ctx, daprClient, "pubsub", "ORGANIZATION_DELETED", organizationDeletedEvent); err != nil {
+		return nil, err
+	}
+
 	return &pb.DeleteOrganizationResponse{}, nil
 }
 

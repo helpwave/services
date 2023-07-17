@@ -65,6 +65,48 @@ class OrganizationCreatedEvent extends $pb.GeneratedMessage {
   void clearUserId() => clearField(2);
 }
 
+class OrganizationDeletedEvent extends $pb.GeneratedMessage {
+  factory OrganizationDeletedEvent() => create();
+  OrganizationDeletedEvent._() : super();
+  factory OrganizationDeletedEvent.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory OrganizationDeletedEvent.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'OrganizationDeletedEvent', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.libs.events.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  OrganizationDeletedEvent clone() => OrganizationDeletedEvent()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  OrganizationDeletedEvent copyWith(void Function(OrganizationDeletedEvent) updates) => super.copyWith((message) => updates(message as OrganizationDeletedEvent)) as OrganizationDeletedEvent;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static OrganizationDeletedEvent create() => OrganizationDeletedEvent._();
+  OrganizationDeletedEvent createEmptyInstance() => create();
+  static $pb.PbList<OrganizationDeletedEvent> createRepeated() => $pb.PbList<OrganizationDeletedEvent>();
+  @$core.pragma('dart2js:noInline')
+  static OrganizationDeletedEvent getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<OrganizationDeletedEvent>(create);
+  static OrganizationDeletedEvent? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');
