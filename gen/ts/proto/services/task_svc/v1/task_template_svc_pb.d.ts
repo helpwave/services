@@ -8,6 +8,8 @@ export class CreateTaskTemplateRequest extends jspb.Message {
 
   getDescription(): string;
   setDescription(value: string): CreateTaskTemplateRequest;
+  hasDescription(): boolean;
+  clearDescription(): CreateTaskTemplateRequest;
 
   getWardId(): string;
   setWardId(value: string): CreateTaskTemplateRequest;
@@ -30,7 +32,7 @@ export class CreateTaskTemplateRequest extends jspb.Message {
 export namespace CreateTaskTemplateRequest {
   export type AsObject = {
     name: string,
-    description: string,
+    description?: string,
     wardId?: string,
     subtasksList: Array<CreateTaskTemplateRequest.SubTask.AsObject>,
   }
@@ -53,6 +55,11 @@ export namespace CreateTaskTemplateRequest {
     }
   }
 
+
+  export enum DescriptionCase { 
+    _DESCRIPTION_NOT_SET = 0,
+    DESCRIPTION = 2,
+  }
 
   export enum WardIdCase { 
     _WARD_ID_NOT_SET = 0,

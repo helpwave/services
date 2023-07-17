@@ -4,7 +4,7 @@ import "github.com/google/uuid"
 
 type Base struct {
 	Name        string `gorm:"column:name"`
-	Description string `gorm:"column:description"`
+	Description string `gorm:"column:description;default:''"`
 }
 
 type TaskTemplate struct {

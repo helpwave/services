@@ -41,8 +41,12 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		return nil, err
 	}
 
+	description := ""
+	if req.Description != nil {
+		description = *req.Description
+	}
 	taskTemplate := models.TaskTemplate{
-		Base:           models.Base{Name: req.Name, Description: req.Description},
+		Base:           models.Base{Name: req.Name, Description: description},
 		OrganizationID: organizationID,
 		CreatedBy:      userID,
 		WardID:         wardID,
