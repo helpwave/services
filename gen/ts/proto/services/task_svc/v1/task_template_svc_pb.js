@@ -704,8 +704,8 @@ proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.serializeBinaryToWrit
       f
     );
   }
-  f = message.getDescription();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
     writer.writeString(
       2,
       f
@@ -891,7 +891,25 @@ proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.getDescript
  * @return {!proto.proto.services.task_svc.v1.CreateTaskTemplateRequest} returns this
  */
 proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.setDescription = function(value) {
-  return jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setField(this, 2, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.task_svc.v1.CreateTaskTemplateRequest} returns this
+ */
+proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.clearDescription = function() {
+  return jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.CreateTaskTemplateRequest.prototype.hasDescription = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
