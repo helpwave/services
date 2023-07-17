@@ -8,7 +8,7 @@
 // versions:
 // 	protoc-gen-grpc-web v1.4.2
 // 	protoc              v0.0.0
-// source: proto/services/user_svc/v1/user_svc.proto
+// source: proto/services/user_svc/v1/organization_svc.proto
 
 
 /* eslint-disable */

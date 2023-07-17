@@ -1,4 +1,4 @@
-// source: proto/services/user_svc/v1/user_svc.proto
+// source: proto/services/user_svc/v1/organization_svc.proto
 /**
  * @fileoverview
  * @enhanceable
