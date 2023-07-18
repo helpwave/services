@@ -164,14 +164,19 @@ message GetInvitationsByUserRequest {
 }
 
 message GetInvitationsByUserResponse {
-
   repeated Invitation invitations = 1;
 
-  message Invitation{
+  message Invitation {
     string id = 1;
     string email = 2;
-    string organization_id = 3;
+    Organization organization = 3;
     string state = 4;
+
+    message Organization {
+      string id = 1;
+      string long_name = 2;
+      string avatar_url = 3;
+    }
   }
 }
 
@@ -184,7 +189,6 @@ message DeclineInvitationRequest {
 }
 
 message DeclineInvitationResponse {}
-
 
 //
 //  OrganizationService

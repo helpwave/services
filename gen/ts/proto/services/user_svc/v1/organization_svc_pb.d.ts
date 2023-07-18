@@ -610,8 +610,10 @@ export namespace GetInvitationsByUserResponse {
     getEmail(): string;
     setEmail(value: string): Invitation;
 
-    getOrganizationId(): string;
-    setOrganizationId(value: string): Invitation;
+    getOrganization(): GetInvitationsByUserResponse.Invitation.Organization | undefined;
+    setOrganization(value?: GetInvitationsByUserResponse.Invitation.Organization): Invitation;
+    hasOrganization(): boolean;
+    clearOrganization(): Invitation;
 
     getState(): string;
     setState(value: string): Invitation;
@@ -628,9 +630,36 @@ export namespace GetInvitationsByUserResponse {
     export type AsObject = {
       id: string,
       email: string,
-      organizationId: string,
+      organization?: GetInvitationsByUserResponse.Invitation.Organization.AsObject,
       state: string,
     }
+
+    export class Organization extends jspb.Message {
+      getId(): string;
+      setId(value: string): Organization;
+
+      getLongName(): string;
+      setLongName(value: string): Organization;
+
+      getAvatarUrl(): string;
+      setAvatarUrl(value: string): Organization;
+
+      serializeBinary(): Uint8Array;
+      toObject(includeInstance?: boolean): Organization.AsObject;
+      static toObject(includeInstance: boolean, msg: Organization): Organization.AsObject;
+      static serializeBinaryToWriter(message: Organization, writer: jspb.BinaryWriter): void;
+      static deserializeBinary(bytes: Uint8Array): Organization;
+      static deserializeBinaryFromReader(message: Organization, reader: jspb.BinaryReader): Organization;
+    }
+
+    export namespace Organization {
+      export type AsObject = {
+        id: string,
+        longName: string,
+        avatarUrl: string,
+      }
+    }
+
   }
 
 }

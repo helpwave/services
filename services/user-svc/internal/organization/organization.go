@@ -52,8 +52,9 @@ type Membership struct {
 }
 
 type Invitation struct {
-	ID             uuid.UUID       `gorm:"column:id;default:uuid_generate_v4()"`
-	OrganizationID uuid.UUID       `gorm:"column:organization_id"`
+	ID             uuid.UUID `gorm:"column:id;default:uuid_generate_v4()"`
+	OrganizationID uuid.UUID `gorm:"column:organization_id"`
+	Organization   Organization
 	Email          string          `gorm:"column:email"`
 	State          InvitationState `gorm:"column:state"`
 }
@@ -447,7 +448,7 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 		filter = filter.Where("state = ?", req.State)
 	}
 
-	if err := filter.Find(&invitations).Error; err != nil {
+	if err := filter.Preload("Organization").Find(&invitations).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
@@ -457,11 +458,17 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 	}
 
 	invitationsResponse = hwutil.Map(invitations, func(invitation Invitation) *pb.GetInvitationsByUserResponse_Invitation {
+		organization := &pb.GetInvitationsByUserResponse_Invitation_Organization{
+			Id:        invitation.Organization.ID.String(),
+			LongName:  invitation.Organization.LongName,
+			AvatarUrl: invitation.Organization.AvatarUrl,
+		}
+
 		return &pb.GetInvitationsByUserResponse_Invitation{
-			Id:             invitation.ID.String(),
-			Email:          invitation.Email,
-			OrganizationId: invitation.OrganizationID.String(),
-			State:          invitation.State,
+			Id:           invitation.ID.String(),
+			Email:        invitation.Email,
+			Organization: organization,
+			State:        invitation.State,
 		}
 	})
 
