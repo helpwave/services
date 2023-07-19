@@ -184,7 +184,7 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOr
 
 	// TODO: Auth
 
-	userID, err := uuid.Parse(req.UserId)
+	userID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

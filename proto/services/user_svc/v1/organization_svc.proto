@@ -62,7 +62,6 @@ message GetOrganizationResponse {
 //
 
 message GetOrganizationsByUserRequest {
-  string user_id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetOrganizationsByUserResponse {

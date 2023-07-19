@@ -123,15 +123,11 @@ final $typed_data.Uint8List getOrganizationResponseDescriptor = $convert.base64D
 @$core.Deprecated('Use getOrganizationsByUserRequestDescriptor instead')
 const GetOrganizationsByUserRequest$json = {
   '1': 'GetOrganizationsByUserRequest',
-  '2': [
-    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
-  ],
 };
 
 /// Descriptor for `GetOrganizationsByUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getOrganizationsByUserRequestDescriptor = $convert.base64Decode(
-    'Ch1HZXRPcmdhbml6YXRpb25zQnlVc2VyUmVxdWVzdBIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySW'
-    'Q=');
+    'Ch1HZXRPcmdhbml6YXRpb25zQnlVc2VyUmVxdWVzdA==');
 
 @$core.Deprecated('Use getOrganizationsByUserResponseDescriptor instead')
 const GetOrganizationsByUserResponse$json = {
