@@ -14,6 +14,10 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'organization_svc.pbenum.dart';
+
+export 'organization_svc.pbenum.dart';
+
 class CreateOrganizationRequest extends $pb.GeneratedMessage {
   factory CreateOrganizationRequest() => create();
   CreateOrganizationRequest._() : super();
@@ -1209,7 +1213,7 @@ class GetInvitationsByUserRequest extends $pb.GeneratedMessage {
   factory GetInvitationsByUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetInvitationsByUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'state')
+    ..e<InvitationState>(1, _omitFieldNames ? '' : 'state', $pb.PbFieldType.OE, defaultOrMaker: InvitationState.INVITATION_STATE_UNSPECIFIED, valueOf: InvitationState.valueOf, enumValues: InvitationState.values)
     ..hasRequiredFields = false
   ;
 
@@ -1235,9 +1239,9 @@ class GetInvitationsByUserRequest extends $pb.GeneratedMessage {
   static GetInvitationsByUserRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get state => $_getSZ(0);
+  InvitationState get state => $_getN(0);
   @$pb.TagNumber(1)
-  set state($core.String v) { $_setString(0, v); }
+  set state(InvitationState v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasState() => $_has(0);
   @$pb.TagNumber(1)
@@ -1316,7 +1320,7 @@ class GetInvitationsByUserResponse_Invitation extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'email')
     ..aOM<GetInvitationsByUserResponse_Invitation_Organization>(3, _omitFieldNames ? '' : 'organization', subBuilder: GetInvitationsByUserResponse_Invitation_Organization.create)
-    ..aOS(4, _omitFieldNames ? '' : 'state')
+    ..e<InvitationState>(4, _omitFieldNames ? '' : 'state', $pb.PbFieldType.OE, defaultOrMaker: InvitationState.INVITATION_STATE_UNSPECIFIED, valueOf: InvitationState.valueOf, enumValues: InvitationState.values)
     ..hasRequiredFields = false
   ;
 
@@ -1371,9 +1375,9 @@ class GetInvitationsByUserResponse_Invitation extends $pb.GeneratedMessage {
   GetInvitationsByUserResponse_Invitation_Organization ensureOrganization() => $_ensure(2);
 
   @$pb.TagNumber(4)
-  $core.String get state => $_getSZ(3);
+  InvitationState get state => $_getN(3);
   @$pb.TagNumber(4)
-  set state($core.String v) { $_setString(3, v); }
+  set state(InvitationState v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasState() => $_has(3);
   @$pb.TagNumber(4)

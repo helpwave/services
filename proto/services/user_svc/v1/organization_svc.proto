@@ -4,6 +4,13 @@ package proto.services.user_svc.v1;
 
 option go_package = "gen/proto/services/user-svc";
 
+enum InvitationState {
+  INVITATION_STATE_UNSPECIFIED = 0;
+  INVITATION_STATE_PENDING = 1;
+  INVITATION_STATE_ACCEPTED = 2;
+  INVITATION_STATE_REJECTED = 3;
+}
+
 //
 // CreateOrganization
 //
@@ -159,7 +166,7 @@ message AcceptInvitationResponse {}
 //
 
 message GetInvitationsByUserRequest {
-  optional string state = 1;
+  optional InvitationState state = 1;
 }
 
 message GetInvitationsByUserResponse {
@@ -169,7 +176,7 @@ message GetInvitationsByUserResponse {
     string id = 1;
     string email = 2;
     Organization organization = 3;
-    string state = 4;
+    InvitationState state = 4;
 
     message Organization {
       string id = 1;

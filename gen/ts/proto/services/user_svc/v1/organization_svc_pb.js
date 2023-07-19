@@ -44,6 +44,7 @@ goog.exportSymbol('proto.proto.services.user_svc.v1.GetOrganizationsByUserReques
 goog.exportSymbol('proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse', null, global);
 goog.exportSymbol('proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization', null, global);
 goog.exportSymbol('proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.Member', null, global);
+goog.exportSymbol('proto.proto.services.user_svc.v1.InvitationState', null, global);
 goog.exportSymbol('proto.proto.services.user_svc.v1.InviteMemberRequest', null, global);
 goog.exportSymbol('proto.proto.services.user_svc.v1.InviteMemberResponse', null, global);
 goog.exportSymbol('proto.proto.services.user_svc.v1.RemoveMemberRequest', null, global);
@@ -4587,7 +4588,7 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.prototype.toObject 
  */
 proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    state: jspb.Message.getFieldWithDefault(msg, 1, "")
+    state: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -4625,7 +4626,7 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.deserializeBinaryFr
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!proto.proto.services.user_svc.v1.InvitationState} */ (reader.readEnum());
       msg.setState(value);
       break;
     default:
@@ -4657,9 +4658,9 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.prototype.serialize
  */
 proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {string} */ (jspb.Message.getField(message, 1));
+  f = /** @type {!proto.proto.services.user_svc.v1.InvitationState} */ (jspb.Message.getField(message, 1));
   if (f != null) {
-    writer.writeString(
+    writer.writeEnum(
       1,
       f
     );
@@ -4668,16 +4669,16 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.serializeBinaryToWr
 
 
 /**
- * optional string state = 1;
- * @return {string}
+ * optional InvitationState state = 1;
+ * @return {!proto.proto.services.user_svc.v1.InvitationState}
  */
 proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.prototype.getState = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+  return /** @type {!proto.proto.services.user_svc.v1.InvitationState} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /**
- * @param {string} value
+ * @param {!proto.proto.services.user_svc.v1.InvitationState} value
  * @return {!proto.proto.services.user_svc.v1.GetInvitationsByUserRequest} returns this
  */
 proto.proto.services.user_svc.v1.GetInvitationsByUserRequest.prototype.setState = function(value) {
@@ -4860,7 +4861,7 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.toObjec
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     email: jspb.Message.getFieldWithDefault(msg, 2, ""),
     organization: (f = msg.getOrganization()) && proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.Organization.toObject(includeInstance, f),
-    state: jspb.Message.getFieldWithDefault(msg, 4, "")
+    state: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
 
   if (includeInstance) {
@@ -4911,7 +4912,7 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.deseria
       msg.setOrganization(value);
       break;
     case 4:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!proto.proto.services.user_svc.v1.InvitationState} */ (reader.readEnum());
       msg.setState(value);
       break;
     default:
@@ -4966,8 +4967,8 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.seriali
     );
   }
   f = message.getState();
-  if (f.length > 0) {
-    writer.writeString(
+  if (f !== 0.0) {
+    writer.writeEnum(
       4,
       f
     );
@@ -5239,20 +5240,20 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.prototy
 
 
 /**
- * optional string state = 4;
- * @return {string}
+ * optional InvitationState state = 4;
+ * @return {!proto.proto.services.user_svc.v1.InvitationState}
  */
 proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.prototype.getState = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+  return /** @type {!proto.proto.services.user_svc.v1.InvitationState} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
 
 /**
- * @param {string} value
+ * @param {!proto.proto.services.user_svc.v1.InvitationState} value
  * @return {!proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation} returns this
  */
 proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.prototype.setState = function(value) {
-  return jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3EnumField(this, 4, value);
 };
 
 
@@ -5524,5 +5525,15 @@ proto.proto.services.user_svc.v1.DeclineInvitationResponse.serializeBinaryToWrit
   var f = undefined;
 };
 
+
+/**
+ * @enum {number}
+ */
+proto.proto.services.user_svc.v1.InvitationState = {
+  INVITATION_STATE_UNSPECIFIED: 0,
+  INVITATION_STATE_PENDING: 1,
+  INVITATION_STATE_ACCEPTED: 2,
+  INVITATION_STATE_REJECTED: 3
+};
 
 goog.object.extend(exports, proto.proto.services.user_svc.v1);

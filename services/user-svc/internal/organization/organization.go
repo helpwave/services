@@ -21,12 +21,6 @@ import (
 
 type InvitationState = string
 
-const (
-	InvitationStateAccepted InvitationState = "accepted"
-	InvitationStateRejected InvitationState = "rejected"
-	InvitationStatePending  InvitationState = "pending"
-)
-
 type Base struct {
 	LongName     string `gorm:"column:long_name"`
 	ShortName    string `gorm:"column:short_name"`
@@ -55,8 +49,8 @@ type Invitation struct {
 	ID             uuid.UUID `gorm:"column:id;default:uuid_generate_v4()"`
 	OrganizationID uuid.UUID `gorm:"column:organization_id"`
 	Organization   Organization
-	Email          string          `gorm:"column:email"`
-	State          InvitationState `gorm:"column:state"`
+	Email          string             `gorm:"column:email"`
+	State          pb.InvitationState `gorm:"column:state"`
 }
 
 var UserCreatedEventSubscription = &daprcmn.Subscription{
@@ -349,7 +343,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	// check if already an invitation exists
 	invitation := Invitation{}
 
-	if err := db.Where("(email = ? AND organization_id = ?) AND (state IN ?)", req.Email, organizationId, []string{InvitationStatePending, InvitationStateAccepted}).First(&invitation).Error; err != nil {
+	if err := db.Where("(email = ? AND organization_id = ?) AND (state IN ?)", req.Email, organizationId, []pb.InvitationState{pb.InvitationState_INVITATION_STATE_PENDING, pb.InvitationState_INVITATION_STATE_ACCEPTED}).First(&invitation).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
@@ -358,7 +352,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 			invitation = Invitation{
 				Email:          req.Email,
 				OrganizationID: organizationId,
-				State:          InvitationStatePending,
+				State:          pb.InvitationState_INVITATION_STATE_PENDING,
 			}
 
 			if err := db.Create(&invitation).Error; err != nil {
@@ -402,9 +396,9 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 		}
 	}
 
-	if currentInvitation.State == InvitationStateAccepted {
+	if currentInvitation.State == pb.InvitationState_INVITATION_STATE_ACCEPTED {
 		return &pb.AcceptInvitationResponse{}, nil
-	} else if currentInvitation.State != InvitationStatePending {
+	} else if currentInvitation.State != pb.InvitationState_INVITATION_STATE_PENDING {
 		return nil, status.Error(codes.InvalidArgument, "only pending invitations can be accepted")
 	}
 
@@ -413,7 +407,7 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 		ID: invitationId,
 	}
 
-	if err := db.Model(&invitation).Update("state", InvitationStateAccepted).Error; err != nil {
+	if err := db.Model(&invitation).Update("state", pb.InvitationState_INVITATION_STATE_ACCEPTED).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -501,9 +495,9 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 		}
 	}
 
-	if currentInvitation.State == InvitationStateRejected {
+	if currentInvitation.State == pb.InvitationState_INVITATION_STATE_REJECTED {
 		return &pb.DeclineInvitationResponse{}, nil
-	} else if currentInvitation.State != InvitationStatePending {
+	} else if currentInvitation.State != pb.InvitationState_INVITATION_STATE_PENDING {
 		return nil, status.Error(codes.InvalidArgument, "only pending invitations can be rejected")
 	}
 
@@ -512,7 +506,7 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 		ID: invitationId,
 	}
 
-	if err := db.Model(&invitation).Update("state", InvitationStateRejected).Error; err != nil {
+	if err := db.Model(&invitation).Update("state", pb.InvitationState_INVITATION_STATE_REJECTED).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}

@@ -13,6 +13,23 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use invitationStateDescriptor instead')
+const InvitationState$json = {
+  '1': 'InvitationState',
+  '2': [
+    {'1': 'INVITATION_STATE_UNSPECIFIED', '2': 0},
+    {'1': 'INVITATION_STATE_PENDING', '2': 1},
+    {'1': 'INVITATION_STATE_ACCEPTED', '2': 2},
+    {'1': 'INVITATION_STATE_REJECTED', '2': 3},
+  ],
+};
+
+/// Descriptor for `InvitationState`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List invitationStateDescriptor = $convert.base64Decode(
+    'Cg9JbnZpdGF0aW9uU3RhdGUSIAocSU5WSVRBVElPTl9TVEFURV9VTlNQRUNJRklFRBAAEhwKGE'
+    'lOVklUQVRJT05fU1RBVEVfUEVORElORxABEh0KGUlOVklUQVRJT05fU1RBVEVfQUNDRVBURUQQ'
+    'AhIdChlJTlZJVEFUSU9OX1NUQVRFX1JFSkVDVEVEEAM=');
+
 @$core.Deprecated('Use createOrganizationRequestDescriptor instead')
 const CreateOrganizationRequest$json = {
   '1': 'CreateOrganizationRequest',
@@ -335,7 +352,7 @@ final $typed_data.Uint8List acceptInvitationResponseDescriptor = $convert.base64
 const GetInvitationsByUserRequest$json = {
   '1': 'GetInvitationsByUserRequest',
   '2': [
-    {'1': 'state', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'state', '17': true},
+    {'1': 'state', '3': 1, '4': 1, '5': 14, '6': '.proto.services.user_svc.v1.InvitationState', '9': 0, '10': 'state', '17': true},
   ],
   '8': [
     {'1': '_state'},
@@ -344,8 +361,8 @@ const GetInvitationsByUserRequest$json = {
 
 /// Descriptor for `GetInvitationsByUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getInvitationsByUserRequestDescriptor = $convert.base64Decode(
-    'ChtHZXRJbnZpdGF0aW9uc0J5VXNlclJlcXVlc3QSGQoFc3RhdGUYASABKAlIAFIFc3RhdGWIAQ'
-    'FCCAoGX3N0YXRl');
+    'ChtHZXRJbnZpdGF0aW9uc0J5VXNlclJlcXVlc3QSRgoFc3RhdGUYASABKA4yKy5wcm90by5zZX'
+    'J2aWNlcy51c2VyX3N2Yy52MS5JbnZpdGF0aW9uU3RhdGVIAFIFc3RhdGWIAQFCCAoGX3N0YXRl');
 
 @$core.Deprecated('Use getInvitationsByUserResponseDescriptor instead')
 const GetInvitationsByUserResponse$json = {
@@ -363,7 +380,7 @@ const GetInvitationsByUserResponse_Invitation$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
     {'1': 'organization', '3': 3, '4': 1, '5': 11, '6': '.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.Organization', '10': 'organization'},
-    {'1': 'state', '3': 4, '4': 1, '5': 9, '10': 'state'},
+    {'1': 'state', '3': 4, '4': 1, '5': 14, '6': '.proto.services.user_svc.v1.InvitationState', '10': 'state'},
   ],
   '3': [GetInvitationsByUserResponse_Invitation_Organization$json],
 };
@@ -382,12 +399,13 @@ const GetInvitationsByUserResponse_Invitation_Organization$json = {
 final $typed_data.Uint8List getInvitationsByUserResponseDescriptor = $convert.base64Decode(
     'ChxHZXRJbnZpdGF0aW9uc0J5VXNlclJlc3BvbnNlEmUKC2ludml0YXRpb25zGAEgAygLMkMucH'
     'JvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0SW52aXRhdGlvbnNCeVVzZXJSZXNwb25zZS5J'
-    'bnZpdGF0aW9uUgtpbnZpdGF0aW9ucxqaAgoKSW52aXRhdGlvbhIOCgJpZBgBIAEoCVICaWQSFA'
+    'bnZpdGF0aW9uUgtpbnZpdGF0aW9ucxrHAgoKSW52aXRhdGlvbhIOCgJpZBgBIAEoCVICaWQSFA'
     'oFZW1haWwYAiABKAlSBWVtYWlsEnQKDG9yZ2FuaXphdGlvbhgDIAEoCzJQLnByb3RvLnNlcnZp'
     'Y2VzLnVzZXJfc3ZjLnYxLkdldEludml0YXRpb25zQnlVc2VyUmVzcG9uc2UuSW52aXRhdGlvbi'
-    '5Pcmdhbml6YXRpb25SDG9yZ2FuaXphdGlvbhIUCgVzdGF0ZRgEIAEoCVIFc3RhdGUaWgoMT3Jn'
-    'YW5pemF0aW9uEg4KAmlkGAEgASgJUgJpZBIbCglsb25nX25hbWUYAiABKAlSCGxvbmdOYW1lEh'
-    '0KCmF2YXRhcl91cmwYAyABKAlSCWF2YXRhclVybA==');
+    '5Pcmdhbml6YXRpb25SDG9yZ2FuaXphdGlvbhJBCgVzdGF0ZRgEIAEoDjIrLnByb3RvLnNlcnZp'
+    'Y2VzLnVzZXJfc3ZjLnYxLkludml0YXRpb25TdGF0ZVIFc3RhdGUaWgoMT3JnYW5pemF0aW9uEg'
+    '4KAmlkGAEgASgJUgJpZBIbCglsb25nX25hbWUYAiABKAlSCGxvbmdOYW1lEh0KCmF2YXRhcl91'
+    'cmwYAyABKAlSCWF2YXRhclVybA==');
 
 @$core.Deprecated('Use declineInvitationRequestDescriptor instead')
 const DeclineInvitationRequest$json = {
