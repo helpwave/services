@@ -2021,7 +2021,7 @@ proto.proto.services.user_svc.v1.GetOrganizationsByUserRequest.prototype.toObjec
  */
 proto.proto.services.user_svc.v1.GetOrganizationsByUserRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    userId: jspb.Message.getFieldWithDefault(msg, 1, "")
+
   };
 
   if (includeInstance) {
@@ -2058,10 +2058,6 @@ proto.proto.services.user_svc.v1.GetOrganizationsByUserRequest.deserializeBinary
     }
     var field = reader.getFieldNumber();
     switch (field) {
-    case 1:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setUserId(value);
-      break;
     default:
       reader.skipField();
       break;
@@ -2091,31 +2087,6 @@ proto.proto.services.user_svc.v1.GetOrganizationsByUserRequest.prototype.seriali
  */
 proto.proto.services.user_svc.v1.GetOrganizationsByUserRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getUserId();
-  if (f.length > 0) {
-    writer.writeString(
-      1,
-      f
-    );
-  }
-};
-
-
-/**
- * optional string user_id = 1;
- * @return {string}
- */
-proto.proto.services.user_svc.v1.GetOrganizationsByUserRequest.prototype.getUserId = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.proto.services.user_svc.v1.GetOrganizationsByUserRequest} returns this
- */
-proto.proto.services.user_svc.v1.GetOrganizationsByUserRequest.prototype.setUserId = function(value) {
-  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 

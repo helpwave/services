@@ -183,9 +183,6 @@ export namespace GetOrganizationResponse {
 }
 
 export class GetOrganizationsByUserRequest extends jspb.Message {
-  getUserId(): string;
-  setUserId(value: string): GetOrganizationsByUserRequest;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetOrganizationsByUserRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetOrganizationsByUserRequest): GetOrganizationsByUserRequest.AsObject;
@@ -196,7 +193,6 @@ export class GetOrganizationsByUserRequest extends jspb.Message {
 
 export namespace GetOrganizationsByUserRequest {
   export type AsObject = {
-    userId: string,
   }
 }
 

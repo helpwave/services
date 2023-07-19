@@ -439,7 +439,6 @@ class GetOrganizationsByUserRequest extends $pb.GeneratedMessage {
   factory GetOrganizationsByUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetOrganizationsByUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.user_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..hasRequiredFields = false
   ;
 
@@ -463,15 +462,6 @@ class GetOrganizationsByUserRequest extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static GetOrganizationsByUserRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetOrganizationsByUserRequest>(create);
   static GetOrganizationsByUserRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasUserId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearUserId() => clearField(1);
 }
 
 class GetOrganizationsByUserResponse_Organization_Member extends $pb.GeneratedMessage {
