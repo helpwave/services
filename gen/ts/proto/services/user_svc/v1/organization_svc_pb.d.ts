@@ -556,8 +556,8 @@ export namespace AcceptInvitationResponse {
 }
 
 export class GetInvitationsByUserRequest extends jspb.Message {
-  getState(): string;
-  setState(value: string): GetInvitationsByUserRequest;
+  getState(): InvitationState;
+  setState(value: InvitationState): GetInvitationsByUserRequest;
   hasState(): boolean;
   clearState(): GetInvitationsByUserRequest;
 
@@ -571,7 +571,7 @@ export class GetInvitationsByUserRequest extends jspb.Message {
 
 export namespace GetInvitationsByUserRequest {
   export type AsObject = {
-    state?: string,
+    state?: InvitationState,
   }
 
   export enum StateCase { 
@@ -611,8 +611,8 @@ export namespace GetInvitationsByUserResponse {
     hasOrganization(): boolean;
     clearOrganization(): Invitation;
 
-    getState(): string;
-    setState(value: string): Invitation;
+    getState(): InvitationState;
+    setState(value: InvitationState): Invitation;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Invitation.AsObject;
@@ -627,7 +627,7 @@ export namespace GetInvitationsByUserResponse {
       id: string,
       email: string,
       organization?: GetInvitationsByUserResponse.Invitation.Organization.AsObject,
-      state: string,
+      state: InvitationState,
     }
 
     export class Organization extends jspb.Message {
@@ -692,3 +692,9 @@ export namespace DeclineInvitationResponse {
   }
 }
 
+export enum InvitationState { 
+  INVITATION_STATE_UNSPECIFIED = 0,
+  INVITATION_STATE_PENDING = 1,
+  INVITATION_STATE_ACCEPTED = 2,
+  INVITATION_STATE_REJECTED = 3,
+}
