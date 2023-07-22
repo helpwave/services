@@ -81,13 +81,18 @@ func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrg
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	isPersonal := true
+	if req.IsPersonal != nil {
+		isPersonal = *req.IsPersonal
+	}
+
 	organization, err := CreateOrganizationAndAddUser(
 		ctx,
 		Base{
 			LongName:     req.LongName,
 			ShortName:    req.ShortName,
 			ContactEmail: req.ContactEmail,
-			IsPersonal:   req.IsPersonal,
+			IsPersonal:   isPersonal,
 		},
 		userID,
 	)
@@ -113,13 +118,18 @@ func (s ServiceServer) CreateOrganizationForUser(ctx context.Context, req *pb.Cr
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	isPersonal := true
+	if req.IsPersonal != nil {
+		isPersonal = *req.IsPersonal
+	}
+
 	organization, err := CreateOrganizationAndAddUser(
 		ctx,
 		Base{
 			LongName:     req.LongName,
 			ShortName:    req.ShortName,
 			ContactEmail: req.ContactEmail,
-			IsPersonal:   req.IsPersonal,
+			IsPersonal:   isPersonal,
 		},
 		userID,
 	)
