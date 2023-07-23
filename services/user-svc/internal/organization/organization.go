@@ -367,6 +367,111 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	}, nil
 }
 
+func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb.GetInvitationsByOrganizationRequest) (*pb.GetInvitationsByOrganizationResponse, error) {
+	db := hwgorm.GetDB(ctx)
+	log := zlog.Ctx(ctx)
+
+	claims, err := common.GetAuthClaims(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	organizationID, err := uuid.Parse(req.OrganizationId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	hasAccess, err := IsInOrganization(db, organizationID, userID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	if !hasAccess || hwutil.Contains(claims.Organizations, organizationID) {
+		return nil, status.Error(codes.Unauthenticated, "Not a member of this Organization")
+	}
+
+	var invitations []Invitation
+	var invitationsResponse []*pb.GetInvitationsByOrganizationResponse_Invitation
+
+	filter := db.Where("organization_id = ?", organizationID)
+	if req.State != nil {
+		filter = filter.Where("state = ?", req.State)
+	}
+
+	if err := filter.Find(&invitations).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			log.Warn().Err(err).Msg("database error")
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "invalid state")
+		}
+	}
+
+	invitationsResponse = hwutil.Map(invitations, func(invitation Invitation) *pb.GetInvitationsByOrganizationResponse_Invitation {
+		return &pb.GetInvitationsByOrganizationResponse_Invitation{
+			Id:             invitation.ID.String(),
+			Email:          invitation.Email,
+			OrganizationId: invitation.OrganizationID.String(),
+			State:          invitation.State,
+		}
+	})
+
+	return &pb.GetInvitationsByOrganizationResponse{
+		Invitations: invitationsResponse,
+	}, nil
+}
+
+func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvitationsByUserRequest) (*pb.GetInvitationsByUserResponse, error) {
+	db := hwgorm.GetDB(ctx)
+	log := zlog.Ctx(ctx)
+
+	claims, err := common.GetAuthClaims(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	var invitations []Invitation
+	var invitationsResponse []*pb.GetInvitationsByUserResponse_Invitation
+
+	filter := db.Where("email = ?", claims.Email)
+	if req.State != nil {
+		filter = filter.Where("state = ?", req.State)
+	}
+
+	if err := filter.Preload("Organization").Find(&invitations).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			log.Warn().Err(err).Msg("database error")
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "invalid state")
+		}
+	}
+
+	invitationsResponse = hwutil.Map(invitations, func(invitation Invitation) *pb.GetInvitationsByUserResponse_Invitation {
+		organization := &pb.GetInvitationsByUserResponse_Invitation_Organization{
+			Id:        invitation.Organization.ID.String(),
+			LongName:  invitation.Organization.LongName,
+			AvatarUrl: invitation.Organization.AvatarUrl,
+		}
+
+		return &pb.GetInvitationsByUserResponse_Invitation{
+			Id:           invitation.ID.String(),
+			Email:        invitation.Email,
+			Organization: organization,
+			State:        invitation.State,
+		}
+	})
+
+	return &pb.GetInvitationsByUserResponse{
+		Invitations: invitationsResponse,
+	}, nil
+}
+
 func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvitationRequest) (*pb.AcceptInvitationResponse, error) {
 	db := hwgorm.GetDB(ctx)
 	log := zlog.Ctx(ctx)
@@ -418,52 +523,6 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 	}
 
 	return &pb.AcceptInvitationResponse{}, nil
-}
-
-func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvitationsByUserRequest) (*pb.GetInvitationsByUserResponse, error) {
-	db := hwgorm.GetDB(ctx)
-	log := zlog.Ctx(ctx)
-
-	claims, err := common.GetAuthClaims(ctx)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	var invitations []Invitation
-	var invitationsResponse []*pb.GetInvitationsByUserResponse_Invitation
-
-	filter := db.Where("email = ?", claims.Email)
-	if req.State != nil {
-		filter = filter.Where("state = ?", req.State)
-	}
-
-	if err := filter.Preload("Organization").Find(&invitations).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
-			log.Warn().Err(err).Msg("database error")
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "invalid state")
-		}
-	}
-
-	invitationsResponse = hwutil.Map(invitations, func(invitation Invitation) *pb.GetInvitationsByUserResponse_Invitation {
-		organization := &pb.GetInvitationsByUserResponse_Invitation_Organization{
-			Id:        invitation.Organization.ID.String(),
-			LongName:  invitation.Organization.LongName,
-			AvatarUrl: invitation.Organization.AvatarUrl,
-		}
-
-		return &pb.GetInvitationsByUserResponse_Invitation{
-			Id:           invitation.ID.String(),
-			Email:        invitation.Email,
-			Organization: organization,
-			State:        invitation.State,
-		}
-	})
-
-	return &pb.GetInvitationsByUserResponse{
-		Invitations: invitationsResponse,
-	}, nil
 }
 
 func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInvitationRequest) (*pb.DeclineInvitationResponse, error) {
@@ -683,4 +742,23 @@ func ChangeMembershipAdminStatus(ctx context.Context, db *gorm.DB, userID uuid.U
 		Msg("admin status changed")
 
 	return nil
+}
+
+func IsInOrganization(db *gorm.DB, organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
+
+	membership := Membership{
+		UserID:         userID,
+		OrganizationID: organizationID,
+	}
+	err := db.Model(&membership).Error
+
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return false, status.Error(codes.Internal, err.Error())
+		} else {
+			return false, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+
+	return true, nil
 }

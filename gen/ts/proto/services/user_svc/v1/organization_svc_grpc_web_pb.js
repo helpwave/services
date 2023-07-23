@@ -629,61 +629,61 @@ proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.invi
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.user_svc.v1.AcceptInvitationRequest,
- *   !proto.proto.services.user_svc.v1.AcceptInvitationResponse>}
+ *   !proto.proto.services.user_svc.v1.GetInvitationsByOrganizationRequest,
+ *   !proto.proto.services.user_svc.v1.GetInvitationsByOrganizationResponse>}
  */
-const methodDescriptor_OrganizationService_AcceptInvitation = new grpc.web.MethodDescriptor(
-  '/proto.services.user_svc.v1.OrganizationService/AcceptInvitation',
+const methodDescriptor_OrganizationService_GetInvitationsByOrganization = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/GetInvitationsByOrganization',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.user_svc.v1.AcceptInvitationRequest,
-  proto.proto.services.user_svc.v1.AcceptInvitationResponse,
+  proto.proto.services.user_svc.v1.GetInvitationsByOrganizationRequest,
+  proto.proto.services.user_svc.v1.GetInvitationsByOrganizationResponse,
   /**
-   * @param {!proto.proto.services.user_svc.v1.AcceptInvitationRequest} request
+   * @param {!proto.proto.services.user_svc.v1.GetInvitationsByOrganizationRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.user_svc.v1.AcceptInvitationResponse.deserializeBinary
+  proto.proto.services.user_svc.v1.GetInvitationsByOrganizationResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.user_svc.v1.AcceptInvitationRequest} request The
+ * @param {!proto.proto.services.user_svc.v1.GetInvitationsByOrganizationRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.AcceptInvitationResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.GetInvitationsByOrganizationResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.AcceptInvitationResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.GetInvitationsByOrganizationResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.acceptInvitation =
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.getInvitationsByOrganization =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.user_svc.v1.OrganizationService/AcceptInvitation',
+      '/proto.services.user_svc.v1.OrganizationService/GetInvitationsByOrganization',
       request,
       metadata || {},
-      methodDescriptor_OrganizationService_AcceptInvitation,
+      methodDescriptor_OrganizationService_GetInvitationsByOrganization,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.user_svc.v1.AcceptInvitationRequest} request The
+ * @param {!proto.proto.services.user_svc.v1.GetInvitationsByOrganizationRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.user_svc.v1.AcceptInvitationResponse>}
+ * @return {!Promise<!proto.proto.services.user_svc.v1.GetInvitationsByOrganizationResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.acceptInvitation =
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.getInvitationsByOrganization =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.user_svc.v1.OrganizationService/AcceptInvitation',
+      '/proto.services.user_svc.v1.OrganizationService/GetInvitationsByOrganization',
       request,
       metadata || {},
-      methodDescriptor_OrganizationService_AcceptInvitation);
+      methodDescriptor_OrganizationService_GetInvitationsByOrganization);
 };
 
 
@@ -745,6 +745,67 @@ proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.getI
       request,
       metadata || {},
       methodDescriptor_OrganizationService_GetInvitationsByUser);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.AcceptInvitationRequest,
+ *   !proto.proto.services.user_svc.v1.AcceptInvitationResponse>}
+ */
+const methodDescriptor_OrganizationService_AcceptInvitation = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/AcceptInvitation',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.AcceptInvitationRequest,
+  proto.proto.services.user_svc.v1.AcceptInvitationResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.AcceptInvitationRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.AcceptInvitationResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.AcceptInvitationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.AcceptInvitationResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.AcceptInvitationResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.acceptInvitation =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/AcceptInvitation',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_AcceptInvitation,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.AcceptInvitationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.AcceptInvitationResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.acceptInvitation =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/AcceptInvitation',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_AcceptInvitation);
 };
 
 

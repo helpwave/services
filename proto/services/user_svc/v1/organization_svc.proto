@@ -153,13 +153,25 @@ message InviteMemberResponse {
 }
 
 //
-// AcceptInvite
+// GetInvitationsByOrganization
 //
-message AcceptInvitationRequest {
-  string invitation_id = 1;  // @gotags: validate:"uuid4"
+
+message GetInvitationsByOrganizationRequest {
+  string organization_id = 1;  // @gotags: validate:"uuid4"
+  optional InvitationState state = 2;
 }
 
-message AcceptInvitationResponse {}
+message GetInvitationsByOrganizationResponse {
+  repeated Invitation invitations = 1;
+
+  message Invitation {
+    string id = 1;
+    string email = 2;
+    string organization_id = 3;
+    InvitationState state = 4;
+  }
+}
+
 
 //
 // GetInvitationsByUser
@@ -186,6 +198,17 @@ message GetInvitationsByUserResponse {
   }
 }
 
+
+//
+// AcceptInvite
+//
+message AcceptInvitationRequest {
+  string invitation_id = 1;  // @gotags: validate:"uuid4"
+}
+
+message AcceptInvitationResponse {}
+
+
 //
 // DeclineInvitation
 //
@@ -195,6 +218,7 @@ message DeclineInvitationRequest {
 }
 
 message DeclineInvitationResponse {}
+
 
 //
 //  OrganizationService
@@ -210,7 +234,8 @@ service OrganizationService {
   rpc AddMember (AddMemberRequest) returns (AddMemberResponse) {}
   rpc RemoveMember (RemoveMemberRequest) returns (RemoveMemberResponse) {}
   rpc InviteMember (InviteMemberRequest) returns (InviteMemberResponse) {}
-  rpc AcceptInvitation (AcceptInvitationRequest) returns (AcceptInvitationResponse) {}
+  rpc GetInvitationsByOrganization(GetInvitationsByOrganizationRequest) returns (GetInvitationsByOrganizationResponse) {}
   rpc GetInvitationsByUser(GetInvitationsByUserRequest) returns (GetInvitationsByUserResponse) {}
+  rpc AcceptInvitation (AcceptInvitationRequest) returns (AcceptInvitationResponse) {}
   rpc DeclineInvitation(DeclineInvitationRequest) returns (DeclineInvitationResponse) {}
 }

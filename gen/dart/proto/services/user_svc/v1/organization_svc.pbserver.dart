@@ -30,8 +30,9 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
   $async.Future<$8.AddMemberResponse> addMember($pb.ServerContext ctx, $8.AddMemberRequest request);
   $async.Future<$8.RemoveMemberResponse> removeMember($pb.ServerContext ctx, $8.RemoveMemberRequest request);
   $async.Future<$8.InviteMemberResponse> inviteMember($pb.ServerContext ctx, $8.InviteMemberRequest request);
-  $async.Future<$8.AcceptInvitationResponse> acceptInvitation($pb.ServerContext ctx, $8.AcceptInvitationRequest request);
+  $async.Future<$8.GetInvitationsByOrganizationResponse> getInvitationsByOrganization($pb.ServerContext ctx, $8.GetInvitationsByOrganizationRequest request);
   $async.Future<$8.GetInvitationsByUserResponse> getInvitationsByUser($pb.ServerContext ctx, $8.GetInvitationsByUserRequest request);
+  $async.Future<$8.AcceptInvitationResponse> acceptInvitation($pb.ServerContext ctx, $8.AcceptInvitationRequest request);
   $async.Future<$8.DeclineInvitationResponse> declineInvitation($pb.ServerContext ctx, $8.DeclineInvitationRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
@@ -45,8 +46,9 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
       case 'AddMember': return $8.AddMemberRequest();
       case 'RemoveMember': return $8.RemoveMemberRequest();
       case 'InviteMember': return $8.InviteMemberRequest();
-      case 'AcceptInvitation': return $8.AcceptInvitationRequest();
+      case 'GetInvitationsByOrganization': return $8.GetInvitationsByOrganizationRequest();
       case 'GetInvitationsByUser': return $8.GetInvitationsByUserRequest();
+      case 'AcceptInvitation': return $8.AcceptInvitationRequest();
       case 'DeclineInvitation': return $8.DeclineInvitationRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
@@ -63,8 +65,9 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
       case 'AddMember': return this.addMember(ctx, request as $8.AddMemberRequest);
       case 'RemoveMember': return this.removeMember(ctx, request as $8.RemoveMemberRequest);
       case 'InviteMember': return this.inviteMember(ctx, request as $8.InviteMemberRequest);
-      case 'AcceptInvitation': return this.acceptInvitation(ctx, request as $8.AcceptInvitationRequest);
+      case 'GetInvitationsByOrganization': return this.getInvitationsByOrganization(ctx, request as $8.GetInvitationsByOrganizationRequest);
       case 'GetInvitationsByUser': return this.getInvitationsByUser(ctx, request as $8.GetInvitationsByUserRequest);
+      case 'AcceptInvitation': return this.acceptInvitation(ctx, request as $8.AcceptInvitationRequest);
       case 'DeclineInvitation': return this.declineInvitation(ctx, request as $8.DeclineInvitationRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
