@@ -37,7 +37,10 @@ const CreateOrganizationRequest$json = {
     {'1': 'long_name', '3': 1, '4': 1, '5': 9, '10': 'longName'},
     {'1': 'short_name', '3': 2, '4': 1, '5': 9, '10': 'shortName'},
     {'1': 'contact_email', '3': 3, '4': 1, '5': 9, '10': 'contactEmail'},
-    {'1': 'is_personal', '3': 4, '4': 1, '5': 8, '10': 'isPersonal'},
+    {'1': 'is_personal', '3': 4, '4': 1, '5': 8, '9': 0, '10': 'isPersonal', '17': true},
+  ],
+  '8': [
+    {'1': '_is_personal'},
   ],
 };
 
@@ -45,7 +48,8 @@ const CreateOrganizationRequest$json = {
 final $typed_data.Uint8List createOrganizationRequestDescriptor = $convert.base64Decode(
     'ChlDcmVhdGVPcmdhbml6YXRpb25SZXF1ZXN0EhsKCWxvbmdfbmFtZRgBIAEoCVIIbG9uZ05hbW'
     'USHQoKc2hvcnRfbmFtZRgCIAEoCVIJc2hvcnROYW1lEiMKDWNvbnRhY3RfZW1haWwYAyABKAlS'
-    'DGNvbnRhY3RFbWFpbBIfCgtpc19wZXJzb25hbBgEIAEoCFIKaXNQZXJzb25hbA==');
+    'DGNvbnRhY3RFbWFpbBIkCgtpc19wZXJzb25hbBgEIAEoCEgAUgppc1BlcnNvbmFsiAEBQg4KDF'
+    '9pc19wZXJzb25hbA==');
 
 @$core.Deprecated('Use createOrganizationResponseDescriptor instead')
 const CreateOrganizationResponse$json = {
@@ -66,8 +70,11 @@ const CreateOrganizationForUserRequest$json = {
     {'1': 'long_name', '3': 1, '4': 1, '5': 9, '10': 'longName'},
     {'1': 'short_name', '3': 2, '4': 1, '5': 9, '10': 'shortName'},
     {'1': 'contact_email', '3': 3, '4': 1, '5': 9, '10': 'contactEmail'},
-    {'1': 'is_personal', '3': 4, '4': 1, '5': 8, '10': 'isPersonal'},
+    {'1': 'is_personal', '3': 4, '4': 1, '5': 8, '9': 0, '10': 'isPersonal', '17': true},
     {'1': 'user_id', '3': 5, '4': 1, '5': 9, '10': 'userId'},
+  ],
+  '8': [
+    {'1': '_is_personal'},
   ],
 };
 
@@ -75,8 +82,8 @@ const CreateOrganizationForUserRequest$json = {
 final $typed_data.Uint8List createOrganizationForUserRequestDescriptor = $convert.base64Decode(
     'CiBDcmVhdGVPcmdhbml6YXRpb25Gb3JVc2VyUmVxdWVzdBIbCglsb25nX25hbWUYASABKAlSCG'
     'xvbmdOYW1lEh0KCnNob3J0X25hbWUYAiABKAlSCXNob3J0TmFtZRIjCg1jb250YWN0X2VtYWls'
-    'GAMgASgJUgxjb250YWN0RW1haWwSHwoLaXNfcGVyc29uYWwYBCABKAhSCmlzUGVyc29uYWwSFw'
-    'oHdXNlcl9pZBgFIAEoCVIGdXNlcklk');
+    'GAMgASgJUgxjb250YWN0RW1haWwSJAoLaXNfcGVyc29uYWwYBCABKAhIAFIKaXNQZXJzb25hbI'
+    'gBARIXCgd1c2VyX2lkGAUgASgJUgZ1c2VySWRCDgoMX2lzX3BlcnNvbmFs');
 
 @$core.Deprecated('Use createOrganizationForUserResponseDescriptor instead')
 const CreateOrganizationForUserResponse$json = {

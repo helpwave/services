@@ -798,8 +798,8 @@ proto.proto.services.user_svc.v1.CreateOrganizationRequest.serializeBinaryToWrit
       f
     );
   }
-  f = message.getIsPersonal();
-  if (f) {
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
     writer.writeBool(
       4,
       f
@@ -876,7 +876,25 @@ proto.proto.services.user_svc.v1.CreateOrganizationRequest.prototype.getIsPerson
  * @return {!proto.proto.services.user_svc.v1.CreateOrganizationRequest} returns this
  */
 proto.proto.services.user_svc.v1.CreateOrganizationRequest.prototype.setIsPersonal = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 4, value);
+  return jspb.Message.setField(this, 4, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.user_svc.v1.CreateOrganizationRequest} returns this
+ */
+proto.proto.services.user_svc.v1.CreateOrganizationRequest.prototype.clearIsPersonal = function() {
+  return jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.user_svc.v1.CreateOrganizationRequest.prototype.hasIsPersonal = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -1153,8 +1171,8 @@ proto.proto.services.user_svc.v1.CreateOrganizationForUserRequest.serializeBinar
       f
     );
   }
-  f = message.getIsPersonal();
-  if (f) {
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
     writer.writeBool(
       4,
       f
@@ -1238,7 +1256,25 @@ proto.proto.services.user_svc.v1.CreateOrganizationForUserRequest.prototype.getI
  * @return {!proto.proto.services.user_svc.v1.CreateOrganizationForUserRequest} returns this
  */
 proto.proto.services.user_svc.v1.CreateOrganizationForUserRequest.prototype.setIsPersonal = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 4, value);
+  return jspb.Message.setField(this, 4, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.user_svc.v1.CreateOrganizationForUserRequest} returns this
+ */
+proto.proto.services.user_svc.v1.CreateOrganizationForUserRequest.prototype.clearIsPersonal = function() {
+  return jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.user_svc.v1.CreateOrganizationForUserRequest.prototype.hasIsPersonal = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 

@@ -14,6 +14,8 @@ export class CreateOrganizationRequest extends jspb.Message {
 
   getIsPersonal(): boolean;
   setIsPersonal(value: boolean): CreateOrganizationRequest;
+  hasIsPersonal(): boolean;
+  clearIsPersonal(): CreateOrganizationRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateOrganizationRequest.AsObject;
@@ -28,7 +30,12 @@ export namespace CreateOrganizationRequest {
     longName: string,
     shortName: string,
     contactEmail: string,
-    isPersonal: boolean,
+    isPersonal?: boolean,
+  }
+
+  export enum IsPersonalCase { 
+    _IS_PERSONAL_NOT_SET = 0,
+    IS_PERSONAL = 4,
   }
 }
 
@@ -62,6 +69,8 @@ export class CreateOrganizationForUserRequest extends jspb.Message {
 
   getIsPersonal(): boolean;
   setIsPersonal(value: boolean): CreateOrganizationForUserRequest;
+  hasIsPersonal(): boolean;
+  clearIsPersonal(): CreateOrganizationForUserRequest;
 
   getUserId(): string;
   setUserId(value: string): CreateOrganizationForUserRequest;
@@ -79,8 +88,13 @@ export namespace CreateOrganizationForUserRequest {
     longName: string,
     shortName: string,
     contactEmail: string,
-    isPersonal: boolean,
+    isPersonal?: boolean,
     userId: string,
+  }
+
+  export enum IsPersonalCase { 
+    _IS_PERSONAL_NOT_SET = 0,
+    IS_PERSONAL = 4,
   }
 }
 

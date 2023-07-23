@@ -71,12 +71,7 @@ func NewServiceServer(daprClient *daprc.GRPCClient) *ServiceServer {
 }
 
 func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrganizationRequest) (*pb.CreateOrganizationResponse, error) {
-	claims, err := common.GetAuthClaims(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	userID, err := uuid.Parse(claims.Sub)
+	userID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -87,7 +82,7 @@ func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrg
 			LongName:     req.LongName,
 			ShortName:    req.ShortName,
 			ContactEmail: req.ContactEmail,
-			IsPersonal:   req.IsPersonal,
+			IsPersonal:   req.GetIsPersonal(),
 		},
 		userID,
 	)
@@ -119,7 +114,7 @@ func (s ServiceServer) CreateOrganizationForUser(ctx context.Context, req *pb.Cr
 			LongName:     req.LongName,
 			ShortName:    req.ShortName,
 			ContactEmail: req.ContactEmail,
-			IsPersonal:   req.IsPersonal,
+			IsPersonal:   req.GetIsPersonal(),
 		},
 		userID,
 	)
@@ -531,7 +526,7 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UU
 		}
 
 		// Make the creating user admin of the organization
-		if err := ChangeMembershipAdminStatus(db, userID, organization.ID, true); err != nil {
+		if err := ChangeMembershipAdminStatus(ctx, tx, userID, organization.ID, true); err != nil {
 			return err
 		}
 
@@ -669,7 +664,9 @@ func HandleUserCreatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry
 	return false, nil
 }
 
-func ChangeMembershipAdminStatus(db *gorm.DB, userID uuid.UUID, organizationID uuid.UUID, isAdmin bool) error {
+func ChangeMembershipAdminStatus(ctx context.Context, db *gorm.DB, userID uuid.UUID, organizationID uuid.UUID, isAdmin bool) error {
+	log := zlog.Ctx(ctx)
+
 	member := Membership{
 		OrganizationID: organizationID,
 		UserID:         userID,
@@ -678,6 +675,12 @@ func ChangeMembershipAdminStatus(db *gorm.DB, userID uuid.UUID, organizationID u
 	if err := db.First(&member).Update("is_admin", isAdmin).Error; err != nil {
 		return err
 	}
+
+	log.Info().
+		Str("organizationId", organizationID.String()).
+		Str("userId", userID.String()).
+		Bool("is_admin", isAdmin).
+		Msg("admin status changed")
 
 	return nil
 }
