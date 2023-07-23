@@ -168,7 +168,7 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 	}, nil
 }
 
-func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOrganizationsByUserRequest) (*pb.GetOrganizationsByUserResponse, error) {
+func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrganizationsByUserRequest) (*pb.GetOrganizationsByUserResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -369,7 +369,6 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 
 func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb.GetInvitationsByOrganizationRequest) (*pb.GetInvitationsByOrganizationResponse, error) {
 	db := hwgorm.GetDB(ctx)
-	log := zlog.Ctx(ctx)
 
 	claims, err := common.GetAuthClaims(ctx)
 	if err != nil {
@@ -405,7 +404,6 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 
 	if err := filter.Find(&invitations).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
-			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "invalid state")
