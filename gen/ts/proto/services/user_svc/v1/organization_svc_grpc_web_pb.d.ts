@@ -71,12 +71,12 @@ export class OrganizationServiceClient {
                response: proto_services_user_svc_v1_organization_svc_pb.InviteMemberResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_organization_svc_pb.InviteMemberResponse>;
 
-  acceptInvitation(
-    request: proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationRequest,
+  getInvitationsByOrganization(
+    request: proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByOrganizationRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationResponse>;
+               response: proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByOrganizationResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByOrganizationResponse>;
 
   getInvitationsByUser(
     request: proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByUserRequest,
@@ -84,6 +84,13 @@ export class OrganizationServiceClient {
     callback: (err: grpcWeb.RpcError,
                response: proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByUserResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByUserResponse>;
+
+  acceptInvitation(
+    request: proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationResponse>;
 
   declineInvitation(
     request: proto_services_user_svc_v1_organization_svc_pb.DeclineInvitationRequest,
@@ -144,15 +151,20 @@ export class OrganizationServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_user_svc_v1_organization_svc_pb.InviteMemberResponse>;
 
-  acceptInvitation(
-    request: proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationRequest,
+  getInvitationsByOrganization(
+    request: proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByOrganizationRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationResponse>;
+  ): Promise<proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByOrganizationResponse>;
 
   getInvitationsByUser(
     request: proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByUserRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_user_svc_v1_organization_svc_pb.GetInvitationsByUserResponse>;
+
+  acceptInvitation(
+    request: proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_user_svc_v1_organization_svc_pb.AcceptInvitationResponse>;
 
   declineInvitation(
     request: proto_services_user_svc_v1_organization_svc_pb.DeclineInvitationRequest,
