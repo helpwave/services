@@ -537,36 +537,84 @@ export namespace InviteMemberResponse {
   }
 }
 
-export class AcceptInvitationRequest extends jspb.Message {
-  getInvitationId(): string;
-  setInvitationId(value: string): AcceptInvitationRequest;
+export class GetInvitationsByOrganizationRequest extends jspb.Message {
+  getOrganizationId(): string;
+  setOrganizationId(value: string): GetInvitationsByOrganizationRequest;
+
+  getState(): InvitationState;
+  setState(value: InvitationState): GetInvitationsByOrganizationRequest;
+  hasState(): boolean;
+  clearState(): GetInvitationsByOrganizationRequest;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): AcceptInvitationRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: AcceptInvitationRequest): AcceptInvitationRequest.AsObject;
-  static serializeBinaryToWriter(message: AcceptInvitationRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): AcceptInvitationRequest;
-  static deserializeBinaryFromReader(message: AcceptInvitationRequest, reader: jspb.BinaryReader): AcceptInvitationRequest;
+  toObject(includeInstance?: boolean): GetInvitationsByOrganizationRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetInvitationsByOrganizationRequest): GetInvitationsByOrganizationRequest.AsObject;
+  static serializeBinaryToWriter(message: GetInvitationsByOrganizationRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetInvitationsByOrganizationRequest;
+  static deserializeBinaryFromReader(message: GetInvitationsByOrganizationRequest, reader: jspb.BinaryReader): GetInvitationsByOrganizationRequest;
 }
 
-export namespace AcceptInvitationRequest {
+export namespace GetInvitationsByOrganizationRequest {
   export type AsObject = {
-    invitationId: string,
+    organizationId: string,
+    state?: InvitationState,
+  }
+
+  export enum StateCase { 
+    _STATE_NOT_SET = 0,
+    STATE = 2,
   }
 }
 
-export class AcceptInvitationResponse extends jspb.Message {
+export class GetInvitationsByOrganizationResponse extends jspb.Message {
+  getInvitationsList(): Array<GetInvitationsByOrganizationResponse.Invitation>;
+  setInvitationsList(value: Array<GetInvitationsByOrganizationResponse.Invitation>): GetInvitationsByOrganizationResponse;
+  clearInvitationsList(): GetInvitationsByOrganizationResponse;
+  addInvitations(value?: GetInvitationsByOrganizationResponse.Invitation, index?: number): GetInvitationsByOrganizationResponse.Invitation;
+
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): AcceptInvitationResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: AcceptInvitationResponse): AcceptInvitationResponse.AsObject;
-  static serializeBinaryToWriter(message: AcceptInvitationResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): AcceptInvitationResponse;
-  static deserializeBinaryFromReader(message: AcceptInvitationResponse, reader: jspb.BinaryReader): AcceptInvitationResponse;
+  toObject(includeInstance?: boolean): GetInvitationsByOrganizationResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetInvitationsByOrganizationResponse): GetInvitationsByOrganizationResponse.AsObject;
+  static serializeBinaryToWriter(message: GetInvitationsByOrganizationResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetInvitationsByOrganizationResponse;
+  static deserializeBinaryFromReader(message: GetInvitationsByOrganizationResponse, reader: jspb.BinaryReader): GetInvitationsByOrganizationResponse;
 }
 
-export namespace AcceptInvitationResponse {
+export namespace GetInvitationsByOrganizationResponse {
   export type AsObject = {
+    invitationsList: Array<GetInvitationsByOrganizationResponse.Invitation.AsObject>,
   }
+
+  export class Invitation extends jspb.Message {
+    getId(): string;
+    setId(value: string): Invitation;
+
+    getEmail(): string;
+    setEmail(value: string): Invitation;
+
+    getOrganizationId(): string;
+    setOrganizationId(value: string): Invitation;
+
+    getState(): InvitationState;
+    setState(value: InvitationState): Invitation;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Invitation.AsObject;
+    static toObject(includeInstance: boolean, msg: Invitation): Invitation.AsObject;
+    static serializeBinaryToWriter(message: Invitation, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Invitation;
+    static deserializeBinaryFromReader(message: Invitation, reader: jspb.BinaryReader): Invitation;
+  }
+
+  export namespace Invitation {
+    export type AsObject = {
+      id: string,
+      email: string,
+      organizationId: string,
+      state: InvitationState,
+    }
+  }
+
 }
 
 export class GetInvitationsByUserRequest extends jspb.Message {
@@ -672,6 +720,38 @@ export namespace GetInvitationsByUserResponse {
 
   }
 
+}
+
+export class AcceptInvitationRequest extends jspb.Message {
+  getInvitationId(): string;
+  setInvitationId(value: string): AcceptInvitationRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AcceptInvitationRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: AcceptInvitationRequest): AcceptInvitationRequest.AsObject;
+  static serializeBinaryToWriter(message: AcceptInvitationRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AcceptInvitationRequest;
+  static deserializeBinaryFromReader(message: AcceptInvitationRequest, reader: jspb.BinaryReader): AcceptInvitationRequest;
+}
+
+export namespace AcceptInvitationRequest {
+  export type AsObject = {
+    invitationId: string,
+  }
+}
+
+export class AcceptInvitationResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AcceptInvitationResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: AcceptInvitationResponse): AcceptInvitationResponse.AsObject;
+  static serializeBinaryToWriter(message: AcceptInvitationResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AcceptInvitationResponse;
+  static deserializeBinaryFromReader(message: AcceptInvitationResponse, reader: jspb.BinaryReader): AcceptInvitationResponse;
+}
+
+export namespace AcceptInvitationResponse {
+  export type AsObject = {
+  }
 }
 
 export class DeclineInvitationRequest extends jspb.Message {

@@ -19,18 +19,19 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	OrganizationService_CreateOrganization_FullMethodName        = "/proto.services.user_svc.v1.OrganizationService/CreateOrganization"
-	OrganizationService_CreateOrganizationForUser_FullMethodName = "/proto.services.user_svc.v1.OrganizationService/CreateOrganizationForUser"
-	OrganizationService_GetOrganization_FullMethodName           = "/proto.services.user_svc.v1.OrganizationService/GetOrganization"
-	OrganizationService_GetOrganizationsByUser_FullMethodName    = "/proto.services.user_svc.v1.OrganizationService/GetOrganizationsByUser"
-	OrganizationService_UpdateOrganization_FullMethodName        = "/proto.services.user_svc.v1.OrganizationService/UpdateOrganization"
-	OrganizationService_DeleteOrganization_FullMethodName        = "/proto.services.user_svc.v1.OrganizationService/DeleteOrganization"
-	OrganizationService_AddMember_FullMethodName                 = "/proto.services.user_svc.v1.OrganizationService/AddMember"
-	OrganizationService_RemoveMember_FullMethodName              = "/proto.services.user_svc.v1.OrganizationService/RemoveMember"
-	OrganizationService_InviteMember_FullMethodName              = "/proto.services.user_svc.v1.OrganizationService/InviteMember"
-	OrganizationService_AcceptInvitation_FullMethodName          = "/proto.services.user_svc.v1.OrganizationService/AcceptInvitation"
-	OrganizationService_GetInvitationsByUser_FullMethodName      = "/proto.services.user_svc.v1.OrganizationService/GetInvitationsByUser"
-	OrganizationService_DeclineInvitation_FullMethodName         = "/proto.services.user_svc.v1.OrganizationService/DeclineInvitation"
+	OrganizationService_CreateOrganization_FullMethodName           = "/proto.services.user_svc.v1.OrganizationService/CreateOrganization"
+	OrganizationService_CreateOrganizationForUser_FullMethodName    = "/proto.services.user_svc.v1.OrganizationService/CreateOrganizationForUser"
+	OrganizationService_GetOrganization_FullMethodName              = "/proto.services.user_svc.v1.OrganizationService/GetOrganization"
+	OrganizationService_GetOrganizationsByUser_FullMethodName       = "/proto.services.user_svc.v1.OrganizationService/GetOrganizationsByUser"
+	OrganizationService_UpdateOrganization_FullMethodName           = "/proto.services.user_svc.v1.OrganizationService/UpdateOrganization"
+	OrganizationService_DeleteOrganization_FullMethodName           = "/proto.services.user_svc.v1.OrganizationService/DeleteOrganization"
+	OrganizationService_AddMember_FullMethodName                    = "/proto.services.user_svc.v1.OrganizationService/AddMember"
+	OrganizationService_RemoveMember_FullMethodName                 = "/proto.services.user_svc.v1.OrganizationService/RemoveMember"
+	OrganizationService_InviteMember_FullMethodName                 = "/proto.services.user_svc.v1.OrganizationService/InviteMember"
+	OrganizationService_GetInvitationsByOrganization_FullMethodName = "/proto.services.user_svc.v1.OrganizationService/GetInvitationsByOrganization"
+	OrganizationService_GetInvitationsByUser_FullMethodName         = "/proto.services.user_svc.v1.OrganizationService/GetInvitationsByUser"
+	OrganizationService_AcceptInvitation_FullMethodName             = "/proto.services.user_svc.v1.OrganizationService/AcceptInvitation"
+	OrganizationService_DeclineInvitation_FullMethodName            = "/proto.services.user_svc.v1.OrganizationService/DeclineInvitation"
 )
 
 // OrganizationServiceClient is the client API for OrganizationService service.
@@ -46,8 +47,9 @@ type OrganizationServiceClient interface {
 	AddMember(ctx context.Context, in *AddMemberRequest, opts ...grpc.CallOption) (*AddMemberResponse, error)
 	RemoveMember(ctx context.Context, in *RemoveMemberRequest, opts ...grpc.CallOption) (*RemoveMemberResponse, error)
 	InviteMember(ctx context.Context, in *InviteMemberRequest, opts ...grpc.CallOption) (*InviteMemberResponse, error)
-	AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*AcceptInvitationResponse, error)
+	GetInvitationsByOrganization(ctx context.Context, in *GetInvitationsByOrganizationRequest, opts ...grpc.CallOption) (*GetInvitationsByOrganizationResponse, error)
 	GetInvitationsByUser(ctx context.Context, in *GetInvitationsByUserRequest, opts ...grpc.CallOption) (*GetInvitationsByUserResponse, error)
+	AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*AcceptInvitationResponse, error)
 	DeclineInvitation(ctx context.Context, in *DeclineInvitationRequest, opts ...grpc.CallOption) (*DeclineInvitationResponse, error)
 }
 
@@ -140,9 +142,9 @@ func (c *organizationServiceClient) InviteMember(ctx context.Context, in *Invite
 	return out, nil
 }
 
-func (c *organizationServiceClient) AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*AcceptInvitationResponse, error) {
-	out := new(AcceptInvitationResponse)
-	err := c.cc.Invoke(ctx, OrganizationService_AcceptInvitation_FullMethodName, in, out, opts...)
+func (c *organizationServiceClient) GetInvitationsByOrganization(ctx context.Context, in *GetInvitationsByOrganizationRequest, opts ...grpc.CallOption) (*GetInvitationsByOrganizationResponse, error) {
+	out := new(GetInvitationsByOrganizationResponse)
+	err := c.cc.Invoke(ctx, OrganizationService_GetInvitationsByOrganization_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -152,6 +154,15 @@ func (c *organizationServiceClient) AcceptInvitation(ctx context.Context, in *Ac
 func (c *organizationServiceClient) GetInvitationsByUser(ctx context.Context, in *GetInvitationsByUserRequest, opts ...grpc.CallOption) (*GetInvitationsByUserResponse, error) {
 	out := new(GetInvitationsByUserResponse)
 	err := c.cc.Invoke(ctx, OrganizationService_GetInvitationsByUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *organizationServiceClient) AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*AcceptInvitationResponse, error) {
+	out := new(AcceptInvitationResponse)
+	err := c.cc.Invoke(ctx, OrganizationService_AcceptInvitation_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -180,8 +191,9 @@ type OrganizationServiceServer interface {
 	AddMember(context.Context, *AddMemberRequest) (*AddMemberResponse, error)
 	RemoveMember(context.Context, *RemoveMemberRequest) (*RemoveMemberResponse, error)
 	InviteMember(context.Context, *InviteMemberRequest) (*InviteMemberResponse, error)
-	AcceptInvitation(context.Context, *AcceptInvitationRequest) (*AcceptInvitationResponse, error)
+	GetInvitationsByOrganization(context.Context, *GetInvitationsByOrganizationRequest) (*GetInvitationsByOrganizationResponse, error)
 	GetInvitationsByUser(context.Context, *GetInvitationsByUserRequest) (*GetInvitationsByUserResponse, error)
+	AcceptInvitation(context.Context, *AcceptInvitationRequest) (*AcceptInvitationResponse, error)
 	DeclineInvitation(context.Context, *DeclineInvitationRequest) (*DeclineInvitationResponse, error)
 	mustEmbedUnimplementedOrganizationServiceServer()
 }
@@ -217,11 +229,14 @@ func (UnimplementedOrganizationServiceServer) RemoveMember(context.Context, *Rem
 func (UnimplementedOrganizationServiceServer) InviteMember(context.Context, *InviteMemberRequest) (*InviteMemberResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InviteMember not implemented")
 }
-func (UnimplementedOrganizationServiceServer) AcceptInvitation(context.Context, *AcceptInvitationRequest) (*AcceptInvitationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AcceptInvitation not implemented")
+func (UnimplementedOrganizationServiceServer) GetInvitationsByOrganization(context.Context, *GetInvitationsByOrganizationRequest) (*GetInvitationsByOrganizationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInvitationsByOrganization not implemented")
 }
 func (UnimplementedOrganizationServiceServer) GetInvitationsByUser(context.Context, *GetInvitationsByUserRequest) (*GetInvitationsByUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInvitationsByUser not implemented")
+}
+func (UnimplementedOrganizationServiceServer) AcceptInvitation(context.Context, *AcceptInvitationRequest) (*AcceptInvitationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AcceptInvitation not implemented")
 }
 func (UnimplementedOrganizationServiceServer) DeclineInvitation(context.Context, *DeclineInvitationRequest) (*DeclineInvitationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeclineInvitation not implemented")
@@ -401,20 +416,20 @@ func _OrganizationService_InviteMember_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
-func _OrganizationService_AcceptInvitation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AcceptInvitationRequest)
+func _OrganizationService_GetInvitationsByOrganization_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInvitationsByOrganizationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(OrganizationServiceServer).AcceptInvitation(ctx, in)
+		return srv.(OrganizationServiceServer).GetInvitationsByOrganization(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: OrganizationService_AcceptInvitation_FullMethodName,
+		FullMethod: OrganizationService_GetInvitationsByOrganization_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrganizationServiceServer).AcceptInvitation(ctx, req.(*AcceptInvitationRequest))
+		return srv.(OrganizationServiceServer).GetInvitationsByOrganization(ctx, req.(*GetInvitationsByOrganizationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -433,6 +448,24 @@ func _OrganizationService_GetInvitationsByUser_Handler(srv interface{}, ctx cont
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OrganizationServiceServer).GetInvitationsByUser(ctx, req.(*GetInvitationsByUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OrganizationService_AcceptInvitation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AcceptInvitationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrganizationServiceServer).AcceptInvitation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OrganizationService_AcceptInvitation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrganizationServiceServer).AcceptInvitation(ctx, req.(*AcceptInvitationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -499,12 +532,16 @@ var OrganizationService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _OrganizationService_InviteMember_Handler,
 		},
 		{
-			MethodName: "AcceptInvitation",
-			Handler:    _OrganizationService_AcceptInvitation_Handler,
+			MethodName: "GetInvitationsByOrganization",
+			Handler:    _OrganizationService_GetInvitationsByOrganization_Handler,
 		},
 		{
 			MethodName: "GetInvitationsByUser",
 			Handler:    _OrganizationService_GetInvitationsByUser_Handler,
+		},
+		{
+			MethodName: "AcceptInvitation",
+			Handler:    _OrganizationService_AcceptInvitation_Handler,
 		},
 		{
 			MethodName: "DeclineInvitation",
