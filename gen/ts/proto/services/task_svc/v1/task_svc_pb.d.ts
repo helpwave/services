@@ -1,5 +1,6 @@
 import * as jspb from 'google-protobuf'
 
+import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb';
 
 
 export class CreateTaskRequest extends jspb.Message {
@@ -17,6 +18,11 @@ export class CreateTaskRequest extends jspb.Message {
   getPublic(): boolean;
   setPublic(value: boolean): CreateTaskRequest;
 
+  getDueAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setDueAt(value?: google_protobuf_timestamp_pb.Timestamp): CreateTaskRequest;
+  hasDueAt(): boolean;
+  clearDueAt(): CreateTaskRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateTaskRequest.AsObject;
   static toObject(includeInstance: boolean, msg: CreateTaskRequest): CreateTaskRequest.AsObject;
@@ -31,6 +37,7 @@ export namespace CreateTaskRequest {
     description?: string,
     patientId: string,
     pb_public: boolean,
+    dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
   }
 
   export enum DescriptionCase { 
@@ -97,6 +104,11 @@ export class GetTaskResponse extends jspb.Message {
   getPublic(): boolean;
   setPublic(value: boolean): GetTaskResponse;
 
+  getDueAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setDueAt(value?: google_protobuf_timestamp_pb.Timestamp): GetTaskResponse;
+  hasDueAt(): boolean;
+  clearDueAt(): GetTaskResponse;
+
   getSubtasksList(): Array<GetTaskResponse.SubTask>;
   setSubtasksList(value: Array<GetTaskResponse.SubTask>): GetTaskResponse;
   clearSubtasksList(): GetTaskResponse;
@@ -119,6 +131,7 @@ export namespace GetTaskResponse {
     assignedUserId: string,
     patientId: string,
     pb_public: boolean,
+    dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     subtasksList: Array<GetTaskResponse.SubTask.AsObject>,
   }
 
@@ -209,6 +222,11 @@ export namespace GetTasksByPatientResponse {
     getPublic(): boolean;
     setPublic(value: boolean): Task;
 
+    getDueAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
+    setDueAt(value?: google_protobuf_timestamp_pb.Timestamp): Task;
+    hasDueAt(): boolean;
+    clearDueAt(): Task;
+
     getSubtasksList(): Array<GetTasksByPatientResponse.Task.SubTask>;
     setSubtasksList(value: Array<GetTasksByPatientResponse.Task.SubTask>): Task;
     clearSubtasksList(): Task;
@@ -231,6 +249,7 @@ export namespace GetTasksByPatientResponse {
       assignedUserId: string,
       patientId: string,
       pb_public: boolean,
+      dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
       subtasksList: Array<GetTasksByPatientResponse.Task.SubTask.AsObject>,
     }
 
@@ -332,6 +351,11 @@ export namespace GetTasksByPatientSortedByStatusResponse {
     getPublic(): boolean;
     setPublic(value: boolean): Task;
 
+    getDueAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
+    setDueAt(value?: google_protobuf_timestamp_pb.Timestamp): Task;
+    hasDueAt(): boolean;
+    clearDueAt(): Task;
+
     getSubtasksList(): Array<GetTasksByPatientSortedByStatusResponse.Task.SubTask>;
     setSubtasksList(value: Array<GetTasksByPatientSortedByStatusResponse.Task.SubTask>): Task;
     clearSubtasksList(): Task;
@@ -353,6 +377,7 @@ export namespace GetTasksByPatientSortedByStatusResponse {
       assignedUserId: string,
       patientId: string,
       pb_public: boolean,
+      dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
       subtasksList: Array<GetTasksByPatientSortedByStatusResponse.Task.SubTask.AsObject>,
     }
 
@@ -400,6 +425,16 @@ export class UpdateTaskRequest extends jspb.Message {
   hasDescription(): boolean;
   clearDescription(): UpdateTaskRequest;
 
+  getDueAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setDueAt(value?: google_protobuf_timestamp_pb.Timestamp): UpdateTaskRequest;
+  hasDueAt(): boolean;
+  clearDueAt(): UpdateTaskRequest;
+
+  getPublic(): boolean;
+  setPublic(value: boolean): UpdateTaskRequest;
+  hasPublic(): boolean;
+  clearPublic(): UpdateTaskRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateTaskRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateTaskRequest): UpdateTaskRequest.AsObject;
@@ -413,6 +448,8 @@ export namespace UpdateTaskRequest {
     id: string,
     name?: string,
     description?: string,
+    dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    pb_public?: boolean,
   }
 
   export enum NameCase { 
@@ -423,6 +460,16 @@ export namespace UpdateTaskRequest {
   export enum DescriptionCase { 
     _DESCRIPTION_NOT_SET = 0,
     DESCRIPTION = 3,
+  }
+
+  export enum DueAtCase { 
+    _DUE_AT_NOT_SET = 0,
+    DUE_AT = 4,
+  }
+
+  export enum PublicCase { 
+    _PUBLIC_NOT_SET = 0,
+    PUBLIC = 5,
   }
 }
 

@@ -15,42 +15,42 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'ward_svc.pb.dart' as $7;
+import 'ward_svc.pb.dart' as $8;
 import 'ward_svc.pbjson.dart';
 
 export 'ward_svc.pb.dart';
 
 abstract class WardServiceBase extends $pb.GeneratedService {
-  $async.Future<$7.CreateWardResponse> createWard($pb.ServerContext ctx, $7.CreateWardRequest request);
-  $async.Future<$7.GetWardResponse> getWard($pb.ServerContext ctx, $7.GetWardRequest request);
-  $async.Future<$7.GetWardsResponse> getWards($pb.ServerContext ctx, $7.GetWardsRequest request);
-  $async.Future<$7.UpdateWardResponse> updateWard($pb.ServerContext ctx, $7.UpdateWardRequest request);
-  $async.Future<$7.DeleteWardResponse> deleteWard($pb.ServerContext ctx, $7.DeleteWardRequest request);
-  $async.Future<$7.GetWardOverviewsResponse> getWardOverviews($pb.ServerContext ctx, $7.GetWardOverviewsRequest request);
-  $async.Future<$7.GetWardDetailsResponse> getWardDetails($pb.ServerContext ctx, $7.GetWardDetailsRequest request);
+  $async.Future<$8.CreateWardResponse> createWard($pb.ServerContext ctx, $8.CreateWardRequest request);
+  $async.Future<$8.GetWardResponse> getWard($pb.ServerContext ctx, $8.GetWardRequest request);
+  $async.Future<$8.GetWardsResponse> getWards($pb.ServerContext ctx, $8.GetWardsRequest request);
+  $async.Future<$8.UpdateWardResponse> updateWard($pb.ServerContext ctx, $8.UpdateWardRequest request);
+  $async.Future<$8.DeleteWardResponse> deleteWard($pb.ServerContext ctx, $8.DeleteWardRequest request);
+  $async.Future<$8.GetWardOverviewsResponse> getWardOverviews($pb.ServerContext ctx, $8.GetWardOverviewsRequest request);
+  $async.Future<$8.GetWardDetailsResponse> getWardDetails($pb.ServerContext ctx, $8.GetWardDetailsRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
-      case 'CreateWard': return $7.CreateWardRequest();
-      case 'GetWard': return $7.GetWardRequest();
-      case 'GetWards': return $7.GetWardsRequest();
-      case 'UpdateWard': return $7.UpdateWardRequest();
-      case 'DeleteWard': return $7.DeleteWardRequest();
-      case 'GetWardOverviews': return $7.GetWardOverviewsRequest();
-      case 'GetWardDetails': return $7.GetWardDetailsRequest();
+      case 'CreateWard': return $8.CreateWardRequest();
+      case 'GetWard': return $8.GetWardRequest();
+      case 'GetWards': return $8.GetWardsRequest();
+      case 'UpdateWard': return $8.UpdateWardRequest();
+      case 'DeleteWard': return $8.DeleteWardRequest();
+      case 'GetWardOverviews': return $8.GetWardOverviewsRequest();
+      case 'GetWardDetails': return $8.GetWardDetailsRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
-      case 'CreateWard': return this.createWard(ctx, request as $7.CreateWardRequest);
-      case 'GetWard': return this.getWard(ctx, request as $7.GetWardRequest);
-      case 'GetWards': return this.getWards(ctx, request as $7.GetWardsRequest);
-      case 'UpdateWard': return this.updateWard(ctx, request as $7.UpdateWardRequest);
-      case 'DeleteWard': return this.deleteWard(ctx, request as $7.DeleteWardRequest);
-      case 'GetWardOverviews': return this.getWardOverviews(ctx, request as $7.GetWardOverviewsRequest);
-      case 'GetWardDetails': return this.getWardDetails(ctx, request as $7.GetWardDetailsRequest);
+      case 'CreateWard': return this.createWard(ctx, request as $8.CreateWardRequest);
+      case 'GetWard': return this.getWard(ctx, request as $8.GetWardRequest);
+      case 'GetWards': return this.getWards(ctx, request as $8.GetWardsRequest);
+      case 'UpdateWard': return this.updateWard(ctx, request as $8.UpdateWardRequest);
+      case 'DeleteWard': return this.deleteWard(ctx, request as $8.DeleteWardRequest);
+      case 'GetWardOverviews': return this.getWardOverviews(ctx, request as $8.GetWardOverviewsRequest);
+      case 'GetWardDetails': return this.getWardDetails(ctx, request as $8.GetWardDetailsRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }

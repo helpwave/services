@@ -21,6 +21,8 @@ var global =
     (function () { return this; }).call(null) ||
     Function('return this')();
 
+var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
+goog.object.extend(proto, google_protobuf_timestamp_pb);
 goog.exportSymbol('proto.proto.services.task_svc.v1.AddSubTaskRequest', null, global);
 goog.exportSymbol('proto.proto.services.task_svc.v1.AddSubTaskResponse', null, global);
 goog.exportSymbol('proto.proto.services.task_svc.v1.AssignTaskToUserRequest', null, global);
@@ -959,7 +961,8 @@ proto.proto.services.task_svc.v1.CreateTaskRequest.toObject = function(includeIn
     name: jspb.Message.getFieldWithDefault(msg, 1, ""),
     description: jspb.Message.getFieldWithDefault(msg, 2, ""),
     patientId: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    pb_public: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
+    pb_public: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
+    dueAt: (f = msg.getDueAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1011,6 +1014,11 @@ proto.proto.services.task_svc.v1.CreateTaskRequest.deserializeBinaryFromReader =
     case 4:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setPublic(value);
+      break;
+    case 5:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setDueAt(value);
       break;
     default:
       reader.skipField();
@@ -1067,6 +1075,14 @@ proto.proto.services.task_svc.v1.CreateTaskRequest.serializeBinaryToWriter = fun
     writer.writeBool(
       4,
       f
+    );
+  }
+  f = message.getDueAt();
+  if (f != null) {
+    writer.writeMessage(
+      5,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
   }
 };
@@ -1159,6 +1175,43 @@ proto.proto.services.task_svc.v1.CreateTaskRequest.prototype.getPublic = functio
  */
 proto.proto.services.task_svc.v1.CreateTaskRequest.prototype.setPublic = function(value) {
   return jspb.Message.setProto3BooleanField(this, 4, value);
+};
+
+
+/**
+ * optional google.protobuf.Timestamp due_at = 5;
+ * @return {?proto.google.protobuf.Timestamp}
+ */
+proto.proto.services.task_svc.v1.CreateTaskRequest.prototype.getDueAt = function() {
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 5));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.proto.services.task_svc.v1.CreateTaskRequest} returns this
+*/
+proto.proto.services.task_svc.v1.CreateTaskRequest.prototype.setDueAt = function(value) {
+  return jspb.Message.setWrapperField(this, 5, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.services.task_svc.v1.CreateTaskRequest} returns this
+ */
+proto.proto.services.task_svc.v1.CreateTaskRequest.prototype.clearDueAt = function() {
+  return this.setDueAt(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.CreateTaskRequest.prototype.hasDueAt = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
@@ -1428,7 +1481,7 @@ proto.proto.services.task_svc.v1.GetTaskRequest.prototype.setId = function(value
  * @private {!Array<number>}
  * @const
  */
-proto.proto.services.task_svc.v1.GetTaskResponse.repeatedFields_ = [8];
+proto.proto.services.task_svc.v1.GetTaskResponse.repeatedFields_ = [9];
 
 
 
@@ -1468,6 +1521,7 @@ proto.proto.services.task_svc.v1.GetTaskResponse.toObject = function(includeInst
     assignedUserId: jspb.Message.getFieldWithDefault(msg, 5, ""),
     patientId: jspb.Message.getFieldWithDefault(msg, 6, ""),
     pb_public: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
+    dueAt: (f = msg.getDueAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
     proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.toObject, includeInstance)
   };
@@ -1535,6 +1589,11 @@ proto.proto.services.task_svc.v1.GetTaskResponse.deserializeBinaryFromReader = f
       msg.setPublic(value);
       break;
     case 8:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setDueAt(value);
+      break;
+    case 9:
       var value = new proto.proto.services.task_svc.v1.GetTaskResponse.SubTask;
       reader.readMessage(value,proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.deserializeBinaryFromReader);
       msg.addSubtasks(value);
@@ -1617,10 +1676,18 @@ proto.proto.services.task_svc.v1.GetTaskResponse.serializeBinaryToWriter = funct
       f
     );
   }
+  f = message.getDueAt();
+  if (f != null) {
+    writer.writeMessage(
+      8,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+    );
+  }
   f = message.getSubtasksList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      8,
+      9,
       f,
       proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.serializeBinaryToWriter
     );
@@ -1945,12 +2012,49 @@ proto.proto.services.task_svc.v1.GetTaskResponse.prototype.setPublic = function(
 
 
 /**
- * repeated SubTask subtasks = 8;
+ * optional google.protobuf.Timestamp due_at = 8;
+ * @return {?proto.google.protobuf.Timestamp}
+ */
+proto.proto.services.task_svc.v1.GetTaskResponse.prototype.getDueAt = function() {
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 8));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.proto.services.task_svc.v1.GetTaskResponse} returns this
+*/
+proto.proto.services.task_svc.v1.GetTaskResponse.prototype.setDueAt = function(value) {
+  return jspb.Message.setWrapperField(this, 8, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.services.task_svc.v1.GetTaskResponse} returns this
+ */
+proto.proto.services.task_svc.v1.GetTaskResponse.prototype.clearDueAt = function() {
+  return this.setDueAt(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.GetTaskResponse.prototype.hasDueAt = function() {
+  return jspb.Message.getField(this, 8) != null;
+};
+
+
+/**
+ * repeated SubTask subtasks = 9;
  * @return {!Array<!proto.proto.services.task_svc.v1.GetTaskResponse.SubTask>}
  */
 proto.proto.services.task_svc.v1.GetTaskResponse.prototype.getSubtasksList = function() {
   return /** @type{!Array<!proto.proto.services.task_svc.v1.GetTaskResponse.SubTask>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.proto.services.task_svc.v1.GetTaskResponse.SubTask, 8));
+    jspb.Message.getRepeatedWrapperField(this, proto.proto.services.task_svc.v1.GetTaskResponse.SubTask, 9));
 };
 
 
@@ -1959,7 +2063,7 @@ proto.proto.services.task_svc.v1.GetTaskResponse.prototype.getSubtasksList = fun
  * @return {!proto.proto.services.task_svc.v1.GetTaskResponse} returns this
 */
 proto.proto.services.task_svc.v1.GetTaskResponse.prototype.setSubtasksList = function(value) {
-  return jspb.Message.setRepeatedWrapperField(this, 8, value);
+  return jspb.Message.setRepeatedWrapperField(this, 9, value);
 };
 
 
@@ -1969,7 +2073,7 @@ proto.proto.services.task_svc.v1.GetTaskResponse.prototype.setSubtasksList = fun
  * @return {!proto.proto.services.task_svc.v1.GetTaskResponse.SubTask}
  */
 proto.proto.services.task_svc.v1.GetTaskResponse.prototype.addSubtasks = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 8, opt_value, proto.proto.services.task_svc.v1.GetTaskResponse.SubTask, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 9, opt_value, proto.proto.services.task_svc.v1.GetTaskResponse.SubTask, opt_index);
 };
 
 
@@ -2240,7 +2344,7 @@ proto.proto.services.task_svc.v1.GetTasksByPatientResponse.serializeBinaryToWrit
  * @private {!Array<number>}
  * @const
  */
-proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.repeatedFields_ = [8];
+proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.repeatedFields_ = [9];
 
 
 
@@ -2280,6 +2384,7 @@ proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.toObject = funct
     assignedUserId: jspb.Message.getFieldWithDefault(msg, 5, ""),
     patientId: jspb.Message.getFieldWithDefault(msg, 6, ""),
     pb_public: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
+    dueAt: (f = msg.getDueAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
     proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask.toObject, includeInstance)
   };
@@ -2347,6 +2452,11 @@ proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.deserializeBinar
       msg.setPublic(value);
       break;
     case 8:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setDueAt(value);
+      break;
+    case 9:
       var value = new proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask;
       reader.readMessage(value,proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask.deserializeBinaryFromReader);
       msg.addSubtasks(value);
@@ -2429,10 +2539,18 @@ proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.serializeBinaryT
       f
     );
   }
+  f = message.getDueAt();
+  if (f != null) {
+    writer.writeMessage(
+      8,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+    );
+  }
   f = message.getSubtasksList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      8,
+      9,
       f,
       proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask.serializeBinaryToWriter
     );
@@ -2757,12 +2875,49 @@ proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.prototype.setPub
 
 
 /**
- * repeated SubTask subtasks = 8;
+ * optional google.protobuf.Timestamp due_at = 8;
+ * @return {?proto.google.protobuf.Timestamp}
+ */
+proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.prototype.getDueAt = function() {
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 8));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task} returns this
+*/
+proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.prototype.setDueAt = function(value) {
+  return jspb.Message.setWrapperField(this, 8, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task} returns this
+ */
+proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.prototype.clearDueAt = function() {
+  return this.setDueAt(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.prototype.hasDueAt = function() {
+  return jspb.Message.getField(this, 8) != null;
+};
+
+
+/**
+ * repeated SubTask subtasks = 9;
  * @return {!Array<!proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask>}
  */
 proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.prototype.getSubtasksList = function() {
   return /** @type{!Array<!proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask, 8));
+    jspb.Message.getRepeatedWrapperField(this, proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask, 9));
 };
 
 
@@ -2771,7 +2926,7 @@ proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.prototype.getSub
  * @return {!proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task} returns this
 */
 proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.prototype.setSubtasksList = function(value) {
-  return jspb.Message.setRepeatedWrapperField(this, 8, value);
+  return jspb.Message.setRepeatedWrapperField(this, 9, value);
 };
 
 
@@ -2781,7 +2936,7 @@ proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.prototype.setSub
  * @return {!proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask}
  */
 proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.prototype.addSubtasks = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 8, opt_value, proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 9, opt_value, proto.proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask, opt_index);
 };
 
 
@@ -3120,7 +3275,7 @@ proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.seriali
  * @private {!Array<number>}
  * @const
  */
-proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.repeatedFields_ = [8];
+proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.repeatedFields_ = [9];
 
 
 
@@ -3159,6 +3314,7 @@ proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.to
     assignedUserId: jspb.Message.getFieldWithDefault(msg, 5, ""),
     patientId: jspb.Message.getFieldWithDefault(msg, 6, ""),
     pb_public: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
+    dueAt: (f = msg.getDueAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
     proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask.toObject, includeInstance)
   };
@@ -3222,6 +3378,11 @@ proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.de
       msg.setPublic(value);
       break;
     case 8:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setDueAt(value);
+      break;
+    case 9:
       var value = new proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask;
       reader.readMessage(value,proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask.deserializeBinaryFromReader);
       msg.addSubtasks(value);
@@ -3297,10 +3458,18 @@ proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.se
       f
     );
   }
+  f = message.getDueAt();
+  if (f != null) {
+    writer.writeMessage(
+      8,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+    );
+  }
   f = message.getSubtasksList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      8,
+      9,
       f,
       proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask.serializeBinaryToWriter
     );
@@ -3607,12 +3776,49 @@ proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.pr
 
 
 /**
- * repeated SubTask subtasks = 8;
+ * optional google.protobuf.Timestamp due_at = 8;
+ * @return {?proto.google.protobuf.Timestamp}
+ */
+proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.getDueAt = function() {
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 8));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task} returns this
+*/
+proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.setDueAt = function(value) {
+  return jspb.Message.setWrapperField(this, 8, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task} returns this
+ */
+proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.clearDueAt = function() {
+  return this.setDueAt(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.hasDueAt = function() {
+  return jspb.Message.getField(this, 8) != null;
+};
+
+
+/**
+ * repeated SubTask subtasks = 9;
  * @return {!Array<!proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask>}
  */
 proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.getSubtasksList = function() {
   return /** @type{!Array<!proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask, 8));
+    jspb.Message.getRepeatedWrapperField(this, proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask, 9));
 };
 
 
@@ -3621,7 +3827,7 @@ proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.pr
  * @return {!proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task} returns this
 */
 proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.setSubtasksList = function(value) {
-  return jspb.Message.setRepeatedWrapperField(this, 8, value);
+  return jspb.Message.setRepeatedWrapperField(this, 9, value);
 };
 
 
@@ -3631,7 +3837,7 @@ proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.pr
  * @return {!proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask}
  */
 proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.addSubtasks = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 8, opt_value, proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 9, opt_value, proto.proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask, opt_index);
 };
 
 
@@ -3792,7 +3998,9 @@ proto.proto.services.task_svc.v1.UpdateTaskRequest.toObject = function(includeIn
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    description: jspb.Message.getFieldWithDefault(msg, 3, "")
+    description: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    dueAt: (f = msg.getDueAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
+    pb_public: jspb.Message.getBooleanFieldWithDefault(msg, 5, false)
   };
 
   if (includeInstance) {
@@ -3841,6 +4049,15 @@ proto.proto.services.task_svc.v1.UpdateTaskRequest.deserializeBinaryFromReader =
       var value = /** @type {string} */ (reader.readString());
       msg.setDescription(value);
       break;
+    case 4:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setDueAt(value);
+      break;
+    case 5:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setPublic(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -3888,6 +4105,21 @@ proto.proto.services.task_svc.v1.UpdateTaskRequest.serializeBinaryToWriter = fun
   if (f != null) {
     writer.writeString(
       3,
+      f
+    );
+  }
+  f = message.getDueAt();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 5));
+  if (f != null) {
+    writer.writeBool(
+      5,
       f
     );
   }
@@ -3981,6 +4213,79 @@ proto.proto.services.task_svc.v1.UpdateTaskRequest.prototype.clearDescription = 
  */
 proto.proto.services.task_svc.v1.UpdateTaskRequest.prototype.hasDescription = function() {
   return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional google.protobuf.Timestamp due_at = 4;
+ * @return {?proto.google.protobuf.Timestamp}
+ */
+proto.proto.services.task_svc.v1.UpdateTaskRequest.prototype.getDueAt = function() {
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 4));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.proto.services.task_svc.v1.UpdateTaskRequest} returns this
+*/
+proto.proto.services.task_svc.v1.UpdateTaskRequest.prototype.setDueAt = function(value) {
+  return jspb.Message.setWrapperField(this, 4, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.services.task_svc.v1.UpdateTaskRequest} returns this
+ */
+proto.proto.services.task_svc.v1.UpdateTaskRequest.prototype.clearDueAt = function() {
+  return this.setDueAt(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.UpdateTaskRequest.prototype.hasDueAt = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional bool public = 5;
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.UpdateTaskRequest.prototype.getPublic = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 5, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.services.task_svc.v1.UpdateTaskRequest} returns this
+ */
+proto.proto.services.task_svc.v1.UpdateTaskRequest.prototype.setPublic = function(value) {
+  return jspb.Message.setField(this, 5, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.task_svc.v1.UpdateTaskRequest} returns this
+ */
+proto.proto.services.task_svc.v1.UpdateTaskRequest.prototype.clearPublic = function() {
+  return jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.UpdateTaskRequest.prototype.hasPublic = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 

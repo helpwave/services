@@ -8,6 +8,7 @@ import (
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
@@ -52,6 +53,11 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		return nil, err
 	}
 
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	patientId, err := uuid.Parse(req.PatientId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -78,6 +84,8 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		},
 		PatientId:      patientId,
 		OrganizationID: organizationID,
+		CreatedBy:      userID,
+		DueAt:          req.DueAt.AsTime(),
 	}
 
 	if err := db.Create(&task).Error; err != nil {
@@ -137,6 +145,7 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		PatientId:      task.PatientId.String(),
 		Subtasks:       subtasks,
 		Public:         task.Public,
+		DueAt:          timestamppb.New(task.DueAt),
 	}, nil
 }
 
@@ -174,6 +183,7 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 			PatientId:      task.PatientId.String(),
 			Subtasks:       mappedSubtasks,
 			Public:         task.Public,
+			DueAt:          timestamppb.New(task.DueAt),
 		}
 	})
 
@@ -216,6 +226,7 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 				PatientId:      task.PatientId.String(),
 				Subtasks:       mappedSubtasks,
 				Public:         task.Public,
+				DueAt:          timestamppb.New(task.DueAt),
 			}
 		})
 	}
@@ -280,7 +291,10 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
-	// TODO: Auth
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	taskId, err := uuid.Parse(req.TaskId)
 	if err != nil {
@@ -300,7 +314,12 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 	if req.Done != nil {
 		done = *req.Done
 	}
-	subtask := models.Subtask{Name: req.Name, TaskID: taskId, Done: done}
+	subtask := models.Subtask{
+		Name:      req.Name,
+		TaskID:    taskId,
+		Done:      done,
+		CreatedBy: userID,
+	}
 
 	if err := db.Create(&subtask).Error; err != nil {
 		log.Warn().Err(err).Msg("database error")
