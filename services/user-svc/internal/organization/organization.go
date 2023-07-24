@@ -370,11 +370,6 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb.GetInvitationsByOrganizationRequest) (*pb.GetInvitationsByOrganizationResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
-	claims, err := common.GetAuthClaims(ctx)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
 	organizationID, err := uuid.Parse(req.OrganizationId)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -390,7 +385,7 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	if !hasAccess || hwutil.Contains(claims.Organizations, organizationID) {
+	if !hasAccess {
 		return nil, status.Error(codes.Unauthenticated, "Not a member of this Organization")
 	}
 
