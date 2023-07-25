@@ -304,7 +304,6 @@ func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberReq
 		OrganizationID: organizationID,
 	}
 	if err := db.Delete(&member).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -340,7 +339,6 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 
 	if err := db.Where("(email = ? AND organization_id = ?) AND (state IN ?)", req.Email, organizationId, []pb.InvitationState{pb.InvitationState_INVITATION_STATE_PENDING, pb.InvitationState_INVITATION_STATE_ACCEPTED}).First(&invitation).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
-			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			// create invitation because doesn't exist
@@ -351,7 +349,6 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 			}
 
 			if err := db.Create(&invitation).Error; err != nil {
-				log.Warn().Err(err).Msg("database error")
 				return nil, status.Error(codes.Internal, err.Error())
 			}
 
@@ -421,7 +418,6 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 
 func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvitationsByUserRequest) (*pb.GetInvitationsByUserResponse, error) {
 	db := hwgorm.GetDB(ctx)
-	log := zlog.Ctx(ctx)
 
 	claims, err := common.GetAuthClaims(ctx)
 	if err != nil {
@@ -438,7 +434,6 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 
 	if err := filter.Preload("Organization").Find(&invitations).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
-			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "invalid state")
@@ -467,7 +462,6 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 
 func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvitationRequest) (*pb.AcceptInvitationResponse, error) {
 	db := hwgorm.GetDB(ctx)
-	log := zlog.Ctx(ctx)
 
 	invitationId, err := uuid.Parse(req.InvitationId)
 	if err != nil {
@@ -501,7 +495,6 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 	}
 
 	if err := db.Model(&invitation).Update("state", pb.InvitationState_INVITATION_STATE_ACCEPTED).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -520,7 +513,6 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 
 func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInvitationRequest) (*pb.DeclineInvitationResponse, error) {
 	db := hwgorm.GetDB(ctx)
-	log := zlog.Ctx(ctx)
 
 	invitationId, err := uuid.Parse(req.InvitationId)
 	if err != nil {
@@ -554,7 +546,6 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 	}
 
 	if err := db.Model(&invitation).Update("state", pb.InvitationState_INVITATION_STATE_REJECTED).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 

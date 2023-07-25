@@ -71,7 +71,6 @@ func (emergencyRoomServiceServer) CreateER(ctx context.Context, req *pb.CreateER
 
 	result := db.Create(&emergencyRoom)
 	if err := result.Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
@@ -105,7 +104,6 @@ func (emergencyRoomServiceServer) GetER(ctx context.Context, req *pb.GetERReques
 	result := db.First(&emergencyRoom)
 
 	if err := result.Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
@@ -143,7 +141,6 @@ func (emergencyRoomServiceServer) GetERs(ctx context.Context, req *pb.GetERsRequ
 		Find(&emergencyRooms)
 
 	if err := tx.Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
@@ -216,7 +213,6 @@ func (emergencyRoomServiceServer) UpdateER(ctx context.Context, req *pb.UpdateER
 	log.Debug().Msg(logging.Formatted(updatesMap))
 
 	if err := db.Model(&emergencyRoom).Updates(updatesMap).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
@@ -248,7 +244,6 @@ func (emergencyRoomServiceServer) AddDepartmentsToER(ctx context.Context, req *p
 	log.Debug().Msgf("departmentsToAdd: %s", logging.Formatted(departmentsToAdd))
 
 	if err := db.Model(&emergencyRoom).Association("Departments").Append(departmentsToAdd); err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
@@ -284,7 +279,6 @@ func (emergencyRoomServiceServer) RemoveDepartmentsFromER(ctx context.Context, r
 	}
 
 	if err := db.Model(&emergencyRoom).Association("Departments").Delete(departmentsToRemove); err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
@@ -312,7 +306,6 @@ func (emergencyRoomServiceServer) DeleteER(ctx context.Context, req *pb.DeleteER
 	result := db.Delete(&emergencyRoom)
 
 	if err := result.Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
