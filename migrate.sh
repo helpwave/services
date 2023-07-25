@@ -28,7 +28,7 @@ POSTGRES_URL="postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTG
 
 echo "Note: using sslmode=disable, only use this script with local databases!"
 
-docker run --rm -v /$(pwd)/$WORKING_DIRECTORY/migrations:/migrations --network host migrate/migrate -database $POSTGRES_URL -path migrations "$@"
+docker run --rm -ti -v /$(pwd)/$WORKING_DIRECTORY/migrations:/migrations --network host migrate/migrate -database $POSTGRES_URL -path migrations "$@"
 
 if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
 	echo "Done, waiting 10 seconds to show result"
