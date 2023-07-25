@@ -826,7 +826,6 @@ func IsAdminInOrganization(db *gorm.DB, organizationID uuid.UUID, userID uuid.UU
 			return false, status.Error(codes.InvalidArgument, "not a member of this organization")
 		}
 	}
-	fmt.Println("end:", membership.IsAdmin)
 	isAdmin := membership.IsAdmin
 	return isAdmin, nil
 }
