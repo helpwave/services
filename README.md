@@ -17,12 +17,14 @@ helpwave's microservices
 
 ### Fake token
 
-Every service that is using auth, as the ability to use something called fake-tokens.
-A fake-token are Base64 encoded claims of our ID Token to [services-local-dev](services-local-dev) not rely on our OAuth2.0 provider
-during local development. With the environment variable `INSECURE_FAKE_TOKEN_ENABLE=true` set,
-this fast-path gets activated.
+When working with services that use auth, instead of dealing with JWTs, you can make use of fake tokens.
+A fake token is only the claims part of a JWT, which are defined [here](libs/common/auth.go#L37).
+You can create your own by simply base64-encoding your json claims.
 
-The claims are defined [here](libs/common/auth.go#L37).
+Use the environment variable `INSECURE_FAKE_TOKEN_ENABLE=true` for a service to accept fake-tokens.
+Only do this in development environments!
+
+Fake tokens are used just like JWTs: As bearer tokens in the Authorization header of your gRPC requests.
 
 Here is an example fake-token that can be used as the bearer authorization token.
 ```
