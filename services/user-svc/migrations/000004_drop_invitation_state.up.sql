@@ -1,3 +1,5 @@
+-- see InvitationState
+--   https://proto.helpwave.de/#proto.services.user_svc.v1.InvitationState
 ALTER TABLE invitations
 	ALTER COLUMN state TYPE integer USING (
 		CASE state
