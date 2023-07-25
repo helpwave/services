@@ -446,6 +446,67 @@ proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.dele
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.GetMembersByOrganisationRequest,
+ *   !proto.proto.services.user_svc.v1.GetMembersByOrganisationResponse>}
+ */
+const methodDescriptor_OrganizationService_GetMembersByOrganisation = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/GetMembersByOrganisation',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.GetMembersByOrganisationRequest,
+  proto.proto.services.user_svc.v1.GetMembersByOrganisationResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.GetMembersByOrganisationRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.GetMembersByOrganisationResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.GetMembersByOrganisationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.GetMembersByOrganisationResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.GetMembersByOrganisationResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.getMembersByOrganisation =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/GetMembersByOrganisation',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_GetMembersByOrganisation,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.GetMembersByOrganisationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.GetMembersByOrganisationResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.getMembersByOrganisation =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/GetMembersByOrganisation',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_GetMembersByOrganisation);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.user_svc.v1.AddMemberRequest,
  *   !proto.proto.services.user_svc.v1.AddMemberResponse>}
  */

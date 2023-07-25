@@ -465,6 +465,52 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 	}, nil
 }
 
+func (s ServiceServer) GetMembersByOrganisation(ctx context.Context, req *pb.GetMembersByOrganisationRequest) (*pb.GetMembersByOrganisationResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	organisationID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	hasAccess, err := IsInOrganization(db, organisationID, userID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	if !hasAccess {
+		return nil, status.Error(codes.Unauthenticated, "Not a member of this organisation")
+	}
+
+	var members []Membership
+	if err := db.Where("organization_id = ?", organisationID).Find(&members).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "invalid state")
+		}
+	}
+
+	// Somehow get the user information
+	mappedMembers := hwutil.Map(members, func(member Membership) *pb.GetMembersByOrganisationResponse_Member {
+		return &pb.GetMembersByOrganisationResponse_Member{
+			UserId:    member.UserID.String(),
+			AvatarUrl: "",
+			Email:     member.UserID.String() + "@helpwave.de", // TODO replace ones Users are implemented
+			Nickname:  member.UserID.String(),                  // TODO replace ones Users are implemented
+		}
+	})
+
+	return &pb.GetMembersByOrganisationResponse{
+		Members: mappedMembers,
+	}, nil
+}
+
 func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvitationRequest) (*pb.AcceptInvitationResponse, error) {
 	db := hwgorm.GetDB(ctx)
 	log := zlog.Ctx(ctx)

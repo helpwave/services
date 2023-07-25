@@ -50,6 +50,13 @@ export class OrganizationServiceClient {
                response: proto_services_user_svc_v1_organization_svc_pb.DeleteOrganizationResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_organization_svc_pb.DeleteOrganizationResponse>;
 
+  getMembersByOrganisation(
+    request: proto_services_user_svc_v1_organization_svc_pb.GetMembersByOrganisationRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_user_svc_v1_organization_svc_pb.GetMembersByOrganisationResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_organization_svc_pb.GetMembersByOrganisationResponse>;
+
   addMember(
     request: proto_services_user_svc_v1_organization_svc_pb.AddMemberRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -135,6 +142,11 @@ export class OrganizationServicePromiseClient {
     request: proto_services_user_svc_v1_organization_svc_pb.DeleteOrganizationRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_user_svc_v1_organization_svc_pb.DeleteOrganizationResponse>;
+
+  getMembersByOrganisation(
+    request: proto_services_user_svc_v1_organization_svc_pb.GetMembersByOrganisationRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_user_svc_v1_organization_svc_pb.GetMembersByOrganisationResponse>;
 
   addMember(
     request: proto_services_user_svc_v1_organization_svc_pb.AddMemberRequest,
