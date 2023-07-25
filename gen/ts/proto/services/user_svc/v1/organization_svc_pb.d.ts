@@ -786,6 +786,38 @@ export namespace DeclineInvitationResponse {
   }
 }
 
+export class RevokeInvitationRequest extends jspb.Message {
+  getInvitationId(): string;
+  setInvitationId(value: string): RevokeInvitationRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RevokeInvitationRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: RevokeInvitationRequest): RevokeInvitationRequest.AsObject;
+  static serializeBinaryToWriter(message: RevokeInvitationRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RevokeInvitationRequest;
+  static deserializeBinaryFromReader(message: RevokeInvitationRequest, reader: jspb.BinaryReader): RevokeInvitationRequest;
+}
+
+export namespace RevokeInvitationRequest {
+  export type AsObject = {
+    invitationId: string,
+  }
+}
+
+export class RevokeInvitationResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RevokeInvitationResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: RevokeInvitationResponse): RevokeInvitationResponse.AsObject;
+  static serializeBinaryToWriter(message: RevokeInvitationResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RevokeInvitationResponse;
+  static deserializeBinaryFromReader(message: RevokeInvitationResponse, reader: jspb.BinaryReader): RevokeInvitationResponse;
+}
+
+export namespace RevokeInvitationResponse {
+  export type AsObject = {
+  }
+}
+
 export enum InvitationState { 
   INVITATION_STATE_UNSPECIFIED = 0,
   INVITATION_STATE_PENDING = 1,

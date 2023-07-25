@@ -870,5 +870,66 @@ proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.decl
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.user_svc.v1.RevokeInvitationRequest,
+ *   !proto.proto.services.user_svc.v1.RevokeInvitationResponse>}
+ */
+const methodDescriptor_OrganizationService_RevokeInvitation = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/RevokeInvitation',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.user_svc.v1.RevokeInvitationRequest,
+  proto.proto.services.user_svc.v1.RevokeInvitationResponse,
+  /**
+   * @param {!proto.proto.services.user_svc.v1.RevokeInvitationRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.user_svc.v1.RevokeInvitationResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.RevokeInvitationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.RevokeInvitationResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.RevokeInvitationResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.revokeInvitation =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/RevokeInvitation',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_RevokeInvitation,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.user_svc.v1.RevokeInvitationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.user_svc.v1.RevokeInvitationResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.revokeInvitation =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.user_svc.v1.OrganizationService/RevokeInvitation',
+      request,
+      metadata || {},
+      methodDescriptor_OrganizationService_RevokeInvitation);
+};
+
+
 module.exports = proto.proto.services.user_svc.v1;
 
