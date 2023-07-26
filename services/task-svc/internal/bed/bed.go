@@ -32,7 +32,12 @@ func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]mode
 	}
 
 	var beds []models.Bed
-	if err := db.Where("organization_id = ? AND room_id = ?", organizationID.String(), roomID.String()).Find(&beds).Error; err != nil {
+	query := db.
+		Where("organization_id = ? AND room_id = ?", organizationID.String(), roomID.String()).
+		Order("name ASC").
+		Find(&beds)
+
+	if err := query.Error; err != nil {
 		return nil, err
 	}
 
@@ -117,7 +122,12 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 	}
 
 	var beds []models.Bed
-	if err := db.Where("organization_id = ?", organizationID.String()).Find(&beds).Error; err != nil {
+	query := db.
+		Where("organization_id = ?", organizationID.String()).
+		Order("name ASC").
+		Find(&beds)
+
+	if err := query.Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {

@@ -18,7 +18,7 @@ func NewRoomRepositoryWithDB(db *gorm.DB) *BedRepository {
 func (r *BedRepository) GetBedsByRoom(roomID uuid.UUID) ([]Bed, error) {
 	var beds []Bed
 
-	if err := r.db.Where("room_id = ?", roomID).Find(&beds).Error; err != nil {
+	if err := r.db.Where("room_id = ?", roomID).Order("name ASC").Find(&beds).Error; err != nil {
 		return nil, err
 	}
 
