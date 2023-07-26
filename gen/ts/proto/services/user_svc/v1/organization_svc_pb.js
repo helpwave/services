@@ -6468,7 +6468,8 @@ proto.proto.services.user_svc.v1.InvitationState = {
   INVITATION_STATE_UNSPECIFIED: 0,
   INVITATION_STATE_PENDING: 1,
   INVITATION_STATE_ACCEPTED: 2,
-  INVITATION_STATE_REJECTED: 3
+  INVITATION_STATE_REJECTED: 3,
+  INVITATION_STATE_REVOKED: 4
 };
 
 goog.object.extend(exports, proto.proto.services.user_svc.v1);

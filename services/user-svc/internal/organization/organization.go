@@ -605,7 +605,7 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 		ID: invitationId,
 	}
 
-	if err := db.Delete(&invitation).Error; err != nil {
+	if err := db.Model(&invitation).Update("state", pb.InvitationState_INVITATION_STATE_REVOKED).Error; err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 

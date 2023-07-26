@@ -21,6 +21,7 @@ const InvitationState$json = {
     {'1': 'INVITATION_STATE_PENDING', '2': 1},
     {'1': 'INVITATION_STATE_ACCEPTED', '2': 2},
     {'1': 'INVITATION_STATE_REJECTED', '2': 3},
+    {'1': 'INVITATION_STATE_REVOKED', '2': 4},
   ],
 };
 
@@ -28,7 +29,8 @@ const InvitationState$json = {
 final $typed_data.Uint8List invitationStateDescriptor = $convert.base64Decode(
     'Cg9JbnZpdGF0aW9uU3RhdGUSIAocSU5WSVRBVElPTl9TVEFURV9VTlNQRUNJRklFRBAAEhwKGE'
     'lOVklUQVRJT05fU1RBVEVfUEVORElORxABEh0KGUlOVklUQVRJT05fU1RBVEVfQUNDRVBURUQQ'
-    'AhIdChlJTlZJVEFUSU9OX1NUQVRFX1JFSkVDVEVEEAM=');
+    'AhIdChlJTlZJVEFUSU9OX1NUQVRFX1JFSkVDVEVEEAMSHAoYSU5WSVRBVElPTl9TVEFURV9SRV'
+    'ZPS0VEEAQ=');
 
 @$core.Deprecated('Use createOrganizationRequestDescriptor instead')
 const CreateOrganizationRequest$json = {
