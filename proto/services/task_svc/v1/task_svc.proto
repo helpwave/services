@@ -46,12 +46,14 @@ message GetTaskResponse {
   string patient_id = 6;
   bool public = 7;
   google.protobuf.Timestamp due_at = 8;
-  repeated SubTask subtasks = 9;
+  string created_by = 9;
+  repeated SubTask subtasks = 10;
 
   message SubTask {
     string id = 1;
     string name = 2;
     bool done = 3;
+    string created_by = 4;
   }
 }
 
@@ -75,12 +77,14 @@ message GetTasksByPatientResponse {
     string patient_id = 6;
     bool public = 7;
     google.protobuf.Timestamp due_at = 8;
-    repeated SubTask subtasks = 9;
+    string created_by = 9;
+    repeated SubTask subtasks = 10;
 
     message SubTask {
       string id = 1;
       string name = 2;
       bool done = 3;
+      string created_by = 4;
     }
   }
 }
@@ -107,12 +111,14 @@ message GetTasksByPatientSortedByStatusResponse {
     string patient_id = 6;
     bool public = 7;
     google.protobuf.Timestamp due_at = 8;
-    repeated SubTask subtasks = 9;
+    string created_by = 9;
+    repeated SubTask subtasks = 10;
 
     message SubTask {
       string id = 1;
       string name = 2;
       bool done = 3;
+      string created_by = 4;
     }
   }
 }

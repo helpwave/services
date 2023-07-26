@@ -130,9 +130,10 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 
 	var subtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTaskResponse_SubTask {
 		return &pb.GetTaskResponse_SubTask{
-			Id:   subtask.ID.String(),
-			Done: subtask.Done,
-			Name: subtask.Name,
+			Id:        subtask.ID.String(),
+			Done:      subtask.Done,
+			Name:      subtask.Name,
+			CreatedBy: subtask.CreatedBy.String(),
 		}
 	})
 
@@ -146,6 +147,7 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		Subtasks:       subtasks,
 		Public:         task.Public,
 		DueAt:          timestamppb.New(task.DueAt),
+		CreatedBy:      task.CreatedBy.String(),
 	}, nil
 }
 
@@ -169,9 +171,10 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 	var mappedTasks = hwutil.Map(tasks, func(task models.Task) *pb.GetTasksByPatientResponse_Task {
 		var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTasksByPatientResponse_Task_SubTask {
 			return &pb.GetTasksByPatientResponse_Task_SubTask{
-				Id:   subtask.ID.String(),
-				Done: subtask.Done,
-				Name: subtask.Name,
+				Id:        subtask.ID.String(),
+				Done:      subtask.Done,
+				Name:      subtask.Name,
+				CreatedBy: subtask.CreatedBy.String(),
 			}
 		})
 		return &pb.GetTasksByPatientResponse_Task{
@@ -184,6 +187,7 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 			Subtasks:       mappedSubtasks,
 			Public:         task.Public,
 			DueAt:          timestamppb.New(task.DueAt),
+			CreatedBy:      task.CreatedBy.String(),
 		}
 	})
 
@@ -213,9 +217,10 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 		return hwutil.Map(tasks, func(task models.Task) *pb.GetTasksByPatientSortedByStatusResponse_Task {
 			var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask {
 				return &pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask{
-					Id:   subtask.ID.String(),
-					Done: subtask.Done,
-					Name: subtask.Name,
+					Id:        subtask.ID.String(),
+					Done:      subtask.Done,
+					Name:      subtask.Name,
+					CreatedBy: subtask.CreatedBy.String(),
 				}
 			})
 			return &pb.GetTasksByPatientSortedByStatusResponse_Task{
@@ -227,6 +232,7 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 				Subtasks:       mappedSubtasks,
 				Public:         task.Public,
 				DueAt:          timestamppb.New(task.DueAt),
+				CreatedBy:      task.CreatedBy.String(),
 			}
 		})
 	}

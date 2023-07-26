@@ -109,6 +109,9 @@ export class GetTaskResponse extends jspb.Message {
   hasDueAt(): boolean;
   clearDueAt(): GetTaskResponse;
 
+  getCreatedBy(): string;
+  setCreatedBy(value: string): GetTaskResponse;
+
   getSubtasksList(): Array<GetTaskResponse.SubTask>;
   setSubtasksList(value: Array<GetTaskResponse.SubTask>): GetTaskResponse;
   clearSubtasksList(): GetTaskResponse;
@@ -132,6 +135,7 @@ export namespace GetTaskResponse {
     patientId: string,
     pb_public: boolean,
     dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    createdBy: string,
     subtasksList: Array<GetTaskResponse.SubTask.AsObject>,
   }
 
@@ -144,6 +148,9 @@ export namespace GetTaskResponse {
 
     getDone(): boolean;
     setDone(value: boolean): SubTask;
+
+    getCreatedBy(): string;
+    setCreatedBy(value: string): SubTask;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SubTask.AsObject;
@@ -158,6 +165,7 @@ export namespace GetTaskResponse {
       id: string,
       name: string,
       done: boolean,
+      createdBy: string,
     }
   }
 
@@ -227,6 +235,9 @@ export namespace GetTasksByPatientResponse {
     hasDueAt(): boolean;
     clearDueAt(): Task;
 
+    getCreatedBy(): string;
+    setCreatedBy(value: string): Task;
+
     getSubtasksList(): Array<GetTasksByPatientResponse.Task.SubTask>;
     setSubtasksList(value: Array<GetTasksByPatientResponse.Task.SubTask>): Task;
     clearSubtasksList(): Task;
@@ -250,6 +261,7 @@ export namespace GetTasksByPatientResponse {
       patientId: string,
       pb_public: boolean,
       dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+      createdBy: string,
       subtasksList: Array<GetTasksByPatientResponse.Task.SubTask.AsObject>,
     }
 
@@ -262,6 +274,9 @@ export namespace GetTasksByPatientResponse {
 
       getDone(): boolean;
       setDone(value: boolean): SubTask;
+
+      getCreatedBy(): string;
+      setCreatedBy(value: string): SubTask;
 
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SubTask.AsObject;
@@ -276,6 +291,7 @@ export namespace GetTasksByPatientResponse {
         id: string,
         name: string,
         done: boolean,
+        createdBy: string,
       }
     }
 
@@ -356,6 +372,9 @@ export namespace GetTasksByPatientSortedByStatusResponse {
     hasDueAt(): boolean;
     clearDueAt(): Task;
 
+    getCreatedBy(): string;
+    setCreatedBy(value: string): Task;
+
     getSubtasksList(): Array<GetTasksByPatientSortedByStatusResponse.Task.SubTask>;
     setSubtasksList(value: Array<GetTasksByPatientSortedByStatusResponse.Task.SubTask>): Task;
     clearSubtasksList(): Task;
@@ -378,6 +397,7 @@ export namespace GetTasksByPatientSortedByStatusResponse {
       patientId: string,
       pb_public: boolean,
       dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+      createdBy: string,
       subtasksList: Array<GetTasksByPatientSortedByStatusResponse.Task.SubTask.AsObject>,
     }
 
@@ -390,6 +410,9 @@ export namespace GetTasksByPatientSortedByStatusResponse {
 
       getDone(): boolean;
       setDone(value: boolean): SubTask;
+
+      getCreatedBy(): string;
+      setCreatedBy(value: string): SubTask;
 
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SubTask.AsObject;
@@ -404,6 +427,7 @@ export namespace GetTasksByPatientSortedByStatusResponse {
         id: string,
         name: string,
         done: boolean,
+        createdBy: string,
       }
     }
 
