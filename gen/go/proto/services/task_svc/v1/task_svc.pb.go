@@ -80,7 +80,7 @@ type CreateTaskRequest struct {
 	Name        string  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" validate:"required"` // @gotags: validate:"required"
 	Description *string `protobuf:"bytes,2,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	PatientId   string  `protobuf:"bytes,3,opt,name=patient_id,json=patientId,proto3" json:"patient_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
-	Public      bool    `protobuf:"varint,4,opt,name=public,proto3" json:"public,omitempty"`                       // default: true
+	Public      bool    `protobuf:"varint,4,opt,name=public,proto3" json:"public,omitempty"`                                        // default: true
 }
 
 func (x *CreateTaskRequest) Reset() {
@@ -652,7 +652,7 @@ type AddSubTaskRequest struct {
 
 	Name   string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	TaskId string `protobuf:"bytes,2,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
-	Done   *bool  `protobuf:"varint,3,opt,name=done,proto3,oneof" json:"done,omitempty"`            // default: false
+	Done   *bool  `protobuf:"varint,3,opt,name=done,proto3,oneof" json:"done,omitempty"`                             // default: false
 }
 
 func (x *AddSubTaskRequest) Reset() {

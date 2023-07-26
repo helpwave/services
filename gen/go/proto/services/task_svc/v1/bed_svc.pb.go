@@ -26,7 +26,7 @@ type CreateBedRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	RoomId string `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
-	Name   string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" validate:"required"`                   // @gotags: validate:"required"
+	Name   string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" validate:"required"`                // @gotags: validate:"required"
 }
 
 func (x *CreateBedRequest) Reset() {
@@ -135,7 +135,7 @@ type BulkCreateBedsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RoomId       string `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty" validate:"uuid4"`                      // @gotags: validate:"uuid4"
+	RoomId       string `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty" validate:"uuid4"`                         // @gotags: validate:"uuid4"
 	AmountOfBeds uint32 `protobuf:"varint,2,opt,name=amount_of_beds,json=amountOfBeds,proto3" json:"amount_of_beds,omitempty" validate:"required"` // @gotags: validate:"required"
 }
 
