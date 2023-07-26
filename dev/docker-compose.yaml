@@ -18,6 +18,8 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: tech@helpwave.de
       PGADMIN_DEFAULT_PASSWORD: tech@helpwave.de
+    volumes:
+      - ./servers.json:/pgadmin4/servers.json:ro
     ports:
       - "5433:80"
 

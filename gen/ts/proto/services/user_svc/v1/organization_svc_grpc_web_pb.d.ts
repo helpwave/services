@@ -106,6 +106,13 @@ export class OrganizationServiceClient {
                response: proto_services_user_svc_v1_organization_svc_pb.DeclineInvitationResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_organization_svc_pb.DeclineInvitationResponse>;
 
+  revokeInvitation(
+    request: proto_services_user_svc_v1_organization_svc_pb.RevokeInvitationRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_user_svc_v1_organization_svc_pb.RevokeInvitationResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_user_svc_v1_organization_svc_pb.RevokeInvitationResponse>;
+
 }
 
 export class OrganizationServicePromiseClient {
@@ -182,6 +189,11 @@ export class OrganizationServicePromiseClient {
     request: proto_services_user_svc_v1_organization_svc_pb.DeclineInvitationRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_user_svc_v1_organization_svc_pb.DeclineInvitationResponse>;
+
+  revokeInvitation(
+    request: proto_services_user_svc_v1_organization_svc_pb.RevokeInvitationRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_user_svc_v1_organization_svc_pb.RevokeInvitationResponse>;
 
 }
 

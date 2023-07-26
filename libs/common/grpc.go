@@ -323,7 +323,7 @@ func redactMetadata(m metautils.NiceMD) metautils.NiceMD {
 func OrganizationIDFromMD(ctx context.Context) (string, error) {
 	val := metautils.ExtractIncoming(ctx).Get("X-Organization")
 	if val == "" {
-		return "", status.Errorf(codes.Unauthenticated, "Request unauthenticated")
+		return "", status.Errorf(codes.Unauthenticated, "organization header missing")
 	}
 	return val, nil
 }

@@ -9,6 +9,7 @@ enum InvitationState {
   INVITATION_STATE_PENDING = 1;
   INVITATION_STATE_ACCEPTED = 2;
   INVITATION_STATE_REJECTED = 3;
+  INVITATION_STATE_REVOKED = 4;
 }
 
 //
@@ -242,6 +243,17 @@ message DeclineInvitationResponse {}
 
 
 //
+// RevokeInvitation
+//
+
+message RevokeInvitationRequest {
+  string invitation_id = 1;  // @gotags: validate:"uuid4"
+}
+
+message RevokeInvitationResponse {}
+
+
+//
 //  OrganizationService
 //
 
@@ -260,4 +272,5 @@ service OrganizationService {
   rpc GetInvitationsByUser(GetInvitationsByUserRequest) returns (GetInvitationsByUserResponse) {}
   rpc AcceptInvitation (AcceptInvitationRequest) returns (AcceptInvitationResponse) {}
   rpc DeclineInvitation(DeclineInvitationRequest) returns (DeclineInvitationResponse) {}
+  rpc RevokeInvitation(RevokeInvitationRequest) returns (RevokeInvitationResponse) {}
 }
