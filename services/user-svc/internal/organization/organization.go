@@ -171,8 +171,6 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrganizationsByUserRequest) (*pb.GetOrganizationsByUserResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
-	// TODO: Auth
-
 	userID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -180,7 +178,7 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrga
 
 	var organizations []Organization
 	err = db.Preload("Members").Joins("JOIN memberships ON memberships.organization_id = organizations.id").
-		Where("memberships.user_id = ? OR organizations.created_by_user_id = ?", userID, userID).
+		Where("memberships.user_id = ?", userID).
 		Find(&organizations).Error
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
