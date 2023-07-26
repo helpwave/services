@@ -6,6 +6,9 @@ export class CreateBedRequest extends jspb.Message {
   getRoomId(): string;
   setRoomId(value: string): CreateBedRequest;
 
+  getName(): string;
+  setName(value: string): CreateBedRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateBedRequest.AsObject;
   static toObject(includeInstance: boolean, msg: CreateBedRequest): CreateBedRequest.AsObject;
@@ -17,12 +20,16 @@ export class CreateBedRequest extends jspb.Message {
 export namespace CreateBedRequest {
   export type AsObject = {
     roomId: string,
+    name: string,
   }
 }
 
 export class CreateBedResponse extends jspb.Message {
   getId(): string;
   setId(value: string): CreateBedResponse;
+
+  getName(): string;
+  setName(value: string): CreateBedResponse;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateBedResponse.AsObject;
@@ -35,6 +42,7 @@ export class CreateBedResponse extends jspb.Message {
 export namespace CreateBedResponse {
   export type AsObject = {
     id: string,
+    name: string,
   }
 }
 
@@ -83,6 +91,9 @@ export namespace BulkCreateBedsResponse {
     getId(): string;
     setId(value: string): Bed;
 
+    getName(): string;
+    setName(value: string): Bed;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
     static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
@@ -94,6 +105,7 @@ export namespace BulkCreateBedsResponse {
   export namespace Bed {
     export type AsObject = {
       id: string,
+      name: string,
     }
   }
 
@@ -124,6 +136,9 @@ export class GetBedResponse extends jspb.Message {
   getRoomId(): string;
   setRoomId(value: string): GetBedResponse;
 
+  getName(): string;
+  setName(value: string): GetBedResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetBedResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetBedResponse): GetBedResponse.AsObject;
@@ -136,6 +151,7 @@ export namespace GetBedResponse {
   export type AsObject = {
     id: string,
     roomId: string,
+    name: string,
   }
 }
 
@@ -179,6 +195,9 @@ export namespace GetBedsResponse {
     getRoomId(): string;
     setRoomId(value: string): Bed;
 
+    getName(): string;
+    setName(value: string): Bed;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
     static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
@@ -191,6 +210,7 @@ export namespace GetBedsResponse {
     export type AsObject = {
       id: string,
       roomId: string,
+      name: string,
     }
   }
 
@@ -237,6 +257,9 @@ export namespace GetBedsByRoomResponse {
     getId(): string;
     setId(value: string): Bed;
 
+    getName(): string;
+    setName(value: string): Bed;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
     static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
@@ -248,6 +271,7 @@ export namespace GetBedsByRoomResponse {
   export namespace Bed {
     export type AsObject = {
       id: string,
+      name: string,
     }
   }
 
@@ -262,6 +286,11 @@ export class UpdateBedRequest extends jspb.Message {
   hasRoomId(): boolean;
   clearRoomId(): UpdateBedRequest;
 
+  getName(): string;
+  setName(value: string): UpdateBedRequest;
+  hasName(): boolean;
+  clearName(): UpdateBedRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateBedRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateBedRequest): UpdateBedRequest.AsObject;
@@ -274,11 +303,17 @@ export namespace UpdateBedRequest {
   export type AsObject = {
     id: string,
     roomId?: string,
+    name?: string,
   }
 
   export enum RoomIdCase { 
     _ROOM_ID_NOT_SET = 0,
     ROOM_ID = 2,
+  }
+
+  export enum NameCase { 
+    _NAME_NOT_SET = 0,
+    NAME = 3,
   }
 }
 

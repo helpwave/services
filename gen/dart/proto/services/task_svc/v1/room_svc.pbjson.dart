@@ -69,6 +69,7 @@ const GetRoomResponse_Bed$json = {
   '1': 'Bed',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
   ],
 };
 
@@ -77,7 +78,8 @@ final $typed_data.Uint8List getRoomResponseDescriptor = $convert.base64Decode(
     'Cg9HZXRSb29tUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSQw'
     'oEYmVkcxgDIAMoCzIvLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFJvb21SZXNwb25z'
     'ZS5CZWRSBGJlZHMSJwoPb3JnYW5pemF0aW9uX2lkGAQgASgJUg5vcmdhbml6YXRpb25JZBIXCg'
-    'd3YXJkX2lkGAUgASgJUgZ3YXJkSWQaFQoDQmVkEg4KAmlkGAEgASgJUgJpZA==');
+    'd3YXJkX2lkGAUgASgJUgZ3YXJkSWQaKQoDQmVkEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIg'
+    'ASgJUgRuYW1l');
 
 @$core.Deprecated('Use getRoomsRequestDescriptor instead')
 const GetRoomsRequest$json = {
@@ -115,17 +117,18 @@ const GetRoomsResponse_Room_Bed$json = {
   '1': 'Bed',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
   ],
 };
 
 /// Descriptor for `GetRoomsResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getRoomsResponseDescriptor = $convert.base64Decode(
     'ChBHZXRSb29tc1Jlc3BvbnNlEkcKBXJvb21zGAEgAygLMjEucHJvdG8uc2VydmljZXMudGFza1'
-    '9zdmMudjEuR2V0Um9vbXNSZXNwb25zZS5Sb29tUgVyb29tcxrOAQoEUm9vbRIOCgJpZBgBIAEo'
+    '9zdmMudjEuR2V0Um9vbXNSZXNwb25zZS5Sb29tUgVyb29tcxriAQoEUm9vbRIOCgJpZBgBIAEo'
     'CVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRJJCgRiZWRzGAMgAygLMjUucHJvdG8uc2VydmljZX'
     'MudGFza19zdmMudjEuR2V0Um9vbXNSZXNwb25zZS5Sb29tLkJlZFIEYmVkcxInCg9vcmdhbml6'
     'YXRpb25faWQYBCABKAlSDm9yZ2FuaXphdGlvbklkEhcKB3dhcmRfaWQYBSABKAlSBndhcmRJZB'
-    'oVCgNCZWQSDgoCaWQYASABKAlSAmlk');
+    'opCgNCZWQSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWU=');
 
 @$core.Deprecated('Use getRoomsByWardRequestDescriptor instead')
 const GetRoomsByWardRequest$json = {
@@ -166,17 +169,19 @@ const GetRoomsByWardResponse_Room_Bed$json = {
   '1': 'Bed',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
   ],
 };
 
 /// Descriptor for `GetRoomsByWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getRoomsByWardResponseDescriptor = $convert.base64Decode(
     'ChZHZXRSb29tc0J5V2FyZFJlc3BvbnNlEk0KBXJvb21zGAEgAygLMjcucHJvdG8uc2VydmljZX'
-    'MudGFza19zdmMudjEuR2V0Um9vbXNCeVdhcmRSZXNwb25zZS5Sb29tUgVyb29tcxrUAQoEUm9v'
+    'MudGFza19zdmMudjEuR2V0Um9vbXNCeVdhcmRSZXNwb25zZS5Sb29tUgVyb29tcxroAQoEUm9v'
     'bRIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRJPCgRiZWRzGAMgAygLMjsucH'
     'JvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0Um9vbXNCeVdhcmRSZXNwb25zZS5Sb29tLkJl'
     'ZFIEYmVkcxInCg9vcmdhbml6YXRpb25faWQYBCABKAlSDm9yZ2FuaXphdGlvbklkEhcKB3dhcm'
-    'RfaWQYBSABKAlSBndhcmRJZBoVCgNCZWQSDgoCaWQYASABKAlSAmlk');
+    'RfaWQYBSABKAlSBndhcmRJZBopCgNCZWQSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlS'
+    'BG5hbWU=');
 
 @$core.Deprecated('Use updateRoomRequestDescriptor instead')
 const UpdateRoomRequest$json = {
@@ -262,6 +267,7 @@ const GetRoomOverviewsByWardResponse_Room_Bed$json = {
   '1': 'Bed',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
     {'1': 'patient', '3': 2, '4': 1, '5': 11, '6': '.proto.services.task_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient', '9': 0, '10': 'patient', '17': true},
   ],
   '3': [GetRoomOverviewsByWardResponse_Room_Bed_Patient$json],
@@ -286,15 +292,16 @@ const GetRoomOverviewsByWardResponse_Room_Bed_Patient$json = {
 final $typed_data.Uint8List getRoomOverviewsByWardResponseDescriptor = $convert.base64Decode(
     'Ch5HZXRSb29tT3ZlcnZpZXdzQnlXYXJkUmVzcG9uc2USVQoFcm9vbXMYASADKAsyPy5wcm90by'
     '5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRSb29tT3ZlcnZpZXdzQnlXYXJkUmVzcG9uc2UuUm9v'
-    'bVIFcm9vbXMa4wMKBFJvb20SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSVw'
+    'bVIFcm9vbXMa9wMKBFJvb20SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSVw'
     'oEYmVkcxgDIAMoCzJDLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFJvb21PdmVydmll'
-    'd3NCeVdhcmRSZXNwb25zZS5Sb29tLkJlZFIEYmVkcxrdAgoDQmVkEg4KAmlkGAEgASgJUgJpZB'
-    'JqCgdwYXRpZW50GAIgASgLMksucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0Um9vbU92'
-    'ZXJ2aWV3c0J5V2FyZFJlc3BvbnNlLlJvb20uQmVkLlBhdGllbnRIAFIHcGF0aWVudIgBARrNAQ'
-    'oHUGF0aWVudBIOCgJpZBgBIAEoCVICaWQSOgoZaHVtYW5fcmVhZGFibGVfaWRlbnRpZmllchgC'
-    'IAEoCVIXaHVtYW5SZWFkYWJsZUlkZW50aWZpZXISKwoRdGFza3NfdW5zY2hlZHVsZWQYAyABKA'
-    '1SEHRhc2tzVW5zY2hlZHVsZWQSKgoRdGFza3NfaW5fcHJvZ3Jlc3MYBCABKA1SD3Rhc2tzSW5Q'
-    'cm9ncmVzcxIdCgp0YXNrc19kb25lGAUgASgNUgl0YXNrc0RvbmVCCgoIX3BhdGllbnQ=');
+    'd3NCeVdhcmRSZXNwb25zZS5Sb29tLkJlZFIEYmVkcxrxAgoDQmVkEg4KAmlkGAEgASgJUgJpZB'
+    'ISCgRuYW1lGAMgASgJUgRuYW1lEmoKB3BhdGllbnQYAiABKAsySy5wcm90by5zZXJ2aWNlcy50'
+    'YXNrX3N2Yy52MS5HZXRSb29tT3ZlcnZpZXdzQnlXYXJkUmVzcG9uc2UuUm9vbS5CZWQuUGF0aW'
+    'VudEgAUgdwYXRpZW50iAEBGs0BCgdQYXRpZW50Eg4KAmlkGAEgASgJUgJpZBI6ChlodW1hbl9y'
+    'ZWFkYWJsZV9pZGVudGlmaWVyGAIgASgJUhdodW1hblJlYWRhYmxlSWRlbnRpZmllchIrChF0YX'
+    'Nrc191bnNjaGVkdWxlZBgDIAEoDVIQdGFza3NVbnNjaGVkdWxlZBIqChF0YXNrc19pbl9wcm9n'
+    'cmVzcxgEIAEoDVIPdGFza3NJblByb2dyZXNzEh0KCnRhc2tzX2RvbmUYBSABKA1SCXRhc2tzRG'
+    '9uZUIKCghfcGF0aWVudA==');
 
 const $core.Map<$core.String, $core.dynamic> RoomServiceBase$json = {
   '1': 'RoomService',

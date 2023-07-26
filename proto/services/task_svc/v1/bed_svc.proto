@@ -10,10 +10,12 @@ option go_package = "gen/proto/services/task-svc";
 
 message CreateBedRequest {
   string room_id = 1; // @gotags: validate:"uuid4"
+  string name = 2; // @gotags: validate:"required"
 }
 
 message CreateBedResponse {
   string id = 1;
+  string name = 2;
 }
 
 //
@@ -30,6 +32,7 @@ message BulkCreateBedsResponse {
 
   message Bed {
     string id = 1;
+    string name = 2;
   }
 }
 
@@ -44,6 +47,7 @@ message GetBedRequest {
 message GetBedResponse {
   string id = 1;
   string room_id = 2;
+  string name = 3;
 }
 
 //
@@ -58,6 +62,7 @@ message GetBedsResponse {
   message Bed {
     string id = 1;
     string room_id = 2;
+    string name = 3;
   }
 }
 
@@ -74,6 +79,7 @@ message GetBedsByRoomResponse {
 
   message Bed {
     string id = 1;
+    string name = 2;
   }
 }
 
@@ -84,6 +90,7 @@ message GetBedsByRoomResponse {
 message UpdateBedRequest {
   string id = 1; // @gotags: validate:"uuid4"
   optional string room_id = 2;
+  optional string name = 3;
 }
 
 message UpdateBedResponse {}

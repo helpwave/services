@@ -171,6 +171,7 @@ const GetWardDetailsResponse_Bed$json = {
   '1': 'Bed',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
   ],
 };
 
@@ -209,13 +210,13 @@ final $typed_data.Uint8List getWardDetailsResponseDescriptor = $convert.base64De
     'RuYW1lEk0KBXJvb21zGAMgAygLMjcucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0V2Fy'
     'ZERldGFpbHNSZXNwb25zZS5Sb29tUgVyb29tcxJmCg50YXNrX3RlbXBsYXRlcxgEIAMoCzI/Ln'
     'Byb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFdhcmREZXRhaWxzUmVzcG9uc2UuVGFza1Rl'
-    'bXBsYXRlUg10YXNrVGVtcGxhdGVzGhUKA0JlZBIOCgJpZBgBIAEoCVICaWQaLQoHU3VidGFzax'
-    'IOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRp2CgRSb29tEg4KAmlkGAEgASgJ'
-    'UgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEkoKBGJlZHMYAyADKAsyNi5wcm90by5zZXJ2aWNlcy'
-    '50YXNrX3N2Yy52MS5HZXRXYXJkRGV0YWlsc1Jlc3BvbnNlLkJlZFIEYmVkcxqKAQoMVGFza1Rl'
-    'bXBsYXRlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lElYKCHN1YnRhc2tzGA'
-    'MgAygLMjoucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0V2FyZERldGFpbHNSZXNwb25z'
-    'ZS5TdWJ0YXNrUghzdWJ0YXNrcw==');
+    'bXBsYXRlUg10YXNrVGVtcGxhdGVzGikKA0JlZBIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIA'
+    'EoCVIEbmFtZRotCgdTdWJ0YXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1l'
+    'GnYKBFJvb20SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSSgoEYmVkcxgDIA'
+    'MoCzI2LnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFdhcmREZXRhaWxzUmVzcG9uc2Uu'
+    'QmVkUgRiZWRzGooBCgxUYXNrVGVtcGxhdGUSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKA'
+    'lSBG5hbWUSVgoIc3VidGFza3MYAyADKAsyOi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5H'
+    'ZXRXYXJkRGV0YWlsc1Jlc3BvbnNlLlN1YnRhc2tSCHN1YnRhc2tz');
 
 @$core.Deprecated('Use getWardOverviewsRequestDescriptor instead')
 const GetWardOverviewsRequest$json = {

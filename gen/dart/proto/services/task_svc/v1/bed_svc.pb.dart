@@ -22,6 +22,7 @@ class CreateBedRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateBedRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'roomId')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
@@ -54,6 +55,15 @@ class CreateBedRequest extends $pb.GeneratedMessage {
   $core.bool hasRoomId() => $_has(0);
   @$pb.TagNumber(1)
   void clearRoomId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
 }
 
 class CreateBedResponse extends $pb.GeneratedMessage {
@@ -64,6 +74,7 @@ class CreateBedResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
@@ -96,6 +107,15 @@ class CreateBedResponse extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
 }
 
 class BulkCreateBedsRequest extends $pb.GeneratedMessage {
@@ -158,6 +178,7 @@ class BulkCreateBedsResponse_Bed extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BulkCreateBedsResponse.Bed', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
@@ -190,6 +211,15 @@ class BulkCreateBedsResponse_Bed extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
 }
 
 class BulkCreateBedsResponse extends $pb.GeneratedMessage {
@@ -279,6 +309,7 @@ class GetBedResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'roomId')
+    ..aOS(3, _omitFieldNames ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
@@ -320,6 +351,15 @@ class GetBedResponse extends $pb.GeneratedMessage {
   $core.bool hasRoomId() => $_has(1);
   @$pb.TagNumber(2)
   void clearRoomId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get name => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set name($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearName() => clearField(3);
 }
 
 class GetBedsRequest extends $pb.GeneratedMessage {
@@ -363,6 +403,7 @@ class GetBedsResponse_Bed extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedsResponse.Bed', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'roomId')
+    ..aOS(3, _omitFieldNames ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
@@ -404,6 +445,15 @@ class GetBedsResponse_Bed extends $pb.GeneratedMessage {
   $core.bool hasRoomId() => $_has(1);
   @$pb.TagNumber(2)
   void clearRoomId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get name => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set name($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearName() => clearField(3);
 }
 
 class GetBedsResponse extends $pb.GeneratedMessage {
@@ -492,6 +542,7 @@ class GetBedsByRoomResponse_Bed extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedsByRoomResponse.Bed', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
@@ -524,6 +575,15 @@ class GetBedsByRoomResponse_Bed extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
 }
 
 class GetBedsByRoomResponse extends $pb.GeneratedMessage {
@@ -571,6 +631,7 @@ class UpdateBedRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateBedRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'roomId')
+    ..aOS(3, _omitFieldNames ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
@@ -612,6 +673,15 @@ class UpdateBedRequest extends $pb.GeneratedMessage {
   $core.bool hasRoomId() => $_has(1);
   @$pb.TagNumber(2)
   void clearRoomId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get name => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set name($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearName() => clearField(3);
 }
 
 class UpdateBedResponse extends $pb.GeneratedMessage {

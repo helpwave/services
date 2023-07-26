@@ -34,6 +34,7 @@ message GetRoomResponse {
 
   message Bed {
     string id = 1;
+    string name = 2;
   }
 }
 
@@ -55,6 +56,7 @@ message GetRoomsResponse {
 
     message Bed {
       string id = 1;
+      string name = 2;
     }
   }
 }
@@ -79,6 +81,7 @@ message GetRoomsByWardResponse {
 
     message Bed {
       string id = 1;
+      string name = 2;
     }
   }
 }
@@ -123,6 +126,7 @@ message GetRoomOverviewsByWardResponse {
 
     message Bed {
       string id = 1;
+      string name = 3;
       optional Patient patient = 2;
 
       message Patient{

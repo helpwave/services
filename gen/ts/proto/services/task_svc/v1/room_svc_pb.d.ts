@@ -99,6 +99,9 @@ export namespace GetRoomResponse {
     getId(): string;
     setId(value: string): Bed;
 
+    getName(): string;
+    setName(value: string): Bed;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
     static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
@@ -110,6 +113,7 @@ export namespace GetRoomResponse {
   export namespace Bed {
     export type AsObject = {
       id: string,
+      name: string,
     }
   }
 
@@ -187,6 +191,9 @@ export namespace GetRoomsResponse {
       getId(): string;
       setId(value: string): Bed;
 
+      getName(): string;
+      setName(value: string): Bed;
+
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): Bed.AsObject;
       static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
@@ -198,6 +205,7 @@ export namespace GetRoomsResponse {
     export namespace Bed {
       export type AsObject = {
         id: string,
+        name: string,
       }
     }
 
@@ -281,6 +289,9 @@ export namespace GetRoomsByWardResponse {
       getId(): string;
       setId(value: string): Bed;
 
+      getName(): string;
+      setName(value: string): Bed;
+
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): Bed.AsObject;
       static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
@@ -292,6 +303,7 @@ export namespace GetRoomsByWardResponse {
     export namespace Bed {
       export type AsObject = {
         id: string,
+        name: string,
       }
     }
 
@@ -442,6 +454,9 @@ export namespace GetRoomOverviewsByWardResponse {
       getId(): string;
       setId(value: string): Bed;
 
+      getName(): string;
+      setName(value: string): Bed;
+
       getPatient(): GetRoomOverviewsByWardResponse.Room.Bed.Patient | undefined;
       setPatient(value?: GetRoomOverviewsByWardResponse.Room.Bed.Patient): Bed;
       hasPatient(): boolean;
@@ -458,6 +473,7 @@ export namespace GetRoomOverviewsByWardResponse {
     export namespace Bed {
       export type AsObject = {
         id: string,
+        name: string,
         patient?: GetRoomOverviewsByWardResponse.Room.Bed.Patient.AsObject,
       }
 

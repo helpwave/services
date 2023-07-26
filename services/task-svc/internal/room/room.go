@@ -34,7 +34,14 @@ func GetRoomsWithBedsAndPatientsAndTasksByWardForOrganization(ctx context.Contex
 	}
 
 	var rooms []models.Room
-	if err := db.Preload("Beds").Preload("Beds.Patient").Preload("Beds.Patient.Tasks").Where("organization_id = ? AND ward_id = ?", organizationID.String(), wardID.String()).Find(&rooms).Error; err != nil {
+	query := db.
+		Scopes(models.PreloadBedsSorted).
+		Preload("Beds.Patient").
+		Preload("Beds.Patient.Tasks").
+		Where("organization_id = ? AND ward_id = ?", organizationID.String(), wardID.String()).
+		Find(&rooms)
+
+	if err := query.Error; err != nil {
 		return nil, err
 	}
 
@@ -90,8 +97,7 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 	}
 
 	room := models.Room{ID: id}
-
-	if err := db.Preload("Beds").First(&room).Error; err != nil {
+	if err := db.Scopes(models.PreloadBedsSorted).First(&room).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -101,7 +107,8 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 
 	beds := hwutil.Map(room.Beds, func(bed models.Bed) *pb.GetRoomResponse_Bed {
 		return &pb.GetRoomResponse_Bed{
-			Id: bed.ID.String(),
+			Id:   bed.ID.String(),
+			Name: bed.Name,
 		}
 	})
 
@@ -140,7 +147,7 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 	// TODO: Auth
 
 	var rooms []models.Room
-	if err := db.Preload("Beds").Find(&rooms).Error; err != nil {
+	if err := db.Scopes(models.PreloadBedsSorted).Find(&rooms).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -151,7 +158,8 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 	roomsResponse := hwutil.Map(rooms, func(room models.Room) *pb.GetRoomsResponse_Room {
 		beds := hwutil.Map(room.Beds, func(bed models.Bed) *pb.GetRoomsResponse_Room_Bed {
 			return &pb.GetRoomsResponse_Room_Bed{
-				Id: bed.ID.String(),
+				Id:   bed.ID.String(),
+				Name: bed.Name,
 			}
 		})
 		return &pb.GetRoomsResponse_Room{
@@ -179,7 +187,7 @@ func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardR
 	}
 
 	var rooms []models.Room
-	if err := db.Preload("Beds").Find(&rooms, "ward_id = ?", wardId).Error; err != nil {
+	if err := db.Scopes(models.PreloadBedsSorted).Find(&rooms, "ward_id = ?", wardId).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -190,7 +198,8 @@ func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardR
 	roomsResponse := hwutil.Map(rooms, func(room models.Room) *pb.GetRoomsByWardResponse_Room {
 		beds := hwutil.Map(room.Beds, func(bed models.Bed) *pb.GetRoomsByWardResponse_Room_Bed {
 			return &pb.GetRoomsByWardResponse_Room_Bed{
-				Id: bed.ID.String(),
+				Id:   bed.ID.String(),
+				Name: bed.Name,
 			}
 		})
 		return &pb.GetRoomsByWardResponse_Room{
@@ -264,6 +273,7 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 
 			return &pb.GetRoomOverviewsByWardResponse_Room_Bed{
 				Id:      bed.ID.String(),
+				Name:    bed.Name,
 				Patient: patient,
 			}, nil
 		})
