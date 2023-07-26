@@ -77,8 +77,8 @@ side by side in the container via [hivemind](https://github.com/DarthSim/hivemin
 ## Migrations
 We use [migrate](https://github.com/golang-migrate/migrate) to handle changes to our database tables
 It uses change versioning, e.g.
-- `000009_init.up.sql` contains all changes from version 8 to 9
-- `000009_init.down.sql` contains all changes from version 9 to 8 in reverse order from
+- `000009_some_name.up.sql` contains all changes from version 8 to 9
+- `000009_some_name.down.sql` contains all changes from version 9 to 8 in reverse order from
 ```
 migrate -path services/<service>/migrations/ -database postgres://postgres:postgres@localhost:5432/<service>?sslmode=disable up [version]
 migrate -path services/<service>/migrations/ -database postgres://postgres:postgres@localhost:5432/<service>?sslmode=disable down [version]
