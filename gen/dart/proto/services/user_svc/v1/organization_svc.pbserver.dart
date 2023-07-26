@@ -27,6 +27,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
   $async.Future<$9.GetOrganizationsByUserResponse> getOrganizationsByUser($pb.ServerContext ctx, $9.GetOrganizationsByUserRequest request);
   $async.Future<$9.UpdateOrganizationResponse> updateOrganization($pb.ServerContext ctx, $9.UpdateOrganizationRequest request);
   $async.Future<$9.DeleteOrganizationResponse> deleteOrganization($pb.ServerContext ctx, $9.DeleteOrganizationRequest request);
+  $async.Future<$9.GetMembersByOrganizationResponse> getMembersByOrganization($pb.ServerContext ctx, $9.GetMembersByOrganizationRequest request);
   $async.Future<$9.AddMemberResponse> addMember($pb.ServerContext ctx, $9.AddMemberRequest request);
   $async.Future<$9.RemoveMemberResponse> removeMember($pb.ServerContext ctx, $9.RemoveMemberRequest request);
   $async.Future<$9.InviteMemberResponse> inviteMember($pb.ServerContext ctx, $9.InviteMemberRequest request);
@@ -34,6 +35,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
   $async.Future<$9.GetInvitationsByUserResponse> getInvitationsByUser($pb.ServerContext ctx, $9.GetInvitationsByUserRequest request);
   $async.Future<$9.AcceptInvitationResponse> acceptInvitation($pb.ServerContext ctx, $9.AcceptInvitationRequest request);
   $async.Future<$9.DeclineInvitationResponse> declineInvitation($pb.ServerContext ctx, $9.DeclineInvitationRequest request);
+  $async.Future<$9.RevokeInvitationResponse> revokeInvitation($pb.ServerContext ctx, $9.RevokeInvitationRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
@@ -43,6 +45,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
       case 'GetOrganizationsByUser': return $9.GetOrganizationsByUserRequest();
       case 'UpdateOrganization': return $9.UpdateOrganizationRequest();
       case 'DeleteOrganization': return $9.DeleteOrganizationRequest();
+      case 'GetMembersByOrganization': return $9.GetMembersByOrganizationRequest();
       case 'AddMember': return $9.AddMemberRequest();
       case 'RemoveMember': return $9.RemoveMemberRequest();
       case 'InviteMember': return $9.InviteMemberRequest();
@@ -50,6 +53,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
       case 'GetInvitationsByUser': return $9.GetInvitationsByUserRequest();
       case 'AcceptInvitation': return $9.AcceptInvitationRequest();
       case 'DeclineInvitation': return $9.DeclineInvitationRequest();
+      case 'RevokeInvitation': return $9.RevokeInvitationRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
@@ -62,6 +66,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
       case 'GetOrganizationsByUser': return this.getOrganizationsByUser(ctx, request as $9.GetOrganizationsByUserRequest);
       case 'UpdateOrganization': return this.updateOrganization(ctx, request as $9.UpdateOrganizationRequest);
       case 'DeleteOrganization': return this.deleteOrganization(ctx, request as $9.DeleteOrganizationRequest);
+      case 'GetMembersByOrganization': return this.getMembersByOrganization(ctx, request as $9.GetMembersByOrganizationRequest);
       case 'AddMember': return this.addMember(ctx, request as $9.AddMemberRequest);
       case 'RemoveMember': return this.removeMember(ctx, request as $9.RemoveMemberRequest);
       case 'InviteMember': return this.inviteMember(ctx, request as $9.InviteMemberRequest);
@@ -69,6 +74,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
       case 'GetInvitationsByUser': return this.getInvitationsByUser(ctx, request as $9.GetInvitationsByUserRequest);
       case 'AcceptInvitation': return this.acceptInvitation(ctx, request as $9.AcceptInvitationRequest);
       case 'DeclineInvitation': return this.declineInvitation(ctx, request as $9.DeclineInvitationRequest);
+      case 'RevokeInvitation': return this.revokeInvitation(ctx, request as $9.RevokeInvitationRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
