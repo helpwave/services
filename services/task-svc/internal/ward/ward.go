@@ -242,7 +242,8 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		}
 		var mappedBeds = hwutil.Map(beds, func(bed bedmodels.Bed) *pb.GetWardDetailsResponse_Bed {
 			return &pb.GetWardDetailsResponse_Bed{
-				Id: bed.ID.String(),
+				Id:   bed.ID.String(),
+				Name: bed.Name,
 			}
 		})
 

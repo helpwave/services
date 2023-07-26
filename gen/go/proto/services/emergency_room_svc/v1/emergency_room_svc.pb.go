@@ -86,7 +86,7 @@ type CreateERRequest struct {
 	DisplayableAddress string   `protobuf:"bytes,3,opt,name=displayable_address,json=displayableAddress,proto3" json:"displayable_address,omitempty" validate:"required"` // @gotags: validate:"required"
 	Open               bool     `protobuf:"varint,4,opt,name=open,proto3" json:"open,omitempty"`
 	Utilization        int32    `protobuf:"varint,5,opt,name=utilization,proto3" json:"utilization,omitempty" validate:"required"` // @gotags: validate:"required"
-	Departments        []string `protobuf:"bytes,6,rep,name=departments,proto3" json:"departments,omitempty" validate:"dive,uuid"` // @gotags: validate:"dive,uuid"
+	Departments        []string `protobuf:"bytes,6,rep,name=departments,proto3" json:"departments,omitempty" validate:"dive,uuid"`  // @gotags: validate:"dive,uuid"
 }
 
 func (x *CreateERRequest) Reset() {
@@ -895,7 +895,7 @@ type AddDepartmentsToERRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"required,uuid"`              // @gotags: validate:"required,uuid"
+	Id          string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"required,uuid"`                   // @gotags: validate:"required,uuid"
 	Departments []string `protobuf:"bytes,2,rep,name=departments,proto3" json:"departments,omitempty" validate:"required"` // @gotags: validate:"required"
 }
 
@@ -988,7 +988,7 @@ type RemoveDepartmentsFromERRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"required,uuid"`              // @gotags: validate:"required,uuid"
+	Id          string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"required,uuid"`                   // @gotags: validate:"required,uuid"
 	Departments []string `protobuf:"bytes,2,rep,name=departments,proto3" json:"departments,omitempty" validate:"required"` // @gotags: validate:"required"
 }
 

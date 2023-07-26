@@ -23,4 +23,5 @@ type Bed struct {
 	Room           *Room           `gorm:"foreignKey:ID"`
 	Patient        *models.Patient `gorm:"foreignKey:BedID"`
 	OrganizationID uuid.UUID       `gorm:"column:organization_id"`
+	Name           string          `gorm:"column:name"`
 }

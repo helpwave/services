@@ -101,7 +101,8 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 
 	beds := hwutil.Map(room.Beds, func(bed models.Bed) *pb.GetRoomResponse_Bed {
 		return &pb.GetRoomResponse_Bed{
-			Id: bed.ID.String(),
+			Id:   bed.ID.String(),
+			Name: bed.Name,
 		}
 	})
 
@@ -151,7 +152,8 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 	roomsResponse := hwutil.Map(rooms, func(room models.Room) *pb.GetRoomsResponse_Room {
 		beds := hwutil.Map(room.Beds, func(bed models.Bed) *pb.GetRoomsResponse_Room_Bed {
 			return &pb.GetRoomsResponse_Room_Bed{
-				Id: bed.ID.String(),
+				Id:   bed.ID.String(),
+				Name: bed.Name,
 			}
 		})
 		return &pb.GetRoomsResponse_Room{
@@ -190,7 +192,8 @@ func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardR
 	roomsResponse := hwutil.Map(rooms, func(room models.Room) *pb.GetRoomsByWardResponse_Room {
 		beds := hwutil.Map(room.Beds, func(bed models.Bed) *pb.GetRoomsByWardResponse_Room_Bed {
 			return &pb.GetRoomsByWardResponse_Room_Bed{
-				Id: bed.ID.String(),
+				Id:   bed.ID.String(),
+				Name: bed.Name,
 			}
 		})
 		return &pb.GetRoomsByWardResponse_Room{
@@ -266,6 +269,7 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 
 			return &pb.GetRoomOverviewsByWardResponse_Room_Bed{
 				Id:      bed.ID.String(),
+				Name:    bed.Name,
 				Patient: patient,
 			}, nil
 		})

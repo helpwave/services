@@ -265,6 +265,9 @@ export namespace GetWardDetailsResponse {
     getId(): string;
     setId(value: string): Bed;
 
+    getName(): string;
+    setName(value: string): Bed;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
     static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
@@ -276,6 +279,7 @@ export namespace GetWardDetailsResponse {
   export namespace Bed {
     export type AsObject = {
       id: string,
+      name: string,
     }
   }
 

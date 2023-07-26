@@ -63,7 +63,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		}
 	}
 
-	bed := models.Bed{RoomID: roomID, OrganizationID: organizationID}
+	bed := models.Bed{RoomID: roomID, OrganizationID: organizationID, Name: req.Name}
 	if err := db.Create(&bed).Error; err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -71,6 +71,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 	log.Info().
 		Str("bedId", bed.ID.String()).
 		Str("roomId", room.ID.String()).
+		Str("name", room.Name).
 		Msg("bed created")
 
 	return &pb.CreateBedResponse{
@@ -103,6 +104,7 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 	return &pb.GetBedResponse{
 		Id:     bed.ID.String(),
 		RoomId: bed.RoomID.String(),
+		Name:   bed.Name,
 	}, nil
 }
 
@@ -131,6 +133,7 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 		res.Beds = append(res.Beds, &pb.GetBedsResponse_Bed{
 			Id:     bed.ID.String(),
 			RoomId: bed.RoomID.String(),
+			Name:   bed.Name,
 		})
 	}
 
@@ -158,7 +161,8 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 
 	for _, bed := range beds {
 		res.Beds = append(res.Beds, &pb.GetBedsByRoomResponse_Bed{
-			Id: bed.ID.String(),
+			Id:   bed.ID.String(),
+			Name: bed.Name,
 		})
 	}
 
@@ -175,7 +179,6 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 
 	bed := models.Bed{ID: bedID}
 	updates := pbhelpers.UpdatesMapForUpdateBedRequest(req)
-	// TODO: respect req.RoomID in this or another method
 
 	if err := db.Model(&bed).Updates(updates).Error; err != nil {
 		return nil, status.Error(codes.Internal, err.Error())

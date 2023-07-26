@@ -89,7 +89,13 @@ func UpdatesMapForUpdateRoomRequest(r *pb.UpdateRoomRequest) map[string]interfac
 func UpdatesMapForUpdateBedRequest(r *pb.UpdateBedRequest) map[string]interface{} {
 	m := make(map[string]interface{})
 
-	/* Empty for later extension and use */
+	if r.Name != nil {
+		m["name"] = r.Name
+	}
+
+	if r.RoomId != nil {
+		m["room_id"] = r.RoomId
+	}
 
 	return m
 }
