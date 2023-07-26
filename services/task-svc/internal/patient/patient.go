@@ -69,7 +69,6 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientReq
 	}
 
 	if err := db.Create(&patient).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -83,7 +82,6 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientReq
 }
 
 func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) (*pb.GetPatientResponse, error) {
-	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -96,7 +94,6 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 	patient := patientModels.Patient{ID: id}
 	if err := db.First(&patient).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
-			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "id not found")
@@ -112,7 +109,6 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 }
 
 func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBedRequest) (*pb.GetPatientByBedResponse, error) {
-	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -125,7 +121,6 @@ func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBe
 	patient := patientModels.Patient{}
 	if err := db.Where("bed_id = ?", bedID).First(&patient).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
-			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "id not found")
@@ -170,7 +165,6 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 }
 
 func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientRequest) (*pb.UpdatePatientResponse, error) {
-	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
 
 	// TODO: Auth
@@ -184,7 +178,6 @@ func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientReq
 	updates := pbhelpers.UpdatesMapForUpdatePatientRequest(req)
 
 	if err := db.Model(&patient).Updates(updates).Error; err != nil {
-		log.Warn().Err(err).Msg("database error")
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -211,7 +204,6 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 	bed := roomModels.Bed{ID: bedID}
 	if err := db.First(&bed).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
-			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "bed_id not found")
@@ -221,7 +213,6 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 	patient := patientModels.Patient{ID: id}
 	if err := db.Model(&patient).Update("bed_id", bed.ID).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
-			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "patient id not found")
@@ -250,7 +241,6 @@ func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest
 	patient := patientModels.Patient{ID: id}
 	if err := db.Model(&patient).Update("bed_id", nil).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
-			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "id not found")
@@ -282,7 +272,6 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 	// Unassign Patient from bed and set to discharged
 	if err := db.Model(&patientModels.Patient{ID: id}).Updates(updates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
-			log.Warn().Err(err).Msg("database error")
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "id not found")
