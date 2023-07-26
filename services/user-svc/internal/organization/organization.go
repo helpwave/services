@@ -331,7 +331,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "organisation not found")
+			return nil, status.Error(codes.InvalidArgument, "organization not found")
 		}
 	}
 
@@ -468,7 +468,7 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.GetMembersByOrganizationRequest) (*pb.GetMembersByOrganizationResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
-	organisationID, err := uuid.Parse(req.Id)
+	organizationID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -478,17 +478,17 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	hasAccess, err := IsInOrganization(db, organisationID, userID)
+	hasAccess, err := IsInOrganization(db, organizationID, userID)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	if !hasAccess {
-		return nil, status.Error(codes.Unauthenticated, "Not a member of this organisation")
+		return nil, status.Error(codes.Unauthenticated, "Not a member of this organization")
 	}
 
 	var members []Membership
-	if err := db.Where("organization_id = ?", organisationID).Find(&members).Error; err != nil {
+	if err := db.Where("organization_id = ?", organizationID).Find(&members).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
