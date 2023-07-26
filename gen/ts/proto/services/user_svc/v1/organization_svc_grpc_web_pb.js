@@ -446,61 +446,61 @@ proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.dele
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.user_svc.v1.GetMembersByOrganisationRequest,
- *   !proto.proto.services.user_svc.v1.GetMembersByOrganisationResponse>}
+ *   !proto.proto.services.user_svc.v1.GetMembersByOrganizationRequest,
+ *   !proto.proto.services.user_svc.v1.GetMembersByOrganizationResponse>}
  */
-const methodDescriptor_OrganizationService_GetMembersByOrganisation = new grpc.web.MethodDescriptor(
-  '/proto.services.user_svc.v1.OrganizationService/GetMembersByOrganisation',
+const methodDescriptor_OrganizationService_GetMembersByOrganization = new grpc.web.MethodDescriptor(
+  '/proto.services.user_svc.v1.OrganizationService/GetMembersByOrganization',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.user_svc.v1.GetMembersByOrganisationRequest,
-  proto.proto.services.user_svc.v1.GetMembersByOrganisationResponse,
+  proto.proto.services.user_svc.v1.GetMembersByOrganizationRequest,
+  proto.proto.services.user_svc.v1.GetMembersByOrganizationResponse,
   /**
-   * @param {!proto.proto.services.user_svc.v1.GetMembersByOrganisationRequest} request
+   * @param {!proto.proto.services.user_svc.v1.GetMembersByOrganizationRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.user_svc.v1.GetMembersByOrganisationResponse.deserializeBinary
+  proto.proto.services.user_svc.v1.GetMembersByOrganizationResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.user_svc.v1.GetMembersByOrganisationRequest} request The
+ * @param {!proto.proto.services.user_svc.v1.GetMembersByOrganizationRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.GetMembersByOrganisationResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.user_svc.v1.GetMembersByOrganizationResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.GetMembersByOrganisationResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.user_svc.v1.GetMembersByOrganizationResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.getMembersByOrganisation =
+proto.proto.services.user_svc.v1.OrganizationServiceClient.prototype.getMembersByOrganization =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.user_svc.v1.OrganizationService/GetMembersByOrganisation',
+      '/proto.services.user_svc.v1.OrganizationService/GetMembersByOrganization',
       request,
       metadata || {},
-      methodDescriptor_OrganizationService_GetMembersByOrganisation,
+      methodDescriptor_OrganizationService_GetMembersByOrganization,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.user_svc.v1.GetMembersByOrganisationRequest} request The
+ * @param {!proto.proto.services.user_svc.v1.GetMembersByOrganizationRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.user_svc.v1.GetMembersByOrganisationResponse>}
+ * @return {!Promise<!proto.proto.services.user_svc.v1.GetMembersByOrganizationResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.getMembersByOrganisation =
+proto.proto.services.user_svc.v1.OrganizationServicePromiseClient.prototype.getMembersByOrganization =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.user_svc.v1.OrganizationService/GetMembersByOrganisation',
+      '/proto.services.user_svc.v1.OrganizationService/GetMembersByOrganization',
       request,
       metadata || {},
-      methodDescriptor_OrganizationService_GetMembersByOrganisation);
+      methodDescriptor_OrganizationService_GetMembersByOrganization);
 };
 
 

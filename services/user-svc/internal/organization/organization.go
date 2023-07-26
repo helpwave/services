@@ -465,7 +465,7 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 	}, nil
 }
 
-func (s ServiceServer) GetMembersByOrganisation(ctx context.Context, req *pb.GetMembersByOrganisationRequest) (*pb.GetMembersByOrganisationResponse, error) {
+func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.GetMembersByOrganizationRequest) (*pb.GetMembersByOrganizationResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
 	organisationID, err := uuid.Parse(req.Id)
@@ -497,8 +497,8 @@ func (s ServiceServer) GetMembersByOrganisation(ctx context.Context, req *pb.Get
 	}
 
 	// Somehow get the user information
-	mappedMembers := hwutil.Map(members, func(member Membership) *pb.GetMembersByOrganisationResponse_Member {
-		return &pb.GetMembersByOrganisationResponse_Member{
+	mappedMembers := hwutil.Map(members, func(member Membership) *pb.GetMembersByOrganizationResponse_Member {
+		return &pb.GetMembersByOrganizationResponse_Member{
 			UserId:    member.UserID.String(),
 			AvatarUrl: "",
 			Email:     member.UserID.String() + "@helpwave.de", // TODO replace ones Users are implemented
@@ -506,7 +506,7 @@ func (s ServiceServer) GetMembersByOrganisation(ctx context.Context, req *pb.Get
 		}
 	})
 
-	return &pb.GetMembersByOrganisationResponse{
+	return &pb.GetMembersByOrganizationResponse{
 		Members: mappedMembers,
 	}, nil
 }

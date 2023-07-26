@@ -425,41 +425,41 @@ export namespace DeleteOrganizationResponse {
   }
 }
 
-export class GetMembersByOrganisationRequest extends jspb.Message {
+export class GetMembersByOrganizationRequest extends jspb.Message {
   getId(): string;
-  setId(value: string): GetMembersByOrganisationRequest;
+  setId(value: string): GetMembersByOrganizationRequest;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetMembersByOrganisationRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetMembersByOrganisationRequest): GetMembersByOrganisationRequest.AsObject;
-  static serializeBinaryToWriter(message: GetMembersByOrganisationRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetMembersByOrganisationRequest;
-  static deserializeBinaryFromReader(message: GetMembersByOrganisationRequest, reader: jspb.BinaryReader): GetMembersByOrganisationRequest;
+  toObject(includeInstance?: boolean): GetMembersByOrganizationRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMembersByOrganizationRequest): GetMembersByOrganizationRequest.AsObject;
+  static serializeBinaryToWriter(message: GetMembersByOrganizationRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMembersByOrganizationRequest;
+  static deserializeBinaryFromReader(message: GetMembersByOrganizationRequest, reader: jspb.BinaryReader): GetMembersByOrganizationRequest;
 }
 
-export namespace GetMembersByOrganisationRequest {
+export namespace GetMembersByOrganizationRequest {
   export type AsObject = {
     id: string,
   }
 }
 
-export class GetMembersByOrganisationResponse extends jspb.Message {
-  getMembersList(): Array<GetMembersByOrganisationResponse.Member>;
-  setMembersList(value: Array<GetMembersByOrganisationResponse.Member>): GetMembersByOrganisationResponse;
-  clearMembersList(): GetMembersByOrganisationResponse;
-  addMembers(value?: GetMembersByOrganisationResponse.Member, index?: number): GetMembersByOrganisationResponse.Member;
+export class GetMembersByOrganizationResponse extends jspb.Message {
+  getMembersList(): Array<GetMembersByOrganizationResponse.Member>;
+  setMembersList(value: Array<GetMembersByOrganizationResponse.Member>): GetMembersByOrganizationResponse;
+  clearMembersList(): GetMembersByOrganizationResponse;
+  addMembers(value?: GetMembersByOrganizationResponse.Member, index?: number): GetMembersByOrganizationResponse.Member;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetMembersByOrganisationResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetMembersByOrganisationResponse): GetMembersByOrganisationResponse.AsObject;
-  static serializeBinaryToWriter(message: GetMembersByOrganisationResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetMembersByOrganisationResponse;
-  static deserializeBinaryFromReader(message: GetMembersByOrganisationResponse, reader: jspb.BinaryReader): GetMembersByOrganisationResponse;
+  toObject(includeInstance?: boolean): GetMembersByOrganizationResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMembersByOrganizationResponse): GetMembersByOrganizationResponse.AsObject;
+  static serializeBinaryToWriter(message: GetMembersByOrganizationResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMembersByOrganizationResponse;
+  static deserializeBinaryFromReader(message: GetMembersByOrganizationResponse, reader: jspb.BinaryReader): GetMembersByOrganizationResponse;
 }
 
-export namespace GetMembersByOrganisationResponse {
+export namespace GetMembersByOrganizationResponse {
   export type AsObject = {
-    membersList: Array<GetMembersByOrganisationResponse.Member.AsObject>,
+    membersList: Array<GetMembersByOrganizationResponse.Member.AsObject>,
   }
 
   export class Member extends jspb.Message {
