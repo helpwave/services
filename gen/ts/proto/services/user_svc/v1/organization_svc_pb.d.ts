@@ -425,6 +425,75 @@ export namespace DeleteOrganizationResponse {
   }
 }
 
+export class GetMembersByOrganizationRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): GetMembersByOrganizationRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetMembersByOrganizationRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMembersByOrganizationRequest): GetMembersByOrganizationRequest.AsObject;
+  static serializeBinaryToWriter(message: GetMembersByOrganizationRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMembersByOrganizationRequest;
+  static deserializeBinaryFromReader(message: GetMembersByOrganizationRequest, reader: jspb.BinaryReader): GetMembersByOrganizationRequest;
+}
+
+export namespace GetMembersByOrganizationRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class GetMembersByOrganizationResponse extends jspb.Message {
+  getMembersList(): Array<GetMembersByOrganizationResponse.Member>;
+  setMembersList(value: Array<GetMembersByOrganizationResponse.Member>): GetMembersByOrganizationResponse;
+  clearMembersList(): GetMembersByOrganizationResponse;
+  addMembers(value?: GetMembersByOrganizationResponse.Member, index?: number): GetMembersByOrganizationResponse.Member;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetMembersByOrganizationResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMembersByOrganizationResponse): GetMembersByOrganizationResponse.AsObject;
+  static serializeBinaryToWriter(message: GetMembersByOrganizationResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMembersByOrganizationResponse;
+  static deserializeBinaryFromReader(message: GetMembersByOrganizationResponse, reader: jspb.BinaryReader): GetMembersByOrganizationResponse;
+}
+
+export namespace GetMembersByOrganizationResponse {
+  export type AsObject = {
+    membersList: Array<GetMembersByOrganizationResponse.Member.AsObject>,
+  }
+
+  export class Member extends jspb.Message {
+    getUserId(): string;
+    setUserId(value: string): Member;
+
+    getEmail(): string;
+    setEmail(value: string): Member;
+
+    getNickname(): string;
+    setNickname(value: string): Member;
+
+    getAvatarUrl(): string;
+    setAvatarUrl(value: string): Member;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Member.AsObject;
+    static toObject(includeInstance: boolean, msg: Member): Member.AsObject;
+    static serializeBinaryToWriter(message: Member, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Member;
+    static deserializeBinaryFromReader(message: Member, reader: jspb.BinaryReader): Member;
+  }
+
+  export namespace Member {
+    export type AsObject = {
+      userId: string,
+      email: string,
+      nickname: string,
+      avatarUrl: string,
+    }
+  }
+
+}
+
 export class AddMemberRequest extends jspb.Message {
   getId(): string;
   setId(value: string): AddMemberRequest;
@@ -786,9 +855,42 @@ export namespace DeclineInvitationResponse {
   }
 }
 
+export class RevokeInvitationRequest extends jspb.Message {
+  getInvitationId(): string;
+  setInvitationId(value: string): RevokeInvitationRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RevokeInvitationRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: RevokeInvitationRequest): RevokeInvitationRequest.AsObject;
+  static serializeBinaryToWriter(message: RevokeInvitationRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RevokeInvitationRequest;
+  static deserializeBinaryFromReader(message: RevokeInvitationRequest, reader: jspb.BinaryReader): RevokeInvitationRequest;
+}
+
+export namespace RevokeInvitationRequest {
+  export type AsObject = {
+    invitationId: string,
+  }
+}
+
+export class RevokeInvitationResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RevokeInvitationResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: RevokeInvitationResponse): RevokeInvitationResponse.AsObject;
+  static serializeBinaryToWriter(message: RevokeInvitationResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RevokeInvitationResponse;
+  static deserializeBinaryFromReader(message: RevokeInvitationResponse, reader: jspb.BinaryReader): RevokeInvitationResponse;
+}
+
+export namespace RevokeInvitationResponse {
+  export type AsObject = {
+  }
+}
+
 export enum InvitationState { 
   INVITATION_STATE_UNSPECIFIED = 0,
   INVITATION_STATE_PENDING = 1,
   INVITATION_STATE_ACCEPTED = 2,
   INVITATION_STATE_REJECTED = 3,
+  INVITATION_STATE_REVOKED = 4,
 }

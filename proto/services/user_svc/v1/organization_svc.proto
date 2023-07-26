@@ -9,6 +9,7 @@ enum InvitationState {
   INVITATION_STATE_PENDING = 1;
   INVITATION_STATE_ACCEPTED = 2;
   INVITATION_STATE_REJECTED = 3;
+  INVITATION_STATE_REVOKED = 4;
 }
 
 //
@@ -117,6 +118,27 @@ message DeleteOrganizationRequest {
 
 message DeleteOrganizationResponse {}
 
+
+//
+//  GetMembersByOrganization
+//
+
+message GetMembersByOrganizationRequest {
+  string id = 1;  // @gotags: validate:"uuid4"
+}
+
+message GetMembersByOrganizationResponse {
+  repeated Member members = 1;
+
+  message Member {
+    string user_id = 1;
+    string email = 2;
+    string nickname = 3;
+    string avatar_url = 4;
+  }
+}
+
+
 //
 // AddMember
 //
@@ -221,6 +243,17 @@ message DeclineInvitationResponse {}
 
 
 //
+// RevokeInvitation
+//
+
+message RevokeInvitationRequest {
+  string invitation_id = 1;  // @gotags: validate:"uuid4"
+}
+
+message RevokeInvitationResponse {}
+
+
+//
 //  OrganizationService
 //
 
@@ -231,6 +264,7 @@ service OrganizationService {
   rpc GetOrganizationsByUser (GetOrganizationsByUserRequest) returns (GetOrganizationsByUserResponse) {}
   rpc UpdateOrganization (UpdateOrganizationRequest) returns (UpdateOrganizationResponse) {}
   rpc DeleteOrganization (DeleteOrganizationRequest) returns (DeleteOrganizationResponse) {}
+  rpc GetMembersByOrganization (GetMembersByOrganizationRequest) returns (GetMembersByOrganizationResponse) {}
   rpc AddMember (AddMemberRequest) returns (AddMemberResponse) {}
   rpc RemoveMember (RemoveMemberRequest) returns (RemoveMemberResponse) {}
   rpc InviteMember (InviteMemberRequest) returns (InviteMemberResponse) {}
@@ -238,4 +272,5 @@ service OrganizationService {
   rpc GetInvitationsByUser(GetInvitationsByUserRequest) returns (GetInvitationsByUserResponse) {}
   rpc AcceptInvitation (AcceptInvitationRequest) returns (AcceptInvitationResponse) {}
   rpc DeclineInvitation(DeclineInvitationRequest) returns (DeclineInvitationResponse) {}
+  rpc RevokeInvitation(RevokeInvitationRequest) returns (RevokeInvitationResponse) {}
 }
