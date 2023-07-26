@@ -32,6 +32,7 @@ const (
 	OrganizationService_GetInvitationsByUser_FullMethodName         = "/proto.services.user_svc.v1.OrganizationService/GetInvitationsByUser"
 	OrganizationService_AcceptInvitation_FullMethodName             = "/proto.services.user_svc.v1.OrganizationService/AcceptInvitation"
 	OrganizationService_DeclineInvitation_FullMethodName            = "/proto.services.user_svc.v1.OrganizationService/DeclineInvitation"
+	OrganizationService_RevokeInvitation_FullMethodName             = "/proto.services.user_svc.v1.OrganizationService/RevokeInvitation"
 )
 
 // OrganizationServiceClient is the client API for OrganizationService service.
@@ -51,6 +52,7 @@ type OrganizationServiceClient interface {
 	GetInvitationsByUser(ctx context.Context, in *GetInvitationsByUserRequest, opts ...grpc.CallOption) (*GetInvitationsByUserResponse, error)
 	AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*AcceptInvitationResponse, error)
 	DeclineInvitation(ctx context.Context, in *DeclineInvitationRequest, opts ...grpc.CallOption) (*DeclineInvitationResponse, error)
+	RevokeInvitation(ctx context.Context, in *RevokeInvitationRequest, opts ...grpc.CallOption) (*RevokeInvitationResponse, error)
 }
 
 type organizationServiceClient struct {
@@ -178,6 +180,15 @@ func (c *organizationServiceClient) DeclineInvitation(ctx context.Context, in *D
 	return out, nil
 }
 
+func (c *organizationServiceClient) RevokeInvitation(ctx context.Context, in *RevokeInvitationRequest, opts ...grpc.CallOption) (*RevokeInvitationResponse, error) {
+	out := new(RevokeInvitationResponse)
+	err := c.cc.Invoke(ctx, OrganizationService_RevokeInvitation_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrganizationServiceServer is the server API for OrganizationService service.
 // All implementations must embed UnimplementedOrganizationServiceServer
 // for forward compatibility
@@ -195,6 +206,7 @@ type OrganizationServiceServer interface {
 	GetInvitationsByUser(context.Context, *GetInvitationsByUserRequest) (*GetInvitationsByUserResponse, error)
 	AcceptInvitation(context.Context, *AcceptInvitationRequest) (*AcceptInvitationResponse, error)
 	DeclineInvitation(context.Context, *DeclineInvitationRequest) (*DeclineInvitationResponse, error)
+	RevokeInvitation(context.Context, *RevokeInvitationRequest) (*RevokeInvitationResponse, error)
 	mustEmbedUnimplementedOrganizationServiceServer()
 }
 
@@ -240,6 +252,9 @@ func (UnimplementedOrganizationServiceServer) AcceptInvitation(context.Context, 
 }
 func (UnimplementedOrganizationServiceServer) DeclineInvitation(context.Context, *DeclineInvitationRequest) (*DeclineInvitationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeclineInvitation not implemented")
+}
+func (UnimplementedOrganizationServiceServer) RevokeInvitation(context.Context, *RevokeInvitationRequest) (*RevokeInvitationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeInvitation not implemented")
 }
 func (UnimplementedOrganizationServiceServer) mustEmbedUnimplementedOrganizationServiceServer() {}
 
@@ -488,6 +503,24 @@ func _OrganizationService_DeclineInvitation_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OrganizationService_RevokeInvitation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeInvitationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrganizationServiceServer).RevokeInvitation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OrganizationService_RevokeInvitation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrganizationServiceServer).RevokeInvitation(ctx, req.(*RevokeInvitationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OrganizationService_ServiceDesc is the grpc.ServiceDesc for OrganizationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -546,6 +579,10 @@ var OrganizationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeclineInvitation",
 			Handler:    _OrganizationService_DeclineInvitation_Handler,
+		},
+		{
+			MethodName: "RevokeInvitation",
+			Handler:    _OrganizationService_RevokeInvitation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

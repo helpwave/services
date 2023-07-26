@@ -550,6 +550,63 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 	return &pb.DeclineInvitationResponse{}, nil
 }
 
+func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvitationRequest) (*pb.RevokeInvitationResponse, error) {
+	db := hwgorm.GetDB(ctx)
+	log := zlog.Ctx(ctx)
+
+	invitationId, err := uuid.Parse(req.InvitationId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	currentInvitation, err := GetInvitationById(db, invitationId)
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
+	}
+
+	organizationID := currentInvitation.OrganizationID
+	inviteeEmail := currentInvitation.Email
+
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	isAdmin, err := IsAdminInOrganization(db, organizationID, userID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	if !isAdmin {
+		return nil, status.Error(codes.PermissionDenied, "only admins can revoke invitations")
+	}
+
+	if currentInvitation.State != pb.InvitationState_INVITATION_STATE_PENDING {
+		return nil, status.Error(codes.InvalidArgument, "only pending invitations can be revoked")
+	}
+
+	// Update invitation state
+	invitation := Invitation{
+		ID: invitationId,
+	}
+
+	if err := db.Model(&invitation).Update("state", pb.InvitationState_INVITATION_STATE_REVOKED).Error; err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	log.Info().
+		Str("admin", userID.String()).
+		Str("organizationId", organizationID.String()).
+		Str("invitee-email", inviteeEmail).
+		Msg("admin revoked invitation to organization")
+
+	return &pb.RevokeInvitationResponse{}, nil
+}
+
 func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UUID) (*Organization, error) {
 	db := hwgorm.GetDB(ctx)
 
@@ -727,7 +784,6 @@ func ChangeMembershipAdminStatus(ctx context.Context, db *gorm.DB, userID uuid.U
 }
 
 func IsInOrganization(db *gorm.DB, organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
-
 	membership := Membership{
 		UserID:         userID,
 		OrganizationID: organizationID,
@@ -743,4 +799,22 @@ func IsInOrganization(db *gorm.DB, organizationID uuid.UUID, userID uuid.UUID) (
 	}
 
 	return true, nil
+}
+
+func IsAdminInOrganization(db *gorm.DB, organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
+	membership := Membership{
+		UserID:         userID,
+		OrganizationID: organizationID,
+	}
+
+	err := db.First(&membership).Error
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return false, status.Error(codes.Internal, err.Error())
+		} else {
+			return false, status.Error(codes.InvalidArgument, "not a member of this organization")
+		}
+	}
+	isAdmin := membership.IsAdmin
+	return isAdmin, nil
 }

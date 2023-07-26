@@ -18,12 +18,14 @@ class InvitationState extends $pb.ProtobufEnum {
   static const InvitationState INVITATION_STATE_PENDING = InvitationState._(1, _omitEnumNames ? '' : 'INVITATION_STATE_PENDING');
   static const InvitationState INVITATION_STATE_ACCEPTED = InvitationState._(2, _omitEnumNames ? '' : 'INVITATION_STATE_ACCEPTED');
   static const InvitationState INVITATION_STATE_REJECTED = InvitationState._(3, _omitEnumNames ? '' : 'INVITATION_STATE_REJECTED');
+  static const InvitationState INVITATION_STATE_REVOKED = InvitationState._(4, _omitEnumNames ? '' : 'INVITATION_STATE_REVOKED');
 
   static const $core.List<InvitationState> values = <InvitationState> [
     INVITATION_STATE_UNSPECIFIED,
     INVITATION_STATE_PENDING,
     INVITATION_STATE_ACCEPTED,
     INVITATION_STATE_REJECTED,
+    INVITATION_STATE_REVOKED,
   ];
 
   static final $core.Map<$core.int, InvitationState> _byValue = $pb.ProtobufEnum.initByValue(values);
