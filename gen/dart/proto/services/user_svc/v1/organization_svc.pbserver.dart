@@ -27,6 +27,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
   $async.Future<$8.GetOrganizationsByUserResponse> getOrganizationsByUser($pb.ServerContext ctx, $8.GetOrganizationsByUserRequest request);
   $async.Future<$8.UpdateOrganizationResponse> updateOrganization($pb.ServerContext ctx, $8.UpdateOrganizationRequest request);
   $async.Future<$8.DeleteOrganizationResponse> deleteOrganization($pb.ServerContext ctx, $8.DeleteOrganizationRequest request);
+  $async.Future<$8.GetMembersByOrganizationResponse> getMembersByOrganization($pb.ServerContext ctx, $8.GetMembersByOrganizationRequest request);
   $async.Future<$8.AddMemberResponse> addMember($pb.ServerContext ctx, $8.AddMemberRequest request);
   $async.Future<$8.RemoveMemberResponse> removeMember($pb.ServerContext ctx, $8.RemoveMemberRequest request);
   $async.Future<$8.InviteMemberResponse> inviteMember($pb.ServerContext ctx, $8.InviteMemberRequest request);
@@ -44,6 +45,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
       case 'GetOrganizationsByUser': return $8.GetOrganizationsByUserRequest();
       case 'UpdateOrganization': return $8.UpdateOrganizationRequest();
       case 'DeleteOrganization': return $8.DeleteOrganizationRequest();
+      case 'GetMembersByOrganization': return $8.GetMembersByOrganizationRequest();
       case 'AddMember': return $8.AddMemberRequest();
       case 'RemoveMember': return $8.RemoveMemberRequest();
       case 'InviteMember': return $8.InviteMemberRequest();
@@ -64,6 +66,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
       case 'GetOrganizationsByUser': return this.getOrganizationsByUser(ctx, request as $8.GetOrganizationsByUserRequest);
       case 'UpdateOrganization': return this.updateOrganization(ctx, request as $8.UpdateOrganizationRequest);
       case 'DeleteOrganization': return this.deleteOrganization(ctx, request as $8.DeleteOrganizationRequest);
+      case 'GetMembersByOrganization': return this.getMembersByOrganization(ctx, request as $8.GetMembersByOrganizationRequest);
       case 'AddMember': return this.addMember(ctx, request as $8.AddMemberRequest);
       case 'RemoveMember': return this.removeMember(ctx, request as $8.RemoveMemberRequest);
       case 'InviteMember': return this.inviteMember(ctx, request as $8.InviteMemberRequest);

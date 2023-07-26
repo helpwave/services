@@ -328,7 +328,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "organisation not found")
+			return nil, status.Error(codes.InvalidArgument, "organization not found")
 		}
 	}
 
@@ -455,6 +455,52 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 
 	return &pb.GetInvitationsByUserResponse{
 		Invitations: invitationsResponse,
+	}, nil
+}
+
+func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.GetMembersByOrganizationRequest) (*pb.GetMembersByOrganizationResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	organizationID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	hasAccess, err := IsInOrganization(db, organizationID, userID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	if !hasAccess {
+		return nil, status.Error(codes.Unauthenticated, "Not a member of this organization")
+	}
+
+	var members []Membership
+	if err := db.Where("organization_id = ?", organizationID).Find(&members).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "invalid state")
+		}
+	}
+
+	// Somehow get the user information
+	mappedMembers := hwutil.Map(members, func(member Membership) *pb.GetMembersByOrganizationResponse_Member {
+		return &pb.GetMembersByOrganizationResponse_Member{
+			UserId:    member.UserID.String(),
+			AvatarUrl: "",
+			Email:     member.UserID.String() + "@helpwave.de", // TODO replace ones Users are implemented
+			Nickname:  member.UserID.String(),                  // TODO replace ones Users are implemented
+		}
+	})
+
+	return &pb.GetMembersByOrganizationResponse{
+		Members: mappedMembers,
 	}, nil
 }
 

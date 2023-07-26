@@ -118,6 +118,27 @@ message DeleteOrganizationRequest {
 
 message DeleteOrganizationResponse {}
 
+
+//
+//  GetMembersByOrganization
+//
+
+message GetMembersByOrganizationRequest {
+  string id = 1;  // @gotags: validate:"uuid4"
+}
+
+message GetMembersByOrganizationResponse {
+  repeated Member members = 1;
+
+  message Member {
+    string user_id = 1;
+    string email = 2;
+    string nickname = 3;
+    string avatar_url = 4;
+  }
+}
+
+
 //
 // AddMember
 //
@@ -243,6 +264,7 @@ service OrganizationService {
   rpc GetOrganizationsByUser (GetOrganizationsByUserRequest) returns (GetOrganizationsByUserResponse) {}
   rpc UpdateOrganization (UpdateOrganizationRequest) returns (UpdateOrganizationResponse) {}
   rpc DeleteOrganization (DeleteOrganizationRequest) returns (DeleteOrganizationResponse) {}
+  rpc GetMembersByOrganization (GetMembersByOrganizationRequest) returns (GetMembersByOrganizationResponse) {}
   rpc AddMember (AddMemberRequest) returns (AddMemberResponse) {}
   rpc RemoveMember (RemoveMemberRequest) returns (RemoveMemberResponse) {}
   rpc InviteMember (InviteMemberRequest) returns (InviteMemberResponse) {}
