@@ -593,7 +593,7 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 	}
 
 	if !isAdmin {
-		return nil, status.Error(codes.Unauthenticated, "only admins can revoke invitations")
+		return nil, status.Error(codes.PermissionDenied, "only admins can revoke invitations")
 	}
 
 	if currentInvitation.State != pb.InvitationState_INVITATION_STATE_PENDING {
