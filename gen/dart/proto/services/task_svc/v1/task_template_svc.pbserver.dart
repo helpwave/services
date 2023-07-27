@@ -15,48 +15,48 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'task_template_svc.pb.dart' as $6;
+import 'task_template_svc.pb.dart' as $7;
 import 'task_template_svc.pbjson.dart';
 
 export 'task_template_svc.pb.dart';
 
 abstract class TaskTemplateServiceBase extends $pb.GeneratedService {
-  $async.Future<$6.CreateTaskTemplateResponse> createTaskTemplate($pb.ServerContext ctx, $6.CreateTaskTemplateRequest request);
-  $async.Future<$6.GetAllTaskTemplatesResponse> getAllTaskTemplates($pb.ServerContext ctx, $6.GetAllTaskTemplatesRequest request);
-  $async.Future<$6.DeleteTaskTemplateResponse> deleteTaskTemplate($pb.ServerContext ctx, $6.DeleteTaskTemplateRequest request);
-  $async.Future<$6.DeleteTaskTemplateSubTaskResponse> deleteTaskTemplateSubTask($pb.ServerContext ctx, $6.DeleteTaskTemplateSubTaskRequest request);
-  $async.Future<$6.UpdateTaskTemplateResponse> updateTaskTemplate($pb.ServerContext ctx, $6.UpdateTaskTemplateRequest request);
-  $async.Future<$6.UpdateTaskTemplateSubTaskResponse> updateTaskTemplateSubTask($pb.ServerContext ctx, $6.UpdateTaskTemplateSubTaskRequest request);
-  $async.Future<$6.CreateTaskTemplateSubTaskResponse> createTaskTemplateSubTask($pb.ServerContext ctx, $6.CreateTaskTemplateSubTaskRequest request);
-  $async.Future<$6.GetAllTaskTemplatesByCreatorResponse> getAllTaskTemplatesByCreator($pb.ServerContext ctx, $6.GetAllTaskTemplatesByCreatorRequest request);
-  $async.Future<$6.GetAllTaskTemplatesByWardResponse> getAllTaskTemplatesByWard($pb.ServerContext ctx, $6.GetAllTaskTemplatesByWardRequest request);
+  $async.Future<$7.CreateTaskTemplateResponse> createTaskTemplate($pb.ServerContext ctx, $7.CreateTaskTemplateRequest request);
+  $async.Future<$7.GetAllTaskTemplatesResponse> getAllTaskTemplates($pb.ServerContext ctx, $7.GetAllTaskTemplatesRequest request);
+  $async.Future<$7.DeleteTaskTemplateResponse> deleteTaskTemplate($pb.ServerContext ctx, $7.DeleteTaskTemplateRequest request);
+  $async.Future<$7.DeleteTaskTemplateSubTaskResponse> deleteTaskTemplateSubTask($pb.ServerContext ctx, $7.DeleteTaskTemplateSubTaskRequest request);
+  $async.Future<$7.UpdateTaskTemplateResponse> updateTaskTemplate($pb.ServerContext ctx, $7.UpdateTaskTemplateRequest request);
+  $async.Future<$7.UpdateTaskTemplateSubTaskResponse> updateTaskTemplateSubTask($pb.ServerContext ctx, $7.UpdateTaskTemplateSubTaskRequest request);
+  $async.Future<$7.CreateTaskTemplateSubTaskResponse> createTaskTemplateSubTask($pb.ServerContext ctx, $7.CreateTaskTemplateSubTaskRequest request);
+  $async.Future<$7.GetAllTaskTemplatesByCreatorResponse> getAllTaskTemplatesByCreator($pb.ServerContext ctx, $7.GetAllTaskTemplatesByCreatorRequest request);
+  $async.Future<$7.GetAllTaskTemplatesByWardResponse> getAllTaskTemplatesByWard($pb.ServerContext ctx, $7.GetAllTaskTemplatesByWardRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
-      case 'CreateTaskTemplate': return $6.CreateTaskTemplateRequest();
-      case 'GetAllTaskTemplates': return $6.GetAllTaskTemplatesRequest();
-      case 'DeleteTaskTemplate': return $6.DeleteTaskTemplateRequest();
-      case 'DeleteTaskTemplateSubTask': return $6.DeleteTaskTemplateSubTaskRequest();
-      case 'UpdateTaskTemplate': return $6.UpdateTaskTemplateRequest();
-      case 'UpdateTaskTemplateSubTask': return $6.UpdateTaskTemplateSubTaskRequest();
-      case 'CreateTaskTemplateSubTask': return $6.CreateTaskTemplateSubTaskRequest();
-      case 'GetAllTaskTemplatesByCreator': return $6.GetAllTaskTemplatesByCreatorRequest();
-      case 'GetAllTaskTemplatesByWard': return $6.GetAllTaskTemplatesByWardRequest();
+      case 'CreateTaskTemplate': return $7.CreateTaskTemplateRequest();
+      case 'GetAllTaskTemplates': return $7.GetAllTaskTemplatesRequest();
+      case 'DeleteTaskTemplate': return $7.DeleteTaskTemplateRequest();
+      case 'DeleteTaskTemplateSubTask': return $7.DeleteTaskTemplateSubTaskRequest();
+      case 'UpdateTaskTemplate': return $7.UpdateTaskTemplateRequest();
+      case 'UpdateTaskTemplateSubTask': return $7.UpdateTaskTemplateSubTaskRequest();
+      case 'CreateTaskTemplateSubTask': return $7.CreateTaskTemplateSubTaskRequest();
+      case 'GetAllTaskTemplatesByCreator': return $7.GetAllTaskTemplatesByCreatorRequest();
+      case 'GetAllTaskTemplatesByWard': return $7.GetAllTaskTemplatesByWardRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
-      case 'CreateTaskTemplate': return this.createTaskTemplate(ctx, request as $6.CreateTaskTemplateRequest);
-      case 'GetAllTaskTemplates': return this.getAllTaskTemplates(ctx, request as $6.GetAllTaskTemplatesRequest);
-      case 'DeleteTaskTemplate': return this.deleteTaskTemplate(ctx, request as $6.DeleteTaskTemplateRequest);
-      case 'DeleteTaskTemplateSubTask': return this.deleteTaskTemplateSubTask(ctx, request as $6.DeleteTaskTemplateSubTaskRequest);
-      case 'UpdateTaskTemplate': return this.updateTaskTemplate(ctx, request as $6.UpdateTaskTemplateRequest);
-      case 'UpdateTaskTemplateSubTask': return this.updateTaskTemplateSubTask(ctx, request as $6.UpdateTaskTemplateSubTaskRequest);
-      case 'CreateTaskTemplateSubTask': return this.createTaskTemplateSubTask(ctx, request as $6.CreateTaskTemplateSubTaskRequest);
-      case 'GetAllTaskTemplatesByCreator': return this.getAllTaskTemplatesByCreator(ctx, request as $6.GetAllTaskTemplatesByCreatorRequest);
-      case 'GetAllTaskTemplatesByWard': return this.getAllTaskTemplatesByWard(ctx, request as $6.GetAllTaskTemplatesByWardRequest);
+      case 'CreateTaskTemplate': return this.createTaskTemplate(ctx, request as $7.CreateTaskTemplateRequest);
+      case 'GetAllTaskTemplates': return this.getAllTaskTemplates(ctx, request as $7.GetAllTaskTemplatesRequest);
+      case 'DeleteTaskTemplate': return this.deleteTaskTemplate(ctx, request as $7.DeleteTaskTemplateRequest);
+      case 'DeleteTaskTemplateSubTask': return this.deleteTaskTemplateSubTask(ctx, request as $7.DeleteTaskTemplateSubTaskRequest);
+      case 'UpdateTaskTemplate': return this.updateTaskTemplate(ctx, request as $7.UpdateTaskTemplateRequest);
+      case 'UpdateTaskTemplateSubTask': return this.updateTaskTemplateSubTask(ctx, request as $7.UpdateTaskTemplateSubTaskRequest);
+      case 'CreateTaskTemplateSubTask': return this.createTaskTemplateSubTask(ctx, request as $7.CreateTaskTemplateSubTaskRequest);
+      case 'GetAllTaskTemplatesByCreator': return this.getAllTaskTemplatesByCreator(ctx, request as $7.GetAllTaskTemplatesByCreatorRequest);
+      case 'GetAllTaskTemplatesByWard': return this.getAllTaskTemplatesByWard(ctx, request as $7.GetAllTaskTemplatesByWardRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }

@@ -15,6 +15,14 @@ func UpdatesMapForUpdateTaskRequest(r *pb.UpdateTaskRequest) map[string]interfac
 		m["description"] = *r.Description
 	}
 
+	if r.DueAt != nil {
+		m["due_at"] = r.DueAt.AsTime()
+	}
+
+	if r.Public != nil {
+		m["public"] = *r.Public
+	}
+
 	return m
 }
 
