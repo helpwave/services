@@ -1,6 +1,7 @@
 package user_svc
 
 import (
+	"gen/proto/libs/events/v1"
 	pb "gen/proto/services/user_svc/v1"
 )
 
@@ -26,6 +27,16 @@ func UpdatesMapForUpdateOrganizationRequest(r *pb.UpdateOrganizationRequest) map
 	if r.IsPersonal != nil {
 		m["is_personal"] = *r.IsPersonal
 	}
+
+	return m
+}
+
+func UpdatesMapForUserUpdatedEvent(e *events.UserUpdatedEvent) map[string]interface{} {
+	m := make(map[string]interface{})
+
+	m["email"] = e.Email
+	m["nickname"] = e.Nickname
+	m["name"] = e.Name
 
 	return m
 }

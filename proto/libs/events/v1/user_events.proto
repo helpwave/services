@@ -4,8 +4,24 @@ package proto.libs.events.v1;
 
 option go_package = "gen/proto/libs/events";
 
+// TOPIC: USER_REGISTERED
+message UserRegisteredEvent {
+  string id = 1;
+  string email = 2;
+  string nickname = 3;
+  string name = 4;
+}
+
 // TOPIC: USER_CREATED
 message UserCreatedEvent {
+  string id = 1;
+  string email = 2;
+  string nickname = 3;
+  string name = 4;
+}
+
+// TOPIC: USER_UPDATED
+message UserUpdatedEvent {
   string id = 1;
   string email = 2;
   string nickname = 3;

@@ -5,6 +5,11 @@ upstreams:
     scheme: grpc
     type: roundrobin
 
+  - id: dapr-http
+    scheme: http
+    nodes:
+      "localhost:3500": 1
+
 services:
   - id: task-svc
     upstream_id: dapr-grpc
@@ -30,6 +35,18 @@ services:
         headers:
           add:
             dapr-app-id: user-svc
+  - id: ory-svc
+    upstream_id: dapr-http
+    plugins:
+      cors:
+        allow_origins: "**"
+        allow_methods: "**"
+        allow_headers: "**"
+        expose_headers: "**"
+        max_age: 5
+        allow_credential: true
+        _meta:
+          priority: -1
 
 routes:
   - id: task-svc
@@ -74,5 +91,17 @@ routes:
         allow_credential: true
         _meta:
           priority: -1
+  - id: ory-svc-after-registration
+    uri: /ory-svc/webhooks/after-registration
+    service_id: ory-svc
+    plugins:
+      proxy-rewrite:
+        uri: /v1.0/invoke/ory-svc/method/after_registration_webhook
+  - id: ory-svc-after-settings
+    uri: /ory-svc/webhooks/after-settings
+    service_id: ory-svc
+    plugins:
+      proxy-rewrite:
+        uri: /v1.0/invoke/ory-svc/method/after_settings_webhook
 
 #END

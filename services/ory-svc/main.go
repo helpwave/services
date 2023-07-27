@@ -44,6 +44,10 @@ func main() {
 		zlog.Fatal().Str("endpoint", "after_registration_webhook").Err(err).Msg("could not add service invocation handler")
 	}
 
+	if err := service.AddServiceInvocationHandler("/after_settings_webhook", afterSettingsWebhookHandler); err != nil {
+		zlog.Fatal().Str("endpoint", "after_settings_webhook").Err(err).Msg("could not add service invocation handler")
+	}
+
 	if err := service.Start(); err != nil {
 		zlog.Fatal().Str("addr", addr).Err(err).Msg("could not start http server")
 	}
@@ -68,14 +72,47 @@ func afterRegistrationWebhookHandler(ctx context.Context, in *daprcmn.Invocation
 		return nil, newErrAndLog(ctx, err.Error())
 	}
 
-	userCreatedEvent := &events.UserCreatedEvent{
+	userRegisteredEvent := &events.UserRegisteredEvent{
 		Id:       userID.String(),
 		Email:    payload.Email,
 		Nickname: payload.Nickname,
 		Name:     payload.Name,
 	}
 
-	if err := common.PublishMessage(ctx, daprClient, DaprPubsub, "USER_CREATED", userCreatedEvent); err != nil {
+	if err := common.PublishMessage(ctx, daprClient, DaprPubsub, "USER_REGISTERED", userRegisteredEvent); err != nil {
+		return nil, newErrAndLog(ctx, err.Error())
+	}
+
+	return nil, nil // 200 OK
+}
+
+func afterSettingsWebhookHandler(ctx context.Context, in *daprcmn.InvocationEvent) (out *daprcmn.Content, err error) {
+	if in.Verb != http.MethodPost {
+		return nil, newErrAndLog(ctx, "invalid method")
+	}
+
+	if in.ContentType != "application/json" {
+		return nil, newErrAndLog(ctx, "invalid content-type")
+	}
+
+	var payload pb.AfterSettingsWebhookPayload
+	if err := hwutil.ParseValidJson(in.Data, &payload); err != nil {
+		return nil, newErrAndLog(ctx, err.Error())
+	}
+
+	userID, err := uuid.Parse(payload.UserId)
+	if err != nil {
+		return nil, newErrAndLog(ctx, err.Error())
+	}
+
+	userUpdatedEvent := &events.UserRegisteredEvent{
+		Id:       userID.String(),
+		Email:    payload.Email,
+		Nickname: payload.Nickname,
+		Name:     payload.Name,
+	}
+
+	if err := common.PublishMessage(ctx, daprClient, DaprPubsub, "USER_UPDATED", userUpdatedEvent); err != nil {
 		return nil, newErrAndLog(ctx, err.Error())
 	}
 

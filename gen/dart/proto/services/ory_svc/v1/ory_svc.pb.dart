@@ -85,6 +85,78 @@ class AfterRegistrationWebhookPayload extends $pb.GeneratedMessage {
   void clearName() => clearField(4);
 }
 
+class AfterSettingsWebhookPayload extends $pb.GeneratedMessage {
+  factory AfterSettingsWebhookPayload() => create();
+  AfterSettingsWebhookPayload._() : super();
+  factory AfterSettingsWebhookPayload.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AfterSettingsWebhookPayload.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AfterSettingsWebhookPayload', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.ory_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..aOS(2, _omitFieldNames ? '' : 'email')
+    ..aOS(3, _omitFieldNames ? '' : 'nickname')
+    ..aOS(4, _omitFieldNames ? '' : 'name')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AfterSettingsWebhookPayload clone() => AfterSettingsWebhookPayload()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AfterSettingsWebhookPayload copyWith(void Function(AfterSettingsWebhookPayload) updates) => super.copyWith((message) => updates(message as AfterSettingsWebhookPayload)) as AfterSettingsWebhookPayload;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static AfterSettingsWebhookPayload create() => AfterSettingsWebhookPayload._();
+  AfterSettingsWebhookPayload createEmptyInstance() => create();
+  static $pb.PbList<AfterSettingsWebhookPayload> createRepeated() => $pb.PbList<AfterSettingsWebhookPayload>();
+  @$core.pragma('dart2js:noInline')
+  static AfterSettingsWebhookPayload getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AfterSettingsWebhookPayload>(create);
+  static AfterSettingsWebhookPayload? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get userId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set userId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get email => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set email($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasEmail() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearEmail() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get nickname => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set nickname($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasNickname() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearNickname() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get name => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set name($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasName() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearName() => clearField(4);
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

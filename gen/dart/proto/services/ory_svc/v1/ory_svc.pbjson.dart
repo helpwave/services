@@ -30,3 +30,20 @@ final $typed_data.Uint8List afterRegistrationWebhookPayloadDescriptor = $convert
     'JJZBIUCgVlbWFpbBgCIAEoCVIFZW1haWwSGgoIbmlja25hbWUYAyABKAlSCG5pY2tuYW1lEhIK'
     'BG5hbWUYBCABKAlSBG5hbWU=');
 
+@$core.Deprecated('Use afterSettingsWebhookPayloadDescriptor instead')
+const AfterSettingsWebhookPayload$json = {
+  '1': 'AfterSettingsWebhookPayload',
+  '2': [
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+    {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
+    {'1': 'name', '3': 4, '4': 1, '5': 9, '10': 'name'},
+  ],
+};
+
+/// Descriptor for `AfterSettingsWebhookPayload`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List afterSettingsWebhookPayloadDescriptor = $convert.base64Decode(
+    'ChtBZnRlclNldHRpbmdzV2ViaG9va1BheWxvYWQSFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklkEh'
+    'QKBWVtYWlsGAIgASgJUgVlbWFpbBIaCghuaWNrbmFtZRgDIAEoCVIIbmlja25hbWUSEgoEbmFt'
+    'ZRgEIAEoCVIEbmFtZQ==');
+
