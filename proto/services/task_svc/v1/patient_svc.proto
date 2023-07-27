@@ -66,6 +66,37 @@ message GetPatientsByWardResponse {
   }
 }
 
+
+//
+// GetPatientAssignmentByWard
+//
+
+message GetPatientAssignmentByWardRequest {
+  string ward_id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetPatientAssignmentByWardResponse {
+  repeated Room rooms = 1;
+
+  message Room {
+    string id = 1;
+    string name = 2;
+    repeated Bed beds = 3;
+
+    message Bed {
+      string id = 1;
+      string name = 2;
+      optional Patient patient = 3;
+
+      message Patient {
+        string id = 1;
+        string name = 2;
+      }
+    }
+  }
+}
+
+
 //
 // UpdatePatient
 //
@@ -162,6 +193,7 @@ service PatientService {
   rpc GetPatient(GetPatientRequest) returns (GetPatientResponse) {}
   rpc GetPatientByBed(GetPatientByBedRequest) returns (GetPatientByBedResponse) {}
   rpc GetPatientsByWard(GetPatientsByWardRequest) returns (GetPatientsByWardResponse) {}
+  rpc GetPatientAssignmentByWard(GetPatientAssignmentByWardRequest) returns (GetPatientAssignmentByWardResponse) {}
   rpc UpdatePatient(UpdatePatientRequest) returns (UpdatePatientResponse) {}
   rpc AssignBed(AssignBedRequest) returns (AssignBedResponse) {}
   rpc UnassignBed(UnassignBedRequest) returns (UnassignBedResponse) {}
