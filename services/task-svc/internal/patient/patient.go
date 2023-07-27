@@ -164,6 +164,48 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 	}, nil
 }
 
+func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.GetPatientAssignmentByWardRequest) (*pb.GetPatientAssignmentByWardResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	wardID, err := uuid.Parse(req.WardId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	var rooms []roomModels.Room
+	if err := db.Preload("Beds.Patient").Preload("Beds").Where("ward_id = ?", wardID).Find(&rooms).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+
+	mappedRooms := hwutil.Map(rooms, func(room roomModels.Room) *pb.GetPatientAssignmentByWardResponse_Room {
+		return &pb.GetPatientAssignmentByWardResponse_Room{
+			Id:   room.ID.String(),
+			Name: room.Name,
+			Beds: hwutil.Map(room.Beds, func(bed roomModels.Bed) *pb.GetPatientAssignmentByWardResponse_Room_Bed {
+				var patient *pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient
+				if bed.Patient != nil {
+					patient = &pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
+						Id:   bed.Patient.ID.String(),
+						Name: bed.Patient.HumanReadableIdentifier,
+					}
+				}
+				return &pb.GetPatientAssignmentByWardResponse_Room_Bed{
+					Id:      bed.ID.String(),
+					Name:    bed.Name,
+					Patient: patient,
+				}
+			}),
+		}
+	})
+	return &pb.GetPatientAssignmentByWardResponse{
+		Rooms: mappedRooms,
+	}, nil
+}
+
 func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientRequest) (*pb.UpdatePatientResponse, error) {
 	db := hwgorm.GetDB(ctx)
 
