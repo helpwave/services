@@ -173,7 +173,7 @@ func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.Get
 	}
 
 	var rooms []roomModels.Room
-	if err := db.Preload("Beds.Patient").Preload("Beds").Where("ward_id = ?", wardID).Find(&rooms).Error; err != nil {
+	if err := db.Preload("Beds.Patient").Scopes(roommodels.PreloadBedsSorted).Where("ward_id = ?", wardID).Find(&rooms).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
