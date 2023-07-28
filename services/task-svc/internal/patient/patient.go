@@ -11,6 +11,7 @@ import (
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
+	bedModels "task-svc/internal/bed/models"
 	patientModels "task-svc/internal/patient/models"
 	roomModels "task-svc/internal/room/models"
 	intTask "task-svc/internal/task"
@@ -311,7 +312,7 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 		"bed_id":        nil,
 		"is_discharged": 1,
 	}
-	// Unassign Patient from bed and set to discharged
+	// Unassign Patient from bed and set to discharge
 	if err := db.Model(&patientModels.Patient{ID: id}).Updates(updates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -377,5 +378,76 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		Notes:                   patient.Notes,
 		Name:                    patient.HumanReadableIdentifier, // TODO replace later
 		Tasks:                   mappedTasks,
+	}, nil
+}
+
+func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListRequest) (*pb.GetPatientListResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	id, err := uuid.Parse(req.OrganisationId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	var unassignedPatients []patientModels.Patient
+	if err := db.Where("organization_id = ? AND bed_id IS NULL AND is_discharged = 0", id).Find(&unassignedPatients).Error; err != nil {
+		return nil, err
+	}
+
+	var dischargedPatients []patientModels.Patient
+	if err := db.Where("organization_id = ? AND is_discharged = 1", id).Find(&dischargedPatients).Error; err != nil {
+		return nil, err
+	}
+
+	var activePatients []patientModels.Patient
+	if err := db.Where("organization_id = ? AND bed_id IS NOT NULL AND is_discharged = 0", id).Find(&activePatients).Error; err != nil {
+		return nil, err
+	}
+
+	resActivePatients, err := hwutil.MapWithErr(activePatients, func(patient patientModels.Patient) (*pb.GetPatientListResponse_PatientWithRoomAndBed, error) {
+		bedRepository := bedModels.NewRoomRepositoryWithDB(hwgorm.GetDB(ctx))
+		bed, err := bedRepository.GetById(patient.BedID)
+		if err != nil {
+			return nil, err
+		}
+
+		roomRepository := roomModels.NewRoomRepositoryWithDB(hwgorm.GetDB(ctx))
+		room, err := roomRepository.GetById(bed.RoomID)
+		if err != nil {
+			return nil, err
+		}
+
+		return &pb.GetPatientListResponse_PatientWithRoomAndBed{
+			Id:                      patient.ID.String(),
+			HumanReadableIdentifier: patient.HumanReadableIdentifier,
+			Bed: &pb.GetPatientListResponse_Bed{
+				Id:   bed.ID.String(),
+				Name: bed.Name,
+			},
+			Room: &pb.GetPatientListResponse_Room{
+				Id:   room.ID.String(),
+				Name: room.Name,
+			},
+		}, nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.GetPatientListResponse{
+		DischargedPatients: hwutil.Map(dischargedPatients, func(patient patientModels.Patient) *pb.GetPatientListResponse_Patient {
+			return &pb.GetPatientListResponse_Patient{
+				Id:                      patient.ID.String(),
+				HumanReadableIdentifier: patient.HumanReadableIdentifier,
+			}
+		}),
+		UnassignedPatients: hwutil.Map(unassignedPatients, func(patient patientModels.Patient) *pb.GetPatientListResponse_Patient {
+			return &pb.GetPatientListResponse_Patient{
+				Id:                      patient.ID.String(),
+				HumanReadableIdentifier: patient.HumanReadableIdentifier,
+			}
+		}),
+		Active: resActivePatients,
 	}, nil
 }
