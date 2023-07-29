@@ -405,17 +405,13 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 	}
 
 	resActivePatients, err := hwutil.MapWithErr(activePatients, func(patient patientModels.Patient) (*pb.GetPatientListResponse_PatientWithRoomAndBed, error) {
-		bedRepository := bedModels.NewRoomRepositoryWithDB(hwgorm.GetDB(ctx))
-		bed, err := bedRepository.GetById(patient.BedID)
-		if err != nil {
-			return nil, err
-		}
+		var bed bedModels.Bed
+		var room roomModels.Room
 
-		roomRepository := roomModels.NewRoomRepositoryWithDB(hwgorm.GetDB(ctx))
-		room, err := roomRepository.GetById(bed.RoomID)
-		if err != nil {
-			return nil, err
-		}
+		db.Where("beds.id = ?", patient.BedID).
+			Joins("JOIN rooms ON beds.room_id = rooms.id").
+			First(&bed).
+			First(&room)
 
 		return &pb.GetPatientListResponse_PatientWithRoomAndBed{
 			Id:                      patient.ID.String(),
