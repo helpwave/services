@@ -16,5 +16,5 @@ type Patient struct {
 	OrganizationID uuid.UUID         `gorm:"column:organization_id"`
 	BedID          *uuid.UUID        `gorm:"column:bed_id;default:NULL"`
 	Tasks          []taskModels.Task `gorm:"foreignKey:PatientId"`
-	IsDischarged   bool              `gorm:"column:is_discharged;softDelete:flag;default:0"`
+	IsDischarged   int               `gorm:"column:is_discharged;softDelete:flag;default:0"`
 }
