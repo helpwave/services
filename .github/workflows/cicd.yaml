@@ -21,7 +21,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Detected changes in libs
+      - name: Detect changes in libs
         id: changes-in-libs
         uses: tj-actions/changed-files@v37
         with:
@@ -31,14 +31,14 @@ jobs:
             .dockerignore
             Dockerfile.service
 
-      - name: Detected changes in services
+      - name: Detect changes in services
         id: changes-in-services
         uses: tj-actions/changed-files@v37
         with:
           files: |
             services/**
 
-      - name: Detected changes in images
+      - name: Detect changes in images
         id: changes-in-images
         uses: tj-actions/changed-files@v37
         with:

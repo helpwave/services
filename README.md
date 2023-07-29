@@ -95,9 +95,9 @@ you arguments into migrate/migrate running in a container.
 `migrate.sh` will use the database setup of the passed service. Therefore, a .env file is required.
 
 #### Usage
-`./migrate.sh [service] [... arguments for migrate/migrate]`
+`./migrate.sh <service> [... arguments for migrate/migrate]`
 
-- `[service]` must be one of the services inside `/services/`
+- `<service>` must be one of the services inside `/services/`
 - `[... arguments for migrate/migrate]` gets passed directly to migrate/migrate
 
 
@@ -105,6 +105,14 @@ you arguments into migrate/migrate running in a container.
 - Migrate the task-svc database all the way up `./migrate.sh task-svc up`
 - Migrate the task-svc database one down: `./migrate.sh task-svc down 1`
 - Current migration version of the task-svc database: `./migrate.sh task-svc version`
+
+#### desired:
+Additionally, the script allows you to query the highest available migration version
+based on the migration files available in the service:
+
+```bash
+./migrate <service> desired
+```
 
 ## Enviroment variables
 Every service should contain a `.env.example` file which should be copied to a usable `.env` file
