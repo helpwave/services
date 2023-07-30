@@ -24,3 +24,14 @@ func (r *BedRepository) GetBedsByRoom(roomID uuid.UUID) ([]Bed, error) {
 
 	return beds, nil
 }
+
+func (r *BedRepository) GetById(id *uuid.UUID) (*Bed, error) {
+
+	bed := Bed{}
+
+	if err := r.db.Where("id = ?", id).Order("name ASC").First(&bed).Error; err != nil {
+		return nil, err
+	}
+
+	return &bed, nil
+}

@@ -379,3 +379,74 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		Tasks:                   mappedTasks,
 	}, nil
 }
+
+func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListRequest) (*pb.GetPatientListResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	id, err := uuid.Parse(req.OrganisationId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	var unassignedPatients []patientModels.Patient
+	if err := db.Where("organization_id = ? AND bed_id IS NULL AND is_discharged = 0", id).Find(&unassignedPatients).Error; err != nil {
+		return nil, err
+	}
+
+	var dischargedPatients []patientModels.Patient
+	if err := db.Unscoped().Where("organization_id = ? AND is_discharged = 1", id).Find(&dischargedPatients).Error; err != nil {
+		return nil, err
+	}
+
+	var rooms []roomModels.Room
+	err = db.
+		Preload("Beds.Patient").
+		Joins("JOIN beds ON rooms.id = beds.room_id").
+		Joins("JOIN patients ON patients.bed_id = beds.id").
+		Where("patients.organization_id = ? AND patients.is_discharged = 0", id).
+		Group("rooms.id").
+		Find(&rooms).
+		Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	var activePatients []*pb.GetPatientListResponse_PatientWithRoomAndBed
+
+	for _, room := range rooms {
+		for _, bed := range room.Beds {
+			if bed.Patient != nil {
+				patientWithRoomAndBed := &pb.GetPatientListResponse_PatientWithRoomAndBed{
+					Id:                      bed.Patient.ID.String(),
+					HumanReadableIdentifier: bed.Patient.HumanReadableIdentifier,
+					Bed: &pb.GetPatientListResponse_Bed{
+						Id:   bed.ID.String(),
+						Name: bed.Name,
+					},
+					Room: &pb.GetPatientListResponse_Room{
+						Id:   room.ID.String(),
+						Name: room.Name,
+					},
+				}
+				activePatients = append(activePatients, patientWithRoomAndBed)
+			}
+		}
+	}
+
+	return &pb.GetPatientListResponse{
+		DischargedPatients: hwutil.Map(dischargedPatients, func(patient patientModels.Patient) *pb.GetPatientListResponse_Patient {
+			return &pb.GetPatientListResponse_Patient{
+				Id:                      patient.ID.String(),
+				HumanReadableIdentifier: patient.HumanReadableIdentifier,
+			}
+		}),
+		UnassignedPatients: hwutil.Map(unassignedPatients, func(patient patientModels.Patient) *pb.GetPatientListResponse_Patient {
+			return &pb.GetPatientListResponse_Patient{
+				Id:                      patient.ID.String(),
+				HumanReadableIdentifier: patient.HumanReadableIdentifier,
+			}
+		}),
+		Active: activePatients,
+	}, nil
+}
