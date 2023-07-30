@@ -311,7 +311,7 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 		"bed_id":        nil,
 		"is_discharged": 1,
 	}
-	// Unassign Patient from bed and set to discharge
+	// Unassign Patient from bed and set to discharged
 	if err := db.Model(&patientModels.Patient{ID: id}).Updates(updates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
