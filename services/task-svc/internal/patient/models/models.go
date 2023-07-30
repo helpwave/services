@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/google/uuid"
+	"gorm.io/plugin/soft_delete"
 	taskModels "task-svc/internal/task/models"
 )
 
@@ -12,9 +13,9 @@ type Base struct {
 
 type Patient struct {
 	Base
-	ID             uuid.UUID         `gorm:"column:id;default:uuid_generate_v4()"`
-	OrganizationID uuid.UUID         `gorm:"column:organization_id"`
-	BedID          *uuid.UUID        `gorm:"column:bed_id;default:NULL"`
-	Tasks          []taskModels.Task `gorm:"foreignKey:PatientId"`
-	IsDischarged   int               `gorm:"column:is_discharged;softDelete:flag;default:0"`
+	ID             uuid.UUID             `gorm:"column:id;default:uuid_generate_v4()"`
+	OrganizationID uuid.UUID             `gorm:"column:organization_id"`
+	BedID          *uuid.UUID            `gorm:"column:bed_id;default:NULL"`
+	Tasks          []taskModels.Task     `gorm:"foreignKey:PatientId"`
+	IsDischarged   soft_delete.DeletedAt `gorm:"column:is_discharged;softDelete:flag;default:0"`
 }

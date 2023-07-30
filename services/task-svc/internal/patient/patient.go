@@ -11,7 +11,6 @@ import (
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
-	bedModels "task-svc/internal/bed/models"
 	patientModels "task-svc/internal/patient/models"
 	roomModels "task-svc/internal/room/models"
 	intTask "task-svc/internal/task"
@@ -395,40 +394,44 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 	}
 
 	var dischargedPatients []patientModels.Patient
-	if err := db.Where("organization_id = ? AND is_discharged = 1", id).Find(&dischargedPatients).Error; err != nil {
+	if err := db.Unscoped().Where("organization_id = ? AND is_discharged = 1", id).Find(&dischargedPatients).Error; err != nil {
 		return nil, err
 	}
 
-	var activePatients []patientModels.Patient
-	if err := db.Where("organization_id = ? AND bed_id IS NOT NULL AND is_discharged = 0", id).Find(&activePatients).Error; err != nil {
-		return nil, err
-	}
-
-	resActivePatients, err := hwutil.MapWithErr(activePatients, func(patient patientModels.Patient) (*pb.GetPatientListResponse_PatientWithRoomAndBed, error) {
-		var bed bedModels.Bed
-		var room roomModels.Room
-
-		db.Where("beds.id = ?", patient.BedID).
-			Joins("JOIN rooms ON beds.room_id = rooms.id").
-			First(&bed).
-			First(&room)
-
-		return &pb.GetPatientListResponse_PatientWithRoomAndBed{
-			Id:                      patient.ID.String(),
-			HumanReadableIdentifier: patient.HumanReadableIdentifier,
-			Bed: &pb.GetPatientListResponse_Bed{
-				Id:   bed.ID.String(),
-				Name: bed.Name,
-			},
-			Room: &pb.GetPatientListResponse_Room{
-				Id:   room.ID.String(),
-				Name: room.Name,
-			},
-		}, nil
-	})
+	var rooms []roomModels.Room
+	err = db.
+		Preload("Beds.Patient").
+		Joins("JOIN beds ON rooms.id = beds.room_id").
+		Joins("JOIN patients ON patients.bed_id = beds.id").
+		Where("patients.organization_id = ? AND patients.is_discharged = 0", id).
+		Group("rooms.id").
+		Find(&rooms).
+		Error
 
 	if err != nil {
 		return nil, err
+	}
+
+	var activePatients []*pb.GetPatientListResponse_PatientWithRoomAndBed
+
+	for _, room := range rooms {
+		for _, bed := range room.Beds {
+			if bed.Patient != nil {
+				patientWithRoomAndBed := &pb.GetPatientListResponse_PatientWithRoomAndBed{
+					Id:                      bed.Patient.ID.String(),
+					HumanReadableIdentifier: bed.Patient.HumanReadableIdentifier,
+					Bed: &pb.GetPatientListResponse_Bed{
+						Id:   bed.ID.String(),
+						Name: bed.Name,
+					},
+					Room: &pb.GetPatientListResponse_Room{
+						Id:   room.ID.String(),
+						Name: room.Name,
+					},
+				}
+				activePatients = append(activePatients, patientWithRoomAndBed)
+			}
+		}
 	}
 
 	return &pb.GetPatientListResponse{
@@ -444,6 +447,6 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
 			}
 		}),
-		Active: resActivePatients,
+		Active: activePatients,
 	}, nil
 }
