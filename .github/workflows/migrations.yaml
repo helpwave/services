@@ -11,8 +11,6 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      # Any changes at all? "true" or "false"
-      changes: ${{ steps.changes.outputs.any_changed }}
       # Stringified JSON Array of changed services
       services: ${{ steps.changes.outputs.all_changed_files }}
     steps:
@@ -38,10 +36,8 @@ jobs:
       # Summary for debugging
       - name: Summarize
         run: |
-          echo "changes: $changes" >> $GITHUB_STEP_SUMMARY
           echo "services: $services" >> $GITHUB_STEP_SUMMARY
         env:
-          changes: ${{ steps.changes.outputs.any_changed }}
           services: ${{ steps.changes.outputs.all_changed_files }}
 
   disallow-modifications:
@@ -69,7 +65,7 @@ jobs:
   migrations:
     runs-on: ubuntu-latest
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.changes }} == "true"
+    if: needs.detect-changes.outputs.services != '[]'
     strategy:
       matrix:
         service: ${{ fromJson(needs.detect-changes.outputs.services) }}
