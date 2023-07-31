@@ -257,7 +257,7 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "patient id not found")
+			return nil, status.Error(codes.InvalidArgument, "patient id not found or bed in use")
 		}
 	}
 
