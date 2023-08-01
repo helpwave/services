@@ -72,6 +72,8 @@ jobs:
 
     env:
       svc: ${{ matrix.service }}
+      FLY_DB_APP: helpwave-staging-postgres
+      REMOTE_DB: helpwave_staging_${{ matrix.service }}
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 5432
       POSTGRES_USER: postgres
@@ -114,7 +116,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Open tunnel to staging db
         run: |
-          flyctl proxy 5431:5432 -a helpwave-staging-postgres &
+          flyctl proxy 5431:5432 -a $FLY_DB_APP &
           sleep 5
         env:
           FLY_API_TOKEN: ${{ secrets.STAGING_DB_TOKEN }}
@@ -131,7 +133,6 @@ jobs:
           # Use newly created database from now on
           echo "POSTGRES_DB=$REMOTE_DB" >> "$GITHUB_ENV"
         env:
-          REMOTE_DB: helpwave_staging_${{ matrix.service }}
           STAGING_DB_USER: ${{ secrets.STAGING_DB_USER }}
           STAGING_DB_PASS: ${{ secrets.STAGING_DB_PASS }}
       - name: Collect current version
@@ -140,7 +141,7 @@ jobs:
           echo -n "VERSION=" > $GITHUB_OUTPUT
           # for some reason, beyond my comprehension,
           # the output of migrate is sent to stderr in the CI, but stdout on local
-          ./migrate.sh task-svc version 2>&1 | tail -n1 >> $GITHUB_OUTPUT
+          ./migrate.sh $svc version 2>&1 | tail -n1 >> $GITHUB_OUTPUT
       - name: Check version
         run: |
           ./migrate.sh $svc desired
