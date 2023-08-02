@@ -55,6 +55,7 @@ FROM alpine AS production
 ARG SERVICE
 # APP_PROTOCOL can be grpc or http
 ARG APP_PROTOCOL=grpc
+ARG LOG_LEVEL=info
 
 WORKDIR /app
 
@@ -76,6 +77,7 @@ RUN chmod +x \
 	run-migrations.sh
 
 ENV DAPR_APP_ID=$SERVICE
+ENV LOG_LEVEL=$LOG_LEVEL
 ENV APP_PROTOCOL=$APP_PROTOCOL
 ENV ADDR 127.0.0.1:80
 ENV MODE development
