@@ -11,15 +11,13 @@ import (
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
-	patientModels "task-svc/internal/patient/models"
-	roomModels "task-svc/internal/room/models"
+	"task-svc/internal/models"
 	intTask "task-svc/internal/task"
-	taskModels "task-svc/internal/task/models"
 )
 
 // GetPatientsByWardForOrganization
 // TODO: Move into repository
-func GetPatientsByWardForOrganization(ctx context.Context, wardID uuid.UUID) ([]patientModels.Patient, error) {
+func GetPatientsByWardForOrganization(ctx context.Context, wardID uuid.UUID) ([]models.Patient, error) {
 	db := hwgorm.GetDB(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
@@ -27,7 +25,7 @@ func GetPatientsByWardForOrganization(ctx context.Context, wardID uuid.UUID) ([]
 		return nil, err
 	}
 
-	var patients []patientModels.Patient
+	var patients []models.Patient
 	if err := db.
 		Table("patients").
 		Joins("JOIN beds ON beds.id = patients.bed_id").
@@ -60,8 +58,8 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientReq
 		return nil, err
 	}
 
-	patient := patientModels.Patient{
-		Base: patientModels.Base{
+	patient := models.Patient{
+		PatientBase: models.PatientBase{
 			HumanReadableIdentifier: req.HumanReadableIdentifier,
 			Notes:                   req.Notes,
 		},
@@ -91,7 +89,7 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient := patientModels.Patient{ID: id}
+	patient := models.Patient{ID: id}
 	if err := db.First(&patient).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -118,7 +116,7 @@ func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBe
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient := patientModels.Patient{}
+	patient := models.Patient{}
 	if err := db.Where("bed_id = ?", bedID).First(&patient).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -153,7 +151,7 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 	}
 
 	return &pb.GetPatientsByWardResponse{
-		Patients: hwutil.Map(patients, func(patient patientModels.Patient) *pb.GetPatientsByWardResponse_Patient {
+		Patients: hwutil.Map(patients, func(patient models.Patient) *pb.GetPatientsByWardResponse_Patient {
 			return &pb.GetPatientsByWardResponse_Patient{
 				Id:                      patient.ID.String(),
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
@@ -172,8 +170,8 @@ func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.Get
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var rooms []roomModels.Room
-	if err := db.Preload("Beds.Patient").Scopes(roomModels.PreloadBedsSorted).Where("ward_id = ?", wardID).Find(&rooms).Error; err != nil {
+	var rooms []models.Room
+	if err := db.Preload("Beds.Patient").Scopes(models.PreloadBedsSorted).Where("ward_id = ?", wardID).Find(&rooms).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -181,11 +179,11 @@ func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.Get
 		}
 	}
 
-	mappedRooms := hwutil.Map(rooms, func(room roomModels.Room) *pb.GetPatientAssignmentByWardResponse_Room {
+	mappedRooms := hwutil.Map(rooms, func(room models.Room) *pb.GetPatientAssignmentByWardResponse_Room {
 		return &pb.GetPatientAssignmentByWardResponse_Room{
 			Id:   room.ID.String(),
 			Name: room.Name,
-			Beds: hwutil.Map(room.Beds, func(bed roomModels.Bed) *pb.GetPatientAssignmentByWardResponse_Room_Bed {
+			Beds: hwutil.Map(room.Beds, func(bed models.Bed) *pb.GetPatientAssignmentByWardResponse_Room_Bed {
 				var patient *pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient
 				if bed.Patient != nil {
 					patient = &pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
@@ -216,7 +214,7 @@ func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient := patientModels.Patient{ID: id}
+	patient := models.Patient{ID: id}
 	updates := pbhelpers.UpdatesMapForUpdatePatientRequest(req)
 
 	if err := db.Model(&patient).Updates(updates).Error; err != nil {
@@ -243,7 +241,7 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 	}
 
 	// Check whether bed exits
-	bed := roomModels.Bed{ID: bedID}
+	bed := models.Bed{ID: bedID}
 	if err := db.First(&bed).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -252,7 +250,7 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 		}
 	}
 
-	patient := patientModels.Patient{ID: id}
+	patient := models.Patient{ID: id}
 	if err := db.Model(&patient).Update("bed_id", bed.ID).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -280,7 +278,7 @@ func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient := patientModels.Patient{ID: id}
+	patient := models.Patient{ID: id}
 	if err := db.Model(&patient).Update("bed_id", nil).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -312,7 +310,7 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 		"is_discharged": 1,
 	}
 	// Unassign Patient from bed and set to discharged
-	if err := db.Model(&patientModels.Patient{ID: id}).Updates(updates).Error; err != nil {
+	if err := db.Model(&models.Patient{ID: id}).Updates(updates).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -337,7 +335,7 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient := patientModels.Patient{ID: id}
+	patient := models.Patient{ID: id}
 	if err := db.First(&patient).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -351,8 +349,8 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		return nil, err
 	}
 
-	var mappedTasks = hwutil.Map(tasks, func(task taskModels.Task) *pb.GetPatientDetailsResponse_Task {
-		var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask taskModels.Subtask) *pb.GetPatientDetailsResponse_Task_SubTask {
+	var mappedTasks = hwutil.Map(tasks, func(task models.Task) *pb.GetPatientDetailsResponse_Task {
+		var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetPatientDetailsResponse_Task_SubTask {
 			return &pb.GetPatientDetailsResponse_Task_SubTask{
 				Id:   subtask.ID.String(),
 				Done: subtask.Done,
@@ -388,17 +386,17 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var unassignedPatients []patientModels.Patient
+	var unassignedPatients []models.Patient
 	if err := db.Where("organization_id = ? AND bed_id IS NULL AND is_discharged = 0", id).Find(&unassignedPatients).Error; err != nil {
 		return nil, err
 	}
 
-	var dischargedPatients []patientModels.Patient
+	var dischargedPatients []models.Patient
 	if err := db.Unscoped().Where("organization_id = ? AND is_discharged = 1", id).Find(&dischargedPatients).Error; err != nil {
 		return nil, err
 	}
 
-	var rooms []roomModels.Room
+	var rooms []models.Room
 	err = db.
 		Preload("Beds.Patient").
 		Joins("JOIN beds ON rooms.id = beds.room_id").
@@ -435,13 +433,13 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 	}
 
 	return &pb.GetPatientListResponse{
-		DischargedPatients: hwutil.Map(dischargedPatients, func(patient patientModels.Patient) *pb.GetPatientListResponse_Patient {
+		DischargedPatients: hwutil.Map(dischargedPatients, func(patient models.Patient) *pb.GetPatientListResponse_Patient {
 			return &pb.GetPatientListResponse_Patient{
 				Id:                      patient.ID.String(),
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
 			}
 		}),
-		UnassignedPatients: hwutil.Map(unassignedPatients, func(patient patientModels.Patient) *pb.GetPatientListResponse_Patient {
+		UnassignedPatients: hwutil.Map(unassignedPatients, func(patient models.Patient) *pb.GetPatientListResponse_Patient {
 			return &pb.GetPatientListResponse_Patient{
 				Id:                      patient.ID.String(),
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,

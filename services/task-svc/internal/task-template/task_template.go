@@ -11,7 +11,7 @@ import (
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
-	"task-svc/internal/task-template/models"
+	"task-svc/internal/models"
 )
 
 type ServiceServer struct {
@@ -46,10 +46,10 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		description = *req.Description
 	}
 	taskTemplate := models.TaskTemplate{
-		Base:           models.Base{Name: req.Name, Description: description},
-		OrganizationID: organizationID,
-		CreatedBy:      userID,
-		WardID:         wardID,
+		TaskTemplateBase: models.TaskTemplateBase{Name: req.Name, Description: description},
+		OrganizationID:   organizationID,
+		CreatedBy:        userID,
+		WardID:           wardID,
 	}
 
 	// This also implicitly checks the wardID because of the foreignKey constraint in the sql

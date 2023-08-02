@@ -6,14 +6,14 @@ import (
 	"time"
 )
 
-type Base struct {
+type TaskBase struct {
 	Name        string        `gorm:"column:name"`
 	Description string        `gorm:"column:description;default:''"`
 	Status      pb.TaskStatus `gorm:"column:status"`
 }
 
 type Task struct {
-	Base
+	TaskBase
 	ID             uuid.UUID     `gorm:"column:id;default:uuid_generate_v4()"`
 	OrganizationID uuid.UUID     `gorm:"column:organization_id"`
 	AssignedUserId uuid.NullUUID `gorm:"column:assigned_user_id;default:NULL"`

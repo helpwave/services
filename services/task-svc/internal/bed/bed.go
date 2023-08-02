@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	pbhelpers "proto_helpers/task_svc/v1"
-	"task-svc/internal/room/models"
+	models2 "task-svc/internal/models"
 )
 
 type ServiceServer struct {
@@ -23,7 +23,7 @@ func NewServiceServer() *ServiceServer {
 
 // GetBedsByRoomForOrganization
 // TODO: Move into repository
-func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]models.Bed, error) {
+func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]models2.Bed, error) {
 	db := hwgorm.GetDB(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
@@ -31,7 +31,7 @@ func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]mode
 		return nil, err
 	}
 
-	var beds []models.Bed
+	var beds []models2.Bed
 	query := db.
 		Where("organization_id = ? AND room_id = ?", organizationID.String(), roomID.String()).
 		Order("name ASC").
@@ -47,7 +47,7 @@ func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]mode
 func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*pb.CreateBedResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
-	roomRepository := models.NewRoomRepositoryWithDB(db)
+	roomRepository := models2.NewRoomRepositoryWithDB(db)
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -68,7 +68,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		}
 	}
 
-	bed := models.Bed{RoomID: roomID, OrganizationID: organizationID, Name: req.Name}
+	bed := models2.Bed{RoomID: roomID, OrganizationID: organizationID, Name: req.Name}
 	if err := db.Create(&bed).Error; err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -97,7 +97,7 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed := models.Bed{ID: id}
+	bed := models2.Bed{ID: id}
 	if err := db.Where("organization_id = ?", organizationID).First(&bed).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -121,7 +121,7 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 		return nil, err
 	}
 
-	var beds []models.Bed
+	var beds []models2.Bed
 	query := db.
 		Where("organization_id = ?", organizationID.String()).
 		Order("name ASC").
@@ -187,7 +187,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed := models.Bed{ID: bedID}
+	bed := models2.Bed{ID: bedID}
 	updates := pbhelpers.UpdatesMapForUpdateBedRequest(req)
 
 	if err := db.Model(&bed).Updates(updates).Error; err != nil {
@@ -211,7 +211,7 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed := models.Bed{ID: bedID}
+	bed := models2.Bed{ID: bedID}
 	if err := db.Where("organization_id = ?", organizationID).First(&bed).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
