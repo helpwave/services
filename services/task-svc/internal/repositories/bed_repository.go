@@ -1,8 +1,10 @@
 package repositories
 
 import (
+	"context"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+	"hwgorm"
 	"task-svc/internal/models"
 )
 
@@ -10,9 +12,9 @@ type BedRepository struct {
 	db *gorm.DB
 }
 
-func NewBedRepositoryWithDB(db *gorm.DB) *BedRepository {
+func BedRepo(logCtx context.Context) *BedRepository {
 	return &BedRepository{
-		db: db,
+		db: hwgorm.GetDB(logCtx),
 	}
 }
 

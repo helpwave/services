@@ -1,8 +1,10 @@
 package repositories
 
 import (
+	"context"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+	"hwgorm"
 	"task-svc/internal/models"
 )
 
@@ -10,9 +12,9 @@ type TemplateRepository struct {
 	db *gorm.DB
 }
 
-func NewTemplateRepositoryWithDB(db *gorm.DB) *TemplateRepository {
+func TemplateRepo(logCtx context.Context) *TemplateRepository {
 	return &TemplateRepository{
-		db: db,
+		db: hwgorm.GetDB(logCtx),
 	}
 }
 

@@ -49,7 +49,7 @@ func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]mode
 func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*pb.CreateBedResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
-	roomRepository := repositories.NewRoomRepositoryWithDB(db)
+	roomRepository := repositories.RoomRepo(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {

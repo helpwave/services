@@ -62,7 +62,7 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	wardRepository := repositories.NewWardRepositoryWithDB(hwgorm.GetDB(ctx))
+	wardRepository := repositories.WardRepo(ctx)
 	ward, err := wardRepository.GetWardByIdForOrganization(ctx, id)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
@@ -79,7 +79,7 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 }
 
 func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb.GetWardsResponse, error) {
-	wardRepository := repositories.NewWardRepositoryWithDB(hwgorm.GetDB(ctx))
+	wardRepository := repositories.WardRepo(ctx)
 	wards, err := wardRepository.GetWardsForOrganization(ctx)
 
 	if err != nil {
@@ -128,7 +128,7 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	wardRepository := repositories.NewWardRepositoryWithDB(hwgorm.GetDB(ctx))
+	wardRepository := repositories.WardRepo(ctx)
 	ward, err := wardRepository.GetWardByIdForOrganization(ctx, id)
 	if err != nil {
 		return nil, err
@@ -142,14 +142,14 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 }
 
 func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOverviewsRequest) (*pb.GetWardOverviewsResponse, error) {
-	wardRepository := repositories.NewWardRepositoryWithDB(hwgorm.GetDB(ctx))
+	wardRepository := repositories.WardRepo(ctx)
 	wards, err := wardRepository.GetWardsForOrganization(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	resWards, err := hwutil.MapWithErr(wards, func(ward *models.Ward) (*pb.GetWardOverviewsResponse_Ward, error) {
-		roomRepository := repositories.NewRoomRepositoryWithDB(hwgorm.GetDB(ctx))
+		roomRepository := repositories.RoomRepo(ctx)
 		rooms, err := roomRepository.GetByWardForOrganization(ctx, ward.ID)
 		if err != nil {
 			return nil, err
@@ -210,7 +210,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	wardRepository := repositories.NewWardRepositoryWithDB(hwgorm.GetDB(ctx))
+	wardRepository := repositories.WardRepo(ctx)
 	ward, err := wardRepository.GetWardById(wardID)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
@@ -220,7 +220,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		}
 	}
 
-	roomRepository := repositories.NewRoomRepositoryWithDB(hwgorm.GetDB(ctx))
+	roomRepository := repositories.RoomRepo(ctx)
 	rooms, err := roomRepository.GetRoomByWard(wardID)
 
 	if err != nil {
@@ -231,7 +231,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		}
 	}
 
-	bedRepository := repositories.NewBedRepositoryWithDB(hwgorm.GetDB(ctx))
+	bedRepository := repositories.BedRepo(ctx)
 	mappedRooms, err := hwutil.MapWithErr(rooms, func(room models.Room) (*pb.GetWardDetailsResponse_Room, error) {
 		beds, err := bedRepository.GetBedsByRoom(room.ID)
 		if err != nil {
@@ -260,7 +260,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		}
 	}
 
-	templateRepository := repositories.NewTemplateRepositoryWithDB(hwgorm.GetDB(ctx))
+	templateRepository := repositories.TemplateRepo(ctx)
 	taskTemplates, err := templateRepository.GetTemplateByWard(wardID)
 
 	if err != nil {

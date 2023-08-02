@@ -5,6 +5,7 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+	"hwgorm"
 	"task-svc/internal/models"
 )
 
@@ -12,9 +13,9 @@ type RoomRepository struct {
 	db *gorm.DB
 }
 
-func NewRoomRepositoryWithDB(db *gorm.DB) *RoomRepository {
+func RoomRepo(logCtx context.Context) *RoomRepository {
 	return &RoomRepository{
-		db: db,
+		db: hwgorm.GetDB(logCtx),
 	}
 }
 
