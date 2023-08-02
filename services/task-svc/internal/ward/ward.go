@@ -3,19 +3,20 @@ package ward
 import (
 	"common"
 	"context"
-	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
-	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/bed"
-	models2 "task-svc/internal/models"
+	"task-svc/internal/models"
 	"task-svc/internal/patient"
 	"task-svc/internal/repositories"
 	"task-svc/internal/task"
+
+	pb "gen/proto/services/task_svc/v1"
+	zlog "github.com/rs/zerolog/log"
+	pbhelpers "proto_helpers/task_svc/v1"
 )
 
 type ServiceServer struct {
@@ -35,8 +36,8 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 		return nil, err
 	}
 
-	ward := models2.Ward{
-		WardBase: models2.WardBase{
+	ward := models.Ward{
+		WardBase: models.WardBase{
 			Name: req.GetName(),
 		},
 		OrganizationID: organizationID,
@@ -90,7 +91,7 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 	}
 
 	return &pb.GetWardsResponse{
-		Wards: hwutil.Map(wards, func(ward *models2.Ward) *pb.GetWardsResponse_Ward {
+		Wards: hwutil.Map(wards, func(ward *models.Ward) *pb.GetWardsResponse_Ward {
 			return &pb.GetWardsResponse_Ward{
 				Id:   ward.ID.String(),
 				Name: ward.Name,
@@ -109,7 +110,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	ward := models2.Ward{ID: id}
+	ward := models.Ward{ID: id}
 	updates := pbhelpers.UpdatesMapForUpdateWardRequest(req)
 
 	if err := db.Model(&ward).Updates(updates).Error; err != nil {
@@ -147,7 +148,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 		return nil, err
 	}
 
-	resWards, err := hwutil.MapWithErr(wards, func(ward *models2.Ward) (*pb.GetWardOverviewsResponse_Ward, error) {
+	resWards, err := hwutil.MapWithErr(wards, func(ward *models.Ward) (*pb.GetWardOverviewsResponse_Ward, error) {
 		roomRepository := repositories.NewRoomRepositoryWithDB(hwgorm.GetDB(ctx))
 		rooms, err := roomRepository.GetByWardForOrganization(ctx, ward.ID)
 		if err != nil {
@@ -231,13 +232,13 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 	}
 
 	bedRepository := repositories.NewBedRepositoryWithDB(hwgorm.GetDB(ctx))
-	mappedRooms, err := hwutil.MapWithErr(rooms, func(room models2.Room) (*pb.GetWardDetailsResponse_Room, error) {
+	mappedRooms, err := hwutil.MapWithErr(rooms, func(room models.Room) (*pb.GetWardDetailsResponse_Room, error) {
 		beds, err := bedRepository.GetBedsByRoom(room.ID)
 		if err != nil {
 			return nil, err
 
 		}
-		var mappedBeds = hwutil.Map(beds, func(bed models2.Bed) *pb.GetWardDetailsResponse_Bed {
+		var mappedBeds = hwutil.Map(beds, func(bed models.Bed) *pb.GetWardDetailsResponse_Bed {
 			return &pb.GetWardDetailsResponse_Bed{
 				Id:   bed.ID.String(),
 				Name: bed.Name,
@@ -270,14 +271,14 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		}
 	}
 
-	mappedTaskTemplates, err := hwutil.MapWithErr(taskTemplates, func(taskTemplate models2.TaskTemplate) (*pb.GetWardDetailsResponse_TaskTemplate, error) {
+	mappedTaskTemplates, err := hwutil.MapWithErr(taskTemplates, func(taskTemplate models.TaskTemplate) (*pb.GetWardDetailsResponse_TaskTemplate, error) {
 		taskTemplateSubtasks, err := templateRepository.GetSubTasksByTemplate(taskTemplate.ID)
 
 		if err != nil {
 			return nil, err
 		}
 
-		var mappedSubtasks = hwutil.Map(taskTemplateSubtasks, func(taskTemplateSubtask models2.TaskTemplateSubtask) *pb.GetWardDetailsResponse_Subtask {
+		var mappedSubtasks = hwutil.Map(taskTemplateSubtasks, func(taskTemplateSubtask models.TaskTemplateSubtask) *pb.GetWardDetailsResponse_Subtask {
 			return &pb.GetWardDetailsResponse_Subtask{
 				Name: taskTemplateSubtask.Name,
 				Id:   taskTemplateSubtask.ID.String(),

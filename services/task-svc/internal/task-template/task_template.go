@@ -3,15 +3,16 @@ package task_template
 import (
 	"common"
 	"context"
-	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
-	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
+
+	pb "gen/proto/services/task_svc/v1"
+	zlog "github.com/rs/zerolog/log"
+	pbhelpers "proto_helpers/task_svc/v1"
 )
 
 type ServiceServer struct {
