@@ -1,0 +1,166 @@
+name: migrations
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      # Stringified JSON Array of changed services
+      services: ${{ steps.changes.outputs.all_changed_files }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # Collect the services, which have changes in their migrations directory.
+      # Available in ${{ steps.changes.outputs.all_changed_files }}
+      # as a json array (it's a string)
+      - name: Detect changes in migrations
+        id: changes
+        uses: tj-actions/changed-files@v37
+        with:
+          json: "true"
+          escape_json: "false"
+          dir_names: "true"
+          dir_names_exclude_current_dir: "true"
+          dir_names_max_depth: 1
+          path: "services"
+          files: ./*/migrations/**
+
+      # Summary for debugging
+      - name: Summarize
+        run: |
+          echo "services: $services" >> $GITHUB_STEP_SUMMARY
+        env:
+          services: ${{ steps.changes.outputs.all_changed_files }}
+
+  disallow-modifications:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Detect modifications in migrations
+        id: changes
+        uses: tj-actions/changed-files@v37
+        with:
+          json: "true"
+          path: "services"
+          files: ./*/migrations/**
+      - name: Don't modify existing migrations!
+        if: steps.changes.outputs.modified_files != '[]'
+        run: |
+          echo "Don't modify existing migrations! Doing so may result in unwanted behavior."
+          echo "You can ignore this message if you believe the changes made will not change the migrations,"
+          echo "for example by only adding comments. Reviewers may proceed only with caution."
+          exit 1
+
+  migrations:
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.services != '[]'
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.detect-changes.outputs.services) }}
+
+    env:
+      svc: ${{ matrix.service }}
+      FLY_DB_APP: helpwave-staging-postgres
+      REMOTE_DB: helpwave_staging_${{ matrix.service }}
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres # will be overwritten in "Pull staging data"
+
+    services:
+      postgres:
+        image: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+    steps:
+      - name: Setup flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+        with:
+          version: 0.1.66
+      # currently ubuntu-latest ships with psql 14.x,
+      # whose pg_dump is incompatible with our postgres server (15.x)
+      - name: Setup postgres client
+        run: |
+          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
+          sudo apt update
+          sudo apt remove postgresql-client
+          sudo apt install postgresql-client-15 -y
+          /usr/lib/postgresql/15/bin/pg_dump --version
+      - name: Clone Repo
+        uses: actions/checkout@v3
+      - name: Open tunnel to staging db
+        run: |
+          flyctl proxy 5431:5432 -a $FLY_DB_APP &
+          sleep 5
+        env:
+          FLY_API_TOKEN: ${{ secrets.STAGING_DB_TOKEN }}
+      - name: Pull staging data
+        run: |
+          # service-name -> service_name
+          REMOTE_DB=$(echo "$REMOTE_DB" | sed "s/-/_/g")
+          # Build URIs
+          REMOTE=postgres://$STAGING_DB_USER:$STAGING_DB_PASS@localhost:5431/$REMOTE_DB
+          LOCAL=postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB
+          # Remote -> SQL -> Local
+          /usr/lib/postgresql/15/bin/pg_dump -C -c --if-exists --no-comments -O -x $REMOTE -f dump.sql
+          /usr/lib/postgresql/15/bin/psql -q $LOCAL -f dump.sql
+          # Use newly created database from now on
+          echo "POSTGRES_DB=$REMOTE_DB" >> "$GITHUB_ENV"
+        env:
+          STAGING_DB_USER: ${{ secrets.STAGING_DB_USER }}
+          STAGING_DB_PASS: ${{ secrets.STAGING_DB_PASS }}
+      - name: Collect current version
+        id: collect-version
+        run: |
+          echo -n "VERSION=" > $GITHUB_OUTPUT
+          # for some reason, beyond my comprehension,
+          # the output of migrate is sent to stderr in the CI, but stdout on local
+          ./migrate.sh $svc version 2>&1 | tail -n1 >> $GITHUB_OUTPUT
+      - name: Check version
+        run: |
+          ./migrate.sh $svc desired
+          if [ "$current" -ge "$(./migrate.sh $svc desired)" ]; then
+            echo "Migrations must be newer than the version of staging! You probably lack behind, merge or rebase onto main first!"
+            exit 1
+          fi
+        env:
+          current: ${{ steps.collect-version.outputs.VERSION }}
+
+      - name: Run UP migrations (1/2)
+        run: ./migrate.sh $svc up
+      - name: Run DOWN migrations (1/2)
+        run: ./migrate.sh $svc goto $VERSION
+        env:
+          VERSION: ${{ steps.collect-version.outputs.VERSION }}
+      - name: Run UP migrations (2/2)
+        run: ./migrate.sh $svc up
+      - name: Run DOWN migrations (2/2)
+        run: ./migrate.sh $svc goto $VERSION
+        env:
+          VERSION: ${{ steps.collect-version.outputs.VERSION }}
