@@ -1,10 +1,11 @@
-package models
+package repositories
 
 import (
 	"common"
 	"context"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+	"task-svc/internal/models"
 )
 
 type RoomRepository struct {
@@ -17,8 +18,8 @@ func NewRoomRepositoryWithDB(db *gorm.DB) *RoomRepository {
 	}
 }
 
-func (r *RoomRepository) GetById(id uuid.UUID) (*Room, error) {
-	room := Room{ID: id}
+func (r *RoomRepository) GetById(id uuid.UUID) (*models.Room, error) {
+	room := models.Room{ID: id}
 
 	if err := r.db.Preload("Beds").First(&room).Error; err != nil {
 		return nil, err
@@ -27,13 +28,13 @@ func (r *RoomRepository) GetById(id uuid.UUID) (*Room, error) {
 	return &room, nil
 }
 
-func (r *RoomRepository) GetByWardForOrganization(ctx context.Context, wardID uuid.UUID) ([]Room, error) {
+func (r *RoomRepository) GetByWardForOrganization(ctx context.Context, wardID uuid.UUID) ([]models.Room, error) {
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	var rooms []Room
+	var rooms []models.Room
 	if err := r.db.Where("organization_id = ? AND ward_id = ?", organizationID.String(), wardID.String()).Find(&rooms).Error; err != nil {
 		return nil, err
 	}
@@ -41,8 +42,8 @@ func (r *RoomRepository) GetByWardForOrganization(ctx context.Context, wardID uu
 	return rooms, nil
 }
 
-func (r *RoomRepository) GetRoomByWard(wardID uuid.UUID) ([]Room, error) {
-	var rooms []Room
+func (r *RoomRepository) GetRoomByWard(wardID uuid.UUID) ([]models.Room, error) {
+	var rooms []models.Room
 
 	if err := r.db.Where("ward_id = ?", wardID).Find(&rooms).Error; err != nil {
 		return nil, err

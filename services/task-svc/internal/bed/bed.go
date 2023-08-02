@@ -11,6 +11,7 @@ import (
 	"hwgorm"
 	pbhelpers "proto_helpers/task_svc/v1"
 	models2 "task-svc/internal/models"
+	"task-svc/internal/repositories"
 )
 
 type ServiceServer struct {
@@ -47,7 +48,7 @@ func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]mode
 func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*pb.CreateBedResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwgorm.GetDB(ctx)
-	roomRepository := models2.NewRoomRepositoryWithDB(db)
+	roomRepository := repositories.NewRoomRepositoryWithDB(db)
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {

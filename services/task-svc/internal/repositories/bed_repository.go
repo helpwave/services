@@ -1,8 +1,9 @@
-package models
+package repositories
 
 import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+	"task-svc/internal/models"
 )
 
 type BedRepository struct {
@@ -15,8 +16,8 @@ func NewBedRepositoryWithDB(db *gorm.DB) *BedRepository {
 	}
 }
 
-func (r *BedRepository) GetBedsByRoom(roomID uuid.UUID) ([]Bed, error) {
-	var beds []Bed
+func (r *BedRepository) GetBedsByRoom(roomID uuid.UUID) ([]models.Bed, error) {
+	var beds []models.Bed
 
 	if err := r.db.Where("room_id = ?", roomID).Order("name ASC").Find(&beds).Error; err != nil {
 		return nil, err
@@ -25,9 +26,9 @@ func (r *BedRepository) GetBedsByRoom(roomID uuid.UUID) ([]Bed, error) {
 	return beds, nil
 }
 
-func (r *BedRepository) GetById(id *uuid.UUID) (*Bed, error) {
+func (r *BedRepository) GetById(id *uuid.UUID) (*models.Bed, error) {
 
-	bed := Bed{}
+	bed := models.Bed{}
 
 	if err := r.db.Where("id = ?", id).Order("name ASC").First(&bed).Error; err != nil {
 		return nil, err

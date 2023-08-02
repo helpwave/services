@@ -12,6 +12,7 @@ import (
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
 	models2 "task-svc/internal/models"
+	"task-svc/internal/repositories"
 )
 
 type ServiceServer struct {
@@ -34,7 +35,7 @@ func GetRoomsWithBedsAndPatientsAndTasksByWardForOrganization(ctx context.Contex
 
 	var rooms []models2.Room
 	query := db.
-		Scopes(models2.PreloadBedsSorted).
+		Scopes(repositories.PreloadBedsSorted).
 		Preload("Beds.Patient").
 		Preload("Beds.Patient.Tasks").
 		Where("organization_id = ? AND ward_id = ?", organizationID.String(), wardID.String()).
@@ -96,7 +97,7 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 	}
 
 	room := models2.Room{ID: id}
-	if err := db.Scopes(models2.PreloadBedsSorted).First(&room).Error; err != nil {
+	if err := db.Scopes(repositories.PreloadBedsSorted).First(&room).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -146,7 +147,7 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 	// TODO: Auth
 
 	var rooms []models2.Room
-	if err := db.Scopes(models2.PreloadBedsSorted).Find(&rooms).Error; err != nil {
+	if err := db.Scopes(repositories.PreloadBedsSorted).Find(&rooms).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -186,7 +187,7 @@ func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardR
 	}
 
 	var rooms []models2.Room
-	if err := db.Scopes(models2.PreloadBedsSorted).Find(&rooms, "ward_id = ?", wardId).Error; err != nil {
+	if err := db.Scopes(repositories.PreloadBedsSorted).Find(&rooms, "ward_id = ?", wardId).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {

@@ -12,6 +12,7 @@ import (
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
+	"task-svc/internal/repositories"
 	intTask "task-svc/internal/task"
 )
 
@@ -171,7 +172,7 @@ func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.Get
 	}
 
 	var rooms []models.Room
-	if err := db.Preload("Beds.Patient").Scopes(models.PreloadBedsSorted).Where("ward_id = ?", wardID).Find(&rooms).Error; err != nil {
+	if err := db.Preload("Beds.Patient").Scopes(repositories.PreloadBedsSorted).Where("ward_id = ?", wardID).Find(&rooms).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
