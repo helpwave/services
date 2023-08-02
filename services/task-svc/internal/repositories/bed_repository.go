@@ -20,21 +20,25 @@ func BedRepo(logCtx context.Context) *BedRepository {
 
 func (r *BedRepository) GetBedsByRoom(roomID uuid.UUID) ([]models.Bed, error) {
 	var beds []models.Bed
+	query := r.db.
+		Where("room_id = ?", roomID).
+		Order("name ASC").
+		Find(&beds)
 
-	if err := r.db.Where("room_id = ?", roomID).Order("name ASC").Find(&beds).Error; err != nil {
+	if err := query.Error; err != nil {
 		return nil, err
 	}
-
 	return beds, nil
 }
 
-func (r *BedRepository) GetById(id *uuid.UUID) (*models.Bed, error) {
-
+func (r *BedRepository) GetBedById(id *uuid.UUID) (*models.Bed, error) {
 	bed := models.Bed{}
+	query := r.db.
+		Where("id = ?", id).
+		Order("name ASC").First(&bed)
 
-	if err := r.db.Where("id = ?", id).Order("name ASC").First(&bed).Error; err != nil {
+	if err := query.Error; err != nil {
 		return nil, err
 	}
-
 	return &bed, nil
 }
