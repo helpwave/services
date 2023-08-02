@@ -18,6 +18,19 @@ func BedRepo(logCtx context.Context) *BedRepository {
 	}
 }
 
+func (r *BedRepository) GetBedsForOrganization(organizationID uuid.UUID) ([]models.Bed, error) {
+	var beds []models.Bed
+	query := r.db.
+		Where("organization_id = ?", organizationID).
+		Order("name ASC").
+		Find(&beds)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return beds, nil
+}
+
 func (r *BedRepository) GetBedsByRoom(roomID uuid.UUID) ([]models.Bed, error) {
 	var beds []models.Bed
 	query := r.db.
@@ -41,4 +54,27 @@ func (r *BedRepository) GetBedById(id *uuid.UUID) (*models.Bed, error) {
 		return nil, err
 	}
 	return &bed, nil
+}
+
+func (r *BedRepository) GetBedsByRoomForOrganization(roomID, organizationID uuid.UUID) ([]models.Bed, error) {
+	var beds []models.Bed
+	query := r.db.
+		Where("organization_id = ? AND room_id = ?", organizationID.String(), roomID.String()).
+		Order("name ASC").
+		Find(&beds)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return beds, nil
+}
+
+func (r *BedRepository) CreateBed(bed *models.Bed) (*models.Bed, error) {
+	query := r.db.
+		Create(&bed)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return bed, nil
 }

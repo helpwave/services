@@ -84,7 +84,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		return nil, err
 	}
 
 	var taskTemplates []models.TaskTemplate

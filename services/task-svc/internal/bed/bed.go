@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
+	"hwutil"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
 
@@ -23,62 +24,30 @@ func NewServiceServer() *ServiceServer {
 	return &ServiceServer{}
 }
 
-// GetBedsByRoomForOrganization
-// TODO: Move into repository
-func GetBedsByRoomForOrganization(ctx context.Context, roomID uuid.UUID) ([]models.Bed, error) {
-	db := hwgorm.GetDB(ctx)
-
-	organizationID, err := common.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	var beds []models.Bed
-	query := db.
-		Where("organization_id = ? AND room_id = ?", organizationID.String(), roomID.String()).
-		Order("name ASC").
-		Find(&beds)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-
-	return beds, nil
-}
-
 func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*pb.CreateBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
-	roomRepository := repositories.RoomRepo(ctx)
+	bedRepo := repositories.BedRepo(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	roomID, err := uuid.Parse(req.RoomId)
+	roomId, err := uuid.Parse(req.RoomId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	room, err := roomRepository.GetById(roomID)
-	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "roomID not found")
-		}
-	}
-
-	bed := models.Bed{RoomID: roomID, OrganizationID: organizationID, Name: req.Name}
-	if err := db.Create(&bed).Error; err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
+	bed, err := bedRepo.CreateBed(&models.Bed{
+		RoomID:         roomId,
+		OrganizationID: organizationID,
+		Name:           req.Name,
+	})
 
 	log.Info().
 		Str("bedId", bed.ID.String()).
-		Str("roomId", room.ID.String()).
-		Str("name", room.Name).
+		Str("roomId", req.RoomId).
+		Str("name", bed.Name).
 		Msg("bed created")
 
 	return &pb.CreateBedResponse{
@@ -87,7 +56,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 }
 
 func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.GetBedResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	bedRepo := repositories.BedRepo(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -99,13 +68,18 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed := models.Bed{ID: id}
-	if err := db.Where("organization_id = ?", organizationID).First(&bed).Error; err != nil {
+	bed, err := bedRepo.GetBedById(&id)
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "id not found")
 		}
+	}
+
+	if bed.OrganizationID != organizationID {
+		// exceptionally rare to happen, as the uuidv4 space is huge
+		return nil, status.Error(codes.PermissionDenied, "bed does not belong to your organization")
 	}
 
 	return &pb.GetBedResponse{
@@ -116,20 +90,15 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 }
 
 func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.GetBedsResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	bedRepo := repositories.BedRepo(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	var beds []models.Bed
-	query := db.
-		Where("organization_id = ?", organizationID.String()).
-		Order("name ASC").
-		Find(&beds)
-
-	if err := query.Error; err != nil {
+	beds, err := bedRepo.GetBedsForOrganization(organizationID)
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -137,19 +106,15 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 		}
 	}
 
-	res := pb.GetBedsResponse{
-		Beds: []*pb.GetBedsResponse_Bed{},
-	}
-
-	for _, bed := range beds {
-		res.Beds = append(res.Beds, &pb.GetBedsResponse_Bed{
-			Id:     bed.ID.String(),
-			RoomId: bed.RoomID.String(),
-			Name:   bed.Name,
-		})
-	}
-
-	return &res, nil
+	return &pb.GetBedsResponse{
+		Beds: hwutil.Map(beds, func(bed models.Bed) *pb.GetBedsResponse_Bed {
+			return &pb.GetBedsResponse_Bed{
+				Id:     bed.ID.String(),
+				RoomId: bed.RoomID.String(),
+				Name:   bed.Name,
+			}
+		}),
+	}, nil
 }
 
 func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomRequest) (*pb.GetBedsByRoomResponse, error) {
@@ -158,7 +123,14 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	beds, err := GetBedsByRoomForOrganization(ctx, roomID)
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	bedRepo := repositories.BedRepo(ctx)
+
+	beds, err := bedRepo.GetBedsByRoomForOrganization(roomID, organizationID)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())

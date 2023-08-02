@@ -8,7 +8,6 @@ import (
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
-	"task-svc/internal/bed"
 	"task-svc/internal/models"
 	"task-svc/internal/patient"
 	"task-svc/internal/repositories"
@@ -33,7 +32,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		return nil, err
 	}
 
 	ward := models.Ward{
@@ -64,7 +63,7 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		return nil, err
 	}
 
 	wardRepository := repositories.WardRepo(ctx)
@@ -86,7 +85,7 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb.GetWardsResponse, error) {
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		return nil, err
 	}
 
 	wardRepository := repositories.WardRepo(ctx)
@@ -133,7 +132,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		return nil, err
 	}
 	db := hwgorm.GetDB(ctx)
 
@@ -158,7 +157,7 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOverviewsRequest) (*pb.GetWardOverviewsResponse, error) {
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		return nil, err
 	}
 
 	wardRepository := repositories.WardRepo(ctx)
@@ -185,7 +184,8 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 
 		var bedCount uint32
 		for _, room := range rooms {
-			beds, err := bed.GetBedsByRoomForOrganization(ctx, room.ID)
+			bedRepo := repositories.BedRepo(ctx)
+			beds, err := bedRepo.GetBedsByRoomForOrganization(room.ID, organizationID)
 			if err != nil {
 				if hwgorm.IsOurFault(err) {
 					return nil, status.Error(codes.Internal, err.Error())
