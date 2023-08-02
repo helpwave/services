@@ -17,34 +17,38 @@ func NewRoomRepositoryWithDB(db *gorm.DB) *RoomRepository {
 	}
 }
 
-func (r *RoomRepository) GetById(id uuid.UUID) (*Room, error) {
+func (r *RoomRepository) GetRoomById(id uuid.UUID) (*Room, error) {
 	room := Room{ID: id}
 
-	if err := r.db.Preload("Beds").First(&room).Error; err != nil {
+	if err := r.db.Scopes(PreloadBedsSorted).First(&room).Error; err != nil {
 		return nil, err
 	}
 
 	return &room, nil
 }
 
-func (r *RoomRepository) GetByWardForOrganization(ctx context.Context, wardID uuid.UUID) ([]Room, error) {
+func (r *RoomRepository) GetRoomsByWardForOrganization(ctx context.Context, wardID uuid.UUID) ([]Room, error) {
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	var rooms []Room
-	if err := r.db.Where("organization_id = ? AND ward_id = ?", organizationID.String(), wardID.String()).Find(&rooms).Error; err != nil {
+	query := r.db.
+		Where("organization_id = ? AND ward_id = ?", organizationID.String(), wardID.String()).
+		Order("name ASC").
+		Find(&rooms)
+	if err := query.Error; err != nil {
 		return nil, err
 	}
 
 	return rooms, nil
 }
 
-func (r *RoomRepository) GetRoomByWard(wardID uuid.UUID) ([]Room, error) {
+func (r *RoomRepository) GetRoomsByWard(wardID uuid.UUID) ([]Room, error) {
 	var rooms []Room
 
-	if err := r.db.Where("ward_id = ?", wardID).Find(&rooms).Error; err != nil {
+	if err := r.db.Where("ward_id = ?", wardID).Order("name ASC").Find(&rooms).Error; err != nil {
 		return nil, err
 	}
 

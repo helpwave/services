@@ -39,6 +39,7 @@ func GetRoomsWithBedsAndPatientsAndTasksByWardForOrganization(ctx context.Contex
 		Preload("Beds.Patient").
 		Preload("Beds.Patient.Tasks").
 		Where("organization_id = ? AND ward_id = ?", organizationID.String(), wardID.String()).
+		Order("name ASC").
 		Find(&rooms)
 
 	if err := query.Error; err != nil {
@@ -147,7 +148,7 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 	// TODO: Auth
 
 	var rooms []models.Room
-	if err := db.Scopes(models.PreloadBedsSorted).Find(&rooms).Error; err != nil {
+	if err := db.Scopes(models.PreloadBedsSorted).Order("name ASC").Find(&rooms).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -187,7 +188,12 @@ func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardR
 	}
 
 	var rooms []models.Room
-	if err := db.Scopes(models.PreloadBedsSorted).Find(&rooms, "ward_id = ?", wardId).Error; err != nil {
+	query := db.
+		Scopes(models.PreloadBedsSorted).
+		Order("name ASC").
+		Find(&rooms, "ward_id = ?", wardId)
+
+	if err := query.Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
