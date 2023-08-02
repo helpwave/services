@@ -40,10 +40,12 @@ func main() {
 	addr := common.ResolveAddrFromEnv()
 	service := daprd.NewService(addr)
 
-	err := service.AddServiceInvocationHandler("/after_registration_webhook", afterRegistrationWebhookHandler)
-	err = service.AddServiceInvocationHandler("/after_settings_webhook", afterSettingsWebhookHandler)
-	if err != nil {
-		zlog.Err(err).Msg("could not add service invocation handler")
+	if err := service.AddServiceInvocationHandler("/after_registration_webhook", afterRegistrationWebhookHandler); err != nil {
+		zlog.Fatal().Str("endpoint", "after_registration_webhook").Err(err).Msg("could not add service invocation handler")
+	}
+
+	if err := service.AddServiceInvocationHandler("/after_settings_webhook", afterSettingsWebhookHandler); err != nil {
+		zlog.Fatal().Str("endpoint", "after_settings_webhook").Err(err).Msg("could not add service invocation handler")
 	}
 
 	if err := service.Start(); err != nil {
