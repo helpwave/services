@@ -39,6 +39,8 @@ services:
     volumes:
       - ./dapr.yaml:/usr/local/apisix/dapr/config.yaml:ro
       - ../apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro # for hot-reloading
+    environment:
+      ORY_WEBHOOK_BASIC_AUTH: '{"username":"ory","password":"2341"}'
     ports:
       - "9080:9080"
 

@@ -1,3 +1,10 @@
+consumers:
+  - username: ory
+    plugins:
+      basic-auth:
+        username: "$ENV://ORY_WEBHOOK_BASIC_AUTH/username"
+        password: "$ENV://ORY_WEBHOOK_BASIC_AUTH/password"
+
 upstreams:
   - id: dapr-grpc
     nodes:
@@ -47,6 +54,7 @@ services:
         allow_credential: true
         _meta:
           priority: -1
+      basic-auth:
 
 routes:
   - id: task-svc
