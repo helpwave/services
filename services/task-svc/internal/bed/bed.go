@@ -68,7 +68,7 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed, err := bedRepo.GetBedById(&id)
+	bed, err := bedRepo.GetBedById(id)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -154,17 +154,16 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 }
 
 func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*pb.UpdateBedResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	bedRepo := repositories.BedRepo(ctx)
 
 	bedID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed := models.Bed{ID: bedID}
 	updates := pbhelpers.UpdatesMapForUpdateBedRequest(req)
 
-	if err := db.Model(&bed).Updates(updates).Error; err != nil {
+	if _, err := bedRepo.UpdateBed(bedID, updates); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -173,7 +172,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 
 func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*pb.DeleteBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
+	bedRepo := repositories.BedRepo(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -185,8 +184,8 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed := models.Bed{ID: bedID}
-	if err := db.Where("organization_id = ?", organizationID).First(&bed).Error; err != nil {
+	bed, err := bedRepo.GetBedById(bedID)
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -195,7 +194,13 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 		}
 	}
 
-	if err := db.Delete(bed).Error; err != nil {
+	if bed.OrganizationID != organizationID {
+		return nil, status.Error(codes.PermissionDenied, "bed not in your organization")
+	}
+
+	err = bedRepo.DeleteBed(bedID)
+
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
