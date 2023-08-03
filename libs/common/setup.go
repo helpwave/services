@@ -63,7 +63,11 @@ func Setup(serviceName, version string, auth bool) {
 
 	organizationIdStr := hwutil.GetEnvOr("ORGANIZATION_ID", "")
 	if organizationIdStr != "" {
-		organizationID := uuid.MustParse(organizationIdStr)
+		organizationID, err := uuid.Parse(organizationIdStr)
+		if err != nil {
+			log.Fatal().Err(err).Msg("invalid uuid for environment variable ORGANIZATION_ID")
+		}
+		log.Info().Str("organizationID", organizationID.String()).Msg("using fallback organizationID")
 		OrganizationID = &organizationID
 	}
 }
