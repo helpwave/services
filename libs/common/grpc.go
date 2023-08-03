@@ -146,14 +146,22 @@ func authFunc(ctx context.Context) (context.Context, error) {
 // organizationID from the headers against the organizationIDs inside the claim.
 func handleOrganizationIDForAuthFunc(ctx context.Context) (context.Context, error) {
 	organizationIDStr, err := OrganizationIDFromMD(ctx)
-	if err != nil {
+
+	var organizationID uuid.UUID
+	if err == nil {
+		// organizationID in header, using header
+		organizationID, err = uuid.Parse(organizationIDStr)
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "invalid organizationID")
+		}
+	} else if OrganizationID != nil {
+		// no organizationID in header but in envs, using env
+		zlog.Ctx(ctx).Info().Msg("no valid organization header found, falling back to environment organization id")
+		organizationID = *OrganizationID
+	} else {
+		// no organizationID in header or env, error
 		zlog.Ctx(ctx).Trace().Err(err).Msg("no valid organization header found")
 		return nil, err
-	}
-
-	organizationID, err := uuid.Parse(organizationIDStr)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "invalid organizationID")
 	}
 
 	claims, err := GetAuthClaims(ctx)

@@ -3,6 +3,7 @@ package common
 import (
 	"crypto/tls"
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 	"hwutil"
@@ -16,6 +17,7 @@ import (
 var (
 	Mode                    string // Mode is set in Setup()
 	InsecureFakeTokenEnable = false
+	OrganizationID          *uuid.UUID
 )
 
 const DevelopmentMode = "development"
@@ -57,6 +59,12 @@ func Setup(serviceName, version string, auth bool) {
 		}
 
 		setupAuth()
+	}
+
+	organizationIdStr := hwutil.GetEnvOr("ORGANIZATION_ID", "")
+	if organizationIdStr != "" {
+		organizationID := uuid.MustParse(organizationIdStr)
+		OrganizationID = &organizationID
 	}
 }
 
