@@ -9,7 +9,6 @@ import (
 	"hwgorm"
 	"hwutil"
 	"task-svc/internal/models"
-	"task-svc/internal/patient"
 	"task-svc/internal/repositories"
 	"task-svc/internal/task"
 
@@ -155,6 +154,8 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 }
 
 func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOverviewsRequest) (*pb.GetWardOverviewsResponse, error) {
+	patientRepo := repositories.PatientRepo(ctx)
+
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
@@ -196,7 +197,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 			bedCount += uint32(len(beds))
 		}
 
-		patients, err := patient.GetPatientsByWardForOrganization(ctx, ward.ID)
+		patients, err := patientRepo.GetPatientsByWardForOrganization(ward.ID, organizationID)
 		if err != nil {
 			if hwgorm.IsOurFault(err) {
 				return nil, status.Error(codes.Internal, err.Error())

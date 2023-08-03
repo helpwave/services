@@ -3,42 +3,19 @@ package patient
 import (
 	"common"
 	"context"
-	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
-	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
+
+	pb "gen/proto/services/task_svc/v1"
+	zlog "github.com/rs/zerolog/log"
+	pbhelpers "proto_helpers/task_svc/v1"
 	intTask "task-svc/internal/task"
 )
-
-// GetPatientsByWardForOrganization
-// TODO: Move into repository
-func GetPatientsByWardForOrganization(ctx context.Context, wardID uuid.UUID) ([]models.Patient, error) {
-	db := hwgorm.GetDB(ctx)
-
-	organizationID, err := common.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	var patients []models.Patient
-	if err := db.
-		Table("patients").
-		Joins("JOIN beds ON beds.id = patients.bed_id").
-		Joins("JOIN rooms ON rooms.id = beds.room_id").
-		Where("rooms.ward_id = ? AND rooms.organization_id = ?", wardID, organizationID).
-		Find(&patients).
-		Error; err != nil {
-		return nil, err
-	}
-
-	return patients, nil
-}
 
 type ServiceServer struct {
 	pb.UnimplementedPatientServiceServer
@@ -50,7 +27,7 @@ func NewServiceServer() *ServiceServer {
 
 func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientRequest) (*pb.CreatePatientResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
+	patientRepo := repositories.PatientRepo(ctx)
 
 	// TODO: Auth
 
@@ -59,15 +36,15 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientReq
 		return nil, err
 	}
 
-	patient := models.Patient{
+	patient, err := patientRepo.CreatePatient(&models.Patient{
 		PatientBase: models.PatientBase{
 			HumanReadableIdentifier: req.HumanReadableIdentifier,
 			Notes:                   req.Notes,
 		},
 		OrganizationID: organizationID,
-	}
+	})
 
-	if err := db.Create(&patient).Error; err != nil {
+	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -81,7 +58,7 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientReq
 }
 
 func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) (*pb.GetPatientResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	patientRepo := repositories.PatientRepo(ctx)
 
 	// TODO: Auth
 
@@ -90,12 +67,12 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient := models.Patient{ID: id}
-	if err := db.First(&patient).Error; err != nil {
+	patient, err := patientRepo.GetPatientById(id)
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
+			return nil, status.Error(codes.InvalidArgument, "not found")
 		}
 	}
 
@@ -135,14 +112,21 @@ func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBe
 }
 
 func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsByWardRequest) (*pb.GetPatientsByWardResponse, error) {
+	patientRepo := repositories.PatientRepo(ctx)
+
 	// TODO: Auth
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	wardID, err := uuid.Parse(req.WardId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patients, err := GetPatientsByWardForOrganization(ctx, wardID)
+	patients, err := patientRepo.GetPatientsByWardForOrganization(wardID, organizationID)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -164,15 +148,17 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 }
 
 func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.GetPatientAssignmentByWardRequest) (*pb.GetPatientAssignmentByWardResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	patientRepo := repositories.PatientRepo(ctx)
+
+	// TODO: Auth
 
 	wardID, err := uuid.Parse(req.WardId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var rooms []models.Room
-	if err := db.Preload("Beds.Patient").Scopes(repositories.PreloadBedsSorted).Where("ward_id = ?", wardID).Find(&rooms).Error; err != nil {
+	rooms, err := patientRepo.GetRoomsWithBedsWithPatientsByWard(wardID)
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -206,7 +192,7 @@ func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.Get
 }
 
 func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientRequest) (*pb.UpdatePatientResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	patientRepo := repositories.PatientRepo(ctx)
 
 	// TODO: Auth
 
@@ -215,10 +201,10 @@ func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient := models.Patient{ID: id}
 	updates := pbhelpers.UpdatesMapForUpdatePatientRequest(req)
+	_, err = patientRepo.UpdatePatient(id, updates)
 
-	if err := db.Model(&patient).Updates(updates).Error; err != nil {
+	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -227,7 +213,8 @@ func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientReq
 
 func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*pb.AssignBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
+	patientRepo := repositories.PatientRepo(ctx)
+	bedRepo := repositories.BedRepo(ctx)
 
 	// TODO: Auth
 
@@ -242,17 +229,18 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 	}
 
 	// Check whether bed exits
-	bed := models.Bed{ID: bedID}
-	if err := db.First(&bed).Error; err != nil {
+	bed, err := bedRepo.GetBedById(bedID)
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "bed_id not found")
+			return nil, status.Error(codes.InvalidArgument, "bed not found")
 		}
 	}
 
-	patient := models.Patient{ID: id}
-	if err := db.Model(&patient).Update("bed_id", bed.ID).Error; err != nil {
+	updates := map[string]interface{}{"bed_id": bedID}
+	patient, err := patientRepo.UpdatePatient(id, updates)
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -270,7 +258,7 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 
 func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest) (*pb.UnassignBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
+	patientRepo := repositories.PatientRepo(ctx)
 
 	// TODO: Auth
 
@@ -279,8 +267,10 @@ func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient := models.Patient{ID: id}
-	if err := db.Model(&patient).Update("bed_id", nil).Error; err != nil {
+	updates := map[string]interface{}{"bed_id": nil}
+	patient, err := patientRepo.UpdatePatient(id, updates)
+
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -297,7 +287,7 @@ func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest
 
 func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePatientRequest) (*pb.DischargePatientResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
+	patientRepo := repositories.PatientRepo(ctx)
 
 	// TODO: Auth
 
@@ -306,12 +296,14 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
+	// Unassign Patient from bed and set to discharged
 	updates := map[string]interface{}{
 		"bed_id":        nil,
 		"is_discharged": 1,
 	}
-	// Unassign Patient from bed and set to discharged
-	if err := db.Model(&models.Patient{ID: id}).Updates(updates).Error; err != nil {
+	_, err = patientRepo.UpdatePatient(id, updates)
+
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -327,7 +319,7 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 }
 
 func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDetailsRequest) (*pb.GetPatientDetailsResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	patientRepo := repositories.PatientRepo(ctx)
 
 	// TODO: Auth
 
@@ -336,12 +328,12 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient := models.Patient{ID: id}
-	if err := db.First(&patient).Error; err != nil {
+	patient, err := patientRepo.GetPatientById(id)
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
+			return nil, status.Error(codes.InvalidArgument, "patient not found")
 		}
 	}
 
@@ -380,36 +372,29 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 }
 
 func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListRequest) (*pb.GetPatientListResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	patientRepo := repositories.PatientRepo(ctx)
 
-	id, err := uuid.Parse(req.OrganisationId)
+	organizationID, err := uuid.Parse(req.OrganisationId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var unassignedPatients []models.Patient
-	if err := db.Where("organization_id = ? AND bed_id IS NULL AND is_discharged = 0", id).Find(&unassignedPatients).Error; err != nil {
-		return nil, err
-	}
-
-	var dischargedPatients []models.Patient
-	if err := db.Unscoped().Where("organization_id = ? AND is_discharged = 1", id).Find(&dischargedPatients).Error; err != nil {
-		return nil, err
-	}
-
-	var rooms []models.Room
-	err = db.
-		Preload("Beds.Patient").
-		Joins("JOIN beds ON rooms.id = beds.room_id").
-		Joins("JOIN patients ON patients.bed_id = beds.id").
-		Where("patients.organization_id = ? AND patients.is_discharged = 0", id).
-		Group("rooms.id").
-		Find(&rooms).
-		Error
-
+	unassignedPatients, err := patientRepo.GetUnassignedPatientsForOrganization(organizationID)
 	if err != nil {
-		return nil, err
+		return nil, status.Error(codes.Internal, err.Error())
 	}
+
+	dischargedPatients, err := patientRepo.GetDischargedPatientsForOrganization(organizationID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	rooms, err := patientRepo.GetRoomsWithBedsWithActivePatientsForOrganization(organizationID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	// TODO: replace with hwutil.Map()
 
 	var activePatients []*pb.GetPatientListResponse_PatientWithRoomAndBed
 
