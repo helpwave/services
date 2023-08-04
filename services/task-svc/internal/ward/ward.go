@@ -174,7 +174,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 	resWards, err := hwutil.MapWithErr(wards, func(ward *models.Ward) (*pb.GetWardOverviewsResponse_Ward, error) {
 		// FIXME: NO!
 		roomRepository := repositories.RoomRepo(ctx)
-		rooms, err := roomRepository.GetRoomsByWardForOrganization(ward.ID, organizationID)
+		rooms, err := roomRepository.GetRoomsWithBedsByWardForOrganization(ward.ID, organizationID)
 		if err != nil {
 			if hwgorm.IsOurFault(err) {
 				return nil, status.Error(codes.Internal, err.Error())
