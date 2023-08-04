@@ -317,7 +317,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 	}
 
 	mappedTaskTemplates, err := hwutil.MapWithErr(taskTemplates, func(taskTemplate models.TaskTemplate) (*pb.GetWardDetailsResponse_TaskTemplate, error) {
-		taskTemplateSubtasks, err := templateRepo.GetSubTasksByTemplate(taskTemplate.ID)
+		taskTemplateSubtasks, err := templateRepo.GetSubTasksForTemplate(taskTemplate.ID)
 
 		if err != nil {
 			return nil, err
