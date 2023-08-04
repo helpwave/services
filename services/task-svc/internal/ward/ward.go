@@ -174,7 +174,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 	resWards, err := hwutil.MapWithErr(wards, func(ward *models.Ward) (*pb.GetWardOverviewsResponse_Ward, error) {
 		// FIXME: NO!
 		roomRepository := repositories.RoomRepo(ctx)
-		rooms, err := roomRepository.GetByWardForOrganization(ward.ID, organizationID)
+		rooms, err := roomRepository.GetRoomsByWardForOrganization(ward.ID, organizationID)
 		if err != nil {
 			if hwgorm.IsOurFault(err) {
 				return nil, status.Error(codes.Internal, err.Error())
@@ -261,7 +261,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 	}
 
 	roomRepository := repositories.RoomRepo(ctx)
-	rooms, err := roomRepository.GetRoomByWard(wardID)
+	rooms, err := roomRepository.GetRoomsByWard(wardID)
 
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
@@ -273,6 +273,8 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 
 	bedRepository := repositories.BedRepo(ctx)
 	mappedRooms, err := hwutil.MapWithErr(rooms, func(room models.Room) (*pb.GetWardDetailsResponse_Room, error) {
+		// FIXME: this is a sin and need to be refactored!
+		// FIXME: don't make network requests in loops, like ever
 		beds, err := bedRepository.GetBedsByRoom(room.ID)
 		if err != nil {
 			return nil, err
@@ -301,7 +303,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 	}
 
 	templateRepository := repositories.TemplateRepo(ctx)
-	taskTemplates, err := templateRepository.GetTemplateByWard(wardID)
+	taskTemplates, err := templateRepository.GetTemplatesByWard(wardID)
 
 	if err != nil {
 		if hwgorm.IsOurFault(err) {

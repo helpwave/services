@@ -44,6 +44,10 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		Name:           req.Name,
 	})
 
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	log.Info().
 		Str("bedId", bed.ID.String()).
 		Str("roomId", req.RoomId).

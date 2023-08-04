@@ -18,10 +18,10 @@ func RoomRepo(logCtx context.Context) *RoomRepository {
 	}
 }
 
-func (r *RoomRepository) GetById(id uuid.UUID) (*models.Room, error) {
+func (r *RoomRepository) GetRoomById(id uuid.UUID) (*models.Room, error) {
 	room := models.Room{ID: id}
 	query := r.db.
-		Preload("Beds").
+		Scopes(PreloadBedsSorted).
 		First(&room)
 
 	if err := query.Error; err != nil {
@@ -30,10 +30,11 @@ func (r *RoomRepository) GetById(id uuid.UUID) (*models.Room, error) {
 	return &room, nil
 }
 
-func (r *RoomRepository) GetByWardForOrganization(wardID uuid.UUID, organizationID uuid.UUID) ([]models.Room, error) {
+func (r *RoomRepository) GetRoomsByWardForOrganization(wardID uuid.UUID, organizationID uuid.UUID) ([]models.Room, error) {
 	var rooms []models.Room
 	query := r.db.
 		Where("organization_id = ? AND ward_id = ?", organizationID.String(), wardID.String()).
+		Order("name ASC").
 		Find(&rooms)
 
 	if err := query.Error; err != nil {
@@ -42,10 +43,11 @@ func (r *RoomRepository) GetByWardForOrganization(wardID uuid.UUID, organization
 	return rooms, nil
 }
 
-func (r *RoomRepository) GetRoomByWard(wardID uuid.UUID) ([]models.Room, error) {
+func (r *RoomRepository) GetRoomsByWard(wardID uuid.UUID) ([]models.Room, error) {
 	var rooms []models.Room
 	query := r.db.
 		Where("ward_id = ?", wardID).
+		Order("name ASC").
 		Find(&rooms)
 
 	if err := query.Error; err != nil {

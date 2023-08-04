@@ -18,7 +18,7 @@ func TemplateRepo(logCtx context.Context) *TemplateRepository {
 	}
 }
 
-func (r *TemplateRepository) GetTemplateByWard(wardID uuid.UUID) ([]models.TaskTemplate, error) {
+func (r *TemplateRepository) GetTemplatesByWard(wardID uuid.UUID) ([]models.TaskTemplate, error) {
 	var templates []models.TaskTemplate
 	query := r.db.
 		Where("ward_id = ?", wardID).
