@@ -66,7 +66,7 @@ func Setup(serviceName, version string, auth bool) {
 			if err != nil {
 				log.Fatal().Err(err).Msg("invalid uuid for environment variable ORGANIZATION_ID")
 			}
-			log.Info().Str("organizationID", organizationID.String()).Msg("specified fallback organizationID when no organization header was found")
+			log.Info().Str("organizationID", organizationID.String()).Msg("specified fallback organizationID for requests without organization header")
 			InstanceOrganizationID = &organizationID
 		}
 
