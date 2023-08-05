@@ -23,6 +23,12 @@ services:
     ports:
       - "5433:80"
 
+  redis:
+    image: redis:6
+    profiles:
+      - full
+    restart: unless-stopped
+
   apisix:
     build:
       context: ..
@@ -31,8 +37,10 @@ services:
       - full
     restart: unless-stopped
     volumes:
-      - ../apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro
-      - ./dapr.yaml:/usr/local/apisix/dapr.yaml:ro
+      - ./dapr.yaml:/usr/local/apisix/dapr/config.yaml:ro
+      - ../apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro # for hot-reloading
+    environment:
+      ORY_WEBHOOK_BASIC_AUTH: '{"username":"ory","password":"2341"}'
     ports:
       - "9080:9080"
 
@@ -45,11 +53,46 @@ services:
     profiles:
       - full
     volumes:
-      - ./dapr.yaml:/app/dapr.yaml:ro
+      - ./dapr.yaml:/app/dapr/dapr.yaml:ro
     restart: unless-stopped
     environment:
       INSECURE_FAKE_TOKEN_ENABLE: true
-      POSTGRES_HOST: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: task-svc
+      POSTGRES_DSN: postgres://postgres:postgres@postgres/task-svc
+      SECRETSTORE_REDIS_HOST: "redis:6379"
+      SECRETSTORE_REDIS_PASSWORD: ""
+      SECRETSTORE_REDIS_USERNAME: ""
+
+  user-svc:
+    build:
+      context: ..
+      dockerfile: Dockerfile.standalone
+      args:
+        - SERVICE=user-svc
+    profiles:
+      - full
+    volumes:
+      - ./dapr.yaml:/app/dapr/dapr.yaml:ro
+    restart: unless-stopped
+    environment:
+      INSECURE_FAKE_TOKEN_ENABLE: true
+      POSTGRES_DSN: postgres://postgres:postgres@postgres/user-svc
+      SECRETSTORE_REDIS_HOST: "redis:6379"
+      SECRETSTORE_REDIS_PASSWORD: ""
+      SECRETSTORE_REDIS_USERNAME: ""
+
+  ory-svc:
+    build:
+      context: ..
+      dockerfile: Dockerfile.standalone
+      args:
+        - SERVICE=ory-svc
+        - APP_PROTOCOL=http
+    profiles:
+      - full
+    volumes:
+      - ./dapr.yaml:/app/dapr/dapr.yaml:ro
+    restart: unless-stopped
+    environment:
+      SECRETSTORE_REDIS_HOST: "redis:6379"
+      SECRETSTORE_REDIS_PASSWORD: ""
+      SECRETSTORE_REDIS_USERNAME: ""
