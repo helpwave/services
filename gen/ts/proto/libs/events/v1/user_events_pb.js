@@ -651,22 +651,22 @@ proto.proto.libs.events.v1.UserUpdatedEvent.serializeBinaryToWriter = function(m
       f
     );
   }
-  f = message.getEmail();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = message.getNickname();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 3));
+  if (f != null) {
     writer.writeString(
       3,
       f
     );
   }
-  f = message.getName();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
     writer.writeString(
       4,
       f
@@ -707,7 +707,25 @@ proto.proto.libs.events.v1.UserUpdatedEvent.prototype.getEmail = function() {
  * @return {!proto.proto.libs.events.v1.UserUpdatedEvent} returns this
  */
 proto.proto.libs.events.v1.UserUpdatedEvent.prototype.setEmail = function(value) {
-  return jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setField(this, 2, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.libs.events.v1.UserUpdatedEvent} returns this
+ */
+proto.proto.libs.events.v1.UserUpdatedEvent.prototype.clearEmail = function() {
+  return jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.libs.events.v1.UserUpdatedEvent.prototype.hasEmail = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
@@ -725,7 +743,25 @@ proto.proto.libs.events.v1.UserUpdatedEvent.prototype.getNickname = function() {
  * @return {!proto.proto.libs.events.v1.UserUpdatedEvent} returns this
  */
 proto.proto.libs.events.v1.UserUpdatedEvent.prototype.setNickname = function(value) {
-  return jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setField(this, 3, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.libs.events.v1.UserUpdatedEvent} returns this
+ */
+proto.proto.libs.events.v1.UserUpdatedEvent.prototype.clearNickname = function() {
+  return jspb.Message.setField(this, 3, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.libs.events.v1.UserUpdatedEvent.prototype.hasNickname = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
@@ -743,7 +779,25 @@ proto.proto.libs.events.v1.UserUpdatedEvent.prototype.getName = function() {
  * @return {!proto.proto.libs.events.v1.UserUpdatedEvent} returns this
  */
 proto.proto.libs.events.v1.UserUpdatedEvent.prototype.setName = function(value) {
-  return jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setField(this, 4, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.libs.events.v1.UserUpdatedEvent} returns this
+ */
+proto.proto.libs.events.v1.UserUpdatedEvent.prototype.clearName = function() {
+  return jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.libs.events.v1.UserUpdatedEvent.prototype.hasName = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 

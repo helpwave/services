@@ -68,12 +68,18 @@ export class UserUpdatedEvent extends jspb.Message {
 
   getEmail(): string;
   setEmail(value: string): UserUpdatedEvent;
+  hasEmail(): boolean;
+  clearEmail(): UserUpdatedEvent;
 
   getNickname(): string;
   setNickname(value: string): UserUpdatedEvent;
+  hasNickname(): boolean;
+  clearNickname(): UserUpdatedEvent;
 
   getName(): string;
   setName(value: string): UserUpdatedEvent;
+  hasName(): boolean;
+  clearName(): UserUpdatedEvent;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UserUpdatedEvent.AsObject;
@@ -86,9 +92,24 @@ export class UserUpdatedEvent extends jspb.Message {
 export namespace UserUpdatedEvent {
   export type AsObject = {
     id: string,
-    email: string,
-    nickname: string,
-    name: string,
+    email?: string,
+    nickname?: string,
+    name?: string,
+  }
+
+  export enum EmailCase { 
+    _EMAIL_NOT_SET = 0,
+    EMAIL = 2,
+  }
+
+  export enum NicknameCase { 
+    _NICKNAME_NOT_SET = 0,
+    NICKNAME = 3,
+  }
+
+  export enum NameCase { 
+    _NAME_NOT_SET = 0,
+    NAME = 4,
   }
 }
 

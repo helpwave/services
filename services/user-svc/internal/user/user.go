@@ -11,7 +11,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"
 	"hwgorm"
-	pbhelpers "proto_helpers/user_svc/v1"
+	pbhelpersEvents "proto_helpers/events/v1"
 )
 
 type Base struct {
@@ -148,7 +148,7 @@ func HandleUserUpdatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry
 
 	db := hwgorm.GetDB(ctx)
 
-	if err := updateUser(ctx, db, userID, pbhelpers.UpdatesMapForUserUpdatedEvent(&payload)); err != nil {
+	if err := updateUser(ctx, db, userID, pbhelpersEvents.UpdatesMapForUserUpdatedEvent(&payload)); err != nil {
 		log.Error().Err(err).Send()
 		return true, err
 	}

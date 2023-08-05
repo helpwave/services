@@ -50,14 +50,20 @@ const UserUpdatedEvent$json = {
   '1': 'UserUpdatedEvent',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
-    {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
-    {'1': 'name', '3': 4, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'email', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'email', '17': true},
+    {'1': 'nickname', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'nickname', '17': true},
+    {'1': 'name', '3': 4, '4': 1, '5': 9, '9': 2, '10': 'name', '17': true},
+  ],
+  '8': [
+    {'1': '_email'},
+    {'1': '_nickname'},
+    {'1': '_name'},
   ],
 };
 
 /// Descriptor for `UserUpdatedEvent`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List userUpdatedEventDescriptor = $convert.base64Decode(
-    'ChBVc2VyVXBkYXRlZEV2ZW50Eg4KAmlkGAEgASgJUgJpZBIUCgVlbWFpbBgCIAEoCVIFZW1haW'
-    'wSGgoIbmlja25hbWUYAyABKAlSCG5pY2tuYW1lEhIKBG5hbWUYBCABKAlSBG5hbWU=');
+    'ChBVc2VyVXBkYXRlZEV2ZW50Eg4KAmlkGAEgASgJUgJpZBIZCgVlbWFpbBgCIAEoCUgAUgVlbW'
+    'FpbIgBARIfCghuaWNrbmFtZRgDIAEoCUgBUghuaWNrbmFtZYgBARIXCgRuYW1lGAQgASgJSAJS'
+    'BG5hbWWIAQFCCAoGX2VtYWlsQgsKCV9uaWNrbmFtZUIHCgVfbmFtZQ==');
 
