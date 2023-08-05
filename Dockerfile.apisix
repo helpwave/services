@@ -22,6 +22,8 @@ RUN echo -n "56ff6bbcfc551d2cedb06a30a8fa32fb14f6efe2995b38316a991b0c5e048e15 /r
 FROM apache/apisix:3.4.0-debian
 USER root
 ENV DAPR_APP_ID=gateway
+# DAPR_HTTP_READ_BUFFER_SIZE: default 4KB
+ENV DAPR_HTTP_READ_BUFFER_SIZE=8
 ENV APISIX_STAND_ALONE=true
 
 COPY --chown=apisix:apisix --from=deps /hivemind /usr/bin/hivemind
@@ -30,6 +32,9 @@ COPY --chown=apisix:apisix dapr/config.yaml dapr/config.yaml
 COPY --chown=apisix:apisix apisix/Procfile.apisix Procfile
 COPY --chown=apisix:apisix apisix/apisix_config.yaml /usr/local/apisix/conf/config.yaml
 COPY --chown=apisix:apisix apisix/apisix.yaml /usr/local/apisix/conf/apisix.yaml
+
+# fix permissions
+RUN chmod +x /usr/bin/daprd
 
 USER apisix
 CMD hivemind

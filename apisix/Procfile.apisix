@@ -1,4 +1,4 @@
 # Format; See https://devcenter.heroku.com/articles/procfile#procfile-format
 # <process type / name>: <command>
-daprd: /usr/bin/daprd --app-id $DAPR_APP_ID --config /usr/local/apisix/dapr/config.yaml --log-level debug --app-port 9080 --metrics-port 9099 --dapr-internal-grpc-port 35001
+daprd: /usr/bin/daprd --app-id $DAPR_APP_ID --dapr-http-read-buffer-size $DAPR_HTTP_READ_BUFFER_SIZE --config /usr/local/apisix/dapr/config.yaml --log-level debug --app-port 9080 --metrics-port 9099 --dapr-internal-grpc-port 35001
 apisix: /usr/bin/apisix init && exec /usr/local/openresty/bin/openresty -p /usr/local/apisix -g 'daemon off;'

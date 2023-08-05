@@ -61,6 +61,16 @@ func (t IDTokenClaims) AsExpected() error {
 		return errors.New("email missing in id token")
 	}
 
+	if len(t.Name) == 0 {
+		return errors.New("name missing in id token")
+	}
+
+	if len(t.Nickname) == 0 {
+		return errors.New("nickname missing in id token")
+	}
+
+	// TODO: Validate Organizations
+
 	return nil
 }
 

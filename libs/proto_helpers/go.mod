@@ -5,6 +5,7 @@ go 1.20
 replace (
 	gen => ../../gen/go
 	hwgorm => ../hwgorm
+	hwutil => ../hwutil
 	logging => ../logging
 )
 
@@ -14,8 +15,11 @@ require (
 )
 
 require (
-	github.com/fatih/structs v1.1.0 // indirect
+	github.com/go-playground/locales v0.14.0 // indirect
+	github.com/go-playground/universal-translator v0.18.0 // indirect
+	github.com/go-playground/validator/v10 v10.11.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/uuid v1.3.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.13.0 // indirect
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa // indirect
@@ -27,6 +31,7 @@ require (
 	github.com/jackc/pgx/v4 v4.17.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
+	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/rs/zerolog v1.28.0 // indirect
@@ -39,5 +44,5 @@ require (
 	google.golang.org/protobuf v1.30.0 // indirect
 	gorm.io/driver/postgres v1.4.5 // indirect
 	gorm.io/gorm v1.24.2 // indirect
-	logging v0.0.0 // indirect
+	hwutil v0.0.0 // indirect
 )

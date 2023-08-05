@@ -46,13 +46,15 @@ func createIdToken(identity *ory.Identity) (*common.IDTokenClaims, error) {
 		return nil, err
 	}
 
+	// NOTICE: Due to the fact that the claims inside the id token are now under full control of us,
+	// we could fetch the organizations directly from the user-svc
 	organizationIDs, err := oryIdentityMetadataPublic.GetOrganizationsAsUUID()
 	if err != nil {
 		return nil, err
 	}
 
 	return &common.IDTokenClaims{
-		Sub:           identity.Id,
+		Sub:           identity.GetId(),
 		Email:         identity.GetVerifiableAddresses()[0].Value,
 		Name:          oryIdentityTraits.Name,
 		Nickname:      oryIdentityTraits.Nickname,

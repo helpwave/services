@@ -54,6 +54,10 @@ func main() {
 		zlog.Fatal().Str("endpoint", "after_registration_webhook").Err(err).Msg("could not add service invocation handler")
 	}
 
+	if err := service.AddServiceInvocationHandler("/after_settings_webhook", afterSettingsWebhookHandler); err != nil {
+		zlog.Fatal().Str("endpoint", "after_settings_webhook").Err(err).Msg("could not add service invocation handler")
+	}
+
 	if err := service.AddServiceInvocationHandler("/oauth2_consent", oauth2ConsentHandler); err != nil {
 		zlog.Fatal().Str("endpoint", "oauth2_consent").Err(err).Msg("could not add service invocation handler")
 	}
@@ -82,14 +86,47 @@ func afterRegistrationWebhookHandler(ctx context.Context, in *daprcmn.Invocation
 		return nil, newErrAndLog(ctx, err.Error())
 	}
 
-	userCreatedEvent := &events.UserCreatedEvent{
+	userRegisteredEvent := &events.UserRegisteredEvent{
 		Id:       userID.String(),
 		Email:    payload.Email,
 		Nickname: payload.Nickname,
 		Name:     payload.Name,
 	}
 
-	if err := common.PublishMessage(ctx, daprClient, DaprPubsub, "USER_CREATED", userCreatedEvent); err != nil {
+	if err := common.PublishMessage(ctx, daprClient, DaprPubsub, "USER_REGISTERED", userRegisteredEvent); err != nil {
+		return nil, newErrAndLog(ctx, err.Error())
+	}
+
+	return nil, nil // 200 OK
+}
+
+func afterSettingsWebhookHandler(ctx context.Context, in *daprcmn.InvocationEvent) (out *daprcmn.Content, err error) {
+	if in.Verb != http.MethodPost {
+		return nil, newErrAndLog(ctx, "invalid method")
+	}
+
+	if in.ContentType != "application/json" {
+		return nil, newErrAndLog(ctx, "invalid content-type")
+	}
+
+	var payload pb.AfterSettingsWebhookPayload
+	if err := hwutil.ParseValidJson(in.Data, &payload); err != nil {
+		return nil, newErrAndLog(ctx, err.Error())
+	}
+
+	userID, err := uuid.Parse(payload.UserId)
+	if err != nil {
+		return nil, newErrAndLog(ctx, err.Error())
+	}
+
+	userUpdatedEvent := &events.UserRegisteredEvent{
+		Id:       userID.String(),
+		Email:    payload.Email,
+		Nickname: payload.Nickname,
+		Name:     payload.Name,
+	}
+
+	if err := common.PublishMessage(ctx, daprClient, DaprPubsub, "USER_UPDATED", userUpdatedEvent); err != nil {
 		return nil, newErrAndLog(ctx, err.Error())
 	}
 
@@ -97,17 +134,21 @@ func afterRegistrationWebhookHandler(ctx context.Context, in *daprcmn.Invocation
 }
 
 func oauth2ConsentHandler(ctx context.Context, in *daprcmn.InvocationEvent) (out *daprcmn.Content, err error) {
+	if in.Verb != http.MethodGet {
+		return nil, newErrAndLog(ctx, "invalid method")
+	}
+
 	queryString, err := url.ParseQuery(in.QueryString)
 	if err != nil {
-		return nil, err
+		return nil, newErrAndLog(ctx, err.Error())
 	}
 
 	consentChallenge := queryString.Get("consent_challenge")
 	if consentChallenge == "" {
-		return nil, errors.New("key consent_challenge not in query-string")
+		return nil, newErrAndLog(ctx, "key consent_challenge not in query-string")
 	}
 
-	redirectUrl, err := oryInt.HandleOAuth2Consent(ctx, oryClient, consentChallenge)
+	redirectUrl, idTokenClaims, err := oryInt.HandleOAuth2Consent(ctx, oryClient, consentChallenge)
 	if err != nil {
 		return nil, newErrAndLog(ctx, err.Error())
 	}
@@ -116,6 +157,10 @@ func oauth2ConsentHandler(ctx context.Context, in *daprcmn.InvocationEvent) (out
 	if err != nil {
 		return nil, newErrAndLog(ctx, err.Error())
 	}
+
+	zlog.Ctx(ctx).Info().
+		Str("userID", idTokenClaims.Sub).
+		Msg("OAuth2 consent given")
 
 	http.Redirect(w, r, *redirectUrl, http.StatusFound)
 

@@ -76,6 +76,7 @@ RUN chmod +x \
 	run-migrations.sh
 
 ENV DAPR_APP_ID=$SERVICE
+ENV DAPR_LOG_LEVEL=info
 ENV APP_PROTOCOL=$APP_PROTOCOL
 ENV ADDR 127.0.0.1:80
 ENV MODE development
