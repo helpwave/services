@@ -17,6 +17,10 @@ upstreams:
     nodes:
       "localhost:3500": 1
 
+# _meta: priority -1 => We need to define the plugin order manually,
+# for example the cors and grpc-web plugin do not get along so well
+# https://the-asf.slack.com/archives/CUC5MN17A/p1685478440334289
+
 services:
   - id: task-svc
     upstream_id: dapr-grpc
