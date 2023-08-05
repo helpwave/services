@@ -31,7 +31,7 @@ func (r *RoomRepository) CreateRoom(room *models.Room) (*models.Room, error) {
 func (r *RoomRepository) GetRoomWithBedsById(id uuid.UUID) (*models.Room, error) {
 	room := models.Room{ID: id}
 	query := r.db.
-		Scopes(PreloadBedsSorted).
+		Scopes(preloadBedsSorted).
 		First(&room)
 
 	if err := query.Error; err != nil {
@@ -43,7 +43,7 @@ func (r *RoomRepository) GetRoomWithBedsById(id uuid.UUID) (*models.Room, error)
 func (r *RoomRepository) GetRoomsWithBedsForOrganization(organizationID uuid.UUID) ([]models.Room, error) {
 	var rooms []models.Room
 	query := r.db.
-		Scopes(PreloadBedsSorted).
+		Scopes(preloadBedsSorted).
 		Where("organization_id = ?", organizationID.String()).
 		Order("name ASC").
 		Find(&rooms)
@@ -57,7 +57,7 @@ func (r *RoomRepository) GetRoomsWithBedsForOrganization(organizationID uuid.UUI
 func (r *RoomRepository) GetRoomsWithBedsByWardForOrganization(wardID uuid.UUID, organizationID uuid.UUID) ([]models.Room, error) {
 	var rooms []models.Room
 	query := r.db.
-		Scopes(PreloadBedsSorted).
+		Scopes(preloadBedsSorted).
 		Where("organization_id = ? AND ward_id = ?", organizationID.String(), wardID.String()).
 		Order("name ASC").
 		Find(&rooms)
@@ -84,7 +84,7 @@ func (r *RoomRepository) GetRoomsByWard(wardID uuid.UUID) ([]models.Room, error)
 func (r *RoomRepository) GetRoomsWithBedsAndPatientsAndTasksByWardForOrganization(wardID, organizationID uuid.UUID) ([]models.Room, error) {
 	var rooms []models.Room
 	query := r.db.
-		Scopes(PreloadBedsSorted).
+		Scopes(preloadBedsSorted).
 		Preload("Beds.Patient").
 		Preload("Beds.Patient.Tasks").
 		Where("organization_id = ? AND ward_id = ?", organizationID.String(), wardID.String()).

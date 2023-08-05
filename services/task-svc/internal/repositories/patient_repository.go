@@ -58,7 +58,7 @@ func (r *PatientRepository) GetRoomsWithBedsWithPatientsByWard(wardID uuid.UUID)
 	var rooms []models.Room
 	query := r.db.
 		Preload("Beds.Patient").
-		Scopes(PreloadBedsSorted).
+		Scopes(preloadBedsSorted).
 		Where("ward_id = ?", wardID).
 		Find(&rooms)
 

@@ -14,7 +14,6 @@ import (
 	pb "gen/proto/services/task_svc/v1"
 	zlog "github.com/rs/zerolog/log"
 	pbhelpers "proto_helpers/task_svc/v1"
-	intTask "task-svc/internal/task"
 )
 
 type ServiceServer struct {
@@ -320,6 +319,7 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 
 func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDetailsRequest) (*pb.GetPatientDetailsResponse, error) {
 	patientRepo := repositories.PatientRepo(ctx)
+	taskRepo := repositories.TaskRepo(ctx)
 
 	// TODO: Auth
 
@@ -337,7 +337,7 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		}
 	}
 
-	tasks, err := intTask.GetTasksByPatient(ctx, patient.ID)
+	tasks, err := taskRepo.GetTasksWithSubTasksByPatient(patient.ID)
 	if err != nil {
 		return nil, err
 	}

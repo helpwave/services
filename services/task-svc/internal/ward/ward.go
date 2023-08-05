@@ -3,18 +3,16 @@ package ward
 import (
 	"common"
 	"context"
+	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
+	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
-	"task-svc/internal/task"
-
-	pb "gen/proto/services/task_svc/v1"
-	zlog "github.com/rs/zerolog/log"
-	pbhelpers "proto_helpers/task_svc/v1"
 )
 
 type ServiceServer struct {
@@ -159,6 +157,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 	patientRepo := repositories.PatientRepo(ctx)
 	wardRepo := repositories.WardRepo(ctx)
 	roomRepo := repositories.RoomRepo(ctx)
+	taskRepo := repositories.TaskRepo(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -212,7 +211,8 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 		var tasksInProgress uint32
 		var tasksDone uint32
 		for _, p := range patients {
-			tasks, err := task.GetTasksByPatientForOrganization(ctx, p.ID)
+			// FIXME: NO!
+			tasks, err := taskRepo.GetTasksWithSubTasksByPatientForOrganization(p.ID, organizationID)
 			if err != nil {
 				if hwgorm.IsOurFault(err) {
 					return nil, status.Error(codes.Internal, err.Error())
