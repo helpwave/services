@@ -145,6 +145,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 // The claims are signed. Therefore, we can match the user provided
 // organizationID from the headers against the organizationIDs inside the claim.
 func handleOrganizationIDForAuthFunc(ctx context.Context) (context.Context, error) {
+	log := zlog.Ctx(ctx)
 	organizationIDStr, err := OrganizationIDFromMD(ctx)
 
 	var organizationID uuid.UUID
@@ -154,13 +155,13 @@ func handleOrganizationIDForAuthFunc(ctx context.Context) (context.Context, erro
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "invalid organizationID")
 		}
-	} else if OrganizationID != nil {
+	} else if InstanceOrganizationID != nil {
 		// no organizationID in header but in envs, using env
-		zlog.Ctx(ctx).Info().Msg("no valid organization header found, falling back to environment organization id")
-		organizationID = *OrganizationID
+		log.Trace().Msg("no valid organization header found, falling back to environment organization id")
+		organizationID = *InstanceOrganizationID
 	} else {
 		// no organizationID in header or env, error
-		zlog.Ctx(ctx).Trace().Err(err).Msg("no valid organization header found")
+		log.Trace().Err(err).Msg("no valid organization header found")
 		return nil, err
 	}
 
@@ -170,15 +171,15 @@ func handleOrganizationIDForAuthFunc(ctx context.Context) (context.Context, erro
 	}
 
 	if !hwutil.Contains(claims.Organizations, organizationID) {
-		zlog.Ctx(ctx).Info().Str("organizationID", organizationID.String()).Msg("organization in header was not part of claims")
+		log.Info().Str("organizationID", organizationID.String()).Msg("organization in header was not part of claims")
 		return nil, status.Errorf(codes.Unauthenticated, "no access to this organization")
 	}
 
 	ctx = context.WithValue(ctx, organizationIDKey{}, organizationID)
 
 	// Append organizationID to the logger
-	log := zlog.Ctx(ctx).With().Str("organizationID", organizationID.String()).Logger()
-	return log.WithContext(ctx), nil
+	loggerWithOrganizationID := zlog.Ctx(ctx).With().Str("organizationID", organizationID.String()).Logger()
+	return loggerWithOrganizationID.WithContext(ctx), nil
 }
 
 // VerifyFakeToken accepts a Base64 encoded json structure with the schema of IDTokenClaims

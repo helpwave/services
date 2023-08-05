@@ -17,7 +17,7 @@ import (
 var (
 	Mode                    string // Mode is set in Setup()
 	InsecureFakeTokenEnable = false
-	OrganizationID          *uuid.UUID
+	InstanceOrganizationID  *uuid.UUID
 )
 
 const DevelopmentMode = "development"
@@ -58,17 +58,19 @@ func Setup(serviceName, version string, auth bool) {
 			log.Error().Msg("INSECURE_FAKE_TOKEN_ENABLE is set to true, accepting fake tokens")
 		}
 
-		setupAuth()
-	}
-
-	organizationIdStr := hwutil.GetEnvOr("ORGANIZATION_ID", "")
-	if organizationIdStr != "" {
-		organizationID, err := uuid.Parse(organizationIdStr)
-		if err != nil {
-			log.Fatal().Err(err).Msg("invalid uuid for environment variable ORGANIZATION_ID")
+		// organizationIdStr, later InstanceOrganizationID is used as a fallback when a client does not send the organization header
+		// For code consistency purposes, we are parsing organizationIdStr from a string into a UUID
+		organizationIdStr := hwutil.GetEnvOr("ORGANIZATION_ID", "")
+		if organizationIdStr != "" {
+			organizationID, err := uuid.Parse(organizationIdStr)
+			if err != nil {
+				log.Fatal().Err(err).Msg("invalid uuid for environment variable ORGANIZATION_ID")
+			}
+			log.Info().Str("organizationID", organizationID.String()).Msg("specified fallback organizationID when no organization header was found")
+			InstanceOrganizationID = &organizationID
 		}
-		log.Info().Str("organizationID", organizationID.String()).Msg("using fallback organizationID")
-		OrganizationID = &organizationID
+
+		setupAuth()
 	}
 }
 
