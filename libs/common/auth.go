@@ -42,6 +42,12 @@ type IDTokenClaims struct {
 	// Claim: email
 	Email string `json:"email"`
 
+	// Subject: name
+	Name string `json:"name"`
+
+	// Subject: nickname
+	Nickname string `json:"nickname"`
+
 	// Claim: organizations
 	Organizations []uuid.UUID `json:"organizations"`
 }

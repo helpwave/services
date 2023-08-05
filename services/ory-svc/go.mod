@@ -14,7 +14,10 @@ require (
 	common v0.0.0
 	gen v0.0.0-00010101000000-000000000000
 	github.com/dapr/go-sdk v1.8.0
+	github.com/go-chi/chi/v5 v5.0.10
 	github.com/google/uuid v1.3.0
+	github.com/mitchellh/mapstructure v1.5.1-0.20220423185008-bf980b35cac4
+	github.com/ory/client-go v1.1.41
 	github.com/rs/zerolog v1.29.1
 	hwutil v0.0.0
 )
@@ -23,17 +26,18 @@ require (
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
-	github.com/go-chi/chi/v5 v5.0.10 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.14.1 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
+	github.com/kr/pretty v0.2.0 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
+	github.com/stretchr/testify v1.8.4 // indirect
 	golang.org/x/crypto v0.11.0 // indirect
 	golang.org/x/net v0.12.0 // indirect
 	golang.org/x/oauth2 v0.10.0 // indirect
