@@ -158,6 +158,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 	wardRepo := repositories.WardRepo(ctx)
 	roomRepo := repositories.RoomRepo(ctx)
 	taskRepo := repositories.TaskRepo(ctx)
+	bedRepo := repositories.BedRepo(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -186,7 +187,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 
 		var bedCount uint32
 		for _, room := range rooms {
-			bedRepo := repositories.BedRepo(ctx)
+			// FIXME: NO!
 			beds, err := bedRepo.GetBedsByRoomForOrganization(room.ID, organizationID)
 			if err != nil {
 				if hwgorm.IsOurFault(err) {
@@ -198,6 +199,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 			bedCount += uint32(len(beds))
 		}
 
+		// FIXME: NO!
 		patients, err := patientRepo.GetPatientsByWardForOrganization(ward.ID, organizationID)
 		if err != nil {
 			if hwgorm.IsOurFault(err) {
@@ -317,6 +319,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 	}
 
 	mappedTaskTemplates, err := hwutil.MapWithErr(taskTemplates, func(taskTemplate models.TaskTemplate) (*pb.GetWardDetailsResponse_TaskTemplate, error) {
+		// FIXME: NO!
 		taskTemplateSubtasks, err := templateRepo.GetSubTasksForTemplate(taskTemplate.ID)
 
 		if err != nil {
