@@ -3,6 +3,7 @@ package task
 import (
 	"common"
 	"context"
+	"fmt"
 	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -246,6 +247,66 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 		Done: mappingFunction(hwutil.Filter(tasks, func(value models.Task) bool {
 			return value.Status == pb.TaskStatus_TASK_STATUS_DONE
 		})),
+	}, nil
+}
+
+func (ServiceServer) GetAssignedTasks(ctx context.Context, req *pb.GetAssignedTasksRequest) (*pb.GetAssignedTasksResponse, error) {
+	db := hwgorm.GetDB(ctx)
+
+	assigneeID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	var patients []patientModels.Patient
+	if err := db.
+		Table("patients").
+		Group("patients.id").
+		Joins("JOIN tasks ON patients.id = tasks.patient_id").
+		Where("tasks.assigned_user_id = ?", assigneeID).
+		Preload("Tasks").
+		Find(&patients).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+
+	var tasks []*pb.GetAssignedTasksResponse_Task
+
+	for _, patient := range patients {
+		mappedPatient := &pb.GetAssignedTasksResponse_Task_Patient{
+			Id:   patient.ID.String(),
+			Name: patient.HumanReadableIdentifier,
+		}
+		fmt.Println(len(patient.Tasks))
+		patientTasks := hwutil.Map(patient.Tasks, func(task models.Task) *pb.GetAssignedTasksResponse_Task {
+			var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetAssignedTasksResponse_Task_SubTask {
+				return &pb.GetAssignedTasksResponse_Task_SubTask{
+					Id:        subtask.ID.String(),
+					Done:      subtask.Done,
+					Name:      subtask.Name,
+					CreatedBy: subtask.CreatedBy.String(),
+				}
+			})
+			return &pb.GetAssignedTasksResponse_Task{
+				Id:             task.ID.String(),
+				Name:           task.Name,
+				Description:    task.Description,
+				AssignedUserId: task.AssignedUserId.UUID.String(),
+				Patient:        mappedPatient,
+				Subtasks:       mappedSubtasks,
+				Public:         task.Public,
+				DueAt:          timestamppb.New(task.DueAt),
+				CreatedBy:      task.CreatedBy.String(),
+			}
+		})
+		tasks = append(tasks, patientTasks...)
+	}
+
+	return &pb.GetAssignedTasksResponse{
+		Tasks: tasks,
 	}, nil
 }
 

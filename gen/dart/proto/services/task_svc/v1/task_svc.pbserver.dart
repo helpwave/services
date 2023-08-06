@@ -25,6 +25,7 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
   $async.Future<$6.GetTaskResponse> getTask($pb.ServerContext ctx, $6.GetTaskRequest request);
   $async.Future<$6.GetTasksByPatientResponse> getTasksByPatient($pb.ServerContext ctx, $6.GetTasksByPatientRequest request);
   $async.Future<$6.GetTasksByPatientSortedByStatusResponse> getTasksByPatientSortedByStatus($pb.ServerContext ctx, $6.GetTasksByPatientSortedByStatusRequest request);
+  $async.Future<$6.GetAssignedTasksResponse> getAssignedTasks($pb.ServerContext ctx, $6.GetAssignedTasksRequest request);
   $async.Future<$6.UpdateTaskResponse> updateTask($pb.ServerContext ctx, $6.UpdateTaskRequest request);
   $async.Future<$6.AddSubTaskResponse> addSubTask($pb.ServerContext ctx, $6.AddSubTaskRequest request);
   $async.Future<$6.RemoveSubTaskResponse> removeSubTask($pb.ServerContext ctx, $6.RemoveSubTaskRequest request);
@@ -46,6 +47,7 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
       case 'GetTask': return $6.GetTaskRequest();
       case 'GetTasksByPatient': return $6.GetTasksByPatientRequest();
       case 'GetTasksByPatientSortedByStatus': return $6.GetTasksByPatientSortedByStatusRequest();
+      case 'GetAssignedTasks': return $6.GetAssignedTasksRequest();
       case 'UpdateTask': return $6.UpdateTaskRequest();
       case 'AddSubTask': return $6.AddSubTaskRequest();
       case 'RemoveSubTask': return $6.RemoveSubTaskRequest();
@@ -70,6 +72,7 @@ abstract class TaskServiceBase extends $pb.GeneratedService {
       case 'GetTask': return this.getTask(ctx, request as $6.GetTaskRequest);
       case 'GetTasksByPatient': return this.getTasksByPatient(ctx, request as $6.GetTasksByPatientRequest);
       case 'GetTasksByPatientSortedByStatus': return this.getTasksByPatientSortedByStatus(ctx, request as $6.GetTasksByPatientSortedByStatusRequest);
+      case 'GetAssignedTasks': return this.getAssignedTasks(ctx, request as $6.GetAssignedTasksRequest);
       case 'UpdateTask': return this.updateTask(ctx, request as $6.UpdateTaskRequest);
       case 'AddSubTask': return this.addSubTask(ctx, request as $6.AddSubTaskRequest);
       case 'RemoveSubTask': return this.removeSubTask(ctx, request as $6.RemoveSubTaskRequest);

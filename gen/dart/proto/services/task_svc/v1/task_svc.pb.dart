@@ -941,6 +941,318 @@ class GetTasksByPatientSortedByStatusResponse extends $pb.GeneratedMessage {
   $core.List<GetTasksByPatientSortedByStatusResponse_Task> get done => $_getList(2);
 }
 
+class GetAssignedTasksRequest extends $pb.GeneratedMessage {
+  factory GetAssignedTasksRequest() => create();
+  GetAssignedTasksRequest._() : super();
+  factory GetAssignedTasksRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAssignedTasksRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAssignedTasksRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetAssignedTasksRequest clone() => GetAssignedTasksRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetAssignedTasksRequest copyWith(void Function(GetAssignedTasksRequest) updates) => super.copyWith((message) => updates(message as GetAssignedTasksRequest)) as GetAssignedTasksRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetAssignedTasksRequest create() => GetAssignedTasksRequest._();
+  GetAssignedTasksRequest createEmptyInstance() => create();
+  static $pb.PbList<GetAssignedTasksRequest> createRepeated() => $pb.PbList<GetAssignedTasksRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetAssignedTasksRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAssignedTasksRequest>(create);
+  static GetAssignedTasksRequest? _defaultInstance;
+}
+
+class GetAssignedTasksResponse_Task_Patient extends $pb.GeneratedMessage {
+  factory GetAssignedTasksResponse_Task_Patient() => create();
+  GetAssignedTasksResponse_Task_Patient._() : super();
+  factory GetAssignedTasksResponse_Task_Patient.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAssignedTasksResponse_Task_Patient.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAssignedTasksResponse.Task.Patient', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetAssignedTasksResponse_Task_Patient clone() => GetAssignedTasksResponse_Task_Patient()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetAssignedTasksResponse_Task_Patient copyWith(void Function(GetAssignedTasksResponse_Task_Patient) updates) => super.copyWith((message) => updates(message as GetAssignedTasksResponse_Task_Patient)) as GetAssignedTasksResponse_Task_Patient;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetAssignedTasksResponse_Task_Patient create() => GetAssignedTasksResponse_Task_Patient._();
+  GetAssignedTasksResponse_Task_Patient createEmptyInstance() => create();
+  static $pb.PbList<GetAssignedTasksResponse_Task_Patient> createRepeated() => $pb.PbList<GetAssignedTasksResponse_Task_Patient>();
+  @$core.pragma('dart2js:noInline')
+  static GetAssignedTasksResponse_Task_Patient getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAssignedTasksResponse_Task_Patient>(create);
+  static GetAssignedTasksResponse_Task_Patient? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+}
+
+class GetAssignedTasksResponse_Task_SubTask extends $pb.GeneratedMessage {
+  factory GetAssignedTasksResponse_Task_SubTask() => create();
+  GetAssignedTasksResponse_Task_SubTask._() : super();
+  factory GetAssignedTasksResponse_Task_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAssignedTasksResponse_Task_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAssignedTasksResponse.Task.SubTask', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOB(3, _omitFieldNames ? '' : 'done')
+    ..aOS(4, _omitFieldNames ? '' : 'createdBy')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetAssignedTasksResponse_Task_SubTask clone() => GetAssignedTasksResponse_Task_SubTask()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetAssignedTasksResponse_Task_SubTask copyWith(void Function(GetAssignedTasksResponse_Task_SubTask) updates) => super.copyWith((message) => updates(message as GetAssignedTasksResponse_Task_SubTask)) as GetAssignedTasksResponse_Task_SubTask;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetAssignedTasksResponse_Task_SubTask create() => GetAssignedTasksResponse_Task_SubTask._();
+  GetAssignedTasksResponse_Task_SubTask createEmptyInstance() => create();
+  static $pb.PbList<GetAssignedTasksResponse_Task_SubTask> createRepeated() => $pb.PbList<GetAssignedTasksResponse_Task_SubTask>();
+  @$core.pragma('dart2js:noInline')
+  static GetAssignedTasksResponse_Task_SubTask getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAssignedTasksResponse_Task_SubTask>(create);
+  static GetAssignedTasksResponse_Task_SubTask? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get done => $_getBF(2);
+  @$pb.TagNumber(3)
+  set done($core.bool v) { $_setBool(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDone() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDone() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get createdBy => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set createdBy($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasCreatedBy() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearCreatedBy() => clearField(4);
+}
+
+class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
+  factory GetAssignedTasksResponse_Task() => create();
+  GetAssignedTasksResponse_Task._() : super();
+  factory GetAssignedTasksResponse_Task.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAssignedTasksResponse_Task.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAssignedTasksResponse.Task', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'description')
+    ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
+    ..aOM<GetAssignedTasksResponse_Task_Patient>(6, _omitFieldNames ? '' : 'patient', subBuilder: GetAssignedTasksResponse_Task_Patient.create)
+    ..aOB(7, _omitFieldNames ? '' : 'public')
+    ..aOM<$5.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $5.Timestamp.create)
+    ..aOS(9, _omitFieldNames ? '' : 'createdBy')
+    ..pc<GetAssignedTasksResponse_Task_SubTask>(10, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetAssignedTasksResponse_Task_SubTask.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetAssignedTasksResponse_Task clone() => GetAssignedTasksResponse_Task()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetAssignedTasksResponse_Task copyWith(void Function(GetAssignedTasksResponse_Task) updates) => super.copyWith((message) => updates(message as GetAssignedTasksResponse_Task)) as GetAssignedTasksResponse_Task;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetAssignedTasksResponse_Task create() => GetAssignedTasksResponse_Task._();
+  GetAssignedTasksResponse_Task createEmptyInstance() => create();
+  static $pb.PbList<GetAssignedTasksResponse_Task> createRepeated() => $pb.PbList<GetAssignedTasksResponse_Task>();
+  @$core.pragma('dart2js:noInline')
+  static GetAssignedTasksResponse_Task getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAssignedTasksResponse_Task>(create);
+  static GetAssignedTasksResponse_Task? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get description => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set description($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDescription() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDescription() => clearField(3);
+
+  @$pb.TagNumber(5)
+  $core.String get assignedUserId => $_getSZ(3);
+  @$pb.TagNumber(5)
+  set assignedUserId($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasAssignedUserId() => $_has(3);
+  @$pb.TagNumber(5)
+  void clearAssignedUserId() => clearField(5);
+
+  @$pb.TagNumber(6)
+  GetAssignedTasksResponse_Task_Patient get patient => $_getN(4);
+  @$pb.TagNumber(6)
+  set patient(GetAssignedTasksResponse_Task_Patient v) { setField(6, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasPatient() => $_has(4);
+  @$pb.TagNumber(6)
+  void clearPatient() => clearField(6);
+  @$pb.TagNumber(6)
+  GetAssignedTasksResponse_Task_Patient ensurePatient() => $_ensure(4);
+
+  @$pb.TagNumber(7)
+  $core.bool get public => $_getBF(5);
+  @$pb.TagNumber(7)
+  set public($core.bool v) { $_setBool(5, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasPublic() => $_has(5);
+  @$pb.TagNumber(7)
+  void clearPublic() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $5.Timestamp get dueAt => $_getN(6);
+  @$pb.TagNumber(8)
+  set dueAt($5.Timestamp v) { setField(8, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasDueAt() => $_has(6);
+  @$pb.TagNumber(8)
+  void clearDueAt() => clearField(8);
+  @$pb.TagNumber(8)
+  $5.Timestamp ensureDueAt() => $_ensure(6);
+
+  @$pb.TagNumber(9)
+  $core.String get createdBy => $_getSZ(7);
+  @$pb.TagNumber(9)
+  set createdBy($core.String v) { $_setString(7, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasCreatedBy() => $_has(7);
+  @$pb.TagNumber(9)
+  void clearCreatedBy() => clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.List<GetAssignedTasksResponse_Task_SubTask> get subtasks => $_getList(8);
+}
+
+class GetAssignedTasksResponse extends $pb.GeneratedMessage {
+  factory GetAssignedTasksResponse() => create();
+  GetAssignedTasksResponse._() : super();
+  factory GetAssignedTasksResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAssignedTasksResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAssignedTasksResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..pc<GetAssignedTasksResponse_Task>(1, _omitFieldNames ? '' : 'tasks', $pb.PbFieldType.PM, subBuilder: GetAssignedTasksResponse_Task.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetAssignedTasksResponse clone() => GetAssignedTasksResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetAssignedTasksResponse copyWith(void Function(GetAssignedTasksResponse) updates) => super.copyWith((message) => updates(message as GetAssignedTasksResponse)) as GetAssignedTasksResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetAssignedTasksResponse create() => GetAssignedTasksResponse._();
+  GetAssignedTasksResponse createEmptyInstance() => create();
+  static $pb.PbList<GetAssignedTasksResponse> createRepeated() => $pb.PbList<GetAssignedTasksResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetAssignedTasksResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAssignedTasksResponse>(create);
+  static GetAssignedTasksResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<GetAssignedTasksResponse_Task> get tasks => $_getList(0);
+}
+
 class UpdateTaskRequest extends $pb.GeneratedMessage {
   factory UpdateTaskRequest() => create();
   UpdateTaskRequest._() : super();
@@ -2084,6 +2396,9 @@ class TaskServiceApi {
   ;
   $async.Future<GetTasksByPatientSortedByStatusResponse> getTasksByPatientSortedByStatus($pb.ClientContext? ctx, GetTasksByPatientSortedByStatusRequest request) =>
     _client.invoke<GetTasksByPatientSortedByStatusResponse>(ctx, 'TaskService', 'GetTasksByPatientSortedByStatus', request, GetTasksByPatientSortedByStatusResponse())
+  ;
+  $async.Future<GetAssignedTasksResponse> getAssignedTasks($pb.ClientContext? ctx, GetAssignedTasksRequest request) =>
+    _client.invoke<GetAssignedTasksResponse>(ctx, 'TaskService', 'GetAssignedTasks', request, GetAssignedTasksResponse())
   ;
   $async.Future<UpdateTaskResponse> updateTask($pb.ClientContext? ctx, UpdateTaskRequest request) =>
     _client.invoke<UpdateTaskResponse>(ctx, 'TaskService', 'UpdateTask', request, UpdateTaskResponse())
