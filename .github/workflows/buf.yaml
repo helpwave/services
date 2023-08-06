@@ -42,6 +42,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: bufbuild/buf-setup-action@v1
+        with:
+          github_token: ${{ github.token }}
 # TODO (arm-versioning): Arm versioning by removing the comments of the following lines
 #      - uses: bufbuild/buf-breaking-action@v1
 #        with:
