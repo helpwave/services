@@ -128,8 +128,7 @@ message GetTasksByPatientSortedByStatusResponse {
 // GetAssignedTasks
 //
 
-message GetAssignedTasksRequest {
-}
+message GetAssignedTasksRequest {}
 
 message GetAssignedTasksResponse {
   repeated Task tasks = 1;
