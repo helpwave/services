@@ -277,6 +277,9 @@ func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTask
 	}
 
 	patients, err := GetPatientsWithTasksByAssignee(ctx, assigneeID)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
 
 	var tasks []*pb.GetAssignedTasksResponse_Task
 
