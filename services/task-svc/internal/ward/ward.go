@@ -175,7 +175,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 	}
 
 	resWards, err := hwutil.MapWithErr(wards, func(ward *models.Ward) (*pb.GetWardOverviewsResponse_Ward, error) {
-		// FIXME: NO!
+		// FIXME: #345
 		rooms, err := roomRepo.GetRoomsWithBedsByWardForOrganization(ward.ID, organizationID)
 		if err != nil {
 			if hwgorm.IsOurFault(err) {
@@ -187,7 +187,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 
 		var bedCount uint32
 		for _, room := range rooms {
-			// FIXME: NO!
+			// FIXME: #345
 			beds, err := bedRepo.GetBedsByRoomForOrganization(room.ID, organizationID)
 			if err != nil {
 				if hwgorm.IsOurFault(err) {
@@ -199,7 +199,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 			bedCount += uint32(len(beds))
 		}
 
-		// FIXME: NO!
+		// FIXME: #345
 		patients, err := patientRepo.GetPatientsByWardForOrganization(ward.ID, organizationID)
 		if err != nil {
 			if hwgorm.IsOurFault(err) {
@@ -213,7 +213,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 		var tasksInProgress uint32
 		var tasksDone uint32
 		for _, p := range patients {
-			// FIXME: NO!
+			// FIXME: #345
 			tasks, err := taskRepo.GetTasksWithSubTasksByPatientForOrganization(p.ID, organizationID)
 			if err != nil {
 				if hwgorm.IsOurFault(err) {
@@ -279,7 +279,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 	}
 
 	mappedRooms, err := hwutil.MapWithErr(rooms, func(room models.Room) (*pb.GetWardDetailsResponse_Room, error) {
-		// FIXME: this is a sin and need to be refactored!
+		// FIXME: this is a sin and need to be refactored! (#345)
 		// FIXME: don't make network requests in loops, like ever
 		beds, err := bedRepo.GetBedsByRoom(room.ID)
 		if err != nil {
@@ -319,7 +319,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 	}
 
 	mappedTaskTemplates, err := hwutil.MapWithErr(taskTemplates, func(taskTemplate models.TaskTemplate) (*pb.GetWardDetailsResponse_TaskTemplate, error) {
-		// FIXME: NO!
+		// FIXME: #345
 		taskTemplateSubtasks, err := templateRepo.GetSubTasksForTaskTemplate(taskTemplate.ID)
 
 		if err != nil {
