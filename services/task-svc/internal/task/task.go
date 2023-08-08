@@ -3,7 +3,6 @@ package task
 import (
 	"common"
 	"context"
-	"fmt"
 	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -286,7 +285,6 @@ func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTask
 			Id:   patient.ID.String(),
 			Name: patient.HumanReadableIdentifier,
 		}
-		fmt.Println(len(patient.Tasks))
 		patientTasks := hwutil.Map(patient.Tasks, func(task models.Task) *pb.GetAssignedTasksResponse_Task {
 			var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetAssignedTasksResponse_Task_SubTask {
 				return &pb.GetAssignedTasksResponse_Task_SubTask{
