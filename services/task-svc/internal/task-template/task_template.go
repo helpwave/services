@@ -66,6 +66,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		})
 	}
 
+	// TODO: Run the following in the same transaction as the query above
 	taskTemplate.SubTasks = append(taskTemplate.SubTasks, subtasks...)
 	if _, err := templateRepo.SaveTaskTemplate(taskTemplate); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
