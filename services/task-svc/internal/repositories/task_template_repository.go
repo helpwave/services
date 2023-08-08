@@ -48,7 +48,7 @@ func (r *TemplateRepository) CreateTaskTemplateSubTask(subtask *models.TaskTempl
 	return subtask, nil
 }
 
-func (r *TemplateRepository) GetTemplatesByWard(wardID uuid.UUID) ([]models.TaskTemplate, error) {
+func (r *TemplateRepository) GetTaskTemplatesByWard(wardID uuid.UUID) ([]models.TaskTemplate, error) {
 	var templates []models.TaskTemplate
 	query := r.db.
 		Where("ward_id = ?", wardID).
@@ -60,7 +60,7 @@ func (r *TemplateRepository) GetTemplatesByWard(wardID uuid.UUID) ([]models.Task
 	return templates, nil
 }
 
-func (r *TemplateRepository) GetSubTasksForTemplate(templateID uuid.UUID) ([]models.TaskTemplateSubtask, error) {
+func (r *TemplateRepository) GetSubTasksForTaskTemplate(templateID uuid.UUID) ([]models.TaskTemplateSubtask, error) {
 	var taskTemplateSubtask []models.TaskTemplateSubtask
 	query := r.db.
 		Where("task_template_id = ?", templateID).
@@ -140,7 +140,7 @@ func (r *TemplateRepository) UpdateTaskTemplateSubTask(templateSubTaskID uuid.UU
 	return templateSubTask, nil
 }
 
-func (r *TemplateRepository) DeleteTemplate(templateID uuid.UUID) error {
+func (r *TemplateRepository) DeleteTaskTemplate(templateID uuid.UUID) error {
 	template := models.TaskTemplate{ID: templateID}
 	query := r.db.
 		Delete(&template)
@@ -148,7 +148,7 @@ func (r *TemplateRepository) DeleteTemplate(templateID uuid.UUID) error {
 	return query.Error
 }
 
-func (r *TemplateRepository) DeleteTemplateSubTask(templateSubTaskID uuid.UUID) (*models.TaskTemplateSubtask, error) {
+func (r *TemplateRepository) DeleteTaskTemplateSubTask(templateSubTaskID uuid.UUID) (*models.TaskTemplateSubtask, error) {
 	subtask := &models.TaskTemplateSubtask{ID: templateSubTaskID}
 	query := r.db.
 		Delete(subtask)

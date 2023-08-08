@@ -308,7 +308,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		}
 	}
 
-	taskTemplates, err := templateRepo.GetTemplatesByWard(wardID)
+	taskTemplates, err := templateRepo.GetTaskTemplatesByWard(wardID)
 
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
@@ -320,7 +320,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 
 	mappedTaskTemplates, err := hwutil.MapWithErr(taskTemplates, func(taskTemplate models.TaskTemplate) (*pb.GetWardDetailsResponse_TaskTemplate, error) {
 		// FIXME: NO!
-		taskTemplateSubtasks, err := templateRepo.GetSubTasksForTemplate(taskTemplate.ID)
+		taskTemplateSubtasks, err := templateRepo.GetSubTasksForTaskTemplate(taskTemplate.ID)
 
 		if err != nil {
 			return nil, err

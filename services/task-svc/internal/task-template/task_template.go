@@ -132,7 +132,7 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := templateRepo.DeleteTemplate(id); err != nil {
+	if err := templateRepo.DeleteTaskTemplate(id); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -154,7 +154,7 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	subtask, err := templateRepo.DeleteTemplateSubTask(id)
+	subtask, err := templateRepo.DeleteTaskTemplateSubTask(id)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
