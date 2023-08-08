@@ -72,18 +72,13 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed, err := bedRepo.GetBedById(id)
+	bed, err := bedRepo.GetBedByIdForOrganization(id, organizationID)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "id not found")
 		}
-	}
-
-	if bed.OrganizationID != organizationID {
-		// exceptionally rare to happen, as the uuidv4 space is huge
-		return nil, status.Error(codes.PermissionDenied, "bed does not belong to your organization")
 	}
 
 	return &pb.GetBedResponse{
@@ -188,7 +183,7 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed, err := bedRepo.GetBedById(bedID)
+	_, err = bedRepo.GetBedByIdForOrganization(bedID, organizationID)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -196,10 +191,6 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 			// Probably already deleted
 			return &pb.DeleteBedResponse{}, err
 		}
-	}
-
-	if bed.OrganizationID != organizationID {
-		return nil, status.Error(codes.PermissionDenied, "bed not in your organization")
 	}
 
 	err = bedRepo.DeleteBed(bedID)
