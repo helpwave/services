@@ -35,6 +35,27 @@ func GetTasksByPatientForOrganization(ctx context.Context, patientID uuid.UUID) 
 	return tasks, nil
 }
 
+// GetPatientsWithTasksByAssignee
+// TODO: Move into repository
+func GetPatientsWithTasksByAssignee(ctx context.Context, assigneeID uuid.UUID) ([]patientModels.Patient, error) {
+	db := hwgorm.GetDB(ctx)
+	var patients []patientModels.Patient
+	if err := db.
+		Table("patients").
+		Group("patients.id").
+		Joins("JOIN tasks ON patients.id = tasks.patient_id").
+		Where("tasks.assigned_user_id = ?", assigneeID).
+		Preload("Tasks").
+		Find(&patients).Error; err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+	return patients, nil
+}
+
 type ServiceServer struct {
 	pb.UnimplementedTaskServiceServer
 }
@@ -250,28 +271,13 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 	}, nil
 }
 
-func (ServiceServer) GetAssignedTasks(ctx context.Context, req *pb.GetAssignedTasksRequest) (*pb.GetAssignedTasksResponse, error) {
-	db := hwgorm.GetDB(ctx)
-
+func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTasksRequest) (*pb.GetAssignedTasksResponse, error) {
 	assigneeID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var patients []patientModels.Patient
-	if err := db.
-		Table("patients").
-		Group("patients.id").
-		Joins("JOIN tasks ON patients.id = tasks.patient_id").
-		Where("tasks.assigned_user_id = ?", assigneeID).
-		Preload("Tasks").
-		Find(&patients).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
-	}
+	patients, err := GetPatientsWithTasksByAssignee(ctx, assigneeID)
 
 	var tasks []*pb.GetAssignedTasksResponse_Task
 
