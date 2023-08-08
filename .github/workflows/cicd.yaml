@@ -98,6 +98,7 @@ jobs:
       packages: write
     uses: ./.github/workflows/cicd-images.yaml
     with:
+      deploy: ${{ env.CD_DO_DEPLOY }}
       image: ${{ matrix.image }}
     secrets: inherit
 
