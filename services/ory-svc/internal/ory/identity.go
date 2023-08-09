@@ -9,6 +9,7 @@ import (
 )
 
 type OryIdentityTraits struct {
+	Email    string
 	Name     string
 	Nickname string
 }
@@ -55,7 +56,7 @@ func createIdToken(identity *ory.Identity) (*common.IDTokenClaims, error) {
 
 	return &common.IDTokenClaims{
 		Sub:           identity.GetId(),
-		Email:         identity.GetVerifiableAddresses()[0].Value,
+		Email:         oryIdentityTraits.Email,
 		Name:          oryIdentityTraits.Name,
 		Nickname:      oryIdentityTraits.Nickname,
 		Organizations: organizationIDs,
