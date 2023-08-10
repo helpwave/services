@@ -3,40 +3,18 @@ package task
 import (
 	"common"
 	"context"
+	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwgorm"
 	"hwutil"
+	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
-
-	pb "gen/proto/services/task_svc/v1"
-	zlog "github.com/rs/zerolog/log"
-	pbhelpers "proto_helpers/task_svc/v1"
 )
-
-// GetPatientsWithTasksByAssignee
-// TODO: Move into repository
-func GetPatientsWithTasksByAssignee(ctx context.Context, assigneeID uuid.UUID) ([]patientModels.Patient, error) {
-	db := hwgorm.GetDB(ctx)
-	var patients []patientModels.Patient
-	if err := db.
-		Table("patients").
-		Group("patients.id").
-		Joins("JOIN tasks ON patients.id = tasks.patient_id").
-		Where("tasks.assigned_user_id = ?", assigneeID).
-		Preload("Tasks").
-		Find(&patients).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
-	}
-	return patients, nil
-}
 
 type ServiceServer struct {
 	pb.UnimplementedTaskServiceServer
@@ -270,12 +248,13 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 }
 
 func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTasksRequest) (*pb.GetAssignedTasksResponse, error) {
+	taskRepo := repositories.TaskRepo(ctx)
 	assigneeID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patients, err := GetPatientsWithTasksByAssignee(ctx, assigneeID)
+	patients, err := taskRepo.GetPatientsWithTasksByAssignee(ctx, assigneeID)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
