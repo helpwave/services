@@ -374,9 +374,20 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListRequest) (*pb.GetPatientListResponse, error) {
 	patientRepo := repositories.PatientRepo(ctx)
 
-	organizationID, err := uuid.Parse(req.OrganisationId)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+	var organizationID uuid.UUID
+	if req.OrganisationId != nil {
+		var err error
+		organizationID, err = uuid.Parse(*req.OrganisationId)
+		if err != nil {
+			return nil, status.Error(codes.Internal, err.Error())
+		}
+	} else {
+		var err error
+		organizationID, err = common.GetOrganizationID(ctx)
+		// TODO differentiate between errors here a malformed uuid is treated as missing in the response
+		if err != nil {
+			return nil, status.Error(codes.InvalidArgument, "either the header X-Organization or the organisation_id must be set to a uuid")
+		}
 	}
 
 	unassignedPatients, err := patientRepo.GetUnassignedPatientsForOrganization(organizationID)

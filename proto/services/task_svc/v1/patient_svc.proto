@@ -185,7 +185,7 @@ message GetPatientDetailsResponse {
 
 
 message GetPatientListRequest {
-  string organisation_id = 1;
+  optional string organisation_id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetPatientListResponse {
@@ -233,5 +233,4 @@ service PatientService {
   rpc DischargePatient(DischargePatientRequest) returns (DischargePatientResponse) {}
   rpc GetPatientDetails(GetPatientDetailsRequest) returns (GetPatientDetailsResponse) {}
   rpc GetPatientList(GetPatientListRequest) returns (GetPatientListResponse) {}
-
 }

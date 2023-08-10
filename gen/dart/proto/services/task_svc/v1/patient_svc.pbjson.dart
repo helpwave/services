@@ -393,14 +393,17 @@ final $typed_data.Uint8List getPatientDetailsResponseDescriptor = $convert.base6
 const GetPatientListRequest$json = {
   '1': 'GetPatientListRequest',
   '2': [
-    {'1': 'organisation_id', '3': 1, '4': 1, '5': 9, '10': 'organisationId'},
+    {'1': 'organisation_id', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'organisationId', '17': true},
+  ],
+  '8': [
+    {'1': '_organisation_id'},
   ],
 };
 
 /// Descriptor for `GetPatientListRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getPatientListRequestDescriptor = $convert.base64Decode(
-    'ChVHZXRQYXRpZW50TGlzdFJlcXVlc3QSJwoPb3JnYW5pc2F0aW9uX2lkGAEgASgJUg5vcmdhbm'
-    'lzYXRpb25JZA==');
+    'ChVHZXRQYXRpZW50TGlzdFJlcXVlc3QSLAoPb3JnYW5pc2F0aW9uX2lkGAEgASgJSABSDm9yZ2'
+    'FuaXNhdGlvbklkiAEBQhIKEF9vcmdhbmlzYXRpb25faWQ=');
 
 @$core.Deprecated('Use getPatientListResponseDescriptor instead')
 const GetPatientListResponse$json = {
