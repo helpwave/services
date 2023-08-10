@@ -2,13 +2,13 @@ package models
 
 import "github.com/google/uuid"
 
-type Base struct {
+type TaskTemplateBase struct {
 	Name        string `gorm:"column:name"`
 	Description string `gorm:"column:description;default:''"`
 }
 
 type TaskTemplate struct {
-	Base
+	TaskTemplateBase
 	ID             uuid.UUID             `gorm:"column:id;default:uuid_generate_v4()"`
 	OrganizationID uuid.UUID             `gorm:"column:organization_id"`
 	CreatedBy      uuid.UUID             `gorm:"column:created_by"`

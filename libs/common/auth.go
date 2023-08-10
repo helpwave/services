@@ -42,6 +42,12 @@ type IDTokenClaims struct {
 	// Claim: email
 	Email string `json:"email"`
 
+	// Subject: name
+	Name string `json:"name"`
+
+	// Subject: nickname
+	Nickname string `json:"nickname"`
+
 	// Claim: organizations
 	Organizations []uuid.UUID `json:"organizations"`
 }
@@ -54,6 +60,16 @@ func (t IDTokenClaims) AsExpected() error {
 	if len(t.Email) == 0 {
 		return errors.New("email missing in id token")
 	}
+
+	if len(t.Name) == 0 {
+		return errors.New("name missing in id token")
+	}
+
+	if len(t.Nickname) == 0 {
+		return errors.New("nickname missing in id token")
+	}
+
+	// TODO: Validate Organizations
 
 	return nil
 }

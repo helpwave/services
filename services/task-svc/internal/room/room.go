@@ -3,16 +3,17 @@ package room
 import (
 	"common"
 	"context"
-	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
+	"task-svc/internal/models"
+	"task-svc/internal/repositories"
+
+	pb "gen/proto/services/task_svc/v1"
+	zlog "github.com/rs/zerolog/log"
 	pbhelpers "proto_helpers/task_svc/v1"
-	"task-svc/internal/room/models"
-	taskModel "task-svc/internal/task/models"
 )
 
 type ServiceServer struct {
@@ -23,35 +24,9 @@ func NewServiceServer() *ServiceServer {
 	return &ServiceServer{}
 }
 
-// GetRoomsWithBedsAndPatientsAndTasksByWardForOrganization
-// TODO: Move into repository
-func GetRoomsWithBedsAndPatientsAndTasksByWardForOrganization(ctx context.Context, wardID uuid.UUID) ([]models.Room, error) {
-	db := hwgorm.GetDB(ctx)
-
-	organizationID, err := common.GetOrganizationID(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	var rooms []models.Room
-	query := db.
-		Scopes(models.PreloadBedsSorted).
-		Preload("Beds.Patient").
-		Preload("Beds.Patient.Tasks").
-		Where("organization_id = ? AND ward_id = ?", organizationID.String(), wardID.String()).
-		Order("name ASC").
-		Find(&rooms)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-
-	return rooms, nil
-}
-
 func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) (*pb.CreateRoomResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
+	roomRepo := repositories.RoomRepo(ctx)
 
 	// TODO: Auth
 
@@ -65,15 +40,15 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	room := models.Room{
-		Base: models.Base{
+	room, err := roomRepo.CreateRoom(&models.Room{
+		RoomBase: models.RoomBase{
 			Name: req.Name,
 		},
 		OrganizationID: organizationID,
 		WardID:         wardId,
-	}
+	})
 
-	if err := db.Create(&room).Error; err != nil {
+	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -88,7 +63,7 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 }
 
 func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.GetRoomResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	roomRepo := repositories.RoomRepo(ctx)
 
 	// TODO: Auth
 
@@ -97,8 +72,8 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	room := models.Room{ID: id}
-	if err := db.Scopes(models.PreloadBedsSorted).First(&room).Error; err != nil {
+	room, err := roomRepo.GetRoomWithBedsById(id)
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -123,7 +98,7 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 }
 
 func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) (*pb.UpdateRoomResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	roomRepo := repositories.RoomRepo(ctx)
 
 	// TODO: Auth
 
@@ -132,10 +107,10 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	room := models.Room{ID: id}
 	updates := pbhelpers.UpdatesMapForUpdateRoomRequest(req)
+	_, err = roomRepo.UpdateRoom(id, updates)
 
-	if err := db.Model(&room).Updates(updates).Error; err != nil {
+	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -143,12 +118,17 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 }
 
 func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.GetRoomsResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	roomRepo := repositories.RoomRepo(ctx)
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	// TODO: Auth
 
-	var rooms []models.Room
-	if err := db.Scopes(models.PreloadBedsSorted).Order("name ASC").Find(&rooms).Error; err != nil {
+	rooms, err := roomRepo.GetRoomsWithBedsForOrganization(organizationID)
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -178,7 +158,12 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 }
 
 func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardRequest) (*pb.GetRoomsByWardResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	roomRepo := repositories.RoomRepo(ctx)
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	// TODO: Auth
 
@@ -187,13 +172,9 @@ func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardR
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var rooms []models.Room
-	query := db.
-		Scopes(models.PreloadBedsSorted).
-		Order("name ASC").
-		Find(&rooms, "ward_id = ?", wardId)
+	rooms, err := roomRepo.GetRoomsWithBedsByWardForOrganization(wardId, organizationID)
 
-	if err := query.Error; err != nil {
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -223,7 +204,7 @@ func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardR
 }
 
 func (ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest) (*pb.DeleteRoomResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	roomRepo := repositories.RoomRepo(ctx)
 
 	// TODO: Auth
 
@@ -232,9 +213,7 @@ func (ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	room := models.Room{ID: id}
-
-	if err := db.Delete(&room).Error; err != nil {
+	if err := roomRepo.DeleteRoom(id); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -244,12 +223,19 @@ func (ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest) 
 }
 
 func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoomOverviewsByWardRequest) (*pb.GetRoomOverviewsByWardResponse, error) {
+	roomRepo := repositories.RoomRepo(ctx)
+
 	wardId, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	rooms, err := GetRoomsWithBedsAndPatientsAndTasksByWardForOrganization(ctx, wardId)
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	rooms, err := roomRepo.GetRoomsWithBedsAndPatientsAndTasksByWardForOrganization(wardId, organizationID)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -265,13 +251,13 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 				patient = &pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient{
 					Id:                      bed.Patient.ID.String(),
 					HumanReadableIdentifier: bed.Patient.HumanReadableIdentifier,
-					TasksUnscheduled: uint32(hwutil.CountElements(bed.Patient.Tasks, func(task taskModel.Task) bool {
+					TasksUnscheduled: uint32(hwutil.CountElements(bed.Patient.Tasks, func(task models.Task) bool {
 						return task.Status == pb.TaskStatus_TASK_STATUS_TODO
 					})),
-					TasksInProgress: uint32(hwutil.CountElements(bed.Patient.Tasks, func(task taskModel.Task) bool {
+					TasksInProgress: uint32(hwutil.CountElements(bed.Patient.Tasks, func(task models.Task) bool {
 						return task.Status == pb.TaskStatus_TASK_STATUS_IN_PROGRESS
 					})),
-					TasksDone: uint32(hwutil.CountElements(bed.Patient.Tasks, func(task taskModel.Task) bool {
+					TasksDone: uint32(hwutil.CountElements(bed.Patient.Tasks, func(task models.Task) bool {
 						return task.Status == pb.TaskStatus_TASK_STATUS_DONE
 					})),
 				}

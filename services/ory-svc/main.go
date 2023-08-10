@@ -9,10 +9,14 @@ import (
 	daprc "github.com/dapr/go-sdk/client"
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	daprd "github.com/dapr/go-sdk/service/http"
+	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
+	ory "github.com/ory/client-go"
 	zlog "github.com/rs/zerolog/log"
 	"hwutil"
 	"net/http"
+	"net/url"
+	oryInt "ory-svc/internal/ory"
 )
 
 const ServiceName = "ory-svc"
@@ -23,6 +27,8 @@ var Version string
 var DaprPubsub string
 
 var daprClient *daprc.GRPCClient
+
+var oryClient *ory.APIClient
 
 func newErrAndLog(ctx context.Context, msg string) error {
 	log := zlog.Ctx(ctx)
@@ -36,9 +42,13 @@ func main() {
 	DaprPubsub = hwutil.GetEnvOr("DAPR_PUBSUB", "pubsub")
 
 	daprClient = common.MustNewDaprGRPCClient()
+	oryClient = oryInt.MustNewOryClient()
+
+	router := chi.NewRouter()
+	router.Use(InjectResponseWriterAndRequestIntoContext())
 
 	addr := common.ResolveAddrFromEnv()
-	service := daprd.NewService(addr)
+	service := daprd.NewServiceWithMux(addr, router)
 
 	if err := service.AddServiceInvocationHandler("/after_registration_webhook", afterRegistrationWebhookHandler); err != nil {
 		zlog.Fatal().Str("endpoint", "after_registration_webhook").Err(err).Msg("could not add service invocation handler")
@@ -46,6 +56,10 @@ func main() {
 
 	if err := service.AddServiceInvocationHandler("/after_settings_webhook", afterSettingsWebhookHandler); err != nil {
 		zlog.Fatal().Str("endpoint", "after_settings_webhook").Err(err).Msg("could not add service invocation handler")
+	}
+
+	if err := service.AddServiceInvocationHandler("/oauth2_consent", oauth2ConsentHandler); err != nil {
+		zlog.Fatal().Str("endpoint", "oauth2_consent").Err(err).Msg("could not add service invocation handler")
 	}
 
 	if err := service.Start(); err != nil {
@@ -117,4 +131,38 @@ func afterSettingsWebhookHandler(ctx context.Context, in *daprcmn.InvocationEven
 	}
 
 	return nil, nil // 200 OK
+}
+
+func oauth2ConsentHandler(ctx context.Context, in *daprcmn.InvocationEvent) (out *daprcmn.Content, err error) {
+	if in.Verb != http.MethodGet {
+		return nil, newErrAndLog(ctx, "invalid method")
+	}
+
+	queryString, err := url.ParseQuery(in.QueryString)
+	if err != nil {
+		return nil, newErrAndLog(ctx, err.Error())
+	}
+
+	consentChallenge := queryString.Get("consent_challenge")
+	if consentChallenge == "" {
+		return nil, newErrAndLog(ctx, "key consent_challenge not in query-string")
+	}
+
+	redirectUrl, idTokenClaims, err := oryInt.HandleOAuth2Consent(ctx, oryClient, consentChallenge)
+	if err != nil {
+		return nil, newErrAndLog(ctx, err.Error())
+	}
+
+	w, r, err := GetHttpResponseWriterAndRequestFromCtx(ctx)
+	if err != nil {
+		return nil, newErrAndLog(ctx, err.Error())
+	}
+
+	zlog.Ctx(ctx).Info().
+		Str("userID", idTokenClaims.Sub).
+		Msg("OAuth2 consent given")
+
+	http.Redirect(w, r, *redirectUrl, http.StatusFound)
+
+	return nil, nil
 }

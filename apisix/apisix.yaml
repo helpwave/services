@@ -58,7 +58,6 @@ services:
         allow_credential: true
         _meta:
           priority: -1
-      basic-auth:
 
 routes:
   - id: task-svc
@@ -107,13 +106,21 @@ routes:
     uri: /ory-svc/webhooks/after-registration
     service_id: ory-svc
     plugins:
+      basic-auth: {}
       proxy-rewrite:
         uri: /v1.0/invoke/ory-svc/method/after_registration_webhook
   - id: ory-svc-after-settings
     uri: /ory-svc/webhooks/after-settings
     service_id: ory-svc
     plugins:
+      basic-auth: {}
       proxy-rewrite:
         uri: /v1.0/invoke/ory-svc/method/after_settings_webhook
+  - id: ory-svc-oauth2-consent
+    uri: /ory-svc/v1.0/oauth2/consent
+    service_id: ory-svc
+    plugins:
+      proxy-rewrite:
+        uri: /v1.0/invoke/ory-svc/method/oauth2_consent
 
 #END

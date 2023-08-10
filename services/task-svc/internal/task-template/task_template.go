@@ -3,15 +3,17 @@ package task_template
 import (
 	"common"
 	"context"
-	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
+	"task-svc/internal/models"
+	"task-svc/internal/repositories"
+
+	pb "gen/proto/services/task_svc/v1"
+	zlog "github.com/rs/zerolog/log"
 	pbhelpers "proto_helpers/task_svc/v1"
-	"task-svc/internal/task-template/models"
 )
 
 type ServiceServer struct {
@@ -24,7 +26,7 @@ func NewServiceServer() *ServiceServer {
 
 func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskTemplateRequest) (*pb.CreateTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
+	templateRepo := repositories.TemplateRepo(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -45,15 +47,15 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	if req.Description != nil {
 		description = *req.Description
 	}
-	taskTemplate := models.TaskTemplate{
-		Base:           models.Base{Name: req.Name, Description: description},
-		OrganizationID: organizationID,
-		CreatedBy:      userID,
-		WardID:         wardID,
-	}
+	taskTemplate, err := templateRepo.CreateTaskTemplate(&models.TaskTemplate{
+		TaskTemplateBase: models.TaskTemplateBase{Name: req.Name, Description: description},
+		OrganizationID:   organizationID,
+		CreatedBy:        userID,
+		WardID:           wardID,
+	})
 
 	// This also implicitly checks the wardID because of the foreignKey constraint in the sql
-	if err := db.Create(&taskTemplate).Error; err != nil {
+	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -64,8 +66,9 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		})
 	}
 
+	// TODO: Run the following in the same transaction as the query above
 	taskTemplate.SubTasks = append(taskTemplate.SubTasks, subtasks...)
-	if err := db.Save(&taskTemplate).Error; err != nil {
+	if _, err := templateRepo.SaveTaskTemplate(taskTemplate); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -79,16 +82,16 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 }
 
 func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTemplatesRequest) (*pb.GetAllTaskTemplatesResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	templateRepo := repositories.TemplateRepo(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		return nil, err
 	}
 
-	var taskTemplates []models.TaskTemplate
+	taskTemplates, err := templateRepo.GetAllTaskTemplatesWithSubTasksForOrganization(organizationID)
 
-	if err := db.Preload("SubTasks").Where("organization_id = ?", organizationID).Find(&taskTemplates).Error; err != nil {
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -121,7 +124,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 
 func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskTemplateRequest) (*pb.DeleteTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
+	templateRepo := repositories.TemplateRepo(ctx)
 
 	// TODO: Auth
 
@@ -130,14 +133,12 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	taskTemplate := models.TaskTemplate{ID: id}
-
-	if err := db.Delete(&taskTemplate).Error; err != nil {
+	if err := templateRepo.DeleteTaskTemplate(id); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	log.Info().
-		Str("taskTemplateId", taskTemplate.ID.String()).
+		Str("taskTemplateId", id.String()).
 		Msg("taskTemplate deleted")
 
 	return &pb.DeleteTaskTemplateResponse{}, nil
@@ -145,7 +146,7 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 
 func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.DeleteTaskTemplateSubTaskRequest) (*pb.DeleteTaskTemplateSubTaskResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
+	templateRepo := repositories.TemplateRepo(ctx)
 
 	// TODO: Auth
 
@@ -154,22 +155,21 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	taskTemplateSubtask := models.TaskTemplateSubtask{ID: id}
-
-	if err := db.Delete(&taskTemplateSubtask).Error; err != nil {
+	subtask, err := templateRepo.DeleteTaskTemplateSubTask(id)
+	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	log.Info().
-		Str("taskTemplateSubtaskId", taskTemplateSubtask.ID.String()).
-		Str("taskTemplateId", taskTemplateSubtask.TaskTemplateID.String()).
+		Str("taskTemplateSubtaskId", subtask.ID.String()).
+		Str("taskTemplateId", subtask.TaskTemplateID.String()).
 		Msg("taskTemplateSubtask deleted")
 
 	return &pb.DeleteTaskTemplateSubTaskResponse{}, nil
 }
 
 func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskTemplateRequest) (*pb.UpdateTaskTemplateResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	templateRepo := repositories.TemplateRepo(ctx)
 
 	// TODO: Auth
 
@@ -178,10 +178,9 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	taskTemplate := models.TaskTemplate{ID: id}
 	updates := pbhelpers.UpdatesMapForUpdateTaskTemplateRequest(req)
 
-	if err := db.Model(&taskTemplate).Updates(updates).Error; err != nil {
+	if _, err := templateRepo.UpdateTaskTemplate(id, updates); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -189,7 +188,7 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 }
 
 func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.UpdateTaskTemplateSubTaskRequest) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	templateRepo := repositories.TemplateRepo(ctx)
 
 	// TODO: Auth
 
@@ -198,10 +197,9 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	taskTemplate := models.TaskTemplateSubtask{ID: id}
 	updates := pbhelpers.UpdatesMapForUpdateTaskTemplateSubTaskRequest(req)
 
-	if err := db.Model(&taskTemplate).Updates(updates).Error; err != nil {
+	if _, err := templateRepo.UpdateTaskTemplateSubTask(id, updates); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -210,20 +208,20 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 
 func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.CreateTaskTemplateSubTaskRequest) (*pb.CreateTaskTemplateSubTaskResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
+	templateRepo := repositories.TemplateRepo(ctx)
 
 	taskTemplateID, err := uuid.Parse(req.TaskTemplateId)
 	if err != nil {
 		return nil, err
 	}
 
-	taskTemplateSubtask := models.TaskTemplateSubtask{
+	taskTemplateSubtask, err := templateRepo.CreateTaskTemplateSubTask(&models.TaskTemplateSubtask{
 		TaskTemplateID: taskTemplateID,
 		Name:           req.Name,
-	}
+	})
 
 	// implicitly checks the existence of the ward through the foreign key constraint
-	if err := db.Create(&taskTemplateSubtask).Error; err != nil {
+	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -238,18 +236,23 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 }
 
 func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.GetAllTaskTemplatesByCreatorRequest) (*pb.GetAllTaskTemplatesByCreatorResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	templateRepo := repositories.TemplateRepo(ctx)
 
 	// TODO: Auth
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	createdBy, err := uuid.Parse(req.CreatedBy)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var taskTemplates []models.TaskTemplate
+	taskTemplates, err := templateRepo.GetTaskTemplatesWithSubTasksForOrganizationAndCreator(organizationID, createdBy)
 
-	if err := db.Preload("SubTasks").Where("created_by = ? AND ward_id IS NULL", createdBy).Find(&taskTemplates).Error; err != nil {
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -280,16 +283,16 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.G
 }
 
 func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetAllTaskTemplatesByWardRequest) (*pb.GetAllTaskTemplatesByWardResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	templateRepo := repositories.TemplateRepo(ctx)
 
 	wardId, err := uuid.Parse(req.WardId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var taskTemplates []models.TaskTemplate
+	taskTemplates, err := templateRepo.GetTaskTemplatesWithSubTasksForWard(wardId)
 
-	if err := db.Preload("SubTasks").Where("ward_id = ?", wardId).Find(&taskTemplates).Error; err != nil {
+	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
