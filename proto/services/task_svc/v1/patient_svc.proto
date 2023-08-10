@@ -185,7 +185,7 @@ message GetPatientDetailsResponse {
 
 
 message GetPatientListRequest {
-  optional string organisation_id = 1; // @gotags: validate:"uuid4"
+  optional string organisation_id = 1;
 }
 
 message GetPatientListResponse {

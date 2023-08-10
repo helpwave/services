@@ -1094,7 +1094,7 @@ type GetPatientListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	OrganisationId *string `protobuf:"bytes,1,opt,name=organisation_id,json=organisationId,proto3,oneof" json:"organisation_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
+	OrganisationId *string `protobuf:"bytes,1,opt,name=organisation_id,json=organisationId,proto3,oneof" json:"organisation_id,omitempty"`
 }
 
 func (x *GetPatientListRequest) Reset() {
