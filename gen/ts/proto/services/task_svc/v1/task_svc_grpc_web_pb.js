@@ -326,6 +326,67 @@ proto.proto.services.task_svc.v1.TaskServicePromiseClient.prototype.getTasksByPa
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetAssignedTasksRequest,
+ *   !proto.proto.services.task_svc.v1.GetAssignedTasksResponse>}
+ */
+const methodDescriptor_TaskService_GetAssignedTasks = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.TaskService/GetAssignedTasks',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetAssignedTasksRequest,
+  proto.proto.services.task_svc.v1.GetAssignedTasksResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetAssignedTasksRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetAssignedTasksResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetAssignedTasksRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetAssignedTasksResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetAssignedTasksResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.TaskServiceClient.prototype.getAssignedTasks =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskService/GetAssignedTasks',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_GetAssignedTasks,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetAssignedTasksRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetAssignedTasksResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.TaskServicePromiseClient.prototype.getAssignedTasks =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.TaskService/GetAssignedTasks',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_GetAssignedTasks);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.task_svc.v1.UpdateTaskRequest,
  *   !proto.proto.services.task_svc.v1.UpdateTaskResponse>}
  */
