@@ -11,7 +11,7 @@ permissions:
   pull-requests: read
 
 env:
-  CD_DO_DEPLOY: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
+  doDeploy: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
 
 jobs:
 
@@ -82,7 +82,7 @@ jobs:
       packages: write
     uses: ./.github/workflows/cicd-go.yaml
     with:
-      deploy: ${{ env.CD_DO_DEPLOY }}
+      deploy: ${{ env.doDeploy }}
       service: ${{ matrix.service }}
     secrets: inherit
 
@@ -98,13 +98,13 @@ jobs:
       packages: write
     uses: ./.github/workflows/cicd-images.yaml
     with:
-      deploy: ${{ env.CD_DO_DEPLOY }}
+      deploy: ${{ env.doDeploy }}
       image: ${{ matrix.image }}
     secrets: inherit
 
   fly-deploy:
     needs: detect-changes
-    if: ${{ env.CD_DO_DEPLOY && needs.detect-changes.outputs.services != '[]' && needs.detect-changes.outputs.services != '' }}
+    if: ${{ env.doDeploy && needs.detect-changes.outputs.services != '[]' && needs.detect-changes.outputs.services != '' }}
     strategy:
       fail-fast: false
       max-parallel: 2
