@@ -79,6 +79,7 @@ jobs:
       packages: write
     uses: ./.github/workflows/cicd-go.yaml
     with:
+      deploy: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
       service: ${{ matrix.service }}
     secrets: inherit
 
@@ -94,12 +95,13 @@ jobs:
       packages: write
     uses: ./.github/workflows/cicd-images.yaml
     with:
+      deploy: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
       image: ${{ matrix.image }}
     secrets: inherit
 
   fly-deploy:
     needs: detect-changes
-    if: ${{ github.event_name != 'pull_request' && needs.detect-changes.outputs.services != '[]' && needs.detect-changes.outputs.services != '' }}
+    if: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) && needs.detect-changes.outputs.services != '[]' && needs.detect-changes.outputs.services != '' }}
     strategy:
       fail-fast: false
       max-parallel: 2
