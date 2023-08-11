@@ -32,11 +32,11 @@ eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3Rp
 ---
 # decoded
 {
-  "sub": "18159713-5d4e-4ad5-94ad-fbb6bb147984",
-  "email": "testine.test@helpwave.de",
-  "organizations": [
-  	"3b25c6f5-4705-4074-9fc6-a50c28eba406"
-  ]
+	"sub":"18159713-5d4e-4ad5-94ad-fbb6bb147984",
+	"email":"testine.test@helpwave.de",
+	"name":"Testine Test",
+	"nickname":"testine.test",
+	"organizations":["3b25c6f5-4705-4074-9fc6-a50c28eba406"]
 }
 ````
 
