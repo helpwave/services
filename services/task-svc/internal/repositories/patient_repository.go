@@ -83,7 +83,8 @@ func (r *PatientRepository) GetUnassignedPatientsForOrganization(organizationID 
 func (r *PatientRepository) GetDischargedPatientsForOrganization(organizationID uuid.UUID) ([]models.Patient, error) {
 	var patients []models.Patient
 	query := r.db.
-		Where("organization_id = ? AND is_discharged = 1", organizationID).
+		Unscoped().
+		Where("organization_id = ? AND NOT is_discharged = 0", organizationID).
 		Find(&patients)
 
 	if err := query.Error; err != nil {

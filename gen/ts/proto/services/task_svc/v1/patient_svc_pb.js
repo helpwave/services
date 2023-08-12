@@ -5293,8 +5293,8 @@ proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.serializeBinary
  */
 proto.proto.services.task_svc.v1.GetPatientListRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getOrganisationId();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 1));
+  if (f != null) {
     writer.writeString(
       1,
       f
@@ -5317,7 +5317,25 @@ proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.getOrganisation
  * @return {!proto.proto.services.task_svc.v1.GetPatientListRequest} returns this
  */
 proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.setOrganisationId = function(value) {
-  return jspb.Message.setProto3StringField(this, 1, value);
+  return jspb.Message.setField(this, 1, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.task_svc.v1.GetPatientListRequest} returns this
+ */
+proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.clearOrganisationId = function() {
+  return jspb.Message.setField(this, 1, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.hasOrganisationId = function() {
+  return jspb.Message.getField(this, 1) != null;
 };
 
 

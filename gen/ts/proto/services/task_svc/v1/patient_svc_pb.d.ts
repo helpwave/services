@@ -646,6 +646,8 @@ export namespace GetPatientDetailsResponse {
 export class GetPatientListRequest extends jspb.Message {
   getOrganisationId(): string;
   setOrganisationId(value: string): GetPatientListRequest;
+  hasOrganisationId(): boolean;
+  clearOrganisationId(): GetPatientListRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPatientListRequest.AsObject;
@@ -657,7 +659,12 @@ export class GetPatientListRequest extends jspb.Message {
 
 export namespace GetPatientListRequest {
   export type AsObject = {
-    organisationId: string,
+    organisationId?: string,
+  }
+
+  export enum OrganisationIdCase { 
+    _ORGANISATION_ID_NOT_SET = 0,
+    ORGANISATION_ID = 1,
   }
 }
 
