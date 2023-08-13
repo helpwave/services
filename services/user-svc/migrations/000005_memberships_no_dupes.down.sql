@@ -1,0 +1,2 @@
+ALTER TABLE memberships
+DROP CONSTRAINT IF EXISTS memberships_user_id_organization_id_unique;
