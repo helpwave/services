@@ -226,6 +226,80 @@ class GetPatientResponse extends $pb.GeneratedMessage {
   void clearBedId() => clearField(4);
 }
 
+class DeletePatientRequest extends $pb.GeneratedMessage {
+  factory DeletePatientRequest() => create();
+  DeletePatientRequest._() : super();
+  factory DeletePatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeletePatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeletePatientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DeletePatientRequest clone() => DeletePatientRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DeletePatientRequest copyWith(void Function(DeletePatientRequest) updates) => super.copyWith((message) => updates(message as DeletePatientRequest)) as DeletePatientRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DeletePatientRequest create() => DeletePatientRequest._();
+  DeletePatientRequest createEmptyInstance() => create();
+  static $pb.PbList<DeletePatientRequest> createRepeated() => $pb.PbList<DeletePatientRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DeletePatientRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeletePatientRequest>(create);
+  static DeletePatientRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
+class DeletePatientResponse extends $pb.GeneratedMessage {
+  factory DeletePatientResponse() => create();
+  DeletePatientResponse._() : super();
+  factory DeletePatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeletePatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeletePatientResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DeletePatientResponse clone() => DeletePatientResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DeletePatientResponse copyWith(void Function(DeletePatientResponse) updates) => super.copyWith((message) => updates(message as DeletePatientResponse)) as DeletePatientResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DeletePatientResponse create() => DeletePatientResponse._();
+  DeletePatientResponse createEmptyInstance() => create();
+  static $pb.PbList<DeletePatientResponse> createRepeated() => $pb.PbList<DeletePatientResponse>();
+  @$core.pragma('dart2js:noInline')
+  static DeletePatientResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeletePatientResponse>(create);
+  static DeletePatientResponse? _defaultInstance;
+}
+
 class GetPatientByBedRequest extends $pb.GeneratedMessage {
   factory GetPatientByBedRequest() => create();
   GetPatientByBedRequest._() : super();
@@ -1706,6 +1780,9 @@ class PatientServiceApi {
   ;
   $async.Future<GetPatientListResponse> getPatientList($pb.ClientContext? ctx, GetPatientListRequest request) =>
     _client.invoke<GetPatientListResponse>(ctx, 'PatientService', 'GetPatientList', request, GetPatientListResponse())
+  ;
+  $async.Future<DeletePatientResponse> deletePatient($pb.ClientContext? ctx, DeletePatientRequest request) =>
+    _client.invoke<DeletePatientResponse>(ctx, 'PatientService', 'DeletePatient', request, DeletePatientResponse())
   ;
 }
 

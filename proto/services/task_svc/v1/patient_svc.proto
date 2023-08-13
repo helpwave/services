@@ -33,6 +33,16 @@ message GetPatientResponse {
 }
 
 //
+// DeletePatient
+//
+message DeletePatientRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+message DeletePatientResponse {
+}
+
+//
 // GetPatientByBed
 //
 
@@ -233,4 +243,5 @@ service PatientService {
   rpc DischargePatient(DischargePatientRequest) returns (DischargePatientResponse) {}
   rpc GetPatientDetails(GetPatientDetailsRequest) returns (GetPatientDetailsResponse) {}
   rpc GetPatientList(GetPatientListRequest) returns (GetPatientListResponse) {}
+  rpc DeletePatient(DeletePatientRequest) returns (DeletePatientResponse) {}
 }

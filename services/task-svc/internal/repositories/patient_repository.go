@@ -120,3 +120,13 @@ func (r *PatientRepository) UpdatePatient(patientID uuid.UUID, updates map[strin
 	}
 	return patient, nil
 }
+
+func (r *PatientRepository) DeletePatient(patientID uuid.UUID) (*models.Patient, error) {
+	patient := &models.Patient{ID: patientID}
+	query := r.db.Unscoped().Delete(patient)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return patient, nil
+}

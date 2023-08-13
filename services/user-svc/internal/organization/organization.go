@@ -17,41 +17,11 @@ import (
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/user_svc/v1"
+	"user-svc/internal/models"
+	"user-svc/internal/repositories"
 )
 
 type InvitationState = string
-
-type Base struct {
-	LongName     string `gorm:"column:long_name"`
-	ShortName    string `gorm:"column:short_name"`
-	ContactEmail string `gorm:"column:contact_email"`
-	AvatarUrl    string `gorm:"column:avatar_url"`
-	IsPersonal   bool   `gorm:"column:is_personal"`
-}
-
-type Organization struct {
-	Base
-	ID              uuid.UUID    `gorm:"column:id;default:uuid_generate_v4()"`
-	CreatedByUserId uuid.UUID    `gorm:"column:created_by_user_id"`
-	Members         []Membership `gorm:"foreignKey:OrganizationID"`
-	Invitations     []Invitation `gorm:"foreignKey:OrganizationID"`
-}
-
-type Membership struct {
-	ID             uuid.UUID    `gorm:"primaryKey,column:id;default:uuid_generate_v4()"`
-	UserID         uuid.UUID    `gorm:"column:user_id"`
-	OrganizationID uuid.UUID    `gorm:"column:organization_id"`
-	Organization   Organization `gorm:"foreignKey:OrganizationID"`
-	IsAdmin        bool         `gorm:"column:is_admin;default:False"`
-}
-
-type Invitation struct {
-	ID             uuid.UUID `gorm:"column:id;default:uuid_generate_v4()"`
-	OrganizationID uuid.UUID `gorm:"column:organization_id"`
-	Organization   Organization
-	Email          string             `gorm:"column:email"`
-	State          pb.InvitationState `gorm:"column:state"`
-}
 
 var UserCreatedEventSubscription = &daprcmn.Subscription{
 	PubsubName: "pubsub",
@@ -78,7 +48,7 @@ func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrg
 
 	organization, err := CreateOrganizationAndAddUser(
 		ctx,
-		Base{
+		models.Base{
 			LongName:     req.LongName,
 			ShortName:    req.ShortName,
 			ContactEmail: req.ContactEmail,
@@ -110,7 +80,7 @@ func (s ServiceServer) CreateOrganizationForUser(ctx context.Context, req *pb.Cr
 
 	organization, err := CreateOrganizationAndAddUser(
 		ctx,
-		Base{
+		models.Base{
 			LongName:     req.LongName,
 			ShortName:    req.ShortName,
 			ContactEmail: req.ContactEmail,
@@ -133,7 +103,7 @@ func (s ServiceServer) CreateOrganizationForUser(ctx context.Context, req *pb.Cr
 }
 
 func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizationRequest) (*pb.GetOrganizationResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	organisationRepo := repositories.OrganisationRepo(ctx)
 
 	// TODO: Auth
 
@@ -142,7 +112,7 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organization, err := GetOrganizationById(db, id)
+	organization, err := organisationRepo.GetOrganizationById(id)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -176,7 +146,7 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrga
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var organizations []Organization
+	var organizations []models.Organization
 	err = db.Preload("Members").Joins("JOIN memberships ON memberships.organization_id = organizations.id").
 		Where("memberships.user_id = ?", userID).
 		Find(&organizations).Error
@@ -188,7 +158,7 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrga
 		}
 	}
 
-	mappedOrganizations := hwutil.Map(organizations, func(organization Organization) *pb.GetOrganizationsByUserResponse_Organization {
+	mappedOrganizations := hwutil.Map(organizations, func(organization models.Organization) *pb.GetOrganizationsByUserResponse_Organization {
 		return &pb.GetOrganizationsByUserResponse_Organization{
 			Id:           organization.ID.String(),
 			LongName:     organization.LongName,
@@ -196,7 +166,7 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrga
 			ContactEmail: organization.ContactEmail,
 			AvatarUrl:    organization.AvatarUrl,
 			IsPersonal:   false,
-			Members: hwutil.Map(organization.Members, func(membership Membership) *pb.GetOrganizationsByUserResponse_Organization_Member {
+			Members: hwutil.Map(organization.Members, func(membership models.Membership) *pb.GetOrganizationsByUserResponse_Organization_Member {
 				return &pb.GetOrganizationsByUserResponse_Organization_Member{
 					UserId:    membership.UserID.String(),
 					AvatarUrl: "",
@@ -220,7 +190,7 @@ func (s ServiceServer) UpdateOrganization(ctx context.Context, req *pb.UpdateOrg
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organization := Organization{ID: organizationID}
+	organization := models.Organization{ID: organizationID}
 	updates := pbhelpers.UpdatesMapForUpdateOrganizationRequest(req)
 
 	if err := db.Model(&organization).Updates(updates).Error; err != nil {
@@ -238,7 +208,7 @@ func (s ServiceServer) DeleteOrganization(ctx context.Context, req *pb.DeleteOrg
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organization := Organization{ID: organizationID}
+	organization := models.Organization{ID: organizationID}
 
 	if err := db.Delete(&organization).Error; err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -297,7 +267,7 @@ func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	member := Membership{
+	member := models.Membership{
 		UserID:         userID,
 		OrganizationID: organizationID,
 	}
@@ -314,6 +284,8 @@ func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberReq
 }
 
 func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberRequest) (*pb.InviteMemberResponse, error) {
+	organisationRepo := repositories.OrganisationRepo(ctx)
+
 	db := hwgorm.GetDB(ctx)
 	log := zlog.Ctx(ctx)
 
@@ -323,7 +295,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	}
 
 	// Check if an organization exists
-	_, err = GetOrganizationById(db, organizationId)
+	_, err = organisationRepo.GetOrganizationById(organizationId)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -333,14 +305,14 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	}
 
 	// check if already an invitation exists
-	invitation := Invitation{}
+	invitation := models.Invitation{}
 
 	if err := db.Where("(email = ? AND organization_id = ?) AND (state IN ?)", req.Email, organizationId, []pb.InvitationState{pb.InvitationState_INVITATION_STATE_PENDING, pb.InvitationState_INVITATION_STATE_ACCEPTED}).First(&invitation).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
 			// create invitation because doesn't exist
-			invitation = Invitation{
+			invitation = models.Invitation{
 				Email:          req.Email,
 				OrganizationID: organizationId,
 				State:          pb.InvitationState_INVITATION_STATE_PENDING,
@@ -384,7 +356,7 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 		return nil, status.Error(codes.Unauthenticated, "Not a member of this Organization")
 	}
 
-	var invitations []Invitation
+	var invitations []models.Invitation
 	var invitationsResponse []*pb.GetInvitationsByOrganizationResponse_Invitation
 
 	filter := db.Where("organization_id = ?", organizationID)
@@ -400,7 +372,7 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 		}
 	}
 
-	invitationsResponse = hwutil.Map(invitations, func(invitation Invitation) *pb.GetInvitationsByOrganizationResponse_Invitation {
+	invitationsResponse = hwutil.Map(invitations, func(invitation models.Invitation) *pb.GetInvitationsByOrganizationResponse_Invitation {
 		return &pb.GetInvitationsByOrganizationResponse_Invitation{
 			Id:             invitation.ID.String(),
 			Email:          invitation.Email,
@@ -422,7 +394,7 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	var invitations []Invitation
+	var invitations []models.Invitation
 	var invitationsResponse []*pb.GetInvitationsByUserResponse_Invitation
 
 	filter := db.Where("email = ?", claims.Email)
@@ -438,7 +410,7 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 		}
 	}
 
-	invitationsResponse = hwutil.Map(invitations, func(invitation Invitation) *pb.GetInvitationsByUserResponse_Invitation {
+	invitationsResponse = hwutil.Map(invitations, func(invitation models.Invitation) *pb.GetInvitationsByUserResponse_Invitation {
 		organization := &pb.GetInvitationsByUserResponse_Invitation_Organization{
 			Id:        invitation.Organization.ID.String(),
 			LongName:  invitation.Organization.LongName,
@@ -480,7 +452,7 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 		return nil, status.Error(codes.Unauthenticated, "Not a member of this organization")
 	}
 
-	var members []Membership
+	var members []models.Membership
 	if err := db.Where("organization_id = ?", organizationID).Find(&members).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -490,7 +462,7 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 	}
 
 	// Somehow get the user information
-	mappedMembers := hwutil.Map(members, func(member Membership) *pb.GetMembersByOrganizationResponse_Member {
+	mappedMembers := hwutil.Map(members, func(member models.Membership) *pb.GetMembersByOrganizationResponse_Member {
 		return &pb.GetMembersByOrganizationResponse_Member{
 			UserId:    member.UserID.String(),
 			AvatarUrl: "",
@@ -534,7 +506,7 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 	}
 
 	// Update invitation state
-	invitation := Invitation{
+	invitation := models.Invitation{
 		ID: invitationId,
 	}
 
@@ -585,7 +557,7 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 	}
 
 	// Update invitation state
-	invitation := Invitation{
+	invitation := models.Invitation{
 		ID: invitationId,
 	}
 
@@ -597,6 +569,8 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 }
 
 func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvitationRequest) (*pb.RevokeInvitationResponse, error) {
+	organisationRepo := repositories.OrganisationRepo(ctx)
+
 	db := hwgorm.GetDB(ctx)
 	log := zlog.Ctx(ctx)
 
@@ -605,7 +579,7 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	currentInvitation, err := GetInvitationById(db, invitationId)
+	currentInvitation, err := organisationRepo.GetInvitationById(invitationId)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -622,7 +596,7 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	isAdmin, err := IsAdminInOrganization(db, organizationID, userID)
+	isAdmin, err := organisationRepo.IsAdminInOrganization(organizationID, userID)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -636,7 +610,7 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 	}
 
 	// Update invitation state
-	invitation := Invitation{
+	invitation := models.Invitation{
 		ID: invitationId,
 	}
 
@@ -653,10 +627,10 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 	return &pb.RevokeInvitationResponse{}, nil
 }
 
-func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UUID) (*Organization, error) {
+func CreateOrganizationAndAddUser(ctx context.Context, attr models.Base, userID uuid.UUID) (*models.Organization, error) {
 	db := hwgorm.GetDB(ctx)
 
-	var organization Organization
+	var organization models.Organization
 	err := db.Transaction(func(tx *gorm.DB) error {
 		organizationPtr, err := CreateOrganization(ctx, tx, attr, userID)
 		if err != nil {
@@ -697,13 +671,13 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr Base, userID uuid.UU
 	return &organization, nil
 }
 
-func CreateOrganization(ctx context.Context, db *gorm.DB, attr Base, creatorUserId uuid.UUID) (*Organization, error) {
+func CreateOrganization(ctx context.Context, db *gorm.DB, attr models.Base, creatorUserId uuid.UUID) (*models.Organization, error) {
 	log := zlog.Ctx(ctx)
 
 	// TODO: Auth
 
-	organization := Organization{
-		Base: Base{
+	organization := models.Organization{
+		Base: models.Base{
 			LongName:     attr.LongName,
 			ShortName:    attr.ShortName,
 			ContactEmail: attr.ContactEmail,
@@ -711,7 +685,7 @@ func CreateOrganization(ctx context.Context, db *gorm.DB, attr Base, creatorUser
 			IsPersonal:   attr.IsPersonal,
 		},
 		CreatedByUserId: creatorUserId,
-		Members:         []Membership{},
+		Members:         []models.Membership{},
 	}
 
 	if err := db.Create(&organization).Error; err != nil {
@@ -729,8 +703,8 @@ func CreateOrganization(ctx context.Context, db *gorm.DB, attr Base, creatorUser
 func AddUserToOrganization(ctx context.Context, db *gorm.DB, userId uuid.UUID, organizationId uuid.UUID) error {
 	log := zlog.Ctx(ctx)
 
-	organization := Organization{ID: organizationId}
-	member := Membership{
+	organization := models.Organization{ID: organizationId}
+	member := models.Membership{
 		UserID: userId,
 	}
 
@@ -748,31 +722,9 @@ func AddUserToOrganization(ctx context.Context, db *gorm.DB, userId uuid.UUID, o
 	return nil
 }
 
-func GetOrganizationById(db *gorm.DB, id uuid.UUID) (*Organization, error) {
-	organization := Organization{ID: id}
+func GetInvitationByIdAndEmail(db *gorm.DB, email string, id uuid.UUID) (*models.Invitation, error) {
 
-	if err := db.Preload("Members").First(&organization).Error; err != nil {
-		return nil, err
-	}
-
-	return &organization, nil
-}
-
-func GetInvitationById(db *gorm.DB, id uuid.UUID) (*Invitation, error) {
-	invitation := Invitation{
-		ID: id,
-	}
-
-	if err := db.First(&invitation).Error; err != nil {
-		return nil, err
-	}
-
-	return &invitation, nil
-}
-
-func GetInvitationByIdAndEmail(db *gorm.DB, email string, id uuid.UUID) (*Invitation, error) {
-
-	var invitation Invitation
+	var invitation models.Invitation
 	if err := db.Where("id = ? AND email = ?", id, email).First(&invitation).Error; err != nil {
 		return nil, err
 	}
@@ -795,7 +747,7 @@ func HandleUserCreatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry
 		return true, err
 	}
 
-	if _, err := CreateOrganizationAndAddUser(ctx, Base{
+	if _, err := CreateOrganizationAndAddUser(ctx, models.Base{
 		LongName:     fmt.Sprintf("%s personal organization", payload.Nickname),
 		ShortName:    payload.Nickname,
 		ContactEmail: payload.Email,
@@ -811,7 +763,7 @@ func HandleUserCreatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry
 func ChangeMembershipAdminStatus(ctx context.Context, db *gorm.DB, userID uuid.UUID, organizationID uuid.UUID, isAdmin bool) error {
 	log := zlog.Ctx(ctx)
 
-	member := Membership{
+	member := models.Membership{
 		OrganizationID: organizationID,
 		UserID:         userID,
 	}
@@ -830,7 +782,7 @@ func ChangeMembershipAdminStatus(ctx context.Context, db *gorm.DB, userID uuid.U
 }
 
 func IsInOrganization(db *gorm.DB, organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
-	membership := Membership{
+	membership := models.Membership{
 		UserID:         userID,
 		OrganizationID: organizationID,
 	}
@@ -845,22 +797,4 @@ func IsInOrganization(db *gorm.DB, organizationID uuid.UUID, userID uuid.UUID) (
 	}
 
 	return true, nil
-}
-
-func IsAdminInOrganization(db *gorm.DB, organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
-	membership := Membership{
-		UserID:         userID,
-		OrganizationID: organizationID,
-	}
-
-	err := db.First(&membership).Error
-	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return false, status.Error(codes.Internal, err.Error())
-		} else {
-			return false, status.Error(codes.InvalidArgument, "not a member of this organization")
-		}
-	}
-	isAdmin := membership.IsAdmin
-	return isAdmin, nil
 }

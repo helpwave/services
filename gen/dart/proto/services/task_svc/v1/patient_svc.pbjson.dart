@@ -71,6 +71,27 @@ final $typed_data.Uint8List getPatientResponseDescriptor = $convert.base64Decode
     'lkZW50aWZpZXIYAiABKAlSF2h1bWFuUmVhZGFibGVJZGVudGlmaWVyEhQKBW5vdGVzGAMgASgJ'
     'UgVub3RlcxIaCgZiZWRfaWQYBCABKAlIAFIFYmVkSWSIAQFCCQoHX2JlZF9pZA==');
 
+@$core.Deprecated('Use deletePatientRequestDescriptor instead')
+const DeletePatientRequest$json = {
+  '1': 'DeletePatientRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `DeletePatientRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deletePatientRequestDescriptor = $convert.base64Decode(
+    'ChREZWxldGVQYXRpZW50UmVxdWVzdBIOCgJpZBgBIAEoCVICaWQ=');
+
+@$core.Deprecated('Use deletePatientResponseDescriptor instead')
+const DeletePatientResponse$json = {
+  '1': 'DeletePatientResponse',
+};
+
+/// Descriptor for `DeletePatientResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deletePatientResponseDescriptor = $convert.base64Decode(
+    'ChVEZWxldGVQYXRpZW50UmVzcG9uc2U=');
+
 @$core.Deprecated('Use getPatientByBedRequestDescriptor instead')
 const GetPatientByBedRequest$json = {
   '1': 'GetPatientByBedRequest',
@@ -485,6 +506,7 @@ const $core.Map<$core.String, $core.dynamic> PatientServiceBase$json = {
     {'1': 'DischargePatient', '2': '.proto.services.task_svc.v1.DischargePatientRequest', '3': '.proto.services.task_svc.v1.DischargePatientResponse', '4': {}},
     {'1': 'GetPatientDetails', '2': '.proto.services.task_svc.v1.GetPatientDetailsRequest', '3': '.proto.services.task_svc.v1.GetPatientDetailsResponse', '4': {}},
     {'1': 'GetPatientList', '2': '.proto.services.task_svc.v1.GetPatientListRequest', '3': '.proto.services.task_svc.v1.GetPatientListResponse', '4': {}},
+    {'1': 'DeletePatient', '2': '.proto.services.task_svc.v1.DeletePatientRequest', '3': '.proto.services.task_svc.v1.DeletePatientResponse', '4': {}},
   ],
 };
 
@@ -522,6 +544,8 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> PatientSer
   '.proto.services.task_svc.v1.GetPatientListResponse.Room': GetPatientListResponse_Room$json,
   '.proto.services.task_svc.v1.GetPatientListResponse.Bed': GetPatientListResponse_Bed$json,
   '.proto.services.task_svc.v1.GetPatientListResponse.Patient': GetPatientListResponse_Patient$json,
+  '.proto.services.task_svc.v1.DeletePatientRequest': DeletePatientRequest$json,
+  '.proto.services.task_svc.v1.DeletePatientResponse': DeletePatientResponse$json,
 };
 
 /// Descriptor for `PatientService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
@@ -551,5 +575,7 @@ final $typed_data.Uint8List patientServiceDescriptor = $convert.base64Decode(
     'LnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnREZXRhaWxzUmVzcG9uc2UiABJ5Cg5HZX'
     'RQYXRpZW50TGlzdBIxLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0'
     'UmVxdWVzdBoyLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG'
-    '9uc2UiAA==');
+    '9uc2UiABJ2Cg1EZWxldGVQYXRpZW50EjAucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuRGVs'
+    'ZXRlUGF0aWVudFJlcXVlc3QaMS5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVQYX'
+    'RpZW50UmVzcG9uc2UiAA==');
 
