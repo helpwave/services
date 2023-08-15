@@ -70,6 +70,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		OrganizationID: organizationID,
 		CreatedBy:      userID,
 		DueAt:          req.DueAt.AsTime(),
+		IsPublic:       req.IsPublic,
 	})
 
 	if err != nil {
