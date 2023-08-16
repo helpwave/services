@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -19,7 +19,27 @@ import 'organization_svc.pbenum.dart';
 export 'organization_svc.pbenum.dart';
 
 class CreateOrganizationRequest extends $pb.GeneratedMessage {
-  factory CreateOrganizationRequest() => create();
+  factory CreateOrganizationRequest({
+    $core.String? longName,
+    $core.String? shortName,
+    $core.String? contactEmail,
+    $core.bool? isPersonal,
+  }) {
+    final $result = create();
+    if (longName != null) {
+      $result.longName = longName;
+    }
+    if (shortName != null) {
+      $result.shortName = shortName;
+    }
+    if (contactEmail != null) {
+      $result.contactEmail = contactEmail;
+    }
+    if (isPersonal != null) {
+      $result.isPersonal = isPersonal;
+    }
+    return $result;
+  }
   CreateOrganizationRequest._() : super();
   factory CreateOrganizationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateOrganizationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -91,7 +111,15 @@ class CreateOrganizationRequest extends $pb.GeneratedMessage {
 }
 
 class CreateOrganizationResponse extends $pb.GeneratedMessage {
-  factory CreateOrganizationResponse() => create();
+  factory CreateOrganizationResponse({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   CreateOrganizationResponse._() : super();
   factory CreateOrganizationResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateOrganizationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -133,7 +161,31 @@ class CreateOrganizationResponse extends $pb.GeneratedMessage {
 }
 
 class CreateOrganizationForUserRequest extends $pb.GeneratedMessage {
-  factory CreateOrganizationForUserRequest() => create();
+  factory CreateOrganizationForUserRequest({
+    $core.String? longName,
+    $core.String? shortName,
+    $core.String? contactEmail,
+    $core.bool? isPersonal,
+    $core.String? userId,
+  }) {
+    final $result = create();
+    if (longName != null) {
+      $result.longName = longName;
+    }
+    if (shortName != null) {
+      $result.shortName = shortName;
+    }
+    if (contactEmail != null) {
+      $result.contactEmail = contactEmail;
+    }
+    if (isPersonal != null) {
+      $result.isPersonal = isPersonal;
+    }
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    return $result;
+  }
   CreateOrganizationForUserRequest._() : super();
   factory CreateOrganizationForUserRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateOrganizationForUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -215,7 +267,15 @@ class CreateOrganizationForUserRequest extends $pb.GeneratedMessage {
 }
 
 class CreateOrganizationForUserResponse extends $pb.GeneratedMessage {
-  factory CreateOrganizationForUserResponse() => create();
+  factory CreateOrganizationForUserResponse({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   CreateOrganizationForUserResponse._() : super();
   factory CreateOrganizationForUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateOrganizationForUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -257,7 +317,15 @@ class CreateOrganizationForUserResponse extends $pb.GeneratedMessage {
 }
 
 class GetOrganizationMember extends $pb.GeneratedMessage {
-  factory GetOrganizationMember() => create();
+  factory GetOrganizationMember({
+    $core.String? userId,
+  }) {
+    final $result = create();
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    return $result;
+  }
   GetOrganizationMember._() : super();
   factory GetOrganizationMember.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetOrganizationMember.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -299,7 +367,15 @@ class GetOrganizationMember extends $pb.GeneratedMessage {
 }
 
 class GetOrganizationRequest extends $pb.GeneratedMessage {
-  factory GetOrganizationRequest() => create();
+  factory GetOrganizationRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   GetOrganizationRequest._() : super();
   factory GetOrganizationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetOrganizationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -341,7 +417,39 @@ class GetOrganizationRequest extends $pb.GeneratedMessage {
 }
 
 class GetOrganizationResponse extends $pb.GeneratedMessage {
-  factory GetOrganizationResponse() => create();
+  factory GetOrganizationResponse({
+    $core.String? id,
+    $core.String? longName,
+    $core.String? shortName,
+    $core.String? contactEmail,
+    $core.String? avatarUrl,
+    $core.bool? isPersonal,
+    $core.Iterable<GetOrganizationMember>? members,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (longName != null) {
+      $result.longName = longName;
+    }
+    if (shortName != null) {
+      $result.shortName = shortName;
+    }
+    if (contactEmail != null) {
+      $result.contactEmail = contactEmail;
+    }
+    if (avatarUrl != null) {
+      $result.avatarUrl = avatarUrl;
+    }
+    if (isPersonal != null) {
+      $result.isPersonal = isPersonal;
+    }
+    if (members != null) {
+      $result.members.addAll(members);
+    }
+    return $result;
+  }
   GetOrganizationResponse._() : super();
   factory GetOrganizationResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetOrganizationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -469,7 +577,27 @@ class GetOrganizationsByUserRequest extends $pb.GeneratedMessage {
 }
 
 class GetOrganizationsByUserResponse_Organization_Member extends $pb.GeneratedMessage {
-  factory GetOrganizationsByUserResponse_Organization_Member() => create();
+  factory GetOrganizationsByUserResponse_Organization_Member({
+    $core.String? userId,
+    $core.String? email,
+    $core.String? nickname,
+    $core.String? avatarUrl,
+  }) {
+    final $result = create();
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    if (email != null) {
+      $result.email = email;
+    }
+    if (nickname != null) {
+      $result.nickname = nickname;
+    }
+    if (avatarUrl != null) {
+      $result.avatarUrl = avatarUrl;
+    }
+    return $result;
+  }
   GetOrganizationsByUserResponse_Organization_Member._() : super();
   factory GetOrganizationsByUserResponse_Organization_Member.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetOrganizationsByUserResponse_Organization_Member.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -541,7 +669,39 @@ class GetOrganizationsByUserResponse_Organization_Member extends $pb.GeneratedMe
 }
 
 class GetOrganizationsByUserResponse_Organization extends $pb.GeneratedMessage {
-  factory GetOrganizationsByUserResponse_Organization() => create();
+  factory GetOrganizationsByUserResponse_Organization({
+    $core.String? id,
+    $core.String? longName,
+    $core.String? shortName,
+    $core.String? contactEmail,
+    $core.String? avatarUrl,
+    $core.bool? isPersonal,
+    $core.Iterable<GetOrganizationsByUserResponse_Organization_Member>? members,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (longName != null) {
+      $result.longName = longName;
+    }
+    if (shortName != null) {
+      $result.shortName = shortName;
+    }
+    if (contactEmail != null) {
+      $result.contactEmail = contactEmail;
+    }
+    if (avatarUrl != null) {
+      $result.avatarUrl = avatarUrl;
+    }
+    if (isPersonal != null) {
+      $result.isPersonal = isPersonal;
+    }
+    if (members != null) {
+      $result.members.addAll(members);
+    }
+    return $result;
+  }
   GetOrganizationsByUserResponse_Organization._() : super();
   factory GetOrganizationsByUserResponse_Organization.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetOrganizationsByUserResponse_Organization.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -637,7 +797,15 @@ class GetOrganizationsByUserResponse_Organization extends $pb.GeneratedMessage {
 }
 
 class GetOrganizationsByUserResponse extends $pb.GeneratedMessage {
-  factory GetOrganizationsByUserResponse() => create();
+  factory GetOrganizationsByUserResponse({
+    $core.Iterable<GetOrganizationsByUserResponse_Organization>? organizations,
+  }) {
+    final $result = create();
+    if (organizations != null) {
+      $result.organizations.addAll(organizations);
+    }
+    return $result;
+  }
   GetOrganizationsByUserResponse._() : super();
   factory GetOrganizationsByUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetOrganizationsByUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -673,7 +841,35 @@ class GetOrganizationsByUserResponse extends $pb.GeneratedMessage {
 }
 
 class UpdateOrganizationRequest extends $pb.GeneratedMessage {
-  factory UpdateOrganizationRequest() => create();
+  factory UpdateOrganizationRequest({
+    $core.String? id,
+    $core.String? longName,
+    $core.String? shortName,
+    $core.String? contactEmail,
+    $core.String? avatarUrl,
+    $core.bool? isPersonal,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (longName != null) {
+      $result.longName = longName;
+    }
+    if (shortName != null) {
+      $result.shortName = shortName;
+    }
+    if (contactEmail != null) {
+      $result.contactEmail = contactEmail;
+    }
+    if (avatarUrl != null) {
+      $result.avatarUrl = avatarUrl;
+    }
+    if (isPersonal != null) {
+      $result.isPersonal = isPersonal;
+    }
+    return $result;
+  }
   UpdateOrganizationRequest._() : super();
   factory UpdateOrganizationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdateOrganizationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -797,7 +993,15 @@ class UpdateOrganizationResponse extends $pb.GeneratedMessage {
 }
 
 class DeleteOrganizationRequest extends $pb.GeneratedMessage {
-  factory DeleteOrganizationRequest() => create();
+  factory DeleteOrganizationRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   DeleteOrganizationRequest._() : super();
   factory DeleteOrganizationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DeleteOrganizationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -871,7 +1075,15 @@ class DeleteOrganizationResponse extends $pb.GeneratedMessage {
 }
 
 class GetMembersByOrganizationRequest extends $pb.GeneratedMessage {
-  factory GetMembersByOrganizationRequest() => create();
+  factory GetMembersByOrganizationRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   GetMembersByOrganizationRequest._() : super();
   factory GetMembersByOrganizationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetMembersByOrganizationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -913,7 +1125,27 @@ class GetMembersByOrganizationRequest extends $pb.GeneratedMessage {
 }
 
 class GetMembersByOrganizationResponse_Member extends $pb.GeneratedMessage {
-  factory GetMembersByOrganizationResponse_Member() => create();
+  factory GetMembersByOrganizationResponse_Member({
+    $core.String? userId,
+    $core.String? email,
+    $core.String? nickname,
+    $core.String? avatarUrl,
+  }) {
+    final $result = create();
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    if (email != null) {
+      $result.email = email;
+    }
+    if (nickname != null) {
+      $result.nickname = nickname;
+    }
+    if (avatarUrl != null) {
+      $result.avatarUrl = avatarUrl;
+    }
+    return $result;
+  }
   GetMembersByOrganizationResponse_Member._() : super();
   factory GetMembersByOrganizationResponse_Member.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetMembersByOrganizationResponse_Member.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -985,7 +1217,15 @@ class GetMembersByOrganizationResponse_Member extends $pb.GeneratedMessage {
 }
 
 class GetMembersByOrganizationResponse extends $pb.GeneratedMessage {
-  factory GetMembersByOrganizationResponse() => create();
+  factory GetMembersByOrganizationResponse({
+    $core.Iterable<GetMembersByOrganizationResponse_Member>? members,
+  }) {
+    final $result = create();
+    if (members != null) {
+      $result.members.addAll(members);
+    }
+    return $result;
+  }
   GetMembersByOrganizationResponse._() : super();
   factory GetMembersByOrganizationResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetMembersByOrganizationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1021,7 +1261,19 @@ class GetMembersByOrganizationResponse extends $pb.GeneratedMessage {
 }
 
 class AddMemberRequest extends $pb.GeneratedMessage {
-  factory AddMemberRequest() => create();
+  factory AddMemberRequest({
+    $core.String? id,
+    $core.String? userId,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    return $result;
+  }
   AddMemberRequest._() : super();
   factory AddMemberRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory AddMemberRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1105,7 +1357,19 @@ class AddMemberResponse extends $pb.GeneratedMessage {
 }
 
 class RemoveMemberRequest extends $pb.GeneratedMessage {
-  factory RemoveMemberRequest() => create();
+  factory RemoveMemberRequest({
+    $core.String? id,
+    $core.String? userId,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    return $result;
+  }
   RemoveMemberRequest._() : super();
   factory RemoveMemberRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory RemoveMemberRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1189,7 +1453,19 @@ class RemoveMemberResponse extends $pb.GeneratedMessage {
 }
 
 class InviteMemberRequest extends $pb.GeneratedMessage {
-  factory InviteMemberRequest() => create();
+  factory InviteMemberRequest({
+    $core.String? organizationId,
+    $core.String? email,
+  }) {
+    final $result = create();
+    if (organizationId != null) {
+      $result.organizationId = organizationId;
+    }
+    if (email != null) {
+      $result.email = email;
+    }
+    return $result;
+  }
   InviteMemberRequest._() : super();
   factory InviteMemberRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory InviteMemberRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1241,7 +1517,15 @@ class InviteMemberRequest extends $pb.GeneratedMessage {
 }
 
 class InviteMemberResponse extends $pb.GeneratedMessage {
-  factory InviteMemberResponse() => create();
+  factory InviteMemberResponse({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   InviteMemberResponse._() : super();
   factory InviteMemberResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory InviteMemberResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1283,7 +1567,19 @@ class InviteMemberResponse extends $pb.GeneratedMessage {
 }
 
 class GetInvitationsByOrganizationRequest extends $pb.GeneratedMessage {
-  factory GetInvitationsByOrganizationRequest() => create();
+  factory GetInvitationsByOrganizationRequest({
+    $core.String? organizationId,
+    InvitationState? state,
+  }) {
+    final $result = create();
+    if (organizationId != null) {
+      $result.organizationId = organizationId;
+    }
+    if (state != null) {
+      $result.state = state;
+    }
+    return $result;
+  }
   GetInvitationsByOrganizationRequest._() : super();
   factory GetInvitationsByOrganizationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetInvitationsByOrganizationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1335,7 +1631,27 @@ class GetInvitationsByOrganizationRequest extends $pb.GeneratedMessage {
 }
 
 class GetInvitationsByOrganizationResponse_Invitation extends $pb.GeneratedMessage {
-  factory GetInvitationsByOrganizationResponse_Invitation() => create();
+  factory GetInvitationsByOrganizationResponse_Invitation({
+    $core.String? id,
+    $core.String? email,
+    $core.String? organizationId,
+    InvitationState? state,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (email != null) {
+      $result.email = email;
+    }
+    if (organizationId != null) {
+      $result.organizationId = organizationId;
+    }
+    if (state != null) {
+      $result.state = state;
+    }
+    return $result;
+  }
   GetInvitationsByOrganizationResponse_Invitation._() : super();
   factory GetInvitationsByOrganizationResponse_Invitation.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetInvitationsByOrganizationResponse_Invitation.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1407,7 +1723,15 @@ class GetInvitationsByOrganizationResponse_Invitation extends $pb.GeneratedMessa
 }
 
 class GetInvitationsByOrganizationResponse extends $pb.GeneratedMessage {
-  factory GetInvitationsByOrganizationResponse() => create();
+  factory GetInvitationsByOrganizationResponse({
+    $core.Iterable<GetInvitationsByOrganizationResponse_Invitation>? invitations,
+  }) {
+    final $result = create();
+    if (invitations != null) {
+      $result.invitations.addAll(invitations);
+    }
+    return $result;
+  }
   GetInvitationsByOrganizationResponse._() : super();
   factory GetInvitationsByOrganizationResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetInvitationsByOrganizationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1443,7 +1767,15 @@ class GetInvitationsByOrganizationResponse extends $pb.GeneratedMessage {
 }
 
 class GetInvitationsByUserRequest extends $pb.GeneratedMessage {
-  factory GetInvitationsByUserRequest() => create();
+  factory GetInvitationsByUserRequest({
+    InvitationState? state,
+  }) {
+    final $result = create();
+    if (state != null) {
+      $result.state = state;
+    }
+    return $result;
+  }
   GetInvitationsByUserRequest._() : super();
   factory GetInvitationsByUserRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetInvitationsByUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1485,7 +1817,23 @@ class GetInvitationsByUserRequest extends $pb.GeneratedMessage {
 }
 
 class GetInvitationsByUserResponse_Invitation_Organization extends $pb.GeneratedMessage {
-  factory GetInvitationsByUserResponse_Invitation_Organization() => create();
+  factory GetInvitationsByUserResponse_Invitation_Organization({
+    $core.String? id,
+    $core.String? longName,
+    $core.String? avatarUrl,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (longName != null) {
+      $result.longName = longName;
+    }
+    if (avatarUrl != null) {
+      $result.avatarUrl = avatarUrl;
+    }
+    return $result;
+  }
   GetInvitationsByUserResponse_Invitation_Organization._() : super();
   factory GetInvitationsByUserResponse_Invitation_Organization.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetInvitationsByUserResponse_Invitation_Organization.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1547,7 +1895,27 @@ class GetInvitationsByUserResponse_Invitation_Organization extends $pb.Generated
 }
 
 class GetInvitationsByUserResponse_Invitation extends $pb.GeneratedMessage {
-  factory GetInvitationsByUserResponse_Invitation() => create();
+  factory GetInvitationsByUserResponse_Invitation({
+    $core.String? id,
+    $core.String? email,
+    GetInvitationsByUserResponse_Invitation_Organization? organization,
+    InvitationState? state,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (email != null) {
+      $result.email = email;
+    }
+    if (organization != null) {
+      $result.organization = organization;
+    }
+    if (state != null) {
+      $result.state = state;
+    }
+    return $result;
+  }
   GetInvitationsByUserResponse_Invitation._() : super();
   factory GetInvitationsByUserResponse_Invitation.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetInvitationsByUserResponse_Invitation.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1621,7 +1989,15 @@ class GetInvitationsByUserResponse_Invitation extends $pb.GeneratedMessage {
 }
 
 class GetInvitationsByUserResponse extends $pb.GeneratedMessage {
-  factory GetInvitationsByUserResponse() => create();
+  factory GetInvitationsByUserResponse({
+    $core.Iterable<GetInvitationsByUserResponse_Invitation>? invitations,
+  }) {
+    final $result = create();
+    if (invitations != null) {
+      $result.invitations.addAll(invitations);
+    }
+    return $result;
+  }
   GetInvitationsByUserResponse._() : super();
   factory GetInvitationsByUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetInvitationsByUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1656,8 +2032,18 @@ class GetInvitationsByUserResponse extends $pb.GeneratedMessage {
   $core.List<GetInvitationsByUserResponse_Invitation> get invitations => $_getList(0);
 }
 
+///
+///  AcceptInvite
 class AcceptInvitationRequest extends $pb.GeneratedMessage {
-  factory AcceptInvitationRequest() => create();
+  factory AcceptInvitationRequest({
+    $core.String? invitationId,
+  }) {
+    final $result = create();
+    if (invitationId != null) {
+      $result.invitationId = invitationId;
+    }
+    return $result;
+  }
   AcceptInvitationRequest._() : super();
   factory AcceptInvitationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory AcceptInvitationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1731,7 +2117,15 @@ class AcceptInvitationResponse extends $pb.GeneratedMessage {
 }
 
 class DeclineInvitationRequest extends $pb.GeneratedMessage {
-  factory DeclineInvitationRequest() => create();
+  factory DeclineInvitationRequest({
+    $core.String? invitationId,
+  }) {
+    final $result = create();
+    if (invitationId != null) {
+      $result.invitationId = invitationId;
+    }
+    return $result;
+  }
   DeclineInvitationRequest._() : super();
   factory DeclineInvitationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DeclineInvitationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1805,7 +2199,15 @@ class DeclineInvitationResponse extends $pb.GeneratedMessage {
 }
 
 class RevokeInvitationRequest extends $pb.GeneratedMessage {
-  factory RevokeInvitationRequest() => create();
+  factory RevokeInvitationRequest({
+    $core.String? invitationId,
+  }) {
+    final $result = create();
+    if (invitationId != null) {
+      $result.invitationId = invitationId;
+    }
+    return $result;
+  }
   RevokeInvitationRequest._() : super();
   factory RevokeInvitationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory RevokeInvitationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);

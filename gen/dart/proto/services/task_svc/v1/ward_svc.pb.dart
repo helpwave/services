@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -15,7 +15,15 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class CreateWardRequest extends $pb.GeneratedMessage {
-  factory CreateWardRequest() => create();
+  factory CreateWardRequest({
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   CreateWardRequest._() : super();
   factory CreateWardRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateWardRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -57,7 +65,15 @@ class CreateWardRequest extends $pb.GeneratedMessage {
 }
 
 class CreateWardResponse extends $pb.GeneratedMessage {
-  factory CreateWardResponse() => create();
+  factory CreateWardResponse({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   CreateWardResponse._() : super();
   factory CreateWardResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateWardResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -99,7 +115,15 @@ class CreateWardResponse extends $pb.GeneratedMessage {
 }
 
 class GetWardRequest extends $pb.GeneratedMessage {
-  factory GetWardRequest() => create();
+  factory GetWardRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   GetWardRequest._() : super();
   factory GetWardRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetWardRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -141,7 +165,19 @@ class GetWardRequest extends $pb.GeneratedMessage {
 }
 
 class GetWardResponse extends $pb.GeneratedMessage {
-  factory GetWardResponse() => create();
+  factory GetWardResponse({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetWardResponse._() : super();
   factory GetWardResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetWardResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -225,7 +261,19 @@ class GetWardsRequest extends $pb.GeneratedMessage {
 }
 
 class GetWardsResponse_Ward extends $pb.GeneratedMessage {
-  factory GetWardsResponse_Ward() => create();
+  factory GetWardsResponse_Ward({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetWardsResponse_Ward._() : super();
   factory GetWardsResponse_Ward.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetWardsResponse_Ward.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -277,7 +325,15 @@ class GetWardsResponse_Ward extends $pb.GeneratedMessage {
 }
 
 class GetWardsResponse extends $pb.GeneratedMessage {
-  factory GetWardsResponse() => create();
+  factory GetWardsResponse({
+    $core.Iterable<GetWardsResponse_Ward>? wards,
+  }) {
+    final $result = create();
+    if (wards != null) {
+      $result.wards.addAll(wards);
+    }
+    return $result;
+  }
   GetWardsResponse._() : super();
   factory GetWardsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetWardsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -313,7 +369,19 @@ class GetWardsResponse extends $pb.GeneratedMessage {
 }
 
 class UpdateWardRequest extends $pb.GeneratedMessage {
-  factory UpdateWardRequest() => create();
+  factory UpdateWardRequest({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   UpdateWardRequest._() : super();
   factory UpdateWardRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdateWardRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -397,7 +465,15 @@ class UpdateWardResponse extends $pb.GeneratedMessage {
 }
 
 class DeleteWardRequest extends $pb.GeneratedMessage {
-  factory DeleteWardRequest() => create();
+  factory DeleteWardRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   DeleteWardRequest._() : super();
   factory DeleteWardRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DeleteWardRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -471,7 +547,15 @@ class DeleteWardResponse extends $pb.GeneratedMessage {
 }
 
 class GetWardDetailsRequest extends $pb.GeneratedMessage {
-  factory GetWardDetailsRequest() => create();
+  factory GetWardDetailsRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   GetWardDetailsRequest._() : super();
   factory GetWardDetailsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetWardDetailsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -513,7 +597,19 @@ class GetWardDetailsRequest extends $pb.GeneratedMessage {
 }
 
 class GetWardDetailsResponse_Bed extends $pb.GeneratedMessage {
-  factory GetWardDetailsResponse_Bed() => create();
+  factory GetWardDetailsResponse_Bed({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetWardDetailsResponse_Bed._() : super();
   factory GetWardDetailsResponse_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetWardDetailsResponse_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -565,7 +661,19 @@ class GetWardDetailsResponse_Bed extends $pb.GeneratedMessage {
 }
 
 class GetWardDetailsResponse_Subtask extends $pb.GeneratedMessage {
-  factory GetWardDetailsResponse_Subtask() => create();
+  factory GetWardDetailsResponse_Subtask({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetWardDetailsResponse_Subtask._() : super();
   factory GetWardDetailsResponse_Subtask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetWardDetailsResponse_Subtask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -617,7 +725,23 @@ class GetWardDetailsResponse_Subtask extends $pb.GeneratedMessage {
 }
 
 class GetWardDetailsResponse_Room extends $pb.GeneratedMessage {
-  factory GetWardDetailsResponse_Room() => create();
+  factory GetWardDetailsResponse_Room({
+    $core.String? id,
+    $core.String? name,
+    $core.Iterable<GetWardDetailsResponse_Bed>? beds,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (beds != null) {
+      $result.beds.addAll(beds);
+    }
+    return $result;
+  }
   GetWardDetailsResponse_Room._() : super();
   factory GetWardDetailsResponse_Room.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetWardDetailsResponse_Room.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -673,7 +797,23 @@ class GetWardDetailsResponse_Room extends $pb.GeneratedMessage {
 }
 
 class GetWardDetailsResponse_TaskTemplate extends $pb.GeneratedMessage {
-  factory GetWardDetailsResponse_TaskTemplate() => create();
+  factory GetWardDetailsResponse_TaskTemplate({
+    $core.String? id,
+    $core.String? name,
+    $core.Iterable<GetWardDetailsResponse_Subtask>? subtasks,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (subtasks != null) {
+      $result.subtasks.addAll(subtasks);
+    }
+    return $result;
+  }
   GetWardDetailsResponse_TaskTemplate._() : super();
   factory GetWardDetailsResponse_TaskTemplate.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetWardDetailsResponse_TaskTemplate.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -729,7 +869,27 @@ class GetWardDetailsResponse_TaskTemplate extends $pb.GeneratedMessage {
 }
 
 class GetWardDetailsResponse extends $pb.GeneratedMessage {
-  factory GetWardDetailsResponse() => create();
+  factory GetWardDetailsResponse({
+    $core.String? id,
+    $core.String? name,
+    $core.Iterable<GetWardDetailsResponse_Room>? rooms,
+    $core.Iterable<GetWardDetailsResponse_TaskTemplate>? taskTemplates,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (rooms != null) {
+      $result.rooms.addAll(rooms);
+    }
+    if (taskTemplates != null) {
+      $result.taskTemplates.addAll(taskTemplates);
+    }
+    return $result;
+  }
   GetWardDetailsResponse._() : super();
   factory GetWardDetailsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetWardDetailsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -821,7 +981,35 @@ class GetWardOverviewsRequest extends $pb.GeneratedMessage {
 }
 
 class GetWardOverviewsResponse_Ward extends $pb.GeneratedMessage {
-  factory GetWardOverviewsResponse_Ward() => create();
+  factory GetWardOverviewsResponse_Ward({
+    $core.String? id,
+    $core.String? name,
+    $core.int? bedCount,
+    $core.int? tasksTodo,
+    $core.int? tasksInProgress,
+    $core.int? tasksDone,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (bedCount != null) {
+      $result.bedCount = bedCount;
+    }
+    if (tasksTodo != null) {
+      $result.tasksTodo = tasksTodo;
+    }
+    if (tasksInProgress != null) {
+      $result.tasksInProgress = tasksInProgress;
+    }
+    if (tasksDone != null) {
+      $result.tasksDone = tasksDone;
+    }
+    return $result;
+  }
   GetWardOverviewsResponse_Ward._() : super();
   factory GetWardOverviewsResponse_Ward.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetWardOverviewsResponse_Ward.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -913,7 +1101,15 @@ class GetWardOverviewsResponse_Ward extends $pb.GeneratedMessage {
 }
 
 class GetWardOverviewsResponse extends $pb.GeneratedMessage {
-  factory GetWardOverviewsResponse() => create();
+  factory GetWardOverviewsResponse({
+    $core.Iterable<GetWardOverviewsResponse_Ward>? wards,
+  }) {
+    final $result = create();
+    if (wards != null) {
+      $result.wards.addAll(wards);
+    }
+    return $result;
+  }
   GetWardOverviewsResponse._() : super();
   factory GetWardOverviewsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetWardOverviewsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);

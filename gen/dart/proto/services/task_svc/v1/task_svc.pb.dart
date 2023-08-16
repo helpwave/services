@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -20,7 +20,31 @@ import 'task_svc.pbenum.dart';
 export 'task_svc.pbenum.dart';
 
 class CreateTaskRequest extends $pb.GeneratedMessage {
-  factory CreateTaskRequest() => create();
+  factory CreateTaskRequest({
+    $core.String? name,
+    $core.String? description,
+    $core.String? patientId,
+    $core.bool? public,
+    $5.Timestamp? dueAt,
+  }) {
+    final $result = create();
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (patientId != null) {
+      $result.patientId = patientId;
+    }
+    if (public != null) {
+      $result.public = public;
+    }
+    if (dueAt != null) {
+      $result.dueAt = dueAt;
+    }
+    return $result;
+  }
   CreateTaskRequest._() : super();
   factory CreateTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -104,7 +128,15 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
 }
 
 class CreateTaskResponse extends $pb.GeneratedMessage {
-  factory CreateTaskResponse() => create();
+  factory CreateTaskResponse({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   CreateTaskResponse._() : super();
   factory CreateTaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -146,7 +178,15 @@ class CreateTaskResponse extends $pb.GeneratedMessage {
 }
 
 class GetTaskRequest extends $pb.GeneratedMessage {
-  factory GetTaskRequest() => create();
+  factory GetTaskRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   GetTaskRequest._() : super();
   factory GetTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -188,7 +228,27 @@ class GetTaskRequest extends $pb.GeneratedMessage {
 }
 
 class GetTaskResponse_SubTask extends $pb.GeneratedMessage {
-  factory GetTaskResponse_SubTask() => create();
+  factory GetTaskResponse_SubTask({
+    $core.String? id,
+    $core.String? name,
+    $core.bool? done,
+    $core.String? createdBy,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (done != null) {
+      $result.done = done;
+    }
+    if (createdBy != null) {
+      $result.createdBy = createdBy;
+    }
+    return $result;
+  }
   GetTaskResponse_SubTask._() : super();
   factory GetTaskResponse_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetTaskResponse_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -260,7 +320,51 @@ class GetTaskResponse_SubTask extends $pb.GeneratedMessage {
 }
 
 class GetTaskResponse extends $pb.GeneratedMessage {
-  factory GetTaskResponse() => create();
+  factory GetTaskResponse({
+    $core.String? id,
+    $core.String? name,
+    $core.String? description,
+    TaskStatus? status,
+    $core.String? assignedUserId,
+    $core.String? patientId,
+    $core.bool? public,
+    $5.Timestamp? dueAt,
+    $core.String? createdBy,
+    $core.Iterable<GetTaskResponse_SubTask>? subtasks,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (status != null) {
+      $result.status = status;
+    }
+    if (assignedUserId != null) {
+      $result.assignedUserId = assignedUserId;
+    }
+    if (patientId != null) {
+      $result.patientId = patientId;
+    }
+    if (public != null) {
+      $result.public = public;
+    }
+    if (dueAt != null) {
+      $result.dueAt = dueAt;
+    }
+    if (createdBy != null) {
+      $result.createdBy = createdBy;
+    }
+    if (subtasks != null) {
+      $result.subtasks.addAll(subtasks);
+    }
+    return $result;
+  }
   GetTaskResponse._() : super();
   factory GetTaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -388,7 +492,15 @@ class GetTaskResponse extends $pb.GeneratedMessage {
 }
 
 class GetTasksByPatientRequest extends $pb.GeneratedMessage {
-  factory GetTasksByPatientRequest() => create();
+  factory GetTasksByPatientRequest({
+    $core.String? patientId,
+  }) {
+    final $result = create();
+    if (patientId != null) {
+      $result.patientId = patientId;
+    }
+    return $result;
+  }
   GetTasksByPatientRequest._() : super();
   factory GetTasksByPatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetTasksByPatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -430,7 +542,27 @@ class GetTasksByPatientRequest extends $pb.GeneratedMessage {
 }
 
 class GetTasksByPatientResponse_Task_SubTask extends $pb.GeneratedMessage {
-  factory GetTasksByPatientResponse_Task_SubTask() => create();
+  factory GetTasksByPatientResponse_Task_SubTask({
+    $core.String? id,
+    $core.String? name,
+    $core.bool? done,
+    $core.String? createdBy,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (done != null) {
+      $result.done = done;
+    }
+    if (createdBy != null) {
+      $result.createdBy = createdBy;
+    }
+    return $result;
+  }
   GetTasksByPatientResponse_Task_SubTask._() : super();
   factory GetTasksByPatientResponse_Task_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetTasksByPatientResponse_Task_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -502,7 +634,51 @@ class GetTasksByPatientResponse_Task_SubTask extends $pb.GeneratedMessage {
 }
 
 class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
-  factory GetTasksByPatientResponse_Task() => create();
+  factory GetTasksByPatientResponse_Task({
+    $core.String? id,
+    $core.String? name,
+    $core.String? description,
+    TaskStatus? status,
+    $core.String? assignedUserId,
+    $core.String? patientId,
+    $core.bool? public,
+    $5.Timestamp? dueAt,
+    $core.String? createdBy,
+    $core.Iterable<GetTasksByPatientResponse_Task_SubTask>? subtasks,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (status != null) {
+      $result.status = status;
+    }
+    if (assignedUserId != null) {
+      $result.assignedUserId = assignedUserId;
+    }
+    if (patientId != null) {
+      $result.patientId = patientId;
+    }
+    if (public != null) {
+      $result.public = public;
+    }
+    if (dueAt != null) {
+      $result.dueAt = dueAt;
+    }
+    if (createdBy != null) {
+      $result.createdBy = createdBy;
+    }
+    if (subtasks != null) {
+      $result.subtasks.addAll(subtasks);
+    }
+    return $result;
+  }
   GetTasksByPatientResponse_Task._() : super();
   factory GetTasksByPatientResponse_Task.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetTasksByPatientResponse_Task.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -630,7 +806,15 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
 }
 
 class GetTasksByPatientResponse extends $pb.GeneratedMessage {
-  factory GetTasksByPatientResponse() => create();
+  factory GetTasksByPatientResponse({
+    $core.Iterable<GetTasksByPatientResponse_Task>? tasks,
+  }) {
+    final $result = create();
+    if (tasks != null) {
+      $result.tasks.addAll(tasks);
+    }
+    return $result;
+  }
   GetTasksByPatientResponse._() : super();
   factory GetTasksByPatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetTasksByPatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -666,7 +850,15 @@ class GetTasksByPatientResponse extends $pb.GeneratedMessage {
 }
 
 class GetTasksByPatientSortedByStatusRequest extends $pb.GeneratedMessage {
-  factory GetTasksByPatientSortedByStatusRequest() => create();
+  factory GetTasksByPatientSortedByStatusRequest({
+    $core.String? patientId,
+  }) {
+    final $result = create();
+    if (patientId != null) {
+      $result.patientId = patientId;
+    }
+    return $result;
+  }
   GetTasksByPatientSortedByStatusRequest._() : super();
   factory GetTasksByPatientSortedByStatusRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetTasksByPatientSortedByStatusRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -708,7 +900,27 @@ class GetTasksByPatientSortedByStatusRequest extends $pb.GeneratedMessage {
 }
 
 class GetTasksByPatientSortedByStatusResponse_Task_SubTask extends $pb.GeneratedMessage {
-  factory GetTasksByPatientSortedByStatusResponse_Task_SubTask() => create();
+  factory GetTasksByPatientSortedByStatusResponse_Task_SubTask({
+    $core.String? id,
+    $core.String? name,
+    $core.bool? done,
+    $core.String? createdBy,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (done != null) {
+      $result.done = done;
+    }
+    if (createdBy != null) {
+      $result.createdBy = createdBy;
+    }
+    return $result;
+  }
   GetTasksByPatientSortedByStatusResponse_Task_SubTask._() : super();
   factory GetTasksByPatientSortedByStatusResponse_Task_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetTasksByPatientSortedByStatusResponse_Task_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -780,7 +992,47 @@ class GetTasksByPatientSortedByStatusResponse_Task_SubTask extends $pb.Generated
 }
 
 class GetTasksByPatientSortedByStatusResponse_Task extends $pb.GeneratedMessage {
-  factory GetTasksByPatientSortedByStatusResponse_Task() => create();
+  factory GetTasksByPatientSortedByStatusResponse_Task({
+    $core.String? id,
+    $core.String? name,
+    $core.String? description,
+    $core.String? assignedUserId,
+    $core.String? patientId,
+    $core.bool? public,
+    $5.Timestamp? dueAt,
+    $core.String? createdBy,
+    $core.Iterable<GetTasksByPatientSortedByStatusResponse_Task_SubTask>? subtasks,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (assignedUserId != null) {
+      $result.assignedUserId = assignedUserId;
+    }
+    if (patientId != null) {
+      $result.patientId = patientId;
+    }
+    if (public != null) {
+      $result.public = public;
+    }
+    if (dueAt != null) {
+      $result.dueAt = dueAt;
+    }
+    if (createdBy != null) {
+      $result.createdBy = createdBy;
+    }
+    if (subtasks != null) {
+      $result.subtasks.addAll(subtasks);
+    }
+    return $result;
+  }
   GetTasksByPatientSortedByStatusResponse_Task._() : super();
   factory GetTasksByPatientSortedByStatusResponse_Task.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetTasksByPatientSortedByStatusResponse_Task.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -898,7 +1150,23 @@ class GetTasksByPatientSortedByStatusResponse_Task extends $pb.GeneratedMessage 
 }
 
 class GetTasksByPatientSortedByStatusResponse extends $pb.GeneratedMessage {
-  factory GetTasksByPatientSortedByStatusResponse() => create();
+  factory GetTasksByPatientSortedByStatusResponse({
+    $core.Iterable<GetTasksByPatientSortedByStatusResponse_Task>? todo,
+    $core.Iterable<GetTasksByPatientSortedByStatusResponse_Task>? inProgress,
+    $core.Iterable<GetTasksByPatientSortedByStatusResponse_Task>? done,
+  }) {
+    final $result = create();
+    if (todo != null) {
+      $result.todo.addAll(todo);
+    }
+    if (inProgress != null) {
+      $result.inProgress.addAll(inProgress);
+    }
+    if (done != null) {
+      $result.done.addAll(done);
+    }
+    return $result;
+  }
   GetTasksByPatientSortedByStatusResponse._() : super();
   factory GetTasksByPatientSortedByStatusResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetTasksByPatientSortedByStatusResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -974,7 +1242,19 @@ class GetAssignedTasksRequest extends $pb.GeneratedMessage {
 }
 
 class GetAssignedTasksResponse_Task_Patient extends $pb.GeneratedMessage {
-  factory GetAssignedTasksResponse_Task_Patient() => create();
+  factory GetAssignedTasksResponse_Task_Patient({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetAssignedTasksResponse_Task_Patient._() : super();
   factory GetAssignedTasksResponse_Task_Patient.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAssignedTasksResponse_Task_Patient.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1026,7 +1306,27 @@ class GetAssignedTasksResponse_Task_Patient extends $pb.GeneratedMessage {
 }
 
 class GetAssignedTasksResponse_Task_SubTask extends $pb.GeneratedMessage {
-  factory GetAssignedTasksResponse_Task_SubTask() => create();
+  factory GetAssignedTasksResponse_Task_SubTask({
+    $core.String? id,
+    $core.String? name,
+    $core.bool? done,
+    $core.String? createdBy,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (done != null) {
+      $result.done = done;
+    }
+    if (createdBy != null) {
+      $result.createdBy = createdBy;
+    }
+    return $result;
+  }
   GetAssignedTasksResponse_Task_SubTask._() : super();
   factory GetAssignedTasksResponse_Task_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAssignedTasksResponse_Task_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1098,7 +1398,47 @@ class GetAssignedTasksResponse_Task_SubTask extends $pb.GeneratedMessage {
 }
 
 class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
-  factory GetAssignedTasksResponse_Task() => create();
+  factory GetAssignedTasksResponse_Task({
+    $core.String? id,
+    $core.String? name,
+    $core.String? description,
+    $core.String? assignedUserId,
+    GetAssignedTasksResponse_Task_Patient? patient,
+    $core.bool? public,
+    $5.Timestamp? dueAt,
+    $core.String? createdBy,
+    $core.Iterable<GetAssignedTasksResponse_Task_SubTask>? subtasks,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (assignedUserId != null) {
+      $result.assignedUserId = assignedUserId;
+    }
+    if (patient != null) {
+      $result.patient = patient;
+    }
+    if (public != null) {
+      $result.public = public;
+    }
+    if (dueAt != null) {
+      $result.dueAt = dueAt;
+    }
+    if (createdBy != null) {
+      $result.createdBy = createdBy;
+    }
+    if (subtasks != null) {
+      $result.subtasks.addAll(subtasks);
+    }
+    return $result;
+  }
   GetAssignedTasksResponse_Task._() : super();
   factory GetAssignedTasksResponse_Task.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAssignedTasksResponse_Task.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1218,7 +1558,15 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
 }
 
 class GetAssignedTasksResponse extends $pb.GeneratedMessage {
-  factory GetAssignedTasksResponse() => create();
+  factory GetAssignedTasksResponse({
+    $core.Iterable<GetAssignedTasksResponse_Task>? tasks,
+  }) {
+    final $result = create();
+    if (tasks != null) {
+      $result.tasks.addAll(tasks);
+    }
+    return $result;
+  }
   GetAssignedTasksResponse._() : super();
   factory GetAssignedTasksResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAssignedTasksResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1254,7 +1602,31 @@ class GetAssignedTasksResponse extends $pb.GeneratedMessage {
 }
 
 class UpdateTaskRequest extends $pb.GeneratedMessage {
-  factory UpdateTaskRequest() => create();
+  factory UpdateTaskRequest({
+    $core.String? id,
+    $core.String? name,
+    $core.String? description,
+    $5.Timestamp? dueAt,
+    $core.bool? public,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (dueAt != null) {
+      $result.dueAt = dueAt;
+    }
+    if (public != null) {
+      $result.public = public;
+    }
+    return $result;
+  }
   UpdateTaskRequest._() : super();
   factory UpdateTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdateTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1370,7 +1742,23 @@ class UpdateTaskResponse extends $pb.GeneratedMessage {
 }
 
 class AddSubTaskRequest extends $pb.GeneratedMessage {
-  factory AddSubTaskRequest() => create();
+  factory AddSubTaskRequest({
+    $core.String? name,
+    $core.String? taskId,
+    $core.bool? done,
+  }) {
+    final $result = create();
+    if (name != null) {
+      $result.name = name;
+    }
+    if (taskId != null) {
+      $result.taskId = taskId;
+    }
+    if (done != null) {
+      $result.done = done;
+    }
+    return $result;
+  }
   AddSubTaskRequest._() : super();
   factory AddSubTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory AddSubTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1432,7 +1820,15 @@ class AddSubTaskRequest extends $pb.GeneratedMessage {
 }
 
 class AddSubTaskResponse extends $pb.GeneratedMessage {
-  factory AddSubTaskResponse() => create();
+  factory AddSubTaskResponse({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   AddSubTaskResponse._() : super();
   factory AddSubTaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory AddSubTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1474,7 +1870,15 @@ class AddSubTaskResponse extends $pb.GeneratedMessage {
 }
 
 class RemoveSubTaskRequest extends $pb.GeneratedMessage {
-  factory RemoveSubTaskRequest() => create();
+  factory RemoveSubTaskRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   RemoveSubTaskRequest._() : super();
   factory RemoveSubTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory RemoveSubTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1548,7 +1952,19 @@ class RemoveSubTaskResponse extends $pb.GeneratedMessage {
 }
 
 class UpdateSubTaskRequest extends $pb.GeneratedMessage {
-  factory UpdateSubTaskRequest() => create();
+  factory UpdateSubTaskRequest({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   UpdateSubTaskRequest._() : super();
   factory UpdateSubTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdateSubTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1632,7 +2048,15 @@ class UpdateSubTaskResponse extends $pb.GeneratedMessage {
 }
 
 class SubTaskToToDoRequest extends $pb.GeneratedMessage {
-  factory SubTaskToToDoRequest() => create();
+  factory SubTaskToToDoRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   SubTaskToToDoRequest._() : super();
   factory SubTaskToToDoRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory SubTaskToToDoRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1706,7 +2130,15 @@ class SubTaskToToDoResponse extends $pb.GeneratedMessage {
 }
 
 class SubTaskToDoneRequest extends $pb.GeneratedMessage {
-  factory SubTaskToDoneRequest() => create();
+  factory SubTaskToDoneRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   SubTaskToDoneRequest._() : super();
   factory SubTaskToDoneRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory SubTaskToDoneRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1780,7 +2212,15 @@ class SubTaskToDoneResponse extends $pb.GeneratedMessage {
 }
 
 class TaskToToDoRequest extends $pb.GeneratedMessage {
-  factory TaskToToDoRequest() => create();
+  factory TaskToToDoRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   TaskToToDoRequest._() : super();
   factory TaskToToDoRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory TaskToToDoRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1854,7 +2294,15 @@ class TaskToToDoResponse extends $pb.GeneratedMessage {
 }
 
 class TaskToInProgressRequest extends $pb.GeneratedMessage {
-  factory TaskToInProgressRequest() => create();
+  factory TaskToInProgressRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   TaskToInProgressRequest._() : super();
   factory TaskToInProgressRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory TaskToInProgressRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1928,7 +2376,15 @@ class TaskToInProgressResponse extends $pb.GeneratedMessage {
 }
 
 class TaskToDoneRequest extends $pb.GeneratedMessage {
-  factory TaskToDoneRequest() => create();
+  factory TaskToDoneRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   TaskToDoneRequest._() : super();
   factory TaskToDoneRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory TaskToDoneRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -2002,7 +2458,19 @@ class TaskToDoneResponse extends $pb.GeneratedMessage {
 }
 
 class AssignTaskToUserRequest extends $pb.GeneratedMessage {
-  factory AssignTaskToUserRequest() => create();
+  factory AssignTaskToUserRequest({
+    $core.String? id,
+    $core.String? userId,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    return $result;
+  }
   AssignTaskToUserRequest._() : super();
   factory AssignTaskToUserRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory AssignTaskToUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -2086,7 +2554,15 @@ class AssignTaskToUserResponse extends $pb.GeneratedMessage {
 }
 
 class UnassignTaskFromUserRequest extends $pb.GeneratedMessage {
-  factory UnassignTaskFromUserRequest() => create();
+  factory UnassignTaskFromUserRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   UnassignTaskFromUserRequest._() : super();
   factory UnassignTaskFromUserRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UnassignTaskFromUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -2160,7 +2636,15 @@ class UnassignTaskFromUserResponse extends $pb.GeneratedMessage {
 }
 
 class PublishTaskRequest extends $pb.GeneratedMessage {
-  factory PublishTaskRequest() => create();
+  factory PublishTaskRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   PublishTaskRequest._() : super();
   factory PublishTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory PublishTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -2234,7 +2718,15 @@ class PublishTaskResponse extends $pb.GeneratedMessage {
 }
 
 class UnpublishTaskRequest extends $pb.GeneratedMessage {
-  factory UnpublishTaskRequest() => create();
+  factory UnpublishTaskRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   UnpublishTaskRequest._() : super();
   factory UnpublishTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UnpublishTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -2308,7 +2800,15 @@ class UnpublishTaskResponse extends $pb.GeneratedMessage {
 }
 
 class DeleteTaskRequest extends $pb.GeneratedMessage {
-  factory DeleteTaskRequest() => create();
+  factory DeleteTaskRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   DeleteTaskRequest._() : super();
   factory DeleteTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DeleteTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);

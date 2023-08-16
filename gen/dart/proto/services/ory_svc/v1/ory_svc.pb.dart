@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -14,7 +14,27 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class AfterRegistrationWebhookPayload extends $pb.GeneratedMessage {
-  factory AfterRegistrationWebhookPayload() => create();
+  factory AfterRegistrationWebhookPayload({
+    $core.String? userId,
+    $core.String? email,
+    $core.String? nickname,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    if (email != null) {
+      $result.email = email;
+    }
+    if (nickname != null) {
+      $result.nickname = nickname;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   AfterRegistrationWebhookPayload._() : super();
   factory AfterRegistrationWebhookPayload.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory AfterRegistrationWebhookPayload.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -86,7 +106,27 @@ class AfterRegistrationWebhookPayload extends $pb.GeneratedMessage {
 }
 
 class AfterSettingsWebhookPayload extends $pb.GeneratedMessage {
-  factory AfterSettingsWebhookPayload() => create();
+  factory AfterSettingsWebhookPayload({
+    $core.String? userId,
+    $core.String? email,
+    $core.String? nickname,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    if (email != null) {
+      $result.email = email;
+    }
+    if (nickname != null) {
+      $result.nickname = nickname;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   AfterSettingsWebhookPayload._() : super();
   factory AfterSettingsWebhookPayload.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory AfterSettingsWebhookPayload.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);

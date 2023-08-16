@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -15,7 +15,19 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class CreateBedRequest extends $pb.GeneratedMessage {
-  factory CreateBedRequest() => create();
+  factory CreateBedRequest({
+    $core.String? roomId,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (roomId != null) {
+      $result.roomId = roomId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   CreateBedRequest._() : super();
   factory CreateBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -67,7 +79,19 @@ class CreateBedRequest extends $pb.GeneratedMessage {
 }
 
 class CreateBedResponse extends $pb.GeneratedMessage {
-  factory CreateBedResponse() => create();
+  factory CreateBedResponse({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   CreateBedResponse._() : super();
   factory CreateBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -119,7 +143,19 @@ class CreateBedResponse extends $pb.GeneratedMessage {
 }
 
 class BulkCreateBedsRequest extends $pb.GeneratedMessage {
-  factory BulkCreateBedsRequest() => create();
+  factory BulkCreateBedsRequest({
+    $core.String? roomId,
+    $core.int? amountOfBeds,
+  }) {
+    final $result = create();
+    if (roomId != null) {
+      $result.roomId = roomId;
+    }
+    if (amountOfBeds != null) {
+      $result.amountOfBeds = amountOfBeds;
+    }
+    return $result;
+  }
   BulkCreateBedsRequest._() : super();
   factory BulkCreateBedsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory BulkCreateBedsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -171,7 +207,19 @@ class BulkCreateBedsRequest extends $pb.GeneratedMessage {
 }
 
 class BulkCreateBedsResponse_Bed extends $pb.GeneratedMessage {
-  factory BulkCreateBedsResponse_Bed() => create();
+  factory BulkCreateBedsResponse_Bed({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   BulkCreateBedsResponse_Bed._() : super();
   factory BulkCreateBedsResponse_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory BulkCreateBedsResponse_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -223,7 +271,15 @@ class BulkCreateBedsResponse_Bed extends $pb.GeneratedMessage {
 }
 
 class BulkCreateBedsResponse extends $pb.GeneratedMessage {
-  factory BulkCreateBedsResponse() => create();
+  factory BulkCreateBedsResponse({
+    $core.Iterable<BulkCreateBedsResponse_Bed>? beds,
+  }) {
+    final $result = create();
+    if (beds != null) {
+      $result.beds.addAll(beds);
+    }
+    return $result;
+  }
   BulkCreateBedsResponse._() : super();
   factory BulkCreateBedsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory BulkCreateBedsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -259,7 +315,15 @@ class BulkCreateBedsResponse extends $pb.GeneratedMessage {
 }
 
 class GetBedRequest extends $pb.GeneratedMessage {
-  factory GetBedRequest() => create();
+  factory GetBedRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   GetBedRequest._() : super();
   factory GetBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -301,7 +365,23 @@ class GetBedRequest extends $pb.GeneratedMessage {
 }
 
 class GetBedResponse extends $pb.GeneratedMessage {
-  factory GetBedResponse() => create();
+  factory GetBedResponse({
+    $core.String? id,
+    $core.String? roomId,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (roomId != null) {
+      $result.roomId = roomId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetBedResponse._() : super();
   factory GetBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -395,7 +475,23 @@ class GetBedsRequest extends $pb.GeneratedMessage {
 }
 
 class GetBedsResponse_Bed extends $pb.GeneratedMessage {
-  factory GetBedsResponse_Bed() => create();
+  factory GetBedsResponse_Bed({
+    $core.String? id,
+    $core.String? roomId,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (roomId != null) {
+      $result.roomId = roomId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetBedsResponse_Bed._() : super();
   factory GetBedsResponse_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetBedsResponse_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -457,7 +553,15 @@ class GetBedsResponse_Bed extends $pb.GeneratedMessage {
 }
 
 class GetBedsResponse extends $pb.GeneratedMessage {
-  factory GetBedsResponse() => create();
+  factory GetBedsResponse({
+    $core.Iterable<GetBedsResponse_Bed>? beds,
+  }) {
+    final $result = create();
+    if (beds != null) {
+      $result.beds.addAll(beds);
+    }
+    return $result;
+  }
   GetBedsResponse._() : super();
   factory GetBedsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetBedsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -493,7 +597,15 @@ class GetBedsResponse extends $pb.GeneratedMessage {
 }
 
 class GetBedsByRoomRequest extends $pb.GeneratedMessage {
-  factory GetBedsByRoomRequest() => create();
+  factory GetBedsByRoomRequest({
+    $core.String? roomId,
+  }) {
+    final $result = create();
+    if (roomId != null) {
+      $result.roomId = roomId;
+    }
+    return $result;
+  }
   GetBedsByRoomRequest._() : super();
   factory GetBedsByRoomRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetBedsByRoomRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -535,7 +647,19 @@ class GetBedsByRoomRequest extends $pb.GeneratedMessage {
 }
 
 class GetBedsByRoomResponse_Bed extends $pb.GeneratedMessage {
-  factory GetBedsByRoomResponse_Bed() => create();
+  factory GetBedsByRoomResponse_Bed({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetBedsByRoomResponse_Bed._() : super();
   factory GetBedsByRoomResponse_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetBedsByRoomResponse_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -587,7 +711,15 @@ class GetBedsByRoomResponse_Bed extends $pb.GeneratedMessage {
 }
 
 class GetBedsByRoomResponse extends $pb.GeneratedMessage {
-  factory GetBedsByRoomResponse() => create();
+  factory GetBedsByRoomResponse({
+    $core.Iterable<GetBedsByRoomResponse_Bed>? beds,
+  }) {
+    final $result = create();
+    if (beds != null) {
+      $result.beds.addAll(beds);
+    }
+    return $result;
+  }
   GetBedsByRoomResponse._() : super();
   factory GetBedsByRoomResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetBedsByRoomResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -623,7 +755,23 @@ class GetBedsByRoomResponse extends $pb.GeneratedMessage {
 }
 
 class UpdateBedRequest extends $pb.GeneratedMessage {
-  factory UpdateBedRequest() => create();
+  factory UpdateBedRequest({
+    $core.String? id,
+    $core.String? roomId,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (roomId != null) {
+      $result.roomId = roomId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   UpdateBedRequest._() : super();
   factory UpdateBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdateBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -717,7 +865,15 @@ class UpdateBedResponse extends $pb.GeneratedMessage {
 }
 
 class DeleteBedRequest extends $pb.GeneratedMessage {
-  factory DeleteBedRequest() => create();
+  factory DeleteBedRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   DeleteBedRequest._() : super();
   factory DeleteBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DeleteBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);

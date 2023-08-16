@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -13,8 +13,21 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+/// TOPIC: ORGANIZATION_CREATED
 class OrganizationCreatedEvent extends $pb.GeneratedMessage {
-  factory OrganizationCreatedEvent() => create();
+  factory OrganizationCreatedEvent({
+    $core.String? id,
+    $core.String? userId,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    return $result;
+  }
   OrganizationCreatedEvent._() : super();
   factory OrganizationCreatedEvent.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory OrganizationCreatedEvent.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -46,6 +59,7 @@ class OrganizationCreatedEvent extends $pb.GeneratedMessage {
   static OrganizationCreatedEvent getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<OrganizationCreatedEvent>(create);
   static OrganizationCreatedEvent? _defaultInstance;
 
+  /// the id of the created organization
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
@@ -55,6 +69,7 @@ class OrganizationCreatedEvent extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
 
+  /// the id of the user that created the organization
   @$pb.TagNumber(2)
   $core.String get userId => $_getSZ(1);
   @$pb.TagNumber(2)
@@ -65,8 +80,17 @@ class OrganizationCreatedEvent extends $pb.GeneratedMessage {
   void clearUserId() => clearField(2);
 }
 
+/// TOPIC: ORGANIZATION_DELETED
 class OrganizationDeletedEvent extends $pb.GeneratedMessage {
-  factory OrganizationDeletedEvent() => create();
+  factory OrganizationDeletedEvent({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   OrganizationDeletedEvent._() : super();
   factory OrganizationDeletedEvent.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory OrganizationDeletedEvent.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -97,6 +121,7 @@ class OrganizationDeletedEvent extends $pb.GeneratedMessage {
   static OrganizationDeletedEvent getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<OrganizationDeletedEvent>(create);
   static OrganizationDeletedEvent? _defaultInstance;
 
+  /// the id of the deleted organization
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
