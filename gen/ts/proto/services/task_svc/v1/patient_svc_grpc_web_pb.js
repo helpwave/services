@@ -748,5 +748,66 @@ proto.proto.services.task_svc.v1.PatientServicePromiseClient.prototype.getPatien
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.DeletePatientRequest,
+ *   !proto.proto.services.task_svc.v1.DeletePatientResponse>}
+ */
+const methodDescriptor_PatientService_DeletePatient = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.PatientService/DeletePatient',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.DeletePatientRequest,
+  proto.proto.services.task_svc.v1.DeletePatientResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.DeletePatientRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.DeletePatientResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.DeletePatientRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.DeletePatientResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.DeletePatientResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.PatientServiceClient.prototype.deletePatient =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.PatientService/DeletePatient',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_DeletePatient,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.DeletePatientRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.DeletePatientResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.PatientServicePromiseClient.prototype.deletePatient =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.PatientService/DeletePatient',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_DeletePatient);
+};
+
+
 module.exports = proto.proto.services.task_svc.v1;
 

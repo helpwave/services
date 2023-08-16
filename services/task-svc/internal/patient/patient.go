@@ -3,17 +3,16 @@ package patient
 import (
 	"common"
 	"context"
+	pb "gen/proto/services/task_svc/v1"
 	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
+	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
-
-	pb "gen/proto/services/task_svc/v1"
-	zlog "github.com/rs/zerolog/log"
-	pbhelpers "proto_helpers/task_svc/v1"
 )
 
 type ServiceServer struct {
@@ -444,4 +443,21 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 		}),
 		Active: activePatients,
 	}, nil
+}
+
+func (ServiceServer) DeletePatient(ctx context.Context, req *pb.DeletePatientRequest) (*pb.DeletePatientResponse, error) {
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	// TODO: admin check
+
+	patientRepo := repositories.PatientRepo(ctx)
+	_, err = patientRepo.DeletePatient(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.DeletePatientResponse{}, nil
 }
