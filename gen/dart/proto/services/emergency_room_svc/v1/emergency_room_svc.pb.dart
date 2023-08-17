@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -15,8 +15,21 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+/// TODO: move somewhere else
 class Point extends $pb.GeneratedMessage {
-  factory Point() => create();
+  factory Point({
+    $core.double? lat,
+    $core.double? long,
+  }) {
+    final $result = create();
+    if (lat != null) {
+      $result.lat = lat;
+    }
+    if (long != null) {
+      $result.long = long;
+    }
+    return $result;
+  }
   Point._() : super();
   factory Point.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Point.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -68,7 +81,35 @@ class Point extends $pb.GeneratedMessage {
 }
 
 class CreateERRequest extends $pb.GeneratedMessage {
-  factory CreateERRequest() => create();
+  factory CreateERRequest({
+    $core.String? name,
+    Point? location,
+    $core.String? displayableAddress,
+    $core.bool? open,
+    $core.int? utilization,
+    $core.Iterable<$core.String>? departments,
+  }) {
+    final $result = create();
+    if (name != null) {
+      $result.name = name;
+    }
+    if (location != null) {
+      $result.location = location;
+    }
+    if (displayableAddress != null) {
+      $result.displayableAddress = displayableAddress;
+    }
+    if (open != null) {
+      $result.open = open;
+    }
+    if (utilization != null) {
+      $result.utilization = utilization;
+    }
+    if (departments != null) {
+      $result.departments.addAll(departments);
+    }
+    return $result;
+  }
   CreateERRequest._() : super();
   factory CreateERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -156,7 +197,39 @@ class CreateERRequest extends $pb.GeneratedMessage {
 }
 
 class CreateERResponse extends $pb.GeneratedMessage {
-  factory CreateERResponse() => create();
+  factory CreateERResponse({
+    $core.String? id,
+    $core.String? name,
+    Point? location,
+    $core.String? displayableAddress,
+    $core.bool? open,
+    $core.int? utilization,
+    $core.Iterable<DepartmentBase>? departments,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (location != null) {
+      $result.location = location;
+    }
+    if (displayableAddress != null) {
+      $result.displayableAddress = displayableAddress;
+    }
+    if (open != null) {
+      $result.open = open;
+    }
+    if (utilization != null) {
+      $result.utilization = utilization;
+    }
+    if (departments != null) {
+      $result.departments.addAll(departments);
+    }
+    return $result;
+  }
   CreateERResponse._() : super();
   factory CreateERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -254,7 +327,15 @@ class CreateERResponse extends $pb.GeneratedMessage {
 }
 
 class GetERRequest extends $pb.GeneratedMessage {
-  factory GetERRequest() => create();
+  factory GetERRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   GetERRequest._() : super();
   factory GetERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -296,7 +377,19 @@ class GetERRequest extends $pb.GeneratedMessage {
 }
 
 class DepartmentBase extends $pb.GeneratedMessage {
-  factory DepartmentBase() => create();
+  factory DepartmentBase({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   DepartmentBase._() : super();
   factory DepartmentBase.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DepartmentBase.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -348,7 +441,39 @@ class DepartmentBase extends $pb.GeneratedMessage {
 }
 
 class GetERResponse extends $pb.GeneratedMessage {
-  factory GetERResponse() => create();
+  factory GetERResponse({
+    $core.String? id,
+    $core.String? name,
+    Point? location,
+    $core.String? displayableAddress,
+    $core.bool? open,
+    $core.int? utilization,
+    $core.Iterable<DepartmentBase>? departments,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (location != null) {
+      $result.location = location;
+    }
+    if (displayableAddress != null) {
+      $result.displayableAddress = displayableAddress;
+    }
+    if (open != null) {
+      $result.open = open;
+    }
+    if (utilization != null) {
+      $result.utilization = utilization;
+    }
+    if (departments != null) {
+      $result.departments.addAll(departments);
+    }
+    return $result;
+  }
   GetERResponse._() : super();
   factory GetERResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetERResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -445,8 +570,21 @@ class GetERResponse extends $pb.GeneratedMessage {
   $core.List<DepartmentBase> get departments => $_getList(6);
 }
 
+/// TODO: move somewhere else
 class InclusiveIntInterval extends $pb.GeneratedMessage {
-  factory InclusiveIntInterval() => create();
+  factory InclusiveIntInterval({
+    $core.int? min,
+    $core.int? max,
+  }) {
+    final $result = create();
+    if (min != null) {
+      $result.min = min;
+    }
+    if (max != null) {
+      $result.max = max;
+    }
+    return $result;
+  }
   InclusiveIntInterval._() : super();
   factory InclusiveIntInterval.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory InclusiveIntInterval.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -497,8 +635,21 @@ class InclusiveIntInterval extends $pb.GeneratedMessage {
   void clearMax() => clearField(2);
 }
 
+/// TODO: move to hwgorm
 class PagedRequest extends $pb.GeneratedMessage {
-  factory PagedRequest() => create();
+  factory PagedRequest({
+    $core.int? page,
+    $core.int? pageSize,
+  }) {
+    final $result = create();
+    if (page != null) {
+      $result.page = page;
+    }
+    if (pageSize != null) {
+      $result.pageSize = pageSize;
+    }
+    return $result;
+  }
   PagedRequest._() : super();
   factory PagedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory PagedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -549,8 +700,29 @@ class PagedRequest extends $pb.GeneratedMessage {
   void clearPageSize() => clearField(2);
 }
 
+/// TODO: move to hwgorm
 class PageInfo extends $pb.GeneratedMessage {
-  factory PageInfo() => create();
+  factory PageInfo({
+    $core.int? page,
+    $core.int? pageSize,
+    $fixnum.Int64? totalSize,
+    $core.bool? lastPage,
+  }) {
+    final $result = create();
+    if (page != null) {
+      $result.page = page;
+    }
+    if (pageSize != null) {
+      $result.pageSize = pageSize;
+    }
+    if (totalSize != null) {
+      $result.totalSize = totalSize;
+    }
+    if (lastPage != null) {
+      $result.lastPage = lastPage;
+    }
+    return $result;
+  }
   PageInfo._() : super();
   factory PageInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory PageInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -622,7 +794,27 @@ class PageInfo extends $pb.GeneratedMessage {
 }
 
 class GetERsRequest extends $pb.GeneratedMessage {
-  factory GetERsRequest() => create();
+  factory GetERsRequest({
+    PagedRequest? pagedRequest,
+    $core.bool? open,
+    InclusiveIntInterval? utilization,
+    Point? location,
+  }) {
+    final $result = create();
+    if (pagedRequest != null) {
+      $result.pagedRequest = pagedRequest;
+    }
+    if (open != null) {
+      $result.open = open;
+    }
+    if (utilization != null) {
+      $result.utilization = utilization;
+    }
+    if (location != null) {
+      $result.location = location;
+    }
+    return $result;
+  }
   GetERsRequest._() : super();
   factory GetERsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetERsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -700,7 +892,19 @@ class GetERsRequest extends $pb.GeneratedMessage {
 }
 
 class GetERsResponse extends $pb.GeneratedMessage {
-  factory GetERsResponse() => create();
+  factory GetERsResponse({
+    PageInfo? pageInfo,
+    $core.Iterable<GetERResponse>? emergencyRooms,
+  }) {
+    final $result = create();
+    if (pageInfo != null) {
+      $result.pageInfo = pageInfo;
+    }
+    if (emergencyRooms != null) {
+      $result.emergencyRooms.addAll(emergencyRooms);
+    }
+    return $result;
+  }
   GetERsResponse._() : super();
   factory GetERsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetERsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -748,7 +952,35 @@ class GetERsResponse extends $pb.GeneratedMessage {
 }
 
 class UpdateERRequest extends $pb.GeneratedMessage {
-  factory UpdateERRequest() => create();
+  factory UpdateERRequest({
+    $core.String? id,
+    $core.String? name,
+    Point? location,
+    $core.String? displayableAddress,
+    $core.bool? open,
+    $core.int? utilization,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (location != null) {
+      $result.location = location;
+    }
+    if (displayableAddress != null) {
+      $result.displayableAddress = displayableAddress;
+    }
+    if (open != null) {
+      $result.open = open;
+    }
+    if (utilization != null) {
+      $result.utilization = utilization;
+    }
+    return $result;
+  }
   UpdateERRequest._() : super();
   factory UpdateERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdateERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -874,7 +1106,19 @@ class UpdateERResponse extends $pb.GeneratedMessage {
 }
 
 class AddDepartmentsToERRequest extends $pb.GeneratedMessage {
-  factory AddDepartmentsToERRequest() => create();
+  factory AddDepartmentsToERRequest({
+    $core.String? id,
+    $core.Iterable<$core.String>? departments,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (departments != null) {
+      $result.departments.addAll(departments);
+    }
+    return $result;
+  }
   AddDepartmentsToERRequest._() : super();
   factory AddDepartmentsToERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory AddDepartmentsToERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -952,7 +1196,19 @@ class AddDepartmentsToERResponse extends $pb.GeneratedMessage {
 }
 
 class RemoveDepartmentsFromERRequest extends $pb.GeneratedMessage {
-  factory RemoveDepartmentsFromERRequest() => create();
+  factory RemoveDepartmentsFromERRequest({
+    $core.String? id,
+    $core.Iterable<$core.String>? departments,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (departments != null) {
+      $result.departments.addAll(departments);
+    }
+    return $result;
+  }
   RemoveDepartmentsFromERRequest._() : super();
   factory RemoveDepartmentsFromERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory RemoveDepartmentsFromERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1030,7 +1286,15 @@ class RemoveDepartmentsFromERResponse extends $pb.GeneratedMessage {
 }
 
 class DeleteERRequest extends $pb.GeneratedMessage {
-  factory DeleteERRequest() => create();
+  factory DeleteERRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   DeleteERRequest._() : super();
   factory DeleteERRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DeleteERRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);

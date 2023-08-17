@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -15,7 +15,15 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class ReadSelfOrganization extends $pb.GeneratedMessage {
-  factory ReadSelfOrganization() => create();
+  factory ReadSelfOrganization({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   ReadSelfOrganization._() : super();
   factory ReadSelfOrganization.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ReadSelfOrganization.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -56,6 +64,7 @@ class ReadSelfOrganization extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 }
 
+/// User gets resolved from current authentication context
 class ReadSelfRequest extends $pb.GeneratedMessage {
   factory ReadSelfRequest() => create();
   ReadSelfRequest._() : super();
@@ -89,7 +98,31 @@ class ReadSelfRequest extends $pb.GeneratedMessage {
 }
 
 class ReadSelfResponse extends $pb.GeneratedMessage {
-  factory ReadSelfResponse() => create();
+  factory ReadSelfResponse({
+    $core.String? id,
+    $core.String? name,
+    $core.String? nickname,
+    $core.String? avatarUrl,
+    $core.Iterable<ReadSelfOrganization>? organizations,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (nickname != null) {
+      $result.nickname = nickname;
+    }
+    if (avatarUrl != null) {
+      $result.avatarUrl = avatarUrl;
+    }
+    if (organizations != null) {
+      $result.organizations.addAll(organizations);
+    }
+    return $result;
+  }
   ReadSelfResponse._() : super();
   factory ReadSelfResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ReadSelfResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -165,7 +198,15 @@ class ReadSelfResponse extends $pb.GeneratedMessage {
 }
 
 class ReadPublicProfileRequest extends $pb.GeneratedMessage {
-  factory ReadPublicProfileRequest() => create();
+  factory ReadPublicProfileRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   ReadPublicProfileRequest._() : super();
   factory ReadPublicProfileRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ReadPublicProfileRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -207,7 +248,27 @@ class ReadPublicProfileRequest extends $pb.GeneratedMessage {
 }
 
 class ReadPublicProfileResponse extends $pb.GeneratedMessage {
-  factory ReadPublicProfileResponse() => create();
+  factory ReadPublicProfileResponse({
+    $core.String? id,
+    $core.String? name,
+    $core.String? nickname,
+    $core.String? avatarUrl,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (nickname != null) {
+      $result.nickname = nickname;
+    }
+    if (avatarUrl != null) {
+      $result.avatarUrl = avatarUrl;
+    }
+    return $result;
+  }
   ReadPublicProfileResponse._() : super();
   factory ReadPublicProfileResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ReadPublicProfileResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -279,7 +340,15 @@ class ReadPublicProfileResponse extends $pb.GeneratedMessage {
 }
 
 class UpdateUserRequest extends $pb.GeneratedMessage {
-  factory UpdateUserRequest() => create();
+  factory UpdateUserRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   UpdateUserRequest._() : super();
   factory UpdateUserRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdateUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);

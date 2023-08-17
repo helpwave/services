@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -15,7 +15,15 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class CreateTaskTemplateRequest_SubTask extends $pb.GeneratedMessage {
-  factory CreateTaskTemplateRequest_SubTask() => create();
+  factory CreateTaskTemplateRequest_SubTask({
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   CreateTaskTemplateRequest_SubTask._() : super();
   factory CreateTaskTemplateRequest_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateTaskTemplateRequest_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -57,7 +65,27 @@ class CreateTaskTemplateRequest_SubTask extends $pb.GeneratedMessage {
 }
 
 class CreateTaskTemplateRequest extends $pb.GeneratedMessage {
-  factory CreateTaskTemplateRequest() => create();
+  factory CreateTaskTemplateRequest({
+    $core.String? name,
+    $core.String? description,
+    $core.String? wardId,
+    $core.Iterable<CreateTaskTemplateRequest_SubTask>? subtasks,
+  }) {
+    final $result = create();
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (wardId != null) {
+      $result.wardId = wardId;
+    }
+    if (subtasks != null) {
+      $result.subtasks.addAll(subtasks);
+    }
+    return $result;
+  }
   CreateTaskTemplateRequest._() : super();
   factory CreateTaskTemplateRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateTaskTemplateRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -123,7 +151,15 @@ class CreateTaskTemplateRequest extends $pb.GeneratedMessage {
 }
 
 class CreateTaskTemplateResponse extends $pb.GeneratedMessage {
-  factory CreateTaskTemplateResponse() => create();
+  factory CreateTaskTemplateResponse({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   CreateTaskTemplateResponse._() : super();
   factory CreateTaskTemplateResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateTaskTemplateResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -197,7 +233,23 @@ class GetAllTaskTemplatesRequest extends $pb.GeneratedMessage {
 }
 
 class GetAllTaskTemplatesResponse_TaskTemplate_SubTask extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesResponse_TaskTemplate_SubTask() => create();
+  factory GetAllTaskTemplatesResponse_TaskTemplate_SubTask({
+    $core.String? id,
+    $core.String? taskTemplateId,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (taskTemplateId != null) {
+      $result.taskTemplateId = taskTemplateId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetAllTaskTemplatesResponse_TaskTemplate_SubTask._() : super();
   factory GetAllTaskTemplatesResponse_TaskTemplate_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAllTaskTemplatesResponse_TaskTemplate_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -259,7 +311,35 @@ class GetAllTaskTemplatesResponse_TaskTemplate_SubTask extends $pb.GeneratedMess
 }
 
 class GetAllTaskTemplatesResponse_TaskTemplate extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesResponse_TaskTemplate() => create();
+  factory GetAllTaskTemplatesResponse_TaskTemplate({
+    $core.String? id,
+    $core.String? name,
+    $core.String? description,
+    $core.bool? isPublic,
+    $core.String? createdBy,
+    $core.Iterable<GetAllTaskTemplatesResponse_TaskTemplate_SubTask>? subtasks,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (isPublic != null) {
+      $result.isPublic = isPublic;
+    }
+    if (createdBy != null) {
+      $result.createdBy = createdBy;
+    }
+    if (subtasks != null) {
+      $result.subtasks.addAll(subtasks);
+    }
+    return $result;
+  }
   GetAllTaskTemplatesResponse_TaskTemplate._() : super();
   factory GetAllTaskTemplatesResponse_TaskTemplate.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAllTaskTemplatesResponse_TaskTemplate.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -345,7 +425,15 @@ class GetAllTaskTemplatesResponse_TaskTemplate extends $pb.GeneratedMessage {
 }
 
 class GetAllTaskTemplatesResponse extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesResponse() => create();
+  factory GetAllTaskTemplatesResponse({
+    $core.Iterable<GetAllTaskTemplatesResponse_TaskTemplate>? templates,
+  }) {
+    final $result = create();
+    if (templates != null) {
+      $result.templates.addAll(templates);
+    }
+    return $result;
+  }
   GetAllTaskTemplatesResponse._() : super();
   factory GetAllTaskTemplatesResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAllTaskTemplatesResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -381,7 +469,15 @@ class GetAllTaskTemplatesResponse extends $pb.GeneratedMessage {
 }
 
 class DeleteTaskTemplateRequest extends $pb.GeneratedMessage {
-  factory DeleteTaskTemplateRequest() => create();
+  factory DeleteTaskTemplateRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   DeleteTaskTemplateRequest._() : super();
   factory DeleteTaskTemplateRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DeleteTaskTemplateRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -455,7 +551,15 @@ class DeleteTaskTemplateResponse extends $pb.GeneratedMessage {
 }
 
 class DeleteTaskTemplateSubTaskRequest extends $pb.GeneratedMessage {
-  factory DeleteTaskTemplateSubTaskRequest() => create();
+  factory DeleteTaskTemplateSubTaskRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   DeleteTaskTemplateSubTaskRequest._() : super();
   factory DeleteTaskTemplateSubTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DeleteTaskTemplateSubTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -529,7 +633,23 @@ class DeleteTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
 }
 
 class UpdateTaskTemplateRequest extends $pb.GeneratedMessage {
-  factory UpdateTaskTemplateRequest() => create();
+  factory UpdateTaskTemplateRequest({
+    $core.String? id,
+    $core.String? name,
+    $core.String? description,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    return $result;
+  }
   UpdateTaskTemplateRequest._() : super();
   factory UpdateTaskTemplateRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdateTaskTemplateRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -623,7 +743,19 @@ class UpdateTaskTemplateResponse extends $pb.GeneratedMessage {
 }
 
 class UpdateTaskTemplateSubTaskRequest extends $pb.GeneratedMessage {
-  factory UpdateTaskTemplateSubTaskRequest() => create();
+  factory UpdateTaskTemplateSubTaskRequest({
+    $core.String? subtaskId,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (subtaskId != null) {
+      $result.subtaskId = subtaskId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   UpdateTaskTemplateSubTaskRequest._() : super();
   factory UpdateTaskTemplateSubTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdateTaskTemplateSubTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -707,7 +839,19 @@ class UpdateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
 }
 
 class CreateTaskTemplateSubTaskRequest extends $pb.GeneratedMessage {
-  factory CreateTaskTemplateSubTaskRequest() => create();
+  factory CreateTaskTemplateSubTaskRequest({
+    $core.String? taskTemplateId,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (taskTemplateId != null) {
+      $result.taskTemplateId = taskTemplateId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   CreateTaskTemplateSubTaskRequest._() : super();
   factory CreateTaskTemplateSubTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateTaskTemplateSubTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -759,7 +903,15 @@ class CreateTaskTemplateSubTaskRequest extends $pb.GeneratedMessage {
 }
 
 class CreateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
-  factory CreateTaskTemplateSubTaskResponse() => create();
+  factory CreateTaskTemplateSubTaskResponse({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   CreateTaskTemplateSubTaskResponse._() : super();
   factory CreateTaskTemplateSubTaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreateTaskTemplateSubTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -801,7 +953,15 @@ class CreateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
 }
 
 class GetAllTaskTemplatesByCreatorRequest extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByCreatorRequest() => create();
+  factory GetAllTaskTemplatesByCreatorRequest({
+    $core.String? createdBy,
+  }) {
+    final $result = create();
+    if (createdBy != null) {
+      $result.createdBy = createdBy;
+    }
+    return $result;
+  }
   GetAllTaskTemplatesByCreatorRequest._() : super();
   factory GetAllTaskTemplatesByCreatorRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAllTaskTemplatesByCreatorRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -843,7 +1003,23 @@ class GetAllTaskTemplatesByCreatorRequest extends $pb.GeneratedMessage {
 }
 
 class GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask() => create();
+  factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask({
+    $core.String? id,
+    $core.String? taskTemplateId,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (taskTemplateId != null) {
+      $result.taskTemplateId = taskTemplateId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask._() : super();
   factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -905,7 +1081,31 @@ class GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask extends $pb.Gene
 }
 
 class GetAllTaskTemplatesByCreatorResponse_TaskTemplate extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate() => create();
+  factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate({
+    $core.String? id,
+    $core.String? name,
+    $core.String? description,
+    $core.bool? isPublic,
+    $core.Iterable<GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask>? subtasks,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (isPublic != null) {
+      $result.isPublic = isPublic;
+    }
+    if (subtasks != null) {
+      $result.subtasks.addAll(subtasks);
+    }
+    return $result;
+  }
   GetAllTaskTemplatesByCreatorResponse_TaskTemplate._() : super();
   factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -981,7 +1181,15 @@ class GetAllTaskTemplatesByCreatorResponse_TaskTemplate extends $pb.GeneratedMes
 }
 
 class GetAllTaskTemplatesByCreatorResponse extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByCreatorResponse() => create();
+  factory GetAllTaskTemplatesByCreatorResponse({
+    $core.Iterable<GetAllTaskTemplatesByCreatorResponse_TaskTemplate>? templates,
+  }) {
+    final $result = create();
+    if (templates != null) {
+      $result.templates.addAll(templates);
+    }
+    return $result;
+  }
   GetAllTaskTemplatesByCreatorResponse._() : super();
   factory GetAllTaskTemplatesByCreatorResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAllTaskTemplatesByCreatorResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1017,7 +1225,15 @@ class GetAllTaskTemplatesByCreatorResponse extends $pb.GeneratedMessage {
 }
 
 class GetAllTaskTemplatesByWardRequest extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByWardRequest() => create();
+  factory GetAllTaskTemplatesByWardRequest({
+    $core.String? wardId,
+  }) {
+    final $result = create();
+    if (wardId != null) {
+      $result.wardId = wardId;
+    }
+    return $result;
+  }
   GetAllTaskTemplatesByWardRequest._() : super();
   factory GetAllTaskTemplatesByWardRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAllTaskTemplatesByWardRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1059,7 +1275,23 @@ class GetAllTaskTemplatesByWardRequest extends $pb.GeneratedMessage {
 }
 
 class GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask() => create();
+  factory GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask({
+    $core.String? id,
+    $core.String? taskTemplateId,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (taskTemplateId != null) {
+      $result.taskTemplateId = taskTemplateId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask._() : super();
   factory GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1121,7 +1353,35 @@ class GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask extends $pb.Generat
 }
 
 class GetAllTaskTemplatesByWardResponse_TaskTemplate extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByWardResponse_TaskTemplate() => create();
+  factory GetAllTaskTemplatesByWardResponse_TaskTemplate({
+    $core.String? id,
+    $core.String? name,
+    $core.String? description,
+    $core.bool? isPublic,
+    $core.String? createdBy,
+    $core.Iterable<GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask>? subtasks,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (isPublic != null) {
+      $result.isPublic = isPublic;
+    }
+    if (createdBy != null) {
+      $result.createdBy = createdBy;
+    }
+    if (subtasks != null) {
+      $result.subtasks.addAll(subtasks);
+    }
+    return $result;
+  }
   GetAllTaskTemplatesByWardResponse_TaskTemplate._() : super();
   factory GetAllTaskTemplatesByWardResponse_TaskTemplate.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAllTaskTemplatesByWardResponse_TaskTemplate.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1207,7 +1467,15 @@ class GetAllTaskTemplatesByWardResponse_TaskTemplate extends $pb.GeneratedMessag
 }
 
 class GetAllTaskTemplatesByWardResponse extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByWardResponse() => create();
+  factory GetAllTaskTemplatesByWardResponse({
+    $core.Iterable<GetAllTaskTemplatesByWardResponse_TaskTemplate>? templates,
+  }) {
+    final $result = create();
+    if (templates != null) {
+      $result.templates.addAll(templates);
+    }
+    return $result;
+  }
   GetAllTaskTemplatesByWardResponse._() : super();
   factory GetAllTaskTemplatesByWardResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAllTaskTemplatesByWardResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);

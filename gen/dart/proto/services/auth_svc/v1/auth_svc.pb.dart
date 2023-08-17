@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -14,6 +14,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+/// More in <a href="https://wiki.helpwave.de/doc/authentication-jedzCcERwF">the wiki</a>
 class PrelimAuthRequestRequest extends $pb.GeneratedMessage {
   factory PrelimAuthRequestRequest() => create();
   PrelimAuthRequestRequest._() : super();
@@ -47,7 +48,15 @@ class PrelimAuthRequestRequest extends $pb.GeneratedMessage {
 }
 
 class PrelimAuthRequestResponse extends $pb.GeneratedMessage {
-  factory PrelimAuthRequestResponse() => create();
+  factory PrelimAuthRequestResponse({
+    $core.String? url,
+  }) {
+    final $result = create();
+    if (url != null) {
+      $result.url = url;
+    }
+    return $result;
+  }
   PrelimAuthRequestResponse._() : super();
   factory PrelimAuthRequestResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory PrelimAuthRequestResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -78,6 +87,8 @@ class PrelimAuthRequestResponse extends $pb.GeneratedMessage {
   static PrelimAuthRequestResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PrelimAuthRequestResponse>(create);
   static PrelimAuthRequestResponse? _defaultInstance;
 
+  /// The Authorization Request URL including Client ID, Scopes and so on. Start the Auth Flow by redirecting here.
+  /// State and PKCE should be populated by the client
   @$pb.TagNumber(1)
   $core.String get url => $_getSZ(0);
   @$pb.TagNumber(1)

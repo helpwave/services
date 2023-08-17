@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -13,8 +13,29 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+/// TOPIC: USER_REGISTERED
 class UserRegisteredEvent extends $pb.GeneratedMessage {
-  factory UserRegisteredEvent() => create();
+  factory UserRegisteredEvent({
+    $core.String? id,
+    $core.String? email,
+    $core.String? nickname,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (email != null) {
+      $result.email = email;
+    }
+    if (nickname != null) {
+      $result.nickname = nickname;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   UserRegisteredEvent._() : super();
   factory UserRegisteredEvent.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UserRegisteredEvent.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -85,8 +106,29 @@ class UserRegisteredEvent extends $pb.GeneratedMessage {
   void clearName() => clearField(4);
 }
 
+/// TOPIC: USER_CREATED
 class UserCreatedEvent extends $pb.GeneratedMessage {
-  factory UserCreatedEvent() => create();
+  factory UserCreatedEvent({
+    $core.String? id,
+    $core.String? email,
+    $core.String? nickname,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (email != null) {
+      $result.email = email;
+    }
+    if (nickname != null) {
+      $result.nickname = nickname;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   UserCreatedEvent._() : super();
   factory UserCreatedEvent.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UserCreatedEvent.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -157,8 +199,29 @@ class UserCreatedEvent extends $pb.GeneratedMessage {
   void clearName() => clearField(4);
 }
 
+/// TOPIC: USER_UPDATED
 class UserUpdatedEvent extends $pb.GeneratedMessage {
-  factory UserUpdatedEvent() => create();
+  factory UserUpdatedEvent({
+    $core.String? id,
+    $core.String? email,
+    $core.String? nickname,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (email != null) {
+      $result.email = email;
+    }
+    if (nickname != null) {
+      $result.nickname = nickname;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   UserUpdatedEvent._() : super();
   factory UserUpdatedEvent.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UserUpdatedEvent.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);

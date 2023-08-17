@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -19,7 +19,19 @@ import 'patient_svc.pbenum.dart';
 export 'patient_svc.pbenum.dart';
 
 class CreatePatientRequest extends $pb.GeneratedMessage {
-  factory CreatePatientRequest() => create();
+  factory CreatePatientRequest({
+    $core.String? humanReadableIdentifier,
+    $core.String? notes,
+  }) {
+    final $result = create();
+    if (humanReadableIdentifier != null) {
+      $result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (notes != null) {
+      $result.notes = notes;
+    }
+    return $result;
+  }
   CreatePatientRequest._() : super();
   factory CreatePatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreatePatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -71,7 +83,15 @@ class CreatePatientRequest extends $pb.GeneratedMessage {
 }
 
 class CreatePatientResponse extends $pb.GeneratedMessage {
-  factory CreatePatientResponse() => create();
+  factory CreatePatientResponse({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   CreatePatientResponse._() : super();
   factory CreatePatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreatePatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -113,7 +133,15 @@ class CreatePatientResponse extends $pb.GeneratedMessage {
 }
 
 class GetPatientRequest extends $pb.GeneratedMessage {
-  factory GetPatientRequest() => create();
+  factory GetPatientRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   GetPatientRequest._() : super();
   factory GetPatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -155,7 +183,27 @@ class GetPatientRequest extends $pb.GeneratedMessage {
 }
 
 class GetPatientResponse extends $pb.GeneratedMessage {
-  factory GetPatientResponse() => create();
+  factory GetPatientResponse({
+    $core.String? id,
+    $core.String? humanReadableIdentifier,
+    $core.String? notes,
+    $core.String? bedId,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (humanReadableIdentifier != null) {
+      $result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (notes != null) {
+      $result.notes = notes;
+    }
+    if (bedId != null) {
+      $result.bedId = bedId;
+    }
+    return $result;
+  }
   GetPatientResponse._() : super();
   factory GetPatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -226,8 +274,18 @@ class GetPatientResponse extends $pb.GeneratedMessage {
   void clearBedId() => clearField(4);
 }
 
+///
+///  DeletePatient
 class DeletePatientRequest extends $pb.GeneratedMessage {
-  factory DeletePatientRequest() => create();
+  factory DeletePatientRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   DeletePatientRequest._() : super();
   factory DeletePatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DeletePatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -301,7 +359,15 @@ class DeletePatientResponse extends $pb.GeneratedMessage {
 }
 
 class GetPatientByBedRequest extends $pb.GeneratedMessage {
-  factory GetPatientByBedRequest() => create();
+  factory GetPatientByBedRequest({
+    $core.String? bedId,
+  }) {
+    final $result = create();
+    if (bedId != null) {
+      $result.bedId = bedId;
+    }
+    return $result;
+  }
   GetPatientByBedRequest._() : super();
   factory GetPatientByBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientByBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -343,7 +409,27 @@ class GetPatientByBedRequest extends $pb.GeneratedMessage {
 }
 
 class GetPatientByBedResponse extends $pb.GeneratedMessage {
-  factory GetPatientByBedResponse() => create();
+  factory GetPatientByBedResponse({
+    $core.String? id,
+    $core.String? humanReadableIdentifier,
+    $core.String? notes,
+    $core.String? bedId,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (humanReadableIdentifier != null) {
+      $result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (notes != null) {
+      $result.notes = notes;
+    }
+    if (bedId != null) {
+      $result.bedId = bedId;
+    }
+    return $result;
+  }
   GetPatientByBedResponse._() : super();
   factory GetPatientByBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientByBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -415,7 +501,15 @@ class GetPatientByBedResponse extends $pb.GeneratedMessage {
 }
 
 class GetPatientsByWardRequest extends $pb.GeneratedMessage {
-  factory GetPatientsByWardRequest() => create();
+  factory GetPatientsByWardRequest({
+    $core.String? wardId,
+  }) {
+    final $result = create();
+    if (wardId != null) {
+      $result.wardId = wardId;
+    }
+    return $result;
+  }
   GetPatientsByWardRequest._() : super();
   factory GetPatientsByWardRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientsByWardRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -457,7 +551,27 @@ class GetPatientsByWardRequest extends $pb.GeneratedMessage {
 }
 
 class GetPatientsByWardResponse_Patient extends $pb.GeneratedMessage {
-  factory GetPatientsByWardResponse_Patient() => create();
+  factory GetPatientsByWardResponse_Patient({
+    $core.String? id,
+    $core.String? humanReadableIdentifier,
+    $core.String? notes,
+    $core.String? bedId,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (humanReadableIdentifier != null) {
+      $result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (notes != null) {
+      $result.notes = notes;
+    }
+    if (bedId != null) {
+      $result.bedId = bedId;
+    }
+    return $result;
+  }
   GetPatientsByWardResponse_Patient._() : super();
   factory GetPatientsByWardResponse_Patient.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientsByWardResponse_Patient.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -529,7 +643,15 @@ class GetPatientsByWardResponse_Patient extends $pb.GeneratedMessage {
 }
 
 class GetPatientsByWardResponse extends $pb.GeneratedMessage {
-  factory GetPatientsByWardResponse() => create();
+  factory GetPatientsByWardResponse({
+    $core.Iterable<GetPatientsByWardResponse_Patient>? patients,
+  }) {
+    final $result = create();
+    if (patients != null) {
+      $result.patients.addAll(patients);
+    }
+    return $result;
+  }
   GetPatientsByWardResponse._() : super();
   factory GetPatientsByWardResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientsByWardResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -565,7 +687,15 @@ class GetPatientsByWardResponse extends $pb.GeneratedMessage {
 }
 
 class GetPatientAssignmentByWardRequest extends $pb.GeneratedMessage {
-  factory GetPatientAssignmentByWardRequest() => create();
+  factory GetPatientAssignmentByWardRequest({
+    $core.String? wardId,
+  }) {
+    final $result = create();
+    if (wardId != null) {
+      $result.wardId = wardId;
+    }
+    return $result;
+  }
   GetPatientAssignmentByWardRequest._() : super();
   factory GetPatientAssignmentByWardRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientAssignmentByWardRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -607,7 +737,19 @@ class GetPatientAssignmentByWardRequest extends $pb.GeneratedMessage {
 }
 
 class GetPatientAssignmentByWardResponse_Room_Bed_Patient extends $pb.GeneratedMessage {
-  factory GetPatientAssignmentByWardResponse_Room_Bed_Patient() => create();
+  factory GetPatientAssignmentByWardResponse_Room_Bed_Patient({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetPatientAssignmentByWardResponse_Room_Bed_Patient._() : super();
   factory GetPatientAssignmentByWardResponse_Room_Bed_Patient.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientAssignmentByWardResponse_Room_Bed_Patient.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -659,7 +801,23 @@ class GetPatientAssignmentByWardResponse_Room_Bed_Patient extends $pb.GeneratedM
 }
 
 class GetPatientAssignmentByWardResponse_Room_Bed extends $pb.GeneratedMessage {
-  factory GetPatientAssignmentByWardResponse_Room_Bed() => create();
+  factory GetPatientAssignmentByWardResponse_Room_Bed({
+    $core.String? id,
+    $core.String? name,
+    GetPatientAssignmentByWardResponse_Room_Bed_Patient? patient,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (patient != null) {
+      $result.patient = patient;
+    }
+    return $result;
+  }
   GetPatientAssignmentByWardResponse_Room_Bed._() : super();
   factory GetPatientAssignmentByWardResponse_Room_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientAssignmentByWardResponse_Room_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -723,7 +881,23 @@ class GetPatientAssignmentByWardResponse_Room_Bed extends $pb.GeneratedMessage {
 }
 
 class GetPatientAssignmentByWardResponse_Room extends $pb.GeneratedMessage {
-  factory GetPatientAssignmentByWardResponse_Room() => create();
+  factory GetPatientAssignmentByWardResponse_Room({
+    $core.String? id,
+    $core.String? name,
+    $core.Iterable<GetPatientAssignmentByWardResponse_Room_Bed>? beds,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (beds != null) {
+      $result.beds.addAll(beds);
+    }
+    return $result;
+  }
   GetPatientAssignmentByWardResponse_Room._() : super();
   factory GetPatientAssignmentByWardResponse_Room.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientAssignmentByWardResponse_Room.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -779,7 +953,15 @@ class GetPatientAssignmentByWardResponse_Room extends $pb.GeneratedMessage {
 }
 
 class GetPatientAssignmentByWardResponse extends $pb.GeneratedMessage {
-  factory GetPatientAssignmentByWardResponse() => create();
+  factory GetPatientAssignmentByWardResponse({
+    $core.Iterable<GetPatientAssignmentByWardResponse_Room>? rooms,
+  }) {
+    final $result = create();
+    if (rooms != null) {
+      $result.rooms.addAll(rooms);
+    }
+    return $result;
+  }
   GetPatientAssignmentByWardResponse._() : super();
   factory GetPatientAssignmentByWardResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientAssignmentByWardResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -815,7 +997,23 @@ class GetPatientAssignmentByWardResponse extends $pb.GeneratedMessage {
 }
 
 class UpdatePatientRequest extends $pb.GeneratedMessage {
-  factory UpdatePatientRequest() => create();
+  factory UpdatePatientRequest({
+    $core.String? id,
+    $core.String? humanReadableIdentifier,
+    $core.String? notes,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (humanReadableIdentifier != null) {
+      $result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (notes != null) {
+      $result.notes = notes;
+    }
+    return $result;
+  }
   UpdatePatientRequest._() : super();
   factory UpdatePatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdatePatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -909,7 +1107,19 @@ class UpdatePatientResponse extends $pb.GeneratedMessage {
 }
 
 class AssignBedRequest extends $pb.GeneratedMessage {
-  factory AssignBedRequest() => create();
+  factory AssignBedRequest({
+    $core.String? id,
+    $core.String? bedId,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (bedId != null) {
+      $result.bedId = bedId;
+    }
+    return $result;
+  }
   AssignBedRequest._() : super();
   factory AssignBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory AssignBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -993,7 +1203,15 @@ class AssignBedResponse extends $pb.GeneratedMessage {
 }
 
 class UnassignBedRequest extends $pb.GeneratedMessage {
-  factory UnassignBedRequest() => create();
+  factory UnassignBedRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   UnassignBedRequest._() : super();
   factory UnassignBedRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UnassignBedRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1067,7 +1285,15 @@ class UnassignBedResponse extends $pb.GeneratedMessage {
 }
 
 class DischargePatientRequest extends $pb.GeneratedMessage {
-  factory DischargePatientRequest() => create();
+  factory DischargePatientRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   DischargePatientRequest._() : super();
   factory DischargePatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DischargePatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1141,7 +1367,15 @@ class DischargePatientResponse extends $pb.GeneratedMessage {
 }
 
 class GetPatientDetailsRequest extends $pb.GeneratedMessage {
-  factory GetPatientDetailsRequest() => create();
+  factory GetPatientDetailsRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
   GetPatientDetailsRequest._() : super();
   factory GetPatientDetailsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientDetailsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1183,7 +1417,23 @@ class GetPatientDetailsRequest extends $pb.GeneratedMessage {
 }
 
 class GetPatientDetailsResponse_Task_SubTask extends $pb.GeneratedMessage {
-  factory GetPatientDetailsResponse_Task_SubTask() => create();
+  factory GetPatientDetailsResponse_Task_SubTask({
+    $core.String? id,
+    $core.String? name,
+    $core.bool? done,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (done != null) {
+      $result.done = done;
+    }
+    return $result;
+  }
   GetPatientDetailsResponse_Task_SubTask._() : super();
   factory GetPatientDetailsResponse_Task_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientDetailsResponse_Task_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1245,7 +1495,43 @@ class GetPatientDetailsResponse_Task_SubTask extends $pb.GeneratedMessage {
 }
 
 class GetPatientDetailsResponse_Task extends $pb.GeneratedMessage {
-  factory GetPatientDetailsResponse_Task() => create();
+  factory GetPatientDetailsResponse_Task({
+    $core.String? id,
+    $core.String? name,
+    $core.String? description,
+    GetPatientDetailsResponse_TaskStatus? status,
+    $core.String? assignedUserId,
+    $core.String? patientId,
+    $core.bool? public,
+    $core.Iterable<GetPatientDetailsResponse_Task_SubTask>? subtasks,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (status != null) {
+      $result.status = status;
+    }
+    if (assignedUserId != null) {
+      $result.assignedUserId = assignedUserId;
+    }
+    if (patientId != null) {
+      $result.patientId = patientId;
+    }
+    if (public != null) {
+      $result.public = public;
+    }
+    if (subtasks != null) {
+      $result.subtasks.addAll(subtasks);
+    }
+    return $result;
+  }
   GetPatientDetailsResponse_Task._() : super();
   factory GetPatientDetailsResponse_Task.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientDetailsResponse_Task.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1351,7 +1637,31 @@ class GetPatientDetailsResponse_Task extends $pb.GeneratedMessage {
 }
 
 class GetPatientDetailsResponse extends $pb.GeneratedMessage {
-  factory GetPatientDetailsResponse() => create();
+  factory GetPatientDetailsResponse({
+    $core.String? id,
+    $core.String? name,
+    $core.String? humanReadableIdentifier,
+    $core.String? notes,
+    $core.Iterable<GetPatientDetailsResponse_Task>? tasks,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (humanReadableIdentifier != null) {
+      $result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (notes != null) {
+      $result.notes = notes;
+    }
+    if (tasks != null) {
+      $result.tasks.addAll(tasks);
+    }
+    return $result;
+  }
   GetPatientDetailsResponse._() : super();
   factory GetPatientDetailsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientDetailsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1422,12 +1732,21 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   void clearNotes() => clearField(4);
 
+  /// "bed_index": number,
   @$pb.TagNumber(5)
   $core.List<GetPatientDetailsResponse_Task> get tasks => $_getList(4);
 }
 
 class GetPatientListRequest extends $pb.GeneratedMessage {
-  factory GetPatientListRequest() => create();
+  factory GetPatientListRequest({
+    $core.String? organisationId,
+  }) {
+    final $result = create();
+    if (organisationId != null) {
+      $result.organisationId = organisationId;
+    }
+    return $result;
+  }
   GetPatientListRequest._() : super();
   factory GetPatientListRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientListRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1469,7 +1788,19 @@ class GetPatientListRequest extends $pb.GeneratedMessage {
 }
 
 class GetPatientListResponse_Patient extends $pb.GeneratedMessage {
-  factory GetPatientListResponse_Patient() => create();
+  factory GetPatientListResponse_Patient({
+    $core.String? id,
+    $core.String? humanReadableIdentifier,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (humanReadableIdentifier != null) {
+      $result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    return $result;
+  }
   GetPatientListResponse_Patient._() : super();
   factory GetPatientListResponse_Patient.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientListResponse_Patient.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1521,7 +1852,19 @@ class GetPatientListResponse_Patient extends $pb.GeneratedMessage {
 }
 
 class GetPatientListResponse_Bed extends $pb.GeneratedMessage {
-  factory GetPatientListResponse_Bed() => create();
+  factory GetPatientListResponse_Bed({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetPatientListResponse_Bed._() : super();
   factory GetPatientListResponse_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientListResponse_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1573,7 +1916,19 @@ class GetPatientListResponse_Bed extends $pb.GeneratedMessage {
 }
 
 class GetPatientListResponse_Room extends $pb.GeneratedMessage {
-  factory GetPatientListResponse_Room() => create();
+  factory GetPatientListResponse_Room({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
   GetPatientListResponse_Room._() : super();
   factory GetPatientListResponse_Room.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientListResponse_Room.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1625,7 +1980,27 @@ class GetPatientListResponse_Room extends $pb.GeneratedMessage {
 }
 
 class GetPatientListResponse_PatientWithRoomAndBed extends $pb.GeneratedMessage {
-  factory GetPatientListResponse_PatientWithRoomAndBed() => create();
+  factory GetPatientListResponse_PatientWithRoomAndBed({
+    $core.String? id,
+    $core.String? humanReadableIdentifier,
+    GetPatientListResponse_Room? room,
+    GetPatientListResponse_Bed? bed,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (humanReadableIdentifier != null) {
+      $result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (room != null) {
+      $result.room = room;
+    }
+    if (bed != null) {
+      $result.bed = bed;
+    }
+    return $result;
+  }
   GetPatientListResponse_PatientWithRoomAndBed._() : super();
   factory GetPatientListResponse_PatientWithRoomAndBed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientListResponse_PatientWithRoomAndBed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -1701,7 +2076,23 @@ class GetPatientListResponse_PatientWithRoomAndBed extends $pb.GeneratedMessage 
 }
 
 class GetPatientListResponse extends $pb.GeneratedMessage {
-  factory GetPatientListResponse() => create();
+  factory GetPatientListResponse({
+    $core.Iterable<GetPatientListResponse_PatientWithRoomAndBed>? active,
+    $core.Iterable<GetPatientListResponse_Patient>? unassignedPatients,
+    $core.Iterable<GetPatientListResponse_Patient>? dischargedPatients,
+  }) {
+    final $result = create();
+    if (active != null) {
+      $result.active.addAll(active);
+    }
+    if (unassignedPatients != null) {
+      $result.unassignedPatients.addAll(unassignedPatients);
+    }
+    if (dischargedPatients != null) {
+      $result.dischargedPatients.addAll(dischargedPatients);
+    }
+    return $result;
+  }
   GetPatientListResponse._() : super();
   factory GetPatientListResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPatientListResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
