@@ -23,6 +23,7 @@ message CreateTaskRequest {
   string patient_id = 3; // @gotags: validate:"uuid4"
   bool public = 4; // default: true
   google.protobuf.Timestamp due_at = 5;
+  optional TaskStatus initial_status = 6;
 }
 
 message CreateTaskResponse {

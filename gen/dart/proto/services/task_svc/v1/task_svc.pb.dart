@@ -26,6 +26,7 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     $core.String? patientId,
     $core.bool? public,
     $5.Timestamp? dueAt,
+    TaskStatus? initialStatus,
   }) {
     final $result = create();
     if (name != null) {
@@ -43,6 +44,9 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     if (dueAt != null) {
       $result.dueAt = dueAt;
     }
+    if (initialStatus != null) {
+      $result.initialStatus = initialStatus;
+    }
     return $result;
   }
   CreateTaskRequest._() : super();
@@ -55,6 +59,7 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'patientId')
     ..aOB(4, _omitFieldNames ? '' : 'public')
     ..aOM<$5.Timestamp>(5, _omitFieldNames ? '' : 'dueAt', subBuilder: $5.Timestamp.create)
+    ..e<TaskStatus>(6, _omitFieldNames ? '' : 'initialStatus', $pb.PbFieldType.OE, defaultOrMaker: TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: TaskStatus.valueOf, enumValues: TaskStatus.values)
     ..hasRequiredFields = false
   ;
 
@@ -125,6 +130,15 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
   void clearDueAt() => clearField(5);
   @$pb.TagNumber(5)
   $5.Timestamp ensureDueAt() => $_ensure(4);
+
+  @$pb.TagNumber(6)
+  TaskStatus get initialStatus => $_getN(5);
+  @$pb.TagNumber(6)
+  set initialStatus(TaskStatus v) { setField(6, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasInitialStatus() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearInitialStatus() => clearField(6);
 }
 
 class CreateTaskResponse extends $pb.GeneratedMessage {

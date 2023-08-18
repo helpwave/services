@@ -41,9 +41,11 @@ const CreateTaskRequest$json = {
     {'1': 'patient_id', '3': 3, '4': 1, '5': 9, '10': 'patientId'},
     {'1': 'public', '3': 4, '4': 1, '5': 8, '10': 'public'},
     {'1': 'due_at', '3': 5, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'dueAt'},
+    {'1': 'initial_status', '3': 6, '4': 1, '5': 14, '6': '.proto.services.task_svc.v1.TaskStatus', '9': 1, '10': 'initialStatus', '17': true},
   ],
   '8': [
     {'1': '_description'},
+    {'1': '_initial_status'},
   ],
 };
 
@@ -52,7 +54,9 @@ final $typed_data.Uint8List createTaskRequestDescriptor = $convert.base64Decode(
     'ChFDcmVhdGVUYXNrUmVxdWVzdBISCgRuYW1lGAEgASgJUgRuYW1lEiUKC2Rlc2NyaXB0aW9uGA'
     'IgASgJSABSC2Rlc2NyaXB0aW9uiAEBEh0KCnBhdGllbnRfaWQYAyABKAlSCXBhdGllbnRJZBIW'
     'CgZwdWJsaWMYBCABKAhSBnB1YmxpYxIxCgZkdWVfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idW'
-    'YuVGltZXN0YW1wUgVkdWVBdEIOCgxfZGVzY3JpcHRpb24=');
+    'YuVGltZXN0YW1wUgVkdWVBdBJSCg5pbml0aWFsX3N0YXR1cxgGIAEoDjImLnByb3RvLnNlcnZp'
+    'Y2VzLnRhc2tfc3ZjLnYxLlRhc2tTdGF0dXNIAVINaW5pdGlhbFN0YXR1c4gBAUIOCgxfZGVzY3'
+    'JpcHRpb25CEQoPX2luaXRpYWxfc3RhdHVz');
 
 @$core.Deprecated('Use createTaskResponseDescriptor instead')
 const CreateTaskResponse$json = {
