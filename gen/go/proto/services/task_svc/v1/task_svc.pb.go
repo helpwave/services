@@ -81,7 +81,7 @@ type CreateTaskRequest struct {
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" validate:"required"` // @gotags: validate:"required"
 	Description   *string                `protobuf:"bytes,2,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	PatientId     string                 `protobuf:"bytes,3,opt,name=patient_id,json=patientId,proto3" json:"patient_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
-	Public        bool                   `protobuf:"varint,4,opt,name=public,proto3" json:"public,omitempty"`                                        // default: true
+	Public        bool                   `protobuf:"varint,4,opt,name=public,proto3" json:"public,omitempty"`
 	DueAt         *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=due_at,json=dueAt,proto3" json:"due_at,omitempty"`
 	InitialStatus *TaskStatus            `protobuf:"varint,6,opt,name=initial_status,json=initialStatus,proto3,enum=proto.services.task_svc.v1.TaskStatus,oneof" json:"initial_status,omitempty"`
 }
