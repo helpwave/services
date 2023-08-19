@@ -61,7 +61,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 	}
 
 	// When changing this array also adjust the error message below
-	allowedInitialStatuses := []pb.TaskStatus{pb.TaskStatus_TASK_STATUS_IN_PROGRESS, pb.TaskStatus_TASK_STATUS_IN_PROGRESS}
+	allowedInitialStatuses := []pb.TaskStatus{pb.TaskStatus.TASK_STATUS_TODO, pb.TaskStatus_TASK_STATUS_IN_PROGRESS}
 	initialStatus := pb.TaskStatus_TASK_STATUS_TODO // default value
 	if req.InitialStatus != nil {
 		if hwutil.Contains(allowedInitialStatuses, *req.InitialStatus) {
