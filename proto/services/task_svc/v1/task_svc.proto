@@ -21,8 +21,9 @@ message CreateTaskRequest {
   string name = 1; // @gotags: validate:"required"
   optional string description = 2;
   string patient_id = 3; // @gotags: validate:"uuid4"
-  bool public = 4; // default: true
+  bool public = 4;
   google.protobuf.Timestamp due_at = 5;
+  optional TaskStatus initial_status = 6;
 }
 
 message CreateTaskResponse {

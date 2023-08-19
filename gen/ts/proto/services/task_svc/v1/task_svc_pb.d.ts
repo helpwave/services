@@ -23,6 +23,11 @@ export class CreateTaskRequest extends jspb.Message {
   hasDueAt(): boolean;
   clearDueAt(): CreateTaskRequest;
 
+  getInitialStatus(): TaskStatus;
+  setInitialStatus(value: TaskStatus): CreateTaskRequest;
+  hasInitialStatus(): boolean;
+  clearInitialStatus(): CreateTaskRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateTaskRequest.AsObject;
   static toObject(includeInstance: boolean, msg: CreateTaskRequest): CreateTaskRequest.AsObject;
@@ -38,11 +43,17 @@ export namespace CreateTaskRequest {
     patientId: string,
     pb_public: boolean,
     dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    initialStatus?: TaskStatus,
   }
 
   export enum DescriptionCase { 
     _DESCRIPTION_NOT_SET = 0,
     DESCRIPTION = 2,
+  }
+
+  export enum InitialStatusCase { 
+    _INITIAL_STATUS_NOT_SET = 0,
+    INITIAL_STATUS = 6,
   }
 }
 

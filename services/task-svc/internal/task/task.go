@@ -60,11 +60,22 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		description = *req.Description
 	}
 
+	// When changing this array also adjust the error message below
+	allowedInitialStatuses := []pb.TaskStatus{pb.TaskStatus_TASK_STATUS_TODO, pb.TaskStatus_TASK_STATUS_IN_PROGRESS}
+	initialStatus := pb.TaskStatus_TASK_STATUS_TODO // default value
+	if req.InitialStatus != nil {
+		if hwutil.Contains(allowedInitialStatuses, *req.InitialStatus) {
+			initialStatus = *req.InitialStatus
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "only todo and in progress are allowed as an initial TaskStatus")
+		}
+	}
+
 	task, err := taskRepo.CreateTask(&models.Task{
 		TaskBase: models.TaskBase{
 			Name:        req.Name,
 			Description: description,
-			Status:      pb.TaskStatus_TASK_STATUS_TODO,
+			Status:      initialStatus,
 		},
 		PatientId:      patientId,
 		OrganizationID: organizationID,
