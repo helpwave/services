@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
+	"github.com/rs/zerolog/log"
+	"strconv"
 )
 
 var validate *validator.Validate
@@ -59,4 +61,13 @@ func StringToUUIDPtr(s *string) (*uuid.UUID, error) {
 		uPtr = &u
 	}
 	return uPtr, nil
+}
+
+func MustParseInt(s string) int {
+	i, err := strconv.ParseInt(GetEnvOr("REDIS_DB", "0"), 10, 32)
+	if err != nil {
+		log.Fatal().Str("string", s).Msg("could not parse int32")
+	}
+
+	return int(i)
 }
