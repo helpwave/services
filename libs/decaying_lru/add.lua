@@ -13,8 +13,8 @@ local inv_p = ARGV[4]
 
 local time = redis.call("TIME")[1]
 
-redis.call("EXPIRE", key, decay)
 local ret = redis.call("ZADD", key, time, value)
+redis.call("EXPIRE", key, decay)
 
 -- random number between 1 and p_inv both inclusive,
 -- so P(random = 1) = 1 / p_inv
