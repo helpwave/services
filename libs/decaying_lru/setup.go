@@ -21,18 +21,18 @@ func Setup(serviceName string, size int64, decay time.Duration, invP int) Decayi
 // DefaultRedisOptions collects values from env (read the README so see which vars are respected)
 // You can update the struct and use it with CustomSetup instead of Setup
 func DefaultRedisOptions(serviceName string) *redis.Options {
-	var tlsConfig *tls.Config = nil
-	if strings.ToLower(hwutil.GetEnvOr("INSECURE_REDIS_NO_TLS", "false")) != "true" {
+	tlsConfig := &tls.Config{
+		MinVersion: tls.VersionTLS13,
+	}
+
+	if strings.ToLower(hwutil.GetEnvOr("INSECURE_REDIS_NO_TLS", "false")) == "true" {
 		log.Error().Msg("connecting to redis without TLS")
-		tlsConfig = &tls.Config{
-			MinVersion: tls.VersionTLS13,
-		}
+		tlsConfig = nil
 	}
 
 	return &redis.Options{
 		Addr:       hwutil.MustGetEnv("REDIS_ADDR"),
 		ClientName: serviceName,
-		OnConnect:  nil, // TODO: inject script
 		Username:   hwutil.GetEnvOr("REDIS_USER", ""),
 		Password:   hwutil.GetEnvOr("REDIS_PASSWORD", ""),
 		DB:         hwutil.MustParseInt(hwutil.GetEnvOr("REDIS_DB", "0")),

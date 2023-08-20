@@ -79,12 +79,10 @@ func (lru *DecayingLRU) GetItemsForKey(key string) ([]string, error) {
 	size := lru.size
 
 	res := lru.redisClient.ZRangeArgs(ctx, redis.ZRangeArgs{
-		Key:     key,
-		Start:   0,
-		Stop:    -1,
-		ByScore: true,
-		Rev:     true,
-		Count:   size,
+		Key:   key,
+		Start: 0,
+		Stop:  size - 1,
+		Rev:   true,
 	})
 
 	return res.Result()

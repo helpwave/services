@@ -11,15 +11,19 @@ local size = ARGV[2]
 local decay = ARGV[3]
 local inv_p = ARGV[4]
 
-redis.call("Expire", key, decay)
-redis.call("ZADD", key, os.time(), value)
+local time = redis.call("TIME")[1]
+
+redis.call("EXPIRE", key, decay)
+local ret = redis.call("ZADD", key, time, value)
 
 -- random number between 1 and p_inv both inclusive,
 -- so P(random = 1) = 1 / p_inv
-if math.random(inv_p) = 1 then
+if math.random(inv_p) == 1 then
 	-- say size is 10,
 	-- then it removes elements with ranks from 0 to -11,
 	-- effectively keeping only the elements with ranks 0 to 9,
 	-- which is the top 10 elements
 	redis.call("ZREMRANGEBYRANK", key, 0, -1 * (size + 1))
 end
+
+return ret
