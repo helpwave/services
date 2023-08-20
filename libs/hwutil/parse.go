@@ -64,7 +64,7 @@ func StringToUUIDPtr(s *string) (*uuid.UUID, error) {
 }
 
 func MustParseInt(s string) int {
-	i, err := strconv.ParseInt(GetEnvOr("REDIS_DB", "0"), 10, 32)
+	i, err := strconv.ParseInt(s, 10, 32)
 	if err != nil {
 		log.Fatal().Str("string", s).Msg("could not parse int32")
 	}
