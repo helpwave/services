@@ -3,7 +3,6 @@ package decaying_lru
 import (
 	"context"
 	"github.com/redis/go-redis/v9"
-	"github.com/rs/zerolog/log"
 	"time"
 
 	_ "embed"
@@ -43,33 +42,6 @@ func member(item interface{}) redis.Z {
 		Score:  now,
 		Member: item,
 	}
-}
-
-// AddItemForKeySlow is a low-level way to interact with the LRU,
-// you probably want to work with AddItem instead
-func (lru *DecayingLRU) AddItemForKeySlow(key string, item interface{}) error {
-	ctx := lru.ctx
-
-	// First update the expiry for the key
-	// We do this first, else there is the possibility of
-	// expiring before we extend the life and losing the write op
-	cmd1 := lru.redisClient.Expire(ctx, key, lru.decay)
-
-	if err := cmd1.Err(); err != nil {
-		log.Warn().
-			Err(err).
-			Str("key", key).
-			Msg("could not Expire() key")
-	}
-
-	// now update the Sorted Set,
-	// we use the current time as the score for the item,
-	// so ZREVRANGE will give us the LRUsed items
-	cmd2 := lru.redisClient.ZAdd(ctx, key, member(item))
-
-	_, err := cmd2.Result()
-
-	return err
 }
 
 // GetItemsForKey is a low-level way to interact with the LRU,
