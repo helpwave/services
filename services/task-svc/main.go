@@ -10,6 +10,7 @@ import (
 	"task-svc/internal/room"
 	"task-svc/internal/task"
 	"task-svc/internal/task-template"
+	"task-svc/internal/tracking"
 	"task-svc/internal/ward"
 )
 
@@ -22,6 +23,7 @@ func main() {
 	common.Setup(ServiceName, Version, true)
 
 	hwgorm.SetupDatabaseByEnvs()
+	tracking.SetupTracking(ServiceName)
 
 	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
