@@ -13,7 +13,7 @@ import (
 // Setup creates a DecayingLRU and sets it up from env
 // Size is the max size of the LRU
 // decay is the time in seconds after which a key is evicted, reset with every write
-// We expect a garbage collection for a key to run every invP write instructions
+// We expect a garbage collection for a key to run every invP add calls
 func Setup(serviceName string, size int64, decay time.Duration, invP int) DecayingLRU {
 	return CustomSetup(serviceName, size, decay, invP, nil)
 }
