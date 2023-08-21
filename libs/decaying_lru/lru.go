@@ -30,18 +30,19 @@ var addScriptSource string
 var addScript = redis.NewScript(addScriptSource)
 
 // AddItemForKey is a low-level way to interact with the LRU,
-// you probably want to work with AddItem instead
+// you probably want to work with AddItemForUser instead
 func (lru *DecayingLRU) AddItemForKey(key, value string) error {
 	ctx := lru.ctx
 	r := lru.redisClient
 	keys := []string{key}
 
 	// add(key, value, size, decay, inv_p)
+	// see add.lua
 	return addScript.Run(ctx, r, keys, value, lru.size, lru.decay, lru.invP).Err()
 }
 
 // GetItemsForKey is a low-level way to interact with the LRU,
-// you probably want to work with GetItems instead
+// you probably want to work with GetItemsForUser instead
 func (lru *DecayingLRU) GetItemsForKey(key string) ([]string, error) {
 	ctx := lru.ctx
 	size := lru.size
@@ -57,25 +58,25 @@ func (lru *DecayingLRU) GetItemsForKey(key string) ([]string, error) {
 }
 
 // RemoveItemForKey is a low-level way to interact with the LRU,
-// you probably want to work with RemoveItem instead
+// you probably want to work with RemoveItemForUser instead
 func (lru *DecayingLRU) RemoveItemForKey(key, value string) error {
 	return lru.redisClient.ZRem(lru.ctx, key, value).Err()
 }
 
-// AddItem adds an item for your key for a user,
+// AddItemForUser adds an item for your key for a user,
 // if you don't want to store information scoped to a user see AddItemForKey
-func (lru *DecayingLRU) AddItem(key, userID, item string) error {
+func (lru *DecayingLRU) AddItemForUser(key, userID, item string) error {
 	return lru.AddItemForKey(redisKey(key, userID), item)
 }
 
-// GetItems gets items for your key for a user,
+// GetItemsForUser gets items for your key for a user,
 // if you don't want to access information scoped to a user see GetItemsForKey
-func (lru *DecayingLRU) GetItems(key, userID string) ([]string, error) {
+func (lru *DecayingLRU) GetItemsForUser(key, userID string) ([]string, error) {
 	return lru.GetItemsForKey(redisKey(key, userID))
 }
 
-// RemoveItem is a self-remove of an item from the LRU
+// RemoveItemForUser removes an item from the LRU,
 // if you don't want to remove items scoped to a user see RemoveItemForKey
-func (lru *DecayingLRU) RemoveItem(key, userID string, item string) error {
+func (lru *DecayingLRU) RemoveItemForUser(key, userID string, item string) error {
 	return lru.RemoveItemForKey(redisKey(key, userID), item)
 }
