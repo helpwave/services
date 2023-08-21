@@ -1,3 +1,5 @@
+-- this file gets embedded into lru.go's "addScriptSource" string at compile time
+
 -- interface for this script:
 -- add(key, value, size, decay, inv_p)
 
