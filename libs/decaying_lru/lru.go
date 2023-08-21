@@ -88,6 +88,12 @@ func (lru *DecayingLRU) GetItemsForKey(key string) ([]string, error) {
 	return res.Result()
 }
 
+// RemoveItemByValue is a low-level way to interact with the LRU,
+// you probably want to work with RemoveItem instead
+func (lru *DecayingLRU) RemoveItemByValue(key, value string) error {
+	return lru.redisClient.ZRem(lru.ctx, key, value).Err()
+}
+
 // AddItem adds an item for your key for a user,
 // if you don't want to store information scoped to a user see AddItemForKey
 func (lru *DecayingLRU) AddItem(key, userID, item string) error {
@@ -98,4 +104,10 @@ func (lru *DecayingLRU) AddItem(key, userID, item string) error {
 // if you don't want to access information scoped to a user see GetItemsForKey
 func (lru *DecayingLRU) GetItems(key, userID string) ([]string, error) {
 	return lru.GetItemsForKey(key + "-" + userID)
+}
+
+// RemoveItem is a self-remove of an item from the LRU
+// if you don't want to remove items scoped to a user see RemoveItemByValue
+func (lru *DecayingLRU) RemoveItem(key, userID string, item string) error {
+	return lru.RemoveItemByValue(key+"-"+userID, item)
 }

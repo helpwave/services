@@ -19,12 +19,15 @@ func main() {
 	must(lru.AddItem("test", "1", "def"))
 	must(lru.AddItem("test", "1", "ghi"))
 
-	time.Sleep(10 * time.Second)
+	time.Sleep(5 * time.Second)
 
 	must(lru.AddItem("test", "1", "jkl"))
+	must(lru.AddItem("test", "1", "mno"))
+
+	must(lru.RemoveItem("test", "1", "mno"))
 
 	values, err := lru.GetItems("test", "1")
 	must(err)
 
-	fmt.Println(values) // [jkl] due to the fact that [ghi,def,abc] are expired
+	fmt.Println(values) // [jkl] due to the fact that [ghi,def,abc] are expired and [mno] was removed
 }
