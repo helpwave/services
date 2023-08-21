@@ -40,14 +40,6 @@ func (lru *DecayingLRU) AddItemForKey(key, value string) error {
 	return addScript.Run(ctx, r, keys, value, lru.size, lru.decay, lru.invP).Err()
 }
 
-func member(item interface{}) redis.Z {
-	now := float64(time.Now().Unix())
-	return redis.Z{
-		Score:  now,
-		Member: item,
-	}
-}
-
 // GetItemsForKey is a low-level way to interact with the LRU,
 // you probably want to work with GetItems instead
 func (lru *DecayingLRU) GetItemsForKey(key string) ([]string, error) {
