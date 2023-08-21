@@ -12,7 +12,7 @@ import (
 type DecayingLRU struct {
 	ctx         context.Context
 	redisClient *redis.Client
-	// time it takes for a key to decay after it was last written to
+	// time in seconds it takes for a key to decay after it was last written to
 	decay time.Duration
 	// size is the amount of items held in the LRU
 	size int64
