@@ -158,6 +158,13 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrga
 		}
 	}
 
+	userRepository := repositories.UserRepo(ctx)
+
+	user, err := userRepository.GetUserById(userID)
+	if err != nil {
+		return nil, err
+	}
+
 	mappedOrganizations := hwutil.Map(organizations, func(organization models.Organization) *pb.GetOrganizationsByUserResponse_Organization {
 		return &pb.GetOrganizationsByUserResponse_Organization{
 			Id:           organization.ID.String(),
@@ -170,8 +177,8 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrga
 				return &pb.GetOrganizationsByUserResponse_Organization_Member{
 					UserId:    membership.UserID.String(),
 					AvatarUrl: "",
-					Email:     membership.UserID.String() + "@helpwave.de", // TODO replace ones Users are implemented
-					Nickname:  membership.UserID.String(),                  // TODO replace ones Users are implemented
+					Email:     user.Email,
+					Nickname:  user.Nickname,
 				}
 			}),
 		}
@@ -461,13 +468,21 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 		}
 	}
 
+	userRepository := repositories.UserRepo(ctx)
+
+	user, err := userRepository.GetUserById(userID)
+
+	if err != nil {
+		return nil, err
+	}
+
 	// Somehow get the user information
 	mappedMembers := hwutil.Map(members, func(member models.Membership) *pb.GetMembersByOrganizationResponse_Member {
 		return &pb.GetMembersByOrganizationResponse_Member{
 			UserId:    member.UserID.String(),
 			AvatarUrl: "",
-			Email:     member.UserID.String() + "@helpwave.de", // TODO replace ones Users are implemented
-			Nickname:  member.UserID.String(),                  // TODO replace ones Users are implemented
+			Email:     user.Email,
+			Nickname:  user.Nickname,
 		}
 	})
 
