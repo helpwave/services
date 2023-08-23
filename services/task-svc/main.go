@@ -19,7 +19,7 @@ const ServiceName = "task-svc"
 var Version string
 
 func main() {
-	common.Setup(ServiceName, Version, true)
+	common.Setup(ServiceName, Version, true, nil)
 
 	hwgorm.SetupDatabaseByEnvs()
 

@@ -74,12 +74,19 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 }
 
 func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
-	if isUnaryRPCForDaprInternal(info) {
-		zlog.Debug().Msg("skipping auth func, RPC targeted at some internal gRPC service")
+	if isUnaryRPCForDaprInternal(info) || hwutil.Contains(skipAuthForMethods, info.FullMethod) {
+		zlog.Debug().
+			Str("method", info.FullMethod).
+			Msg("skipping auth func, RPC targeted at some internal gRPC service or method")
 		return next(ctx, req)
 	}
 
 	ctx, err := authFunc(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx, err = handleOrganizationIDForAuthFunc(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +145,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	log := zlog.Ctx(ctx).With().Str("userID", userID.String()).Logger()
 	ctx = log.WithContext(ctx)
 
-	return handleOrganizationIDForAuthFunc(ctx)
+	return ctx, nil
 }
 
 // handleOrganizationIDForAuthFunc is a part of our auth middleware.

@@ -3,16 +3,13 @@ package organization
 import (
 	"common"
 	"context"
-	"fmt"
 	"gen/proto/libs/events/v1"
 	pb "gen/proto/services/user_svc/v1"
 	daprc "github.com/dapr/go-sdk/client"
-	daprcmn "github.com/dapr/go-sdk/service/common"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"
 	"hwgorm"
 	"hwutil"
@@ -22,12 +19,6 @@ import (
 )
 
 type InvitationState = string
-
-var UserCreatedEventSubscription = &daprcmn.Subscription{
-	PubsubName: "pubsub",
-	Topic:      "USER_CREATED",
-	Route:      "/pubsub/user_created/v1",
-}
 
 type ServiceServer struct {
 	pb.UnimplementedOrganizationServiceServer
@@ -730,34 +721,6 @@ func GetInvitationByIdAndEmail(db *gorm.DB, email string, id uuid.UUID) (*models
 	}
 
 	return &invitation, nil
-}
-
-func HandleUserCreatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry bool, err error) {
-	log := zlog.Ctx(ctx)
-
-	var payload events.UserCreatedEvent
-	if err := proto.Unmarshal(evt.RawData, &payload); err != nil {
-		log.Error().Err(err).Msg("could not convert USER_CREATED event data to UserCreatedEvent")
-		return true, err
-	}
-
-	userId, err := uuid.Parse(payload.Id)
-	if err != nil {
-		log.Error().Err(err).Msg("could not convert Id of USER_CREATED event to UUID")
-		return true, err
-	}
-
-	if _, err := CreateOrganizationAndAddUser(ctx, models.Base{
-		LongName:     fmt.Sprintf("%s personal organization", payload.Nickname),
-		ShortName:    payload.Nickname,
-		ContactEmail: payload.Email,
-		IsPersonal:   true,
-	}, userId); err != nil {
-		log.Error().Err(err).Str("userId", userId.String()).Msg("could not create organization")
-		return true, err
-	}
-
-	return false, nil
 }
 
 func ChangeMembershipAdminStatus(ctx context.Context, db *gorm.DB, userID uuid.UUID, organizationID uuid.UUID, isAdmin bool) error {
