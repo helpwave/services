@@ -22,7 +22,6 @@ func UserRepo(logCtx context.Context) *UserRepository {
 }
 
 func (r *UserRepository) GetUserById(id uuid.UUID) (*models.User, error) {
-
 	user := models.User{ID: id}
 
 	if err := r.db.First(&user).Error; err != nil {
