@@ -176,7 +176,7 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrga
 			Members: hwutil.Map(organization.Members, func(membership models.Membership) *pb.GetOrganizationsByUserResponse_Organization_Member {
 				return &pb.GetOrganizationsByUserResponse_Organization_Member{
 					UserId:    membership.UserID.String(),
-					AvatarUrl: "",
+					AvatarUrl: user.Avatar,
 					Email:     user.Email,
 					Nickname:  user.Nickname,
 				}
@@ -480,7 +480,7 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 	mappedMembers := hwutil.Map(members, func(member models.Membership) *pb.GetMembersByOrganizationResponse_Member {
 		return &pb.GetMembersByOrganizationResponse_Member{
 			UserId:    member.UserID.String(),
-			AvatarUrl: "",
+			AvatarUrl: user.Avatar,
 			Email:     user.Email,
 			Nickname:  user.Nickname,
 		}
