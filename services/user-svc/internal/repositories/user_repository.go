@@ -1,6 +1,9 @@
 package repositories
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"golang.org/x/net/context"
@@ -39,6 +42,11 @@ func (r *UserRepository) UpdateUser(id uuid.UUID, attr map[string]interface{}) e
 	}
 
 	return nil
+}
+
+func (r *UserRepository) GenerateDefaultAvatarUrl(userID string) string {
+	hash := sha256.Sum256([]byte(userID))
+	return fmt.Sprintf("%s%s", "https://source.boringavatars.com/marble/128/", hex.EncodeToString(hash[:]))
 }
 
 func (r *UserRepository) CreateUser(user models.User) (*models.User, error) {

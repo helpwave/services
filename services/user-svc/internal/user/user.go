@@ -3,7 +3,6 @@ package user
 import (
 	"common"
 	"context"
-	"fmt"
 	"gen/proto/libs/events/v1"
 	pb "gen/proto/services/user_svc/v1"
 	daprcmn "github.com/dapr/go-sdk/service/common"
@@ -14,8 +13,6 @@ import (
 	"user-svc/internal/models"
 	"user-svc/internal/repositories"
 )
-
-const BoringAvatarURL = "https://source.boringavatars.com/marble/128/"
 
 var RegisteredEventSubscription = &daprcmn.Subscription{
 	PubsubName: "pubsub",
@@ -55,7 +52,7 @@ func HandleUserRegisteredEvent(ctx context.Context, evt *daprcmn.TopicEvent) (re
 
 	var user *models.User
 	if existingUser, _ := userRepository.GetUserById(userID); existingUser == nil {
-		avatarUrl := fmt.Sprintf("%s%d", BoringAvatarURL, userID)
+		avatarUrl := userRepository.GenerateDefaultAvatarUrl(userID.String())
 
 		user, err = userRepository.CreateUser(models.User{
 			ID: userID,
