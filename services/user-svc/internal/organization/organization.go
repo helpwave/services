@@ -476,7 +476,6 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 		return nil, err
 	}
 
-	// Somehow get the user information
 	mappedMembers := hwutil.Map(members, func(member models.Membership) *pb.GetMembersByOrganizationResponse_Member {
 		return &pb.GetMembersByOrganizationResponse_Member{
 			UserId:    member.UserID.String(),
