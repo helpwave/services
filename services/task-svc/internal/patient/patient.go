@@ -368,6 +368,7 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		}
 	})
 
+	// TODO: check if tracking here makes sense or too much spam
 	tracking.AddPatientToRecentActivity(ctx, id.String())
 
 	return &pb.GetPatientDetailsResponse{
