@@ -24,6 +24,7 @@ abstract class WardServiceBase extends $pb.GeneratedService {
   $async.Future<$8.CreateWardResponse> createWard($pb.ServerContext ctx, $8.CreateWardRequest request);
   $async.Future<$8.GetWardResponse> getWard($pb.ServerContext ctx, $8.GetWardRequest request);
   $async.Future<$8.GetWardsResponse> getWards($pb.ServerContext ctx, $8.GetWardsRequest request);
+  $async.Future<$8.GetRecentWardsResponse> getRecentWards($pb.ServerContext ctx, $8.GetRecentWardsRequest request);
   $async.Future<$8.UpdateWardResponse> updateWard($pb.ServerContext ctx, $8.UpdateWardRequest request);
   $async.Future<$8.DeleteWardResponse> deleteWard($pb.ServerContext ctx, $8.DeleteWardRequest request);
   $async.Future<$8.GetWardOverviewsResponse> getWardOverviews($pb.ServerContext ctx, $8.GetWardOverviewsRequest request);
@@ -34,6 +35,7 @@ abstract class WardServiceBase extends $pb.GeneratedService {
       case 'CreateWard': return $8.CreateWardRequest();
       case 'GetWard': return $8.GetWardRequest();
       case 'GetWards': return $8.GetWardsRequest();
+      case 'GetRecentWards': return $8.GetRecentWardsRequest();
       case 'UpdateWard': return $8.UpdateWardRequest();
       case 'DeleteWard': return $8.DeleteWardRequest();
       case 'GetWardOverviews': return $8.GetWardOverviewsRequest();
@@ -47,6 +49,7 @@ abstract class WardServiceBase extends $pb.GeneratedService {
       case 'CreateWard': return this.createWard(ctx, request as $8.CreateWardRequest);
       case 'GetWard': return this.getWard(ctx, request as $8.GetWardRequest);
       case 'GetWards': return this.getWards(ctx, request as $8.GetWardsRequest);
+      case 'GetRecentWards': return this.getRecentWards(ctx, request as $8.GetRecentWardsRequest);
       case 'UpdateWard': return this.updateWard(ctx, request as $8.UpdateWardRequest);
       case 'DeleteWard': return this.deleteWard(ctx, request as $8.DeleteWardRequest);
       case 'GetWardOverviews': return this.getWardOverviews(ctx, request as $8.GetWardOverviewsRequest);

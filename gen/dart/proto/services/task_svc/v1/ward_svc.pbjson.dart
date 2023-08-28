@@ -97,6 +97,46 @@ final $typed_data.Uint8List getWardsResponseDescriptor = $convert.base64Decode(
     '9zdmMudjEuR2V0V2FyZHNSZXNwb25zZS5XYXJkUgV3YXJkcxoqCgRXYXJkEg4KAmlkGAEgASgJ'
     'UgJpZBISCgRuYW1lGAIgASgJUgRuYW1l');
 
+@$core.Deprecated('Use getRecentWardsRequestDescriptor instead')
+const GetRecentWardsRequest$json = {
+  '1': 'GetRecentWardsRequest',
+};
+
+/// Descriptor for `GetRecentWardsRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRecentWardsRequestDescriptor = $convert.base64Decode(
+    'ChVHZXRSZWNlbnRXYXJkc1JlcXVlc3Q=');
+
+@$core.Deprecated('Use getRecentWardsResponseDescriptor instead')
+const GetRecentWardsResponse$json = {
+  '1': 'GetRecentWardsResponse',
+  '2': [
+    {'1': 'wards', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetRecentWardsResponse.Ward', '10': 'wards'},
+  ],
+  '3': [GetRecentWardsResponse_Ward$json],
+};
+
+@$core.Deprecated('Use getRecentWardsResponseDescriptor instead')
+const GetRecentWardsResponse_Ward$json = {
+  '1': 'Ward',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'bed_count', '3': 3, '4': 1, '5': 13, '10': 'bedCount'},
+    {'1': 'tasks_todo', '3': 4, '4': 1, '5': 13, '10': 'tasksTodo'},
+    {'1': 'tasks_in_progress', '3': 5, '4': 1, '5': 13, '10': 'tasksInProgress'},
+    {'1': 'tasks_done', '3': 6, '4': 1, '5': 13, '10': 'tasksDone'},
+  ],
+};
+
+/// Descriptor for `GetRecentWardsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRecentWardsResponseDescriptor = $convert.base64Decode(
+    'ChZHZXRSZWNlbnRXYXJkc1Jlc3BvbnNlEk0KBXdhcmRzGAEgAygLMjcucHJvdG8uc2VydmljZX'
+    'MudGFza19zdmMudjEuR2V0UmVjZW50V2FyZHNSZXNwb25zZS5XYXJkUgV3YXJkcxqxAQoEV2Fy'
+    'ZBIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIbCgliZWRfY291bnQYAyABKA'
+    '1SCGJlZENvdW50Eh0KCnRhc2tzX3RvZG8YBCABKA1SCXRhc2tzVG9kbxIqChF0YXNrc19pbl9w'
+    'cm9ncmVzcxgFIAEoDVIPdGFza3NJblByb2dyZXNzEh0KCnRhc2tzX2RvbmUYBiABKA1SCXRhc2'
+    'tzRG9uZQ==');
+
 @$core.Deprecated('Use updateWardRequestDescriptor instead')
 const UpdateWardRequest$json = {
   '1': 'UpdateWardRequest',
@@ -266,6 +306,7 @@ const $core.Map<$core.String, $core.dynamic> WardServiceBase$json = {
     {'1': 'CreateWard', '2': '.proto.services.task_svc.v1.CreateWardRequest', '3': '.proto.services.task_svc.v1.CreateWardResponse', '4': {}},
     {'1': 'GetWard', '2': '.proto.services.task_svc.v1.GetWardRequest', '3': '.proto.services.task_svc.v1.GetWardResponse', '4': {}},
     {'1': 'GetWards', '2': '.proto.services.task_svc.v1.GetWardsRequest', '3': '.proto.services.task_svc.v1.GetWardsResponse', '4': {}},
+    {'1': 'GetRecentWards', '2': '.proto.services.task_svc.v1.GetRecentWardsRequest', '3': '.proto.services.task_svc.v1.GetRecentWardsResponse', '4': {}},
     {'1': 'UpdateWard', '2': '.proto.services.task_svc.v1.UpdateWardRequest', '3': '.proto.services.task_svc.v1.UpdateWardResponse', '4': {}},
     {'1': 'DeleteWard', '2': '.proto.services.task_svc.v1.DeleteWardRequest', '3': '.proto.services.task_svc.v1.DeleteWardResponse', '4': {}},
     {'1': 'GetWardOverviews', '2': '.proto.services.task_svc.v1.GetWardOverviewsRequest', '3': '.proto.services.task_svc.v1.GetWardOverviewsResponse', '4': {}},
@@ -282,6 +323,9 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> WardServic
   '.proto.services.task_svc.v1.GetWardsRequest': GetWardsRequest$json,
   '.proto.services.task_svc.v1.GetWardsResponse': GetWardsResponse$json,
   '.proto.services.task_svc.v1.GetWardsResponse.Ward': GetWardsResponse_Ward$json,
+  '.proto.services.task_svc.v1.GetRecentWardsRequest': GetRecentWardsRequest$json,
+  '.proto.services.task_svc.v1.GetRecentWardsResponse': GetRecentWardsResponse$json,
+  '.proto.services.task_svc.v1.GetRecentWardsResponse.Ward': GetRecentWardsResponse_Ward$json,
   '.proto.services.task_svc.v1.UpdateWardRequest': UpdateWardRequest$json,
   '.proto.services.task_svc.v1.UpdateWardResponse': UpdateWardResponse$json,
   '.proto.services.task_svc.v1.DeleteWardRequest': DeleteWardRequest$json,
@@ -304,14 +348,16 @@ final $typed_data.Uint8List wardServiceDescriptor = $convert.base64Decode(
     'YXJkUmVzcG9uc2UiABJkCgdHZXRXYXJkEioucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2'
     'V0V2FyZFJlcXVlc3QaKy5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRXYXJkUmVzcG9u'
     'c2UiABJnCghHZXRXYXJkcxIrLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFdhcmRzUm'
-    'VxdWVzdBosLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFdhcmRzUmVzcG9uc2UiABJt'
-    'CgpVcGRhdGVXYXJkEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVXBkYXRlV2FyZFJlcX'
-    'Vlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5VcGRhdGVXYXJkUmVzcG9uc2UiABJt'
-    'CgpEZWxldGVXYXJkEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuRGVsZXRlV2FyZFJlcX'
-    'Vlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVXYXJkUmVzcG9uc2UiABJ/'
-    'ChBHZXRXYXJkT3ZlcnZpZXdzEjMucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0V2FyZE'
-    '92ZXJ2aWV3c1JlcXVlc3QaNC5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRXYXJkT3Zl'
-    'cnZpZXdzUmVzcG9uc2UiABJ5Cg5HZXRXYXJkRGV0YWlscxIxLnByb3RvLnNlcnZpY2VzLnRhc2'
-    'tfc3ZjLnYxLkdldFdhcmREZXRhaWxzUmVxdWVzdBoyLnByb3RvLnNlcnZpY2VzLnRhc2tfc3Zj'
-    'LnYxLkdldFdhcmREZXRhaWxzUmVzcG9uc2UiAA==');
+    'VxdWVzdBosLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFdhcmRzUmVzcG9uc2UiABJ5'
+    'Cg5HZXRSZWNlbnRXYXJkcxIxLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFJlY2VudF'
+    'dhcmRzUmVxdWVzdBoyLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFJlY2VudFdhcmRz'
+    'UmVzcG9uc2UiABJtCgpVcGRhdGVXYXJkEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuVX'
+    'BkYXRlV2FyZFJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5VcGRhdGVXYXJk'
+    'UmVzcG9uc2UiABJtCgpEZWxldGVXYXJkEi0ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuRG'
+    'VsZXRlV2FyZFJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVXYXJk'
+    'UmVzcG9uc2UiABJ/ChBHZXRXYXJkT3ZlcnZpZXdzEjMucHJvdG8uc2VydmljZXMudGFza19zdm'
+    'MudjEuR2V0V2FyZE92ZXJ2aWV3c1JlcXVlc3QaNC5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52'
+    'MS5HZXRXYXJkT3ZlcnZpZXdzUmVzcG9uc2UiABJ5Cg5HZXRXYXJkRGV0YWlscxIxLnByb3RvLn'
+    'NlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFdhcmREZXRhaWxzUmVxdWVzdBoyLnByb3RvLnNlcnZp'
+    'Y2VzLnRhc2tfc3ZjLnYxLkdldFdhcmREZXRhaWxzUmVzcG9uc2UiAA==');
 

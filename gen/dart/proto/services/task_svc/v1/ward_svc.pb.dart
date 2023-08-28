@@ -382,6 +382,202 @@ class GetWardsResponse extends $pb.GeneratedMessage {
   $core.List<GetWardsResponse_Ward> get wards => $_getList(0);
 }
 
+class GetRecentWardsRequest extends $pb.GeneratedMessage {
+  factory GetRecentWardsRequest() => create();
+  GetRecentWardsRequest._() : super();
+  factory GetRecentWardsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRecentWardsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRecentWardsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRecentWardsRequest clone() => GetRecentWardsRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRecentWardsRequest copyWith(void Function(GetRecentWardsRequest) updates) => super.copyWith((message) => updates(message as GetRecentWardsRequest)) as GetRecentWardsRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetRecentWardsRequest create() => GetRecentWardsRequest._();
+  GetRecentWardsRequest createEmptyInstance() => create();
+  static $pb.PbList<GetRecentWardsRequest> createRepeated() => $pb.PbList<GetRecentWardsRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetRecentWardsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRecentWardsRequest>(create);
+  static GetRecentWardsRequest? _defaultInstance;
+}
+
+class GetRecentWardsResponse_Ward extends $pb.GeneratedMessage {
+  factory GetRecentWardsResponse_Ward({
+    $core.String? id,
+    $core.String? name,
+    $core.int? bedCount,
+    $core.int? tasksTodo,
+    $core.int? tasksInProgress,
+    $core.int? tasksDone,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (bedCount != null) {
+      $result.bedCount = bedCount;
+    }
+    if (tasksTodo != null) {
+      $result.tasksTodo = tasksTodo;
+    }
+    if (tasksInProgress != null) {
+      $result.tasksInProgress = tasksInProgress;
+    }
+    if (tasksDone != null) {
+      $result.tasksDone = tasksDone;
+    }
+    return $result;
+  }
+  GetRecentWardsResponse_Ward._() : super();
+  factory GetRecentWardsResponse_Ward.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRecentWardsResponse_Ward.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRecentWardsResponse.Ward', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'bedCount', $pb.PbFieldType.OU3)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'tasksTodo', $pb.PbFieldType.OU3)
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'tasksInProgress', $pb.PbFieldType.OU3)
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'tasksDone', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRecentWardsResponse_Ward clone() => GetRecentWardsResponse_Ward()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRecentWardsResponse_Ward copyWith(void Function(GetRecentWardsResponse_Ward) updates) => super.copyWith((message) => updates(message as GetRecentWardsResponse_Ward)) as GetRecentWardsResponse_Ward;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetRecentWardsResponse_Ward create() => GetRecentWardsResponse_Ward._();
+  GetRecentWardsResponse_Ward createEmptyInstance() => create();
+  static $pb.PbList<GetRecentWardsResponse_Ward> createRepeated() => $pb.PbList<GetRecentWardsResponse_Ward>();
+  @$core.pragma('dart2js:noInline')
+  static GetRecentWardsResponse_Ward getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRecentWardsResponse_Ward>(create);
+  static GetRecentWardsResponse_Ward? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get bedCount => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set bedCount($core.int v) { $_setUnsignedInt32(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasBedCount() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearBedCount() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.int get tasksTodo => $_getIZ(3);
+  @$pb.TagNumber(4)
+  set tasksTodo($core.int v) { $_setUnsignedInt32(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasTasksTodo() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearTasksTodo() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get tasksInProgress => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set tasksInProgress($core.int v) { $_setUnsignedInt32(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasTasksInProgress() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearTasksInProgress() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.int get tasksDone => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set tasksDone($core.int v) { $_setUnsignedInt32(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasTasksDone() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearTasksDone() => clearField(6);
+}
+
+class GetRecentWardsResponse extends $pb.GeneratedMessage {
+  factory GetRecentWardsResponse({
+    $core.Iterable<GetRecentWardsResponse_Ward>? wards,
+  }) {
+    final $result = create();
+    if (wards != null) {
+      $result.wards.addAll(wards);
+    }
+    return $result;
+  }
+  GetRecentWardsResponse._() : super();
+  factory GetRecentWardsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRecentWardsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRecentWardsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..pc<GetRecentWardsResponse_Ward>(1, _omitFieldNames ? '' : 'wards', $pb.PbFieldType.PM, subBuilder: GetRecentWardsResponse_Ward.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRecentWardsResponse clone() => GetRecentWardsResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRecentWardsResponse copyWith(void Function(GetRecentWardsResponse) updates) => super.copyWith((message) => updates(message as GetRecentWardsResponse)) as GetRecentWardsResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetRecentWardsResponse create() => GetRecentWardsResponse._();
+  GetRecentWardsResponse createEmptyInstance() => create();
+  static $pb.PbList<GetRecentWardsResponse> createRepeated() => $pb.PbList<GetRecentWardsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetRecentWardsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRecentWardsResponse>(create);
+  static GetRecentWardsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<GetRecentWardsResponse_Ward> get wards => $_getList(0);
+}
+
 class UpdateWardRequest extends $pb.GeneratedMessage {
   factory UpdateWardRequest({
     $core.String? id,
@@ -1170,6 +1366,9 @@ class WardServiceApi {
   ;
   $async.Future<GetWardsResponse> getWards($pb.ClientContext? ctx, GetWardsRequest request) =>
     _client.invoke<GetWardsResponse>(ctx, 'WardService', 'GetWards', request, GetWardsResponse())
+  ;
+  $async.Future<GetRecentWardsResponse> getRecentWards($pb.ClientContext? ctx, GetRecentWardsRequest request) =>
+    _client.invoke<GetRecentWardsResponse>(ctx, 'WardService', 'GetRecentWards', request, GetRecentWardsResponse())
   ;
   $async.Future<UpdateWardResponse> updateWard($pb.ClientContext? ctx, UpdateWardRequest request) =>
     _client.invoke<UpdateWardResponse>(ctx, 'WardService', 'UpdateWard', request, UpdateWardResponse())

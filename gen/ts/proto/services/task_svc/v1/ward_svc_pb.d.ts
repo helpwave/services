@@ -139,6 +139,79 @@ export namespace GetWardsResponse {
 
 }
 
+export class GetRecentWardsRequest extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetRecentWardsRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetRecentWardsRequest): GetRecentWardsRequest.AsObject;
+  static serializeBinaryToWriter(message: GetRecentWardsRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetRecentWardsRequest;
+  static deserializeBinaryFromReader(message: GetRecentWardsRequest, reader: jspb.BinaryReader): GetRecentWardsRequest;
+}
+
+export namespace GetRecentWardsRequest {
+  export type AsObject = {
+  }
+}
+
+export class GetRecentWardsResponse extends jspb.Message {
+  getWardsList(): Array<GetRecentWardsResponse.Ward>;
+  setWardsList(value: Array<GetRecentWardsResponse.Ward>): GetRecentWardsResponse;
+  clearWardsList(): GetRecentWardsResponse;
+  addWards(value?: GetRecentWardsResponse.Ward, index?: number): GetRecentWardsResponse.Ward;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetRecentWardsResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetRecentWardsResponse): GetRecentWardsResponse.AsObject;
+  static serializeBinaryToWriter(message: GetRecentWardsResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetRecentWardsResponse;
+  static deserializeBinaryFromReader(message: GetRecentWardsResponse, reader: jspb.BinaryReader): GetRecentWardsResponse;
+}
+
+export namespace GetRecentWardsResponse {
+  export type AsObject = {
+    wardsList: Array<GetRecentWardsResponse.Ward.AsObject>,
+  }
+
+  export class Ward extends jspb.Message {
+    getId(): string;
+    setId(value: string): Ward;
+
+    getName(): string;
+    setName(value: string): Ward;
+
+    getBedCount(): number;
+    setBedCount(value: number): Ward;
+
+    getTasksTodo(): number;
+    setTasksTodo(value: number): Ward;
+
+    getTasksInProgress(): number;
+    setTasksInProgress(value: number): Ward;
+
+    getTasksDone(): number;
+    setTasksDone(value: number): Ward;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Ward.AsObject;
+    static toObject(includeInstance: boolean, msg: Ward): Ward.AsObject;
+    static serializeBinaryToWriter(message: Ward, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Ward;
+    static deserializeBinaryFromReader(message: Ward, reader: jspb.BinaryReader): Ward;
+  }
+
+  export namespace Ward {
+    export type AsObject = {
+      id: string,
+      name: string,
+      bedCount: number,
+      tasksTodo: number,
+      tasksInProgress: number,
+      tasksDone: number,
+    }
+  }
+
+}
+
 export class UpdateWardRequest extends jspb.Message {
   getId(): string;
   setId(value: string): UpdateWardRequest;

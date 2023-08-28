@@ -263,6 +263,67 @@ proto.proto.services.task_svc.v1.WardServicePromiseClient.prototype.getWards =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetRecentWardsRequest,
+ *   !proto.proto.services.task_svc.v1.GetRecentWardsResponse>}
+ */
+const methodDescriptor_WardService_GetRecentWards = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.WardService/GetRecentWards',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetRecentWardsRequest,
+  proto.proto.services.task_svc.v1.GetRecentWardsResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetRecentWardsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetRecentWardsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetRecentWardsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetRecentWardsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetRecentWardsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.WardServiceClient.prototype.getRecentWards =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.WardService/GetRecentWards',
+      request,
+      metadata || {},
+      methodDescriptor_WardService_GetRecentWards,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetRecentWardsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetRecentWardsResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.WardServicePromiseClient.prototype.getRecentWards =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.WardService/GetRecentWards',
+      request,
+      metadata || {},
+      methodDescriptor_WardService_GetRecentWards);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.task_svc.v1.UpdateWardRequest,
  *   !proto.proto.services.task_svc.v1.UpdateWardResponse>}
  */
