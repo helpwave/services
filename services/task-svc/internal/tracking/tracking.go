@@ -72,9 +72,9 @@ func RemovePatientFromRecentActivity(ctx context.Context, patientID string) {
 // only works, when
 //   - SetupTracking was called earlier
 //   - the context originates from an authenticated request
-func AddWardToRecentActivity(ctx context.Context, patientID string) {
+func AddWardToRecentActivity(ctx context.Context, wardID string) {
 	if userID := getUserID(ctx); userID != "" {
-		_ = lru.AddItemForUser(WardKey, userID, patientID)
+		_ = lru.AddItemForUser(WardKey, userID, wardID)
 	}
 }
 
@@ -82,8 +82,8 @@ func AddWardToRecentActivity(ctx context.Context, patientID string) {
 // only works, when
 //   - SetupTracking was called earlier
 //   - the context originates from an authenticated request
-func RemoveWardFromRecentActivity(ctx context.Context, patientID string) {
+func RemoveWardFromRecentActivity(ctx context.Context, wardID string) {
 	if userID := getUserID(ctx); userID != "" {
-		_ = lru.RemoveItemForUser(WardKey, userID, patientID)
+		_ = lru.RemoveItemForUser(WardKey, userID, wardID)
 	}
 }
