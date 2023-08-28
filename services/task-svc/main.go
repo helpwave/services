@@ -24,7 +24,7 @@ func main() {
 	common.Setup(ServiceName, Version, true)
 
 	hwgorm.SetupDatabaseByEnvs()
-	tracking.SetupTracking(ServiceName, 5, 4*24*time.Hour, 10)
+	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
 
 	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
