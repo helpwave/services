@@ -399,6 +399,11 @@ export namespace GetRecentPatientsRequest {
 }
 
 export class GetRecentPatientsResponse extends jspb.Message {
+  getRecentPatientsList(): Array<GetRecentPatientsResponse.PatientWithRoomAndBed>;
+  setRecentPatientsList(value: Array<GetRecentPatientsResponse.PatientWithRoomAndBed>): GetRecentPatientsResponse;
+  clearRecentPatientsList(): GetRecentPatientsResponse;
+  addRecentPatients(value?: GetRecentPatientsResponse.PatientWithRoomAndBed, index?: number): GetRecentPatientsResponse.PatientWithRoomAndBed;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetRecentPatientsResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetRecentPatientsResponse): GetRecentPatientsResponse.AsObject;
@@ -409,66 +414,7 @@ export class GetRecentPatientsResponse extends jspb.Message {
 
 export namespace GetRecentPatientsResponse {
   export type AsObject = {
-  }
-}
-
-export class UpdatePatientRequest extends jspb.Message {
-  getId(): string;
-  setId(value: string): UpdatePatientRequest;
-
-  getHumanReadableIdentifier(): string;
-  setHumanReadableIdentifier(value: string): UpdatePatientRequest;
-  hasHumanReadableIdentifier(): boolean;
-  clearHumanReadableIdentifier(): UpdatePatientRequest;
-
-  getNotes(): string;
-  setNotes(value: string): UpdatePatientRequest;
-  hasNotes(): boolean;
-  clearNotes(): UpdatePatientRequest;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): UpdatePatientRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: UpdatePatientRequest): UpdatePatientRequest.AsObject;
-  static serializeBinaryToWriter(message: UpdatePatientRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): UpdatePatientRequest;
-  static deserializeBinaryFromReader(message: UpdatePatientRequest, reader: jspb.BinaryReader): UpdatePatientRequest;
-}
-
-export namespace UpdatePatientRequest {
-  export type AsObject = {
-    id: string,
-    humanReadableIdentifier?: string,
-    notes?: string,
-  }
-
-  export enum HumanReadableIdentifierCase { 
-    _HUMAN_READABLE_IDENTIFIER_NOT_SET = 0,
-    HUMAN_READABLE_IDENTIFIER = 2,
-  }
-
-  export enum NotesCase { 
-    _NOTES_NOT_SET = 0,
-    NOTES = 3,
-  }
-}
-
-export class UpdatePatientResponse extends jspb.Message {
-  getRecentPatients(): UpdatePatientResponse.PatientWithRoomAndBed | undefined;
-  setRecentPatients(value?: UpdatePatientResponse.PatientWithRoomAndBed): UpdatePatientResponse;
-  hasRecentPatients(): boolean;
-  clearRecentPatients(): UpdatePatientResponse;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): UpdatePatientResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: UpdatePatientResponse): UpdatePatientResponse.AsObject;
-  static serializeBinaryToWriter(message: UpdatePatientResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): UpdatePatientResponse;
-  static deserializeBinaryFromReader(message: UpdatePatientResponse, reader: jspb.BinaryReader): UpdatePatientResponse;
-}
-
-export namespace UpdatePatientResponse {
-  export type AsObject = {
-    recentPatients?: UpdatePatientResponse.PatientWithRoomAndBed.AsObject,
+    recentPatientsList: Array<GetRecentPatientsResponse.PatientWithRoomAndBed.AsObject>,
   }
 
   export class Bed extends jspb.Message {
@@ -524,13 +470,13 @@ export namespace UpdatePatientResponse {
     getHumanReadableIdentifier(): string;
     setHumanReadableIdentifier(value: string): PatientWithRoomAndBed;
 
-    getRoom(): UpdatePatientResponse.Room | undefined;
-    setRoom(value?: UpdatePatientResponse.Room): PatientWithRoomAndBed;
+    getRoom(): GetRecentPatientsResponse.Room | undefined;
+    setRoom(value?: GetRecentPatientsResponse.Room): PatientWithRoomAndBed;
     hasRoom(): boolean;
     clearRoom(): PatientWithRoomAndBed;
 
-    getBed(): UpdatePatientResponse.Bed | undefined;
-    setBed(value?: UpdatePatientResponse.Bed): PatientWithRoomAndBed;
+    getBed(): GetRecentPatientsResponse.Bed | undefined;
+    setBed(value?: GetRecentPatientsResponse.Bed): PatientWithRoomAndBed;
     hasBed(): boolean;
     clearBed(): PatientWithRoomAndBed;
 
@@ -546,11 +492,65 @@ export namespace UpdatePatientResponse {
     export type AsObject = {
       id: string,
       humanReadableIdentifier: string,
-      room?: UpdatePatientResponse.Room.AsObject,
-      bed?: UpdatePatientResponse.Bed.AsObject,
+      room?: GetRecentPatientsResponse.Room.AsObject,
+      bed?: GetRecentPatientsResponse.Bed.AsObject,
     }
   }
 
+}
+
+export class UpdatePatientRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): UpdatePatientRequest;
+
+  getHumanReadableIdentifier(): string;
+  setHumanReadableIdentifier(value: string): UpdatePatientRequest;
+  hasHumanReadableIdentifier(): boolean;
+  clearHumanReadableIdentifier(): UpdatePatientRequest;
+
+  getNotes(): string;
+  setNotes(value: string): UpdatePatientRequest;
+  hasNotes(): boolean;
+  clearNotes(): UpdatePatientRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdatePatientRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdatePatientRequest): UpdatePatientRequest.AsObject;
+  static serializeBinaryToWriter(message: UpdatePatientRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdatePatientRequest;
+  static deserializeBinaryFromReader(message: UpdatePatientRequest, reader: jspb.BinaryReader): UpdatePatientRequest;
+}
+
+export namespace UpdatePatientRequest {
+  export type AsObject = {
+    id: string,
+    humanReadableIdentifier?: string,
+    notes?: string,
+  }
+
+  export enum HumanReadableIdentifierCase { 
+    _HUMAN_READABLE_IDENTIFIER_NOT_SET = 0,
+    HUMAN_READABLE_IDENTIFIER = 2,
+  }
+
+  export enum NotesCase { 
+    _NOTES_NOT_SET = 0,
+    NOTES = 3,
+  }
+}
+
+export class UpdatePatientResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdatePatientResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdatePatientResponse): UpdatePatientResponse.AsObject;
+  static serializeBinaryToWriter(message: UpdatePatientResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdatePatientResponse;
+  static deserializeBinaryFromReader(message: UpdatePatientResponse, reader: jspb.BinaryReader): UpdatePatientResponse;
+}
+
+export namespace UpdatePatientResponse {
+  export type AsObject = {
+  }
 }
 
 export class AssignBedRequest extends jspb.Message {

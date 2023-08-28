@@ -112,21 +112,8 @@ message GetPatientAssignmentByWardResponse {
 
 message GetRecentPatientsRequest {}
 
-message GetRecentPatientsResponse {}
-
-
-//
-// UpdatePatient
-//
-
-message UpdatePatientRequest {
-  string id = 1; // @gotags: validate:"uuid4"
-  optional string human_readable_identifier = 2;
-  optional string notes = 3;
-}
-
-message UpdatePatientResponse {
-  PatientWithRoomAndBed recent_patients = 1;
+message GetRecentPatientsResponse {
+  repeated PatientWithRoomAndBed recent_patients = 1;
 
   message Bed {
     string id = 1;
@@ -145,6 +132,19 @@ message UpdatePatientResponse {
     Bed bed = 4;
   }
 }
+
+
+//
+// UpdatePatient
+//
+
+message UpdatePatientRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+  optional string human_readable_identifier = 2;
+  optional string notes = 3;
+}
+
+message UpdatePatientResponse {}
 
 //
 // AssignBed

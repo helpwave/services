@@ -39,6 +39,21 @@ func (r *PatientRepository) GetPatientById(id uuid.UUID) (*models.Patient, error
 	return patient, nil
 }
 
+func (r *PatientRepository) GetPatientsByIdsWithBedAndRoom(ids []uuid.UUID) ([]models.Patient, error) {
+	var patients []models.Patient
+
+	query := r.db.
+		Where("id IN ?", ids).
+		Preload("Bed").
+		Preload("Bed.Room").
+		Find(&patients)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return patients, nil
+}
+
 func (r *PatientRepository) GetPatientsByWardForOrganization(wardID, organizationID uuid.UUID) ([]models.Patient, error) {
 	var patients []models.Patient
 	query := r.db.

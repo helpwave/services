@@ -20,6 +20,16 @@ func Map[K any, V any](vs []K, f func(K) V) []V {
 	return vsm
 }
 
+func FlatMap[K any, V any](vs []K, f func(K) *V) []V {
+	var vsm []V
+	for _, key := range vs {
+		if vPtr := f(key); vPtr != nil {
+			vsm = append(vsm, *vPtr)
+		}
+	}
+	return vsm
+}
+
 func MapWithErr[K any, V any](vs []K, f func(K) (V, error)) ([]V, error) {
 	vsm := make([]V, len(vs))
 	for i, v := range vs {

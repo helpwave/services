@@ -4,6 +4,7 @@ import (
 	"common"
 	"context"
 	"decaying_lru"
+	"errors"
 	zlog "github.com/rs/zerolog/log"
 	"hwutil"
 	"time"
@@ -66,6 +67,18 @@ func RemovePatientFromRecentActivity(ctx context.Context, patientID string) {
 	if userID := getUserID(ctx); userID != "" {
 		_ = lru.RemoveItemForUser(PatientKey, userID, patientID)
 	}
+}
+
+// GetRecentPatientsForUser returns patient ids from the current user's recent activity
+// only works, when
+//   - SetupTracking was called earlier
+//   - the context originates from an authenticated request
+func GetRecentPatientsForUser(ctx context.Context) ([]string, error) {
+	userID := getUserID(ctx)
+	if userID == "" {
+		return nil, errors.New("GetRecentPatientsForUser called, but context has no userID")
+	}
+	return lru.GetItemsForUser(PatientKey, userID)
 }
 
 // AddWardToRecentActivity adds a ward to the user's recent activity,
