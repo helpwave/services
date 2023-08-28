@@ -216,6 +216,10 @@ func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPat
 
 	patients, err := patientRepo.GetPatientsByIdsWithBedAndRoom(recentPatientIds)
 
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	recentPatients := hwutil.Map(patients, func(patient models.Patient) *pb.GetRecentPatientsResponse_PatientWithRoomAndBed {
 		var bed *pb.GetRecentPatientsResponse_Bed = nil
 		var room *pb.GetRecentPatientsResponse_Room = nil
