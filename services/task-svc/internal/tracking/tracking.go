@@ -5,6 +5,7 @@ import (
 	"context"
 	"decaying_lru"
 	zlog "github.com/rs/zerolog/log"
+	"hwutil"
 	"time"
 )
 
@@ -15,7 +16,23 @@ const (
 var lru decaying_lru.DecayingLRU
 
 func SetupTracking(serviceName string, lruSize int64, decay time.Duration, invP int) {
-	lru = decaying_lru.Setup(serviceName, lruSize, decay, invP)
+	redisOptions := decaying_lru.DefaultRedisOptions(serviceName)
+
+	// Default ENVs not set? try SECRETSTORE_ versions instead
+
+	if redisOptions.Addr == "" {
+		redisOptions.Addr = hwutil.GetEnvOr("SECRETSTORE_REDIS_HOST", "")
+	}
+
+	if redisOptions.Username == "" {
+		redisOptions.Username = hwutil.GetEnvOr("SECRETSTORE_REDIS_USERNAME", "")
+	}
+
+	if redisOptions.Password == "" {
+		redisOptions.Password = hwutil.GetEnvOr("SECRETSTORE_REDIS_PASSWORD", "")
+	}
+
+	lru = decaying_lru.CustomSetup(serviceName, lruSize, decay, invP, redisOptions)
 }
 
 func getUserID(ctx context.Context) string {
