@@ -22,7 +22,7 @@ func SetupTracking(serviceName string, lruSize int64, decay time.Duration, invP 
 	// Default ENVs not set? try SECRETSTORE_ versions instead
 
 	if redisOptions.Addr == "" {
-		redisOptions.Addr = hwutil.GetEnvOr("SECRETSTORE_REDIS_HOST", "")
+		redisOptions.Addr = hwutil.GetEnvOr("SECRETSTORE_REDIS_HOST", "") + ":6379"
 	}
 
 	if redisOptions.Username == "" {
