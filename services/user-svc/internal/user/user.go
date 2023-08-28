@@ -55,19 +55,19 @@ func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest
 		if err != nil {
 			return nil, status.Error(codes.Internal, err.Error())
 		}
-	}
 
-	userCreatedEvent := &events.UserCreatedEvent{
-		Id:       user.ID.String(),
-		Email:    user.Email,
-		Nickname: user.Nickname,
-		Name:     user.Name,
-	}
+		userCreatedEvent := &events.UserCreatedEvent{
+			Id:       user.ID.String(),
+			Email:    user.Email,
+			Nickname: user.Nickname,
+			Name:     user.Name,
+		}
 
-	daprClient := common.MustNewDaprGRPCClient()
+		daprClient := common.MustNewDaprGRPCClient()
 
-	if err := common.PublishMessage(ctx, daprClient, "pubsub", "USER_CREATED", userCreatedEvent); err != nil {
-		log.Error().Err(err).Msg("could not publish message")
+		if err := common.PublishMessage(ctx, daprClient, "pubsub", "USER_CREATED", userCreatedEvent); err != nil {
+			log.Error().Err(err).Msg("could not publish message")
+		}
 	}
 
 	return &pb.CreateUserResponse{Id: user.ID.String()}, nil

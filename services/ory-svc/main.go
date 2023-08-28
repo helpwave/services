@@ -31,9 +31,6 @@ var Version string
 
 var DaprPubsub string
 
-// TODO: Remove later on. Just for testing on production with example data.
-var exampleOrganizationID = uuid.MustParse("3b25c6f5-4705-4074-9fc6-a50c28eba406")
-
 var daprClient *daprc.GRPCClient
 
 var oryClient *ory.APIClient
@@ -124,23 +121,12 @@ func afterRegistrationWebhookHandler(ctx context.Context, in *daprcmn.Invocation
 		return nil, newErrAndLog(ctx, err.Error())
 	}
 
-	trueVal := true
-
 	createOrganizationForUserResponse, err := organizationSvc.CreateOrganizationForUser(ctx, &userSvcPb.CreateOrganizationForUserRequest{
 		UserId:       userID.String(),
 		LongName:     fmt.Sprintf("%s personal organization", payload.Nickname),
 		ShortName:    payload.Nickname,
 		ContactEmail: payload.Email,
-		IsPersonal:   &trueVal,
-	})
-
-	if err != nil {
-		return nil, newErrAndLog(ctx, err.Error())
-	}
-
-	_, err = organizationSvc.AddMember(ctx, &userSvcPb.AddMemberRequest{
-		Id:     exampleOrganizationID.String(),
-		UserId: userID.String(),
+		IsPersonal:   hwutil.PtrTo(true),
 	})
 
 	if err != nil {
@@ -154,7 +140,7 @@ func afterRegistrationWebhookHandler(ctx context.Context, in *daprcmn.Invocation
 
 	// Update identity in Ory with the new organizations
 	if err := oryInt.UpdateIdentityMetadataPublic(ctx, oryClient, userID, oryInt.OryIdentityMetadataPublic{
-		Organizations: []string{organizationID.String(), exampleOrganizationID.String()},
+		Organizations: []string{organizationID.String()},
 	}); err != nil {
 		return nil, newErrAndLog(ctx, err.Error())
 	}

@@ -25,6 +25,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
   $async.Future<$9.CreateOrganizationForUserResponse> createOrganizationForUser($pb.ServerContext ctx, $9.CreateOrganizationForUserRequest request);
   $async.Future<$9.GetOrganizationResponse> getOrganization($pb.ServerContext ctx, $9.GetOrganizationRequest request);
   $async.Future<$9.GetOrganizationsByUserResponse> getOrganizationsByUser($pb.ServerContext ctx, $9.GetOrganizationsByUserRequest request);
+  $async.Future<$9.GetOrganizationsForUserResponse> getOrganizationsForUser($pb.ServerContext ctx, $9.GetOrganizationsForUserRequest request);
   $async.Future<$9.UpdateOrganizationResponse> updateOrganization($pb.ServerContext ctx, $9.UpdateOrganizationRequest request);
   $async.Future<$9.DeleteOrganizationResponse> deleteOrganization($pb.ServerContext ctx, $9.DeleteOrganizationRequest request);
   $async.Future<$9.GetMembersByOrganizationResponse> getMembersByOrganization($pb.ServerContext ctx, $9.GetMembersByOrganizationRequest request);
@@ -43,6 +44,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
       case 'CreateOrganizationForUser': return $9.CreateOrganizationForUserRequest();
       case 'GetOrganization': return $9.GetOrganizationRequest();
       case 'GetOrganizationsByUser': return $9.GetOrganizationsByUserRequest();
+      case 'GetOrganizationsForUser': return $9.GetOrganizationsForUserRequest();
       case 'UpdateOrganization': return $9.UpdateOrganizationRequest();
       case 'DeleteOrganization': return $9.DeleteOrganizationRequest();
       case 'GetMembersByOrganization': return $9.GetMembersByOrganizationRequest();
@@ -64,6 +66,7 @@ abstract class OrganizationServiceBase extends $pb.GeneratedService {
       case 'CreateOrganizationForUser': return this.createOrganizationForUser(ctx, request as $9.CreateOrganizationForUserRequest);
       case 'GetOrganization': return this.getOrganization(ctx, request as $9.GetOrganizationRequest);
       case 'GetOrganizationsByUser': return this.getOrganizationsByUser(ctx, request as $9.GetOrganizationsByUserRequest);
+      case 'GetOrganizationsForUser': return this.getOrganizationsForUser(ctx, request as $9.GetOrganizationsForUserRequest);
       case 'UpdateOrganization': return this.updateOrganization(ctx, request as $9.UpdateOrganizationRequest);
       case 'DeleteOrganization': return this.deleteOrganization(ctx, request as $9.DeleteOrganizationRequest);
       case 'GetMembersByOrganization': return this.getMembersByOrganization(ctx, request as $9.GetMembersByOrganizationRequest);

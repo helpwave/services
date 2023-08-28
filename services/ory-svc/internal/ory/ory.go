@@ -3,8 +3,10 @@ package ory
 import (
 	"common"
 	"context"
+	userSvcPb "gen/proto/services/user_svc/v1"
 	"github.com/google/uuid"
 	ory "github.com/ory/client-go"
+	"hwutil"
 )
 
 // TODO: Remove later on. Just for testing on production with example data.
@@ -76,7 +78,7 @@ func HandleOAuth2Consent(ctx context.Context, oryClient *ory.APIClient, consentC
 	// TODO: Respect skip logic https://www.ory.sh/docs/oauth2-oidc/custom-login-consent/flow#skipping-consent-for-trusted-clients
 
 	// Create id token claims for that identity
-	idTokenClaims, err := CreateIdTokenForUser(ctx, oryClient, consentRequest.GetSubject())
+	idTokenClaims, err := CreateIdTokenClaimsForUser(ctx, oryClient, consentRequest.GetSubject())
 	if err != nil {
 		return nil, nil, err
 	}
@@ -90,7 +92,7 @@ func HandleOAuth2Consent(ctx context.Context, oryClient *ory.APIClient, consentC
 	return &redirectAfterConsentRequest.RedirectTo, idTokenClaims, err
 }
 
-func CreateIdTokenForUser(ctx context.Context, oryClient *ory.APIClient, userId string) (*common.IDTokenClaims, error) {
+func CreateIdTokenClaimsForUser(ctx context.Context, oryClient *ory.APIClient, userId string) (*common.IDTokenClaims, error) {
 	ctx = prepareCtxForOry(ctx)
 
 	// Get the identity of the current flow that needs to give the consent
@@ -99,20 +101,51 @@ func CreateIdTokenForUser(ctx context.Context, oryClient *ory.APIClient, userId 
 		return nil, err
 	}
 
-	// Create id token claims for that identity
-	idTokenClaims, err := createIdToken(identity)
+	oryIdentityTraits, err := NewOryIdentityTraitsFromIdentity(identity)
 	if err != nil {
 		return nil, err
 	}
 
+	organizationIDs, err := getOrganizationIDsForUser(ctx, userId)
+
 	// Due to our current multi tenancy migration, we need to ensure that one valid organization id is inside the token,
 	// in case of a race condition during the registration flow
 	// TODO: Revisit
-	if len(idTokenClaims.Organizations) <= 0 {
-		idTokenClaims.Organizations = append(idTokenClaims.Organizations, exampleOrganizationID)
+	if !hwutil.Contains(organizationIDs, exampleOrganizationID) {
+		organizationIDs = append(organizationIDs, exampleOrganizationID)
 	}
 
-	return idTokenClaims, nil
+	idTokenClaims := common.IDTokenClaims{
+		Sub:           identity.GetId(),
+		Email:         oryIdentityTraits.Email,
+		Name:          oryIdentityTraits.Name,
+		Nickname:      oryIdentityTraits.Nickname,
+		Organizations: organizationIDs,
+	}
+
+	return &idTokenClaims, nil
+}
+
+func getOrganizationIDsForUser(ctx context.Context, userId string) ([]uuid.UUID, error) {
+	ctx, cancel, err := common.PrepCtxForSvcToSvcCall(ctx, "user-svc")
+	if err != nil {
+		return nil, err
+	}
+	defer cancel()
+
+	daprClient := common.MustNewDaprGRPCClient()
+	organizationSvc := userSvcPb.NewOrganizationServiceClient(daprClient.GrpcClientConn())
+
+	getOrganizationsByUserResponse, err := organizationSvc.GetOrganizationsByUser(ctx, &userSvcPb.GetOrganizationsByUserRequest{
+		UserId: userId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return hwutil.Map(getOrganizationsByUserResponse.Organizations, func(v *userSvcPb.GetOrganizationsByUserResponse_Organization) uuid.UUID {
+		return uuid.MustParse(v.Id)
+	}), nil
 }
 
 // UpdateIdentityMetadataPublic fully replaces metadata_public

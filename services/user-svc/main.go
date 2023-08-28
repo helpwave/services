@@ -19,6 +19,7 @@ func main() {
 		"/proto.services.user_svc.v1.UserService/CreateUser",
 		"/proto.services.user_svc.v1.OrganizationService/CreateOrganizationForUser",
 		"/proto.services.user_svc.v1.OrganizationService/AddMember",
+		"/proto.services.user_svc.v1.OrganizationService/GetOrganizationsByUser",
 	})
 
 	hwgorm.SetupDatabaseByEnvs()

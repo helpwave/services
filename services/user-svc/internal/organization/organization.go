@@ -129,18 +129,27 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 	}, nil
 }
 
-func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrganizationsByUserRequest) (*pb.GetOrganizationsByUserResponse, error) {
+func getOrganizationsByUser(ctx context.Context, userID uuid.UUID) ([]models.Organization, error) {
 	db := hwgorm.GetDB(ctx)
 
-	userID, err := common.GetUserID(ctx)
+	var organizations []models.Organization
+	err := db.Preload("Members").Joins("JOIN memberships ON memberships.organization_id = organizations.id").
+		Where("memberships.user_id = ?", userID).
+		Find(&organizations).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return organizations, nil
+}
+
+func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOrganizationsByUserRequest) (*pb.GetOrganizationsByUserResponse, error) {
+	userID, err := uuid.Parse(req.UserId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var organizations []models.Organization
-	err = db.Preload("Members").Joins("JOIN memberships ON memberships.organization_id = organizations.id").
-		Where("memberships.user_id = ?", userID).
-		Find(&organizations).Error
+	organizations, err := getOrganizationsByUser(ctx, userID)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -176,6 +185,52 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrga
 	})
 
 	return &pb.GetOrganizationsByUserResponse{
+		Organizations: mappedOrganizations,
+	}, nil
+}
+
+func (s ServiceServer) GetOrganizationsForUser(ctx context.Context, _ *pb.GetOrganizationsForUserRequest) (*pb.GetOrganizationsForUserResponse, error) {
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	organizations, err := getOrganizationsByUser(ctx, userID)
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+
+	userRepository := repositories.UserRepo(ctx)
+
+	user, err := userRepository.GetUserById(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	mappedOrganizations := hwutil.Map(organizations, func(organization models.Organization) *pb.GetOrganizationsForUserResponse_Organization {
+		return &pb.GetOrganizationsForUserResponse_Organization{
+			Id:           organization.ID.String(),
+			LongName:     organization.LongName,
+			ShortName:    organization.ShortName,
+			ContactEmail: organization.ContactEmail,
+			AvatarUrl:    organization.AvatarUrl,
+			IsPersonal:   false,
+			Members: hwutil.Map(organization.Members, func(membership models.Membership) *pb.GetOrganizationsForUserResponse_Organization_Member {
+				return &pb.GetOrganizationsForUserResponse_Organization_Member{
+					UserId:    membership.UserID.String(),
+					AvatarUrl: user.Avatar,
+					Email:     user.Email,
+					Nickname:  user.Nickname,
+				}
+			}),
+		}
+	})
+
+	return &pb.GetOrganizationsForUserResponse{
 		Organizations: mappedOrganizations,
 	}, nil
 }
