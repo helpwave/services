@@ -256,6 +256,8 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 		Str("bedId", bed.ID.String()).
 		Msg("assigned bed to patient")
 
+	tracking.AddPatientToRecentActivity(ctx, id.String())
+
 	return &pb.AssignBedResponse{}, nil
 }
 
@@ -284,6 +286,8 @@ func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest
 	log.Info().
 		Str("patientId", patient.ID.String()).
 		Msg("unassigned bed from patient")
+
+	tracking.AddPatientToRecentActivity(ctx, id.String())
 
 	return &pb.UnassignBedResponse{}, nil
 }
