@@ -24,8 +24,8 @@ func main() {
 
 		daprClient := common.MustNewDaprGRPCClient()
 
-		common.MustAddTopicEventHandler(server, user.UserRegisteredEventSubscription, user.HandleUserRegisteredEvent)
-		common.MustAddTopicEventHandler(server, user.UserUpdatedEventSubscription, user.HandleUserUpdatedEvent)
+		common.MustAddTopicEventHandler(server, user.RegisteredEventSubscription, user.HandleUserRegisteredEvent)
+		common.MustAddTopicEventHandler(server, user.UpdatedEventSubscription, user.HandleUserUpdatedEvent)
 		pb.RegisterUserServiceServer(grpcServer, user.NewServiceServer())
 
 		common.MustAddTopicEventHandler(server, organization.UserCreatedEventSubscription, organization.HandleUserCreatedEvent)

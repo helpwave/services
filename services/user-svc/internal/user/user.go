@@ -9,65 +9,18 @@ import (
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/protobuf/proto"
-	"gorm.io/gorm"
-	"hwgorm"
 	pbhelpersEvents "proto_helpers/events/v1"
+	"user-svc/internal/models"
+	"user-svc/internal/repositories"
 )
 
-type Base struct {
-	Email    string `gorm:"column:email"`
-	Nickname string `gorm:"column:nickname"`
-	Name     string `gorm:"column:name"`
-}
-
-type User struct {
-	Base
-	ID uuid.UUID `gorm:"column:id"`
-}
-
-func createUser(ctx context.Context, db *gorm.DB, user User) (*User, error) {
-	log := zlog.Ctx(ctx)
-
-	if err := db.Create(&user).Error; err != nil {
-		return nil, err
-	}
-
-	log.Info().
-		Str("userId", user.ID.String()).
-		Msg("user created")
-
-	return &user, nil
-}
-
-func getUserById(ctx context.Context, id uuid.UUID) (*User, error) {
-	db := hwgorm.GetDB(ctx)
-
-	user := User{ID: id}
-
-	if err := db.First(&user).Error; err != nil {
-		return nil, err
-	}
-
-	return &user, nil
-}
-
-func updateUser(ctx context.Context, db *gorm.DB, id uuid.UUID, attr map[string]interface{}) error {
-	user := User{ID: id}
-
-	if err := db.Model(&user).Updates(attr).Error; err != nil {
-		return err
-	}
-
-	return nil
-}
-
-var UserRegisteredEventSubscription = &daprcmn.Subscription{
+var RegisteredEventSubscription = &daprcmn.Subscription{
 	PubsubName: "pubsub",
 	Topic:      "USER_REGISTERED",
 	Route:      "/pubsub/user_registered/v1",
 }
 
-var UserUpdatedEventSubscription = &daprcmn.Subscription{
+var UpdatedEventSubscription = &daprcmn.Subscription{
 	PubsubName: "pubsub",
 	Topic:      "USER_UPDATED",
 	Route:      "/pubsub/user_updated/v1",
@@ -83,6 +36,7 @@ func NewServiceServer() *ServiceServer {
 
 func HandleUserRegisteredEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry bool, err error) {
 	log := zlog.Ctx(ctx)
+	userRepository := repositories.UserRepo(ctx)
 
 	var payload events.UserRegisteredEvent
 	if err := proto.Unmarshal(evt.RawData, &payload); err != nil {
@@ -96,13 +50,14 @@ func HandleUserRegisteredEvent(ctx context.Context, evt *daprcmn.TopicEvent) (re
 		return true, err
 	}
 
-	db := hwgorm.GetDB(ctx)
+	var user *models.User
+	if existingUser, _ := userRepository.GetUserById(userID); existingUser == nil {
+		avatarUrl := userRepository.GenerateDefaultAvatarUrl(userID.String())
 
-	var user *User
-	if existingUser, _ := getUserById(ctx, userID); existingUser == nil {
-		user, err = createUser(ctx, db, User{
+		user, err = userRepository.CreateUser(models.User{
 			ID: userID,
-			Base: Base{
+			BaseUser: models.BaseUser{
+				Avatar:   avatarUrl,
 				Email:    payload.Email,
 				Nickname: payload.Nickname,
 				Name:     payload.Name,
@@ -133,6 +88,7 @@ func HandleUserRegisteredEvent(ctx context.Context, evt *daprcmn.TopicEvent) (re
 
 func HandleUserUpdatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry bool, err error) {
 	log := zlog.Ctx(ctx)
+	userRepository := repositories.UserRepo(ctx)
 
 	var payload events.UserUpdatedEvent
 	if err := proto.Unmarshal(evt.RawData, &payload); err != nil {
@@ -146,9 +102,7 @@ func HandleUserUpdatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry
 		return true, err
 	}
 
-	db := hwgorm.GetDB(ctx)
-
-	if err := updateUser(ctx, db, userID, pbhelpersEvents.UpdatesMapForUserUpdatedEvent(&payload)); err != nil {
+	if err := userRepository.UpdateUser(userID, pbhelpersEvents.UpdatesMapForUserUpdatedEvent(&payload)); err != nil {
 		log.Error().Err(err).Send()
 		return true, err
 	}
