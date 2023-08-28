@@ -104,3 +104,15 @@ func RemoveWardFromRecentActivity(ctx context.Context, wardID string) {
 		_ = lru.RemoveItemForUser(WardKey, userID, wardID)
 	}
 }
+
+// GetRecentWardsForUser returns ward ids from the current user's recent activity
+// only works, when
+//   - SetupTracking was called earlier
+//   - the context originates from an authenticated request
+func GetRecentWardsForUser(ctx context.Context) ([]string, error) {
+	userID := getUserID(ctx)
+	if userID == "" {
+		return nil, errors.New("GetRecentWardsForUser called, but context has no userID")
+	}
+	return lru.GetItemsForUser(WardKey, userID)
+}

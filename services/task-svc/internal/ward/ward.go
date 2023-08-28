@@ -112,6 +112,60 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 	}, nil
 }
 
+func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsRequest) (*pb.GetRecentWardsResponse, error) {
+	wardRepo := repositories.WardRepo(ctx)
+	log := zlog.Ctx(ctx)
+
+	// TODO: Auth
+
+	recentWardIDsStr, err := tracking.GetRecentWardsForUser(ctx)
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	// parse all valid uuids into an array
+	recentWardIDs := hwutil.FlatMap(recentWardIDsStr, func(s string) *uuid.UUID {
+		parsedUUID, err := uuid.Parse(s)
+		if err != nil {
+			log.Warn().Str("uuid", s).Msg("GetRecentWardsForUser returned invalid uuid")
+			return nil
+		}
+		return &parsedUUID
+	})
+
+	recentWards, err := wardRepo.GetWardsByIDs(recentWardIDs)
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	bedCounts, err := wardRepo.CountBedsForWards(recentWardIDs)
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	taskCounts, err := wardRepo.CountTasksWithStatusForWards(recentWardIDs)
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	response := hwutil.Map(recentWards, func(ward models.Ward) *pb.GetRecentWardsResponse_Ward {
+		return &pb.GetRecentWardsResponse_Ward{
+			Id:              ward.ID.String(),
+			Name:            ward.Name,
+			BedCount:        uint32(bedCounts[ward.ID]),
+			TasksTodo:       uint32(taskCounts[ward.ID][pb.TaskStatus_TASK_STATUS_TODO]),
+			TasksInProgress: uint32(taskCounts[ward.ID][pb.TaskStatus_TASK_STATUS_IN_PROGRESS]),
+			TasksDone:       uint32(taskCounts[ward.ID][pb.TaskStatus_TASK_STATUS_DONE]),
+		}
+	})
+
+	return &pb.GetRecentWardsResponse{Wards: response}, nil
+}
+
 func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) (*pb.UpdateWardResponse, error) {
 	wardRepo := repositories.WardRepo(ctx)
 
