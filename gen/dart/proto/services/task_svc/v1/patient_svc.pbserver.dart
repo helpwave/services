@@ -26,6 +26,7 @@ abstract class PatientServiceBase extends $pb.GeneratedService {
   $async.Future<$3.GetPatientByBedResponse> getPatientByBed($pb.ServerContext ctx, $3.GetPatientByBedRequest request);
   $async.Future<$3.GetPatientsByWardResponse> getPatientsByWard($pb.ServerContext ctx, $3.GetPatientsByWardRequest request);
   $async.Future<$3.GetPatientAssignmentByWardResponse> getPatientAssignmentByWard($pb.ServerContext ctx, $3.GetPatientAssignmentByWardRequest request);
+  $async.Future<$3.GetRecentPatientsResponse> getRecentPatients($pb.ServerContext ctx, $3.GetRecentPatientsRequest request);
   $async.Future<$3.UpdatePatientResponse> updatePatient($pb.ServerContext ctx, $3.UpdatePatientRequest request);
   $async.Future<$3.AssignBedResponse> assignBed($pb.ServerContext ctx, $3.AssignBedRequest request);
   $async.Future<$3.UnassignBedResponse> unassignBed($pb.ServerContext ctx, $3.UnassignBedRequest request);
@@ -41,6 +42,7 @@ abstract class PatientServiceBase extends $pb.GeneratedService {
       case 'GetPatientByBed': return $3.GetPatientByBedRequest();
       case 'GetPatientsByWard': return $3.GetPatientsByWardRequest();
       case 'GetPatientAssignmentByWard': return $3.GetPatientAssignmentByWardRequest();
+      case 'GetRecentPatients': return $3.GetRecentPatientsRequest();
       case 'UpdatePatient': return $3.UpdatePatientRequest();
       case 'AssignBed': return $3.AssignBedRequest();
       case 'UnassignBed': return $3.UnassignBedRequest();
@@ -59,6 +61,7 @@ abstract class PatientServiceBase extends $pb.GeneratedService {
       case 'GetPatientByBed': return this.getPatientByBed(ctx, request as $3.GetPatientByBedRequest);
       case 'GetPatientsByWard': return this.getPatientsByWard(ctx, request as $3.GetPatientsByWardRequest);
       case 'GetPatientAssignmentByWard': return this.getPatientAssignmentByWard(ctx, request as $3.GetPatientAssignmentByWardRequest);
+      case 'GetRecentPatients': return this.getRecentPatients(ctx, request as $3.GetRecentPatientsRequest);
       case 'UpdatePatient': return this.updatePatient(ctx, request as $3.UpdatePatientRequest);
       case 'AssignBed': return this.assignBed(ctx, request as $3.AssignBedRequest);
       case 'UnassignBed': return this.unassignBed(ctx, request as $3.UnassignBedRequest);
