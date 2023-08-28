@@ -14,8 +14,8 @@ const (
 
 var lru decaying_lru.DecayingLRU
 
-func SetupTracking(serviceName string) {
-	lru = decaying_lru.Setup(serviceName, 5, 4*24*time.Hour, 10)
+func SetupTracking(serviceName string, lruSize int64, decay time.Duration, invP int) {
+	lru = decaying_lru.Setup(serviceName, lruSize, decay, invP)
 }
 
 func getUserID(ctx context.Context) string {

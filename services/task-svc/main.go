@@ -12,6 +12,7 @@ import (
 	"task-svc/internal/task-template"
 	"task-svc/internal/tracking"
 	"task-svc/internal/ward"
+	"time"
 )
 
 const ServiceName = "task-svc"
@@ -23,7 +24,7 @@ func main() {
 	common.Setup(ServiceName, Version, true)
 
 	hwgorm.SetupDatabaseByEnvs()
-	tracking.SetupTracking(ServiceName)
+	tracking.SetupTracking(ServiceName, 5, 4*24*time.Hour, 10)
 
 	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
