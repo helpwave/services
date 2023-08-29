@@ -128,6 +128,9 @@ export class GetTaskResponse extends jspb.Message {
   clearSubtasksList(): GetTaskResponse;
   addSubtasks(value?: GetTaskResponse.SubTask, index?: number): GetTaskResponse.SubTask;
 
+  getOrganizationId(): string;
+  setOrganizationId(value: string): GetTaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetTaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetTaskResponse): GetTaskResponse.AsObject;
@@ -148,6 +151,7 @@ export namespace GetTaskResponse {
     dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     createdBy: string,
     subtasksList: Array<GetTaskResponse.SubTask.AsObject>,
+    organizationId: string,
   }
 
   export class SubTask extends jspb.Message {

@@ -345,6 +345,7 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     $5.Timestamp? dueAt,
     $core.String? createdBy,
     $core.Iterable<GetTaskResponse_SubTask>? subtasks,
+    $core.String? organizationId,
   }) {
     final $result = create();
     if (id != null) {
@@ -377,6 +378,9 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     if (subtasks != null) {
       $result.subtasks.addAll(subtasks);
     }
+    if (organizationId != null) {
+      $result.organizationId = organizationId;
+    }
     return $result;
   }
   GetTaskResponse._() : super();
@@ -394,6 +398,7 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     ..aOM<$5.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $5.Timestamp.create)
     ..aOS(9, _omitFieldNames ? '' : 'createdBy')
     ..pc<GetTaskResponse_SubTask>(10, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTaskResponse_SubTask.create)
+    ..aOS(11, _omitFieldNames ? '' : 'organizationId')
     ..hasRequiredFields = false
   ;
 
@@ -503,6 +508,15 @@ class GetTaskResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(10)
   $core.List<GetTaskResponse_SubTask> get subtasks => $_getList(9);
+
+  @$pb.TagNumber(11)
+  $core.String get organizationId => $_getSZ(10);
+  @$pb.TagNumber(11)
+  set organizationId($core.String v) { $_setString(10, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasOrganizationId() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearOrganizationId() => clearField(11);
 }
 
 class GetTasksByPatientRequest extends $pb.GeneratedMessage {
