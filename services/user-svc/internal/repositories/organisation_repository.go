@@ -44,12 +44,10 @@ func (r *OrganisationRepository) IsInOrganization(organizationID uuid.UUID, user
 
 func (r *OrganisationRepository) IsInOrganizationByEmail(organizationID uuid.UUID, email string) (bool, error) {
 	membership := models.Membership{}
-
 	err := r.db.
-		Table("organizations").
-		Joins("JOIN memberships ON memberships.organization_id = organization.id").
-		Joins("JOIN users ON memberships.user_id = users.id").
-		Where("organization.id = ? AND users.email = ?", organizationID.String(), email).
+		Table("memberships").
+		Joins("JOIN users ON users.id = memberships.user_id").
+		Where("memberships.organization_id = ? AND users.email = ?", organizationID, email).
 		First(&membership).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return false, nil
@@ -61,7 +59,6 @@ func (r *OrganisationRepository) IsInOrganizationByEmail(organizationID uuid.UUI
 			return false, status.Error(codes.InvalidArgument, "not a member of this organization")
 		}
 	}
-
 	return true, nil
 }
 
