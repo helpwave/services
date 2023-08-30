@@ -11,6 +11,7 @@ import (
 
 const (
 	PatientKey = "recently-viewed-patient"
+	WardKey    = "recently-viewed-ward"
 )
 
 var lru decaying_lru.DecayingLRU
@@ -64,5 +65,25 @@ func AddPatientToRecentActivity(ctx context.Context, patientID string) {
 func RemovePatientFromRecentActivity(ctx context.Context, patientID string) {
 	if userID := getUserID(ctx); userID != "" {
 		_ = lru.RemoveItemForUser(PatientKey, userID, patientID)
+	}
+}
+
+// AddWardToRecentActivity adds a ward to the user's recent activity,
+// only works, when
+//   - SetupTracking was called earlier
+//   - the context originates from an authenticated request
+func AddWardToRecentActivity(ctx context.Context, wardID string) {
+	if userID := getUserID(ctx); userID != "" {
+		_ = lru.AddItemForUser(WardKey, userID, wardID)
+	}
+}
+
+// RemoveWardFromRecentActivity removes a ward from the current user's recent activity
+// only works, when
+//   - SetupTracking was called earlier
+//   - the context originates from an authenticated request
+func RemoveWardFromRecentActivity(ctx context.Context, wardID string) {
+	if userID := getUserID(ctx); userID != "" {
+		_ = lru.RemoveItemForUser(WardKey, userID, wardID)
 	}
 }
