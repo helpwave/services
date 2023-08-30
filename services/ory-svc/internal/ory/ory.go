@@ -107,6 +107,9 @@ func CreateIdTokenClaimsForUser(ctx context.Context, oryClient *ory.APIClient, u
 	}
 
 	organizationIDs, err := getOrganizationIDsForUser(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
 
 	// Due to our current multi tenancy migration, we need to ensure that one valid organization id is inside the token,
 	// in case of a race condition during the registration flow
