@@ -21,7 +21,7 @@ const ServiceName = "task-svc"
 var Version string
 
 func main() {
-	common.Setup(ServiceName, Version, true, nil)
+	common.Setup(ServiceName, Version, true)
 
 	hwgorm.SetupDatabaseByEnvs()
 	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)

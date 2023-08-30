@@ -25,9 +25,14 @@ const ProductionMode = "production"
 
 var skipAuthForMethods []string
 
-// Setup loads the .env file and sets up logging
+// Setup wraps SetupWithUnauthenticatedMethods for a setup without unauthenticated methods
+func Setup(serviceName, version string, auth bool) {
+	SetupWithUnauthenticatedMethods(serviceName, version, auth, nil)
+}
+
+// SetupWithUnauthenticatedMethods loads the .env file and sets up logging
 // also sets up tokens when the service requires auth
-func Setup(serviceName, version string, auth bool, unauthenticatedMethods *[]string) {
+func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, unauthenticatedMethods *[]string) {
 	dotenvErr := godotenv.Load()
 	rand.Seed(time.Now().UnixNano())
 
