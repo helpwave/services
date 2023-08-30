@@ -311,6 +311,19 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		}
 	}
 
+	isInOrganization, err := organisationRepo.IsInOrganizationByEmail(organizationId, req.Email)
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "organization not found")
+		}
+	}
+
+	if !isInOrganization {
+		return nil, status.Error(codes.InvalidArgument, "cannot invite a user that is already a member")
+	}
+
 	// check if already an invitation exists
 	invitation := models.Invitation{}
 

@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
@@ -20,8 +21,51 @@ func OrganisationRepo(logCtx context.Context) *OrganisationRepository {
 	}
 }
 
-func (r *OrganisationRepository) IsAdminInOrganization(organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
+func (r *OrganisationRepository) IsInOrganization(organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
+	membership := models.Membership{
+		UserID:         userID,
+		OrganizationID: organizationID,
+	}
 
+	err := r.db.First(&membership).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return false, nil
+	}
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return false, status.Error(codes.Internal, err.Error())
+		} else {
+			return false, status.Error(codes.InvalidArgument, "not a member of this organization")
+		}
+	}
+
+	return true, nil
+}
+
+func (r *OrganisationRepository) IsInOrganizationByEmail(organizationID uuid.UUID, email string) (bool, error) {
+	membership := models.Membership{}
+
+	err := r.db.
+		Table("organizations").
+		Joins("JOIN memberships ON memberships.organization_id = organization.id").
+		Joins("JOIN users ON memberships.user_id = users.id").
+		Where("organization.id = ? AND users.email = ?", organizationID.String(), email).
+		First(&membership).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return false, nil
+	}
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return false, status.Error(codes.Internal, err.Error())
+		} else {
+			return false, status.Error(codes.InvalidArgument, "not a member of this organization")
+		}
+	}
+
+	return true, nil
+}
+
+func (r *OrganisationRepository) IsAdminInOrganization(organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
 	membership := models.Membership{
 		UserID:         userID,
 		OrganizationID: organizationID,
