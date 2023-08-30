@@ -1682,7 +1682,8 @@ proto.proto.services.task_svc.v1.GetTaskResponse.toObject = function(includeInst
     dueAt: (f = msg.getDueAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     createdBy: jspb.Message.getFieldWithDefault(msg, 9, ""),
     subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
-    proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.toObject, includeInstance)
+    proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.toObject, includeInstance),
+    organizationId: jspb.Message.getFieldWithDefault(msg, 11, "")
   };
 
   if (includeInstance) {
@@ -1760,6 +1761,10 @@ proto.proto.services.task_svc.v1.GetTaskResponse.deserializeBinaryFromReader = f
       var value = new proto.proto.services.task_svc.v1.GetTaskResponse.SubTask;
       reader.readMessage(value,proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.deserializeBinaryFromReader);
       msg.addSubtasks(value);
+      break;
+    case 11:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setOrganizationId(value);
       break;
     default:
       reader.skipField();
@@ -1860,6 +1865,13 @@ proto.proto.services.task_svc.v1.GetTaskResponse.serializeBinaryToWriter = funct
       10,
       f,
       proto.proto.services.task_svc.v1.GetTaskResponse.SubTask.serializeBinaryToWriter
+    );
+  }
+  f = message.getOrganizationId();
+  if (f.length > 0) {
+    writer.writeString(
+      11,
+      f
     );
   }
 };
@@ -2301,6 +2313,24 @@ proto.proto.services.task_svc.v1.GetTaskResponse.prototype.addSubtasks = functio
  */
 proto.proto.services.task_svc.v1.GetTaskResponse.prototype.clearSubtasksList = function() {
   return this.setSubtasksList([]);
+};
+
+
+/**
+ * optional string organization_id = 11;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.GetTaskResponse.prototype.getOrganizationId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 11, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.GetTaskResponse} returns this
+ */
+proto.proto.services.task_svc.v1.GetTaskResponse.prototype.setOrganizationId = function(value) {
+  return jspb.Message.setProto3StringField(this, 11, value);
 };
 
 

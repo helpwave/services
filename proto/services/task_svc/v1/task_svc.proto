@@ -49,6 +49,7 @@ message GetTaskResponse {
   google.protobuf.Timestamp due_at = 8;
   string created_by = 9;
   repeated SubTask subtasks = 10;
+  string organization_id = 11;
 
   message SubTask {
     string id = 1;

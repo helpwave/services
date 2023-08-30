@@ -143,6 +143,7 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		Public:         task.Public,
 		DueAt:          timestamppb.New(task.DueAt),
 		CreatedBy:      task.CreatedBy.String(),
+		OrganizationId: task.OrganizationID.String(),
 	}, nil
 }
 
