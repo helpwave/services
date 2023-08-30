@@ -13,6 +13,7 @@ import (
 	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
+	"task-svc/internal/tracking"
 )
 
 type ServiceServer struct {
@@ -46,6 +47,8 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 	log.Info().
 		Str("wardId", ward.ID.String()).
 		Msg("ward created")
+
+	tracking.AddWardToRecentActivity(ctx, ward.ID.String())
 
 	return &pb.CreateWardResponse{
 		Id: ward.ID.String(),
@@ -125,6 +128,8 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	tracking.AddWardToRecentActivity(ctx, id.String())
+
 	return &pb.UpdateWardResponse{}, nil
 }
 
@@ -149,6 +154,8 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 	if err := wardRepo.DeleteWard(ward.ID); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
+
+	tracking.RemoveWardFromRecentActivity(ctx, id.String())
 
 	return &pb.DeleteWardResponse{}, nil
 }

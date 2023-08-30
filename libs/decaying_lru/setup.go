@@ -31,7 +31,7 @@ func DefaultRedisOptions(serviceName string) *redis.Options {
 	}
 
 	return &redis.Options{
-		Addr:       hwutil.MustGetEnv("REDIS_ADDR"),
+		Addr:       hwutil.GetEnvOr("REDIS_ADDR", ""),
 		ClientName: serviceName,
 		Username:   hwutil.GetEnvOr("REDIS_USER", ""),
 		Password:   hwutil.GetEnvOr("REDIS_PASSWORD", ""),

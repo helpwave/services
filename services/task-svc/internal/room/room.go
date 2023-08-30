@@ -10,6 +10,7 @@ import (
 	"hwutil"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
+	"task-svc/internal/tracking"
 
 	pb "gen/proto/services/task_svc/v1"
 	zlog "github.com/rs/zerolog/log"
@@ -281,6 +282,8 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 	if err != nil {
 		return nil, err
 	}
+
+	tracking.AddWardToRecentActivity(ctx, wardId.String())
 
 	return &pb.GetRoomOverviewsByWardResponse{
 		Rooms: roomsResponse,

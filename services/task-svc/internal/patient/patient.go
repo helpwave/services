@@ -13,6 +13,7 @@ import (
 	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
+	"task-svc/internal/tracking"
 )
 
 type ServiceServer struct {
@@ -49,6 +50,8 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientReq
 	log.Info().
 		Str("patientId", patient.ID.String()).
 		Msg("patient created")
+
+	tracking.AddPatientToRecentActivity(ctx, patient.ID.String())
 
 	return &pb.CreatePatientResponse{
 		Id: patient.ID.String(),
@@ -206,6 +209,8 @@ func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientReq
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	tracking.AddPatientToRecentActivity(ctx, id.String())
+
 	return &pb.UpdatePatientResponse{}, nil
 }
 
@@ -251,6 +256,8 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 		Str("bedId", bed.ID.String()).
 		Msg("assigned bed to patient")
 
+	tracking.AddPatientToRecentActivity(ctx, id.String())
+
 	return &pb.AssignBedResponse{}, nil
 }
 
@@ -279,6 +286,8 @@ func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest
 	log.Info().
 		Str("patientId", patient.ID.String()).
 		Msg("unassigned bed from patient")
+
+	tracking.AddPatientToRecentActivity(ctx, id.String())
 
 	return &pb.UnassignBedResponse{}, nil
 }
@@ -312,6 +321,8 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 	log.Info().
 		Str("patientId", id.String()).
 		Msg("patient discharged")
+
+	tracking.RemovePatientFromRecentActivity(ctx, id.String())
 
 	return &pb.DischargePatientResponse{}, nil
 }
@@ -360,6 +371,9 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 			Public:         task.Public,
 		}
 	})
+
+	// TODO: check if tracking here makes sense or too much spam
+	tracking.AddPatientToRecentActivity(ctx, id.String())
 
 	return &pb.GetPatientDetailsResponse{
 		Id:                      patient.ID.String(),
@@ -458,6 +472,8 @@ func (ServiceServer) DeletePatient(ctx context.Context, req *pb.DeletePatientReq
 	if err != nil {
 		return nil, err
 	}
+
+	tracking.RemovePatientFromRecentActivity(ctx, id.String())
 
 	return &pb.DeletePatientResponse{}, nil
 }
