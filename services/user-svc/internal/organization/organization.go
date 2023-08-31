@@ -147,7 +147,9 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrga
 	}
 
 	var organizations []models.Organization
-	err = db.Preload("Members").Joins("JOIN memberships ON memberships.organization_id = organizations.id").
+	err = db.
+		Preload("Members").
+		Joins("JOIN memberships ON memberships.organization_id = organizations.id").
 		Where("memberships.user_id = ?", userID).
 		Find(&organizations).Error
 	if err != nil {
@@ -309,6 +311,19 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "organization not found")
 		}
+	}
+
+	isInOrganization, err := organisationRepo.IsInOrganizationByEmail(organizationId, req.Email)
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "organization not found")
+		}
+	}
+
+	if isInOrganization {
+		return nil, status.Error(codes.InvalidArgument, "cannot invite a user that is already a member")
 	}
 
 	// check if already an invitation exists
