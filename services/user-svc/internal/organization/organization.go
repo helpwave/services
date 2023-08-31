@@ -148,6 +148,7 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrga
 
 	var organizations []models.Organization
 	err = db.
+		Preload("Members.User").
 		Preload("Members").
 		Joins("JOIN memberships ON memberships.organization_id = organizations.id").
 		Where("memberships.user_id = ?", userID).
@@ -158,13 +159,6 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrga
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "id not found")
 		}
-	}
-
-	userRepository := repositories.UserRepo(ctx)
-
-	user, err := userRepository.GetUserById(userID)
-	if err != nil {
-		return nil, err
 	}
 
 	mappedOrganizations := hwutil.Map(organizations, func(organization models.Organization) *pb.GetOrganizationsByUserResponse_Organization {
@@ -178,9 +172,9 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrga
 			Members: hwutil.Map(organization.Members, func(membership models.Membership) *pb.GetOrganizationsByUserResponse_Organization_Member {
 				return &pb.GetOrganizationsByUserResponse_Organization_Member{
 					UserId:    membership.UserID.String(),
-					AvatarUrl: user.Avatar,
-					Email:     user.Email,
-					Nickname:  user.Nickname,
+					AvatarUrl: membership.User.Avatar,
+					Email:     membership.User.Email,
+					Nickname:  membership.User.Nickname,
 				}
 			}),
 		}
