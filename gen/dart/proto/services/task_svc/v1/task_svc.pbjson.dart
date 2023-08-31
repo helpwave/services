@@ -13,7 +13,7 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-import '../../../../google/protobuf/timestamp.pbjson.dart' as $5;
+import '../../../../google/protobuf/timestamp.pbjson.dart' as $6;
 
 @$core.Deprecated('Use taskStatusDescriptor instead')
 const TaskStatus$json = {
@@ -684,7 +684,7 @@ const $core.Map<$core.String, $core.dynamic> TaskServiceBase$json = {
 @$core.Deprecated('Use taskServiceDescriptor instead')
 const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> TaskServiceBase$messageJson = {
   '.proto.services.task_svc.v1.CreateTaskRequest': CreateTaskRequest$json,
-  '.google.protobuf.Timestamp': $5.Timestamp$json,
+  '.google.protobuf.Timestamp': $6.Timestamp$json,
   '.proto.services.task_svc.v1.CreateTaskResponse': CreateTaskResponse$json,
   '.proto.services.task_svc.v1.GetTaskRequest': GetTaskRequest$json,
   '.proto.services.task_svc.v1.GetTaskResponse': GetTaskResponse$json,

@@ -6,6 +6,7 @@ import (
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwgorm"
 	"task-svc/internal/bed"
+	"task-svc/internal/breadcrumb"
 	"task-svc/internal/patient"
 	"task-svc/internal/room"
 	"task-svc/internal/task"
@@ -34,5 +35,6 @@ func main() {
 		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer())
 		pb.RegisterBedServiceServer(grpcServer, bed.NewServiceServer())
 		pb.RegisterTaskTemplateServiceServer(grpcServer, task_template.NewServiceServer())
+		pb.RegisterBreadcrumbServiceServer(grpcServer, breadcrumb.NewServiceServer())
 	})
 }

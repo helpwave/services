@@ -15,30 +15,30 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'user_svc.pb.dart' as $10;
+import 'user_svc.pb.dart' as $11;
 import 'user_svc.pbjson.dart';
 
 export 'user_svc.pb.dart';
 
 abstract class UserServiceBase extends $pb.GeneratedService {
-  $async.Future<$10.ReadSelfResponse> readSelf($pb.ServerContext ctx, $10.ReadSelfRequest request);
-  $async.Future<$10.ReadPublicProfileResponse> readPublicProfile($pb.ServerContext ctx, $10.ReadPublicProfileRequest request);
-  $async.Future<$10.UpdateUserResponse> updateUser($pb.ServerContext ctx, $10.UpdateUserRequest request);
+  $async.Future<$11.ReadSelfResponse> readSelf($pb.ServerContext ctx, $11.ReadSelfRequest request);
+  $async.Future<$11.ReadPublicProfileResponse> readPublicProfile($pb.ServerContext ctx, $11.ReadPublicProfileRequest request);
+  $async.Future<$11.UpdateUserResponse> updateUser($pb.ServerContext ctx, $11.UpdateUserRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
-      case 'ReadSelf': return $10.ReadSelfRequest();
-      case 'ReadPublicProfile': return $10.ReadPublicProfileRequest();
-      case 'UpdateUser': return $10.UpdateUserRequest();
+      case 'ReadSelf': return $11.ReadSelfRequest();
+      case 'ReadPublicProfile': return $11.ReadPublicProfileRequest();
+      case 'UpdateUser': return $11.UpdateUserRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
-      case 'ReadSelf': return this.readSelf(ctx, request as $10.ReadSelfRequest);
-      case 'ReadPublicProfile': return this.readPublicProfile(ctx, request as $10.ReadPublicProfileRequest);
-      case 'UpdateUser': return this.updateUser(ctx, request as $10.UpdateUserRequest);
+      case 'ReadSelf': return this.readSelf(ctx, request as $11.ReadSelfRequest);
+      case 'ReadPublicProfile': return this.readPublicProfile(ctx, request as $11.ReadPublicProfileRequest);
+      case 'UpdateUser': return this.updateUser(ctx, request as $11.UpdateUserRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }

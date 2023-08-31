@@ -15,42 +15,42 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'room_svc.pb.dart' as $4;
+import 'room_svc.pb.dart' as $5;
 import 'room_svc.pbjson.dart';
 
 export 'room_svc.pb.dart';
 
 abstract class RoomServiceBase extends $pb.GeneratedService {
-  $async.Future<$4.CreateRoomResponse> createRoom($pb.ServerContext ctx, $4.CreateRoomRequest request);
-  $async.Future<$4.GetRoomResponse> getRoom($pb.ServerContext ctx, $4.GetRoomRequest request);
-  $async.Future<$4.GetRoomsResponse> getRooms($pb.ServerContext ctx, $4.GetRoomsRequest request);
-  $async.Future<$4.GetRoomsByWardResponse> getRoomsByWard($pb.ServerContext ctx, $4.GetRoomsByWardRequest request);
-  $async.Future<$4.UpdateRoomResponse> updateRoom($pb.ServerContext ctx, $4.UpdateRoomRequest request);
-  $async.Future<$4.DeleteRoomResponse> deleteRoom($pb.ServerContext ctx, $4.DeleteRoomRequest request);
-  $async.Future<$4.GetRoomOverviewsByWardResponse> getRoomOverviewsByWard($pb.ServerContext ctx, $4.GetRoomOverviewsByWardRequest request);
+  $async.Future<$5.CreateRoomResponse> createRoom($pb.ServerContext ctx, $5.CreateRoomRequest request);
+  $async.Future<$5.GetRoomResponse> getRoom($pb.ServerContext ctx, $5.GetRoomRequest request);
+  $async.Future<$5.GetRoomsResponse> getRooms($pb.ServerContext ctx, $5.GetRoomsRequest request);
+  $async.Future<$5.GetRoomsByWardResponse> getRoomsByWard($pb.ServerContext ctx, $5.GetRoomsByWardRequest request);
+  $async.Future<$5.UpdateRoomResponse> updateRoom($pb.ServerContext ctx, $5.UpdateRoomRequest request);
+  $async.Future<$5.DeleteRoomResponse> deleteRoom($pb.ServerContext ctx, $5.DeleteRoomRequest request);
+  $async.Future<$5.GetRoomOverviewsByWardResponse> getRoomOverviewsByWard($pb.ServerContext ctx, $5.GetRoomOverviewsByWardRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
-      case 'CreateRoom': return $4.CreateRoomRequest();
-      case 'GetRoom': return $4.GetRoomRequest();
-      case 'GetRooms': return $4.GetRoomsRequest();
-      case 'GetRoomsByWard': return $4.GetRoomsByWardRequest();
-      case 'UpdateRoom': return $4.UpdateRoomRequest();
-      case 'DeleteRoom': return $4.DeleteRoomRequest();
-      case 'GetRoomOverviewsByWard': return $4.GetRoomOverviewsByWardRequest();
+      case 'CreateRoom': return $5.CreateRoomRequest();
+      case 'GetRoom': return $5.GetRoomRequest();
+      case 'GetRooms': return $5.GetRoomsRequest();
+      case 'GetRoomsByWard': return $5.GetRoomsByWardRequest();
+      case 'UpdateRoom': return $5.UpdateRoomRequest();
+      case 'DeleteRoom': return $5.DeleteRoomRequest();
+      case 'GetRoomOverviewsByWard': return $5.GetRoomOverviewsByWardRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
-      case 'CreateRoom': return this.createRoom(ctx, request as $4.CreateRoomRequest);
-      case 'GetRoom': return this.getRoom(ctx, request as $4.GetRoomRequest);
-      case 'GetRooms': return this.getRooms(ctx, request as $4.GetRoomsRequest);
-      case 'GetRoomsByWard': return this.getRoomsByWard(ctx, request as $4.GetRoomsByWardRequest);
-      case 'UpdateRoom': return this.updateRoom(ctx, request as $4.UpdateRoomRequest);
-      case 'DeleteRoom': return this.deleteRoom(ctx, request as $4.DeleteRoomRequest);
-      case 'GetRoomOverviewsByWard': return this.getRoomOverviewsByWard(ctx, request as $4.GetRoomOverviewsByWardRequest);
+      case 'CreateRoom': return this.createRoom(ctx, request as $5.CreateRoomRequest);
+      case 'GetRoom': return this.getRoom(ctx, request as $5.GetRoomRequest);
+      case 'GetRooms': return this.getRooms(ctx, request as $5.GetRoomsRequest);
+      case 'GetRoomsByWard': return this.getRoomsByWard(ctx, request as $5.GetRoomsByWardRequest);
+      case 'UpdateRoom': return this.updateRoom(ctx, request as $5.UpdateRoomRequest);
+      case 'DeleteRoom': return this.deleteRoom(ctx, request as $5.DeleteRoomRequest);
+      case 'GetRoomOverviewsByWard': return this.getRoomOverviewsByWard(ctx, request as $5.GetRoomOverviewsByWardRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
