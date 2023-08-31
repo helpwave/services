@@ -50,7 +50,7 @@ func (r *OrganisationRepository) IsInOrganizationByEmail(organizationID uuid.UUI
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, nil
 		} else {
-			return false, status.Error(codes.Internal, err.Error())
+			return false, err
 		}
 	}
 	return true, nil
