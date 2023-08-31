@@ -28,14 +28,11 @@ func (r *OrganisationRepository) IsInOrganization(organizationID uuid.UUID, user
 	}
 
 	err := r.db.First(&membership).Error
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return false, nil
-	}
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return false, status.Error(codes.Internal, err.Error())
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, nil
 		} else {
-			return false, status.Error(codes.InvalidArgument, "not a member of this organization")
+			return false, status.Error(codes.Internal, err.Error())
 		}
 	}
 
@@ -49,14 +46,11 @@ func (r *OrganisationRepository) IsInOrganizationByEmail(organizationID uuid.UUI
 		Joins("JOIN users ON users.id = memberships.user_id").
 		Where("memberships.organization_id = ? AND users.email = ?", organizationID, email).
 		First(&membership).Error
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return false, nil
-	}
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return false, status.Error(codes.Internal, err.Error())
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, nil
 		} else {
-			return false, status.Error(codes.InvalidArgument, "not a member of this organization")
+			return false, status.Error(codes.Internal, err.Error())
 		}
 	}
 	return true, nil
