@@ -177,7 +177,10 @@ func handleOrganizationIDForAuthFunc(ctx context.Context) (context.Context, erro
 		return nil, err
 	}
 
-	if !hwutil.Contains(claims.Organizations, organizationID) {
+	// If InsecureFakeTokenEnable is true,
+	// we accept all organizations that the fake id token presents to us.
+	// ONLY FOR NON-PUBLIC DEVELOPMENT AND STAGING ENVIRONMENTS
+	if !hwutil.Contains(claims.Organizations, organizationID) && !InsecureFakeTokenEnable {
 		log.Info().Str("organizationID", organizationID.String()).Msg("organization in header was not part of claims")
 		return nil, status.Errorf(codes.Unauthenticated, "no access to this organization")
 	}
