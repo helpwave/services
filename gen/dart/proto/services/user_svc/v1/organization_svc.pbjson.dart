@@ -149,11 +149,15 @@ final $typed_data.Uint8List getOrganizationResponseDescriptor = $convert.base64D
 @$core.Deprecated('Use getOrganizationsByUserRequestDescriptor instead')
 const GetOrganizationsByUserRequest$json = {
   '1': 'GetOrganizationsByUserRequest',
+  '2': [
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+  ],
 };
 
 /// Descriptor for `GetOrganizationsByUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getOrganizationsByUserRequestDescriptor = $convert.base64Decode(
-    'Ch1HZXRPcmdhbml6YXRpb25zQnlVc2VyUmVxdWVzdA==');
+    'Ch1HZXRPcmdhbml6YXRpb25zQnlVc2VyUmVxdWVzdBIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySW'
+    'Q=');
 
 @$core.Deprecated('Use getOrganizationsByUserResponseDescriptor instead')
 const GetOrganizationsByUserResponse$json = {
@@ -203,6 +207,64 @@ final $typed_data.Uint8List getOrganizationsByUserResponseDescriptor = $convert.
     'cgoGTWVtYmVyEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIUCgVlbWFpbBgCIAEoCVIFZW1haW'
     'wSGgoIbmlja25hbWUYAyABKAlSCG5pY2tuYW1lEh0KCmF2YXRhcl91cmwYBCABKAlSCWF2YXRh'
     'clVybA==');
+
+@$core.Deprecated('Use getOrganizationsForUserRequestDescriptor instead')
+const GetOrganizationsForUserRequest$json = {
+  '1': 'GetOrganizationsForUserRequest',
+};
+
+/// Descriptor for `GetOrganizationsForUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getOrganizationsForUserRequestDescriptor = $convert.base64Decode(
+    'Ch5HZXRPcmdhbml6YXRpb25zRm9yVXNlclJlcXVlc3Q=');
+
+@$core.Deprecated('Use getOrganizationsForUserResponseDescriptor instead')
+const GetOrganizationsForUserResponse$json = {
+  '1': 'GetOrganizationsForUserResponse',
+  '2': [
+    {'1': 'organizations', '3': 1, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization', '10': 'organizations'},
+  ],
+  '3': [GetOrganizationsForUserResponse_Organization$json],
+};
+
+@$core.Deprecated('Use getOrganizationsForUserResponseDescriptor instead')
+const GetOrganizationsForUserResponse_Organization$json = {
+  '1': 'Organization',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'long_name', '3': 2, '4': 1, '5': 9, '10': 'longName'},
+    {'1': 'short_name', '3': 3, '4': 1, '5': 9, '10': 'shortName'},
+    {'1': 'contact_email', '3': 4, '4': 1, '5': 9, '10': 'contactEmail'},
+    {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '10': 'avatarUrl'},
+    {'1': 'is_personal', '3': 6, '4': 1, '5': 8, '10': 'isPersonal'},
+    {'1': 'members', '3': 7, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.Member', '10': 'members'},
+  ],
+  '3': [GetOrganizationsForUserResponse_Organization_Member$json],
+};
+
+@$core.Deprecated('Use getOrganizationsForUserResponseDescriptor instead')
+const GetOrganizationsForUserResponse_Organization_Member$json = {
+  '1': 'Member',
+  '2': [
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+    {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
+    {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '10': 'avatarUrl'},
+  ],
+};
+
+/// Descriptor for `GetOrganizationsForUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getOrganizationsForUserResponseDescriptor = $convert.base64Decode(
+    'Ch9HZXRPcmdhbml6YXRpb25zRm9yVXNlclJlc3BvbnNlEm4KDW9yZ2FuaXphdGlvbnMYASADKA'
+    'sySC5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRPcmdhbml6YXRpb25zRm9yVXNlclJl'
+    'c3BvbnNlLk9yZ2FuaXphdGlvblINb3JnYW5pemF0aW9ucxqeAwoMT3JnYW5pemF0aW9uEg4KAm'
+    'lkGAEgASgJUgJpZBIbCglsb25nX25hbWUYAiABKAlSCGxvbmdOYW1lEh0KCnNob3J0X25hbWUY'
+    'AyABKAlSCXNob3J0TmFtZRIjCg1jb250YWN0X2VtYWlsGAQgASgJUgxjb250YWN0RW1haWwSHQ'
+    'oKYXZhdGFyX3VybBgFIAEoCVIJYXZhdGFyVXJsEh8KC2lzX3BlcnNvbmFsGAYgASgIUgppc1Bl'
+    'cnNvbmFsEmkKB21lbWJlcnMYByADKAsyTy5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZX'
+    'RPcmdhbml6YXRpb25zRm9yVXNlclJlc3BvbnNlLk9yZ2FuaXphdGlvbi5NZW1iZXJSB21lbWJl'
+    'cnMacgoGTWVtYmVyEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIUCgVlbWFpbBgCIAEoCVIFZW'
+    '1haWwSGgoIbmlja25hbWUYAyABKAlSCG5pY2tuYW1lEh0KCmF2YXRhcl91cmwYBCABKAlSCWF2'
+    'YXRhclVybA==');
 
 @$core.Deprecated('Use updateOrganizationRequestDescriptor instead')
 const UpdateOrganizationRequest$json = {
@@ -554,6 +616,7 @@ const $core.Map<$core.String, $core.dynamic> OrganizationServiceBase$json = {
     {'1': 'CreateOrganizationForUser', '2': '.proto.services.user_svc.v1.CreateOrganizationForUserRequest', '3': '.proto.services.user_svc.v1.CreateOrganizationForUserResponse', '4': {}},
     {'1': 'GetOrganization', '2': '.proto.services.user_svc.v1.GetOrganizationRequest', '3': '.proto.services.user_svc.v1.GetOrganizationResponse', '4': {}},
     {'1': 'GetOrganizationsByUser', '2': '.proto.services.user_svc.v1.GetOrganizationsByUserRequest', '3': '.proto.services.user_svc.v1.GetOrganizationsByUserResponse', '4': {}},
+    {'1': 'GetOrganizationsForUser', '2': '.proto.services.user_svc.v1.GetOrganizationsForUserRequest', '3': '.proto.services.user_svc.v1.GetOrganizationsForUserResponse', '4': {}},
     {'1': 'UpdateOrganization', '2': '.proto.services.user_svc.v1.UpdateOrganizationRequest', '3': '.proto.services.user_svc.v1.UpdateOrganizationResponse', '4': {}},
     {'1': 'DeleteOrganization', '2': '.proto.services.user_svc.v1.DeleteOrganizationRequest', '3': '.proto.services.user_svc.v1.DeleteOrganizationResponse', '4': {}},
     {'1': 'GetMembersByOrganization', '2': '.proto.services.user_svc.v1.GetMembersByOrganizationRequest', '3': '.proto.services.user_svc.v1.GetMembersByOrganizationResponse', '4': {}},
@@ -581,6 +644,10 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> Organizati
   '.proto.services.user_svc.v1.GetOrganizationsByUserResponse': GetOrganizationsByUserResponse$json,
   '.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization': GetOrganizationsByUserResponse_Organization$json,
   '.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.Member': GetOrganizationsByUserResponse_Organization_Member$json,
+  '.proto.services.user_svc.v1.GetOrganizationsForUserRequest': GetOrganizationsForUserRequest$json,
+  '.proto.services.user_svc.v1.GetOrganizationsForUserResponse': GetOrganizationsForUserResponse$json,
+  '.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization': GetOrganizationsForUserResponse_Organization$json,
+  '.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.Member': GetOrganizationsForUserResponse_Organization_Member$json,
   '.proto.services.user_svc.v1.UpdateOrganizationRequest': UpdateOrganizationRequest$json,
   '.proto.services.user_svc.v1.UpdateOrganizationResponse': UpdateOrganizationResponse$json,
   '.proto.services.user_svc.v1.DeleteOrganizationRequest': DeleteOrganizationRequest$json,
@@ -621,32 +688,34 @@ final $typed_data.Uint8List organizationServiceDescriptor = $convert.base64Decod
     'Byb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkdldE9yZ2FuaXphdGlvblJlc3BvbnNlIgASkQEK'
     'FkdldE9yZ2FuaXphdGlvbnNCeVVzZXISOS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZX'
     'RPcmdhbml6YXRpb25zQnlVc2VyUmVxdWVzdBo6LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYx'
-    'LkdldE9yZ2FuaXphdGlvbnNCeVVzZXJSZXNwb25zZSIAEoUBChJVcGRhdGVPcmdhbml6YXRpb2'
-    '4SNS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5VcGRhdGVPcmdhbml6YXRpb25SZXF1ZXN0'
-    'GjYucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuVXBkYXRlT3JnYW5pemF0aW9uUmVzcG9uc2'
-    'UiABKFAQoSRGVsZXRlT3JnYW5pemF0aW9uEjUucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEu'
-    'RGVsZXRlT3JnYW5pemF0aW9uUmVxdWVzdBo2LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLk'
-    'RlbGV0ZU9yZ2FuaXphdGlvblJlc3BvbnNlIgASlwEKGEdldE1lbWJlcnNCeU9yZ2FuaXphdGlv'
-    'bhI7LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkdldE1lbWJlcnNCeU9yZ2FuaXphdGlvbl'
-    'JlcXVlc3QaPC5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRNZW1iZXJzQnlPcmdhbml6'
-    'YXRpb25SZXNwb25zZSIAEmoKCUFkZE1lbWJlchIsLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLn'
-    'YxLkFkZE1lbWJlclJlcXVlc3QaLS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5BZGRNZW1i'
-    'ZXJSZXNwb25zZSIAEnMKDFJlbW92ZU1lbWJlchIvLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLn'
-    'YxLlJlbW92ZU1lbWJlclJlcXVlc3QaMC5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5SZW1v'
-    'dmVNZW1iZXJSZXNwb25zZSIAEnMKDEludml0ZU1lbWJlchIvLnByb3RvLnNlcnZpY2VzLnVzZX'
-    'Jfc3ZjLnYxLkludml0ZU1lbWJlclJlcXVlc3QaMC5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52'
-    'MS5JbnZpdGVNZW1iZXJSZXNwb25zZSIAEqMBChxHZXRJbnZpdGF0aW9uc0J5T3JnYW5pemF0aW'
-    '9uEj8ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0SW52aXRhdGlvbnNCeU9yZ2FuaXph'
-    'dGlvblJlcXVlc3QaQC5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRJbnZpdGF0aW9uc0'
-    'J5T3JnYW5pemF0aW9uUmVzcG9uc2UiABKLAQoUR2V0SW52aXRhdGlvbnNCeVVzZXISNy5wcm90'
-    'by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRJbnZpdGF0aW9uc0J5VXNlclJlcXVlc3QaOC5wcm'
-    '90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRJbnZpdGF0aW9uc0J5VXNlclJlc3BvbnNlIgAS'
-    'fwoQQWNjZXB0SW52aXRhdGlvbhIzLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkFjY2VwdE'
-    'ludml0YXRpb25SZXF1ZXN0GjQucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQWNjZXB0SW52'
-    'aXRhdGlvblJlc3BvbnNlIgASggEKEURlY2xpbmVJbnZpdGF0aW9uEjQucHJvdG8uc2VydmljZX'
-    'MudXNlcl9zdmMudjEuRGVjbGluZUludml0YXRpb25SZXF1ZXN0GjUucHJvdG8uc2VydmljZXMu'
-    'dXNlcl9zdmMudjEuRGVjbGluZUludml0YXRpb25SZXNwb25zZSIAEn8KEFJldm9rZUludml0YX'
-    'Rpb24SMy5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5SZXZva2VJbnZpdGF0aW9uUmVxdWVz'
-    'dBo0LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLlJldm9rZUludml0YXRpb25SZXNwb25zZS'
-    'IA');
+    'LkdldE9yZ2FuaXphdGlvbnNCeVVzZXJSZXNwb25zZSIAEpQBChdHZXRPcmdhbml6YXRpb25zRm'
+    '9yVXNlchI6LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkdldE9yZ2FuaXphdGlvbnNGb3JV'
+    'c2VyUmVxdWVzdBo7LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkdldE9yZ2FuaXphdGlvbn'
+    'NGb3JVc2VyUmVzcG9uc2UiABKFAQoSVXBkYXRlT3JnYW5pemF0aW9uEjUucHJvdG8uc2Vydmlj'
+    'ZXMudXNlcl9zdmMudjEuVXBkYXRlT3JnYW5pemF0aW9uUmVxdWVzdBo2LnByb3RvLnNlcnZpY2'
+    'VzLnVzZXJfc3ZjLnYxLlVwZGF0ZU9yZ2FuaXphdGlvblJlc3BvbnNlIgAShQEKEkRlbGV0ZU9y'
+    'Z2FuaXphdGlvbhI1LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkRlbGV0ZU9yZ2FuaXphdG'
+    'lvblJlcXVlc3QaNi5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5EZWxldGVPcmdhbml6YXRp'
+    'b25SZXNwb25zZSIAEpcBChhHZXRNZW1iZXJzQnlPcmdhbml6YXRpb24SOy5wcm90by5zZXJ2aW'
+    'Nlcy51c2VyX3N2Yy52MS5HZXRNZW1iZXJzQnlPcmdhbml6YXRpb25SZXF1ZXN0GjwucHJvdG8u'
+    'c2VydmljZXMudXNlcl9zdmMudjEuR2V0TWVtYmVyc0J5T3JnYW5pemF0aW9uUmVzcG9uc2UiAB'
+    'JqCglBZGRNZW1iZXISLC5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5BZGRNZW1iZXJSZXF1'
+    'ZXN0Gi0ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuQWRkTWVtYmVyUmVzcG9uc2UiABJzCg'
+    'xSZW1vdmVNZW1iZXISLy5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5SZW1vdmVNZW1iZXJS'
+    'ZXF1ZXN0GjAucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuUmVtb3ZlTWVtYmVyUmVzcG9uc2'
+    'UiABJzCgxJbnZpdGVNZW1iZXISLy5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5JbnZpdGVN'
+    'ZW1iZXJSZXF1ZXN0GjAucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuSW52aXRlTWVtYmVyUm'
+    'VzcG9uc2UiABKjAQocR2V0SW52aXRhdGlvbnNCeU9yZ2FuaXphdGlvbhI/LnByb3RvLnNlcnZp'
+    'Y2VzLnVzZXJfc3ZjLnYxLkdldEludml0YXRpb25zQnlPcmdhbml6YXRpb25SZXF1ZXN0GkAucH'
+    'JvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0SW52aXRhdGlvbnNCeU9yZ2FuaXphdGlvblJl'
+    'c3BvbnNlIgASiwEKFEdldEludml0YXRpb25zQnlVc2VyEjcucHJvdG8uc2VydmljZXMudXNlcl'
+    '9zdmMudjEuR2V0SW52aXRhdGlvbnNCeVVzZXJSZXF1ZXN0GjgucHJvdG8uc2VydmljZXMudXNl'
+    'cl9zdmMudjEuR2V0SW52aXRhdGlvbnNCeVVzZXJSZXNwb25zZSIAEn8KEEFjY2VwdEludml0YX'
+    'Rpb24SMy5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5BY2NlcHRJbnZpdGF0aW9uUmVxdWVz'
+    'dBo0LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkFjY2VwdEludml0YXRpb25SZXNwb25zZS'
+    'IAEoIBChFEZWNsaW5lSW52aXRhdGlvbhI0LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkRl'
+    'Y2xpbmVJbnZpdGF0aW9uUmVxdWVzdBo1LnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkRlY2'
+    'xpbmVJbnZpdGF0aW9uUmVzcG9uc2UiABJ/ChBSZXZva2VJbnZpdGF0aW9uEjMucHJvdG8uc2Vy'
+    'dmljZXMudXNlcl9zdmMudjEuUmV2b2tlSW52aXRhdGlvblJlcXVlc3QaNC5wcm90by5zZXJ2aW'
+    'Nlcy51c2VyX3N2Yy52MS5SZXZva2VJbnZpdGF0aW9uUmVzcG9uc2UiAA==');
 

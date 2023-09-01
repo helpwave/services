@@ -21,12 +21,14 @@ import 'user_svc.pbjson.dart';
 export 'user_svc.pb.dart';
 
 abstract class UserServiceBase extends $pb.GeneratedService {
+  $async.Future<$10.CreateUserResponse> createUser($pb.ServerContext ctx, $10.CreateUserRequest request);
   $async.Future<$10.ReadSelfResponse> readSelf($pb.ServerContext ctx, $10.ReadSelfRequest request);
   $async.Future<$10.ReadPublicProfileResponse> readPublicProfile($pb.ServerContext ctx, $10.ReadPublicProfileRequest request);
   $async.Future<$10.UpdateUserResponse> updateUser($pb.ServerContext ctx, $10.UpdateUserRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
+      case 'CreateUser': return $10.CreateUserRequest();
       case 'ReadSelf': return $10.ReadSelfRequest();
       case 'ReadPublicProfile': return $10.ReadPublicProfileRequest();
       case 'UpdateUser': return $10.UpdateUserRequest();
@@ -36,6 +38,7 @@ abstract class UserServiceBase extends $pb.GeneratedService {
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
+      case 'CreateUser': return this.createUser(ctx, request as $10.CreateUserRequest);
       case 'ReadSelf': return this.readSelf(ctx, request as $10.ReadSelfRequest);
       case 'ReadPublicProfile': return this.readPublicProfile(ctx, request as $10.ReadPublicProfileRequest);
       case 'UpdateUser': return this.updateUser(ctx, request as $10.UpdateUserRequest);

@@ -4,8 +4,10 @@ import (
 	"common"
 	"context"
 	"errors"
+	"fmt"
 	"gen/proto/libs/events/v1"
 	pb "gen/proto/services/ory_svc/v1"
+	userSvcPb "gen/proto/services/user_svc/v1"
 	daprc "github.com/dapr/go-sdk/client"
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	daprd "github.com/dapr/go-sdk/service/http"
@@ -13,10 +15,13 @@ import (
 	"github.com/google/uuid"
 	ory "github.com/ory/client-go"
 	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/grpc/metadata"
 	"hwutil"
 	"net/http"
 	"net/url"
 	oryInt "ory-svc/internal/ory"
+	"strings"
+	"time"
 )
 
 const ServiceName = "ory-svc"
@@ -67,16 +72,25 @@ func main() {
 	}
 }
 
+func prepCtxForSvcToSvcCall(parentCtx context.Context, targetDaprAppId string) (context.Context, context.CancelFunc, error) {
+	timeout := time.Second * 3
+	ctx, cancel := context.WithTimeout(parentCtx, timeout)
+	ctx = metadata.AppendToOutgoingContext(ctx, "dapr-app-id", targetDaprAppId)
+
+	return ctx, cancel, nil
+}
+
+// afterRegistrationWebhookHandler handles the registration of new users from our identity provider
 func afterRegistrationWebhookHandler(ctx context.Context, in *daprcmn.InvocationEvent) (out *daprcmn.Content, err error) {
 	if in.Verb != http.MethodPost {
 		return nil, newErrAndLog(ctx, "invalid method")
 	}
 
-	if in.ContentType != "application/json" {
+	if !strings.Contains(in.ContentType, "application/json") {
 		return nil, newErrAndLog(ctx, "invalid content-type")
 	}
 
-	var payload pb.AfterRegistrationWebhookPayload
+	var payload pb.AfterRegistrationWebhookPayloadRequest
 	if err := hwutil.ParseValidJson(in.Data, &payload); err != nil {
 		return nil, newErrAndLog(ctx, err.Error())
 	}
@@ -86,14 +100,48 @@ func afterRegistrationWebhookHandler(ctx context.Context, in *daprcmn.Invocation
 		return nil, newErrAndLog(ctx, err.Error())
 	}
 
-	userRegisteredEvent := &events.UserRegisteredEvent{
+	ctx, cancel, err := prepCtxForSvcToSvcCall(ctx, "user-svc")
+	if err != nil {
+		return nil, newErrAndLog(ctx, err.Error())
+	}
+	defer cancel()
+
+	daprClient := common.MustNewDaprGRPCClient()
+	userSvc := userSvcPb.NewUserServiceClient(daprClient.GrpcClientConn())
+	organizationSvc := userSvcPb.NewOrganizationServiceClient(daprClient.GrpcClientConn())
+
+	_, err = userSvc.CreateUser(ctx, &userSvcPb.CreateUserRequest{
 		Id:       userID.String(),
 		Email:    payload.Email,
 		Nickname: payload.Nickname,
 		Name:     payload.Name,
+	})
+
+	if err != nil {
+		return nil, newErrAndLog(ctx, err.Error())
 	}
 
-	if err := common.PublishMessage(ctx, daprClient, DaprPubsub, "USER_REGISTERED", userRegisteredEvent); err != nil {
+	createOrganizationForUserResponse, err := organizationSvc.CreateOrganizationForUser(ctx, &userSvcPb.CreateOrganizationForUserRequest{
+		UserId:       userID.String(),
+		LongName:     fmt.Sprintf("%s personal organization", payload.Nickname),
+		ShortName:    payload.Nickname,
+		ContactEmail: payload.Email,
+		IsPersonal:   hwutil.PtrTo(true),
+	})
+
+	if err != nil {
+		return nil, newErrAndLog(ctx, err.Error())
+	}
+
+	organizationID, err := uuid.Parse(createOrganizationForUserResponse.Id)
+	if err != nil {
+		return nil, newErrAndLog(ctx, err.Error())
+	}
+
+	// Update identity in Ory with the new organizations
+	if err := oryInt.UpdateIdentityMetadataPublic(ctx, oryClient, userID, oryInt.OryIdentityMetadataPublic{
+		Organizations: []string{organizationID.String()},
+	}); err != nil {
 		return nil, newErrAndLog(ctx, err.Error())
 	}
 

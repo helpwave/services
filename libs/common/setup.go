@@ -23,9 +23,16 @@ var (
 const DevelopmentMode = "development"
 const ProductionMode = "production"
 
-// Setup loads the .env file and sets up logging
-// also sets up tokens when the service requires auth
+var skipAuthForMethods []string
+
+// Setup wraps SetupWithUnauthenticatedMethods for a setup without unauthenticated methods
 func Setup(serviceName, version string, auth bool) {
+	SetupWithUnauthenticatedMethods(serviceName, version, auth, nil)
+}
+
+// SetupWithUnauthenticatedMethods loads the .env file and sets up logging
+// also sets up tokens when the service requires auth
+func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, unauthenticatedMethods *[]string) {
 	dotenvErr := godotenv.Load()
 	rand.Seed(time.Now().UnixNano())
 
@@ -68,6 +75,11 @@ func Setup(serviceName, version string, auth bool) {
 			}
 			log.Info().Str("organizationID", organizationID.String()).Msg("specified fallback organizationID for requests without organization header")
 			InstanceOrganizationID = &organizationID
+		}
+
+		// Only modify skipAuthForMethods once on startup
+		if unauthenticatedMethods != nil {
+			skipAuthForMethods = *unauthenticatedMethods
 		}
 
 		setupAuth()

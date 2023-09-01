@@ -13,6 +13,34 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use createUserRequestDescriptor instead')
+const CreateUserRequest$json = {
+  '1': 'CreateUserRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
+    {'1': 'name', '3': 4, '4': 1, '5': 9, '10': 'name'},
+  ],
+};
+
+/// Descriptor for `CreateUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createUserRequestDescriptor = $convert.base64Decode(
+    'ChFDcmVhdGVVc2VyUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSFAoFZW1haWwYAiABKAlSBWVtYW'
+    'lsEhoKCG5pY2tuYW1lGAMgASgJUghuaWNrbmFtZRISCgRuYW1lGAQgASgJUgRuYW1l');
+
+@$core.Deprecated('Use createUserResponseDescriptor instead')
+const CreateUserResponse$json = {
+  '1': 'CreateUserResponse',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `CreateUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createUserResponseDescriptor = $convert.base64Decode(
+    'ChJDcmVhdGVVc2VyUmVzcG9uc2USDgoCaWQYASABKAlSAmlk');
+
 @$core.Deprecated('Use readSelfOrganizationDescriptor instead')
 const ReadSelfOrganization$json = {
   '1': 'ReadSelfOrganization',
@@ -106,6 +134,7 @@ final $typed_data.Uint8List updateUserResponseDescriptor = $convert.base64Decode
 const $core.Map<$core.String, $core.dynamic> UserServiceBase$json = {
   '1': 'UserService',
   '2': [
+    {'1': 'CreateUser', '2': '.proto.services.user_svc.v1.CreateUserRequest', '3': '.proto.services.user_svc.v1.CreateUserResponse', '4': {}},
     {'1': 'ReadSelf', '2': '.proto.services.user_svc.v1.ReadSelfRequest', '3': '.proto.services.user_svc.v1.ReadSelfResponse', '4': {}},
     {'1': 'ReadPublicProfile', '2': '.proto.services.user_svc.v1.ReadPublicProfileRequest', '3': '.proto.services.user_svc.v1.ReadPublicProfileResponse', '4': {}},
     {'1': 'UpdateUser', '2': '.proto.services.user_svc.v1.UpdateUserRequest', '3': '.proto.services.user_svc.v1.UpdateUserResponse', '4': {}},
@@ -114,6 +143,8 @@ const $core.Map<$core.String, $core.dynamic> UserServiceBase$json = {
 
 @$core.Deprecated('Use userServiceDescriptor instead')
 const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> UserServiceBase$messageJson = {
+  '.proto.services.user_svc.v1.CreateUserRequest': CreateUserRequest$json,
+  '.proto.services.user_svc.v1.CreateUserResponse': CreateUserResponse$json,
   '.proto.services.user_svc.v1.ReadSelfRequest': ReadSelfRequest$json,
   '.proto.services.user_svc.v1.ReadSelfResponse': ReadSelfResponse$json,
   '.proto.services.user_svc.v1.ReadSelfOrganization': ReadSelfOrganization$json,
@@ -125,7 +156,9 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> UserServic
 
 /// Descriptor for `UserService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
 final $typed_data.Uint8List userServiceDescriptor = $convert.base64Decode(
-    'CgtVc2VyU2VydmljZRJnCghSZWFkU2VsZhIrLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLl'
+    'CgtVc2VyU2VydmljZRJtCgpDcmVhdGVVc2VyEi0ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudj'
+    'EuQ3JlYXRlVXNlclJlcXVlc3QaLi5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5DcmVhdGVV'
+    'c2VyUmVzcG9uc2UiABJnCghSZWFkU2VsZhIrLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLl'
     'JlYWRTZWxmUmVxdWVzdBosLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLlJlYWRTZWxmUmVz'
     'cG9uc2UiABKCAQoRUmVhZFB1YmxpY1Byb2ZpbGUSNC5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy'
     '52MS5SZWFkUHVibGljUHJvZmlsZVJlcXVlc3QaNS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52'

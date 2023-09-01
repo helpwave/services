@@ -2,28 +2,28 @@ import * as jspb from 'google-protobuf'
 
 
 
-export class AfterRegistrationWebhookPayload extends jspb.Message {
+export class AfterRegistrationWebhookPayloadRequest extends jspb.Message {
   getUserId(): string;
-  setUserId(value: string): AfterRegistrationWebhookPayload;
+  setUserId(value: string): AfterRegistrationWebhookPayloadRequest;
 
   getEmail(): string;
-  setEmail(value: string): AfterRegistrationWebhookPayload;
+  setEmail(value: string): AfterRegistrationWebhookPayloadRequest;
 
   getNickname(): string;
-  setNickname(value: string): AfterRegistrationWebhookPayload;
+  setNickname(value: string): AfterRegistrationWebhookPayloadRequest;
 
   getName(): string;
-  setName(value: string): AfterRegistrationWebhookPayload;
+  setName(value: string): AfterRegistrationWebhookPayloadRequest;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): AfterRegistrationWebhookPayload.AsObject;
-  static toObject(includeInstance: boolean, msg: AfterRegistrationWebhookPayload): AfterRegistrationWebhookPayload.AsObject;
-  static serializeBinaryToWriter(message: AfterRegistrationWebhookPayload, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): AfterRegistrationWebhookPayload;
-  static deserializeBinaryFromReader(message: AfterRegistrationWebhookPayload, reader: jspb.BinaryReader): AfterRegistrationWebhookPayload;
+  toObject(includeInstance?: boolean): AfterRegistrationWebhookPayloadRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: AfterRegistrationWebhookPayloadRequest): AfterRegistrationWebhookPayloadRequest.AsObject;
+  static serializeBinaryToWriter(message: AfterRegistrationWebhookPayloadRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AfterRegistrationWebhookPayloadRequest;
+  static deserializeBinaryFromReader(message: AfterRegistrationWebhookPayloadRequest, reader: jspb.BinaryReader): AfterRegistrationWebhookPayloadRequest;
 }
 
-export namespace AfterRegistrationWebhookPayload {
+export namespace AfterRegistrationWebhookPayloadRequest {
   export type AsObject = {
     userId: string,
     email: string,

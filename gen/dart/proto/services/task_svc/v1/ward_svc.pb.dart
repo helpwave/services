@@ -168,6 +168,7 @@ class GetWardResponse extends $pb.GeneratedMessage {
   factory GetWardResponse({
     $core.String? id,
     $core.String? name,
+    $core.String? organizationId,
   }) {
     final $result = create();
     if (id != null) {
@@ -175,6 +176,9 @@ class GetWardResponse extends $pb.GeneratedMessage {
     }
     if (name != null) {
       $result.name = name;
+    }
+    if (organizationId != null) {
+      $result.organizationId = organizationId;
     }
     return $result;
   }
@@ -185,6 +189,7 @@ class GetWardResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetWardResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'organizationId')
     ..hasRequiredFields = false
   ;
 
@@ -226,6 +231,15 @@ class GetWardResponse extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
   void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get organizationId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set organizationId($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasOrganizationId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearOrganizationId() => clearField(3);
 }
 
 class GetWardsRequest extends $pb.GeneratedMessage {
