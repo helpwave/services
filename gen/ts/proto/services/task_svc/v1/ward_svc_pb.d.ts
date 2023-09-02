@@ -63,6 +63,9 @@ export class GetWardResponse extends jspb.Message {
   getName(): string;
   setName(value: string): GetWardResponse;
 
+  getOrganizationId(): string;
+  setOrganizationId(value: string): GetWardResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetWardResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetWardResponse): GetWardResponse.AsObject;
@@ -75,6 +78,7 @@ export namespace GetWardResponse {
   export type AsObject = {
     id: string,
     name: string,
+    organizationId: string,
   }
 }
 

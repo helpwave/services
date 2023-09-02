@@ -8,22 +8,17 @@ import (
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 	pbhelpersEvents "proto_helpers/events/v1"
 	"user-svc/internal/models"
 	"user-svc/internal/repositories"
 )
 
-var RegisteredEventSubscription = &daprcmn.Subscription{
-	PubsubName: "pubsub",
-	Topic:      "USER_REGISTERED",
-	Route:      "/pubsub/user_registered/v1",
-}
-
-var UpdatedEventSubscription = &daprcmn.Subscription{
+var UserUpdatedEventSubscription = &daprcmn.Subscription{
 	PubsubName: "pubsub",
 	Topic:      "USER_UPDATED",
-	Route:      "/pubsub/user_updated/v1",
 }
 
 type ServiceServer struct {
@@ -34,20 +29,13 @@ func NewServiceServer() *ServiceServer {
 	return &ServiceServer{}
 }
 
-func HandleUserRegisteredEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry bool, err error) {
+func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
 	log := zlog.Ctx(ctx)
 	userRepository := repositories.UserRepo(ctx)
 
-	var payload events.UserRegisteredEvent
-	if err := proto.Unmarshal(evt.RawData, &payload); err != nil {
-		log.Error().Err(err).Send()
-		return true, err
-	}
-
-	userID, err := uuid.Parse(payload.Id)
+	userID, err := uuid.Parse(req.Id)
 	if err != nil {
-		log.Error().Err(err).Send()
-		return true, err
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	var user *models.User
@@ -58,32 +46,31 @@ func HandleUserRegisteredEvent(ctx context.Context, evt *daprcmn.TopicEvent) (re
 			ID: userID,
 			BaseUser: models.BaseUser{
 				Avatar:   avatarUrl,
-				Email:    payload.Email,
-				Nickname: payload.Nickname,
-				Name:     payload.Name,
+				Email:    req.Email,
+				Nickname: req.Nickname,
+				Name:     req.Name,
 			},
 		})
 
 		if err != nil {
-			log.Error().Err(err).Send()
-			return true, err
+			return nil, status.Error(codes.Internal, err.Error())
+		}
+
+		userCreatedEvent := &events.UserCreatedEvent{
+			Id:       user.ID.String(),
+			Email:    user.Email,
+			Nickname: user.Nickname,
+			Name:     user.Name,
+		}
+
+		daprClient := common.MustNewDaprGRPCClient()
+
+		if err := common.PublishMessage(ctx, daprClient, "pubsub", "USER_CREATED", userCreatedEvent); err != nil {
+			log.Error().Err(err).Msg("could not publish message")
 		}
 	}
 
-	userCreatedEvent := &events.UserCreatedEvent{
-		Id:       user.ID.String(),
-		Email:    user.Email,
-		Nickname: user.Nickname,
-		Name:     user.Name,
-	}
-
-	daprClient := common.MustNewDaprGRPCClient()
-
-	if err := common.PublishMessage(ctx, daprClient, "pubsub", "USER_CREATED", userCreatedEvent); err != nil {
-		return true, err
-	}
-
-	return false, nil
+	return &pb.CreateUserResponse{Id: user.ID.String()}, nil
 }
 
 func HandleUserUpdatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry bool, err error) {

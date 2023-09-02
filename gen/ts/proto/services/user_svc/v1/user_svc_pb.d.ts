@@ -2,6 +2,54 @@ import * as jspb from 'google-protobuf'
 
 
 
+export class CreateUserRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): CreateUserRequest;
+
+  getEmail(): string;
+  setEmail(value: string): CreateUserRequest;
+
+  getNickname(): string;
+  setNickname(value: string): CreateUserRequest;
+
+  getName(): string;
+  setName(value: string): CreateUserRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CreateUserRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: CreateUserRequest): CreateUserRequest.AsObject;
+  static serializeBinaryToWriter(message: CreateUserRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CreateUserRequest;
+  static deserializeBinaryFromReader(message: CreateUserRequest, reader: jspb.BinaryReader): CreateUserRequest;
+}
+
+export namespace CreateUserRequest {
+  export type AsObject = {
+    id: string,
+    email: string,
+    nickname: string,
+    name: string,
+  }
+}
+
+export class CreateUserResponse extends jspb.Message {
+  getId(): string;
+  setId(value: string): CreateUserResponse;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CreateUserResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: CreateUserResponse): CreateUserResponse.AsObject;
+  static serializeBinaryToWriter(message: CreateUserResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CreateUserResponse;
+  static deserializeBinaryFromReader(message: CreateUserResponse, reader: jspb.BinaryReader): CreateUserResponse;
+}
+
+export namespace CreateUserResponse {
+  export type AsObject = {
+    id: string,
+  }
+}
+
 export class ReadSelfOrganization extends jspb.Message {
   getId(): string;
   setId(value: string): ReadSelfOrganization;

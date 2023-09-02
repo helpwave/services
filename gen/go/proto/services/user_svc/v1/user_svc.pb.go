@@ -20,6 +20,124 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type CreateUserRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id       string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`       // @gotags: validate:"uuid4"
+	Email    string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty" validate:"email"` // @gotags: validate:"email"
+	Nickname string `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (x *CreateUserRequest) Reset() {
+	*x = CreateUserRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateUserRequest) ProtoMessage() {}
+
+func (x *CreateUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateUserRequest.ProtoReflect.Descriptor instead.
+func (*CreateUserRequest) Descriptor() ([]byte, []int) {
+	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *CreateUserRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *CreateUserRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *CreateUserRequest) GetNickname() string {
+	if x != nil {
+		return x.Nickname
+	}
+	return ""
+}
+
+func (x *CreateUserRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type CreateUserResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *CreateUserResponse) Reset() {
+	*x = CreateUserResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateUserResponse) ProtoMessage() {}
+
+func (x *CreateUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateUserResponse.ProtoReflect.Descriptor instead.
+func (*CreateUserResponse) Descriptor() ([]byte, []int) {
+	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *CreateUserResponse) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
 type ReadSelfOrganization struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -31,7 +149,7 @@ type ReadSelfOrganization struct {
 func (x *ReadSelfOrganization) Reset() {
 	*x = ReadSelfOrganization{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[0]
+		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -44,7 +162,7 @@ func (x *ReadSelfOrganization) String() string {
 func (*ReadSelfOrganization) ProtoMessage() {}
 
 func (x *ReadSelfOrganization) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[0]
+	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +175,7 @@ func (x *ReadSelfOrganization) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadSelfOrganization.ProtoReflect.Descriptor instead.
 func (*ReadSelfOrganization) Descriptor() ([]byte, []int) {
-	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{0}
+	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ReadSelfOrganization) GetId() string {
@@ -77,7 +195,7 @@ type ReadSelfRequest struct {
 func (x *ReadSelfRequest) Reset() {
 	*x = ReadSelfRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[1]
+		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -90,7 +208,7 @@ func (x *ReadSelfRequest) String() string {
 func (*ReadSelfRequest) ProtoMessage() {}
 
 func (x *ReadSelfRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[1]
+	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -103,7 +221,7 @@ func (x *ReadSelfRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadSelfRequest.ProtoReflect.Descriptor instead.
 func (*ReadSelfRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{1}
+	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{3}
 }
 
 type ReadSelfResponse struct {
@@ -121,7 +239,7 @@ type ReadSelfResponse struct {
 func (x *ReadSelfResponse) Reset() {
 	*x = ReadSelfResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[2]
+		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -134,7 +252,7 @@ func (x *ReadSelfResponse) String() string {
 func (*ReadSelfResponse) ProtoMessage() {}
 
 func (x *ReadSelfResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[2]
+	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -147,7 +265,7 @@ func (x *ReadSelfResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadSelfResponse.ProtoReflect.Descriptor instead.
 func (*ReadSelfResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{2}
+	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ReadSelfResponse) GetId() string {
@@ -196,7 +314,7 @@ type ReadPublicProfileRequest struct {
 func (x *ReadPublicProfileRequest) Reset() {
 	*x = ReadPublicProfileRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[3]
+		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -209,7 +327,7 @@ func (x *ReadPublicProfileRequest) String() string {
 func (*ReadPublicProfileRequest) ProtoMessage() {}
 
 func (x *ReadPublicProfileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[3]
+	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -222,7 +340,7 @@ func (x *ReadPublicProfileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadPublicProfileRequest.ProtoReflect.Descriptor instead.
 func (*ReadPublicProfileRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{3}
+	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ReadPublicProfileRequest) GetId() string {
@@ -246,7 +364,7 @@ type ReadPublicProfileResponse struct {
 func (x *ReadPublicProfileResponse) Reset() {
 	*x = ReadPublicProfileResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[4]
+		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -259,7 +377,7 @@ func (x *ReadPublicProfileResponse) String() string {
 func (*ReadPublicProfileResponse) ProtoMessage() {}
 
 func (x *ReadPublicProfileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[4]
+	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -272,7 +390,7 @@ func (x *ReadPublicProfileResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadPublicProfileResponse.ProtoReflect.Descriptor instead.
 func (*ReadPublicProfileResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{4}
+	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ReadPublicProfileResponse) GetId() string {
@@ -314,7 +432,7 @@ type UpdateUserRequest struct {
 func (x *UpdateUserRequest) Reset() {
 	*x = UpdateUserRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[5]
+		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -327,7 +445,7 @@ func (x *UpdateUserRequest) String() string {
 func (*UpdateUserRequest) ProtoMessage() {}
 
 func (x *UpdateUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[5]
+	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -340,7 +458,7 @@ func (x *UpdateUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{5}
+	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *UpdateUserRequest) GetId() string {
@@ -359,7 +477,7 @@ type UpdateUserResponse struct {
 func (x *UpdateUserResponse) Reset() {
 	*x = UpdateUserResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[6]
+		mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -372,7 +490,7 @@ func (x *UpdateUserResponse) String() string {
 func (*UpdateUserResponse) ProtoMessage() {}
 
 func (x *UpdateUserResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[6]
+	mi := &file_proto_services_user_svc_v1_user_svc_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -385,7 +503,7 @@ func (x *UpdateUserResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserResponse.ProtoReflect.Descriptor instead.
 func (*UpdateUserResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{6}
+	return file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP(), []int{8}
 }
 
 var File_proto_services_user_svc_v1_user_svc_proto protoreflect.FileDescriptor
@@ -395,39 +513,55 @@ var file_proto_services_user_svc_v1_user_svc_proto_rawDesc = []byte{
 	0x2f, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x73, 0x76, 0x63, 0x2f, 0x76, 0x31, 0x2f, 0x75, 0x73, 0x65,
 	0x72, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x1a, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x75, 0x73, 0x65, 0x72,
-	0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x22, 0x26, 0x0a, 0x14, 0x52, 0x65, 0x61, 0x64, 0x53,
-	0x65, 0x6c, 0x66, 0x4f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12,
-	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22,
-	0x11, 0x0a, 0x0f, 0x52, 0x65, 0x61, 0x64, 0x53, 0x65, 0x6c, 0x66, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x22, 0xc9, 0x01, 0x0a, 0x10, 0x52, 0x65, 0x61, 0x64, 0x53, 0x65, 0x6c, 0x66, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x6e,
-	0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6e,
-	0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x61, 0x76, 0x61, 0x74, 0x61,
-	0x72, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x76, 0x61,
-	0x74, 0x61, 0x72, 0x55, 0x72, 0x6c, 0x12, 0x56, 0x0a, 0x0d, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69,
-	0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x30, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x75,
-	0x73, 0x65, 0x72, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x61, 0x64, 0x53,
-	0x65, 0x6c, 0x66, 0x4f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52,
-	0x0d, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x2a,
-	0x0a, 0x18, 0x52, 0x65, 0x61, 0x64, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x50, 0x72, 0x6f, 0x66,
-	0x69, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x7a, 0x0a, 0x19, 0x52, 0x65,
-	0x61, 0x64, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x6e,
-	0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6e,
-	0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x61, 0x76, 0x61, 0x74, 0x61,
-	0x72, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x76, 0x61,
-	0x74, 0x61, 0x72, 0x55, 0x72, 0x6c, 0x22, 0x23, 0x0a, 0x11, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
-	0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69,
-	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x14, 0x0a, 0x12, 0x55,
-	0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x32, 0xea, 0x02, 0x0a, 0x0b, 0x55, 0x73, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x12, 0x67, 0x0a, 0x08, 0x52, 0x65, 0x61, 0x64, 0x53, 0x65, 0x6c, 0x66, 0x12, 0x2b, 0x2e,
+	0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x22, 0x69, 0x0a, 0x11, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x14, 0x0a, 0x05,
+	0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61,
+	0x69, 0x6c, 0x12, 0x1a, 0x0a, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x12,
+	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
+	0x6d, 0x65, 0x22, 0x24, 0x0a, 0x12, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x26, 0x0a, 0x14, 0x52, 0x65, 0x61, 0x64,
+	0x53, 0x65, 0x6c, 0x66, 0x4f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64,
+	0x22, 0x11, 0x0a, 0x0f, 0x52, 0x65, 0x61, 0x64, 0x53, 0x65, 0x6c, 0x66, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x22, 0xc9, 0x01, 0x0a, 0x10, 0x52, 0x65, 0x61, 0x64, 0x53, 0x65, 0x6c, 0x66,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08,
+	0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
+	0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x61, 0x76, 0x61, 0x74,
+	0x61, 0x72, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x76,
+	0x61, 0x74, 0x61, 0x72, 0x55, 0x72, 0x6c, 0x12, 0x56, 0x0a, 0x0d, 0x6f, 0x72, 0x67, 0x61, 0x6e,
+	0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x30,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e,
+	0x75, 0x73, 0x65, 0x72, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x61, 0x64,
+	0x53, 0x65, 0x6c, 0x66, 0x4f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x52, 0x0d, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x22,
+	0x2a, 0x0a, 0x18, 0x52, 0x65, 0x61, 0x64, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x50, 0x72, 0x6f,
+	0x66, 0x69, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x7a, 0x0a, 0x19, 0x52,
+	0x65, 0x61, 0x64, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08,
+	0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
+	0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x61, 0x76, 0x61, 0x74,
+	0x61, 0x72, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x76,
+	0x61, 0x74, 0x61, 0x72, 0x55, 0x72, 0x6c, 0x22, 0x23, 0x0a, 0x11, 0x55, 0x70, 0x64, 0x61, 0x74,
+	0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x14, 0x0a, 0x12,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x32, 0xd9, 0x03, 0x0a, 0x0b, 0x55, 0x73, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x12, 0x6d, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72,
+	0x12, 0x2d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x73, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x2e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x2e, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x72, 0x65,
+	0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x00, 0x12, 0x67, 0x0a, 0x08, 0x52, 0x65, 0x61, 0x64, 0x53, 0x65, 0x6c, 0x66, 0x12, 0x2b, 0x2e,
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x75,
 	0x73, 0x65, 0x72, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x61, 0x64, 0x53,
 	0x65, 0x6c, 0x66, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x70, 0x72, 0x6f,
@@ -477,26 +611,30 @@ func file_proto_services_user_svc_v1_user_svc_proto_rawDescGZIP() []byte {
 	return file_proto_services_user_svc_v1_user_svc_proto_rawDescData
 }
 
-var file_proto_services_user_svc_v1_user_svc_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_proto_services_user_svc_v1_user_svc_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_proto_services_user_svc_v1_user_svc_proto_goTypes = []interface{}{
-	(*ReadSelfOrganization)(nil),      // 0: proto.services.user_svc.v1.ReadSelfOrganization
-	(*ReadSelfRequest)(nil),           // 1: proto.services.user_svc.v1.ReadSelfRequest
-	(*ReadSelfResponse)(nil),          // 2: proto.services.user_svc.v1.ReadSelfResponse
-	(*ReadPublicProfileRequest)(nil),  // 3: proto.services.user_svc.v1.ReadPublicProfileRequest
-	(*ReadPublicProfileResponse)(nil), // 4: proto.services.user_svc.v1.ReadPublicProfileResponse
-	(*UpdateUserRequest)(nil),         // 5: proto.services.user_svc.v1.UpdateUserRequest
-	(*UpdateUserResponse)(nil),        // 6: proto.services.user_svc.v1.UpdateUserResponse
+	(*CreateUserRequest)(nil),         // 0: proto.services.user_svc.v1.CreateUserRequest
+	(*CreateUserResponse)(nil),        // 1: proto.services.user_svc.v1.CreateUserResponse
+	(*ReadSelfOrganization)(nil),      // 2: proto.services.user_svc.v1.ReadSelfOrganization
+	(*ReadSelfRequest)(nil),           // 3: proto.services.user_svc.v1.ReadSelfRequest
+	(*ReadSelfResponse)(nil),          // 4: proto.services.user_svc.v1.ReadSelfResponse
+	(*ReadPublicProfileRequest)(nil),  // 5: proto.services.user_svc.v1.ReadPublicProfileRequest
+	(*ReadPublicProfileResponse)(nil), // 6: proto.services.user_svc.v1.ReadPublicProfileResponse
+	(*UpdateUserRequest)(nil),         // 7: proto.services.user_svc.v1.UpdateUserRequest
+	(*UpdateUserResponse)(nil),        // 8: proto.services.user_svc.v1.UpdateUserResponse
 }
 var file_proto_services_user_svc_v1_user_svc_proto_depIdxs = []int32{
-	0, // 0: proto.services.user_svc.v1.ReadSelfResponse.organizations:type_name -> proto.services.user_svc.v1.ReadSelfOrganization
-	1, // 1: proto.services.user_svc.v1.UserService.ReadSelf:input_type -> proto.services.user_svc.v1.ReadSelfRequest
-	3, // 2: proto.services.user_svc.v1.UserService.ReadPublicProfile:input_type -> proto.services.user_svc.v1.ReadPublicProfileRequest
-	5, // 3: proto.services.user_svc.v1.UserService.UpdateUser:input_type -> proto.services.user_svc.v1.UpdateUserRequest
-	2, // 4: proto.services.user_svc.v1.UserService.ReadSelf:output_type -> proto.services.user_svc.v1.ReadSelfResponse
-	4, // 5: proto.services.user_svc.v1.UserService.ReadPublicProfile:output_type -> proto.services.user_svc.v1.ReadPublicProfileResponse
-	6, // 6: proto.services.user_svc.v1.UserService.UpdateUser:output_type -> proto.services.user_svc.v1.UpdateUserResponse
-	4, // [4:7] is the sub-list for method output_type
-	1, // [1:4] is the sub-list for method input_type
+	2, // 0: proto.services.user_svc.v1.ReadSelfResponse.organizations:type_name -> proto.services.user_svc.v1.ReadSelfOrganization
+	0, // 1: proto.services.user_svc.v1.UserService.CreateUser:input_type -> proto.services.user_svc.v1.CreateUserRequest
+	3, // 2: proto.services.user_svc.v1.UserService.ReadSelf:input_type -> proto.services.user_svc.v1.ReadSelfRequest
+	5, // 3: proto.services.user_svc.v1.UserService.ReadPublicProfile:input_type -> proto.services.user_svc.v1.ReadPublicProfileRequest
+	7, // 4: proto.services.user_svc.v1.UserService.UpdateUser:input_type -> proto.services.user_svc.v1.UpdateUserRequest
+	1, // 5: proto.services.user_svc.v1.UserService.CreateUser:output_type -> proto.services.user_svc.v1.CreateUserResponse
+	4, // 6: proto.services.user_svc.v1.UserService.ReadSelf:output_type -> proto.services.user_svc.v1.ReadSelfResponse
+	6, // 7: proto.services.user_svc.v1.UserService.ReadPublicProfile:output_type -> proto.services.user_svc.v1.ReadPublicProfileResponse
+	8, // 8: proto.services.user_svc.v1.UserService.UpdateUser:output_type -> proto.services.user_svc.v1.UpdateUserResponse
+	5, // [5:9] is the sub-list for method output_type
+	1, // [1:5] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -509,7 +647,7 @@ func file_proto_services_user_svc_v1_user_svc_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_proto_services_user_svc_v1_user_svc_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReadSelfOrganization); i {
+			switch v := v.(*CreateUserRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -521,7 +659,7 @@ func file_proto_services_user_svc_v1_user_svc_proto_init() {
 			}
 		}
 		file_proto_services_user_svc_v1_user_svc_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReadSelfRequest); i {
+			switch v := v.(*CreateUserResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -533,7 +671,7 @@ func file_proto_services_user_svc_v1_user_svc_proto_init() {
 			}
 		}
 		file_proto_services_user_svc_v1_user_svc_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReadSelfResponse); i {
+			switch v := v.(*ReadSelfOrganization); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -545,7 +683,7 @@ func file_proto_services_user_svc_v1_user_svc_proto_init() {
 			}
 		}
 		file_proto_services_user_svc_v1_user_svc_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReadPublicProfileRequest); i {
+			switch v := v.(*ReadSelfRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -557,7 +695,7 @@ func file_proto_services_user_svc_v1_user_svc_proto_init() {
 			}
 		}
 		file_proto_services_user_svc_v1_user_svc_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReadPublicProfileResponse); i {
+			switch v := v.(*ReadSelfResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -569,7 +707,7 @@ func file_proto_services_user_svc_v1_user_svc_proto_init() {
 			}
 		}
 		file_proto_services_user_svc_v1_user_svc_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateUserRequest); i {
+			switch v := v.(*ReadPublicProfileRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -581,6 +719,30 @@ func file_proto_services_user_svc_v1_user_svc_proto_init() {
 			}
 		}
 		file_proto_services_user_svc_v1_user_svc_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ReadPublicProfileResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_services_user_svc_v1_user_svc_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateUserRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_services_user_svc_v1_user_svc_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateUserResponse); i {
 			case 0:
 				return &v.state
@@ -599,7 +761,7 @@ func file_proto_services_user_svc_v1_user_svc_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_services_user_svc_v1_user_svc_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

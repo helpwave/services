@@ -71,3 +71,8 @@ func MustParseInt(s string) int {
 
 	return int(i)
 }
+
+// PtrTo returns the pointer to the passed value
+func PtrTo[T any](v T) *T {
+	return &v
+}

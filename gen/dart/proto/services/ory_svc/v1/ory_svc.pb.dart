@@ -13,8 +13,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-class AfterRegistrationWebhookPayload extends $pb.GeneratedMessage {
-  factory AfterRegistrationWebhookPayload({
+class AfterRegistrationWebhookPayloadRequest extends $pb.GeneratedMessage {
+  factory AfterRegistrationWebhookPayloadRequest({
     $core.String? userId,
     $core.String? email,
     $core.String? nickname,
@@ -35,11 +35,11 @@ class AfterRegistrationWebhookPayload extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  AfterRegistrationWebhookPayload._() : super();
-  factory AfterRegistrationWebhookPayload.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory AfterRegistrationWebhookPayload.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  AfterRegistrationWebhookPayloadRequest._() : super();
+  factory AfterRegistrationWebhookPayloadRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AfterRegistrationWebhookPayloadRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AfterRegistrationWebhookPayload', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.ory_svc.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AfterRegistrationWebhookPayloadRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.ory_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..aOS(2, _omitFieldNames ? '' : 'email')
     ..aOS(3, _omitFieldNames ? '' : 'nickname')
@@ -51,22 +51,22 @@ class AfterRegistrationWebhookPayload extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  AfterRegistrationWebhookPayload clone() => AfterRegistrationWebhookPayload()..mergeFromMessage(this);
+  AfterRegistrationWebhookPayloadRequest clone() => AfterRegistrationWebhookPayloadRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  AfterRegistrationWebhookPayload copyWith(void Function(AfterRegistrationWebhookPayload) updates) => super.copyWith((message) => updates(message as AfterRegistrationWebhookPayload)) as AfterRegistrationWebhookPayload;
+  AfterRegistrationWebhookPayloadRequest copyWith(void Function(AfterRegistrationWebhookPayloadRequest) updates) => super.copyWith((message) => updates(message as AfterRegistrationWebhookPayloadRequest)) as AfterRegistrationWebhookPayloadRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static AfterRegistrationWebhookPayload create() => AfterRegistrationWebhookPayload._();
-  AfterRegistrationWebhookPayload createEmptyInstance() => create();
-  static $pb.PbList<AfterRegistrationWebhookPayload> createRepeated() => $pb.PbList<AfterRegistrationWebhookPayload>();
+  static AfterRegistrationWebhookPayloadRequest create() => AfterRegistrationWebhookPayloadRequest._();
+  AfterRegistrationWebhookPayloadRequest createEmptyInstance() => create();
+  static $pb.PbList<AfterRegistrationWebhookPayloadRequest> createRepeated() => $pb.PbList<AfterRegistrationWebhookPayloadRequest>();
   @$core.pragma('dart2js:noInline')
-  static AfterRegistrationWebhookPayload getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AfterRegistrationWebhookPayload>(create);
-  static AfterRegistrationWebhookPayload? _defaultInstance;
+  static AfterRegistrationWebhookPayloadRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AfterRegistrationWebhookPayloadRequest>(create);
+  static AfterRegistrationWebhookPayloadRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get userId => $_getSZ(0);

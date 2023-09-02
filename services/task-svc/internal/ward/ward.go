@@ -78,8 +78,9 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 	}
 
 	return &pb.GetWardResponse{
-		Id:   ward.ID.String(),
-		Name: ward.Name,
+		Id:             ward.ID.String(),
+		Name:           ward.Name,
+		OrganizationId: ward.OrganizationID.String(),
 	}, nil
 }
 

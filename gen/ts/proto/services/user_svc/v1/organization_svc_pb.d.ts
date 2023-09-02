@@ -197,6 +197,9 @@ export namespace GetOrganizationResponse {
 }
 
 export class GetOrganizationsByUserRequest extends jspb.Message {
+  getUserId(): string;
+  setUserId(value: string): GetOrganizationsByUserRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetOrganizationsByUserRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetOrganizationsByUserRequest): GetOrganizationsByUserRequest.AsObject;
@@ -207,6 +210,7 @@ export class GetOrganizationsByUserRequest extends jspb.Message {
 
 export namespace GetOrganizationsByUserRequest {
   export type AsObject = {
+    userId: string,
   }
 }
 
@@ -270,6 +274,116 @@ export namespace GetOrganizationsByUserResponse {
       avatarUrl: string,
       isPersonal: boolean,
       membersList: Array<GetOrganizationsByUserResponse.Organization.Member.AsObject>,
+    }
+
+    export class Member extends jspb.Message {
+      getUserId(): string;
+      setUserId(value: string): Member;
+
+      getEmail(): string;
+      setEmail(value: string): Member;
+
+      getNickname(): string;
+      setNickname(value: string): Member;
+
+      getAvatarUrl(): string;
+      setAvatarUrl(value: string): Member;
+
+      serializeBinary(): Uint8Array;
+      toObject(includeInstance?: boolean): Member.AsObject;
+      static toObject(includeInstance: boolean, msg: Member): Member.AsObject;
+      static serializeBinaryToWriter(message: Member, writer: jspb.BinaryWriter): void;
+      static deserializeBinary(bytes: Uint8Array): Member;
+      static deserializeBinaryFromReader(message: Member, reader: jspb.BinaryReader): Member;
+    }
+
+    export namespace Member {
+      export type AsObject = {
+        userId: string,
+        email: string,
+        nickname: string,
+        avatarUrl: string,
+      }
+    }
+
+  }
+
+}
+
+export class GetOrganizationsForUserRequest extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetOrganizationsForUserRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetOrganizationsForUserRequest): GetOrganizationsForUserRequest.AsObject;
+  static serializeBinaryToWriter(message: GetOrganizationsForUserRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetOrganizationsForUserRequest;
+  static deserializeBinaryFromReader(message: GetOrganizationsForUserRequest, reader: jspb.BinaryReader): GetOrganizationsForUserRequest;
+}
+
+export namespace GetOrganizationsForUserRequest {
+  export type AsObject = {
+  }
+}
+
+export class GetOrganizationsForUserResponse extends jspb.Message {
+  getOrganizationsList(): Array<GetOrganizationsForUserResponse.Organization>;
+  setOrganizationsList(value: Array<GetOrganizationsForUserResponse.Organization>): GetOrganizationsForUserResponse;
+  clearOrganizationsList(): GetOrganizationsForUserResponse;
+  addOrganizations(value?: GetOrganizationsForUserResponse.Organization, index?: number): GetOrganizationsForUserResponse.Organization;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetOrganizationsForUserResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetOrganizationsForUserResponse): GetOrganizationsForUserResponse.AsObject;
+  static serializeBinaryToWriter(message: GetOrganizationsForUserResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetOrganizationsForUserResponse;
+  static deserializeBinaryFromReader(message: GetOrganizationsForUserResponse, reader: jspb.BinaryReader): GetOrganizationsForUserResponse;
+}
+
+export namespace GetOrganizationsForUserResponse {
+  export type AsObject = {
+    organizationsList: Array<GetOrganizationsForUserResponse.Organization.AsObject>,
+  }
+
+  export class Organization extends jspb.Message {
+    getId(): string;
+    setId(value: string): Organization;
+
+    getLongName(): string;
+    setLongName(value: string): Organization;
+
+    getShortName(): string;
+    setShortName(value: string): Organization;
+
+    getContactEmail(): string;
+    setContactEmail(value: string): Organization;
+
+    getAvatarUrl(): string;
+    setAvatarUrl(value: string): Organization;
+
+    getIsPersonal(): boolean;
+    setIsPersonal(value: boolean): Organization;
+
+    getMembersList(): Array<GetOrganizationsForUserResponse.Organization.Member>;
+    setMembersList(value: Array<GetOrganizationsForUserResponse.Organization.Member>): Organization;
+    clearMembersList(): Organization;
+    addMembers(value?: GetOrganizationsForUserResponse.Organization.Member, index?: number): GetOrganizationsForUserResponse.Organization.Member;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Organization.AsObject;
+    static toObject(includeInstance: boolean, msg: Organization): Organization.AsObject;
+    static serializeBinaryToWriter(message: Organization, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Organization;
+    static deserializeBinaryFromReader(message: Organization, reader: jspb.BinaryReader): Organization;
+  }
+
+  export namespace Organization {
+    export type AsObject = {
+      id: string,
+      longName: string,
+      shortName: string,
+      contactEmail: string,
+      avatarUrl: string,
+      isPersonal: boolean,
+      membersList: Array<GetOrganizationsForUserResponse.Organization.Member.AsObject>,
     }
 
     export class Member extends jspb.Message {

@@ -67,12 +67,41 @@ message GetOrganizationResponse {
 
 //
 // GetOrganizationsByUser
+// TODO: Internal
 //
 
 message GetOrganizationsByUserRequest {
+  string user_id = 1; // @gotags: validate:"uuid4"
 }
 
 message GetOrganizationsByUserResponse {
+  repeated Organization organizations = 1;
+
+  message Organization {
+    string id = 1;
+    string long_name = 2;
+    string short_name = 3;
+    string contact_email = 4;
+    string avatar_url = 5;
+    bool is_personal = 6;
+    repeated Member members = 7;
+
+    message Member {
+      string user_id = 1;
+      string email = 2;
+      string nickname = 3;
+      string avatar_url = 4;
+    }
+  }
+}
+
+//
+// GetOrganizationsForUser
+//
+
+message GetOrganizationsForUserRequest {}
+
+message GetOrganizationsForUserResponse {
   repeated Organization organizations = 1;
 
   message Organization {
@@ -262,6 +291,7 @@ service OrganizationService {
   rpc CreateOrganizationForUser (CreateOrganizationForUserRequest) returns (CreateOrganizationForUserResponse) {}
   rpc GetOrganization (GetOrganizationRequest) returns (GetOrganizationResponse) {}
   rpc GetOrganizationsByUser (GetOrganizationsByUserRequest) returns (GetOrganizationsByUserResponse) {}
+  rpc GetOrganizationsForUser (GetOrganizationsForUserRequest) returns (GetOrganizationsForUserResponse) {}
   rpc UpdateOrganization (UpdateOrganizationRequest) returns (UpdateOrganizationResponse) {}
   rpc DeleteOrganization (DeleteOrganizationRequest) returns (DeleteOrganizationResponse) {}
   rpc GetMembersByOrganization (GetMembersByOrganizationRequest) returns (GetMembersByOrganizationResponse) {}

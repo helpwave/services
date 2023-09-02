@@ -884,7 +884,8 @@ proto.proto.services.task_svc.v1.GetWardResponse.prototype.toObject = function(o
 proto.proto.services.task_svc.v1.GetWardResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 2, "")
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    organizationId: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -929,6 +930,10 @@ proto.proto.services.task_svc.v1.GetWardResponse.deserializeBinaryFromReader = f
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setOrganizationId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -972,6 +977,13 @@ proto.proto.services.task_svc.v1.GetWardResponse.serializeBinaryToWriter = funct
       f
     );
   }
+  f = message.getOrganizationId();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
 };
 
 
@@ -1008,6 +1020,24 @@ proto.proto.services.task_svc.v1.GetWardResponse.prototype.getName = function() 
  */
 proto.proto.services.task_svc.v1.GetWardResponse.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string organization_id = 3;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.GetWardResponse.prototype.getOrganizationId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.GetWardResponse} returns this
+ */
+proto.proto.services.task_svc.v1.GetWardResponse.prototype.setOrganizationId = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
