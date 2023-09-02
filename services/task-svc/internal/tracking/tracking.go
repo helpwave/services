@@ -55,7 +55,9 @@ func getUserID(ctx context.Context) string {
 //   - the context originates from an authenticated request
 func AddPatientToRecentActivity(ctx context.Context, patientID string) {
 	if userID := getUserID(ctx); userID != "" {
-		_ = lru.AddItemForUser(PatientKey, userID, patientID)
+		if err := lru.AddItemForUser(PatientKey, userID, patientID); err != nil {
+			zlog.Ctx(ctx).Error().Err(err).Msg("could not add patient to recent activity")
+		}
 	}
 }
 
@@ -87,7 +89,9 @@ func GetRecentPatientsForUser(ctx context.Context) ([]string, error) {
 //   - the context originates from an authenticated request
 func AddWardToRecentActivity(ctx context.Context, wardID string) {
 	if userID := getUserID(ctx); userID != "" {
-		_ = lru.AddItemForUser(WardKey, userID, wardID)
+		if err := lru.AddItemForUser(WardKey, userID, wardID); err != nil {
+			zlog.Ctx(ctx).Error().Err(err).Msg("could not add ward to recent activity")
+		}
 	}
 }
 
