@@ -3,16 +3,13 @@ package organization
 import (
 	"common"
 	"context"
-	"fmt"
 	"gen/proto/libs/events/v1"
 	pb "gen/proto/services/user_svc/v1"
 	daprc "github.com/dapr/go-sdk/client"
-	daprcmn "github.com/dapr/go-sdk/service/common"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"
 	"hwgorm"
 	"hwutil"
@@ -22,12 +19,6 @@ import (
 )
 
 type InvitationState = string
-
-var UserCreatedEventSubscription = &daprcmn.Subscription{
-	PubsubName: "pubsub",
-	Topic:      "USER_CREATED",
-	Route:      "/pubsub/user_created/v1",
-}
 
 type ServiceServer struct {
 	pb.UnimplementedOrganizationServiceServer
@@ -138,18 +129,29 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 	}, nil
 }
 
-func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrganizationsByUserRequest) (*pb.GetOrganizationsByUserResponse, error) {
+func getOrganizationsByUser(ctx context.Context, userID uuid.UUID) ([]models.Organization, error) {
 	db := hwgorm.GetDB(ctx)
 
-	userID, err := common.GetUserID(ctx)
+	var organizations []models.Organization
+	err := db.
+		Preload("Members").
+		Joins("JOIN memberships ON memberships.organization_id = organizations.id").
+		Where("memberships.user_id = ?", userID).
+		Find(&organizations).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return organizations, nil
+}
+
+func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOrganizationsByUserRequest) (*pb.GetOrganizationsByUserResponse, error) {
+	userID, err := uuid.Parse(req.UserId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	var organizations []models.Organization
-	err = db.Preload("Members").Joins("JOIN memberships ON memberships.organization_id = organizations.id").
-		Where("memberships.user_id = ?", userID).
-		Find(&organizations).Error
+	organizations, err := getOrganizationsByUser(ctx, userID)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -185,6 +187,52 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, _ *pb.GetOrga
 	})
 
 	return &pb.GetOrganizationsByUserResponse{
+		Organizations: mappedOrganizations,
+	}, nil
+}
+
+func (s ServiceServer) GetOrganizationsForUser(ctx context.Context, _ *pb.GetOrganizationsForUserRequest) (*pb.GetOrganizationsForUserResponse, error) {
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	organizations, err := getOrganizationsByUser(ctx, userID)
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+
+	userRepository := repositories.UserRepo(ctx)
+
+	user, err := userRepository.GetUserById(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	mappedOrganizations := hwutil.Map(organizations, func(organization models.Organization) *pb.GetOrganizationsForUserResponse_Organization {
+		return &pb.GetOrganizationsForUserResponse_Organization{
+			Id:           organization.ID.String(),
+			LongName:     organization.LongName,
+			ShortName:    organization.ShortName,
+			ContactEmail: organization.ContactEmail,
+			AvatarUrl:    organization.AvatarUrl,
+			IsPersonal:   false,
+			Members: hwutil.Map(organization.Members, func(membership models.Membership) *pb.GetOrganizationsForUserResponse_Organization_Member {
+				return &pb.GetOrganizationsForUserResponse_Organization_Member{
+					UserId:    membership.UserID.String(),
+					AvatarUrl: user.Avatar,
+					Email:     user.Email,
+					Nickname:  user.Nickname,
+				}
+			}),
+		}
+	})
+
+	return &pb.GetOrganizationsForUserResponse{
 		Organizations: mappedOrganizations,
 	}, nil
 }
@@ -309,6 +357,19 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "organization not found")
 		}
+	}
+
+	isInOrganization, err := organisationRepo.IsInOrganizationByEmail(organizationId, req.Email)
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "organization not found")
+		}
+	}
+
+	if isInOrganization {
+		return nil, status.Error(codes.InvalidArgument, "cannot invite a user that is already a member")
 	}
 
 	// check if already an invitation exists
@@ -744,34 +805,6 @@ func GetInvitationByIdAndEmail(db *gorm.DB, email string, id uuid.UUID) (*models
 	}
 
 	return &invitation, nil
-}
-
-func HandleUserCreatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry bool, err error) {
-	log := zlog.Ctx(ctx)
-
-	var payload events.UserCreatedEvent
-	if err := proto.Unmarshal(evt.RawData, &payload); err != nil {
-		log.Error().Err(err).Msg("could not convert USER_CREATED event data to UserCreatedEvent")
-		return true, err
-	}
-
-	userId, err := uuid.Parse(payload.Id)
-	if err != nil {
-		log.Error().Err(err).Msg("could not convert Id of USER_CREATED event to UUID")
-		return true, err
-	}
-
-	if _, err := CreateOrganizationAndAddUser(ctx, models.Base{
-		LongName:     fmt.Sprintf("%s personal organization", payload.Nickname),
-		ShortName:    payload.Nickname,
-		ContactEmail: payload.Email,
-		IsPersonal:   true,
-	}, userId); err != nil {
-		log.Error().Err(err).Str("userId", userId.String()).Msg("could not create organization")
-		return true, err
-	}
-
-	return false, nil
 }
 
 func ChangeMembershipAdminStatus(ctx context.Context, db *gorm.DB, userID uuid.UUID, organizationID uuid.UUID, isAdmin bool) error {

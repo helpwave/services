@@ -27,6 +27,7 @@ message GetWardRequest {
 message GetWardResponse {
   string id = 1;
   string name = 2;
+  string organization_id = 3;
 }
 
 //

@@ -15,7 +15,12 @@ const ServiceName = "user-svc"
 var Version string
 
 func main() {
-	common.Setup(ServiceName, Version, true)
+	common.SetupWithUnauthenticatedMethods(ServiceName, Version, true, &[]string{
+		"/proto.services.user_svc.v1.UserService/CreateUser",
+		"/proto.services.user_svc.v1.OrganizationService/CreateOrganizationForUser",
+		"/proto.services.user_svc.v1.OrganizationService/AddMember",
+		"/proto.services.user_svc.v1.OrganizationService/GetOrganizationsByUser",
+	})
 
 	hwgorm.SetupDatabaseByEnvs()
 
@@ -24,11 +29,9 @@ func main() {
 
 		daprClient := common.MustNewDaprGRPCClient()
 
-		common.MustAddTopicEventHandler(server, user.RegisteredEventSubscription, user.HandleUserRegisteredEvent)
-		common.MustAddTopicEventHandler(server, user.UpdatedEventSubscription, user.HandleUserUpdatedEvent)
+		common.MustAddTopicEventHandler(server, user.UserUpdatedEventSubscription, user.HandleUserUpdatedEvent)
 		pb.RegisterUserServiceServer(grpcServer, user.NewServiceServer())
 
-		common.MustAddTopicEventHandler(server, organization.UserCreatedEventSubscription, organization.HandleUserCreatedEvent)
 		pb.RegisterOrganizationServiceServer(grpcServer, organization.NewServiceServer(daprClient))
 	})
 }

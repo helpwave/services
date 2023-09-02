@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
@@ -20,8 +21,42 @@ func OrganisationRepo(logCtx context.Context) *OrganisationRepository {
 	}
 }
 
-func (r *OrganisationRepository) IsAdminInOrganization(organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
+func (r *OrganisationRepository) IsInOrganization(organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
+	membership := models.Membership{
+		UserID:         userID,
+		OrganizationID: organizationID,
+	}
 
+	err := r.db.First(&membership).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, nil
+		} else {
+			return false, status.Error(codes.Internal, err.Error())
+		}
+	}
+
+	return true, nil
+}
+
+func (r *OrganisationRepository) IsInOrganizationByEmail(organizationID uuid.UUID, email string) (bool, error) {
+	membership := models.Membership{}
+	err := r.db.
+		Table("memberships").
+		Joins("JOIN users ON users.id = memberships.user_id").
+		Where("memberships.organization_id = ? AND users.email = ?", organizationID, email).
+		First(&membership).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, nil
+		} else {
+			return false, err
+		}
+	}
+	return true, nil
+}
+
+func (r *OrganisationRepository) IsAdminInOrganization(organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
 	membership := models.Membership{
 		UserID:         userID,
 		OrganizationID: organizationID,
