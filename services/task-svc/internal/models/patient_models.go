@@ -15,6 +15,7 @@ type Patient struct {
 	ID             uuid.UUID             `gorm:"column:id;default:uuid_generate_v4()"`
 	OrganizationID uuid.UUID             `gorm:"column:organization_id"`
 	BedID          *uuid.UUID            `gorm:"column:bed_id;default:NULL"`
+	Bed            Bed                   `gorm:"foreignKey:BedID"`
 	Tasks          []Task                `gorm:"foreignKey:PatientId"`
 	IsDischarged   soft_delete.DeletedAt `gorm:"column:is_discharged;softDelete:flag;default:0"`
 }

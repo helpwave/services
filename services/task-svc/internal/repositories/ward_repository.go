@@ -62,6 +62,22 @@ func (r *WardRepository) GetWardsForOrganization(organizationID uuid.UUID) ([]*m
 	return wards, nil
 }
 
+func (r *WardRepository) GetWardOverviewsForOrganization(organizationID uuid.UUID) ([]*models.Ward, error) {
+	var wards []*models.Ward
+	query := r.db.
+		Preload("Rooms.Beds.Patient.Tasks").
+		Preload("Rooms.Beds.Patient").
+		Preload("Rooms.Beds").
+		Preload("Rooms").
+		Where("organization_id = ?", organizationID).
+		Find(&wards)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return wards, nil
+}
+
 func (r *WardRepository) UpdateWard(wardId uuid.UUID, updates map[string]interface{}) (*models.Ward, error) {
 	ward := &models.Ward{ID: wardId}
 	query := r.db.
