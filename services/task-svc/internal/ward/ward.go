@@ -169,7 +169,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 		return nil, err
 	}
 
-	wards, err := wardRepo.GetWardOverviewsForOrganization(organizationID)
+	wards, err := wardRepo.GetWardsForOrganizationFullyLoaded(organizationID)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -223,8 +223,6 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 
 func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsRequest) (*pb.GetWardDetailsResponse, error) {
 	wardRepo := repositories.WardRepo(ctx)
-	roomRepo := repositories.RoomRepo(ctx)
-	bedRepo := repositories.BedRepo(ctx)
 	templateRepo := repositories.TemplateRepo(ctx)
 
 	wardID, err := uuid.Parse(req.Id)
@@ -232,7 +230,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	ward, err := wardRepo.GetWardById(wardID)
+	ward, err := wardRepo.GetWardByIdWithPreloadedRoomsAndBeds(wardID)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -241,25 +239,8 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		}
 	}
 
-	rooms, err := roomRepo.GetRoomsByWard(wardID)
-
-	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, err.Error())
-		}
-	}
-
-	mappedRooms, err := hwutil.MapWithErr(rooms, func(room models.Room) (*pb.GetWardDetailsResponse_Room, error) {
-		// FIXME: this is a sin and need to be refactored! (#345)
-		// FIXME: don't make network requests in loops, like ever
-		beds, err := bedRepo.GetBedsByRoom(room.ID)
-		if err != nil {
-			return nil, err
-
-		}
-		var mappedBeds = hwutil.Map(beds, func(bed models.Bed) *pb.GetWardDetailsResponse_Bed {
+	mappedRooms := hwutil.Map(ward.Rooms, func(room models.Room) *pb.GetWardDetailsResponse_Room {
+		var mappedBeds = hwutil.Map(room.Beds, func(bed models.Bed) *pb.GetWardDetailsResponse_Bed {
 			return &pb.GetWardDetailsResponse_Bed{
 				Id:   bed.ID.String(),
 				Name: bed.Name,
@@ -270,9 +251,10 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 			Id:   room.ID.String(),
 			Name: room.Name,
 			Beds: mappedBeds,
-		}, nil
+		}
 	})
 
+	taskTemplates, err := templateRepo.GetTaskTemplatesByWardWithSubtasks(wardID)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -281,25 +263,8 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		}
 	}
 
-	taskTemplates, err := templateRepo.GetTaskTemplatesByWard(wardID)
-
-	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, err.Error())
-		}
-	}
-
-	mappedTaskTemplates, err := hwutil.MapWithErr(taskTemplates, func(taskTemplate models.TaskTemplate) (*pb.GetWardDetailsResponse_TaskTemplate, error) {
-		// FIXME: #345
-		taskTemplateSubtasks, err := templateRepo.GetSubTasksForTaskTemplate(taskTemplate.ID)
-
-		if err != nil {
-			return nil, err
-		}
-
-		var mappedSubtasks = hwutil.Map(taskTemplateSubtasks, func(taskTemplateSubtask models.TaskTemplateSubtask) *pb.GetWardDetailsResponse_Subtask {
+	mappedTaskTemplates := hwutil.Map(taskTemplates, func(taskTemplate models.TaskTemplate) *pb.GetWardDetailsResponse_TaskTemplate {
+		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(taskTemplateSubtask models.TaskTemplateSubtask) *pb.GetWardDetailsResponse_Subtask {
 			return &pb.GetWardDetailsResponse_Subtask{
 				Name: taskTemplateSubtask.Name,
 				Id:   taskTemplateSubtask.ID.String(),
@@ -310,16 +275,8 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 			Id:       taskTemplate.ID.String(),
 			Name:     taskTemplate.Name,
 			Subtasks: mappedSubtasks,
-		}, nil
-	})
-
-	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, err.Error())
 		}
-	}
+	})
 
 	return &pb.GetWardDetailsResponse{
 		Id:            ward.ID.String(),
