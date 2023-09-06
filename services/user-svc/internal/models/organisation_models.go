@@ -24,6 +24,7 @@ type Organization struct {
 type Membership struct {
 	ID             uuid.UUID    `gorm:"primaryKey,column:id;default:uuid_generate_v4()"`
 	UserID         uuid.UUID    `gorm:"column:user_id"`
+	User           User         `gorm:"foreignKey:UserID"`
 	OrganizationID uuid.UUID    `gorm:"column:organization_id"`
 	Organization   Organization `gorm:"foreignKey:OrganizationID"`
 	IsAdmin        bool         `gorm:"column:is_admin;default:False"`

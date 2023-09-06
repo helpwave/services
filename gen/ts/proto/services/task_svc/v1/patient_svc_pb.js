@@ -5542,7 +5542,7 @@ proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.toObject = func
  */
 proto.proto.services.task_svc.v1.GetPatientListRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    organisationId: jspb.Message.getFieldWithDefault(msg, 1, "")
+    wardId: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -5581,7 +5581,7 @@ proto.proto.services.task_svc.v1.GetPatientListRequest.deserializeBinaryFromRead
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setOrganisationId(value);
+      msg.setWardId(value);
       break;
     default:
       reader.skipField();
@@ -5623,10 +5623,10 @@ proto.proto.services.task_svc.v1.GetPatientListRequest.serializeBinaryToWriter =
 
 
 /**
- * optional string organisation_id = 1;
+ * optional string ward_id = 1;
  * @return {string}
  */
-proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.getOrganisationId = function() {
+proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.getWardId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -5635,7 +5635,7 @@ proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.getOrganisation
  * @param {string} value
  * @return {!proto.proto.services.task_svc.v1.GetPatientListRequest} returns this
  */
-proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.setOrganisationId = function(value) {
+proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.setWardId = function(value) {
   return jspb.Message.setField(this, 1, value);
 };
 
@@ -5644,7 +5644,7 @@ proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.setOrganisation
  * Clears the field making it undefined.
  * @return {!proto.proto.services.task_svc.v1.GetPatientListRequest} returns this
  */
-proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.clearOrganisationId = function() {
+proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.clearWardId = function() {
   return jspb.Message.setField(this, 1, undefined);
 };
 
@@ -5653,7 +5653,7 @@ proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.clearOrganisati
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.hasOrganisationId = function() {
+proto.proto.services.task_svc.v1.GetPatientListRequest.prototype.hasWardId = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
