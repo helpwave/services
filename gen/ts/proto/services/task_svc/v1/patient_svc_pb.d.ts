@@ -836,3 +836,35 @@ export namespace GetPatientListResponse {
 
 }
 
+export class ReactivatePatientRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): ReactivatePatientRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ReactivatePatientRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ReactivatePatientRequest): ReactivatePatientRequest.AsObject;
+  static serializeBinaryToWriter(message: ReactivatePatientRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReactivatePatientRequest;
+  static deserializeBinaryFromReader(message: ReactivatePatientRequest, reader: jspb.BinaryReader): ReactivatePatientRequest;
+}
+
+export namespace ReactivatePatientRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class ReactivatePatientResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ReactivatePatientResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: ReactivatePatientResponse): ReactivatePatientResponse.AsObject;
+  static serializeBinaryToWriter(message: ReactivatePatientResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReactivatePatientResponse;
+  static deserializeBinaryFromReader(message: ReactivatePatientResponse, reader: jspb.BinaryReader): ReactivatePatientResponse;
+}
+
+export namespace ReactivatePatientResponse {
+  export type AsObject = {
+  }
+}
+

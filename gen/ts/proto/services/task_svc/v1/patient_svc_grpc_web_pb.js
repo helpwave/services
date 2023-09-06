@@ -809,5 +809,66 @@ proto.proto.services.task_svc.v1.PatientServicePromiseClient.prototype.deletePat
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.ReactivatePatientRequest,
+ *   !proto.proto.services.task_svc.v1.ReactivatePatientResponse>}
+ */
+const methodDescriptor_PatientService_ReactivatePatient = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.PatientService/ReactivatePatient',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.ReactivatePatientRequest,
+  proto.proto.services.task_svc.v1.ReactivatePatientResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.ReactivatePatientRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.ReactivatePatientResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.ReactivatePatientRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.ReactivatePatientResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.ReactivatePatientResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.PatientServiceClient.prototype.reactivatePatient =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.PatientService/ReactivatePatient',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_ReactivatePatient,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.ReactivatePatientRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.ReactivatePatientResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.PatientServicePromiseClient.prototype.reactivatePatient =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.PatientService/ReactivatePatient',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_ReactivatePatient);
+};
+
+
 module.exports = proto.proto.services.task_svc.v1;
 

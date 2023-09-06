@@ -194,6 +194,10 @@ message GetPatientDetailsResponse {
 }
 
 
+//
+// GetPatientList
+//
+
 message GetPatientListRequest {
   optional string organisation_id = 1;
 }
@@ -228,6 +232,16 @@ message GetPatientListResponse {
 
 
 //
+// ReactivatePatient
+//
+
+message ReactivatePatientRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+message ReactivatePatientResponse {}
+
+//
 // PatientService
 //
 
@@ -244,4 +258,5 @@ service PatientService {
   rpc GetPatientDetails(GetPatientDetailsRequest) returns (GetPatientDetailsResponse) {}
   rpc GetPatientList(GetPatientListRequest) returns (GetPatientListResponse) {}
   rpc DeletePatient(DeletePatientRequest) returns (DeletePatientResponse) {}
+  rpc ReactivatePatient(ReactivatePatientRequest) returns (ReactivatePatientResponse) {}
 }

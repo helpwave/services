@@ -477,3 +477,22 @@ func (ServiceServer) DeletePatient(ctx context.Context, req *pb.DeletePatientReq
 
 	return &pb.DeletePatientResponse{}, nil
 }
+
+func (ServiceServer) ReactivatePatient(ctx context.Context, req *pb.ReactivatePatientRequest) (*pb.ReactivatePatientResponse, error) {
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	// TODO: admin check
+
+	patientRepo := repositories.PatientRepo(ctx)
+	_, err = patientRepo.ReactivatePatient(id)
+	if err != nil {
+		return nil, err
+	}
+
+	tracking.AddPatientToRecentActivity(ctx, id.String())
+
+	return &pb.ReactivatePatientResponse{}, nil
+}

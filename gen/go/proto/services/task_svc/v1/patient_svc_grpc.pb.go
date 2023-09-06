@@ -31,6 +31,7 @@ const (
 	PatientService_GetPatientDetails_FullMethodName          = "/proto.services.task_svc.v1.PatientService/GetPatientDetails"
 	PatientService_GetPatientList_FullMethodName             = "/proto.services.task_svc.v1.PatientService/GetPatientList"
 	PatientService_DeletePatient_FullMethodName              = "/proto.services.task_svc.v1.PatientService/DeletePatient"
+	PatientService_ReactivatePatient_FullMethodName          = "/proto.services.task_svc.v1.PatientService/ReactivatePatient"
 )
 
 // PatientServiceClient is the client API for PatientService service.
@@ -49,6 +50,7 @@ type PatientServiceClient interface {
 	GetPatientDetails(ctx context.Context, in *GetPatientDetailsRequest, opts ...grpc.CallOption) (*GetPatientDetailsResponse, error)
 	GetPatientList(ctx context.Context, in *GetPatientListRequest, opts ...grpc.CallOption) (*GetPatientListResponse, error)
 	DeletePatient(ctx context.Context, in *DeletePatientRequest, opts ...grpc.CallOption) (*DeletePatientResponse, error)
+	ReactivatePatient(ctx context.Context, in *ReactivatePatientRequest, opts ...grpc.CallOption) (*ReactivatePatientResponse, error)
 }
 
 type patientServiceClient struct {
@@ -167,6 +169,15 @@ func (c *patientServiceClient) DeletePatient(ctx context.Context, in *DeletePati
 	return out, nil
 }
 
+func (c *patientServiceClient) ReactivatePatient(ctx context.Context, in *ReactivatePatientRequest, opts ...grpc.CallOption) (*ReactivatePatientResponse, error) {
+	out := new(ReactivatePatientResponse)
+	err := c.cc.Invoke(ctx, PatientService_ReactivatePatient_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PatientServiceServer is the server API for PatientService service.
 // All implementations must embed UnimplementedPatientServiceServer
 // for forward compatibility
@@ -183,6 +194,7 @@ type PatientServiceServer interface {
 	GetPatientDetails(context.Context, *GetPatientDetailsRequest) (*GetPatientDetailsResponse, error)
 	GetPatientList(context.Context, *GetPatientListRequest) (*GetPatientListResponse, error)
 	DeletePatient(context.Context, *DeletePatientRequest) (*DeletePatientResponse, error)
+	ReactivatePatient(context.Context, *ReactivatePatientRequest) (*ReactivatePatientResponse, error)
 	mustEmbedUnimplementedPatientServiceServer()
 }
 
@@ -225,6 +237,9 @@ func (UnimplementedPatientServiceServer) GetPatientList(context.Context, *GetPat
 }
 func (UnimplementedPatientServiceServer) DeletePatient(context.Context, *DeletePatientRequest) (*DeletePatientResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeletePatient not implemented")
+}
+func (UnimplementedPatientServiceServer) ReactivatePatient(context.Context, *ReactivatePatientRequest) (*ReactivatePatientResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReactivatePatient not implemented")
 }
 func (UnimplementedPatientServiceServer) mustEmbedUnimplementedPatientServiceServer() {}
 
@@ -455,6 +470,24 @@ func _PatientService_DeletePatient_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PatientService_ReactivatePatient_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReactivatePatientRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PatientServiceServer).ReactivatePatient(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PatientService_ReactivatePatient_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PatientServiceServer).ReactivatePatient(ctx, req.(*ReactivatePatientRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PatientService_ServiceDesc is the grpc.ServiceDesc for PatientService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -509,6 +542,10 @@ var PatientService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeletePatient",
 			Handler:    _PatientService_DeletePatient_Handler,
+		},
+		{
+			MethodName: "ReactivatePatient",
+			Handler:    _PatientService_ReactivatePatient_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
