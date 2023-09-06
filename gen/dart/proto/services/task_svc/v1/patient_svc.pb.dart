@@ -2135,22 +2135,22 @@ class GetPatientListResponse extends $pb.GeneratedMessage {
   $core.List<GetPatientListResponse_Patient> get dischargedPatients => $_getList(2);
 }
 
-class ReactivatePatientRequest extends $pb.GeneratedMessage {
-  factory ReactivatePatientRequest({
-    $core.String? id,
+class ReadmitPatientRequest extends $pb.GeneratedMessage {
+  factory ReadmitPatientRequest({
+    $core.String? patientId,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (patientId != null) {
+      $result.patientId = patientId;
     }
     return $result;
   }
-  ReactivatePatientRequest._() : super();
-  factory ReactivatePatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ReactivatePatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  ReadmitPatientRequest._() : super();
+  factory ReadmitPatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ReadmitPatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReactivatePatientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReadmitPatientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'patientId')
     ..hasRequiredFields = false
   ;
 
@@ -2158,40 +2158,40 @@ class ReactivatePatientRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  ReactivatePatientRequest clone() => ReactivatePatientRequest()..mergeFromMessage(this);
+  ReadmitPatientRequest clone() => ReadmitPatientRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ReactivatePatientRequest copyWith(void Function(ReactivatePatientRequest) updates) => super.copyWith((message) => updates(message as ReactivatePatientRequest)) as ReactivatePatientRequest;
+  ReadmitPatientRequest copyWith(void Function(ReadmitPatientRequest) updates) => super.copyWith((message) => updates(message as ReadmitPatientRequest)) as ReadmitPatientRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static ReactivatePatientRequest create() => ReactivatePatientRequest._();
-  ReactivatePatientRequest createEmptyInstance() => create();
-  static $pb.PbList<ReactivatePatientRequest> createRepeated() => $pb.PbList<ReactivatePatientRequest>();
+  static ReadmitPatientRequest create() => ReadmitPatientRequest._();
+  ReadmitPatientRequest createEmptyInstance() => create();
+  static $pb.PbList<ReadmitPatientRequest> createRepeated() => $pb.PbList<ReadmitPatientRequest>();
   @$core.pragma('dart2js:noInline')
-  static ReactivatePatientRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReactivatePatientRequest>(create);
-  static ReactivatePatientRequest? _defaultInstance;
+  static ReadmitPatientRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReadmitPatientRequest>(create);
+  static ReadmitPatientRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get patientId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set patientId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasPatientId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearPatientId() => clearField(1);
 }
 
-class ReactivatePatientResponse extends $pb.GeneratedMessage {
-  factory ReactivatePatientResponse() => create();
-  ReactivatePatientResponse._() : super();
-  factory ReactivatePatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ReactivatePatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+class ReadmitPatientResponse extends $pb.GeneratedMessage {
+  factory ReadmitPatientResponse() => create();
+  ReadmitPatientResponse._() : super();
+  factory ReadmitPatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ReadmitPatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReactivatePatientResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReadmitPatientResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
@@ -2199,22 +2199,22 @@ class ReactivatePatientResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  ReactivatePatientResponse clone() => ReactivatePatientResponse()..mergeFromMessage(this);
+  ReadmitPatientResponse clone() => ReadmitPatientResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ReactivatePatientResponse copyWith(void Function(ReactivatePatientResponse) updates) => super.copyWith((message) => updates(message as ReactivatePatientResponse)) as ReactivatePatientResponse;
+  ReadmitPatientResponse copyWith(void Function(ReadmitPatientResponse) updates) => super.copyWith((message) => updates(message as ReadmitPatientResponse)) as ReadmitPatientResponse;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static ReactivatePatientResponse create() => ReactivatePatientResponse._();
-  ReactivatePatientResponse createEmptyInstance() => create();
-  static $pb.PbList<ReactivatePatientResponse> createRepeated() => $pb.PbList<ReactivatePatientResponse>();
+  static ReadmitPatientResponse create() => ReadmitPatientResponse._();
+  ReadmitPatientResponse createEmptyInstance() => create();
+  static $pb.PbList<ReadmitPatientResponse> createRepeated() => $pb.PbList<ReadmitPatientResponse>();
   @$core.pragma('dart2js:noInline')
-  static ReactivatePatientResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReactivatePatientResponse>(create);
-  static ReactivatePatientResponse? _defaultInstance;
+  static ReadmitPatientResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReadmitPatientResponse>(create);
+  static ReadmitPatientResponse? _defaultInstance;
 }
 
 class PatientServiceApi {
@@ -2257,8 +2257,8 @@ class PatientServiceApi {
   $async.Future<DeletePatientResponse> deletePatient($pb.ClientContext? ctx, DeletePatientRequest request) =>
     _client.invoke<DeletePatientResponse>(ctx, 'PatientService', 'DeletePatient', request, DeletePatientResponse())
   ;
-  $async.Future<ReactivatePatientResponse> reactivatePatient($pb.ClientContext? ctx, ReactivatePatientRequest request) =>
-    _client.invoke<ReactivatePatientResponse>(ctx, 'PatientService', 'ReactivatePatient', request, ReactivatePatientResponse())
+  $async.Future<ReadmitPatientResponse> readmitPatient($pb.ClientContext? ctx, ReadmitPatientRequest request) =>
+    _client.invoke<ReadmitPatientResponse>(ctx, 'PatientService', 'ReadmitPatient', request, ReadmitPatientResponse())
   ;
 }
 

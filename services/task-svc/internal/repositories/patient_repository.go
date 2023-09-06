@@ -131,7 +131,7 @@ func (r *PatientRepository) DeletePatient(patientID uuid.UUID) (*models.Patient,
 	return patient, nil
 }
 
-func (r *PatientRepository) ReactivatePatient(patientID uuid.UUID) (*models.Patient, error) {
+func (r *PatientRepository) ReadmitPatient(patientID uuid.UUID) (*models.Patient, error) {
 	patient := &models.Patient{ID: patientID}
 	query := r.db.Unscoped().Model(patient).Update("is_discharged", 0)
 

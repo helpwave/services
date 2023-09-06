@@ -492,26 +492,26 @@ final $typed_data.Uint8List getPatientListResponseDescriptor = $convert.base64De
     'aWVudExpc3RSZXNwb25zZS5Sb29tUgRyb29tEkgKA2JlZBgEIAEoCzI2LnByb3RvLnNlcnZpY2'
     'VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuQmVkUgNiZWQ=');
 
-@$core.Deprecated('Use reactivatePatientRequestDescriptor instead')
-const ReactivatePatientRequest$json = {
-  '1': 'ReactivatePatientRequest',
+@$core.Deprecated('Use readmitPatientRequestDescriptor instead')
+const ReadmitPatientRequest$json = {
+  '1': 'ReadmitPatientRequest',
   '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'patient_id', '3': 1, '4': 1, '5': 9, '10': 'patientId'},
   ],
 };
 
-/// Descriptor for `ReactivatePatientRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List reactivatePatientRequestDescriptor = $convert.base64Decode(
-    'ChhSZWFjdGl2YXRlUGF0aWVudFJlcXVlc3QSDgoCaWQYASABKAlSAmlk');
+/// Descriptor for `ReadmitPatientRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List readmitPatientRequestDescriptor = $convert.base64Decode(
+    'ChVSZWFkbWl0UGF0aWVudFJlcXVlc3QSHQoKcGF0aWVudF9pZBgBIAEoCVIJcGF0aWVudElk');
 
-@$core.Deprecated('Use reactivatePatientResponseDescriptor instead')
-const ReactivatePatientResponse$json = {
-  '1': 'ReactivatePatientResponse',
+@$core.Deprecated('Use readmitPatientResponseDescriptor instead')
+const ReadmitPatientResponse$json = {
+  '1': 'ReadmitPatientResponse',
 };
 
-/// Descriptor for `ReactivatePatientResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List reactivatePatientResponseDescriptor = $convert.base64Decode(
-    'ChlSZWFjdGl2YXRlUGF0aWVudFJlc3BvbnNl');
+/// Descriptor for `ReadmitPatientResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List readmitPatientResponseDescriptor = $convert.base64Decode(
+    'ChZSZWFkbWl0UGF0aWVudFJlc3BvbnNl');
 
 const $core.Map<$core.String, $core.dynamic> PatientServiceBase$json = {
   '1': 'PatientService',
@@ -528,7 +528,7 @@ const $core.Map<$core.String, $core.dynamic> PatientServiceBase$json = {
     {'1': 'GetPatientDetails', '2': '.proto.services.task_svc.v1.GetPatientDetailsRequest', '3': '.proto.services.task_svc.v1.GetPatientDetailsResponse', '4': {}},
     {'1': 'GetPatientList', '2': '.proto.services.task_svc.v1.GetPatientListRequest', '3': '.proto.services.task_svc.v1.GetPatientListResponse', '4': {}},
     {'1': 'DeletePatient', '2': '.proto.services.task_svc.v1.DeletePatientRequest', '3': '.proto.services.task_svc.v1.DeletePatientResponse', '4': {}},
-    {'1': 'ReactivatePatient', '2': '.proto.services.task_svc.v1.ReactivatePatientRequest', '3': '.proto.services.task_svc.v1.ReactivatePatientResponse', '4': {}},
+    {'1': 'ReadmitPatient', '2': '.proto.services.task_svc.v1.ReadmitPatientRequest', '3': '.proto.services.task_svc.v1.ReadmitPatientResponse', '4': {}},
   ],
 };
 
@@ -568,8 +568,8 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> PatientSer
   '.proto.services.task_svc.v1.GetPatientListResponse.Patient': GetPatientListResponse_Patient$json,
   '.proto.services.task_svc.v1.DeletePatientRequest': DeletePatientRequest$json,
   '.proto.services.task_svc.v1.DeletePatientResponse': DeletePatientResponse$json,
-  '.proto.services.task_svc.v1.ReactivatePatientRequest': ReactivatePatientRequest$json,
-  '.proto.services.task_svc.v1.ReactivatePatientResponse': ReactivatePatientResponse$json,
+  '.proto.services.task_svc.v1.ReadmitPatientRequest': ReadmitPatientRequest$json,
+  '.proto.services.task_svc.v1.ReadmitPatientResponse': ReadmitPatientResponse$json,
 };
 
 /// Descriptor for `PatientService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
@@ -601,7 +601,7 @@ final $typed_data.Uint8List patientServiceDescriptor = $convert.base64Decode(
     'UmVxdWVzdBoyLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG'
     '9uc2UiABJ2Cg1EZWxldGVQYXRpZW50EjAucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuRGVs'
     'ZXRlUGF0aWVudFJlcXVlc3QaMS5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5EZWxldGVQYX'
-    'RpZW50UmVzcG9uc2UiABKCAQoRUmVhY3RpdmF0ZVBhdGllbnQSNC5wcm90by5zZXJ2aWNlcy50'
-    'YXNrX3N2Yy52MS5SZWFjdGl2YXRlUGF0aWVudFJlcXVlc3QaNS5wcm90by5zZXJ2aWNlcy50YX'
-    'NrX3N2Yy52MS5SZWFjdGl2YXRlUGF0aWVudFJlc3BvbnNlIgA=');
+    'RpZW50UmVzcG9uc2UiABJ5Cg5SZWFkbWl0UGF0aWVudBIxLnByb3RvLnNlcnZpY2VzLnRhc2tf'
+    'c3ZjLnYxLlJlYWRtaXRQYXRpZW50UmVxdWVzdBoyLnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLn'
+    'YxLlJlYWRtaXRQYXRpZW50UmVzcG9uc2UiAA==');
 

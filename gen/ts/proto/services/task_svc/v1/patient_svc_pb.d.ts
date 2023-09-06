@@ -836,34 +836,34 @@ export namespace GetPatientListResponse {
 
 }
 
-export class ReactivatePatientRequest extends jspb.Message {
-  getId(): string;
-  setId(value: string): ReactivatePatientRequest;
+export class ReadmitPatientRequest extends jspb.Message {
+  getPatientId(): string;
+  setPatientId(value: string): ReadmitPatientRequest;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): ReactivatePatientRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: ReactivatePatientRequest): ReactivatePatientRequest.AsObject;
-  static serializeBinaryToWriter(message: ReactivatePatientRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): ReactivatePatientRequest;
-  static deserializeBinaryFromReader(message: ReactivatePatientRequest, reader: jspb.BinaryReader): ReactivatePatientRequest;
+  toObject(includeInstance?: boolean): ReadmitPatientRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ReadmitPatientRequest): ReadmitPatientRequest.AsObject;
+  static serializeBinaryToWriter(message: ReadmitPatientRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReadmitPatientRequest;
+  static deserializeBinaryFromReader(message: ReadmitPatientRequest, reader: jspb.BinaryReader): ReadmitPatientRequest;
 }
 
-export namespace ReactivatePatientRequest {
+export namespace ReadmitPatientRequest {
   export type AsObject = {
-    id: string,
+    patientId: string,
   }
 }
 
-export class ReactivatePatientResponse extends jspb.Message {
+export class ReadmitPatientResponse extends jspb.Message {
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): ReactivatePatientResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: ReactivatePatientResponse): ReactivatePatientResponse.AsObject;
-  static serializeBinaryToWriter(message: ReactivatePatientResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): ReactivatePatientResponse;
-  static deserializeBinaryFromReader(message: ReactivatePatientResponse, reader: jspb.BinaryReader): ReactivatePatientResponse;
+  toObject(includeInstance?: boolean): ReadmitPatientResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: ReadmitPatientResponse): ReadmitPatientResponse.AsObject;
+  static serializeBinaryToWriter(message: ReadmitPatientResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReadmitPatientResponse;
+  static deserializeBinaryFromReader(message: ReadmitPatientResponse, reader: jspb.BinaryReader): ReadmitPatientResponse;
 }
 
-export namespace ReactivatePatientResponse {
+export namespace ReadmitPatientResponse {
   export type AsObject = {
   }
 }

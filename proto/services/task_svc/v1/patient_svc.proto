@@ -232,14 +232,14 @@ message GetPatientListResponse {
 
 
 //
-// ReactivatePatient
+// ReadmitPatient
 //
 
-message ReactivatePatientRequest {
-  string id = 1; // @gotags: validate:"uuid4"
+message ReadmitPatientRequest {
+  string patient_id = 1; // @gotags: validate:"uuid4"
 }
 
-message ReactivatePatientResponse {}
+message ReadmitPatientResponse {}
 
 //
 // PatientService
@@ -258,5 +258,5 @@ service PatientService {
   rpc GetPatientDetails(GetPatientDetailsRequest) returns (GetPatientDetailsResponse) {}
   rpc GetPatientList(GetPatientListRequest) returns (GetPatientListResponse) {}
   rpc DeletePatient(DeletePatientRequest) returns (DeletePatientResponse) {}
-  rpc ReactivatePatient(ReactivatePatientRequest) returns (ReactivatePatientResponse) {}
+  rpc ReadmitPatient(ReadmitPatientRequest) returns (ReadmitPatientResponse) {}
 }
