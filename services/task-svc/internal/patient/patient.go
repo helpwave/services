@@ -397,7 +397,7 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 	if isUsingWardID {
 		wardID, err = uuid.Parse(*req.WardId)
 		if err != nil {
-			return nil, status.Error(codes.InvalidArgument, "invalid organization id")
+			return nil, status.Error(codes.InvalidArgument, "invalid ward id")
 		}
 	}
 
