@@ -1739,11 +1739,11 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
 
 class GetPatientListRequest extends $pb.GeneratedMessage {
   factory GetPatientListRequest({
-    $core.String? organisationId,
+    $core.String? wardId,
   }) {
     final $result = create();
-    if (organisationId != null) {
-      $result.organisationId = organisationId;
+    if (wardId != null) {
+      $result.wardId = wardId;
     }
     return $result;
   }
@@ -1752,7 +1752,7 @@ class GetPatientListRequest extends $pb.GeneratedMessage {
   factory GetPatientListRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientListRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'organisationId')
+    ..aOS(1, _omitFieldNames ? '' : 'wardId')
     ..hasRequiredFields = false
   ;
 
@@ -1778,13 +1778,13 @@ class GetPatientListRequest extends $pb.GeneratedMessage {
   static GetPatientListRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get organisationId => $_getSZ(0);
+  $core.String get wardId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set organisationId($core.String v) { $_setString(0, v); }
+  set wardId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasOrganisationId() => $_has(0);
+  $core.bool hasWardId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearOrganisationId() => clearField(1);
+  void clearWardId() => clearField(1);
 }
 
 class GetPatientListResponse_Patient extends $pb.GeneratedMessage {
