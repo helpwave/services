@@ -387,19 +387,17 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListRequest) (*pb.GetPatientListResponse, error) {
 	patientRepo := repositories.PatientRepo(ctx)
 
-	var organizationID uuid.UUID
-	if req.OrganisationId != nil {
-		var err error
-		organizationID, err = uuid.Parse(*req.OrganisationId)
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid organization id")
+	}
+
+	isUsingWardID := req.WardId != nil
+	var wardID uuid.UUID
+	if isUsingWardID {
+		wardID, err = uuid.Parse(*req.WardId)
 		if err != nil {
-			return nil, status.Error(codes.Internal, err.Error())
-		}
-	} else {
-		var err error
-		organizationID, err = common.GetOrganizationID(ctx)
-		// TODO differentiate between errors here a malformed uuid is treated as missing in the response
-		if err != nil {
-			return nil, status.Error(codes.InvalidArgument, "either the header X-Organization or the organisation_id must be set to a uuid")
+			return nil, status.Error(codes.InvalidArgument, "invalid ward id")
 		}
 	}
 
@@ -413,15 +411,17 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	rooms, err := patientRepo.GetRoomsWithBedsWithActivePatientsForOrganization(organizationID)
+	var rooms []models.Room
+	if isUsingWardID {
+		rooms, err = patientRepo.GetRoomsWithBedsWithActivePatientsForWard(wardID)
+	} else {
+		rooms, err = patientRepo.GetRoomsWithBedsWithActivePatientsForOrganization(organizationID)
+	}
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	// TODO: replace with hwutil.Map()
-
 	var activePatients []*pb.GetPatientListResponse_PatientWithRoomAndBed
-
 	for _, room := range rooms {
 		for _, bed := range room.Beds {
 			if bed.Patient != nil {

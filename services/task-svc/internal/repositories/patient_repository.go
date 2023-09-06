@@ -109,6 +109,22 @@ func (r *PatientRepository) GetRoomsWithBedsWithActivePatientsForOrganization(or
 	return rooms, nil
 }
 
+func (r *PatientRepository) GetRoomsWithBedsWithActivePatientsForWard(wardID uuid.UUID) ([]models.Room, error) {
+	var rooms []models.Room
+	query := r.db.
+		Preload("Beds.Patient").
+		Joins("JOIN beds ON rooms.id = beds.room_id").
+		Joins("JOIN patients ON patients.bed_id = beds.id").
+		Where("rooms.ward_id = ? AND patients.is_discharged = 0", wardID).
+		Group("rooms.id").
+		Find(&rooms)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return rooms, nil
+}
+
 func (r *PatientRepository) UpdatePatient(patientID uuid.UUID, updates map[string]interface{}) (*models.Patient, error) {
 	patient := &models.Patient{ID: patientID}
 	query := r.db.
