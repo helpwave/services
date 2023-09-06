@@ -33,7 +33,7 @@ abstract class PatientServiceBase extends $pb.GeneratedService {
   $async.Future<$3.GetPatientDetailsResponse> getPatientDetails($pb.ServerContext ctx, $3.GetPatientDetailsRequest request);
   $async.Future<$3.GetPatientListResponse> getPatientList($pb.ServerContext ctx, $3.GetPatientListRequest request);
   $async.Future<$3.DeletePatientResponse> deletePatient($pb.ServerContext ctx, $3.DeletePatientRequest request);
-  $async.Future<$3.ReactivatePatientResponse> reactivatePatient($pb.ServerContext ctx, $3.ReactivatePatientRequest request);
+  $async.Future<$3.ReadmitPatientResponse> readmitPatient($pb.ServerContext ctx, $3.ReadmitPatientRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
@@ -49,7 +49,7 @@ abstract class PatientServiceBase extends $pb.GeneratedService {
       case 'GetPatientDetails': return $3.GetPatientDetailsRequest();
       case 'GetPatientList': return $3.GetPatientListRequest();
       case 'DeletePatient': return $3.DeletePatientRequest();
-      case 'ReactivatePatient': return $3.ReactivatePatientRequest();
+      case 'ReadmitPatient': return $3.ReadmitPatientRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
@@ -68,7 +68,7 @@ abstract class PatientServiceBase extends $pb.GeneratedService {
       case 'GetPatientDetails': return this.getPatientDetails(ctx, request as $3.GetPatientDetailsRequest);
       case 'GetPatientList': return this.getPatientList(ctx, request as $3.GetPatientListRequest);
       case 'DeletePatient': return this.deletePatient(ctx, request as $3.DeletePatientRequest);
-      case 'ReactivatePatient': return this.reactivatePatient(ctx, request as $3.ReactivatePatientRequest);
+      case 'ReadmitPatient': return this.readmitPatient(ctx, request as $3.ReadmitPatientRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
