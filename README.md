@@ -14,6 +14,9 @@ helpwave's microservices
 5. Run `./migrate.sh task-svc up` to run the migrations or do it manually by [installing migrate](https://github.com/golang-migrate/migrate)
 6. Run the service
    > Most of our services can be run via `go run main.go`. In the future, we will provide some more convenient ways to setup all services directly via Dapr.
+7. Add the following as Metadata in your requests:
+	- `X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406`
+	- `dapr-app-id: service-name`
 
 ### Fake token
 
