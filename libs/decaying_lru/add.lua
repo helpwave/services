@@ -11,7 +11,7 @@ local key = KEYS[1]
 local value = ARGV[1]
 local size = ARGV[2]
 local decay = ARGV[3]
-local inv_p = ARGV[4]
+local inv_p = tonumber(ARGV[4])
 
 local time = redis.call("TIME")[1]
 

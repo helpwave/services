@@ -106,6 +106,33 @@ message GetPatientAssignmentByWardResponse {
   }
 }
 
+//
+// GetRecentPatients
+//
+
+message GetRecentPatientsRequest {}
+
+message GetRecentPatientsResponse {
+  repeated PatientWithRoomAndBed recent_patients = 1;
+
+  message Bed {
+    string id = 1;
+    string name = 2;
+  }
+
+  message  Room {
+    string  id = 1;
+    string name = 2;
+  }
+
+  message PatientWithRoomAndBed {
+    string id = 1;
+    string human_readable_identifier = 2;
+    Room room = 3;
+    Bed bed = 4;
+  }
+}
+
 
 //
 // UpdatePatient
@@ -237,6 +264,7 @@ service PatientService {
   rpc GetPatientByBed(GetPatientByBedRequest) returns (GetPatientByBedResponse) {}
   rpc GetPatientsByWard(GetPatientsByWardRequest) returns (GetPatientsByWardResponse) {}
   rpc GetPatientAssignmentByWard(GetPatientAssignmentByWardRequest) returns (GetPatientAssignmentByWardResponse) {}
+  rpc GetRecentPatients(GetRecentPatientsRequest) returns (GetRecentPatientsResponse) {}
   rpc UpdatePatient(UpdatePatientRequest) returns (UpdatePatientResponse) {}
   rpc AssignBed(AssignBedRequest) returns (AssignBedResponse) {}
   rpc UnassignBed(UnassignBedRequest) returns (UnassignBedResponse) {}

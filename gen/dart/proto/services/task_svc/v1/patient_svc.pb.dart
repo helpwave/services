@@ -996,6 +996,306 @@ class GetPatientAssignmentByWardResponse extends $pb.GeneratedMessage {
   $core.List<GetPatientAssignmentByWardResponse_Room> get rooms => $_getList(0);
 }
 
+class GetRecentPatientsRequest extends $pb.GeneratedMessage {
+  factory GetRecentPatientsRequest() => create();
+  GetRecentPatientsRequest._() : super();
+  factory GetRecentPatientsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRecentPatientsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRecentPatientsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRecentPatientsRequest clone() => GetRecentPatientsRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRecentPatientsRequest copyWith(void Function(GetRecentPatientsRequest) updates) => super.copyWith((message) => updates(message as GetRecentPatientsRequest)) as GetRecentPatientsRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetRecentPatientsRequest create() => GetRecentPatientsRequest._();
+  GetRecentPatientsRequest createEmptyInstance() => create();
+  static $pb.PbList<GetRecentPatientsRequest> createRepeated() => $pb.PbList<GetRecentPatientsRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetRecentPatientsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRecentPatientsRequest>(create);
+  static GetRecentPatientsRequest? _defaultInstance;
+}
+
+class GetRecentPatientsResponse_Bed extends $pb.GeneratedMessage {
+  factory GetRecentPatientsResponse_Bed({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
+  GetRecentPatientsResponse_Bed._() : super();
+  factory GetRecentPatientsResponse_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRecentPatientsResponse_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRecentPatientsResponse.Bed', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRecentPatientsResponse_Bed clone() => GetRecentPatientsResponse_Bed()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRecentPatientsResponse_Bed copyWith(void Function(GetRecentPatientsResponse_Bed) updates) => super.copyWith((message) => updates(message as GetRecentPatientsResponse_Bed)) as GetRecentPatientsResponse_Bed;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetRecentPatientsResponse_Bed create() => GetRecentPatientsResponse_Bed._();
+  GetRecentPatientsResponse_Bed createEmptyInstance() => create();
+  static $pb.PbList<GetRecentPatientsResponse_Bed> createRepeated() => $pb.PbList<GetRecentPatientsResponse_Bed>();
+  @$core.pragma('dart2js:noInline')
+  static GetRecentPatientsResponse_Bed getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRecentPatientsResponse_Bed>(create);
+  static GetRecentPatientsResponse_Bed? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+}
+
+class GetRecentPatientsResponse_Room extends $pb.GeneratedMessage {
+  factory GetRecentPatientsResponse_Room({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
+  GetRecentPatientsResponse_Room._() : super();
+  factory GetRecentPatientsResponse_Room.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRecentPatientsResponse_Room.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRecentPatientsResponse.Room', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRecentPatientsResponse_Room clone() => GetRecentPatientsResponse_Room()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRecentPatientsResponse_Room copyWith(void Function(GetRecentPatientsResponse_Room) updates) => super.copyWith((message) => updates(message as GetRecentPatientsResponse_Room)) as GetRecentPatientsResponse_Room;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetRecentPatientsResponse_Room create() => GetRecentPatientsResponse_Room._();
+  GetRecentPatientsResponse_Room createEmptyInstance() => create();
+  static $pb.PbList<GetRecentPatientsResponse_Room> createRepeated() => $pb.PbList<GetRecentPatientsResponse_Room>();
+  @$core.pragma('dart2js:noInline')
+  static GetRecentPatientsResponse_Room getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRecentPatientsResponse_Room>(create);
+  static GetRecentPatientsResponse_Room? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+}
+
+class GetRecentPatientsResponse_PatientWithRoomAndBed extends $pb.GeneratedMessage {
+  factory GetRecentPatientsResponse_PatientWithRoomAndBed({
+    $core.String? id,
+    $core.String? humanReadableIdentifier,
+    GetRecentPatientsResponse_Room? room,
+    GetRecentPatientsResponse_Bed? bed,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (humanReadableIdentifier != null) {
+      $result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (room != null) {
+      $result.room = room;
+    }
+    if (bed != null) {
+      $result.bed = bed;
+    }
+    return $result;
+  }
+  GetRecentPatientsResponse_PatientWithRoomAndBed._() : super();
+  factory GetRecentPatientsResponse_PatientWithRoomAndBed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRecentPatientsResponse_PatientWithRoomAndBed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRecentPatientsResponse.PatientWithRoomAndBed', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
+    ..aOM<GetRecentPatientsResponse_Room>(3, _omitFieldNames ? '' : 'room', subBuilder: GetRecentPatientsResponse_Room.create)
+    ..aOM<GetRecentPatientsResponse_Bed>(4, _omitFieldNames ? '' : 'bed', subBuilder: GetRecentPatientsResponse_Bed.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRecentPatientsResponse_PatientWithRoomAndBed clone() => GetRecentPatientsResponse_PatientWithRoomAndBed()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRecentPatientsResponse_PatientWithRoomAndBed copyWith(void Function(GetRecentPatientsResponse_PatientWithRoomAndBed) updates) => super.copyWith((message) => updates(message as GetRecentPatientsResponse_PatientWithRoomAndBed)) as GetRecentPatientsResponse_PatientWithRoomAndBed;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetRecentPatientsResponse_PatientWithRoomAndBed create() => GetRecentPatientsResponse_PatientWithRoomAndBed._();
+  GetRecentPatientsResponse_PatientWithRoomAndBed createEmptyInstance() => create();
+  static $pb.PbList<GetRecentPatientsResponse_PatientWithRoomAndBed> createRepeated() => $pb.PbList<GetRecentPatientsResponse_PatientWithRoomAndBed>();
+  @$core.pragma('dart2js:noInline')
+  static GetRecentPatientsResponse_PatientWithRoomAndBed getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRecentPatientsResponse_PatientWithRoomAndBed>(create);
+  static GetRecentPatientsResponse_PatientWithRoomAndBed? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get humanReadableIdentifier => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set humanReadableIdentifier($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasHumanReadableIdentifier() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearHumanReadableIdentifier() => clearField(2);
+
+  @$pb.TagNumber(3)
+  GetRecentPatientsResponse_Room get room => $_getN(2);
+  @$pb.TagNumber(3)
+  set room(GetRecentPatientsResponse_Room v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasRoom() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearRoom() => clearField(3);
+  @$pb.TagNumber(3)
+  GetRecentPatientsResponse_Room ensureRoom() => $_ensure(2);
+
+  @$pb.TagNumber(4)
+  GetRecentPatientsResponse_Bed get bed => $_getN(3);
+  @$pb.TagNumber(4)
+  set bed(GetRecentPatientsResponse_Bed v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasBed() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearBed() => clearField(4);
+  @$pb.TagNumber(4)
+  GetRecentPatientsResponse_Bed ensureBed() => $_ensure(3);
+}
+
+class GetRecentPatientsResponse extends $pb.GeneratedMessage {
+  factory GetRecentPatientsResponse({
+    $core.Iterable<GetRecentPatientsResponse_PatientWithRoomAndBed>? recentPatients,
+  }) {
+    final $result = create();
+    if (recentPatients != null) {
+      $result.recentPatients.addAll(recentPatients);
+    }
+    return $result;
+  }
+  GetRecentPatientsResponse._() : super();
+  factory GetRecentPatientsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRecentPatientsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRecentPatientsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..pc<GetRecentPatientsResponse_PatientWithRoomAndBed>(1, _omitFieldNames ? '' : 'recentPatients', $pb.PbFieldType.PM, subBuilder: GetRecentPatientsResponse_PatientWithRoomAndBed.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRecentPatientsResponse clone() => GetRecentPatientsResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRecentPatientsResponse copyWith(void Function(GetRecentPatientsResponse) updates) => super.copyWith((message) => updates(message as GetRecentPatientsResponse)) as GetRecentPatientsResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetRecentPatientsResponse create() => GetRecentPatientsResponse._();
+  GetRecentPatientsResponse createEmptyInstance() => create();
+  static $pb.PbList<GetRecentPatientsResponse> createRepeated() => $pb.PbList<GetRecentPatientsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetRecentPatientsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRecentPatientsResponse>(create);
+  static GetRecentPatientsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<GetRecentPatientsResponse_PatientWithRoomAndBed> get recentPatients => $_getList(0);
+}
+
 class UpdatePatientRequest extends $pb.GeneratedMessage {
   factory UpdatePatientRequest({
     $core.String? id,
@@ -2153,6 +2453,9 @@ class PatientServiceApi {
   ;
   $async.Future<GetPatientAssignmentByWardResponse> getPatientAssignmentByWard($pb.ClientContext? ctx, GetPatientAssignmentByWardRequest request) =>
     _client.invoke<GetPatientAssignmentByWardResponse>(ctx, 'PatientService', 'GetPatientAssignmentByWard', request, GetPatientAssignmentByWardResponse())
+  ;
+  $async.Future<GetRecentPatientsResponse> getRecentPatients($pb.ClientContext? ctx, GetRecentPatientsRequest request) =>
+    _client.invoke<GetRecentPatientsResponse>(ctx, 'PatientService', 'GetRecentPatients', request, GetRecentPatientsResponse())
   ;
   $async.Future<UpdatePatientResponse> updatePatient($pb.ClientContext? ctx, UpdatePatientRequest request) =>
     _client.invoke<UpdatePatientResponse>(ctx, 'PatientService', 'UpdatePatient', request, UpdatePatientResponse())

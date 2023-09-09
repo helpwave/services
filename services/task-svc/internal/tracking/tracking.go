@@ -4,6 +4,7 @@ import (
 	"common"
 	"context"
 	"decaying_lru"
+	"errors"
 	zlog "github.com/rs/zerolog/log"
 	"hwutil"
 	"time"
@@ -54,7 +55,9 @@ func getUserID(ctx context.Context) string {
 //   - the context originates from an authenticated request
 func AddPatientToRecentActivity(ctx context.Context, patientID string) {
 	if userID := getUserID(ctx); userID != "" {
-		_ = lru.AddItemForUser(PatientKey, userID, patientID)
+		if err := lru.AddItemForUser(PatientKey, userID, patientID); err != nil {
+			zlog.Ctx(ctx).Error().Err(err).Msg("could not add patient to recent activity")
+		}
 	}
 }
 
@@ -68,13 +71,27 @@ func RemovePatientFromRecentActivity(ctx context.Context, patientID string) {
 	}
 }
 
+// GetRecentPatientsForUser returns patient ids from the current user's recent activity
+// only works, when
+//   - SetupTracking was called earlier
+//   - the context originates from an authenticated request
+func GetRecentPatientsForUser(ctx context.Context) ([]string, error) {
+	userID := getUserID(ctx)
+	if userID == "" {
+		return nil, errors.New("GetRecentPatientsForUser called, but context has no userID")
+	}
+	return lru.GetItemsForUser(PatientKey, userID)
+}
+
 // AddWardToRecentActivity adds a ward to the user's recent activity,
 // only works, when
 //   - SetupTracking was called earlier
 //   - the context originates from an authenticated request
 func AddWardToRecentActivity(ctx context.Context, wardID string) {
 	if userID := getUserID(ctx); userID != "" {
-		_ = lru.AddItemForUser(WardKey, userID, wardID)
+		if err := lru.AddItemForUser(WardKey, userID, wardID); err != nil {
+			zlog.Ctx(ctx).Error().Err(err).Msg("could not add ward to recent activity")
+		}
 	}
 }
 

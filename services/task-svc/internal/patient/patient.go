@@ -192,6 +192,62 @@ func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.Get
 	}, nil
 }
 
+func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPatientsRequest) (*pb.GetRecentPatientsResponse, error) {
+	patientRepo := repositories.PatientRepo(ctx)
+	log := zlog.Ctx(ctx)
+
+	// TODO: Auth
+
+	recentPatientIdsStrs, err := tracking.GetRecentPatientsForUser(ctx)
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	// parse all valid uuids into an array
+	recentPatientIds := hwutil.FlatMap(recentPatientIdsStrs, func(s string) *uuid.UUID {
+		parsedUUID, err := uuid.Parse(s)
+		if err != nil {
+			log.Warn().Str("uuid", s).Msg("GetRecentPatientsForUser returned invalid uuid")
+			return nil
+		}
+		return &parsedUUID
+	})
+
+	patients, err := patientRepo.GetPatientsByIdsWithBedAndRoom(recentPatientIds)
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	recentPatients := hwutil.Map(patients, func(patient models.Patient) *pb.GetRecentPatientsResponse_PatientWithRoomAndBed {
+		var bed *pb.GetRecentPatientsResponse_Bed = nil
+		var room *pb.GetRecentPatientsResponse_Room = nil
+
+		if patient.Bed != nil {
+			bed = &pb.GetRecentPatientsResponse_Bed{
+				Id:   patient.Bed.ID.String(),
+				Name: patient.Bed.Name,
+			}
+			if patient.Bed.Room != nil {
+				room = &pb.GetRecentPatientsResponse_Room{
+					Id:   patient.Bed.Room.ID.String(),
+					Name: patient.Bed.Room.Name,
+				}
+			}
+		}
+
+		return &pb.GetRecentPatientsResponse_PatientWithRoomAndBed{
+			Id:                      patient.ID.String(),
+			HumanReadableIdentifier: patient.HumanReadableIdentifier,
+			Room:                    room,
+			Bed:                     bed,
+		}
+	})
+
+	return &pb.GetRecentPatientsResponse{RecentPatients: recentPatients}, nil
+}
+
 func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientRequest) (*pb.UpdatePatientResponse, error) {
 	patientRepo := repositories.PatientRepo(ctx)
 
