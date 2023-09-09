@@ -134,6 +134,7 @@ func getOrganizationsByUser(ctx context.Context, userID uuid.UUID) ([]models.Org
 
 	var organizations []models.Organization
 	err := db.
+		Preload("Members.User").
 		Preload("Members").
 		Joins("JOIN memberships ON memberships.organization_id = organizations.id").
 		Where("memberships.user_id = ?", userID).
@@ -160,13 +161,6 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOr
 		}
 	}
 
-	userRepository := repositories.UserRepo(ctx)
-
-	user, err := userRepository.GetUserById(userID)
-	if err != nil {
-		return nil, err
-	}
-
 	mappedOrganizations := hwutil.Map(organizations, func(organization models.Organization) *pb.GetOrganizationsByUserResponse_Organization {
 		return &pb.GetOrganizationsByUserResponse_Organization{
 			Id:           organization.ID.String(),
@@ -178,9 +172,9 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOr
 			Members: hwutil.Map(organization.Members, func(membership models.Membership) *pb.GetOrganizationsByUserResponse_Organization_Member {
 				return &pb.GetOrganizationsByUserResponse_Organization_Member{
 					UserId:    membership.UserID.String(),
-					AvatarUrl: user.Avatar,
-					Email:     user.Email,
-					Nickname:  user.Nickname,
+					AvatarUrl: membership.User.Avatar,
+					Email:     membership.User.Email,
+					Nickname:  membership.User.Nickname,
 				}
 			}),
 		}
@@ -206,13 +200,6 @@ func (s ServiceServer) GetOrganizationsForUser(ctx context.Context, _ *pb.GetOrg
 		}
 	}
 
-	userRepository := repositories.UserRepo(ctx)
-
-	user, err := userRepository.GetUserById(userID)
-	if err != nil {
-		return nil, err
-	}
-
 	mappedOrganizations := hwutil.Map(organizations, func(organization models.Organization) *pb.GetOrganizationsForUserResponse_Organization {
 		return &pb.GetOrganizationsForUserResponse_Organization{
 			Id:           organization.ID.String(),
@@ -224,9 +211,9 @@ func (s ServiceServer) GetOrganizationsForUser(ctx context.Context, _ *pb.GetOrg
 			Members: hwutil.Map(organization.Members, func(membership models.Membership) *pb.GetOrganizationsForUserResponse_Organization_Member {
 				return &pb.GetOrganizationsForUserResponse_Organization_Member{
 					UserId:    membership.UserID.String(),
-					AvatarUrl: user.Avatar,
-					Email:     user.Email,
-					Nickname:  user.Nickname,
+					AvatarUrl: membership.User.Avatar,
+					Email:     membership.User.Email,
+					Nickname:  membership.User.Nickname,
 				}
 			}),
 		}

@@ -222,7 +222,7 @@ message GetPatientDetailsResponse {
 
 
 message GetPatientListRequest {
-  optional string organisation_id = 1;
+  optional string ward_id = 1;
 }
 
 message GetPatientListResponse {
