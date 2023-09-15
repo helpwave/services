@@ -1,0 +1,33 @@
+primary_region = "ams"
+
+[build]
+  dockerfile = "../../Dockerfile.standalone"
+
+[build.args]
+  SERVICE = "task-svc"
+
+[env]
+  OAUTH_CLIENT_ID="425f8b8d-c786-4ff7-b2bf-e52f505fb588"
+
+[deploy]
+  strategy = "bluegreen"
+  release_command = "./run-migrations.sh"
+
+[[services]]
+  auto_stop_machines = false
+  auto_start_machines = false
+
+[checks]
+  [checks.dapr_sidecar]
+    grace_period = "15s"
+    interval = "10s"
+    method = "get"
+    path = "/v1.0/healthz"
+    port = 3500
+    timeout = "2s"
+    type = "http"
+
+[metrics]
+  port = 9090
+  path = "/metrics"
+
