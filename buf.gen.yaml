@@ -24,4 +24,5 @@ plugins:
       - import_style=commonjs,binary
 
   - plugin: buf.build/protocolbuffers/dart
-    out: gen/dart
+    out: gen/dart/lib
+    opt: grpc
