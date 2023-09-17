@@ -4,3 +4,7 @@ repository: "https://github.com/helpwave/services.git"
 version: 0.21.1-eac9535.0
 environment:
   sdk: '^2.12.0'
+dependencies:
+  grpc: ^3.2.4
+  protobuf: ^3.1.0
+  fixnum: ^1.1.0
