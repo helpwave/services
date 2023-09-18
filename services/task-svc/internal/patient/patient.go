@@ -533,3 +533,22 @@ func (ServiceServer) DeletePatient(ctx context.Context, req *pb.DeletePatientReq
 
 	return &pb.DeletePatientResponse{}, nil
 }
+
+func (ServiceServer) ReadmitPatient(ctx context.Context, req *pb.ReadmitPatientRequest) (*pb.ReadmitPatientResponse, error) {
+	id, err := uuid.Parse(req.PatientId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	// TODO: admin check
+
+	patientRepo := repositories.PatientRepo(ctx)
+	_, err = patientRepo.ReadmitPatient(id)
+	if err != nil {
+		return nil, err
+	}
+
+	tracking.AddPatientToRecentActivity(ctx, id.String())
+
+	return &pb.ReadmitPatientResponse{}, nil
+}

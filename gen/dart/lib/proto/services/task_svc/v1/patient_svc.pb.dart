@@ -2434,6 +2434,88 @@ class GetPatientListResponse extends $pb.GeneratedMessage {
   $core.List<GetPatientListResponse_Patient> get dischargedPatients => $_getList(2);
 }
 
+class ReadmitPatientRequest extends $pb.GeneratedMessage {
+  factory ReadmitPatientRequest({
+    $core.String? patientId,
+  }) {
+    final $result = create();
+    if (patientId != null) {
+      $result.patientId = patientId;
+    }
+    return $result;
+  }
+  ReadmitPatientRequest._() : super();
+  factory ReadmitPatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ReadmitPatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReadmitPatientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'patientId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ReadmitPatientRequest clone() => ReadmitPatientRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ReadmitPatientRequest copyWith(void Function(ReadmitPatientRequest) updates) => super.copyWith((message) => updates(message as ReadmitPatientRequest)) as ReadmitPatientRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ReadmitPatientRequest create() => ReadmitPatientRequest._();
+  ReadmitPatientRequest createEmptyInstance() => create();
+  static $pb.PbList<ReadmitPatientRequest> createRepeated() => $pb.PbList<ReadmitPatientRequest>();
+  @$core.pragma('dart2js:noInline')
+  static ReadmitPatientRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReadmitPatientRequest>(create);
+  static ReadmitPatientRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get patientId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set patientId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasPatientId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPatientId() => clearField(1);
+}
+
+class ReadmitPatientResponse extends $pb.GeneratedMessage {
+  factory ReadmitPatientResponse() => create();
+  ReadmitPatientResponse._() : super();
+  factory ReadmitPatientResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ReadmitPatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReadmitPatientResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ReadmitPatientResponse clone() => ReadmitPatientResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ReadmitPatientResponse copyWith(void Function(ReadmitPatientResponse) updates) => super.copyWith((message) => updates(message as ReadmitPatientResponse)) as ReadmitPatientResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ReadmitPatientResponse create() => ReadmitPatientResponse._();
+  ReadmitPatientResponse createEmptyInstance() => create();
+  static $pb.PbList<ReadmitPatientResponse> createRepeated() => $pb.PbList<ReadmitPatientResponse>();
+  @$core.pragma('dart2js:noInline')
+  static ReadmitPatientResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReadmitPatientResponse>(create);
+  static ReadmitPatientResponse? _defaultInstance;
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

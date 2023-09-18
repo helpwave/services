@@ -221,6 +221,10 @@ message GetPatientDetailsResponse {
 }
 
 
+//
+// GetPatientList
+//
+
 message GetPatientListRequest {
   optional string ward_id = 1;
 }
@@ -255,6 +259,16 @@ message GetPatientListResponse {
 
 
 //
+// ReadmitPatient
+//
+
+message ReadmitPatientRequest {
+  string patient_id = 1; // @gotags: validate:"uuid4"
+}
+
+message ReadmitPatientResponse {}
+
+//
 // PatientService
 //
 
@@ -272,4 +286,5 @@ service PatientService {
   rpc GetPatientDetails(GetPatientDetailsRequest) returns (GetPatientDetailsResponse) {}
   rpc GetPatientList(GetPatientListRequest) returns (GetPatientListResponse) {}
   rpc DeletePatient(DeletePatientRequest) returns (DeletePatientResponse) {}
+  rpc ReadmitPatient(ReadmitPatientRequest) returns (ReadmitPatientResponse) {}
 }

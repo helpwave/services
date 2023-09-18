@@ -551,3 +551,24 @@ final $typed_data.Uint8List getPatientListResponseDescriptor = $convert.base64De
     'aWVudExpc3RSZXNwb25zZS5Sb29tUgRyb29tEkgKA2JlZBgEIAEoCzI2LnByb3RvLnNlcnZpY2'
     'VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuQmVkUgNiZWQ=');
 
+@$core.Deprecated('Use readmitPatientRequestDescriptor instead')
+const ReadmitPatientRequest$json = {
+  '1': 'ReadmitPatientRequest',
+  '2': [
+    {'1': 'patient_id', '3': 1, '4': 1, '5': 9, '10': 'patientId'},
+  ],
+};
+
+/// Descriptor for `ReadmitPatientRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List readmitPatientRequestDescriptor = $convert.base64Decode(
+    'ChVSZWFkbWl0UGF0aWVudFJlcXVlc3QSHQoKcGF0aWVudF9pZBgBIAEoCVIJcGF0aWVudElk');
+
+@$core.Deprecated('Use readmitPatientResponseDescriptor instead')
+const ReadmitPatientResponse$json = {
+  '1': 'ReadmitPatientResponse',
+};
+
+/// Descriptor for `ReadmitPatientResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List readmitPatientResponseDescriptor = $convert.base64Decode(
+    'ChZSZWFkbWl0UGF0aWVudFJlc3BvbnNl');
+
