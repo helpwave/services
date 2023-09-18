@@ -73,6 +73,10 @@ class PatientServiceClient extends $grpc.Client {
       '/proto.services.task_svc.v1.PatientService/DeletePatient',
       ($3.DeletePatientRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $3.DeletePatientResponse.fromBuffer(value));
+  static final _$readmitPatient = $grpc.ClientMethod<$3.ReadmitPatientRequest, $3.ReadmitPatientResponse>(
+      '/proto.services.task_svc.v1.PatientService/ReadmitPatient',
+      ($3.ReadmitPatientRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $3.ReadmitPatientResponse.fromBuffer(value));
 
   PatientServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -130,6 +134,10 @@ class PatientServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$3.DeletePatientResponse> deletePatient($3.DeletePatientRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$deletePatient, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$3.ReadmitPatientResponse> readmitPatient($3.ReadmitPatientRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$readmitPatient, request, options: options);
   }
 }
 
@@ -229,6 +237,13 @@ abstract class PatientServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $3.DeletePatientRequest.fromBuffer(value),
         ($3.DeletePatientResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.ReadmitPatientRequest, $3.ReadmitPatientResponse>(
+        'ReadmitPatient',
+        readmitPatient_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $3.ReadmitPatientRequest.fromBuffer(value),
+        ($3.ReadmitPatientResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$3.CreatePatientResponse> createPatient_Pre($grpc.ServiceCall call, $async.Future<$3.CreatePatientRequest> request) async {
@@ -283,6 +298,10 @@ abstract class PatientServiceBase extends $grpc.Service {
     return deletePatient(call, await request);
   }
 
+  $async.Future<$3.ReadmitPatientResponse> readmitPatient_Pre($grpc.ServiceCall call, $async.Future<$3.ReadmitPatientRequest> request) async {
+    return readmitPatient(call, await request);
+  }
+
   $async.Future<$3.CreatePatientResponse> createPatient($grpc.ServiceCall call, $3.CreatePatientRequest request);
   $async.Future<$3.GetPatientResponse> getPatient($grpc.ServiceCall call, $3.GetPatientRequest request);
   $async.Future<$3.GetPatientByBedResponse> getPatientByBed($grpc.ServiceCall call, $3.GetPatientByBedRequest request);
@@ -296,4 +315,5 @@ abstract class PatientServiceBase extends $grpc.Service {
   $async.Future<$3.GetPatientDetailsResponse> getPatientDetails($grpc.ServiceCall call, $3.GetPatientDetailsRequest request);
   $async.Future<$3.GetPatientListResponse> getPatientList($grpc.ServiceCall call, $3.GetPatientListRequest request);
   $async.Future<$3.DeletePatientResponse> deletePatient($grpc.ServiceCall call, $3.DeletePatientRequest request);
+  $async.Future<$3.ReadmitPatientResponse> readmitPatient($grpc.ServiceCall call, $3.ReadmitPatientRequest request);
 }
