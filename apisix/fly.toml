@@ -12,3 +12,6 @@ primary_region = "ams"
   [[services.ports]]
     handlers = ["tls"]
     port = 443
+
+  [services.ports.tls_options]
+    alpn = ["h2"]
