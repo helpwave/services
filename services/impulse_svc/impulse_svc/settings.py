@@ -77,13 +77,11 @@ if os.environ.get("DB_HOST"):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "OPTIONS": {
-                "HOST": os.environ.get("DB_HOST", ""),
-                "USER": os.environ.get("DB_USER", ""),
-                "NAME": os.environ.get("DB_NAME", ""),
-                "PASSWORD": os.environ.get("DB_PASSWORD", ""),
-                "PORT": 5432,
-            },
+            "HOST": os.environ.get("DB_HOST", ""),
+            "USER": os.environ.get("DB_USER", ""),
+            "NAME": os.environ.get("DB_NAME", ""),
+            "PASSWORD": os.environ.get("DB_PASSWORD", ""),
+            "PORT": 5432,
         }
     }
 else:
