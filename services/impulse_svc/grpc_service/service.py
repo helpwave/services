@@ -43,6 +43,20 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             total_score += user_challenge.score
         return impulse_svc_pb2.GetScoreResponse(score=total_score)
     
+    def GetRewards(self, request, context):
+        user = User.objects.get(id=request.user_id)
+        rewards = Reward.objects.filter(points__lte=user.score)
+        return impulse_svc_pb2.GetRewardsResponse(
+            rewards=[
+                impulse_svc_pb2.Reward(
+                    id=str(reward.id),
+                    title=reward.title,
+                    description=reward.description,
+                    points=reward.points,
+                ) for reward in rewards
+            ]
+        )
+    
     def UpdateUser(self, request, context):
         try:
             user = User.objects.get(id=request.id)
@@ -53,6 +67,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             user.gender = request.gender
             user.pal = request.pal
             user.birthday = datetime.fromisoformat(request.birthday)
+            user.team = Team.objects.get(id=request.team_id)
             user.save()
 
             return impulse_svc_pb2.UpdateUserResponse(
