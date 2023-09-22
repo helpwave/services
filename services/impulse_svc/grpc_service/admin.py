@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User, Challenge, UserChallenge
+from .models import User, Challenge, UserChallenge, Reward, Team
 
 
 class UserChallengeInline(admin.TabularInline):
@@ -17,4 +17,12 @@ class User(admin.ModelAdmin):
     ]
 
 
+@admin.register(Team)
+class User(admin.ModelAdmin):
+    readonly_fields = [
+        "score"
+    ]
+
+
 admin.site.register(Challenge)
+admin.site.register(Reward)

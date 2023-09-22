@@ -59,6 +59,14 @@ class Team(models.Model):
     image: str = models.CharField(max_length=100)
     description: str = models.TextField()
 
+    def __str__(self):
+        return self.name
+
+    @property
+    def score(self):
+        return (self.user_set.all().values("userchallenge__score").aggregate(Sum("userchallenge__score")).
+                get("userchallenge__score__sum", 0))
+
 
 class User(models.Model):
     class Gender(models.TextChoices):
@@ -74,7 +82,7 @@ class User(models.Model):
     image: str = models.CharField(max_length=100)
 
     challenges: list = models.ManyToManyField(Challenge, through=UserChallenge)
-    rewards: list = models.ManyToManyField(Reward)
+    rewards: list = models.ManyToManyField(Reward, null=True, blank=True)
     team: Team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
