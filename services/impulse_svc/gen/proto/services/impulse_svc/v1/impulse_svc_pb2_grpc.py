@@ -8,7 +8,7 @@ from proto.services.impulse_svc.v1 import impulse_svc_pb2 as proto_dot_services_
 class ImpulseServiceStub(object):
     """
     ImpulseService
-    
+
 
     """
 
@@ -53,12 +53,17 @@ class ImpulseServiceStub(object):
                 request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllRewardsRequest.SerializeToString,
                 response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllRewardsResponse.FromString,
                 )
+        self.GetAllTeams = channel.unary_unary(
+                '/proto.services.impulse_svc.v1.ImpulseService/GetAllTeams',
+                request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllTeamsRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllTeamsResponse.FromString,
+                )
 
 
 class ImpulseServiceServicer(object):
     """
     ImpulseService
-    
+
 
     """
 
@@ -104,6 +109,12 @@ class ImpulseServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetAllTeams(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ImpulseServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -142,6 +153,11 @@ def add_ImpulseServiceServicer_to_server(servicer, server):
                     request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllRewardsRequest.FromString,
                     response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllRewardsResponse.SerializeToString,
             ),
+            'GetAllTeams': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetAllTeams,
+                    request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllTeamsRequest.FromString,
+                    response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllTeamsResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'proto.services.impulse_svc.v1.ImpulseService', rpc_method_handlers)
@@ -152,7 +168,7 @@ def add_ImpulseServiceServicer_to_server(servicer, server):
 class ImpulseService(object):
     """
     ImpulseService
-    
+
 
     """
 
@@ -272,5 +288,22 @@ class ImpulseService(object):
         return grpc.experimental.unary_unary(request, target, '/proto.services.impulse_svc.v1.ImpulseService/GetAllRewards',
             proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllRewardsRequest.SerializeToString,
             proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllRewardsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetAllTeams(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.impulse_svc.v1.ImpulseService/GetAllTeams',
+            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllTeamsRequest.SerializeToString,
+            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllTeamsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

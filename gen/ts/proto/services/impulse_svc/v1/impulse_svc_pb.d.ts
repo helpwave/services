@@ -131,6 +131,75 @@ export namespace UpdateUserResponse {
   }
 }
 
+export class GetAllTeamsRequest extends jspb.Message {
+  getUserId(): string;
+  setUserId(value: string): GetAllTeamsRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetAllTeamsRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetAllTeamsRequest): GetAllTeamsRequest.AsObject;
+  static serializeBinaryToWriter(message: GetAllTeamsRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetAllTeamsRequest;
+  static deserializeBinaryFromReader(message: GetAllTeamsRequest, reader: jspb.BinaryReader): GetAllTeamsRequest;
+}
+
+export namespace GetAllTeamsRequest {
+  export type AsObject = {
+    userId: string,
+  }
+}
+
+export class GetAllTeamsResponse extends jspb.Message {
+  getTeamsList(): Array<GetAllTeamsResponse.Team>;
+  setTeamsList(value: Array<GetAllTeamsResponse.Team>): GetAllTeamsResponse;
+  clearTeamsList(): GetAllTeamsResponse;
+  addTeams(value?: GetAllTeamsResponse.Team, index?: number): GetAllTeamsResponse.Team;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetAllTeamsResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetAllTeamsResponse): GetAllTeamsResponse.AsObject;
+  static serializeBinaryToWriter(message: GetAllTeamsResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetAllTeamsResponse;
+  static deserializeBinaryFromReader(message: GetAllTeamsResponse, reader: jspb.BinaryReader): GetAllTeamsResponse;
+}
+
+export namespace GetAllTeamsResponse {
+  export type AsObject = {
+    teamsList: Array<GetAllTeamsResponse.Team.AsObject>,
+  }
+
+  export class Team extends jspb.Message {
+    getId(): string;
+    setId(value: string): Team;
+
+    getName(): string;
+    setName(value: string): Team;
+
+    getDescription(): string;
+    setDescription(value: string): Team;
+
+    getImage(): string;
+    setImage(value: string): Team;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Team.AsObject;
+    static toObject(includeInstance: boolean, msg: Team): Team.AsObject;
+    static serializeBinaryToWriter(message: Team, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Team;
+    static deserializeBinaryFromReader(message: Team, reader: jspb.BinaryReader): Team;
+  }
+
+  export namespace Team {
+    export type AsObject = {
+      id: string,
+      name: string,
+      description: string,
+      image: string,
+    }
+  }
+
+}
+
 export class TrackChallengeRequest extends jspb.Message {
   getChallengeId(): string;
   setChallengeId(value: string): TrackChallengeRequest;

@@ -504,5 +504,66 @@ proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.getAll
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.impulse_svc.v1.GetAllTeamsRequest,
+ *   !proto.proto.services.impulse_svc.v1.GetAllTeamsResponse>}
+ */
+const methodDescriptor_ImpulseService_GetAllTeams = new grpc.web.MethodDescriptor(
+  '/proto.services.impulse_svc.v1.ImpulseService/GetAllTeams',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.impulse_svc.v1.GetAllTeamsRequest,
+  proto.proto.services.impulse_svc.v1.GetAllTeamsResponse,
+  /**
+   * @param {!proto.proto.services.impulse_svc.v1.GetAllTeamsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.impulse_svc.v1.GetAllTeamsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.impulse_svc.v1.GetAllTeamsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.impulse_svc.v1.GetAllTeamsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.impulse_svc.v1.ImpulseServiceClient.prototype.getAllTeams =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.impulse_svc.v1.ImpulseService/GetAllTeams',
+      request,
+      metadata || {},
+      methodDescriptor_ImpulseService_GetAllTeams,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.impulse_svc.v1.GetAllTeamsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.impulse_svc.v1.GetAllTeamsResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.getAllTeams =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.impulse_svc.v1.ImpulseService/GetAllTeams',
+      request,
+      metadata || {},
+      methodDescriptor_ImpulseService_GetAllTeams);
+};
+
+
 module.exports = proto.proto.services.impulse_svc.v1;
 

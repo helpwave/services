@@ -26,6 +26,7 @@ const (
 	ImpulseService_GetScore_FullMethodName            = "/proto.services.impulse_svc.v1.ImpulseService/GetScore"
 	ImpulseService_GetRewards_FullMethodName          = "/proto.services.impulse_svc.v1.ImpulseService/GetRewards"
 	ImpulseService_GetAllRewards_FullMethodName       = "/proto.services.impulse_svc.v1.ImpulseService/GetAllRewards"
+	ImpulseService_GetAllTeams_FullMethodName         = "/proto.services.impulse_svc.v1.ImpulseService/GetAllTeams"
 )
 
 // ImpulseServiceClient is the client API for ImpulseService service.
@@ -39,6 +40,7 @@ type ImpulseServiceClient interface {
 	GetScore(ctx context.Context, in *GetScoreRequest, opts ...grpc.CallOption) (*GetScoreResponse, error)
 	GetRewards(ctx context.Context, in *GetRewardsRequest, opts ...grpc.CallOption) (*GetRewardsResponse, error)
 	GetAllRewards(ctx context.Context, in *GetAllRewardsRequest, opts ...grpc.CallOption) (*GetAllRewardsResponse, error)
+	GetAllTeams(ctx context.Context, in *GetAllTeamsRequest, opts ...grpc.CallOption) (*GetAllTeamsResponse, error)
 }
 
 type impulseServiceClient struct {
@@ -112,6 +114,15 @@ func (c *impulseServiceClient) GetAllRewards(ctx context.Context, in *GetAllRewa
 	return out, nil
 }
 
+func (c *impulseServiceClient) GetAllTeams(ctx context.Context, in *GetAllTeamsRequest, opts ...grpc.CallOption) (*GetAllTeamsResponse, error) {
+	out := new(GetAllTeamsResponse)
+	err := c.cc.Invoke(ctx, ImpulseService_GetAllTeams_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ImpulseServiceServer is the server API for ImpulseService service.
 // All implementations must embed UnimplementedImpulseServiceServer
 // for forward compatibility
@@ -123,6 +134,7 @@ type ImpulseServiceServer interface {
 	GetScore(context.Context, *GetScoreRequest) (*GetScoreResponse, error)
 	GetRewards(context.Context, *GetRewardsRequest) (*GetRewardsResponse, error)
 	GetAllRewards(context.Context, *GetAllRewardsRequest) (*GetAllRewardsResponse, error)
+	GetAllTeams(context.Context, *GetAllTeamsRequest) (*GetAllTeamsResponse, error)
 	mustEmbedUnimplementedImpulseServiceServer()
 }
 
@@ -150,6 +162,9 @@ func (UnimplementedImpulseServiceServer) GetRewards(context.Context, *GetRewards
 }
 func (UnimplementedImpulseServiceServer) GetAllRewards(context.Context, *GetAllRewardsRequest) (*GetAllRewardsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllRewards not implemented")
+}
+func (UnimplementedImpulseServiceServer) GetAllTeams(context.Context, *GetAllTeamsRequest) (*GetAllTeamsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllTeams not implemented")
 }
 func (UnimplementedImpulseServiceServer) mustEmbedUnimplementedImpulseServiceServer() {}
 
@@ -290,6 +305,24 @@ func _ImpulseService_GetAllRewards_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ImpulseService_GetAllTeams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllTeamsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ImpulseServiceServer).GetAllTeams(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ImpulseService_GetAllTeams_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ImpulseServiceServer).GetAllTeams(ctx, req.(*GetAllTeamsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ImpulseService_ServiceDesc is the grpc.ServiceDesc for ImpulseService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -324,6 +357,10 @@ var ImpulseService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllRewards",
 			Handler:    _ImpulseService_GetAllRewards_Handler,
+		},
+		{
+			MethodName: "GetAllTeams",
+			Handler:    _ImpulseService_GetAllTeams_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

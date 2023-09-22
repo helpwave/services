@@ -111,6 +111,45 @@ final $typed_data.Uint8List updateUserResponseDescriptor = $convert.base64Decode
     'ChJVcGRhdGVVc2VyUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhYKBmdlbmRlchgCIAEoCVIGZ2'
     'VuZGVyEhoKCGJpcnRoZGF5GAMgASgJUghiaXJ0aGRheRIQCgNwYWwYBCABKA1SA3BhbA==');
 
+@$core.Deprecated('Use getAllTeamsRequestDescriptor instead')
+const GetAllTeamsRequest$json = {
+  '1': 'GetAllTeamsRequest',
+  '2': [
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+  ],
+};
+
+/// Descriptor for `GetAllTeamsRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getAllTeamsRequestDescriptor = $convert.base64Decode(
+    'ChJHZXRBbGxUZWFtc1JlcXVlc3QSFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklk');
+
+@$core.Deprecated('Use getAllTeamsResponseDescriptor instead')
+const GetAllTeamsResponse$json = {
+  '1': 'GetAllTeamsResponse',
+  '2': [
+    {'1': 'teams', '3': 1, '4': 3, '5': 11, '6': '.proto.services.impulse_svc.v1.GetAllTeamsResponse.Team', '10': 'teams'},
+  ],
+  '3': [GetAllTeamsResponse_Team$json],
+};
+
+@$core.Deprecated('Use getAllTeamsResponseDescriptor instead')
+const GetAllTeamsResponse_Team$json = {
+  '1': 'Team',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'image', '3': 5, '4': 1, '5': 9, '10': 'image'},
+  ],
+};
+
+/// Descriptor for `GetAllTeamsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getAllTeamsResponseDescriptor = $convert.base64Decode(
+    'ChNHZXRBbGxUZWFtc1Jlc3BvbnNlEk0KBXRlYW1zGAEgAygLMjcucHJvdG8uc2VydmljZXMuaW'
+    '1wdWxzZV9zdmMudjEuR2V0QWxsVGVhbXNSZXNwb25zZS5UZWFtUgV0ZWFtcxpiCgRUZWFtEg4K'
+    'AmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW9uGAMgASgJUg'
+    'tkZXNjcmlwdGlvbhIUCgVpbWFnZRgFIAEoCVIFaW1hZ2U=');
+
 @$core.Deprecated('Use trackChallengeRequestDescriptor instead')
 const TrackChallengeRequest$json = {
   '1': 'TrackChallengeRequest',

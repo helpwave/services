@@ -344,6 +344,192 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
   void clearPal() => clearField(4);
 }
 
+class GetAllTeamsRequest extends $pb.GeneratedMessage {
+  factory GetAllTeamsRequest({
+    $core.String? userId,
+  }) {
+    final $result = create();
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    return $result;
+  }
+  GetAllTeamsRequest._() : super();
+  factory GetAllTeamsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAllTeamsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTeamsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetAllTeamsRequest clone() => GetAllTeamsRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetAllTeamsRequest copyWith(void Function(GetAllTeamsRequest) updates) => super.copyWith((message) => updates(message as GetAllTeamsRequest)) as GetAllTeamsRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetAllTeamsRequest create() => GetAllTeamsRequest._();
+  GetAllTeamsRequest createEmptyInstance() => create();
+  static $pb.PbList<GetAllTeamsRequest> createRepeated() => $pb.PbList<GetAllTeamsRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetAllTeamsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTeamsRequest>(create);
+  static GetAllTeamsRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get userId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set userId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserId() => clearField(1);
+}
+
+class GetAllTeamsResponse_Team extends $pb.GeneratedMessage {
+  factory GetAllTeamsResponse_Team({
+    $core.String? id,
+    $core.String? name,
+    $core.String? description,
+    $core.String? image,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (image != null) {
+      $result.image = image;
+    }
+    return $result;
+  }
+  GetAllTeamsResponse_Team._() : super();
+  factory GetAllTeamsResponse_Team.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAllTeamsResponse_Team.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTeamsResponse.Team', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'description')
+    ..aOS(5, _omitFieldNames ? '' : 'image')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetAllTeamsResponse_Team clone() => GetAllTeamsResponse_Team()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetAllTeamsResponse_Team copyWith(void Function(GetAllTeamsResponse_Team) updates) => super.copyWith((message) => updates(message as GetAllTeamsResponse_Team)) as GetAllTeamsResponse_Team;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetAllTeamsResponse_Team create() => GetAllTeamsResponse_Team._();
+  GetAllTeamsResponse_Team createEmptyInstance() => create();
+  static $pb.PbList<GetAllTeamsResponse_Team> createRepeated() => $pb.PbList<GetAllTeamsResponse_Team>();
+  @$core.pragma('dart2js:noInline')
+  static GetAllTeamsResponse_Team getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTeamsResponse_Team>(create);
+  static GetAllTeamsResponse_Team? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get description => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set description($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDescription() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDescription() => clearField(3);
+
+  @$pb.TagNumber(5)
+  $core.String get image => $_getSZ(3);
+  @$pb.TagNumber(5)
+  set image($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasImage() => $_has(3);
+  @$pb.TagNumber(5)
+  void clearImage() => clearField(5);
+}
+
+class GetAllTeamsResponse extends $pb.GeneratedMessage {
+  factory GetAllTeamsResponse({
+    $core.Iterable<GetAllTeamsResponse_Team>? teams,
+  }) {
+    final $result = create();
+    if (teams != null) {
+      $result.teams.addAll(teams);
+    }
+    return $result;
+  }
+  GetAllTeamsResponse._() : super();
+  factory GetAllTeamsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAllTeamsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTeamsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..pc<GetAllTeamsResponse_Team>(1, _omitFieldNames ? '' : 'teams', $pb.PbFieldType.PM, subBuilder: GetAllTeamsResponse_Team.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetAllTeamsResponse clone() => GetAllTeamsResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetAllTeamsResponse copyWith(void Function(GetAllTeamsResponse) updates) => super.copyWith((message) => updates(message as GetAllTeamsResponse)) as GetAllTeamsResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetAllTeamsResponse create() => GetAllTeamsResponse._();
+  GetAllTeamsResponse createEmptyInstance() => create();
+  static $pb.PbList<GetAllTeamsResponse> createRepeated() => $pb.PbList<GetAllTeamsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetAllTeamsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTeamsResponse>(create);
+  static GetAllTeamsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<GetAllTeamsResponse_Team> get teams => $_getList(0);
+}
+
 class TrackChallengeRequest extends $pb.GeneratedMessage {
   factory TrackChallengeRequest({
     $core.String? challengeId,

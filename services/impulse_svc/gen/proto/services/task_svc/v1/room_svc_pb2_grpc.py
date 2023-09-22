@@ -8,7 +8,7 @@ from proto.services.task_svc.v1 import room_svc_pb2 as proto_dot_services_dot_ta
 class RoomServiceStub(object):
     """
     RoomService
-    
+
 
     """
 
@@ -58,7 +58,7 @@ class RoomServiceStub(object):
 class RoomServiceServicer(object):
     """
     RoomService
-    
+
 
     """
 
@@ -152,7 +152,7 @@ def add_RoomServiceServicer_to_server(servicer, server):
 class RoomService(object):
     """
     RoomService
-    
+
 
     """
 
