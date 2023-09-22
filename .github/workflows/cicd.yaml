@@ -36,7 +36,11 @@ jobs:
         uses: tj-actions/changed-files@v37
         with:
           files: |
-            services/**
+            services/auth-svc/**
+            services/emergency-room-svc/**
+            services/ory-svc/**
+            services/task-svc/**
+            services/user-svc/**
 
       - name: Detect changes in images
         id: changes-in-images
@@ -49,7 +53,7 @@ jobs:
         id: aggregate-changes
         run: |
           if [[ "$libsChanged" == "true" ]]; then
-            echo "services=$(ls services | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
+            echo "services=$(ls services | grep -v 'impulse_svc' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           else
             echo "services=$(echo $changesInServices | awk -F / '$1 ~ /services/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           fi
