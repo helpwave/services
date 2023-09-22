@@ -11,14 +11,14 @@ from proto.services.impulse_svc.v1 import impulse_svc_pb2
 from google.protobuf.timestamp_pb2 import Timestamp
 
 from grpc_service.models import Challenge, UserChallenge, User
-from djang.db.models import Q
+from django.db.models import Q
 
 class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
     def CreateUser(self, request, context):
         user = User.objects.create(
             username=request.username,
-            gender=request.sex,
+            gender=request.gender,
             pal=request.pal,
             birthday=datetime.fromtimestamp(request.birthday.seconds + request.birthday.nanos/1e9)
         )
@@ -31,13 +31,13 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.Response()
         else:
-            user.gender = request.sex,
+            user.gender = request.gender,
             user.pal = request.pal,
             user.birthday = datetime.fromtimestamp(request.birthday.seconds + request.birthday.nanos / 1e9)
 
             return impulse_svc_pb2.UpdateUserResponse(
                 id=str(user.id),
-                sex=user.gender,
+                gender=user.gender,
                 pal=user.pal,
                 birthday=Timestamp().FromDatetime(dt=user.birthday)
             )
@@ -55,16 +55,16 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         return impulse_svc_pb2.TrackChallengeResponse(id=str(user_challenge.id))
         
 
-    def GetChallenges(self, request, context):
+    def GetActiveChallenges(self, request, context):
         current_date = datetime.now()
         challenges = Challenge.objects.get(
             # if the start date is lower than current date and the end date is higher than current date
-            (Q(start_at__lte=current_date) & Q(end_at__gte=current_date)) | 
+            (Q(start_datetime__lte=current_date) & Q(end_datetime__gte=current_date)) | 
             # or the start and end dates ar`e null
-            (Q(end_at__isnull=True) & Q(start_at__gte=True))
+            (Q(end_datetime__isnull=True) & Q(start_datetime__isnull=True))
             # the challenge is active
         )
-        return impulse_svc_pb2.GetChallengesResponse(
+        return impulse_svc_pb2.GetActiveChallengesResponse(
             challenges=[
                 impulse_svc_pb2.Challenge(
                     id=str(challenge.id),
@@ -72,8 +72,8 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
                     description=challenge.description,
                     category=challenge.category,
                     type=challenge.type,
-                    start_at=challenge.start_at,
-                    end_at=challenge.end_at,
+                    start_datetime=challenge.start_datetime,
+                    end_datetime=challenge.end_datetime,
                     points=challenge.points,
                     threshold=challenge.threshold,
                     unit=challenge.unit,
