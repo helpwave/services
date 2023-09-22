@@ -1,0 +1,150 @@
+syntax = "proto3";
+
+package proto.services.impulse_svc.v1;
+
+option go_package = "gen/proto/services/impulse-svc";
+
+import "google/protobuf/timestamp.proto";
+
+enum ChallengeType {
+  CHALLENGE_TYPE_UNSPECIFIED = 0;
+  CHALLENGE_TYPE_DAILY = 1;
+  CHALLENGE_TYPE_QUEST = 2;
+}
+
+enum ChallengeCategory {
+  CHALLENGE_CATEGORY_UNSPECIFIED = 0;
+  CHALLENGE_CATEGORY_FOOD = 1;
+  CHALLENGE_CATEGORY_FITNESS = 2;
+}
+
+//
+// CreateUser
+//
+
+message CreateUserRequest {
+  string username = 1;
+  string sex = 2;
+  google.protobuf.Timestamp birthday = 3;
+  uint32 pal = 4;
+}
+
+message CreateUserResponse {
+  string id = 1;
+}
+
+//
+// UpdateUser
+//
+
+message UpdateUserRequest {
+  string id = 1;
+  optional string sex = 2;
+  optional google.protobuf.Timestamp birthday = 3;
+  optional uint32 pal = 4;
+}
+
+message UpdateUserResponse {
+  string id = 1;
+  string sex = 2;
+  google.protobuf.Timestamp birthday = 3;
+  uint32 pal = 4;
+}
+
+//
+// TrackChallenge
+//
+
+message TrackChallengeRequest {
+  string challenge_id = 1;
+  string user_id = 2;
+  uint64 score = 3;
+  google.protobuf.Timestamp done_at = 4;
+}
+
+message TrackChallengeResponse {
+  string id = 1;
+}
+
+//
+// CreateDailyChallenge
+//
+
+message CreateDailyChallengeRequest {
+  string title = 1;
+  string description = 2;
+  ChallengeCategory category = 3;
+  uint64 threshold = 4;
+  uint64 points = 5;
+}
+
+message CreateDailyChallengeResponse {
+  string id = 1;
+}
+
+//
+// CreateQuestChallenge
+//
+
+message CreateQuestChallengeRequest {
+  string title = 1;
+  string description = 2;
+  google.protobuf.Timestamp start_at = 3;
+  google.protobuf.Timestamp end_at = 4;
+  ChallengeCategory category = 5;
+  uint64 threshold = 6;
+  uint64 points = 7;
+}
+
+message CreateQuestChallengeResponse {
+  string id = 1;
+}
+
+//
+// GetChallenges
+//
+
+message GetChallengesRequest {}
+
+message GetChallengesResponse {
+  repeated Challenge challenges = 1;
+
+  message Challenge {
+    string id = 1;
+    string title = 2;
+    string description = 3;
+    google.protobuf.Timestamp start_at = 4;
+    google.protobuf.Timestamp end_at = 5;
+    ChallengeCategory category = 6;
+    ChallengeType type = 7;
+    uint64 threshold = 8;
+    uint64 points = 9;
+  }
+}
+
+//
+// UpdateChallenge
+//
+
+message UpdateChallengeRequest {
+  string id = 1;
+  optional string title = 2;
+  optional string description = 3;
+  optional google.protobuf.Timestamp start_at = 4;
+  optional google.protobuf.Timestamp end_at = 5;
+  optional ChallengeCategory category = 6;
+  optional uint64 threshold = 7;
+  optional uint64 points = 8;
+}
+
+message UpdateChallengeResponse {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  google.protobuf.Timestamp start_at = 4;
+  google.protobuf.Timestamp end_at = 5;
+  ChallengeCategory category = 6;
+  ChallengeType type = 7;
+  uint64 threshold = 8;
+  uint64 points = 9;
+}
