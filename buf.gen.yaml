@@ -26,3 +26,8 @@ plugins:
   - plugin: buf.build/protocolbuffers/dart
     out: gen/dart/lib
     opt: grpc
+
+  - plugin: buf.build/grpc/python:v1.58.1
+    out: gen/python
+  - plugin: buf.build/protocolbuffers/python
+    out: gen/python
