@@ -25,6 +25,7 @@ class Challenge(models.Model):
     category: str = models.CharField(max_length=10, choices=ChallengeCategories.choices)
 
     points: int = models.IntegerField()
+    unit: str = models.CharField(max_length=50)
 
     def __str__(self):
         return self.title
