@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from grpc_service import impulse_svc_pb2 as proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2
+from grpc_service import impulse_svc_pb2 as impulse__svc__pb2
 
 
 class ImpulseServiceStub(object):
