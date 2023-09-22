@@ -43,28 +43,32 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             )
 
     def TrackChallenge(self, request, context):
-        pass
+        # get challenge
+        # get user
+        
 
     def GetChallenges(self, request, context):
         current_date = datetime.now()
         challenges = Challenge.objects.get(
             # if the start date is lower than current date and the end date is higher than current date
-            (Q(start_date__lte=current_date) & Q(end_date__gte=current_date)) | 
-            # or the start and end dates are null
-            (Q(end_date__isnull=True) & Q(start_date__gte=True))
+            (Q(start_at__lte=current_date) & Q(end_at__gte=current_date)) | 
+            # or the start and end dates ar`e null
+            (Q(end_at__isnull=True) & Q(start_at__gte=True))
             # the challenge is active
         )
         return impulse_svc_pb2.GetChallengesResponse(
             challenges=[
                 impulse_svc_pb2.Challenge(
                     id=str(challenge.id),
-                    name=challenge.name,
+                    title=challenge.title,
                     description=challenge.description,
                     category=challenge.category,
-                    difficulty=challenge.difficulty,
-                    duration=challenge.duration,
+                    type=challenge.type,
+                    start_at=challenge.start_at,
+                    end_at=challenge.end_at,
                     points=challenge.points,
-                    image=challenge.image
+                    threshold=challenge.threshold,
+                    unit=challenge.unit,
                 ) for challenge in challenges
             ]
         )
