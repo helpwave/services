@@ -126,5 +126,5 @@ service ImpulseService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
   rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {}
   rpc TrackChallenge(TrackChallengeRequest) returns (TrackChallengeResponse) {}
-  rpc GetChallenges(GetChallengesRequest) returns (GetChallengesResponse) {}
+  rpc GetChallenges(GetActiveChallengesRequest) returns (GetActiveChallengesResponse) {}
 }
