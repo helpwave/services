@@ -197,5 +197,5 @@ service ImpulseService {
   rpc GetScore(GetScoreRequest) returns (GetScoreResponse) {}
   rpc GetRewards(GetRewardsRequest) returns (GetRewardsResponse) {}
   rpc GetAllRewards(GetAllRewardsRequest) returns (GetAllRewardsResponse) {}
-  rpc GetAllTeams(GetTeamRequest) returns (GetTeamResponse) {}
+  rpc GetAllTeams(GetAllTeamsRequest) returns (GetAllTeamsResponse) {}
 }
