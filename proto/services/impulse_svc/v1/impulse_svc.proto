@@ -7,13 +7,15 @@ option go_package = "gen/proto/services/impulse-svc";
 import "google/protobuf/timestamp.proto";
 
 enum ChallengeType {
-  CHALLENGE_TYPE_DAILY = 0;
-  CHALLENGE_TYPE_QUEST = 1;
+  CHALLENGE_TYPE_UNSPECIFIED = 0;
+  CHALLENGE_TYPE_DAILY = 1;
+  CHALLENGE_TYPE_QUEST = 2;
 }
 
 enum ChallengeCategory {
-  CHALLENGE_CATEGORY_FOOD = 0;
-  CHALLENGE_CATEGORY_FITNESS = 1;
+  CHALLENGE_CATEGORY_UNSPECIFIED = 0;
+  CHALLENGE_CATEGORY_FOOD = 1;
+  CHALLENGE_CATEGORY_FITNESS = 2;
 }
 
 //
