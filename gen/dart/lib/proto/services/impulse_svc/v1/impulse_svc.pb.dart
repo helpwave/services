@@ -1076,6 +1076,460 @@ class UpdateChallengeResponse extends $pb.GeneratedMessage {
   void clearUnit() => clearField(10);
 }
 
+class GetScoreRequest extends $pb.GeneratedMessage {
+  factory GetScoreRequest({
+    $core.String? userId,
+  }) {
+    final $result = create();
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    return $result;
+  }
+  GetScoreRequest._() : super();
+  factory GetScoreRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetScoreRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetScoreRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetScoreRequest clone() => GetScoreRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetScoreRequest copyWith(void Function(GetScoreRequest) updates) => super.copyWith((message) => updates(message as GetScoreRequest)) as GetScoreRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetScoreRequest create() => GetScoreRequest._();
+  GetScoreRequest createEmptyInstance() => create();
+  static $pb.PbList<GetScoreRequest> createRepeated() => $pb.PbList<GetScoreRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetScoreRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetScoreRequest>(create);
+  static GetScoreRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get userId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set userId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserId() => clearField(1);
+}
+
+class GetScoreResponse extends $pb.GeneratedMessage {
+  factory GetScoreResponse({
+    $fixnum.Int64? score,
+  }) {
+    final $result = create();
+    if (score != null) {
+      $result.score = score;
+    }
+    return $result;
+  }
+  GetScoreResponse._() : super();
+  factory GetScoreResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetScoreResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetScoreResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..a<$fixnum.Int64>(1, _omitFieldNames ? '' : 'score', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetScoreResponse clone() => GetScoreResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetScoreResponse copyWith(void Function(GetScoreResponse) updates) => super.copyWith((message) => updates(message as GetScoreResponse)) as GetScoreResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetScoreResponse create() => GetScoreResponse._();
+  GetScoreResponse createEmptyInstance() => create();
+  static $pb.PbList<GetScoreResponse> createRepeated() => $pb.PbList<GetScoreResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetScoreResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetScoreResponse>(create);
+  static GetScoreResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $fixnum.Int64 get score => $_getI64(0);
+  @$pb.TagNumber(1)
+  set score($fixnum.Int64 v) { $_setInt64(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasScore() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearScore() => clearField(1);
+}
+
+class GetRewardsRequest extends $pb.GeneratedMessage {
+  factory GetRewardsRequest({
+    $core.String? userId,
+  }) {
+    final $result = create();
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    return $result;
+  }
+  GetRewardsRequest._() : super();
+  factory GetRewardsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRewardsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRewardsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRewardsRequest clone() => GetRewardsRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRewardsRequest copyWith(void Function(GetRewardsRequest) updates) => super.copyWith((message) => updates(message as GetRewardsRequest)) as GetRewardsRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetRewardsRequest create() => GetRewardsRequest._();
+  GetRewardsRequest createEmptyInstance() => create();
+  static $pb.PbList<GetRewardsRequest> createRepeated() => $pb.PbList<GetRewardsRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetRewardsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRewardsRequest>(create);
+  static GetRewardsRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get userId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set userId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserId() => clearField(1);
+}
+
+class GetRewardsResponse_Reward extends $pb.GeneratedMessage {
+  factory GetRewardsResponse_Reward({
+    $core.String? id,
+    $core.String? title,
+    $core.String? description,
+    $fixnum.Int64? points,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (title != null) {
+      $result.title = title;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (points != null) {
+      $result.points = points;
+    }
+    return $result;
+  }
+  GetRewardsResponse_Reward._() : super();
+  factory GetRewardsResponse_Reward.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRewardsResponse_Reward.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRewardsResponse.Reward', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'title')
+    ..aOS(3, _omitFieldNames ? '' : 'description')
+    ..a<$fixnum.Int64>(5, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRewardsResponse_Reward clone() => GetRewardsResponse_Reward()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRewardsResponse_Reward copyWith(void Function(GetRewardsResponse_Reward) updates) => super.copyWith((message) => updates(message as GetRewardsResponse_Reward)) as GetRewardsResponse_Reward;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetRewardsResponse_Reward create() => GetRewardsResponse_Reward._();
+  GetRewardsResponse_Reward createEmptyInstance() => create();
+  static $pb.PbList<GetRewardsResponse_Reward> createRepeated() => $pb.PbList<GetRewardsResponse_Reward>();
+  @$core.pragma('dart2js:noInline')
+  static GetRewardsResponse_Reward getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRewardsResponse_Reward>(create);
+  static GetRewardsResponse_Reward? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get title => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set title($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasTitle() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTitle() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get description => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set description($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDescription() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDescription() => clearField(3);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get points => $_getI64(3);
+  @$pb.TagNumber(5)
+  set points($fixnum.Int64 v) { $_setInt64(3, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasPoints() => $_has(3);
+  @$pb.TagNumber(5)
+  void clearPoints() => clearField(5);
+}
+
+class GetRewardsResponse extends $pb.GeneratedMessage {
+  factory GetRewardsResponse({
+    $core.Iterable<GetRewardsResponse_Reward>? rewards,
+  }) {
+    final $result = create();
+    if (rewards != null) {
+      $result.rewards.addAll(rewards);
+    }
+    return $result;
+  }
+  GetRewardsResponse._() : super();
+  factory GetRewardsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRewardsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRewardsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..pc<GetRewardsResponse_Reward>(1, _omitFieldNames ? '' : 'rewards', $pb.PbFieldType.PM, subBuilder: GetRewardsResponse_Reward.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRewardsResponse clone() => GetRewardsResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRewardsResponse copyWith(void Function(GetRewardsResponse) updates) => super.copyWith((message) => updates(message as GetRewardsResponse)) as GetRewardsResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetRewardsResponse create() => GetRewardsResponse._();
+  GetRewardsResponse createEmptyInstance() => create();
+  static $pb.PbList<GetRewardsResponse> createRepeated() => $pb.PbList<GetRewardsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetRewardsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRewardsResponse>(create);
+  static GetRewardsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<GetRewardsResponse_Reward> get rewards => $_getList(0);
+}
+
+class GetAllRewardsRequest extends $pb.GeneratedMessage {
+  factory GetAllRewardsRequest() => create();
+  GetAllRewardsRequest._() : super();
+  factory GetAllRewardsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAllRewardsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllRewardsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetAllRewardsRequest clone() => GetAllRewardsRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetAllRewardsRequest copyWith(void Function(GetAllRewardsRequest) updates) => super.copyWith((message) => updates(message as GetAllRewardsRequest)) as GetAllRewardsRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetAllRewardsRequest create() => GetAllRewardsRequest._();
+  GetAllRewardsRequest createEmptyInstance() => create();
+  static $pb.PbList<GetAllRewardsRequest> createRepeated() => $pb.PbList<GetAllRewardsRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetAllRewardsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllRewardsRequest>(create);
+  static GetAllRewardsRequest? _defaultInstance;
+}
+
+class GetAllRewardsResponse_Reward extends $pb.GeneratedMessage {
+  factory GetAllRewardsResponse_Reward({
+    $core.String? id,
+    $core.String? title,
+    $core.String? description,
+    $fixnum.Int64? points,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (title != null) {
+      $result.title = title;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (points != null) {
+      $result.points = points;
+    }
+    return $result;
+  }
+  GetAllRewardsResponse_Reward._() : super();
+  factory GetAllRewardsResponse_Reward.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAllRewardsResponse_Reward.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllRewardsResponse.Reward', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'title')
+    ..aOS(3, _omitFieldNames ? '' : 'description')
+    ..a<$fixnum.Int64>(5, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetAllRewardsResponse_Reward clone() => GetAllRewardsResponse_Reward()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetAllRewardsResponse_Reward copyWith(void Function(GetAllRewardsResponse_Reward) updates) => super.copyWith((message) => updates(message as GetAllRewardsResponse_Reward)) as GetAllRewardsResponse_Reward;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetAllRewardsResponse_Reward create() => GetAllRewardsResponse_Reward._();
+  GetAllRewardsResponse_Reward createEmptyInstance() => create();
+  static $pb.PbList<GetAllRewardsResponse_Reward> createRepeated() => $pb.PbList<GetAllRewardsResponse_Reward>();
+  @$core.pragma('dart2js:noInline')
+  static GetAllRewardsResponse_Reward getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllRewardsResponse_Reward>(create);
+  static GetAllRewardsResponse_Reward? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get title => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set title($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasTitle() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTitle() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get description => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set description($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDescription() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDescription() => clearField(3);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get points => $_getI64(3);
+  @$pb.TagNumber(5)
+  set points($fixnum.Int64 v) { $_setInt64(3, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasPoints() => $_has(3);
+  @$pb.TagNumber(5)
+  void clearPoints() => clearField(5);
+}
+
+class GetAllRewardsResponse extends $pb.GeneratedMessage {
+  factory GetAllRewardsResponse({
+    $core.Iterable<GetAllRewardsResponse_Reward>? rewards,
+  }) {
+    final $result = create();
+    if (rewards != null) {
+      $result.rewards.addAll(rewards);
+    }
+    return $result;
+  }
+  GetAllRewardsResponse._() : super();
+  factory GetAllRewardsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAllRewardsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllRewardsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..pc<GetAllRewardsResponse_Reward>(1, _omitFieldNames ? '' : 'rewards', $pb.PbFieldType.PM, subBuilder: GetAllRewardsResponse_Reward.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetAllRewardsResponse clone() => GetAllRewardsResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetAllRewardsResponse copyWith(void Function(GetAllRewardsResponse) updates) => super.copyWith((message) => updates(message as GetAllRewardsResponse)) as GetAllRewardsResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetAllRewardsResponse create() => GetAllRewardsResponse._();
+  GetAllRewardsResponse createEmptyInstance() => create();
+  static $pb.PbList<GetAllRewardsResponse> createRepeated() => $pb.PbList<GetAllRewardsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetAllRewardsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllRewardsResponse>(create);
+  static GetAllRewardsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<GetAllRewardsResponse_Reward> get rewards => $_getList(0);
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

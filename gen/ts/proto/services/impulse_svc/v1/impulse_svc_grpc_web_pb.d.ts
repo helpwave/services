@@ -36,6 +36,27 @@ export class ImpulseServiceClient {
                response: proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesResponse>;
 
+  getScore(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetScoreRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_impulse_svc_v1_impulse_svc_pb.GetScoreResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.GetScoreResponse>;
+
+  getRewards(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetRewardsRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_impulse_svc_v1_impulse_svc_pb.GetRewardsResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.GetRewardsResponse>;
+
+  getAllRewards(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetAllRewardsRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_impulse_svc_v1_impulse_svc_pb.GetAllRewardsResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.GetAllRewardsResponse>;
+
 }
 
 export class ImpulseServicePromiseClient {
@@ -62,6 +83,21 @@ export class ImpulseServicePromiseClient {
     request: proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesResponse>;
+
+  getScore(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetScoreRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.GetScoreResponse>;
+
+  getRewards(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetRewardsRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.GetRewardsResponse>;
+
+  getAllRewards(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetAllRewardsRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.GetAllRewardsResponse>;
 
 }
 

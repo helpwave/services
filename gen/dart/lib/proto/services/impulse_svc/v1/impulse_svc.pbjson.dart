@@ -251,3 +251,102 @@ final $typed_data.Uint8List updateChallengeResponseDescriptor = $convert.base64D
     'VuZ2VUeXBlUgR0eXBlEhwKCXRocmVzaG9sZBgIIAEoBFIJdGhyZXNob2xkEhYKBnBvaW50cxgJ'
     'IAEoBFIGcG9pbnRzEhIKBHVuaXQYCiABKAlSBHVuaXQ=');
 
+@$core.Deprecated('Use getScoreRequestDescriptor instead')
+const GetScoreRequest$json = {
+  '1': 'GetScoreRequest',
+  '2': [
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+  ],
+};
+
+/// Descriptor for `GetScoreRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getScoreRequestDescriptor = $convert.base64Decode(
+    'Cg9HZXRTY29yZVJlcXVlc3QSFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklk');
+
+@$core.Deprecated('Use getScoreResponseDescriptor instead')
+const GetScoreResponse$json = {
+  '1': 'GetScoreResponse',
+  '2': [
+    {'1': 'score', '3': 1, '4': 1, '5': 4, '10': 'score'},
+  ],
+};
+
+/// Descriptor for `GetScoreResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getScoreResponseDescriptor = $convert.base64Decode(
+    'ChBHZXRTY29yZVJlc3BvbnNlEhQKBXNjb3JlGAEgASgEUgVzY29yZQ==');
+
+@$core.Deprecated('Use getRewardsRequestDescriptor instead')
+const GetRewardsRequest$json = {
+  '1': 'GetRewardsRequest',
+  '2': [
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+  ],
+};
+
+/// Descriptor for `GetRewardsRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRewardsRequestDescriptor = $convert.base64Decode(
+    'ChFHZXRSZXdhcmRzUmVxdWVzdBIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySWQ=');
+
+@$core.Deprecated('Use getRewardsResponseDescriptor instead')
+const GetRewardsResponse$json = {
+  '1': 'GetRewardsResponse',
+  '2': [
+    {'1': 'rewards', '3': 1, '4': 3, '5': 11, '6': '.proto.services.impulse_svc.v1.GetRewardsResponse.Reward', '10': 'rewards'},
+  ],
+  '3': [GetRewardsResponse_Reward$json],
+};
+
+@$core.Deprecated('Use getRewardsResponseDescriptor instead')
+const GetRewardsResponse_Reward$json = {
+  '1': 'Reward',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
+    {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'points', '3': 5, '4': 1, '5': 4, '10': 'points'},
+  ],
+};
+
+/// Descriptor for `GetRewardsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRewardsResponseDescriptor = $convert.base64Decode(
+    'ChJHZXRSZXdhcmRzUmVzcG9uc2USUgoHcmV3YXJkcxgBIAMoCzI4LnByb3RvLnNlcnZpY2VzLm'
+    'ltcHVsc2Vfc3ZjLnYxLkdldFJld2FyZHNSZXNwb25zZS5SZXdhcmRSB3Jld2FyZHMaaAoGUmV3'
+    'YXJkEg4KAmlkGAEgASgJUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSIAoLZGVzY3JpcHRpb2'
+    '4YAyABKAlSC2Rlc2NyaXB0aW9uEhYKBnBvaW50cxgFIAEoBFIGcG9pbnRz');
+
+@$core.Deprecated('Use getAllRewardsRequestDescriptor instead')
+const GetAllRewardsRequest$json = {
+  '1': 'GetAllRewardsRequest',
+};
+
+/// Descriptor for `GetAllRewardsRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getAllRewardsRequestDescriptor = $convert.base64Decode(
+    'ChRHZXRBbGxSZXdhcmRzUmVxdWVzdA==');
+
+@$core.Deprecated('Use getAllRewardsResponseDescriptor instead')
+const GetAllRewardsResponse$json = {
+  '1': 'GetAllRewardsResponse',
+  '2': [
+    {'1': 'rewards', '3': 1, '4': 3, '5': 11, '6': '.proto.services.impulse_svc.v1.GetAllRewardsResponse.Reward', '10': 'rewards'},
+  ],
+  '3': [GetAllRewardsResponse_Reward$json],
+};
+
+@$core.Deprecated('Use getAllRewardsResponseDescriptor instead')
+const GetAllRewardsResponse_Reward$json = {
+  '1': 'Reward',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
+    {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'points', '3': 5, '4': 1, '5': 4, '10': 'points'},
+  ],
+};
+
+/// Descriptor for `GetAllRewardsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getAllRewardsResponseDescriptor = $convert.base64Decode(
+    'ChVHZXRBbGxSZXdhcmRzUmVzcG9uc2USVQoHcmV3YXJkcxgBIAMoCzI7LnByb3RvLnNlcnZpY2'
+    'VzLmltcHVsc2Vfc3ZjLnYxLkdldEFsbFJld2FyZHNSZXNwb25zZS5SZXdhcmRSB3Jld2FyZHMa'
+    'aAoGUmV3YXJkEg4KAmlkGAEgASgJUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSIAoLZGVzY3'
+    'JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uEhYKBnBvaW50cxgFIAEoBFIGcG9pbnRz');
+

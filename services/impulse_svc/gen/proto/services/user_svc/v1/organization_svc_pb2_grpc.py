@@ -8,7 +8,7 @@ from proto.services.user_svc.v1 import organization_svc_pb2 as proto_dot_service
 class OrganizationServiceStub(object):
     """
     OrganizationService
-    
+
 
     """
 
@@ -103,7 +103,7 @@ class OrganizationServiceStub(object):
 class OrganizationServiceServicer(object):
     """
     OrganizationService
-    
+
 
     """
 
@@ -296,7 +296,7 @@ def add_OrganizationServiceServicer_to_server(servicer, server):
 class OrganizationService(object):
     """
     OrganizationService
-    
+
 
     """
 
