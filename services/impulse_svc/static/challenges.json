@@ -1,0 +1,114 @@
+[
+    {
+        "title": "Iss mal vegetarisch",
+        "description": "Die 'Iss mal vegetarisch'-Herausforderung lädt dich ein, heute eine vollständig vegetarische Mahlzeit zu genießen. Entdecke die Vielfalt köstlicher vegetarischer Gerichte und trage so zu deiner Gesundheit und dem Umweltschutz bei. Teile ein Foto deiner Mahlzeit, um zusätzliche Punkte zu verdienen!",
+        "type": [
+            "challenge"
+        ],
+        "start_date": "2019-11-01",
+        "end_date": "2019-11-08",
+        "category": [
+            "food"
+        ],
+        "threshold": 1,
+        "points": 10
+    },
+    {
+        "title": "Heute mal nur Wasser und Tee",
+        "description": "Bei der 'Heute mal nur Wasser und Tee'-Challenge verzichtest du für einen Tag auf alle zuckerhaltigen Getränke und alkoholischen Drinks. Stattdessen konzentrierst du dich auf die Hydration deines Körpers mit Wasser und gesundem Kräutertee. Halte dich an diese gesunde Wahl und beobachte, wie sich dein Körper besser fühlt und du dir Punkte in unserer App verdienst!",
+        "type": [
+            "challenge"
+        ],
+        "start_date": "2019-11-01",
+        "end_date": "2019-11-08",
+        "category": [
+            "food"
+        ],
+        "threshold": 1,
+        "points": 10
+    },
+    {
+        "title": "Iss dich durch den Regenbogen",
+        "description": "Mit der 'Iss dich durch den Regenbogen'-Herausforderung entdeckst du die Vielfalt der natürlichen Lebensmittel. Deine Aufgabe ist es, heute Lebensmittel aus jeder Farbe des Regenbogens zu essen. Von roten Tomaten bis zu grünem Spinat und blauen Beeren - sorge dafür, dass deine Mahlzeiten bunt und nährstoffreich sind. Teile ein Foto deines 'regenbogenreichen' Essens, um zusätzliche Punkte für deine gesunde Ernährung zu verdienen!",
+        "type": [
+            "challenge"
+        ],
+        "start_date": "2019-11-01",
+        "end_date": "2019-11-08",
+        "category": [
+            "food"
+        ],
+        "threshold": 1,
+        "points": 10
+    },
+    {
+        "title": "Lauf den Stern",
+        "description": "Die 'Lauf den Stern'-Herausforderung lädt dich ein, die malerische 1,5 km lange Strecke rund um das Schloss in Münster zu erkunden. Genieße einen belebenden Spaziergang oder Lauf und entdecke die Schönheit der Umgebung. Halte deine Aktivität mit unserer App fest und sammle Punkte für deine Fitness und Erkundung der Stadt!",
+        "type": [
+            "challenge"
+        ],
+        "start_date": "2019-11-01",
+        "end_date": "2019-11-08",
+        "category": [
+            "fitness"
+        ],
+        "threshold": 1,
+        "points": 10
+    },
+    {
+        "title": "Fahr die Promenade",
+        "description": "Bei der 'Fahr die Promenade'-Challenge wirst du auf der etwa 4,5 km langen 'Fahrradautobahn' in Münster aktiv. In 30 Minuten sollst du so viele Runden wie möglich zurücklegen. Genieße die autofreie Umgebung und die frische Luft. Je mehr Runden du schaffst, desto mehr Punkte verdienst du für deine Aktivität in unserer App!",
+        "type": [
+            "challenge"
+        ],
+        "start_date": "2019-11-01",
+        "end_date": "2019-11-08",
+        "category": [
+            "fitness"
+        ],
+        "threshold": 1,
+        "points": 10
+    },
+    {
+        "title": "Gönn dir eine Pause",
+        "description": "Mit der 'Gönn dir eine Pause'-Herausforderung kannst du dir eine wohltuende Auszeit gönnen. Besuche das 'Campus Gym Münster' und erlebe progressive Muskelentspannung. Schalte ab, entspanne dich und lass den Stress des Tages los. Dokumentiere deine entspannende Erfahrung, um Punkte für deine Selbstfürsorge in unserer App zu verdienen!",
+        "type": [
+            "challenge"
+        ],
+        "start_date": "2019-11-01",
+        "end_date": "2019-11-08",
+        "category": [
+            "fitness"
+        ],
+        "threshold": 1,
+        "points": 10
+    },
+    {
+        "title": "Wie geht es dir?",
+        "description": "Die 'Wie geht es dir?'-Herausforderung ermutigt dich, am Abend deine aktuelle Stimmung festzuhalten und über den Verlauf deines Tages und deiner Gedanken nachzudenken. Nimm dir einen Moment Zeit für Selbstreflexion und teile deine Emotionen mit uns. Dies hilft dir, dein Wohlbefinden zu verfolgen und wertvolle Einblicke in deine Gefühle zu gewinnen, während du Punkte in unserer App sammelst!",
+        "type": [
+            "challenge"
+        ],
+        "start_date": "2019-11-01",
+        "end_date": "2019-11-08",
+        "category": [
+            "mental_health"
+        ],
+        "threshold": 1,
+        "points": 10
+    },
+    {
+        "title": "Wie ist deine Stimmung?",
+        "description": "Bei der 'Wie ist deine Stimmung'-Challenge kannst du jederzeit deine aktuelle Stimmung festhalten, indem du Bilder des Wetters verwendest, um sie zu beschreiben. Ob Sonnenschein, Regen oder Wolken, wähle das Wetter, das am besten zu deinem Gefühl passt, und teile es mit uns. Diese kreative Möglichkeit zur Selbstreflexion hilft dir, deine Emotionen besser zu verstehen und Punkte in unserer App zu sammeln!",
+        "type": [
+            "challenge"
+        ],
+        "start_date": "2019-11-01",
+        "end_date": "2019-11-08",
+        "category": [
+            "mental_health"
+        ],
+        "threshold": 1,
+        "points": 10
+    }
+]
