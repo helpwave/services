@@ -148,3 +148,17 @@ message UpdateChallengeResponse {
   uint64 threshold = 8;
   uint64 points = 9;
 }
+
+//
+// ImpulseService
+//
+
+service ImpulseService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {}
+  rpc TrackChallenge(TrackChallengeRequest) returns (TrackChallengeResponse) {}
+  rpc CreateDailyChallenge(CreateDailyChallengeRequest) returns (CreateDailyChallengeResponse) {}
+  rpc CreateQuestChallenge(CreateQuestChallengeRequest) returns (CreateQuestChallengeResponse) {}
+  rpc UpdateChallenge(UpdateChallengeRequest) returns (UpdateChallengeResponse) {}
+  rpc GetChallenges(GetChallengesRequest) returns (GetChallengesResponse) {}
+}
