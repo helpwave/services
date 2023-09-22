@@ -76,6 +76,7 @@ message CreateDailyChallengeRequest {
   ChallengeCategory category = 3;
   uint64 threshold = 4;
   uint64 points = 5;
+  string unit = 6;
 }
 
 message CreateDailyChallengeResponse {
@@ -94,6 +95,7 @@ message CreateQuestChallengeRequest {
   ChallengeCategory category = 5;
   uint64 threshold = 6;
   uint64 points = 7;
+  string unit = 8;
 }
 
 message CreateQuestChallengeResponse {
@@ -119,6 +121,7 @@ message GetChallengesResponse {
     ChallengeType type = 7;
     uint64 threshold = 8;
     uint64 points = 9;
+    string unit = 10;
   }
 }
 
@@ -135,6 +138,7 @@ message UpdateChallengeRequest {
   optional ChallengeCategory category = 6;
   optional uint64 threshold = 7;
   optional uint64 points = 8;
+  optional string unit = 9;
 }
 
 message UpdateChallengeResponse {
@@ -147,6 +151,7 @@ message UpdateChallengeResponse {
   ChallengeType type = 7;
   uint64 threshold = 8;
   uint64 points = 9;
+  string unit = 10;
 }
 
 //
