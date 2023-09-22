@@ -119,6 +119,54 @@ message UpdateChallengeResponse {
 }
 
 //
+// GetScore
+//
+
+message GetScoreRequest {
+  string user_id = 1;
+}
+
+message GetScoreResponse {
+  uint64 score = 1;
+}
+
+//
+// GetRewards
+//
+
+message GetRewardsRequest {
+  string user_id = 1;
+}
+
+message GetRewardsResponse {
+  repeated Reward rewards = 1;
+
+  message Reward {
+      string id = 1;
+      string title = 2;
+      string description = 3;
+      uint64 points = 5;
+  }
+}
+
+//
+// GetAllRewards
+//
+
+message GetAllRewardsRequest {}
+
+message GetAllRewardsResponse {
+  repeated Reward rewards = 1;
+
+  message Reward {
+    string id = 1;
+    string title = 2;
+    string description = 3;
+    uint64 points = 5;
+  }
+}
+
+//
 // ImpulseService
 //
 
@@ -127,4 +175,7 @@ service ImpulseService {
   rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {}
   rpc TrackChallenge(TrackChallengeRequest) returns (TrackChallengeResponse) {}
   rpc GetActiveChallenges(GetActiveChallengesRequest) returns (GetActiveChallengesResponse) {}
+  rpc GetScore(GetScoreRequest) returns (GetScoreResponse) {}
+  rpc GetRewards(GetRewardsRequest) returns (GetRewardsResponse) {}
+  rpc GetAllRewards(GetAllRewardsRequest) returns (GetAllRewardsResponse) {}
 }

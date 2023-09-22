@@ -41,6 +41,16 @@ class UserChallenge(models.Model):
     done_datetime: datetime = models.DateTimeField()
 
 
+class Reward(models.Model):
+    id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title: str = models.CharField(max_length=50)
+    description: str = models.TextField()
+    points: int = models.IntegerField()
+
+    def __str__(self):
+        return self.title
+
+
 class User(models.Model):
     class Gender(models.TextChoices):
         MALE = 'male', _('Männlich')
@@ -54,6 +64,7 @@ class User(models.Model):
     pal: float = models.FloatField()
 
     challenges: list = models.ManyToManyField(Challenge, through=UserChallenge)
+    rewards: list = models.ManyToManyField(Reward)
 
     def __str__(self):
         return self.username

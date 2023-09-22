@@ -60,7 +60,6 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             done_datetime=current_date
         )
         return impulse_svc_pb2.TrackChallengeResponse(id=str(user_challenge.id))
-        
 
     def GetActiveChallenges(self, request, context):
         current_date = datetime.now()
@@ -92,6 +91,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         
     def GetAllRewards(self, request, context):
         rewards = Reward.objects.all()
+
 
 def grpc_hook(server):
     impulse_svc_pb2_grpc.add_ImpulseServiceServicer_to_server(Servicer(), server)
