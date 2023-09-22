@@ -23,6 +23,9 @@ const (
 	ImpulseService_UpdateUser_FullMethodName          = "/proto.services.impulse_svc.v1.ImpulseService/UpdateUser"
 	ImpulseService_TrackChallenge_FullMethodName      = "/proto.services.impulse_svc.v1.ImpulseService/TrackChallenge"
 	ImpulseService_GetActiveChallenges_FullMethodName = "/proto.services.impulse_svc.v1.ImpulseService/GetActiveChallenges"
+	ImpulseService_GetScore_FullMethodName            = "/proto.services.impulse_svc.v1.ImpulseService/GetScore"
+	ImpulseService_GetRewards_FullMethodName          = "/proto.services.impulse_svc.v1.ImpulseService/GetRewards"
+	ImpulseService_GetAllRewards_FullMethodName       = "/proto.services.impulse_svc.v1.ImpulseService/GetAllRewards"
 )
 
 // ImpulseServiceClient is the client API for ImpulseService service.
@@ -33,6 +36,9 @@ type ImpulseServiceClient interface {
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error)
 	TrackChallenge(ctx context.Context, in *TrackChallengeRequest, opts ...grpc.CallOption) (*TrackChallengeResponse, error)
 	GetActiveChallenges(ctx context.Context, in *GetActiveChallengesRequest, opts ...grpc.CallOption) (*GetActiveChallengesResponse, error)
+	GetScore(ctx context.Context, in *GetScoreRequest, opts ...grpc.CallOption) (*GetScoreResponse, error)
+	GetRewards(ctx context.Context, in *GetRewardsRequest, opts ...grpc.CallOption) (*GetRewardsResponse, error)
+	GetAllRewards(ctx context.Context, in *GetAllRewardsRequest, opts ...grpc.CallOption) (*GetAllRewardsResponse, error)
 }
 
 type impulseServiceClient struct {
@@ -79,6 +85,33 @@ func (c *impulseServiceClient) GetActiveChallenges(ctx context.Context, in *GetA
 	return out, nil
 }
 
+func (c *impulseServiceClient) GetScore(ctx context.Context, in *GetScoreRequest, opts ...grpc.CallOption) (*GetScoreResponse, error) {
+	out := new(GetScoreResponse)
+	err := c.cc.Invoke(ctx, ImpulseService_GetScore_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *impulseServiceClient) GetRewards(ctx context.Context, in *GetRewardsRequest, opts ...grpc.CallOption) (*GetRewardsResponse, error) {
+	out := new(GetRewardsResponse)
+	err := c.cc.Invoke(ctx, ImpulseService_GetRewards_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *impulseServiceClient) GetAllRewards(ctx context.Context, in *GetAllRewardsRequest, opts ...grpc.CallOption) (*GetAllRewardsResponse, error) {
+	out := new(GetAllRewardsResponse)
+	err := c.cc.Invoke(ctx, ImpulseService_GetAllRewards_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ImpulseServiceServer is the server API for ImpulseService service.
 // All implementations must embed UnimplementedImpulseServiceServer
 // for forward compatibility
@@ -87,6 +120,9 @@ type ImpulseServiceServer interface {
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
 	TrackChallenge(context.Context, *TrackChallengeRequest) (*TrackChallengeResponse, error)
 	GetActiveChallenges(context.Context, *GetActiveChallengesRequest) (*GetActiveChallengesResponse, error)
+	GetScore(context.Context, *GetScoreRequest) (*GetScoreResponse, error)
+	GetRewards(context.Context, *GetRewardsRequest) (*GetRewardsResponse, error)
+	GetAllRewards(context.Context, *GetAllRewardsRequest) (*GetAllRewardsResponse, error)
 	mustEmbedUnimplementedImpulseServiceServer()
 }
 
@@ -105,6 +141,15 @@ func (UnimplementedImpulseServiceServer) TrackChallenge(context.Context, *TrackC
 }
 func (UnimplementedImpulseServiceServer) GetActiveChallenges(context.Context, *GetActiveChallengesRequest) (*GetActiveChallengesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetActiveChallenges not implemented")
+}
+func (UnimplementedImpulseServiceServer) GetScore(context.Context, *GetScoreRequest) (*GetScoreResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetScore not implemented")
+}
+func (UnimplementedImpulseServiceServer) GetRewards(context.Context, *GetRewardsRequest) (*GetRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRewards not implemented")
+}
+func (UnimplementedImpulseServiceServer) GetAllRewards(context.Context, *GetAllRewardsRequest) (*GetAllRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllRewards not implemented")
 }
 func (UnimplementedImpulseServiceServer) mustEmbedUnimplementedImpulseServiceServer() {}
 
@@ -191,6 +236,60 @@ func _ImpulseService_GetActiveChallenges_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ImpulseService_GetScore_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetScoreRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ImpulseServiceServer).GetScore(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ImpulseService_GetScore_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ImpulseServiceServer).GetScore(ctx, req.(*GetScoreRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ImpulseService_GetRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRewardsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ImpulseServiceServer).GetRewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ImpulseService_GetRewards_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ImpulseServiceServer).GetRewards(ctx, req.(*GetRewardsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ImpulseService_GetAllRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllRewardsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ImpulseServiceServer).GetAllRewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ImpulseService_GetAllRewards_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ImpulseServiceServer).GetAllRewards(ctx, req.(*GetAllRewardsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ImpulseService_ServiceDesc is the grpc.ServiceDesc for ImpulseService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -213,6 +312,18 @@ var ImpulseService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetActiveChallenges",
 			Handler:    _ImpulseService_GetActiveChallenges_Handler,
+		},
+		{
+			MethodName: "GetScore",
+			Handler:    _ImpulseService_GetScore_Handler,
+		},
+		{
+			MethodName: "GetRewards",
+			Handler:    _ImpulseService_GetRewards_Handler,
+		},
+		{
+			MethodName: "GetAllRewards",
+			Handler:    _ImpulseService_GetAllRewards_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

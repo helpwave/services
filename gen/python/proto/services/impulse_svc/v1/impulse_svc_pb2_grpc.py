@@ -38,6 +38,21 @@ class ImpulseServiceStub(object):
                 request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetActiveChallengesRequest.SerializeToString,
                 response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetActiveChallengesResponse.FromString,
                 )
+        self.GetScore = channel.unary_unary(
+                '/proto.services.impulse_svc.v1.ImpulseService/GetScore',
+                request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetScoreRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetScoreResponse.FromString,
+                )
+        self.GetRewards = channel.unary_unary(
+                '/proto.services.impulse_svc.v1.ImpulseService/GetRewards',
+                request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetRewardsRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetRewardsResponse.FromString,
+                )
+        self.GetAllRewards = channel.unary_unary(
+                '/proto.services.impulse_svc.v1.ImpulseService/GetAllRewards',
+                request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllRewardsRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllRewardsResponse.FromString,
+                )
 
 
 class ImpulseServiceServicer(object):
@@ -71,6 +86,24 @@ class ImpulseServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetScore(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetRewards(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetAllRewards(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ImpulseServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -93,6 +126,21 @@ def add_ImpulseServiceServicer_to_server(servicer, server):
                     servicer.GetActiveChallenges,
                     request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetActiveChallengesRequest.FromString,
                     response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetActiveChallengesResponse.SerializeToString,
+            ),
+            'GetScore': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetScore,
+                    request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetScoreRequest.FromString,
+                    response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetScoreResponse.SerializeToString,
+            ),
+            'GetRewards': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetRewards,
+                    request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetRewardsRequest.FromString,
+                    response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetRewardsResponse.SerializeToString,
+            ),
+            'GetAllRewards': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetAllRewards,
+                    request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllRewardsRequest.FromString,
+                    response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllRewardsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -173,5 +221,56 @@ class ImpulseService(object):
         return grpc.experimental.unary_unary(request, target, '/proto.services.impulse_svc.v1.ImpulseService/GetActiveChallenges',
             proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetActiveChallengesRequest.SerializeToString,
             proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetActiveChallengesResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetScore(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.impulse_svc.v1.ImpulseService/GetScore',
+            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetScoreRequest.SerializeToString,
+            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetScoreResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetRewards(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.impulse_svc.v1.ImpulseService/GetRewards',
+            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetRewardsRequest.SerializeToString,
+            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetRewardsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetAllRewards(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.impulse_svc.v1.ImpulseService/GetAllRewards',
+            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllRewardsRequest.SerializeToString,
+            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetAllRewardsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -428,6 +428,176 @@ export namespace UpdateChallengeResponse {
   }
 }
 
+export class GetScoreRequest extends jspb.Message {
+  getUserId(): string;
+  setUserId(value: string): GetScoreRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetScoreRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetScoreRequest): GetScoreRequest.AsObject;
+  static serializeBinaryToWriter(message: GetScoreRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetScoreRequest;
+  static deserializeBinaryFromReader(message: GetScoreRequest, reader: jspb.BinaryReader): GetScoreRequest;
+}
+
+export namespace GetScoreRequest {
+  export type AsObject = {
+    userId: string,
+  }
+}
+
+export class GetScoreResponse extends jspb.Message {
+  getScore(): number;
+  setScore(value: number): GetScoreResponse;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetScoreResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetScoreResponse): GetScoreResponse.AsObject;
+  static serializeBinaryToWriter(message: GetScoreResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetScoreResponse;
+  static deserializeBinaryFromReader(message: GetScoreResponse, reader: jspb.BinaryReader): GetScoreResponse;
+}
+
+export namespace GetScoreResponse {
+  export type AsObject = {
+    score: number,
+  }
+}
+
+export class GetRewardsRequest extends jspb.Message {
+  getUserId(): string;
+  setUserId(value: string): GetRewardsRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetRewardsRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetRewardsRequest): GetRewardsRequest.AsObject;
+  static serializeBinaryToWriter(message: GetRewardsRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetRewardsRequest;
+  static deserializeBinaryFromReader(message: GetRewardsRequest, reader: jspb.BinaryReader): GetRewardsRequest;
+}
+
+export namespace GetRewardsRequest {
+  export type AsObject = {
+    userId: string,
+  }
+}
+
+export class GetRewardsResponse extends jspb.Message {
+  getRewardsList(): Array<GetRewardsResponse.Reward>;
+  setRewardsList(value: Array<GetRewardsResponse.Reward>): GetRewardsResponse;
+  clearRewardsList(): GetRewardsResponse;
+  addRewards(value?: GetRewardsResponse.Reward, index?: number): GetRewardsResponse.Reward;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetRewardsResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetRewardsResponse): GetRewardsResponse.AsObject;
+  static serializeBinaryToWriter(message: GetRewardsResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetRewardsResponse;
+  static deserializeBinaryFromReader(message: GetRewardsResponse, reader: jspb.BinaryReader): GetRewardsResponse;
+}
+
+export namespace GetRewardsResponse {
+  export type AsObject = {
+    rewardsList: Array<GetRewardsResponse.Reward.AsObject>,
+  }
+
+  export class Reward extends jspb.Message {
+    getId(): string;
+    setId(value: string): Reward;
+
+    getTitle(): string;
+    setTitle(value: string): Reward;
+
+    getDescription(): string;
+    setDescription(value: string): Reward;
+
+    getPoints(): number;
+    setPoints(value: number): Reward;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Reward.AsObject;
+    static toObject(includeInstance: boolean, msg: Reward): Reward.AsObject;
+    static serializeBinaryToWriter(message: Reward, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Reward;
+    static deserializeBinaryFromReader(message: Reward, reader: jspb.BinaryReader): Reward;
+  }
+
+  export namespace Reward {
+    export type AsObject = {
+      id: string,
+      title: string,
+      description: string,
+      points: number,
+    }
+  }
+
+}
+
+export class GetAllRewardsRequest extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetAllRewardsRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetAllRewardsRequest): GetAllRewardsRequest.AsObject;
+  static serializeBinaryToWriter(message: GetAllRewardsRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetAllRewardsRequest;
+  static deserializeBinaryFromReader(message: GetAllRewardsRequest, reader: jspb.BinaryReader): GetAllRewardsRequest;
+}
+
+export namespace GetAllRewardsRequest {
+  export type AsObject = {
+  }
+}
+
+export class GetAllRewardsResponse extends jspb.Message {
+  getRewardsList(): Array<GetAllRewardsResponse.Reward>;
+  setRewardsList(value: Array<GetAllRewardsResponse.Reward>): GetAllRewardsResponse;
+  clearRewardsList(): GetAllRewardsResponse;
+  addRewards(value?: GetAllRewardsResponse.Reward, index?: number): GetAllRewardsResponse.Reward;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetAllRewardsResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetAllRewardsResponse): GetAllRewardsResponse.AsObject;
+  static serializeBinaryToWriter(message: GetAllRewardsResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetAllRewardsResponse;
+  static deserializeBinaryFromReader(message: GetAllRewardsResponse, reader: jspb.BinaryReader): GetAllRewardsResponse;
+}
+
+export namespace GetAllRewardsResponse {
+  export type AsObject = {
+    rewardsList: Array<GetAllRewardsResponse.Reward.AsObject>,
+  }
+
+  export class Reward extends jspb.Message {
+    getId(): string;
+    setId(value: string): Reward;
+
+    getTitle(): string;
+    setTitle(value: string): Reward;
+
+    getDescription(): string;
+    setDescription(value: string): Reward;
+
+    getPoints(): number;
+    setPoints(value: number): Reward;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Reward.AsObject;
+    static toObject(includeInstance: boolean, msg: Reward): Reward.AsObject;
+    static serializeBinaryToWriter(message: Reward, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Reward;
+    static deserializeBinaryFromReader(message: Reward, reader: jspb.BinaryReader): Reward;
+  }
+
+  export namespace Reward {
+    export type AsObject = {
+      id: string,
+      title: string,
+      description: string,
+      points: number,
+    }
+  }
+
+}
+
 export enum ChallengeType { 
   CHALLENGE_TYPE_UNSPECIFIED = 0,
   CHALLENGE_TYPE_DAILY = 1,
