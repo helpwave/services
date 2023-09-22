@@ -46,6 +46,8 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         # get challenge
         # get user
         
+        pass
+        
 
     def GetChallenges(self, request, context):
         current_date = datetime.now()
