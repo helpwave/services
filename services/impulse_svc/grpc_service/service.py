@@ -1,9 +1,13 @@
+import sys
+
 from datetime import datetime
 
 import grpc
 
-from grpc_service import impulse_svc_pb2_grpc
-from grpc_service import impulse_svc_pb2
+sys.path.append("./gen/")
+
+from proto.services.impulse_svc.v1 import impulse_svc_pb2_grpc
+from proto.services.impulse_svc.v1 import impulse_svc_pb2
 from google.protobuf.timestamp_pb2 import Timestamp
 
 from grpc_service.models import Challenge, UserChallenge, User
@@ -35,7 +39,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
                 id=str(user.id),
                 sex=user.gender,
                 pal=user.pal,
-                birthday=Timestamp().FromDatetime(user.birthday)
+                birthday=Timestamp().FromDatetime(dt=user.birthday)
             )
 
     def TrackChallenge(self, request, context):
