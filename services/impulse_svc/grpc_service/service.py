@@ -8,7 +8,6 @@ sys.path.append("./gen/")
 
 from proto.services.impulse_svc.v1 import impulse_svc_pb2_grpc
 from proto.services.impulse_svc.v1 import impulse_svc_pb2
-from google.protobuf.timestamp_pb2 import Timestamp
 
 from grpc_service.models import Challenge, UserChallenge, User
 from djang.db.models import Q
@@ -18,9 +17,9 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
     def CreateUser(self, request, context):
         user = User.objects.create(
             username=request.username,
-            gender=request.sex,
+            gender=request.gender,
             pal=request.pal,
-            birthday=datetime.fromtimestamp(request.birthday.seconds + request.birthday.nanos/1e9)
+            birthday=datetime.fromisoformat(request.birthday)
         )
         return impulse_svc_pb2.CreateUserResponse(id=str(user.id))
 
@@ -31,15 +30,16 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.Response()
         else:
-            user.gender = request.sex,
-            user.pal = request.pal,
-            user.birthday = datetime.fromtimestamp(request.birthday.seconds + request.birthday.nanos / 1e9)
+            user.gender = request.gender
+            user.pal = request.pal
+            user.birthday = datetime.fromisoformat(request.birthday)
+            user.save()
 
             return impulse_svc_pb2.UpdateUserResponse(
                 id=str(user.id),
-                sex=user.gender,
+                gender=user.gender,
+                birthday=user.birthday.isoformat(),
                 pal=user.pal,
-                birthday=Timestamp().FromDatetime(dt=user.birthday)
             )
 
     def TrackChallenge(self, request, context):
