@@ -53,6 +53,7 @@ message UpdateUserResponse {
 
 //
 // GetTeams
+//
 
 message GetAllTeamsRequest { }
 
