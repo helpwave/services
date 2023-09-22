@@ -1,5 +1,7 @@
 import uuid
 
+from datetime import datetime
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -18,8 +20,8 @@ class Challenge(models.Model):
     title: str = models.CharField(max_length=50)
     description: str = models.TextField()
 
-    start_datetime: str = models.DateTimeField()
-    end_datetime: str = models.DateTimeField()
+    start_datetime: datetime = models.DateTimeField()
+    end_datetime: datetime = models.DateTimeField()
 
     type: str = models.CharField(max_length=10, choices=ChallengeTypes.choices)
     category: str = models.CharField(max_length=10, choices=ChallengeCategories.choices)
@@ -35,7 +37,7 @@ class UserChallenge(models.Model):
     user: str = models.ForeignKey('User', on_delete=models.CASCADE)
     challenge: str = models.ForeignKey('Challenge', on_delete=models.CASCADE)
     score: int = models.IntegerField()
-    done: bool = models.BooleanField()
+    done_datetime: datetime = models.DateTimeField()
 
 
 class User(models.Model):
@@ -47,7 +49,7 @@ class User(models.Model):
     id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username: str = models.CharField(max_length=50)
     gender: str = models.CharField(max_length=10, choices=Gender.choices)
-    age: int = models.IntegerField()
+    birthday: datetime = models.DateTimeField()
     pal: float = models.FloatField()
 
     challenges: list = models.ManyToManyField(Challenge, through=UserChallenge)
