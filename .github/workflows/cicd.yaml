@@ -36,7 +36,11 @@ jobs:
         uses: tj-actions/changed-files@v37
         with:
           files: |
-            services/*-svc/**
+            services/auth-svc/**
+            services/emergency-room-svc/**
+            services/ory-svc/**
+            services/task-svc/**
+            services/user-svc/**
 
       - name: Detect changes in images
         id: changes-in-images
