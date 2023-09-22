@@ -3,6 +3,7 @@ import uuid
 from datetime import datetime
 
 from django.db import models
+from django.db.models.aggregates import Sum
 from django.utils.translation import gettext_lazy as _
 
 
@@ -56,3 +57,7 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
+
+    @property
+    def score(self):
+        return self.userchallenge_set.all().values("score").aggregate(Sum("score")).get("score__sum", 0)
