@@ -9,7 +9,7 @@ sys.path.append("./gen/")
 from proto.services.impulse_svc.v1 import impulse_svc_pb2_grpc
 from proto.services.impulse_svc.v1 import impulse_svc_pb2
 
-from grpc_service.models import Challenge, UserChallenge, User
+from grpc_service.models import Challenge, UserChallenge, User, Reward
 from django.db.models import Q
 
 class Servicer(impulse_svc_pb2_grpc.ImpulseService):
@@ -23,6 +23,13 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         )
         return impulse_svc_pb2.CreateUserResponse(id=str(user.id))
 
+    def GetScore(self, request, context):
+        user_challenges = UserChallenge.objects.filter(user_id=request.user_id)
+        total_score = 0
+        for user_challenge in user_challenges:
+            total_score += user_challenge.score
+        return impulse_svc_pb2.GetScoreResponse(score=total_score)
+    
     def UpdateUser(self, request, context):
         try:
             user = User.objects.get(id=request.id)
@@ -82,6 +89,9 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
                 ) for challenge in challenges
             ]
         )
+        
+    def GetAllRewards(self, request, context):
+        rewards = Reward.objects.all()
 
 def grpc_hook(server):
     impulse_svc_pb2_grpc.add_ImpulseServiceServicer_to_server(Servicer(), server)
