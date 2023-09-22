@@ -82,7 +82,7 @@ class User(models.Model):
     image: str = models.CharField(max_length=100)
 
     challenges: list = models.ManyToManyField(Challenge, through=UserChallenge)
-    rewards: list = models.ManyToManyField(Reward, null=True, blank=True)
+    rewards: list = models.ManyToManyField(Reward, blank=True)
     team: Team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
