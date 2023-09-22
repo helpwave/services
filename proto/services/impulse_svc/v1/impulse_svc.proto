@@ -54,9 +54,7 @@ message UpdateUserResponse {
 //
 // GetTeams
 
-message GetAllTeamsRequest {
-  string user_id = 1;
-}
+message GetAllTeamsRequest { }
 
 message GetAllTeamsResponse {
   repeated Team teams = 1;

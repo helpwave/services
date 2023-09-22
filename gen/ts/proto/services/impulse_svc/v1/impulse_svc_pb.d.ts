@@ -132,9 +132,6 @@ export namespace UpdateUserResponse {
 }
 
 export class GetAllTeamsRequest extends jspb.Message {
-  getUserId(): string;
-  setUserId(value: string): GetAllTeamsRequest;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetAllTeamsRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetAllTeamsRequest): GetAllTeamsRequest.AsObject;
@@ -145,7 +142,6 @@ export class GetAllTeamsRequest extends jspb.Message {
 
 export namespace GetAllTeamsRequest {
   export type AsObject = {
-    userId: string,
   }
 }
 

@@ -114,14 +114,11 @@ final $typed_data.Uint8List updateUserResponseDescriptor = $convert.base64Decode
 @$core.Deprecated('Use getAllTeamsRequestDescriptor instead')
 const GetAllTeamsRequest$json = {
   '1': 'GetAllTeamsRequest',
-  '2': [
-    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
-  ],
 };
 
 /// Descriptor for `GetAllTeamsRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getAllTeamsRequestDescriptor = $convert.base64Decode(
-    'ChJHZXRBbGxUZWFtc1JlcXVlc3QSFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklk');
+    'ChJHZXRBbGxUZWFtc1JlcXVlc3Q=');
 
 @$core.Deprecated('Use getAllTeamsResponseDescriptor instead')
 const GetAllTeamsResponse$json = {

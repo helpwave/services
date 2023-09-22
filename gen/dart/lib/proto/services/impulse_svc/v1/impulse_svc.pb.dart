@@ -345,21 +345,12 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
 }
 
 class GetAllTeamsRequest extends $pb.GeneratedMessage {
-  factory GetAllTeamsRequest({
-    $core.String? userId,
-  }) {
-    final $result = create();
-    if (userId != null) {
-      $result.userId = userId;
-    }
-    return $result;
-  }
+  factory GetAllTeamsRequest() => create();
   GetAllTeamsRequest._() : super();
   factory GetAllTeamsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAllTeamsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTeamsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..hasRequiredFields = false
   ;
 
@@ -383,15 +374,6 @@ class GetAllTeamsRequest extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static GetAllTeamsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTeamsRequest>(create);
   static GetAllTeamsRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasUserId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearUserId() => clearField(1);
 }
 
 class GetAllTeamsResponse_Team extends $pb.GeneratedMessage {

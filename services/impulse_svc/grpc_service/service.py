@@ -45,7 +45,14 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
     
     def GetRewards(self, request, context):
         user = User.objects.get(id=request.user_id)
-        rewards = Reward.objects.filter(points__lte=user.score)
+
+        if user.team:
+            rewards = Reward.objects.filter(points__lte=user.team.score)
+        else:
+            return impulse_svc_pb2.GetRewardsResponse(
+                rewards=[]
+            )
+
         return impulse_svc_pb2.GetRewardsResponse(
             rewards=[
                 impulse_svc_pb2.Reward(
@@ -100,6 +107,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             (Q(end_datetime__isnull=True) & Q(start_datetime__isnull=True))
             # the challenge is active
         )
+
         return impulse_svc_pb2.GetActiveChallengesResponse(
             challenges=[
                 impulse_svc_pb2.Challenge(

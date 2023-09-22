@@ -1383,7 +1383,7 @@ proto.proto.services.impulse_svc.v1.GetAllTeamsRequest.prototype.toObject = func
  */
 proto.proto.services.impulse_svc.v1.GetAllTeamsRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    userId: jspb.Message.getFieldWithDefault(msg, 1, "")
+
   };
 
   if (includeInstance) {
@@ -1420,10 +1420,6 @@ proto.proto.services.impulse_svc.v1.GetAllTeamsRequest.deserializeBinaryFromRead
     }
     var field = reader.getFieldNumber();
     switch (field) {
-    case 1:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setUserId(value);
-      break;
     default:
       reader.skipField();
       break;
@@ -1453,31 +1449,6 @@ proto.proto.services.impulse_svc.v1.GetAllTeamsRequest.prototype.serializeBinary
  */
 proto.proto.services.impulse_svc.v1.GetAllTeamsRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getUserId();
-  if (f.length > 0) {
-    writer.writeString(
-      1,
-      f
-    );
-  }
-};
-
-
-/**
- * optional string user_id = 1;
- * @return {string}
- */
-proto.proto.services.impulse_svc.v1.GetAllTeamsRequest.prototype.getUserId = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.proto.services.impulse_svc.v1.GetAllTeamsRequest} returns this
- */
-proto.proto.services.impulse_svc.v1.GetAllTeamsRequest.prototype.setUserId = function(value) {
-  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
