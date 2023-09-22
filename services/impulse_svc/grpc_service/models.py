@@ -26,6 +26,8 @@ class Challenge(models.Model):
 
 
 class UserChallenge(models.Model):
+	user: str = models.ForeignKey('User', on_delete=models.CASCADE)
+	challenge: str = models.ForeignKey('Challenge', on_delete=models.CASCADE)
 	score: int = models.IntegerField()
 	done: bool = models.BooleanField()
 
