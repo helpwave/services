@@ -502,6 +502,7 @@ class CreateDailyChallengeRequest extends $pb.GeneratedMessage {
     ChallengeCategory? category,
     $fixnum.Int64? threshold,
     $fixnum.Int64? points,
+    $core.String? unit,
   }) {
     final $result = create();
     if (title != null) {
@@ -519,6 +520,9 @@ class CreateDailyChallengeRequest extends $pb.GeneratedMessage {
     if (points != null) {
       $result.points = points;
     }
+    if (unit != null) {
+      $result.unit = unit;
+    }
     return $result;
   }
   CreateDailyChallengeRequest._() : super();
@@ -531,6 +535,7 @@ class CreateDailyChallengeRequest extends $pb.GeneratedMessage {
     ..e<ChallengeCategory>(3, _omitFieldNames ? '' : 'category', $pb.PbFieldType.OE, defaultOrMaker: ChallengeCategory.CHALLENGE_CATEGORY_UNSPECIFIED, valueOf: ChallengeCategory.valueOf, enumValues: ChallengeCategory.values)
     ..a<$fixnum.Int64>(4, _omitFieldNames ? '' : 'threshold', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..a<$fixnum.Int64>(5, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..aOS(6, _omitFieldNames ? '' : 'unit')
     ..hasRequiredFields = false
   ;
 
@@ -599,6 +604,15 @@ class CreateDailyChallengeRequest extends $pb.GeneratedMessage {
   $core.bool hasPoints() => $_has(4);
   @$pb.TagNumber(5)
   void clearPoints() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get unit => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set unit($core.String v) { $_setString(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasUnit() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearUnit() => clearField(6);
 }
 
 class CreateDailyChallengeResponse extends $pb.GeneratedMessage {
@@ -660,6 +674,7 @@ class CreateQuestChallengeRequest extends $pb.GeneratedMessage {
     ChallengeCategory? category,
     $fixnum.Int64? threshold,
     $fixnum.Int64? points,
+    $core.String? unit,
   }) {
     final $result = create();
     if (title != null) {
@@ -683,6 +698,9 @@ class CreateQuestChallengeRequest extends $pb.GeneratedMessage {
     if (points != null) {
       $result.points = points;
     }
+    if (unit != null) {
+      $result.unit = unit;
+    }
     return $result;
   }
   CreateQuestChallengeRequest._() : super();
@@ -697,6 +715,7 @@ class CreateQuestChallengeRequest extends $pb.GeneratedMessage {
     ..e<ChallengeCategory>(5, _omitFieldNames ? '' : 'category', $pb.PbFieldType.OE, defaultOrMaker: ChallengeCategory.CHALLENGE_CATEGORY_UNSPECIFIED, valueOf: ChallengeCategory.valueOf, enumValues: ChallengeCategory.values)
     ..a<$fixnum.Int64>(6, _omitFieldNames ? '' : 'threshold', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..a<$fixnum.Int64>(7, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..aOS(8, _omitFieldNames ? '' : 'unit')
     ..hasRequiredFields = false
   ;
 
@@ -787,6 +806,15 @@ class CreateQuestChallengeRequest extends $pb.GeneratedMessage {
   $core.bool hasPoints() => $_has(6);
   @$pb.TagNumber(7)
   void clearPoints() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get unit => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set unit($core.String v) { $_setString(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasUnit() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearUnit() => clearField(8);
 }
 
 class CreateQuestChallengeResponse extends $pb.GeneratedMessage {
@@ -882,6 +910,7 @@ class GetChallengesResponse_Challenge extends $pb.GeneratedMessage {
     ChallengeType? type,
     $fixnum.Int64? threshold,
     $fixnum.Int64? points,
+    $core.String? unit,
   }) {
     final $result = create();
     if (id != null) {
@@ -911,6 +940,9 @@ class GetChallengesResponse_Challenge extends $pb.GeneratedMessage {
     if (points != null) {
       $result.points = points;
     }
+    if (unit != null) {
+      $result.unit = unit;
+    }
     return $result;
   }
   GetChallengesResponse_Challenge._() : super();
@@ -927,6 +959,7 @@ class GetChallengesResponse_Challenge extends $pb.GeneratedMessage {
     ..e<ChallengeType>(7, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: ChallengeType.CHALLENGE_TYPE_UNSPECIFIED, valueOf: ChallengeType.valueOf, enumValues: ChallengeType.values)
     ..a<$fixnum.Int64>(8, _omitFieldNames ? '' : 'threshold', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..a<$fixnum.Int64>(9, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..aOS(10, _omitFieldNames ? '' : 'unit')
     ..hasRequiredFields = false
   ;
 
@@ -1035,6 +1068,15 @@ class GetChallengesResponse_Challenge extends $pb.GeneratedMessage {
   $core.bool hasPoints() => $_has(8);
   @$pb.TagNumber(9)
   void clearPoints() => clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get unit => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set unit($core.String v) { $_setString(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasUnit() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearUnit() => clearField(10);
 }
 
 class GetChallengesResponse extends $pb.GeneratedMessage {
@@ -1091,6 +1133,7 @@ class UpdateChallengeRequest extends $pb.GeneratedMessage {
     ChallengeCategory? category,
     $fixnum.Int64? threshold,
     $fixnum.Int64? points,
+    $core.String? unit,
   }) {
     final $result = create();
     if (id != null) {
@@ -1117,6 +1160,9 @@ class UpdateChallengeRequest extends $pb.GeneratedMessage {
     if (points != null) {
       $result.points = points;
     }
+    if (unit != null) {
+      $result.unit = unit;
+    }
     return $result;
   }
   UpdateChallengeRequest._() : super();
@@ -1132,6 +1178,7 @@ class UpdateChallengeRequest extends $pb.GeneratedMessage {
     ..e<ChallengeCategory>(6, _omitFieldNames ? '' : 'category', $pb.PbFieldType.OE, defaultOrMaker: ChallengeCategory.CHALLENGE_CATEGORY_UNSPECIFIED, valueOf: ChallengeCategory.valueOf, enumValues: ChallengeCategory.values)
     ..a<$fixnum.Int64>(7, _omitFieldNames ? '' : 'threshold', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..a<$fixnum.Int64>(8, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..aOS(9, _omitFieldNames ? '' : 'unit')
     ..hasRequiredFields = false
   ;
 
@@ -1231,6 +1278,15 @@ class UpdateChallengeRequest extends $pb.GeneratedMessage {
   $core.bool hasPoints() => $_has(7);
   @$pb.TagNumber(8)
   void clearPoints() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get unit => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set unit($core.String v) { $_setString(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasUnit() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearUnit() => clearField(9);
 }
 
 class UpdateChallengeResponse extends $pb.GeneratedMessage {
@@ -1244,6 +1300,7 @@ class UpdateChallengeResponse extends $pb.GeneratedMessage {
     ChallengeType? type,
     $fixnum.Int64? threshold,
     $fixnum.Int64? points,
+    $core.String? unit,
   }) {
     final $result = create();
     if (id != null) {
@@ -1273,6 +1330,9 @@ class UpdateChallengeResponse extends $pb.GeneratedMessage {
     if (points != null) {
       $result.points = points;
     }
+    if (unit != null) {
+      $result.unit = unit;
+    }
     return $result;
   }
   UpdateChallengeResponse._() : super();
@@ -1289,6 +1349,7 @@ class UpdateChallengeResponse extends $pb.GeneratedMessage {
     ..e<ChallengeType>(7, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: ChallengeType.CHALLENGE_TYPE_UNSPECIFIED, valueOf: ChallengeType.valueOf, enumValues: ChallengeType.values)
     ..a<$fixnum.Int64>(8, _omitFieldNames ? '' : 'threshold', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..a<$fixnum.Int64>(9, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..aOS(10, _omitFieldNames ? '' : 'unit')
     ..hasRequiredFields = false
   ;
 
@@ -1397,6 +1458,15 @@ class UpdateChallengeResponse extends $pb.GeneratedMessage {
   $core.bool hasPoints() => $_has(8);
   @$pb.TagNumber(9)
   void clearPoints() => clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get unit => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set unit($core.String v) { $_setString(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasUnit() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearUnit() => clearField(10);
 }
 
 

@@ -1651,7 +1651,8 @@ proto.proto.services.impulse_svc.v1.CreateDailyChallengeRequest.toObject = funct
     description: jspb.Message.getFieldWithDefault(msg, 2, ""),
     category: jspb.Message.getFieldWithDefault(msg, 3, 0),
     threshold: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    points: jspb.Message.getFieldWithDefault(msg, 5, 0)
+    points: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    unit: jspb.Message.getFieldWithDefault(msg, 6, "")
   };
 
   if (includeInstance) {
@@ -1707,6 +1708,10 @@ proto.proto.services.impulse_svc.v1.CreateDailyChallengeRequest.deserializeBinar
     case 5:
       var value = /** @type {number} */ (reader.readUint64());
       msg.setPoints(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUnit(value);
       break;
     default:
       reader.skipField();
@@ -1769,6 +1774,13 @@ proto.proto.services.impulse_svc.v1.CreateDailyChallengeRequest.serializeBinaryT
   if (f !== 0) {
     writer.writeUint64(
       5,
+      f
+    );
+  }
+  f = message.getUnit();
+  if (f.length > 0) {
+    writer.writeString(
+      6,
       f
     );
   }
@@ -1862,6 +1874,24 @@ proto.proto.services.impulse_svc.v1.CreateDailyChallengeRequest.prototype.getPoi
  */
 proto.proto.services.impulse_svc.v1.CreateDailyChallengeRequest.prototype.setPoints = function(value) {
   return jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional string unit = 6;
+ * @return {string}
+ */
+proto.proto.services.impulse_svc.v1.CreateDailyChallengeRequest.prototype.getUnit = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.impulse_svc.v1.CreateDailyChallengeRequest} returns this
+ */
+proto.proto.services.impulse_svc.v1.CreateDailyChallengeRequest.prototype.setUnit = function(value) {
+  return jspb.Message.setProto3StringField(this, 6, value);
 };
 
 
@@ -2033,7 +2063,8 @@ proto.proto.services.impulse_svc.v1.CreateQuestChallengeRequest.toObject = funct
     endAt: (f = msg.getEndAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     category: jspb.Message.getFieldWithDefault(msg, 5, 0),
     threshold: jspb.Message.getFieldWithDefault(msg, 6, 0),
-    points: jspb.Message.getFieldWithDefault(msg, 7, 0)
+    points: jspb.Message.getFieldWithDefault(msg, 7, 0),
+    unit: jspb.Message.getFieldWithDefault(msg, 8, "")
   };
 
   if (includeInstance) {
@@ -2099,6 +2130,10 @@ proto.proto.services.impulse_svc.v1.CreateQuestChallengeRequest.deserializeBinar
     case 7:
       var value = /** @type {number} */ (reader.readUint64());
       msg.setPoints(value);
+      break;
+    case 8:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUnit(value);
       break;
     default:
       reader.skipField();
@@ -2177,6 +2212,13 @@ proto.proto.services.impulse_svc.v1.CreateQuestChallengeRequest.serializeBinaryT
   if (f !== 0) {
     writer.writeUint64(
       7,
+      f
+    );
+  }
+  f = message.getUnit();
+  if (f.length > 0) {
+    writer.writeString(
+      8,
       f
     );
   }
@@ -2344,6 +2386,24 @@ proto.proto.services.impulse_svc.v1.CreateQuestChallengeRequest.prototype.getPoi
  */
 proto.proto.services.impulse_svc.v1.CreateQuestChallengeRequest.prototype.setPoints = function(value) {
   return jspb.Message.setProto3IntField(this, 7, value);
+};
+
+
+/**
+ * optional string unit = 8;
+ * @return {string}
+ */
+proto.proto.services.impulse_svc.v1.CreateQuestChallengeRequest.prototype.getUnit = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.impulse_svc.v1.CreateQuestChallengeRequest} returns this
+ */
+proto.proto.services.impulse_svc.v1.CreateQuestChallengeRequest.prototype.setUnit = function(value) {
+  return jspb.Message.setProto3StringField(this, 8, value);
 };
 
 
@@ -2740,7 +2800,8 @@ proto.proto.services.impulse_svc.v1.GetChallengesResponse.Challenge.toObject = f
     category: jspb.Message.getFieldWithDefault(msg, 6, 0),
     type: jspb.Message.getFieldWithDefault(msg, 7, 0),
     threshold: jspb.Message.getFieldWithDefault(msg, 8, 0),
-    points: jspb.Message.getFieldWithDefault(msg, 9, 0)
+    points: jspb.Message.getFieldWithDefault(msg, 9, 0),
+    unit: jspb.Message.getFieldWithDefault(msg, 10, "")
   };
 
   if (includeInstance) {
@@ -2814,6 +2875,10 @@ proto.proto.services.impulse_svc.v1.GetChallengesResponse.Challenge.deserializeB
     case 9:
       var value = /** @type {number} */ (reader.readUint64());
       msg.setPoints(value);
+      break;
+    case 10:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUnit(value);
       break;
     default:
       reader.skipField();
@@ -2906,6 +2971,13 @@ proto.proto.services.impulse_svc.v1.GetChallengesResponse.Challenge.serializeBin
   if (f !== 0) {
     writer.writeUint64(
       9,
+      f
+    );
+  }
+  f = message.getUnit();
+  if (f.length > 0) {
+    writer.writeString(
+      10,
       f
     );
   }
@@ -3113,6 +3185,24 @@ proto.proto.services.impulse_svc.v1.GetChallengesResponse.Challenge.prototype.se
 
 
 /**
+ * optional string unit = 10;
+ * @return {string}
+ */
+proto.proto.services.impulse_svc.v1.GetChallengesResponse.Challenge.prototype.getUnit = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 10, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.impulse_svc.v1.GetChallengesResponse.Challenge} returns this
+ */
+proto.proto.services.impulse_svc.v1.GetChallengesResponse.Challenge.prototype.setUnit = function(value) {
+  return jspb.Message.setProto3StringField(this, 10, value);
+};
+
+
+/**
  * repeated Challenge challenges = 1;
  * @return {!Array<!proto.proto.services.impulse_svc.v1.GetChallengesResponse.Challenge>}
  */
@@ -3189,7 +3279,8 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.toObject = function(i
     endAt: (f = msg.getEndAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     category: jspb.Message.getFieldWithDefault(msg, 6, 0),
     threshold: jspb.Message.getFieldWithDefault(msg, 7, 0),
-    points: jspb.Message.getFieldWithDefault(msg, 8, 0)
+    points: jspb.Message.getFieldWithDefault(msg, 8, 0),
+    unit: jspb.Message.getFieldWithDefault(msg, 9, "")
   };
 
   if (includeInstance) {
@@ -3259,6 +3350,10 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.deserializeBinaryFrom
     case 8:
       var value = /** @type {number} */ (reader.readUint64());
       msg.setPoints(value);
+      break;
+    case 9:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUnit(value);
       break;
     default:
       reader.skipField();
@@ -3344,6 +3439,13 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.serializeBinaryToWrit
   if (f != null) {
     writer.writeUint64(
       8,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 9));
+  if (f != null) {
+    writer.writeString(
+      9,
       f
     );
   }
@@ -3622,6 +3724,42 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.prototype.hasPoints =
 };
 
 
+/**
+ * optional string unit = 9;
+ * @return {string}
+ */
+proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.prototype.getUnit = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.impulse_svc.v1.UpdateChallengeRequest} returns this
+ */
+proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.prototype.setUnit = function(value) {
+  return jspb.Message.setField(this, 9, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.impulse_svc.v1.UpdateChallengeRequest} returns this
+ */
+proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.prototype.clearUnit = function() {
+  return jspb.Message.setField(this, 9, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.prototype.hasUnit = function() {
+  return jspb.Message.getField(this, 9) != null;
+};
+
+
 
 
 
@@ -3662,7 +3800,8 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.toObject = function(
     category: jspb.Message.getFieldWithDefault(msg, 6, 0),
     type: jspb.Message.getFieldWithDefault(msg, 7, 0),
     threshold: jspb.Message.getFieldWithDefault(msg, 8, 0),
-    points: jspb.Message.getFieldWithDefault(msg, 9, 0)
+    points: jspb.Message.getFieldWithDefault(msg, 9, 0),
+    unit: jspb.Message.getFieldWithDefault(msg, 10, "")
   };
 
   if (includeInstance) {
@@ -3736,6 +3875,10 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.deserializeBinaryFro
     case 9:
       var value = /** @type {number} */ (reader.readUint64());
       msg.setPoints(value);
+      break;
+    case 10:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUnit(value);
       break;
     default:
       reader.skipField();
@@ -3828,6 +3971,13 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.serializeBinaryToWri
   if (f !== 0) {
     writer.writeUint64(
       9,
+      f
+    );
+  }
+  f = message.getUnit();
+  if (f.length > 0) {
+    writer.writeString(
+      10,
       f
     );
   }
@@ -4031,6 +4181,24 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.prototype.getPoints 
  */
 proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.prototype.setPoints = function(value) {
   return jspb.Message.setProto3IntField(this, 9, value);
+};
+
+
+/**
+ * optional string unit = 10;
+ * @return {string}
+ */
+proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.prototype.getUnit = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 10, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.impulse_svc.v1.UpdateChallengeResponse} returns this
+ */
+proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.prototype.setUnit = function(value) {
+  return jspb.Message.setProto3StringField(this, 10, value);
 };
 
 

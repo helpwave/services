@@ -31,3 +31,8 @@ plugins:
     out: gen/python
   - plugin: buf.build/protocolbuffers/python
     out: gen/python
+
+  - plugin: buf.build/grpc/python:v1.58.1
+    out: services/impulse_svc/gen
+  - plugin: buf.build/protocolbuffers/python
+    out: services/impulse_svc/gen
