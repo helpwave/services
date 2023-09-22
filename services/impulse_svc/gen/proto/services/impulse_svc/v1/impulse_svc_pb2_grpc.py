@@ -8,7 +8,7 @@ from proto.services.impulse_svc.v1 import impulse_svc_pb2 as proto_dot_services_
 class ImpulseServiceStub(object):
     """
     ImpulseService
-
+    
 
     """
 
@@ -58,7 +58,7 @@ class ImpulseServiceStub(object):
 class ImpulseServiceServicer(object):
     """
     ImpulseService
-
+    
 
     """
 
@@ -152,7 +152,7 @@ def add_ImpulseServiceServicer_to_server(servicer, server):
 class ImpulseService(object):
     """
     ImpulseService
-
+    
 
     """
 
