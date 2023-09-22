@@ -57,10 +57,12 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
     def GetActiveChallenges(self, request, context):
         current_date = datetime.now()
-        challenges = Challenge.objects.get(
+        challenges = Challenge.objects.filter(
+
             # if the start date is lower than current date and the end date is higher than current date
+            
             (Q(start_datetime__lte=current_date) & Q(end_datetime__gte=current_date)) | 
-            # or the start and end dates ar`e null
+            # # or the start and end dates ar`e null
             (Q(end_datetime__isnull=True) & Q(start_datetime__isnull=True))
             # the challenge is active
         )
