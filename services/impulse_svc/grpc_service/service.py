@@ -31,9 +31,9 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.Response()
         else:
-            user.gender=request.sex,
-            user.pal=request.pal,
-            user.birthday=datetime.fromtimestamp(request.birthday.seconds + request.birthday.nanos / 1e9)
+            user.gender = request.sex,
+            user.pal = request.pal,
+            user.birthday = datetime.fromtimestamp(request.birthday.seconds + request.birthday.nanos / 1e9)
 
             return impulse_svc_pb2.UpdateUserResponse(
                 id=str(user.id),
