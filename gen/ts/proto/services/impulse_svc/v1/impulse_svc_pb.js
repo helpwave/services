@@ -759,7 +759,7 @@ proto.proto.services.impulse_svc.v1.CreateUserResponse.prototype.toObject = func
  */
 proto.proto.services.impulse_svc.v1.CreateUserResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, "")
+    userId: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -798,7 +798,7 @@ proto.proto.services.impulse_svc.v1.CreateUserResponse.deserializeBinaryFromRead
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setId(value);
+      msg.setUserId(value);
       break;
     default:
       reader.skipField();
@@ -829,7 +829,7 @@ proto.proto.services.impulse_svc.v1.CreateUserResponse.prototype.serializeBinary
  */
 proto.proto.services.impulse_svc.v1.CreateUserResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getUserId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -840,10 +840,10 @@ proto.proto.services.impulse_svc.v1.CreateUserResponse.serializeBinaryToWriter =
 
 
 /**
- * optional string id = 1;
+ * optional string user_id = 1;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.CreateUserResponse.prototype.getId = function() {
+proto.proto.services.impulse_svc.v1.CreateUserResponse.prototype.getUserId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -852,7 +852,7 @@ proto.proto.services.impulse_svc.v1.CreateUserResponse.prototype.getId = functio
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.CreateUserResponse} returns this
  */
-proto.proto.services.impulse_svc.v1.CreateUserResponse.prototype.setId = function(value) {
+proto.proto.services.impulse_svc.v1.CreateUserResponse.prototype.setUserId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
@@ -889,7 +889,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.toObject = funct
  */
 proto.proto.services.impulse_svc.v1.UpdateUserRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     gender: jspb.Message.getFieldWithDefault(msg, 2, ""),
     birthday: jspb.Message.getFieldWithDefault(msg, 3, ""),
     pal: jspb.Message.getFieldWithDefault(msg, 4, 0)
@@ -931,7 +931,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.deserializeBinaryFromReade
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setId(value);
+      msg.setUserId(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
@@ -974,7 +974,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.serializeBinary 
  */
 proto.proto.services.impulse_svc.v1.UpdateUserRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getUserId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -1006,10 +1006,10 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.serializeBinaryToWriter = 
 
 
 /**
- * optional string id = 1;
+ * optional string user_id = 1;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getId = function() {
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getUserId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -1018,7 +1018,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getId = function
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.UpdateUserRequest} returns this
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setId = function(value) {
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setUserId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
@@ -1163,7 +1163,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.toObject = func
  */
 proto.proto.services.impulse_svc.v1.UpdateUserResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     gender: jspb.Message.getFieldWithDefault(msg, 2, ""),
     birthday: jspb.Message.getFieldWithDefault(msg, 3, ""),
     pal: jspb.Message.getFieldWithDefault(msg, 4, 0)
@@ -1205,7 +1205,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.deserializeBinaryFromRead
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setId(value);
+      msg.setUserId(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
@@ -1248,7 +1248,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.serializeBinary
  */
 proto.proto.services.impulse_svc.v1.UpdateUserResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getUserId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -1280,10 +1280,10 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.serializeBinaryToWriter =
 
 
 /**
- * optional string id = 1;
+ * optional string user_id = 1;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getId = function() {
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getUserId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -1292,7 +1292,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getId = functio
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.UpdateUserResponse} returns this
  */
-proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setId = function(value) {
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setUserId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
@@ -1606,7 +1606,7 @@ proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.Team.prototype.toObject 
  */
 proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.Team.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    teamId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
     image: jspb.Message.getFieldWithDefault(msg, 5, "")
@@ -1648,7 +1648,7 @@ proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.Team.deserializeBinaryFr
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setId(value);
+      msg.setTeamId(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
@@ -1691,7 +1691,7 @@ proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.Team.prototype.serialize
  */
 proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.Team.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getTeamId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -1723,10 +1723,10 @@ proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.Team.serializeBinaryToWr
 
 
 /**
- * optional string id = 1;
+ * optional string team_id = 1;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.Team.prototype.getId = function() {
+proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.Team.prototype.getTeamId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -1735,7 +1735,7 @@ proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.Team.prototype.getId = f
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.Team} returns this
  */
-proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.Team.prototype.setId = function(value) {
+proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.Team.prototype.setTeamId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
@@ -2084,7 +2084,7 @@ proto.proto.services.impulse_svc.v1.TrackChallengeResponse.prototype.toObject = 
  */
 proto.proto.services.impulse_svc.v1.TrackChallengeResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, "")
+    challengeId: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -2123,7 +2123,7 @@ proto.proto.services.impulse_svc.v1.TrackChallengeResponse.deserializeBinaryFrom
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setId(value);
+      msg.setChallengeId(value);
       break;
     default:
       reader.skipField();
@@ -2154,7 +2154,7 @@ proto.proto.services.impulse_svc.v1.TrackChallengeResponse.prototype.serializeBi
  */
 proto.proto.services.impulse_svc.v1.TrackChallengeResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getChallengeId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -2165,10 +2165,10 @@ proto.proto.services.impulse_svc.v1.TrackChallengeResponse.serializeBinaryToWrit
 
 
 /**
- * optional string id = 1;
+ * optional string challenge_id = 1;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.TrackChallengeResponse.prototype.getId = function() {
+proto.proto.services.impulse_svc.v1.TrackChallengeResponse.prototype.getChallengeId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -2177,7 +2177,7 @@ proto.proto.services.impulse_svc.v1.TrackChallengeResponse.prototype.getId = fun
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.TrackChallengeResponse} returns this
  */
-proto.proto.services.impulse_svc.v1.TrackChallengeResponse.prototype.setId = function(value) {
+proto.proto.services.impulse_svc.v1.TrackChallengeResponse.prototype.setChallengeId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
@@ -2437,7 +2437,7 @@ proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse.Challenge.protot
  */
 proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse.Challenge.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    challengeId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     title: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
     startAt: jspb.Message.getFieldWithDefault(msg, 4, ""),
@@ -2485,7 +2485,7 @@ proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse.Challenge.deseri
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setId(value);
+      msg.setChallengeId(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
@@ -2552,7 +2552,7 @@ proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse.Challenge.protot
  */
 proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse.Challenge.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getChallengeId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -2626,10 +2626,10 @@ proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse.Challenge.serial
 
 
 /**
- * optional string id = 1;
+ * optional string challenge_id = 1;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse.Challenge.prototype.getId = function() {
+proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse.Challenge.prototype.getChallengeId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -2638,7 +2638,7 @@ proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse.Challenge.protot
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse.Challenge} returns this
  */
-proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse.Challenge.prototype.setId = function(value) {
+proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse.Challenge.prototype.setChallengeId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
@@ -2875,7 +2875,7 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.prototype.toObject = 
  */
 proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    challengeId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     title: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
     startAt: jspb.Message.getFieldWithDefault(msg, 4, ""),
@@ -2922,7 +2922,7 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.deserializeBinaryFrom
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setId(value);
+      msg.setChallengeId(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
@@ -2985,7 +2985,7 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.prototype.serializeBi
  */
 proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getChallengeId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -3052,10 +3052,10 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.serializeBinaryToWrit
 
 
 /**
- * optional string id = 1;
+ * optional string challenge_id = 1;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.prototype.getId = function() {
+proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.prototype.getChallengeId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -3064,7 +3064,7 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.prototype.getId = fun
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.UpdateChallengeRequest} returns this
  */
-proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.prototype.setId = function(value) {
+proto.proto.services.impulse_svc.v1.UpdateChallengeRequest.prototype.setChallengeId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
@@ -3389,7 +3389,7 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.prototype.toObject =
  */
 proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    challengeId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     title: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
     startAt: jspb.Message.getFieldWithDefault(msg, 4, ""),
@@ -3437,7 +3437,7 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.deserializeBinaryFro
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setId(value);
+      msg.setChallengeId(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
@@ -3504,7 +3504,7 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.prototype.serializeB
  */
 proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getChallengeId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -3578,10 +3578,10 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.serializeBinaryToWri
 
 
 /**
- * optional string id = 1;
+ * optional string challenge_id = 1;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.prototype.getId = function() {
+proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.prototype.getChallengeId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -3590,7 +3590,7 @@ proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.prototype.getId = fu
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.UpdateChallengeResponse} returns this
  */
-proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.prototype.setId = function(value) {
+proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.prototype.setChallengeId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
@@ -4049,7 +4049,7 @@ proto.proto.services.impulse_svc.v1.GetRewardsRequest.prototype.toObject = funct
  */
 proto.proto.services.impulse_svc.v1.GetRewardsRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    userId: jspb.Message.getFieldWithDefault(msg, 1, "")
+    rewardId: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -4088,7 +4088,7 @@ proto.proto.services.impulse_svc.v1.GetRewardsRequest.deserializeBinaryFromReade
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setUserId(value);
+      msg.setRewardId(value);
       break;
     default:
       reader.skipField();
@@ -4119,7 +4119,7 @@ proto.proto.services.impulse_svc.v1.GetRewardsRequest.prototype.serializeBinary 
  */
 proto.proto.services.impulse_svc.v1.GetRewardsRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getUserId();
+  f = message.getRewardId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -4130,10 +4130,10 @@ proto.proto.services.impulse_svc.v1.GetRewardsRequest.serializeBinaryToWriter = 
 
 
 /**
- * optional string user_id = 1;
+ * optional string reward_id = 1;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.GetRewardsRequest.prototype.getUserId = function() {
+proto.proto.services.impulse_svc.v1.GetRewardsRequest.prototype.getRewardId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -4142,7 +4142,7 @@ proto.proto.services.impulse_svc.v1.GetRewardsRequest.prototype.getUserId = func
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.GetRewardsRequest} returns this
  */
-proto.proto.services.impulse_svc.v1.GetRewardsRequest.prototype.setUserId = function(value) {
+proto.proto.services.impulse_svc.v1.GetRewardsRequest.prototype.setRewardId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
@@ -4301,7 +4301,7 @@ proto.proto.services.impulse_svc.v1.GetRewardsResponse.Reward.prototype.toObject
  */
 proto.proto.services.impulse_svc.v1.GetRewardsResponse.Reward.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    rewardId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     title: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
     points: jspb.Message.getFieldWithDefault(msg, 5, 0)
@@ -4343,7 +4343,7 @@ proto.proto.services.impulse_svc.v1.GetRewardsResponse.Reward.deserializeBinaryF
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setId(value);
+      msg.setRewardId(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
@@ -4386,7 +4386,7 @@ proto.proto.services.impulse_svc.v1.GetRewardsResponse.Reward.prototype.serializ
  */
 proto.proto.services.impulse_svc.v1.GetRewardsResponse.Reward.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getRewardId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -4418,10 +4418,10 @@ proto.proto.services.impulse_svc.v1.GetRewardsResponse.Reward.serializeBinaryToW
 
 
 /**
- * optional string id = 1;
+ * optional string reward_id = 1;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.GetRewardsResponse.Reward.prototype.getId = function() {
+proto.proto.services.impulse_svc.v1.GetRewardsResponse.Reward.prototype.getRewardId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -4430,7 +4430,7 @@ proto.proto.services.impulse_svc.v1.GetRewardsResponse.Reward.prototype.getId = 
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.GetRewardsResponse.Reward} returns this
  */
-proto.proto.services.impulse_svc.v1.GetRewardsResponse.Reward.prototype.setId = function(value) {
+proto.proto.services.impulse_svc.v1.GetRewardsResponse.Reward.prototype.setRewardId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
@@ -4782,7 +4782,7 @@ proto.proto.services.impulse_svc.v1.GetAllRewardsResponse.Reward.prototype.toObj
  */
 proto.proto.services.impulse_svc.v1.GetAllRewardsResponse.Reward.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    rewardId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     title: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
     points: jspb.Message.getFieldWithDefault(msg, 5, 0)
@@ -4824,7 +4824,7 @@ proto.proto.services.impulse_svc.v1.GetAllRewardsResponse.Reward.deserializeBina
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setId(value);
+      msg.setRewardId(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
@@ -4867,7 +4867,7 @@ proto.proto.services.impulse_svc.v1.GetAllRewardsResponse.Reward.prototype.seria
  */
 proto.proto.services.impulse_svc.v1.GetAllRewardsResponse.Reward.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getRewardId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -4899,10 +4899,10 @@ proto.proto.services.impulse_svc.v1.GetAllRewardsResponse.Reward.serializeBinary
 
 
 /**
- * optional string id = 1;
+ * optional string reward_id = 1;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.GetAllRewardsResponse.Reward.prototype.getId = function() {
+proto.proto.services.impulse_svc.v1.GetAllRewardsResponse.Reward.prototype.getRewardId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -4911,7 +4911,7 @@ proto.proto.services.impulse_svc.v1.GetAllRewardsResponse.Reward.prototype.getId
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.GetAllRewardsResponse.Reward} returns this
  */
-proto.proto.services.impulse_svc.v1.GetAllRewardsResponse.Reward.prototype.setId = function(value) {
+proto.proto.services.impulse_svc.v1.GetAllRewardsResponse.Reward.prototype.setRewardId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 

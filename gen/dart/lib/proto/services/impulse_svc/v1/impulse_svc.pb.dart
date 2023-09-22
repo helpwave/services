@@ -112,11 +112,11 @@ class CreateUserRequest extends $pb.GeneratedMessage {
 
 class CreateUserResponse extends $pb.GeneratedMessage {
   factory CreateUserResponse({
-    $core.String? id,
+    $core.String? userId,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (userId != null) {
+      $result.userId = userId;
     }
     return $result;
   }
@@ -125,7 +125,7 @@ class CreateUserResponse extends $pb.GeneratedMessage {
   factory CreateUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateUserResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..hasRequiredFields = false
   ;
 
@@ -151,25 +151,25 @@ class CreateUserResponse extends $pb.GeneratedMessage {
   static CreateUserResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get userId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set userId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasUserId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearUserId() => clearField(1);
 }
 
 class UpdateUserRequest extends $pb.GeneratedMessage {
   factory UpdateUserRequest({
-    $core.String? id,
+    $core.String? userId,
     $core.String? gender,
     $core.String? birthday,
     $core.int? pal,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (userId != null) {
+      $result.userId = userId;
     }
     if (gender != null) {
       $result.gender = gender;
@@ -187,7 +187,7 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
   factory UpdateUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..aOS(2, _omitFieldNames ? '' : 'gender')
     ..aOS(3, _omitFieldNames ? '' : 'birthday')
     ..a<$core.int>(4, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OU3)
@@ -216,13 +216,13 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
   static UpdateUserRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get userId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set userId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasUserId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearUserId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get gender => $_getSZ(1);
@@ -254,14 +254,14 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
 
 class UpdateUserResponse extends $pb.GeneratedMessage {
   factory UpdateUserResponse({
-    $core.String? id,
+    $core.String? userId,
     $core.String? gender,
     $core.String? birthday,
     $core.int? pal,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (userId != null) {
+      $result.userId = userId;
     }
     if (gender != null) {
       $result.gender = gender;
@@ -279,7 +279,7 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
   factory UpdateUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateUserResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..aOS(2, _omitFieldNames ? '' : 'gender')
     ..aOS(3, _omitFieldNames ? '' : 'birthday')
     ..a<$core.int>(4, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OU3)
@@ -308,13 +308,13 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
   static UpdateUserResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get userId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set userId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasUserId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearUserId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get gender => $_getSZ(1);
@@ -378,14 +378,14 @@ class GetAllTeamsRequest extends $pb.GeneratedMessage {
 
 class GetAllTeamsResponse_Team extends $pb.GeneratedMessage {
   factory GetAllTeamsResponse_Team({
-    $core.String? id,
+    $core.String? teamId,
     $core.String? name,
     $core.String? description,
     $core.String? image,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (teamId != null) {
+      $result.teamId = teamId;
     }
     if (name != null) {
       $result.name = name;
@@ -403,7 +403,7 @@ class GetAllTeamsResponse_Team extends $pb.GeneratedMessage {
   factory GetAllTeamsResponse_Team.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTeamsResponse.Team', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(1, _omitFieldNames ? '' : 'teamId')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOS(5, _omitFieldNames ? '' : 'image')
@@ -432,13 +432,13 @@ class GetAllTeamsResponse_Team extends $pb.GeneratedMessage {
   static GetAllTeamsResponse_Team? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get teamId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set teamId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasTeamId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearTeamId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get name => $_getSZ(1);
@@ -606,11 +606,11 @@ class TrackChallengeRequest extends $pb.GeneratedMessage {
 
 class TrackChallengeResponse extends $pb.GeneratedMessage {
   factory TrackChallengeResponse({
-    $core.String? id,
+    $core.String? challengeId,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (challengeId != null) {
+      $result.challengeId = challengeId;
     }
     return $result;
   }
@@ -619,7 +619,7 @@ class TrackChallengeResponse extends $pb.GeneratedMessage {
   factory TrackChallengeResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TrackChallengeResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(1, _omitFieldNames ? '' : 'challengeId')
     ..hasRequiredFields = false
   ;
 
@@ -645,13 +645,13 @@ class TrackChallengeResponse extends $pb.GeneratedMessage {
   static TrackChallengeResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get challengeId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set challengeId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasChallengeId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearChallengeId() => clearField(1);
 }
 
 class GetActiveChallengesRequest extends $pb.GeneratedMessage {
@@ -688,7 +688,7 @@ class GetActiveChallengesRequest extends $pb.GeneratedMessage {
 
 class GetActiveChallengesResponse_Challenge extends $pb.GeneratedMessage {
   factory GetActiveChallengesResponse_Challenge({
-    $core.String? id,
+    $core.String? challengeId,
     $core.String? title,
     $core.String? description,
     $core.String? startAt,
@@ -700,8 +700,8 @@ class GetActiveChallengesResponse_Challenge extends $pb.GeneratedMessage {
     $core.String? unit,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (challengeId != null) {
+      $result.challengeId = challengeId;
     }
     if (title != null) {
       $result.title = title;
@@ -737,7 +737,7 @@ class GetActiveChallengesResponse_Challenge extends $pb.GeneratedMessage {
   factory GetActiveChallengesResponse_Challenge.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetActiveChallengesResponse.Challenge', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(1, _omitFieldNames ? '' : 'challengeId')
     ..aOS(2, _omitFieldNames ? '' : 'title')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOS(4, _omitFieldNames ? '' : 'startAt')
@@ -772,13 +772,13 @@ class GetActiveChallengesResponse_Challenge extends $pb.GeneratedMessage {
   static GetActiveChallengesResponse_Challenge? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get challengeId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set challengeId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasChallengeId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearChallengeId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get title => $_getSZ(1);
@@ -908,7 +908,7 @@ class GetActiveChallengesResponse extends $pb.GeneratedMessage {
 
 class UpdateChallengeRequest extends $pb.GeneratedMessage {
   factory UpdateChallengeRequest({
-    $core.String? id,
+    $core.String? challengeId,
     $core.String? title,
     $core.String? description,
     $core.String? startAt,
@@ -919,8 +919,8 @@ class UpdateChallengeRequest extends $pb.GeneratedMessage {
     $core.String? unit,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (challengeId != null) {
+      $result.challengeId = challengeId;
     }
     if (title != null) {
       $result.title = title;
@@ -953,7 +953,7 @@ class UpdateChallengeRequest extends $pb.GeneratedMessage {
   factory UpdateChallengeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateChallengeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(1, _omitFieldNames ? '' : 'challengeId')
     ..aOS(2, _omitFieldNames ? '' : 'title')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOS(4, _omitFieldNames ? '' : 'startAt')
@@ -987,13 +987,13 @@ class UpdateChallengeRequest extends $pb.GeneratedMessage {
   static UpdateChallengeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get challengeId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set challengeId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasChallengeId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearChallengeId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get title => $_getSZ(1);
@@ -1070,7 +1070,7 @@ class UpdateChallengeRequest extends $pb.GeneratedMessage {
 
 class UpdateChallengeResponse extends $pb.GeneratedMessage {
   factory UpdateChallengeResponse({
-    $core.String? id,
+    $core.String? challengeId,
     $core.String? title,
     $core.String? description,
     $core.String? startAt,
@@ -1082,8 +1082,8 @@ class UpdateChallengeResponse extends $pb.GeneratedMessage {
     $core.String? unit,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (challengeId != null) {
+      $result.challengeId = challengeId;
     }
     if (title != null) {
       $result.title = title;
@@ -1119,7 +1119,7 @@ class UpdateChallengeResponse extends $pb.GeneratedMessage {
   factory UpdateChallengeResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateChallengeResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(1, _omitFieldNames ? '' : 'challengeId')
     ..aOS(2, _omitFieldNames ? '' : 'title')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOS(4, _omitFieldNames ? '' : 'startAt')
@@ -1154,13 +1154,13 @@ class UpdateChallengeResponse extends $pb.GeneratedMessage {
   static UpdateChallengeResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get challengeId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set challengeId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasChallengeId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearChallengeId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get title => $_getSZ(1);
@@ -1346,11 +1346,11 @@ class GetScoreResponse extends $pb.GeneratedMessage {
 
 class GetRewardsRequest extends $pb.GeneratedMessage {
   factory GetRewardsRequest({
-    $core.String? userId,
+    $core.String? rewardId,
   }) {
     final $result = create();
-    if (userId != null) {
-      $result.userId = userId;
+    if (rewardId != null) {
+      $result.rewardId = rewardId;
     }
     return $result;
   }
@@ -1359,7 +1359,7 @@ class GetRewardsRequest extends $pb.GeneratedMessage {
   factory GetRewardsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRewardsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..aOS(1, _omitFieldNames ? '' : 'rewardId')
     ..hasRequiredFields = false
   ;
 
@@ -1385,25 +1385,25 @@ class GetRewardsRequest extends $pb.GeneratedMessage {
   static GetRewardsRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
+  $core.String get rewardId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
+  set rewardId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasUserId() => $_has(0);
+  $core.bool hasRewardId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearUserId() => clearField(1);
+  void clearRewardId() => clearField(1);
 }
 
 class GetRewardsResponse_Reward extends $pb.GeneratedMessage {
   factory GetRewardsResponse_Reward({
-    $core.String? id,
+    $core.String? rewardId,
     $core.String? title,
     $core.String? description,
     $fixnum.Int64? points,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (rewardId != null) {
+      $result.rewardId = rewardId;
     }
     if (title != null) {
       $result.title = title;
@@ -1421,7 +1421,7 @@ class GetRewardsResponse_Reward extends $pb.GeneratedMessage {
   factory GetRewardsResponse_Reward.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRewardsResponse.Reward', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(1, _omitFieldNames ? '' : 'rewardId')
     ..aOS(2, _omitFieldNames ? '' : 'title')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..a<$fixnum.Int64>(5, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
@@ -1450,13 +1450,13 @@ class GetRewardsResponse_Reward extends $pb.GeneratedMessage {
   static GetRewardsResponse_Reward? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get rewardId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set rewardId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasRewardId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearRewardId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get title => $_getSZ(1);
@@ -1564,14 +1564,14 @@ class GetAllRewardsRequest extends $pb.GeneratedMessage {
 
 class GetAllRewardsResponse_Reward extends $pb.GeneratedMessage {
   factory GetAllRewardsResponse_Reward({
-    $core.String? id,
+    $core.String? rewardId,
     $core.String? title,
     $core.String? description,
     $fixnum.Int64? points,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (rewardId != null) {
+      $result.rewardId = rewardId;
     }
     if (title != null) {
       $result.title = title;
@@ -1589,7 +1589,7 @@ class GetAllRewardsResponse_Reward extends $pb.GeneratedMessage {
   factory GetAllRewardsResponse_Reward.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllRewardsResponse.Reward', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(1, _omitFieldNames ? '' : 'rewardId')
     ..aOS(2, _omitFieldNames ? '' : 'title')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..a<$fixnum.Int64>(5, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
@@ -1618,13 +1618,13 @@ class GetAllRewardsResponse_Reward extends $pb.GeneratedMessage {
   static GetAllRewardsResponse_Reward? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get rewardId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set rewardId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasRewardId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearRewardId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get title => $_getSZ(1);

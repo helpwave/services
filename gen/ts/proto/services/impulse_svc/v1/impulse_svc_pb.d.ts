@@ -33,8 +33,8 @@ export namespace CreateUserRequest {
 }
 
 export class CreateUserResponse extends jspb.Message {
-  getId(): string;
-  setId(value: string): CreateUserResponse;
+  getUserId(): string;
+  setUserId(value: string): CreateUserResponse;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateUserResponse.AsObject;
@@ -46,13 +46,13 @@ export class CreateUserResponse extends jspb.Message {
 
 export namespace CreateUserResponse {
   export type AsObject = {
-    id: string,
+    userId: string,
   }
 }
 
 export class UpdateUserRequest extends jspb.Message {
-  getId(): string;
-  setId(value: string): UpdateUserRequest;
+  getUserId(): string;
+  setUserId(value: string): UpdateUserRequest;
 
   getGender(): string;
   setGender(value: string): UpdateUserRequest;
@@ -79,7 +79,7 @@ export class UpdateUserRequest extends jspb.Message {
 
 export namespace UpdateUserRequest {
   export type AsObject = {
-    id: string,
+    userId: string,
     gender?: string,
     birthday?: string,
     pal?: number,
@@ -102,8 +102,8 @@ export namespace UpdateUserRequest {
 }
 
 export class UpdateUserResponse extends jspb.Message {
-  getId(): string;
-  setId(value: string): UpdateUserResponse;
+  getUserId(): string;
+  setUserId(value: string): UpdateUserResponse;
 
   getGender(): string;
   setGender(value: string): UpdateUserResponse;
@@ -124,7 +124,7 @@ export class UpdateUserResponse extends jspb.Message {
 
 export namespace UpdateUserResponse {
   export type AsObject = {
-    id: string,
+    userId: string,
     gender: string,
     birthday: string,
     pal: number,
@@ -165,8 +165,8 @@ export namespace GetAllTeamsResponse {
   }
 
   export class Team extends jspb.Message {
-    getId(): string;
-    setId(value: string): Team;
+    getTeamId(): string;
+    setTeamId(value: string): Team;
 
     getName(): string;
     setName(value: string): Team;
@@ -187,7 +187,7 @@ export namespace GetAllTeamsResponse {
 
   export namespace Team {
     export type AsObject = {
-      id: string,
+      teamId: string,
       name: string,
       description: string,
       image: string,
@@ -227,8 +227,8 @@ export namespace TrackChallengeRequest {
 }
 
 export class TrackChallengeResponse extends jspb.Message {
-  getId(): string;
-  setId(value: string): TrackChallengeResponse;
+  getChallengeId(): string;
+  setChallengeId(value: string): TrackChallengeResponse;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): TrackChallengeResponse.AsObject;
@@ -240,7 +240,7 @@ export class TrackChallengeResponse extends jspb.Message {
 
 export namespace TrackChallengeResponse {
   export type AsObject = {
-    id: string,
+    challengeId: string,
   }
 }
 
@@ -278,8 +278,8 @@ export namespace GetActiveChallengesResponse {
   }
 
   export class Challenge extends jspb.Message {
-    getId(): string;
-    setId(value: string): Challenge;
+    getChallengeId(): string;
+    setChallengeId(value: string): Challenge;
 
     getTitle(): string;
     setTitle(value: string): Challenge;
@@ -318,7 +318,7 @@ export namespace GetActiveChallengesResponse {
 
   export namespace Challenge {
     export type AsObject = {
-      id: string,
+      challengeId: string,
       title: string,
       description: string,
       startAt: string,
@@ -334,8 +334,8 @@ export namespace GetActiveChallengesResponse {
 }
 
 export class UpdateChallengeRequest extends jspb.Message {
-  getId(): string;
-  setId(value: string): UpdateChallengeRequest;
+  getChallengeId(): string;
+  setChallengeId(value: string): UpdateChallengeRequest;
 
   getTitle(): string;
   setTitle(value: string): UpdateChallengeRequest;
@@ -387,7 +387,7 @@ export class UpdateChallengeRequest extends jspb.Message {
 
 export namespace UpdateChallengeRequest {
   export type AsObject = {
-    id: string,
+    challengeId: string,
     title?: string,
     description?: string,
     startAt?: string,
@@ -440,8 +440,8 @@ export namespace UpdateChallengeRequest {
 }
 
 export class UpdateChallengeResponse extends jspb.Message {
-  getId(): string;
-  setId(value: string): UpdateChallengeResponse;
+  getChallengeId(): string;
+  setChallengeId(value: string): UpdateChallengeResponse;
 
   getTitle(): string;
   setTitle(value: string): UpdateChallengeResponse;
@@ -480,7 +480,7 @@ export class UpdateChallengeResponse extends jspb.Message {
 
 export namespace UpdateChallengeResponse {
   export type AsObject = {
-    id: string,
+    challengeId: string,
     title: string,
     description: string,
     startAt: string,
@@ -530,8 +530,8 @@ export namespace GetScoreResponse {
 }
 
 export class GetRewardsRequest extends jspb.Message {
-  getUserId(): string;
-  setUserId(value: string): GetRewardsRequest;
+  getRewardId(): string;
+  setRewardId(value: string): GetRewardsRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetRewardsRequest.AsObject;
@@ -543,7 +543,7 @@ export class GetRewardsRequest extends jspb.Message {
 
 export namespace GetRewardsRequest {
   export type AsObject = {
-    userId: string,
+    rewardId: string,
   }
 }
 
@@ -567,8 +567,8 @@ export namespace GetRewardsResponse {
   }
 
   export class Reward extends jspb.Message {
-    getId(): string;
-    setId(value: string): Reward;
+    getRewardId(): string;
+    setRewardId(value: string): Reward;
 
     getTitle(): string;
     setTitle(value: string): Reward;
@@ -589,7 +589,7 @@ export namespace GetRewardsResponse {
 
   export namespace Reward {
     export type AsObject = {
-      id: string,
+      rewardId: string,
       title: string,
       description: string,
       points: number,
@@ -632,8 +632,8 @@ export namespace GetAllRewardsResponse {
   }
 
   export class Reward extends jspb.Message {
-    getId(): string;
-    setId(value: string): Reward;
+    getRewardId(): string;
+    setRewardId(value: string): Reward;
 
     getTitle(): string;
     setTitle(value: string): Reward;
@@ -654,7 +654,7 @@ export namespace GetAllRewardsResponse {
 
   export namespace Reward {
     export type AsObject = {
-      id: string,
+      rewardId: string,
       title: string,
       description: string,
       points: number,

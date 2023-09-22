@@ -30,7 +30,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
                 pal=request.pal,
                 birthday=datetime.fromisoformat(request.birthday)
             )
-        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, ValueError) as e:
+        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, ValueError, AttributeError) as e:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.CreateUserResponse()
 
@@ -52,7 +52,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
     def GetScore(self, request, context):
         try:
             user_challenges = UserChallenge.objects.filter(user_id=request.user_id)
-        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist) as e:
+        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.GetScoreResponse()
 
@@ -64,7 +64,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
     def GetRewards(self, request, context):
         try:
             user = User.objects.get(id=request.user_id)
-        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist) as e:
+        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.GetRewardsResponse()
 
@@ -89,7 +89,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
     def UpdateUser(self, request, context):
         try:
             user = User.objects.get(id=request.id)
-        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist) as e:
+        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.UpdateUserResponse()
 
@@ -118,7 +118,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
                 score=request.score,
                 done_datetime=current_date
             )
-        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, IntegrityError) as e:
+        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, IntegrityError, AttributeError) as e:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.TrackChallengeResponse()
 
