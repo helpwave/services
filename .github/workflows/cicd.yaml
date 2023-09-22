@@ -37,6 +37,8 @@ jobs:
         with:
           files: |
             services/**
+          files_ignore: |
+            services/impulse_svc/**
 
       - name: Detect changes in images
         id: changes-in-images
