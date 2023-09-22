@@ -1,3 +1,4 @@
+from __future__ import annotations
 import uuid
 
 from datetime import datetime
@@ -21,8 +22,8 @@ class Challenge(models.Model):
     title: str = models.CharField(max_length=50)
     description: str = models.TextField()
 
-    start_datetime: datetime = models.DateTimeField()
-    end_datetime: datetime = models.DateTimeField()
+    start_datetime: datetime = models.DateTimeField(null=True, blank=True)
+    end_datetime: datetime = models.DateTimeField(null=True, blank=True)
 
     type: str = models.CharField(max_length=10, choices=ChallengeTypes.choices)
     category: str = models.CharField(max_length=10, choices=ChallengeCategories.choices)
@@ -46,9 +47,17 @@ class Reward(models.Model):
     title: str = models.CharField(max_length=50)
     description: str = models.TextField()
     points: int = models.IntegerField()
+    image: str = models.CharField(max_length=100)
 
     def __str__(self):
         return self.title
+
+
+class Team(models.Model):
+    id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name: str = models.CharField(max_length=50)
+    image: str = models.CharField(max_length=100)
+    description: str = models.TextField()
 
 
 class User(models.Model):
@@ -62,9 +71,11 @@ class User(models.Model):
     gender: str = models.CharField(max_length=10, choices=Gender.choices)
     birthday: datetime = models.DateTimeField()
     pal: float = models.FloatField()
+    image: str = models.CharField(max_length=100)
 
     challenges: list = models.ManyToManyField(Challenge, through=UserChallenge)
     rewards: list = models.ManyToManyField(Reward)
+    team: Team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.username
