@@ -6,5 +6,5 @@ COPY . /app
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT [ "python" ]
-CMD [ "manage.py", "grpcserver" ]
+CMD sh -c 'python manage.py grpcserver &' \
+  && sh -c 'python manage.py runserver'

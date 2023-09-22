@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import os
 
 from pathlib import Path
 
@@ -75,13 +76,26 @@ WSGI_APPLICATION = 'impulse_svc.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.environ.get("DB_HOST"):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "OPTIONS": {
+                "HOST": os.environ.get("DB_HOST", ""),
+                "USER": os.environ.get("DB_USER", ""),
+                "NAME": os.environ.get("DB_NAME", ""),
+                "PASSWORD": os.environ.get("DB_PASSWORD", ""),
+                "PORT": 5432,
+            },
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -129,13 +143,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 GRPCSERVER = {
-    'servicers': ['grpc_service.service.grpc_hook'],  # see `grpc_hook()` below
-    # 'interceptors': ['dotted.path.to.interceptor_class',],  # optional, interceprots are similar to middleware in Django
-    # 'maximum_concurrent_rpcs': None,
-    # 'options': [("grpc.max_receive_message_length", 1024 * 1024 * 100)],  # optional, list of key-value pairs to configure the channel. The full list of available channel arguments: https://grpc.github.io/grpc/core/group__grpc__arg__keys.html
-    # 'credentials': [{
-    #     'private_key': 'private_key.pem',
-    #     'certificate_chain': 'certificate_chain.pem'
-    # }],    # required only if SSL/TLS support is required to be enabled
-    # 'async': False  # Default: False, if True then gRPC server will start in ASYNC mode
+    'servicers': ['grpc_service.service.grpc_hook'],
 }
