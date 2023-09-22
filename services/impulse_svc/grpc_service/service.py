@@ -2,10 +2,28 @@ from grpc_service import impulse_svc_pb2_grpc
 from grpc_service import impulse_svc_pb2
 
 
-class MYServicer(impulse_svc_pb2_grpc.ImpulseService):
+class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
-    def Get(self, request, context):
-        return impulse_svc_pb2.GetResponse(value="Test")
+    def CreateUser(self, request, context):
+        pass
+
+    def UpdateUser(self, request, context):
+        pass
+
+    def TrackChallenge(self, request, context):
+        pass
+
+    def CreateDailyChallenge(self, request, context):
+        pass
+
+    def CreateQuestChallenge(self, request, context):
+        pass
+
+    def UpdateChallenge(self, request, context):
+        pass
+
+    def GetChallenges(self, request, context):
+        pass
 
 def grpc_hook(server):
-    impulse_svc_pb2_grpc.add_ImpulseServiceServicer_to_server(MYServicer(), server)
+    impulse_svc_pb2_grpc.add_ImpulseServiceServicer_to_server(Servicer(), server)
