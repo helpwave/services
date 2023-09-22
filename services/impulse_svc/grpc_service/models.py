@@ -1,42 +1,55 @@
+import uuid
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
 class Challenge(models.Model):
-	class ChallengeTypes(models.TextChoices):
-		DAILY = 'daily', _('Täglich')
-		QUEST = 'quest', _('Mission')
+    class ChallengeTypes(models.TextChoices):
+        DAILY = 'daily', _('Täglich')
+        QUEST = 'quest', _('Mission')
 
-	class ChallengeCategories(models.TextChoices):
-		FOOD = 'food', _('Ernährung')
-		FITNESS = 'fitness', _('Fitness')
-		MENTAL = 'mental', _('Mentale Gesundheit')
+    class ChallengeCategories(models.TextChoices):
+        FOOD = 'food', _('Ernährung')
+        FITNESS = 'fitness', _('Fitness')
+        MENTAL = 'mental', _('Mentale Gesundheit')
 
-	id: str = models.UUIDField(primary_key=True)
-	title: str = models.CharField(max_length=50)
-	description: str = models.CharField(max_length=200)
+    id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title: str = models.CharField(max_length=50)
+    description: str = models.TextField()
 
-	start_datetime: str = models.DateTimeField()
-	end_datetime: str = models.DateTimeField()
+    start_datetime: str = models.DateTimeField()
+    end_datetime: str = models.DateTimeField()
 
-	type: str = models.CharField(max_length=10, choices=ChallengeTypes.choices)
-	category: str = models.CharField(max_length=10, choices=ChallengeCategories.choices)
+    type: str = models.CharField(max_length=10, choices=ChallengeTypes.choices)
+    category: str = models.CharField(max_length=10, choices=ChallengeCategories.choices)
 
-	points: int = models.IntegerField()
+    points: int = models.IntegerField()
+
+    def __str__(self):
+        return self.title
 
 
 class UserChallenge(models.Model):
-	user: str = models.ForeignKey('User', on_delete=models.CASCADE)
-	challenge: str = models.ForeignKey('Challenge', on_delete=models.CASCADE)
-	score: int = models.IntegerField()
-	done: bool = models.BooleanField()
+    user: str = models.ForeignKey('User', on_delete=models.CASCADE)
+    challenge: str = models.ForeignKey('Challenge', on_delete=models.CASCADE)
+    score: int = models.IntegerField()
+    done: bool = models.BooleanField()
 
 
 class User(models.Model):
-	id: str = models.UUIDField(primary_key=True)
-	username: str = models.CharField(max_length=50)
-	sex: str = models.CharField(max_length=1)
-	age: int = models.IntegerField()
-	pal: float = models.FloatField()
+    class Gender(models.TextChoices):
+        MALE = 'male', _('Männlich')
+        FEMALE = 'female', _('Weiblich')
+        DIVERSE = 'diverse', _('Divers')
 
-	challenges: list = models.ManyToManyField(Challenge, through=UserChallenge)
+    id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    username: str = models.CharField(max_length=50)
+    gender: str = models.CharField(max_length=10, choices=Gender.choices)
+    age: int = models.IntegerField()
+    pal: float = models.FloatField()
+
+    challenges: list = models.ManyToManyField(Challenge, through=UserChallenge)
+
+    def __str__(self):
+        return self.username
