@@ -91,6 +91,16 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         
     def GetAllRewards(self, request, context):
         rewards = Reward.objects.all()
+        return impulse_svc_pb2.GetAllRewardsResponse(
+            rewards=[
+                impulse_svc_pb2.Reward(
+                    id=str(reward.id),
+                    title=reward.title,
+                    description=reward.description,
+                    points=reward.points
+                ) for reward in rewards
+            ]
+        )
 
 
 def grpc_hook(server):
