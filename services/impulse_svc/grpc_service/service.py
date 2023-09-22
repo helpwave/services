@@ -9,7 +9,7 @@ sys.path.append("./gen/")
 from proto.services.impulse_svc.v1 import impulse_svc_pb2_grpc
 from proto.services.impulse_svc.v1 import impulse_svc_pb2
 
-from grpc_service.models import Challenge, UserChallenge, User, Reward
+from grpc_service.models import Challenge, UserChallenge, User, Reward, Team
 from django.db.models import Q
 
 class Servicer(impulse_svc_pb2_grpc.ImpulseService):
@@ -22,7 +22,20 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             birthday=datetime.fromisoformat(request.birthday)
         )
         return impulse_svc_pb2.CreateUserResponse(id=str(user.id))
-
+    
+    def GetAllTeams(self, request, context):
+        teams = Team.objects.all()
+        return impulse_svc_pb2.GetAllTeamsResponse(
+            teams=[
+                impulse_svc_pb2.Team(
+                    id=str(team.id),
+                    name=team.name,
+                    description=team.description,
+                    points=team.points,
+                ) for team in teams
+            ]
+        )
+    
     def GetScore(self, request, context):
         user_challenges = UserChallenge.objects.filter(user_id=request.user_id)
         total_score = 0

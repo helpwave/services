@@ -52,6 +52,24 @@ message UpdateUserResponse {
 }
 
 //
+// GetTeams
+
+message GetAllTeamsRequest {
+  string user_id = 1;
+}
+
+message GetAllTeamsResponse {
+  repeated Team teams = 1;
+
+  message Team {
+      string id = 1;
+      string name = 2;
+      string description = 3;
+      string image = 5;
+  }
+}
+
+//
 // TrackChallenge
 //
 
@@ -166,6 +184,7 @@ message GetAllRewardsResponse {
   }
 }
 
+
 //
 // ImpulseService
 //
@@ -178,4 +197,5 @@ service ImpulseService {
   rpc GetScore(GetScoreRequest) returns (GetScoreResponse) {}
   rpc GetRewards(GetRewardsRequest) returns (GetRewardsResponse) {}
   rpc GetAllRewards(GetAllRewardsRequest) returns (GetAllRewardsResponse) {}
+  rpc GetAllTeams(GetTeamRequest) returns (GetTeamResponse) {}
 }
