@@ -7,7 +7,7 @@ from grpc_service import impulse_svc_pb2
 from google.protobuf.timestamp_pb2 import Timestamp
 
 from grpc_service.models import Challenge, UserChallenge, User
-
+from djang.db.models import Q
 
 class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
@@ -42,7 +42,28 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         pass
 
     def GetChallenges(self, request, context):
-        pass
+        current_date = datetime.now()
+        challenges = Challenge.objects.get(
+            # if the start date is lower than current date and the end date is higher than current date
+            (Q(start_date__lte=current_date) & Q(end_date__gte=current_date)) | 
+            # or the start and end dates are null
+            (Q(end_date__isnull=True) & Q(start_date__gte=True))
+            # the challenge is active
+        )
+        return impulse_svc_pb2.GetChallengesResponse(
+            challenges=[
+                impulse_svc_pb2.Challenge(
+                    id=str(challenge.id),
+                    name=challenge.name,
+                    description=challenge.description,
+                    category=challenge.category,
+                    difficulty=challenge.difficulty,
+                    duration=challenge.duration,
+                    points=challenge.points,
+                    image=challenge.image
+                ) for challenge in challenges
+            ]
+        )
 
 def grpc_hook(server):
     impulse_svc_pb2_grpc.add_ImpulseServiceServicer_to_server(Servicer(), server)
