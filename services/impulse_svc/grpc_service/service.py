@@ -43,10 +43,16 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             )
 
     def TrackChallenge(self, request, context):
-        # get challenge
-        # get user
-        
-        pass
+        # current date 
+        current_date = datetime.now()
+        # create the UserChallenge object
+        user_challenge = UserChallenge.objects.create(
+            user_id=request.user_id,
+            challenge_id=request.challenge_id,
+            score=request.score,
+            done_datetime=current_date
+        )
+        return impulse_svc_pb2.TrackChallengeResponse(id=str(user_challenge.id))
         
 
     def GetChallenges(self, request, context):
