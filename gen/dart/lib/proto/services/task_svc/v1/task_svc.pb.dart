@@ -13,7 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../../google/protobuf/timestamp.pb.dart' as $10;
+import '../../../../google/protobuf/timestamp.pb.dart' as $11;
 import 'task_svc.pbenum.dart';
 
 export 'task_svc.pbenum.dart';
@@ -24,7 +24,7 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     $core.String? description,
     $core.String? patientId,
     $core.bool? public,
-    $10.Timestamp? dueAt,
+    $11.Timestamp? dueAt,
     TaskStatus? initialStatus,
   }) {
     final $result = create();
@@ -57,7 +57,7 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'description')
     ..aOS(3, _omitFieldNames ? '' : 'patientId')
     ..aOB(4, _omitFieldNames ? '' : 'public')
-    ..aOM<$10.Timestamp>(5, _omitFieldNames ? '' : 'dueAt', subBuilder: $10.Timestamp.create)
+    ..aOM<$11.Timestamp>(5, _omitFieldNames ? '' : 'dueAt', subBuilder: $11.Timestamp.create)
     ..e<TaskStatus>(6, _omitFieldNames ? '' : 'initialStatus', $pb.PbFieldType.OE, defaultOrMaker: TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: TaskStatus.valueOf, enumValues: TaskStatus.values)
     ..hasRequiredFields = false
   ;
@@ -120,15 +120,15 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
   void clearPublic() => clearField(4);
 
   @$pb.TagNumber(5)
-  $10.Timestamp get dueAt => $_getN(4);
+  $11.Timestamp get dueAt => $_getN(4);
   @$pb.TagNumber(5)
-  set dueAt($10.Timestamp v) { setField(5, v); }
+  set dueAt($11.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasDueAt() => $_has(4);
   @$pb.TagNumber(5)
   void clearDueAt() => clearField(5);
   @$pb.TagNumber(5)
-  $10.Timestamp ensureDueAt() => $_ensure(4);
+  $11.Timestamp ensureDueAt() => $_ensure(4);
 
   @$pb.TagNumber(6)
   TaskStatus get initialStatus => $_getN(5);
@@ -341,7 +341,7 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     $core.String? assignedUserId,
     $core.String? patientId,
     $core.bool? public,
-    $10.Timestamp? dueAt,
+    $11.Timestamp? dueAt,
     $core.String? createdBy,
     $core.Iterable<GetTaskResponse_SubTask>? subtasks,
     $core.String? organizationId,
@@ -394,7 +394,7 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOS(6, _omitFieldNames ? '' : 'patientId')
     ..aOB(7, _omitFieldNames ? '' : 'public')
-    ..aOM<$10.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $10.Timestamp.create)
+    ..aOM<$11.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $11.Timestamp.create)
     ..aOS(9, _omitFieldNames ? '' : 'createdBy')
     ..pc<GetTaskResponse_SubTask>(10, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTaskResponse_SubTask.create)
     ..aOS(11, _omitFieldNames ? '' : 'organizationId')
@@ -486,15 +486,15 @@ class GetTaskResponse extends $pb.GeneratedMessage {
   void clearPublic() => clearField(7);
 
   @$pb.TagNumber(8)
-  $10.Timestamp get dueAt => $_getN(7);
+  $11.Timestamp get dueAt => $_getN(7);
   @$pb.TagNumber(8)
-  set dueAt($10.Timestamp v) { setField(8, v); }
+  set dueAt($11.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasDueAt() => $_has(7);
   @$pb.TagNumber(8)
   void clearDueAt() => clearField(8);
   @$pb.TagNumber(8)
-  $10.Timestamp ensureDueAt() => $_ensure(7);
+  $11.Timestamp ensureDueAt() => $_ensure(7);
 
   @$pb.TagNumber(9)
   $core.String get createdBy => $_getSZ(8);
@@ -669,7 +669,7 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
     $core.String? assignedUserId,
     $core.String? patientId,
     $core.bool? public,
-    $10.Timestamp? dueAt,
+    $11.Timestamp? dueAt,
     $core.String? createdBy,
     $core.Iterable<GetTasksByPatientResponse_Task_SubTask>? subtasks,
   }) {
@@ -718,7 +718,7 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOS(6, _omitFieldNames ? '' : 'patientId')
     ..aOB(7, _omitFieldNames ? '' : 'public')
-    ..aOM<$10.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $10.Timestamp.create)
+    ..aOM<$11.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $11.Timestamp.create)
     ..aOS(9, _omitFieldNames ? '' : 'createdBy')
     ..pc<GetTasksByPatientResponse_Task_SubTask>(10, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTasksByPatientResponse_Task_SubTask.create)
     ..hasRequiredFields = false
@@ -809,15 +809,15 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
   void clearPublic() => clearField(7);
 
   @$pb.TagNumber(8)
-  $10.Timestamp get dueAt => $_getN(7);
+  $11.Timestamp get dueAt => $_getN(7);
   @$pb.TagNumber(8)
-  set dueAt($10.Timestamp v) { setField(8, v); }
+  set dueAt($11.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasDueAt() => $_has(7);
   @$pb.TagNumber(8)
   void clearDueAt() => clearField(8);
   @$pb.TagNumber(8)
-  $10.Timestamp ensureDueAt() => $_ensure(7);
+  $11.Timestamp ensureDueAt() => $_ensure(7);
 
   @$pb.TagNumber(9)
   $core.String get createdBy => $_getSZ(8);
@@ -1026,7 +1026,7 @@ class GetTasksByPatientSortedByStatusResponse_Task extends $pb.GeneratedMessage 
     $core.String? assignedUserId,
     $core.String? patientId,
     $core.bool? public,
-    $10.Timestamp? dueAt,
+    $11.Timestamp? dueAt,
     $core.String? createdBy,
     $core.Iterable<GetTasksByPatientSortedByStatusResponse_Task_SubTask>? subtasks,
   }) {
@@ -1071,7 +1071,7 @@ class GetTasksByPatientSortedByStatusResponse_Task extends $pb.GeneratedMessage 
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOS(6, _omitFieldNames ? '' : 'patientId')
     ..aOB(7, _omitFieldNames ? '' : 'public')
-    ..aOM<$10.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $10.Timestamp.create)
+    ..aOM<$11.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $11.Timestamp.create)
     ..aOS(9, _omitFieldNames ? '' : 'createdBy')
     ..pc<GetTasksByPatientSortedByStatusResponse_Task_SubTask>(10, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTasksByPatientSortedByStatusResponse_Task_SubTask.create)
     ..hasRequiredFields = false
@@ -1153,15 +1153,15 @@ class GetTasksByPatientSortedByStatusResponse_Task extends $pb.GeneratedMessage 
   void clearPublic() => clearField(7);
 
   @$pb.TagNumber(8)
-  $10.Timestamp get dueAt => $_getN(6);
+  $11.Timestamp get dueAt => $_getN(6);
   @$pb.TagNumber(8)
-  set dueAt($10.Timestamp v) { setField(8, v); }
+  set dueAt($11.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasDueAt() => $_has(6);
   @$pb.TagNumber(8)
   void clearDueAt() => clearField(8);
   @$pb.TagNumber(8)
-  $10.Timestamp ensureDueAt() => $_ensure(6);
+  $11.Timestamp ensureDueAt() => $_ensure(6);
 
   @$pb.TagNumber(9)
   $core.String get createdBy => $_getSZ(7);
@@ -1432,7 +1432,7 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
     $core.String? assignedUserId,
     GetAssignedTasksResponse_Task_Patient? patient,
     $core.bool? public,
-    $10.Timestamp? dueAt,
+    $11.Timestamp? dueAt,
     $core.String? createdBy,
     $core.Iterable<GetAssignedTasksResponse_Task_SubTask>? subtasks,
   }) {
@@ -1477,7 +1477,7 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOM<GetAssignedTasksResponse_Task_Patient>(6, _omitFieldNames ? '' : 'patient', subBuilder: GetAssignedTasksResponse_Task_Patient.create)
     ..aOB(7, _omitFieldNames ? '' : 'public')
-    ..aOM<$10.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $10.Timestamp.create)
+    ..aOM<$11.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $11.Timestamp.create)
     ..aOS(9, _omitFieldNames ? '' : 'createdBy')
     ..pc<GetAssignedTasksResponse_Task_SubTask>(10, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetAssignedTasksResponse_Task_SubTask.create)
     ..hasRequiredFields = false
@@ -1561,15 +1561,15 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
   void clearPublic() => clearField(7);
 
   @$pb.TagNumber(8)
-  $10.Timestamp get dueAt => $_getN(6);
+  $11.Timestamp get dueAt => $_getN(6);
   @$pb.TagNumber(8)
-  set dueAt($10.Timestamp v) { setField(8, v); }
+  set dueAt($11.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasDueAt() => $_has(6);
   @$pb.TagNumber(8)
   void clearDueAt() => clearField(8);
   @$pb.TagNumber(8)
-  $10.Timestamp ensureDueAt() => $_ensure(6);
+  $11.Timestamp ensureDueAt() => $_ensure(6);
 
   @$pb.TagNumber(9)
   $core.String get createdBy => $_getSZ(7);
@@ -1633,7 +1633,7 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    $10.Timestamp? dueAt,
+    $11.Timestamp? dueAt,
     $core.bool? public,
   }) {
     final $result = create();
@@ -1662,7 +1662,7 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..aOM<$10.Timestamp>(4, _omitFieldNames ? '' : 'dueAt', subBuilder: $10.Timestamp.create)
+    ..aOM<$11.Timestamp>(4, _omitFieldNames ? '' : 'dueAt', subBuilder: $11.Timestamp.create)
     ..aOB(5, _omitFieldNames ? '' : 'public')
     ..hasRequiredFields = false
   ;
@@ -1716,15 +1716,15 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $10.Timestamp get dueAt => $_getN(3);
+  $11.Timestamp get dueAt => $_getN(3);
   @$pb.TagNumber(4)
-  set dueAt($10.Timestamp v) { setField(4, v); }
+  set dueAt($11.Timestamp v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasDueAt() => $_has(3);
   @$pb.TagNumber(4)
   void clearDueAt() => clearField(4);
   @$pb.TagNumber(4)
-  $10.Timestamp ensureDueAt() => $_ensure(3);
+  $11.Timestamp ensureDueAt() => $_ensure(3);
 
   @$pb.TagNumber(5)
   $core.bool get public => $_getBF(4);
