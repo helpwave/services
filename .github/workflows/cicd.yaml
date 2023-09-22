@@ -36,9 +36,7 @@ jobs:
         uses: tj-actions/changed-files@v37
         with:
           files: |
-            services/**
-          files_ignore: |
-            services/impulse_svc/**
+            services/*-svc/**
 
       - name: Detect changes in images
         id: changes-in-images
