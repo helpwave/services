@@ -24,8 +24,8 @@ enum ChallengeCategory {
 
 message CreateUserRequest {
   string username = 1;
-  string sex = 2;
-  google.protobuf.Timestamp birthday = 3;
+  string gender = 2;
+  string birthday = 3;
   uint32 pal = 4;
 }
 
@@ -39,15 +39,15 @@ message CreateUserResponse {
 
 message UpdateUserRequest {
   string id = 1;
-  optional string sex = 2;
-  optional google.protobuf.Timestamp birthday = 3;
+  optional string gender = 2;
+  optional string birthday = 3;
   optional uint32 pal = 4;
 }
 
 message UpdateUserResponse {
   string id = 1;
-  string sex = 2;
-  google.protobuf.Timestamp birthday = 3;
+  string gender = 2;
+  string birthday = 3;
   uint32 pal = 4;
 }
 
@@ -59,7 +59,7 @@ message TrackChallengeRequest {
   string challenge_id = 1;
   string user_id = 2;
   uint64 score = 3;
-  google.protobuf.Timestamp done_at = 4;
+  string done_at = 4;
 }
 
 message TrackChallengeResponse {
@@ -67,56 +67,20 @@ message TrackChallengeResponse {
 }
 
 //
-// CreateDailyChallenge
+// GetActiveChallenges
 //
 
-message CreateDailyChallengeRequest {
-  string title = 1;
-  string description = 2;
-  ChallengeCategory category = 3;
-  uint64 threshold = 4;
-  uint64 points = 5;
-  string unit = 6;
-}
+message GetActiveChallengesRequest {}
 
-message CreateDailyChallengeResponse {
-  string id = 1;
-}
-
-//
-// CreateQuestChallenge
-//
-
-message CreateQuestChallengeRequest {
-  string title = 1;
-  string description = 2;
-  google.protobuf.Timestamp start_at = 3;
-  google.protobuf.Timestamp end_at = 4;
-  ChallengeCategory category = 5;
-  uint64 threshold = 6;
-  uint64 points = 7;
-  string unit = 8;
-}
-
-message CreateQuestChallengeResponse {
-  string id = 1;
-}
-
-//
-// GetChallenges
-//
-
-message GetChallengesRequest {}
-
-message GetChallengesResponse {
+message GetActiveChallengesResponse {
   repeated Challenge challenges = 1;
 
   message Challenge {
     string id = 1;
     string title = 2;
     string description = 3;
-    google.protobuf.Timestamp start_at = 4;
-    google.protobuf.Timestamp end_at = 5;
+    string start_at = 4;
+    string end_at = 5;
     ChallengeCategory category = 6;
     ChallengeType type = 7;
     uint64 threshold = 8;
@@ -133,8 +97,8 @@ message UpdateChallengeRequest {
   string id = 1;
   optional string title = 2;
   optional string description = 3;
-  optional google.protobuf.Timestamp start_at = 4;
-  optional google.protobuf.Timestamp end_at = 5;
+  optional string start_at = 4;
+  optional string end_at = 5;
   optional ChallengeCategory category = 6;
   optional uint64 threshold = 7;
   optional uint64 points = 8;
@@ -145,8 +109,8 @@ message UpdateChallengeResponse {
   string id = 1;
   string title = 2;
   string description = 3;
-  google.protobuf.Timestamp start_at = 4;
-  google.protobuf.Timestamp end_at = 5;
+  string start_at = 4;
+  string end_at = 5;
   ChallengeCategory category = 6;
   ChallengeType type = 7;
   uint64 threshold = 8;
@@ -162,8 +126,5 @@ service ImpulseService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
   rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {}
   rpc TrackChallenge(TrackChallengeRequest) returns (TrackChallengeResponse) {}
-  rpc CreateDailyChallenge(CreateDailyChallengeRequest) returns (CreateDailyChallengeResponse) {}
-  rpc CreateQuestChallenge(CreateQuestChallengeRequest) returns (CreateQuestChallengeResponse) {}
-  rpc UpdateChallenge(UpdateChallengeRequest) returns (UpdateChallengeResponse) {}
-  rpc GetChallenges(GetChallengesRequest) returns (GetChallengesResponse) {}
+  rpc GetChallenges(GetActiveChallengesRequest) returns (GetActiveChallengesResponse) {}
 }

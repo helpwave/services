@@ -1,9 +1,13 @@
+import sys
+
 from datetime import datetime
 
 import grpc
 
-from grpc_service import impulse_svc_pb2_grpc
-from grpc_service import impulse_svc_pb2
+sys.path.append("./gen/")
+
+from proto.services.impulse_svc.v1 import impulse_svc_pb2_grpc
+from proto.services.impulse_svc.v1 import impulse_svc_pb2
 from google.protobuf.timestamp_pb2 import Timestamp
 
 from grpc_service.models import Challenge, UserChallenge, User
@@ -27,15 +31,15 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.Response()
         else:
-            user.gender=request.sex,
-            user.pal=request.pal,
-            user.birthday=datetime.fromtimestamp(request.birthday.seconds + request.birthday.nanos / 1e9)
+            user.gender = request.sex,
+            user.pal = request.pal,
+            user.birthday = datetime.fromtimestamp(request.birthday.seconds + request.birthday.nanos / 1e9)
 
             return impulse_svc_pb2.UpdateUserResponse(
                 id=str(user.id),
                 sex=user.gender,
                 pal=user.pal,
-                birthday=Timestamp().FromDatetime(user.birthday)
+                birthday=Timestamp().FromDatetime(dt=user.birthday)
             )
 
     def TrackChallenge(self, request, context):

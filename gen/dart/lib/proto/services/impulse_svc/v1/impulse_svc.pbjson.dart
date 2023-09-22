@@ -151,6 +151,7 @@ const CreateDailyChallengeRequest$json = {
     {'1': 'category', '3': 3, '4': 1, '5': 14, '6': '.proto.services.impulse_svc.v1.ChallengeCategory', '10': 'category'},
     {'1': 'threshold', '3': 4, '4': 1, '5': 4, '10': 'threshold'},
     {'1': 'points', '3': 5, '4': 1, '5': 4, '10': 'points'},
+    {'1': 'unit', '3': 6, '4': 1, '5': 9, '10': 'unit'},
   ],
 };
 
@@ -159,7 +160,8 @@ final $typed_data.Uint8List createDailyChallengeRequestDescriptor = $convert.bas
     'ChtDcmVhdGVEYWlseUNoYWxsZW5nZVJlcXVlc3QSFAoFdGl0bGUYASABKAlSBXRpdGxlEiAKC2'
     'Rlc2NyaXB0aW9uGAIgASgJUgtkZXNjcmlwdGlvbhJMCghjYXRlZ29yeRgDIAEoDjIwLnByb3Rv'
     'LnNlcnZpY2VzLmltcHVsc2Vfc3ZjLnYxLkNoYWxsZW5nZUNhdGVnb3J5UghjYXRlZ29yeRIcCg'
-    'l0aHJlc2hvbGQYBCABKARSCXRocmVzaG9sZBIWCgZwb2ludHMYBSABKARSBnBvaW50cw==');
+    'l0aHJlc2hvbGQYBCABKARSCXRocmVzaG9sZBIWCgZwb2ludHMYBSABKARSBnBvaW50cxISCgR1'
+    'bml0GAYgASgJUgR1bml0');
 
 @$core.Deprecated('Use createDailyChallengeResponseDescriptor instead')
 const CreateDailyChallengeResponse$json = {
@@ -184,6 +186,7 @@ const CreateQuestChallengeRequest$json = {
     {'1': 'category', '3': 5, '4': 1, '5': 14, '6': '.proto.services.impulse_svc.v1.ChallengeCategory', '10': 'category'},
     {'1': 'threshold', '3': 6, '4': 1, '5': 4, '10': 'threshold'},
     {'1': 'points', '3': 7, '4': 1, '5': 4, '10': 'points'},
+    {'1': 'unit', '3': 8, '4': 1, '5': 9, '10': 'unit'},
   ],
 };
 
@@ -194,7 +197,8 @@ final $typed_data.Uint8List createQuestChallengeRequestDescriptor = $convert.bas
     'ZS5wcm90b2J1Zi5UaW1lc3RhbXBSB3N0YXJ0QXQSMQoGZW5kX2F0GAQgASgLMhouZ29vZ2xlLn'
     'Byb3RvYnVmLlRpbWVzdGFtcFIFZW5kQXQSTAoIY2F0ZWdvcnkYBSABKA4yMC5wcm90by5zZXJ2'
     'aWNlcy5pbXB1bHNlX3N2Yy52MS5DaGFsbGVuZ2VDYXRlZ29yeVIIY2F0ZWdvcnkSHAoJdGhyZX'
-    'Nob2xkGAYgASgEUgl0aHJlc2hvbGQSFgoGcG9pbnRzGAcgASgEUgZwb2ludHM=');
+    'Nob2xkGAYgASgEUgl0aHJlc2hvbGQSFgoGcG9pbnRzGAcgASgEUgZwb2ludHMSEgoEdW5pdBgI'
+    'IAEoCVIEdW5pdA==');
 
 @$core.Deprecated('Use createQuestChallengeResponseDescriptor instead')
 const CreateQuestChallengeResponse$json = {
@@ -239,6 +243,7 @@ const GetChallengesResponse_Challenge$json = {
     {'1': 'type', '3': 7, '4': 1, '5': 14, '6': '.proto.services.impulse_svc.v1.ChallengeType', '10': 'type'},
     {'1': 'threshold', '3': 8, '4': 1, '5': 4, '10': 'threshold'},
     {'1': 'points', '3': 9, '4': 1, '5': 4, '10': 'points'},
+    {'1': 'unit', '3': 10, '4': 1, '5': 9, '10': 'unit'},
   ],
 };
 
@@ -246,14 +251,14 @@ const GetChallengesResponse_Challenge$json = {
 final $typed_data.Uint8List getChallengesResponseDescriptor = $convert.base64Decode(
     'ChVHZXRDaGFsbGVuZ2VzUmVzcG9uc2USXgoKY2hhbGxlbmdlcxgBIAMoCzI+LnByb3RvLnNlcn'
     'ZpY2VzLmltcHVsc2Vfc3ZjLnYxLkdldENoYWxsZW5nZXNSZXNwb25zZS5DaGFsbGVuZ2VSCmNo'
-    'YWxsZW5nZXMagwMKCUNoYWxsZW5nZRIOCgJpZBgBIAEoCVICaWQSFAoFdGl0bGUYAiABKAlSBX'
+    'YWxsZW5nZXMalwMKCUNoYWxsZW5nZRIOCgJpZBgBIAEoCVICaWQSFAoFdGl0bGUYAiABKAlSBX'
     'RpdGxlEiAKC2Rlc2NyaXB0aW9uGAMgASgJUgtkZXNjcmlwdGlvbhI1CghzdGFydF9hdBgEIAEo'
     'CzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSB3N0YXJ0QXQSMQoGZW5kX2F0GAUgASgLMh'
     'ouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIFZW5kQXQSTAoIY2F0ZWdvcnkYBiABKA4yMC5w'
     'cm90by5zZXJ2aWNlcy5pbXB1bHNlX3N2Yy52MS5DaGFsbGVuZ2VDYXRlZ29yeVIIY2F0ZWdvcn'
     'kSQAoEdHlwZRgHIAEoDjIsLnByb3RvLnNlcnZpY2VzLmltcHVsc2Vfc3ZjLnYxLkNoYWxsZW5n'
     'ZVR5cGVSBHR5cGUSHAoJdGhyZXNob2xkGAggASgEUgl0aHJlc2hvbGQSFgoGcG9pbnRzGAkgAS'
-    'gEUgZwb2ludHM=');
+    'gEUgZwb2ludHMSEgoEdW5pdBgKIAEoCVIEdW5pdA==');
 
 @$core.Deprecated('Use updateChallengeRequestDescriptor instead')
 const UpdateChallengeRequest$json = {
@@ -267,6 +272,7 @@ const UpdateChallengeRequest$json = {
     {'1': 'category', '3': 6, '4': 1, '5': 14, '6': '.proto.services.impulse_svc.v1.ChallengeCategory', '9': 4, '10': 'category', '17': true},
     {'1': 'threshold', '3': 7, '4': 1, '5': 4, '9': 5, '10': 'threshold', '17': true},
     {'1': 'points', '3': 8, '4': 1, '5': 4, '9': 6, '10': 'points', '17': true},
+    {'1': 'unit', '3': 9, '4': 1, '5': 9, '9': 7, '10': 'unit', '17': true},
   ],
   '8': [
     {'1': '_title'},
@@ -276,6 +282,7 @@ const UpdateChallengeRequest$json = {
     {'1': '_category'},
     {'1': '_threshold'},
     {'1': '_points'},
+    {'1': '_unit'},
   ],
 };
 
@@ -287,9 +294,9 @@ final $typed_data.Uint8List updateChallengeRequestDescriptor = $convert.base64De
     'I2CgZlbmRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wSANSBWVuZEF0iAEB'
     'ElEKCGNhdGVnb3J5GAYgASgOMjAucHJvdG8uc2VydmljZXMuaW1wdWxzZV9zdmMudjEuQ2hhbG'
     'xlbmdlQ2F0ZWdvcnlIBFIIY2F0ZWdvcnmIAQESIQoJdGhyZXNob2xkGAcgASgESAVSCXRocmVz'
-    'aG9sZIgBARIbCgZwb2ludHMYCCABKARIBlIGcG9pbnRziAEBQggKBl90aXRsZUIOCgxfZGVzY3'
-    'JpcHRpb25CCwoJX3N0YXJ0X2F0QgkKB19lbmRfYXRCCwoJX2NhdGVnb3J5QgwKCl90aHJlc2hv'
-    'bGRCCQoHX3BvaW50cw==');
+    'aG9sZIgBARIbCgZwb2ludHMYCCABKARIBlIGcG9pbnRziAEBEhcKBHVuaXQYCSABKAlIB1IEdW'
+    '5pdIgBAUIICgZfdGl0bGVCDgoMX2Rlc2NyaXB0aW9uQgsKCV9zdGFydF9hdEIJCgdfZW5kX2F0'
+    'QgsKCV9jYXRlZ29yeUIMCgpfdGhyZXNob2xkQgkKB19wb2ludHNCBwoFX3VuaXQ=');
 
 @$core.Deprecated('Use updateChallengeResponseDescriptor instead')
 const UpdateChallengeResponse$json = {
@@ -304,6 +311,7 @@ const UpdateChallengeResponse$json = {
     {'1': 'type', '3': 7, '4': 1, '5': 14, '6': '.proto.services.impulse_svc.v1.ChallengeType', '10': 'type'},
     {'1': 'threshold', '3': 8, '4': 1, '5': 4, '10': 'threshold'},
     {'1': 'points', '3': 9, '4': 1, '5': 4, '10': 'points'},
+    {'1': 'unit', '3': 10, '4': 1, '5': 9, '10': 'unit'},
   ],
 };
 
@@ -316,5 +324,5 @@ final $typed_data.Uint8List updateChallengeResponseDescriptor = $convert.base64D
     'MC5wcm90by5zZXJ2aWNlcy5pbXB1bHNlX3N2Yy52MS5DaGFsbGVuZ2VDYXRlZ29yeVIIY2F0ZW'
     'dvcnkSQAoEdHlwZRgHIAEoDjIsLnByb3RvLnNlcnZpY2VzLmltcHVsc2Vfc3ZjLnYxLkNoYWxs'
     'ZW5nZVR5cGVSBHR5cGUSHAoJdGhyZXNob2xkGAggASgEUgl0aHJlc2hvbGQSFgoGcG9pbnRzGA'
-    'kgASgEUgZwb2ludHM=');
+    'kgASgEUgZwb2ludHMSEgoEdW5pdBgKIAEoCVIEdW5pdA==');
 

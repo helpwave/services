@@ -1,1 +1,0 @@
-../../../gen/python/proto/services/impulse_svc/v1/impulse_svc_pb2.py

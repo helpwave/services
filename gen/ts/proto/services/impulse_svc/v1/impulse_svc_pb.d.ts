@@ -202,6 +202,9 @@ export class CreateDailyChallengeRequest extends jspb.Message {
   getPoints(): number;
   setPoints(value: number): CreateDailyChallengeRequest;
 
+  getUnit(): string;
+  setUnit(value: string): CreateDailyChallengeRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateDailyChallengeRequest.AsObject;
   static toObject(includeInstance: boolean, msg: CreateDailyChallengeRequest): CreateDailyChallengeRequest.AsObject;
@@ -217,6 +220,7 @@ export namespace CreateDailyChallengeRequest {
     category: ChallengeCategory,
     threshold: number,
     points: number,
+    unit: string,
   }
 }
 
@@ -264,6 +268,9 @@ export class CreateQuestChallengeRequest extends jspb.Message {
   getPoints(): number;
   setPoints(value: number): CreateQuestChallengeRequest;
 
+  getUnit(): string;
+  setUnit(value: string): CreateQuestChallengeRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateQuestChallengeRequest.AsObject;
   static toObject(includeInstance: boolean, msg: CreateQuestChallengeRequest): CreateQuestChallengeRequest.AsObject;
@@ -281,6 +288,7 @@ export namespace CreateQuestChallengeRequest {
     category: ChallengeCategory,
     threshold: number,
     points: number,
+    unit: string,
   }
 }
 
@@ -367,6 +375,9 @@ export namespace GetChallengesResponse {
     getPoints(): number;
     setPoints(value: number): Challenge;
 
+    getUnit(): string;
+    setUnit(value: string): Challenge;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Challenge.AsObject;
     static toObject(includeInstance: boolean, msg: Challenge): Challenge.AsObject;
@@ -386,6 +397,7 @@ export namespace GetChallengesResponse {
       type: ChallengeType,
       threshold: number,
       points: number,
+      unit: string,
     }
   }
 
@@ -430,6 +442,11 @@ export class UpdateChallengeRequest extends jspb.Message {
   hasPoints(): boolean;
   clearPoints(): UpdateChallengeRequest;
 
+  getUnit(): string;
+  setUnit(value: string): UpdateChallengeRequest;
+  hasUnit(): boolean;
+  clearUnit(): UpdateChallengeRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateChallengeRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateChallengeRequest): UpdateChallengeRequest.AsObject;
@@ -448,6 +465,7 @@ export namespace UpdateChallengeRequest {
     category?: ChallengeCategory,
     threshold?: number,
     points?: number,
+    unit?: string,
   }
 
   export enum TitleCase { 
@@ -484,6 +502,11 @@ export namespace UpdateChallengeRequest {
     _POINTS_NOT_SET = 0,
     POINTS = 8,
   }
+
+  export enum UnitCase { 
+    _UNIT_NOT_SET = 0,
+    UNIT = 9,
+  }
 }
 
 export class UpdateChallengeResponse extends jspb.Message {
@@ -518,6 +541,9 @@ export class UpdateChallengeResponse extends jspb.Message {
   getPoints(): number;
   setPoints(value: number): UpdateChallengeResponse;
 
+  getUnit(): string;
+  setUnit(value: string): UpdateChallengeResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateChallengeResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateChallengeResponse): UpdateChallengeResponse.AsObject;
@@ -537,6 +563,7 @@ export namespace UpdateChallengeResponse {
     type: ChallengeType,
     threshold: number,
     points: number,
+    unit: string,
   }
 }
 
