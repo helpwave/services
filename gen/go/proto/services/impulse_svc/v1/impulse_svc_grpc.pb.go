@@ -19,13 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ImpulseService_CreateUser_FullMethodName           = "/proto.services.impulse_svc.v1.ImpulseService/CreateUser"
-	ImpulseService_UpdateUser_FullMethodName           = "/proto.services.impulse_svc.v1.ImpulseService/UpdateUser"
-	ImpulseService_TrackChallenge_FullMethodName       = "/proto.services.impulse_svc.v1.ImpulseService/TrackChallenge"
-	ImpulseService_CreateDailyChallenge_FullMethodName = "/proto.services.impulse_svc.v1.ImpulseService/CreateDailyChallenge"
-	ImpulseService_CreateQuestChallenge_FullMethodName = "/proto.services.impulse_svc.v1.ImpulseService/CreateQuestChallenge"
-	ImpulseService_UpdateChallenge_FullMethodName      = "/proto.services.impulse_svc.v1.ImpulseService/UpdateChallenge"
-	ImpulseService_GetChallenges_FullMethodName        = "/proto.services.impulse_svc.v1.ImpulseService/GetChallenges"
+	ImpulseService_CreateUser_FullMethodName          = "/proto.services.impulse_svc.v1.ImpulseService/CreateUser"
+	ImpulseService_UpdateUser_FullMethodName          = "/proto.services.impulse_svc.v1.ImpulseService/UpdateUser"
+	ImpulseService_TrackChallenge_FullMethodName      = "/proto.services.impulse_svc.v1.ImpulseService/TrackChallenge"
+	ImpulseService_GetActiveChallenges_FullMethodName = "/proto.services.impulse_svc.v1.ImpulseService/GetActiveChallenges"
 )
 
 // ImpulseServiceClient is the client API for ImpulseService service.
@@ -35,10 +32,7 @@ type ImpulseServiceClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error)
 	TrackChallenge(ctx context.Context, in *TrackChallengeRequest, opts ...grpc.CallOption) (*TrackChallengeResponse, error)
-	CreateDailyChallenge(ctx context.Context, in *CreateDailyChallengeRequest, opts ...grpc.CallOption) (*CreateDailyChallengeResponse, error)
-	CreateQuestChallenge(ctx context.Context, in *CreateQuestChallengeRequest, opts ...grpc.CallOption) (*CreateQuestChallengeResponse, error)
-	UpdateChallenge(ctx context.Context, in *UpdateChallengeRequest, opts ...grpc.CallOption) (*UpdateChallengeResponse, error)
-	GetChallenges(ctx context.Context, in *GetChallengesRequest, opts ...grpc.CallOption) (*GetChallengesResponse, error)
+	GetActiveChallenges(ctx context.Context, in *GetActiveChallengesRequest, opts ...grpc.CallOption) (*GetActiveChallengesResponse, error)
 }
 
 type impulseServiceClient struct {
@@ -76,36 +70,9 @@ func (c *impulseServiceClient) TrackChallenge(ctx context.Context, in *TrackChal
 	return out, nil
 }
 
-func (c *impulseServiceClient) CreateDailyChallenge(ctx context.Context, in *CreateDailyChallengeRequest, opts ...grpc.CallOption) (*CreateDailyChallengeResponse, error) {
-	out := new(CreateDailyChallengeResponse)
-	err := c.cc.Invoke(ctx, ImpulseService_CreateDailyChallenge_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *impulseServiceClient) CreateQuestChallenge(ctx context.Context, in *CreateQuestChallengeRequest, opts ...grpc.CallOption) (*CreateQuestChallengeResponse, error) {
-	out := new(CreateQuestChallengeResponse)
-	err := c.cc.Invoke(ctx, ImpulseService_CreateQuestChallenge_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *impulseServiceClient) UpdateChallenge(ctx context.Context, in *UpdateChallengeRequest, opts ...grpc.CallOption) (*UpdateChallengeResponse, error) {
-	out := new(UpdateChallengeResponse)
-	err := c.cc.Invoke(ctx, ImpulseService_UpdateChallenge_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *impulseServiceClient) GetChallenges(ctx context.Context, in *GetChallengesRequest, opts ...grpc.CallOption) (*GetChallengesResponse, error) {
-	out := new(GetChallengesResponse)
-	err := c.cc.Invoke(ctx, ImpulseService_GetChallenges_FullMethodName, in, out, opts...)
+func (c *impulseServiceClient) GetActiveChallenges(ctx context.Context, in *GetActiveChallengesRequest, opts ...grpc.CallOption) (*GetActiveChallengesResponse, error) {
+	out := new(GetActiveChallengesResponse)
+	err := c.cc.Invoke(ctx, ImpulseService_GetActiveChallenges_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -119,10 +86,7 @@ type ImpulseServiceServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
 	TrackChallenge(context.Context, *TrackChallengeRequest) (*TrackChallengeResponse, error)
-	CreateDailyChallenge(context.Context, *CreateDailyChallengeRequest) (*CreateDailyChallengeResponse, error)
-	CreateQuestChallenge(context.Context, *CreateQuestChallengeRequest) (*CreateQuestChallengeResponse, error)
-	UpdateChallenge(context.Context, *UpdateChallengeRequest) (*UpdateChallengeResponse, error)
-	GetChallenges(context.Context, *GetChallengesRequest) (*GetChallengesResponse, error)
+	GetActiveChallenges(context.Context, *GetActiveChallengesRequest) (*GetActiveChallengesResponse, error)
 	mustEmbedUnimplementedImpulseServiceServer()
 }
 
@@ -139,17 +103,8 @@ func (UnimplementedImpulseServiceServer) UpdateUser(context.Context, *UpdateUser
 func (UnimplementedImpulseServiceServer) TrackChallenge(context.Context, *TrackChallengeRequest) (*TrackChallengeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TrackChallenge not implemented")
 }
-func (UnimplementedImpulseServiceServer) CreateDailyChallenge(context.Context, *CreateDailyChallengeRequest) (*CreateDailyChallengeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateDailyChallenge not implemented")
-}
-func (UnimplementedImpulseServiceServer) CreateQuestChallenge(context.Context, *CreateQuestChallengeRequest) (*CreateQuestChallengeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateQuestChallenge not implemented")
-}
-func (UnimplementedImpulseServiceServer) UpdateChallenge(context.Context, *UpdateChallengeRequest) (*UpdateChallengeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateChallenge not implemented")
-}
-func (UnimplementedImpulseServiceServer) GetChallenges(context.Context, *GetChallengesRequest) (*GetChallengesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetChallenges not implemented")
+func (UnimplementedImpulseServiceServer) GetActiveChallenges(context.Context, *GetActiveChallengesRequest) (*GetActiveChallengesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetActiveChallenges not implemented")
 }
 func (UnimplementedImpulseServiceServer) mustEmbedUnimplementedImpulseServiceServer() {}
 
@@ -218,74 +173,20 @@ func _ImpulseService_TrackChallenge_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ImpulseService_CreateDailyChallenge_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateDailyChallengeRequest)
+func _ImpulseService_GetActiveChallenges_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetActiveChallengesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ImpulseServiceServer).CreateDailyChallenge(ctx, in)
+		return srv.(ImpulseServiceServer).GetActiveChallenges(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ImpulseService_CreateDailyChallenge_FullMethodName,
+		FullMethod: ImpulseService_GetActiveChallenges_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ImpulseServiceServer).CreateDailyChallenge(ctx, req.(*CreateDailyChallengeRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ImpulseService_CreateQuestChallenge_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateQuestChallengeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ImpulseServiceServer).CreateQuestChallenge(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ImpulseService_CreateQuestChallenge_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ImpulseServiceServer).CreateQuestChallenge(ctx, req.(*CreateQuestChallengeRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ImpulseService_UpdateChallenge_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateChallengeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ImpulseServiceServer).UpdateChallenge(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ImpulseService_UpdateChallenge_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ImpulseServiceServer).UpdateChallenge(ctx, req.(*UpdateChallengeRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ImpulseService_GetChallenges_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetChallengesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ImpulseServiceServer).GetChallenges(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ImpulseService_GetChallenges_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ImpulseServiceServer).GetChallenges(ctx, req.(*GetChallengesRequest))
+		return srv.(ImpulseServiceServer).GetActiveChallenges(ctx, req.(*GetActiveChallengesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -310,20 +211,8 @@ var ImpulseService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ImpulseService_TrackChallenge_Handler,
 		},
 		{
-			MethodName: "CreateDailyChallenge",
-			Handler:    _ImpulseService_CreateDailyChallenge_Handler,
-		},
-		{
-			MethodName: "CreateQuestChallenge",
-			Handler:    _ImpulseService_CreateQuestChallenge_Handler,
-		},
-		{
-			MethodName: "UpdateChallenge",
-			Handler:    _ImpulseService_UpdateChallenge_Handler,
-		},
-		{
-			MethodName: "GetChallenges",
-			Handler:    _ImpulseService_GetChallenges_Handler,
+			MethodName: "GetActiveChallenges",
+			Handler:    _ImpulseService_GetActiveChallenges_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

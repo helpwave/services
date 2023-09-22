@@ -1,19 +1,16 @@
 import * as jspb from 'google-protobuf'
 
-import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb';
 
 
 export class CreateUserRequest extends jspb.Message {
   getUsername(): string;
   setUsername(value: string): CreateUserRequest;
 
-  getSex(): string;
-  setSex(value: string): CreateUserRequest;
+  getGender(): string;
+  setGender(value: string): CreateUserRequest;
 
-  getBirthday(): google_protobuf_timestamp_pb.Timestamp | undefined;
-  setBirthday(value?: google_protobuf_timestamp_pb.Timestamp): CreateUserRequest;
-  hasBirthday(): boolean;
-  clearBirthday(): CreateUserRequest;
+  getBirthday(): string;
+  setBirthday(value: string): CreateUserRequest;
 
   getPal(): number;
   setPal(value: number): CreateUserRequest;
@@ -29,8 +26,8 @@ export class CreateUserRequest extends jspb.Message {
 export namespace CreateUserRequest {
   export type AsObject = {
     username: string,
-    sex: string,
-    birthday?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    gender: string,
+    birthday: string,
     pal: number,
   }
 }
@@ -57,13 +54,13 @@ export class UpdateUserRequest extends jspb.Message {
   getId(): string;
   setId(value: string): UpdateUserRequest;
 
-  getSex(): string;
-  setSex(value: string): UpdateUserRequest;
-  hasSex(): boolean;
-  clearSex(): UpdateUserRequest;
+  getGender(): string;
+  setGender(value: string): UpdateUserRequest;
+  hasGender(): boolean;
+  clearGender(): UpdateUserRequest;
 
-  getBirthday(): google_protobuf_timestamp_pb.Timestamp | undefined;
-  setBirthday(value?: google_protobuf_timestamp_pb.Timestamp): UpdateUserRequest;
+  getBirthday(): string;
+  setBirthday(value: string): UpdateUserRequest;
   hasBirthday(): boolean;
   clearBirthday(): UpdateUserRequest;
 
@@ -83,14 +80,14 @@ export class UpdateUserRequest extends jspb.Message {
 export namespace UpdateUserRequest {
   export type AsObject = {
     id: string,
-    sex?: string,
-    birthday?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    gender?: string,
+    birthday?: string,
     pal?: number,
   }
 
-  export enum SexCase { 
-    _SEX_NOT_SET = 0,
-    SEX = 2,
+  export enum GenderCase { 
+    _GENDER_NOT_SET = 0,
+    GENDER = 2,
   }
 
   export enum BirthdayCase { 
@@ -108,13 +105,11 @@ export class UpdateUserResponse extends jspb.Message {
   getId(): string;
   setId(value: string): UpdateUserResponse;
 
-  getSex(): string;
-  setSex(value: string): UpdateUserResponse;
+  getGender(): string;
+  setGender(value: string): UpdateUserResponse;
 
-  getBirthday(): google_protobuf_timestamp_pb.Timestamp | undefined;
-  setBirthday(value?: google_protobuf_timestamp_pb.Timestamp): UpdateUserResponse;
-  hasBirthday(): boolean;
-  clearBirthday(): UpdateUserResponse;
+  getBirthday(): string;
+  setBirthday(value: string): UpdateUserResponse;
 
   getPal(): number;
   setPal(value: number): UpdateUserResponse;
@@ -130,8 +125,8 @@ export class UpdateUserResponse extends jspb.Message {
 export namespace UpdateUserResponse {
   export type AsObject = {
     id: string,
-    sex: string,
-    birthday?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    gender: string,
+    birthday: string,
     pal: number,
   }
 }
@@ -146,10 +141,8 @@ export class TrackChallengeRequest extends jspb.Message {
   getScore(): number;
   setScore(value: number): TrackChallengeRequest;
 
-  getDoneAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
-  setDoneAt(value?: google_protobuf_timestamp_pb.Timestamp): TrackChallengeRequest;
-  hasDoneAt(): boolean;
-  clearDoneAt(): TrackChallengeRequest;
+  getDoneAt(): string;
+  setDoneAt(value: string): TrackChallengeRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): TrackChallengeRequest.AsObject;
@@ -164,7 +157,7 @@ export namespace TrackChallengeRequest {
     challengeId: string,
     userId: string,
     score: number,
-    doneAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    doneAt: string,
   }
 }
 
@@ -186,161 +179,37 @@ export namespace TrackChallengeResponse {
   }
 }
 
-export class CreateDailyChallengeRequest extends jspb.Message {
-  getTitle(): string;
-  setTitle(value: string): CreateDailyChallengeRequest;
-
-  getDescription(): string;
-  setDescription(value: string): CreateDailyChallengeRequest;
-
-  getCategory(): ChallengeCategory;
-  setCategory(value: ChallengeCategory): CreateDailyChallengeRequest;
-
-  getThreshold(): number;
-  setThreshold(value: number): CreateDailyChallengeRequest;
-
-  getPoints(): number;
-  setPoints(value: number): CreateDailyChallengeRequest;
-
-  getUnit(): string;
-  setUnit(value: string): CreateDailyChallengeRequest;
-
+export class GetActiveChallengesRequest extends jspb.Message {
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CreateDailyChallengeRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: CreateDailyChallengeRequest): CreateDailyChallengeRequest.AsObject;
-  static serializeBinaryToWriter(message: CreateDailyChallengeRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CreateDailyChallengeRequest;
-  static deserializeBinaryFromReader(message: CreateDailyChallengeRequest, reader: jspb.BinaryReader): CreateDailyChallengeRequest;
+  toObject(includeInstance?: boolean): GetActiveChallengesRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetActiveChallengesRequest): GetActiveChallengesRequest.AsObject;
+  static serializeBinaryToWriter(message: GetActiveChallengesRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetActiveChallengesRequest;
+  static deserializeBinaryFromReader(message: GetActiveChallengesRequest, reader: jspb.BinaryReader): GetActiveChallengesRequest;
 }
 
-export namespace CreateDailyChallengeRequest {
-  export type AsObject = {
-    title: string,
-    description: string,
-    category: ChallengeCategory,
-    threshold: number,
-    points: number,
-    unit: string,
-  }
-}
-
-export class CreateDailyChallengeResponse extends jspb.Message {
-  getId(): string;
-  setId(value: string): CreateDailyChallengeResponse;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CreateDailyChallengeResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: CreateDailyChallengeResponse): CreateDailyChallengeResponse.AsObject;
-  static serializeBinaryToWriter(message: CreateDailyChallengeResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CreateDailyChallengeResponse;
-  static deserializeBinaryFromReader(message: CreateDailyChallengeResponse, reader: jspb.BinaryReader): CreateDailyChallengeResponse;
-}
-
-export namespace CreateDailyChallengeResponse {
-  export type AsObject = {
-    id: string,
-  }
-}
-
-export class CreateQuestChallengeRequest extends jspb.Message {
-  getTitle(): string;
-  setTitle(value: string): CreateQuestChallengeRequest;
-
-  getDescription(): string;
-  setDescription(value: string): CreateQuestChallengeRequest;
-
-  getStartAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
-  setStartAt(value?: google_protobuf_timestamp_pb.Timestamp): CreateQuestChallengeRequest;
-  hasStartAt(): boolean;
-  clearStartAt(): CreateQuestChallengeRequest;
-
-  getEndAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
-  setEndAt(value?: google_protobuf_timestamp_pb.Timestamp): CreateQuestChallengeRequest;
-  hasEndAt(): boolean;
-  clearEndAt(): CreateQuestChallengeRequest;
-
-  getCategory(): ChallengeCategory;
-  setCategory(value: ChallengeCategory): CreateQuestChallengeRequest;
-
-  getThreshold(): number;
-  setThreshold(value: number): CreateQuestChallengeRequest;
-
-  getPoints(): number;
-  setPoints(value: number): CreateQuestChallengeRequest;
-
-  getUnit(): string;
-  setUnit(value: string): CreateQuestChallengeRequest;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CreateQuestChallengeRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: CreateQuestChallengeRequest): CreateQuestChallengeRequest.AsObject;
-  static serializeBinaryToWriter(message: CreateQuestChallengeRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CreateQuestChallengeRequest;
-  static deserializeBinaryFromReader(message: CreateQuestChallengeRequest, reader: jspb.BinaryReader): CreateQuestChallengeRequest;
-}
-
-export namespace CreateQuestChallengeRequest {
-  export type AsObject = {
-    title: string,
-    description: string,
-    startAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
-    endAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
-    category: ChallengeCategory,
-    threshold: number,
-    points: number,
-    unit: string,
-  }
-}
-
-export class CreateQuestChallengeResponse extends jspb.Message {
-  getId(): string;
-  setId(value: string): CreateQuestChallengeResponse;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CreateQuestChallengeResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: CreateQuestChallengeResponse): CreateQuestChallengeResponse.AsObject;
-  static serializeBinaryToWriter(message: CreateQuestChallengeResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CreateQuestChallengeResponse;
-  static deserializeBinaryFromReader(message: CreateQuestChallengeResponse, reader: jspb.BinaryReader): CreateQuestChallengeResponse;
-}
-
-export namespace CreateQuestChallengeResponse {
-  export type AsObject = {
-    id: string,
-  }
-}
-
-export class GetChallengesRequest extends jspb.Message {
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetChallengesRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetChallengesRequest): GetChallengesRequest.AsObject;
-  static serializeBinaryToWriter(message: GetChallengesRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetChallengesRequest;
-  static deserializeBinaryFromReader(message: GetChallengesRequest, reader: jspb.BinaryReader): GetChallengesRequest;
-}
-
-export namespace GetChallengesRequest {
+export namespace GetActiveChallengesRequest {
   export type AsObject = {
   }
 }
 
-export class GetChallengesResponse extends jspb.Message {
-  getChallengesList(): Array<GetChallengesResponse.Challenge>;
-  setChallengesList(value: Array<GetChallengesResponse.Challenge>): GetChallengesResponse;
-  clearChallengesList(): GetChallengesResponse;
-  addChallenges(value?: GetChallengesResponse.Challenge, index?: number): GetChallengesResponse.Challenge;
+export class GetActiveChallengesResponse extends jspb.Message {
+  getChallengesList(): Array<GetActiveChallengesResponse.Challenge>;
+  setChallengesList(value: Array<GetActiveChallengesResponse.Challenge>): GetActiveChallengesResponse;
+  clearChallengesList(): GetActiveChallengesResponse;
+  addChallenges(value?: GetActiveChallengesResponse.Challenge, index?: number): GetActiveChallengesResponse.Challenge;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetChallengesResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetChallengesResponse): GetChallengesResponse.AsObject;
-  static serializeBinaryToWriter(message: GetChallengesResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetChallengesResponse;
-  static deserializeBinaryFromReader(message: GetChallengesResponse, reader: jspb.BinaryReader): GetChallengesResponse;
+  toObject(includeInstance?: boolean): GetActiveChallengesResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetActiveChallengesResponse): GetActiveChallengesResponse.AsObject;
+  static serializeBinaryToWriter(message: GetActiveChallengesResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetActiveChallengesResponse;
+  static deserializeBinaryFromReader(message: GetActiveChallengesResponse, reader: jspb.BinaryReader): GetActiveChallengesResponse;
 }
 
-export namespace GetChallengesResponse {
+export namespace GetActiveChallengesResponse {
   export type AsObject = {
-    challengesList: Array<GetChallengesResponse.Challenge.AsObject>,
+    challengesList: Array<GetActiveChallengesResponse.Challenge.AsObject>,
   }
 
   export class Challenge extends jspb.Message {
@@ -353,15 +222,11 @@ export namespace GetChallengesResponse {
     getDescription(): string;
     setDescription(value: string): Challenge;
 
-    getStartAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
-    setStartAt(value?: google_protobuf_timestamp_pb.Timestamp): Challenge;
-    hasStartAt(): boolean;
-    clearStartAt(): Challenge;
+    getStartAt(): string;
+    setStartAt(value: string): Challenge;
 
-    getEndAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
-    setEndAt(value?: google_protobuf_timestamp_pb.Timestamp): Challenge;
-    hasEndAt(): boolean;
-    clearEndAt(): Challenge;
+    getEndAt(): string;
+    setEndAt(value: string): Challenge;
 
     getCategory(): ChallengeCategory;
     setCategory(value: ChallengeCategory): Challenge;
@@ -391,8 +256,8 @@ export namespace GetChallengesResponse {
       id: string,
       title: string,
       description: string,
-      startAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
-      endAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+      startAt: string,
+      endAt: string,
       category: ChallengeCategory,
       type: ChallengeType,
       threshold: number,
@@ -417,13 +282,13 @@ export class UpdateChallengeRequest extends jspb.Message {
   hasDescription(): boolean;
   clearDescription(): UpdateChallengeRequest;
 
-  getStartAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
-  setStartAt(value?: google_protobuf_timestamp_pb.Timestamp): UpdateChallengeRequest;
+  getStartAt(): string;
+  setStartAt(value: string): UpdateChallengeRequest;
   hasStartAt(): boolean;
   clearStartAt(): UpdateChallengeRequest;
 
-  getEndAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
-  setEndAt(value?: google_protobuf_timestamp_pb.Timestamp): UpdateChallengeRequest;
+  getEndAt(): string;
+  setEndAt(value: string): UpdateChallengeRequest;
   hasEndAt(): boolean;
   clearEndAt(): UpdateChallengeRequest;
 
@@ -460,8 +325,8 @@ export namespace UpdateChallengeRequest {
     id: string,
     title?: string,
     description?: string,
-    startAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
-    endAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    startAt?: string,
+    endAt?: string,
     category?: ChallengeCategory,
     threshold?: number,
     points?: number,
@@ -519,15 +384,11 @@ export class UpdateChallengeResponse extends jspb.Message {
   getDescription(): string;
   setDescription(value: string): UpdateChallengeResponse;
 
-  getStartAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
-  setStartAt(value?: google_protobuf_timestamp_pb.Timestamp): UpdateChallengeResponse;
-  hasStartAt(): boolean;
-  clearStartAt(): UpdateChallengeResponse;
+  getStartAt(): string;
+  setStartAt(value: string): UpdateChallengeResponse;
 
-  getEndAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
-  setEndAt(value?: google_protobuf_timestamp_pb.Timestamp): UpdateChallengeResponse;
-  hasEndAt(): boolean;
-  clearEndAt(): UpdateChallengeResponse;
+  getEndAt(): string;
+  setEndAt(value: string): UpdateChallengeResponse;
 
   getCategory(): ChallengeCategory;
   setCategory(value: ChallengeCategory): UpdateChallengeResponse;
@@ -557,8 +418,8 @@ export namespace UpdateChallengeResponse {
     id: string,
     title: string,
     description: string,
-    startAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
-    endAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    startAt: string,
+    endAt: string,
     category: ChallengeCategory,
     type: ChallengeType,
     threshold: number,

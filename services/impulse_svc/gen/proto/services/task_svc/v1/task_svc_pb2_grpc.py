@@ -8,7 +8,7 @@ from proto.services.task_svc.v1 import task_svc_pb2 as proto_dot_services_dot_ta
 class TaskServiceStub(object):
     """
     TaskService
-
+    
 
     """
 
@@ -118,7 +118,7 @@ class TaskServiceStub(object):
 class TaskServiceServicer(object):
     """
     TaskService
-
+    
 
     """
 
@@ -344,7 +344,7 @@ def add_TaskServiceServicer_to_server(servicer, server):
 class TaskService(object):
     """
     TaskService
-
+    
 
     """
 

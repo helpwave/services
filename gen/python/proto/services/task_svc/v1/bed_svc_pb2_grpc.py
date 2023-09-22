@@ -8,7 +8,7 @@ from proto.services.task_svc.v1 import bed_svc_pb2 as proto_dot_services_dot_tas
 class BedServiceStub(object):
     """
     BedService
-
+    
 
     """
 
@@ -58,7 +58,7 @@ class BedServiceStub(object):
 class BedServiceServicer(object):
     """
     BedService
-
+    
 
     """
 
@@ -152,7 +152,7 @@ def add_BedServiceServicer_to_server(servicer, server):
 class BedService(object):
     """
     BedService
-
+    
 
     """
 
