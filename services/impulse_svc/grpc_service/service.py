@@ -13,15 +13,6 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
     def TrackChallenge(self, request, context):
         pass
 
-    def CreateDailyChallenge(self, request, context):
-        pass  # Do Not Implement
-
-    def CreateQuestChallenge(self, request, context):
-        pass  # Do Not Implement
-
-    def UpdateChallenge(self, request, context):
-        pass  # Do Not Implement
-
     def GetChallenges(self, request, context):
         pass
 
