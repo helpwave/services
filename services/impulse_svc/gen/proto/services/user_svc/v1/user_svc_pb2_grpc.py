@@ -8,7 +8,7 @@ from proto.services.user_svc.v1 import user_svc_pb2 as proto_dot_services_dot_us
 class UserServiceStub(object):
     """
     UserService
-
+    
 
     """
 
@@ -43,7 +43,7 @@ class UserServiceStub(object):
 class UserServiceServicer(object):
     """
     UserService
-
+    
 
     """
 
@@ -104,7 +104,7 @@ def add_UserServiceServicer_to_server(servicer, server):
 class UserService(object):
     """
     UserService
-
+    
 
     """
 

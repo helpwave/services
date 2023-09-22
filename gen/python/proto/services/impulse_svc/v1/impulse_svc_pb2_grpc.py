@@ -33,25 +33,10 @@ class ImpulseServiceStub(object):
                 request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.TrackChallengeRequest.SerializeToString,
                 response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.TrackChallengeResponse.FromString,
                 )
-        self.CreateDailyChallenge = channel.unary_unary(
-                '/proto.services.impulse_svc.v1.ImpulseService/CreateDailyChallenge',
-                request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.CreateDailyChallengeRequest.SerializeToString,
-                response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.CreateDailyChallengeResponse.FromString,
-                )
-        self.CreateQuestChallenge = channel.unary_unary(
-                '/proto.services.impulse_svc.v1.ImpulseService/CreateQuestChallenge',
-                request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.CreateQuestChallengeRequest.SerializeToString,
-                response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.CreateQuestChallengeResponse.FromString,
-                )
-        self.UpdateChallenge = channel.unary_unary(
-                '/proto.services.impulse_svc.v1.ImpulseService/UpdateChallenge',
-                request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.UpdateChallengeRequest.SerializeToString,
-                response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.UpdateChallengeResponse.FromString,
-                )
-        self.GetChallenges = channel.unary_unary(
-                '/proto.services.impulse_svc.v1.ImpulseService/GetChallenges',
-                request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetChallengesRequest.SerializeToString,
-                response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetChallengesResponse.FromString,
+        self.GetActiveChallenges = channel.unary_unary(
+                '/proto.services.impulse_svc.v1.ImpulseService/GetActiveChallenges',
+                request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetActiveChallengesRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetActiveChallengesResponse.FromString,
                 )
 
 
@@ -80,25 +65,7 @@ class ImpulseServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def CreateDailyChallenge(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def CreateQuestChallenge(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def UpdateChallenge(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def GetChallenges(self, request, context):
+    def GetActiveChallenges(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -122,25 +89,10 @@ def add_ImpulseServiceServicer_to_server(servicer, server):
                     request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.TrackChallengeRequest.FromString,
                     response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.TrackChallengeResponse.SerializeToString,
             ),
-            'CreateDailyChallenge': grpc.unary_unary_rpc_method_handler(
-                    servicer.CreateDailyChallenge,
-                    request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.CreateDailyChallengeRequest.FromString,
-                    response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.CreateDailyChallengeResponse.SerializeToString,
-            ),
-            'CreateQuestChallenge': grpc.unary_unary_rpc_method_handler(
-                    servicer.CreateQuestChallenge,
-                    request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.CreateQuestChallengeRequest.FromString,
-                    response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.CreateQuestChallengeResponse.SerializeToString,
-            ),
-            'UpdateChallenge': grpc.unary_unary_rpc_method_handler(
-                    servicer.UpdateChallenge,
-                    request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.UpdateChallengeRequest.FromString,
-                    response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.UpdateChallengeResponse.SerializeToString,
-            ),
-            'GetChallenges': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetChallenges,
-                    request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetChallengesRequest.FromString,
-                    response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetChallengesResponse.SerializeToString,
+            'GetActiveChallenges': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetActiveChallenges,
+                    request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetActiveChallengesRequest.FromString,
+                    response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetActiveChallengesResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -208,7 +160,7 @@ class ImpulseService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def CreateDailyChallenge(request,
+    def GetActiveChallenges(request,
             target,
             options=(),
             channel_credentials=None,
@@ -218,59 +170,8 @@ class ImpulseService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/proto.services.impulse_svc.v1.ImpulseService/CreateDailyChallenge',
-            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.CreateDailyChallengeRequest.SerializeToString,
-            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.CreateDailyChallengeResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def CreateQuestChallenge(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/proto.services.impulse_svc.v1.ImpulseService/CreateQuestChallenge',
-            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.CreateQuestChallengeRequest.SerializeToString,
-            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.CreateQuestChallengeResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def UpdateChallenge(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/proto.services.impulse_svc.v1.ImpulseService/UpdateChallenge',
-            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.UpdateChallengeRequest.SerializeToString,
-            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.UpdateChallengeResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def GetChallenges(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/proto.services.impulse_svc.v1.ImpulseService/GetChallenges',
-            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetChallengesRequest.SerializeToString,
-            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetChallengesResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/proto.services.impulse_svc.v1.ImpulseService/GetActiveChallenges',
+            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetActiveChallengesRequest.SerializeToString,
+            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.GetActiveChallengesResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

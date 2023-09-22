@@ -8,7 +8,7 @@ from proto.services.task_svc.v1 import ward_svc_pb2 as proto_dot_services_dot_ta
 class WardServiceStub(object):
     """
     WardService
-
+    
 
     """
 
@@ -58,7 +58,7 @@ class WardServiceStub(object):
 class WardServiceServicer(object):
     """
     WardService
-
+    
 
     """
 
@@ -152,7 +152,7 @@ def add_WardServiceServicer_to_server(servicer, server):
 class WardService(object):
     """
     WardService
-
+    
 
     """
 

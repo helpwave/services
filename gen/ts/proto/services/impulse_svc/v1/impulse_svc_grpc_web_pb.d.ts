@@ -29,33 +29,12 @@ export class ImpulseServiceClient {
                response: proto_services_impulse_svc_v1_impulse_svc_pb.TrackChallengeResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.TrackChallengeResponse>;
 
-  createDailyChallenge(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.CreateDailyChallengeRequest,
+  getActiveChallenges(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: proto_services_impulse_svc_v1_impulse_svc_pb.CreateDailyChallengeResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.CreateDailyChallengeResponse>;
-
-  createQuestChallenge(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.CreateQuestChallengeRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: proto_services_impulse_svc_v1_impulse_svc_pb.CreateQuestChallengeResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.CreateQuestChallengeResponse>;
-
-  updateChallenge(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.UpdateChallengeRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: proto_services_impulse_svc_v1_impulse_svc_pb.UpdateChallengeResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.UpdateChallengeResponse>;
-
-  getChallenges(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetChallengesRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: proto_services_impulse_svc_v1_impulse_svc_pb.GetChallengesResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.GetChallengesResponse>;
+               response: proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesResponse>;
 
 }
 
@@ -79,25 +58,10 @@ export class ImpulseServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.TrackChallengeResponse>;
 
-  createDailyChallenge(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.CreateDailyChallengeRequest,
+  getActiveChallenges(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.CreateDailyChallengeResponse>;
-
-  createQuestChallenge(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.CreateQuestChallengeRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.CreateQuestChallengeResponse>;
-
-  updateChallenge(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.UpdateChallengeRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.UpdateChallengeResponse>;
-
-  getChallenges(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetChallengesRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.GetChallengesResponse>;
+  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesResponse>;
 
 }
 

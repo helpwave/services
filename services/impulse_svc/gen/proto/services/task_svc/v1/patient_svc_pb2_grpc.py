@@ -8,7 +8,7 @@ from proto.services.task_svc.v1 import patient_svc_pb2 as proto_dot_services_dot
 class PatientServiceStub(object):
     """
     PatientService
-
+    
 
     """
 
@@ -93,7 +93,7 @@ class PatientServiceStub(object):
 class PatientServiceServicer(object):
     """
     PatientService
-
+    
 
     """
 
@@ -264,7 +264,7 @@ def add_PatientServiceServicer_to_server(servicer, server):
 class PatientService(object):
     """
     PatientService
-
+    
 
     """
 
