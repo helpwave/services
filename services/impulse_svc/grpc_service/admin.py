@@ -11,7 +11,10 @@ class UserChallengeInline(admin.TabularInline):
 class User(admin.ModelAdmin):
     inlines = [
         UserChallengeInline
-    ]    
+    ]
+    readonly_fields = [
+        "score"
+    ]
 
 
 admin.site.register(Challenge)
