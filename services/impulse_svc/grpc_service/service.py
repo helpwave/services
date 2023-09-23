@@ -180,8 +180,8 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
                     description=challenge.description,
                     category=challenge.category,
                     type=challenge.type,
-                    start_datetime=challenge.start_datetime,
-                    end_datetime=challenge.end_datetime,
+                    start_at=challenge.start_datetime.isoformat(),
+                    end_at=challenge.end_datetime.isoformat(),
                     points=challenge.points,
                     unit=challenge.unit,
                 ) for challenge in challenges
