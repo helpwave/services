@@ -225,6 +225,28 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             average_age=team.avg_age,
             user_count=team.user_count,
         )
+        
+    def Verification(self, request, context):
+        challenge = Challenge.objects.get(id=request.challenge_id)
+        string_verifications = challenge.verificationstr_set.all()
+        integer_verifications = challenge.verificationint_set.all()
+        
+        return impulse_svc_pb2.VerificationResponse(
+            string_verifications=[
+                impulse_svc_pb2.VerificationResponse.StringVerification(
+                    order=string_verification.order,
+                    type=string_verification.type,
+                    value=string_verification.value,
+                ) for string_verification in string_verifications
+            ],
+            integer_verifications=[
+                impulse_svc_pb2.VerificationResponse.IntegerVerification(
+                    order=integer_verification.order,
+                    type=integer_verification.type,
+                    value=integer_verification.value,
+                ) for integer_verification in integer_verifications
+            ]
+        )
 
 
 
