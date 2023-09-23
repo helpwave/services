@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
+
 class Verification(models.Model):
     id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     order: int = models.IntegerField()
@@ -19,31 +20,31 @@ class Verification(models.Model):
 
 
 class VerificationStr(Verification):
-    class VerificationStrType(models.TextChoices):
-        QR = 'qr', _('QR Code')
+    class VerificationStrType(models.IntegerChoices):
+        QR = 1
 
-    type = models.CharField(max_length=10, choices=VerificationStrType.choices)
-    value = models.CharField(max_length=512)
+    type: int = models.IntegerField(choices=VerificationStrType.choices)
+    value: str = models.CharField(max_length=512)
 
 
 class VerificationInt(Verification):
-    class VerificationIntType(models.TextChoices):
-        TIMER = 'timer', _('Stopuhr')
-        Number = 'number', _('Nummer')
+    class VerificationIntType(models.IntegerChoices):
+        TIMER = 1
+        NUMBER = 2
 
-    type = models.CharField(max_length=10, choices=VerificationIntType.choices)
-    value = models.IntegerField()
+    type: int = models.IntegerField(choices=VerificationIntType.choices)
+    value: int = models.IntegerField()
 
 
 class Challenge(models.Model):
-    class ChallengeTypes(models.TextChoices):
-        DAILY = 'daily', _('Täglich')
-        QUEST = 'quest', _('Mission')
+    class ChallengeTypes(models.IntegerChoices):
+        DAILY = 1
+        QUEST = 2
 
-    class ChallengeCategories(models.TextChoices):
-        FOOD = 'food', _('Ernährung')
-        FITNESS = 'fitness', _('Fitness')
-        MENTAL = 'mental', _('Mentale Gesundheit')
+    class ChallengeCategories(models.IntegerChoices):
+        FOOD = 1
+        FITNESS = 2
+        MENTAL = 3
 
     id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title: str = models.CharField(max_length=50)
@@ -52,14 +53,14 @@ class Challenge(models.Model):
     start_datetime: datetime = models.DateTimeField(null=True, blank=True)
     end_datetime: datetime = models.DateTimeField(null=True, blank=True)
 
-    type: str = models.CharField(max_length=10, choices=ChallengeTypes.choices)
-    category: str = models.CharField(max_length=10, choices=ChallengeCategories.choices)
+    type: str = models.IntegerField(choices=ChallengeTypes.choices)
+    category: str = models.IntegerField(choices=ChallengeCategories.choices)
 
     points: int = models.IntegerField()
     unit: str = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.title
+        return f"{self.title} - {self.id}"
 
 
 class UserChallenge(models.Model):
@@ -76,7 +77,7 @@ class Reward(models.Model):
     points: int = models.IntegerField()
 
     def __str__(self):
-        return self.title
+        return f"{self.title} - {self.id}"
 
 
 class Team(models.Model):
@@ -85,7 +86,7 @@ class Team(models.Model):
     description: str = models.TextField()
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.id}"
 
     def get_gender_count(self, gender: User.Gender):
         return self.user_set.filter(gender=gender).count()
@@ -117,10 +118,10 @@ class Team(models.Model):
 
 
 class User(models.Model):
-    class Gender(models.TextChoices):
-        MALE = 1, _('Männlich')
-        FEMALE = 2, _('Weiblich')
-        DIVERSE = 3, _('Divers')
+    class Gender(models.IntegerChoices):
+        MALE = 1
+        FEMALE = 2
+        DIVERSE = 3
 
     id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username: str = models.CharField(max_length=50)
@@ -135,11 +136,11 @@ class User(models.Model):
     team: Team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return self.username
+        return f"{self.username} - {self.id}"
 
     @property
     def score(self):
-        return self.userchallenge_set.all().values("score").aggregate(Sum("score")).get("score__sum", 0)
+        return self.userchallenge_set.all().values("score").aggregate(Sum("score")).get("score__sum", 0) or 0
 
     @property
     def age(self):

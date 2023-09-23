@@ -25,6 +25,17 @@ enum Gender {
   GENDER_DIVERSE = 3;
 }
 
+enum StringVerificationType {
+  STRING_VERIFICATION_TYPE_UNSPECIFIED = 0;
+  STRING_VERIFICATION_TYPE_QR = 1;
+}
+
+enum IntegerVerificationType {
+  INTEGER_VERIFICATION_TYPE_UNSPECIFIED = 0;
+  INTEGER_VERIFICATION_TYPE_TIMER = 1;
+  INTEGER_VERIFICATION_TYPE_NUMBER = 2;
+}
+
 //
 // CreateUser
 //
@@ -49,7 +60,7 @@ message CreateUserResponse {
 message UpdateUserRequest {
   string user_id = 1;
   optional string team_id = 2;
-  optional string gender = 3;
+  optional Gender gender = 3;
   optional string birthday = 4;
   optional float pal = 5;
   optional int32 length = 6;
@@ -59,7 +70,7 @@ message UpdateUserRequest {
 message UpdateUserResponse {
   string user_id = 1;
   optional string team_id = 2;
-  string gender = 3;
+  Gender gender = 3;
   string birthday = 4;
   float pal = 5;
   int32 length = 6;
@@ -79,7 +90,6 @@ message GetAllTeamsResponse {
       string team_id = 1;
       string name = 2;
       string description = 3;
-      string image = 5;
   }
 }
 
@@ -167,7 +177,7 @@ message GetScoreResponse {
 //
 
 message GetRewardsRequest {
-  string reward_id = 1;
+  string user_id = 1;
 }
 
 message GetRewardsResponse {
@@ -204,7 +214,7 @@ message StatsForTeamByUserRequest {
 
 message StatsForTeamByUserResponse {
   string team_id = 1;
-  float score = 2;
+  uint64 score = 2;
   repeated GenderCount gender_count = 3;
   float average_age = 4;
   uint64 user_count = 5;
@@ -212,6 +222,30 @@ message StatsForTeamByUserResponse {
   message GenderCount {
     Gender gender = 1;
     uint32 count = 2;
+  }
+}
+
+//
+// Verification
+//
+
+message VerificationRequest {
+  string challenge_id = 1;
+}
+
+message VerificationResponse {
+  repeated StringVerification string_verifications = 1;
+  repeated IntegerVerification integer_verifications = 2;
+
+  message StringVerification {
+      uint32 order = 1;
+      StringVerificationType type = 2;
+      string value = 3;
+  }
+  message IntegerVerification {
+      uint32 order = 1;
+      IntegerVerificationType type = 2;
+      uint64 value = 3;
   }
 }
 
@@ -229,4 +263,5 @@ service ImpulseService {
   rpc GetAllRewards(GetAllRewardsRequest) returns (GetAllRewardsResponse) {}
   rpc GetAllTeams(GetAllTeamsRequest) returns (GetAllTeamsResponse) {}
   rpc StatsForTeamByUser(StatsForTeamByUserRequest) returns (StatsForTeamByUserResponse) {}
+  rpc Verification(VerificationRequest) returns (VerificationResponse) {}
 }

@@ -28,6 +28,7 @@ const (
 	ImpulseService_GetAllRewards_FullMethodName       = "/proto.services.impulse_svc.v1.ImpulseService/GetAllRewards"
 	ImpulseService_GetAllTeams_FullMethodName         = "/proto.services.impulse_svc.v1.ImpulseService/GetAllTeams"
 	ImpulseService_StatsForTeamByUser_FullMethodName  = "/proto.services.impulse_svc.v1.ImpulseService/StatsForTeamByUser"
+	ImpulseService_Verification_FullMethodName        = "/proto.services.impulse_svc.v1.ImpulseService/Verification"
 )
 
 // ImpulseServiceClient is the client API for ImpulseService service.
@@ -43,6 +44,7 @@ type ImpulseServiceClient interface {
 	GetAllRewards(ctx context.Context, in *GetAllRewardsRequest, opts ...grpc.CallOption) (*GetAllRewardsResponse, error)
 	GetAllTeams(ctx context.Context, in *GetAllTeamsRequest, opts ...grpc.CallOption) (*GetAllTeamsResponse, error)
 	StatsForTeamByUser(ctx context.Context, in *StatsForTeamByUserRequest, opts ...grpc.CallOption) (*StatsForTeamByUserResponse, error)
+	Verification(ctx context.Context, in *VerificationRequest, opts ...grpc.CallOption) (*VerificationResponse, error)
 }
 
 type impulseServiceClient struct {
@@ -134,6 +136,15 @@ func (c *impulseServiceClient) StatsForTeamByUser(ctx context.Context, in *Stats
 	return out, nil
 }
 
+func (c *impulseServiceClient) Verification(ctx context.Context, in *VerificationRequest, opts ...grpc.CallOption) (*VerificationResponse, error) {
+	out := new(VerificationResponse)
+	err := c.cc.Invoke(ctx, ImpulseService_Verification_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ImpulseServiceServer is the server API for ImpulseService service.
 // All implementations must embed UnimplementedImpulseServiceServer
 // for forward compatibility
@@ -147,6 +158,7 @@ type ImpulseServiceServer interface {
 	GetAllRewards(context.Context, *GetAllRewardsRequest) (*GetAllRewardsResponse, error)
 	GetAllTeams(context.Context, *GetAllTeamsRequest) (*GetAllTeamsResponse, error)
 	StatsForTeamByUser(context.Context, *StatsForTeamByUserRequest) (*StatsForTeamByUserResponse, error)
+	Verification(context.Context, *VerificationRequest) (*VerificationResponse, error)
 	mustEmbedUnimplementedImpulseServiceServer()
 }
 
@@ -180,6 +192,9 @@ func (UnimplementedImpulseServiceServer) GetAllTeams(context.Context, *GetAllTea
 }
 func (UnimplementedImpulseServiceServer) StatsForTeamByUser(context.Context, *StatsForTeamByUserRequest) (*StatsForTeamByUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StatsForTeamByUser not implemented")
+}
+func (UnimplementedImpulseServiceServer) Verification(context.Context, *VerificationRequest) (*VerificationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Verification not implemented")
 }
 func (UnimplementedImpulseServiceServer) mustEmbedUnimplementedImpulseServiceServer() {}
 
@@ -356,6 +371,24 @@ func _ImpulseService_StatsForTeamByUser_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ImpulseService_Verification_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerificationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ImpulseServiceServer).Verification(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ImpulseService_Verification_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ImpulseServiceServer).Verification(ctx, req.(*VerificationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ImpulseService_ServiceDesc is the grpc.ServiceDesc for ImpulseService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -398,6 +431,10 @@ var ImpulseService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "StatsForTeamByUser",
 			Handler:    _ImpulseService_StatsForTeamByUser_Handler,
+		},
+		{
+			MethodName: "Verification",
+			Handler:    _ImpulseService_Verification_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

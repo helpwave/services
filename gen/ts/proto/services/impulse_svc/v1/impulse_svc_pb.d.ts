@@ -67,8 +67,8 @@ export class UpdateUserRequest extends jspb.Message {
   hasTeamId(): boolean;
   clearTeamId(): UpdateUserRequest;
 
-  getGender(): string;
-  setGender(value: string): UpdateUserRequest;
+  getGender(): Gender;
+  setGender(value: Gender): UpdateUserRequest;
   hasGender(): boolean;
   clearGender(): UpdateUserRequest;
 
@@ -104,7 +104,7 @@ export namespace UpdateUserRequest {
   export type AsObject = {
     userId: string,
     teamId?: string,
-    gender?: string,
+    gender?: Gender,
     birthday?: string,
     pal?: number,
     length?: number,
@@ -151,8 +151,8 @@ export class UpdateUserResponse extends jspb.Message {
   hasTeamId(): boolean;
   clearTeamId(): UpdateUserResponse;
 
-  getGender(): string;
-  setGender(value: string): UpdateUserResponse;
+  getGender(): Gender;
+  setGender(value: Gender): UpdateUserResponse;
 
   getBirthday(): string;
   setBirthday(value: string): UpdateUserResponse;
@@ -178,7 +178,7 @@ export namespace UpdateUserResponse {
   export type AsObject = {
     userId: string,
     teamId?: string,
-    gender: string,
+    gender: Gender,
     birthday: string,
     pal: number,
     length: number,
@@ -234,9 +234,6 @@ export namespace GetAllTeamsResponse {
     getDescription(): string;
     setDescription(value: string): Team;
 
-    getImage(): string;
-    setImage(value: string): Team;
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Team.AsObject;
     static toObject(includeInstance: boolean, msg: Team): Team.AsObject;
@@ -250,7 +247,6 @@ export namespace GetAllTeamsResponse {
       teamId: string,
       name: string,
       description: string,
-      image: string,
     }
   }
 
@@ -590,8 +586,8 @@ export namespace GetScoreResponse {
 }
 
 export class GetRewardsRequest extends jspb.Message {
-  getRewardId(): string;
-  setRewardId(value: string): GetRewardsRequest;
+  getUserId(): string;
+  setUserId(value: string): GetRewardsRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetRewardsRequest.AsObject;
@@ -603,7 +599,7 @@ export class GetRewardsRequest extends jspb.Message {
 
 export namespace GetRewardsRequest {
   export type AsObject = {
-    rewardId: string,
+    userId: string,
   }
 }
 
@@ -800,6 +796,104 @@ export namespace StatsForTeamByUserResponse {
 
 }
 
+export class VerificationRequest extends jspb.Message {
+  getChallengeId(): string;
+  setChallengeId(value: string): VerificationRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): VerificationRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: VerificationRequest): VerificationRequest.AsObject;
+  static serializeBinaryToWriter(message: VerificationRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): VerificationRequest;
+  static deserializeBinaryFromReader(message: VerificationRequest, reader: jspb.BinaryReader): VerificationRequest;
+}
+
+export namespace VerificationRequest {
+  export type AsObject = {
+    challengeId: string,
+  }
+}
+
+export class VerificationResponse extends jspb.Message {
+  getStringVerificationsList(): Array<VerificationResponse.StringVerification>;
+  setStringVerificationsList(value: Array<VerificationResponse.StringVerification>): VerificationResponse;
+  clearStringVerificationsList(): VerificationResponse;
+  addStringVerifications(value?: VerificationResponse.StringVerification, index?: number): VerificationResponse.StringVerification;
+
+  getIntegerVerificationsList(): Array<VerificationResponse.IntegerVerification>;
+  setIntegerVerificationsList(value: Array<VerificationResponse.IntegerVerification>): VerificationResponse;
+  clearIntegerVerificationsList(): VerificationResponse;
+  addIntegerVerifications(value?: VerificationResponse.IntegerVerification, index?: number): VerificationResponse.IntegerVerification;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): VerificationResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: VerificationResponse): VerificationResponse.AsObject;
+  static serializeBinaryToWriter(message: VerificationResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): VerificationResponse;
+  static deserializeBinaryFromReader(message: VerificationResponse, reader: jspb.BinaryReader): VerificationResponse;
+}
+
+export namespace VerificationResponse {
+  export type AsObject = {
+    stringVerificationsList: Array<VerificationResponse.StringVerification.AsObject>,
+    integerVerificationsList: Array<VerificationResponse.IntegerVerification.AsObject>,
+  }
+
+  export class StringVerification extends jspb.Message {
+    getOrder(): number;
+    setOrder(value: number): StringVerification;
+
+    getType(): StringVerificationType;
+    setType(value: StringVerificationType): StringVerification;
+
+    getValue(): string;
+    setValue(value: string): StringVerification;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): StringVerification.AsObject;
+    static toObject(includeInstance: boolean, msg: StringVerification): StringVerification.AsObject;
+    static serializeBinaryToWriter(message: StringVerification, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): StringVerification;
+    static deserializeBinaryFromReader(message: StringVerification, reader: jspb.BinaryReader): StringVerification;
+  }
+
+  export namespace StringVerification {
+    export type AsObject = {
+      order: number,
+      type: StringVerificationType,
+      value: string,
+    }
+  }
+
+
+  export class IntegerVerification extends jspb.Message {
+    getOrder(): number;
+    setOrder(value: number): IntegerVerification;
+
+    getType(): IntegerVerificationType;
+    setType(value: IntegerVerificationType): IntegerVerification;
+
+    getValue(): number;
+    setValue(value: number): IntegerVerification;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): IntegerVerification.AsObject;
+    static toObject(includeInstance: boolean, msg: IntegerVerification): IntegerVerification.AsObject;
+    static serializeBinaryToWriter(message: IntegerVerification, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): IntegerVerification;
+    static deserializeBinaryFromReader(message: IntegerVerification, reader: jspb.BinaryReader): IntegerVerification;
+  }
+
+  export namespace IntegerVerification {
+    export type AsObject = {
+      order: number,
+      type: IntegerVerificationType,
+      value: number,
+    }
+  }
+
+}
+
 export enum ChallengeType { 
   CHALLENGE_TYPE_UNSPECIFIED = 0,
   CHALLENGE_TYPE_DAILY = 1,
@@ -815,4 +909,13 @@ export enum Gender {
   GENDER_MALE = 1,
   GENDER_FEMALE = 2,
   GENDER_DIVERSE = 3,
+}
+export enum StringVerificationType { 
+  STRING_VERIFICATION_TYPE_UNSPECIFIED = 0,
+  STRING_VERIFICATION_TYPE_QR = 1,
+}
+export enum IntegerVerificationType { 
+  INTEGER_VERIFICATION_TYPE_UNSPECIFIED = 0,
+  INTEGER_VERIFICATION_TYPE_TIMER = 1,
+  INTEGER_VERIFICATION_TYPE_NUMBER = 2,
 }

@@ -192,7 +192,7 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
   factory UpdateUserRequest({
     $core.String? userId,
     $core.String? teamId,
-    $core.String? gender,
+    Gender? gender,
     $core.String? birthday,
     $core.double? pal,
     $core.int? length,
@@ -229,7 +229,7 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..aOS(2, _omitFieldNames ? '' : 'teamId')
-    ..aOS(3, _omitFieldNames ? '' : 'gender')
+    ..e<Gender>(3, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: Gender.GENDER_UNSPECIFIED, valueOf: Gender.valueOf, enumValues: Gender.values)
     ..aOS(4, _omitFieldNames ? '' : 'birthday')
     ..a<$core.double>(5, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OF)
     ..a<$core.int>(6, _omitFieldNames ? '' : 'length', $pb.PbFieldType.O3)
@@ -277,9 +277,9 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
   void clearTeamId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get gender => $_getSZ(2);
+  Gender get gender => $_getN(2);
   @$pb.TagNumber(3)
-  set gender($core.String v) { $_setString(2, v); }
+  set gender(Gender v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasGender() => $_has(2);
   @$pb.TagNumber(3)
@@ -326,7 +326,7 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
   factory UpdateUserResponse({
     $core.String? userId,
     $core.String? teamId,
-    $core.String? gender,
+    Gender? gender,
     $core.String? birthday,
     $core.double? pal,
     $core.int? length,
@@ -363,7 +363,7 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateUserResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..aOS(2, _omitFieldNames ? '' : 'teamId')
-    ..aOS(3, _omitFieldNames ? '' : 'gender')
+    ..e<Gender>(3, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: Gender.GENDER_UNSPECIFIED, valueOf: Gender.valueOf, enumValues: Gender.values)
     ..aOS(4, _omitFieldNames ? '' : 'birthday')
     ..a<$core.double>(5, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OF)
     ..a<$core.int>(6, _omitFieldNames ? '' : 'length', $pb.PbFieldType.O3)
@@ -411,9 +411,9 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
   void clearTeamId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get gender => $_getSZ(2);
+  Gender get gender => $_getN(2);
   @$pb.TagNumber(3)
-  set gender($core.String v) { $_setString(2, v); }
+  set gender(Gender v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasGender() => $_has(2);
   @$pb.TagNumber(3)
@@ -493,7 +493,6 @@ class GetAllTeamsResponse_Team extends $pb.GeneratedMessage {
     $core.String? teamId,
     $core.String? name,
     $core.String? description,
-    $core.String? image,
   }) {
     final $result = create();
     if (teamId != null) {
@@ -505,9 +504,6 @@ class GetAllTeamsResponse_Team extends $pb.GeneratedMessage {
     if (description != null) {
       $result.description = description;
     }
-    if (image != null) {
-      $result.image = image;
-    }
     return $result;
   }
   GetAllTeamsResponse_Team._() : super();
@@ -518,7 +514,6 @@ class GetAllTeamsResponse_Team extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'teamId')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..aOS(5, _omitFieldNames ? '' : 'image')
     ..hasRequiredFields = false
   ;
 
@@ -569,15 +564,6 @@ class GetAllTeamsResponse_Team extends $pb.GeneratedMessage {
   $core.bool hasDescription() => $_has(2);
   @$pb.TagNumber(3)
   void clearDescription() => clearField(3);
-
-  @$pb.TagNumber(5)
-  $core.String get image => $_getSZ(3);
-  @$pb.TagNumber(5)
-  set image($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasImage() => $_has(3);
-  @$pb.TagNumber(5)
-  void clearImage() => clearField(5);
 }
 
 class GetAllTeamsResponse extends $pb.GeneratedMessage {
@@ -1458,11 +1444,11 @@ class GetScoreResponse extends $pb.GeneratedMessage {
 
 class GetRewardsRequest extends $pb.GeneratedMessage {
   factory GetRewardsRequest({
-    $core.String? rewardId,
+    $core.String? userId,
   }) {
     final $result = create();
-    if (rewardId != null) {
-      $result.rewardId = rewardId;
+    if (userId != null) {
+      $result.userId = userId;
     }
     return $result;
   }
@@ -1471,7 +1457,7 @@ class GetRewardsRequest extends $pb.GeneratedMessage {
   factory GetRewardsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRewardsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'rewardId')
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..hasRequiredFields = false
   ;
 
@@ -1497,13 +1483,13 @@ class GetRewardsRequest extends $pb.GeneratedMessage {
   static GetRewardsRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get rewardId => $_getSZ(0);
+  $core.String get userId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set rewardId($core.String v) { $_setString(0, v); }
+  set userId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasRewardId() => $_has(0);
+  $core.bool hasUserId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearRewardId() => clearField(1);
+  void clearUserId() => clearField(1);
 }
 
 class GetRewardsResponse_Reward extends $pb.GeneratedMessage {
@@ -1927,7 +1913,7 @@ class StatsForTeamByUserResponse_GenderCount extends $pb.GeneratedMessage {
 class StatsForTeamByUserResponse extends $pb.GeneratedMessage {
   factory StatsForTeamByUserResponse({
     $core.String? teamId,
-    $core.double? score,
+    $fixnum.Int64? score,
     $core.Iterable<StatsForTeamByUserResponse_GenderCount>? genderCount,
     $core.double? averageAge,
     $fixnum.Int64? userCount,
@@ -1956,7 +1942,7 @@ class StatsForTeamByUserResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StatsForTeamByUserResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'teamId')
-    ..a<$core.double>(2, _omitFieldNames ? '' : 'score', $pb.PbFieldType.OF)
+    ..a<$fixnum.Int64>(2, _omitFieldNames ? '' : 'score', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..pc<StatsForTeamByUserResponse_GenderCount>(3, _omitFieldNames ? '' : 'genderCount', $pb.PbFieldType.PM, subBuilder: StatsForTeamByUserResponse_GenderCount.create)
     ..a<$core.double>(4, _omitFieldNames ? '' : 'averageAge', $pb.PbFieldType.OF)
     ..a<$fixnum.Int64>(5, _omitFieldNames ? '' : 'userCount', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
@@ -1994,9 +1980,9 @@ class StatsForTeamByUserResponse extends $pb.GeneratedMessage {
   void clearTeamId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.double get score => $_getN(1);
+  $fixnum.Int64 get score => $_getI64(1);
   @$pb.TagNumber(2)
-  set score($core.double v) { $_setFloat(1, v); }
+  set score($fixnum.Int64 v) { $_setInt64(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasScore() => $_has(1);
   @$pb.TagNumber(2)
@@ -2022,6 +2008,264 @@ class StatsForTeamByUserResponse extends $pb.GeneratedMessage {
   $core.bool hasUserCount() => $_has(4);
   @$pb.TagNumber(5)
   void clearUserCount() => clearField(5);
+}
+
+class VerificationRequest extends $pb.GeneratedMessage {
+  factory VerificationRequest({
+    $core.String? challengeId,
+  }) {
+    final $result = create();
+    if (challengeId != null) {
+      $result.challengeId = challengeId;
+    }
+    return $result;
+  }
+  VerificationRequest._() : super();
+  factory VerificationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory VerificationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'VerificationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'challengeId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  VerificationRequest clone() => VerificationRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  VerificationRequest copyWith(void Function(VerificationRequest) updates) => super.copyWith((message) => updates(message as VerificationRequest)) as VerificationRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static VerificationRequest create() => VerificationRequest._();
+  VerificationRequest createEmptyInstance() => create();
+  static $pb.PbList<VerificationRequest> createRepeated() => $pb.PbList<VerificationRequest>();
+  @$core.pragma('dart2js:noInline')
+  static VerificationRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<VerificationRequest>(create);
+  static VerificationRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get challengeId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set challengeId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChallengeId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChallengeId() => clearField(1);
+}
+
+class VerificationResponse_StringVerification extends $pb.GeneratedMessage {
+  factory VerificationResponse_StringVerification({
+    $core.int? order,
+    StringVerificationType? type,
+    $core.String? value,
+  }) {
+    final $result = create();
+    if (order != null) {
+      $result.order = order;
+    }
+    if (type != null) {
+      $result.type = type;
+    }
+    if (value != null) {
+      $result.value = value;
+    }
+    return $result;
+  }
+  VerificationResponse_StringVerification._() : super();
+  factory VerificationResponse_StringVerification.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory VerificationResponse_StringVerification.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'VerificationResponse.StringVerification', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'order', $pb.PbFieldType.OU3)
+    ..e<StringVerificationType>(2, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: StringVerificationType.STRING_VERIFICATION_TYPE_UNSPECIFIED, valueOf: StringVerificationType.valueOf, enumValues: StringVerificationType.values)
+    ..aOS(3, _omitFieldNames ? '' : 'value')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  VerificationResponse_StringVerification clone() => VerificationResponse_StringVerification()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  VerificationResponse_StringVerification copyWith(void Function(VerificationResponse_StringVerification) updates) => super.copyWith((message) => updates(message as VerificationResponse_StringVerification)) as VerificationResponse_StringVerification;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static VerificationResponse_StringVerification create() => VerificationResponse_StringVerification._();
+  VerificationResponse_StringVerification createEmptyInstance() => create();
+  static $pb.PbList<VerificationResponse_StringVerification> createRepeated() => $pb.PbList<VerificationResponse_StringVerification>();
+  @$core.pragma('dart2js:noInline')
+  static VerificationResponse_StringVerification getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<VerificationResponse_StringVerification>(create);
+  static VerificationResponse_StringVerification? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get order => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set order($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasOrder() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearOrder() => clearField(1);
+
+  @$pb.TagNumber(2)
+  StringVerificationType get type => $_getN(1);
+  @$pb.TagNumber(2)
+  set type(StringVerificationType v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasType() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearType() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get value => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set value($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasValue() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearValue() => clearField(3);
+}
+
+class VerificationResponse_IntegerVerification extends $pb.GeneratedMessage {
+  factory VerificationResponse_IntegerVerification({
+    $core.int? order,
+    IntegerVerificationType? type,
+    $fixnum.Int64? value,
+  }) {
+    final $result = create();
+    if (order != null) {
+      $result.order = order;
+    }
+    if (type != null) {
+      $result.type = type;
+    }
+    if (value != null) {
+      $result.value = value;
+    }
+    return $result;
+  }
+  VerificationResponse_IntegerVerification._() : super();
+  factory VerificationResponse_IntegerVerification.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory VerificationResponse_IntegerVerification.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'VerificationResponse.IntegerVerification', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'order', $pb.PbFieldType.OU3)
+    ..e<IntegerVerificationType>(2, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: IntegerVerificationType.INTEGER_VERIFICATION_TYPE_UNSPECIFIED, valueOf: IntegerVerificationType.valueOf, enumValues: IntegerVerificationType.values)
+    ..a<$fixnum.Int64>(3, _omitFieldNames ? '' : 'value', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  VerificationResponse_IntegerVerification clone() => VerificationResponse_IntegerVerification()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  VerificationResponse_IntegerVerification copyWith(void Function(VerificationResponse_IntegerVerification) updates) => super.copyWith((message) => updates(message as VerificationResponse_IntegerVerification)) as VerificationResponse_IntegerVerification;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static VerificationResponse_IntegerVerification create() => VerificationResponse_IntegerVerification._();
+  VerificationResponse_IntegerVerification createEmptyInstance() => create();
+  static $pb.PbList<VerificationResponse_IntegerVerification> createRepeated() => $pb.PbList<VerificationResponse_IntegerVerification>();
+  @$core.pragma('dart2js:noInline')
+  static VerificationResponse_IntegerVerification getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<VerificationResponse_IntegerVerification>(create);
+  static VerificationResponse_IntegerVerification? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get order => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set order($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasOrder() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearOrder() => clearField(1);
+
+  @$pb.TagNumber(2)
+  IntegerVerificationType get type => $_getN(1);
+  @$pb.TagNumber(2)
+  set type(IntegerVerificationType v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasType() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearType() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get value => $_getI64(2);
+  @$pb.TagNumber(3)
+  set value($fixnum.Int64 v) { $_setInt64(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasValue() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearValue() => clearField(3);
+}
+
+class VerificationResponse extends $pb.GeneratedMessage {
+  factory VerificationResponse({
+    $core.Iterable<VerificationResponse_StringVerification>? stringVerifications,
+    $core.Iterable<VerificationResponse_IntegerVerification>? integerVerifications,
+  }) {
+    final $result = create();
+    if (stringVerifications != null) {
+      $result.stringVerifications.addAll(stringVerifications);
+    }
+    if (integerVerifications != null) {
+      $result.integerVerifications.addAll(integerVerifications);
+    }
+    return $result;
+  }
+  VerificationResponse._() : super();
+  factory VerificationResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory VerificationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'VerificationResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..pc<VerificationResponse_StringVerification>(1, _omitFieldNames ? '' : 'stringVerifications', $pb.PbFieldType.PM, subBuilder: VerificationResponse_StringVerification.create)
+    ..pc<VerificationResponse_IntegerVerification>(2, _omitFieldNames ? '' : 'integerVerifications', $pb.PbFieldType.PM, subBuilder: VerificationResponse_IntegerVerification.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  VerificationResponse clone() => VerificationResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  VerificationResponse copyWith(void Function(VerificationResponse) updates) => super.copyWith((message) => updates(message as VerificationResponse)) as VerificationResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static VerificationResponse create() => VerificationResponse._();
+  VerificationResponse createEmptyInstance() => create();
+  static $pb.PbList<VerificationResponse> createRepeated() => $pb.PbList<VerificationResponse>();
+  @$core.pragma('dart2js:noInline')
+  static VerificationResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<VerificationResponse>(create);
+  static VerificationResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<VerificationResponse_StringVerification> get stringVerifications => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.List<VerificationResponse_IntegerVerification> get integerVerifications => $_getList(1);
 }
 
 

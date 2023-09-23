@@ -57,6 +57,10 @@ class ImpulseServiceClient extends $grpc.Client {
       '/proto.services.impulse_svc.v1.ImpulseService/StatsForTeamByUser',
       ($2.StatsForTeamByUserRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $2.StatsForTeamByUserResponse.fromBuffer(value));
+  static final _$verification = $grpc.ClientMethod<$2.VerificationRequest, $2.VerificationResponse>(
+      '/proto.services.impulse_svc.v1.ImpulseService/Verification',
+      ($2.VerificationRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.VerificationResponse.fromBuffer(value));
 
   ImpulseServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -98,6 +102,10 @@ class ImpulseServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$2.StatsForTeamByUserResponse> statsForTeamByUser($2.StatsForTeamByUserRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$statsForTeamByUser, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$2.VerificationResponse> verification($2.VerificationRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$verification, request, options: options);
   }
 }
 
@@ -169,6 +177,13 @@ abstract class ImpulseServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $2.StatsForTeamByUserRequest.fromBuffer(value),
         ($2.StatsForTeamByUserResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.VerificationRequest, $2.VerificationResponse>(
+        'Verification',
+        verification_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $2.VerificationRequest.fromBuffer(value),
+        ($2.VerificationResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$2.CreateUserResponse> createUser_Pre($grpc.ServiceCall call, $async.Future<$2.CreateUserRequest> request) async {
@@ -207,6 +222,10 @@ abstract class ImpulseServiceBase extends $grpc.Service {
     return statsForTeamByUser(call, await request);
   }
 
+  $async.Future<$2.VerificationResponse> verification_Pre($grpc.ServiceCall call, $async.Future<$2.VerificationRequest> request) async {
+    return verification(call, await request);
+  }
+
   $async.Future<$2.CreateUserResponse> createUser($grpc.ServiceCall call, $2.CreateUserRequest request);
   $async.Future<$2.UpdateUserResponse> updateUser($grpc.ServiceCall call, $2.UpdateUserRequest request);
   $async.Future<$2.TrackChallengeResponse> trackChallenge($grpc.ServiceCall call, $2.TrackChallengeRequest request);
@@ -216,4 +235,5 @@ abstract class ImpulseServiceBase extends $grpc.Service {
   $async.Future<$2.GetAllRewardsResponse> getAllRewards($grpc.ServiceCall call, $2.GetAllRewardsRequest request);
   $async.Future<$2.GetAllTeamsResponse> getAllTeams($grpc.ServiceCall call, $2.GetAllTeamsRequest request);
   $async.Future<$2.StatsForTeamByUserResponse> statsForTeamByUser($grpc.ServiceCall call, $2.StatsForTeamByUserRequest request);
+  $async.Future<$2.VerificationResponse> verification($grpc.ServiceCall call, $2.VerificationRequest request);
 }
