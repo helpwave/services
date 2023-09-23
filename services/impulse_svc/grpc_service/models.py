@@ -89,7 +89,7 @@ class Team(models.Model):
 
     @property
     def avg_age(self):
-        return sum(u.age for u in self.user_set.all()) / self.user_set.all().count()
+        return sum(u.age for u in self.user_set.all()) / (self.user_set.all().count() or 1)
 
 
 class User(models.Model):
@@ -100,7 +100,7 @@ class User(models.Model):
 
     id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username: str = models.CharField(max_length=50)
-    gender: str = models.CharField(max_length=10, choices=Gender.choices)
+    gender: int = models.IntegerField(choices=Gender.choices)
     birthday: datetime = models.DateTimeField()
     pal: float = models.FloatField()
     image: str = models.CharField(max_length=100)
