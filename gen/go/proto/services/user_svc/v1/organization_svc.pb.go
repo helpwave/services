@@ -80,10 +80,10 @@ type CreateOrganizationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LongName     string `protobuf:"bytes,1,opt,name=long_name,json=longName,proto3" json:"long_name,omitempty"`              // @gotags: validate:"required,gte=4,lte=64"
-	ShortName    string `protobuf:"bytes,2,opt,name=short_name,json=shortName,proto3" json:"short_name,omitempty"`           // @gotags: validate:"omitempty,gte=2,lte=16"
-	ContactEmail string `protobuf:"bytes,3,opt,name=contact_email,json=contactEmail,proto3" json:"contact_email,omitempty"`  // @gotags: validate:"required,email"
-	IsPersonal   *bool  `protobuf:"varint,4,opt,name=is_personal,json=isPersonal,proto3,oneof" json:"is_personal,omitempty"` // default: false
+	LongName     string `protobuf:"bytes,1,opt,name=long_name,json=longName,proto3" json:"long_name,omitempty" validate:"required,gte=4,lte=64"`      // @gotags: validate:"required,gte=4,lte=64"
+	ShortName    string `protobuf:"bytes,2,opt,name=short_name,json=shortName,proto3" json:"short_name,omitempty" validate:"omitempty,gte=2,lte=16"`  // @gotags: validate:"omitempty,gte=2,lte=16"
+	ContactEmail string `protobuf:"bytes,3,opt,name=contact_email,json=contactEmail,proto3" json:"contact_email,omitempty" validate:"required,email"` // @gotags: validate:"required,email"
+	IsPersonal   *bool  `protobuf:"varint,4,opt,name=is_personal,json=isPersonal,proto3,oneof" json:"is_personal,omitempty"`                          // default: false
 }
 
 func (x *CreateOrganizationRequest) Reset() {
@@ -198,11 +198,11 @@ type CreateOrganizationForUserRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LongName     string `protobuf:"bytes,1,opt,name=long_name,json=longName,proto3" json:"long_name,omitempty"`              // @gotags: validate:"required,gte=4,lte=64"
-	ShortName    string `protobuf:"bytes,2,opt,name=short_name,json=shortName,proto3" json:"short_name,omitempty"`           // @gotags: validate:"omitempty,gte=2,lte=16"
-	ContactEmail string `protobuf:"bytes,3,opt,name=contact_email,json=contactEmail,proto3" json:"contact_email,omitempty"`  // @gotags: validate:"required,email"
-	IsPersonal   *bool  `protobuf:"varint,4,opt,name=is_personal,json=isPersonal,proto3,oneof" json:"is_personal,omitempty"` // default: false
-	UserId       string `protobuf:"bytes,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                    // @gotags: validate:"uuid4"
+	LongName     string `protobuf:"bytes,1,opt,name=long_name,json=longName,proto3" json:"long_name,omitempty" validate:"required,gte=4,lte=64"`      // @gotags: validate:"required,gte=4,lte=64"
+	ShortName    string `protobuf:"bytes,2,opt,name=short_name,json=shortName,proto3" json:"short_name,omitempty" validate:"omitempty,gte=2,lte=16"`  // @gotags: validate:"omitempty,gte=2,lte=16"
+	ContactEmail string `protobuf:"bytes,3,opt,name=contact_email,json=contactEmail,proto3" json:"contact_email,omitempty" validate:"required,email"` // @gotags: validate:"required,email"
+	IsPersonal   *bool  `protobuf:"varint,4,opt,name=is_personal,json=isPersonal,proto3,oneof" json:"is_personal,omitempty"`                          // default: false
+	UserId       string `protobuf:"bytes,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" validate:"uuid4"`                            // @gotags: validate:"uuid4"
 }
 
 func (x *CreateOrganizationForUserRequest) Reset() {
@@ -371,7 +371,7 @@ type GetOrganizationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetOrganizationRequest) Reset() {
@@ -513,7 +513,7 @@ type GetOrganizationsByUserRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // @gotags: validate:"uuid4"
+	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetOrganizationsByUserRequest) Reset() {
@@ -692,7 +692,7 @@ type UpdateOrganizationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id           string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id           string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 	LongName     *string `protobuf:"bytes,2,opt,name=long_name,json=longName,proto3,oneof" json:"long_name,omitempty"`
 	ShortName    *string `protobuf:"bytes,3,opt,name=short_name,json=shortName,proto3,oneof" json:"short_name,omitempty"`
 	ContactEmail *string `protobuf:"bytes,4,opt,name=contact_email,json=contactEmail,proto3,oneof" json:"contact_email,omitempty"`
@@ -817,7 +817,7 @@ type DeleteOrganizationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *DeleteOrganizationRequest) Reset() {
@@ -902,7 +902,7 @@ type GetMembersByOrganizationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetMembersByOrganizationRequest) Reset() {
@@ -996,8 +996,8 @@ type AddMemberRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                       // @gotags: validate:"uuid4"
-	UserId string `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // @gotags: validate:"uuid4"
+	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`                       // @gotags: validate:"uuid4"
+	UserId string `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *AddMemberRequest) Reset() {
@@ -1089,8 +1089,8 @@ type RemoveMemberRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                       // @gotags: validate:"uuid4"
-	UserId string `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // @gotags: validate:"uuid4"
+	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`                       // @gotags: validate:"uuid4"
+	UserId string `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *RemoveMemberRequest) Reset() {
@@ -1182,8 +1182,8 @@ type InviteMemberRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	OrganizationId string `protobuf:"bytes,1,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty"` // @gotags: validate:"uuid4"
-	Email          string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`                                         // @gotags: validate:"required,email"
+	OrganizationId string `protobuf:"bytes,1,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
+	Email          string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty" validate:"required,email"`                                // @gotags: validate:"required,email"
 }
 
 func (x *InviteMemberRequest) Reset() {
@@ -1284,7 +1284,7 @@ type GetInvitationsByOrganizationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	OrganizationId string           `protobuf:"bytes,1,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty"` // @gotags: validate:"uuid4"
+	OrganizationId string           `protobuf:"bytes,1,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 	State          *InvitationState `protobuf:"varint,2,opt,name=state,proto3,enum=proto.services.user_svc.v1.InvitationState,oneof" json:"state,omitempty"`
 }
 
@@ -1481,7 +1481,7 @@ type AcceptInvitationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	InvitationId string `protobuf:"bytes,1,opt,name=invitation_id,json=invitationId,proto3" json:"invitation_id,omitempty"` // @gotags: validate:"uuid4"
+	InvitationId string `protobuf:"bytes,1,opt,name=invitation_id,json=invitationId,proto3" json:"invitation_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *AcceptInvitationRequest) Reset() {
@@ -1566,7 +1566,7 @@ type DeclineInvitationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	InvitationId string `protobuf:"bytes,1,opt,name=invitation_id,json=invitationId,proto3" json:"invitation_id,omitempty"` // @gotags: validate:"uuid4"
+	InvitationId string `protobuf:"bytes,1,opt,name=invitation_id,json=invitationId,proto3" json:"invitation_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *DeclineInvitationRequest) Reset() {
@@ -1651,7 +1651,7 @@ type RevokeInvitationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	InvitationId string `protobuf:"bytes,1,opt,name=invitation_id,json=invitationId,proto3" json:"invitation_id,omitempty"` // @gotags: validate:"uuid4"
+	InvitationId string `protobuf:"bytes,1,opt,name=invitation_id,json=invitationId,proto3" json:"invitation_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *RevokeInvitationRequest) Reset() {

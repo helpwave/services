@@ -25,7 +25,7 @@ type CreateTaskTemplateRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name        string                               `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"` // @gotags: validate:"required"
+	Name        string                               `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" validate:"required"` // @gotags: validate:"required"
 	Description *string                              `protobuf:"bytes,2,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	WardId      *string                              `protobuf:"bytes,4,opt,name=ward_id,json=wardId,proto3,oneof" json:"ward_id,omitempty"`
 	Subtasks    []*CreateTaskTemplateRequest_SubTask `protobuf:"bytes,5,rep,name=subtasks,proto3" json:"subtasks,omitempty"` // When passed, every subtask is a seperate entity
@@ -228,7 +228,7 @@ type DeleteTaskTemplateRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *DeleteTaskTemplateRequest) Reset() {
@@ -313,7 +313,7 @@ type DeleteTaskTemplateSubTaskRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *DeleteTaskTemplateSubTaskRequest) Reset() {
@@ -398,7 +398,7 @@ type UpdateTaskTemplateRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"required"
+	Id          string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"required"` // @gotags: validate:"required"
 	Name        *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Description *string `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
 }
@@ -499,7 +499,7 @@ type UpdateTaskTemplateSubTaskRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	SubtaskId string  `protobuf:"bytes,1,opt,name=subtask_id,json=subtaskId,proto3" json:"subtask_id,omitempty"` // @gotags: validate:"required"
+	SubtaskId string  `protobuf:"bytes,1,opt,name=subtask_id,json=subtaskId,proto3" json:"subtask_id,omitempty" validate:"required"` // @gotags: validate:"required"
 	Name      *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 }
 
@@ -592,8 +592,8 @@ type CreateTaskTemplateSubTaskRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	TaskTemplateId string `protobuf:"bytes,1,opt,name=task_template_id,json=taskTemplateId,proto3" json:"task_template_id,omitempty"` // @gotags: validate:"required"
-	Name           string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                                             // @gotags: validate:"required"
+	TaskTemplateId string `protobuf:"bytes,1,opt,name=task_template_id,json=taskTemplateId,proto3" json:"task_template_id,omitempty" validate:"required"` // @gotags: validate:"required"
+	Name           string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" validate:"required"`                                             // @gotags: validate:"required"
 }
 
 func (x *CreateTaskTemplateSubTaskRequest) Reset() {
