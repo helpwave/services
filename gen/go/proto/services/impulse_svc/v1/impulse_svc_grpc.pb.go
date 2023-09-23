@@ -27,6 +27,7 @@ const (
 	ImpulseService_GetRewards_FullMethodName          = "/proto.services.impulse_svc.v1.ImpulseService/GetRewards"
 	ImpulseService_GetAllRewards_FullMethodName       = "/proto.services.impulse_svc.v1.ImpulseService/GetAllRewards"
 	ImpulseService_GetAllTeams_FullMethodName         = "/proto.services.impulse_svc.v1.ImpulseService/GetAllTeams"
+	ImpulseService_StatsForTeamByUser_FullMethodName  = "/proto.services.impulse_svc.v1.ImpulseService/StatsForTeamByUser"
 )
 
 // ImpulseServiceClient is the client API for ImpulseService service.
@@ -41,6 +42,7 @@ type ImpulseServiceClient interface {
 	GetRewards(ctx context.Context, in *GetRewardsRequest, opts ...grpc.CallOption) (*GetRewardsResponse, error)
 	GetAllRewards(ctx context.Context, in *GetAllRewardsRequest, opts ...grpc.CallOption) (*GetAllRewardsResponse, error)
 	GetAllTeams(ctx context.Context, in *GetAllTeamsRequest, opts ...grpc.CallOption) (*GetAllTeamsResponse, error)
+	StatsForTeamByUser(ctx context.Context, in *StatsForTeamByUserRequest, opts ...grpc.CallOption) (*StatsForTeamByUserResponse, error)
 }
 
 type impulseServiceClient struct {
@@ -123,6 +125,15 @@ func (c *impulseServiceClient) GetAllTeams(ctx context.Context, in *GetAllTeamsR
 	return out, nil
 }
 
+func (c *impulseServiceClient) StatsForTeamByUser(ctx context.Context, in *StatsForTeamByUserRequest, opts ...grpc.CallOption) (*StatsForTeamByUserResponse, error) {
+	out := new(StatsForTeamByUserResponse)
+	err := c.cc.Invoke(ctx, ImpulseService_StatsForTeamByUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ImpulseServiceServer is the server API for ImpulseService service.
 // All implementations must embed UnimplementedImpulseServiceServer
 // for forward compatibility
@@ -135,6 +146,7 @@ type ImpulseServiceServer interface {
 	GetRewards(context.Context, *GetRewardsRequest) (*GetRewardsResponse, error)
 	GetAllRewards(context.Context, *GetAllRewardsRequest) (*GetAllRewardsResponse, error)
 	GetAllTeams(context.Context, *GetAllTeamsRequest) (*GetAllTeamsResponse, error)
+	StatsForTeamByUser(context.Context, *StatsForTeamByUserRequest) (*StatsForTeamByUserResponse, error)
 	mustEmbedUnimplementedImpulseServiceServer()
 }
 
@@ -165,6 +177,9 @@ func (UnimplementedImpulseServiceServer) GetAllRewards(context.Context, *GetAllR
 }
 func (UnimplementedImpulseServiceServer) GetAllTeams(context.Context, *GetAllTeamsRequest) (*GetAllTeamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllTeams not implemented")
+}
+func (UnimplementedImpulseServiceServer) StatsForTeamByUser(context.Context, *StatsForTeamByUserRequest) (*StatsForTeamByUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StatsForTeamByUser not implemented")
 }
 func (UnimplementedImpulseServiceServer) mustEmbedUnimplementedImpulseServiceServer() {}
 
@@ -323,6 +338,24 @@ func _ImpulseService_GetAllTeams_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ImpulseService_StatsForTeamByUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StatsForTeamByUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ImpulseServiceServer).StatsForTeamByUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ImpulseService_StatsForTeamByUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ImpulseServiceServer).StatsForTeamByUser(ctx, req.(*StatsForTeamByUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ImpulseService_ServiceDesc is the grpc.ServiceDesc for ImpulseService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -361,6 +394,10 @@ var ImpulseService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllTeams",
 			Handler:    _ImpulseService_GetAllTeams_Handler,
+		},
+		{
+			MethodName: "StatsForTeamByUser",
+			Handler:    _ImpulseService_StatsForTeamByUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

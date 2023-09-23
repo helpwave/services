@@ -44,12 +44,28 @@ final $typed_data.Uint8List challengeCategoryDescriptor = $convert.base64Decode(
     'IbChdDSEFMTEVOR0VfQ0FURUdPUllfRk9PRBABEh4KGkNIQUxMRU5HRV9DQVRFR09SWV9GSVRO'
     'RVNTEAI=');
 
+@$core.Deprecated('Use genderDescriptor instead')
+const Gender$json = {
+  '1': 'Gender',
+  '2': [
+    {'1': 'GENDER_UNSPECIFIED', '2': 0},
+    {'1': 'GENDER_MALE', '2': 1},
+    {'1': 'GENDER_FEMALE', '2': 2},
+    {'1': 'GENDER_DIVERSE', '2': 3},
+  ],
+};
+
+/// Descriptor for `Gender`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List genderDescriptor = $convert.base64Decode(
+    'CgZHZW5kZXISFgoSR0VOREVSX1VOU1BFQ0lGSUVEEAASDwoLR0VOREVSX01BTEUQARIRCg1HRU'
+    '5ERVJfRkVNQUxFEAISEgoOR0VOREVSX0RJVkVSU0UQAw==');
+
 @$core.Deprecated('Use createUserRequestDescriptor instead')
 const CreateUserRequest$json = {
   '1': 'CreateUserRequest',
   '2': [
     {'1': 'username', '3': 1, '4': 1, '5': 9, '10': 'username'},
-    {'1': 'gender', '3': 2, '4': 1, '5': 9, '10': 'gender'},
+    {'1': 'gender', '3': 2, '4': 1, '5': 14, '6': '.proto.services.impulse_svc.v1.Gender', '10': 'gender'},
     {'1': 'birthday', '3': 3, '4': 1, '5': 9, '10': 'birthday'},
     {'1': 'pal', '3': 4, '4': 1, '5': 2, '10': 'pal'},
     {'1': 'length', '3': 5, '4': 1, '5': 5, '10': 'length'},
@@ -59,9 +75,10 @@ const CreateUserRequest$json = {
 
 /// Descriptor for `CreateUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createUserRequestDescriptor = $convert.base64Decode(
-    'ChFDcmVhdGVVc2VyUmVxdWVzdBIaCgh1c2VybmFtZRgBIAEoCVIIdXNlcm5hbWUSFgoGZ2VuZG'
-    'VyGAIgASgJUgZnZW5kZXISGgoIYmlydGhkYXkYAyABKAlSCGJpcnRoZGF5EhAKA3BhbBgEIAEo'
-    'AlIDcGFsEhYKBmxlbmd0aBgFIAEoBVIGbGVuZ3RoEhYKBndlaWdodBgGIAEoAlIGd2VpZ2h0');
+    'ChFDcmVhdGVVc2VyUmVxdWVzdBIaCgh1c2VybmFtZRgBIAEoCVIIdXNlcm5hbWUSPQoGZ2VuZG'
+    'VyGAIgASgOMiUucHJvdG8uc2VydmljZXMuaW1wdWxzZV9zdmMudjEuR2VuZGVyUgZnZW5kZXIS'
+    'GgoIYmlydGhkYXkYAyABKAlSCGJpcnRoZGF5EhAKA3BhbBgEIAEoAlIDcGFsEhYKBmxlbmd0aB'
+    'gFIAEoBVIGbGVuZ3RoEhYKBndlaWdodBgGIAEoAlIGd2VpZ2h0');
 
 @$core.Deprecated('Use createUserResponseDescriptor instead')
 const CreateUserResponse$json = {
@@ -409,4 +426,48 @@ final $typed_data.Uint8List getAllRewardsResponseDescriptor = $convert.base64Dec
     'dQoGUmV3YXJkEhsKCXJld2FyZF9pZBgBIAEoCVIIcmV3YXJkSWQSFAoFdGl0bGUYAiABKAlSBX'
     'RpdGxlEiAKC2Rlc2NyaXB0aW9uGAMgASgJUgtkZXNjcmlwdGlvbhIWCgZwb2ludHMYBSABKARS'
     'BnBvaW50cw==');
+
+@$core.Deprecated('Use statsForTeamByUserRequestDescriptor instead')
+const StatsForTeamByUserRequest$json = {
+  '1': 'StatsForTeamByUserRequest',
+  '2': [
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+  ],
+};
+
+/// Descriptor for `StatsForTeamByUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List statsForTeamByUserRequestDescriptor = $convert.base64Decode(
+    'ChlTdGF0c0ZvclRlYW1CeVVzZXJSZXF1ZXN0EhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZA==');
+
+@$core.Deprecated('Use statsForTeamByUserResponseDescriptor instead')
+const StatsForTeamByUserResponse$json = {
+  '1': 'StatsForTeamByUserResponse',
+  '2': [
+    {'1': 'team_id', '3': 1, '4': 1, '5': 9, '10': 'teamId'},
+    {'1': 'score', '3': 2, '4': 1, '5': 2, '10': 'score'},
+    {'1': 'gender_count', '3': 3, '4': 3, '5': 11, '6': '.proto.services.impulse_svc.v1.StatsForTeamByUserResponse.GenderCount', '10': 'genderCount'},
+    {'1': 'average_age', '3': 4, '4': 1, '5': 2, '10': 'averageAge'},
+    {'1': 'user_count', '3': 5, '4': 1, '5': 4, '10': 'userCount'},
+  ],
+  '3': [StatsForTeamByUserResponse_GenderCount$json],
+};
+
+@$core.Deprecated('Use statsForTeamByUserResponseDescriptor instead')
+const StatsForTeamByUserResponse_GenderCount$json = {
+  '1': 'GenderCount',
+  '2': [
+    {'1': 'gender', '3': 1, '4': 1, '5': 14, '6': '.proto.services.impulse_svc.v1.Gender', '10': 'gender'},
+    {'1': 'count', '3': 2, '4': 1, '5': 13, '10': 'count'},
+  ],
+};
+
+/// Descriptor for `StatsForTeamByUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List statsForTeamByUserResponseDescriptor = $convert.base64Decode(
+    'ChpTdGF0c0ZvclRlYW1CeVVzZXJSZXNwb25zZRIXCgd0ZWFtX2lkGAEgASgJUgZ0ZWFtSWQSFA'
+    'oFc2NvcmUYAiABKAJSBXNjb3JlEmgKDGdlbmRlcl9jb3VudBgDIAMoCzJFLnByb3RvLnNlcnZp'
+    'Y2VzLmltcHVsc2Vfc3ZjLnYxLlN0YXRzRm9yVGVhbUJ5VXNlclJlc3BvbnNlLkdlbmRlckNvdW'
+    '50UgtnZW5kZXJDb3VudBIfCgthdmVyYWdlX2FnZRgEIAEoAlIKYXZlcmFnZUFnZRIdCgp1c2Vy'
+    'X2NvdW50GAUgASgEUgl1c2VyQ291bnQaYgoLR2VuZGVyQ291bnQSPQoGZ2VuZGVyGAEgASgOMi'
+    'UucHJvdG8uc2VydmljZXMuaW1wdWxzZV9zdmMudjEuR2VuZGVyUgZnZW5kZXISFAoFY291bnQY'
+    'AiABKA1SBWNvdW50');
 

@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import User, Challenge, UserChallenge, Reward, Team, VerificationInt, VerificationStr
 
 
-class UserChallengeInline(admin.TabularInline):
+class UserChallengeInlineAdmin(admin.TabularInline):
     model = UserChallenge
 
 
@@ -16,9 +16,9 @@ class VerificationStrInlineAdmin(admin.TabularInline):
 
 
 @admin.register(User)
-class User(admin.ModelAdmin):
+class UserAdmin(admin.ModelAdmin):
     inlines = [
-        UserChallengeInline
+        UserChallengeInlineAdmin
     ]
     readonly_fields = [
         "score"
@@ -26,9 +26,14 @@ class User(admin.ModelAdmin):
 
 
 @admin.register(Team)
-class User(admin.ModelAdmin):
+class TeamAdmin(admin.ModelAdmin):
     readonly_fields = [
-        "score"
+        "score",
+        "user_count",
+        "male_count",
+        "female_count",
+        "diverse_count",
+        "avg_age",
     ]
 
 

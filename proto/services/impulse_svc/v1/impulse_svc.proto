@@ -18,13 +18,20 @@ enum ChallengeCategory {
   CHALLENGE_CATEGORY_FITNESS = 2;
 }
 
+enum Gender {
+  GENDER_UNSPECIFIED = 0;
+  GENDER_MALE = 1;
+  GENDER_FEMALE = 2;
+  GENDER_DIVERSE = 3;
+}
+
 //
 // CreateUser
 //
 
 message CreateUserRequest {
   string username = 1;
-  string gender = 2;
+  Gender gender = 2;
   string birthday = 3;
   float pal = 4;
   int32 length = 5;
@@ -191,6 +198,22 @@ message GetAllRewardsResponse {
   }
 }
 
+message StatsForTeamByUserRequest {
+  string user_id = 1;
+}
+
+message StatsForTeamByUserResponse {
+  string team_id = 1;
+  float score = 2;
+  repeated GenderCount gender_count = 3;
+  float average_age = 4;
+  uint64 user_count = 5;
+
+  message GenderCount {
+    Gender gender = 1;
+    uint32 count = 2;
+  }
+}
 
 //
 // ImpulseService
@@ -205,4 +228,5 @@ service ImpulseService {
   rpc GetRewards(GetRewardsRequest) returns (GetRewardsResponse) {}
   rpc GetAllRewards(GetAllRewardsRequest) returns (GetAllRewardsResponse) {}
   rpc GetAllTeams(GetAllTeamsRequest) returns (GetAllTeamsResponse) {}
+  rpc StatsForTeamByUser(StatsForTeamByUserRequest) returns (StatsForTeamByUserResponse) {}
 }

@@ -565,5 +565,66 @@ proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.getAll
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.impulse_svc.v1.StatsForTeamByUserRequest,
+ *   !proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse>}
+ */
+const methodDescriptor_ImpulseService_StatsForTeamByUser = new grpc.web.MethodDescriptor(
+  '/proto.services.impulse_svc.v1.ImpulseService/StatsForTeamByUser',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.impulse_svc.v1.StatsForTeamByUserRequest,
+  proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse,
+  /**
+   * @param {!proto.proto.services.impulse_svc.v1.StatsForTeamByUserRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.impulse_svc.v1.StatsForTeamByUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.impulse_svc.v1.ImpulseServiceClient.prototype.statsForTeamByUser =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.impulse_svc.v1.ImpulseService/StatsForTeamByUser',
+      request,
+      metadata || {},
+      methodDescriptor_ImpulseService_StatsForTeamByUser,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.impulse_svc.v1.StatsForTeamByUserRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.statsForTeamByUser =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.impulse_svc.v1.ImpulseService/StatsForTeamByUser',
+      request,
+      metadata || {},
+      methodDescriptor_ImpulseService_StatsForTeamByUser);
+};
+
+
 module.exports = proto.proto.services.impulse_svc.v1;
 

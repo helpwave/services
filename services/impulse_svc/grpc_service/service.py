@@ -205,6 +205,33 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
                 ) for reward in rewards
             ]
         )
+        
+    def StatsForTeamByUser(self, request, context):
+        user = User.objects.get(id=request.user_id)
+        team = user.team
+        
+        return impulse_svc_pb2.StatsForTeamByUserResponse(
+            team=impulse_svc_pb2.Team(
+                id=str(team.id),
+                score=team.score,
+                gender_count=[
+                        impulse_svc_pb2.GenderCount(
+                            gender=User.Gender.MALE,
+                            count=team.male_count
+                        ),
+                        impulse_svc_pb2.GenderCount(
+                            gender=User.Gender.FEMALE,
+                            count=team.female_count,
+                        ),
+                        impulse_svc_pb2.GenderCount(
+                            gender=User.Gender.DIVERSE,
+                            count=team.diverse_count,
+                        )
+                    ],
+                average_age=team.avg_age,
+                user_count=team.user_count,
+            )
+        )
 
 
 def grpc_hook(server):
