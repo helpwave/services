@@ -5763,9 +5763,10 @@ proto.proto.services.impulse_svc.v1.ChallengeCategory = {
  * @enum {number}
  */
 proto.proto.services.impulse_svc.v1.Gender = {
-  MALE: 0,
-  FEMALE: 1,
-  DIVERSE: 2
+  GENDER_UNSPECIFIED: 0,
+  MALE: 1,
+  FEMALE: 2,
+  DIVERSE: 3
 };
 
 goog.object.extend(exports, proto.proto.services.impulse_svc.v1);

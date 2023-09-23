@@ -46,7 +46,7 @@ class CreateUserRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'username')
-    ..e<Gender>(2, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: Gender.MALE, valueOf: Gender.valueOf, enumValues: Gender.values)
+    ..e<Gender>(2, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: Gender.GENDER_UNSPECIFIED, valueOf: Gender.valueOf, enumValues: Gender.values)
     ..aOS(3, _omitFieldNames ? '' : 'birthday')
     ..a<$core.double>(4, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OF)
     ..hasRequiredFields = false
@@ -1795,7 +1795,7 @@ class StatsForTeamByUserResponse_GenderCount extends $pb.GeneratedMessage {
   factory StatsForTeamByUserResponse_GenderCount.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StatsForTeamByUserResponse.GenderCount', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..e<Gender>(1, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: Gender.MALE, valueOf: Gender.valueOf, enumValues: Gender.values)
+    ..e<Gender>(1, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: Gender.GENDER_UNSPECIFIED, valueOf: Gender.valueOf, enumValues: Gender.values)
     ..a<$core.int>(2, _omitFieldNames ? '' : 'count', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;

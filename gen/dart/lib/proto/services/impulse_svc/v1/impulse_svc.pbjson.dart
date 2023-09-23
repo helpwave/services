@@ -48,15 +48,17 @@ final $typed_data.Uint8List challengeCategoryDescriptor = $convert.base64Decode(
 const Gender$json = {
   '1': 'Gender',
   '2': [
-    {'1': 'MALE', '2': 0},
-    {'1': 'FEMALE', '2': 1},
-    {'1': 'DIVERSE', '2': 2},
+    {'1': 'GENDER_UNSPECIFIED', '2': 0},
+    {'1': 'MALE', '2': 1},
+    {'1': 'FEMALE', '2': 2},
+    {'1': 'DIVERSE', '2': 3},
   ],
 };
 
 /// Descriptor for `Gender`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List genderDescriptor = $convert.base64Decode(
-    'CgZHZW5kZXISCAoETUFMRRAAEgoKBkZFTUFMRRABEgsKB0RJVkVSU0UQAg==');
+    'CgZHZW5kZXISFgoSR0VOREVSX1VOU1BFQ0lGSUVEEAASCAoETUFMRRABEgoKBkZFTUFMRRACEg'
+    'sKB0RJVkVSU0UQAw==');
 
 @$core.Deprecated('Use createUserRequestDescriptor instead')
 const CreateUserRequest$json = {

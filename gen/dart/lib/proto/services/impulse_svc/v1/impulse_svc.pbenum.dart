@@ -48,11 +48,13 @@ class ChallengeCategory extends $pb.ProtobufEnum {
 }
 
 class Gender extends $pb.ProtobufEnum {
-  static const Gender MALE = Gender._(0, _omitEnumNames ? '' : 'MALE');
-  static const Gender FEMALE = Gender._(1, _omitEnumNames ? '' : 'FEMALE');
-  static const Gender DIVERSE = Gender._(2, _omitEnumNames ? '' : 'DIVERSE');
+  static const Gender GENDER_UNSPECIFIED = Gender._(0, _omitEnumNames ? '' : 'GENDER_UNSPECIFIED');
+  static const Gender MALE = Gender._(1, _omitEnumNames ? '' : 'MALE');
+  static const Gender FEMALE = Gender._(2, _omitEnumNames ? '' : 'FEMALE');
+  static const Gender DIVERSE = Gender._(3, _omitEnumNames ? '' : 'DIVERSE');
 
   static const $core.List<Gender> values = <Gender> [
+    GENDER_UNSPECIFIED,
     MALE,
     FEMALE,
     DIVERSE,

@@ -94,9 +94,9 @@ class Team(models.Model):
 
 class User(models.Model):
     class Gender(models.TextChoices):
-        MALE = 0, _('Männlich')
-        FEMALE = 1, _('Weiblich')
-        DIVERSE = 2, _('Divers')
+        MALE = 1, _('Männlich')
+        FEMALE = 2, _('Weiblich')
+        DIVERSE = 3, _('Divers')
 
     id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username: str = models.CharField(max_length=50)
