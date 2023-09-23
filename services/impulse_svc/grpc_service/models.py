@@ -20,20 +20,20 @@ class Verification(models.Model):
 
 
 class VerificationStr(Verification):
-    class VerificationStrType(models.TextChoices):
-        QR = 'qr', _('QR Code')
+    class VerificationStrType(models.IntegerChoices):
+        QR = 1
 
-    type = models.CharField(max_length=10, choices=VerificationStrType.choices)
-    value = models.CharField(max_length=512)
+    type: int = models.IntegerField(choices=VerificationStrType.choices)
+    value: str = models.CharField(max_length=512)
 
 
 class VerificationInt(Verification):
-    class VerificationIntType(models.TextChoices):
-        TIMER = 'timer', _('Stopuhr')
-        Number = 'number', _('Nummer')
+    class VerificationIntType(models.IntegerChoices):
+        TIMER = 1
+        NUMBER = 2
 
-    type = models.CharField(max_length=10, choices=VerificationIntType.choices)
-    value = models.IntegerField()
+    type: int = models.IntegerField(choices=VerificationIntType.choices)
+    value: int = models.IntegerField()
 
 
 class Challenge(models.Model):
@@ -60,7 +60,7 @@ class Challenge(models.Model):
     unit: str = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.title
+        return f"{self.title} - {self.id}"
 
 
 class UserChallenge(models.Model):
@@ -77,7 +77,7 @@ class Reward(models.Model):
     points: int = models.IntegerField()
 
     def __str__(self):
-        return self.title
+        return f"{self.title} - {self.id}"
 
 
 class Team(models.Model):
@@ -86,7 +86,7 @@ class Team(models.Model):
     description: str = models.TextField()
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.id}"
 
     def get_gender_count(self, gender: User.Gender):
         return self.user_set.filter(gender=gender).count()
@@ -136,7 +136,7 @@ class User(models.Model):
     team: Team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return self.username
+        return f"{self.username} - {self.id}"
 
     @property
     def score(self):
