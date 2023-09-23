@@ -167,6 +167,11 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             # the challenge is active
         )
 
+        def _get_date_str(dt: None | datetime) -> str:
+            if dt is None:
+                return ""
+            return dt.isoformat()
+
         return impulse_svc_pb2.GetActiveChallengesResponse(
             challenges=[
                 impulse_svc_pb2.GetActiveChallengesResponse.Challenge(
@@ -175,8 +180,8 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
                     description=challenge.description,
                     category=challenge.category,
                     type=challenge.type,
-                    start_at=challenge.start_datetime.isoformat(),
-                    end_at=challenge.end_datetime.isoformat(),
+                    start_at=_get_date_str(challenge.start_datetime),
+                    end_at=_get_date_str(challenge.end_datetime),
                     points=challenge.points,
                     unit=challenge.unit,
                 ) for challenge in challenges
