@@ -26,8 +26,8 @@ type Point struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Lat  float32 `protobuf:"fixed32,1,opt,name=lat,proto3" json:"lat,omitempty" validate:"required"`   // @gotags: validate:"required"
-	Long float32 `protobuf:"fixed32,2,opt,name=long,proto3" json:"long,omitempty" validate:"required"` // @gotags: validate:"required"
+	Lat  float32 `protobuf:"fixed32,1,opt,name=lat,proto3" json:"lat,omitempty"`   // @gotags: validate:"required"
+	Long float32 `protobuf:"fixed32,2,opt,name=long,proto3" json:"long,omitempty"` // @gotags: validate:"required"
 }
 
 func (x *Point) Reset() {
@@ -81,12 +81,12 @@ type CreateERRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name               string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" validate:"required"`                                                       // @gotags: validate:"required"
-	Location           *Point   `protobuf:"bytes,2,opt,name=location,proto3" json:"location,omitempty" validate:"required"`                                               // @gotags: validate:"required"
-	DisplayableAddress string   `protobuf:"bytes,3,opt,name=displayable_address,json=displayableAddress,proto3" json:"displayable_address,omitempty" validate:"required"` // @gotags: validate:"required"
+	Name               string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`                                                       // @gotags: validate:"required"
+	Location           *Point   `protobuf:"bytes,2,opt,name=location,proto3" json:"location,omitempty"`                                               // @gotags: validate:"required"
+	DisplayableAddress string   `protobuf:"bytes,3,opt,name=displayable_address,json=displayableAddress,proto3" json:"displayable_address,omitempty"` // @gotags: validate:"required"
 	Open               bool     `protobuf:"varint,4,opt,name=open,proto3" json:"open,omitempty"`
-	Utilization        int32    `protobuf:"varint,5,opt,name=utilization,proto3" json:"utilization,omitempty" validate:"required"` // @gotags: validate:"required"
-	Departments        []string `protobuf:"bytes,6,rep,name=departments,proto3" json:"departments,omitempty" validate:"dive,uuid"` // @gotags: validate:"dive,uuid"
+	Utilization        int32    `protobuf:"varint,5,opt,name=utilization,proto3" json:"utilization,omitempty"` // @gotags: validate:"required"
+	Departments        []string `protobuf:"bytes,6,rep,name=departments,proto3" json:"departments,omitempty"`  // @gotags: validate:"dive,uuid"
 }
 
 func (x *CreateERRequest) Reset() {
@@ -263,7 +263,7 @@ type GetERRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"required,uuid"` // @gotags: validate:"required,uuid"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"required,uuid"
 }
 
 func (x *GetERRequest) Reset() {
@@ -517,8 +517,8 @@ type PagedRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Page     int32 `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty" validate:"required"`                         // @gotags: validate:"required"
-	PageSize int32 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty" validate:"required"` // @gotags: validate:"required"
+	Page     int32 `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`                         // @gotags: validate:"required"
+	PageSize int32 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"` // @gotags: validate:"required"
 }
 
 func (x *PagedRequest) Reset() {
@@ -770,7 +770,7 @@ type UpdateERRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                 string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"required,uuid"` // @gotags: validate:"required,uuid"
+	Id                 string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"required,uuid"
 	Name               *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Location           *Point  `protobuf:"bytes,3,opt,name=location,proto3,oneof" json:"location,omitempty"`
 	DisplayableAddress *string `protobuf:"bytes,4,opt,name=displayable_address,json=displayableAddress,proto3,oneof" json:"displayable_address,omitempty"`
@@ -895,8 +895,8 @@ type AddDepartmentsToERRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"required,uuid"`              // @gotags: validate:"required,uuid"
-	Departments []string `protobuf:"bytes,2,rep,name=departments,proto3" json:"departments,omitempty" validate:"required"` // @gotags: validate:"required"
+	Id          string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                   // @gotags: validate:"required,uuid"
+	Departments []string `protobuf:"bytes,2,rep,name=departments,proto3" json:"departments,omitempty"` // @gotags: validate:"required"
 }
 
 func (x *AddDepartmentsToERRequest) Reset() {
@@ -988,8 +988,8 @@ type RemoveDepartmentsFromERRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"required,uuid"`              // @gotags: validate:"required,uuid"
-	Departments []string `protobuf:"bytes,2,rep,name=departments,proto3" json:"departments,omitempty" validate:"required"` // @gotags: validate:"required"
+	Id          string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                   // @gotags: validate:"required,uuid"
+	Departments []string `protobuf:"bytes,2,rep,name=departments,proto3" json:"departments,omitempty"` // @gotags: validate:"required"
 }
 
 func (x *RemoveDepartmentsFromERRequest) Reset() {
@@ -1081,7 +1081,7 @@ type DeleteERRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"required,uuid"` // @gotags: validate:"required,uuid"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"required,uuid"
 }
 
 func (x *DeleteERRequest) Reset() {
