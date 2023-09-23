@@ -53,6 +53,10 @@ class ImpulseServiceClient extends $grpc.Client {
       '/proto.services.impulse_svc.v1.ImpulseService/GetAllTeams',
       ($2.GetAllTeamsRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $2.GetAllTeamsResponse.fromBuffer(value));
+  static final _$statsForTeamByUser = $grpc.ClientMethod<$2.StatsForTeamByUserRequest, $2.StatsForTeamByUserResponse>(
+      '/proto.services.impulse_svc.v1.ImpulseService/StatsForTeamByUser',
+      ($2.StatsForTeamByUserRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.StatsForTeamByUserResponse.fromBuffer(value));
 
   ImpulseServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -90,6 +94,10 @@ class ImpulseServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$2.GetAllTeamsResponse> getAllTeams($2.GetAllTeamsRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getAllTeams, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$2.StatsForTeamByUserResponse> statsForTeamByUser($2.StatsForTeamByUserRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$statsForTeamByUser, request, options: options);
   }
 }
 
@@ -154,6 +162,13 @@ abstract class ImpulseServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $2.GetAllTeamsRequest.fromBuffer(value),
         ($2.GetAllTeamsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.StatsForTeamByUserRequest, $2.StatsForTeamByUserResponse>(
+        'StatsForTeamByUser',
+        statsForTeamByUser_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $2.StatsForTeamByUserRequest.fromBuffer(value),
+        ($2.StatsForTeamByUserResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$2.CreateUserResponse> createUser_Pre($grpc.ServiceCall call, $async.Future<$2.CreateUserRequest> request) async {
@@ -188,6 +203,10 @@ abstract class ImpulseServiceBase extends $grpc.Service {
     return getAllTeams(call, await request);
   }
 
+  $async.Future<$2.StatsForTeamByUserResponse> statsForTeamByUser_Pre($grpc.ServiceCall call, $async.Future<$2.StatsForTeamByUserRequest> request) async {
+    return statsForTeamByUser(call, await request);
+  }
+
   $async.Future<$2.CreateUserResponse> createUser($grpc.ServiceCall call, $2.CreateUserRequest request);
   $async.Future<$2.UpdateUserResponse> updateUser($grpc.ServiceCall call, $2.UpdateUserRequest request);
   $async.Future<$2.TrackChallengeResponse> trackChallenge($grpc.ServiceCall call, $2.TrackChallengeRequest request);
@@ -196,4 +215,5 @@ abstract class ImpulseServiceBase extends $grpc.Service {
   $async.Future<$2.GetRewardsResponse> getRewards($grpc.ServiceCall call, $2.GetRewardsRequest request);
   $async.Future<$2.GetAllRewardsResponse> getAllRewards($grpc.ServiceCall call, $2.GetAllRewardsRequest request);
   $async.Future<$2.GetAllTeamsResponse> getAllTeams($grpc.ServiceCall call, $2.GetAllTeamsRequest request);
+  $async.Future<$2.StatsForTeamByUserResponse> statsForTeamByUser($grpc.ServiceCall call, $2.StatsForTeamByUserRequest request);
 }

@@ -21,7 +21,7 @@ export 'impulse_svc.pbenum.dart';
 class CreateUserRequest extends $pb.GeneratedMessage {
   factory CreateUserRequest({
     $core.String? username,
-    $core.String? gender,
+    Gender? gender,
     $core.String? birthday,
     $core.double? pal,
     $core.int? length,
@@ -54,7 +54,7 @@ class CreateUserRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'username')
-    ..aOS(2, _omitFieldNames ? '' : 'gender')
+    ..e<Gender>(2, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: Gender.GENDER_UNSPECIFIED, valueOf: Gender.valueOf, enumValues: Gender.values)
     ..aOS(3, _omitFieldNames ? '' : 'birthday')
     ..a<$core.double>(4, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OF)
     ..a<$core.int>(5, _omitFieldNames ? '' : 'length', $pb.PbFieldType.O3)
@@ -93,9 +93,9 @@ class CreateUserRequest extends $pb.GeneratedMessage {
   void clearUsername() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get gender => $_getSZ(1);
+  Gender get gender => $_getN(1);
   @$pb.TagNumber(2)
-  set gender($core.String v) { $_setString(1, v); }
+  set gender(Gender v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasGender() => $_has(1);
   @$pb.TagNumber(2)
@@ -1808,6 +1808,220 @@ class GetAllRewardsResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<GetAllRewardsResponse_Reward> get rewards => $_getList(0);
+}
+
+class StatsForTeamByUserRequest extends $pb.GeneratedMessage {
+  factory StatsForTeamByUserRequest({
+    $core.String? userId,
+  }) {
+    final $result = create();
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    return $result;
+  }
+  StatsForTeamByUserRequest._() : super();
+  factory StatsForTeamByUserRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory StatsForTeamByUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StatsForTeamByUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  StatsForTeamByUserRequest clone() => StatsForTeamByUserRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  StatsForTeamByUserRequest copyWith(void Function(StatsForTeamByUserRequest) updates) => super.copyWith((message) => updates(message as StatsForTeamByUserRequest)) as StatsForTeamByUserRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static StatsForTeamByUserRequest create() => StatsForTeamByUserRequest._();
+  StatsForTeamByUserRequest createEmptyInstance() => create();
+  static $pb.PbList<StatsForTeamByUserRequest> createRepeated() => $pb.PbList<StatsForTeamByUserRequest>();
+  @$core.pragma('dart2js:noInline')
+  static StatsForTeamByUserRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StatsForTeamByUserRequest>(create);
+  static StatsForTeamByUserRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get userId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set userId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserId() => clearField(1);
+}
+
+class StatsForTeamByUserResponse_GenderCount extends $pb.GeneratedMessage {
+  factory StatsForTeamByUserResponse_GenderCount({
+    Gender? gender,
+    $core.int? count,
+  }) {
+    final $result = create();
+    if (gender != null) {
+      $result.gender = gender;
+    }
+    if (count != null) {
+      $result.count = count;
+    }
+    return $result;
+  }
+  StatsForTeamByUserResponse_GenderCount._() : super();
+  factory StatsForTeamByUserResponse_GenderCount.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory StatsForTeamByUserResponse_GenderCount.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StatsForTeamByUserResponse.GenderCount', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..e<Gender>(1, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: Gender.GENDER_UNSPECIFIED, valueOf: Gender.valueOf, enumValues: Gender.values)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'count', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  StatsForTeamByUserResponse_GenderCount clone() => StatsForTeamByUserResponse_GenderCount()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  StatsForTeamByUserResponse_GenderCount copyWith(void Function(StatsForTeamByUserResponse_GenderCount) updates) => super.copyWith((message) => updates(message as StatsForTeamByUserResponse_GenderCount)) as StatsForTeamByUserResponse_GenderCount;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static StatsForTeamByUserResponse_GenderCount create() => StatsForTeamByUserResponse_GenderCount._();
+  StatsForTeamByUserResponse_GenderCount createEmptyInstance() => create();
+  static $pb.PbList<StatsForTeamByUserResponse_GenderCount> createRepeated() => $pb.PbList<StatsForTeamByUserResponse_GenderCount>();
+  @$core.pragma('dart2js:noInline')
+  static StatsForTeamByUserResponse_GenderCount getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StatsForTeamByUserResponse_GenderCount>(create);
+  static StatsForTeamByUserResponse_GenderCount? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  Gender get gender => $_getN(0);
+  @$pb.TagNumber(1)
+  set gender(Gender v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasGender() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearGender() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get count => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set count($core.int v) { $_setUnsignedInt32(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasCount() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCount() => clearField(2);
+}
+
+class StatsForTeamByUserResponse extends $pb.GeneratedMessage {
+  factory StatsForTeamByUserResponse({
+    $core.String? teamId,
+    $core.double? score,
+    $core.Iterable<StatsForTeamByUserResponse_GenderCount>? genderCount,
+    $core.double? averageAge,
+    $fixnum.Int64? userCount,
+  }) {
+    final $result = create();
+    if (teamId != null) {
+      $result.teamId = teamId;
+    }
+    if (score != null) {
+      $result.score = score;
+    }
+    if (genderCount != null) {
+      $result.genderCount.addAll(genderCount);
+    }
+    if (averageAge != null) {
+      $result.averageAge = averageAge;
+    }
+    if (userCount != null) {
+      $result.userCount = userCount;
+    }
+    return $result;
+  }
+  StatsForTeamByUserResponse._() : super();
+  factory StatsForTeamByUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory StatsForTeamByUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StatsForTeamByUserResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'teamId')
+    ..a<$core.double>(2, _omitFieldNames ? '' : 'score', $pb.PbFieldType.OF)
+    ..pc<StatsForTeamByUserResponse_GenderCount>(3, _omitFieldNames ? '' : 'genderCount', $pb.PbFieldType.PM, subBuilder: StatsForTeamByUserResponse_GenderCount.create)
+    ..a<$core.double>(4, _omitFieldNames ? '' : 'averageAge', $pb.PbFieldType.OF)
+    ..a<$fixnum.Int64>(5, _omitFieldNames ? '' : 'userCount', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  StatsForTeamByUserResponse clone() => StatsForTeamByUserResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  StatsForTeamByUserResponse copyWith(void Function(StatsForTeamByUserResponse) updates) => super.copyWith((message) => updates(message as StatsForTeamByUserResponse)) as StatsForTeamByUserResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static StatsForTeamByUserResponse create() => StatsForTeamByUserResponse._();
+  StatsForTeamByUserResponse createEmptyInstance() => create();
+  static $pb.PbList<StatsForTeamByUserResponse> createRepeated() => $pb.PbList<StatsForTeamByUserResponse>();
+  @$core.pragma('dart2js:noInline')
+  static StatsForTeamByUserResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StatsForTeamByUserResponse>(create);
+  static StatsForTeamByUserResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get teamId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set teamId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasTeamId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTeamId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.double get score => $_getN(1);
+  @$pb.TagNumber(2)
+  set score($core.double v) { $_setFloat(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasScore() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearScore() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.List<StatsForTeamByUserResponse_GenderCount> get genderCount => $_getList(2);
+
+  @$pb.TagNumber(4)
+  $core.double get averageAge => $_getN(3);
+  @$pb.TagNumber(4)
+  set averageAge($core.double v) { $_setFloat(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasAverageAge() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearAverageAge() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get userCount => $_getI64(4);
+  @$pb.TagNumber(5)
+  set userCount($fixnum.Int64 v) { $_setInt64(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasUserCount() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearUserCount() => clearField(5);
 }
 
 
