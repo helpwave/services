@@ -4,8 +4,10 @@ import uuid
 from datetime import datetime
 
 from django.db import models
-from django.db.models.aggregates import Sum, Count
+from django.db.models.aggregates import Sum, Count, Avg
 from django.utils.translation import gettext_lazy as _
+from dateutil.relativedelta import relativedelta
+from django.utils import timezone
 
 
 class Challenge(models.Model):
@@ -62,6 +64,9 @@ class Team(models.Model):
     def __str__(self):
         return self.name
 
+    def get_gender_count(self, gender: User.Gender):
+        return self.user_set.filter(gender=gender).count()
+
     @property
     def score(self):
         return (self.user_set.all().values("userchallenge__score").aggregate(Sum("userchallenge__score")).
@@ -73,15 +78,19 @@ class Team(models.Model):
 
     @property
     def male_count(self):
-        return self.user_set.filter(gender=User.Gender.MALE).count()
+        return self.get_gender_count(User.Gender.MALE)
 
     @property
     def female_count(self):
-        return self.user_set.filter(gender=User.Gender.FEMALE).count()
+        return self.get_gender_count(User.Gender.FEMALE)
 
     @property
-    def divers_count(self):
-        return self.user_set.filter(gender=User.Gender.DIVERSE).count()
+    def diverse_count(self):
+        return self.get_gender_count(User.Gender.DIVERSE)
+
+    @property
+    def avg_age(self):
+        return sum(u.age for u in self.user_set.all()) / self.user_set.all().count()
 
 
 class User(models.Model):
@@ -107,3 +116,7 @@ class User(models.Model):
     @property
     def score(self):
         return self.userchallenge_set.all().values("score").aggregate(Sum("score")).get("score__sum", 0)
+
+    @property
+    def age(self):
+        return relativedelta(timezone.now(), self.birthday).years
