@@ -24,7 +24,8 @@ class TeamAdmin(admin.ModelAdmin):
         "user_count",
         "male_count",
         "female_count",
-        "divers_count",
+        "diverse_count",
+        "avg_age",
     ]
 
 
