@@ -5980,9 +5980,9 @@ proto.proto.services.impulse_svc.v1.ChallengeCategory = {
  */
 proto.proto.services.impulse_svc.v1.Gender = {
   GENDER_UNSPECIFIED: 0,
-  MALE: 1,
-  FEMALE: 2,
-  DIVERSE: 3
+  GENDER_MALE: 1,
+  GENDER_FEMALE: 2,
+  GENDER_DIVERSE: 3
 };
 
 goog.object.extend(exports, proto.proto.services.impulse_svc.v1);
