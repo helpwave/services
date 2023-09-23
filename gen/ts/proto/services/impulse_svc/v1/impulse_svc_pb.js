@@ -542,7 +542,7 @@ proto.proto.services.impulse_svc.v1.CreateUserRequest.toObject = function(includ
     username: jspb.Message.getFieldWithDefault(msg, 1, ""),
     gender: jspb.Message.getFieldWithDefault(msg, 2, ""),
     birthday: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    pal: jspb.Message.getFieldWithDefault(msg, 4, 0)
+    pal: jspb.Message.getFloatingPointFieldWithDefault(msg, 4, 0.0)
   };
 
   if (includeInstance) {
@@ -592,7 +592,7 @@ proto.proto.services.impulse_svc.v1.CreateUserRequest.deserializeBinaryFromReade
       msg.setBirthday(value);
       break;
     case 4:
-      var value = /** @type {number} */ (reader.readUint32());
+      var value = /** @type {number} */ (reader.readFloat());
       msg.setPal(value);
       break;
     default:
@@ -646,8 +646,8 @@ proto.proto.services.impulse_svc.v1.CreateUserRequest.serializeBinaryToWriter = 
     );
   }
   f = message.getPal();
-  if (f !== 0) {
-    writer.writeUint32(
+  if (f !== 0.0) {
+    writer.writeFloat(
       4,
       f
     );
@@ -710,11 +710,11 @@ proto.proto.services.impulse_svc.v1.CreateUserRequest.prototype.setBirthday = fu
 
 
 /**
- * optional uint32 pal = 4;
+ * optional float pal = 4;
  * @return {number}
  */
 proto.proto.services.impulse_svc.v1.CreateUserRequest.prototype.getPal = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 4, 0.0));
 };
 
 
@@ -723,7 +723,7 @@ proto.proto.services.impulse_svc.v1.CreateUserRequest.prototype.getPal = functio
  * @return {!proto.proto.services.impulse_svc.v1.CreateUserRequest} returns this
  */
 proto.proto.services.impulse_svc.v1.CreateUserRequest.prototype.setPal = function(value) {
-  return jspb.Message.setProto3IntField(this, 4, value);
+  return jspb.Message.setProto3FloatField(this, 4, value);
 };
 
 
@@ -893,7 +893,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.toObject = function(includ
     teamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
     gender: jspb.Message.getFieldWithDefault(msg, 3, ""),
     birthday: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    pal: jspb.Message.getFieldWithDefault(msg, 5, 0)
+    pal: jspb.Message.getFloatingPointFieldWithDefault(msg, 5, 0.0)
   };
 
   if (includeInstance) {
@@ -947,7 +947,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.deserializeBinaryFromReade
       msg.setBirthday(value);
       break;
     case 5:
-      var value = /** @type {number} */ (reader.readUint32());
+      var value = /** @type {number} */ (reader.readFloat());
       msg.setPal(value);
       break;
     default:
@@ -1009,7 +1009,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.serializeBinaryToWriter = 
   }
   f = /** @type {number} */ (jspb.Message.getField(message, 5));
   if (f != null) {
-    writer.writeUint32(
+    writer.writeFloat(
       5,
       f
     );
@@ -1144,11 +1144,11 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.hasBirthday = fu
 
 
 /**
- * optional uint32 pal = 5;
+ * optional float pal = 5;
  * @return {number}
  */
 proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getPal = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 5, 0.0));
 };
 
 
@@ -1215,7 +1215,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.toObject = function(inclu
     teamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
     gender: jspb.Message.getFieldWithDefault(msg, 3, ""),
     birthday: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    pal: jspb.Message.getFieldWithDefault(msg, 5, 0)
+    pal: jspb.Message.getFloatingPointFieldWithDefault(msg, 5, 0.0)
   };
 
   if (includeInstance) {
@@ -1269,7 +1269,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.deserializeBinaryFromRead
       msg.setBirthday(value);
       break;
     case 5:
-      var value = /** @type {number} */ (reader.readUint32());
+      var value = /** @type {number} */ (reader.readFloat());
       msg.setPal(value);
       break;
     default:
@@ -1330,8 +1330,8 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.serializeBinaryToWriter =
     );
   }
   f = message.getPal();
-  if (f !== 0) {
-    writer.writeUint32(
+  if (f !== 0.0) {
+    writer.writeFloat(
       5,
       f
     );
@@ -1430,11 +1430,11 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setBirthday = f
 
 
 /**
- * optional uint32 pal = 5;
+ * optional float pal = 5;
  * @return {number}
  */
 proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getPal = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 5, 0.0));
 };
 
 
@@ -1443,7 +1443,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getPal = functi
  * @return {!proto.proto.services.impulse_svc.v1.UpdateUserResponse} returns this
  */
 proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setPal = function(value) {
-  return jspb.Message.setProto3IntField(this, 5, value);
+  return jspb.Message.setProto3FloatField(this, 5, value);
 };
 
 

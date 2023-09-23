@@ -23,7 +23,7 @@ class CreateUserRequest extends $pb.GeneratedMessage {
     $core.String? username,
     $core.String? gender,
     $core.String? birthday,
-    $core.int? pal,
+    $core.double? pal,
   }) {
     final $result = create();
     if (username != null) {
@@ -48,7 +48,7 @@ class CreateUserRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'username')
     ..aOS(2, _omitFieldNames ? '' : 'gender')
     ..aOS(3, _omitFieldNames ? '' : 'birthday')
-    ..a<$core.int>(4, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OU3)
+    ..a<$core.double>(4, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OF)
     ..hasRequiredFields = false
   ;
 
@@ -101,9 +101,9 @@ class CreateUserRequest extends $pb.GeneratedMessage {
   void clearBirthday() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.int get pal => $_getIZ(3);
+  $core.double get pal => $_getN(3);
   @$pb.TagNumber(4)
-  set pal($core.int v) { $_setUnsignedInt32(3, v); }
+  set pal($core.double v) { $_setFloat(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasPal() => $_has(3);
   @$pb.TagNumber(4)
@@ -166,7 +166,7 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
     $core.String? teamId,
     $core.String? gender,
     $core.String? birthday,
-    $core.int? pal,
+    $core.double? pal,
   }) {
     final $result = create();
     if (userId != null) {
@@ -195,7 +195,7 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'teamId')
     ..aOS(3, _omitFieldNames ? '' : 'gender')
     ..aOS(4, _omitFieldNames ? '' : 'birthday')
-    ..a<$core.int>(5, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OU3)
+    ..a<$core.double>(5, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OF)
     ..hasRequiredFields = false
   ;
 
@@ -257,9 +257,9 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
   void clearBirthday() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.int get pal => $_getIZ(4);
+  $core.double get pal => $_getN(4);
   @$pb.TagNumber(5)
-  set pal($core.int v) { $_setUnsignedInt32(4, v); }
+  set pal($core.double v) { $_setFloat(4, v); }
   @$pb.TagNumber(5)
   $core.bool hasPal() => $_has(4);
   @$pb.TagNumber(5)
@@ -272,7 +272,7 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
     $core.String? teamId,
     $core.String? gender,
     $core.String? birthday,
-    $core.int? pal,
+    $core.double? pal,
   }) {
     final $result = create();
     if (userId != null) {
@@ -301,7 +301,7 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'teamId')
     ..aOS(3, _omitFieldNames ? '' : 'gender')
     ..aOS(4, _omitFieldNames ? '' : 'birthday')
-    ..a<$core.int>(5, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OU3)
+    ..a<$core.double>(5, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OF)
     ..hasRequiredFields = false
   ;
 
@@ -363,9 +363,9 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
   void clearBirthday() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.int get pal => $_getIZ(4);
+  $core.double get pal => $_getN(4);
   @$pb.TagNumber(5)
-  set pal($core.int v) { $_setUnsignedInt32(4, v); }
+  set pal($core.double v) { $_setFloat(4, v); }
   @$pb.TagNumber(5)
   $core.bool hasPal() => $_has(4);
   @$pb.TagNumber(5)
