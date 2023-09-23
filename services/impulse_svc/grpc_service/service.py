@@ -169,7 +169,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
         def _get_date_str(dt: None | datetime) -> str:
             if dt is None:
-                return ""
+                return None
             return dt.isoformat()
 
         return impulse_svc_pb2.GetActiveChallengesResponse(
