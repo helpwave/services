@@ -1,1 +1,3 @@
 *         @helpwave/backend
+
+/services/impulse_svc/* !FoseFx
