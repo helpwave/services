@@ -5617,7 +5617,7 @@ proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse.prototype.toObjec
 proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     teamId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    score: jspb.Message.getFloatingPointFieldWithDefault(msg, 2, 0.0),
+    score: jspb.Message.getFieldWithDefault(msg, 2, 0),
     genderCountList: jspb.Message.toObjectList(msg.getGenderCountList(),
     proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse.GenderCount.toObject, includeInstance),
     averageAge: jspb.Message.getFloatingPointFieldWithDefault(msg, 4, 0.0),
@@ -5663,7 +5663,7 @@ proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse.deserializeBinary
       msg.setTeamId(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readFloat());
+      var value = /** @type {number} */ (reader.readUint64());
       msg.setScore(value);
       break;
     case 3:
@@ -5716,8 +5716,8 @@ proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse.serializeBinaryTo
     );
   }
   f = message.getScore();
-  if (f !== 0.0) {
-    writer.writeFloat(
+  if (f !== 0) {
+    writer.writeUint64(
       2,
       f
     );
@@ -5926,11 +5926,11 @@ proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse.prototype.setTeam
 
 
 /**
- * optional float score = 2;
+ * optional uint64 score = 2;
  * @return {number}
  */
 proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse.prototype.getScore = function() {
-  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 2, 0.0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
@@ -5939,7 +5939,7 @@ proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse.prototype.getScor
  * @return {!proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse} returns this
  */
 proto.proto.services.impulse_svc.v1.StatsForTeamByUserResponse.prototype.setScore = function(value) {
-  return jspb.Message.setProto3FloatField(this, 2, value);
+  return jspb.Message.setProto3IntField(this, 2, value);
 };
 
 

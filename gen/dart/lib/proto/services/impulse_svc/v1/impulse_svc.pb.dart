@@ -1913,7 +1913,7 @@ class StatsForTeamByUserResponse_GenderCount extends $pb.GeneratedMessage {
 class StatsForTeamByUserResponse extends $pb.GeneratedMessage {
   factory StatsForTeamByUserResponse({
     $core.String? teamId,
-    $core.double? score,
+    $fixnum.Int64? score,
     $core.Iterable<StatsForTeamByUserResponse_GenderCount>? genderCount,
     $core.double? averageAge,
     $fixnum.Int64? userCount,
@@ -1942,7 +1942,7 @@ class StatsForTeamByUserResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StatsForTeamByUserResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'teamId')
-    ..a<$core.double>(2, _omitFieldNames ? '' : 'score', $pb.PbFieldType.OF)
+    ..a<$fixnum.Int64>(2, _omitFieldNames ? '' : 'score', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..pc<StatsForTeamByUserResponse_GenderCount>(3, _omitFieldNames ? '' : 'genderCount', $pb.PbFieldType.PM, subBuilder: StatsForTeamByUserResponse_GenderCount.create)
     ..a<$core.double>(4, _omitFieldNames ? '' : 'averageAge', $pb.PbFieldType.OF)
     ..a<$fixnum.Int64>(5, _omitFieldNames ? '' : 'userCount', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
@@ -1980,9 +1980,9 @@ class StatsForTeamByUserResponse extends $pb.GeneratedMessage {
   void clearTeamId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.double get score => $_getN(1);
+  $fixnum.Int64 get score => $_getI64(1);
   @$pb.TagNumber(2)
-  set score($core.double v) { $_setFloat(1, v); }
+  set score($fixnum.Int64 v) { $_setInt64(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasScore() => $_has(1);
   @$pb.TagNumber(2)

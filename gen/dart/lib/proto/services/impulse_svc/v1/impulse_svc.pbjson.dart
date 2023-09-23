@@ -474,7 +474,7 @@ const StatsForTeamByUserResponse$json = {
   '1': 'StatsForTeamByUserResponse',
   '2': [
     {'1': 'team_id', '3': 1, '4': 1, '5': 9, '10': 'teamId'},
-    {'1': 'score', '3': 2, '4': 1, '5': 2, '10': 'score'},
+    {'1': 'score', '3': 2, '4': 1, '5': 4, '10': 'score'},
     {'1': 'gender_count', '3': 3, '4': 3, '5': 11, '6': '.proto.services.impulse_svc.v1.StatsForTeamByUserResponse.GenderCount', '10': 'genderCount'},
     {'1': 'average_age', '3': 4, '4': 1, '5': 2, '10': 'averageAge'},
     {'1': 'user_count', '3': 5, '4': 1, '5': 4, '10': 'userCount'},
@@ -494,7 +494,7 @@ const StatsForTeamByUserResponse_GenderCount$json = {
 /// Descriptor for `StatsForTeamByUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List statsForTeamByUserResponseDescriptor = $convert.base64Decode(
     'ChpTdGF0c0ZvclRlYW1CeVVzZXJSZXNwb25zZRIXCgd0ZWFtX2lkGAEgASgJUgZ0ZWFtSWQSFA'
-    'oFc2NvcmUYAiABKAJSBXNjb3JlEmgKDGdlbmRlcl9jb3VudBgDIAMoCzJFLnByb3RvLnNlcnZp'
+    'oFc2NvcmUYAiABKARSBXNjb3JlEmgKDGdlbmRlcl9jb3VudBgDIAMoCzJFLnByb3RvLnNlcnZp'
     'Y2VzLmltcHVsc2Vfc3ZjLnYxLlN0YXRzRm9yVGVhbUJ5VXNlclJlc3BvbnNlLkdlbmRlckNvdW'
     '50UgtnZW5kZXJDb3VudBIfCgthdmVyYWdlX2FnZRgEIAEoAlIKYXZlcmFnZUFnZRIdCgp1c2Vy'
     'X2NvdW50GAUgASgEUgl1c2VyQ291bnQaYgoLR2VuZGVyQ291bnQSPQoGZ2VuZGVyGAEgASgOMi'

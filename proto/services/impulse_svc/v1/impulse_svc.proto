@@ -214,7 +214,7 @@ message StatsForTeamByUserRequest {
 
 message StatsForTeamByUserResponse {
   string team_id = 1;
-  float score = 2;
+  uint64 score = 2;
   repeated GenderCount gender_count = 3;
   float average_age = 4;
   uint64 user_count = 5;
