@@ -102,8 +102,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         try:
             user.birthday = datetime.fromisoformat(request.birthday)
         except ValueError:
-            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-            return impulse_svc_pb2.UpdateUserResponse()
+            pass
 
         try:
             user.team = Team.objects.get(id=request.team_id)
