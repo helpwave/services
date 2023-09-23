@@ -6,8 +6,8 @@ export class CreateUserRequest extends jspb.Message {
   getUsername(): string;
   setUsername(value: string): CreateUserRequest;
 
-  getGender(): string;
-  setGender(value: string): CreateUserRequest;
+  getGender(): Gender;
+  setGender(value: Gender): CreateUserRequest;
 
   getBirthday(): string;
   setBirthday(value: string): CreateUserRequest;
@@ -26,7 +26,7 @@ export class CreateUserRequest extends jspb.Message {
 export namespace CreateUserRequest {
   export type AsObject = {
     username: string,
-    gender: string,
+    gender: Gender,
     birthday: string,
     pal: number,
   }
@@ -685,6 +685,83 @@ export namespace GetAllRewardsResponse {
 
 }
 
+export class StatsForTeamByUserRequest extends jspb.Message {
+  getUserId(): string;
+  setUserId(value: string): StatsForTeamByUserRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): StatsForTeamByUserRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: StatsForTeamByUserRequest): StatsForTeamByUserRequest.AsObject;
+  static serializeBinaryToWriter(message: StatsForTeamByUserRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): StatsForTeamByUserRequest;
+  static deserializeBinaryFromReader(message: StatsForTeamByUserRequest, reader: jspb.BinaryReader): StatsForTeamByUserRequest;
+}
+
+export namespace StatsForTeamByUserRequest {
+  export type AsObject = {
+    userId: string,
+  }
+}
+
+export class StatsForTeamByUserResponse extends jspb.Message {
+  getTeamId(): string;
+  setTeamId(value: string): StatsForTeamByUserResponse;
+
+  getScore(): number;
+  setScore(value: number): StatsForTeamByUserResponse;
+
+  getGenderCountList(): Array<StatsForTeamByUserResponse.GenderCount>;
+  setGenderCountList(value: Array<StatsForTeamByUserResponse.GenderCount>): StatsForTeamByUserResponse;
+  clearGenderCountList(): StatsForTeamByUserResponse;
+  addGenderCount(value?: StatsForTeamByUserResponse.GenderCount, index?: number): StatsForTeamByUserResponse.GenderCount;
+
+  getAverageAge(): number;
+  setAverageAge(value: number): StatsForTeamByUserResponse;
+
+  getUserCount(): number;
+  setUserCount(value: number): StatsForTeamByUserResponse;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): StatsForTeamByUserResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: StatsForTeamByUserResponse): StatsForTeamByUserResponse.AsObject;
+  static serializeBinaryToWriter(message: StatsForTeamByUserResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): StatsForTeamByUserResponse;
+  static deserializeBinaryFromReader(message: StatsForTeamByUserResponse, reader: jspb.BinaryReader): StatsForTeamByUserResponse;
+}
+
+export namespace StatsForTeamByUserResponse {
+  export type AsObject = {
+    teamId: string,
+    score: number,
+    genderCountList: Array<StatsForTeamByUserResponse.GenderCount.AsObject>,
+    averageAge: number,
+    userCount: number,
+  }
+
+  export class GenderCount extends jspb.Message {
+    getGender(): Gender;
+    setGender(value: Gender): GenderCount;
+
+    getCount(): number;
+    setCount(value: number): GenderCount;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GenderCount.AsObject;
+    static toObject(includeInstance: boolean, msg: GenderCount): GenderCount.AsObject;
+    static serializeBinaryToWriter(message: GenderCount, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GenderCount;
+    static deserializeBinaryFromReader(message: GenderCount, reader: jspb.BinaryReader): GenderCount;
+  }
+
+  export namespace GenderCount {
+    export type AsObject = {
+      gender: Gender,
+      count: number,
+    }
+  }
+
+}
+
 export enum ChallengeType { 
   CHALLENGE_TYPE_UNSPECIFIED = 0,
   CHALLENGE_TYPE_DAILY = 1,
@@ -694,4 +771,9 @@ export enum ChallengeCategory {
   CHALLENGE_CATEGORY_UNSPECIFIED = 0,
   CHALLENGE_CATEGORY_FOOD = 1,
   CHALLENGE_CATEGORY_FITNESS = 2,
+}
+export enum Gender { 
+  MALE = 0,
+  FEMALE = 1,
+  DIVERSE = 2,
 }

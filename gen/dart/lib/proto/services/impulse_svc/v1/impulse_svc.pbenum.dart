@@ -47,5 +47,22 @@ class ChallengeCategory extends $pb.ProtobufEnum {
   const ChallengeCategory._($core.int v, $core.String n) : super(v, n);
 }
 
+class Gender extends $pb.ProtobufEnum {
+  static const Gender MALE = Gender._(0, _omitEnumNames ? '' : 'MALE');
+  static const Gender FEMALE = Gender._(1, _omitEnumNames ? '' : 'FEMALE');
+  static const Gender DIVERSE = Gender._(2, _omitEnumNames ? '' : 'DIVERSE');
+
+  static const $core.List<Gender> values = <Gender> [
+    MALE,
+    FEMALE,
+    DIVERSE,
+  ];
+
+  static final $core.Map<$core.int, Gender> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static Gender? valueOf($core.int value) => _byValue[value];
+
+  const Gender._($core.int v, $core.String n) : super(v, n);
+}
+
 
 const _omitEnumNames = $core.bool.fromEnvironment('protobuf.omit_enum_names');
