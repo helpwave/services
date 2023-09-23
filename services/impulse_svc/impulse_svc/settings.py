@@ -130,7 +130,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "http://*",
+    "https://*",
+    "http://helpwave-staging-impulse-svc.fly.dev",
+    "https://helpwave-staging-impulse-svc.fly.dev",
+]
 
 GRPCSERVER = {
     'servicers': ['grpc_service.service.grpc_hook'],
