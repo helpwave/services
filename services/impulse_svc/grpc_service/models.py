@@ -8,6 +8,32 @@ from django.db.models.aggregates import Sum
 from django.utils.translation import gettext_lazy as _
 
 
+class Verification(models.Model):
+    id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    order: int = models.IntegerField()
+    challenge: str = models.ForeignKey('Challenge', on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
+
+
+class VerificationStr(Verification):
+    class VerificationStrType(models.TextChoices):
+        QR = 'qr', _('QR Code')
+
+    type = models.CharField(max_length=10, choices=VerificationStrType.choices)
+    value = models.CharField(max_length=512)
+
+
+class VerificationInt(Verification):
+    class VerificationIntType(models.TextChoices):
+        TIMER = 'timer', _('Stopuhr')
+        Number = 'number', _('Nummer')
+
+    type = models.CharField(max_length=10, choices=VerificationIntType.choices)
+    value = models.IntegerField()
+
+
 class Challenge(models.Model):
     class ChallengeTypes(models.TextChoices):
         DAILY = 'daily', _('Täglich')
