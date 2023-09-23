@@ -14,6 +14,7 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import '../../../../google/protobuf/timestamp.pb.dart' as $11;
 import 'impulse_svc.pbenum.dart';
 
 export 'impulse_svc.pbenum.dart';
@@ -21,16 +22,16 @@ export 'impulse_svc.pbenum.dart';
 class CreateUserRequest extends $pb.GeneratedMessage {
   factory CreateUserRequest({
     $core.String? username,
-    $core.String? gender,
-    $core.String? birthday,
+    $core.String? sex,
+    $11.Timestamp? birthday,
     $core.int? pal,
   }) {
     final $result = create();
     if (username != null) {
       $result.username = username;
     }
-    if (gender != null) {
-      $result.gender = gender;
+    if (sex != null) {
+      $result.sex = sex;
     }
     if (birthday != null) {
       $result.birthday = birthday;
@@ -46,8 +47,8 @@ class CreateUserRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'username')
-    ..aOS(2, _omitFieldNames ? '' : 'gender')
-    ..aOS(3, _omitFieldNames ? '' : 'birthday')
+    ..aOS(2, _omitFieldNames ? '' : 'sex')
+    ..aOM<$11.Timestamp>(3, _omitFieldNames ? '' : 'birthday', subBuilder: $11.Timestamp.create)
     ..a<$core.int>(4, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
@@ -83,22 +84,24 @@ class CreateUserRequest extends $pb.GeneratedMessage {
   void clearUsername() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get gender => $_getSZ(1);
+  $core.String get sex => $_getSZ(1);
   @$pb.TagNumber(2)
-  set gender($core.String v) { $_setString(1, v); }
+  set sex($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasGender() => $_has(1);
+  $core.bool hasSex() => $_has(1);
   @$pb.TagNumber(2)
-  void clearGender() => clearField(2);
+  void clearSex() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get birthday => $_getSZ(2);
+  $11.Timestamp get birthday => $_getN(2);
   @$pb.TagNumber(3)
-  set birthday($core.String v) { $_setString(2, v); }
+  set birthday($11.Timestamp v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasBirthday() => $_has(2);
   @$pb.TagNumber(3)
   void clearBirthday() => clearField(3);
+  @$pb.TagNumber(3)
+  $11.Timestamp ensureBirthday() => $_ensure(2);
 
   @$pb.TagNumber(4)
   $core.int get pal => $_getIZ(3);
@@ -112,11 +115,11 @@ class CreateUserRequest extends $pb.GeneratedMessage {
 
 class CreateUserResponse extends $pb.GeneratedMessage {
   factory CreateUserResponse({
-    $core.String? userId,
+    $core.String? id,
   }) {
     final $result = create();
-    if (userId != null) {
-      $result.userId = userId;
+    if (id != null) {
+      $result.id = id;
     }
     return $result;
   }
@@ -125,7 +128,7 @@ class CreateUserResponse extends $pb.GeneratedMessage {
   factory CreateUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateUserResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
@@ -151,28 +154,28 @@ class CreateUserResponse extends $pb.GeneratedMessage {
   static CreateUserResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
+  $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
+  set id($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasUserId() => $_has(0);
+  $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearUserId() => clearField(1);
+  void clearId() => clearField(1);
 }
 
 class UpdateUserRequest extends $pb.GeneratedMessage {
   factory UpdateUserRequest({
-    $core.String? userId,
-    $core.String? gender,
-    $core.String? birthday,
+    $core.String? id,
+    $core.String? sex,
+    $11.Timestamp? birthday,
     $core.int? pal,
   }) {
     final $result = create();
-    if (userId != null) {
-      $result.userId = userId;
+    if (id != null) {
+      $result.id = id;
     }
-    if (gender != null) {
-      $result.gender = gender;
+    if (sex != null) {
+      $result.sex = sex;
     }
     if (birthday != null) {
       $result.birthday = birthday;
@@ -187,9 +190,9 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
   factory UpdateUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'userId')
-    ..aOS(2, _omitFieldNames ? '' : 'gender')
-    ..aOS(3, _omitFieldNames ? '' : 'birthday')
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'sex')
+    ..aOM<$11.Timestamp>(3, _omitFieldNames ? '' : 'birthday', subBuilder: $11.Timestamp.create)
     ..a<$core.int>(4, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
@@ -216,31 +219,33 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
   static UpdateUserRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
+  $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
+  set id($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasUserId() => $_has(0);
+  $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearUserId() => clearField(1);
+  void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get gender => $_getSZ(1);
+  $core.String get sex => $_getSZ(1);
   @$pb.TagNumber(2)
-  set gender($core.String v) { $_setString(1, v); }
+  set sex($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasGender() => $_has(1);
+  $core.bool hasSex() => $_has(1);
   @$pb.TagNumber(2)
-  void clearGender() => clearField(2);
+  void clearSex() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get birthday => $_getSZ(2);
+  $11.Timestamp get birthday => $_getN(2);
   @$pb.TagNumber(3)
-  set birthday($core.String v) { $_setString(2, v); }
+  set birthday($11.Timestamp v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasBirthday() => $_has(2);
   @$pb.TagNumber(3)
   void clearBirthday() => clearField(3);
+  @$pb.TagNumber(3)
+  $11.Timestamp ensureBirthday() => $_ensure(2);
 
   @$pb.TagNumber(4)
   $core.int get pal => $_getIZ(3);
@@ -254,17 +259,17 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
 
 class UpdateUserResponse extends $pb.GeneratedMessage {
   factory UpdateUserResponse({
-    $core.String? userId,
-    $core.String? gender,
-    $core.String? birthday,
+    $core.String? id,
+    $core.String? sex,
+    $11.Timestamp? birthday,
     $core.int? pal,
   }) {
     final $result = create();
-    if (userId != null) {
-      $result.userId = userId;
+    if (id != null) {
+      $result.id = id;
     }
-    if (gender != null) {
-      $result.gender = gender;
+    if (sex != null) {
+      $result.sex = sex;
     }
     if (birthday != null) {
       $result.birthday = birthday;
@@ -279,9 +284,9 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
   factory UpdateUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateUserResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'userId')
-    ..aOS(2, _omitFieldNames ? '' : 'gender')
-    ..aOS(3, _omitFieldNames ? '' : 'birthday')
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'sex')
+    ..aOM<$11.Timestamp>(3, _omitFieldNames ? '' : 'birthday', subBuilder: $11.Timestamp.create)
     ..a<$core.int>(4, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
@@ -308,31 +313,33 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
   static UpdateUserResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
+  $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
+  set id($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasUserId() => $_has(0);
+  $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearUserId() => clearField(1);
+  void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get gender => $_getSZ(1);
+  $core.String get sex => $_getSZ(1);
   @$pb.TagNumber(2)
-  set gender($core.String v) { $_setString(1, v); }
+  set sex($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasGender() => $_has(1);
+  $core.bool hasSex() => $_has(1);
   @$pb.TagNumber(2)
-  void clearGender() => clearField(2);
+  void clearSex() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get birthday => $_getSZ(2);
+  $11.Timestamp get birthday => $_getN(2);
   @$pb.TagNumber(3)
-  set birthday($core.String v) { $_setString(2, v); }
+  set birthday($11.Timestamp v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasBirthday() => $_has(2);
   @$pb.TagNumber(3)
   void clearBirthday() => clearField(3);
+  @$pb.TagNumber(3)
+  $11.Timestamp ensureBirthday() => $_ensure(2);
 
   @$pb.TagNumber(4)
   $core.int get pal => $_getIZ(3);
@@ -344,180 +351,12 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
   void clearPal() => clearField(4);
 }
 
-class GetAllTeamsRequest extends $pb.GeneratedMessage {
-  factory GetAllTeamsRequest() => create();
-  GetAllTeamsRequest._() : super();
-  factory GetAllTeamsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTeamsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTeamsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllTeamsRequest clone() => GetAllTeamsRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllTeamsRequest copyWith(void Function(GetAllTeamsRequest) updates) => super.copyWith((message) => updates(message as GetAllTeamsRequest)) as GetAllTeamsRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllTeamsRequest create() => GetAllTeamsRequest._();
-  GetAllTeamsRequest createEmptyInstance() => create();
-  static $pb.PbList<GetAllTeamsRequest> createRepeated() => $pb.PbList<GetAllTeamsRequest>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllTeamsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTeamsRequest>(create);
-  static GetAllTeamsRequest? _defaultInstance;
-}
-
-class GetAllTeamsResponse_Team extends $pb.GeneratedMessage {
-  factory GetAllTeamsResponse_Team({
-    $core.String? teamId,
-    $core.String? name,
-    $core.String? description,
-    $core.String? image,
-  }) {
-    final $result = create();
-    if (teamId != null) {
-      $result.teamId = teamId;
-    }
-    if (name != null) {
-      $result.name = name;
-    }
-    if (description != null) {
-      $result.description = description;
-    }
-    if (image != null) {
-      $result.image = image;
-    }
-    return $result;
-  }
-  GetAllTeamsResponse_Team._() : super();
-  factory GetAllTeamsResponse_Team.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTeamsResponse_Team.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTeamsResponse.Team', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'teamId')
-    ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..aOS(5, _omitFieldNames ? '' : 'image')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllTeamsResponse_Team clone() => GetAllTeamsResponse_Team()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllTeamsResponse_Team copyWith(void Function(GetAllTeamsResponse_Team) updates) => super.copyWith((message) => updates(message as GetAllTeamsResponse_Team)) as GetAllTeamsResponse_Team;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllTeamsResponse_Team create() => GetAllTeamsResponse_Team._();
-  GetAllTeamsResponse_Team createEmptyInstance() => create();
-  static $pb.PbList<GetAllTeamsResponse_Team> createRepeated() => $pb.PbList<GetAllTeamsResponse_Team>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllTeamsResponse_Team getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTeamsResponse_Team>(create);
-  static GetAllTeamsResponse_Team? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get teamId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set teamId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasTeamId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearTeamId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get name => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set name($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasName() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearName() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get description => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set description($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasDescription() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearDescription() => clearField(3);
-
-  @$pb.TagNumber(5)
-  $core.String get image => $_getSZ(3);
-  @$pb.TagNumber(5)
-  set image($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasImage() => $_has(3);
-  @$pb.TagNumber(5)
-  void clearImage() => clearField(5);
-}
-
-class GetAllTeamsResponse extends $pb.GeneratedMessage {
-  factory GetAllTeamsResponse({
-    $core.Iterable<GetAllTeamsResponse_Team>? teams,
-  }) {
-    final $result = create();
-    if (teams != null) {
-      $result.teams.addAll(teams);
-    }
-    return $result;
-  }
-  GetAllTeamsResponse._() : super();
-  factory GetAllTeamsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTeamsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTeamsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..pc<GetAllTeamsResponse_Team>(1, _omitFieldNames ? '' : 'teams', $pb.PbFieldType.PM, subBuilder: GetAllTeamsResponse_Team.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllTeamsResponse clone() => GetAllTeamsResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllTeamsResponse copyWith(void Function(GetAllTeamsResponse) updates) => super.copyWith((message) => updates(message as GetAllTeamsResponse)) as GetAllTeamsResponse;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllTeamsResponse create() => GetAllTeamsResponse._();
-  GetAllTeamsResponse createEmptyInstance() => create();
-  static $pb.PbList<GetAllTeamsResponse> createRepeated() => $pb.PbList<GetAllTeamsResponse>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllTeamsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTeamsResponse>(create);
-  static GetAllTeamsResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.List<GetAllTeamsResponse_Team> get teams => $_getList(0);
-}
-
 class TrackChallengeRequest extends $pb.GeneratedMessage {
   factory TrackChallengeRequest({
     $core.String? challengeId,
     $core.String? userId,
     $fixnum.Int64? score,
-    $core.String? doneAt,
+    $11.Timestamp? doneAt,
   }) {
     final $result = create();
     if (challengeId != null) {
@@ -542,7 +381,7 @@ class TrackChallengeRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'challengeId')
     ..aOS(2, _omitFieldNames ? '' : 'userId')
     ..a<$fixnum.Int64>(3, _omitFieldNames ? '' : 'score', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..aOS(4, _omitFieldNames ? '' : 'doneAt')
+    ..aOM<$11.Timestamp>(4, _omitFieldNames ? '' : 'doneAt', subBuilder: $11.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -595,22 +434,24 @@ class TrackChallengeRequest extends $pb.GeneratedMessage {
   void clearScore() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get doneAt => $_getSZ(3);
+  $11.Timestamp get doneAt => $_getN(3);
   @$pb.TagNumber(4)
-  set doneAt($core.String v) { $_setString(3, v); }
+  set doneAt($11.Timestamp v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasDoneAt() => $_has(3);
   @$pb.TagNumber(4)
   void clearDoneAt() => clearField(4);
+  @$pb.TagNumber(4)
+  $11.Timestamp ensureDoneAt() => $_ensure(3);
 }
 
 class TrackChallengeResponse extends $pb.GeneratedMessage {
   factory TrackChallengeResponse({
-    $core.String? challengeId,
+    $core.String? id,
   }) {
     final $result = create();
-    if (challengeId != null) {
-      $result.challengeId = challengeId;
+    if (id != null) {
+      $result.id = id;
     }
     return $result;
   }
@@ -619,7 +460,7 @@ class TrackChallengeResponse extends $pb.GeneratedMessage {
   factory TrackChallengeResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TrackChallengeResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'challengeId')
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
@@ -645,22 +486,51 @@ class TrackChallengeResponse extends $pb.GeneratedMessage {
   static TrackChallengeResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get challengeId => $_getSZ(0);
+  $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
-  set challengeId($core.String v) { $_setString(0, v); }
+  set id($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasChallengeId() => $_has(0);
+  $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearChallengeId() => clearField(1);
+  void clearId() => clearField(1);
 }
 
-class GetActiveChallengesRequest extends $pb.GeneratedMessage {
-  factory GetActiveChallengesRequest() => create();
-  GetActiveChallengesRequest._() : super();
-  factory GetActiveChallengesRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetActiveChallengesRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+class CreateDailyChallengeRequest extends $pb.GeneratedMessage {
+  factory CreateDailyChallengeRequest({
+    $core.String? title,
+    $core.String? description,
+    ChallengeCategory? category,
+    $fixnum.Int64? threshold,
+    $fixnum.Int64? points,
+  }) {
+    final $result = create();
+    if (title != null) {
+      $result.title = title;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (category != null) {
+      $result.category = category;
+    }
+    if (threshold != null) {
+      $result.threshold = threshold;
+    }
+    if (points != null) {
+      $result.points = points;
+    }
+    return $result;
+  }
+  CreateDailyChallengeRequest._() : super();
+  factory CreateDailyChallengeRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateDailyChallengeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetActiveChallengesRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateDailyChallengeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'title')
+    ..aOS(2, _omitFieldNames ? '' : 'description')
+    ..e<ChallengeCategory>(3, _omitFieldNames ? '' : 'category', $pb.PbFieldType.OE, defaultOrMaker: ChallengeCategory.CHALLENGE_CATEGORY_UNSPECIFIED, valueOf: ChallengeCategory.valueOf, enumValues: ChallengeCategory.values)
+    ..a<$fixnum.Int64>(4, _omitFieldNames ? '' : 'threshold', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..a<$fixnum.Int64>(5, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..hasRequiredFields = false
   ;
 
@@ -668,40 +538,354 @@ class GetActiveChallengesRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetActiveChallengesRequest clone() => GetActiveChallengesRequest()..mergeFromMessage(this);
+  CreateDailyChallengeRequest clone() => CreateDailyChallengeRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetActiveChallengesRequest copyWith(void Function(GetActiveChallengesRequest) updates) => super.copyWith((message) => updates(message as GetActiveChallengesRequest)) as GetActiveChallengesRequest;
+  CreateDailyChallengeRequest copyWith(void Function(CreateDailyChallengeRequest) updates) => super.copyWith((message) => updates(message as CreateDailyChallengeRequest)) as CreateDailyChallengeRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetActiveChallengesRequest create() => GetActiveChallengesRequest._();
-  GetActiveChallengesRequest createEmptyInstance() => create();
-  static $pb.PbList<GetActiveChallengesRequest> createRepeated() => $pb.PbList<GetActiveChallengesRequest>();
+  static CreateDailyChallengeRequest create() => CreateDailyChallengeRequest._();
+  CreateDailyChallengeRequest createEmptyInstance() => create();
+  static $pb.PbList<CreateDailyChallengeRequest> createRepeated() => $pb.PbList<CreateDailyChallengeRequest>();
   @$core.pragma('dart2js:noInline')
-  static GetActiveChallengesRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetActiveChallengesRequest>(create);
-  static GetActiveChallengesRequest? _defaultInstance;
+  static CreateDailyChallengeRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateDailyChallengeRequest>(create);
+  static CreateDailyChallengeRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get title => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set title($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasTitle() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTitle() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get description => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set description($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasDescription() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDescription() => clearField(2);
+
+  @$pb.TagNumber(3)
+  ChallengeCategory get category => $_getN(2);
+  @$pb.TagNumber(3)
+  set category(ChallengeCategory v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasCategory() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCategory() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $fixnum.Int64 get threshold => $_getI64(3);
+  @$pb.TagNumber(4)
+  set threshold($fixnum.Int64 v) { $_setInt64(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasThreshold() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearThreshold() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get points => $_getI64(4);
+  @$pb.TagNumber(5)
+  set points($fixnum.Int64 v) { $_setInt64(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasPoints() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearPoints() => clearField(5);
 }
 
-class GetActiveChallengesResponse_Challenge extends $pb.GeneratedMessage {
-  factory GetActiveChallengesResponse_Challenge({
-    $core.String? challengeId,
+class CreateDailyChallengeResponse extends $pb.GeneratedMessage {
+  factory CreateDailyChallengeResponse({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
+  CreateDailyChallengeResponse._() : super();
+  factory CreateDailyChallengeResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateDailyChallengeResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateDailyChallengeResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateDailyChallengeResponse clone() => CreateDailyChallengeResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateDailyChallengeResponse copyWith(void Function(CreateDailyChallengeResponse) updates) => super.copyWith((message) => updates(message as CreateDailyChallengeResponse)) as CreateDailyChallengeResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreateDailyChallengeResponse create() => CreateDailyChallengeResponse._();
+  CreateDailyChallengeResponse createEmptyInstance() => create();
+  static $pb.PbList<CreateDailyChallengeResponse> createRepeated() => $pb.PbList<CreateDailyChallengeResponse>();
+  @$core.pragma('dart2js:noInline')
+  static CreateDailyChallengeResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateDailyChallengeResponse>(create);
+  static CreateDailyChallengeResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
+class CreateQuestChallengeRequest extends $pb.GeneratedMessage {
+  factory CreateQuestChallengeRequest({
     $core.String? title,
     $core.String? description,
-    $core.String? startAt,
-    $core.String? endAt,
+    $11.Timestamp? startAt,
+    $11.Timestamp? endAt,
+    ChallengeCategory? category,
+    $fixnum.Int64? threshold,
+    $fixnum.Int64? points,
+  }) {
+    final $result = create();
+    if (title != null) {
+      $result.title = title;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (startAt != null) {
+      $result.startAt = startAt;
+    }
+    if (endAt != null) {
+      $result.endAt = endAt;
+    }
+    if (category != null) {
+      $result.category = category;
+    }
+    if (threshold != null) {
+      $result.threshold = threshold;
+    }
+    if (points != null) {
+      $result.points = points;
+    }
+    return $result;
+  }
+  CreateQuestChallengeRequest._() : super();
+  factory CreateQuestChallengeRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateQuestChallengeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateQuestChallengeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'title')
+    ..aOS(2, _omitFieldNames ? '' : 'description')
+    ..aOM<$11.Timestamp>(3, _omitFieldNames ? '' : 'startAt', subBuilder: $11.Timestamp.create)
+    ..aOM<$11.Timestamp>(4, _omitFieldNames ? '' : 'endAt', subBuilder: $11.Timestamp.create)
+    ..e<ChallengeCategory>(5, _omitFieldNames ? '' : 'category', $pb.PbFieldType.OE, defaultOrMaker: ChallengeCategory.CHALLENGE_CATEGORY_UNSPECIFIED, valueOf: ChallengeCategory.valueOf, enumValues: ChallengeCategory.values)
+    ..a<$fixnum.Int64>(6, _omitFieldNames ? '' : 'threshold', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..a<$fixnum.Int64>(7, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateQuestChallengeRequest clone() => CreateQuestChallengeRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateQuestChallengeRequest copyWith(void Function(CreateQuestChallengeRequest) updates) => super.copyWith((message) => updates(message as CreateQuestChallengeRequest)) as CreateQuestChallengeRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreateQuestChallengeRequest create() => CreateQuestChallengeRequest._();
+  CreateQuestChallengeRequest createEmptyInstance() => create();
+  static $pb.PbList<CreateQuestChallengeRequest> createRepeated() => $pb.PbList<CreateQuestChallengeRequest>();
+  @$core.pragma('dart2js:noInline')
+  static CreateQuestChallengeRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateQuestChallengeRequest>(create);
+  static CreateQuestChallengeRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get title => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set title($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasTitle() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTitle() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get description => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set description($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasDescription() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDescription() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $11.Timestamp get startAt => $_getN(2);
+  @$pb.TagNumber(3)
+  set startAt($11.Timestamp v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasStartAt() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearStartAt() => clearField(3);
+  @$pb.TagNumber(3)
+  $11.Timestamp ensureStartAt() => $_ensure(2);
+
+  @$pb.TagNumber(4)
+  $11.Timestamp get endAt => $_getN(3);
+  @$pb.TagNumber(4)
+  set endAt($11.Timestamp v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasEndAt() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearEndAt() => clearField(4);
+  @$pb.TagNumber(4)
+  $11.Timestamp ensureEndAt() => $_ensure(3);
+
+  @$pb.TagNumber(5)
+  ChallengeCategory get category => $_getN(4);
+  @$pb.TagNumber(5)
+  set category(ChallengeCategory v) { setField(5, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasCategory() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearCategory() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $fixnum.Int64 get threshold => $_getI64(5);
+  @$pb.TagNumber(6)
+  set threshold($fixnum.Int64 v) { $_setInt64(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasThreshold() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearThreshold() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $fixnum.Int64 get points => $_getI64(6);
+  @$pb.TagNumber(7)
+  set points($fixnum.Int64 v) { $_setInt64(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasPoints() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearPoints() => clearField(7);
+}
+
+class CreateQuestChallengeResponse extends $pb.GeneratedMessage {
+  factory CreateQuestChallengeResponse({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
+  CreateQuestChallengeResponse._() : super();
+  factory CreateQuestChallengeResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateQuestChallengeResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateQuestChallengeResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateQuestChallengeResponse clone() => CreateQuestChallengeResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateQuestChallengeResponse copyWith(void Function(CreateQuestChallengeResponse) updates) => super.copyWith((message) => updates(message as CreateQuestChallengeResponse)) as CreateQuestChallengeResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreateQuestChallengeResponse create() => CreateQuestChallengeResponse._();
+  CreateQuestChallengeResponse createEmptyInstance() => create();
+  static $pb.PbList<CreateQuestChallengeResponse> createRepeated() => $pb.PbList<CreateQuestChallengeResponse>();
+  @$core.pragma('dart2js:noInline')
+  static CreateQuestChallengeResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateQuestChallengeResponse>(create);
+  static CreateQuestChallengeResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
+class GetChallengesRequest extends $pb.GeneratedMessage {
+  factory GetChallengesRequest() => create();
+  GetChallengesRequest._() : super();
+  factory GetChallengesRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetChallengesRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChallengesRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetChallengesRequest clone() => GetChallengesRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetChallengesRequest copyWith(void Function(GetChallengesRequest) updates) => super.copyWith((message) => updates(message as GetChallengesRequest)) as GetChallengesRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetChallengesRequest create() => GetChallengesRequest._();
+  GetChallengesRequest createEmptyInstance() => create();
+  static $pb.PbList<GetChallengesRequest> createRepeated() => $pb.PbList<GetChallengesRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetChallengesRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetChallengesRequest>(create);
+  static GetChallengesRequest? _defaultInstance;
+}
+
+class GetChallengesResponse_Challenge extends $pb.GeneratedMessage {
+  factory GetChallengesResponse_Challenge({
+    $core.String? id,
+    $core.String? title,
+    $core.String? description,
+    $11.Timestamp? startAt,
+    $11.Timestamp? endAt,
     ChallengeCategory? category,
     ChallengeType? type,
     $fixnum.Int64? threshold,
     $fixnum.Int64? points,
-    $core.String? unit,
   }) {
     final $result = create();
-    if (challengeId != null) {
-      $result.challengeId = challengeId;
+    if (id != null) {
+      $result.id = id;
     }
     if (title != null) {
       $result.title = title;
@@ -727,26 +911,22 @@ class GetActiveChallengesResponse_Challenge extends $pb.GeneratedMessage {
     if (points != null) {
       $result.points = points;
     }
-    if (unit != null) {
-      $result.unit = unit;
-    }
     return $result;
   }
-  GetActiveChallengesResponse_Challenge._() : super();
-  factory GetActiveChallengesResponse_Challenge.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetActiveChallengesResponse_Challenge.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetChallengesResponse_Challenge._() : super();
+  factory GetChallengesResponse_Challenge.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetChallengesResponse_Challenge.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetActiveChallengesResponse.Challenge', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'challengeId')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChallengesResponse.Challenge', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'title')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..aOS(4, _omitFieldNames ? '' : 'startAt')
-    ..aOS(5, _omitFieldNames ? '' : 'endAt')
+    ..aOM<$11.Timestamp>(4, _omitFieldNames ? '' : 'startAt', subBuilder: $11.Timestamp.create)
+    ..aOM<$11.Timestamp>(5, _omitFieldNames ? '' : 'endAt', subBuilder: $11.Timestamp.create)
     ..e<ChallengeCategory>(6, _omitFieldNames ? '' : 'category', $pb.PbFieldType.OE, defaultOrMaker: ChallengeCategory.CHALLENGE_CATEGORY_UNSPECIFIED, valueOf: ChallengeCategory.valueOf, enumValues: ChallengeCategory.values)
     ..e<ChallengeType>(7, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: ChallengeType.CHALLENGE_TYPE_UNSPECIFIED, valueOf: ChallengeType.valueOf, enumValues: ChallengeType.values)
     ..a<$fixnum.Int64>(8, _omitFieldNames ? '' : 'threshold', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..a<$fixnum.Int64>(9, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..aOS(10, _omitFieldNames ? '' : 'unit')
     ..hasRequiredFields = false
   ;
 
@@ -754,31 +934,31 @@ class GetActiveChallengesResponse_Challenge extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetActiveChallengesResponse_Challenge clone() => GetActiveChallengesResponse_Challenge()..mergeFromMessage(this);
+  GetChallengesResponse_Challenge clone() => GetChallengesResponse_Challenge()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetActiveChallengesResponse_Challenge copyWith(void Function(GetActiveChallengesResponse_Challenge) updates) => super.copyWith((message) => updates(message as GetActiveChallengesResponse_Challenge)) as GetActiveChallengesResponse_Challenge;
+  GetChallengesResponse_Challenge copyWith(void Function(GetChallengesResponse_Challenge) updates) => super.copyWith((message) => updates(message as GetChallengesResponse_Challenge)) as GetChallengesResponse_Challenge;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetActiveChallengesResponse_Challenge create() => GetActiveChallengesResponse_Challenge._();
-  GetActiveChallengesResponse_Challenge createEmptyInstance() => create();
-  static $pb.PbList<GetActiveChallengesResponse_Challenge> createRepeated() => $pb.PbList<GetActiveChallengesResponse_Challenge>();
+  static GetChallengesResponse_Challenge create() => GetChallengesResponse_Challenge._();
+  GetChallengesResponse_Challenge createEmptyInstance() => create();
+  static $pb.PbList<GetChallengesResponse_Challenge> createRepeated() => $pb.PbList<GetChallengesResponse_Challenge>();
   @$core.pragma('dart2js:noInline')
-  static GetActiveChallengesResponse_Challenge getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetActiveChallengesResponse_Challenge>(create);
-  static GetActiveChallengesResponse_Challenge? _defaultInstance;
+  static GetChallengesResponse_Challenge getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetChallengesResponse_Challenge>(create);
+  static GetChallengesResponse_Challenge? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get challengeId => $_getSZ(0);
+  $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
-  set challengeId($core.String v) { $_setString(0, v); }
+  set id($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasChallengeId() => $_has(0);
+  $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearChallengeId() => clearField(1);
+  void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get title => $_getSZ(1);
@@ -799,22 +979,26 @@ class GetActiveChallengesResponse_Challenge extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get startAt => $_getSZ(3);
+  $11.Timestamp get startAt => $_getN(3);
   @$pb.TagNumber(4)
-  set startAt($core.String v) { $_setString(3, v); }
+  set startAt($11.Timestamp v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStartAt() => $_has(3);
   @$pb.TagNumber(4)
   void clearStartAt() => clearField(4);
+  @$pb.TagNumber(4)
+  $11.Timestamp ensureStartAt() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $core.String get endAt => $_getSZ(4);
+  $11.Timestamp get endAt => $_getN(4);
   @$pb.TagNumber(5)
-  set endAt($core.String v) { $_setString(4, v); }
+  set endAt($11.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasEndAt() => $_has(4);
   @$pb.TagNumber(5)
   void clearEndAt() => clearField(5);
+  @$pb.TagNumber(5)
+  $11.Timestamp ensureEndAt() => $_ensure(4);
 
   @$pb.TagNumber(6)
   ChallengeCategory get category => $_getN(5);
@@ -851,20 +1035,11 @@ class GetActiveChallengesResponse_Challenge extends $pb.GeneratedMessage {
   $core.bool hasPoints() => $_has(8);
   @$pb.TagNumber(9)
   void clearPoints() => clearField(9);
-
-  @$pb.TagNumber(10)
-  $core.String get unit => $_getSZ(9);
-  @$pb.TagNumber(10)
-  set unit($core.String v) { $_setString(9, v); }
-  @$pb.TagNumber(10)
-  $core.bool hasUnit() => $_has(9);
-  @$pb.TagNumber(10)
-  void clearUnit() => clearField(10);
 }
 
-class GetActiveChallengesResponse extends $pb.GeneratedMessage {
-  factory GetActiveChallengesResponse({
-    $core.Iterable<GetActiveChallengesResponse_Challenge>? challenges,
+class GetChallengesResponse extends $pb.GeneratedMessage {
+  factory GetChallengesResponse({
+    $core.Iterable<GetChallengesResponse_Challenge>? challenges,
   }) {
     final $result = create();
     if (challenges != null) {
@@ -872,12 +1047,12 @@ class GetActiveChallengesResponse extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  GetActiveChallengesResponse._() : super();
-  factory GetActiveChallengesResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetActiveChallengesResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetChallengesResponse._() : super();
+  factory GetChallengesResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetChallengesResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetActiveChallengesResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..pc<GetActiveChallengesResponse_Challenge>(1, _omitFieldNames ? '' : 'challenges', $pb.PbFieldType.PM, subBuilder: GetActiveChallengesResponse_Challenge.create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChallengesResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
+    ..pc<GetChallengesResponse_Challenge>(1, _omitFieldNames ? '' : 'challenges', $pb.PbFieldType.PM, subBuilder: GetChallengesResponse_Challenge.create)
     ..hasRequiredFields = false
   ;
 
@@ -885,42 +1060,41 @@ class GetActiveChallengesResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetActiveChallengesResponse clone() => GetActiveChallengesResponse()..mergeFromMessage(this);
+  GetChallengesResponse clone() => GetChallengesResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetActiveChallengesResponse copyWith(void Function(GetActiveChallengesResponse) updates) => super.copyWith((message) => updates(message as GetActiveChallengesResponse)) as GetActiveChallengesResponse;
+  GetChallengesResponse copyWith(void Function(GetChallengesResponse) updates) => super.copyWith((message) => updates(message as GetChallengesResponse)) as GetChallengesResponse;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetActiveChallengesResponse create() => GetActiveChallengesResponse._();
-  GetActiveChallengesResponse createEmptyInstance() => create();
-  static $pb.PbList<GetActiveChallengesResponse> createRepeated() => $pb.PbList<GetActiveChallengesResponse>();
+  static GetChallengesResponse create() => GetChallengesResponse._();
+  GetChallengesResponse createEmptyInstance() => create();
+  static $pb.PbList<GetChallengesResponse> createRepeated() => $pb.PbList<GetChallengesResponse>();
   @$core.pragma('dart2js:noInline')
-  static GetActiveChallengesResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetActiveChallengesResponse>(create);
-  static GetActiveChallengesResponse? _defaultInstance;
+  static GetChallengesResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetChallengesResponse>(create);
+  static GetChallengesResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<GetActiveChallengesResponse_Challenge> get challenges => $_getList(0);
+  $core.List<GetChallengesResponse_Challenge> get challenges => $_getList(0);
 }
 
 class UpdateChallengeRequest extends $pb.GeneratedMessage {
   factory UpdateChallengeRequest({
-    $core.String? challengeId,
+    $core.String? id,
     $core.String? title,
     $core.String? description,
-    $core.String? startAt,
-    $core.String? endAt,
+    $11.Timestamp? startAt,
+    $11.Timestamp? endAt,
     ChallengeCategory? category,
     $fixnum.Int64? threshold,
     $fixnum.Int64? points,
-    $core.String? unit,
   }) {
     final $result = create();
-    if (challengeId != null) {
-      $result.challengeId = challengeId;
+    if (id != null) {
+      $result.id = id;
     }
     if (title != null) {
       $result.title = title;
@@ -943,9 +1117,6 @@ class UpdateChallengeRequest extends $pb.GeneratedMessage {
     if (points != null) {
       $result.points = points;
     }
-    if (unit != null) {
-      $result.unit = unit;
-    }
     return $result;
   }
   UpdateChallengeRequest._() : super();
@@ -953,15 +1124,14 @@ class UpdateChallengeRequest extends $pb.GeneratedMessage {
   factory UpdateChallengeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateChallengeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'challengeId')
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'title')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..aOS(4, _omitFieldNames ? '' : 'startAt')
-    ..aOS(5, _omitFieldNames ? '' : 'endAt')
+    ..aOM<$11.Timestamp>(4, _omitFieldNames ? '' : 'startAt', subBuilder: $11.Timestamp.create)
+    ..aOM<$11.Timestamp>(5, _omitFieldNames ? '' : 'endAt', subBuilder: $11.Timestamp.create)
     ..e<ChallengeCategory>(6, _omitFieldNames ? '' : 'category', $pb.PbFieldType.OE, defaultOrMaker: ChallengeCategory.CHALLENGE_CATEGORY_UNSPECIFIED, valueOf: ChallengeCategory.valueOf, enumValues: ChallengeCategory.values)
     ..a<$fixnum.Int64>(7, _omitFieldNames ? '' : 'threshold', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..a<$fixnum.Int64>(8, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..aOS(9, _omitFieldNames ? '' : 'unit')
     ..hasRequiredFields = false
   ;
 
@@ -987,13 +1157,13 @@ class UpdateChallengeRequest extends $pb.GeneratedMessage {
   static UpdateChallengeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get challengeId => $_getSZ(0);
+  $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
-  set challengeId($core.String v) { $_setString(0, v); }
+  set id($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasChallengeId() => $_has(0);
+  $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearChallengeId() => clearField(1);
+  void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get title => $_getSZ(1);
@@ -1014,22 +1184,26 @@ class UpdateChallengeRequest extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get startAt => $_getSZ(3);
+  $11.Timestamp get startAt => $_getN(3);
   @$pb.TagNumber(4)
-  set startAt($core.String v) { $_setString(3, v); }
+  set startAt($11.Timestamp v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStartAt() => $_has(3);
   @$pb.TagNumber(4)
   void clearStartAt() => clearField(4);
+  @$pb.TagNumber(4)
+  $11.Timestamp ensureStartAt() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $core.String get endAt => $_getSZ(4);
+  $11.Timestamp get endAt => $_getN(4);
   @$pb.TagNumber(5)
-  set endAt($core.String v) { $_setString(4, v); }
+  set endAt($11.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasEndAt() => $_has(4);
   @$pb.TagNumber(5)
   void clearEndAt() => clearField(5);
+  @$pb.TagNumber(5)
+  $11.Timestamp ensureEndAt() => $_ensure(4);
 
   @$pb.TagNumber(6)
   ChallengeCategory get category => $_getN(5);
@@ -1057,33 +1231,23 @@ class UpdateChallengeRequest extends $pb.GeneratedMessage {
   $core.bool hasPoints() => $_has(7);
   @$pb.TagNumber(8)
   void clearPoints() => clearField(8);
-
-  @$pb.TagNumber(9)
-  $core.String get unit => $_getSZ(8);
-  @$pb.TagNumber(9)
-  set unit($core.String v) { $_setString(8, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasUnit() => $_has(8);
-  @$pb.TagNumber(9)
-  void clearUnit() => clearField(9);
 }
 
 class UpdateChallengeResponse extends $pb.GeneratedMessage {
   factory UpdateChallengeResponse({
-    $core.String? challengeId,
+    $core.String? id,
     $core.String? title,
     $core.String? description,
-    $core.String? startAt,
-    $core.String? endAt,
+    $11.Timestamp? startAt,
+    $11.Timestamp? endAt,
     ChallengeCategory? category,
     ChallengeType? type,
     $fixnum.Int64? threshold,
     $fixnum.Int64? points,
-    $core.String? unit,
   }) {
     final $result = create();
-    if (challengeId != null) {
-      $result.challengeId = challengeId;
+    if (id != null) {
+      $result.id = id;
     }
     if (title != null) {
       $result.title = title;
@@ -1109,9 +1273,6 @@ class UpdateChallengeResponse extends $pb.GeneratedMessage {
     if (points != null) {
       $result.points = points;
     }
-    if (unit != null) {
-      $result.unit = unit;
-    }
     return $result;
   }
   UpdateChallengeResponse._() : super();
@@ -1119,16 +1280,15 @@ class UpdateChallengeResponse extends $pb.GeneratedMessage {
   factory UpdateChallengeResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateChallengeResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'challengeId')
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'title')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..aOS(4, _omitFieldNames ? '' : 'startAt')
-    ..aOS(5, _omitFieldNames ? '' : 'endAt')
+    ..aOM<$11.Timestamp>(4, _omitFieldNames ? '' : 'startAt', subBuilder: $11.Timestamp.create)
+    ..aOM<$11.Timestamp>(5, _omitFieldNames ? '' : 'endAt', subBuilder: $11.Timestamp.create)
     ..e<ChallengeCategory>(6, _omitFieldNames ? '' : 'category', $pb.PbFieldType.OE, defaultOrMaker: ChallengeCategory.CHALLENGE_CATEGORY_UNSPECIFIED, valueOf: ChallengeCategory.valueOf, enumValues: ChallengeCategory.values)
     ..e<ChallengeType>(7, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: ChallengeType.CHALLENGE_TYPE_UNSPECIFIED, valueOf: ChallengeType.valueOf, enumValues: ChallengeType.values)
     ..a<$fixnum.Int64>(8, _omitFieldNames ? '' : 'threshold', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..a<$fixnum.Int64>(9, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..aOS(10, _omitFieldNames ? '' : 'unit')
     ..hasRequiredFields = false
   ;
 
@@ -1154,13 +1314,13 @@ class UpdateChallengeResponse extends $pb.GeneratedMessage {
   static UpdateChallengeResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get challengeId => $_getSZ(0);
+  $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
-  set challengeId($core.String v) { $_setString(0, v); }
+  set id($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasChallengeId() => $_has(0);
+  $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearChallengeId() => clearField(1);
+  void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get title => $_getSZ(1);
@@ -1181,22 +1341,26 @@ class UpdateChallengeResponse extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get startAt => $_getSZ(3);
+  $11.Timestamp get startAt => $_getN(3);
   @$pb.TagNumber(4)
-  set startAt($core.String v) { $_setString(3, v); }
+  set startAt($11.Timestamp v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStartAt() => $_has(3);
   @$pb.TagNumber(4)
   void clearStartAt() => clearField(4);
+  @$pb.TagNumber(4)
+  $11.Timestamp ensureStartAt() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $core.String get endAt => $_getSZ(4);
+  $11.Timestamp get endAt => $_getN(4);
   @$pb.TagNumber(5)
-  set endAt($core.String v) { $_setString(4, v); }
+  set endAt($11.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasEndAt() => $_has(4);
   @$pb.TagNumber(5)
   void clearEndAt() => clearField(5);
+  @$pb.TagNumber(5)
+  $11.Timestamp ensureEndAt() => $_ensure(4);
 
   @$pb.TagNumber(6)
   ChallengeCategory get category => $_getN(5);
@@ -1233,469 +1397,6 @@ class UpdateChallengeResponse extends $pb.GeneratedMessage {
   $core.bool hasPoints() => $_has(8);
   @$pb.TagNumber(9)
   void clearPoints() => clearField(9);
-
-  @$pb.TagNumber(10)
-  $core.String get unit => $_getSZ(9);
-  @$pb.TagNumber(10)
-  set unit($core.String v) { $_setString(9, v); }
-  @$pb.TagNumber(10)
-  $core.bool hasUnit() => $_has(9);
-  @$pb.TagNumber(10)
-  void clearUnit() => clearField(10);
-}
-
-class GetScoreRequest extends $pb.GeneratedMessage {
-  factory GetScoreRequest({
-    $core.String? userId,
-  }) {
-    final $result = create();
-    if (userId != null) {
-      $result.userId = userId;
-    }
-    return $result;
-  }
-  GetScoreRequest._() : super();
-  factory GetScoreRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetScoreRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetScoreRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'userId')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetScoreRequest clone() => GetScoreRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetScoreRequest copyWith(void Function(GetScoreRequest) updates) => super.copyWith((message) => updates(message as GetScoreRequest)) as GetScoreRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetScoreRequest create() => GetScoreRequest._();
-  GetScoreRequest createEmptyInstance() => create();
-  static $pb.PbList<GetScoreRequest> createRepeated() => $pb.PbList<GetScoreRequest>();
-  @$core.pragma('dart2js:noInline')
-  static GetScoreRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetScoreRequest>(create);
-  static GetScoreRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasUserId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearUserId() => clearField(1);
-}
-
-class GetScoreResponse extends $pb.GeneratedMessage {
-  factory GetScoreResponse({
-    $fixnum.Int64? score,
-  }) {
-    final $result = create();
-    if (score != null) {
-      $result.score = score;
-    }
-    return $result;
-  }
-  GetScoreResponse._() : super();
-  factory GetScoreResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetScoreResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetScoreResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..a<$fixnum.Int64>(1, _omitFieldNames ? '' : 'score', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetScoreResponse clone() => GetScoreResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetScoreResponse copyWith(void Function(GetScoreResponse) updates) => super.copyWith((message) => updates(message as GetScoreResponse)) as GetScoreResponse;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetScoreResponse create() => GetScoreResponse._();
-  GetScoreResponse createEmptyInstance() => create();
-  static $pb.PbList<GetScoreResponse> createRepeated() => $pb.PbList<GetScoreResponse>();
-  @$core.pragma('dart2js:noInline')
-  static GetScoreResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetScoreResponse>(create);
-  static GetScoreResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $fixnum.Int64 get score => $_getI64(0);
-  @$pb.TagNumber(1)
-  set score($fixnum.Int64 v) { $_setInt64(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasScore() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearScore() => clearField(1);
-}
-
-class GetRewardsRequest extends $pb.GeneratedMessage {
-  factory GetRewardsRequest({
-    $core.String? rewardId,
-  }) {
-    final $result = create();
-    if (rewardId != null) {
-      $result.rewardId = rewardId;
-    }
-    return $result;
-  }
-  GetRewardsRequest._() : super();
-  factory GetRewardsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetRewardsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRewardsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'rewardId')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetRewardsRequest clone() => GetRewardsRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetRewardsRequest copyWith(void Function(GetRewardsRequest) updates) => super.copyWith((message) => updates(message as GetRewardsRequest)) as GetRewardsRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetRewardsRequest create() => GetRewardsRequest._();
-  GetRewardsRequest createEmptyInstance() => create();
-  static $pb.PbList<GetRewardsRequest> createRepeated() => $pb.PbList<GetRewardsRequest>();
-  @$core.pragma('dart2js:noInline')
-  static GetRewardsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRewardsRequest>(create);
-  static GetRewardsRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get rewardId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set rewardId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasRewardId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearRewardId() => clearField(1);
-}
-
-class GetRewardsResponse_Reward extends $pb.GeneratedMessage {
-  factory GetRewardsResponse_Reward({
-    $core.String? rewardId,
-    $core.String? title,
-    $core.String? description,
-    $fixnum.Int64? points,
-  }) {
-    final $result = create();
-    if (rewardId != null) {
-      $result.rewardId = rewardId;
-    }
-    if (title != null) {
-      $result.title = title;
-    }
-    if (description != null) {
-      $result.description = description;
-    }
-    if (points != null) {
-      $result.points = points;
-    }
-    return $result;
-  }
-  GetRewardsResponse_Reward._() : super();
-  factory GetRewardsResponse_Reward.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetRewardsResponse_Reward.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRewardsResponse.Reward', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'rewardId')
-    ..aOS(2, _omitFieldNames ? '' : 'title')
-    ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..a<$fixnum.Int64>(5, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetRewardsResponse_Reward clone() => GetRewardsResponse_Reward()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetRewardsResponse_Reward copyWith(void Function(GetRewardsResponse_Reward) updates) => super.copyWith((message) => updates(message as GetRewardsResponse_Reward)) as GetRewardsResponse_Reward;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetRewardsResponse_Reward create() => GetRewardsResponse_Reward._();
-  GetRewardsResponse_Reward createEmptyInstance() => create();
-  static $pb.PbList<GetRewardsResponse_Reward> createRepeated() => $pb.PbList<GetRewardsResponse_Reward>();
-  @$core.pragma('dart2js:noInline')
-  static GetRewardsResponse_Reward getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRewardsResponse_Reward>(create);
-  static GetRewardsResponse_Reward? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get rewardId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set rewardId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasRewardId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearRewardId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get title => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set title($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasTitle() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearTitle() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get description => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set description($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasDescription() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearDescription() => clearField(3);
-
-  @$pb.TagNumber(5)
-  $fixnum.Int64 get points => $_getI64(3);
-  @$pb.TagNumber(5)
-  set points($fixnum.Int64 v) { $_setInt64(3, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasPoints() => $_has(3);
-  @$pb.TagNumber(5)
-  void clearPoints() => clearField(5);
-}
-
-class GetRewardsResponse extends $pb.GeneratedMessage {
-  factory GetRewardsResponse({
-    $core.Iterable<GetRewardsResponse_Reward>? rewards,
-  }) {
-    final $result = create();
-    if (rewards != null) {
-      $result.rewards.addAll(rewards);
-    }
-    return $result;
-  }
-  GetRewardsResponse._() : super();
-  factory GetRewardsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetRewardsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRewardsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..pc<GetRewardsResponse_Reward>(1, _omitFieldNames ? '' : 'rewards', $pb.PbFieldType.PM, subBuilder: GetRewardsResponse_Reward.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetRewardsResponse clone() => GetRewardsResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetRewardsResponse copyWith(void Function(GetRewardsResponse) updates) => super.copyWith((message) => updates(message as GetRewardsResponse)) as GetRewardsResponse;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetRewardsResponse create() => GetRewardsResponse._();
-  GetRewardsResponse createEmptyInstance() => create();
-  static $pb.PbList<GetRewardsResponse> createRepeated() => $pb.PbList<GetRewardsResponse>();
-  @$core.pragma('dart2js:noInline')
-  static GetRewardsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRewardsResponse>(create);
-  static GetRewardsResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.List<GetRewardsResponse_Reward> get rewards => $_getList(0);
-}
-
-class GetAllRewardsRequest extends $pb.GeneratedMessage {
-  factory GetAllRewardsRequest() => create();
-  GetAllRewardsRequest._() : super();
-  factory GetAllRewardsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllRewardsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllRewardsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllRewardsRequest clone() => GetAllRewardsRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllRewardsRequest copyWith(void Function(GetAllRewardsRequest) updates) => super.copyWith((message) => updates(message as GetAllRewardsRequest)) as GetAllRewardsRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllRewardsRequest create() => GetAllRewardsRequest._();
-  GetAllRewardsRequest createEmptyInstance() => create();
-  static $pb.PbList<GetAllRewardsRequest> createRepeated() => $pb.PbList<GetAllRewardsRequest>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllRewardsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllRewardsRequest>(create);
-  static GetAllRewardsRequest? _defaultInstance;
-}
-
-class GetAllRewardsResponse_Reward extends $pb.GeneratedMessage {
-  factory GetAllRewardsResponse_Reward({
-    $core.String? rewardId,
-    $core.String? title,
-    $core.String? description,
-    $fixnum.Int64? points,
-  }) {
-    final $result = create();
-    if (rewardId != null) {
-      $result.rewardId = rewardId;
-    }
-    if (title != null) {
-      $result.title = title;
-    }
-    if (description != null) {
-      $result.description = description;
-    }
-    if (points != null) {
-      $result.points = points;
-    }
-    return $result;
-  }
-  GetAllRewardsResponse_Reward._() : super();
-  factory GetAllRewardsResponse_Reward.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllRewardsResponse_Reward.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllRewardsResponse.Reward', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'rewardId')
-    ..aOS(2, _omitFieldNames ? '' : 'title')
-    ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..a<$fixnum.Int64>(5, _omitFieldNames ? '' : 'points', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllRewardsResponse_Reward clone() => GetAllRewardsResponse_Reward()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllRewardsResponse_Reward copyWith(void Function(GetAllRewardsResponse_Reward) updates) => super.copyWith((message) => updates(message as GetAllRewardsResponse_Reward)) as GetAllRewardsResponse_Reward;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllRewardsResponse_Reward create() => GetAllRewardsResponse_Reward._();
-  GetAllRewardsResponse_Reward createEmptyInstance() => create();
-  static $pb.PbList<GetAllRewardsResponse_Reward> createRepeated() => $pb.PbList<GetAllRewardsResponse_Reward>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllRewardsResponse_Reward getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllRewardsResponse_Reward>(create);
-  static GetAllRewardsResponse_Reward? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get rewardId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set rewardId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasRewardId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearRewardId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get title => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set title($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasTitle() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearTitle() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get description => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set description($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasDescription() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearDescription() => clearField(3);
-
-  @$pb.TagNumber(5)
-  $fixnum.Int64 get points => $_getI64(3);
-  @$pb.TagNumber(5)
-  set points($fixnum.Int64 v) { $_setInt64(3, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasPoints() => $_has(3);
-  @$pb.TagNumber(5)
-  void clearPoints() => clearField(5);
-}
-
-class GetAllRewardsResponse extends $pb.GeneratedMessage {
-  factory GetAllRewardsResponse({
-    $core.Iterable<GetAllRewardsResponse_Reward>? rewards,
-  }) {
-    final $result = create();
-    if (rewards != null) {
-      $result.rewards.addAll(rewards);
-    }
-    return $result;
-  }
-  GetAllRewardsResponse._() : super();
-  factory GetAllRewardsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllRewardsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllRewardsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
-    ..pc<GetAllRewardsResponse_Reward>(1, _omitFieldNames ? '' : 'rewards', $pb.PbFieldType.PM, subBuilder: GetAllRewardsResponse_Reward.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllRewardsResponse clone() => GetAllRewardsResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllRewardsResponse copyWith(void Function(GetAllRewardsResponse) updates) => super.copyWith((message) => updates(message as GetAllRewardsResponse)) as GetAllRewardsResponse;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllRewardsResponse create() => GetAllRewardsResponse._();
-  GetAllRewardsResponse createEmptyInstance() => create();
-  static $pb.PbList<GetAllRewardsResponse> createRepeated() => $pb.PbList<GetAllRewardsResponse>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllRewardsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllRewardsResponse>(create);
-  static GetAllRewardsResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.List<GetAllRewardsResponse_Reward> get rewards => $_getList(0);
 }
 
 

@@ -19,6 +19,8 @@
 const grpc = {};
 grpc.web = require('grpc-web');
 
+
+var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js')
 const proto = {};
 proto.proto = {};
 proto.proto.services = {};
@@ -263,305 +265,244 @@ proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.trackC
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.impulse_svc.v1.GetActiveChallengesRequest,
- *   !proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse>}
+ *   !proto.proto.services.impulse_svc.v1.CreateDailyChallengeRequest,
+ *   !proto.proto.services.impulse_svc.v1.CreateDailyChallengeResponse>}
  */
-const methodDescriptor_ImpulseService_GetActiveChallenges = new grpc.web.MethodDescriptor(
-  '/proto.services.impulse_svc.v1.ImpulseService/GetActiveChallenges',
+const methodDescriptor_ImpulseService_CreateDailyChallenge = new grpc.web.MethodDescriptor(
+  '/proto.services.impulse_svc.v1.ImpulseService/CreateDailyChallenge',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.impulse_svc.v1.GetActiveChallengesRequest,
-  proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse,
+  proto.proto.services.impulse_svc.v1.CreateDailyChallengeRequest,
+  proto.proto.services.impulse_svc.v1.CreateDailyChallengeResponse,
   /**
-   * @param {!proto.proto.services.impulse_svc.v1.GetActiveChallengesRequest} request
+   * @param {!proto.proto.services.impulse_svc.v1.CreateDailyChallengeRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse.deserializeBinary
+  proto.proto.services.impulse_svc.v1.CreateDailyChallengeResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.impulse_svc.v1.GetActiveChallengesRequest} request The
+ * @param {!proto.proto.services.impulse_svc.v1.CreateDailyChallengeRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.impulse_svc.v1.CreateDailyChallengeResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.impulse_svc.v1.CreateDailyChallengeResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.impulse_svc.v1.ImpulseServiceClient.prototype.getActiveChallenges =
+proto.proto.services.impulse_svc.v1.ImpulseServiceClient.prototype.createDailyChallenge =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.impulse_svc.v1.ImpulseService/GetActiveChallenges',
+      '/proto.services.impulse_svc.v1.ImpulseService/CreateDailyChallenge',
       request,
       metadata || {},
-      methodDescriptor_ImpulseService_GetActiveChallenges,
+      methodDescriptor_ImpulseService_CreateDailyChallenge,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.impulse_svc.v1.GetActiveChallengesRequest} request The
+ * @param {!proto.proto.services.impulse_svc.v1.CreateDailyChallengeRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.impulse_svc.v1.GetActiveChallengesResponse>}
+ * @return {!Promise<!proto.proto.services.impulse_svc.v1.CreateDailyChallengeResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.getActiveChallenges =
+proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.createDailyChallenge =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.impulse_svc.v1.ImpulseService/GetActiveChallenges',
+      '/proto.services.impulse_svc.v1.ImpulseService/CreateDailyChallenge',
       request,
       metadata || {},
-      methodDescriptor_ImpulseService_GetActiveChallenges);
+      methodDescriptor_ImpulseService_CreateDailyChallenge);
 };
 
 
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.impulse_svc.v1.GetScoreRequest,
- *   !proto.proto.services.impulse_svc.v1.GetScoreResponse>}
+ *   !proto.proto.services.impulse_svc.v1.CreateQuestChallengeRequest,
+ *   !proto.proto.services.impulse_svc.v1.CreateQuestChallengeResponse>}
  */
-const methodDescriptor_ImpulseService_GetScore = new grpc.web.MethodDescriptor(
-  '/proto.services.impulse_svc.v1.ImpulseService/GetScore',
+const methodDescriptor_ImpulseService_CreateQuestChallenge = new grpc.web.MethodDescriptor(
+  '/proto.services.impulse_svc.v1.ImpulseService/CreateQuestChallenge',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.impulse_svc.v1.GetScoreRequest,
-  proto.proto.services.impulse_svc.v1.GetScoreResponse,
+  proto.proto.services.impulse_svc.v1.CreateQuestChallengeRequest,
+  proto.proto.services.impulse_svc.v1.CreateQuestChallengeResponse,
   /**
-   * @param {!proto.proto.services.impulse_svc.v1.GetScoreRequest} request
+   * @param {!proto.proto.services.impulse_svc.v1.CreateQuestChallengeRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.impulse_svc.v1.GetScoreResponse.deserializeBinary
+  proto.proto.services.impulse_svc.v1.CreateQuestChallengeResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.impulse_svc.v1.GetScoreRequest} request The
+ * @param {!proto.proto.services.impulse_svc.v1.CreateQuestChallengeRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.impulse_svc.v1.GetScoreResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.impulse_svc.v1.CreateQuestChallengeResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.impulse_svc.v1.GetScoreResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.impulse_svc.v1.CreateQuestChallengeResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.impulse_svc.v1.ImpulseServiceClient.prototype.getScore =
+proto.proto.services.impulse_svc.v1.ImpulseServiceClient.prototype.createQuestChallenge =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.impulse_svc.v1.ImpulseService/GetScore',
+      '/proto.services.impulse_svc.v1.ImpulseService/CreateQuestChallenge',
       request,
       metadata || {},
-      methodDescriptor_ImpulseService_GetScore,
+      methodDescriptor_ImpulseService_CreateQuestChallenge,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.impulse_svc.v1.GetScoreRequest} request The
+ * @param {!proto.proto.services.impulse_svc.v1.CreateQuestChallengeRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.impulse_svc.v1.GetScoreResponse>}
+ * @return {!Promise<!proto.proto.services.impulse_svc.v1.CreateQuestChallengeResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.getScore =
+proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.createQuestChallenge =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.impulse_svc.v1.ImpulseService/GetScore',
+      '/proto.services.impulse_svc.v1.ImpulseService/CreateQuestChallenge',
       request,
       metadata || {},
-      methodDescriptor_ImpulseService_GetScore);
+      methodDescriptor_ImpulseService_CreateQuestChallenge);
 };
 
 
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.impulse_svc.v1.GetRewardsRequest,
- *   !proto.proto.services.impulse_svc.v1.GetRewardsResponse>}
+ *   !proto.proto.services.impulse_svc.v1.UpdateChallengeRequest,
+ *   !proto.proto.services.impulse_svc.v1.UpdateChallengeResponse>}
  */
-const methodDescriptor_ImpulseService_GetRewards = new grpc.web.MethodDescriptor(
-  '/proto.services.impulse_svc.v1.ImpulseService/GetRewards',
+const methodDescriptor_ImpulseService_UpdateChallenge = new grpc.web.MethodDescriptor(
+  '/proto.services.impulse_svc.v1.ImpulseService/UpdateChallenge',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.impulse_svc.v1.GetRewardsRequest,
-  proto.proto.services.impulse_svc.v1.GetRewardsResponse,
+  proto.proto.services.impulse_svc.v1.UpdateChallengeRequest,
+  proto.proto.services.impulse_svc.v1.UpdateChallengeResponse,
   /**
-   * @param {!proto.proto.services.impulse_svc.v1.GetRewardsRequest} request
+   * @param {!proto.proto.services.impulse_svc.v1.UpdateChallengeRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.impulse_svc.v1.GetRewardsResponse.deserializeBinary
+  proto.proto.services.impulse_svc.v1.UpdateChallengeResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.impulse_svc.v1.GetRewardsRequest} request The
+ * @param {!proto.proto.services.impulse_svc.v1.UpdateChallengeRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.impulse_svc.v1.GetRewardsResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.impulse_svc.v1.UpdateChallengeResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.impulse_svc.v1.GetRewardsResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.impulse_svc.v1.UpdateChallengeResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.impulse_svc.v1.ImpulseServiceClient.prototype.getRewards =
+proto.proto.services.impulse_svc.v1.ImpulseServiceClient.prototype.updateChallenge =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.impulse_svc.v1.ImpulseService/GetRewards',
+      '/proto.services.impulse_svc.v1.ImpulseService/UpdateChallenge',
       request,
       metadata || {},
-      methodDescriptor_ImpulseService_GetRewards,
+      methodDescriptor_ImpulseService_UpdateChallenge,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.impulse_svc.v1.GetRewardsRequest} request The
+ * @param {!proto.proto.services.impulse_svc.v1.UpdateChallengeRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.impulse_svc.v1.GetRewardsResponse>}
+ * @return {!Promise<!proto.proto.services.impulse_svc.v1.UpdateChallengeResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.getRewards =
+proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.updateChallenge =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.impulse_svc.v1.ImpulseService/GetRewards',
+      '/proto.services.impulse_svc.v1.ImpulseService/UpdateChallenge',
       request,
       metadata || {},
-      methodDescriptor_ImpulseService_GetRewards);
+      methodDescriptor_ImpulseService_UpdateChallenge);
 };
 
 
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.impulse_svc.v1.GetAllRewardsRequest,
- *   !proto.proto.services.impulse_svc.v1.GetAllRewardsResponse>}
+ *   !proto.proto.services.impulse_svc.v1.GetChallengesRequest,
+ *   !proto.proto.services.impulse_svc.v1.GetChallengesResponse>}
  */
-const methodDescriptor_ImpulseService_GetAllRewards = new grpc.web.MethodDescriptor(
-  '/proto.services.impulse_svc.v1.ImpulseService/GetAllRewards',
+const methodDescriptor_ImpulseService_GetChallenges = new grpc.web.MethodDescriptor(
+  '/proto.services.impulse_svc.v1.ImpulseService/GetChallenges',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.impulse_svc.v1.GetAllRewardsRequest,
-  proto.proto.services.impulse_svc.v1.GetAllRewardsResponse,
+  proto.proto.services.impulse_svc.v1.GetChallengesRequest,
+  proto.proto.services.impulse_svc.v1.GetChallengesResponse,
   /**
-   * @param {!proto.proto.services.impulse_svc.v1.GetAllRewardsRequest} request
+   * @param {!proto.proto.services.impulse_svc.v1.GetChallengesRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.impulse_svc.v1.GetAllRewardsResponse.deserializeBinary
+  proto.proto.services.impulse_svc.v1.GetChallengesResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.impulse_svc.v1.GetAllRewardsRequest} request The
+ * @param {!proto.proto.services.impulse_svc.v1.GetChallengesRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.impulse_svc.v1.GetAllRewardsResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.impulse_svc.v1.GetChallengesResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.impulse_svc.v1.GetAllRewardsResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.impulse_svc.v1.GetChallengesResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.impulse_svc.v1.ImpulseServiceClient.prototype.getAllRewards =
+proto.proto.services.impulse_svc.v1.ImpulseServiceClient.prototype.getChallenges =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.impulse_svc.v1.ImpulseService/GetAllRewards',
+      '/proto.services.impulse_svc.v1.ImpulseService/GetChallenges',
       request,
       metadata || {},
-      methodDescriptor_ImpulseService_GetAllRewards,
+      methodDescriptor_ImpulseService_GetChallenges,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.impulse_svc.v1.GetAllRewardsRequest} request The
+ * @param {!proto.proto.services.impulse_svc.v1.GetChallengesRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.impulse_svc.v1.GetAllRewardsResponse>}
+ * @return {!Promise<!proto.proto.services.impulse_svc.v1.GetChallengesResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.getAllRewards =
+proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.getChallenges =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.impulse_svc.v1.ImpulseService/GetAllRewards',
+      '/proto.services.impulse_svc.v1.ImpulseService/GetChallenges',
       request,
       metadata || {},
-      methodDescriptor_ImpulseService_GetAllRewards);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.impulse_svc.v1.GetAllTeamsRequest,
- *   !proto.proto.services.impulse_svc.v1.GetAllTeamsResponse>}
- */
-const methodDescriptor_ImpulseService_GetAllTeams = new grpc.web.MethodDescriptor(
-  '/proto.services.impulse_svc.v1.ImpulseService/GetAllTeams',
-  grpc.web.MethodType.UNARY,
-  proto.proto.services.impulse_svc.v1.GetAllTeamsRequest,
-  proto.proto.services.impulse_svc.v1.GetAllTeamsResponse,
-  /**
-   * @param {!proto.proto.services.impulse_svc.v1.GetAllTeamsRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.proto.services.impulse_svc.v1.GetAllTeamsResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.proto.services.impulse_svc.v1.GetAllTeamsRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.impulse_svc.v1.GetAllTeamsResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.impulse_svc.v1.GetAllTeamsResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.proto.services.impulse_svc.v1.ImpulseServiceClient.prototype.getAllTeams =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.impulse_svc.v1.ImpulseService/GetAllTeams',
-      request,
-      metadata || {},
-      methodDescriptor_ImpulseService_GetAllTeams,
-      callback);
-};
-
-
-/**
- * @param {!proto.proto.services.impulse_svc.v1.GetAllTeamsRequest} request The
- *     request proto
- * @param {?Object<string, string>=} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.proto.services.impulse_svc.v1.GetAllTeamsResponse>}
- *     Promise that resolves to the response
- */
-proto.proto.services.impulse_svc.v1.ImpulseServicePromiseClient.prototype.getAllTeams =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.impulse_svc.v1.ImpulseService/GetAllTeams',
-      request,
-      metadata || {},
-      methodDescriptor_ImpulseService_GetAllTeams);
+      methodDescriptor_ImpulseService_GetChallenges);
 };
 
 

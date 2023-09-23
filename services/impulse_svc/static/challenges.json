@@ -78,7 +78,7 @@
         "start_date": "2019-11-01",
         "end_date": "2019-11-08",
         "category": [
-            "mental"
+            "fitness"
         ],
         "threshold": 1,
         "points": 10
@@ -92,7 +92,7 @@
         "start_date": "2019-11-01",
         "end_date": "2019-11-08",
         "category": [
-            "mental"
+            "mental_health"
         ],
         "threshold": 1,
         "points": 10
@@ -106,7 +106,7 @@
         "start_date": "2019-11-01",
         "end_date": "2019-11-08",
         "category": [
-            "mental"
+            "mental_health"
         ],
         "threshold": 1,
         "points": 10
