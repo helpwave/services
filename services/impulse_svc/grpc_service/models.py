@@ -106,6 +106,8 @@ class User(models.Model):
     birthday: datetime = models.DateTimeField()
     pal: float = models.FloatField()
     image: str = models.CharField(max_length=100)
+    weight: float = models.FloatField()
+    length: int = models.IntegerField()
 
     challenges: list = models.ManyToManyField(Challenge, through=UserChallenge)
     rewards: list = models.ManyToManyField(Reward, blank=True)
@@ -117,3 +119,7 @@ class User(models.Model):
     @property
     def score(self):
         return self.userchallenge_set.all().values("score").aggregate(Sum("score")).get("score__sum", 0)
+
+    @property
+    def bmi(self):
+        return self.weight / (self.length / 100) ** 2

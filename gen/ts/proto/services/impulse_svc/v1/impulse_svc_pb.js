@@ -542,7 +542,9 @@ proto.proto.services.impulse_svc.v1.CreateUserRequest.toObject = function(includ
     username: jspb.Message.getFieldWithDefault(msg, 1, ""),
     gender: jspb.Message.getFieldWithDefault(msg, 2, ""),
     birthday: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    pal: jspb.Message.getFloatingPointFieldWithDefault(msg, 4, 0.0)
+    pal: jspb.Message.getFloatingPointFieldWithDefault(msg, 4, 0.0),
+    length: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    weight: jspb.Message.getFloatingPointFieldWithDefault(msg, 6, 0.0)
   };
 
   if (includeInstance) {
@@ -594,6 +596,14 @@ proto.proto.services.impulse_svc.v1.CreateUserRequest.deserializeBinaryFromReade
     case 4:
       var value = /** @type {number} */ (reader.readFloat());
       msg.setPal(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setLength(value);
+      break;
+    case 6:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setWeight(value);
       break;
     default:
       reader.skipField();
@@ -649,6 +659,20 @@ proto.proto.services.impulse_svc.v1.CreateUserRequest.serializeBinaryToWriter = 
   if (f !== 0.0) {
     writer.writeFloat(
       4,
+      f
+    );
+  }
+  f = message.getLength();
+  if (f !== 0) {
+    writer.writeInt32(
+      5,
+      f
+    );
+  }
+  f = message.getWeight();
+  if (f !== 0.0) {
+    writer.writeFloat(
+      6,
       f
     );
   }
@@ -724,6 +748,42 @@ proto.proto.services.impulse_svc.v1.CreateUserRequest.prototype.getPal = functio
  */
 proto.proto.services.impulse_svc.v1.CreateUserRequest.prototype.setPal = function(value) {
   return jspb.Message.setProto3FloatField(this, 4, value);
+};
+
+
+/**
+ * optional int32 length = 5;
+ * @return {number}
+ */
+proto.proto.services.impulse_svc.v1.CreateUserRequest.prototype.getLength = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.services.impulse_svc.v1.CreateUserRequest} returns this
+ */
+proto.proto.services.impulse_svc.v1.CreateUserRequest.prototype.setLength = function(value) {
+  return jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional float weight = 6;
+ * @return {number}
+ */
+proto.proto.services.impulse_svc.v1.CreateUserRequest.prototype.getWeight = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 6, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.services.impulse_svc.v1.CreateUserRequest} returns this
+ */
+proto.proto.services.impulse_svc.v1.CreateUserRequest.prototype.setWeight = function(value) {
+  return jspb.Message.setProto3FloatField(this, 6, value);
 };
 
 
@@ -893,7 +953,9 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.toObject = function(includ
     teamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
     gender: jspb.Message.getFieldWithDefault(msg, 3, ""),
     birthday: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    pal: jspb.Message.getFloatingPointFieldWithDefault(msg, 5, 0.0)
+    pal: jspb.Message.getFloatingPointFieldWithDefault(msg, 5, 0.0),
+    length: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    weight: jspb.Message.getFloatingPointFieldWithDefault(msg, 7, 0.0)
   };
 
   if (includeInstance) {
@@ -949,6 +1011,14 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.deserializeBinaryFromReade
     case 5:
       var value = /** @type {number} */ (reader.readFloat());
       msg.setPal(value);
+      break;
+    case 6:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setLength(value);
+      break;
+    case 7:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setWeight(value);
       break;
     default:
       reader.skipField();
@@ -1011,6 +1081,20 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.serializeBinaryToWriter = 
   if (f != null) {
     writer.writeFloat(
       5,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 6));
+  if (f != null) {
+    writer.writeInt32(
+      6,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 7));
+  if (f != null) {
+    writer.writeFloat(
+      7,
       f
     );
   }
@@ -1179,6 +1263,78 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.hasPal = functio
 };
 
 
+/**
+ * optional int32 length = 6;
+ * @return {number}
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getLength = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.services.impulse_svc.v1.UpdateUserRequest} returns this
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setLength = function(value) {
+  return jspb.Message.setField(this, 6, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.impulse_svc.v1.UpdateUserRequest} returns this
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.clearLength = function() {
+  return jspb.Message.setField(this, 6, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.hasLength = function() {
+  return jspb.Message.getField(this, 6) != null;
+};
+
+
+/**
+ * optional float weight = 7;
+ * @return {number}
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getWeight = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 7, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.services.impulse_svc.v1.UpdateUserRequest} returns this
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setWeight = function(value) {
+  return jspb.Message.setField(this, 7, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.impulse_svc.v1.UpdateUserRequest} returns this
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.clearWeight = function() {
+  return jspb.Message.setField(this, 7, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.hasWeight = function() {
+  return jspb.Message.getField(this, 7) != null;
+};
+
+
 
 
 
@@ -1215,7 +1371,9 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.toObject = function(inclu
     teamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
     gender: jspb.Message.getFieldWithDefault(msg, 3, ""),
     birthday: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    pal: jspb.Message.getFloatingPointFieldWithDefault(msg, 5, 0.0)
+    pal: jspb.Message.getFloatingPointFieldWithDefault(msg, 5, 0.0),
+    length: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    weight: jspb.Message.getFloatingPointFieldWithDefault(msg, 7, 0.0)
   };
 
   if (includeInstance) {
@@ -1271,6 +1429,14 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.deserializeBinaryFromRead
     case 5:
       var value = /** @type {number} */ (reader.readFloat());
       msg.setPal(value);
+      break;
+    case 6:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setLength(value);
+      break;
+    case 7:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setWeight(value);
       break;
     default:
       reader.skipField();
@@ -1333,6 +1499,20 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.serializeBinaryToWriter =
   if (f !== 0.0) {
     writer.writeFloat(
       5,
+      f
+    );
+  }
+  f = message.getLength();
+  if (f !== 0) {
+    writer.writeInt32(
+      6,
+      f
+    );
+  }
+  f = message.getWeight();
+  if (f !== 0.0) {
+    writer.writeFloat(
+      7,
       f
     );
   }
@@ -1444,6 +1624,42 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getPal = functi
  */
 proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setPal = function(value) {
   return jspb.Message.setProto3FloatField(this, 5, value);
+};
+
+
+/**
+ * optional int32 length = 6;
+ * @return {number}
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getLength = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.services.impulse_svc.v1.UpdateUserResponse} returns this
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setLength = function(value) {
+  return jspb.Message.setProto3IntField(this, 6, value);
+};
+
+
+/**
+ * optional float weight = 7;
+ * @return {number}
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getWeight = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 7, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.services.impulse_svc.v1.UpdateUserResponse} returns this
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setWeight = function(value) {
+  return jspb.Message.setProto3FloatField(this, 7, value);
 };
 
 

@@ -27,6 +27,8 @@ message CreateUserRequest {
   string gender = 2;
   string birthday = 3;
   float pal = 4;
+  int32 length = 5;
+  float weight = 6;
 }
 
 message CreateUserResponse {
@@ -43,6 +45,8 @@ message UpdateUserRequest {
   optional string gender = 3;
   optional string birthday = 4;
   optional float pal = 5;
+  optional int32 length = 6;
+  optional float weight = 7;
 }
 
 message UpdateUserResponse {
@@ -51,6 +55,8 @@ message UpdateUserResponse {
   string gender = 3;
   string birthday = 4;
   float pal = 5;
+  int32 length = 6;
+  float weight = 7;
 }
 
 //
