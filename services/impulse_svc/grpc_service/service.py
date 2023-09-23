@@ -122,21 +122,16 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
     def GetRewards(self, request, context):
         try:
             user = User.objects.get(id=request.user_id)
-        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:
+        except User.DoesNotExist as e:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.GetRewardsResponse()
 
-        if user.team:
-            rewards = Reward.objects.filter(points__lte=user.team.score)
-        else:
-            return impulse_svc_pb2.GetRewardsResponse(
-                rewards=[]
-            )
+        rewards = Reward.objects.filter(points__lte=user.score)
 
         return impulse_svc_pb2.GetRewardsResponse(
             rewards=[
                 impulse_svc_pb2.GetRewardsResponse.Reward(
-                    id=str(reward.id),
+                    reward_id=str(reward.id),
                     title=reward.title,
                     description=reward.description,
                     points=reward.points,
