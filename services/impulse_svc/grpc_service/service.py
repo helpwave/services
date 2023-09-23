@@ -102,26 +102,22 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         teams = Team.objects.all()
         return impulse_svc_pb2.GetAllTeamsResponse(
             teams=[
-                impulse_svc_pb2.Team(
-                    id=str(team.id),
+                impulse_svc_pb2.GetAllTeamsResponse.Team(
+                    team_id=str(team.id),
                     name=team.name,
                     description=team.description,
-                    points=team.points,
                 ) for team in teams
             ]
         )
     
     def GetScore(self, request, context):
         try:
-            user_challenges = UserChallenge.objects.filter(user_id=request.user_id)
-        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:
+            user = User.objects.get(id=request.user_id)
+        except User.DoesNotExist:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.GetScoreResponse()
 
-        total_score = 0
-        for user_challenge in user_challenges:
-            total_score += user_challenge.score
-        return impulse_svc_pb2.GetScoreResponse(score=total_score)
+        return impulse_svc_pb2.GetScoreResponse(score=user.score)
     
     def GetRewards(self, request, context):
         try:
@@ -139,7 +135,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
         return impulse_svc_pb2.GetRewardsResponse(
             rewards=[
-                impulse_svc_pb2.Reward(
+                impulse_svc_pb2.GetRewardsResponse.Reward(
                     id=str(reward.id),
                     title=reward.title,
                     description=reward.description,
@@ -178,8 +174,8 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
         return impulse_svc_pb2.GetActiveChallengesResponse(
             challenges=[
-                impulse_svc_pb2.Challenge(
-                    id=str(challenge.id),
+                impulse_svc_pb2.GetActiveChallengesResponse.Challenge(
+                    challenge_id=str(challenge.id),
                     title=challenge.title,
                     description=challenge.description,
                     category=challenge.category,
@@ -187,7 +183,6 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
                     start_datetime=challenge.start_datetime,
                     end_datetime=challenge.end_datetime,
                     points=challenge.points,
-                    threshold=challenge.threshold,
                     unit=challenge.unit,
                 ) for challenge in challenges
             ]
@@ -197,8 +192,8 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         rewards = Reward.objects.all()
         return impulse_svc_pb2.GetAllRewardsResponse(
             rewards=[
-                impulse_svc_pb2.Reward(
-                    id=str(reward.id),
+                impulse_svc_pb2.GetAllRewardsResponse.Reward(
+                    reward_id=str(reward.id),
                     title=reward.title,
                     description=reward.description,
                     points=reward.points

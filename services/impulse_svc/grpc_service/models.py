@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
+
 class Verification(models.Model):
     id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     order: int = models.IntegerField()
@@ -36,14 +37,14 @@ class VerificationInt(Verification):
 
 
 class Challenge(models.Model):
-    class ChallengeTypes(models.TextChoices):
-        DAILY = 'daily', _('Täglich')
-        QUEST = 'quest', _('Mission')
+    class ChallengeTypes(models.IntegerChoices):
+        DAILY = 1
+        QUEST = 2
 
-    class ChallengeCategories(models.TextChoices):
-        FOOD = 'food', _('Ernährung')
-        FITNESS = 'fitness', _('Fitness')
-        MENTAL = 'mental', _('Mentale Gesundheit')
+    class ChallengeCategories(models.IntegerChoices):
+        FOOD = 1
+        FITNESS = 2
+        MENTAL = 3
 
     id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title: str = models.CharField(max_length=50)
@@ -52,8 +53,8 @@ class Challenge(models.Model):
     start_datetime: datetime = models.DateTimeField(null=True, blank=True)
     end_datetime: datetime = models.DateTimeField(null=True, blank=True)
 
-    type: str = models.CharField(max_length=10, choices=ChallengeTypes.choices)
-    category: str = models.CharField(max_length=10, choices=ChallengeCategories.choices)
+    type: str = models.IntegerField(choices=ChallengeTypes.choices)
+    category: str = models.IntegerField(choices=ChallengeCategories.choices)
 
     points: int = models.IntegerField()
     unit: str = models.CharField(max_length=50)
@@ -117,10 +118,10 @@ class Team(models.Model):
 
 
 class User(models.Model):
-    class Gender(models.TextChoices):
-        MALE = 1, _('Männlich')
-        FEMALE = 2, _('Weiblich')
-        DIVERSE = 3, _('Divers')
+    class Gender(models.IntegerChoices):
+        MALE = 1
+        FEMALE = 2
+        DIVERSE = 3
 
     id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username: str = models.CharField(max_length=50)
@@ -139,7 +140,7 @@ class User(models.Model):
 
     @property
     def score(self):
-        return self.userchallenge_set.all().values("score").aggregate(Sum("score")).get("score__sum", 0)
+        return self.userchallenge_set.all().values("score").aggregate(Sum("score")).get("score__sum", 0) or 0
 
     @property
     def age(self):

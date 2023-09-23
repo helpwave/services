@@ -49,7 +49,7 @@ message CreateUserResponse {
 message UpdateUserRequest {
   string user_id = 1;
   optional string team_id = 2;
-  optional string gender = 3;
+  optional Gender gender = 3;
   optional string birthday = 4;
   optional float pal = 5;
   optional int32 length = 6;
@@ -59,7 +59,7 @@ message UpdateUserRequest {
 message UpdateUserResponse {
   string user_id = 1;
   optional string team_id = 2;
-  string gender = 3;
+  Gender gender = 3;
   string birthday = 4;
   float pal = 5;
   int32 length = 6;
@@ -79,7 +79,6 @@ message GetAllTeamsResponse {
       string team_id = 1;
       string name = 2;
       string description = 3;
-      string image = 5;
   }
 }
 

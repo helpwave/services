@@ -21,6 +21,7 @@ class UserAdmin(admin.ModelAdmin):
         UserChallengeInlineAdmin
     ]
     readonly_fields = [
+        "id",
         "score"
     ]
 
@@ -28,6 +29,7 @@ class UserAdmin(admin.ModelAdmin):
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
     readonly_fields = [
+        "id",
         "score",
         "user_count",
         "male_count",
@@ -42,6 +44,9 @@ class ChallengeAdmin(admin.ModelAdmin):
     inlines = [
         VerificationIntInlineAdmin,
         VerificationStrInlineAdmin
+    ]
+    readonly_fields = [
+        "id",
     ]
 
 
