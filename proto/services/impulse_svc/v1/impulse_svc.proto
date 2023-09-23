@@ -25,15 +25,15 @@ enum Gender {
   GENDER_DIVERSE = 3;
 }
 
-enum StringVerifcationType {
-  VERIFICATION_TYPE_UNSPECIFIED = 0;
-  VERIFCATION_TYPE_QR = 1;
+enum StringVerificationType {
+  STRING_VERIFICATION_TYPE_UNSPECIFIED = 0;
+  STRING_VERIFICATION_TYPE_QR = 1;
 }
 
 enum IntegerVerificationType {
-  VERIFICATION_TYPE_UNSPECIFIED = 0;
-  VERIFCATION_TYPE_TIMER = 1;
-  VERIFICATION_TYPE_NUMBER = 2;
+  INTEGER_VERIFICATION_TYPE_UNSPECIFIED = 0;
+  INTEGER_VERIFICATION_TYPE_TIMER = 1;
+  INTEGER_VERIFICATION_TYPE_NUMBER = 2;
 }
 
 //
@@ -177,7 +177,7 @@ message GetScoreResponse {
 //
 
 message GetRewardsRequest {
-  string reward_id = 1;
+  string user_id = 1;
 }
 
 message GetRewardsResponse {
@@ -239,7 +239,7 @@ message VerificationResponse {
 
   message StringVerification {
       uint32 order = 1;
-      StringVerifcationType type = 2;
+      StringVerificationType type = 2;
       string value = 3;
   }
   message IntegerVerification {

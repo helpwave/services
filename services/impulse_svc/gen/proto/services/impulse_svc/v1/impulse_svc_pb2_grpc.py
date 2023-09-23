@@ -63,6 +63,11 @@ class ImpulseServiceStub(object):
                 request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.StatsForTeamByUserRequest.SerializeToString,
                 response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.StatsForTeamByUserResponse.FromString,
                 )
+        self.Verification = channel.unary_unary(
+                '/proto.services.impulse_svc.v1.ImpulseService/Verification',
+                request_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.VerificationRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.VerificationResponse.FromString,
+                )
 
 
 class ImpulseServiceServicer(object):
@@ -126,6 +131,12 @@ class ImpulseServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Verification(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ImpulseServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -173,6 +184,11 @@ def add_ImpulseServiceServicer_to_server(servicer, server):
                     servicer.StatsForTeamByUser,
                     request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.StatsForTeamByUserRequest.FromString,
                     response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.StatsForTeamByUserResponse.SerializeToString,
+            ),
+            'Verification': grpc.unary_unary_rpc_method_handler(
+                    servicer.Verification,
+                    request_deserializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.VerificationRequest.FromString,
+                    response_serializer=proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.VerificationResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -338,5 +354,22 @@ class ImpulseService(object):
         return grpc.experimental.unary_unary(request, target, '/proto.services.impulse_svc.v1.ImpulseService/StatsForTeamByUser',
             proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.StatsForTeamByUserRequest.SerializeToString,
             proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.StatsForTeamByUserResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Verification(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.impulse_svc.v1.ImpulseService/Verification',
+            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.VerificationRequest.SerializeToString,
+            proto_dot_services_dot_impulse__svc_dot_v1_dot_impulse__svc__pb2.VerificationResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

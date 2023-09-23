@@ -119,7 +119,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
         return impulse_svc_pb2.GetScoreResponse(score=user.score)
     
-    def GetRewards(self, request, context): # TODO
+    def GetRewards(self, request, context):
         try:
             user = User.objects.get(id=request.user_id)
         except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:

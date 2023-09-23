@@ -60,6 +60,36 @@ final $typed_data.Uint8List genderDescriptor = $convert.base64Decode(
     'CgZHZW5kZXISFgoSR0VOREVSX1VOU1BFQ0lGSUVEEAASDwoLR0VOREVSX01BTEUQARIRCg1HRU'
     '5ERVJfRkVNQUxFEAISEgoOR0VOREVSX0RJVkVSU0UQAw==');
 
+@$core.Deprecated('Use stringVerificationTypeDescriptor instead')
+const StringVerificationType$json = {
+  '1': 'StringVerificationType',
+  '2': [
+    {'1': 'STRING_VERIFICATION_TYPE_UNSPECIFIED', '2': 0},
+    {'1': 'STRING_VERIFICATION_TYPE_QR', '2': 1},
+  ],
+};
+
+/// Descriptor for `StringVerificationType`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List stringVerificationTypeDescriptor = $convert.base64Decode(
+    'ChZTdHJpbmdWZXJpZmljYXRpb25UeXBlEigKJFNUUklOR19WRVJJRklDQVRJT05fVFlQRV9VTl'
+    'NQRUNJRklFRBAAEh8KG1NUUklOR19WRVJJRklDQVRJT05fVFlQRV9RUhAB');
+
+@$core.Deprecated('Use integerVerificationTypeDescriptor instead')
+const IntegerVerificationType$json = {
+  '1': 'IntegerVerificationType',
+  '2': [
+    {'1': 'INTEGER_VERIFICATION_TYPE_UNSPECIFIED', '2': 0},
+    {'1': 'INTEGER_VERIFICATION_TYPE_TIMER', '2': 1},
+    {'1': 'INTEGER_VERIFICATION_TYPE_NUMBER', '2': 2},
+  ],
+};
+
+/// Descriptor for `IntegerVerificationType`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List integerVerificationTypeDescriptor = $convert.base64Decode(
+    'ChdJbnRlZ2VyVmVyaWZpY2F0aW9uVHlwZRIpCiVJTlRFR0VSX1ZFUklGSUNBVElPTl9UWVBFX1'
+    'VOU1BFQ0lGSUVEEAASIwofSU5URUdFUl9WRVJJRklDQVRJT05fVFlQRV9USU1FUhABEiQKIElO'
+    'VEVHRVJfVkVSSUZJQ0FUSU9OX1RZUEVfTlVNQkVSEAI=');
+
 @$core.Deprecated('Use createUserRequestDescriptor instead')
 const CreateUserRequest$json = {
   '1': 'CreateUserRequest',
@@ -98,7 +128,7 @@ const UpdateUserRequest$json = {
   '2': [
     {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
     {'1': 'team_id', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'teamId', '17': true},
-    {'1': 'gender', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'gender', '17': true},
+    {'1': 'gender', '3': 3, '4': 1, '5': 14, '6': '.proto.services.impulse_svc.v1.Gender', '9': 1, '10': 'gender', '17': true},
     {'1': 'birthday', '3': 4, '4': 1, '5': 9, '9': 2, '10': 'birthday', '17': true},
     {'1': 'pal', '3': 5, '4': 1, '5': 2, '9': 3, '10': 'pal', '17': true},
     {'1': 'length', '3': 6, '4': 1, '5': 5, '9': 4, '10': 'length', '17': true},
@@ -117,11 +147,11 @@ const UpdateUserRequest$json = {
 /// Descriptor for `UpdateUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateUserRequestDescriptor = $convert.base64Decode(
     'ChFVcGRhdGVVc2VyUmVxdWVzdBIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySWQSHAoHdGVhbV9pZB'
-    'gCIAEoCUgAUgZ0ZWFtSWSIAQESGwoGZ2VuZGVyGAMgASgJSAFSBmdlbmRlcogBARIfCghiaXJ0'
-    'aGRheRgEIAEoCUgCUghiaXJ0aGRheYgBARIVCgNwYWwYBSABKAJIA1IDcGFsiAEBEhsKBmxlbm'
-    'd0aBgGIAEoBUgEUgZsZW5ndGiIAQESGwoGd2VpZ2h0GAcgASgCSAVSBndlaWdodIgBAUIKCghf'
-    'dGVhbV9pZEIJCgdfZ2VuZGVyQgsKCV9iaXJ0aGRheUIGCgRfcGFsQgkKB19sZW5ndGhCCQoHX3'
-    'dlaWdodA==');
+    'gCIAEoCUgAUgZ0ZWFtSWSIAQESQgoGZ2VuZGVyGAMgASgOMiUucHJvdG8uc2VydmljZXMuaW1w'
+    'dWxzZV9zdmMudjEuR2VuZGVySAFSBmdlbmRlcogBARIfCghiaXJ0aGRheRgEIAEoCUgCUghiaX'
+    'J0aGRheYgBARIVCgNwYWwYBSABKAJIA1IDcGFsiAEBEhsKBmxlbmd0aBgGIAEoBUgEUgZsZW5n'
+    'dGiIAQESGwoGd2VpZ2h0GAcgASgCSAVSBndlaWdodIgBAUIKCghfdGVhbV9pZEIJCgdfZ2VuZG'
+    'VyQgsKCV9iaXJ0aGRheUIGCgRfcGFsQgkKB19sZW5ndGhCCQoHX3dlaWdodA==');
 
 @$core.Deprecated('Use updateUserResponseDescriptor instead')
 const UpdateUserResponse$json = {
@@ -129,7 +159,7 @@ const UpdateUserResponse$json = {
   '2': [
     {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
     {'1': 'team_id', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'teamId', '17': true},
-    {'1': 'gender', '3': 3, '4': 1, '5': 9, '10': 'gender'},
+    {'1': 'gender', '3': 3, '4': 1, '5': 14, '6': '.proto.services.impulse_svc.v1.Gender', '10': 'gender'},
     {'1': 'birthday', '3': 4, '4': 1, '5': 9, '10': 'birthday'},
     {'1': 'pal', '3': 5, '4': 1, '5': 2, '10': 'pal'},
     {'1': 'length', '3': 6, '4': 1, '5': 5, '10': 'length'},
@@ -143,9 +173,10 @@ const UpdateUserResponse$json = {
 /// Descriptor for `UpdateUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateUserResponseDescriptor = $convert.base64Decode(
     'ChJVcGRhdGVVc2VyUmVzcG9uc2USFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklkEhwKB3RlYW1faW'
-    'QYAiABKAlIAFIGdGVhbUlkiAEBEhYKBmdlbmRlchgDIAEoCVIGZ2VuZGVyEhoKCGJpcnRoZGF5'
-    'GAQgASgJUghiaXJ0aGRheRIQCgNwYWwYBSABKAJSA3BhbBIWCgZsZW5ndGgYBiABKAVSBmxlbm'
-    'd0aBIWCgZ3ZWlnaHQYByABKAJSBndlaWdodEIKCghfdGVhbV9pZA==');
+    'QYAiABKAlIAFIGdGVhbUlkiAEBEj0KBmdlbmRlchgDIAEoDjIlLnByb3RvLnNlcnZpY2VzLmlt'
+    'cHVsc2Vfc3ZjLnYxLkdlbmRlclIGZ2VuZGVyEhoKCGJpcnRoZGF5GAQgASgJUghiaXJ0aGRheR'
+    'IQCgNwYWwYBSABKAJSA3BhbBIWCgZsZW5ndGgYBiABKAVSBmxlbmd0aBIWCgZ3ZWlnaHQYByAB'
+    'KAJSBndlaWdodEIKCghfdGVhbV9pZA==');
 
 @$core.Deprecated('Use getAllTeamsRequestDescriptor instead')
 const GetAllTeamsRequest$json = {
@@ -172,16 +203,15 @@ const GetAllTeamsResponse_Team$json = {
     {'1': 'team_id', '3': 1, '4': 1, '5': 9, '10': 'teamId'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
-    {'1': 'image', '3': 5, '4': 1, '5': 9, '10': 'image'},
   ],
 };
 
 /// Descriptor for `GetAllTeamsResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getAllTeamsResponseDescriptor = $convert.base64Decode(
     'ChNHZXRBbGxUZWFtc1Jlc3BvbnNlEk0KBXRlYW1zGAEgAygLMjcucHJvdG8uc2VydmljZXMuaW'
-    '1wdWxzZV9zdmMudjEuR2V0QWxsVGVhbXNSZXNwb25zZS5UZWFtUgV0ZWFtcxprCgRUZWFtEhcK'
+    '1wdWxzZV9zdmMudjEuR2V0QWxsVGVhbXNSZXNwb25zZS5UZWFtUgV0ZWFtcxpVCgRUZWFtEhcK'
     'B3RlYW1faWQYASABKAlSBnRlYW1JZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW'
-    '9uGAMgASgJUgtkZXNjcmlwdGlvbhIUCgVpbWFnZRgFIAEoCVIFaW1hZ2U=');
+    '9uGAMgASgJUgtkZXNjcmlwdGlvbg==');
 
 @$core.Deprecated('Use trackChallengeRequestDescriptor instead')
 const TrackChallengeRequest$json = {
@@ -354,13 +384,13 @@ final $typed_data.Uint8List getScoreResponseDescriptor = $convert.base64Decode(
 const GetRewardsRequest$json = {
   '1': 'GetRewardsRequest',
   '2': [
-    {'1': 'reward_id', '3': 1, '4': 1, '5': 9, '10': 'rewardId'},
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
   ],
 };
 
 /// Descriptor for `GetRewardsRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getRewardsRequestDescriptor = $convert.base64Decode(
-    'ChFHZXRSZXdhcmRzUmVxdWVzdBIbCglyZXdhcmRfaWQYASABKAlSCHJld2FyZElk');
+    'ChFHZXRSZXdhcmRzUmVxdWVzdBIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySWQ=');
 
 @$core.Deprecated('Use getRewardsResponseDescriptor instead')
 const GetRewardsResponse$json = {
@@ -470,4 +500,61 @@ final $typed_data.Uint8List statsForTeamByUserResponseDescriptor = $convert.base
     'X2NvdW50GAUgASgEUgl1c2VyQ291bnQaYgoLR2VuZGVyQ291bnQSPQoGZ2VuZGVyGAEgASgOMi'
     'UucHJvdG8uc2VydmljZXMuaW1wdWxzZV9zdmMudjEuR2VuZGVyUgZnZW5kZXISFAoFY291bnQY'
     'AiABKA1SBWNvdW50');
+
+@$core.Deprecated('Use verificationRequestDescriptor instead')
+const VerificationRequest$json = {
+  '1': 'VerificationRequest',
+  '2': [
+    {'1': 'challenge_id', '3': 1, '4': 1, '5': 9, '10': 'challengeId'},
+  ],
+};
+
+/// Descriptor for `VerificationRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List verificationRequestDescriptor = $convert.base64Decode(
+    'ChNWZXJpZmljYXRpb25SZXF1ZXN0EiEKDGNoYWxsZW5nZV9pZBgBIAEoCVILY2hhbGxlbmdlSW'
+    'Q=');
+
+@$core.Deprecated('Use verificationResponseDescriptor instead')
+const VerificationResponse$json = {
+  '1': 'VerificationResponse',
+  '2': [
+    {'1': 'string_verifications', '3': 1, '4': 3, '5': 11, '6': '.proto.services.impulse_svc.v1.VerificationResponse.StringVerification', '10': 'stringVerifications'},
+    {'1': 'integer_verifications', '3': 2, '4': 3, '5': 11, '6': '.proto.services.impulse_svc.v1.VerificationResponse.IntegerVerification', '10': 'integerVerifications'},
+  ],
+  '3': [VerificationResponse_StringVerification$json, VerificationResponse_IntegerVerification$json],
+};
+
+@$core.Deprecated('Use verificationResponseDescriptor instead')
+const VerificationResponse_StringVerification$json = {
+  '1': 'StringVerification',
+  '2': [
+    {'1': 'order', '3': 1, '4': 1, '5': 13, '10': 'order'},
+    {'1': 'type', '3': 2, '4': 1, '5': 14, '6': '.proto.services.impulse_svc.v1.StringVerificationType', '10': 'type'},
+    {'1': 'value', '3': 3, '4': 1, '5': 9, '10': 'value'},
+  ],
+};
+
+@$core.Deprecated('Use verificationResponseDescriptor instead')
+const VerificationResponse_IntegerVerification$json = {
+  '1': 'IntegerVerification',
+  '2': [
+    {'1': 'order', '3': 1, '4': 1, '5': 13, '10': 'order'},
+    {'1': 'type', '3': 2, '4': 1, '5': 14, '6': '.proto.services.impulse_svc.v1.IntegerVerificationType', '10': 'type'},
+    {'1': 'value', '3': 3, '4': 1, '5': 4, '10': 'value'},
+  ],
+};
+
+/// Descriptor for `VerificationResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List verificationResponseDescriptor = $convert.base64Decode(
+    'ChRWZXJpZmljYXRpb25SZXNwb25zZRJ5ChRzdHJpbmdfdmVyaWZpY2F0aW9ucxgBIAMoCzJGLn'
+    'Byb3RvLnNlcnZpY2VzLmltcHVsc2Vfc3ZjLnYxLlZlcmlmaWNhdGlvblJlc3BvbnNlLlN0cmlu'
+    'Z1ZlcmlmaWNhdGlvblITc3RyaW5nVmVyaWZpY2F0aW9ucxJ8ChVpbnRlZ2VyX3ZlcmlmaWNhdG'
+    'lvbnMYAiADKAsyRy5wcm90by5zZXJ2aWNlcy5pbXB1bHNlX3N2Yy52MS5WZXJpZmljYXRpb25S'
+    'ZXNwb25zZS5JbnRlZ2VyVmVyaWZpY2F0aW9uUhRpbnRlZ2VyVmVyaWZpY2F0aW9ucxqLAQoSU3'
+    'RyaW5nVmVyaWZpY2F0aW9uEhQKBW9yZGVyGAEgASgNUgVvcmRlchJJCgR0eXBlGAIgASgOMjUu'
+    'cHJvdG8uc2VydmljZXMuaW1wdWxzZV9zdmMudjEuU3RyaW5nVmVyaWZpY2F0aW9uVHlwZVIEdH'
+    'lwZRIUCgV2YWx1ZRgDIAEoCVIFdmFsdWUajQEKE0ludGVnZXJWZXJpZmljYXRpb24SFAoFb3Jk'
+    'ZXIYASABKA1SBW9yZGVyEkoKBHR5cGUYAiABKA4yNi5wcm90by5zZXJ2aWNlcy5pbXB1bHNlX3'
+    'N2Yy52MS5JbnRlZ2VyVmVyaWZpY2F0aW9uVHlwZVIEdHlwZRIUCgV2YWx1ZRgDIAEoBFIFdmFs'
+    'dWU=');
 

@@ -66,5 +66,37 @@ class Gender extends $pb.ProtobufEnum {
   const Gender._($core.int v, $core.String n) : super(v, n);
 }
 
+class StringVerificationType extends $pb.ProtobufEnum {
+  static const StringVerificationType STRING_VERIFICATION_TYPE_UNSPECIFIED = StringVerificationType._(0, _omitEnumNames ? '' : 'STRING_VERIFICATION_TYPE_UNSPECIFIED');
+  static const StringVerificationType STRING_VERIFICATION_TYPE_QR = StringVerificationType._(1, _omitEnumNames ? '' : 'STRING_VERIFICATION_TYPE_QR');
+
+  static const $core.List<StringVerificationType> values = <StringVerificationType> [
+    STRING_VERIFICATION_TYPE_UNSPECIFIED,
+    STRING_VERIFICATION_TYPE_QR,
+  ];
+
+  static final $core.Map<$core.int, StringVerificationType> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static StringVerificationType? valueOf($core.int value) => _byValue[value];
+
+  const StringVerificationType._($core.int v, $core.String n) : super(v, n);
+}
+
+class IntegerVerificationType extends $pb.ProtobufEnum {
+  static const IntegerVerificationType INTEGER_VERIFICATION_TYPE_UNSPECIFIED = IntegerVerificationType._(0, _omitEnumNames ? '' : 'INTEGER_VERIFICATION_TYPE_UNSPECIFIED');
+  static const IntegerVerificationType INTEGER_VERIFICATION_TYPE_TIMER = IntegerVerificationType._(1, _omitEnumNames ? '' : 'INTEGER_VERIFICATION_TYPE_TIMER');
+  static const IntegerVerificationType INTEGER_VERIFICATION_TYPE_NUMBER = IntegerVerificationType._(2, _omitEnumNames ? '' : 'INTEGER_VERIFICATION_TYPE_NUMBER');
+
+  static const $core.List<IntegerVerificationType> values = <IntegerVerificationType> [
+    INTEGER_VERIFICATION_TYPE_UNSPECIFIED,
+    INTEGER_VERIFICATION_TYPE_TIMER,
+    INTEGER_VERIFICATION_TYPE_NUMBER,
+  ];
+
+  static final $core.Map<$core.int, IntegerVerificationType> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static IntegerVerificationType? valueOf($core.int value) => _byValue[value];
+
+  const IntegerVerificationType._($core.int v, $core.String n) : super(v, n);
+}
+
 
 const _omitEnumNames = $core.bool.fromEnvironment('protobuf.omit_enum_names');
