@@ -29,40 +29,33 @@ export class ImpulseServiceClient {
                response: proto_services_impulse_svc_v1_impulse_svc_pb.TrackChallengeResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.TrackChallengeResponse>;
 
-  getActiveChallenges(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesRequest,
+  createDailyChallenge(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.CreateDailyChallengeRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesResponse>;
+               response: proto_services_impulse_svc_v1_impulse_svc_pb.CreateDailyChallengeResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.CreateDailyChallengeResponse>;
 
-  getScore(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetScoreRequest,
+  createQuestChallenge(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.CreateQuestChallengeRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: proto_services_impulse_svc_v1_impulse_svc_pb.GetScoreResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.GetScoreResponse>;
+               response: proto_services_impulse_svc_v1_impulse_svc_pb.CreateQuestChallengeResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.CreateQuestChallengeResponse>;
 
-  getRewards(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetRewardsRequest,
+  updateChallenge(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.UpdateChallengeRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: proto_services_impulse_svc_v1_impulse_svc_pb.GetRewardsResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.GetRewardsResponse>;
+               response: proto_services_impulse_svc_v1_impulse_svc_pb.UpdateChallengeResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.UpdateChallengeResponse>;
 
-  getAllRewards(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetAllRewardsRequest,
+  getChallenges(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetChallengesRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: proto_services_impulse_svc_v1_impulse_svc_pb.GetAllRewardsResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.GetAllRewardsResponse>;
-
-  getAllTeams(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetAllTeamsRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: proto_services_impulse_svc_v1_impulse_svc_pb.GetAllTeamsResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.GetAllTeamsResponse>;
+               response: proto_services_impulse_svc_v1_impulse_svc_pb.GetChallengesResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_impulse_svc_v1_impulse_svc_pb.GetChallengesResponse>;
 
 }
 
@@ -86,30 +79,25 @@ export class ImpulseServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.TrackChallengeResponse>;
 
-  getActiveChallenges(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesRequest,
+  createDailyChallenge(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.CreateDailyChallengeRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.GetActiveChallengesResponse>;
+  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.CreateDailyChallengeResponse>;
 
-  getScore(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetScoreRequest,
+  createQuestChallenge(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.CreateQuestChallengeRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.GetScoreResponse>;
+  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.CreateQuestChallengeResponse>;
 
-  getRewards(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetRewardsRequest,
+  updateChallenge(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.UpdateChallengeRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.GetRewardsResponse>;
+  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.UpdateChallengeResponse>;
 
-  getAllRewards(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetAllRewardsRequest,
+  getChallenges(
+    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetChallengesRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.GetAllRewardsResponse>;
-
-  getAllTeams(
-    request: proto_services_impulse_svc_v1_impulse_svc_pb.GetAllTeamsRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.GetAllTeamsResponse>;
+  ): Promise<proto_services_impulse_svc_v1_impulse_svc_pb.GetChallengesResponse>;
 
 }
 

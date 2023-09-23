@@ -5,5 +5,3 @@ django-grpc==1.0.21
 protobuf
 grpcio
 grpcio-tools
-psycopg2-binary
-pytz

@@ -9,12 +9,12 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import os
 
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -36,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_grpc',
-    'grpc_service',
+	'django_grpc',
+	'grpc_service',
 ]
 
 MIDDLEWARE = [
@@ -71,26 +72,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'impulse_svc.wsgi.application'
 
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-if os.environ.get("DB_HOST"):
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "HOST": os.environ.get("DB_HOST", ""),
-            "USER": os.environ.get("DB_USER", ""),
-            "NAME": os.environ.get("DB_NAME", ""),
-            "PASSWORD": os.environ.get("DB_PASSWORD", ""),
-            "PORT": 5432,
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -110,6 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -121,6 +114,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -130,8 +124,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-ALLOWED_HOSTS = ["*"]
+
+
+
 
 GRPCSERVER = {
-    'servicers': ['grpc_service.service.grpc_hook'],
+    'servicers': ['grpc_service.service.grpc_hook'],  # see `grpc_hook()` below
+    # 'interceptors': ['dotted.path.to.interceptor_class',],  # optional, interceprots are similar to middleware in Django
+    # 'maximum_concurrent_rpcs': None,
+    # 'options': [("grpc.max_receive_message_length", 1024 * 1024 * 100)],  # optional, list of key-value pairs to configure the channel. The full list of available channel arguments: https://grpc.github.io/grpc/core/group__grpc__arg__keys.html
+    # 'credentials': [{
+    #     'private_key': 'private_key.pem',
+    #     'certificate_chain': 'certificate_chain.pem'
+    # }],    # required only if SSL/TLS support is required to be enabled
+    # 'async': False  # Default: False, if True then gRPC server will start in ASYNC mode
 }
