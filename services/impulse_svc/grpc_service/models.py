@@ -23,8 +23,8 @@ class VerificationStr(Verification):
     class VerificationStrType(models.IntegerChoices):
         QR = 1
 
-    type = models.IntegerField(choices=VerificationStrType.choices)
-    value = models.CharField(max_length=512)
+    type: int = models.IntegerField(choices=VerificationStrType.choices)
+    value: str = models.CharField(max_length=512)
 
 
 class VerificationInt(Verification):
@@ -32,8 +32,8 @@ class VerificationInt(Verification):
         TIMER = 1
         NUMBER = 2
 
-    type = models.IntegerField(choices=VerificationIntType.choices)
-    value = models.IntegerField()
+    type: int = models.IntegerField(choices=VerificationIntType.choices)
+    value: int = models.IntegerField()
 
 
 class Challenge(models.Model):
