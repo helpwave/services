@@ -52,6 +52,8 @@ const CreateUserRequest$json = {
     {'1': 'gender', '3': 2, '4': 1, '5': 9, '10': 'gender'},
     {'1': 'birthday', '3': 3, '4': 1, '5': 9, '10': 'birthday'},
     {'1': 'pal', '3': 4, '4': 1, '5': 2, '10': 'pal'},
+    {'1': 'length', '3': 5, '4': 1, '5': 5, '10': 'length'},
+    {'1': 'weight', '3': 6, '4': 1, '5': 2, '10': 'weight'},
   ],
 };
 
@@ -59,7 +61,7 @@ const CreateUserRequest$json = {
 final $typed_data.Uint8List createUserRequestDescriptor = $convert.base64Decode(
     'ChFDcmVhdGVVc2VyUmVxdWVzdBIaCgh1c2VybmFtZRgBIAEoCVIIdXNlcm5hbWUSFgoGZ2VuZG'
     'VyGAIgASgJUgZnZW5kZXISGgoIYmlydGhkYXkYAyABKAlSCGJpcnRoZGF5EhAKA3BhbBgEIAEo'
-    'AlIDcGFs');
+    'AlIDcGFsEhYKBmxlbmd0aBgFIAEoBVIGbGVuZ3RoEhYKBndlaWdodBgGIAEoAlIGd2VpZ2h0');
 
 @$core.Deprecated('Use createUserResponseDescriptor instead')
 const CreateUserResponse$json = {
@@ -82,12 +84,16 @@ const UpdateUserRequest$json = {
     {'1': 'gender', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'gender', '17': true},
     {'1': 'birthday', '3': 4, '4': 1, '5': 9, '9': 2, '10': 'birthday', '17': true},
     {'1': 'pal', '3': 5, '4': 1, '5': 2, '9': 3, '10': 'pal', '17': true},
+    {'1': 'length', '3': 6, '4': 1, '5': 5, '9': 4, '10': 'length', '17': true},
+    {'1': 'weight', '3': 7, '4': 1, '5': 2, '9': 5, '10': 'weight', '17': true},
   ],
   '8': [
     {'1': '_team_id'},
     {'1': '_gender'},
     {'1': '_birthday'},
     {'1': '_pal'},
+    {'1': '_length'},
+    {'1': '_weight'},
   ],
 };
 
@@ -95,8 +101,10 @@ const UpdateUserRequest$json = {
 final $typed_data.Uint8List updateUserRequestDescriptor = $convert.base64Decode(
     'ChFVcGRhdGVVc2VyUmVxdWVzdBIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySWQSHAoHdGVhbV9pZB'
     'gCIAEoCUgAUgZ0ZWFtSWSIAQESGwoGZ2VuZGVyGAMgASgJSAFSBmdlbmRlcogBARIfCghiaXJ0'
-    'aGRheRgEIAEoCUgCUghiaXJ0aGRheYgBARIVCgNwYWwYBSABKAJIA1IDcGFsiAEBQgoKCF90ZW'
-    'FtX2lkQgkKB19nZW5kZXJCCwoJX2JpcnRoZGF5QgYKBF9wYWw=');
+    'aGRheRgEIAEoCUgCUghiaXJ0aGRheYgBARIVCgNwYWwYBSABKAJIA1IDcGFsiAEBEhsKBmxlbm'
+    'd0aBgGIAEoBUgEUgZsZW5ndGiIAQESGwoGd2VpZ2h0GAcgASgCSAVSBndlaWdodIgBAUIKCghf'
+    'dGVhbV9pZEIJCgdfZ2VuZGVyQgsKCV9iaXJ0aGRheUIGCgRfcGFsQgkKB19sZW5ndGhCCQoHX3'
+    'dlaWdodA==');
 
 @$core.Deprecated('Use updateUserResponseDescriptor instead')
 const UpdateUserResponse$json = {
@@ -107,6 +115,8 @@ const UpdateUserResponse$json = {
     {'1': 'gender', '3': 3, '4': 1, '5': 9, '10': 'gender'},
     {'1': 'birthday', '3': 4, '4': 1, '5': 9, '10': 'birthday'},
     {'1': 'pal', '3': 5, '4': 1, '5': 2, '10': 'pal'},
+    {'1': 'length', '3': 6, '4': 1, '5': 5, '10': 'length'},
+    {'1': 'weight', '3': 7, '4': 1, '5': 2, '10': 'weight'},
   ],
   '8': [
     {'1': '_team_id'},
@@ -117,7 +127,8 @@ const UpdateUserResponse$json = {
 final $typed_data.Uint8List updateUserResponseDescriptor = $convert.base64Decode(
     'ChJVcGRhdGVVc2VyUmVzcG9uc2USFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklkEhwKB3RlYW1faW'
     'QYAiABKAlIAFIGdGVhbUlkiAEBEhYKBmdlbmRlchgDIAEoCVIGZ2VuZGVyEhoKCGJpcnRoZGF5'
-    'GAQgASgJUghiaXJ0aGRheRIQCgNwYWwYBSABKAJSA3BhbEIKCghfdGVhbV9pZA==');
+    'GAQgASgJUghiaXJ0aGRheRIQCgNwYWwYBSABKAJSA3BhbBIWCgZsZW5ndGgYBiABKAVSBmxlbm'
+    'd0aBIWCgZ3ZWlnaHQYByABKAJSBndlaWdodEIKCghfdGVhbV9pZA==');
 
 @$core.Deprecated('Use getAllTeamsRequestDescriptor instead')
 const GetAllTeamsRequest$json = {
