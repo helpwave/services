@@ -119,7 +119,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
         return impulse_svc_pb2.GetScoreResponse(score=user.score)
     
-    def GetRewards(self, request, context):
+    def GetRewards(self, request, context): # TODO
         try:
             user = User.objects.get(id=request.user_id)
         except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:
@@ -160,7 +160,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.TrackChallengeResponse()
 
-        return impulse_svc_pb2.TrackChallengeResponse(id=str(user_challenge.id))
+        return impulse_svc_pb2.TrackChallengeResponse(challenge_id=str(user_challenge.id))
 
     def GetActiveChallenges(self, request, context):
         current_date = datetime.now(tz)
@@ -206,27 +206,26 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         team = user.team
         
         return impulse_svc_pb2.StatsForTeamByUserResponse(
-            team=impulse_svc_pb2.Team(
-                id=str(team.id),
-                score=team.score,
-                gender_count=[
-                        impulse_svc_pb2.GenderCount(
-                            gender=User.Gender.MALE,
-                            count=team.male_count
-                        ),
-                        impulse_svc_pb2.GenderCount(
-                            gender=User.Gender.FEMALE,
-                            count=team.female_count,
-                        ),
-                        impulse_svc_pb2.GenderCount(
-                            gender=User.Gender.DIVERSE,
-                            count=team.diverse_count,
-                        )
-                    ],
-                average_age=team.avg_age,
-                user_count=team.user_count,
-            )
+            team_id=str(team.id),
+            score=team.score,
+            gender_count=[
+                    impulse_svc_pb2.StatsForTeamByUserResponse.GenderCount(
+                        gender=User.Gender.MALE,
+                        count=team.male_count
+                    ),
+                    impulse_svc_pb2.StatsForTeamByUserResponse.GenderCount(
+                        gender=User.Gender.FEMALE,
+                        count=team.female_count,
+                    ),
+                    impulse_svc_pb2.StatsForTeamByUserResponse.GenderCount(
+                        gender=User.Gender.DIVERSE,
+                        count=team.diverse_count,
+                    )
+                ],
+            average_age=team.avg_age,
+            user_count=team.user_count,
         )
+
 
 
 def grpc_hook(server):

@@ -50,4 +50,8 @@ class ChallengeAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(Reward)
+@admin.register((Reward))
+class RewardAdmin(admin.ModelAdmin):
+    readonly_fields = [
+        "id",
+    ]
