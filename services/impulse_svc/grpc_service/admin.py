@@ -1,10 +1,18 @@
 from django.contrib import admin
 
-from .models import User, Challenge, UserChallenge, Reward, Team
+from .models import User, Challenge, UserChallenge, Reward, Team, VerificationInt, VerificationStr
 
 
 class UserChallengeInlineAdmin(admin.TabularInline):
     model = UserChallenge
+
+
+class VerificationIntInlineAdmin(admin.TabularInline):
+    model = VerificationInt
+
+
+class VerificationStrInlineAdmin(admin.TabularInline):
+    model = VerificationStr
 
 
 @admin.register(User)
@@ -29,5 +37,12 @@ class TeamAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(Challenge)
+@admin.register(Challenge)
+class ChallengeAdmin(admin.ModelAdmin):
+    inlines = [
+        VerificationIntInlineAdmin,
+        VerificationStrInlineAdmin
+    ]
+
+
 admin.site.register(Reward)

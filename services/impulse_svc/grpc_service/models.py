@@ -9,6 +9,32 @@ from django.utils.translation import gettext_lazy as _
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
+class Verification(models.Model):
+    id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    order: int = models.IntegerField()
+    challenge: str = models.ForeignKey('Challenge', on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
+
+
+class VerificationStr(Verification):
+    class VerificationStrType(models.TextChoices):
+        QR = 'qr', _('QR Code')
+
+    type = models.CharField(max_length=10, choices=VerificationStrType.choices)
+    value = models.CharField(max_length=512)
+
+
+class VerificationInt(Verification):
+    class VerificationIntType(models.TextChoices):
+        TIMER = 'timer', _('Stopuhr')
+        Number = 'number', _('Nummer')
+
+    type = models.CharField(max_length=10, choices=VerificationIntType.choices)
+    value = models.IntegerField()
+
+
 class Challenge(models.Model):
     class ChallengeTypes(models.TextChoices):
         DAILY = 'daily', _('Täglich')
@@ -48,7 +74,6 @@ class Reward(models.Model):
     title: str = models.CharField(max_length=50)
     description: str = models.TextField()
     points: int = models.IntegerField()
-    image: str = models.CharField(max_length=100)
 
     def __str__(self):
         return self.title
@@ -57,7 +82,6 @@ class Reward(models.Model):
 class Team(models.Model):
     id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name: str = models.CharField(max_length=50)
-    image: str = models.CharField(max_length=100)
     description: str = models.TextField()
 
     def __str__(self):
@@ -103,7 +127,6 @@ class User(models.Model):
     gender: int = models.IntegerField(choices=Gender.choices)
     birthday: datetime = models.DateTimeField()
     pal: float = models.FloatField()
-    image: str = models.CharField(max_length=100)
     weight: float = models.FloatField()
     length: int = models.IntegerField()
 
