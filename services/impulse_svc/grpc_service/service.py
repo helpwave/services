@@ -28,13 +28,13 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
                 username=request.username,
                 gender=request.gender,
                 pal=request.pal,
-                birthday=datetime.fromisoformat(request.birthday),
+                birthday=datetime.fromisoformat(request.birthday)
             )
         except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, ValueError, AttributeError) as e:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.CreateUserResponse()
 
-        return impulse_svc_pb2.CreateUserResponse(user_id=str(user.id))
+        return impulse_svc_pb2.CreateUserResponse(id=str(user.id))
     
     def GetAllTeams(self, request, context):
         teams = Team.objects.all()
@@ -88,44 +88,23 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
     def UpdateUser(self, request, context):
         try:
-            user: User = User.objects.get(id=request.user_id)
+            user = User.objects.get(id=request.id)
         except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:
-            if isinstance(e, exceptions.ObjectDoesNotExist):
-                context.set_code(grpc.StatusCode.NOT_FOUND)
-            else:
-                context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.UpdateUserResponse()
 
         user.gender = request.gender
         user.pal = request.pal
-
-        try:
-            user.birthday = datetime.fromisoformat(request.birthday)
-        except ValueError:
-            pass
-
-        try:
-            user.team = Team.objects.get(id=request.team_id)
-        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:
-            pass
-
+        user.birthday = datetime.fromisoformat(request.birthday)
+        user.team = Team.objects.get(id=request.team_id)
         user.save()
 
-        if user.team is None:
-            return impulse_svc_pb2.UpdateUserResponse(
-                user_id=str(user.id),
-                gender=user.gender,
-                birthday=user.birthday.isoformat(),
-                pal=user.pal,
-            )
-        else:
-            return impulse_svc_pb2.UpdateUserResponse(
-                user_id=str(user.id),
-                team_id=str(user.team.id),
-                gender=user.gender,
-                birthday=user.birthday.isoformat(),
-                pal=user.pal,
-            )
+        return impulse_svc_pb2.UpdateUserResponse(
+            id=str(user.id),
+            gender=user.gender,
+            birthday=user.birthday.isoformat(),
+            pal=user.pal,
+        )
 
     def TrackChallenge(self, request, context):
         # current date 
@@ -183,6 +162,33 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
                     points=reward.points
                 ) for reward in rewards
             ]
+        )
+        
+    def StatsForTeamByUser(self, request, context):
+        user = User.objects.get(id=request.user_id)
+        team = user.team
+        
+        return impulse_svc_pb2.StatsForTeamByUserResponse(
+            team=impulse_svc_pb2.Team(
+                id=str(team.id),
+                score=team.score,
+                gender_count=[
+                        impulse_svc_pb2.GenderCount(
+                            gender=User.Gender.MALE,
+                            count=team.male_count
+                        ),
+                        impulse_svc_pb2.GenderCount(
+                            gender=User.Gender.FEMALE,
+                            count=team.female_count,
+                        ),
+                        impulse_svc_pb2.GenderCount(
+                            gender=User.Gender.DIVERSE,
+                            count=team.diverse_count,
+                        )
+                    ],
+                average_age=team.avg_age,
+                user_count=team.user_count,
+            )
         )
 
 

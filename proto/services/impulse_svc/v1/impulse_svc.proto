@@ -221,4 +221,5 @@ service ImpulseService {
   rpc GetRewards(GetRewardsRequest) returns (GetRewardsResponse) {}
   rpc GetAllRewards(GetAllRewardsRequest) returns (GetAllRewardsResponse) {}
   rpc GetAllTeams(GetAllTeamsRequest) returns (GetAllTeamsResponse) {}
+  rpc StatsForTeamByUser(StatsForTeamByUserRequest) returns (StatsForTeamByUserResponse) {}
 }

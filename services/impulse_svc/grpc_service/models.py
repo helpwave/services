@@ -9,7 +9,6 @@ from django.utils.translation import gettext_lazy as _
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
-
 class Challenge(models.Model):
     class ChallengeTypes(models.TextChoices):
         DAILY = 'daily', _('Täglich')
@@ -95,9 +94,9 @@ class Team(models.Model):
 
 class User(models.Model):
     class Gender(models.TextChoices):
-        MALE = 'male', _('Männlich')
-        FEMALE = 'female', _('Weiblich')
-        DIVERSE = 'diverse', _('Divers')
+        MALE = 0, _('Männlich')
+        FEMALE = 1, _('Weiblich')
+        DIVERSE = 2, _('Divers')
 
     id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username: str = models.CharField(max_length=50)
