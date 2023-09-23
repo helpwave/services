@@ -51,7 +51,7 @@ const CreateUserRequest$json = {
     {'1': 'username', '3': 1, '4': 1, '5': 9, '10': 'username'},
     {'1': 'gender', '3': 2, '4': 1, '5': 9, '10': 'gender'},
     {'1': 'birthday', '3': 3, '4': 1, '5': 9, '10': 'birthday'},
-    {'1': 'pal', '3': 4, '4': 1, '5': 13, '10': 'pal'},
+    {'1': 'pal', '3': 4, '4': 1, '5': 2, '10': 'pal'},
   ],
 };
 
@@ -59,7 +59,7 @@ const CreateUserRequest$json = {
 final $typed_data.Uint8List createUserRequestDescriptor = $convert.base64Decode(
     'ChFDcmVhdGVVc2VyUmVxdWVzdBIaCgh1c2VybmFtZRgBIAEoCVIIdXNlcm5hbWUSFgoGZ2VuZG'
     'VyGAIgASgJUgZnZW5kZXISGgoIYmlydGhkYXkYAyABKAlSCGJpcnRoZGF5EhAKA3BhbBgEIAEo'
-    'DVIDcGFs');
+    'AlIDcGFs');
 
 @$core.Deprecated('Use createUserResponseDescriptor instead')
 const CreateUserResponse$json = {
@@ -78,11 +78,13 @@ const UpdateUserRequest$json = {
   '1': 'UpdateUserRequest',
   '2': [
     {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
-    {'1': 'gender', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'gender', '17': true},
-    {'1': 'birthday', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'birthday', '17': true},
-    {'1': 'pal', '3': 4, '4': 1, '5': 13, '9': 2, '10': 'pal', '17': true},
+    {'1': 'team_id', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'teamId', '17': true},
+    {'1': 'gender', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'gender', '17': true},
+    {'1': 'birthday', '3': 4, '4': 1, '5': 9, '9': 2, '10': 'birthday', '17': true},
+    {'1': 'pal', '3': 5, '4': 1, '5': 2, '9': 3, '10': 'pal', '17': true},
   ],
   '8': [
+    {'1': '_team_id'},
     {'1': '_gender'},
     {'1': '_birthday'},
     {'1': '_pal'},
@@ -91,26 +93,31 @@ const UpdateUserRequest$json = {
 
 /// Descriptor for `UpdateUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateUserRequestDescriptor = $convert.base64Decode(
-    'ChFVcGRhdGVVc2VyUmVxdWVzdBIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySWQSGwoGZ2VuZGVyGA'
-    'IgASgJSABSBmdlbmRlcogBARIfCghiaXJ0aGRheRgDIAEoCUgBUghiaXJ0aGRheYgBARIVCgNw'
-    'YWwYBCABKA1IAlIDcGFsiAEBQgkKB19nZW5kZXJCCwoJX2JpcnRoZGF5QgYKBF9wYWw=');
+    'ChFVcGRhdGVVc2VyUmVxdWVzdBIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySWQSHAoHdGVhbV9pZB'
+    'gCIAEoCUgAUgZ0ZWFtSWSIAQESGwoGZ2VuZGVyGAMgASgJSAFSBmdlbmRlcogBARIfCghiaXJ0'
+    'aGRheRgEIAEoCUgCUghiaXJ0aGRheYgBARIVCgNwYWwYBSABKAJIA1IDcGFsiAEBQgoKCF90ZW'
+    'FtX2lkQgkKB19nZW5kZXJCCwoJX2JpcnRoZGF5QgYKBF9wYWw=');
 
 @$core.Deprecated('Use updateUserResponseDescriptor instead')
 const UpdateUserResponse$json = {
   '1': 'UpdateUserResponse',
   '2': [
     {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
-    {'1': 'gender', '3': 2, '4': 1, '5': 9, '10': 'gender'},
-    {'1': 'birthday', '3': 3, '4': 1, '5': 9, '10': 'birthday'},
-    {'1': 'pal', '3': 4, '4': 1, '5': 13, '10': 'pal'},
+    {'1': 'team_id', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'teamId', '17': true},
+    {'1': 'gender', '3': 3, '4': 1, '5': 9, '10': 'gender'},
+    {'1': 'birthday', '3': 4, '4': 1, '5': 9, '10': 'birthday'},
+    {'1': 'pal', '3': 5, '4': 1, '5': 2, '10': 'pal'},
+  ],
+  '8': [
+    {'1': '_team_id'},
   ],
 };
 
 /// Descriptor for `UpdateUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateUserResponseDescriptor = $convert.base64Decode(
-    'ChJVcGRhdGVVc2VyUmVzcG9uc2USFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklkEhYKBmdlbmRlch'
-    'gCIAEoCVIGZ2VuZGVyEhoKCGJpcnRoZGF5GAMgASgJUghiaXJ0aGRheRIQCgNwYWwYBCABKA1S'
-    'A3BhbA==');
+    'ChJVcGRhdGVVc2VyUmVzcG9uc2USFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklkEhwKB3RlYW1faW'
+    'QYAiABKAlIAFIGdGVhbUlkiAEBEhYKBmdlbmRlchgDIAEoCVIGZ2VuZGVyEhoKCGJpcnRoZGF5'
+    'GAQgASgJUghiaXJ0aGRheRIQCgNwYWwYBSABKAJSA3BhbEIKCghfdGVhbV9pZA==');
 
 @$core.Deprecated('Use getAllTeamsRequestDescriptor instead')
 const GetAllTeamsRequest$json = {
