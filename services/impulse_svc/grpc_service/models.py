@@ -74,7 +74,6 @@ class Reward(models.Model):
     title: str = models.CharField(max_length=50)
     description: str = models.TextField()
     points: int = models.IntegerField()
-    image: str = models.CharField(max_length=100)
 
     def __str__(self):
         return self.title
@@ -83,7 +82,6 @@ class Reward(models.Model):
 class Team(models.Model):
     id: str = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name: str = models.CharField(max_length=50)
-    image: str = models.CharField(max_length=100)
     description: str = models.TextField()
 
     def __str__(self):
@@ -129,7 +127,6 @@ class User(models.Model):
     gender: int = models.IntegerField(choices=Gender.choices)
     birthday: datetime = models.DateTimeField()
     pal: float = models.FloatField()
-    image: str = models.CharField(max_length=100)
     weight: float = models.FloatField()
     length: int = models.IntegerField()
 
