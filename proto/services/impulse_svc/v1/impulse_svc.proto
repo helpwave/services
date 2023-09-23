@@ -4,7 +4,7 @@ package proto.services.impulse_svc.v1;
 
 option go_package = "gen/proto/services/impulse-svc";
 
-import "google/protobuf/timestamp.proto";
+// import "google/protobuf/timestamp.proto";
 
 enum ChallengeType {
   CHALLENGE_TYPE_UNSPECIFIED = 0;
@@ -24,13 +24,13 @@ enum ChallengeCategory {
 
 message CreateUserRequest {
   string username = 1;
-  string sex = 2;
-  google.protobuf.Timestamp birthday = 3;
+  string gender = 2;
+  string birthday = 3;
   uint32 pal = 4;
 }
 
 message CreateUserResponse {
-  string id = 1;
+  string user_id = 1;
 }
 
 //
@@ -38,17 +38,34 @@ message CreateUserResponse {
 //
 
 message UpdateUserRequest {
-  string id = 1;
-  optional string sex = 2;
-  optional google.protobuf.Timestamp birthday = 3;
+  string user_id = 1;
+  optional string gender = 2;
+  optional string birthday = 3;
   optional uint32 pal = 4;
 }
 
 message UpdateUserResponse {
-  string id = 1;
-  string sex = 2;
-  google.protobuf.Timestamp birthday = 3;
+  string user_id = 1;
+  string gender = 2;
+  string birthday = 3;
   uint32 pal = 4;
+}
+
+//
+// GetTeams
+//
+
+message GetAllTeamsRequest { }
+
+message GetAllTeamsResponse {
+  repeated Team teams = 1;
+
+  message Team {
+      string team_id = 1;
+      string name = 2;
+      string description = 3;
+      string image = 5;
+  }
 }
 
 //
@@ -59,66 +76,33 @@ message TrackChallengeRequest {
   string challenge_id = 1;
   string user_id = 2;
   uint64 score = 3;
-  google.protobuf.Timestamp done_at = 4;
+  string done_at = 4;
 }
 
 message TrackChallengeResponse {
-  string id = 1;
+  string challenge_id = 1;
 }
 
 //
-// CreateDailyChallenge
+// GetActiveChallenges
 //
 
-message CreateDailyChallengeRequest {
-  string title = 1;
-  string description = 2;
-  ChallengeCategory category = 3;
-  uint64 threshold = 4;
-  uint64 points = 5;
-}
+message GetActiveChallengesRequest {}
 
-message CreateDailyChallengeResponse {
-  string id = 1;
-}
-
-//
-// CreateQuestChallenge
-//
-
-message CreateQuestChallengeRequest {
-  string title = 1;
-  string description = 2;
-  google.protobuf.Timestamp start_at = 3;
-  google.protobuf.Timestamp end_at = 4;
-  ChallengeCategory category = 5;
-  uint64 threshold = 6;
-  uint64 points = 7;
-}
-
-message CreateQuestChallengeResponse {
-  string id = 1;
-}
-
-//
-// GetChallenges
-//
-
-message GetChallengesRequest {}
-
-message GetChallengesResponse {
+message GetActiveChallengesResponse {
   repeated Challenge challenges = 1;
 
   message Challenge {
-    string id = 1;
+    string challenge_id = 1;
     string title = 2;
     string description = 3;
-    google.protobuf.Timestamp start_at = 4;
-    google.protobuf.Timestamp end_at = 5;
+    string start_at = 4;
+    string end_at = 5;
     ChallengeCategory category = 6;
     ChallengeType type = 7;
     uint64 threshold = 8;
     uint64 points = 9;
+    string unit = 10;
   }
 }
 
@@ -127,27 +111,78 @@ message GetChallengesResponse {
 //
 
 message UpdateChallengeRequest {
-  string id = 1;
+  string challenge_id = 1;
   optional string title = 2;
   optional string description = 3;
-  optional google.protobuf.Timestamp start_at = 4;
-  optional google.protobuf.Timestamp end_at = 5;
+  optional string start_at = 4;
+  optional string end_at = 5;
   optional ChallengeCategory category = 6;
   optional uint64 threshold = 7;
   optional uint64 points = 8;
+  optional string unit = 9;
 }
 
 message UpdateChallengeResponse {
-  string id = 1;
+  string challenge_id = 1;
   string title = 2;
   string description = 3;
-  google.protobuf.Timestamp start_at = 4;
-  google.protobuf.Timestamp end_at = 5;
+  string start_at = 4;
+  string end_at = 5;
   ChallengeCategory category = 6;
   ChallengeType type = 7;
   uint64 threshold = 8;
   uint64 points = 9;
+  string unit = 10;
 }
+
+//
+// GetScore
+//
+
+message GetScoreRequest {
+  string user_id = 1;
+}
+
+message GetScoreResponse {
+  uint64 score = 1;
+}
+
+//
+// GetRewards
+//
+
+message GetRewardsRequest {
+  string reward_id = 1;
+}
+
+message GetRewardsResponse {
+  repeated Reward rewards = 1;
+
+  message Reward {
+      string reward_id = 1;
+      string title = 2;
+      string description = 3;
+      uint64 points = 5;
+  }
+}
+
+//
+// GetAllRewards
+//
+
+message GetAllRewardsRequest {}
+
+message GetAllRewardsResponse {
+  repeated Reward rewards = 1;
+
+  message Reward {
+    string reward_id = 1;
+    string title = 2;
+    string description = 3;
+    uint64 points = 5;
+  }
+}
+
 
 //
 // ImpulseService
@@ -157,8 +192,9 @@ service ImpulseService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
   rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {}
   rpc TrackChallenge(TrackChallengeRequest) returns (TrackChallengeResponse) {}
-  rpc CreateDailyChallenge(CreateDailyChallengeRequest) returns (CreateDailyChallengeResponse) {}
-  rpc CreateQuestChallenge(CreateQuestChallengeRequest) returns (CreateQuestChallengeResponse) {}
-  rpc UpdateChallenge(UpdateChallengeRequest) returns (UpdateChallengeResponse) {}
-  rpc GetChallenges(GetChallengesRequest) returns (GetChallengesResponse) {}
+  rpc GetActiveChallenges(GetActiveChallengesRequest) returns (GetActiveChallengesResponse) {}
+  rpc GetScore(GetScoreRequest) returns (GetScoreResponse) {}
+  rpc GetRewards(GetRewardsRequest) returns (GetRewardsResponse) {}
+  rpc GetAllRewards(GetAllRewardsRequest) returns (GetAllRewardsResponse) {}
+  rpc GetAllTeams(GetAllTeamsRequest) returns (GetAllTeamsResponse) {}
 }
