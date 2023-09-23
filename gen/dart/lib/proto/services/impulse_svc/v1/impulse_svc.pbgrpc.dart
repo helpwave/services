@@ -33,22 +33,26 @@ class ImpulseServiceClient extends $grpc.Client {
       '/proto.services.impulse_svc.v1.ImpulseService/TrackChallenge',
       ($2.TrackChallengeRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $2.TrackChallengeResponse.fromBuffer(value));
-  static final _$createDailyChallenge = $grpc.ClientMethod<$2.CreateDailyChallengeRequest, $2.CreateDailyChallengeResponse>(
-      '/proto.services.impulse_svc.v1.ImpulseService/CreateDailyChallenge',
-      ($2.CreateDailyChallengeRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.CreateDailyChallengeResponse.fromBuffer(value));
-  static final _$createQuestChallenge = $grpc.ClientMethod<$2.CreateQuestChallengeRequest, $2.CreateQuestChallengeResponse>(
-      '/proto.services.impulse_svc.v1.ImpulseService/CreateQuestChallenge',
-      ($2.CreateQuestChallengeRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.CreateQuestChallengeResponse.fromBuffer(value));
-  static final _$updateChallenge = $grpc.ClientMethod<$2.UpdateChallengeRequest, $2.UpdateChallengeResponse>(
-      '/proto.services.impulse_svc.v1.ImpulseService/UpdateChallenge',
-      ($2.UpdateChallengeRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.UpdateChallengeResponse.fromBuffer(value));
-  static final _$getChallenges = $grpc.ClientMethod<$2.GetChallengesRequest, $2.GetChallengesResponse>(
-      '/proto.services.impulse_svc.v1.ImpulseService/GetChallenges',
-      ($2.GetChallengesRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.GetChallengesResponse.fromBuffer(value));
+  static final _$getActiveChallenges = $grpc.ClientMethod<$2.GetActiveChallengesRequest, $2.GetActiveChallengesResponse>(
+      '/proto.services.impulse_svc.v1.ImpulseService/GetActiveChallenges',
+      ($2.GetActiveChallengesRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.GetActiveChallengesResponse.fromBuffer(value));
+  static final _$getScore = $grpc.ClientMethod<$2.GetScoreRequest, $2.GetScoreResponse>(
+      '/proto.services.impulse_svc.v1.ImpulseService/GetScore',
+      ($2.GetScoreRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.GetScoreResponse.fromBuffer(value));
+  static final _$getRewards = $grpc.ClientMethod<$2.GetRewardsRequest, $2.GetRewardsResponse>(
+      '/proto.services.impulse_svc.v1.ImpulseService/GetRewards',
+      ($2.GetRewardsRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.GetRewardsResponse.fromBuffer(value));
+  static final _$getAllRewards = $grpc.ClientMethod<$2.GetAllRewardsRequest, $2.GetAllRewardsResponse>(
+      '/proto.services.impulse_svc.v1.ImpulseService/GetAllRewards',
+      ($2.GetAllRewardsRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.GetAllRewardsResponse.fromBuffer(value));
+  static final _$getAllTeams = $grpc.ClientMethod<$2.GetAllTeamsRequest, $2.GetAllTeamsResponse>(
+      '/proto.services.impulse_svc.v1.ImpulseService/GetAllTeams',
+      ($2.GetAllTeamsRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.GetAllTeamsResponse.fromBuffer(value));
 
   ImpulseServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -68,20 +72,24 @@ class ImpulseServiceClient extends $grpc.Client {
     return $createUnaryCall(_$trackChallenge, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.CreateDailyChallengeResponse> createDailyChallenge($2.CreateDailyChallengeRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$createDailyChallenge, request, options: options);
+  $grpc.ResponseFuture<$2.GetActiveChallengesResponse> getActiveChallenges($2.GetActiveChallengesRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getActiveChallenges, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.CreateQuestChallengeResponse> createQuestChallenge($2.CreateQuestChallengeRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$createQuestChallenge, request, options: options);
+  $grpc.ResponseFuture<$2.GetScoreResponse> getScore($2.GetScoreRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getScore, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.UpdateChallengeResponse> updateChallenge($2.UpdateChallengeRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$updateChallenge, request, options: options);
+  $grpc.ResponseFuture<$2.GetRewardsResponse> getRewards($2.GetRewardsRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getRewards, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.GetChallengesResponse> getChallenges($2.GetChallengesRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getChallenges, request, options: options);
+  $grpc.ResponseFuture<$2.GetAllRewardsResponse> getAllRewards($2.GetAllRewardsRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getAllRewards, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$2.GetAllTeamsResponse> getAllTeams($2.GetAllTeamsRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getAllTeams, request, options: options);
   }
 }
 
@@ -111,34 +119,41 @@ abstract class ImpulseServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $2.TrackChallengeRequest.fromBuffer(value),
         ($2.TrackChallengeResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.CreateDailyChallengeRequest, $2.CreateDailyChallengeResponse>(
-        'CreateDailyChallenge',
-        createDailyChallenge_Pre,
+    $addMethod($grpc.ServiceMethod<$2.GetActiveChallengesRequest, $2.GetActiveChallengesResponse>(
+        'GetActiveChallenges',
+        getActiveChallenges_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.CreateDailyChallengeRequest.fromBuffer(value),
-        ($2.CreateDailyChallengeResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.CreateQuestChallengeRequest, $2.CreateQuestChallengeResponse>(
-        'CreateQuestChallenge',
-        createQuestChallenge_Pre,
+        ($core.List<$core.int> value) => $2.GetActiveChallengesRequest.fromBuffer(value),
+        ($2.GetActiveChallengesResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.GetScoreRequest, $2.GetScoreResponse>(
+        'GetScore',
+        getScore_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.CreateQuestChallengeRequest.fromBuffer(value),
-        ($2.CreateQuestChallengeResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.UpdateChallengeRequest, $2.UpdateChallengeResponse>(
-        'UpdateChallenge',
-        updateChallenge_Pre,
+        ($core.List<$core.int> value) => $2.GetScoreRequest.fromBuffer(value),
+        ($2.GetScoreResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.GetRewardsRequest, $2.GetRewardsResponse>(
+        'GetRewards',
+        getRewards_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.UpdateChallengeRequest.fromBuffer(value),
-        ($2.UpdateChallengeResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.GetChallengesRequest, $2.GetChallengesResponse>(
-        'GetChallenges',
-        getChallenges_Pre,
+        ($core.List<$core.int> value) => $2.GetRewardsRequest.fromBuffer(value),
+        ($2.GetRewardsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.GetAllRewardsRequest, $2.GetAllRewardsResponse>(
+        'GetAllRewards',
+        getAllRewards_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.GetChallengesRequest.fromBuffer(value),
-        ($2.GetChallengesResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $2.GetAllRewardsRequest.fromBuffer(value),
+        ($2.GetAllRewardsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.GetAllTeamsRequest, $2.GetAllTeamsResponse>(
+        'GetAllTeams',
+        getAllTeams_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $2.GetAllTeamsRequest.fromBuffer(value),
+        ($2.GetAllTeamsResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$2.CreateUserResponse> createUser_Pre($grpc.ServiceCall call, $async.Future<$2.CreateUserRequest> request) async {
@@ -153,27 +168,32 @@ abstract class ImpulseServiceBase extends $grpc.Service {
     return trackChallenge(call, await request);
   }
 
-  $async.Future<$2.CreateDailyChallengeResponse> createDailyChallenge_Pre($grpc.ServiceCall call, $async.Future<$2.CreateDailyChallengeRequest> request) async {
-    return createDailyChallenge(call, await request);
+  $async.Future<$2.GetActiveChallengesResponse> getActiveChallenges_Pre($grpc.ServiceCall call, $async.Future<$2.GetActiveChallengesRequest> request) async {
+    return getActiveChallenges(call, await request);
   }
 
-  $async.Future<$2.CreateQuestChallengeResponse> createQuestChallenge_Pre($grpc.ServiceCall call, $async.Future<$2.CreateQuestChallengeRequest> request) async {
-    return createQuestChallenge(call, await request);
+  $async.Future<$2.GetScoreResponse> getScore_Pre($grpc.ServiceCall call, $async.Future<$2.GetScoreRequest> request) async {
+    return getScore(call, await request);
   }
 
-  $async.Future<$2.UpdateChallengeResponse> updateChallenge_Pre($grpc.ServiceCall call, $async.Future<$2.UpdateChallengeRequest> request) async {
-    return updateChallenge(call, await request);
+  $async.Future<$2.GetRewardsResponse> getRewards_Pre($grpc.ServiceCall call, $async.Future<$2.GetRewardsRequest> request) async {
+    return getRewards(call, await request);
   }
 
-  $async.Future<$2.GetChallengesResponse> getChallenges_Pre($grpc.ServiceCall call, $async.Future<$2.GetChallengesRequest> request) async {
-    return getChallenges(call, await request);
+  $async.Future<$2.GetAllRewardsResponse> getAllRewards_Pre($grpc.ServiceCall call, $async.Future<$2.GetAllRewardsRequest> request) async {
+    return getAllRewards(call, await request);
+  }
+
+  $async.Future<$2.GetAllTeamsResponse> getAllTeams_Pre($grpc.ServiceCall call, $async.Future<$2.GetAllTeamsRequest> request) async {
+    return getAllTeams(call, await request);
   }
 
   $async.Future<$2.CreateUserResponse> createUser($grpc.ServiceCall call, $2.CreateUserRequest request);
   $async.Future<$2.UpdateUserResponse> updateUser($grpc.ServiceCall call, $2.UpdateUserRequest request);
   $async.Future<$2.TrackChallengeResponse> trackChallenge($grpc.ServiceCall call, $2.TrackChallengeRequest request);
-  $async.Future<$2.CreateDailyChallengeResponse> createDailyChallenge($grpc.ServiceCall call, $2.CreateDailyChallengeRequest request);
-  $async.Future<$2.CreateQuestChallengeResponse> createQuestChallenge($grpc.ServiceCall call, $2.CreateQuestChallengeRequest request);
-  $async.Future<$2.UpdateChallengeResponse> updateChallenge($grpc.ServiceCall call, $2.UpdateChallengeRequest request);
-  $async.Future<$2.GetChallengesResponse> getChallenges($grpc.ServiceCall call, $2.GetChallengesRequest request);
+  $async.Future<$2.GetActiveChallengesResponse> getActiveChallenges($grpc.ServiceCall call, $2.GetActiveChallengesRequest request);
+  $async.Future<$2.GetScoreResponse> getScore($grpc.ServiceCall call, $2.GetScoreRequest request);
+  $async.Future<$2.GetRewardsResponse> getRewards($grpc.ServiceCall call, $2.GetRewardsRequest request);
+  $async.Future<$2.GetAllRewardsResponse> getAllRewards($grpc.ServiceCall call, $2.GetAllRewardsRequest request);
+  $async.Future<$2.GetAllTeamsResponse> getAllTeams($grpc.ServiceCall call, $2.GetAllTeamsRequest request);
 }
