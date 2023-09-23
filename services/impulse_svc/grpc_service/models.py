@@ -20,19 +20,19 @@ class Verification(models.Model):
 
 
 class VerificationStr(Verification):
-    class VerificationStrType(models.TextChoices):
-        QR = 'qr', _('QR Code')
+    class VerificationStrType(models.IntegerChoices):
+        QR = 1
 
-    type = models.CharField(max_length=10, choices=VerificationStrType.choices)
+    type = models.IntegerField(choices=VerificationStrType.choices)
     value = models.CharField(max_length=512)
 
 
 class VerificationInt(Verification):
-    class VerificationIntType(models.TextChoices):
-        TIMER = 'timer', _('Stopuhr')
-        Number = 'number', _('Nummer')
+    class VerificationIntType(models.IntegerChoices):
+        TIMER = 1
+        NUMBER = 2
 
-    type = models.CharField(max_length=10, choices=VerificationIntType.choices)
+    type = models.IntegerField(choices=VerificationIntType.choices)
     value = models.IntegerField()
 
 
