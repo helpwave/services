@@ -15,6 +15,12 @@ export class CreateUserRequest extends jspb.Message {
   getPal(): number;
   setPal(value: number): CreateUserRequest;
 
+  getLength(): number;
+  setLength(value: number): CreateUserRequest;
+
+  getWeight(): number;
+  setWeight(value: number): CreateUserRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateUserRequest.AsObject;
   static toObject(includeInstance: boolean, msg: CreateUserRequest): CreateUserRequest.AsObject;
@@ -29,6 +35,8 @@ export namespace CreateUserRequest {
     gender: string,
     birthday: string,
     pal: number,
+    length: number,
+    weight: number,
   }
 }
 
@@ -74,6 +82,16 @@ export class UpdateUserRequest extends jspb.Message {
   hasPal(): boolean;
   clearPal(): UpdateUserRequest;
 
+  getLength(): number;
+  setLength(value: number): UpdateUserRequest;
+  hasLength(): boolean;
+  clearLength(): UpdateUserRequest;
+
+  getWeight(): number;
+  setWeight(value: number): UpdateUserRequest;
+  hasWeight(): boolean;
+  clearWeight(): UpdateUserRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateUserRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateUserRequest): UpdateUserRequest.AsObject;
@@ -89,6 +107,8 @@ export namespace UpdateUserRequest {
     gender?: string,
     birthday?: string,
     pal?: number,
+    length?: number,
+    weight?: number,
   }
 
   export enum TeamIdCase { 
@@ -110,6 +130,16 @@ export namespace UpdateUserRequest {
     _PAL_NOT_SET = 0,
     PAL = 5,
   }
+
+  export enum LengthCase { 
+    _LENGTH_NOT_SET = 0,
+    LENGTH = 6,
+  }
+
+  export enum WeightCase { 
+    _WEIGHT_NOT_SET = 0,
+    WEIGHT = 7,
+  }
 }
 
 export class UpdateUserResponse extends jspb.Message {
@@ -130,6 +160,12 @@ export class UpdateUserResponse extends jspb.Message {
   getPal(): number;
   setPal(value: number): UpdateUserResponse;
 
+  getLength(): number;
+  setLength(value: number): UpdateUserResponse;
+
+  getWeight(): number;
+  setWeight(value: number): UpdateUserResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateUserResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateUserResponse): UpdateUserResponse.AsObject;
@@ -145,6 +181,8 @@ export namespace UpdateUserResponse {
     gender: string,
     birthday: string,
     pal: number,
+    length: number,
+    weight: number,
   }
 
   export enum TeamIdCase { 
