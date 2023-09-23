@@ -1,7 +1,7 @@
 FROM python:3.11.5-alpine
 
 # gRPC Port
-EXPOSE 50051
+EXPOSE 8080
 # HTTP Port
 EXPOSE 8000
 
@@ -12,5 +12,4 @@ RUN chmod +x run-migrations.sh
 
 RUN pip install -r requirements.txt
 
-CMD sh -c 'python manage.py grpcserver 0.0.0.0:50051 &' \
-  && sh -c 'python manage.py runserver 0.0.0.0:80000'
+CMD sleep infinity
