@@ -18,13 +18,19 @@ enum ChallengeCategory {
   CHALLENGE_CATEGORY_FITNESS = 2;
 }
 
+enum Gender {
+  MALE = 0;
+  FEMALE = 1;
+  DIVERSE = 2;
+}
+
 //
 // CreateUser
 //
 
 message CreateUserRequest {
   string username = 1;
-  string gender = 2;
+  Gender gender = 2;
   string birthday = 3;
   float pal = 4;
 }
@@ -185,6 +191,22 @@ message GetAllRewardsResponse {
   }
 }
 
+message StatsForTeamByUserRequest {
+  string user_id = 1;
+}
+
+message StatsForTeamByUserResponse {
+  string team_id = 1;
+  float score = 2;
+  repeated GenderCount gender_count = 3;
+  float average_age = 4;
+  uint64 user_count = 5;
+  
+  message GenderCount {
+    Gender gender = 1;
+    uint32 count = 2;
+  }
+}
 
 //
 // ImpulseService
