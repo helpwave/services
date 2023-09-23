@@ -890,9 +890,10 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.toObject = funct
 proto.proto.services.impulse_svc.v1.UpdateUserRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    gender: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    birthday: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    pal: jspb.Message.getFieldWithDefault(msg, 4, 0)
+    teamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    gender: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    birthday: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    pal: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
 
   if (includeInstance) {
@@ -935,13 +936,17 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.deserializeBinaryFromReade
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setGender(value);
+      msg.setTeamId(value);
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
-      msg.setBirthday(value);
+      msg.setGender(value);
       break;
     case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setBirthday(value);
+      break;
+    case 5:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setPal(value);
       break;
@@ -995,10 +1000,17 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.serializeBinaryToWriter = 
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 4));
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 5));
   if (f != null) {
     writer.writeUint32(
-      4,
+      5,
       f
     );
   }
@@ -1024,10 +1036,10 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setUserId = func
 
 
 /**
- * optional string gender = 2;
+ * optional string team_id = 2;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getGender = function() {
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getTeamId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
@@ -1036,7 +1048,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getGender = func
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.UpdateUserRequest} returns this
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setGender = function(value) {
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setTeamId = function(value) {
   return jspb.Message.setField(this, 2, value);
 };
 
@@ -1045,7 +1057,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setGender = func
  * Clears the field making it undefined.
  * @return {!proto.proto.services.impulse_svc.v1.UpdateUserRequest} returns this
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.clearGender = function() {
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.clearTeamId = function() {
   return jspb.Message.setField(this, 2, undefined);
 };
 
@@ -1054,16 +1066,16 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.clearGender = fu
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.hasGender = function() {
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.hasTeamId = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * optional string birthday = 3;
+ * optional string gender = 3;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getBirthday = function() {
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getGender = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
@@ -1072,7 +1084,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getBirthday = fu
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.UpdateUserRequest} returns this
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setBirthday = function(value) {
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setGender = function(value) {
   return jspb.Message.setField(this, 3, value);
 };
 
@@ -1081,7 +1093,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setBirthday = fu
  * Clears the field making it undefined.
  * @return {!proto.proto.services.impulse_svc.v1.UpdateUserRequest} returns this
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.clearBirthday = function() {
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.clearGender = function() {
   return jspb.Message.setField(this, 3, undefined);
 };
 
@@ -1090,25 +1102,25 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.clearBirthday = 
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.hasBirthday = function() {
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.hasGender = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional uint32 pal = 4;
- * @return {number}
+ * optional string birthday = 4;
+ * @return {string}
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getPal = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getBirthday = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.UpdateUserRequest} returns this
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setPal = function(value) {
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setBirthday = function(value) {
   return jspb.Message.setField(this, 4, value);
 };
 
@@ -1117,7 +1129,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setPal = functio
  * Clears the field making it undefined.
  * @return {!proto.proto.services.impulse_svc.v1.UpdateUserRequest} returns this
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.clearPal = function() {
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.clearBirthday = function() {
   return jspb.Message.setField(this, 4, undefined);
 };
 
@@ -1126,8 +1138,44 @@ proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.clearPal = funct
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.hasPal = function() {
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.hasBirthday = function() {
   return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional uint32 pal = 5;
+ * @return {number}
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.getPal = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.services.impulse_svc.v1.UpdateUserRequest} returns this
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.setPal = function(value) {
+  return jspb.Message.setField(this, 5, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.impulse_svc.v1.UpdateUserRequest} returns this
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.clearPal = function() {
+  return jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserRequest.prototype.hasPal = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
@@ -1164,9 +1212,10 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.toObject = func
 proto.proto.services.impulse_svc.v1.UpdateUserResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    gender: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    birthday: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    pal: jspb.Message.getFieldWithDefault(msg, 4, 0)
+    teamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    gender: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    birthday: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    pal: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
 
   if (includeInstance) {
@@ -1209,13 +1258,17 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.deserializeBinaryFromRead
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setGender(value);
+      msg.setTeamId(value);
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
-      msg.setBirthday(value);
+      msg.setGender(value);
       break;
     case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setBirthday(value);
+      break;
+    case 5:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setPal(value);
       break;
@@ -1255,24 +1308,31 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.serializeBinaryToWriter =
       f
     );
   }
-  f = message.getGender();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
     writer.writeString(
       2,
       f
     );
   }
-  f = message.getBirthday();
+  f = message.getGender();
   if (f.length > 0) {
     writer.writeString(
       3,
       f
     );
   }
+  f = message.getBirthday();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
   f = message.getPal();
   if (f !== 0) {
     writer.writeUint32(
-      4,
+      5,
       f
     );
   }
@@ -1298,10 +1358,10 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setUserId = fun
 
 
 /**
- * optional string gender = 2;
+ * optional string team_id = 2;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getGender = function() {
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getTeamId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
@@ -1310,16 +1370,34 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getGender = fun
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.UpdateUserResponse} returns this
  */
-proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setGender = function(value) {
-  return jspb.Message.setProto3StringField(this, 2, value);
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setTeamId = function(value) {
+  return jspb.Message.setField(this, 2, value);
 };
 
 
 /**
- * optional string birthday = 3;
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.impulse_svc.v1.UpdateUserResponse} returns this
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.clearTeamId = function() {
+  return jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.hasTeamId = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional string gender = 3;
  * @return {string}
  */
-proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getBirthday = function() {
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getGender = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
@@ -1328,17 +1406,35 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getBirthday = f
  * @param {string} value
  * @return {!proto.proto.services.impulse_svc.v1.UpdateUserResponse} returns this
  */
-proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setBirthday = function(value) {
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setGender = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
 /**
- * optional uint32 pal = 4;
+ * optional string birthday = 4;
+ * @return {string}
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getBirthday = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.impulse_svc.v1.UpdateUserResponse} returns this
+ */
+proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setBirthday = function(value) {
+  return jspb.Message.setProto3StringField(this, 4, value);
+};
+
+
+/**
+ * optional uint32 pal = 5;
  * @return {number}
  */
 proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getPal = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
 };
 
 
@@ -1347,7 +1443,7 @@ proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.getPal = functi
  * @return {!proto.proto.services.impulse_svc.v1.UpdateUserResponse} returns this
  */
 proto.proto.services.impulse_svc.v1.UpdateUserResponse.prototype.setPal = function(value) {
-  return jspb.Message.setProto3IntField(this, 4, value);
+  return jspb.Message.setProto3IntField(this, 5, value);
 };
 
 
