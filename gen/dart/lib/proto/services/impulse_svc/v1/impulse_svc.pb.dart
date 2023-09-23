@@ -24,6 +24,8 @@ class CreateUserRequest extends $pb.GeneratedMessage {
     Gender? gender,
     $core.String? birthday,
     $core.double? pal,
+    $core.int? length,
+    $core.double? weight,
   }) {
     final $result = create();
     if (username != null) {
@@ -38,6 +40,12 @@ class CreateUserRequest extends $pb.GeneratedMessage {
     if (pal != null) {
       $result.pal = pal;
     }
+    if (length != null) {
+      $result.length = length;
+    }
+    if (weight != null) {
+      $result.weight = weight;
+    }
     return $result;
   }
   CreateUserRequest._() : super();
@@ -49,6 +57,8 @@ class CreateUserRequest extends $pb.GeneratedMessage {
     ..e<Gender>(2, _omitFieldNames ? '' : 'gender', $pb.PbFieldType.OE, defaultOrMaker: Gender.GENDER_UNSPECIFIED, valueOf: Gender.valueOf, enumValues: Gender.values)
     ..aOS(3, _omitFieldNames ? '' : 'birthday')
     ..a<$core.double>(4, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OF)
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'length', $pb.PbFieldType.O3)
+    ..a<$core.double>(6, _omitFieldNames ? '' : 'weight', $pb.PbFieldType.OF)
     ..hasRequiredFields = false
   ;
 
@@ -108,6 +118,24 @@ class CreateUserRequest extends $pb.GeneratedMessage {
   $core.bool hasPal() => $_has(3);
   @$pb.TagNumber(4)
   void clearPal() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get length => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set length($core.int v) { $_setSignedInt32(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasLength() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearLength() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.double get weight => $_getN(5);
+  @$pb.TagNumber(6)
+  set weight($core.double v) { $_setFloat(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasWeight() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearWeight() => clearField(6);
 }
 
 class CreateUserResponse extends $pb.GeneratedMessage {
@@ -167,6 +195,8 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
     $core.String? gender,
     $core.String? birthday,
     $core.double? pal,
+    $core.int? length,
+    $core.double? weight,
   }) {
     final $result = create();
     if (userId != null) {
@@ -184,6 +214,12 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
     if (pal != null) {
       $result.pal = pal;
     }
+    if (length != null) {
+      $result.length = length;
+    }
+    if (weight != null) {
+      $result.weight = weight;
+    }
     return $result;
   }
   UpdateUserRequest._() : super();
@@ -196,6 +232,8 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'gender')
     ..aOS(4, _omitFieldNames ? '' : 'birthday')
     ..a<$core.double>(5, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OF)
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'length', $pb.PbFieldType.O3)
+    ..a<$core.double>(7, _omitFieldNames ? '' : 'weight', $pb.PbFieldType.OF)
     ..hasRequiredFields = false
   ;
 
@@ -264,6 +302,24 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
   $core.bool hasPal() => $_has(4);
   @$pb.TagNumber(5)
   void clearPal() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.int get length => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set length($core.int v) { $_setSignedInt32(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasLength() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearLength() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.double get weight => $_getN(6);
+  @$pb.TagNumber(7)
+  set weight($core.double v) { $_setFloat(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasWeight() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearWeight() => clearField(7);
 }
 
 class UpdateUserResponse extends $pb.GeneratedMessage {
@@ -273,6 +329,8 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
     $core.String? gender,
     $core.String? birthday,
     $core.double? pal,
+    $core.int? length,
+    $core.double? weight,
   }) {
     final $result = create();
     if (userId != null) {
@@ -290,6 +348,12 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
     if (pal != null) {
       $result.pal = pal;
     }
+    if (length != null) {
+      $result.length = length;
+    }
+    if (weight != null) {
+      $result.weight = weight;
+    }
     return $result;
   }
   UpdateUserResponse._() : super();
@@ -302,6 +366,8 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'gender')
     ..aOS(4, _omitFieldNames ? '' : 'birthday')
     ..a<$core.double>(5, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OF)
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'length', $pb.PbFieldType.O3)
+    ..a<$core.double>(7, _omitFieldNames ? '' : 'weight', $pb.PbFieldType.OF)
     ..hasRequiredFields = false
   ;
 
@@ -370,6 +436,24 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
   $core.bool hasPal() => $_has(4);
   @$pb.TagNumber(5)
   void clearPal() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.int get length => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set length($core.int v) { $_setSignedInt32(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasLength() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearLength() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.double get weight => $_getN(6);
+  @$pb.TagNumber(7)
+  set weight($core.double v) { $_setFloat(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasWeight() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearWeight() => clearField(7);
 }
 
 class GetAllTeamsRequest extends $pb.GeneratedMessage {

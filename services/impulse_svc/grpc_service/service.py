@@ -22,19 +22,81 @@ tz = pytz.timezone('Europe/Berlin')
 
 
 class Servicer(impulse_svc_pb2_grpc.ImpulseService):
-    def CreateUser(self, request, context):
+    def CreateUser(self, request: impulse_svc_pb2.CreateUserRequest, context):
         try:
             user = User.objects.create(
                 username=request.username,
                 gender=request.gender,
                 pal=request.pal,
-                birthday=datetime.fromisoformat(request.birthday)
+                birthday=datetime.fromisoformat(request.birthday),
+                weight=request.weight,
+                length=request.length,
             )
-        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, ValueError, AttributeError) as e:
-            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+        except (exceptions.ValidationError, ValueError, AttributeError) as e:
+            if isinstance(e, exceptions.ValidationError) or isinstance(e, ValueError) or isinstance(e, AttributeError):
+                context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            else:
+                context.set_code(grpc.StatusCode.INTERNAL)
             return impulse_svc_pb2.CreateUserResponse()
 
-        return impulse_svc_pb2.CreateUserResponse(id=str(user.id))
+        return impulse_svc_pb2.CreateUserResponse(user_id=str(user.id))
+
+    def UpdateUser(self, request, context):
+        try:
+            user: User = User.objects.get(id=request.user_id)
+        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:
+            if isinstance(e, exceptions.ObjectDoesNotExist):
+                context.set_code(grpc.StatusCode.NOT_FOUND)
+            else:
+                context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return impulse_svc_pb2.UpdateUserResponse()
+
+        try:
+            user.birthday = datetime.fromisoformat(request.birthday)
+        except (ValueError, AttributeError) as e:
+            if request.birthday != "":
+                context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+                context.set_details("Check the date format")
+                return impulse_svc_pb2.UpdateUserResponse()
+
+        if request.gender != "":
+            user.gender = request.gender
+
+        if request.pal != 0:
+            user.pal = request.pal
+
+        if request.length != 0:
+            user.length = request.length
+
+        if request.weight != 0:
+            user.weight = request.weight
+
+        try:
+            user.team = Team.objects.get(id=request.team_id)
+        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:
+            pass
+
+        user.save()
+
+        if user.team is None:
+            return impulse_svc_pb2.UpdateUserResponse(
+                user_id=str(user.id),
+                gender=user.gender,
+                birthday=user.birthday.isoformat(),
+                pal=user.pal,
+                length=user.length,
+                weight=user.weight,
+            )
+        else:
+            return impulse_svc_pb2.UpdateUserResponse(
+                user_id=str(user.id),
+                team_id=str(user.team.id),
+                gender=user.gender,
+                birthday=user.birthday.isoformat(),
+                pal=user.pal,
+                length=user.length,
+                weight=user.weight,
+            )
     
     def GetAllTeams(self, request, context):
         teams = Team.objects.all()
@@ -84,26 +146,6 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
                     points=reward.points,
                 ) for reward in rewards
             ]
-        )
-
-    def UpdateUser(self, request, context):
-        try:
-            user = User.objects.get(id=request.id)
-        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:
-            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-            return impulse_svc_pb2.UpdateUserResponse()
-
-        user.gender = request.gender
-        user.pal = request.pal
-        user.birthday = datetime.fromisoformat(request.birthday)
-        user.team = Team.objects.get(id=request.team_id)
-        user.save()
-
-        return impulse_svc_pb2.UpdateUserResponse(
-            id=str(user.id),
-            gender=user.gender,
-            birthday=user.birthday.isoformat(),
-            pal=user.pal,
         )
 
     def TrackChallenge(self, request, context):

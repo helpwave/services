@@ -104,6 +104,8 @@ class User(models.Model):
     birthday: datetime = models.DateTimeField()
     pal: float = models.FloatField()
     image: str = models.CharField(max_length=100)
+    weight: float = models.FloatField()
+    length: int = models.IntegerField()
 
     challenges: list = models.ManyToManyField(Challenge, through=UserChallenge)
     rewards: list = models.ManyToManyField(Reward, blank=True)
@@ -119,3 +121,7 @@ class User(models.Model):
     @property
     def age(self):
         return relativedelta(timezone.now(), self.birthday).years
+    
+    @property
+    def bmi(self):
+        return self.weight / (self.length / 100) ** 2
