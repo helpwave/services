@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 
 from django.db import models
-from django.db.models.aggregates import Sum
+from django.db.models.aggregates import Sum, Count
 from django.utils.translation import gettext_lazy as _
 
 
@@ -66,6 +66,22 @@ class Team(models.Model):
     def score(self):
         return (self.user_set.all().values("userchallenge__score").aggregate(Sum("userchallenge__score")).
                 get("userchallenge__score__sum", 0))
+
+    @property
+    def user_count(self):
+        return self.user_set.all().count()
+
+    @property
+    def male_count(self):
+        return self.user_set.filter(gender=User.Gender.MALE).count()
+
+    @property
+    def female_count(self):
+        return self.user_set.filter(gender=User.Gender.FEMALE).count()
+
+    @property
+    def divers_count(self):
+        return self.user_set.filter(gender=User.Gender.DIVERSE).count()
 
 
 class User(models.Model):
