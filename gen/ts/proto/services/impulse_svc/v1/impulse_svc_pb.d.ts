@@ -54,6 +54,11 @@ export class UpdateUserRequest extends jspb.Message {
   getUserId(): string;
   setUserId(value: string): UpdateUserRequest;
 
+  getTeamId(): string;
+  setTeamId(value: string): UpdateUserRequest;
+  hasTeamId(): boolean;
+  clearTeamId(): UpdateUserRequest;
+
   getGender(): string;
   setGender(value: string): UpdateUserRequest;
   hasGender(): boolean;
@@ -80,30 +85,41 @@ export class UpdateUserRequest extends jspb.Message {
 export namespace UpdateUserRequest {
   export type AsObject = {
     userId: string,
+    teamId?: string,
     gender?: string,
     birthday?: string,
     pal?: number,
   }
 
+  export enum TeamIdCase { 
+    _TEAM_ID_NOT_SET = 0,
+    TEAM_ID = 2,
+  }
+
   export enum GenderCase { 
     _GENDER_NOT_SET = 0,
-    GENDER = 2,
+    GENDER = 3,
   }
 
   export enum BirthdayCase { 
     _BIRTHDAY_NOT_SET = 0,
-    BIRTHDAY = 3,
+    BIRTHDAY = 4,
   }
 
   export enum PalCase { 
     _PAL_NOT_SET = 0,
-    PAL = 4,
+    PAL = 5,
   }
 }
 
 export class UpdateUserResponse extends jspb.Message {
   getUserId(): string;
   setUserId(value: string): UpdateUserResponse;
+
+  getTeamId(): string;
+  setTeamId(value: string): UpdateUserResponse;
+  hasTeamId(): boolean;
+  clearTeamId(): UpdateUserResponse;
 
   getGender(): string;
   setGender(value: string): UpdateUserResponse;
@@ -125,9 +141,15 @@ export class UpdateUserResponse extends jspb.Message {
 export namespace UpdateUserResponse {
   export type AsObject = {
     userId: string,
+    teamId?: string,
     gender: string,
     birthday: string,
     pal: number,
+  }
+
+  export enum TeamIdCase { 
+    _TEAM_ID_NOT_SET = 0,
+    TEAM_ID = 2,
   }
 }
 

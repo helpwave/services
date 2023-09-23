@@ -26,7 +26,7 @@ message CreateUserRequest {
   string username = 1;
   string gender = 2;
   string birthday = 3;
-  uint32 pal = 4;
+  float pal = 4;
 }
 
 message CreateUserResponse {
@@ -39,16 +39,18 @@ message CreateUserResponse {
 
 message UpdateUserRequest {
   string user_id = 1;
-  optional string gender = 2;
-  optional string birthday = 3;
-  optional uint32 pal = 4;
+  optional string team_id = 2;
+  optional string gender = 3;
+  optional string birthday = 4;
+  optional float pal = 5;
 }
 
 message UpdateUserResponse {
   string user_id = 1;
-  string gender = 2;
-  string birthday = 3;
-  uint32 pal = 4;
+  optional string team_id = 2;
+  string gender = 3;
+  string birthday = 4;
+  float pal = 5;
 }
 
 //
