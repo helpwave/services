@@ -163,6 +163,7 @@ class CreateUserResponse extends $pb.GeneratedMessage {
 class UpdateUserRequest extends $pb.GeneratedMessage {
   factory UpdateUserRequest({
     $core.String? userId,
+    $core.String? teamId,
     $core.String? gender,
     $core.String? birthday,
     $core.int? pal,
@@ -170,6 +171,9 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
     final $result = create();
     if (userId != null) {
       $result.userId = userId;
+    }
+    if (teamId != null) {
+      $result.teamId = teamId;
     }
     if (gender != null) {
       $result.gender = gender;
@@ -188,9 +192,10 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'userId')
-    ..aOS(2, _omitFieldNames ? '' : 'gender')
-    ..aOS(3, _omitFieldNames ? '' : 'birthday')
-    ..a<$core.int>(4, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OU3)
+    ..aOS(2, _omitFieldNames ? '' : 'teamId')
+    ..aOS(3, _omitFieldNames ? '' : 'gender')
+    ..aOS(4, _omitFieldNames ? '' : 'birthday')
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -225,36 +230,46 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
   void clearUserId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get gender => $_getSZ(1);
+  $core.String get teamId => $_getSZ(1);
   @$pb.TagNumber(2)
-  set gender($core.String v) { $_setString(1, v); }
+  set teamId($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasGender() => $_has(1);
+  $core.bool hasTeamId() => $_has(1);
   @$pb.TagNumber(2)
-  void clearGender() => clearField(2);
+  void clearTeamId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get birthday => $_getSZ(2);
+  $core.String get gender => $_getSZ(2);
   @$pb.TagNumber(3)
-  set birthday($core.String v) { $_setString(2, v); }
+  set gender($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasBirthday() => $_has(2);
+  $core.bool hasGender() => $_has(2);
   @$pb.TagNumber(3)
-  void clearBirthday() => clearField(3);
+  void clearGender() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.int get pal => $_getIZ(3);
+  $core.String get birthday => $_getSZ(3);
   @$pb.TagNumber(4)
-  set pal($core.int v) { $_setUnsignedInt32(3, v); }
+  set birthday($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasPal() => $_has(3);
+  $core.bool hasBirthday() => $_has(3);
   @$pb.TagNumber(4)
-  void clearPal() => clearField(4);
+  void clearBirthday() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get pal => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set pal($core.int v) { $_setUnsignedInt32(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasPal() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearPal() => clearField(5);
 }
 
 class UpdateUserResponse extends $pb.GeneratedMessage {
   factory UpdateUserResponse({
     $core.String? userId,
+    $core.String? teamId,
     $core.String? gender,
     $core.String? birthday,
     $core.int? pal,
@@ -262,6 +277,9 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
     final $result = create();
     if (userId != null) {
       $result.userId = userId;
+    }
+    if (teamId != null) {
+      $result.teamId = teamId;
     }
     if (gender != null) {
       $result.gender = gender;
@@ -280,9 +298,10 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateUserResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.impulse_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'userId')
-    ..aOS(2, _omitFieldNames ? '' : 'gender')
-    ..aOS(3, _omitFieldNames ? '' : 'birthday')
-    ..a<$core.int>(4, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OU3)
+    ..aOS(2, _omitFieldNames ? '' : 'teamId')
+    ..aOS(3, _omitFieldNames ? '' : 'gender')
+    ..aOS(4, _omitFieldNames ? '' : 'birthday')
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'pal', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -317,31 +336,40 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
   void clearUserId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get gender => $_getSZ(1);
+  $core.String get teamId => $_getSZ(1);
   @$pb.TagNumber(2)
-  set gender($core.String v) { $_setString(1, v); }
+  set teamId($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasGender() => $_has(1);
+  $core.bool hasTeamId() => $_has(1);
   @$pb.TagNumber(2)
-  void clearGender() => clearField(2);
+  void clearTeamId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get birthday => $_getSZ(2);
+  $core.String get gender => $_getSZ(2);
   @$pb.TagNumber(3)
-  set birthday($core.String v) { $_setString(2, v); }
+  set gender($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasBirthday() => $_has(2);
+  $core.bool hasGender() => $_has(2);
   @$pb.TagNumber(3)
-  void clearBirthday() => clearField(3);
+  void clearGender() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.int get pal => $_getIZ(3);
+  $core.String get birthday => $_getSZ(3);
   @$pb.TagNumber(4)
-  set pal($core.int v) { $_setUnsignedInt32(3, v); }
+  set birthday($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasPal() => $_has(3);
+  $core.bool hasBirthday() => $_has(3);
   @$pb.TagNumber(4)
-  void clearPal() => clearField(4);
+  void clearBirthday() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get pal => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set pal($core.int v) { $_setUnsignedInt32(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasPal() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearPal() => clearField(5);
 }
 
 class GetAllTeamsRequest extends $pb.GeneratedMessage {

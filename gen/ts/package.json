@@ -1,0 +1,10 @@
+{
+ 	"name": "@helpwave/proto-ts",
+ 	"version": "0.24.0-6114f75.0",
+ 	"description": "https://proto.helpwave.de",
+ 	"author": "contact@helpwave.de",
+ 	"license": "MPL 2.0",
+ 	"repository": {
+ 	 	"url": "https://github.com/helpwave/services.git"
+ 	}
+}

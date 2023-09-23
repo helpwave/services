@@ -34,7 +34,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.CreateUserResponse()
 
-        return impulse_svc_pb2.CreateUserResponse(id=str(user.id))
+        return impulse_svc_pb2.CreateUserResponse(user_id=str(user.id))
     
     def GetAllTeams(self, request, context):
         teams = Team.objects.all()
@@ -88,23 +88,46 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
     def UpdateUser(self, request, context):
         try:
-            user = User.objects.get(id=request.id)
+            user: User = User.objects.get(id=request.user_id)
         except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:
-            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            if isinstance(e, exceptions.ObjectDoesNotExist):
+                context.set_code(grpc.StatusCode.NOT_FOUND)
+            else:
+                context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return impulse_svc_pb2.UpdateUserResponse()
 
         user.gender = request.gender
         user.pal = request.pal
-        user.birthday = datetime.fromisoformat(request.birthday)
-        user.team = Team.objects.get(id=request.team_id)
+
+        try:
+            user.birthday = datetime.fromisoformat(request.birthday)
+        except ValueError:
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return impulse_svc_pb2.UpdateUserResponse()
+
+        try:
+            user.team = Team.objects.get(id=request.team_id)
+        except (exceptions.ValidationError, exceptions.ObjectDoesNotExist, AttributeError) as e:
+            # TODO: Should we do something here?
+            pass
+
         user.save()
 
-        return impulse_svc_pb2.UpdateUserResponse(
-            id=str(user.id),
-            gender=user.gender,
-            birthday=user.birthday.isoformat(),
-            pal=user.pal,
-        )
+        if user.team is None:
+            return impulse_svc_pb2.UpdateUserResponse(
+                user_id=str(user.id),
+                gender=user.gender,
+                birthday=user.birthday.isoformat(),
+                pal=user.pal,
+            )
+        else:
+            return impulse_svc_pb2.UpdateUserResponse(
+                user_id=str(user.id),
+                team_id=str(user.team.id),
+                gender=user.gender,
+                birthday=user.birthday.isoformat(),
+                pal=user.pal,
+            )
 
     def TrackChallenge(self, request, context):
         # current date 
