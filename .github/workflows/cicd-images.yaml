@@ -35,7 +35,7 @@ jobs:
         run: |
           echo "IMAGE_NAME=ghcr.io/${{ env.REPOSITORY_OWNER_LC }}/${{ inputs.image }}" >>${GITHUB_ENV}
 
-      - uses: docker/metadata-action@v4
+      - uses: docker/metadata-action@v5
         id: meta
         with:
           images: ${{ env.IMAGE_NAME }}
