@@ -14,7 +14,7 @@ jobs:
       # Stringified JSON Array of changed services
       services: ${{ steps.changes.outputs.all_changed_files }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -43,7 +43,7 @@ jobs:
   disallow-modifications:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -113,7 +113,7 @@ jobs:
           sudo apt install postgresql-client-15 -y
           /usr/lib/postgresql/15/bin/pg_dump --version
       - name: Clone Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Open tunnel to staging db
         run: |
           flyctl proxy 5431:5432 -a $FLY_DB_APP &
