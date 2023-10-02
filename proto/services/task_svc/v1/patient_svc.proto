@@ -106,6 +106,33 @@ message GetPatientAssignmentByWardResponse {
   }
 }
 
+//
+// GetRecentPatients
+//
+
+message GetRecentPatientsRequest {}
+
+message GetRecentPatientsResponse {
+  repeated PatientWithRoomAndBed recent_patients = 1;
+
+  message Bed {
+    string id = 1;
+    string name = 2;
+  }
+
+  message  Room {
+    string  id = 1;
+    string name = 2;
+  }
+
+  message PatientWithRoomAndBed {
+    string id = 1;
+    string human_readable_identifier = 2;
+    Room room = 3;
+    Bed bed = 4;
+  }
+}
+
 
 //
 // UpdatePatient
@@ -194,8 +221,12 @@ message GetPatientDetailsResponse {
 }
 
 
+//
+// GetPatientList
+//
+
 message GetPatientListRequest {
-  optional string organisation_id = 1;
+  optional string ward_id = 1;
 }
 
 message GetPatientListResponse {
@@ -228,6 +259,16 @@ message GetPatientListResponse {
 
 
 //
+// ReadmitPatient
+//
+
+message ReadmitPatientRequest {
+  string patient_id = 1; // @gotags: validate:"uuid4"
+}
+
+message ReadmitPatientResponse {}
+
+//
 // PatientService
 //
 
@@ -237,6 +278,7 @@ service PatientService {
   rpc GetPatientByBed(GetPatientByBedRequest) returns (GetPatientByBedResponse) {}
   rpc GetPatientsByWard(GetPatientsByWardRequest) returns (GetPatientsByWardResponse) {}
   rpc GetPatientAssignmentByWard(GetPatientAssignmentByWardRequest) returns (GetPatientAssignmentByWardResponse) {}
+  rpc GetRecentPatients(GetRecentPatientsRequest) returns (GetRecentPatientsResponse) {}
   rpc UpdatePatient(UpdatePatientRequest) returns (UpdatePatientResponse) {}
   rpc AssignBed(AssignBedRequest) returns (AssignBedResponse) {}
   rpc UnassignBed(UnassignBedRequest) returns (UnassignBedResponse) {}
@@ -244,4 +286,5 @@ service PatientService {
   rpc GetPatientDetails(GetPatientDetailsRequest) returns (GetPatientDetailsResponse) {}
   rpc GetPatientList(GetPatientListRequest) returns (GetPatientListResponse) {}
   rpc DeletePatient(DeletePatientRequest) returns (DeletePatientResponse) {}
+  rpc ReadmitPatient(ReadmitPatientRequest) returns (ReadmitPatientResponse) {}
 }

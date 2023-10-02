@@ -39,6 +39,21 @@ func (r *PatientRepository) GetPatientById(id uuid.UUID) (*models.Patient, error
 	return patient, nil
 }
 
+func (r *PatientRepository) GetPatientsByIdsWithBedAndRoom(ids []uuid.UUID) ([]models.Patient, error) {
+	var patients []models.Patient
+
+	query := r.db.
+		Where("id IN ?", ids).
+		Preload("Bed").
+		Preload("Bed.Room").
+		Find(&patients)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return patients, nil
+}
+
 func (r *PatientRepository) GetPatientsByWardForOrganization(wardID, organizationID uuid.UUID) ([]models.Patient, error) {
 	var patients []models.Patient
 	query := r.db.
@@ -109,6 +124,22 @@ func (r *PatientRepository) GetRoomsWithBedsWithActivePatientsForOrganization(or
 	return rooms, nil
 }
 
+func (r *PatientRepository) GetRoomsWithBedsWithActivePatientsForWard(wardID uuid.UUID) ([]models.Room, error) {
+	var rooms []models.Room
+	query := r.db.
+		Preload("Beds.Patient").
+		Joins("JOIN beds ON rooms.id = beds.room_id").
+		Joins("JOIN patients ON patients.bed_id = beds.id").
+		Where("rooms.ward_id = ? AND patients.is_discharged = 0", wardID).
+		Group("rooms.id").
+		Find(&rooms)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return rooms, nil
+}
+
 func (r *PatientRepository) UpdatePatient(patientID uuid.UUID, updates map[string]interface{}) (*models.Patient, error) {
 	patient := &models.Patient{ID: patientID}
 	query := r.db.
@@ -124,6 +155,16 @@ func (r *PatientRepository) UpdatePatient(patientID uuid.UUID, updates map[strin
 func (r *PatientRepository) DeletePatient(patientID uuid.UUID) (*models.Patient, error) {
 	patient := &models.Patient{ID: patientID}
 	query := r.db.Unscoped().Delete(patient)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return patient, nil
+}
+
+func (r *PatientRepository) ReadmitPatient(patientID uuid.UUID) (*models.Patient, error) {
+	patient := &models.Patient{ID: patientID}
+	query := r.db.Unscoped().Model(patient).Update("is_discharged", 0)
 
 	if err := query.Error; err != nil {
 		return nil, err

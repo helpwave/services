@@ -27,7 +27,7 @@ jobs:
     outputs:
       exist: ${{ steps.fly-toml.outputs.fly-toml-exist }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Does a fly.toml exist?
         id: fly-toml
         run: |
@@ -42,8 +42,8 @@ jobs:
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: docker/setup-buildx-action@v2
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
       - name: Configure Dapr for deployment
         run: sed -i "s/helpwave-staging/$organization/g" dapr/config.yaml
         env:

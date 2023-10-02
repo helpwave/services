@@ -43,6 +43,13 @@ export class PatientServiceClient {
                response: proto_services_task_svc_v1_patient_svc_pb.GetPatientAssignmentByWardResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_patient_svc_pb.GetPatientAssignmentByWardResponse>;
 
+  getRecentPatients(
+    request: proto_services_task_svc_v1_patient_svc_pb.GetRecentPatientsRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_patient_svc_pb.GetRecentPatientsResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_patient_svc_pb.GetRecentPatientsResponse>;
+
   updatePatient(
     request: proto_services_task_svc_v1_patient_svc_pb.UpdatePatientRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -92,6 +99,13 @@ export class PatientServiceClient {
                response: proto_services_task_svc_v1_patient_svc_pb.DeletePatientResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_patient_svc_pb.DeletePatientResponse>;
 
+  readmitPatient(
+    request: proto_services_task_svc_v1_patient_svc_pb.ReadmitPatientRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_patient_svc_pb.ReadmitPatientResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_patient_svc_pb.ReadmitPatientResponse>;
+
 }
 
 export class PatientServicePromiseClient {
@@ -123,6 +137,11 @@ export class PatientServicePromiseClient {
     request: proto_services_task_svc_v1_patient_svc_pb.GetPatientAssignmentByWardRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_patient_svc_pb.GetPatientAssignmentByWardResponse>;
+
+  getRecentPatients(
+    request: proto_services_task_svc_v1_patient_svc_pb.GetRecentPatientsRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_patient_svc_pb.GetRecentPatientsResponse>;
 
   updatePatient(
     request: proto_services_task_svc_v1_patient_svc_pb.UpdatePatientRequest,
@@ -158,6 +177,11 @@ export class PatientServicePromiseClient {
     request: proto_services_task_svc_v1_patient_svc_pb.DeletePatientRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_patient_svc_pb.DeletePatientResponse>;
+
+  readmitPatient(
+    request: proto_services_task_svc_v1_patient_svc_pb.ReadmitPatientRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_patient_svc_pb.ReadmitPatientResponse>;
 
 }
 

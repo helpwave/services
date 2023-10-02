@@ -17,13 +17,13 @@ jobs:
     outputs:
       services: ${{ steps.aggregate-changes.outputs.services }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Detect changes in libs
         id: changes-in-libs
-        uses: tj-actions/changed-files@v37
+        uses: tj-actions/changed-files@v39
         with:
           files: |
             .github/**
@@ -33,14 +33,18 @@ jobs:
 
       - name: Detect changes in services
         id: changes-in-services
-        uses: tj-actions/changed-files@v37
+        uses: tj-actions/changed-files@v39
         with:
           files: |
-            services/**
+            services/auth-svc/**
+            services/emergency-room-svc/**
+            services/ory-svc/**
+            services/task-svc/**
+            services/user-svc/**
 
       - name: Detect changes in images
         id: changes-in-images
-        uses: tj-actions/changed-files@v37
+        uses: tj-actions/changed-files@v39
         with:
           files: |
             images/**
@@ -49,7 +53,7 @@ jobs:
         id: aggregate-changes
         run: |
           if [[ "$libsChanged" == "true" ]]; then
-            echo "services=$(ls services | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
+            echo "services=$(ls services | grep -v 'impulse_svc' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           else
             echo "services=$(echo $changesInServices | awk -F / '$1 ~ /services/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           fi
