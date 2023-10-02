@@ -124,7 +124,7 @@ jobs:
           password: ${{ github.token }}
 
       - id: commit
-        uses: pr-mpt/actions-commit-hash@v2
+        uses: pr-mpt/actions-commit-hash@v3
         with:
           commit: "${{ github.sha }}"
 
