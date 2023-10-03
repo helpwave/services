@@ -60,6 +60,19 @@ func (r *TemplateRepository) GetTaskTemplatesByWard(wardID uuid.UUID) ([]models.
 	return templates, nil
 }
 
+func (r *TemplateRepository) GetTaskTemplatesByWardWithSubtasks(wardID uuid.UUID) ([]models.TaskTemplate, error) {
+	var templates []models.TaskTemplate
+	query := r.db.
+		Preload("SubTasks").
+		Where("ward_id = ?", wardID).
+		Find(&templates)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return templates, nil
+}
+
 func (r *TemplateRepository) GetSubTasksForTaskTemplate(templateID uuid.UUID) ([]models.TaskTemplateSubtask, error) {
 	var taskTemplateSubtask []models.TaskTemplateSubtask
 	query := r.db.

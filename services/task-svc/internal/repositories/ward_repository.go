@@ -39,6 +39,19 @@ func (r *WardRepository) GetWardById(id uuid.UUID) (*models.Ward, error) {
 	return &ward, nil
 }
 
+func (r *WardRepository) GetWardByIdWithPreloadedRoomsAndBeds(id uuid.UUID) (*models.Ward, error) {
+	ward := models.Ward{ID: id}
+	query := r.db.
+		Preload("Rooms.Beds").
+		Preload("Rooms").
+		First(&ward)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return &ward, nil
+}
+
 func (r *WardRepository) GetWardByIdForOrganization(id, organizationID uuid.UUID) (*models.Ward, error) {
 	ward := models.Ward{ID: id, OrganizationID: organizationID}
 	query := r.db.
@@ -53,6 +66,22 @@ func (r *WardRepository) GetWardByIdForOrganization(id, organizationID uuid.UUID
 func (r *WardRepository) GetWardsForOrganization(organizationID uuid.UUID) ([]*models.Ward, error) {
 	var wards []*models.Ward
 	query := r.db.
+		Where("organization_id = ?", organizationID).
+		Find(&wards)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return wards, nil
+}
+
+func (r *WardRepository) GetWardsForOrganizationFullyLoaded(organizationID uuid.UUID) ([]*models.Ward, error) {
+	var wards []*models.Ward
+	query := r.db.
+		Preload("Rooms.Beds.Patient.Tasks").
+		Preload("Rooms.Beds.Patient").
+		Preload("Rooms.Beds").
+		Preload("Rooms").
 		Where("organization_id = ?", organizationID).
 		Find(&wards)
 

@@ -14,4 +14,5 @@ type Room struct {
 	OrganizationID uuid.UUID `gorm:"column:organization_id"`
 	Beds           []Bed     `gorm:"foreignKey:RoomID"`
 	WardID         uuid.UUID `gorm:"column:ward_id"`
+	Ward           *Ward     `gorm:"foreignKey:WardID"`
 }
