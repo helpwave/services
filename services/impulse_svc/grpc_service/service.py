@@ -1,12 +1,12 @@
 import sys
-
 from datetime import datetime
+from uuid import UUID
 
 import django.core.exceptions as exceptions
 from django.utils.timezone import make_aware
+from django.db.models import Q
 
 import grpc
-from uuid import UUID
 
 sys.path.append("./gen/")
 
@@ -15,23 +15,19 @@ from proto.services.impulse_svc.v1 import impulse_svc_pb2
 
 from grpc_service.models import Challenge, UserChallenge, User, Reward, Team
 
-from django.db.models import Q
 
-
-def is_uuid(uuid_input: str, version=4) -> bool:
+def get_uuid(uuid_input: str, version=4) -> UUID | None:
     try:
-        UUID(uuid_input, version=version)
+        return UUID(uuid_input, version=version)
     except ValueError:
-        return False
-    return True
+        return None
 
 
-def is_iso_datetime(datetime_input: str) -> bool:
+def get_iso_datetime(datetime_input: str) -> datetime | None:
     try:
-        datetime.fromisoformat(datetime_input)
+        return datetime.fromisoformat(datetime_input)
     except ValueError:
-        return False
-    return True
+        return None
 
 
 def parse_datetime(datetime_input: str) -> datetime:
@@ -55,17 +51,25 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             context.set_details("Weight value can not be negativ")
             return impulse_svc_pb2.CreateUserResponse()
 
+        birthday: datetime | None = get_iso_datetime(request.birthday)
+
+        if birthday is None:
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            context.set_details("Birthday is not a valid datetime")
+            return impulse_svc_pb2.CreateUserResponse()
+
         try:
             user = User.objects.create(
                 username=request.username,
                 gender=request.gender,
                 pal=request.pal,
-                birthday=datetime.fromisoformat(request.birthday),
+                birthday=birthday,
                 weight=request.weight,
                 length=request.length,
             )
         except (exceptions.ValidationError, ValueError, AttributeError) as e:
             if isinstance(e, exceptions.ValidationError) or isinstance(e, ValueError) or isinstance(e, AttributeError):
+                print(e)
                 context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
                 context.set_details("Check your arguments")
             else:
@@ -76,37 +80,41 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         return impulse_svc_pb2.CreateUserResponse(user_id=str(user.id))
 
     def UpdateUser(self, request, context):
-        if not is_uuid(request.user_id):
+        user_id: UUID | None = get_uuid(request.user_id)
+        birthday: datetime | None = get_iso_datetime(request.birthday)
+        team_id: UUID | None = get_uuid(request.team_id)
+
+        if user_id is None:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             context.set_details("userId is not a valid uuid")
             return impulse_svc_pb2.UpdateUserResponse()
 
-        if User.objects.filter(id=request.user_id).count() == 0:
+        try:
+            user: User = User.objects.get(id=user_id)
+        except User.DoesNotExist as e:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("user does not exist")
             return impulse_svc_pb2.UpdateUserResponse()
 
-        user: User = User.objects.get(id=request.user_id)
-
-        if request.birthday != "" and not is_iso_datetime(request.birthday):
+        if request.birthday != "" and birthday is None:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             context.set_details("birthday is not a valid datetime")
             return impulse_svc_pb2.UpdateUserResponse()
         elif request.birthday != "":
-            user.birthday = parse_datetime(request.birthday)
+            user.birthday = birthday
 
         if request.team_id == "":
             pass
-        elif not is_uuid(request.team_id):
+        elif team_id is None:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             context.set_details("teamId is not a valid datetime")
             return impulse_svc_pb2.UpdateUserResponse()
-        elif Team.objects.filter(id=request.team_id).count() == 0:
+        elif Team.objects.filter(id=team_id).count() == 0:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("team does not exist")
             return impulse_svc_pb2.UpdateUserResponse()
         else:
-            user.team = Team.objects.get(id=request.team_id)
+            user.team = Team.objects.get(id=team_id)
 
         if request.gender != "":
             user.gender = request.gender
@@ -156,32 +164,36 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         )
     
     def GetScore(self, request, context):
-        if not is_uuid(request.user_id):
+        user_id: UUID | None = get_uuid(request.user_id)
+
+        if user_id is None:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             context.set_details("userId is not a valid uuid")
             return impulse_svc_pb2.UpdateUserResponse()
 
-        if User.objects.filter(id=request.user_id).count() == 0:
+        try:
+            user: User = User.objects.get(id=user_id)
+        except User.DoesNotExist as e:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("user does not exist")
             return impulse_svc_pb2.UpdateUserResponse()
-
-        user = User.objects.get(id=request.user_id)
 
         return impulse_svc_pb2.GetScoreResponse(score=user.score)
     
     def GetRewards(self, request, context):
-        if not is_uuid(request.user_id):
+        user_id: UUID | None = get_uuid(request.user_id)
+
+        if user_id is None:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             context.set_details("userId is not a valid uuid")
             return impulse_svc_pb2.UpdateUserResponse()
 
-        if User.objects.filter(id=request.user_id).count() == 0:
+        try:
+            user: User = User.objects.get(id=user_id)
+        except User.DoesNotExist as e:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("user does not exist")
             return impulse_svc_pb2.UpdateUserResponse()
-
-        user = User.objects.get(id=request.user_id)
 
         rewards = Reward.objects.filter(points__lte=user.score)
 
@@ -197,12 +209,14 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         )
 
     def TrackChallenge(self, request, context):
-        if not is_uuid(request.user_id):
+        user_id: UUID | None = get_uuid(request.user_id)
+
+        if user_id is None:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             context.set_details("userId is not a valid uuid")
             return impulse_svc_pb2.UpdateUserResponse()
 
-        if User.objects.filter(id=request.user_id).count() == 0:
+        if User.objects.filter(id=user_id).count() == 0:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("user does not exist")
             return impulse_svc_pb2.UpdateUserResponse()
@@ -210,6 +224,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         if UserChallenge.objects.filter(challenge_id=request.challenge_id).count() == 0:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("challenge does not exist")
+            return impulse_svc_pb2.UpdateUserResponse()
 
         # current date
         current_date = make_aware(datetime.now())
@@ -217,10 +232,11 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         if request.score < 0:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             context.set_details("Negativ scores are not valid")
+            return impulse_svc_pb2.UpdateUserResponse()
 
         # create the UserChallenge object
         user_challenge = UserChallenge.objects.create(
-            user_id=request.user_id,
+            user_id=user_id,
             challenge_id=request.challenge_id,
             score=request.score,
             done_datetime=current_date
@@ -274,17 +290,20 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         )
 
     def StatsForTeamByUser(self, request, context):
-        if not is_uuid(request.user_id):
+        user_id: UUID | None = get_uuid(request.user_id)
+
+        if user_id is None:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             context.set_details("userId is not a valid uuid")
             return impulse_svc_pb2.UpdateUserResponse()
 
-        if User.objects.filter(id=request.user_id).count() == 0:
+        try:
+            user: User = User.objects.get(id=user_id)
+        except User.DoesNotExist as e:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("user does not exist")
             return impulse_svc_pb2.UpdateUserResponse()
 
-        user = User.objects.get(id=request.user_id)
         team = user.team
         
         return impulse_svc_pb2.StatsForTeamByUserResponse(
@@ -309,22 +328,20 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         )
         
     def Verification(self, request, context):
-        if not is_uuid(request.user_id):
+        challenge_id: UUID | None = get_uuid(request.challenge_id)
+
+        if challenge_id is None:
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-            context.set_details("userId is not a valid uuid")
+            context.set_details("challengeId is not a valid uuid")
             return impulse_svc_pb2.UpdateUserResponse()
 
-        if User.objects.filter(id=request.user_id).count() == 0:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("user does not exist")
-            return impulse_svc_pb2.UpdateUserResponse()
-
-        if User.objects.filter(id=request.challenge_id).count() == 0:
+        try:
+            challenge = Challenge.objects.get(id=challenge_id)
+        except Challenge.DoesNotExist as e:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("challenge does not exist")
             return impulse_svc_pb2.UpdateUserResponse()
 
-        challenge = Challenge.objects.get(id=request.challenge_id)
         string_verifications = challenge.verificationstr_set.all()
         integer_verifications = challenge.verificationint_set.all()
         
