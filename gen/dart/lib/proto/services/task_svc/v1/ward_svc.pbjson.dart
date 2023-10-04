@@ -97,6 +97,46 @@ final $typed_data.Uint8List getWardsResponseDescriptor = $convert.base64Decode(
     '9zdmMudjEuR2V0V2FyZHNSZXNwb25zZS5XYXJkUgV3YXJkcxoqCgRXYXJkEg4KAmlkGAEgASgJ'
     'UgJpZBISCgRuYW1lGAIgASgJUgRuYW1l');
 
+@$core.Deprecated('Use getRecentWardsRequestDescriptor instead')
+const GetRecentWardsRequest$json = {
+  '1': 'GetRecentWardsRequest',
+};
+
+/// Descriptor for `GetRecentWardsRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRecentWardsRequestDescriptor = $convert.base64Decode(
+    'ChVHZXRSZWNlbnRXYXJkc1JlcXVlc3Q=');
+
+@$core.Deprecated('Use getRecentWardsResponseDescriptor instead')
+const GetRecentWardsResponse$json = {
+  '1': 'GetRecentWardsResponse',
+  '2': [
+    {'1': 'wards', '3': 1, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetRecentWardsResponse.Ward', '10': 'wards'},
+  ],
+  '3': [GetRecentWardsResponse_Ward$json],
+};
+
+@$core.Deprecated('Use getRecentWardsResponseDescriptor instead')
+const GetRecentWardsResponse_Ward$json = {
+  '1': 'Ward',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'bed_count', '3': 3, '4': 1, '5': 13, '10': 'bedCount'},
+    {'1': 'tasks_todo', '3': 4, '4': 1, '5': 13, '10': 'tasksTodo'},
+    {'1': 'tasks_in_progress', '3': 5, '4': 1, '5': 13, '10': 'tasksInProgress'},
+    {'1': 'tasks_done', '3': 6, '4': 1, '5': 13, '10': 'tasksDone'},
+  ],
+};
+
+/// Descriptor for `GetRecentWardsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRecentWardsResponseDescriptor = $convert.base64Decode(
+    'ChZHZXRSZWNlbnRXYXJkc1Jlc3BvbnNlEk0KBXdhcmRzGAEgAygLMjcucHJvdG8uc2VydmljZX'
+    'MudGFza19zdmMudjEuR2V0UmVjZW50V2FyZHNSZXNwb25zZS5XYXJkUgV3YXJkcxqxAQoEV2Fy'
+    'ZBIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIbCgliZWRfY291bnQYAyABKA'
+    '1SCGJlZENvdW50Eh0KCnRhc2tzX3RvZG8YBCABKA1SCXRhc2tzVG9kbxIqChF0YXNrc19pbl9w'
+    'cm9ncmVzcxgFIAEoDVIPdGFza3NJblByb2dyZXNzEh0KCnRhc2tzX2RvbmUYBiABKA1SCXRhc2'
+    'tzRG9uZQ==');
+
 @$core.Deprecated('Use updateWardRequestDescriptor instead')
 const UpdateWardRequest$json = {
   '1': 'UpdateWardRequest',

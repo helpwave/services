@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n)proto/services/task_svc/v1/ward_svc.proto\x12\x1aproto.services.task_svc.v1\"\'\n\x11\x43reateWardRequest\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"$\n\x12\x43reateWardResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\" \n\x0eGetWardRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"^\n\x0fGetWardResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\'\n\x0forganization_id\x18\x03 \x01(\tR\x0eorganizationId\"\x11\n\x0fGetWardsRequest\"\x87\x01\n\x10GetWardsResponse\x12G\n\x05wards\x18\x01 \x03(\x0b\x32\x31.proto.services.task_svc.v1.GetWardsResponse.WardR\x05wards\x1a*\n\x04Ward\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\"E\n\x11UpdateWardRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n\x04name\x18\x02 \x01(\tH\x00R\x04name\x88\x01\x01\x42\x07\n\x05_name\"\x14\n\x12UpdateWardResponse\"#\n\x11\x44\x65leteWardRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"\x14\n\x12\x44\x65leteWardResponse\"\'\n\x15GetWardDetailsRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"\xd2\x04\n\x16GetWardDetailsResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12M\n\x05rooms\x18\x03 \x03(\x0b\x32\x37.proto.services.task_svc.v1.GetWardDetailsResponse.RoomR\x05rooms\x12\x66\n\x0etask_templates\x18\x04 \x03(\x0b\x32?.proto.services.task_svc.v1.GetWardDetailsResponse.TaskTemplateR\rtaskTemplates\x1a)\n\x03\x42\x65\x64\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x1a-\n\x07Subtask\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x1av\n\x04Room\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12J\n\x04\x62\x65\x64s\x18\x03 \x03(\x0b\x32\x36.proto.services.task_svc.v1.GetWardDetailsResponse.BedR\x04\x62\x65\x64s\x1a\x8a\x01\n\x0cTaskTemplate\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12V\n\x08subtasks\x18\x03 \x03(\x0b\x32:.proto.services.task_svc.v1.GetWardDetailsResponse.SubtaskR\x08subtasks\"\x19\n\x17GetWardOverviewsRequest\"\x9f\x02\n\x18GetWardOverviewsResponse\x12O\n\x05wards\x18\x01 \x03(\x0b\x32\x39.proto.services.task_svc.v1.GetWardOverviewsResponse.WardR\x05wards\x1a\xb1\x01\n\x04Ward\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\x1b\n\tbed_count\x18\x03 \x01(\rR\x08\x62\x65\x64\x43ount\x12\x1d\n\ntasks_todo\x18\x04 \x01(\rR\ttasksTodo\x12*\n\x11tasks_in_progress\x18\x05 \x01(\rR\x0ftasksInProgress\x12\x1d\n\ntasks_done\x18\x06 \x01(\rR\ttasksDone2\xa5\x06\n\x0bWardService\x12m\n\nCreateWard\x12-.proto.services.task_svc.v1.CreateWardRequest\x1a..proto.services.task_svc.v1.CreateWardResponse\"\x00\x12\x64\n\x07GetWard\x12*.proto.services.task_svc.v1.GetWardRequest\x1a+.proto.services.task_svc.v1.GetWardResponse\"\x00\x12g\n\x08GetWards\x12+.proto.services.task_svc.v1.GetWardsRequest\x1a,.proto.services.task_svc.v1.GetWardsResponse\"\x00\x12m\n\nUpdateWard\x12-.proto.services.task_svc.v1.UpdateWardRequest\x1a..proto.services.task_svc.v1.UpdateWardResponse\"\x00\x12m\n\nDeleteWard\x12-.proto.services.task_svc.v1.DeleteWardRequest\x1a..proto.services.task_svc.v1.DeleteWardResponse\"\x00\x12\x7f\n\x10GetWardOverviews\x12\x33.proto.services.task_svc.v1.GetWardOverviewsRequest\x1a\x34.proto.services.task_svc.v1.GetWardOverviewsResponse\"\x00\x12y\n\x0eGetWardDetails\x12\x31.proto.services.task_svc.v1.GetWardDetailsRequest\x1a\x32.proto.services.task_svc.v1.GetWardDetailsResponse\"\x00\x42\xd2\x01\n\x1e\x63om.proto.services.task_svc.v1B\x0cWardSvcProtoP\x01Z\x1bgen/proto/services/task-svc\xa2\x02\x03PST\xaa\x02\x19Proto.Services.TaskSvc.V1\xca\x02\x19Proto\\Services\\TaskSvc\\V1\xe2\x02%Proto\\Services\\TaskSvc\\V1\\GPBMetadata\xea\x02\x1cProto::Services::TaskSvc::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n)proto/services/task_svc/v1/ward_svc.proto\x12\x1aproto.services.task_svc.v1\"\'\n\x11\x43reateWardRequest\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"$\n\x12\x43reateWardResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\" \n\x0eGetWardRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"^\n\x0fGetWardResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\'\n\x0forganization_id\x18\x03 \x01(\tR\x0eorganizationId\"\x11\n\x0fGetWardsRequest\"\x87\x01\n\x10GetWardsResponse\x12G\n\x05wards\x18\x01 \x03(\x0b\x32\x31.proto.services.task_svc.v1.GetWardsResponse.WardR\x05wards\x1a*\n\x04Ward\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\"\x17\n\x15GetRecentWardsRequest\"\x9b\x02\n\x16GetRecentWardsResponse\x12M\n\x05wards\x18\x01 \x03(\x0b\x32\x37.proto.services.task_svc.v1.GetRecentWardsResponse.WardR\x05wards\x1a\xb1\x01\n\x04Ward\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\x1b\n\tbed_count\x18\x03 \x01(\rR\x08\x62\x65\x64\x43ount\x12\x1d\n\ntasks_todo\x18\x04 \x01(\rR\ttasksTodo\x12*\n\x11tasks_in_progress\x18\x05 \x01(\rR\x0ftasksInProgress\x12\x1d\n\ntasks_done\x18\x06 \x01(\rR\ttasksDone\"E\n\x11UpdateWardRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n\x04name\x18\x02 \x01(\tH\x00R\x04name\x88\x01\x01\x42\x07\n\x05_name\"\x14\n\x12UpdateWardResponse\"#\n\x11\x44\x65leteWardRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"\x14\n\x12\x44\x65leteWardResponse\"\'\n\x15GetWardDetailsRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"\xd2\x04\n\x16GetWardDetailsResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12M\n\x05rooms\x18\x03 \x03(\x0b\x32\x37.proto.services.task_svc.v1.GetWardDetailsResponse.RoomR\x05rooms\x12\x66\n\x0etask_templates\x18\x04 \x03(\x0b\x32?.proto.services.task_svc.v1.GetWardDetailsResponse.TaskTemplateR\rtaskTemplates\x1a)\n\x03\x42\x65\x64\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x1a-\n\x07Subtask\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x1av\n\x04Room\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12J\n\x04\x62\x65\x64s\x18\x03 \x03(\x0b\x32\x36.proto.services.task_svc.v1.GetWardDetailsResponse.BedR\x04\x62\x65\x64s\x1a\x8a\x01\n\x0cTaskTemplate\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12V\n\x08subtasks\x18\x03 \x03(\x0b\x32:.proto.services.task_svc.v1.GetWardDetailsResponse.SubtaskR\x08subtasks\"\x19\n\x17GetWardOverviewsRequest\"\x9f\x02\n\x18GetWardOverviewsResponse\x12O\n\x05wards\x18\x01 \x03(\x0b\x32\x39.proto.services.task_svc.v1.GetWardOverviewsResponse.WardR\x05wards\x1a\xb1\x01\n\x04Ward\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\x1b\n\tbed_count\x18\x03 \x01(\rR\x08\x62\x65\x64\x43ount\x12\x1d\n\ntasks_todo\x18\x04 \x01(\rR\ttasksTodo\x12*\n\x11tasks_in_progress\x18\x05 \x01(\rR\x0ftasksInProgress\x12\x1d\n\ntasks_done\x18\x06 \x01(\rR\ttasksDone2\xa0\x07\n\x0bWardService\x12m\n\nCreateWard\x12-.proto.services.task_svc.v1.CreateWardRequest\x1a..proto.services.task_svc.v1.CreateWardResponse\"\x00\x12\x64\n\x07GetWard\x12*.proto.services.task_svc.v1.GetWardRequest\x1a+.proto.services.task_svc.v1.GetWardResponse\"\x00\x12g\n\x08GetWards\x12+.proto.services.task_svc.v1.GetWardsRequest\x1a,.proto.services.task_svc.v1.GetWardsResponse\"\x00\x12y\n\x0eGetRecentWards\x12\x31.proto.services.task_svc.v1.GetRecentWardsRequest\x1a\x32.proto.services.task_svc.v1.GetRecentWardsResponse\"\x00\x12m\n\nUpdateWard\x12-.proto.services.task_svc.v1.UpdateWardRequest\x1a..proto.services.task_svc.v1.UpdateWardResponse\"\x00\x12m\n\nDeleteWard\x12-.proto.services.task_svc.v1.DeleteWardRequest\x1a..proto.services.task_svc.v1.DeleteWardResponse\"\x00\x12\x7f\n\x10GetWardOverviews\x12\x33.proto.services.task_svc.v1.GetWardOverviewsRequest\x1a\x34.proto.services.task_svc.v1.GetWardOverviewsResponse\"\x00\x12y\n\x0eGetWardDetails\x12\x31.proto.services.task_svc.v1.GetWardDetailsRequest\x1a\x32.proto.services.task_svc.v1.GetWardDetailsResponse\"\x00\x42\xd2\x01\n\x1e\x63om.proto.services.task_svc.v1B\x0cWardSvcProtoP\x01Z\x1bgen/proto/services/task-svc\xa2\x02\x03PST\xaa\x02\x19Proto.Services.TaskSvc.V1\xca\x02\x19Proto\\Services\\TaskSvc\\V1\xe2\x02%Proto\\Services\\TaskSvc\\V1\\GPBMetadata\xea\x02\x1cProto::Services::TaskSvc::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -35,32 +35,38 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_GETWARDSRESPONSE']._serialized_end=437
   _globals['_GETWARDSRESPONSE_WARD']._serialized_start=395
   _globals['_GETWARDSRESPONSE_WARD']._serialized_end=437
-  _globals['_UPDATEWARDREQUEST']._serialized_start=439
-  _globals['_UPDATEWARDREQUEST']._serialized_end=508
-  _globals['_UPDATEWARDRESPONSE']._serialized_start=510
-  _globals['_UPDATEWARDRESPONSE']._serialized_end=530
-  _globals['_DELETEWARDREQUEST']._serialized_start=532
-  _globals['_DELETEWARDREQUEST']._serialized_end=567
-  _globals['_DELETEWARDRESPONSE']._serialized_start=569
-  _globals['_DELETEWARDRESPONSE']._serialized_end=589
-  _globals['_GETWARDDETAILSREQUEST']._serialized_start=591
-  _globals['_GETWARDDETAILSREQUEST']._serialized_end=630
-  _globals['_GETWARDDETAILSRESPONSE']._serialized_start=633
-  _globals['_GETWARDDETAILSRESPONSE']._serialized_end=1227
-  _globals['_GETWARDDETAILSRESPONSE_BED']._serialized_start=878
-  _globals['_GETWARDDETAILSRESPONSE_BED']._serialized_end=919
-  _globals['_GETWARDDETAILSRESPONSE_SUBTASK']._serialized_start=921
-  _globals['_GETWARDDETAILSRESPONSE_SUBTASK']._serialized_end=966
-  _globals['_GETWARDDETAILSRESPONSE_ROOM']._serialized_start=968
-  _globals['_GETWARDDETAILSRESPONSE_ROOM']._serialized_end=1086
-  _globals['_GETWARDDETAILSRESPONSE_TASKTEMPLATE']._serialized_start=1089
-  _globals['_GETWARDDETAILSRESPONSE_TASKTEMPLATE']._serialized_end=1227
-  _globals['_GETWARDOVERVIEWSREQUEST']._serialized_start=1229
-  _globals['_GETWARDOVERVIEWSREQUEST']._serialized_end=1254
-  _globals['_GETWARDOVERVIEWSRESPONSE']._serialized_start=1257
-  _globals['_GETWARDOVERVIEWSRESPONSE']._serialized_end=1544
-  _globals['_GETWARDOVERVIEWSRESPONSE_WARD']._serialized_start=1367
-  _globals['_GETWARDOVERVIEWSRESPONSE_WARD']._serialized_end=1544
-  _globals['_WARDSERVICE']._serialized_start=1547
-  _globals['_WARDSERVICE']._serialized_end=2352
+  _globals['_GETRECENTWARDSREQUEST']._serialized_start=439
+  _globals['_GETRECENTWARDSREQUEST']._serialized_end=462
+  _globals['_GETRECENTWARDSRESPONSE']._serialized_start=465
+  _globals['_GETRECENTWARDSRESPONSE']._serialized_end=748
+  _globals['_GETRECENTWARDSRESPONSE_WARD']._serialized_start=571
+  _globals['_GETRECENTWARDSRESPONSE_WARD']._serialized_end=748
+  _globals['_UPDATEWARDREQUEST']._serialized_start=750
+  _globals['_UPDATEWARDREQUEST']._serialized_end=819
+  _globals['_UPDATEWARDRESPONSE']._serialized_start=821
+  _globals['_UPDATEWARDRESPONSE']._serialized_end=841
+  _globals['_DELETEWARDREQUEST']._serialized_start=843
+  _globals['_DELETEWARDREQUEST']._serialized_end=878
+  _globals['_DELETEWARDRESPONSE']._serialized_start=880
+  _globals['_DELETEWARDRESPONSE']._serialized_end=900
+  _globals['_GETWARDDETAILSREQUEST']._serialized_start=902
+  _globals['_GETWARDDETAILSREQUEST']._serialized_end=941
+  _globals['_GETWARDDETAILSRESPONSE']._serialized_start=944
+  _globals['_GETWARDDETAILSRESPONSE']._serialized_end=1538
+  _globals['_GETWARDDETAILSRESPONSE_BED']._serialized_start=1189
+  _globals['_GETWARDDETAILSRESPONSE_BED']._serialized_end=1230
+  _globals['_GETWARDDETAILSRESPONSE_SUBTASK']._serialized_start=1232
+  _globals['_GETWARDDETAILSRESPONSE_SUBTASK']._serialized_end=1277
+  _globals['_GETWARDDETAILSRESPONSE_ROOM']._serialized_start=1279
+  _globals['_GETWARDDETAILSRESPONSE_ROOM']._serialized_end=1397
+  _globals['_GETWARDDETAILSRESPONSE_TASKTEMPLATE']._serialized_start=1400
+  _globals['_GETWARDDETAILSRESPONSE_TASKTEMPLATE']._serialized_end=1538
+  _globals['_GETWARDOVERVIEWSREQUEST']._serialized_start=1540
+  _globals['_GETWARDOVERVIEWSREQUEST']._serialized_end=1565
+  _globals['_GETWARDOVERVIEWSRESPONSE']._serialized_start=1568
+  _globals['_GETWARDOVERVIEWSRESPONSE']._serialized_end=1855
+  _globals['_GETWARDOVERVIEWSRESPONSE_WARD']._serialized_start=571
+  _globals['_GETWARDOVERVIEWSRESPONSE_WARD']._serialized_end=748
+  _globals['_WARDSERVICE']._serialized_start=1858
+  _globals['_WARDSERVICE']._serialized_end=2786
 # @@protoc_insertion_point(module_scope)

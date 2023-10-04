@@ -29,6 +29,13 @@ export class WardServiceClient {
                response: proto_services_task_svc_v1_ward_svc_pb.GetWardsResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_ward_svc_pb.GetWardsResponse>;
 
+  getRecentWards(
+    request: proto_services_task_svc_v1_ward_svc_pb.GetRecentWardsRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_ward_svc_pb.GetRecentWardsResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_ward_svc_pb.GetRecentWardsResponse>;
+
   updateWard(
     request: proto_services_task_svc_v1_ward_svc_pb.UpdateWardRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -78,6 +85,11 @@ export class WardServicePromiseClient {
     request: proto_services_task_svc_v1_ward_svc_pb.GetWardsRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_ward_svc_pb.GetWardsResponse>;
+
+  getRecentWards(
+    request: proto_services_task_svc_v1_ward_svc_pb.GetRecentWardsRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_ward_svc_pb.GetRecentWardsResponse>;
 
   updateWard(
     request: proto_services_task_svc_v1_ward_svc_pb.UpdateWardRequest,

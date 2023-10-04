@@ -46,6 +46,24 @@ message GetWardsResponse {
 }
 
 //
+// GetRecentWards
+//
+
+message GetRecentWardsRequest {}
+message GetRecentWardsResponse {
+  repeated Ward wards = 1;
+
+  message Ward {
+    string id = 1;
+    string name = 2;
+    uint32 bed_count = 3;
+    uint32 tasks_todo = 4;
+    uint32 tasks_in_progress = 5;
+    uint32 tasks_done = 6;
+  }
+}
+
+//
 // UpdateWard
 //
 
@@ -128,6 +146,7 @@ service WardService {
   rpc CreateWard (CreateWardRequest) returns (CreateWardResponse) {}
   rpc GetWard (GetWardRequest) returns (GetWardResponse) {}
   rpc GetWards(GetWardsRequest) returns (GetWardsResponse) {}
+  rpc GetRecentWards(GetRecentWardsRequest) returns (GetRecentWardsResponse) {}
   rpc UpdateWard (UpdateWardRequest) returns (UpdateWardResponse) {}
   rpc DeleteWard (DeleteWardRequest) returns (DeleteWardResponse) {}
   rpc GetWardOverviews (GetWardOverviewsRequest) returns (GetWardOverviewsResponse) {}

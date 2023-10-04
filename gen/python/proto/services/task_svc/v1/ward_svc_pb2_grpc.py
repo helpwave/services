@@ -33,6 +33,11 @@ class WardServiceStub(object):
                 request_serializer=proto_dot_services_dot_task__svc_dot_v1_dot_ward__svc__pb2.GetWardsRequest.SerializeToString,
                 response_deserializer=proto_dot_services_dot_task__svc_dot_v1_dot_ward__svc__pb2.GetWardsResponse.FromString,
                 )
+        self.GetRecentWards = channel.unary_unary(
+                '/proto.services.task_svc.v1.WardService/GetRecentWards',
+                request_serializer=proto_dot_services_dot_task__svc_dot_v1_dot_ward__svc__pb2.GetRecentWardsRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_task__svc_dot_v1_dot_ward__svc__pb2.GetRecentWardsResponse.FromString,
+                )
         self.UpdateWard = channel.unary_unary(
                 '/proto.services.task_svc.v1.WardService/UpdateWard',
                 request_serializer=proto_dot_services_dot_task__svc_dot_v1_dot_ward__svc__pb2.UpdateWardRequest.SerializeToString,
@@ -80,6 +85,12 @@ class WardServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetRecentWards(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def UpdateWard(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -121,6 +132,11 @@ def add_WardServiceServicer_to_server(servicer, server):
                     servicer.GetWards,
                     request_deserializer=proto_dot_services_dot_task__svc_dot_v1_dot_ward__svc__pb2.GetWardsRequest.FromString,
                     response_serializer=proto_dot_services_dot_task__svc_dot_v1_dot_ward__svc__pb2.GetWardsResponse.SerializeToString,
+            ),
+            'GetRecentWards': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetRecentWards,
+                    request_deserializer=proto_dot_services_dot_task__svc_dot_v1_dot_ward__svc__pb2.GetRecentWardsRequest.FromString,
+                    response_serializer=proto_dot_services_dot_task__svc_dot_v1_dot_ward__svc__pb2.GetRecentWardsResponse.SerializeToString,
             ),
             'UpdateWard': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateWard,
@@ -204,6 +220,23 @@ class WardService(object):
         return grpc.experimental.unary_unary(request, target, '/proto.services.task_svc.v1.WardService/GetWards',
             proto_dot_services_dot_task__svc_dot_v1_dot_ward__svc__pb2.GetWardsRequest.SerializeToString,
             proto_dot_services_dot_task__svc_dot_v1_dot_ward__svc__pb2.GetWardsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetRecentWards(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.task_svc.v1.WardService/GetRecentWards',
+            proto_dot_services_dot_task__svc_dot_v1_dot_ward__svc__pb2.GetRecentWardsRequest.SerializeToString,
+            proto_dot_services_dot_task__svc_dot_v1_dot_ward__svc__pb2.GetRecentWardsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
