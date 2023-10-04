@@ -951,3 +951,35 @@ export namespace GetPatientListResponse {
 
 }
 
+export class ReadmitPatientRequest extends jspb.Message {
+  getPatientId(): string;
+  setPatientId(value: string): ReadmitPatientRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ReadmitPatientRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ReadmitPatientRequest): ReadmitPatientRequest.AsObject;
+  static serializeBinaryToWriter(message: ReadmitPatientRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReadmitPatientRequest;
+  static deserializeBinaryFromReader(message: ReadmitPatientRequest, reader: jspb.BinaryReader): ReadmitPatientRequest;
+}
+
+export namespace ReadmitPatientRequest {
+  export type AsObject = {
+    patientId: string,
+  }
+}
+
+export class ReadmitPatientResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ReadmitPatientResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: ReadmitPatientResponse): ReadmitPatientResponse.AsObject;
+  static serializeBinaryToWriter(message: ReadmitPatientResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ReadmitPatientResponse;
+  static deserializeBinaryFromReader(message: ReadmitPatientResponse, reader: jspb.BinaryReader): ReadmitPatientResponse;
+}
+
+export namespace ReadmitPatientResponse {
+  export type AsObject = {
+  }
+}
+

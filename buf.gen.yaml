@@ -24,4 +24,15 @@ plugins:
       - import_style=commonjs,binary
 
   - plugin: buf.build/protocolbuffers/dart
-    out: gen/dart
+    out: gen/dart/lib
+    opt: grpc
+
+  - plugin: buf.build/grpc/python:v1.58.1
+    out: gen/python
+  - plugin: buf.build/protocolbuffers/python
+    out: gen/python
+
+  - plugin: buf.build/grpc/python:v1.58.1
+    out: services/impulse_svc/gen
+  - plugin: buf.build/protocolbuffers/python
+    out: services/impulse_svc/gen
