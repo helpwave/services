@@ -34,9 +34,13 @@ def parse_datetime(datetime_input: str) -> datetime:
     return make_aware(datetime.fromisoformat(datetime_input))
 
 
+def is_valid_pal(pal: float) -> bool:
+    return 0 <= pal <= 2.4
+
+
 class Servicer(impulse_svc_pb2_grpc.ImpulseService):
     def CreateUser(self, request: impulse_svc_pb2.CreateUserRequest, context):
-        if request.pal < 0:
+        if not is_valid_pal(request.pal):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             context.set_details("Pal value can not be negativ")
             return impulse_svc_pb2.CreateUserResponse()
@@ -119,8 +123,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         if request.gender != "":
             user.gender = request.gender
 
-        # TODO: should we verify the pal value and return an error?
-        if request.pal > 0:
+        if is_valid_pal(request.pal):
             user.pal = request.pal
 
         if request.length > 0:
