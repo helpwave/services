@@ -19,8 +19,8 @@ _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'proto.services.impulse_svc.v1.impulse_svc_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-  DESCRIPTOR._options = None
-  DESCRIPTOR._serialized_options = b'\n!com.proto.services.impulse_svc.v1B\017ImpulseSvcProtoP\001Z\036gen/proto/services/impulse-svc\242\002\003PSI\252\002\034Proto.Services.ImpulseSvc.V1\312\002\034Proto\\Services\\ImpulseSvc\\V1\342\002(Proto\\Services\\ImpulseSvc\\V1\\GPBMetadata\352\002\037Proto::Services::ImpulseSvc::V1'
+  _globals['DESCRIPTOR']._options = None
+  _globals['DESCRIPTOR']._serialized_options = b'\n!com.proto.services.impulse_svc.v1B\017ImpulseSvcProtoP\001Z\036gen/proto/services/impulse-svc\242\002\003PSI\252\002\034Proto.Services.ImpulseSvc.V1\312\002\034Proto\\Services\\ImpulseSvc\\V1\342\002(Proto\\Services\\ImpulseSvc\\V1\\GPBMetadata\352\002\037Proto::Services::ImpulseSvc::V1'
   _globals['_CHALLENGETYPE']._serialized_start=4329
   _globals['_CHALLENGETYPE']._serialized_end=4428
   _globals['_CHALLENGECATEGORY']._serialized_start=4430

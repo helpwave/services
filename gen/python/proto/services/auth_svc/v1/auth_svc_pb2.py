@@ -19,8 +19,8 @@ _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'proto.services.auth_svc.v1.auth_svc_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-  DESCRIPTOR._options = None
-  DESCRIPTOR._serialized_options = b'\n\036com.proto.services.auth_svc.v1B\014AuthSvcProtoP\001Z\033gen/proto/services/auth-svc\242\002\003PSA\252\002\031Proto.Services.AuthSvc.V1\312\002\031Proto\\Services\\AuthSvc\\V1\342\002%Proto\\Services\\AuthSvc\\V1\\GPBMetadata\352\002\034Proto::Services::AuthSvc::V1'
+  _globals['DESCRIPTOR']._options = None
+  _globals['DESCRIPTOR']._serialized_options = b'\n\036com.proto.services.auth_svc.v1B\014AuthSvcProtoP\001Z\033gen/proto/services/auth-svc\242\002\003PSA\252\002\031Proto.Services.AuthSvc.V1\312\002\031Proto\\Services\\AuthSvc\\V1\342\002%Proto\\Services\\AuthSvc\\V1\\GPBMetadata\352\002\034Proto::Services::AuthSvc::V1'
   _globals['_PRELIMAUTHREQUESTREQUEST']._serialized_start=73
   _globals['_PRELIMAUTHREQUESTREQUEST']._serialized_end=99
   _globals['_PRELIMAUTHREQUESTRESPONSE']._serialized_start=101

@@ -19,8 +19,8 @@ _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'proto.libs.events.v1.user_events_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-  DESCRIPTOR._options = None
-  DESCRIPTOR._serialized_options = b'\n\030com.proto.libs.events.v1B\017UserEventsProtoP\001Z\025gen/proto/libs/events\242\002\003PLE\252\002\024Proto.Libs.Events.V1\312\002\024Proto\\Libs\\Events\\V1\342\002 Proto\\Libs\\Events\\V1\\GPBMetadata\352\002\027Proto::Libs::Events::V1'
+  _globals['DESCRIPTOR']._options = None
+  _globals['DESCRIPTOR']._serialized_options = b'\n\030com.proto.libs.events.v1B\017UserEventsProtoP\001Z\025gen/proto/libs/events\242\002\003PLE\252\002\024Proto.Libs.Events.V1\312\002\024Proto\\Libs\\Events\\V1\342\002 Proto\\Libs\\Events\\V1\\GPBMetadata\352\002\027Proto::Libs::Events::V1'
   _globals['_USERREGISTEREDEVENT']._serialized_start=64
   _globals['_USERREGISTEREDEVENT']._serialized_end=171
   _globals['_USERCREATEDEVENT']._serialized_start=173
