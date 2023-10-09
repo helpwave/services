@@ -19,8 +19,8 @@ _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'proto.services.emergency_room_svc.v1.emergency_room_svc_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-  DESCRIPTOR._options = None
-  DESCRIPTOR._serialized_options = b'\n(com.proto.services.emergency_room_svc.v1B\025EmergencyRoomSvcProtoP\001Z%gen/proto/services/emergency-room-svc\242\002\003PSE\252\002\"Proto.Services.EmergencyRoomSvc.V1\312\002\"Proto\\Services\\EmergencyRoomSvc\\V1\342\002.Proto\\Services\\EmergencyRoomSvc\\V1\\GPBMetadata\352\002%Proto::Services::EmergencyRoomSvc::V1'
+  _globals['DESCRIPTOR']._options = None
+  _globals['DESCRIPTOR']._serialized_options = b'\n(com.proto.services.emergency_room_svc.v1B\025EmergencyRoomSvcProtoP\001Z%gen/proto/services/emergency-room-svc\242\002\003PSE\252\002\"Proto.Services.EmergencyRoomSvc.V1\312\002\"Proto\\Services\\EmergencyRoomSvc\\V1\342\002.Proto\\Services\\EmergencyRoomSvc\\V1\\GPBMetadata\352\002%Proto::Services::EmergencyRoomSvc::V1'
   _globals['_POINT']._serialized_start=103
   _globals['_POINT']._serialized_end=148
   _globals['_CREATEERREQUEST']._serialized_start=151

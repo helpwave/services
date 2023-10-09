@@ -19,8 +19,8 @@ _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'google.protobuf.timestamp_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-  DESCRIPTOR._options = None
-  DESCRIPTOR._serialized_options = b'\n\023com.google.protobufB\016TimestampProtoP\001Z2google.golang.org/protobuf/types/known/timestamppb\370\001\001\242\002\003GPB\252\002\036Google.Protobuf.WellKnownTypes'
+  _globals['DESCRIPTOR']._options = None
+  _globals['DESCRIPTOR']._serialized_options = b'\n\023com.google.protobufB\016TimestampProtoP\001Z2google.golang.org/protobuf/types/known/timestamppb\370\001\001\242\002\003GPB\252\002\036Google.Protobuf.WellKnownTypes'
   _globals['_TIMESTAMP']._serialized_start=52
   _globals['_TIMESTAMP']._serialized_end=111
 # @@protoc_insertion_point(module_scope)
