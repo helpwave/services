@@ -3,6 +3,7 @@ package decaying_lru
 import (
 	"context"
 	"github.com/redis/go-redis/v9"
+	zlog "github.com/rs/zerolog/log"
 	"time"
 
 	_ "embed"
@@ -33,8 +34,11 @@ var addScript = redis.NewScript(addScriptSource)
 // you probably want to work with AddItemForUser instead
 func (lru *DecayingLRU) AddItemForKey(key, value string) error {
 	ctx := lru.ctx
+	log := zlog.Ctx(ctx)
 	r := lru.redisClient
 	keys := []string{key}
+
+	log.Trace().Str("key", key).Str("value", value).Msg("AddItemForKey")
 
 	// add(key, value, size, decay, inv_p)
 	// see add.lua

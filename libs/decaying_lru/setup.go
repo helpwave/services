@@ -3,6 +3,7 @@ package decaying_lru
 import (
 	"context"
 	"crypto/tls"
+	"errors"
 	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog/log"
 	"hwutil"
@@ -49,11 +50,20 @@ func redisOptionsOrDefault(serviceName string, redisOptions *redis.Options) *red
 
 func CustomSetup(serviceName string, size int64, decay time.Duration, invP int, redisOptions *redis.Options) DecayingLRU {
 	redisClient := redis.NewClient(redisOptionsOrDefault(serviceName, redisOptions))
-	return DecayingLRU{
+
+	lru := DecayingLRU{
 		ctx:         context.Background(),
 		redisClient: redisClient,
 		decay:       decay,
 		size:        size,
 		invP:        invP,
 	}
+
+	if err := lru.redisClient.Get(lru.ctx, "connectiontest").Err(); err != nil && !errors.Is(err, redis.Nil) {
+		log.Error().Err(err).Msg("error during redis connection test")
+	} else {
+		log.Info().Msg("redis connection test ok")
+	}
+
+	return lru
 }
