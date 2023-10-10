@@ -46,6 +46,7 @@ func getUserID(ctx context.Context) string {
 		log.Error().Err(err).Msg("could not get userID from context, can't add item to LRU")
 		return ""
 	}
+	log.Trace().Str("userID", userID.String()).Msg("getUserID: got userid")
 	return userID.String()
 }
 
