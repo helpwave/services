@@ -508,7 +508,7 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 	}
 
 	var members []models.Membership
-	if err := db.Where("organization_id = ?", organizationID).Find(&members).Error; err != nil {
+	if err := db.Where("organization_id = ?", organizationID).Preload("User").Find(&members).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -516,20 +516,16 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 		}
 	}
 
-	userRepository := repositories.UserRepo(ctx)
-
-	user, err := userRepository.GetUserById(userID)
-
 	if err != nil {
 		return nil, err
 	}
 
 	mappedMembers := hwutil.Map(members, func(member models.Membership) *pb.GetMembersByOrganizationResponse_Member {
 		return &pb.GetMembersByOrganizationResponse_Member{
-			UserId:    member.UserID.String(),
-			AvatarUrl: user.Avatar,
-			Email:     user.Email,
-			Nickname:  user.Nickname,
+			UserId:    member.User.ID.String(),
+			AvatarUrl: member.User.Avatar,
+			Email:     member.User.Email,
+			Nickname:  member.User.Nickname,
 		}
 	})
 
