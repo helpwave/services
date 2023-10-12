@@ -1,0 +1,40 @@
+version: 1
+
+common:
+  daprdLogDestination: console
+  appLogDestination: console
+  appChannelAddress: 127.0.0.1
+  appProtocol: grpc
+  env:
+    ADDR: 127.0.0.1
+    MODE: development
+    LOG_LEVEL: debug
+    POSTGRES_HOST: localhost
+    POSTGRES_PORT: 5432
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    INSECURE_FAKE_TOKEN_ENABLE: true
+    REDIS_ADDR: localhost:6379
+    INSECURE_REDIS_NO_TLS: true
+    ORGANIZATION_ID: 3b25c6f5-4705-4074-9fc6-a50c28eba405
+
+apps:
+  - appID: task-svc
+    appDirPath: services/task-svc
+    appPort: 3001
+    env:
+      POSTGRES_DB: task-svc
+    command: ["air"]
+
+  - appID: user-svc
+    appDirPath: services/user-svc
+    appPort: 3002
+    env:
+      POSTGRES_DB: user-svc
+    command: ["go", "run", "."]
+
+  - appID: ory-svc
+    appDirPath: services/ory-svc
+    appPort: 3003
+    appProtocol: http
+    command: ["go", "run", "."]

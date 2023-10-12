@@ -28,3 +28,7 @@ max_line_length = 80
 [*.toml]
 indent_style = space
 indent_size = 2
+
+[*.nix]
+indent_style = space
+indent_size = 2
