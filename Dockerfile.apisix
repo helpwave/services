@@ -14,7 +14,7 @@ RUN wget -q -O hivemind.gz https://github.com/DarthSim/hivemind/releases/downloa
 # get daprd
 RUN wget -q https://github.com/dapr/dapr/releases/download/v$DAPR_VERSION/daprd_linux_amd64.tar.gz -O - | tar -xzvf - daprd
 
-FROM apache/apisix:3.4.1-debian
+FROM apache/apisix:3.6.0-debian
 USER root
 ENV DAPR_APP_ID=gateway
 # DAPR_HTTP_READ_BUFFER_SIZE: default 4KB
