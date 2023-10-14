@@ -379,7 +379,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 
 			log.Info().
 				Str("email", req.Email). // TODO: Revisited for privacy reasons
-				Str("organizationId", organizationId.String()).
+				Str("organizationID", organizationId.String()).
 				Msg("user invited to organization")
 		}
 	}
@@ -678,8 +678,8 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 
 	log.Info().
 		Str("admin", userID.String()).
-		Str("organizationId", organizationID.String()).
-		Str("invitee-email", inviteeEmail).
+		Str("organizationID", organizationID.String()).
+		Str("inviteeEmail", inviteeEmail).
 		Msg("admin revoked invitation to organization")
 
 	return &pb.RevokeInvitationResponse{}, nil
@@ -751,8 +751,8 @@ func CreateOrganization(ctx context.Context, db *gorm.DB, attr models.Base, crea
 	}
 
 	log.Info().
-		Str("organizationId", organization.ID.String()).
-		Str("userId", creatorUserId.String()).
+		Str("organizationID", organization.ID.String()).
+		Str("userID", creatorUserId.String()).
 		Msg("organization created")
 
 	return &organization, nil
@@ -771,8 +771,8 @@ func AddUserToOrganization(ctx context.Context, db *gorm.DB, userId uuid.UUID, o
 	}
 
 	log.Info().
-		Str("organizationId", organizationId.String()).
-		Str("userId", userId.String()).
+		Str("organizationID", organizationId.String()).
+		Str("userID", userId.String()).
 		Msg("added user to organization")
 
 	// TODO: Dispatch UserJoinedOrganizationEvent
@@ -803,9 +803,9 @@ func ChangeMembershipAdminStatus(ctx context.Context, db *gorm.DB, userID uuid.U
 	}
 
 	log.Info().
-		Str("organizationId", organizationID.String()).
-		Str("userId", userID.String()).
-		Bool("is_admin", isAdmin).
+		Str("organizationID", organizationID.String()).
+		Str("userID", userID.String()).
+		Bool("isAdmin", isAdmin).
 		Msg("admin status changed")
 
 	return nil
