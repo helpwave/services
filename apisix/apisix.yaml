@@ -122,5 +122,8 @@ routes:
     plugins:
       proxy-rewrite:
         uri: /v1.0/invoke/ory-svc/method/oauth2_consent
+  - id: grpc
+    uri: /*
+    upstream_id: dapr-grpc
 
 #END
