@@ -89,8 +89,8 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 	}
 
 	log.Info().
-		Str("taskId", task.ID.String()).
-		Str("patientId", patientId.String()).
+		Str("taskID", task.ID.String()).
+		Str("patientID", patientId.String()).
 		Msg("task created for patient")
 
 	return &pb.CreateTaskResponse{
@@ -476,7 +476,7 @@ func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) 
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
+		Str("taskID", id.String()).
 		Msg("task to in-progress")
 
 	return &pb.TaskToToDoResponse{}, nil
@@ -500,7 +500,7 @@ func (ServiceServer) TaskToInProgress(ctx context.Context, req *pb.TaskToInProgr
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
+		Str("taskID", id.String()).
 		Msg("task to in-progress")
 
 	return &pb.TaskToInProgressResponse{}, nil
@@ -524,7 +524,7 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) 
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
+		Str("taskID", id.String()).
 		Msg("task to done")
 
 	return &pb.TaskToDoneResponse{}, nil
@@ -555,8 +555,8 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
-		Str("userId", userId.String()).
+		Str("taskID", id.String()).
+		Str("userID", userId.String()).
 		Msg("user assigned")
 
 	return &pb.AssignTaskToUserResponse{}, nil
@@ -580,7 +580,7 @@ func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignT
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
+		Str("taskID", id.String()).
 		Msg("user unassigned")
 
 	return &pb.UnassignTaskFromUserResponse{}, nil
@@ -604,7 +604,7 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
+		Str("taskID", id.String()).
 		Msg("task published")
 
 	return &pb.PublishTaskResponse{}, nil
@@ -628,7 +628,7 @@ func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskReq
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
+		Str("taskID", id.String()).
 		Msg("task unpublished")
 
 	return &pb.UnpublishTaskResponse{}, nil

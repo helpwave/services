@@ -48,7 +48,7 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientReq
 	}
 
 	log.Info().
-		Str("patientId", patient.ID.String()).
+		Str("patientID", patient.ID.String()).
 		Msg("patient created")
 
 	tracking.AddPatientToRecentActivity(ctx, patient.ID.String())
@@ -308,8 +308,8 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 	}
 
 	log.Info().
-		Str("patientId", patient.ID.String()).
-		Str("bedId", bed.ID.String()).
+		Str("patientID", patient.ID.String()).
+		Str("bedID", bed.ID.String()).
 		Msg("assigned bed to patient")
 
 	tracking.AddPatientToRecentActivity(ctx, id.String())
@@ -340,7 +340,7 @@ func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest
 	}
 
 	log.Info().
-		Str("patientId", patient.ID.String()).
+		Str("patientID", patient.ID.String()).
 		Msg("unassigned bed from patient")
 
 	tracking.AddPatientToRecentActivity(ctx, id.String())
@@ -375,7 +375,7 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 	}
 
 	log.Info().
-		Str("patientId", id.String()).
+		Str("patientID", id.String()).
 		Msg("patient discharged")
 
 	tracking.RemovePatientFromRecentActivity(ctx, id.String())

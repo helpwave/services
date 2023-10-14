@@ -49,8 +49,8 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 	}
 
 	log.Info().
-		Str("bedId", bed.ID.String()).
-		Str("roomId", req.RoomId).
+		Str("bedID", bed.ID.String()).
+		Str("roomID", req.RoomId).
 		Str("name", bed.Name).
 		Msg("bed created")
 
@@ -204,7 +204,7 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 	}
 
 	log.Info().
-		Str("bedId", bedID.String()).
+		Str("bedID", bedID.String()).
 		Msg("bed deleted")
 
 	return &pb.DeleteBedResponse{}, err

@@ -73,7 +73,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	}
 
 	log.Info().
-		Str("taskTemplateId", taskTemplate.ID.String()).
+		Str("taskTemplateID", taskTemplate.ID.String()).
 		Msg("taskTemplate created")
 
 	return &pb.CreateTaskTemplateResponse{
@@ -138,7 +138,7 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 	}
 
 	log.Info().
-		Str("taskTemplateId", id.String()).
+		Str("taskTemplateID", id.String()).
 		Msg("taskTemplate deleted")
 
 	return &pb.DeleteTaskTemplateResponse{}, nil
@@ -161,8 +161,8 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 	}
 
 	log.Info().
-		Str("taskTemplateSubtaskId", subtask.ID.String()).
-		Str("taskTemplateId", subtask.TaskTemplateID.String()).
+		Str("taskTemplateSubtaskID", subtask.ID.String()).
+		Str("taskTemplateID", subtask.TaskTemplateID.String()).
 		Msg("taskTemplateSubtask deleted")
 
 	return &pb.DeleteTaskTemplateSubTaskResponse{}, nil
@@ -226,8 +226,8 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 	}
 
 	log.Info().
-		Str("taskTemplateId", taskTemplateSubtask.TaskTemplateID.String()).
-		Str("taskTemplateSubTaskId", taskTemplateSubtask.ID.String()).
+		Str("taskTemplateID", taskTemplateSubtask.TaskTemplateID.String()).
+		Str("taskTemplateSubTaskID", taskTemplateSubtask.ID.String()).
 		Msg("taskTemplateSubtask created")
 
 	return &pb.CreateTaskTemplateSubTaskResponse{
