@@ -28,7 +28,7 @@ FROM debian AS deps
 
 ARG HIVEMIND_VERSION=1.1.0
 ARG MIGRATE_VERSION=4.15.2
-ARG DAPR_VERSION=1.10.7
+ARG DAPR_VERSION=1.12.0
 
 RUN apt update && \
 	apt install -y wget
@@ -39,16 +39,10 @@ RUN wget -q -O hivemind.gz https://github.com/DarthSim/hivemind/releases/downloa
     chmod +x hivemind
 
 # get migrate
-RUN wget -q -O migrate.tgz https://github.com/golang-migrate/migrate/releases/download/v$MIGRATE_VERSION/migrate.linux-amd64.tar.gz && \
-	tar -xzvf migrate.tgz migrate
+RUN wget -q https://github.com/golang-migrate/migrate/releases/download/v$MIGRATE_VERSION/migrate.linux-amd64.tar.gz -O - | tar -xzvf - migrate
 
-# install Dapr
-# RUN wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O - | /bin/bash && \
-#     dapr init --slim --runtime-version $DAPR_VERSION
-
-# add daprd temporarily from helpwave/tmp-dapr-dist; our pull request is approved but not merged yet https://github.com/dapr/components-contrib/pull/2883
-ADD --chmod=100 https://github.com/helpwave/tmp-dapr-dist/raw/main/linux_amd64/release/daprd /root/.dapr/bin/daprd
-RUN echo -n "56ff6bbcfc551d2cedb06a30a8fa32fb14f6efe2995b38316a991b0c5e048e15 /root/.dapr/bin/daprd" | sha256sum --check --status
+# get daprd
+RUN wget -q https://github.com/dapr/dapr/releases/download/v$DAPR_VERSION/daprd_linux_amd64.tar.gz -O - | tar -xzvf - daprd
 
 FROM alpine AS production
 
@@ -61,7 +55,7 @@ WORKDIR /app
 # copy deps
 COPY --from=deps /hivemind /usr/bin/hivemind
 COPY --from=deps /migrate /usr/bin/migrate
-COPY --from=deps /root/.dapr/bin/daprd /usr/bin/daprd
+COPY --from=deps /daprd /usr/bin/daprd
 COPY dapr dapr
 COPY Procfile.standalone Procfile
 
@@ -71,9 +65,7 @@ COPY --from=builder /build/app/migrations ./migrations
 COPY docker-run-migrations.sh ./run-migrations.sh
 
 # fix permissions
-RUN chmod +x \
-	/usr/bin/daprd \
-	run-migrations.sh
+RUN chmod +x run-migrations.sh
 
 ENV DAPR_APP_ID=$SERVICE
 # DAPR_HTTP_READ_BUFFER_SIZE: default 4KB
