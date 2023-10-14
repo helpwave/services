@@ -11,17 +11,17 @@ import (
 	"user-svc/internal/models"
 )
 
-type OrganisationRepository struct {
+type OrganizationRepository struct {
 	db *gorm.DB
 }
 
-func OrganisationRepo(logCtx context.Context) *OrganisationRepository {
-	return &OrganisationRepository{
+func OrganizationRepo(logCtx context.Context) *OrganizationRepository {
+	return &OrganizationRepository{
 		db: hwgorm.GetDB(logCtx),
 	}
 }
 
-func (r *OrganisationRepository) IsInOrganization(organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
+func (r *OrganizationRepository) IsInOrganization(organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
 	membership := models.Membership{
 		UserID:         userID,
 		OrganizationID: organizationID,
@@ -39,7 +39,7 @@ func (r *OrganisationRepository) IsInOrganization(organizationID uuid.UUID, user
 	return true, nil
 }
 
-func (r *OrganisationRepository) IsInOrganizationByEmail(organizationID uuid.UUID, email string) (bool, error) {
+func (r *OrganizationRepository) IsInOrganizationByEmail(organizationID uuid.UUID, email string) (bool, error) {
 	membership := models.Membership{}
 	err := r.db.
 		Table("memberships").
@@ -56,7 +56,7 @@ func (r *OrganisationRepository) IsInOrganizationByEmail(organizationID uuid.UUI
 	return true, nil
 }
 
-func (r *OrganisationRepository) IsAdminInOrganization(organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
+func (r *OrganizationRepository) IsAdminInOrganization(organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
 	membership := models.Membership{
 		UserID:         userID,
 		OrganizationID: organizationID,
@@ -74,7 +74,7 @@ func (r *OrganisationRepository) IsAdminInOrganization(organizationID uuid.UUID,
 	return isAdmin, nil
 }
 
-func (r *OrganisationRepository) GetOrganizationById(id uuid.UUID) (*models.Organization, error) {
+func (r *OrganizationRepository) GetOrganizationById(id uuid.UUID) (*models.Organization, error) {
 	organization := models.Organization{ID: id}
 
 	if err := r.db.Preload("Members").First(&organization).Error; err != nil {
@@ -84,7 +84,7 @@ func (r *OrganisationRepository) GetOrganizationById(id uuid.UUID) (*models.Orga
 	return &organization, nil
 }
 
-func (r *OrganisationRepository) GetInvitationById(id uuid.UUID) (*models.Invitation, error) {
+func (r *OrganizationRepository) GetInvitationById(id uuid.UUID) (*models.Invitation, error) {
 	invitation := models.Invitation{
 		ID: id,
 	}
