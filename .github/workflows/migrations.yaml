@@ -56,11 +56,7 @@ jobs:
           files: ./*/migrations/**
       - name: Don't modify existing migrations!
         if: steps.changes.outputs.modified_files != '[]'
-        run: |
-          echo "Don't modify existing migrations! Doing so may result in unwanted behavior."
-          echo "You can ignore this message if you believe the changes made will not change the migrations,"
-          echo "for example by only adding comments. Reviewers may proceed only with caution."
-          exit 1
+        uses: helpwave/pg-fingerprint-action@main
 
   migrations:
     runs-on: ubuntu-latest
