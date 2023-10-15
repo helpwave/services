@@ -57,6 +57,8 @@ jobs:
       - name: Don't modify existing migrations!
         if: steps.changes.outputs.modified_files != '[]'
         uses: helpwave/pg-fingerprint-action@main
+        with:
+          files: ${{ steps.changes.outputs.modified_files }}
 
   migrations:
     runs-on: ubuntu-latest
