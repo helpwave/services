@@ -52,6 +52,7 @@ jobs:
         uses: tj-actions/changed-files@v39
         with:
           json: "true"
+          escape_json: "false"
           path: "services"
           files: ./*/migrations/**
       - name: Don't modify existing migrations!
