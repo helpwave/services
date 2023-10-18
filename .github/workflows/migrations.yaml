@@ -59,6 +59,7 @@ jobs:
         if: steps.changes.outputs.modified_files != '[]'
         uses: helpwave/pg-fingerprint-action@main
         with:
+          root: "services"
           github_token: ${{ secrets.GITHUB_TOKEN }}
           files: ${{ steps.changes.outputs.modified_files }}
 
