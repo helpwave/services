@@ -52,15 +52,16 @@ jobs:
         uses: tj-actions/changed-files@v39
         with:
           json: "true"
+          escape_json: "false"
           path: "services"
           files: ./*/migrations/**
       - name: Don't modify existing migrations!
         if: steps.changes.outputs.modified_files != '[]'
-        run: |
-          echo "Don't modify existing migrations! Doing so may result in unwanted behavior."
-          echo "You can ignore this message if you believe the changes made will not change the migrations,"
-          echo "for example by only adding comments. Reviewers may proceed only with caution."
-          exit 1
+        uses: helpwave/pg-fingerprint-action@main
+        with:
+          root: "services"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          files: ${{ steps.changes.outputs.modified_files }}
 
   migrations:
     runs-on: ubuntu-latest
