@@ -2246,6 +2246,7 @@ class GetPatientListResponse_Room extends $pb.GeneratedMessage {
   factory GetPatientListResponse_Room({
     $core.String? id,
     $core.String? name,
+    $core.String? wardId,
   }) {
     final $result = create();
     if (id != null) {
@@ -2253,6 +2254,9 @@ class GetPatientListResponse_Room extends $pb.GeneratedMessage {
     }
     if (name != null) {
       $result.name = name;
+    }
+    if (wardId != null) {
+      $result.wardId = wardId;
     }
     return $result;
   }
@@ -2263,6 +2267,7 @@ class GetPatientListResponse_Room extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientListResponse.Room', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'wardId')
     ..hasRequiredFields = false
   ;
 
@@ -2304,6 +2309,15 @@ class GetPatientListResponse_Room extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
   void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get wardId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set wardId($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasWardId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearWardId() => clearField(3);
 }
 
 class GetPatientListResponse_PatientWithRoomAndBed extends $pb.GeneratedMessage {

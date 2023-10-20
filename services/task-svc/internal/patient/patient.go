@@ -505,8 +505,9 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 						Name: bed.Name,
 					},
 					Room: &pb.GetPatientListResponse_Room{
-						Id:   room.ID.String(),
-						Name: room.Name,
+						Id:     room.ID.String(),
+						Name:   room.Name,
+						WardId: room.WardID.String(),
 					},
 				}
 				activePatients = append(activePatients, patientWithRoomAndBed)
