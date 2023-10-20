@@ -30,6 +30,7 @@ message GetPatientResponse {
   string human_readable_identifier = 2; // @gotags: validate:"required"
   string notes = 3;
   optional string bed_id = 4;
+  optional string ward_id = 5;
 }
 
 //

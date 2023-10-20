@@ -77,11 +77,19 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 		}
 	}
 
+	var wardId *uuid.UUID = nil
+	if patient.Bed != nil {
+		if patient.Bed.Room != nil {
+			wardId = &patient.Bed.Room.WardID
+		}
+	}
+
 	return &pb.GetPatientResponse{
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
 		BedId:                   hwutil.UUIDToStringPtr(patient.BedID),
+		WardId:                  hwutil.UUIDToStringPtr(wardId),
 	}, nil
 }
 

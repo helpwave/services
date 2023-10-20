@@ -31,6 +31,7 @@ func (r *PatientRepository) CreatePatient(patient *models.Patient) (*models.Pati
 func (r *PatientRepository) GetPatientById(id uuid.UUID) (*models.Patient, error) {
 	patient := &models.Patient{ID: id}
 	query := r.db.
+		Preload("Bed.Room").
 		First(patient)
 
 	if err := query.Error; err != nil {

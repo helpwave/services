@@ -187,6 +187,7 @@ class GetPatientResponse extends $pb.GeneratedMessage {
     $core.String? humanReadableIdentifier,
     $core.String? notes,
     $core.String? bedId,
+    $core.String? wardId,
   }) {
     final $result = create();
     if (id != null) {
@@ -201,6 +202,9 @@ class GetPatientResponse extends $pb.GeneratedMessage {
     if (bedId != null) {
       $result.bedId = bedId;
     }
+    if (wardId != null) {
+      $result.wardId = wardId;
+    }
     return $result;
   }
   GetPatientResponse._() : super();
@@ -212,6 +216,7 @@ class GetPatientResponse extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
     ..aOS(3, _omitFieldNames ? '' : 'notes')
     ..aOS(4, _omitFieldNames ? '' : 'bedId')
+    ..aOS(5, _omitFieldNames ? '' : 'wardId')
     ..hasRequiredFields = false
   ;
 
@@ -271,6 +276,15 @@ class GetPatientResponse extends $pb.GeneratedMessage {
   $core.bool hasBedId() => $_has(3);
   @$pb.TagNumber(4)
   void clearBedId() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get wardId => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set wardId($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasWardId() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearWardId() => clearField(5);
 }
 
 ///

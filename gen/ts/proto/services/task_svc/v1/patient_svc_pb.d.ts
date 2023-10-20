@@ -75,6 +75,11 @@ export class GetPatientResponse extends jspb.Message {
   hasBedId(): boolean;
   clearBedId(): GetPatientResponse;
 
+  getWardId(): string;
+  setWardId(value: string): GetPatientResponse;
+  hasWardId(): boolean;
+  clearWardId(): GetPatientResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPatientResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetPatientResponse): GetPatientResponse.AsObject;
@@ -89,11 +94,17 @@ export namespace GetPatientResponse {
     humanReadableIdentifier: string,
     notes: string,
     bedId?: string,
+    wardId?: string,
   }
 
   export enum BedIdCase { 
     _BED_ID_NOT_SET = 0,
     BED_ID = 4,
+  }
+
+  export enum WardIdCase { 
+    _WARD_ID_NOT_SET = 0,
+    WARD_ID = 5,
   }
 }
 

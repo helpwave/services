@@ -59,9 +59,11 @@ const GetPatientResponse$json = {
     {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
     {'1': 'notes', '3': 3, '4': 1, '5': 9, '10': 'notes'},
     {'1': 'bed_id', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'bedId', '17': true},
+    {'1': 'ward_id', '3': 5, '4': 1, '5': 9, '9': 1, '10': 'wardId', '17': true},
   ],
   '8': [
     {'1': '_bed_id'},
+    {'1': '_ward_id'},
   ],
 };
 
@@ -69,7 +71,8 @@ const GetPatientResponse$json = {
 final $typed_data.Uint8List getPatientResponseDescriptor = $convert.base64Decode(
     'ChJHZXRQYXRpZW50UmVzcG9uc2USDgoCaWQYASABKAlSAmlkEjoKGWh1bWFuX3JlYWRhYmxlX2'
     'lkZW50aWZpZXIYAiABKAlSF2h1bWFuUmVhZGFibGVJZGVudGlmaWVyEhQKBW5vdGVzGAMgASgJ'
-    'UgVub3RlcxIaCgZiZWRfaWQYBCABKAlIAFIFYmVkSWSIAQFCCQoHX2JlZF9pZA==');
+    'UgVub3RlcxIaCgZiZWRfaWQYBCABKAlIAFIFYmVkSWSIAQESHAoHd2FyZF9pZBgFIAEoCUgBUg'
+    'Z3YXJkSWSIAQFCCQoHX2JlZF9pZEIKCghfd2FyZF9pZA==');
 
 @$core.Deprecated('Use deletePatientRequestDescriptor instead')
 const DeletePatientRequest$json = {
