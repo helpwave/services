@@ -194,7 +194,7 @@ message GetPatientDetailsResponse {
   string notes = 4;
   // "bed_index": number,
   repeated Task tasks = 5;
-
+  optional string ward_id = 6;
 
   message Task {
     string id = 1;

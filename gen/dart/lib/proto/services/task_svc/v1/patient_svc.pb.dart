@@ -1956,6 +1956,7 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
     $core.String? humanReadableIdentifier,
     $core.String? notes,
     $core.Iterable<GetPatientDetailsResponse_Task>? tasks,
+    $core.String? wardId,
   }) {
     final $result = create();
     if (id != null) {
@@ -1973,6 +1974,9 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
     if (tasks != null) {
       $result.tasks.addAll(tasks);
     }
+    if (wardId != null) {
+      $result.wardId = wardId;
+    }
     return $result;
   }
   GetPatientDetailsResponse._() : super();
@@ -1985,6 +1989,7 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'humanReadableIdentifier')
     ..aOS(4, _omitFieldNames ? '' : 'notes')
     ..pc<GetPatientDetailsResponse_Task>(5, _omitFieldNames ? '' : 'tasks', $pb.PbFieldType.PM, subBuilder: GetPatientDetailsResponse_Task.create)
+    ..aOS(6, _omitFieldNames ? '' : 'wardId')
     ..hasRequiredFields = false
   ;
 
@@ -2048,6 +2053,15 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
   /// "bed_index": number,
   @$pb.TagNumber(5)
   $core.List<GetPatientDetailsResponse_Task> get tasks => $_getList(4);
+
+  @$pb.TagNumber(6)
+  $core.String get wardId => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set wardId($core.String v) { $_setString(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasWardId() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearWardId() => clearField(6);
 }
 
 class GetPatientListRequest extends $pb.GeneratedMessage {

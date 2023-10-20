@@ -5705,7 +5705,8 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.toObject = function(i
     humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 3, ""),
     notes: jspb.Message.getFieldWithDefault(msg, 4, ""),
     tasksList: jspb.Message.toObjectList(msg.getTasksList(),
-    proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.toObject, includeInstance)
+    proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.toObject, includeInstance),
+    wardId: jspb.Message.getFieldWithDefault(msg, 6, "")
   };
 
   if (includeInstance) {
@@ -5762,6 +5763,10 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.deserializeBinaryFrom
       var value = new proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task;
       reader.readMessage(value,proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.deserializeBinaryFromReader);
       msg.addTasks(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setWardId(value);
       break;
     default:
       reader.skipField();
@@ -5826,6 +5831,13 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.serializeBinaryToWrit
       5,
       f,
       proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 6));
+  if (f != null) {
+    writer.writeString(
+      6,
+      f
     );
   }
 };
@@ -6508,6 +6520,42 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.addTasks = 
  */
 proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.clearTasksList = function() {
   return this.setTasksList([]);
+};
+
+
+/**
+ * optional string ward_id = 6;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.getWardId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.GetPatientDetailsResponse} returns this
+ */
+proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.setWardId = function(value) {
+  return jspb.Message.setField(this, 6, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.task_svc.v1.GetPatientDetailsResponse} returns this
+ */
+proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.clearWardId = function() {
+  return jspb.Message.setField(this, 6, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.hasWardId = function() {
+  return jspb.Message.getField(this, 6) != null;
 };
 
 

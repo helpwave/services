@@ -416,6 +416,13 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		return nil, err
 	}
 
+	var wardId *uuid.UUID = nil
+	if patient.Bed != nil {
+		if patient.Bed.Room != nil {
+			wardId = &patient.Bed.Room.WardID
+		}
+	}
+
 	var mappedTasks = hwutil.Map(tasks, func(task models.Task) *pb.GetPatientDetailsResponse_Task {
 		var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetPatientDetailsResponse_Task_SubTask {
 			return &pb.GetPatientDetailsResponse_Task_SubTask{
@@ -445,6 +452,7 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		Notes:                   patient.Notes,
 		Name:                    patient.HumanReadableIdentifier, // TODO replace later
 		Tasks:                   mappedTasks,
+		WardId:                  hwutil.UUIDToStringPtr(wardId),
 	}, nil
 }
 
