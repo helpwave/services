@@ -239,8 +239,9 @@ func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPat
 			}
 			if patient.Bed.Room != nil {
 				room = &pb.GetRecentPatientsResponse_Room{
-					Id:   patient.Bed.Room.ID.String(),
-					Name: patient.Bed.Room.Name,
+					Id:     patient.Bed.Room.ID.String(),
+					Name:   patient.Bed.Room.Name,
+					WardId: patient.Bed.Room.WardID.String(),
 				}
 			}
 		}

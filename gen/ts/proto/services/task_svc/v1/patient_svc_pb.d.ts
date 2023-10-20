@@ -458,6 +458,9 @@ export namespace GetRecentPatientsResponse {
     getName(): string;
     setName(value: string): Room;
 
+    getWardId(): string;
+    setWardId(value: string): Room;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Room.AsObject;
     static toObject(includeInstance: boolean, msg: Room): Room.AsObject;
@@ -470,6 +473,7 @@ export namespace GetRecentPatientsResponse {
     export type AsObject = {
       id: string,
       name: string,
+      wardId: string,
     }
   }
 

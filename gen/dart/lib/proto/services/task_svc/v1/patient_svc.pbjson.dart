@@ -271,6 +271,7 @@ const GetRecentPatientsResponse_Room$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'ward_id', '3': 3, '4': 1, '5': 9, '10': 'wardId'},
   ],
 };
 
@@ -290,12 +291,13 @@ final $typed_data.Uint8List getRecentPatientsResponseDescriptor = $convert.base6
     'ChlHZXRSZWNlbnRQYXRpZW50c1Jlc3BvbnNlEnQKD3JlY2VudF9wYXRpZW50cxgBIAMoCzJLLn'
     'Byb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFJlY2VudFBhdGllbnRzUmVzcG9uc2UuUGF0'
     'aWVudFdpdGhSb29tQW5kQmVkUg5yZWNlbnRQYXRpZW50cxopCgNCZWQSDgoCaWQYASABKAlSAm'
-    'lkEhIKBG5hbWUYAiABKAlSBG5hbWUaKgoEUm9vbRIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgC'
-    'IAEoCVIEbmFtZRqAAgoVUGF0aWVudFdpdGhSb29tQW5kQmVkEg4KAmlkGAEgASgJUgJpZBI6Ch'
-    'lodW1hbl9yZWFkYWJsZV9pZGVudGlmaWVyGAIgASgJUhdodW1hblJlYWRhYmxlSWRlbnRpZmll'
-    'chJOCgRyb29tGAMgASgLMjoucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0UmVjZW50UG'
-    'F0aWVudHNSZXNwb25zZS5Sb29tUgRyb29tEksKA2JlZBgEIAEoCzI5LnByb3RvLnNlcnZpY2Vz'
-    'LnRhc2tfc3ZjLnYxLkdldFJlY2VudFBhdGllbnRzUmVzcG9uc2UuQmVkUgNiZWQ=');
+    'lkEhIKBG5hbWUYAiABKAlSBG5hbWUaQwoEUm9vbRIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgC'
+    'IAEoCVIEbmFtZRIXCgd3YXJkX2lkGAMgASgJUgZ3YXJkSWQagAIKFVBhdGllbnRXaXRoUm9vbU'
+    'FuZEJlZBIOCgJpZBgBIAEoCVICaWQSOgoZaHVtYW5fcmVhZGFibGVfaWRlbnRpZmllchgCIAEo'
+    'CVIXaHVtYW5SZWFkYWJsZUlkZW50aWZpZXISTgoEcm9vbRgDIAEoCzI6LnByb3RvLnNlcnZpY2'
+    'VzLnRhc2tfc3ZjLnYxLkdldFJlY2VudFBhdGllbnRzUmVzcG9uc2UuUm9vbVIEcm9vbRJLCgNi'
+    'ZWQYBCABKAsyOS5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRSZWNlbnRQYXRpZW50c1'
+    'Jlc3BvbnNlLkJlZFIDYmVk');
 
 @$core.Deprecated('Use updatePatientRequestDescriptor instead')
 const UpdatePatientRequest$json = {
