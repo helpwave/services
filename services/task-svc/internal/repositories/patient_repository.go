@@ -46,6 +46,7 @@ func (r *PatientRepository) GetPatientsByIdsWithBedAndRoom(ids []uuid.UUID) ([]m
 		Where("id IN ?", ids).
 		Preload("Bed").
 		Preload("Bed.Room").
+		Order("updated_at DESC").
 		Find(&patients)
 
 	if err := query.Error; err != nil {
@@ -138,6 +139,20 @@ func (r *PatientRepository) GetRoomsWithBedsWithActivePatientsForWard(wardID uui
 		return nil, err
 	}
 	return rooms, nil
+}
+
+func (r *PatientRepository) GetLastUpdatedPatientsForOrganization(maxAmount uint32, organizationID uuid.UUID) ([]models.Patient, error) {
+	var patients []models.Patient
+	query := r.db.
+		Where("organization_id = ?", organizationID).
+		Limit(int(maxAmount)).
+		Order("updated_at DESC").
+		Find(&patients)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return patients, nil
 }
 
 func (r *PatientRepository) UpdatePatient(patientID uuid.UUID, updates map[string]interface{}) (*models.Patient, error) {
