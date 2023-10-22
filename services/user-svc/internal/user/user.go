@@ -73,6 +73,27 @@ func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest
 	return &pb.CreateUserResponse{Id: user.ID.String()}, nil
 }
 
+func (s ServiceServer) ReadPublicProfile(ctx context.Context, req *pb.ReadPublicProfileRequest) (*pb.ReadPublicProfileResponse, error) {
+	userRepository := repositories.UserRepo(ctx)
+
+	userID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	user, err := userRepository.GetUserById(userID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &pb.ReadPublicProfileResponse{
+		Id:        user.ID.String(),
+		Name:      user.Name,
+		Nickname:  user.Nickname,
+		AvatarUrl: user.Avatar,
+	}, nil
+}
+
 func HandleUserUpdatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry bool, err error) {
 	log := zlog.Ctx(ctx)
 	userRepository := repositories.UserRepo(ctx)
