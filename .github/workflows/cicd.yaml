@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       services: ${{ steps.aggregate-changes.outputs.services }}
+      commit_hash: ${{ steps.commit.outputs.short }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -62,6 +63,12 @@ jobs:
           libsChanged: ${{ steps.changes-in-libs.outputs.any_changed }}
           changesInServices: ${{ steps.changes-in-services.outputs.all_changed_files }}
           changesInImages: ${{ steps.changes-in-images.outputs.all_changed_files }}
+
+      - name: Get commit hash
+        id: commit
+        uses: pr-mpt/actions-commit-hash@v3
+        with:
+          commit: "${{ github.sha }}"
 
       - name: Summarize
         run: |
@@ -116,4 +123,5 @@ jobs:
       service: ${{ matrix.service }}
       app: ${{ vars.FLY_ORGANIZATION_NAME }}-${{ matrix.service }}
       organization: ${{ vars.FLY_ORGANIZATION_NAME }}
+      version: ${{ needs.detect-changes.outputs.commit_hash }}
     secrets: inherit
