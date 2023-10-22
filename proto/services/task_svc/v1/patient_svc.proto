@@ -30,6 +30,7 @@ message GetPatientResponse {
   string human_readable_identifier = 2; // @gotags: validate:"required"
   string notes = 3;
   optional string bed_id = 4;
+  optional string ward_id = 5;
 }
 
 //
@@ -122,7 +123,8 @@ message GetRecentPatientsResponse {
 
   message  Room {
     string  id = 1;
-    string name = 2;
+    string  name = 2;
+    string  ward_id = 3;
   }
 
   message PatientWithRoomAndBed {
@@ -193,7 +195,7 @@ message GetPatientDetailsResponse {
   string notes = 4;
   // "bed_index": number,
   repeated Task tasks = 5;
-
+  optional string ward_id = 6;
 
   message Task {
     string id = 1;
@@ -246,7 +248,8 @@ message GetPatientListResponse {
 
   message  Room {
     string  id = 1;
-    string name = 2;
+    string  name = 2;
+    string  ward_id = 3;
   }
 
   message PatientWithRoomAndBed {

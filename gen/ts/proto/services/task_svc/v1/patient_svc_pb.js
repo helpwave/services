@@ -1379,7 +1379,8 @@ proto.proto.services.task_svc.v1.GetPatientResponse.toObject = function(includeI
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 2, ""),
     notes: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    bedId: jspb.Message.getFieldWithDefault(msg, 4, "")
+    bedId: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    wardId: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
 
   if (includeInstance) {
@@ -1431,6 +1432,10 @@ proto.proto.services.task_svc.v1.GetPatientResponse.deserializeBinaryFromReader 
     case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setBedId(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setWardId(value);
       break;
     default:
       reader.skipField();
@@ -1486,6 +1491,13 @@ proto.proto.services.task_svc.v1.GetPatientResponse.serializeBinaryToWriter = fu
   if (f != null) {
     writer.writeString(
       4,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 5));
+  if (f != null) {
+    writer.writeString(
+      5,
       f
     );
   }
@@ -1579,6 +1591,42 @@ proto.proto.services.task_svc.v1.GetPatientResponse.prototype.clearBedId = funct
  */
 proto.proto.services.task_svc.v1.GetPatientResponse.prototype.hasBedId = function() {
   return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional string ward_id = 5;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.GetPatientResponse.prototype.getWardId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.GetPatientResponse} returns this
+ */
+proto.proto.services.task_svc.v1.GetPatientResponse.prototype.setWardId = function(value) {
+  return jspb.Message.setField(this, 5, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.task_svc.v1.GetPatientResponse} returns this
+ */
+proto.proto.services.task_svc.v1.GetPatientResponse.prototype.clearWardId = function() {
+  return jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.GetPatientResponse.prototype.hasWardId = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
@@ -4006,7 +4054,8 @@ proto.proto.services.task_svc.v1.GetRecentPatientsResponse.Room.prototype.toObje
 proto.proto.services.task_svc.v1.GetRecentPatientsResponse.Room.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 2, "")
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    wardId: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -4051,6 +4100,10 @@ proto.proto.services.task_svc.v1.GetRecentPatientsResponse.Room.deserializeBinar
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setWardId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -4094,6 +4147,13 @@ proto.proto.services.task_svc.v1.GetRecentPatientsResponse.Room.serializeBinaryT
       f
     );
   }
+  f = message.getWardId();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
 };
 
 
@@ -4130,6 +4190,24 @@ proto.proto.services.task_svc.v1.GetRecentPatientsResponse.Room.prototype.getNam
  */
 proto.proto.services.task_svc.v1.GetRecentPatientsResponse.Room.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string ward_id = 3;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.GetRecentPatientsResponse.Room.prototype.getWardId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.GetRecentPatientsResponse.Room} returns this
+ */
+proto.proto.services.task_svc.v1.GetRecentPatientsResponse.Room.prototype.setWardId = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -5657,7 +5735,8 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.toObject = function(i
     humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 3, ""),
     notes: jspb.Message.getFieldWithDefault(msg, 4, ""),
     tasksList: jspb.Message.toObjectList(msg.getTasksList(),
-    proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.toObject, includeInstance)
+    proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.toObject, includeInstance),
+    wardId: jspb.Message.getFieldWithDefault(msg, 6, "")
   };
 
   if (includeInstance) {
@@ -5714,6 +5793,10 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.deserializeBinaryFrom
       var value = new proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task;
       reader.readMessage(value,proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.deserializeBinaryFromReader);
       msg.addTasks(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setWardId(value);
       break;
     default:
       reader.skipField();
@@ -5778,6 +5861,13 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.serializeBinaryToWrit
       5,
       f,
       proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 6));
+  if (f != null) {
+    writer.writeString(
+      6,
+      f
     );
   }
 };
@@ -6463,6 +6553,42 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.clearTasksL
 };
 
 
+/**
+ * optional string ward_id = 6;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.getWardId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.GetPatientDetailsResponse} returns this
+ */
+proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.setWardId = function(value) {
+  return jspb.Message.setField(this, 6, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.task_svc.v1.GetPatientDetailsResponse} returns this
+ */
+proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.clearWardId = function() {
+  return jspb.Message.setField(this, 6, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.hasWardId = function() {
+  return jspb.Message.getField(this, 6) != null;
+};
+
+
 
 
 
@@ -7116,7 +7242,8 @@ proto.proto.services.task_svc.v1.GetPatientListResponse.Room.prototype.toObject 
 proto.proto.services.task_svc.v1.GetPatientListResponse.Room.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 2, "")
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    wardId: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -7161,6 +7288,10 @@ proto.proto.services.task_svc.v1.GetPatientListResponse.Room.deserializeBinaryFr
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setWardId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -7204,6 +7335,13 @@ proto.proto.services.task_svc.v1.GetPatientListResponse.Room.serializeBinaryToWr
       f
     );
   }
+  f = message.getWardId();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
 };
 
 
@@ -7240,6 +7378,24 @@ proto.proto.services.task_svc.v1.GetPatientListResponse.Room.prototype.getName =
  */
 proto.proto.services.task_svc.v1.GetPatientListResponse.Room.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string ward_id = 3;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.GetPatientListResponse.Room.prototype.getWardId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.GetPatientListResponse.Room} returns this
+ */
+proto.proto.services.task_svc.v1.GetPatientListResponse.Room.prototype.setWardId = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 

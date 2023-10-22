@@ -77,11 +77,19 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 		}
 	}
 
+	var wardId *uuid.UUID = nil
+	if patient.Bed != nil {
+		if patient.Bed.Room != nil {
+			wardId = &patient.Bed.Room.WardID
+		}
+	}
+
 	return &pb.GetPatientResponse{
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
 		BedId:                   hwutil.UUIDToStringPtr(patient.BedID),
+		WardId:                  hwutil.UUIDToStringPtr(wardId),
 	}, nil
 }
 
@@ -231,8 +239,9 @@ func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPat
 			}
 			if patient.Bed.Room != nil {
 				room = &pb.GetRecentPatientsResponse_Room{
-					Id:   patient.Bed.Room.ID.String(),
-					Name: patient.Bed.Room.Name,
+					Id:     patient.Bed.Room.ID.String(),
+					Name:   patient.Bed.Room.Name,
+					WardId: patient.Bed.Room.WardID.String(),
 				}
 			}
 		}
@@ -408,6 +417,13 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		return nil, err
 	}
 
+	var wardId *uuid.UUID = nil
+	if patient.Bed != nil {
+		if patient.Bed.Room != nil {
+			wardId = &patient.Bed.Room.WardID
+		}
+	}
+
 	var mappedTasks = hwutil.Map(tasks, func(task models.Task) *pb.GetPatientDetailsResponse_Task {
 		var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetPatientDetailsResponse_Task_SubTask {
 			return &pb.GetPatientDetailsResponse_Task_SubTask{
@@ -437,6 +453,7 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		Notes:                   patient.Notes,
 		Name:                    patient.HumanReadableIdentifier, // TODO replace later
 		Tasks:                   mappedTasks,
+		WardId:                  hwutil.UUIDToStringPtr(wardId),
 	}, nil
 }
 
@@ -489,8 +506,9 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 						Name: bed.Name,
 					},
 					Room: &pb.GetPatientListResponse_Room{
-						Id:   room.ID.String(),
-						Name: room.Name,
+						Id:     room.ID.String(),
+						Name:   room.Name,
+						WardId: room.WardID.String(),
 					},
 				}
 				activePatients = append(activePatients, patientWithRoomAndBed)
