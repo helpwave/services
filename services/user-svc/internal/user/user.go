@@ -74,7 +74,6 @@ func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest
 }
 
 func (s ServiceServer) ReadPublicProfile(ctx context.Context, req *pb.ReadPublicProfileRequest) (*pb.ReadPublicProfileResponse, error) {
-	log := zlog.Ctx(ctx)
 	userRepository := repositories.UserRepo(ctx)
 
 	userID, err := uuid.Parse(req.Id)
@@ -86,10 +85,6 @@ func (s ServiceServer) ReadPublicProfile(ctx context.Context, req *pb.ReadPublic
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-
-	log.Debug().
-		Str("userID", userID.String()).
-		Msg("serving public user profile")
 
 	return &pb.ReadPublicProfileResponse{
 		Id:        user.ID.String(),
