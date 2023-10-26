@@ -31,10 +31,12 @@ apps:
     appPort: 3002
     env:
       POSTGRES_DB: user-svc
-    command: ["go", "run", "."]
+    command: ["air"]
 
   - appID: ory-svc
     appDirPath: services/ory-svc
     appPort: 3003
     appProtocol: http
-    command: ["go", "run", "."]
+    env:
+      ORY_APIKEY: 2341
+    command: ["air"]

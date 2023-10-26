@@ -7,7 +7,7 @@ helpwave's microservices
 This repository utilizes [devenv.sh](https://devenv.sh) (on top of [Nix](https://nixos.org/)) for our development environments.
 
 1. [Install devenv](https://devenv.sh/getting-started/)
-2. Start the environment of this repository by running `devenv up`
+2. Start the environment of this repository by running `devenv up` in the root 
 3. Develop!
 
 - Use `devenv shell` to enter a shell that contains all necessary packages and utilities for this repository
