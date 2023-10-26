@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/google/uuid"
 	"gorm.io/plugin/soft_delete"
+	"time"
 )
 
 type PatientBase struct {
@@ -18,4 +19,6 @@ type Patient struct {
 	Bed            *Bed                  `gorm:"foreignKey:BedID"`
 	Tasks          []Task                `gorm:"foreignKey:PatientId"`
 	IsDischarged   soft_delete.DeletedAt `gorm:"column:is_discharged;softDelete:flag;default:0"`
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
 }

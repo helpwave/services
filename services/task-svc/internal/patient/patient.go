@@ -204,12 +204,27 @@ func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPat
 	patientRepo := repositories.PatientRepo(ctx)
 	log := zlog.Ctx(ctx)
 
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	// TODO: Auth
 
 	recentPatientIdsStrs, err := tracking.GetRecentPatientsForUser(ctx)
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	// WORKAROUND: Until https://github.com/helpwave/services/issues/458 is fixed
+	if len(recentPatientIdsStrs) == 0 {
+		log.Debug().Msg("recentPatientIdsStrs was empty")
+		if patients, err := patientRepo.GetLastUpdatedPatientsForOrganization(4, organizationID); err == nil {
+			recentPatientIdsStrs = hwutil.Map(patients, func(patient models.Patient) string {
+				return patient.ID.String()
+			})
+		}
 	}
 
 	// parse all valid uuids into an array
