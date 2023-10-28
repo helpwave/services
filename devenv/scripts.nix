@@ -3,10 +3,6 @@
 let
 in {
   scripts = {
-    fmt.exec = ''
-      ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt .
-    '';
-
     proto.exec = ''
       buf lint
       buf generate --include-imports --include-wkt
@@ -19,7 +15,7 @@ in {
     '';
 
     nix-lint.exec = ''
-      nixpkgs-fmt --check .
+      ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt --check .
     '';
 
     migratesh.exec = ''
