@@ -134,7 +134,13 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 	})
 
 	patient, err := patientRepo.GetPatientById(task.PatientId)
-
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
 	patientResponse := &pb.GetTaskResponse_Patient{
 		Id:   *hwutil.UUIDToStringPtr(&patient.ID),
 		Name: patient.HumanReadableIdentifier,
