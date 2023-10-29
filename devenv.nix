@@ -16,6 +16,7 @@ in
     gh
     git
     go-migrate
+    nixpkgs-fmt
   ] ++ [
     # self build packages
     protoc-go-inject-tag

@@ -2,7 +2,8 @@
 
 let
   protoc-go-inject-tag = import ../protoc-go-inject-tag.nix { inherit pkgs; };
-in {
+in
+{
   scripts = {
     proto.exec = ''
       ${pkgs.buf}/bin/buf lint --path proto
