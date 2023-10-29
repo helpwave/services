@@ -7,13 +7,21 @@ helpwave's microservices
 This repository utilizes [devenv.sh](https://devenv.sh) (on top of [Nix](https://nixos.org/)) for our development environments.
 
 1. [Install devenv](https://devenv.sh/getting-started/)
-2. Start the environment of this repository by running `devenv up` in the root. This command starts our database and all services including a hot-reload.
+2. Start the environment of this repository by running `devenv up` in the root. On first run, this command can take a while. This starts our database and all services including a hot-reload.
 3. Develop!
 
 - Use `devenv shell` to enter a shell that contains all necessary packages and utilities for this repository
 - For direct client to service requests via gRPC, add the following metadata to your requests:
 	- `X-Organization: [An organization id. Most requests are performed on the side of an organization. The id must be part of your passed access token]`
 	- `dapr-app-id: [the app id of the targeted service]`
+
+### Ports
+
+| Service  | Port | Protocol |
+|----------|------|----------|
+| task-svc | 3001 | gRPC     |
+| user-svc | 3002 | gRPC     |
+| ory-svc  | 3003 | gRPC     |
 
 ### Scripts
 

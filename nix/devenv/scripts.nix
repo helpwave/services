@@ -1,17 +1,19 @@
 { pkgs, ... }:
 
 let
+  protoc-go-inject-tag = import ../protoc-go-inject-tag.nix { inherit pkgs; };
 in {
   scripts = {
     proto.exec = ''
-      buf lint
-      buf generate --include-imports --include-wkt
-      protoc-go-inject-tag -input="gen/go/proto/*/*/*/*.pb.go"
+      ${pkgs.buf}/bin/buf lint --path proto
+      ${pkgs.buf}/bin/buf generate --path proto --include-imports --include-wkt
+      ${protoc-go-inject-tag}/bin/protoc-go-inject-tag -input="gen/go/proto/*/*/*/*.pb.go"
+      # TODO: use gofmt from pkgs
       gofmt -w gen/go
     '';
 
     proto-lint.exec = ''
-      buf lint
+      ${pkgs.buf}/bin/buf lint --path proto
     '';
 
     nix-lint.exec = ''
