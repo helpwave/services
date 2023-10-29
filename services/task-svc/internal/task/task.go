@@ -100,6 +100,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 
 func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.GetTaskResponse, error) {
 	taskRepo := repositories.TaskRepo(ctx)
+	patientRepo := repositories.PatientRepo(ctx)
 
 	// TODO: Auth
 
@@ -132,13 +133,20 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		}
 	})
 
+	patient, err := patientRepo.GetPatientById(task.PatientId)
+
+	patientResponse := &pb.GetTaskResponse_Patient{
+		Id:   *hwutil.UUIDToStringPtr(&patient.ID),
+		Name: patient.HumanReadableIdentifier,
+	}
+
 	return &pb.GetTaskResponse{
 		Id:             task.ID.String(),
 		Name:           task.Name,
 		Description:    task.Description,
 		Status:         task.Status,
 		AssignedUserId: assignedUserId,
-		PatientId:      task.PatientId.String(),
+		Patient:        patientResponse,
 		Subtasks:       subtasks,
 		Public:         task.Public,
 		DueAt:          timestamppb.New(task.DueAt),
