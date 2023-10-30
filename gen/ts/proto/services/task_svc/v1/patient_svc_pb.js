@@ -6922,7 +6922,8 @@ proto.proto.services.task_svc.v1.GetPatientListResponse.Patient.prototype.toObje
 proto.proto.services.task_svc.v1.GetPatientListResponse.Patient.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 2, "")
+    humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    notes: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -6967,6 +6968,10 @@ proto.proto.services.task_svc.v1.GetPatientListResponse.Patient.deserializeBinar
       var value = /** @type {string} */ (reader.readString());
       msg.setHumanReadableIdentifier(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setNotes(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -7010,6 +7015,13 @@ proto.proto.services.task_svc.v1.GetPatientListResponse.Patient.serializeBinaryT
       f
     );
   }
+  f = message.getNotes();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
 };
 
 
@@ -7046,6 +7058,24 @@ proto.proto.services.task_svc.v1.GetPatientListResponse.Patient.prototype.getHum
  */
 proto.proto.services.task_svc.v1.GetPatientListResponse.Patient.prototype.setHumanReadableIdentifier = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string notes = 3;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.GetPatientListResponse.Patient.prototype.getNotes = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.GetPatientListResponse.Patient} returns this
+ */
+proto.proto.services.task_svc.v1.GetPatientListResponse.Patient.prototype.setNotes = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -7434,7 +7464,8 @@ proto.proto.services.task_svc.v1.GetPatientListResponse.PatientWithRoomAndBed.to
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 2, ""),
     room: (f = msg.getRoom()) && proto.proto.services.task_svc.v1.GetPatientListResponse.Room.toObject(includeInstance, f),
-    bed: (f = msg.getBed()) && proto.proto.services.task_svc.v1.GetPatientListResponse.Bed.toObject(includeInstance, f)
+    bed: (f = msg.getBed()) && proto.proto.services.task_svc.v1.GetPatientListResponse.Bed.toObject(includeInstance, f),
+    notes: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
 
   if (includeInstance) {
@@ -7488,6 +7519,10 @@ proto.proto.services.task_svc.v1.GetPatientListResponse.PatientWithRoomAndBed.de
       var value = new proto.proto.services.task_svc.v1.GetPatientListResponse.Bed;
       reader.readMessage(value,proto.proto.services.task_svc.v1.GetPatientListResponse.Bed.deserializeBinaryFromReader);
       msg.setBed(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setNotes(value);
       break;
     default:
       reader.skipField();
@@ -7546,6 +7581,13 @@ proto.proto.services.task_svc.v1.GetPatientListResponse.PatientWithRoomAndBed.se
       4,
       f,
       proto.proto.services.task_svc.v1.GetPatientListResponse.Bed.serializeBinaryToWriter
+    );
+  }
+  f = message.getNotes();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
+      f
     );
   }
 };
@@ -7658,6 +7700,24 @@ proto.proto.services.task_svc.v1.GetPatientListResponse.PatientWithRoomAndBed.pr
  */
 proto.proto.services.task_svc.v1.GetPatientListResponse.PatientWithRoomAndBed.prototype.hasBed = function() {
   return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional string notes = 5;
+ * @return {string}
+ */
+proto.proto.services.task_svc.v1.GetPatientListResponse.PatientWithRoomAndBed.prototype.getNotes = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.task_svc.v1.GetPatientListResponse.PatientWithRoomAndBed} returns this
+ */
+proto.proto.services.task_svc.v1.GetPatientListResponse.PatientWithRoomAndBed.prototype.setNotes = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 

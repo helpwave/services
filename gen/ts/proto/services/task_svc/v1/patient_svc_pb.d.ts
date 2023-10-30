@@ -879,6 +879,9 @@ export namespace GetPatientListResponse {
     getHumanReadableIdentifier(): string;
     setHumanReadableIdentifier(value: string): Patient;
 
+    getNotes(): string;
+    setNotes(value: string): Patient;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Patient.AsObject;
     static toObject(includeInstance: boolean, msg: Patient): Patient.AsObject;
@@ -891,6 +894,7 @@ export namespace GetPatientListResponse {
     export type AsObject = {
       id: string,
       humanReadableIdentifier: string,
+      notes: string,
     }
   }
 
@@ -962,6 +966,9 @@ export namespace GetPatientListResponse {
     hasBed(): boolean;
     clearBed(): PatientWithRoomAndBed;
 
+    getNotes(): string;
+    setNotes(value: string): PatientWithRoomAndBed;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): PatientWithRoomAndBed.AsObject;
     static toObject(includeInstance: boolean, msg: PatientWithRoomAndBed): PatientWithRoomAndBed.AsObject;
@@ -976,6 +983,7 @@ export namespace GetPatientListResponse {
       humanReadableIdentifier: string,
       room?: GetPatientListResponse.Room.AsObject,
       bed?: GetPatientListResponse.Bed.AsObject,
+      notes: string,
     }
   }
 

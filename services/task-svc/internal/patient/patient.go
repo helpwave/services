@@ -525,6 +525,7 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 						Name:   room.Name,
 						WardId: room.WardID.String(),
 					},
+					Notes: bed.Patient.Notes,
 				}
 				activePatients = append(activePatients, patientWithRoomAndBed)
 			}
@@ -536,12 +537,14 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 			return &pb.GetPatientListResponse_Patient{
 				Id:                      patient.ID.String(),
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
+				Notes:                   patient.Notes,
 			}
 		}),
 		UnassignedPatients: hwutil.Map(unassignedPatients, func(patient models.Patient) *pb.GetPatientListResponse_Patient {
 			return &pb.GetPatientListResponse_Patient{
 				Id:                      patient.ID.String(),
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
+				Notes:                   patient.Notes,
 			}
 		}),
 		Active: activePatients,

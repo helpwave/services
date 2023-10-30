@@ -239,6 +239,7 @@ message GetPatientListResponse {
   message Patient {
     string id = 1;
     string human_readable_identifier = 2;
+    string notes = 3;
   }
 
   message Bed {
@@ -257,6 +258,7 @@ message GetPatientListResponse {
     string human_readable_identifier = 2;
     Room room = 3;
     Bed bed = 4;
+    string notes = 5;
   }
 }
 
