@@ -21,6 +21,9 @@ proto_lint:
 
 .PHONY: GO_SERVICES
 $(GO_SERVICES): proto
+	./migrate.sh $@ up
+	pg_dump postgres://postgres:postgres@localhost:5432/task-svc --schema-only > ./services/$@/schema.sql
+	docker run --rm -v $(WORKING_DIRECTORY):/src -w /src/services/$@ sqlc/sqlc generate
 	docker build -f ${DOCKERFILE_SERVICES} --build-arg=VERSION=${VERSION} --build-arg=SERVICE=$@ -t ghcr.io/helpwave/$@:edge .
 
 .PHONY: DOCKER_SERVICES
