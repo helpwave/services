@@ -1,2 +1,3 @@
 gen/** linguist-generated=true
 gen/**/helpers.go linguist-generated=false
+services/**/schema.sql linguist-generated=true
