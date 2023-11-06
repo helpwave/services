@@ -77,11 +77,3 @@ func (r *BedRepository) UpdateBed(bedID uuid.UUID, updates map[string]interface{
 	}
 	return bed, nil
 }
-
-func (r *BedRepository) DeleteBed(bedID uuid.UUID) error {
-	bed := &models.Bed{ID: bedID}
-	query := r.db.
-		Delete(&bed)
-
-	return query.Error
-}

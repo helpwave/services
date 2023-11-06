@@ -15,3 +15,14 @@ SET
 	name = coalesce(sqlc.narg('name'), name),
 	room_id = coalesce(sqlc.narg('room_id'), room_id)
 WHERE id = @id;
+
+-- name: DeleteBed :exec
+DELETE FROM beds WHERE id = $1;
+
+-- name: ExistsBedInOrganization :one
+SELECT EXISTS (
+    SELECT 1
+    FROM beds
+    WHERE id = $1
+    AND organization_id = $2
+) bed_exists;

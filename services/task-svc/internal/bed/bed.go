@@ -182,7 +182,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 
 func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*pb.DeleteBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	bedRepo := repositories.BedRepo(ctx)
+	bedRepo := bed_repo.New(hwdb.GetDB(ctx))
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -194,17 +194,19 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	_, err = bedRepo.GetBedByIdForOrganization(bedID, organizationID)
+	exists, err := bedRepo.ExistsBedInOrganization(ctx, bed_repo.ExistsBedInOrganizationParams{
+		ID:             bedID,
+		OrganizationID: organizationID,
+	})
+	if !exists {
+		// already deleted
+		return &pb.DeleteBedResponse{}, err
+	}
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			// Probably already deleted
-			return &pb.DeleteBedResponse{}, err
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	err = bedRepo.DeleteBed(bedID)
+	err = bedRepo.DeleteBed(ctx, bedID)
 
 	if err != nil {
 		if hwgorm.IsOurFault(err) {

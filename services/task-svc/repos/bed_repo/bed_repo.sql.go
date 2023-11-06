@@ -33,6 +33,36 @@ func (q *Queries) CreateBed(ctx context.Context, arg CreateBedParams) (Bed, erro
 	return i, err
 }
 
+const deleteBed = `-- name: DeleteBed :exec
+DELETE FROM beds WHERE id = $1
+`
+
+func (q *Queries) DeleteBed(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteBed, id)
+	return err
+}
+
+const existsBedInOrganization = `-- name: ExistsBedInOrganization :one
+SELECT EXISTS (
+    SELECT 1
+    FROM beds
+    WHERE id = $1
+    AND organization_id = $2
+) bed_exists
+`
+
+type ExistsBedInOrganizationParams struct {
+	ID             uuid.UUID
+	OrganizationID uuid.UUID
+}
+
+func (q *Queries) ExistsBedInOrganization(ctx context.Context, arg ExistsBedInOrganizationParams) (bool, error) {
+	row := q.db.QueryRow(ctx, existsBedInOrganization, arg.ID, arg.OrganizationID)
+	var bed_exists bool
+	err := row.Scan(&bed_exists)
+	return bed_exists, err
+}
+
 const getBedById = `-- name: GetBedById :one
 SELECT id, room_id, organization_id, name FROM beds WHERE id = $1 LIMIT 1
 `
