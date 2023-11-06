@@ -9,9 +9,9 @@ import (
 	"hwdb"
 	"hwgorm"
 	"hwutil"
-	"task-svc/database"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
+	"task-svc/repos/bed_repo"
 
 	pb "gen/proto/services/task_svc/v1"
 	zlog "github.com/rs/zerolog/log"
@@ -27,7 +27,7 @@ func NewServiceServer() *ServiceServer {
 
 func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*pb.CreateBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	queries := database.New(hwdb.GetDB(ctx))
+	bedRepo := bed_repo.New(hwdb.GetDB(ctx))
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -39,7 +39,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed, err := queries.CreateBed(ctx, database.CreateBedParams{
+	bed, err := bedRepo.CreateBed(ctx, bed_repo.CreateBedParams{
 		RoomID:         roomId,
 		OrganizationID: organizationID,
 		Name:           req.Name,
@@ -128,9 +128,9 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 		return nil, err
 	}
 
-	queries := database.New(hwdb.GetDB(ctx))
+	bedRepo := bed_repo.New(hwdb.GetDB(ctx))
 
-	beds, err := queries.GetBedsByRoomForOrganization(ctx, database.GetBedsByRoomForOrganizationParams{
+	beds, err := bedRepo.GetBedsByRoomForOrganization(ctx, bed_repo.GetBedsByRoomForOrganizationParams{
 		OrganizationID: roomID,
 		RoomID:         organizationID,
 	})
@@ -157,7 +157,7 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 }
 
 func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*pb.UpdateBedResponse, error) {
-	queries := database.New(hwdb.GetDB(ctx))
+	bedRepo := bed_repo.New(hwdb.GetDB(ctx))
 
 	bedID, err := uuid.Parse(req.Id)
 	if err != nil {
@@ -169,7 +169,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := queries.UpdateBed(ctx, database.UpdateBedParams{
+	if err := bedRepo.UpdateBed(ctx, bed_repo.UpdateBedParams{
 		ID:     bedID,
 		Name:   req.Name,
 		RoomID: roomId,

@@ -12,10 +12,10 @@ import (
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
-	"task-svc/database"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
 	"task-svc/internal/tracking"
+	"task-svc/repos/bed_repo"
 )
 
 type ServiceServer struct {
@@ -299,7 +299,7 @@ func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientReq
 func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*pb.AssignBedResponse, error) {
 	log := zlog.Ctx(ctx)
 	patientRepo := repositories.PatientRepo(ctx)
-	queries := database.New(hwdb.GetDB(ctx))
+	bedRepo := bed_repo.New(hwdb.GetDB(ctx))
 
 	// TODO: Auth
 
@@ -314,7 +314,7 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 	}
 
 	// Check whether bed exits
-	bed, err := queries.GetBedById(ctx, bedID)
+	bed, err := bedRepo.GetBedById(ctx, bedID)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())

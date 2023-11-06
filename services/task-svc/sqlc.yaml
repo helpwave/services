@@ -1,12 +1,12 @@
 version: "2"
 sql:
   - engine: "postgresql"
-    queries: "query.sql"
+    queries: "./repos/bed_repo.sql"
     schema: "schema.sql"
     gen:
       go:
-        package: "database"
-        out: "database"
+        package: "bed_repo"
+        out: "repos/bed_repo"
         sql_package: "pgx/v5"
         emit_pointers_for_null_types: true
         overrides:
