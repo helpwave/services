@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5/tracelog"
 	"github.com/rs/zerolog/log"
+	"hwdb/pgx_zerolog"
 	"hwutil"
 
 	pgxUUID "github.com/vgarvardt/pgx-google-uuid/v5"
@@ -75,6 +77,14 @@ func openDatabasePool(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
 		return nil
 	}
 
+	// logging
+	pgxConfig.ConnConfig.Tracer = &tracelog.TraceLog{
+		Logger: pgx_zerolog.NewContextLogger(),
+		// LogLevel is the level at which pgx will start calling zerolog
+		// Trace, being the lowest level, will cause it to always be called
+		LogLevel: tracelog.LogLevelTrace,
+	}
+
 	// open pool
 	dbpool, err := pgxpool.NewWithConfig(ctx, pgxConfig)
 	if err != nil {
@@ -84,13 +94,9 @@ func openDatabasePool(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
 	return dbpool, nil
 }
 
-func GetDB(logCtx context.Context) *pgxpool.Pool {
-	// TODO: make use of logCtx
+func GetDB() *pgxpool.Pool {
 	if connectionPool == nil {
 		log.Error().Msg("GetDB called without set-up database, you will run into nil-pointers. Make sure to call SetupDatabaseFromEnv()!")
-	}
-	if logCtx != nil {
-		return connectionPool
 	}
 	return connectionPool
 }

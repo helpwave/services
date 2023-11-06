@@ -27,7 +27,7 @@ func NewServiceServer() *ServiceServer {
 
 func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*pb.CreateBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	bedRepo := bed_repo.New(hwdb.GetDB(ctx))
+	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -128,7 +128,7 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 		return nil, err
 	}
 
-	bedRepo := bed_repo.New(hwdb.GetDB(ctx))
+	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	beds, err := bedRepo.GetBedsByRoomForOrganization(ctx, bed_repo.GetBedsByRoomForOrganizationParams{
 		OrganizationID: roomID,
@@ -157,7 +157,7 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 }
 
 func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*pb.UpdateBedResponse, error) {
-	bedRepo := bed_repo.New(hwdb.GetDB(ctx))
+	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	bedID, err := uuid.Parse(req.Id)
 	if err != nil {
@@ -182,7 +182,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 
 func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*pb.DeleteBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	bedRepo := bed_repo.New(hwdb.GetDB(ctx))
+	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
