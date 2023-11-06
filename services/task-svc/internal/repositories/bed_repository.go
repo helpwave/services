@@ -54,18 +54,6 @@ func (r *BedRepository) GetBedsByRoom(roomID uuid.UUID) ([]models.Bed, error) {
 	return beds, nil
 }
 
-func (r *BedRepository) GetBedById(id uuid.UUID) (*models.Bed, error) {
-	bed := models.Bed{}
-	query := r.db.
-		Where("id = ?", id).
-		Order("name ASC").First(&bed)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return &bed, nil
-}
-
 func (r *BedRepository) GetBedByIdForOrganization(bedID, organizationID uuid.UUID) (*models.Bed, error) {
 	bed := models.Bed{}
 	query := r.db.

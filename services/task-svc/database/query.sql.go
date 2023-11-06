@@ -32,3 +32,19 @@ func (q *Queries) CreateBed(ctx context.Context, arg CreateBedParams) (Bed, erro
 	)
 	return i, err
 }
+
+const getBedById = `-- name: GetBedById :one
+SELECT id, room_id, organization_id, name FROM beds WHERE id = $1 LIMIT 1
+`
+
+func (q *Queries) GetBedById(ctx context.Context, id uuid.UUID) (Bed, error) {
+	row := q.db.QueryRow(ctx, getBedById, id)
+	var i Bed
+	err := row.Scan(
+		&i.ID,
+		&i.RoomID,
+		&i.OrganizationID,
+		&i.Name,
+	)
+	return i, err
+}
