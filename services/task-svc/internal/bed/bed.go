@@ -129,9 +129,12 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 		return nil, err
 	}
 
-	bedRepo := repositories.BedRepo(ctx)
+	queries := database.New(hwdb.GetDB(ctx))
 
-	beds, err := bedRepo.GetBedsByRoomForOrganization(roomID, organizationID)
+	beds, err := queries.GetBedsByRoomForOrganization(ctx, database.GetBedsByRoomForOrganizationParams{
+		OrganizationID: roomID,
+		RoomID:         organizationID,
+	})
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())

@@ -66,19 +66,6 @@ func (r *BedRepository) GetBedByIdForOrganization(bedID, organizationID uuid.UUI
 	return &bed, nil
 }
 
-func (r *BedRepository) GetBedsByRoomForOrganization(roomID, organizationID uuid.UUID) ([]models.Bed, error) {
-	var beds []models.Bed
-	query := r.db.
-		Where("organization_id = ? AND room_id = ?", organizationID.String(), roomID.String()).
-		Order("name ASC").
-		Find(&beds)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return beds, nil
-}
-
 func (r *BedRepository) UpdateBed(bedID uuid.UUID, updates map[string]interface{}) (*models.Bed, error) {
 	bed := &models.Bed{ID: bedID}
 	query := r.db.

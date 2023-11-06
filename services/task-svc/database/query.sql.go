@@ -48,3 +48,39 @@ func (q *Queries) GetBedById(ctx context.Context, id uuid.UUID) (Bed, error) {
 	)
 	return i, err
 }
+
+const getBedsByRoomForOrganization = `-- name: GetBedsByRoomForOrganization :many
+SELECT id, room_id, organization_id, name FROM beds
+	WHERE organization_id = $1 AND room_id = $2
+	ORDER BY name ASC
+`
+
+type GetBedsByRoomForOrganizationParams struct {
+	OrganizationID uuid.UUID
+	RoomID         uuid.UUID
+}
+
+func (q *Queries) GetBedsByRoomForOrganization(ctx context.Context, arg GetBedsByRoomForOrganizationParams) ([]Bed, error) {
+	rows, err := q.db.Query(ctx, getBedsByRoomForOrganization, arg.OrganizationID, arg.RoomID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Bed
+	for rows.Next() {
+		var i Bed
+		if err := rows.Scan(
+			&i.ID,
+			&i.RoomID,
+			&i.OrganizationID,
+			&i.Name,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
