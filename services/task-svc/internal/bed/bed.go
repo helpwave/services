@@ -15,7 +15,6 @@ import (
 
 	pb "gen/proto/services/task_svc/v1"
 	zlog "github.com/rs/zerolog/log"
-	pbhelpers "proto_helpers/task_svc/v1"
 )
 
 type ServiceServer struct {
@@ -158,16 +157,23 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 }
 
 func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*pb.UpdateBedResponse, error) {
-	bedRepo := repositories.BedRepo(ctx)
+	queries := database.New(hwdb.GetDB(ctx))
 
 	bedID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := pbhelpers.UpdatesMapForUpdateBedRequest(req)
+	roomId, err := hwutil.ParseNullUUID(req.RoomId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
 
-	if _, err := bedRepo.UpdateBed(bedID, updates); err != nil {
+	if err := queries.UpdateBed(ctx, database.UpdateBedParams{
+		ID:     bedID,
+		Name:   req.Name,
+		RoomID: roomId,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 

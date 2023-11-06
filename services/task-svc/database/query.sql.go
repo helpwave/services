@@ -84,3 +84,22 @@ func (q *Queries) GetBedsByRoomForOrganization(ctx context.Context, arg GetBedsB
 	}
 	return items, nil
 }
+
+const updateBed = `-- name: UpdateBed :exec
+UPDATE beds
+SET
+	name = coalesce($1, name),
+	room_id = coalesce($2, room_id)
+WHERE id = $3
+`
+
+type UpdateBedParams struct {
+	Name   *string
+	RoomID uuid.NullUUID
+	ID     uuid.UUID
+}
+
+func (q *Queries) UpdateBed(ctx context.Context, arg UpdateBedParams) error {
+	_, err := q.db.Exec(ctx, updateBed, arg.Name, arg.RoomID, arg.ID)
+	return err
+}
