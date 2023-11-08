@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"time"
 )
 
 type SubTask struct {
@@ -17,7 +18,8 @@ func (SubTask) Fields() []ent.Field {
 			Default(uuid.New),
 		field.Text("name"),
 		field.Bool("done").Default(false),
-		field.UUID("created_by", uuid.UUID{})
+		field.Time("creation_date").Default(time.Now),
+		field.UUID("created_by", uuid.UUID{}),
 	}
 }
 
