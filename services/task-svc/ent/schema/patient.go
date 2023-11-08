@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"time"
 )
 
 type Patient struct {
@@ -16,8 +17,10 @@ func (Patient) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New),
 		field.Text("human_readable_identifier"),
-		field.Text("notes"),
-		field.Bool("is_discharged"),
+		field.Text("notes").Default(""),
+		field.Int("is_discharged").Default(0),
+		field.Time("created_at").Default(time.Now),
+		field.Time("updated_at").Default(time.Now), // TODO update this automatically?
 		field.UUID("organization_id", uuid.UUID{}),
 	}
 }

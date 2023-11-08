@@ -17,7 +17,7 @@ func (SubTask) Fields() []ent.Field {
 			Default(uuid.New),
 		field.Text("name"),
 		field.Bool("done").Default(false),
-		field.UUID("created_by", uuid.UUID{}),
+		field.UUID("created_by", uuid.UUID{})
 	}
 }
 
