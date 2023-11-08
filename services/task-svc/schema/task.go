@@ -11,19 +11,12 @@ type Task struct {
 	ent.Schema
 }
 
-/*
-
-type TaskBase struct {
-	Status      pb.TaskStatus `gorm:"column:status"` TODO
-}
-
-*/
-
 func (Task) Fields() []ent.Field {
 	return []ent.Field{
 		field.Text("name"),
 		field.Text("description").Default(""),
 		field.Bool("public").Default(false),
+		field.Int32("status"), // pb.TaskStatus
 		field.Time("due_at"),
 		field.UUID("created_by", uuid.UUID{}),
 		field.UUID("assigned_user_id", uuid.UUID{}),
