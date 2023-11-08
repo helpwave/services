@@ -13,6 +13,8 @@ type Task struct {
 
 func (Task) Fields() []ent.Field {
 	return []ent.Field{
+		field.UUID("id", uuid.UUID{}).
+			Default(uuid.New),
 		field.Text("name"),
 		field.Text("description").Default(""),
 		field.Bool("public").Default(false),
@@ -21,6 +23,7 @@ func (Task) Fields() []ent.Field {
 		field.UUID("created_by", uuid.UUID{}),
 		field.UUID("assigned_user_id", uuid.UUID{}),
 		field.UUID("organization_id", uuid.UUID{}),
+		// TODO: created at and updated at
 	}
 }
 

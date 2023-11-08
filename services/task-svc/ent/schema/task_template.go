@@ -13,6 +13,8 @@ type TaskTemplate struct {
 
 func (TaskTemplate) Fields() []ent.Field {
 	return []ent.Field{
+		field.UUID("id", uuid.UUID{}).
+			Default(uuid.New),
 		field.Text("name"),
 		field.Text("description").Default(""),
 		field.UUID("created_by", uuid.UUID{}),
@@ -22,7 +24,7 @@ func (TaskTemplate) Fields() []ent.Field {
 
 func (TaskTemplate) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("ward", SubTask.Type).Ref("task_templates").Unique(), // TODO: can a Task Template exist without ward?
+		edge.From("ward", Ward.Type).Ref("task_templates").Unique(), // TODO: can a Task Template exist without ward?
 		edge.To("subtasks", TaskTemplateSubTask.Type),
 	}
 }

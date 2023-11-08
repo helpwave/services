@@ -7,20 +7,22 @@ import (
 	"github.com/google/uuid"
 )
 
-type Ward struct {
+type Room struct {
 	ent.Schema
 }
 
-func (Ward) Fields() []ent.Field {
+func (Room) Fields() []ent.Field {
 	return []ent.Field{
+		field.UUID("id", uuid.UUID{}).
+			Default(uuid.New),
 		field.Text("name"),
 		field.UUID("organization_id", uuid.UUID{}),
 	}
 }
 
-func (Ward) Edges() []ent.Edge {
+func (Room) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("rooms", Room.Type),
-		edge.To("task_templates", TaskTemplate.Type),
+		edge.To("beds", Bed.Type),
+		edge.From("ward", Ward.Type).Ref("rooms").Required().Unique(),
 	}
 }

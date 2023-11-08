@@ -13,6 +13,8 @@ type Bed struct {
 
 func (Bed) Fields() []ent.Field {
 	return []ent.Field{
+		field.UUID("id", uuid.UUID{}).
+			Default(uuid.New),
 		field.Text("name"),
 		field.UUID("organization_id", uuid.UUID{}),
 	}

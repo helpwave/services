@@ -13,6 +13,8 @@ type SubTask struct {
 
 func (SubTask) Fields() []ent.Field {
 	return []ent.Field{
+		field.UUID("id", uuid.UUID{}).
+			Default(uuid.New),
 		field.Text("name"),
 		field.Bool("done").Default(false),
 		field.UUID("created_by", uuid.UUID{}),

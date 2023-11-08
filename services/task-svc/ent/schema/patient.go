@@ -13,6 +13,8 @@ type Patient struct {
 
 func (Patient) Fields() []ent.Field {
 	return []ent.Field{
+		field.UUID("id", uuid.UUID{}).
+			Default(uuid.New),
 		field.Text("human_readable_identifier"),
 		field.Text("notes"),
 		field.Bool("is_discharged"),
