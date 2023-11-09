@@ -4,16 +4,17 @@ import (
 	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
 	"task-svc/internal/tracking"
+
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ServiceServer struct {
@@ -476,7 +477,7 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 	patientRepo := repositories.PatientRepo(ctx)
 
 	mapTasks := func(tasks []models.Task) []*pb.GetPatientListResponse_Task {
-		var mappedTasks = hwutil.Map(tasks, func(task models.Task) *pb.GetPatientListResponse_Task {
+		return hwutil.Map(tasks, func(task models.Task) *pb.GetPatientListResponse_Task {
 			var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetPatientListResponse_Task_SubTask {
 				return &pb.GetPatientListResponse_Task_SubTask{
 					Id:   subtask.ID.String(),
@@ -495,7 +496,6 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 				Public:         task.Public,
 			}
 		})
-		return mappedTasks
 	}
 
 	organizationID, err := common.GetOrganizationID(ctx)
@@ -503,13 +503,13 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 		return nil, status.Error(codes.InvalidArgument, "invalid organization id")
 	}
 
-	isUsingWardID := req.WardId != nil
-	var wardID uuid.UUID
-	if isUsingWardID {
-		wardID, err = uuid.Parse(*req.WardId)
+	var wardID *uuid.UUID
+	if req.WardId != nil {
+		parsedWardID, err := uuid.Parse(*req.WardId)
 		if err != nil {
 			return nil, status.Error(codes.InvalidArgument, "invalid ward id")
 		}
+		wardID = &parsedWardID
 	}
 
 	unassignedPatients, err := patientRepo.GetUnassignedPatientsForOrganization(organizationID)
@@ -523,8 +523,8 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 	}
 
 	var rooms []models.Room
-	if isUsingWardID {
-		rooms, err = patientRepo.GetRoomsWithBedsWithActivePatientsForWard(wardID)
+	if wardID != nil {
+		rooms, err = patientRepo.GetRoomsWithBedsWithActivePatientsForWard(*wardID)
 	} else {
 		rooms, err = patientRepo.GetRoomsWithBedsWithActivePatientsForOrganization(organizationID)
 	}
@@ -536,7 +536,6 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 	for _, room := range rooms {
 		for _, bed := range room.Beds {
 			if bed.Patient != nil {
-				var mappedTasks = mapTasks(bed.Patient.Tasks)
 				patientWithRoomAndBed := &pb.GetPatientListResponse_PatientWithRoomAndBed{
 					Id:                      bed.Patient.ID.String(),
 					HumanReadableIdentifier: bed.Patient.HumanReadableIdentifier,
@@ -550,33 +549,29 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 						WardId: room.WardID.String(),
 					},
 					Notes: bed.Patient.Notes,
-					Tasks: mappedTasks,
+					Tasks: mapTasks(bed.Patient.Tasks),
 				}
 				activePatients = append(activePatients, patientWithRoomAndBed)
 			}
 		}
 	}
 
+	mapPatients := func(patients []models.Patient) []*pb.GetPatientListResponse_Patient {
+		return hwutil.Map(patients, func(patient models.Patient) *pb.GetPatientListResponse_Patient {
+			var mappedTasks = mapTasks(patient.Tasks)
+			return &pb.GetPatientListResponse_Patient{
+				Id:                      patient.ID.String(),
+				HumanReadableIdentifier: patient.HumanReadableIdentifier,
+				Notes:                   patient.Notes,
+				Tasks:                   mappedTasks,
+			}
+		})
+	}
+
 	return &pb.GetPatientListResponse{
-		DischargedPatients: hwutil.Map(dischargedPatients, func(patient models.Patient) *pb.GetPatientListResponse_Patient {
-			var mappedTasks = mapTasks(patient.Tasks)
-			return &pb.GetPatientListResponse_Patient{
-				Id:                      patient.ID.String(),
-				HumanReadableIdentifier: patient.HumanReadableIdentifier,
-				Notes:                   patient.Notes,
-				Tasks:                   mappedTasks,
-			}
-		}),
-		UnassignedPatients: hwutil.Map(unassignedPatients, func(patient models.Patient) *pb.GetPatientListResponse_Patient {
-			var mappedTasks = mapTasks(patient.Tasks)
-			return &pb.GetPatientListResponse_Patient{
-				Id:                      patient.ID.String(),
-				HumanReadableIdentifier: patient.HumanReadableIdentifier,
-				Notes:                   patient.Notes,
-				Tasks:                   mappedTasks,
-			}
-		}),
-		Active: activePatients,
+		DischargedPatients: mapPatients(dischargedPatients),
+		UnassignedPatients: mapPatients(unassignedPatients),
+		Active:             activePatients,
 	}, nil
 }
 

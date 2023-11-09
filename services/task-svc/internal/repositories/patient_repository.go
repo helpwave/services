@@ -2,10 +2,11 @@ package repositories
 
 import (
 	"context"
-	"github.com/google/uuid"
-	"gorm.io/gorm"
 	"hwgorm"
 	"task-svc/internal/models"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type PatientRepository struct {
@@ -90,6 +91,7 @@ func (r *PatientRepository) GetUnassignedPatientsForOrganization(organizationID 
 	query := r.db.
 		Where("organization_id = ? AND bed_id IS NULL AND is_discharged = 0", organizationID).
 		Preload("Tasks").
+		Preload("Tasks.Subtasks").
 		Find(&unassignedPatients)
 
 	if err := query.Error; err != nil {
@@ -104,6 +106,7 @@ func (r *PatientRepository) GetDischargedPatientsForOrganization(organizationID 
 		Unscoped().
 		Where("organization_id = ? AND NOT is_discharged = 0", organizationID).
 		Preload("Tasks").
+		Preload("Tasks.Subtasks").
 		Find(&patients)
 
 	if err := query.Error; err != nil {
@@ -117,6 +120,7 @@ func (r *PatientRepository) GetRoomsWithBedsWithActivePatientsForOrganization(or
 	query := r.db.
 		Preload("Beds.Patient").
 		Preload("Beds.Patient.Tasks").
+		Preload("Beds.Patient.Tasks.Subtasks").
 		Joins("JOIN beds ON rooms.id = beds.room_id").
 		Joins("JOIN patients ON patients.bed_id = beds.id").
 		Where("patients.organization_id = ? AND patients.is_discharged = 0", organizationID).
@@ -134,6 +138,7 @@ func (r *PatientRepository) GetRoomsWithBedsWithActivePatientsForWard(wardID uui
 	query := r.db.
 		Preload("Beds.Patient").
 		Preload("Beds.Patient.Tasks").
+		Preload("Beds.Patient.Tasks.Subtasks").
 		Joins("JOIN beds ON rooms.id = beds.room_id").
 		Joins("JOIN patients ON patients.bed_id = beds.id").
 		Where("rooms.ward_id = ? AND patients.is_discharged = 0", wardID).
