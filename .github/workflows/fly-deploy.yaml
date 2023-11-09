@@ -15,6 +15,10 @@ on:
         description: 'The name of the organization on Fly.'
         type: string
         required: true
+      version:
+        description: "The version of the app."
+        type: string
+        required: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ inputs.app }}
@@ -52,6 +56,6 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy
         run: |
-          flyctl deploy --config services/${{ inputs.service }}/fly.toml --app ${{ inputs.app }} --remote-only
+          flyctl deploy --config services/${{ inputs.service }}/fly.toml --app ${{ inputs.app }} --build-arg VERSION=${{ inputs.version }} --remote-only
         env:
           DOCKER_BUILDKIT: 1
