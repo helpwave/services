@@ -29,8 +29,7 @@ updates:
     labels:
       - "deps"
 
-  - &go-service
-    directory: "/services/auth-svc"
+  - directory: "/services/auth-svc"
     package-ecosystem: "gomod"
     schedule:
       interval: "weekly"
@@ -38,11 +37,39 @@ updates:
       prefix: "chore(deps)"
     labels:
       - "deps"
-  - <<: *go-service
-    directory: "/services/emergency-room-svc"
-  - <<: *go-service
-    directory: "/services/ory-svc"
-  - <<: *go-service
-    directory: "/services/task-svc"
-  - <<: *go-service
-    directory: "/services/user-svc"
+
+  - directory: "/services/emergency-room-svc"
+    package-ecosystem: "gomod"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "deps"
+
+  - directory: "/services/ory-svc"
+    package-ecosystem: "gomod"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "deps"
+
+  - directory: "/services/task-svc"
+    package-ecosystem: "gomod"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "deps"
+
+  - directory: "/services/user-svc"
+    package-ecosystem: "gomod"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "deps"
