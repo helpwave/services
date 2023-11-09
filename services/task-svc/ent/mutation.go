@@ -562,7 +562,10 @@ type PatientMutation struct {
 	id                        *uuid.UUID
 	human_readable_identifier *string
 	notes                     *string
-	is_discharged             *bool
+	is_discharged             *int
+	addis_discharged          *int
+	created_at                *time.Time
+	updated_at                *time.Time
 	organization_id           *uuid.UUID
 	clearedFields             map[string]struct{}
 	bed                       *uuid.UUID
@@ -752,12 +755,13 @@ func (m *PatientMutation) ResetNotes() {
 }
 
 // SetIsDischarged sets the "is_discharged" field.
-func (m *PatientMutation) SetIsDischarged(b bool) {
-	m.is_discharged = &b
+func (m *PatientMutation) SetIsDischarged(i int) {
+	m.is_discharged = &i
+	m.addis_discharged = nil
 }
 
 // IsDischarged returns the value of the "is_discharged" field in the mutation.
-func (m *PatientMutation) IsDischarged() (r bool, exists bool) {
+func (m *PatientMutation) IsDischarged() (r int, exists bool) {
 	v := m.is_discharged
 	if v == nil {
 		return
@@ -768,7 +772,7 @@ func (m *PatientMutation) IsDischarged() (r bool, exists bool) {
 // OldIsDischarged returns the old "is_discharged" field's value of the Patient entity.
 // If the Patient object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PatientMutation) OldIsDischarged(ctx context.Context) (v bool, err error) {
+func (m *PatientMutation) OldIsDischarged(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsDischarged is only allowed on UpdateOne operations")
 	}
@@ -782,9 +786,100 @@ func (m *PatientMutation) OldIsDischarged(ctx context.Context) (v bool, err erro
 	return oldValue.IsDischarged, nil
 }
 
+// AddIsDischarged adds i to the "is_discharged" field.
+func (m *PatientMutation) AddIsDischarged(i int) {
+	if m.addis_discharged != nil {
+		*m.addis_discharged += i
+	} else {
+		m.addis_discharged = &i
+	}
+}
+
+// AddedIsDischarged returns the value that was added to the "is_discharged" field in this mutation.
+func (m *PatientMutation) AddedIsDischarged() (r int, exists bool) {
+	v := m.addis_discharged
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ResetIsDischarged resets all changes to the "is_discharged" field.
 func (m *PatientMutation) ResetIsDischarged() {
 	m.is_discharged = nil
+	m.addis_discharged = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *PatientMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PatientMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Patient entity.
+// If the Patient object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PatientMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PatientMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *PatientMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *PatientMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Patient entity.
+// If the Patient object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PatientMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *PatientMutation) ResetUpdatedAt() {
+	m.updated_at = nil
 }
 
 // SetOrganizationID sets the "organization_id" field.
@@ -950,7 +1045,7 @@ func (m *PatientMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PatientMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 6)
 	if m.human_readable_identifier != nil {
 		fields = append(fields, patient.FieldHumanReadableIdentifier)
 	}
@@ -959,6 +1054,12 @@ func (m *PatientMutation) Fields() []string {
 	}
 	if m.is_discharged != nil {
 		fields = append(fields, patient.FieldIsDischarged)
+	}
+	if m.created_at != nil {
+		fields = append(fields, patient.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, patient.FieldUpdatedAt)
 	}
 	if m.organization_id != nil {
 		fields = append(fields, patient.FieldOrganizationID)
@@ -977,6 +1078,10 @@ func (m *PatientMutation) Field(name string) (ent.Value, bool) {
 		return m.Notes()
 	case patient.FieldIsDischarged:
 		return m.IsDischarged()
+	case patient.FieldCreatedAt:
+		return m.CreatedAt()
+	case patient.FieldUpdatedAt:
+		return m.UpdatedAt()
 	case patient.FieldOrganizationID:
 		return m.OrganizationID()
 	}
@@ -994,6 +1099,10 @@ func (m *PatientMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldNotes(ctx)
 	case patient.FieldIsDischarged:
 		return m.OldIsDischarged(ctx)
+	case patient.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case patient.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
 	case patient.FieldOrganizationID:
 		return m.OldOrganizationID(ctx)
 	}
@@ -1020,11 +1129,25 @@ func (m *PatientMutation) SetField(name string, value ent.Value) error {
 		m.SetNotes(v)
 		return nil
 	case patient.FieldIsDischarged:
-		v, ok := value.(bool)
+		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIsDischarged(v)
+		return nil
+	case patient.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case patient.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
 		return nil
 	case patient.FieldOrganizationID:
 		v, ok := value.(uuid.UUID)
@@ -1040,13 +1163,21 @@ func (m *PatientMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *PatientMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addis_discharged != nil {
+		fields = append(fields, patient.FieldIsDischarged)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *PatientMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case patient.FieldIsDischarged:
+		return m.AddedIsDischarged()
+	}
 	return nil, false
 }
 
@@ -1055,6 +1186,13 @@ func (m *PatientMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *PatientMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case patient.FieldIsDischarged:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddIsDischarged(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Patient numeric field %s", name)
 }
@@ -1090,6 +1228,12 @@ func (m *PatientMutation) ResetField(name string) error {
 		return nil
 	case patient.FieldIsDischarged:
 		m.ResetIsDischarged()
+		return nil
+	case patient.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case patient.FieldUpdatedAt:
+		m.ResetUpdatedAt()
 		return nil
 	case patient.FieldOrganizationID:
 		m.ResetOrganizationID()
@@ -1746,6 +1890,7 @@ type SubTaskMutation struct {
 	id            *uuid.UUID
 	name          *string
 	_done         *bool
+	creation_date *time.Time
 	created_by    *uuid.UUID
 	clearedFields map[string]struct{}
 	task          *uuid.UUID
@@ -1931,6 +2076,42 @@ func (m *SubTaskMutation) ResetDone() {
 	m._done = nil
 }
 
+// SetCreationDate sets the "creation_date" field.
+func (m *SubTaskMutation) SetCreationDate(t time.Time) {
+	m.creation_date = &t
+}
+
+// CreationDate returns the value of the "creation_date" field in the mutation.
+func (m *SubTaskMutation) CreationDate() (r time.Time, exists bool) {
+	v := m.creation_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreationDate returns the old "creation_date" field's value of the SubTask entity.
+// If the SubTask object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubTaskMutation) OldCreationDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreationDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreationDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreationDate: %w", err)
+	}
+	return oldValue.CreationDate, nil
+}
+
+// ResetCreationDate resets all changes to the "creation_date" field.
+func (m *SubTaskMutation) ResetCreationDate() {
+	m.creation_date = nil
+}
+
 // SetCreatedBy sets the "created_by" field.
 func (m *SubTaskMutation) SetCreatedBy(u uuid.UUID) {
 	m.created_by = &u
@@ -2040,12 +2221,15 @@ func (m *SubTaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SubTaskMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 4)
 	if m.name != nil {
 		fields = append(fields, subtask.FieldName)
 	}
 	if m._done != nil {
 		fields = append(fields, subtask.FieldDone)
+	}
+	if m.creation_date != nil {
+		fields = append(fields, subtask.FieldCreationDate)
 	}
 	if m.created_by != nil {
 		fields = append(fields, subtask.FieldCreatedBy)
@@ -2062,6 +2246,8 @@ func (m *SubTaskMutation) Field(name string) (ent.Value, bool) {
 		return m.Name()
 	case subtask.FieldDone:
 		return m.Done()
+	case subtask.FieldCreationDate:
+		return m.CreationDate()
 	case subtask.FieldCreatedBy:
 		return m.CreatedBy()
 	}
@@ -2077,6 +2263,8 @@ func (m *SubTaskMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldName(ctx)
 	case subtask.FieldDone:
 		return m.OldDone(ctx)
+	case subtask.FieldCreationDate:
+		return m.OldCreationDate(ctx)
 	case subtask.FieldCreatedBy:
 		return m.OldCreatedBy(ctx)
 	}
@@ -2101,6 +2289,13 @@ func (m *SubTaskMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDone(v)
+		return nil
+	case subtask.FieldCreationDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreationDate(v)
 		return nil
 	case subtask.FieldCreatedBy:
 		v, ok := value.(uuid.UUID)
@@ -2163,6 +2358,9 @@ func (m *SubTaskMutation) ResetField(name string) error {
 		return nil
 	case subtask.FieldDone:
 		m.ResetDone()
+		return nil
+	case subtask.FieldCreationDate:
+		m.ResetCreationDate()
 		return nil
 	case subtask.FieldCreatedBy:
 		m.ResetCreatedBy()

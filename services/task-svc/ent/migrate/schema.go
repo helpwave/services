@@ -11,7 +11,7 @@ var (
 	// BedsColumns holds the columns for the "beds" table.
 	BedsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
-		{Name: "name", Type: field.TypeString, Size: 2147483647},
+		{Name: "name", Type: field.TypeString, Size: 2147483647, Default: "Unnamed Bed"},
 		{Name: "organization_id", Type: field.TypeUUID},
 		{Name: "room_beds", Type: field.TypeUUID},
 	}
@@ -33,8 +33,10 @@ var (
 	PatientsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "human_readable_identifier", Type: field.TypeString, Size: 2147483647},
-		{Name: "notes", Type: field.TypeString, Size: 2147483647},
-		{Name: "is_discharged", Type: field.TypeBool},
+		{Name: "notes", Type: field.TypeString, Size: 2147483647, Default: ""},
+		{Name: "is_discharged", Type: field.TypeInt, Default: 0},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "organization_id", Type: field.TypeUUID},
 		{Name: "bed_patient", Type: field.TypeUUID, Unique: true, Nullable: true},
 	}
@@ -46,7 +48,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "patients_beds_patient",
-				Columns:    []*schema.Column{PatientsColumns[5]},
+				Columns:    []*schema.Column{PatientsColumns[7]},
 				RefColumns: []*schema.Column{BedsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -78,6 +80,7 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "name", Type: field.TypeString, Size: 2147483647},
 		{Name: "done", Type: field.TypeBool, Default: false},
+		{Name: "creation_date", Type: field.TypeTime},
 		{Name: "created_by", Type: field.TypeUUID},
 		{Name: "task_subtasks", Type: field.TypeUUID},
 	}
@@ -89,7 +92,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sub_tasks_tasks_subtasks",
-				Columns:    []*schema.Column{SubTasksColumns[4]},
+				Columns:    []*schema.Column{SubTasksColumns[5]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

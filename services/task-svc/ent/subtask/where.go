@@ -4,6 +4,7 @@ package subtask
 
 import (
 	"task-svc/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -63,6 +64,11 @@ func Name(v string) predicate.SubTask {
 // Done applies equality check predicate on the "done" field. It's identical to DoneEQ.
 func Done(v bool) predicate.SubTask {
 	return predicate.SubTask(sql.FieldEQ(FieldDone, v))
+}
+
+// CreationDate applies equality check predicate on the "creation_date" field. It's identical to CreationDateEQ.
+func CreationDate(v time.Time) predicate.SubTask {
+	return predicate.SubTask(sql.FieldEQ(FieldCreationDate, v))
 }
 
 // CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
@@ -143,6 +149,46 @@ func DoneEQ(v bool) predicate.SubTask {
 // DoneNEQ applies the NEQ predicate on the "done" field.
 func DoneNEQ(v bool) predicate.SubTask {
 	return predicate.SubTask(sql.FieldNEQ(FieldDone, v))
+}
+
+// CreationDateEQ applies the EQ predicate on the "creation_date" field.
+func CreationDateEQ(v time.Time) predicate.SubTask {
+	return predicate.SubTask(sql.FieldEQ(FieldCreationDate, v))
+}
+
+// CreationDateNEQ applies the NEQ predicate on the "creation_date" field.
+func CreationDateNEQ(v time.Time) predicate.SubTask {
+	return predicate.SubTask(sql.FieldNEQ(FieldCreationDate, v))
+}
+
+// CreationDateIn applies the In predicate on the "creation_date" field.
+func CreationDateIn(vs ...time.Time) predicate.SubTask {
+	return predicate.SubTask(sql.FieldIn(FieldCreationDate, vs...))
+}
+
+// CreationDateNotIn applies the NotIn predicate on the "creation_date" field.
+func CreationDateNotIn(vs ...time.Time) predicate.SubTask {
+	return predicate.SubTask(sql.FieldNotIn(FieldCreationDate, vs...))
+}
+
+// CreationDateGT applies the GT predicate on the "creation_date" field.
+func CreationDateGT(v time.Time) predicate.SubTask {
+	return predicate.SubTask(sql.FieldGT(FieldCreationDate, v))
+}
+
+// CreationDateGTE applies the GTE predicate on the "creation_date" field.
+func CreationDateGTE(v time.Time) predicate.SubTask {
+	return predicate.SubTask(sql.FieldGTE(FieldCreationDate, v))
+}
+
+// CreationDateLT applies the LT predicate on the "creation_date" field.
+func CreationDateLT(v time.Time) predicate.SubTask {
+	return predicate.SubTask(sql.FieldLT(FieldCreationDate, v))
+}
+
+// CreationDateLTE applies the LTE predicate on the "creation_date" field.
+func CreationDateLTE(v time.Time) predicate.SubTask {
+	return predicate.SubTask(sql.FieldLTE(FieldCreationDate, v))
 }
 
 // CreatedByEQ applies the EQ predicate on the "created_by" field.

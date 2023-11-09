@@ -3,6 +3,8 @@
 package subtask
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
@@ -17,6 +19,8 @@ const (
 	FieldName = "name"
 	// FieldDone holds the string denoting the done field in the database.
 	FieldDone = "done"
+	// FieldCreationDate holds the string denoting the creation_date field in the database.
+	FieldCreationDate = "creation_date"
 	// FieldCreatedBy holds the string denoting the created_by field in the database.
 	FieldCreatedBy = "created_by"
 	// EdgeTask holds the string denoting the task edge name in mutations.
@@ -37,6 +41,7 @@ var Columns = []string{
 	FieldID,
 	FieldName,
 	FieldDone,
+	FieldCreationDate,
 	FieldCreatedBy,
 }
 
@@ -64,6 +69,8 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultDone holds the default value on creation for the "done" field.
 	DefaultDone bool
+	// DefaultCreationDate holds the default value on creation for the "creation_date" field.
+	DefaultCreationDate func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -84,6 +91,11 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByDone orders the results by the done field.
 func ByDone(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDone, opts...).ToFunc()
+}
+
+// ByCreationDate orders the results by the creation_date field.
+func ByCreationDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreationDate, opts...).ToFunc()
 }
 
 // ByCreatedBy orders the results by the created_by field.

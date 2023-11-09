@@ -9,6 +9,7 @@ import (
 	"task-svc/ent/bed"
 	"task-svc/ent/patient"
 	"task-svc/ent/task"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -34,9 +35,53 @@ func (pc *PatientCreate) SetNotes(s string) *PatientCreate {
 	return pc
 }
 
+// SetNillableNotes sets the "notes" field if the given value is not nil.
+func (pc *PatientCreate) SetNillableNotes(s *string) *PatientCreate {
+	if s != nil {
+		pc.SetNotes(*s)
+	}
+	return pc
+}
+
 // SetIsDischarged sets the "is_discharged" field.
-func (pc *PatientCreate) SetIsDischarged(b bool) *PatientCreate {
-	pc.mutation.SetIsDischarged(b)
+func (pc *PatientCreate) SetIsDischarged(i int) *PatientCreate {
+	pc.mutation.SetIsDischarged(i)
+	return pc
+}
+
+// SetNillableIsDischarged sets the "is_discharged" field if the given value is not nil.
+func (pc *PatientCreate) SetNillableIsDischarged(i *int) *PatientCreate {
+	if i != nil {
+		pc.SetIsDischarged(*i)
+	}
+	return pc
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (pc *PatientCreate) SetCreatedAt(t time.Time) *PatientCreate {
+	pc.mutation.SetCreatedAt(t)
+	return pc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (pc *PatientCreate) SetNillableCreatedAt(t *time.Time) *PatientCreate {
+	if t != nil {
+		pc.SetCreatedAt(*t)
+	}
+	return pc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pc *PatientCreate) SetUpdatedAt(t time.Time) *PatientCreate {
+	pc.mutation.SetUpdatedAt(t)
+	return pc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (pc *PatientCreate) SetNillableUpdatedAt(t *time.Time) *PatientCreate {
+	if t != nil {
+		pc.SetUpdatedAt(*t)
+	}
 	return pc
 }
 
@@ -129,6 +174,22 @@ func (pc *PatientCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (pc *PatientCreate) defaults() {
+	if _, ok := pc.mutation.Notes(); !ok {
+		v := patient.DefaultNotes
+		pc.mutation.SetNotes(v)
+	}
+	if _, ok := pc.mutation.IsDischarged(); !ok {
+		v := patient.DefaultIsDischarged
+		pc.mutation.SetIsDischarged(v)
+	}
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		v := patient.DefaultCreatedAt()
+		pc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		v := patient.DefaultUpdatedAt()
+		pc.mutation.SetUpdatedAt(v)
+	}
 	if _, ok := pc.mutation.ID(); !ok {
 		v := patient.DefaultID()
 		pc.mutation.SetID(v)
@@ -145,6 +206,12 @@ func (pc *PatientCreate) check() error {
 	}
 	if _, ok := pc.mutation.IsDischarged(); !ok {
 		return &ValidationError{Name: "is_discharged", err: errors.New(`ent: missing required field "Patient.is_discharged"`)}
+	}
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Patient.created_at"`)}
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Patient.updated_at"`)}
 	}
 	if _, ok := pc.mutation.OrganizationID(); !ok {
 		return &ValidationError{Name: "organization_id", err: errors.New(`ent: missing required field "Patient.organization_id"`)}
@@ -193,8 +260,16 @@ func (pc *PatientCreate) createSpec() (*Patient, *sqlgraph.CreateSpec) {
 		_node.Notes = value
 	}
 	if value, ok := pc.mutation.IsDischarged(); ok {
-		_spec.SetField(patient.FieldIsDischarged, field.TypeBool, value)
+		_spec.SetField(patient.FieldIsDischarged, field.TypeInt, value)
 		_node.IsDischarged = value
+	}
+	if value, ok := pc.mutation.CreatedAt(); ok {
+		_spec.SetField(patient.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := pc.mutation.UpdatedAt(); ok {
+		_spec.SetField(patient.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
 	}
 	if value, ok := pc.mutation.OrganizationID(); ok {
 		_spec.SetField(patient.FieldOrganizationID, field.TypeUUID, value)

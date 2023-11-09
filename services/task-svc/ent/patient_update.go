@@ -10,6 +10,7 @@ import (
 	"task-svc/ent/patient"
 	"task-svc/ent/predicate"
 	"task-svc/ent/task"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -42,9 +43,60 @@ func (pu *PatientUpdate) SetNotes(s string) *PatientUpdate {
 	return pu
 }
 
+// SetNillableNotes sets the "notes" field if the given value is not nil.
+func (pu *PatientUpdate) SetNillableNotes(s *string) *PatientUpdate {
+	if s != nil {
+		pu.SetNotes(*s)
+	}
+	return pu
+}
+
 // SetIsDischarged sets the "is_discharged" field.
-func (pu *PatientUpdate) SetIsDischarged(b bool) *PatientUpdate {
-	pu.mutation.SetIsDischarged(b)
+func (pu *PatientUpdate) SetIsDischarged(i int) *PatientUpdate {
+	pu.mutation.ResetIsDischarged()
+	pu.mutation.SetIsDischarged(i)
+	return pu
+}
+
+// SetNillableIsDischarged sets the "is_discharged" field if the given value is not nil.
+func (pu *PatientUpdate) SetNillableIsDischarged(i *int) *PatientUpdate {
+	if i != nil {
+		pu.SetIsDischarged(*i)
+	}
+	return pu
+}
+
+// AddIsDischarged adds i to the "is_discharged" field.
+func (pu *PatientUpdate) AddIsDischarged(i int) *PatientUpdate {
+	pu.mutation.AddIsDischarged(i)
+	return pu
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (pu *PatientUpdate) SetCreatedAt(t time.Time) *PatientUpdate {
+	pu.mutation.SetCreatedAt(t)
+	return pu
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (pu *PatientUpdate) SetNillableCreatedAt(t *time.Time) *PatientUpdate {
+	if t != nil {
+		pu.SetCreatedAt(*t)
+	}
+	return pu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pu *PatientUpdate) SetUpdatedAt(t time.Time) *PatientUpdate {
+	pu.mutation.SetUpdatedAt(t)
+	return pu
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (pu *PatientUpdate) SetNillableUpdatedAt(t *time.Time) *PatientUpdate {
+	if t != nil {
+		pu.SetUpdatedAt(*t)
+	}
 	return pu
 }
 
@@ -163,7 +215,16 @@ func (pu *PatientUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(patient.FieldNotes, field.TypeString, value)
 	}
 	if value, ok := pu.mutation.IsDischarged(); ok {
-		_spec.SetField(patient.FieldIsDischarged, field.TypeBool, value)
+		_spec.SetField(patient.FieldIsDischarged, field.TypeInt, value)
+	}
+	if value, ok := pu.mutation.AddedIsDischarged(); ok {
+		_spec.AddField(patient.FieldIsDischarged, field.TypeInt, value)
+	}
+	if value, ok := pu.mutation.CreatedAt(); ok {
+		_spec.SetField(patient.FieldCreatedAt, field.TypeTime, value)
+	}
+	if value, ok := pu.mutation.UpdatedAt(); ok {
+		_spec.SetField(patient.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := pu.mutation.OrganizationID(); ok {
 		_spec.SetField(patient.FieldOrganizationID, field.TypeUUID, value)
@@ -274,9 +335,60 @@ func (puo *PatientUpdateOne) SetNotes(s string) *PatientUpdateOne {
 	return puo
 }
 
+// SetNillableNotes sets the "notes" field if the given value is not nil.
+func (puo *PatientUpdateOne) SetNillableNotes(s *string) *PatientUpdateOne {
+	if s != nil {
+		puo.SetNotes(*s)
+	}
+	return puo
+}
+
 // SetIsDischarged sets the "is_discharged" field.
-func (puo *PatientUpdateOne) SetIsDischarged(b bool) *PatientUpdateOne {
-	puo.mutation.SetIsDischarged(b)
+func (puo *PatientUpdateOne) SetIsDischarged(i int) *PatientUpdateOne {
+	puo.mutation.ResetIsDischarged()
+	puo.mutation.SetIsDischarged(i)
+	return puo
+}
+
+// SetNillableIsDischarged sets the "is_discharged" field if the given value is not nil.
+func (puo *PatientUpdateOne) SetNillableIsDischarged(i *int) *PatientUpdateOne {
+	if i != nil {
+		puo.SetIsDischarged(*i)
+	}
+	return puo
+}
+
+// AddIsDischarged adds i to the "is_discharged" field.
+func (puo *PatientUpdateOne) AddIsDischarged(i int) *PatientUpdateOne {
+	puo.mutation.AddIsDischarged(i)
+	return puo
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (puo *PatientUpdateOne) SetCreatedAt(t time.Time) *PatientUpdateOne {
+	puo.mutation.SetCreatedAt(t)
+	return puo
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (puo *PatientUpdateOne) SetNillableCreatedAt(t *time.Time) *PatientUpdateOne {
+	if t != nil {
+		puo.SetCreatedAt(*t)
+	}
+	return puo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (puo *PatientUpdateOne) SetUpdatedAt(t time.Time) *PatientUpdateOne {
+	puo.mutation.SetUpdatedAt(t)
+	return puo
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (puo *PatientUpdateOne) SetNillableUpdatedAt(t *time.Time) *PatientUpdateOne {
+	if t != nil {
+		puo.SetUpdatedAt(*t)
+	}
 	return puo
 }
 
@@ -425,7 +537,16 @@ func (puo *PatientUpdateOne) sqlSave(ctx context.Context) (_node *Patient, err e
 		_spec.SetField(patient.FieldNotes, field.TypeString, value)
 	}
 	if value, ok := puo.mutation.IsDischarged(); ok {
-		_spec.SetField(patient.FieldIsDischarged, field.TypeBool, value)
+		_spec.SetField(patient.FieldIsDischarged, field.TypeInt, value)
+	}
+	if value, ok := puo.mutation.AddedIsDischarged(); ok {
+		_spec.AddField(patient.FieldIsDischarged, field.TypeInt, value)
+	}
+	if value, ok := puo.mutation.CreatedAt(); ok {
+		_spec.SetField(patient.FieldCreatedAt, field.TypeTime, value)
+	}
+	if value, ok := puo.mutation.UpdatedAt(); ok {
+		_spec.SetField(patient.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := puo.mutation.OrganizationID(); ok {
 		_spec.SetField(patient.FieldOrganizationID, field.TypeUUID, value)

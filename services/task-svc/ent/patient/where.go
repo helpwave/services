@@ -4,6 +4,7 @@ package patient
 
 import (
 	"task-svc/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -66,8 +67,18 @@ func Notes(v string) predicate.Patient {
 }
 
 // IsDischarged applies equality check predicate on the "is_discharged" field. It's identical to IsDischargedEQ.
-func IsDischarged(v bool) predicate.Patient {
+func IsDischarged(v int) predicate.Patient {
 	return predicate.Patient(sql.FieldEQ(FieldIsDischarged, v))
+}
+
+// CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
+func CreatedAt(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
+func UpdatedAt(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
 // OrganizationID applies equality check predicate on the "organization_id" field. It's identical to OrganizationIDEQ.
@@ -206,13 +217,123 @@ func NotesContainsFold(v string) predicate.Patient {
 }
 
 // IsDischargedEQ applies the EQ predicate on the "is_discharged" field.
-func IsDischargedEQ(v bool) predicate.Patient {
+func IsDischargedEQ(v int) predicate.Patient {
 	return predicate.Patient(sql.FieldEQ(FieldIsDischarged, v))
 }
 
 // IsDischargedNEQ applies the NEQ predicate on the "is_discharged" field.
-func IsDischargedNEQ(v bool) predicate.Patient {
+func IsDischargedNEQ(v int) predicate.Patient {
 	return predicate.Patient(sql.FieldNEQ(FieldIsDischarged, v))
+}
+
+// IsDischargedIn applies the In predicate on the "is_discharged" field.
+func IsDischargedIn(vs ...int) predicate.Patient {
+	return predicate.Patient(sql.FieldIn(FieldIsDischarged, vs...))
+}
+
+// IsDischargedNotIn applies the NotIn predicate on the "is_discharged" field.
+func IsDischargedNotIn(vs ...int) predicate.Patient {
+	return predicate.Patient(sql.FieldNotIn(FieldIsDischarged, vs...))
+}
+
+// IsDischargedGT applies the GT predicate on the "is_discharged" field.
+func IsDischargedGT(v int) predicate.Patient {
+	return predicate.Patient(sql.FieldGT(FieldIsDischarged, v))
+}
+
+// IsDischargedGTE applies the GTE predicate on the "is_discharged" field.
+func IsDischargedGTE(v int) predicate.Patient {
+	return predicate.Patient(sql.FieldGTE(FieldIsDischarged, v))
+}
+
+// IsDischargedLT applies the LT predicate on the "is_discharged" field.
+func IsDischargedLT(v int) predicate.Patient {
+	return predicate.Patient(sql.FieldLT(FieldIsDischarged, v))
+}
+
+// IsDischargedLTE applies the LTE predicate on the "is_discharged" field.
+func IsDischargedLTE(v int) predicate.Patient {
+	return predicate.Patient(sql.FieldLTE(FieldIsDischarged, v))
+}
+
+// CreatedAtEQ applies the EQ predicate on the "created_at" field.
+func CreatedAtEQ(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
+func CreatedAtNEQ(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldNEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtIn applies the In predicate on the "created_at" field.
+func CreatedAtIn(vs ...time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
+func CreatedAtNotIn(vs ...time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldNotIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtGT applies the GT predicate on the "created_at" field.
+func CreatedAtGT(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldGT(FieldCreatedAt, v))
+}
+
+// CreatedAtGTE applies the GTE predicate on the "created_at" field.
+func CreatedAtGTE(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldGTE(FieldCreatedAt, v))
+}
+
+// CreatedAtLT applies the LT predicate on the "created_at" field.
+func CreatedAtLT(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldLT(FieldCreatedAt, v))
+}
+
+// CreatedAtLTE applies the LTE predicate on the "created_at" field.
+func CreatedAtLTE(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldLTE(FieldCreatedAt, v))
+}
+
+// UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
+func UpdatedAtEQ(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
+func UpdatedAtNEQ(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldNEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtIn applies the In predicate on the "updated_at" field.
+func UpdatedAtIn(vs ...time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
+func UpdatedAtNotIn(vs ...time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldNotIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtGT applies the GT predicate on the "updated_at" field.
+func UpdatedAtGT(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldGT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
+func UpdatedAtGTE(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldGTE(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLT applies the LT predicate on the "updated_at" field.
+func UpdatedAtLT(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldLT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
+func UpdatedAtLTE(v time.Time) predicate.Patient {
+	return predicate.Patient(sql.FieldLTE(FieldUpdatedAt, v))
 }
 
 // OrganizationIDEQ applies the EQ predicate on the "organization_id" field.

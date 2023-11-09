@@ -12,6 +12,7 @@ import (
 	"task-svc/ent/tasktemplate"
 	"task-svc/ent/tasktemplatesubtask"
 	"task-svc/ent/ward"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -22,12 +23,32 @@ import (
 func init() {
 	bedFields := schema.Bed{}.Fields()
 	_ = bedFields
+	// bedDescName is the schema descriptor for name field.
+	bedDescName := bedFields[1].Descriptor()
+	// bed.DefaultName holds the default value on creation for the name field.
+	bed.DefaultName = bedDescName.Default.(string)
 	// bedDescID is the schema descriptor for id field.
 	bedDescID := bedFields[0].Descriptor()
 	// bed.DefaultID holds the default value on creation for the id field.
 	bed.DefaultID = bedDescID.Default.(func() uuid.UUID)
 	patientFields := schema.Patient{}.Fields()
 	_ = patientFields
+	// patientDescNotes is the schema descriptor for notes field.
+	patientDescNotes := patientFields[2].Descriptor()
+	// patient.DefaultNotes holds the default value on creation for the notes field.
+	patient.DefaultNotes = patientDescNotes.Default.(string)
+	// patientDescIsDischarged is the schema descriptor for is_discharged field.
+	patientDescIsDischarged := patientFields[3].Descriptor()
+	// patient.DefaultIsDischarged holds the default value on creation for the is_discharged field.
+	patient.DefaultIsDischarged = patientDescIsDischarged.Default.(int)
+	// patientDescCreatedAt is the schema descriptor for created_at field.
+	patientDescCreatedAt := patientFields[4].Descriptor()
+	// patient.DefaultCreatedAt holds the default value on creation for the created_at field.
+	patient.DefaultCreatedAt = patientDescCreatedAt.Default.(func() time.Time)
+	// patientDescUpdatedAt is the schema descriptor for updated_at field.
+	patientDescUpdatedAt := patientFields[5].Descriptor()
+	// patient.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	patient.DefaultUpdatedAt = patientDescUpdatedAt.Default.(func() time.Time)
 	// patientDescID is the schema descriptor for id field.
 	patientDescID := patientFields[0].Descriptor()
 	// patient.DefaultID holds the default value on creation for the id field.
@@ -44,6 +65,10 @@ func init() {
 	subtaskDescDone := subtaskFields[2].Descriptor()
 	// subtask.DefaultDone holds the default value on creation for the done field.
 	subtask.DefaultDone = subtaskDescDone.Default.(bool)
+	// subtaskDescCreationDate is the schema descriptor for creation_date field.
+	subtaskDescCreationDate := subtaskFields[3].Descriptor()
+	// subtask.DefaultCreationDate holds the default value on creation for the creation_date field.
+	subtask.DefaultCreationDate = subtaskDescCreationDate.Default.(func() time.Time)
 	// subtaskDescID is the schema descriptor for id field.
 	subtaskDescID := subtaskFields[0].Descriptor()
 	// subtask.DefaultID holds the default value on creation for the id field.

@@ -7,6 +7,7 @@ import (
 	"strings"
 	"task-svc/ent/bed"
 	"task-svc/ent/patient"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -23,7 +24,11 @@ type Patient struct {
 	// Notes holds the value of the "notes" field.
 	Notes string `json:"notes,omitempty"`
 	// IsDischarged holds the value of the "is_discharged" field.
-	IsDischarged bool `json:"is_discharged,omitempty"`
+	IsDischarged int `json:"is_discharged,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// OrganizationID holds the value of the "organization_id" field.
 	OrganizationID uuid.UUID `json:"organization_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -72,9 +77,11 @@ func (*Patient) scanValues(columns []string) ([]any, error) {
 	for i := range columns {
 		switch columns[i] {
 		case patient.FieldIsDischarged:
-			values[i] = new(sql.NullBool)
+			values[i] = new(sql.NullInt64)
 		case patient.FieldHumanReadableIdentifier, patient.FieldNotes:
 			values[i] = new(sql.NullString)
+		case patient.FieldCreatedAt, patient.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		case patient.FieldID, patient.FieldOrganizationID:
 			values[i] = new(uuid.UUID)
 		case patient.ForeignKeys[0]: // bed_patient
@@ -113,10 +120,22 @@ func (pa *Patient) assignValues(columns []string, values []any) error {
 				pa.Notes = value.String
 			}
 		case patient.FieldIsDischarged:
-			if value, ok := values[i].(*sql.NullBool); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field is_discharged", values[i])
 			} else if value.Valid {
-				pa.IsDischarged = value.Bool
+				pa.IsDischarged = int(value.Int64)
+			}
+		case patient.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				pa.CreatedAt = value.Time
+			}
+		case patient.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				pa.UpdatedAt = value.Time
 			}
 		case patient.FieldOrganizationID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -185,6 +204,12 @@ func (pa *Patient) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_discharged=")
 	builder.WriteString(fmt.Sprintf("%v", pa.IsDischarged))
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(pa.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(pa.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("organization_id=")
 	builder.WriteString(fmt.Sprintf("%v", pa.OrganizationID))

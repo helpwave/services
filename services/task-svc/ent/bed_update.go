@@ -36,6 +36,14 @@ func (bu *BedUpdate) SetName(s string) *BedUpdate {
 	return bu
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (bu *BedUpdate) SetNillableName(s *string) *BedUpdate {
+	if s != nil {
+		bu.SetName(*s)
+	}
+	return bu
+}
+
 // SetOrganizationID sets the "organization_id" field.
 func (bu *BedUpdate) SetOrganizationID(u uuid.UUID) *BedUpdate {
 	bu.mutation.SetOrganizationID(u)
@@ -223,6 +231,14 @@ type BedUpdateOne struct {
 // SetName sets the "name" field.
 func (buo *BedUpdateOne) SetName(s string) *BedUpdateOne {
 	buo.mutation.SetName(s)
+	return buo
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (buo *BedUpdateOne) SetNillableName(s *string) *BedUpdateOne {
+	if s != nil {
+		buo.SetName(*s)
+	}
 	return buo
 }
 

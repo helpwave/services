@@ -9,6 +9,7 @@ import (
 	"task-svc/ent/predicate"
 	"task-svc/ent/subtask"
 	"task-svc/ent/task"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -45,6 +46,20 @@ func (stu *SubTaskUpdate) SetDone(b bool) *SubTaskUpdate {
 func (stu *SubTaskUpdate) SetNillableDone(b *bool) *SubTaskUpdate {
 	if b != nil {
 		stu.SetDone(*b)
+	}
+	return stu
+}
+
+// SetCreationDate sets the "creation_date" field.
+func (stu *SubTaskUpdate) SetCreationDate(t time.Time) *SubTaskUpdate {
+	stu.mutation.SetCreationDate(t)
+	return stu
+}
+
+// SetNillableCreationDate sets the "creation_date" field if the given value is not nil.
+func (stu *SubTaskUpdate) SetNillableCreationDate(t *time.Time) *SubTaskUpdate {
+	if t != nil {
+		stu.SetCreationDate(*t)
 	}
 	return stu
 }
@@ -130,6 +145,9 @@ func (stu *SubTaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := stu.mutation.Done(); ok {
 		_spec.SetField(subtask.FieldDone, field.TypeBool, value)
 	}
+	if value, ok := stu.mutation.CreationDate(); ok {
+		_spec.SetField(subtask.FieldCreationDate, field.TypeTime, value)
+	}
 	if value, ok := stu.mutation.CreatedBy(); ok {
 		_spec.SetField(subtask.FieldCreatedBy, field.TypeUUID, value)
 	}
@@ -198,6 +216,20 @@ func (stuo *SubTaskUpdateOne) SetDone(b bool) *SubTaskUpdateOne {
 func (stuo *SubTaskUpdateOne) SetNillableDone(b *bool) *SubTaskUpdateOne {
 	if b != nil {
 		stuo.SetDone(*b)
+	}
+	return stuo
+}
+
+// SetCreationDate sets the "creation_date" field.
+func (stuo *SubTaskUpdateOne) SetCreationDate(t time.Time) *SubTaskUpdateOne {
+	stuo.mutation.SetCreationDate(t)
+	return stuo
+}
+
+// SetNillableCreationDate sets the "creation_date" field if the given value is not nil.
+func (stuo *SubTaskUpdateOne) SetNillableCreationDate(t *time.Time) *SubTaskUpdateOne {
+	if t != nil {
+		stuo.SetCreationDate(*t)
 	}
 	return stuo
 }
@@ -312,6 +344,9 @@ func (stuo *SubTaskUpdateOne) sqlSave(ctx context.Context) (_node *SubTask, err 
 	}
 	if value, ok := stuo.mutation.Done(); ok {
 		_spec.SetField(subtask.FieldDone, field.TypeBool, value)
+	}
+	if value, ok := stuo.mutation.CreationDate(); ok {
+		_spec.SetField(subtask.FieldCreationDate, field.TypeTime, value)
 	}
 	if value, ok := stuo.mutation.CreatedBy(); ok {
 		_spec.SetField(subtask.FieldCreatedBy, field.TypeUUID, value)

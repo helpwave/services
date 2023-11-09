@@ -28,6 +28,14 @@ func (bc *BedCreate) SetName(s string) *BedCreate {
 	return bc
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (bc *BedCreate) SetNillableName(s *string) *BedCreate {
+	if s != nil {
+		bc.SetName(*s)
+	}
+	return bc
+}
+
 // SetOrganizationID sets the "organization_id" field.
 func (bc *BedCreate) SetOrganizationID(u uuid.UUID) *BedCreate {
 	bc.mutation.SetOrganizationID(u)
@@ -113,6 +121,10 @@ func (bc *BedCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (bc *BedCreate) defaults() {
+	if _, ok := bc.mutation.Name(); !ok {
+		v := bed.DefaultName
+		bc.mutation.SetName(v)
+	}
 	if _, ok := bc.mutation.ID(); !ok {
 		v := bed.DefaultID()
 		bc.mutation.SetID(v)

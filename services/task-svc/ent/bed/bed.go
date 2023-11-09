@@ -68,6 +68,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultName holds the default value on creation for the "name" field.
+	DefaultName string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

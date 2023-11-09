@@ -7,6 +7,7 @@ import (
 	"strings"
 	"task-svc/ent/subtask"
 	"task-svc/ent/task"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -22,6 +23,8 @@ type SubTask struct {
 	Name string `json:"name,omitempty"`
 	// Done holds the value of the "done" field.
 	Done bool `json:"done,omitempty"`
+	// CreationDate holds the value of the "creation_date" field.
+	CreationDate time.Time `json:"creation_date,omitempty"`
 	// CreatedBy holds the value of the "created_by" field.
 	CreatedBy uuid.UUID `json:"created_by,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -62,6 +65,8 @@ func (*SubTask) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case subtask.FieldName:
 			values[i] = new(sql.NullString)
+		case subtask.FieldCreationDate:
+			values[i] = new(sql.NullTime)
 		case subtask.FieldID, subtask.FieldCreatedBy:
 			values[i] = new(uuid.UUID)
 		case subtask.ForeignKeys[0]: // task_subtasks
@@ -98,6 +103,12 @@ func (st *SubTask) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field done", values[i])
 			} else if value.Valid {
 				st.Done = value.Bool
+			}
+		case subtask.FieldCreationDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field creation_date", values[i])
+			} else if value.Valid {
+				st.CreationDate = value.Time
 			}
 		case subtask.FieldCreatedBy:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -158,6 +169,9 @@ func (st *SubTask) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("done=")
 	builder.WriteString(fmt.Sprintf("%v", st.Done))
+	builder.WriteString(", ")
+	builder.WriteString("creation_date=")
+	builder.WriteString(st.CreationDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
 	builder.WriteString(fmt.Sprintf("%v", st.CreatedBy))

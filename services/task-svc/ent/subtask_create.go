@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"task-svc/ent/subtask"
 	"task-svc/ent/task"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -37,6 +38,20 @@ func (stc *SubTaskCreate) SetDone(b bool) *SubTaskCreate {
 func (stc *SubTaskCreate) SetNillableDone(b *bool) *SubTaskCreate {
 	if b != nil {
 		stc.SetDone(*b)
+	}
+	return stc
+}
+
+// SetCreationDate sets the "creation_date" field.
+func (stc *SubTaskCreate) SetCreationDate(t time.Time) *SubTaskCreate {
+	stc.mutation.SetCreationDate(t)
+	return stc
+}
+
+// SetNillableCreationDate sets the "creation_date" field if the given value is not nil.
+func (stc *SubTaskCreate) SetNillableCreationDate(t *time.Time) *SubTaskCreate {
+	if t != nil {
+		stc.SetCreationDate(*t)
 	}
 	return stc
 }
@@ -111,6 +126,10 @@ func (stc *SubTaskCreate) defaults() {
 		v := subtask.DefaultDone
 		stc.mutation.SetDone(v)
 	}
+	if _, ok := stc.mutation.CreationDate(); !ok {
+		v := subtask.DefaultCreationDate()
+		stc.mutation.SetCreationDate(v)
+	}
 	if _, ok := stc.mutation.ID(); !ok {
 		v := subtask.DefaultID()
 		stc.mutation.SetID(v)
@@ -124,6 +143,9 @@ func (stc *SubTaskCreate) check() error {
 	}
 	if _, ok := stc.mutation.Done(); !ok {
 		return &ValidationError{Name: "done", err: errors.New(`ent: missing required field "SubTask.done"`)}
+	}
+	if _, ok := stc.mutation.CreationDate(); !ok {
+		return &ValidationError{Name: "creation_date", err: errors.New(`ent: missing required field "SubTask.creation_date"`)}
 	}
 	if _, ok := stc.mutation.CreatedBy(); !ok {
 		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "SubTask.created_by"`)}
@@ -173,6 +195,10 @@ func (stc *SubTaskCreate) createSpec() (*SubTask, *sqlgraph.CreateSpec) {
 	if value, ok := stc.mutation.Done(); ok {
 		_spec.SetField(subtask.FieldDone, field.TypeBool, value)
 		_node.Done = value
+	}
+	if value, ok := stc.mutation.CreationDate(); ok {
+		_spec.SetField(subtask.FieldCreationDate, field.TypeTime, value)
+		_node.CreationDate = value
 	}
 	if value, ok := stc.mutation.CreatedBy(); ok {
 		_spec.SetField(subtask.FieldCreatedBy, field.TypeUUID, value)
