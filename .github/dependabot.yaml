@@ -5,7 +5,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-        interval: "weekly"
+      interval: "weekly"
     commit-message:
       prefix: "chore(deps)"
     labels:
@@ -29,11 +29,20 @@ updates:
     labels:
       - "deps"
 
-  - package-ecosystem: "gomod"
-    directory: "/"
+  - &go-service
+    directory: "/services/auth-svc"
+    package-ecosystem: "gomod"
     schedule:
       interval: "weekly"
     commit-message:
       prefix: "chore(deps)"
     labels:
       - "deps"
+  - <<: *go-service
+    directory: "/services/emergency-room-svc"
+  - <<: *go-service
+    directory: "/services/ory-svc"
+  - <<: *go-service
+    directory: "/services/task-svc"
+  - <<: *go-service
+    directory: "/services/user-svc"
