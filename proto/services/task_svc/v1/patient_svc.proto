@@ -29,8 +29,22 @@ message GetPatientResponse {
   string id = 1; // @gotags: validate:"uuid4"
   string human_readable_identifier = 2; // @gotags: validate:"required"
   string notes = 3;
-  optional string bed_id = 4;
+  optional string bed_id = 4 [deprecated=true];
   optional string ward_id = 5;
+
+  optional Room room = 7;
+  optional Bed bed = 8;
+
+  message Room {
+    string id = 1;
+    string name = 2;
+  }
+
+  message Bed {
+    string id = 1;
+    string name = 2;
+  }
+
 }
 
 //
@@ -196,6 +210,18 @@ message GetPatientDetailsResponse {
   // "bed_index": number,
   repeated Task tasks = 5;
   optional string ward_id = 6;
+  optional Room room = 7;
+  optional Bed bed = 8;
+
+  message Room {
+    string id = 1;
+    string name = 2;
+  }
+
+  message Bed {
+    string id = 1;
+    string name = 2;
+  }
 
   message Task {
     string id = 1;

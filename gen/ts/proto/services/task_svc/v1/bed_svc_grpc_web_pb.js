@@ -263,6 +263,67 @@ proto.proto.services.task_svc.v1.BedServicePromiseClient.prototype.getBed =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.task_svc.v1.GetBedByPatientRequest,
+ *   !proto.proto.services.task_svc.v1.GetBedByPatientResponse>}
+ */
+const methodDescriptor_BedService_GetBedByPatient = new grpc.web.MethodDescriptor(
+  '/proto.services.task_svc.v1.BedService/GetBedByPatient',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.task_svc.v1.GetBedByPatientRequest,
+  proto.proto.services.task_svc.v1.GetBedByPatientResponse,
+  /**
+   * @param {!proto.proto.services.task_svc.v1.GetBedByPatientRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.task_svc.v1.GetBedByPatientResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetBedByPatientRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.task_svc.v1.GetBedByPatientResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.task_svc.v1.GetBedByPatientResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.task_svc.v1.BedServiceClient.prototype.getBedByPatient =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.task_svc.v1.BedService/GetBedByPatient',
+      request,
+      metadata || {},
+      methodDescriptor_BedService_GetBedByPatient,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.GetBedByPatientRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.task_svc.v1.GetBedByPatientResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.task_svc.v1.BedServicePromiseClient.prototype.getBedByPatient =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.task_svc.v1.BedService/GetBedByPatient',
+      request,
+      metadata || {},
+      methodDescriptor_BedService_GetBedByPatient);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.task_svc.v1.GetBedsRequest,
  *   !proto.proto.services.task_svc.v1.GetBedsResponse>}
  */

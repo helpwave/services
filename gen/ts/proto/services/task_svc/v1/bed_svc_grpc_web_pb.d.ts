@@ -29,6 +29,13 @@ export class BedServiceClient {
                response: proto_services_task_svc_v1_bed_svc_pb.GetBedResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_bed_svc_pb.GetBedResponse>;
 
+  getBedByPatient(
+    request: proto_services_task_svc_v1_bed_svc_pb.GetBedByPatientRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_task_svc_v1_bed_svc_pb.GetBedByPatientResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_task_svc_v1_bed_svc_pb.GetBedByPatientResponse>;
+
   getBeds(
     request: proto_services_task_svc_v1_bed_svc_pb.GetBedsRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -78,6 +85,11 @@ export class BedServicePromiseClient {
     request: proto_services_task_svc_v1_bed_svc_pb.GetBedRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_task_svc_v1_bed_svc_pb.GetBedResponse>;
+
+  getBedByPatient(
+    request: proto_services_task_svc_v1_bed_svc_pb.GetBedByPatientRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_task_svc_v1_bed_svc_pb.GetBedByPatientResponse>;
 
   getBeds(
     request: proto_services_task_svc_v1_bed_svc_pb.GetBedsRequest,

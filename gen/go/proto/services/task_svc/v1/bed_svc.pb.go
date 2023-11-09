@@ -342,6 +342,108 @@ func (x *GetBedResponse) GetName() string {
 	return ""
 }
 
+type GetBedByPatientRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	PatientId string `protobuf:"bytes,1,opt,name=patient_id,json=patientId,proto3" json:"patient_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
+}
+
+func (x *GetBedByPatientRequest) Reset() {
+	*x = GetBedByPatientRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetBedByPatientRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetBedByPatientRequest) ProtoMessage() {}
+
+func (x *GetBedByPatientRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetBedByPatientRequest.ProtoReflect.Descriptor instead.
+func (*GetBedByPatientRequest) Descriptor() ([]byte, []int) {
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetBedByPatientRequest) GetPatientId() string {
+	if x != nil {
+		return x.PatientId
+	}
+	return ""
+}
+
+type GetBedByPatientResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Room *GetBedByPatientResponse_Room `protobuf:"bytes,1,opt,name=room,proto3,oneof" json:"room,omitempty"`
+	Bed  *GetBedByPatientResponse_Bed  `protobuf:"bytes,2,opt,name=bed,proto3,oneof" json:"bed,omitempty"`
+}
+
+func (x *GetBedByPatientResponse) Reset() {
+	*x = GetBedByPatientResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetBedByPatientResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetBedByPatientResponse) ProtoMessage() {}
+
+func (x *GetBedByPatientResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetBedByPatientResponse.ProtoReflect.Descriptor instead.
+func (*GetBedByPatientResponse) Descriptor() ([]byte, []int) {
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetBedByPatientResponse) GetRoom() *GetBedByPatientResponse_Room {
+	if x != nil {
+		return x.Room
+	}
+	return nil
+}
+
+func (x *GetBedByPatientResponse) GetBed() *GetBedByPatientResponse_Bed {
+	if x != nil {
+		return x.Bed
+	}
+	return nil
+}
+
 type GetBedsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -351,7 +453,7 @@ type GetBedsRequest struct {
 func (x *GetBedsRequest) Reset() {
 	*x = GetBedsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[6]
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -364,7 +466,7 @@ func (x *GetBedsRequest) String() string {
 func (*GetBedsRequest) ProtoMessage() {}
 
 func (x *GetBedsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[6]
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -377,7 +479,7 @@ func (x *GetBedsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBedsRequest.ProtoReflect.Descriptor instead.
 func (*GetBedsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{6}
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{8}
 }
 
 type GetBedsResponse struct {
@@ -391,7 +493,7 @@ type GetBedsResponse struct {
 func (x *GetBedsResponse) Reset() {
 	*x = GetBedsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[7]
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -404,7 +506,7 @@ func (x *GetBedsResponse) String() string {
 func (*GetBedsResponse) ProtoMessage() {}
 
 func (x *GetBedsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[7]
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -417,7 +519,7 @@ func (x *GetBedsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBedsResponse.ProtoReflect.Descriptor instead.
 func (*GetBedsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{7}
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetBedsResponse) GetBeds() []*GetBedsResponse_Bed {
@@ -438,7 +540,7 @@ type GetBedsByRoomRequest struct {
 func (x *GetBedsByRoomRequest) Reset() {
 	*x = GetBedsByRoomRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[8]
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -451,7 +553,7 @@ func (x *GetBedsByRoomRequest) String() string {
 func (*GetBedsByRoomRequest) ProtoMessage() {}
 
 func (x *GetBedsByRoomRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[8]
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -464,7 +566,7 @@ func (x *GetBedsByRoomRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBedsByRoomRequest.ProtoReflect.Descriptor instead.
 func (*GetBedsByRoomRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{8}
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetBedsByRoomRequest) GetRoomId() string {
@@ -485,7 +587,7 @@ type GetBedsByRoomResponse struct {
 func (x *GetBedsByRoomResponse) Reset() {
 	*x = GetBedsByRoomResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[9]
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -498,7 +600,7 @@ func (x *GetBedsByRoomResponse) String() string {
 func (*GetBedsByRoomResponse) ProtoMessage() {}
 
 func (x *GetBedsByRoomResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[9]
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -511,7 +613,7 @@ func (x *GetBedsByRoomResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBedsByRoomResponse.ProtoReflect.Descriptor instead.
 func (*GetBedsByRoomResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{9}
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GetBedsByRoomResponse) GetBeds() []*GetBedsByRoomResponse_Bed {
@@ -534,7 +636,7 @@ type UpdateBedRequest struct {
 func (x *UpdateBedRequest) Reset() {
 	*x = UpdateBedRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[10]
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -547,7 +649,7 @@ func (x *UpdateBedRequest) String() string {
 func (*UpdateBedRequest) ProtoMessage() {}
 
 func (x *UpdateBedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[10]
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -560,7 +662,7 @@ func (x *UpdateBedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateBedRequest.ProtoReflect.Descriptor instead.
 func (*UpdateBedRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{10}
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *UpdateBedRequest) GetId() string {
@@ -593,7 +695,7 @@ type UpdateBedResponse struct {
 func (x *UpdateBedResponse) Reset() {
 	*x = UpdateBedResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[11]
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -606,7 +708,7 @@ func (x *UpdateBedResponse) String() string {
 func (*UpdateBedResponse) ProtoMessage() {}
 
 func (x *UpdateBedResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[11]
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -619,7 +721,7 @@ func (x *UpdateBedResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateBedResponse.ProtoReflect.Descriptor instead.
 func (*UpdateBedResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{11}
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{13}
 }
 
 type DeleteBedRequest struct {
@@ -633,7 +735,7 @@ type DeleteBedRequest struct {
 func (x *DeleteBedRequest) Reset() {
 	*x = DeleteBedRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[12]
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -646,7 +748,7 @@ func (x *DeleteBedRequest) String() string {
 func (*DeleteBedRequest) ProtoMessage() {}
 
 func (x *DeleteBedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[12]
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -659,7 +761,7 @@ func (x *DeleteBedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteBedRequest.ProtoReflect.Descriptor instead.
 func (*DeleteBedRequest) Descriptor() ([]byte, []int) {
-	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{12}
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *DeleteBedRequest) GetId() string {
@@ -678,7 +780,7 @@ type DeleteBedResponse struct {
 func (x *DeleteBedResponse) Reset() {
 	*x = DeleteBedResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[13]
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -691,7 +793,7 @@ func (x *DeleteBedResponse) String() string {
 func (*DeleteBedResponse) ProtoMessage() {}
 
 func (x *DeleteBedResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[13]
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -704,7 +806,7 @@ func (x *DeleteBedResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteBedResponse.ProtoReflect.Descriptor instead.
 func (*DeleteBedResponse) Descriptor() ([]byte, []int) {
-	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{13}
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{15}
 }
 
 type BulkCreateBedsResponse_Bed struct {
@@ -719,7 +821,7 @@ type BulkCreateBedsResponse_Bed struct {
 func (x *BulkCreateBedsResponse_Bed) Reset() {
 	*x = BulkCreateBedsResponse_Bed{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[14]
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -732,7 +834,7 @@ func (x *BulkCreateBedsResponse_Bed) String() string {
 func (*BulkCreateBedsResponse_Bed) ProtoMessage() {}
 
 func (x *BulkCreateBedsResponse_Bed) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[14]
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -762,6 +864,116 @@ func (x *BulkCreateBedsResponse_Bed) GetName() string {
 	return ""
 }
 
+type GetBedByPatientResponse_Room struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id   string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (x *GetBedByPatientResponse_Room) Reset() {
+	*x = GetBedByPatientResponse_Room{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[17]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetBedByPatientResponse_Room) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetBedByPatientResponse_Room) ProtoMessage() {}
+
+func (x *GetBedByPatientResponse_Room) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[17]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetBedByPatientResponse_Room.ProtoReflect.Descriptor instead.
+func (*GetBedByPatientResponse_Room) Descriptor() ([]byte, []int) {
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{7, 0}
+}
+
+func (x *GetBedByPatientResponse_Room) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *GetBedByPatientResponse_Room) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type GetBedByPatientResponse_Bed struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id   string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (x *GetBedByPatientResponse_Bed) Reset() {
+	*x = GetBedByPatientResponse_Bed{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[18]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetBedByPatientResponse_Bed) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetBedByPatientResponse_Bed) ProtoMessage() {}
+
+func (x *GetBedByPatientResponse_Bed) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[18]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetBedByPatientResponse_Bed.ProtoReflect.Descriptor instead.
+func (*GetBedByPatientResponse_Bed) Descriptor() ([]byte, []int) {
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{7, 1}
+}
+
+func (x *GetBedByPatientResponse_Bed) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *GetBedByPatientResponse_Bed) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 type GetBedsResponse_Bed struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -775,7 +987,7 @@ type GetBedsResponse_Bed struct {
 func (x *GetBedsResponse_Bed) Reset() {
 	*x = GetBedsResponse_Bed{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[15]
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -788,7 +1000,7 @@ func (x *GetBedsResponse_Bed) String() string {
 func (*GetBedsResponse_Bed) ProtoMessage() {}
 
 func (x *GetBedsResponse_Bed) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[15]
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -801,7 +1013,7 @@ func (x *GetBedsResponse_Bed) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBedsResponse_Bed.ProtoReflect.Descriptor instead.
 func (*GetBedsResponse_Bed) Descriptor() ([]byte, []int) {
-	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{7, 0}
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{9, 0}
 }
 
 func (x *GetBedsResponse_Bed) GetId() string {
@@ -837,7 +1049,7 @@ type GetBedsByRoomResponse_Bed struct {
 func (x *GetBedsByRoomResponse_Bed) Reset() {
 	*x = GetBedsByRoomResponse_Bed{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[16]
+		mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -850,7 +1062,7 @@ func (x *GetBedsByRoomResponse_Bed) String() string {
 func (*GetBedsByRoomResponse_Bed) ProtoMessage() {}
 
 func (x *GetBedsByRoomResponse_Bed) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[16]
+	mi := &file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -863,7 +1075,7 @@ func (x *GetBedsByRoomResponse_Bed) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBedsByRoomResponse_Bed.ProtoReflect.Descriptor instead.
 func (*GetBedsByRoomResponse_Bed) Descriptor() ([]byte, []int) {
-	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{9, 0}
+	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP(), []int{11, 0}
 }
 
 func (x *GetBedsByRoomResponse_Bed) GetId() string {
@@ -916,7 +1128,29 @@ var file_proto_services_task_svc_v1_bed_svc_proto_rawDesc = []byte{
 	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x17, 0x0a,
 	0x07, 0x72, 0x6f, 0x6f, 0x6d, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
 	0x72, 0x6f, 0x6f, 0x6d, 0x49, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x10, 0x0a, 0x0e, 0x47, 0x65,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x37, 0x0a, 0x16, 0x47, 0x65,
+	0x74, 0x42, 0x65, 0x64, 0x42, 0x79, 0x50, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x70, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x5f,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x70, 0x61, 0x74, 0x69, 0x65, 0x6e,
+	0x74, 0x49, 0x64, 0x22, 0xa4, 0x02, 0x0a, 0x17, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x42, 0x79,
+	0x50, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x51, 0x0a, 0x04, 0x72, 0x6f, 0x6f, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x38, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74,
+	0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x42, 0x65,
+	0x64, 0x42, 0x79, 0x50, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x2e, 0x52, 0x6f, 0x6f, 0x6d, 0x48, 0x00, 0x52, 0x04, 0x72, 0x6f, 0x6f, 0x6d, 0x88,
+	0x01, 0x01, 0x12, 0x4e, 0x0a, 0x03, 0x62, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x37, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74,
+	0x42, 0x65, 0x64, 0x42, 0x79, 0x50, 0x61, 0x74, 0x69, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x2e, 0x42, 0x65, 0x64, 0x48, 0x01, 0x52, 0x03, 0x62, 0x65, 0x64, 0x88,
+	0x01, 0x01, 0x1a, 0x2a, 0x0a, 0x04, 0x52, 0x6f, 0x6f, 0x6d, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61,
+	0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x1a, 0x29,
+	0x0a, 0x03, 0x42, 0x65, 0x64, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x42, 0x07, 0x0a, 0x05, 0x5f, 0x72, 0x6f,
+	0x6f, 0x6d, 0x42, 0x06, 0x0a, 0x04, 0x5f, 0x62, 0x65, 0x64, 0x22, 0x10, 0x0a, 0x0e, 0x47, 0x65,
 	0x74, 0x42, 0x65, 0x64, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x9a, 0x01, 0x0a,
 	0x0f, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
 	0x12, 0x43, 0x0a, 0x04, 0x62, 0x65, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2f,
@@ -951,7 +1185,7 @@ var file_proto_services_task_svc_v1_bed_svc_proto_rawDesc = []byte{
 	0x22, 0x0a, 0x10, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x42, 0x65, 0x64, 0x52, 0x65, 0x71, 0x75,
 	0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
 	0x02, 0x69, 0x64, 0x22, 0x13, 0x0a, 0x11, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x42, 0x65, 0x64,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x8c, 0x06, 0x0a, 0x0a, 0x42, 0x65, 0x64,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x8a, 0x07, 0x0a, 0x0a, 0x42, 0x65, 0x64,
 	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x6a, 0x0a, 0x09, 0x43, 0x72, 0x65, 0x61, 0x74,
 	0x65, 0x42, 0x65, 0x64, 0x12, 0x2c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72,
 	0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76,
@@ -973,48 +1207,56 @@ var file_proto_services_task_svc_v1_bed_svc_proto_rawDesc = []byte{
 	0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76,
 	0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31,
 	0x2e, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x00, 0x12, 0x64, 0x0a, 0x07, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x73, 0x12, 0x2a, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61,
-	0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64,
-	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x00, 0x12, 0x7c, 0x0a, 0x0f, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x42, 0x79, 0x50, 0x61, 0x74,
+	0x69, 0x65, 0x6e, 0x74, 0x12, 0x32, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76,
+	0x31, 0x2e, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x42, 0x79, 0x50, 0x61, 0x74, 0x69, 0x65, 0x6e,
+	0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x33, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73,
-	0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x76, 0x0a, 0x0d, 0x47, 0x65, 0x74, 0x42, 0x65,
-	0x64, 0x73, 0x42, 0x79, 0x52, 0x6f, 0x6f, 0x6d, 0x12, 0x30, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x42, 0x79, 0x50, 0x61,
+	0x74, 0x69, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
+	0x64, 0x0a, 0x07, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x73, 0x12, 0x2a, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b,
+	0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x73, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63,
+	0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x76, 0x0a, 0x0d, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x73,
+	0x42, 0x79, 0x52, 0x6f, 0x6f, 0x6d, 0x12, 0x30, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63,
+	0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x73, 0x42, 0x79, 0x52, 0x6f, 0x6f,
+	0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73,
 	0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x73, 0x42, 0x79, 0x52,
-	0x6f, 0x6f, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b,
-	0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x42, 0x65, 0x64, 0x73, 0x42,
-	0x79, 0x52, 0x6f, 0x6f, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
-	0x6a, 0x0a, 0x09, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x42, 0x65, 0x64, 0x12, 0x2c, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61,
-	0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
-	0x42, 0x65, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x70, 0x72, 0x6f,
+	0x6f, 0x6f, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x6a, 0x0a,
+	0x09, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x42, 0x65, 0x64, 0x12, 0x2c, 0x2e, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b,
 	0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x42, 0x65,
-	0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x6a, 0x0a, 0x09, 0x44,
-	0x65, 0x6c, 0x65, 0x74, 0x65, 0x42, 0x65, 0x64, 0x12, 0x2c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73,
-	0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x42, 0x65, 0x64, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73,
+	0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x42, 0x65, 0x64, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x6a, 0x0a, 0x09, 0x44, 0x65, 0x6c,
+	0x65, 0x74, 0x65, 0x42, 0x65, 0x64, 0x12, 0x2c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73,
 	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63,
-	0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x42, 0x65, 0x64, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0xd1, 0x01, 0x0a, 0x1e, 0x63, 0x6f, 0x6d, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74,
-	0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x42, 0x0b, 0x42, 0x65, 0x64, 0x53,
-	0x76, 0x63, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x67, 0x65, 0x6e, 0x2f, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x74, 0x61,
-	0x73, 0x6b, 0x2d, 0x73, 0x76, 0x63, 0xa2, 0x02, 0x03, 0x50, 0x53, 0x54, 0xaa, 0x02, 0x19, 0x50,
-	0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x54, 0x61,
-	0x73, 0x6b, 0x53, 0x76, 0x63, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x19, 0x50, 0x72, 0x6f, 0x74, 0x6f,
-	0x5c, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5c, 0x54, 0x61, 0x73, 0x6b, 0x53, 0x76,
-	0x63, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x25, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x5c, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x73, 0x5c, 0x54, 0x61, 0x73, 0x6b, 0x53, 0x76, 0x63, 0x5c, 0x56, 0x31,
-	0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1c, 0x50,
-	0x72, 0x6f, 0x74, 0x6f, 0x3a, 0x3a, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x3a, 0x3a,
-	0x54, 0x61, 0x73, 0x6b, 0x53, 0x76, 0x63, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x42, 0x65, 0x64, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76,
+	0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x42, 0x65, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0xd1, 0x01, 0x0a, 0x1e, 0x63, 0x6f, 0x6d, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x74, 0x61, 0x73,
+	0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x42, 0x0b, 0x42, 0x65, 0x64, 0x53, 0x76, 0x63,
+	0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1b, 0x67, 0x65, 0x6e, 0x2f, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x74, 0x61, 0x73, 0x6b,
+	0x2d, 0x73, 0x76, 0x63, 0xa2, 0x02, 0x03, 0x50, 0x53, 0x54, 0xaa, 0x02, 0x19, 0x50, 0x72, 0x6f,
+	0x74, 0x6f, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x54, 0x61, 0x73, 0x6b,
+	0x53, 0x76, 0x63, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x19, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x5c, 0x53,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5c, 0x54, 0x61, 0x73, 0x6b, 0x53, 0x76, 0x63, 0x5c,
+	0x56, 0x31, 0xe2, 0x02, 0x25, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x5c, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x73, 0x5c, 0x54, 0x61, 0x73, 0x6b, 0x53, 0x76, 0x63, 0x5c, 0x56, 0x31, 0x5c, 0x47,
+	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1c, 0x50, 0x72, 0x6f,
+	0x74, 0x6f, 0x3a, 0x3a, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x3a, 0x3a, 0x54, 0x61,
+	0x73, 0x6b, 0x53, 0x76, 0x63, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -1029,49 +1271,57 @@ func file_proto_services_task_svc_v1_bed_svc_proto_rawDescGZIP() []byte {
 	return file_proto_services_task_svc_v1_bed_svc_proto_rawDescData
 }
 
-var file_proto_services_task_svc_v1_bed_svc_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_proto_services_task_svc_v1_bed_svc_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_proto_services_task_svc_v1_bed_svc_proto_goTypes = []interface{}{
-	(*CreateBedRequest)(nil),           // 0: proto.services.task_svc.v1.CreateBedRequest
-	(*CreateBedResponse)(nil),          // 1: proto.services.task_svc.v1.CreateBedResponse
-	(*BulkCreateBedsRequest)(nil),      // 2: proto.services.task_svc.v1.BulkCreateBedsRequest
-	(*BulkCreateBedsResponse)(nil),     // 3: proto.services.task_svc.v1.BulkCreateBedsResponse
-	(*GetBedRequest)(nil),              // 4: proto.services.task_svc.v1.GetBedRequest
-	(*GetBedResponse)(nil),             // 5: proto.services.task_svc.v1.GetBedResponse
-	(*GetBedsRequest)(nil),             // 6: proto.services.task_svc.v1.GetBedsRequest
-	(*GetBedsResponse)(nil),            // 7: proto.services.task_svc.v1.GetBedsResponse
-	(*GetBedsByRoomRequest)(nil),       // 8: proto.services.task_svc.v1.GetBedsByRoomRequest
-	(*GetBedsByRoomResponse)(nil),      // 9: proto.services.task_svc.v1.GetBedsByRoomResponse
-	(*UpdateBedRequest)(nil),           // 10: proto.services.task_svc.v1.UpdateBedRequest
-	(*UpdateBedResponse)(nil),          // 11: proto.services.task_svc.v1.UpdateBedResponse
-	(*DeleteBedRequest)(nil),           // 12: proto.services.task_svc.v1.DeleteBedRequest
-	(*DeleteBedResponse)(nil),          // 13: proto.services.task_svc.v1.DeleteBedResponse
-	(*BulkCreateBedsResponse_Bed)(nil), // 14: proto.services.task_svc.v1.BulkCreateBedsResponse.Bed
-	(*GetBedsResponse_Bed)(nil),        // 15: proto.services.task_svc.v1.GetBedsResponse.Bed
-	(*GetBedsByRoomResponse_Bed)(nil),  // 16: proto.services.task_svc.v1.GetBedsByRoomResponse.Bed
+	(*CreateBedRequest)(nil),             // 0: proto.services.task_svc.v1.CreateBedRequest
+	(*CreateBedResponse)(nil),            // 1: proto.services.task_svc.v1.CreateBedResponse
+	(*BulkCreateBedsRequest)(nil),        // 2: proto.services.task_svc.v1.BulkCreateBedsRequest
+	(*BulkCreateBedsResponse)(nil),       // 3: proto.services.task_svc.v1.BulkCreateBedsResponse
+	(*GetBedRequest)(nil),                // 4: proto.services.task_svc.v1.GetBedRequest
+	(*GetBedResponse)(nil),               // 5: proto.services.task_svc.v1.GetBedResponse
+	(*GetBedByPatientRequest)(nil),       // 6: proto.services.task_svc.v1.GetBedByPatientRequest
+	(*GetBedByPatientResponse)(nil),      // 7: proto.services.task_svc.v1.GetBedByPatientResponse
+	(*GetBedsRequest)(nil),               // 8: proto.services.task_svc.v1.GetBedsRequest
+	(*GetBedsResponse)(nil),              // 9: proto.services.task_svc.v1.GetBedsResponse
+	(*GetBedsByRoomRequest)(nil),         // 10: proto.services.task_svc.v1.GetBedsByRoomRequest
+	(*GetBedsByRoomResponse)(nil),        // 11: proto.services.task_svc.v1.GetBedsByRoomResponse
+	(*UpdateBedRequest)(nil),             // 12: proto.services.task_svc.v1.UpdateBedRequest
+	(*UpdateBedResponse)(nil),            // 13: proto.services.task_svc.v1.UpdateBedResponse
+	(*DeleteBedRequest)(nil),             // 14: proto.services.task_svc.v1.DeleteBedRequest
+	(*DeleteBedResponse)(nil),            // 15: proto.services.task_svc.v1.DeleteBedResponse
+	(*BulkCreateBedsResponse_Bed)(nil),   // 16: proto.services.task_svc.v1.BulkCreateBedsResponse.Bed
+	(*GetBedByPatientResponse_Room)(nil), // 17: proto.services.task_svc.v1.GetBedByPatientResponse.Room
+	(*GetBedByPatientResponse_Bed)(nil),  // 18: proto.services.task_svc.v1.GetBedByPatientResponse.Bed
+	(*GetBedsResponse_Bed)(nil),          // 19: proto.services.task_svc.v1.GetBedsResponse.Bed
+	(*GetBedsByRoomResponse_Bed)(nil),    // 20: proto.services.task_svc.v1.GetBedsByRoomResponse.Bed
 }
 var file_proto_services_task_svc_v1_bed_svc_proto_depIdxs = []int32{
-	14, // 0: proto.services.task_svc.v1.BulkCreateBedsResponse.beds:type_name -> proto.services.task_svc.v1.BulkCreateBedsResponse.Bed
-	15, // 1: proto.services.task_svc.v1.GetBedsResponse.beds:type_name -> proto.services.task_svc.v1.GetBedsResponse.Bed
-	16, // 2: proto.services.task_svc.v1.GetBedsByRoomResponse.beds:type_name -> proto.services.task_svc.v1.GetBedsByRoomResponse.Bed
-	0,  // 3: proto.services.task_svc.v1.BedService.CreateBed:input_type -> proto.services.task_svc.v1.CreateBedRequest
-	2,  // 4: proto.services.task_svc.v1.BedService.BulkCreateBeds:input_type -> proto.services.task_svc.v1.BulkCreateBedsRequest
-	4,  // 5: proto.services.task_svc.v1.BedService.GetBed:input_type -> proto.services.task_svc.v1.GetBedRequest
-	6,  // 6: proto.services.task_svc.v1.BedService.GetBeds:input_type -> proto.services.task_svc.v1.GetBedsRequest
-	8,  // 7: proto.services.task_svc.v1.BedService.GetBedsByRoom:input_type -> proto.services.task_svc.v1.GetBedsByRoomRequest
-	10, // 8: proto.services.task_svc.v1.BedService.UpdateBed:input_type -> proto.services.task_svc.v1.UpdateBedRequest
-	12, // 9: proto.services.task_svc.v1.BedService.DeleteBed:input_type -> proto.services.task_svc.v1.DeleteBedRequest
-	1,  // 10: proto.services.task_svc.v1.BedService.CreateBed:output_type -> proto.services.task_svc.v1.CreateBedResponse
-	3,  // 11: proto.services.task_svc.v1.BedService.BulkCreateBeds:output_type -> proto.services.task_svc.v1.BulkCreateBedsResponse
-	5,  // 12: proto.services.task_svc.v1.BedService.GetBed:output_type -> proto.services.task_svc.v1.GetBedResponse
-	7,  // 13: proto.services.task_svc.v1.BedService.GetBeds:output_type -> proto.services.task_svc.v1.GetBedsResponse
-	9,  // 14: proto.services.task_svc.v1.BedService.GetBedsByRoom:output_type -> proto.services.task_svc.v1.GetBedsByRoomResponse
-	11, // 15: proto.services.task_svc.v1.BedService.UpdateBed:output_type -> proto.services.task_svc.v1.UpdateBedResponse
-	13, // 16: proto.services.task_svc.v1.BedService.DeleteBed:output_type -> proto.services.task_svc.v1.DeleteBedResponse
-	10, // [10:17] is the sub-list for method output_type
-	3,  // [3:10] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	16, // 0: proto.services.task_svc.v1.BulkCreateBedsResponse.beds:type_name -> proto.services.task_svc.v1.BulkCreateBedsResponse.Bed
+	17, // 1: proto.services.task_svc.v1.GetBedByPatientResponse.room:type_name -> proto.services.task_svc.v1.GetBedByPatientResponse.Room
+	18, // 2: proto.services.task_svc.v1.GetBedByPatientResponse.bed:type_name -> proto.services.task_svc.v1.GetBedByPatientResponse.Bed
+	19, // 3: proto.services.task_svc.v1.GetBedsResponse.beds:type_name -> proto.services.task_svc.v1.GetBedsResponse.Bed
+	20, // 4: proto.services.task_svc.v1.GetBedsByRoomResponse.beds:type_name -> proto.services.task_svc.v1.GetBedsByRoomResponse.Bed
+	0,  // 5: proto.services.task_svc.v1.BedService.CreateBed:input_type -> proto.services.task_svc.v1.CreateBedRequest
+	2,  // 6: proto.services.task_svc.v1.BedService.BulkCreateBeds:input_type -> proto.services.task_svc.v1.BulkCreateBedsRequest
+	4,  // 7: proto.services.task_svc.v1.BedService.GetBed:input_type -> proto.services.task_svc.v1.GetBedRequest
+	6,  // 8: proto.services.task_svc.v1.BedService.GetBedByPatient:input_type -> proto.services.task_svc.v1.GetBedByPatientRequest
+	8,  // 9: proto.services.task_svc.v1.BedService.GetBeds:input_type -> proto.services.task_svc.v1.GetBedsRequest
+	10, // 10: proto.services.task_svc.v1.BedService.GetBedsByRoom:input_type -> proto.services.task_svc.v1.GetBedsByRoomRequest
+	12, // 11: proto.services.task_svc.v1.BedService.UpdateBed:input_type -> proto.services.task_svc.v1.UpdateBedRequest
+	14, // 12: proto.services.task_svc.v1.BedService.DeleteBed:input_type -> proto.services.task_svc.v1.DeleteBedRequest
+	1,  // 13: proto.services.task_svc.v1.BedService.CreateBed:output_type -> proto.services.task_svc.v1.CreateBedResponse
+	3,  // 14: proto.services.task_svc.v1.BedService.BulkCreateBeds:output_type -> proto.services.task_svc.v1.BulkCreateBedsResponse
+	5,  // 15: proto.services.task_svc.v1.BedService.GetBed:output_type -> proto.services.task_svc.v1.GetBedResponse
+	7,  // 16: proto.services.task_svc.v1.BedService.GetBedByPatient:output_type -> proto.services.task_svc.v1.GetBedByPatientResponse
+	9,  // 17: proto.services.task_svc.v1.BedService.GetBeds:output_type -> proto.services.task_svc.v1.GetBedsResponse
+	11, // 18: proto.services.task_svc.v1.BedService.GetBedsByRoom:output_type -> proto.services.task_svc.v1.GetBedsByRoomResponse
+	13, // 19: proto.services.task_svc.v1.BedService.UpdateBed:output_type -> proto.services.task_svc.v1.UpdateBedResponse
+	15, // 20: proto.services.task_svc.v1.BedService.DeleteBed:output_type -> proto.services.task_svc.v1.DeleteBedResponse
+	13, // [13:21] is the sub-list for method output_type
+	5,  // [5:13] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_proto_services_task_svc_v1_bed_svc_proto_init() }
@@ -1153,7 +1403,7 @@ func file_proto_services_task_svc_v1_bed_svc_proto_init() {
 			}
 		}
 		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetBedsRequest); i {
+			switch v := v.(*GetBedByPatientRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1165,7 +1415,7 @@ func file_proto_services_task_svc_v1_bed_svc_proto_init() {
 			}
 		}
 		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetBedsResponse); i {
+			switch v := v.(*GetBedByPatientResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1177,7 +1427,7 @@ func file_proto_services_task_svc_v1_bed_svc_proto_init() {
 			}
 		}
 		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetBedsByRoomRequest); i {
+			switch v := v.(*GetBedsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1189,7 +1439,7 @@ func file_proto_services_task_svc_v1_bed_svc_proto_init() {
 			}
 		}
 		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetBedsByRoomResponse); i {
+			switch v := v.(*GetBedsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1201,7 +1451,7 @@ func file_proto_services_task_svc_v1_bed_svc_proto_init() {
 			}
 		}
 		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateBedRequest); i {
+			switch v := v.(*GetBedsByRoomRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1213,7 +1463,7 @@ func file_proto_services_task_svc_v1_bed_svc_proto_init() {
 			}
 		}
 		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateBedResponse); i {
+			switch v := v.(*GetBedsByRoomResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1225,7 +1475,7 @@ func file_proto_services_task_svc_v1_bed_svc_proto_init() {
 			}
 		}
 		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteBedRequest); i {
+			switch v := v.(*UpdateBedRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1237,7 +1487,7 @@ func file_proto_services_task_svc_v1_bed_svc_proto_init() {
 			}
 		}
 		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteBedResponse); i {
+			switch v := v.(*UpdateBedResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1249,7 +1499,7 @@ func file_proto_services_task_svc_v1_bed_svc_proto_init() {
 			}
 		}
 		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BulkCreateBedsResponse_Bed); i {
+			switch v := v.(*DeleteBedRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1261,7 +1511,7 @@ func file_proto_services_task_svc_v1_bed_svc_proto_init() {
 			}
 		}
 		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetBedsResponse_Bed); i {
+			switch v := v.(*DeleteBedResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1273,6 +1523,54 @@ func file_proto_services_task_svc_v1_bed_svc_proto_init() {
 			}
 		}
 		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BulkCreateBedsResponse_Bed); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetBedByPatientResponse_Room); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetBedByPatientResponse_Bed); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetBedsResponse_Bed); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetBedsByRoomResponse_Bed); i {
 			case 0:
 				return &v.state
@@ -1285,14 +1583,15 @@ func file_proto_services_task_svc_v1_bed_svc_proto_init() {
 			}
 		}
 	}
-	file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[10].OneofWrappers = []interface{}{}
+	file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[7].OneofWrappers = []interface{}{}
+	file_proto_services_task_svc_v1_bed_svc_proto_msgTypes[12].OneofWrappers = []interface{}{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_services_task_svc_v1_bed_svc_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
