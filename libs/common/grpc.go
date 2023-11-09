@@ -3,21 +3,21 @@ package common
 import (
 	"context"
 	"encoding/base64"
+	"hwutil"
+	"logging"
+	"net"
+
 	"github.com/dapr/go-sdk/dapr/proto/runtime/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/google/uuid"
-	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
-	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
-	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
+	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
+	metautils "github.com/grpc-ecosystem/go-grpc-middleware/v2/metadata"
 	"github.com/rs/zerolog"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
-	"hwutil"
-	"logging"
-	"net"
 )
 
 type claimsKey struct{}
@@ -40,8 +40,7 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	loggingInterceptor := loggingUnaryInterceptor
 	authInterceptor := authUnaryInterceptor
 	validateInterceptor := validateUnaryInterceptor
-	chain := grpc_middleware.ChainUnaryServer(loggingInterceptor, authInterceptor, validateInterceptor)
-	grpcServerOption := grpc.UnaryInterceptor(chain)
+	grpcServerOption := grpc.ChainUnaryInterceptor(loggingInterceptor, authInterceptor, validateInterceptor)
 
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
@@ -328,7 +327,7 @@ func resolveLogLevelForError(err error) zerolog.Level {
 	return zerolog.WarnLevel
 }
 
-func redactMetadata(m metautils.NiceMD) metautils.NiceMD {
+func redactMetadata(m metautils.MD) metautils.MD {
 	if arr := m["authorization"]; arr != nil {
 		for i := range arr {
 			arr[i] = logging.OmitAll(arr[i])
