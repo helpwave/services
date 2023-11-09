@@ -139,6 +139,7 @@ const GetBedByPatientResponse_Room$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'ward_id', '3': 3, '4': 1, '5': 9, '10': 'wardId'},
   ],
 };
 
@@ -156,9 +157,9 @@ final $typed_data.Uint8List getBedByPatientResponseDescriptor = $convert.base64D
     'ChdHZXRCZWRCeVBhdGllbnRSZXNwb25zZRJRCgRyb29tGAEgASgLMjgucHJvdG8uc2VydmljZX'
     'MudGFza19zdmMudjEuR2V0QmVkQnlQYXRpZW50UmVzcG9uc2UuUm9vbUgAUgRyb29tiAEBEk4K'
     'A2JlZBgCIAEoCzI3LnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldEJlZEJ5UGF0aWVudF'
-    'Jlc3BvbnNlLkJlZEgBUgNiZWSIAQEaKgoEUm9vbRIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgC'
-    'IAEoCVIEbmFtZRopCgNCZWQSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWVCBw'
-    'oFX3Jvb21CBgoEX2JlZA==');
+    'Jlc3BvbnNlLkJlZEgBUgNiZWSIAQEaQwoEUm9vbRIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgC'
+    'IAEoCVIEbmFtZRIXCgd3YXJkX2lkGAMgASgJUgZ3YXJkSWQaKQoDQmVkEg4KAmlkGAEgASgJUg'
+    'JpZBISCgRuYW1lGAIgASgJUgRuYW1lQgcKBV9yb29tQgYKBF9iZWQ=');
 
 @$core.Deprecated('Use getBedsRequestDescriptor instead')
 const GetBedsRequest$json = {

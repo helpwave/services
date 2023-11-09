@@ -66,6 +66,7 @@ message GetBedByPatientResponse {
   message Room {
     string id = 1;
     string name = 2;
+    string ward_id = 3;
   }
 
   message Bed {

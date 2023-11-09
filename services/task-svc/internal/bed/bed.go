@@ -3,17 +3,19 @@ package bed
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
 
+	"github.com/google/uuid"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	pb "gen/proto/services/task_svc/v1"
-	zlog "github.com/rs/zerolog/log"
 	pbhelpers "proto_helpers/task_svc/v1"
+
+	zlog "github.com/rs/zerolog/log"
 )
 
 type ServiceServer struct {
@@ -85,6 +87,35 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		Id:     bed.ID.String(),
 		RoomId: bed.RoomID.String(),
 		Name:   bed.Name,
+	}, nil
+}
+
+func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatientRequest) (*pb.GetBedByPatientResponse, error) {
+	patientRepo := repositories.PatientRepo(ctx)
+
+	// TODO: Auth
+
+	patientId, err := uuid.Parse(req.PatientId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	patient, err := patientRepo.GetPatientById(patientId)
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return &pb.GetBedByPatientResponse{}, nil // no bed or room found
+		}
+	}
+
+	return &pb.GetBedByPatientResponse{
+		Room: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetBedByPatientResponse_Room {
+			return pb.GetBedByPatientResponse_Room{Id: bed.Room.ID.String(), Name: bed.Room.Name, WardId: bed.Room.WardID.String()}
+		}),
+		Bed: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetBedByPatientResponse_Bed {
+			return pb.GetBedByPatientResponse_Bed{Id: bed.ID.String(), Name: bed.Name}
+		}),
 	}, nil
 }
 

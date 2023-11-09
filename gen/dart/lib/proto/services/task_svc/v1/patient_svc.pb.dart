@@ -185,6 +185,7 @@ class GetPatientResponse_Room extends $pb.GeneratedMessage {
   factory GetPatientResponse_Room({
     $core.String? id,
     $core.String? name,
+    $core.String? wardId,
   }) {
     final $result = create();
     if (id != null) {
@@ -192,6 +193,9 @@ class GetPatientResponse_Room extends $pb.GeneratedMessage {
     }
     if (name != null) {
       $result.name = name;
+    }
+    if (wardId != null) {
+      $result.wardId = wardId;
     }
     return $result;
   }
@@ -202,6 +206,7 @@ class GetPatientResponse_Room extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientResponse.Room', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'wardId')
     ..hasRequiredFields = false
   ;
 
@@ -243,6 +248,15 @@ class GetPatientResponse_Room extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
   void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get wardId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set wardId($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasWardId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearWardId() => clearField(3);
 }
 
 class GetPatientResponse_Bed extends $pb.GeneratedMessage {
@@ -316,6 +330,7 @@ class GetPatientResponse extends $pb.GeneratedMessage {
     $core.String? notes,
   @$core.Deprecated('This field is deprecated.')
     $core.String? bedId,
+  @$core.Deprecated('This field is deprecated.')
     $core.String? wardId,
     GetPatientResponse_Room? room,
     GetPatientResponse_Bed? bed,
@@ -335,6 +350,7 @@ class GetPatientResponse extends $pb.GeneratedMessage {
       $result.bedId = bedId;
     }
     if (wardId != null) {
+      // ignore: deprecated_member_use_from_same_package
       $result.wardId = wardId;
     }
     if (room != null) {
@@ -421,12 +437,16 @@ class GetPatientResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   void clearBedId() => clearField(4);
 
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(5)
   $core.String get wardId => $_getSZ(4);
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(5)
   set wardId($core.String v) { $_setString(4, v); }
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(5)
   $core.bool hasWardId() => $_has(4);
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(5)
   void clearWardId() => clearField(5);
 
@@ -1913,6 +1933,7 @@ class GetPatientDetailsResponse_Room extends $pb.GeneratedMessage {
   factory GetPatientDetailsResponse_Room({
     $core.String? id,
     $core.String? name,
+    $core.String? wardId,
   }) {
     final $result = create();
     if (id != null) {
@@ -1920,6 +1941,9 @@ class GetPatientDetailsResponse_Room extends $pb.GeneratedMessage {
     }
     if (name != null) {
       $result.name = name;
+    }
+    if (wardId != null) {
+      $result.wardId = wardId;
     }
     return $result;
   }
@@ -1930,6 +1954,7 @@ class GetPatientDetailsResponse_Room extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientDetailsResponse.Room', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'wardId')
     ..hasRequiredFields = false
   ;
 
@@ -1971,6 +1996,15 @@ class GetPatientDetailsResponse_Room extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
   void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get wardId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set wardId($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasWardId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearWardId() => clearField(3);
 }
 
 class GetPatientDetailsResponse_Bed extends $pb.GeneratedMessage {
@@ -2264,6 +2298,7 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
     $core.String? humanReadableIdentifier,
     $core.String? notes,
     $core.Iterable<GetPatientDetailsResponse_Task>? tasks,
+  @$core.Deprecated('This field is deprecated.')
     $core.String? wardId,
     GetPatientDetailsResponse_Room? room,
     GetPatientDetailsResponse_Bed? bed,
@@ -2285,6 +2320,7 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
       $result.tasks.addAll(tasks);
     }
     if (wardId != null) {
+      // ignore: deprecated_member_use_from_same_package
       $result.wardId = wardId;
     }
     if (room != null) {
@@ -2372,12 +2408,16 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.List<GetPatientDetailsResponse_Task> get tasks => $_getList(4);
 
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(6)
   $core.String get wardId => $_getSZ(5);
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(6)
   set wardId($core.String v) { $_setString(5, v); }
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(6)
   $core.bool hasWardId() => $_has(5);
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(6)
   void clearWardId() => clearField(6);
 

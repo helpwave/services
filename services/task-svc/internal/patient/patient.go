@@ -4,16 +4,17 @@ import (
 	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
 	"task-svc/internal/tracking"
+
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ServiceServer struct {
@@ -90,6 +91,12 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 		Notes:                   patient.Notes,
 		BedId:                   hwutil.UUIDToStringPtr(patient.BedID),
 		WardId:                  hwutil.UUIDToStringPtr(wardId),
+		Room: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientResponse_Room {
+			return pb.GetPatientResponse_Room{Id: bed.Room.ID.String(), Name: bed.Room.Name, WardId: bed.Room.WardID.String()}
+		}),
+		Bed: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientResponse_Bed {
+			return pb.GetPatientResponse_Bed{Id: bed.ID.String(), Name: bed.Name}
+		}),
 	}, nil
 }
 
@@ -469,6 +476,12 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		Name:                    patient.HumanReadableIdentifier, // TODO replace later
 		Tasks:                   mappedTasks,
 		WardId:                  hwutil.UUIDToStringPtr(wardId),
+		Room: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientDetailsResponse_Room {
+			return pb.GetPatientDetailsResponse_Room{Id: bed.Room.ID.String(), Name: bed.Room.Name, WardId: bed.Room.WardID.String()}
+		}),
+		Bed: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientDetailsResponse_Bed {
+			return pb.GetPatientDetailsResponse_Bed{Id: bed.ID.String(), Name: bed.Name}
+		}),
 	}, nil
 }
 
