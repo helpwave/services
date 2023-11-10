@@ -19,13 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	BedService_CreateBed_FullMethodName      = "/proto.services.task_svc.v1.BedService/CreateBed"
-	BedService_BulkCreateBeds_FullMethodName = "/proto.services.task_svc.v1.BedService/BulkCreateBeds"
-	BedService_GetBed_FullMethodName         = "/proto.services.task_svc.v1.BedService/GetBed"
-	BedService_GetBeds_FullMethodName        = "/proto.services.task_svc.v1.BedService/GetBeds"
-	BedService_GetBedsByRoom_FullMethodName  = "/proto.services.task_svc.v1.BedService/GetBedsByRoom"
-	BedService_UpdateBed_FullMethodName      = "/proto.services.task_svc.v1.BedService/UpdateBed"
-	BedService_DeleteBed_FullMethodName      = "/proto.services.task_svc.v1.BedService/DeleteBed"
+	BedService_CreateBed_FullMethodName       = "/proto.services.task_svc.v1.BedService/CreateBed"
+	BedService_BulkCreateBeds_FullMethodName  = "/proto.services.task_svc.v1.BedService/BulkCreateBeds"
+	BedService_GetBed_FullMethodName          = "/proto.services.task_svc.v1.BedService/GetBed"
+	BedService_GetBedByPatient_FullMethodName = "/proto.services.task_svc.v1.BedService/GetBedByPatient"
+	BedService_GetBeds_FullMethodName         = "/proto.services.task_svc.v1.BedService/GetBeds"
+	BedService_GetBedsByRoom_FullMethodName   = "/proto.services.task_svc.v1.BedService/GetBedsByRoom"
+	BedService_UpdateBed_FullMethodName       = "/proto.services.task_svc.v1.BedService/UpdateBed"
+	BedService_DeleteBed_FullMethodName       = "/proto.services.task_svc.v1.BedService/DeleteBed"
 )
 
 // BedServiceClient is the client API for BedService service.
@@ -35,6 +36,7 @@ type BedServiceClient interface {
 	CreateBed(ctx context.Context, in *CreateBedRequest, opts ...grpc.CallOption) (*CreateBedResponse, error)
 	BulkCreateBeds(ctx context.Context, in *BulkCreateBedsRequest, opts ...grpc.CallOption) (*BulkCreateBedsResponse, error)
 	GetBed(ctx context.Context, in *GetBedRequest, opts ...grpc.CallOption) (*GetBedResponse, error)
+	GetBedByPatient(ctx context.Context, in *GetBedByPatientRequest, opts ...grpc.CallOption) (*GetBedByPatientResponse, error)
 	GetBeds(ctx context.Context, in *GetBedsRequest, opts ...grpc.CallOption) (*GetBedsResponse, error)
 	GetBedsByRoom(ctx context.Context, in *GetBedsByRoomRequest, opts ...grpc.CallOption) (*GetBedsByRoomResponse, error)
 	UpdateBed(ctx context.Context, in *UpdateBedRequest, opts ...grpc.CallOption) (*UpdateBedResponse, error)
@@ -70,6 +72,15 @@ func (c *bedServiceClient) BulkCreateBeds(ctx context.Context, in *BulkCreateBed
 func (c *bedServiceClient) GetBed(ctx context.Context, in *GetBedRequest, opts ...grpc.CallOption) (*GetBedResponse, error) {
 	out := new(GetBedResponse)
 	err := c.cc.Invoke(ctx, BedService_GetBed_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bedServiceClient) GetBedByPatient(ctx context.Context, in *GetBedByPatientRequest, opts ...grpc.CallOption) (*GetBedByPatientResponse, error) {
+	out := new(GetBedByPatientResponse)
+	err := c.cc.Invoke(ctx, BedService_GetBedByPatient_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -119,6 +130,7 @@ type BedServiceServer interface {
 	CreateBed(context.Context, *CreateBedRequest) (*CreateBedResponse, error)
 	BulkCreateBeds(context.Context, *BulkCreateBedsRequest) (*BulkCreateBedsResponse, error)
 	GetBed(context.Context, *GetBedRequest) (*GetBedResponse, error)
+	GetBedByPatient(context.Context, *GetBedByPatientRequest) (*GetBedByPatientResponse, error)
 	GetBeds(context.Context, *GetBedsRequest) (*GetBedsResponse, error)
 	GetBedsByRoom(context.Context, *GetBedsByRoomRequest) (*GetBedsByRoomResponse, error)
 	UpdateBed(context.Context, *UpdateBedRequest) (*UpdateBedResponse, error)
@@ -138,6 +150,9 @@ func (UnimplementedBedServiceServer) BulkCreateBeds(context.Context, *BulkCreate
 }
 func (UnimplementedBedServiceServer) GetBed(context.Context, *GetBedRequest) (*GetBedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBed not implemented")
+}
+func (UnimplementedBedServiceServer) GetBedByPatient(context.Context, *GetBedByPatientRequest) (*GetBedByPatientResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBedByPatient not implemented")
 }
 func (UnimplementedBedServiceServer) GetBeds(context.Context, *GetBedsRequest) (*GetBedsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBeds not implemented")
@@ -214,6 +229,24 @@ func _BedService_GetBed_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BedServiceServer).GetBed(ctx, req.(*GetBedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BedService_GetBedByPatient_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBedByPatientRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BedServiceServer).GetBedByPatient(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BedService_GetBedByPatient_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BedServiceServer).GetBedByPatient(ctx, req.(*GetBedByPatientRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -308,6 +341,10 @@ var BedService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetBed",
 			Handler:    _BedService_GetBed_Handler,
+		},
+		{
+			MethodName: "GetBedByPatient",
+			Handler:    _BedService_GetBedByPatient_Handler,
 		},
 		{
 			MethodName: "GetBeds",

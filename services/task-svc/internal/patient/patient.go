@@ -91,6 +91,12 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 		Notes:                   patient.Notes,
 		BedId:                   hwutil.UUIDToStringPtr(patient.BedID),
 		WardId:                  hwutil.UUIDToStringPtr(wardId),
+		Room: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientResponse_Room {
+			return pb.GetPatientResponse_Room{Id: bed.Room.ID.String(), Name: bed.Room.Name, WardId: bed.Room.WardID.String()}
+		}),
+		Bed: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientResponse_Bed {
+			return pb.GetPatientResponse_Bed{Id: bed.ID.String(), Name: bed.Name}
+		}),
 	}, nil
 }
 
@@ -470,6 +476,12 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		Name:                    patient.HumanReadableIdentifier, // TODO replace later
 		Tasks:                   mappedTasks,
 		WardId:                  hwutil.UUIDToStringPtr(wardId),
+		Room: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientDetailsResponse_Room {
+			return pb.GetPatientDetailsResponse_Room{Id: bed.Room.ID.String(), Name: bed.Room.Name, WardId: bed.Room.WardID.String()}
+		}),
+		Bed: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientDetailsResponse_Bed {
+			return pb.GetPatientDetailsResponse_Bed{Id: bed.ID.String(), Name: bed.Name}
+		}),
 	}, nil
 }
 
