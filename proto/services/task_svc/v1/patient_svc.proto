@@ -267,6 +267,8 @@ message GetPatientListResponse {
   message Patient {
     string id = 1;
     string human_readable_identifier = 2;
+    string notes = 3;
+    repeated Task tasks = 4;
   }
 
   message Bed {
@@ -285,6 +287,32 @@ message GetPatientListResponse {
     string human_readable_identifier = 2;
     Room room = 3;
     Bed bed = 4;
+    string notes = 5;
+    repeated Task tasks = 6;
+  }
+
+  message Task {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    TaskStatus status = 4;
+    string assigned_user_id = 5;
+    string patient_id = 6;
+    bool public = 7;
+    repeated SubTask subtasks = 8;
+
+    message SubTask {
+      string id = 1;
+      string name = 2;
+      bool done = 3;
+    }
+  }
+
+  enum TaskStatus {
+    TASK_STATUS_UNSPECIFIED = 0;
+    TASK_STATUS_TODO = 1;
+    TASK_STATUS_IN_PROGRESS = 2;
+    TASK_STATUS_DONE = 3;
   }
 }
 

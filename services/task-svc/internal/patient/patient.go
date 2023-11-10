@@ -488,18 +488,40 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListRequest) (*pb.GetPatientListResponse, error) {
 	patientRepo := repositories.PatientRepo(ctx)
 
+	mapTasks := func(tasks []models.Task) []*pb.GetPatientListResponse_Task {
+		return hwutil.Map(tasks, func(task models.Task) *pb.GetPatientListResponse_Task {
+			var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetPatientListResponse_Task_SubTask {
+				return &pb.GetPatientListResponse_Task_SubTask{
+					Id:   subtask.ID.String(),
+					Done: subtask.Done,
+					Name: subtask.Name,
+				}
+			})
+			return &pb.GetPatientListResponse_Task{
+				Id:             task.ID.String(),
+				Name:           task.Name,
+				Description:    task.Description,
+				Status:         pb.GetPatientListResponse_TaskStatus(task.Status),
+				AssignedUserId: task.AssignedUserId.UUID.String(),
+				PatientId:      task.PatientId.String(),
+				Subtasks:       mappedSubtasks,
+				Public:         task.Public,
+			}
+		})
+	}
+
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid organization id")
 	}
 
-	isUsingWardID := req.WardId != nil
-	var wardID uuid.UUID
-	if isUsingWardID {
-		wardID, err = uuid.Parse(*req.WardId)
+	var wardID *uuid.UUID
+	if req.WardId != nil {
+		parsedWardID, err := uuid.Parse(*req.WardId)
 		if err != nil {
 			return nil, status.Error(codes.InvalidArgument, "invalid ward id")
 		}
+		wardID = &parsedWardID
 	}
 
 	unassignedPatients, err := patientRepo.GetUnassignedPatientsForOrganization(organizationID)
@@ -513,8 +535,8 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 	}
 
 	var rooms []models.Room
-	if isUsingWardID {
-		rooms, err = patientRepo.GetRoomsWithBedsWithActivePatientsForWard(wardID)
+	if wardID != nil {
+		rooms, err = patientRepo.GetRoomsWithBedsWithActivePatientsForWard(*wardID)
 	} else {
 		rooms, err = patientRepo.GetRoomsWithBedsWithActivePatientsForOrganization(organizationID)
 	}
@@ -538,26 +560,30 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 						Name:   room.Name,
 						WardId: room.WardID.String(),
 					},
+					Notes: bed.Patient.Notes,
+					Tasks: mapTasks(bed.Patient.Tasks),
 				}
 				activePatients = append(activePatients, patientWithRoomAndBed)
 			}
 		}
 	}
 
+	mapPatients := func(patients []models.Patient) []*pb.GetPatientListResponse_Patient {
+		return hwutil.Map(patients, func(patient models.Patient) *pb.GetPatientListResponse_Patient {
+			var mappedTasks = mapTasks(patient.Tasks)
+			return &pb.GetPatientListResponse_Patient{
+				Id:                      patient.ID.String(),
+				HumanReadableIdentifier: patient.HumanReadableIdentifier,
+				Notes:                   patient.Notes,
+				Tasks:                   mappedTasks,
+			}
+		})
+	}
+
 	return &pb.GetPatientListResponse{
-		DischargedPatients: hwutil.Map(dischargedPatients, func(patient models.Patient) *pb.GetPatientListResponse_Patient {
-			return &pb.GetPatientListResponse_Patient{
-				Id:                      patient.ID.String(),
-				HumanReadableIdentifier: patient.HumanReadableIdentifier,
-			}
-		}),
-		UnassignedPatients: hwutil.Map(unassignedPatients, func(patient models.Patient) *pb.GetPatientListResponse_Patient {
-			return &pb.GetPatientListResponse_Patient{
-				Id:                      patient.ID.String(),
-				HumanReadableIdentifier: patient.HumanReadableIdentifier,
-			}
-		}),
-		Active: activePatients,
+		DischargedPatients: mapPatients(dischargedPatients),
+		UnassignedPatients: mapPatients(unassignedPatients),
+		Active:             activePatients,
 	}, nil
 }
 
