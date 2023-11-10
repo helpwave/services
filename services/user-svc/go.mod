@@ -20,7 +20,7 @@ require (
 	golang.org/x/net v0.12.0
 	google.golang.org/grpc v1.56.2
 	google.golang.org/protobuf v1.31.0
-	gorm.io/gorm v1.25.2
+	gorm.io/gorm v1.25.5
 	hwgorm v0.0.0
 	hwutil v0.0.0
 	proto_helpers v0.0.0
