@@ -1,2 +1,3 @@
 gen/** linguist-generated=true
 gen/**/helpers.go linguist-generated=false
+services/impulse_svc/gen/** linguist-generated=true
