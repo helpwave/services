@@ -29,6 +29,60 @@ updates:
     labels:
       - "deps"
 
+  - directory: "/libs/common"
+    package-ecosystem: "gomod"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "deps"
+
+  - directory: "/libs/decaying_lru"
+    package-ecosystem: "gomod"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "deps"
+
+  - directory: "/libs/hwgorm"
+    package-ecosystem: "gomod"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "deps"
+
+  - directory: "/libs/hwutil"
+    package-ecosystem: "gomod"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "deps"
+
+  - directory: "/libs/logging"
+    package-ecosystem: "gomod"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "deps"
+
+  - directory: "/libs/proto_helpers"
+    package-ecosystem: "gomod"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "deps"
+
   - directory: "/services/auth-svc"
     package-ecosystem: "gomod"
     schedule:
