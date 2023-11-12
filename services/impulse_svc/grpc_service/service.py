@@ -39,7 +39,7 @@ def is_valid_pal(pal: float) -> bool:
 
 
 class Servicer(impulse_svc_pb2_grpc.ImpulseService):
-    def CreateUser(self, request: impulse_svc_pb2.CreateUserRequest, context):
+    async def CreateUser(self, request: impulse_svc_pb2.CreateUserRequest, context):
         if not is_valid_pal(request.pal):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             context.set_details("Pal value can not be negativ")
@@ -63,7 +63,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             return impulse_svc_pb2.CreateUserResponse()
 
         try:
-            user = User.objects.create(
+            user = await User.objects.acreate(
                 username=request.username,
                 gender=request.gender,
                 pal=request.pal,
@@ -83,7 +83,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
         return impulse_svc_pb2.CreateUserResponse(user_id=str(user.id))
 
-    def UpdateUser(self, request, context):
+    async def UpdateUser(self, request, context):
         user_id: UUID | None = get_uuid(request.user_id)
         birthday: datetime | None = get_iso_datetime(request.birthday)
         team_id: UUID | None = get_uuid(request.team_id)
@@ -94,7 +94,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             return impulse_svc_pb2.UpdateUserResponse()
 
         try:
-            user: User = User.objects.get(id=user_id)
+            user: User = await User.objects.aget(id=user_id)
         except User.DoesNotExist as e:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("user does not exist")
@@ -113,12 +113,12 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             context.set_details("teamId is not a valid datetime")
             return impulse_svc_pb2.UpdateUserResponse()
-        elif Team.objects.filter(id=team_id).count() == 0:
+        elif await Team.objects.afilter(id=team_id).count() == 0:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("team does not exist")
             return impulse_svc_pb2.UpdateUserResponse()
         else:
-            user.team = Team.objects.get(id=team_id)
+            user.team = await Team.objects.aget(id=team_id)
 
         if request.gender != "":
             user.gender = request.gender
@@ -132,7 +132,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
         if request.weight > 0:
             user.weight = request.weight
 
-        user.save()
+        await user.asave()
 
         if user.team is None:
             return impulse_svc_pb2.UpdateUserResponse(
@@ -154,8 +154,8 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
                 weight=user.weight,
             )
     
-    def GetAllTeams(self, request, context):
-        teams = Team.objects.all()
+    async def GetAllTeams(self, request, context):
+        teams = await Team.objects.all()
         return impulse_svc_pb2.GetAllTeamsResponse(
             teams=[
                 impulse_svc_pb2.GetAllTeamsResponse.Team(
@@ -166,7 +166,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             ]
         )
     
-    def GetScore(self, request, context):
+    async def GetScore(self, request, context):
         user_id: UUID | None = get_uuid(request.user_id)
 
         if user_id is None:
@@ -175,7 +175,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             return impulse_svc_pb2.UpdateUserResponse()
 
         try:
-            user: User = User.objects.get(id=user_id)
+            user: User = await User.objects.aget(id=user_id)
         except User.DoesNotExist as e:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("user does not exist")
@@ -183,7 +183,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
         return impulse_svc_pb2.GetScoreResponse(score=user.score)
     
-    def GetRewards(self, request, context):
+    async def GetRewards(self, request, context):
         user_id: UUID | None = get_uuid(request.user_id)
 
         if user_id is None:
@@ -192,13 +192,13 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             return impulse_svc_pb2.UpdateUserResponse()
 
         try:
-            user: User = User.objects.get(id=user_id)
+            user: User = await User.objects.aget(id=user_id)
         except User.DoesNotExist as e:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("user does not exist")
             return impulse_svc_pb2.UpdateUserResponse()
 
-        rewards = Reward.objects.filter(points__lte=user.score)
+        rewards = await Reward.objects.afilter(points__lte=user.score)
 
         return impulse_svc_pb2.GetRewardsResponse(
             rewards=[
@@ -211,7 +211,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             ]
         )
 
-    def TrackChallenge(self, request, context):
+    async def TrackChallenge(self, request, context):
         user_id: UUID | None = get_uuid(request.user_id)
 
         if user_id is None:
@@ -219,12 +219,12 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             context.set_details("userId is not a valid uuid")
             return impulse_svc_pb2.UpdateUserResponse()
 
-        if User.objects.filter(id=user_id).count() == 0:
+        if await User.objects.afilter(id=user_id).count() == 0:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("user does not exist")
             return impulse_svc_pb2.UpdateUserResponse()
 
-        if UserChallenge.objects.filter(challenge_id=request.challenge_id).count() == 0:
+        if await UserChallenge.objects.afilter(challenge_id=request.challenge_id).count() == 0:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("challenge does not exist")
             return impulse_svc_pb2.UpdateUserResponse()
@@ -238,7 +238,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             return impulse_svc_pb2.UpdateUserResponse()
 
         # create the UserChallenge object
-        user_challenge = UserChallenge.objects.create(
+        user_challenge = await UserChallenge.objects.acreate(
             user_id=user_id,
             challenge_id=request.challenge_id,
             score=request.score,
@@ -247,10 +247,10 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
 
         return impulse_svc_pb2.TrackChallengeResponse(challenge_id=str(user_challenge.id))
 
-    def GetActiveChallenges(self, request, context):
+    async def GetActiveChallenges(self, request, context):
         current_date = make_aware(datetime.now())
 
-        challenges = Challenge.objects.filter(
+        challenges = await Challenge.objects.afilter(
             # if the start date is lower than current date and the end date is higher than current date
             (Q(start_datetime__lte=current_date) & Q(end_datetime__gte=current_date)) | 
             # # or the start and end dates ar`e null
@@ -279,8 +279,8 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             ]
         )
 
-    def GetAllRewards(self, request, context):
-        rewards = Reward.objects.all()
+    async def GetAllRewards(self, request, context):
+        rewards = await Reward.objects.all()
         return impulse_svc_pb2.GetAllRewardsResponse(
             rewards=[
                 impulse_svc_pb2.GetAllRewardsResponse.Reward(
@@ -292,7 +292,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             ]
         )
 
-    def StatsForTeamByUser(self, request, context):
+    async def StatsForTeamByUser(self, request, context):
         user_id: UUID | None = get_uuid(request.user_id)
 
         if user_id is None:
@@ -301,7 +301,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             return impulse_svc_pb2.UpdateUserResponse()
 
         try:
-            user: User = User.objects.get(id=user_id)
+            user: User = await User.objects.aget(id=user_id)
         except User.DoesNotExist as e:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("user does not exist")
@@ -330,7 +330,7 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             user_count=team.user_count,
         )
         
-    def Verification(self, request, context):
+    async def Verification(self, request, context):
         challenge_id: UUID | None = get_uuid(request.challenge_id)
 
         if challenge_id is None:
@@ -339,14 +339,14 @@ class Servicer(impulse_svc_pb2_grpc.ImpulseService):
             return impulse_svc_pb2.UpdateUserResponse()
 
         try:
-            challenge = Challenge.objects.get(id=challenge_id)
+            challenge = await Challenge.objects.aget(id=challenge_id)
         except Challenge.DoesNotExist as e:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("challenge does not exist")
             return impulse_svc_pb2.UpdateUserResponse()
 
-        string_verifications = challenge.verificationstr_set.all()
-        integer_verifications = challenge.verificationint_set.all()
+        string_verifications = await challenge.verificationstr_set.all()
+        integer_verifications = await challenge.verificationint_set.all()
         
         return impulse_svc_pb2.VerificationResponse(
             string_verifications=[
