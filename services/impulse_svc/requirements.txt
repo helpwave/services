@@ -1,10 +1,14 @@
 asgiref==3.7.2
+click==8.1.7
 Django==4.2.5
+-e git+ssh://git@github.com/helpwave/services.git@566645dc3acaf25c607e74730f117ad9590be397#egg=django_grpc&subdirectory=libs/python/django_grpc
+grpcio==1.58.0
+grpcio-tools==1.58.0
+h11==0.14.0
+protobuf==4.24.3
+psycopg2-binary==2.9.7
+python-dateutil==2.8.2
+pytz==2023.3.post1
+six==1.16.0
 sqlparse==0.4.4
-django-grpc==1.0.21
-protobuf
-grpcio
-grpcio-tools
-psycopg2-binary
-pytz
-python-dateutil
+uvicorn==0.24.0.post1
