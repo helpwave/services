@@ -4,7 +4,9 @@ import (
 	"common"
 	pb "gen/proto/services/task_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
+	"hwdb"
 	"hwgorm"
+	"task-svc/ent"
 	"task-svc/internal/bed"
 	"task-svc/internal/patient"
 	"task-svc/internal/room"
@@ -24,6 +26,7 @@ func main() {
 	common.Setup(ServiceName, Version, true)
 
 	hwgorm.SetupDatabaseByEnvs()
+	ent.GetDB = hwdb.SetupDatabaseWithEnvs(ent.Open)
 	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
 
 	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {

@@ -6,6 +6,7 @@ replace (
 	common => ../../libs/common
 	decaying_lru => ../../libs/decaying_lru
 	gen => ../../gen/go
+	hwdb => ../../libs/hwdb
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
 	logging => ../../libs/logging
@@ -76,5 +77,6 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/postgres v1.5.2 // indirect
+	hwdb v0.0.0-00010101000000-000000000000 // indirect
 	logging v0.0.0 // indirect
 )

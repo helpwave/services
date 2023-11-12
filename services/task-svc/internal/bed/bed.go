@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 	"hwgorm"
 	"hwutil"
+	"task-svc/ent"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
 
@@ -26,7 +27,7 @@ func NewServiceServer() *ServiceServer {
 
 func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*pb.CreateBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	bedRepo := repositories.BedRepo(ctx)
+	db := ent.GetDB(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -38,11 +39,11 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed, err := bedRepo.CreateBed(&models.Bed{
-		RoomID:         roomId,
-		OrganizationID: organizationID,
-		Name:           req.Name,
-	})
+	bed, err := db.Bed.Create().
+		SetRoomID(roomId).
+		SetOrganizationID(organizationID).
+		SetName(req.Name).
+		Save(ctx)
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
