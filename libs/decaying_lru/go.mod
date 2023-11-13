@@ -8,7 +8,7 @@ replace (
 )
 
 require (
-	github.com/redis/go-redis/v9 v9.1.0
+	github.com/redis/go-redis/v9 v9.3.0
 	github.com/rs/zerolog v1.31.0
 	hwutil v0.0.0
 )
