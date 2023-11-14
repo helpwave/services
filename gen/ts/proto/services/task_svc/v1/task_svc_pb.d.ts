@@ -1,6 +1,6 @@
 import * as jspb from 'google-protobuf'
 
-import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb';
+import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb'; // proto import: "google/protobuf/timestamp.proto"
 
 
 export class CreateTaskRequest extends jspb.Message {
@@ -518,6 +518,9 @@ export namespace GetAssignedTasksResponse {
     getDescription(): string;
     setDescription(value: string): Task;
 
+    getStatus(): TaskStatus;
+    setStatus(value: TaskStatus): Task;
+
     getAssignedUserId(): string;
     setAssignedUserId(value: string): Task;
 
@@ -555,6 +558,7 @@ export namespace GetAssignedTasksResponse {
       id: string,
       name: string,
       description: string,
+      status: TaskStatus,
       assignedUserId: string,
       patient?: GetAssignedTasksResponse.Task.Patient.AsObject,
       pb_public: boolean,
