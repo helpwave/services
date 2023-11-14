@@ -1,6 +1,6 @@
 import * as grpcWeb from 'grpc-web';
 
-import * as proto_services_task_svc_v1_task_template_svc_pb from '../../../../proto/services/task_svc/v1/task_template_svc_pb';
+import * as proto_services_task_svc_v1_task_template_svc_pb from '../../../../proto/services/task_svc/v1/task_template_svc_pb'; // proto import: "proto/services/task_svc/v1/task_template_svc.proto"
 
 
 export class TaskTemplateServiceClient {
