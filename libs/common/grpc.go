@@ -3,7 +3,7 @@ package common
 import (
 	"context"
 	"encoding/base64"
-	"github.com/dapr/go-sdk/dapr/proto/runtime/v1"
+	"github.com/dapr/dapr/pkg/proto/runtime/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/google/uuid"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
