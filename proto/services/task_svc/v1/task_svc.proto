@@ -144,6 +144,7 @@ message GetAssignedTasksResponse {
     string id = 1;
     string name = 2;
     string description = 3;
+    TaskStatus status = 4;
     string assigned_user_id = 5;
     Patient patient = 6;
     bool public = 7;

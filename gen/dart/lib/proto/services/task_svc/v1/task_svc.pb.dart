@@ -1495,6 +1495,7 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
+    TaskStatus? status,
     $core.String? assignedUserId,
     GetAssignedTasksResponse_Task_Patient? patient,
     $core.bool? public,
@@ -1511,6 +1512,9 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
     }
     if (description != null) {
       $result.description = description;
+    }
+    if (status != null) {
+      $result.status = status;
     }
     if (assignedUserId != null) {
       $result.assignedUserId = assignedUserId;
@@ -1540,6 +1544,7 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
+    ..e<TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: TaskStatus.valueOf, enumValues: TaskStatus.values)
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOM<GetAssignedTasksResponse_Task_Patient>(6, _omitFieldNames ? '' : 'patient', subBuilder: GetAssignedTasksResponse_Task_Patient.create)
     ..aOB(7, _omitFieldNames ? '' : 'public')
@@ -1597,57 +1602,66 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   void clearDescription() => clearField(3);
 
+  @$pb.TagNumber(4)
+  TaskStatus get status => $_getN(3);
+  @$pb.TagNumber(4)
+  set status(TaskStatus v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasStatus() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearStatus() => clearField(4);
+
   @$pb.TagNumber(5)
-  $core.String get assignedUserId => $_getSZ(3);
+  $core.String get assignedUserId => $_getSZ(4);
   @$pb.TagNumber(5)
-  set assignedUserId($core.String v) { $_setString(3, v); }
+  set assignedUserId($core.String v) { $_setString(4, v); }
   @$pb.TagNumber(5)
-  $core.bool hasAssignedUserId() => $_has(3);
+  $core.bool hasAssignedUserId() => $_has(4);
   @$pb.TagNumber(5)
   void clearAssignedUserId() => clearField(5);
 
   @$pb.TagNumber(6)
-  GetAssignedTasksResponse_Task_Patient get patient => $_getN(4);
+  GetAssignedTasksResponse_Task_Patient get patient => $_getN(5);
   @$pb.TagNumber(6)
   set patient(GetAssignedTasksResponse_Task_Patient v) { setField(6, v); }
   @$pb.TagNumber(6)
-  $core.bool hasPatient() => $_has(4);
+  $core.bool hasPatient() => $_has(5);
   @$pb.TagNumber(6)
   void clearPatient() => clearField(6);
   @$pb.TagNumber(6)
-  GetAssignedTasksResponse_Task_Patient ensurePatient() => $_ensure(4);
+  GetAssignedTasksResponse_Task_Patient ensurePatient() => $_ensure(5);
 
   @$pb.TagNumber(7)
-  $core.bool get public => $_getBF(5);
+  $core.bool get public => $_getBF(6);
   @$pb.TagNumber(7)
-  set public($core.bool v) { $_setBool(5, v); }
+  set public($core.bool v) { $_setBool(6, v); }
   @$pb.TagNumber(7)
-  $core.bool hasPublic() => $_has(5);
+  $core.bool hasPublic() => $_has(6);
   @$pb.TagNumber(7)
   void clearPublic() => clearField(7);
 
   @$pb.TagNumber(8)
-  $11.Timestamp get dueAt => $_getN(6);
+  $11.Timestamp get dueAt => $_getN(7);
   @$pb.TagNumber(8)
   set dueAt($11.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
-  $core.bool hasDueAt() => $_has(6);
+  $core.bool hasDueAt() => $_has(7);
   @$pb.TagNumber(8)
   void clearDueAt() => clearField(8);
   @$pb.TagNumber(8)
-  $11.Timestamp ensureDueAt() => $_ensure(6);
+  $11.Timestamp ensureDueAt() => $_ensure(7);
 
   @$pb.TagNumber(9)
-  $core.String get createdBy => $_getSZ(7);
+  $core.String get createdBy => $_getSZ(8);
   @$pb.TagNumber(9)
-  set createdBy($core.String v) { $_setString(7, v); }
+  set createdBy($core.String v) { $_setString(8, v); }
   @$pb.TagNumber(9)
-  $core.bool hasCreatedBy() => $_has(7);
+  $core.bool hasCreatedBy() => $_has(8);
   @$pb.TagNumber(9)
   void clearCreatedBy() => clearField(9);
 
   @$pb.TagNumber(10)
-  $core.List<GetAssignedTasksResponse_Task_SubTask> get subtasks => $_getList(8);
+  $core.List<GetAssignedTasksResponse_Task_SubTask> get subtasks => $_getList(9);
 }
 
 class GetAssignedTasksResponse extends $pb.GeneratedMessage {

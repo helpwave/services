@@ -307,6 +307,7 @@ func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTask
 				Id:             task.ID.String(),
 				Name:           task.Name,
 				Description:    task.Description,
+				Status:         task.Status,
 				AssignedUserId: task.AssignedUserId.UUID.String(),
 				Patient:        mappedPatient,
 				Subtasks:       mappedSubtasks,

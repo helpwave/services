@@ -4800,6 +4800,7 @@ proto.proto.services.task_svc.v1.GetAssignedTasksResponse.Task.toObject = functi
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    status: jspb.Message.getFieldWithDefault(msg, 4, 0),
     assignedUserId: jspb.Message.getFieldWithDefault(msg, 5, ""),
     patient: (f = msg.getPatient()) && proto.proto.services.task_svc.v1.GetAssignedTasksResponse.Task.Patient.toObject(includeInstance, f),
     pb_public: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
@@ -4854,6 +4855,10 @@ proto.proto.services.task_svc.v1.GetAssignedTasksResponse.Task.deserializeBinary
     case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setDescription(value);
+      break;
+    case 4:
+      var value = /** @type {!proto.proto.services.task_svc.v1.TaskStatus} */ (reader.readEnum());
+      msg.setStatus(value);
       break;
     case 5:
       var value = /** @type {string} */ (reader.readString());
@@ -4929,6 +4934,13 @@ proto.proto.services.task_svc.v1.GetAssignedTasksResponse.Task.serializeBinaryTo
   if (f.length > 0) {
     writer.writeString(
       3,
+      f
+    );
+  }
+  f = message.getStatus();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      4,
       f
     );
   }
@@ -5411,6 +5423,24 @@ proto.proto.services.task_svc.v1.GetAssignedTasksResponse.Task.prototype.getDesc
  */
 proto.proto.services.task_svc.v1.GetAssignedTasksResponse.Task.prototype.setDescription = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional TaskStatus status = 4;
+ * @return {!proto.proto.services.task_svc.v1.TaskStatus}
+ */
+proto.proto.services.task_svc.v1.GetAssignedTasksResponse.Task.prototype.getStatus = function() {
+  return /** @type {!proto.proto.services.task_svc.v1.TaskStatus} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/**
+ * @param {!proto.proto.services.task_svc.v1.TaskStatus} value
+ * @return {!proto.proto.services.task_svc.v1.GetAssignedTasksResponse.Task} returns this
+ */
+proto.proto.services.task_svc.v1.GetAssignedTasksResponse.Task.prototype.setStatus = function(value) {
+  return jspb.Message.setProto3EnumField(this, 4, value);
 };
 
 

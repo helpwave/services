@@ -2439,6 +2439,7 @@ type GetAssignedTasksResponse_Task struct {
 	Id             string                                   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name           string                                   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Description    string                                   `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	Status         TaskStatus                               `protobuf:"varint,4,opt,name=status,proto3,enum=proto.services.task_svc.v1.TaskStatus" json:"status,omitempty"`
 	AssignedUserId string                                   `protobuf:"bytes,5,opt,name=assigned_user_id,json=assignedUserId,proto3" json:"assigned_user_id,omitempty"`
 	Patient        *GetAssignedTasksResponse_Task_Patient   `protobuf:"bytes,6,opt,name=patient,proto3" json:"patient,omitempty"`
 	Public         bool                                     `protobuf:"varint,7,opt,name=public,proto3" json:"public,omitempty"`
@@ -2498,6 +2499,13 @@ func (x *GetAssignedTasksResponse_Task) GetDescription() string {
 		return x.Description
 	}
 	return ""
+}
+
+func (x *GetAssignedTasksResponse_Task) GetStatus() TaskStatus {
+	if x != nil {
+		return x.Status
+	}
+	return TaskStatus_TASK_STATUS_UNSPECIFIED
 }
 
 func (x *GetAssignedTasksResponse_Task) GetAssignedUserId() string {
@@ -2841,18 +2849,22 @@ var file_proto_services_task_svc_v1_task_svc_proto_rawDesc = []byte{
 	0x74, 0x65, 0x64, 0x5f, 0x62, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x63, 0x72,
 	0x65, 0x61, 0x74, 0x65, 0x64, 0x42, 0x79, 0x22, 0x19, 0x0a, 0x17, 0x47, 0x65, 0x74, 0x41, 0x73,
 	0x73, 0x69, 0x67, 0x6e, 0x65, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x22, 0x9b, 0x05, 0x0a, 0x18, 0x47, 0x65, 0x74, 0x41, 0x73, 0x73, 0x69, 0x67, 0x6e,
+	0x73, 0x74, 0x22, 0xdb, 0x05, 0x0a, 0x18, 0x47, 0x65, 0x74, 0x41, 0x73, 0x73, 0x69, 0x67, 0x6e,
 	0x65, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
 	0x4f, 0x0a, 0x05, 0x74, 0x61, 0x73, 0x6b, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x39,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e,
 	0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x41,
 	0x73, 0x73, 0x69, 0x67, 0x6e, 0x65, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x73, 0x52, 0x65, 0x73, 0x70,
 	0x6f, 0x6e, 0x73, 0x65, 0x2e, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x05, 0x74, 0x61, 0x73, 0x6b, 0x73,
-	0x1a, 0xad, 0x04, 0x0a, 0x04, 0x54, 0x61, 0x73, 0x6b, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
+	0x1a, 0xed, 0x04, 0x0a, 0x04, 0x54, 0x61, 0x73, 0x6b, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
 	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x20, 0x0a,
 	0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x3e, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0e, 0x32,
+	0x26, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x2e, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x61, 0x73,
+	0x6b, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12,
 	0x28, 0x0a, 0x10, 0x61, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x65, 0x64, 0x5f, 0x75, 0x73, 0x65, 0x72,
 	0x5f, 0x69, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x61, 0x73, 0x73, 0x69, 0x67,
 	0x6e, 0x65, 0x64, 0x55, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x5b, 0x0a, 0x07, 0x70, 0x61, 0x74,
@@ -3213,52 +3225,53 @@ var file_proto_services_task_svc_v1_task_svc_proto_depIdxs = []int32{
 	42, // 14: proto.services.task_svc.v1.GetTasksByPatientResponse.Task.subtasks:type_name -> proto.services.task_svc.v1.GetTasksByPatientResponse.Task.SubTask
 	48, // 15: proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.due_at:type_name -> google.protobuf.Timestamp
 	44, // 16: proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.subtasks:type_name -> proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask
-	46, // 17: proto.services.task_svc.v1.GetAssignedTasksResponse.Task.patient:type_name -> proto.services.task_svc.v1.GetAssignedTasksResponse.Task.Patient
-	48, // 18: proto.services.task_svc.v1.GetAssignedTasksResponse.Task.due_at:type_name -> google.protobuf.Timestamp
-	47, // 19: proto.services.task_svc.v1.GetAssignedTasksResponse.Task.subtasks:type_name -> proto.services.task_svc.v1.GetAssignedTasksResponse.Task.SubTask
-	1,  // 20: proto.services.task_svc.v1.TaskService.CreateTask:input_type -> proto.services.task_svc.v1.CreateTaskRequest
-	3,  // 21: proto.services.task_svc.v1.TaskService.GetTask:input_type -> proto.services.task_svc.v1.GetTaskRequest
-	5,  // 22: proto.services.task_svc.v1.TaskService.GetTasksByPatient:input_type -> proto.services.task_svc.v1.GetTasksByPatientRequest
-	7,  // 23: proto.services.task_svc.v1.TaskService.GetTasksByPatientSortedByStatus:input_type -> proto.services.task_svc.v1.GetTasksByPatientSortedByStatusRequest
-	9,  // 24: proto.services.task_svc.v1.TaskService.GetAssignedTasks:input_type -> proto.services.task_svc.v1.GetAssignedTasksRequest
-	11, // 25: proto.services.task_svc.v1.TaskService.UpdateTask:input_type -> proto.services.task_svc.v1.UpdateTaskRequest
-	13, // 26: proto.services.task_svc.v1.TaskService.AddSubTask:input_type -> proto.services.task_svc.v1.AddSubTaskRequest
-	15, // 27: proto.services.task_svc.v1.TaskService.RemoveSubTask:input_type -> proto.services.task_svc.v1.RemoveSubTaskRequest
-	17, // 28: proto.services.task_svc.v1.TaskService.UpdateSubTask:input_type -> proto.services.task_svc.v1.UpdateSubTaskRequest
-	19, // 29: proto.services.task_svc.v1.TaskService.SubTaskToToDo:input_type -> proto.services.task_svc.v1.SubTaskToToDoRequest
-	21, // 30: proto.services.task_svc.v1.TaskService.SubTaskToDone:input_type -> proto.services.task_svc.v1.SubTaskToDoneRequest
-	23, // 31: proto.services.task_svc.v1.TaskService.TaskToToDo:input_type -> proto.services.task_svc.v1.TaskToToDoRequest
-	25, // 32: proto.services.task_svc.v1.TaskService.TaskToInProgress:input_type -> proto.services.task_svc.v1.TaskToInProgressRequest
-	27, // 33: proto.services.task_svc.v1.TaskService.TaskToDone:input_type -> proto.services.task_svc.v1.TaskToDoneRequest
-	29, // 34: proto.services.task_svc.v1.TaskService.AssignTaskToUser:input_type -> proto.services.task_svc.v1.AssignTaskToUserRequest
-	31, // 35: proto.services.task_svc.v1.TaskService.UnassignTaskFromUser:input_type -> proto.services.task_svc.v1.UnassignTaskFromUserRequest
-	33, // 36: proto.services.task_svc.v1.TaskService.PublishTask:input_type -> proto.services.task_svc.v1.PublishTaskRequest
-	35, // 37: proto.services.task_svc.v1.TaskService.UnpublishTask:input_type -> proto.services.task_svc.v1.UnpublishTaskRequest
-	37, // 38: proto.services.task_svc.v1.TaskService.DeleteTask:input_type -> proto.services.task_svc.v1.DeleteTaskRequest
-	2,  // 39: proto.services.task_svc.v1.TaskService.CreateTask:output_type -> proto.services.task_svc.v1.CreateTaskResponse
-	4,  // 40: proto.services.task_svc.v1.TaskService.GetTask:output_type -> proto.services.task_svc.v1.GetTaskResponse
-	6,  // 41: proto.services.task_svc.v1.TaskService.GetTasksByPatient:output_type -> proto.services.task_svc.v1.GetTasksByPatientResponse
-	8,  // 42: proto.services.task_svc.v1.TaskService.GetTasksByPatientSortedByStatus:output_type -> proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse
-	10, // 43: proto.services.task_svc.v1.TaskService.GetAssignedTasks:output_type -> proto.services.task_svc.v1.GetAssignedTasksResponse
-	12, // 44: proto.services.task_svc.v1.TaskService.UpdateTask:output_type -> proto.services.task_svc.v1.UpdateTaskResponse
-	14, // 45: proto.services.task_svc.v1.TaskService.AddSubTask:output_type -> proto.services.task_svc.v1.AddSubTaskResponse
-	16, // 46: proto.services.task_svc.v1.TaskService.RemoveSubTask:output_type -> proto.services.task_svc.v1.RemoveSubTaskResponse
-	18, // 47: proto.services.task_svc.v1.TaskService.UpdateSubTask:output_type -> proto.services.task_svc.v1.UpdateSubTaskResponse
-	20, // 48: proto.services.task_svc.v1.TaskService.SubTaskToToDo:output_type -> proto.services.task_svc.v1.SubTaskToToDoResponse
-	22, // 49: proto.services.task_svc.v1.TaskService.SubTaskToDone:output_type -> proto.services.task_svc.v1.SubTaskToDoneResponse
-	24, // 50: proto.services.task_svc.v1.TaskService.TaskToToDo:output_type -> proto.services.task_svc.v1.TaskToToDoResponse
-	26, // 51: proto.services.task_svc.v1.TaskService.TaskToInProgress:output_type -> proto.services.task_svc.v1.TaskToInProgressResponse
-	28, // 52: proto.services.task_svc.v1.TaskService.TaskToDone:output_type -> proto.services.task_svc.v1.TaskToDoneResponse
-	30, // 53: proto.services.task_svc.v1.TaskService.AssignTaskToUser:output_type -> proto.services.task_svc.v1.AssignTaskToUserResponse
-	32, // 54: proto.services.task_svc.v1.TaskService.UnassignTaskFromUser:output_type -> proto.services.task_svc.v1.UnassignTaskFromUserResponse
-	34, // 55: proto.services.task_svc.v1.TaskService.PublishTask:output_type -> proto.services.task_svc.v1.PublishTaskResponse
-	36, // 56: proto.services.task_svc.v1.TaskService.UnpublishTask:output_type -> proto.services.task_svc.v1.UnpublishTaskResponse
-	38, // 57: proto.services.task_svc.v1.TaskService.DeleteTask:output_type -> proto.services.task_svc.v1.DeleteTaskResponse
-	39, // [39:58] is the sub-list for method output_type
-	20, // [20:39] is the sub-list for method input_type
-	20, // [20:20] is the sub-list for extension type_name
-	20, // [20:20] is the sub-list for extension extendee
-	0,  // [0:20] is the sub-list for field type_name
+	0,  // 17: proto.services.task_svc.v1.GetAssignedTasksResponse.Task.status:type_name -> proto.services.task_svc.v1.TaskStatus
+	46, // 18: proto.services.task_svc.v1.GetAssignedTasksResponse.Task.patient:type_name -> proto.services.task_svc.v1.GetAssignedTasksResponse.Task.Patient
+	48, // 19: proto.services.task_svc.v1.GetAssignedTasksResponse.Task.due_at:type_name -> google.protobuf.Timestamp
+	47, // 20: proto.services.task_svc.v1.GetAssignedTasksResponse.Task.subtasks:type_name -> proto.services.task_svc.v1.GetAssignedTasksResponse.Task.SubTask
+	1,  // 21: proto.services.task_svc.v1.TaskService.CreateTask:input_type -> proto.services.task_svc.v1.CreateTaskRequest
+	3,  // 22: proto.services.task_svc.v1.TaskService.GetTask:input_type -> proto.services.task_svc.v1.GetTaskRequest
+	5,  // 23: proto.services.task_svc.v1.TaskService.GetTasksByPatient:input_type -> proto.services.task_svc.v1.GetTasksByPatientRequest
+	7,  // 24: proto.services.task_svc.v1.TaskService.GetTasksByPatientSortedByStatus:input_type -> proto.services.task_svc.v1.GetTasksByPatientSortedByStatusRequest
+	9,  // 25: proto.services.task_svc.v1.TaskService.GetAssignedTasks:input_type -> proto.services.task_svc.v1.GetAssignedTasksRequest
+	11, // 26: proto.services.task_svc.v1.TaskService.UpdateTask:input_type -> proto.services.task_svc.v1.UpdateTaskRequest
+	13, // 27: proto.services.task_svc.v1.TaskService.AddSubTask:input_type -> proto.services.task_svc.v1.AddSubTaskRequest
+	15, // 28: proto.services.task_svc.v1.TaskService.RemoveSubTask:input_type -> proto.services.task_svc.v1.RemoveSubTaskRequest
+	17, // 29: proto.services.task_svc.v1.TaskService.UpdateSubTask:input_type -> proto.services.task_svc.v1.UpdateSubTaskRequest
+	19, // 30: proto.services.task_svc.v1.TaskService.SubTaskToToDo:input_type -> proto.services.task_svc.v1.SubTaskToToDoRequest
+	21, // 31: proto.services.task_svc.v1.TaskService.SubTaskToDone:input_type -> proto.services.task_svc.v1.SubTaskToDoneRequest
+	23, // 32: proto.services.task_svc.v1.TaskService.TaskToToDo:input_type -> proto.services.task_svc.v1.TaskToToDoRequest
+	25, // 33: proto.services.task_svc.v1.TaskService.TaskToInProgress:input_type -> proto.services.task_svc.v1.TaskToInProgressRequest
+	27, // 34: proto.services.task_svc.v1.TaskService.TaskToDone:input_type -> proto.services.task_svc.v1.TaskToDoneRequest
+	29, // 35: proto.services.task_svc.v1.TaskService.AssignTaskToUser:input_type -> proto.services.task_svc.v1.AssignTaskToUserRequest
+	31, // 36: proto.services.task_svc.v1.TaskService.UnassignTaskFromUser:input_type -> proto.services.task_svc.v1.UnassignTaskFromUserRequest
+	33, // 37: proto.services.task_svc.v1.TaskService.PublishTask:input_type -> proto.services.task_svc.v1.PublishTaskRequest
+	35, // 38: proto.services.task_svc.v1.TaskService.UnpublishTask:input_type -> proto.services.task_svc.v1.UnpublishTaskRequest
+	37, // 39: proto.services.task_svc.v1.TaskService.DeleteTask:input_type -> proto.services.task_svc.v1.DeleteTaskRequest
+	2,  // 40: proto.services.task_svc.v1.TaskService.CreateTask:output_type -> proto.services.task_svc.v1.CreateTaskResponse
+	4,  // 41: proto.services.task_svc.v1.TaskService.GetTask:output_type -> proto.services.task_svc.v1.GetTaskResponse
+	6,  // 42: proto.services.task_svc.v1.TaskService.GetTasksByPatient:output_type -> proto.services.task_svc.v1.GetTasksByPatientResponse
+	8,  // 43: proto.services.task_svc.v1.TaskService.GetTasksByPatientSortedByStatus:output_type -> proto.services.task_svc.v1.GetTasksByPatientSortedByStatusResponse
+	10, // 44: proto.services.task_svc.v1.TaskService.GetAssignedTasks:output_type -> proto.services.task_svc.v1.GetAssignedTasksResponse
+	12, // 45: proto.services.task_svc.v1.TaskService.UpdateTask:output_type -> proto.services.task_svc.v1.UpdateTaskResponse
+	14, // 46: proto.services.task_svc.v1.TaskService.AddSubTask:output_type -> proto.services.task_svc.v1.AddSubTaskResponse
+	16, // 47: proto.services.task_svc.v1.TaskService.RemoveSubTask:output_type -> proto.services.task_svc.v1.RemoveSubTaskResponse
+	18, // 48: proto.services.task_svc.v1.TaskService.UpdateSubTask:output_type -> proto.services.task_svc.v1.UpdateSubTaskResponse
+	20, // 49: proto.services.task_svc.v1.TaskService.SubTaskToToDo:output_type -> proto.services.task_svc.v1.SubTaskToToDoResponse
+	22, // 50: proto.services.task_svc.v1.TaskService.SubTaskToDone:output_type -> proto.services.task_svc.v1.SubTaskToDoneResponse
+	24, // 51: proto.services.task_svc.v1.TaskService.TaskToToDo:output_type -> proto.services.task_svc.v1.TaskToToDoResponse
+	26, // 52: proto.services.task_svc.v1.TaskService.TaskToInProgress:output_type -> proto.services.task_svc.v1.TaskToInProgressResponse
+	28, // 53: proto.services.task_svc.v1.TaskService.TaskToDone:output_type -> proto.services.task_svc.v1.TaskToDoneResponse
+	30, // 54: proto.services.task_svc.v1.TaskService.AssignTaskToUser:output_type -> proto.services.task_svc.v1.AssignTaskToUserResponse
+	32, // 55: proto.services.task_svc.v1.TaskService.UnassignTaskFromUser:output_type -> proto.services.task_svc.v1.UnassignTaskFromUserResponse
+	34, // 56: proto.services.task_svc.v1.TaskService.PublishTask:output_type -> proto.services.task_svc.v1.PublishTaskResponse
+	36, // 57: proto.services.task_svc.v1.TaskService.UnpublishTask:output_type -> proto.services.task_svc.v1.UnpublishTaskResponse
+	38, // 58: proto.services.task_svc.v1.TaskService.DeleteTask:output_type -> proto.services.task_svc.v1.DeleteTaskResponse
+	40, // [40:59] is the sub-list for method output_type
+	21, // [21:40] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_proto_services_task_svc_v1_task_svc_proto_init() }
