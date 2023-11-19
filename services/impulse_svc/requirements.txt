@@ -1,3 +1,4 @@
+anyio==4.0.0
 asgiref==3.7.2
 attrs==23.1.0
 autobahn==23.6.2
@@ -8,26 +9,41 @@ constantly==23.10.4
 cryptography==41.0.5
 daphne==4.0.0
 Django==4.2.5
--e git+ssh://git@github.com/helpwave/services.git@8df245f6d37406f375c2fa6a48b209a5e25eb1ef#egg=django_grpc&subdirectory=libs/python/django_grpc
+-e git+ssh://git@github.com/helpwave/services.git@03c2901160f7cff8b2211c850bc4c229c06f512f#egg=django_grpc&subdirectory=libs/python/django_grpc
+graphql-core==3.2.3
 grpcio==1.58.0
 grpcio-tools==1.58.0
 h11==0.14.0
 hyperlink==21.0.0
 idna==3.4
 incremental==22.10.0
+libcst==1.1.0
+markdown-it-py==3.0.0
+mdurl==0.1.2
+mypy-extensions==1.0.0
 protobuf==4.24.3
 psycopg2-binary==2.9.7
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
 pycparser==2.21
+Pygments==2.17.1
 pyOpenSSL==23.3.0
 python-dateutil==2.8.2
+python-multipart==0.0.6
 pytz==2023.3.post1
+PyYAML==6.0.1
+rich==13.7.0
 service-identity==23.1.0
 six==1.16.0
+sniffio==1.3.0
 sqlparse==0.4.4
+starlette==0.32.0.post1
+strawberry-graphql==0.215.0
+strawberry-graphql-django==0.25.0
 Twisted==23.10.0
 txaio==23.1.1
+typer==0.9.0
+typing-inspect==0.9.0
 typing_extensions==4.8.0
 uvicorn==0.24.0.post1
 zope.interface==6.1
