@@ -8,7 +8,7 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('grpc_service', '0003_alter_user_rewards'),
+        ('impulse', '0003_alter_user_rewards'),
     ]
 
     operations = [
@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
                 ('order', models.IntegerField()),
                 ('type', models.CharField(choices=[('qr', 'QR Code')], max_length=10)),
                 ('value', models.CharField(max_length=512)),
-                ('challenge', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='grpc_service.challenge')),
+                ('challenge', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='impulse.challenge')),
             ],
             options={
                 'abstract': False,
@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
                 ('order', models.IntegerField()),
                 ('type', models.CharField(choices=[('timer', 'Stopuhr'), ('number', 'Nummer')], max_length=10)),
                 ('value', models.IntegerField()),
-                ('challenge', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='grpc_service.challenge')),
+                ('challenge', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='impulse.challenge')),
             ],
             options={
                 'abstract': False,

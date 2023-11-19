@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_grpc',
-    'grpc_service',
+    'impulse',
 ]
 
 MIDDLEWARE = [
@@ -141,5 +141,6 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 GRPCSERVER = {
-    'servicers': ['grpc_service.service.grpc_hook'],
+    'servicers': ['impulse.grpc_views.grpc_hook'],
 }
+PROTO_PATH = os.environ.get("GRPC_PATH", "../../gen/python")

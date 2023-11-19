@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('grpc_service', '0004_remove_reward_image_remove_team_image_and_more'),
+        ('impulse', '0004_remove_reward_image_remove_team_image_and_more'),
     ]
 
     operations = [

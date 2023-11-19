@@ -5,15 +5,16 @@ from uuid import UUID
 import django.core.exceptions as exceptions
 from django.utils.timezone import make_aware
 from django.db.models import Q
+from django.conf import settings
 
 import grpc
 
-sys.path.append("./gen/")
+sys.path.append(settings.PROTO_PATH)
 
 from proto.services.impulse_svc.v1 import impulse_svc_pb2_grpc
 from proto.services.impulse_svc.v1 import impulse_svc_pb2
 
-from grpc_service.models import Challenge, UserChallenge, User, Reward, Team
+from impulse.models import Challenge, UserChallenge, User, Reward, Team
 
 
 def get_uuid(uuid_input: str, version=4) -> UUID | None:

@@ -10,6 +10,6 @@ class DjangoGrpcConfig(AppConfig):
         super().ready()
 
         from django_grpc.grpc_server import serve
-        # loop = asyncio.get_running_loop()
-        # loop.run_until_complete(serve())
-        asyncio.create_task(serve())
+
+        loop = asyncio.get_event_loop()
+        loop.create_task(serve())

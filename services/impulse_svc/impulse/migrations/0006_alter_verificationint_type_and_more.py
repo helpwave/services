@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('grpc_service', '0005_alter_challenge_category_alter_challenge_type_and_more'),
+        ('impulse', '0005_alter_challenge_category_alter_challenge_type_and_more'),
     ]
 
     operations = [

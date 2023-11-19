@@ -31,6 +31,7 @@ async def serve(port: int = 50051):
 
     # TODO Creds
     server.add_insecure_port(f"[::]:{port}")
+    logger.info("Starting gRPC server at 127.0.0.1:%s", port)
     await server.start()
     await server.wait_for_termination()
 

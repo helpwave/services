@@ -63,23 +63,23 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('score', models.IntegerField()),
                 ('done_datetime', models.DateTimeField()),
-                ('challenge', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='grpc_service.challenge')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='grpc_service.user')),
+                ('challenge', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='impulse.challenge')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='impulse.user')),
             ],
         ),
         migrations.AddField(
             model_name='user',
             name='challenges',
-            field=models.ManyToManyField(through='grpc_service.UserChallenge', to='grpc_service.challenge'),
+            field=models.ManyToManyField(through='impulse.UserChallenge', to='impulse.challenge'),
         ),
         migrations.AddField(
             model_name='user',
             name='rewards',
-            field=models.ManyToManyField(to='grpc_service.reward'),
+            field=models.ManyToManyField(to='impulse.reward'),
         ),
         migrations.AddField(
             model_name='user',
             name='team',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='grpc_service.team'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='impulse.team'),
         ),
     ]
