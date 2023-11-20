@@ -2,10 +2,7 @@ module ory-svc
 
 go 1.20
 
-replace gen => ../../gen/go
-
 require (
-	gen v0.0.0
 	github.com/dapr/go-sdk v1.9.1
 	github.com/go-chi/chi/v5 v5.0.10
 	github.com/google/uuid v1.4.0

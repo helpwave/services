@@ -1,15 +1,16 @@
 go 1.20
 
 use (
-	./libs/common
-	./libs/decaying_lru
-	./libs/hwgorm
-	./libs/hwutil
-	./libs/logging
-	./libs/proto_helpers
-	./services/auth-svc
-	./services/emergency-room-svc
-	./services/ory-svc
-	./services/task-svc
-	./services/user-svc
+	gen/go
+	libs/common
+	libs/decaying_lru
+	libs/hwgorm
+	libs/hwutil
+	libs/logging
+	libs/proto_helpers
+	services/auth-svc
+	services/emergency-room-svc
+	services/ory-svc
+	services/task-svc
+	services/user-svc
 )
