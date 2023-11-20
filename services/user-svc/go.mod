@@ -2,14 +2,7 @@ module user-svc
 
 go 1.20
 
-replace (
-	common => ../../libs/common
-	gen => ../../gen/go
-	hwgorm => ../../libs/hwgorm
-	hwutil => ../../libs/hwutil
-	logging => ../../libs/logging
-	proto_helpers => ../../libs/proto_helpers
-)
+replace gen => ../../gen/go
 
 require (
 	common v0.0.0

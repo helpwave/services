@@ -2,11 +2,6 @@ module decaying_lru
 
 go 1.20
 
-replace (
-	common => ../common
-	hwutil => ../hwutil
-)
-
 require (
 	github.com/redis/go-redis/v9 v9.1.0
 	github.com/rs/zerolog v1.31.0

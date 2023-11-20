@@ -2,11 +2,6 @@ module hwgorm
 
 go 1.20
 
-replace (
-	hwutil => ../hwutil
-	logging => ../logging
-)
-
 require (
 	github.com/jackc/pgconn v1.14.0
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa

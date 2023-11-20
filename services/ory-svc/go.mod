@@ -2,13 +2,7 @@ module ory-svc
 
 go 1.20
 
-replace (
-	common => ../../libs/common
-	gen => ../../gen/go
-	hwgorm => ../../libs/hwgorm
-	hwutil => ../../libs/hwutil
-	logging => ../../libs/logging
-)
+replace gen => ../../gen/go
 
 require (
 	common v0.0.0

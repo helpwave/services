@@ -2,11 +2,6 @@ module common
 
 go 1.20
 
-replace (
-	hwutil => ../hwutil
-	logging => ../logging
-)
-
 require (
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/dapr/go-sdk v1.9.1

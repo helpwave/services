@@ -2,12 +2,7 @@ module proto_helpers
 
 go 1.20
 
-replace (
-	gen => ../../gen/go
-	hwgorm => ../hwgorm
-	hwutil => ../hwutil
-	logging => ../logging
-)
+replace gen => ../../gen/go
 
 require (
 	gen v0.0.0
