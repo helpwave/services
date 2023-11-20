@@ -10,8 +10,6 @@ require (
 	github.com/rs/zerolog v1.31.0
 	golang.org/x/oauth2 v0.14.0
 	google.golang.org/grpc v1.59.0
-	hwutil v0.0.0
-	logging v0.0.0
 )
 
 require (
@@ -22,14 +20,8 @@ require (
 
 require (
 	cloud.google.com/go/compute v1.23.2 // indirect
-	github.com/fatih/structs v1.1.0 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
-	github.com/go-playground/locales v0.14.1 // indirect
-	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.16.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
-	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
