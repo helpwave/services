@@ -16,6 +16,7 @@ in
     gh
     git
     go-migrate
+    grpcurl
     nixpkgs-fmt
   ] ++ [
     # self build packages

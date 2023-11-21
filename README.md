@@ -17,11 +17,14 @@ This repository utilizes [devenv.sh](https://devenv.sh) (on top of [Nix](https:/
 
 ### Ports
 
-| Service  | Port | Protocol |
-|----------|------|----------|
-| task-svc | 3001 | gRPC     |
-| user-svc | 3002 | gRPC     |
-| ory-svc  | 3003 | gRPC     |
+| Service         | Port  | Protocol               |
+|-----------------|-------|------------------------|
+| task-svc        | 3001  | gRPC                   |
+| user-svc        | 3002  | gRPC                   |
+| ory-svc         | 3003  | gRPC                   |
+| dapr (task-svc) | 3500  | http                   |
+| dapr (task-svc) | 35001 | grpc                   |
+| APISIX          | 9080  | http (mostly grcp-web) |
 
 ### Scripts
 

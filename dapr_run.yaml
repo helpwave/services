@@ -22,6 +22,8 @@ apps:
   - appID: task-svc
     appDirPath: services/task-svc
     appPort: 3001
+    daprHTTPPort: 3500
+    daprGRPCPort: 35001
     env:
       POSTGRES_DB: task-svc
     command: ["air"]

@@ -110,6 +110,10 @@ in
       wait $pid
       cleanup_command
     '';
+
+    apisix.exec = ''
+      # FIXME: the container does not stop when SIGINTing
+      docker run -i -e NO_DAPR=true --network host --rm $(docker build -q -f Dockerfile.apisix -t helpwave-services-apisix .)
+    '';
   };
 }
-
