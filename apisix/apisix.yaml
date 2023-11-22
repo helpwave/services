@@ -18,7 +18,7 @@ upstreams:
     # based on the dapr-app-id metadata key (think: http header)
   - id: dapr-grpc
     nodes:
-      "localhost:35001": 1 # TODO: can this be refactored to be an array?
+      "localhost:35001": 1
     scheme: grpc
     # Dapr's http router works similar to the dapr grpc router
   - id: dapr-http
@@ -140,7 +140,7 @@ routes:
       proxy-rewrite:
         uri: /v1.0/invoke/ory-svc/method/after_settings_webhook
 
-  # ory-svc' auth wall route
+  # ory-svc's auth wall route
   - id: ory-svc-oauth2-consent
     uri: /ory-svc/v1.0/oauth2/consent
     service_id: ory-svc
@@ -149,7 +149,7 @@ routes:
         uri: /v1.0/invoke/ory-svc/method/oauth2_consent
 
   # Catch-all: route grpc traffic to dapr-grpc (without grpc-web!)
-  # TODO: why does this exist? It's a security risk at best
+  # used by mobile, which talks grpc
   - id: grpc
     uri: /*
     upstream_id: dapr-grpc

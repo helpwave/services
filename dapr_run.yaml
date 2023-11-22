@@ -22,8 +22,6 @@ apps:
   - appID: task-svc
     appDirPath: services/task-svc
     appPort: 3001
-    daprHTTPPort: 3500
-    daprGRPCPort: 35001
     env:
       POSTGRES_DB: task-svc
     command: ["air"]
@@ -42,3 +40,11 @@ apps:
     env:
       ORY_APIKEY: 2341
     command: ["air"]
+
+  - appID: apisix
+    appPort: 9080
+    appDirPath: .
+    daprInternalGRPCPort: 35001
+    logLevel: debug
+    command: ["bash", "-c", "docker run -i -e NO_DAPR=true --network host --rm $(docker build -q -f Dockerfile.apisix -t helpwave-services-apisix .)"]
+
