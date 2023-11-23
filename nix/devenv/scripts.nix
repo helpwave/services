@@ -79,6 +79,7 @@ in
 
       cleanup() {
         kill -TERM $pid
+        docker kill helpwave-services-apisix || echo "helpwave-services-apisix already dead"
         wait $pid
         cleanup_command
         exit 0
