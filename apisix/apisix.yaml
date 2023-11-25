@@ -81,7 +81,7 @@ routes:
   - id: task-svc
     uri: /task-svc/*
     service_id: task-svc
-    # TODO: maybe we can move this to the upstream?
+    # TODO: maybe we can move this to the service?
     plugins:
       cors:
         # TODO: Scope to grpc-web spec
@@ -96,7 +96,7 @@ routes:
   - id: auth-svc
     uri: /auth-svc/*
     service_id: auth-svc
-    # TODO: maybe we can move this to the upstream?
+    # TODO: maybe we can move this to the service?
     plugins:
       cors:
         # TODO: Scope to grpc-web spec
@@ -111,7 +111,7 @@ routes:
   - id: user-svc
     uri: /user-svc/*
     service_id: user-svc
-    # TODO: maybe we can move this to the upstream?
+    # TODO: maybe we can move this to the service?
     plugins:
       cors:
         # TODO: Scope to grpc-web spec
