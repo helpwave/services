@@ -45,5 +45,6 @@ apps:
     appPort: 9080
     appDirPath: .
     daprInternalGRPCPort: 35001
+    daprHTTPPort: 3500
     command: ["bash", "-c", "docker run --name helpwave-services-apisix -e NO_DAPR=true --network host -v $(pwd)/apisix/apisix_config.dev.yaml:/usr/local/apisix/conf/config.yaml --rm $(docker build -q -f Dockerfile.apisix -t helpwave-services-apisix .)"]
 
