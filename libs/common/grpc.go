@@ -116,14 +116,15 @@ func authFunc(ctx context.Context) (context.Context, error) {
 		return nil, status.Errorf(codes.Unauthenticated, "no auth token: %v", err)
 	}
 
-	// verify token
+	// verify token -> if fakeToken is used claims will be nil and we will get an error
 	claims, err := VerifyIDToken(token)
 
 	// If InsecureFakeTokenEnable is true and Mode is development,
 	// we accept unverified Base64 encoded json structure in the schema of IDTokenClaims as well.
 	// This allows the client to pass self-defined "Fake ID Token Claims" without going through our auth provider.
 	// ONLY FOR NON-PUBLIC DEVELOPMENT AND STAGING ENVIRONMENTS
-	if claims == nil && err != nil && InsecureFakeTokenEnable {
+	if claims == nil && InsecureFakeTokenEnable {
+		zlog.Warn().Msg("could not verify token, falling back to fake token instead")
 		claims, err = VerifyFakeToken(token)
 	}
 

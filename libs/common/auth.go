@@ -90,14 +90,8 @@ func setupAuth() {
 		zlog.Fatal().Err(err).Send()
 	}
 
-	// We are doing this if/else to fail when
-	// InsecureFakeTokenEnable is false and env OAUTH_CLIENT_ID is not set
-	var clientId string
-	if InsecureFakeTokenEnable {
-		clientId = "fake_oauth_client_id"
-	} else {
-		clientId = hwutil.MustGetEnv("OAUTH_CLIENT_ID")
-	}
+	// Set OAUTH_CLIENT_ID to env variable or use fake clientid if not set.
+	clientId := hwutil.GetEnvOr("OAUTH_CLIENT_ID", "fake_oauth_client_id")
 
 	oauthConfig = &oauth2.Config{
 		ClientID: clientId,
