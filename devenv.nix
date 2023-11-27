@@ -17,6 +17,7 @@ in
     git
     go-migrate
     nixpkgs-fmt
+    sqlc
   ] ++ [
     # self build packages
     protoc-go-inject-tag

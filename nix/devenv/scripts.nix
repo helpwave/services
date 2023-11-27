@@ -71,6 +71,29 @@ in
           sleep 10
       fi
     '';
+
+    models.exec = ''
+      # No service? Build them all!
+      if [[ -z $1 ]]; then
+        for file in services/*-svc; do
+          devenv shell models $(basename "$file")
+        done
+        exit 0
+      fi
+
+      # First, make sure the db is migrated
+      devenv shell migratesh $1 up
+
+      if [ $? -ne 0 ]; then
+        exit 0
+      fi
+
+      # Generate schema.sql
+      # TODO: use parameters
+      pg_dump postgres://postgres:postgres@localhost:5432/$1 --schema-only > ./services/$1/schema.sql
+
+      cd services/$1 && sqlc generate
+    '';
   };
 
   processes = {
