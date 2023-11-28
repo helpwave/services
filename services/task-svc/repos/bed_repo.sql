@@ -1,8 +1,16 @@
 -- name: CreateBed :one
 INSERT INTO beds (room_id, organization_id, name) VALUES (@room_id, @organization_id, @name) RETURNING *;
 
--- name: GetBedById :one
-SELECT * FROM beds WHERE id = $1 LIMIT 1;
+-- name: GetBedByIdForOrganization :one
+SELECT * FROM beds
+	WHERE id = $1
+	AND organization_id = $2
+	LIMIT 1;
+
+-- name: GetBedsForOrganization :many
+SELECT * FROM beds
+	WHERE organization_id = $1
+	ORDER BY name ASC;
 
 -- name: GetBedsByRoomForOrganization :many
 SELECT * FROM beds

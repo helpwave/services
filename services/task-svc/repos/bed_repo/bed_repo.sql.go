@@ -63,12 +63,20 @@ func (q *Queries) ExistsBedInOrganization(ctx context.Context, arg ExistsBedInOr
 	return bed_exists, err
 }
 
-const getBedById = `-- name: GetBedById :one
-SELECT id, room_id, organization_id, name FROM beds WHERE id = $1 LIMIT 1
+const getBedByIdForOrganization = `-- name: GetBedByIdForOrganization :one
+SELECT id, room_id, organization_id, name FROM beds
+	WHERE id = $1
+	AND organization_id = $2
+	LIMIT 1
 `
 
-func (q *Queries) GetBedById(ctx context.Context, id uuid.UUID) (Bed, error) {
-	row := q.db.QueryRow(ctx, getBedById, id)
+type GetBedByIdForOrganizationParams struct {
+	ID             uuid.UUID
+	OrganizationID uuid.UUID
+}
+
+func (q *Queries) GetBedByIdForOrganization(ctx context.Context, arg GetBedByIdForOrganizationParams) (Bed, error) {
+	row := q.db.QueryRow(ctx, getBedByIdForOrganization, arg.ID, arg.OrganizationID)
 	var i Bed
 	err := row.Scan(
 		&i.ID,
@@ -92,6 +100,37 @@ type GetBedsByRoomForOrganizationParams struct {
 
 func (q *Queries) GetBedsByRoomForOrganization(ctx context.Context, arg GetBedsByRoomForOrganizationParams) ([]Bed, error) {
 	rows, err := q.db.Query(ctx, getBedsByRoomForOrganization, arg.OrganizationID, arg.RoomID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Bed
+	for rows.Next() {
+		var i Bed
+		if err := rows.Scan(
+			&i.ID,
+			&i.RoomID,
+			&i.OrganizationID,
+			&i.Name,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getBedsForOrganization = `-- name: GetBedsForOrganization :many
+SELECT id, room_id, organization_id, name FROM beds
+	WHERE organization_id = $1
+	ORDER BY name ASC
+`
+
+func (q *Queries) GetBedsForOrganization(ctx context.Context, organizationID uuid.UUID) ([]Bed, error) {
+	rows, err := q.db.Query(ctx, getBedsForOrganization, organizationID)
 	if err != nil {
 		return nil, err
 	}

@@ -6,10 +6,10 @@ import (
 	pb "gen/proto/services/task_svc/v1"
 	"hwgorm"
 	"hwutil"
-	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
 	"task-svc/internal/tracking"
+	"task-svc/repos/bed_repo"
 
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -186,7 +186,7 @@ func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.Get
 		return &pb.GetPatientAssignmentByWardResponse_Room{
 			Id:   room.ID.String(),
 			Name: room.Name,
-			Beds: hwutil.Map(room.Beds, func(bed models.Bed) *pb.GetPatientAssignmentByWardResponse_Room_Bed {
+			Beds: hwutil.Map(room.Beds, func(bed bed_repo.Bed) *pb.GetPatientAssignmentByWardResponse_Room_Bed {
 				var patient *pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient
 				if bed.Patient != nil {
 					patient = &pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
@@ -304,7 +304,7 @@ func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientReq
 func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*pb.AssignBedResponse, error) {
 	log := zlog.Ctx(ctx)
 	patientRepo := repositories.PatientRepo(ctx)
-	bedRepo := repositories.BedRepo(ctx)
+	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -476,10 +476,10 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		Name:                    patient.HumanReadableIdentifier, // TODO replace later
 		Tasks:                   mappedTasks,
 		WardId:                  hwutil.UUIDToStringPtr(wardId),
-		Room: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientDetailsResponse_Room {
+		Room: hwutil.MapNillable(patient.Bed, func(bed bed_repo.Bed) pb.GetPatientDetailsResponse_Room {
 			return pb.GetPatientDetailsResponse_Room{Id: bed.Room.ID.String(), Name: bed.Room.Name, WardId: bed.Room.WardID.String()}
 		}),
-		Bed: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientDetailsResponse_Bed {
+		Bed: hwutil.MapNillable(patient.Bed, func(bed bed_repo.Bed) pb.GetPatientDetailsResponse_Bed {
 			return pb.GetPatientDetailsResponse_Bed{Id: bed.ID.String(), Name: bed.Name}
 		}),
 	}, nil
