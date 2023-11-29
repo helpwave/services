@@ -1,9 +1,9 @@
-# File is copied to /usr/local/apisix/conf/config.yaml in docker image (Dockerfile.apisix)
+# File can be mounted to /usr/local/apisix/conf/config.yaml (e.g. in dapr_run.yaml)
 
 apisix:
   node_listen:
     - port: 9080
-      enable_http2: true
+      enable_http2: false
 
 deployment:
   role: data_plane
