@@ -4,11 +4,13 @@ import (
 	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
+	"hwdb"
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
+	"task-svc/repos/patient_repo"
 
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -27,7 +29,7 @@ func NewServiceServer() *ServiceServer {
 
 func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.CreateTaskResponse, error) {
 	log := zlog.Ctx(ctx)
-	patientRepo := repositories.PatientRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 	taskRepo := repositories.TaskRepo(ctx)
 
 	// TODO: Auth
@@ -48,12 +50,13 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 	}
 
 	// Check if patient exists
-	if _, err := patientRepo.GetPatientById(patientId); err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "patientId not found")
-		}
+	if exists, err := patientRepo.ExistsPatientInOrganization(ctx, patient_repo.ExistsPatientInOrganizationParams{
+		ID:             patientId,
+		OrganizationID: organizationID,
+	}); err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if !exists {
+		return nil, status.Error(codes.InvalidArgument, "patientId not found")
 	}
 
 	description := ""
@@ -101,7 +104,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 
 func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.GetTaskResponse, error) {
 	taskRepo := repositories.TaskRepo(ctx)
-	patientRepo := repositories.PatientRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -134,7 +137,7 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		}
 	})
 
-	patient, err := patientRepo.GetPatientById(task.PatientId)
+	patientName, err := patientRepo.GetPatientHumanReadableIdentifier(ctx, task.PatientId)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -143,8 +146,8 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		}
 	}
 	patientResponse := &pb.GetTaskResponse_Patient{
-		Id:   *hwutil.UUIDToStringPtr(&patient.ID),
-		Name: patient.HumanReadableIdentifier,
+		Id:   task.PatientId.String(),
+		Name: patientName,
 	}
 
 	return &pb.GetTaskResponse{

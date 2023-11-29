@@ -7,6 +7,16 @@ SELECT * FROM beds
 	AND organization_id = $2
 	LIMIT 1;
 
+-- name: GetBedWithRoomByPatientForOrganization :one
+SELECT
+	beds.id as bed_id, beds.name as bed_name,
+	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+	FROM patients
+	JOIN beds ON patients.bed_id = beds.id
+	JOIN rooms ON beds.room_id = rooms.id
+	WHERE patients.id = @patient_id
+	LIMIT 1;
+
 -- name: GetBedsForOrganization :many
 SELECT * FROM beds
 	WHERE organization_id = $1

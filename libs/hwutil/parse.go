@@ -44,11 +44,19 @@ func StringsToUUIDs(strings []string) ([]uuid.UUID, error) {
 }
 
 func UUIDToStringPtr(u *uuid.UUID) *string {
-	var s string
 	if u != nil {
-		s = u.String()
+		s := u.String()
+		return &s
 	}
-	return &s
+	return nil
+}
+
+func NullUUIDToStringPtr(u uuid.NullUUID) *string {
+	if u.Valid {
+		s := u.UUID.String()
+		return &s
+	}
+	return nil
 }
 
 func StringToUUIDPtr(s *string) (*uuid.UUID, error) {

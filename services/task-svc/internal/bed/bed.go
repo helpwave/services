@@ -6,7 +6,6 @@ import (
 	"hwdb"
 	"hwgorm"
 	"hwutil"
-	"task-svc/internal/repositories"
 	"task-svc/repos/bed_repo"
 
 	"github.com/google/uuid"
@@ -73,16 +72,15 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed, err := bedRepo.GetBedByIdForOrganization(ctx, bed_repo.GetBedByIdForOrganizationParams{
+	bed, err := hwdb.Optional(bedRepo.GetBedByIdForOrganization)(ctx, bed_repo.GetBedByIdForOrganizationParams{
 		ID:             id,
 		OrganizationID: organizationID,
 	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	if bed == nil {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
 	}
 
 	return &pb.GetBedResponse{
@@ -93,7 +91,7 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 }
 
 func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatientRequest) (*pb.GetBedByPatientResponse, error) {
-	patientRepo := repositories.PatientRepo(ctx)
+	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -102,7 +100,7 @@ func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatien
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient, err := patientRepo.GetPatientById(patientId)
+	result, err := hwdb.Optional(bedRepo.GetBedWithRoomByPatientForOrganization)(ctx, patientId)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -112,11 +110,11 @@ func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatien
 	}
 
 	return &pb.GetBedByPatientResponse{
-		Room: hwutil.MapNillable(patient.Bed, func(bed bed_repo.Bed) pb.GetBedByPatientResponse_Room {
-			return pb.GetBedByPatientResponse_Room{Id: bed.Room.ID.String(), Name: bed.Room.Name, WardId: bed.Room.WardID.String()}
+		Room: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientForOrganizationRow) pb.GetBedByPatientResponse_Room {
+			return pb.GetBedByPatientResponse_Room{Id: res.RoomID.String(), Name: res.RoomName, WardId: res.WardID.String()}
 		}),
-		Bed: hwutil.MapNillable(patient.Bed, func(bed bed_repo.Bed) pb.GetBedByPatientResponse_Bed {
-			return pb.GetBedByPatientResponse_Bed{Id: bed.ID.String(), Name: bed.Name}
+		Bed: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientForOrganizationRow) pb.GetBedByPatientResponse_Bed {
+			return pb.GetBedByPatientResponse_Bed{Id: res.BedID.String(), Name: res.BedName}
 		}),
 	}, nil
 }

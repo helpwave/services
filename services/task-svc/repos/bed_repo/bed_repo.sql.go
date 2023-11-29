@@ -87,6 +87,38 @@ func (q *Queries) GetBedByIdForOrganization(ctx context.Context, arg GetBedByIdF
 	return i, err
 }
 
+const getBedWithRoomByPatientForOrganization = `-- name: GetBedWithRoomByPatientForOrganization :one
+SELECT
+	beds.id as bed_id, beds.name as bed_name,
+	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+	FROM patients
+	JOIN beds ON patients.bed_id = beds.id
+	JOIN rooms ON beds.room_id = rooms.id
+	WHERE patients.id = $1
+	LIMIT 1
+`
+
+type GetBedWithRoomByPatientForOrganizationRow struct {
+	BedID    uuid.UUID
+	BedName  string
+	RoomID   uuid.UUID
+	RoomName string
+	WardID   uuid.UUID
+}
+
+func (q *Queries) GetBedWithRoomByPatientForOrganization(ctx context.Context, patientID uuid.UUID) (GetBedWithRoomByPatientForOrganizationRow, error) {
+	row := q.db.QueryRow(ctx, getBedWithRoomByPatientForOrganization, patientID)
+	var i GetBedWithRoomByPatientForOrganizationRow
+	err := row.Scan(
+		&i.BedID,
+		&i.BedName,
+		&i.RoomID,
+		&i.RoomName,
+		&i.WardID,
+	)
+	return i, err
+}
+
 const getBedsByRoomForOrganization = `-- name: GetBedsByRoomForOrganization :many
 SELECT id, room_id, organization_id, name FROM beds
 	WHERE organization_id = $1 AND room_id = $2
@@ -104,7 +136,7 @@ func (q *Queries) GetBedsByRoomForOrganization(ctx context.Context, arg GetBedsB
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Bed
+	items := []Bed{}
 	for rows.Next() {
 		var i Bed
 		if err := rows.Scan(
@@ -135,7 +167,7 @@ func (q *Queries) GetBedsForOrganization(ctx context.Context, organizationID uui
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Bed
+	items := []Bed{}
 	for rows.Next() {
 		var i Bed
 		if err := rows.Scan(
