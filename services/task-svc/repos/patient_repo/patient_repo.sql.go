@@ -7,6 +7,7 @@ package patient_repo
 
 import (
 	"context"
+	"strings"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -72,99 +73,6 @@ func (q *Queries) ExistsPatientInOrganization(ctx context.Context, arg ExistsPat
 	var patient_exists bool
 	err := row.Scan(&patient_exists)
 	return patient_exists, err
-}
-
-const getDischargedPatientsWithTasksForOrganization = `-- name: GetDischargedPatientsWithTasksForOrganization :many
-SELECT
-	patients.id as patient_id,
-	patients.id, patients.human_readable_identifier, patients.organization_id, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at,
-	tasks.id as task_id,
-	tasks.id, tasks.name, tasks.description, tasks.status, tasks.assigned_user_id, tasks.patient_id, tasks.public, tasks.organization_id, tasks.created_by, tasks.due_at,
-	subtasks.id as subtask_id,
-	subtasks.id, subtasks.task_id, subtasks.name, subtasks.done, subtasks.created_by, subtasks.creation_date
-	FROM patients
-	LEFT JOIN tasks ON tasks.patient_id = patients.id
-	LEFT JOIN subtasks ON subtasks.task_id = tasks.id
-	WHERE patients.organization_id = $1
-	AND NOT patients.is_discharged = 0
-`
-
-type GetDischargedPatientsWithTasksForOrganizationRow struct {
-	PatientID               uuid.UUID
-	ID                      uuid.UUID
-	HumanReadableIdentifier string
-	OrganizationID          uuid.UUID
-	Notes                   string
-	BedID                   uuid.NullUUID
-	IsDischarged            int32
-	CreatedAt               pgtype.Timestamp
-	UpdatedAt               pgtype.Timestamp
-	TaskID                  uuid.NullUUID
-	ID_2                    uuid.NullUUID
-	Name                    *string
-	Description             *string
-	Status                  *int32
-	AssignedUserID          uuid.NullUUID
-	PatientID_2             uuid.NullUUID
-	Public                  *bool
-	OrganizationID_2        uuid.NullUUID
-	CreatedBy               uuid.NullUUID
-	DueAt                   pgtype.Timestamp
-	SubtaskID               uuid.NullUUID
-	ID_3                    uuid.NullUUID
-	TaskID_2                uuid.NullUUID
-	Name_2                  *string
-	Done                    *bool
-	CreatedBy_2             uuid.NullUUID
-	CreationDate            pgtype.Timestamp
-}
-
-func (q *Queries) GetDischargedPatientsWithTasksForOrganization(ctx context.Context, organizationID uuid.UUID) ([]GetDischargedPatientsWithTasksForOrganizationRow, error) {
-	rows, err := q.db.Query(ctx, getDischargedPatientsWithTasksForOrganization, organizationID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []GetDischargedPatientsWithTasksForOrganizationRow{}
-	for rows.Next() {
-		var i GetDischargedPatientsWithTasksForOrganizationRow
-		if err := rows.Scan(
-			&i.PatientID,
-			&i.ID,
-			&i.HumanReadableIdentifier,
-			&i.OrganizationID,
-			&i.Notes,
-			&i.BedID,
-			&i.IsDischarged,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-			&i.TaskID,
-			&i.ID_2,
-			&i.Name,
-			&i.Description,
-			&i.Status,
-			&i.AssignedUserID,
-			&i.PatientID_2,
-			&i.Public,
-			&i.OrganizationID_2,
-			&i.CreatedBy,
-			&i.DueAt,
-			&i.SubtaskID,
-			&i.ID_3,
-			&i.TaskID_2,
-			&i.Name_2,
-			&i.Done,
-			&i.CreatedBy_2,
-			&i.CreationDate,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
 }
 
 const getLastUpdatedPatientIDsForOrganization = `-- name: GetLastUpdatedPatientIDsForOrganization :many
@@ -348,100 +256,6 @@ func (q *Queries) GetPatientsWithBedAndRoom(ctx context.Context, patientIds []uu
 			&i.RoomID,
 			&i.RoomName,
 			&i.WardID,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getUnassignedPatientsWithTasksForOrganization = `-- name: GetUnassignedPatientsWithTasksForOrganization :many
-SELECT
-	patients.id as patient_id,
-	patients.id, patients.human_readable_identifier, patients.organization_id, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at,
-	tasks.id as task_id,
-	tasks.id, tasks.name, tasks.description, tasks.status, tasks.assigned_user_id, tasks.patient_id, tasks.public, tasks.organization_id, tasks.created_by, tasks.due_at,
-	subtasks.id as subtask_id,
-	subtasks.id, subtasks.task_id, subtasks.name, subtasks.done, subtasks.created_by, subtasks.creation_date
-	FROM patients
-	LEFT JOIN tasks ON tasks.patient_id = patients.id
-	LEFT JOIN subtasks ON subtasks.task_id = tasks.id
-	WHERE patients.organization_id = $1
-	AND patients.bed_id IS NULL
-	AND patients.is_discharged = 0
-`
-
-type GetUnassignedPatientsWithTasksForOrganizationRow struct {
-	PatientID               uuid.UUID
-	ID                      uuid.UUID
-	HumanReadableIdentifier string
-	OrganizationID          uuid.UUID
-	Notes                   string
-	BedID                   uuid.NullUUID
-	IsDischarged            int32
-	CreatedAt               pgtype.Timestamp
-	UpdatedAt               pgtype.Timestamp
-	TaskID                  uuid.NullUUID
-	ID_2                    uuid.NullUUID
-	Name                    *string
-	Description             *string
-	Status                  *int32
-	AssignedUserID          uuid.NullUUID
-	PatientID_2             uuid.NullUUID
-	Public                  *bool
-	OrganizationID_2        uuid.NullUUID
-	CreatedBy               uuid.NullUUID
-	DueAt                   pgtype.Timestamp
-	SubtaskID               uuid.NullUUID
-	ID_3                    uuid.NullUUID
-	TaskID_2                uuid.NullUUID
-	Name_2                  *string
-	Done                    *bool
-	CreatedBy_2             uuid.NullUUID
-	CreationDate            pgtype.Timestamp
-}
-
-func (q *Queries) GetUnassignedPatientsWithTasksForOrganization(ctx context.Context, organizationID uuid.UUID) ([]GetUnassignedPatientsWithTasksForOrganizationRow, error) {
-	rows, err := q.db.Query(ctx, getUnassignedPatientsWithTasksForOrganization, organizationID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []GetUnassignedPatientsWithTasksForOrganizationRow{}
-	for rows.Next() {
-		var i GetUnassignedPatientsWithTasksForOrganizationRow
-		if err := rows.Scan(
-			&i.PatientID,
-			&i.ID,
-			&i.HumanReadableIdentifier,
-			&i.OrganizationID,
-			&i.Notes,
-			&i.BedID,
-			&i.IsDischarged,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-			&i.TaskID,
-			&i.ID_2,
-			&i.Name,
-			&i.Description,
-			&i.Status,
-			&i.AssignedUserID,
-			&i.PatientID_2,
-			&i.Public,
-			&i.OrganizationID_2,
-			&i.CreatedBy,
-			&i.DueAt,
-			&i.SubtaskID,
-			&i.ID_3,
-			&i.TaskID_2,
-			&i.Name_2,
-			&i.Done,
-			&i.CreatedBy_2,
-			&i.CreationDate,
 		); err != nil {
 			return nil, err
 		}

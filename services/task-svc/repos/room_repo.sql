@@ -47,44 +47,6 @@ SELECT
 	WHERE rooms.ward_id = @ward_id
 	ORDER BY rooms.id ASC, beds.name ASC;
 
--- name: GetRoomsWithBedsWithActivePatientsForWard :many
-SELECT
-	rooms.id as room_id,
-	rooms.name as room_name,
-	beds.id as bed_id,
-	beds.name as bed_name,
-	patients.id as patient_id,
-	patients.human_readable_identifier as patient_human_readable_identifier,
-	sqlc.embed(tasks),
-	sqlc.embed(subtasks)
-	FROM rooms
-	LEFT JOIN beds ON beds.room_id = rooms.id
-	LEFT JOIN patients ON patients.bed_id = beds.id
-	LEFT JOIN tasks ON tasks.patient_id = patients.id
-	LEFT JOIN subtasks ON subtasks.task_id = tasks.id
-	WHERE rooms.ward_id = @ward_id
-	AND patients.is_discharged = 0
-	ORDER BY rooms.id ASC, beds.name ASC;
-
--- name: GetRoomsWithBedsWithActivePatientsForOrganization :many
-SELECT
-	rooms.id as room_id,
-	rooms.name as room_name,
-	beds.id as bed_id,
-	beds.name as bed_name,
-	patients.id as patient_id,
-	patients.human_readable_identifier as patient_human_readable_identifier,
-	sqlc.embed(tasks),
-	sqlc.embed(subtasks)
-	FROM rooms
-	LEFT JOIN beds ON beds.room_id = rooms.id
-	LEFT JOIN patients ON patients.bed_id = beds.id
-	LEFT JOIN tasks ON tasks.patient_id = patients.id
-	LEFT JOIN subtasks ON subtasks.task_id = tasks.id
-	WHERE rooms.organization_id = @organization_id
-	AND patients.is_discharged = 0
-	ORDER BY rooms.id ASC, beds.name ASC;
-
 -- name: GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganization :many
 SELECT
 	rooms.id as room_id,

@@ -39,36 +39,6 @@ SELECT
 	WHERE rooms.ward_id = @ward_id
 	AND rooms.organization_id = @organization_id;
 
--- name: GetUnassignedPatientsWithTasksForOrganization :many
-SELECT
-	patients.id as patient_id,
-	patients.*,
-	tasks.id as task_id,
-	tasks.*,
-	subtasks.id as subtask_id,
-	subtasks.*
-	FROM patients
-	LEFT JOIN tasks ON tasks.patient_id = patients.id
-	LEFT JOIN subtasks ON subtasks.task_id = tasks.id
-	WHERE patients.organization_id = @organization_id
-	AND patients.bed_id IS NULL
-	AND patients.is_discharged = 0;
-
-
--- name: GetDischargedPatientsWithTasksForOrganization :many
-SELECT
-	patients.id as patient_id,
-	patients.*,
-	tasks.id as task_id,
-	tasks.*,
-	subtasks.id as subtask_id,
-	subtasks.*
-	FROM patients
-	LEFT JOIN tasks ON tasks.patient_id = patients.id
-	LEFT JOIN subtasks ON subtasks.task_id = tasks.id
-	WHERE patients.organization_id = @organization_id
-	AND NOT patients.is_discharged = 0;
-
 -- name: GetLastUpdatedPatientIDsForOrganization :many
 SELECT id
 	FROM patients
