@@ -29,7 +29,7 @@ upstreams:
 # Services define groups of API endpoints, which correspond to logical (and in our case physical) services.
 # Most services have a plugin chain like this:
 # - grpc-web, is both a frontend library and a proxy that allows grpc communication from browsers, see [AGW]
-# - proxy-rewrit, which we use to add the dapr-app-id header, so dapr will route the request to the correct service
+# - proxy-rewrite, which we use to add the dapr-app-id header, so dapr will route the request to the correct service
 #
 # _meta: priority -1 => We need to define the plugin order manually,
 # for example the cors and grpc-web plugin do not get along so well:
