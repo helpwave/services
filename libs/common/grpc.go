@@ -123,7 +123,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	// we accept unverified Base64 encoded json structure in the schema of IDTokenClaims as well.
 	// This allows the client to pass self-defined "Fake ID Token Claims" without going through our auth provider.
 	// ONLY FOR NON-PUBLIC DEVELOPMENT AND STAGING ENVIRONMENTS
-	if claims == nil && InsecureFakeTokenEnable {
+	if claims == nil && err != nil && InsecureFakeTokenEnable {
 		zlog.Warn().Msg("could not verify token, falling back to fake token instead")
 		claims, err = VerifyFakeToken(token)
 	}
