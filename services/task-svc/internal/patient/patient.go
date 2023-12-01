@@ -506,6 +506,189 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListRequest) (*pb.GetPatientListResponse, error) {
 	patientRepo := patient_repo.New(hwdb.GetDB())
 
+	// TODO: Auth
+
+	wardID, err := hwutil.ParseNullUUID(req.WardId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := patientRepo.GetPatientsWithTasksBedAndRoomByWard(ctx, patient_repo.GetPatientsWithTasksBedAndRoomByWardParams{
+		WardID:         wardID,
+		OrganizationID: organizationID,
+	})
+
+	dischargedRows, chargedRows := hwutil.Partition(rows, func(row patient_repo.GetPatientsWithTasksBedAndRoomByWardRow) bool {
+		return row.Patient.IsDischarged != 0
+	})
+
+	withBedRows, unassignedRows := hwutil.Partition(chargedRows, func(row patient_repo.GetPatientsWithTasksBedAndRoomByWardRow) bool {
+		return row.BedID.Valid
+	})
+
+	// collectActivePatients assumes row.BedID exists
+	// by constraints then row.BedName and row.Room* must also exist
+	collectActivePatients := func(rows []patient_repo.GetPatientsWithTasksBedAndRoomByWardRow) []*pb.GetPatientListResponse_PatientWithRoomAndBed {
+		patients := make([]*pb.GetPatientListResponse_PatientWithRoomAndBed, 0) // List of Patients to be returned
+		patientsMap := make(map[uuid.UUID]int)                                  // maps id to index of patient in patients list
+		tasksMap := make(map[uuid.UUID]int)                                     // maps tasks id to index of task in its patient's Task list
+		subTasksSet := make(map[uuid.UUID]bool)
+
+		for _, row := range rows {
+			var patient *pb.GetPatientListResponse_PatientWithRoomAndBed
+
+			if patientIx, existed := patientsMap[row.Patient.ID]; existed {
+				patient = patients[patientIx]
+			} else {
+				patient = &pb.GetPatientListResponse_PatientWithRoomAndBed{
+					Id:                      row.Patient.ID.String(),
+					HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
+					Room: &pb.GetPatientListResponse_Room{
+						Id:     row.RoomID.UUID.String(),
+						Name:   *row.RoomName,
+						WardId: row.WardID.UUID.String(),
+					},
+					Bed: &pb.GetPatientListResponse_Bed{
+						Id:   row.BedID.UUID.String(),
+						Name: *row.BedName,
+					},
+					Notes: row.Patient.Notes,
+					Tasks: make([]*pb.GetPatientListResponse_Task, 0),
+				}
+				patients = append(patients, patient)
+				patientsMap[row.Patient.ID] = len(patients) - 1
+			}
+
+			// a patient may not have any tasks
+			if !row.TaskID.Valid {
+				continue
+			}
+
+			var task *pb.GetPatientListResponse_Task
+			if taskIx, existed := tasksMap[row.TaskID.UUID]; existed {
+				task = patient.Tasks[taskIx]
+			} else {
+				// TODO: in order for the api to behave the same I keep this,
+				// TODO: like it was before, but we should really make AUID optional and return nil
+				assignedUserId := ""
+				if row.TaskAssignedUserID.Valid {
+					assignedUserId = row.TaskAssignedUserID.UUID.String()
+				}
+
+				task = &pb.GetPatientListResponse_Task{
+					Id:             row.TaskID.UUID.String(),
+					Name:           *row.TaskName,
+					Description:    *row.TaskDescription,
+					Status:         pb.GetPatientListResponse_TaskStatus(*row.TaskStatus),
+					AssignedUserId: assignedUserId,
+					PatientId:      row.Patient.ID.String(),
+					Public:         *row.TaskPublic,
+					Subtasks:       make([]*pb.GetPatientListResponse_Task_SubTask, 0),
+				}
+				patient.Tasks = append(patient.Tasks, task)
+				tasksMap[row.TaskID.UUID] = len(patient.Tasks) - 1
+			}
+
+			// task may not have any subtasks
+			if !row.SubtaskID.Valid {
+				continue
+			}
+
+			if _, exists := subTasksSet[row.SubtaskID.UUID]; !exists {
+				task.Subtasks = append(task.Subtasks, &pb.GetPatientListResponse_Task_SubTask{
+					Id:   row.SubtaskID.UUID.String(),
+					Name: *row.SubtaskName,
+					Done: *row.SubtaskDone,
+				})
+				subTasksSet[row.SubtaskID.UUID] = true
+			}
+		}
+
+		return patients
+	}
+
+	// not ideal that we have to repeat ourselves here
+	collectPatients := func(rows []patient_repo.GetPatientsWithTasksBedAndRoomByWardRow) []*pb.GetPatientListResponse_Patient {
+		patients := make([]*pb.GetPatientListResponse_Patient, 0) // List of Patients to be returned
+		patientsMap := make(map[uuid.UUID]int)                    // maps id to index of patient in patients list
+		tasksMap := make(map[uuid.UUID]int)                       // maps tasks id to index of task in its patient's Task list
+		subTasksSet := make(map[uuid.UUID]bool)
+
+		for _, row := range rows {
+			var patient *pb.GetPatientListResponse_Patient
+
+			if patientIx, existed := patientsMap[row.Patient.ID]; existed {
+				patient = patients[patientIx]
+			} else {
+				patient = &pb.GetPatientListResponse_Patient{
+					Id:                      row.Patient.ID.String(),
+					HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
+					Notes:                   row.Patient.Notes,
+					Tasks:                   make([]*pb.GetPatientListResponse_Task, 0),
+				}
+				patients = append(patients, patient)
+				patientsMap[row.Patient.ID] = len(patients) - 1
+			}
+
+			// a patient may not have any tasks
+			if !row.TaskID.Valid {
+				continue
+			}
+
+			var task *pb.GetPatientListResponse_Task
+			if taskIx, existed := tasksMap[row.TaskID.UUID]; existed {
+				task = patient.Tasks[taskIx]
+			} else {
+
+				// TODO: in order for the api to behave the same I keep this,
+				// TODO: like it was before, but we should really make AUID optional and return nil
+				assignedUserId := ""
+				if row.TaskAssignedUserID.Valid {
+					assignedUserId = row.TaskAssignedUserID.UUID.String()
+				}
+
+				task = &pb.GetPatientListResponse_Task{
+					Id:             row.TaskID.UUID.String(),
+					Name:           *row.TaskName,
+					Description:    *row.TaskDescription,
+					Status:         pb.GetPatientListResponse_TaskStatus(*row.TaskStatus),
+					AssignedUserId: assignedUserId,
+					PatientId:      row.Patient.ID.String(),
+					Public:         *row.TaskPublic,
+					Subtasks:       make([]*pb.GetPatientListResponse_Task_SubTask, 0),
+				}
+				patient.Tasks = append(patient.Tasks, task)
+				tasksMap[row.TaskID.UUID] = len(patient.Tasks) - 1
+			}
+
+			// task may not have any subtasks
+			if !row.SubtaskID.Valid {
+				continue
+			}
+
+			if _, exists := subTasksSet[row.SubtaskID.UUID]; !exists {
+				task.Subtasks = append(task.Subtasks, &pb.GetPatientListResponse_Task_SubTask{
+					Id:   row.SubtaskID.UUID.String(),
+					Name: *row.SubtaskName,
+					Done: *row.SubtaskDone,
+				})
+				subTasksSet[row.SubtaskID.UUID] = true
+			}
+		}
+
+		return patients
+	}
+
+	return &pb.GetPatientListResponse{
+		Active:             collectActivePatients(withBedRows),
+		UnassignedPatients: collectPatients(unassignedRows),
+		DischargedPatients: collectPatients(dischargedRows),
+	}, nil
 }
 
 func (ServiceServer) DeletePatient(ctx context.Context, req *pb.DeletePatientRequest) (*pb.DeletePatientResponse, error) {
