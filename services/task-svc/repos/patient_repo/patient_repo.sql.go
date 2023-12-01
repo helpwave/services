@@ -7,7 +7,6 @@ package patient_repo
 
 import (
 	"context"
-	"strings"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
