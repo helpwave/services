@@ -1,4 +1,3 @@
-# FIXME: This is *very* slow for some reason
 # FIXME: The Patient does not exist case is not handled well
 
 echo "Unassigned Patient, empty Bed:"
