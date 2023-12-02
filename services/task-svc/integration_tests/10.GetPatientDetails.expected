@@ -10,7 +10,19 @@ Assigned Patient, with tasks:
       "name": "Supplement L Metatarsotars Jt with Autol Sub, Perc Approach",
       "status": "TASK_STATUS_DONE",
       "assignedUserId": "8aa8a5ee-2a35-4203-81bb-baf4ca17a9e9",
-      "patientId": "06f57c97-509e-4b41-9839-233f29197f56"
+      "patientId": "06f57c97-509e-4b41-9839-233f29197f56",
+      "subtasks": [
+        {
+          "id": "539cae1d-29aa-4d87-aecf-ba4d5ad51da8",
+          "name": "Regional lymph node excision",
+          "done": true
+        },
+        {
+          "id": "6c0f78df-ac07-4563-ada5-f0d8ae3c418f",
+          "name": "Other lysis of perivesical adhesions",
+          "done": true
+        }
+      ]
     },
     {
       "id": "1eaf1f03-d5b9-4f3a-b27f-f892c63886ec",
@@ -19,7 +31,32 @@ Assigned Patient, with tasks:
       "status": "TASK_STATUS_DONE",
       "assignedUserId": "674217fc-05a6-4eec-ad7e-8a2d0dc8caa9",
       "patientId": "06f57c97-509e-4b41-9839-233f29197f56",
-      "public": true
+      "public": true,
+      "subtasks": [
+        {
+          "id": "6cb3b838-c3db-43b3-923d-b637566f73eb",
+          "name": "Vaccination against tularemia",
+          "done": true
+        },
+        {
+          "id": "5d7ac55a-f273-4222-b372-ada3e2479f25",
+          "name": "Amnioscopy"
+        },
+        {
+          "id": "a943a1cf-6217-4338-98c4-9aa5c7d877ba",
+          "name": "Repair of atrial septal defect with tissue graft",
+          "done": true
+        },
+        {
+          "id": "67b0e8c4-54ae-43ce-ae9d-2f291715679b",
+          "name": "Replacement of tube or enterostomy device of large intestine",
+          "done": true
+        },
+        {
+          "id": "9190b783-be6b-479a-9aef-6637be9fd54e",
+          "name": "Ligation and stripping of varicose veins, upper limb vessels"
+        }
+      ]
     },
     {
       "id": "3023b697-b5e7-48b6-9c80-f5151e124ae4",
@@ -72,7 +109,13 @@ Unassigned Patient, with tasks:
       "status": "TASK_STATUS_IN_PROGRESS",
       "assignedUserId": "df363387-7774-4592-b01c-2b765abaa86a",
       "patientId": "2e830d2f-69c9-4e38-bd4b-ab43decc7ae3",
-      "public": true
+      "public": true,
+      "subtasks": [
+        {
+          "id": "5ab50302-d939-4588-bce6-7bffc125e11c",
+          "name": "Other lysis of perirenal or periureteral adhesions"
+        }
+      ]
     },
     {
       "id": "f0566273-28e5-46f1-a85d-5ebd493a26de",
@@ -88,7 +131,14 @@ Unassigned Patient, with tasks:
       "name": "Bypass Azygos Vein to Up Vein w Synth Sub, Perc Endo",
       "status": "TASK_STATUS_DONE",
       "assignedUserId": "3e795d31-1912-4b09-8e5a-fd62a2461a8c",
-      "patientId": "2e830d2f-69c9-4e38-bd4b-ab43decc7ae3"
+      "patientId": "2e830d2f-69c9-4e38-bd4b-ab43decc7ae3",
+      "subtasks": [
+        {
+          "id": "652a641a-e5aa-4d96-97bf-3f0ded7bf5ce",
+          "name": "Annuloplasty",
+          "done": true
+        }
+      ]
     }
   ],
   "wardId": ""
