@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # FIXME: The Patient does not exist case is not handled well
 
 echo "Unassigned Patient, empty Bed:"

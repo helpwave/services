@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # TODO CreateBed does not return name, but the proto has it declared
 
 echo "Room does not exist"
