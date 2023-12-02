@@ -131,6 +131,23 @@ based on the migration files available in the service:
 ./migrate <service> desired
 ```
 
+### `devenv shell models` - Generate models from SQL Queries
+
+> [!IMPORTANT]
+> Requires a running database, it's best to run `devenv up` before running this script.
+
+We use [sqlc](https://docs.sqlc.dev/en/latest/), a compiler that generates go functions based on SQL queries and a schema.
+This script
+1. Makes sure the database is fully migrated up (see migration.sh)
+2. Generates a `schema.sql` using pg_dump
+	> [!TIP]
+	> The `schema.sql` is also a great place to familiarize yourself with the data model(s)!
+3. Invokes sqlc to generate go code based on a `sqlc.yaml`
+
+Usage:
+- `devenv shell models <some-svc>` generates models for a specific service
+- `devenv shell models` generates models for all services
+
 ## Enviroment variables
 Every service should contain a `.env.example` file which should be copied to a usable `.env` file
 
