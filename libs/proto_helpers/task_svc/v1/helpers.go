@@ -60,49 +60,11 @@ func UpdatesMapForUpdateTaskTemplateSubTaskRequest(r *pb.UpdateTaskTemplateSubTa
 	return m
 }
 
-func UpdatesMapForUpdatePatientRequest(r *pb.UpdatePatientRequest) map[string]interface{} {
-	m := make(map[string]interface{})
-
-	if r.HumanReadableIdentifier != nil {
-		m["human_readable_identifier"] = r.HumanReadableIdentifier
-	}
-
-	if r.Notes != nil {
-		m["notes"] = r.Notes
-	}
-
-	return m
-}
-
 func UpdatesMapForUpdateWardRequest(r *pb.UpdateWardRequest) map[string]interface{} {
 	m := make(map[string]interface{})
 
 	if r.Name != nil {
 		m["name"] = r.Name
-	}
-
-	return m
-}
-
-func UpdatesMapForUpdateRoomRequest(r *pb.UpdateRoomRequest) map[string]interface{} {
-	m := make(map[string]interface{})
-
-	if r.Name != nil {
-		m["name"] = r.Name
-	}
-
-	return m
-}
-
-func UpdatesMapForUpdateBedRequest(r *pb.UpdateBedRequest) map[string]interface{} {
-	m := make(map[string]interface{})
-
-	if r.Name != nil {
-		m["name"] = r.Name
-	}
-
-	if r.RoomId != nil {
-		m["room_id"] = r.RoomId
 	}
 
 	return m
