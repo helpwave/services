@@ -8,6 +8,12 @@ SELECT human_readable_identifier FROM patients
 	WHERE id = @id
 	LIMIT 1;
 
+-- name: GetPatientByBed :one
+SELECT patients.*
+	FROM patients
+	WHERE bed_id = @bed_id
+	LIMIT 1;
+
 -- name: GetPatientWithBedAndRoom :one
 SELECT
 	patients.*,

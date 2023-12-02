@@ -101,7 +101,7 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 }
 
 func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBedRequest) (*pb.GetPatientByBedResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -110,13 +110,14 @@ func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBe
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient := models.Patient{}
-	if err := db.Where("bed_id = ?", bedID).First(&patient).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+	patient, err := hwdb.Optional(patientRepo.GetPatientByBed)(ctx, uuid.NullUUID{
+		UUID:  bedID,
+		Valid: true,
+	})
+	if patient == nil {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
+	} else if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.GetPatientByBedResponse{
