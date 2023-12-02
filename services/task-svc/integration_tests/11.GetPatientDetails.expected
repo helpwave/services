@@ -144,10 +144,23 @@ Unassigned Patient, with tasks:
   "wardId": ""
 }
 Discharged Patient:
-ERROR:
-  Code: InvalidArgument
-  Message: patient not found
-
+{
+  "id": "c05e189c-06c8-479e-b3b9-306f2b66c07d",
+  "name": "Margit Bottby",
+  "humanReadableIdentifier": "Margit Bottby",
+  "notes": "Traumatic rupture of other ligament of right ring finger at metacarpophalangeal and interphalangeal joint, initial encounter",
+  "tasks": [
+    {
+      "id": "0d4c8a6b-74c6-4dd8-acc9-d55e0ad9c60d",
+      "name": "Reposition Left Lower Eyelid, Open Approach",
+      "description": "Supplement Chordae Tendineae with Autologous Tissue Substitute, Percutaneous Approach",
+      "status": "TASK_STATUS_TODO",
+      "assignedUserId": "3e795d31-1912-4b09-8e5a-fd62a2461a8c",
+      "patientId": "c05e189c-06c8-479e-b3b9-306f2b66c07d"
+    }
+  ],
+  "wardId": ""
+}
 Patient does not exist:
 ERROR:
   Code: InvalidArgument
