@@ -44,7 +44,7 @@ SELECT
 	beds.name as bed_name
 	FROM rooms
 	LEFT JOIN beds ON beds.room_id = rooms.id
-	WHERE room_id = $1
+	WHERE rooms.id = $1
 	ORDER BY beds.name ASC
 `
 

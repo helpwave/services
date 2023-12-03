@@ -8,7 +8,7 @@ SELECT
 	beds.name as bed_name
 	FROM rooms
 	LEFT JOIN beds ON beds.room_id = rooms.id
-	WHERE room_id = @room_id
+	WHERE rooms.id = @room_id
 	ORDER BY beds.name ASC;
 
 -- name: GetRoomsWithBedsForOrganization :many
