@@ -2,6 +2,20 @@ Exists, with Bed:
 {
   "rooms": [
     {
+      "id": "80d49a5a-573e-4a7a-a9b4-f8d2431f6f14",
+      "name": "Legal",
+      "beds": [
+        {
+          "id": "1d8fbe74-37be-4ec1-beb2-0518b51e1da8",
+          "name": "Turquoise",
+          "patient": {
+            "id": "06f57c97-509e-4b41-9839-233f29197f56",
+            "name": "Clerc Levay"
+          }
+        }
+      ]
+    },
+    {
       "id": "c7e6c19e-df2e-4130-b8f3-97b551f911ed",
       "name": "Research and Development",
       "beds": [
@@ -58,20 +72,6 @@ Exists, with Bed:
           }
         }
       ]
-    },
-    {
-      "id": "80d49a5a-573e-4a7a-a9b4-f8d2431f6f14",
-      "name": "Legal",
-      "beds": [
-        {
-          "id": "1d8fbe74-37be-4ec1-beb2-0518b51e1da8",
-          "name": "Turquoise",
-          "patient": {
-            "id": "06f57c97-509e-4b41-9839-233f29197f56",
-            "name": "Clerc Levay"
-          }
-        }
-      ]
     }
   ]
 }
@@ -80,6 +80,10 @@ Exists, no Rooms:
 Exists, one Room has no Beds:
 {
   "rooms": [
+    {
+      "id": "2a3b9111-1f78-4d36-8318-1c69c1e5ad51",
+      "name": "Whatever else"
+    },
     {
       "id": "b79dc72f-8359-4058-bd7a-e4b7019a5ec3",
       "name": "Sales",
@@ -125,10 +129,6 @@ Exists, one Room has no Beds:
           }
         }
       ]
-    },
-    {
-      "id": "2a3b9111-1f78-4d36-8318-1c69c1e5ad51",
-      "name": "Whatever else"
     }
   ]
 }
