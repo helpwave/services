@@ -19,6 +19,7 @@ in
     grpcurl
     jq
     nixpkgs-fmt
+    sqlc
   ] ++ [
     # self build packages
     protoc-go-inject-tag
