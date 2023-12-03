@@ -2,10 +2,11 @@ package repositories
 
 import (
 	"context"
-	"github.com/google/uuid"
-	"gorm.io/gorm"
 	"hwgorm"
 	"task-svc/internal/models"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type PatientRepository struct {
@@ -31,6 +32,8 @@ func (r *PatientRepository) CreatePatient(patient *models.Patient) (*models.Pati
 func (r *PatientRepository) GetPatientById(id uuid.UUID) (*models.Patient, error) {
 	patient := &models.Patient{ID: id}
 	query := r.db.
+		Unscoped().
+		Preload("Bed.Room").
 		First(patient)
 
 	if err := query.Error; err != nil {
@@ -46,6 +49,7 @@ func (r *PatientRepository) GetPatientsByIdsWithBedAndRoom(ids []uuid.UUID) ([]m
 		Where("id IN ?", ids).
 		Preload("Bed").
 		Preload("Bed.Room").
+		Order("updated_at DESC").
 		Find(&patients)
 
 	if err := query.Error; err != nil {
@@ -87,6 +91,8 @@ func (r *PatientRepository) GetUnassignedPatientsForOrganization(organizationID 
 	var unassignedPatients []models.Patient
 	query := r.db.
 		Where("organization_id = ? AND bed_id IS NULL AND is_discharged = 0", organizationID).
+		Preload("Tasks").
+		Preload("Tasks.Subtasks").
 		Find(&unassignedPatients)
 
 	if err := query.Error; err != nil {
@@ -100,6 +106,8 @@ func (r *PatientRepository) GetDischargedPatientsForOrganization(organizationID 
 	query := r.db.
 		Unscoped().
 		Where("organization_id = ? AND NOT is_discharged = 0", organizationID).
+		Preload("Tasks").
+		Preload("Tasks.Subtasks").
 		Find(&patients)
 
 	if err := query.Error; err != nil {
@@ -112,6 +120,8 @@ func (r *PatientRepository) GetRoomsWithBedsWithActivePatientsForOrganization(or
 	var rooms []models.Room
 	query := r.db.
 		Preload("Beds.Patient").
+		Preload("Beds.Patient.Tasks").
+		Preload("Beds.Patient.Tasks.Subtasks").
 		Joins("JOIN beds ON rooms.id = beds.room_id").
 		Joins("JOIN patients ON patients.bed_id = beds.id").
 		Where("patients.organization_id = ? AND patients.is_discharged = 0", organizationID).
@@ -128,6 +138,8 @@ func (r *PatientRepository) GetRoomsWithBedsWithActivePatientsForWard(wardID uui
 	var rooms []models.Room
 	query := r.db.
 		Preload("Beds.Patient").
+		Preload("Beds.Patient.Tasks").
+		Preload("Beds.Patient.Tasks.Subtasks").
 		Joins("JOIN beds ON rooms.id = beds.room_id").
 		Joins("JOIN patients ON patients.bed_id = beds.id").
 		Where("rooms.ward_id = ? AND patients.is_discharged = 0", wardID).
@@ -138,6 +150,20 @@ func (r *PatientRepository) GetRoomsWithBedsWithActivePatientsForWard(wardID uui
 		return nil, err
 	}
 	return rooms, nil
+}
+
+func (r *PatientRepository) GetLastUpdatedPatientsForOrganization(maxAmount uint32, organizationID uuid.UUID) ([]models.Patient, error) {
+	var patients []models.Patient
+	query := r.db.
+		Where("organization_id = ?", organizationID).
+		Limit(int(maxAmount)).
+		Order("updated_at DESC").
+		Find(&patients)
+
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return patients, nil
 }
 
 func (r *PatientRepository) UpdatePatient(patientID uuid.UUID, updates map[string]interface{}) (*models.Patient, error) {

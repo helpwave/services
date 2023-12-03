@@ -1,6 +1,6 @@
 import * as jspb from 'google-protobuf'
 
-import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb';
+import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb'; // proto import: "google/protobuf/timestamp.proto"
 
 
 export class CreateTaskRequest extends jspb.Message {
@@ -109,8 +109,10 @@ export class GetTaskResponse extends jspb.Message {
   getAssignedUserId(): string;
   setAssignedUserId(value: string): GetTaskResponse;
 
-  getPatientId(): string;
-  setPatientId(value: string): GetTaskResponse;
+  getPatient(): GetTaskResponse.Patient | undefined;
+  setPatient(value?: GetTaskResponse.Patient): GetTaskResponse;
+  hasPatient(): boolean;
+  clearPatient(): GetTaskResponse;
 
   getPublic(): boolean;
   setPublic(value: boolean): GetTaskResponse;
@@ -146,7 +148,7 @@ export namespace GetTaskResponse {
     description: string,
     status: TaskStatus,
     assignedUserId: string,
-    patientId: string,
+    patient?: GetTaskResponse.Patient.AsObject,
     pb_public: boolean,
     dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     createdBy: string,
@@ -181,6 +183,29 @@ export namespace GetTaskResponse {
       name: string,
       done: boolean,
       createdBy: string,
+    }
+  }
+
+
+  export class Patient extends jspb.Message {
+    getId(): string;
+    setId(value: string): Patient;
+
+    getName(): string;
+    setName(value: string): Patient;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Patient.AsObject;
+    static toObject(includeInstance: boolean, msg: Patient): Patient.AsObject;
+    static serializeBinaryToWriter(message: Patient, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Patient;
+    static deserializeBinaryFromReader(message: Patient, reader: jspb.BinaryReader): Patient;
+  }
+
+  export namespace Patient {
+    export type AsObject = {
+      id: string,
+      name: string,
     }
   }
 
@@ -493,6 +518,9 @@ export namespace GetAssignedTasksResponse {
     getDescription(): string;
     setDescription(value: string): Task;
 
+    getStatus(): TaskStatus;
+    setStatus(value: TaskStatus): Task;
+
     getAssignedUserId(): string;
     setAssignedUserId(value: string): Task;
 
@@ -530,6 +558,7 @@ export namespace GetAssignedTasksResponse {
       id: string,
       name: string,
       description: string,
+      status: TaskStatus,
       assignedUserId: string,
       patient?: GetAssignedTasksResponse.Task.Patient.AsObject,
       pb_public: boolean,

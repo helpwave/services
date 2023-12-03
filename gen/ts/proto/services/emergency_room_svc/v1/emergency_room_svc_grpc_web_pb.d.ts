@@ -1,6 +1,6 @@
 import * as grpcWeb from 'grpc-web';
 
-import * as proto_services_emergency_room_svc_v1_emergency_room_svc_pb from '../../../../proto/services/emergency_room_svc/v1/emergency_room_svc_pb';
+import * as proto_services_emergency_room_svc_v1_emergency_room_svc_pb from '../../../../proto/services/emergency_room_svc/v1/emergency_room_svc_pb'; // proto import: "proto/services/emergency_room_svc/v1/emergency_room_svc.proto"
 
 
 export class EmergencyRoomServiceClient {

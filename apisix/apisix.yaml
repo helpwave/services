@@ -1,26 +1,41 @@
-consumers:
-  - username: ory
-    plugins:
-      basic-auth:
-        username: "$ENV://ORY_WEBHOOK_BASIC_AUTH/username"
-        password: "$ENV://ORY_WEBHOOK_BASIC_AUTH/password"
+# We use APISIX in standalone mode, this means no database is required (usually APISIX uses etcd to store it's config),
+# instead we define all routing configuration in this yaml file
+# Profiles (e.g. apisix-prod.yaml) are supported
+# For reference see https://apisix.apache.org/docs/apisix/admin-api/
+#
+# To configure APISIX' non-dynamic config, see apisix_config.yaml
 
+
+# Upstreams are the backends that APISIX can send traffic to,
+# for development and staging this is configured statically
+# APISIX has upstream discovery features though
+#
+# Currently we send all traffic to dapr, which then routes the requests to the corresponding service,
+# this might be improved up on in the future
 upstreams:
+    # Dapr's grpc router,
+    # it routes grpc traffic it receives to the corresponding app (i.e. service)
+    # based on the dapr-app-id metadata key (think: http header)
   - id: dapr-grpc
     nodes:
       "localhost:35001": 1
     scheme: grpc
-    type: roundrobin
-
+    # Dapr's http router works similar to the dapr grpc router
   - id: dapr-http
     scheme: http
     nodes:
       "localhost:3500": 1
 
+# Services define groups of API endpoints, which correspond to logical (and in our case physical) services.
+# Most services have a plugin chain like this:
+# - grpc-web, is both a frontend library and a proxy that allows grpc communication from browsers, see [AGW]
+# - proxy-rewrite, which we use to add the dapr-app-id header, so dapr will route the request to the correct service
+#
 # _meta: priority -1 => We need to define the plugin order manually,
-# for example the cors and grpc-web plugin do not get along so well
+# for example the cors and grpc-web plugin do not get along so well:
 # https://the-asf.slack.com/archives/CUC5MN17A/p1685478440334289
-
+#
+# [AGW]: https://apisix.apache.org/blog/2022/01/25/apisix-grpc-web-integration/
 services:
   - id: task-svc
     upstream_id: dapr-grpc
@@ -46,6 +61,7 @@ services:
         headers:
           add:
             dapr-app-id: user-svc
+  # ory-svc is the only service (for now) that exposes a http API
   - id: ory-svc
     upstream_id: dapr-http
     plugins:
@@ -59,10 +75,13 @@ services:
         _meta:
           priority: -1
 
+# Routes define all endpoints APISIX is supposed to handle and maps them to their service
 routes:
+  # Service Routes
   - id: task-svc
     uri: /task-svc/*
     service_id: task-svc
+    # TODO: maybe we can move this to the service?
     plugins:
       cors:
         # TODO: Scope to grpc-web spec
@@ -77,6 +96,7 @@ routes:
   - id: auth-svc
     uri: /auth-svc/*
     service_id: auth-svc
+    # TODO: maybe we can move this to the service?
     plugins:
       cors:
         # TODO: Scope to grpc-web spec
@@ -91,6 +111,7 @@ routes:
   - id: user-svc
     uri: /user-svc/*
     service_id: user-svc
+    # TODO: maybe we can move this to the service?
     plugins:
       cors:
         # TODO: Scope to grpc-web spec
@@ -102,6 +123,8 @@ routes:
         allow_credential: true
         _meta:
           priority: -1
+
+  # ory-svc webhook routes (authenticated using basic-auth)
   - id: ory-svc-after-registration
     uri: /ory-svc/webhooks/after-registration
     service_id: ory-svc
@@ -116,11 +139,28 @@ routes:
       basic-auth: {}
       proxy-rewrite:
         uri: /v1.0/invoke/ory-svc/method/after_settings_webhook
+
+  # ory-svc's auth wall route
   - id: ory-svc-oauth2-consent
     uri: /ory-svc/v1.0/oauth2/consent
     service_id: ory-svc
     plugins:
       proxy-rewrite:
         uri: /v1.0/invoke/ory-svc/method/oauth2_consent
+
+  # Catch-all: route grpc traffic to dapr-grpc (without grpc-web!)
+  # used by mobile, which talks grpc
+  - id: grpc
+    uri: /*
+    upstream_id: dapr-grpc
+
+# The consumers section defines sources for user authentication that APISIX can rely on
+# We currently only use this to authenticate the ory webhook service using HTTP Basic Auth
+consumers:
+  - username: ory
+    plugins:
+      basic-auth:
+        username: "$ENV://ORY_WEBHOOK_BASIC_AUTH/username"
+        password: "$ENV://ORY_WEBHOOK_BASIC_AUTH/password"
 
 #END

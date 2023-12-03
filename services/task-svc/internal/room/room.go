@@ -54,7 +54,7 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 	}
 
 	log.Info().
-		Str("roomId", room.ID.String()).
+		Str("roomID", room.ID.String()).
 		Int("beds", len(room.Beds)).
 		Msg("room created")
 

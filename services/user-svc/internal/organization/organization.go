@@ -94,7 +94,7 @@ func (s ServiceServer) CreateOrganizationForUser(ctx context.Context, req *pb.Cr
 }
 
 func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizationRequest) (*pb.GetOrganizationResponse, error) {
-	organisationRepo := repositories.OrganisationRepo(ctx)
+	organizationRepo := repositories.OrganizationRepo(ctx)
 
 	// TODO: Auth
 
@@ -103,7 +103,7 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organization, err := organisationRepo.GetOrganizationById(id)
+	organization, err := organizationRepo.GetOrganizationById(id)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -326,7 +326,7 @@ func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberReq
 }
 
 func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberRequest) (*pb.InviteMemberResponse, error) {
-	organisationRepo := repositories.OrganisationRepo(ctx)
+	organizationRepo := repositories.OrganizationRepo(ctx)
 
 	db := hwgorm.GetDB(ctx)
 	log := zlog.Ctx(ctx)
@@ -337,7 +337,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	}
 
 	// Check if an organization exists
-	_, err = organisationRepo.GetOrganizationById(organizationId)
+	_, err = organizationRepo.GetOrganizationById(organizationId)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -346,7 +346,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		}
 	}
 
-	isInOrganization, err := organisationRepo.IsInOrganizationByEmail(organizationId, req.Email)
+	isInOrganization, err := organizationRepo.IsInOrganizationByEmail(organizationId, req.Email)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -379,7 +379,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 
 			log.Info().
 				Str("email", req.Email). // TODO: Revisited for privacy reasons
-				Str("organizationId", organizationId.String()).
+				Str("organizationID", organizationId.String()).
 				Msg("user invited to organization")
 		}
 	}
@@ -508,7 +508,7 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 	}
 
 	var members []models.Membership
-	if err := db.Where("organization_id = ?", organizationID).Find(&members).Error; err != nil {
+	if err := db.Where("organization_id = ?", organizationID).Preload("User").Find(&members).Error; err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
@@ -516,20 +516,16 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 		}
 	}
 
-	userRepository := repositories.UserRepo(ctx)
-
-	user, err := userRepository.GetUserById(userID)
-
 	if err != nil {
 		return nil, err
 	}
 
 	mappedMembers := hwutil.Map(members, func(member models.Membership) *pb.GetMembersByOrganizationResponse_Member {
 		return &pb.GetMembersByOrganizationResponse_Member{
-			UserId:    member.UserID.String(),
-			AvatarUrl: user.Avatar,
-			Email:     user.Email,
-			Nickname:  user.Nickname,
+			UserId:    member.User.ID.String(),
+			AvatarUrl: member.User.Avatar,
+			Email:     member.User.Email,
+			Nickname:  member.User.Nickname,
 		}
 	})
 
@@ -631,7 +627,7 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 }
 
 func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvitationRequest) (*pb.RevokeInvitationResponse, error) {
-	organisationRepo := repositories.OrganisationRepo(ctx)
+	organizationRepo := repositories.OrganizationRepo(ctx)
 
 	db := hwgorm.GetDB(ctx)
 	log := zlog.Ctx(ctx)
@@ -641,7 +637,7 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	currentInvitation, err := organisationRepo.GetInvitationById(invitationId)
+	currentInvitation, err := organizationRepo.GetInvitationById(invitationId)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -658,7 +654,7 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	isAdmin, err := organisationRepo.IsAdminInOrganization(organizationID, userID)
+	isAdmin, err := organizationRepo.IsAdminInOrganization(organizationID, userID)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -682,8 +678,8 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 
 	log.Info().
 		Str("admin", userID.String()).
-		Str("organizationId", organizationID.String()).
-		Str("invitee-email", inviteeEmail).
+		Str("organizationID", organizationID.String()).
+		Str("inviteeEmail", inviteeEmail).
 		Msg("admin revoked invitation to organization")
 
 	return &pb.RevokeInvitationResponse{}, nil
@@ -755,8 +751,8 @@ func CreateOrganization(ctx context.Context, db *gorm.DB, attr models.Base, crea
 	}
 
 	log.Info().
-		Str("organizationId", organization.ID.String()).
-		Str("userId", creatorUserId.String()).
+		Str("organizationID", organization.ID.String()).
+		Str("userID", creatorUserId.String()).
 		Msg("organization created")
 
 	return &organization, nil
@@ -775,8 +771,8 @@ func AddUserToOrganization(ctx context.Context, db *gorm.DB, userId uuid.UUID, o
 	}
 
 	log.Info().
-		Str("organizationId", organizationId.String()).
-		Str("userId", userId.String()).
+		Str("organizationID", organizationId.String()).
+		Str("userID", userId.String()).
 		Msg("added user to organization")
 
 	// TODO: Dispatch UserJoinedOrganizationEvent
@@ -807,9 +803,9 @@ func ChangeMembershipAdminStatus(ctx context.Context, db *gorm.DB, userID uuid.U
 	}
 
 	log.Info().
-		Str("organizationId", organizationID.String()).
-		Str("userId", userID.String()).
-		Bool("is_admin", isAdmin).
+		Str("organizationID", organizationID.String()).
+		Str("userID", userID.String()).
+		Bool("isAdmin", isAdmin).
 		Msg("admin status changed")
 
 	return nil

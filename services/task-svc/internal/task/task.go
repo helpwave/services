@@ -4,16 +4,17 @@ import (
 	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
+
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type ServiceServer struct {
@@ -89,8 +90,8 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 	}
 
 	log.Info().
-		Str("taskId", task.ID.String()).
-		Str("patientId", patientId.String()).
+		Str("taskID", task.ID.String()).
+		Str("patientID", patientId.String()).
 		Msg("task created for patient")
 
 	return &pb.CreateTaskResponse{
@@ -100,6 +101,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 
 func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.GetTaskResponse, error) {
 	taskRepo := repositories.TaskRepo(ctx)
+	patientRepo := repositories.PatientRepo(ctx)
 
 	// TODO: Auth
 
@@ -132,13 +134,26 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		}
 	})
 
+	patient, err := patientRepo.GetPatientById(task.PatientId)
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+	patientResponse := &pb.GetTaskResponse_Patient{
+		Id:   *hwutil.UUIDToStringPtr(&patient.ID),
+		Name: patient.HumanReadableIdentifier,
+	}
+
 	return &pb.GetTaskResponse{
 		Id:             task.ID.String(),
 		Name:           task.Name,
 		Description:    task.Description,
 		Status:         task.Status,
 		AssignedUserId: assignedUserId,
-		PatientId:      task.PatientId.String(),
+		Patient:        patientResponse,
 		Subtasks:       subtasks,
 		Public:         task.Public,
 		DueAt:          timestamppb.New(task.DueAt),
@@ -292,6 +307,7 @@ func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTask
 				Id:             task.ID.String(),
 				Name:           task.Name,
 				Description:    task.Description,
+				Status:         task.Status,
 				AssignedUserId: task.AssignedUserId.UUID.String(),
 				Patient:        mappedPatient,
 				Subtasks:       mappedSubtasks,
@@ -476,7 +492,7 @@ func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) 
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
+		Str("taskID", id.String()).
 		Msg("task to in-progress")
 
 	return &pb.TaskToToDoResponse{}, nil
@@ -500,7 +516,7 @@ func (ServiceServer) TaskToInProgress(ctx context.Context, req *pb.TaskToInProgr
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
+		Str("taskID", id.String()).
 		Msg("task to in-progress")
 
 	return &pb.TaskToInProgressResponse{}, nil
@@ -524,7 +540,7 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) 
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
+		Str("taskID", id.String()).
 		Msg("task to done")
 
 	return &pb.TaskToDoneResponse{}, nil
@@ -555,8 +571,8 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
-		Str("userId", userId.String()).
+		Str("taskID", id.String()).
+		Str("userID", userId.String()).
 		Msg("user assigned")
 
 	return &pb.AssignTaskToUserResponse{}, nil
@@ -580,7 +596,7 @@ func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignT
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
+		Str("taskID", id.String()).
 		Msg("user unassigned")
 
 	return &pb.UnassignTaskFromUserResponse{}, nil
@@ -604,7 +620,7 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
+		Str("taskID", id.String()).
 		Msg("task published")
 
 	return &pb.PublishTaskResponse{}, nil
@@ -628,7 +644,7 @@ func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskReq
 	}
 
 	log.Info().
-		Str("taskId", id.String()).
+		Str("taskID", id.String()).
 		Msg("task unpublished")
 
 	return &pb.UnpublishTaskResponse{}, nil

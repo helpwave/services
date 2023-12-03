@@ -4,21 +4,43 @@ helpwave's microservices
 
 ## Getting started
 
-1. [Install](https://docs.dapr.io/getting-started/install-dapr-cli/) and [run](https://docs.dapr.io/getting-started/install-dapr-selfhost/) Dapr locally
-2. Most of our services require a database. Run `dev/docker-compose.yaml` to set up a basic postgres database
-   > Postgres username and password: `postgres`:`postgres`
+This repository utilizes [devenv.sh](https://devenv.sh) (on top of [Nix](https://nixos.org/)) for our development environments.
 
-   > pgAdmin username and password: `tech@helpwave.de`:`tech@helpwave.de`
-3. Go to your [services/](services/) of choice `cd services/<service>/`
-4. Copy the environment variables of `.env.example` to '.env' and configure them
-5. Run `./migrate.sh task-svc up` to run the migrations or do it manually by [installing migrate](https://github.com/golang-migrate/migrate)
-6. Run the service
-   > Most of our services can be run via `go run main.go`. In the future, we will provide some more convenient ways to setup all services directly via Dapr.
-7. For direct client to service requests via gRPC, add the following metadata to your requests:
+1. [Install devenv](https://devenv.sh/getting-started/)
+2. Start the environment of this repository by running `devenv up` in the root. On first run, this command can take a while. This starts our database and all services including a hot-reload.
+3. Develop!
+
+- Use `devenv shell` to enter a shell that contains all necessary packages and utilities for this repository
+- For direct client to service requests via gRPC, add the following metadata to your requests:
 	- `X-Organization: [An organization id. Most requests are performed on the side of an organization. The id must be part of your passed access token]`
 	- `dapr-app-id: [the app id of the targeted service]`
 
-### Fake token
+### Ports
+
+| Service       | Port       | Protocol                |
+|---------------|------------|-------------------------|
+| task-svc      | 3001       | gRPC                    |
+| user-svc      | 3002       | gRPC                    |
+| ory-svc       | 3003       | gRPC                    |
+| APISIX (dapr) | 3500       | http                    |
+| APISIX (dapr) | 35001      | grpc                    |
+| APISIX        | 9080       | http  (mostly grcp-web) |
+| APISIX        | 9433       | https (mostly grcp-web) |
+| APISIX        | 9090       | http  (control api)     |
+| APISIX        | 9091       | http  (prometheus)      |
+| postgres      | 5432       |                         |
+| redis         | 6379       |                         |
+
+### Scripts
+
+You can either run `<script>` in the shell (`devenv shell`) or outside the shell via `devenv shell <script>`.
+
+- `proto`: Generate protos
+- `proto-lint`: Lint protos
+- `nix-lint`: Lint .nix
+- `migratesh`: [migrate.sh](#migratesh---running-migratemigrate-inside-docker)
+
+## Fake token
 
 When working with services that use auth, instead of dealing with JWTs, you can make use of fake tokens.
 A fake token is only the claims part of a JWT, which are defined [here](libs/common/auth.go#L37).
@@ -116,6 +138,23 @@ based on the migration files available in the service:
 ```bash
 ./migrate <service> desired
 ```
+
+### `devenv shell models` - Generate models from SQL Queries
+
+> [!IMPORTANT]
+> Requires a running database, it's best to run `devenv up` before running this script.
+
+We use [sqlc](https://docs.sqlc.dev/en/latest/), a compiler that generates go functions based on SQL queries and a schema.
+This script
+1. Makes sure the database is fully migrated up (see migration.sh)
+2. Generates a `schema.sql` using pg_dump
+	> [!TIP]
+	> The `schema.sql` is also a great place to familiarize yourself with the data model(s)!
+3. Invokes sqlc to generate go code based on a `sqlc.yaml`
+
+Usage:
+- `devenv shell models <some-svc>` generates models for a specific service
+- `devenv shell models` generates models for all services
 
 ## Enviroment variables
 Every service should contain a `.env.example` file which should be copied to a usable `.env` file

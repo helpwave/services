@@ -48,7 +48,7 @@ func (g GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql s
 		Ctx(ctx).
 		Trace().
 		Dur("elapsed", elapsed).
-		Int64("rows_affected", rowsAffected).
+		Int64("rowsAffected", rowsAffected).
 		Err(err).
 		Msg(query)
 }

@@ -33,6 +33,11 @@ class BedServiceStub(object):
                 request_serializer=proto_dot_services_dot_task__svc_dot_v1_dot_bed__svc__pb2.GetBedRequest.SerializeToString,
                 response_deserializer=proto_dot_services_dot_task__svc_dot_v1_dot_bed__svc__pb2.GetBedResponse.FromString,
                 )
+        self.GetBedByPatient = channel.unary_unary(
+                '/proto.services.task_svc.v1.BedService/GetBedByPatient',
+                request_serializer=proto_dot_services_dot_task__svc_dot_v1_dot_bed__svc__pb2.GetBedByPatientRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_task__svc_dot_v1_dot_bed__svc__pb2.GetBedByPatientResponse.FromString,
+                )
         self.GetBeds = channel.unary_unary(
                 '/proto.services.task_svc.v1.BedService/GetBeds',
                 request_serializer=proto_dot_services_dot_task__svc_dot_v1_dot_bed__svc__pb2.GetBedsRequest.SerializeToString,
@@ -80,6 +85,12 @@ class BedServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetBedByPatient(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def GetBeds(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -121,6 +132,11 @@ def add_BedServiceServicer_to_server(servicer, server):
                     servicer.GetBed,
                     request_deserializer=proto_dot_services_dot_task__svc_dot_v1_dot_bed__svc__pb2.GetBedRequest.FromString,
                     response_serializer=proto_dot_services_dot_task__svc_dot_v1_dot_bed__svc__pb2.GetBedResponse.SerializeToString,
+            ),
+            'GetBedByPatient': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetBedByPatient,
+                    request_deserializer=proto_dot_services_dot_task__svc_dot_v1_dot_bed__svc__pb2.GetBedByPatientRequest.FromString,
+                    response_serializer=proto_dot_services_dot_task__svc_dot_v1_dot_bed__svc__pb2.GetBedByPatientResponse.SerializeToString,
             ),
             'GetBeds': grpc.unary_unary_rpc_method_handler(
                     servicer.GetBeds,
@@ -204,6 +220,23 @@ class BedService(object):
         return grpc.experimental.unary_unary(request, target, '/proto.services.task_svc.v1.BedService/GetBed',
             proto_dot_services_dot_task__svc_dot_v1_dot_bed__svc__pb2.GetBedRequest.SerializeToString,
             proto_dot_services_dot_task__svc_dot_v1_dot_bed__svc__pb2.GetBedResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetBedByPatient(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.task_svc.v1.BedService/GetBedByPatient',
+            proto_dot_services_dot_task__svc_dot_v1_dot_bed__svc__pb2.GetBedByPatientRequest.SerializeToString,
+            proto_dot_services_dot_task__svc_dot_v1_dot_bed__svc__pb2.GetBedByPatientResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

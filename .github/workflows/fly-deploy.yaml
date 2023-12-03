@@ -18,6 +18,10 @@ on:
         description: 'The name of the organization on Fly.'
         type: string
         required: true
+      version:
+        description: "The version of the app."
+        type: string
+        required: false
       environment:
         description:
           Which config file to choose.
@@ -66,6 +70,6 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy
         run: |
-          flyctl deploy --config services/${{ inputs.service }}/${{ needs.fly-toml.outputs.fly_toml }} --app ${{ inputs.app }} --remote-only
+          flyctl deploy --config services/${{ inputs.service }}/${{ needs.fly-toml.outputs.fly_toml }} --app ${{ inputs.app }} --build-arg VERSION=${{ inputs.version }} --remote-only
         env:
           DOCKER_BUILDKIT: 1

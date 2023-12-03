@@ -57,7 +57,7 @@ func (r *UserRepository) CreateUser(user models.User) (*models.User, error) {
 	}
 
 	log.Info().
-		Str("userId", user.ID.String()).
+		Str("userID", user.ID.String()).
 		Msg("user created")
 
 	return &user, nil
