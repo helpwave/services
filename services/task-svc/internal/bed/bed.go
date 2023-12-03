@@ -76,11 +76,10 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		ID:             id,
 		OrganizationID: organizationID,
 	})
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
 	if bed == nil {
 		return nil, status.Error(codes.InvalidArgument, "id not found")
+	} else if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.GetBedResponse{
