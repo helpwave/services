@@ -17,6 +17,7 @@ in
     git
     go-migrate
     grpcurl
+    jq
     nixpkgs-fmt
     sqlc
   ] ++ [
