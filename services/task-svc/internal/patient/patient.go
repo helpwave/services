@@ -519,22 +519,26 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 		return nil, err
 	}
 
-	rows, err := patientRepo.GetPatientsWithTasksBedAndRoomByWard(ctx, patient_repo.GetPatientsWithTasksBedAndRoomByWardParams{
-		WardID:         wardID,
-		OrganizationID: organizationID,
-	})
+	rows, err := patientRepo.GetPatientsWithTasksBedAndRoomForOrganization(ctx, organizationID)
 
-	dischargedRows, chargedRows := hwutil.Partition(rows, func(row patient_repo.GetPatientsWithTasksBedAndRoomByWardRow) bool {
+	dischargedRows, chargedRows := hwutil.Partition(rows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
 		return row.Patient.IsDischarged != 0
 	})
 
-	withBedRows, unassignedRows := hwutil.Partition(chargedRows, func(row patient_repo.GetPatientsWithTasksBedAndRoomByWardRow) bool {
+	withBedRows, unassignedRows := hwutil.Partition(chargedRows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
 		return row.BedID.Valid
 	})
 
+	if wardID.Valid {
+		// scope active patients to wardID
+		withBedRows = hwutil.Filter(withBedRows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
+			return row.WardID.UUID == wardID.UUID // equality implies validity
+		})
+	}
+
 	// collectActivePatients assumes row.BedID exists
 	// by constraints then row.BedName and row.Room* must also exist
-	collectActivePatients := func(rows []patient_repo.GetPatientsWithTasksBedAndRoomByWardRow) []*pb.GetPatientListResponse_PatientWithRoomAndBed {
+	collectActivePatients := func(rows []patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) []*pb.GetPatientListResponse_PatientWithRoomAndBed {
 		patients := make([]*pb.GetPatientListResponse_PatientWithRoomAndBed, 0) // List of Patients to be returned
 		patientsMap := make(map[uuid.UUID]int)                                  // maps id to index of patient in patients list
 		tasksMap := make(map[uuid.UUID]int)                                     // maps tasks id to index of task in its patient's Task list
@@ -614,7 +618,7 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 	}
 
 	// not ideal that we have to repeat ourselves here
-	collectPatients := func(rows []patient_repo.GetPatientsWithTasksBedAndRoomByWardRow) []*pb.GetPatientListResponse_Patient {
+	collectPatients := func(rows []patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) []*pb.GetPatientListResponse_Patient {
 		patients := make([]*pb.GetPatientListResponse_Patient, 0) // List of Patients to be returned
 		patientsMap := make(map[uuid.UUID]int)                    // maps id to index of patient in patients list
 		tasksMap := make(map[uuid.UUID]int)                       // maps tasks id to index of task in its patient's Task list

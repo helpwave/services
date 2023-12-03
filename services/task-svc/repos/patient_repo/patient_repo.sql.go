@@ -289,7 +289,7 @@ func (q *Queries) GetPatientsWithBedAndRoom(ctx context.Context, patientIds []uu
 	return items, nil
 }
 
-const getPatientsWithTasksBedAndRoomByWard = `-- name: GetPatientsWithTasksBedAndRoomByWard :many
+const getPatientsWithTasksBedAndRoomForOrganization = `-- name: GetPatientsWithTasksBedAndRoomForOrganization :many
 SELECT
 	patients.id, patients.human_readable_identifier, patients.organization_id, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at,
 	tasks.id as task_id,
@@ -311,16 +311,10 @@ SELECT
 	LEFT JOIN subtasks ON subtasks.task_id = tasks.id
 	LEFT JOIN beds ON beds.id = patients.bed_id
 	LEFT JOIN rooms ON rooms.id = beds.room_id
-	WHERE (rooms.ward_id = $1 OR $1 IS NULL)
-	AND patients.organization_id = $2
+	WHERE patients.organization_id = $1
 `
 
-type GetPatientsWithTasksBedAndRoomByWardParams struct {
-	WardID         uuid.NullUUID
-	OrganizationID uuid.UUID
-}
-
-type GetPatientsWithTasksBedAndRoomByWardRow struct {
+type GetPatientsWithTasksBedAndRoomForOrganizationRow struct {
 	Patient            Patient
 	TaskID             uuid.NullUUID
 	TaskName           *string
@@ -338,15 +332,15 @@ type GetPatientsWithTasksBedAndRoomByWardRow struct {
 	WardID             uuid.NullUUID
 }
 
-func (q *Queries) GetPatientsWithTasksBedAndRoomByWard(ctx context.Context, arg GetPatientsWithTasksBedAndRoomByWardParams) ([]GetPatientsWithTasksBedAndRoomByWardRow, error) {
-	rows, err := q.db.Query(ctx, getPatientsWithTasksBedAndRoomByWard, arg.WardID, arg.OrganizationID)
+func (q *Queries) GetPatientsWithTasksBedAndRoomForOrganization(ctx context.Context, organizationID uuid.UUID) ([]GetPatientsWithTasksBedAndRoomForOrganizationRow, error) {
+	rows, err := q.db.Query(ctx, getPatientsWithTasksBedAndRoomForOrganization, organizationID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []GetPatientsWithTasksBedAndRoomByWardRow{}
+	items := []GetPatientsWithTasksBedAndRoomForOrganizationRow{}
 	for rows.Next() {
-		var i GetPatientsWithTasksBedAndRoomByWardRow
+		var i GetPatientsWithTasksBedAndRoomForOrganizationRow
 		if err := rows.Scan(
 			&i.Patient.ID,
 			&i.Patient.HumanReadableIdentifier,

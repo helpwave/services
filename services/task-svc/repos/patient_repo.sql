@@ -52,7 +52,7 @@ SELECT id
 	ORDER BY updated_at DESC
 	LIMIT 4;
 
--- name: GetPatientsWithTasksBedAndRoomByWard :many
+-- name: GetPatientsWithTasksBedAndRoomForOrganization :many
 SELECT
 	sqlc.embed(patients),
 	tasks.id as task_id,
@@ -74,8 +74,7 @@ SELECT
 	LEFT JOIN subtasks ON subtasks.task_id = tasks.id
 	LEFT JOIN beds ON beds.id = patients.bed_id
 	LEFT JOIN rooms ON rooms.id = beds.room_id
-	WHERE (rooms.ward_id = sqlc.narg('ward_id') OR sqlc.narg('ward_id') IS NULL)
-	AND patients.organization_id = @organization_id;
+	WHERE patients.organization_id = @organization_id;
 
 -- name: ExistsPatientInOrganization :one
 SELECT EXISTS (
