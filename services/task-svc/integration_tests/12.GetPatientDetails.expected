@@ -140,8 +140,7 @@ Unassigned Patient, with tasks:
         }
       ]
     }
-  ],
-  "wardId": ""
+  ]
 }
 Discharged Patient:
 {
@@ -158,8 +157,7 @@ Discharged Patient:
       "assignedUserId": "3e795d31-1912-4b09-8e5a-fd62a2461a8c",
       "patientId": "c05e189c-06c8-479e-b3b9-306f2b66c07d"
     }
-  ],
-  "wardId": ""
+  ]
 }
 Patient does not exist:
 ERROR:
