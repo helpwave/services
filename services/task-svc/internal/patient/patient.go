@@ -521,6 +521,10 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 
 	rows, err := patientRepo.GetPatientsWithTasksBedAndRoomForOrganization(ctx, organizationID)
 
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	dischargedRows, chargedRows := hwutil.Partition(rows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
 		return row.Patient.IsDischarged != 0
 	})
