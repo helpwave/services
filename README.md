@@ -39,6 +39,7 @@ You can either run `<script>` in the shell (`devenv shell`) or outside the shell
 - `proto-lint`: Lint protos
 - `nix-lint`: Lint .nix
 - `migratesh`: [migrate.sh](#migratesh---running-migratemigrate-inside-docker)
+- `models`
 
 ## Fake token
 
