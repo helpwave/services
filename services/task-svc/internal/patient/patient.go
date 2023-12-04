@@ -582,19 +582,13 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 			if taskIx, existed := tasksMap[row.TaskID.UUID]; existed {
 				task = patient.Tasks[taskIx]
 			} else {
-				// TODO: in order for the api to behave the same I keep this,
-				// TODO: like it was before, but we should really make AUID optional and return nil
-				assignedUserId := ""
-				if row.TaskAssignedUserID.Valid {
-					assignedUserId = row.TaskAssignedUserID.UUID.String()
-				}
 
 				task = &pb.GetPatientListResponse_Task{
 					Id:             row.TaskID.UUID.String(),
 					Name:           *row.TaskName,
 					Description:    *row.TaskDescription,
 					Status:         pb.GetPatientListResponse_TaskStatus(*row.TaskStatus),
-					AssignedUserId: assignedUserId,
+					AssignedUserId: hwutil.NullUUIDToStringPtr(row.TaskAssignedUserID),
 					PatientId:      row.Patient.ID.String(),
 					Public:         *row.TaskPublic,
 					Subtasks:       make([]*pb.GetPatientListResponse_Task_SubTask, 0),
@@ -653,20 +647,12 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 			if taskIx, existed := tasksMap[row.TaskID.UUID]; existed {
 				task = patient.Tasks[taskIx]
 			} else {
-
-				// TODO: in order for the api to behave the same I keep this,
-				// TODO: like it was before, but we should really make AUID optional and return nil
-				assignedUserId := ""
-				if row.TaskAssignedUserID.Valid {
-					assignedUserId = row.TaskAssignedUserID.UUID.String()
-				}
-
 				task = &pb.GetPatientListResponse_Task{
 					Id:             row.TaskID.UUID.String(),
 					Name:           *row.TaskName,
 					Description:    *row.TaskDescription,
 					Status:         pb.GetPatientListResponse_TaskStatus(*row.TaskStatus),
-					AssignedUserId: assignedUserId,
+					AssignedUserId: hwutil.NullUUIDToStringPtr(row.TaskAssignedUserID),
 					PatientId:      row.Patient.ID.String(),
 					Public:         *row.TaskPublic,
 					Subtasks:       make([]*pb.GetPatientListResponse_Task_SubTask, 0),

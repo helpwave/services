@@ -643,12 +643,15 @@ const GetPatientListResponse_Task$json = {
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
     {'1': 'status', '3': 4, '4': 1, '5': 14, '6': '.proto.services.task_svc.v1.GetPatientListResponse.TaskStatus', '10': 'status'},
-    {'1': 'assigned_user_id', '3': 5, '4': 1, '5': 9, '10': 'assignedUserId'},
+    {'1': 'assigned_user_id', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'assignedUserId', '17': true},
     {'1': 'patient_id', '3': 6, '4': 1, '5': 9, '10': 'patientId'},
     {'1': 'public', '3': 7, '4': 1, '5': 8, '10': 'public'},
     {'1': 'subtasks', '3': 8, '4': 3, '5': 11, '6': '.proto.services.task_svc.v1.GetPatientListResponse.Task.SubTask', '10': 'subtasks'},
   ],
   '3': [GetPatientListResponse_Task_SubTask$json],
+  '8': [
+    {'1': '_assigned_user_id'},
+  ],
 };
 
 @$core.Deprecated('Use getPatientListResponseDescriptor instead')
@@ -691,17 +694,18 @@ final $typed_data.Uint8List getPatientListResponseDescriptor = $convert.base64De
     'c2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuUm9vbVIEcm9vbRJICgNiZWQYBCABKA'
     'syNi5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRQYXRpZW50TGlzdFJlc3BvbnNlLkJl'
     'ZFIDYmVkEhQKBW5vdGVzGAUgASgJUgVub3RlcxJNCgV0YXNrcxgGIAMoCzI3LnByb3RvLnNlcn'
-    'ZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuVGFza1IFdGFza3MapAMK'
+    'ZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuVGFza1IFdGFza3MavgMK'
     'BFRhc2sSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIAoLZGVzY3JpcHRpb2'
     '4YAyABKAlSC2Rlc2NyaXB0aW9uElUKBnN0YXR1cxgEIAEoDjI9LnByb3RvLnNlcnZpY2VzLnRh'
-    'c2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuVGFza1N0YXR1c1IGc3RhdHVzEigKEG'
-    'Fzc2lnbmVkX3VzZXJfaWQYBSABKAlSDmFzc2lnbmVkVXNlcklkEh0KCnBhdGllbnRfaWQYBiAB'
-    'KAlSCXBhdGllbnRJZBIWCgZwdWJsaWMYByABKAhSBnB1YmxpYxJbCghzdWJ0YXNrcxgIIAMoCz'
-    'I/LnByb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuVGFz'
-    'ay5TdWJUYXNrUghzdWJ0YXNrcxpBCgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGA'
-    'IgASgJUgRuYW1lEhIKBGRvbmUYAyABKAhSBGRvbmUicgoKVGFza1N0YXR1cxIbChdUQVNLX1NU'
-    'QVRVU19VTlNQRUNJRklFRBAAEhQKEFRBU0tfU1RBVFVTX1RPRE8QARIbChdUQVNLX1NUQVRVU1'
-    '9JTl9QUk9HUkVTUxACEhQKEFRBU0tfU1RBVFVTX0RPTkUQAw==');
+    'c2tfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuVGFza1N0YXR1c1IGc3RhdHVzEi0KEG'
+    'Fzc2lnbmVkX3VzZXJfaWQYBSABKAlIAFIOYXNzaWduZWRVc2VySWSIAQESHQoKcGF0aWVudF9p'
+    'ZBgGIAEoCVIJcGF0aWVudElkEhYKBnB1YmxpYxgHIAEoCFIGcHVibGljElsKCHN1YnRhc2tzGA'
+    'ggAygLMj8ucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0UGF0aWVudExpc3RSZXNwb25z'
+    'ZS5UYXNrLlN1YlRhc2tSCHN1YnRhc2tzGkEKB1N1YlRhc2sSDgoCaWQYASABKAlSAmlkEhIKBG'
+    '5hbWUYAiABKAlSBG5hbWUSEgoEZG9uZRgDIAEoCFIEZG9uZUITChFfYXNzaWduZWRfdXNlcl9p'
+    'ZCJyCgpUYXNrU3RhdHVzEhsKF1RBU0tfU1RBVFVTX1VOU1BFQ0lGSUVEEAASFAoQVEFTS19TVE'
+    'FUVVNfVE9ETxABEhsKF1RBU0tfU1RBVFVTX0lOX1BST0dSRVNTEAISFAoQVEFTS19TVEFUVVNf'
+    'RE9ORRAD');
 
 @$core.Deprecated('Use readmitPatientRequestDescriptor instead')
 const ReadmitPatientRequest$json = {
