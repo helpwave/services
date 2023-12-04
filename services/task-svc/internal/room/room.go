@@ -291,6 +291,7 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 			if _, roomProcessed := processedRooms[roomRow.RoomID]; roomProcessed {
 				return nil
 			}
+			processedRooms[roomRow.RoomID] = true
 			beds := hwutil.FlatMap(rows,
 				func(bedRow room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganizationRow) **pb.GetRoomOverviewsByWardResponse_Room_Bed {
 					if !bedRow.BedID.Valid || bedRow.RoomID != roomRow.RoomID {
