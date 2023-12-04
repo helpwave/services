@@ -179,8 +179,14 @@ SELECT
 	FROM rooms
 	LEFT JOIN beds ON beds.room_id = rooms.id
 	WHERE rooms.organization_id = $1
+	AND (rooms.ward_id = $2 OR $2 IS NULL)
 	ORDER BY rooms.id ASC, beds.name ASC
 `
+
+type GetRoomsWithBedsForOrganizationParams struct {
+	OrganizationID uuid.UUID
+	WardID         uuid.NullUUID
+}
 
 type GetRoomsWithBedsForOrganizationRow struct {
 	Room    Room
@@ -188,8 +194,8 @@ type GetRoomsWithBedsForOrganizationRow struct {
 	BedName *string
 }
 
-func (q *Queries) GetRoomsWithBedsForOrganization(ctx context.Context, organizationID uuid.UUID) ([]GetRoomsWithBedsForOrganizationRow, error) {
-	rows, err := q.db.Query(ctx, getRoomsWithBedsForOrganization, organizationID)
+func (q *Queries) GetRoomsWithBedsForOrganization(ctx context.Context, arg GetRoomsWithBedsForOrganizationParams) ([]GetRoomsWithBedsForOrganizationRow, error) {
+	rows, err := q.db.Query(ctx, getRoomsWithBedsForOrganization, arg.OrganizationID, arg.WardID)
 	if err != nil {
 		return nil, err
 	}
@@ -197,56 +203,6 @@ func (q *Queries) GetRoomsWithBedsForOrganization(ctx context.Context, organizat
 	items := []GetRoomsWithBedsForOrganizationRow{}
 	for rows.Next() {
 		var i GetRoomsWithBedsForOrganizationRow
-		if err := rows.Scan(
-			&i.Room.ID,
-			&i.Room.Name,
-			&i.Room.OrganizationID,
-			&i.Room.WardID,
-			&i.BedID,
-			&i.BedName,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getRoomsWithBedsForWardInOrganization = `-- name: GetRoomsWithBedsForWardInOrganization :many
-SELECT
-	rooms.id, rooms.name, rooms.organization_id, rooms.ward_id,
-	beds.id as bed_id,
-	beds.name as bed_name
-	FROM rooms
-	LEFT JOIN beds ON beds.room_id = rooms.id
-	WHERE rooms.organization_id = $1
-	AND rooms.ward_id = $2
-	ORDER BY rooms.id ASC, beds.name ASC
-`
-
-type GetRoomsWithBedsForWardInOrganizationParams struct {
-	OrganizationID uuid.UUID
-	WardID         uuid.UUID
-}
-
-type GetRoomsWithBedsForWardInOrganizationRow struct {
-	Room    Room
-	BedID   uuid.NullUUID
-	BedName *string
-}
-
-func (q *Queries) GetRoomsWithBedsForWardInOrganization(ctx context.Context, arg GetRoomsWithBedsForWardInOrganizationParams) ([]GetRoomsWithBedsForWardInOrganizationRow, error) {
-	rows, err := q.db.Query(ctx, getRoomsWithBedsForWardInOrganization, arg.OrganizationID, arg.WardID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []GetRoomsWithBedsForWardInOrganizationRow{}
-	for rows.Next() {
-		var i GetRoomsWithBedsForWardInOrganizationRow
 		if err := rows.Scan(
 			&i.Room.ID,
 			&i.Room.Name,

@@ -19,18 +19,7 @@ SELECT
 	FROM rooms
 	LEFT JOIN beds ON beds.room_id = rooms.id
 	WHERE rooms.organization_id = @organization_id
-	ORDER BY rooms.id ASC, beds.name ASC;
-
-
--- name: GetRoomsWithBedsForWardInOrganization :many
-SELECT
-	sqlc.embed(rooms),
-	beds.id as bed_id,
-	beds.name as bed_name
-	FROM rooms
-	LEFT JOIN beds ON beds.room_id = rooms.id
-	WHERE rooms.organization_id = @organization_id
-	AND rooms.ward_id = @ward_id
+	AND (rooms.ward_id = sqlc.narg('ward_id') OR sqlc.narg('ward_id') IS NULL)
 	ORDER BY rooms.id ASC, beds.name ASC;
 
 -- name: GetRoomsWithBedsWithPatientsByWard :many
