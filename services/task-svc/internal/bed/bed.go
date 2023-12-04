@@ -126,7 +126,9 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 		return nil, err
 	}
 
-	beds, err := bedRepo.GetBedsForOrganization(ctx, organizationID)
+	beds, err := bedRepo.GetBedsForOrganization(ctx, bed_repo.GetBedsForOrganizationParams{
+		OrganizationID: organizationID,
+	})
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -159,9 +161,12 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	beds, err := bedRepo.GetBedsByRoomForOrganization(ctx, bed_repo.GetBedsByRoomForOrganizationParams{
+	beds, err := bedRepo.GetBedsForOrganization(ctx, bed_repo.GetBedsForOrganizationParams{
 		OrganizationID: organizationID,
-		RoomID:         roomID,
+		RoomID: uuid.NullUUID{
+			UUID:  roomID,
+			Valid: true,
+		},
 	})
 	if err != nil {
 		if hwgorm.IsOurFault(err) {

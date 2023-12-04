@@ -19,12 +19,8 @@ SELECT
 
 -- name: GetBedsForOrganization :many
 SELECT * FROM beds
-	WHERE organization_id = $1
-	ORDER BY name ASC;
-
--- name: GetBedsByRoomForOrganization :many
-SELECT * FROM beds
-	WHERE organization_id = $1 AND room_id = $2
+	WHERE organization_id = @organization_id
+	AND (room_id = sqlc.narg('room_id') OR sqlc.narg('room_id') IS NULL)
 	ORDER BY name ASC;
 
 -- name: UpdateBed :exec
