@@ -276,66 +276,106 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 }
 
 func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsRequest) (*pb.GetWardDetailsResponse, error) {
-	wardRepo := repositories.WardRepo(ctx)
-	templateRepo := repositories.TemplateRepo(ctx)
+	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	wardID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	ward, err := wardRepo.GetWardByIdWithPreloadedRoomsAndBeds(wardID)
+	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
+	}
+
+	rows, err := wardRepo.GetWardByIdWithRoomsBedsAndTaskTemplates(ctx, ward_repo.GetWardByIdWithRoomsBedsAndTaskTemplatesParams{
+		OrganizationID: organizationID,
+		WardID:         wardID,
+	})
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if len(rows) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
+	}
+
+	rooms := make([]*pb.GetWardDetailsResponse_Room, 0)
+	roomsIndexMap := make(map[uuid.UUID]int)
+	bedSet := make(map[uuid.UUID]bool)
+
+	for _, row := range rows {
+		if !row.RoomID.Valid {
+			continue
+		}
+		var room *pb.GetWardDetailsResponse_Room
+		if roomIx, processed := roomsIndexMap[row.RoomID.UUID]; processed {
+			room = rooms[roomIx]
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
+			room = &pb.GetWardDetailsResponse_Room{
+				Id:   row.RoomID.UUID.String(),
+				Name: *row.RoomName,
+				Beds: make([]*pb.GetWardDetailsResponse_Bed, 0),
+			}
+			rooms = append(rooms, room)
+			roomsIndexMap[row.RoomID.UUID] = len(rooms) - 1
+		}
+
+		if !row.BedID.Valid {
+			continue
+		}
+		if _, processed := bedSet[row.BedID.UUID]; !processed {
+			bed := &pb.GetWardDetailsResponse_Bed{
+				Id:   row.BedID.UUID.String(),
+				Name: *row.BedName,
+			}
+			room.Beds = append(room.Beds, bed)
+			bedSet[row.BedID.UUID] = true
 		}
 	}
 
-	mappedRooms := hwutil.Map(ward.Rooms, func(room models.Room) *pb.GetWardDetailsResponse_Room {
-		var mappedBeds = hwutil.Map(room.Beds, func(bed models.Bed) *pb.GetWardDetailsResponse_Bed {
-			return &pb.GetWardDetailsResponse_Bed{
-				Id:   bed.ID.String(),
-				Name: bed.Name,
-			}
-		})
+	// we could process both in one iteration,
+	// but I suspect the deep branching required will result in slower performance
+	// (bmn)
 
-		return &pb.GetWardDetailsResponse_Room{
-			Id:   room.ID.String(),
-			Name: room.Name,
-			Beds: mappedBeds,
+	taskTemplates := make([]*pb.GetWardDetailsResponse_TaskTemplate, 0)
+	ttIndexMap := make(map[uuid.UUID]int)
+	stSet := make(map[uuid.UUID]bool)
+
+	for _, row := range rows {
+		if !row.TaskTemplateID.Valid {
+			continue
 		}
-	})
-
-	taskTemplates, err := templateRepo.GetTaskTemplatesByWardWithSubtasks(wardID)
-	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
+		var taskTemplate *pb.GetWardDetailsResponse_TaskTemplate
+		if ttIx, processed := ttIndexMap[row.TaskTemplateID.UUID]; processed {
+			taskTemplate = taskTemplates[ttIx]
 		} else {
-			return nil, status.Error(codes.InvalidArgument, err.Error())
+			taskTemplate = &pb.GetWardDetailsResponse_TaskTemplate{
+				Id:       row.TaskTemplateID.UUID.String(),
+				Name:     *row.TaskTemplateName,
+				Subtasks: make([]*pb.GetWardDetailsResponse_Subtask, 0),
+			}
+			taskTemplates = append(taskTemplates, taskTemplate)
+			ttIndexMap[row.TaskTemplateID.UUID] = len(taskTemplates) - 1
+		}
+
+		if !row.TaskTemplateSubtaskID.Valid {
+			continue
+		}
+		if _, processed := stSet[row.TaskTemplateSubtaskID.UUID]; !processed {
+			subTask := &pb.GetWardDetailsResponse_Subtask{
+				Id:   row.TaskTemplateSubtaskID.UUID.String(),
+				Name: *row.TaskTemplateSubtaskName,
+			}
+			taskTemplate.Subtasks = append(taskTemplate.Subtasks, subTask)
+			stSet[row.TaskTemplateSubtaskID.UUID] = true
 		}
 	}
 
-	mappedTaskTemplates := hwutil.Map(taskTemplates, func(taskTemplate models.TaskTemplate) *pb.GetWardDetailsResponse_TaskTemplate {
-		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(taskTemplateSubtask models.TaskTemplateSubtask) *pb.GetWardDetailsResponse_Subtask {
-			return &pb.GetWardDetailsResponse_Subtask{
-				Name: taskTemplateSubtask.Name,
-				Id:   taskTemplateSubtask.ID.String(),
-			}
-		})
+	ward := &pb.GetWardDetailsResponse{
+		Id:            rows[0].WardID.String(),
+		Name:          rows[0].WardName,
+		Rooms:         rooms,
+		TaskTemplates: taskTemplates,
+	}
 
-		return &pb.GetWardDetailsResponse_TaskTemplate{
-			Id:       taskTemplate.ID.String(),
-			Name:     taskTemplate.Name,
-			Subtasks: mappedSubtasks,
-		}
-	})
-
-	return &pb.GetWardDetailsResponse{
-		Id:            ward.ID.String(),
-		Name:          ward.Name,
-		Rooms:         mappedRooms,
-		TaskTemplates: mappedTaskTemplates,
-	}, nil
+	return ward, nil
 }

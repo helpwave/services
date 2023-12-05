@@ -19,30 +19,6 @@ func WardRepo(logCtx context.Context) *WardRepository {
 	}
 }
 
-func (r *WardRepository) GetWardById(id uuid.UUID) (*models.Ward, error) {
-	ward := models.Ward{ID: id}
-	query := r.db.
-		First(&ward)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return &ward, nil
-}
-
-func (r *WardRepository) GetWardByIdWithPreloadedRoomsAndBeds(id uuid.UUID) (*models.Ward, error) {
-	ward := models.Ward{ID: id}
-	query := r.db.
-		Preload("Rooms.Beds").
-		Preload("Rooms").
-		First(&ward)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return &ward, nil
-}
-
 func (r *WardRepository) GetWardByIdForOrganization(id, organizationID uuid.UUID) (*models.Ward, error) {
 	ward := models.Ward{ID: id, OrganizationID: organizationID}
 	query := r.db.
