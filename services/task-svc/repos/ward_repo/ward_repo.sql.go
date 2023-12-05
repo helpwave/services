@@ -27,6 +27,15 @@ func (q *Queries) CreateWard(ctx context.Context, arg CreateWardParams) (uuid.UU
 	return id, err
 }
 
+const deleteWard = `-- name: DeleteWard :exec
+DELETE FROM wards WHERE id = $1
+`
+
+func (q *Queries) DeleteWard(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteWard, id)
+	return err
+}
+
 const existsWard = `-- name: ExistsWard :one
 SELECT EXISTS (
     SELECT 1

@@ -203,15 +203,18 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	ward, err := wardRepo.ExistsWard(ctx, ward_repo.ExistsWardParams{
+	exists, err := wardRepo.ExistsWard(ctx, ward_repo.ExistsWardParams{
 		ID:             id,
 		OrganizationID: organizationID,
 	})
+	if !exists {
+		return nil, nil
+	}
 	if err != nil {
 		return nil, err
 	}
 
-	if err := wardRepo.DeleteWard(ward.ID); err != nil {
+	if err := wardRepo.DeleteWard(ctx, id); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 

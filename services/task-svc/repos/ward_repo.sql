@@ -33,3 +33,6 @@ SELECT EXISTS (
     WHERE id = $1
     AND organization_id = $2
 ) ward_exists;
+
+-- name: DeleteWard :exec
+DELETE FROM wards WHERE id = @id;
