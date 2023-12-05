@@ -4,7 +4,12 @@ INSERT INTO rooms (name, organization_id) VALUES ($1, $2) RETURNING id;
 -- name: GetWardById :one
 SELECT * FROM wards
 WHERE organization_id = @organization_id
-AND id = @ward_id LIMIT 1;
+AND id = @ward_id
+LIMIT 1;
+
+-- name: GetWards :many
+SELECT * FROM wards
+WHERE organization_id = @organization_id;
 
 -- name: GetWardByIdWithRoomsBedsAndTaskTemplates :many
 SELECT

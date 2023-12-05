@@ -87,25 +87,21 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 }
 
 func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb.GetWardsResponse, error) {
-	wardRepo := repositories.WardRepo(ctx)
+	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	wards, err := wardRepo.GetWardsForOrganization(organizationID)
+	wards, err := wardRepo.GetWards(ctx, organizationID)
 
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.GetWardsResponse{
-		Wards: hwutil.Map(wards, func(ward *models.Ward) *pb.GetWardsResponse_Ward {
+		Wards: hwutil.Map(wards, func(ward ward_repo.Ward) *pb.GetWardsResponse_Ward {
 			return &pb.GetWardsResponse_Ward{
 				Id:   ward.ID.String(),
 				Name: ward.Name,

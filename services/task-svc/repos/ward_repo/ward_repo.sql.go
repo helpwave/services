@@ -60,7 +60,8 @@ func (q *Queries) ExistsWard(ctx context.Context, arg ExistsWardParams) (bool, e
 const getWardById = `-- name: GetWardById :one
 SELECT id, name, organization_id FROM wards
 WHERE organization_id = $1
-AND id = $2 LIMIT 1
+AND id = $2
+LIMIT 1
 `
 
 type GetWardByIdParams struct {
@@ -135,6 +136,31 @@ func (q *Queries) GetWardByIdWithRoomsBedsAndTaskTemplates(ctx context.Context, 
 			&i.TaskTemplateSubtaskID,
 			&i.TaskTemplateSubtaskName,
 		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getWards = `-- name: GetWards :many
+SELECT id, name, organization_id FROM wards
+WHERE organization_id = $1
+`
+
+func (q *Queries) GetWards(ctx context.Context, organizationID uuid.UUID) ([]Ward, error) {
+	rows, err := q.db.Query(ctx, getWards, organizationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Ward{}
+	for rows.Next() {
+		var i Ward
+		if err := rows.Scan(&i.ID, &i.Name, &i.OrganizationID); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

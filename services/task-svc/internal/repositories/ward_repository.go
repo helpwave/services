@@ -19,29 +19,6 @@ func WardRepo(logCtx context.Context) *WardRepository {
 	}
 }
 
-func (r *WardRepository) GetWardByIdForOrganization(id, organizationID uuid.UUID) (*models.Ward, error) {
-	ward := models.Ward{ID: id, OrganizationID: organizationID}
-	query := r.db.
-		First(&ward)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return &ward, nil
-}
-
-func (r *WardRepository) GetWardsForOrganization(organizationID uuid.UUID) ([]*models.Ward, error) {
-	var wards []*models.Ward
-	query := r.db.
-		Where("organization_id = ?", organizationID).
-		Find(&wards)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return wards, nil
-}
-
 func (r *WardRepository) GetWardsForOrganizationFullyLoaded(organizationID uuid.UUID) ([]*models.Ward, error) {
 	var wards []*models.Ward
 	query := r.db.
@@ -68,14 +45,6 @@ func (r *WardRepository) UpdateWard(wardId uuid.UUID, updates map[string]interfa
 		return nil, err
 	}
 	return ward, nil
-}
-
-func (r *WardRepository) DeleteWard(wardId uuid.UUID) error {
-	ward := &models.Ward{ID: wardId}
-	query := r.db.
-		Delete(ward)
-
-	return query.Error
 }
 
 func (r *WardRepository) GetWardsByIDs(ids []uuid.UUID) ([]models.Ward, error) {
