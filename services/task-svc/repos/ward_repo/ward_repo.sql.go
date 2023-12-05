@@ -27,6 +27,45 @@ func (q *Queries) CreateWard(ctx context.Context, arg CreateWardParams) (uuid.UU
 	return id, err
 }
 
+const existsWard = `-- name: ExistsWard :one
+SELECT EXISTS (
+    SELECT 1
+    FROM wards
+    WHERE id = $1
+    AND organization_id = $2
+) ward_exists
+`
+
+type ExistsWardParams struct {
+	ID             uuid.UUID
+	OrganizationID uuid.UUID
+}
+
+func (q *Queries) ExistsWard(ctx context.Context, arg ExistsWardParams) (bool, error) {
+	row := q.db.QueryRow(ctx, existsWard, arg.ID, arg.OrganizationID)
+	var ward_exists bool
+	err := row.Scan(&ward_exists)
+	return ward_exists, err
+}
+
+const getWardById = `-- name: GetWardById :one
+SELECT id, name, organization_id FROM wards
+WHERE organization_id = $1
+AND id = $2 LIMIT 1
+`
+
+type GetWardByIdParams struct {
+	OrganizationID uuid.UUID
+	WardID         uuid.UUID
+}
+
+func (q *Queries) GetWardById(ctx context.Context, arg GetWardByIdParams) (Ward, error) {
+	row := q.db.QueryRow(ctx, getWardById, arg.OrganizationID, arg.WardID)
+	var i Ward
+	err := row.Scan(&i.ID, &i.Name, &i.OrganizationID)
+	return i, err
+}
+
 const getWardByIdWithRoomsBedsAndTaskTemplates = `-- name: GetWardByIdWithRoomsBedsAndTaskTemplates :many
 SELECT
 	wards.id as ward_id,
@@ -39,13 +78,13 @@ SELECT
 	task_templates.name as task_template_name,
 	task_template_subtasks.id as task_template_subtask_id,
 	task_template_subtasks.name as task_template_subtask_name
-	FROM wards
+FROM wards
 	LEFT JOIN rooms ON rooms.ward_id = wards.id
 	LEFT JOIN beds ON beds.room_id = rooms.id
 	LEFT JOIN task_templates ON task_templates.ward_id = wards.id
 	LEFT JOIN task_template_subtasks ON task_template_subtasks.task_template_id = task_templates.id
-	WHERE wards.organization_id = $1
-	AND wards.id = $2
+WHERE wards.organization_id = $1
+AND wards.id = $2
 `
 
 type GetWardByIdWithRoomsBedsAndTaskTemplatesParams struct {

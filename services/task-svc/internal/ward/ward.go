@@ -56,7 +56,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 }
 
 func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.GetWardResponse, error) {
-	wardRepo := repositories.WardRepo(ctx)
+	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	id, err := uuid.Parse(req.Id)
 	if err != nil {
@@ -68,13 +68,15 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 		return nil, err
 	}
 
-	ward, err := wardRepo.GetWardByIdForOrganization(id, organizationID)
-	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+	ward, err := hwdb.Optional(wardRepo.GetWardById)(ctx, ward_repo.GetWardByIdParams{
+		OrganizationID: organizationID,
+		WardID:         id,
+	})
+	if ward == nil {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
+
+	} else if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.GetWardResponse{
@@ -189,7 +191,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 }
 
 func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {
-	wardRepo := repositories.WardRepo(ctx)
+	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -201,7 +203,10 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	ward, err := wardRepo.GetWardByIdForOrganization(id, organizationID)
+	ward, err := wardRepo.ExistsWard(ctx, ward_repo.ExistsWardParams{
+		ID:             id,
+		OrganizationID: organizationID,
+	})
 	if err != nil {
 		return nil, err
 	}
