@@ -110,8 +110,13 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 }
 
 func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsRequest) (*pb.GetRecentWardsResponse, error) {
-	wardRepo := repositories.WardRepo(ctx)
+	wardRepo := ward_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	// TODO: Auth
 
@@ -131,32 +136,26 @@ func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsR
 		return &parsedUUID
 	})
 
-	recentWards, err := wardRepo.GetWardsByIDs(recentWardIDs)
+	rows, err := wardRepo.GetWardsWithCountsByIDs(ctx, ward_repo.GetWardsWithCountsByIDsParams{
+		StatusTodo:       int32(pb.TaskStatus_TASK_STATUS_TODO),
+		StatusInProgress: int32(pb.TaskStatus_TASK_STATUS_IN_PROGRESS),
+		StatusDone:       int32(pb.TaskStatus_TASK_STATUS_DONE),
+		OrganizationID:   organizationID,
+		WardIds:          recentWardIDs,
+	})
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	bedCounts, err := wardRepo.CountBedsForWards(recentWardIDs)
-
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	taskCounts, err := wardRepo.CountTasksWithStatusForWards(recentWardIDs)
-
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	response := hwutil.Map(recentWards, func(ward models.Ward) *pb.GetRecentWardsResponse_Ward {
+	response := hwutil.Map(rows, func(row ward_repo.GetWardsWithCountsByIDsRow) *pb.GetRecentWardsResponse_Ward {
 		return &pb.GetRecentWardsResponse_Ward{
-			Id:              ward.ID.String(),
-			Name:            ward.Name,
-			BedCount:        uint32(bedCounts[ward.ID]),
-			TasksTodo:       uint32(taskCounts[ward.ID][pb.TaskStatus_TASK_STATUS_TODO]),
-			TasksInProgress: uint32(taskCounts[ward.ID][pb.TaskStatus_TASK_STATUS_IN_PROGRESS]),
-			TasksDone:       uint32(taskCounts[ward.ID][pb.TaskStatus_TASK_STATUS_DONE]),
+			Id:              row.Ward.ID.String(),
+			Name:            row.Ward.Name,
+			BedCount:        uint32(row.BedCount),
+			TasksTodo:       uint32(row.TodoCount),
+			TasksInProgress: uint32(row.InProgressCount),
+			TasksDone:       uint32(row.DoneCount),
 		}
 	})
 

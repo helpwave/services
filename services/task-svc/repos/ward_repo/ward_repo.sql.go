@@ -171,6 +171,73 @@ func (q *Queries) GetWards(ctx context.Context, organizationID uuid.UUID) ([]War
 	return items, nil
 }
 
+const getWardsWithCountsByIDs = `-- name: GetWardsWithCountsByIDs :many
+SELECT
+	wards.id, wards.name, wards.organization_id,
+	COUNT(beds.id) AS bed_count,
+	COUNT(CASE WHEN tasks.status = $1 THEN 1 ELSE NULL END) AS todo_count,
+	COUNT(CASE WHEN tasks.status = $2 THEN 1 ELSE NULL END) AS in_progress_count,
+	COUNT(CASE WHEN tasks.status = $3 THEN 1 ELSE NULL END) AS done_count
+FROM wards
+	LEFT JOIN rooms ON rooms.ward_id = wards.id
+	LEFT JOIN beds ON beds.room_id = rooms.id
+	LEFT JOIN patients ON patients.bed_id = beds.id
+	LEFT JOIN tasks ON tasks.patient_id = patients.id
+WHERE wards.organization_id = $4
+AND wards.id IN ($5)
+GROUP BY wards.id
+`
+
+type GetWardsWithCountsByIDsParams struct {
+	StatusTodo       int32
+	StatusInProgress int32
+	StatusDone       int32
+	OrganizationID   uuid.UUID
+	WardIds          []uuid.UUID
+}
+
+type GetWardsWithCountsByIDsRow struct {
+	Ward            Ward
+	BedCount        int64
+	TodoCount       int64
+	InProgressCount int64
+	DoneCount       int64
+}
+
+func (q *Queries) GetWardsWithCountsByIDs(ctx context.Context, arg GetWardsWithCountsByIDsParams) ([]GetWardsWithCountsByIDsRow, error) {
+	rows, err := q.db.Query(ctx, getWardsWithCountsByIDs,
+		arg.StatusTodo,
+		arg.StatusInProgress,
+		arg.StatusDone,
+		arg.OrganizationID,
+		arg.WardIds,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetWardsWithCountsByIDsRow{}
+	for rows.Next() {
+		var i GetWardsWithCountsByIDsRow
+		if err := rows.Scan(
+			&i.Ward.ID,
+			&i.Ward.Name,
+			&i.Ward.OrganizationID,
+			&i.BedCount,
+			&i.TodoCount,
+			&i.InProgressCount,
+			&i.DoneCount,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateWard = `-- name: UpdateWard :exec
 UPDATE wards
 SET	name = coalesce($1, name)

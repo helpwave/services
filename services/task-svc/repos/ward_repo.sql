@@ -11,6 +11,23 @@ LIMIT 1;
 SELECT * FROM wards
 WHERE organization_id = @organization_id;
 
+-- name: GetWardsWithCountsByIDs :many
+SELECT
+	sqlc.embed(wards),
+	COUNT(beds.id) AS bed_count,
+	COUNT(CASE WHEN tasks.status = @status_todo THEN 1 ELSE NULL END) AS todo_count,
+	COUNT(CASE WHEN tasks.status = @status_in_progress THEN 1 ELSE NULL END) AS in_progress_count,
+	COUNT(CASE WHEN tasks.status = @status_done THEN 1 ELSE NULL END) AS done_count
+FROM wards
+	LEFT JOIN rooms ON rooms.ward_id = wards.id
+	LEFT JOIN beds ON beds.room_id = rooms.id
+	LEFT JOIN patients ON patients.bed_id = beds.id
+	LEFT JOIN tasks ON tasks.patient_id = patients.id
+WHERE wards.organization_id = @organization_id
+AND wards.id IN (sqlc.slice('ward_ids'))
+GROUP BY wards.id;
+
+
 -- name: GetWardByIdWithRoomsBedsAndTaskTemplates :many
 SELECT
 	wards.id as ward_id,
