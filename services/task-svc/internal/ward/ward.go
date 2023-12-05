@@ -8,12 +8,14 @@ import (
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"hwdb"
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
 	"task-svc/internal/tracking"
+	"task-svc/repos/ward_repo"
 )
 
 type ServiceServer struct {
@@ -26,17 +28,15 @@ func NewServiceServer() *ServiceServer {
 
 func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) (*pb.CreateWardResponse, error) {
 	log := zlog.Ctx(ctx)
-	wardRepo := repositories.WardRepo(ctx)
+	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	ward, err := wardRepo.CreateWard(&models.Ward{
-		WardBase: models.WardBase{
-			Name: req.GetName(),
-		},
+	wardID, err := wardRepo.CreateWard(ctx, ward_repo.CreateWardParams{
+		Name:           req.Name,
 		OrganizationID: organizationID,
 	})
 
@@ -45,13 +45,13 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 	}
 
 	log.Info().
-		Str("wardID", ward.ID.String()).
-		Msg("ward created")
+		Str("wardID", wardID.String()).
+		Msg("wardID created")
 
-	tracking.AddWardToRecentActivity(ctx, ward.ID.String())
+	tracking.AddWardToRecentActivity(ctx, wardID.String())
 
 	return &pb.CreateWardResponse{
-		Id: ward.ID.String(),
+		Id: wardID.String(),
 	}, nil
 }
 

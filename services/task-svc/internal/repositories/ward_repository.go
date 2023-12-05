@@ -19,16 +19,6 @@ func WardRepo(logCtx context.Context) *WardRepository {
 	}
 }
 
-func (r *WardRepository) CreateWard(ward *models.Ward) (*models.Ward, error) {
-	query := r.db.
-		Create(ward)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return ward, nil
-}
-
 func (r *WardRepository) GetWardById(id uuid.UUID) (*models.Ward, error) {
 	ward := models.Ward{ID: id}
 	query := r.db.
