@@ -1,0 +1,16 @@
+{}
+get members:
+{
+  "members": [
+    {
+      "userId": "9b045845-b5bf-456b-94a3-0b7bfd0bd0c5",
+      "email": "heinrich.heine@helpwave.de",
+      "nickname": "Annika",
+      "avatarUrl": "https://source.boringavatars.com/marble/128/"
+    }
+  ]
+}
+remove member:
+{}
+get members:
+{}
