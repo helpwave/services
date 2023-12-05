@@ -11,7 +11,6 @@ import (
 	"hwdb"
 	"hwgorm"
 	"hwutil"
-	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
 	"task-svc/internal/tracking"
@@ -165,7 +164,7 @@ func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsR
 }
 
 func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) (*pb.UpdateWardResponse, error) {
-	wardRepo := repositories.WardRepo(ctx)
+	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -174,8 +173,10 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := pbhelpers.UpdatesMapForUpdateWardRequest(req)
-	_, err = wardRepo.UpdateWard(id, updates)
+	err = wardRepo.UpdateWard(ctx, ward_repo.UpdateWardParams{
+		ID:   id,
+		Name: req.Name,
+	})
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())

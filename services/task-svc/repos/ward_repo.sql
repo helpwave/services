@@ -39,5 +39,11 @@ SELECT EXISTS (
     AND organization_id = $2
 ) ward_exists;
 
+-- name: UpdateWard :exec
+UPDATE wards
+SET	name = coalesce(sqlc.narg('name'), name)
+WHERE id = @id;
+
+
 -- name: DeleteWard :exec
 DELETE FROM wards WHERE id = @id;

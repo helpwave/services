@@ -170,3 +170,19 @@ func (q *Queries) GetWards(ctx context.Context, organizationID uuid.UUID) ([]War
 	}
 	return items, nil
 }
+
+const updateWard = `-- name: UpdateWard :exec
+UPDATE wards
+SET	name = coalesce($1, name)
+WHERE id = $2
+`
+
+type UpdateWardParams struct {
+	Name *string
+	ID   uuid.UUID
+}
+
+func (q *Queries) UpdateWard(ctx context.Context, arg UpdateWardParams) error {
+	_, err := q.db.Exec(ctx, updateWard, arg.Name, arg.ID)
+	return err
+}

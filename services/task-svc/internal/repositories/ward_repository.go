@@ -35,18 +35,6 @@ func (r *WardRepository) GetWardsForOrganizationFullyLoaded(organizationID uuid.
 	return wards, nil
 }
 
-func (r *WardRepository) UpdateWard(wardId uuid.UUID, updates map[string]interface{}) (*models.Ward, error) {
-	ward := &models.Ward{ID: wardId}
-	query := r.db.
-		Model(ward).
-		Updates(updates)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return ward, nil
-}
-
 func (r *WardRepository) GetWardsByIDs(ids []uuid.UUID) ([]models.Ward, error) {
 	var wards []models.Ward
 
