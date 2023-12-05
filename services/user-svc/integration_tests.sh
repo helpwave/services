@@ -4,12 +4,12 @@ set -e
 
 ### Setup ###
 cd ../../
-yes | ./migrate.sh task-svc down
-./migrate.sh task-svc up
+yes | ./migrate.sh user-svc down
+./migrate.sh user-svc up
 
 cd -
 
-psql -f integration_tests/seed.sql postgres://postgres:postgres@localhost:5432/task-svc
+psql -f integration_tests/seed.sql postgres://postgres:postgres@localhost:5432/user-svc
 
 rm integration_tests/*.actual -f
 
