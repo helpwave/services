@@ -11,8 +11,6 @@ import (
 	"hwdb"
 	"hwgorm"
 	"hwutil"
-	"task-svc/internal/models"
-	"task-svc/internal/repositories"
 	"task-svc/internal/tracking"
 	"task-svc/repos/ward_repo"
 )
@@ -136,7 +134,7 @@ func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsR
 		return &parsedUUID
 	})
 
-	rows, err := wardRepo.GetWardsWithCountsByIDs(ctx, ward_repo.GetWardsWithCountsByIDsParams{
+	rows, err := wardRepo.GetWardsWithCounts(ctx, ward_repo.GetWardsWithCountsParams{
 		StatusTodo:       int32(pb.TaskStatus_TASK_STATUS_TODO),
 		StatusInProgress: int32(pb.TaskStatus_TASK_STATUS_IN_PROGRESS),
 		StatusDone:       int32(pb.TaskStatus_TASK_STATUS_DONE),
@@ -148,7 +146,7 @@ func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsR
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	response := hwutil.Map(rows, func(row ward_repo.GetWardsWithCountsByIDsRow) *pb.GetRecentWardsResponse_Ward {
+	response := hwutil.Map(rows, func(row ward_repo.GetWardsWithCountsRow) *pb.GetRecentWardsResponse_Ward {
 		return &pb.GetRecentWardsResponse_Ward{
 			Id:              row.Ward.ID.String(),
 			Name:            row.Ward.Name,
@@ -220,14 +218,20 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 }
 
 func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOverviewsRequest) (*pb.GetWardOverviewsResponse, error) {
-	wardRepo := repositories.WardRepo(ctx)
+	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	wards, err := wardRepo.GetWardsForOrganizationFullyLoaded(organizationID)
+	rows, err := wardRepo.GetWardsWithCounts(ctx, ward_repo.GetWardsWithCountsParams{
+		StatusTodo:       int32(pb.TaskStatus_TASK_STATUS_TODO),
+		StatusInProgress: int32(pb.TaskStatus_TASK_STATUS_IN_PROGRESS),
+		StatusDone:       int32(pb.TaskStatus_TASK_STATUS_DONE),
+		OrganizationID:   organizationID,
+		WardIds:          nil,
+	})
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -236,43 +240,14 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 		}
 	}
 
-	resWards := hwutil.Map(wards, func(ward *models.Ward) *pb.GetWardOverviewsResponse_Ward {
-		rooms := ward.Rooms
-
-		var bedCount uint32
-		var tasksTodo uint32
-		var tasksInProgress uint32
-		var tasksDone uint32
-
-		for _, room := range rooms {
-			beds := room.Beds
-			bedCount += uint32(len(beds))
-
-			for _, bed := range beds {
-				if bed.Patient != nil {
-					tasks := bed.Patient.Tasks
-
-					for _, t := range tasks {
-						switch t.Status {
-						case pb.TaskStatus_TASK_STATUS_TODO:
-							tasksTodo++
-						case pb.TaskStatus_TASK_STATUS_IN_PROGRESS:
-							tasksInProgress++
-						case pb.TaskStatus_TASK_STATUS_DONE:
-							tasksDone++
-						}
-					}
-				}
-			}
-		}
-
+	resWards := hwutil.Map(rows, func(row ward_repo.GetWardsWithCountsRow) *pb.GetWardOverviewsResponse_Ward {
 		return &pb.GetWardOverviewsResponse_Ward{
-			Id:              ward.ID.String(),
-			Name:            ward.Name,
-			BedCount:        bedCount,
-			TasksTodo:       tasksTodo,
-			TasksInProgress: tasksInProgress,
-			TasksDone:       tasksDone,
+			Id:              row.Ward.ID.String(),
+			Name:            row.Ward.Name,
+			BedCount:        uint32(row.BedCount),
+			TasksTodo:       uint32(row.TodoCount),
+			TasksInProgress: uint32(row.InProgressCount),
+			TasksDone:       uint32(row.DoneCount),
 		}
 	})
 

@@ -171,7 +171,7 @@ func (q *Queries) GetWards(ctx context.Context, organizationID uuid.UUID) ([]War
 	return items, nil
 }
 
-const getWardsWithCountsByIDs = `-- name: GetWardsWithCountsByIDs :many
+const getWardsWithCounts = `-- name: GetWardsWithCounts :many
 SELECT
 	wards.id, wards.name, wards.organization_id,
 	COUNT(beds.id) AS bed_count,
@@ -184,11 +184,11 @@ FROM wards
 	LEFT JOIN patients ON patients.bed_id = beds.id
 	LEFT JOIN tasks ON tasks.patient_id = patients.id
 WHERE wards.organization_id = $4
-AND wards.id IN ($5)
+AND (wards.id IN ($5) OR $5 IS NULL)
 GROUP BY wards.id
 `
 
-type GetWardsWithCountsByIDsParams struct {
+type GetWardsWithCountsParams struct {
 	StatusTodo       int32
 	StatusInProgress int32
 	StatusDone       int32
@@ -196,7 +196,7 @@ type GetWardsWithCountsByIDsParams struct {
 	WardIds          []uuid.UUID
 }
 
-type GetWardsWithCountsByIDsRow struct {
+type GetWardsWithCountsRow struct {
 	Ward            Ward
 	BedCount        int64
 	TodoCount       int64
@@ -204,8 +204,8 @@ type GetWardsWithCountsByIDsRow struct {
 	DoneCount       int64
 }
 
-func (q *Queries) GetWardsWithCountsByIDs(ctx context.Context, arg GetWardsWithCountsByIDsParams) ([]GetWardsWithCountsByIDsRow, error) {
-	rows, err := q.db.Query(ctx, getWardsWithCountsByIDs,
+func (q *Queries) GetWardsWithCounts(ctx context.Context, arg GetWardsWithCountsParams) ([]GetWardsWithCountsRow, error) {
+	rows, err := q.db.Query(ctx, getWardsWithCounts,
 		arg.StatusTodo,
 		arg.StatusInProgress,
 		arg.StatusDone,
@@ -216,9 +216,9 @@ func (q *Queries) GetWardsWithCountsByIDs(ctx context.Context, arg GetWardsWithC
 		return nil, err
 	}
 	defer rows.Close()
-	items := []GetWardsWithCountsByIDsRow{}
+	items := []GetWardsWithCountsRow{}
 	for rows.Next() {
-		var i GetWardsWithCountsByIDsRow
+		var i GetWardsWithCountsRow
 		if err := rows.Scan(
 			&i.Ward.ID,
 			&i.Ward.Name,

@@ -11,7 +11,7 @@ LIMIT 1;
 SELECT * FROM wards
 WHERE organization_id = @organization_id;
 
--- name: GetWardsWithCountsByIDs :many
+-- name: GetWardsWithCounts :many
 SELECT
 	sqlc.embed(wards),
 	COUNT(beds.id) AS bed_count,
@@ -24,7 +24,7 @@ FROM wards
 	LEFT JOIN patients ON patients.bed_id = beds.id
 	LEFT JOIN tasks ON tasks.patient_id = patients.id
 WHERE wards.organization_id = @organization_id
-AND wards.id IN (sqlc.slice('ward_ids'))
+AND (wards.id IN (sqlc.slice('ward_ids')) OR sqlc.slice('ward_ids') IS NULL)
 GROUP BY wards.id;
 
 
