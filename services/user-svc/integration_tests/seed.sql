@@ -11,13 +11,15 @@ insert into organizations (id, long_name, short_name, contact_email, is_personal
 insert into users (id, email, nickname, name) values ('51dce0ea-2e72-412a-988e-8e9089a68572', 'maike.test@helpwave.de', 'Maike', 'Maike');
 insert into users (id, email, nickname, name) values ('78b6eada-4621-4987-a2c6-ac792bf59483', 'tim.testmann@helpwave.de', 'Tim', 'Tim');
 insert into users (id, email, nickname, name) values ('8b5ff90a-7548-454e-9684-6f2c30677db5', 'heinrich.heine@helpwave.de', 'Heine', 'Heinrich');
-insert into users (id, email, nickname, name) values ('9b045845-b5bf-456b-94a3-0b7bfd0bd0c5', 'heinrich.heine@helpwave.de', 'Annika', 'Annika');
+insert into users (id, email, nickname, name) values ('9b045845-b5bf-456b-94a3-0b7bfd0bd0c5', 'annika.b@helpwave.de', 'Annika', 'Annika');
+insert into users (id, email, nickname, name) values ('f6cfe2aa-8f1b-4fbd-b193-946c3815a9ec', 'moritz.wetter@helpwave.de', 'wetter', 'Moritz');
+
 
 -- memberships
 
 insert into memberships (id, user_id, organization_id, is_admin) values ('769e37e6-6e98-4ee7-8c03-5ce32c3783ff', '51dce0ea-2e72-412a-988e-8e9089a68572', 'ead68d1d-db6b-4cf0-b316-ac9064c66413', false);
-insert into memberships (id, user_id, organization_id, is_admin) values ('769e37e6-6e98-4ee7-8c03-5ce32c3783f2', '51dce0ea-2e72-412a-988e-8e9089a68572', '77e49c1c-340b-4921-b5b4-fffbb8d3df6c', false);
-insert into memberships (id, user_id, organization_id, is_admin) values ('16c4d803-367c-47cc-ae26-7a04143490aa', '8b5ff90a-7548-454e-9684-6f2c30677db5', 'ead68d1d-db6b-4cf0-b316-ac9064c66413', false);
+insert into memberships (id, user_id, organization_id, is_admin) values ('9a2c44ee-57a3-4154-8d89-c26ed08d7eb0', '51dce0ea-2e72-412a-988e-8e9089a68572', '77e49c1c-340b-4921-b5b4-fffbb8d3df6c', false);
+insert into memberships (id, user_id, organization_id, is_admin) values ('16c4d803-367c-47cc-ae26-7a04143490aa', '8b5ff90a-7548-454e-9684-6f2c30677db5', 'ead68d1d-db6b-4cf0-b316-ac9064c66413', true);
 
 
 -- invitations
@@ -26,3 +28,12 @@ insert into invitations (id, email, organization_id, state) values ('dcf6280b-de
 insert into invitations (id, email, organization_id, state) values ('d0bd85ee-910a-4578-bbdc-a4346a624a34', 'mailer@helpwave.de', 'cc401e43-d76c-4f0e-933a-3ddfab895e59', 2);
 insert into invitations (id, email, organization_id, state) values ('07c4f3fd-5146-4bda-aece-c02aa0c50fdc', 'marvin@helpwave.de', 'cc401e43-d76c-4f0e-933a-3ddfab895e59', 2);
 insert into invitations (id, email, organization_id, state) values ('4e857c97-0afc-4e3e-97a6-cc9d346f68aa', 'tom.breitband@helpwave.de', 'cc401e43-d76c-4f0e-933a-3ddfab895e59', 1);
+insert into invitations (id, email, organization_id, state) values ('2cbb3841-09dc-4015-aef1-95fb389700d4', 'acceptor@helpwave.de', '77e49c1c-340b-4921-b5b4-fffbb8d3df6c', 1);
+insert into invitations (id, email, organization_id, state) values ('e7788133-8814-4859-8407-44617828d4b1', 'acceptor2@helpwave.de', '77e49c1c-340b-4921-b5b4-fffbb8d3df6c', 3);
+insert into invitations (id, email, organization_id, state) values ('0bdd571f-54d8-42f6-b449-624cfdead279', 'rejector@helpwave.de', 'ead68d1d-db6b-4cf0-b316-ac9064c66413', 1);
+insert into invitations (id, email, organization_id, state) values ('3232a80e-181f-462f-ad0d-8db54881afa7', 'rejector2@helpwave.de', 'ead68d1d-db6b-4cf0-b316-ac9064c66413', 4);
+insert into invitations (id, email, organization_id, state) values ('1bb75dca-0ec0-485e-85f4-b7a813c89a6b', 'revoker@helpwave.de', 'ead68d1d-db6b-4cf0-b316-ac9064c66413', 1);
+insert into invitations (id, email, organization_id, state) values ('6acc312b-62ce-4077-ab74-2f6794272b9c', 'revoker2@helpwave.de', 'ead68d1d-db6b-4cf0-b316-ac9064c66413', 3);
+insert into invitations (id, email, organization_id, state) values ('c23a0d63-e4ce-46cd-ae5c-30990d02ebe4', 'revoker3@helpwave.de', 'ead68d1d-db6b-4cf0-b316-ac9064c66413', 1);
+
+
