@@ -313,7 +313,7 @@ func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberReq
 		UserID:         userID,
 		OrganizationID: organizationID,
 	}
-	if err := db.Delete(&member).Error; err != nil {
+	if err := db.Delete(&member, "user_id = ?", userID).Error; err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
