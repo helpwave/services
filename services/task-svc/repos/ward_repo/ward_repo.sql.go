@@ -184,7 +184,7 @@ FROM wards
 	LEFT JOIN patients ON patients.bed_id = beds.id
 	LEFT JOIN tasks ON tasks.patient_id = patients.id
 WHERE wards.organization_id = $4
-AND (wards.id IN ($5) OR $5 IS NULL)
+AND (wards.id = ANY($5::uuid[]) OR $5 IS NULL)
 GROUP BY wards.id
 `
 

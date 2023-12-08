@@ -24,7 +24,7 @@ FROM wards
 	LEFT JOIN patients ON patients.bed_id = beds.id
 	LEFT JOIN tasks ON tasks.patient_id = patients.id
 WHERE wards.organization_id = @organization_id
-AND (wards.id IN (sqlc.slice('ward_ids')) OR sqlc.slice('ward_ids') IS NULL)
+AND (wards.id = ANY(@ward_ids::uuid[]) OR @ward_ids IS NULL)
 GROUP BY wards.id;
 
 
