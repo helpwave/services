@@ -4,6 +4,11 @@ import (
 	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwdb"
 	"hwgorm"
 	"hwutil"
@@ -11,12 +16,7 @@ import (
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
 	"task-svc/repos/patient_repo"
-
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/types/known/timestamppb"
+	"task-svc/repos/task_repo"
 )
 
 type ServiceServer struct {
@@ -30,7 +30,7 @@ func NewServiceServer() *ServiceServer {
 func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.CreateTaskResponse, error) {
 	log := zlog.Ctx(ctx)
 	patientRepo := patient_repo.New(hwdb.GetDB())
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -75,17 +75,15 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		}
 	}
 
-	task, err := taskRepo.CreateTask(&models.Task{
-		TaskBase: models.TaskBase{
-			Name:        req.Name,
-			Description: description,
-			Status:      initialStatus,
-		},
-		PatientId:      patientId,
+	taskId, err := taskRepo.CreateTask(ctx, task_repo.CreateTaskParams{
+		Name:           req.Name,
+		Description:    description,
+		Status:         int32(initialStatus),
+		PatientID:      patientId,
+		Public:         req.Public,
 		OrganizationID: organizationID,
 		CreatedBy:      userID,
-		DueAt:          req.DueAt.AsTime(),
-		Public:         req.Public,
+		DueAt:          hwdb.TimeToTimestamp(req.DueAt.AsTime()),
 	})
 
 	if err != nil {
@@ -93,12 +91,12 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 	}
 
 	log.Info().
-		Str("taskID", task.ID.String()).
+		Str("taskID", taskId.String()).
 		Str("patientID", patientId.String()).
-		Msg("task created for patient")
+		Msg("taskId created for patient")
 
 	return &pb.CreateTaskResponse{
-		Id: task.ID.String(),
+		Id: taskId.String(),
 	}, nil
 }
 
