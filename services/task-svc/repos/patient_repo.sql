@@ -33,7 +33,7 @@ SELECT
 	FROM patients
 	LEFT JOIN beds ON patients.bed_id = beds.id
 	LEFT JOIN rooms ON beds.room_id = rooms.id
-	WHERE patients.id IN (sqlc.slice('patient_ids'))
+	WHERE patients.id = ANY(@patient_ids::uuid[])
 	ORDER BY patients.updated_at DESC;
 
 -- name: GetPatientsByWardForOrganization :many

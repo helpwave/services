@@ -237,7 +237,7 @@ SELECT
 	FROM patients
 	LEFT JOIN beds ON patients.bed_id = beds.id
 	LEFT JOIN rooms ON beds.room_id = rooms.id
-	WHERE patients.id IN ($1)
+	WHERE patients.id = ANY($1::uuid[])
 	ORDER BY patients.updated_at DESC
 `
 
