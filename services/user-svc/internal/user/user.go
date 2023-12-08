@@ -3,17 +3,22 @@ package user
 import (
 	"common"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
 	"gen/proto/libs/events/v1"
 	pb "gen/proto/services/user_svc/v1"
+	"hwdb"
+	pbhelpersEvents "proto_helpers/events/v1"
+	"user-svc/internal/repositories"
+	"user-svc/repos/user_repo"
+
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
-	pbhelpersEvents "proto_helpers/events/v1"
-	"user-svc/internal/models"
-	"user-svc/internal/repositories"
 )
 
 var UserUpdatedEventSubscription = &daprcmn.Subscription{
@@ -31,25 +36,30 @@ func NewServiceServer() *ServiceServer {
 
 func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
 	log := zlog.Ctx(ctx)
-	userRepository := repositories.UserRepo(ctx)
+	userRepo := user_repo.New(hwdb.GetDB())
 
 	userID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	var user *models.User
-	if existingUser, _ := userRepository.GetUserById(userID); existingUser == nil {
-		avatarUrl := userRepository.GenerateDefaultAvatarUrl(userID.String())
+	// TODO: Use Max's hwdb.Optional function -> No need of QUERY ExistsUser then
 
-		user, err = userRepository.CreateUser(models.User{
-			ID: userID,
-			BaseUser: models.BaseUser{
-				Avatar:   avatarUrl,
-				Email:    req.Email,
-				Nickname: req.Nickname,
-				Name:     req.Name,
-			},
+	userExists, err := userRepo.ExistsUser(ctx, userID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	var user user_repo.User
+	if !userExists {
+		hash := sha256.Sum256([]byte(userID.String()))
+		avatarUrl := fmt.Sprintf("%s%s", "https://source.boringavatars.com/marble/128/", hex.EncodeToString(hash[:]))
+		fmt.Println(avatarUrl)
+		user, err = userRepo.CreateUser(ctx, user_repo.CreateUserParams{
+			ID:        userID,
+			Email:     req.Email,
+			Nickname:  req.Nickname,
+			Name:      req.Name,
+			AvatarUrl: &avatarUrl,
 		})
 
 		if err != nil {
@@ -69,7 +79,6 @@ func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest
 			log.Error().Err(err).Msg("could not publish message")
 		}
 	}
-
 	return &pb.CreateUserResponse{Id: user.ID.String()}, nil
 }
 
