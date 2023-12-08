@@ -12,7 +12,7 @@ import (
 )
 
 const createWard = `-- name: CreateWard :one
-INSERT INTO rooms (name, organization_id) VALUES ($1, $2) RETURNING id
+INSERT INTO wards (name, organization_id) VALUES ($1, $2) RETURNING id
 `
 
 type CreateWardParams struct {
