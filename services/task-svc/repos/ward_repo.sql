@@ -14,10 +14,10 @@ WHERE organization_id = @organization_id;
 -- name: GetWardsWithCounts :many
 SELECT
 	sqlc.embed(wards),
-	COUNT(beds.id) AS bed_count,
-	COUNT(CASE WHEN tasks.status = @status_todo THEN 1 ELSE NULL END) AS todo_count,
-	COUNT(CASE WHEN tasks.status = @status_in_progress THEN 1 ELSE NULL END) AS in_progress_count,
-	COUNT(CASE WHEN tasks.status = @status_done THEN 1 ELSE NULL END) AS done_count
+	COUNT(DISTINCT beds.id) AS bed_count,
+	COUNT(DISTINCT CASE WHEN tasks.status = @status_todo THEN tasks.id ELSE NULL END) AS todo_count,
+	COUNT(DISTINCT CASE WHEN tasks.status = @status_in_progress THEN tasks.id ELSE NULL END) AS in_progress_count,
+	COUNT(DISTINCT CASE WHEN tasks.status = @status_done THEN tasks.id ELSE NULL END) AS done_count
 FROM wards
 	LEFT JOIN rooms ON rooms.ward_id = wards.id
 	LEFT JOIN beds ON beds.room_id = rooms.id

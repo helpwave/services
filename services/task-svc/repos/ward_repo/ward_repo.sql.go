@@ -174,10 +174,10 @@ func (q *Queries) GetWards(ctx context.Context, organizationID uuid.UUID) ([]War
 const getWardsWithCounts = `-- name: GetWardsWithCounts :many
 SELECT
 	wards.id, wards.name, wards.organization_id,
-	COUNT(beds.id) AS bed_count,
-	COUNT(CASE WHEN tasks.status = $1 THEN 1 ELSE NULL END) AS todo_count,
-	COUNT(CASE WHEN tasks.status = $2 THEN 1 ELSE NULL END) AS in_progress_count,
-	COUNT(CASE WHEN tasks.status = $3 THEN 1 ELSE NULL END) AS done_count
+	COUNT(DISTINCT beds.id) AS bed_count,
+	COUNT(DISTINCT CASE WHEN tasks.status = $1 THEN tasks.id ELSE NULL END) AS todo_count,
+	COUNT(DISTINCT CASE WHEN tasks.status = $2 THEN tasks.id ELSE NULL END) AS in_progress_count,
+	COUNT(DISTINCT CASE WHEN tasks.status = $3 THEN tasks.id ELSE NULL END) AS done_count
 FROM wards
 	LEFT JOIN rooms ON rooms.ward_id = wards.id
 	LEFT JOIN beds ON beds.room_id = rooms.id
