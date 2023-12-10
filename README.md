@@ -221,6 +221,11 @@ if err != nil {
 [We disarmed the versioning for pre-production.](https://github.com/helpwave/services/issues/125).
 To arm the versioning, search for "arm-versioning" in the codebase.
 
+### Event Sourcing
+
+We are currently in the progress of adopting event sourcing for some entities.
+Therefore, event sourcing is entirely optional and behind a feature flag (environment variable: `FEATURE_FLAG_EVENT_SOURCING`).
+
 ## Deployment
 
 [See infrastructure/README.md](infrastructure/README.md)

@@ -7,6 +7,7 @@ replace (
 	decaying_lru => ../../libs/decaying_lru
 	gen => ../../gen/go
 	hwdb => ../../libs/hwdb
+	hwes => ../../libs/hwes
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
 	logging => ../../libs/logging
@@ -19,18 +20,21 @@ require (
 	gen v0.0.0
 	github.com/dapr/go-sdk v1.9.1
 	github.com/google/uuid v1.4.0
+	github.com/jackc/pgx/v5 v5.5.0
 	github.com/rs/zerolog v1.31.0
 	google.golang.org/grpc v1.59.0
 	google.golang.org/protobuf v1.31.0
 	gorm.io/gorm v1.25.5
 	gorm.io/plugin/soft_delete v1.2.1
 	hwdb v0.0.0
+	hwes v0.0.0
 	hwgorm v0.0.0
 	hwutil v0.0.0
-	proto_helpers v0.0.0
+	proto_helpers v0.0.0-00010101000000-000000000000
 )
 
 require (
+	github.com/EventStore/EventStore-Client-Go v1.0.2 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
 	github.com/dapr/dapr v1.12.1 // indirect
@@ -40,6 +44,8 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.16.0 // indirect
+	github.com/gofrs/uuid v3.3.0+incompatible // indirect
+	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
@@ -49,7 +55,6 @@ require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgproto3/v2 v2.3.2 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
-	github.com/jackc/pgx/v5 v5.5.0 // indirect
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
