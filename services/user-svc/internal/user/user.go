@@ -43,43 +43,39 @@ func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	// TODO: Use Max's hwdb.Optional function -> No need of QUERY ExistsUser then
-
-	userExists, err := userRepo.ExistsUser(ctx, userID)
+	var createdUser user_repo.User
+	result, err := hwdb.Optional(userRepo.GetUserById)(ctx, userID)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
-	}
-	var user user_repo.User
-	if !userExists {
+	} else if result != nil {
+		return nil, status.Error(codes.InvalidArgument, "user already exists")
+	} else {
 		hash := sha256.Sum256([]byte(userID.String()))
 		avatarUrl := fmt.Sprintf("%s%s", "https://source.boringavatars.com/marble/128/", hex.EncodeToString(hash[:]))
-		fmt.Println(avatarUrl)
-		user, err = userRepo.CreateUser(ctx, user_repo.CreateUserParams{
+
+		createdUser, err = userRepo.CreateUser(ctx, user_repo.CreateUserParams{
 			ID:        userID,
 			Email:     req.Email,
 			Nickname:  req.Nickname,
 			Name:      req.Name,
 			AvatarUrl: &avatarUrl,
 		})
-
 		if err != nil {
 			return nil, status.Error(codes.Internal, err.Error())
 		}
 
 		userCreatedEvent := &events.UserCreatedEvent{
-			Id:       user.ID.String(),
-			Email:    user.Email,
-			Nickname: user.Nickname,
-			Name:     user.Name,
+			Id:       createdUser.ID.String(),
+			Email:    createdUser.Email,
+			Nickname: createdUser.Nickname,
+			Name:     createdUser.Name,
 		}
-
 		daprClient := common.MustNewDaprGRPCClient()
-
 		if err := common.PublishMessage(ctx, daprClient, "pubsub", "USER_CREATED", userCreatedEvent); err != nil {
 			log.Error().Err(err).Msg("could not publish message")
 		}
 	}
-	return &pb.CreateUserResponse{Id: user.ID.String()}, nil
+	return &pb.CreateUserResponse{Id: createdUser.ID.String()}, nil
 }
 
 func (s ServiceServer) ReadPublicProfile(ctx context.Context, req *pb.ReadPublicProfileRequest) (*pb.ReadPublicProfileResponse, error) {
