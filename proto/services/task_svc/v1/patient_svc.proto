@@ -296,7 +296,7 @@ message GetPatientListResponse {
     string name = 2;
     string description = 3;
     TaskStatus status = 4;
-    string assigned_user_id = 5;
+    optional string assigned_user_id = 5;
     string patient_id = 6;
     bool public = 7;
     repeated SubTask subtasks = 8;

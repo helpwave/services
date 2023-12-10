@@ -12,6 +12,22 @@ func Filter[K any](array []K, condition func(value K) bool) []K {
 	return result
 }
 
+// Partition returns the subarrays, for which the condition is (true, false)
+func Partition[K any](array []K, condition func(value K) bool) ([]K, []K) {
+	var in []K
+	var out []K
+
+	for _, value := range array {
+		if condition(value) {
+			in = append(in, value)
+		} else {
+			out = append(out, value)
+		}
+	}
+
+	return in, out
+}
+
 func Map[K any, V any](vs []K, f func(K) V) []V {
 	vsm := make([]V, len(vs))
 	for i, v := range vs {

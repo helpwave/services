@@ -51,14 +51,6 @@
       "notes": "Contusion of right little finger with damage to nail",
       "tasks": [
         {
-          "id": "a66c5c73-9049-4e56-8ee0-d09b27cbbd23",
-          "name": "Destruction of Perineum Tendon, Percutaneous Approach",
-          "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "5db6cc86-bbf1-4fa6-bbe8-a8cdea869758",
-          "patientId": "2a7f62d2-926c-4a0b-a963-2b4cdc89e1e7",
-          "public": true
-        },
-        {
           "id": "8da8256d-f63d-4cb3-9458-d8c6f20f2ddc",
           "name": "Replacement of Left Metacarpal with Autol Sub, Perc Approach",
           "description": "Occlusion of Left Thyroid Artery, Open Approach",
@@ -73,6 +65,14 @@
               "done": true
             }
           ]
+        },
+        {
+          "id": "a66c5c73-9049-4e56-8ee0-d09b27cbbd23",
+          "name": "Destruction of Perineum Tendon, Percutaneous Approach",
+          "status": "TASK_STATUS_IN_PROGRESS",
+          "assignedUserId": "5db6cc86-bbf1-4fa6-bbe8-a8cdea869758",
+          "patientId": "2a7f62d2-926c-4a0b-a963-2b4cdc89e1e7",
+          "public": true
         }
       ]
     },
@@ -90,28 +90,6 @@
       },
       "notes": "Unspecified injury of inferior mesenteric artery, subsequent encounter",
       "tasks": [
-        {
-          "id": "ff04811d-e4f2-43a3-9d89-159b0541e436",
-          "name": "Removal of Autol Sub from Brain, Perc Approach",
-          "status": "TASK_STATUS_TODO",
-          "assignedUserId": "00000000-0000-0000-0000-000000000000",
-          "patientId": "4a2e5163-57a7-4a50-9ed7-981c119848d7"
-        },
-        {
-          "id": "fbaaac31-0826-4289-b759-96a4f0d72401",
-          "name": "Extraction of Post Neck Subcu/Fascia, Perc Approach",
-          "description": "Removal of Autologous Tissue Substitute from Right Finger Phalangeal Joint, Percutaneous Approach",
-          "status": "TASK_STATUS_TODO",
-          "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
-          "patientId": "4a2e5163-57a7-4a50-9ed7-981c119848d7",
-          "subtasks": [
-            {
-              "id": "5e89560d-149f-4de7-802b-df1d34d2cc97",
-              "name": "Other turbinectomy",
-              "done": true
-            }
-          ]
-        },
         {
           "id": "b2ed8f2b-1fc9-4bbe-8705-acf84850c6aa",
           "name": "Drainage of Sigmoid Colon with Drain Dev, Perc Endo Approach",
@@ -149,6 +127,28 @@
               "name": "Removal of (cement) spacer"
             }
           ]
+        },
+        {
+          "id": "fbaaac31-0826-4289-b759-96a4f0d72401",
+          "name": "Extraction of Post Neck Subcu/Fascia, Perc Approach",
+          "description": "Removal of Autologous Tissue Substitute from Right Finger Phalangeal Joint, Percutaneous Approach",
+          "status": "TASK_STATUS_TODO",
+          "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
+          "patientId": "4a2e5163-57a7-4a50-9ed7-981c119848d7",
+          "subtasks": [
+            {
+              "id": "5e89560d-149f-4de7-802b-df1d34d2cc97",
+              "name": "Other turbinectomy",
+              "done": true
+            }
+          ]
+        },
+        {
+          "id": "ff04811d-e4f2-43a3-9d89-159b0541e436",
+          "name": "Removal of Autol Sub from Brain, Perc Approach",
+          "status": "TASK_STATUS_TODO",
+          "assignedUserId": "00000000-0000-0000-0000-000000000000",
+          "patientId": "4a2e5163-57a7-4a50-9ed7-981c119848d7"
         }
       ]
     },
@@ -167,18 +167,18 @@
       "notes": "Underdosing of unspecified antipsychotics and neuroleptics, subsequent encounter",
       "tasks": [
         {
-          "id": "249a1021-73ae-4996-a701-9a19603cec21",
-          "name": "Transplantation of Bilateral Lungs, Syngeneic, Open Approach",
-          "status": "TASK_STATUS_TODO",
-          "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
-          "patientId": "707aa958-b3b5-485a-83ab-bbd030605bf5",
-          "public": true
-        },
-        {
           "id": "87a6446e-fcea-4c09-aa4f-bf3d529cebde",
           "name": "Dilate Sup Mesent Art, Bifurc, w 3 Drug-elut, Open",
           "status": "TASK_STATUS_TODO",
           "assignedUserId": "3e795d31-1912-4b09-8e5a-fd62a2461a8c",
+          "patientId": "707aa958-b3b5-485a-83ab-bbd030605bf5",
+          "public": true
+        },
+        {
+          "id": "249a1021-73ae-4996-a701-9a19603cec21",
+          "name": "Transplantation of Bilateral Lungs, Syngeneic, Open Approach",
+          "status": "TASK_STATUS_TODO",
+          "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
           "patientId": "707aa958-b3b5-485a-83ab-bbd030605bf5",
           "public": true
         }
@@ -212,15 +212,6 @@
           ]
         },
         {
-          "id": "0a4b4616-ba16-432a-ba50-55b1b58c8a88",
-          "name": "Revision of Autol Sub in L Thumb Phalanx, Extern Approach",
-          "description": "Introduction of Oxazolidinones into Lymphatics, Percutaneous Approach",
-          "status": "TASK_STATUS_TODO",
-          "assignedUserId": "df363387-7774-4592-b01c-2b765abaa86a",
-          "patientId": "8763d32d-73d1-4e53-b367-b970ee5f6c18",
-          "public": true
-        },
-        {
           "id": "b025f9bb-7852-45c2-82a6-bfee3adcbddd",
           "name": "Removal of Drain Dev from Vagina & Cul-de-sac, Perc Approach",
           "description": "Supplement Left Nipple with Autologous Tissue Substitute, Via Natural or Artificial Opening Endoscopic",
@@ -239,6 +230,15 @@
               "name": "Mediastinal pneumogram"
             }
           ]
+        },
+        {
+          "id": "0a4b4616-ba16-432a-ba50-55b1b58c8a88",
+          "name": "Revision of Autol Sub in L Thumb Phalanx, Extern Approach",
+          "description": "Introduction of Oxazolidinones into Lymphatics, Percutaneous Approach",
+          "status": "TASK_STATUS_TODO",
+          "assignedUserId": "df363387-7774-4592-b01c-2b765abaa86a",
+          "patientId": "8763d32d-73d1-4e53-b367-b970ee5f6c18",
+          "public": true
         },
         {
           "id": "a2f04cb2-4587-48ad-89ee-a01256a80d7c",
@@ -265,21 +265,6 @@
       "notes": "Toxic effect of ethanol, intentional self-harm",
       "tasks": [
         {
-          "id": "3fae6b47-ff14-4a1a-9554-3c35e0214920",
-          "name": "Drainage of Right Trunk Tendon, Percutaneous Approach",
-          "description": "Drainage of Right Sternoclavicular Joint, Percutaneous Endoscopic Approach, Diagnostic",
-          "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "22b47b87-aadf-4e81-802d-9e23489e696c",
-          "patientId": "a5d17f16-b5f8-4ce3-995a-82b13eadc1ae",
-          "public": true,
-          "subtasks": [
-            {
-              "id": "86e58960-654e-4e66-ac47-a94746db264d",
-              "name": "(Aorto)coronary bypass of two coronary arteries"
-            }
-          ]
-        },
-        {
           "id": "851f2a7e-73ed-4990-bccf-7f6c2e89d9ab",
           "name": "Release Left Elbow Joint, External Approach",
           "description": "Bypass Right Kidney Pelvis to Right Kidney Pelvis, Open Approach",
@@ -291,6 +276,21 @@
             {
               "id": "5ababaea-39cf-4649-af40-5609f6c48e5d",
               "name": "Insertion of fixed bridge"
+            }
+          ]
+        },
+        {
+          "id": "3fae6b47-ff14-4a1a-9554-3c35e0214920",
+          "name": "Drainage of Right Trunk Tendon, Percutaneous Approach",
+          "description": "Drainage of Right Sternoclavicular Joint, Percutaneous Endoscopic Approach, Diagnostic",
+          "status": "TASK_STATUS_IN_PROGRESS",
+          "assignedUserId": "22b47b87-aadf-4e81-802d-9e23489e696c",
+          "patientId": "a5d17f16-b5f8-4ce3-995a-82b13eadc1ae",
+          "public": true,
+          "subtasks": [
+            {
+              "id": "86e58960-654e-4e66-ac47-a94746db264d",
+              "name": "(Aorto)coronary bypass of two coronary arteries"
             }
           ]
         },
@@ -424,14 +424,6 @@
       "notes": "Other pemphigus",
       "tasks": [
         {
-          "id": "cfdf8e12-7038-4580-9255-8fd51009f421",
-          "name": "Dilation of R Int Mamm Art, Bifurc, Open Approach",
-          "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
-          "patientId": "f3c65081-1597-4b0b-bb7d-96256cf329fa",
-          "public": true
-        },
-        {
           "id": "02d6632d-1a67-4182-992e-6384e00ac2d7",
           "name": "Dilation of Abdominal Aorta with 2 Drug-elut, Perc Approach",
           "description": "Extirpation of Matter from Coccygeal Joint, Percutaneous Endoscopic Approach",
@@ -446,6 +438,14 @@
               "done": true
             }
           ]
+        },
+        {
+          "id": "cfdf8e12-7038-4580-9255-8fd51009f421",
+          "name": "Dilation of R Int Mamm Art, Bifurc, Open Approach",
+          "status": "TASK_STATUS_IN_PROGRESS",
+          "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
+          "patientId": "f3c65081-1597-4b0b-bb7d-96256cf329fa",
+          "public": true
         }
       ]
     }
@@ -506,15 +506,6 @@
           ]
         },
         {
-          "id": "f0566273-28e5-46f1-a85d-5ebd493a26de",
-          "name": "Drainage of Buccal Mucosa, Percutaneous Approach, Diagnostic",
-          "description": "Supplement Right Axilla with Synthetic Substitute, Percutaneous Endoscopic Approach",
-          "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "3e795d31-1912-4b09-8e5a-fd62a2461a8c",
-          "patientId": "2e830d2f-69c9-4e38-bd4b-ab43decc7ae3",
-          "public": true
-        },
-        {
           "id": "503b6598-a1f0-4a1f-b4b8-f37dea4ea9a9",
           "name": "Bypass Azygos Vein to Up Vein w Synth Sub, Perc Endo",
           "status": "TASK_STATUS_DONE",
@@ -527,6 +518,15 @@
               "done": true
             }
           ]
+        },
+        {
+          "id": "f0566273-28e5-46f1-a85d-5ebd493a26de",
+          "name": "Drainage of Buccal Mucosa, Percutaneous Approach, Diagnostic",
+          "description": "Supplement Right Axilla with Synthetic Substitute, Percutaneous Endoscopic Approach",
+          "status": "TASK_STATUS_IN_PROGRESS",
+          "assignedUserId": "3e795d31-1912-4b09-8e5a-fd62a2461a8c",
+          "patientId": "2e830d2f-69c9-4e38-bd4b-ab43decc7ae3",
+          "public": true
         }
       ]
     },
@@ -604,6 +604,20 @@
       "notes": "Unspecified injury of lung, bilateral, subsequent encounter",
       "tasks": [
         {
+          "id": "40aa8544-9776-4700-b035-76865df3a0cc",
+          "name": "Revision of Drainage Device in L Knee Jt, Perc Approach",
+          "description": "Release Phrenic Nerve, Open Approach",
+          "status": "TASK_STATUS_IN_PROGRESS",
+          "assignedUserId": "73c0d265-3c9a-410a-8eaf-0174fc57f421",
+          "patientId": "e20f0d11-7c82-4565-b7a8-6ba2811ebcd0",
+          "subtasks": [
+            {
+              "id": "e9f82fc9-678c-4fe7-9240-4f6a05c3aac9",
+              "name": "Alcohol rehabilitation"
+            }
+          ]
+        },
+        {
           "id": "8f440795-ede8-4295-8603-f1c257687754",
           "name": "Dilate L Foot Art, Bifurc, w 3 Drug-elut, Open",
           "description": "Revision of Autologous Tissue Substitute in Right Carpal, External Approach",
@@ -616,20 +630,6 @@
               "id": "6d3c2be8-3311-414e-816d-48048885f350",
               "name": "Augmentation rhinoplasty",
               "done": true
-            }
-          ]
-        },
-        {
-          "id": "40aa8544-9776-4700-b035-76865df3a0cc",
-          "name": "Revision of Drainage Device in L Knee Jt, Perc Approach",
-          "description": "Release Phrenic Nerve, Open Approach",
-          "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "73c0d265-3c9a-410a-8eaf-0174fc57f421",
-          "patientId": "e20f0d11-7c82-4565-b7a8-6ba2811ebcd0",
-          "subtasks": [
-            {
-              "id": "e9f82fc9-678c-4fe7-9240-4f6a05c3aac9",
-              "name": "Alcohol rehabilitation"
             }
           ]
         },
@@ -650,25 +650,6 @@
       "humanReadableIdentifier": "Clerc Levay",
       "notes": "Other extraarticular fracture of lower end of left radius, subsequent encounter for open fracture type I or II with nonunion",
       "tasks": [
-        {
-          "id": "20863649-d855-4b0d-af4f-76199749c509",
-          "name": "Supplement L Metatarsotars Jt with Autol Sub, Perc Approach",
-          "status": "TASK_STATUS_DONE",
-          "assignedUserId": "8aa8a5ee-2a35-4203-81bb-baf4ca17a9e9",
-          "patientId": "06f57c97-509e-4b41-9839-233f29197f56",
-          "subtasks": [
-            {
-              "id": "539cae1d-29aa-4d87-aecf-ba4d5ad51da8",
-              "name": "Regional lymph node excision",
-              "done": true
-            },
-            {
-              "id": "6c0f78df-ac07-4563-ada5-f0d8ae3c418f",
-              "name": "Other lysis of perivesical adhesions",
-              "done": true
-            }
-          ]
-        },
         {
           "id": "1eaf1f03-d5b9-4f3a-b27f-f892c63886ec",
           "name": "Revision of Drain Dev in Tracheobronc Tree, Extern Approach",
@@ -700,6 +681,25 @@
             {
               "id": "9190b783-be6b-479a-9aef-6637be9fd54e",
               "name": "Ligation and stripping of varicose veins, upper limb vessels"
+            }
+          ]
+        },
+        {
+          "id": "20863649-d855-4b0d-af4f-76199749c509",
+          "name": "Supplement L Metatarsotars Jt with Autol Sub, Perc Approach",
+          "status": "TASK_STATUS_DONE",
+          "assignedUserId": "8aa8a5ee-2a35-4203-81bb-baf4ca17a9e9",
+          "patientId": "06f57c97-509e-4b41-9839-233f29197f56",
+          "subtasks": [
+            {
+              "id": "539cae1d-29aa-4d87-aecf-ba4d5ad51da8",
+              "name": "Regional lymph node excision",
+              "done": true
+            },
+            {
+              "id": "6c0f78df-ac07-4563-ada5-f0d8ae3c418f",
+              "name": "Other lysis of perivesical adhesions",
+              "done": true
             }
           ]
         },
@@ -740,22 +740,6 @@
       "notes": "Other subluxation of right knee, subsequent encounter",
       "tasks": [
         {
-          "id": "7a7f68ef-e28b-4ef6-9efa-b45ed3ded42e",
-          "name": "Repair Right Ankle Bursa and Ligament, Perc Endo Approach",
-          "description": "Excision of Right Main Bronchus, Open Approach, Diagnostic",
-          "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "73c0d265-3c9a-410a-8eaf-0174fc57f421",
-          "patientId": "1dd8f65c-6bdc-40f5-9a1a-b6dbd52f3fd4",
-          "public": true
-        },
-        {
-          "id": "fa75c34d-acfd-452d-ab0b-2b0b89a59f0c",
-          "name": "Repair Left Frontal Bone, Percutaneous Approach",
-          "status": "TASK_STATUS_DONE",
-          "assignedUserId": "674217fc-05a6-4eec-ad7e-8a2d0dc8caa9",
-          "patientId": "1dd8f65c-6bdc-40f5-9a1a-b6dbd52f3fd4"
-        },
-        {
           "id": "c555b6ca-d453-48dd-8ca1-93473c7732ce",
           "name": "Bypass L Ext Iliac Art to B Ext Ilia w Synth Sub, Perc Endo",
           "description": "Removal of Autologous Tissue Substitute from Right Upper Extremity, Open Approach",
@@ -784,6 +768,22 @@
               "done": true
             }
           ]
+        },
+        {
+          "id": "7a7f68ef-e28b-4ef6-9efa-b45ed3ded42e",
+          "name": "Repair Right Ankle Bursa and Ligament, Perc Endo Approach",
+          "description": "Excision of Right Main Bronchus, Open Approach, Diagnostic",
+          "status": "TASK_STATUS_IN_PROGRESS",
+          "assignedUserId": "73c0d265-3c9a-410a-8eaf-0174fc57f421",
+          "patientId": "1dd8f65c-6bdc-40f5-9a1a-b6dbd52f3fd4",
+          "public": true
+        },
+        {
+          "id": "fa75c34d-acfd-452d-ab0b-2b0b89a59f0c",
+          "name": "Repair Left Frontal Bone, Percutaneous Approach",
+          "status": "TASK_STATUS_DONE",
+          "assignedUserId": "674217fc-05a6-4eec-ad7e-8a2d0dc8caa9",
+          "patientId": "1dd8f65c-6bdc-40f5-9a1a-b6dbd52f3fd4"
         }
       ]
     },
@@ -792,14 +792,6 @@
       "humanReadableIdentifier": "Patric Trudgion",
       "notes": "Driver of pick-up truck or van injured in collision with other motor vehicles in traffic accident",
       "tasks": [
-        {
-          "id": "71f0ba07-ef77-4106-a08c-543d99553674",
-          "name": "Introduce Adhesion Barrier in Periton Cav, Open",
-          "status": "TASK_STATUS_DONE",
-          "assignedUserId": "5db6cc86-bbf1-4fa6-bbe8-a8cdea869758",
-          "patientId": "1e68267e-0149-47d8-9052-cb5df340044b",
-          "public": true
-        },
         {
           "id": "affa2bce-2f7b-406f-9be5-be8d9881830b",
           "name": "Release Larynx, Via Natural or Artificial Opening",
@@ -818,6 +810,14 @@
               "name": "Intrathoracic esophageal anastomosis with other interposition"
             }
           ]
+        },
+        {
+          "id": "71f0ba07-ef77-4106-a08c-543d99553674",
+          "name": "Introduce Adhesion Barrier in Periton Cav, Open",
+          "status": "TASK_STATUS_DONE",
+          "assignedUserId": "5db6cc86-bbf1-4fa6-bbe8-a8cdea869758",
+          "patientId": "1e68267e-0149-47d8-9052-cb5df340044b",
+          "public": true
         }
       ]
     },
@@ -826,20 +826,6 @@
       "humanReadableIdentifier": "Janot Mabon",
       "notes": "Other specified injury of long flexor muscle, fascia and tendon of left thumb at wrist and hand level, initial encounter",
       "tasks": [
-        {
-          "id": "2788364b-6bdf-4b8d-aa01-041b1b80533e",
-          "name": "Detachment at Right Upper Leg, High, Open Approach",
-          "description": "Insertion of Spacer into Right Temporomandibular Joint, Percutaneous Approach",
-          "status": "TASK_STATUS_TODO",
-          "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
-          "patientId": "23edc7ee-5a0e-41ac-91b3-db21455b6e6b",
-          "subtasks": [
-            {
-              "id": "62b512ed-11c9-4c0e-99ff-5531418fb675",
-              "name": "Local excision of esophageal diverticulum"
-            }
-          ]
-        },
         {
           "id": "58905ce6-56fe-40e8-a2d4-1d701e082b72",
           "name": "Replacement of Sternum with Synth Sub, Perc Approach",
@@ -884,12 +870,18 @@
           ]
         },
         {
-          "id": "c6668cd6-6a8e-4c46-988d-8c771aeefa24",
-          "name": "Excision of Left Upper Leg, Open Approach, Diagnostic",
-          "description": "Resection of Vagina, Open Approach",
-          "status": "TASK_STATUS_DONE",
-          "assignedUserId": "73c0d265-3c9a-410a-8eaf-0174fc57f421",
-          "patientId": "23edc7ee-5a0e-41ac-91b3-db21455b6e6b"
+          "id": "2788364b-6bdf-4b8d-aa01-041b1b80533e",
+          "name": "Detachment at Right Upper Leg, High, Open Approach",
+          "description": "Insertion of Spacer into Right Temporomandibular Joint, Percutaneous Approach",
+          "status": "TASK_STATUS_TODO",
+          "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
+          "patientId": "23edc7ee-5a0e-41ac-91b3-db21455b6e6b",
+          "subtasks": [
+            {
+              "id": "62b512ed-11c9-4c0e-99ff-5531418fb675",
+              "name": "Local excision of esophageal diverticulum"
+            }
+          ]
         },
         {
           "id": "4e2724b8-38db-40cf-8511-b57b28f80866",
@@ -897,6 +889,14 @@
           "description": "Stereotactic Other Photon Radiosurgery of Mouth",
           "status": "TASK_STATUS_DONE",
           "assignedUserId": "5db6cc86-bbf1-4fa6-bbe8-a8cdea869758",
+          "patientId": "23edc7ee-5a0e-41ac-91b3-db21455b6e6b"
+        },
+        {
+          "id": "c6668cd6-6a8e-4c46-988d-8c771aeefa24",
+          "name": "Excision of Left Upper Leg, Open Approach, Diagnostic",
+          "description": "Resection of Vagina, Open Approach",
+          "status": "TASK_STATUS_DONE",
+          "assignedUserId": "73c0d265-3c9a-410a-8eaf-0174fc57f421",
           "patientId": "23edc7ee-5a0e-41ac-91b3-db21455b6e6b"
         }
       ]
@@ -922,14 +922,6 @@
           ]
         },
         {
-          "id": "811484b9-7776-4656-9e07-4e5691449977",
-          "name": "Bypass Thor Aorta Desc to Subclav w Synth Sub, Open",
-          "description": "Stereotactic Other Photon Radiosurgery of Parathyroid Glands",
-          "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "46697884-4792-49ff-b243-14a17eb5b871",
-          "patientId": "2d977c7a-c0a8-4d06-b474-1824d440d8b4"
-        },
-        {
           "id": "93665228-249f-4668-8ca6-2bb3b9936d96",
           "name": "Occlusion of Colic Vein with Intralum Dev, Open Approach",
           "description": "Insertion of Infusion Device into Right Lung, Percutaneous Approach",
@@ -937,6 +929,14 @@
           "assignedUserId": "8aa8a5ee-2a35-4203-81bb-baf4ca17a9e9",
           "patientId": "2d977c7a-c0a8-4d06-b474-1824d440d8b4",
           "public": true
+        },
+        {
+          "id": "811484b9-7776-4656-9e07-4e5691449977",
+          "name": "Bypass Thor Aorta Desc to Subclav w Synth Sub, Open",
+          "description": "Stereotactic Other Photon Radiosurgery of Parathyroid Glands",
+          "status": "TASK_STATUS_IN_PROGRESS",
+          "assignedUserId": "46697884-4792-49ff-b243-14a17eb5b871",
+          "patientId": "2d977c7a-c0a8-4d06-b474-1824d440d8b4"
         }
       ]
     },
@@ -993,16 +993,18 @@
       "notes": "Person on outside of three-wheeled motor vehicle injured in collision with railway train or railway vehicle in traffic accident, sequela",
       "tasks": [
         {
-          "id": "444b801b-502f-4a56-a007-8f7d5f2a9e7e",
-          "name": "Repair Thoracic Vertebral Disc, Perc Endo Approach",
-          "description": "Bypass Left Femoral Artery to Lower Extremity Artery with Autologous Arterial Tissue, Open Approach",
+          "id": "18fecf80-27d9-41a4-9183-1e44aa605d2f",
+          "name": "Replacement of Tongue with Nonaut Sub, Extern Approach",
+          "description": "Drainage of Spinal Canal, Percutaneous Endoscopic Approach",
           "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "df363387-7774-4592-b01c-2b765abaa86a",
+          "assignedUserId": "3e795d31-1912-4b09-8e5a-fd62a2461a8c",
           "patientId": "52d68bc2-045a-423c-b03f-df58f3335de3",
+          "public": true,
           "subtasks": [
             {
-              "id": "139be2ea-9305-4961-80ff-8eed63301f08",
-              "name": "Other incision of bone without division, patella"
+              "id": "4644be3d-9efd-4266-8966-37617c4c004e",
+              "name": "Laser interstitial thermal therapy [LITT] of lesion or tissue of head and neck under guidance",
+              "done": true
             }
           ]
         },
@@ -1023,18 +1025,16 @@
           ]
         },
         {
-          "id": "18fecf80-27d9-41a4-9183-1e44aa605d2f",
-          "name": "Replacement of Tongue with Nonaut Sub, Extern Approach",
-          "description": "Drainage of Spinal Canal, Percutaneous Endoscopic Approach",
+          "id": "444b801b-502f-4a56-a007-8f7d5f2a9e7e",
+          "name": "Repair Thoracic Vertebral Disc, Perc Endo Approach",
+          "description": "Bypass Left Femoral Artery to Lower Extremity Artery with Autologous Arterial Tissue, Open Approach",
           "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "3e795d31-1912-4b09-8e5a-fd62a2461a8c",
+          "assignedUserId": "df363387-7774-4592-b01c-2b765abaa86a",
           "patientId": "52d68bc2-045a-423c-b03f-df58f3335de3",
-          "public": true,
           "subtasks": [
             {
-              "id": "4644be3d-9efd-4266-8966-37617c4c004e",
-              "name": "Laser interstitial thermal therapy [LITT] of lesion or tissue of head and neck under guidance",
-              "done": true
+              "id": "139be2ea-9305-4961-80ff-8eed63301f08",
+              "name": "Other incision of bone without division, patella"
             }
           ]
         }
@@ -1089,36 +1089,20 @@
       "notes": "Unspecified injury of brachial artery, right side, subsequent encounter",
       "tasks": [
         {
-          "id": "bc5d1f18-5145-42b4-ba18-dc7242626fae",
-          "name": "Inspection of Right Wrist Joint, Open Approach",
-          "description": "Resection of Right Wrist Bursa and Ligament, Open Approach",
+          "id": "4454d62d-fd22-40f8-b4ab-2f1de65ed881",
+          "name": "Drainage of Right Lower Extremity, Percutaneous Approach",
+          "description": "Reposition Right Occipital Bone, Percutaneous Endoscopic Approach",
           "status": "TASK_STATUS_DONE",
-          "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
+          "assignedUserId": "22b47b87-aadf-4e81-802d-9e23489e696c",
           "patientId": "65708dab-983d-450a-8786-57b1336a2e9f",
           "subtasks": [
             {
-              "id": "f1d465c5-6f75-4b35-8719-05dd1dabca07",
-              "name": "Arteriography of femoral and other lower extremity arteries",
-              "done": true
+              "id": "bb59ac22-ca79-4dd3-a9c2-d9fa0505390b",
+              "name": "Other arthrotomy, ankle"
             },
             {
-              "id": "2783544c-cac8-4b35-bea2-84666aa9c270",
-              "name": "Other evisceration of eyeball",
-              "done": true
-            }
-          ]
-        },
-        {
-          "id": "db3dddb7-019e-48fd-a245-4d3d7cec05a9",
-          "name": "Revision of Intraluminal Device in Nose, Open Approach",
-          "status": "TASK_STATUS_DONE",
-          "assignedUserId": "674217fc-05a6-4eec-ad7e-8a2d0dc8caa9",
-          "patientId": "65708dab-983d-450a-8786-57b1336a2e9f",
-          "public": true,
-          "subtasks": [
-            {
-              "id": "3c48c51e-977f-451c-9bd4-2e786cd883d2",
-              "name": "Other x-ray of thoracic spine"
+              "id": "adf84aad-50c0-4036-9034-2ee3e34797ae",
+              "name": "Removal of both fallopian tubes at same operative episode"
             }
           ]
         },
@@ -1143,6 +1127,20 @@
           ]
         },
         {
+          "id": "db3dddb7-019e-48fd-a245-4d3d7cec05a9",
+          "name": "Revision of Intraluminal Device in Nose, Open Approach",
+          "status": "TASK_STATUS_DONE",
+          "assignedUserId": "674217fc-05a6-4eec-ad7e-8a2d0dc8caa9",
+          "patientId": "65708dab-983d-450a-8786-57b1336a2e9f",
+          "public": true,
+          "subtasks": [
+            {
+              "id": "3c48c51e-977f-451c-9bd4-2e786cd883d2",
+              "name": "Other x-ray of thoracic spine"
+            }
+          ]
+        },
+        {
           "id": "b9c97686-edbb-46da-9f09-7d9c97186020",
           "name": "Reattachment of Right Thorax Tendon, Open Approach",
           "description": "Replacement of Nasal Turbinate with Autologous Tissue Substitute, Percutaneous Approach",
@@ -1162,20 +1160,22 @@
           ]
         },
         {
-          "id": "4454d62d-fd22-40f8-b4ab-2f1de65ed881",
-          "name": "Drainage of Right Lower Extremity, Percutaneous Approach",
-          "description": "Reposition Right Occipital Bone, Percutaneous Endoscopic Approach",
+          "id": "bc5d1f18-5145-42b4-ba18-dc7242626fae",
+          "name": "Inspection of Right Wrist Joint, Open Approach",
+          "description": "Resection of Right Wrist Bursa and Ligament, Open Approach",
           "status": "TASK_STATUS_DONE",
-          "assignedUserId": "22b47b87-aadf-4e81-802d-9e23489e696c",
+          "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
           "patientId": "65708dab-983d-450a-8786-57b1336a2e9f",
           "subtasks": [
             {
-              "id": "bb59ac22-ca79-4dd3-a9c2-d9fa0505390b",
-              "name": "Other arthrotomy, ankle"
+              "id": "f1d465c5-6f75-4b35-8719-05dd1dabca07",
+              "name": "Arteriography of femoral and other lower extremity arteries",
+              "done": true
             },
             {
-              "id": "adf84aad-50c0-4036-9034-2ee3e34797ae",
-              "name": "Removal of both fallopian tubes at same operative episode"
+              "id": "2783544c-cac8-4b35-bea2-84666aa9c270",
+              "name": "Other evisceration of eyeball",
+              "done": true
             }
           ]
         }
@@ -1218,22 +1218,6 @@
       "notes": "Person boarding or alighting a pick-up truck or van injured in collision with pedestrian or animal",
       "tasks": [
         {
-          "id": "ed4939f8-dd9f-427d-8c46-7f0409037668",
-          "name": "Fusion of R Finger Phalanx Jt with Autol Sub, Open Approach",
-          "description": "Replacement of Left Femoral Shaft with Autologous Tissue Substitute, Percutaneous Approach",
-          "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "674217fc-05a6-4eec-ad7e-8a2d0dc8caa9",
-          "patientId": "7f29f9d7-f44c-4f0d-8883-8ce8f5967642",
-          "public": true
-        },
-        {
-          "id": "a6da2f20-f631-4fdc-a50e-5cef264f2f15",
-          "name": "Revision of Infusion Device in Great Vessel, Open Approach",
-          "status": "TASK_STATUS_DONE",
-          "assignedUserId": "00000000-0000-0000-0000-000000000000",
-          "patientId": "7f29f9d7-f44c-4f0d-8883-8ce8f5967642"
-        },
-        {
           "id": "c9aeccc3-d307-4973-be73-b9001465065a",
           "name": "Alteration of R Up Arm with Nonaut Sub, Perc Endo Approach",
           "description": "Supplement Left Maxilla with Synthetic Substitute, Percutaneous Approach",
@@ -1256,6 +1240,22 @@
               "name": "Incision of middle ear"
             }
           ]
+        },
+        {
+          "id": "ed4939f8-dd9f-427d-8c46-7f0409037668",
+          "name": "Fusion of R Finger Phalanx Jt with Autol Sub, Open Approach",
+          "description": "Replacement of Left Femoral Shaft with Autologous Tissue Substitute, Percutaneous Approach",
+          "status": "TASK_STATUS_IN_PROGRESS",
+          "assignedUserId": "674217fc-05a6-4eec-ad7e-8a2d0dc8caa9",
+          "patientId": "7f29f9d7-f44c-4f0d-8883-8ce8f5967642",
+          "public": true
+        },
+        {
+          "id": "a6da2f20-f631-4fdc-a50e-5cef264f2f15",
+          "name": "Revision of Infusion Device in Great Vessel, Open Approach",
+          "status": "TASK_STATUS_DONE",
+          "assignedUserId": "00000000-0000-0000-0000-000000000000",
+          "patientId": "7f29f9d7-f44c-4f0d-8883-8ce8f5967642"
         }
       ]
     },
@@ -1365,13 +1365,6 @@
           ]
         },
         {
-          "id": "d40144c7-07b9-4d27-9433-de3d0a4ffb66",
-          "name": "Drainage of Right Upper Arm Muscle, Open Approach, Diagn",
-          "status": "TASK_STATUS_TODO",
-          "assignedUserId": "73c0d265-3c9a-410a-8eaf-0174fc57f421",
-          "patientId": "9d868246-ffb8-43bd-95f8-2fc4fea196df"
-        },
-        {
           "id": "9817abb0-3916-448a-abe0-501da2c61920",
           "name": "Revision of Int Fix in L Metatarsotars Jt, Perc Approach",
           "description": "Inspection of Cervicothoracic Vertebral Joint, Percutaneous Approach",
@@ -1390,6 +1383,13 @@
               "done": true
             }
           ]
+        },
+        {
+          "id": "d40144c7-07b9-4d27-9433-de3d0a4ffb66",
+          "name": "Drainage of Right Upper Arm Muscle, Open Approach, Diagn",
+          "status": "TASK_STATUS_TODO",
+          "assignedUserId": "73c0d265-3c9a-410a-8eaf-0174fc57f421",
+          "patientId": "9d868246-ffb8-43bd-95f8-2fc4fea196df"
         }
       ]
     },
@@ -1398,15 +1398,6 @@
       "humanReadableIdentifier": "Louise Feldklein",
       "notes": "Poisoning by monoamine-oxidase-inhibitor antidepressants, accidental (unintentional)",
       "tasks": [
-        {
-          "id": "4bb4b915-cde5-48db-9768-c51dee8ec021",
-          "name": "Revise of Infusion Dev in Thoracic Duct, Perc Endo Approach",
-          "description": "Beam Radiation of Uterus using Photons 1 - 10 MeV",
-          "status": "TASK_STATUS_DONE",
-          "assignedUserId": "73c0d265-3c9a-410a-8eaf-0174fc57f421",
-          "patientId": "9ee5b1f9-b726-4dea-872a-141135bb9079",
-          "public": true
-        },
         {
           "id": "c90c8104-de70-470d-af65-8b2422fbfd62",
           "name": "Excision of Cervix, Percutaneous Approach, Diagnostic",
@@ -1420,6 +1411,15 @@
               "name": "Open reduction of fracture with internal fixation, tibia and fibula"
             }
           ]
+        },
+        {
+          "id": "4bb4b915-cde5-48db-9768-c51dee8ec021",
+          "name": "Revise of Infusion Dev in Thoracic Duct, Perc Endo Approach",
+          "description": "Beam Radiation of Uterus using Photons 1 - 10 MeV",
+          "status": "TASK_STATUS_DONE",
+          "assignedUserId": "73c0d265-3c9a-410a-8eaf-0174fc57f421",
+          "patientId": "9ee5b1f9-b726-4dea-872a-141135bb9079",
+          "public": true
         },
         {
           "id": "6894d106-637e-461b-a279-baf5cf97ed65",
@@ -1436,15 +1436,6 @@
       "humanReadableIdentifier": "Manny Emanuelov",
       "notes": "Abrasion of right little finger, subsequent encounter",
       "tasks": [
-        {
-          "id": "de756805-43ab-4f2d-83dd-d761b91914e7",
-          "name": "Supplement L Low Leg Tendon with Synth Sub, Open Approach",
-          "description": "Inspection of Endocrine Gland, Percutaneous Endoscopic Approach",
-          "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "df363387-7774-4592-b01c-2b765abaa86a",
-          "patientId": "a28c6344-620d-4a53-9025-e4c275fa768a",
-          "public": true
-        },
         {
           "id": "9395112c-4903-409d-b7ab-c70bd87b5288",
           "name": "Drainage of Right Large Intestine, Open Approach",
@@ -1464,6 +1455,15 @@
               "name": "Other total reconstruction of breast"
             }
           ]
+        },
+        {
+          "id": "de756805-43ab-4f2d-83dd-d761b91914e7",
+          "name": "Supplement L Low Leg Tendon with Synth Sub, Open Approach",
+          "description": "Inspection of Endocrine Gland, Percutaneous Endoscopic Approach",
+          "status": "TASK_STATUS_IN_PROGRESS",
+          "assignedUserId": "df363387-7774-4592-b01c-2b765abaa86a",
+          "patientId": "a28c6344-620d-4a53-9025-e4c275fa768a",
+          "public": true
         }
       ]
     },
@@ -1543,16 +1543,32 @@
       "notes": "Unspecified focal traumatic brain injury with loss of consciousness of 31 minutes to 59 minutes, initial encounter",
       "tasks": [
         {
-          "id": "2b32ad4a-100b-4cca-a4aa-90b53d12ccc2",
-          "name": "Revision of Nonaut Sub in R Low Extrem, Perc Endo Approach",
-          "description": "Resection of Jejunum, Open Approach",
-          "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
+          "id": "17d5ea47-1f76-4283-86d8-0818625e7486",
+          "name": "Removal of Monitor Dev from Hepatobil Duct, Perc Approach",
+          "description": "Removal of Spacer from Right Sternoclavicular Joint, Open Approach",
+          "status": "TASK_STATUS_TODO",
+          "assignedUserId": "00000000-0000-0000-0000-000000000000",
+          "patientId": "bf3ee02f-adba-4320-8fa6-dd9456585232",
+          "public": true,
+          "subtasks": [
+            {
+              "id": "57ea19c7-92b4-425f-b4f0-3b04385e613d",
+              "name": "Removal of foreign body, not otherwise specified",
+              "done": true
+            }
+          ]
+        },
+        {
+          "id": "53922d3d-0252-4fdc-a281-a9a41c0727da",
+          "name": "Insertion of Ext Fix into R Patella, Open Approach",
+          "description": "Occlusion of Right Common Iliac Artery, Percutaneous Endoscopic Approach",
+          "status": "TASK_STATUS_DONE",
+          "assignedUserId": "73c0d265-3c9a-410a-8eaf-0174fc57f421",
           "patientId": "bf3ee02f-adba-4320-8fa6-dd9456585232",
           "subtasks": [
             {
-              "id": "3f70d251-eea0-4859-955b-0a7e6d06447f",
-              "name": "(Aorto)coronary bypass of two coronary arteries"
+              "id": "213ce579-647d-4114-b986-c4235508909f",
+              "name": "Other partial ostectomy, carpals and metacarpals"
             }
           ]
         },
@@ -1577,16 +1593,16 @@
           ]
         },
         {
-          "id": "53922d3d-0252-4fdc-a281-a9a41c0727da",
-          "name": "Insertion of Ext Fix into R Patella, Open Approach",
-          "description": "Occlusion of Right Common Iliac Artery, Percutaneous Endoscopic Approach",
-          "status": "TASK_STATUS_DONE",
-          "assignedUserId": "73c0d265-3c9a-410a-8eaf-0174fc57f421",
+          "id": "2b32ad4a-100b-4cca-a4aa-90b53d12ccc2",
+          "name": "Revision of Nonaut Sub in R Low Extrem, Perc Endo Approach",
+          "description": "Resection of Jejunum, Open Approach",
+          "status": "TASK_STATUS_IN_PROGRESS",
+          "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
           "patientId": "bf3ee02f-adba-4320-8fa6-dd9456585232",
           "subtasks": [
             {
-              "id": "213ce579-647d-4114-b986-c4235508909f",
-              "name": "Other partial ostectomy, carpals and metacarpals"
+              "id": "3f70d251-eea0-4859-955b-0a7e6d06447f",
+              "name": "(Aorto)coronary bypass of two coronary arteries"
             }
           ]
         },
@@ -1598,22 +1614,6 @@
           "assignedUserId": "8aa8a5ee-2a35-4203-81bb-baf4ca17a9e9",
           "patientId": "bf3ee02f-adba-4320-8fa6-dd9456585232",
           "public": true
-        },
-        {
-          "id": "17d5ea47-1f76-4283-86d8-0818625e7486",
-          "name": "Removal of Monitor Dev from Hepatobil Duct, Perc Approach",
-          "description": "Removal of Spacer from Right Sternoclavicular Joint, Open Approach",
-          "status": "TASK_STATUS_TODO",
-          "assignedUserId": "00000000-0000-0000-0000-000000000000",
-          "patientId": "bf3ee02f-adba-4320-8fa6-dd9456585232",
-          "public": true,
-          "subtasks": [
-            {
-              "id": "57ea19c7-92b4-425f-b4f0-3b04385e613d",
-              "name": "Removal of foreign body, not otherwise specified",
-              "done": true
-            }
-          ]
         }
       ]
     },
@@ -1659,6 +1659,26 @@
       "notes": "Nondisplaced unspecified fracture of right great toe, subsequent encounter for fracture with routine healing",
       "tasks": [
         {
+          "id": "b488b448-46dd-41ca-b4e2-910df5ace4b2",
+          "name": "LDR Brachytherapy of Nasopharynx using Iridium 192",
+          "description": "Restriction of Large Intestine with Extraluminal Device, Percutaneous Approach",
+          "status": "TASK_STATUS_IN_PROGRESS",
+          "assignedUserId": "5db6cc86-bbf1-4fa6-bbe8-a8cdea869758",
+          "patientId": "d2023b5e-7f84-4328-96b5-ffd5ddd7ccae",
+          "subtasks": [
+            {
+              "id": "d42487ea-ad3b-44d3-a048-2b17f72dd208",
+              "name": "Incision of other bile ducts for relief of obstruction",
+              "done": true
+            },
+            {
+              "id": "ac4c8119-a2b7-43f5-a949-882bac8b5465",
+              "name": "Therapeutic evacuation of anterior chamber",
+              "done": true
+            }
+          ]
+        },
+        {
           "id": "2bda078a-ee5e-49e3-8a25-5c14c7b65682",
           "name": "Removal of Infusion Device from Testis, Perc Approach",
           "description": "Excision of Appendix, Percutaneous Endoscopic Approach, Diagnostic",
@@ -1678,26 +1698,6 @@
               "done": true
             }
           ]
-        },
-        {
-          "id": "b488b448-46dd-41ca-b4e2-910df5ace4b2",
-          "name": "LDR Brachytherapy of Nasopharynx using Iridium 192",
-          "description": "Restriction of Large Intestine with Extraluminal Device, Percutaneous Approach",
-          "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "5db6cc86-bbf1-4fa6-bbe8-a8cdea869758",
-          "patientId": "d2023b5e-7f84-4328-96b5-ffd5ddd7ccae",
-          "subtasks": [
-            {
-              "id": "d42487ea-ad3b-44d3-a048-2b17f72dd208",
-              "name": "Incision of other bile ducts for relief of obstruction",
-              "done": true
-            },
-            {
-              "id": "ac4c8119-a2b7-43f5-a949-882bac8b5465",
-              "name": "Therapeutic evacuation of anterior chamber",
-              "done": true
-            }
-          ]
         }
       ]
     },
@@ -1711,6 +1711,22 @@
       "humanReadableIdentifier": "Jehanna Pandya",
       "notes": "Unspecified disorder of synovium and tendon, left upper arm",
       "tasks": [
+        {
+          "id": "db837e36-2cd9-4e1e-a9da-1062f96530f6",
+          "name": "Extirpation of Matter from Upper Vein, Perc Endo Approach",
+          "description": "Dilation of Right Hand Artery, Bifurcation, with Three Drug-eluting Intraluminal Devices, Percutaneous Approach",
+          "status": "TASK_STATUS_IN_PROGRESS",
+          "assignedUserId": "674217fc-05a6-4eec-ad7e-8a2d0dc8caa9",
+          "patientId": "d43c1842-3965-4752-b7ac-438c2bc925b1",
+          "public": true,
+          "subtasks": [
+            {
+              "id": "1a4b0b88-e402-4550-904c-404311091ac0",
+              "name": "Enlargement of existing atrial septal defect",
+              "done": true
+            }
+          ]
+        },
         {
           "id": "56bb419a-6d94-4332-8f6d-f79783f1c781",
           "name": "Supplement R Face Vein with Synth Sub, Perc Endo Approach",
@@ -1727,22 +1743,6 @@
           "assignedUserId": "df363387-7774-4592-b01c-2b765abaa86a",
           "patientId": "d43c1842-3965-4752-b7ac-438c2bc925b1",
           "public": true
-        },
-        {
-          "id": "db837e36-2cd9-4e1e-a9da-1062f96530f6",
-          "name": "Extirpation of Matter from Upper Vein, Perc Endo Approach",
-          "description": "Dilation of Right Hand Artery, Bifurcation, with Three Drug-eluting Intraluminal Devices, Percutaneous Approach",
-          "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "674217fc-05a6-4eec-ad7e-8a2d0dc8caa9",
-          "patientId": "d43c1842-3965-4752-b7ac-438c2bc925b1",
-          "public": true,
-          "subtasks": [
-            {
-              "id": "1a4b0b88-e402-4550-904c-404311091ac0",
-              "name": "Enlargement of existing atrial septal defect",
-              "done": true
-            }
-          ]
         }
       ]
     },
@@ -1777,17 +1777,17 @@
       "notes": "Strain of unspecified muscle and tendon at ankle and foot level, unspecified foot, subsequent encounter",
       "tasks": [
         {
-          "id": "8f64950a-2441-4b86-9f7e-75931fa8b2c4",
-          "name": "Plain Radiography of Mastoids",
-          "description": "Restriction of Colic Vein, Percutaneous Approach",
-          "status": "TASK_STATUS_IN_PROGRESS",
-          "assignedUserId": "46697884-4792-49ff-b243-14a17eb5b871",
+          "id": "7da7911a-ff4d-4c34-b965-f1b30e58793b",
+          "name": "Reattachment of Mult Parathyroid, Perc Endo Approach",
+          "description": "Release Right Popliteal Artery, Percutaneous Endoscopic Approach",
+          "status": "TASK_STATUS_TODO",
+          "assignedUserId": "00000000-0000-0000-0000-000000000000",
           "patientId": "ddb6c139-cd0d-4c65-95d8-288035eabf54",
           "public": true,
           "subtasks": [
             {
-              "id": "49af7127-213f-4423-b0fa-e9aed23b2119",
-              "name": "Production of subcutaneous tunnel without esophageal anastomosis"
+              "id": "8eea29fd-afd1-493e-8a22-1e7d44d885a9",
+              "name": "Ligation of thyroid vessels"
             }
           ]
         },
@@ -1812,17 +1812,17 @@
           ]
         },
         {
-          "id": "7da7911a-ff4d-4c34-b965-f1b30e58793b",
-          "name": "Reattachment of Mult Parathyroid, Perc Endo Approach",
-          "description": "Release Right Popliteal Artery, Percutaneous Endoscopic Approach",
-          "status": "TASK_STATUS_TODO",
-          "assignedUserId": "00000000-0000-0000-0000-000000000000",
+          "id": "8f64950a-2441-4b86-9f7e-75931fa8b2c4",
+          "name": "Plain Radiography of Mastoids",
+          "description": "Restriction of Colic Vein, Percutaneous Approach",
+          "status": "TASK_STATUS_IN_PROGRESS",
+          "assignedUserId": "46697884-4792-49ff-b243-14a17eb5b871",
           "patientId": "ddb6c139-cd0d-4c65-95d8-288035eabf54",
           "public": true,
           "subtasks": [
             {
-              "id": "8eea29fd-afd1-493e-8a22-1e7d44d885a9",
-              "name": "Ligation of thyroid vessels"
+              "id": "49af7127-213f-4423-b0fa-e9aed23b2119",
+              "name": "Production of subcutaneous tunnel without esophageal anastomosis"
             }
           ]
         }

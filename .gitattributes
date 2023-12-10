@@ -3,3 +3,4 @@ gen/**/helpers.go linguist-generated=false
 services/impulse_svc/gen/** linguist-generated=true
 services/**/schema.sql linguist-generated=true
 **/*.expected linguist-generated=true
+

@@ -48,6 +48,7 @@ jobs:
         with:
           # Can this be a bug in golangci-lint? We already defined the working-directory for this step.
           working-directory: services/${{ inputs.service }}
+          args: "--out-format=line-number"
 
   test:
     runs-on: ubuntu-latest
