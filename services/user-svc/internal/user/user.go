@@ -9,8 +9,6 @@ import (
 	"gen/proto/libs/events/v1"
 	pb "gen/proto/services/user_svc/v1"
 	"hwdb"
-	pbhelpersEvents "proto_helpers/events/v1"
-	"user-svc/internal/repositories"
 	"user-svc/repos/user_repo"
 
 	daprcmn "github.com/dapr/go-sdk/service/common"
@@ -103,7 +101,7 @@ func (s ServiceServer) ReadPublicProfile(ctx context.Context, req *pb.ReadPublic
 
 func HandleUserUpdatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry bool, err error) {
 	log := zlog.Ctx(ctx)
-	userRepository := repositories.UserRepo(ctx)
+	userRepo := user_repo.New(hwdb.GetDB())
 
 	var payload events.UserUpdatedEvent
 	if err := proto.Unmarshal(evt.RawData, &payload); err != nil {
@@ -111,13 +109,18 @@ func HandleUserUpdatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry
 		return true, err
 	}
 
-	userID, err := uuid.Parse(payload.Id)
+	userId, err := uuid.Parse(payload.Id)
 	if err != nil {
 		log.Error().Err(err).Send()
 		return true, err
 	}
 
-	if err := userRepository.UpdateUser(userID, pbhelpersEvents.UpdatesMapForUserUpdatedEvent(&payload)); err != nil {
+	if err := userRepo.UpdateUser(ctx, user_repo.UpdateUserParams{
+		ID:       userId,
+		Email:    payload.Email,
+		Name:     payload.Name,
+		Nickname: payload.Nickname,
+	}); err != nil {
 		log.Error().Err(err).Send()
 		return true, err
 	}
