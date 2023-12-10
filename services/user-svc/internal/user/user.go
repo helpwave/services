@@ -79,23 +79,25 @@ func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest
 }
 
 func (s ServiceServer) ReadPublicProfile(ctx context.Context, req *pb.ReadPublicProfileRequest) (*pb.ReadPublicProfileResponse, error) {
-	userRepository := repositories.UserRepo(ctx)
+	userRepo := user_repo.New(hwdb.GetDB())
 
 	userID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	user, err := userRepository.GetUserById(userID)
+	user, err := hwdb.Optional(userRepo.GetUserById)(ctx, userID)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
+	} else if user == nil {
+		return nil, status.Error(codes.Internal, "record not found")
 	}
 
 	return &pb.ReadPublicProfileResponse{
 		Id:        user.ID.String(),
 		Name:      user.Name,
 		Nickname:  user.Nickname,
-		AvatarUrl: user.Avatar,
+		AvatarUrl: *user.AvatarUrl,
 	}, nil
 }
 
