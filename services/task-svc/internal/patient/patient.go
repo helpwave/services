@@ -4,12 +4,15 @@ import (
 	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
+	"hwdb"
 	"hwgorm"
 	"hwutil"
-	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
 	"task-svc/internal/tracking"
+	"task-svc/repos/bed_repo"
+	"task-svc/repos/patient_repo"
+	"task-svc/repos/room_repo"
 
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -27,7 +30,7 @@ func NewServiceServer() *ServiceServer {
 
 func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientRequest) (*pb.CreatePatientResponse, error) {
 	log := zlog.Ctx(ctx)
-	patientRepo := repositories.PatientRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -36,12 +39,10 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientReq
 		return nil, err
 	}
 
-	patient, err := patientRepo.CreatePatient(&models.Patient{
-		PatientBase: models.PatientBase{
-			HumanReadableIdentifier: req.HumanReadableIdentifier,
-			Notes:                   req.Notes,
-		},
-		OrganizationID: organizationID,
+	patient_id, err := patientRepo.CreatePatient(ctx, patient_repo.CreatePatientParams{
+		OrganizationID:          organizationID,
+		HumanReadableIdentifier: req.HumanReadableIdentifier,
+		Notes:                   req.Notes,
 	})
 
 	if err != nil {
@@ -49,59 +50,58 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientReq
 	}
 
 	log.Info().
-		Str("patientID", patient.ID.String()).
+		Str("patientID", patient_id.String()).
 		Msg("patient created")
 
-	tracking.AddPatientToRecentActivity(ctx, patient.ID.String())
+	tracking.AddPatientToRecentActivity(ctx, patient_id.String())
 
 	return &pb.CreatePatientResponse{
-		Id: patient.ID.String(),
+		Id: patient_id.String(),
 	}, nil
 }
 
 func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) (*pb.GetPatientResponse, error) {
-	patientRepo := repositories.PatientRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	patientId, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient, err := patientRepo.GetPatientById(id)
-	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "not found")
-		}
+	res, err := hwdb.Optional(patientRepo.GetPatientWithBedAndRoom)(ctx, patientId)
+	if res == nil {
+		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
-
-	var wardId *uuid.UUID = nil
-	if patient.Bed != nil {
-		if patient.Bed.Room != nil {
-			wardId = &patient.Bed.Room.WardID
-		}
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.GetPatientResponse{
-		Id:                      patient.ID.String(),
-		HumanReadableIdentifier: patient.HumanReadableIdentifier,
-		Notes:                   patient.Notes,
-		BedId:                   hwutil.UUIDToStringPtr(patient.BedID),
-		WardId:                  hwutil.UUIDToStringPtr(wardId),
-		Room: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientResponse_Room {
-			return pb.GetPatientResponse_Room{Id: bed.Room.ID.String(), Name: bed.Room.Name, WardId: bed.Room.WardID.String()}
+		Id:                      res.ID.String(),
+		HumanReadableIdentifier: res.HumanReadableIdentifier,
+		Notes:                   res.Notes,
+		BedId:                   hwutil.NullUUIDToStringPtr(res.BedID),
+		WardId:                  hwutil.NullUUIDToStringPtr(res.WardID),
+		Room: hwutil.MapIf(res.RoomID.Valid, *res, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientResponse_Room {
+			return pb.GetPatientResponse_Room{
+				Id:     res.RoomID.UUID.String(), // has to be Valid, we just checked
+				Name:   *res.RoomName,            // RoomName must exist (NOT NULL) when room exists
+				WardId: res.WardID.UUID.String(), // WardId must exist (NOT NULL) when room exists
+			}
 		}),
-		Bed: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientResponse_Bed {
-			return pb.GetPatientResponse_Bed{Id: bed.ID.String(), Name: bed.Name}
+		Bed: hwutil.MapIf(res.BedID.Valid, *res, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientResponse_Bed {
+			return pb.GetPatientResponse_Bed{
+				Id:   res.BedID.UUID.String(), // has to be Valid as per MapIf condition
+				Name: *res.BedName,            // BedName must exist (NOT NULL) when Bed exists
+			}
 		}),
 	}, nil
 }
 
 func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBedRequest) (*pb.GetPatientByBedResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -110,13 +110,14 @@ func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBe
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient := models.Patient{}
-	if err := db.Where("bed_id = ?", bedID).First(&patient).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+	patient, err := hwdb.Optional(patientRepo.GetPatientByBed)(ctx, uuid.NullUUID{
+		UUID:  bedID,
+		Valid: true,
+	})
+	if patient == nil {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
+	} else if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.GetPatientByBedResponse{
@@ -128,7 +129,7 @@ func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBe
 }
 
 func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsByWardRequest) (*pb.GetPatientsByWardResponse, error) {
-	patientRepo := repositories.PatientRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -142,7 +143,11 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patients, err := patientRepo.GetPatientsByWardForOrganization(wardID, organizationID)
+	patients, err := patientRepo.GetPatientsByWardForOrganization(ctx, patient_repo.GetPatientsByWardForOrganizationParams{
+		WardID:         wardID,
+		OrganizationID: organizationID,
+	})
+
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -152,19 +157,19 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 	}
 
 	return &pb.GetPatientsByWardResponse{
-		Patients: hwutil.Map(patients, func(patient models.Patient) *pb.GetPatientsByWardResponse_Patient {
+		Patients: hwutil.Map(patients, func(patient patient_repo.Patient) *pb.GetPatientsByWardResponse_Patient {
 			return &pb.GetPatientsByWardResponse_Patient{
 				Id:                      patient.ID.String(),
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
 				Notes:                   patient.Notes,
-				BedId:                   hwutil.UUIDToStringPtr(patient.BedID),
+				BedId:                   hwutil.NullUUIDToStringPtr(patient.BedID),
 			}
 		}),
 	}, nil
 }
 
 func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.GetPatientAssignmentByWardRequest) (*pb.GetPatientAssignmentByWardResponse, error) {
-	patientRepo := repositories.PatientRepo(ctx)
+	roomRepo := room_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -173,7 +178,7 @@ func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.Get
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	rooms, err := patientRepo.GetRoomsWithBedsWithPatientsByWard(wardID)
+	rows, err := roomRepo.GetRoomsWithBedsWithPatientsByWard(ctx, wardID)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -182,33 +187,44 @@ func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.Get
 		}
 	}
 
-	mappedRooms := hwutil.Map(rooms, func(room models.Room) *pb.GetPatientAssignmentByWardResponse_Room {
-		return &pb.GetPatientAssignmentByWardResponse_Room{
-			Id:   room.ID.String(),
-			Name: room.Name,
-			Beds: hwutil.Map(room.Beds, func(bed models.Bed) *pb.GetPatientAssignmentByWardResponse_Room_Bed {
-				var patient *pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient
-				if bed.Patient != nil {
-					patient = &pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
-						Id:   bed.Patient.ID.String(),
-						Name: bed.Patient.HumanReadableIdentifier,
-					}
-				}
-				return &pb.GetPatientAssignmentByWardResponse_Room_Bed{
-					Id:      bed.ID.String(),
-					Name:    bed.Name,
-					Patient: patient,
-				}
-			}),
-		}
-	})
+	processedRooms := make(map[uuid.UUID]bool)
+
 	return &pb.GetPatientAssignmentByWardResponse{
-		Rooms: mappedRooms,
+		Rooms: hwutil.FlatMap(rows, func(roomRow room_repo.GetRoomsWithBedsWithPatientsByWardRow) **pb.GetPatientAssignmentByWardResponse_Room {
+			if _, processed := processedRooms[roomRow.RoomID]; processed {
+				return nil
+			}
+			processedRooms[roomRow.RoomID] = true
+
+			beds := hwutil.FlatMap(rows, func(bedRow room_repo.GetRoomsWithBedsWithPatientsByWardRow) **pb.GetPatientAssignmentByWardResponse_Room_Bed {
+				if bedRow.RoomID != roomRow.RoomID || !bedRow.BedID.Valid {
+					return nil
+				}
+				val := &pb.GetPatientAssignmentByWardResponse_Room_Bed{
+					Id:   bedRow.BedID.UUID.String(), // valid because of if above
+					Name: *bedRow.BedName,            // exists, because NOT-NULL
+					Patient: hwutil.MapIf(bedRow.PatientID.Valid, bedRow,
+						func(bedRow room_repo.GetRoomsWithBedsWithPatientsByWardRow) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
+							return pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
+								Id:   bedRow.PatientID.UUID.String(),
+								Name: *bedRow.PatientHumanReadableIdentifier,
+							}
+						}),
+				}
+				return &val
+			})
+			val := &pb.GetPatientAssignmentByWardResponse_Room{
+				Id:   roomRow.RoomID.String(),
+				Name: roomRow.RoomName,
+				Beds: beds,
+			}
+			return &val
+		}),
 	}, nil
 }
 
 func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPatientsRequest) (*pb.GetRecentPatientsResponse, error) {
-	patientRepo := repositories.PatientRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
@@ -227,9 +243,9 @@ func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPat
 	// WORKAROUND: Until https://github.com/helpwave/services/issues/458 is fixed
 	if len(recentPatientIdsStrs) == 0 {
 		log.Debug().Msg("recentPatientIdsStrs was empty")
-		if patients, err := patientRepo.GetLastUpdatedPatientsForOrganization(4, organizationID); err == nil {
-			recentPatientIdsStrs = hwutil.Map(patients, func(patient models.Patient) string {
-				return patient.ID.String()
+		if patientIds, err := patientRepo.GetLastUpdatedPatientIDsForOrganization(ctx, organizationID); err == nil {
+			recentPatientIdsStrs = hwutil.Map(patientIds, func(patientId uuid.UUID) string {
+				return patientId.String()
 			})
 		}
 	}
@@ -244,33 +260,33 @@ func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPat
 		return &parsedUUID
 	})
 
-	patients, err := patientRepo.GetPatientsByIdsWithBedAndRoom(recentPatientIds)
+	patientsRes, err := patientRepo.GetPatientsWithBedAndRoom(ctx, recentPatientIds)
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	recentPatients := hwutil.Map(patients, func(patient models.Patient) *pb.GetRecentPatientsResponse_PatientWithRoomAndBed {
+	recentPatients := hwutil.Map(patientsRes, func(res patient_repo.GetPatientsWithBedAndRoomRow) *pb.GetRecentPatientsResponse_PatientWithRoomAndBed {
 		var bed *pb.GetRecentPatientsResponse_Bed = nil
 		var room *pb.GetRecentPatientsResponse_Room = nil
 
-		if patient.Bed != nil {
+		if res.BedID.Valid {
 			bed = &pb.GetRecentPatientsResponse_Bed{
-				Id:   patient.Bed.ID.String(),
-				Name: patient.Bed.Name,
+				Id:   res.BedID.UUID.String(),
+				Name: *res.BedName, // NOT-NULL, must exist
 			}
-			if patient.Bed.Room != nil {
+			if res.RoomID.Valid {
 				room = &pb.GetRecentPatientsResponse_Room{
-					Id:     patient.Bed.Room.ID.String(),
-					Name:   patient.Bed.Room.Name,
-					WardId: patient.Bed.Room.WardID.String(),
+					Id:     res.RoomID.UUID.String(), // checked validity already
+					Name:   *res.RoomName,            // must exist, as NOT-NULL
+					WardId: res.WardID.UUID.String(), // must be valid, as NOT-NULL
 				}
 			}
 		}
 
 		return &pb.GetRecentPatientsResponse_PatientWithRoomAndBed{
-			Id:                      patient.ID.String(),
-			HumanReadableIdentifier: patient.HumanReadableIdentifier,
+			Id:                      res.ID.String(),
+			HumanReadableIdentifier: res.HumanReadableIdentifier,
 			Room:                    room,
 			Bed:                     bed,
 		}
@@ -280,56 +296,67 @@ func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPat
 }
 
 func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientRequest) (*pb.UpdatePatientResponse, error) {
-	patientRepo := repositories.PatientRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := pbhelpers.UpdatesMapForUpdatePatientRequest(req)
-	_, err = patientRepo.UpdatePatient(id, updates)
+	err = patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
+		ID:                      patientID,
+		HumanReadableIdentifier: req.HumanReadableIdentifier,
+		Notes:                   req.Notes,
+	})
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	tracking.AddPatientToRecentActivity(ctx, id.String())
+	tracking.AddPatientToRecentActivity(ctx, patientID.String())
 
 	return &pb.UpdatePatientResponse{}, nil
 }
 
 func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*pb.AssignBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	patientRepo := repositories.PatientRepo(ctx)
-	bedRepo := repositories.BedRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
+	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	bedID, err := uuid.Parse(req.BedId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	id, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	// Check whether bed exits
-	bed, err := bedRepo.GetBedById(bedID)
+	bedExists, err := bedRepo.ExistsBedInOrganization(ctx, bed_repo.ExistsBedInOrganizationParams{
+		ID:             bedID,
+		OrganizationID: organizationID,
+	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "bed not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if !bedExists {
+		return nil, status.Error(codes.InvalidArgument, "bed not found")
 	}
 
-	updates := map[string]interface{}{"bed_id": bedID}
-	patient, err := patientRepo.UpdatePatient(id, updates)
+	err = patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
+		ID:    patientID,
+		BedID: uuid.NullUUID{UUID: bedID, Valid: true},
+	})
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -339,111 +366,96 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 	}
 
 	log.Info().
-		Str("patientID", patient.ID.String()).
-		Str("bedID", bed.ID.String()).
+		Str("patientID", patientID.String()).
+		Str("bedID", bedID.String()).
 		Msg("assigned bed to patient")
 
-	tracking.AddPatientToRecentActivity(ctx, id.String())
+	tracking.AddPatientToRecentActivity(ctx, patientID.String())
 
 	return &pb.AssignBedResponse{}, nil
 }
 
 func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest) (*pb.UnassignBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	patientRepo := repositories.PatientRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	patientId, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"bed_id": nil}
-	patient, err := patientRepo.UpdatePatient(id, updates)
-
+	err = patientRepo.UnassignBedFromPatient(ctx, patientId)
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
+			return nil, status.Error(codes.InvalidArgument, "patientId not found")
 		}
 	}
 
 	log.Info().
-		Str("patientID", patient.ID.String()).
+		Str("patientID", patientId.String()).
 		Msg("unassigned bed from patient")
 
-	tracking.AddPatientToRecentActivity(ctx, id.String())
+	tracking.AddPatientToRecentActivity(ctx, patientId.String())
 
 	return &pb.UnassignBedResponse{}, nil
 }
 
 func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePatientRequest) (*pb.DischargePatientResponse, error) {
 	log := zlog.Ctx(ctx)
-	patientRepo := repositories.PatientRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	patientId, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	// Unassign Patient from bed and set to discharged
-	updates := map[string]interface{}{
-		"bed_id":        nil,
-		"is_discharged": 1,
-	}
-	_, err = patientRepo.UpdatePatient(id, updates)
+	err = patientRepo.DischargePatient(ctx, patientId)
 
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
+			return nil, status.Error(codes.InvalidArgument, "patientId not found")
 		}
 	}
 
 	log.Info().
-		Str("patientID", id.String()).
+		Str("patientID", patientId.String()).
 		Msg("patient discharged")
 
-	tracking.RemovePatientFromRecentActivity(ctx, id.String())
+	tracking.RemovePatientFromRecentActivity(ctx, patientId.String())
 
 	return &pb.DischargePatientResponse{}, nil
 }
 
 func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDetailsRequest) (*pb.GetPatientDetailsResponse, error) {
-	patientRepo := repositories.PatientRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 	taskRepo := repositories.TaskRepo(ctx)
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	patientId, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient, err := patientRepo.GetPatientById(id)
+	patientRes, err := hwdb.Optional(patientRepo.GetPatientWithBedAndRoom)(ctx, patientId)
+	if patientRes == nil {
+		return nil, status.Error(codes.InvalidArgument, "patient not found")
+	}
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "patient not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	tasks, err := taskRepo.GetTasksWithSubTasksByPatient(patient.ID)
+	tasks, err := taskRepo.GetTasksWithSubTasksByPatient(patientId)
 	if err != nil {
 		return nil, err
-	}
-
-	var wardId *uuid.UUID = nil
-	if patient.Bed != nil {
-		if patient.Bed.Room != nil {
-			wardId = &patient.Bed.Room.WardID
-		}
 	}
 
 	var mappedTasks = hwutil.Map(tasks, func(task models.Task) *pb.GetPatientDetailsResponse_Task {
@@ -467,160 +479,247 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 	})
 
 	// TODO: check if tracking here makes sense or too much spam
-	tracking.AddPatientToRecentActivity(ctx, id.String())
+	tracking.AddPatientToRecentActivity(ctx, patientId.String())
 
 	return &pb.GetPatientDetailsResponse{
-		Id:                      patient.ID.String(),
-		HumanReadableIdentifier: patient.HumanReadableIdentifier,
-		Notes:                   patient.Notes,
-		Name:                    patient.HumanReadableIdentifier, // TODO replace later
+		Id:                      patientRes.ID.String(),
+		HumanReadableIdentifier: patientRes.HumanReadableIdentifier,
+		Notes:                   patientRes.Notes,
+		Name:                    patientRes.HumanReadableIdentifier, // TODO replace later
 		Tasks:                   mappedTasks,
-		WardId:                  hwutil.UUIDToStringPtr(wardId),
-		Room: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientDetailsResponse_Room {
-			return pb.GetPatientDetailsResponse_Room{Id: bed.Room.ID.String(), Name: bed.Room.Name, WardId: bed.Room.WardID.String()}
+		WardId:                  hwutil.NullUUIDToStringPtr(patientRes.WardID),
+		Room: hwutil.MapIf(patientRes.RoomID.Valid, *patientRes, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientDetailsResponse_Room {
+			return pb.GetPatientDetailsResponse_Room{
+				Id:     res.RoomID.UUID.String(), // we just checked
+				Name:   *res.RoomName,            // RoomName is NOT-NULL, so must exist
+				WardId: res.WardID.UUID.String(), // WardID is NOT-NULL, so must be valid
+			}
 		}),
-		Bed: hwutil.MapNillable(patient.Bed, func(bed models.Bed) pb.GetPatientDetailsResponse_Bed {
-			return pb.GetPatientDetailsResponse_Bed{Id: bed.ID.String(), Name: bed.Name}
+		Bed: hwutil.MapIf(patientRes.BedID.Valid, *patientRes, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientDetailsResponse_Bed {
+			return pb.GetPatientDetailsResponse_Bed{
+				Id:   res.BedID.UUID.String(), // valid as per MapIf condition
+				Name: *res.BedName,            // BedName is NOT-NULL, so must exist
+			}
 		}),
 	}, nil
 }
 
 func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListRequest) (*pb.GetPatientListResponse, error) {
-	patientRepo := repositories.PatientRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 
-	mapTasks := func(tasks []models.Task) []*pb.GetPatientListResponse_Task {
-		return hwutil.Map(tasks, func(task models.Task) *pb.GetPatientListResponse_Task {
-			var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetPatientListResponse_Task_SubTask {
-				return &pb.GetPatientListResponse_Task_SubTask{
-					Id:   subtask.ID.String(),
-					Done: subtask.Done,
-					Name: subtask.Name,
-				}
-			})
-			return &pb.GetPatientListResponse_Task{
-				Id:             task.ID.String(),
-				Name:           task.Name,
-				Description:    task.Description,
-				Status:         pb.GetPatientListResponse_TaskStatus(task.Status),
-				AssignedUserId: task.AssignedUserId.UUID.String(),
-				PatientId:      task.PatientId.String(),
-				Subtasks:       mappedSubtasks,
-				Public:         task.Public,
-			}
-		})
+	// TODO: Auth
+
+	wardID, err := hwutil.ParseNullUUID(req.WardId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid organization id")
+		return nil, err
 	}
 
-	var wardID *uuid.UUID
-	if req.WardId != nil {
-		parsedWardID, err := uuid.Parse(*req.WardId)
-		if err != nil {
-			return nil, status.Error(codes.InvalidArgument, "invalid ward id")
-		}
-		wardID = &parsedWardID
-	}
+	rows, err := patientRepo.GetPatientsWithTasksBedAndRoomForOrganization(ctx, organizationID)
 
-	unassignedPatients, err := patientRepo.GetUnassignedPatientsForOrganization(organizationID)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	dischargedPatients, err := patientRepo.GetDischargedPatientsForOrganization(organizationID)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
+	dischargedRows, chargedRows := hwutil.Partition(rows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
+		return row.Patient.IsDischarged != 0
+	})
 
-	var rooms []models.Room
-	if wardID != nil {
-		rooms, err = patientRepo.GetRoomsWithBedsWithActivePatientsForWard(*wardID)
-	} else {
-		rooms, err = patientRepo.GetRoomsWithBedsWithActivePatientsForOrganization(organizationID)
-	}
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
+	withBedRows, unassignedRows := hwutil.Partition(chargedRows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
+		return row.BedID.Valid
+	})
 
-	var activePatients []*pb.GetPatientListResponse_PatientWithRoomAndBed
-	for _, room := range rooms {
-		for _, bed := range room.Beds {
-			if bed.Patient != nil {
-				patientWithRoomAndBed := &pb.GetPatientListResponse_PatientWithRoomAndBed{
-					Id:                      bed.Patient.ID.String(),
-					HumanReadableIdentifier: bed.Patient.HumanReadableIdentifier,
-					Bed: &pb.GetPatientListResponse_Bed{
-						Id:   bed.ID.String(),
-						Name: bed.Name,
-					},
-					Room: &pb.GetPatientListResponse_Room{
-						Id:     room.ID.String(),
-						Name:   room.Name,
-						WardId: room.WardID.String(),
-					},
-					Notes: bed.Patient.Notes,
-					Tasks: mapTasks(bed.Patient.Tasks),
-				}
-				activePatients = append(activePatients, patientWithRoomAndBed)
-			}
-		}
-	}
-
-	mapPatients := func(patients []models.Patient) []*pb.GetPatientListResponse_Patient {
-		return hwutil.Map(patients, func(patient models.Patient) *pb.GetPatientListResponse_Patient {
-			var mappedTasks = mapTasks(patient.Tasks)
-			return &pb.GetPatientListResponse_Patient{
-				Id:                      patient.ID.String(),
-				HumanReadableIdentifier: patient.HumanReadableIdentifier,
-				Notes:                   patient.Notes,
-				Tasks:                   mappedTasks,
-			}
+	if wardID.Valid {
+		// scope active patients to wardID
+		withBedRows = hwutil.Filter(withBedRows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
+			return row.WardID.UUID == wardID.UUID // equality implies validity
 		})
 	}
 
+	// collectActivePatients assumes row.BedID exists
+	// by constraints then row.BedName and row.Room* must also exist
+	collectActivePatients := func(rows []patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) []*pb.GetPatientListResponse_PatientWithRoomAndBed {
+		patients := make([]*pb.GetPatientListResponse_PatientWithRoomAndBed, 0) // List of Patients to be returned
+		patientsMap := make(map[uuid.UUID]int)                                  // maps id to index of patient in patients list
+		tasksMap := make(map[uuid.UUID]int)                                     // maps tasks id to index of task in its patient's Task list
+		subTasksSet := make(map[uuid.UUID]bool)
+
+		for _, row := range rows {
+			var patient *pb.GetPatientListResponse_PatientWithRoomAndBed
+
+			if patientIx, existed := patientsMap[row.Patient.ID]; existed {
+				patient = patients[patientIx]
+			} else {
+				patient = &pb.GetPatientListResponse_PatientWithRoomAndBed{
+					Id:                      row.Patient.ID.String(),
+					HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
+					Room: &pb.GetPatientListResponse_Room{
+						Id:     row.RoomID.UUID.String(),
+						Name:   *row.RoomName,
+						WardId: row.WardID.UUID.String(),
+					},
+					Bed: &pb.GetPatientListResponse_Bed{
+						Id:   row.BedID.UUID.String(),
+						Name: *row.BedName,
+					},
+					Notes: row.Patient.Notes,
+					Tasks: make([]*pb.GetPatientListResponse_Task, 0),
+				}
+				patients = append(patients, patient)
+				patientsMap[row.Patient.ID] = len(patients) - 1
+			}
+
+			// a patient may not have any tasks
+			if !row.TaskID.Valid {
+				continue
+			}
+
+			var task *pb.GetPatientListResponse_Task
+			if taskIx, existed := tasksMap[row.TaskID.UUID]; existed {
+				task = patient.Tasks[taskIx]
+			} else {
+
+				task = &pb.GetPatientListResponse_Task{
+					Id:             row.TaskID.UUID.String(),
+					Name:           *row.TaskName,
+					Description:    *row.TaskDescription,
+					Status:         pb.GetPatientListResponse_TaskStatus(*row.TaskStatus),
+					AssignedUserId: hwutil.NullUUIDToStringPtr(row.TaskAssignedUserID),
+					PatientId:      row.Patient.ID.String(),
+					Public:         *row.TaskPublic,
+					Subtasks:       make([]*pb.GetPatientListResponse_Task_SubTask, 0),
+				}
+				patient.Tasks = append(patient.Tasks, task)
+				tasksMap[row.TaskID.UUID] = len(patient.Tasks) - 1
+			}
+
+			// task may not have any subtasks
+			if !row.SubtaskID.Valid {
+				continue
+			}
+
+			if _, exists := subTasksSet[row.SubtaskID.UUID]; !exists {
+				task.Subtasks = append(task.Subtasks, &pb.GetPatientListResponse_Task_SubTask{
+					Id:   row.SubtaskID.UUID.String(),
+					Name: *row.SubtaskName,
+					Done: *row.SubtaskDone,
+				})
+				subTasksSet[row.SubtaskID.UUID] = true
+			}
+		}
+
+		return patients
+	}
+
+	// not ideal that we have to repeat ourselves here
+	collectPatients := func(rows []patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) []*pb.GetPatientListResponse_Patient {
+		patients := make([]*pb.GetPatientListResponse_Patient, 0) // List of Patients to be returned
+		patientsMap := make(map[uuid.UUID]int)                    // maps id to index of patient in patients list
+		tasksMap := make(map[uuid.UUID]int)                       // maps tasks id to index of task in its patient's Task list
+		subTasksSet := make(map[uuid.UUID]bool)
+
+		for _, row := range rows {
+			var patient *pb.GetPatientListResponse_Patient
+
+			if patientIx, existed := patientsMap[row.Patient.ID]; existed {
+				patient = patients[patientIx]
+			} else {
+				patient = &pb.GetPatientListResponse_Patient{
+					Id:                      row.Patient.ID.String(),
+					HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
+					Notes:                   row.Patient.Notes,
+					Tasks:                   make([]*pb.GetPatientListResponse_Task, 0),
+				}
+				patients = append(patients, patient)
+				patientsMap[row.Patient.ID] = len(patients) - 1
+			}
+
+			// a patient may not have any tasks
+			if !row.TaskID.Valid {
+				continue
+			}
+
+			var task *pb.GetPatientListResponse_Task
+			if taskIx, existed := tasksMap[row.TaskID.UUID]; existed {
+				task = patient.Tasks[taskIx]
+			} else {
+				task = &pb.GetPatientListResponse_Task{
+					Id:             row.TaskID.UUID.String(),
+					Name:           *row.TaskName,
+					Description:    *row.TaskDescription,
+					Status:         pb.GetPatientListResponse_TaskStatus(*row.TaskStatus),
+					AssignedUserId: hwutil.NullUUIDToStringPtr(row.TaskAssignedUserID),
+					PatientId:      row.Patient.ID.String(),
+					Public:         *row.TaskPublic,
+					Subtasks:       make([]*pb.GetPatientListResponse_Task_SubTask, 0),
+				}
+				patient.Tasks = append(patient.Tasks, task)
+				tasksMap[row.TaskID.UUID] = len(patient.Tasks) - 1
+			}
+
+			// task may not have any subtasks
+			if !row.SubtaskID.Valid {
+				continue
+			}
+
+			if _, exists := subTasksSet[row.SubtaskID.UUID]; !exists {
+				task.Subtasks = append(task.Subtasks, &pb.GetPatientListResponse_Task_SubTask{
+					Id:   row.SubtaskID.UUID.String(),
+					Name: *row.SubtaskName,
+					Done: *row.SubtaskDone,
+				})
+				subTasksSet[row.SubtaskID.UUID] = true
+			}
+		}
+
+		return patients
+	}
+
 	return &pb.GetPatientListResponse{
-		DischargedPatients: mapPatients(dischargedPatients),
-		UnassignedPatients: mapPatients(unassignedPatients),
-		Active:             activePatients,
+		Active:             collectActivePatients(withBedRows),
+		UnassignedPatients: collectPatients(unassignedRows),
+		DischargedPatients: collectPatients(dischargedRows),
 	}, nil
 }
 
 func (ServiceServer) DeletePatient(ctx context.Context, req *pb.DeletePatientRequest) (*pb.DeletePatientResponse, error) {
-	id, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	// TODO: admin check
 
-	patientRepo := repositories.PatientRepo(ctx)
-	_, err = patientRepo.DeletePatient(id)
+	patientRepo := patient_repo.New(hwdb.GetDB())
+	err = patientRepo.DeletePatient(ctx, patientID)
 	if err != nil {
 		return nil, err
 	}
 
-	tracking.RemovePatientFromRecentActivity(ctx, id.String())
+	tracking.RemovePatientFromRecentActivity(ctx, patientID.String())
 
 	return &pb.DeletePatientResponse{}, nil
 }
 
 func (ServiceServer) ReadmitPatient(ctx context.Context, req *pb.ReadmitPatientRequest) (*pb.ReadmitPatientResponse, error) {
-	id, err := uuid.Parse(req.PatientId)
+	patientID, err := uuid.Parse(req.PatientId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	// TODO: admin check
 
-	patientRepo := repositories.PatientRepo(ctx)
-	_, err = patientRepo.ReadmitPatient(id)
+	patientRepo := patient_repo.New(hwdb.GetDB())
+	err = patientRepo.ReadmitPatient(ctx, patientID)
 	if err != nil {
 		return nil, err
 	}
 
-	tracking.AddPatientToRecentActivity(ctx, id.String())
+	tracking.AddPatientToRecentActivity(ctx, patientID.String())
 
 	return &pb.ReadmitPatientResponse{}, nil
 }

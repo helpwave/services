@@ -19,9 +19,7 @@ Exists, no Bed:
 {
   "id": "2e830d2f-69c9-4e38-bd4b-ab43decc7ae3",
   "humanReadableIdentifier": "Cloris Dunbavin",
-  "notes": "Transient synovitis, shoulder",
-  "bedId": "",
-  "wardId": ""
+  "notes": "Transient synovitis, shoulder"
 }
 Does not exist:
 ERROR:

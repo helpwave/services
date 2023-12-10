@@ -6,6 +6,7 @@ replace (
 	common => ../../libs/common
 	decaying_lru => ../../libs/decaying_lru
 	gen => ../../gen/go
+	hwdb => ../../libs/hwdb
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
 	logging => ../../libs/logging
@@ -23,6 +24,7 @@ require (
 	google.golang.org/protobuf v1.31.0
 	gorm.io/gorm v1.25.5
 	gorm.io/plugin/soft_delete v1.2.1
+	hwdb v0.0.0
 	hwgorm v0.0.0
 	hwutil v0.0.0
 	proto_helpers v0.0.0
@@ -47,7 +49,8 @@ require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgproto3/v2 v2.3.2 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
-	github.com/jackc/pgx/v5 v5.4.3 // indirect
+	github.com/jackc/pgx/v5 v5.5.0 // indirect
+	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
@@ -57,9 +60,11 @@ require (
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
 	github.com/redis/go-redis/v9 v9.1.0 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
+	github.com/vgarvardt/pgx-google-uuid/v5 v5.0.0 // indirect
 	golang.org/x/crypto v0.15.0 // indirect
 	golang.org/x/net v0.18.0 // indirect
 	golang.org/x/oauth2 v0.14.0 // indirect
+	golang.org/x/sync v0.3.0 // indirect
 	golang.org/x/sys v0.14.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect

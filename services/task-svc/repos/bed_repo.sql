@@ -1,12 +1,26 @@
 -- name: CreateBed :one
 INSERT INTO beds (room_id, organization_id, name) VALUES (@room_id, @organization_id, @name) RETURNING *;
 
--- name: GetBedById :one
-SELECT * FROM beds WHERE id = $1 LIMIT 1;
-
--- name: GetBedsByRoomForOrganization :many
+-- name: GetBedByIdForOrganization :one
 SELECT * FROM beds
-	WHERE organization_id = $1 AND room_id = $2
+	WHERE id = $1
+	AND organization_id = $2
+	LIMIT 1;
+
+-- name: GetBedWithRoomByPatientForOrganization :one
+SELECT
+	beds.id as bed_id, beds.name as bed_name,
+	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+	FROM patients
+	JOIN beds ON patients.bed_id = beds.id
+	JOIN rooms ON beds.room_id = rooms.id
+	WHERE patients.id = @patient_id
+	LIMIT 1;
+
+-- name: GetBedsForOrganization :many
+SELECT * FROM beds
+	WHERE organization_id = @organization_id
+	AND (room_id = sqlc.narg('room_id') OR sqlc.narg('room_id') IS NULL)
 	ORDER BY name ASC;
 
 -- name: UpdateBed :exec
