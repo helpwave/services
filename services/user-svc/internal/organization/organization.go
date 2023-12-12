@@ -11,11 +11,13 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
+	"hwdb"
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/user_svc/v1"
 	"user-svc/internal/models"
 	"user-svc/internal/repositories"
+	"user-svc/repos/organization_repo"
 )
 
 type InvitationState = string
@@ -34,26 +36,21 @@ func NewServiceServer(daprClient *daprc.GRPCClient) *ServiceServer {
 func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrganizationRequest) (*pb.CreateOrganizationResponse, error) {
 	userID, err := common.GetUserID(ctx)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	organization, err := CreateOrganizationAndAddUser(
 		ctx,
-		models.Base{
+		organization_repo.Organization{
 			LongName:     req.LongName,
 			ShortName:    req.ShortName,
 			ContactEmail: req.ContactEmail,
-			IsPersonal:   req.GetIsPersonal(),
+			IsPersonal:   req.IsPersonal,
 		},
 		userID,
 	)
-
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, err.Error())
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.CreateOrganizationResponse{
@@ -66,26 +63,22 @@ func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrg
 func (s ServiceServer) CreateOrganizationForUser(ctx context.Context, req *pb.CreateOrganizationForUserRequest) (*pb.CreateOrganizationForUserResponse, error) {
 	userID, err := uuid.Parse(req.UserId)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	organization, err := CreateOrganizationAndAddUser(
 		ctx,
-		models.Base{
+		organization_repo.Organization{
 			LongName:     req.LongName,
 			ShortName:    req.ShortName,
 			ContactEmail: req.ContactEmail,
-			IsPersonal:   req.GetIsPersonal(),
+			IsPersonal:   req.IsPersonal,
 		},
 		userID,
 	)
 
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, err.Error())
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.CreateOrganizationForUserResponse{
@@ -685,76 +678,55 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 	return &pb.RevokeInvitationResponse{}, nil
 }
 
-func CreateOrganizationAndAddUser(ctx context.Context, attr models.Base, userID uuid.UUID) (*models.Organization, error) {
-	db := hwgorm.GetDB(ctx)
+func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Organization, userID uuid.UUID) (*organization_repo.Organization, error) {
+	db := hwdb.GetDB()
 
-	var organization models.Organization
-	err := db.Transaction(func(tx *gorm.DB) error {
-		organizationPtr, err := CreateOrganization(ctx, tx, attr, userID)
-		if err != nil {
-			return err
-		}
+	tx, err := db.Begin(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback(ctx)
 
-		organization = *organizationPtr
+	organizationRepo := organization_repo.New(db).WithTx(tx)
 
-		if err := AddUserToOrganization(ctx, tx, userID, organization.ID); err != nil {
-			return err
-		}
-
-		// Make the creating user admin of the organization
-		if err := ChangeMembershipAdminStatus(ctx, tx, userID, organization.ID, true); err != nil {
-			return err
-		}
-
-		organizationCreatedEvent := &events.OrganizationCreatedEvent{
-			Id:     organization.ID.String(),
-			UserId: userID.String(),
-		}
-
-		daprClient := common.MustNewDaprGRPCClient()
-
-		if err := common.PublishMessage(ctx, daprClient, "pubsub", "ORGANIZATION_CREATED", organizationCreatedEvent); err != nil {
-			return err
-		}
-
-		// TODO: Dispatch UserJoinedOrganizationEvent
-
-		return nil
+	organization, err := organizationRepo.CreateOrganization(ctx, organization_repo.CreateOrganizationParams{
+		LongName:        attr.LongName,
+		ShortName:       attr.ShortName,
+		ContactEmail:    attr.ContactEmail,
+		AvatarUrl:       attr.AvatarUrl,
+		IsPersonal:      attr.IsPersonal,
+		CreatedByUserID: userID,
 	})
-
 	if err != nil {
 		return nil, err
 	}
 
-	return &organization, nil
-}
-
-func CreateOrganization(ctx context.Context, db *gorm.DB, attr models.Base, creatorUserId uuid.UUID) (*models.Organization, error) {
-	log := zlog.Ctx(ctx)
-
-	// TODO: Auth
-
-	organization := models.Organization{
-		Base: models.Base{
-			LongName:     attr.LongName,
-			ShortName:    attr.ShortName,
-			ContactEmail: attr.ContactEmail,
-			AvatarUrl:    attr.AvatarUrl,
-			IsPersonal:   attr.IsPersonal,
-		},
-		CreatedByUserId: creatorUserId,
-		Members:         []models.Membership{},
-	}
-
-	if err := db.Create(&organization).Error; err != nil {
+	if err := organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
+		UserID:         userID,
+		OrganizationID: organization.ID,
+	}); err != nil {
 		return nil, err
 	}
 
-	log.Info().
-		Str("organizationID", organization.ID.String()).
-		Str("userID", creatorUserId.String()).
-		Msg("organization created")
+	if err := organizationRepo.ChangeMembershipAdminStatus(ctx, organization_repo.ChangeMembershipAdminStatusParams{
+		UserID:         userID,
+		OrganizationID: organization.ID,
+	}); err != nil {
+		return nil, err
+	}
 
+	organizationCreatedEvent := &events.OrganizationCreatedEvent{
+		Id:     organization.ID.String(),
+		UserId: userID.String(),
+	}
+	daprClient := common.MustNewDaprGRPCClient()
+	if err := common.PublishMessage(ctx, daprClient, "pubsub", "ORGANIZATION_CREATED", organizationCreatedEvent); err != nil {
+		return nil, err
+	}
+
+	// TODO: Dispatch UserJoinedOrganizationEvent
+
+	tx.Commit(ctx)
 	return &organization, nil
 }
 
@@ -788,27 +760,6 @@ func GetInvitationByIdAndEmail(db *gorm.DB, email string, id uuid.UUID) (*models
 	}
 
 	return &invitation, nil
-}
-
-func ChangeMembershipAdminStatus(ctx context.Context, db *gorm.DB, userID uuid.UUID, organizationID uuid.UUID, isAdmin bool) error {
-	log := zlog.Ctx(ctx)
-
-	member := models.Membership{
-		OrganizationID: organizationID,
-		UserID:         userID,
-	}
-
-	if err := db.First(&member).Update("is_admin", isAdmin).Error; err != nil {
-		return err
-	}
-
-	log.Info().
-		Str("organizationID", organizationID.String()).
-		Str("userID", userID.String()).
-		Bool("isAdmin", isAdmin).
-		Msg("admin status changed")
-
-	return nil
 }
 
 func IsInOrganization(db *gorm.DB, organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
