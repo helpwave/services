@@ -131,9 +131,12 @@ const GetOrganizationResponse$json = {
     {'1': 'long_name', '3': 2, '4': 1, '5': 9, '10': 'longName'},
     {'1': 'short_name', '3': 3, '4': 1, '5': 9, '10': 'shortName'},
     {'1': 'contact_email', '3': 4, '4': 1, '5': 9, '10': 'contactEmail'},
-    {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '10': 'avatarUrl'},
+    {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'avatarUrl', '17': true},
     {'1': 'is_personal', '3': 6, '4': 1, '5': 8, '10': 'isPersonal'},
     {'1': 'members', '3': 7, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.GetOrganizationMember', '10': 'members'},
+  ],
+  '8': [
+    {'1': '_avatar_url'},
   ],
 };
 
@@ -141,10 +144,10 @@ const GetOrganizationResponse$json = {
 final $typed_data.Uint8List getOrganizationResponseDescriptor = $convert.base64Decode(
     'ChdHZXRPcmdhbml6YXRpb25SZXNwb25zZRIOCgJpZBgBIAEoCVICaWQSGwoJbG9uZ19uYW1lGA'
     'IgASgJUghsb25nTmFtZRIdCgpzaG9ydF9uYW1lGAMgASgJUglzaG9ydE5hbWUSIwoNY29udGFj'
-    'dF9lbWFpbBgEIAEoCVIMY29udGFjdEVtYWlsEh0KCmF2YXRhcl91cmwYBSABKAlSCWF2YXRhcl'
-    'VybBIfCgtpc19wZXJzb25hbBgGIAEoCFIKaXNQZXJzb25hbBJLCgdtZW1iZXJzGAcgAygLMjEu'
-    'cHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0T3JnYW5pemF0aW9uTWVtYmVyUgdtZW1iZX'
-    'Jz');
+    'dF9lbWFpbBgEIAEoCVIMY29udGFjdEVtYWlsEiIKCmF2YXRhcl91cmwYBSABKAlIAFIJYXZhdG'
+    'FyVXJsiAEBEh8KC2lzX3BlcnNvbmFsGAYgASgIUgppc1BlcnNvbmFsEksKB21lbWJlcnMYByAD'
+    'KAsyMS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRPcmdhbml6YXRpb25NZW1iZXJSB2'
+    '1lbWJlcnNCDQoLX2F2YXRhcl91cmw=');
 
 @$core.Deprecated('Use getOrganizationsByUserRequestDescriptor instead')
 const GetOrganizationsByUserRequest$json = {

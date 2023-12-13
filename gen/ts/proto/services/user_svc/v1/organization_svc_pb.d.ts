@@ -167,6 +167,8 @@ export class GetOrganizationResponse extends jspb.Message {
 
   getAvatarUrl(): string;
   setAvatarUrl(value: string): GetOrganizationResponse;
+  hasAvatarUrl(): boolean;
+  clearAvatarUrl(): GetOrganizationResponse;
 
   getIsPersonal(): boolean;
   setIsPersonal(value: boolean): GetOrganizationResponse;
@@ -190,9 +192,14 @@ export namespace GetOrganizationResponse {
     longName: string,
     shortName: string,
     contactEmail: string,
-    avatarUrl: string,
+    avatarUrl?: string,
     isPersonal: boolean,
     membersList: Array<GetOrganizationMember.AsObject>,
+  }
+
+  export enum AvatarUrlCase { 
+    _AVATAR_URL_NOT_SET = 0,
+    AVATAR_URL = 5,
   }
 }
 
