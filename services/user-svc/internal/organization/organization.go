@@ -87,8 +87,7 @@ func (s ServiceServer) CreateOrganizationForUser(ctx context.Context, req *pb.Cr
 }
 
 func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizationRequest) (*pb.GetOrganizationResponse, error) {
-	organizationRepo := repositories.OrganizationRepo(ctx)
-
+	organizationRepo := organization_repo.New(hwdb.GetDB())
 	// TODO: Auth
 
 	id, err := uuid.Parse(req.Id)
@@ -96,28 +95,32 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organization, err := organizationRepo.GetOrganizationById(id)
-	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+	organization, err := hwdb.Optional(organizationRepo.GetOrganizationById)(ctx, id)
+	var members []*pb.GetOrganizationMember
+
+	if organization == nil {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
+	} else if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	// TODO: Move members out of GetOrganizationResponse into GetMembers with pagination
-	var members []*pb.GetOrganizationMember
-	for _, member := range organization.Members {
-		members = append(members, &pb.GetOrganizationMember{UserId: member.UserID.String()})
+	results, err := organizationRepo.GetMembersByOrganization(ctx, organization.ID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
 	}
+
+	for _, member := range results {
+		members = append(members, &pb.GetOrganizationMember{UserId: member.ID.String()})
+	}
+	// TODO: Move members out of GetOrganizationResponse into GetMembers with pagination
 
 	return &pb.GetOrganizationResponse{
 		Id:           organization.ID.String(),
 		LongName:     organization.LongName,
 		ShortName:    organization.ShortName,
 		ContactEmail: organization.ContactEmail,
+		IsPersonal:   *organization.IsPersonal, // must exist
 		AvatarUrl:    organization.AvatarUrl,
-		IsPersonal:   false,
 		Members:      members,
 	}, nil
 }

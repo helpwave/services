@@ -42,8 +42,15 @@ INSERT INTO invitations (email, organization_id, state)
 VALUES (@email, @organization_id, @state);
 
 -- name: GetInvitationsByOrganization :many
-SELECT * FROM invitations
-WHERE (
-	organization_id = $1 AND
-	state = $2 OR $2 IS NULL
-);
+SELECT *
+	FROM invitations
+	WHERE (
+		organization_id = $1 AND
+		state = $2 OR $2 IS NULL
+	);
+
+-- name: GetMembersByOrganization :many
+SELECT u.*
+	FROM memberships m
+	JOIN users u ON m.user_id = u.id
+	WHERE m.organization_id = $1;

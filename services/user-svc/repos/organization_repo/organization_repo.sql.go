@@ -127,6 +127,39 @@ func (q *Queries) GetInvitationsByOrganization(ctx context.Context, arg GetInvit
 	return items, nil
 }
 
+const getMembersByOrganization = `-- name: GetMembersByOrganization :many
+SELECT u.id, u.email, u.nickname, u.name, u.avatar_url
+FROM memberships m
+JOIN users u ON m.user_id = u.id
+WHERE m.organization_id = $1
+`
+
+func (q *Queries) GetMembersByOrganization(ctx context.Context, organizationID uuid.UUID) ([]User, error) {
+	rows, err := q.db.Query(ctx, getMembersByOrganization, organizationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []User{}
+	for rows.Next() {
+		var i User
+		if err := rows.Scan(
+			&i.ID,
+			&i.Email,
+			&i.Nickname,
+			&i.Name,
+			&i.AvatarUrl,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getOrganizationById = `-- name: GetOrganizationById :one
 SELECT id, long_name, short_name, contact_email, avatar_url, is_personal, created_by_user_id FROM organizations WHERE id = $1 LIMIT 1
 `
