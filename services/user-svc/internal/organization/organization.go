@@ -5,12 +5,6 @@ import (
 	"context"
 	"gen/proto/libs/events/v1"
 	pb "gen/proto/services/user_svc/v1"
-	daprc "github.com/dapr/go-sdk/client"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-	"gorm.io/gorm"
 	"hwdb"
 	"hwgorm"
 	"hwutil"
@@ -18,6 +12,13 @@ import (
 	"user-svc/internal/models"
 	"user-svc/internal/repositories"
 	"user-svc/repos/organization_repo"
+
+	daprc "github.com/dapr/go-sdk/client"
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"gorm.io/gorm"
 )
 
 type InvitationState = string
@@ -96,7 +97,6 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 	}
 
 	organization, err := hwdb.Optional(organizationRepo.GetOrganizationById)(ctx, id)
-	var members []*pb.GetOrganizationMember
 
 	if organization == nil {
 		return nil, status.Error(codes.InvalidArgument, "id not found")
@@ -104,16 +104,12 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	results, err := organizationRepo.GetMembersByOrganization(ctx, organization.ID)
+	members, err := organizationRepo.GetMembersByOrganization(ctx, organization.ID)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	for _, member := range results {
-		members = append(members, &pb.GetOrganizationMember{UserId: member.ID.String()})
-	}
 	// TODO: Move members out of GetOrganizationResponse into GetMembers with pagination
-
 	return &pb.GetOrganizationResponse{
 		Id:           organization.ID.String(),
 		LongName:     organization.LongName,
@@ -121,7 +117,11 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 		ContactEmail: organization.ContactEmail,
 		IsPersonal:   *organization.IsPersonal, // must exist
 		AvatarUrl:    organization.AvatarUrl,
-		Members:      members,
+		Members: hwutil.Map(members, func(member organization_repo.User) *pb.GetOrganizationMember {
+			return &pb.GetOrganizationMember{
+				UserId: member.ID.String(),
+			}
+		}),
 	}, nil
 }
 
