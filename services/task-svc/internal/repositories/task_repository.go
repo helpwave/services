@@ -20,16 +20,6 @@ func TaskRepo(ctx context.Context) TaskRepository {
 	}
 }
 
-func (r *TaskRepository) CreateTask(task *models.Task) (*models.Task, error) {
-	query := r.db.
-		Create(task)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return task, nil
-}
-
 func (r *TaskRepository) CreateSubTask(subtask *models.Subtask) (*models.Subtask, error) {
 	query := r.db.
 		Create(subtask)
@@ -44,7 +34,7 @@ func (r *TaskRepository) GetTaskWithSubTasks(taskID uuid.UUID) (*models.Task, er
 	task := &models.Task{ID: taskID}
 	query := r.db.
 		Preload("Subtasks", func(db *gorm.DB) *gorm.DB {
-			return db.Order("creation_date ASC")	
+			return db.Order("creation_date ASC")
 		}).
 		First(task)
 

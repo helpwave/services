@@ -362,7 +362,12 @@ func (ServiceServer) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) 
 }
 
 func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) (*pb.AddSubTaskResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	userID, err := common.GetUserID(ctx)
 	if err != nil {
@@ -375,13 +380,14 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 	}
 
 	// Check if task exists
-	// TODO: this is probably not needed due to the FK constrain in the subtask table
-	if _, err := taskRepo.GetTaskWithSubTasks(taskId); err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "taskId not found")
-		}
+	// TODO: this is probably not needed due to the FK constrain in the subtaskID table
+	if exists, err := taskRepo.ExistsTask(ctx, task_repo.ExistsTaskParams{
+		ID:             taskId,
+		OrganizationID: organizationID,
+	}); err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if !exists {
+		return nil, status.Error(codes.InvalidArgument, "taskId not found")
 	}
 
 	done := false
@@ -389,7 +395,7 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 		done = *req.Done
 	}
 
-	subtask, err := taskRepo.CreateSubTask(&models.Subtask{
+	subtaskID, err := taskRepo.CreateSubTask(ctx, task_repo.CreateSubTaskParams{
 		Name:      req.Name,
 		TaskID:    taskId,
 		Done:      done,
@@ -400,7 +406,7 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &pb.AddSubTaskResponse{Id: subtask.ID.String()}, nil
+	return &pb.AddSubTaskResponse{Id: subtaskID.String()}, nil
 }
 
 func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskRequest) (*pb.RemoveSubTaskResponse, error) {
