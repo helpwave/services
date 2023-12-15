@@ -143,41 +143,54 @@ func getOrganizationsByUser(ctx context.Context, userID uuid.UUID) ([]models.Org
 }
 
 func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOrganizationsByUserRequest) (*pb.GetOrganizationsByUserResponse, error) {
+	organizationRepo := organization_repo.New(hwdb.GetDB())
 	userID, err := uuid.Parse(req.UserId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
-
-	organizations, err := getOrganizationsByUser(ctx, userID)
+	rows, err := organizationRepo.GetOrganizationsWithMembersByUser(ctx, userID)
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	if len(rows) == 0 {
+		return &pb.GetOrganizationsByUserResponse{}, nil
 	}
 
-	mappedOrganizations := hwutil.Map(organizations, func(organization models.Organization) *pb.GetOrganizationsByUserResponse_Organization {
-		return &pb.GetOrganizationsByUserResponse_Organization{
+	processedOrganizations := make(map[uuid.UUID]bool)
+
+	organizationsResponse := hwutil.FlatMap(rows, func(organizationRow organization_repo.GetOrganizationsWithMembersByUserRow) **pb.GetOrganizationsByUserResponse_Organization {
+		organization := organizationRow.Organization
+		if _, processed := processedOrganizations[organization.ID]; processed {
+			return nil
+		}
+		processedOrganizations[organization.ID] = true
+		members := hwutil.FlatMap(rows, func(memberRow organization_repo.GetOrganizationsWithMembersByUserRow) **pb.GetOrganizationsByUserResponse_Organization_Member {
+			if memberRow.Organization.ID != organization.ID {
+				return nil
+			}
+			val := &pb.GetOrganizationsByUserResponse_Organization_Member{
+				UserId:    memberRow.ID.String(),
+				Email:     memberRow.Email,
+				Nickname:  memberRow.Nickname,
+				AvatarUrl: *memberRow.AvatarUrl,
+			}
+			return &val
+		})
+
+		val := &pb.GetOrganizationsByUserResponse_Organization{
 			Id:           organization.ID.String(),
 			LongName:     organization.LongName,
 			ShortName:    organization.ShortName,
 			ContactEmail: organization.ContactEmail,
-			AvatarUrl:    organization.AvatarUrl,
+			AvatarUrl:    organization.AvatarUrl, // can be nil
 			IsPersonal:   false,
-			Members: hwutil.Map(organization.Members, func(membership models.Membership) *pb.GetOrganizationsByUserResponse_Organization_Member {
-				return &pb.GetOrganizationsByUserResponse_Organization_Member{
-					UserId:    membership.UserID.String(),
-					AvatarUrl: membership.User.Avatar,
-					Email:     membership.User.Email,
-					Nickname:  membership.User.Nickname,
-				}
-			}),
+			Members:      members,
 		}
+		return &val
 	})
 
 	return &pb.GetOrganizationsByUserResponse{
-		Organizations: mappedOrganizations,
+		Organizations: organizationsResponse,
 	}, nil
 }
 

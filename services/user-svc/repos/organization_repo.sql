@@ -4,12 +4,19 @@ VALUES (@long_name, @short_name, @contact_email, @avatar_url, @is_personal, @cre
 RETURNING *;
 
 -- name: GetOrganizationById :one
-SELECT * FROM organizations WHERE id = $1 LIMIT 1;
-
--- name: GetOrganizationByUser :many
 SELECT * FROM organizations
-				JOIN memberships ON memberships.organization_id = organizations.id
-WHERE memberships.user_id = $1;
+    WHERE id = $1 LIMIT 1;
+
+-- name: GetOrganizationsWithMembersByUser :many
+SELECT
+	sqlc.embed(organizations),
+	users.*
+FROM organizations
+	JOIN memberships ON memberships.organization_id=organizations.id
+	JOIN users ON memberships.user_id=users.id
+WHERE organizations.id IN (SELECT memberships.organization_id
+						   FROM memberships
+						   WHERE memberships.user_id = $1);
 
 -- name: UpdateOrganization :exec
 UPDATE organizations

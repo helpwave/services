@@ -90,11 +90,12 @@ func (q *Queries) DeleteOrganization(ctx context.Context, id uuid.UUID) error {
 }
 
 const getInvitationsByOrganization = `-- name: GetInvitationsByOrganization :many
-SELECT id, email, organization_id, state FROM invitations
-WHERE (
-	organization_id = $1 AND
-	state = $2 OR $2 IS NULL
-)
+SELECT id, email, organization_id, state
+	FROM invitations
+	WHERE (
+		organization_id = $1 AND
+		state = $2 OR $2 IS NULL
+	)
 `
 
 type GetInvitationsByOrganizationParams struct {
@@ -129,9 +130,9 @@ func (q *Queries) GetInvitationsByOrganization(ctx context.Context, arg GetInvit
 
 const getMembersByOrganization = `-- name: GetMembersByOrganization :many
 SELECT u.id, u.email, u.nickname, u.name, u.avatar_url
-FROM memberships m
-JOIN users u ON m.user_id = u.id
-WHERE m.organization_id = $1
+	FROM memberships m
+	JOIN users u ON m.user_id = u.id
+	WHERE m.organization_id = $1
 `
 
 func (q *Queries) GetMembersByOrganization(ctx context.Context, organizationID uuid.UUID) ([]User, error) {
@@ -161,7 +162,8 @@ func (q *Queries) GetMembersByOrganization(ctx context.Context, organizationID u
 }
 
 const getOrganizationById = `-- name: GetOrganizationById :one
-SELECT id, long_name, short_name, contact_email, avatar_url, is_personal, created_by_user_id FROM organizations WHERE id = $1 LIMIT 1
+SELECT id, long_name, short_name, contact_email, avatar_url, is_personal, created_by_user_id FROM organizations
+    WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) GetOrganizationById(ctx context.Context, id uuid.UUID) (Organization, error) {
@@ -179,47 +181,49 @@ func (q *Queries) GetOrganizationById(ctx context.Context, id uuid.UUID) (Organi
 	return i, err
 }
 
-const getOrganizationByUser = `-- name: GetOrganizationByUser :many
-SELECT organizations.id, long_name, short_name, contact_email, avatar_url, is_personal, created_by_user_id, memberships.id, user_id, organization_id, is_admin FROM organizations
-				JOIN memberships ON memberships.organization_id = organizations.id
-WHERE memberships.user_id = $1
+const getOrganizationsWithMembersByUser = `-- name: GetOrganizationsWithMembersByUser :many
+SELECT
+	organizations.id, organizations.long_name, organizations.short_name, organizations.contact_email, organizations.avatar_url, organizations.is_personal, organizations.created_by_user_id,
+	users.id, users.email, users.nickname, users.name, users.avatar_url
+FROM organizations
+	JOIN memberships ON memberships.organization_id=organizations.id
+	JOIN users ON memberships.user_id=users.id
+WHERE organizations.id IN (SELECT memberships.organization_id
+						   FROM memberships
+						   WHERE memberships.user_id = $1)
 `
 
-type GetOrganizationByUserRow struct {
-	ID              uuid.UUID
-	LongName        string
-	ShortName       string
-	ContactEmail    string
-	AvatarUrl       *string
-	IsPersonal      *bool
-	CreatedByUserID uuid.UUID
-	ID_2            uuid.UUID
-	UserID          uuid.UUID
-	OrganizationID  uuid.UUID
-	IsAdmin         *bool
+type GetOrganizationsWithMembersByUserRow struct {
+	Organization Organization
+	ID           uuid.UUID
+	Email        string
+	Nickname     string
+	Name         string
+	AvatarUrl    *string
 }
 
-func (q *Queries) GetOrganizationByUser(ctx context.Context, userID uuid.UUID) ([]GetOrganizationByUserRow, error) {
-	rows, err := q.db.Query(ctx, getOrganizationByUser, userID)
+func (q *Queries) GetOrganizationsWithMembersByUser(ctx context.Context, userID uuid.UUID) ([]GetOrganizationsWithMembersByUserRow, error) {
+	rows, err := q.db.Query(ctx, getOrganizationsWithMembersByUser, userID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []GetOrganizationByUserRow{}
+	items := []GetOrganizationsWithMembersByUserRow{}
 	for rows.Next() {
-		var i GetOrganizationByUserRow
+		var i GetOrganizationsWithMembersByUserRow
 		if err := rows.Scan(
+			&i.Organization.ID,
+			&i.Organization.LongName,
+			&i.Organization.ShortName,
+			&i.Organization.ContactEmail,
+			&i.Organization.AvatarUrl,
+			&i.Organization.IsPersonal,
+			&i.Organization.CreatedByUserID,
 			&i.ID,
-			&i.LongName,
-			&i.ShortName,
-			&i.ContactEmail,
+			&i.Email,
+			&i.Nickname,
+			&i.Name,
 			&i.AvatarUrl,
-			&i.IsPersonal,
-			&i.CreatedByUserID,
-			&i.ID_2,
-			&i.UserID,
-			&i.OrganizationID,
-			&i.IsAdmin,
 		); err != nil {
 			return nil, err
 		}
