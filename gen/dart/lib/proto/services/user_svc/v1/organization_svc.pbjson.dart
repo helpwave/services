@@ -240,11 +240,14 @@ const GetOrganizationsForUserResponse_Organization$json = {
     {'1': 'long_name', '3': 2, '4': 1, '5': 9, '10': 'longName'},
     {'1': 'short_name', '3': 3, '4': 1, '5': 9, '10': 'shortName'},
     {'1': 'contact_email', '3': 4, '4': 1, '5': 9, '10': 'contactEmail'},
-    {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '10': 'avatarUrl'},
+    {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'avatarUrl', '17': true},
     {'1': 'is_personal', '3': 6, '4': 1, '5': 8, '10': 'isPersonal'},
     {'1': 'members', '3': 7, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.Member', '10': 'members'},
   ],
   '3': [GetOrganizationsForUserResponse_Organization_Member$json],
+  '8': [
+    {'1': '_avatar_url'},
+  ],
 };
 
 @$core.Deprecated('Use getOrganizationsForUserResponseDescriptor instead')
@@ -262,15 +265,15 @@ const GetOrganizationsForUserResponse_Organization_Member$json = {
 final $typed_data.Uint8List getOrganizationsForUserResponseDescriptor = $convert.base64Decode(
     'Ch9HZXRPcmdhbml6YXRpb25zRm9yVXNlclJlc3BvbnNlEm4KDW9yZ2FuaXphdGlvbnMYASADKA'
     'sySC5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRPcmdhbml6YXRpb25zRm9yVXNlclJl'
-    'c3BvbnNlLk9yZ2FuaXphdGlvblINb3JnYW5pemF0aW9ucxqeAwoMT3JnYW5pemF0aW9uEg4KAm'
+    'c3BvbnNlLk9yZ2FuaXphdGlvblINb3JnYW5pemF0aW9ucxqyAwoMT3JnYW5pemF0aW9uEg4KAm'
     'lkGAEgASgJUgJpZBIbCglsb25nX25hbWUYAiABKAlSCGxvbmdOYW1lEh0KCnNob3J0X25hbWUY'
-    'AyABKAlSCXNob3J0TmFtZRIjCg1jb250YWN0X2VtYWlsGAQgASgJUgxjb250YWN0RW1haWwSHQ'
-    'oKYXZhdGFyX3VybBgFIAEoCVIJYXZhdGFyVXJsEh8KC2lzX3BlcnNvbmFsGAYgASgIUgppc1Bl'
-    'cnNvbmFsEmkKB21lbWJlcnMYByADKAsyTy5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZX'
-    'RPcmdhbml6YXRpb25zRm9yVXNlclJlc3BvbnNlLk9yZ2FuaXphdGlvbi5NZW1iZXJSB21lbWJl'
-    'cnMacgoGTWVtYmVyEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIUCgVlbWFpbBgCIAEoCVIFZW'
-    '1haWwSGgoIbmlja25hbWUYAyABKAlSCG5pY2tuYW1lEh0KCmF2YXRhcl91cmwYBCABKAlSCWF2'
-    'YXRhclVybA==');
+    'AyABKAlSCXNob3J0TmFtZRIjCg1jb250YWN0X2VtYWlsGAQgASgJUgxjb250YWN0RW1haWwSIg'
+    'oKYXZhdGFyX3VybBgFIAEoCUgAUglhdmF0YXJVcmyIAQESHwoLaXNfcGVyc29uYWwYBiABKAhS'
+    'CmlzUGVyc29uYWwSaQoHbWVtYmVycxgHIAMoCzJPLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLn'
+    'YxLkdldE9yZ2FuaXphdGlvbnNGb3JVc2VyUmVzcG9uc2UuT3JnYW5pemF0aW9uLk1lbWJlclIH'
+    'bWVtYmVycxpyCgZNZW1iZXISFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklkEhQKBWVtYWlsGAIgAS'
+    'gJUgVlbWFpbBIaCghuaWNrbmFtZRgDIAEoCVIIbmlja25hbWUSHQoKYXZhdGFyX3VybBgEIAEo'
+    'CVIJYXZhdGFyVXJsQg0KC19hdmF0YXJfdXJs');
 
 @$core.Deprecated('Use updateOrganizationRequestDescriptor instead')
 const UpdateOrganizationRequest$json = {
