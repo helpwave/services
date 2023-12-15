@@ -513,7 +513,7 @@ func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) 
 
 func (ServiceServer) TaskToInProgress(ctx context.Context, req *pb.TaskToInProgressRequest) (*pb.TaskToInProgressResponse, error) {
 	log := zlog.Ctx(ctx)
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -522,9 +522,8 @@ func (ServiceServer) TaskToInProgress(ctx context.Context, req *pb.TaskToInProgr
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"status": pb.TaskStatus_TASK_STATUS_IN_PROGRESS}
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	s := int32(pb.TaskStatus_TASK_STATUS_IN_PROGRESS)
+	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Status: &s}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
