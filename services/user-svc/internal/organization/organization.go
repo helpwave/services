@@ -267,25 +267,21 @@ func (s ServiceServer) UpdateOrganization(ctx context.Context, req *pb.UpdateOrg
 }
 
 func (s ServiceServer) DeleteOrganization(ctx context.Context, req *pb.DeleteOrganizationRequest) (*pb.DeleteOrganizationResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	organizationID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organization := models.Organization{ID: organizationID}
-
-	if err := db.Delete(&organization).Error; err != nil {
+	if err := organizationRepo.DeleteOrganization(ctx, organizationID); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	organizationDeletedEvent := &events.OrganizationDeletedEvent{
 		Id: organizationID.String(),
 	}
-
 	daprClient := common.MustNewDaprGRPCClient()
-
 	if err := common.PublishMessage(ctx, daprClient, "pubsub", "ORGANIZATION_DELETED", organizationDeletedEvent); err != nil {
 		return nil, err
 	}
