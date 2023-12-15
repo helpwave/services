@@ -181,6 +181,50 @@ func (q *Queries) GetOrganizationById(ctx context.Context, id uuid.UUID) (Organi
 	return i, err
 }
 
+const getOrganizationWithMemberById = `-- name: GetOrganizationWithMemberById :many
+SELECT
+	organizations.id, organizations.long_name, organizations.short_name, organizations.contact_email, organizations.avatar_url, organizations.is_personal, organizations.created_by_user_id,
+	users.id as user_id
+FROM organizations
+		 LEFT JOIN memberships ON memberships.organization_id = organizations.id
+		 LEFT JOIN users ON memberships.user_id = users.id
+WHERE organizations.id = $1
+`
+
+type GetOrganizationWithMemberByIdRow struct {
+	Organization Organization
+	UserID       uuid.NullUUID
+}
+
+func (q *Queries) GetOrganizationWithMemberById(ctx context.Context, id uuid.UUID) ([]GetOrganizationWithMemberByIdRow, error) {
+	rows, err := q.db.Query(ctx, getOrganizationWithMemberById, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetOrganizationWithMemberByIdRow{}
+	for rows.Next() {
+		var i GetOrganizationWithMemberByIdRow
+		if err := rows.Scan(
+			&i.Organization.ID,
+			&i.Organization.LongName,
+			&i.Organization.ShortName,
+			&i.Organization.ContactEmail,
+			&i.Organization.AvatarUrl,
+			&i.Organization.IsPersonal,
+			&i.Organization.CreatedByUserID,
+			&i.UserID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getOrganizationsWithMembersByUser = `-- name: GetOrganizationsWithMembersByUser :many
 SELECT
 	organizations.id, organizations.long_name, organizations.short_name, organizations.contact_email, organizations.avatar_url, organizations.is_personal, organizations.created_by_user_id,

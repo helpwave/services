@@ -96,18 +96,24 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organization, err := hwdb.Optional(organizationRepo.GetOrganizationById)(ctx, id)
-
-	if organization == nil {
-		return nil, status.Error(codes.InvalidArgument, "id not found")
-	} else if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	members, err := organizationRepo.GetMembersByOrganization(ctx, organization.ID)
+	rows, err := organizationRepo.GetOrganizationWithMemberById(ctx, id)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
+	if len(rows) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
+	}
+
+	organization := rows[0].Organization
+	members := hwutil.FlatMap(rows, func(row organization_repo.GetOrganizationWithMemberByIdRow) **pb.GetOrganizationMember {
+		if !row.UserID.Valid {
+			return nil
+		}
+		val := &pb.GetOrganizationMember{
+			UserId: row.UserID.UUID.String(),
+		}
+		return &val
+	})
 
 	// TODO: Move members out of GetOrganizationResponse into GetMembers with pagination
 	return &pb.GetOrganizationResponse{
@@ -117,11 +123,7 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 		ContactEmail: organization.ContactEmail,
 		IsPersonal:   *organization.IsPersonal, // must exist
 		AvatarUrl:    organization.AvatarUrl,
-		Members: hwutil.Map(members, func(member organization_repo.User) *pb.GetOrganizationMember {
-			return &pb.GetOrganizationMember{
-				UserId: member.ID.String(),
-			}
-		}),
+		Members:      members,
 	}, nil
 }
 

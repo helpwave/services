@@ -7,6 +7,15 @@ RETURNING *;
 SELECT * FROM organizations
     WHERE id = $1 LIMIT 1;
 
+-- name: GetOrganizationWithMemberById :many
+SELECT
+	sqlc.embed(organizations),
+	users.id as user_id
+FROM organizations
+		 LEFT JOIN memberships ON memberships.organization_id = organizations.id
+		 LEFT JOIN users ON memberships.user_id = users.id
+WHERE organizations.id = $1;
+
 -- name: GetOrganizationsWithMembersByUser :many
 SELECT
 	sqlc.embed(organizations),
