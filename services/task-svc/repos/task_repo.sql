@@ -20,3 +20,6 @@ SELECT EXISTS (
 
 -- name: DeleteSubTask :exec
 DELETE FROM subtasks WHERE id = @id;
+
+-- name: DeleteTask :exec
+DELETE FROM tasks WHERE id = @id;

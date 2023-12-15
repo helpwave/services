@@ -104,11 +104,3 @@ func (r *TaskRepository) UpdateSubTask(subtaskID uuid.UUID, updates map[string]i
 	}
 	return subtask, nil
 }
-
-func (r *TaskRepository) DeleteTask(taskID uuid.UUID) error {
-	task := &models.Task{ID: taskID}
-	query := r.db.
-		Delete(task)
-
-	return query.Error
-}
