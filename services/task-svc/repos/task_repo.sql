@@ -15,7 +15,8 @@ UPDATE tasks
 SET	name = coalesce(sqlc.narg('name'), name),
 	description = coalesce(sqlc.narg('description'), description),
 	due_at = coalesce(sqlc.narg('due_at'), due_at),
-	public = coalesce(sqlc.narg('public'), public)
+	public = coalesce(sqlc.narg('public'), public),
+	status = coalesce(sqlc.narg('status'), status)
 WHERE id = @id;
 
 -- name: UpdateSubTask :exec

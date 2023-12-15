@@ -134,8 +134,9 @@ UPDATE tasks
 SET	name = coalesce($1, name),
 	description = coalesce($2, description),
 	due_at = coalesce($3, due_at),
-	public = coalesce($4, public)
-WHERE id = $5
+	public = coalesce($4, public),
+	status = coalesce($5, status)
+WHERE id = $6
 `
 
 type UpdateTaskParams struct {
@@ -143,6 +144,7 @@ type UpdateTaskParams struct {
 	Description *string
 	DueAt       pgtype.Timestamp
 	Public      *bool
+	Status      *int32
 	ID          uuid.UUID
 }
 
@@ -152,6 +154,7 @@ func (q *Queries) UpdateTask(ctx context.Context, arg UpdateTaskParams) error {
 		arg.Description,
 		arg.DueAt,
 		arg.Public,
+		arg.Status,
 		arg.ID,
 	)
 	return err

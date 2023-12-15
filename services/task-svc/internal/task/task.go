@@ -490,7 +490,7 @@ func (ServiceServer) SubTaskToDone(ctx context.Context, req *pb.SubTaskToDoneReq
 
 func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) (*pb.TaskToToDoResponse, error) {
 	log := zlog.Ctx(ctx)
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -499,9 +499,8 @@ func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"status": pb.TaskStatus_TASK_STATUS_TODO}
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	s := int32(pb.TaskStatus_TASK_STATUS_TODO)
+	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Status: &s}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
