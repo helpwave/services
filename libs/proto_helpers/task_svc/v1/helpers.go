@@ -26,16 +26,6 @@ func UpdatesMapForUpdateTaskRequest(r *pb.UpdateTaskRequest) map[string]interfac
 	return m
 }
 
-func UpdatesMapForUpdateSubTaskRequest(r *pb.UpdateSubTaskRequest) map[string]interface{} {
-	m := make(map[string]interface{})
-
-	if r.Name != nil {
-		m["name"] = *r.Name
-	}
-
-	return m
-}
-
 func UpdatesMapForUpdateTaskTemplateRequest(r *pb.UpdateTaskTemplateRequest) map[string]interface{} {
 	m := make(map[string]interface{})
 

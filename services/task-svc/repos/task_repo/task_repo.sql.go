@@ -110,3 +110,21 @@ func (q *Queries) ExistsTask(ctx context.Context, arg ExistsTaskParams) (bool, e
 	err := row.Scan(&task_exists)
 	return task_exists, err
 }
+
+const updateSubTask = `-- name: UpdateSubTask :exec
+UPDATE subtasks
+SET	name = coalesce($1, name),
+	done = coalesce($2, done)
+WHERE id = $3
+`
+
+type UpdateSubTaskParams struct {
+	Name *string
+	Done *bool
+	ID   uuid.UUID
+}
+
+func (q *Queries) UpdateSubTask(ctx context.Context, arg UpdateSubTaskParams) error {
+	_, err := q.db.Exec(ctx, updateSubTask, arg.Name, arg.Done, arg.ID)
+	return err
+}

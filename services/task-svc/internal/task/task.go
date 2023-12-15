@@ -427,16 +427,18 @@ func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskReq
 }
 
 func (ServiceServer) UpdateSubTask(ctx context.Context, req *pb.UpdateSubTaskRequest) (*pb.UpdateSubTaskResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	subtaskID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := pbhelpers.UpdatesMapForUpdateSubTaskRequest(req)
-
-	if _, err := taskRepo.UpdateSubTask(subtaskID, updates); err != nil {
+	if err := taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{
+		Name: req.Name,
+		Done: nil,
+		ID:   subtaskID,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
