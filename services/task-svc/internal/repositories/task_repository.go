@@ -92,15 +92,3 @@ func (r *TaskRepository) UpdateTask(taskID uuid.UUID, updates map[string]interfa
 	}
 	return task, nil
 }
-
-func (r *TaskRepository) UpdateSubTask(subtaskID uuid.UUID, updates map[string]interface{}) (*models.Subtask, error) {
-	subtask := &models.Subtask{ID: subtaskID}
-	query := r.db.
-		Model(subtask).
-		Updates(updates)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return subtask, nil
-}
