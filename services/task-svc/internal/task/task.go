@@ -575,7 +575,7 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 
 	// TODO: Check if user exists
 
-	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+	if err := taskRepo.UpdateTaskUser(ctx, task_repo.UpdateTaskUserParams{
 		ID: id,
 		AssignedUserID: uuid.NullUUID{
 			UUID:  userId,
@@ -595,7 +595,7 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 
 func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignTaskFromUserRequest) (*pb.UnassignTaskFromUserResponse, error) {
 	log := zlog.Ctx(ctx)
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -604,9 +604,7 @@ func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"assigned_user_id": nil}
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	if err := taskRepo.UpdateTaskUser(ctx, task_repo.UpdateTaskUserParams{ID: id, AssignedUserID: uuid.NullUUID{}}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
