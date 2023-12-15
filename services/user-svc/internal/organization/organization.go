@@ -8,7 +8,6 @@ import (
 	"hwdb"
 	"hwgorm"
 	"hwutil"
-	pbhelpers "proto_helpers/user_svc/v1"
 	"user-svc/internal/models"
 	"user-svc/internal/repositories"
 	"user-svc/repos/organization_repo"
@@ -246,17 +245,21 @@ func (s ServiceServer) GetOrganizationsForUser(ctx context.Context, _ *pb.GetOrg
 }
 
 func (s ServiceServer) UpdateOrganization(ctx context.Context, req *pb.UpdateOrganizationRequest) (*pb.UpdateOrganizationResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	organizationID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organization := models.Organization{ID: organizationID}
-	updates := pbhelpers.UpdatesMapForUpdateOrganizationRequest(req)
-
-	if err := db.Model(&organization).Updates(updates).Error; err != nil {
+	if err := organizationRepo.UpdateOrganization(ctx, organization_repo.UpdateOrganizationParams{
+		ID:           organizationID,
+		ContactEmail: req.ContactEmail,
+		LongName:     req.LongName,
+		ShortName:    req.ShortName,
+		IsPersonal:   req.IsPersonal,
+		AvatarUrl:    req.AvatarUrl,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
