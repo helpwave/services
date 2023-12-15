@@ -72,6 +72,15 @@ func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) (uuid.UU
 	return id, err
 }
 
+const deleteSubTask = `-- name: DeleteSubTask :exec
+DELETE FROM subtasks WHERE id = $1
+`
+
+func (q *Queries) DeleteSubTask(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteSubTask, id)
+	return err
+}
+
 const existsTask = `-- name: ExistsTask :one
 SELECT EXISTS (
     SELECT 1

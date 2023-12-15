@@ -18,3 +18,5 @@ SELECT EXISTS (
     AND organization_id = $2
 ) task_exists;
 
+-- name: DeleteSubTask :exec
+DELETE FROM subtasks WHERE id = @id;

@@ -20,16 +20,6 @@ func TaskRepo(ctx context.Context) TaskRepository {
 	}
 }
 
-func (r *TaskRepository) CreateSubTask(subtask *models.Subtask) (*models.Subtask, error) {
-	query := r.db.
-		Create(subtask)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return subtask, nil
-}
-
 func (r *TaskRepository) GetTaskWithSubTasks(taskID uuid.UUID) (*models.Task, error) {
 	task := &models.Task{ID: taskID}
 	query := r.db.
@@ -119,14 +109,6 @@ func (r *TaskRepository) DeleteTask(taskID uuid.UUID) error {
 	task := &models.Task{ID: taskID}
 	query := r.db.
 		Delete(task)
-
-	return query.Error
-}
-
-func (r *TaskRepository) DeleteSubTask(subtaskID uuid.UUID) error {
-	subtask := &models.Subtask{ID: subtaskID}
-	query := r.db.
-		Delete(subtask)
 
 	return query.Error
 }

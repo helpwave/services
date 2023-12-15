@@ -410,7 +410,7 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 }
 
 func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskRequest) (*pb.RemoveSubTaskResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -419,7 +419,7 @@ func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := taskRepo.DeleteSubTask(subtaskID); err != nil {
+	if err := taskRepo.DeleteSubTask(ctx, subtaskID); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
