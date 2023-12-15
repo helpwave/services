@@ -446,7 +446,7 @@ func (ServiceServer) UpdateSubTask(ctx context.Context, req *pb.UpdateSubTaskReq
 }
 
 func (ServiceServer) SubTaskToToDo(ctx context.Context, req *pb.SubTaskToToDoRequest) (*pb.SubTaskToToDoResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -455,9 +455,11 @@ func (ServiceServer) SubTaskToToDo(ctx context.Context, req *pb.SubTaskToToDoReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"done": false}
-
-	if _, err := taskRepo.UpdateSubTask(subtaskID, updates); err != nil {
+	done := false
+	if err := taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{
+		Done: &done,
+		ID:   subtaskID,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
