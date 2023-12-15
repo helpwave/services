@@ -255,6 +255,8 @@ export namespace GetOrganizationsByUserResponse {
 
     getAvatarUrl(): string;
     setAvatarUrl(value: string): Organization;
+    hasAvatarUrl(): boolean;
+    clearAvatarUrl(): Organization;
 
     getIsPersonal(): boolean;
     setIsPersonal(value: boolean): Organization;
@@ -278,7 +280,7 @@ export namespace GetOrganizationsByUserResponse {
       longName: string,
       shortName: string,
       contactEmail: string,
-      avatarUrl: string,
+      avatarUrl?: string,
       isPersonal: boolean,
       membersList: Array<GetOrganizationsByUserResponse.Organization.Member.AsObject>,
     }
@@ -313,6 +315,11 @@ export namespace GetOrganizationsByUserResponse {
       }
     }
 
+
+    export enum AvatarUrlCase { 
+      _AVATAR_URL_NOT_SET = 0,
+      AVATAR_URL = 5,
+    }
   }
 
 }

@@ -82,7 +82,7 @@ message GetOrganizationsByUserResponse {
     string long_name = 2;
     string short_name = 3;
     string contact_email = 4;
-    string avatar_url = 5;
+    optional string avatar_url = 5;
     bool is_personal = 6;
     repeated Member members = 7;
 
