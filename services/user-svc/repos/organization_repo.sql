@@ -53,9 +53,10 @@ WHERE user_id = $1 AND organization_id = $2;
 -- name: RemoveMember :exec
 DELETE FROM memberships WHERE user_id=$1 AND organization_id=$2;
 
--- name: InviteMember :exec
+-- name: InviteMember :one
 INSERT INTO invitations (email, organization_id, state)
-VALUES (@email, @organization_id, @state);
+VALUES (@email, @organization_id, @state::pb.InvitationState)
+RETURNING *;
 
 -- name: GetInvitationsByOrganization :many
 SELECT *
@@ -70,3 +71,19 @@ SELECT u.*
 	FROM memberships m
 	JOIN users u ON m.user_id = u.id
 	WHERE m.organization_id = $1;
+
+-- name: IsInOrganizationByEmail :one
+SELECT memberships.*
+	FROM memberships
+	JOIN users ON users.id = memberships.user_id
+WHERE memberships.organization_id = @organization_id
+	AND users.email = @email
+LIMIT 1;
+
+-- name: DoesInvitationExist :one
+SELECT EXISTS (
+	SELECT 1
+		FROM invitations
+	WHERE (invitations.email = @email AND invitations.organization_id = @organization_id)
+		AND state = ANY(ARRAY[@state::pb.InvitationState])
+);

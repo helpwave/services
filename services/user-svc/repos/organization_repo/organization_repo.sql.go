@@ -89,6 +89,28 @@ func (q *Queries) DeleteOrganization(ctx context.Context, id uuid.UUID) error {
 	return err
 }
 
+const doesInvitationExist = `-- name: DoesInvitationExist :one
+SELECT EXISTS (
+	SELECT 1
+		FROM invitations
+	WHERE (invitations.email = $1 AND invitations.organization_id = $2)
+		AND state = ANY(ARRAY[$3::pb.InvitationState])
+)
+`
+
+type DoesInvitationExistParams struct {
+	Email          string
+	OrganizationID uuid.UUID
+	State          interface{}
+}
+
+func (q *Queries) DoesInvitationExist(ctx context.Context, arg DoesInvitationExistParams) (bool, error) {
+	row := q.db.QueryRow(ctx, doesInvitationExist, arg.Email, arg.OrganizationID, arg.State)
+	var exists bool
+	err := row.Scan(&exists)
+	return exists, err
+}
+
 const getInvitationsByOrganization = `-- name: GetInvitationsByOrganization :many
 SELECT id, email, organization_id, state
 	FROM invitations
@@ -279,20 +301,54 @@ func (q *Queries) GetOrganizationsWithMembersByUser(ctx context.Context, userID 
 	return items, nil
 }
 
-const inviteMember = `-- name: InviteMember :exec
+const inviteMember = `-- name: InviteMember :one
 INSERT INTO invitations (email, organization_id, state)
-VALUES ($1, $2, $3)
+VALUES ($1, $2, $3::pb.InvitationState)
+RETURNING id, email, organization_id, state
 `
 
 type InviteMemberParams struct {
 	Email          string
 	OrganizationID uuid.UUID
-	State          int32
+	State          interface{}
 }
 
-func (q *Queries) InviteMember(ctx context.Context, arg InviteMemberParams) error {
-	_, err := q.db.Exec(ctx, inviteMember, arg.Email, arg.OrganizationID, arg.State)
-	return err
+func (q *Queries) InviteMember(ctx context.Context, arg InviteMemberParams) (Invitation, error) {
+	row := q.db.QueryRow(ctx, inviteMember, arg.Email, arg.OrganizationID, arg.State)
+	var i Invitation
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.OrganizationID,
+		&i.State,
+	)
+	return i, err
+}
+
+const isInOrganizationByEmail = `-- name: IsInOrganizationByEmail :one
+SELECT memberships.id, memberships.user_id, memberships.organization_id, memberships.is_admin
+	FROM memberships
+	JOIN users ON users.id = memberships.user_id
+WHERE memberships.organization_id = $1
+	AND users.email = $2
+LIMIT 1
+`
+
+type IsInOrganizationByEmailParams struct {
+	OrganizationID uuid.UUID
+	Email          string
+}
+
+func (q *Queries) IsInOrganizationByEmail(ctx context.Context, arg IsInOrganizationByEmailParams) (Membership, error) {
+	row := q.db.QueryRow(ctx, isInOrganizationByEmail, arg.OrganizationID, arg.Email)
+	var i Membership
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.OrganizationID,
+		&i.IsAdmin,
+	)
+	return i, err
 }
 
 const removeMember = `-- name: RemoveMember :exec

@@ -291,7 +291,7 @@ func (s ServiceServer) DeleteOrganization(ctx context.Context, req *pb.DeleteOrg
 
 func (s ServiceServer) AddMember(ctx context.Context, req *pb.AddMemberRequest) (*pb.AddMemberResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
+	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	userID, err := uuid.Parse(req.UserId)
 	if err != nil {
@@ -303,7 +303,10 @@ func (s ServiceServer) AddMember(ctx context.Context, req *pb.AddMemberRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := AddUserToOrganization(ctx, db, userID, organizationID); err != nil {
+	if err := organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
+		UserID:         userID,
+		OrganizationID: organizationID,
+	}); err != nil {
 		return nil, err
 	}
 
@@ -317,7 +320,7 @@ func (s ServiceServer) AddMember(ctx context.Context, req *pb.AddMemberRequest) 
 
 func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberRequest) (*pb.RemoveMemberResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwgorm.GetDB(ctx)
+	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	userID, err := uuid.Parse(req.UserId)
 	if err != nil {
@@ -329,11 +332,10 @@ func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	member := models.Membership{
-		UserID:         userID,
+	if err := organizationRepo.RemoveMember(ctx, organization_repo.RemoveMemberParams{
 		OrganizationID: organizationID,
-	}
-	if err := db.Delete(&member, "user_id = ?", userID).Error; err != nil {
+		UserID:         userID,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -346,9 +348,9 @@ func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberReq
 }
 
 func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberRequest) (*pb.InviteMemberResponse, error) {
-	organizationRepo := repositories.OrganizationRepo(ctx)
+	organizationRepo := organization_repo.New(hwdb.GetDB())
+	invitation := organization_repo.Invitation{}
 
-	db := hwgorm.GetDB(ctx)
 	log := zlog.Ctx(ctx)
 
 	organizationId, err := uuid.Parse(req.OrganizationId)
@@ -357,51 +359,50 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	}
 
 	// Check if an organization exists
-	_, err = organizationRepo.GetOrganizationById(organizationId)
+	organization, err := hwdb.Optional(organizationRepo.GetOrganizationById)(ctx, organizationId)
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "organization not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if organization == nil {
+		return nil, status.Error(codes.InvalidArgument, "organization not found")
 	}
 
-	isInOrganization, err := organizationRepo.IsInOrganizationByEmail(organizationId, req.Email)
+	// Check if email is already in organization
+	isInOrganization, err := hwdb.Optional(organizationRepo.IsInOrganizationByEmail)(ctx, organization_repo.IsInOrganizationByEmailParams{
+		OrganizationID: organizationId,
+		Email:          req.Email,
+	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "organization not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if isInOrganization == nil {
+		return nil, status.Error(codes.InvalidArgument, "organization not found")
 	}
 
-	if isInOrganization {
+	if isInOrganization != nil {
 		return nil, status.Error(codes.InvalidArgument, "cannot invite a user that is already a member")
 	}
 
-	// check if already an invitation exists
-	invitation := models.Invitation{}
-
-	if err := db.Where("(email = ? AND organization_id = ?) AND (state IN ?)", req.Email, organizationId, []pb.InvitationState{pb.InvitationState_INVITATION_STATE_PENDING, pb.InvitationState_INVITATION_STATE_ACCEPTED}).First(&invitation).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
+	// check if an Invitation already exists
+	doesInvitationExists, err := organizationRepo.DoesInvitationExist(ctx, organization_repo.DoesInvitationExistParams{
+		Email:          req.Email,
+		OrganizationID: organizationId,
+		State:          []pb.InvitationState{pb.InvitationState_INVITATION_STATE_PENDING, pb.InvitationState_INVITATION_STATE_ACCEPTED},
+	})
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if doesInvitationExists == false {
+		invitation, err = organizationRepo.InviteMember(ctx, organization_repo.InviteMemberParams{
+			Email:          req.Email,
+			OrganizationID: organizationId,
+			State:          pb.InvitationState_INVITATION_STATE_PENDING,
+		})
+		if err != nil {
 			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			// create invitation because doesn't exist
-			invitation = models.Invitation{
-				Email:          req.Email,
-				OrganizationID: organizationId,
-				State:          pb.InvitationState_INVITATION_STATE_PENDING,
-			}
-
-			if err := db.Create(&invitation).Error; err != nil {
-				return nil, status.Error(codes.Internal, err.Error())
-			}
-
-			log.Info().
-				Str("email", req.Email). // TODO: Revisited for privacy reasons
-				Str("organizationID", organizationId.String()).
-				Msg("user invited to organization")
 		}
+
+		log.Info().
+			Str("email", req.Email). // TODO: Revisited for privacy reasons
+			Str("organizationID", organizationId.String()).
+			Msg("user invited to organization")
 	}
 
 	return &pb.InviteMemberResponse{
