@@ -559,7 +559,7 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) 
 
 func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToUserRequest) (*pb.AssignTaskToUserResponse, error) {
 	log := zlog.Ctx(ctx)
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -575,9 +575,13 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 
 	// TODO: Check if user exists
 
-	updates := map[string]interface{}{"assigned_user_id": userId}
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+		ID: id,
+		AssignedUserID: uuid.NullUUID{
+			UUID:  userId,
+			Valid: true,
+		},
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
