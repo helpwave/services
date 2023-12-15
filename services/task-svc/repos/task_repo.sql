@@ -10,6 +10,14 @@ INSERT INTO subtasks
 VALUES ($1, $2, $3, $4)
 RETURNING id;
 
+-- name: UpdateTask :exec
+UPDATE tasks
+SET	name = coalesce(sqlc.narg('name'), name),
+	description = coalesce(sqlc.narg('description'), description),
+	due_at = coalesce(sqlc.narg('due_at'), due_at),
+	public = coalesce(sqlc.narg('public'), public)
+WHERE id = @id;
+
 -- name: UpdateSubTask :exec
 UPDATE subtasks
 SET	name = coalesce(sqlc.narg('name'), name),

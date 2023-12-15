@@ -12,7 +12,6 @@ import (
 	"hwdb"
 	"hwgorm"
 	"hwutil"
-	pbhelpers "proto_helpers/task_svc/v1"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
 	"task-svc/repos/patient_repo"
@@ -326,7 +325,7 @@ func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTask
 }
 
 func (ServiceServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) (*pb.UpdateTaskResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -335,9 +334,13 @@ func (ServiceServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := pbhelpers.UpdatesMapForUpdateTaskRequest(req)
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+		Name:        req.Name,
+		Description: req.Description,
+		DueAt:       hwdb.PbToTimestamp(req.DueAt),
+		Public:      req.Public,
+		ID:          id,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 

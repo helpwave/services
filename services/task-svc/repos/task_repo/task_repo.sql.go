@@ -128,3 +128,31 @@ func (q *Queries) UpdateSubTask(ctx context.Context, arg UpdateSubTaskParams) er
 	_, err := q.db.Exec(ctx, updateSubTask, arg.Name, arg.Done, arg.ID)
 	return err
 }
+
+const updateTask = `-- name: UpdateTask :exec
+UPDATE tasks
+SET	name = coalesce($1, name),
+	description = coalesce($2, description),
+	due_at = coalesce($3, due_at),
+	public = coalesce($4, public)
+WHERE id = $5
+`
+
+type UpdateTaskParams struct {
+	Name        *string
+	Description *string
+	DueAt       pgtype.Timestamp
+	Public      *bool
+	ID          uuid.UUID
+}
+
+func (q *Queries) UpdateTask(ctx context.Context, arg UpdateTaskParams) error {
+	_, err := q.db.Exec(ctx, updateTask,
+		arg.Name,
+		arg.Description,
+		arg.DueAt,
+		arg.Public,
+		arg.ID,
+	)
+	return err
+}

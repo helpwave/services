@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"time"
 )
 
@@ -31,4 +32,11 @@ func TimeToTimestamp(src time.Time) pgtype.Timestamp {
 	// just slightly faster as we know the type is time.Time
 	// (bmn)
 	return pgtype.Timestamp{Time: src.UTC(), Valid: true}
+}
+
+func PbToTimestamp(src *timestamppb.Timestamp) pgtype.Timestamp {
+	if src == nil {
+		return pgtype.Timestamp{Valid: false}
+	}
+	return pgtype.Timestamp{Time: (*src).AsTime().UTC(), Valid: true}
 }
