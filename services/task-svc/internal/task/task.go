@@ -641,7 +641,7 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 
 func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskRequest) (*pb.UnpublishTaskResponse, error) {
 	log := zlog.Ctx(ctx)
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -650,9 +650,11 @@ func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"public": false}
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	public := false
+	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+		Public: &public,
+		ID:     id,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 

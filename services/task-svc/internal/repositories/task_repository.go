@@ -80,15 +80,3 @@ func (r *TaskRepository) GetPatientsWithTasksByAssignee(ctx context.Context, ass
 	}
 	return patients, nil
 }
-
-func (r *TaskRepository) UpdateTask(taskID uuid.UUID, updates map[string]interface{}) (*models.Task, error) {
-	task := &models.Task{ID: taskID}
-	query := r.db.
-		Model(task).
-		Updates(updates)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return task, nil
-}
