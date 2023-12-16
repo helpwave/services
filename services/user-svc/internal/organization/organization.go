@@ -531,7 +531,7 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 }
 
 func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvitationRequest) (*pb.AcceptInvitationResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	invitationId, err := uuid.Parse(req.InvitationId)
 	if err != nil {
@@ -544,27 +544,27 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 	}
 
 	// Check if invite exists
-	currentInvitation, err := GetInvitationByIdAndEmail(db, claims.Email, invitationId)
+	currentInvitation, err := hwdb.Optional(organizationRepo.GetInvitationByIdAndEmail)(ctx, organization_repo.GetInvitationByIdAndEmailParams{
+		ID:    invitationId,
+		Email: claims.Email,
+	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, err.Error())
-		}
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if currentInvitation == nil {
+		return nil, status.Error(codes.InvalidArgument, "record not found")
 	}
 
-	if currentInvitation.State == pb.InvitationState_INVITATION_STATE_ACCEPTED {
+	if currentInvitation.State == int32(pb.InvitationState_INVITATION_STATE_ACCEPTED.Number()) {
 		return &pb.AcceptInvitationResponse{}, nil
-	} else if currentInvitation.State != pb.InvitationState_INVITATION_STATE_PENDING {
+	} else if currentInvitation.State != int32(pb.InvitationState_INVITATION_STATE_PENDING.Number()) {
 		return nil, status.Error(codes.InvalidArgument, "only pending invitations can be accepted")
 	}
 
-	// Update invitation state
-	invitation := models.Invitation{
-		ID: invitationId,
-	}
-
-	if err := db.Model(&invitation).Update("state", pb.InvitationState_INVITATION_STATE_ACCEPTED).Error; err != nil {
+	// Update Invitation State
+	if err := organizationRepo.UpdateInvitationState(ctx, organization_repo.UpdateInvitationStateParams{
+		ID:    invitationId,
+		State: int32(pb.InvitationState_INVITATION_STATE_ACCEPTED.Number()),
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -574,7 +574,7 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 	}
 
 	// Add user to organization
-	if err := AddUserToOrganization(ctx, db, userID, currentInvitation.OrganizationID); err != nil {
+	if err := AddUserToOrganization(ctx, userID, currentInvitation.OrganizationID); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -733,15 +733,14 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 	return &organization, nil
 }
 
-func AddUserToOrganization(ctx context.Context, db *gorm.DB, userId uuid.UUID, organizationId uuid.UUID) error {
+func AddUserToOrganization(ctx context.Context, userId uuid.UUID, organizationId uuid.UUID) error {
 	log := zlog.Ctx(ctx)
+	organizationRepo := organization_repo.New(hwdb.GetDB())
 
-	organization := models.Organization{ID: organizationId}
-	member := models.Membership{
-		UserID: userId,
-	}
-
-	if err := db.Model(&organization).Association("Members").Append(&member); err != nil {
+	if err := organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
+		UserID:         userId,
+		OrganizationID: organizationId,
+	}); err != nil {
 		return err
 	}
 

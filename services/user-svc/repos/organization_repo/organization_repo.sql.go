@@ -111,6 +111,30 @@ func (q *Queries) DoesInvitationExist(ctx context.Context, arg DoesInvitationExi
 	return exists, err
 }
 
+const getInvitationByIdAndEmail = `-- name: GetInvitationByIdAndEmail :one
+SELECT
+	id, email, organization_id, state
+FROM invitations
+WHERE email = $1 AND id = $2
+`
+
+type GetInvitationByIdAndEmailParams struct {
+	Email string
+	ID    uuid.UUID
+}
+
+func (q *Queries) GetInvitationByIdAndEmail(ctx context.Context, arg GetInvitationByIdAndEmailParams) (Invitation, error) {
+	row := q.db.QueryRow(ctx, getInvitationByIdAndEmail, arg.Email, arg.ID)
+	var i Invitation
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.OrganizationID,
+		&i.State,
+	)
+	return i, err
+}
+
 const getInvitationsByOrganization = `-- name: GetInvitationsByOrganization :many
 SELECT id, email, organization_id, state
 	FROM invitations
@@ -471,6 +495,23 @@ type RemoveMemberParams struct {
 
 func (q *Queries) RemoveMember(ctx context.Context, arg RemoveMemberParams) error {
 	_, err := q.db.Exec(ctx, removeMember, arg.UserID, arg.OrganizationID)
+	return err
+}
+
+const updateInvitationState = `-- name: UpdateInvitationState :exec
+UPDATE invitations
+SET
+	state = $1
+WHERE id = $2
+`
+
+type UpdateInvitationStateParams struct {
+	State int32
+	ID    uuid.UUID
+}
+
+func (q *Queries) UpdateInvitationState(ctx context.Context, arg UpdateInvitationStateParams) error {
+	_, err := q.db.Exec(ctx, updateInvitationState, arg.State, arg.ID)
 	return err
 }
 

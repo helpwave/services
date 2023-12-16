@@ -111,3 +111,15 @@ FROM invitations
 	JOIN organizations ON invitations.organization_id = organizations.id
 WHERE email = @email
 	AND state = coalesce(sqlc.narg('state'), state);
+
+-- name: GetInvitationByIdAndEmail :one
+SELECT
+	*
+FROM invitations
+WHERE email = @email AND id = @id;
+
+-- name: UpdateInvitationState :exec
+UPDATE invitations
+SET
+	state = @state
+WHERE id = @id;
