@@ -487,7 +487,7 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 }
 
 func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.GetMembersByOrganizationRequest) (*pb.GetMembersByOrganizationResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	organizationID, err := uuid.Parse(req.Id)
 	if err != nil {
@@ -499,7 +499,10 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	hasAccess, err := IsInOrganization(db, organizationID, userID)
+	hasAccess, err := organizationRepo.IsInOrganizationById(ctx, organization_repo.IsInOrganizationByIdParams{
+		Organizationid: organizationID,
+		Userid:         userID,
+	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -508,25 +511,17 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 		return nil, status.Error(codes.Unauthenticated, "Not a member of this organization")
 	}
 
-	var members []models.Membership
-	if err := db.Where("organization_id = ?", organizationID).Preload("User").Find(&members).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "invalid state")
-		}
-	}
-
+	members, err := organizationRepo.GetMembersByOrganization(ctx, organizationID)
 	if err != nil {
-		return nil, err
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	mappedMembers := hwutil.Map(members, func(member models.Membership) *pb.GetMembersByOrganizationResponse_Member {
+	mappedMembers := hwutil.Map(members, func(member organization_repo.User) *pb.GetMembersByOrganizationResponse_Member {
 		return &pb.GetMembersByOrganizationResponse_Member{
-			UserId:    member.User.ID.String(),
-			AvatarUrl: member.User.Avatar,
-			Email:     member.User.Email,
-			Nickname:  member.User.Nickname,
+			UserId:    member.ID.String(),
+			AvatarUrl: *member.AvatarUrl, // cannot be nil, has default
+			Email:     member.Email,
+			Nickname:  member.Nickname,
 		}
 	})
 
