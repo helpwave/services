@@ -905,6 +905,8 @@ export namespace GetInvitationsByUserResponse {
 
       getAvatarUrl(): string;
       setAvatarUrl(value: string): Organization;
+      hasAvatarUrl(): boolean;
+      clearAvatarUrl(): Organization;
 
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): Organization.AsObject;
@@ -918,7 +920,12 @@ export namespace GetInvitationsByUserResponse {
       export type AsObject = {
         id: string,
         longName: string,
-        avatarUrl: string,
+        avatarUrl?: string,
+      }
+
+      export enum AvatarUrlCase { 
+        _AVATAR_URL_NOT_SET = 0,
+        AVATAR_URL = 3,
       }
     }
 

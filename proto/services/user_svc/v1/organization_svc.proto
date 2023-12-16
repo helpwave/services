@@ -244,7 +244,7 @@ message GetInvitationsByUserResponse {
     message Organization {
       string id = 1;
       string long_name = 2;
-      string avatar_url = 3;
+      optional string avatar_url = 3;
     }
   }
 }

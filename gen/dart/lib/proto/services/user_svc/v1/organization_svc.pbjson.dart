@@ -536,7 +536,10 @@ const GetInvitationsByUserResponse_Invitation_Organization$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'long_name', '3': 2, '4': 1, '5': 9, '10': 'longName'},
-    {'1': 'avatar_url', '3': 3, '4': 1, '5': 9, '10': 'avatarUrl'},
+    {'1': 'avatar_url', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'avatarUrl', '17': true},
+  ],
+  '8': [
+    {'1': '_avatar_url'},
   ],
 };
 
@@ -544,13 +547,13 @@ const GetInvitationsByUserResponse_Invitation_Organization$json = {
 final $typed_data.Uint8List getInvitationsByUserResponseDescriptor = $convert.base64Decode(
     'ChxHZXRJbnZpdGF0aW9uc0J5VXNlclJlc3BvbnNlEmUKC2ludml0YXRpb25zGAEgAygLMkMucH'
     'JvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0SW52aXRhdGlvbnNCeVVzZXJSZXNwb25zZS5J'
-    'bnZpdGF0aW9uUgtpbnZpdGF0aW9ucxrHAgoKSW52aXRhdGlvbhIOCgJpZBgBIAEoCVICaWQSFA'
+    'bnZpdGF0aW9uUgtpbnZpdGF0aW9ucxrbAgoKSW52aXRhdGlvbhIOCgJpZBgBIAEoCVICaWQSFA'
     'oFZW1haWwYAiABKAlSBWVtYWlsEnQKDG9yZ2FuaXphdGlvbhgDIAEoCzJQLnByb3RvLnNlcnZp'
     'Y2VzLnVzZXJfc3ZjLnYxLkdldEludml0YXRpb25zQnlVc2VyUmVzcG9uc2UuSW52aXRhdGlvbi'
     '5Pcmdhbml6YXRpb25SDG9yZ2FuaXphdGlvbhJBCgVzdGF0ZRgEIAEoDjIrLnByb3RvLnNlcnZp'
-    'Y2VzLnVzZXJfc3ZjLnYxLkludml0YXRpb25TdGF0ZVIFc3RhdGUaWgoMT3JnYW5pemF0aW9uEg'
-    '4KAmlkGAEgASgJUgJpZBIbCglsb25nX25hbWUYAiABKAlSCGxvbmdOYW1lEh0KCmF2YXRhcl91'
-    'cmwYAyABKAlSCWF2YXRhclVybA==');
+    'Y2VzLnVzZXJfc3ZjLnYxLkludml0YXRpb25TdGF0ZVIFc3RhdGUabgoMT3JnYW5pemF0aW9uEg'
+    '4KAmlkGAEgASgJUgJpZBIbCglsb25nX25hbWUYAiABKAlSCGxvbmdOYW1lEiIKCmF2YXRhcl91'
+    'cmwYAyABKAlIAFIJYXZhdGFyVXJsiAEBQg0KC19hdmF0YXJfdXJs');
 
 @$core.Deprecated('Use acceptInvitationRequestDescriptor instead')
 const AcceptInvitationRequest$json = {
