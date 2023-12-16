@@ -362,22 +362,21 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	organization, err := hwdb.Optional(organizationRepo.GetOrganizationById)(ctx, organizationId)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
-	} else if organization == nil {
+	}
+	if organization == nil {
 		return nil, status.Error(codes.InvalidArgument, "organization not found")
 	}
 
 	// Check if email is already in organization
-	isInOrganization, err := hwdb.Optional(organizationRepo.IsInOrganizationByEmail)(ctx, organization_repo.IsInOrganizationByEmailParams{
+	isInOrganization, err := organizationRepo.IsInOrganizationByEmail(ctx, organization_repo.IsInOrganizationByEmailParams{
 		OrganizationID: organizationId,
 		Email:          req.Email,
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
-	} else if isInOrganization == nil {
-		return nil, status.Error(codes.InvalidArgument, "organization not found")
 	}
 
-	if isInOrganization != nil {
+	if isInOrganization {
 		return nil, status.Error(codes.InvalidArgument, "cannot invite a user that is already a member")
 	}
 
@@ -385,7 +384,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	doesInvitationExists, err := organizationRepo.DoesInvitationExist(ctx, organization_repo.DoesInvitationExistParams{
 		Email:          req.Email,
 		OrganizationID: organizationId,
-		State:          []pb.InvitationState{pb.InvitationState_INVITATION_STATE_PENDING, pb.InvitationState_INVITATION_STATE_ACCEPTED},
+		State:          []int32{int32(pb.InvitationState_INVITATION_STATE_ACCEPTED.Number()), int32(pb.InvitationState_INVITATION_STATE_PENDING.Number())},
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -393,7 +392,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		invitation, err = organizationRepo.InviteMember(ctx, organization_repo.InviteMemberParams{
 			Email:          req.Email,
 			OrganizationID: organizationId,
-			State:          pb.InvitationState_INVITATION_STATE_PENDING,
+			State:          int32(pb.InvitationState_INVITATION_STATE_PENDING.Number()),
 		})
 		if err != nil {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -403,6 +402,8 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 			Str("email", req.Email). // TODO: Revisited for privacy reasons
 			Str("organizationID", organizationId.String()).
 			Msg("user invited to organization")
+	} else {
+		return nil, status.Error(codes.InvalidArgument, "user already invited")
 	}
 
 	return &pb.InviteMemberResponse{
@@ -411,7 +412,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 }
 
 func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb.GetInvitationsByOrganizationRequest) (*pb.GetInvitationsByOrganizationResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	organizationID, err := uuid.Parse(req.OrganizationId)
 	if err != nil {
@@ -423,37 +424,28 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	hasAccess, err := IsInOrganization(db, organizationID, userID)
+	hasAccess, err := organizationRepo.IsInOrganizationById(ctx, organization_repo.IsInOrganizationByIdParams{
+		Organizationid: organizationID,
+		Userid:         userID,
+	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-
 	if !hasAccess {
 		return nil, status.Error(codes.Unauthenticated, "Not a member of this Organization")
 	}
 
-	var invitations []models.Invitation
-	var invitationsResponse []*pb.GetInvitationsByOrganizationResponse_Invitation
+	invitations, err := organizationRepo.GetInvitationsByOrganizations(ctx, organization_repo.GetInvitationsByOrganizationsParams{
+		OrganizationID: organizationID,
+		State:          (*int32)(req.State),
+	})
 
-	filter := db.Where("organization_id = ?", organizationID)
-	if req.State != nil {
-		filter = filter.Where("state = ?", req.State)
-	}
-
-	if err := filter.Find(&invitations).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "invalid state")
-		}
-	}
-
-	invitationsResponse = hwutil.Map(invitations, func(invitation models.Invitation) *pb.GetInvitationsByOrganizationResponse_Invitation {
+	invitationsResponse := hwutil.Map(invitations, func(invitation organization_repo.Invitation) *pb.GetInvitationsByOrganizationResponse_Invitation {
 		return &pb.GetInvitationsByOrganizationResponse_Invitation{
 			Id:             invitation.ID.String(),
 			Email:          invitation.Email,
 			OrganizationId: invitation.OrganizationID.String(),
-			State:          invitation.State,
+			State:          pb.InvitationState(invitation.State),
 		}
 	})
 

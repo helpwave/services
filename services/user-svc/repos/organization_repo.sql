@@ -55,7 +55,7 @@ DELETE FROM memberships WHERE user_id=$1 AND organization_id=$2;
 
 -- name: InviteMember :one
 INSERT INTO invitations (email, organization_id, state)
-VALUES (@email, @organization_id, @state::pb.InvitationState)
+VALUES (@email, @organization_id, @state)
 RETURNING *;
 
 -- name: GetInvitationsByOrganization :many
@@ -73,17 +73,32 @@ SELECT u.*
 	WHERE m.organization_id = $1;
 
 -- name: IsInOrganizationByEmail :one
-SELECT memberships.*
+SELECT EXISTS(
+	SELECT memberships.*
 	FROM memberships
-	JOIN users ON users.id = memberships.user_id
-WHERE memberships.organization_id = @organization_id
-	AND users.email = @email
-LIMIT 1;
+		JOIN users ON users.id = memberships.user_id
+	WHERE memberships.organization_id = @organization_id
+	  AND users.email = @email
+	LIMIT 1
+);
+
+-- name: IsInOrganizationById :one
+SELECT EXISTS(
+	SELECT 1
+	FROM memberships
+	WHERE user_id = @userID AND organization_id = @organizationID
+);
 
 -- name: DoesInvitationExist :one
 SELECT EXISTS (
 	SELECT 1
-		FROM invitations
+	FROM invitations
 	WHERE (invitations.email = @email AND invitations.organization_id = @organization_id)
-		AND state = ANY(ARRAY[@state::pb.InvitationState])
+		AND state = ANY(ARRAY[@state::int[]])
 );
+
+-- name: GetInvitationsByOrganizations :many
+SELECT *
+FROM invitations
+WHERE organization_id = @organization_id
+	AND state = coalesce(sqlc.narg('state'), state);
