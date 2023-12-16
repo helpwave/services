@@ -582,7 +582,7 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 }
 
 func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInvitationRequest) (*pb.DeclineInvitationResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	invitationId, err := uuid.Parse(req.InvitationId)
 	if err != nil {
@@ -595,27 +595,27 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 	}
 
 	// Check if invite exists
-	currentInvitation, err := GetInvitationByIdAndEmail(db, claims.Email, invitationId)
+	currentInvitation, err := hwdb.Optional(organizationRepo.GetInvitationByIdAndEmail)(ctx, organization_repo.GetInvitationByIdAndEmailParams{
+		ID:    invitationId,
+		Email: claims.Email,
+	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, err.Error())
-		}
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if currentInvitation == nil {
+		return nil, status.Error(codes.InvalidArgument, "record not found")
 	}
 
-	if currentInvitation.State == pb.InvitationState_INVITATION_STATE_REJECTED {
+	if currentInvitation.State == int32(pb.InvitationState_INVITATION_STATE_REJECTED.Number()) {
 		return &pb.DeclineInvitationResponse{}, nil
-	} else if currentInvitation.State != pb.InvitationState_INVITATION_STATE_PENDING {
+	} else if currentInvitation.State != int32(pb.InvitationState_INVITATION_STATE_PENDING.Number()) {
 		return nil, status.Error(codes.InvalidArgument, "only pending invitations can be rejected")
 	}
 
 	// Update invitation state
-	invitation := models.Invitation{
-		ID: invitationId,
-	}
-
-	if err := db.Model(&invitation).Update("state", pb.InvitationState_INVITATION_STATE_REJECTED).Error; err != nil {
+	if err := organizationRepo.UpdateInvitationState(ctx, organization_repo.UpdateInvitationStateParams{
+		ID:    invitationId,
+		State: int32(pb.InvitationState_INVITATION_STATE_REJECTED.Number()),
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
