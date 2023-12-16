@@ -2,22 +2,22 @@ exists with state:
 {
   "invitations": [
     {
-      "id": "dcf6280b-dee6-4a0f-826b-cc506476e1e9",
-      "email": "invitation@mail.de",
-      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
-      "state": "INVITATION_STATE_ACCEPTED"
+      "id": "0bdd571f-54d8-42f6-b449-624cfdead279",
+      "email": "rejector@helpwave.de",
+      "organizationId": "ead68d1d-db6b-4cf0-b316-ac9064c66413",
+      "state": "INVITATION_STATE_PENDING"
     },
     {
-      "id": "d0bd85ee-910a-4578-bbdc-a4346a624a34",
-      "email": "mailer@helpwave.de",
-      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
-      "state": "INVITATION_STATE_ACCEPTED"
+      "id": "1bb75dca-0ec0-485e-85f4-b7a813c89a6b",
+      "email": "revoker@helpwave.de",
+      "organizationId": "ead68d1d-db6b-4cf0-b316-ac9064c66413",
+      "state": "INVITATION_STATE_PENDING"
     },
     {
-      "id": "07c4f3fd-5146-4bda-aece-c02aa0c50fdc",
-      "email": "marvin@helpwave.de",
-      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
-      "state": "INVITATION_STATE_ACCEPTED"
+      "id": "c23a0d63-e4ce-46cd-ae5c-30990d02ebe4",
+      "email": "revoker3@helpwave.de",
+      "organizationId": "ead68d1d-db6b-4cf0-b316-ac9064c66413",
+      "state": "INVITATION_STATE_PENDING"
     }
   ]
 }
@@ -25,28 +25,39 @@ exists without state:
 {
   "invitations": [
     {
-      "id": "dcf6280b-dee6-4a0f-826b-cc506476e1e9",
-      "email": "invitation@mail.de",
-      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
-      "state": "INVITATION_STATE_ACCEPTED"
+      "id": "0bdd571f-54d8-42f6-b449-624cfdead279",
+      "email": "rejector@helpwave.de",
+      "organizationId": "ead68d1d-db6b-4cf0-b316-ac9064c66413",
+      "state": "INVITATION_STATE_PENDING"
     },
     {
-      "id": "d0bd85ee-910a-4578-bbdc-a4346a624a34",
-      "email": "mailer@helpwave.de",
-      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
-      "state": "INVITATION_STATE_ACCEPTED"
+      "id": "3232a80e-181f-462f-ad0d-8db54881afa7",
+      "email": "rejector2@helpwave.de",
+      "organizationId": "ead68d1d-db6b-4cf0-b316-ac9064c66413",
+      "state": "INVITATION_STATE_REVOKED"
     },
     {
-      "id": "07c4f3fd-5146-4bda-aece-c02aa0c50fdc",
-      "email": "marvin@helpwave.de",
-      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
-      "state": "INVITATION_STATE_ACCEPTED"
+      "id": "1bb75dca-0ec0-485e-85f4-b7a813c89a6b",
+      "email": "revoker@helpwave.de",
+      "organizationId": "ead68d1d-db6b-4cf0-b316-ac9064c66413",
+      "state": "INVITATION_STATE_PENDING"
     },
     {
-      "id": "4e857c97-0afc-4e3e-97a6-cc9d346f68aa",
-      "email": "tom.breitband@helpwave.de",
-      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
+      "id": "6acc312b-62ce-4077-ab74-2f6794272b9c",
+      "email": "revoker2@helpwave.de",
+      "organizationId": "ead68d1d-db6b-4cf0-b316-ac9064c66413",
+      "state": "INVITATION_STATE_REJECTED"
+    },
+    {
+      "id": "c23a0d63-e4ce-46cd-ae5c-30990d02ebe4",
+      "email": "revoker3@helpwave.de",
+      "organizationId": "ead68d1d-db6b-4cf0-b316-ac9064c66413",
       "state": "INVITATION_STATE_PENDING"
     }
   ]
 }
+not a member:
+ERROR:
+  Code: Unauthenticated
+  Message: Not a member of this Organization
+
