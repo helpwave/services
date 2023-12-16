@@ -455,46 +455,34 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 }
 
 func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvitationsByUserRequest) (*pb.GetInvitationsByUserResponse, error) {
-	db := hwgorm.GetDB(ctx)
+	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	claims, err := common.GetAuthClaims(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	var invitations []models.Invitation
-	var invitationsResponse []*pb.GetInvitationsByUserResponse_Invitation
+	invitations, err := organizationRepo.GetInvitationsWithOrganizationByUser(ctx, organization_repo.GetInvitationsWithOrganizationByUserParams{
+		Email: claims.Email,
+		State: (*int32)(req.State),
+	})
 
-	filter := db.Where("email = ?", claims.Email)
-	if req.State != nil {
-		filter = filter.Where("state = ?", req.State)
-	}
-
-	if err := filter.Preload("Organization").Find(&invitations).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "invalid state")
-		}
-	}
-
-	invitationsResponse = hwutil.Map(invitations, func(invitation models.Invitation) *pb.GetInvitationsByUserResponse_Invitation {
+	invitationResponse := hwutil.Map(invitations, func(invitation organization_repo.GetInvitationsWithOrganizationByUserRow) *pb.GetInvitationsByUserResponse_Invitation {
 		organization := &pb.GetInvitationsByUserResponse_Invitation_Organization{
 			Id:        invitation.Organization.ID.String(),
 			LongName:  invitation.Organization.LongName,
-			AvatarUrl: invitation.Organization.AvatarUrl,
+			AvatarUrl: invitation.Organization.AvatarUrl, // can be null
 		}
-
 		return &pb.GetInvitationsByUserResponse_Invitation{
 			Id:           invitation.ID.String(),
 			Email:        invitation.Email,
 			Organization: organization,
-			State:        invitation.State,
+			State:        pb.InvitationState(invitation.State),
 		}
 	})
 
 	return &pb.GetInvitationsByUserResponse{
-		Invitations: invitationsResponse,
+		Invitations: invitationResponse,
 	}, nil
 }
 

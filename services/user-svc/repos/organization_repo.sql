@@ -102,3 +102,12 @@ SELECT *
 FROM invitations
 WHERE organization_id = @organization_id
 	AND state = coalesce(sqlc.narg('state'), state);
+
+-- name: GetInvitationsWithOrganizationByUser :many
+SELECT
+	sqlc.embed(organizations),
+	invitations.*
+FROM invitations
+	JOIN organizations ON invitations.organization_id = organizations.id
+WHERE email = @email
+	AND state = coalesce(sqlc.narg('state'), state);

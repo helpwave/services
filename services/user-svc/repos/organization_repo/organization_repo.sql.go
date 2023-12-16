@@ -187,6 +187,61 @@ func (q *Queries) GetInvitationsByOrganizations(ctx context.Context, arg GetInvi
 	return items, nil
 }
 
+const getInvitationsWithOrganizationByUser = `-- name: GetInvitationsWithOrganizationByUser :many
+SELECT
+	organizations.id, organizations.long_name, organizations.short_name, organizations.contact_email, organizations.avatar_url, organizations.is_personal, organizations.created_by_user_id,
+	invitations.id, invitations.email, invitations.organization_id, invitations.state
+FROM invitations
+	JOIN organizations ON invitations.organization_id = organizations.id
+WHERE email = $1
+	AND state = coalesce($2, state)
+`
+
+type GetInvitationsWithOrganizationByUserParams struct {
+	Email string
+	State *int32
+}
+
+type GetInvitationsWithOrganizationByUserRow struct {
+	Organization   Organization
+	ID             uuid.UUID
+	Email          string
+	OrganizationID uuid.UUID
+	State          int32
+}
+
+func (q *Queries) GetInvitationsWithOrganizationByUser(ctx context.Context, arg GetInvitationsWithOrganizationByUserParams) ([]GetInvitationsWithOrganizationByUserRow, error) {
+	rows, err := q.db.Query(ctx, getInvitationsWithOrganizationByUser, arg.Email, arg.State)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetInvitationsWithOrganizationByUserRow{}
+	for rows.Next() {
+		var i GetInvitationsWithOrganizationByUserRow
+		if err := rows.Scan(
+			&i.Organization.ID,
+			&i.Organization.LongName,
+			&i.Organization.ShortName,
+			&i.Organization.ContactEmail,
+			&i.Organization.AvatarUrl,
+			&i.Organization.IsPersonal,
+			&i.Organization.CreatedByUserID,
+			&i.ID,
+			&i.Email,
+			&i.OrganizationID,
+			&i.State,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMembersByOrganization = `-- name: GetMembersByOrganization :many
 SELECT u.id, u.email, u.nickname, u.name, u.avatar_url
 	FROM memberships m
