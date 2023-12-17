@@ -71,7 +71,6 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 	})
 	if ward == nil {
 		return nil, status.Error(codes.InvalidArgument, "id not found")
-
 	} else if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
