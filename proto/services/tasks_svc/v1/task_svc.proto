@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package proto.services.tasks_svc.v1;
+
+option go_package = "gen/proto/services/tasks-svc";
+
+//
+// CreateTask
+//
+
+message CreateTaskRequest {
+  string name = 1; // @gotags: validate:"required"
+}
+
+message CreateTaskResponse {
+  string id = 1;
+}
+
+//
+// GetTask
+//
+
+message GetTaskRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetTaskResponse {
+  string id = 1;
+  string name = 2;
+}
+
+//
+// TaskService
+//
+
+service TaskService {
+  rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse) {}
+  rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
+}

@@ -226,6 +226,10 @@ To arm the versioning, search for "arm-versioning" in the codebase.
 We are currently in the progress of adopting event sourcing for some entities.
 Therefore, event sourcing is entirely optional and behind a feature flag (environment variable: `FEATURE_FLAG_EVENT_SOURCING`).
 
+### Credits where credits due 
+
+- Our CQRS and Event sourcing in Golang is heavily inspired by https://github.com/AleksK1NG/Go-EventSourcing-CQRS
+
 ## Deployment
 
 [See infrastructure/README.md](infrastructure/README.md)
