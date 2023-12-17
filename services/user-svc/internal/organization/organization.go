@@ -6,10 +6,7 @@ import (
 	"gen/proto/libs/events/v1"
 	pb "gen/proto/services/user_svc/v1"
 	"hwdb"
-	"hwgorm"
 	"hwutil"
-	"user-svc/internal/models"
-	"user-svc/internal/repositories"
 	"user-svc/repos/organization_repo"
 
 	daprc "github.com/dapr/go-sdk/client"
@@ -17,7 +14,6 @@ import (
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"gorm.io/gorm"
 )
 
 type InvitationState = string
@@ -435,8 +431,8 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 		return nil, status.Error(codes.Unauthenticated, "Not a member of this Organization")
 	}
 
-	invitations, err := organizationRepo.GetInvitationsByOrganizations(ctx, organization_repo.GetInvitationsByOrganizationsParams{
-		OrganizationID: organizationID,
+	invitations, err := organizationRepo.GetInvitations(ctx, organization_repo.GetInvitationsParams{
+		OrganizationID: uuid.NullUUID{UUID: organizationID, Valid: true},
 		State:          (*int32)(req.State),
 	})
 
@@ -544,16 +540,17 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 	}
 
 	// Check if invite exists
-	currentInvitation, err := hwdb.Optional(organizationRepo.GetInvitationByIdAndEmail)(ctx, organization_repo.GetInvitationByIdAndEmailParams{
-		ID:    invitationId,
-		Email: claims.Email,
+	rows, err := organizationRepo.GetInvitations(ctx, organization_repo.GetInvitationsParams{
+		ID:    uuid.NullUUID{UUID: invitationId, Valid: true},
+		Email: &claims.Email,
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
-	} else if currentInvitation == nil {
+	} else if len(rows) == 0 {
 		return nil, status.Error(codes.InvalidArgument, "record not found")
 	}
 
+	currentInvitation := rows[0]
 	if currentInvitation.State == int32(pb.InvitationState_INVITATION_STATE_ACCEPTED.Number()) {
 		return &pb.AcceptInvitationResponse{}, nil
 	} else if currentInvitation.State != int32(pb.InvitationState_INVITATION_STATE_PENDING.Number()) {
@@ -595,16 +592,17 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 	}
 
 	// Check if invite exists
-	currentInvitation, err := hwdb.Optional(organizationRepo.GetInvitationByIdAndEmail)(ctx, organization_repo.GetInvitationByIdAndEmailParams{
-		ID:    invitationId,
-		Email: claims.Email,
+	rows, err := organizationRepo.GetInvitations(ctx, organization_repo.GetInvitationsParams{
+		ID:    uuid.NullUUID{UUID: invitationId, Valid: true},
+		Email: &claims.Email,
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
-	} else if currentInvitation == nil {
+	} else if len(rows) == 0 {
 		return nil, status.Error(codes.InvalidArgument, "record not found")
 	}
 
+	currentInvitation := rows[0]
 	if currentInvitation.State == int32(pb.InvitationState_INVITATION_STATE_REJECTED.Number()) {
 		return &pb.DeclineInvitationResponse{}, nil
 	} else if currentInvitation.State != int32(pb.InvitationState_INVITATION_STATE_PENDING.Number()) {
@@ -623,9 +621,8 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 }
 
 func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvitationRequest) (*pb.RevokeInvitationResponse, error) {
-	organizationRepo := repositories.OrganizationRepo(ctx)
+	organizationRepo := organization_repo.New(hwdb.GetDB())
 
-	db := hwgorm.GetDB(ctx)
 	log := zlog.Ctx(ctx)
 
 	invitationId, err := uuid.Parse(req.InvitationId)
@@ -633,15 +630,16 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	currentInvitation, err := organizationRepo.GetInvitationById(invitationId)
+	rows, err := organizationRepo.GetInvitations(ctx, organization_repo.GetInvitationsParams{
+		ID: uuid.NullUUID{UUID: invitationId, Valid: true},
+	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, err.Error())
-		}
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if len(rows) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "record not found")
 	}
 
+	currentInvitation := rows[0]
 	organizationID := currentInvitation.OrganizationID
 	inviteeEmail := currentInvitation.Email
 
@@ -650,7 +648,10 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	isAdmin, err := organizationRepo.IsAdminInOrganization(organizationID, userID)
+	isAdmin, err := organizationRepo.IsAdminInOrganization(ctx, organization_repo.IsAdminInOrganizationParams{
+		OrganizationID: organizationID,
+		UserID:         userID,
+	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -659,16 +660,15 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 		return nil, status.Error(codes.PermissionDenied, "only admins can revoke invitations")
 	}
 
-	if currentInvitation.State != pb.InvitationState_INVITATION_STATE_PENDING {
+	if currentInvitation.State != int32(pb.InvitationState_INVITATION_STATE_PENDING.Number()) {
 		return nil, status.Error(codes.InvalidArgument, "only pending invitations can be revoked")
 	}
 
 	// Update invitation state
-	invitation := models.Invitation{
-		ID: invitationId,
-	}
-
-	if err := db.Model(&invitation).Update("state", pb.InvitationState_INVITATION_STATE_REVOKED).Error; err != nil {
+	if err := organizationRepo.UpdateInvitationState(ctx, organization_repo.UpdateInvitationStateParams{
+		ID:    invitationId,
+		State: int32(pb.InvitationState_INVITATION_STATE_REVOKED.Number()),
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -752,32 +752,4 @@ func AddUserToOrganization(ctx context.Context, userId uuid.UUID, organizationId
 	// TODO: Dispatch UserJoinedOrganizationEvent
 
 	return nil
-}
-
-func GetInvitationByIdAndEmail(db *gorm.DB, email string, id uuid.UUID) (*models.Invitation, error) {
-
-	var invitation models.Invitation
-	if err := db.Where("id = ? AND email = ?", id, email).First(&invitation).Error; err != nil {
-		return nil, err
-	}
-
-	return &invitation, nil
-}
-
-func IsInOrganization(db *gorm.DB, organizationID uuid.UUID, userID uuid.UUID) (bool, error) {
-	membership := models.Membership{
-		UserID:         userID,
-		OrganizationID: organizationID,
-	}
-	err := db.Model(&membership).Error
-
-	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return false, status.Error(codes.Internal, err.Error())
-		} else {
-			return false, status.Error(codes.InvalidArgument, "id not found")
-		}
-	}
-
-	return true, nil
 }

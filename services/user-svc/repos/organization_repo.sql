@@ -58,12 +58,14 @@ INSERT INTO invitations (email, organization_id, state)
 VALUES (@email, @organization_id, @state)
 RETURNING *;
 
--- name: GetInvitationsByOrganization :many
+-- name: GetInvitations :many
 SELECT *
 	FROM invitations
 	WHERE (
-		organization_id = $1 AND
-		state = $2 OR $2 IS NULL
+		(organization_id = sqlc.narg('organization_id') OR sqlc.narg('organization_id') IS NULL) AND
+		(state = sqlc.narg('state') OR sqlc.narg('state') IS NULL) AND
+		(id = sqlc.narg('id') OR sqlc.narg('id') IS NULL) AND
+		(email = sqlc.narg('email') OR sqlc.narg('email') IS NULL)
 	);
 
 -- name: GetMembersByOrganization :many
@@ -97,12 +99,6 @@ SELECT EXISTS (
 		AND state = ANY(ARRAY[@state::int[]])
 );
 
--- name: GetInvitationsByOrganizations :many
-SELECT *
-FROM invitations
-WHERE organization_id = @organization_id
-	AND state = coalesce(sqlc.narg('state'), state);
-
 -- name: GetInvitationsWithOrganizationByUser :many
 SELECT
 	sqlc.embed(organizations),
@@ -112,14 +108,15 @@ FROM invitations
 WHERE email = @email
 	AND state = coalesce(sqlc.narg('state'), state);
 
--- name: GetInvitationByIdAndEmail :one
-SELECT
-	*
-FROM invitations
-WHERE email = @email AND id = @id;
-
 -- name: UpdateInvitationState :exec
 UPDATE invitations
 SET
 	state = @state
 WHERE id = @id;
+
+-- name: IsAdminInOrganization :one
+SELECT EXISTS (
+	SELECT 1
+	FROM memberships
+	WHERE user_id = @user_id AND organization_id = @organization_id AND is_admin = TRUE
+);

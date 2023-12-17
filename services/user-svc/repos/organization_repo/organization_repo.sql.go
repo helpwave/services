@@ -111,83 +111,31 @@ func (q *Queries) DoesInvitationExist(ctx context.Context, arg DoesInvitationExi
 	return exists, err
 }
 
-const getInvitationByIdAndEmail = `-- name: GetInvitationByIdAndEmail :one
-SELECT
-	id, email, organization_id, state
-FROM invitations
-WHERE email = $1 AND id = $2
-`
-
-type GetInvitationByIdAndEmailParams struct {
-	Email string
-	ID    uuid.UUID
-}
-
-func (q *Queries) GetInvitationByIdAndEmail(ctx context.Context, arg GetInvitationByIdAndEmailParams) (Invitation, error) {
-	row := q.db.QueryRow(ctx, getInvitationByIdAndEmail, arg.Email, arg.ID)
-	var i Invitation
-	err := row.Scan(
-		&i.ID,
-		&i.Email,
-		&i.OrganizationID,
-		&i.State,
-	)
-	return i, err
-}
-
-const getInvitationsByOrganization = `-- name: GetInvitationsByOrganization :many
+const getInvitations = `-- name: GetInvitations :many
 SELECT id, email, organization_id, state
 	FROM invitations
 	WHERE (
-		organization_id = $1 AND
-		state = $2 OR $2 IS NULL
+		(organization_id = $1 OR $1 IS NULL) AND
+		(state = $2 OR $2 IS NULL) AND
+		(id = $3 OR $3 IS NULL) AND
+		(email = $4 OR $4 IS NULL)
 	)
 `
 
-type GetInvitationsByOrganizationParams struct {
-	OrganizationID uuid.UUID
-	State          int32
-}
-
-func (q *Queries) GetInvitationsByOrganization(ctx context.Context, arg GetInvitationsByOrganizationParams) ([]Invitation, error) {
-	rows, err := q.db.Query(ctx, getInvitationsByOrganization, arg.OrganizationID, arg.State)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []Invitation{}
-	for rows.Next() {
-		var i Invitation
-		if err := rows.Scan(
-			&i.ID,
-			&i.Email,
-			&i.OrganizationID,
-			&i.State,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getInvitationsByOrganizations = `-- name: GetInvitationsByOrganizations :many
-SELECT id, email, organization_id, state
-FROM invitations
-WHERE organization_id = $1
-	AND state = coalesce($2, state)
-`
-
-type GetInvitationsByOrganizationsParams struct {
-	OrganizationID uuid.UUID
+type GetInvitationsParams struct {
+	OrganizationID uuid.NullUUID
 	State          *int32
+	ID             uuid.NullUUID
+	Email          *string
 }
 
-func (q *Queries) GetInvitationsByOrganizations(ctx context.Context, arg GetInvitationsByOrganizationsParams) ([]Invitation, error) {
-	rows, err := q.db.Query(ctx, getInvitationsByOrganizations, arg.OrganizationID, arg.State)
+func (q *Queries) GetInvitations(ctx context.Context, arg GetInvitationsParams) ([]Invitation, error) {
+	rows, err := q.db.Query(ctx, getInvitations,
+		arg.OrganizationID,
+		arg.State,
+		arg.ID,
+		arg.Email,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -439,6 +387,26 @@ func (q *Queries) InviteMember(ctx context.Context, arg InviteMemberParams) (Inv
 		&i.State,
 	)
 	return i, err
+}
+
+const isAdminInOrganization = `-- name: IsAdminInOrganization :one
+SELECT EXISTS (
+	SELECT 1
+	FROM memberships
+	WHERE user_id = $1 AND organization_id = $2 AND is_admin = TRUE
+)
+`
+
+type IsAdminInOrganizationParams struct {
+	UserID         uuid.UUID
+	OrganizationID uuid.UUID
+}
+
+func (q *Queries) IsAdminInOrganization(ctx context.Context, arg IsAdminInOrganizationParams) (bool, error) {
+	row := q.db.QueryRow(ctx, isAdminInOrganization, arg.UserID, arg.OrganizationID)
+	var exists bool
+	err := row.Scan(&exists)
+	return exists, err
 }
 
 const isInOrganizationByEmail = `-- name: IsInOrganizationByEmail :one
