@@ -43,7 +43,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 
 	log.Info().
 		Str("wardID", wardID.String()).
-		Msg("wardID created")
+		Msg("ward created")
 
 	tracking.AddWardToRecentActivity(ctx, wardID.String())
 
