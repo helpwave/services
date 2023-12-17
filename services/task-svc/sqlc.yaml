@@ -1,11 +1,12 @@
 version: "2"
 sql:
-  # maybe we can use yaml anchors here
-  - engine: "postgresql"
+  - &repo
+    engine: "postgresql"
     queries: "./repos/bed_repo.sql"
     schema: "schema.sql"
     gen:
       go:
+        &repo-go
         package: "bed_repo"
         out: "repos/bed_repo"
         sql_package: "pgx/v5"
@@ -18,36 +19,26 @@ sql:
             go_type: "github.com/google/uuid.NullUUID"
             nullable: true
 
-  - engine: "postgresql"
+  - <<: *repo
     queries: "./repos/patient_repo.sql"
-    schema: "schema.sql"
     gen:
       go:
+        <<: *repo-go
         package: "patient_repo"
         out: "repos/patient_repo"
-        sql_package: "pgx/v5"
-        emit_empty_slices: true
-        emit_pointers_for_null_types: true
-        overrides:
-          - db_type: "uuid"
-            go_type: "github.com/google/uuid.UUID"
-          - db_type: "uuid"
-            go_type: "github.com/google/uuid.NullUUID"
-            nullable: true
 
-  - engine: "postgresql"
+  - <<: *repo
     queries: "./repos/room_repo.sql"
-    schema: "schema.sql"
     gen:
       go:
+        <<: *repo-go
         package: "room_repo"
         out: "repos/room_repo"
-        sql_package: "pgx/v5"
-        emit_empty_slices: true
-        emit_pointers_for_null_types: true
-        overrides:
-          - db_type: "uuid"
-            go_type: "github.com/google/uuid.UUID"
-          - db_type: "uuid"
-            go_type: "github.com/google/uuid.NullUUID"
-            nullable: true
+
+  - <<: *repo
+    queries: "./repos/ward_repo.sql"
+    gen:
+      go:
+        <<: *repo-go
+        package: "ward_repo"
+        out: "repos/ward_repo"
