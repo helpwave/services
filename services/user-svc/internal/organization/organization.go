@@ -384,7 +384,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
-	} else if doesInvitationExists == false {
+	} else if !doesInvitationExists {
 		invitation, err = organizationRepo.InviteMember(ctx, organization_repo.InviteMemberParams{
 			Email:          req.Email,
 			OrganizationID: organizationId,
@@ -435,6 +435,9 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 		OrganizationID: uuid.NullUUID{UUID: organizationID, Valid: true},
 		State:          (*int32)(req.State),
 	})
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
 	invitationsResponse := hwutil.Map(invitations, func(invitation organization_repo.Invitation) *pb.GetInvitationsByOrganizationResponse_Invitation {
 		return &pb.GetInvitationsByOrganizationResponse_Invitation{
@@ -462,6 +465,9 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 		Email: claims.Email,
 		State: (*int32)(req.State),
 	})
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
 	invitationResponse := hwutil.Map(invitations, func(invitation organization_repo.GetInvitationsWithOrganizationByUserRow) *pb.GetInvitationsByUserResponse_Invitation {
 		organization := &pb.GetInvitationsByUserResponse_Invitation_Organization{
@@ -688,7 +694,6 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 	if err != nil {
 		return nil, err
 	}
-	defer tx.Rollback(ctx)
 
 	organizationRepo := organization_repo.New(db).WithTx(tx)
 
@@ -726,10 +731,11 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 	if err := common.PublishMessage(ctx, daprClient, "pubsub", "ORGANIZATION_CREATED", organizationCreatedEvent); err != nil {
 		return nil, err
 	}
-
 	// TODO: Dispatch UserJoinedOrganizationEvent
+	if err := tx.Commit(ctx); err != nil {
+		return nil, err
+	}
 
-	tx.Commit(ctx)
 	return &organization, nil
 }
 
