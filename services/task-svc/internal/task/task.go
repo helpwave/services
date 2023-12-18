@@ -100,8 +100,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 }
 
 func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.GetTaskResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
-	patientRepo := patient_repo.New(hwdb.GetDB())
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -110,40 +109,37 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task, err := taskRepo.GetTaskWithSubTasks(id)
+	rows, err := taskRepo.GetTaskWithSubTasksAndPatientName(ctx, id)
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
+	if len(rows) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
+	}
+	task := rows[0].Task
+	patientName := rows[0].PatientName
 
-	// TODO: task.AssignedUserId.UUID.String() should handle the translation to "", seems not to work.
-	assignedUserId := task.AssignedUserId.UUID.String()
-	if !task.AssignedUserId.Valid {
+	// TODO: replace with optional response field
+	assignedUserId := task.AssignedUserID.UUID.String()
+	if !task.AssignedUserID.Valid {
 		assignedUserId = ""
 	}
 
-	var subtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTaskResponse_SubTask {
-		return &pb.GetTaskResponse_SubTask{
-			Id:        subtask.ID.String(),
-			Done:      subtask.Done,
-			Name:      subtask.Name,
-			CreatedBy: subtask.CreatedBy.String(),
+	subtasks := hwutil.FlatMap(rows, func(row task_repo.GetTaskWithSubTasksAndPatientNameRow) **pb.GetTaskResponse_SubTask {
+		if !row.SubtaskID.Valid {
+			return nil
 		}
+		val := &pb.GetTaskResponse_SubTask{
+			Id:        row.SubtaskID.UUID.String(),
+			Done:      *row.SubtaskDone,
+			Name:      *row.SubtaskName,
+			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
+		}
+		return &val
 	})
 
-	patientName, err := patientRepo.GetPatientHumanReadableIdentifier(ctx, task.PatientId)
-	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
-	}
-	patientResponse := &pb.GetTaskResponse_Patient{
-		Id:   task.PatientId.String(),
+	patient := &pb.GetTaskResponse_Patient{
+		Id:   task.PatientID.String(),
 		Name: patientName,
 	}
 
@@ -151,12 +147,12 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		Id:             task.ID.String(),
 		Name:           task.Name,
 		Description:    task.Description,
-		Status:         task.Status,
+		Status:         pb.TaskStatus(task.Status),
 		AssignedUserId: assignedUserId,
-		Patient:        patientResponse,
+		Patient:        patient,
 		Subtasks:       subtasks,
 		Public:         task.Public,
-		DueAt:          timestamppb.New(task.DueAt),
+		DueAt:          timestamppb.New(task.DueAt.Time),
 		CreatedBy:      task.CreatedBy.String(),
 		OrganizationId: task.OrganizationID.String(),
 	}, nil

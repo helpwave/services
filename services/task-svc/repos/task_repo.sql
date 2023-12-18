@@ -10,6 +10,20 @@ INSERT INTO subtasks
 VALUES ($1, $2, $3, $4)
 RETURNING id;
 
+-- name: GetTaskWithSubTasksAndPatientName :many
+SELECT
+	sqlc.embed(tasks),
+	subtasks.id as subtask_id,
+	subtasks.done as subtask_done,
+	subtasks.name as subtask_name,
+	subtasks.created_by as subtask_created_by,
+	patients.human_readable_identifier as patient_name
+FROM tasks
+JOIN patients ON patients.id = tasks.patient_id
+LEFT JOIN subtasks ON subtasks.task_id = tasks.id
+WHERE tasks.id = $1
+ORDER BY subtasks.creation_date ASC;
+
 -- name: UpdateTask :exec
 UPDATE tasks
 SET	name = coalesce(sqlc.narg('name'), name),

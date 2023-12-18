@@ -111,6 +111,66 @@ func (q *Queries) ExistsTask(ctx context.Context, arg ExistsTaskParams) (bool, e
 	return task_exists, err
 }
 
+const getTaskWithSubTasksAndPatientName = `-- name: GetTaskWithSubTasksAndPatientName :many
+SELECT
+	tasks.id, tasks.name, tasks.description, tasks.status, tasks.assigned_user_id, tasks.patient_id, tasks.public, tasks.organization_id, tasks.created_by, tasks.due_at,
+	subtasks.id as subtask_id,
+	subtasks.done as subtask_done,
+	subtasks.name as subtask_name,
+	subtasks.created_by as subtask_created_by,
+	patients.human_readable_identifier as patient_name
+FROM tasks
+JOIN patients ON patients.id = tasks.patient_id
+LEFT JOIN subtasks ON subtasks.task_id = tasks.id
+WHERE tasks.id = $1
+ORDER BY subtasks.creation_date ASC
+`
+
+type GetTaskWithSubTasksAndPatientNameRow struct {
+	Task             Task
+	SubtaskID        uuid.NullUUID
+	SubtaskDone      *bool
+	SubtaskName      *string
+	SubtaskCreatedBy uuid.NullUUID
+	PatientName      string
+}
+
+func (q *Queries) GetTaskWithSubTasksAndPatientName(ctx context.Context, id uuid.UUID) ([]GetTaskWithSubTasksAndPatientNameRow, error) {
+	rows, err := q.db.Query(ctx, getTaskWithSubTasksAndPatientName, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetTaskWithSubTasksAndPatientNameRow{}
+	for rows.Next() {
+		var i GetTaskWithSubTasksAndPatientNameRow
+		if err := rows.Scan(
+			&i.Task.ID,
+			&i.Task.Name,
+			&i.Task.Description,
+			&i.Task.Status,
+			&i.Task.AssignedUserID,
+			&i.Task.PatientID,
+			&i.Task.Public,
+			&i.Task.OrganizationID,
+			&i.Task.CreatedBy,
+			&i.Task.DueAt,
+			&i.SubtaskID,
+			&i.SubtaskDone,
+			&i.SubtaskName,
+			&i.SubtaskCreatedBy,
+			&i.PatientName,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateSubTask = `-- name: UpdateSubTask :exec
 UPDATE subtasks
 SET	name = coalesce($1, name),

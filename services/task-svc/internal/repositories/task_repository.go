@@ -20,20 +20,6 @@ func TaskRepo(ctx context.Context) TaskRepository {
 	}
 }
 
-func (r *TaskRepository) GetTaskWithSubTasks(taskID uuid.UUID) (*models.Task, error) {
-	task := &models.Task{ID: taskID}
-	query := r.db.
-		Preload("Subtasks", func(db *gorm.DB) *gorm.DB {
-			return db.Order("creation_date ASC")
-		}).
-		First(task)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return task, nil
-}
-
 func (r *TaskRepository) GetTasksWithSubTasksByPatient(patientId uuid.UUID) ([]models.Task, error) {
 	var tasks []models.Task
 
