@@ -22,6 +22,13 @@ export class TaskServiceClient {
                response: proto_services_tasks_svc_v1_task_svc_pb.GetTaskResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.GetTaskResponse>;
 
+  assignTask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.AssignTaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_tasks_svc_v1_task_svc_pb.AssignTaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.AssignTaskResponse>;
+
 }
 
 export class TaskServicePromiseClient {
@@ -38,6 +45,11 @@ export class TaskServicePromiseClient {
     request: proto_services_tasks_svc_v1_task_svc_pb.GetTaskRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_tasks_svc_v1_task_svc_pb.GetTaskResponse>;
+
+  assignTask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.AssignTaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_tasks_svc_v1_task_svc_pb.AssignTaskResponse>;
 
 }
 

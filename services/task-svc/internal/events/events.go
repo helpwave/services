@@ -108,7 +108,7 @@ func DispatchBedCreatedEvent(ctx context.Context, bedId uuid.UUID, bedName strin
 	if err != nil {
 		log.Error().
 			Err(err).
-			Str("event", event.Type).
+			Str("event", event.EventType).
 			Msg("could not dispatch event")
 	}
 	return err
@@ -129,7 +129,7 @@ func DispatchBedUpdatedEvent(ctx context.Context, bedId uuid.UUID, bedName strin
 	if err != nil {
 		log.Error().
 			Err(err).
-			Str("event", event.Type).
+			Str("event", event.EventType).
 			Msg("could not dispatch event")
 	}
 	return err
@@ -150,7 +150,7 @@ func DispatchBedMovedToAnotherRoomEvent(ctx context.Context, bedId uuid.UUID, ro
 	if err != nil {
 		log.Error().
 			Err(err).
-			Str("event", event.Type).
+			Str("event", event.EventType).
 			Msg("could not dispatch event")
 	}
 	return err
@@ -188,7 +188,7 @@ func DispatchTaskAssignedEvent(ctx context.Context, taskId, userId uuid.UUID) er
 	if err != nil {
 		log.Error().
 			Err(err).
-			Str("event", event.Type).
+			Str("event", event.EventType).
 			Msg("could not dispatch event")
 	}
 	return err
@@ -209,7 +209,7 @@ func DispatchTaskSelfAssignedEvent(ctx context.Context, taskId, userId uuid.UUID
 	if err != nil {
 		log.Error().
 			Err(err).
-			Str("event", event.Type).
+			Str("event", event.EventType).
 			Msg("could not dispatch event")
 	}
 	return err

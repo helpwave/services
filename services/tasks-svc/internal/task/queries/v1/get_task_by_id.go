@@ -3,6 +3,8 @@ package v1
 import (
 	"context"
 	"github.com/google/uuid"
+	"hwes"
+	"tasks-svc/internal/task/aggregate"
 	"tasks-svc/internal/task/models"
 )
 
@@ -18,15 +20,23 @@ type GetTaskByIDQueryHandler interface {
 	Handle(ctx context.Context, query *GetTaskByIDQuery) (*models.Task, error)
 }
 
-type getTaskByIDQueryHandler struct{}
+type getTaskByIDQueryHandler struct {
+	as hwes.AggregateStore
+}
 
-func NewGetTaskByIDQueryHandler() *getTaskByIDQueryHandler {
-	return &getTaskByIDQueryHandler{}
+func NewGetTaskByIDQueryHandler(as hwes.AggregateStore) *getTaskByIDQueryHandler {
+	return &getTaskByIDQueryHandler{as: as}
 }
 
 func (q *getTaskByIDQueryHandler) Handle(ctx context.Context, query *GetTaskByIDQuery) (*models.Task, error) {
+	task, err := aggregate.LoadTaskAggregate(ctx, q.as, query.ID)
+	if err != nil {
+		return nil, err
+	}
+
 	return &models.Task{
-		ID:   uuid.New(),
-		Name: "Test",
+		ID:            task.Task.ID,
+		Name:          task.Task.Name,
+		AssignedUsers: task.Task.AssignedUsers,
 	}, nil
 }

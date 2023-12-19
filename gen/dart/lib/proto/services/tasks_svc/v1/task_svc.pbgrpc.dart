@@ -29,6 +29,10 @@ class TaskServiceClient extends $grpc.Client {
       '/proto.services.tasks_svc.v1.TaskService/GetTask',
       ($9.GetTaskRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $9.GetTaskResponse.fromBuffer(value));
+  static final _$assignTask = $grpc.ClientMethod<$9.AssignTaskRequest, $9.AssignTaskResponse>(
+      '/proto.services.tasks_svc.v1.TaskService/AssignTask',
+      ($9.AssignTaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $9.AssignTaskResponse.fromBuffer(value));
 
   TaskServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -42,6 +46,10 @@ class TaskServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$9.GetTaskResponse> getTask($9.GetTaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getTask, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$9.AssignTaskResponse> assignTask($9.AssignTaskRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$assignTask, request, options: options);
   }
 }
 
@@ -64,6 +72,13 @@ abstract class TaskServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $9.GetTaskRequest.fromBuffer(value),
         ($9.GetTaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$9.AssignTaskRequest, $9.AssignTaskResponse>(
+        'AssignTask',
+        assignTask_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $9.AssignTaskRequest.fromBuffer(value),
+        ($9.AssignTaskResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$9.CreateTaskResponse> createTask_Pre($grpc.ServiceCall call, $async.Future<$9.CreateTaskRequest> request) async {
@@ -74,6 +89,11 @@ abstract class TaskServiceBase extends $grpc.Service {
     return getTask(call, await request);
   }
 
+  $async.Future<$9.AssignTaskResponse> assignTask_Pre($grpc.ServiceCall call, $async.Future<$9.AssignTaskRequest> request) async {
+    return assignTask(call, await request);
+  }
+
   $async.Future<$9.CreateTaskResponse> createTask($grpc.ServiceCall call, $9.CreateTaskRequest request);
   $async.Future<$9.GetTaskResponse> getTask($grpc.ServiceCall call, $9.GetTaskRequest request);
+  $async.Future<$9.AssignTaskResponse> assignTask($grpc.ServiceCall call, $9.AssignTaskRequest request);
 }

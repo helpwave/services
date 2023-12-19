@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
+	"hwutil"
 	v1commands "tasks-svc/internal/task/commands/v1"
 	v1queries "tasks-svc/internal/task/queries/v1"
 	"tasks-svc/internal/task/service"
@@ -31,6 +32,25 @@ func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequ
 	}, nil
 }
 
+func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequest) (*pb.AssignTaskResponse, error) {
+	taskID, err := uuid.Parse(req.TaskId)
+	if err != nil {
+		return nil, err
+	}
+
+	userID, err := uuid.Parse(req.UserId)
+	if err != nil {
+		return nil, err
+	}
+
+	command := v1commands.NewAssignTaskCommand(taskID, userID)
+	if err := s.service.Commands.AssignTask.Handle(ctx, command); err != nil {
+		return nil, err
+	}
+
+	return &pb.AssignTaskResponse{}, nil
+}
+
 func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.GetTaskResponse, error) {
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
@@ -46,5 +66,8 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 	return &pb.GetTaskResponse{
 		Id:   task.ID.String(),
 		Name: task.Name,
+		AssignedUsers: hwutil.Map(task.AssignedUsers, func(userID uuid.UUID) string {
+			return userID.String()
+		}),
 	}, nil
 }

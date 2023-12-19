@@ -4,6 +4,15 @@ package proto.services.tasks_svc.v1;
 
 option go_package = "gen/proto/services/tasks-svc";
 
+import "google/protobuf/empty.proto";
+
+enum TaskStatus {
+  TASK_STATUS_UNSPECIFIED = 0;
+  TASK_STATUS_TODO = 1;
+  TASK_STATUS_IN_PROGRESS = 2;
+  TASK_STATUS_DONE = 3;
+}
+
 //
 // CreateTask
 //
@@ -27,7 +36,19 @@ message GetTaskRequest {
 message GetTaskResponse {
   string id = 1;
   string name = 2;
+  repeated string assigned_users = 3;
 }
+
+//
+// AssignTask
+//
+
+message AssignTaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  string user_id = 2; // @gotags: validate:"uuid4"
+}
+
+message AssignTaskResponse {}
 
 //
 // TaskService
@@ -36,4 +57,5 @@ message GetTaskResponse {
 service TaskService {
   rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse) {}
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
+  rpc AssignTask(AssignTaskRequest) returns (AssignTaskResponse) {}
 }

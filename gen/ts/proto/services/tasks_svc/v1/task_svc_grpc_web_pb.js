@@ -19,6 +19,8 @@
 const grpc = {};
 grpc.web = require('grpc-web');
 
+
+var google_protobuf_empty_pb = require('google-protobuf/google/protobuf/empty_pb.js')
 const proto = {};
 proto.proto = {};
 proto.proto.services = {};
@@ -196,6 +198,67 @@ proto.proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.getTask =
       request,
       metadata || {},
       methodDescriptor_TaskService_GetTask);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.AssignTaskRequest,
+ *   !proto.proto.services.tasks_svc.v1.AssignTaskResponse>}
+ */
+const methodDescriptor_TaskService_AssignTask = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.TaskService/AssignTask',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.AssignTaskRequest,
+  proto.proto.services.tasks_svc.v1.AssignTaskResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.AssignTaskRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.AssignTaskResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.AssignTaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.AssignTaskResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.AssignTaskResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.TaskServiceClient.prototype.assignTask =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.TaskService/AssignTask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_AssignTask,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.AssignTaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.AssignTaskResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.assignTask =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.TaskService/AssignTask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_AssignTask);
 };
 
 

@@ -1,5 +1,6 @@
 import * as jspb from 'google-protobuf'
 
+import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb'; // proto import: "google/protobuf/empty.proto"
 
 
 export class CreateTaskRequest extends jspb.Message {
@@ -63,6 +64,11 @@ export class GetTaskResponse extends jspb.Message {
   getName(): string;
   setName(value: string): GetTaskResponse;
 
+  getAssignedUsersList(): Array<string>;
+  setAssignedUsersList(value: Array<string>): GetTaskResponse;
+  clearAssignedUsersList(): GetTaskResponse;
+  addAssignedUsers(value: string, index?: number): GetTaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetTaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetTaskResponse): GetTaskResponse.AsObject;
@@ -75,6 +81,49 @@ export namespace GetTaskResponse {
   export type AsObject = {
     id: string,
     name: string,
+    assignedUsersList: Array<string>,
   }
 }
 
+export class AssignTaskRequest extends jspb.Message {
+  getTaskId(): string;
+  setTaskId(value: string): AssignTaskRequest;
+
+  getUserId(): string;
+  setUserId(value: string): AssignTaskRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AssignTaskRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: AssignTaskRequest): AssignTaskRequest.AsObject;
+  static serializeBinaryToWriter(message: AssignTaskRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AssignTaskRequest;
+  static deserializeBinaryFromReader(message: AssignTaskRequest, reader: jspb.BinaryReader): AssignTaskRequest;
+}
+
+export namespace AssignTaskRequest {
+  export type AsObject = {
+    taskId: string,
+    userId: string,
+  }
+}
+
+export class AssignTaskResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AssignTaskResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: AssignTaskResponse): AssignTaskResponse.AsObject;
+  static serializeBinaryToWriter(message: AssignTaskResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AssignTaskResponse;
+  static deserializeBinaryFromReader(message: AssignTaskResponse, reader: jspb.BinaryReader): AssignTaskResponse;
+}
+
+export namespace AssignTaskResponse {
+  export type AsObject = {
+  }
+}
+
+export enum TaskStatus { 
+  TASK_STATUS_UNSPECIFIED = 0,
+  TASK_STATUS_TODO = 1,
+  TASK_STATUS_IN_PROGRESS = 2,
+  TASK_STATUS_DONE = 3,
+}
