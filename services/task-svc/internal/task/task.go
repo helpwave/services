@@ -159,7 +159,7 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 }
 
 func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPatientRequest) (*pb.GetTasksByPatientResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -173,40 +173,48 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	tasks, err := taskRepo.GetTasksWithSubTasksByPatientForOrganization(patientID, organizationID)
+	rows, err := taskRepo.GetTasksWithSubTasksByPatient(ctx, task_repo.GetTasksWithSubTasksByPatientParams{
+		PatientID:      patientID,
+		OrganizationID: organizationID,
+	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, err
 	}
 
-	var mappedTasks = hwutil.Map(tasks, func(task models.Task) *pb.GetTasksByPatientResponse_Task {
-		var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTasksByPatientResponse_Task_SubTask {
-			return &pb.GetTasksByPatientResponse_Task_SubTask{
-				Id:        subtask.ID.String(),
-				Done:      subtask.Done,
-				Name:      subtask.Name,
-				CreatedBy: subtask.CreatedBy.String(),
+	tasks := make([]*pb.GetTasksByPatientResponse_Task, 0)
+	taskMap := make(map[uuid.UUID]int)
+
+	for _, row := range rows {
+		var task *pb.GetTasksByPatientResponse_Task
+		if ix, exists := taskMap[row.Task.ID]; exists {
+			task = tasks[ix]
+		} else {
+			task := &pb.GetTasksByPatientResponse_Task{
+				Id:             row.Task.ID.String(),
+				Name:           row.Task.Name,
+				Description:    row.Task.Description,
+				Status:         pb.TaskStatus(row.Task.Status),
+				AssignedUserId: hwutil.NullUUIDToStringPtr(row.Task.AssignedUserID),
+				PatientId:      row.Task.PatientID.String(),
+				Public:         row.Task.Public,
+				Subtasks:       make([]*pb.GetTasksByPatientResponse_Task_SubTask, 0),
 			}
-		})
-		return &pb.GetTasksByPatientResponse_Task{
-			Id:             task.ID.String(),
-			Name:           task.Name,
-			Description:    task.Description,
-			Status:         task.Status,
-			AssignedUserId: task.AssignedUserId.UUID.String(),
-			PatientId:      task.PatientId.String(),
-			Subtasks:       mappedSubtasks,
-			Public:         task.Public,
-			DueAt:          timestamppb.New(task.DueAt),
-			CreatedBy:      task.CreatedBy.String(),
+			tasks = append(tasks, task)
+			taskMap[row.Task.ID] = len(tasks) - 1
 		}
-	})
+
+		if !row.SubtaskID.Valid {
+			continue
+		}
+		task.Subtasks = append(task.Subtasks, &pb.GetTasksByPatientResponse_Task_SubTask{
+			Id:   row.SubtaskID.UUID.String(),
+			Name: *row.SubtaskName,
+			Done: *row.SubtaskDone,
+		})
+	}
 
 	return &pb.GetTasksByPatientResponse{
-		Tasks: mappedTasks,
+		Tasks: tasks,
 	}, nil
 }
 
