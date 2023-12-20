@@ -3,8 +3,6 @@ package repositories
 import (
 	"context"
 	"github.com/google/uuid"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
 	"hwgorm"
 	"task-svc/internal/models"
@@ -20,20 +18,6 @@ func TaskRepo(ctx context.Context) TaskRepository {
 	}
 }
 
-func (r *TaskRepository) GetTasksWithSubTasksByPatient(patientId uuid.UUID) ([]models.Task, error) {
-	var tasks []models.Task
-
-	query := r.db.
-		Preload("Subtasks").
-		Where("patient_id = ?", patientId).
-		Find(&tasks)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return tasks, nil
-}
-
 func (r *TaskRepository) GetTasksWithSubTasksByPatientForOrganization(patientID, organizationID uuid.UUID) ([]models.Task, error) {
 	var tasks []models.Task
 	query := r.db.
@@ -45,24 +29,4 @@ func (r *TaskRepository) GetTasksWithSubTasksByPatientForOrganization(patientID,
 		return nil, err
 	}
 	return tasks, nil
-}
-
-// GetPatientsWithTasksByAssignee
-func (r *TaskRepository) GetPatientsWithTasksByAssignee(ctx context.Context, assigneeID uuid.UUID) ([]models.Patient, error) {
-	db := hwgorm.GetDB(ctx)
-	var patients []models.Patient
-	if err := db.
-		Table("patients").
-		Group("patients.id").
-		Joins("JOIN tasks ON patients.id = tasks.patient_id").
-		Where("tasks.assigned_user_id = ?", assigneeID).
-		Preload("Tasks").
-		Find(&patients).Error; err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
-	}
-	return patients, nil
 }

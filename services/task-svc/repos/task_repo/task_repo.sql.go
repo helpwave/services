@@ -233,6 +233,68 @@ func (q *Queries) GetTasksWithPatientsByAssignee(ctx context.Context, assignedUs
 	return items, nil
 }
 
+const getTasksWithSubTasksByPatient = `-- name: GetTasksWithSubTasksByPatient :many
+SELECT
+	tasks.id, tasks.name, tasks.description, tasks.status, tasks.assigned_user_id, tasks.patient_id, tasks.public, tasks.organization_id, tasks.created_by, tasks.due_at,
+	subtasks.id as subtask_id,
+	subtasks.name as subtask_name,
+	subtasks.done as subtask_done,
+	subtasks.created_by as subtask_created_by
+FROM tasks
+JOIN patients ON patients.id = tasks.patient_id
+LEFT JOIN subtasks ON subtasks.task_id = tasks.id
+WHERE tasks.patient_id = $1
+AND tasks.organization_id = $2
+`
+
+type GetTasksWithSubTasksByPatientParams struct {
+	PatientID      uuid.UUID
+	OrganizationID uuid.UUID
+}
+
+type GetTasksWithSubTasksByPatientRow struct {
+	Task             Task
+	SubtaskID        uuid.NullUUID
+	SubtaskName      *string
+	SubtaskDone      *bool
+	SubtaskCreatedBy uuid.NullUUID
+}
+
+func (q *Queries) GetTasksWithSubTasksByPatient(ctx context.Context, arg GetTasksWithSubTasksByPatientParams) ([]GetTasksWithSubTasksByPatientRow, error) {
+	rows, err := q.db.Query(ctx, getTasksWithSubTasksByPatient, arg.PatientID, arg.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetTasksWithSubTasksByPatientRow{}
+	for rows.Next() {
+		var i GetTasksWithSubTasksByPatientRow
+		if err := rows.Scan(
+			&i.Task.ID,
+			&i.Task.Name,
+			&i.Task.Description,
+			&i.Task.Status,
+			&i.Task.AssignedUserID,
+			&i.Task.PatientID,
+			&i.Task.Public,
+			&i.Task.OrganizationID,
+			&i.Task.CreatedBy,
+			&i.Task.DueAt,
+			&i.SubtaskID,
+			&i.SubtaskName,
+			&i.SubtaskDone,
+			&i.SubtaskCreatedBy,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateSubTask = `-- name: UpdateSubTask :exec
 UPDATE subtasks
 SET	name = coalesce($1, name),

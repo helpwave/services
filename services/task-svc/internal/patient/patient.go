@@ -7,12 +7,11 @@ import (
 	"hwdb"
 	"hwgorm"
 	"hwutil"
-	"task-svc/internal/models"
-	"task-svc/internal/repositories"
 	"task-svc/internal/tracking"
 	"task-svc/repos/bed_repo"
 	"task-svc/repos/patient_repo"
 	"task-svc/repos/room_repo"
+	"task-svc/repos/task_repo"
 
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -436,16 +435,21 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 
 func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDetailsRequest) (*pb.GetPatientDetailsResponse, error) {
 	patientRepo := patient_repo.New(hwdb.GetDB())
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
-	patientId, err := uuid.Parse(req.Id)
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	patientID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patientRes, err := hwdb.Optional(patientRepo.GetPatientWithBedAndRoom)(ctx, patientId)
+	patientRes, err := hwdb.Optional(patientRepo.GetPatientWithBedAndRoom)(ctx, patientID)
 	if patientRes == nil {
 		return nil, status.Error(codes.InvalidArgument, "patient not found")
 	}
@@ -453,33 +457,48 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	tasks, err := taskRepo.GetTasksWithSubTasksByPatient(patientId)
+	taskRows, err := taskRepo.GetTasksWithSubTasksByPatient(ctx, task_repo.GetTasksWithSubTasksByPatientParams{
+		PatientID:      patientID,
+		OrganizationID: organizationID,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	var mappedTasks = hwutil.Map(tasks, func(task models.Task) *pb.GetPatientDetailsResponse_Task {
-		var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetPatientDetailsResponse_Task_SubTask {
-			return &pb.GetPatientDetailsResponse_Task_SubTask{
-				Id:   subtask.ID.String(),
-				Done: subtask.Done,
-				Name: subtask.Name,
+	tasks := make([]*pb.GetPatientDetailsResponse_Task, 0)
+	taskMap := make(map[uuid.UUID]int)
+
+	for _, row := range taskRows {
+		var task *pb.GetPatientDetailsResponse_Task
+		if ix, exists := taskMap[row.Task.ID]; exists {
+			task = tasks[ix]
+		} else {
+			task := &pb.GetPatientDetailsResponse_Task{
+				Id:             row.Task.ID.String(),
+				Name:           row.Task.Name,
+				Description:    row.Task.Description,
+				Status:         pb.GetPatientDetailsResponse_TaskStatus(row.Task.Status),
+				AssignedUserId: hwutil.NullUUIDToStringPtr(row.Task.AssignedUserID),
+				PatientId:      row.Task.PatientID.String(),
+				Public:         row.Task.Public,
+				Subtasks:       make([]*pb.GetPatientDetailsResponse_Task_SubTask, 0),
 			}
-		})
-		return &pb.GetPatientDetailsResponse_Task{
-			Id:             task.ID.String(),
-			Name:           task.Name,
-			Description:    task.Description,
-			Status:         pb.GetPatientDetailsResponse_TaskStatus(task.Status),
-			AssignedUserId: task.AssignedUserId.UUID.String(),
-			PatientId:      task.PatientId.String(),
-			Subtasks:       mappedSubtasks,
-			Public:         task.Public,
+			tasks = append(tasks, task)
+			taskMap[row.Task.ID] = len(tasks) - 1
 		}
-	})
+
+		if !row.SubtaskID.Valid {
+			continue
+		}
+		task.Subtasks = append(task.Subtasks, &pb.GetPatientDetailsResponse_Task_SubTask{
+			Id:   row.SubtaskID.UUID.String(),
+			Name: *row.SubtaskName,
+			Done: *row.SubtaskDone,
+		})
+	}
 
 	// TODO: check if tracking here makes sense or too much spam
-	tracking.AddPatientToRecentActivity(ctx, patientId.String())
+	tracking.AddPatientToRecentActivity(ctx, patientID.String())
 
 	return &pb.GetPatientDetailsResponse{
 		Id:                      patientRes.ID.String(),
