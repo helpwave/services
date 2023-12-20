@@ -23,6 +23,15 @@ services:
     ports:
       - "5433:80"
 
+  eventstore:
+    image: eventstore/eventstore:lts
+    restart: unless-stopped
+    environment:
+      EVENTSTORE_TELEMETRY_OPTOUT: true
+    ports:
+      - "2113:2113"
+    command: --insecure --run-projections=All --enable-atom-pub-over-http
+
   redis:
     image: redis:6
     profiles:
