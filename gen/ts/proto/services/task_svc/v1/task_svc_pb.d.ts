@@ -407,6 +407,8 @@ export namespace GetTasksByPatientSortedByStatusResponse {
 
     getAssignedUserId(): string;
     setAssignedUserId(value: string): Task;
+    hasAssignedUserId(): boolean;
+    clearAssignedUserId(): Task;
 
     getPatientId(): string;
     setPatientId(value: string): Task;
@@ -440,7 +442,7 @@ export namespace GetTasksByPatientSortedByStatusResponse {
       id: string,
       name: string,
       description: string,
-      assignedUserId: string,
+      assignedUserId?: string,
       patientId: string,
       pb_public: boolean,
       dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
@@ -478,6 +480,11 @@ export namespace GetTasksByPatientSortedByStatusResponse {
       }
     }
 
+
+    export enum AssignedUserIdCase { 
+      _ASSIGNED_USER_ID_NOT_SET = 0,
+      ASSIGNED_USER_ID = 5,
+    }
   }
 
 }

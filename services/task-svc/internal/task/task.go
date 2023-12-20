@@ -10,10 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwdb"
-	"hwgorm"
 	"hwutil"
-	"task-svc/internal/models"
-	"task-svc/internal/repositories"
 	"task-svc/repos/patient_repo"
 	"task-svc/repos/task_repo"
 )
@@ -189,7 +186,7 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 		if ix, exists := taskMap[row.Task.ID]; exists {
 			task = tasks[ix]
 		} else {
-			task := &pb.GetTasksByPatientResponse_Task{
+			task = &pb.GetTasksByPatientResponse_Task{
 				Id:             row.Task.ID.String(),
 				Name:           row.Task.Name,
 				Description:    row.Task.Description,
@@ -219,7 +216,7 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 }
 
 func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *pb.GetTasksByPatientSortedByStatusRequest) (*pb.GetTasksByPatientSortedByStatusResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -233,49 +230,72 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	tasks, err := taskRepo.GetTasksWithSubTasksByPatientForOrganization(patientID, organizationID)
+	rows, err := taskRepo.GetTasksWithSubTasksByPatient(ctx, task_repo.GetTasksWithSubTasksByPatientParams{
+		PatientID:      patientID,
+		OrganizationID: organizationID,
+	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	var mappingFunction = func(tasks []models.Task) []*pb.GetTasksByPatientSortedByStatusResponse_Task {
-		return hwutil.Map(tasks, func(task models.Task) *pb.GetTasksByPatientSortedByStatusResponse_Task {
-			var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask {
-				return &pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask{
-					Id:        subtask.ID.String(),
-					Done:      subtask.Done,
-					Name:      subtask.Name,
-					CreatedBy: subtask.CreatedBy.String(),
-				}
-			})
-			return &pb.GetTasksByPatientSortedByStatusResponse_Task{
-				Id:             task.ID.String(),
-				Name:           task.Name,
-				Description:    task.Description,
-				AssignedUserId: task.AssignedUserId.UUID.String(),
-				PatientId:      task.PatientId.String(),
-				Subtasks:       mappedSubtasks,
-				Public:         task.Public,
-				DueAt:          timestamppb.New(task.DueAt),
-				CreatedBy:      task.CreatedBy.String(),
+	tasks := make([]*pb.GetTasksByPatientSortedByStatusResponse_Task, 0)
+	taskMap := make(map[uuid.UUID]int)
+
+	todo := make(map[int]bool)
+	inprogress := make(map[int]bool)
+	done := make(map[int]bool)
+
+	for _, row := range rows {
+		var task *pb.GetTasksByPatientSortedByStatusResponse_Task
+		if i, exists := taskMap[row.Task.ID]; exists {
+			task = tasks[i]
+		} else {
+			task = &pb.GetTasksByPatientSortedByStatusResponse_Task{
+				Id:             row.Task.ID.String(),
+				Name:           row.Task.Name,
+				Description:    row.Task.Description,
+				AssignedUserId: hwutil.NullUUIDToStringPtr(row.Task.AssignedUserID),
+				PatientId:      row.Task.PatientID.String(),
+				Public:         row.Task.Public,
+				Subtasks:       make([]*pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask, 0),
 			}
+			tasks = append(tasks, task)
+			ix := len(tasks) - 1
+			taskMap[row.Task.ID] = ix
+			taskStatus := pb.TaskStatus(row.Task.Status)
+			if taskStatus == pb.TaskStatus_TASK_STATUS_TODO {
+				todo[ix] = true
+			} else if taskStatus == pb.TaskStatus_TASK_STATUS_IN_PROGRESS {
+				inprogress[ix] = true
+			} else if taskStatus == pb.TaskStatus_TASK_STATUS_DONE {
+				done[ix] = true
+			}
+		}
+
+		if !row.SubtaskID.Valid {
+			continue
+		}
+		task.Subtasks = append(task.Subtasks, &pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask{
+			Id:   row.SubtaskID.UUID.String(),
+			Name: *row.SubtaskName,
+			Done: *row.SubtaskDone,
 		})
 	}
 
+	collectIxs := func(set map[int]bool) []*pb.GetTasksByPatientSortedByStatusResponse_Task {
+		res := make([]*pb.GetTasksByPatientSortedByStatusResponse_Task, len(set))
+		for i, b := range set {
+			if b {
+				res = append(res, tasks[i])
+			}
+		}
+		return res
+	}
+
 	return &pb.GetTasksByPatientSortedByStatusResponse{
-		Todo: mappingFunction(hwutil.Filter(tasks, func(value models.Task) bool {
-			return value.Status == pb.TaskStatus_TASK_STATUS_TODO
-		})),
-		InProgress: mappingFunction(hwutil.Filter(tasks, func(value models.Task) bool {
-			return value.Status == pb.TaskStatus_TASK_STATUS_IN_PROGRESS
-		})),
-		Done: mappingFunction(hwutil.Filter(tasks, func(value models.Task) bool {
-			return value.Status == pb.TaskStatus_TASK_STATUS_DONE
-		})),
+		Todo:       collectIxs(todo),
+		InProgress: collectIxs(inprogress),
+		Done:       collectIxs(done),
 	}, nil
 }
 

@@ -473,7 +473,7 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		if ix, exists := taskMap[row.Task.ID]; exists {
 			task = tasks[ix]
 		} else {
-			task := &pb.GetPatientDetailsResponse_Task{
+			task = &pb.GetPatientDetailsResponse_Task{
 				Id:             row.Task.ID.String(),
 				Name:           row.Task.Name,
 				Description:    row.Task.Description,
