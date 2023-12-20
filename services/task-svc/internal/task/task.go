@@ -272,47 +272,57 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 }
 
 func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTasksRequest) (*pb.GetAssignedTasksResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 	assigneeID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patients, err := taskRepo.GetPatientsWithTasksByAssignee(ctx, assigneeID)
+	rows, err := taskRepo.GetTasksWithPatientsByAssignee(ctx, uuid.NullUUID{
+		UUID:  assigneeID,
+		Valid: true,
+	})
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	var tasks []*pb.GetAssignedTasksResponse_Task
+	taskMap := make(map[uuid.UUID]int)
 
-	for _, patient := range patients {
-		mappedPatient := &pb.GetAssignedTasksResponse_Task_Patient{
-			Id:   patient.ID.String(),
-			Name: patient.HumanReadableIdentifier,
-		}
-		patientTasks := hwutil.Map(patient.Tasks, func(task models.Task) *pb.GetAssignedTasksResponse_Task {
-			var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetAssignedTasksResponse_Task_SubTask {
-				return &pb.GetAssignedTasksResponse_Task_SubTask{
-					Id:        subtask.ID.String(),
-					Done:      subtask.Done,
-					Name:      subtask.Name,
-					CreatedBy: subtask.CreatedBy.String(),
-				}
-			})
-			return &pb.GetAssignedTasksResponse_Task{
-				Id:             task.ID.String(),
-				Name:           task.Name,
-				Description:    task.Description,
-				Status:         task.Status,
-				AssignedUserId: task.AssignedUserId.UUID.String(),
-				Patient:        mappedPatient,
-				Subtasks:       mappedSubtasks,
-				Public:         task.Public,
-				DueAt:          timestamppb.New(task.DueAt),
-				CreatedBy:      task.CreatedBy.String(),
+	for _, row := range rows {
+		var task *pb.GetAssignedTasksResponse_Task
+		if ix, exists := taskMap[row.Task.ID]; exists {
+			task = tasks[ix]
+		} else {
+			task = &pb.GetAssignedTasksResponse_Task{
+				Id:             row.Task.ID.String(),
+				Name:           row.Task.Name,
+				Description:    row.Task.Description,
+				Status:         pb.TaskStatus(row.Task.Status),
+				AssignedUserId: row.Task.AssignedUserID.UUID.String(),
+				Patient: &pb.GetAssignedTasksResponse_Task_Patient{
+					Id:   row.PatientID.String(),
+					Name: row.PatientName,
+				},
+				Public:    row.Task.Public,
+				DueAt:     timestamppb.New(row.Task.DueAt.Time),
+				CreatedBy: row.Task.CreatedBy.String(),
+				Subtasks:  make([]*pb.GetAssignedTasksResponse_Task_SubTask, 0),
 			}
+			tasks = append(tasks, task)
+			taskMap[row.Task.ID] = len(tasks) - 1
+		}
+
+		if !row.SubtaskID.Valid {
+			continue
+		}
+
+		task.Subtasks = append(task.Subtasks, &pb.GetAssignedTasksResponse_Task_SubTask{
+			Id:        row.SubtaskID.UUID.String(),
+			Name:      *row.SubtaskName,
+			Done:      *row.SubtaskDone,
+			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
 		})
-		tasks = append(tasks, patientTasks...)
 	}
 
 	return &pb.GetAssignedTasksResponse{

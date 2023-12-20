@@ -44,6 +44,20 @@ SET	name = coalesce(sqlc.narg('name'), name),
 	done = coalesce(sqlc.narg('done'), done)
 WHERE id = @id;
 
+-- name: GetTasksWithPatientsByAssignee :many
+SELECT
+	sqlc.embed(tasks),
+	patients.id as patient_id,
+	patients.human_readable_identifier as patient_name,
+	subtasks.id as subtask_id,
+	subtasks.name as subtask_name,
+	subtasks.done as subtask_done,
+	subtasks.created_by as subtask_created_by
+FROM patients
+JOIN tasks ON tasks.patient_id = patients.id
+LEFT JOIN subtasks ON subtasks.task_id = tasks.id
+WHERE tasks.assigned_user_id = $1;
+
 -- name: ExistsTask :one
 SELECT EXISTS (
     SELECT 1
