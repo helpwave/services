@@ -20,6 +20,7 @@ require (
 	github.com/dapr/go-sdk v1.9.1
 	github.com/google/uuid v1.4.0
 	hwes v0.0.0-00010101000000-000000000000
+	hwutil v0.0.0
 )
 
 require (
@@ -52,6 +53,5 @@ require (
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	hwutil v0.0.0 // indirect
 	logging v0.0.0 // indirect
 )

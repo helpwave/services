@@ -12,7 +12,7 @@ import (
 type AggregateStore interface {
 	Load(ctx context.Context, aggregate Aggregate) error
 	Save(ctx context.Context, aggregate Aggregate) error
-	Exists(ctx context.Context, aggregate Aggregate) error
+	Exists(ctx context.Context, aggregate Aggregate) (bool, error)
 }
 
 type aggregateStore struct {
@@ -112,14 +112,22 @@ func (a *aggregateStore) Save(ctx context.Context, aggregate Aggregate) error {
 	return nil
 }
 
-func (a *aggregateStore) Exists(ctx context.Context, aggregate Aggregate) error {
+func (a *aggregateStore) Exists(ctx context.Context, aggregate Aggregate) (bool, error) {
 	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.Revision(1)}
 	stream, err := a.es.ReadStream(ctx, aggregate.GetStreamID(), readOpts, 1)
 	if err != nil {
-		return err
+		return false, err
 	}
 	defer stream.Close()
 
 	_, err = stream.Recv()
-	return err
+	if err != nil {
+		if errors.Is(err, esdb.ErrStreamNotFound) {
+			return false, nil
+		} else {
+			return false, err
+		}
+	}
+
+	return true, nil
 }

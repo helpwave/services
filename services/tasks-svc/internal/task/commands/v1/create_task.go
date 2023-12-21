@@ -3,7 +3,6 @@ package v1
 import (
 	"context"
 	"errors"
-	"github.com/EventStore/EventStore-Client-Go/esdb"
 	"github.com/google/uuid"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"
@@ -33,8 +32,13 @@ func NewCreateTaskCommandHandler(as hwes.AggregateStore) *createTaskCommandHandl
 func (c *createTaskCommandHandler) Handle(ctx context.Context, command *CreateTaskCommand) error {
 	a := aggregate.NewTaskAggregate(command.AggregateID)
 
-	if err := c.as.Exists(ctx, a); err != nil && !errors.Is(err, esdb.ErrStreamNotFound) {
+	exists, err := c.as.Exists(ctx, a)
+	if err != nil {
 		return err
+	}
+
+	if exists {
+		return errors.New("cannot create an already existing aggregate")
 	}
 
 	if err := a.CreateTask(ctx, command.Name); err != nil {
