@@ -25,6 +25,14 @@ func NewTaskAggregate(id uuid.UUID) *TaskAggregate {
 	return aggregate
 }
 
+func LoadTaskAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID) (*TaskAggregate, error) {
+	task := NewTaskAggregate(id)
+	if err := as.Load(ctx, task); err != nil {
+		return nil, err
+	}
+	return task, nil
+}
+
 func (a *TaskAggregate) When(evt hwes.Event) error {
 	switch evt.EventType {
 	case v1.TaskCreated:
@@ -35,6 +43,12 @@ func (a *TaskAggregate) When(evt hwes.Event) error {
 		return a.onTaskAssigned(evt)
 	case v1.TaskUnassigned:
 		return a.onTaskUnassigned(evt)
+	case v1.SubtaskCreated:
+		return a.onSubtaskCreated(evt)
+	case v1.SubtaskCompleted:
+		return a.onSubtaskCompleted(evt)
+	case v1.SubtaskUncompleted:
+		return a.onSubtaskUncompleted(evt)
 	default:
 		return errors.New(fmt.Sprintf("event type '%s' is invalid", evt.EventType))
 	}
@@ -105,10 +119,58 @@ func (a *TaskAggregate) onTaskUnassigned(evt hwes.Event) error {
 	return nil
 }
 
-func LoadTaskAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID) (*TaskAggregate, error) {
-	task := NewTaskAggregate(id)
-	if err := as.Load(ctx, task); err != nil {
-		return nil, err
+func (a *TaskAggregate) onSubtaskCreated(evt hwes.Event) error {
+	var payload v1.SubtaskCreatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
 	}
-	return task, nil
+
+	subtaskID, err := uuid.Parse(payload.SubtaskID)
+	if err != nil {
+		return err
+	}
+
+	subtask := models.NewSubtask()
+	subtask.ID = subtaskID
+	subtask.Name = payload.Name
+
+	a.Task.Subtasks[subtaskID] = *subtask
+
+	return nil
+}
+
+func (a *TaskAggregate) onSubtaskCompleted(evt hwes.Event) error {
+	var payload v1.SubtaskCompletedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	subtaskID, err := uuid.Parse(payload.SubtaskID)
+	if err != nil {
+		return err
+	}
+
+	subtask := a.Task.Subtasks[subtaskID]
+	subtask.Done = true
+	a.Task.Subtasks[subtaskID] = subtask
+
+	return nil
+}
+
+func (a *TaskAggregate) onSubtaskUncompleted(evt hwes.Event) error {
+	var payload v1.SubtaskUncompletedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	subtaskID, err := uuid.Parse(payload.SubtaskID)
+	if err != nil {
+		return err
+	}
+
+	subtask := a.Task.Subtasks[subtaskID]
+	subtask.Done = false
+	a.Task.Subtasks[subtaskID] = subtask
+
+	return nil
 }

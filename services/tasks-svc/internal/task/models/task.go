@@ -17,7 +17,7 @@ type Task struct {
 	Status        pb.TaskStatus
 	PatientID     uuid.UUID
 	AssignedUsers []uuid.UUID
-	Subtasks      []Subtask
+	Subtasks      map[uuid.UUID]Subtask
 }
 
 func NewTask() *Task {
@@ -25,7 +25,7 @@ func NewTask() *Task {
 		CreatedAt:     time.Now().UTC(),
 		Status:        pb.TaskStatus_TASK_STATUS_UNSPECIFIED,
 		AssignedUsers: make([]uuid.UUID, 0),
-		Subtasks:      make([]Subtask, 0),
+		Subtasks:      make(map[uuid.UUID]Subtask, 0),
 	}
 }
 

@@ -63,11 +63,77 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 		return nil, err
 	}
 
+	var subtasksRes []*pb.GetTaskResponse_Subtask
+	for _, subtask := range task.Subtasks {
+		subtasksRes = append(subtasksRes, &pb.GetTaskResponse_Subtask{
+			Id:   subtask.ID.String(),
+			Name: subtask.Name,
+			Done: subtask.Done,
+		})
+	}
+
 	return &pb.GetTaskResponse{
 		Id:   task.ID.String(),
 		Name: task.Name,
 		AssignedUsers: hwutil.Map(task.AssignedUsers, func(userID uuid.UUID) string {
 			return userID.String()
 		}),
+		Subtasks: subtasksRes,
 	}, nil
+}
+
+func (s *TaskGrpcService) CreateSubtask(ctx context.Context, req *pb.CreateSubtaskRequest) (*pb.CreateSubtaskResponse, error) {
+	taskID, err := uuid.Parse(req.GetTaskId())
+	if err != nil {
+		return nil, err
+	}
+
+	subtaskID := uuid.New()
+
+	command := v1commands.NewCreateSubtaskCommand(taskID, subtaskID, req.GetSubtask().GetName())
+	if err := s.service.Commands.CreateSubtask.Handle(ctx, command); err != nil {
+		return nil, err
+	}
+
+	return &pb.CreateSubtaskResponse{
+		SubtaskId: subtaskID.String(),
+	}, nil
+}
+
+func (s *TaskGrpcService) CompleteSubtask(ctx context.Context, req *pb.CompleteSubtaskRequest) (*pb.CompleteSubtaskResponse, error) {
+	taskID, err := uuid.Parse(req.GetTaskId())
+	if err != nil {
+		return nil, err
+	}
+
+	subtaskID, err := uuid.Parse(req.GetSubtaskId())
+	if err != nil {
+		return nil, err
+	}
+
+	command := v1commands.NewCompleteSubtaskCommand(taskID, subtaskID)
+	if err := s.service.Commands.CompleteSubtask.Handle(ctx, command); err != nil {
+		return nil, err
+	}
+
+	return &pb.CompleteSubtaskResponse{}, nil
+}
+
+func (s *TaskGrpcService) UncompleteSubtask(ctx context.Context, req *pb.UncompleteSubtaskRequest) (*pb.UncompleteSubtaskResponse, error) {
+	taskID, err := uuid.Parse(req.GetTaskId())
+	if err != nil {
+		return nil, err
+	}
+
+	subtaskID, err := uuid.Parse(req.GetSubtaskId())
+	if err != nil {
+		return nil, err
+	}
+
+	command := v1commands.NewUncompleteSubtaskCommand(taskID, subtaskID)
+	if err := s.service.Commands.UncompleteSubtask.Handle(ctx, command); err != nil {
+		return nil, err
+	}
+
+	return &pb.UncompleteSubtaskResponse{}, nil
 }

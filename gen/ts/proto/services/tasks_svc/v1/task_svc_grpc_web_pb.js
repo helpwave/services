@@ -262,5 +262,188 @@ proto.proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.assignTask 
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.CreateSubtaskRequest,
+ *   !proto.proto.services.tasks_svc.v1.CreateSubtaskResponse>}
+ */
+const methodDescriptor_TaskService_CreateSubtask = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.TaskService/CreateSubtask',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.CreateSubtaskRequest,
+  proto.proto.services.tasks_svc.v1.CreateSubtaskResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.CreateSubtaskRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.CreateSubtaskResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.CreateSubtaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.CreateSubtaskResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.CreateSubtaskResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.TaskServiceClient.prototype.createSubtask =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.TaskService/CreateSubtask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_CreateSubtask,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.CreateSubtaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.CreateSubtaskResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.createSubtask =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.TaskService/CreateSubtask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_CreateSubtask);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.CompleteSubtaskRequest,
+ *   !proto.proto.services.tasks_svc.v1.CompleteSubtaskResponse>}
+ */
+const methodDescriptor_TaskService_CompleteSubtask = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.TaskService/CompleteSubtask',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.CompleteSubtaskRequest,
+  proto.proto.services.tasks_svc.v1.CompleteSubtaskResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.CompleteSubtaskRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.CompleteSubtaskResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.CompleteSubtaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.CompleteSubtaskResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.CompleteSubtaskResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.TaskServiceClient.prototype.completeSubtask =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.TaskService/CompleteSubtask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_CompleteSubtask,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.CompleteSubtaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.CompleteSubtaskResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.completeSubtask =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.TaskService/CompleteSubtask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_CompleteSubtask);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.UncompleteSubtaskRequest,
+ *   !proto.proto.services.tasks_svc.v1.UncompleteSubtaskResponse>}
+ */
+const methodDescriptor_TaskService_UncompleteSubtask = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.TaskService/UncompleteSubtask',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.UncompleteSubtaskRequest,
+  proto.proto.services.tasks_svc.v1.UncompleteSubtaskResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.UncompleteSubtaskRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.UncompleteSubtaskResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.UncompleteSubtaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.UncompleteSubtaskResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.UncompleteSubtaskResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.TaskServiceClient.prototype.uncompleteSubtask =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.TaskService/UncompleteSubtask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_UncompleteSubtask,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.UncompleteSubtaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.UncompleteSubtaskResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.uncompleteSubtask =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.TaskService/UncompleteSubtask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_UncompleteSubtask);
+};
+
+
 module.exports = proto.proto.services.tasks_svc.v1;
 

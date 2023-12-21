@@ -22,3 +22,27 @@ func (a *TaskAggregate) AssignTask(ctx context.Context, userID uuid.UUID) error 
 	}
 	return a.Apply(event)
 }
+
+func (a *TaskAggregate) CreateSubtask(ctx context.Context, subtaskID uuid.UUID, name string) error {
+	event, err := eventsV1.NewSubtaskCreatedEvent(a, subtaskID, name)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *TaskAggregate) CompleteSubtask(ctx context.Context, subtaskID uuid.UUID) error {
+	event, err := eventsV1.NewSubtaskCompletedEvent(a, subtaskID)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *TaskAggregate) UncompleteSubtask(ctx context.Context, subtaskID uuid.UUID) error {
+	event, err := eventsV1.NewSubtaskUncompletedEvent(a, subtaskID)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}

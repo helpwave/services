@@ -116,7 +116,11 @@ func (a *aggregateStore) Exists(ctx context.Context, aggregate Aggregate) (bool,
 	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.Revision(1)}
 	stream, err := a.es.ReadStream(ctx, aggregate.GetStreamID(), readOpts, 1)
 	if err != nil {
-		return false, err
+		if errors.Is(err, esdb.ErrStreamNotFound) {
+			return false, nil
+		} else {
+			return false, err
+		}
 	}
 	defer stream.Close()
 

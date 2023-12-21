@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*proto/services/tasks_svc/v1/task_svc.proto\x12\x1bproto.services.tasks_svc.v1\x1a\x1bgoogle/protobuf/empty.proto\"\'\n\x11\x43reateTaskRequest\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"$\n\x12\x43reateTaskResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\" \n\x0eGetTaskRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"\\\n\x0fGetTaskResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12%\n\x0e\x61ssigned_users\x18\x03 \x03(\tR\rassignedUsers\"E\n\x11\x41ssignTaskRequest\x12\x17\n\x07task_id\x18\x01 \x01(\tR\x06taskId\x12\x17\n\x07user_id\x18\x02 \x01(\tR\x06userId\"\x14\n\x12\x41ssignTaskResponse*r\n\nTaskStatus\x12\x1b\n\x17TASK_STATUS_UNSPECIFIED\x10\x00\x12\x14\n\x10TASK_STATUS_TODO\x10\x01\x12\x1b\n\x17TASK_STATUS_IN_PROGRESS\x10\x02\x12\x14\n\x10TASK_STATUS_DONE\x10\x03\x32\xd7\x02\n\x0bTaskService\x12o\n\nCreateTask\x12..proto.services.tasks_svc.v1.CreateTaskRequest\x1a/.proto.services.tasks_svc.v1.CreateTaskResponse\"\x00\x12\x66\n\x07GetTask\x12+.proto.services.tasks_svc.v1.GetTaskRequest\x1a,.proto.services.tasks_svc.v1.GetTaskResponse\"\x00\x12o\n\nAssignTask\x12..proto.services.tasks_svc.v1.AssignTaskRequest\x1a/.proto.services.tasks_svc.v1.AssignTaskResponse\"\x00\x42\xd8\x01\n\x1f\x63om.proto.services.tasks_svc.v1B\x0cTaskSvcProtoP\x01Z\x1cgen/proto/services/tasks-svc\xa2\x02\x03PST\xaa\x02\x1aProto.Services.TasksSvc.V1\xca\x02\x1aProto\\Services\\TasksSvc\\V1\xe2\x02&Proto\\Services\\TasksSvc\\V1\\GPBMetadata\xea\x02\x1dProto::Services::TasksSvc::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*proto/services/tasks_svc/v1/task_svc.proto\x12\x1bproto.services.tasks_svc.v1\x1a\x1bgoogle/protobuf/empty.proto\"\'\n\x11\x43reateTaskRequest\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"$\n\x12\x43reateTaskResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\" \n\x0eGetTaskRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"\xf1\x01\n\x0fGetTaskResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12%\n\x0e\x61ssigned_users\x18\x03 \x03(\tR\rassignedUsers\x12P\n\x08subtasks\x18\x04 \x03(\x0b\x32\x34.proto.services.tasks_svc.v1.GetTaskResponse.SubtaskR\x08subtasks\x1a\x41\n\x07Subtask\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n\x04\x64one\x18\x03 \x01(\x08R\x04\x64one\"E\n\x11\x41ssignTaskRequest\x12\x17\n\x07task_id\x18\x01 \x01(\tR\x06taskId\x12\x17\n\x07user_id\x18\x02 \x01(\tR\x06userId\"\x14\n\x12\x41ssignTaskResponse\"\xa3\x01\n\x14\x43reateSubtaskRequest\x12\x17\n\x07task_id\x18\x01 \x01(\tR\x06taskId\x12S\n\x07subtask\x18\x02 \x01(\x0b\x32\x39.proto.services.tasks_svc.v1.CreateSubtaskRequest.SubtaskR\x07subtask\x1a\x1d\n\x07Subtask\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"6\n\x15\x43reateSubtaskResponse\x12\x1d\n\nsubtask_id\x18\x01 \x01(\tR\tsubtaskId\"P\n\x16\x43ompleteSubtaskRequest\x12\x17\n\x07task_id\x18\x01 \x01(\tR\x06taskId\x12\x1d\n\nsubtask_id\x18\x02 \x01(\tR\tsubtaskId\"\x19\n\x17\x43ompleteSubtaskResponse\"R\n\x18UncompleteSubtaskRequest\x12\x17\n\x07task_id\x18\x01 \x01(\tR\x06taskId\x12\x1d\n\nsubtask_id\x18\x02 \x01(\tR\tsubtaskId\"\x1b\n\x19UncompleteSubtaskResponse*r\n\nTaskStatus\x12\x1b\n\x17TASK_STATUS_UNSPECIFIED\x10\x00\x12\x14\n\x10TASK_STATUS_TODO\x10\x01\x12\x1b\n\x17TASK_STATUS_IN_PROGRESS\x10\x02\x12\x14\n\x10TASK_STATUS_DONE\x10\x03\x32\xd8\x05\n\x0bTaskService\x12o\n\nCreateTask\x12..proto.services.tasks_svc.v1.CreateTaskRequest\x1a/.proto.services.tasks_svc.v1.CreateTaskResponse\"\x00\x12\x66\n\x07GetTask\x12+.proto.services.tasks_svc.v1.GetTaskRequest\x1a,.proto.services.tasks_svc.v1.GetTaskResponse\"\x00\x12o\n\nAssignTask\x12..proto.services.tasks_svc.v1.AssignTaskRequest\x1a/.proto.services.tasks_svc.v1.AssignTaskResponse\"\x00\x12x\n\rCreateSubtask\x12\x31.proto.services.tasks_svc.v1.CreateSubtaskRequest\x1a\x32.proto.services.tasks_svc.v1.CreateSubtaskResponse\"\x00\x12~\n\x0f\x43ompleteSubtask\x12\x33.proto.services.tasks_svc.v1.CompleteSubtaskRequest\x1a\x34.proto.services.tasks_svc.v1.CompleteSubtaskResponse\"\x00\x12\x84\x01\n\x11UncompleteSubtask\x12\x35.proto.services.tasks_svc.v1.UncompleteSubtaskRequest\x1a\x36.proto.services.tasks_svc.v1.UncompleteSubtaskResponse\"\x00\x42\xd8\x01\n\x1f\x63om.proto.services.tasks_svc.v1B\x0cTaskSvcProtoP\x01Z\x1cgen/proto/services/tasks-svc\xa2\x02\x03PST\xaa\x02\x1aProto.Services.TasksSvc.V1\xca\x02\x1aProto\\Services\\TasksSvc\\V1\xe2\x02&Proto\\Services\\TasksSvc\\V1\\GPBMetadata\xea\x02\x1dProto::Services::TasksSvc::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -23,20 +23,36 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'proto.services.tasks_svc.v1
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\037com.proto.services.tasks_svc.v1B\014TaskSvcProtoP\001Z\034gen/proto/services/tasks-svc\242\002\003PST\252\002\032Proto.Services.TasksSvc.V1\312\002\032Proto\\Services\\TasksSvc\\V1\342\002&Proto\\Services\\TasksSvc\\V1\\GPBMetadata\352\002\035Proto::Services::TasksSvc::V1'
-  _globals['_TASKSTATUS']._serialized_start=404
-  _globals['_TASKSTATUS']._serialized_end=518
+  _globals['_TASKSTATUS']._serialized_start=998
+  _globals['_TASKSTATUS']._serialized_end=1112
   _globals['_CREATETASKREQUEST']._serialized_start=104
   _globals['_CREATETASKREQUEST']._serialized_end=143
   _globals['_CREATETASKRESPONSE']._serialized_start=145
   _globals['_CREATETASKRESPONSE']._serialized_end=181
   _globals['_GETTASKREQUEST']._serialized_start=183
   _globals['_GETTASKREQUEST']._serialized_end=215
-  _globals['_GETTASKRESPONSE']._serialized_start=217
-  _globals['_GETTASKRESPONSE']._serialized_end=309
-  _globals['_ASSIGNTASKREQUEST']._serialized_start=311
-  _globals['_ASSIGNTASKREQUEST']._serialized_end=380
-  _globals['_ASSIGNTASKRESPONSE']._serialized_start=382
-  _globals['_ASSIGNTASKRESPONSE']._serialized_end=402
-  _globals['_TASKSERVICE']._serialized_start=521
-  _globals['_TASKSERVICE']._serialized_end=864
+  _globals['_GETTASKRESPONSE']._serialized_start=218
+  _globals['_GETTASKRESPONSE']._serialized_end=459
+  _globals['_GETTASKRESPONSE_SUBTASK']._serialized_start=394
+  _globals['_GETTASKRESPONSE_SUBTASK']._serialized_end=459
+  _globals['_ASSIGNTASKREQUEST']._serialized_start=461
+  _globals['_ASSIGNTASKREQUEST']._serialized_end=530
+  _globals['_ASSIGNTASKRESPONSE']._serialized_start=532
+  _globals['_ASSIGNTASKRESPONSE']._serialized_end=552
+  _globals['_CREATESUBTASKREQUEST']._serialized_start=555
+  _globals['_CREATESUBTASKREQUEST']._serialized_end=718
+  _globals['_CREATESUBTASKREQUEST_SUBTASK']._serialized_start=689
+  _globals['_CREATESUBTASKREQUEST_SUBTASK']._serialized_end=718
+  _globals['_CREATESUBTASKRESPONSE']._serialized_start=720
+  _globals['_CREATESUBTASKRESPONSE']._serialized_end=774
+  _globals['_COMPLETESUBTASKREQUEST']._serialized_start=776
+  _globals['_COMPLETESUBTASKREQUEST']._serialized_end=856
+  _globals['_COMPLETESUBTASKRESPONSE']._serialized_start=858
+  _globals['_COMPLETESUBTASKRESPONSE']._serialized_end=883
+  _globals['_UNCOMPLETESUBTASKREQUEST']._serialized_start=885
+  _globals['_UNCOMPLETESUBTASKREQUEST']._serialized_end=967
+  _globals['_UNCOMPLETESUBTASKRESPONSE']._serialized_start=969
+  _globals['_UNCOMPLETESUBTASKRESPONSE']._serialized_end=996
+  _globals['_TASKSERVICE']._serialized_start=1115
+  _globals['_TASKSERVICE']._serialized_end=1843
 # @@protoc_insertion_point(module_scope)

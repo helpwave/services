@@ -6,10 +6,13 @@ import (
 )
 
 const (
-	TaskCreated      = "TASK_CREATED_v1"
-	TaskAssigned     = "TASK_ASSIGNED_v1"
-	TaskSelfAssigned = "TASK_SELF_ASSIGNED_v1"
-	TaskUnassigned   = "TASK_UNASSIGNED_v1"
+	TaskCreated        = "TASK_CREATED_v1"
+	TaskAssigned       = "TASK_ASSIGNED_v1"
+	TaskSelfAssigned   = "TASK_SELF_ASSIGNED_v1"
+	TaskUnassigned     = "TASK_UNASSIGNED_v1"
+	SubtaskCreated     = "TASK_SUBTASK_CREATED_v1"
+	SubtaskCompleted   = "TASK_SUBTASK_COMPLETED_v1"
+	SubtaskUncompleted = "TASK_SUBTASK_UNCOMPLETED_v1"
 )
 
 type TaskCreatedEvent struct {
@@ -27,6 +30,19 @@ type TaskSelfAssignedEvent struct {
 
 type TaskUnassignedEvent struct {
 	UserID string `json:"user_id"`
+}
+
+type SubtaskCreatedEvent struct {
+	SubtaskID string `json:"subtask_id"`
+	Name      string `json:"name"`
+}
+
+type SubtaskCompletedEvent struct {
+	SubtaskID string `json:"subtask_id"`
+}
+
+type SubtaskUncompletedEvent struct {
+	SubtaskID string `json:"subtask_id"`
 }
 
 func NewTaskCreatedEvent(a hwes.Aggregate, id uuid.UUID, name string) (hwes.Event, error) {
@@ -70,6 +86,40 @@ func NewTaskUnassignedEvent(a hwes.Aggregate, userID string) (hwes.Event, error)
 	event := hwes.NewBaseEvent(a, TaskUnassigned)
 	if err := event.SetJsonData(&payload); err != nil {
 		return hwes.Event{}, err
+	}
+	return event, nil
+}
+
+func NewSubtaskCreatedEvent(a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
+	payload := SubtaskCreatedEvent{
+		SubtaskID: subtaskID.String(),
+		Name:      name,
+	}
+	event := hwes.NewBaseEvent(a, SubtaskCreated)
+	if err := event.SetJsonData(&payload); err != nil {
+		return hwes.Event{}, err
+	}
+	return event, nil
+}
+
+func NewSubtaskCompletedEvent(a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
+	payload := SubtaskCompletedEvent{
+		SubtaskID: subtaskID.String(),
+	}
+	event := hwes.NewBaseEvent(a, SubtaskCompleted)
+	if err := event.SetJsonData(&payload); err != nil {
+		return hwes.Event{}, nil
+	}
+	return event, nil
+}
+
+func NewSubtaskUncompletedEvent(a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
+	payload := SubtaskUncompletedEvent{
+		SubtaskID: subtaskID.String(),
+	}
+	event := hwes.NewBaseEvent(a, SubtaskUncompleted)
+	if err := event.SetJsonData(&payload); err != nil {
+		return hwes.Event{}, nil
 	}
 	return event, nil
 }

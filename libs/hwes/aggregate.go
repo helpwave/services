@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/rs/zerolog/log"
 )
 
 type When interface {
@@ -139,6 +140,12 @@ func (a *AggregateBase) RaiseEvent(event Event) error {
 	}
 
 	event.SetAggregateType(a.GetType()) // TODO: Is this really necessary?
+
+	log.Debug().
+		Str("aggregateID", event.GetAggregateID().String()).
+		Str("aggregateType", string(event.GetAggregateType())).
+		Str("eventType", event.EventType).
+		Msg("raise event")
 
 	if err := a.when(event); err != nil {
 		return err

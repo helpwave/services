@@ -37,6 +37,13 @@ message GetTaskResponse {
   string id = 1;
   string name = 2;
   repeated string assigned_users = 3;
+  repeated Subtask subtasks = 4;
+
+  message Subtask {
+    string id = 1;
+    string name = 2;
+    bool done = 3;
+  }
 }
 
 //
@@ -51,6 +58,45 @@ message AssignTaskRequest {
 message AssignTaskResponse {}
 
 //
+// CreateSubtask
+//
+
+message CreateSubtaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  Subtask subtask = 2;
+
+  message Subtask {
+    string name = 1;
+  }
+}
+
+message CreateSubtaskResponse {
+  string subtask_id = 1;
+}
+
+//
+// CompleteSubtask
+//
+
+message CompleteSubtaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  string subtask_id = 2; // @gotags: validate:"uuid4"
+}
+
+message CompleteSubtaskResponse {}
+
+//
+// UncompleteSubtask
+//
+
+message UncompleteSubtaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  string subtask_id = 2; // @gotags: validate:"uuid4"
+}
+
+message UncompleteSubtaskResponse {}
+
+//
 // TaskService
 //
 
@@ -58,4 +104,7 @@ service TaskService {
   rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse) {}
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
   rpc AssignTask(AssignTaskRequest) returns (AssignTaskResponse) {}
+  rpc CreateSubtask(CreateSubtaskRequest) returns (CreateSubtaskResponse) {}
+  rpc CompleteSubtask(CompleteSubtaskRequest) returns (CompleteSubtaskResponse) {}
+  rpc UncompleteSubtask(UncompleteSubtaskRequest) returns (UncompleteSubtaskResponse) {}
 }

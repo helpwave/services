@@ -38,5 +38,6 @@ func (q *getTaskByIDQueryHandler) Handle(ctx context.Context, query *GetTaskByID
 		ID:            task.Task.ID,
 		Name:          task.Task.Name,
 		AssignedUsers: task.Task.AssignedUsers,
+		Subtasks:      task.Task.Subtasks,
 	}, nil
 }

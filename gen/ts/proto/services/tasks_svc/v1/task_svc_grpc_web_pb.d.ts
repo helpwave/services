@@ -29,6 +29,27 @@ export class TaskServiceClient {
                response: proto_services_tasks_svc_v1_task_svc_pb.AssignTaskResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.AssignTaskResponse>;
 
+  createSubtask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.CreateSubtaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_tasks_svc_v1_task_svc_pb.CreateSubtaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.CreateSubtaskResponse>;
+
+  completeSubtask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.CompleteSubtaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_tasks_svc_v1_task_svc_pb.CompleteSubtaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.CompleteSubtaskResponse>;
+
+  uncompleteSubtask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskResponse>;
+
 }
 
 export class TaskServicePromiseClient {
@@ -50,6 +71,21 @@ export class TaskServicePromiseClient {
     request: proto_services_tasks_svc_v1_task_svc_pb.AssignTaskRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_tasks_svc_v1_task_svc_pb.AssignTaskResponse>;
+
+  createSubtask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.CreateSubtaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_tasks_svc_v1_task_svc_pb.CreateSubtaskResponse>;
+
+  completeSubtask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.CompleteSubtaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_tasks_svc_v1_task_svc_pb.CompleteSubtaskResponse>;
+
+  uncompleteSubtask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskResponse>;
 
 }
 

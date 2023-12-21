@@ -33,6 +33,18 @@ class TaskServiceClient extends $grpc.Client {
       '/proto.services.tasks_svc.v1.TaskService/AssignTask',
       ($9.AssignTaskRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $9.AssignTaskResponse.fromBuffer(value));
+  static final _$createSubtask = $grpc.ClientMethod<$9.CreateSubtaskRequest, $9.CreateSubtaskResponse>(
+      '/proto.services.tasks_svc.v1.TaskService/CreateSubtask',
+      ($9.CreateSubtaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $9.CreateSubtaskResponse.fromBuffer(value));
+  static final _$completeSubtask = $grpc.ClientMethod<$9.CompleteSubtaskRequest, $9.CompleteSubtaskResponse>(
+      '/proto.services.tasks_svc.v1.TaskService/CompleteSubtask',
+      ($9.CompleteSubtaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $9.CompleteSubtaskResponse.fromBuffer(value));
+  static final _$uncompleteSubtask = $grpc.ClientMethod<$9.UncompleteSubtaskRequest, $9.UncompleteSubtaskResponse>(
+      '/proto.services.tasks_svc.v1.TaskService/UncompleteSubtask',
+      ($9.UncompleteSubtaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $9.UncompleteSubtaskResponse.fromBuffer(value));
 
   TaskServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -50,6 +62,18 @@ class TaskServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$9.AssignTaskResponse> assignTask($9.AssignTaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$assignTask, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$9.CreateSubtaskResponse> createSubtask($9.CreateSubtaskRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$createSubtask, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$9.CompleteSubtaskResponse> completeSubtask($9.CompleteSubtaskRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$completeSubtask, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$9.UncompleteSubtaskResponse> uncompleteSubtask($9.UncompleteSubtaskRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$uncompleteSubtask, request, options: options);
   }
 }
 
@@ -79,6 +103,27 @@ abstract class TaskServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $9.AssignTaskRequest.fromBuffer(value),
         ($9.AssignTaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$9.CreateSubtaskRequest, $9.CreateSubtaskResponse>(
+        'CreateSubtask',
+        createSubtask_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $9.CreateSubtaskRequest.fromBuffer(value),
+        ($9.CreateSubtaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$9.CompleteSubtaskRequest, $9.CompleteSubtaskResponse>(
+        'CompleteSubtask',
+        completeSubtask_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $9.CompleteSubtaskRequest.fromBuffer(value),
+        ($9.CompleteSubtaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$9.UncompleteSubtaskRequest, $9.UncompleteSubtaskResponse>(
+        'UncompleteSubtask',
+        uncompleteSubtask_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $9.UncompleteSubtaskRequest.fromBuffer(value),
+        ($9.UncompleteSubtaskResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$9.CreateTaskResponse> createTask_Pre($grpc.ServiceCall call, $async.Future<$9.CreateTaskRequest> request) async {
@@ -93,7 +138,22 @@ abstract class TaskServiceBase extends $grpc.Service {
     return assignTask(call, await request);
   }
 
+  $async.Future<$9.CreateSubtaskResponse> createSubtask_Pre($grpc.ServiceCall call, $async.Future<$9.CreateSubtaskRequest> request) async {
+    return createSubtask(call, await request);
+  }
+
+  $async.Future<$9.CompleteSubtaskResponse> completeSubtask_Pre($grpc.ServiceCall call, $async.Future<$9.CompleteSubtaskRequest> request) async {
+    return completeSubtask(call, await request);
+  }
+
+  $async.Future<$9.UncompleteSubtaskResponse> uncompleteSubtask_Pre($grpc.ServiceCall call, $async.Future<$9.UncompleteSubtaskRequest> request) async {
+    return uncompleteSubtask(call, await request);
+  }
+
   $async.Future<$9.CreateTaskResponse> createTask($grpc.ServiceCall call, $9.CreateTaskRequest request);
   $async.Future<$9.GetTaskResponse> getTask($grpc.ServiceCall call, $9.GetTaskRequest request);
   $async.Future<$9.AssignTaskResponse> assignTask($grpc.ServiceCall call, $9.AssignTaskRequest request);
+  $async.Future<$9.CreateSubtaskResponse> createSubtask($grpc.ServiceCall call, $9.CreateSubtaskRequest request);
+  $async.Future<$9.CompleteSubtaskResponse> completeSubtask($grpc.ServiceCall call, $9.CompleteSubtaskRequest request);
+  $async.Future<$9.UncompleteSubtaskResponse> uncompleteSubtask($grpc.ServiceCall call, $9.UncompleteSubtaskRequest request);
 }

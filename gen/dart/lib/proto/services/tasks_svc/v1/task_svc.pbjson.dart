@@ -73,13 +73,28 @@ const GetTaskResponse$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'assigned_users', '3': 3, '4': 3, '5': 9, '10': 'assignedUsers'},
+    {'1': 'subtasks', '3': 4, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetTaskResponse.Subtask', '10': 'subtasks'},
+  ],
+  '3': [GetTaskResponse_Subtask$json],
+};
+
+@$core.Deprecated('Use getTaskResponseDescriptor instead')
+const GetTaskResponse_Subtask$json = {
+  '1': 'Subtask',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
   ],
 };
 
 /// Descriptor for `GetTaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getTaskResponseDescriptor = $convert.base64Decode(
     'Cg9HZXRUYXNrUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSJQ'
-    'oOYXNzaWduZWRfdXNlcnMYAyADKAlSDWFzc2lnbmVkVXNlcnM=');
+    'oOYXNzaWduZWRfdXNlcnMYAyADKAlSDWFzc2lnbmVkVXNlcnMSUAoIc3VidGFza3MYBCADKAsy'
+    'NC5wcm90by5zZXJ2aWNlcy50YXNrc19zdmMudjEuR2V0VGFza1Jlc3BvbnNlLlN1YnRhc2tSCH'
+    'N1YnRhc2tzGkEKB1N1YnRhc2sSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUS'
+    'EgoEZG9uZRgDIAEoCFIEZG9uZQ==');
 
 @$core.Deprecated('Use assignTaskRequestDescriptor instead')
 const AssignTaskRequest$json = {
@@ -103,4 +118,86 @@ const AssignTaskResponse$json = {
 /// Descriptor for `AssignTaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List assignTaskResponseDescriptor = $convert.base64Decode(
     'ChJBc3NpZ25UYXNrUmVzcG9uc2U=');
+
+@$core.Deprecated('Use createSubtaskRequestDescriptor instead')
+const CreateSubtaskRequest$json = {
+  '1': 'CreateSubtaskRequest',
+  '2': [
+    {'1': 'task_id', '3': 1, '4': 1, '5': 9, '10': 'taskId'},
+    {'1': 'subtask', '3': 2, '4': 1, '5': 11, '6': '.proto.services.tasks_svc.v1.CreateSubtaskRequest.Subtask', '10': 'subtask'},
+  ],
+  '3': [CreateSubtaskRequest_Subtask$json],
+};
+
+@$core.Deprecated('Use createSubtaskRequestDescriptor instead')
+const CreateSubtaskRequest_Subtask$json = {
+  '1': 'Subtask',
+  '2': [
+    {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
+  ],
+};
+
+/// Descriptor for `CreateSubtaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createSubtaskRequestDescriptor = $convert.base64Decode(
+    'ChRDcmVhdGVTdWJ0YXNrUmVxdWVzdBIXCgd0YXNrX2lkGAEgASgJUgZ0YXNrSWQSUwoHc3VidG'
+    'FzaxgCIAEoCzI5LnByb3RvLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5DcmVhdGVTdWJ0YXNrUmVx'
+    'dWVzdC5TdWJ0YXNrUgdzdWJ0YXNrGh0KB1N1YnRhc2sSEgoEbmFtZRgBIAEoCVIEbmFtZQ==');
+
+@$core.Deprecated('Use createSubtaskResponseDescriptor instead')
+const CreateSubtaskResponse$json = {
+  '1': 'CreateSubtaskResponse',
+  '2': [
+    {'1': 'subtask_id', '3': 1, '4': 1, '5': 9, '10': 'subtaskId'},
+  ],
+};
+
+/// Descriptor for `CreateSubtaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createSubtaskResponseDescriptor = $convert.base64Decode(
+    'ChVDcmVhdGVTdWJ0YXNrUmVzcG9uc2USHQoKc3VidGFza19pZBgBIAEoCVIJc3VidGFza0lk');
+
+@$core.Deprecated('Use completeSubtaskRequestDescriptor instead')
+const CompleteSubtaskRequest$json = {
+  '1': 'CompleteSubtaskRequest',
+  '2': [
+    {'1': 'task_id', '3': 1, '4': 1, '5': 9, '10': 'taskId'},
+    {'1': 'subtask_id', '3': 2, '4': 1, '5': 9, '10': 'subtaskId'},
+  ],
+};
+
+/// Descriptor for `CompleteSubtaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List completeSubtaskRequestDescriptor = $convert.base64Decode(
+    'ChZDb21wbGV0ZVN1YnRhc2tSZXF1ZXN0EhcKB3Rhc2tfaWQYASABKAlSBnRhc2tJZBIdCgpzdW'
+    'J0YXNrX2lkGAIgASgJUglzdWJ0YXNrSWQ=');
+
+@$core.Deprecated('Use completeSubtaskResponseDescriptor instead')
+const CompleteSubtaskResponse$json = {
+  '1': 'CompleteSubtaskResponse',
+};
+
+/// Descriptor for `CompleteSubtaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List completeSubtaskResponseDescriptor = $convert.base64Decode(
+    'ChdDb21wbGV0ZVN1YnRhc2tSZXNwb25zZQ==');
+
+@$core.Deprecated('Use uncompleteSubtaskRequestDescriptor instead')
+const UncompleteSubtaskRequest$json = {
+  '1': 'UncompleteSubtaskRequest',
+  '2': [
+    {'1': 'task_id', '3': 1, '4': 1, '5': 9, '10': 'taskId'},
+    {'1': 'subtask_id', '3': 2, '4': 1, '5': 9, '10': 'subtaskId'},
+  ],
+};
+
+/// Descriptor for `UncompleteSubtaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List uncompleteSubtaskRequestDescriptor = $convert.base64Decode(
+    'ChhVbmNvbXBsZXRlU3VidGFza1JlcXVlc3QSFwoHdGFza19pZBgBIAEoCVIGdGFza0lkEh0KCn'
+    'N1YnRhc2tfaWQYAiABKAlSCXN1YnRhc2tJZA==');
+
+@$core.Deprecated('Use uncompleteSubtaskResponseDescriptor instead')
+const UncompleteSubtaskResponse$json = {
+  '1': 'UncompleteSubtaskResponse',
+};
+
+/// Descriptor for `UncompleteSubtaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List uncompleteSubtaskResponseDescriptor = $convert.base64Decode(
+    'ChlVbmNvbXBsZXRlU3VidGFza1Jlc3BvbnNl');
 
