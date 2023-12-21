@@ -93,19 +93,19 @@ const doesInvitationExist = `-- name: DoesInvitationExist :one
 SELECT EXISTS (
 	SELECT 1
 	FROM invitations
-	WHERE (invitations.email = $1 AND invitations.organization_id = $2)
-		AND state = ANY(ARRAY[$3::int[]])
+	WHERE (email = $1 AND organization_id = $2)
+	AND state = ANY(ARRAY[$3::int[]])
 )
 `
 
 type DoesInvitationExistParams struct {
 	Email          string
 	OrganizationID uuid.UUID
-	State          []int32
+	States         []int32
 }
 
 func (q *Queries) DoesInvitationExist(ctx context.Context, arg DoesInvitationExistParams) (bool, error) {
-	row := q.db.QueryRow(ctx, doesInvitationExist, arg.Email, arg.OrganizationID, arg.State)
+	row := q.db.QueryRow(ctx, doesInvitationExist, arg.Email, arg.OrganizationID, arg.States)
 	var exists bool
 	err := row.Scan(&exists)
 	return exists, err
@@ -163,10 +163,10 @@ const getInvitationsWithOrganizationByUser = `-- name: GetInvitationsWithOrganiz
 SELECT
 	organizations.id, organizations.long_name, organizations.short_name, organizations.contact_email, organizations.avatar_url, organizations.is_personal, organizations.created_by_user_id,
 	invitations.id, invitations.email, invitations.organization_id, invitations.state
-FROM invitations
+	FROM invitations
 	JOIN organizations ON invitations.organization_id = organizations.id
-WHERE email = $1
-	AND state = coalesce($2, state)
+	WHERE email = $1
+	AND (state = $2 OR $2 IS NULL)
 `
 
 type GetInvitationsWithOrganizationByUserParams struct {
@@ -215,10 +215,10 @@ func (q *Queries) GetInvitationsWithOrganizationByUser(ctx context.Context, arg 
 }
 
 const getMembersByOrganization = `-- name: GetMembersByOrganization :many
-SELECT u.id, u.email, u.nickname, u.name, u.avatar_url
-	FROM memberships m
-	JOIN users u ON m.user_id = u.id
-	WHERE m.organization_id = $1
+SELECT users.id, users.email, users.nickname, users.name, users.avatar_url
+	FROM memberships
+	JOIN users ON memberships.user_id = users.id
+	WHERE memberships.organization_id = $1
 `
 
 func (q *Queries) GetMembersByOrganization(ctx context.Context, organizationID uuid.UUID) ([]User, error) {
@@ -248,7 +248,9 @@ func (q *Queries) GetMembersByOrganization(ctx context.Context, organizationID u
 }
 
 const getOrganizationById = `-- name: GetOrganizationById :one
-SELECT id, long_name, short_name, contact_email, avatar_url, is_personal, created_by_user_id FROM organizations
+SELECT
+	id, long_name, short_name, contact_email, avatar_url, is_personal, created_by_user_id
+	FROM organizations
     WHERE id = $1 LIMIT 1
 `
 
@@ -271,10 +273,10 @@ const getOrganizationWithMemberById = `-- name: GetOrganizationWithMemberById :m
 SELECT
 	organizations.id, organizations.long_name, organizations.short_name, organizations.contact_email, organizations.avatar_url, organizations.is_personal, organizations.created_by_user_id,
 	users.id as user_id
-FROM organizations
-		 LEFT JOIN memberships ON memberships.organization_id = organizations.id
-		 LEFT JOIN users ON memberships.user_id = users.id
-WHERE organizations.id = $1
+	FROM organizations
+	LEFT JOIN memberships ON memberships.organization_id = organizations.id
+	LEFT JOIN users ON memberships.user_id = users.id
+	WHERE organizations.id = $1
 `
 
 type GetOrganizationWithMemberByIdRow struct {
@@ -315,12 +317,13 @@ const getOrganizationsWithMembersByUser = `-- name: GetOrganizationsWithMembersB
 SELECT
 	organizations.id, organizations.long_name, organizations.short_name, organizations.contact_email, organizations.avatar_url, organizations.is_personal, organizations.created_by_user_id,
 	users.id, users.email, users.nickname, users.name, users.avatar_url
-FROM organizations
+	FROM organizations
 	JOIN memberships ON memberships.organization_id=organizations.id
 	JOIN users ON memberships.user_id=users.id
-WHERE organizations.id IN (SELECT memberships.organization_id
-						   FROM memberships
-						   WHERE memberships.user_id = $1)
+	WHERE organizations.id IN
+	      (SELECT memberships.organization_id
+			FROM memberships
+			WHERE memberships.user_id = $1)
 `
 
 type GetOrganizationsWithMembersByUserRow struct {
@@ -411,11 +414,11 @@ func (q *Queries) IsAdminInOrganization(ctx context.Context, arg IsAdminInOrgani
 
 const isInOrganizationByEmail = `-- name: IsInOrganizationByEmail :one
 SELECT EXISTS(
-	SELECT memberships.id, memberships.user_id, memberships.organization_id, memberships.is_admin
+	SELECT 1
 	FROM memberships
-		JOIN users ON users.id = memberships.user_id
+	JOIN users ON users.id = memberships.user_id
 	WHERE memberships.organization_id = $1
-	  AND users.email = $2
+	AND users.email = $2
 	LIMIT 1
 )
 `

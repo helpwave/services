@@ -4,28 +4,31 @@ VALUES (@long_name, @short_name, @contact_email, @avatar_url, @is_personal, @cre
 RETURNING *;
 
 -- name: GetOrganizationById :one
-SELECT * FROM organizations
+SELECT
+	*
+	FROM organizations
     WHERE id = $1 LIMIT 1;
 
 -- name: GetOrganizationWithMemberById :many
 SELECT
 	sqlc.embed(organizations),
 	users.id as user_id
-FROM organizations
-		 LEFT JOIN memberships ON memberships.organization_id = organizations.id
-		 LEFT JOIN users ON memberships.user_id = users.id
-WHERE organizations.id = $1;
+	FROM organizations
+	LEFT JOIN memberships ON memberships.organization_id = organizations.id
+	LEFT JOIN users ON memberships.user_id = users.id
+	WHERE organizations.id = $1;
 
 -- name: GetOrganizationsWithMembersByUser :many
 SELECT
 	sqlc.embed(organizations),
 	users.*
-FROM organizations
+	FROM organizations
 	JOIN memberships ON memberships.organization_id=organizations.id
 	JOIN users ON memberships.user_id=users.id
-WHERE organizations.id IN (SELECT memberships.organization_id
-						   FROM memberships
-						   WHERE memberships.user_id = $1);
+	WHERE organizations.id IN
+	      (SELECT memberships.organization_id
+			FROM memberships
+			WHERE memberships.user_id = $1);
 
 -- name: UpdateOrganization :exec
 UPDATE organizations
@@ -69,18 +72,18 @@ SELECT *
 	);
 
 -- name: GetMembersByOrganization :many
-SELECT u.*
-	FROM memberships m
-	JOIN users u ON m.user_id = u.id
-	WHERE m.organization_id = $1;
+SELECT users.*
+	FROM memberships
+	JOIN users ON memberships.user_id = users.id
+	WHERE memberships.organization_id = $1;
 
 -- name: IsInOrganizationByEmail :one
 SELECT EXISTS(
-	SELECT memberships.*
+	SELECT 1
 	FROM memberships
-		JOIN users ON users.id = memberships.user_id
+	JOIN users ON users.id = memberships.user_id
 	WHERE memberships.organization_id = @organization_id
-	  AND users.email = @email
+	AND users.email = @email
 	LIMIT 1
 );
 
@@ -95,18 +98,18 @@ SELECT EXISTS(
 SELECT EXISTS (
 	SELECT 1
 	FROM invitations
-	WHERE (invitations.email = @email AND invitations.organization_id = @organization_id)
-		AND state = ANY(ARRAY[@state::int[]])
+	WHERE (email = @email AND organization_id = @organization_id)
+	AND state = ANY(ARRAY[@states::int[]])
 );
 
 -- name: GetInvitationsWithOrganizationByUser :many
 SELECT
 	sqlc.embed(organizations),
 	invitations.*
-FROM invitations
+	FROM invitations
 	JOIN organizations ON invitations.organization_id = organizations.id
-WHERE email = @email
-	AND state = coalesce(sqlc.narg('state'), state);
+	WHERE email = @email
+	AND (state = sqlc.narg('state') OR sqlc.narg('state') IS NULL);
 
 -- name: UpdateInvitationState :exec
 UPDATE invitations

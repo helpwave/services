@@ -380,7 +380,7 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	doesInvitationExists, err := organizationRepo.DoesInvitationExist(ctx, organization_repo.DoesInvitationExistParams{
 		Email:          req.Email,
 		OrganizationID: organizationId,
-		State:          []int32{int32(pb.InvitationState_INVITATION_STATE_ACCEPTED.Number()), int32(pb.InvitationState_INVITATION_STATE_PENDING.Number())},
+		States:         []int32{int32(pb.InvitationState_INVITATION_STATE_ACCEPTED.Number()), int32(pb.InvitationState_INVITATION_STATE_PENDING.Number())},
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -418,6 +418,13 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 	userID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	organization, err := hwdb.Optional(organizationRepo.GetOrganizationById)(ctx, organizationID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if organization == nil {
+		return &pb.GetInvitationsByOrganizationResponse{}, nil
 	}
 
 	hasAccess, err := organizationRepo.IsInOrganizationById(ctx, organization_repo.IsInOrganizationByIdParams{
@@ -499,6 +506,13 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 	userID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	organization, err := hwdb.Optional(organizationRepo.GetOrganizationById)(ctx, organizationID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if organization == nil {
+		return &pb.GetMembersByOrganizationResponse{}, nil
 	}
 
 	hasAccess, err := organizationRepo.IsInOrganizationById(ctx, organization_repo.IsInOrganizationByIdParams{
