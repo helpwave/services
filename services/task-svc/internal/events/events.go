@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"hwes"
+	"task-svc/internal/feature"
 )
 
 const (
@@ -94,6 +95,10 @@ func NewTaskSelfAssignedEvent(userId string) (hwes.Event, error) {
 }
 
 func DispatchBedCreatedEvent(ctx context.Context, bedId uuid.UUID, bedName string) error {
+	if !feature.IsEventSourcingEnabled() {
+		return nil
+	}
+
 	log := zlog.Ctx(ctx)
 	event, err := NewBedCreatedEvent(bedId, bedName)
 	if err != nil {
@@ -115,6 +120,10 @@ func DispatchBedCreatedEvent(ctx context.Context, bedId uuid.UUID, bedName strin
 }
 
 func DispatchBedUpdatedEvent(ctx context.Context, bedId uuid.UUID, bedName string) error {
+	if !feature.IsEventSourcingEnabled() {
+		return nil
+	}
+
 	log := zlog.Ctx(ctx)
 	event, err := NewBedUpdatedEvent(bedName)
 	if err != nil {
@@ -136,6 +145,10 @@ func DispatchBedUpdatedEvent(ctx context.Context, bedId uuid.UUID, bedName strin
 }
 
 func DispatchBedMovedToAnotherRoomEvent(ctx context.Context, bedId uuid.UUID, roomId string) error {
+	if !feature.IsEventSourcingEnabled() {
+		return nil
+	}
+
 	log := zlog.Ctx(ctx)
 	event, err := NewBedMovedToAnotherRoomEvent(roomId)
 	if err != nil {
@@ -157,8 +170,11 @@ func DispatchBedMovedToAnotherRoomEvent(ctx context.Context, bedId uuid.UUID, ro
 }
 
 func DispatchBedDeletedEvent(ctx context.Context, bedId uuid.UUID) error {
-	log := zlog.Ctx(ctx)
+	if !feature.IsEventSourcingEnabled() {
+		return nil
+	}
 
+	log := zlog.Ctx(ctx)
 	err := hwes.AppendEvents(ctx, bedId.String())
 	if err != nil {
 		log.Error().
@@ -174,6 +190,10 @@ func DispatchBedDeletedEvent(ctx context.Context, bedId uuid.UUID) error {
 }
 
 func DispatchTaskAssignedEvent(ctx context.Context, taskId, userId uuid.UUID) error {
+	if !feature.IsEventSourcingEnabled() {
+		return nil
+	}
+
 	log := zlog.Ctx(ctx)
 	event, err := NewTaskAssignedEvent(userId.String())
 	if err != nil {
@@ -195,6 +215,10 @@ func DispatchTaskAssignedEvent(ctx context.Context, taskId, userId uuid.UUID) er
 }
 
 func DispatchTaskSelfAssignedEvent(ctx context.Context, taskId, userId uuid.UUID) error {
+	if !feature.IsEventSourcingEnabled() {
+		return nil
+	}
+
 	log := zlog.Ctx(ctx)
 	event, err := NewTaskSelfAssignedEvent(userId.String())
 	if err != nil {

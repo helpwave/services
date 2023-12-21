@@ -8,31 +8,15 @@ import (
 )
 
 var (
-	es             *esdb.Client = nil
-	FeatureFlagEnv              = "FEATURE_FLAG_EVENT_SOURCING"
+	es *esdb.Client = nil
 )
 
 func SetupEventStoreByEnv() {
-	if !hwutil.HasEnv(FeatureFlagEnv) {
-		log.Info().
-			Str("FEATURE_FLAG", FeatureFlagEnv).
-			Bool("FEATURE_ENABLED", false).
-			Msg("early exit SetupEventStoreByEnv()")
-		return
-	}
 	connectionString := hwutil.MustGetEnv("EVENTSTORE_CS")
 	SetupEventStore(connectionString)
 }
 
 func SetupEventStore(connectionString string) {
-	if !hwutil.HasEnv(FeatureFlagEnv) {
-		log.Info().
-			Str("FEATURE_FLAG", FeatureFlagEnv).
-			Bool("FEATURE_ENABLED", false).
-			Msg("early exit SetupEventStore()")
-		return
-	}
-
 	config, err := esdb.ParseConnectionString(connectionString)
 	if err != nil {
 		log.Fatal().Err(err).Msg("invalid eventstore connection string")
@@ -48,13 +32,6 @@ func SetupEventStore(connectionString string) {
 }
 
 func AppendEvents(ctx context.Context, id string, events ...Event) error {
-	if !hwutil.HasEnv(FeatureFlagEnv) {
-		log.Info().
-			Str("FEATURE_FLAG", FeatureFlagEnv).
-			Bool("FEATURE_ENABLED", false).
-			Msg("early exit AppendEvents()")
-	}
-
 	es := GetES()
 
 	eventsData := make([]esdb.EventData, 0, len(events))
@@ -103,13 +80,6 @@ func AppendEvents(ctx context.Context, id string, events ...Event) error {
 }
 
 func TombstoneStream(ctx context.Context, id string) error {
-	if !hwutil.HasEnv(FeatureFlagEnv) {
-		log.Info().
-			Str("FEATURE_FLAG", FeatureFlagEnv).
-			Bool("FEATURE_ENABLED", false).
-			Msg("early exit TombstoneStream()")
-	}
-
 	_, err := GetES().TombstoneStream(ctx, id, esdb.TombstoneStreamOptions{})
 	return err
 }
