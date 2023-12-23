@@ -90,7 +90,7 @@ message GetOrganizationsByUserResponse {
       string user_id = 1;
       string email = 2;
       string nickname = 3;
-      string avatar_url = 4;
+      optional string avatar_url = 4;
     }
   }
 }
@@ -117,7 +117,7 @@ message GetOrganizationsForUserResponse {
       string user_id = 1;
       string email = 2;
       string nickname = 3;
-      string avatar_url = 4;
+      optional string avatar_url = 4;
     }
   }
 }
@@ -163,7 +163,7 @@ message GetMembersByOrganizationResponse {
     string user_id = 1;
     string email = 2;
     string nickname = 3;
-    string avatar_url = 4;
+    optional string avatar_url = 4;
   }
 }
 

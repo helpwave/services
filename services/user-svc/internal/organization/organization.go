@@ -144,7 +144,7 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOr
 			Members: hwutil.Map(obj.Members, func(membership organization_repo.User) *pb.GetOrganizationsByUserResponse_Organization_Member {
 				return &pb.GetOrganizationsByUserResponse_Organization_Member{
 					UserId:    membership.ID.String(),
-					AvatarUrl: *membership.AvatarUrl,
+					AvatarUrl: membership.AvatarUrl, // can be nil, if inserted intentionally
 					Email:     membership.Email,
 					Nickname:  membership.Nickname,
 				}
@@ -227,7 +227,7 @@ func (s ServiceServer) GetOrganizationsForUser(ctx context.Context, _ *pb.GetOrg
 			Members: hwutil.Map(obj.Members, func(membership organization_repo.User) *pb.GetOrganizationsForUserResponse_Organization_Member {
 				return &pb.GetOrganizationsForUserResponse_Organization_Member{
 					UserId:    membership.ID.String(),
-					AvatarUrl: *membership.AvatarUrl,
+					AvatarUrl: membership.AvatarUrl, // can be nil, if inserted intentionally
 					Email:     membership.Email,
 					Nickname:  membership.Nickname,
 				}
@@ -535,7 +535,7 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 	mappedMembers := hwutil.Map(members, func(member organization_repo.User) *pb.GetMembersByOrganizationResponse_Member {
 		return &pb.GetMembersByOrganizationResponse_Member{
 			UserId:    member.ID.String(),
-			AvatarUrl: *member.AvatarUrl, // cannot be nil, has default
+			AvatarUrl: member.AvatarUrl, // can be nil, if inserted intentionally
 			Email:     member.Email,
 			Nickname:  member.Nickname,
 		}

@@ -95,7 +95,7 @@ func (s ServiceServer) ReadPublicProfile(ctx context.Context, req *pb.ReadPublic
 		Id:        user.ID.String(),
 		Name:      user.Name,
 		Nickname:  user.Nickname,
-		AvatarUrl: *user.AvatarUrl,
+		AvatarUrl: user.AvatarUrl,
 	}, nil
 }
 
