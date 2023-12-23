@@ -77,16 +77,6 @@ SELECT users.*
 	JOIN users ON memberships.user_id = users.id
 	WHERE memberships.organization_id = $1;
 
--- name: IsInOrganizationByEmail :one
-SELECT EXISTS(
-	SELECT 1
-	FROM memberships
-	JOIN users ON users.id = memberships.user_id
-	WHERE memberships.organization_id = @organization_id
-	AND users.email = @email
-	LIMIT 1
-);
-
 -- name: IsInOrganizationById :one
 SELECT EXISTS(
 	SELECT 1
@@ -94,13 +84,37 @@ SELECT EXISTS(
 	WHERE user_id = @userID AND organization_id = @organizationID
 );
 
--- name: DoesInvitationExist :one
+-- name: DoesOrganizationExist :one
 SELECT EXISTS (
 	SELECT 1
-	FROM invitations
-	WHERE (email = @email AND organization_id = @organization_id)
-	AND state = ANY(ARRAY[@states::int[]])
+	FROM organizations
+	WHERE (id = @id)
 );
+
+-- name: GetInvitationConditions :one
+SELECT
+	EXISTS (
+		SELECT 1
+		FROM memberships
+				 JOIN users ON users.id = memberships.user_id
+		WHERE memberships.organization_id = @organization_id
+		  AND users.email = @email
+		LIMIT 1
+	) AS isInOrganitationByEmail,
+
+	EXISTS (
+		SELECT 1
+		FROM organizations
+		WHERE (id = @organization_id)
+	) AS doesOrganizationExist,
+
+	EXISTS (
+		SELECT 1
+		FROM invitations
+		WHERE (email = @email AND organization_id = @organization_id)
+		  AND state = ANY(ARRAY[@states::int[]])
+	) AS DoesInvitationExist;
+
 
 -- name: GetInvitationsWithOrganizationByUser :many
 SELECT

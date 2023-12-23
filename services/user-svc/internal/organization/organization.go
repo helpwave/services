@@ -354,37 +354,22 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	// Check if an organization exists
-	organization, err := hwdb.Optional(organizationRepo.GetOrganizationById)(ctx, organizationId)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-	if organization == nil {
-		return nil, status.Error(codes.InvalidArgument, "organization not found")
-	}
-
-	// Check if email is already in organization
-	isInOrganization, err := organizationRepo.IsInOrganizationByEmail(ctx, organization_repo.IsInOrganizationByEmailParams{
+	conditions, err := organizationRepo.GetInvitationConditions(ctx, organization_repo.GetInvitationConditionsParams{
 		OrganizationID: organizationId,
 		Email:          req.Email,
-	})
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	if isInOrganization {
-		return nil, status.Error(codes.InvalidArgument, "cannot invite a user that is already a member")
-	}
-
-	// check if an Invitation already exists
-	doesInvitationExists, err := organizationRepo.DoesInvitationExist(ctx, organization_repo.DoesInvitationExistParams{
-		Email:          req.Email,
-		OrganizationID: organizationId,
 		States:         []int32{int32(pb.InvitationState_INVITATION_STATE_ACCEPTED.Number()), int32(pb.InvitationState_INVITATION_STATE_PENDING.Number())},
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
-	} else if !doesInvitationExists {
+	}
+
+	if !conditions.Doesorganizationexist {
+		return nil, status.Error(codes.InvalidArgument, "organization not found")
+	} else if conditions.Isinorganitationbyemail {
+		return nil, status.Error(codes.InvalidArgument, "cannot invite a user that is already a member")
+	} else if conditions.Doesinvitationexist {
+		return nil, status.Error(codes.InvalidArgument, "user already invited")
+	} else {
 		invitation, err = organizationRepo.InviteMember(ctx, organization_repo.InviteMemberParams{
 			Email:          req.Email,
 			OrganizationID: organizationId,
@@ -398,8 +383,6 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 			Str("email", req.Email). // TODO: Revisited for privacy reasons
 			Str("organizationID", organizationId.String()).
 			Msg("user invited to organization")
-	} else {
-		return nil, status.Error(codes.InvalidArgument, "user already invited")
 	}
 
 	return &pb.InviteMemberResponse{
@@ -420,10 +403,10 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	organization, err := hwdb.Optional(organizationRepo.GetOrganizationById)(ctx, organizationID)
+	doesOrganizationExist, err := organizationRepo.DoesOrganizationExist(ctx, organizationID)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
-	} else if organization == nil {
+	} else if !doesOrganizationExist {
 		return &pb.GetInvitationsByOrganizationResponse{}, nil
 	}
 
@@ -508,10 +491,10 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	organization, err := hwdb.Optional(organizationRepo.GetOrganizationById)(ctx, organizationID)
+	doesOrganizationExist, err := organizationRepo.DoesOrganizationExist(ctx, organizationID)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
-	} else if organization == nil {
+	} else if !doesOrganizationExist {
 		return &pb.GetMembersByOrganizationResponse{}, nil
 	}
 

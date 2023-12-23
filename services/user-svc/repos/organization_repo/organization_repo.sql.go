@@ -89,26 +89,63 @@ func (q *Queries) DeleteOrganization(ctx context.Context, id uuid.UUID) error {
 	return err
 }
 
-const doesInvitationExist = `-- name: DoesInvitationExist :one
+const doesOrganizationExist = `-- name: DoesOrganizationExist :one
 SELECT EXISTS (
 	SELECT 1
-	FROM invitations
-	WHERE (email = $1 AND organization_id = $2)
-	AND state = ANY(ARRAY[$3::int[]])
+	FROM organizations
+	WHERE (id = $1)
 )
 `
 
-type DoesInvitationExistParams struct {
-	Email          string
-	OrganizationID uuid.UUID
-	States         []int32
-}
-
-func (q *Queries) DoesInvitationExist(ctx context.Context, arg DoesInvitationExistParams) (bool, error) {
-	row := q.db.QueryRow(ctx, doesInvitationExist, arg.Email, arg.OrganizationID, arg.States)
+func (q *Queries) DoesOrganizationExist(ctx context.Context, id uuid.UUID) (bool, error) {
+	row := q.db.QueryRow(ctx, doesOrganizationExist, id)
 	var exists bool
 	err := row.Scan(&exists)
 	return exists, err
+}
+
+const getInvitationConditions = `-- name: GetInvitationConditions :one
+SELECT
+	EXISTS (
+		SELECT 1
+		FROM memberships
+				 JOIN users ON users.id = memberships.user_id
+		WHERE memberships.organization_id = $1
+		  AND users.email = $2
+		LIMIT 1
+	) AS isInOrganitationByEmail,
+
+	EXISTS (
+		SELECT 1
+		FROM organizations
+		WHERE (id = $1)
+	) AS doesOrganizationExist,
+
+	EXISTS (
+		SELECT 1
+		FROM invitations
+		WHERE (email = $2 AND organization_id = $1)
+		  AND state = ANY(ARRAY[$3::int[]])
+	) AS DoesInvitationExist
+`
+
+type GetInvitationConditionsParams struct {
+	OrganizationID uuid.UUID
+	Email          string
+	States         []int32
+}
+
+type GetInvitationConditionsRow struct {
+	Isinorganitationbyemail bool
+	Doesorganizationexist   bool
+	Doesinvitationexist     bool
+}
+
+func (q *Queries) GetInvitationConditions(ctx context.Context, arg GetInvitationConditionsParams) (GetInvitationConditionsRow, error) {
+	row := q.db.QueryRow(ctx, getInvitationConditions, arg.OrganizationID, arg.Email, arg.States)
+	var i GetInvitationConditionsRow
+	err := row.Scan(&i.Isinorganitationbyemail, &i.Doesorganizationexist, &i.Doesinvitationexist)
+	return i, err
 }
 
 const getInvitations = `-- name: GetInvitations :many
@@ -407,29 +444,6 @@ type IsAdminInOrganizationParams struct {
 
 func (q *Queries) IsAdminInOrganization(ctx context.Context, arg IsAdminInOrganizationParams) (bool, error) {
 	row := q.db.QueryRow(ctx, isAdminInOrganization, arg.UserID, arg.OrganizationID)
-	var exists bool
-	err := row.Scan(&exists)
-	return exists, err
-}
-
-const isInOrganizationByEmail = `-- name: IsInOrganizationByEmail :one
-SELECT EXISTS(
-	SELECT 1
-	FROM memberships
-	JOIN users ON users.id = memberships.user_id
-	WHERE memberships.organization_id = $1
-	AND users.email = $2
-	LIMIT 1
-)
-`
-
-type IsInOrganizationByEmailParams struct {
-	OrganizationID uuid.UUID
-	Email          string
-}
-
-func (q *Queries) IsInOrganizationByEmail(ctx context.Context, arg IsInOrganizationByEmailParams) (bool, error) {
-	row := q.db.QueryRow(ctx, isInOrganizationByEmail, arg.OrganizationID, arg.Email)
 	var exists bool
 	err := row.Scan(&exists)
 	return exists, err
