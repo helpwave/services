@@ -128,12 +128,12 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOr
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizations, err := GetOrganizationsForUser(ctx, userID)
+	organizations, err := GetOrganizationsByUserId(ctx, userID)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	mappedOrganizations := hwutil.Map(*organizations, func(obj OrganizationWithMembers) *pb.GetOrganizationsByUserResponse_Organization {
+	mappedOrganizations := hwutil.Map(organizations, func(obj OrganizationWithMembers) *pb.GetOrganizationsByUserResponse_Organization {
 		return &pb.GetOrganizationsByUserResponse_Organization{
 			Id:           obj.Organization.ID.String(),
 			LongName:     obj.Organization.LongName,
@@ -163,7 +163,7 @@ type OrganizationWithMembers struct {
 	Members      []organization_repo.User
 }
 
-func GetOrganizationsForUser(ctx context.Context, userId uuid.UUID) (*[]OrganizationWithMembers, error) {
+func GetOrganizationsByUserId(ctx context.Context, userId uuid.UUID) ([]OrganizationWithMembers, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	rows, err := organizationRepo.GetOrganizationsWithMembersByUser(ctx, userId)
@@ -171,7 +171,7 @@ func GetOrganizationsForUser(ctx context.Context, userId uuid.UUID) (*[]Organiza
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	if len(rows) == 0 {
-		return &[]OrganizationWithMembers{}, nil
+		return []OrganizationWithMembers{}, nil
 	}
 
 	processedOrganizations := make(map[uuid.UUID]bool)
@@ -201,7 +201,7 @@ func GetOrganizationsForUser(ctx context.Context, userId uuid.UUID) (*[]Organiza
 		return val
 	})
 
-	return &organizationsResponse, nil
+	return organizationsResponse, nil
 
 }
 
@@ -211,12 +211,12 @@ func (s ServiceServer) GetOrganizationsForUser(ctx context.Context, _ *pb.GetOrg
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizations, err := GetOrganizationsForUser(ctx, userID)
+	organizations, err := GetOrganizationsByUserId(ctx, userID)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	mappedOrganizations := hwutil.Map(*organizations, func(obj OrganizationWithMembers) *pb.GetOrganizationsForUserResponse_Organization {
+	mappedOrganizations := hwutil.Map(organizations, func(obj OrganizationWithMembers) *pb.GetOrganizationsForUserResponse_Organization {
 		return &pb.GetOrganizationsForUserResponse_Organization{
 			Id:           obj.Organization.ID.String(),
 			LongName:     obj.Organization.LongName,
