@@ -58,11 +58,21 @@ func NewAggregateBase(atype AggregateType, id uuid.UUID, when when) *AggregateBa
 		return nil
 	}
 
+	whenWithLogger := func(event Event) error {
+		log.Debug().
+			Str("aggregateID", event.GetAggregateID().String()).
+			Str("aggregateType", string(event.GetAggregateType())).
+			Str("eventType", event.EventType).
+			Int64("version", event.GetVersion()).
+			Msg("raise event")
+		return when(event)
+	}
+
 	return &AggregateBase{
 		id:      id,
 		version: -1, // -1 indicates a new stream for EventStoreDB
 		atype:   atype,
-		when:    when,
+		when:    whenWithLogger,
 
 		appliedEvents:     make([]Event, 0),
 		uncommittedEvents: make([]Event, 0),
@@ -140,12 +150,6 @@ func (a *AggregateBase) RaiseEvent(event Event) error {
 	}
 
 	event.SetAggregateType(a.GetType()) // TODO: Is this really necessary?
-
-	log.Debug().
-		Str("aggregateID", event.GetAggregateID().String()).
-		Str("aggregateType", string(event.GetAggregateType())).
-		Str("eventType", event.EventType).
-		Msg("raise event")
 
 	if err := a.when(event); err != nil {
 		return err

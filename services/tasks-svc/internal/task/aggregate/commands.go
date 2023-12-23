@@ -6,6 +6,8 @@ import (
 	eventsV1 "tasks-svc/internal/task/events/v1"
 )
 
+// TODO: Rename commands
+
 func (a *TaskAggregate) CreateTask(ctx context.Context, name string) error {
 	id := uuid.New()
 	event, err := eventsV1.NewTaskCreatedEvent(a, id, name)
