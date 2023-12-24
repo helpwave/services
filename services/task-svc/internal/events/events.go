@@ -72,6 +72,11 @@ func NewBedMovedToAnotherRoomEvent(roomId string) (hwes.Event, error) {
 	return event, nil
 }
 
+func NewBedDeletedEvent() (hwes.Event, error) {
+	event := hwes.NewBaseEvent(BedDeleted)
+	return event, nil
+}
+
 func NewTaskAssignedEvent(userId string) (hwes.Event, error) {
 	eventData := TaskAssignedEvent{
 		UserId: userId,
@@ -175,11 +180,20 @@ func DispatchBedDeletedEvent(ctx context.Context, bedId uuid.UUID) error {
 	}
 
 	log := zlog.Ctx(ctx)
-	err := hwes.AppendEvents(ctx, bedId.String())
+	event, err := NewBedDeletedEvent()
 	if err != nil {
 		log.Error().
 			Err(err).
 			Str("event", BedDeleted).
+			Msg("could not create event")
+		return err
+	}
+
+	err = hwes.AppendEvents(ctx, bedId.String(), event)
+	if err != nil {
+		log.Error().
+			Err(err).
+			Str("event", event.Type).
 			Msg("could not dispatch event")
 	}
 
