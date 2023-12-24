@@ -15,7 +15,6 @@ message CreateBedRequest {
 
 message CreateBedResponse {
   string id = 1;
-  string name = 2;
 }
 
 //
