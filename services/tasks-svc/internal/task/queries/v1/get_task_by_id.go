@@ -37,6 +37,7 @@ func (q *getTaskByIDQueryHandler) Handle(ctx context.Context, query *GetTaskByID
 	return &models.Task{
 		ID:            task.Task.ID,
 		Name:          task.Task.Name,
+		Description:   task.Task.Description,
 		AssignedUsers: task.Task.AssignedUsers,
 		Subtasks:      task.Task.Subtasks,
 	}, nil

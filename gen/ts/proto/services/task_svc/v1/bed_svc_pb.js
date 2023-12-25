@@ -675,8 +675,7 @@ proto.proto.services.task_svc.v1.CreateBedResponse.prototype.toObject = function
  */
 proto.proto.services.task_svc.v1.CreateBedResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 2, "")
+    id: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -717,10 +716,6 @@ proto.proto.services.task_svc.v1.CreateBedResponse.deserializeBinaryFromReader =
       var value = /** @type {string} */ (reader.readString());
       msg.setId(value);
       break;
-    case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setName(value);
-      break;
     default:
       reader.skipField();
       break;
@@ -757,13 +752,6 @@ proto.proto.services.task_svc.v1.CreateBedResponse.serializeBinaryToWriter = fun
       f
     );
   }
-  f = message.getName();
-  if (f.length > 0) {
-    writer.writeString(
-      2,
-      f
-    );
-  }
 };
 
 
@@ -782,24 +770,6 @@ proto.proto.services.task_svc.v1.CreateBedResponse.prototype.getId = function() 
  */
 proto.proto.services.task_svc.v1.CreateBedResponse.prototype.setId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
-};
-
-
-/**
- * optional string name = 2;
- * @return {string}
- */
-proto.proto.services.task_svc.v1.CreateBedResponse.prototype.getName = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.proto.services.task_svc.v1.CreateBedResponse} returns this
- */
-proto.proto.services.task_svc.v1.CreateBedResponse.prototype.setName = function(value) {
-  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

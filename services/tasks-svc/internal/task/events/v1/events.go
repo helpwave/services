@@ -6,18 +6,32 @@ import (
 )
 
 const (
-	TaskCreated        = "TASK_CREATED_v1"
-	TaskAssigned       = "TASK_ASSIGNED_v1"
-	TaskSelfAssigned   = "TASK_SELF_ASSIGNED_v1"
-	TaskUnassigned     = "TASK_UNASSIGNED_v1"
-	SubtaskCreated     = "TASK_SUBTASK_CREATED_v1"
-	SubtaskCompleted   = "TASK_SUBTASK_COMPLETED_v1"
-	SubtaskUncompleted = "TASK_SUBTASK_UNCOMPLETED_v1"
+	TaskCreated            = "TASK_CREATED_v1"
+	TaskNameUpdated        = "TASK_NAME_UPDATED_v1"
+	TaskDescriptionUpdated = "TASK_DESCRIPTION_UPDATED_v1"
+	TaskAssigned           = "TASK_ASSIGNED_v1"
+	TaskSelfAssigned       = "TASK_SELF_ASSIGNED_v1"
+	TaskUnassigned         = "TASK_UNASSIGNED_v1"
+	SubtaskCreated         = "TASK_SUBTASK_CREATED_v1"
+	SubtaskNameUpdated     = "TASK_SUBTASK_NAME_UPDATED_v1"
+	SubtaskCompleted       = "TASK_SUBTASK_COMPLETED_v1"
+	SubtaskUncompleted     = "TASK_SUBTASK_UNCOMPLETED_v1"
+	SubtaskDeleted         = "TASK_SUBTASK_DELETED_v1"
 )
 
 type TaskCreatedEvent struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
+}
+
+type TaskNameUpdatedEvent struct {
+	PreviousName string `json:"previous_name"`
+	Name         string `json:"name"`
+}
+
+type TaskDescriptionUpdatedEvent struct {
+	PreviousDescription string `json:"previous_description"`
+	Description         string `json:"description"`
 }
 
 type TaskAssignedEvent struct {
@@ -37,11 +51,20 @@ type SubtaskCreatedEvent struct {
 	Name      string `json:"name"`
 }
 
+type SubtaskNameUpdatedEvent struct {
+	SubtaskID string `json:"subtask_id"`
+	Name      string `json:"name"`
+}
+
 type SubtaskCompletedEvent struct {
 	SubtaskID string `json:"subtask_id"`
 }
 
 type SubtaskUncompletedEvent struct {
+	SubtaskID string `json:"subtask_id"`
+}
+
+type SubtaskDeletedEvent struct {
 	SubtaskID string `json:"subtask_id"`
 }
 
@@ -51,6 +74,30 @@ func NewTaskCreatedEvent(a hwes.Aggregate, id uuid.UUID, name string) (hwes.Even
 		Name: name,
 	}
 	event := hwes.NewBaseEvent(a, TaskCreated)
+	if err := event.SetJsonData(&payload); err != nil {
+		return hwes.Event{}, err
+	}
+	return event, nil
+}
+
+func NewTaskNameUpdatedEvent(a hwes.Aggregate, previousName, name string) (hwes.Event, error) {
+	payload := TaskNameUpdatedEvent{
+		PreviousName: previousName,
+		Name:         name,
+	}
+	event := hwes.NewBaseEvent(a, TaskNameUpdated)
+	if err := event.SetJsonData(&payload); err != nil {
+		return hwes.Event{}, err
+	}
+	return event, nil
+}
+
+func NewTaskDescriptionUpdatedEvent(a hwes.Aggregate, previousDescription, description string) (hwes.Event, error) {
+	payload := TaskDescriptionUpdatedEvent{
+		PreviousDescription: previousDescription,
+		Description:         description,
+	}
+	event := hwes.NewBaseEvent(a, TaskDescriptionUpdated)
 	if err := event.SetJsonData(&payload); err != nil {
 		return hwes.Event{}, err
 	}
@@ -102,6 +149,18 @@ func NewSubtaskCreatedEvent(a hwes.Aggregate, subtaskID uuid.UUID, name string) 
 	return event, nil
 }
 
+func NewSubtaskNameUpdatedEvent(a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
+	payload := SubtaskNameUpdatedEvent{
+		SubtaskID: subtaskID.String(),
+		Name:      name,
+	}
+	event := hwes.NewBaseEvent(a, SubtaskNameUpdated)
+	if err := event.SetJsonData(&payload); err != nil {
+		return hwes.Event{}, err
+	}
+	return event, nil
+}
+
 func NewSubtaskCompletedEvent(a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
 	payload := SubtaskCompletedEvent{
 		SubtaskID: subtaskID.String(),
@@ -118,6 +177,17 @@ func NewSubtaskUncompletedEvent(a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Eve
 		SubtaskID: subtaskID.String(),
 	}
 	event := hwes.NewBaseEvent(a, SubtaskUncompleted)
+	if err := event.SetJsonData(&payload); err != nil {
+		return hwes.Event{}, nil
+	}
+	return event, nil
+}
+
+func NewSubtaskDeletedEvent(a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
+	payload := SubtaskDeletedEvent{
+		SubtaskID: subtaskID.String(),
+	}
+	event := hwes.NewBaseEvent(a, SubtaskDeleted)
 	if err := event.SetJsonData(&payload); err != nil {
 		return hwes.Event{}, nil
 	}

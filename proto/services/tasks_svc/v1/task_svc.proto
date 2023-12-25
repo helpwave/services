@@ -4,7 +4,7 @@ package proto.services.tasks_svc.v1;
 
 option go_package = "gen/proto/services/tasks-svc";
 
-import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
 enum TaskStatus {
   TASK_STATUS_UNSPECIFIED = 0;
@@ -19,11 +19,39 @@ enum TaskStatus {
 
 message CreateTaskRequest {
   string name = 1; // @gotags: validate:"required"
+  optional string description = 2;
+  string patient_id = 3; // @gotags: validate:"uuid4"
+  bool public = 4;
+  google.protobuf.Timestamp due_at = 5;
+  optional TaskStatus initial_status = 6;
 }
 
 message CreateTaskResponse {
   string id = 1;
 }
+
+//
+// UpdateTask
+//
+
+message UpdateTaskRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+  optional string name = 2;
+  optional string description = 3;
+  optional google.protobuf.Timestamp due_at = 4;
+}
+
+message UpdateTaskResponse {}
+
+//
+// PublishTask
+//
+
+message PublishTaskRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+message PublishTaskResponse {}
 
 //
 // GetTask
@@ -36,8 +64,9 @@ message GetTaskRequest {
 message GetTaskResponse {
   string id = 1;
   string name = 2;
-  repeated string assigned_users = 3;
-  repeated Subtask subtasks = 4;
+  string description = 3;
+  repeated string assigned_users = 4;
+  repeated Subtask subtasks = 5;
 
   message Subtask {
     string id = 1;
@@ -75,6 +104,22 @@ message CreateSubtaskResponse {
 }
 
 //
+// UpdateSubtask
+//
+
+message UpdateSubtaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  string subtask_id = 2; // @gotags: validate:"uuid4"
+  Subtask subtask = 3;
+
+  message Subtask {
+    optional string name = 1;
+  }
+}
+
+message UpdateSubtaskResponse {}
+
+//
 // CompleteSubtask
 //
 
@@ -97,14 +142,29 @@ message UncompleteSubtaskRequest {
 message UncompleteSubtaskResponse {}
 
 //
+// DeleteSubtask
+//
+
+message DeleteSubtaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  string subtask_id = 2; // @gotags: validate:"uuid4"
+}
+
+message DeleteSubtaskResponse {}
+
+//
 // TaskService
 //
 
 service TaskService {
   rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse) {}
+  rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse) {}
+  rpc PublishTask(PublishTaskRequest) returns (PublishTaskResponse) {}
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
   rpc AssignTask(AssignTaskRequest) returns (AssignTaskResponse) {}
   rpc CreateSubtask(CreateSubtaskRequest) returns (CreateSubtaskResponse) {}
+  rpc UpdateSubtask(UpdateSubtaskRequest) returns (UpdateSubtaskResponse) {}
   rpc CompleteSubtask(CompleteSubtaskRequest) returns (CompleteSubtaskResponse) {}
   rpc UncompleteSubtask(UncompleteSubtaskRequest) returns (UncompleteSubtaskResponse) {}
+  rpc DeleteSubtask(DeleteSubtaskRequest) returns (DeleteSubtaskResponse) {}
 }

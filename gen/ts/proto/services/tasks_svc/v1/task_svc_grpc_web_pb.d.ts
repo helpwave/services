@@ -15,6 +15,20 @@ export class TaskServiceClient {
                response: proto_services_tasks_svc_v1_task_svc_pb.CreateTaskResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.CreateTaskResponse>;
 
+  updateTask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.UpdateTaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_tasks_svc_v1_task_svc_pb.UpdateTaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.UpdateTaskResponse>;
+
+  publishTask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.PublishTaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_tasks_svc_v1_task_svc_pb.PublishTaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.PublishTaskResponse>;
+
   getTask(
     request: proto_services_tasks_svc_v1_task_svc_pb.GetTaskRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -36,6 +50,13 @@ export class TaskServiceClient {
                response: proto_services_tasks_svc_v1_task_svc_pb.CreateSubtaskResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.CreateSubtaskResponse>;
 
+  updateSubtask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.UpdateSubtaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_tasks_svc_v1_task_svc_pb.UpdateSubtaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.UpdateSubtaskResponse>;
+
   completeSubtask(
     request: proto_services_tasks_svc_v1_task_svc_pb.CompleteSubtaskRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -50,6 +71,13 @@ export class TaskServiceClient {
                response: proto_services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskResponse>;
 
+  deleteSubtask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.DeleteSubtaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_tasks_svc_v1_task_svc_pb.DeleteSubtaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.DeleteSubtaskResponse>;
+
 }
 
 export class TaskServicePromiseClient {
@@ -61,6 +89,16 @@ export class TaskServicePromiseClient {
     request: proto_services_tasks_svc_v1_task_svc_pb.CreateTaskRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_tasks_svc_v1_task_svc_pb.CreateTaskResponse>;
+
+  updateTask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.UpdateTaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_tasks_svc_v1_task_svc_pb.UpdateTaskResponse>;
+
+  publishTask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.PublishTaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_tasks_svc_v1_task_svc_pb.PublishTaskResponse>;
 
   getTask(
     request: proto_services_tasks_svc_v1_task_svc_pb.GetTaskRequest,
@@ -77,6 +115,11 @@ export class TaskServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_tasks_svc_v1_task_svc_pb.CreateSubtaskResponse>;
 
+  updateSubtask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.UpdateSubtaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_tasks_svc_v1_task_svc_pb.UpdateSubtaskResponse>;
+
   completeSubtask(
     request: proto_services_tasks_svc_v1_task_svc_pb.CompleteSubtaskRequest,
     metadata?: grpcWeb.Metadata
@@ -86,6 +129,11 @@ export class TaskServicePromiseClient {
     request: proto_services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskResponse>;
+
+  deleteSubtask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.DeleteSubtaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_tasks_svc_v1_task_svc_pb.DeleteSubtaskResponse>;
 
 }
 

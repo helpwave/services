@@ -22,6 +22,8 @@ type Task struct {
 
 func NewTask() *Task {
 	return &Task{
+		Name:          "",
+		Description:   "",
 		CreatedAt:     time.Now().UTC(),
 		Status:        pb.TaskStatus_TASK_STATUS_UNSPECIFIED,
 		AssignedUsers: make([]uuid.UUID, 0),
