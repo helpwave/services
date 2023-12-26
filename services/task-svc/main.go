@@ -6,7 +6,6 @@ import (
 	pb "gen/proto/services/task_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwdb"
-	"hwes"
 	"hwgorm"
 	"task-svc/internal/bed"
 	"task-svc/internal/patient"
@@ -26,7 +25,6 @@ var Version string
 func main() {
 	common.Setup(ServiceName, Version, true)
 
-	hwes.SetupEventStoreByEnv()
 	hwgorm.SetupDatabaseByEnvs() // TODO: to be removed
 	hwdb.SetupDatabaseFromEnv(context.Background())
 	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)

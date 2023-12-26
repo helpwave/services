@@ -6,7 +6,6 @@ import (
 	"hwdb"
 	"hwgorm"
 	"hwutil"
-	"task-svc/internal/events"
 	"task-svc/repos/bed_repo"
 
 	"github.com/google/uuid"
@@ -54,8 +53,6 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		Str("roomID", req.RoomId).
 		Str("name", bed.Name).
 		Msg("bed created")
-
-	_ = events.DispatchBedCreatedEvent(ctx, bed.ID, bed.Name)
 
 	return &pb.CreateBedResponse{
 		Id: bed.ID.String(),
@@ -214,12 +211,6 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	_ = events.DispatchBedUpdatedEvent(ctx, bedID, req.GetName())
-
-	if roomId.Valid {
-		_ = events.DispatchBedMovedToAnotherRoomEvent(ctx, bedID, roomId.UUID.String())
-	}
-
 	return &pb.UpdateBedResponse{}, nil
 }
 
@@ -261,8 +252,6 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 	log.Info().
 		Str("bedID", bedID.String()).
 		Msg("bed deleted")
-
-	_ = events.DispatchBedDeletedEvent(ctx, bedID)
 
 	return &pb.DeleteBedResponse{}, err
 }
