@@ -39,8 +39,7 @@ func AppendEvents(ctx context.Context, id string, events ...Event) error {
 		eventsData = append(eventsData, event.ToEventData())
 	}
 
-	// readOps := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.End{}}
-	readOps := esdb.ReadStreamOptions{}
+	readOps := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.End{}}
 	stream, err := es.ReadStream(ctx, id, readOps, 1)
 	if err != nil && err != esdb.ErrStreamNotFound {
 		return err
