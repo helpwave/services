@@ -122,6 +122,9 @@ func TestTaskGrpcService_UpdateTask(t *testing.T) {
 		Name:        &taskName2,
 		Description: &taskDescription2,
 	})
+	if err != nil {
+		t.Error(err)
+	}
 
 	getTaskResponse, err = client.GetTask(ctx, &pb.GetTaskRequest{Id: createTaskResponse.GetId()})
 	if err != nil {

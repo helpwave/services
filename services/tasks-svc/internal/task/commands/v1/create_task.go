@@ -60,7 +60,7 @@ func (c *createTaskCommandHandler) Handle(ctx context.Context, command *CreateTa
 		return err
 	}
 
-	if command.Public != nil && *command.Public == true {
+	if command.Public != nil && *command.Public {
 		if err := a.PublishTask(ctx); err != nil {
 			return err
 		}

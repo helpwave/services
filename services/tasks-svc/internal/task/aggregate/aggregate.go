@@ -2,7 +2,6 @@ package aggregate
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
@@ -61,7 +60,7 @@ func (a *TaskAggregate) When(evt hwes.Event) error {
 	case eventsV1.SubtaskDeleted:
 		return a.onSubtaskDeleted(evt)
 	default:
-		return errors.New(fmt.Sprintf("event type '%s' is invalid", evt.EventType))
+		return fmt.Errorf("event type '%s' is invalid", evt.EventType)
 	}
 }
 
@@ -119,14 +118,12 @@ func (a *TaskAggregate) onTaskAssigned(evt hwes.Event) error {
 			return err
 		}
 		userIDStr = payload.UserID
-		break
 	case eventsV1.TaskSelfAssigned:
 		var payload eventsV1.TaskSelfAssignedEvent
 		if err := evt.GetJsonData(&payload); err != nil {
 			return err
 		}
 		userIDStr = payload.UserID
-		break
 	}
 
 	userID, err := uuid.Parse(userIDStr)
@@ -205,7 +202,7 @@ func (a *TaskAggregate) onSubtaskNameUpdated(evt hwes.Event) error {
 
 	subtask, found := a.Task.Subtasks[subtaskID]
 	if !found {
-		return errors.New(fmt.Sprintf("Subtask '%s' not found in task '%s'", subtaskID, a.Task.ID))
+		return fmt.Errorf("Subtask '%s' not found in task '%s'", subtaskID, a.Task.ID)
 	}
 
 	subtask.Name = payload.Name
