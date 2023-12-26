@@ -28,6 +28,14 @@ func NewBaseEvent(aggregate Aggregate, eventType string) Event {
 	}
 }
 
+func NewBaseEventWithPayload(aggregate Aggregate, eventType string, payload interface{}) (Event, error) {
+	baseEvent := NewBaseEvent(aggregate, eventType)
+	if err := baseEvent.SetJsonData(&payload); err != nil {
+		return Event{}, err
+	}
+	return baseEvent, nil
+}
+
 func resolveAggregateIDFromStreamID(streamID string) (uuid.UUID, error) {
 	streamIDParts := strings.SplitN(streamID, "-", 2)
 
