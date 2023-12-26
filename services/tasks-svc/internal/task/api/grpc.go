@@ -20,15 +20,20 @@ func NewTaskGrpcService(taskService *service.TaskService) *TaskGrpcService {
 }
 
 func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.CreateTaskResponse, error) {
-	id := uuid.New()
+	taskID := uuid.New()
 
-	command := commandsV1.NewCreateTaskCommand(id, req.GetName())
+	patientID, err := uuid.Parse(req.GetPatientId())
+	if err != nil {
+		return nil, err
+	}
+
+	command := commandsV1.NewCreateTaskCommand(taskID, req.GetName(), patientID, req.Public, req.InitialStatus)
 	if err := s.service.Commands.CreateTask.Handle(ctx, command); err != nil {
 		return nil, err
 	}
 
 	return &pb.CreateTaskResponse{
-		Id: id.String(),
+		Id: taskID.String(),
 	}, nil
 }
 
@@ -94,6 +99,7 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 			return userID.String()
 		}),
 		Subtasks: subtasksRes,
+		Status:   task.Status,
 	}, nil
 }
 

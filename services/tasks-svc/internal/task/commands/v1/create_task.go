@@ -3,6 +3,7 @@ package v1
 import (
 	"context"
 	"errors"
+	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"
@@ -10,11 +11,20 @@ import (
 
 type CreateTaskCommand struct {
 	hwes.BaseCommand
-	Name string
+	Name      string
+	PatientID uuid.UUID
+	Public    *bool
+	Status    *pb.TaskStatus
 }
 
-func NewCreateTaskCommand(id uuid.UUID, name string) *CreateTaskCommand {
-	return &CreateTaskCommand{BaseCommand: hwes.NewBaseCommand(id), Name: name}
+func NewCreateTaskCommand(id uuid.UUID, name string, patientID uuid.UUID, public *bool, status *pb.TaskStatus) *CreateTaskCommand {
+	return &CreateTaskCommand{
+		BaseCommand: hwes.NewBaseCommand(id),
+		Name:        name,
+		PatientID:   patientID,
+		Public:      public,
+		Status:      status,
+	}
 }
 
 type CreateTaskCommandHandler interface {
@@ -41,8 +51,19 @@ func (c *createTaskCommandHandler) Handle(ctx context.Context, command *CreateTa
 		return errors.New("cannot create an already existing aggregate")
 	}
 
-	if err := a.CreateTask(ctx, command.Name); err != nil {
+	status := pb.TaskStatus_TASK_STATUS_TODO
+	if command.Status != nil {
+		status = *command.Status
+	}
+
+	if err := a.CreateTask(ctx, command.Name, command.PatientID, status); err != nil {
 		return err
+	}
+
+	if command.Public != nil && *command.Public == true {
+		if err := a.PublishTask(ctx); err != nil {
+			return err
+		}
 	}
 
 	return c.as.Save(ctx, a)

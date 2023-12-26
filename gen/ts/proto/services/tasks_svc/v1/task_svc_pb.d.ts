@@ -17,6 +17,8 @@ export class CreateTaskRequest extends jspb.Message {
 
   getPublic(): boolean;
   setPublic(value: boolean): CreateTaskRequest;
+  hasPublic(): boolean;
+  clearPublic(): CreateTaskRequest;
 
   getDueAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
   setDueAt(value?: google_protobuf_timestamp_pb.Timestamp): CreateTaskRequest;
@@ -41,7 +43,7 @@ export namespace CreateTaskRequest {
     name: string,
     description?: string,
     patientId: string,
-    pb_public: boolean,
+    pb_public?: boolean,
     dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     initialStatus?: TaskStatus,
   }
@@ -49,6 +51,11 @@ export namespace CreateTaskRequest {
   export enum DescriptionCase { 
     _DESCRIPTION_NOT_SET = 0,
     DESCRIPTION = 2,
+  }
+
+  export enum PublicCase { 
+    _PUBLIC_NOT_SET = 0,
+    PUBLIC = 4,
   }
 
   export enum InitialStatusCase { 
@@ -210,6 +217,9 @@ export class GetTaskResponse extends jspb.Message {
   clearSubtasksList(): GetTaskResponse;
   addSubtasks(value?: GetTaskResponse.Subtask, index?: number): GetTaskResponse.Subtask;
 
+  getStatus(): TaskStatus;
+  setStatus(value: TaskStatus): GetTaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetTaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetTaskResponse): GetTaskResponse.AsObject;
@@ -225,6 +235,7 @@ export namespace GetTaskResponse {
     description: string,
     assignedUsersList: Array<string>,
     subtasksList: Array<GetTaskResponse.Subtask.AsObject>,
+    status: TaskStatus,
   }
 
   export class Subtask extends jspb.Message {

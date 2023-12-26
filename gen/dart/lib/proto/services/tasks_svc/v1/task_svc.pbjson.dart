@@ -37,12 +37,13 @@ const CreateTaskRequest$json = {
     {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
     {'1': 'description', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
     {'1': 'patient_id', '3': 3, '4': 1, '5': 9, '10': 'patientId'},
-    {'1': 'public', '3': 4, '4': 1, '5': 8, '10': 'public'},
+    {'1': 'public', '3': 4, '4': 1, '5': 8, '9': 1, '10': 'public', '17': true},
     {'1': 'due_at', '3': 5, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'dueAt'},
-    {'1': 'initial_status', '3': 6, '4': 1, '5': 14, '6': '.proto.services.tasks_svc.v1.TaskStatus', '9': 1, '10': 'initialStatus', '17': true},
+    {'1': 'initial_status', '3': 6, '4': 1, '5': 14, '6': '.proto.services.tasks_svc.v1.TaskStatus', '9': 2, '10': 'initialStatus', '17': true},
   ],
   '8': [
     {'1': '_description'},
+    {'1': '_public'},
     {'1': '_initial_status'},
   ],
 };
@@ -50,11 +51,11 @@ const CreateTaskRequest$json = {
 /// Descriptor for `CreateTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createTaskRequestDescriptor = $convert.base64Decode(
     'ChFDcmVhdGVUYXNrUmVxdWVzdBISCgRuYW1lGAEgASgJUgRuYW1lEiUKC2Rlc2NyaXB0aW9uGA'
-    'IgASgJSABSC2Rlc2NyaXB0aW9uiAEBEh0KCnBhdGllbnRfaWQYAyABKAlSCXBhdGllbnRJZBIW'
-    'CgZwdWJsaWMYBCABKAhSBnB1YmxpYxIxCgZkdWVfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idW'
-    'YuVGltZXN0YW1wUgVkdWVBdBJTCg5pbml0aWFsX3N0YXR1cxgGIAEoDjInLnByb3RvLnNlcnZp'
-    'Y2VzLnRhc2tzX3N2Yy52MS5UYXNrU3RhdHVzSAFSDWluaXRpYWxTdGF0dXOIAQFCDgoMX2Rlc2'
-    'NyaXB0aW9uQhEKD19pbml0aWFsX3N0YXR1cw==');
+    'IgASgJSABSC2Rlc2NyaXB0aW9uiAEBEh0KCnBhdGllbnRfaWQYAyABKAlSCXBhdGllbnRJZBIb'
+    'CgZwdWJsaWMYBCABKAhIAVIGcHVibGljiAEBEjEKBmR1ZV9hdBgFIAEoCzIaLmdvb2dsZS5wcm'
+    '90b2J1Zi5UaW1lc3RhbXBSBWR1ZUF0ElMKDmluaXRpYWxfc3RhdHVzGAYgASgOMicucHJvdG8u'
+    'c2VydmljZXMudGFza3Nfc3ZjLnYxLlRhc2tTdGF0dXNIAlINaW5pdGlhbFN0YXR1c4gBAUIOCg'
+    'xfZGVzY3JpcHRpb25CCQoHX3B1YmxpY0IRCg9faW5pdGlhbF9zdGF0dXM=');
 
 @$core.Deprecated('Use createTaskResponseDescriptor instead')
 const CreateTaskResponse$json = {
@@ -142,6 +143,7 @@ const GetTaskResponse$json = {
     {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
     {'1': 'assigned_users', '3': 4, '4': 3, '5': 9, '10': 'assignedUsers'},
     {'1': 'subtasks', '3': 5, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetTaskResponse.Subtask', '10': 'subtasks'},
+    {'1': 'status', '3': 6, '4': 1, '5': 14, '6': '.proto.services.tasks_svc.v1.TaskStatus', '10': 'status'},
   ],
   '3': [GetTaskResponse_Subtask$json],
 };
@@ -161,8 +163,10 @@ final $typed_data.Uint8List getTaskResponseDescriptor = $convert.base64Decode(
     'Cg9HZXRUYXNrUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIA'
     'oLZGVzY3JpcHRpb24YAyABKAlSC2Rlc2NyaXB0aW9uEiUKDmFzc2lnbmVkX3VzZXJzGAQgAygJ'
     'Ug1hc3NpZ25lZFVzZXJzElAKCHN1YnRhc2tzGAUgAygLMjQucHJvdG8uc2VydmljZXMudGFza3'
-    'Nfc3ZjLnYxLkdldFRhc2tSZXNwb25zZS5TdWJ0YXNrUghzdWJ0YXNrcxpBCgdTdWJ0YXNrEg4K'
-    'AmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhIKBGRvbmUYAyABKAhSBGRvbmU=');
+    'Nfc3ZjLnYxLkdldFRhc2tSZXNwb25zZS5TdWJ0YXNrUghzdWJ0YXNrcxI/CgZzdGF0dXMYBiAB'
+    'KA4yJy5wcm90by5zZXJ2aWNlcy50YXNrc19zdmMudjEuVGFza1N0YXR1c1IGc3RhdHVzGkEKB1'
+    'N1YnRhc2sSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSEgoEZG9uZRgDIAEo'
+    'CFIEZG9uZQ==');
 
 @$core.Deprecated('Use assignTaskRequestDescriptor instead')
 const AssignTaskRequest$json = {

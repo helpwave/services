@@ -533,6 +533,7 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     $core.String? description,
     $core.Iterable<$core.String>? assignedUsers,
     $core.Iterable<GetTaskResponse_Subtask>? subtasks,
+    TaskStatus? status,
   }) {
     final $result = create();
     if (id != null) {
@@ -550,6 +551,9 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     if (subtasks != null) {
       $result.subtasks.addAll(subtasks);
     }
+    if (status != null) {
+      $result.status = status;
+    }
     return $result;
   }
   GetTaskResponse._() : super();
@@ -562,6 +566,7 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..pPS(4, _omitFieldNames ? '' : 'assignedUsers')
     ..pc<GetTaskResponse_Subtask>(5, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTaskResponse_Subtask.create)
+    ..e<TaskStatus>(6, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: TaskStatus.valueOf, enumValues: TaskStatus.values)
     ..hasRequiredFields = false
   ;
 
@@ -618,6 +623,15 @@ class GetTaskResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(5)
   $core.List<GetTaskResponse_Subtask> get subtasks => $_getList(4);
+
+  @$pb.TagNumber(6)
+  TaskStatus get status => $_getN(5);
+  @$pb.TagNumber(6)
+  set status(TaskStatus v) { setField(6, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasStatus() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearStatus() => clearField(6);
 }
 
 class AssignTaskRequest extends $pb.GeneratedMessage {

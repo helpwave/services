@@ -15,6 +15,8 @@ type Task struct {
 	Name          string
 	Description   string
 	Status        pb.TaskStatus
+	Public        bool
+	DueAt         time.Time
 	PatientID     uuid.UUID
 	AssignedUsers []uuid.UUID
 	Subtasks      map[uuid.UUID]Subtask
@@ -25,7 +27,7 @@ func NewTask() *Task {
 		Name:          "",
 		Description:   "",
 		CreatedAt:     time.Now().UTC(),
-		Status:        pb.TaskStatus_TASK_STATUS_UNSPECIFIED,
+		Status:        pb.TaskStatus_TASK_STATUS_TODO,
 		AssignedUsers: make([]uuid.UUID, 0),
 		Subtasks:      make(map[uuid.UUID]Subtask, 0),
 	}

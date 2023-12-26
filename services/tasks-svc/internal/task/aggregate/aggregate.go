@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
 	"hwutil"
@@ -47,6 +48,8 @@ func (a *TaskAggregate) When(evt hwes.Event) error {
 		return a.onTaskAssigned(evt)
 	case eventsV1.TaskUnassigned:
 		return a.onTaskUnassigned(evt)
+	case eventsV1.TaskPublished:
+		return a.onTaskPublished(evt)
 	case eventsV1.SubtaskCreated:
 		return a.onSubtaskCreated(evt)
 	case eventsV1.SubtaskNameUpdated:
@@ -70,7 +73,16 @@ func (a *TaskAggregate) onTaskCreated(evt hwes.Event) error {
 		return err
 	}
 
+	patientID, err := uuid.Parse(payload.PatientID)
+	if err != nil {
+		return err
+	}
+
+	status := (pb.TaskStatus)(pb.TaskStatus_value[payload.Status])
+
 	a.Task.Name = payload.Name
+	a.Task.PatientID = patientID
+	a.Task.Status = status
 
 	return nil
 }
@@ -145,6 +157,17 @@ func (a *TaskAggregate) onTaskUnassigned(evt hwes.Event) error {
 	a.Task.AssignedUsers = hwutil.Filter(a.Task.AssignedUsers, func(assignedUserID uuid.UUID) bool {
 		return assignedUserID != userID
 	})
+
+	return nil
+}
+
+func (a *TaskAggregate) onTaskPublished(evt hwes.Event) error {
+	var payload eventsV1.TaskPublishedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	a.Task.Public = true
 
 	return nil
 }

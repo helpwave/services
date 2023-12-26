@@ -1,6 +1,7 @@
 package v1
 
 import (
+	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
 )
@@ -12,6 +13,7 @@ const (
 	TaskAssigned           = "TASK_ASSIGNED_v1"
 	TaskSelfAssigned       = "TASK_SELF_ASSIGNED_v1"
 	TaskUnassigned         = "TASK_UNASSIGNED_v1"
+	TaskPublished          = "TASK_PUBLISHED_v1"
 	SubtaskCreated         = "TASK_SUBTASK_CREATED_v1"
 	SubtaskNameUpdated     = "TASK_SUBTASK_NAME_UPDATED_v1"
 	SubtaskCompleted       = "TASK_SUBTASK_COMPLETED_v1"
@@ -20,8 +22,10 @@ const (
 )
 
 type TaskCreatedEvent struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	PatientID string `json:"patient_id"`
+	Status    string `json:"status"`
 }
 
 type TaskNameUpdatedEvent struct {
@@ -68,10 +72,14 @@ type SubtaskDeletedEvent struct {
 	SubtaskID string `json:"subtask_id"`
 }
 
-func NewTaskCreatedEvent(a hwes.Aggregate, id uuid.UUID, name string) (hwes.Event, error) {
+type TaskPublishedEvent struct{}
+
+func NewTaskCreatedEvent(a hwes.Aggregate, id uuid.UUID, name string, patientID uuid.UUID, status pb.TaskStatus) (hwes.Event, error) {
 	payload := TaskCreatedEvent{
-		ID:   id.String(),
-		Name: name,
+		ID:        id.String(),
+		Name:      name,
+		PatientID: patientID.String(),
+		Status:    status.String(),
 	}
 	event := hwes.NewBaseEvent(a, TaskCreated)
 	if err := event.SetJsonData(&payload); err != nil {
@@ -104,9 +112,9 @@ func NewTaskDescriptionUpdatedEvent(a hwes.Aggregate, previousDescription, descr
 	return event, nil
 }
 
-func NewTaskAssignedEvent(a hwes.Aggregate, userID string) (hwes.Event, error) {
+func NewTaskAssignedEvent(a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
 	payload := TaskAssignedEvent{
-		UserID: userID,
+		UserID: userID.String(),
 	}
 	event := hwes.NewBaseEvent(a, TaskAssigned)
 	if err := event.SetJsonData(&payload); err != nil {
@@ -126,11 +134,20 @@ func NewTaskSelfAssignedEvent(a hwes.Aggregate, userID string) (hwes.Event, erro
 	return event, nil
 }
 
-func NewTaskUnassignedEvent(a hwes.Aggregate, userID string) (hwes.Event, error) {
+func NewTaskUnassignedEvent(a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
 	payload := TaskUnassignedEvent{
-		UserID: userID,
+		UserID: userID.String(),
 	}
 	event := hwes.NewBaseEvent(a, TaskUnassigned)
+	if err := event.SetJsonData(&payload); err != nil {
+		return hwes.Event{}, err
+	}
+	return event, nil
+}
+
+func NewTaskPublishedEvent(a hwes.Aggregate) (hwes.Event, error) {
+	payload := TaskPublishedEvent{}
+	event := hwes.NewBaseEvent(a, TaskPublished)
 	if err := event.SetJsonData(&payload); err != nil {
 		return hwes.Event{}, err
 	}

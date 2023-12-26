@@ -679,8 +679,8 @@ proto.proto.services.tasks_svc.v1.CreateTaskRequest.serializeBinaryToWriter = fu
       f
     );
   }
-  f = message.getPublic();
-  if (f) {
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
     writer.writeBool(
       4,
       f
@@ -790,7 +790,25 @@ proto.proto.services.tasks_svc.v1.CreateTaskRequest.prototype.getPublic = functi
  * @return {!proto.proto.services.tasks_svc.v1.CreateTaskRequest} returns this
  */
 proto.proto.services.tasks_svc.v1.CreateTaskRequest.prototype.setPublic = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 4, value);
+  return jspb.Message.setField(this, 4, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.CreateTaskRequest} returns this
+ */
+proto.proto.services.tasks_svc.v1.CreateTaskRequest.prototype.clearPublic = function() {
+  return jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.CreateTaskRequest.prototype.hasPublic = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -1780,7 +1798,8 @@ proto.proto.services.tasks_svc.v1.GetTaskResponse.toObject = function(includeIns
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
     assignedUsersList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
     subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
-    proto.proto.services.tasks_svc.v1.GetTaskResponse.Subtask.toObject, includeInstance)
+    proto.proto.services.tasks_svc.v1.GetTaskResponse.Subtask.toObject, includeInstance),
+    status: jspb.Message.getFieldWithDefault(msg, 6, 0)
   };
 
   if (includeInstance) {
@@ -1837,6 +1856,10 @@ proto.proto.services.tasks_svc.v1.GetTaskResponse.deserializeBinaryFromReader = 
       var value = new proto.proto.services.tasks_svc.v1.GetTaskResponse.Subtask;
       reader.readMessage(value,proto.proto.services.tasks_svc.v1.GetTaskResponse.Subtask.deserializeBinaryFromReader);
       msg.addSubtasks(value);
+      break;
+    case 6:
+      var value = /** @type {!proto.proto.services.tasks_svc.v1.TaskStatus} */ (reader.readEnum());
+      msg.setStatus(value);
       break;
     default:
       reader.skipField();
@@ -1901,6 +1924,13 @@ proto.proto.services.tasks_svc.v1.GetTaskResponse.serializeBinaryToWriter = func
       5,
       f,
       proto.proto.services.tasks_svc.v1.GetTaskResponse.Subtask.serializeBinaryToWriter
+    );
+  }
+  f = message.getStatus();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      6,
+      f
     );
   }
 };
@@ -2222,6 +2252,24 @@ proto.proto.services.tasks_svc.v1.GetTaskResponse.prototype.addSubtasks = functi
  */
 proto.proto.services.tasks_svc.v1.GetTaskResponse.prototype.clearSubtasksList = function() {
   return this.setSubtasksList([]);
+};
+
+
+/**
+ * optional TaskStatus status = 6;
+ * @return {!proto.proto.services.tasks_svc.v1.TaskStatus}
+ */
+proto.proto.services.tasks_svc.v1.GetTaskResponse.prototype.getStatus = function() {
+  return /** @type {!proto.proto.services.tasks_svc.v1.TaskStatus} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.TaskStatus} value
+ * @return {!proto.proto.services.tasks_svc.v1.GetTaskResponse} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetTaskResponse.prototype.setStatus = function(value) {
+  return jspb.Message.setProto3EnumField(this, 6, value);
 };
 
 

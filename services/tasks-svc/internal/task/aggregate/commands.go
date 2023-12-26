@@ -2,15 +2,16 @@ package aggregate
 
 import (
 	"context"
+	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	eventsV1 "tasks-svc/internal/task/events/v1"
 )
 
 // TODO: Rename commands
 
-func (a *TaskAggregate) CreateTask(ctx context.Context, name string) error {
+func (a *TaskAggregate) CreateTask(ctx context.Context, name string, patientID uuid.UUID, status pb.TaskStatus) error {
 	id := uuid.New()
-	event, err := eventsV1.NewTaskCreatedEvent(a, id, name)
+	event, err := eventsV1.NewTaskCreatedEvent(a, id, name, patientID, status)
 	if err != nil {
 		return err
 	}
@@ -34,7 +35,23 @@ func (a *TaskAggregate) UpdateDescription(ctx context.Context, currentDescriptio
 }
 
 func (a *TaskAggregate) AssignTask(ctx context.Context, userID uuid.UUID) error {
-	event, err := eventsV1.NewTaskAssignedEvent(a, userID.String())
+	event, err := eventsV1.NewTaskAssignedEvent(a, userID)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *TaskAggregate) UnassignTask(ctx context.Context, userID uuid.UUID) error {
+	event, err := eventsV1.NewTaskUnassignedEvent(a, userID)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *TaskAggregate) PublishTask(ctx context.Context) error {
+	event, err := eventsV1.NewTaskPublishedEvent(a)
 	if err != nil {
 		return err
 	}

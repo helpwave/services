@@ -62,7 +62,9 @@ func (a *aggregateStore) Save(ctx context.Context, aggregate Aggregate) error {
 	})
 
 	var expectedRevsion esdb.ExpectedRevision
-	if aggregate.GetVersion() == 0 {
+
+	// We imply that AppliedEvents are empty when an entity was loaded from an event store and therefore non-existing
+	if len(aggregate.GetAppliedEvents()) == 0 {
 		expectedRevsion = esdb.NoStream{}
 
 		_, err := a.es.AppendToStream(
