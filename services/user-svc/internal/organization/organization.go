@@ -693,7 +693,7 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 	}
 
 	defer func() {
-		err = tx.Rollback(ctx)
+		_ = tx.Rollback(ctx)
 	}()
 
 	organizationRepo := organization_repo.New(db).WithTx(tx)
@@ -737,7 +737,7 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 		return nil, err
 	}
 
-	return &organization, err
+	return &organization, nil
 }
 
 func AddUserToOrganization(ctx context.Context, userId uuid.UUID, organizationId uuid.UUID) error {
