@@ -14,6 +14,8 @@ type aggregateStore struct {
 	es *esdb.Client
 }
 
+type getExpectedRevision = func(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error)
+
 func NewAggregateStore(es *esdb.Client) *aggregateStore {
 	return &aggregateStore{es: es}
 }
@@ -47,7 +49,37 @@ func (a *aggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 	return nil
 }
 
-func (a *aggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) error {
+func (a *aggregateStore) getExpectedRevisionByRead(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
+	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.End{}}
+	stream, err := a.es.ReadStream(
+		ctx,
+		aggregate.GetStreamID(),
+		readOpts,
+		1,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer stream.Close()
+
+	lastEvent, err := stream.Recv()
+	if err != nil {
+		return nil, err
+	}
+
+	return esdb.Revision(lastEvent.OriginalEvent().EventNumber), nil
+}
+
+func (a *aggregateStore) getExpectedRevisionByPreviousRead(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
+	if len(aggregate.GetAppliedEvents()) <= 0 {
+		return nil, errors.New("aggregate has no applied events. Consider to persist and load the aggregate first")
+	}
+	lastAppliedEvent := aggregate.GetAppliedEvents()[len(aggregate.GetAppliedEvents())-1]
+	eventNumber := uint64(lastAppliedEvent.GetVersion())
+	return esdb.Revision(eventNumber), nil
+}
+
+func (a *aggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, getExpectedRevision getExpectedRevision) error {
 	if len(aggregate.GetUncommittedEvents()) == 0 {
 		return nil
 	}
@@ -56,16 +88,14 @@ func (a *aggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) err
 		return event.ToEventData()
 	})
 
-	var expectedRevsion esdb.ExpectedRevision
-
 	// We imply that AppliedEvents are empty when an entity was loaded from an event store and therefore non-existing
 	if len(aggregate.GetAppliedEvents()) == 0 {
-		expectedRevsion = esdb.NoStream{}
+		expectedRevision := esdb.NoStream{}
 
 		_, err := a.es.AppendToStream(
 			ctx,
 			aggregate.GetStreamID(),
-			esdb.AppendToStreamOptions{ExpectedRevision: expectedRevsion},
+			esdb.AppendToStreamOptions{ExpectedRevision: expectedRevision},
 			eventsData...,
 		)
 		if err != nil {
@@ -75,26 +105,13 @@ func (a *aggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) err
 		return nil
 	}
 
-	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.End{}}
-	stream, err := a.es.ReadStream(
-		ctx,
-		aggregate.GetStreamID(),
-		readOpts,
-		1,
-	)
-	if err != nil {
-		return err
-	}
-	defer stream.Close()
-
-	lastEvent, err := stream.Recv()
+	// We resolve the expectedRevision by the passed strategy of the caller
+	expectedRevision, err := getExpectedRevision(ctx, aggregate)
 	if err != nil {
 		return err
 	}
 
-	expectedRevsion = esdb.Revision(lastEvent.OriginalEvent().EventNumber)
-
-	appendOpts := esdb.AppendToStreamOptions{ExpectedRevision: expectedRevsion}
+	appendOpts := esdb.AppendToStreamOptions{ExpectedRevision: expectedRevision}
 	_, err = a.es.AppendToStream(
 		ctx,
 		aggregate.GetStreamID(),
@@ -107,6 +124,11 @@ func (a *aggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) err
 
 	aggregate.ClearUncommittedEvents()
 	return nil
+}
+
+func (a *aggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) error {
+	// We can switch out the expectedRevision strategy for testing
+	return a.doSave(ctx, aggregate, a.getExpectedRevisionByPreviousRead)
 }
 
 func (a *aggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (bool, error) {
