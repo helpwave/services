@@ -1,0 +1,62 @@
+name: "CI GO libs"
+
+on:
+  workflow_call:
+    inputs:
+      lib:
+        description: 'The name of the lib.'
+        type: string
+        required: true
+
+env:
+  GO_VERSION: '1.21'
+
+jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: libs/${{ inputs.lib }}
+    steps:
+      - uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - uses: actions/checkout@v4
+
+      - name: Cache build dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/_go.sum') }}
+
+      - uses: golangci/golangci-lint-action@v3
+        with:
+          # Can this be a bug in golangci-lint? We already defined the working-directory for this step.
+          working-directory: libs/${{ inputs.lib }}
+          args: "--out-format=line-number"
+
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: libs/${{ inputs.lib }}
+    steps:
+      - uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - uses: actions/checkout@v4
+
+      - name: Cache build dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/_go.sum') }}
+
+      - name: Install dependencies
+        run: go get .
+
+      - name: Test
+        run: go test -v -race ./...
