@@ -8,10 +8,8 @@ import (
 	"github.com/rs/zerolog/log"
 	"hwutil"
 	"logging"
-	"math/rand"
 	"net/http"
 	"strings"
-	"time"
 )
 
 var (
@@ -34,7 +32,6 @@ func Setup(serviceName, version string, auth bool) {
 // also sets up tokens when the service requires auth
 func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, unauthenticatedMethods *[]string) {
 	dotenvErr := godotenv.Load()
-	rand.Seed(time.Now().UnixNano())
 
 	Mode = hwutil.GetEnvOr("MODE", DevelopmentMode)
 	LogLevel := hwutil.GetEnvOr("LOG_LEVEL", "info")
