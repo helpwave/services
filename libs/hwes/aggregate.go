@@ -7,19 +7,26 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// When is a per aggregate defined function that
+// executes event handlers based on evt.EventType
+//
+// Example:
+//
+//	func (a *TaskAggregate) When(evt hwes.Event) error {
+//		switch evt.EventType {
+//		case eventsV1.TaskCreated:
+//			return a.onTaskCreated(evt)
+//		case eventsV1.TaskUnassigned:
+//			return a.onTaskUnassigned(evt)
+//		default:
+//			return fmt.Errorf("event type '%s' is invalid", evt.EventType)
+//		}
+//	}
 type When interface {
 	When(evt Event) error
 }
 
 type when func(evt Event) error
-
-type Apply interface {
-	Apply(event Event) error
-}
-
-type Load interface {
-	Load(events []Event) error
-}
 
 type Aggregate interface {
 	When
@@ -35,10 +42,9 @@ type AggregateRoot interface {
 	GetAppliedEvents() []Event
 	GetUncommittedEvents() []Event
 	ClearUncommittedEvents()
+	Load(events []Event) error
+	Apply(event Event) error
 	RaiseEvent(event Event) error
-
-	Load
-	Apply
 }
 
 type AggregateType string
@@ -53,6 +59,17 @@ type AggregateBase struct {
 	uncommittedEvents []Event
 }
 
+// NewAggregateBase gets called by an aggregate specific implementation
+// that provides details about the aggregate type, id and "When"-Implementation
+//
+// Example:
+//
+//	func NewTaskAggregate(id uuid.UUID) *TaskAggregate {
+//		aggregate := &TaskAggregate{Task: models.NewTask()}
+//		aggregate.AggregateBase = hwes.NewAggregateBase(TaskAggregateType, id, aggregate.When)
+//		aggregate.Task.ID = id
+//		return aggregate
+//	}
 func NewAggregateBase(atype AggregateType, id uuid.UUID, when when) *AggregateBase {
 	if when == nil {
 		return nil
@@ -107,6 +124,8 @@ func (a *AggregateBase) ClearUncommittedEvents() {
 	a.uncommittedEvents = make([]Event, 0)
 }
 
+// Load applies events to an aggregate by utilizing the "When"-Function
+// Currently not in use. Could be helpful for testing.
 func (a *AggregateBase) Load(events []Event) error {
 	for _, event := range events {
 		if event.GetAggregateID() != a.GetID() {
@@ -123,6 +142,8 @@ func (a *AggregateBase) Load(events []Event) error {
 	return nil
 }
 
+// Apply applies events to an aggregate by utilizing the "When"-Function
+// and appends it as an uncommitted one to be later persisted by an aggregate store.
 func (a *AggregateBase) Apply(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
 		return errors.New("invalid aggregate for event")
@@ -140,6 +161,8 @@ func (a *AggregateBase) Apply(event Event) error {
 	return nil
 }
 
+// RaiseEvent should be called after all events are loaded though an aggregate store.
+// The passed event gets applied to an aggregate by utilizing the "When"-Function.
 func (a *AggregateBase) RaiseEvent(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
 		return errors.New("invalid aggregate for event")
