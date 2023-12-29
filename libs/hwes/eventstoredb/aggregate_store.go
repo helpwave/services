@@ -49,6 +49,7 @@ func (a *aggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 	return nil
 }
 
+// nolint:unused
 func (a *aggregateStore) getExpectedRevisionByRead(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
 	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.End{}}
 	stream, err := a.es.ReadStream(

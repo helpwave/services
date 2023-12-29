@@ -19,6 +19,10 @@ func SetupEventStore(connectionString string) *esdb.Client {
 	}
 
 	client, err := esdb.NewClient(config)
+	if err != nil {
+		log.Fatal().Err(err).Msg("could not create new eventstore client")
+	}
+
 	_, err = client.ReadAll(context.Background(), esdb.ReadAllOptions{}, 1) // Test connection
 	if err != nil {
 		log.Fatal().Err(err).Msg("could not connect to eventstore")
