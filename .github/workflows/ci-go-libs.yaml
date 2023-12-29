@@ -1,4 +1,4 @@
-name: "CI GO libs"
+name: "CI Go libs"
 
 on:
   workflow_call:

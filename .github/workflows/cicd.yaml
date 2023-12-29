@@ -56,16 +56,14 @@ jobs:
         run: |
           if [[ "$libsChanged" == "true" ]]; then
             echo "services=$(ls services | grep -v 'impulse_svc' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
-            echo "libs=$(ls libs | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
+            echo "libs=$(ls libs | grep -v 'proto_helpers' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           else
             echo "services=$(echo $changesInServices | awk -F / '$1 ~ /services/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
-            echo "libs=$(echo $changesInLibs | awk -F / '$1 ~ /libs/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           fi
           echo "images=$(echo $changesInImages | awk -F / '$1 ~ /images/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
         env:
           libsChanged: ${{ steps.changes-in-libs.outputs.any_changed }}
           changesInServices: ${{ steps.changes-in-services.outputs.all_changed_files }}
-          changesInLibs: ${{ steps.changes-in-libs.outputs.all_changed_files }}
           changesInImages: ${{ steps.changes-in-images.outputs.all_changed_files }}
 
       - name: Get commit hash
