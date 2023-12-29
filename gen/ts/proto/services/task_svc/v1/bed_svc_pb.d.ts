@@ -28,6 +28,9 @@ export class CreateBedResponse extends jspb.Message {
   getId(): string;
   setId(value: string): CreateBedResponse;
 
+  getName(): string;
+  setName(value: string): CreateBedResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateBedResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreateBedResponse): CreateBedResponse.AsObject;
@@ -39,6 +42,7 @@ export class CreateBedResponse extends jspb.Message {
 export namespace CreateBedResponse {
   export type AsObject = {
     id: string,
+    name: string,
   }
 }
 

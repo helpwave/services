@@ -68,6 +68,7 @@ message GetTaskResponse {
   repeated string assigned_users = 4;
   repeated Subtask subtasks = 5;
   TaskStatus status = 6;
+  google.protobuf.Timestamp created_at = 7;
 
   message Subtask {
     string id = 1;

@@ -44,7 +44,7 @@ func (a *TaskAggregate) When(evt hwes.Event) error {
 	case eventsV1.TaskAssigned:
 		fallthrough
 	case eventsV1.TaskSelfAssigned:
-		return a.onTaskAssigned(evt)
+		return a.onTaskAssigned(evt) // Handle TaskAssigned and TaskSelfAssigned
 	case eventsV1.TaskUnassigned:
 		return a.onTaskUnassigned(evt)
 	case eventsV1.TaskPublished:
@@ -82,6 +82,7 @@ func (a *TaskAggregate) onTaskCreated(evt hwes.Event) error {
 	a.Task.Name = payload.Name
 	a.Task.PatientID = patientID
 	a.Task.Status = status
+	a.Task.CreatedAt = evt.Timestamp
 
 	return nil
 }

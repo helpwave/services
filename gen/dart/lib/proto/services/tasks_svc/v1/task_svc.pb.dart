@@ -534,6 +534,7 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? assignedUsers,
     $core.Iterable<GetTaskResponse_Subtask>? subtasks,
     TaskStatus? status,
+    $12.Timestamp? createdAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -554,6 +555,9 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     if (status != null) {
       $result.status = status;
     }
+    if (createdAt != null) {
+      $result.createdAt = createdAt;
+    }
     return $result;
   }
   GetTaskResponse._() : super();
@@ -567,6 +571,7 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     ..pPS(4, _omitFieldNames ? '' : 'assignedUsers')
     ..pc<GetTaskResponse_Subtask>(5, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTaskResponse_Subtask.create)
     ..e<TaskStatus>(6, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: TaskStatus.valueOf, enumValues: TaskStatus.values)
+    ..aOM<$12.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $12.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -632,6 +637,17 @@ class GetTaskResponse extends $pb.GeneratedMessage {
   $core.bool hasStatus() => $_has(5);
   @$pb.TagNumber(6)
   void clearStatus() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $12.Timestamp get createdAt => $_getN(6);
+  @$pb.TagNumber(7)
+  set createdAt($12.Timestamp v) { setField(7, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasCreatedAt() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearCreatedAt() => clearField(7);
+  @$pb.TagNumber(7)
+  $12.Timestamp ensureCreatedAt() => $_ensure(6);
 }
 
 class AssignTaskRequest extends $pb.GeneratedMessage {

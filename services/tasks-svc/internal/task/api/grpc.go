@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwutil"
 	commandsV1 "tasks-svc/internal/task/commands/v1"
 	v1queries "tasks-svc/internal/task/queries/v1"
@@ -98,8 +99,9 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 		AssignedUsers: hwutil.Map(task.AssignedUsers, func(userID uuid.UUID) string {
 			return userID.String()
 		}),
-		Subtasks: subtasksRes,
-		Status:   task.Status,
+		Subtasks:  subtasksRes,
+		Status:    task.Status,
+		CreatedAt: timestamppb.New(task.CreatedAt),
 	}, nil
 }
 

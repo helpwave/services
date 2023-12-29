@@ -220,6 +220,11 @@ export class GetTaskResponse extends jspb.Message {
   getStatus(): TaskStatus;
   setStatus(value: TaskStatus): GetTaskResponse;
 
+  getCreatedAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setCreatedAt(value?: google_protobuf_timestamp_pb.Timestamp): GetTaskResponse;
+  hasCreatedAt(): boolean;
+  clearCreatedAt(): GetTaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetTaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetTaskResponse): GetTaskResponse.AsObject;
@@ -236,6 +241,7 @@ export namespace GetTaskResponse {
     assignedUsersList: Array<string>,
     subtasksList: Array<GetTaskResponse.Subtask.AsObject>,
     status: TaskStatus,
+    createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
   }
 
   export class Subtask extends jspb.Message {

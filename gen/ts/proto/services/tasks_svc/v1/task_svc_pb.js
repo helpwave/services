@@ -1799,7 +1799,8 @@ proto.proto.services.tasks_svc.v1.GetTaskResponse.toObject = function(includeIns
     assignedUsersList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
     subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
     proto.proto.services.tasks_svc.v1.GetTaskResponse.Subtask.toObject, includeInstance),
-    status: jspb.Message.getFieldWithDefault(msg, 6, 0)
+    status: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    createdAt: (f = msg.getCreatedAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1860,6 +1861,11 @@ proto.proto.services.tasks_svc.v1.GetTaskResponse.deserializeBinaryFromReader = 
     case 6:
       var value = /** @type {!proto.proto.services.tasks_svc.v1.TaskStatus} */ (reader.readEnum());
       msg.setStatus(value);
+      break;
+    case 7:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setCreatedAt(value);
       break;
     default:
       reader.skipField();
@@ -1931,6 +1937,14 @@ proto.proto.services.tasks_svc.v1.GetTaskResponse.serializeBinaryToWriter = func
     writer.writeEnum(
       6,
       f
+    );
+  }
+  f = message.getCreatedAt();
+  if (f != null) {
+    writer.writeMessage(
+      7,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
   }
 };
@@ -2270,6 +2284,43 @@ proto.proto.services.tasks_svc.v1.GetTaskResponse.prototype.getStatus = function
  */
 proto.proto.services.tasks_svc.v1.GetTaskResponse.prototype.setStatus = function(value) {
   return jspb.Message.setProto3EnumField(this, 6, value);
+};
+
+
+/**
+ * optional google.protobuf.Timestamp created_at = 7;
+ * @return {?proto.google.protobuf.Timestamp}
+ */
+proto.proto.services.tasks_svc.v1.GetTaskResponse.prototype.getCreatedAt = function() {
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 7));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.proto.services.tasks_svc.v1.GetTaskResponse} returns this
+*/
+proto.proto.services.tasks_svc.v1.GetTaskResponse.prototype.setCreatedAt = function(value) {
+  return jspb.Message.setWrapperField(this, 7, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.GetTaskResponse} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetTaskResponse.prototype.clearCreatedAt = function() {
+  return this.setCreatedAt(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.GetTaskResponse.prototype.hasCreatedAt = function() {
+  return jspb.Message.getField(this, 7) != null;
 };
 
 
