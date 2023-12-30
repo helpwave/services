@@ -65,7 +65,7 @@ func NewBedMovedToAnotherRoomEvent(roomId string) (hwes.Event, error) {
 	eventData := BedMovedToAnotherRoomEvent{
 		RoomId: roomId,
 	}
-	event := hwes.NewBaseEvent(BedUpdated)
+	event := hwes.NewBaseEvent(BedMovedToAnotherRoom)
 	if err := event.SetJsonData(eventData); err != nil {
 		return hwes.Event{}, err
 	}
