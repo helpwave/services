@@ -44,16 +44,6 @@ message UpdateTaskRequest {
 message UpdateTaskResponse {}
 
 //
-// PublishTask
-//
-
-message PublishTaskRequest {
-  string id = 1; // @gotags: validate:"uuid4"
-}
-
-message PublishTaskResponse {}
-
-//
 // GetTask
 //
 
@@ -161,7 +151,6 @@ message DeleteSubtaskResponse {}
 service TaskService {
   rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse) {}
   rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse) {}
-  rpc PublishTask(PublishTaskRequest) returns (PublishTaskResponse) {}
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
   rpc AssignTask(AssignTaskRequest) returns (AssignTaskResponse) {}
   rpc CreateSubtask(CreateSubtaskRequest) returns (CreateSubtaskResponse) {}

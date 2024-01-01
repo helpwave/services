@@ -204,67 +204,6 @@ proto.proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.updateTask 
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.tasks_svc.v1.PublishTaskRequest,
- *   !proto.proto.services.tasks_svc.v1.PublishTaskResponse>}
- */
-const methodDescriptor_TaskService_PublishTask = new grpc.web.MethodDescriptor(
-  '/proto.services.tasks_svc.v1.TaskService/PublishTask',
-  grpc.web.MethodType.UNARY,
-  proto.proto.services.tasks_svc.v1.PublishTaskRequest,
-  proto.proto.services.tasks_svc.v1.PublishTaskResponse,
-  /**
-   * @param {!proto.proto.services.tasks_svc.v1.PublishTaskRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.proto.services.tasks_svc.v1.PublishTaskResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.proto.services.tasks_svc.v1.PublishTaskRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.PublishTaskResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.PublishTaskResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.proto.services.tasks_svc.v1.TaskServiceClient.prototype.publishTask =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.tasks_svc.v1.TaskService/PublishTask',
-      request,
-      metadata || {},
-      methodDescriptor_TaskService_PublishTask,
-      callback);
-};
-
-
-/**
- * @param {!proto.proto.services.tasks_svc.v1.PublishTaskRequest} request The
- *     request proto
- * @param {?Object<string, string>=} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.proto.services.tasks_svc.v1.PublishTaskResponse>}
- *     Promise that resolves to the response
- */
-proto.proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.publishTask =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.tasks_svc.v1.TaskService/PublishTask',
-      request,
-      metadata || {},
-      methodDescriptor_TaskService_PublishTask);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.tasks_svc.v1.GetTaskRequest,
  *   !proto.proto.services.tasks_svc.v1.GetTaskResponse>}
  */

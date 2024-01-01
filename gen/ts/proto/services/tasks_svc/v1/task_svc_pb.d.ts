@@ -147,38 +147,6 @@ export namespace UpdateTaskResponse {
   }
 }
 
-export class PublishTaskRequest extends jspb.Message {
-  getId(): string;
-  setId(value: string): PublishTaskRequest;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): PublishTaskRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: PublishTaskRequest): PublishTaskRequest.AsObject;
-  static serializeBinaryToWriter(message: PublishTaskRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): PublishTaskRequest;
-  static deserializeBinaryFromReader(message: PublishTaskRequest, reader: jspb.BinaryReader): PublishTaskRequest;
-}
-
-export namespace PublishTaskRequest {
-  export type AsObject = {
-    id: string,
-  }
-}
-
-export class PublishTaskResponse extends jspb.Message {
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): PublishTaskResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: PublishTaskResponse): PublishTaskResponse.AsObject;
-  static serializeBinaryToWriter(message: PublishTaskResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): PublishTaskResponse;
-  static deserializeBinaryFromReader(message: PublishTaskResponse, reader: jspb.BinaryReader): PublishTaskResponse;
-}
-
-export namespace PublishTaskResponse {
-  export type AsObject = {
-  }
-}
-
 export class GetTaskRequest extends jspb.Message {
   getId(): string;
   setId(value: string): GetTaskRequest;

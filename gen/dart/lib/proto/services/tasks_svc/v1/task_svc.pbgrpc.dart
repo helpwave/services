@@ -29,10 +29,6 @@ class TaskServiceClient extends $grpc.Client {
       '/proto.services.tasks_svc.v1.TaskService/UpdateTask',
       ($9.UpdateTaskRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $9.UpdateTaskResponse.fromBuffer(value));
-  static final _$publishTask = $grpc.ClientMethod<$9.PublishTaskRequest, $9.PublishTaskResponse>(
-      '/proto.services.tasks_svc.v1.TaskService/PublishTask',
-      ($9.PublishTaskRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $9.PublishTaskResponse.fromBuffer(value));
   static final _$getTask = $grpc.ClientMethod<$9.GetTaskRequest, $9.GetTaskResponse>(
       '/proto.services.tasks_svc.v1.TaskService/GetTask',
       ($9.GetTaskRequest value) => value.writeToBuffer(),
@@ -74,10 +70,6 @@ class TaskServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$9.UpdateTaskResponse> updateTask($9.UpdateTaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$updateTask, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$9.PublishTaskResponse> publishTask($9.PublishTaskRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$publishTask, request, options: options);
   }
 
   $grpc.ResponseFuture<$9.GetTaskResponse> getTask($9.GetTaskRequest request, {$grpc.CallOptions? options}) {
@@ -128,13 +120,6 @@ abstract class TaskServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $9.UpdateTaskRequest.fromBuffer(value),
         ($9.UpdateTaskResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$9.PublishTaskRequest, $9.PublishTaskResponse>(
-        'PublishTask',
-        publishTask_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $9.PublishTaskRequest.fromBuffer(value),
-        ($9.PublishTaskResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$9.GetTaskRequest, $9.GetTaskResponse>(
         'GetTask',
         getTask_Pre,
@@ -194,10 +179,6 @@ abstract class TaskServiceBase extends $grpc.Service {
     return updateTask(call, await request);
   }
 
-  $async.Future<$9.PublishTaskResponse> publishTask_Pre($grpc.ServiceCall call, $async.Future<$9.PublishTaskRequest> request) async {
-    return publishTask(call, await request);
-  }
-
   $async.Future<$9.GetTaskResponse> getTask_Pre($grpc.ServiceCall call, $async.Future<$9.GetTaskRequest> request) async {
     return getTask(call, await request);
   }
@@ -228,7 +209,6 @@ abstract class TaskServiceBase extends $grpc.Service {
 
   $async.Future<$9.CreateTaskResponse> createTask($grpc.ServiceCall call, $9.CreateTaskRequest request);
   $async.Future<$9.UpdateTaskResponse> updateTask($grpc.ServiceCall call, $9.UpdateTaskRequest request);
-  $async.Future<$9.PublishTaskResponse> publishTask($grpc.ServiceCall call, $9.PublishTaskRequest request);
   $async.Future<$9.GetTaskResponse> getTask($grpc.ServiceCall call, $9.GetTaskRequest request);
   $async.Future<$9.AssignTaskResponse> assignTask($grpc.ServiceCall call, $9.AssignTaskRequest request);
   $async.Future<$9.CreateSubtaskResponse> createSubtask($grpc.ServiceCall call, $9.CreateSubtaskRequest request);

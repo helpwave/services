@@ -21,7 +21,6 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	TaskService_CreateTask_FullMethodName        = "/proto.services.tasks_svc.v1.TaskService/CreateTask"
 	TaskService_UpdateTask_FullMethodName        = "/proto.services.tasks_svc.v1.TaskService/UpdateTask"
-	TaskService_PublishTask_FullMethodName       = "/proto.services.tasks_svc.v1.TaskService/PublishTask"
 	TaskService_GetTask_FullMethodName           = "/proto.services.tasks_svc.v1.TaskService/GetTask"
 	TaskService_AssignTask_FullMethodName        = "/proto.services.tasks_svc.v1.TaskService/AssignTask"
 	TaskService_CreateSubtask_FullMethodName     = "/proto.services.tasks_svc.v1.TaskService/CreateSubtask"
@@ -37,7 +36,6 @@ const (
 type TaskServiceClient interface {
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error)
 	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*UpdateTaskResponse, error)
-	PublishTask(ctx context.Context, in *PublishTaskRequest, opts ...grpc.CallOption) (*PublishTaskResponse, error)
 	GetTask(ctx context.Context, in *GetTaskRequest, opts ...grpc.CallOption) (*GetTaskResponse, error)
 	AssignTask(ctx context.Context, in *AssignTaskRequest, opts ...grpc.CallOption) (*AssignTaskResponse, error)
 	CreateSubtask(ctx context.Context, in *CreateSubtaskRequest, opts ...grpc.CallOption) (*CreateSubtaskResponse, error)
@@ -67,15 +65,6 @@ func (c *taskServiceClient) CreateTask(ctx context.Context, in *CreateTaskReques
 func (c *taskServiceClient) UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*UpdateTaskResponse, error) {
 	out := new(UpdateTaskResponse)
 	err := c.cc.Invoke(ctx, TaskService_UpdateTask_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskServiceClient) PublishTask(ctx context.Context, in *PublishTaskRequest, opts ...grpc.CallOption) (*PublishTaskResponse, error) {
-	out := new(PublishTaskResponse)
-	err := c.cc.Invoke(ctx, TaskService_PublishTask_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -151,7 +140,6 @@ func (c *taskServiceClient) DeleteSubtask(ctx context.Context, in *DeleteSubtask
 type TaskServiceServer interface {
 	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error)
 	UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskResponse, error)
-	PublishTask(context.Context, *PublishTaskRequest) (*PublishTaskResponse, error)
 	GetTask(context.Context, *GetTaskRequest) (*GetTaskResponse, error)
 	AssignTask(context.Context, *AssignTaskRequest) (*AssignTaskResponse, error)
 	CreateSubtask(context.Context, *CreateSubtaskRequest) (*CreateSubtaskResponse, error)
@@ -171,9 +159,6 @@ func (UnimplementedTaskServiceServer) CreateTask(context.Context, *CreateTaskReq
 }
 func (UnimplementedTaskServiceServer) UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
-}
-func (UnimplementedTaskServiceServer) PublishTask(context.Context, *PublishTaskRequest) (*PublishTaskResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PublishTask not implemented")
 }
 func (UnimplementedTaskServiceServer) GetTask(context.Context, *GetTaskRequest) (*GetTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTask not implemented")
@@ -241,24 +226,6 @@ func _TaskService_UpdateTask_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TaskServiceServer).UpdateTask(ctx, req.(*UpdateTaskRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _TaskService_PublishTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PublishTaskRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskServiceServer).PublishTask(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: TaskService_PublishTask_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServiceServer).PublishTask(ctx, req.(*PublishTaskRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -403,10 +370,6 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateTask",
 			Handler:    _TaskService_UpdateTask_Handler,
-		},
-		{
-			MethodName: "PublishTask",
-			Handler:    _TaskService_PublishTask_Handler,
 		},
 		{
 			MethodName: "GetTask",

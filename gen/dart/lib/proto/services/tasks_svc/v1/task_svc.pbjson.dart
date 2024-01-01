@@ -101,27 +101,6 @@ const UpdateTaskResponse$json = {
 final $typed_data.Uint8List updateTaskResponseDescriptor = $convert.base64Decode(
     'ChJVcGRhdGVUYXNrUmVzcG9uc2U=');
 
-@$core.Deprecated('Use publishTaskRequestDescriptor instead')
-const PublishTaskRequest$json = {
-  '1': 'PublishTaskRequest',
-  '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-  ],
-};
-
-/// Descriptor for `PublishTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List publishTaskRequestDescriptor = $convert.base64Decode(
-    'ChJQdWJsaXNoVGFza1JlcXVlc3QSDgoCaWQYASABKAlSAmlk');
-
-@$core.Deprecated('Use publishTaskResponseDescriptor instead')
-const PublishTaskResponse$json = {
-  '1': 'PublishTaskResponse',
-};
-
-/// Descriptor for `PublishTaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List publishTaskResponseDescriptor = $convert.base64Decode(
-    'ChNQdWJsaXNoVGFza1Jlc3BvbnNl');
-
 @$core.Deprecated('Use getTaskRequestDescriptor instead')
 const GetTaskRequest$json = {
   '1': 'GetTaskRequest',

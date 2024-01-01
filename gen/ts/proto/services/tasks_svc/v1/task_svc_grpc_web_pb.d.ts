@@ -22,13 +22,6 @@ export class TaskServiceClient {
                response: proto_services_tasks_svc_v1_task_svc_pb.UpdateTaskResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.UpdateTaskResponse>;
 
-  publishTask(
-    request: proto_services_tasks_svc_v1_task_svc_pb.PublishTaskRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: proto_services_tasks_svc_v1_task_svc_pb.PublishTaskResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.PublishTaskResponse>;
-
   getTask(
     request: proto_services_tasks_svc_v1_task_svc_pb.GetTaskRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -94,11 +87,6 @@ export class TaskServicePromiseClient {
     request: proto_services_tasks_svc_v1_task_svc_pb.UpdateTaskRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_tasks_svc_v1_task_svc_pb.UpdateTaskResponse>;
-
-  publishTask(
-    request: proto_services_tasks_svc_v1_task_svc_pb.PublishTaskRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_tasks_svc_v1_task_svc_pb.PublishTaskResponse>;
 
   getTask(
     request: proto_services_tasks_svc_v1_task_svc_pb.GetTaskRequest,

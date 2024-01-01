@@ -28,11 +28,6 @@ class TaskServiceStub(object):
                 request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UpdateTaskRequest.SerializeToString,
                 response_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UpdateTaskResponse.FromString,
                 )
-        self.PublishTask = channel.unary_unary(
-                '/proto.services.tasks_svc.v1.TaskService/PublishTask',
-                request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.PublishTaskRequest.SerializeToString,
-                response_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.PublishTaskResponse.FromString,
-                )
         self.GetTask = channel.unary_unary(
                 '/proto.services.tasks_svc.v1.TaskService/GetTask',
                 request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTaskRequest.SerializeToString,
@@ -84,12 +79,6 @@ class TaskServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def UpdateTask(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def PublishTask(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -149,11 +138,6 @@ def add_TaskServiceServicer_to_server(servicer, server):
                     servicer.UpdateTask,
                     request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UpdateTaskRequest.FromString,
                     response_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UpdateTaskResponse.SerializeToString,
-            ),
-            'PublishTask': grpc.unary_unary_rpc_method_handler(
-                    servicer.PublishTask,
-                    request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.PublishTaskRequest.FromString,
-                    response_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.PublishTaskResponse.SerializeToString,
             ),
             'GetTask': grpc.unary_unary_rpc_method_handler(
                     servicer.GetTask,
@@ -235,23 +219,6 @@ class TaskService(object):
         return grpc.experimental.unary_unary(request, target, '/proto.services.tasks_svc.v1.TaskService/UpdateTask',
             proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UpdateTaskRequest.SerializeToString,
             proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UpdateTaskResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def PublishTask(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/proto.services.tasks_svc.v1.TaskService/PublishTask',
-            proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.PublishTaskRequest.SerializeToString,
-            proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.PublishTaskResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
