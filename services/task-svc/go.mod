@@ -7,7 +7,6 @@ replace (
 	decaying_lru => ../../libs/decaying_lru
 	gen => ../../gen/go
 	hwdb => ../../libs/hwdb
-	hwes => ../../libs/hwes
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
 	logging => ../../libs/logging
@@ -27,14 +26,12 @@ require (
 	gorm.io/gorm v1.24.2
 	gorm.io/plugin/soft_delete v1.2.1
 	hwdb v0.0.0
-	hwes v0.0.0
 	hwgorm v0.0.0
 	hwutil v0.0.0
 	proto_helpers v0.0.0
 )
 
 require (
-	github.com/EventStore/EventStore-Client-Go v1.0.2 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
 	github.com/dapr/dapr v1.12.0-rc.4 // indirect
@@ -44,8 +41,6 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.16.0 // indirect
-	github.com/gofrs/uuid v4.0.0+incompatible // indirect
-	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect

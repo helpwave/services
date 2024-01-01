@@ -8,7 +8,6 @@ import (
 	"hwgorm"
 	"hwutil"
 	pbhelpers "proto_helpers/task_svc/v1"
-	"task-svc/internal/events"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
 	"task-svc/repos/patient_repo"
@@ -578,15 +577,6 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 		Str("taskID", id.String()).
 		Str("userID", userId.String()).
 		Msg("user assigned")
-
-	if currentUserId, err := common.GetUserID(ctx); err == nil {
-		if currentUserId == userId {
-			// Authenticated user of this request does a self-assignment of this request
-			_ = events.DispatchTaskSelfAssignedEvent(ctx, id, userId)
-		} else {
-			_ = events.DispatchTaskAssignedEvent(ctx, id, userId)
-		}
-	}
 
 	return &pb.AssignTaskToUserResponse{}, nil
 }
