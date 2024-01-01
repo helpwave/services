@@ -15,7 +15,6 @@ message CreateBedRequest {
 
 message CreateBedResponse {
   string id = 1;
-  string name = 2;
 }
 
 //
@@ -48,6 +47,31 @@ message GetBedResponse {
   string id = 1;
   string room_id = 2;
   string name = 3;
+}
+
+
+//
+// GetBedByPatient
+//
+
+message GetBedByPatientRequest {
+  string patient_id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetBedByPatientResponse {
+  optional Room room = 1;
+  optional Bed bed = 2;
+  
+  message Room {
+    string id = 1;
+    string name = 2;
+    string ward_id = 3;
+  }
+
+  message Bed {
+    string id = 1;
+    string name = 2;
+  }
 }
 
 //
@@ -113,6 +137,7 @@ service BedService {
   rpc CreateBed(CreateBedRequest) returns (CreateBedResponse) {}
   rpc BulkCreateBeds(BulkCreateBedsRequest) returns (BulkCreateBedsResponse) {}
   rpc GetBed(GetBedRequest) returns (GetBedResponse) {}
+  rpc GetBedByPatient(GetBedByPatientRequest) returns (GetBedByPatientResponse) {}
   rpc GetBeds(GetBedsRequest) returns (GetBedsResponse) {}
   rpc GetBedsByRoom(GetBedsByRoomRequest) returns (GetBedsByRoomResponse) {}
   rpc UpdateBed(UpdateBedRequest) returns (UpdateBedResponse) {}

@@ -12,8 +12,8 @@ export WORKING_DIRECTORY
 
 .PHONY: proto
 proto:
-	docker run --rm -v $(WORKING_DIRECTORY):/wd ghcr.io/helpwave/service-preproc:edge lint || true
-	docker run --rm -v $(WORKING_DIRECTORY):/wd ghcr.io/helpwave/service-preproc:edge generate --include-imports --include-wkt
+	docker run --rm -v $(WORKING_DIRECTORY):/wd ghcr.io/helpwave/service-preproc:edge lint --path proto || true
+	docker run --rm -v $(WORKING_DIRECTORY):/wd ghcr.io/helpwave/service-preproc:edge generate --path proto --include-imports --include-wkt
 
 .PHONY: proto_lint
 proto_lint:

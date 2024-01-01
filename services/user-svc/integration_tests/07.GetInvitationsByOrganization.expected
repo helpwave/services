@@ -1,0 +1,52 @@
+exists with state:
+{
+  "invitations": [
+    {
+      "id": "dcf6280b-dee6-4a0f-826b-cc506476e1e9",
+      "email": "invitation@mail.de",
+      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
+      "state": "INVITATION_STATE_ACCEPTED"
+    },
+    {
+      "id": "d0bd85ee-910a-4578-bbdc-a4346a624a34",
+      "email": "mailer@helpwave.de",
+      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
+      "state": "INVITATION_STATE_ACCEPTED"
+    },
+    {
+      "id": "07c4f3fd-5146-4bda-aece-c02aa0c50fdc",
+      "email": "marvin@helpwave.de",
+      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
+      "state": "INVITATION_STATE_ACCEPTED"
+    }
+  ]
+}
+exists without state:
+{
+  "invitations": [
+    {
+      "id": "dcf6280b-dee6-4a0f-826b-cc506476e1e9",
+      "email": "invitation@mail.de",
+      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
+      "state": "INVITATION_STATE_ACCEPTED"
+    },
+    {
+      "id": "d0bd85ee-910a-4578-bbdc-a4346a624a34",
+      "email": "mailer@helpwave.de",
+      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
+      "state": "INVITATION_STATE_ACCEPTED"
+    },
+    {
+      "id": "07c4f3fd-5146-4bda-aece-c02aa0c50fdc",
+      "email": "marvin@helpwave.de",
+      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
+      "state": "INVITATION_STATE_ACCEPTED"
+    },
+    {
+      "id": "4e857c97-0afc-4e3e-97a6-cc9d346f68aa",
+      "email": "tom.breitband@helpwave.de",
+      "organizationId": "cc401e43-d76c-4f0e-933a-3ddfab895e59",
+      "state": "INVITATION_STATE_PENDING"
+    }
+  ]
+}

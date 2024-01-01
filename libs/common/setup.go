@@ -91,7 +91,13 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 // The address will always be in the "(ADDR):PORT" format.
 // If "ADDR" is not set, the "ADDR" part of the format will be "".
 // If "PORT" is not set, the fallback is "8080".
+// If "APP_PORT" is set, we assume that Dapr is running on the same interface so we return "127.0.0.1:$APP_PORT"
 func ResolveAddrFromEnv() string {
+	daprAppPort := hwutil.GetEnvOr("APP_PORT", "")
+	if daprAppPort != "" {
+		return fmt.Sprintf("127.0.0.1:%s", daprAppPort)
+	}
+
 	port := hwutil.GetEnvOr("PORT", "8080")
 	fallbackAddr := fmt.Sprintf(":%s", port)
 	return hwutil.GetEnvOr("ADDR", fallbackAddr)

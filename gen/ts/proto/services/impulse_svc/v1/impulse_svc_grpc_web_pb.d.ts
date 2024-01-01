@@ -1,6 +1,6 @@
 import * as grpcWeb from 'grpc-web';
 
-import * as proto_services_impulse_svc_v1_impulse_svc_pb from '../../../../proto/services/impulse_svc/v1/impulse_svc_pb';
+import * as proto_services_impulse_svc_v1_impulse_svc_pb from '../../../../proto/services/impulse_svc/v1/impulse_svc_pb'; // proto import: "proto/services/impulse_svc/v1/impulse_svc.proto"
 
 
 export class ImpulseServiceClient {

@@ -9,6 +9,7 @@ import (
 	"golang.org/x/oauth2"
 	"hwutil"
 	"logging"
+	"os"
 )
 
 var (
@@ -90,13 +91,10 @@ func setupAuth() {
 		zlog.Fatal().Err(err).Send()
 	}
 
-	// We are doing this if/else to fail when
-	// InsecureFakeTokenEnable is false and env OAUTH_CLIENT_ID is not set
-	var clientId string
-	if InsecureFakeTokenEnable {
-		clientId = "fake_oauth_client_id"
-	} else {
-		clientId = hwutil.MustGetEnv("OAUTH_CLIENT_ID")
+	clientId, clientIdSet := os.LookupEnv("OAUTH_CLIENT_ID")
+
+	if !clientIdSet && !InsecureFakeTokenEnable {
+		zlog.Fatal().Msg("OAUTH_CLIENT_ID env variable missing")
 	}
 
 	oauthConfig = &oauth2.Config{

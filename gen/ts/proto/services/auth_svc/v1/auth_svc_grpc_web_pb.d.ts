@@ -1,6 +1,6 @@
 import * as grpcWeb from 'grpc-web';
 
-import * as proto_services_auth_svc_v1_auth_svc_pb from '../../../../proto/services/auth_svc/v1/auth_svc_pb';
+import * as proto_services_auth_svc_v1_auth_svc_pb from '../../../../proto/services/auth_svc/v1/auth_svc_pb'; // proto import: "proto/services/auth_svc/v1/auth_svc.proto"
 
 
 export class AuthServiceClient {

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "exists with state:"
+grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
+	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
+	-d '{"organization_id": "cc401e43-d76c-4f0e-933a-3ddfab895e59", "state": 2}' \
+	localhost:3002 \
+	proto.services.user_svc.v1.OrganizationService/GetInvitationsByOrganization
+
+echo "exists without state:"
+grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
+	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
+	-d '{"organization_id": "cc401e43-d76c-4f0e-933a-3ddfab895e59"}' \
+	localhost:3002 \
+	proto.services.user_svc.v1.OrganizationService/GetInvitationsByOrganization
