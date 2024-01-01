@@ -80,14 +80,10 @@ class CreateBedRequest extends $pb.GeneratedMessage {
 class CreateBedResponse extends $pb.GeneratedMessage {
   factory CreateBedResponse({
     $core.String? id,
-    $core.String? name,
   }) {
     final $result = create();
     if (id != null) {
       $result.id = id;
-    }
-    if (name != null) {
-      $result.name = name;
     }
     return $result;
   }
@@ -97,7 +93,6 @@ class CreateBedResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
@@ -130,15 +125,6 @@ class CreateBedResponse extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get name => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set name($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasName() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearName() => clearField(2);
 }
 
 class BulkCreateBedsRequest extends $pb.GeneratedMessage {

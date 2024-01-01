@@ -16,7 +16,7 @@ require (
 	github.com/dapr/go-sdk v1.9.1
 	github.com/go-chi/chi/v5 v5.0.10
 	github.com/google/uuid v1.4.0
-	github.com/mitchellh/mapstructure v1.5.1-0.20220423185008-bf980b35cac4
+	github.com/mitchellh/mapstructure v1.5.1-0.20231216201459-8508981c8b6c
 	github.com/ory/client-go v1.2.17
 	github.com/rs/zerolog v1.31.0
 	google.golang.org/grpc v1.59.0
