@@ -7,10 +7,10 @@ import (
 	eventsV1 "tasks-svc/internal/task/events/v1"
 )
 
-// TODO: Rename commands
-
 func (a *TaskAggregate) CreateTask(ctx context.Context, name string, patientID uuid.UUID, status pb.TaskStatus) error {
-	id := uuid.New()
+	// The "Task" entity is our main entity in this aggregate.
+	// Therefore, we are using the same ID
+	id := a.GetID()
 	event, err := eventsV1.NewTaskCreatedEvent(a, id, name, patientID, status)
 	if err != nil {
 		return err

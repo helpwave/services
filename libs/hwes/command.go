@@ -17,7 +17,3 @@ func NewBaseCommand(aggregateID uuid.UUID) BaseCommand {
 func (c *BaseCommand) GetAggregateID() uuid.UUID {
 	return c.AggregateID
 }
-
-func (c *BaseCommand) GetAggregateIDString() string {
-	return c.AggregateID.String()
-}
