@@ -32,14 +32,12 @@ const CreateBedResponse$json = {
   '1': 'CreateBedResponse',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
   ],
 };
 
 /// Descriptor for `CreateBedResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createBedResponseDescriptor = $convert.base64Decode(
-    'ChFDcmVhdGVCZWRSZXNwb25zZRIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZQ'
-    '==');
+    'ChFDcmVhdGVCZWRSZXNwb25zZRIOCgJpZBgBIAEoCVICaWQ=');
 
 @$core.Deprecated('Use bulkCreateBedsRequestDescriptor instead')
 const BulkCreateBedsRequest$json = {
