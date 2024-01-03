@@ -113,20 +113,20 @@ SELECT
 		WHERE memberships.organization_id = $1
 		  AND users.email = $2
 		LIMIT 1
-	) AS isInOrganitationByEmail,
+	) AS is_in_organization_by_email,
 
 	EXISTS (
 		SELECT 1
 		FROM organizations
 		WHERE (id = $1)
-	) AS doesOrganizationExist,
+	) AS does_organization_exist,
 
 	EXISTS (
 		SELECT 1
 		FROM invitations
 		WHERE (email = $2 AND organization_id = $1)
-		  AND state = ANY(ARRAY[$3::int[]])
-	) AS DoesInvitationExist
+		  AND state = ANY($3::int[])
+	) AS does_invitation_exist
 `
 
 type GetInvitationConditionsParams struct {
@@ -136,15 +136,15 @@ type GetInvitationConditionsParams struct {
 }
 
 type GetInvitationConditionsRow struct {
-	Isinorganitationbyemail bool
-	Doesorganizationexist   bool
-	Doesinvitationexist     bool
+	IsInOrganizationByEmail bool
+	DoesOrganizationExist   bool
+	DoesInvitationExist     bool
 }
 
 func (q *Queries) GetInvitationConditions(ctx context.Context, arg GetInvitationConditionsParams) (GetInvitationConditionsRow, error) {
 	row := q.db.QueryRow(ctx, getInvitationConditions, arg.OrganizationID, arg.Email, arg.States)
 	var i GetInvitationConditionsRow
-	err := row.Scan(&i.Isinorganitationbyemail, &i.Doesorganizationexist, &i.Doesinvitationexist)
+	err := row.Scan(&i.IsInOrganizationByEmail, &i.DoesOrganizationExist, &i.DoesInvitationExist)
 	return i, err
 }
 

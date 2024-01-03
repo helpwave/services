@@ -363,11 +363,11 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	if !conditions.Doesorganizationexist {
+	if !conditions.DoesOrganizationExist {
 		return nil, status.Error(codes.InvalidArgument, "organization not found")
-	} else if conditions.Isinorganitationbyemail {
+	} else if conditions.IsInOrganizationByEmail {
 		return nil, status.Error(codes.InvalidArgument, "cannot invite a user that is already a member")
-	} else if conditions.Doesinvitationexist {
+	} else if conditions.DoesInvitationExist {
 		return nil, status.Error(codes.InvalidArgument, "user already invited")
 	} else {
 		invitation, err = organizationRepo.InviteMember(ctx, organization_repo.InviteMemberParams{
@@ -693,6 +693,7 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 	}
 
 	defer func() {
+		// TODO: log Rollback errors
 		_ = tx.Rollback(ctx)
 	}()
 

@@ -100,20 +100,20 @@ SELECT
 		WHERE memberships.organization_id = @organization_id
 		  AND users.email = @email
 		LIMIT 1
-	) AS isInOrganitationByEmail,
+	) AS is_in_organization_by_email,
 
 	EXISTS (
 		SELECT 1
 		FROM organizations
 		WHERE (id = @organization_id)
-	) AS doesOrganizationExist,
+	) AS does_organization_exist,
 
 	EXISTS (
 		SELECT 1
 		FROM invitations
 		WHERE (email = @email AND organization_id = @organization_id)
-		  AND state = ANY(ARRAY[@states::int[]])
-	) AS DoesInvitationExist;
+		  AND state = ANY(@states::int[])
+	) AS does_invitation_exist;
 
 
 -- name: GetInvitationsWithOrganizationByUser :many
