@@ -2,9 +2,10 @@ package main
 
 import (
 	"common"
+	"context"
 	pb "gen/proto/services/user_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
-	"hwgorm"
+	"hwdb"
 	"user-svc/internal/organization"
 	"user-svc/internal/user"
 )
@@ -22,7 +23,7 @@ func main() {
 		"/proto.services.user_svc.v1.OrganizationService/GetOrganizationsByUser",
 	})
 
-	hwgorm.SetupDatabaseByEnvs()
+	hwdb.SetupDatabaseFromEnv(context.Background())
 
 	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()

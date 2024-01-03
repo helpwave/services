@@ -17,3 +17,8 @@ Exists, has members:
 }
 Does not exist:
 {}
+Not a member:
+ERROR:
+  Code: Unauthenticated
+  Message: Not a member of this organization
+

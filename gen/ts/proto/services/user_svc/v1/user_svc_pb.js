@@ -952,8 +952,8 @@ proto.proto.services.user_svc.v1.ReadSelfResponse.serializeBinaryToWriter = func
       f
     );
   }
-  f = message.getAvatarUrl();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
     writer.writeString(
       4,
       f
@@ -1038,7 +1038,25 @@ proto.proto.services.user_svc.v1.ReadSelfResponse.prototype.getAvatarUrl = funct
  * @return {!proto.proto.services.user_svc.v1.ReadSelfResponse} returns this
  */
 proto.proto.services.user_svc.v1.ReadSelfResponse.prototype.setAvatarUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setField(this, 4, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.user_svc.v1.ReadSelfResponse} returns this
+ */
+proto.proto.services.user_svc.v1.ReadSelfResponse.prototype.clearAvatarUrl = function() {
+  return jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.user_svc.v1.ReadSelfResponse.prototype.hasAvatarUrl = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -1348,8 +1366,8 @@ proto.proto.services.user_svc.v1.ReadPublicProfileResponse.serializeBinaryToWrit
       f
     );
   }
-  f = message.getAvatarUrl();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
     writer.writeString(
       4,
       f
@@ -1426,7 +1444,25 @@ proto.proto.services.user_svc.v1.ReadPublicProfileResponse.prototype.getAvatarUr
  * @return {!proto.proto.services.user_svc.v1.ReadPublicProfileResponse} returns this
  */
 proto.proto.services.user_svc.v1.ReadPublicProfileResponse.prototype.setAvatarUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setField(this, 4, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.user_svc.v1.ReadPublicProfileResponse} returns this
+ */
+proto.proto.services.user_svc.v1.ReadPublicProfileResponse.prototype.clearAvatarUrl = function() {
+  return jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.user_svc.v1.ReadPublicProfileResponse.prototype.hasAvatarUrl = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
