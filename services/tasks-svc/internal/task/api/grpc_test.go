@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc/test/bufconn"
 	hwes_test "hwes/test"
 	"hwutil"
+	hwauthz_test "hwutil/authz/test"
 	"log"
 	"net"
 	"tasks-svc/internal/task/api"
@@ -21,7 +22,8 @@ func server(ctx context.Context) (pb.TaskServiceClient, func()) {
 	listener := bufconn.Listen(buffer)
 
 	aggregateStore := hwes_test.NewAggregateStore()
-	taskService := service.NewTaskService(aggregateStore)
+	authz := hwauthz_test.NewTrueAuthZ()
+	taskService := service.NewTaskService(aggregateStore, authz)
 	taskGrpcService := api.NewTaskGrpcService(taskService)
 
 	grpcServer := grpc.NewServer()

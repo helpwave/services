@@ -1,6 +1,7 @@
 package service
 
 import (
+	"hwauthz"
 	"hwes"
 	commandsV1 "tasks-svc/internal/task/commands/v1"
 	queriesV1 "tasks-svc/internal/task/queries/v1"
@@ -11,7 +12,7 @@ type TaskService struct {
 	Queries  *queriesV1.TaskQueries
 }
 
-func NewTaskService(as hwes.AggregateStore) *TaskService {
+func NewTaskService(as hwes.AggregateStore, authz hwauthz.AuthZ) *TaskService {
 	taskCommands := commandsV1.NewTaskCommands(
 		commandsV1.NewCreateTaskCommandHandler(as),
 		commandsV1.NewUpdateTaskCommandHandler(as),
@@ -24,7 +25,7 @@ func NewTaskService(as hwes.AggregateStore) *TaskService {
 	)
 
 	taskQueries := queriesV1.NewTaskQueries(
-		queriesV1.NewGetTaskByIDQueryHandler(as),
+		queriesV1.NewGetTaskByIDQueryHandler(as, authz),
 	)
 
 	return &TaskService{Commands: taskCommands, Queries: taskQueries}

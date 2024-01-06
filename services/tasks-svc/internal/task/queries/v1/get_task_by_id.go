@@ -1,8 +1,10 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
+	"hwauthz"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"
 	"tasks-svc/internal/task/models"
@@ -21,14 +23,28 @@ type GetTaskByIDQueryHandler interface {
 }
 
 type getTaskByIDQueryHandler struct {
-	as hwes.AggregateStore
+	as    hwes.AggregateStore
+	authz hwauthz.AuthZ
 }
 
-func NewGetTaskByIDQueryHandler(as hwes.AggregateStore) *getTaskByIDQueryHandler {
-	return &getTaskByIDQueryHandler{as: as}
+func NewGetTaskByIDQueryHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) *getTaskByIDQueryHandler {
+	return &getTaskByIDQueryHandler{as: as, authz: authz}
 }
 
 func (q *getTaskByIDQueryHandler) Handle(ctx context.Context, query *GetTaskByIDQuery) (*models.Task, error) {
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := hwauthz.CheckGrpcWrapper(
+		ctx,
+		q.authz,
+		hwauthz.NewPermission("task", query.ID.String(), "view", "user", userID.String()),
+	); err != nil {
+		return nil, err
+	}
+
 	taskAggregate, err := aggregate.LoadTaskAggregate(ctx, q.as, query.ID)
 	if err != nil {
 		return nil, err

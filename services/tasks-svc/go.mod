@@ -5,6 +5,7 @@ go 1.20
 replace (
 	common => ../../libs/common
 	gen => ../../gen/go
+	hwauthz => ../../libs/hwauthz
 	hwes => ../../libs/hwes
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
@@ -14,18 +15,24 @@ replace (
 require (
 	common v0.0.0
 	gen v0.0.0
+	github.com/EventStore/EventStore-Client-Go v1.0.2
+	github.com/authzed/authzed-go v0.10.1
 	github.com/dapr/go-sdk v1.9.1
 	github.com/google/uuid v1.5.0
 	google.golang.org/grpc v1.60.1
 	google.golang.org/protobuf v1.32.0
+	hwauthz v0.0.0
 	hwes v0.0.0
 	hwutil v0.0.0
 )
 
 require (
-	github.com/EventStore/EventStore-Client-Go v1.0.2 // indirect
+	github.com/authzed/grpcutil v0.0.0-20230908193239-4286bb1d6403 // indirect
+	github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
 	github.com/dapr/dapr v1.12.2 // indirect
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
+	github.com/envoyproxy/protoc-gen-validate v1.0.2 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
@@ -35,19 +42,26 @@ require (
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
+	github.com/jzelinskie/stringz v0.0.2 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
 	github.com/rs/zerolog v1.31.0 // indirect
+	github.com/stretchr/testify v1.8.4 // indirect
 	golang.org/x/crypto v0.17.0 // indirect
 	golang.org/x/net v0.19.0 // indirect
 	golang.org/x/oauth2 v0.15.0 // indirect
-	golang.org/x/sys v0.15.0 // indirect
+	golang.org/x/sync v0.6.0 // indirect
+	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20231212172506-995d672761c0 // indirect
+	google.golang.org/genproto v0.0.0-20231212172506-995d672761c0 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20231211222908-989df2bf70f3 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240102182953-50ed04b92917 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	logging v0.0.0 // indirect

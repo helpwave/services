@@ -35,7 +35,7 @@ type organizationIDKey struct{}
 //		grpcServer := server.GrpcServer()
 //		api.RegisterMyServiceServer(grpcServer, &myServiceServer{})
 //	})
-func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
+func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) (func() error, *grpc.Server) {
 	// middlewares
 	loggingInterceptor := loggingUnaryInterceptor
 	authInterceptor := authUnaryInterceptor
@@ -68,9 +68,13 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 
 	zlog.Info().Str("addr", addr).Msg("starting grpc service")
 
-	if err = server.Serve(listener); err != nil {
-		zlog.Fatal().Str("addr", addr).Err(err).Msg("could not start grpc server")
-	}
+	go func() {
+		if err = server.Serve(listener); err != nil {
+			zlog.Fatal().Str("addr", addr).Err(err).Msg("could not start grpc server")
+		}
+	}()
+
+	return listener.Close, server
 }
 
 func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {

@@ -2,10 +2,16 @@ package main
 
 import (
 	"common"
+	"context"
 	pb "gen/proto/services/tasks_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
+	hwspicedb "hwauthz/spicedb"
 	"hwes/eventstoredb"
+	"os"
+	"os/signal"
+	"syscall"
 	"tasks-svc/internal/task/api"
+	"tasks-svc/internal/task/projections/spicedb"
 	"tasks-svc/internal/task/service"
 )
 
@@ -15,17 +21,33 @@ const ServiceName = "tasks-svc"
 var Version string
 
 func main() {
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	defer cancel()
+
 	common.Setup(ServiceName, Version, true)
 
-	eventstoredb.SetupEventStoreByEnv()
-
 	eventStore := eventstoredb.SetupEventStoreByEnv()
-	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
-	taskService := service.NewTaskService(aggregateStore)
+	sdb := hwspicedb.SetupSpiceDbByEnv()
 
-	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
+	spiceDBProjection := spicedb.NewSpiceDBProjection(eventStore, sdb)
+	go func() {
+		err := spiceDBProjection.Cp.Subscribe(ctx, spiceDBProjection.When)
+		if err != nil {
+			cancel()
+		}
+	}()
+
+	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
+	authz := hwspicedb.NewSpiceDBAuthZ(sdb)
+	taskService := service.NewTaskService(aggregateStore, authz)
+
+	stopGrpcServer, grpcServer := common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
 		pb.RegisterTaskServiceServer(grpcServer, api.NewTaskGrpcService(taskService))
 	})
+	defer stopGrpcServer()
+
+	<-ctx.Done()
+	grpcServer.GracefulStop()
 }
