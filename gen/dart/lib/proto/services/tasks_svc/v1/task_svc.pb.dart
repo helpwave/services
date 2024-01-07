@@ -664,6 +664,102 @@ class AssignTaskResponse extends $pb.GeneratedMessage {
   static AssignTaskResponse? _defaultInstance;
 }
 
+class UnassignTaskRequest extends $pb.GeneratedMessage {
+  factory UnassignTaskRequest({
+    $core.String? taskId,
+    $core.String? userId,
+  }) {
+    final $result = create();
+    if (taskId != null) {
+      $result.taskId = taskId;
+    }
+    if (userId != null) {
+      $result.userId = userId;
+    }
+    return $result;
+  }
+  UnassignTaskRequest._() : super();
+  factory UnassignTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UnassignTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UnassignTaskRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'taskId')
+    ..aOS(2, _omitFieldNames ? '' : 'userId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UnassignTaskRequest clone() => UnassignTaskRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UnassignTaskRequest copyWith(void Function(UnassignTaskRequest) updates) => super.copyWith((message) => updates(message as UnassignTaskRequest)) as UnassignTaskRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UnassignTaskRequest create() => UnassignTaskRequest._();
+  UnassignTaskRequest createEmptyInstance() => create();
+  static $pb.PbList<UnassignTaskRequest> createRepeated() => $pb.PbList<UnassignTaskRequest>();
+  @$core.pragma('dart2js:noInline')
+  static UnassignTaskRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UnassignTaskRequest>(create);
+  static UnassignTaskRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get taskId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set taskId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasTaskId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTaskId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get userId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set userId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasUserId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearUserId() => clearField(2);
+}
+
+class UnassignTaskResponse extends $pb.GeneratedMessage {
+  factory UnassignTaskResponse() => create();
+  UnassignTaskResponse._() : super();
+  factory UnassignTaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UnassignTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UnassignTaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UnassignTaskResponse clone() => UnassignTaskResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UnassignTaskResponse copyWith(void Function(UnassignTaskResponse) updates) => super.copyWith((message) => updates(message as UnassignTaskResponse)) as UnassignTaskResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UnassignTaskResponse create() => UnassignTaskResponse._();
+  UnassignTaskResponse createEmptyInstance() => create();
+  static $pb.PbList<UnassignTaskResponse> createRepeated() => $pb.PbList<UnassignTaskResponse>();
+  @$core.pragma('dart2js:noInline')
+  static UnassignTaskResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UnassignTaskResponse>(create);
+  static UnassignTaskResponse? _defaultInstance;
+}
+
 class CreateSubtaskRequest_Subtask extends $pb.GeneratedMessage {
   factory CreateSubtaskRequest_Subtask({
     $core.String? name,

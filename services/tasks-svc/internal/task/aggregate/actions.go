@@ -42,6 +42,14 @@ func (a *TaskAggregate) AssignTask(ctx context.Context, userID uuid.UUID) error 
 	return a.Apply(event)
 }
 
+func (a *TaskAggregate) SelfAssignTask(ctx context.Context, userID uuid.UUID) error {
+	event, err := eventsV1.NewTaskSelfAssignedEvent(a, userID)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
 func (a *TaskAggregate) UnassignTask(ctx context.Context, userID uuid.UUID) error {
 	event, err := eventsV1.NewTaskUnassignedEvent(a, userID)
 	if err != nil {

@@ -38,6 +38,11 @@ class TaskServiceStub(object):
                 request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.AssignTaskRequest.SerializeToString,
                 response_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.AssignTaskResponse.FromString,
                 )
+        self.UnassignTask = channel.unary_unary(
+                '/proto.services.tasks_svc.v1.TaskService/UnassignTask',
+                request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UnassignTaskRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UnassignTaskResponse.FromString,
+                )
         self.CreateSubtask = channel.unary_unary(
                 '/proto.services.tasks_svc.v1.TaskService/CreateSubtask',
                 request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.CreateSubtaskRequest.SerializeToString,
@@ -96,6 +101,12 @@ class TaskServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def UnassignTask(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def CreateSubtask(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -148,6 +159,11 @@ def add_TaskServiceServicer_to_server(servicer, server):
                     servicer.AssignTask,
                     request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.AssignTaskRequest.FromString,
                     response_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.AssignTaskResponse.SerializeToString,
+            ),
+            'UnassignTask': grpc.unary_unary_rpc_method_handler(
+                    servicer.UnassignTask,
+                    request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UnassignTaskRequest.FromString,
+                    response_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UnassignTaskResponse.SerializeToString,
             ),
             'CreateSubtask': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateSubtask,
@@ -253,6 +269,23 @@ class TaskService(object):
         return grpc.experimental.unary_unary(request, target, '/proto.services.tasks_svc.v1.TaskService/AssignTask',
             proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.AssignTaskRequest.SerializeToString,
             proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.AssignTaskResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def UnassignTask(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.tasks_svc.v1.TaskService/UnassignTask',
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UnassignTaskRequest.SerializeToString,
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UnassignTaskResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

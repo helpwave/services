@@ -16,6 +16,7 @@ func NewTaskService(as hwes.AggregateStore) *TaskService {
 		commandsV1.NewCreateTaskCommandHandler(as),
 		commandsV1.NewUpdateTaskCommandHandler(as),
 		commandsV1.NewAssignTaskCommandHandler(as),
+		commandsV1.NewUnassignTaskCommandHandler(as),
 		commandsV1.NewCreateSubtaskCommandHandler(as),
 		commandsV1.NewUpdateSubtaskCommandHandler(as),
 		commandsV1.NewCompleteSubtaskCommandHandler(as),

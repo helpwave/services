@@ -23,6 +23,7 @@ const (
 	TaskService_UpdateTask_FullMethodName        = "/proto.services.tasks_svc.v1.TaskService/UpdateTask"
 	TaskService_GetTask_FullMethodName           = "/proto.services.tasks_svc.v1.TaskService/GetTask"
 	TaskService_AssignTask_FullMethodName        = "/proto.services.tasks_svc.v1.TaskService/AssignTask"
+	TaskService_UnassignTask_FullMethodName      = "/proto.services.tasks_svc.v1.TaskService/UnassignTask"
 	TaskService_CreateSubtask_FullMethodName     = "/proto.services.tasks_svc.v1.TaskService/CreateSubtask"
 	TaskService_UpdateSubtask_FullMethodName     = "/proto.services.tasks_svc.v1.TaskService/UpdateSubtask"
 	TaskService_CompleteSubtask_FullMethodName   = "/proto.services.tasks_svc.v1.TaskService/CompleteSubtask"
@@ -38,6 +39,7 @@ type TaskServiceClient interface {
 	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*UpdateTaskResponse, error)
 	GetTask(ctx context.Context, in *GetTaskRequest, opts ...grpc.CallOption) (*GetTaskResponse, error)
 	AssignTask(ctx context.Context, in *AssignTaskRequest, opts ...grpc.CallOption) (*AssignTaskResponse, error)
+	UnassignTask(ctx context.Context, in *UnassignTaskRequest, opts ...grpc.CallOption) (*UnassignTaskResponse, error)
 	CreateSubtask(ctx context.Context, in *CreateSubtaskRequest, opts ...grpc.CallOption) (*CreateSubtaskResponse, error)
 	UpdateSubtask(ctx context.Context, in *UpdateSubtaskRequest, opts ...grpc.CallOption) (*UpdateSubtaskResponse, error)
 	CompleteSubtask(ctx context.Context, in *CompleteSubtaskRequest, opts ...grpc.CallOption) (*CompleteSubtaskResponse, error)
@@ -83,6 +85,15 @@ func (c *taskServiceClient) GetTask(ctx context.Context, in *GetTaskRequest, opt
 func (c *taskServiceClient) AssignTask(ctx context.Context, in *AssignTaskRequest, opts ...grpc.CallOption) (*AssignTaskResponse, error) {
 	out := new(AssignTaskResponse)
 	err := c.cc.Invoke(ctx, TaskService_AssignTask_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) UnassignTask(ctx context.Context, in *UnassignTaskRequest, opts ...grpc.CallOption) (*UnassignTaskResponse, error) {
+	out := new(UnassignTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_UnassignTask_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -142,6 +153,7 @@ type TaskServiceServer interface {
 	UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskResponse, error)
 	GetTask(context.Context, *GetTaskRequest) (*GetTaskResponse, error)
 	AssignTask(context.Context, *AssignTaskRequest) (*AssignTaskResponse, error)
+	UnassignTask(context.Context, *UnassignTaskRequest) (*UnassignTaskResponse, error)
 	CreateSubtask(context.Context, *CreateSubtaskRequest) (*CreateSubtaskResponse, error)
 	UpdateSubtask(context.Context, *UpdateSubtaskRequest) (*UpdateSubtaskResponse, error)
 	CompleteSubtask(context.Context, *CompleteSubtaskRequest) (*CompleteSubtaskResponse, error)
@@ -165,6 +177,9 @@ func (UnimplementedTaskServiceServer) GetTask(context.Context, *GetTaskRequest) 
 }
 func (UnimplementedTaskServiceServer) AssignTask(context.Context, *AssignTaskRequest) (*AssignTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AssignTask not implemented")
+}
+func (UnimplementedTaskServiceServer) UnassignTask(context.Context, *UnassignTaskRequest) (*UnassignTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnassignTask not implemented")
 }
 func (UnimplementedTaskServiceServer) CreateSubtask(context.Context, *CreateSubtaskRequest) (*CreateSubtaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSubtask not implemented")
@@ -262,6 +277,24 @@ func _TaskService_AssignTask_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TaskServiceServer).AssignTask(ctx, req.(*AssignTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_UnassignTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnassignTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).UnassignTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_UnassignTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).UnassignTask(ctx, req.(*UnassignTaskRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -378,6 +411,10 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AssignTask",
 			Handler:    _TaskService_AssignTask_Handler,
+		},
+		{
+			MethodName: "UnassignTask",
+			Handler:    _TaskService_UnassignTask_Handler,
 		},
 		{
 			MethodName: "CreateSubtask",

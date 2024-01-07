@@ -34,6 +34,7 @@ func (c *assignTaskCommandHandler) Handle(ctx context.Context, command *AssignTa
 		return err
 	}
 
+	// TODO: Handle SelfAssignTask when common.GetUserID() is testable
 	if err := task.AssignTask(ctx, command.UserID); err != nil {
 		return err
 	}

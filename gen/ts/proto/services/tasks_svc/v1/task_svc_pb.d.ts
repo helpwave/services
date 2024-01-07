@@ -276,6 +276,42 @@ export namespace AssignTaskResponse {
   }
 }
 
+export class UnassignTaskRequest extends jspb.Message {
+  getTaskId(): string;
+  setTaskId(value: string): UnassignTaskRequest;
+
+  getUserId(): string;
+  setUserId(value: string): UnassignTaskRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UnassignTaskRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UnassignTaskRequest): UnassignTaskRequest.AsObject;
+  static serializeBinaryToWriter(message: UnassignTaskRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UnassignTaskRequest;
+  static deserializeBinaryFromReader(message: UnassignTaskRequest, reader: jspb.BinaryReader): UnassignTaskRequest;
+}
+
+export namespace UnassignTaskRequest {
+  export type AsObject = {
+    taskId: string,
+    userId: string,
+  }
+}
+
+export class UnassignTaskResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UnassignTaskResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: UnassignTaskResponse): UnassignTaskResponse.AsObject;
+  static serializeBinaryToWriter(message: UnassignTaskResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UnassignTaskResponse;
+  static deserializeBinaryFromReader(message: UnassignTaskResponse, reader: jspb.BinaryReader): UnassignTaskResponse;
+}
+
+export namespace UnassignTaskResponse {
+  export type AsObject = {
+  }
+}
+
 export class CreateSubtaskRequest extends jspb.Message {
   getTaskId(): string;
   setTaskId(value: string): CreateSubtaskRequest;

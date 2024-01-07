@@ -71,6 +71,25 @@ func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequ
 	return &pb.AssignTaskResponse{}, nil
 }
 
+func (s *TaskGrpcService) UnassignTask(ctx context.Context, req *pb.UnassignTaskRequest) (*pb.UnassignTaskResponse, error) {
+	taskID, err := uuid.Parse(req.TaskId)
+	if err != nil {
+		return nil, err
+	}
+
+	userID, err := uuid.Parse(req.UserId)
+	if err != nil {
+		return nil, err
+	}
+
+	command := commandsV1.NewUnassignTaskCommand(taskID, userID)
+	if err := s.service.Commands.UnassignTask.Handle(ctx, command); err != nil {
+		return nil, err
+	}
+
+	return &pb.UnassignTaskResponse{}, nil
+}
+
 func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.GetTaskResponse, error) {
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {

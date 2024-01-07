@@ -326,6 +326,67 @@ proto.proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.assignTask 
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.UnassignTaskRequest,
+ *   !proto.proto.services.tasks_svc.v1.UnassignTaskResponse>}
+ */
+const methodDescriptor_TaskService_UnassignTask = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.TaskService/UnassignTask',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.UnassignTaskRequest,
+  proto.proto.services.tasks_svc.v1.UnassignTaskResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.UnassignTaskRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.UnassignTaskResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.UnassignTaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.UnassignTaskResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.UnassignTaskResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.TaskServiceClient.prototype.unassignTask =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.TaskService/UnassignTask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_UnassignTask,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.UnassignTaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.UnassignTaskResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.unassignTask =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.TaskService/UnassignTask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_UnassignTask);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.tasks_svc.v1.CreateSubtaskRequest,
  *   !proto.proto.services.tasks_svc.v1.CreateSubtaskResponse>}
  */

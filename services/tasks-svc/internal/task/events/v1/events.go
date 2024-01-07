@@ -107,9 +107,9 @@ func NewTaskAssignedEvent(a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error
 	return hwes.NewBaseEventWithPayload(a, TaskAssigned, payload)
 }
 
-func NewTaskSelfAssignedEvent(a hwes.Aggregate, userID string) (hwes.Event, error) {
+func NewTaskSelfAssignedEvent(a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
 	payload := TaskSelfAssignedEvent{
-		UserID: userID,
+		UserID: userID.String(),
 	}
 	return hwes.NewBaseEventWithPayload(a, TaskSelfAssigned, payload)
 }

@@ -4,6 +4,7 @@ type TaskCommands struct {
 	CreateTask        CreateTaskCommandHandler
 	UpdateTask        UpdateTaskCommandHandler
 	AssignTask        AssignTaskCommandHandler
+	UnassignTask      UnassignTaskCommandHandler
 	CreateSubtask     CreateSubtaskCommandHandler
 	UpdateSubtask     UpdateSubtaskCommandHandler
 	CompleteSubtask   CompleteSubtaskCommandHandler
@@ -15,6 +16,7 @@ func NewTaskCommands(
 	createTask CreateTaskCommandHandler,
 	updateTask UpdateTaskCommandHandler,
 	assignTask AssignTaskCommandHandler,
+	unassignTask UnassignTaskCommandHandler,
 	createSubtask CreateSubtaskCommandHandler,
 	updateSubtask UpdateSubtaskCommandHandler,
 	completeSubtask CompleteSubtaskCommandHandler,
@@ -25,6 +27,7 @@ func NewTaskCommands(
 		CreateTask:        createTask,
 		UpdateTask:        updateTask,
 		AssignTask:        assignTask,
+		UnassignTask:      unassignTask,
 		CreateSubtask:     createSubtask,
 		UpdateSubtask:     updateSubtask,
 		CompleteSubtask:   completeSubtask,

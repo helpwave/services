@@ -17,8 +17,6 @@ var Version string
 func main() {
 	common.Setup(ServiceName, Version, true)
 
-	eventstoredb.SetupEventStoreByEnv()
-
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
 	taskService := service.NewTaskService(aggregateStore)
