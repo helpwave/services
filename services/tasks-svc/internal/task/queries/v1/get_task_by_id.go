@@ -40,7 +40,7 @@ func (q *getTaskByIDQueryHandler) Handle(ctx context.Context, query *GetTaskByID
 	if err := hwauthz.CheckGrpcWrapper(
 		ctx,
 		q.authz,
-		hwauthz.NewPermission("task", query.ID.String(), "view", "user", userID.String()),
+		hwauthz.NewCanUserViewTaskPermission(userID, query.ID),
 	); err != nil {
 		return nil, err
 	}

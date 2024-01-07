@@ -1,8 +1,10 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
+	"hwauthz"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"
 )
@@ -21,14 +23,27 @@ type DeleteSubtaskCommandHandler interface {
 }
 
 type deleteSubtaskCommandHandler struct {
-	as hwes.AggregateStore
+	as    hwes.AggregateStore
+	authz hwauthz.AuthZ
 }
 
-func NewDeleteSubtaskCommandHandler(as hwes.AggregateStore) *deleteSubtaskCommandHandler {
-	return &deleteSubtaskCommandHandler{as: as}
+func NewDeleteSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) *deleteSubtaskCommandHandler {
+	return &deleteSubtaskCommandHandler{as: as, authz: authz}
 }
 
 func (c *deleteSubtaskCommandHandler) Handle(ctx context.Context, command *DeleteSubtaskCommand) error {
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return err
+	}
+
+	if err := hwauthz.CheckGrpcWrapper(
+		ctx,
+		c.authz,
+		hwauthz.NewCanUserDeleteSubtaskOnTaskPermission(userID, command.AggregateID)); err != nil {
+		return err
+	}
+
 	taskAggregate, err := aggregate.LoadTaskAggregate(ctx, c.as, command.AggregateID)
 	if err != nil {
 		return err

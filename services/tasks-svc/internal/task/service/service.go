@@ -15,13 +15,13 @@ type TaskService struct {
 func NewTaskService(as hwes.AggregateStore, authz hwauthz.AuthZ) *TaskService {
 	taskCommands := commandsV1.NewTaskCommands(
 		commandsV1.NewCreateTaskCommandHandler(as),
-		commandsV1.NewUpdateTaskCommandHandler(as),
+		commandsV1.NewUpdateTaskCommandHandler(as, authz),
 		commandsV1.NewAssignTaskCommandHandler(as),
-		commandsV1.NewCreateSubtaskCommandHandler(as),
-		commandsV1.NewUpdateSubtaskCommandHandler(as),
+		commandsV1.NewCreateSubtaskCommandHandler(as, authz),
+		commandsV1.NewUpdateSubtaskCommandHandler(as, authz),
 		commandsV1.NewCompleteSubtaskCommandHandler(as),
 		commandsV1.NewUncompleteSubtaskCommandHandler(as),
-		commandsV1.NewDeleteSubtaskCommandHandler(as),
+		commandsV1.NewDeleteSubtaskCommandHandler(as, authz),
 	)
 
 	taskQueries := queriesV1.NewTaskQueries(

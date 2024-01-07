@@ -1,8 +1,10 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
+	"hwauthz"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"
 )
@@ -22,14 +24,27 @@ type CreateSubtaskCommandHandler interface {
 }
 
 type createSubtaskCommandHandler struct {
-	as hwes.AggregateStore
+	as    hwes.AggregateStore
+	authz hwauthz.AuthZ
 }
 
-func NewCreateSubtaskCommandHandler(as hwes.AggregateStore) *createSubtaskCommandHandler {
-	return &createSubtaskCommandHandler{as: as}
+func NewCreateSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) *createSubtaskCommandHandler {
+	return &createSubtaskCommandHandler{as: as, authz: authz}
 }
 
 func (c *createSubtaskCommandHandler) Handle(ctx context.Context, command *CreateSubtaskCommand) error {
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return err
+	}
+
+	if err := hwauthz.CheckGrpcWrapper(
+		ctx,
+		c.authz,
+		hwauthz.NewCanUserCreateSubtaskOnTaskPermission(userID, command.AggregateID)); err != nil {
+		return err
+	}
+
 	a, err := aggregate.LoadTaskAggregate(ctx, c.as, command.AggregateID)
 	if err != nil {
 		return err
