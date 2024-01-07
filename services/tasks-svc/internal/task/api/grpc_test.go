@@ -63,8 +63,9 @@ func TestTaskGrpcService_CreateTask(t *testing.T) {
 
 	patientID := uuid.New()
 	taskName := "Test task"
+	taskDescription := "Abc"
 
-	createTaskResponse, err := client.CreateTask(ctx, &pb.CreateTaskRequest{Name: taskName, PatientId: patientID.String(), Public: hwutil.PtrTo(true)})
+	createTaskResponse, err := client.CreateTask(ctx, &pb.CreateTaskRequest{Name: taskName, Description: &taskDescription, PatientId: patientID.String(), Public: hwutil.PtrTo(true)})
 	if err != nil {
 		t.Error(err)
 	}
@@ -80,6 +81,10 @@ func TestTaskGrpcService_CreateTask(t *testing.T) {
 
 	if getTaskResponse.GetName() != taskName {
 		t.Errorf("Task name: expected '%s' got '%s'", taskName, getTaskResponse.GetName())
+	}
+
+	if getTaskResponse.Description != taskDescription {
+		t.Errorf("Task description: expected '%s' got '%s'", taskDescription, getTaskResponse.GetDescription())
 	}
 }
 

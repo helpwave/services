@@ -11,16 +11,18 @@ import (
 
 type CreateTaskCommand struct {
 	hwes.BaseCommand
-	Name      string
-	PatientID uuid.UUID
-	Public    *bool
-	Status    *pb.TaskStatus
+	Name        string
+	Description *string
+	PatientID   uuid.UUID
+	Public      *bool
+	Status      *pb.TaskStatus
 }
 
-func NewCreateTaskCommand(id uuid.UUID, name string, patientID uuid.UUID, public *bool, status *pb.TaskStatus) *CreateTaskCommand {
+func NewCreateTaskCommand(id uuid.UUID, name string, description *string, patientID uuid.UUID, public *bool, status *pb.TaskStatus) *CreateTaskCommand {
 	return &CreateTaskCommand{
 		BaseCommand: hwes.NewBaseCommand(id),
 		Name:        name,
+		Description: description,
 		PatientID:   patientID,
 		Public:      public,
 		Status:      status,
@@ -58,6 +60,12 @@ func (c *createTaskCommandHandler) Handle(ctx context.Context, command *CreateTa
 
 	if err := a.CreateTask(ctx, command.Name, command.PatientID, status); err != nil {
 		return err
+	}
+
+	if command.Description != nil {
+		if err := a.UpdateDescription(ctx, a.Task.Description, *command.Description); err != nil {
+			return err
+		}
 	}
 
 	if command.Public != nil && *command.Public {

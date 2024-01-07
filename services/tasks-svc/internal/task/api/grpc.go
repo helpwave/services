@@ -28,7 +28,7 @@ func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequ
 		return nil, err
 	}
 
-	command := commandsV1.NewCreateTaskCommand(taskID, req.GetName(), patientID, req.Public, req.InitialStatus)
+	command := commandsV1.NewCreateTaskCommand(taskID, req.GetName(), req.Description, patientID, req.Public, req.InitialStatus)
 	if err := s.service.Commands.CreateTask.Handle(ctx, command); err != nil {
 		return nil, err
 	}
