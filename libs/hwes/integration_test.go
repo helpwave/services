@@ -2,6 +2,7 @@ package hwes_test
 
 import (
 	"context"
+	"errors"
 	"github.com/google/uuid"
 	"hwes"
 	"hwes/test"
@@ -62,6 +63,12 @@ func NewUserAggregate(id uuid.UUID) *UserAggregate {
 		RegisterEventListener(UsernameUpdated, aggregate.onUsernameUpdated)
 
 	return aggregate
+}
+
+const UserInvalidEvent = "USER_INVALID_EVENT"
+
+func NewUserInvalidEvent(a hwes.Aggregate) (hwes.Event, error) {
+	return hwes.NewBaseEvent(a, UserInvalidEvent), nil
 }
 
 const UserCreated = "USER_CREATED"
@@ -140,5 +147,53 @@ func TestIntegration(t *testing.T) {
 
 	if loadedUserAggregate.User.Username != "testine.test" {
 		t.Fatal("invalid username")
+	}
+}
+
+func TestAggregateBase_RegisterEventListener_HandleEvent(t *testing.T) {
+	aggregate := NewUserAggregate(uuid.New())
+
+	userInvalidEvent, err := NewUserInvalidEvent(aggregate)
+	if err != nil {
+		t.Error(err)
+	}
+
+	userCreatedEvent, err := NewUserCreatedEvent(aggregate, uuid.New(), "test")
+	if err != nil {
+		t.Error(err)
+	}
+
+	fncWithNoErr := func(event hwes.Event) error {
+		return nil
+	}
+
+	fncWithErr := func(event hwes.Event) error {
+		return errors.New("test error")
+	}
+
+	aggregate.RegisterEventListener(UserCreated, fncWithNoErr)
+
+	if err := aggregate.HandleEvent(userCreatedEvent); err != nil {
+		t.Error(err)
+	}
+
+	aggregate.RegisterEventListener(UserCreated, fncWithErr)
+
+	if err := aggregate.HandleEvent(userCreatedEvent); err != nil {
+		if err.Error() != "test error" {
+			t.Error(err)
+		}
+	} else {
+		t.Error("expected an error")
+	}
+
+	aggregate.RegisterEventListener(UserCreated, fncWithNoErr)
+
+	if err := aggregate.HandleEvent(userCreatedEvent); err != nil {
+		t.Error(err)
+	}
+
+	if err := aggregate.HandleEvent(userInvalidEvent); err == nil {
+		t.Error("event handler is not register and should therefore not be handled")
 	}
 }
