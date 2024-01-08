@@ -52,20 +52,15 @@ func (a *UserAggregate) onUsernameUpdated(evt hwes.Event) error {
 	return nil
 }
 
-func (a *UserAggregate) When(evt hwes.Event) error {
-	switch evt.EventType {
-	case UserCreated:
-		return a.onUserCreated(evt)
-	case UsernameUpdated:
-		return a.onUsernameUpdated(evt)
-	}
-	return nil
-}
-
 func NewUserAggregate(id uuid.UUID) *UserAggregate {
 	aggregate := &UserAggregate{User: NewUserModel()}
-	aggregate.AggregateBase = hwes.NewAggregateBase(UserAggregateType, id, aggregate.When)
+	aggregate.AggregateBase = hwes.NewAggregateBase(UserAggregateType, id)
 	aggregate.User.ID = id
+
+	aggregate.
+		RegisterEventListener(UserCreated, aggregate.onUserCreated).
+		RegisterEventListener(UsernameUpdated, aggregate.onUsernameUpdated)
+
 	return aggregate
 }
 

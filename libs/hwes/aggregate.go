@@ -7,29 +7,9 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// When is a per aggregate defined function that
-// executes event handlers based on evt.EventType
-//
-// Example:
-//
-//	func (a *TaskAggregate) When(evt hwes.Event) error {
-//		switch evt.EventType {
-//		case eventsV1.TaskCreated:
-//			return a.onTaskCreated(evt)
-//		case eventsV1.TaskUnassigned:
-//			return a.onTaskUnassigned(evt)
-//		default:
-//			return fmt.Errorf("event type '%s' is invalid", evt.EventType)
-//		}
-//	}
-type When interface {
-	When(evt Event) error
-}
-
-type when func(evt Event) error
+type eventHandler func(evt Event) error
 
 type Aggregate interface {
-	When
 	AggregateRoot
 }
 
@@ -38,6 +18,8 @@ type AggregateRoot interface {
 	GetStreamID() string
 	GetType() AggregateType
 	GetVersion() int64
+
+	HandleEvent(event Event) error
 
 	GetAppliedEvents() []Event
 	GetUncommittedEvents() []Event
@@ -53,7 +35,8 @@ type AggregateBase struct {
 	id      uuid.UUID
 	atype   AggregateType
 	version int64
-	when    when
+
+	eventHandlers map[string]eventHandler
 
 	appliedEvents     []Event
 	uncommittedEvents []Event
@@ -66,30 +49,20 @@ type AggregateBase struct {
 //
 //	func NewTaskAggregate(id uuid.UUID) *TaskAggregate {
 //		aggregate := &TaskAggregate{Task: models.NewTask()}
-//		aggregate.AggregateBase = hwes.NewAggregateBase(TaskAggregateType, id, aggregate.When)
+//		aggregate.AggregateBase = hwes.NewAggregateBase(TaskAggregateType, id)
 //		aggregate.Task.ID = id
+//
+//		aggregate.RegisterEventListener(eventsV1.TaskCreated, a.onTaskCreated)
+//
 //		return aggregate
 //	}
-func NewAggregateBase(atype AggregateType, id uuid.UUID, when when) *AggregateBase {
-	if when == nil {
-		return nil
-	}
-
-	whenWithLogger := func(event Event) error {
-		log.Debug().
-			Str("aggregateID", event.GetAggregateID().String()).
-			Str("aggregateType", string(event.GetAggregateType())).
-			Str("eventType", event.EventType).
-			Int64("version", event.GetVersion()).
-			Msg("raise event")
-		return when(event)
-	}
-
+func NewAggregateBase(atype AggregateType, id uuid.UUID) *AggregateBase {
 	return &AggregateBase{
 		id:      id,
 		version: -1, // -1 indicates a new stream for EventStoreDB
 		atype:   atype,
-		when:    whenWithLogger,
+
+		eventHandlers: make(map[string]eventHandler, 0),
 
 		appliedEvents:     make([]Event, 0),
 		uncommittedEvents: make([]Event, 0),
@@ -132,7 +105,7 @@ func (a *AggregateBase) Load(events []Event) error {
 			return errors.New("invalid aggregate for event")
 		}
 
-		if err := a.when(event); err != nil {
+		if err := a.HandleEvent(event); err != nil {
 			return err
 		}
 
@@ -151,7 +124,7 @@ func (a *AggregateBase) Apply(event Event) error {
 
 	event.SetAggregateType(a.GetType()) // TODO: Is this really necessary?
 
-	if err := a.when(event); err != nil {
+	if err := a.HandleEvent(event); err != nil {
 		return err
 	}
 
@@ -174,11 +147,39 @@ func (a *AggregateBase) RaiseEvent(event Event) error {
 
 	event.SetAggregateType(a.GetType()) // TODO: Is this really necessary?
 
-	if err := a.when(event); err != nil {
+	if err := a.HandleEvent(event); err != nil {
 		return err
 	}
 
 	a.appliedEvents = append(a.appliedEvents, event)
 	a.version = event.GetVersion()
 	return nil
+}
+
+func (a *AggregateBase) HandleEvent(event Event) error {
+	log.Debug().
+		Str("aggregateID", event.GetAggregateID().String()).
+		Str("aggregateType", string(event.GetAggregateType())).
+		Str("eventType", event.EventType).
+		Int64("version", event.GetVersion()).
+		Msg("handle event")
+
+	eventHandler, found := a.eventHandlers[event.EventType]
+	if !found {
+		return fmt.Errorf("event type '%s' is invalid", event.EventType)
+	}
+
+	return eventHandler(event)
+}
+
+func (a *AggregateBase) RegisterEventListener(eventType string, eventHandler eventHandler) *AggregateBase {
+	_, found := a.eventHandlers[eventType]
+	if found {
+		log.Warn().
+			Str("eventType", eventType).
+			Msg("override existing event handler")
+	}
+
+	a.eventHandlers[eventType] = eventHandler
+	return a
 }

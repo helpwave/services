@@ -20,8 +20,9 @@ type TaskAggregate struct {
 
 func NewTaskAggregate(id uuid.UUID) *TaskAggregate {
 	aggregate := &TaskAggregate{Task: models.NewTask()}
-	aggregate.AggregateBase = hwes.NewAggregateBase(TaskAggregateType, id, aggregate.When)
+	aggregate.AggregateBase = hwes.NewAggregateBase(TaskAggregateType, id)
 	aggregate.Task.ID = id
+	aggregate.initEventListener()
 	return aggregate
 }
 
@@ -33,35 +34,20 @@ func LoadTaskAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID
 	return task, nil
 }
 
-func (a *TaskAggregate) When(evt hwes.Event) error {
-	switch evt.EventType {
-	case eventsV1.TaskCreated:
-		return a.onTaskCreated(evt)
-	case eventsV1.TaskNameUpdated:
-		return a.onTaskNameUpdated(evt)
-	case eventsV1.TaskDescriptionUpdated:
-		return a.onTaskDescriptionUpdated(evt)
-	case eventsV1.TaskAssigned:
-		fallthrough
-	case eventsV1.TaskSelfAssigned:
-		return a.onTaskAssigned(evt) // Handle TaskAssigned and TaskSelfAssigned
-	case eventsV1.TaskUnassigned:
-		return a.onTaskUnassigned(evt)
-	case eventsV1.TaskPublished:
-		return a.onTaskPublished(evt)
-	case eventsV1.SubtaskCreated:
-		return a.onSubtaskCreated(evt)
-	case eventsV1.SubtaskNameUpdated:
-		return a.onSubtaskNameUpdated(evt)
-	case eventsV1.SubtaskCompleted:
-		return a.onSubtaskCompleted(evt)
-	case eventsV1.SubtaskUncompleted:
-		return a.onSubtaskUncompleted(evt)
-	case eventsV1.SubtaskDeleted:
-		return a.onSubtaskDeleted(evt)
-	default:
-		return fmt.Errorf("event type '%s' is invalid", evt.EventType)
-	}
+func (a *TaskAggregate) initEventListener() {
+	a.
+		RegisterEventListener(eventsV1.TaskCreated, a.onTaskCreated).
+		RegisterEventListener(eventsV1.TaskNameUpdated, a.onTaskNameUpdated).
+		RegisterEventListener(eventsV1.TaskDescriptionUpdated, a.onTaskDescriptionUpdated).
+		RegisterEventListener(eventsV1.TaskAssigned, a.onTaskAssigned).
+		RegisterEventListener(eventsV1.TaskSelfAssigned, a.onTaskAssigned).
+		RegisterEventListener(eventsV1.TaskUnassigned, a.onTaskUnassigned).
+		RegisterEventListener(eventsV1.TaskPublished, a.onTaskPublished).
+		RegisterEventListener(eventsV1.SubtaskCreated, a.onSubtaskCreated).
+		RegisterEventListener(eventsV1.SubtaskNameUpdated, a.onSubtaskNameUpdated).
+		RegisterEventListener(eventsV1.SubtaskCompleted, a.onSubtaskCompleted).
+		RegisterEventListener(eventsV1.SubtaskUncompleted, a.onSubtaskUncompleted).
+		RegisterEventListener(eventsV1.SubtaskDeleted, a.onSubtaskDeleted)
 }
 
 // Event handlers
