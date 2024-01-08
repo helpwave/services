@@ -24,7 +24,8 @@ const ServiceName = "emergency-room-svc"
 var Version string
 
 func main() {
-	common.Setup(ServiceName, Version, false)
+	shutdown := common.Setup(ServiceName, Version, false)
+	defer shutdown()
 
 	hwgorm.SetupDatabaseByEnvs()
 

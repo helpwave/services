@@ -16,12 +16,13 @@ const ServiceName = "user-svc"
 var Version string
 
 func main() {
-	common.SetupWithUnauthenticatedMethods(ServiceName, Version, true, &[]string{
+	shutdown := common.SetupWithUnauthenticatedMethods(ServiceName, Version, true, &[]string{
 		"/proto.services.user_svc.v1.UserService/CreateUser",
 		"/proto.services.user_svc.v1.OrganizationService/CreateOrganizationForUser",
 		"/proto.services.user_svc.v1.OrganizationService/AddMember",
 		"/proto.services.user_svc.v1.OrganizationService/GetOrganizationsByUser",
 	})
+	defer shutdown()
 
 	hwdb.SetupDatabaseFromEnv(context.Background())
 

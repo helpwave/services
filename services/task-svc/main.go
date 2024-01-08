@@ -26,7 +26,8 @@ const ServiceName = "task-svc"
 var Version string
 
 func main() {
-	common.Setup(ServiceName, Version, true)
+	shutdown := common.Setup(ServiceName, Version, true)
+	defer shutdown()
 
 	if feature.IsEventSourcingEnabled() {
 		log.Info().

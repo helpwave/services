@@ -1,6 +1,7 @@
 package common
 
 import (
+	"context"
 	"crypto/tls"
 	"fmt"
 	"github.com/google/uuid"
@@ -24,13 +25,14 @@ const ProductionMode = "production"
 var skipAuthForMethods []string
 
 // Setup wraps SetupWithUnauthenticatedMethods for a setup without unauthenticated methods
-func Setup(serviceName, version string, auth bool) {
-	SetupWithUnauthenticatedMethods(serviceName, version, auth, nil)
+func Setup(serviceName, version string, auth bool) func() {
+	return SetupWithUnauthenticatedMethods(serviceName, version, auth, nil)
 }
 
-// SetupWithUnauthenticatedMethods loads the .env file and sets up logging
-// also sets up tokens when the service requires auth
-func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, unauthenticatedMethods *[]string) {
+// SetupWithUnauthenticatedMethods loads the .env file and sets up logging,
+// also sets up tokens when the service requires auth.
+// It returns a shutdown function, which must be called before exiting the process (needed for otel)
+func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, unauthenticatedMethods *[]string) func() {
 	dotenvErr := godotenv.Load()
 
 	Mode = hwutil.GetEnvOr("MODE", DevelopmentMode)
@@ -42,6 +44,24 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 		serviceName,
 		version,
 	)
+
+	shutdownOtel, err := setupOTelSDK(context.Background(), serviceName, version)
+	if err != nil {
+		msg := "Could not set up opentelemetry sdk"
+		if Mode == ProductionMode { // TODO: replace with env variable
+			log.Fatal().Err(err).Msg(msg)
+		} else {
+			log.Error().Err(err).Msg(msg)
+		}
+	}
+
+	// for now, we return this function and move responsibility to the callee,
+	// in the future we might call this in a SIGINT trap, which we set up in common
+	shutdown := func() {
+		if err := shutdownOtel(context.Background()); err != nil {
+			log.Error().Err(err).Msg("error in shutting down opentelemetry")
+		}
+	}
 
 	if len(version) == 0 && Mode == ProductionMode {
 		log.Warn().Msg("Version is empty in production build! Recompile using ldflag '-X main.Version=<version>'")
@@ -81,6 +101,8 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 
 		setupAuth()
 	}
+
+	return shutdown
 }
 
 // ResolveAddrFromEnv uses the "PORT" and "ADDR" env variables to
