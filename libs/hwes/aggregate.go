@@ -43,7 +43,7 @@ type AggregateBase struct {
 }
 
 // NewAggregateBase gets called by an aggregate specific implementation
-// that provides details about the aggregate type, id and "When"-Implementation
+// that provides details about the aggregate type and id
 //
 // Example:
 //
@@ -97,7 +97,7 @@ func (a *AggregateBase) ClearUncommittedEvents() {
 	a.uncommittedEvents = make([]Event, 0)
 }
 
-// Load applies events to an aggregate by utilizing the "When"-Function
+// Load applies events to an aggregate by utilizing the registered event listeners
 // Currently not in use. Could be helpful for testing.
 func (a *AggregateBase) Load(events []Event) error {
 	for _, event := range events {
@@ -115,7 +115,7 @@ func (a *AggregateBase) Load(events []Event) error {
 	return nil
 }
 
-// Apply applies events to an aggregate by utilizing the "When"-Function
+// Apply applies events to an aggregate by utilizing the registered event listeners
 // and appends it as an uncommitted one to be later persisted by an aggregate store.
 func (a *AggregateBase) Apply(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
@@ -135,7 +135,7 @@ func (a *AggregateBase) Apply(event Event) error {
 }
 
 // RaiseEvent should be called after all events are loaded though an aggregate store.
-// The passed event gets applied to an aggregate by utilizing the "When"-Function.
+// The passed event gets applied to an aggregate by utilizing the registered event listeners.
 func (a *AggregateBase) RaiseEvent(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
 		return errors.New("invalid aggregate for event")
