@@ -23,7 +23,9 @@ var connectionPool *pgxpool.Pool = nil
 // POSTGRES_PASSWORD (postgres)
 // POSTGRES_DB (postgres)
 // POSTGRES_PORT (5432)
-func SetupDatabaseFromEnv(context context.Context) {
+//
+// SetupDatabaseFromEnv returns a close function, which has to be called in order to shut down the database cleanly
+func SetupDatabaseFromEnv(context context.Context) func() {
 	log.Info().Msg("connecting to postgres ...")
 
 	dsn := hwutil.GetEnvOr("POSTGRES_DSN", "")
@@ -41,6 +43,11 @@ func SetupDatabaseFromEnv(context context.Context) {
 	connectionPool = dbpool
 
 	log.Info().Msg("connected to postgres")
+
+	return func() {
+		log.Info().Msg("closing db pool")
+		dbpool.Close()
+	}
 }
 
 func buildDsnFromEnvs() string {

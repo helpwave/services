@@ -27,8 +27,7 @@ const ServiceName = "task-svc"
 var Version string
 
 func main() {
-	shutdown := common.Setup(ServiceName, Version, true)
-	defer shutdown()
+	common.Setup(ServiceName, Version, true)
 
 	tracer := otel.Tracer("")
 	_, span := tracer.Start(context.Background(), "test span name")
@@ -46,7 +45,10 @@ func main() {
 	}
 
 	hwgorm.SetupDatabaseByEnvs() // TODO: to be removed
-	hwdb.SetupDatabaseFromEnv(context.Background())
+
+	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
+	defer closeDBPool()
+
 	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
 
 	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {

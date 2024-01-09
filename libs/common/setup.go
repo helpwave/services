@@ -17,6 +17,7 @@ var (
 	Mode                    string // Mode is set in Setup()
 	InsecureFakeTokenEnable = false
 	InstanceOrganizationID  *uuid.UUID
+	shutdownOpenTelemetryFn func() // cleanup function
 )
 
 const DevelopmentMode = "development"
@@ -25,14 +26,14 @@ const ProductionMode = "production"
 var skipAuthForMethods []string
 
 // Setup wraps SetupWithUnauthenticatedMethods for a setup without unauthenticated methods
-func Setup(serviceName, version string, auth bool) func() {
-	return SetupWithUnauthenticatedMethods(serviceName, version, auth, nil)
+func Setup(serviceName, version string, auth bool) {
+	SetupWithUnauthenticatedMethods(serviceName, version, auth, nil)
 }
 
 // SetupWithUnauthenticatedMethods loads the .env file and sets up logging,
 // also sets up tokens when the service requires auth.
 // It returns a shutdown function, which must be called before exiting the process (needed for otel)
-func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, unauthenticatedMethods *[]string) func() {
+func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, unauthenticatedMethods *[]string) {
 	dotenvErr := godotenv.Load()
 
 	Mode = hwutil.GetEnvOr("MODE", DevelopmentMode)
@@ -55,11 +56,12 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 		log.Fatal().Err(err).Msg(msg)
 	}
 
-	// for now, we return this function and move responsibility to the callee,
-	// in the future we might call this in a SIGINT trap, which we set up in common
-	shutdown := func() {
+	// function is called when the process is instructed to shut down
+	shutdownOpenTelemetryFn = func() {
 		if err := shutdownOtel(context.Background()); err != nil {
 			log.Error().Err(err).Msg("error in shutting down opentelemetry")
+		} else {
+			log.Info().Msg("otel shut down without errors")
 		}
 	}
 
@@ -97,8 +99,6 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 
 		setupAuth()
 	}
-
-	return shutdown
 }
 
 // ResolveAddrFromEnv uses the "PORT" and "ADDR" env variables to

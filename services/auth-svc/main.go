@@ -15,8 +15,7 @@ const ServiceName = "auth-svc"
 var Version string
 
 func main() {
-	shutdown := common.Setup(ServiceName, Version, false)
-	defer shutdown()
+	common.Setup(ServiceName, Version, false)
 
 	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		pb.RegisterAuthServiceServer(server.GrpcServer(), &authServiceServer{})
