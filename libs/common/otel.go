@@ -2,7 +2,6 @@ package common
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	zlog "github.com/rs/zerolog/log"
 	"go.opentelemetry.io/otel"
@@ -55,7 +54,9 @@ func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shut
 	shutdown = func(ctx context.Context) error {
 		var err error
 		for _, fn := range shutdownFuncs {
-			err = errors.Join(err, fn(ctx))
+			if fnerr := fn(ctx); fnerr != nil {
+				err = fmt.Errorf("%v\n%v", err, fnerr)
+			}
 		}
 		shutdownFuncs = nil
 		return err
@@ -69,7 +70,10 @@ func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shut
 
 	// handleErr calls shutdown for cleanup and makes sure that all errors are returned.
 	handleErr := func(inErr error) {
-		err = errors.Join(inErr, shutdown(ctx))
+		err = inErr
+		if sderr := shutdown(ctx); sderr != nil {
+			err = fmt.Errorf("%v\n%v", err, sderr)
+		}
 	}
 
 	// Set up resource.
