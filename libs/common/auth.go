@@ -3,7 +3,7 @@ package common
 import (
 	"context"
 	"errors"
-	"github.com/coreos/go-oidc"
+	oidc "github.com/coreos/go-oidc"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
