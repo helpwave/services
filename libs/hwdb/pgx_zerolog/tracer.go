@@ -24,11 +24,15 @@ func (t tracer) TraceCopyFromEnd(ctx context.Context, conn *pgx.Conn, data pgx.T
 }
 
 func (t tracer) TraceConnectStart(ctx context.Context, data pgx.TraceConnectStartData) context.Context {
+	ctx, span := common.StartSpan(ctx, "pgx.connect")
+	span.SetAttributes(attribute.String("server",
+		fmt.Sprintf("%s:%d", data.ConnConfig.Host, data.ConnConfig.Port)))
 	return t.inner.TraceConnectStart(ctx, data)
 }
 
 func (t tracer) TraceConnectEnd(ctx context.Context, data pgx.TraceConnectEndData) {
 	t.inner.TraceConnectEnd(ctx, data)
+	common.StopSpanFromCtx(ctx)
 }
 
 func (t tracer) TraceBatchStart(ctx context.Context, conn *pgx.Conn, data pgx.TraceBatchStartData) context.Context {
@@ -44,7 +48,7 @@ func (t tracer) TraceBatchEnd(ctx context.Context, conn *pgx.Conn, data pgx.Trac
 }
 
 func (t tracer) TraceQueryStart(ctx context.Context, conn *pgx.Conn, data pgx.TraceQueryStartData) context.Context {
-	ctx, span := common.StartSpan(ctx, "query")
+	ctx, span := common.StartSpan(ctx, "pgx.query")
 	span.SetAttributes(attribute.String("sql", data.SQL))
 	args := make([]string, len(data.Args))
 	for i, val := range data.Args {

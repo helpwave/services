@@ -41,7 +41,7 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	loggingInterceptor := loggingUnaryInterceptor
 	authInterceptor := authUnaryInterceptor
 	validateInterceptor := validateUnaryInterceptor
-	chain := grpc_middleware.ChainUnaryServer(loggingInterceptor, authInterceptor, validateInterceptor)
+	chain := grpc_middleware.ChainUnaryServer(loggingInterceptor, authInterceptor, validateInterceptor, handlerSpanInterceptor)
 	interceptorChainServerOption := grpc.UnaryInterceptor(chain)
 
 	otelServerOption := grpc.StatsHandler(otelgrpc.NewServerHandler())
@@ -77,6 +77,9 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 }
 
 func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	ctx, span := StartSpan(ctx, "auth_interceptor")
+	defer span.End()
+
 	if isUnaryRPCForDaprInternal(info) || hwutil.Contains(skipAuthForMethods, info.FullMethod) {
 		zlog.Debug().
 			Str("method", info.FullMethod).
@@ -248,7 +251,22 @@ func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
 	}
 }
 
+// handlerSpanInterceptor opens and closes a span around the next in the chain
+// it should only be used as the last element in the interceptor chain before the handler
+func handlerSpanInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	ctx, span := StartSpan(ctx, "handler")
+	res, err := next(ctx, req)
+	if err != nil {
+		span.SetStatus(1, err.Error())
+	}
+	span.End()
+	return res, err
+}
+
 func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	ctx, span := StartSpan(ctx, "validate_interceptor")
+	defer span.End()
+
 	if err := hwutil.Validate(req); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
@@ -256,6 +274,9 @@ func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.U
 }
 
 func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	ctx, span := StartSpan(ctx, "logging_interceptor")
+	defer span.End()
+
 	metadata := metautils.ExtractIncoming(ctx)
 
 	// Add request information
