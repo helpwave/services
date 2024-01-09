@@ -6,6 +6,7 @@ import (
 	pb "gen/proto/services/task_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
+	"go.opentelemetry.io/otel"
 	"hwdb"
 	"hwes"
 	"hwgorm"
@@ -28,6 +29,10 @@ var Version string
 func main() {
 	shutdown := common.Setup(ServiceName, Version, true)
 	defer shutdown()
+
+	tracer := otel.Tracer("tracer")
+	_, span := tracer.Start(context.Background(), "test span name")
+	span.End()
 
 	if feature.IsEventSourcingEnabled() {
 		log.Info().

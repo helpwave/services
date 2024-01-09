@@ -38,6 +38,14 @@ services:
       - full
     restart: unless-stopped
 
+  jaeger:
+    image: jaegertracing/all-in-one
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    ports:
+      - "16686:16686" # api and UI
+      - "4317:4317" # OTLP (grpc)
+
   apisix:
     build:
       context: ..
