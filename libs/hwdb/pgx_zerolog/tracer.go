@@ -15,6 +15,8 @@ type tracer struct {
 	inner *tracelog.TraceLog
 }
 
+// impl CopyFromTracer interface
+
 func (t tracer) TraceCopyFromStart(ctx context.Context, conn *pgx.Conn, data pgx.TraceCopyFromStartData) context.Context {
 	return t.inner.TraceCopyFromStart(ctx, conn, data)
 }
@@ -22,6 +24,8 @@ func (t tracer) TraceCopyFromStart(ctx context.Context, conn *pgx.Conn, data pgx
 func (t tracer) TraceCopyFromEnd(ctx context.Context, conn *pgx.Conn, data pgx.TraceCopyFromEndData) {
 	t.inner.TraceCopyFromEnd(ctx, conn, data)
 }
+
+// impl ConnectTracer interface
 
 func (t tracer) TraceConnectStart(ctx context.Context, data pgx.TraceConnectStartData) context.Context {
 	ctx, span := common.StartSpan(ctx, "pgx.connect")
@@ -35,6 +39,8 @@ func (t tracer) TraceConnectEnd(ctx context.Context, data pgx.TraceConnectEndDat
 	common.StopSpanFromCtx(ctx)
 }
 
+// impl BatchTracer interface
+
 func (t tracer) TraceBatchStart(ctx context.Context, conn *pgx.Conn, data pgx.TraceBatchStartData) context.Context {
 	return t.inner.TraceBatchStart(ctx, conn, data)
 }
@@ -46,6 +52,8 @@ func (t tracer) TraceBatchQuery(ctx context.Context, conn *pgx.Conn, data pgx.Tr
 func (t tracer) TraceBatchEnd(ctx context.Context, conn *pgx.Conn, data pgx.TraceBatchEndData) {
 	t.inner.TraceBatchEnd(ctx, conn, data)
 }
+
+// impl QueryTracer interface
 
 func (t tracer) TraceQueryStart(ctx context.Context, conn *pgx.Conn, data pgx.TraceQueryStartData) context.Context {
 	ctx, span := common.StartSpan(ctx, "pgx.query")
@@ -71,10 +79,13 @@ func (t tracer) TraceQueryEnd(ctx context.Context, conn *pgx.Conn, data pgx.Trac
 	span.End()
 }
 
+// NewTracer returns a tracer, which wraps a TraceLog, which itself wraps zerolog
+// This tracer will emit logs using zerolog
+// and create otel spans for some operations
 func NewTracer() pgx.QueryTracer {
 	return tracer{
 		inner: &tracelog.TraceLog{
-			Logger: NewContextLogger(),
+			Logger: newContextLogger(),
 			// LogLevel is the level at which pgx will start calling zerolog
 			// Trace, being the lowest level, will cause it to always be called
 			LogLevel: tracelog.LogLevelTrace,

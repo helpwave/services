@@ -22,43 +22,10 @@ type Logger struct {
 // option options for configuring the logger when creating a new logger.
 type option func(logger *Logger)
 
-// WithContextFunc adds possibility to get request scoped values from the
-// ctx.Context before logging lines.
-func WithContextFunc(withFunc func(context.Context, zerolog.Context) zerolog.Context) option {
-	return func(logger *Logger) {
-		logger.withFunc = withFunc
-	}
-}
-
-// WithoutPGXModule disables adding module:pgx to the default logger context.
-func WithoutPGXModule() option {
-	return func(logger *Logger) {
-		logger.skipModule = true
-	}
-}
-
-// WithSubDictionary adds data to sub dictionary with key.
-func WithSubDictionary(key string) option {
-	return func(logger *Logger) {
-		logger.subDictionary = true
-		logger.subDictionaryKey = key
-	}
-}
-
-// NewLogger accepts a zerolog.Logger as input and returns a new custom pgx
-// logging facade as output.
-func NewLogger(logger zerolog.Logger, options ...option) *Logger {
-	l := Logger{
-		logger: logger,
-	}
-	l.init(options)
-	return &l
-}
-
-// NewContextLogger creates logger that extracts the zerolog.Logger from the
+// newContextLogger creates logger that extracts the zerolog.Logger from the
 // context.Context by using `zerolog.Ctx`. The zerolog.DefaultContextLogger will
 // be used if no logger is associated with the context.
-func NewContextLogger(options ...option) *Logger {
+func newContextLogger(options ...option) *Logger {
 	l := Logger{
 		fromContext: true,
 	}

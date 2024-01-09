@@ -32,7 +32,6 @@ func Setup(serviceName, version string, auth bool) {
 
 // SetupWithUnauthenticatedMethods loads the .env file and sets up logging,
 // also sets up tokens when the service requires auth.
-// It returns a shutdown function, which must be called before exiting the process (needed for otel)
 func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, unauthenticatedMethods *[]string) {
 	dotenvErr := godotenv.Load()
 

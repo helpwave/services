@@ -43,8 +43,7 @@ func newErrAndLog(ctx context.Context, msg string) error {
 }
 
 func main() {
-	shutdown := common.Setup(ServiceName, Version, false)
-	defer shutdown()
+	common.Setup(ServiceName, Version, false)
 
 	DaprPubsub = hwutil.GetEnvOr("DAPR_PUBSUB", "pubsub")
 
