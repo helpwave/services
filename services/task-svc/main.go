@@ -30,7 +30,7 @@ func main() {
 	shutdown := common.Setup(ServiceName, Version, true)
 	defer shutdown()
 
-	tracer := otel.Tracer("tracer")
+	tracer := otel.Tracer("")
 	_, span := tracer.Start(context.Background(), "test span name")
 	span.End()
 
