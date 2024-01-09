@@ -19,8 +19,6 @@ import (
 	"hwutil"
 	"logging"
 	"net"
-	"os"
-	"os/signal"
 )
 
 type claimsKey struct{}
@@ -31,7 +29,7 @@ type organizationIDKey struct{}
 // StartNewGRPCServer creates and starts a new GRPC server on addr or panics.
 // Using registerServerHook you are able to register your
 // service server implementation with this grpc server.
-// It will register a SIGINT trap and clean up everything from Setup() and this function
+// It will register a SIGINT trap and clean up everything from Setup() using Shutdown() and this function
 // Afterward, code execution is handed back to you, where you can do additional clean up,
 // e.g. closing the database pool.
 //
@@ -75,29 +73,18 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 		zlog.Warn().Msg("grpc reflection enabled")
 	}
 
-	// set up SIGINT trap, so we can to clean up before the process stops
-	ctx, stopTrap := signal.NotifyContext(context.Background(), os.Interrupt)
-	defer stopTrap()
-	zlog.Debug().Msg("SIGINT trap set up")
-
-	// spawn another (green-)thread to actually run the server
-	serverErr := make(chan error, 1)
-	go func() {
+	interrupted, err := hwutil.RunUntilInterrupted(context.Background(), func() error {
 		zlog.Info().Str("addr", addr).Msg("starting grpc service")
-		// Serve() only returns on err, e.g. when the port is blocked
-		// we send the error back to the main thread
-		serverErr <- server.Serve(listener)
-	}()
+		return server.Serve(listener)
+	})
 
-	// block main thread until we either get an error back from the server thread
-	// or until we received an interrupt signal
-	select {
-	case err = <-serverErr:
-		zlog.Error().Str("addr", addr).Err(err).Msg("could not start grpc server")
-	case <-ctx.Done():
+	if interrupted {
 		zlog.Warn().Msg("SIGINT received, shutting down")
+	} else {
+		zlog.Error().Str("addr", addr).Err(err).Msg("could not start grpc server")
 	}
 
+	// Shut down service
 	zlog.Info().Msg("shutting down dapr/grpc service")
 	if err := service.GracefulStop(); err != nil {
 		zlog.Error().Err(err).Msg("failed shutting down service, it is what it is")
@@ -105,8 +92,8 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 		zlog.Info().Msg("grpc server shut down")
 	}
 
-	zlog.Info().Msg("shutting down otel")
-	shutdownOpenTelemetryFn()
+	// Shut down Setup()'s resources
+	Shutdown()
 }
 
 func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {

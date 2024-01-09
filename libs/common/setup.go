@@ -116,3 +116,12 @@ func ResolveAddrFromEnv() string {
 	fallbackAddr := fmt.Sprintf(":%s", port)
 	return hwutil.GetEnvOr("ADDR", fallbackAddr)
 }
+
+// Shutdown cleans up all resources prepared by Setup() and SetupWithUnauthenticatedMethods()
+// It should only ever be called after Setup() or SetupWithUnauthenticatedMethods()!
+// StartNewGRPCServer() already calls this function, so there is usually not need to call Shutdown() at all!
+// Keep in mind, that this shuts down the otel exporter, new traces won't be processed!
+func Shutdown() {
+	log.Info().Msg("shutting down otel")
+	shutdownOpenTelemetryFn()
+}
