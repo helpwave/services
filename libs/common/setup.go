@@ -45,14 +45,14 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 		version,
 	)
 
+	if dotenvErr == nil {
+		log.Info().Msg("successfully loaded .env file")
+	}
+
 	shutdownOtel, err := setupOTelSDK(context.Background(), serviceName, version)
 	if err != nil {
 		msg := "Could not set up opentelemetry sdk"
-		if Mode == ProductionMode { // TODO: replace with env variable
-			log.Fatal().Err(err).Msg(msg)
-		} else {
-			log.Error().Err(err).Msg(msg)
-		}
+		log.Fatal().Err(err).Msg(msg)
 	}
 
 	// for now, we return this function and move responsibility to the callee,
@@ -65,10 +65,6 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 
 	if len(version) == 0 && Mode == ProductionMode {
 		log.Warn().Msg("Version is empty in production build! Recompile using ldflag '-X main.Version=<version>'")
-	}
-
-	if dotenvErr == nil {
-		log.Info().Msg("successfully loaded .env file")
 	}
 
 	if strings.ToLower(hwutil.GetEnvOr("INSECURE_DISABLE_TLS_VERIFY", "false")) == "true" {

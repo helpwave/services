@@ -11,6 +11,7 @@ import (
 	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
 	"github.com/rs/zerolog"
 	zlog "github.com/rs/zerolog/log"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
@@ -41,7 +42,9 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	authInterceptor := authUnaryInterceptor
 	validateInterceptor := validateUnaryInterceptor
 	chain := grpc_middleware.ChainUnaryServer(loggingInterceptor, authInterceptor, validateInterceptor)
-	grpcServerOption := grpc.UnaryInterceptor(chain)
+	interceptorChainServerOption := grpc.UnaryInterceptor(chain)
+
+	otelServerOption := grpc.StatsHandler(otelgrpc.NewServerHandler())
 
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
@@ -49,7 +52,7 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	}
 
 	// dapr/grpc service
-	service := daprd.NewServiceWithListener(listener, grpcServerOption).(*daprd.Server)
+	service := daprd.NewServiceWithListener(listener, interceptorChainServerOption, otelServerOption).(*daprd.Server)
 	server := service.GrpcServer()
 
 	if err := service.AddHealthCheckHandler("", func(ctx context.Context) error {

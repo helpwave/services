@@ -34,6 +34,12 @@ func StartSpan(ctx context.Context, spanName string, opts ...otelTrace.SpanStart
 	return tracer.Start(ctx, spanName, opts...)
 }
 
+// StopSpanFromCtx is short for otelTrace.SpanFromContext(ctx).End(opts...)
+// and should only be used when you lost access to the span object
+func StopSpanFromCtx(ctx context.Context, opts ...otelTrace.SpanEndOption) {
+	otelTrace.SpanFromContext(ctx).End(opts...)
+}
+
 // setupOTelSDK bootstraps the OpenTelemetry pipeline.
 // If it does not return an error, make sure to call shutdown for proper cleanup.
 func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shutdown func(context.Context) error, err error) {

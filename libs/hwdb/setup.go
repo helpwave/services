@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/jackc/pgx/v5/tracelog"
 	"github.com/rs/zerolog/log"
 	"hwdb/pgx_zerolog"
 	"hwutil"
@@ -78,12 +77,7 @@ func openDatabasePool(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
 	}
 
 	// logging
-	pgxConfig.ConnConfig.Tracer = &tracelog.TraceLog{
-		Logger: pgx_zerolog.NewContextLogger(),
-		// LogLevel is the level at which pgx will start calling zerolog
-		// Trace, being the lowest level, will cause it to always be called
-		LogLevel: tracelog.LogLevelTrace,
-	}
+	pgxConfig.ConnConfig.Tracer = pgx_zerolog.NewTracer()
 
 	// open pool
 	dbpool, err := pgxpool.NewWithConfig(ctx, pgxConfig)
