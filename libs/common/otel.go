@@ -140,7 +140,11 @@ func newTraceProvider(ctx context.Context, res *resource.Resource) (*trace.Trace
 // newTraceExporter returns a new trace.SpanExporter based on the OTEL_TRACE_EXPORTER env variable
 // A SpanExporter pushes traces to a tracing database. For more configuration see the corresponding documentation.
 func newTraceExporter(ctx context.Context) (trace.SpanExporter, error) {
-	switch strings.ToLower(hwutil.GetEnvOr("OTEL_TRACE_EXPORTER", "zipkin")) {
+	switch strings.ToLower(hwutil.GetEnvOr("OTEL_TRACE_EXPORTER", "otlp")) {
+	case "zipkin":
+		// configures otel exporter using the OTEL_EXPORTER_ZIPKIN_ENDPOINT environment variable,
+		// which defaults to "http://localhost:9411/api/v2/spans"
+		return zipkin.New("")
 	case "otlp":
 		// configures otel exporter using environment
 		// more info: https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc@v1.21.0
@@ -150,8 +154,6 @@ func newTraceExporter(ctx context.Context) (trace.SpanExporter, error) {
 		// more info: https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.21.0
 		return otlptracehttp.New(ctx)
 	default:
-		// configures otel exporter using the OTEL_EXPORTER_ZIPKIN_ENDPOINT environment variable,
-		// which defaults to "http://localhost:9411/api/v2/spans"
-		return zipkin.New("")
+		return nil, fmt.Errorf("OTEL_TRACE_EXPORTER invalid")
 	}
 }
