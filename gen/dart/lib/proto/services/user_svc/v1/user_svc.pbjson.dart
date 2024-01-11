@@ -69,17 +69,20 @@ const ReadSelfResponse$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
-    {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '10': 'avatarUrl'},
+    {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'avatarUrl', '17': true},
     {'1': 'organizations', '3': 5, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.ReadSelfOrganization', '10': 'organizations'},
+  ],
+  '8': [
+    {'1': '_avatar_url'},
   ],
 };
 
 /// Descriptor for `ReadSelfResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List readSelfResponseDescriptor = $convert.base64Decode(
     'ChBSZWFkU2VsZlJlc3BvbnNlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEh'
-    'oKCG5pY2tuYW1lGAMgASgJUghuaWNrbmFtZRIdCgphdmF0YXJfdXJsGAQgASgJUglhdmF0YXJV'
-    'cmwSVgoNb3JnYW5pemF0aW9ucxgFIAMoCzIwLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLl'
-    'JlYWRTZWxmT3JnYW5pemF0aW9uUg1vcmdhbml6YXRpb25z');
+    'oKCG5pY2tuYW1lGAMgASgJUghuaWNrbmFtZRIiCgphdmF0YXJfdXJsGAQgASgJSABSCWF2YXRh'
+    'clVybIgBARJWCg1vcmdhbml6YXRpb25zGAUgAygLMjAucHJvdG8uc2VydmljZXMudXNlcl9zdm'
+    'MudjEuUmVhZFNlbGZPcmdhbml6YXRpb25SDW9yZ2FuaXphdGlvbnNCDQoLX2F2YXRhcl91cmw=');
 
 @$core.Deprecated('Use readPublicProfileRequestDescriptor instead')
 const ReadPublicProfileRequest$json = {
@@ -100,15 +103,18 @@ const ReadPublicProfileResponse$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
-    {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '10': 'avatarUrl'},
+    {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'avatarUrl', '17': true},
+  ],
+  '8': [
+    {'1': '_avatar_url'},
   ],
 };
 
 /// Descriptor for `ReadPublicProfileResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List readPublicProfileResponseDescriptor = $convert.base64Decode(
     'ChlSZWFkUHVibGljUHJvZmlsZVJlc3BvbnNlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgAS'
-    'gJUgRuYW1lEhoKCG5pY2tuYW1lGAMgASgJUghuaWNrbmFtZRIdCgphdmF0YXJfdXJsGAQgASgJ'
-    'UglhdmF0YXJVcmw=');
+    'gJUgRuYW1lEhoKCG5pY2tuYW1lGAMgASgJUghuaWNrbmFtZRIiCgphdmF0YXJfdXJsGAQgASgJ'
+    'SABSCWF2YXRhclVybIgBAUINCgtfYXZhdGFyX3VybA==');
 
 @$core.Deprecated('Use updateUserRequestDescriptor instead')
 const UpdateUserRequest$json = {
