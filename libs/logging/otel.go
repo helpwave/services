@@ -2,11 +2,13 @@ package logging
 
 import (
 	"context"
+	"fmt"
 	"github.com/rs/zerolog"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/trace"
+	"reflect"
 )
 
 // StartSpan starts a new span and returns a context with both span information and a new span-aware logger attached.
@@ -62,7 +64,7 @@ func zerologTraceHook() zerolog.HookFunc {
 		}
 
 		addSpanIdToLogEvent(span, event)
-		addLogEventToSpan(span, level, message)
+		addLogEventToSpan(span, event, level, message)
 	}
 }
 
@@ -81,14 +83,23 @@ func addSpanIdToLogEvent(span trace.Span, event *zerolog.Event) {
 }
 
 // addLogEventToSpan adds a new otel event for a log event to the given span
-func addLogEventToSpan(span trace.Span, level zerolog.Level, message string) {
-	// Unlike logrus or exp/slog, zerolog does not give hooks the ability to get the whole event/message with all its key-values
-	// see: https://github.com/rs/zerolog/issues/300
+func addLogEventToSpan(span trace.Span, event *zerolog.Event, level zerolog.Level, message string) {
+	// this *wild* piece of engineering is taken from
+	// https://github.com/agoda-com/opentelemetry-go/blob/main/otelzerolog/otelzerolog.go#L79-L81
+	// It gets around the issue, that zerolog does not give hooks the ability
+	// to get the whole event/message with all its key-values (see: https://github.com/rs/zerolog/issues/300)
+	// using reflection
+	// In case zerolog changes the event struct's 'buf' field or the way it works all of this might break
+	// Keep in mind, 'buf' is not exported, so we can't expect semver compatibility.
+	// We can see Hyrum’s Law at work.
+	raw := fmt.Sprintf("%s}", reflect.ValueOf(event).Elem().FieldByName("buf"))
+	// We don't do any parsing of the attributes here for stability and speed
 
 	span.AddEvent("log",
 		trace.WithAttributes(
 			attribute.String("log.severity", level.String()),
 			attribute.String("log.message", message),
+			attribute.String("log.raw", raw),
 		),
 	)
 
