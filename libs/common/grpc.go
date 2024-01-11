@@ -42,10 +42,12 @@ type organizationIDKey struct{}
 //	// cleanup after yourself here
 func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	// middlewares
-	loggingInterceptor := loggingUnaryInterceptor
-	authInterceptor := authUnaryInterceptor
-	validateInterceptor := validateUnaryInterceptor
-	chain := grpc_middleware.ChainUnaryServer(loggingInterceptor, authInterceptor, validateInterceptor, handlerSpanInterceptor)
+	chain := grpc_middleware.ChainUnaryServer(
+		loggingUnaryInterceptor,
+		authUnaryInterceptor,
+		validateUnaryInterceptor,
+		handlerSpanInterceptor,
+	)
 	interceptorChainServerOption := grpc.UnaryInterceptor(chain)
 
 	otelServerOption := grpc.StatsHandler(otelgrpc.NewServerHandler())
@@ -97,11 +99,11 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 }
 
 func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
-	ctx, span := StartSpan(ctx, "auth_interceptor")
+	ctx, span, log := logging.StartSpan(ctx, "auth_interceptor")
 	defer span.End()
 
 	if isUnaryRPCForDaprInternal(info) || hwutil.Contains(skipAuthForMethods, info.FullMethod) {
-		zlog.Debug().
+		log.Debug().
 			Str("method", info.FullMethod).
 			Msg("skipping auth func, RPC targeted at some internal gRPC service or method")
 		return next(ctx, req)
@@ -128,8 +130,10 @@ func isUnaryRPCForDaprInternal(info *grpc.UnaryServerInfo) bool {
 }
 
 func authFunc(ctx context.Context) (context.Context, error) {
+	log := zlog.Ctx(ctx)
+
 	if !isAuthSetUp() {
-		zlog.Ctx(ctx).Trace().Msg("skipping auth middleware, as auth is not set up")
+		log.Trace().Msg("skipping auth middleware, as auth is not set up")
 		// skip injecting claims into context
 		return ctx, nil
 	}
@@ -138,7 +142,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	token, err := grpc_auth.AuthFromMD(ctx, "bearer")
 
 	if err != nil {
-		zlog.Ctx(ctx).Trace().Err(err).Msg("no valid auth header found")
+		log.Trace().Err(err).Msg("no valid auth header found")
 		return nil, status.Errorf(codes.Unauthenticated, "no auth token: %v", err)
 	}
 
@@ -150,7 +154,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	// This allows the client to pass self-defined "Fake ID Token Claims" without going through our auth provider.
 	// ONLY FOR NON-PUBLIC DEVELOPMENT AND STAGING ENVIRONMENTS
 	if claims == nil && err != nil && InsecureFakeTokenEnable {
-		zlog.Warn().Msg("could not verify token, falling back to fake token instead")
+		log.Warn().Msg("could not verify token, falling back to fake token instead")
 		claims, err = VerifyFakeToken(token)
 	}
 
@@ -160,17 +164,24 @@ func authFunc(ctx context.Context) (context.Context, error) {
 
 	ctx = context.WithValue(ctx, claimsKey{}, claims)
 
-	// parse and cache userID
+	// parse userID
 	userID, err := uuid.Parse(claims.Sub)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "invalid userID")
 	}
 
+	// attach userID to context, so we can get it in a handler using GetUserID()
 	ctx = context.WithValue(ctx, userIDKey{}, userID)
 
-	// Append userID to the logger
-	log := zlog.Ctx(ctx).With().Str("userID", userID.String()).Logger()
-	ctx = log.WithContext(ctx)
+	// attach userID to current span (should be the auth interceptor span)
+	logging.SetSpanStr(ctx, "user.id", userID.String())
+
+	// Append userID to the logger and attach it to the context
+	ctx = log.With().
+		Ctx(ctx).
+		Str("userID", userID.String()).
+		Logger().
+		WithContext(ctx)
 
 	return ctx, nil
 }
@@ -274,7 +285,7 @@ func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
 // handlerSpanInterceptor opens and closes a span around the next in the chain
 // it should only be used as the last element in the interceptor chain before the handler
 func handlerSpanInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
-	ctx, span := StartSpan(ctx, "handler")
+	ctx, span, _ := logging.StartSpan(ctx, "handler")
 	res, err := next(ctx, req)
 	if err != nil {
 		span.SetStatus(1, err.Error())
@@ -284,7 +295,7 @@ func handlerSpanInterceptor(ctx context.Context, req interface{}, info *grpc.Una
 }
 
 func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
-	ctx, span := StartSpan(ctx, "validate_interceptor")
+	ctx, span, _ := logging.StartSpan(ctx, "validate_interceptor")
 	defer span.End()
 
 	if err := hwutil.Validate(req); err != nil {
@@ -294,23 +305,23 @@ func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.U
 }
 
 func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
-	ctx, span := StartSpan(ctx, "logging_interceptor")
+	ctx, span, log := logging.StartSpan(ctx, "logging_interceptor")
 	defer span.End()
 
 	metadata := metautils.ExtractIncoming(ctx)
 
 	// Add request information
-	builder := zlog.
+	builder := log.
 		With().
-		Str("handler", info.FullMethod).
-		Str("span", metadata.Get("traceparent")) // TODO: grpc-trace-bin header
+		Str("handler", info.FullMethod)
 
 	omitBody := false
 
 	// additional information for pub/sub events
+	// TODO: make sure this is picked up in otel propagation
 	if req, ok := req.(*runtime.TopicEventRequest); ok {
 		if traceparent, ok := req.GetExtensions().Fields["traceparent"]; ok {
-			builder = builder.Str("span", traceparent.GetStringValue())
+			builder = builder.Str("traceparent", traceparent.GetStringValue())
 		}
 		builder = builder.Str("eventID", req.Id)
 
@@ -320,7 +331,9 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 	}
 
 	// this is the logger that should be used for this request
-	log := builder.Logger()
+	log = builder.Logger()
+
+	// context, with new logger attached
 	ctx = log.WithContext(ctx)
 
 	log.Trace().Interface("metadata", redactMetadata(metadata)).Send()

@@ -1,14 +1,14 @@
 package pgx_zerolog
 
 import (
-	"common"
 	"context"
 	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/tracelog"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
-	otelTrace "go.opentelemetry.io/otel/trace"
+	"go.opentelemetry.io/otel/trace"
+	"logging"
 )
 
 type tracer struct {
@@ -28,7 +28,7 @@ func (t tracer) TraceCopyFromEnd(ctx context.Context, conn *pgx.Conn, data pgx.T
 // impl ConnectTracer interface
 
 func (t tracer) TraceConnectStart(ctx context.Context, data pgx.TraceConnectStartData) context.Context {
-	ctx, span := common.StartSpan(ctx, "pgx.connect")
+	ctx, span, _ := logging.StartSpan(ctx, "pgx.connect")
 	span.SetAttributes(attribute.String("server",
 		fmt.Sprintf("%s:%d", data.ConnConfig.Host, data.ConnConfig.Port)))
 	return t.inner.TraceConnectStart(ctx, data)
@@ -36,7 +36,7 @@ func (t tracer) TraceConnectStart(ctx context.Context, data pgx.TraceConnectStar
 
 func (t tracer) TraceConnectEnd(ctx context.Context, data pgx.TraceConnectEndData) {
 	t.inner.TraceConnectEnd(ctx, data)
-	common.StopSpanFromCtx(ctx)
+	logging.StopSpanFromCtx(ctx)
 }
 
 // impl BatchTracer interface
@@ -56,7 +56,7 @@ func (t tracer) TraceBatchEnd(ctx context.Context, conn *pgx.Conn, data pgx.Trac
 // impl QueryTracer interface
 
 func (t tracer) TraceQueryStart(ctx context.Context, conn *pgx.Conn, data pgx.TraceQueryStartData) context.Context {
-	ctx, span := common.StartSpan(ctx, "pgx.query")
+	ctx, span, _ := logging.StartSpan(ctx, "pgx.query")
 	span.SetAttributes(attribute.String("sql", data.SQL))
 	args := make([]string, len(data.Args))
 	for i, val := range data.Args {
@@ -67,7 +67,7 @@ func (t tracer) TraceQueryStart(ctx context.Context, conn *pgx.Conn, data pgx.Tr
 }
 
 func (t tracer) TraceQueryEnd(ctx context.Context, conn *pgx.Conn, data pgx.TraceQueryEndData) {
-	span := otelTrace.SpanFromContext(ctx)
+	span := trace.SpanFromContext(ctx)
 	if data.Err != nil {
 		span.SetStatus(codes.Error, data.Err.Error())
 	} else {
