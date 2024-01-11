@@ -41,6 +41,8 @@ type organizationIDKey struct{}
 //	})
 //	// cleanup after yourself here
 func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
+	log := zlog.Logger
+
 	// middlewares
 	chain := grpc_middleware.ChainUnaryServer(
 		loggingUnaryInterceptor,
@@ -54,7 +56,7 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
-		zlog.Fatal().Str("addr", addr).Err(err).Send()
+		log.Fatal().Str("addr", addr).Err(err).Send()
 	}
 
 	// dapr/grpc service
@@ -65,33 +67,33 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 		// We need to implement this. Just return nil == everything OK
 		return nil
 	}); err != nil {
-		zlog.Fatal().Err(err).Send()
+		log.Fatal().Err(err).Send()
 	}
 
 	registerServerHook(service)
 
 	if Mode == DevelopmentMode {
 		reflection.Register(server)
-		zlog.Warn().Msg("grpc reflection enabled")
+		log.Warn().Msg("grpc reflection enabled")
 	}
 
 	interrupted, err := hwutil.RunUntilInterrupted(context.Background(), func() error {
-		zlog.Info().Str("addr", addr).Msg("starting grpc service")
+		log.Info().Str("addr", addr).Msg("starting grpc service")
 		return server.Serve(listener)
 	})
 
 	if interrupted {
-		zlog.Warn().Msg("SIGINT received, shutting down")
+		log.Warn().Msg("SIGINT received, shutting down")
 	} else {
-		zlog.Error().Str("addr", addr).Err(err).Msg("could not start grpc server")
+		log.Error().Str("addr", addr).Err(err).Msg("could not start grpc server")
 	}
 
 	// Shut down service
-	zlog.Info().Msg("shutting down dapr/grpc service")
+	log.Info().Msg("shutting down dapr/grpc service")
 	if err := service.GracefulStop(); err != nil {
-		zlog.Error().Err(err).Msg("failed shutting down service, it is what it is")
+		log.Error().Err(err).Msg("failed shutting down service, it is what it is")
 	} else {
-		zlog.Info().Msg("grpc server shut down")
+		log.Info().Msg("grpc server shut down")
 	}
 
 	// Shut down Setup()'s resources
@@ -147,7 +149,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	}
 
 	// verify token -> if fakeToken is used claims will be nil and we will get an error
-	claims, err := VerifyIDToken(token)
+	claims, err := VerifyIDToken(ctx, token)
 
 	// If InsecureFakeTokenEnable is true and Mode is development,
 	// we accept unverified Base64 encoded json structure in the schema of IDTokenClaims as well.
@@ -155,7 +157,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	// ONLY FOR NON-PUBLIC DEVELOPMENT AND STAGING ENVIRONMENTS
 	if claims == nil && err != nil && InsecureFakeTokenEnable {
 		log.Warn().Msg("could not verify token, falling back to fake token instead")
-		claims, err = VerifyFakeToken(token)
+		claims, err = VerifyFakeToken(ctx, token)
 	}
 
 	if err != nil {
@@ -226,12 +228,14 @@ func handleOrganizationIDForAuthFunc(ctx context.Context) (context.Context, erro
 	ctx = context.WithValue(ctx, organizationIDKey{}, organizationID)
 
 	// Append organizationID to the logger
-	loggerWithOrganizationID := zlog.Ctx(ctx).With().Str("organizationID", organizationID.String()).Logger()
+	loggerWithOrganizationID := log.With().Str("organizationID", organizationID.String()).Logger()
 	return loggerWithOrganizationID.WithContext(ctx), nil
 }
 
 // VerifyFakeToken accepts a Base64 encoded json structure with the schema of IDTokenClaims
-func VerifyFakeToken(token string) (*IDTokenClaims, error) {
+func VerifyFakeToken(ctx context.Context, token string) (*IDTokenClaims, error) {
+	log := zlog.Ctx(ctx)
+
 	plainToken, err := base64.StdEncoding.DecodeString(token)
 	if err != nil {
 		return nil, err
@@ -246,7 +250,7 @@ func VerifyFakeToken(token string) (*IDTokenClaims, error) {
 		return nil, err
 	}
 
-	zlog.Warn().Interface("claims", claims).Msg("fake token was verified")
+	log.Warn().Interface("claims", claims).Msg("fake token was verified")
 
 	return &claims, err
 }

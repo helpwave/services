@@ -67,7 +67,7 @@ func (pl *Logger) Log(ctx context.Context, level tracelog.LogLevel, msg string, 
 	var zctx zerolog.Context
 	if pl.fromContext {
 		logger := zerolog.Ctx(ctx)
-		zctx = logger.With()
+		zctx = logger.With().Ctx(ctx)
 	} else {
 		zctx = pl.logger.With()
 	}

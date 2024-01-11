@@ -29,7 +29,7 @@ type authServiceServer struct {
 func (authServiceServer) PrelimAuthRequest(ctx context.Context, _ *pb.PrelimAuthRequestRequest) (*pb.PrelimAuthRequestResponse, error) {
 	log := zlog.Ctx(ctx)
 
-	url := common.GetAuthCodeURL()
+	url := common.GetAuthCodeURL(ctx)
 	log.Info().Msg(url)
 
 	return &pb.PrelimAuthRequestResponse{Url: url}, nil
