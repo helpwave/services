@@ -23,7 +23,8 @@ func main() {
 		"/proto.services.user_svc.v1.OrganizationService/GetOrganizationsByUser",
 	})
 
-	hwdb.SetupDatabaseFromEnv(context.Background())
+	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
+	defer closeDBPool()
 
 	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()

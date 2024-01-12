@@ -8,6 +8,7 @@ primary_region = "ams"
 
 [env]
   INSECURE_FAKE_TOKEN_ENABLE=true
+  OTEL_DISABLE=true
 
 [deploy]
   strategy = "bluegreen"
