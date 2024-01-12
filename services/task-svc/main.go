@@ -40,7 +40,10 @@ func main() {
 	}
 
 	hwgorm.SetupDatabaseByEnvs() // TODO: to be removed
-	hwdb.SetupDatabaseFromEnv(context.Background())
+
+	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
+	defer closeDBPool()
+
 	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
 
 	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {

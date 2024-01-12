@@ -44,6 +44,7 @@ func newErrAndLog(ctx context.Context, msg string) error {
 
 func main() {
 	common.Setup(ServiceName, Version, false)
+
 	DaprPubsub = hwutil.GetEnvOr("DAPR_PUBSUB", "pubsub")
 
 	daprClient = common.MustNewDaprGRPCClient()
@@ -67,9 +68,19 @@ func main() {
 		zlog.Fatal().Str("endpoint", "oauth2_consent").Err(err).Msg("could not add service invocation handler")
 	}
 
-	if err := service.Start(); err != nil {
-		zlog.Fatal().Str("addr", addr).Err(err).Msg("could not start http server")
+	interrupted, err := hwutil.RunUntilInterrupted(context.Background(), func() error {
+		return service.Start()
+	})
+
+	if err != nil {
+		zlog.Error().Str("addr", addr).Err(err).Msg("could not start http server")
+	} else if interrupted {
+		zlog.Info().Msg("SIGINT received")
 	}
+
+	// we don't use common.StartNewGRPCServer,
+	// so we have to call Shutdown manually
+	common.Shutdown()
 }
 
 func prepCtxForSvcToSvcCall(parentCtx context.Context, targetDaprAppId string) (context.Context, context.CancelFunc, error) {

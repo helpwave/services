@@ -17,6 +17,7 @@ common:
     REDIS_ADDR: localhost:6379
     INSECURE_REDIS_NO_TLS: true
     ORGANIZATION_ID: 3b25c6f5-4705-4074-9fc6-a50c28eba405
+    OTEL_DISABLE: true
 
 apps:
   - appID: task-svc

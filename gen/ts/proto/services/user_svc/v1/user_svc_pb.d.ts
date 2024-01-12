@@ -94,6 +94,8 @@ export class ReadSelfResponse extends jspb.Message {
 
   getAvatarUrl(): string;
   setAvatarUrl(value: string): ReadSelfResponse;
+  hasAvatarUrl(): boolean;
+  clearAvatarUrl(): ReadSelfResponse;
 
   getOrganizationsList(): Array<ReadSelfOrganization>;
   setOrganizationsList(value: Array<ReadSelfOrganization>): ReadSelfResponse;
@@ -113,8 +115,13 @@ export namespace ReadSelfResponse {
     id: string,
     name: string,
     nickname: string,
-    avatarUrl: string,
+    avatarUrl?: string,
     organizationsList: Array<ReadSelfOrganization.AsObject>,
+  }
+
+  export enum AvatarUrlCase { 
+    _AVATAR_URL_NOT_SET = 0,
+    AVATAR_URL = 4,
   }
 }
 
@@ -148,6 +155,8 @@ export class ReadPublicProfileResponse extends jspb.Message {
 
   getAvatarUrl(): string;
   setAvatarUrl(value: string): ReadPublicProfileResponse;
+  hasAvatarUrl(): boolean;
+  clearAvatarUrl(): ReadPublicProfileResponse;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ReadPublicProfileResponse.AsObject;
@@ -162,7 +171,12 @@ export namespace ReadPublicProfileResponse {
     id: string,
     name: string,
     nickname: string,
-    avatarUrl: string,
+    avatarUrl?: string,
+  }
+
+  export enum AvatarUrlCase { 
+    _AVATAR_URL_NOT_SET = 0,
+    AVATAR_URL = 4,
   }
 }
 
