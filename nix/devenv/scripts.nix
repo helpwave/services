@@ -15,6 +15,7 @@ in
             # remove version lines as they tend to break PRs
       	    sed '/# Protobuf Python Version: /d' -i $(find gen -path "gen/python/**/*.py")
       	    sed '/\/\/ 	protoc-gen-go v/d' -i $(find gen -path "gen/go/**/*.go")
+            sed '/\/\/ - protoc-gen-go-grpc v/d' -i $(find gen -path "gen/go/**/*.go")
       	    sed '/\/\/ 	protoc-gen-grpc-web v/d' -i $(find gen -path "gen/ts/**/*.*")
       	    # dart gen does not (currently) have a compiler version stamp
     '';
