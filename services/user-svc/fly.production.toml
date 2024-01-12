@@ -8,6 +8,7 @@ primary_region = "ams"
 
 [env]
   OAUTH_CLIENT_ID="425f8b8d-c786-4ff7-b2bf-e52f505fb588"
+  OTEL_DISABLE=true
 
 [deploy]
   strategy = "bluegreen"
