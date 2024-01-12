@@ -7,6 +7,9 @@ primary_region = "ams"
   SERVICE = "ory-svc"
   APP_PROTOCOL = "http"
 
+[env]
+  OTEL_DISABLE=true
+
 [deploy]
   strategy = "bluegreen"
 
