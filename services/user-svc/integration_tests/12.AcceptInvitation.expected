@@ -1,0 +1,12 @@
+exists:
+{}
+exist, not pending:
+ERROR:
+  Code: InvalidArgument
+  Message: only pending invitations can be accepted
+
+does not exist:
+ERROR:
+  Code: InvalidArgument
+  Message: record not found
+

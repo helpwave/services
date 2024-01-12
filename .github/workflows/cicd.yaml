@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       services: ${{ steps.aggregate-changes.outputs.services }}
+      libs: ${{ steps.aggregate-changes.outputs.libs }}
+      commit_hash: ${{ steps.commit.outputs.short }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,7 +25,7 @@ jobs:
 
       - name: Detect changes in libs
         id: changes-in-libs
-        uses: tj-actions/changed-files@v39
+        uses: tj-actions/changed-files@v40
         with:
           files: |
             .github/**
@@ -33,7 +35,7 @@ jobs:
 
       - name: Detect changes in services
         id: changes-in-services
-        uses: tj-actions/changed-files@v39
+        uses: tj-actions/changed-files@v40
         with:
           files: |
             services/auth-svc/**
@@ -44,7 +46,7 @@ jobs:
 
       - name: Detect changes in images
         id: changes-in-images
-        uses: tj-actions/changed-files@v39
+        uses: tj-actions/changed-files@v40
         with:
           files: |
             images/**
@@ -53,7 +55,12 @@ jobs:
         id: aggregate-changes
         run: |
           if [[ "$libsChanged" == "true" ]]; then
+            # Exception for the Python "impulse_svc". Our workflows are very Golang opinionated.
             echo "services=$(ls services | grep -v 'impulse_svc' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
+
+            # Exception for "libs/proto_helpers" due to the fact that this package does not require any direct external packages.
+            # If the CI runs "go get .", the command exits (1) with "go: .: no package to get in current directory".
+            echo "libs=$(ls libs | grep -v 'proto_helpers' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           else
             echo "services=$(echo $changesInServices | awk -F / '$1 ~ /services/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           fi
@@ -62,6 +69,12 @@ jobs:
           libsChanged: ${{ steps.changes-in-libs.outputs.any_changed }}
           changesInServices: ${{ steps.changes-in-services.outputs.all_changed_files }}
           changesInImages: ${{ steps.changes-in-images.outputs.all_changed_files }}
+
+      - name: Get commit hash
+        id: commit
+        uses: pr-mpt/actions-commit-hash@v3
+        with:
+          commit: "${{ github.sha }}"
 
       - name: Summarize
         run: |
@@ -87,6 +100,17 @@ jobs:
       service: ${{ matrix.service }}
     secrets: inherit
 
+  ci-go-libs:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.libs != '[]' && needs.detect-changes.outputs.libs != '' }}
+    strategy:
+      matrix:
+        lib: ${{ fromJson(needs.detect-changes.outputs.libs) }}
+    uses: ./.github/workflows/ci-go-libs.yaml
+    with:
+      lib: ${{ matrix.lib }}
+    secrets: inherit
+
   cicd-images:
     needs: detect-changes
     if: ${{ needs.detect-changes.outputs.images != '[]' && needs.detect-changes.outputs.images != '' }}
@@ -103,7 +127,7 @@ jobs:
       image: ${{ matrix.image }}
     secrets: inherit
 
-  fly-deploy:
+  fly-deploy-staging:
     needs: detect-changes
     if: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) && needs.detect-changes.outputs.services != '[]' && needs.detect-changes.outputs.services != '' }}
     strategy:
@@ -114,6 +138,29 @@ jobs:
     uses: ./.github/workflows/fly-deploy.yaml
     with:
       service: ${{ matrix.service }}
-      app: ${{ vars.FLY_ORGANIZATION_NAME }}-${{ matrix.service }}
-      organization: ${{ vars.FLY_ORGANIZATION_NAME }}
+      app: ${{ vars.FLY_ORGANIZATION_STAGING }}-${{ matrix.service }}
+      organization: ${{ vars.FLY_ORGANIZATION_STAGING }}
+      version: ${{ needs.detect-changes.outputs.commit_hash }}
+      environment: "staging"
+    secrets: inherit
+
+  fly-deploy-prod:
+    needs: detect-changes
+    # TODO
+    # For now, it's ok to deploy if ANY version tag is pushed to (we assume it's the newest version and needs deployment)
+    # In the future we need to be able to deploy to different, API incompatible, production environments
+    # Maybe even automate resource creation
+    if: ${{ github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/v') && needs.detect-changes.outputs.services != '[]' && needs.detect-changes.outputs.services != '' }}
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        service: ${{ fromJson(needs.detect-changes.outputs.services) }}
+    uses: ./.github/workflows/fly-deploy.yaml
+    with:
+      service: ${{ matrix.service }}
+      app: ${{ vars.FLY_ORGANIZATION_PROD }}-${{ matrix.service }}
+      organization: ${{ vars.FLY_ORGANIZATION_PROD }}
+      version: ${{ needs.detect-changes.outputs.commit_hash }}
+      environment: "production"
     secrets: inherit

@@ -1,3 +1,5 @@
+# File is copied to /usr/local/apisix/conf/config.yaml in docker image (Dockerfile.apisix)
+
 apisix:
   node_listen:
     - port: 9080

@@ -1,6 +1,6 @@
 import * as grpcWeb from 'grpc-web';
 
-import * as proto_services_user_svc_v1_user_svc_pb from '../../../../proto/services/user_svc/v1/user_svc_pb';
+import * as proto_services_user_svc_v1_user_svc_pb from '../../../../proto/services/user_svc/v1/user_svc_pb'; // proto import: "proto/services/user_svc/v1/user_svc.proto"
 
 
 export class UserServiceClient {

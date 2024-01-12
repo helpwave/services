@@ -1,0 +1,13 @@
+# File can be mounted to /usr/local/apisix/conf/config.yaml (e.g. in dapr_run.yaml)
+
+apisix:
+  node_listen:
+    - port: 9080
+      enable_http2: false
+
+deployment:
+  role: data_plane
+  role_data_plane:
+    config_provider: yaml
+
+#END

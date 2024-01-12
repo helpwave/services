@@ -3,17 +3,18 @@ package bed
 import (
 	"common"
 	"context"
+	"hwdb"
+	"hwgorm"
+	"hwutil"
+	"task-svc/internal/events"
+	"task-svc/repos/bed_repo"
+
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"hwgorm"
-	"hwutil"
-	"task-svc/internal/models"
-	"task-svc/internal/repositories"
 
 	pb "gen/proto/services/task_svc/v1"
 	zlog "github.com/rs/zerolog/log"
-	pbhelpers "proto_helpers/task_svc/v1"
 )
 
 type ServiceServer struct {
@@ -26,7 +27,7 @@ func NewServiceServer() *ServiceServer {
 
 func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*pb.CreateBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	bedRepo := repositories.BedRepo(ctx)
+	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -38,7 +39,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed, err := bedRepo.CreateBed(&models.Bed{
+	bed, err := bedRepo.CreateBed(ctx, bed_repo.CreateBedParams{
 		RoomID:         roomId,
 		OrganizationID: organizationID,
 		Name:           req.Name,
@@ -54,13 +55,15 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		Str("name", bed.Name).
 		Msg("bed created")
 
+	_ = events.DispatchBedCreatedEvent(ctx, bed.ID, bed.Name)
+
 	return &pb.CreateBedResponse{
 		Id: bed.ID.String(),
 	}, nil
 }
 
 func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.GetBedResponse, error) {
-	bedRepo := repositories.BedRepo(ctx)
+	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -72,13 +75,14 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	bed, err := bedRepo.GetBedByIdForOrganization(id, organizationID)
-	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+	bed, err := hwdb.Optional(bedRepo.GetBedByIdForOrganization)(ctx, bed_repo.GetBedByIdForOrganizationParams{
+		ID:             id,
+		OrganizationID: organizationID,
+	})
+	if bed == nil {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
+	} else if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.GetBedResponse{
@@ -88,15 +92,46 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 	}, nil
 }
 
+func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatientRequest) (*pb.GetBedByPatientResponse, error) {
+	bedRepo := bed_repo.New(hwdb.GetDB())
+
+	// TODO: Auth
+
+	patientId, err := uuid.Parse(req.PatientId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	result, err := hwdb.Optional(bedRepo.GetBedWithRoomByPatientForOrganization)(ctx, patientId)
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return &pb.GetBedByPatientResponse{}, nil // no bed or room found
+		}
+	}
+
+	return &pb.GetBedByPatientResponse{
+		Room: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientForOrganizationRow) pb.GetBedByPatientResponse_Room {
+			return pb.GetBedByPatientResponse_Room{Id: res.RoomID.String(), Name: res.RoomName, WardId: res.WardID.String()}
+		}),
+		Bed: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientForOrganizationRow) pb.GetBedByPatientResponse_Bed {
+			return pb.GetBedByPatientResponse_Bed{Id: res.BedID.String(), Name: res.BedName}
+		}),
+	}, nil
+}
+
 func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.GetBedsResponse, error) {
-	bedRepo := repositories.BedRepo(ctx)
+	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	beds, err := bedRepo.GetBedsForOrganization(organizationID)
+	beds, err := bedRepo.GetBedsForOrganization(ctx, bed_repo.GetBedsForOrganizationParams{
+		OrganizationID: organizationID,
+	})
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -106,7 +141,7 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 	}
 
 	return &pb.GetBedsResponse{
-		Beds: hwutil.Map(beds, func(bed models.Bed) *pb.GetBedsResponse_Bed {
+		Beds: hwutil.Map(beds, func(bed bed_repo.Bed) *pb.GetBedsResponse_Bed {
 			return &pb.GetBedsResponse_Bed{
 				Id:     bed.ID.String(),
 				RoomId: bed.RoomID.String(),
@@ -127,9 +162,15 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 		return nil, err
 	}
 
-	bedRepo := repositories.BedRepo(ctx)
+	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	beds, err := bedRepo.GetBedsByRoomForOrganization(roomID, organizationID)
+	beds, err := bedRepo.GetBedsForOrganization(ctx, bed_repo.GetBedsForOrganizationParams{
+		OrganizationID: organizationID,
+		RoomID: uuid.NullUUID{
+			UUID:  roomID,
+			Valid: true,
+		},
+	})
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
 			return nil, status.Error(codes.Internal, err.Error())
@@ -153,17 +194,30 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 }
 
 func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*pb.UpdateBedResponse, error) {
-	bedRepo := repositories.BedRepo(ctx)
+	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	bedID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := pbhelpers.UpdatesMapForUpdateBedRequest(req)
+	roomId, err := hwutil.ParseNullUUID(req.RoomId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
 
-	if _, err := bedRepo.UpdateBed(bedID, updates); err != nil {
+	if err := bedRepo.UpdateBed(ctx, bed_repo.UpdateBedParams{
+		ID:     bedID,
+		Name:   req.Name,
+		RoomID: roomId,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	_ = events.DispatchBedUpdatedEvent(ctx, bedID, req.GetName())
+
+	if roomId.Valid {
+		_ = events.DispatchBedMovedToAnotherRoomEvent(ctx, bedID, roomId.UUID.String())
 	}
 
 	return &pb.UpdateBedResponse{}, nil
@@ -171,7 +225,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 
 func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*pb.DeleteBedResponse, error) {
 	log := zlog.Ctx(ctx)
-	bedRepo := repositories.BedRepo(ctx)
+	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -183,17 +237,18 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	_, err = bedRepo.GetBedByIdForOrganization(bedID, organizationID)
+	exists, err := bedRepo.ExistsBedInOrganization(ctx, bed_repo.ExistsBedInOrganizationParams{
+		ID:             bedID,
+		OrganizationID: organizationID,
+	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			// Probably already deleted
-			return &pb.DeleteBedResponse{}, err
-		}
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if !exists {
+		// skip delete
+		return &pb.DeleteBedResponse{}, err
 	}
 
-	err = bedRepo.DeleteBed(bedID)
+	err = bedRepo.DeleteBed(ctx, bedID)
 
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
@@ -206,6 +261,8 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 	log.Info().
 		Str("bedID", bedID.String()).
 		Msg("bed deleted")
+
+	_ = events.DispatchBedDeletedEvent(ctx, bedID)
 
 	return &pb.DeleteBedResponse{}, err
 }

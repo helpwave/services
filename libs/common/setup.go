@@ -8,10 +8,8 @@ import (
 	"github.com/rs/zerolog/log"
 	"hwutil"
 	"logging"
-	"math/rand"
 	"net/http"
 	"strings"
-	"time"
 )
 
 var (
@@ -34,7 +32,6 @@ func Setup(serviceName, version string, auth bool) {
 // also sets up tokens when the service requires auth
 func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, unauthenticatedMethods *[]string) {
 	dotenvErr := godotenv.Load()
-	rand.Seed(time.Now().UnixNano())
 
 	Mode = hwutil.GetEnvOr("MODE", DevelopmentMode)
 	LogLevel := hwutil.GetEnvOr("LOG_LEVEL", "info")
@@ -91,7 +88,13 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 // The address will always be in the "(ADDR):PORT" format.
 // If "ADDR" is not set, the "ADDR" part of the format will be "".
 // If "PORT" is not set, the fallback is "8080".
+// If "APP_PORT" is set, we assume that Dapr is running on the same interface so we return "127.0.0.1:$APP_PORT"
 func ResolveAddrFromEnv() string {
+	daprAppPort := hwutil.GetEnvOr("APP_PORT", "")
+	if daprAppPort != "" {
+		return fmt.Sprintf("127.0.0.1:%s", daprAppPort)
+	}
+
 	port := hwutil.GetEnvOr("PORT", "8080")
 	fallbackAddr := fmt.Sprintf(":%s", port)
 	return hwutil.GetEnvOr("ADDR", fallbackAddr)

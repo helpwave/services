@@ -1,6 +1,6 @@
 import * as grpcWeb from 'grpc-web';
 
-import * as proto_services_task_svc_v1_patient_svc_pb from '../../../../proto/services/task_svc/v1/patient_svc_pb';
+import * as proto_services_task_svc_v1_patient_svc_pb from '../../../../proto/services/task_svc/v1/patient_svc_pb'; // proto import: "proto/services/task_svc/v1/patient_svc.proto"
 
 
 export class PatientServiceClient {

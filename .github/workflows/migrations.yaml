@@ -23,7 +23,7 @@ jobs:
       # as a json array (it's a string)
       - name: Detect changes in migrations
         id: changes
-        uses: tj-actions/changed-files@v39
+        uses: tj-actions/changed-files@v40
         with:
           json: "true"
           escape_json: "false"
@@ -49,7 +49,7 @@ jobs:
 
       - name: Detect modifications in migrations
         id: changes
-        uses: tj-actions/changed-files@v39
+        uses: tj-actions/changed-files@v40
         with:
           json: "true"
           escape_json: "false"

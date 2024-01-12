@@ -44,7 +44,7 @@ message GetTaskResponse {
   string description = 3;
   TaskStatus status = 4;
   string assigned_user_id = 5;
-  string patient_id = 6;
+  Patient patient = 6;
   bool public = 7;
   google.protobuf.Timestamp due_at = 8;
   string created_by = 9;
@@ -56,6 +56,11 @@ message GetTaskResponse {
     string name = 2;
     bool done = 3;
     string created_by = 4;
+  }
+
+  message Patient {
+    string id = 1;
+    string name = 2;
   }
 }
 
@@ -139,6 +144,7 @@ message GetAssignedTasksResponse {
     string id = 1;
     string name = 2;
     string description = 3;
+    TaskStatus status = 4;
     string assigned_user_id = 5;
     Patient patient = 6;
     bool public = 7;

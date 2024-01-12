@@ -4,16 +4,20 @@ import (
 	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
+	"hwdb"
+	"hwgorm"
+	"hwutil"
+	pbhelpers "proto_helpers/task_svc/v1"
+	"task-svc/internal/events"
+	"task-svc/internal/models"
+	"task-svc/internal/repositories"
+	"task-svc/repos/patient_repo"
+
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"hwgorm"
-	"hwutil"
-	pbhelpers "proto_helpers/task_svc/v1"
-	"task-svc/internal/models"
-	"task-svc/internal/repositories"
 )
 
 type ServiceServer struct {
@@ -26,7 +30,7 @@ func NewServiceServer() *ServiceServer {
 
 func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.CreateTaskResponse, error) {
 	log := zlog.Ctx(ctx)
-	patientRepo := repositories.PatientRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 	taskRepo := repositories.TaskRepo(ctx)
 
 	// TODO: Auth
@@ -47,12 +51,13 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 	}
 
 	// Check if patient exists
-	if _, err := patientRepo.GetPatientById(patientId); err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "patientId not found")
-		}
+	if exists, err := patientRepo.ExistsPatientInOrganization(ctx, patient_repo.ExistsPatientInOrganizationParams{
+		ID:             patientId,
+		OrganizationID: organizationID,
+	}); err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if !exists {
+		return nil, status.Error(codes.InvalidArgument, "patientId not found")
 	}
 
 	description := ""
@@ -100,6 +105,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 
 func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.GetTaskResponse, error) {
 	taskRepo := repositories.TaskRepo(ctx)
+	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -132,13 +138,26 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		}
 	})
 
+	patientName, err := patientRepo.GetPatientHumanReadableIdentifier(ctx, task.PatientId)
+	if err != nil {
+		if hwgorm.IsOurFault(err) {
+			return nil, status.Error(codes.Internal, err.Error())
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "id not found")
+		}
+	}
+	patientResponse := &pb.GetTaskResponse_Patient{
+		Id:   task.PatientId.String(),
+		Name: patientName,
+	}
+
 	return &pb.GetTaskResponse{
 		Id:             task.ID.String(),
 		Name:           task.Name,
 		Description:    task.Description,
 		Status:         task.Status,
 		AssignedUserId: assignedUserId,
-		PatientId:      task.PatientId.String(),
+		Patient:        patientResponse,
 		Subtasks:       subtasks,
 		Public:         task.Public,
 		DueAt:          timestamppb.New(task.DueAt),
@@ -292,6 +311,7 @@ func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTask
 				Id:             task.ID.String(),
 				Name:           task.Name,
 				Description:    task.Description,
+				Status:         task.Status,
 				AssignedUserId: task.AssignedUserId.UUID.String(),
 				Patient:        mappedPatient,
 				Subtasks:       mappedSubtasks,
@@ -558,6 +578,15 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 		Str("taskID", id.String()).
 		Str("userID", userId.String()).
 		Msg("user assigned")
+
+	if currentUserId, err := common.GetUserID(ctx); err == nil {
+		if currentUserId == userId {
+			// Authenticated user of this request does a self-assignment of this request
+			_ = events.DispatchTaskSelfAssignedEvent(ctx, id, userId)
+		} else {
+			_ = events.DispatchTaskAssignedEvent(ctx, id, userId)
+		}
+	}
 
 	return &pb.AssignTaskToUserResponse{}, nil
 }

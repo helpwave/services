@@ -73,9 +73,7 @@ jobs:
     steps:
     - name: Clone Repo
       uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.HELPWAVE_BOT_PAT }}
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       with:
         node-version: '18.x'
         registry-url: 'https://registry.npmjs.org'
@@ -92,10 +90,7 @@ jobs:
     - uses: EndBug/add-and-commit@v9
       with:
         add: gen/ts/package.json
-        default_author: github_actions
         message: 'chore(proto-ts): bump version'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   dart:
     needs:
@@ -108,7 +103,6 @@ jobs:
     - name: Clone Repo
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.HELPWAVE_BOT_PAT }}
         ref: main # TODO: Commit all changes in one commit. Should prevents branch behind error as well.
     - name: Install tools
       run: |
@@ -143,7 +137,4 @@ jobs:
     - uses: EndBug/add-and-commit@v9
       with:
         add: gen/dart/pubspec.yaml
-        default_author: github_actions
         message: 'chore(proto-dart): bump version'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

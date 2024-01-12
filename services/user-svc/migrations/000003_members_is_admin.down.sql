@@ -1,5 +1,5 @@
 ALTER TABLE memberships
 	RENAME TO members;
 
-ALTER TABLE memberships
+ALTER TABLE members
 	DROP COLUMN is_admin;
