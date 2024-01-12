@@ -11,6 +11,12 @@ in
       ${protoc-go-inject-tag}/bin/protoc-go-inject-tag -input="gen/go/proto/*/*/*/*.pb.go"
       # TODO: use gofmt from pkgs
       gofmt -w gen/go
+
+      # remove version lines as they tend to break PRs
+	    sed '/# Protobuf Python Version: /d' -i $(find gen -path "gen/python/**/*.py")
+	    sed '/\/\/ 	protoc-gen-go v/d' -i $(find gen -path "gen/go/**/*.go")
+	    sed '/\/\/ 	protoc-gen-grpc-web v/d' -i $(find gen -path "gen/ts/**/*.*")
+	    # dart gen does not (currently) have a compiler version stamp
     '';
 
     proto-lint.exec = ''
