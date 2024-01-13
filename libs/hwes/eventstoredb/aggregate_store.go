@@ -10,17 +10,17 @@ import (
 	"math"
 )
 
-type aggregateStore struct {
+type AggregateStore struct {
 	es *esdb.Client
 }
 
 type getExpectedRevision = func(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error)
 
-func NewAggregateStore(es *esdb.Client) *aggregateStore {
-	return &aggregateStore{es: es}
+func NewAggregateStore(es *esdb.Client) *AggregateStore {
+	return &AggregateStore{es: es}
 }
 
-func (a *aggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) error {
+func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) error {
 	stream, err := a.es.ReadStream(ctx, aggregate.GetStreamID(), esdb.ReadStreamOptions{}, math.MaxUint64) // MaxUint64 for "all" events
 	if err != nil {
 		return err
@@ -50,7 +50,7 @@ func (a *aggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 }
 
 // nolint:unused
-func (a *aggregateStore) getExpectedRevisionByRead(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
+func (a *AggregateStore) getExpectedRevisionByRead(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
 	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.End{}}
 	stream, err := a.es.ReadStream(
 		ctx,
@@ -71,7 +71,7 @@ func (a *aggregateStore) getExpectedRevisionByRead(ctx context.Context, aggregat
 	return esdb.Revision(lastEvent.OriginalEvent().EventNumber), nil
 }
 
-func (a *aggregateStore) getExpectedRevisionByPreviousRead(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
+func (a *AggregateStore) getExpectedRevisionByPreviousRead(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
 	if len(aggregate.GetAppliedEvents()) <= 0 {
 		return nil, errors.New("aggregate has no applied events. Consider to persist and load the aggregate first")
 	}
@@ -80,7 +80,7 @@ func (a *aggregateStore) getExpectedRevisionByPreviousRead(ctx context.Context, 
 	return esdb.Revision(eventNumber), nil
 }
 
-func (a *aggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, getExpectedRevision getExpectedRevision) error {
+func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, getExpectedRevision getExpectedRevision) error {
 	if len(aggregate.GetUncommittedEvents()) == 0 {
 		return nil
 	}
@@ -89,8 +89,9 @@ func (a *aggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 		return event.ToEventData()
 	})
 
-	// We imply that AppliedEvents are empty when an entity was loaded from an event store and therefore non-existing
+	// If AppliedEvents are empty, we imply that this entity was not loaded from an event store and therefore non-existing.
 	if len(aggregate.GetAppliedEvents()) == 0 {
+		// Create aggregate stream
 		expectedRevision := esdb.NoStream{}
 
 		_, err := a.es.AppendToStream(
@@ -127,12 +128,12 @@ func (a *aggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 	return nil
 }
 
-func (a *aggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) error {
+func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) error {
 	// We can switch out the expectedRevision strategy for testing
 	return a.doSave(ctx, aggregate, a.getExpectedRevisionByPreviousRead)
 }
 
-func (a *aggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (bool, error) {
+func (a *AggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (bool, error) {
 	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.Revision(1)}
 	stream, err := a.es.ReadStream(ctx, aggregate.GetStreamID(), readOpts, 1)
 	if err != nil {
