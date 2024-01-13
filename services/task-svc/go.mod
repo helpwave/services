@@ -25,7 +25,6 @@ require (
 	google.golang.org/grpc v1.60.1
 	google.golang.org/protobuf v1.31.0
 	gorm.io/gorm v1.25.5
-	gorm.io/plugin/soft_delete v1.2.1
 	hwdb v0.0.0
 	hwes v0.0.0
 	hwgorm v0.0.0
