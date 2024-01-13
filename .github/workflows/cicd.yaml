@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       services: ${{ steps.aggregate-changes.outputs.services }}
+      libs: ${{ steps.aggregate-changes.outputs.libs }}
       commit_hash: ${{ steps.commit.outputs.short }}
     steps:
       - uses: actions/checkout@v4
@@ -54,7 +55,12 @@ jobs:
         id: aggregate-changes
         run: |
           if [[ "$libsChanged" == "true" ]]; then
+            # Exception for the Python "impulse_svc". Our workflows are very Golang opinionated.
             echo "services=$(ls services | grep -v 'impulse_svc' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
+
+            # Exception for "libs/proto_helpers" due to the fact that this package does not require any direct external packages.
+            # If the CI runs "go get .", the command exits (1) with "go: .: no package to get in current directory".
+            echo "libs=$(ls libs | grep -v 'proto_helpers' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           else
             echo "services=$(echo $changesInServices | awk -F / '$1 ~ /services/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           fi
@@ -92,6 +98,17 @@ jobs:
     with:
       deploy: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
       service: ${{ matrix.service }}
+    secrets: inherit
+
+  ci-go-libs:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.libs != '[]' && needs.detect-changes.outputs.libs != '' }}
+    strategy:
+      matrix:
+        lib: ${{ fromJson(needs.detect-changes.outputs.libs) }}
+    uses: ./.github/workflows/ci-go-libs.yaml
+    with:
+      lib: ${{ matrix.lib }}
     secrets: inherit
 
   cicd-images:

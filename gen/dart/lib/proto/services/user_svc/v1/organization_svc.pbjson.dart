@@ -131,9 +131,12 @@ const GetOrganizationResponse$json = {
     {'1': 'long_name', '3': 2, '4': 1, '5': 9, '10': 'longName'},
     {'1': 'short_name', '3': 3, '4': 1, '5': 9, '10': 'shortName'},
     {'1': 'contact_email', '3': 4, '4': 1, '5': 9, '10': 'contactEmail'},
-    {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '10': 'avatarUrl'},
+    {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'avatarUrl', '17': true},
     {'1': 'is_personal', '3': 6, '4': 1, '5': 8, '10': 'isPersonal'},
     {'1': 'members', '3': 7, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.GetOrganizationMember', '10': 'members'},
+  ],
+  '8': [
+    {'1': '_avatar_url'},
   ],
 };
 
@@ -141,10 +144,10 @@ const GetOrganizationResponse$json = {
 final $typed_data.Uint8List getOrganizationResponseDescriptor = $convert.base64Decode(
     'ChdHZXRPcmdhbml6YXRpb25SZXNwb25zZRIOCgJpZBgBIAEoCVICaWQSGwoJbG9uZ19uYW1lGA'
     'IgASgJUghsb25nTmFtZRIdCgpzaG9ydF9uYW1lGAMgASgJUglzaG9ydE5hbWUSIwoNY29udGFj'
-    'dF9lbWFpbBgEIAEoCVIMY29udGFjdEVtYWlsEh0KCmF2YXRhcl91cmwYBSABKAlSCWF2YXRhcl'
-    'VybBIfCgtpc19wZXJzb25hbBgGIAEoCFIKaXNQZXJzb25hbBJLCgdtZW1iZXJzGAcgAygLMjEu'
-    'cHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0T3JnYW5pemF0aW9uTWVtYmVyUgdtZW1iZX'
-    'Jz');
+    'dF9lbWFpbBgEIAEoCVIMY29udGFjdEVtYWlsEiIKCmF2YXRhcl91cmwYBSABKAlIAFIJYXZhdG'
+    'FyVXJsiAEBEh8KC2lzX3BlcnNvbmFsGAYgASgIUgppc1BlcnNvbmFsEksKB21lbWJlcnMYByAD'
+    'KAsyMS5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRPcmdhbml6YXRpb25NZW1iZXJSB2'
+    '1lbWJlcnNCDQoLX2F2YXRhcl91cmw=');
 
 @$core.Deprecated('Use getOrganizationsByUserRequestDescriptor instead')
 const GetOrganizationsByUserRequest$json = {
@@ -176,11 +179,14 @@ const GetOrganizationsByUserResponse_Organization$json = {
     {'1': 'long_name', '3': 2, '4': 1, '5': 9, '10': 'longName'},
     {'1': 'short_name', '3': 3, '4': 1, '5': 9, '10': 'shortName'},
     {'1': 'contact_email', '3': 4, '4': 1, '5': 9, '10': 'contactEmail'},
-    {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '10': 'avatarUrl'},
+    {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'avatarUrl', '17': true},
     {'1': 'is_personal', '3': 6, '4': 1, '5': 8, '10': 'isPersonal'},
     {'1': 'members', '3': 7, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.Member', '10': 'members'},
   ],
   '3': [GetOrganizationsByUserResponse_Organization_Member$json],
+  '8': [
+    {'1': '_avatar_url'},
+  ],
 };
 
 @$core.Deprecated('Use getOrganizationsByUserResponseDescriptor instead')
@@ -190,7 +196,10 @@ const GetOrganizationsByUserResponse_Organization_Member$json = {
     {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
     {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
     {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
-    {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '10': 'avatarUrl'},
+    {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'avatarUrl', '17': true},
+  ],
+  '8': [
+    {'1': '_avatar_url'},
   ],
 };
 
@@ -198,15 +207,15 @@ const GetOrganizationsByUserResponse_Organization_Member$json = {
 final $typed_data.Uint8List getOrganizationsByUserResponseDescriptor = $convert.base64Decode(
     'Ch5HZXRPcmdhbml6YXRpb25zQnlVc2VyUmVzcG9uc2USbQoNb3JnYW5pemF0aW9ucxgBIAMoCz'
     'JHLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLnYxLkdldE9yZ2FuaXphdGlvbnNCeVVzZXJSZXNw'
-    'b25zZS5Pcmdhbml6YXRpb25SDW9yZ2FuaXphdGlvbnManQMKDE9yZ2FuaXphdGlvbhIOCgJpZB'
+    'b25zZS5Pcmdhbml6YXRpb25SDW9yZ2FuaXphdGlvbnMaxgMKDE9yZ2FuaXphdGlvbhIOCgJpZB'
     'gBIAEoCVICaWQSGwoJbG9uZ19uYW1lGAIgASgJUghsb25nTmFtZRIdCgpzaG9ydF9uYW1lGAMg'
-    'ASgJUglzaG9ydE5hbWUSIwoNY29udGFjdF9lbWFpbBgEIAEoCVIMY29udGFjdEVtYWlsEh0KCm'
-    'F2YXRhcl91cmwYBSABKAlSCWF2YXRhclVybBIfCgtpc19wZXJzb25hbBgGIAEoCFIKaXNQZXJz'
-    'b25hbBJoCgdtZW1iZXJzGAcgAygLMk4ucHJvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0T3'
-    'JnYW5pemF0aW9uc0J5VXNlclJlc3BvbnNlLk9yZ2FuaXphdGlvbi5NZW1iZXJSB21lbWJlcnMa'
-    'cgoGTWVtYmVyEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIUCgVlbWFpbBgCIAEoCVIFZW1haW'
-    'wSGgoIbmlja25hbWUYAyABKAlSCG5pY2tuYW1lEh0KCmF2YXRhcl91cmwYBCABKAlSCWF2YXRh'
-    'clVybA==');
+    'ASgJUglzaG9ydE5hbWUSIwoNY29udGFjdF9lbWFpbBgEIAEoCVIMY29udGFjdEVtYWlsEiIKCm'
+    'F2YXRhcl91cmwYBSABKAlIAFIJYXZhdGFyVXJsiAEBEh8KC2lzX3BlcnNvbmFsGAYgASgIUgpp'
+    'c1BlcnNvbmFsEmgKB21lbWJlcnMYByADKAsyTi5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS'
+    '5HZXRPcmdhbml6YXRpb25zQnlVc2VyUmVzcG9uc2UuT3JnYW5pemF0aW9uLk1lbWJlclIHbWVt'
+    'YmVycxqGAQoGTWVtYmVyEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIUCgVlbWFpbBgCIAEoCV'
+    'IFZW1haWwSGgoIbmlja25hbWUYAyABKAlSCG5pY2tuYW1lEiIKCmF2YXRhcl91cmwYBCABKAlI'
+    'AFIJYXZhdGFyVXJsiAEBQg0KC19hdmF0YXJfdXJsQg0KC19hdmF0YXJfdXJs');
 
 @$core.Deprecated('Use getOrganizationsForUserRequestDescriptor instead')
 const GetOrganizationsForUserRequest$json = {
@@ -234,11 +243,14 @@ const GetOrganizationsForUserResponse_Organization$json = {
     {'1': 'long_name', '3': 2, '4': 1, '5': 9, '10': 'longName'},
     {'1': 'short_name', '3': 3, '4': 1, '5': 9, '10': 'shortName'},
     {'1': 'contact_email', '3': 4, '4': 1, '5': 9, '10': 'contactEmail'},
-    {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '10': 'avatarUrl'},
+    {'1': 'avatar_url', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'avatarUrl', '17': true},
     {'1': 'is_personal', '3': 6, '4': 1, '5': 8, '10': 'isPersonal'},
     {'1': 'members', '3': 7, '4': 3, '5': 11, '6': '.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.Member', '10': 'members'},
   ],
   '3': [GetOrganizationsForUserResponse_Organization_Member$json],
+  '8': [
+    {'1': '_avatar_url'},
+  ],
 };
 
 @$core.Deprecated('Use getOrganizationsForUserResponseDescriptor instead')
@@ -248,7 +260,10 @@ const GetOrganizationsForUserResponse_Organization_Member$json = {
     {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
     {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
     {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
-    {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '10': 'avatarUrl'},
+    {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'avatarUrl', '17': true},
+  ],
+  '8': [
+    {'1': '_avatar_url'},
   ],
 };
 
@@ -256,15 +271,15 @@ const GetOrganizationsForUserResponse_Organization_Member$json = {
 final $typed_data.Uint8List getOrganizationsForUserResponseDescriptor = $convert.base64Decode(
     'Ch9HZXRPcmdhbml6YXRpb25zRm9yVXNlclJlc3BvbnNlEm4KDW9yZ2FuaXphdGlvbnMYASADKA'
     'sySC5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZXRPcmdhbml6YXRpb25zRm9yVXNlclJl'
-    'c3BvbnNlLk9yZ2FuaXphdGlvblINb3JnYW5pemF0aW9ucxqeAwoMT3JnYW5pemF0aW9uEg4KAm'
+    'c3BvbnNlLk9yZ2FuaXphdGlvblINb3JnYW5pemF0aW9ucxrHAwoMT3JnYW5pemF0aW9uEg4KAm'
     'lkGAEgASgJUgJpZBIbCglsb25nX25hbWUYAiABKAlSCGxvbmdOYW1lEh0KCnNob3J0X25hbWUY'
-    'AyABKAlSCXNob3J0TmFtZRIjCg1jb250YWN0X2VtYWlsGAQgASgJUgxjb250YWN0RW1haWwSHQ'
-    'oKYXZhdGFyX3VybBgFIAEoCVIJYXZhdGFyVXJsEh8KC2lzX3BlcnNvbmFsGAYgASgIUgppc1Bl'
-    'cnNvbmFsEmkKB21lbWJlcnMYByADKAsyTy5wcm90by5zZXJ2aWNlcy51c2VyX3N2Yy52MS5HZX'
-    'RPcmdhbml6YXRpb25zRm9yVXNlclJlc3BvbnNlLk9yZ2FuaXphdGlvbi5NZW1iZXJSB21lbWJl'
-    'cnMacgoGTWVtYmVyEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIUCgVlbWFpbBgCIAEoCVIFZW'
-    '1haWwSGgoIbmlja25hbWUYAyABKAlSCG5pY2tuYW1lEh0KCmF2YXRhcl91cmwYBCABKAlSCWF2'
-    'YXRhclVybA==');
+    'AyABKAlSCXNob3J0TmFtZRIjCg1jb250YWN0X2VtYWlsGAQgASgJUgxjb250YWN0RW1haWwSIg'
+    'oKYXZhdGFyX3VybBgFIAEoCUgAUglhdmF0YXJVcmyIAQESHwoLaXNfcGVyc29uYWwYBiABKAhS'
+    'CmlzUGVyc29uYWwSaQoHbWVtYmVycxgHIAMoCzJPLnByb3RvLnNlcnZpY2VzLnVzZXJfc3ZjLn'
+    'YxLkdldE9yZ2FuaXphdGlvbnNGb3JVc2VyUmVzcG9uc2UuT3JnYW5pemF0aW9uLk1lbWJlclIH'
+    'bWVtYmVycxqGAQoGTWVtYmVyEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIUCgVlbWFpbBgCIA'
+    'EoCVIFZW1haWwSGgoIbmlja25hbWUYAyABKAlSCG5pY2tuYW1lEiIKCmF2YXRhcl91cmwYBCAB'
+    'KAlIAFIJYXZhdGFyVXJsiAEBQg0KC19hdmF0YXJfdXJsQg0KC19hdmF0YXJfdXJs');
 
 @$core.Deprecated('Use updateOrganizationRequestDescriptor instead')
 const UpdateOrganizationRequest$json = {
@@ -353,7 +368,10 @@ const GetMembersByOrganizationResponse_Member$json = {
     {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
     {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
     {'1': 'nickname', '3': 3, '4': 1, '5': 9, '10': 'nickname'},
-    {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '10': 'avatarUrl'},
+    {'1': 'avatar_url', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'avatarUrl', '17': true},
+  ],
+  '8': [
+    {'1': '_avatar_url'},
   ],
 };
 
@@ -361,9 +379,9 @@ const GetMembersByOrganizationResponse_Member$json = {
 final $typed_data.Uint8List getMembersByOrganizationResponseDescriptor = $convert.base64Decode(
     'CiBHZXRNZW1iZXJzQnlPcmdhbml6YXRpb25SZXNwb25zZRJdCgdtZW1iZXJzGAEgAygLMkMucH'
     'JvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0TWVtYmVyc0J5T3JnYW5pemF0aW9uUmVzcG9u'
-    'c2UuTWVtYmVyUgdtZW1iZXJzGnIKBk1lbWJlchIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySWQSFA'
-    'oFZW1haWwYAiABKAlSBWVtYWlsEhoKCG5pY2tuYW1lGAMgASgJUghuaWNrbmFtZRIdCgphdmF0'
-    'YXJfdXJsGAQgASgJUglhdmF0YXJVcmw=');
+    'c2UuTWVtYmVyUgdtZW1iZXJzGoYBCgZNZW1iZXISFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklkEh'
+    'QKBWVtYWlsGAIgASgJUgVlbWFpbBIaCghuaWNrbmFtZRgDIAEoCVIIbmlja25hbWUSIgoKYXZh'
+    'dGFyX3VybBgEIAEoCUgAUglhdmF0YXJVcmyIAQFCDQoLX2F2YXRhcl91cmw=');
 
 @$core.Deprecated('Use addMemberRequestDescriptor instead')
 const AddMemberRequest$json = {
@@ -527,7 +545,10 @@ const GetInvitationsByUserResponse_Invitation_Organization$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'long_name', '3': 2, '4': 1, '5': 9, '10': 'longName'},
-    {'1': 'avatar_url', '3': 3, '4': 1, '5': 9, '10': 'avatarUrl'},
+    {'1': 'avatar_url', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'avatarUrl', '17': true},
+  ],
+  '8': [
+    {'1': '_avatar_url'},
   ],
 };
 
@@ -535,13 +556,13 @@ const GetInvitationsByUserResponse_Invitation_Organization$json = {
 final $typed_data.Uint8List getInvitationsByUserResponseDescriptor = $convert.base64Decode(
     'ChxHZXRJbnZpdGF0aW9uc0J5VXNlclJlc3BvbnNlEmUKC2ludml0YXRpb25zGAEgAygLMkMucH'
     'JvdG8uc2VydmljZXMudXNlcl9zdmMudjEuR2V0SW52aXRhdGlvbnNCeVVzZXJSZXNwb25zZS5J'
-    'bnZpdGF0aW9uUgtpbnZpdGF0aW9ucxrHAgoKSW52aXRhdGlvbhIOCgJpZBgBIAEoCVICaWQSFA'
+    'bnZpdGF0aW9uUgtpbnZpdGF0aW9ucxrbAgoKSW52aXRhdGlvbhIOCgJpZBgBIAEoCVICaWQSFA'
     'oFZW1haWwYAiABKAlSBWVtYWlsEnQKDG9yZ2FuaXphdGlvbhgDIAEoCzJQLnByb3RvLnNlcnZp'
     'Y2VzLnVzZXJfc3ZjLnYxLkdldEludml0YXRpb25zQnlVc2VyUmVzcG9uc2UuSW52aXRhdGlvbi'
     '5Pcmdhbml6YXRpb25SDG9yZ2FuaXphdGlvbhJBCgVzdGF0ZRgEIAEoDjIrLnByb3RvLnNlcnZp'
-    'Y2VzLnVzZXJfc3ZjLnYxLkludml0YXRpb25TdGF0ZVIFc3RhdGUaWgoMT3JnYW5pemF0aW9uEg'
-    '4KAmlkGAEgASgJUgJpZBIbCglsb25nX25hbWUYAiABKAlSCGxvbmdOYW1lEh0KCmF2YXRhcl91'
-    'cmwYAyABKAlSCWF2YXRhclVybA==');
+    'Y2VzLnVzZXJfc3ZjLnYxLkludml0YXRpb25TdGF0ZVIFc3RhdGUabgoMT3JnYW5pemF0aW9uEg'
+    '4KAmlkGAEgASgJUgJpZBIbCglsb25nX25hbWUYAiABKAlSCGxvbmdOYW1lEiIKCmF2YXRhcl91'
+    'cmwYAyABKAlIAFIJYXZhdGFyVXJsiAEBQg0KC19hdmF0YXJfdXJs');
 
 @$core.Deprecated('Use acceptInvitationRequestDescriptor instead')
 const AcceptInvitationRequest$json = {

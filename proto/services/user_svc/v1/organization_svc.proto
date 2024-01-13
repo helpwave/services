@@ -60,7 +60,7 @@ message GetOrganizationResponse {
   string long_name = 2;
   string short_name = 3;
   string contact_email = 4;
-  string avatar_url = 5;
+  optional string avatar_url = 5;
   bool is_personal = 6;
   repeated GetOrganizationMember members = 7;
 }
@@ -82,7 +82,7 @@ message GetOrganizationsByUserResponse {
     string long_name = 2;
     string short_name = 3;
     string contact_email = 4;
-    string avatar_url = 5;
+    optional string avatar_url = 5;
     bool is_personal = 6;
     repeated Member members = 7;
 
@@ -90,7 +90,7 @@ message GetOrganizationsByUserResponse {
       string user_id = 1;
       string email = 2;
       string nickname = 3;
-      string avatar_url = 4;
+      optional string avatar_url = 4;
     }
   }
 }
@@ -109,7 +109,7 @@ message GetOrganizationsForUserResponse {
     string long_name = 2;
     string short_name = 3;
     string contact_email = 4;
-    string avatar_url = 5;
+    optional string avatar_url = 5;
     bool is_personal = 6;
     repeated Member members = 7;
 
@@ -117,7 +117,7 @@ message GetOrganizationsForUserResponse {
       string user_id = 1;
       string email = 2;
       string nickname = 3;
-      string avatar_url = 4;
+      optional string avatar_url = 4;
     }
   }
 }
@@ -163,7 +163,7 @@ message GetMembersByOrganizationResponse {
     string user_id = 1;
     string email = 2;
     string nickname = 3;
-    string avatar_url = 4;
+    optional string avatar_url = 4;
   }
 }
 
@@ -244,7 +244,7 @@ message GetInvitationsByUserResponse {
     message Organization {
       string id = 1;
       string long_name = 2;
-      string avatar_url = 3;
+      optional string avatar_url = 3;
     }
   }
 }

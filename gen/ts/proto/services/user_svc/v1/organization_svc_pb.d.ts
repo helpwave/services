@@ -167,6 +167,8 @@ export class GetOrganizationResponse extends jspb.Message {
 
   getAvatarUrl(): string;
   setAvatarUrl(value: string): GetOrganizationResponse;
+  hasAvatarUrl(): boolean;
+  clearAvatarUrl(): GetOrganizationResponse;
 
   getIsPersonal(): boolean;
   setIsPersonal(value: boolean): GetOrganizationResponse;
@@ -190,9 +192,14 @@ export namespace GetOrganizationResponse {
     longName: string,
     shortName: string,
     contactEmail: string,
-    avatarUrl: string,
+    avatarUrl?: string,
     isPersonal: boolean,
     membersList: Array<GetOrganizationMember.AsObject>,
+  }
+
+  export enum AvatarUrlCase { 
+    _AVATAR_URL_NOT_SET = 0,
+    AVATAR_URL = 5,
   }
 }
 
@@ -248,6 +255,8 @@ export namespace GetOrganizationsByUserResponse {
 
     getAvatarUrl(): string;
     setAvatarUrl(value: string): Organization;
+    hasAvatarUrl(): boolean;
+    clearAvatarUrl(): Organization;
 
     getIsPersonal(): boolean;
     setIsPersonal(value: boolean): Organization;
@@ -271,7 +280,7 @@ export namespace GetOrganizationsByUserResponse {
       longName: string,
       shortName: string,
       contactEmail: string,
-      avatarUrl: string,
+      avatarUrl?: string,
       isPersonal: boolean,
       membersList: Array<GetOrganizationsByUserResponse.Organization.Member.AsObject>,
     }
@@ -288,6 +297,8 @@ export namespace GetOrganizationsByUserResponse {
 
       getAvatarUrl(): string;
       setAvatarUrl(value: string): Member;
+      hasAvatarUrl(): boolean;
+      clearAvatarUrl(): Member;
 
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): Member.AsObject;
@@ -302,10 +313,20 @@ export namespace GetOrganizationsByUserResponse {
         userId: string,
         email: string,
         nickname: string,
-        avatarUrl: string,
+        avatarUrl?: string,
+      }
+
+      export enum AvatarUrlCase { 
+        _AVATAR_URL_NOT_SET = 0,
+        AVATAR_URL = 4,
       }
     }
 
+
+    export enum AvatarUrlCase { 
+      _AVATAR_URL_NOT_SET = 0,
+      AVATAR_URL = 5,
+    }
   }
 
 }
@@ -358,6 +379,8 @@ export namespace GetOrganizationsForUserResponse {
 
     getAvatarUrl(): string;
     setAvatarUrl(value: string): Organization;
+    hasAvatarUrl(): boolean;
+    clearAvatarUrl(): Organization;
 
     getIsPersonal(): boolean;
     setIsPersonal(value: boolean): Organization;
@@ -381,7 +404,7 @@ export namespace GetOrganizationsForUserResponse {
       longName: string,
       shortName: string,
       contactEmail: string,
-      avatarUrl: string,
+      avatarUrl?: string,
       isPersonal: boolean,
       membersList: Array<GetOrganizationsForUserResponse.Organization.Member.AsObject>,
     }
@@ -398,6 +421,8 @@ export namespace GetOrganizationsForUserResponse {
 
       getAvatarUrl(): string;
       setAvatarUrl(value: string): Member;
+      hasAvatarUrl(): boolean;
+      clearAvatarUrl(): Member;
 
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): Member.AsObject;
@@ -412,10 +437,20 @@ export namespace GetOrganizationsForUserResponse {
         userId: string,
         email: string,
         nickname: string,
-        avatarUrl: string,
+        avatarUrl?: string,
+      }
+
+      export enum AvatarUrlCase { 
+        _AVATAR_URL_NOT_SET = 0,
+        AVATAR_URL = 4,
       }
     }
 
+
+    export enum AvatarUrlCase { 
+      _AVATAR_URL_NOT_SET = 0,
+      AVATAR_URL = 5,
+    }
   }
 
 }
@@ -588,6 +623,8 @@ export namespace GetMembersByOrganizationResponse {
 
     getAvatarUrl(): string;
     setAvatarUrl(value: string): Member;
+    hasAvatarUrl(): boolean;
+    clearAvatarUrl(): Member;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Member.AsObject;
@@ -602,7 +639,12 @@ export namespace GetMembersByOrganizationResponse {
       userId: string,
       email: string,
       nickname: string,
-      avatarUrl: string,
+      avatarUrl?: string,
+    }
+
+    export enum AvatarUrlCase { 
+      _AVATAR_URL_NOT_SET = 0,
+      AVATAR_URL = 4,
     }
   }
 
@@ -884,6 +926,8 @@ export namespace GetInvitationsByUserResponse {
 
       getAvatarUrl(): string;
       setAvatarUrl(value: string): Organization;
+      hasAvatarUrl(): boolean;
+      clearAvatarUrl(): Organization;
 
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): Organization.AsObject;
@@ -897,7 +941,12 @@ export namespace GetInvitationsByUserResponse {
       export type AsObject = {
         id: string,
         longName: string,
-        avatarUrl: string,
+        avatarUrl?: string,
+      }
+
+      export enum AvatarUrlCase { 
+        _AVATAR_URL_NOT_SET = 0,
+        AVATAR_URL = 3,
       }
     }
 
