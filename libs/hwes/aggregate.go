@@ -118,8 +118,6 @@ func (a *AggregateBase) Apply(event Event) error {
 		return errors.New("invalid aggregate for event")
 	}
 
-	event.SetAggregateType(a.GetType()) // TODO: Is this really necessary?
-
 	if err := a.HandleEvent(event); err != nil {
 		return err
 	}
@@ -141,14 +139,12 @@ func (a *AggregateBase) RaiseEvent(event Event) error {
 		return errors.New("invalid version")
 	}
 
-	event.SetAggregateType(a.GetType()) // TODO: Is this really necessary?
-
 	if err := a.HandleEvent(event); err != nil {
 		return err
 	}
 
-	a.appliedEvents = append(a.appliedEvents, event)
 	a.version = event.GetVersion()
+	a.appliedEvents = append(a.appliedEvents, event)
 	return nil
 }
 
