@@ -10,10 +10,6 @@ import (
 type eventHandler func(evt Event) error
 
 type Aggregate interface {
-	AggregateRoot
-}
-
-type AggregateRoot interface {
 	GetID() uuid.UUID
 	GetStreamID() string
 	GetType() AggregateType
