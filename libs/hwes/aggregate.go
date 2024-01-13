@@ -116,7 +116,7 @@ func (a *AggregateBase) Load(events []Event) error {
 }
 
 // Apply applies events to an aggregate by utilizing the registered event listeners
-// and appends it as an uncommitted one to be later persisted by an aggregate store.
+// and appends it as an uncommitted event to be later persisted by an aggregate store.
 func (a *AggregateBase) Apply(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
 		return errors.New("invalid aggregate for event")
