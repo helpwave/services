@@ -15,7 +15,7 @@ type Event struct {
 	AggregateType AggregateType
 	Data          []byte
 	Timestamp     time.Time
-	Version       int64 // TODO: uint64?
+	Version       uint64
 }
 
 func NewBaseEvent(aggregate Aggregate, eventType string) Event {
@@ -64,7 +64,7 @@ func NewEventFromRecordedEvent(event *esdb.RecordedEvent) (Event, error) {
 		AggregateID: aggregateID,
 		Data:        event.Data,
 		Timestamp:   event.CreatedDate,
-		Version:     int64(event.EventNumber),
+		Version:     event.EventNumber,
 	}, nil
 }
 
@@ -81,12 +81,12 @@ func (e *Event) GetAggregateType() AggregateType {
 	return e.AggregateType
 }
 
-func (e *Event) SetVersion(version int64) *Event {
+func (e *Event) SetVersion(version uint64) *Event {
 	e.Version = version
 	return e
 }
 
-func (e *Event) GetVersion() int64 {
+func (e *Event) GetVersion() uint64 {
 	return e.Version
 }
 

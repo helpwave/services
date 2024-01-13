@@ -17,7 +17,7 @@ type AggregateRoot interface {
 	GetID() uuid.UUID
 	GetStreamID() string
 	GetType() AggregateType
-	GetVersion() int64
+	GetVersion() uint64
 
 	HandleEvent(event Event) error
 
@@ -34,7 +34,7 @@ type AggregateType string
 type AggregateBase struct {
 	id      uuid.UUID
 	atype   AggregateType
-	version int64
+	version uint64
 
 	eventHandlers map[string]eventHandler
 
@@ -59,7 +59,7 @@ type AggregateBase struct {
 func NewAggregateBase(atype AggregateType, id uuid.UUID) *AggregateBase {
 	return &AggregateBase{
 		id:      id,
-		version: -1, // -1 indicates a new stream for EventStoreDB
+		version: 0,
 		atype:   atype,
 
 		eventHandlers: make(map[string]eventHandler, 0),
@@ -81,7 +81,7 @@ func (a *AggregateBase) GetType() AggregateType {
 	return a.atype
 }
 
-func (a *AggregateBase) GetVersion() int64 {
+func (a *AggregateBase) GetVersion() uint64 {
 	return a.version
 }
 
@@ -161,7 +161,7 @@ func (a *AggregateBase) HandleEvent(event Event) error {
 		Str("aggregateID", event.GetAggregateID().String()).
 		Str("aggregateType", string(event.GetAggregateType())).
 		Str("eventType", event.EventType).
-		Int64("version", event.GetVersion()).
+		Uint64("version", event.GetVersion()).
 		Msg("handle event")
 
 	eventHandler, found := a.eventHandlers[event.EventType]
