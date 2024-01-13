@@ -169,7 +169,11 @@ func (a *AggregateBase) HandleEvent(event Event) error {
 		return fmt.Errorf("event type '%s' is invalid", event.EventType)
 	}
 
-	return eventHandler(event)
+	if err := eventHandler(event); err != nil {
+		return fmt.Errorf("event handler for type '%s' failed: %w", event.EventType, err)
+	}
+
+	return nil
 }
 
 // RegisterEventListener registers the callback function for a specific event type
