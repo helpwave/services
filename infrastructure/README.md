@@ -54,10 +54,6 @@ primary_region = "ams"
   strategy = "bluegreen"
   release_command = "./run-migrations.sh"
 
-[[services]]
-  auto_stop_machines = false
-  auto_start_machines = false
-
 [checks]
   [checks.dapr_sidecar]
     grace_period = "5s"
