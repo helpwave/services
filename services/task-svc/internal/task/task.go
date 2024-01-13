@@ -195,6 +195,8 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 				AssignedUserId: hwutil.NullUUIDToStringPtr(row.Task.AssignedUserID),
 				PatientId:      row.Task.PatientID.String(),
 				Public:         row.Task.Public,
+				DueAt:          timestamppb.New(row.Task.DueAt.Time),
+				CreatedBy:      row.Task.CreatedBy.String(),
 				Subtasks:       make([]*pb.GetTasksByPatientResponse_Task_SubTask, 0),
 			}
 			tasks = append(tasks, task)
@@ -205,9 +207,10 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 			continue
 		}
 		task.Subtasks = append(task.Subtasks, &pb.GetTasksByPatientResponse_Task_SubTask{
-			Id:   row.SubtaskID.UUID.String(),
-			Name: *row.SubtaskName,
-			Done: *row.SubtaskDone,
+			Id:        row.SubtaskID.UUID.String(),
+			Name:      *row.SubtaskName,
+			Done:      *row.SubtaskDone,
+			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
 		})
 	}
 
