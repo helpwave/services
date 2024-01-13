@@ -8,13 +8,13 @@ import (
 )
 
 type CreateSubtaskCommand struct {
-	hwes.BaseCommand
+	hwes.CommandBase
 	SubtaskID uuid.UUID
 	Name      string
 }
 
 func NewCreateSubtaskCommand(id uuid.UUID, subtaskID uuid.UUID, name string) *CreateSubtaskCommand {
-	return &CreateSubtaskCommand{BaseCommand: hwes.NewBaseCommand(id), SubtaskID: subtaskID, Name: name}
+	return &CreateSubtaskCommand{CommandBase: hwes.NewCommandBase(id), SubtaskID: subtaskID, Name: name}
 }
 
 type CreateSubtaskCommandHandler interface {
@@ -30,7 +30,7 @@ func NewCreateSubtaskCommandHandler(as hwes.AggregateStore) *createSubtaskComman
 }
 
 func (c *createSubtaskCommandHandler) Handle(ctx context.Context, command *CreateSubtaskCommand) error {
-	a, err := aggregate.LoadTaskAggregate(ctx, c.as, command.AggregateID)
+	a, err := aggregate.LoadTaskAggregate(ctx, c.as, command.GetAggregateID())
 	if err != nil {
 		return err
 	}

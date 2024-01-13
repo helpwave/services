@@ -10,7 +10,7 @@ import (
 )
 
 type CreateTaskCommand struct {
-	hwes.BaseCommand
+	hwes.CommandBase
 	Name        string
 	Description *string
 	PatientID   uuid.UUID
@@ -20,7 +20,7 @@ type CreateTaskCommand struct {
 
 func NewCreateTaskCommand(id uuid.UUID, name string, description *string, patientID uuid.UUID, public *bool, status *pb.TaskStatus) *CreateTaskCommand {
 	return &CreateTaskCommand{
-		BaseCommand: hwes.NewBaseCommand(id),
+		CommandBase: hwes.NewCommandBase(id),
 		Name:        name,
 		Description: description,
 		PatientID:   patientID,
@@ -42,7 +42,7 @@ func NewCreateTaskCommandHandler(as hwes.AggregateStore) *createTaskCommandHandl
 }
 
 func (c *createTaskCommandHandler) Handle(ctx context.Context, command *CreateTaskCommand) error {
-	a := aggregate.NewTaskAggregate(command.AggregateID)
+	a := aggregate.NewTaskAggregate(command.GetAggregateID())
 
 	exists, err := c.as.Exists(ctx, a)
 	if err != nil {

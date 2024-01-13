@@ -8,13 +8,13 @@ import (
 )
 
 type UpdateSubtaskCommand struct {
-	hwes.BaseCommand
+	hwes.CommandBase
 	SubtaskID uuid.UUID
 	Name      *string
 }
 
 func NewUpdateSubtaskCommand(taskID, subtaskID uuid.UUID, name *string) *UpdateSubtaskCommand {
-	return &UpdateSubtaskCommand{BaseCommand: hwes.NewBaseCommand(taskID), SubtaskID: subtaskID, Name: name}
+	return &UpdateSubtaskCommand{CommandBase: hwes.NewCommandBase(taskID), SubtaskID: subtaskID, Name: name}
 }
 
 type UpdateSubtaskCommandHandler interface {
@@ -30,7 +30,7 @@ func NewUpdateSubtaskCommandHandler(as hwes.AggregateStore) *updateSubtaskComman
 }
 
 func (c *updateSubtaskCommandHandler) Handle(ctx context.Context, command *UpdateSubtaskCommand) error {
-	a, err := aggregate.LoadTaskAggregate(ctx, c.as, command.AggregateID)
+	a, err := aggregate.LoadTaskAggregate(ctx, c.as, command.GetAggregateID())
 	if err != nil {
 		return err
 	}

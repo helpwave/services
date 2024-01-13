@@ -8,12 +8,12 @@ import (
 )
 
 type UnassignTaskCommand struct {
-	hwes.BaseCommand
+	hwes.CommandBase
 	UserID uuid.UUID
 }
 
 func NewUnassignTaskCommand(taskID, userID uuid.UUID) *UnassignTaskCommand {
-	return &UnassignTaskCommand{BaseCommand: hwes.NewBaseCommand(taskID), UserID: userID}
+	return &UnassignTaskCommand{CommandBase: hwes.NewCommandBase(taskID), UserID: userID}
 }
 
 type UnassignTaskCommandHandler interface {
@@ -29,7 +29,7 @@ func NewUnassignTaskCommandHandler(as hwes.AggregateStore) *unassignTaskCommandH
 }
 
 func (c *unassignTaskCommandHandler) Handle(ctx context.Context, command *UnassignTaskCommand) error {
-	task, err := aggregate.LoadTaskAggregate(ctx, c.as, command.AggregateID)
+	task, err := aggregate.LoadTaskAggregate(ctx, c.as, command.GetAggregateID())
 	if err != nil {
 		return err
 	}

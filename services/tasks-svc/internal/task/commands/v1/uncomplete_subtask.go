@@ -8,12 +8,12 @@ import (
 )
 
 type UncompleteSubtaskCommand struct {
-	hwes.BaseCommand
+	hwes.CommandBase
 	SubtaskID uuid.UUID
 }
 
 func NewUncompleteSubtaskCommand(id uuid.UUID, subtaskID uuid.UUID) *UncompleteSubtaskCommand {
-	return &UncompleteSubtaskCommand{BaseCommand: hwes.NewBaseCommand(id), SubtaskID: subtaskID}
+	return &UncompleteSubtaskCommand{CommandBase: hwes.NewCommandBase(id), SubtaskID: subtaskID}
 }
 
 type UncompleteSubtaskCommandHandler interface {
@@ -29,7 +29,7 @@ func NewUncompleteSubtaskCommandHandler(as hwes.AggregateStore) *uncompleteSubta
 }
 
 func (c *uncompleteSubtaskCommandHandler) Handle(ctx context.Context, command *UncompleteSubtaskCommand) error {
-	a, err := aggregate.LoadTaskAggregate(ctx, c.as, command.AggregateID)
+	a, err := aggregate.LoadTaskAggregate(ctx, c.as, command.GetAggregateID())
 	if err != nil {
 		return err
 	}

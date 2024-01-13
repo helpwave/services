@@ -2,18 +2,17 @@ package hwes
 
 import "github.com/google/uuid"
 
-type Command interface {
-	GetAggregateID() uuid.UUID
+// CommandBase acts as a container for the targeted AggregateID
+// A concrete command in our CQRS pattern will call NewCommandBase
+// in there initialization.
+type CommandBase struct {
+	aggregateID uuid.UUID
 }
 
-type BaseCommand struct {
-	AggregateID uuid.UUID
+func NewCommandBase(aggregateID uuid.UUID) CommandBase {
+	return CommandBase{aggregateID: aggregateID}
 }
 
-func NewBaseCommand(aggregateID uuid.UUID) BaseCommand {
-	return BaseCommand{AggregateID: aggregateID}
-}
-
-func (c *BaseCommand) GetAggregateID() uuid.UUID {
-	return c.AggregateID
+func (c *CommandBase) GetAggregateID() uuid.UUID {
+	return c.aggregateID
 }

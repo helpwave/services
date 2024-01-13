@@ -8,12 +8,12 @@ import (
 )
 
 type DeleteSubtaskCommand struct {
-	hwes.BaseCommand
+	hwes.CommandBase
 	SubtaskID uuid.UUID
 }
 
 func NewDeleteSubtaskCommand(taskID, subtaskID uuid.UUID) *DeleteSubtaskCommand {
-	return &DeleteSubtaskCommand{BaseCommand: hwes.NewBaseCommand(taskID), SubtaskID: subtaskID}
+	return &DeleteSubtaskCommand{CommandBase: hwes.NewCommandBase(taskID), SubtaskID: subtaskID}
 }
 
 type DeleteSubtaskCommandHandler interface {
@@ -29,7 +29,7 @@ func NewDeleteSubtaskCommandHandler(as hwes.AggregateStore) *deleteSubtaskComman
 }
 
 func (c *deleteSubtaskCommandHandler) Handle(ctx context.Context, command *DeleteSubtaskCommand) error {
-	taskAggregate, err := aggregate.LoadTaskAggregate(ctx, c.as, command.AggregateID)
+	taskAggregate, err := aggregate.LoadTaskAggregate(ctx, c.as, command.GetAggregateID())
 	if err != nil {
 		return err
 	}
