@@ -81,7 +81,7 @@ func NewTaskCreatedEvent(a hwes.Aggregate, id uuid.UUID, name string, patientID 
 		PatientID: patientID.String(),
 		Status:    status.String(),
 	}
-	return hwes.NewBaseEventWithPayload(a, TaskCreated, payload)
+	return hwes.NewEventBaseWithPayload(a, TaskCreated, payload)
 }
 
 func NewTaskNameUpdatedEvent(a hwes.Aggregate, previousName, name string) (hwes.Event, error) {
@@ -89,7 +89,7 @@ func NewTaskNameUpdatedEvent(a hwes.Aggregate, previousName, name string) (hwes.
 		PreviousName: previousName,
 		Name:         name,
 	}
-	return hwes.NewBaseEventWithPayload(a, TaskNameUpdated, payload)
+	return hwes.NewEventBaseWithPayload(a, TaskNameUpdated, payload)
 }
 
 func NewTaskDescriptionUpdatedEvent(a hwes.Aggregate, previousDescription, description string) (hwes.Event, error) {
@@ -97,33 +97,33 @@ func NewTaskDescriptionUpdatedEvent(a hwes.Aggregate, previousDescription, descr
 		PreviousDescription: previousDescription,
 		Description:         description,
 	}
-	return hwes.NewBaseEventWithPayload(a, TaskDescriptionUpdated, payload)
+	return hwes.NewEventBaseWithPayload(a, TaskDescriptionUpdated, payload)
 }
 
 func NewTaskAssignedEvent(a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
 	payload := TaskAssignedEvent{
 		UserID: userID.String(),
 	}
-	return hwes.NewBaseEventWithPayload(a, TaskAssigned, payload)
+	return hwes.NewEventBaseWithPayload(a, TaskAssigned, payload)
 }
 
 func NewTaskSelfAssignedEvent(a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
 	payload := TaskSelfAssignedEvent{
 		UserID: userID.String(),
 	}
-	return hwes.NewBaseEventWithPayload(a, TaskSelfAssigned, payload)
+	return hwes.NewEventBaseWithPayload(a, TaskSelfAssigned, payload)
 }
 
 func NewTaskUnassignedEvent(a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
 	payload := TaskUnassignedEvent{
 		UserID: userID.String(),
 	}
-	return hwes.NewBaseEventWithPayload(a, TaskUnassigned, payload)
+	return hwes.NewEventBaseWithPayload(a, TaskUnassigned, payload)
 }
 
 func NewTaskPublishedEvent(a hwes.Aggregate) (hwes.Event, error) {
 	payload := TaskPublishedEvent{}
-	return hwes.NewBaseEventWithPayload(a, TaskPublished, payload)
+	return hwes.NewEventBaseWithPayload(a, TaskPublished, payload)
 }
 
 func NewSubtaskCreatedEvent(a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
@@ -131,7 +131,7 @@ func NewSubtaskCreatedEvent(a hwes.Aggregate, subtaskID uuid.UUID, name string) 
 		SubtaskID: subtaskID.String(),
 		Name:      name,
 	}
-	return hwes.NewBaseEventWithPayload(a, SubtaskCreated, payload)
+	return hwes.NewEventBaseWithPayload(a, SubtaskCreated, payload)
 }
 
 func NewSubtaskNameUpdatedEvent(a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
@@ -139,26 +139,26 @@ func NewSubtaskNameUpdatedEvent(a hwes.Aggregate, subtaskID uuid.UUID, name stri
 		SubtaskID: subtaskID.String(),
 		Name:      name,
 	}
-	return hwes.NewBaseEventWithPayload(a, SubtaskNameUpdated, payload)
+	return hwes.NewEventBaseWithPayload(a, SubtaskNameUpdated, payload)
 }
 
 func NewSubtaskCompletedEvent(a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
 	payload := SubtaskCompletedEvent{
 		SubtaskID: subtaskID.String(),
 	}
-	return hwes.NewBaseEventWithPayload(a, SubtaskCompleted, payload)
+	return hwes.NewEventBaseWithPayload(a, SubtaskCompleted, payload)
 }
 
 func NewSubtaskUncompletedEvent(a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
 	payload := SubtaskUncompletedEvent{
 		SubtaskID: subtaskID.String(),
 	}
-	return hwes.NewBaseEventWithPayload(a, SubtaskUncompleted, payload)
+	return hwes.NewEventBaseWithPayload(a, SubtaskUncompleted, payload)
 }
 
 func NewSubtaskDeletedEvent(a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
 	payload := SubtaskDeletedEvent{
 		SubtaskID: subtaskID.String(),
 	}
-	return hwes.NewBaseEventWithPayload(a, SubtaskDeleted, payload)
+	return hwes.NewEventBaseWithPayload(a, SubtaskDeleted, payload)
 }

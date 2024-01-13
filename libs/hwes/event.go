@@ -18,7 +18,7 @@ type Event struct {
 	Version       uint64
 }
 
-func NewBaseEvent(aggregate Aggregate, eventType string) Event {
+func NewEventBase(aggregate Aggregate, eventType string) Event {
 	return Event{
 		EventID:       uuid.New(),
 		EventType:     eventType,
@@ -28,12 +28,12 @@ func NewBaseEvent(aggregate Aggregate, eventType string) Event {
 	}
 }
 
-func NewBaseEventWithPayload(aggregate Aggregate, eventType string, payload interface{}) (Event, error) {
-	baseEvent := NewBaseEvent(aggregate, eventType)
-	if err := baseEvent.SetJsonData(&payload); err != nil {
+func NewEventBaseWithPayload(aggregate Aggregate, eventType string, payload interface{}) (Event, error) {
+	eventBase := NewEventBase(aggregate, eventType)
+	if err := eventBase.SetJsonData(&payload); err != nil {
 		return Event{}, err
 	}
-	return baseEvent, nil
+	return eventBase, nil
 }
 
 func resolveAggregateIDFromStreamID(streamID string) (uuid.UUID, error) {
