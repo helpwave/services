@@ -9,12 +9,15 @@ import (
 
 type eventHandler func(evt Event) error
 
+type AggregateType string
+
 type Aggregate interface {
 	GetID() uuid.UUID
 	GetStreamID() string
 	GetType() AggregateType
 	GetVersion() uint64
 
+	RegisterEventListener(eventType string, eventHandler eventHandler) *AggregateBase
 	HandleEvent(event Event) error
 
 	GetAppliedEvents() []Event
@@ -24,8 +27,6 @@ type Aggregate interface {
 	Apply(event Event) error
 	RaiseEvent(event Event) error
 }
-
-type AggregateType string
 
 type AggregateBase struct {
 	id      uuid.UUID
@@ -65,6 +66,8 @@ func NewAggregateBase(atype AggregateType, id uuid.UUID) *AggregateBase {
 	}
 }
 
+// Implements aggregate interface
+
 func (a *AggregateBase) GetID() uuid.UUID {
 	return a.id
 }
@@ -79,6 +82,40 @@ func (a *AggregateBase) GetType() AggregateType {
 
 func (a *AggregateBase) GetVersion() uint64 {
 	return a.version
+}
+
+// RegisterEventListener registers the callback function for a specific event type
+// If you call RegisterEventListener multiple times for the same eventType, the last eventHandler gets registered.
+func (a *AggregateBase) RegisterEventListener(eventType string, eventHandler eventHandler) *AggregateBase {
+	_, found := a.eventHandlers[eventType]
+	if found {
+		log.Warn().
+			Str("eventType", eventType).
+			Msg("override existing event handler")
+	}
+
+	a.eventHandlers[eventType] = eventHandler
+	return a
+}
+
+func (a *AggregateBase) HandleEvent(event Event) error {
+	log.Debug().
+		Str("aggregateID", event.GetAggregateID().String()).
+		Str("aggregateType", string(event.GetAggregateType())).
+		Str("eventType", event.EventType).
+		Uint64("version", event.GetVersion()).
+		Msg("handle event")
+
+	eventHandler, found := a.eventHandlers[event.EventType]
+	if !found {
+		return fmt.Errorf("event type '%s' is invalid", event.EventType)
+	}
+
+	if err := eventHandler(event); err != nil {
+		return fmt.Errorf("event handler for type '%s' failed: %w", event.EventType, err)
+	}
+
+	return nil
 }
 
 func (a *AggregateBase) GetAppliedEvents() []Event {
@@ -98,7 +135,7 @@ func (a *AggregateBase) ClearUncommittedEvents() {
 func (a *AggregateBase) Load(events []Event) error {
 	for _, event := range events {
 		if event.GetAggregateID() != a.GetID() {
-			return errors.New("invalid aggregate for event")
+			return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'", a.GetID(), event.GetAggregateID())
 		}
 
 		if err := a.HandleEvent(event); err != nil {
@@ -115,7 +152,7 @@ func (a *AggregateBase) Load(events []Event) error {
 // and appends it as an uncommitted event to be later persisted by an aggregate store.
 func (a *AggregateBase) Apply(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
-		return errors.New("invalid aggregate for event")
+		return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'", a.GetID(), event.GetAggregateID())
 	}
 
 	if err := a.HandleEvent(event); err != nil {
@@ -146,38 +183,4 @@ func (a *AggregateBase) RaiseEvent(event Event) error {
 	a.version = event.GetVersion()
 	a.appliedEvents = append(a.appliedEvents, event)
 	return nil
-}
-
-func (a *AggregateBase) HandleEvent(event Event) error {
-	log.Debug().
-		Str("aggregateID", event.GetAggregateID().String()).
-		Str("aggregateType", string(event.GetAggregateType())).
-		Str("eventType", event.EventType).
-		Uint64("version", event.GetVersion()).
-		Msg("handle event")
-
-	eventHandler, found := a.eventHandlers[event.EventType]
-	if !found {
-		return fmt.Errorf("event type '%s' is invalid", event.EventType)
-	}
-
-	if err := eventHandler(event); err != nil {
-		return fmt.Errorf("event handler for type '%s' failed: %w", event.EventType, err)
-	}
-
-	return nil
-}
-
-// RegisterEventListener registers the callback function for a specific event type
-// If you call RegisterEventListener multiple times for the same eventType, the last eventHandler gets registered.
-func (a *AggregateBase) RegisterEventListener(eventType string, eventHandler eventHandler) *AggregateBase {
-	_, found := a.eventHandlers[eventType]
-	if found {
-		log.Warn().
-			Str("eventType", eventType).
-			Msg("override existing event handler")
-	}
-
-	a.eventHandlers[eventType] = eventHandler
-	return a
 }
