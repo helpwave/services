@@ -261,6 +261,8 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 				AssignedUserId: hwutil.NullUUIDToStringPtr(row.Task.AssignedUserID),
 				PatientId:      row.Task.PatientID.String(),
 				Public:         row.Task.Public,
+				DueAt:          timestamppb.New(row.Task.DueAt.Time),
+				CreatedBy:      row.Task.CreatedBy.String(),
 				Subtasks:       make([]*pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask, 0),
 			}
 			tasks = append(tasks, task)
@@ -280,19 +282,22 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 			continue
 		}
 		task.Subtasks = append(task.Subtasks, &pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask{
-			Id:   row.SubtaskID.UUID.String(),
-			Name: *row.SubtaskName,
-			Done: *row.SubtaskDone,
+			Id:        row.SubtaskID.UUID.String(),
+			Name:      *row.SubtaskName,
+			Done:      *row.SubtaskDone,
+			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
 		})
 	}
 
 	collectIxs := func(set map[int]bool) []*pb.GetTasksByPatientSortedByStatusResponse_Task {
-		res := make([]*pb.GetTasksByPatientSortedByStatusResponse_Task, len(set))
-		for i, b := range set {
-			if b {
-				res = append(res, tasks[i])
+		res := make([]*pb.GetTasksByPatientSortedByStatusResponse_Task, 0, len(set))
+
+		for key, value := range set {
+			if value {
+				res = append(res, tasks[key])
 			}
 		}
+
 		return res
 	}
 
