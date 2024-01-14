@@ -180,7 +180,7 @@ func TestAggregateBase_RegisterEventListener_HandleEvent(t *testing.T) {
 	aggregate.RegisterEventListener(UserCreated, fncWithErr)
 
 	if err := aggregate.HandleEvent(userCreatedEvent); err != nil {
-		if err.Error() != "test error" {
+		if errors.Unwrap(err).Error() != "test error" {
 			t.Error(err)
 		}
 	} else {
