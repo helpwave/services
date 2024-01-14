@@ -48,8 +48,7 @@ func NewEventBaseWithPayload(aggregate Aggregate, eventType string, payload inte
 func ResolveAggregateIDAndTypeFromStreamID(streamID string) (AggregateType, uuid.UUID, error) {
 	streamIDParts := strings.SplitN(streamID, "-", 2)
 
-	aggregateTypeStr := ""
-	aggregateIDStr := streamID
+	var aggregateTypeStr, aggregateIDStr string
 
 	if len(streamIDParts) == 2 {
 		aggregateTypeStr = streamIDParts[0]
