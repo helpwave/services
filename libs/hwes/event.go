@@ -37,17 +37,6 @@ func NewEventBaseWithPayload(aggregate Aggregate, eventType string, payload inte
 	return eventBase, nil
 }
 
-func resolveAggregateIDFromStreamID(streamID string) (uuid.UUID, error) {
-	streamIDParts := strings.SplitN(streamID, "-", 2)
-
-	aggregateIDStr := streamID
-	if len(streamIDParts) == 2 {
-		aggregateIDStr = streamIDParts[1]
-	}
-
-	return uuid.Parse(aggregateIDStr)
-}
-
 func resolveAggregateIDAndTypeFromStreamID(streamID string) (AggregateType, uuid.UUID, error) {
 	streamIDParts := strings.SplitN(streamID, "-", 2)
 
@@ -74,6 +63,9 @@ func resolveAggregateIDAndTypeFromStreamID(streamID string) (AggregateType, uuid
 	return aggregateType, aggregateID, err
 }
 
+// NewEventFromRecordedEvent is a helper function for EventStore.
+// This function transforms esdb.RecordedEvent to hwes.Event.
+// We expect that the StreamID of the aggregate is in the format of "[aggregateType]-[aggregateID]".
 func NewEventFromRecordedEvent(event *esdb.RecordedEvent) (Event, error) {
 	id, err := uuid.Parse(event.EventID.String())
 	if err != nil {
