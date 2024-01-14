@@ -1,7 +1,6 @@
 package hwes
 
 import (
-	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
@@ -11,6 +10,10 @@ type eventHandler func(evt Event) error
 
 type AggregateType string
 
+// Aggregate reflects a concept of Domain-Driven-Design.
+// This interface describes the contracts that are used
+// by an AggregateStore to persists this aggregate in an
+// event-sourcing manner
 type Aggregate interface {
 	GetID() uuid.UUID
 	GetStreamID() string
@@ -25,7 +28,7 @@ type Aggregate interface {
 	ClearUncommittedEvents()
 	Load(events []Event) error
 	Apply(event Event) error
-	RaiseEvent(event Event) error
+	Progress(event Event) error
 }
 
 type AggregateBase struct {
@@ -39,8 +42,8 @@ type AggregateBase struct {
 	uncommittedEvents []Event
 }
 
-// NewAggregateBase gets called by an aggregate specific implementation
-// that provides details about the aggregate type and id
+// NewAggregateBase must be called by a concrete aggregate during its initialization
+// The caller provides the type and id of the aggregate
 //
 // Example:
 //
@@ -98,6 +101,9 @@ func (a *AggregateBase) RegisterEventListener(eventType string, eventHandler eve
 	return a
 }
 
+// HandleEvent finds and calls the registered event handler
+// based on the type of the passed event.
+// The executed event handler can modify the in-memory data of the aggregate.
 func (a *AggregateBase) HandleEvent(event Event) error {
 	log.Debug().
 		Str("aggregateID", event.GetAggregateID().String()).
@@ -150,6 +156,7 @@ func (a *AggregateBase) Load(events []Event) error {
 
 // Apply applies events to an aggregate by utilizing the registered event listeners
 // and appends it as an uncommitted event to be later persisted by an aggregate store.
+// Apply -> You apply a *new* event to the aggregate that could be persisted
 func (a *AggregateBase) Apply(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
 		return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'", a.GetID(), event.GetAggregateID())
@@ -165,15 +172,16 @@ func (a *AggregateBase) Apply(event Event) error {
 	return nil
 }
 
-// RaiseEvent should be called after all events are loaded though an aggregate store.
+// Progress should be called after all events are loaded though an aggregate store.
 // The passed event gets applied to an aggregate by utilizing the registered event listeners.
-func (a *AggregateBase) RaiseEvent(event Event) error {
+// Progress -> You progress the state of an aggregate
+func (a *AggregateBase) Progress(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
-		return errors.New("invalid aggregate for event")
+		return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'", a.GetID(), event.GetAggregateID())
 	}
 
 	if event.GetVersion() < a.GetVersion() {
-		return errors.New("invalid version")
+		return fmt.Errorf("event version of %d is lower then aggregate version of %d", event.GetVersion(), a.GetVersion())
 	}
 
 	if err := a.HandleEvent(event); err != nil {

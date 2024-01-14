@@ -3,7 +3,7 @@ package hwes
 import "github.com/google/uuid"
 
 // CommandBase acts as a container for the targeted AggregateID
-// A concrete command in our CQRS pattern will call NewCommandBase
+// A concrete command in our CQRS pattern must call NewCommandBase
 // in there initialization.
 //
 // Example:

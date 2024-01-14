@@ -41,7 +41,7 @@ func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 			return err
 		}
 
-		if err := aggregate.RaiseEvent(event); err != nil {
+		if err := aggregate.Progress(event); err != nil {
 			return err
 		}
 	}
