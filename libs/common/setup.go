@@ -1,6 +1,7 @@
 package common
 
 import (
+	"context"
 	"crypto/tls"
 	"fmt"
 	"github.com/google/uuid"
@@ -16,6 +17,7 @@ var (
 	Mode                    string // Mode is set in Setup()
 	InsecureFakeTokenEnable = false
 	InstanceOrganizationID  *uuid.UUID
+	shutdownOpenTelemetryFn func() // cleanup function
 )
 
 const DevelopmentMode = "development"
@@ -28,8 +30,8 @@ func Setup(serviceName, version string, auth bool) {
 	SetupWithUnauthenticatedMethods(serviceName, version, auth, nil)
 }
 
-// SetupWithUnauthenticatedMethods loads the .env file and sets up logging
-// also sets up tokens when the service requires auth
+// SetupWithUnauthenticatedMethods loads the .env file and sets up logging,
+// also sets up tokens when the service requires auth.
 func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, unauthenticatedMethods *[]string) {
 	dotenvErr := godotenv.Load()
 
@@ -43,12 +45,27 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 		version,
 	)
 
-	if len(version) == 0 && Mode == ProductionMode {
-		log.Warn().Msg("Version is empty in production build! Recompile using ldflag '-X main.Version=<version>'")
-	}
-
 	if dotenvErr == nil {
 		log.Info().Msg("successfully loaded .env file")
+	}
+
+	shutdownOtel, err := setupOTelSDK(context.Background(), serviceName, version)
+	if err != nil {
+		msg := "Could not set up opentelemetry sdk"
+		log.Fatal().Err(err).Msg(msg)
+	}
+
+	// function is called when the process is instructed to shut down
+	shutdownOpenTelemetryFn = func() {
+		if err := shutdownOtel(context.Background()); err != nil {
+			log.Error().Err(err).Msg("error in shutting down opentelemetry")
+		} else {
+			log.Info().Msg("otel shut down without errors")
+		}
+	}
+
+	if len(version) == 0 && Mode == ProductionMode {
+		log.Warn().Msg("Version is empty in production build! Recompile using ldflag '-X main.Version=<version>'")
 	}
 
 	if strings.ToLower(hwutil.GetEnvOr("INSECURE_DISABLE_TLS_VERIFY", "false")) == "true" {
@@ -98,4 +115,13 @@ func ResolveAddrFromEnv() string {
 	port := hwutil.GetEnvOr("PORT", "8080")
 	fallbackAddr := fmt.Sprintf(":%s", port)
 	return hwutil.GetEnvOr("ADDR", fallbackAddr)
+}
+
+// Shutdown cleans up all resources prepared by Setup() and SetupWithUnauthenticatedMethods()
+// It should only ever be called after Setup() or SetupWithUnauthenticatedMethods()!
+// StartNewGRPCServer() already calls this function, so there is usually not need to call Shutdown() at all!
+// Keep in mind, that this shuts down the otel exporter, new traces won't be processed!
+func Shutdown() {
+	log.Info().Msg("shutting down otel")
+	shutdownOpenTelemetryFn()
 }

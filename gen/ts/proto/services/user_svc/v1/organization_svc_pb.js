@@ -2119,8 +2119,8 @@ proto.proto.services.user_svc.v1.GetOrganizationResponse.serializeBinaryToWriter
       f
     );
   }
-  f = message.getAvatarUrl();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 5));
+  if (f != null) {
     writer.writeString(
       5,
       f
@@ -2230,7 +2230,25 @@ proto.proto.services.user_svc.v1.GetOrganizationResponse.prototype.getAvatarUrl 
  * @return {!proto.proto.services.user_svc.v1.GetOrganizationResponse} returns this
  */
 proto.proto.services.user_svc.v1.GetOrganizationResponse.prototype.setAvatarUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
+  return jspb.Message.setField(this, 5, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.user_svc.v1.GetOrganizationResponse} returns this
+ */
+proto.proto.services.user_svc.v1.GetOrganizationResponse.prototype.clearAvatarUrl = function() {
+  return jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.user_svc.v1.GetOrganizationResponse.prototype.hasAvatarUrl = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
@@ -2711,8 +2729,8 @@ proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.ser
       f
     );
   }
-  f = message.getAvatarUrl();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 5));
+  if (f != null) {
     writer.writeString(
       5,
       f
@@ -2874,8 +2892,8 @@ proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.Mem
       f
     );
   }
-  f = message.getAvatarUrl();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
     writer.writeString(
       4,
       f
@@ -2952,7 +2970,25 @@ proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.Mem
  * @return {!proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.Member} returns this
  */
 proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.Member.prototype.setAvatarUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setField(this, 4, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.Member} returns this
+ */
+proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.Member.prototype.clearAvatarUrl = function() {
+  return jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.Member.prototype.hasAvatarUrl = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -3042,7 +3078,25 @@ proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.pro
  * @return {!proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization} returns this
  */
 proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.prototype.setAvatarUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
+  return jspb.Message.setField(this, 5, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization} returns this
+ */
+proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.prototype.clearAvatarUrl = function() {
+  return jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.user_svc.v1.GetOrganizationsByUserResponse.Organization.prototype.hasAvatarUrl = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
@@ -3532,8 +3586,8 @@ proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.se
       f
     );
   }
-  f = message.getAvatarUrl();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 5));
+  if (f != null) {
     writer.writeString(
       5,
       f
@@ -3695,8 +3749,8 @@ proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.Me
       f
     );
   }
-  f = message.getAvatarUrl();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
     writer.writeString(
       4,
       f
@@ -3773,7 +3827,25 @@ proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.Me
  * @return {!proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.Member} returns this
  */
 proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.Member.prototype.setAvatarUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setField(this, 4, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.Member} returns this
+ */
+proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.Member.prototype.clearAvatarUrl = function() {
+  return jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.Member.prototype.hasAvatarUrl = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -3863,7 +3935,25 @@ proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.pr
  * @return {!proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization} returns this
  */
 proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.prototype.setAvatarUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
+  return jspb.Message.setField(this, 5, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization} returns this
+ */
+proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.prototype.clearAvatarUrl = function() {
+  return jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.user_svc.v1.GetOrganizationsForUserResponse.Organization.prototype.hasAvatarUrl = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
@@ -5053,8 +5143,8 @@ proto.proto.services.user_svc.v1.GetMembersByOrganizationResponse.Member.seriali
       f
     );
   }
-  f = message.getAvatarUrl();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
     writer.writeString(
       4,
       f
@@ -5131,7 +5221,25 @@ proto.proto.services.user_svc.v1.GetMembersByOrganizationResponse.Member.prototy
  * @return {!proto.proto.services.user_svc.v1.GetMembersByOrganizationResponse.Member} returns this
  */
 proto.proto.services.user_svc.v1.GetMembersByOrganizationResponse.Member.prototype.setAvatarUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setField(this, 4, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.user_svc.v1.GetMembersByOrganizationResponse.Member} returns this
+ */
+proto.proto.services.user_svc.v1.GetMembersByOrganizationResponse.Member.prototype.clearAvatarUrl = function() {
+  return jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.user_svc.v1.GetMembersByOrganizationResponse.Member.prototype.hasAvatarUrl = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -7089,8 +7197,8 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.Organiz
       f
     );
   }
-  f = message.getAvatarUrl();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 3));
+  if (f != null) {
     writer.writeString(
       3,
       f
@@ -7149,7 +7257,25 @@ proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.Organiz
  * @return {!proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.Organization} returns this
  */
 proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.Organization.prototype.setAvatarUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setField(this, 3, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.Organization} returns this
+ */
+proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.Organization.prototype.clearAvatarUrl = function() {
+  return jspb.Message.setField(this, 3, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.user_svc.v1.GetInvitationsByUserResponse.Invitation.Organization.prototype.hasAvatarUrl = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 

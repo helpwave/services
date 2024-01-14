@@ -69,7 +69,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
-      contents: write
     steps:
     - name: Clone Repo
       uses: actions/checkout@v4
@@ -77,6 +76,9 @@ jobs:
       with:
         node-version: '18.x'
         registry-url: 'https://registry.npmjs.org'
+    - name: Fetch latest version from registry
+      working-directory: gen/ts
+      run: npm version $(npm view . version)
     - name: Bump version
       working-directory: gen/ts
       run: npm version pre$BUMP --preid $SHA
@@ -87,18 +89,12 @@ jobs:
       working-directory: gen/ts
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-    - uses: EndBug/add-and-commit@v9
-      with:
-        add: gen/ts/package.json
-        message: 'chore(proto-ts): bump version'
 
   dart:
     needs:
     - check-preconditions
     - ts # TODO: Commit all changes in one commit. Should prevents branch behind error as well.
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
     - name: Clone Repo
       uses: actions/checkout@v4
@@ -106,7 +102,6 @@ jobs:
         ref: main # TODO: Commit all changes in one commit. Should prevents branch behind error as well.
     - name: Install tools
       run: |
-        pip install yq
         wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
         chmod +x /usr/local/bin/semver
     - uses: dart-lang/setup-dart@v1
@@ -127,14 +122,10 @@ jobs:
         BUMP: ${{ needs.check-preconditions.outputs.bump }}
         SHA: ${{ needs.check-preconditions.outputs.commit }}
       run: |
-        VERSION=$(cat pubspec.yaml | yq .version -r)
+        VERSION=$(curl https://pub.dev/api/packages/helpwave_proto_dart -H "Accept: application/vnd.pub.v2+json" | jq ".latest.version" -r)
         NEW_VERSION=$(semver bump $BUMP $VERSION)
         NEW_VERSION=$(semver bump prerel $SHA.0 $NEW_VERSION)
         sed "s/version:.*/version: $NEW_VERSION/" pubspec.yaml -i
     - name: Publish to pub.dev
       working-directory: gen/dart
       run: dart pub publish -f
-    - uses: EndBug/add-and-commit@v9
-      with:
-        add: gen/dart/pubspec.yaml
-        message: 'chore(proto-dart): bump version'
