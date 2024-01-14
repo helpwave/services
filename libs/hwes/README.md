@@ -2,11 +2,11 @@
 
 > helpwave event sourcing
 
-This lib provides the fundamental software architecture for event sourcing at helpwave for Golang.
+This lib provides the fundamental building blocks for our event sourcing services at helpwave for Golang.
 
 ### TODOs
-- [ ] Snapshots
 - [ ] Subscriber & Projections
+- [ ] Snapshots
 
 ### Credits
 
