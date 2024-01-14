@@ -37,7 +37,15 @@ func NewEventBaseWithPayload(aggregate Aggregate, eventType string, payload inte
 	return eventBase, nil
 }
 
-func resolveAggregateIDAndTypeFromStreamID(streamID string) (AggregateType, uuid.UUID, error) {
+// ResolveAggregateIDAndTypeFromStreamID converts a streamID to an aggregateType and aggregateID
+// See aggregate.GetStreamID
+//
+// # Example
+//
+// StreamID:		task-d9027be3-d00f-4eec-b50e-5f489df20433
+// AggregateType: 	task
+// AggregateID: 	d9027be3-d00f-4eec-b50e-5f489df20433
+func ResolveAggregateIDAndTypeFromStreamID(streamID string) (AggregateType, uuid.UUID, error) {
 	streamIDParts := strings.SplitN(streamID, "-", 2)
 
 	aggregateTypeStr := ""
@@ -72,7 +80,7 @@ func NewEventFromRecordedEvent(event *esdb.RecordedEvent) (Event, error) {
 		return Event{}, err
 	}
 
-	aggregateType, aggregateID, err := resolveAggregateIDAndTypeFromStreamID(event.StreamID)
+	aggregateType, aggregateID, err := ResolveAggregateIDAndTypeFromStreamID(event.StreamID)
 	if err != nil {
 		return Event{}, err
 	}

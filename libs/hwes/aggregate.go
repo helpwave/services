@@ -75,6 +75,8 @@ func (a *AggregateBase) GetID() uuid.UUID {
 	return a.id
 }
 
+// GetStreamID returns the streamID for our AggregateStore (EventStore)
+// The format is expected by hwes.ResolveAggregateIDAndTypeFromStreamID
 func (a *AggregateBase) GetStreamID() string {
 	return fmt.Sprintf("%s-%s", a.atype, a.id)
 }
