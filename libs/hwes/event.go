@@ -19,7 +19,7 @@ type Event struct {
 	Version       uint64
 }
 
-func NewEventBase(aggregate Aggregate, eventType string) Event {
+func NewEvent(aggregate Aggregate, eventType string) Event {
 	return Event{
 		EventID:       uuid.New(),
 		EventType:     eventType,
@@ -29,14 +29,14 @@ func NewEventBase(aggregate Aggregate, eventType string) Event {
 	}
 }
 
-// NewEventBaseWithData will call hwes.NewEventBase() with the passed aggregate and eventType
-// to marshall the data to json via hwes.EventBase.SetJsonData().
-func NewEventBaseWithData(aggregate Aggregate, eventType string, data interface{}) (Event, error) {
-	eventBase := NewEventBase(aggregate, eventType)
-	if err := eventBase.SetJsonData(&data); err != nil {
+// NewEventWithData will call hwes.NewEvent() with the passed aggregate and eventType
+// to marshall the data to json via hwes.Event.SetJsonData().
+func NewEventWithData(aggregate Aggregate, eventType string, data interface{}) (Event, error) {
+	event := NewEvent(aggregate, eventType)
+	if err := event.SetJsonData(&data); err != nil {
 		return Event{}, err
 	}
-	return eventBase, nil
+	return event, nil
 }
 
 // ResolveAggregateIDAndTypeFromStreamID extracts the aggregateType and aggregateID of a given streamID

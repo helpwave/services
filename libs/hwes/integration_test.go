@@ -68,7 +68,7 @@ func NewUserAggregate(id uuid.UUID) *UserAggregate {
 const UserInvalidEvent = "USER_INVALID_EVENT"
 
 func NewUserInvalidEvent(a hwes.Aggregate) (hwes.Event, error) {
-	return hwes.NewEventBase(a, UserInvalidEvent), nil
+	return hwes.NewEvent(a, UserInvalidEvent), nil
 }
 
 const UserCreated = "USER_CREATED"
@@ -83,7 +83,7 @@ func NewUserCreatedEvent(a hwes.Aggregate, id uuid.UUID, username string) (hwes.
 		ID:       id.String(),
 		Username: username,
 	}
-	return hwes.NewEventBaseWithData(a, UserCreated, &payload)
+	return hwes.NewEventWithData(a, UserCreated, &payload)
 }
 
 const UsernameUpdated = "USER_UPDATED"
@@ -98,7 +98,7 @@ func NewUsernameUpdatedEvent(a hwes.Aggregate, previousUsername, username string
 		PreviousUsername: previousUsername,
 		Username:         username,
 	}
-	return hwes.NewEventBaseWithData(a, UsernameUpdated, &payload)
+	return hwes.NewEventWithData(a, UsernameUpdated, &payload)
 }
 
 func TestIntegration(t *testing.T) {
