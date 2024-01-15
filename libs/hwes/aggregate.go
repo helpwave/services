@@ -94,7 +94,7 @@ func (a *AggregateBase) GetVersion() uint64 {
 func (a *AggregateBase) RegisterEventListener(eventType string, eventHandler eventHandler) *AggregateBase {
 	_, found := a.eventHandlers[eventType]
 	if found {
-		log.Warn().
+		log.Error().
 			Str("eventType", eventType).
 			Msg("override existing event handler")
 	}
