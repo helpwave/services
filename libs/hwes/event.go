@@ -37,7 +37,7 @@ func NewEventBaseWithData(aggregate Aggregate, eventType string, data interface{
 	return eventBase, nil
 }
 
-// ResolveAggregateIDAndTypeFromStreamID converts a streamID to an aggregateType and aggregateID
+// ResolveAggregateIDAndTypeFromStreamID extracts the aggregateType and aggregateID of a given streamID
 // See aggregate.GetStreamID
 //
 // # Example
