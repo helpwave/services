@@ -12,21 +12,21 @@ type TaskService struct {
 }
 
 func NewTaskService(as hwes.AggregateStore) *TaskService {
-	taskCommands := commandsV1.NewTaskCommands(
-		commandsV1.NewCreateTaskCommandHandler(as),
-		commandsV1.NewUpdateTaskCommandHandler(as),
-		commandsV1.NewAssignTaskCommandHandler(as),
-		commandsV1.NewUnassignTaskCommandHandler(as),
-		commandsV1.NewCreateSubtaskCommandHandler(as),
-		commandsV1.NewUpdateSubtaskCommandHandler(as),
-		commandsV1.NewCompleteSubtaskCommandHandler(as),
-		commandsV1.NewUncompleteSubtaskCommandHandler(as),
-		commandsV1.NewDeleteSubtaskCommandHandler(as),
-	)
+	taskCommands := &commandsV1.TaskCommands{
+		CreateTask:        commandsV1.NewCreateTaskCommandHandler(as),
+		UpdateTask:        commandsV1.NewUpdateTaskCommandHandler(as),
+		AssignTask:        commandsV1.NewAssignTaskCommandHandler(as),
+		UnassignTask:      commandsV1.NewUnassignTaskCommandHandler(as),
+		CreateSubtask:     commandsV1.NewCreateSubtaskCommandHandler(as),
+		UpdateSubtask:     commandsV1.NewUpdateSubtaskCommandHandler(as),
+		CompleteSubtask:   commandsV1.NewCompleteSubtaskCommandHandler(as),
+		UncompleteSubtask: commandsV1.NewUncompleteSubtaskCommandHandler(as),
+		DeleteSubtask:     commandsV1.NewDeleteSubtaskCommandHandler(as),
+	}
 
-	taskQueries := queriesV1.NewTaskQueries(
-		queriesV1.NewGetTaskByIDQueryHandler(as),
-	)
+	taskQueries := &queriesV1.TaskQueries{
+		GetTaskByID: queriesV1.NewGetTaskByIDQueryHandler(as),
+	}
 
 	return &TaskService{Commands: taskCommands, Queries: taskQueries}
 }
