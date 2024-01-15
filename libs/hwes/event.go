@@ -45,7 +45,7 @@ func NewEventBaseWithData(aggregate Aggregate, eventType string, data interface{
 // StreamID:		task-d9027be3-d00f-4eec-b50e-5f489df20433
 // AggregateType: 	task
 // AggregateID: 	d9027be3-d00f-4eec-b50e-5f489df20433
-func ResolveAggregateIDAndTypeFromStreamID(streamID string) (AggregateType, uuid.UUID, error) {
+func ResolveAggregateIDAndTypeFromStreamID(streamID string) (aggregateType AggregateType, aggregateID uuid.UUID, err error) {
 	streamIDParts := strings.SplitN(streamID, "-", 2)
 
 	var aggregateTypeStr, aggregateIDStr string
@@ -54,20 +54,22 @@ func ResolveAggregateIDAndTypeFromStreamID(streamID string) (AggregateType, uuid
 		aggregateTypeStr = streamIDParts[0]
 		aggregateIDStr = streamIDParts[1]
 	} else {
-		return "", uuid.UUID{}, fmt.Errorf("cannot resolve aggregateType and aggregateID from streamID '%s'", streamID)
+		err = fmt.Errorf("cannot resolve aggregateType and aggregateID from streamID '%s'", streamID)
+		return
 	}
 
-	aggregateType := AggregateType(aggregateTypeStr)
+	aggregateType = AggregateType(aggregateTypeStr)
 	if aggregateType == "" {
-		return "", uuid.UUID{}, fmt.Errorf("resolved empty aggregateType from streamID '%s'", streamID)
+		err = fmt.Errorf("resolved empty aggregateType from streamID '%s'", streamID)
+		return
 	}
 
-	aggregateID, err := uuid.Parse(aggregateIDStr)
+	aggregateID, err = uuid.Parse(aggregateIDStr)
 	if err != nil {
-		return "", uuid.UUID{}, err
+		return
 	}
 
-	return aggregateType, aggregateID, err
+	return
 }
 
 // NewEventFromRecordedEvent is a helper function for EventStore.
