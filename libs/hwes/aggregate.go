@@ -111,7 +111,7 @@ func (a *AggregateBase) HandleEvent(event Event) error {
 		Str("aggregateID", event.GetAggregateID().String()).
 		Str("aggregateType", string(event.GetAggregateType())).
 		Str("eventType", event.EventType).
-		Uint64("version", event.GetVersion()).
+		Uint64("eventVersion", event.GetVersion()).
 		Msg("handle event")
 
 	eventHandler, found := a.eventHandlers[event.EventType]
