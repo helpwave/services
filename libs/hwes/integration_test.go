@@ -83,7 +83,7 @@ func NewUserCreatedEvent(a hwes.Aggregate, id uuid.UUID, username string) (hwes.
 		ID:       id.String(),
 		Username: username,
 	}
-	return hwes.NewEventBaseWithPayload(a, UserCreated, &payload)
+	return hwes.NewEventBaseWithData(a, UserCreated, &payload)
 }
 
 const UsernameUpdated = "USER_UPDATED"
@@ -98,7 +98,7 @@ func NewUsernameUpdatedEvent(a hwes.Aggregate, previousUsername, username string
 		PreviousUsername: previousUsername,
 		Username:         username,
 	}
-	return hwes.NewEventBaseWithPayload(a, UsernameUpdated, &payload)
+	return hwes.NewEventBaseWithData(a, UsernameUpdated, &payload)
 }
 
 func TestIntegration(t *testing.T) {

@@ -31,7 +31,7 @@ func NewEventBase(aggregate Aggregate, eventType string) Event {
 
 func NewEventBaseWithData(aggregate Aggregate, eventType string, data interface{}) (Event, error) {
 	eventBase := NewEventBase(aggregate, eventType)
-	if err := eventBase.SetJsonData(&payload); err != nil {
+	if err := eventBase.SetJsonData(&data); err != nil {
 		return Event{}, err
 	}
 	return eventBase, nil
