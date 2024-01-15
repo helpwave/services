@@ -14,6 +14,8 @@ type AggregateStore struct {
 	es *esdb.Client
 }
 
+// getExpectedRevision is for our strategy pattern to resolve the expected version
+// before a commit to EventStore between the aggregate and EventStore.
 type getExpectedRevision = func(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error)
 
 func NewAggregateStore(es *esdb.Client) *AggregateStore {
@@ -49,8 +51,13 @@ func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 	return nil
 }
 
+// getExpectedRevisionByReadTEST implements a strategy for our getExpectedRevision strategy pattern.
+// This function resolves the version by returning the version of the last event in
+// the event stream of EventStore of our aggregate.
+// NOT FOR PRODUCTION
+//
 // nolint:unused
-func (a *AggregateStore) getExpectedRevisionByRead(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
+func (a *AggregateStore) getExpectedRevisionByReadTEST(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
 	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.End{}}
 	stream, err := a.es.ReadStream(
 		ctx,
@@ -71,6 +78,8 @@ func (a *AggregateStore) getExpectedRevisionByRead(ctx context.Context, aggregat
 	return esdb.Revision(lastEvent.OriginalEvent().EventNumber), nil
 }
 
+// getExpectedRevisionByPreviousRead implements a strategy for our getExpectedRevision strategy pattern.
+// This function resolves the version by returning the version of the last applied event of our aggregate.
 func (a *AggregateStore) getExpectedRevisionByPreviousRead(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
 	if len(aggregate.GetAppliedEvents()) <= 0 {
 		return nil, errors.New("aggregate has no applied events. Consider to persist and load the aggregate first")
@@ -129,7 +138,10 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 }
 
 func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) error {
-	// We can switch out the expectedRevision strategy for testing
+	// We can switch out the getExpectedRevision strategy for testing optimistic concurrency.
+	// It is not intended to switch the strategy in production.
+	// To ensure consistency and correctly applied events during another read,
+	// getExpectedRevisionByPreviousRead is the prefered method for production use.
 	return a.doSave(ctx, aggregate, a.getExpectedRevisionByPreviousRead)
 }
 
