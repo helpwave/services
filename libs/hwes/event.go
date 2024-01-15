@@ -29,6 +29,8 @@ func NewEventBase(aggregate Aggregate, eventType string) Event {
 	}
 }
 
+// NewEventBaseWithData will call hwes.NewEventBase() with the passed aggregate and eventType
+// to marshall the data to json via hwes.EventBase.SetJsonData().
 func NewEventBaseWithData(aggregate Aggregate, eventType string, data interface{}) (Event, error) {
 	eventBase := NewEventBase(aggregate, eventType)
 	if err := eventBase.SetJsonData(&data); err != nil {
