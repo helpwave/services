@@ -22,35 +22,6 @@ func NewAggregateStore(es *esdb.Client) *AggregateStore {
 	return &AggregateStore{es: es}
 }
 
-func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) error {
-	stream, err := a.es.ReadStream(ctx, aggregate.GetStreamID(), esdb.ReadStreamOptions{}, math.MaxUint64) // MaxUint64 for "all" events
-	if err != nil {
-		return err
-	}
-	defer stream.Close()
-
-	for {
-		esdbEvent, err := stream.Recv()
-		if errors.Is(err, io.EOF) {
-			// exit condition for for-loop
-			break
-		} else if err != nil {
-			return err
-		}
-
-		event, err := hwes.NewEventFromRecordedEvent(esdbEvent.Event)
-		if err != nil {
-			return err
-		}
-
-		if err := aggregate.Progress(event); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 // getExpectedRevisionByReadTEST implements a strategy for our getExpectedRevision strategy pattern.
 // This function resolves the version by returning the version of the last event in
 // the event stream of EventStore of our aggregate.
@@ -134,6 +105,37 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 	}
 
 	aggregate.ClearUncommittedEvents()
+	return nil
+}
+
+// Implements AggregateStore interface
+
+func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) error {
+	stream, err := a.es.ReadStream(ctx, aggregate.GetStreamID(), esdb.ReadStreamOptions{}, math.MaxUint64) // MaxUint64 for "all" events
+	if err != nil {
+		return err
+	}
+	defer stream.Close()
+
+	for {
+		esdbEvent, err := stream.Recv()
+		if errors.Is(err, io.EOF) {
+			// exit condition for for-loop
+			break
+		} else if err != nil {
+			return err
+		}
+
+		event, err := hwes.NewEventFromRecordedEvent(esdbEvent.Event)
+		if err != nil {
+			return err
+		}
+
+		if err := aggregate.Progress(event); err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
