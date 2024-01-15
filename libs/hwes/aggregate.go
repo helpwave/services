@@ -90,7 +90,7 @@ func (a *AggregateBase) GetVersion() uint64 {
 }
 
 // RegisterEventListener registers the callback function for a specific event type
-// If you call RegisterEventListener multiple times for the same eventType, the last eventHandler gets registered.
+// If you call RegisterEventListener multiple times for the same eventType, only the last eventHandler gets registered.
 func (a *AggregateBase) RegisterEventListener(eventType string, eventHandler eventHandler) *AggregateBase {
 	_, found := a.eventHandlers[eventType]
 	if found {
