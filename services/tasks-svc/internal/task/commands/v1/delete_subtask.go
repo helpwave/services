@@ -7,36 +7,19 @@ import (
 	"tasks-svc/internal/task/aggregate"
 )
 
-type DeleteSubtaskCommand struct {
-	hwes.CommandBase
-	SubtaskID uuid.UUID
-}
+type DeleteSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID) error
 
-func NewDeleteSubtaskCommand(taskID, subtaskID uuid.UUID) *DeleteSubtaskCommand {
-	return &DeleteSubtaskCommand{CommandBase: hwes.NewCommandBase(taskID), SubtaskID: subtaskID}
-}
+func NewDeleteSubtaskCommandHandler(as hwes.AggregateStore) DeleteSubtaskCommandHandler {
+	return func(ctx context.Context, taskID, subtaskID uuid.UUID) error {
+		taskAggregate, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
+		if err != nil {
+			return err
+		}
 
-type DeleteSubtaskCommandHandler interface {
-	Handle(ctx context.Context, cmd *DeleteSubtaskCommand) error
-}
+		if err := taskAggregate.DeleteSubtask(ctx, subtaskID); err != nil {
+			return err
+		}
 
-type deleteSubtaskCommandHandler struct {
-	as hwes.AggregateStore
-}
-
-func NewDeleteSubtaskCommandHandler(as hwes.AggregateStore) *deleteSubtaskCommandHandler {
-	return &deleteSubtaskCommandHandler{as: as}
-}
-
-func (c *deleteSubtaskCommandHandler) Handle(ctx context.Context, command *DeleteSubtaskCommand) error {
-	taskAggregate, err := aggregate.LoadTaskAggregate(ctx, c.as, command.GetAggregateID())
-	if err != nil {
-		return err
+		return as.Save(ctx, taskAggregate)
 	}
-
-	if err := taskAggregate.DeleteSubtask(ctx, command.SubtaskID); err != nil {
-		return err
-	}
-
-	return c.as.Save(ctx, taskAggregate)
 }

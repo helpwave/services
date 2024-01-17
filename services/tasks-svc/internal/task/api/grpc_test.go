@@ -12,7 +12,6 @@ import (
 	"log"
 	"net"
 	"tasks-svc/internal/task/api"
-	"tasks-svc/internal/task/service"
 	"testing"
 )
 
@@ -21,8 +20,7 @@ func server(ctx context.Context) (pb.TaskServiceClient, func()) {
 	listener := bufconn.Listen(buffer)
 
 	aggregateStore := hwes_test.NewAggregateStore()
-	taskService := service.NewTaskService(aggregateStore)
-	taskGrpcService := api.NewTaskGrpcService(taskService)
+	taskGrpcService := api.NewTaskGrpcService(aggregateStore)
 
 	grpcServer := grpc.NewServer()
 

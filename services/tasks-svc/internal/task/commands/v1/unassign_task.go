@@ -7,36 +7,19 @@ import (
 	"tasks-svc/internal/task/aggregate"
 )
 
-type UnassignTaskCommand struct {
-	hwes.CommandBase
-	UserID uuid.UUID
-}
+type UnassignTaskCommandHandler func(ctx context.Context, taskID, userID uuid.UUID) error
 
-func NewUnassignTaskCommand(taskID, userID uuid.UUID) *UnassignTaskCommand {
-	return &UnassignTaskCommand{CommandBase: hwes.NewCommandBase(taskID), UserID: userID}
-}
+func NewUnassignTaskCommandHandler(as hwes.AggregateStore) UnassignTaskCommandHandler {
+	return func(ctx context.Context, taskID, userID uuid.UUID) error {
+		task, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
+		if err != nil {
+			return err
+		}
 
-type UnassignTaskCommandHandler interface {
-	Handle(ctx context.Context, cmd *UnassignTaskCommand) error
-}
+		if err := task.UnassignTask(ctx, userID); err != nil {
+			return err
+		}
 
-type unassignTaskCommandHandler struct {
-	as hwes.AggregateStore
-}
-
-func NewUnassignTaskCommandHandler(as hwes.AggregateStore) *unassignTaskCommandHandler {
-	return &unassignTaskCommandHandler{as: as}
-}
-
-func (c *unassignTaskCommandHandler) Handle(ctx context.Context, command *UnassignTaskCommand) error {
-	task, err := aggregate.LoadTaskAggregate(ctx, c.as, command.GetAggregateID())
-	if err != nil {
-		return err
+		return as.Save(ctx, task)
 	}
-
-	if err := task.UnassignTask(ctx, command.UserID); err != nil {
-		return err
-	}
-
-	return c.as.Save(ctx, task)
 }

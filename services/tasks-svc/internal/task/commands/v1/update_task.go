@@ -17,35 +17,27 @@ func NewUpdateTaskCommand(taskID uuid.UUID, name, description *string) *UpdateTa
 	return &UpdateTaskCommand{CommandBase: hwes.NewCommandBase(taskID), Name: name, Description: description}
 }
 
-type UpdateTaskCommandHandler interface {
-	Handle(ctx context.Context, cmd *UpdateTaskCommand) error
-}
+type UpdateTaskCommandHandler func(ctx context.Context, taskID uuid.UUID, name *string, description *string) error
 
-type updateTaskCommandHandler struct {
-	as hwes.AggregateStore
-}
-
-func NewUpdateTaskCommandHandler(as hwes.AggregateStore) *updateTaskCommandHandler {
-	return &updateTaskCommandHandler{as: as}
-}
-
-func (c *updateTaskCommandHandler) Handle(ctx context.Context, command *UpdateTaskCommand) error {
-	a, err := aggregate.LoadTaskAggregate(ctx, c.as, command.GetAggregateID())
-	if err != nil {
-		return err
-	}
-
-	if command.Name != nil {
-		if err := a.UpdateName(ctx, a.Task.Name, *command.Name); err != nil {
+func NewUpdateTaskCommandHandler(as hwes.AggregateStore) UpdateTaskCommandHandler {
+	return func(ctx context.Context, taskID uuid.UUID, name *string, description *string) error {
+		a, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
+		if err != nil {
 			return err
 		}
-	}
 
-	if command.Description != nil {
-		if err := a.UpdateDescription(ctx, a.Task.Description, *command.Description); err != nil {
-			return err
+		if name != nil {
+			if err := a.UpdateName(ctx, a.Task.Name, *name); err != nil {
+				return err
+			}
 		}
-	}
 
-	return c.as.Save(ctx, a)
+		if description != nil {
+			if err := a.UpdateDescription(ctx, a.Task.Description, *description); err != nil {
+				return err
+			}
+		}
+
+		return as.Save(ctx, a)
+	}
 }

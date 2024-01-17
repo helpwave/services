@@ -8,30 +8,14 @@ import (
 	"tasks-svc/internal/task/models"
 )
 
-type GetTaskByIDQuery struct {
-	ID uuid.UUID
-}
+type GetTaskByIDQueryHandler func(ctx context.Context, taskID uuid.UUID) (*models.Task, error)
 
-func NewGetTaskByIDQuery(id uuid.UUID) *GetTaskByIDQuery {
-	return &GetTaskByIDQuery{ID: id}
-}
-
-type GetTaskByIDQueryHandler interface {
-	Handle(ctx context.Context, query *GetTaskByIDQuery) (*models.Task, error)
-}
-
-type getTaskByIDQueryHandler struct {
-	as hwes.AggregateStore
-}
-
-func NewGetTaskByIDQueryHandler(as hwes.AggregateStore) *getTaskByIDQueryHandler {
-	return &getTaskByIDQueryHandler{as: as}
-}
-
-func (q *getTaskByIDQueryHandler) Handle(ctx context.Context, query *GetTaskByIDQuery) (*models.Task, error) {
-	taskAggregate, err := aggregate.LoadTaskAggregate(ctx, q.as, query.ID)
-	if err != nil {
-		return nil, err
+func NewGetTaskByIDQueryHandler(as hwes.AggregateStore) GetTaskByIDQueryHandler {
+	return func(ctx context.Context, taskID uuid.UUID) (*models.Task, error) {
+		taskAggregate, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
+		if err != nil {
+			return nil, err
+		}
+		return taskAggregate.Task, err
 	}
-	return taskAggregate.Task, err
 }
