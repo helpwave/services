@@ -16,7 +16,7 @@ type AggregateType string
 // event-sourcing manner
 type Aggregate interface {
 	GetID() uuid.UUID
-	GetStreamID() string
+	GetStreamID() string // TODO: Make private https://github.com/helpwave/services/pull/587#discussion_r1451788115
 	GetType() AggregateType
 	GetVersion() uint64
 
