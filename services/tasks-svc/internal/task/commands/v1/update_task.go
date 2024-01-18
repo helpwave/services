@@ -7,16 +7,6 @@ import (
 	"tasks-svc/internal/task/aggregate"
 )
 
-type UpdateTaskCommand struct {
-	hwes.CommandBase
-	Name        *string
-	Description *string
-}
-
-func NewUpdateTaskCommand(taskID uuid.UUID, name, description *string) *UpdateTaskCommand {
-	return &UpdateTaskCommand{CommandBase: hwes.NewCommandBase(taskID), Name: name, Description: description}
-}
-
 type UpdateTaskCommandHandler func(ctx context.Context, taskID uuid.UUID, name *string, description *string) error
 
 func NewUpdateTaskCommandHandler(as hwes.AggregateStore) UpdateTaskCommandHandler {
