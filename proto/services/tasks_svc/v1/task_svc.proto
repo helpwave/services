@@ -79,6 +79,17 @@ message AssignTaskRequest {
 message AssignTaskResponse {}
 
 //
+// UnassignTask
+//
+
+message UnassignTaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  string user_id = 2; // @gotags: validate:"uuid4"
+}
+
+message UnassignTaskResponse {}
+
+//
 // CreateSubtask
 //
 
@@ -153,6 +164,7 @@ service TaskService {
   rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse) {}
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
   rpc AssignTask(AssignTaskRequest) returns (AssignTaskResponse) {}
+  rpc UnassignTask(UnassignTaskRequest) returns (UnassignTaskResponse) {}
   rpc CreateSubtask(CreateSubtaskRequest) returns (CreateSubtaskResponse) {}
   rpc UpdateSubtask(UpdateSubtaskRequest) returns (UpdateSubtaskResponse) {}
   rpc CompleteSubtask(CompleteSubtaskRequest) returns (CompleteSubtaskResponse) {}

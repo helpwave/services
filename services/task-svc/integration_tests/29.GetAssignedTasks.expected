@@ -1,0 +1,156 @@
+user: 8aa8a5ee-2a35-4203-81bb-baf4ca17a9e9:
+{
+  "tasks": [
+    {
+      "id": "cfdf8e12-7038-4580-9255-8fd51009f421",
+      "name": "Dilation of R Int Mamm Art, Bifurc, Open Approach",
+      "status": "TASK_STATUS_IN_PROGRESS",
+      "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
+      "patient": {
+        "id": "f3c65081-1597-4b0b-bb7d-96256cf329fa",
+        "name": "Egbert Merriott"
+      },
+      "public": true,
+      "dueAt": "2022-12-23T18:54:10Z",
+      "createdBy": "674217fc-05a6-4eec-ad7e-8a2d0dc8caa9"
+    },
+    {
+      "id": "02d6632d-1a67-4182-992e-6384e00ac2d7",
+      "name": "Dilation of Abdominal Aorta with 2 Drug-elut, Perc Approach",
+      "description": "Extirpation of Matter from Coccygeal Joint, Percutaneous Endoscopic Approach",
+      "status": "TASK_STATUS_DONE",
+      "assignedUserId": "8aa8a5ee-2a35-4203-81bb-baf4ca17a9e9",
+      "patient": {
+        "id": "f3c65081-1597-4b0b-bb7d-96256cf329fa",
+        "name": "Egbert Merriott"
+      },
+      "public": true,
+      "dueAt": "2023-04-29T10:32:59Z",
+      "createdBy": "46697884-4792-49ff-b243-14a17eb5b871"
+    }
+  ]
+}
+user: 531244c4-0500-4701-91ef-a03645ba92b2:
+{
+  "tasks": [
+    {
+      "id": "3b9e7844-6eee-4f7f-ba4d-2e0d977793c8",
+      "name": "Drainage of Cystic Duct, Perc Endo Approach, Diagn",
+      "status": "TASK_STATUS_TODO",
+      "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
+      "patient": {
+        "id": "04da6ed3-1082-4149-8b29-abbcde3cd6b5",
+        "name": "Lorain Marchiso"
+      },
+      "dueAt": "2024-06-18T17:45:44Z",
+      "createdBy": "674217fc-05a6-4eec-ad7e-8a2d0dc8caa9"
+    },
+    {
+      "id": "ff04811d-e4f2-43a3-9d89-159b0541e436",
+      "name": "Removal of Autol Sub from Brain, Perc Approach",
+      "status": "TASK_STATUS_TODO",
+      "assignedUserId": "00000000-0000-0000-0000-000000000000",
+      "patient": {
+        "id": "4a2e5163-57a7-4a50-9ed7-981c119848d7",
+        "name": "Desiree Ert"
+      },
+      "dueAt": "2024-05-30T20:13:04Z",
+      "createdBy": "5db6cc86-bbf1-4fa6-bbe8-a8cdea869758"
+    },
+    {
+      "id": "fbaaac31-0826-4289-b759-96a4f0d72401",
+      "name": "Extraction of Post Neck Subcu/Fascia, Perc Approach",
+      "description": "Removal of Autologous Tissue Substitute from Right Finger Phalangeal Joint, Percutaneous Approach",
+      "status": "TASK_STATUS_TODO",
+      "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
+      "patient": {
+        "id": "4a2e5163-57a7-4a50-9ed7-981c119848d7",
+        "name": "Desiree Ert"
+      },
+      "dueAt": "2024-10-24T15:23:21Z",
+      "createdBy": "46697884-4792-49ff-b243-14a17eb5b871"
+    },
+    {
+      "id": "b2ed8f2b-1fc9-4bbe-8705-acf84850c6aa",
+      "name": "Drainage of Sigmoid Colon with Drain Dev, Perc Endo Approach",
+      "description": "Supplement Right Common Iliac Vein with Nonautologous Tissue Substitute, Percutaneous Endoscopic Approach",
+      "status": "TASK_STATUS_TODO",
+      "assignedUserId": "22b47b87-aadf-4e81-802d-9e23489e696c",
+      "patient": {
+        "id": "4a2e5163-57a7-4a50-9ed7-981c119848d7",
+        "name": "Desiree Ert"
+      },
+      "dueAt": "2024-11-18T07:54:24Z",
+      "createdBy": "8aa8a5ee-2a35-4203-81bb-baf4ca17a9e9"
+    },
+    {
+      "id": "25c84b6d-b499-4b2a-9b8f-05ab144e353c",
+      "name": "Insertion of Ext Fix into L Patella, Perc Endo Approach",
+      "description": "Supplement Tibial Nerve with Autologous Tissue Substitute, Open Approach",
+      "status": "TASK_STATUS_TODO",
+      "assignedUserId": "3e795d31-1912-4b09-8e5a-fd62a2461a8c",
+      "patient": {
+        "id": "4a2e5163-57a7-4a50-9ed7-981c119848d7",
+        "name": "Desiree Ert"
+      },
+      "public": true,
+      "dueAt": "2023-05-16T11:53:06Z",
+      "createdBy": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "id": "249a1021-73ae-4996-a701-9a19603cec21",
+      "name": "Transplantation of Bilateral Lungs, Syngeneic, Open Approach",
+      "status": "TASK_STATUS_TODO",
+      "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
+      "patient": {
+        "id": "707aa958-b3b5-485a-83ab-bbd030605bf5",
+        "name": "Cosetta Enrico"
+      },
+      "public": true,
+      "dueAt": "2022-12-27T11:56:37Z",
+      "createdBy": "8aa8a5ee-2a35-4203-81bb-baf4ca17a9e9"
+    },
+    {
+      "id": "87a6446e-fcea-4c09-aa4f-bf3d529cebde",
+      "name": "Dilate Sup Mesent Art, Bifurc, w 3 Drug-elut, Open",
+      "status": "TASK_STATUS_TODO",
+      "assignedUserId": "3e795d31-1912-4b09-8e5a-fd62a2461a8c",
+      "patient": {
+        "id": "707aa958-b3b5-485a-83ab-bbd030605bf5",
+        "name": "Cosetta Enrico"
+      },
+      "public": true,
+      "dueAt": "2025-04-10T01:51:04Z",
+      "createdBy": "674217fc-05a6-4eec-ad7e-8a2d0dc8caa9"
+    },
+    {
+      "id": "cfdf8e12-7038-4580-9255-8fd51009f421",
+      "name": "Dilation of R Int Mamm Art, Bifurc, Open Approach",
+      "status": "TASK_STATUS_IN_PROGRESS",
+      "assignedUserId": "531244c4-0500-4701-91ef-a03645ba92b2",
+      "patient": {
+        "id": "f3c65081-1597-4b0b-bb7d-96256cf329fa",
+        "name": "Egbert Merriott"
+      },
+      "public": true,
+      "dueAt": "2022-12-23T18:54:10Z",
+      "createdBy": "674217fc-05a6-4eec-ad7e-8a2d0dc8caa9"
+    },
+    {
+      "id": "02d6632d-1a67-4182-992e-6384e00ac2d7",
+      "name": "Dilation of Abdominal Aorta with 2 Drug-elut, Perc Approach",
+      "description": "Extirpation of Matter from Coccygeal Joint, Percutaneous Endoscopic Approach",
+      "status": "TASK_STATUS_DONE",
+      "assignedUserId": "8aa8a5ee-2a35-4203-81bb-baf4ca17a9e9",
+      "patient": {
+        "id": "f3c65081-1597-4b0b-bb7d-96256cf329fa",
+        "name": "Egbert Merriott"
+      },
+      "public": true,
+      "dueAt": "2023-04-29T10:32:59Z",
+      "createdBy": "46697884-4792-49ff-b243-14a17eb5b871"
+    }
+  ]
+}
+user: 431244c4-0500-4701-91ef-a03645ba92b2:
+{}

@@ -5,6 +5,7 @@ insert into organizations (id, long_name, short_name, contact_email, is_personal
 insert into organizations (id, long_name, short_name, contact_email, is_personal, created_by_user_id) values ('cc401e43-d76c-4f0e-933a-3ddfab895e59', 'Krankenhaus Günzburg', 'Günzburg', 'markus.tester@helpwave.de', false, '8b5ff90a-7548-454e-9684-6f2c30677db5');
 insert into organizations (id, long_name, short_name, contact_email, is_personal, created_by_user_id) values ('792145d6-39ae-4596-95b3-b2fd907256e3', 'Uniklinik Köln', 'Köln', 'martin.test@helpwave.de', false, '8b5ff90a-7548-454e-9684-6f2c30677db5');
 insert into organizations (id, long_name, short_name, contact_email, is_personal, created_by_user_id) values ('1685fa66-b16e-4b5b-8b9e-0a473d3665c3', 'Teil-Organisation', 'Teil', 'erika.musterfrau@helpwave.de', false, '8b5ff90a-7548-454e-9684-6f2c30677db5');
+insert into organizations (id, long_name, short_name, contact_email, is_personal, created_by_user_id) values ('d311e7d9-85cd-4ae9-a0c0-7a0abc6dd48e', 'Leer-Organisation', 'Leer', 'leer.markus@helpwave.de', false, '44612c5a-4e61-4318-8f2b-b734eef305d2');
 
 -- users
 
@@ -13,6 +14,7 @@ insert into users (id, email, nickname, name) values ('78b6eada-4621-4987-a2c6-a
 insert into users (id, email, nickname, name) values ('8b5ff90a-7548-454e-9684-6f2c30677db5', 'heinrich.heine@helpwave.de', 'Heine', 'Heinrich');
 insert into users (id, email, nickname, name) values ('9b045845-b5bf-456b-94a3-0b7bfd0bd0c5', 'annika.b@helpwave.de', 'Annika', 'Annika');
 insert into users (id, email, nickname, name) values ('f6cfe2aa-8f1b-4fbd-b193-946c3815a9ec', 'moritz.wetter@helpwave.de', 'wetter', 'Moritz');
+insert into users (id, email, nickname, name) values ('44612c5a-4e61-4318-8f2b-b734eef305d2', 'member.tester@helpwave.de', 'mem', 'Moritz');
 
 
 -- memberships
@@ -20,6 +22,7 @@ insert into users (id, email, nickname, name) values ('f6cfe2aa-8f1b-4fbd-b193-9
 insert into memberships (id, user_id, organization_id, is_admin) values ('769e37e6-6e98-4ee7-8c03-5ce32c3783ff', '51dce0ea-2e72-412a-988e-8e9089a68572', 'ead68d1d-db6b-4cf0-b316-ac9064c66413', false);
 insert into memberships (id, user_id, organization_id, is_admin) values ('9a2c44ee-57a3-4154-8d89-c26ed08d7eb0', '51dce0ea-2e72-412a-988e-8e9089a68572', '77e49c1c-340b-4921-b5b4-fffbb8d3df6c', false);
 insert into memberships (id, user_id, organization_id, is_admin) values ('16c4d803-367c-47cc-ae26-7a04143490aa', '8b5ff90a-7548-454e-9684-6f2c30677db5', 'ead68d1d-db6b-4cf0-b316-ac9064c66413', true);
+insert into memberships (id, user_id, organization_id, is_admin) values ('0bc89375-632a-47e5-94b6-52a0ee3d4687', '44612c5a-4e61-4318-8f2b-b734eef305d2', 'd311e7d9-85cd-4ae9-a0c0-7a0abc6dd48e', true);
 
 
 -- invitations

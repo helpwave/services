@@ -7,36 +7,19 @@ import (
 	"tasks-svc/internal/task/aggregate"
 )
 
-type UncompleteSubtaskCommand struct {
-	hwes.BaseCommand
-	SubtaskID uuid.UUID
-}
+type UncompleteSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID) error
 
-func NewUncompleteSubtaskCommand(id uuid.UUID, subtaskID uuid.UUID) *UncompleteSubtaskCommand {
-	return &UncompleteSubtaskCommand{BaseCommand: hwes.NewBaseCommand(id), SubtaskID: subtaskID}
-}
+func NewUncompleteSubtaskCommandHandler(as hwes.AggregateStore) UncompleteSubtaskCommandHandler {
+	return func(ctx context.Context, taskID, subtaskID uuid.UUID) error {
+		a, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
+		if err != nil {
+			return err
+		}
 
-type UncompleteSubtaskCommandHandler interface {
-	Handle(ctx context.Context, cmd *UncompleteSubtaskCommand) error
-}
+		if err := a.UncompleteSubtask(ctx, subtaskID); err != nil {
+			return err
+		}
 
-type uncompleteSubtaskCommandHandler struct {
-	as hwes.AggregateStore
-}
-
-func NewUncompleteSubtaskCommandHandler(as hwes.AggregateStore) *uncompleteSubtaskCommandHandler {
-	return &uncompleteSubtaskCommandHandler{as: as}
-}
-
-func (c *uncompleteSubtaskCommandHandler) Handle(ctx context.Context, command *UncompleteSubtaskCommand) error {
-	a, err := aggregate.LoadTaskAggregate(ctx, c.as, command.AggregateID)
-	if err != nil {
-		return err
+		return as.Save(ctx, a)
 	}
-
-	if err := a.UncompleteSubtask(ctx, command.SubtaskID); err != nil {
-		return err
-	}
-
-	return c.as.Save(ctx, a)
 }

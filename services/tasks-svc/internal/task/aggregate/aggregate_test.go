@@ -16,7 +16,7 @@ func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwe
 		t.Error(err)
 	}
 
-	if err := aggregate.RaiseEvent(event); err != nil {
+	if err := aggregate.Progress(event); err != nil {
 		t.Error(err)
 	}
 }

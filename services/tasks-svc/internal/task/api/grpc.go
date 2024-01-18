@@ -5,19 +5,19 @@ import (
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"hwes"
 	"hwutil"
 	commandsV1 "tasks-svc/internal/task/commands/v1"
 	v1queries "tasks-svc/internal/task/queries/v1"
-	"tasks-svc/internal/task/service"
 )
 
 type TaskGrpcService struct {
 	pb.UnimplementedTaskServiceServer
-	service *service.TaskService
+	as hwes.AggregateStore
 }
 
-func NewTaskGrpcService(taskService *service.TaskService) *TaskGrpcService {
-	return &TaskGrpcService{service: taskService}
+func NewTaskGrpcService(aggregateStore hwes.AggregateStore) *TaskGrpcService {
+	return &TaskGrpcService{as: aggregateStore}
 }
 
 func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.CreateTaskResponse, error) {
@@ -28,8 +28,7 @@ func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequ
 		return nil, err
 	}
 
-	command := commandsV1.NewCreateTaskCommand(taskID, req.GetName(), patientID, req.Public, req.InitialStatus)
-	if err := s.service.Commands.CreateTask.Handle(ctx, command); err != nil {
+	if err := commandsV1.NewCreateTaskCommandHandler(s.as)(ctx, taskID, req.GetName(), req.Description, patientID, req.Public, req.InitialStatus); err != nil {
 		return nil, err
 	}
 
@@ -44,8 +43,7 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 		return nil, err
 	}
 
-	command := commandsV1.NewUpdateTaskCommand(taskID, req.Name, req.Description)
-	if err := s.service.Commands.UpdateTask.Handle(ctx, command); err != nil {
+	if err := commandsV1.NewUpdateTaskCommandHandler(s.as)(ctx, taskID, req.Name, req.Description); err != nil {
 		return nil, err
 	}
 
@@ -63,12 +61,29 @@ func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequ
 		return nil, err
 	}
 
-	command := commandsV1.NewAssignTaskCommand(taskID, userID)
-	if err := s.service.Commands.AssignTask.Handle(ctx, command); err != nil {
+	if err := commandsV1.NewAssignTaskCommandHandler(s.as)(ctx, taskID, userID); err != nil {
 		return nil, err
 	}
 
 	return &pb.AssignTaskResponse{}, nil
+}
+
+func (s *TaskGrpcService) UnassignTask(ctx context.Context, req *pb.UnassignTaskRequest) (*pb.UnassignTaskResponse, error) {
+	taskID, err := uuid.Parse(req.TaskId)
+	if err != nil {
+		return nil, err
+	}
+
+	userID, err := uuid.Parse(req.UserId)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := commandsV1.NewUnassignTaskCommandHandler(s.as)(ctx, taskID, userID); err != nil {
+		return nil, err
+	}
+
+	return &pb.UnassignTaskResponse{}, nil
 }
 
 func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.GetTaskResponse, error) {
@@ -77,8 +92,7 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 		return nil, err
 	}
 
-	query := v1queries.NewGetTaskByIDQuery(id)
-	task, err := s.service.Queries.GetTaskByID.Handle(ctx, query)
+	task, err := v1queries.NewGetTaskByIDQueryHandler(s.as)(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -113,8 +127,7 @@ func (s *TaskGrpcService) CreateSubtask(ctx context.Context, req *pb.CreateSubta
 
 	subtaskID := uuid.New()
 
-	command := commandsV1.NewCreateSubtaskCommand(taskID, subtaskID, req.GetSubtask().GetName())
-	if err := s.service.Commands.CreateSubtask.Handle(ctx, command); err != nil {
+	if err := commandsV1.NewCreateSubtaskCommandHandler(s.as)(ctx, taskID, subtaskID, req.GetSubtask().GetName()); err != nil {
 		return nil, err
 	}
 
@@ -134,8 +147,7 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 		return nil, err
 	}
 
-	command := commandsV1.NewUpdateSubtaskCommand(taskID, subtaskID, req.Subtask.Name)
-	if err := s.service.Commands.UpdateSubtask.Handle(ctx, command); err != nil {
+	if err := commandsV1.NewUpdateSubtaskCommandHandler(s.as)(ctx, taskID, subtaskID, req.Subtask.Name); err != nil {
 		return nil, err
 	}
 
@@ -153,8 +165,7 @@ func (s *TaskGrpcService) CompleteSubtask(ctx context.Context, req *pb.CompleteS
 		return nil, err
 	}
 
-	command := commandsV1.NewCompleteSubtaskCommand(taskID, subtaskID)
-	if err := s.service.Commands.CompleteSubtask.Handle(ctx, command); err != nil {
+	if err := commandsV1.NewCompleteSubtaskCommandHandler(s.as)(ctx, taskID, subtaskID); err != nil {
 		return nil, err
 	}
 
@@ -172,8 +183,7 @@ func (s *TaskGrpcService) UncompleteSubtask(ctx context.Context, req *pb.Uncompl
 		return nil, err
 	}
 
-	command := commandsV1.NewUncompleteSubtaskCommand(taskID, subtaskID)
-	if err := s.service.Commands.UncompleteSubtask.Handle(ctx, command); err != nil {
+	if err := commandsV1.NewUncompleteSubtaskCommandHandler(s.as)(ctx, taskID, subtaskID); err != nil {
 		return nil, err
 	}
 
@@ -191,8 +201,7 @@ func (s *TaskGrpcService) DeleteSubtask(ctx context.Context, req *pb.DeleteSubta
 		return nil, err
 	}
 
-	command := commandsV1.NewDeleteSubtaskCommand(taskID, subtaskID)
-	if err := s.service.Commands.DeleteSubtask.Handle(ctx, command); err != nil {
+	if err := commandsV1.NewDeleteSubtaskCommandHandler(s.as)(ctx, taskID, subtaskID); err != nil {
 		return nil, err
 	}
 

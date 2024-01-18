@@ -11,6 +11,7 @@ import (
 	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
 	"github.com/rs/zerolog"
 	zlog "github.com/rs/zerolog/log"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
@@ -28,6 +29,9 @@ type organizationIDKey struct{}
 // StartNewGRPCServer creates and starts a new GRPC server on addr or panics.
 // Using registerServerHook you are able to register your
 // service server implementation with this grpc server.
+// It will register a SIGINT trap and clean up everything from Setup() using Shutdown() and this function
+// Afterward, code execution is handed back to you, where you can do additional clean up,
+// e.g. closing the database pool.
 //
 // Example:
 //
@@ -35,13 +39,16 @@ type organizationIDKey struct{}
 //		grpcServer := server.GrpcServer()
 //		api.RegisterMyServiceServer(grpcServer, &myServiceServer{})
 //	})
-func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) (func() error, *grpc.Server) {
+//	// cleanup after yourself here
+func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	// middlewares
 	loggingInterceptor := loggingUnaryInterceptor
 	authInterceptor := authUnaryInterceptor
 	validateInterceptor := validateUnaryInterceptor
-	chain := grpc_middleware.ChainUnaryServer(loggingInterceptor, authInterceptor, validateInterceptor)
-	grpcServerOption := grpc.UnaryInterceptor(chain)
+	chain := grpc_middleware.ChainUnaryServer(loggingInterceptor, authInterceptor, validateInterceptor, handlerSpanInterceptor)
+	interceptorChainServerOption := grpc.UnaryInterceptor(chain)
+
+	otelServerOption := grpc.StatsHandler(otelgrpc.NewServerHandler())
 
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
@@ -49,7 +56,7 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) (fu
 	}
 
 	// dapr/grpc service
-	service := daprd.NewServiceWithListener(listener, grpcServerOption).(*daprd.Server)
+	service := daprd.NewServiceWithListener(listener, interceptorChainServerOption, otelServerOption).(*daprd.Server)
 	server := service.GrpcServer()
 
 	if err := service.AddHealthCheckHandler("", func(ctx context.Context) error {
@@ -66,18 +73,33 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) (fu
 		zlog.Warn().Msg("grpc reflection enabled")
 	}
 
-	zlog.Info().Str("addr", addr).Msg("starting grpc service")
+	interrupted, err := hwutil.RunUntilInterrupted(context.Background(), func() error {
+		zlog.Info().Str("addr", addr).Msg("starting grpc service")
+		return server.Serve(listener)
+	})
 
-	go func() {
-		if err = server.Serve(listener); err != nil {
-			zlog.Fatal().Str("addr", addr).Err(err).Msg("could not start grpc server")
-		}
-	}()
+	if interrupted {
+		zlog.Warn().Msg("SIGINT received, shutting down")
+	} else {
+		zlog.Error().Str("addr", addr).Err(err).Msg("could not start grpc server")
+	}
 
-	return listener.Close, server
+	// Shut down service
+	zlog.Info().Msg("shutting down dapr/grpc service")
+	if err := service.GracefulStop(); err != nil {
+		zlog.Error().Err(err).Msg("failed shutting down service, it is what it is")
+	} else {
+		zlog.Info().Msg("grpc server shut down")
+	}
+
+	// Shut down Setup()'s resources
+	Shutdown()
 }
 
 func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	ctx, span := StartSpan(ctx, "auth_interceptor")
+	defer span.End()
+
 	if isUnaryRPCForDaprInternal(info) || hwutil.Contains(skipAuthForMethods, info.FullMethod) {
 		zlog.Debug().
 			Str("method", info.FullMethod).
@@ -249,7 +271,22 @@ func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
 	}
 }
 
+// handlerSpanInterceptor opens and closes a span around the next in the chain
+// it should only be used as the last element in the interceptor chain before the handler
+func handlerSpanInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	ctx, span := StartSpan(ctx, "handler")
+	res, err := next(ctx, req)
+	if err != nil {
+		span.SetStatus(1, err.Error())
+	}
+	span.End()
+	return res, err
+}
+
 func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	ctx, span := StartSpan(ctx, "validate_interceptor")
+	defer span.End()
+
 	if err := hwutil.Validate(req); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
@@ -257,6 +294,9 @@ func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.U
 }
 
 func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	ctx, span := StartSpan(ctx, "logging_interceptor")
+	defer span.End()
+
 	metadata := metautils.ExtractIncoming(ctx)
 
 	// Add request information

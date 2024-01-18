@@ -19,7 +19,7 @@ func (a *aggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 	events := a.streams[aggregate.GetStreamID()]
 
 	for _, event := range events {
-		if err := aggregate.RaiseEvent(event); err != nil {
+		if err := aggregate.Progress(event); err != nil {
 			return err
 		}
 	}

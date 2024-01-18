@@ -36,6 +36,13 @@ export class TaskServiceClient {
                response: proto_services_tasks_svc_v1_task_svc_pb.AssignTaskResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.AssignTaskResponse>;
 
+  unassignTask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.UnassignTaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_tasks_svc_v1_task_svc_pb.UnassignTaskResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_task_svc_pb.UnassignTaskResponse>;
+
   createSubtask(
     request: proto_services_tasks_svc_v1_task_svc_pb.CreateSubtaskRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -97,6 +104,11 @@ export class TaskServicePromiseClient {
     request: proto_services_tasks_svc_v1_task_svc_pb.AssignTaskRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_tasks_svc_v1_task_svc_pb.AssignTaskResponse>;
+
+  unassignTask(
+    request: proto_services_tasks_svc_v1_task_svc_pb.UnassignTaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_tasks_svc_v1_task_svc_pb.UnassignTaskResponse>;
 
   createSubtask(
     request: proto_services_tasks_svc_v1_task_svc_pb.CreateSubtaskRequest,

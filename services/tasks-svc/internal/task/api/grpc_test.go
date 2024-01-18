@@ -9,11 +9,9 @@ import (
 	"google.golang.org/grpc/test/bufconn"
 	hwes_test "hwes/test"
 	"hwutil"
-	hwauthz_test "hwutil/authz/test"
 	"log"
 	"net"
 	"tasks-svc/internal/task/api"
-	"tasks-svc/internal/task/service"
 	"testing"
 )
 
@@ -22,9 +20,7 @@ func server(ctx context.Context) (pb.TaskServiceClient, func()) {
 	listener := bufconn.Listen(buffer)
 
 	aggregateStore := hwes_test.NewAggregateStore()
-	authz := hwauthz_test.NewTrueAuthZ()
-	taskService := service.NewTaskService(aggregateStore, authz)
-	taskGrpcService := api.NewTaskGrpcService(taskService)
+	taskGrpcService := api.NewTaskGrpcService(aggregateStore)
 
 	grpcServer := grpc.NewServer()
 
@@ -65,8 +61,9 @@ func TestTaskGrpcService_CreateTask(t *testing.T) {
 
 	patientID := uuid.New()
 	taskName := "Test task"
+	taskDescription := "Abc"
 
-	createTaskResponse, err := client.CreateTask(ctx, &pb.CreateTaskRequest{Name: taskName, PatientId: patientID.String(), Public: hwutil.PtrTo(true)})
+	createTaskResponse, err := client.CreateTask(ctx, &pb.CreateTaskRequest{Name: taskName, Description: &taskDescription, PatientId: patientID.String(), Public: hwutil.PtrTo(true)})
 	if err != nil {
 		t.Error(err)
 	}
@@ -82,6 +79,10 @@ func TestTaskGrpcService_CreateTask(t *testing.T) {
 
 	if getTaskResponse.GetName() != taskName {
 		t.Errorf("Task name: expected '%s' got '%s'", taskName, getTaskResponse.GetName())
+	}
+
+	if getTaskResponse.Description != taskDescription {
+		t.Errorf("Task description: expected '%s' got '%s'", taskDescription, getTaskResponse.GetDescription())
 	}
 }
 
@@ -181,6 +182,66 @@ func TestTaskGrpcService_AssignTask(t *testing.T) {
 
 	if getTaskResponse.AssignedUsers[0] != userID.String() {
 		t.Errorf("Invalid user was assigned. Expected '%s' got '%s'.", userID, getTaskResponse.AssignedUsers[0])
+	}
+}
+
+func TestTaskGrpcService_UnassignTask(t *testing.T) {
+	ctx := context.Background()
+	client, closer := server(ctx)
+	defer closer()
+
+	patientID := uuid.New()
+	userOneID := uuid.New()
+	userTwoID := uuid.New()
+
+	createTaskResponse, err := client.CreateTask(ctx, &pb.CreateTaskRequest{Name: "Test task", PatientId: patientID.String()})
+	if err != nil {
+		t.Error(err)
+	}
+
+	_, err = client.AssignTask(ctx, &pb.AssignTaskRequest{TaskId: createTaskResponse.GetId(), UserId: userOneID.String()})
+	if err != nil {
+		t.Error(err)
+	}
+
+	_, err = client.AssignTask(ctx, &pb.AssignTaskRequest{TaskId: createTaskResponse.GetId(), UserId: userTwoID.String()})
+	if err != nil {
+		t.Error(err)
+	}
+
+	getTaskResponse, err := client.GetTask(ctx, &pb.GetTaskRequest{Id: createTaskResponse.GetId()})
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(getTaskResponse.AssignedUsers) != 2 {
+		t.Errorf("Invalid length of assigned users. Expected 2 got %d", len(getTaskResponse.AssignedUsers))
+	}
+
+	if getTaskResponse.AssignedUsers[0] != userOneID.String() {
+		t.Errorf("Invalid user was assigned. Expected '%s' got '%s'.", userOneID, getTaskResponse.AssignedUsers[0])
+	}
+
+	if getTaskResponse.AssignedUsers[1] != userTwoID.String() {
+		t.Errorf("Invalid user was assigned. Expected '%s' got '%s'.", userTwoID, getTaskResponse.AssignedUsers[0])
+	}
+
+	_, err = client.UnassignTask(ctx, &pb.UnassignTaskRequest{TaskId: createTaskResponse.GetId(), UserId: userTwoID.String()})
+	if err != nil {
+		t.Error(err)
+	}
+
+	getTaskResponse, err = client.GetTask(ctx, &pb.GetTaskRequest{Id: createTaskResponse.GetId()})
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(getTaskResponse.AssignedUsers) != 1 {
+		t.Errorf("Invalid length of assigned users. Expected 1 after unassignment got %d", len(getTaskResponse.AssignedUsers))
+	}
+
+	if getTaskResponse.AssignedUsers[0] != userOneID.String() {
+		t.Errorf("Invalid user was assigned. Expected '%s' got '%s'.", userOneID, getTaskResponse.AssignedUsers[0])
 	}
 }
 

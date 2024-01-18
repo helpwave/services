@@ -35,7 +35,7 @@ message ReadSelfResponse {
   string id = 1;
   string name = 2;
   string nickname = 3;
-  string avatar_url = 4;
+  optional string avatar_url = 4;
   repeated ReadSelfOrganization organizations = 5;
 }
 
@@ -51,7 +51,7 @@ message ReadPublicProfileResponse {
   string id = 1;
   string name = 2;
   string nickname = 3;
-  string avatar_url = 4;
+  optional string avatar_url = 4;
 }
 
 //

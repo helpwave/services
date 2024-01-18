@@ -172,6 +172,29 @@ const AssignTaskResponse$json = {
 final $typed_data.Uint8List assignTaskResponseDescriptor = $convert.base64Decode(
     'ChJBc3NpZ25UYXNrUmVzcG9uc2U=');
 
+@$core.Deprecated('Use unassignTaskRequestDescriptor instead')
+const UnassignTaskRequest$json = {
+  '1': 'UnassignTaskRequest',
+  '2': [
+    {'1': 'task_id', '3': 1, '4': 1, '5': 9, '10': 'taskId'},
+    {'1': 'user_id', '3': 2, '4': 1, '5': 9, '10': 'userId'},
+  ],
+};
+
+/// Descriptor for `UnassignTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List unassignTaskRequestDescriptor = $convert.base64Decode(
+    'ChNVbmFzc2lnblRhc2tSZXF1ZXN0EhcKB3Rhc2tfaWQYASABKAlSBnRhc2tJZBIXCgd1c2VyX2'
+    'lkGAIgASgJUgZ1c2VySWQ=');
+
+@$core.Deprecated('Use unassignTaskResponseDescriptor instead')
+const UnassignTaskResponse$json = {
+  '1': 'UnassignTaskResponse',
+};
+
+/// Descriptor for `UnassignTaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List unassignTaskResponseDescriptor = $convert.base64Decode(
+    'ChRVbmFzc2lnblRhc2tSZXNwb25zZQ==');
+
 @$core.Deprecated('Use createSubtaskRequestDescriptor instead')
 const CreateSubtaskRequest$json = {
   '1': 'CreateSubtaskRequest',

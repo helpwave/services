@@ -2,6 +2,7 @@ package hwes
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/esdb"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
@@ -16,10 +17,10 @@ type Event struct {
 	AggregateType AggregateType
 	Data          []byte
 	Timestamp     time.Time
-	Version       int64 // TODO: uint64?
+	Version       uint64
 }
 
-func NewBaseEvent(aggregate Aggregate, eventType string) Event {
+func NewEvent(aggregate Aggregate, eventType string) Event {
 	return Event{
 		EventID:       uuid.New(),
 		EventType:     eventType,
@@ -29,43 +30,73 @@ func NewBaseEvent(aggregate Aggregate, eventType string) Event {
 	}
 }
 
-func NewBaseEventWithPayload(aggregate Aggregate, eventType string, payload interface{}) (Event, error) {
-	baseEvent := NewBaseEvent(aggregate, eventType)
-	if err := baseEvent.SetJsonData(&payload); err != nil {
+// NewEventWithData will call hwes.NewEvent() with the passed aggregate and eventType
+// to marshall the data to json via hwes.Event.SetJsonData().
+func NewEventWithData(aggregate Aggregate, eventType string, data interface{}) (Event, error) {
+	event := NewEvent(aggregate, eventType)
+	if err := event.SetJsonData(&data); err != nil {
 		return Event{}, err
 	}
-	return baseEvent, nil
+	return event, nil
 }
 
-func resolveAggregateIDFromStreamID(streamID string) (uuid.UUID, error) {
+// resolveAggregateIDAndTypeFromStreamID extracts the aggregateType and aggregateID of a given streamID
+// See aggregate.GetStreamID
+//
+// # Example
+//
+// StreamID:		task-d9027be3-d00f-4eec-b50e-5f489df20433
+// AggregateType: 	task
+// AggregateID: 	d9027be3-d00f-4eec-b50e-5f489df20433
+func resolveAggregateIDAndTypeFromStreamID(streamID string) (aggregateType AggregateType, aggregateID uuid.UUID, err error) {
 	streamIDParts := strings.SplitN(streamID, "-", 2)
 
-	aggregateIDStr := streamID
+	var aggregateTypeStr, aggregateIDStr string
+
 	if len(streamIDParts) == 2 {
+		aggregateTypeStr = streamIDParts[0]
 		aggregateIDStr = streamIDParts[1]
+	} else {
+		err = fmt.Errorf("cannot resolve aggregateType and aggregateID from streamID '%s'", streamID)
+		return
 	}
 
-	return uuid.Parse(aggregateIDStr)
+	aggregateType = AggregateType(aggregateTypeStr)
+	if aggregateType == "" {
+		err = fmt.Errorf("resolved empty aggregateType from streamID '%s'", streamID)
+		return
+	}
+
+	aggregateID, err = uuid.Parse(aggregateIDStr)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
+// NewEventFromRecordedEvent is a helper function for EventStore.
+// This function transforms esdb.RecordedEvent to hwes.Event.
+// We expect that the StreamID of the aggregate is in the format of "[aggregateType]-[aggregateID]".
 func NewEventFromRecordedEvent(event *esdb.RecordedEvent) (Event, error) {
 	id, err := uuid.Parse(event.EventID.String())
 	if err != nil {
 		return Event{}, err
 	}
 
-	aggregateID, err := resolveAggregateIDFromStreamID(event.StreamID)
+	aggregateType, aggregateID, err := resolveAggregateIDAndTypeFromStreamID(event.StreamID)
 	if err != nil {
 		return Event{}, err
 	}
 
 	return Event{
-		EventID:     id,
-		EventType:   event.EventType,
-		AggregateID: aggregateID,
-		Data:        event.Data,
-		Timestamp:   event.CreatedDate,
-		Version:     int64(event.EventNumber),
+		EventID:       id,
+		EventType:     event.EventType,
+		AggregateID:   aggregateID,
+		AggregateType: aggregateType,
+		Data:          event.Data,
+		Timestamp:     event.CreatedDate,
+		Version:       event.EventNumber,
 	}, nil
 }
 
@@ -82,12 +113,12 @@ func (e *Event) GetAggregateType() AggregateType {
 	return e.AggregateType
 }
 
-func (e *Event) SetVersion(version int64) *Event {
+func (e *Event) SetVersion(version uint64) *Event {
 	e.Version = version
 	return e
 }
 
-func (e *Event) GetVersion() int64 {
+func (e *Event) GetVersion() uint64 {
 	return e.Version
 }
 
