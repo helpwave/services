@@ -17,7 +17,7 @@ var Version string
 func main() {
 	common.Setup(ServiceName, Version, false)
 
-	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
+	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		pb.RegisterAuthServiceServer(server.GrpcServer(), &authServiceServer{})
 	})
 }

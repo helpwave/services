@@ -28,7 +28,7 @@ func main() {
 
 	hwgorm.SetupDatabaseByEnvs()
 
-	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
+	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		pb.RegisterEmergencyRoomServiceServer(server.GrpcServer(), &emergencyRoomServiceServer{})
 	})
 }

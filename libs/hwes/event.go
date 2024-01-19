@@ -152,5 +152,5 @@ func (e *Event) Log(l *zerolog.Event) *zerolog.Event {
 	return l.
 		Str("eventId", e.EventID.String()).
 		Str("eventType", e.EventType).
-		Int64("version", e.Version)
+		Uint64("eventVersion", e.Version)
 }

@@ -5,6 +5,7 @@ import (
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"hwauthz"
 	"hwes"
 	"hwutil"
 	commandsV1 "tasks-svc/internal/task/commands/v1"
@@ -13,11 +14,12 @@ import (
 
 type TaskGrpcService struct {
 	pb.UnimplementedTaskServiceServer
-	as hwes.AggregateStore
+	as    hwes.AggregateStore
+	authz hwauthz.AuthZ
 }
 
-func NewTaskGrpcService(aggregateStore hwes.AggregateStore) *TaskGrpcService {
-	return &TaskGrpcService{as: aggregateStore}
+func NewTaskGrpcService(aggregateStore hwes.AggregateStore, authz hwauthz.AuthZ) *TaskGrpcService {
+	return &TaskGrpcService{as: aggregateStore, authz: authz}
 }
 
 func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.CreateTaskResponse, error) {
@@ -127,7 +129,7 @@ func (s *TaskGrpcService) CreateSubtask(ctx context.Context, req *pb.CreateSubta
 
 	subtaskID := uuid.New()
 
-	if err := commandsV1.NewCreateSubtaskCommandHandler(s.as)(ctx, taskID, subtaskID, req.GetSubtask().GetName()); err != nil {
+	if err := commandsV1.NewCreateSubtaskCommandHandler(s.as, s.authz)(ctx, taskID, subtaskID, req.GetSubtask().GetName()); err != nil {
 		return nil, err
 	}
 
@@ -201,7 +203,7 @@ func (s *TaskGrpcService) DeleteSubtask(ctx context.Context, req *pb.DeleteSubta
 		return nil, err
 	}
 
-	if err := commandsV1.NewDeleteSubtaskCommandHandler(s.as)(ctx, taskID, subtaskID); err != nil {
+	if err := commandsV1.NewDeleteSubtaskCommandHandler(s.as, s.authz)(ctx, taskID, subtaskID); err != nil {
 		return nil, err
 	}
 
