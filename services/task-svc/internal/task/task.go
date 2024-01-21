@@ -701,9 +701,8 @@ func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	public := false
 	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
-		Public: &public,
+		Public: hwutil.PtrTo(false),
 		ID:     id,
 	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
