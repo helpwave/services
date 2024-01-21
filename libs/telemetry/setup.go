@@ -1,4 +1,4 @@
-package logging
+package telemetry
 
 import (
 	"github.com/rs/zerolog"

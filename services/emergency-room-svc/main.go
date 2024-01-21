@@ -7,15 +7,14 @@ import (
 	pb "gen/proto/services/emergency_room_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
 	"hwgorm"
 	"hwutil"
-	"logging"
 	pbhelpers "proto_helpers/emergency_room_svc/v1"
-
-	zlog "github.com/rs/zerolog/log"
+	"telemetry"
 )
 
 const ServiceName = "emergency-room-svc"
@@ -64,7 +63,7 @@ func (emergencyRoomServiceServer) CreateER(ctx context.Context, req *pb.CreateER
 		},
 		Departments: models.UUIDsToDepartments(deps),
 	}
-	log.Debug().Str("model", logging.Formatted(emergencyRoom)).Send()
+	log.Debug().Str("model", telemetry.Formatted(emergencyRoom)).Send()
 
 	db := hwgorm.GetDB(ctx)
 	db = db.Omit("Departments.*") // do not attempt to upsert Departments, they have to exist already
@@ -97,7 +96,7 @@ func (emergencyRoomServiceServer) GetER(ctx context.Context, req *pb.GetERReques
 	emergencyRoom := models.EmergencyRoom{
 		ID: id,
 	}
-	log.Debug().Str("model", logging.Formatted(emergencyRoom)).Send()
+	log.Debug().Str("model", telemetry.Formatted(emergencyRoom)).Send()
 
 	db := hwgorm.GetDB(ctx)
 
@@ -210,7 +209,7 @@ func (emergencyRoomServiceServer) UpdateER(ctx context.Context, req *pb.UpdateER
 	}
 
 	updatesMap := pbhelpers.UpdatesMapForUpdateERRequest(req)
-	log.Debug().Msg(logging.Formatted(updatesMap))
+	log.Debug().Msg(telemetry.Formatted(updatesMap))
 
 	if err := db.Model(&emergencyRoom).Updates(updatesMap).Error; err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -241,7 +240,7 @@ func (emergencyRoomServiceServer) AddDepartmentsToER(ctx context.Context, req *p
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 	departmentsToAdd := models.UUIDsToDepartments(deps)
-	log.Debug().Msgf("departmentsToAdd: %s", logging.Formatted(departmentsToAdd))
+	log.Debug().Msgf("departmentsToAdd: %s", telemetry.Formatted(departmentsToAdd))
 
 	if err := db.Model(&emergencyRoom).Association("Departments").Append(departmentsToAdd); err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -272,7 +271,7 @@ func (emergencyRoomServiceServer) RemoveDepartmentsFromER(ctx context.Context, r
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 	departmentsToRemove := models.UUIDsToDepartments(deps)
-	log.Debug().Msgf("departmentsToRemove: %s", logging.Formatted(departmentsToRemove))
+	log.Debug().Msgf("departmentsToRemove: %s", telemetry.Formatted(departmentsToRemove))
 
 	if len(departmentsToRemove) == 0 {
 		return &pb.RemoveDepartmentsFromERResponse{}, nil
@@ -299,7 +298,7 @@ func (emergencyRoomServiceServer) DeleteER(ctx context.Context, req *pb.DeleteER
 	emergencyRoom := models.EmergencyRoom{
 		ID: id,
 	}
-	log.Debug().Str("model", logging.Formatted(emergencyRoom)).Send()
+	log.Debug().Str("model", telemetry.Formatted(emergencyRoom)).Send()
 
 	db := hwgorm.GetDB(ctx)
 

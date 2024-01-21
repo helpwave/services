@@ -7,7 +7,7 @@ replace (
 	gen => ../../gen/go
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
-	logging => ../../libs/logging
+	telemetry => ./../../libs/telemetry
 )
 
 require (
@@ -61,5 +61,5 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	hwutil v0.0.0 // indirect
-	logging v0.0.0 // indirect
+	telemetry v0.0.0 // indirect
 )

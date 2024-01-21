@@ -3,13 +3,13 @@ package common
 import (
 	"context"
 	"errors"
-	oidc "github.com/coreos/go-oidc"
+	"github.com/coreos/go-oidc"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"hwutil"
-	"logging"
 	"os"
+	"telemetry"
 )
 
 var (
@@ -108,7 +108,7 @@ func setupAuth(ctx context.Context) {
 		Endpoint: provider.Endpoint(),
 	}
 
-	log.Debug().Msg(logging.Formatted(oauthConfig))
+	log.Debug().Msg(telemetry.Formatted(oauthConfig))
 
 	verifier = provider.Verifier(&oidc.Config{ClientID: oauthConfig.ClientID})
 }

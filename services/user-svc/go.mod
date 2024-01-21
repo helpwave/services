@@ -8,8 +8,8 @@ replace (
 	hwdb => ../../libs/hwdb
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
-	logging => ../../libs/logging
 	proto_helpers => ../../libs/proto_helpers
+	telemetry => ./../../libs/telemetry
 )
 
 require (
@@ -71,5 +71,5 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231127180814-3a041ad873d4 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	logging v0.0.0 // indirect
+	telemetry v0.0.0 // indirect
 )

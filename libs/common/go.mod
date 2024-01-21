@@ -4,7 +4,7 @@ go 1.20
 
 replace (
 	hwutil => ../hwutil
-	logging => ../logging
+	telemetry => ./../telemetry
 )
 
 require (
@@ -16,7 +16,7 @@ require (
 	golang.org/x/oauth2 v0.11.0
 	google.golang.org/grpc v1.59.0
 	hwutil v0.0.0
-	logging v0.0.0
+	telemetry v0.0.0
 )
 
 require (
