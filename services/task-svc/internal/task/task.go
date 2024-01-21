@@ -180,10 +180,13 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 	}
 
 	tasks := make([]*pb.GetTasksByPatientResponse_Task, 0)
-	taskMap := make(map[uuid.UUID]int)
+	taskMap := make(map[uuid.UUID]int) // id -> index map
 
 	for _, row := range rows {
 		var task *pb.GetTasksByPatientResponse_Task
+		// if task was seen before (i.e. already has a GetTasksByPatientResponse_Task object),
+		// mutate that one
+		// else, create it
 		if ix, exists := taskMap[row.Task.ID]; exists {
 			task = tasks[ix]
 		} else {
