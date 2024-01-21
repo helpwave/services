@@ -7,7 +7,7 @@ replace (
 	gen => ../../gen/go
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
-	telemetry => ./../../libs/telemetry
+	telemetry => ../../libs/telemetry
 )
 
 require (

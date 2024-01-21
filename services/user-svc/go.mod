@@ -9,7 +9,7 @@ replace (
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
 	proto_helpers => ../../libs/proto_helpers
-	telemetry => ./../../libs/telemetry
+	telemetry => ../../libs/telemetry
 )
 
 require (

@@ -5,7 +5,7 @@ go 1.20
 replace (
 	common => ../common
 	hwutil => ../hwutil
-	telemetry => ./../telemetry
+	telemetry => ../telemetry
 )
 
 require (
