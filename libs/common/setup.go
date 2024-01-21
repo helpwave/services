@@ -33,6 +33,7 @@ func Setup(serviceName, version string, auth bool) {
 // SetupWithUnauthenticatedMethods loads the .env file and sets up logging,
 // also sets up tokens when the service requires auth.
 func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, unauthenticatedMethods *[]string) {
+	ctx := context.Background()
 	dotenvErr := godotenv.Load()
 
 	Mode = hwutil.GetEnvOr("MODE", DevelopmentMode)
@@ -49,7 +50,7 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 		log.Info().Msg("successfully loaded .env file")
 	}
 
-	shutdownOtel, err := setupOTelSDK(context.Background(), serviceName, version)
+	shutdownOtel, err := setupOTelSDK(ctx, serviceName, version)
 	if err != nil {
 		msg := "Could not set up opentelemetry sdk"
 		log.Fatal().Err(err).Msg(msg)
@@ -57,7 +58,7 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 
 	// function is called when the process is instructed to shut down
 	shutdownOpenTelemetryFn = func() {
-		if err := shutdownOtel(context.Background()); err != nil {
+		if err := shutdownOtel(ctx); err != nil {
 			log.Error().Err(err).Msg("error in shutting down opentelemetry")
 		} else {
 			log.Info().Msg("otel shut down without errors")
@@ -96,7 +97,7 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 			skipAuthForMethods = *unauthenticatedMethods
 		}
 
-		setupAuth()
+		setupAuth(ctx)
 	}
 }
 
