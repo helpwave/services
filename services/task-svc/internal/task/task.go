@@ -501,9 +501,8 @@ func (ServiceServer) SubTaskToToDo(ctx context.Context, req *pb.SubTaskToToDoReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	done := false
 	if err := taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{
-		Done: &done,
+		Done: hwutil.PtrTo(false),
 		ID:   subtaskID,
 	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
