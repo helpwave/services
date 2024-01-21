@@ -90,7 +90,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 	log.Info().
 		Str("taskID", taskId.String()).
 		Str("patientID", patientId.String()).
-		Msg("taskId created for patient")
+		Msg("task created for patient")
 
 	return &pb.CreateTaskResponse{
 		Id: taskId.String(),
