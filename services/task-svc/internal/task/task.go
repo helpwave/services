@@ -521,9 +521,7 @@ func (ServiceServer) SubTaskToDone(ctx context.Context, req *pb.SubTaskToDoneReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	done := true
-
-	if err := taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{Done: &done, ID: subtaskID}); err != nil {
+	if err := taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{Done: hwutil.PtrTo(true), ID: subtaskID}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -677,9 +675,7 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	public := true
-
-	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Public: &public}); err != nil {
+	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Public: hwutil.PtrTo(true)}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
