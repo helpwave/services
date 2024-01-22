@@ -55,7 +55,7 @@ type AggregateBase struct {
 //		aggregate.AggregateBase = hwes.NewAggregateBase(TaskAggregateType, id)
 //		aggregate.Task.ID = id
 //
-//		aggregate.RegisterEventListener(eventsV1.TaskCreated, a.onTaskCreated)
+//		aggregate.RegisterEventListener(taskEventsV1.TaskCreated, a.onTaskCreated)
 //
 //		return aggregate
 //	}

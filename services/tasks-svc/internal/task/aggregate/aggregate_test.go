@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"
-	eventsV1 "tasks-svc/internal/task/events/v1"
+	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"testing"
 )
 
@@ -31,7 +31,7 @@ func TestTaskAggregate_UpdateName(t *testing.T) {
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return eventsV1.NewTaskCreatedEvent(taskAggregate, taskID, initialTaskName, patientID, pb.TaskStatus_TASK_STATUS_TODO)
+		return taskEventsV1.NewTaskCreatedEvent(taskAggregate, taskID, initialTaskName, patientID, pb.TaskStatus_TASK_STATUS_TODO)
 	})
 
 	if taskAggregate.Task.Name != initialTaskName {
@@ -39,7 +39,7 @@ func TestTaskAggregate_UpdateName(t *testing.T) {
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return eventsV1.NewTaskNameUpdatedEvent(taskAggregate, initialTaskName, updatedTaskName)
+		return taskEventsV1.NewTaskNameUpdatedEvent(taskAggregate, initialTaskName, updatedTaskName)
 	})
 
 	if taskAggregate.Task.Name != updatedTaskName {
@@ -57,7 +57,7 @@ func TestTaskAggregate_UpdateDescription(t *testing.T) {
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return eventsV1.NewTaskCreatedEvent(taskAggregate, taskID, "Test task", patientID, pb.TaskStatus_TASK_STATUS_TODO)
+		return taskEventsV1.NewTaskCreatedEvent(taskAggregate, taskID, "Test task", patientID, pb.TaskStatus_TASK_STATUS_TODO)
 	})
 
 	if taskAggregate.Task.Description != initialTaskDescription {
@@ -65,7 +65,7 @@ func TestTaskAggregate_UpdateDescription(t *testing.T) {
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return eventsV1.NewTaskDescriptionUpdatedEvent(taskAggregate, initialTaskDescription, updatedTaskDescription)
+		return taskEventsV1.NewTaskDescriptionUpdatedEvent(taskAggregate, initialTaskDescription, updatedTaskDescription)
 	})
 
 	if taskAggregate.Task.Description != updatedTaskDescription {
@@ -84,11 +84,11 @@ func TestTaskAggregate_UpdateSubtaskName(t *testing.T) {
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return eventsV1.NewTaskCreatedEvent(taskAggregate, taskID, "Test task", patientID, pb.TaskStatus_TASK_STATUS_TODO)
+		return taskEventsV1.NewTaskCreatedEvent(taskAggregate, taskID, "Test task", patientID, pb.TaskStatus_TASK_STATUS_TODO)
 	})
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return eventsV1.NewSubtaskCreatedEvent(taskAggregate, subtaskID, subtaskName)
+		return taskEventsV1.NewSubtaskCreatedEvent(taskAggregate, subtaskID, subtaskName)
 	})
 
 	if taskAggregate.Task.Subtasks[subtaskID].Name != subtaskName {
@@ -96,7 +96,7 @@ func TestTaskAggregate_UpdateSubtaskName(t *testing.T) {
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return eventsV1.NewSubtaskNameUpdatedEvent(taskAggregate, subtaskID, subtaskName)
+		return taskEventsV1.NewSubtaskNameUpdatedEvent(taskAggregate, subtaskID, subtaskName)
 	})
 
 	if taskAggregate.Task.Subtasks[subtaskID].Name != subtaskName {
@@ -115,7 +115,7 @@ func TestTaskAggregate_CompleteSubtask(t *testing.T) {
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return eventsV1.NewTaskCreatedEvent(taskAggregate, taskID, taskName, patientID, pb.TaskStatus_TASK_STATUS_TODO)
+		return taskEventsV1.NewTaskCreatedEvent(taskAggregate, taskID, taskName, patientID, pb.TaskStatus_TASK_STATUS_TODO)
 	})
 
 	if taskAggregate.Task.Name != taskName {
@@ -123,7 +123,7 @@ func TestTaskAggregate_CompleteSubtask(t *testing.T) {
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return eventsV1.NewSubtaskCreatedEvent(taskAggregate, subtaskID, subtaskName)
+		return taskEventsV1.NewSubtaskCreatedEvent(taskAggregate, subtaskID, subtaskName)
 	})
 
 	if taskAggregate.Task.Name != taskName {
@@ -131,12 +131,12 @@ func TestTaskAggregate_CompleteSubtask(t *testing.T) {
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return eventsV1.NewSubtaskCompletedEvent(taskAggregate, subtaskID)
+		return taskEventsV1.NewSubtaskCompletedEvent(taskAggregate, subtaskID)
 	})
 
 	// Apply two times
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return eventsV1.NewSubtaskCompletedEvent(taskAggregate, subtaskID)
+		return taskEventsV1.NewSubtaskCompletedEvent(taskAggregate, subtaskID)
 	})
 
 	if !taskAggregate.Task.Subtasks[subtaskID].Done {
