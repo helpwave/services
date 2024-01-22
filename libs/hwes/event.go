@@ -67,9 +67,6 @@ func resolveAggregateIDAndTypeFromStreamID(streamID string) (aggregateType Aggre
 	}
 
 	aggregateID, err = uuid.Parse(aggregateIDStr)
-	if err != nil {
-		return
-	}
 
 	return
 }

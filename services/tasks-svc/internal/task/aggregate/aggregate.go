@@ -22,7 +22,7 @@ func NewTaskAggregate(id uuid.UUID) *TaskAggregate {
 	aggregate := &TaskAggregate{Task: models.NewTask()}
 	aggregate.AggregateBase = hwes.NewAggregateBase(TaskAggregateType, id)
 	aggregate.Task.ID = id
-	aggregate.initEventListener()
+	aggregate.initEventListeners()
 	return aggregate
 }
 
@@ -34,7 +34,7 @@ func LoadTaskAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID
 	return task, nil
 }
 
-func (a *TaskAggregate) initEventListener() {
+func (a *TaskAggregate) initEventListeners() {
 	a.
 		RegisterEventListener(eventsV1.TaskCreated, a.onTaskCreated).
 		RegisterEventListener(eventsV1.TaskNameUpdated, a.onTaskNameUpdated).

@@ -14,6 +14,7 @@ type AggregateType string
 // This interface describes the contracts that are used
 // by an AggregateStore to persists this aggregate in an
 // event-sourcing manner
+// Also see AggregateBase and NewAggregateBase, you probably don't want to implement this interface by hand
 type Aggregate interface {
 	GetID() uuid.UUID
 	GetStreamID() string // TODO: Make private https://github.com/helpwave/services/pull/587#discussion_r1451788115
@@ -42,7 +43,9 @@ type AggregateBase struct {
 	uncommittedEvents []Event
 }
 
-// NewAggregateBase must be called by a concrete aggregate during its initialization
+// NewAggregateBase constructs a new AggregateBase.
+// When implementing a new, concrete, aggregate struct you can embed an AggregateBase into it.
+// This way you get an implementation of the Aggregate interface for free.
 // The caller provides the type and id of the aggregate
 //
 // Example:
