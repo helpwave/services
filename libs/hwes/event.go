@@ -40,7 +40,7 @@ func NewEventWithData(aggregate Aggregate, eventType string, data interface{}) (
 }
 
 // resolveAggregateIDAndTypeFromStreamID extracts the aggregateType and aggregateID of a given streamID
-// See aggregate.GetStreamID
+// See aggregate.GetTypeID
 //
 // # Example
 //

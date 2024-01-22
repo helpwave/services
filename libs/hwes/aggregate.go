@@ -17,7 +17,7 @@ type AggregateType string
 // Also see AggregateBase and NewAggregateBase, you probably don't want to implement this interface by hand
 type Aggregate interface {
 	GetID() uuid.UUID
-	GetStreamID() string // TODO: Make private https://github.com/helpwave/services/pull/587#discussion_r1451788115
+	GetTypeID() string
 	GetType() AggregateType
 	GetVersion() uint64
 
@@ -78,9 +78,11 @@ func (a *AggregateBase) GetID() uuid.UUID {
 	return a.id
 }
 
-// GetStreamID returns the streamID for our AggregateStore (EventStore)
-// The format is expected by hwes.ResolveAggregateIDAndTypeFromStreamID
-func (a *AggregateBase) GetStreamID() string {
+// GetTypeID returns a string in the format of "Type-ID"
+// This is more of a helper function for AggregatesStore
+// EventStoreDB can use this TypeID as a StreamID
+// AggregateStores can implement their own helper function
+func (a *AggregateBase) GetTypeID() string {
 	return fmt.Sprintf("%s-%s", a.atype, a.id)
 }
 
