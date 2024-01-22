@@ -8,9 +8,9 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 	"hwutil"
-	"logging"
 	"net/http"
 	"strings"
+	"telemetry"
 )
 
 var (
@@ -39,7 +39,7 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 	Mode = hwutil.GetEnvOr("MODE", DevelopmentMode)
 	LogLevel := hwutil.GetEnvOr("LOG_LEVEL", "info")
 
-	logging.SetupLogging(
+	telemetry.SetupLogging(
 		Mode,
 		LogLevel,
 		serviceName,

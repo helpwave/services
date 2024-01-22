@@ -5,7 +5,7 @@ go 1.20
 replace (
 	common => ../common
 	hwutil => ../hwutil
-	logging => ../logging
+	telemetry => ../telemetry
 )
 
 require (
@@ -15,7 +15,7 @@ require (
 	go.opentelemetry.io/otel v1.21.0
 	go.opentelemetry.io/otel/trace v1.21.0
 	hwutil v0.0.0
-	logging v0.0.0
+	telemetry v0.0.0
 )
 
 require (

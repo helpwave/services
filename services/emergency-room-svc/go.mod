@@ -7,8 +7,8 @@ replace (
 	gen => ../../gen/go
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
-	logging => ../../libs/logging
 	proto_helpers => ../../libs/proto_helpers
+	telemetry => ../../libs/telemetry
 )
 
 require (
@@ -21,8 +21,8 @@ require (
 	gorm.io/gorm v1.25.5
 	hwgorm v0.0.0
 	hwutil v0.0.0
-	logging v0.0.0
 	proto_helpers v0.0.0
+	telemetry v0.0.0
 )
 
 require (

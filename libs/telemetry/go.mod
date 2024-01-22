@@ -1,4 +1,4 @@
-module logging
+module telemetry
 
 go 1.20
 

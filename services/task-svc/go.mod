@@ -10,8 +10,8 @@ replace (
 	hwes => ../../libs/hwes
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
-	logging => ../../libs/logging
 	proto_helpers => ../../libs/proto_helpers
+	telemetry => ../../libs/telemetry
 )
 
 require (
@@ -93,5 +93,5 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/postgres v1.5.4 // indirect
-	logging v0.0.0 // indirect
+	telemetry v0.0.0 // indirect
 )

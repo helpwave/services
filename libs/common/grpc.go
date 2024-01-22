@@ -17,8 +17,8 @@ import (
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 	"hwutil"
-	"logging"
 	"net"
+	"telemetry"
 )
 
 type claimsKey struct{}
@@ -101,7 +101,7 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 }
 
 func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
-	ctx, span, log := logging.StartSpan(ctx, "auth_interceptor")
+	ctx, span, log := telemetry.StartSpan(ctx, "auth_interceptor")
 	defer span.End()
 
 	if isUnaryRPCForDaprInternal(info) || hwutil.Contains(skipAuthForMethods, info.FullMethod) {
@@ -176,7 +176,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	ctx = context.WithValue(ctx, userIDKey{}, userID)
 
 	// attach userID to current span (should be the auth interceptor span)
-	logging.SetSpanStr(ctx, "user.id", userID.String())
+	telemetry.SetSpanStr(ctx, "user.id", userID.String())
 
 	// Append userID to the logger and attach it to the context
 	ctx = log.With().
@@ -289,7 +289,7 @@ func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
 // handlerSpanInterceptor opens and closes a span around the next in the chain
 // it should only be used as the last element in the interceptor chain before the handler
 func handlerSpanInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
-	ctx, span, _ := logging.StartSpan(ctx, "handler")
+	ctx, span, _ := telemetry.StartSpan(ctx, "handler")
 	res, err := next(ctx, req)
 	if err != nil {
 		span.SetStatus(1, err.Error())
@@ -299,7 +299,7 @@ func handlerSpanInterceptor(ctx context.Context, req interface{}, info *grpc.Una
 }
 
 func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
-	ctx, span, _ := logging.StartSpan(ctx, "validate_interceptor")
+	ctx, span, _ := telemetry.StartSpan(ctx, "validate_interceptor")
 	defer span.End()
 
 	if err := hwutil.Validate(req); err != nil {
@@ -309,7 +309,7 @@ func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.U
 }
 
 func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
-	ctx, span, log := logging.StartSpan(ctx, "logging_interceptor")
+	ctx, span, log := telemetry.StartSpan(ctx, "logging_interceptor")
 	defer span.End()
 
 	metadata := metautils.ExtractIncoming(ctx)
@@ -345,7 +345,7 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 	logBody := req
 
 	// custom map instead, if implemented
-	if loggable, ok := req.(logging.Loggable); ok {
+	if loggable, ok := req.(telemetry.Loggable); ok {
 		logBody = loggable.LoggableFields()
 	}
 	if !omitBody {
@@ -393,7 +393,7 @@ func resolveLogLevelForError(err error) zerolog.Level {
 func redactMetadata(m metautils.NiceMD) metautils.NiceMD {
 	if arr := m["authorization"]; arr != nil {
 		for i := range arr {
-			arr[i] = logging.OmitAll(arr[i])
+			arr[i] = telemetry.OmitAll(arr[i])
 		}
 	}
 	return m
