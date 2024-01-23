@@ -7020,8 +7020,8 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.serializeBinaryT
       f
     );
   }
-  f = message.getAssignedUserId();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 5));
+  if (f != null) {
     writer.writeString(
       5,
       f
@@ -7328,7 +7328,25 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.prototype.getAss
  * @return {!proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task} returns this
  */
 proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.prototype.setAssignedUserId = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
+  return jspb.Message.setField(this, 5, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task} returns this
+ */
+proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.prototype.clearAssignedUserId = function() {
+  return jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.prototype.hasAssignedUserId = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 

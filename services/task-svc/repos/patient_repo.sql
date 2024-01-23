@@ -3,11 +3,6 @@ INSERT INTO patients (organization_id, human_readable_identifier, notes)
 	VALUES (@organization_id, @human_readable_identifier, @notes)
 	RETURNING id;
 
--- name: GetPatientHumanReadableIdentifier :one
-SELECT human_readable_identifier FROM patients
-	WHERE id = @id
-	LIMIT 1;
-
 -- name: GetPatientByBed :one
 SELECT patients.*
 	FROM patients

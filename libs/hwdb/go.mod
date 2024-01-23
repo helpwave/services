@@ -14,6 +14,7 @@ require (
 	github.com/vgarvardt/pgx-google-uuid/v5 v5.0.0
 	go.opentelemetry.io/otel v1.21.0
 	go.opentelemetry.io/otel/trace v1.21.0
+	google.golang.org/protobuf v1.31.0
 	hwutil v0.0.0
 	telemetry v0.0.0
 )
