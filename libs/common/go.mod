@@ -4,7 +4,7 @@ go 1.20
 
 replace (
 	hwutil => ../hwutil
-	logging => ../logging
+	telemetry => ../telemetry
 )
 
 require (
@@ -16,7 +16,7 @@ require (
 	golang.org/x/oauth2 v0.11.0
 	google.golang.org/grpc v1.59.0
 	hwutil v0.0.0
-	logging v0.0.0
+	telemetry v0.0.0
 )
 
 require (
@@ -28,7 +28,6 @@ require (
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.21.0
 	go.opentelemetry.io/otel/exporters/zipkin v1.21.0
 	go.opentelemetry.io/otel/sdk v1.21.0
-	go.opentelemetry.io/otel/trace v1.21.0
 	google.golang.org/protobuf v1.31.0
 )
 
@@ -50,6 +49,7 @@ require (
 	github.com/pquerna/cachecontrol v0.1.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.21.0 // indirect
 	go.opentelemetry.io/otel/metric v1.21.0 // indirect
+	go.opentelemetry.io/otel/trace v1.21.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.0.0 // indirect
 	golang.org/x/crypto v0.15.0 // indirect
 	golang.org/x/net v0.18.0 // indirect
