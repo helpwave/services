@@ -8,7 +8,7 @@ replace (
 	hwes => ../../libs/hwes
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
-	logging => ../../libs/logging
+	telemetry => ../../libs/telemetry
 )
 
 require (
@@ -66,5 +66,5 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231212172506-995d672761c0 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	logging v0.0.0 // indirect
+	telemetry v0.0.0 // indirect
 )
