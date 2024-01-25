@@ -125,19 +125,6 @@ func (q *Queries) GetPatientByBed(ctx context.Context, bedID uuid.NullUUID) (Pat
 	return i, err
 }
 
-const getPatientHumanReadableIdentifier = `-- name: GetPatientHumanReadableIdentifier :one
-SELECT human_readable_identifier FROM patients
-	WHERE id = $1
-	LIMIT 1
-`
-
-func (q *Queries) GetPatientHumanReadableIdentifier(ctx context.Context, id uuid.UUID) (string, error) {
-	row := q.db.QueryRow(ctx, getPatientHumanReadableIdentifier, id)
-	var human_readable_identifier string
-	err := row.Scan(&human_readable_identifier)
-	return human_readable_identifier, err
-}
-
 const getPatientWithBedAndRoom = `-- name: GetPatientWithBedAndRoom :one
 SELECT
 	patients.id, patients.human_readable_identifier, patients.organization_id, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at,

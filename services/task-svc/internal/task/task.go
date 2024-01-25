@@ -4,19 +4,15 @@ import (
 	"common"
 	"context"
 	pb "gen/proto/services/task_svc/v1"
-	"hwdb"
-	"hwgorm"
-	"hwutil"
-	pbhelpers "proto_helpers/task_svc/v1"
-	"task-svc/internal/models"
-	"task-svc/internal/repositories"
-	"task-svc/repos/patient_repo"
-
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"hwdb"
+	"hwutil"
+	"task-svc/repos/patient_repo"
+	"task-svc/repos/task_repo"
 )
 
 type ServiceServer struct {
@@ -30,7 +26,7 @@ func NewServiceServer() *ServiceServer {
 func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.CreateTaskResponse, error) {
 	log := zlog.Ctx(ctx)
 	patientRepo := patient_repo.New(hwdb.GetDB())
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -75,17 +71,15 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		}
 	}
 
-	task, err := taskRepo.CreateTask(&models.Task{
-		TaskBase: models.TaskBase{
-			Name:        req.Name,
-			Description: description,
-			Status:      initialStatus,
-		},
-		PatientId:      patientId,
+	taskId, err := taskRepo.CreateTask(ctx, task_repo.CreateTaskParams{
+		Name:           req.Name,
+		Description:    description,
+		Status:         int32(initialStatus),
+		PatientID:      patientId,
+		Public:         req.Public,
 		OrganizationID: organizationID,
 		CreatedBy:      userID,
-		DueAt:          req.DueAt.AsTime(),
-		Public:         req.Public,
+		DueAt:          hwdb.TimeToTimestamp(req.DueAt.AsTime()),
 	})
 
 	if err != nil {
@@ -93,18 +87,17 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 	}
 
 	log.Info().
-		Str("taskID", task.ID.String()).
+		Str("taskID", taskId.String()).
 		Str("patientID", patientId.String()).
 		Msg("task created for patient")
 
 	return &pb.CreateTaskResponse{
-		Id: task.ID.String(),
+		Id: taskId.String(),
 	}, nil
 }
 
 func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.GetTaskResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
-	patientRepo := patient_repo.New(hwdb.GetDB())
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -113,40 +106,37 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	task, err := taskRepo.GetTaskWithSubTasks(id)
+	rows, err := taskRepo.GetTaskWithSubTasksAndPatientName(ctx, id)
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
+	if len(rows) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
+	}
+	task := rows[0].Task
+	patientName := rows[0].PatientName
 
-	// TODO: task.AssignedUserId.UUID.String() should handle the translation to "", seems not to work.
-	assignedUserId := task.AssignedUserId.UUID.String()
-	if !task.AssignedUserId.Valid {
+	// TODO: replace with optional response field
+	assignedUserId := task.AssignedUserID.UUID.String()
+	if !task.AssignedUserID.Valid {
 		assignedUserId = ""
 	}
 
-	var subtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTaskResponse_SubTask {
-		return &pb.GetTaskResponse_SubTask{
-			Id:        subtask.ID.String(),
-			Done:      subtask.Done,
-			Name:      subtask.Name,
-			CreatedBy: subtask.CreatedBy.String(),
+	subtasks := hwutil.FlatMap(rows, func(row task_repo.GetTaskWithSubTasksAndPatientNameRow) **pb.GetTaskResponse_SubTask {
+		if !row.SubtaskID.Valid {
+			return nil
 		}
+		val := &pb.GetTaskResponse_SubTask{
+			Id:        row.SubtaskID.UUID.String(),
+			Done:      *row.SubtaskDone,
+			Name:      *row.SubtaskName,
+			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
+		}
+		return &val
 	})
 
-	patientName, err := patientRepo.GetPatientHumanReadableIdentifier(ctx, task.PatientId)
-	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
-	}
-	patientResponse := &pb.GetTaskResponse_Patient{
-		Id:   task.PatientId.String(),
+	patient := &pb.GetTaskResponse_Patient{
+		Id:   task.PatientID.String(),
 		Name: patientName,
 	}
 
@@ -154,19 +144,19 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		Id:             task.ID.String(),
 		Name:           task.Name,
 		Description:    task.Description,
-		Status:         task.Status,
+		Status:         pb.TaskStatus(task.Status),
 		AssignedUserId: assignedUserId,
-		Patient:        patientResponse,
+		Patient:        patient,
 		Subtasks:       subtasks,
 		Public:         task.Public,
-		DueAt:          timestamppb.New(task.DueAt),
+		DueAt:          timestamppb.New(task.DueAt.Time),
 		CreatedBy:      task.CreatedBy.String(),
 		OrganizationId: task.OrganizationID.String(),
 	}, nil
 }
 
 func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPatientRequest) (*pb.GetTasksByPatientResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -180,45 +170,59 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	tasks, err := taskRepo.GetTasksWithSubTasksByPatientForOrganization(patientID, organizationID)
+	rows, err := taskRepo.GetTasksWithSubTasksByPatient(ctx, task_repo.GetTasksWithSubTasksByPatientParams{
+		PatientID:      patientID,
+		OrganizationID: organizationID,
+	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, err
 	}
 
-	var mappedTasks = hwutil.Map(tasks, func(task models.Task) *pb.GetTasksByPatientResponse_Task {
-		var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTasksByPatientResponse_Task_SubTask {
-			return &pb.GetTasksByPatientResponse_Task_SubTask{
-				Id:        subtask.ID.String(),
-				Done:      subtask.Done,
-				Name:      subtask.Name,
-				CreatedBy: subtask.CreatedBy.String(),
+	tasks := make([]*pb.GetTasksByPatientResponse_Task, 0)
+	taskMap := make(map[uuid.UUID]int) // id -> index map
+
+	for _, row := range rows {
+		var task *pb.GetTasksByPatientResponse_Task
+		// if task was seen before (i.e. already has a GetTasksByPatientResponse_Task object),
+		// mutate that one
+		// else, create it
+		if ix, exists := taskMap[row.Task.ID]; exists {
+			task = tasks[ix]
+		} else {
+			task = &pb.GetTasksByPatientResponse_Task{
+				Id:             row.Task.ID.String(),
+				Name:           row.Task.Name,
+				Description:    row.Task.Description,
+				Status:         pb.TaskStatus(row.Task.Status),
+				AssignedUserId: hwutil.NullUUIDToStringPtr(row.Task.AssignedUserID),
+				PatientId:      row.Task.PatientID.String(),
+				Public:         row.Task.Public,
+				DueAt:          timestamppb.New(row.Task.DueAt.Time),
+				CreatedBy:      row.Task.CreatedBy.String(),
+				Subtasks:       make([]*pb.GetTasksByPatientResponse_Task_SubTask, 0),
 			}
-		})
-		return &pb.GetTasksByPatientResponse_Task{
-			Id:             task.ID.String(),
-			Name:           task.Name,
-			Description:    task.Description,
-			Status:         task.Status,
-			AssignedUserId: task.AssignedUserId.UUID.String(),
-			PatientId:      task.PatientId.String(),
-			Subtasks:       mappedSubtasks,
-			Public:         task.Public,
-			DueAt:          timestamppb.New(task.DueAt),
-			CreatedBy:      task.CreatedBy.String(),
+			tasks = append(tasks, task)
+			taskMap[row.Task.ID] = len(tasks) - 1
 		}
-	})
+
+		if !row.SubtaskID.Valid {
+			continue
+		}
+		task.Subtasks = append(task.Subtasks, &pb.GetTasksByPatientResponse_Task_SubTask{
+			Id:        row.SubtaskID.UUID.String(),
+			Name:      *row.SubtaskName,
+			Done:      *row.SubtaskDone,
+			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
+		})
+	}
 
 	return &pb.GetTasksByPatientResponse{
-		Tasks: mappedTasks,
+		Tasks: tasks,
 	}, nil
 }
 
 func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *pb.GetTasksByPatientSortedByStatusRequest) (*pb.GetTasksByPatientSortedByStatusResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -232,94 +236,132 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	tasks, err := taskRepo.GetTasksWithSubTasksByPatientForOrganization(patientID, organizationID)
+	rows, err := taskRepo.GetTasksWithSubTasksByPatient(ctx, task_repo.GetTasksWithSubTasksByPatientParams{
+		PatientID:      patientID,
+		OrganizationID: organizationID,
+	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	var mappingFunction = func(tasks []models.Task) []*pb.GetTasksByPatientSortedByStatusResponse_Task {
-		return hwutil.Map(tasks, func(task models.Task) *pb.GetTasksByPatientSortedByStatusResponse_Task {
-			var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask {
-				return &pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask{
-					Id:        subtask.ID.String(),
-					Done:      subtask.Done,
-					Name:      subtask.Name,
-					CreatedBy: subtask.CreatedBy.String(),
-				}
-			})
-			return &pb.GetTasksByPatientSortedByStatusResponse_Task{
-				Id:             task.ID.String(),
-				Name:           task.Name,
-				Description:    task.Description,
-				AssignedUserId: task.AssignedUserId.UUID.String(),
-				PatientId:      task.PatientId.String(),
-				Subtasks:       mappedSubtasks,
-				Public:         task.Public,
-				DueAt:          timestamppb.New(task.DueAt),
-				CreatedBy:      task.CreatedBy.String(),
+	tasks := make([]*pb.GetTasksByPatientSortedByStatusResponse_Task, 0)
+	taskMap := make(map[uuid.UUID]int)
+
+	todo := make(map[int]bool)
+	inprogress := make(map[int]bool)
+	done := make(map[int]bool)
+
+	for _, row := range rows {
+		var task *pb.GetTasksByPatientSortedByStatusResponse_Task
+		if i, exists := taskMap[row.Task.ID]; exists {
+			task = tasks[i]
+		} else {
+			task = &pb.GetTasksByPatientSortedByStatusResponse_Task{
+				Id:             row.Task.ID.String(),
+				Name:           row.Task.Name,
+				Description:    row.Task.Description,
+				AssignedUserId: hwutil.NullUUIDToStringPtr(row.Task.AssignedUserID),
+				PatientId:      row.Task.PatientID.String(),
+				Public:         row.Task.Public,
+				DueAt:          timestamppb.New(row.Task.DueAt.Time),
+				CreatedBy:      row.Task.CreatedBy.String(),
+				Subtasks:       make([]*pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask, 0),
 			}
+			tasks = append(tasks, task)
+			ix := len(tasks) - 1
+			taskMap[row.Task.ID] = ix
+			taskStatus := pb.TaskStatus(row.Task.Status)
+			if taskStatus == pb.TaskStatus_TASK_STATUS_TODO {
+				todo[ix] = true
+			} else if taskStatus == pb.TaskStatus_TASK_STATUS_IN_PROGRESS {
+				inprogress[ix] = true
+			} else if taskStatus == pb.TaskStatus_TASK_STATUS_DONE {
+				done[ix] = true
+			}
+		}
+
+		if !row.SubtaskID.Valid {
+			continue
+		}
+		task.Subtasks = append(task.Subtasks, &pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask{
+			Id:        row.SubtaskID.UUID.String(),
+			Name:      *row.SubtaskName,
+			Done:      *row.SubtaskDone,
+			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
 		})
 	}
 
+	collectIxs := func(set map[int]bool) []*pb.GetTasksByPatientSortedByStatusResponse_Task {
+		res := make([]*pb.GetTasksByPatientSortedByStatusResponse_Task, 0, len(set))
+
+		for key, value := range set {
+			if value {
+				res = append(res, tasks[key])
+			}
+		}
+
+		return res
+	}
+
 	return &pb.GetTasksByPatientSortedByStatusResponse{
-		Todo: mappingFunction(hwutil.Filter(tasks, func(value models.Task) bool {
-			return value.Status == pb.TaskStatus_TASK_STATUS_TODO
-		})),
-		InProgress: mappingFunction(hwutil.Filter(tasks, func(value models.Task) bool {
-			return value.Status == pb.TaskStatus_TASK_STATUS_IN_PROGRESS
-		})),
-		Done: mappingFunction(hwutil.Filter(tasks, func(value models.Task) bool {
-			return value.Status == pb.TaskStatus_TASK_STATUS_DONE
-		})),
+		Todo:       collectIxs(todo),
+		InProgress: collectIxs(inprogress),
+		Done:       collectIxs(done),
 	}, nil
 }
 
 func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTasksRequest) (*pb.GetAssignedTasksResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 	assigneeID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patients, err := taskRepo.GetPatientsWithTasksByAssignee(ctx, assigneeID)
+	rows, err := taskRepo.GetTasksWithPatientsByAssignee(ctx, uuid.NullUUID{
+		UUID:  assigneeID,
+		Valid: true,
+	})
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	var tasks []*pb.GetAssignedTasksResponse_Task
+	taskMap := make(map[uuid.UUID]int)
 
-	for _, patient := range patients {
-		mappedPatient := &pb.GetAssignedTasksResponse_Task_Patient{
-			Id:   patient.ID.String(),
-			Name: patient.HumanReadableIdentifier,
-		}
-		patientTasks := hwutil.Map(patient.Tasks, func(task models.Task) *pb.GetAssignedTasksResponse_Task {
-			var mappedSubtasks = hwutil.Map(task.Subtasks, func(subtask models.Subtask) *pb.GetAssignedTasksResponse_Task_SubTask {
-				return &pb.GetAssignedTasksResponse_Task_SubTask{
-					Id:        subtask.ID.String(),
-					Done:      subtask.Done,
-					Name:      subtask.Name,
-					CreatedBy: subtask.CreatedBy.String(),
-				}
-			})
-			return &pb.GetAssignedTasksResponse_Task{
-				Id:             task.ID.String(),
-				Name:           task.Name,
-				Description:    task.Description,
-				Status:         task.Status,
-				AssignedUserId: task.AssignedUserId.UUID.String(),
-				Patient:        mappedPatient,
-				Subtasks:       mappedSubtasks,
-				Public:         task.Public,
-				DueAt:          timestamppb.New(task.DueAt),
-				CreatedBy:      task.CreatedBy.String(),
+	for _, row := range rows {
+		var task *pb.GetAssignedTasksResponse_Task
+		if ix, exists := taskMap[row.Task.ID]; exists {
+			task = tasks[ix]
+		} else {
+			task = &pb.GetAssignedTasksResponse_Task{
+				Id:             row.Task.ID.String(),
+				Name:           row.Task.Name,
+				Description:    row.Task.Description,
+				Status:         pb.TaskStatus(row.Task.Status),
+				AssignedUserId: row.Task.AssignedUserID.UUID.String(),
+				Patient: &pb.GetAssignedTasksResponse_Task_Patient{
+					Id:   row.PatientID.String(),
+					Name: row.PatientName,
+				},
+				Public:    row.Task.Public,
+				DueAt:     timestamppb.New(row.Task.DueAt.Time),
+				CreatedBy: row.Task.CreatedBy.String(),
+				Subtasks:  make([]*pb.GetAssignedTasksResponse_Task_SubTask, 0),
 			}
+			tasks = append(tasks, task)
+			taskMap[row.Task.ID] = len(tasks) - 1
+		}
+
+		if !row.SubtaskID.Valid {
+			continue
+		}
+
+		task.Subtasks = append(task.Subtasks, &pb.GetAssignedTasksResponse_Task_SubTask{
+			Id:        row.SubtaskID.UUID.String(),
+			Name:      *row.SubtaskName,
+			Done:      *row.SubtaskDone,
+			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
 		})
-		tasks = append(tasks, patientTasks...)
 	}
 
 	return &pb.GetAssignedTasksResponse{
@@ -328,7 +370,7 @@ func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTask
 }
 
 func (ServiceServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) (*pb.UpdateTaskResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -337,9 +379,13 @@ func (ServiceServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := pbhelpers.UpdatesMapForUpdateTaskRequest(req)
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+		Name:        req.Name,
+		Description: req.Description,
+		DueAt:       hwdb.PbToTimestamp(req.DueAt),
+		Public:      req.Public,
+		ID:          id,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -347,7 +393,7 @@ func (ServiceServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) 
 }
 
 func (ServiceServer) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) (*pb.DeleteTaskResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -356,7 +402,7 @@ func (ServiceServer) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := taskRepo.DeleteTask(id); err != nil {
+	if err := taskRepo.DeleteTask(ctx, id); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -364,7 +410,12 @@ func (ServiceServer) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) 
 }
 
 func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) (*pb.AddSubTaskResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
+
+	organizationID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	userID, err := common.GetUserID(ctx)
 	if err != nil {
@@ -377,13 +428,14 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 	}
 
 	// Check if task exists
-	// TODO: this is probably not needed due to the FK constrain in the subtask table
-	if _, err := taskRepo.GetTaskWithSubTasks(taskId); err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "taskId not found")
-		}
+	// TODO: this is probably not needed due to the FK constrain in the subtaskID table
+	if exists, err := taskRepo.ExistsTask(ctx, task_repo.ExistsTaskParams{
+		ID:             taskId,
+		OrganizationID: organizationID,
+	}); err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	} else if !exists {
+		return nil, status.Error(codes.InvalidArgument, "taskId not found")
 	}
 
 	done := false
@@ -391,7 +443,7 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 		done = *req.Done
 	}
 
-	subtask, err := taskRepo.CreateSubTask(&models.Subtask{
+	subtaskID, err := taskRepo.CreateSubTask(ctx, task_repo.CreateSubTaskParams{
 		Name:      req.Name,
 		TaskID:    taskId,
 		Done:      done,
@@ -402,11 +454,11 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &pb.AddSubTaskResponse{Id: subtask.ID.String()}, nil
+	return &pb.AddSubTaskResponse{Id: subtaskID.String()}, nil
 }
 
 func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskRequest) (*pb.RemoveSubTaskResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -415,7 +467,7 @@ func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := taskRepo.DeleteSubTask(subtaskID); err != nil {
+	if err := taskRepo.DeleteSubTask(ctx, subtaskID); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -423,16 +475,18 @@ func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskReq
 }
 
 func (ServiceServer) UpdateSubTask(ctx context.Context, req *pb.UpdateSubTaskRequest) (*pb.UpdateSubTaskResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	subtaskID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := pbhelpers.UpdatesMapForUpdateSubTaskRequest(req)
-
-	if _, err := taskRepo.UpdateSubTask(subtaskID, updates); err != nil {
+	if err := taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{
+		Name: req.Name,
+		Done: nil,
+		ID:   subtaskID,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -440,7 +494,7 @@ func (ServiceServer) UpdateSubTask(ctx context.Context, req *pb.UpdateSubTaskReq
 }
 
 func (ServiceServer) SubTaskToToDo(ctx context.Context, req *pb.SubTaskToToDoRequest) (*pb.SubTaskToToDoResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -449,9 +503,10 @@ func (ServiceServer) SubTaskToToDo(ctx context.Context, req *pb.SubTaskToToDoReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"done": false}
-
-	if _, err := taskRepo.UpdateSubTask(subtaskID, updates); err != nil {
+	if err := taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{
+		Done: hwutil.PtrTo(false),
+		ID:   subtaskID,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -459,7 +514,7 @@ func (ServiceServer) SubTaskToToDo(ctx context.Context, req *pb.SubTaskToToDoReq
 }
 
 func (ServiceServer) SubTaskToDone(ctx context.Context, req *pb.SubTaskToDoneRequest) (*pb.SubTaskToDoneResponse, error) {
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -468,9 +523,7 @@ func (ServiceServer) SubTaskToDone(ctx context.Context, req *pb.SubTaskToDoneReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"done": true}
-
-	if _, err := taskRepo.UpdateSubTask(subtaskID, updates); err != nil {
+	if err := taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{Done: hwutil.PtrTo(true), ID: subtaskID}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -479,7 +532,7 @@ func (ServiceServer) SubTaskToDone(ctx context.Context, req *pb.SubTaskToDoneReq
 
 func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) (*pb.TaskToToDoResponse, error) {
 	log := zlog.Ctx(ctx)
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -488,9 +541,8 @@ func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"status": pb.TaskStatus_TASK_STATUS_TODO}
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	s := int32(pb.TaskStatus_TASK_STATUS_TODO)
+	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Status: &s}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -503,7 +555,7 @@ func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) 
 
 func (ServiceServer) TaskToInProgress(ctx context.Context, req *pb.TaskToInProgressRequest) (*pb.TaskToInProgressResponse, error) {
 	log := zlog.Ctx(ctx)
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -512,9 +564,8 @@ func (ServiceServer) TaskToInProgress(ctx context.Context, req *pb.TaskToInProgr
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"status": pb.TaskStatus_TASK_STATUS_IN_PROGRESS}
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	s := int32(pb.TaskStatus_TASK_STATUS_IN_PROGRESS)
+	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Status: &s}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -527,7 +578,7 @@ func (ServiceServer) TaskToInProgress(ctx context.Context, req *pb.TaskToInProgr
 
 func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) (*pb.TaskToDoneResponse, error) {
 	log := zlog.Ctx(ctx)
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -536,9 +587,8 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"status": pb.TaskStatus_TASK_STATUS_DONE}
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	s := int32(pb.TaskStatus_TASK_STATUS_DONE)
+	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Status: &s}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -551,7 +601,7 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) 
 
 func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToUserRequest) (*pb.AssignTaskToUserResponse, error) {
 	log := zlog.Ctx(ctx)
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -567,9 +617,13 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 
 	// TODO: Check if user exists
 
-	updates := map[string]interface{}{"assigned_user_id": userId}
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	if err := taskRepo.UpdateTaskUser(ctx, task_repo.UpdateTaskUserParams{
+		ID: id,
+		AssignedUserID: uuid.NullUUID{
+			UUID:  userId,
+			Valid: true,
+		},
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -583,7 +637,7 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 
 func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignTaskFromUserRequest) (*pb.UnassignTaskFromUserResponse, error) {
 	log := zlog.Ctx(ctx)
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -592,9 +646,7 @@ func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"assigned_user_id": nil}
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	if err := taskRepo.UpdateTaskUser(ctx, task_repo.UpdateTaskUserParams{ID: id, AssignedUserID: uuid.NullUUID{}}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -607,7 +659,7 @@ func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignT
 
 func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest) (*pb.PublishTaskResponse, error) {
 	log := zlog.Ctx(ctx)
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -616,9 +668,7 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"public": true}
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Public: hwutil.PtrTo(true)}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -631,7 +681,7 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 
 func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskRequest) (*pb.UnpublishTaskResponse, error) {
 	log := zlog.Ctx(ctx)
-	taskRepo := repositories.TaskRepo(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -640,9 +690,10 @@ func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := map[string]interface{}{"public": false}
-
-	if _, err := taskRepo.UpdateTask(id, updates); err != nil {
+	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+		Public: hwutil.PtrTo(false),
+		ID:     id,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
