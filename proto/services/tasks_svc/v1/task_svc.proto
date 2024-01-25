@@ -1,0 +1,173 @@
+syntax = "proto3";
+
+package proto.services.tasks_svc.v1;
+
+option go_package = "gen/proto/services/tasks-svc";
+
+import "google/protobuf/timestamp.proto";
+
+enum TaskStatus {
+  TASK_STATUS_UNSPECIFIED = 0;
+  TASK_STATUS_TODO = 1;
+  TASK_STATUS_IN_PROGRESS = 2;
+  TASK_STATUS_DONE = 3;
+}
+
+//
+// CreateTask
+//
+
+message CreateTaskRequest {
+  string name = 1; // @gotags: validate:"required"
+  optional string description = 2;
+  string patient_id = 3; // @gotags: validate:"uuid4"
+  optional bool public = 4;
+  google.protobuf.Timestamp due_at = 5;
+  optional TaskStatus initial_status = 6;
+}
+
+message CreateTaskResponse {
+  string id = 1;
+}
+
+//
+// UpdateTask
+//
+
+message UpdateTaskRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+  optional string name = 2;
+  optional string description = 3;
+  optional google.protobuf.Timestamp due_at = 4;
+}
+
+message UpdateTaskResponse {}
+
+//
+// GetTask
+//
+
+message GetTaskRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetTaskResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  repeated string assigned_users = 4;
+  repeated Subtask subtasks = 5;
+  TaskStatus status = 6;
+  google.protobuf.Timestamp created_at = 7;
+
+  message Subtask {
+    string id = 1;
+    string name = 2;
+    bool done = 3;
+  }
+}
+
+//
+// AssignTask
+//
+
+message AssignTaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  string user_id = 2; // @gotags: validate:"uuid4"
+}
+
+message AssignTaskResponse {}
+
+//
+// UnassignTask
+//
+
+message UnassignTaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  string user_id = 2; // @gotags: validate:"uuid4"
+}
+
+message UnassignTaskResponse {}
+
+//
+// CreateSubtask
+//
+
+message CreateSubtaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  Subtask subtask = 2;
+
+  message Subtask {
+    string name = 1;
+  }
+}
+
+message CreateSubtaskResponse {
+  string subtask_id = 1;
+}
+
+//
+// UpdateSubtask
+//
+
+message UpdateSubtaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  string subtask_id = 2; // @gotags: validate:"uuid4"
+  Subtask subtask = 3;
+
+  message Subtask {
+    optional string name = 1;
+  }
+}
+
+message UpdateSubtaskResponse {}
+
+//
+// CompleteSubtask
+//
+
+message CompleteSubtaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  string subtask_id = 2; // @gotags: validate:"uuid4"
+}
+
+message CompleteSubtaskResponse {}
+
+//
+// UncompleteSubtask
+//
+
+message UncompleteSubtaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  string subtask_id = 2; // @gotags: validate:"uuid4"
+}
+
+message UncompleteSubtaskResponse {}
+
+//
+// DeleteSubtask
+//
+
+message DeleteSubtaskRequest {
+  string task_id = 1; // @gotags: validate:"uuid4"
+  string subtask_id = 2; // @gotags: validate:"uuid4"
+}
+
+message DeleteSubtaskResponse {}
+
+//
+// TaskService
+//
+
+service TaskService {
+  rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse) {}
+  rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse) {}
+  rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
+  rpc AssignTask(AssignTaskRequest) returns (AssignTaskResponse) {}
+  rpc UnassignTask(UnassignTaskRequest) returns (UnassignTaskResponse) {}
+  rpc CreateSubtask(CreateSubtaskRequest) returns (CreateSubtaskResponse) {}
+  rpc UpdateSubtask(UpdateSubtaskRequest) returns (UpdateSubtaskResponse) {}
+  rpc CompleteSubtask(CompleteSubtaskRequest) returns (CompleteSubtaskResponse) {}
+  rpc UncompleteSubtask(UncompleteSubtaskRequest) returns (UncompleteSubtaskResponse) {}
+  rpc DeleteSubtask(DeleteSubtaskRequest) returns (DeleteSubtaskResponse) {}
+}
