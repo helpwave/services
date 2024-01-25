@@ -5,6 +5,16 @@ set -e
 # See README.md -> Migrations -> Usage
 
 SERVICE=$1
+
+# No service? use them all!
+if [[ -z $SERVICE ]]; then
+	for file in services/*-svc; do
+		echo $(basename "$file")
+		bash $0 $(basename "$file") up || echo "skipped"
+	done
+	exit 0
+fi
+
 WORKING_DIRECTORY="services/$SERVICE"
 
 # test if service exists and has migrations
@@ -13,10 +23,17 @@ if [ ! -d $WORKING_DIRECTORY/migrations ]; then
     exit 1
 fi
 
-if [ $2 = "desired" ]; then
+if [[ $2 = "desired" ]]; then
 	ls $WORKING_DIRECTORY/migrations | sort -r | head -n1 | grep -Eo '[1-9][0-9]*' | head -n1
 	exit 0
 fi
+
+# Default values
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=postgres
 
 # test if .env exists for service
 if [ ! -f $WORKING_DIRECTORY/.env ]; then
@@ -34,7 +51,7 @@ POSTGRES_URL="postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTG
 
 echo "Note: using sslmode=disable, only use this script with local databases!" >&2
 
-docker run --rm -i -v /$(pwd)/$WORKING_DIRECTORY/migrations:/migrations --network host migrate/migrate -database $POSTGRES_URL -path migrations "$@"
+migrate -database $POSTGRES_URL -path $WORKING_DIRECTORY/migrations "$@"
 
 if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
 	echo "Done, waiting 10 seconds to show result"

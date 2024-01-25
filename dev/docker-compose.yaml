@@ -8,13 +8,21 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro # TODO: document
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # TODO: remove?
   pgadmin:
     image: dpage/pgadmin4:6
     restart: unless-stopped
+    profiles:
+      - full
     environment:
       PGADMIN_DEFAULT_EMAIL: tech@helpwave.de
       PGADMIN_DEFAULT_PASSWORD: tech@helpwave.de
@@ -26,104 +34,100 @@ services:
   eventstore:
     image: eventstore/eventstore:lts
     restart: unless-stopped
+    profiles:
+      - full # TODO
     environment:
-      EVENTSTORE_TELEMETRY_OPTOUT: true
+      EVENTSTORE_TELEMETRY_OPTOUT: "true"
+      EVENTSTORE_LOG_LEVEL: "Warning"
+      EVENTSTORE_INSECURE: "true"
+      EVENTSTORE_RUN_PROJECTIONS: "All"
+      ENABLE_ATOM_PUB_OVER_HTTP: "true"
     ports:
       - "2113:2113"
-    command: --insecure --run-projections=All --enable-atom-pub-over-http
 
   redis:
     image: redis:6
-    profiles:
-      - full
     restart: unless-stopped
+    ports:
+      - "6379:6379"
 
   jaeger:
     image: jaegertracing/all-in-one:1.53
     environment:
       COLLECTOR_OTLP_ENABLED: "true"
+    profiles:
+      - full # TODO
     ports:
       - "16686:16686" # api and UI
       - "4317:4317" # OTLP (grpc)
+
+  consul:
+    image: consul:1.15.4
+    restart: unless-stopped
 
   apisix:
     build:
       context: ..
       dockerfile: Dockerfile.apisix
-    profiles:
-      - full
     restart: unless-stopped
+    depends_on:
+      - services
     volumes:
-      - ./dapr.yaml:/usr/local/apisix/dapr/config.yaml:ro
-      - ../apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro # for hot-reloading
+      - ./apisix_config.yaml:/usr/local/apisix/conf/config.yaml:ro
+      - ../apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro
     environment:
+      NO_DAPR: true
       ORY_WEBHOOK_BASIC_AUTH: '{"username":"ory","password":"2341"}'
     ports:
       - "9080:9080"
 
-  task-svc:
-    build:
-      context: ..
-      dockerfile: Dockerfile.standalone
-      args:
-        - SERVICE=task-svc
-    profiles:
-      - full
-    volumes:
-      - ./dapr.yaml:/app/dapr/dapr.yaml:ro
+  apisix-dapr:
+    image: "daprio/daprd:1.12.4"
     restart: unless-stopped
-    environment:
-      INSECURE_FAKE_TOKEN_ENABLE: true
-      POSTGRES_DSN: postgres://postgres:postgres@postgres/task-svc
-      SECRETSTORE_REDIS_HOST: "redis:6379"
-      SECRETSTORE_REDIS_PASSWORD: ""
-      SECRETSTORE_REDIS_USERNAME: ""
-
-  user-svc:
-    build:
-      context: ..
-      dockerfile: Dockerfile.standalone
-      args:
-        - SERVICE=user-svc
-    profiles:
-      - full
+    depends_on:
+      - apisix
     volumes:
-      - ./dapr.yaml:/app/dapr/dapr.yaml:ro
-    restart: unless-stopped
-    environment:
-      INSECURE_FAKE_TOKEN_ENABLE: true
-      POSTGRES_DSN: postgres://postgres:postgres@postgres/user-svc
-      SECRETSTORE_REDIS_HOST: "redis:6379"
-      SECRETSTORE_REDIS_PASSWORD: ""
-      SECRETSTORE_REDIS_USERNAME: ""
+      - ./dapr.yaml:/dapr.yaml:ro
+    command: [
+      "./daprd",
+      "--app-id", "gateway",
+      "--dapr-http-read-buffer-size", "8",
+      "--config", "/dapr.yaml",
+      "--log-level", "debug",
+      "--app-port", "9080",
+      "--dapr-internal-grpc-port", "35001"
+    ]
+    network_mode: "service:apisix"
 
-  ory-svc:
+  # TODO: document
+  services:
     build:
-      context: ..
-      dockerfile: Dockerfile.standalone
+      context: ../images/dev-go
       args:
-        - SERVICE=ory-svc
-        - APP_PROTOCOL=http
-    profiles:
-      - full
-    volumes:
-      - ./dapr.yaml:/app/dapr/dapr.yaml:ro
-    restart: unless-stopped
-    environment:
-      SECRETSTORE_REDIS_HOST: "redis:6379"
-      SECRETSTORE_REDIS_PASSWORD: ""
-      SECRETSTORE_REDIS_USERNAME: ""
-      ORY_APIKEY: 123
-
-  dev:
-    build:
-      context: ../images/dev-go # TODO
-      args:
-        UID: ${UID:-1000}
+        UID: ${UID:-1000} # TODO: document
         GID: ${GID:-1000}
     volumes:
+      # we currently don't mount (i.e. persist) the go module cache
+      # this increases consistency in builds and dependencies, in trade for increased initial startup time
       - ../:/helpwave
     working_dir: /helpwave
-    user: "${UID:-1000}:${GID:-1000}" # TODO
-    stdin_open: true
-    tty: true
+    user: "helpwave"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      consul:
+        condition: service_started
+    environment:
+      SECRETSTORE_REDIS_HOST: "redis:6379"
+    command:
+      - /bin/sh
+      - -c
+      - |
+        bash migrate.sh
+        dapr run --run-file dapr_run.yaml --config dev/dapr.yaml
+    restart: unless-stopped
+    ports:
+      - "3001:3001" # task-svc
+      - "3002:3002" # user-svc
+      - "3003:3003" # ory-svc
+      - "8080:8080" # general purpose http port, you might use it for dapr dashboard

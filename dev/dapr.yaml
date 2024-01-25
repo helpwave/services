@@ -4,6 +4,17 @@ metadata:
   name: daprConfig
 spec:
   nameResolution:
-    component: "kubernetes"
+    component: "consul"
     configuration:
-      template: "{{.ID}}:{{.Port}}"
+      selfRegister: true
+      client:
+        address: "consul:8500"
+    checks:
+      - name: "Dapr Health Status"
+        checkID: "daprHealth:${APP_ID}"
+        interval: "15s"
+        http: "http://${HOST_ADDRESS}:${DAPR_HTTP_PORT}/v1.0/healthz"
+      - name: "Service Health Status"
+        checkID: "serviceHealth:${APP_ID}"
+        interval: "15s"
+        http: "http://${HOST_ADDRESS}:${APP_PORT}/health"
