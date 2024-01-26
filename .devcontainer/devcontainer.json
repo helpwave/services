@@ -1,8 +1,6 @@
 {
   "dockerComposeFile": "../dev/docker-compose.yaml",
-  "service": "services",
+  "service": "devcontainer",
   "remoteUser": "helpwave",
-  "features": {
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
-  }
+  "workspaceFolder": "/helpwave"
 }

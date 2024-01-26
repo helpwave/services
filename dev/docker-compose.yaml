@@ -21,8 +21,6 @@ services:
   pgadmin:
     image: dpage/pgadmin4:6
     restart: unless-stopped
-    profiles:
-      - full
     environment:
       PGADMIN_DEFAULT_EMAIL: tech@helpwave.de
       PGADMIN_DEFAULT_PASSWORD: tech@helpwave.de
@@ -105,6 +103,8 @@ services:
     volumes:
       # we currently don't mount (i.e. persist) the go module cache
       # this increases consistency in builds and dependencies, in trade for increased initial startup time
+
+      # mounts the whole repo
       - ../:/helpwave
     working_dir: /helpwave
     user: "helpwave"
@@ -127,3 +127,25 @@ services:
       - "3002:3002" # user-svc
       - "3003:3003" # ory-svc
       - "8080:8080" # general purpose http port, you might use it for dapr dashboard
+
+  devcontainer:
+    build:
+      context: ../images/dev-go
+      args:
+        UID: ${UID:-1000} # TODO: document
+        GID: ${GID:-1000}
+    volumes:
+      # we currently don't mount (i.e. persist) the go module cache
+      # this increases consistency in builds and dependencies, in trade for increased initial startup time
+
+      # mounts the whole repo
+      - ../:/helpwave
+
+      # mounts the docker socket (allows DooD)
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /helpwave
+    user: "helpwave"
+    environment:
+      COMPOSE_FILE: "/helpwave/dev/docker-compose.yaml" # allows us to use `docker compose` in any directory
+    restart: unless-stopped
+    command: sleep infinity
