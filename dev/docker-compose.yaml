@@ -12,7 +12,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d task-svc -q"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -34,8 +34,6 @@ services:
   eventstore:
     image: eventstore/eventstore:lts
     restart: unless-stopped
-    profiles:
-      - full # TODO
     environment:
       EVENTSTORE_TELEMETRY_OPTOUT: "true"
       EVENTSTORE_LOG_LEVEL: "Warning"
@@ -55,8 +53,6 @@ services:
     image: jaegertracing/all-in-one:1.53
     environment:
       COLLECTOR_OTLP_ENABLED: "true"
-    profiles:
-      - full # TODO
     ports:
       - "16686:16686" # api and UI
       - "4317:4317" # OTLP (grpc)

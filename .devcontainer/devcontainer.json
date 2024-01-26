@@ -1,0 +1,8 @@
+{
+  "dockerComposeFile": "../dev/docker-compose.yml",
+  "service": "services",
+  "remoteUser": "helpwave",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  }
+}

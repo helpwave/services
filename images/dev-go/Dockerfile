@@ -5,7 +5,7 @@ FROM golang:1.21.6-bullseye
 # update debian package list and packages, also install some
 RUN apt update \
     && apt upgrade \
-    && apt install sudo jq dnsutils postgresql-client -y
+    && apt install sudo jq dnsutils postgresql-client lsb-release gpg redis-tools -y
 
 # install buf
 #  https://buf.build/
@@ -65,12 +65,15 @@ RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.25.0
 RUN go install github.com/favadi/protoc-go-inject-tag@v1.4.0
 
 
-# TODO: redis
-# TODO: postgres error
+# TODO: devcontainer
+
+# TODO: merge dev and .devcontainer
 # TODO: renovate
 # TODO: move apisix dockerfile
-# TODO: devcontainer
 # TODO: docs
 # TODO: profiles
+# TODO: auto-seed database
+# TODO: docker outside docker (compose)
+# TODO: what about .env files?
 
 CMD ["bash"]
