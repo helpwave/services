@@ -17,18 +17,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # TODO: remove?
-  pgadmin:
-    image: dpage/pgadmin4:6
-    restart: unless-stopped
-    environment:
-      PGADMIN_DEFAULT_EMAIL: tech@helpwave.de
-      PGADMIN_DEFAULT_PASSWORD: tech@helpwave.de
-    volumes:
-      - ./servers.json:/pgadmin4/servers.json:ro
-    ports:
-      - "5433:80"
-
   eventstore:
     image: eventstore/eventstore:lts
     restart: unless-stopped
@@ -55,6 +43,9 @@ services:
       - "16686:16686" # api and UI
       - "4317:4317" # OTLP (grpc)
 
+  # dapr by default uses mDNS for service discovery,
+  # unfortunately multicast IP and docker networks don't play nice together,
+  # so we use consul for service discovery
   consul:
     image: consul:1.15.4
     restart: unless-stopped
@@ -62,7 +53,7 @@ services:
   apisix:
     build:
       context: ..
-      dockerfile: Dockerfile.apisix
+      dockerfile: Dockerfile.apisix # TODO
     restart: unless-stopped
     depends_on:
       - services
@@ -75,6 +66,7 @@ services:
     ports:
       - "9080:9080"
 
+  # dapr sidecar for apisix
   apisix-dapr:
     image: "daprio/daprd:1.12.4"
     restart: unless-stopped
@@ -82,6 +74,7 @@ services:
       - apisix
     volumes:
       - ./dapr.yaml:/dapr.yaml:ro
+    # TODO: a lot of this can go (already in config file)
     command: [
       "./daprd",
       "--app-id", "gateway",
@@ -93,7 +86,8 @@ services:
     ]
     network_mode: "service:apisix"
 
-  # TODO: document
+  # services compiles and runs all services using dapr_run.yaml (TODO: move dapr-run file in here)
+  # also runs initial migrations for all services
   services:
     build:
       context: ../images/dev-go
@@ -122,12 +116,9 @@ services:
         bash migrate.sh
         dapr run --run-file dapr_run.yaml --config dev/dapr.yaml
     restart: unless-stopped
-    ports:
-      - "3001:3001" # task-svc
-      - "3002:3002" # user-svc
-      - "3003:3003" # ory-svc
-      - "8080:8080" # general purpose http port, you might use it for dapr dashboard
+    network_mode: "service:devcontainer" # share ports with devcontainer
 
+  # devcontainer is where the developer should do their development in
   devcontainer:
     build:
       context: ../images/dev-go
@@ -135,12 +126,7 @@ services:
         UID: ${UID:-1000} # TODO: document
         GID: ${GID:-1000}
     volumes:
-      # we currently don't mount (i.e. persist) the go module cache
-      # this increases consistency in builds and dependencies, in trade for increased initial startup time
-
-      # mounts the whole repo
       - ../:/helpwave
-
       # mounts the docker socket (allows DooD)
       - /var/run/docker.sock:/var/run/docker.sock
     working_dir: /helpwave
@@ -149,3 +135,8 @@ services:
       COMPOSE_FILE: "/helpwave/dev/docker-compose.yaml" # allows us to use `docker compose` in any directory
     restart: unless-stopped
     command: sleep infinity
+    ports:
+      - "3001:3001" # task-svc
+      - "3002:3002" # user-svc
+      - "3003:3003" # ory-svc
+      - "8080:8080" # general purpose http port, you might use it for dapr dashboard

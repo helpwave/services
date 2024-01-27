@@ -76,13 +76,19 @@ RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.25.0
 #  https://github.com/favadi/protoc-go-inject-tag
 RUN go install github.com/favadi/protoc-go-inject-tag@v1.4.0
 
-# TODO: merge dev and .devcontainer
 # TODO: renovate
 # TODO: move apisix dockerfile
 # TODO: docs
-# TODO: profiles
-# TODO: auto-seed database
-# TODO: docker outside docker (compose)
-# TODO: what about .env files?
+
+# TODO: docker permissions
+# TODO: git credentials
+# TODO: allow customizations
+
+# TODO: mount toolchain
+# TODO: build environment variables in dev container
+# TODO: scripts
+# TODO: update CI
+# TODO: evans
+
 
 CMD ["bash"]
