@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package proto.services.property_svc.v1;
+
+option go_package = "gen/proto/services/property-svc";
+
+enum FieldType {
+  FIELD_TYPE_TEXT = 0;
+  FIELD_TYPE_NUMBER = 1;
+  FIELD_TYPE_CHECKBOX = 2;
+  FIELD_TYPE_DATE = 3;
+  FIELD_TYPE_DATETIME = 4;
+  FIELD_TYPE_SELECT = 5;
+}
+
+//
+// CreateProperty
+//
+message CreatePropertyRequest{
+  string subject_id = 1;
+  string subject_type = 2;
+  FieldType field_type = 3;
+  string name = 4;
+}
+
+message CreatePropertyResponse {
+  string id = 1;
+}
+
+//
+// PropertyService
+//
+
+service PropertyService {
+  rpc CreateProperty(CreatePropertyRequest) returns (CreatePropertyResponse) {}
+}
