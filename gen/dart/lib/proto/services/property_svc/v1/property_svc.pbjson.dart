@@ -62,3 +62,45 @@ const CreatePropertyResponse$json = {
 final $typed_data.Uint8List createPropertyResponseDescriptor = $convert.base64Decode(
     'ChZDcmVhdGVQcm9wZXJ0eVJlc3BvbnNlEg4KAmlkGAEgASgJUgJpZA==');
 
+@$core.Deprecated('Use getPropertyRequestDescriptor instead')
+const GetPropertyRequest$json = {
+  '1': 'GetPropertyRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `GetPropertyRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPropertyRequestDescriptor = $convert.base64Decode(
+    'ChJHZXRQcm9wZXJ0eVJlcXVlc3QSDgoCaWQYASABKAlSAmlk');
+
+@$core.Deprecated('Use getPropertyResponseDescriptor instead')
+const GetPropertyResponse$json = {
+  '1': 'GetPropertyResponse',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'subject_type', '3': 3, '4': 1, '5': 9, '10': 'subjectType'},
+    {'1': 'subject_id', '3': 4, '4': 1, '5': 9, '10': 'subjectId'},
+    {'1': 'field_type', '3': 5, '4': 1, '5': 14, '6': '.proto.services.property_svc.v1.FieldType', '10': 'fieldType'},
+    {'1': 'description', '3': 6, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
+    {'1': 'is_archived', '3': 7, '4': 1, '5': 8, '9': 1, '10': 'isArchived', '17': true},
+    {'1': 'is_soft_required', '3': 8, '4': 1, '5': 8, '9': 2, '10': 'isSoftRequired', '17': true},
+  ],
+  '8': [
+    {'1': '_description'},
+    {'1': '_is_archived'},
+    {'1': '_is_soft_required'},
+  ],
+};
+
+/// Descriptor for `GetPropertyResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPropertyResponseDescriptor = $convert.base64Decode(
+    'ChNHZXRQcm9wZXJ0eVJlc3BvbnNlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW'
+    '1lEiEKDHN1YmplY3RfdHlwZRgDIAEoCVILc3ViamVjdFR5cGUSHQoKc3ViamVjdF9pZBgEIAEo'
+    'CVIJc3ViamVjdElkEkgKCmZpZWxkX3R5cGUYBSABKA4yKS5wcm90by5zZXJ2aWNlcy5wcm9wZX'
+    'J0eV9zdmMudjEuRmllbGRUeXBlUglmaWVsZFR5cGUSJQoLZGVzY3JpcHRpb24YBiABKAlIAFIL'
+    'ZGVzY3JpcHRpb26IAQESJAoLaXNfYXJjaGl2ZWQYByABKAhIAVIKaXNBcmNoaXZlZIgBARItCh'
+    'Bpc19zb2Z0X3JlcXVpcmVkGAggASgISAJSDmlzU29mdFJlcXVpcmVkiAEBQg4KDF9kZXNjcmlw'
+    'dGlvbkIOCgxfaXNfYXJjaGl2ZWRCEwoRX2lzX3NvZnRfcmVxdWlyZWQ=');
+

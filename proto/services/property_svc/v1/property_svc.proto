@@ -28,9 +28,30 @@ message CreatePropertyResponse {
 }
 
 //
+// GetProperty
+//
+
+message GetPropertyRequest {
+  string id = 1;
+}
+
+message GetPropertyResponse {
+  string id = 1;
+  string name = 2;
+  string subject_type = 3;
+  string subject_id = 4;
+  FieldType field_type = 5;
+
+  optional string description = 6;
+  optional bool is_archived = 7;
+  optional bool is_soft_required = 8;
+}
+
+//
 // PropertyService
 //
 
 service PropertyService {
   rpc CreateProperty(CreatePropertyRequest) returns (CreatePropertyResponse) {}
+  rpc GetProperty(GetPropertyRequest) returns (GetPropertyResponse) {}
 }

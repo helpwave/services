@@ -23,6 +23,11 @@ class PropertyServiceStub(object):
                 request_serializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.CreatePropertyRequest.SerializeToString,
                 response_deserializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.CreatePropertyResponse.FromString,
                 )
+        self.GetProperty = channel.unary_unary(
+                '/proto.services.property_svc.v1.PropertyService/GetProperty',
+                request_serializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.GetPropertyRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.GetPropertyResponse.FromString,
+                )
 
 
 class PropertyServiceServicer(object):
@@ -38,6 +43,12 @@ class PropertyServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetProperty(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_PropertyServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -45,6 +56,11 @@ def add_PropertyServiceServicer_to_server(servicer, server):
                     servicer.CreateProperty,
                     request_deserializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.CreatePropertyRequest.FromString,
                     response_serializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.CreatePropertyResponse.SerializeToString,
+            ),
+            'GetProperty': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetProperty,
+                    request_deserializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.GetPropertyRequest.FromString,
+                    response_serializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.GetPropertyResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -74,5 +90,22 @@ class PropertyService(object):
         return grpc.experimental.unary_unary(request, target, '/proto.services.property_svc.v1.PropertyService/CreateProperty',
             proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.CreatePropertyRequest.SerializeToString,
             proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.CreatePropertyResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetProperty(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.property_svc.v1.PropertyService/GetProperty',
+            proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.GetPropertyRequest.SerializeToString,
+            proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.GetPropertyResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

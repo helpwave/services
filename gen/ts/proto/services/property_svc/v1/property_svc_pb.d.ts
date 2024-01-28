@@ -50,6 +50,91 @@ export namespace CreatePropertyResponse {
   }
 }
 
+export class GetPropertyRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): GetPropertyRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPropertyRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPropertyRequest): GetPropertyRequest.AsObject;
+  static serializeBinaryToWriter(message: GetPropertyRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPropertyRequest;
+  static deserializeBinaryFromReader(message: GetPropertyRequest, reader: jspb.BinaryReader): GetPropertyRequest;
+}
+
+export namespace GetPropertyRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class GetPropertyResponse extends jspb.Message {
+  getId(): string;
+  setId(value: string): GetPropertyResponse;
+
+  getName(): string;
+  setName(value: string): GetPropertyResponse;
+
+  getSubjectType(): string;
+  setSubjectType(value: string): GetPropertyResponse;
+
+  getSubjectId(): string;
+  setSubjectId(value: string): GetPropertyResponse;
+
+  getFieldType(): FieldType;
+  setFieldType(value: FieldType): GetPropertyResponse;
+
+  getDescription(): string;
+  setDescription(value: string): GetPropertyResponse;
+  hasDescription(): boolean;
+  clearDescription(): GetPropertyResponse;
+
+  getIsArchived(): boolean;
+  setIsArchived(value: boolean): GetPropertyResponse;
+  hasIsArchived(): boolean;
+  clearIsArchived(): GetPropertyResponse;
+
+  getIsSoftRequired(): boolean;
+  setIsSoftRequired(value: boolean): GetPropertyResponse;
+  hasIsSoftRequired(): boolean;
+  clearIsSoftRequired(): GetPropertyResponse;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPropertyResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPropertyResponse): GetPropertyResponse.AsObject;
+  static serializeBinaryToWriter(message: GetPropertyResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPropertyResponse;
+  static deserializeBinaryFromReader(message: GetPropertyResponse, reader: jspb.BinaryReader): GetPropertyResponse;
+}
+
+export namespace GetPropertyResponse {
+  export type AsObject = {
+    id: string,
+    name: string,
+    subjectType: string,
+    subjectId: string,
+    fieldType: FieldType,
+    description?: string,
+    isArchived?: boolean,
+    isSoftRequired?: boolean,
+  }
+
+  export enum DescriptionCase { 
+    _DESCRIPTION_NOT_SET = 0,
+    DESCRIPTION = 6,
+  }
+
+  export enum IsArchivedCase { 
+    _IS_ARCHIVED_NOT_SET = 0,
+    IS_ARCHIVED = 7,
+  }
+
+  export enum IsSoftRequiredCase { 
+    _IS_SOFT_REQUIRED_NOT_SET = 0,
+    IS_SOFT_REQUIRED = 8,
+  }
+}
+
 export enum FieldType { 
   FIELD_TYPE_TEXT = 0,
   FIELD_TYPE_NUMBER = 1,

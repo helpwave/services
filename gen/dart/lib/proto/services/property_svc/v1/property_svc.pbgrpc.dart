@@ -25,6 +25,10 @@ class PropertyServiceClient extends $grpc.Client {
       '/proto.services.property_svc.v1.PropertyService/CreateProperty',
       ($3.CreatePropertyRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $3.CreatePropertyResponse.fromBuffer(value));
+  static final _$getProperty = $grpc.ClientMethod<$3.GetPropertyRequest, $3.GetPropertyResponse>(
+      '/proto.services.property_svc.v1.PropertyService/GetProperty',
+      ($3.GetPropertyRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $3.GetPropertyResponse.fromBuffer(value));
 
   PropertyServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -34,6 +38,10 @@ class PropertyServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$3.CreatePropertyResponse> createProperty($3.CreatePropertyRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createProperty, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$3.GetPropertyResponse> getProperty($3.GetPropertyRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getProperty, request, options: options);
   }
 }
 
@@ -49,11 +57,23 @@ abstract class PropertyServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $3.CreatePropertyRequest.fromBuffer(value),
         ($3.CreatePropertyResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.GetPropertyRequest, $3.GetPropertyResponse>(
+        'GetProperty',
+        getProperty_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $3.GetPropertyRequest.fromBuffer(value),
+        ($3.GetPropertyResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$3.CreatePropertyResponse> createProperty_Pre($grpc.ServiceCall call, $async.Future<$3.CreatePropertyRequest> request) async {
     return createProperty(call, await request);
   }
 
+  $async.Future<$3.GetPropertyResponse> getProperty_Pre($grpc.ServiceCall call, $async.Future<$3.GetPropertyRequest> request) async {
+    return getProperty(call, await request);
+  }
+
   $async.Future<$3.CreatePropertyResponse> createProperty($grpc.ServiceCall call, $3.CreatePropertyRequest request);
+  $async.Future<$3.GetPropertyResponse> getProperty($grpc.ServiceCall call, $3.GetPropertyRequest request);
 }

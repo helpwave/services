@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	PropertyService_CreateProperty_FullMethodName = "/proto.services.property_svc.v1.PropertyService/CreateProperty"
+	PropertyService_GetProperty_FullMethodName    = "/proto.services.property_svc.v1.PropertyService/GetProperty"
 )
 
 // PropertyServiceClient is the client API for PropertyService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PropertyServiceClient interface {
 	CreateProperty(ctx context.Context, in *CreatePropertyRequest, opts ...grpc.CallOption) (*CreatePropertyResponse, error)
+	GetProperty(ctx context.Context, in *GetPropertyRequest, opts ...grpc.CallOption) (*GetPropertyResponse, error)
 }
 
 type propertyServiceClient struct {
@@ -46,11 +48,21 @@ func (c *propertyServiceClient) CreateProperty(ctx context.Context, in *CreatePr
 	return out, nil
 }
 
+func (c *propertyServiceClient) GetProperty(ctx context.Context, in *GetPropertyRequest, opts ...grpc.CallOption) (*GetPropertyResponse, error) {
+	out := new(GetPropertyResponse)
+	err := c.cc.Invoke(ctx, PropertyService_GetProperty_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PropertyServiceServer is the server API for PropertyService service.
 // All implementations must embed UnimplementedPropertyServiceServer
 // for forward compatibility
 type PropertyServiceServer interface {
 	CreateProperty(context.Context, *CreatePropertyRequest) (*CreatePropertyResponse, error)
+	GetProperty(context.Context, *GetPropertyRequest) (*GetPropertyResponse, error)
 	mustEmbedUnimplementedPropertyServiceServer()
 }
 
@@ -60,6 +72,9 @@ type UnimplementedPropertyServiceServer struct {
 
 func (UnimplementedPropertyServiceServer) CreateProperty(context.Context, *CreatePropertyRequest) (*CreatePropertyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateProperty not implemented")
+}
+func (UnimplementedPropertyServiceServer) GetProperty(context.Context, *GetPropertyRequest) (*GetPropertyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProperty not implemented")
 }
 func (UnimplementedPropertyServiceServer) mustEmbedUnimplementedPropertyServiceServer() {}
 
@@ -92,6 +107,24 @@ func _PropertyService_CreateProperty_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PropertyService_GetProperty_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPropertyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PropertyServiceServer).GetProperty(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PropertyService_GetProperty_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PropertyServiceServer).GetProperty(ctx, req.(*GetPropertyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PropertyService_ServiceDesc is the grpc.ServiceDesc for PropertyService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +135,10 @@ var PropertyService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateProperty",
 			Handler:    _PropertyService_CreateProperty_Handler,
+		},
+		{
+			MethodName: "GetProperty",
+			Handler:    _PropertyService_GetProperty_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

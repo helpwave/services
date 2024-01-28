@@ -138,5 +138,66 @@ proto.proto.services.property_svc.v1.PropertyServicePromiseClient.prototype.crea
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.property_svc.v1.GetPropertyRequest,
+ *   !proto.proto.services.property_svc.v1.GetPropertyResponse>}
+ */
+const methodDescriptor_PropertyService_GetProperty = new grpc.web.MethodDescriptor(
+  '/proto.services.property_svc.v1.PropertyService/GetProperty',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.property_svc.v1.GetPropertyRequest,
+  proto.proto.services.property_svc.v1.GetPropertyResponse,
+  /**
+   * @param {!proto.proto.services.property_svc.v1.GetPropertyRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.property_svc.v1.GetPropertyResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.property_svc.v1.GetPropertyRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.property_svc.v1.GetPropertyResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.property_svc.v1.GetPropertyResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.property_svc.v1.PropertyServiceClient.prototype.getProperty =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.property_svc.v1.PropertyService/GetProperty',
+      request,
+      metadata || {},
+      methodDescriptor_PropertyService_GetProperty,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.property_svc.v1.GetPropertyRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.property_svc.v1.GetPropertyResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.property_svc.v1.PropertyServicePromiseClient.prototype.getProperty =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.property_svc.v1.PropertyService/GetProperty',
+      request,
+      metadata || {},
+      methodDescriptor_PropertyService_GetProperty);
+};
+
+
 module.exports = proto.proto.services.property_svc.v1;
 
