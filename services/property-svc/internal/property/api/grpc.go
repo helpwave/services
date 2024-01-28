@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"hwes"
 	commandsV1 "property-svc/internal/property/commands/v1"
+	v1queries "property-svc/internal/property/queries/v1"
 )
 
 type PropertyGrpcService struct {
@@ -30,5 +31,28 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 
 	return &pb.CreatePropertyResponse{
 		Id: propertyID.String(),
+	}, nil
+}
+
+func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetPropertyRequest) (*pb.GetPropertyResponse, error) {
+	id, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+
+	property, err := v1queries.NewGetPropertyByIDQueryHandler(s.as)(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.GetPropertyResponse{
+		Id:             property.ID.String(),
+		Name:           property.Name,
+		SubjectType:    property.SubjectType,
+		SubjectId:      property.SubjectID.String(),
+		FieldType:      property.FieldType,
+		Description:    &property.Description,
+		IsArchived:     &property.IsArchived,
+		IsSoftRequired: &property.IsSoftRequired,
 	}, nil
 }
