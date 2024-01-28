@@ -40,7 +40,7 @@ RUN useradd -m -u ${UID} -g ${GID} -o -p "" -s /bin/bash ${UNAME} \
     && usermod -aG sudo ${UNAME} \
     && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
     && echo 'Defaults        !env_reset' >> /etc/sudoers \
-    && echo 'alias docker="sudo docker"' >> /home/${UNAME}/.bashrc # shitty hack to make docker mgmt easier
+	&& echo 'shopt -s globstar' >> /home/${UNAME}/.bashrc
 USER ${UID}:${GID}
 ENV HOME="/home/${UNAME}"
 
@@ -76,19 +76,20 @@ RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.25.0
 #  https://github.com/favadi/protoc-go-inject-tag
 RUN go install github.com/favadi/protoc-go-inject-tag@v1.4.0
 
+# LATER
 # TODO: renovate
 # TODO: move apisix dockerfile
-# TODO: docs
+# TODO: mount toolchain on host
 
-# TODO: docker permissions
+# TRY NOW
 # TODO: git credentials
 # TODO: allow customizations
 
-# TODO: mount toolchain
-# TODO: build environment variables in dev container
+# NOW
+# TODO: docs
 # TODO: scripts
 # TODO: update CI
-# TODO: evans
 
-
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]

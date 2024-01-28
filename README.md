@@ -41,6 +41,9 @@ This will install a backend client for your IDE in the `devcontainer` container,
 
 ##### [The short route](https://www.jetbrains.com/help/go/connect-to-devcontainer.html#start_container_from_product)
 
+> [!WARNING]
+> Currently (Jan. 2024) the short route does not work due to bugs in IntelliJ.
+
 1. Start GoLand and close any open projects.
 2. Make sure your docker setup is correctly configured
 3. Under "Remote Development" -> "Dev Containers" create a new Dev Container
@@ -106,7 +109,7 @@ The frontend is a great way to test regressions. Hop over to [the web repo](http
 
 Using this approach you are closest to the actual calls made by the frontends. 
 
-TODO: https://github.com/ktr0731/evans
+TODO
 
 ##### Directly
 
