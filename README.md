@@ -4,7 +4,7 @@ helpwave's microservices
 
 ## Getting started
 
-> [!NOTICE]
+> [!NOTE]
 > Make sure you have [Git](https://git-scm.com/), [Docker](https://docs.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
 > installed on your system.
 
@@ -33,7 +33,7 @@ Next Steps: [Read on here](#development)
 You can start your IDE and Docker Compose together using Dev Containers.
 This will install a backend client for your IDE in the `devcontainer` container, which it uses instead of your local setup.
 
-> [!INFO]
+> [!IMPORTANT]
 > [Development Containers](https://containers.dev/) is still relatively new technology.
 > Things are likely to change and/or break.
 
@@ -251,9 +251,10 @@ We use [sqlc](https://docs.sqlc.dev/en/latest/), a compiler that generates go fu
 This script
 1. Makes sure the database is fully migrated up (see migration.sh)
 2. Generates a `schema.sql` using pg_dump
-	> [!TIP]
-	> The `schema.sql` is also a great place to familiarize yourself with the data model(s)!
 3. Invokes sqlc to generate go code based on a `sqlc.yaml`
+
+> [!TIP]
+> The `schema.sql` is also a great place to familiarize yourself with the data model(s)!
 
 Usage:
 - `./models.sh <some-svc>` generates models for a specific service
