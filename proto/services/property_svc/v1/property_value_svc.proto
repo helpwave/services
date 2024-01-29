@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package proto.services.property_svc.v1;
+
+option go_package = "gen/proto/services/property-svc";
+
+// TODO: This proto is just an hello-world example and far from where it should be!
