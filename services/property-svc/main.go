@@ -5,7 +5,8 @@ import (
 	pb "gen/proto/services/property_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwes/eventstoredb"
-	"property-svc/internal/property/api"
+	propertySetApi "property-svc/internal/property-set/api"
+	propertyApi "property-svc/internal/property/api"
 )
 
 const ServiceName = "property-svc"
@@ -22,7 +23,7 @@ func main() {
 	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
-		pb.RegisterPropertyServiceServer(grpcServer, api.NewPropertyService(aggregateStore))
-
+		pb.RegisterPropertyServiceServer(grpcServer, propertyApi.NewPropertyService(aggregateStore))
+		pb.RegisterPropertySetServiceServer(grpcServer, propertySetApi.NewPropertySetService(aggregateStore))
 	})
 }
