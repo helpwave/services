@@ -48,7 +48,7 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'subjectId')
     ..aOS(2, _omitFieldNames ? '' : 'subjectType')
-    ..e<FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: FieldType.FIELD_TYPE_TEXT, valueOf: FieldType.valueOf, enumValues: FieldType.values)
+    ..e<FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: FieldType.valueOf, enumValues: FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..hasRequiredFields = false
   ;
@@ -258,7 +258,7 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'subjectType')
     ..aOS(4, _omitFieldNames ? '' : 'subjectId')
-    ..e<FieldType>(5, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: FieldType.FIELD_TYPE_TEXT, valueOf: FieldType.valueOf, enumValues: FieldType.values)
+    ..e<FieldType>(5, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: FieldType.valueOf, enumValues: FieldType.values)
     ..aOS(6, _omitFieldNames ? '' : 'description')
     ..aOB(7, _omitFieldNames ? '' : 'isArchived')
     ..aOB(8, _omitFieldNames ? '' : 'isSoftRequired')

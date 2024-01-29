@@ -25,9 +25,10 @@ type Property struct {
 
 func NewProperty() *Property {
 	return &Property{
-		Name:        "",
-		Description: "",
-		IsArchived:  false,
+		Name:           "",
+		Description:    "",
+		IsArchived:     false,
+		IsSoftRequired: true,
 	}
 }
 

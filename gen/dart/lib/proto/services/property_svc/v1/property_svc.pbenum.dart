@@ -14,14 +14,16 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class FieldType extends $pb.ProtobufEnum {
-  static const FieldType FIELD_TYPE_TEXT = FieldType._(0, _omitEnumNames ? '' : 'FIELD_TYPE_TEXT');
-  static const FieldType FIELD_TYPE_NUMBER = FieldType._(1, _omitEnumNames ? '' : 'FIELD_TYPE_NUMBER');
-  static const FieldType FIELD_TYPE_CHECKBOX = FieldType._(2, _omitEnumNames ? '' : 'FIELD_TYPE_CHECKBOX');
-  static const FieldType FIELD_TYPE_DATE = FieldType._(3, _omitEnumNames ? '' : 'FIELD_TYPE_DATE');
-  static const FieldType FIELD_TYPE_DATETIME = FieldType._(4, _omitEnumNames ? '' : 'FIELD_TYPE_DATETIME');
-  static const FieldType FIELD_TYPE_SELECT = FieldType._(5, _omitEnumNames ? '' : 'FIELD_TYPE_SELECT');
+  static const FieldType FIELD_TYPE_UNSPECIFIED = FieldType._(0, _omitEnumNames ? '' : 'FIELD_TYPE_UNSPECIFIED');
+  static const FieldType FIELD_TYPE_TEXT = FieldType._(1, _omitEnumNames ? '' : 'FIELD_TYPE_TEXT');
+  static const FieldType FIELD_TYPE_NUMBER = FieldType._(2, _omitEnumNames ? '' : 'FIELD_TYPE_NUMBER');
+  static const FieldType FIELD_TYPE_CHECKBOX = FieldType._(3, _omitEnumNames ? '' : 'FIELD_TYPE_CHECKBOX');
+  static const FieldType FIELD_TYPE_DATE = FieldType._(4, _omitEnumNames ? '' : 'FIELD_TYPE_DATE');
+  static const FieldType FIELD_TYPE_DATETIME = FieldType._(5, _omitEnumNames ? '' : 'FIELD_TYPE_DATETIME');
+  static const FieldType FIELD_TYPE_SELECT = FieldType._(6, _omitEnumNames ? '' : 'FIELD_TYPE_SELECT');
 
   static const $core.List<FieldType> values = <FieldType> [
+    FIELD_TYPE_UNSPECIFIED,
     FIELD_TYPE_TEXT,
     FIELD_TYPE_NUMBER,
     FIELD_TYPE_CHECKBOX,

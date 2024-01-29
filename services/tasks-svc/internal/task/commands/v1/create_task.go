@@ -32,6 +32,7 @@ func NewCreateTaskCommandHandler(as hwes.AggregateStore) CreateTaskCommandHandle
 		if err := a.CreateTask(ctx, name, patientID, finalStatus); err != nil {
 			return err
 		}
+
 		if description != nil {
 			if err := a.UpdateDescription(ctx, a.Task.Description, *description); err != nil {
 				return err

@@ -988,12 +988,13 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.hasIsSoftRequ
  * @enum {number}
  */
 proto.proto.services.property_svc.v1.FieldType = {
-  FIELD_TYPE_TEXT: 0,
-  FIELD_TYPE_NUMBER: 1,
-  FIELD_TYPE_CHECKBOX: 2,
-  FIELD_TYPE_DATE: 3,
-  FIELD_TYPE_DATETIME: 4,
-  FIELD_TYPE_SELECT: 5
+  FIELD_TYPE_UNSPECIFIED: 0,
+  FIELD_TYPE_TEXT: 1,
+  FIELD_TYPE_NUMBER: 2,
+  FIELD_TYPE_CHECKBOX: 3,
+  FIELD_TYPE_DATE: 4,
+  FIELD_TYPE_DATETIME: 5,
+  FIELD_TYPE_SELECT: 6
 };
 
 goog.object.extend(exports, proto.proto.services.property_svc.v1);

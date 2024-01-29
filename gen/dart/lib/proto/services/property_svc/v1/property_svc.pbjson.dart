@@ -17,20 +17,22 @@ import 'dart:typed_data' as $typed_data;
 const FieldType$json = {
   '1': 'FieldType',
   '2': [
-    {'1': 'FIELD_TYPE_TEXT', '2': 0},
-    {'1': 'FIELD_TYPE_NUMBER', '2': 1},
-    {'1': 'FIELD_TYPE_CHECKBOX', '2': 2},
-    {'1': 'FIELD_TYPE_DATE', '2': 3},
-    {'1': 'FIELD_TYPE_DATETIME', '2': 4},
-    {'1': 'FIELD_TYPE_SELECT', '2': 5},
+    {'1': 'FIELD_TYPE_UNSPECIFIED', '2': 0},
+    {'1': 'FIELD_TYPE_TEXT', '2': 1},
+    {'1': 'FIELD_TYPE_NUMBER', '2': 2},
+    {'1': 'FIELD_TYPE_CHECKBOX', '2': 3},
+    {'1': 'FIELD_TYPE_DATE', '2': 4},
+    {'1': 'FIELD_TYPE_DATETIME', '2': 5},
+    {'1': 'FIELD_TYPE_SELECT', '2': 6},
   ],
 };
 
 /// Descriptor for `FieldType`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List fieldTypeDescriptor = $convert.base64Decode(
-    'CglGaWVsZFR5cGUSEwoPRklFTERfVFlQRV9URVhUEAASFQoRRklFTERfVFlQRV9OVU1CRVIQAR'
-    'IXChNGSUVMRF9UWVBFX0NIRUNLQk9YEAISEwoPRklFTERfVFlQRV9EQVRFEAMSFwoTRklFTERf'
-    'VFlQRV9EQVRFVElNRRAEEhUKEUZJRUxEX1RZUEVfU0VMRUNUEAU=');
+    'CglGaWVsZFR5cGUSGgoWRklFTERfVFlQRV9VTlNQRUNJRklFRBAAEhMKD0ZJRUxEX1RZUEVfVE'
+    'VYVBABEhUKEUZJRUxEX1RZUEVfTlVNQkVSEAISFwoTRklFTERfVFlQRV9DSEVDS0JPWBADEhMK'
+    'D0ZJRUxEX1RZUEVfREFURRAEEhcKE0ZJRUxEX1RZUEVfREFURVRJTUUQBRIVChFGSUVMRF9UWV'
+    'BFX1NFTEVDVBAG');
 
 @$core.Deprecated('Use createPropertyRequestDescriptor instead')
 const CreatePropertyRequest$json = {
