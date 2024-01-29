@@ -1,5 +1,5 @@
 # services
-    
+
 helpwave's microservices
 
 ## Getting started
@@ -21,9 +21,9 @@ The main down site to this is that your IDE will use your local toolchain and de
 3. Start your IDE of choice and start hacking!
 4. You can use the tools installed in the dev docker container by opening a shell on it:
    ```bash
-   $ docker exec -ti dev-devcontainer-1 bash
+   $ ./dev.sh
    # you are now in the container
-   $ psql ...
+   $ psql -d user-svc
    ```
 
 Next Steps: [Read on here](#development)
@@ -95,6 +95,7 @@ Next Steps: [Read on here](#development)
 Following the steps above you should now have a docker compose stack running and are able to execute commands in the `dev-devcontainer-1` container.
 
 To see what compose actually starts we recommend a look into the [docker-compose.yaml](https://github.com/helpwave/services/blob/main/dev/docker-compose.yaml), but here is the gist:
+
 * Dependencies (e.g., Redis, Postgres and EventStore)
 * `apisix`
 * `services`
@@ -122,11 +123,20 @@ The frontend is a great way to test regressions. Hop over to [the web repo](http
 
 Using this approach you are closest to the actual calls made by the frontends. 
 
-TODO
+TODO: We are still looking for a tool that works well for this :/
 
 ##### Directly
 
-TODO
+<https://github.com/fullstorydev/grpcurl>
+
+```bash
+grpcurl --plaintext \
+	-H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
+	-H "Authorization: Bearer <...>" \
+	-d '{}' \
+	localhost:3001 \
+	proto.services.task_svc.v1.WardService/GetWards
+```
 
 ## Ports
 
@@ -148,9 +158,12 @@ TODO
 
 ### Scripts
 
-- `protos.sh`: Lint and Generate protos
-- `migrate.sh`: [migrate.sh](#migratesh---running-migratemigrate-inside-docker)
-- `models.sh`: [models.sh](#modelssh---generate-models-from-sql-queries)
+* `protos.sh`: Lint and Generate protos
+* `migrate.sh`: [migrate.sh](#migratesh---running-migratemigrate-inside-docker)
+* `models.sh`: [models.sh](#modelssh---generate-models-from-sql-queries)
+* `up.sh` - Starts the docker compose stack, accepts `docker compose up` arguments. Your IDE might do this for you!
+* `down.sh` - Shuts down the docker compose stack, accepts `docker compose down` arguments
+* `shell.sh` - Opens a Shell in the devcontainer
 
 ## Fake token
 
@@ -164,7 +177,8 @@ Only do this in development environments!
 Fake tokens are used just like JWTs: As bearer tokens in the Authorization header of your gRPC requests.
 
 Here is an example fake-token that can be used as the bearer authorization token.
-```
+
+```text
 eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19
 ---
 # decoded
@@ -180,19 +194,24 @@ eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3Rp
 ## Docker images
 
 You can build a docker image for a service using `make`:
+
 ```bash
 make <servicename>
 ```
+
  e.g.:
+
 ```bash
  make user-svc
 ```
 
 Each service should have a Makefile, that includes the root's Makefile.
 In the context of a service directory you should be able to use
+
 ```bash
  make this
 ```
+
 to build the corresponding docker image as well.
 
 ### Docker Images
@@ -216,11 +235,14 @@ This image contains the service including the daprd sidecar. These two processes
 side by side in the container via [hivemind](https://github.com/DarthSim/hivemind).
 
 ## Migrations
+
 We use [migrate](https://github.com/golang-migrate/migrate) to handle changes to our database tables
 It uses change versioning, e.g.
-- `000009_some_name.up.sql` contains all changes from version 8 to 9
-- `000009_some_name.down.sql` contains all changes from version 9 to 8 in reverse order from
-```
+
+* `000009_some_name.up.sql` contains all changes from version 8 to 9
+* `000009_some_name.down.sql` contains all changes from version 9 to 8 in reverse order from
+
+```bash
 migrate -path services/<service>/migrations/ -database postgres://postgres:postgres@localhost:5432/<service>?sslmode=disable up [version]
 migrate -path services/<service>/migrations/ -database postgres://postgres:postgres@localhost:5432/<service>?sslmode=disable down [version]
 ```
@@ -236,18 +258,21 @@ you arguments into migrate/migrate running in a container.
 `migrate.sh` will use the database setup of the passed service. Therefore, a .env file is required.
 
 #### Usage
+
 `./migrate.sh <service> [... arguments for migrate/migrate]`
 
-- `<service>` must be one of the services inside `/services/`
-- `[... arguments for migrate/migrate]` gets passed directly to migrate/migrate
+* `<service>` must be one of the services inside `/services/`
+* `[... arguments for migrate/migrate]` gets passed directly to migrate/migrate
 
 
-#### Examples:
-- Migrate the task-svc database all the way up `./migrate.sh task-svc up`
-- Migrate the task-svc database one down: `./migrate.sh task-svc down 1`
-- Current migration version of the task-svc database: `./migrate.sh task-svc version`
+#### Examples
 
-#### desired:
+* Migrate the task-svc database all the way up `./migrate.sh task-svc up`
+* Migrate the task-svc database one down: `./migrate.sh task-svc down 1`
+* Current migration version of the task-svc database: `./migrate.sh task-svc version`
+
+#### desired
+
 Additionally, the script allows you to query the highest available migration version
 based on the migration files available in the service:
 
@@ -262,6 +287,7 @@ based on the migration files available in the service:
 
 We use [sqlc](https://docs.sqlc.dev/en/latest/), a compiler that generates go functions based on SQL queries and a schema.
 This script
+
 1. Makes sure the database is fully migrated up (see migration.sh)
 2. Generates a `schema.sql` using pg_dump
 3. Invokes sqlc to generate go code based on a `sqlc.yaml`
@@ -270,14 +296,17 @@ This script
 > The `schema.sql` is also a great place to familiarize yourself with the data model(s)!
 
 Usage:
-- `./models.sh <some-svc>` generates models for a specific service
-- `./models.sh models` generates models for all services
+
+* `./models.sh <some-svc>` generates models for a specific service
+* `./models.sh models` generates models for all services
 
 ## Enviroment variables
+
 Every service should contain a `.env.example` file which should be copied to a usable `.env` file
 
 Default Variables:
-```
+
+```bash
 # The mode used, options available
 #  development, production
 MODE=development

@@ -8,13 +8,13 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro # TODO: document
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
       - "5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d task-svc -q"]
       interval: 10s
-      timeout: 5s
+      timeout: 2s
       retries: 5
 
   eventstore:
@@ -74,7 +74,6 @@ services:
       - apisix
     volumes:
       - ./dapr.yaml:/dapr.yaml:ro
-    # TODO: a lot of this can go (already in config file)
     command: [
       "./daprd",
       "--app-id", "gateway",
@@ -132,10 +131,18 @@ services:
     working_dir: /helpwave
     user: "helpwave"
     environment:
+      # psql variables, allows easy management / debugging of postgres using `psql -d <database>`
+      PGHOST: postgres
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: postgres
+
       COMPOSE_FILE: "/helpwave/dev/docker-compose.yaml" # allows us to use `docker compose` in any directory
     restart: unless-stopped
     command: sleep infinity
     ports:
+      # all of these ports are bound to in services
       - "3001:3001" # task-svc
       - "3002:3002" # user-svc
       - "3003:3003" # ory-svc

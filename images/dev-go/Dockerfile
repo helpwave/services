@@ -1,6 +1,6 @@
-# based on the debian 11 (bullseye) go 1.21 image
+# based on the debian 12 ("bookworm") go 1.21 image
 # for now this only builds x86_64 images (TODO)
-FROM golang:1.21.6-bullseye
+FROM golang:1.21.6-bookworm
 
 # update debian package list and packages, also install some
 RUN apt update \
@@ -13,9 +13,11 @@ RUN apt update \
 #  using a mounted docker socket we can manage the host's docker (Docker out of Docker):
 #  `/var/run/docker.sock:/var/run/docker.sock`
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
-    && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" \
-    && apt update \
-    && apt install docker-ce -y
+	&& echo "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/debian \
+  	$(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  	sudo tee /etc/apt/sources.list.d/docker.list > /dev/null \
+  	&& sudo apt update \
+ 	&& sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
 # install buf
 #  https://buf.build/
@@ -83,13 +85,12 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v1.4.0
 # TRY NOW
 # TODO: git credentials
 # TODO: allow customizations
-# TODO: dont build, just pull, but CI should build
 # TODO: mount toolchain on host
-# TODO: psql env
 
 # NOW
 # TODO: docs
 # TODO: scripts
+# TODO: dont build, just pull, but CI should build
 # TODO: update CI
 
 COPY entrypoint.sh /entrypoint.sh
