@@ -37,6 +37,14 @@ This will install a backend client for your IDE in the `devcontainer` container,
 > [Development Containers](https://containers.dev/) is still relatively new technology.
 > Things are likely to change and/or break.
 
+> [!WARNING]
+> Even though containers are a somewhat isolated environment,
+> the devcontainer has access to the host's docker socket.
+> This means malicious code can still mess with your system.
+> Just like on your host system (assuming your user is in the docker group), everything could run as root, if it tried hard enough.
+> For example by spawning a new container, which mounts `/` and runs `rf -rf /`.
+> You can disable docker-out-of-docker by setting `DOCKER_SOCK` in `dev`'s `.env` to `/dev/null`.
+
 #### Development Containers and IntelliJ ([GoLand](https://www.jetbrains.com/de-de/go/))
 
 ##### [The short route](https://www.jetbrains.com/help/go/connect-to-devcontainer.html#start_container_from_product)
@@ -49,7 +57,7 @@ This will install a backend client for your IDE in the `devcontainer` container,
 3. Under "Remote Development" -> "Dev Containers" create a new Dev Container
 4. Copy in `git@github.com:helpwave/services.git` and select your branch of choice
 5. Wait, follow further instructions, and select the editor you want to launch (likely GoLand)
-6. GoLand will start *in* a docker container you can start hacking!
+6. GoLand will start *in* a docker container, you can start hacking!
 7. Use the usual GoLand UI to open a terminal, where you will find a bunch of tools pre-installed for you.
 8. Next time you can find the Dev Container ready to start.
 
@@ -75,7 +83,12 @@ Next Steps: [Read on here](#development)
 
 #### Development Containers and VSCode
 
-TODO
+1. Clone the Repo and open it in VSCode
+2. On the lower left, click on the remote development icon
+3. Select "Reopen in Container"
+4. VSCode will restart *in* a docker container, you can start hacking!
+5. Use the VSCode UI to open a terminal, where you will find a bunch of tools pre-installed for you.
+6. Closing VSCode will *not* stop the docker compose stack. You can do that manually, close VSCode and navigate to `dev`, there, run `docker compose down`.
 
 ## Development
 
@@ -135,9 +148,9 @@ TODO
 
 ### Scripts
 
-- `./protos.sh`: Lint and Generate protos
-- `/migrate.sh`: [migrate.sh](#migratesh---running-migratemigrate-inside-docker)
-- `./models.sh`: [models.sh](#modelssh---generate-models-from-sql-queries)
+- `protos.sh`: Lint and Generate protos
+- `migrate.sh`: [migrate.sh](#migratesh---running-migratemigrate-inside-docker)
+- `models.sh`: [models.sh](#modelssh---generate-models-from-sql-queries)
 
 ## Fake token
 

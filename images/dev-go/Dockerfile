@@ -85,6 +85,7 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v1.4.0
 # TODO: allow customizations
 # TODO: dont build, just pull, but CI should build
 # TODO: mount toolchain on host
+# TODO: psql env
 
 # NOW
 # TODO: docs

@@ -128,7 +128,7 @@ services:
     volumes:
       - ../:/helpwave
       # mounts the docker socket (allows DooD)
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock
     working_dir: /helpwave
     user: "helpwave"
     environment:
