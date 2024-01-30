@@ -126,8 +126,6 @@ services:
         GID: ${GID:-1000}
     volumes:
       - ../:/helpwave
-      # mounts the docker socket (allows DooD)
-      - ${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock
     working_dir: /helpwave
     user: "helpwave"
     environment:

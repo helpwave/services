@@ -9,17 +9,6 @@ RUN apt update \
     	apt-transport-https ca-certificates curl gnupg2 software-properties-common \
     	-y
 
-# install docker
-#  using a mounted docker socket we can manage the host's docker (Docker out of Docker):
-#  `/var/run/docker.sock:/var/run/docker.sock`
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
-	&& echo "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/debian \
-  	$(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  	sudo tee /etc/apt/sources.list.d/docker.list > /dev/null \
-  	&& sudo apt update \
- 	&& sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-
-# install buf
 #  https://buf.build/
 RUN wget https://github.com/bufbuild/buf/releases/download/v1.28.1/buf-Linux-x86_64 -O /usr/local/bin/buf \
     && chmod +x /usr/local/bin/buf
