@@ -13,6 +13,9 @@ helpwave's microservices
 Using this setup you use your editor of choice on your system and start the docker compose stack next to it.
 The main down site to this is that your IDE will use your local toolchain and dependencies, which may not be in sync.
 
+> [!TIP]
+> `./up-sh -d` starts the compose stack in the background
+
 1. Clone the repo locally
 	```bash
 	$ git clone git@github.com:helpwave/services.git
@@ -233,7 +236,18 @@ to build the corresponding docker image as well.
 
 #### dev-go
 
-TODO
+The dev-go image is a common development environment for go services. It includes go and a whole lot of tools and dependencies.
+When updating the Dockerfile, also increase the `DEV_TAG` variable in the `up.sh` file.
+
+#### dev-go-custom
+
+For this image we only provide a Dockerfile, you can not pull it from the registry.
+It is built by docker-compose using your uid and gid as build arguments to reduce friction when it comes to mounted files.
+
+The other function of this image is to allow customization of the dev container.
+Feel free to install custom tooling (e.g. zsh, nano, ...) there.
+Please mind the instructions at the top of the Dockerfile though.
+If you think a tool might be useful to others, install it in the dev-go image instead.
 
 #### Dockerfile.apisix
 

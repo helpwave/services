@@ -91,8 +91,8 @@ services:
     build:
       context: ../images/dev-go-custom
       args:
-        TAG: testing-1 # TODO
-        UID: ${UID:-1000} # TODO: document
+        TAG: ${DEV_TAG}
+        UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
       # we currently don't mount (i.e. persist) the go module cache
@@ -123,8 +123,8 @@ services:
     build:
       context: ../images/dev-go-custom
       args:
-        TAG: testing-1 # TODO
-        UID: ${UID:-1000} # TODO: document
+        TAG: ${DEV_TAG}
+        UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
       - ../:/helpwave
