@@ -1,11 +1,10 @@
 # Have a tool you like? You can install it here!
-# This file (directory, even!) is in the .gitignore, so your changes are not checked in
-# Just make sure you don't overwrite the ENTRYPOINT or CMD
-# Also, don't touch anything above the ####-line,
-# or you might have to deal with merge conflicts when pulling new version!
-# If you really NEED to update this file (i.e. anything above the ###-line),
-# you can add this file to git-staging using `git add -f`
+# Make sure you don't overwrite the ENTRYPOINT or CMD
+# Also, don't touch anything above the ####-line
 
+# DON'T CHECK IN YOUR CHANGES!
+# run `git update-index --skip-worktree images/dev-go-custom/Dockerfile` first
+# (undo: `git update-index --no-skip-worktree images/dev-go-custom/Dockerfile`)
 
 # tag of the base docker image
 ARG TAG
@@ -37,3 +36,4 @@ USER helpwave
 
 ##############################################
 
+# Go wild

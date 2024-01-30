@@ -497,6 +497,3 @@ devenv.local.nix
 *.actual
 
 tmp
-
-images/dev-go-custom/**/*
-images/dev-go-custom/Dockerfile

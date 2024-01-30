@@ -84,7 +84,6 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v1.4.0
 
 # TRY NOW
 # TODO: git credentials
-# TODO: allow customizations
 # TODO: mount toolchain on host
 
 # NOW
