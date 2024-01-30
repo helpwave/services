@@ -89,8 +89,9 @@ services:
   # also runs initial migrations for all services
   services:
     build:
-      context: ../images/dev-go
+      context: ../images/dev-go-custom
       args:
+        TAG: testing-1 # TODO
         UID: ${UID:-1000} # TODO: document
         GID: ${GID:-1000}
     volumes:
@@ -120,8 +121,9 @@ services:
   # devcontainer is where the developer should do their development in
   devcontainer:
     build:
-      context: ../images/dev-go
+      context: ../images/dev-go-custom
       args:
+        TAG: testing-1 # TODO
         UID: ${UID:-1000} # TODO: document
         GID: ${GID:-1000}
     volumes:

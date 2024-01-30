@@ -158,12 +158,27 @@ grpcurl --plaintext \
 
 ### Scripts
 
+These scripts can be run on your local machine:
+
+* `shell.sh` - Opens a Shell in the devcontainer
+* `up.sh` - Starts the docker compose stack, accepts `docker compose up` arguments. Your IDE might do this for you!
+* `down.sh` - Shuts down the docker compose stack, accepts `docker compose down` arguments
+
+These scripts can be run in the devcontainer:
+
 * `protos.sh`: Lint and Generate protos
 * `migrate.sh`: [migrate.sh](#migratesh---running-migratemigrate-inside-docker)
 * `models.sh`: [models.sh](#modelssh---generate-models-from-sql-queries)
-* `up.sh` - Starts the docker compose stack, accepts `docker compose up` arguments. Your IDE might do this for you!
-* `down.sh` - Shuts down the docker compose stack, accepts `docker compose down` arguments
-* `shell.sh` - Opens a Shell in the devcontainer
+
+Example:
+
+```bash
+$ ./shell.sh protos.sh
+
+# or
+$ ./shell.sh
+$ ./proto.sh
+```
 
 ## Fake token
 

@@ -80,7 +80,7 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v1.4.0
 
 # LATER
 # TODO: renovate
-# TODO: move apisix dockerfile
+# TODO: move dockerfiles
 
 # TRY NOW
 # TODO: git credentials
@@ -88,8 +88,6 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v1.4.0
 # TODO: mount toolchain on host
 
 # NOW
-# TODO: docs
-# TODO: scripts
 # TODO: dont build, just pull, but CI should build
 # TODO: update CI
 
