@@ -80,6 +80,189 @@ proto.proto.services.tasks_svc.v1.PropertiesServicePromiseClient =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.CreatePropertySetRequest,
+ *   !proto.proto.services.tasks_svc.v1.CreatePropertySetResponse>}
+ */
+const methodDescriptor_PropertiesService_CreatePropertySet = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.PropertiesService/CreatePropertySet',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.CreatePropertySetRequest,
+  proto.proto.services.tasks_svc.v1.CreatePropertySetResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.CreatePropertySetRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.CreatePropertySetResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.CreatePropertySetRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.CreatePropertySetResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.CreatePropertySetResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.PropertiesServiceClient.prototype.createPropertySet =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PropertiesService/CreatePropertySet',
+      request,
+      metadata || {},
+      methodDescriptor_PropertiesService_CreatePropertySet,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.CreatePropertySetRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.CreatePropertySetResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.PropertiesServicePromiseClient.prototype.createPropertySet =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PropertiesService/CreatePropertySet',
+      request,
+      metadata || {},
+      methodDescriptor_PropertiesService_CreatePropertySet);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.UpdatePropertySetRequest,
+ *   !proto.proto.services.tasks_svc.v1.UpdatePropertySetResponse>}
+ */
+const methodDescriptor_PropertiesService_UpdatePropertySet = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.PropertiesService/UpdatePropertySet',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.UpdatePropertySetRequest,
+  proto.proto.services.tasks_svc.v1.UpdatePropertySetResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.UpdatePropertySetRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.UpdatePropertySetResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.UpdatePropertySetRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.UpdatePropertySetResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.UpdatePropertySetResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.PropertiesServiceClient.prototype.updatePropertySet =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PropertiesService/UpdatePropertySet',
+      request,
+      metadata || {},
+      methodDescriptor_PropertiesService_UpdatePropertySet,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.UpdatePropertySetRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.UpdatePropertySetResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.PropertiesServicePromiseClient.prototype.updatePropertySet =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PropertiesService/UpdatePropertySet',
+      request,
+      metadata || {},
+      methodDescriptor_PropertiesService_UpdatePropertySet);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.DeletePropertySetRequest,
+ *   !proto.proto.services.tasks_svc.v1.DeletePropertySetResponse>}
+ */
+const methodDescriptor_PropertiesService_DeletePropertySet = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.PropertiesService/DeletePropertySet',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.DeletePropertySetRequest,
+  proto.proto.services.tasks_svc.v1.DeletePropertySetResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.DeletePropertySetRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.DeletePropertySetResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.DeletePropertySetRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.DeletePropertySetResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.DeletePropertySetResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.PropertiesServiceClient.prototype.deletePropertySet =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PropertiesService/DeletePropertySet',
+      request,
+      metadata || {},
+      methodDescriptor_PropertiesService_DeletePropertySet,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.DeletePropertySetRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.DeletePropertySetResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.PropertiesServicePromiseClient.prototype.deletePropertySet =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PropertiesService/DeletePropertySet',
+      request,
+      metadata || {},
+      methodDescriptor_PropertiesService_DeletePropertySet);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.tasks_svc.v1.CreatePropertyRequest,
  *   !proto.proto.services.tasks_svc.v1.CreatePropertyResponse>}
  */

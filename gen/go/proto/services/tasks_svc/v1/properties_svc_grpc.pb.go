@@ -19,6 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
+	PropertiesService_CreatePropertySet_FullMethodName         = "/proto.services.tasks_svc.v1.PropertiesService/CreatePropertySet"
+	PropertiesService_UpdatePropertySet_FullMethodName         = "/proto.services.tasks_svc.v1.PropertiesService/UpdatePropertySet"
+	PropertiesService_DeletePropertySet_FullMethodName         = "/proto.services.tasks_svc.v1.PropertiesService/DeletePropertySet"
 	PropertiesService_CreateProperty_FullMethodName            = "/proto.services.tasks_svc.v1.PropertiesService/CreateProperty"
 	PropertiesService_GetProperty_FullMethodName               = "/proto.services.tasks_svc.v1.PropertiesService/GetProperty"
 	PropertiesService_GetProperties_FullMethodName             = "/proto.services.tasks_svc.v1.PropertiesService/GetProperties"
@@ -31,6 +34,9 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PropertiesServiceClient interface {
+	CreatePropertySet(ctx context.Context, in *CreatePropertySetRequest, opts ...grpc.CallOption) (*CreatePropertySetResponse, error)
+	UpdatePropertySet(ctx context.Context, in *UpdatePropertySetRequest, opts ...grpc.CallOption) (*UpdatePropertySetResponse, error)
+	DeletePropertySet(ctx context.Context, in *DeletePropertySetRequest, opts ...grpc.CallOption) (*DeletePropertySetResponse, error)
 	CreateProperty(ctx context.Context, in *CreatePropertyRequest, opts ...grpc.CallOption) (*CreatePropertyResponse, error)
 	GetProperty(ctx context.Context, in *GetPropertyRequest, opts ...grpc.CallOption) (*GetPropertyResponse, error)
 	GetProperties(ctx context.Context, in *GetPropertiesRequest, opts ...grpc.CallOption) (*GetPropertiesResponse, error)
@@ -45,6 +51,33 @@ type propertiesServiceClient struct {
 
 func NewPropertiesServiceClient(cc grpc.ClientConnInterface) PropertiesServiceClient {
 	return &propertiesServiceClient{cc}
+}
+
+func (c *propertiesServiceClient) CreatePropertySet(ctx context.Context, in *CreatePropertySetRequest, opts ...grpc.CallOption) (*CreatePropertySetResponse, error) {
+	out := new(CreatePropertySetResponse)
+	err := c.cc.Invoke(ctx, PropertiesService_CreatePropertySet_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *propertiesServiceClient) UpdatePropertySet(ctx context.Context, in *UpdatePropertySetRequest, opts ...grpc.CallOption) (*UpdatePropertySetResponse, error) {
+	out := new(UpdatePropertySetResponse)
+	err := c.cc.Invoke(ctx, PropertiesService_UpdatePropertySet_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *propertiesServiceClient) DeletePropertySet(ctx context.Context, in *DeletePropertySetRequest, opts ...grpc.CallOption) (*DeletePropertySetResponse, error) {
+	out := new(DeletePropertySetResponse)
+	err := c.cc.Invoke(ctx, PropertiesService_DeletePropertySet_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *propertiesServiceClient) CreateProperty(ctx context.Context, in *CreatePropertyRequest, opts ...grpc.CallOption) (*CreatePropertyResponse, error) {
@@ -105,6 +138,9 @@ func (c *propertiesServiceClient) GetAttachedPropertyValues(ctx context.Context,
 // All implementations must embed UnimplementedPropertiesServiceServer
 // for forward compatibility
 type PropertiesServiceServer interface {
+	CreatePropertySet(context.Context, *CreatePropertySetRequest) (*CreatePropertySetResponse, error)
+	UpdatePropertySet(context.Context, *UpdatePropertySetRequest) (*UpdatePropertySetResponse, error)
+	DeletePropertySet(context.Context, *DeletePropertySetRequest) (*DeletePropertySetResponse, error)
 	CreateProperty(context.Context, *CreatePropertyRequest) (*CreatePropertyResponse, error)
 	GetProperty(context.Context, *GetPropertyRequest) (*GetPropertyResponse, error)
 	GetProperties(context.Context, *GetPropertiesRequest) (*GetPropertiesResponse, error)
@@ -118,6 +154,15 @@ type PropertiesServiceServer interface {
 type UnimplementedPropertiesServiceServer struct {
 }
 
+func (UnimplementedPropertiesServiceServer) CreatePropertySet(context.Context, *CreatePropertySetRequest) (*CreatePropertySetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreatePropertySet not implemented")
+}
+func (UnimplementedPropertiesServiceServer) UpdatePropertySet(context.Context, *UpdatePropertySetRequest) (*UpdatePropertySetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePropertySet not implemented")
+}
+func (UnimplementedPropertiesServiceServer) DeletePropertySet(context.Context, *DeletePropertySetRequest) (*DeletePropertySetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeletePropertySet not implemented")
+}
 func (UnimplementedPropertiesServiceServer) CreateProperty(context.Context, *CreatePropertyRequest) (*CreatePropertyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateProperty not implemented")
 }
@@ -147,6 +192,60 @@ type UnsafePropertiesServiceServer interface {
 
 func RegisterPropertiesServiceServer(s grpc.ServiceRegistrar, srv PropertiesServiceServer) {
 	s.RegisterService(&PropertiesService_ServiceDesc, srv)
+}
+
+func _PropertiesService_CreatePropertySet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreatePropertySetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PropertiesServiceServer).CreatePropertySet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PropertiesService_CreatePropertySet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PropertiesServiceServer).CreatePropertySet(ctx, req.(*CreatePropertySetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PropertiesService_UpdatePropertySet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePropertySetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PropertiesServiceServer).UpdatePropertySet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PropertiesService_UpdatePropertySet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PropertiesServiceServer).UpdatePropertySet(ctx, req.(*UpdatePropertySetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PropertiesService_DeletePropertySet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeletePropertySetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PropertiesServiceServer).DeletePropertySet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PropertiesService_DeletePropertySet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PropertiesServiceServer).DeletePropertySet(ctx, req.(*DeletePropertySetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _PropertiesService_CreateProperty_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -264,6 +363,18 @@ var PropertiesService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "proto.services.tasks_svc.v1.PropertiesService",
 	HandlerType: (*PropertiesServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreatePropertySet",
+			Handler:    _PropertiesService_CreatePropertySet_Handler,
+		},
+		{
+			MethodName: "UpdatePropertySet",
+			Handler:    _PropertiesService_UpdatePropertySet_Handler,
+		},
+		{
+			MethodName: "DeletePropertySet",
+			Handler:    _PropertiesService_DeletePropertySet_Handler,
+		},
 		{
 			MethodName: "CreateProperty",
 			Handler:    _PropertiesService_CreateProperty_Handler,

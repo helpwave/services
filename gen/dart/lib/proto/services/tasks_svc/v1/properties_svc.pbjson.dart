@@ -48,6 +48,76 @@ final $typed_data.Uint8List fieldTypeDescriptor = $convert.base64Decode(
     'D0ZJRUxEX1RZUEVfREFURRAEEhgKFEZJRUxEX1RZUEVfREFURV9USU1FEAUSFQoRRklFTERfVF'
     'lQRV9TRUxFQ1QQBg==');
 
+@$core.Deprecated('Use createPropertySetRequestDescriptor instead')
+const CreatePropertySetRequest$json = {
+  '1': 'CreatePropertySetRequest',
+  '2': [
+    {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'properties', '3': 3, '4': 3, '5': 9, '10': 'properties'},
+  ],
+};
+
+/// Descriptor for `CreatePropertySetRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createPropertySetRequestDescriptor = $convert.base64Decode(
+    'ChhDcmVhdGVQcm9wZXJ0eVNldFJlcXVlc3QSEgoEbmFtZRgBIAEoCVIEbmFtZRIeCgpwcm9wZX'
+    'J0aWVzGAMgAygJUgpwcm9wZXJ0aWVz');
+
+@$core.Deprecated('Use createPropertySetResponseDescriptor instead')
+const CreatePropertySetResponse$json = {
+  '1': 'CreatePropertySetResponse',
+};
+
+/// Descriptor for `CreatePropertySetResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createPropertySetResponseDescriptor = $convert.base64Decode(
+    'ChlDcmVhdGVQcm9wZXJ0eVNldFJlc3BvbnNl');
+
+@$core.Deprecated('Use updatePropertySetRequestDescriptor instead')
+const UpdatePropertySetRequest$json = {
+  '1': 'UpdatePropertySetRequest',
+  '2': [
+    {'1': 'set_id', '3': 1, '4': 1, '5': 9, '10': 'setId'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'added_properties', '3': 3, '4': 3, '5': 9, '10': 'addedProperties'},
+    {'1': 'removed_properties', '3': 4, '4': 3, '5': 9, '10': 'removedProperties'},
+  ],
+};
+
+/// Descriptor for `UpdatePropertySetRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updatePropertySetRequestDescriptor = $convert.base64Decode(
+    'ChhVcGRhdGVQcm9wZXJ0eVNldFJlcXVlc3QSFQoGc2V0X2lkGAEgASgJUgVzZXRJZBISCgRuYW'
+    '1lGAIgASgJUgRuYW1lEikKEGFkZGVkX3Byb3BlcnRpZXMYAyADKAlSD2FkZGVkUHJvcGVydGll'
+    'cxItChJyZW1vdmVkX3Byb3BlcnRpZXMYBCADKAlSEXJlbW92ZWRQcm9wZXJ0aWVz');
+
+@$core.Deprecated('Use updatePropertySetResponseDescriptor instead')
+const UpdatePropertySetResponse$json = {
+  '1': 'UpdatePropertySetResponse',
+};
+
+/// Descriptor for `UpdatePropertySetResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updatePropertySetResponseDescriptor = $convert.base64Decode(
+    'ChlVcGRhdGVQcm9wZXJ0eVNldFJlc3BvbnNl');
+
+@$core.Deprecated('Use deletePropertySetRequestDescriptor instead')
+const DeletePropertySetRequest$json = {
+  '1': 'DeletePropertySetRequest',
+  '2': [
+    {'1': 'set_id', '3': 1, '4': 1, '5': 9, '10': 'setId'},
+  ],
+};
+
+/// Descriptor for `DeletePropertySetRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deletePropertySetRequestDescriptor = $convert.base64Decode(
+    'ChhEZWxldGVQcm9wZXJ0eVNldFJlcXVlc3QSFQoGc2V0X2lkGAEgASgJUgVzZXRJZA==');
+
+@$core.Deprecated('Use deletePropertySetResponseDescriptor instead')
+const DeletePropertySetResponse$json = {
+  '1': 'DeletePropertySetResponse',
+};
+
+/// Descriptor for `DeletePropertySetResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deletePropertySetResponseDescriptor = $convert.base64Decode(
+    'ChlEZWxldGVQcm9wZXJ0eVNldFJlc3BvbnNl');
+
 @$core.Deprecated('Use createPropertyRequestDescriptor instead')
 const CreatePropertyRequest$json = {
   '1': 'CreatePropertyRequest',
@@ -392,10 +462,6 @@ const GetAttachedPropertyValuesResponse_Value_Set$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'description', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
-  ],
-  '8': [
-    {'1': '_description'},
   ],
 };
 
@@ -403,13 +469,12 @@ const GetAttachedPropertyValuesResponse_Value_Set$json = {
 final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $convert.base64Decode(
     'CiFHZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2USXAoGdmFsdWVzGAEgAygLMkQucH'
     'JvdG8uc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldEF0dGFjaGVkUHJvcGVydHlWYWx1ZXNSZXNw'
-    'b25zZS5WYWx1ZVIGdmFsdWVzGtADCgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcHJvcG'
+    'b25zZS5WYWx1ZVIGdmFsdWVzGpkDCgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcHJvcG'
     'VydHlJZBJFCgpmaWVsZF90eXBlGAIgASgOMiYucHJvdG8uc2VydmljZXMudGFza3Nfc3ZjLnYx'
     'LkZpZWxkVHlwZVIJZmllbGRUeXBlEhIKBG5hbWUYBCABKAlSBG5hbWUSJQoLZGVzY3JpcHRpb2'
     '4YBSABKAlIAFILZGVzY3JpcHRpb26IAQESHwoLaXNfYXJjaGl2ZWQYBiABKAhSCmlzQXJjaGl2'
     'ZWQSKAoQaXNfc29mdF9yZXF1aXJlZBgHIAEoCFIOaXNTb2Z0UmVxdWlyZWQSXwoDc2V0GAggAS'
     'gLMkgucHJvdG8uc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldEF0dGFjaGVkUHJvcGVydHlWYWx1'
-    'ZXNSZXNwb25zZS5WYWx1ZS5TZXRIAVIDc2V0iAEBGmAKA1NldBIOCgJpZBgBIAEoCVICaWQSEg'
-    'oEbmFtZRgCIAEoCVIEbmFtZRIlCgtkZXNjcmlwdGlvbhgDIAEoCUgAUgtkZXNjcmlwdGlvbogB'
-    'AUIOCgxfZGVzY3JpcHRpb25CDgoMX2Rlc2NyaXB0aW9uQgYKBF9zZXQ=');
+    'ZXNSZXNwb25zZS5WYWx1ZS5TZXRIAVIDc2V0iAEBGikKA1NldBIOCgJpZBgBIAEoCVICaWQSEg'
+    'oEbmFtZRgCIAEoCVIEbmFtZUIOCgxfZGVzY3JpcHRpb25CBgoEX3NldA==');
 

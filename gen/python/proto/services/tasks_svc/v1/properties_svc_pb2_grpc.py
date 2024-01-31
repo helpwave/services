@@ -14,6 +14,21 @@ class PropertiesServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.CreatePropertySet = channel.unary_unary(
+                '/proto.services.tasks_svc.v1.PropertiesService/CreatePropertySet',
+                request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.CreatePropertySetRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.CreatePropertySetResponse.FromString,
+                )
+        self.UpdatePropertySet = channel.unary_unary(
+                '/proto.services.tasks_svc.v1.PropertiesService/UpdatePropertySet',
+                request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.UpdatePropertySetRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.UpdatePropertySetResponse.FromString,
+                )
+        self.DeletePropertySet = channel.unary_unary(
+                '/proto.services.tasks_svc.v1.PropertiesService/DeletePropertySet',
+                request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.DeletePropertySetRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.DeletePropertySetResponse.FromString,
+                )
         self.CreateProperty = channel.unary_unary(
                 '/proto.services.tasks_svc.v1.PropertiesService/CreateProperty',
                 request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.CreatePropertyRequest.SerializeToString,
@@ -48,6 +63,24 @@ class PropertiesServiceStub(object):
 
 class PropertiesServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
+
+    def CreatePropertySet(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def UpdatePropertySet(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeletePropertySet(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def CreateProperty(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -88,6 +121,21 @@ class PropertiesServiceServicer(object):
 
 def add_PropertiesServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'CreatePropertySet': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreatePropertySet,
+                    request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.CreatePropertySetRequest.FromString,
+                    response_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.CreatePropertySetResponse.SerializeToString,
+            ),
+            'UpdatePropertySet': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdatePropertySet,
+                    request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.UpdatePropertySetRequest.FromString,
+                    response_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.UpdatePropertySetResponse.SerializeToString,
+            ),
+            'DeletePropertySet': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeletePropertySet,
+                    request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.DeletePropertySetRequest.FromString,
+                    response_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.DeletePropertySetResponse.SerializeToString,
+            ),
             'CreateProperty': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateProperty,
                     request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.CreatePropertyRequest.FromString,
@@ -127,6 +175,57 @@ def add_PropertiesServiceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class PropertiesService(object):
     """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def CreatePropertySet(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.tasks_svc.v1.PropertiesService/CreatePropertySet',
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.CreatePropertySetRequest.SerializeToString,
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.CreatePropertySetResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def UpdatePropertySet(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.tasks_svc.v1.PropertiesService/UpdatePropertySet',
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.UpdatePropertySetRequest.SerializeToString,
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.UpdatePropertySetResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeletePropertySet(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.tasks_svc.v1.PropertiesService/DeletePropertySet',
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.DeletePropertySetRequest.SerializeToString,
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_properties__svc__pb2.DeletePropertySetResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def CreateProperty(request,

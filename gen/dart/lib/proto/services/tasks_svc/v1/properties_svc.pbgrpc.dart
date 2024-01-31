@@ -21,6 +21,18 @@ export 'properties_svc.pb.dart';
 
 @$pb.GrpcServiceName('proto.services.tasks_svc.v1.PropertiesService')
 class PropertiesServiceClient extends $grpc.Client {
+  static final _$createPropertySet = $grpc.ClientMethod<$9.CreatePropertySetRequest, $9.CreatePropertySetResponse>(
+      '/proto.services.tasks_svc.v1.PropertiesService/CreatePropertySet',
+      ($9.CreatePropertySetRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $9.CreatePropertySetResponse.fromBuffer(value));
+  static final _$updatePropertySet = $grpc.ClientMethod<$9.UpdatePropertySetRequest, $9.UpdatePropertySetResponse>(
+      '/proto.services.tasks_svc.v1.PropertiesService/UpdatePropertySet',
+      ($9.UpdatePropertySetRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $9.UpdatePropertySetResponse.fromBuffer(value));
+  static final _$deletePropertySet = $grpc.ClientMethod<$9.DeletePropertySetRequest, $9.DeletePropertySetResponse>(
+      '/proto.services.tasks_svc.v1.PropertiesService/DeletePropertySet',
+      ($9.DeletePropertySetRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $9.DeletePropertySetResponse.fromBuffer(value));
   static final _$createProperty = $grpc.ClientMethod<$9.CreatePropertyRequest, $9.CreatePropertyResponse>(
       '/proto.services.tasks_svc.v1.PropertiesService/CreateProperty',
       ($9.CreatePropertyRequest value) => value.writeToBuffer(),
@@ -52,6 +64,18 @@ class PropertiesServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
+  $grpc.ResponseFuture<$9.CreatePropertySetResponse> createPropertySet($9.CreatePropertySetRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$createPropertySet, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$9.UpdatePropertySetResponse> updatePropertySet($9.UpdatePropertySetRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$updatePropertySet, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$9.DeletePropertySetResponse> deletePropertySet($9.DeletePropertySetRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$deletePropertySet, request, options: options);
+  }
+
   $grpc.ResponseFuture<$9.CreatePropertyResponse> createProperty($9.CreatePropertyRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createProperty, request, options: options);
   }
@@ -82,6 +106,27 @@ abstract class PropertiesServiceBase extends $grpc.Service {
   $core.String get $name => 'proto.services.tasks_svc.v1.PropertiesService';
 
   PropertiesServiceBase() {
+    $addMethod($grpc.ServiceMethod<$9.CreatePropertySetRequest, $9.CreatePropertySetResponse>(
+        'CreatePropertySet',
+        createPropertySet_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $9.CreatePropertySetRequest.fromBuffer(value),
+        ($9.CreatePropertySetResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$9.UpdatePropertySetRequest, $9.UpdatePropertySetResponse>(
+        'UpdatePropertySet',
+        updatePropertySet_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $9.UpdatePropertySetRequest.fromBuffer(value),
+        ($9.UpdatePropertySetResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$9.DeletePropertySetRequest, $9.DeletePropertySetResponse>(
+        'DeletePropertySet',
+        deletePropertySet_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $9.DeletePropertySetRequest.fromBuffer(value),
+        ($9.DeletePropertySetResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$9.CreatePropertyRequest, $9.CreatePropertyResponse>(
         'CreateProperty',
         createProperty_Pre,
@@ -126,6 +171,18 @@ abstract class PropertiesServiceBase extends $grpc.Service {
         ($9.GetAttachedPropertyValuesResponse value) => value.writeToBuffer()));
   }
 
+  $async.Future<$9.CreatePropertySetResponse> createPropertySet_Pre($grpc.ServiceCall call, $async.Future<$9.CreatePropertySetRequest> request) async {
+    return createPropertySet(call, await request);
+  }
+
+  $async.Future<$9.UpdatePropertySetResponse> updatePropertySet_Pre($grpc.ServiceCall call, $async.Future<$9.UpdatePropertySetRequest> request) async {
+    return updatePropertySet(call, await request);
+  }
+
+  $async.Future<$9.DeletePropertySetResponse> deletePropertySet_Pre($grpc.ServiceCall call, $async.Future<$9.DeletePropertySetRequest> request) async {
+    return deletePropertySet(call, await request);
+  }
+
   $async.Future<$9.CreatePropertyResponse> createProperty_Pre($grpc.ServiceCall call, $async.Future<$9.CreatePropertyRequest> request) async {
     return createProperty(call, await request);
   }
@@ -150,6 +207,9 @@ abstract class PropertiesServiceBase extends $grpc.Service {
     return getAttachedPropertyValues(call, await request);
   }
 
+  $async.Future<$9.CreatePropertySetResponse> createPropertySet($grpc.ServiceCall call, $9.CreatePropertySetRequest request);
+  $async.Future<$9.UpdatePropertySetResponse> updatePropertySet($grpc.ServiceCall call, $9.UpdatePropertySetRequest request);
+  $async.Future<$9.DeletePropertySetResponse> deletePropertySet($grpc.ServiceCall call, $9.DeletePropertySetRequest request);
   $async.Future<$9.CreatePropertyResponse> createProperty($grpc.ServiceCall call, $9.CreatePropertyRequest request);
   $async.Future<$9.GetPropertyResponse> getProperty($grpc.ServiceCall call, $9.GetPropertyRequest request);
   $async.Future<$9.GetPropertiesResponse> getProperties($grpc.ServiceCall call, $9.GetPropertiesRequest request);

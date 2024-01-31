@@ -8,6 +8,27 @@ export class PropertiesServiceClient {
                credentials?: null | { [index: string]: string; },
                options?: null | { [index: string]: any; });
 
+  createPropertySet(
+    request: proto_services_tasks_svc_v1_properties_svc_pb.CreatePropertySetRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_tasks_svc_v1_properties_svc_pb.CreatePropertySetResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_properties_svc_pb.CreatePropertySetResponse>;
+
+  updatePropertySet(
+    request: proto_services_tasks_svc_v1_properties_svc_pb.UpdatePropertySetRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_tasks_svc_v1_properties_svc_pb.UpdatePropertySetResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_properties_svc_pb.UpdatePropertySetResponse>;
+
+  deletePropertySet(
+    request: proto_services_tasks_svc_v1_properties_svc_pb.DeletePropertySetRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_tasks_svc_v1_properties_svc_pb.DeletePropertySetResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_tasks_svc_v1_properties_svc_pb.DeletePropertySetResponse>;
+
   createProperty(
     request: proto_services_tasks_svc_v1_properties_svc_pb.CreatePropertyRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -56,6 +77,21 @@ export class PropertiesServicePromiseClient {
   constructor (hostname: string,
                credentials?: null | { [index: string]: string; },
                options?: null | { [index: string]: any; });
+
+  createPropertySet(
+    request: proto_services_tasks_svc_v1_properties_svc_pb.CreatePropertySetRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_tasks_svc_v1_properties_svc_pb.CreatePropertySetResponse>;
+
+  updatePropertySet(
+    request: proto_services_tasks_svc_v1_properties_svc_pb.UpdatePropertySetRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_tasks_svc_v1_properties_svc_pb.UpdatePropertySetResponse>;
+
+  deletePropertySet(
+    request: proto_services_tasks_svc_v1_properties_svc_pb.DeletePropertySetRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_tasks_svc_v1_properties_svc_pb.DeletePropertySetResponse>;
 
   createProperty(
     request: proto_services_tasks_svc_v1_properties_svc_pb.CreatePropertyRequest,
