@@ -1,5 +1,6 @@
 # based on the debian 12 ("bookworm") go 1.21 image
 # for now this only builds x86_64 images (TODO)
+# when updating the go toolchain, also update the cicd-go-* workflows
 FROM golang:1.21.6-bookworm
 
 # update debian package list and packages, also install some
@@ -89,6 +90,7 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v1.4.0
 # NOW
 # TODO: dont build, just pull, but CI should build
 # TODO: update CI
+# - connect services to ghcr.io/helpwave/dev-go
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

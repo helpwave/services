@@ -1,4 +1,4 @@
-name: cicd
+ame: cicd
 
 on:
   push:
@@ -47,6 +47,7 @@ jobs:
       - name: Detect changes in images
         id: changes-in-images
         uses: tj-actions/changed-files@v40
+        # TODO: ignore go-dev-custom
         with:
           files: |
             images/**

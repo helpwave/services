@@ -19,12 +19,16 @@ jobs:
       - uses: bufbuild/buf-lint-action@v1
   generate-protos:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/helpwave/dev-go:testing-1 # TODO
+      volumes:
+        - ${{ github.workspace }}:/github/workspace
     permissions:
       contents: write
       deployments: write
     steps:
       - uses: actions/checkout@v4
-      - run: make proto
+      - run: bash protos.sh
       - name: Break if generated go modules are not checked in
         # exits with 1 if there were differences, and 0 if there were none
         run: git diff --quiet gen

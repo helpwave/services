@@ -93,13 +93,13 @@ jobs:
   dart:
     needs:
     - check-preconditions
-    - ts # TODO: Commit all changes in one commit. Should prevents branch behind error as well.
+    - ts
     runs-on: ubuntu-latest
     steps:
     - name: Clone Repo
       uses: actions/checkout@v4
       with:
-        ref: main # TODO: Commit all changes in one commit. Should prevents branch behind error as well.
+        ref: main
     - name: Install tools
       run: |
         wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver

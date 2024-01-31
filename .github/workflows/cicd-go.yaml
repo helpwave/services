@@ -22,7 +22,7 @@ permissions:
 #     working-directory: services/${{ inputs.service }}
 
 env:
-  GO_VERSION: '1.19'
+  GO_VERSION: '1.21'
 
 jobs:
 
@@ -41,7 +41,7 @@ jobs:
       - name: Cache build dependencies
         uses: actions/cache@v3
         with:
-          path: ~/go/pkg/mod
+          path: /go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/_go.sum') }}
 
       - uses: golangci/golangci-lint-action@v3
