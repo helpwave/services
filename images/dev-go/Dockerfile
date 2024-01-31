@@ -100,15 +100,6 @@ RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v${SQLC_VERSION}
 ENV GO_INJECT_TAG_VERSION=1.4.0
 RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION}
 
-# LATER
-# TODO: move dockerfiles
-
-# TRY NOW
-# TODO: git credentials
-# TODO: mount toolchain on host
-
-# TODO: renovate
-
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
