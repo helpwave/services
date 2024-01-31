@@ -40,7 +40,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["(/|.|)(images/.*/)?Dockerfile(\\.[\\w_-]+)?$"],
+      "fileMatch": ["^.*Dockerfile(\\.[\\w_-]+)?$"],
       "matchStrings": [
         "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s(ENV|ARG) .*?_VERSION=(?<currentValue>.*)\\s"
       ],
@@ -48,7 +48,7 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [".github/workflows/*.ya?ml$"],
+      "fileMatch": ["^\\.github/workflows/*\\.ya?ml$"],
       "matchStrings": [
         "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?_VERSION: '?(?<currentValue>.*)'?\\s"
       ],
