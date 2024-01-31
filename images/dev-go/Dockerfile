@@ -21,7 +21,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
 
 # install buf
 #  https://buf.build/
-# renovate: datasource=github-release depName=bufbuild/buf
+# renovate: datasource=github-releasesdepName=bufbuild/buf
 ENV BUF_VERSION=1.28.1
 RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-Linux-x86_64 -O /usr/local/bin/buf \
     && chmod +x /usr/local/bin/buf
@@ -50,16 +50,16 @@ ENV HOME="/home/${UNAME}"
 
 # install air
 #  https://github.com/cosmtrek/air
-# renovate: datasource=github-release depName=cosmtrek/air
+# renovate: datasource=github-releasesdepName=cosmtrek/air
 ENV AIR_VERSION=1.49.0
 RUN go install github.com/cosmtrek/air@v${AIR_VERSION}
 
 # install dapr-cli
 #  https://docs.dapr.io/
 
-# renovate: datasource=github-release depName=dapr/cli
+# renovate: datasource=github-releasesdepName=dapr/cli
 ENV DAPR_CLI_VERSION=1.12.0
-# renovate: datasource=github-release depName=dapr/dapr
+# renovate: datasource=github-releasesdepName=dapr/dapr
 ENV DAPR_RT_VERSION=1.12.4
 
 RUN mkdir "$HOME/dapr" \
@@ -74,26 +74,26 @@ ENV PATH="$PATH:$HOME/.fly/bin"
 
 # install go-migrate
 #  https://github.com/golang-migrate/migrate
-# renovate: datasource=github-release depName=golang-migrate/migrate
+# renovate: datasource=github-releasesdepName=golang-migrate/migrate
 ENV MIGRATE_VERSION=4.17.0
 RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v${MIGRATE_VERSION}
 
 # install grpcurl
 #  https://github.com/fullstorydev/grpcurl
-# renovate: datasource=github-release depName=fullstorydev/grpcurl
+# renovate: datasource=github-releasesdepName=fullstorydev/grpcurl
 ENV GRPCURL_VERSION=1.8.9
 RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@v${GRPCURL_VERSION}
 
 # install sqlc
 #  https://sqlc.dev/
-# renovate: datasource=github-release depName=sqlc-dev/sqlc
+# renovate: datasource=github-releasesdepName=sqlc-dev/sqlc
 ENV SQLC_VERSION=1.25.0
 RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v${SQLC_VERSION}
 
 # install protoc-go-inject-tag
 # when updating the version, also update the buf workflow
 #  https://github.com/favadi/protoc-go-inject-tag
-# renovate: datasource=github-release depName=favadi/protoc-go-inject-tag
+# renovate: datasource=github-releasesdepName=favadi/protoc-go-inject-tag
 ENV GO_INJECT_TAG_VERSION=1.4.0
 RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION}
 
