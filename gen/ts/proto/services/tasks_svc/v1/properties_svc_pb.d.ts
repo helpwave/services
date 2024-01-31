@@ -46,6 +46,8 @@ export class UpdatePropertySetRequest extends jspb.Message {
 
   getName(): string;
   setName(value: string): UpdatePropertySetRequest;
+  hasName(): boolean;
+  clearName(): UpdatePropertySetRequest;
 
   getAddedPropertiesList(): Array<string>;
   setAddedPropertiesList(value: Array<string>): UpdatePropertySetRequest;
@@ -68,9 +70,14 @@ export class UpdatePropertySetRequest extends jspb.Message {
 export namespace UpdatePropertySetRequest {
   export type AsObject = {
     setId: string,
-    name: string,
+    name?: string,
     addedPropertiesList: Array<string>,
     removedPropertiesList: Array<string>,
+  }
+
+  export enum NameCase { 
+    _NAME_NOT_SET = 0,
+    NAME = 2,
   }
 }
 

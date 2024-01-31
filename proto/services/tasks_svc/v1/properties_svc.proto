@@ -42,7 +42,7 @@ message CreatePropertySetResponse {}
 
 message UpdatePropertySetRequest {
   string set_id = 1; // @gotags: validate:"uuid4"
-  string name = 2; // TODO: add validation
+  optional string name = 2; // TODO: add validation
 
   repeated string added_properties = 3; // @gotags: validate:"dive,uuid4"
   repeated string removed_properties = 4; // @gotags: validate:"dive,uuid4"
@@ -97,26 +97,26 @@ message GetPropertyRequest {
 }
 
 message GetPropertyResponse {
-    string id = 1;
-    SubjectType subject_type = 2;
-    FieldType field_type = 3;
+  string id = 1;
+  SubjectType subject_type = 2;
+  FieldType field_type = 3;
 
-    string name = 4;
-    optional string description = 5;
+  string name = 4;
+  optional string description = 5;
 
-    bool is_archived = 6;
-    bool is_soft_required = 7;
+  bool is_archived = 6;
+  bool is_soft_required = 7;
 
-    // TODO: TBD: priortyDisplayedAtSubjectIds?
+  // TODO: TBD: priortyDisplayedAtSubjectIds?
 
-    // ID of set this Property should belong to
-    optional string set_id = 8;
+  // ID of set this Property should belong to
+  optional string set_id = 8;
 
-    message SelectOption {
-      string name = 1;
-      optional string description = 2;
-    }
-    repeated SelectOption select_options = 9;
+  message SelectOption {
+    string name = 1;
+    optional string description = 2;
+  }
+  repeated SelectOption select_options = 9;
 }
 
 //

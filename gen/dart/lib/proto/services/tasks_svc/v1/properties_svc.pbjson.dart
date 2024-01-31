@@ -76,17 +76,21 @@ const UpdatePropertySetRequest$json = {
   '1': 'UpdatePropertySetRequest',
   '2': [
     {'1': 'set_id', '3': 1, '4': 1, '5': 9, '10': 'setId'},
-    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'name', '17': true},
     {'1': 'added_properties', '3': 3, '4': 3, '5': 9, '10': 'addedProperties'},
     {'1': 'removed_properties', '3': 4, '4': 3, '5': 9, '10': 'removedProperties'},
+  ],
+  '8': [
+    {'1': '_name'},
   ],
 };
 
 /// Descriptor for `UpdatePropertySetRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updatePropertySetRequestDescriptor = $convert.base64Decode(
-    'ChhVcGRhdGVQcm9wZXJ0eVNldFJlcXVlc3QSFQoGc2V0X2lkGAEgASgJUgVzZXRJZBISCgRuYW'
-    '1lGAIgASgJUgRuYW1lEikKEGFkZGVkX3Byb3BlcnRpZXMYAyADKAlSD2FkZGVkUHJvcGVydGll'
-    'cxItChJyZW1vdmVkX3Byb3BlcnRpZXMYBCADKAlSEXJlbW92ZWRQcm9wZXJ0aWVz');
+    'ChhVcGRhdGVQcm9wZXJ0eVNldFJlcXVlc3QSFQoGc2V0X2lkGAEgASgJUgVzZXRJZBIXCgRuYW'
+    '1lGAIgASgJSABSBG5hbWWIAQESKQoQYWRkZWRfcHJvcGVydGllcxgDIAMoCVIPYWRkZWRQcm9w'
+    'ZXJ0aWVzEi0KEnJlbW92ZWRfcHJvcGVydGllcxgEIAMoCVIRcmVtb3ZlZFByb3BlcnRpZXNCBw'
+    'oFX25hbWU=');
 
 @$core.Deprecated('Use updatePropertySetResponseDescriptor instead')
 const UpdatePropertySetResponse$json = {
