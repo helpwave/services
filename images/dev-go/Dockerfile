@@ -21,6 +21,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
  	&& sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
 # install buf
+# when updating version, also update the buf workflow
 #  https://buf.build/
 RUN wget https://github.com/bufbuild/buf/releases/download/v1.28.1/buf-Linux-x86_64 -O /usr/local/bin/buf \
     && chmod +x /usr/local/bin/buf
@@ -76,6 +77,7 @@ RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@v1.8.9
 RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.25.0
 
 # install protoc-go-inject-tag
+# when updating the version, also update the buf workflow
 #  https://github.com/favadi/protoc-go-inject-tag
 RUN go install github.com/favadi/protoc-go-inject-tag@v1.4.0
 

@@ -10,24 +10,36 @@ permissions:
   contents: read
   pull-requests: read
 
+env:
+  GO_VERSION: '1.21'
+  BUF_CLI_VERSION: 'v1.28.1'
+  PROTOC_GO_INJECT_TAG_VERSION: 'v1.4.0'
+
 jobs:
   lint-protos:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: bufbuild/buf-setup-action@v1
+        with:
+          version: ${{ env.BUF_CLI_VERSION }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: bufbuild/buf-lint-action@v1
   generate-protos:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/helpwave/dev-go:testing-1 # TODO
-      volumes:
-        - ${{ github.workspace }}:/github/workspace
     permissions:
       contents: write
       deployments: write
     steps:
       - uses: actions/checkout@v4
+      - uses: bufbuild/buf-setup-action@v1
+        with:
+          version: ${{ env.BUF_CLI_VERSION }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - run: go install github.com/favadi/protoc-go-inject-tag@${{ env.PROTOC_GO_INJECT_TAG_VERSION }}
       - run: bash protos.sh
       - name: Break if generated go modules are not checked in
         # exits with 1 if there were differences, and 0 if there were none

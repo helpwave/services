@@ -22,5 +22,5 @@ message PrelimAuthRequestResponse {
 //
 
 service AuthService {
-  // TODO rpc PrelimAuthRequest(PrelimAuthRequestRequest) returns (PrelimAuthRequestResponse) {}
+  rpc PrelimAuthRequest(PrelimAuthRequestRequest) returns (PrelimAuthRequestResponse) {}
 }
