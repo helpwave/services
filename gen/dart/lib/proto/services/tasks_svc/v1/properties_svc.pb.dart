@@ -1388,6 +1388,7 @@ class UpdatePropertyResponse extends $pb.GeneratedMessage {
 }
 
 enum AttachPropertyValueRequest_Value {
+  isUndefined, 
   textValue, 
   numberValue, 
   boolValue, 
@@ -1397,11 +1398,13 @@ enum AttachPropertyValueRequest_Value {
   notSet
 }
 
+/// attach the same property again to update
 class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   factory AttachPropertyValueRequest({
     $core.String? subjectId,
     SubjectType? subjectType,
     $core.String? propertyId,
+    $core.bool? isUndefined,
     $core.String? textValue,
     $core.double? numberValue,
     $core.bool? boolValue,
@@ -1418,6 +1421,9 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     }
     if (propertyId != null) {
       $result.propertyId = propertyId;
+    }
+    if (isUndefined != null) {
+      $result.isUndefined = isUndefined;
     }
     if (textValue != null) {
       $result.textValue = textValue;
@@ -1444,25 +1450,27 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   factory AttachPropertyValueRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static const $core.Map<$core.int, AttachPropertyValueRequest_Value> _AttachPropertyValueRequest_ValueByTag = {
-    4 : AttachPropertyValueRequest_Value.textValue,
-    5 : AttachPropertyValueRequest_Value.numberValue,
-    6 : AttachPropertyValueRequest_Value.boolValue,
-    7 : AttachPropertyValueRequest_Value.dateValue,
-    8 : AttachPropertyValueRequest_Value.dateTimeValue,
-    9 : AttachPropertyValueRequest_Value.selectValue,
+    4 : AttachPropertyValueRequest_Value.isUndefined,
+    5 : AttachPropertyValueRequest_Value.textValue,
+    6 : AttachPropertyValueRequest_Value.numberValue,
+    7 : AttachPropertyValueRequest_Value.boolValue,
+    8 : AttachPropertyValueRequest_Value.dateValue,
+    9 : AttachPropertyValueRequest_Value.dateTimeValue,
+    10 : AttachPropertyValueRequest_Value.selectValue,
     0 : AttachPropertyValueRequest_Value.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttachPropertyValueRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [4, 5, 6, 7, 8, 9])
+    ..oo(0, [4, 5, 6, 7, 8, 9, 10])
     ..aOS(1, _omitFieldNames ? '' : 'subjectId')
     ..e<SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: SubjectType.valueOf, enumValues: SubjectType.values)
     ..aOS(3, _omitFieldNames ? '' : 'propertyId')
-    ..aOS(4, _omitFieldNames ? '' : 'textValue')
-    ..a<$core.double>(5, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OF)
-    ..aOB(6, _omitFieldNames ? '' : 'boolValue')
-    ..aOS(7, _omitFieldNames ? '' : 'dateValue')
-    ..aOS(8, _omitFieldNames ? '' : 'dateTimeValue')
-    ..aOS(9, _omitFieldNames ? '' : 'selectValue')
+    ..aOB(4, _omitFieldNames ? '' : 'isUndefined')
+    ..aOS(5, _omitFieldNames ? '' : 'textValue')
+    ..a<$core.double>(6, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OF)
+    ..aOB(7, _omitFieldNames ? '' : 'boolValue')
+    ..aOS(8, _omitFieldNames ? '' : 'dateValue')
+    ..aOS(9, _omitFieldNames ? '' : 'dateTimeValue')
+    ..aOS(10, _omitFieldNames ? '' : 'selectValue')
     ..hasRequiredFields = false
   ;
 
@@ -1518,58 +1526,67 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   void clearPropertyId() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get textValue => $_getSZ(3);
+  $core.bool get isUndefined => $_getBF(3);
   @$pb.TagNumber(4)
-  set textValue($core.String v) { $_setString(3, v); }
+  set isUndefined($core.bool v) { $_setBool(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasTextValue() => $_has(3);
+  $core.bool hasIsUndefined() => $_has(3);
   @$pb.TagNumber(4)
-  void clearTextValue() => clearField(4);
+  void clearIsUndefined() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.double get numberValue => $_getN(4);
+  $core.String get textValue => $_getSZ(4);
   @$pb.TagNumber(5)
-  set numberValue($core.double v) { $_setFloat(4, v); }
+  set textValue($core.String v) { $_setString(4, v); }
   @$pb.TagNumber(5)
-  $core.bool hasNumberValue() => $_has(4);
+  $core.bool hasTextValue() => $_has(4);
   @$pb.TagNumber(5)
-  void clearNumberValue() => clearField(5);
+  void clearTextValue() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.bool get boolValue => $_getBF(5);
+  $core.double get numberValue => $_getN(5);
   @$pb.TagNumber(6)
-  set boolValue($core.bool v) { $_setBool(5, v); }
+  set numberValue($core.double v) { $_setFloat(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasBoolValue() => $_has(5);
+  $core.bool hasNumberValue() => $_has(5);
   @$pb.TagNumber(6)
-  void clearBoolValue() => clearField(6);
+  void clearNumberValue() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get dateValue => $_getSZ(6);
+  $core.bool get boolValue => $_getBF(6);
   @$pb.TagNumber(7)
-  set dateValue($core.String v) { $_setString(6, v); }
+  set boolValue($core.bool v) { $_setBool(6, v); }
   @$pb.TagNumber(7)
-  $core.bool hasDateValue() => $_has(6);
+  $core.bool hasBoolValue() => $_has(6);
   @$pb.TagNumber(7)
-  void clearDateValue() => clearField(7);
+  void clearBoolValue() => clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get dateTimeValue => $_getSZ(7);
+  $core.String get dateValue => $_getSZ(7);
   @$pb.TagNumber(8)
-  set dateTimeValue($core.String v) { $_setString(7, v); }
+  set dateValue($core.String v) { $_setString(7, v); }
   @$pb.TagNumber(8)
-  $core.bool hasDateTimeValue() => $_has(7);
+  $core.bool hasDateValue() => $_has(7);
   @$pb.TagNumber(8)
-  void clearDateTimeValue() => clearField(8);
+  void clearDateValue() => clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get selectValue => $_getSZ(8);
+  $core.String get dateTimeValue => $_getSZ(8);
   @$pb.TagNumber(9)
-  set selectValue($core.String v) { $_setString(8, v); }
+  set dateTimeValue($core.String v) { $_setString(8, v); }
   @$pb.TagNumber(9)
-  $core.bool hasSelectValue() => $_has(8);
+  $core.bool hasDateTimeValue() => $_has(8);
   @$pb.TagNumber(9)
-  void clearSelectValue() => clearField(9);
+  void clearDateTimeValue() => clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get selectValue => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set selectValue($core.String v) { $_setString(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasSelectValue() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearSelectValue() => clearField(10);
 }
 
 class AttachPropertyValueResponse extends $pb.GeneratedMessage {
@@ -1732,6 +1749,17 @@ class GetAttachedPropertyValuesResponse_Value_Set extends $pb.GeneratedMessage {
   void clearName() => clearField(2);
 }
 
+enum GetAttachedPropertyValuesResponse_Value_Value {
+  isUndefined, 
+  textValue, 
+  numberValue, 
+  boolValue, 
+  dateValue, 
+  dateTimeValue, 
+  selectValue, 
+  notSet
+}
+
 class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
   factory GetAttachedPropertyValuesResponse_Value({
     $core.String? propertyId,
@@ -1741,6 +1769,13 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     $core.bool? isArchived,
     $core.bool? isSoftRequired,
     GetAttachedPropertyValuesResponse_Value_Set? set,
+    $core.bool? isUndefined,
+    $core.String? textValue,
+    $core.double? numberValue,
+    $core.bool? boolValue,
+    $core.String? dateValue,
+    $core.String? dateTimeValue,
+    $core.String? selectValue,
   }) {
     final $result = create();
     if (propertyId != null) {
@@ -1764,20 +1799,59 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     if (set != null) {
       $result.set = set;
     }
+    if (isUndefined != null) {
+      $result.isUndefined = isUndefined;
+    }
+    if (textValue != null) {
+      $result.textValue = textValue;
+    }
+    if (numberValue != null) {
+      $result.numberValue = numberValue;
+    }
+    if (boolValue != null) {
+      $result.boolValue = boolValue;
+    }
+    if (dateValue != null) {
+      $result.dateValue = dateValue;
+    }
+    if (dateTimeValue != null) {
+      $result.dateTimeValue = dateTimeValue;
+    }
+    if (selectValue != null) {
+      $result.selectValue = selectValue;
+    }
     return $result;
   }
   GetAttachedPropertyValuesResponse_Value._() : super();
   factory GetAttachedPropertyValuesResponse_Value.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAttachedPropertyValuesResponse_Value.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
+  static const $core.Map<$core.int, GetAttachedPropertyValuesResponse_Value_Value> _GetAttachedPropertyValuesResponse_Value_ValueByTag = {
+    8 : GetAttachedPropertyValuesResponse_Value_Value.isUndefined,
+    9 : GetAttachedPropertyValuesResponse_Value_Value.textValue,
+    10 : GetAttachedPropertyValuesResponse_Value_Value.numberValue,
+    11 : GetAttachedPropertyValuesResponse_Value_Value.boolValue,
+    12 : GetAttachedPropertyValuesResponse_Value_Value.dateValue,
+    13 : GetAttachedPropertyValuesResponse_Value_Value.dateTimeValue,
+    14 : GetAttachedPropertyValuesResponse_Value_Value.selectValue,
+    0 : GetAttachedPropertyValuesResponse_Value_Value.notSet
+  };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAttachedPropertyValuesResponse.Value', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
+    ..oo(0, [8, 9, 10, 11, 12, 13, 14])
     ..aOS(1, _omitFieldNames ? '' : 'propertyId')
     ..e<FieldType>(2, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: FieldType.valueOf, enumValues: FieldType.values)
-    ..aOS(4, _omitFieldNames ? '' : 'name')
-    ..aOS(5, _omitFieldNames ? '' : 'description')
-    ..aOB(6, _omitFieldNames ? '' : 'isArchived')
-    ..aOB(7, _omitFieldNames ? '' : 'isSoftRequired')
-    ..aOM<GetAttachedPropertyValuesResponse_Value_Set>(8, _omitFieldNames ? '' : 'set', subBuilder: GetAttachedPropertyValuesResponse_Value_Set.create)
+    ..aOS(3, _omitFieldNames ? '' : 'name')
+    ..aOS(4, _omitFieldNames ? '' : 'description')
+    ..aOB(5, _omitFieldNames ? '' : 'isArchived')
+    ..aOB(6, _omitFieldNames ? '' : 'isSoftRequired')
+    ..aOM<GetAttachedPropertyValuesResponse_Value_Set>(7, _omitFieldNames ? '' : 'set', subBuilder: GetAttachedPropertyValuesResponse_Value_Set.create)
+    ..aOB(8, _omitFieldNames ? '' : 'isUndefined')
+    ..aOS(9, _omitFieldNames ? '' : 'textValue')
+    ..a<$core.double>(10, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OF)
+    ..aOB(11, _omitFieldNames ? '' : 'boolValue')
+    ..aOS(12, _omitFieldNames ? '' : 'dateValue')
+    ..aOS(13, _omitFieldNames ? '' : 'dateTimeValue')
+    ..aOS(14, _omitFieldNames ? '' : 'selectValue')
     ..hasRequiredFields = false
   ;
 
@@ -1802,6 +1876,9 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
   static GetAttachedPropertyValuesResponse_Value getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAttachedPropertyValuesResponse_Value>(create);
   static GetAttachedPropertyValuesResponse_Value? _defaultInstance;
 
+  GetAttachedPropertyValuesResponse_Value_Value whichValue() => _GetAttachedPropertyValuesResponse_Value_ValueByTag[$_whichOneof(0)]!;
+  void clearValue() => clearField($_whichOneof(0));
+
   @$pb.TagNumber(1)
   $core.String get propertyId => $_getSZ(0);
   @$pb.TagNumber(1)
@@ -1820,52 +1897,115 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearFieldType() => clearField(2);
 
-  @$pb.TagNumber(4)
+  @$pb.TagNumber(3)
   $core.String get name => $_getSZ(2);
-  @$pb.TagNumber(4)
+  @$pb.TagNumber(3)
   set name($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(4)
+  @$pb.TagNumber(3)
   $core.bool hasName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearName() => clearField(3);
+
   @$pb.TagNumber(4)
-  void clearName() => clearField(4);
-
-  @$pb.TagNumber(5)
   $core.String get description => $_getSZ(3);
-  @$pb.TagNumber(5)
+  @$pb.TagNumber(4)
   set description($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(5)
+  @$pb.TagNumber(4)
   $core.bool hasDescription() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearDescription() => clearField(4);
+
   @$pb.TagNumber(5)
-  void clearDescription() => clearField(5);
-
-  @$pb.TagNumber(6)
   $core.bool get isArchived => $_getBF(4);
-  @$pb.TagNumber(6)
+  @$pb.TagNumber(5)
   set isArchived($core.bool v) { $_setBool(4, v); }
-  @$pb.TagNumber(6)
+  @$pb.TagNumber(5)
   $core.bool hasIsArchived() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearIsArchived() => clearField(5);
+
   @$pb.TagNumber(6)
-  void clearIsArchived() => clearField(6);
-
-  @$pb.TagNumber(7)
   $core.bool get isSoftRequired => $_getBF(5);
-  @$pb.TagNumber(7)
+  @$pb.TagNumber(6)
   set isSoftRequired($core.bool v) { $_setBool(5, v); }
-  @$pb.TagNumber(7)
+  @$pb.TagNumber(6)
   $core.bool hasIsSoftRequired() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearIsSoftRequired() => clearField(6);
+
   @$pb.TagNumber(7)
-  void clearIsSoftRequired() => clearField(7);
+  GetAttachedPropertyValuesResponse_Value_Set get set => $_getN(6);
+  @$pb.TagNumber(7)
+  set set(GetAttachedPropertyValuesResponse_Value_Set v) { setField(7, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasSet() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearSet() => clearField(7);
+  @$pb.TagNumber(7)
+  GetAttachedPropertyValuesResponse_Value_Set ensureSet() => $_ensure(6);
 
   @$pb.TagNumber(8)
-  GetAttachedPropertyValuesResponse_Value_Set get set => $_getN(6);
+  $core.bool get isUndefined => $_getBF(7);
   @$pb.TagNumber(8)
-  set set(GetAttachedPropertyValuesResponse_Value_Set v) { setField(8, v); }
+  set isUndefined($core.bool v) { $_setBool(7, v); }
   @$pb.TagNumber(8)
-  $core.bool hasSet() => $_has(6);
+  $core.bool hasIsUndefined() => $_has(7);
   @$pb.TagNumber(8)
-  void clearSet() => clearField(8);
-  @$pb.TagNumber(8)
-  GetAttachedPropertyValuesResponse_Value_Set ensureSet() => $_ensure(6);
+  void clearIsUndefined() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get textValue => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set textValue($core.String v) { $_setString(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasTextValue() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearTextValue() => clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.double get numberValue => $_getN(9);
+  @$pb.TagNumber(10)
+  set numberValue($core.double v) { $_setFloat(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasNumberValue() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearNumberValue() => clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.bool get boolValue => $_getBF(10);
+  @$pb.TagNumber(11)
+  set boolValue($core.bool v) { $_setBool(10, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasBoolValue() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearBoolValue() => clearField(11);
+
+  @$pb.TagNumber(12)
+  $core.String get dateValue => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set dateValue($core.String v) { $_setString(11, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasDateValue() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearDateValue() => clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.String get dateTimeValue => $_getSZ(12);
+  @$pb.TagNumber(13)
+  set dateTimeValue($core.String v) { $_setString(12, v); }
+  @$pb.TagNumber(13)
+  $core.bool hasDateTimeValue() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearDateTimeValue() => clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.String get selectValue => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set selectValue($core.String v) { $_setString(13, v); }
+  @$pb.TagNumber(14)
+  $core.bool hasSelectValue() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearSelectValue() => clearField(14);
 }
 
 class GetAttachedPropertyValuesResponse extends $pb.GeneratedMessage {

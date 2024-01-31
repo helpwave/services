@@ -383,12 +383,13 @@ const AttachPropertyValueRequest$json = {
     {'1': 'subject_id', '3': 1, '4': 1, '5': 9, '10': 'subjectId'},
     {'1': 'subject_type', '3': 2, '4': 1, '5': 14, '6': '.proto.services.tasks_svc.v1.SubjectType', '10': 'subjectType'},
     {'1': 'property_id', '3': 3, '4': 1, '5': 9, '10': 'propertyId'},
-    {'1': 'text_value', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'textValue'},
-    {'1': 'number_value', '3': 5, '4': 1, '5': 2, '9': 0, '10': 'numberValue'},
-    {'1': 'bool_value', '3': 6, '4': 1, '5': 8, '9': 0, '10': 'boolValue'},
-    {'1': 'date_value', '3': 7, '4': 1, '5': 9, '9': 0, '10': 'dateValue'},
-    {'1': 'date_time_value', '3': 8, '4': 1, '5': 9, '9': 0, '10': 'dateTimeValue'},
-    {'1': 'select_value', '3': 9, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
+    {'1': 'is_undefined', '3': 4, '4': 1, '5': 8, '9': 0, '10': 'isUndefined'},
+    {'1': 'text_value', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'textValue'},
+    {'1': 'number_value', '3': 6, '4': 1, '5': 2, '9': 0, '10': 'numberValue'},
+    {'1': 'bool_value', '3': 7, '4': 1, '5': 8, '9': 0, '10': 'boolValue'},
+    {'1': 'date_value', '3': 8, '4': 1, '5': 9, '9': 0, '10': 'dateValue'},
+    {'1': 'date_time_value', '3': 9, '4': 1, '5': 9, '9': 0, '10': 'dateTimeValue'},
+    {'1': 'select_value', '3': 10, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
   ],
   '8': [
     {'1': 'value'},
@@ -400,11 +401,11 @@ final $typed_data.Uint8List attachPropertyValueRequestDescriptor = $convert.base
     'ChpBdHRhY2hQcm9wZXJ0eVZhbHVlUmVxdWVzdBIdCgpzdWJqZWN0X2lkGAEgASgJUglzdWJqZW'
     'N0SWQSSwoMc3ViamVjdF90eXBlGAIgASgOMigucHJvdG8uc2VydmljZXMudGFza3Nfc3ZjLnYx'
     'LlN1YmplY3RUeXBlUgtzdWJqZWN0VHlwZRIfCgtwcm9wZXJ0eV9pZBgDIAEoCVIKcHJvcGVydH'
-    'lJZBIfCgp0ZXh0X3ZhbHVlGAQgASgJSABSCXRleHRWYWx1ZRIjCgxudW1iZXJfdmFsdWUYBSAB'
-    'KAJIAFILbnVtYmVyVmFsdWUSHwoKYm9vbF92YWx1ZRgGIAEoCEgAUglib29sVmFsdWUSHwoKZG'
-    'F0ZV92YWx1ZRgHIAEoCUgAUglkYXRlVmFsdWUSKAoPZGF0ZV90aW1lX3ZhbHVlGAggASgJSABS'
-    'DWRhdGVUaW1lVmFsdWUSIwoMc2VsZWN0X3ZhbHVlGAkgASgJSABSC3NlbGVjdFZhbHVlQgcKBX'
-    'ZhbHVl');
+    'lJZBIjCgxpc191bmRlZmluZWQYBCABKAhIAFILaXNVbmRlZmluZWQSHwoKdGV4dF92YWx1ZRgF'
+    'IAEoCUgAUgl0ZXh0VmFsdWUSIwoMbnVtYmVyX3ZhbHVlGAYgASgCSABSC251bWJlclZhbHVlEh'
+    '8KCmJvb2xfdmFsdWUYByABKAhIAFIJYm9vbFZhbHVlEh8KCmRhdGVfdmFsdWUYCCABKAlIAFIJ'
+    'ZGF0ZVZhbHVlEigKD2RhdGVfdGltZV92YWx1ZRgJIAEoCUgAUg1kYXRlVGltZVZhbHVlEiMKDH'
+    'NlbGVjdF92YWx1ZRgKIAEoCUgAUgtzZWxlY3RWYWx1ZUIHCgV2YWx1ZQ==');
 
 @$core.Deprecated('Use attachPropertyValueResponseDescriptor instead')
 const AttachPropertyValueResponse$json = {
@@ -447,14 +448,22 @@ const GetAttachedPropertyValuesResponse_Value$json = {
   '2': [
     {'1': 'property_id', '3': 1, '4': 1, '5': 9, '10': 'propertyId'},
     {'1': 'field_type', '3': 2, '4': 1, '5': 14, '6': '.proto.services.tasks_svc.v1.FieldType', '10': 'fieldType'},
-    {'1': 'name', '3': 4, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'description', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
-    {'1': 'is_archived', '3': 6, '4': 1, '5': 8, '10': 'isArchived'},
-    {'1': 'is_soft_required', '3': 7, '4': 1, '5': 8, '10': 'isSoftRequired'},
-    {'1': 'set', '3': 8, '4': 1, '5': 11, '6': '.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set', '9': 1, '10': 'set', '17': true},
+    {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'description', '3': 4, '4': 1, '5': 9, '9': 1, '10': 'description', '17': true},
+    {'1': 'is_archived', '3': 5, '4': 1, '5': 8, '10': 'isArchived'},
+    {'1': 'is_soft_required', '3': 6, '4': 1, '5': 8, '10': 'isSoftRequired'},
+    {'1': 'set', '3': 7, '4': 1, '5': 11, '6': '.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set', '9': 2, '10': 'set', '17': true},
+    {'1': 'is_undefined', '3': 8, '4': 1, '5': 8, '9': 0, '10': 'isUndefined'},
+    {'1': 'text_value', '3': 9, '4': 1, '5': 9, '9': 0, '10': 'textValue'},
+    {'1': 'number_value', '3': 10, '4': 1, '5': 2, '9': 0, '10': 'numberValue'},
+    {'1': 'bool_value', '3': 11, '4': 1, '5': 8, '9': 0, '10': 'boolValue'},
+    {'1': 'date_value', '3': 12, '4': 1, '5': 9, '9': 0, '10': 'dateValue'},
+    {'1': 'date_time_value', '3': 13, '4': 1, '5': 9, '9': 0, '10': 'dateTimeValue'},
+    {'1': 'select_value', '3': 14, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
   ],
   '3': [GetAttachedPropertyValuesResponse_Value_Set$json],
   '8': [
+    {'1': 'value'},
     {'1': '_description'},
     {'1': '_set'},
   ],
@@ -473,12 +482,17 @@ const GetAttachedPropertyValuesResponse_Value_Set$json = {
 final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $convert.base64Decode(
     'CiFHZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2USXAoGdmFsdWVzGAEgAygLMkQucH'
     'JvdG8uc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldEF0dGFjaGVkUHJvcGVydHlWYWx1ZXNSZXNw'
-    'b25zZS5WYWx1ZVIGdmFsdWVzGpkDCgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcHJvcG'
+    'b25zZS5WYWx1ZVIGdmFsdWVzGp4FCgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcHJvcG'
     'VydHlJZBJFCgpmaWVsZF90eXBlGAIgASgOMiYucHJvdG8uc2VydmljZXMudGFza3Nfc3ZjLnYx'
-    'LkZpZWxkVHlwZVIJZmllbGRUeXBlEhIKBG5hbWUYBCABKAlSBG5hbWUSJQoLZGVzY3JpcHRpb2'
-    '4YBSABKAlIAFILZGVzY3JpcHRpb26IAQESHwoLaXNfYXJjaGl2ZWQYBiABKAhSCmlzQXJjaGl2'
-    'ZWQSKAoQaXNfc29mdF9yZXF1aXJlZBgHIAEoCFIOaXNTb2Z0UmVxdWlyZWQSXwoDc2V0GAggAS'
+    'LkZpZWxkVHlwZVIJZmllbGRUeXBlEhIKBG5hbWUYAyABKAlSBG5hbWUSJQoLZGVzY3JpcHRpb2'
+    '4YBCABKAlIAVILZGVzY3JpcHRpb26IAQESHwoLaXNfYXJjaGl2ZWQYBSABKAhSCmlzQXJjaGl2'
+    'ZWQSKAoQaXNfc29mdF9yZXF1aXJlZBgGIAEoCFIOaXNTb2Z0UmVxdWlyZWQSXwoDc2V0GAcgAS'
     'gLMkgucHJvdG8uc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldEF0dGFjaGVkUHJvcGVydHlWYWx1'
-    'ZXNSZXNwb25zZS5WYWx1ZS5TZXRIAVIDc2V0iAEBGikKA1NldBIOCgJpZBgBIAEoCVICaWQSEg'
-    'oEbmFtZRgCIAEoCVIEbmFtZUIOCgxfZGVzY3JpcHRpb25CBgoEX3NldA==');
+    'ZXNSZXNwb25zZS5WYWx1ZS5TZXRIAlIDc2V0iAEBEiMKDGlzX3VuZGVmaW5lZBgIIAEoCEgAUg'
+    'tpc1VuZGVmaW5lZBIfCgp0ZXh0X3ZhbHVlGAkgASgJSABSCXRleHRWYWx1ZRIjCgxudW1iZXJf'
+    'dmFsdWUYCiABKAJIAFILbnVtYmVyVmFsdWUSHwoKYm9vbF92YWx1ZRgLIAEoCEgAUglib29sVm'
+    'FsdWUSHwoKZGF0ZV92YWx1ZRgMIAEoCUgAUglkYXRlVmFsdWUSKAoPZGF0ZV90aW1lX3ZhbHVl'
+    'GA0gASgJSABSDWRhdGVUaW1lVmFsdWUSIwoMc2VsZWN0X3ZhbHVlGA4gASgJSABSC3NlbGVjdF'
+    'ZhbHVlGikKA1NldBIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZUIHCgV2YWx1'
+    'ZUIOCgxfZGVzY3JpcHRpb25CBgoEX3NldA==');
 

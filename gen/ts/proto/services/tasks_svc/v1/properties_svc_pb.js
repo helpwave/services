@@ -36,6 +36,7 @@ goog.exportSymbol('proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesRe
 goog.exportSymbol('proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse', null, global);
 goog.exportSymbol('proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value', null, global);
 goog.exportSymbol('proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set', null, global);
+goog.exportSymbol('proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.ValueCase', null, global);
 goog.exportSymbol('proto.proto.services.tasks_svc.v1.GetPropertiesRequest', null, global);
 goog.exportSymbol('proto.proto.services.tasks_svc.v1.GetPropertiesResponse', null, global);
 goog.exportSymbol('proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property', null, global);
@@ -543,7 +544,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_);
 };
 goog.inherits(proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -4708,19 +4709,20 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyResponse.serializeBinaryToWriter
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_ = [[4,5,6,7,8,9]];
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_ = [[4,5,6,7,8,9,10]];
 
 /**
  * @enum {number}
  */
 proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.ValueCase = {
   VALUE_NOT_SET: 0,
-  TEXT_VALUE: 4,
-  NUMBER_VALUE: 5,
-  BOOL_VALUE: 6,
-  DATE_VALUE: 7,
-  DATE_TIME_VALUE: 8,
-  SELECT_VALUE: 9
+  IS_UNDEFINED: 4,
+  TEXT_VALUE: 5,
+  NUMBER_VALUE: 6,
+  BOOL_VALUE: 7,
+  DATE_VALUE: 8,
+  DATE_TIME_VALUE: 9,
+  SELECT_VALUE: 10
 };
 
 /**
@@ -4764,12 +4766,13 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.toObject = function
     subjectId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     subjectType: jspb.Message.getFieldWithDefault(msg, 2, 0),
     propertyId: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    textValue: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    numberValue: jspb.Message.getFloatingPointFieldWithDefault(msg, 5, 0.0),
-    boolValue: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
-    dateValue: jspb.Message.getFieldWithDefault(msg, 7, ""),
-    dateTimeValue: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    selectValue: jspb.Message.getFieldWithDefault(msg, 9, "")
+    isUndefined: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
+    textValue: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    numberValue: jspb.Message.getFloatingPointFieldWithDefault(msg, 6, 0.0),
+    boolValue: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
+    dateValue: jspb.Message.getFieldWithDefault(msg, 8, ""),
+    dateTimeValue: jspb.Message.getFieldWithDefault(msg, 9, ""),
+    selectValue: jspb.Message.getFieldWithDefault(msg, 10, "")
   };
 
   if (includeInstance) {
@@ -4819,26 +4822,30 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.deserializeBinaryFr
       msg.setPropertyId(value);
       break;
     case 4:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsUndefined(value);
+      break;
+    case 5:
       var value = /** @type {string} */ (reader.readString());
       msg.setTextValue(value);
       break;
-    case 5:
+    case 6:
       var value = /** @type {number} */ (reader.readFloat());
       msg.setNumberValue(value);
       break;
-    case 6:
+    case 7:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setBoolValue(value);
       break;
-    case 7:
+    case 8:
       var value = /** @type {string} */ (reader.readString());
       msg.setDateValue(value);
       break;
-    case 8:
+    case 9:
       var value = /** @type {string} */ (reader.readString());
       msg.setDateTimeValue(value);
       break;
-    case 9:
+    case 10:
       var value = /** @type {string} */ (reader.readString());
       msg.setSelectValue(value);
       break;
@@ -4892,30 +4899,30 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.serializeBinaryToWr
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(message, 4));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 4));
   if (f != null) {
-    writer.writeString(
+    writer.writeBool(
       4,
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 5));
+  f = /** @type {string} */ (jspb.Message.getField(message, 5));
   if (f != null) {
-    writer.writeFloat(
+    writer.writeString(
       5,
       f
     );
   }
-  f = /** @type {boolean} */ (jspb.Message.getField(message, 6));
+  f = /** @type {number} */ (jspb.Message.getField(message, 6));
   if (f != null) {
-    writer.writeBool(
+    writer.writeFloat(
       6,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(message, 7));
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 7));
   if (f != null) {
-    writer.writeString(
+    writer.writeBool(
       7,
       f
     );
@@ -4931,6 +4938,13 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.serializeBinaryToWr
   if (f != null) {
     writer.writeString(
       9,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 10));
+  if (f != null) {
+    writer.writeString(
+      10,
       f
     );
   }
@@ -4992,19 +5006,19 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setProper
 
 
 /**
- * optional string text_value = 4;
- * @return {string}
+ * optional bool is_undefined = 4;
+ * @return {boolean}
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getTextValue = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getIsUndefined = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
 };
 
 
 /**
- * @param {string} value
+ * @param {boolean} value
  * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setTextValue = function(value) {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setIsUndefined = function(value) {
   return jspb.Message.setOneofField(this, 4, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], value);
 };
 
@@ -5013,7 +5027,7 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setTextVa
  * Clears the field making it undefined.
  * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearTextValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearIsUndefined = function() {
   return jspb.Message.setOneofField(this, 4, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], undefined);
 };
 
@@ -5022,25 +5036,25 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearText
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.hasTextValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.hasIsUndefined = function() {
   return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * optional float number_value = 5;
- * @return {number}
+ * optional string text_value = 5;
+ * @return {string}
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getNumberValue = function() {
-  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 5, 0.0));
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getTextValue = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setNumberValue = function(value) {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setTextValue = function(value) {
   return jspb.Message.setOneofField(this, 5, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], value);
 };
 
@@ -5049,7 +5063,7 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setNumber
  * Clears the field making it undefined.
  * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearNumberValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearTextValue = function() {
   return jspb.Message.setOneofField(this, 5, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], undefined);
 };
 
@@ -5058,25 +5072,25 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearNumb
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.hasNumberValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.hasTextValue = function() {
   return jspb.Message.getField(this, 5) != null;
 };
 
 
 /**
- * optional bool bool_value = 6;
- * @return {boolean}
+ * optional float number_value = 6;
+ * @return {number}
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getBoolValue = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 6, false));
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getNumberValue = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 6, 0.0));
 };
 
 
 /**
- * @param {boolean} value
+ * @param {number} value
  * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setBoolValue = function(value) {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setNumberValue = function(value) {
   return jspb.Message.setOneofField(this, 6, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], value);
 };
 
@@ -5085,7 +5099,7 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setBoolVa
  * Clears the field making it undefined.
  * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearBoolValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearNumberValue = function() {
   return jspb.Message.setOneofField(this, 6, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], undefined);
 };
 
@@ -5094,25 +5108,25 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearBool
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.hasBoolValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.hasNumberValue = function() {
   return jspb.Message.getField(this, 6) != null;
 };
 
 
 /**
- * optional string date_value = 7;
- * @return {string}
+ * optional bool bool_value = 7;
+ * @return {boolean}
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getDateValue = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getBoolValue = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 7, false));
 };
 
 
 /**
- * @param {string} value
+ * @param {boolean} value
  * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setDateValue = function(value) {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setBoolValue = function(value) {
   return jspb.Message.setOneofField(this, 7, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], value);
 };
 
@@ -5121,7 +5135,7 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setDateVa
  * Clears the field making it undefined.
  * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearDateValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearBoolValue = function() {
   return jspb.Message.setOneofField(this, 7, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], undefined);
 };
 
@@ -5130,16 +5144,16 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearDate
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.hasDateValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.hasBoolValue = function() {
   return jspb.Message.getField(this, 7) != null;
 };
 
 
 /**
- * optional string date_time_value = 8;
+ * optional string date_value = 8;
  * @return {string}
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getDateTimeValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getDateValue = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
 };
 
@@ -5148,7 +5162,7 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getDateTi
  * @param {string} value
  * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setDateTimeValue = function(value) {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setDateValue = function(value) {
   return jspb.Message.setOneofField(this, 8, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], value);
 };
 
@@ -5157,7 +5171,7 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setDateTi
  * Clears the field making it undefined.
  * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearDateTimeValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearDateValue = function() {
   return jspb.Message.setOneofField(this, 8, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], undefined);
 };
 
@@ -5166,16 +5180,16 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearDate
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.hasDateTimeValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.hasDateValue = function() {
   return jspb.Message.getField(this, 8) != null;
 };
 
 
 /**
- * optional string select_value = 9;
+ * optional string date_time_value = 9;
  * @return {string}
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getSelectValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getDateTimeValue = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
 };
 
@@ -5184,7 +5198,7 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getSelect
  * @param {string} value
  * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setSelectValue = function(value) {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setDateTimeValue = function(value) {
   return jspb.Message.setOneofField(this, 9, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], value);
 };
 
@@ -5193,7 +5207,7 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setSelect
  * Clears the field making it undefined.
  * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearSelectValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearDateTimeValue = function() {
   return jspb.Message.setOneofField(this, 9, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], undefined);
 };
 
@@ -5202,8 +5216,44 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearSele
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.hasSelectValue = function() {
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.hasDateTimeValue = function() {
   return jspb.Message.getField(this, 9) != null;
+};
+
+
+/**
+ * optional string select_value = 10;
+ * @return {string}
+ */
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.getSelectValue = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 10, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
+ */
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.setSelectValue = function(value) {
+  return jspb.Message.setOneofField(this, 10, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest} returns this
+ */
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.clearSelectValue = function() {
+  return jspb.Message.setOneofField(this, 10, proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.AttachPropertyValueRequest.prototype.hasSelectValue = function() {
+  return jspb.Message.getField(this, 10) != null;
 };
 
 
@@ -5609,6 +5659,37 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.serializeBin
 
 
 
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_ = [[8,9,10,11,12,13,14]];
+
+/**
+ * @enum {number}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.ValueCase = {
+  VALUE_NOT_SET: 0,
+  IS_UNDEFINED: 8,
+  TEXT_VALUE: 9,
+  NUMBER_VALUE: 10,
+  BOOL_VALUE: 11,
+  DATE_VALUE: 12,
+  DATE_TIME_VALUE: 13,
+  SELECT_VALUE: 14
+};
+
+/**
+ * @return {proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.ValueCase}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getValueCase = function() {
+  return /** @type {proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.ValueCase} */(jspb.Message.computeOneofCase(this, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0]));
+};
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -5642,11 +5723,18 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.toObje
   var f, obj = {
     propertyId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     fieldType: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    name: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    description: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    isArchived: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
-    isSoftRequired: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
-    set: (f = msg.getSet()) && proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set.toObject(includeInstance, f)
+    name: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    description: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    isArchived: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
+    isSoftRequired: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
+    set: (f = msg.getSet()) && proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set.toObject(includeInstance, f),
+    isUndefined: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
+    textValue: jspb.Message.getFieldWithDefault(msg, 9, ""),
+    numberValue: jspb.Message.getFloatingPointFieldWithDefault(msg, 10, 0.0),
+    boolValue: jspb.Message.getBooleanFieldWithDefault(msg, 11, false),
+    dateValue: jspb.Message.getFieldWithDefault(msg, 12, ""),
+    dateTimeValue: jspb.Message.getFieldWithDefault(msg, 13, ""),
+    selectValue: jspb.Message.getFieldWithDefault(msg, 14, "")
   };
 
   if (includeInstance) {
@@ -5691,26 +5779,54 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.deseri
       var value = /** @type {!proto.proto.services.tasks_svc.v1.FieldType} */ (reader.readEnum());
       msg.setFieldType(value);
       break;
-    case 4:
+    case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
-    case 5:
+    case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setDescription(value);
       break;
-    case 6:
+    case 5:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsArchived(value);
       break;
-    case 7:
+    case 6:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsSoftRequired(value);
       break;
-    case 8:
+    case 7:
       var value = new proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set;
       reader.readMessage(value,proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set.deserializeBinaryFromReader);
       msg.setSet(value);
+      break;
+    case 8:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsUndefined(value);
+      break;
+    case 9:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setTextValue(value);
+      break;
+    case 10:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setNumberValue(value);
+      break;
+    case 11:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setBoolValue(value);
+      break;
+    case 12:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setDateValue(value);
+      break;
+    case 13:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setDateTimeValue(value);
+      break;
+    case 14:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSelectValue(value);
       break;
     default:
       reader.skipField();
@@ -5758,37 +5874,86 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.serial
   f = message.getName();
   if (f.length > 0) {
     writer.writeString(
-      4,
+      3,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(message, 5));
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeString(
-      5,
+      4,
       f
     );
   }
   f = message.getIsArchived();
   if (f) {
     writer.writeBool(
-      6,
+      5,
       f
     );
   }
   f = message.getIsSoftRequired();
   if (f) {
     writer.writeBool(
-      7,
+      6,
       f
     );
   }
   f = message.getSet();
   if (f != null) {
     writer.writeMessage(
-      8,
+      7,
       f,
       proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 8));
+  if (f != null) {
+    writer.writeBool(
+      8,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 9));
+  if (f != null) {
+    writer.writeString(
+      9,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 10));
+  if (f != null) {
+    writer.writeFloat(
+      10,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 11));
+  if (f != null) {
+    writer.writeBool(
+      11,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 12));
+  if (f != null) {
+    writer.writeString(
+      12,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 13));
+  if (f != null) {
+    writer.writeString(
+      13,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 14));
+  if (f != null) {
+    writer.writeString(
+      14,
+      f
     );
   }
 };
@@ -5991,11 +6156,11 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.protot
 
 
 /**
- * optional string name = 4;
+ * optional string name = 3;
  * @return {string}
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getName = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
@@ -6004,16 +6169,16 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.protot
  * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setName = function(value) {
-  return jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
 /**
- * optional string description = 5;
+ * optional string description = 4;
  * @return {string}
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getDescription = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
@@ -6022,7 +6187,7 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.protot
  * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setDescription = function(value) {
-  return jspb.Message.setField(this, 5, value);
+  return jspb.Message.setField(this, 4, value);
 };
 
 
@@ -6031,7 +6196,7 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.protot
  * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.clearDescription = function() {
-  return jspb.Message.setField(this, 5, undefined);
+  return jspb.Message.setField(this, 4, undefined);
 };
 
 
@@ -6040,16 +6205,16 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.protot
  * @return {boolean}
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.hasDescription = function() {
-  return jspb.Message.getField(this, 5) != null;
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * optional bool is_archived = 6;
+ * optional bool is_archived = 5;
  * @return {boolean}
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getIsArchived = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 6, false));
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 5, false));
 };
 
 
@@ -6058,16 +6223,16 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.protot
  * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setIsArchived = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 6, value);
+  return jspb.Message.setProto3BooleanField(this, 5, value);
 };
 
 
 /**
- * optional bool is_soft_required = 7;
+ * optional bool is_soft_required = 6;
  * @return {boolean}
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getIsSoftRequired = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 7, false));
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 6, false));
 };
 
 
@@ -6076,17 +6241,17 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.protot
  * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setIsSoftRequired = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 7, value);
+  return jspb.Message.setProto3BooleanField(this, 6, value);
 };
 
 
 /**
- * optional Set set = 8;
+ * optional Set set = 7;
  * @return {?proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set}
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getSet = function() {
   return /** @type{?proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set} */ (
-    jspb.Message.getWrapperField(this, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set, 8));
+    jspb.Message.getWrapperField(this, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set, 7));
 };
 
 
@@ -6095,7 +6260,7 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.protot
  * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
 */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setSet = function(value) {
-  return jspb.Message.setWrapperField(this, 8, value);
+  return jspb.Message.setWrapperField(this, 7, value);
 };
 
 
@@ -6113,7 +6278,259 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.protot
  * @return {boolean}
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.hasSet = function() {
+  return jspb.Message.getField(this, 7) != null;
+};
+
+
+/**
+ * optional bool is_undefined = 8;
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getIsUndefined = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 8, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setIsUndefined = function(value) {
+  return jspb.Message.setOneofField(this, 8, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.clearIsUndefined = function() {
+  return jspb.Message.setOneofField(this, 8, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.hasIsUndefined = function() {
   return jspb.Message.getField(this, 8) != null;
+};
+
+
+/**
+ * optional string text_value = 9;
+ * @return {string}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getTextValue = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setTextValue = function(value) {
+  return jspb.Message.setOneofField(this, 9, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.clearTextValue = function() {
+  return jspb.Message.setOneofField(this, 9, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.hasTextValue = function() {
+  return jspb.Message.getField(this, 9) != null;
+};
+
+
+/**
+ * optional float number_value = 10;
+ * @return {number}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getNumberValue = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 10, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setNumberValue = function(value) {
+  return jspb.Message.setOneofField(this, 10, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.clearNumberValue = function() {
+  return jspb.Message.setOneofField(this, 10, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.hasNumberValue = function() {
+  return jspb.Message.getField(this, 10) != null;
+};
+
+
+/**
+ * optional bool bool_value = 11;
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getBoolValue = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 11, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setBoolValue = function(value) {
+  return jspb.Message.setOneofField(this, 11, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.clearBoolValue = function() {
+  return jspb.Message.setOneofField(this, 11, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.hasBoolValue = function() {
+  return jspb.Message.getField(this, 11) != null;
+};
+
+
+/**
+ * optional string date_value = 12;
+ * @return {string}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getDateValue = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 12, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setDateValue = function(value) {
+  return jspb.Message.setOneofField(this, 12, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.clearDateValue = function() {
+  return jspb.Message.setOneofField(this, 12, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.hasDateValue = function() {
+  return jspb.Message.getField(this, 12) != null;
+};
+
+
+/**
+ * optional string date_time_value = 13;
+ * @return {string}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getDateTimeValue = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 13, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setDateTimeValue = function(value) {
+  return jspb.Message.setOneofField(this, 13, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.clearDateTimeValue = function() {
+  return jspb.Message.setOneofField(this, 13, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.hasDateTimeValue = function() {
+  return jspb.Message.getField(this, 13) != null;
+};
+
+
+/**
+ * optional string select_value = 14;
+ * @return {string}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getSelectValue = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 14, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setSelectValue = function(value) {
+  return jspb.Message.setOneofField(this, 14, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.clearSelectValue = function() {
+  return jspb.Message.setOneofField(this, 14, proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.hasSelectValue = function() {
+  return jspb.Message.getField(this, 14) != null;
 };
 
 

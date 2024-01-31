@@ -657,6 +657,9 @@ export class AttachPropertyValueRequest extends jspb.Message {
   getPropertyId(): string;
   setPropertyId(value: string): AttachPropertyValueRequest;
 
+  getIsUndefined(): boolean;
+  setIsUndefined(value: boolean): AttachPropertyValueRequest;
+
   getTextValue(): string;
   setTextValue(value: string): AttachPropertyValueRequest;
 
@@ -690,6 +693,7 @@ export namespace AttachPropertyValueRequest {
     subjectId: string,
     subjectType: SubjectType,
     propertyId: string,
+    isUndefined: boolean,
     textValue: string,
     numberValue: number,
     boolValue: boolean,
@@ -700,12 +704,13 @@ export namespace AttachPropertyValueRequest {
 
   export enum ValueCase { 
     VALUE_NOT_SET = 0,
-    TEXT_VALUE = 4,
-    NUMBER_VALUE = 5,
-    BOOL_VALUE = 6,
-    DATE_VALUE = 7,
-    DATE_TIME_VALUE = 8,
-    SELECT_VALUE = 9,
+    IS_UNDEFINED = 4,
+    TEXT_VALUE = 5,
+    NUMBER_VALUE = 6,
+    BOOL_VALUE = 7,
+    DATE_VALUE = 8,
+    DATE_TIME_VALUE = 9,
+    SELECT_VALUE = 10,
   }
 }
 
@@ -797,6 +802,29 @@ export namespace GetAttachedPropertyValuesResponse {
     hasSet(): boolean;
     clearSet(): Value;
 
+    getIsUndefined(): boolean;
+    setIsUndefined(value: boolean): Value;
+
+    getTextValue(): string;
+    setTextValue(value: string): Value;
+
+    getNumberValue(): number;
+    setNumberValue(value: number): Value;
+
+    getBoolValue(): boolean;
+    setBoolValue(value: boolean): Value;
+
+    getDateValue(): string;
+    setDateValue(value: string): Value;
+
+    getDateTimeValue(): string;
+    setDateTimeValue(value: string): Value;
+
+    getSelectValue(): string;
+    setSelectValue(value: string): Value;
+
+    getValueCase(): Value.ValueCase;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Value.AsObject;
     static toObject(includeInstance: boolean, msg: Value): Value.AsObject;
@@ -814,6 +842,13 @@ export namespace GetAttachedPropertyValuesResponse {
       isArchived: boolean,
       isSoftRequired: boolean,
       set?: GetAttachedPropertyValuesResponse.Value.Set.AsObject,
+      isUndefined: boolean,
+      textValue: string,
+      numberValue: number,
+      boolValue: boolean,
+      dateValue: string,
+      dateTimeValue: string,
+      selectValue: string,
     }
 
     export class Set extends jspb.Message {
@@ -839,14 +874,25 @@ export namespace GetAttachedPropertyValuesResponse {
     }
 
 
+    export enum ValueCase { 
+      VALUE_NOT_SET = 0,
+      IS_UNDEFINED = 8,
+      TEXT_VALUE = 9,
+      NUMBER_VALUE = 10,
+      BOOL_VALUE = 11,
+      DATE_VALUE = 12,
+      DATE_TIME_VALUE = 13,
+      SELECT_VALUE = 14,
+    }
+
     export enum DescriptionCase { 
       _DESCRIPTION_NOT_SET = 0,
-      DESCRIPTION = 5,
+      DESCRIPTION = 4,
     }
 
     export enum SetCase { 
       _SET_NOT_SET = 0,
-      SET = 8,
+      SET = 7,
     }
   }
 
