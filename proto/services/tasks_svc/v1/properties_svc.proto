@@ -4,10 +4,6 @@ package proto.services.tasks_svc.v1;
 
 option go_package = "gen/proto/services/tasks-svc";
 
-/***************************************************/
-/********* Work with the Properties Schema *********/
-/***************************************************/
-
 enum SubjectType {
   SUBJECT_TYPE_UNSPECIFIED = 0;
   SUBJECT_TYPE_PATIENT = 1;
@@ -22,6 +18,48 @@ enum FieldType {
   FIELD_TYPE_DATE_TIME = 5;
   FIELD_TYPE_SELECT = 6;
 }
+
+/***************************************************/
+/********* Work with the Properties Schema *********/
+/***************************************************/
+
+//
+// CreatePropertySet
+//
+
+message CreatePropertySetRequest {
+  string name = 1;
+
+  repeated string properties = 3; // @gotags: validate:"dive,uuid4"
+}
+
+message CreatePropertySetResponse {}
+
+//
+// UpdatePropertySet
+//
+
+
+message UpdatePropertySetRequest {
+  string set_id = 1; // @gotags: validate:"uuid4"
+  string name = 2; // TODO: add validation
+
+  repeated string added_properties = 3; // @gotags: validate:"dive,uuid4"
+  repeated string removed_properties = 4; // @gotags: validate:"dive,uuid4"
+}
+
+message UpdatePropertySetResponse {}
+
+//
+// UpdatePropertySet
+//
+
+
+message DeletePropertySetRequest {
+  string set_id = 1; // @gotags: validate:"uuid4"
+}
+
+message DeletePropertySetResponse {}
 
 //
 // CreateProperty
@@ -199,7 +237,6 @@ message GetAttachedPropertyValuesResponse {
     message Set {
       string id = 1;
       string name = 2;
-      optional string description = 3;
     }
     optional Set set = 8;
   }
@@ -208,6 +245,10 @@ message GetAttachedPropertyValuesResponse {
 }
 
 service PropertiesService {
+  rpc CreatePropertySet (CreatePropertySetRequest) returns (CreatePropertySetResponse) {}
+  rpc UpdatePropertySet (UpdatePropertySetRequest) returns (UpdatePropertySetResponse) {}
+  rpc DeletePropertySet (DeletePropertySetRequest) returns (DeletePropertySetResponse) {}
+
   rpc CreateProperty (CreatePropertyRequest) returns (CreatePropertyResponse) {}
   rpc GetProperty (GetPropertyRequest) returns (GetPropertyResponse) {}
   rpc GetProperties (GetPropertiesRequest) returns (GetPropertiesResponse) {}
