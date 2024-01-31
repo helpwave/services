@@ -42,7 +42,7 @@ concurrency:
 jobs:
 
   fly-toml:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       fly_toml: ${{ steps.fly-toml.outputs.fly_toml }}
     steps:
@@ -59,7 +59,7 @@ jobs:
           suggested_fly_toml: fly.${{ inputs.environment }}.toml
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: fly-toml
     if: ${{ needs.fly-toml.outputs.fly_toml != '' }}
     env:

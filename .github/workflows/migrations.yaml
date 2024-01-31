@@ -15,7 +15,7 @@ env:
 
 jobs:
   detect-changes:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       # Stringified JSON Array of changed services
       services: ${{ steps.changes.outputs.all_changed_files }}
@@ -47,7 +47,7 @@ jobs:
           services: ${{ steps.changes.outputs.all_changed_files }}
 
   disallow-modifications:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -70,7 +70,7 @@ jobs:
           files: ${{ steps.changes.outputs.modified_files }}
 
   migrations:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: detect-changes
     if: needs.detect-changes.outputs.services != '[]'
     strategy:
@@ -109,7 +109,7 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
         with:
           version: ${{ env.FLY_CLI_VERSION }}
-      # currently ubuntu-latest ships with psql 14.x,
+      # ubuntu-22.04 ships with psql 14.x,
       # whose pg_dump is incompatible with our postgres server (15.x)
       - name: Setup postgres client
         run: |

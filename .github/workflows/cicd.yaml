@@ -13,7 +13,7 @@ permissions:
 jobs:
 
   detect-changes:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       services: ${{ steps.aggregate-changes.outputs.services }}
       libs: ${{ steps.aggregate-changes.outputs.libs }}

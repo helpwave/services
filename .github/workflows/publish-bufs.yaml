@@ -16,7 +16,7 @@ env:
 
 jobs:
   check-preconditions:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       bump: ${{ steps.bump.outputs.bump }}
       commit: ${{ steps.commit.outputs.sha }}
@@ -76,7 +76,7 @@ jobs:
 
   ts:
     needs: check-preconditions
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       packages: write
     steps:
@@ -104,7 +104,7 @@ jobs:
     needs:
     - check-preconditions
     - ts
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Clone Repo
       uses: actions/checkout@v4

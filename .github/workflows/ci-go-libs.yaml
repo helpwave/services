@@ -15,7 +15,7 @@ env:
 jobs:
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: libs/${{ inputs.lib }}
@@ -39,7 +39,7 @@ jobs:
           args: "--out-format=line-number"
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: libs/${{ inputs.lib }}

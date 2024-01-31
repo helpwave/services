@@ -28,7 +28,7 @@ env:
 jobs:
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: services/${{ inputs.service }}
@@ -52,7 +52,7 @@ jobs:
           args: "--out-format=line-number"
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: services/${{ inputs.service }}
@@ -77,7 +77,7 @@ jobs:
 
   docker:
     needs: [ lint, test ]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       packages: write

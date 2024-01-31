@@ -20,7 +20,7 @@ env:
 
 jobs:
   lint-protos:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - uses: bufbuild/buf-setup-action@v1
@@ -29,7 +29,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: bufbuild/buf-lint-action@v1
   generate-protos:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
       deployments: write
@@ -57,7 +57,7 @@ jobs:
           directory: 'proto_docs'
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
   breakage:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - uses: bufbuild/buf-setup-action@v1
