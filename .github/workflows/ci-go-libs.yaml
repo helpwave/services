@@ -9,6 +9,7 @@ on:
         required: true
 
 env:
+  # renovate: datasource=golang-version depName=golang/go
   GO_VERSION: '1.21'
 
 jobs:

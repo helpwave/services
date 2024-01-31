@@ -1,7 +1,9 @@
-# based on the debian 12 ("bookworm") go 1.21 image
+# based on the debian 12 ("bookworm") go image
 # for now this only builds x86_64 images (TODO)
-# when updating the go toolchain, also update the cicd-go-* workflows
-FROM golang:1.21.6-bookworm
+
+# renovate: datasource=golang-version depName=golang/go
+ARG GO_VERSION=1.21
+FROM golang:${GO_VERSION}-bookworm
 
 # update debian package list and packages, also install some
 RUN apt update \
@@ -21,9 +23,10 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
  	&& sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
 # install buf
-# when updating version, also update the buf workflow
 #  https://buf.build/
-RUN wget https://github.com/bufbuild/buf/releases/download/v1.28.1/buf-Linux-x86_64 -O /usr/local/bin/buf \
+# renovate: datasource=github-releases depName=bufbuild/buf
+ENV BUF_VERSION=1.28.1
+RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-Linux-x86_64 -O /usr/local/bin/buf \
     && chmod +x /usr/local/bin/buf
 
 # install gh
@@ -50,14 +53,22 @@ ENV HOME="/home/${UNAME}"
 
 # install air
 #  https://github.com/cosmtrek/air
-RUN go install github.com/cosmtrek/air@v1.49.0
+# renovate: datasource=github-releases depName=cosmtrek/air
+ENV AIR_VERSION=1.49.0
+RUN go install github.com/cosmtrek/air@v${AIR_VERSION}
 
 # install dapr-cli
 #  https://docs.dapr.io/
+
+# renovate: datasource=github-releases depName=dapr/cli
+ENV DAPR_CLI_VERSION=1.12.0
+# renovate: datasource=github-releases depName=dapr/dapr
+ENV DAPR_RT_VERSION=1.12.4
+
 RUN mkdir "$HOME/dapr" \
-    && wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O - | DAPR_INSTALL_DIR="$HOME/dapr" /bin/bash
+    && wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O - | DAPR_INSTALL_DIR="$HOME/dapr" /bin/bash -s ${DAPR_CLI_VERSION}
 ENV PATH="$PATH:$HOME/dapr"
-RUN dapr init -s
+RUN dapr init -s --runtime-version ${DAPR_RT_VERSION}
 
 # install fly
 #  https://fly.io/docs/
@@ -66,33 +77,37 @@ ENV PATH="$PATH:$HOME/.fly/bin"
 
 # install go-migrate
 #  https://github.com/golang-migrate/migrate
-RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.17.0
+# renovate: datasource=github-releases depName=golang-migrate/migrate
+ENV MIGRATE_VERSION=4.17.0
+RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v${MIGRATE_VERSION}
 
 # install grpcurl
 #  https://github.com/fullstorydev/grpcurl
-RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@v1.8.9
+# renovate: datasource=github-releases depName=fullstorydev/grpcurl
+ENV GRPCURL_VERSION=1.8.9
+RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@v${GRPCURL_VERSION}
 
 # install sqlc
 #  https://sqlc.dev/
-RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.25.0
+# renovate: datasource=github-releases depName=sqlc-dev/sqlc
+ENV SQLC_VERSION=1.25.0
+RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v${SQLC_VERSION}
 
 # install protoc-go-inject-tag
 # when updating the version, also update the buf workflow
 #  https://github.com/favadi/protoc-go-inject-tag
-RUN go install github.com/favadi/protoc-go-inject-tag@v1.4.0
+# renovate: datasource=github-releases depName=favadi/protoc-go-inject-tag
+ENV GO_INJECT_TAG_VERSION=1.4.0
+RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION}
 
 # LATER
-# TODO: renovate
 # TODO: move dockerfiles
 
 # TRY NOW
 # TODO: git credentials
 # TODO: mount toolchain on host
 
-# NOW
-# TODO: dont build, just pull, but CI should build
-# TODO: update CI
-# - connect services to ghcr.io/helpwave/dev-go
+# TODO: renovate
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

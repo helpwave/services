@@ -7,6 +7,12 @@ permissions:
   contents: read
   pull-requests: read
 
+env:
+  # renovate: datasource=github-releases depName=golang-migrate/migrate
+  MIGRATE_VERSION: '4.17.0'
+  # renovate: datasource=github-release depName=superfly/flyctl versioning=semver
+  FLY_CLI_VERSION: '0.1.146'
+
 jobs:
   detect-changes:
     runs-on: ubuntu-latest
@@ -102,7 +108,7 @@ jobs:
       - name: Setup flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
         with:
-          version: 0.1.66
+          version: ${{ env.FLY_CLI_VERSION }}
       # currently ubuntu-latest ships with psql 14.x,
       # whose pg_dump is incompatible with our postgres server (15.x)
       - name: Setup postgres client
@@ -116,7 +122,7 @@ jobs:
       - name: install migrate
         run: |
           TEMP_DEB="$(mktemp)"
-          wget -O "$TEMP_DEB" 'https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.deb'
+          wget -O "$TEMP_DEB" 'https://github.com/golang-migrate/migrate/releases/download/v${{ env.MIGRATE_VERSION }}/migrate.linux-amd64.deb'
           sudo dpkg -i "$TEMP_DEB"
           rm -f "$TEMP_DEB"
       - name: Clone Repo

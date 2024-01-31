@@ -36,5 +36,26 @@
         "major"
       ]
     }
+  ],
+  "dockerfile": {
+    "fileMatch": ["(/|.|)(images/.*/)?Dockerfile(\\.[\\w_-]+)?$"]
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["(/|.|)(images/.*/)?Dockerfile(\\.[\\w_-]+)?$"],
+      "matchStrings": [
+        "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s(ENV|ARG) .*?_VERSION=(?<currentValue>.*)\\s"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": [".github/workflows/*.ya?ml$"],
+      "matchStrings": [
+        "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?_VERSION: ['\"]?(?<currentValue>(?!['\"])*)['\"]?\\s"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    }
   ]
 }

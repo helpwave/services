@@ -3,6 +3,10 @@
 
 name: 'Deploy to Fly'
 
+env:
+  # renovate: datasource=github-release depName=superfly/flyctl versioning=semver
+  FLY_CLI_VERSION: '0.1.146'
+
 on:
   workflow_call:
     inputs:
@@ -68,7 +72,10 @@ jobs:
         env:
           organization: ${{ inputs.organization }}
       - name: Setup flyctl
+        # TODO: pin version
         uses: superfly/flyctl-actions/setup-flyctl@master
+        with:
+          version: ${{ env.FLY_CLI_VERSION }}
       - name: Deploy
         run: |
           flyctl deploy --config services/${{ inputs.service }}/${{ needs.fly-toml.outputs.fly_toml }} --app ${{ inputs.app }} --build-arg VERSION=${{ inputs.version }} --remote-only

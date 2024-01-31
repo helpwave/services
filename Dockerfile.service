@@ -3,7 +3,10 @@
 
 # builder builds a go service
 # the build args SERVICE and VERSION must be set!
-FROM golang:1.21 AS builder
+
+# renovate: datasource=golang-version depName=golang/go
+ARG GO_VERSION=1.21
+FROM golang:${GO_VERSION} AS builder
 
 ARG SERVICE
 ARG VERSION
