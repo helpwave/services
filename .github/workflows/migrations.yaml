@@ -8,9 +8,9 @@ permissions:
   pull-requests: read
 
 env:
-  # renovate: datasource=github-releasesdepName=golang-migrate/migrate
+  # renovate: datasource=github-releases depName=golang-migrate/migrate
   MIGRATE_VERSION: '4.17.0'
-  # renovate: datasource=github-releasesdepName=superfly/flyctl versioning=semver
+  # renovate: datasource=github-releases depName=superfly/flyctl versioning=semver
   FLY_CLI_VERSION: '0.1.146'
 
 jobs:

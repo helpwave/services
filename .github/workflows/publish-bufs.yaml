@@ -8,7 +8,7 @@ on:
     - gen/*/proto/**/*
 
 env:
-  # renovate: datasource=github-releasesdepName=bufbuild/buf
+  # renovate: datasource=github-releases depName=bufbuild/buf
   BUF_CLI_VERSION: '1.28.1'
   NODE_VERSION: '18.x'
   # renovate: datasource=dart-version depName=dart

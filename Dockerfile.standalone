@@ -27,11 +27,11 @@ RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-X main.Version=${VERSION}" -a -
 
 FROM debian AS deps
 
-# renovate: datasource=github-releasesdepName=DarthSim/hivemind
+# renovate: datasource=github-releases depName=DarthSim/hivemind
 ARG HIVEMIND_VERSION=1.1.0
-# renovate: datasource=github-releasesdepName=golang-migrate/migrate
+# renovate: datasource=github-releases depName=golang-migrate/migrate
 ARG MIGRATE_VERSION=4.17.0
-# renovate: datasource=github-releasesdepName=dapr/dapr
+# renovate: datasource=github-releases depName=dapr/dapr
 ARG DAPR_VERSION=1.12.0
 
 RUN apt update && \

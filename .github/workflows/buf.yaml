@@ -13,9 +13,9 @@ permissions:
 env:
   # renovate: datasource=golang-version depName=golang/go
   GO_VERSION: '1.21'
-  # renovate: datasource=github-releasesdepName=bufbuild/buf
+  # renovate: datasource=github-releases depName=bufbuild/buf
   BUF_CLI_VERSION: '1.28.1'
-  # renovate: datasource=github-releasesdepName=favadi/protoc-go-inject-tag
+  # renovate: datasource=github-releases depName=favadi/protoc-go-inject-tag
   PROTOC_GO_INJECT_TAG_VERSION: '1.4.0'
 
 jobs:

@@ -4,7 +4,7 @@
 name: 'Deploy to Fly'
 
 env:
-  # renovate: datasource=github-releasesdepName=superfly/flyctl versioning=semver
+  # renovate: datasource=github-releases depName=superfly/flyctl versioning=semver
   FLY_CLI_VERSION: '0.1.146'
 
 on:
