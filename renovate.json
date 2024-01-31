@@ -37,9 +37,6 @@
       ]
     }
   ],
-  "dockerfile": {
-    "fileMatch": ["(/|.|)(images/.*/)?Dockerfile(\\.[\\w_-]+)?$"]
-  },
   "customManagers": [
     {
       "customType": "regex",
