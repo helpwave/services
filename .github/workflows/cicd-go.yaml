@@ -22,7 +22,7 @@ permissions:
 #     working-directory: services/${{ inputs.service }}
 
 env:
-  # renovate: datasource=golang-version depName=golang/go
+  # renovate: datasource=docker depName=golang versioning=docker
   GO_VERSION: '1.21'
 
 jobs:

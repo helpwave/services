@@ -54,6 +54,16 @@
         "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?_VERSION: '?(?<currentValue>[0-9A-Za-z.-]+)'?\\s"
       ],
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    },
+    {
+      "fileMatch": [
+        "go.mod$"
+      ],
+      "matchStrings": [
+        "\\sgo (?<currentValue>.+?)\\s"
+      ],
+      "depNameTemplate": "golang",
+      "datasourceTemplate": "docker"
     }
   ]
 }

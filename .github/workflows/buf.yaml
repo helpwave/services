@@ -11,7 +11,7 @@ permissions:
   pull-requests: read
 
 env:
-  # renovate: datasource=golang-version depName=golang/go
+  # renovate: datasource=docker depName=golang versioning=docker
   GO_VERSION: '1.21'
   # renovate: datasource=github-releases depName=bufbuild/buf
   BUF_CLI_VERSION: '1.28.1'
