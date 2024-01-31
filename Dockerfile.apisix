@@ -1,8 +1,8 @@
 FROM debian:bookworm AS deps
 
-# renovate: datasource=github-releases depName=DarthSim/hivemind
+# renovate: datasource=github-release depName=DarthSim/hivemind
 ARG HIVEMIND_VERSION=1.1.0
-# renovate: datasource=github-releases depName=dapr/dapr
+# renovate: datasource=github-release depName=dapr/dapr
 ARG DAPR_VERSION=1.12.0
 
 RUN apt update && \
