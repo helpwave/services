@@ -48,9 +48,9 @@
     },
     {
       "customType": "regex",
-      "fileMatch": ["^\\.github/workflows/*\\.ya?ml$"],
+      "fileMatch": ["(^|/)(\\.github/(?:workflows|actions))/.+\\.ya?ml$"],
       "matchStrings": [
-        "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?_VERSION: '?(?<currentValue>.*)'?\\s"
+        "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?_VERSION: '?(?<currentValue>(?!')*)'?\\s"
       ],
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     }

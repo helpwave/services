@@ -1,9 +1,6 @@
 # based on the debian 12 ("bookworm") go image
 # for now this only builds x86_64 images (TODO)
-
-# renovate: datasource=golang-version depName=golang/go
-ARG GO_VERSION=1.21
-FROM golang:${GO_VERSION}-bookworm
+FROM golang:1.21-bookworm
 
 # update debian package list and packages, also install some
 RUN apt update \
