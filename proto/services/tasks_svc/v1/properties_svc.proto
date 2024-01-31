@@ -1,0 +1,218 @@
+syntax = "proto3";
+
+package proto.services.tasks_svc.v1;
+
+option go_package = "gen/proto/services/tasks-svc";
+
+/***************************************************/
+/********* Work with the Properties Schema *********/
+/***************************************************/
+
+enum SubjectType {
+  SUBJECT_TYPE_UNSPECIFIED = 0;
+  SUBJECT_TYPE_PATIENT = 1;
+}
+
+enum FieldType {
+  FIELD_TYPE_UNSPECIFIED = 0;
+  FIELD_TYPE_TEXT = 1;
+  FIELD_TYPE_NUMBER = 2; // TODO: TBD: are we sure we don't want multiple number types?
+  FIELD_TYPE_CHECKBOX = 3;
+  FIELD_TYPE_DATE = 4;
+  FIELD_TYPE_DATE_TIME = 5;
+  FIELD_TYPE_SELECT = 6;
+}
+
+//
+// CreateProperty
+//
+
+message CreatePropertyRequest {
+    SubjectType subject_type = 1; // TODO: add validation here (not-unspecified check)
+    FieldType field_type = 2; // TODO: add validation here (not-unspecified check)
+
+    string name = 3; // TODO: add validation (at least non-empty checks)
+    optional string description = 4; // TODO: add validation, if needed
+
+    bool is_soft_required = 5;
+
+    // ID of set this Property should belong to
+    optional string set_id = 6;
+
+    message SelectOption {
+      string name = 1; // TODO: add validation (at least non-empty checks)
+      optional string description = 2; // TODO: add validation, if needed
+    }
+    repeated SelectOption select_options = 7;
+}
+
+message CreatePropertyResponse {}
+
+
+//
+// GetProperty
+//
+
+
+message GetPropertyRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetPropertyResponse {
+    string id = 1;
+    SubjectType subject_type = 2;
+    FieldType field_type = 3;
+
+    string name = 4;
+    optional string description = 5;
+
+    bool is_archived = 6;
+    bool is_soft_required = 7;
+
+    // TODO: TBD: priortyDisplayedAtSubjectIds?
+
+    // ID of set this Property should belong to
+    optional string set_id = 8;
+
+    message SelectOption {
+      string name = 1;
+      optional string description = 2;
+    }
+    repeated SelectOption select_options = 9;
+}
+
+//
+// GetProperties
+//
+
+message GetPropertiesRequest {
+  optional string set_id = 1; // @gotags: validate:"uuid4"
+
+  // TODO: TBD: other filters / search params, e.g. include_is_archived
+}
+
+message GetPropertiesResponse {
+  message Property {
+    string id = 1;
+    SubjectType subject_type = 2;
+    FieldType field_type = 3;
+
+    string name = 4;
+    optional string description = 5;
+
+    bool is_archived = 6;
+    bool is_soft_required = 7;
+
+    // TODO: TBD: priortyDisplayedAtSubjectIds?
+
+    // ID of set this Property should belong to
+    optional string set_id = 8;
+
+    message SelectOption {
+      string name = 1;
+      optional string description = 2;
+    }
+    repeated SelectOption select_options = 9;
+  }
+
+  repeated Property properties = 1;
+}
+
+//
+// UpdateProperty
+//
+
+message UpdatePropertyRequest {
+  string id = 1;
+
+  optional SubjectType subject_type = 2;
+  optional FieldType field_type = 3;
+
+  optional string name = 4; // TODO: validation
+  optional string description = 5; // TODO: validation
+
+  optional bool is_archived = 6;
+  optional bool is_soft_required = 7;
+
+  // TODO: TBD: priortyDisplayedAtSubjectIds?
+
+  // ID of set this Property should belong to
+  optional string set_id = 8;
+
+  message SelectOption {
+    string id = 1;
+    optional string name = 2;
+    optional string description = 3;
+  }
+  repeated SelectOption new_or_updated_select_options = 9;
+  repeated string remove_select_options = 10; // @gotags: validate:"dive,uuid4"
+}
+
+message UpdatePropertyResponse {}
+
+/***************************************************/
+/************ Work with Property Values ************/
+/***************************************************/
+
+//
+// AttachPropertyValue
+//
+
+message AttachPropertyValueRequest {
+  string subject_id = 1; // @gotags: validate:"uuid4"
+  SubjectType subject_type = 2; // TODO: validation (not 0)
+  string property_id = 3; // @gotags: validate:"uuid4"
+
+  oneof value {
+    string text_value = 4; // FIELD_TYPE_TEXT
+    float number_value = 5; // FIELD_TYPE_NUMBER
+    bool bool_value = 6; // FIELD_TYPE_CHECKBOX
+    string date_value = 7; // FIELD_TYPE_DATE TODO: is there a proro date type?
+    string date_time_value = 8; // FIELD_TYPE_DATE_TIME
+    string select_value = 9; // FIELD_TYPE_SELECT, id of option
+  }
+}
+
+message AttachPropertyValueResponse {}
+
+//
+// GetAttachedPropertyValues
+//
+
+message GetAttachedPropertyValuesRequest {
+  string subject_id = 1; // @gotags: validate:"uuid4"
+
+  optional string view = 2;
+  // TODO: TBD: other filters / search params, e.g. include_is_archived
+}
+
+message GetAttachedPropertyValuesResponse {
+  message Value {
+    string property_id = 1;
+    FieldType field_type = 2;
+    string name = 4;
+    optional string description = 5;
+
+    bool is_archived = 6;
+    bool is_soft_required = 7;
+
+    message Set {
+      string id = 1;
+      string name = 2;
+      optional string description = 3;
+    }
+    optional Set set = 8;
+  }
+
+  repeated Value values = 1;
+}
+
+service PropertiesService {
+  rpc CreateProperty (CreatePropertyRequest) returns (CreatePropertyResponse) {}
+  rpc GetProperty (GetPropertyRequest) returns (GetPropertyResponse) {}
+  rpc GetProperties (GetPropertiesRequest) returns (GetPropertiesResponse) {}
+  rpc UpdateProperty (UpdatePropertyRequest) returns (UpdatePropertyResponse) {}
+
+  rpc AttachPropertyValue (AttachPropertyValueRequest) returns (AttachPropertyValueResponse) {}
+  rpc GetAttachedPropertyValues (GetAttachedPropertyValuesRequest) returns (GetAttachedPropertyValuesResponse) {}
+}
