@@ -196,18 +196,20 @@ message UpdatePropertyResponse {}
 // AttachPropertyValue
 //
 
+// attach the same property again to update
 message AttachPropertyValueRequest {
   string subject_id = 1; // @gotags: validate:"uuid4"
   SubjectType subject_type = 2; // TODO: validation (not 0)
   string property_id = 3; // @gotags: validate:"uuid4"
 
   oneof value {
-    string text_value = 4; // FIELD_TYPE_TEXT
-    float number_value = 5; // FIELD_TYPE_NUMBER
-    bool bool_value = 6; // FIELD_TYPE_CHECKBOX
-    string date_value = 7; // FIELD_TYPE_DATE TODO: is there a proto date type?
-    string date_time_value = 8; // FIELD_TYPE_DATE_TIME
-    string select_value = 9; // FIELD_TYPE_SELECT, id of option
+    bool is_undefined = 4; // if it exists, it should be true
+    string text_value = 5; // FIELD_TYPE_TEXT
+    float number_value = 6; // FIELD_TYPE_NUMBER
+    bool bool_value = 7; // FIELD_TYPE_CHECKBOX
+    string date_value = 8; // FIELD_TYPE_DATE TODO: is there a proto date type?
+    string date_time_value = 9; // FIELD_TYPE_DATE_TIME
+    string select_value = 10; // FIELD_TYPE_SELECT, id of option
   }
 }
 
