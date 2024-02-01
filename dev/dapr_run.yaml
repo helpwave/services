@@ -5,7 +5,7 @@ common:
   appLogDestination: console
   appChannelAddress: 127.0.0.1
   appProtocol: grpc
-  configFilePath: "./dev/dapr.yaml"
+  configFilePath: "./dapr.yaml"
   env:
     SECRETSTORE_REDIS_HOST: "redis:6379"
 
@@ -24,7 +24,7 @@ common:
 
 apps:
   - appID: task-svc
-    appDirPath: services/task-svc
+    appDirPath: ../services/task-svc
     appPort: 3001
     env:
       SERVICE: task-svc
@@ -32,7 +32,7 @@ apps:
     command: ["air"]
 
   - appID: user-svc
-    appDirPath: services/user-svc
+    appDirPath: ../services/user-svc
     appPort: 3002
     env:
       SERVICE: user-svc
@@ -40,7 +40,7 @@ apps:
     command: ["air"]
 
   - appID: ory-svc
-    appDirPath: services/ory-svc
+    appDirPath: ../services/ory-svc
     appPort: 3003
     appProtocol: http
     env:

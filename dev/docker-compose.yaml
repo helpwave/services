@@ -85,7 +85,7 @@ services:
     ]
     network_mode: "service:apisix"
 
-  # services compiles and runs all services using dapr_run.yaml (TODO: move dapr-run file in here)
+  # services compiles and runs all services using dapr_run.yaml
   # also runs initial migrations for all services
   services:
     build:
@@ -116,7 +116,7 @@ services:
       - -c
       - |
         bash migrate.sh
-        dapr run --run-file dapr_run.yaml --config dev/dapr.yaml
+        dapr run --run-file dev/dapr_run.yaml --config dev/dapr.yaml
     restart: unless-stopped
     network_mode: "service:devcontainer" # share ports with devcontainer
 
