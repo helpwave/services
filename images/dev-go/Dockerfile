@@ -70,10 +70,10 @@ ENV DAPR_CLI_VERSION=1.12.0
 # renovate: datasource=github-releases depName=dapr/dapr
 ENV DAPR_RT_VERSION=1.12.4
 
-RUN mkdir "$HOME/dapr" \
-    && wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O - | DAPR_INSTALL_DIR="$HOME/dapr" /bin/bash -s ${DAPR_CLI_VERSION}
 ENV PATH="$PATH:$HOME/dapr"
-RUN dapr init -s --runtime-version ${DAPR_RT_VERSION}
+RUN mkdir "$HOME/dapr" \
+    && wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O - | DAPR_INSTALL_DIR="$HOME/dapr" /bin/bash -s ${DAPR_CLI_VERSION} \
+    && dapr init -s --runtime-version ${DAPR_RT_VERSION}
 
 # install fly
 #  https://fly.io/docs/
