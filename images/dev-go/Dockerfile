@@ -12,7 +12,8 @@ RUN apt update \
     && apt upgrade \
     && apt install sudo vim nano jq dnsutils postgresql-client lsb-release gpg redis-tools \
     	apt-transport-https ca-certificates curl gnupg2 software-properties-common \
-    	-y
+		-y \
+    && apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 # install docker
 #  using a mounted docker socket we can manage the host's docker (Docker out of Docker):
@@ -22,7 +23,8 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
   	$(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   	sudo tee /etc/apt/sources.list.d/docker.list > /dev/null \
   	&& sudo apt update \
- 	&& sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+ 	&& sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y \
+    && apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 # install buf
 #  https://buf.build/
@@ -37,7 +39,8 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
     && apt update \
-    && apt install gh -y
+    && apt install gh -y \
+    && apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 # create user, reduces friction with mounted file permissions
 # 1000:1000 is a good guess (at least on linux)
@@ -57,7 +60,7 @@ ENV HOME="/home/${UNAME}"
 #  https://github.com/cosmtrek/air
 # renovate: datasource=github-releases depName=cosmtrek/air
 ENV AIR_VERSION=1.49.0
-RUN go install github.com/cosmtrek/air@v${AIR_VERSION}
+RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v${AIR_VERSION}
 
 # install dapr-cli
 #  https://docs.dapr.io/
@@ -81,26 +84,30 @@ ENV PATH="$PATH:$HOME/.fly/bin"
 #  https://github.com/golang-migrate/migrate
 # renovate: datasource=github-releases depName=golang-migrate/migrate
 ENV MIGRATE_VERSION=4.17.0
-RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v${MIGRATE_VERSION}
+RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v${MIGRATE_VERSION} \
+	&& go clean -modcache
 
 # install grpcurl
 #  https://github.com/fullstorydev/grpcurl
 # renovate: datasource=github-releases depName=fullstorydev/grpcurl
 ENV GRPCURL_VERSION=1.8.9
-RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@v${GRPCURL_VERSION}
+RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@v${GRPCURL_VERSION} \
+	&& go clean -modcache
 
 # install sqlc
 #  https://sqlc.dev/
 # renovate: datasource=github-releases depName=sqlc-dev/sqlc
 ENV SQLC_VERSION=1.25.0
-RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v${SQLC_VERSION}
+RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v${SQLC_VERSION}\
+	&& go clean -modcache
 
 # install protoc-go-inject-tag
 # when updating the version, also update the buf workflow
 #  https://github.com/favadi/protoc-go-inject-tag
 # renovate: datasource=github-releases depName=favadi/protoc-go-inject-tag
 ENV GO_INJECT_TAG_VERSION=1.4.0
-RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION}
+RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} \
+	&& go clean -modcache
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
