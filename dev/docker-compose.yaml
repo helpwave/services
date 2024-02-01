@@ -91,7 +91,9 @@ services:
     build:
       context: ../images/dev-go-custom
       args:
-        TAG: ${DEV_TAG}
+        # increase this value, everytime you change the dev-go image
+        # renovate: dev-tag
+        TAG: '1'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -123,7 +125,10 @@ services:
     build:
       context: ../images/dev-go-custom
       args:
-        TAG: ${DEV_TAG}
+        # TODO
+        # increase this value, everytime you change the dev-go image
+        # renovate: dev-tag
+        TAG: '1'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:

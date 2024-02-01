@@ -72,7 +72,6 @@ jobs:
         env:
           organization: ${{ inputs.organization }}
       - name: Setup flyctl
-        # TODO: pin version
         uses: superfly/flyctl-actions/setup-flyctl@master
         with:
           version: ${{ env.FLY_CLI_VERSION }}
