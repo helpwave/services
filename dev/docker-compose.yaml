@@ -91,7 +91,6 @@ services:
     build:
       context: ../images/dev-go-custom
       args:
-        # increase this value, everytime you change the dev-go image
         # renovate: dev-tag
         TAG: '1'
         UID: ${UID:-1000}
@@ -125,7 +124,6 @@ services:
     build:
       context: ../images/dev-go-custom
       args:
-        # increase this value, everytime you change the dev-go image
         # renovate: dev-tag
         TAG: '1'
         UID: ${UID:-1000}

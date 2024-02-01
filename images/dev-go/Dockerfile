@@ -1,6 +1,6 @@
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#
 # EVERY TIME YOU UPDATE THIS FILE, INCREASE #
-#   THE 'TAG's IN dev/docker-compose.yaml   #
+#  THE TAG IN update-dev-tag.sh AND RUN IT  #
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#
 
 # based on the debian 12 ("bookworm") go image

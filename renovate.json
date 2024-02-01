@@ -57,9 +57,10 @@
     },
     {
       "customType": "regex",
-      "fileMatch": ["dev/docker-compose.yaml"],
+      "fileMatch": ["dev/docker-compose.yaml", ".github/workflows/cicd.yaml"],
       "matchStrings": [
-        "# renovate: dev-tag\\s+TAG: '?(?<currentValue>[0-9A-Za-z.-]+)'?\\s"
+        "# renovate: dev-tag\\s+TAG: '?(?<currentValue>[0-9A-Za-z.-]+)'?\\s",
+        "# renovate: dev-tag\\s+DEV_TAG: '?(?<currentValue>[0-9A-Za-z.-]+)'?\\s"
       ],
       "depNameTemplate": "ghcr.io/helpwave/dev-go",
       "datasourceTemplate": "docker"
