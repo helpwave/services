@@ -53,7 +53,7 @@ services:
   apisix:
     build:
       context: ..
-      dockerfile: Dockerfile.apisix # TODO
+      dockerfile: Dockerfile.apisix
     restart: unless-stopped
     depends_on:
       - services
@@ -125,7 +125,6 @@ services:
     build:
       context: ../images/dev-go-custom
       args:
-        # TODO
         # increase this value, everytime you change the dev-go image
         # renovate: dev-tag
         TAG: '1'
