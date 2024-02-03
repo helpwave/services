@@ -12,7 +12,6 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.21.0"
-	otelTrace "go.opentelemetry.io/otel/trace"
 	"hwutil"
 	"strings"
 )
@@ -23,21 +22,6 @@ import (
 // changes to [DICE] are published under the same license as the rest of this repo
 //
 // [DICE]: https://github.com/open-telemetry/opentelemetry-go/blob/main/example/dice/otel.go
-
-// StartSpan is short for otel.Tracer("").Start(ctx, name)
-//
-//	ctx, span := common.StartSpan(ctx, "some name")
-//	defer span.End()
-func StartSpan(ctx context.Context, spanName string, opts ...otelTrace.SpanStartOption) (context.Context, otelTrace.Span) {
-	tracer := otel.Tracer("") // tracer with default name
-	return tracer.Start(ctx, spanName, opts...)
-}
-
-// StopSpanFromCtx is short for otelTrace.SpanFromContext(ctx).End(opts...)
-// and should only be used when you lost access to the span object
-func StopSpanFromCtx(ctx context.Context, opts ...otelTrace.SpanEndOption) {
-	otelTrace.SpanFromContext(ctx).End(opts...)
-}
 
 // setupOTelSDK bootstraps the OpenTelemetry pipeline.
 // If it does not return an error, make sure to call shutdown for proper cleanup.

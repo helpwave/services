@@ -94,7 +94,7 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 		return nil, err
 	}
 
-	task, err := v1queries.NewGetTaskByIDQueryHandler(s.as)(ctx, id)
+	task, err := v1queries.NewGetTaskByIDQueryHandler(s.as, s.authz)(ctx, id)
 	if err != nil {
 		return nil, err
 	}

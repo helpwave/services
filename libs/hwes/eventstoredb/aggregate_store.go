@@ -32,7 +32,7 @@ func (a *AggregateStore) getExpectedRevisionByReadTEST(ctx context.Context, aggr
 	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.End{}}
 	stream, err := a.es.ReadStream(
 		ctx,
-		aggregate.GetStreamID(),
+		aggregate.GetTypeID(),
 		readOpts,
 		1,
 	)
@@ -76,7 +76,7 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 
 		_, err := a.es.AppendToStream(
 			ctx,
-			aggregate.GetStreamID(),
+			aggregate.GetTypeID(),
 			esdb.AppendToStreamOptions{ExpectedRevision: expectedRevision},
 			eventsData...,
 		)
@@ -96,7 +96,7 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 	appendOpts := esdb.AppendToStreamOptions{ExpectedRevision: expectedRevision}
 	_, err = a.es.AppendToStream(
 		ctx,
-		aggregate.GetStreamID(),
+		aggregate.GetTypeID(),
 		appendOpts,
 		eventsData...,
 	)
@@ -111,7 +111,7 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 // Implements AggregateStore interface
 
 func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) error {
-	stream, err := a.es.ReadStream(ctx, aggregate.GetStreamID(), esdb.ReadStreamOptions{}, math.MaxUint64) // MaxUint64 for "all" events
+	stream, err := a.es.ReadStream(ctx, aggregate.GetTypeID(), esdb.ReadStreamOptions{}, math.MaxUint64) // MaxUint64 for "all" events
 	if err != nil {
 		return err
 	}
@@ -149,7 +149,7 @@ func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) err
 
 func (a *AggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (bool, error) {
 	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.Revision(1)}
-	stream, err := a.es.ReadStream(ctx, aggregate.GetStreamID(), readOpts, 1)
+	stream, err := a.es.ReadStream(ctx, aggregate.GetTypeID(), readOpts, 1)
 	if err != nil {
 		if errors.Is(err, esdb.ErrStreamNotFound) {
 			return false, nil

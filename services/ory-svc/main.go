@@ -45,6 +45,9 @@ func newErrAndLog(ctx context.Context, msg string) error {
 func main() {
 	common.Setup(ServiceName, Version, false)
 
+	ctx := context.Background()
+	log := zlog.Ctx(ctx)
+
 	DaprPubsub = hwutil.GetEnvOr("DAPR_PUBSUB", "pubsub")
 
 	daprClient = common.MustNewDaprGRPCClient()
@@ -57,15 +60,15 @@ func main() {
 	service := daprd.NewServiceWithMux(addr, router)
 
 	if err := service.AddServiceInvocationHandler("/after_registration_webhook", afterRegistrationWebhookHandler); err != nil {
-		zlog.Fatal().Str("endpoint", "after_registration_webhook").Err(err).Msg("could not add service invocation handler")
+		log.Fatal().Str("endpoint", "after_registration_webhook").Err(err).Msg("could not add service invocation handler")
 	}
 
 	if err := service.AddServiceInvocationHandler("/after_settings_webhook", afterSettingsWebhookHandler); err != nil {
-		zlog.Fatal().Str("endpoint", "after_settings_webhook").Err(err).Msg("could not add service invocation handler")
+		log.Fatal().Str("endpoint", "after_settings_webhook").Err(err).Msg("could not add service invocation handler")
 	}
 
 	if err := service.AddServiceInvocationHandler("/oauth2_consent", oauth2ConsentHandler); err != nil {
-		zlog.Fatal().Str("endpoint", "oauth2_consent").Err(err).Msg("could not add service invocation handler")
+		log.Fatal().Str("endpoint", "oauth2_consent").Err(err).Msg("could not add service invocation handler")
 	}
 
 	interrupted, err := hwutil.RunUntilInterrupted(context.Background(), func() error {
@@ -73,9 +76,9 @@ func main() {
 	})
 
 	if err != nil {
-		zlog.Error().Str("addr", addr).Err(err).Msg("could not start http server")
+		log.Error().Str("addr", addr).Err(err).Msg("could not start http server")
 	} else if interrupted {
-		zlog.Info().Msg("SIGINT received")
+		log.Info().Msg("SIGINT received")
 	}
 
 	// we don't use common.StartNewGRPCServer,

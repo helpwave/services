@@ -12,7 +12,8 @@ type DeleteSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uui
 
 func NewDeleteSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) DeleteSubtaskCommandHandler {
 	return func(ctx context.Context, taskID, subtaskID uuid.UUID) error {
-		userID := uuid.New()
+		// TODO: Use context
+		userID := uuid.MustParse("18159713-5d4e-4ad5-94ad-fbb6bb147984")
 		if err := hwauthz.CheckGrpcWrapper(ctx, authz, hwauthz.NewCanUserDeleteSubtaskOnTaskPermission(userID, taskID)); err != nil {
 			return err
 		}

@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"hwes"
 	"hwutil"
-	eventsV1 "tasks-svc/internal/task/events/v1"
+	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"tasks-svc/internal/task/models"
 )
 
@@ -22,7 +22,7 @@ func NewTaskAggregate(id uuid.UUID) *TaskAggregate {
 	aggregate := &TaskAggregate{Task: models.NewTask()}
 	aggregate.AggregateBase = hwes.NewAggregateBase(TaskAggregateType, id)
 	aggregate.Task.ID = id
-	aggregate.initEventListener()
+	aggregate.initEventListeners()
 	return aggregate
 }
 
@@ -34,26 +34,26 @@ func LoadTaskAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID
 	return task, nil
 }
 
-func (a *TaskAggregate) initEventListener() {
+func (a *TaskAggregate) initEventListeners() {
 	a.
-		RegisterEventListener(eventsV1.TaskCreated, a.onTaskCreated).
-		RegisterEventListener(eventsV1.TaskNameUpdated, a.onTaskNameUpdated).
-		RegisterEventListener(eventsV1.TaskDescriptionUpdated, a.onTaskDescriptionUpdated).
-		RegisterEventListener(eventsV1.TaskAssigned, a.onTaskAssigned).
-		RegisterEventListener(eventsV1.TaskSelfAssigned, a.onTaskAssigned).
-		RegisterEventListener(eventsV1.TaskUnassigned, a.onTaskUnassigned).
-		RegisterEventListener(eventsV1.TaskPublished, a.onTaskPublished).
-		RegisterEventListener(eventsV1.SubtaskCreated, a.onSubtaskCreated).
-		RegisterEventListener(eventsV1.SubtaskNameUpdated, a.onSubtaskNameUpdated).
-		RegisterEventListener(eventsV1.SubtaskCompleted, a.onSubtaskCompleted).
-		RegisterEventListener(eventsV1.SubtaskUncompleted, a.onSubtaskUncompleted).
-		RegisterEventListener(eventsV1.SubtaskDeleted, a.onSubtaskDeleted)
+		RegisterEventListener(taskEventsV1.TaskCreated, a.onTaskCreated).
+		RegisterEventListener(taskEventsV1.TaskNameUpdated, a.onTaskNameUpdated).
+		RegisterEventListener(taskEventsV1.TaskDescriptionUpdated, a.onTaskDescriptionUpdated).
+		RegisterEventListener(taskEventsV1.TaskAssigned, a.onTaskAssigned).
+		RegisterEventListener(taskEventsV1.TaskSelfAssigned, a.onTaskAssigned).
+		RegisterEventListener(taskEventsV1.TaskUnassigned, a.onTaskUnassigned).
+		RegisterEventListener(taskEventsV1.TaskPublished, a.onTaskPublished).
+		RegisterEventListener(taskEventsV1.SubtaskCreated, a.onSubtaskCreated).
+		RegisterEventListener(taskEventsV1.SubtaskNameUpdated, a.onSubtaskNameUpdated).
+		RegisterEventListener(taskEventsV1.SubtaskCompleted, a.onSubtaskCompleted).
+		RegisterEventListener(taskEventsV1.SubtaskUncompleted, a.onSubtaskUncompleted).
+		RegisterEventListener(taskEventsV1.SubtaskDeleted, a.onSubtaskDeleted)
 }
 
 // Event handlers
 
 func (a *TaskAggregate) onTaskCreated(evt hwes.Event) error {
-	var payload eventsV1.TaskCreatedEvent
+	var payload taskEventsV1.TaskCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err
 	}
@@ -74,7 +74,7 @@ func (a *TaskAggregate) onTaskCreated(evt hwes.Event) error {
 }
 
 func (a *TaskAggregate) onTaskNameUpdated(evt hwes.Event) error {
-	var payload eventsV1.TaskNameUpdatedEvent
+	var payload taskEventsV1.TaskNameUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err
 	}
@@ -85,7 +85,7 @@ func (a *TaskAggregate) onTaskNameUpdated(evt hwes.Event) error {
 }
 
 func (a *TaskAggregate) onTaskDescriptionUpdated(evt hwes.Event) error {
-	var payload eventsV1.TaskDescriptionUpdatedEvent
+	var payload taskEventsV1.TaskDescriptionUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err
 	}
@@ -99,14 +99,14 @@ func (a *TaskAggregate) onTaskAssigned(evt hwes.Event) error {
 	var userIDStr string
 
 	switch evt.EventType {
-	case eventsV1.TaskAssigned:
-		var payload eventsV1.TaskAssignedEvent
+	case taskEventsV1.TaskAssigned:
+		var payload taskEventsV1.TaskAssignedEvent
 		if err := evt.GetJsonData(&payload); err != nil {
 			return err
 		}
 		userIDStr = payload.UserID
-	case eventsV1.TaskSelfAssigned:
-		var payload eventsV1.TaskSelfAssignedEvent
+	case taskEventsV1.TaskSelfAssigned:
+		var payload taskEventsV1.TaskSelfAssignedEvent
 		if err := evt.GetJsonData(&payload); err != nil {
 			return err
 		}
@@ -128,7 +128,7 @@ func (a *TaskAggregate) onTaskAssigned(evt hwes.Event) error {
 }
 
 func (a *TaskAggregate) onTaskUnassigned(evt hwes.Event) error {
-	var payload eventsV1.TaskUnassignedEvent
+	var payload taskEventsV1.TaskUnassignedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err
 	}
@@ -146,7 +146,7 @@ func (a *TaskAggregate) onTaskUnassigned(evt hwes.Event) error {
 }
 
 func (a *TaskAggregate) onTaskPublished(evt hwes.Event) error {
-	var payload eventsV1.TaskPublishedEvent
+	var payload taskEventsV1.TaskPublishedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err
 	}
@@ -157,7 +157,7 @@ func (a *TaskAggregate) onTaskPublished(evt hwes.Event) error {
 }
 
 func (a *TaskAggregate) onSubtaskCreated(evt hwes.Event) error {
-	var payload eventsV1.SubtaskCreatedEvent
+	var payload taskEventsV1.SubtaskCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err
 	}
@@ -177,7 +177,7 @@ func (a *TaskAggregate) onSubtaskCreated(evt hwes.Event) error {
 }
 
 func (a *TaskAggregate) onSubtaskNameUpdated(evt hwes.Event) error {
-	var payload eventsV1.SubtaskNameUpdatedEvent
+	var payload taskEventsV1.SubtaskNameUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err
 	}
@@ -199,7 +199,7 @@ func (a *TaskAggregate) onSubtaskNameUpdated(evt hwes.Event) error {
 }
 
 func (a *TaskAggregate) onSubtaskCompleted(evt hwes.Event) error {
-	var payload eventsV1.SubtaskCompletedEvent
+	var payload taskEventsV1.SubtaskCompletedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err
 	}
@@ -217,7 +217,7 @@ func (a *TaskAggregate) onSubtaskCompleted(evt hwes.Event) error {
 }
 
 func (a *TaskAggregate) onSubtaskUncompleted(evt hwes.Event) error {
-	var payload eventsV1.SubtaskUncompletedEvent
+	var payload taskEventsV1.SubtaskUncompletedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err
 	}
@@ -235,7 +235,7 @@ func (a *TaskAggregate) onSubtaskUncompleted(evt hwes.Event) error {
 }
 
 func (a *TaskAggregate) onSubtaskDeleted(evt hwes.Event) error {
-	var payload eventsV1.SubtaskDeletedEvent
+	var payload taskEventsV1.SubtaskDeletedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err
 	}

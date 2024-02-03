@@ -19,6 +19,7 @@ in
     grpcurl
     jq
     nixpkgs-fmt
+    spicedb-zed
     sqlc
   ] ++ [
     # self build packages

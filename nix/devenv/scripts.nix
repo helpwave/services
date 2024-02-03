@@ -21,6 +21,10 @@ in
       ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt --check .
     '';
 
+    spicedb-import.exec = ''
+      ${pkgs.spicedb-zed}/bin/zed import --endpoint localhost:50051 --insecure --token helpwave spicedb.yaml
+    '';
+
     migratesh.exec = ''
       # See README.md -> Migrations -> Usage
 

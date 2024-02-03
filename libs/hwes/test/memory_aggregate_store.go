@@ -16,7 +16,7 @@ func NewAggregateStore() *aggregateStore {
 }
 
 func (a *aggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) error {
-	events := a.streams[aggregate.GetStreamID()]
+	events := a.streams[aggregate.GetTypeID()]
 
 	for _, event := range events {
 		if err := aggregate.Progress(event); err != nil {
@@ -32,13 +32,13 @@ func (a *aggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) err
 		return nil
 	}
 
-	a.streams[aggregate.GetStreamID()] = append(a.streams[aggregate.GetStreamID()], aggregate.GetUncommittedEvents()...)
+	a.streams[aggregate.GetTypeID()] = append(a.streams[aggregate.GetTypeID()], aggregate.GetUncommittedEvents()...)
 
 	aggregate.ClearUncommittedEvents()
 	return nil
 }
 
 func (a *aggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (bool, error) {
-	_, exists := a.streams[aggregate.GetStreamID()]
+	_, exists := a.streams[aggregate.GetTypeID()]
 	return exists, nil
 }

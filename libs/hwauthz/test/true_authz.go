@@ -2,7 +2,7 @@ package test
 
 import (
 	"context"
-	"hwutil/authz"
+	"hwauthz"
 )
 
 type TrueAuthZ struct{}
@@ -11,15 +11,15 @@ func NewTrueAuthZ() *TrueAuthZ {
 	return &TrueAuthZ{}
 }
 
-func (*TrueAuthZ) Write(ctx context.Context, relations ...authz.Relation) (authz.ConsistencyToken, error) {
+func (*TrueAuthZ) Write(ctx context.Context, relations ...hwauthz.Relation) (hwauthz.ConsistencyToken, error) {
 	return "", nil
 }
 
-func (*TrueAuthZ) Delete(ctx context.Context, relations ...authz.Relation) (authz.ConsistencyToken, error) {
+func (*TrueAuthZ) Delete(ctx context.Context, relations ...hwauthz.Relation) (hwauthz.ConsistencyToken, error) {
 	return "", nil
 }
 
-func (*TrueAuthZ) Check(ctx context.Context, permissions authz.Permission) (bool, error) {
+func (*TrueAuthZ) Check(ctx context.Context, permissions hwauthz.Permission) (bool, error) {
 	// Always returns true
 	return true, nil
 }

@@ -175,12 +175,16 @@ LOG_LEVEL=debug
 # The port on which the the service will listen on (default: 8080)
 PORT=8080
 
-# Database Related Configurations
+# Database related configurations
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DB=postgres
+
+# EventStoreDB related configurations
+
+EVENTSTORE_CS=sdb://admin:changeit@localhost:2113?tls=false
 
 # For development purposes
 INSECURE_FAKE_TOKEN_ENABLE=true

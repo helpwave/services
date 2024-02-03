@@ -9,7 +9,7 @@ replace (
 	hwes => ../../libs/hwes
 	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
-	logging => ../../libs/logging
+	telemetry => ../../libs/telemetry
 )
 
 require (
@@ -22,7 +22,7 @@ require (
 	github.com/rs/zerolog v1.31.0
 	google.golang.org/grpc v1.60.1
 	google.golang.org/protobuf v1.32.0
-	hwauthz v0.0.0
+	hwauthz v0.0.0-00010101000000-000000000000
 	hwes v0.0.0
 	hwutil v0.0.0
 )
@@ -78,5 +78,5 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240102182953-50ed04b92917 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	logging v0.0.0 // indirect
+	telemetry v0.0.0 // indirect
 )

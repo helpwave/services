@@ -32,6 +32,12 @@ services:
       - "2113:2113"
     command: --insecure --run-projections=All --enable-atom-pub-over-http
 
+  spicedb:
+    image: authzed/spicedb:v1.29.1
+    ports:
+      - "50051:50051"
+    command: serve --grpc-preshared-key "helpwave"
+
   redis:
     image: redis:6
     profiles:

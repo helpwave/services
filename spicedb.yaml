@@ -1,0 +1,45 @@
+schema: |-
+  definition user {}
+
+  definition team {
+  	relation lead: user
+  	relation member: user
+  	permission membership = lead + member
+  	permission invite_member = lead
+  	permission remove_member = lead
+  }
+
+  definition team_invite {
+  	relation user: user
+  	relation team: team
+  	
+  	permission view = user + team->lead
+  	permission accept = user
+  	permission deny = user
+  	permission cancel = team->lead
+  }
+
+  definition patient {
+  	relation doctor: user | team#membership
+  	
+  	permission view = doctor
+  	permission discharge = doctor
+  	permission schedule_gdpr_delete = doctor
+  }
+
+  definition task {
+  	relation assignee: user
+  	relation patient: patient
+
+  	permission view = assignee + patient->view
+  	permission delete = assignee + patient->view
+  }
+relationships: ""
+assertions:
+  assertTrue:
+    - resource:someresource#view@user:somegal
+    - resource:someresource#view@user:anotherguy
+    - resource:someresource#write@user:anotherguy
+  assertFalse:
+    - resource:someresource#write@user:somegal
+validation: null

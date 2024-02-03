@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/test/bufconn"
+	hwauthz_test "hwauthz/test"
 	hwes_test "hwes/test"
 	"hwutil"
 	"log"
@@ -20,7 +21,8 @@ func server(ctx context.Context) (pb.TaskServiceClient, func()) {
 	listener := bufconn.Listen(buffer)
 
 	aggregateStore := hwes_test.NewAggregateStore()
-	taskGrpcService := api.NewTaskGrpcService(aggregateStore)
+	authz := hwauthz_test.NewTrueAuthZ()
+	taskGrpcService := api.NewTaskGrpcService(aggregateStore, authz)
 
 	grpcServer := grpc.NewServer()
 
