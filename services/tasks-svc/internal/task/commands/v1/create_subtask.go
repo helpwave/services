@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"hwauthz"
+	"hwauthz/perm"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"
 )
@@ -14,7 +15,7 @@ func NewCreateSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 	return func(ctx context.Context, taskID, subtaskID uuid.UUID, name string) error {
 		// TODO: Use context
 		userID := uuid.MustParse("18159713-5d4e-4ad5-94ad-fbb6bb147984")
-		if err := hwauthz.CheckGrpcWrapper(ctx, authz, hwauthz.NewCanUserCreateSubtaskOnTaskPermission(userID, taskID)); err != nil {
+		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserCreateSubtaskOnTaskPermission(userID, taskID)); err != nil {
 			return err
 		}
 

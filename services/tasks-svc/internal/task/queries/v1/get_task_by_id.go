@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"hwauthz"
+	"hwauthz/perm"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"
 	"tasks-svc/internal/task/models"
@@ -15,7 +16,7 @@ func NewGetTaskByIDQueryHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) Get
 	return func(ctx context.Context, taskID uuid.UUID) (*models.Task, error) {
 		// TODO: Use context
 		userID := uuid.MustParse("18159713-5d4e-4ad5-94ad-fbb6bb147984")
-		if err := hwauthz.CheckGrpcWrapper(ctx, authz, hwauthz.NewCanUserViewTaskPermission(userID, taskID)); err != nil {
+		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserViewTaskPermission(userID, taskID)); err != nil {
 			return nil, err
 		}
 
