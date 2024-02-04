@@ -21,8 +21,6 @@ var global =
     (function () { return this; }).call(null) ||
     Function('return this')();
 
-var google_protobuf_any_pb = require('google-protobuf/google/protobuf/any_pb.js');
-goog.object.extend(proto, google_protobuf_any_pb);
 goog.exportSymbol('proto.proto.services.property_svc.v1.CreatePropertyValueRequest', null, global);
 goog.exportSymbol('proto.proto.services.property_svc.v1.CreatePropertyValueRequest.ValueCase', null, global);
 goog.exportSymbol('proto.proto.services.property_svc.v1.CreatePropertyValueResponse', null, global);
