@@ -6,6 +6,7 @@ import (
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwes/eventstoredb"
 	propertySetApi "property-svc/internal/property-set/api"
+	propertyValueApi "property-svc/internal/property-value/api"
 	propertyApi "property-svc/internal/property/api"
 )
 
@@ -25,5 +26,6 @@ func main() {
 
 		pb.RegisterPropertyServiceServer(grpcServer, propertyApi.NewPropertyService(aggregateStore))
 		pb.RegisterPropertySetServiceServer(grpcServer, propertySetApi.NewPropertySetService(aggregateStore))
+		pb.RegisterPropertyValueServiceServer(grpcServer, propertyValueApi.NewPropertyValueService(aggregateStore))
 	})
 }
