@@ -76,12 +76,21 @@ class CreatePropertySetRequest extends $pb.GeneratedMessage {
 }
 
 class CreatePropertySetResponse extends $pb.GeneratedMessage {
-  factory CreatePropertySetResponse() => create();
+  factory CreatePropertySetResponse({
+    $core.String? propertySetId,
+  }) {
+    final $result = create();
+    if (propertySetId != null) {
+      $result.propertySetId = propertySetId;
+    }
+    return $result;
+  }
   CreatePropertySetResponse._() : super();
   factory CreatePropertySetResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreatePropertySetResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertySetResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'propertySetId')
     ..hasRequiredFields = false
   ;
 
@@ -105,6 +114,15 @@ class CreatePropertySetResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static CreatePropertySetResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreatePropertySetResponse>(create);
   static CreatePropertySetResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get propertySetId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set propertySetId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasPropertySetId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPropertySetId() => clearField(1);
 }
 
 class UpdatePropertySetRequest extends $pb.GeneratedMessage {
@@ -371,7 +389,6 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
     FieldType? fieldType,
     $core.String? name,
     $core.String? description,
-    $core.bool? isSoftRequired,
     $core.String? setId,
     $core.Iterable<CreatePropertyRequest_SelectOption>? selectOptions,
   }) {
@@ -387,9 +404,6 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
     }
     if (description != null) {
       $result.description = description;
-    }
-    if (isSoftRequired != null) {
-      $result.isSoftRequired = isSoftRequired;
     }
     if (setId != null) {
       $result.setId = setId;
@@ -408,7 +422,6 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
     ..e<FieldType>(2, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: FieldType.valueOf, enumValues: FieldType.values)
     ..aOS(3, _omitFieldNames ? '' : 'name')
     ..aOS(4, _omitFieldNames ? '' : 'description')
-    ..aOB(5, _omitFieldNames ? '' : 'isSoftRequired')
     ..aOS(6, _omitFieldNames ? '' : 'setId')
     ..pc<CreatePropertyRequest_SelectOption>(7, _omitFieldNames ? '' : 'selectOptions', $pb.PbFieldType.PM, subBuilder: CreatePropertyRequest_SelectOption.create)
     ..hasRequiredFields = false
@@ -471,36 +484,36 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   void clearDescription() => clearField(4);
 
-  @$pb.TagNumber(5)
-  $core.bool get isSoftRequired => $_getBF(4);
-  @$pb.TagNumber(5)
-  set isSoftRequired($core.bool v) { $_setBool(4, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasIsSoftRequired() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearIsSoftRequired() => clearField(5);
-
   /// ID of set this Property should belong to
   @$pb.TagNumber(6)
-  $core.String get setId => $_getSZ(5);
+  $core.String get setId => $_getSZ(4);
   @$pb.TagNumber(6)
-  set setId($core.String v) { $_setString(5, v); }
+  set setId($core.String v) { $_setString(4, v); }
   @$pb.TagNumber(6)
-  $core.bool hasSetId() => $_has(5);
+  $core.bool hasSetId() => $_has(4);
   @$pb.TagNumber(6)
   void clearSetId() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.List<CreatePropertyRequest_SelectOption> get selectOptions => $_getList(6);
+  $core.List<CreatePropertyRequest_SelectOption> get selectOptions => $_getList(5);
 }
 
 class CreatePropertyResponse extends $pb.GeneratedMessage {
-  factory CreatePropertyResponse() => create();
+  factory CreatePropertyResponse({
+    $core.String? propertyId,
+  }) {
+    final $result = create();
+    if (propertyId != null) {
+      $result.propertyId = propertyId;
+    }
+    return $result;
+  }
   CreatePropertyResponse._() : super();
   factory CreatePropertyResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreatePropertyResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'propertyId')
     ..hasRequiredFields = false
   ;
 
@@ -524,6 +537,15 @@ class CreatePropertyResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static CreatePropertyResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreatePropertyResponse>(create);
   static CreatePropertyResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get propertyId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set propertyId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasPropertyId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPropertyId() => clearField(1);
 }
 
 class GetPropertyRequest extends $pb.GeneratedMessage {
@@ -648,7 +670,6 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
-    $core.bool? isSoftRequired,
     $core.String? setId,
     $core.Iterable<GetPropertyResponse_SelectOption>? selectOptions,
   }) {
@@ -671,9 +692,6 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
     if (isArchived != null) {
       $result.isArchived = isArchived;
     }
-    if (isSoftRequired != null) {
-      $result.isSoftRequired = isSoftRequired;
-    }
     if (setId != null) {
       $result.setId = setId;
     }
@@ -693,7 +711,6 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
-    ..aOB(7, _omitFieldNames ? '' : 'isSoftRequired')
     ..aOS(8, _omitFieldNames ? '' : 'setId')
     ..pc<GetPropertyResponse_SelectOption>(9, _omitFieldNames ? '' : 'selectOptions', $pb.PbFieldType.PM, subBuilder: GetPropertyResponse_SelectOption.create)
     ..hasRequiredFields = false
@@ -774,27 +791,18 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   void clearIsArchived() => clearField(6);
 
-  @$pb.TagNumber(7)
-  $core.bool get isSoftRequired => $_getBF(6);
-  @$pb.TagNumber(7)
-  set isSoftRequired($core.bool v) { $_setBool(6, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasIsSoftRequired() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearIsSoftRequired() => clearField(7);
-
   /// ID of set this Property should belong to
   @$pb.TagNumber(8)
-  $core.String get setId => $_getSZ(7);
+  $core.String get setId => $_getSZ(6);
   @$pb.TagNumber(8)
-  set setId($core.String v) { $_setString(7, v); }
+  set setId($core.String v) { $_setString(6, v); }
   @$pb.TagNumber(8)
-  $core.bool hasSetId() => $_has(7);
+  $core.bool hasSetId() => $_has(6);
   @$pb.TagNumber(8)
   void clearSetId() => clearField(8);
 
   @$pb.TagNumber(9)
-  $core.List<GetPropertyResponse_SelectOption> get selectOptions => $_getList(8);
+  $core.List<GetPropertyResponse_SelectOption> get selectOptions => $_getList(7);
 }
 
 class GetPropertiesRequest extends $pb.GeneratedMessage {
@@ -851,6 +859,7 @@ class GetPropertiesResponse_Property_SelectOption extends $pb.GeneratedMessage {
   factory GetPropertiesResponse_Property_SelectOption({
     $core.String? name,
     $core.String? description,
+    $core.bool? isCustom,
   }) {
     final $result = create();
     if (name != null) {
@@ -858,6 +867,9 @@ class GetPropertiesResponse_Property_SelectOption extends $pb.GeneratedMessage {
     }
     if (description != null) {
       $result.description = description;
+    }
+    if (isCustom != null) {
+      $result.isCustom = isCustom;
     }
     return $result;
   }
@@ -868,6 +880,7 @@ class GetPropertiesResponse_Property_SelectOption extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertiesResponse.Property.SelectOption', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'name')
     ..aOS(2, _omitFieldNames ? '' : 'description')
+    ..aOB(3, _omitFieldNames ? '' : 'isCustom')
     ..hasRequiredFields = false
   ;
 
@@ -909,6 +922,15 @@ class GetPropertiesResponse_Property_SelectOption extends $pb.GeneratedMessage {
   $core.bool hasDescription() => $_has(1);
   @$pb.TagNumber(2)
   void clearDescription() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get isCustom => $_getBF(2);
+  @$pb.TagNumber(3)
+  set isCustom($core.bool v) { $_setBool(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasIsCustom() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearIsCustom() => clearField(3);
 }
 
 class GetPropertiesResponse_Property extends $pb.GeneratedMessage {
@@ -919,7 +941,6 @@ class GetPropertiesResponse_Property extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
-    $core.bool? isSoftRequired,
     $core.String? setId,
     $core.Iterable<GetPropertiesResponse_Property_SelectOption>? selectOptions,
   }) {
@@ -942,9 +963,6 @@ class GetPropertiesResponse_Property extends $pb.GeneratedMessage {
     if (isArchived != null) {
       $result.isArchived = isArchived;
     }
-    if (isSoftRequired != null) {
-      $result.isSoftRequired = isSoftRequired;
-    }
     if (setId != null) {
       $result.setId = setId;
     }
@@ -964,7 +982,6 @@ class GetPropertiesResponse_Property extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
-    ..aOB(7, _omitFieldNames ? '' : 'isSoftRequired')
     ..aOS(8, _omitFieldNames ? '' : 'setId')
     ..pc<GetPropertiesResponse_Property_SelectOption>(9, _omitFieldNames ? '' : 'selectOptions', $pb.PbFieldType.PM, subBuilder: GetPropertiesResponse_Property_SelectOption.create)
     ..hasRequiredFields = false
@@ -1045,27 +1062,18 @@ class GetPropertiesResponse_Property extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   void clearIsArchived() => clearField(6);
 
-  @$pb.TagNumber(7)
-  $core.bool get isSoftRequired => $_getBF(6);
-  @$pb.TagNumber(7)
-  set isSoftRequired($core.bool v) { $_setBool(6, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasIsSoftRequired() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearIsSoftRequired() => clearField(7);
-
   /// ID of set this Property should belong to
   @$pb.TagNumber(8)
-  $core.String get setId => $_getSZ(7);
+  $core.String get setId => $_getSZ(6);
   @$pb.TagNumber(8)
-  set setId($core.String v) { $_setString(7, v); }
+  set setId($core.String v) { $_setString(6, v); }
   @$pb.TagNumber(8)
-  $core.bool hasSetId() => $_has(7);
+  $core.bool hasSetId() => $_has(6);
   @$pb.TagNumber(8)
   void clearSetId() => clearField(8);
 
   @$pb.TagNumber(9)
-  $core.List<GetPropertiesResponse_Property_SelectOption> get selectOptions => $_getList(8);
+  $core.List<GetPropertiesResponse_Property_SelectOption> get selectOptions => $_getList(7);
 }
 
 class GetPropertiesResponse extends $pb.GeneratedMessage {
@@ -1117,6 +1125,7 @@ class UpdatePropertyRequest_SelectOption extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
+    $core.bool? isCustom,
   }) {
     final $result = create();
     if (id != null) {
@@ -1128,6 +1137,9 @@ class UpdatePropertyRequest_SelectOption extends $pb.GeneratedMessage {
     if (description != null) {
       $result.description = description;
     }
+    if (isCustom != null) {
+      $result.isCustom = isCustom;
+    }
     return $result;
   }
   UpdatePropertyRequest_SelectOption._() : super();
@@ -1138,6 +1150,7 @@ class UpdatePropertyRequest_SelectOption extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
+    ..aOB(4, _omitFieldNames ? '' : 'isCustom')
     ..hasRequiredFields = false
   ;
 
@@ -1188,6 +1201,15 @@ class UpdatePropertyRequest_SelectOption extends $pb.GeneratedMessage {
   $core.bool hasDescription() => $_has(2);
   @$pb.TagNumber(3)
   void clearDescription() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get isCustom => $_getBF(3);
+  @$pb.TagNumber(4)
+  set isCustom($core.bool v) { $_setBool(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasIsCustom() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearIsCustom() => clearField(4);
 }
 
 class UpdatePropertyRequest extends $pb.GeneratedMessage {
@@ -1198,9 +1220,8 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
-    $core.bool? isSoftRequired,
     $core.String? setId,
-    $core.Iterable<UpdatePropertyRequest_SelectOption>? newOrUpdatedSelectOptions,
+    $core.Iterable<UpdatePropertyRequest_SelectOption>? upsertSelectOptions,
     $core.Iterable<$core.String>? removeSelectOptions,
   }) {
     final $result = create();
@@ -1222,14 +1243,11 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
     if (isArchived != null) {
       $result.isArchived = isArchived;
     }
-    if (isSoftRequired != null) {
-      $result.isSoftRequired = isSoftRequired;
-    }
     if (setId != null) {
       $result.setId = setId;
     }
-    if (newOrUpdatedSelectOptions != null) {
-      $result.newOrUpdatedSelectOptions.addAll(newOrUpdatedSelectOptions);
+    if (upsertSelectOptions != null) {
+      $result.upsertSelectOptions.addAll(upsertSelectOptions);
     }
     if (removeSelectOptions != null) {
       $result.removeSelectOptions.addAll(removeSelectOptions);
@@ -1247,9 +1265,8 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
-    ..aOB(7, _omitFieldNames ? '' : 'isSoftRequired')
     ..aOS(8, _omitFieldNames ? '' : 'setId')
-    ..pc<UpdatePropertyRequest_SelectOption>(9, _omitFieldNames ? '' : 'newOrUpdatedSelectOptions', $pb.PbFieldType.PM, subBuilder: UpdatePropertyRequest_SelectOption.create)
+    ..pc<UpdatePropertyRequest_SelectOption>(9, _omitFieldNames ? '' : 'upsertSelectOptions', $pb.PbFieldType.PM, subBuilder: UpdatePropertyRequest_SelectOption.create)
     ..pPS(10, _omitFieldNames ? '' : 'removeSelectOptions')
     ..hasRequiredFields = false
   ;
@@ -1329,30 +1346,21 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   void clearIsArchived() => clearField(6);
 
-  @$pb.TagNumber(7)
-  $core.bool get isSoftRequired => $_getBF(6);
-  @$pb.TagNumber(7)
-  set isSoftRequired($core.bool v) { $_setBool(6, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasIsSoftRequired() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearIsSoftRequired() => clearField(7);
-
   /// ID of set this Property should belong to
   @$pb.TagNumber(8)
-  $core.String get setId => $_getSZ(7);
+  $core.String get setId => $_getSZ(6);
   @$pb.TagNumber(8)
-  set setId($core.String v) { $_setString(7, v); }
+  set setId($core.String v) { $_setString(6, v); }
   @$pb.TagNumber(8)
-  $core.bool hasSetId() => $_has(7);
+  $core.bool hasSetId() => $_has(6);
   @$pb.TagNumber(8)
   void clearSetId() => clearField(8);
 
   @$pb.TagNumber(9)
-  $core.List<UpdatePropertyRequest_SelectOption> get newOrUpdatedSelectOptions => $_getList(8);
+  $core.List<UpdatePropertyRequest_SelectOption> get upsertSelectOptions => $_getList(7);
 
   @$pb.TagNumber(10)
-  $core.List<$core.String> get removeSelectOptions => $_getList(9);
+  $core.List<$core.String> get removeSelectOptions => $_getList(8);
 }
 
 class UpdatePropertyResponse extends $pb.GeneratedMessage {
@@ -1590,12 +1598,21 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
 }
 
 class AttachPropertyValueResponse extends $pb.GeneratedMessage {
-  factory AttachPropertyValueResponse() => create();
+  factory AttachPropertyValueResponse({
+    $core.String? propertyValueId,
+  }) {
+    final $result = create();
+    if (propertyValueId != null) {
+      $result.propertyValueId = propertyValueId;
+    }
+    return $result;
+  }
   AttachPropertyValueResponse._() : super();
   factory AttachPropertyValueResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory AttachPropertyValueResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttachPropertyValueResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'propertyValueId')
     ..hasRequiredFields = false
   ;
 
@@ -1619,6 +1636,15 @@ class AttachPropertyValueResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static AttachPropertyValueResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AttachPropertyValueResponse>(create);
   static AttachPropertyValueResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get propertyValueId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set propertyValueId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasPropertyValueId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPropertyValueId() => clearField(1);
 }
 
 class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
@@ -1767,7 +1793,6 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
-    $core.bool? isSoftRequired,
     GetAttachedPropertyValuesResponse_Value_Set? set,
     $core.bool? isUndefined,
     $core.String? textValue,
@@ -1792,9 +1817,6 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     }
     if (isArchived != null) {
       $result.isArchived = isArchived;
-    }
-    if (isSoftRequired != null) {
-      $result.isSoftRequired = isSoftRequired;
     }
     if (set != null) {
       $result.set = set;
@@ -1843,7 +1865,6 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'name')
     ..aOS(4, _omitFieldNames ? '' : 'description')
     ..aOB(5, _omitFieldNames ? '' : 'isArchived')
-    ..aOB(6, _omitFieldNames ? '' : 'isSoftRequired')
     ..aOM<GetAttachedPropertyValuesResponse_Value_Set>(7, _omitFieldNames ? '' : 'set', subBuilder: GetAttachedPropertyValuesResponse_Value_Set.create)
     ..aOB(8, _omitFieldNames ? '' : 'isUndefined')
     ..aOS(9, _omitFieldNames ? '' : 'textValue')
@@ -1924,86 +1945,77 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   void clearIsArchived() => clearField(5);
 
-  @$pb.TagNumber(6)
-  $core.bool get isSoftRequired => $_getBF(5);
-  @$pb.TagNumber(6)
-  set isSoftRequired($core.bool v) { $_setBool(5, v); }
-  @$pb.TagNumber(6)
-  $core.bool hasIsSoftRequired() => $_has(5);
-  @$pb.TagNumber(6)
-  void clearIsSoftRequired() => clearField(6);
-
   @$pb.TagNumber(7)
-  GetAttachedPropertyValuesResponse_Value_Set get set => $_getN(6);
+  GetAttachedPropertyValuesResponse_Value_Set get set => $_getN(5);
   @$pb.TagNumber(7)
   set set(GetAttachedPropertyValuesResponse_Value_Set v) { setField(7, v); }
   @$pb.TagNumber(7)
-  $core.bool hasSet() => $_has(6);
+  $core.bool hasSet() => $_has(5);
   @$pb.TagNumber(7)
   void clearSet() => clearField(7);
   @$pb.TagNumber(7)
-  GetAttachedPropertyValuesResponse_Value_Set ensureSet() => $_ensure(6);
+  GetAttachedPropertyValuesResponse_Value_Set ensureSet() => $_ensure(5);
 
   @$pb.TagNumber(8)
-  $core.bool get isUndefined => $_getBF(7);
+  $core.bool get isUndefined => $_getBF(6);
   @$pb.TagNumber(8)
-  set isUndefined($core.bool v) { $_setBool(7, v); }
+  set isUndefined($core.bool v) { $_setBool(6, v); }
   @$pb.TagNumber(8)
-  $core.bool hasIsUndefined() => $_has(7);
+  $core.bool hasIsUndefined() => $_has(6);
   @$pb.TagNumber(8)
   void clearIsUndefined() => clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get textValue => $_getSZ(8);
+  $core.String get textValue => $_getSZ(7);
   @$pb.TagNumber(9)
-  set textValue($core.String v) { $_setString(8, v); }
+  set textValue($core.String v) { $_setString(7, v); }
   @$pb.TagNumber(9)
-  $core.bool hasTextValue() => $_has(8);
+  $core.bool hasTextValue() => $_has(7);
   @$pb.TagNumber(9)
   void clearTextValue() => clearField(9);
 
   @$pb.TagNumber(10)
-  $core.double get numberValue => $_getN(9);
+  $core.double get numberValue => $_getN(8);
   @$pb.TagNumber(10)
-  set numberValue($core.double v) { $_setFloat(9, v); }
+  set numberValue($core.double v) { $_setFloat(8, v); }
   @$pb.TagNumber(10)
-  $core.bool hasNumberValue() => $_has(9);
+  $core.bool hasNumberValue() => $_has(8);
   @$pb.TagNumber(10)
   void clearNumberValue() => clearField(10);
 
   @$pb.TagNumber(11)
-  $core.bool get boolValue => $_getBF(10);
+  $core.bool get boolValue => $_getBF(9);
   @$pb.TagNumber(11)
-  set boolValue($core.bool v) { $_setBool(10, v); }
+  set boolValue($core.bool v) { $_setBool(9, v); }
   @$pb.TagNumber(11)
-  $core.bool hasBoolValue() => $_has(10);
+  $core.bool hasBoolValue() => $_has(9);
   @$pb.TagNumber(11)
   void clearBoolValue() => clearField(11);
 
   @$pb.TagNumber(12)
-  $core.String get dateValue => $_getSZ(11);
+  $core.String get dateValue => $_getSZ(10);
   @$pb.TagNumber(12)
-  set dateValue($core.String v) { $_setString(11, v); }
+  set dateValue($core.String v) { $_setString(10, v); }
   @$pb.TagNumber(12)
-  $core.bool hasDateValue() => $_has(11);
+  $core.bool hasDateValue() => $_has(10);
   @$pb.TagNumber(12)
   void clearDateValue() => clearField(12);
 
   @$pb.TagNumber(13)
-  $core.String get dateTimeValue => $_getSZ(12);
+  $core.String get dateTimeValue => $_getSZ(11);
   @$pb.TagNumber(13)
-  set dateTimeValue($core.String v) { $_setString(12, v); }
+  set dateTimeValue($core.String v) { $_setString(11, v); }
   @$pb.TagNumber(13)
-  $core.bool hasDateTimeValue() => $_has(12);
+  $core.bool hasDateTimeValue() => $_has(11);
   @$pb.TagNumber(13)
   void clearDateTimeValue() => clearField(13);
 
   @$pb.TagNumber(14)
-  $core.String get selectValue => $_getSZ(13);
+  $core.String get selectValue => $_getSZ(12);
   @$pb.TagNumber(14)
-  set selectValue($core.String v) { $_setString(13, v); }
+  set selectValue($core.String v) { $_setString(12, v); }
   @$pb.TagNumber(14)
-  $core.bool hasSelectValue() => $_has(13);
+  $core.bool hasSelectValue() => $_has(12);
   @$pb.TagNumber(14)
   void clearSelectValue() => clearField(14);
 }

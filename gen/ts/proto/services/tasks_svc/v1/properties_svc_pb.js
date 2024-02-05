@@ -793,7 +793,7 @@ proto.proto.services.tasks_svc.v1.CreatePropertySetResponse.prototype.toObject =
  */
 proto.proto.services.tasks_svc.v1.CreatePropertySetResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+    propertySetId: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -830,6 +830,10 @@ proto.proto.services.tasks_svc.v1.CreatePropertySetResponse.deserializeBinaryFro
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPropertySetId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -859,6 +863,31 @@ proto.proto.services.tasks_svc.v1.CreatePropertySetResponse.prototype.serializeB
  */
 proto.proto.services.tasks_svc.v1.CreatePropertySetResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getPropertySetId();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string property_set_id = 1;
+ * @return {string}
+ */
+proto.proto.services.tasks_svc.v1.CreatePropertySetResponse.prototype.getPropertySetId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.tasks_svc.v1.CreatePropertySetResponse} returns this
+ */
+proto.proto.services.tasks_svc.v1.CreatePropertySetResponse.prototype.setPropertySetId = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -1520,7 +1549,6 @@ proto.proto.services.tasks_svc.v1.CreatePropertyRequest.toObject = function(incl
     fieldType: jspb.Message.getFieldWithDefault(msg, 2, 0),
     name: jspb.Message.getFieldWithDefault(msg, 3, ""),
     description: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    isSoftRequired: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
     setId: jspb.Message.getFieldWithDefault(msg, 6, ""),
     selectOptionsList: jspb.Message.toObjectList(msg.getSelectOptionsList(),
     proto.proto.services.tasks_svc.v1.CreatePropertyRequest.SelectOption.toObject, includeInstance)
@@ -1575,10 +1603,6 @@ proto.proto.services.tasks_svc.v1.CreatePropertyRequest.deserializeBinaryFromRea
     case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setDescription(value);
-      break;
-    case 5:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setIsSoftRequired(value);
       break;
     case 6:
       var value = /** @type {string} */ (reader.readString());
@@ -1643,13 +1667,6 @@ proto.proto.services.tasks_svc.v1.CreatePropertyRequest.serializeBinaryToWriter 
   if (f != null) {
     writer.writeString(
       4,
-      f
-    );
-  }
-  f = message.getIsSoftRequired();
-  if (f) {
-    writer.writeBool(
-      5,
       f
     );
   }
@@ -1940,24 +1957,6 @@ proto.proto.services.tasks_svc.v1.CreatePropertyRequest.prototype.hasDescription
 
 
 /**
- * optional bool is_soft_required = 5;
- * @return {boolean}
- */
-proto.proto.services.tasks_svc.v1.CreatePropertyRequest.prototype.getIsSoftRequired = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 5, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.proto.services.tasks_svc.v1.CreatePropertyRequest} returns this
- */
-proto.proto.services.tasks_svc.v1.CreatePropertyRequest.prototype.setIsSoftRequired = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 5, value);
-};
-
-
-/**
  * optional string set_id = 6;
  * @return {string}
  */
@@ -2063,7 +2062,7 @@ proto.proto.services.tasks_svc.v1.CreatePropertyResponse.prototype.toObject = fu
  */
 proto.proto.services.tasks_svc.v1.CreatePropertyResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+    propertyId: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -2100,6 +2099,10 @@ proto.proto.services.tasks_svc.v1.CreatePropertyResponse.deserializeBinaryFromRe
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPropertyId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -2129,6 +2132,31 @@ proto.proto.services.tasks_svc.v1.CreatePropertyResponse.prototype.serializeBina
  */
 proto.proto.services.tasks_svc.v1.CreatePropertyResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getPropertyId();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string property_id = 1;
+ * @return {string}
+ */
+proto.proto.services.tasks_svc.v1.CreatePropertyResponse.prototype.getPropertyId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.tasks_svc.v1.CreatePropertyResponse} returns this
+ */
+proto.proto.services.tasks_svc.v1.CreatePropertyResponse.prototype.setPropertyId = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -2307,7 +2335,6 @@ proto.proto.services.tasks_svc.v1.GetPropertyResponse.toObject = function(includ
     name: jspb.Message.getFieldWithDefault(msg, 4, ""),
     description: jspb.Message.getFieldWithDefault(msg, 5, ""),
     isArchived: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
-    isSoftRequired: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
     setId: jspb.Message.getFieldWithDefault(msg, 8, ""),
     selectOptionsList: jspb.Message.toObjectList(msg.getSelectOptionsList(),
     proto.proto.services.tasks_svc.v1.GetPropertyResponse.SelectOption.toObject, includeInstance)
@@ -2370,10 +2397,6 @@ proto.proto.services.tasks_svc.v1.GetPropertyResponse.deserializeBinaryFromReade
     case 6:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsArchived(value);
-      break;
-    case 7:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setIsSoftRequired(value);
       break;
     case 8:
       var value = /** @type {string} */ (reader.readString());
@@ -2452,13 +2475,6 @@ proto.proto.services.tasks_svc.v1.GetPropertyResponse.serializeBinaryToWriter = 
   if (f) {
     writer.writeBool(
       6,
-      f
-    );
-  }
-  f = message.getIsSoftRequired();
-  if (f) {
-    writer.writeBool(
-      7,
       f
     );
   }
@@ -2781,24 +2797,6 @@ proto.proto.services.tasks_svc.v1.GetPropertyResponse.prototype.getIsArchived = 
  */
 proto.proto.services.tasks_svc.v1.GetPropertyResponse.prototype.setIsArchived = function(value) {
   return jspb.Message.setProto3BooleanField(this, 6, value);
-};
-
-
-/**
- * optional bool is_soft_required = 7;
- * @return {boolean}
- */
-proto.proto.services.tasks_svc.v1.GetPropertyResponse.prototype.getIsSoftRequired = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 7, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.proto.services.tasks_svc.v1.GetPropertyResponse} returns this
- */
-proto.proto.services.tasks_svc.v1.GetPropertyResponse.prototype.setIsSoftRequired = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 7, value);
 };
 
 
@@ -3191,7 +3189,6 @@ proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.toObject = func
     name: jspb.Message.getFieldWithDefault(msg, 4, ""),
     description: jspb.Message.getFieldWithDefault(msg, 5, ""),
     isArchived: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
-    isSoftRequired: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
     setId: jspb.Message.getFieldWithDefault(msg, 8, ""),
     selectOptionsList: jspb.Message.toObjectList(msg.getSelectOptionsList(),
     proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.SelectOption.toObject, includeInstance)
@@ -3254,10 +3251,6 @@ proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.deserializeBina
     case 6:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsArchived(value);
-      break;
-    case 7:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setIsSoftRequired(value);
       break;
     case 8:
       var value = /** @type {string} */ (reader.readString());
@@ -3339,13 +3332,6 @@ proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.serializeBinary
       f
     );
   }
-  f = message.getIsSoftRequired();
-  if (f) {
-    writer.writeBool(
-      7,
-      f
-    );
-  }
   f = /** @type {string} */ (jspb.Message.getField(message, 8));
   if (f != null) {
     writer.writeString(
@@ -3397,7 +3383,8 @@ proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.SelectOption.pr
 proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.SelectOption.toObject = function(includeInstance, msg) {
   var f, obj = {
     name: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    description: jspb.Message.getFieldWithDefault(msg, 2, "")
+    description: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    isCustom: jspb.Message.getBooleanFieldWithDefault(msg, 3, false)
   };
 
   if (includeInstance) {
@@ -3442,6 +3429,10 @@ proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.SelectOption.de
       var value = /** @type {string} */ (reader.readString());
       msg.setDescription(value);
       break;
+    case 3:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsCustom(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -3482,6 +3473,13 @@ proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.SelectOption.se
   if (f != null) {
     writer.writeString(
       2,
+      f
+    );
+  }
+  f = message.getIsCustom();
+  if (f) {
+    writer.writeBool(
+      3,
       f
     );
   }
@@ -3539,6 +3537,24 @@ proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.SelectOption.pr
  */
 proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.SelectOption.prototype.hasDescription = function() {
   return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional bool is_custom = 3;
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.SelectOption.prototype.getIsCustom = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 3, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.SelectOption} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.SelectOption.prototype.setIsCustom = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 3, value);
 };
 
 
@@ -3665,24 +3681,6 @@ proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.prototype.getIs
  */
 proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.prototype.setIsArchived = function(value) {
   return jspb.Message.setProto3BooleanField(this, 6, value);
-};
-
-
-/**
- * optional bool is_soft_required = 7;
- * @return {boolean}
- */
-proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.prototype.getIsSoftRequired = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 7, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property} returns this
- */
-proto.proto.services.tasks_svc.v1.GetPropertiesResponse.Property.prototype.setIsSoftRequired = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 7, value);
 };
 
 
@@ -3843,9 +3841,8 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.toObject = function(incl
     name: jspb.Message.getFieldWithDefault(msg, 4, ""),
     description: jspb.Message.getFieldWithDefault(msg, 5, ""),
     isArchived: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
-    isSoftRequired: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
     setId: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    newOrUpdatedSelectOptionsList: jspb.Message.toObjectList(msg.getNewOrUpdatedSelectOptionsList(),
+    upsertSelectOptionsList: jspb.Message.toObjectList(msg.getUpsertSelectOptionsList(),
     proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption.toObject, includeInstance),
     removeSelectOptionsList: (f = jspb.Message.getRepeatedField(msg, 10)) == null ? undefined : f
   };
@@ -3908,10 +3905,6 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.deserializeBinaryFromRea
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsArchived(value);
       break;
-    case 7:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setIsSoftRequired(value);
-      break;
     case 8:
       var value = /** @type {string} */ (reader.readString());
       msg.setSetId(value);
@@ -3919,7 +3912,7 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.deserializeBinaryFromRea
     case 9:
       var value = new proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption;
       reader.readMessage(value,proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption.deserializeBinaryFromReader);
-      msg.addNewOrUpdatedSelectOptions(value);
+      msg.addUpsertSelectOptions(value);
       break;
     case 10:
       var value = /** @type {string} */ (reader.readString());
@@ -3996,13 +3989,6 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.serializeBinaryToWriter 
       f
     );
   }
-  f = /** @type {boolean} */ (jspb.Message.getField(message, 7));
-  if (f != null) {
-    writer.writeBool(
-      7,
-      f
-    );
-  }
   f = /** @type {string} */ (jspb.Message.getField(message, 8));
   if (f != null) {
     writer.writeString(
@@ -4010,7 +3996,7 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.serializeBinaryToWriter 
       f
     );
   }
-  f = message.getNewOrUpdatedSelectOptionsList();
+  f = message.getUpsertSelectOptionsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
       9,
@@ -4062,7 +4048,8 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption.toObject = 
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    description: jspb.Message.getFieldWithDefault(msg, 3, "")
+    description: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    isCustom: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
   };
 
   if (includeInstance) {
@@ -4111,6 +4098,10 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption.deserialize
       var value = /** @type {string} */ (reader.readString());
       msg.setDescription(value);
       break;
+    case 4:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsCustom(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -4158,6 +4149,13 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption.serializeBi
   if (f != null) {
     writer.writeString(
       3,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
+    writer.writeBool(
+      4,
       f
     );
   }
@@ -4251,6 +4249,42 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption.prototype.c
  */
 proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption.prototype.hasDescription = function() {
   return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional bool is_custom = 4;
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption.prototype.getIsCustom = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption} returns this
+ */
+proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption.prototype.setIsCustom = function(value) {
+  return jspb.Message.setField(this, 4, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption} returns this
+ */
+proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption.prototype.clearIsCustom = function() {
+  return jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption.prototype.hasIsCustom = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -4453,42 +4487,6 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.hasIsArchived 
 
 
 /**
- * optional bool is_soft_required = 7;
- * @return {boolean}
- */
-proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.getIsSoftRequired = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 7, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.proto.services.tasks_svc.v1.UpdatePropertyRequest} returns this
- */
-proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.setIsSoftRequired = function(value) {
-  return jspb.Message.setField(this, 7, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.proto.services.tasks_svc.v1.UpdatePropertyRequest} returns this
- */
-proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.clearIsSoftRequired = function() {
-  return jspb.Message.setField(this, 7, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.hasIsSoftRequired = function() {
-  return jspb.Message.getField(this, 7) != null;
-};
-
-
-/**
  * optional string set_id = 8;
  * @return {string}
  */
@@ -4525,10 +4523,10 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.hasSetId = fun
 
 
 /**
- * repeated SelectOption new_or_updated_select_options = 9;
+ * repeated SelectOption upsert_select_options = 9;
  * @return {!Array<!proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption>}
  */
-proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.getNewOrUpdatedSelectOptionsList = function() {
+proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.getUpsertSelectOptionsList = function() {
   return /** @type{!Array<!proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption>} */ (
     jspb.Message.getRepeatedWrapperField(this, proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption, 9));
 };
@@ -4538,7 +4536,7 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.getNewOrUpdate
  * @param {!Array<!proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption>} value
  * @return {!proto.proto.services.tasks_svc.v1.UpdatePropertyRequest} returns this
 */
-proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.setNewOrUpdatedSelectOptionsList = function(value) {
+proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.setUpsertSelectOptionsList = function(value) {
   return jspb.Message.setRepeatedWrapperField(this, 9, value);
 };
 
@@ -4548,7 +4546,7 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.setNewOrUpdate
  * @param {number=} opt_index
  * @return {!proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption}
  */
-proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.addNewOrUpdatedSelectOptions = function(opt_value, opt_index) {
+proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.addUpsertSelectOptions = function(opt_value, opt_index) {
   return jspb.Message.addToRepeatedWrapperField(this, 9, opt_value, proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.SelectOption, opt_index);
 };
 
@@ -4557,8 +4555,8 @@ proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.addNewOrUpdate
  * Clears the list making it empty but non-null.
  * @return {!proto.proto.services.tasks_svc.v1.UpdatePropertyRequest} returns this
  */
-proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.clearNewOrUpdatedSelectOptionsList = function() {
-  return this.setNewOrUpdatedSelectOptionsList([]);
+proto.proto.services.tasks_svc.v1.UpdatePropertyRequest.prototype.clearUpsertSelectOptionsList = function() {
+  return this.setUpsertSelectOptionsList([]);
 };
 
 
@@ -5289,7 +5287,7 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueResponse.prototype.toObject
  */
 proto.proto.services.tasks_svc.v1.AttachPropertyValueResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+    propertyValueId: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -5326,6 +5324,10 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueResponse.deserializeBinaryF
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPropertyValueId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -5355,6 +5357,31 @@ proto.proto.services.tasks_svc.v1.AttachPropertyValueResponse.prototype.serializ
  */
 proto.proto.services.tasks_svc.v1.AttachPropertyValueResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getPropertyValueId();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string property_value_id = 1;
+ * @return {string}
+ */
+proto.proto.services.tasks_svc.v1.AttachPropertyValueResponse.prototype.getPropertyValueId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.tasks_svc.v1.AttachPropertyValueResponse} returns this
+ */
+proto.proto.services.tasks_svc.v1.AttachPropertyValueResponse.prototype.setPropertyValueId = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -5726,7 +5753,6 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.toObje
     name: jspb.Message.getFieldWithDefault(msg, 3, ""),
     description: jspb.Message.getFieldWithDefault(msg, 4, ""),
     isArchived: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
-    isSoftRequired: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
     set: (f = msg.getSet()) && proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set.toObject(includeInstance, f),
     isUndefined: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
     textValue: jspb.Message.getFieldWithDefault(msg, 9, ""),
@@ -5790,10 +5816,6 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.deseri
     case 5:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsArchived(value);
-      break;
-    case 6:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setIsSoftRequired(value);
       break;
     case 7:
       var value = new proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.Set;
@@ -5889,13 +5911,6 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.serial
   if (f) {
     writer.writeBool(
       5,
-      f
-    );
-  }
-  f = message.getIsSoftRequired();
-  if (f) {
-    writer.writeBool(
-      6,
       f
     );
   }
@@ -6224,24 +6239,6 @@ proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.protot
  */
 proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setIsArchived = function(value) {
   return jspb.Message.setProto3BooleanField(this, 5, value);
-};
-
-
-/**
- * optional bool is_soft_required = 6;
- * @return {boolean}
- */
-proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.getIsSoftRequired = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 6, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value} returns this
- */
-proto.proto.services.tasks_svc.v1.GetAttachedPropertyValuesResponse.Value.prototype.setIsSoftRequired = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 6, value);
 };
 
 

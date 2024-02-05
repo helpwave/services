@@ -27,6 +27,9 @@ export namespace CreatePropertySetRequest {
 }
 
 export class CreatePropertySetResponse extends jspb.Message {
+  getPropertySetId(): string;
+  setPropertySetId(value: string): CreatePropertySetResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreatePropertySetResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreatePropertySetResponse): CreatePropertySetResponse.AsObject;
@@ -37,6 +40,7 @@ export class CreatePropertySetResponse extends jspb.Message {
 
 export namespace CreatePropertySetResponse {
   export type AsObject = {
+    propertySetId: string,
   }
 }
 
@@ -142,9 +146,6 @@ export class CreatePropertyRequest extends jspb.Message {
   hasDescription(): boolean;
   clearDescription(): CreatePropertyRequest;
 
-  getIsSoftRequired(): boolean;
-  setIsSoftRequired(value: boolean): CreatePropertyRequest;
-
   getSetId(): string;
   setSetId(value: string): CreatePropertyRequest;
   hasSetId(): boolean;
@@ -169,7 +170,6 @@ export namespace CreatePropertyRequest {
     fieldType: FieldType,
     name: string,
     description?: string,
-    isSoftRequired: boolean,
     setId?: string,
     selectOptionsList: Array<CreatePropertyRequest.SelectOption.AsObject>,
   }
@@ -216,6 +216,9 @@ export namespace CreatePropertyRequest {
 }
 
 export class CreatePropertyResponse extends jspb.Message {
+  getPropertyId(): string;
+  setPropertyId(value: string): CreatePropertyResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreatePropertyResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreatePropertyResponse): CreatePropertyResponse.AsObject;
@@ -226,6 +229,7 @@ export class CreatePropertyResponse extends jspb.Message {
 
 export namespace CreatePropertyResponse {
   export type AsObject = {
+    propertyId: string,
   }
 }
 
@@ -268,9 +272,6 @@ export class GetPropertyResponse extends jspb.Message {
   getIsArchived(): boolean;
   setIsArchived(value: boolean): GetPropertyResponse;
 
-  getIsSoftRequired(): boolean;
-  setIsSoftRequired(value: boolean): GetPropertyResponse;
-
   getSetId(): string;
   setSetId(value: string): GetPropertyResponse;
   hasSetId(): boolean;
@@ -297,7 +298,6 @@ export namespace GetPropertyResponse {
     name: string,
     description?: string,
     isArchived: boolean,
-    isSoftRequired: boolean,
     setId?: string,
     selectOptionsList: Array<GetPropertyResponse.SelectOption.AsObject>,
   }
@@ -408,9 +408,6 @@ export namespace GetPropertiesResponse {
     getIsArchived(): boolean;
     setIsArchived(value: boolean): Property;
 
-    getIsSoftRequired(): boolean;
-    setIsSoftRequired(value: boolean): Property;
-
     getSetId(): string;
     setSetId(value: string): Property;
     hasSetId(): boolean;
@@ -437,7 +434,6 @@ export namespace GetPropertiesResponse {
       name: string,
       description?: string,
       isArchived: boolean,
-      isSoftRequired: boolean,
       setId?: string,
       selectOptionsList: Array<GetPropertiesResponse.Property.SelectOption.AsObject>,
     }
@@ -451,6 +447,9 @@ export namespace GetPropertiesResponse {
       hasDescription(): boolean;
       clearDescription(): SelectOption;
 
+      getIsCustom(): boolean;
+      setIsCustom(value: boolean): SelectOption;
+
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SelectOption.AsObject;
       static toObject(includeInstance: boolean, msg: SelectOption): SelectOption.AsObject;
@@ -463,6 +462,7 @@ export namespace GetPropertiesResponse {
       export type AsObject = {
         name: string,
         description?: string,
+        isCustom: boolean,
       }
 
       export enum DescriptionCase { 
@@ -514,20 +514,15 @@ export class UpdatePropertyRequest extends jspb.Message {
   hasIsArchived(): boolean;
   clearIsArchived(): UpdatePropertyRequest;
 
-  getIsSoftRequired(): boolean;
-  setIsSoftRequired(value: boolean): UpdatePropertyRequest;
-  hasIsSoftRequired(): boolean;
-  clearIsSoftRequired(): UpdatePropertyRequest;
-
   getSetId(): string;
   setSetId(value: string): UpdatePropertyRequest;
   hasSetId(): boolean;
   clearSetId(): UpdatePropertyRequest;
 
-  getNewOrUpdatedSelectOptionsList(): Array<UpdatePropertyRequest.SelectOption>;
-  setNewOrUpdatedSelectOptionsList(value: Array<UpdatePropertyRequest.SelectOption>): UpdatePropertyRequest;
-  clearNewOrUpdatedSelectOptionsList(): UpdatePropertyRequest;
-  addNewOrUpdatedSelectOptions(value?: UpdatePropertyRequest.SelectOption, index?: number): UpdatePropertyRequest.SelectOption;
+  getUpsertSelectOptionsList(): Array<UpdatePropertyRequest.SelectOption>;
+  setUpsertSelectOptionsList(value: Array<UpdatePropertyRequest.SelectOption>): UpdatePropertyRequest;
+  clearUpsertSelectOptionsList(): UpdatePropertyRequest;
+  addUpsertSelectOptions(value?: UpdatePropertyRequest.SelectOption, index?: number): UpdatePropertyRequest.SelectOption;
 
   getRemoveSelectOptionsList(): Array<string>;
   setRemoveSelectOptionsList(value: Array<string>): UpdatePropertyRequest;
@@ -550,9 +545,8 @@ export namespace UpdatePropertyRequest {
     name?: string,
     description?: string,
     isArchived?: boolean,
-    isSoftRequired?: boolean,
     setId?: string,
-    newOrUpdatedSelectOptionsList: Array<UpdatePropertyRequest.SelectOption.AsObject>,
+    upsertSelectOptionsList: Array<UpdatePropertyRequest.SelectOption.AsObject>,
     removeSelectOptionsList: Array<string>,
   }
 
@@ -570,6 +564,11 @@ export namespace UpdatePropertyRequest {
     hasDescription(): boolean;
     clearDescription(): SelectOption;
 
+    getIsCustom(): boolean;
+    setIsCustom(value: boolean): SelectOption;
+    hasIsCustom(): boolean;
+    clearIsCustom(): SelectOption;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SelectOption.AsObject;
     static toObject(includeInstance: boolean, msg: SelectOption): SelectOption.AsObject;
@@ -583,6 +582,7 @@ export namespace UpdatePropertyRequest {
       id: string,
       name?: string,
       description?: string,
+      isCustom?: boolean,
     }
 
     export enum NameCase { 
@@ -593,6 +593,11 @@ export namespace UpdatePropertyRequest {
     export enum DescriptionCase { 
       _DESCRIPTION_NOT_SET = 0,
       DESCRIPTION = 3,
+    }
+
+    export enum IsCustomCase { 
+      _IS_CUSTOM_NOT_SET = 0,
+      IS_CUSTOM = 4,
     }
   }
 
@@ -620,11 +625,6 @@ export namespace UpdatePropertyRequest {
   export enum IsArchivedCase { 
     _IS_ARCHIVED_NOT_SET = 0,
     IS_ARCHIVED = 6,
-  }
-
-  export enum IsSoftRequiredCase { 
-    _IS_SOFT_REQUIRED_NOT_SET = 0,
-    IS_SOFT_REQUIRED = 7,
   }
 
   export enum SetIdCase { 
@@ -715,6 +715,9 @@ export namespace AttachPropertyValueRequest {
 }
 
 export class AttachPropertyValueResponse extends jspb.Message {
+  getPropertyValueId(): string;
+  setPropertyValueId(value: string): AttachPropertyValueResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): AttachPropertyValueResponse.AsObject;
   static toObject(includeInstance: boolean, msg: AttachPropertyValueResponse): AttachPropertyValueResponse.AsObject;
@@ -725,6 +728,7 @@ export class AttachPropertyValueResponse extends jspb.Message {
 
 export namespace AttachPropertyValueResponse {
   export type AsObject = {
+    propertyValueId: string,
   }
 }
 
@@ -794,9 +798,6 @@ export namespace GetAttachedPropertyValuesResponse {
     getIsArchived(): boolean;
     setIsArchived(value: boolean): Value;
 
-    getIsSoftRequired(): boolean;
-    setIsSoftRequired(value: boolean): Value;
-
     getSet(): GetAttachedPropertyValuesResponse.Value.Set | undefined;
     setSet(value?: GetAttachedPropertyValuesResponse.Value.Set): Value;
     hasSet(): boolean;
@@ -840,7 +841,6 @@ export namespace GetAttachedPropertyValuesResponse {
       name: string,
       description?: string,
       isArchived: boolean,
-      isSoftRequired: boolean,
       set?: GetAttachedPropertyValuesResponse.Value.Set.AsObject,
       isUndefined: boolean,
       textValue: string,
