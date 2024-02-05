@@ -145,6 +145,7 @@ message GetPropertiesResponse {
     message SelectOption {
       string name = 1;
       optional string description = 2;
+      bool is_custom = 3;
     }
     repeated SelectOption select_options = 9;
   }
@@ -176,6 +177,7 @@ message UpdatePropertyRequest {
     string id = 1;
     optional string name = 2;
     optional string description = 3;
+    optional bool is_custom = 4;
   }
   repeated SelectOption new_or_updated_select_options = 9;
   repeated string remove_select_options = 10; // @gotags: validate:"dive,uuid4"
