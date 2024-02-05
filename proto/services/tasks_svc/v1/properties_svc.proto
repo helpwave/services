@@ -33,7 +33,9 @@ message CreatePropertySetRequest {
   repeated string properties = 3; // @gotags: validate:"dive,uuid4"
 }
 
-message CreatePropertySetResponse {}
+message CreatePropertySetResponse {
+  string property_set_id = 1;
+}
 
 //
 // UpdatePropertySet
@@ -82,7 +84,9 @@ message CreatePropertyRequest {
     repeated SelectOption select_options = 7;
 }
 
-message CreatePropertyResponse {}
+message CreatePropertyResponse {
+  string property_id = 1;
+}
 
 
 //
@@ -103,8 +107,6 @@ message GetPropertyResponse {
   optional string description = 5;
 
   bool is_archived = 6;
-
-  // TODO: TBD: priortyDisplayedAtSubjectIds?
 
   // ID of set this Property should belong to
   optional string set_id = 8;
@@ -137,8 +139,6 @@ message GetPropertiesResponse {
 
     bool is_archived = 6;
 
-    // TODO: TBD: priortyDisplayedAtSubjectIds?
-
     // ID of set this Property should belong to
     optional string set_id = 8;
 
@@ -167,8 +167,6 @@ message UpdatePropertyRequest {
   optional string description = 5; // TODO: validation
 
   optional bool is_archived = 6;
-
-  // TODO: TBD: priortyDisplayedAtSubjectIds?
 
   // ID of set this Property should belong to
   optional string set_id = 8;
@@ -210,7 +208,9 @@ message AttachPropertyValueRequest {
   }
 }
 
-message AttachPropertyValueResponse {}
+message AttachPropertyValueResponse {
+  string property_value_id = 1;
+}
 
 //
 // GetAttachedPropertyValues
