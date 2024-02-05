@@ -177,7 +177,7 @@ message UpdatePropertyRequest {
     optional string description = 3;
     optional bool is_custom = 4;
   }
-  repeated SelectOption new_or_updated_select_options = 9;
+  repeated SelectOption upsert_select_options = 9;
   repeated string remove_select_options = 10; // @gotags: validate:"dive,uuid4"
 }
 
