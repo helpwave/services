@@ -72,8 +72,6 @@ message CreatePropertyRequest {
     string name = 3; // TODO: add validation (at least non-empty checks)
     optional string description = 4; // TODO: add validation, if needed
 
-    bool is_soft_required = 5;
-
     // ID of set this Property should belong to
     optional string set_id = 6;
 
@@ -105,7 +103,6 @@ message GetPropertyResponse {
   optional string description = 5;
 
   bool is_archived = 6;
-  bool is_soft_required = 7;
 
   // TODO: TBD: priortyDisplayedAtSubjectIds?
 
@@ -139,7 +136,6 @@ message GetPropertiesResponse {
     optional string description = 5;
 
     bool is_archived = 6;
-    bool is_soft_required = 7;
 
     // TODO: TBD: priortyDisplayedAtSubjectIds?
 
@@ -170,7 +166,6 @@ message UpdatePropertyRequest {
   optional string description = 5; // TODO: validation
 
   optional bool is_archived = 6;
-  optional bool is_soft_required = 7;
 
   // TODO: TBD: priortyDisplayedAtSubjectIds?
 
@@ -234,7 +229,6 @@ message GetAttachedPropertyValuesResponse {
     optional string description = 4;
 
     bool is_archived = 5;
-    bool is_soft_required = 6;
 
     message Set {
       string id = 1;
