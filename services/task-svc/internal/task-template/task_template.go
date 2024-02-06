@@ -97,14 +97,16 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 }
 
 func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTemplatesRequest) (*pb.GetAllTaskTemplatesResponse, error) {
-	templateRepo := repositories.TemplateRepo(ctx)
+	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	taskTemplates, err := templateRepo.GetAllTaskTemplatesWithSubTasksForOrganization(organizationID)
+	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx, task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
+		OrganizationID: organizationID,
+	})
 
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
@@ -114,26 +116,38 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 		}
 	}
 
-	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate models.TaskTemplate) *pb.GetAllTaskTemplatesResponse_TaskTemplate {
-		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(subtask models.TaskTemplateSubtask) *pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask {
-			return &pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask{
-				Id:             subtask.ID.String(),
-				TaskTemplateId: subtask.TaskTemplateID.String(),
-				Name:           subtask.Name,
+
+	templates := make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate, 0)
+	templateMap := make(map[uuid.UUID]int)
+
+	for _, row := range rows {
+		var template *pb.GetAllTaskTemplatesResponse_TaskTemplate;
+		if ix, found := templateMap[row.TaskTemplate.ID]; found {
+			template = templates[ix];
+		} else {
+			template = &pb.GetAllTaskTemplatesResponse_TaskTemplate{
+				Id:          row.TaskTemplate.ID.String(),
+				Name:        row.TaskTemplate.Name,
+				Description: row.TaskTemplate.Description,
+				IsPublic: row.TaskTemplate.WardID.Valid,
+				CreatedBy:   row.TaskTemplate.CreatedBy.String(),
+				Subtasks: make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask, 0),
 			}
-		})
-		return &pb.GetAllTaskTemplatesResponse_TaskTemplate{
-			Id:          taskTemplate.ID.String(),
-			Name:        taskTemplate.Name,
-			Description: taskTemplate.Description,
-			IsPublic:    taskTemplate.WardID != nil,
-			CreatedBy:   hwutil.UUIDToStringPtr(&taskTemplate.CreatedBy),
-			Subtasks:    mappedSubtasks,
+			templates = append(templates, template)
+			templateMap[row.TaskTemplate.ID] = len(templates) - 1
 		}
-	})
+
+		if row.SubTaskName != nil {
+			template.Subtasks = append(template.Subtasks, &pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask{
+				Id:             *row.SubTaskName,
+				TaskTemplateId: row.TaskTemplate.ID.String(),
+				Name:           row.SubTaskID.UUID.String(), // must exist by constraint
+			})
+		}
+	}
 
 	return &pb.GetAllTaskTemplatesResponse{
-		Templates: mappedTaskTemplates,
+		Templates: templates,
 	}, nil
 }
 

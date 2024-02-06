@@ -1504,8 +1504,8 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse.TaskTemplate.serial
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(message, 6));
-  if (f != null) {
+  f = message.getCreatedBy();
+  if (f.length > 0) {
     writer.writeString(
       6,
       f
@@ -1798,25 +1798,7 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse.TaskTemplate.protot
  * @return {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse.TaskTemplate} returns this
  */
 proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse.TaskTemplate.prototype.setCreatedBy = function(value) {
-  return jspb.Message.setField(this, 6, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse.TaskTemplate} returns this
- */
-proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse.TaskTemplate.prototype.clearCreatedBy = function() {
-  return jspb.Message.setField(this, 6, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.proto.services.task_svc.v1.GetAllTaskTemplatesResponse.TaskTemplate.prototype.hasCreatedBy = function() {
-  return jspb.Message.getField(this, 6) != null;
+  return jspb.Message.setProto3StringField(this, 6, value);
 };
 
 

@@ -133,8 +133,6 @@ export namespace GetAllTaskTemplatesResponse {
 
     getCreatedBy(): string;
     setCreatedBy(value: string): TaskTemplate;
-    hasCreatedBy(): boolean;
-    clearCreatedBy(): TaskTemplate;
 
     getSubtasksList(): Array<GetAllTaskTemplatesResponse.TaskTemplate.SubTask>;
     setSubtasksList(value: Array<GetAllTaskTemplatesResponse.TaskTemplate.SubTask>): TaskTemplate;
@@ -155,7 +153,7 @@ export namespace GetAllTaskTemplatesResponse {
       name: string,
       description: string,
       isPublic: boolean,
-      createdBy?: string,
+      createdBy: string,
       subtasksList: Array<GetAllTaskTemplatesResponse.TaskTemplate.SubTask.AsObject>,
     }
 
@@ -185,11 +183,6 @@ export namespace GetAllTaskTemplatesResponse {
       }
     }
 
-
-    export enum CreatedByCase { 
-      _CREATED_BY_NOT_SET = 0,
-      CREATED_BY = 6,
-    }
   }
 
 }
