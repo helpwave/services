@@ -71,8 +71,11 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	}
 
 	if req.Subtasks != nil {
-		subtaskNames := hwutil.Map(req.Subtasks, func(subtask *pb.CreateTaskTemplateRequest_SubTask) string {
-			return subtask.Name
+		subtaskNames := hwutil.Map(req.Subtasks, func(subtask *pb.CreateTaskTemplateRequest_SubTask) task_template_repo.AppendSubTasksParams {
+			return task_template_repo.AppendSubTasksParams{
+				Name:           subtask.Name,
+				TaskTemplateID: templateID,
+			}
 		})
 
 		if _, err := templateRepo.AppendSubTasks(ctx, subtaskNames); err != nil {
@@ -220,14 +223,14 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 
 func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.CreateTaskTemplateSubTaskRequest) (*pb.CreateTaskTemplateSubTaskResponse, error) {
 	log := zlog.Ctx(ctx)
-	templateRepo := repositories.TemplateRepo(ctx)
+	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	taskTemplateID, err := uuid.Parse(req.TaskTemplateId)
 	if err != nil {
 		return nil, err
 	}
 
-	taskTemplateSubtask, err := templateRepo.CreateTaskTemplateSubTask(&models.TaskTemplateSubtask{
+	subtaskID, err := templateRepo.CreateSubTask(ctx, task_template_repo.CreateSubTaskParams{
 		TaskTemplateID: taskTemplateID,
 		Name:           req.Name,
 	})
@@ -238,12 +241,12 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 	}
 
 	log.Info().
-		Str("taskTemplateID", taskTemplateSubtask.TaskTemplateID.String()).
-		Str("taskTemplateSubTaskID", taskTemplateSubtask.ID.String()).
-		Msg("taskTemplateSubtask created")
+		Str("taskTemplateID", taskTemplateID.String()).
+		Str("taskTemplateSubTaskID", subtaskID.String()).
+		Msg("subtaskID created")
 
 	return &pb.CreateTaskTemplateSubTaskResponse{
-		Id: taskTemplateSubtask.ID.String(),
+		Id: subtaskID.String(),
 	}, nil
 }
 

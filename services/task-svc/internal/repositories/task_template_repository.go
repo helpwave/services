@@ -18,16 +18,6 @@ func TemplateRepo(logCtx context.Context) *TemplateRepository {
 	}
 }
 
-func (r *TemplateRepository) CreateTaskTemplateSubTask(subtask *models.TaskTemplateSubtask) (*models.TaskTemplateSubtask, error) {
-	query := r.db.
-		Create(subtask)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return subtask, nil
-}
-
 func (r *TemplateRepository) GetTaskTemplatesByWard(wardID uuid.UUID) ([]models.TaskTemplate, error) {
 	var templates []models.TaskTemplate
 	query := r.db.

@@ -11,7 +11,7 @@ import (
 
 // iteratorForAppendSubTasks implements pgx.CopyFromSource.
 type iteratorForAppendSubTasks struct {
-	rows                 []string
+	rows                 []AppendSubTasksParams
 	skippedFirstNextCall bool
 }
 
@@ -29,7 +29,8 @@ func (r *iteratorForAppendSubTasks) Next() bool {
 
 func (r iteratorForAppendSubTasks) Values() ([]interface{}, error) {
 	return []interface{}{
-		r.rows[0],
+		r.rows[0].Name,
+		r.rows[0].TaskTemplateID,
 	}, nil
 }
 
@@ -37,6 +38,6 @@ func (r iteratorForAppendSubTasks) Err() error {
 	return nil
 }
 
-func (q *Queries) AppendSubTasks(ctx context.Context, name []string) (int64, error) {
-	return q.db.CopyFrom(ctx, []string{"task_template_subtasks"}, []string{"name"}, &iteratorForAppendSubTasks{rows: name})
+func (q *Queries) AppendSubTasks(ctx context.Context, arg []AppendSubTasksParams) (int64, error) {
+	return q.db.CopyFrom(ctx, []string{"task_template_subtasks"}, []string{"name", "task_template_id"}, &iteratorForAppendSubTasks{rows: arg})
 }

@@ -11,6 +11,27 @@ import (
 	"github.com/google/uuid"
 )
 
+type AppendSubTasksParams struct {
+	Name           string
+	TaskTemplateID uuid.UUID
+}
+
+const createSubTask = `-- name: CreateSubTask :one
+INSERT INTO task_template_subtasks (name, task_template_id) VALUES ($1, $2) RETURNING id
+`
+
+type CreateSubTaskParams struct {
+	Name           string
+	TaskTemplateID uuid.UUID
+}
+
+func (q *Queries) CreateSubTask(ctx context.Context, arg CreateSubTaskParams) (uuid.UUID, error) {
+	row := q.db.QueryRow(ctx, createSubTask, arg.Name, arg.TaskTemplateID)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
+}
+
 const createTaskTemplate = `-- name: CreateTaskTemplate :one
 INSERT INTO task_templates
 	(name, description, organization_id, created_by, ward_id) VALUES ($1, $2, $3, $4, $5)
