@@ -22,4 +22,5 @@ ON
 	task_template_subtasks.task_template_id = task_templates.id
 WHERE
 	(task_templates.organization_id = sqlc.narg('organization_id') OR sqlc.narg('organization_id') = NULL)
-AND (task_templates.ward_id = sqlc.narg('ward_id') OR sqlc.narg('ward_id') = NULL);
+AND (task_templates.ward_id = sqlc.narg('ward_id') OR sqlc.narg('ward_id') = NULL)
+AND (task_templates.created_by = sqlc.narg('creator_id') OR sqlc.narg('creator_id') = NULL);

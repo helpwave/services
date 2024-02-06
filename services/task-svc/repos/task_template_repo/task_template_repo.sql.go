@@ -73,11 +73,13 @@ ON
 WHERE
 	(task_templates.organization_id = $1 OR $1 = NULL)
 AND (task_templates.ward_id = $2 OR $2 = NULL)
+AND (task_templates.created_by = $3 OR $3 = NULL)
 `
 
 type GetAllTaskTemplatesWithSubTasksParams struct {
 	OrganizationID uuid.NullUUID
 	WardID         uuid.NullUUID
+	CreatorID      uuid.NullUUID
 }
 
 type GetAllTaskTemplatesWithSubTasksRow struct {
@@ -87,7 +89,7 @@ type GetAllTaskTemplatesWithSubTasksRow struct {
 }
 
 func (q *Queries) GetAllTaskTemplatesWithSubTasks(ctx context.Context, arg GetAllTaskTemplatesWithSubTasksParams) ([]GetAllTaskTemplatesWithSubTasksRow, error) {
-	rows, err := q.db.Query(ctx, getAllTaskTemplatesWithSubTasks, arg.OrganizationID, arg.WardID)
+	rows, err := q.db.Query(ctx, getAllTaskTemplatesWithSubTasks, arg.OrganizationID, arg.WardID, arg.CreatorID)
 	if err != nil {
 		return nil, err
 	}
