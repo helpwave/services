@@ -6,25 +6,6 @@ Assigned Patient, with tasks:
   "notes": "Other extraarticular fracture of lower end of left radius, subsequent encounter for open fracture type I or II with nonunion",
   "tasks": [
     {
-      "id": "20863649-d855-4b0d-af4f-76199749c509",
-      "name": "Supplement L Metatarsotars Jt with Autol Sub, Perc Approach",
-      "status": "TASK_STATUS_DONE",
-      "assignedUserId": "8aa8a5ee-2a35-4203-81bb-baf4ca17a9e9",
-      "patientId": "06f57c97-509e-4b41-9839-233f29197f56",
-      "subtasks": [
-        {
-          "id": "539cae1d-29aa-4d87-aecf-ba4d5ad51da8",
-          "name": "Regional lymph node excision",
-          "done": true
-        },
-        {
-          "id": "6c0f78df-ac07-4563-ada5-f0d8ae3c418f",
-          "name": "Other lysis of perivesical adhesions",
-          "done": true
-        }
-      ]
-    },
-    {
       "id": "1eaf1f03-d5b9-4f3a-b27f-f892c63886ec",
       "name": "Revision of Drain Dev in Tracheobronc Tree, Extern Approach",
       "description": "Fluoroscopy of Right Upper Extremity Veins using High Osmolar Contrast",
@@ -55,6 +36,25 @@ Assigned Patient, with tasks:
         {
           "id": "9190b783-be6b-479a-9aef-6637be9fd54e",
           "name": "Ligation and stripping of varicose veins, upper limb vessels"
+        }
+      ]
+    },
+    {
+      "id": "20863649-d855-4b0d-af4f-76199749c509",
+      "name": "Supplement L Metatarsotars Jt with Autol Sub, Perc Approach",
+      "status": "TASK_STATUS_DONE",
+      "assignedUserId": "8aa8a5ee-2a35-4203-81bb-baf4ca17a9e9",
+      "patientId": "06f57c97-509e-4b41-9839-233f29197f56",
+      "subtasks": [
+        {
+          "id": "539cae1d-29aa-4d87-aecf-ba4d5ad51da8",
+          "name": "Regional lymph node excision",
+          "done": true
+        },
+        {
+          "id": "6c0f78df-ac07-4563-ada5-f0d8ae3c418f",
+          "name": "Other lysis of perivesical adhesions",
+          "done": true
         }
       ]
     },
@@ -118,15 +118,6 @@ Unassigned Patient, with tasks:
       ]
     },
     {
-      "id": "f0566273-28e5-46f1-a85d-5ebd493a26de",
-      "name": "Drainage of Buccal Mucosa, Percutaneous Approach, Diagnostic",
-      "description": "Supplement Right Axilla with Synthetic Substitute, Percutaneous Endoscopic Approach",
-      "status": "TASK_STATUS_IN_PROGRESS",
-      "assignedUserId": "3e795d31-1912-4b09-8e5a-fd62a2461a8c",
-      "patientId": "2e830d2f-69c9-4e38-bd4b-ab43decc7ae3",
-      "public": true
-    },
-    {
       "id": "503b6598-a1f0-4a1f-b4b8-f37dea4ea9a9",
       "name": "Bypass Azygos Vein to Up Vein w Synth Sub, Perc Endo",
       "status": "TASK_STATUS_DONE",
@@ -139,6 +130,15 @@ Unassigned Patient, with tasks:
           "done": true
         }
       ]
+    },
+    {
+      "id": "f0566273-28e5-46f1-a85d-5ebd493a26de",
+      "name": "Drainage of Buccal Mucosa, Percutaneous Approach, Diagnostic",
+      "description": "Supplement Right Axilla with Synthetic Substitute, Percutaneous Endoscopic Approach",
+      "status": "TASK_STATUS_IN_PROGRESS",
+      "assignedUserId": "3e795d31-1912-4b09-8e5a-fd62a2461a8c",
+      "patientId": "2e830d2f-69c9-4e38-bd4b-ab43decc7ae3",
+      "public": true
     }
   ]
 }

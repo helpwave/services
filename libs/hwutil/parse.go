@@ -32,7 +32,7 @@ func Validate(target any) error {
 }
 
 func StringsToUUIDs(strings []string) ([]uuid.UUID, error) {
-	ids := make([]uuid.UUID, len(strings))
+	ids := make([]uuid.UUID, 0, len(strings))
 	for _, s := range strings {
 		id, err := uuid.Parse(s)
 		if err != nil {

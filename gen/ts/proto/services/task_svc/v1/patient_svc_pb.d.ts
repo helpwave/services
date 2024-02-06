@@ -876,6 +876,8 @@ export namespace GetPatientDetailsResponse {
 
     getAssignedUserId(): string;
     setAssignedUserId(value: string): Task;
+    hasAssignedUserId(): boolean;
+    clearAssignedUserId(): Task;
 
     getPatientId(): string;
     setPatientId(value: string): Task;
@@ -902,7 +904,7 @@ export namespace GetPatientDetailsResponse {
       name: string,
       description: string,
       status: GetPatientDetailsResponse.TaskStatus,
-      assignedUserId: string,
+      assignedUserId?: string,
       patientId: string,
       pb_public: boolean,
       subtasksList: Array<GetPatientDetailsResponse.Task.SubTask.AsObject>,
@@ -934,6 +936,11 @@ export namespace GetPatientDetailsResponse {
       }
     }
 
+
+    export enum AssignedUserIdCase { 
+      _ASSIGNED_USER_ID_NOT_SET = 0,
+      ASSIGNED_USER_ID = 5,
+    }
   }
 
 

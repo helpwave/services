@@ -17,19 +17,21 @@ This repository utilizes [devenv.sh](https://devenv.sh) (on top of [Nix](https:/
 
 ### Ports
 
-| Service       | Port       | Protocol                |
-|---------------|------------|-------------------------|
-| task-svc      | 3001       | gRPC                    |
-| user-svc      | 3002       | gRPC                    |
-| ory-svc       | 3003       | gRPC                    |
-| APISIX (dapr) | 3500       | http                    |
-| APISIX (dapr) | 35001      | grpc                    |
-| APISIX        | 9080       | http  (mostly grcp-web) |
-| APISIX        | 9433       | https (mostly grcp-web) |
-| APISIX        | 9090       | http  (control api)     |
-| APISIX        | 9091       | http  (prometheus)      |
-| postgres      | 5432       |                         |
-| redis         | 6379       |                         |
+| Service       | Port  | Protocol                |
+|---------------|-------|-------------------------|
+| task-svc      | 3001  | gRPC                    |
+| user-svc      | 3002  | gRPC                    |
+| ory-svc       | 3003  | gRPC                    |
+| APISIX (dapr) | 3500  | http                    |
+| APISIX (dapr) | 35001 | grpc                    |
+| APISIX        | 9080  | http  (mostly grcp-web) |
+| APISIX        | 9433  | https (mostly grcp-web) |
+| APISIX        | 9090  | http  (control api)     |
+| APISIX        | 9091  | http  (prometheus)      |
+| postgres      | 5432  |                         |
+| redis         | 6379  |                         |
+| jaeger (UI)   | 16686 | http                    |
+| jaeger (OTLP) | 4317  | grpc                    |
 
 ### Scripts
 
@@ -173,12 +175,16 @@ LOG_LEVEL=debug
 # The port on which the the service will listen on (default: 8080)
 PORT=8080
 
-# Database Related Configurations
+# Database related configurations
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DB=postgres
+
+# EventStoreDB related configurations
+
+EVENTSTORE_CS=sdb://admin:changeit@localhost:2113?tls=false
 
 # For development purposes
 INSECURE_FAKE_TOKEN_ENABLE=true
@@ -188,6 +194,18 @@ OAUTH_CLIENT_ID=425f8b8d-c786-4ff7-b2bf-e52f505fb588
 SECRETSTORE_REDIS_HOST=localhost
 SECRETSTORE_REDIS_USERNAME=
 SECRETSTORE_REDIS_PASSWORD=
+
+# Telemetry Related Configurations
+
+# skips opentelemetry setup
+OTEL_DISABLE=false
+
+# one of "zipkin", otlp", "otlp_http"
+# for additional configuration for each exporter see their documentation:
+# - otlp: https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc@v1.21.0
+# - otlp_http: https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.21.0
+# - zipkin: only provides OTEL_EXPORTER_ZIPKIN_ENDPOINT with default "http://localhost:9411/api/v2/spans"
+OTEL_TRACE_EXPORTER=otlp
 ```
 
 ## Temporary advises
