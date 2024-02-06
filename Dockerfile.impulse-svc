@@ -1,4 +1,4 @@
-FROM python:3.12.1-alpine
+FROM python:3.12.1
 
 # gRPC Port
 EXPOSE 8080
@@ -6,8 +6,12 @@ EXPOSE 8080
 EXPOSE 8000
 
 WORKDIR /app
+
+RUN apt update -y && apt-get install python3-dev -y
+RUN mkdir -p /libs/python/
+
+COPY libs/python/ /libs/python/
 COPY services/impulse_svc/. /app
-COPY lib/python/ /lib/python/
 COPY docker-run-migrations-impulse-svc.sh ./run-migrations.sh
 RUN chmod +x run-migrations.sh
 
