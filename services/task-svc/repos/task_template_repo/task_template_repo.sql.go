@@ -59,6 +59,26 @@ func (q *Queries) CreateTaskTemplate(ctx context.Context, arg CreateTaskTemplate
 	return id, err
 }
 
+const deleteSubtask = `-- name: DeleteSubtask :one
+DELETE FROM task_template_subtasks WHERE id = $1 RETURNING id, task_template_id, name
+`
+
+func (q *Queries) DeleteSubtask(ctx context.Context, id uuid.UUID) (TaskTemplateSubtask, error) {
+	row := q.db.QueryRow(ctx, deleteSubtask, id)
+	var i TaskTemplateSubtask
+	err := row.Scan(&i.ID, &i.TaskTemplateID, &i.Name)
+	return i, err
+}
+
+const deleteTaskTemplate = `-- name: DeleteTaskTemplate :exec
+DELETE FROM task_templates WHERE id = $1
+`
+
+func (q *Queries) DeleteTaskTemplate(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteTaskTemplate, id)
+	return err
+}
+
 const getAllTaskTemplatesWithSubTasks = `-- name: GetAllTaskTemplatesWithSubTasks :many
 SELECT
 	task_templates.id, task_templates.name, task_templates.description, task_templates.ward_id, task_templates.created_by, task_templates.organization_id,

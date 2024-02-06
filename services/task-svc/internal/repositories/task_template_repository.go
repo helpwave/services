@@ -18,32 +18,6 @@ func TemplateRepo(logCtx context.Context) *TemplateRepository {
 	}
 }
 
-func (r *TemplateRepository) UpdateTaskTemplate(templateID uuid.UUID, updates map[string]interface{}) (*models.TaskTemplate, error) {
-	taskTemplate := &models.TaskTemplate{ID: templateID}
-
-	query := r.db.
-		Model(taskTemplate).
-		Updates(updates)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return taskTemplate, nil
-}
-
-func (r *TemplateRepository) UpdateTaskTemplateSubTask(templateSubTaskID uuid.UUID, updates map[string]interface{}) (*models.TaskTemplateSubtask, error) {
-	templateSubTask := &models.TaskTemplateSubtask{ID: templateSubTaskID}
-
-	query := r.db.
-		Model(templateSubTask).
-		Updates(updates)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return templateSubTask, nil
-}
-
 func (r *TemplateRepository) DeleteTaskTemplate(templateID uuid.UUID) error {
 	template := models.TaskTemplate{ID: templateID}
 	query := r.db.

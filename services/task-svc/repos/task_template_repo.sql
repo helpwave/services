@@ -36,3 +36,9 @@ UPDATE task_template_subtasks
 SET	name = coalesce(sqlc.narg('name'), name)
 WHERE id = @id;
 
+
+-- name: DeleteSubtask :one
+DELETE FROM task_template_subtasks WHERE id = @id RETURNING *;
+
+-- name: DeleteTaskTemplate :exec
+DELETE FROM task_templates WHERE id = @id;

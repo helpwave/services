@@ -9,12 +9,10 @@ import (
 	"hwdb"
 	"hwgorm"
 	"hwutil"
-	"task-svc/internal/repositories"
 	"task-svc/repos/task_template_repo"
 
 	pb "gen/proto/services/task_svc/v1"
 	zlog "github.com/rs/zerolog/log"
-	pbhelpers "proto_helpers/task_svc/v1"
 )
 
 type ServiceServer struct {
@@ -155,7 +153,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 
 func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskTemplateRequest) (*pb.DeleteTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
-	templateRepo := repositories.TemplateRepo(ctx)
+	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -164,7 +162,7 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := templateRepo.DeleteTaskTemplate(id); err != nil {
+	if err := templateRepo.DeleteTaskTemplate(ctx, id); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -177,7 +175,7 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 
 func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.DeleteTaskTemplateSubTaskRequest) (*pb.DeleteTaskTemplateSubTaskResponse, error) {
 	log := zlog.Ctx(ctx)
-	templateRepo := repositories.TemplateRepo(ctx)
+	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -186,7 +184,7 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	subtask, err := templateRepo.DeleteTaskTemplateSubTask(id)
+	subtask, err := templateRepo.DeleteSubtask(ctx, id)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
