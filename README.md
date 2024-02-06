@@ -14,7 +14,7 @@ Using this setup you use your editor of choice on your system and start the dock
 The main down site to this is that your IDE will use your local toolchain and dependencies, which may not be in sync.
 
 > [!TIP]
-> `./up-sh -d` starts the compose stack in the background
+> `./up.sh -d` starts the compose stack in the background
 
 1. Clone the repo locally
 	```bash
