@@ -21,5 +21,5 @@ LEFT JOIN
 ON
 	task_template_subtasks.task_template_id = task_templates.id
 WHERE
-	(sqlc.narg('organization_id') = NULL OR task_templates.organization_id = sqlc.narg('organization_id'))
-AND (sqlc.narg('ward_id') = NULL OR task_templates.ward_id = sqlc.narg('ward_id'));
+	(task_templates.organization_id = sqlc.narg('organization_id') OR sqlc.narg('organization_id') = NULL)
+AND (task_templates.ward_id = sqlc.narg('ward_id') OR sqlc.narg('ward_id') = NULL);

@@ -105,7 +105,10 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 	}
 
 	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx, task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
-		OrganizationID: organizationID,
+		OrganizationID: uuid.NullUUID{
+			UUID:  organizationID,
+			Valid: true,
+		},
 	})
 
 	if err != nil {
@@ -312,14 +315,19 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.G
 }
 
 func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetAllTaskTemplatesByWardRequest) (*pb.GetAllTaskTemplatesByWardResponse, error) {
-	templateRepo := repositories.TemplateRepo(ctx)
+	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	wardId, err := uuid.Parse(req.WardId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	taskTemplates, err := templateRepo.GetTaskTemplatesWithSubTasksForWard(wardId)
+	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx, task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
+		WardID:         uuid.NullUUID{
+			UUID:  wardId,
+			Valid: true,
+		},
+	})
 
 	if err != nil {
 		if hwgorm.IsOurFault(err) {
@@ -329,25 +337,37 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 		}
 	}
 
-	var mappedTaskTemplates = hwutil.Map(taskTemplates, func(taskTemplate models.TaskTemplate) *pb.GetAllTaskTemplatesByWardResponse_TaskTemplate {
-		var mappedSubtasks = hwutil.Map(taskTemplate.SubTasks, func(subtask models.TaskTemplateSubtask) *pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask {
-			return &pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask{
-				Id:             subtask.ID.String(),
-				TaskTemplateId: subtask.TaskTemplateID.String(),
-				Name:           subtask.Name,
+
+	templates := make([]*pb.GetAllTaskTemplatesByWardResponse_TaskTemplate, 0)
+	templateMap := make(map[uuid.UUID]int)
+
+	for _, row := range rows {
+		var template *pb.GetAllTaskTemplatesByWardResponse_TaskTemplate;
+		if ix, found := templateMap[row.TaskTemplate.ID]; found {
+			template = templates[ix];
+		} else {
+			template = &pb.GetAllTaskTemplatesByWardResponse_TaskTemplate{
+				Id:          row.TaskTemplate.ID.String(),
+				Name:        row.TaskTemplate.Name,
+				Description: row.TaskTemplate.Description,
+				IsPublic: row.TaskTemplate.WardID.Valid,
+				CreatedBy:   row.TaskTemplate.CreatedBy.String(),
+				Subtasks: make([]*pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask, 0),
 			}
-		})
-		return &pb.GetAllTaskTemplatesByWardResponse_TaskTemplate{
-			Id:          taskTemplate.ID.String(),
-			Name:        taskTemplate.Name,
-			Description: taskTemplate.Description,
-			IsPublic:    taskTemplate.WardID != nil,
-			CreatedBy:   hwutil.UUIDToStringPtr(&taskTemplate.CreatedBy),
-			Subtasks:    mappedSubtasks,
+			templates = append(templates, template)
+			templateMap[row.TaskTemplate.ID] = len(templates) - 1
 		}
-	})
+
+		if row.SubTaskName != nil {
+			template.Subtasks = append(template.Subtasks, &pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask{
+				Id:             *row.SubTaskName,
+				TaskTemplateId: row.TaskTemplate.ID.String(),
+				Name:           row.SubTaskID.UUID.String(), // must exist by constraint
+			})
+		}
+	}
 
 	return &pb.GetAllTaskTemplatesByWardResponse{
-		Templates: mappedTaskTemplates,
+		Templates: templates,
 	}, nil
 }

@@ -71,13 +71,13 @@ LEFT JOIN
 ON
 	task_template_subtasks.task_template_id = task_templates.id
 WHERE
-	($1 = NULL OR task_templates.organization_id = $1)
-AND ($2 = NULL OR task_templates.ward_id = $2)
+	(task_templates.organization_id = $1 OR $1 = NULL)
+AND (task_templates.ward_id = $2 OR $2 = NULL)
 `
 
 type GetAllTaskTemplatesWithSubTasksParams struct {
-	OrganizationID interface{}
-	WardID         interface{}
+	OrganizationID uuid.NullUUID
+	WardID         uuid.NullUUID
 }
 
 type GetAllTaskTemplatesWithSubTasksRow struct {

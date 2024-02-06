@@ -159,7 +159,7 @@ message GetAllTaskTemplatesByWardResponse {
     string name = 2;
     string description = 3;
     bool is_public = 4;
-    optional string created_by = 6;
+    string created_by = 6;
     repeated SubTask subtasks = 7;
 
     message SubTask {
