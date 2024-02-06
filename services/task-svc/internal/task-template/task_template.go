@@ -221,7 +221,7 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 }
 
 func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.UpdateTaskTemplateSubTaskRequest) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
-	templateRepo := repositories.TemplateRepo(ctx)
+	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -230,9 +230,10 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := pbhelpers.UpdatesMapForUpdateTaskTemplateSubTaskRequest(req)
-
-	if _, err := templateRepo.UpdateTaskTemplateSubTask(id, updates); err != nil {
+	if err := templateRepo.UpdateSubtask(ctx, task_template_repo.UpdateSubtaskParams{
+		Name: req.Name,
+		ID:   id,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 

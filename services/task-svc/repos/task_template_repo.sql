@@ -31,3 +31,8 @@ SET	name = coalesce(sqlc.narg('name'), name),
 	description = coalesce(sqlc.narg('description'), description)
 WHERE id = @id;
 
+-- name: UpdateSubtask :exec
+UPDATE task_template_subtasks
+SET	name = coalesce(sqlc.narg('name'), name)
+WHERE id = @id;
+
