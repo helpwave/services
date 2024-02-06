@@ -30,9 +30,9 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "could not start tx: "+err.Error())
 	}
-	defer {
+	defer func() {
 		_ = tx.Rollback(ctx)
-	}
+	}()
 	templateRepo := task_template_repo.New(db).WithTx(tx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
@@ -116,22 +116,21 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 		}
 	}
 
-
 	templates := make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate, 0)
 	templateMap := make(map[uuid.UUID]int)
 
 	for _, row := range rows {
-		var template *pb.GetAllTaskTemplatesResponse_TaskTemplate;
+		var template *pb.GetAllTaskTemplatesResponse_TaskTemplate
 		if ix, found := templateMap[row.TaskTemplate.ID]; found {
-			template = templates[ix];
+			template = templates[ix]
 		} else {
 			template = &pb.GetAllTaskTemplatesResponse_TaskTemplate{
 				Id:          row.TaskTemplate.ID.String(),
 				Name:        row.TaskTemplate.Name,
 				Description: row.TaskTemplate.Description,
-				IsPublic: row.TaskTemplate.WardID.Valid,
+				IsPublic:    row.TaskTemplate.WardID.Valid,
 				CreatedBy:   row.TaskTemplate.CreatedBy.String(),
-				Subtasks: make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask, 0),
+				Subtasks:    make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask, 0),
 			}
 			templates = append(templates, template)
 			templateMap[row.TaskTemplate.ID] = len(templates) - 1
@@ -287,7 +286,7 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.G
 			UUID:  organizationID,
 			Valid: true,
 		},
-		CreatorID:      uuid.NullUUID{
+		CreatorID: uuid.NullUUID{
 			UUID:  createdBy,
 			Valid: true,
 		},
@@ -301,21 +300,20 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.G
 		}
 	}
 
-
 	templates := make([]*pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate, 0)
 	templateMap := make(map[uuid.UUID]int)
 
 	for _, row := range rows {
-		var template *pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate;
+		var template *pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate
 		if ix, found := templateMap[row.TaskTemplate.ID]; found {
-			template = templates[ix];
+			template = templates[ix]
 		} else {
 			template = &pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate{
 				Id:          row.TaskTemplate.ID.String(),
 				Name:        row.TaskTemplate.Name,
 				Description: row.TaskTemplate.Description,
-				IsPublic: row.TaskTemplate.WardID.Valid,
-				Subtasks: make([]*pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask, 0),
+				IsPublic:    row.TaskTemplate.WardID.Valid,
+				Subtasks:    make([]*pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask, 0),
 			}
 			templates = append(templates, template)
 			templateMap[row.TaskTemplate.ID] = len(templates) - 1
@@ -344,7 +342,7 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 	}
 
 	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx, task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
-		WardID:         uuid.NullUUID{
+		WardID: uuid.NullUUID{
 			UUID:  wardId,
 			Valid: true,
 		},
@@ -358,22 +356,21 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 		}
 	}
 
-
 	templates := make([]*pb.GetAllTaskTemplatesByWardResponse_TaskTemplate, 0)
 	templateMap := make(map[uuid.UUID]int)
 
 	for _, row := range rows {
-		var template *pb.GetAllTaskTemplatesByWardResponse_TaskTemplate;
+		var template *pb.GetAllTaskTemplatesByWardResponse_TaskTemplate
 		if ix, found := templateMap[row.TaskTemplate.ID]; found {
-			template = templates[ix];
+			template = templates[ix]
 		} else {
 			template = &pb.GetAllTaskTemplatesByWardResponse_TaskTemplate{
 				Id:          row.TaskTemplate.ID.String(),
 				Name:        row.TaskTemplate.Name,
 				Description: row.TaskTemplate.Description,
-				IsPublic: row.TaskTemplate.WardID.Valid,
+				IsPublic:    row.TaskTemplate.WardID.Valid,
 				CreatedBy:   row.TaskTemplate.CreatedBy.String(),
-				Subtasks: make([]*pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask, 0),
+				Subtasks:    make([]*pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask, 0),
 			}
 			templates = append(templates, template)
 			templateMap[row.TaskTemplate.ID] = len(templates) - 1
