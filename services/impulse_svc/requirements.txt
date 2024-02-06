@@ -9,7 +9,6 @@ constantly==23.10.4
 cryptography==41.0.5
 daphne==4.0.0
 Django==4.2.9
--e git+ssh://git@github.com/helpwave/services.git@03c2901160f7cff8b2211c850bc4c229c06f512f#egg=django_grpc&subdirectory=libs/python/django_grpc
 graphql-core==3.2.3
 grpcio==1.58.0
 grpcio-tools==1.58.0
@@ -47,3 +46,5 @@ typing-inspect==0.9.0
 typing_extensions==4.8.0
 uvicorn==0.24.0.post1
 zope.interface==6.1
+
+-e /lib/python/django-grpc
