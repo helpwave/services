@@ -200,7 +200,7 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 }
 
 func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskTemplateRequest) (*pb.UpdateTaskTemplateResponse, error) {
-	templateRepo := repositories.TemplateRepo(ctx)
+	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 
@@ -209,9 +209,11 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	updates := pbhelpers.UpdatesMapForUpdateTaskTemplateRequest(req)
-
-	if _, err := templateRepo.UpdateTaskTemplate(id, updates); err != nil {
+	if err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+		Name:        req.Name,
+		Description: req.Description,
+		ID:          id,
+	}); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 

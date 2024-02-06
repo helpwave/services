@@ -116,3 +116,21 @@ func (q *Queries) GetAllTaskTemplatesWithSubTasks(ctx context.Context, arg GetAl
 	}
 	return items, nil
 }
+
+const updateTaskTemplate = `-- name: UpdateTaskTemplate :exec
+UPDATE task_templates
+SET	name = coalesce($1, name),
+	description = coalesce($2, description)
+WHERE id = $3
+`
+
+type UpdateTaskTemplateParams struct {
+	Name        *string
+	Description *string
+	ID          uuid.UUID
+}
+
+func (q *Queries) UpdateTaskTemplate(ctx context.Context, arg UpdateTaskTemplateParams) error {
+	_, err := q.db.Exec(ctx, updateTaskTemplate, arg.Name, arg.Description, arg.ID)
+	return err
+}

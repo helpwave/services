@@ -18,20 +18,6 @@ func TemplateRepo(logCtx context.Context) *TemplateRepository {
 	}
 }
 
-func (r *TemplateRepository) GetTaskTemplatesWithSubTasksForOrganizationAndCreator(organizationID, creatorID uuid.UUID) ([]models.TaskTemplate, error) {
-	var taskTemplates []models.TaskTemplate
-
-	query := r.db.
-		Preload("SubTasks").
-		Where("created_by = ? AND ward_id IS NULL AND organization_id = ?", creatorID.String(), organizationID.String()).
-		Find(&taskTemplates)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return taskTemplates, nil
-}
-
 func (r *TemplateRepository) UpdateTaskTemplate(templateID uuid.UUID, updates map[string]interface{}) (*models.TaskTemplate, error) {
 	taskTemplate := &models.TaskTemplate{ID: templateID}
 

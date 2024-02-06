@@ -24,3 +24,10 @@ WHERE
 	(task_templates.organization_id = sqlc.narg('organization_id') OR sqlc.narg('organization_id') = NULL)
 AND (task_templates.ward_id = sqlc.narg('ward_id') OR sqlc.narg('ward_id') = NULL)
 AND (task_templates.created_by = sqlc.narg('creator_id') OR sqlc.narg('creator_id') = NULL);
+
+-- name: UpdateTaskTemplate :exec
+UPDATE task_templates
+SET	name = coalesce(sqlc.narg('name'), name),
+	description = coalesce(sqlc.narg('description'), description)
+WHERE id = @id;
+
