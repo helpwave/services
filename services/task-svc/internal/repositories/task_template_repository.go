@@ -18,43 +18,6 @@ func TemplateRepo(logCtx context.Context) *TemplateRepository {
 	}
 }
 
-func (r *TemplateRepository) GetTaskTemplatesByWard(wardID uuid.UUID) ([]models.TaskTemplate, error) {
-	var templates []models.TaskTemplate
-	query := r.db.
-		Where("ward_id = ?", wardID).
-		Find(&templates)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return templates, nil
-}
-
-func (r *TemplateRepository) GetTaskTemplatesByWardWithSubtasks(wardID uuid.UUID) ([]models.TaskTemplate, error) {
-	var templates []models.TaskTemplate
-	query := r.db.
-		Preload("SubTasks").
-		Where("ward_id = ?", wardID).
-		Find(&templates)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return templates, nil
-}
-
-func (r *TemplateRepository) GetSubTasksForTaskTemplate(templateID uuid.UUID) ([]models.TaskTemplateSubtask, error) {
-	var taskTemplateSubtask []models.TaskTemplateSubtask
-	query := r.db.
-		Where("task_template_id = ?", templateID).
-		Find(&taskTemplateSubtask)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return taskTemplateSubtask, nil
-}
-
 func (r *TemplateRepository) GetAllTaskTemplatesWithSubTasksForOrganization(organizationID uuid.UUID) ([]models.TaskTemplate, error) {
 	var taskTemplates []models.TaskTemplate
 
