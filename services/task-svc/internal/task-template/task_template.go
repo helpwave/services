@@ -6,10 +6,12 @@ import (
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"hwdb"
 	"hwgorm"
 	"hwutil"
 	"task-svc/internal/models"
 	"task-svc/internal/repositories"
+	"task-svc/repos/task_template_repo"
 
 	pb "gen/proto/services/task_svc/v1"
 	zlog "github.com/rs/zerolog/log"
@@ -26,7 +28,15 @@ func NewServiceServer() *ServiceServer {
 
 func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskTemplateRequest) (*pb.CreateTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
-	templateRepo := repositories.TemplateRepo(ctx)
+	db := hwdb.GetDB()
+	tx, err := db.Begin(ctx)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "could not start tx: "+err.Error())
+	}
+	defer {
+		_ = tx.Rollback(ctx)
+	}
+	templateRepo := task_template_repo.New(db).WithTx(tx)
 
 	organizationID, err := common.GetOrganizationID(ctx)
 	if err != nil {
@@ -38,7 +48,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		return nil, err
 	}
 
-	wardID, err := hwutil.StringToUUIDPtr(req.WardId)
+	wardID, err := hwutil.ParseNullUUID(req.WardId)
 	if err != nil {
 		return nil, err
 	}
@@ -47,37 +57,39 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	if req.Description != nil {
 		description = *req.Description
 	}
-	taskTemplate, err := templateRepo.CreateTaskTemplate(&models.TaskTemplate{
-		TaskTemplateBase: models.TaskTemplateBase{Name: req.Name, Description: description},
-		OrganizationID:   organizationID,
-		CreatedBy:        userID,
-		WardID:           wardID,
-	})
 
+	templateID, err := templateRepo.CreateTaskTemplate(ctx, task_template_repo.CreateTaskTemplateParams{
+		Name:           req.Name,
+		Description:    description,
+		OrganizationID: organizationID,
+		CreatedBy:      userID,
+		WardID:         wardID,
+	})
 	// This also implicitly checks the wardID because of the foreignKey constraint in the sql
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	var subtasks []models.TaskTemplateSubtask
 	if req.Subtasks != nil {
-		subtasks = hwutil.Map(req.Subtasks, func(subtask *pb.CreateTaskTemplateRequest_SubTask) models.TaskTemplateSubtask {
-			return models.TaskTemplateSubtask{Name: subtask.Name, TaskTemplateID: taskTemplate.ID}
+		subtaskNames := hwutil.Map(req.Subtasks, func(subtask *pb.CreateTaskTemplateRequest_SubTask) string {
+			return subtask.Name
 		})
+
+		if _, err := templateRepo.AppendSubTasks(ctx, subtaskNames); err != nil {
+			return nil, status.Error(codes.Internal, "could not append subtask"+err.Error())
+		}
 	}
 
-	// TODO: Run the following in the same transaction as the query above
-	taskTemplate.SubTasks = append(taskTemplate.SubTasks, subtasks...)
-	if _, err := templateRepo.SaveTaskTemplate(taskTemplate); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	if err := tx.Commit(ctx); err != nil {
+		return nil, status.Error(codes.Internal, "could not commit tx"+err.Error())
 	}
 
 	log.Info().
-		Str("taskTemplateID", taskTemplate.ID.String()).
+		Str("taskTemplateID", templateID.String()).
 		Msg("taskTemplate created")
 
 	return &pb.CreateTaskTemplateResponse{
-		Id: taskTemplate.ID.String(),
+		Id: templateID.String(),
 	}, nil
 }
 

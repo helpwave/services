@@ -18,26 +18,6 @@ func TemplateRepo(logCtx context.Context) *TemplateRepository {
 	}
 }
 
-func (r *TemplateRepository) CreateTaskTemplate(template *models.TaskTemplate) (*models.TaskTemplate, error) {
-	query := r.db.
-		Create(template)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return template, nil
-}
-
-func (r *TemplateRepository) SaveTaskTemplate(template *models.TaskTemplate) (*models.TaskTemplate, error) {
-	query := r.db.
-		Save(template)
-
-	if err := query.Error; err != nil {
-		return nil, err
-	}
-	return template, nil
-}
-
 func (r *TemplateRepository) CreateTaskTemplateSubTask(subtask *models.TaskTemplateSubtask) (*models.TaskTemplateSubtask, error) {
 	query := r.db.
 		Create(subtask)
