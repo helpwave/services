@@ -15,7 +15,7 @@ type PatientAggregate struct {
 }
 
 func NewPatientAggregate(id uuid.UUID) *PatientAggregate {
-	aggregate := &PatientAggregate{Patient: models.NewPatient()}
+	aggregate := &PatientAggregate{Patient: &models.Patient{}}
 	aggregate.AggregateBase = hwes.NewAggregateBase(PatientAggregateType, id)
 	aggregate.Patient.ID = id
 	//TODO: aggregate.initEventListeners()

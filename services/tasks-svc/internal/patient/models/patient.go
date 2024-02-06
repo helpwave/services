@@ -15,11 +15,3 @@ type Patient struct {
 	CreatedAt               time.Time
 	UpdatedAt               time.Time
 }
-
-func NewPatient() *Patient {
-	return &Patient{
-		HumanReadableIdentifier: "",
-		Notes:                   "",
-		CreatedAt:               time.Now().UTC(),
-	}
-}
