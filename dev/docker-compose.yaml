@@ -111,7 +111,7 @@ services:
     environment:
       SECRETSTORE_REDIS_HOST: "redis:6379"
     command:
-      - /bin/sh
+      - /usr/bin/bash
       - -c
       - |
         bash migrate.sh
