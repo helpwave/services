@@ -184,7 +184,7 @@ POSTGRES_DB=postgres
 
 # EventStoreDB related configurations
 
-EVENTSTORE_CS=sdb://admin:changeit@localhost:2113?tls=false
+EVENTSTORE_CS=esdb://admin:changeit@localhost:2113?tls=false
 
 # For development purposes
 INSECURE_FAKE_TOKEN_ENABLE=true
