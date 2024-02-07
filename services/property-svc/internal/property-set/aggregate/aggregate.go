@@ -8,7 +8,7 @@ import (
 	"property-svc/internal/property-set/models"
 )
 
-const PropertySetAggregateType = "propertySet"
+const PropertySetAggregateType = "property_set"
 
 type PropertySetAggregate struct {
 	*hwes.AggregateBase

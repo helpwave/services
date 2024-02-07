@@ -8,7 +8,7 @@ import (
 	"property-svc/internal/property-value/models"
 )
 
-const PropertyValueAggregateType = "propertyValue"
+const PropertyValueAggregateType = "property_value"
 
 type PropertyValueAggregate struct {
 	*hwes.AggregateBase

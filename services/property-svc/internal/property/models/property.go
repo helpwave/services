@@ -11,12 +11,9 @@ type Property struct {
 	SubjectType string
 	FieldType   pb.FieldType
 
-	Name           string
-	Description    string
-	IsArchived     bool
-	IsSoftRequired bool
-
-	PriorityDisplayedAtSubjectsIDs []string
+	Name        string
+	Description string
+	IsArchived  bool
 
 	setID uuid.UUID
 
@@ -25,10 +22,9 @@ type Property struct {
 
 func NewProperty() *Property {
 	return &Property{
-		Name:           "",
-		Description:    "",
-		IsArchived:     false,
-		IsSoftRequired: true,
+		Name:        "",
+		Description: "",
+		IsArchived:  false,
 	}
 }
 

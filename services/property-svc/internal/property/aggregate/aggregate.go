@@ -2,6 +2,7 @@ package aggregate
 
 import (
 	"context"
+	"fmt"
 	pb "gen/proto/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
@@ -48,7 +49,12 @@ func (a *PropertyAggregate) onPropertyCreated(evt hwes.Event) error {
 		return err
 	}
 
-	fieldType := (pb.FieldType)(pb.FieldType_value[payload.FieldType])
+	value, found := pb.FieldType_value[payload.FieldType]
+	if !found {
+		return fmt.Errorf("invalid property fieldType: %s", payload.FieldType)
+	}
+
+	fieldType := (pb.FieldType)(value)
 
 	a.Property.SubjectID = subjectID
 	a.Property.SubjectType = payload.SubjectType

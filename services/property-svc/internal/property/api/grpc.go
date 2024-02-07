@@ -46,13 +46,12 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 	}
 
 	return &pb.GetPropertyResponse{
-		Id:             property.ID.String(),
-		Name:           property.Name,
-		SubjectType:    property.SubjectType,
-		SubjectId:      property.SubjectID.String(),
-		FieldType:      property.FieldType,
-		Description:    &property.Description,
-		IsArchived:     &property.IsArchived,
-		IsSoftRequired: &property.IsSoftRequired,
+		Id:          property.ID.String(),
+		Name:        property.Name,
+		SubjectType: property.SubjectType,
+		SubjectId:   property.SubjectID.String(),
+		FieldType:   property.FieldType,
+		Description: &property.Description,
+		IsArchived:  &property.IsArchived,
 	}, nil
 }
