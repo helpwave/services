@@ -15,44 +15,44 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'bed_svc.pb.dart' as $3;
+import 'bed_svc.pb.dart' as $6;
 
 export 'bed_svc.pb.dart';
 
 @$pb.GrpcServiceName('proto.services.task_svc.v1.BedService')
 class BedServiceClient extends $grpc.Client {
-  static final _$createBed = $grpc.ClientMethod<$3.CreateBedRequest, $3.CreateBedResponse>(
+  static final _$createBed = $grpc.ClientMethod<$6.CreateBedRequest, $6.CreateBedResponse>(
       '/proto.services.task_svc.v1.BedService/CreateBed',
-      ($3.CreateBedRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $3.CreateBedResponse.fromBuffer(value));
-  static final _$bulkCreateBeds = $grpc.ClientMethod<$3.BulkCreateBedsRequest, $3.BulkCreateBedsResponse>(
+      ($6.CreateBedRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $6.CreateBedResponse.fromBuffer(value));
+  static final _$bulkCreateBeds = $grpc.ClientMethod<$6.BulkCreateBedsRequest, $6.BulkCreateBedsResponse>(
       '/proto.services.task_svc.v1.BedService/BulkCreateBeds',
-      ($3.BulkCreateBedsRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $3.BulkCreateBedsResponse.fromBuffer(value));
-  static final _$getBed = $grpc.ClientMethod<$3.GetBedRequest, $3.GetBedResponse>(
+      ($6.BulkCreateBedsRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $6.BulkCreateBedsResponse.fromBuffer(value));
+  static final _$getBed = $grpc.ClientMethod<$6.GetBedRequest, $6.GetBedResponse>(
       '/proto.services.task_svc.v1.BedService/GetBed',
-      ($3.GetBedRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $3.GetBedResponse.fromBuffer(value));
-  static final _$getBedByPatient = $grpc.ClientMethod<$3.GetBedByPatientRequest, $3.GetBedByPatientResponse>(
+      ($6.GetBedRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $6.GetBedResponse.fromBuffer(value));
+  static final _$getBedByPatient = $grpc.ClientMethod<$6.GetBedByPatientRequest, $6.GetBedByPatientResponse>(
       '/proto.services.task_svc.v1.BedService/GetBedByPatient',
-      ($3.GetBedByPatientRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $3.GetBedByPatientResponse.fromBuffer(value));
-  static final _$getBeds = $grpc.ClientMethod<$3.GetBedsRequest, $3.GetBedsResponse>(
+      ($6.GetBedByPatientRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $6.GetBedByPatientResponse.fromBuffer(value));
+  static final _$getBeds = $grpc.ClientMethod<$6.GetBedsRequest, $6.GetBedsResponse>(
       '/proto.services.task_svc.v1.BedService/GetBeds',
-      ($3.GetBedsRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $3.GetBedsResponse.fromBuffer(value));
-  static final _$getBedsByRoom = $grpc.ClientMethod<$3.GetBedsByRoomRequest, $3.GetBedsByRoomResponse>(
+      ($6.GetBedsRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $6.GetBedsResponse.fromBuffer(value));
+  static final _$getBedsByRoom = $grpc.ClientMethod<$6.GetBedsByRoomRequest, $6.GetBedsByRoomResponse>(
       '/proto.services.task_svc.v1.BedService/GetBedsByRoom',
-      ($3.GetBedsByRoomRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $3.GetBedsByRoomResponse.fromBuffer(value));
-  static final _$updateBed = $grpc.ClientMethod<$3.UpdateBedRequest, $3.UpdateBedResponse>(
+      ($6.GetBedsByRoomRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $6.GetBedsByRoomResponse.fromBuffer(value));
+  static final _$updateBed = $grpc.ClientMethod<$6.UpdateBedRequest, $6.UpdateBedResponse>(
       '/proto.services.task_svc.v1.BedService/UpdateBed',
-      ($3.UpdateBedRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $3.UpdateBedResponse.fromBuffer(value));
-  static final _$deleteBed = $grpc.ClientMethod<$3.DeleteBedRequest, $3.DeleteBedResponse>(
+      ($6.UpdateBedRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $6.UpdateBedResponse.fromBuffer(value));
+  static final _$deleteBed = $grpc.ClientMethod<$6.DeleteBedRequest, $6.DeleteBedResponse>(
       '/proto.services.task_svc.v1.BedService/DeleteBed',
-      ($3.DeleteBedRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $3.DeleteBedResponse.fromBuffer(value));
+      ($6.DeleteBedRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $6.DeleteBedResponse.fromBuffer(value));
 
   BedServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -60,35 +60,35 @@ class BedServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$3.CreateBedResponse> createBed($3.CreateBedRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$6.CreateBedResponse> createBed($6.CreateBedRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createBed, request, options: options);
   }
 
-  $grpc.ResponseFuture<$3.BulkCreateBedsResponse> bulkCreateBeds($3.BulkCreateBedsRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$6.BulkCreateBedsResponse> bulkCreateBeds($6.BulkCreateBedsRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$bulkCreateBeds, request, options: options);
   }
 
-  $grpc.ResponseFuture<$3.GetBedResponse> getBed($3.GetBedRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$6.GetBedResponse> getBed($6.GetBedRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getBed, request, options: options);
   }
 
-  $grpc.ResponseFuture<$3.GetBedByPatientResponse> getBedByPatient($3.GetBedByPatientRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$6.GetBedByPatientResponse> getBedByPatient($6.GetBedByPatientRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getBedByPatient, request, options: options);
   }
 
-  $grpc.ResponseFuture<$3.GetBedsResponse> getBeds($3.GetBedsRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$6.GetBedsResponse> getBeds($6.GetBedsRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getBeds, request, options: options);
   }
 
-  $grpc.ResponseFuture<$3.GetBedsByRoomResponse> getBedsByRoom($3.GetBedsByRoomRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$6.GetBedsByRoomResponse> getBedsByRoom($6.GetBedsByRoomRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getBedsByRoom, request, options: options);
   }
 
-  $grpc.ResponseFuture<$3.UpdateBedResponse> updateBed($3.UpdateBedRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$6.UpdateBedResponse> updateBed($6.UpdateBedRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$updateBed, request, options: options);
   }
 
-  $grpc.ResponseFuture<$3.DeleteBedResponse> deleteBed($3.DeleteBedRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$6.DeleteBedResponse> deleteBed($6.DeleteBedRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$deleteBed, request, options: options);
   }
 }
@@ -98,102 +98,102 @@ abstract class BedServiceBase extends $grpc.Service {
   $core.String get $name => 'proto.services.task_svc.v1.BedService';
 
   BedServiceBase() {
-    $addMethod($grpc.ServiceMethod<$3.CreateBedRequest, $3.CreateBedResponse>(
+    $addMethod($grpc.ServiceMethod<$6.CreateBedRequest, $6.CreateBedResponse>(
         'CreateBed',
         createBed_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $3.CreateBedRequest.fromBuffer(value),
-        ($3.CreateBedResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$3.BulkCreateBedsRequest, $3.BulkCreateBedsResponse>(
+        ($core.List<$core.int> value) => $6.CreateBedRequest.fromBuffer(value),
+        ($6.CreateBedResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$6.BulkCreateBedsRequest, $6.BulkCreateBedsResponse>(
         'BulkCreateBeds',
         bulkCreateBeds_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $3.BulkCreateBedsRequest.fromBuffer(value),
-        ($3.BulkCreateBedsResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$3.GetBedRequest, $3.GetBedResponse>(
+        ($core.List<$core.int> value) => $6.BulkCreateBedsRequest.fromBuffer(value),
+        ($6.BulkCreateBedsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$6.GetBedRequest, $6.GetBedResponse>(
         'GetBed',
         getBed_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $3.GetBedRequest.fromBuffer(value),
-        ($3.GetBedResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$3.GetBedByPatientRequest, $3.GetBedByPatientResponse>(
+        ($core.List<$core.int> value) => $6.GetBedRequest.fromBuffer(value),
+        ($6.GetBedResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$6.GetBedByPatientRequest, $6.GetBedByPatientResponse>(
         'GetBedByPatient',
         getBedByPatient_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $3.GetBedByPatientRequest.fromBuffer(value),
-        ($3.GetBedByPatientResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$3.GetBedsRequest, $3.GetBedsResponse>(
+        ($core.List<$core.int> value) => $6.GetBedByPatientRequest.fromBuffer(value),
+        ($6.GetBedByPatientResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$6.GetBedsRequest, $6.GetBedsResponse>(
         'GetBeds',
         getBeds_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $3.GetBedsRequest.fromBuffer(value),
-        ($3.GetBedsResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$3.GetBedsByRoomRequest, $3.GetBedsByRoomResponse>(
+        ($core.List<$core.int> value) => $6.GetBedsRequest.fromBuffer(value),
+        ($6.GetBedsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$6.GetBedsByRoomRequest, $6.GetBedsByRoomResponse>(
         'GetBedsByRoom',
         getBedsByRoom_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $3.GetBedsByRoomRequest.fromBuffer(value),
-        ($3.GetBedsByRoomResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$3.UpdateBedRequest, $3.UpdateBedResponse>(
+        ($core.List<$core.int> value) => $6.GetBedsByRoomRequest.fromBuffer(value),
+        ($6.GetBedsByRoomResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$6.UpdateBedRequest, $6.UpdateBedResponse>(
         'UpdateBed',
         updateBed_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $3.UpdateBedRequest.fromBuffer(value),
-        ($3.UpdateBedResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$3.DeleteBedRequest, $3.DeleteBedResponse>(
+        ($core.List<$core.int> value) => $6.UpdateBedRequest.fromBuffer(value),
+        ($6.UpdateBedResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$6.DeleteBedRequest, $6.DeleteBedResponse>(
         'DeleteBed',
         deleteBed_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $3.DeleteBedRequest.fromBuffer(value),
-        ($3.DeleteBedResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $6.DeleteBedRequest.fromBuffer(value),
+        ($6.DeleteBedResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$3.CreateBedResponse> createBed_Pre($grpc.ServiceCall call, $async.Future<$3.CreateBedRequest> request) async {
+  $async.Future<$6.CreateBedResponse> createBed_Pre($grpc.ServiceCall call, $async.Future<$6.CreateBedRequest> request) async {
     return createBed(call, await request);
   }
 
-  $async.Future<$3.BulkCreateBedsResponse> bulkCreateBeds_Pre($grpc.ServiceCall call, $async.Future<$3.BulkCreateBedsRequest> request) async {
+  $async.Future<$6.BulkCreateBedsResponse> bulkCreateBeds_Pre($grpc.ServiceCall call, $async.Future<$6.BulkCreateBedsRequest> request) async {
     return bulkCreateBeds(call, await request);
   }
 
-  $async.Future<$3.GetBedResponse> getBed_Pre($grpc.ServiceCall call, $async.Future<$3.GetBedRequest> request) async {
+  $async.Future<$6.GetBedResponse> getBed_Pre($grpc.ServiceCall call, $async.Future<$6.GetBedRequest> request) async {
     return getBed(call, await request);
   }
 
-  $async.Future<$3.GetBedByPatientResponse> getBedByPatient_Pre($grpc.ServiceCall call, $async.Future<$3.GetBedByPatientRequest> request) async {
+  $async.Future<$6.GetBedByPatientResponse> getBedByPatient_Pre($grpc.ServiceCall call, $async.Future<$6.GetBedByPatientRequest> request) async {
     return getBedByPatient(call, await request);
   }
 
-  $async.Future<$3.GetBedsResponse> getBeds_Pre($grpc.ServiceCall call, $async.Future<$3.GetBedsRequest> request) async {
+  $async.Future<$6.GetBedsResponse> getBeds_Pre($grpc.ServiceCall call, $async.Future<$6.GetBedsRequest> request) async {
     return getBeds(call, await request);
   }
 
-  $async.Future<$3.GetBedsByRoomResponse> getBedsByRoom_Pre($grpc.ServiceCall call, $async.Future<$3.GetBedsByRoomRequest> request) async {
+  $async.Future<$6.GetBedsByRoomResponse> getBedsByRoom_Pre($grpc.ServiceCall call, $async.Future<$6.GetBedsByRoomRequest> request) async {
     return getBedsByRoom(call, await request);
   }
 
-  $async.Future<$3.UpdateBedResponse> updateBed_Pre($grpc.ServiceCall call, $async.Future<$3.UpdateBedRequest> request) async {
+  $async.Future<$6.UpdateBedResponse> updateBed_Pre($grpc.ServiceCall call, $async.Future<$6.UpdateBedRequest> request) async {
     return updateBed(call, await request);
   }
 
-  $async.Future<$3.DeleteBedResponse> deleteBed_Pre($grpc.ServiceCall call, $async.Future<$3.DeleteBedRequest> request) async {
+  $async.Future<$6.DeleteBedResponse> deleteBed_Pre($grpc.ServiceCall call, $async.Future<$6.DeleteBedRequest> request) async {
     return deleteBed(call, await request);
   }
 
-  $async.Future<$3.CreateBedResponse> createBed($grpc.ServiceCall call, $3.CreateBedRequest request);
-  $async.Future<$3.BulkCreateBedsResponse> bulkCreateBeds($grpc.ServiceCall call, $3.BulkCreateBedsRequest request);
-  $async.Future<$3.GetBedResponse> getBed($grpc.ServiceCall call, $3.GetBedRequest request);
-  $async.Future<$3.GetBedByPatientResponse> getBedByPatient($grpc.ServiceCall call, $3.GetBedByPatientRequest request);
-  $async.Future<$3.GetBedsResponse> getBeds($grpc.ServiceCall call, $3.GetBedsRequest request);
-  $async.Future<$3.GetBedsByRoomResponse> getBedsByRoom($grpc.ServiceCall call, $3.GetBedsByRoomRequest request);
-  $async.Future<$3.UpdateBedResponse> updateBed($grpc.ServiceCall call, $3.UpdateBedRequest request);
-  $async.Future<$3.DeleteBedResponse> deleteBed($grpc.ServiceCall call, $3.DeleteBedRequest request);
+  $async.Future<$6.CreateBedResponse> createBed($grpc.ServiceCall call, $6.CreateBedRequest request);
+  $async.Future<$6.BulkCreateBedsResponse> bulkCreateBeds($grpc.ServiceCall call, $6.BulkCreateBedsRequest request);
+  $async.Future<$6.GetBedResponse> getBed($grpc.ServiceCall call, $6.GetBedRequest request);
+  $async.Future<$6.GetBedByPatientResponse> getBedByPatient($grpc.ServiceCall call, $6.GetBedByPatientRequest request);
+  $async.Future<$6.GetBedsResponse> getBeds($grpc.ServiceCall call, $6.GetBedsRequest request);
+  $async.Future<$6.GetBedsByRoomResponse> getBedsByRoom($grpc.ServiceCall call, $6.GetBedsByRoomRequest request);
+  $async.Future<$6.UpdateBedResponse> updateBed($grpc.ServiceCall call, $6.UpdateBedRequest request);
+  $async.Future<$6.DeleteBedResponse> deleteBed($grpc.ServiceCall call, $6.DeleteBedRequest request);
 }
