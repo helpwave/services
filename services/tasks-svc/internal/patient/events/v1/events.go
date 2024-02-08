@@ -3,6 +3,7 @@ package v1
 import (
 	"github.com/google/uuid"
 	"hwes"
+	"hwutil"
 )
 
 const (
@@ -23,8 +24,9 @@ type PatientCreatedEvent struct {
 }
 
 type HumanReadableIdentifierUpdatedEvent struct {
-	PatientID               string `json:"patient_id"`
-	HumanReadableIdentifier string `json:"human_readable_identifier"`
+	PatientID                       string `json:"patient_id"`
+	HumanReadableIdentifier         string `json:"human_readable_identifier"`
+	PreviousHumanReadableIdentifier string `json:"previous_human_readable_identifier"`
 }
 
 type NotesUpdatedEvent struct {
@@ -33,8 +35,8 @@ type NotesUpdatedEvent struct {
 }
 
 type BedAssignedEvent struct {
-	PatientID string `json:"patient_id"`
-	BedID     string `json:"bed_id"`
+	PreviousBedID string `json:"previous_bed_id"`
+	BedID         string `json:"bed_id"`
 }
 
 type BedUnassignedEvent struct {
@@ -78,10 +80,16 @@ func NewNotesUpdatedEvent(a hwes.Aggregate, patientID uuid.UUID, notes string) (
 	return hwes.NewEventWithData(a, NotesUpdated, payload)
 }
 
-func NewBedAssignedEvent(a hwes.Aggregate, patientID uuid.UUID, bedID uuid.UUID) (hwes.Event, error) {
+func NewBedAssignedEvent(a hwes.Aggregate, previousBedID uuid.NullUUID, bedID uuid.UUID) (hwes.Event, error) {
+	value := hwutil.NullUUIDToStringPtr(previousBedID)
+	truePreviousBedID := ""
+	if value != nil {
+		truePreviousBedID = *value
+	}
+
 	payload := BedAssignedEvent{
-		PatientID: patientID.String(),
-		BedID:     bedID.String(),
+		PreviousBedID: truePreviousBedID,
+		BedID:         bedID.String(),
 	}
 	return hwes.NewEventWithData(a, BedAssigned, payload)
 }

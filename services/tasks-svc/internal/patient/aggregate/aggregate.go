@@ -47,3 +47,19 @@ func (a *PatientAggregate) onPatientCreated(evt hwes.Event) error {
 
 	return nil
 }
+
+func (a *PatientAggregate) onBedAssigned(evt hwes.Event) error {
+	var payload patientEventsV1.BedAssignedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	bedID, err := uuid.Parse(payload.BedID)
+	if err != nil {
+		return err
+	}
+
+	a.Patient.BedID = uuid.NullUUID{UUID: bedID, Valid: true}
+
+	return nil
+}
