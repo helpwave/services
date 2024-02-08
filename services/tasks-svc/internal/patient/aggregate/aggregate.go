@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"hwes"
+	patientEventsV1 "tasks-svc/internal/patient/events/v1"
 	"tasks-svc/internal/patient/models"
 )
 
@@ -30,4 +31,19 @@ func LoadPatientAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.U
 	return patient, nil
 }
 
-// TODO: event handlers
+func (a *PatientAggregate) initEventListeners() {
+	a.RegisterEventListener(patientEventsV1.PatientCreated, a.onPatientCreated)
+}
+
+// Event handlers
+func (a *PatientAggregate) onPatientCreated(evt hwes.Event) error {
+	var payload patientEventsV1.PatientCreatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	a.Patient.Notes = payload.Notes
+	a.Patient.HumanReadableIdentifier = payload.HumanReadableIdentifier
+
+	return nil
+}
