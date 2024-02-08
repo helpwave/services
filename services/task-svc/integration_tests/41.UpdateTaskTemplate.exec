@@ -10,7 +10,7 @@ grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 echo "id does not exist"
 grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
-	-d '{"id": "xaa9a5e7-2a35-4203-81bb-baf4ca17a9e9", "name": "Some Updated Name", "description": "Some Updated Description"}' \
+	-d '{"id": "0a21dd28-0b9a-40b9-abf3-71b01c18e8c7", "name": "Some Updated Name", "description": "Some Updated Description"}' \
 	localhost:3001 \
 	proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplate 2>&1 || echo ""
 

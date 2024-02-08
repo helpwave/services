@@ -1,0 +1,15 @@
+Invalid id
+ERROR:
+  Code: Unknown
+  Message: invalid UUID length: 23
+
+id does not exist
+ERROR:
+  Code: Internal
+  Message: ERROR: insert or update on table "task_template_subtasks" violates foreign key constraint "task_template_subtasks_task_template_id_fkey" (SQLSTATE 23503)
+
+Create
+delete it again
+{}
+there should be no change
+{}
