@@ -26,9 +26,9 @@ func (a *PatientAggregate) AssignBed(ctx context.Context, currentBedID uuid.Null
 }
 
 func (a *PatientAggregate) UnassignBed(ctx context.Context) error {
-	event, err := patientEventsV1.NewBedUnassignedEvent(a)
-	if err != nil {
-		return err
-	}
-	return a.Apply(event)
+	return a.Apply(patientEventsV1.NewBedUnassignedEvent(a))
+}
+
+func (a *PatientAggregate) DischargePatient(ctx context.Context) error {
+	return a.Apply(patientEventsV1.NewPatientDischargedEvent(a))
 }

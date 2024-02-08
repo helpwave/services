@@ -35,6 +35,7 @@ func (a *PatientAggregate) initEventListeners() {
 	a.RegisterEventListener(patientEventsV1.PatientCreated, a.onPatientCreated)
 	a.RegisterEventListener(patientEventsV1.BedAssigned, a.onBedAssigned)
 	a.RegisterEventListener(patientEventsV1.BedUnsassigned, a.onBedUnassigned)
+	a.RegisterEventListener(patientEventsV1.PatientDischarged, a.onPatientDischarged)
 }
 
 // Event handlers
@@ -68,5 +69,10 @@ func (a *PatientAggregate) onBedAssigned(evt hwes.Event) error {
 
 func (a *PatientAggregate) onBedUnassigned(_ hwes.Event) error {
 	a.Patient.BedID = uuid.NullUUID{UUID: uuid.Nil, Valid: false}
+	return nil
+}
+
+func (a *PatientAggregate) onPatientDischarged(_ hwes.Event) error {
+	a.Patient.IsDischarged = true
 	return nil
 }

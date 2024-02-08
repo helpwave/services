@@ -91,15 +91,12 @@ func NewBedAssignedEvent(a hwes.Aggregate, previousBedID uuid.NullUUID, bedID uu
 }
 
 // We don't need a payload here
-func NewBedUnassignedEvent(a hwes.Aggregate) (hwes.Event, error) {
-	return hwes.NewEvent(a, BedUnsassigned), nil
+func NewBedUnassignedEvent(a hwes.Aggregate) hwes.Event {
+	return hwes.NewEvent(a, BedUnsassigned)
 }
 
-func NewPatientDischargedEvent(a hwes.Aggregate, patientID uuid.UUID) (hwes.Event, error) {
-	payload := PatientDischargedEvent{
-		PatientID: patientID.String(),
-	}
-	return hwes.NewEventWithData(a, PatientDischarged, payload)
+func NewPatientDischargedEvent(a hwes.Aggregate) hwes.Event {
+	return hwes.NewEvent(a, PatientDischarged)
 }
 
 func NewPatientDeletedEvent(a hwes.Aggregate, patientID uuid.UUID) (hwes.Event, error) {
