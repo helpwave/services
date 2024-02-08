@@ -39,10 +39,6 @@ type BedAssignedEvent struct {
 	BedID         string `json:"bed_id"`
 }
 
-type BedUnassignedEvent struct {
-	PatientID string `json:"patient_id"`
-}
-
 type PatientDischargedEvent struct {
 	PatientID string `json:"patient_id"`
 }
@@ -94,11 +90,9 @@ func NewBedAssignedEvent(a hwes.Aggregate, previousBedID uuid.NullUUID, bedID uu
 	return hwes.NewEventWithData(a, BedAssigned, payload)
 }
 
-func NewBedUnassignedEvent(a hwes.Aggregate, patientID uuid.UUID) (hwes.Event, error) {
-	payload := BedUnassignedEvent{
-		PatientID: patientID.String(),
-	}
-	return hwes.NewEventWithData(a, BedUnsassigned, payload)
+// We don't need a payload here
+func NewBedUnassignedEvent(a hwes.Aggregate) (hwes.Event, error) {
+	return hwes.NewEvent(a, BedUnsassigned), nil
 }
 
 func NewPatientDischargedEvent(a hwes.Aggregate, patientID uuid.UUID) (hwes.Event, error) {

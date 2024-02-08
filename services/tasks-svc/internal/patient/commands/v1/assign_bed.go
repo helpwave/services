@@ -1,8 +1,8 @@
 package v1
 
 import (
+	"context"
 	"github.com/google/uuid"
-	"golang.org/x/net/context"
 	"hwes"
 	"tasks-svc/internal/patient/aggregate"
 )

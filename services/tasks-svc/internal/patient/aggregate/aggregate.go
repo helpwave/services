@@ -33,6 +33,8 @@ func LoadPatientAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.U
 
 func (a *PatientAggregate) initEventListeners() {
 	a.RegisterEventListener(patientEventsV1.PatientCreated, a.onPatientCreated)
+	a.RegisterEventListener(patientEventsV1.BedAssigned, a.onBedAssigned)
+	a.RegisterEventListener(patientEventsV1.BedUnsassigned, a.onBedUnassigned)
 }
 
 // Event handlers
@@ -61,5 +63,10 @@ func (a *PatientAggregate) onBedAssigned(evt hwes.Event) error {
 
 	a.Patient.BedID = uuid.NullUUID{UUID: bedID, Valid: true}
 
+	return nil
+}
+
+func (a *PatientAggregate) onBedUnassigned(_ hwes.Event) error {
+	a.Patient.BedID = uuid.NullUUID{UUID: uuid.Nil, Valid: false}
 	return nil
 }
