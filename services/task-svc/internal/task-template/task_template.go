@@ -138,9 +138,9 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 
 		if row.SubTaskName != nil {
 			template.Subtasks = append(template.Subtasks, &pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask{
-				Id:             *row.SubTaskName,
+				Name:           *row.SubTaskName,
 				TaskTemplateId: row.TaskTemplate.ID.String(),
-				Name:           row.SubTaskID.UUID.String(), // must exist by constraint
+				Id:             row.SubTaskID.UUID.String(), // must exist by constraint
 			})
 		}
 	}

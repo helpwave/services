@@ -91,9 +91,9 @@ LEFT JOIN
 ON
 	task_template_subtasks.task_template_id = task_templates.id
 WHERE
-	(task_templates.organization_id = $1 OR $1 = NULL)
-AND (task_templates.ward_id = $2 OR $2 = NULL)
-AND (task_templates.created_by = $3 OR $3 = NULL)
+	(task_templates.organization_id = $1 OR $1 IS NULL)
+AND (task_templates.ward_id = $2 OR $2 IS NULL)
+AND (task_templates.created_by = $3 OR $3 IS NULL)
 `
 
 type GetAllTaskTemplatesWithSubTasksParams struct {
