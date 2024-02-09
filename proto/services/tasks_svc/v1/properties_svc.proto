@@ -12,11 +12,19 @@ enum SubjectType {
 enum FieldType {
   FIELD_TYPE_UNSPECIFIED = 0;
   FIELD_TYPE_TEXT = 1;
-  FIELD_TYPE_NUMBER = 2; // TODO: TBD: are we sure we don't want multiple number types?
+  FIELD_TYPE_NUMBER = 2;
   FIELD_TYPE_CHECKBOX = 3;
   FIELD_TYPE_DATE = 4;
   FIELD_TYPE_DATE_TIME = 5;
   FIELD_TYPE_SELECT = 6;
+}
+
+// TODO: View"Context" is too general of a name for this in my opinion
+enum ViewContext {
+  VIEW_CONTEXT_UNSPECIFIED = 0;
+  VIEW_CONTEXT_GLOBAL = 1;
+  // TBD: VIEW_CONTEXT_ORGANIZATION = 2;
+  VIEW_CONTEXT_WARD = 2;
 }
 
 /***************************************************/
@@ -68,20 +76,25 @@ message DeletePropertySetResponse {}
 //
 
 message CreatePropertyRequest {
-    SubjectType subject_type = 1; // TODO: add validation here (not-unspecified check)
-    FieldType field_type = 2; // TODO: add validation here (not-unspecified check)
+  ViewContext context = 1;
+  SubjectType subject_type = 2; // TODO: add validation here (not-unspecified check)
+  FieldType field_type = 3; // TODO: add validation here (not-unspecified check)
 
-    string name = 3; // TODO: add validation (at least non-empty checks)
-    optional string description = 4; // TODO: add validation, if needed
+  string name = 4; // TODO: add validation (at least non-empty checks)
+  optional string description = 5; // TODO: add validation, if needed
 
-    // ID of set this Property should belong to
-    optional string set_id = 6;
+  // ID of set this Property should belong to
+  optional string set_id = 6;
 
-    repeated SelectOption select_options = 7;
-    message SelectOption {
-      string name = 1; // TODO: add validation (at least non-empty checks)
-      optional string description = 2; // TODO: add validation, if needed
-    }
+  repeated SelectOption select_options = 7;
+  message SelectOption {
+    string name = 1; // TODO: add validation (at least non-empty checks)
+    optional string description = 2; // TODO: add validation, if needed
+  }
+
+  optional bool select_allow_freetext = 8;
+
+  optional bool always_include_for_current_context = 9;
 }
 
 message CreatePropertyResponse {
@@ -96,6 +109,7 @@ message CreatePropertyResponse {
 
 message GetPropertyRequest {
   string id = 1; // @gotags: validate:"uuid4"
+  ViewContext context = 2;
 }
 
 message GetPropertyResponse {
@@ -116,6 +130,9 @@ message GetPropertyResponse {
     string name = 1;
     optional string description = 2;
   }
+
+  optional bool select_allow_freetext = 10;
+  optional bool always_include_for_current_context = 11;
 }
 
 //
@@ -124,6 +141,7 @@ message GetPropertyResponse {
 
 message GetPropertiesRequest {
   optional string set_id = 1; // @gotags: validate:"uuid4"
+  SubjectType subject_type = 2;
 
   // TODO: TBD: other filters / search params, e.g. include_is_archived
 }
@@ -148,6 +166,9 @@ message GetPropertiesResponse {
       optional string description = 2;
       bool is_custom = 3;
     }
+
+    optional bool select_allow_freetext = 10;
+    optional bool always_include_for_current_context = 11;
   }
 
   repeated Property properties = 1;
@@ -179,6 +200,10 @@ message UpdatePropertyRequest {
     optional string description = 3;
     optional bool is_custom = 4;
   }
+
+  optional bool select_allow_freetext = 11;
+
+  // TODO: TBD: optional bool always_include_for_current_context = 12;
 }
 
 message UpdatePropertyResponse {}
@@ -219,7 +244,6 @@ message AttachPropertyValueResponse {
 message GetAttachedPropertyValuesRequest {
   string subject_id = 1; // @gotags: validate:"uuid4"
 
-  optional string view = 2;
   // TODO: TBD: other filters / search params, e.g. include_is_archived
 }
 
@@ -247,10 +271,46 @@ message GetAttachedPropertyValuesResponse {
       string date_time_value = 13; // FIELD_TYPE_DATE_TIME
       string select_value = 14; // FIELD_TYPE_SELECT, id of option
     }
+
+    optional bool select_allow_freetext = 15;
   }
 
   repeated Value values = 1;
 }
+
+
+/***************************************************/
+/********* Work with the Properties Views  *********/
+/***************************************************/
+
+message UpdatePatientPropertyViewRuleRequest {
+  /* matchers */
+  optional string ward_id = 1;
+  optional string patient_id = 2;
+
+  /* Filter Update */
+
+  oneof soft_required {
+    bool reset_soft_required = 3; // sets soft_required to null for this matcher, when true
+    bool set_soft_required = 4; // sets the value of the soft_required filter for this matcher
+  }
+
+  // append property_id to the always_include list
+  // this means the property is shown, unless a more specific rule
+  // puts it in its dont_always_include list
+  optional string append_to_always_include = 5;
+
+  // remove property_id to the always_include list, also see append_to_always_include
+  optional string remove_from_always_include = 6;
+
+  // append property_id to the dont_always_include list, also see append_to_always_include
+  optional string append_to_dont_always_include = 7;
+
+  // remove property_id to the dont_always_include list, also see append_to_always_include
+  optional string remove_from_dont_always_include = 8;
+}
+
+message UpdatePatientPropertyViewRuleResponse {}
 
 service PropertiesService {
   rpc CreatePropertySet (CreatePropertySetRequest) returns (CreatePropertySetResponse) {}
@@ -264,4 +324,6 @@ service PropertiesService {
 
   rpc AttachPropertyValue (AttachPropertyValueRequest) returns (AttachPropertyValueResponse) {}
   rpc GetAttachedPropertyValues (GetAttachedPropertyValuesRequest) returns (GetAttachedPropertyValuesResponse) {}
+
+  rpc UpdatePatientPropertyViewRule (UpdatePatientPropertyViewRuleRequest) returns (UpdatePatientPropertyViewRuleResponse) {}
 }
