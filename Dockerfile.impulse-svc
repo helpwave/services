@@ -8,13 +8,15 @@ EXPOSE 8000
 WORKDIR /app
 
 RUN apt update -y && apt-get install python3-dev -y
-RUN mkdir -p /libs/python/
+RUN mkdir -p /libs/python/gen
 
 COPY libs/python/ /libs/python/
+COPY gen/python/proto /libs/python/gen/proto/
 COPY services/impulse_svc/. /app
 COPY docker-run-migrations-impulse-svc.sh ./run-migrations.sh
 RUN chmod +x run-migrations.sh
 
 RUN pip install -r requirements.txt
+ENV GRPC_PATH="/libs/python/gen"
 
-CMD sleep infinity
+CMD python -m uvicorn impulse_svc.asgi:application
