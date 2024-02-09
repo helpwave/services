@@ -321,9 +321,9 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.G
 
 		if row.SubTaskName != nil {
 			template.Subtasks = append(template.Subtasks, &pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask{
-				Id:             *row.SubTaskName,
+				Name:           *row.SubTaskName,
 				TaskTemplateId: row.TaskTemplate.ID.String(),
-				Name:           row.SubTaskID.UUID.String(), // must exist by constraint
+				Id:             row.SubTaskID.UUID.String(), // must exist by constraint
 			})
 		}
 	}
@@ -378,9 +378,9 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 
 		if row.SubTaskName != nil {
 			template.Subtasks = append(template.Subtasks, &pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask{
-				Id:             *row.SubTaskName,
+				Name:           *row.SubTaskName,
 				TaskTemplateId: row.TaskTemplate.ID.String(),
-				Name:           row.SubTaskID.UUID.String(), // must exist by constraint
+				Id:             row.SubTaskID.UUID.String(), // must exist by constraint
 			})
 		}
 	}
