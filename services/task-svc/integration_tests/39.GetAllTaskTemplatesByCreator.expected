@@ -1,1 +1,63 @@
-{}
+{
+  "templates": [
+    {
+      "id": "ff2e6ec7-f8d1-4c39-b5e5-6bb5ad99a1f1",
+      "name": "Supplement Vagina with Nonaut Sub, Via Opening",
+      "description": "Autologous hematopoietic stem cell transplant with purging",
+      "isPublic": true,
+      "subtasks": [
+        {
+          "id": "Supplement Skull with Synthetic Substitute, Perc Approach",
+          "taskTemplateId": "ff2e6ec7-f8d1-4c39-b5e5-6bb5ad99a1f1",
+          "name": "3845c063-17d7-4120-a5be-e91bec099f77"
+        }
+      ]
+    },
+    {
+      "id": "12dedb6e-de87-471d-b812-44fbfaa9e73f",
+      "description": "Insertion of therapeutic device into uterus",
+      "isPublic": true,
+      "subtasks": [
+        {
+          "id": "Bypass R Ventricle to L Pulm Art w Nonaut Sub, Perc Endo",
+          "taskTemplateId": "12dedb6e-de87-471d-b812-44fbfaa9e73f",
+          "name": "fe6b8a5e-bffc-4cc8-bdfb-883bd6392ac2"
+        }
+      ]
+    },
+    {
+      "id": "dd3f7c98-2b61-4b61-922a-d730bfb53ae7",
+      "name": "Bypass 1 Cor Art from R Int Mammary w Synth Sub, Perc Endo",
+      "description": "Paraurethral suspension",
+      "isPublic": true,
+      "subtasks": [
+        {
+          "taskTemplateId": "dd3f7c98-2b61-4b61-922a-d730bfb53ae7",
+          "name": "2767aa0d-a4dc-4cda-8d4f-030b272b6ede"
+        }
+      ]
+    },
+    {
+      "id": "d9985e6e-2240-4f4f-8774-ed0b60141ac0",
+      "name": "LDR Brachytherapy of Pancreas using Palladium 103",
+      "isPublic": true,
+      "subtasks": [
+        {
+          "id": "Drain of Accessory Sinus with Drain Dev, Perc Endo Approach",
+          "taskTemplateId": "d9985e6e-2240-4f4f-8774-ed0b60141ac0",
+          "name": "466d13cf-7c15-4474-bb36-1a47073fc216"
+        }
+      ]
+    },
+    {
+      "id": "e82fb996-e70b-45e5-90d6-889ede6a0d0f",
+      "name": "Dilation of Lingula Bronchus, Open Approach",
+      "isPublic": true
+    },
+    {
+      "id": "40297575-f54d-4d77-b6e2-e0b680996e51",
+      "name": "Removal of Extralum Dev from Hepatobil Duct, Open Approach",
+      "isPublic": true
+    }
+  ]
+}
