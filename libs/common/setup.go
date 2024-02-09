@@ -101,19 +101,16 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 	}
 }
 
-// ResolveAddrFromEnv uses the "PORT" and "ADDR" env variables to
+// ResolveAddrFromEnv uses the "APP_PORT", "PORT" and "ADDR" env variables to
 // build the address that can be used by an HTTP or gRPC server.
 // The address will always be in the "(ADDR):PORT" format.
-// If "ADDR" is not set, the "ADDR" part of the format will be "".
-// If "PORT" is not set, the fallback is "8080".
-// If "APP_PORT" is set, we assume that Dapr is running on the same interface so we return "127.0.0.1:$APP_PORT"
+// This is the order of precedent:
+// - ADDR env var will be used if set, else
+// - ":APP_PORT" will be returned, if APP_PORT env var is set, else
+// - ":PORT" will be returned, if PORT env var is set, else
+// - ":8080" will be returned
 func ResolveAddrFromEnv() string {
-	daprAppPort := hwutil.GetEnvOr("APP_PORT", "")
-	if daprAppPort != "" {
-		return fmt.Sprintf("127.0.0.1:%s", daprAppPort)
-	}
-
-	port := hwutil.GetEnvOr("PORT", "8080")
+	port := hwutil.GetEnvOr("APP_PORT", hwutil.GetEnvOr("PORT", "8080"))
 	fallbackAddr := fmt.Sprintf(":%s", port)
 	return hwutil.GetEnvOr("ADDR", fallbackAddr)
 }
