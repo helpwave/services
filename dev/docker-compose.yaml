@@ -49,6 +49,7 @@ services:
   consul:
     image: consul:1.15.4
     restart: unless-stopped
+    command: "agent -dev -client 0.0.0.0 -log-level info"
 
   apisix:
     build:
