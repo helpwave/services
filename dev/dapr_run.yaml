@@ -9,7 +9,6 @@ common:
   env:
     SECRETSTORE_REDIS_HOST: "redis:6379"
 
-    ADDR: 127.0.0.1
     MODE: development
     LOG_LEVEL: debug
     POSTGRES_HOST: postgres
@@ -29,7 +28,7 @@ apps:
     env:
       SERVICE: task-svc
       POSTGRES_DB: task-svc
-    command: ["air", "--build.cmd", '"go build -o tmp/main -buildvcs=false ."']
+    command: ["air"]
 
   - appID: user-svc
     appDirPath: ../services/user-svc
@@ -37,7 +36,7 @@ apps:
     env:
       SERVICE: user-svc
       POSTGRES_DB: user-svc
-    command: ["air", "--build.cmd", '"go build -o tmp/main -buildvcs=false ."']
+    command: ["air"]
 
   - appID: ory-svc
     appDirPath: ../services/ory-svc
@@ -46,4 +45,4 @@ apps:
     env:
       SERVICE: ory-svc
       ORY_APIKEY: 2341
-    command: ["air", "--build.cmd", '"go build -o tmp/main -buildvcs=false ."']
+    command: ["air"]
