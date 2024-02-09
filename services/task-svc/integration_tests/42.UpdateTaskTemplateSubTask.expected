@@ -1,0 +1,17 @@
+invalid id
+ERROR:
+  Code: InvalidArgument
+  Message: invalid UUID length: 12
+
+id does not exist
+{}
+Existing id, no-op
+{}
+see before
+{}
+Existing id, proper update
+{}
+see change
+{}
+undo update for consistency
+{}
