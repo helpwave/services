@@ -63,7 +63,11 @@ func (a *TaskAggregate) onTaskCreated(evt hwes.Event) error {
 		return err
 	}
 
-	status := (pb.TaskStatus)(pb.TaskStatus_value[payload.Status])
+	value, found := pb.TaskStatus_value[payload.Status]
+	if !found {
+		return fmt.Errorf("invalid taskStatus: %s", payload.Status)
+	}
+	status := (pb.TaskStatus)(value)
 
 	a.Task.Name = payload.Name
 	a.Task.PatientID = patientID
