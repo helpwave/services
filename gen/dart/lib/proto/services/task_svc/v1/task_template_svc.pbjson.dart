@@ -239,13 +239,18 @@ const GetAllTaskTemplatesByCreatorRequest$json = {
   '1': 'GetAllTaskTemplatesByCreatorRequest',
   '2': [
     {'1': 'created_by', '3': 1, '4': 1, '5': 9, '10': 'createdBy'},
+    {'1': 'private_only', '3': 2, '4': 1, '5': 8, '9': 0, '10': 'privateOnly', '17': true},
+  ],
+  '8': [
+    {'1': '_private_only'},
   ],
 };
 
 /// Descriptor for `GetAllTaskTemplatesByCreatorRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getAllTaskTemplatesByCreatorRequestDescriptor = $convert.base64Decode(
     'CiNHZXRBbGxUYXNrVGVtcGxhdGVzQnlDcmVhdG9yUmVxdWVzdBIdCgpjcmVhdGVkX2J5GAEgAS'
-    'gJUgljcmVhdGVkQnk=');
+    'gJUgljcmVhdGVkQnkSJgoMcHJpdmF0ZV9vbmx5GAIgASgISABSC3ByaXZhdGVPbmx5iAEBQg8K'
+    'DV9wcml2YXRlX29ubHk=');
 
 @$core.Deprecated('Use getAllTaskTemplatesByCreatorResponseDescriptor instead')
 const GetAllTaskTemplatesByCreatorResponse$json = {

@@ -3268,7 +3268,8 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest.prototype.t
  */
 proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    createdBy: jspb.Message.getFieldWithDefault(msg, 1, "")
+    createdBy: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    privateOnly: jspb.Message.getBooleanFieldWithDefault(msg, 2, false)
   };
 
   if (includeInstance) {
@@ -3309,6 +3310,10 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest.deserialize
       var value = /** @type {string} */ (reader.readString());
       msg.setCreatedBy(value);
       break;
+    case 2:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setPrivateOnly(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -3345,6 +3350,13 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest.serializeBi
       f
     );
   }
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeBool(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -3363,6 +3375,42 @@ proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest.prototype.g
  */
 proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest.prototype.setCreatedBy = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional bool private_only = 2;
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest.prototype.getPrivateOnly = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 2, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest} returns this
+ */
+proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest.prototype.setPrivateOnly = function(value) {
+  return jspb.Message.setField(this, 2, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest} returns this
+ */
+proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest.prototype.clearPrivateOnly = function() {
+  return jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.GetAllTaskTemplatesByCreatorRequest.prototype.hasPrivateOnly = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 

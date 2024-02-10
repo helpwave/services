@@ -121,23 +121,6 @@
       ]
     },
     {
-      "id": "ee863790-1faa-4610-b845-39ba878a59fe",
-      "name": "Muscle Perform Trmt Neuro Up Back/UE w Prosthesis",
-      "isPublic": true,
-      "createdBy": "5db6cc86-bbf1-4fa6-bbe8-a8cdea869758",
-      "subtasks": [
-        {
-          "id": "0840c5e4-835e-493f-a15d-ef0e03aefb0b",
-          "taskTemplateId": "ee863790-1faa-4610-b845-39ba878a59fe",
-          "name": "Dilate R Com Iliac Art w 2 Intralum Dev, Perc Endo"
-        },
-        {
-          "id": "0956f068-73d0-4035-a015-a38594b28ef4",
-          "taskTemplateId": "ee863790-1faa-4610-b845-39ba878a59fe"
-        }
-      ]
-    },
-    {
       "id": "a544bd78-8c45-4034-8c79-7621f36816ee",
       "name": "Repair Uterine Supporting Structure, Open Approach",
       "description": "Replacement of electronic ureteral stimulator",

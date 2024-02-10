@@ -392,6 +392,11 @@ export class GetAllTaskTemplatesByCreatorRequest extends jspb.Message {
   getCreatedBy(): string;
   setCreatedBy(value: string): GetAllTaskTemplatesByCreatorRequest;
 
+  getPrivateOnly(): boolean;
+  setPrivateOnly(value: boolean): GetAllTaskTemplatesByCreatorRequest;
+  hasPrivateOnly(): boolean;
+  clearPrivateOnly(): GetAllTaskTemplatesByCreatorRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetAllTaskTemplatesByCreatorRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesByCreatorRequest): GetAllTaskTemplatesByCreatorRequest.AsObject;
@@ -403,6 +408,12 @@ export class GetAllTaskTemplatesByCreatorRequest extends jspb.Message {
 export namespace GetAllTaskTemplatesByCreatorRequest {
   export type AsObject = {
     createdBy: string,
+    privateOnly?: boolean,
+  }
+
+  export enum PrivateOnlyCase { 
+    _PRIVATE_ONLY_NOT_SET = 0,
+    PRIVATE_ONLY = 2,
   }
 }
 

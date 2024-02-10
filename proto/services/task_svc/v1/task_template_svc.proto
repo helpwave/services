@@ -122,6 +122,7 @@ message CreateTaskTemplateSubTaskResponse {
 
 message GetAllTaskTemplatesByCreatorRequest {
   string created_by = 1;
+  optional bool private_only = 2;
 }
 
 message GetAllTaskTemplatesByCreatorResponse {

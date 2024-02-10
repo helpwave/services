@@ -290,6 +290,7 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.G
 			UUID:  createdBy,
 			Valid: true,
 		},
+		PrivateOnly: req.GetPrivateOnly(),
 	})
 
 	if err != nil {
