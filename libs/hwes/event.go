@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/esdb"
 	"github.com/google/uuid"
+	"github.com/rs/zerolog"
 	"strings"
 	"time"
 )
@@ -142,4 +143,11 @@ func (e *Event) SetJsonData(data interface{}) error {
 
 func (e *Event) GetJsonData(data interface{}) error {
 	return json.Unmarshal(e.Data, data)
+}
+
+func (e *Event) Log(l *zerolog.Event) *zerolog.Event {
+	return l.
+		Str("eventId", e.EventID.String()).
+		Str("eventType", e.EventType).
+		Uint64("eventVersion", e.Version)
 }
