@@ -5,8 +5,10 @@ import (
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
+	"github.com/rs/zerolog/log"
 	"hwes/eventstoredb"
 	"tasks-svc/internal/task/api"
+	"tasks-svc/internal/task/projections/echo"
 )
 
 const ServiceName = "tasks-svc"
@@ -15,10 +17,21 @@ const ServiceName = "tasks-svc"
 var Version string
 
 func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+
 	common.Setup(ServiceName, Version, true)
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
+
+	echoProjection := echo.NewProjection(eventStore)
+	go func() {
+		err := echoProjection.Base.Subscribe(ctx)
+		if err != nil {
+			log.Err(err).Msg("error during echo subscription")
+			cancel()
+		}
+	}()
 
 	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
