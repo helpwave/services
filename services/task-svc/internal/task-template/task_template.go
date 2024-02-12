@@ -7,7 +7,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwdb"
-	"hwgorm"
 	"hwutil"
 	"task-svc/repos/task_template_repo"
 
@@ -109,11 +108,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 	})
 
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	templates := make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate, 0)
@@ -294,11 +289,7 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.G
 	})
 
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	templates := make([]*pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate, 0)
@@ -350,11 +341,7 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 	})
 
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	templates := make([]*pb.GetAllTaskTemplatesByWardResponse_TaskTemplate, 0)

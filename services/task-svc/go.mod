@@ -8,7 +8,6 @@ replace (
 	gen => ../../gen/go
 	hwdb => ../../libs/hwdb
 	hwes => ../../libs/hwes
-	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
 	proto_helpers => ../../libs/proto_helpers
 	telemetry => ../../libs/telemetry
@@ -24,16 +23,11 @@ require (
 	github.com/rs/zerolog v1.31.0
 	google.golang.org/grpc v1.60.1
 	google.golang.org/protobuf v1.31.0
-	gorm.io/gorm v1.25.5
 	hwdb v0.0.0
-	hwes v0.0.0
-	hwgorm v0.0.0
 	hwutil v0.0.0
-	proto_helpers v0.0.0
 )
 
 require (
-	github.com/EventStore/EventStore-Client-Go v1.0.2 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
@@ -46,21 +40,12 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.16.0 // indirect
-	github.com/gofrs/uuid v4.4.0+incompatible // indirect
-	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0 // indirect
-	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
-	github.com/jackc/pgconn v1.14.1 // indirect
-	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa // indirect
-	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
-	github.com/jackc/pgproto3/v2 v2.3.2 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20231201235250-de7065d80cb9 // indirect
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
-	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
@@ -91,6 +76,5 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231212172506-995d672761c0 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/driver/postgres v1.5.4 // indirect
 	telemetry v0.0.0 // indirect
 )
