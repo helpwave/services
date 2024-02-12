@@ -5,7 +5,7 @@ there should be no change
 {}
 Full
 get subtasks (should be 2)
-0
+2
 there should be a template
 1
 delete it again

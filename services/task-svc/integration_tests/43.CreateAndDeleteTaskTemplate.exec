@@ -33,14 +33,14 @@ grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"created_by": "18159713-5d4e-4ad5-94ad-fbb6bb147984"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator | jq -r ".subtasks | length"
+	proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator | jq -r ".templates[0].subtasks | length"
 
 echo "there should be a template"
 grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"created_by": "18159713-5d4e-4ad5-94ad-fbb6bb147984"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator | jq -r ". | length"
+	proto.services.task_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator | jq -r ".templates | length"
 
 
 echo "delete it again"
