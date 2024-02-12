@@ -31,7 +31,7 @@ grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 echo "Existing id, proper update"
 grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
-	-d '{"subtask_id": "9d21dd28-0b9a-40b9-abf3-71b01c18e8c7", "name": "Some Updated Name"}' \
+	-d '{"subtask_id": "ffee7b8b-5663-458e-a5d2-8f9e27112ee8", "name": "Some Updated Name"}' \
 	localhost:3001 \
 	proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplateSubTask
 
@@ -45,6 +45,6 @@ grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 echo "undo update for consistency"
 grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
-	-d '{"subtask_id": "9d21dd28-0b9a-40b9-abf3-71b01c18e8c7", "name": "Extraction of Left Pleura, Open Approach, Diagnostic"}' \
+	-d '{"subtask_id": "ffee7b8b-5663-458e-a5d2-8f9e27112ee8", "name": "Extraction of Left Pleura, Open Approach, Diagnostic"}' \
 	localhost:3001 \
 	proto.services.task_svc.v1.TaskTemplateService/UpdateTaskTemplateSubTask

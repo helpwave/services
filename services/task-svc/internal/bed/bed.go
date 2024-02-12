@@ -4,7 +4,6 @@ import (
 	"common"
 	"context"
 	"hwdb"
-	"hwgorm"
 	"hwutil"
 	"task-svc/repos/bed_repo"
 
@@ -101,11 +100,7 @@ func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatien
 
 	result, err := hwdb.Optional(bedRepo.GetBedWithRoomByPatientForOrganization)(ctx, patientId)
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return &pb.GetBedByPatientResponse{}, nil // no bed or room found
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.GetBedByPatientResponse{
@@ -130,11 +125,7 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 		OrganizationID: organizationID,
 	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.GetBedsResponse{
@@ -169,11 +160,7 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 		},
 	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "roomID not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	res := pb.GetBedsByRoomResponse{
@@ -242,11 +229,7 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 	err = bedRepo.DeleteBed(ctx, bedID)
 
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "roomID not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	log.Info().
