@@ -25,13 +25,14 @@ type PatientCreatedEvent struct {
 
 type HumanReadableIdentifierUpdatedEvent struct {
 	PatientID                       string `json:"patient_id"`
-	HumanReadableIdentifier         string `json:"human_readable_identifier"`
 	PreviousHumanReadableIdentifier string `json:"previous_human_readable_identifier"`
+	HumanReadableIdentifier         string `json:"human_readable_identifier"`
 }
 
 type NotesUpdatedEvent struct {
-	PatientID string `json:"patient_id"`
-	Notes     string `json:"notes"`
+	PatientID     string `json:"patient_id"`
+	PreviousNotes string `json:"previous_notes"`
+	Notes         string `json:"notes"`
 }
 
 type BedAssignedEvent struct {
@@ -60,18 +61,18 @@ func NewPatientCreatedEvent(a hwes.Aggregate, id uuid.UUID, humanReadableIdentif
 	return hwes.NewEventWithData(a, PatientCreated, payload)
 }
 
-func NewHumanReadableIdentifierUpdatedEvent(a hwes.Aggregate, patientID uuid.UUID, humanReadableIdentifier string) (hwes.Event, error) {
+func NewHumanReadableIdentifierUpdatedEvent(a hwes.Aggregate, PreviousHumanReadableIdentifier, humanReadableIdentifier string) (hwes.Event, error) {
 	payload := HumanReadableIdentifierUpdatedEvent{
-		PatientID:               patientID.String(),
-		HumanReadableIdentifier: humanReadableIdentifier,
+		PreviousHumanReadableIdentifier: PreviousHumanReadableIdentifier,
+		HumanReadableIdentifier:         humanReadableIdentifier,
 	}
 	return hwes.NewEventWithData(a, HumanReadableIdentifierUpdated, payload)
 }
 
-func NewNotesUpdatedEvent(a hwes.Aggregate, patientID uuid.UUID, notes string) (hwes.Event, error) {
+func NewNotesUpdatedEvent(a hwes.Aggregate, previousNotes, notes string) (hwes.Event, error) {
 	payload := NotesUpdatedEvent{
-		PatientID: patientID.String(),
-		Notes:     notes,
+		PreviousNotes: previousNotes,
+		Notes:         notes,
 	}
 	return hwes.NewEventWithData(a, NotesUpdated, payload)
 }

@@ -32,3 +32,19 @@ func (a *PatientAggregate) UnassignBed(ctx context.Context) error {
 func (a *PatientAggregate) DischargePatient(ctx context.Context) error {
 	return a.Apply(patientEventsV1.NewPatientDischargedEvent(a))
 }
+
+func (a *PatientAggregate) UpdateHumanReadableIdentifier(ctx context.Context, currentHumanReadableIdentifier string, newHumanReadableIdentifier string) error {
+	event, err := patientEventsV1.NewHumanReadableIdentifierUpdatedEvent(a, currentHumanReadableIdentifier, newHumanReadableIdentifier)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *PatientAggregate) UpdateNotes(ctx context.Context, currentNotes string, newNotes string) error {
+	event, err := patientEventsV1.NewNotesUpdatedEvent(a, currentNotes, newNotes)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
