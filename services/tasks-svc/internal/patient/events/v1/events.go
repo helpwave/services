@@ -48,10 +48,6 @@ type PatientDeletedEvent struct {
 	PatientID string `json:"patient_id"`
 }
 
-type PatientReadmittedEvent struct {
-	PatientID string `json:"patient_id"`
-}
-
 func NewPatientCreatedEvent(a hwes.Aggregate, id uuid.UUID, humanReadableIdentifier string, notes string) (hwes.Event, error) {
 	payload := PatientCreatedEvent{
 		ID:                      id.String(),
@@ -100,16 +96,13 @@ func NewPatientDischargedEvent(a hwes.Aggregate) hwes.Event {
 	return hwes.NewEvent(a, PatientDischarged)
 }
 
+func NewPatientReadmittedEvent(a hwes.Aggregate) hwes.Event {
+	return hwes.NewEvent(a, PatientReadmitted)
+}
+
 func NewPatientDeletedEvent(a hwes.Aggregate, patientID uuid.UUID) (hwes.Event, error) {
 	payload := PatientDeletedEvent{
 		PatientID: patientID.String(),
 	}
 	return hwes.NewEventWithData(a, PatientDeleted, payload)
-}
-
-func NewPatientReadmittedEvent(a hwes.Aggregate, patientID uuid.UUID) (hwes.Event, error) {
-	payload := PatientReadmittedEvent{
-		PatientID: patientID.String(),
-	}
-	return hwes.NewEventWithData(a, PatientReadmitted, payload)
 }

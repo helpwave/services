@@ -36,6 +36,9 @@ func (a *PatientAggregate) initEventListeners() {
 	a.RegisterEventListener(patientEventsV1.BedAssigned, a.onBedAssigned)
 	a.RegisterEventListener(patientEventsV1.BedUnsassigned, a.onBedUnassigned)
 	a.RegisterEventListener(patientEventsV1.PatientDischarged, a.onPatientDischarged)
+	a.RegisterEventListener(patientEventsV1.NotesUpdated, a.onNotesUpdated)
+	a.RegisterEventListener(patientEventsV1.HumanReadableIdentifierUpdated, a.onHumanReadableIdentifierUpdated)
+	a.RegisterEventListener(patientEventsV1.PatientReadmitted, a.onPatientReadmitted)
 }
 
 // Event handlers
@@ -74,5 +77,32 @@ func (a *PatientAggregate) onBedUnassigned(_ hwes.Event) error {
 
 func (a *PatientAggregate) onPatientDischarged(_ hwes.Event) error {
 	a.Patient.IsDischarged = true
+	return nil
+}
+
+func (a *PatientAggregate) onNotesUpdated(evt hwes.Event) error {
+	var payload patientEventsV1.NotesUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	a.Patient.Notes = payload.Notes
+
+	return nil
+}
+
+func (a *PatientAggregate) onHumanReadableIdentifierUpdated(evt hwes.Event) error {
+	var payload patientEventsV1.HumanReadableIdentifierUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	a.Patient.HumanReadableIdentifier = payload.HumanReadableIdentifier
+
+	return nil
+}
+
+func (a *PatientAggregate) onPatientReadmitted(_ hwes.Event) error {
+	a.Patient.IsDischarged = false
 	return nil
 }

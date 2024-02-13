@@ -48,3 +48,7 @@ func (a *PatientAggregate) UpdateNotes(ctx context.Context, currentNotes string,
 	}
 	return a.Apply(event)
 }
+
+func (a *PatientAggregate) ReadmitPatient(ctx context.Context) error {
+	return a.Apply(patientEventsV1.NewPatientReadmittedEvent(a))
+}
