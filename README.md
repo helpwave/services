@@ -206,6 +206,11 @@ OTEL_DISABLE=false
 # - otlp_http: https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.21.0
 # - zipkin: only provides OTEL_EXPORTER_ZIPKIN_ENDPOINT with default "http://localhost:9411/api/v2/spans"
 OTEL_TRACE_EXPORTER=otlp
+
+# the language to fallback to for users that
+# don't provide a (valid) language header
+# must be a valid BCP 47 string
+FALLBACK_LANGUAGE=en
 ```
 
 ## Temporary advises

@@ -10,16 +10,8 @@ import (
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-)
-
-package hwdb
-
-import (
-	"errors"
-    "github.com/jackc/pgerrcode"
-    "github.com/jackc/pgx/v5/pgconn"
-    "google.golang.org/grpc/codes"
-    "google.golang.org/grpc/status"
+	"hwdb/locale"
+	"hwlocale"
 )
 
 // TODO: move to hwutil
@@ -66,8 +58,8 @@ func Error(ctx context.Context, err error) error {
 				Str("constraintName", pgError.ConstraintName).
 				Str("file", pgError.File).
 				Int32("line", pgError.Line).
-				Str("routine", pgError.Routine).
-        ).
+				Str("routine", pgError.Routine),
+		).
 		Logger()
 	ctx = log.WithContext(ctx)
 	log = &newLogger
@@ -89,7 +81,7 @@ func Error(ctx context.Context, err error) error {
 		pgerrcode.IsWithCheckOptionViolation(errCode) ||
 		pgerrcode.IsNoData(errCode) {
 		log.Info().Send()
-		return newStatusError(ctx, codes.InvalidArgument, "database error: " + pgError.Message) // TODO: details
+		return newStatusError(ctx, codes.InvalidArgument, "database error: "+pgError.Message) // TODO: details
 	}
 
 	// acts of god, we can only apologize
@@ -101,7 +93,11 @@ func Error(ctx context.Context, err error) error {
 		pgerrcode.IsProgramLimitExceeded(errCode) ||
 		pgerrcode.IsConfigurationFileError(errCode) {
 		log.Error().Msg("severe database issue! likely requires immediate action!")
-		return newStatusError(ctx, codes.Internal, "Could not perform action due to database issues") // TODO: details
+
+		return newStatusError(ctx, codes.Internal,
+			hwlocale.English(ctx, locale.Bundle(ctx), locale.SevereError),
+			hwlocale.LocalizedMessage(ctx, locale.Bundle(ctx), locale.SevereError),
+		)
 	}
 
 	// we made a mistake
@@ -133,8 +129,8 @@ func Error(ctx context.Context, err error) error {
 		pgerrcode.IsCaseNotFound(errCode) ||
 		pgerrcode.IsDependentPrivilegeDescriptorsStillExist(errCode) ||
 		pgerrcode.IsSnapshotFailure(errCode) {
-		return newStatusError(ctx, codes.Internal, "database error: " + pgError.Message) // TODO: details
+		return newStatusError(ctx, codes.Internal, "database error: "+pgError.Message) // TODO: details
 	}
 	log.Error().Msg("unrecognized database error has occurred")
-	return newStatusError(ctx, codes.Internal, "database error: " + pgError.Message) // TODO: details
+	return newStatusError(ctx, codes.Internal, "database error: "+pgError.Message) // TODO: details
 }

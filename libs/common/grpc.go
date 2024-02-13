@@ -12,12 +12,17 @@ import (
 	"github.com/rs/zerolog"
 	zlog "github.com/rs/zerolog/log"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
+	"golang.org/x/text/language"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
+	"hwlocale"
 	"hwutil"
 	"net"
+	"sort"
+	"strconv"
+	"strings"
 	"telemetry"
 )
 
@@ -46,6 +51,7 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	// middlewares
 	chain := grpc_middleware.ChainUnaryServer(
 		loggingUnaryInterceptor,
+		localeInterceptor,
 		authUnaryInterceptor,
 		validateUnaryInterceptor,
 		handlerSpanInterceptor,
@@ -284,6 +290,57 @@ func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
 	} else {
 		return res, nil
 	}
+}
+
+func localeInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	log := zlog.Ctx(ctx)
+
+	metadata := metautils.ExtractIncoming(ctx)
+
+	langHeader := metadata.Get("accept-language")
+	tags, ok := parseLocales(langHeader)
+	if !ok {
+		log.Warn().Str("langHeader", langHeader).Msg("invalid accept-language header received")
+	}
+
+	return next(hwlocale.WithLocales(ctx, tags), req)
+}
+
+func parseLocales(langHeader string) ([]language.Tag, bool) {
+	type langT struct {
+		tag language.Tag
+		q   float32
+	}
+	langs := make([]langT, 0)
+
+	parts := strings.Split(langHeader, ",")
+	for _, part := range parts {
+		qWeightParts := strings.Split(part, ";q=")
+		var q float32 = 1.0 // default q-weight
+		lang := strings.TrimSpace(qWeightParts[0])
+
+		if len(qWeightParts) != 1 {
+			if parsed, err := strconv.ParseFloat(strings.TrimSpace(qWeightParts[1]), 32); err != nil {
+				// invalid header, stop parsing
+				return []language.Tag{}, false
+			} else {
+				q = float32(parsed)
+			}
+		}
+		if tag, err := language.Parse(lang); err != nil {
+			continue // maybe we just don't know the language
+		} else {
+			langs = append(langs, langT{tag: tag, q: q})
+		}
+	}
+
+	// no priority queue needed, as we deal with small lengths
+	sort.SliceStable(langs, func(i, j int) bool {
+		return langs[i].q > langs[j].q
+	})
+	return hwutil.Map(langs, func(lang langT) language.Tag {
+		return lang.tag
+	}), true
 }
 
 // handlerSpanInterceptor opens and closes a span around the next in the chain

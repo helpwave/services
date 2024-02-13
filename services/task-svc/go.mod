@@ -9,6 +9,7 @@ replace (
 	hwdb => ../../libs/hwdb
 	hwes => ../../libs/hwes
 	hwgorm => ../../libs/hwgorm
+	hwlocale => ../../libs/hwlocale
 	hwutil => ../../libs/hwutil
 	proto_helpers => ../../libs/proto_helpers
 	telemetry => ../../libs/telemetry
@@ -21,19 +22,18 @@ require (
 	github.com/dapr/go-sdk v1.9.1
 	github.com/google/uuid v1.5.0
 	github.com/jackc/pgx/v5 v5.5.1
-	github.com/rs/zerolog v1.31.0
-	google.golang.org/grpc v1.60.1
-	google.golang.org/protobuf v1.31.0
+	github.com/rs/zerolog v1.32.0
+	google.golang.org/grpc v1.61.0
+	google.golang.org/protobuf v1.32.0
 	gorm.io/gorm v1.25.5
 	hwdb v0.0.0
-	hwes v0.0.0
 	hwgorm v0.0.0
 	hwutil v0.0.0
 	proto_helpers v0.0.0
 )
 
 require (
-	github.com/EventStore/EventStore-Client-Go v1.0.2 // indirect
+	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
@@ -46,8 +46,6 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.16.0 // indirect
-	github.com/gofrs/uuid v4.4.0+incompatible // indirect
-	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0 // indirect
@@ -65,6 +63,7 @@ require (
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/nicksnyder/go-i18n/v2 v2.4.0 // indirect
 	github.com/openzipkin/zipkin-go v0.4.2 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
 	github.com/redis/go-redis/v9 v9.3.1 // indirect
@@ -87,10 +86,11 @@ require (
 	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20231002182017-d307bd883b97 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20231212172506-995d672761c0 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20231106174013-bbf56f31fb17 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240205150955-31a09d347014 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/postgres v1.5.4 // indirect
+	hwlocale v0.0.0-00010101000000-000000000000 // indirect
 	telemetry v0.0.0 // indirect
 )
