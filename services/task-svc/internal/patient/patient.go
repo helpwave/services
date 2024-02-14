@@ -5,7 +5,6 @@ import (
 	"context"
 	pb "gen/proto/services/task_svc/v1"
 	"hwdb"
-	"hwgorm"
 	"hwutil"
 	"task-svc/internal/tracking"
 	"task-svc/repos/bed_repo"
@@ -152,11 +151,7 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 	})
 
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.GetPatientsByWardResponse{

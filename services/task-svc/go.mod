@@ -8,7 +8,6 @@ replace (
 	gen => ../../gen/go
 	hwdb => ../../libs/hwdb
 	hwes => ../../libs/hwes
-	hwgorm => ../../libs/hwgorm
 	hwlocale => ../../libs/hwlocale
 	hwutil => ../../libs/hwutil
 	proto_helpers => ../../libs/proto_helpers
@@ -25,11 +24,8 @@ require (
 	github.com/rs/zerolog v1.32.0
 	google.golang.org/grpc v1.61.0
 	google.golang.org/protobuf v1.32.0
-	gorm.io/gorm v1.25.5
 	hwdb v0.0.0
-	hwgorm v0.0.0
 	hwutil v0.0.0
-	proto_helpers v0.0.0
 )
 
 require (
@@ -49,16 +45,10 @@ require (
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0 // indirect
-	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
-	github.com/jackc/pgconn v1.14.1 // indirect
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa // indirect
-	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
-	github.com/jackc/pgproto3/v2 v2.3.2 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20231201235250-de7065d80cb9 // indirect
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
-	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
@@ -90,7 +80,6 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240205150955-31a09d347014 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/driver/postgres v1.5.4 // indirect
 	hwlocale v0.0.0-00010101000000-000000000000 // indirect
 	telemetry v0.0.0 // indirect
 )

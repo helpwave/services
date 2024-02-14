@@ -6,7 +6,6 @@ replace (
 	common => ../../libs/common
 	gen => ../../gen/go
 	hwdb => ../../libs/hwdb
-	hwgorm => ../../libs/hwgorm
 	hwlocale => ../../libs/hwlocale
 	hwutil => ../../libs/hwutil
 	proto_helpers => ../../libs/proto_helpers
