@@ -8,6 +8,9 @@ helpwave's microservices
 > Make sure you have [Git](https://git-scm.com/), [Docker](https://docs.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
 > installed on your system.
 
+> [!NOTE]
+> There seem to be service-discovery issues on Windows Hosts.
+
 ### Using Docker Compose next to your IDE
 
 Using this setup you use your editor of choice on your system and start the docker compose stack next to it.
