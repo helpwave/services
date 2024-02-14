@@ -99,10 +99,3 @@ func NewPatientDischargedEvent(a hwes.Aggregate) hwes.Event {
 func NewPatientReadmittedEvent(a hwes.Aggregate) hwes.Event {
 	return hwes.NewEvent(a, PatientReadmitted)
 }
-
-func NewPatientDeletedEvent(a hwes.Aggregate, patientID uuid.UUID) (hwes.Event, error) {
-	payload := PatientDeletedEvent{
-		PatientID: patientID.String(),
-	}
-	return hwes.NewEventWithData(a, PatientDeleted, payload)
-}

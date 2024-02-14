@@ -18,6 +18,7 @@ func NewCreatePatientCommandHandler(as hwes.AggregateStore) CreatePatientCommand
 		if err != nil {
 			return err
 		}
+
 		if exists {
 			return errors.New("cannot create an already existing aggregate")
 		}

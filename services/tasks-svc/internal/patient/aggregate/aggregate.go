@@ -50,6 +50,7 @@ func (a *PatientAggregate) onPatientCreated(evt hwes.Event) error {
 
 	a.Patient.Notes = payload.Notes
 	a.Patient.HumanReadableIdentifier = payload.HumanReadableIdentifier
+	a.Patient.CreatedAt = evt.Timestamp
 
 	return nil
 }
@@ -87,6 +88,7 @@ func (a *PatientAggregate) onNotesUpdated(evt hwes.Event) error {
 	}
 
 	a.Patient.Notes = payload.Notes
+	a.Patient.UpdatedAt = evt.Timestamp
 
 	return nil
 }
@@ -98,6 +100,7 @@ func (a *PatientAggregate) onHumanReadableIdentifierUpdated(evt hwes.Event) erro
 	}
 
 	a.Patient.HumanReadableIdentifier = payload.HumanReadableIdentifier
+	a.Patient.UpdatedAt = evt.Timestamp
 
 	return nil
 }
