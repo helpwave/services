@@ -155,8 +155,7 @@ func pgErr(ctx context.Context, pgError *pgconn.PgError) error {
 
 func pgConnErr(ctx context.Context, connErr *pgconn.ConnectError) error {
 	log := zlog.Ctx(ctx)
-
-	newLogger := zlog.With().
+	log.Error().
 		Dict("config", zerolog.Dict().
 			Str("host", connErr.Config.Host).
 			Uint16("port", connErr.Config.Port).
@@ -164,9 +163,7 @@ func pgConnErr(ctx context.Context, connErr *pgconn.ConnectError) error {
 			Str("password", telemetry.OmitAll(connErr.Config.Password)).
 			Dur("connectTimeout", connErr.Config.ConnectTimeout),
 		).
-		Logger()
-	log = &newLogger
-
-	log.Error().Err(connErr).Msg("connection issue")
+		Err(connErr).
+		Msg("connection issue")
 	return severeStatusError(ctx)
 }
