@@ -8,8 +8,8 @@ import (
 	zlog "github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"hwutil"
-	"logging"
 	"os"
+	"telemetry"
 )
 
 var (
@@ -18,16 +18,20 @@ var (
 	DEFAULT_OAUTH_ISSUER_URL = "https://auth.helpwave.de"
 )
 
-func getOAuthConfig() *oauth2.Config {
+func getOAuthConfig(ctx context.Context) *oauth2.Config {
+	log := zlog.Ctx(ctx)
+
 	if oauthConfig == nil {
-		zlog.Fatal().Msg("getOAuthConfig called but auth is not set up, please enable auth for this service")
+		log.Fatal().Msg("getOAuthConfig called but auth is not set up, please enable auth for this service")
 	}
 	return oauthConfig
 }
 
-func getIDTokenVerifier() *oidc.IDTokenVerifier {
+func getIDTokenVerifier(ctx context.Context) *oidc.IDTokenVerifier {
+	log := zlog.Ctx(ctx)
+
 	if verifier == nil {
-		zlog.Fatal().Msg("getIDTokenVerifier called but auth is not set up, please enable auth for this service")
+		log.Fatal().Msg("getIDTokenVerifier called but auth is not set up, please enable auth for this service")
 	}
 	return verifier
 }
@@ -79,22 +83,24 @@ func isAuthSetUp() bool {
 	return oauthConfig != nil && verifier != nil
 }
 
-func setupAuth() {
+func setupAuth(ctx context.Context) {
+	log := zlog.Ctx(ctx)
+
 	issuerUrl := hwutil.GetEnvOr("OAUTH_ISSUER_URL", DEFAULT_OAUTH_ISSUER_URL)
 	if issuerUrl != DEFAULT_OAUTH_ISSUER_URL {
-		zlog.Warn().Str("OAUTH_ISSUER_URL", issuerUrl).Msg("using custom OAuth issuer url")
+		log.Warn().Str("OAUTH_ISSUER_URL", issuerUrl).Msg("using custom OAuth issuer url")
 	}
 
 	provider, err := oidc.NewProvider(context.Background(), issuerUrl)
 
 	if err != nil {
-		zlog.Fatal().Err(err).Send()
+		log.Fatal().Err(err).Send()
 	}
 
 	clientId, clientIdSet := os.LookupEnv("OAUTH_CLIENT_ID")
 
 	if !clientIdSet && !InsecureFakeTokenEnable {
-		zlog.Fatal().Msg("OAUTH_CLIENT_ID env variable missing")
+		log.Fatal().Msg("OAUTH_CLIENT_ID env variable missing")
 	}
 
 	oauthConfig = &oauth2.Config{
@@ -102,7 +108,7 @@ func setupAuth() {
 		Endpoint: provider.Endpoint(),
 	}
 
-	zlog.Debug().Msg(logging.Formatted(oauthConfig))
+	log.Debug().Msg(telemetry.Formatted(oauthConfig))
 
 	verifier = provider.Verifier(&oidc.Config{ClientID: oauthConfig.ClientID})
 }
@@ -110,10 +116,10 @@ func setupAuth() {
 // VerifyIDToken verifies the correctness of the accessToken and returns its claim.
 // The claim is checked to be as expected.
 // Service must be set up with auth!
-func VerifyIDToken(token string) (*IDTokenClaims, error) {
+func VerifyIDToken(ctx context.Context, token string) (*IDTokenClaims, error) {
 	// Verify() verifies formal validity, proper signing, usage of the correct keys, ...
 	// and still exposes .Claims() for us to access non-standard ID token claims
-	idToken, err := getIDTokenVerifier().Verify(context.Background(), token)
+	idToken, err := getIDTokenVerifier(ctx).Verify(context.Background(), token)
 	if err != nil {
 		return nil, err
 	}
@@ -132,6 +138,6 @@ func VerifyIDToken(token string) (*IDTokenClaims, error) {
 	return &claims, nil
 }
 
-func GetAuthCodeURL() string {
-	return getOAuthConfig().AuthCodeURL("")
+func GetAuthCodeURL(ctx context.Context) string {
+	return getOAuthConfig(ctx).AuthCodeURL("")
 }

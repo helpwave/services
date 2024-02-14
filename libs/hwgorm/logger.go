@@ -13,7 +13,7 @@ type GormLogger struct {
 
 // LogMode should set the LogLevel (ignored)
 func (g GormLogger) LogMode(_ logger.LogLevel) logger.Interface {
-	// We control the LogLevel via logging.SetupLogging(),
+	// We control the LogLevel via telemetry.SetupLogging(),
 	// so let's ignore it
 	return g
 }

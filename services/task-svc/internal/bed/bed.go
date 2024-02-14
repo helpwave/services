@@ -4,9 +4,7 @@ import (
 	"common"
 	"context"
 	"hwdb"
-	"hwgorm"
 	"hwutil"
-	"task-svc/internal/events"
 	"task-svc/repos/bed_repo"
 
 	"github.com/google/uuid"
@@ -55,8 +53,6 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		Str("name", bed.Name).
 		Msg("bed created")
 
-	_ = events.DispatchBedCreatedEvent(ctx, bed.ID, bed.Name)
-
 	return &pb.CreateBedResponse{
 		Id: bed.ID.String(),
 	}, nil
@@ -104,11 +100,7 @@ func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatien
 
 	result, err := hwdb.Optional(bedRepo.GetBedWithRoomByPatientForOrganization)(ctx, patientId)
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return &pb.GetBedByPatientResponse{}, nil // no bed or room found
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.GetBedByPatientResponse{
@@ -133,11 +125,7 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 		OrganizationID: organizationID,
 	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.GetBedsResponse{
@@ -172,11 +160,7 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 		},
 	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "roomID not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	res := pb.GetBedsByRoomResponse{
@@ -214,12 +198,6 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	_ = events.DispatchBedUpdatedEvent(ctx, bedID, req.GetName())
-
-	if roomId.Valid {
-		_ = events.DispatchBedMovedToAnotherRoomEvent(ctx, bedID, roomId.UUID.String())
-	}
-
 	return &pb.UpdateBedResponse{}, nil
 }
 
@@ -251,18 +229,12 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 	err = bedRepo.DeleteBed(ctx, bedID)
 
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "roomID not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	log.Info().
 		Str("bedID", bedID.String()).
 		Msg("bed deleted")
-
-	_ = events.DispatchBedDeletedEvent(ctx, bedID)
 
 	return &pb.DeleteBedResponse{}, err
 }

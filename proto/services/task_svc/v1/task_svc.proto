@@ -80,7 +80,7 @@ message GetTasksByPatientResponse {
     string name = 2;
     string description = 3;
     TaskStatus status = 4;
-    string assigned_user_id = 5;
+    optional string assigned_user_id = 5;
     string patient_id = 6;
     bool public = 7;
     google.protobuf.Timestamp due_at = 8;
@@ -114,7 +114,7 @@ message GetTasksByPatientSortedByStatusResponse {
     string id = 1;
     string name = 2;
     string description = 3;
-    string assigned_user_id = 5;
+    optional string assigned_user_id = 5;
     string patient_id = 6;
     bool public = 7;
     google.protobuf.Timestamp due_at = 8;

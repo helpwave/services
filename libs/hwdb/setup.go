@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/jackc/pgx/v5/tracelog"
 	"github.com/rs/zerolog/log"
 	"hwdb/pgx_zerolog"
 	"hwutil"
@@ -24,7 +23,9 @@ var connectionPool *pgxpool.Pool = nil
 // POSTGRES_PASSWORD (postgres)
 // POSTGRES_DB (postgres)
 // POSTGRES_PORT (5432)
-func SetupDatabaseFromEnv(context context.Context) {
+//
+// SetupDatabaseFromEnv returns a close function, which has to be called in order to shut down the database cleanly
+func SetupDatabaseFromEnv(context context.Context) func() {
 	log.Info().Msg("connecting to postgres ...")
 
 	dsn := hwutil.GetEnvOr("POSTGRES_DSN", "")
@@ -42,6 +43,11 @@ func SetupDatabaseFromEnv(context context.Context) {
 	connectionPool = dbpool
 
 	log.Info().Msg("connected to postgres")
+
+	return func() {
+		log.Info().Msg("closing db pool")
+		dbpool.Close()
+	}
 }
 
 func buildDsnFromEnvs() string {
@@ -78,12 +84,7 @@ func openDatabasePool(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
 	}
 
 	// logging
-	pgxConfig.ConnConfig.Tracer = &tracelog.TraceLog{
-		Logger: pgx_zerolog.NewContextLogger(),
-		// LogLevel is the level at which pgx will start calling zerolog
-		// Trace, being the lowest level, will cause it to always be called
-		LogLevel: tracelog.LogLevelTrace,
-	}
+	pgxConfig.ConnConfig.Tracer = pgx_zerolog.NewTracer()
 
 	// open pool
 	dbpool, err := pgxpool.NewWithConfig(ctx, pgxConfig)

@@ -1,7 +1,9 @@
 package hwutil_test
 
 import (
+	"errors"
 	"fmt"
+	"github.com/google/uuid"
 	"hwutil"
 	"testing"
 )
@@ -25,5 +27,57 @@ func TestPtrTo(t *testing.T) {
 	}{
 		name: "Testine Test",
 		age:  20,
+	})
+}
+func TestStringsToUUIDs(t *testing.T) {
+	t.Run("valid uuids", func(t *testing.T) {
+		uuidStrings := []string{
+			"48441b57-a92a-4022-bfd9-9ded5acdb693",
+			"370472cf-0e4f-449f-a6a4-817d7e025552",
+		}
+		expected := []uuid.UUID{
+			uuid.MustParse("48441b57-a92a-4022-bfd9-9ded5acdb693"),
+			uuid.MustParse("370472cf-0e4f-449f-a6a4-817d7e025552"),
+		}
+
+		actual, err := hwutil.StringsToUUIDs(uuidStrings)
+		if err != nil {
+			t.Errorf("expected no error, got error: %v", err)
+			return
+		}
+		if len(actual) != len(expected) {
+			t.Errorf("expected length: %v, actual length: %v", len(expected), len(actual))
+			return
+		}
+		for i, id := range actual {
+			if id != expected[i] {
+				t.Errorf("expected[%v]: %v, actual[%v]: %v", i, id, i, expected[i])
+				return
+			}
+		}
+	})
+
+	t.Run("invalid uuids", func(t *testing.T) {
+		uuidStrings := []string{
+			"48441b57-a92a-4022-bfd9-9ded5acdb693",
+			"asdasdasdsadsadadadsa",
+		}
+		_, expErr := uuid.Parse("asdasdasdsadsadadadsa")
+
+		_, err := hwutil.StringsToUUIDs(uuidStrings)
+		if !errors.Is(err, expErr) {
+			t.Errorf("expected error: %v, actual error: %v", expErr, err)
+		}
+	})
+
+	t.Run("empty", func(t *testing.T) {
+		uuidStrings := []string{}
+		actual, err := hwutil.StringsToUUIDs(uuidStrings)
+		if err != nil {
+			t.Errorf("expected no error, got: %v", err)
+		}
+		if len(actual) != 0 {
+			t.Errorf("expected: [], got: %v", actual)
+		}
 	})
 }
