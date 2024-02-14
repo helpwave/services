@@ -121,10 +121,34 @@ func TestPatientAggregate_DischargeReadmitPatient(t *testing.T) {
 	}
 }
 
-func TestPatientAggregate_AssignBed(t *testing.T) {
+func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
+	patientID := uuid.New()
 
-}
+	newBedID := uuid.New()
+	patientHumanReadableIdentifier := "tester"
+	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
-func TestPatientAggregate_UnassignBed(t *testing.T) {
+	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
+		return patientEventsV1.NewPatientCreatedEvent(patientAggregate, patientID, patientHumanReadableIdentifier, "")
+	})
 
+	if patientAggregate.Patient.HumanReadableIdentifier != patientHumanReadableIdentifier {
+		t.Errorf("Patient humanReadableIdentifier: expected '%s' got '%s'", patientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
+	}
+
+	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
+		return patientEventsV1.NewBedAssignedEvent(patientAggregate, patientAggregate.Patient.BedID, newBedID)
+	})
+
+	if patientAggregate.Patient.BedID.UUID != newBedID {
+		t.Errorf("Patient BedID: expected '%s' got '%s'", newBedID.String(), patientAggregate.Patient.BedID.UUID.String())
+	}
+
+	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
+		return patientEventsV1.NewBedUnassignedEvent(patientAggregate), nil
+	})
+
+	if patientAggregate.Patient.BedID.UUID != uuid.Nil {
+		t.Errorf("Patient BedID: expected '%s' got '%s'", uuid.Nil.String(), patientAggregate.Patient.BedID.UUID.String())
+	}
 }
