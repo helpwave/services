@@ -19,9 +19,16 @@ func Bundle(ctx context.Context) *i18n.Bundle {
 	return bundle
 }
 
-func SevereError(context context.Context) hwlocale.Locale {
+func GenericError(context context.Context) hwlocale.Locale {
 	return hwlocale.Locale{
 		Bundle: Bundle(context),
-		Config: &i18n.LocalizeConfig{MessageID: "SevereError"},
+		Config: &i18n.LocalizeConfig{MessageID: "GenericError"},
+	}
+}
+
+func InvalidArgsError(context context.Context) hwlocale.Locale {
+	return hwlocale.Locale{
+		Bundle: Bundle(context),
+		Config: &i18n.LocalizeConfig{MessageID: "InvalidArgsError"},
 	}
 }

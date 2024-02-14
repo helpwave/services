@@ -1,2 +1,5 @@
-[SevereError]
+[GenericError]
 other = "Konnte aufgrund von Datenbankproblemen nicht ausgeführt werden"
+
+[InvalidArgsError]
+other = "Fehlerhafte Anfrage"

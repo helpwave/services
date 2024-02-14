@@ -1,2 +1,7 @@
-[SevereError]
+[GenericError]
+description = "error message returned, when we have no better error to report back"
 other = "Could not perform action due to database issues"
+
+[InvalidArgsError]
+description = "error message returned, when the user caused a database issue, like a constraint violation, but no more specific error is returned"
+other = "Invalid Request"

@@ -46,11 +46,13 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 	}
 
 	// Check if patient exists
-	if exists, err := patientRepo.ExistsPatientInOrganization(ctx, patient_repo.ExistsPatientInOrganizationParams{
+	exists, err := patientRepo.ExistsPatientInOrganization(ctx, patient_repo.ExistsPatientInOrganizationParams{
 		ID:             patientId,
 		OrganizationID: organizationID,
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	} else if !exists {
 		return nil, status.Error(codes.InvalidArgument, "patientId not found")
 	}
@@ -81,9 +83,9 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		CreatedBy:      userID,
 		DueAt:          hwdb.TimeToTimestamp(req.DueAt.AsTime()),
 	})
-
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	log.Info().
@@ -107,9 +109,11 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 	}
 
 	rows, err := taskRepo.GetTaskWithSubTasksAndPatientName(ctx, id)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
+
 	if len(rows) == 0 {
 		return nil, status.Error(codes.InvalidArgument, "id not found")
 	}
@@ -174,6 +178,7 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 		PatientID:      patientID,
 		OrganizationID: organizationID,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
 	}
@@ -240,8 +245,9 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 		PatientID:      patientID,
 		OrganizationID: organizationID,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	tasks := make([]*pb.GetTasksByPatientSortedByStatusResponse_Task, 0)
@@ -321,8 +327,9 @@ func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTask
 		UUID:  assigneeID,
 		Valid: true,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		return nil, err
 	}
 
 	var tasks []*pb.GetAssignedTasksResponse_Task
@@ -379,14 +386,16 @@ func (ServiceServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+	err = taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
 		Name:        req.Name,
 		Description: req.Description,
 		DueAt:       hwdb.PbToTimestamp(req.DueAt),
 		Public:      req.Public,
 		ID:          id,
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.UpdateTaskResponse{}, nil
@@ -402,8 +411,10 @@ func (ServiceServer) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := taskRepo.DeleteTask(ctx, id); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	err = taskRepo.DeleteTask(ctx, id)
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.DeleteTaskResponse{}, nil
@@ -429,11 +440,13 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 
 	// Check if task exists
 	// TODO: this is probably not needed due to the FK constrain in the subtaskID table
-	if exists, err := taskRepo.ExistsTask(ctx, task_repo.ExistsTaskParams{
+	exists, err := taskRepo.ExistsTask(ctx, task_repo.ExistsTaskParams{
 		ID:             taskId,
 		OrganizationID: organizationID,
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	} else if !exists {
 		return nil, status.Error(codes.InvalidArgument, "taskId not found")
 	}
@@ -449,9 +462,9 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 		Done:      done,
 		CreatedBy: userID,
 	})
-
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	return &pb.AddSubTaskResponse{Id: subtaskID.String()}, nil
@@ -467,8 +480,10 @@ func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := taskRepo.DeleteSubTask(ctx, subtaskID); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	err = taskRepo.DeleteSubTask(ctx, subtaskID)
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.RemoveSubTaskResponse{}, nil
@@ -482,12 +497,14 @@ func (ServiceServer) UpdateSubTask(ctx context.Context, req *pb.UpdateSubTaskReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{
+	err = taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{
 		Name: req.Name,
 		Done: nil,
 		ID:   subtaskID,
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.UpdateSubTaskResponse{}, nil
@@ -503,11 +520,13 @@ func (ServiceServer) SubTaskToToDo(ctx context.Context, req *pb.SubTaskToToDoReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{
+	err = taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{
 		Done: hwutil.PtrTo(false),
 		ID:   subtaskID,
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.SubTaskToToDoResponse{}, nil
@@ -523,8 +542,10 @@ func (ServiceServer) SubTaskToDone(ctx context.Context, req *pb.SubTaskToDoneReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{Done: hwutil.PtrTo(true), ID: subtaskID}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	err = taskRepo.UpdateSubTask(ctx, task_repo.UpdateSubTaskParams{Done: hwutil.PtrTo(true), ID: subtaskID})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.SubTaskToDoneResponse{}, nil
@@ -542,8 +563,10 @@ func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) 
 	}
 
 	s := int32(pb.TaskStatus_TASK_STATUS_TODO)
-	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Status: &s}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	err = taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Status: &s})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	log.Info().
@@ -565,8 +588,10 @@ func (ServiceServer) TaskToInProgress(ctx context.Context, req *pb.TaskToInProgr
 	}
 
 	s := int32(pb.TaskStatus_TASK_STATUS_IN_PROGRESS)
-	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Status: &s}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	err = taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Status: &s})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	log.Info().
@@ -588,8 +613,10 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) 
 	}
 
 	s := int32(pb.TaskStatus_TASK_STATUS_DONE)
-	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Status: &s}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	err = taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Status: &s})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	log.Info().
@@ -617,14 +644,16 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 
 	// TODO: Check if user exists
 
-	if err := taskRepo.UpdateTaskUser(ctx, task_repo.UpdateTaskUserParams{
+	err = taskRepo.UpdateTaskUser(ctx, task_repo.UpdateTaskUserParams{
 		ID: id,
 		AssignedUserID: uuid.NullUUID{
 			UUID:  userId,
 			Valid: true,
 		},
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	log.Info().
@@ -646,8 +675,10 @@ func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := taskRepo.UpdateTaskUser(ctx, task_repo.UpdateTaskUserParams{ID: id, AssignedUserID: uuid.NullUUID{}}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	err = taskRepo.UpdateTaskUser(ctx, task_repo.UpdateTaskUserParams{ID: id, AssignedUserID: uuid.NullUUID{}})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	log.Info().
@@ -668,8 +699,10 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Public: hwutil.PtrTo(true)}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	err = taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: id, Public: hwutil.PtrTo(true)})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	log.Info().
@@ -690,11 +723,13 @@ func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+	err = taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
 		Public: hwutil.PtrTo(false),
 		ID:     id,
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	log.Info().
