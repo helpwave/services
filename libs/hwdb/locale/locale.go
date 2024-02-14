@@ -32,3 +32,10 @@ func InvalidArgsError(context context.Context) hwlocale.Locale {
 		Config: &i18n.LocalizeConfig{MessageID: "InvalidArgsError"},
 	}
 }
+
+func MissingFieldsError(context context.Context) hwlocale.Locale {
+	return hwlocale.Locale{
+		Bundle: Bundle(context),
+		Config: &i18n.LocalizeConfig{MessageID: "MissingFieldsError"},
+	}
+}

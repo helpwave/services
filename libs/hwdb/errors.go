@@ -24,7 +24,7 @@ func genericStatusError(ctx context.Context, reasons ...string) error {
 		message = hwlocale.English(ctx, locale.GenericError(ctx))
 	}
 
-	return newStatusError(ctx,
+	return NewStatusError(ctx,
 		codes.Internal,
 		message,
 		hwlocale.LocalizedMessage(ctx, locale.GenericError(ctx)),
@@ -32,7 +32,7 @@ func genericStatusError(ctx context.Context, reasons ...string) error {
 }
 
 // TODO: move to hwutil
-func newStatusError(ctx context.Context, code codes.Code, msg string, details ...proto.Message) error {
+func NewStatusError(ctx context.Context, code codes.Code, msg string, details ...proto.Message) error {
 	statusNoDetails := status.New(code, msg)
 
 	// TODO: emit error if no user-facing error is attached
@@ -51,6 +51,7 @@ type errorFn func(*pgconn.PgError) error
 type errorOptions struct {
 	notNullFn errorFn
 	fkFn      errorFn
+	uniqueFn  errorFn
 }
 
 type ErrorOptionsMutator func(*errorOptions)
@@ -58,7 +59,19 @@ type ErrorOptionsMutator func(*errorOptions)
 // WithOnNotNullViolation lets you specify an error to be returned in case of a NonNull-Constraint violation
 func WithOnNotNullViolation(fn errorFn) ErrorOptionsMutator {
 	return func(options *errorOptions) {
-		options.notNullFn = fn
+		next := options.notNullFn
+		options.notNullFn = func(pgError *pgconn.PgError) error {
+			if err := fn(pgError); err != nil {
+				return err
+			}
+			return next(pgError)
+		}
+	}
+}
+
+func defaultNotNullFn(ctx context.Context) errorFn {
+	return func(pgError *pgconn.PgError) error {
+		return NewStatusError(ctx, codes.InvalidArgument, pgError.Error(), hwlocale.LocalizedMessage(ctx, locale.MissingFieldsError(ctx)))
 	}
 }
 
@@ -69,6 +82,21 @@ func WithOnFKViolation(fn errorFn) ErrorOptionsMutator {
 	}
 }
 
+func defaultFKFn(_ *pgconn.PgError) error {
+	return nil
+}
+
+// WithOnUniqueViolation lets you specify an error to be returned in case of a Unique Constraint violation
+func WithOnUniqueViolation(fn errorFn) ErrorOptionsMutator {
+	return func(options *errorOptions) {
+		options.uniqueFn = fn
+	}
+}
+
+func defaultUniqueFn(_ *pgconn.PgError) error {
+	return nil
+}
+
 // Error expects a database error and returns a processed Error, also does logging
 func Error(ctx context.Context, err error, options ...ErrorOptionsMutator) error {
 	log := zlog.Ctx(ctx)
@@ -76,7 +104,11 @@ func Error(ctx context.Context, err error, options ...ErrorOptionsMutator) error
 		return nil
 	}
 
-	opts := errorOptions{}
+	opts := errorOptions{
+		notNullFn: defaultNotNullFn(ctx),
+		fkFn:      defaultFKFn,
+		uniqueFn:  defaultUniqueFn,
+	}
 	for _, mutator := range options {
 		mutator(&opts)
 	}
@@ -139,7 +171,7 @@ func pgErr(ctx context.Context, pgError *pgconn.PgError, opts errorOptions) erro
 	// user made a mistake
 	if pgerrcode.IsIntegrityConstraintViolation(errCode) ||
 		pgerrcode.IsWithCheckOptionViolation(errCode) ||
-		pgerrcode.IsNoData(errCode) {
+		pgerrcode.IsNoData(errCode) { // TODO: IsNoData
 		log.Info().Send()
 
 		if errCode == pgerrcode.NotNullViolation {
@@ -156,7 +188,14 @@ func pgErr(ctx context.Context, pgError *pgconn.PgError, opts errorOptions) erro
 			}
 		}
 
-		return newStatusError(ctx,
+		if errCode == pgerrcode.UniqueViolation {
+			err := opts.uniqueFn(pgError)
+			if err != nil {
+				return err
+			}
+		}
+
+		return NewStatusError(ctx,
 			codes.InvalidArgument,
 			"database error: "+pgError.Message,
 			hwlocale.LocalizedMessage(ctx, locale.InvalidArgsError(ctx)),

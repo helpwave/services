@@ -3,3 +3,6 @@ other = "Konnte aufgrund von Datenbankproblemen nicht ausgeführt werden"
 
 [InvalidArgsError]
 other = "Fehlerhafte Anfrage"
+
+[MissingFieldsError]
+other = "Ein oder mehr Felder fehlen in der Anfrage"

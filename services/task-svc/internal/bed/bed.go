@@ -3,8 +3,11 @@ package bed
 import (
 	"common"
 	"context"
+	"github.com/jackc/pgx/v5/pgconn"
 	"hwdb"
+	"hwlocale"
 	"hwutil"
+	"task-svc/locale"
 	"task-svc/repos/bed_repo"
 
 	"github.com/google/uuid"
@@ -42,7 +45,12 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		OrganizationID: organizationID,
 		Name:           req.Name,
 	})
-	err = hwdb.Error(ctx, err)
+	err = hwdb.Error(ctx, err, hwdb.WithOnFKViolation(func(pgErr *pgconn.PgError) error {
+		if pgErr.ConstraintName == "beds_room_id_fkey" {
+			return hwdb.NewStatusError(ctx, codes.InvalidArgument, pgErr.Error(), hwlocale.LocalizedMessage(ctx, locale.InvalidRoomIdError(ctx)))
+		}
+		return nil
+	}))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +85,10 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 	})
 	if bed == nil {
 		return nil, status.Error(codes.InvalidArgument, "id not found")
-	} else if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	}
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.GetBedResponse{
