@@ -6,6 +6,7 @@ replace (
 	common => ../../libs/common
 	gen => ../../gen/go
 	hwgorm => ../../libs/hwgorm
+	hwlocale => ../../libs/hwlocale
 	hwutil => ../../libs/hwutil
 	proto_helpers => ../../libs/proto_helpers
 	telemetry => ../../libs/telemetry
@@ -26,6 +27,7 @@ require (
 )
 
 require (
+	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
 	github.com/dapr/dapr v1.12.0-rc.4 // indirect
@@ -53,6 +55,7 @@ require (
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
+	github.com/nicksnyder/go-i18n/v2 v2.4.0 // indirect
 	github.com/openzipkin/zipkin-go v0.4.2 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
@@ -78,4 +81,5 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/postgres v1.5.2 // indirect
+	hwlocale v0.0.0-00010101000000-000000000000 // indirect
 )

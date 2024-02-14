@@ -11,6 +11,11 @@ import (
 	"strings"
 )
 
+type Locale struct {
+	Bundle *i18n.Bundle
+	Config *i18n.LocalizeConfig
+}
+
 func NewLocaleBundle(ctx context.Context, fsys *embed.FS) *i18n.Bundle {
 	log := zerolog.Ctx(ctx)
 
@@ -46,7 +51,10 @@ func Localizer(ctx context.Context, bundle *i18n.Bundle, overrideTags ...string)
 	return i18n.NewLocalizer(bundle, locales...)
 }
 
-func LocalizeWithTag(ctx context.Context, bundle *i18n.Bundle, config *i18n.LocalizeConfig, overrideTags ...string) (string, language.Tag) {
+func LocalizeWithTag(ctx context.Context, locale Locale, overrideTags ...string) (string, language.Tag) {
+	bundle := locale.Bundle
+	config := locale.Config
+
 	l := Localizer(ctx, bundle, overrideTags...)
 	s, tag, err := l.LocalizeWithTag(config)
 	log := zerolog.Ctx(ctx).With().
@@ -62,13 +70,13 @@ func LocalizeWithTag(ctx context.Context, bundle *i18n.Bundle, config *i18n.Loca
 	return s, tag
 }
 
-func Localize(ctx context.Context, bundle *i18n.Bundle, config *i18n.LocalizeConfig, overrideTags ...string) string {
-	s, _ := LocalizeWithTag(ctx, bundle, config, overrideTags...)
+func Localize(ctx context.Context, locale Locale, overrideTags ...string) string {
+	s, _ := LocalizeWithTag(ctx, locale, overrideTags...)
 	return s
 }
 
-func English(ctx context.Context, bundle *i18n.Bundle, config *i18n.LocalizeConfig) string {
-	return Localize(ctx, bundle, config, language.English.String())
+func English(ctx context.Context, locale Locale) string {
+	return Localize(ctx, locale, language.English.String())
 }
 
 func loadFileSystem(ctx context.Context, bundle *i18n.Bundle, fsys embed.FS) {

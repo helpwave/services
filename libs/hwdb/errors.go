@@ -12,7 +12,16 @@ import (
 	"google.golang.org/grpc/status"
 	"hwdb/locale"
 	"hwlocale"
+	"reflect"
+	"telemetry"
 )
+
+func severeStatusError(ctx context.Context) error {
+	return newStatusError(ctx, codes.Internal,
+		hwlocale.English(ctx, locale.SevereError(ctx)),
+		hwlocale.LocalizedMessage(ctx, locale.SevereError(ctx)),
+	)
+}
 
 // TODO: move to hwutil
 func newStatusError(ctx context.Context, code codes.Code, msg string, details ...proto.Message) error {
@@ -32,13 +41,26 @@ func Error(ctx context.Context, err error) error {
 	if err == nil {
 		return nil
 	}
+
 	var pgError *pgconn.PgError
-	if !errors.As(err, &pgError) {
-		log.Warn().
-			Err(err).
-			Msg("hwdb.Error() called with unrecognized error type")
-		return err // just return it
+	if errors.As(err, &pgError) {
+		return pgErr(ctx, pgError)
 	}
+
+	var connErr *pgconn.ConnectError
+	if errors.As(err, &connErr) {
+		return pgConnErr(ctx, connErr)
+	}
+
+	log.Error().
+		Err(err).
+		Str("type", reflect.TypeOf(err).String()).
+		Msg("hwdb.Error() called with unrecognized error type")
+	return err // just return it
+}
+
+func pgErr(ctx context.Context, pgError *pgconn.PgError) error {
+	log := zlog.Ctx(ctx)
 
 	newLogger := log.With().
 		Dict(
@@ -61,7 +83,6 @@ func Error(ctx context.Context, err error) error {
 				Str("routine", pgError.Routine),
 		).
 		Logger()
-	ctx = log.WithContext(ctx)
 	log = &newLogger
 
 	errCode := pgError.Code
@@ -92,12 +113,9 @@ func Error(ctx context.Context, err error) error {
 		pgerrcode.IsInternalError(errCode) ||
 		pgerrcode.IsProgramLimitExceeded(errCode) ||
 		pgerrcode.IsConfigurationFileError(errCode) {
-		log.Error().Msg("severe database issue! likely requires immediate action!")
+		log.Error().Err(pgError).Msg("severe database issue! likely requires immediate action!")
 
-		return newStatusError(ctx, codes.Internal,
-			hwlocale.English(ctx, locale.Bundle(ctx), locale.SevereError),
-			hwlocale.LocalizedMessage(ctx, locale.Bundle(ctx), locale.SevereError),
-		)
+		return severeStatusError(ctx)
 	}
 
 	// we made a mistake
@@ -133,4 +151,22 @@ func Error(ctx context.Context, err error) error {
 	}
 	log.Error().Msg("unrecognized database error has occurred")
 	return newStatusError(ctx, codes.Internal, "database error: "+pgError.Message) // TODO: details
+}
+
+func pgConnErr(ctx context.Context, connErr *pgconn.ConnectError) error {
+	log := zlog.Ctx(ctx)
+
+	newLogger := zlog.With().
+		Dict("config", zerolog.Dict().
+			Str("host", connErr.Config.Host).
+			Uint16("port", connErr.Config.Port).
+			Str("database", connErr.Config.Database).
+			Str("password", telemetry.OmitAll(connErr.Config.Password)).
+			Dur("connectTimeout", connErr.Config.ConnectTimeout),
+		).
+		Logger()
+	log = &newLogger
+
+	log.Error().Err(connErr).Msg("connection issue")
+	return severeStatusError(ctx)
 }

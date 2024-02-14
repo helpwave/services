@@ -18,7 +18,7 @@ require (
 	gen v0.0.0
 	github.com/dapr/go-sdk v1.9.1
 	github.com/google/uuid v1.4.0
-	github.com/jackc/pgx/v5 v5.5.0
+	github.com/jackc/pgx/v5 v5.5.3
 	github.com/rs/zerolog v1.32.0
 	google.golang.org/grpc v1.61.0
 	google.golang.org/protobuf v1.32.0
@@ -64,7 +64,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.21.0 // indirect
 	go.opentelemetry.io/otel/trace v1.21.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.0.0 // indirect
-	golang.org/x/crypto v0.16.0 // indirect
+	golang.org/x/crypto v0.17.0 // indirect
 	golang.org/x/net v0.19.0 // indirect
 	golang.org/x/oauth2 v0.15.0 // indirect
 	golang.org/x/sync v0.5.0 // indirect

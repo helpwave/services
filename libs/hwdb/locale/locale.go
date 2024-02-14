@@ -19,4 +19,9 @@ func Bundle(ctx context.Context) *i18n.Bundle {
 	return bundle
 }
 
-var SevereError = &i18n.LocalizeConfig{MessageID: "SevereError"}
+func SevereError(context context.Context) hwlocale.Locale {
+	return hwlocale.Locale{
+		Bundle: Bundle(context),
+		Config: &i18n.LocalizeConfig{MessageID: "SevereError"},
+	}
+}
