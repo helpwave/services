@@ -9,19 +9,11 @@ import (
 
 //go:embed locale.*.toml
 var localeFS embed.FS
-
-var bundle *i18n.Bundle
-
-func Bundle(ctx context.Context) *i18n.Bundle {
-	if bundle == nil {
-		bundle = hwlocale.NewLocaleBundle(ctx, &localeFS)
-	}
-	return bundle
-}
+var lazy = hwlocale.NewLazyLocaleBundle(&localeFS)
 
 func InvalidRoomIdError(ctx context.Context) hwlocale.Locale {
 	return hwlocale.Locale{
-		Bundle: Bundle(ctx),
+		Bundle: lazy.Bundle(ctx),
 		Config: &i18n.LocalizeConfig{MessageID: "InvalidRoomIdError"},
 	}
 }

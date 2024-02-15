@@ -1,15 +1,14 @@
 package hwdb
 
 import (
+	"common"
 	"context"
 	"errors"
-	"github.com/golang/protobuf/proto"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/rs/zerolog"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"hwdb/locale"
 	"hwlocale"
 	"reflect"
@@ -24,25 +23,11 @@ func genericStatusError(ctx context.Context, reasons ...string) error {
 		message = hwlocale.English(ctx, locale.GenericError(ctx))
 	}
 
-	return NewStatusError(ctx,
+	return common.NewStatusError(ctx,
 		codes.Internal,
 		message,
-		hwlocale.LocalizedMessage(ctx, locale.GenericError(ctx)),
+		locale.GenericError(ctx),
 	)
-}
-
-// TODO: move to hwutil
-func NewStatusError(ctx context.Context, code codes.Code, msg string, details ...proto.Message) error {
-	statusNoDetails := status.New(code, msg)
-
-	// TODO: emit error if no user-facing error is attached
-
-	s, err := statusNoDetails.WithDetails(details...)
-	if err != nil {
-		zlog.Ctx(ctx).Error().Err(err).Msg("could not add details to status error")
-		return statusNoDetails.Err()
-	}
-	return s.Err()
 }
 
 // errorFn should return a Status Error or nil
@@ -71,14 +56,22 @@ func WithOnNotNullViolation(fn errorFn) ErrorOptionsMutator {
 
 func defaultNotNullFn(ctx context.Context) errorFn {
 	return func(pgError *pgconn.PgError) error {
-		return NewStatusError(ctx, codes.InvalidArgument, pgError.Error(), hwlocale.LocalizedMessage(ctx, locale.MissingFieldsError(ctx)))
+		return common.NewStatusError(ctx, codes.InvalidArgument, pgError.Error(), locale.MissingFieldsError(ctx))
 	}
 }
 
 // WithOnFKViolation lets you specify an error to be returned in case of a Foreign Key Constraint violation
-func WithOnFKViolation(fn errorFn) ErrorOptionsMutator {
+func WithOnFKViolation(constraintName string, fn errorFn) ErrorOptionsMutator {
 	return func(options *errorOptions) {
-		options.fkFn = fn
+		next := options.fkFn
+		options.fkFn = func(pgError *pgconn.PgError) error {
+			if constraintName == "" || constraintName == pgError.ConstraintName {
+				if err := fn(pgError); err != nil {
+					return err
+				}
+			}
+			return next(pgError)
+		}
 	}
 }
 
@@ -195,10 +188,10 @@ func pgErr(ctx context.Context, pgError *pgconn.PgError, opts errorOptions) erro
 			}
 		}
 
-		return NewStatusError(ctx,
+		return common.NewStatusError(ctx,
 			codes.InvalidArgument,
 			"database error: "+pgError.Message,
-			hwlocale.LocalizedMessage(ctx, locale.InvalidArgsError(ctx)),
+			locale.InvalidArgsError(ctx),
 		)
 	}
 
@@ -210,9 +203,11 @@ func pgErr(ctx context.Context, pgError *pgconn.PgError, opts errorOptions) erro
 		pgerrcode.IsInternalError(errCode) ||
 		pgerrcode.IsProgramLimitExceeded(errCode) ||
 		pgerrcode.IsConfigurationFileError(errCode) {
-		log.Error().Err(pgError).Msg("severe database issue! likely requires immediate action!")
+		log.Error().
+			Err(pgError).
+			Msg("severe database issue! likely requires immediate action!")
 
-		return genericStatusError(ctx, "severe database issue")
+		return genericStatusError(ctx, "severe database issue", pgError.Error())
 	}
 
 	// we made a mistake
@@ -246,6 +241,7 @@ func pgErr(ctx context.Context, pgError *pgconn.PgError, opts errorOptions) erro
 		pgerrcode.IsSnapshotFailure(errCode) {
 		return genericStatusError(ctx, "database error:", pgError.Message)
 	}
+
 	log.Error().Msg("unrecognized database error has occurred")
 	return genericStatusError(ctx, "database error:", pgError.Message)
 }

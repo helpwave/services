@@ -21,10 +21,12 @@ require (
 	github.com/dapr/go-sdk v1.9.1
 	github.com/google/uuid v1.5.0
 	github.com/jackc/pgx/v5 v5.5.3
+	github.com/nicksnyder/go-i18n/v2 v2.4.0
 	github.com/rs/zerolog v1.32.0
 	google.golang.org/grpc v1.61.0
 	google.golang.org/protobuf v1.32.0
 	hwdb v0.0.0
+	hwlocale v0.0.0
 	hwutil v0.0.0
 )
 
@@ -53,7 +55,6 @@ require (
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/nicksnyder/go-i18n/v2 v2.4.0 // indirect
 	github.com/openzipkin/zipkin-go v0.4.2 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
 	github.com/redis/go-redis/v9 v9.3.1 // indirect
@@ -80,6 +81,5 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240205150955-31a09d347014 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	hwlocale v0.0.0-00010101000000-000000000000 // indirect
 	telemetry v0.0.0 // indirect
 )

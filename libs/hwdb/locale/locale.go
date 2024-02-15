@@ -9,33 +9,25 @@ import (
 
 //go:embed locale.*.toml
 var localeFS embed.FS
+var lazy = hwlocale.NewLazyLocaleBundle(&localeFS)
 
-var bundle *i18n.Bundle
-
-func Bundle(ctx context.Context) *i18n.Bundle {
-	if bundle == nil {
-		bundle = hwlocale.NewLocaleBundle(ctx, &localeFS)
-	}
-	return bundle
-}
-
-func GenericError(context context.Context) hwlocale.Locale {
+func GenericError(ctx context.Context) hwlocale.Locale {
 	return hwlocale.Locale{
-		Bundle: Bundle(context),
+		Bundle: lazy.Bundle(ctx),
 		Config: &i18n.LocalizeConfig{MessageID: "GenericError"},
 	}
 }
 
-func InvalidArgsError(context context.Context) hwlocale.Locale {
+func InvalidArgsError(ctx context.Context) hwlocale.Locale {
 	return hwlocale.Locale{
-		Bundle: Bundle(context),
+		Bundle: lazy.Bundle(ctx),
 		Config: &i18n.LocalizeConfig{MessageID: "InvalidArgsError"},
 	}
 }
 
-func MissingFieldsError(context context.Context) hwlocale.Locale {
+func MissingFieldsError(ctx context.Context) hwlocale.Locale {
 	return hwlocale.Locale{
-		Bundle: Bundle(context),
+		Bundle: lazy.Bundle(ctx),
 		Config: &i18n.LocalizeConfig{MessageID: "MissingFieldsError"},
 	}
 }

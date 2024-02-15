@@ -1,10 +1,14 @@
 package common
 
 import (
+	"common/locale"
 	"context"
 	"encoding/base64"
+	"errors"
 	"github.com/dapr/dapr/pkg/proto/runtime/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
+	"github.com/go-playground/validator/v10"
+	"github.com/golang/protobuf/proto"
 	"github.com/google/uuid"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
@@ -13,6 +17,7 @@ import (
 	zlog "github.com/rs/zerolog/log"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"golang.org/x/text/language"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
@@ -20,6 +25,7 @@ import (
 	"hwlocale"
 	"hwutil"
 	"net"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -358,11 +364,59 @@ func handlerSpanInterceptor(ctx context.Context, req interface{}, info *grpc.Una
 func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "validate_interceptor")
 	defer span.End()
+	log := zlog.Ctx(ctx)
 
 	if err := hwutil.Validate(req); err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, err.Error())
+
+		var internalErr *validator.InvalidValidationError
+
+		if errors.As(err, &internalErr) {
+			return nil, NewStatusError(ctx, codes.Internal, err.Error(), locale.GenericError(ctx))
+		}
+
+		var valErrs validator.ValidationErrors
+
+		if errors.As(err, &valErrs) {
+			br := &errdetails.BadRequest{FieldViolations: make([]*errdetails.BadRequest_FieldViolation, 0)}
+
+			for _, valErr := range valErrs {
+				br.FieldViolations = append(br.FieldViolations, &errdetails.BadRequest_FieldViolation{
+					Field:       valErr.Field(),
+					Description: validateFieldErrDescription(ctx, valErr),
+				})
+			}
+
+			return nil, NewStatusError(
+				ctx,
+				codes.InvalidArgument,
+				err.Error(),
+				locale.GenericInvalidArgsError(ctx, len(valErrs)),
+				br,
+			)
+		}
+
+		log.Error().
+			Err(err).
+			Str("type", reflect.TypeOf(err).String()).
+			Msg("validate returned unexpected error")
+
+		return nil, NewStatusError(ctx, codes.Internal, err.Error(), locale.GenericError(ctx))
 	}
 	return next(ctx, req)
+}
+
+func validateFieldErrDescription(ctx context.Context, fieldErr validator.FieldError) string {
+	var l hwlocale.Locale
+	switch fieldErr.Tag() {
+	case "required":
+		l = locale.RequiredError(ctx)
+		break
+	// TODO: add more tags
+	default:
+		l = locale.InvalidFieldError(ctx)
+	}
+
+	return hwlocale.Localize(ctx, l)
 }
 
 func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
@@ -464,4 +518,32 @@ func OrganizationIDFromMD(ctx context.Context) (string, error) {
 		return "", status.Errorf(codes.Unauthenticated, "organization header missing")
 	}
 	return val, nil
+}
+
+// NewStatusError builds a new Status Error
+// - TODO: add Error Reason
+// - msg is developer-facing and must be in english
+// - for a user-facing message use locale
+// - additional details can be added
+// For more information on details see: https://cloud.google.com/apis/design/errors#error_details
+// and https://cloud.google.com/apis/design/errors#error_payloads
+func NewStatusError(ctx context.Context, code codes.Code, msg string, locale hwlocale.Locale, details ...proto.Message) error {
+	log := zlog.Ctx(ctx)
+	statusNoDetails := status.New(code, msg)
+
+	if locale.Bundle == nil || locale.Config == nil {
+		log.Warn().Msg("creating Status Error without valid locale")
+		// TODO: replace Locale with generic error
+	} else {
+		details = append(details, hwlocale.LocalizedMessage(ctx, locale))
+	}
+
+	s, err := statusNoDetails.WithDetails(details...)
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("could not add details to status error")
+		return statusNoDetails.Err()
+	}
+	return s.Err()
 }

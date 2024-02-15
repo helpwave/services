@@ -20,9 +20,10 @@ require (
 	go.opentelemetry.io/otel/trace v1.21.0
 	google.golang.org/grpc v1.61.0
 	google.golang.org/protobuf v1.32.0
-	hwlocale v0.0.0-00010101000000-000000000000
+	hwlocale v0.0.0
 	hwutil v0.0.0
 	telemetry v0.0.0
+	common v0.0.0
 )
 
 require (

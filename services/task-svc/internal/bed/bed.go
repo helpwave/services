@@ -5,7 +5,6 @@ import (
 	"context"
 	"github.com/jackc/pgx/v5/pgconn"
 	"hwdb"
-	"hwlocale"
 	"hwutil"
 	"task-svc/locale"
 	"task-svc/repos/bed_repo"
@@ -45,11 +44,8 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		OrganizationID: organizationID,
 		Name:           req.Name,
 	})
-	err = hwdb.Error(ctx, err, hwdb.WithOnFKViolation(func(pgErr *pgconn.PgError) error {
-		if pgErr.ConstraintName == "beds_room_id_fkey" {
-			return hwdb.NewStatusError(ctx, codes.InvalidArgument, pgErr.Error(), hwlocale.LocalizedMessage(ctx, locale.InvalidRoomIdError(ctx)))
-		}
-		return nil
+	err = hwdb.Error(ctx, err, hwdb.WithOnFKViolation("beds_room_id_fkey", func(pgErr *pgconn.PgError) error {
+		return common.NewStatusError(ctx, codes.InvalidArgument, pgErr.Error(), locale.InvalidRoomIdError(ctx))
 	}))
 	if err != nil {
 		return nil, err
