@@ -4,7 +4,9 @@ import (
 	"common"
 	"context"
 	"github.com/jackc/pgx/v5/pgconn"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"hwdb"
+	"hwlocale"
 	"hwutil"
 	"task-svc/locale"
 	"task-svc/repos/bed_repo"
@@ -44,9 +46,20 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		OrganizationID: organizationID,
 		Name:           req.Name,
 	})
-	err = hwdb.Error(ctx, err, hwdb.WithOnFKViolation("beds_room_id_fkey", func(pgErr *pgconn.PgError) error {
-		return common.NewStatusError(ctx, codes.InvalidArgument, pgErr.Error(), locale.InvalidRoomIdError(ctx))
-	}))
+	err = hwdb.Error(ctx, err,
+		hwdb.WithOnFKViolation("beds_room_id_fkey", func(pgErr *pgconn.PgError) error {
+			return common.NewStatusError(ctx,
+				codes.InvalidArgument,
+				pgErr.Error(),
+				locale.InvalidRoomIdError(ctx),
+				&errdetails.BadRequest{
+					FieldViolations: []*errdetails.BadRequest_FieldViolation{
+						{
+							Field:       "room_id",
+							Description: hwlocale.Localize(ctx, locale.InvalidRoomIdError(ctx)),
+						},
+					}})
+		}))
 	if err != nil {
 		return nil, err
 	}

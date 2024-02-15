@@ -57,6 +57,7 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 	// middlewares
 	chain := grpc_middleware.ChainUnaryServer(
 		loggingUnaryInterceptor,
+		errorQualityControlInterceptor,
 		localeInterceptor,
 		authUnaryInterceptor,
 		validateUnaryInterceptor,
@@ -361,6 +362,120 @@ func handlerSpanInterceptor(ctx context.Context, req interface{}, info *grpc.Una
 	return res, err
 }
 
+// errorQualityControlInterceptor logs violations to https://cloud.google.com/apis/design/errors#error_payloads
+func errorQualityControlInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	res, err := next(ctx, req)
+
+	log := zlog.Ctx(ctx)
+
+	if err != nil {
+		statusError, ok := status.FromError(err)
+		if !ok {
+			log.Warn().
+				Err(err).
+				Str("type", reflect.TypeOf(err).String()).
+				Msg("non-status error was returned")
+			return res, NewStatusError(ctx, codes.Internal, err.Error(), locale.GenericError(ctx))
+		}
+
+		hasLocalizedMessage := false
+		hasBadRequest := false
+		hasPreconditionFailure := false
+		hasErrorInfo := false
+		hasResourceInfo := false
+		hasQuotaFailure := false
+		hasDebugInfo := false
+
+		for _, detail := range statusError.Details() {
+			if _, ok := detail.(*errdetails.LocalizedMessage); ok {
+				hasLocalizedMessage = true
+			}
+			if _, ok := detail.(*errdetails.BadRequest); ok {
+				hasBadRequest = true
+			}
+			if _, ok := detail.(*errdetails.PreconditionFailure); ok {
+				hasPreconditionFailure = true
+			}
+			if _, ok := detail.(*errdetails.ErrorInfo); ok {
+				hasErrorInfo = true
+			}
+			if _, ok := detail.(*errdetails.ResourceInfo); ok {
+				hasResourceInfo = true
+			}
+			if _, ok := detail.(*errdetails.QuotaFailure); ok {
+				hasQuotaFailure = true
+			}
+			if _, ok := detail.(*errdetails.DebugInfo); ok {
+				hasDebugInfo = true
+			}
+		}
+
+		if !hasLocalizedMessage {
+			log.Warn().Err(err).Msg("status error does not have LocalizedMessage")
+			statusError, err = statusError.WithDetails(hwlocale.LocalizedMessage(ctx, locale.GenericError(ctx)))
+			if statusError != nil {
+				err = statusError.Err()
+			}
+		}
+
+		switch statusError.Code() {
+		case codes.InvalidArgument:
+			fallthrough
+		case codes.OutOfRange:
+			if !hasBadRequest {
+				log.Warn().
+					Str("code", statusError.Code().String()).
+					Msg("status errors with this code should have a BadRequest detail, but none found")
+			}
+		case codes.FailedPrecondition:
+			if !hasPreconditionFailure {
+				log.Warn().
+					Str("code", statusError.Code().String()).
+					Msg("status errors with this code should have a PreconditionFailure detail, but none found")
+			}
+		case codes.Unauthenticated:
+			fallthrough
+		case codes.PermissionDenied:
+			fallthrough
+		case codes.Aborted:
+			if !hasErrorInfo {
+				log.Warn().
+					Str("code", statusError.Code().String()).
+					Msg("status errors with this code should have a ErrorInfo detail, but none found")
+			}
+		case codes.NotFound:
+			fallthrough
+		case codes.AlreadyExists:
+			if !hasResourceInfo {
+				log.Warn().
+					Str("code", statusError.Code().String()).
+					Msg("status errors with this code should have a ResourceInfo detail, but none found")
+			}
+		case codes.ResourceExhausted:
+			if !hasQuotaFailure {
+				log.Warn().
+					Str("code", statusError.Code().String()).
+					Msg("status errors with this code should have a QuotaFailure detail, but none found")
+			}
+		case codes.DataLoss:
+			fallthrough
+		case codes.Unknown:
+			fallthrough
+		case codes.Internal:
+			fallthrough
+		case codes.Unavailable:
+			fallthrough
+		case codes.DeadlineExceeded:
+			if !hasDebugInfo {
+				log.Warn().
+					Str("code", statusError.Code().String()).
+					Msg("status errors with this code should have a QuotaFailure detail, but none found")
+			}
+		}
+	}
+	return res, err
+}
+
 func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "validate_interceptor")
 	defer span.End()
@@ -381,7 +496,7 @@ func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.U
 
 			for _, valErr := range valErrs {
 				br.FieldViolations = append(br.FieldViolations, &errdetails.BadRequest_FieldViolation{
-					Field:       valErr.Field(),
+					Field:       valErr.Field(), // TODO: use json key
 					Description: validateFieldErrDescription(ctx, valErr),
 				})
 			}
