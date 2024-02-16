@@ -75,6 +75,13 @@ services:
         _meta:
           priority: -1
 
+global_rules:
+  - id: 1
+    plugins:
+      opentelemetry:
+        sampler:
+          name: always_on # might be too much
+
 # Routes define all endpoints APISIX is supposed to handle and maps them to their service
 routes:
   # Service Routes
