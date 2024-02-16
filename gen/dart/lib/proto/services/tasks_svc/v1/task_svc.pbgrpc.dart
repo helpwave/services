@@ -15,52 +15,52 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'task_svc.pb.dart' as $10;
+import 'task_svc.pb.dart' as $13;
 
 export 'task_svc.pb.dart';
 
 @$pb.GrpcServiceName('proto.services.tasks_svc.v1.TaskService')
 class TaskServiceClient extends $grpc.Client {
-  static final _$createTask = $grpc.ClientMethod<$10.CreateTaskRequest, $10.CreateTaskResponse>(
+  static final _$createTask = $grpc.ClientMethod<$13.CreateTaskRequest, $13.CreateTaskResponse>(
       '/proto.services.tasks_svc.v1.TaskService/CreateTask',
-      ($10.CreateTaskRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $10.CreateTaskResponse.fromBuffer(value));
-  static final _$updateTask = $grpc.ClientMethod<$10.UpdateTaskRequest, $10.UpdateTaskResponse>(
+      ($13.CreateTaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $13.CreateTaskResponse.fromBuffer(value));
+  static final _$updateTask = $grpc.ClientMethod<$13.UpdateTaskRequest, $13.UpdateTaskResponse>(
       '/proto.services.tasks_svc.v1.TaskService/UpdateTask',
-      ($10.UpdateTaskRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $10.UpdateTaskResponse.fromBuffer(value));
-  static final _$getTask = $grpc.ClientMethod<$10.GetTaskRequest, $10.GetTaskResponse>(
+      ($13.UpdateTaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $13.UpdateTaskResponse.fromBuffer(value));
+  static final _$getTask = $grpc.ClientMethod<$13.GetTaskRequest, $13.GetTaskResponse>(
       '/proto.services.tasks_svc.v1.TaskService/GetTask',
-      ($10.GetTaskRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $10.GetTaskResponse.fromBuffer(value));
-  static final _$assignTask = $grpc.ClientMethod<$10.AssignTaskRequest, $10.AssignTaskResponse>(
+      ($13.GetTaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $13.GetTaskResponse.fromBuffer(value));
+  static final _$assignTask = $grpc.ClientMethod<$13.AssignTaskRequest, $13.AssignTaskResponse>(
       '/proto.services.tasks_svc.v1.TaskService/AssignTask',
-      ($10.AssignTaskRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $10.AssignTaskResponse.fromBuffer(value));
-  static final _$unassignTask = $grpc.ClientMethod<$10.UnassignTaskRequest, $10.UnassignTaskResponse>(
+      ($13.AssignTaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $13.AssignTaskResponse.fromBuffer(value));
+  static final _$unassignTask = $grpc.ClientMethod<$13.UnassignTaskRequest, $13.UnassignTaskResponse>(
       '/proto.services.tasks_svc.v1.TaskService/UnassignTask',
-      ($10.UnassignTaskRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $10.UnassignTaskResponse.fromBuffer(value));
-  static final _$createSubtask = $grpc.ClientMethod<$10.CreateSubtaskRequest, $10.CreateSubtaskResponse>(
+      ($13.UnassignTaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $13.UnassignTaskResponse.fromBuffer(value));
+  static final _$createSubtask = $grpc.ClientMethod<$13.CreateSubtaskRequest, $13.CreateSubtaskResponse>(
       '/proto.services.tasks_svc.v1.TaskService/CreateSubtask',
-      ($10.CreateSubtaskRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $10.CreateSubtaskResponse.fromBuffer(value));
-  static final _$updateSubtask = $grpc.ClientMethod<$10.UpdateSubtaskRequest, $10.UpdateSubtaskResponse>(
+      ($13.CreateSubtaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $13.CreateSubtaskResponse.fromBuffer(value));
+  static final _$updateSubtask = $grpc.ClientMethod<$13.UpdateSubtaskRequest, $13.UpdateSubtaskResponse>(
       '/proto.services.tasks_svc.v1.TaskService/UpdateSubtask',
-      ($10.UpdateSubtaskRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $10.UpdateSubtaskResponse.fromBuffer(value));
-  static final _$completeSubtask = $grpc.ClientMethod<$10.CompleteSubtaskRequest, $10.CompleteSubtaskResponse>(
+      ($13.UpdateSubtaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $13.UpdateSubtaskResponse.fromBuffer(value));
+  static final _$completeSubtask = $grpc.ClientMethod<$13.CompleteSubtaskRequest, $13.CompleteSubtaskResponse>(
       '/proto.services.tasks_svc.v1.TaskService/CompleteSubtask',
-      ($10.CompleteSubtaskRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $10.CompleteSubtaskResponse.fromBuffer(value));
-  static final _$uncompleteSubtask = $grpc.ClientMethod<$10.UncompleteSubtaskRequest, $10.UncompleteSubtaskResponse>(
+      ($13.CompleteSubtaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $13.CompleteSubtaskResponse.fromBuffer(value));
+  static final _$uncompleteSubtask = $grpc.ClientMethod<$13.UncompleteSubtaskRequest, $13.UncompleteSubtaskResponse>(
       '/proto.services.tasks_svc.v1.TaskService/UncompleteSubtask',
-      ($10.UncompleteSubtaskRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $10.UncompleteSubtaskResponse.fromBuffer(value));
-  static final _$deleteSubtask = $grpc.ClientMethod<$10.DeleteSubtaskRequest, $10.DeleteSubtaskResponse>(
+      ($13.UncompleteSubtaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $13.UncompleteSubtaskResponse.fromBuffer(value));
+  static final _$deleteSubtask = $grpc.ClientMethod<$13.DeleteSubtaskRequest, $13.DeleteSubtaskResponse>(
       '/proto.services.tasks_svc.v1.TaskService/DeleteSubtask',
-      ($10.DeleteSubtaskRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $10.DeleteSubtaskResponse.fromBuffer(value));
+      ($13.DeleteSubtaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $13.DeleteSubtaskResponse.fromBuffer(value));
 
   TaskServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -68,43 +68,43 @@ class TaskServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$10.CreateTaskResponse> createTask($10.CreateTaskRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$13.CreateTaskResponse> createTask($13.CreateTaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createTask, request, options: options);
   }
 
-  $grpc.ResponseFuture<$10.UpdateTaskResponse> updateTask($10.UpdateTaskRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$13.UpdateTaskResponse> updateTask($13.UpdateTaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$updateTask, request, options: options);
   }
 
-  $grpc.ResponseFuture<$10.GetTaskResponse> getTask($10.GetTaskRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$13.GetTaskResponse> getTask($13.GetTaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getTask, request, options: options);
   }
 
-  $grpc.ResponseFuture<$10.AssignTaskResponse> assignTask($10.AssignTaskRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$13.AssignTaskResponse> assignTask($13.AssignTaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$assignTask, request, options: options);
   }
 
-  $grpc.ResponseFuture<$10.UnassignTaskResponse> unassignTask($10.UnassignTaskRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$13.UnassignTaskResponse> unassignTask($13.UnassignTaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$unassignTask, request, options: options);
   }
 
-  $grpc.ResponseFuture<$10.CreateSubtaskResponse> createSubtask($10.CreateSubtaskRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$13.CreateSubtaskResponse> createSubtask($13.CreateSubtaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createSubtask, request, options: options);
   }
 
-  $grpc.ResponseFuture<$10.UpdateSubtaskResponse> updateSubtask($10.UpdateSubtaskRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$13.UpdateSubtaskResponse> updateSubtask($13.UpdateSubtaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$updateSubtask, request, options: options);
   }
 
-  $grpc.ResponseFuture<$10.CompleteSubtaskResponse> completeSubtask($10.CompleteSubtaskRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$13.CompleteSubtaskResponse> completeSubtask($13.CompleteSubtaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$completeSubtask, request, options: options);
   }
 
-  $grpc.ResponseFuture<$10.UncompleteSubtaskResponse> uncompleteSubtask($10.UncompleteSubtaskRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$13.UncompleteSubtaskResponse> uncompleteSubtask($13.UncompleteSubtaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$uncompleteSubtask, request, options: options);
   }
 
-  $grpc.ResponseFuture<$10.DeleteSubtaskResponse> deleteSubtask($10.DeleteSubtaskRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$13.DeleteSubtaskResponse> deleteSubtask($13.DeleteSubtaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$deleteSubtask, request, options: options);
   }
 }
@@ -114,126 +114,126 @@ abstract class TaskServiceBase extends $grpc.Service {
   $core.String get $name => 'proto.services.tasks_svc.v1.TaskService';
 
   TaskServiceBase() {
-    $addMethod($grpc.ServiceMethod<$10.CreateTaskRequest, $10.CreateTaskResponse>(
+    $addMethod($grpc.ServiceMethod<$13.CreateTaskRequest, $13.CreateTaskResponse>(
         'CreateTask',
         createTask_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $10.CreateTaskRequest.fromBuffer(value),
-        ($10.CreateTaskResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$10.UpdateTaskRequest, $10.UpdateTaskResponse>(
+        ($core.List<$core.int> value) => $13.CreateTaskRequest.fromBuffer(value),
+        ($13.CreateTaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$13.UpdateTaskRequest, $13.UpdateTaskResponse>(
         'UpdateTask',
         updateTask_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $10.UpdateTaskRequest.fromBuffer(value),
-        ($10.UpdateTaskResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$10.GetTaskRequest, $10.GetTaskResponse>(
+        ($core.List<$core.int> value) => $13.UpdateTaskRequest.fromBuffer(value),
+        ($13.UpdateTaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$13.GetTaskRequest, $13.GetTaskResponse>(
         'GetTask',
         getTask_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $10.GetTaskRequest.fromBuffer(value),
-        ($10.GetTaskResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$10.AssignTaskRequest, $10.AssignTaskResponse>(
+        ($core.List<$core.int> value) => $13.GetTaskRequest.fromBuffer(value),
+        ($13.GetTaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$13.AssignTaskRequest, $13.AssignTaskResponse>(
         'AssignTask',
         assignTask_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $10.AssignTaskRequest.fromBuffer(value),
-        ($10.AssignTaskResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$10.UnassignTaskRequest, $10.UnassignTaskResponse>(
+        ($core.List<$core.int> value) => $13.AssignTaskRequest.fromBuffer(value),
+        ($13.AssignTaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$13.UnassignTaskRequest, $13.UnassignTaskResponse>(
         'UnassignTask',
         unassignTask_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $10.UnassignTaskRequest.fromBuffer(value),
-        ($10.UnassignTaskResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$10.CreateSubtaskRequest, $10.CreateSubtaskResponse>(
+        ($core.List<$core.int> value) => $13.UnassignTaskRequest.fromBuffer(value),
+        ($13.UnassignTaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$13.CreateSubtaskRequest, $13.CreateSubtaskResponse>(
         'CreateSubtask',
         createSubtask_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $10.CreateSubtaskRequest.fromBuffer(value),
-        ($10.CreateSubtaskResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$10.UpdateSubtaskRequest, $10.UpdateSubtaskResponse>(
+        ($core.List<$core.int> value) => $13.CreateSubtaskRequest.fromBuffer(value),
+        ($13.CreateSubtaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$13.UpdateSubtaskRequest, $13.UpdateSubtaskResponse>(
         'UpdateSubtask',
         updateSubtask_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $10.UpdateSubtaskRequest.fromBuffer(value),
-        ($10.UpdateSubtaskResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$10.CompleteSubtaskRequest, $10.CompleteSubtaskResponse>(
+        ($core.List<$core.int> value) => $13.UpdateSubtaskRequest.fromBuffer(value),
+        ($13.UpdateSubtaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$13.CompleteSubtaskRequest, $13.CompleteSubtaskResponse>(
         'CompleteSubtask',
         completeSubtask_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $10.CompleteSubtaskRequest.fromBuffer(value),
-        ($10.CompleteSubtaskResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$10.UncompleteSubtaskRequest, $10.UncompleteSubtaskResponse>(
+        ($core.List<$core.int> value) => $13.CompleteSubtaskRequest.fromBuffer(value),
+        ($13.CompleteSubtaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$13.UncompleteSubtaskRequest, $13.UncompleteSubtaskResponse>(
         'UncompleteSubtask',
         uncompleteSubtask_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $10.UncompleteSubtaskRequest.fromBuffer(value),
-        ($10.UncompleteSubtaskResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$10.DeleteSubtaskRequest, $10.DeleteSubtaskResponse>(
+        ($core.List<$core.int> value) => $13.UncompleteSubtaskRequest.fromBuffer(value),
+        ($13.UncompleteSubtaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$13.DeleteSubtaskRequest, $13.DeleteSubtaskResponse>(
         'DeleteSubtask',
         deleteSubtask_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $10.DeleteSubtaskRequest.fromBuffer(value),
-        ($10.DeleteSubtaskResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $13.DeleteSubtaskRequest.fromBuffer(value),
+        ($13.DeleteSubtaskResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$10.CreateTaskResponse> createTask_Pre($grpc.ServiceCall call, $async.Future<$10.CreateTaskRequest> request) async {
+  $async.Future<$13.CreateTaskResponse> createTask_Pre($grpc.ServiceCall call, $async.Future<$13.CreateTaskRequest> request) async {
     return createTask(call, await request);
   }
 
-  $async.Future<$10.UpdateTaskResponse> updateTask_Pre($grpc.ServiceCall call, $async.Future<$10.UpdateTaskRequest> request) async {
+  $async.Future<$13.UpdateTaskResponse> updateTask_Pre($grpc.ServiceCall call, $async.Future<$13.UpdateTaskRequest> request) async {
     return updateTask(call, await request);
   }
 
-  $async.Future<$10.GetTaskResponse> getTask_Pre($grpc.ServiceCall call, $async.Future<$10.GetTaskRequest> request) async {
+  $async.Future<$13.GetTaskResponse> getTask_Pre($grpc.ServiceCall call, $async.Future<$13.GetTaskRequest> request) async {
     return getTask(call, await request);
   }
 
-  $async.Future<$10.AssignTaskResponse> assignTask_Pre($grpc.ServiceCall call, $async.Future<$10.AssignTaskRequest> request) async {
+  $async.Future<$13.AssignTaskResponse> assignTask_Pre($grpc.ServiceCall call, $async.Future<$13.AssignTaskRequest> request) async {
     return assignTask(call, await request);
   }
 
-  $async.Future<$10.UnassignTaskResponse> unassignTask_Pre($grpc.ServiceCall call, $async.Future<$10.UnassignTaskRequest> request) async {
+  $async.Future<$13.UnassignTaskResponse> unassignTask_Pre($grpc.ServiceCall call, $async.Future<$13.UnassignTaskRequest> request) async {
     return unassignTask(call, await request);
   }
 
-  $async.Future<$10.CreateSubtaskResponse> createSubtask_Pre($grpc.ServiceCall call, $async.Future<$10.CreateSubtaskRequest> request) async {
+  $async.Future<$13.CreateSubtaskResponse> createSubtask_Pre($grpc.ServiceCall call, $async.Future<$13.CreateSubtaskRequest> request) async {
     return createSubtask(call, await request);
   }
 
-  $async.Future<$10.UpdateSubtaskResponse> updateSubtask_Pre($grpc.ServiceCall call, $async.Future<$10.UpdateSubtaskRequest> request) async {
+  $async.Future<$13.UpdateSubtaskResponse> updateSubtask_Pre($grpc.ServiceCall call, $async.Future<$13.UpdateSubtaskRequest> request) async {
     return updateSubtask(call, await request);
   }
 
-  $async.Future<$10.CompleteSubtaskResponse> completeSubtask_Pre($grpc.ServiceCall call, $async.Future<$10.CompleteSubtaskRequest> request) async {
+  $async.Future<$13.CompleteSubtaskResponse> completeSubtask_Pre($grpc.ServiceCall call, $async.Future<$13.CompleteSubtaskRequest> request) async {
     return completeSubtask(call, await request);
   }
 
-  $async.Future<$10.UncompleteSubtaskResponse> uncompleteSubtask_Pre($grpc.ServiceCall call, $async.Future<$10.UncompleteSubtaskRequest> request) async {
+  $async.Future<$13.UncompleteSubtaskResponse> uncompleteSubtask_Pre($grpc.ServiceCall call, $async.Future<$13.UncompleteSubtaskRequest> request) async {
     return uncompleteSubtask(call, await request);
   }
 
-  $async.Future<$10.DeleteSubtaskResponse> deleteSubtask_Pre($grpc.ServiceCall call, $async.Future<$10.DeleteSubtaskRequest> request) async {
+  $async.Future<$13.DeleteSubtaskResponse> deleteSubtask_Pre($grpc.ServiceCall call, $async.Future<$13.DeleteSubtaskRequest> request) async {
     return deleteSubtask(call, await request);
   }
 
-  $async.Future<$10.CreateTaskResponse> createTask($grpc.ServiceCall call, $10.CreateTaskRequest request);
-  $async.Future<$10.UpdateTaskResponse> updateTask($grpc.ServiceCall call, $10.UpdateTaskRequest request);
-  $async.Future<$10.GetTaskResponse> getTask($grpc.ServiceCall call, $10.GetTaskRequest request);
-  $async.Future<$10.AssignTaskResponse> assignTask($grpc.ServiceCall call, $10.AssignTaskRequest request);
-  $async.Future<$10.UnassignTaskResponse> unassignTask($grpc.ServiceCall call, $10.UnassignTaskRequest request);
-  $async.Future<$10.CreateSubtaskResponse> createSubtask($grpc.ServiceCall call, $10.CreateSubtaskRequest request);
-  $async.Future<$10.UpdateSubtaskResponse> updateSubtask($grpc.ServiceCall call, $10.UpdateSubtaskRequest request);
-  $async.Future<$10.CompleteSubtaskResponse> completeSubtask($grpc.ServiceCall call, $10.CompleteSubtaskRequest request);
-  $async.Future<$10.UncompleteSubtaskResponse> uncompleteSubtask($grpc.ServiceCall call, $10.UncompleteSubtaskRequest request);
-  $async.Future<$10.DeleteSubtaskResponse> deleteSubtask($grpc.ServiceCall call, $10.DeleteSubtaskRequest request);
+  $async.Future<$13.CreateTaskResponse> createTask($grpc.ServiceCall call, $13.CreateTaskRequest request);
+  $async.Future<$13.UpdateTaskResponse> updateTask($grpc.ServiceCall call, $13.UpdateTaskRequest request);
+  $async.Future<$13.GetTaskResponse> getTask($grpc.ServiceCall call, $13.GetTaskRequest request);
+  $async.Future<$13.AssignTaskResponse> assignTask($grpc.ServiceCall call, $13.AssignTaskRequest request);
+  $async.Future<$13.UnassignTaskResponse> unassignTask($grpc.ServiceCall call, $13.UnassignTaskRequest request);
+  $async.Future<$13.CreateSubtaskResponse> createSubtask($grpc.ServiceCall call, $13.CreateSubtaskRequest request);
+  $async.Future<$13.UpdateSubtaskResponse> updateSubtask($grpc.ServiceCall call, $13.UpdateSubtaskRequest request);
+  $async.Future<$13.CompleteSubtaskResponse> completeSubtask($grpc.ServiceCall call, $13.CompleteSubtaskRequest request);
+  $async.Future<$13.UncompleteSubtaskResponse> uncompleteSubtask($grpc.ServiceCall call, $13.UncompleteSubtaskRequest request);
+  $async.Future<$13.DeleteSubtaskResponse> deleteSubtask($grpc.ServiceCall call, $13.DeleteSubtaskRequest request);
 }

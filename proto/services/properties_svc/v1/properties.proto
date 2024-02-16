@@ -1,0 +1,180 @@
+syntax = "proto3";
+
+package proto.services.properties_svc.v1;
+
+option go_package = "gen/proto/services/properties-svc";
+
+import "proto/services/properties_svc/v1/types.proto";
+
+//
+// CreateProperty
+//
+
+message CreatePropertyRequest {
+  ViewContext context = 1;
+  SubjectType subject_type = 2; // TODO: add validation here (not-unspecified check)
+  FieldType field_type = 3; // TODO: add validation here (not-unspecified check)
+
+  string name = 4; // TODO: add validation (at least non-empty checks)
+  optional string description = 5; // TODO: add validation, if needed
+
+  // ID of set this Property should belong to
+  optional string set_id = 6;
+
+  optional bool always_include_for_current_context = 7;
+
+  oneof field_type_data {
+    bool none = 8;
+    SelectData select_data = 9;
+  }
+
+  message SelectData {
+    optional bool allow_freetext = 1;
+    repeated SelectOption options = 2;
+    message SelectOption {
+      string name = 1; // TODO: add validation (at least non-empty checks)
+      optional string description = 2; // TODO: add validation, if needed
+    }
+  }
+
+}
+
+message CreatePropertyResponse {
+  string property_id = 1;
+}
+
+
+//
+// GetProperty
+//
+
+
+message GetPropertyRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+  ViewContext context = 2;
+}
+
+message GetPropertyResponse {
+  string id = 1;
+  SubjectType subject_type = 2;
+  FieldType field_type = 3;
+
+  string name = 4;
+  optional string description = 5;
+
+  bool is_archived = 6;
+
+  // ID of set this Property should belong to
+  optional string set_id = 8;
+
+  oneof field_type_data {
+    bool none = 9;
+    SelectData select_data = 10;
+  }
+
+  message SelectData {
+    optional bool allow_freetext = 1;
+    repeated SelectOption options = 2;
+
+    message SelectOption {
+      string name = 1;
+      optional string description = 2;
+    }
+  }
+
+  optional bool always_include_for_current_context = 11;
+}
+
+//
+// GetProperties
+//
+
+message GetPropertiesRequest {
+  optional string set_id = 1; // @gotags: validate:"uuid4"
+  optional SubjectType subject_type = 2;
+}
+
+message GetPropertiesResponse {
+  message Property {
+    string id = 1;
+    SubjectType subject_type = 2;
+    FieldType field_type = 3;
+
+    string name = 4;
+    optional string description = 5;
+
+    bool is_archived = 6;
+
+    // ID of set this Property should belong to
+    optional string set_id = 8;
+
+    oneof field_type_data {
+      bool none = 9;
+      SelectData select_data = 10;
+    }
+
+    message SelectData {
+      optional bool allow_freetext = 1;
+      repeated SelectOption options = 2;
+
+      message SelectOption {
+        string name = 1;
+        optional string description = 2;
+        bool is_custom = 3;
+      }
+    }
+
+    optional bool always_include_for_current_context = 11;
+  }
+
+  repeated Property properties = 1;
+}
+
+//
+// UpdateProperty
+//
+
+message UpdatePropertyRequest {
+  string id = 1;
+
+  optional SubjectType subject_type = 2;
+  optional FieldType field_type = 3;
+
+  optional string name = 4; // TODO: validation
+  optional string description = 5; // TODO: validation
+
+  optional bool is_archived = 6;
+
+  // ID of set this Property should belong to
+  optional string set_id = 8;
+
+  oneof field_type_data {
+    bool none = 9;
+    SelectData select_data = 10;
+  }
+
+  message SelectData {
+    optional bool allow_freetext = 1;
+    repeated string remove_options = 2; // @gotags: validate:"dive,uuid4"
+    repeated SelectOption upsert_options = 3;
+
+    message SelectOption {
+      string id = 1;
+      optional string name = 2;
+      optional string description = 3;
+      optional bool is_custom = 4;
+    }
+  }
+
+
+  // TODO: TBD: optional bool always_include_for_current_context = 11;
+}
+
+message UpdatePropertyResponse {}
+
+service PropertiesService {
+  rpc CreateProperty (CreatePropertyRequest) returns (CreatePropertyResponse) {}
+  rpc GetProperty (GetPropertyRequest) returns (GetPropertyResponse) {}
+  rpc GetProperties (GetPropertiesRequest) returns (GetPropertiesResponse) {}
+  rpc UpdateProperty (UpdatePropertyRequest) returns (UpdatePropertyResponse) {}
+}

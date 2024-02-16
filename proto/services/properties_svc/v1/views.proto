@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package proto.services.properties_svc.v1;
+
+option go_package = "gen/proto/services/properties-svc";
+
+message UpdatePatientPropertyViewRuleRequest {
+  /* matchers */
+  optional string ward_id = 1;
+  optional string patient_id = 2;
+
+  /* Filter Update */
+
+  oneof soft_required {
+    bool reset_soft_required = 3; // sets soft_required to null for this matcher, when true
+    bool set_soft_required = 4; // sets the value of the soft_required filter for this matcher
+  }
+
+  // append property_id to the always_include list
+  // this means the property is shown, unless a more specific rule
+  // puts it in its dont_always_include list
+  optional string append_to_always_include = 5;
+
+  // remove property_id to the always_include list, also see append_to_always_include
+  optional string remove_from_always_include = 6;
+
+  // append property_id to the dont_always_include list, also see append_to_always_include
+  optional string append_to_dont_always_include = 7;
+
+  // remove property_id to the dont_always_include list, also see append_to_always_include
+  optional string remove_from_dont_always_include = 8;
+}
+
+message UpdatePatientPropertyViewRuleResponse {}
+
+message UpdateOrderRequest {
+  // id of the property that we "move"
+  string property_id = 1;
+  // the id of the property with an id just before the property that you are moving
+  // when left blank this means it's moved to the very top
+  optional string prev_neighbor = 2;
+}
+
+message UpdateOrderResponse {}
+
+service PropertyViewsService {
+  rpc UpdatePatientPropertyViewRule (UpdatePatientPropertyViewRuleRequest) returns (UpdatePatientPropertyViewRuleResponse) {}
+  rpc UpdateOrder (UpdateOrderRequest) returns (UpdateOrderResponse) {}
+}

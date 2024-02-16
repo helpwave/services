@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package proto.services.properties_svc.v1;
+
+option go_package = "gen/proto/services/properties-svc";
+
+import "proto/services/properties_svc/v1/types.proto";
+
+//
+// AttachPropertyValue
+//
+
+// attach the same property again to update
+message AttachPropertyValueRequest {
+  string subject_id = 1; // @gotags: validate:"uuid4"
+  SubjectType subject_type = 2; // TODO: validation (not 0)
+  string property_id = 3; // @gotags: validate:"uuid4"
+
+  oneof value {
+    bool is_undefined = 4; // if it exists, it should be true
+    string text_value = 5; // FIELD_TYPE_TEXT
+    float number_value = 6; // FIELD_TYPE_NUMBER
+    bool bool_value = 7; // FIELD_TYPE_CHECKBOX
+    string date_value = 8; // FIELD_TYPE_DATE TODO: is there a proto date type?
+    string date_time_value = 9; // FIELD_TYPE_DATE_TIME
+    string select_value = 10; // FIELD_TYPE_SELECT, id of option
+  }
+}
+
+message AttachPropertyValueResponse {
+  string property_value_id = 1;
+}
+
+//
+// GetAttachedPropertyValues
+//
+
+message GetAttachedPropertyValuesRequest {
+  string subject_id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetAttachedPropertyValuesResponse {
+  message Value {
+    string property_id = 1;
+    FieldType field_type = 2;
+    string name = 3;
+    optional string description = 4;
+
+    bool is_archived = 5;
+
+    message Set {
+      string id = 1;
+      string name = 2;
+    }
+    optional Set set = 7;
+
+    oneof value {
+      bool is_undefined = 8; // if it exists, it's true
+      string text_value = 9; // FIELD_TYPE_TEXT
+      float number_value = 10; // FIELD_TYPE_NUMBER
+      bool bool_value = 11; // FIELD_TYPE_CHECKBOX
+      string date_value = 12; // FIELD_TYPE_DATE TODO: is there a proto date type?
+      string date_time_value = 13; // FIELD_TYPE_DATE_TIME
+      string select_value = 14; // FIELD_TYPE_SELECT, id of option
+    }
+  }
+
+  repeated Value values = 1;
+  // TODO: TBD: Property Information for Values
+}
+
+service PropertyValuesService {
+  rpc AttachPropertyValue (AttachPropertyValueRequest) returns (AttachPropertyValueResponse) {}
+  rpc GetAttachedPropertyValues (GetAttachedPropertyValuesRequest) returns (GetAttachedPropertyValuesResponse) {}
+}
