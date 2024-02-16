@@ -338,6 +338,16 @@ message UpdatePatientPropertyViewRuleRequest {
 
 message UpdatePatientPropertyViewRuleResponse {}
 
+message UpdateOrderRequest {
+  // id of the property that we "move"
+  string property_id = 1;
+  // the id of the property with an id just before the property that you are moving
+  // when left blank this means it's moved to the very top
+  optional string prev_neighbor = 2;
+}
+
+message UpdateOrderResponse {}
+
 service PropertiesService {
   rpc CreatePropertySet (CreatePropertySetRequest) returns (CreatePropertySetResponse) {}
   rpc UpdatePropertySet (UpdatePropertySetRequest) returns (UpdatePropertySetResponse) {}
@@ -352,4 +362,5 @@ service PropertiesService {
   rpc GetAttachedPropertyValues (GetAttachedPropertyValuesRequest) returns (GetAttachedPropertyValuesResponse) {}
 
   rpc UpdatePatientPropertyViewRule (UpdatePatientPropertyViewRuleRequest) returns (UpdatePatientPropertyViewRuleResponse) {}
+  rpc UpdateOrder (UpdateOrderRequest) returns (UpdateOrderResponse) {}
 }
