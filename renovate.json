@@ -37,7 +37,7 @@
       ]
     }
   ],
-  "ignoreDeps": ["common", "decaying_lru", "hwdb", "hwes", "hwutil", "hwgorm", "proto_helpers", "telemetry"],
+  "ignoreDeps": ["common", "decaying_lru", "hwdb", "hwes", "hwutil", "hwgorm", "proto_helpers", "telemetry", "gen"],
   "customManagers": [
     {
       "customType": "regex",
