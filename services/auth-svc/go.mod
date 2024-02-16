@@ -5,7 +5,6 @@ go 1.20
 replace (
 	common => ../../libs/common
 	gen => ../../gen/go
-	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
 	telemetry => ../../libs/telemetry
 )
