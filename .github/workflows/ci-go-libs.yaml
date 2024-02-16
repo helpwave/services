@@ -9,12 +9,13 @@ on:
         required: true
 
 env:
+  # renovate: datasource=docker depName=golang versioning=docker
   GO_VERSION: '1.21'
 
 jobs:
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: libs/${{ inputs.lib }}
@@ -38,7 +39,7 @@ jobs:
           args: "--out-format=line-number"
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: libs/${{ inputs.lib }}

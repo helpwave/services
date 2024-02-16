@@ -1,0 +1,7 @@
+{
+  "dockerComposeFile": "../dev/docker-compose.yaml",
+  "service": "devcontainer",
+  "remoteUser": "helpwave",
+  "workspaceFolder": "/helpwave",
+  "overrideCommand": false
+}

@@ -9,7 +9,7 @@ yes | ./migrate.sh task-svc down
 
 cd -
 
-psql -f integration_tests/seed.sql postgres://postgres:postgres@localhost:5432/task-svc
+psql -f integration_tests/seed.sql postgres://postgres:postgres@postgres:5432/task-svc
 
 rm integration_tests/*.actual -f
 

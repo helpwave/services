@@ -11,6 +11,11 @@ on:
         description: 'The name of the image.'
         type: string
         required: true
+      custom_tag:
+        description: 'This tag will the used when pushing the image'
+        type: string
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -18,7 +23,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       packages: write
@@ -72,7 +77,7 @@ jobs:
           context: images/${{ inputs.image }}
           platforms: linux/amd64
           push: ${{ inputs.deploy }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ inputs.custom_tag && '${{ env.IMAGE_NAME }}:${{ inputs.custom_tag }}' || steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
