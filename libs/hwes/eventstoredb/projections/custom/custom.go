@@ -91,7 +91,7 @@ func (p *CustomProjection) process(ctx context.Context, stream *esdb.PersistentS
 			continue
 		}
 
-		if strings.HasPrefix(esdbEvent.EventAppeared.Event.EventType, "abc") {
+		if strings.HasPrefix(esdbEvent.EventAppeared.Event.EventType, "$") {
 			// Skip internal events
 			// https://developers.eventstore.com/server/v23.10/streams.html#reserved-names
 			continue
