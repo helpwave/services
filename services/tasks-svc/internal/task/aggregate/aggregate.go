@@ -19,7 +19,7 @@ type TaskAggregate struct {
 }
 
 func NewTaskAggregate(id uuid.UUID) *TaskAggregate {
-	aggregate := &TaskAggregate{Task: models.NewTask()}
+	aggregate := &TaskAggregate{Task: &models.Task{}}
 	aggregate.AggregateBase = hwes.NewAggregateBase(TaskAggregateType, id)
 	aggregate.Task.ID = id
 	aggregate.initEventListeners()
@@ -171,9 +171,11 @@ func (a *TaskAggregate) onSubtaskCreated(evt hwes.Event) error {
 		return err
 	}
 
-	subtask := models.NewSubtask()
-	subtask.ID = subtaskID
-	subtask.Name = payload.Name
+	subtask := &models.Subtask{ID: subtaskID, Name: payload.Name}
+
+	if a.Task.Subtasks == nil {
+		a.Task.Subtasks = make(map[uuid.UUID]models.Subtask)
+	}
 
 	a.Task.Subtasks[subtaskID] = *subtask
 
