@@ -35,6 +35,10 @@
       "matchUpdateTypes": [
         "major"
       ]
+    },
+    {
+      "matchDatasources": ["github-releases"],
+      "extractVersion": "^v?(?<version>.*)$"
     }
   ],
   "ignoreDeps": ["common", "decaying_lru", "hwdb", "hwes", "hwutil", "hwgorm", "proto_helpers", "telemetry", "gen"],
