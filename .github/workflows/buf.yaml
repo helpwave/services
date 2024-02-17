@@ -10,21 +10,40 @@ permissions:
   contents: read
   pull-requests: read
 
+env:
+  # renovate: datasource=docker depName=golang versioning=docker
+  GO_VERSION: '1.21'
+  # renovate: datasource=github-releases depName=bufbuild/buf
+  BUF_CLI_VERSION: '1.28.1'
+  # renovate: datasource=github-releases depName=favadi/protoc-go-inject-tag
+  PROTOC_GO_INJECT_TAG_VERSION: '1.4.0'
+
 jobs:
   lint-protos:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - uses: bufbuild/buf-setup-action@v1
+        with:
+          version: v${{ env.BUF_CLI_VERSION }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: bufbuild/buf-lint-action@v1
   generate-protos:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
       deployments: write
     steps:
       - uses: actions/checkout@v4
-      - run: make proto
+      - uses: bufbuild/buf-setup-action@v1
+        with:
+          version: v${{ env.BUF_CLI_VERSION }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - run: go install github.com/favadi/protoc-go-inject-tag@v${{ env.PROTOC_GO_INJECT_TAG_VERSION }}
+      - run: bash protos.sh
       - name: Break if generated go modules are not checked in
         # exits with 1 if there were differences, and 0 if there were none
         run: git diff --quiet gen
@@ -38,7 +57,7 @@ jobs:
           directory: 'proto_docs'
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
   breakage:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - uses: bufbuild/buf-setup-action@v1

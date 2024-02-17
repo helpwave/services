@@ -7,9 +7,16 @@ on:
     - proto/**/*.proto
     - gen/*/proto/**/*
 
+env:
+  # renovate: datasource=github-releases depName=bufbuild/buf
+  BUF_CLI_VERSION: '1.28.1'
+  NODE_VERSION: '18.x'
+  # renovate: datasource=dart-version depName=dart
+  DART_VERSION: '3.2.6'
+
 jobs:
   check-preconditions:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       bump: ${{ steps.bump.outputs.bump }}
       commit: ${{ steps.commit.outputs.sha }}
@@ -19,6 +26,9 @@ jobs:
       with:
         fetch-depth: 2
     - uses: bufbuild/buf-setup-action@v1
+      with:
+        version: ${{ env.BUF_CLI_VERSION }}
+
     - uses: bufbuild/buf-lint-action@v1
     # TODO (arm-versioning): Arm versioning by remove the comment of ONLY the next line
     # - name: Check for illegal breakage
@@ -66,7 +76,7 @@ jobs:
 
   ts:
     needs: check-preconditions
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       packages: write
     steps:
@@ -74,7 +84,7 @@ jobs:
       uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
-        node-version: '18.x'
+        node-version: ${{ env.NODE_VERSION }}
         registry-url: 'https://registry.npmjs.org'
     - name: Fetch latest version from registry
       working-directory: gen/ts
@@ -93,18 +103,20 @@ jobs:
   dart:
     needs:
     - check-preconditions
-    - ts # TODO: Commit all changes in one commit. Should prevents branch behind error as well.
-    runs-on: ubuntu-latest
+    - ts
+    runs-on: ubuntu-22.04
     steps:
     - name: Clone Repo
       uses: actions/checkout@v4
       with:
-        ref: main # TODO: Commit all changes in one commit. Should prevents branch behind error as well.
+        ref: main
     - name: Install tools
       run: |
         wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
         chmod +x /usr/local/bin/semver
     - uses: dart-lang/setup-dart@v1
+      with:
+        sdk: ${{ env.DART_VERSION }}
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v1'
       with:

@@ -50,3 +50,11 @@ sql:
         <<: *repo-go
         package: "task_repo"
         out: "repos/task_repo"
+
+  - <<: *repo
+    queries: "./repos/task_template_repo.sql"
+    gen:
+      go:
+        <<: *repo-go
+        package: "task_template_repo"
+        out: "repos/task_template_repo"

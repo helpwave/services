@@ -6,7 +6,6 @@ replace (
 	common => ../../libs/common
 	gen => ../../gen/go
 	hwes => ../../libs/hwes
-	hwgorm => ../../libs/hwgorm
 	hwutil => ../../libs/hwutil
 	telemetry => ../../libs/telemetry
 )

@@ -15,7 +15,7 @@ type Property struct {
 	Description string
 	IsArchived  bool
 
-	setID uuid.UUID
+	_setID uuid.UUID //nolint:unused
 
 	SelectOptions []SelectOption
 }

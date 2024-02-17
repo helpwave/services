@@ -10,15 +10,6 @@ DOCKER_IMAGES = $(subst images/,,$(wildcard images/*))
 WORKING_DIRECTORY := $(CURDIR)
 export WORKING_DIRECTORY
 
-.PHONY: proto
-proto:
-	docker run --rm -v $(WORKING_DIRECTORY):/wd ghcr.io/helpwave/service-preproc:edge lint --path proto || true
-	docker run --rm -v $(WORKING_DIRECTORY):/wd ghcr.io/helpwave/service-preproc:edge generate --path proto --include-imports --include-wkt
-
-.PHONY: proto_lint
-proto_lint:
-	docker run --rm -v $(WORKING_DIRECTORY):/wd ghcr.io/helpwave/service-preproc:edge lint
-
 .PHONY: GO_SERVICES
 $(GO_SERVICES): proto
 	docker build -f ${DOCKERFILE_SERVICES} --build-arg=VERSION=${VERSION} --build-arg=SERVICE=$@ -t ghcr.io/helpwave/$@:edge .

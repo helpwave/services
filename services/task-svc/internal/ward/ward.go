@@ -9,7 +9,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwdb"
-	"hwgorm"
 	"hwutil"
 	"task-svc/internal/tracking"
 	"task-svc/repos/ward_repo"
@@ -232,11 +231,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 		WardIds:          nil,
 	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	resWards := hwutil.Map(rows, func(row ward_repo.GetWardsWithCountsRow) *pb.GetWardOverviewsResponse_Ward {

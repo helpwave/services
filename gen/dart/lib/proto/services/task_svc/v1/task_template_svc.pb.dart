@@ -954,10 +954,14 @@ class CreateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
 class GetAllTaskTemplatesByCreatorRequest extends $pb.GeneratedMessage {
   factory GetAllTaskTemplatesByCreatorRequest({
     $core.String? createdBy,
+    $core.bool? privateOnly,
   }) {
     final $result = create();
     if (createdBy != null) {
       $result.createdBy = createdBy;
+    }
+    if (privateOnly != null) {
+      $result.privateOnly = privateOnly;
     }
     return $result;
   }
@@ -967,6 +971,7 @@ class GetAllTaskTemplatesByCreatorRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesByCreatorRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.task_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'createdBy')
+    ..aOB(2, _omitFieldNames ? '' : 'privateOnly')
     ..hasRequiredFields = false
   ;
 
@@ -999,6 +1004,15 @@ class GetAllTaskTemplatesByCreatorRequest extends $pb.GeneratedMessage {
   $core.bool hasCreatedBy() => $_has(0);
   @$pb.TagNumber(1)
   void clearCreatedBy() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get privateOnly => $_getBF(1);
+  @$pb.TagNumber(2)
+  set privateOnly($core.bool v) { $_setBool(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPrivateOnly() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPrivateOnly() => clearField(2);
 }
 
 class GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask extends $pb.GeneratedMessage {
