@@ -13,8 +13,8 @@ helpwave's microservices
 
 ### Using Docker Compose next to your IDE
 
-Using this setup you use your editor of choice on your system and start the docker compose stack next to it.
-The main down site to this is that your IDE will use your local toolchain and dependencies, which may not be in sync.
+Using this setup, you use your editor of choice on your system and start the docker compose stack next to it.
+The main downside to this is that your IDE will use your local toolchain and dependencies, which may not be in sync.
 
 > [!TIP]
 > `./up.sh -d` starts the compose stack in the background
@@ -65,7 +65,7 @@ This will install a backend client for your IDE in the `devcontainer` container,
 5. Wait, follow further instructions, and select the editor you want to launch (likely GoLand)
 6. GoLand will start *in* a docker container, you can start hacking!
 7. Use the usual GoLand UI to open a terminal, where you will find a bunch of tools pre-installed for you.
-8. Next time you can find the Dev Container ready to start.
+8. Next time, you can find the Dev Container ready to start.
 
 Next Steps: [Read on here](#development)
 
@@ -77,11 +77,11 @@ The short route will clone the repo *somewhere*. If you like to have control abo
 2. Navigate to ./dev-container/devcontainer.json
 3. Click on the Dev Container Logo next to the first line and "Create Dev Container and Mount Sources"
 4. Wait, follow further instructions, and select the editor you want to launch (likely GoLand)
-5. GoLand will start *in* a docker container you can start hacking!
+5. GoLand will start *in* a docker container, you can start hacking!
 6. Quit both the new, and the old GoLand instances.
 7. Open GoLand again and close any open projects.
 8. In the Welcome Screen, under "Remote Development" -> "Dev Containers" the Dev Container should be listed.
-9. From now on you can start it from there.
+9. From now on, you can start it from there.
 
 Next Steps: [Read on here](#development)
 
@@ -98,9 +98,9 @@ Next Steps: [Read on here](#development)
 
 ## Development
 
-Following the steps above you should now have a docker compose stack running and are able to execute commands in the `dev-devcontainer-1` container.
+Following the steps above, you should now have a docker compose stack running and are able to execute commands in the `dev-devcontainer-1` container.
 
-To see what compose actually starts we recommend a look into the [docker-compose.yaml](https://github.com/helpwave/services/blob/main/dev/docker-compose.yaml), but here is the gist:
+To see what compose actually starts, we recommend a look into the [docker-compose.yaml](https://github.com/helpwave/services/blob/main/dev/docker-compose.yaml), but here is the gist:
 
 * Dependencies (e.g., Redis, Postgres and EventStore)
 * `apisix`
@@ -108,7 +108,7 @@ To see what compose actually starts we recommend a look into the [docker-compose
 * `devcontainer`
 
 Of particular interest are the `services` and `devcontainer` containers. The former starts all go services using [air](https://github.com/cosmtrek/air), a tool that automatically recompiles and restarts the service on reload.
-The latter gives you a playground for development with all the tools you need. As it is in the docker network you can use the names of the other (docker compose) services as hostnames (i.e. `postgres` will be resolved to the container in which the postgres instance is running on).
+The latter gives you a playground for development with all the tools you need. As it is in the docker network you can use the names of the other (docker compose) services as hostnames (i.e., `postgres` will be resolved to the container in which the postgres instance is running on).
 **It also has access to docker.** This means you can, for example, read the services logs like this: `docker compose logs services -f`, and start / stop / restart containers.
 
 A lot of ports will be allocated on your host system for additional debugging. Have a look at the [table below](#ports) for more information.
@@ -117,7 +117,7 @@ A lot of ports will be allocated on your host system for additional debugging. H
 
 The microservices are tied together using [dapr](https://dapr.io/). Most services provide a grpc API, as defined by the protobufs in `/proto`.
 
-We provide one unified entrypoint for clients in form of the API-gateway [APISIX](https://apisix.apache.org/). It exposes a [grpc-web](https://github.com/grpc/grpc-web) api for http-only clients (i.e. web), but falls back to a grpc proxy for those clients that support it (i.e. mobile).
+We provide one unified entrypoint for clients in form of the API-gateway [APISIX](https://apisix.apache.org/). It exposes a [grpc-web](https://github.com/grpc/grpc-web) api for http-only clients (i.e., web), but falls back to a grpc proxy for those clients that support it (i.e., mobile).
 
 #### How do I talk to a service?
 
@@ -127,7 +127,7 @@ The frontend is a great way to test regressions. Hop over to [the web repo](http
 
 ##### Using APISIX over grpc-web
 
-Using this approach you are closest to the actual calls made by the frontends. 
+Using this approach, you are closest to the actual calls made by the frontends. 
 
 TODO: We are still looking for a tool that works well for this :/
 
