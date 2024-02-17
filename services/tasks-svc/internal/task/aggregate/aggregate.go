@@ -9,6 +9,7 @@ import (
 	"hwutil"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"tasks-svc/internal/task/models"
+	"time"
 )
 
 const TaskAggregateType = "task"
@@ -19,9 +20,13 @@ type TaskAggregate struct {
 }
 
 func NewTaskAggregate(id uuid.UUID) *TaskAggregate {
-	aggregate := &TaskAggregate{Task: &models.Task{}}
+	aggregate := &TaskAggregate{Task: &models.Task{
+		ID:            id,
+		CreatedAt:     time.Now().UTC(),
+		AssignedUsers: make([]uuid.UUID, 0),
+		Subtasks:      make(map[uuid.UUID]models.Subtask, 0),
+	}}
 	aggregate.AggregateBase = hwes.NewAggregateBase(TaskAggregateType, id)
-	aggregate.Task.ID = id
 	aggregate.initEventListeners()
 	return aggregate
 }
@@ -171,10 +176,11 @@ func (a *TaskAggregate) onSubtaskCreated(evt hwes.Event) error {
 		return err
 	}
 
-	subtask := &models.Subtask{ID: subtaskID, Name: payload.Name}
-
-	if a.Task.Subtasks == nil {
-		a.Task.Subtasks = make(map[uuid.UUID]models.Subtask)
+	subtask := &models.Subtask{
+		ID:        subtaskID,
+		Name:      payload.Name,
+		CreatedAt: time.Now().UTC(),
+		Done:      false,
 	}
 
 	a.Task.Subtasks[subtaskID] = *subtask
