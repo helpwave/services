@@ -3,6 +3,10 @@
 
 name: 'Deploy to Fly'
 
+env:
+  # renovate: datasource=github-releases depName=superfly/flyctl versioning=semver
+  FLY_CLI_VERSION: '0.1.146'
+
 on:
   workflow_call:
     inputs:
@@ -38,7 +42,7 @@ concurrency:
 jobs:
 
   fly-toml:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       fly_toml: ${{ steps.fly-toml.outputs.fly_toml }}
     steps:
@@ -55,7 +59,7 @@ jobs:
           suggested_fly_toml: fly.${{ inputs.environment }}.toml
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: fly-toml
     if: ${{ needs.fly-toml.outputs.fly_toml != '' }}
     env:
@@ -69,6 +73,8 @@ jobs:
           organization: ${{ inputs.organization }}
       - name: Setup flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
+        with:
+          version: ${{ env.FLY_CLI_VERSION }}
       - name: Deploy
         run: |
           flyctl deploy --config services/${{ inputs.service }}/${{ needs.fly-toml.outputs.fly_toml }} --app ${{ inputs.app }} --build-arg VERSION=${{ inputs.version }} --remote-only

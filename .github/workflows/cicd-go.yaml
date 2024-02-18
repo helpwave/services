@@ -22,12 +22,13 @@ permissions:
 #     working-directory: services/${{ inputs.service }}
 
 env:
-  GO_VERSION: '1.19'
+  # renovate: datasource=docker depName=golang versioning=docker
+  GO_VERSION: '1.21'
 
 jobs:
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: services/${{ inputs.service }}
@@ -41,7 +42,7 @@ jobs:
       - name: Cache build dependencies
         uses: actions/cache@v3
         with:
-          path: ~/go/pkg/mod
+          path: /go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/_go.sum') }}
 
       - uses: golangci/golangci-lint-action@v3
@@ -51,7 +52,7 @@ jobs:
           args: "--out-format=line-number"
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: services/${{ inputs.service }}
@@ -76,7 +77,7 @@ jobs:
 
   docker:
     needs: [ lint, test ]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       packages: write

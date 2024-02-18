@@ -10,10 +10,14 @@ permissions:
   contents: read
   pull-requests: read
 
+env:
+  # renovate: dev-tag
+  DEV_TAG: '1'
+
 jobs:
 
   detect-changes:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       services: ${{ steps.aggregate-changes.outputs.services }}
       libs: ${{ steps.aggregate-changes.outputs.libs }}
@@ -38,11 +42,7 @@ jobs:
         uses: tj-actions/changed-files@v40
         with:
           files: |
-            services/auth-svc/**
-            services/emergency-room-svc/**
-            services/ory-svc/**
-            services/task-svc/**
-            services/user-svc/**
+            services/*-svc/**
 
       - name: Detect changes in images
         id: changes-in-images
@@ -64,7 +64,7 @@ jobs:
           else
             echo "services=$(echo $changesInServices | awk -F / '$1 ~ /services/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           fi
-          echo "images=$(echo $changesInImages | awk -F / '$1 ~ /images/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
+          echo "images=$(echo $changesInImages | awk -F / '$1 ~ /images/ {print $2}' | uniq | grep -v dev-go-custom | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
         env:
           libsChanged: ${{ steps.changes-in-libs.outputs.any_changed }}
           changesInServices: ${{ steps.changes-in-services.outputs.all_changed_files }}
@@ -125,6 +125,7 @@ jobs:
     with:
       deploy: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
       image: ${{ matrix.image }}
+      custom_tag: ${{ matrix.image == 'dev-go' && '${{ env.DEV_TAG }}' || '' }}
     secrets: inherit
 
   fly-deploy-staging:
