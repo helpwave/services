@@ -68,6 +68,6 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240205150955-31a09d347014 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	hwlocale v0.0.0-00010101000000-000000000000 // indirect
+	hwlocale v0.0.0 // indirect
 	telemetry v0.0.0 // indirect
 )

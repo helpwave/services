@@ -10,7 +10,7 @@ replace (
 )
 
 require (
-	github.com/golang/protobuf v1.5.3
+	common v0.0.0
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa
 	github.com/jackc/pgx/v5 v5.5.3
 	github.com/nicksnyder/go-i18n/v2 v2.4.0
@@ -23,7 +23,6 @@ require (
 	hwlocale v0.0.0
 	hwutil v0.0.0
 	telemetry v0.0.0
-	common v0.0.0
 )
 
 require (
@@ -39,6 +38,7 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.16.0 // indirect
+	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0 // indirect

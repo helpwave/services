@@ -81,5 +81,5 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/postgres v1.5.2 // indirect
-	hwlocale v0.0.0-00010101000000-000000000000 // indirect
+	hwlocale v0.0.0 // indirect
 )
