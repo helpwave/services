@@ -1,6 +1,6 @@
 module telemetry
 
-go 1.20
+go 1.22
 
 require (
 	github.com/fatih/structs v1.1.0
