@@ -15,20 +15,20 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'property_svc.pb.dart' as $4;
+import 'property_svc.pb.dart' as $3;
 
 export 'property_svc.pb.dart';
 
 @$pb.GrpcServiceName('proto.services.property_svc.v1.PropertyService')
 class PropertyServiceClient extends $grpc.Client {
-  static final _$createProperty = $grpc.ClientMethod<$4.CreatePropertyRequest, $4.CreatePropertyResponse>(
+  static final _$createProperty = $grpc.ClientMethod<$3.CreatePropertyRequest, $3.CreatePropertyResponse>(
       '/proto.services.property_svc.v1.PropertyService/CreateProperty',
-      ($4.CreatePropertyRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $4.CreatePropertyResponse.fromBuffer(value));
-  static final _$getProperty = $grpc.ClientMethod<$4.GetPropertyRequest, $4.GetPropertyResponse>(
+      ($3.CreatePropertyRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $3.CreatePropertyResponse.fromBuffer(value));
+  static final _$getProperty = $grpc.ClientMethod<$3.GetPropertyRequest, $3.GetPropertyResponse>(
       '/proto.services.property_svc.v1.PropertyService/GetProperty',
-      ($4.GetPropertyRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $4.GetPropertyResponse.fromBuffer(value));
+      ($3.GetPropertyRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $3.GetPropertyResponse.fromBuffer(value));
 
   PropertyServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -36,11 +36,11 @@ class PropertyServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$4.CreatePropertyResponse> createProperty($4.CreatePropertyRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$3.CreatePropertyResponse> createProperty($3.CreatePropertyRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createProperty, request, options: options);
   }
 
-  $grpc.ResponseFuture<$4.GetPropertyResponse> getProperty($4.GetPropertyRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$3.GetPropertyResponse> getProperty($3.GetPropertyRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getProperty, request, options: options);
   }
 }
@@ -50,30 +50,30 @@ abstract class PropertyServiceBase extends $grpc.Service {
   $core.String get $name => 'proto.services.property_svc.v1.PropertyService';
 
   PropertyServiceBase() {
-    $addMethod($grpc.ServiceMethod<$4.CreatePropertyRequest, $4.CreatePropertyResponse>(
+    $addMethod($grpc.ServiceMethod<$3.CreatePropertyRequest, $3.CreatePropertyResponse>(
         'CreateProperty',
         createProperty_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $4.CreatePropertyRequest.fromBuffer(value),
-        ($4.CreatePropertyResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$4.GetPropertyRequest, $4.GetPropertyResponse>(
+        ($core.List<$core.int> value) => $3.CreatePropertyRequest.fromBuffer(value),
+        ($3.CreatePropertyResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.GetPropertyRequest, $3.GetPropertyResponse>(
         'GetProperty',
         getProperty_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $4.GetPropertyRequest.fromBuffer(value),
-        ($4.GetPropertyResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $3.GetPropertyRequest.fromBuffer(value),
+        ($3.GetPropertyResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$4.CreatePropertyResponse> createProperty_Pre($grpc.ServiceCall call, $async.Future<$4.CreatePropertyRequest> request) async {
+  $async.Future<$3.CreatePropertyResponse> createProperty_Pre($grpc.ServiceCall call, $async.Future<$3.CreatePropertyRequest> request) async {
     return createProperty(call, await request);
   }
 
-  $async.Future<$4.GetPropertyResponse> getProperty_Pre($grpc.ServiceCall call, $async.Future<$4.GetPropertyRequest> request) async {
+  $async.Future<$3.GetPropertyResponse> getProperty_Pre($grpc.ServiceCall call, $async.Future<$3.GetPropertyRequest> request) async {
     return getProperty(call, await request);
   }
 
-  $async.Future<$4.CreatePropertyResponse> createProperty($grpc.ServiceCall call, $4.CreatePropertyRequest request);
-  $async.Future<$4.GetPropertyResponse> getProperty($grpc.ServiceCall call, $4.GetPropertyRequest request);
+  $async.Future<$3.CreatePropertyResponse> createProperty($grpc.ServiceCall call, $3.CreatePropertyRequest request);
+  $async.Future<$3.GetPropertyResponse> getProperty($grpc.ServiceCall call, $3.GetPropertyRequest request);
 }
