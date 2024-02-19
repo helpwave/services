@@ -29,9 +29,20 @@ func TestParseLocales(t *testing.T) {
 	arrayEq(t, expected, parsed)
 }
 
-func TestParseLocalesReorderd(t *testing.T) {
+func TestParseLocalesReordered(t *testing.T) {
 	const mdnExample = "fr-CH, de;q=0.7, en;q=0.8, fr;q=0.9, *;q=0.5"
 	expected := []language.Tag{language.MustParse("fr-CH"), language.French, language.English, language.German}
+	parsed, ok := common.ParseLocales(mdnExample)
+	if !ok {
+		t.Error("failed to parse")
+		return
+	}
+	arrayEq(t, expected, parsed)
+}
+
+func TestParseLocalesSimple(t *testing.T) {
+	const mdnExample = "de"
+	expected := []language.Tag{language.German}
 	parsed, ok := common.ParseLocales(mdnExample)
 	if !ok {
 		t.Error("failed to parse")

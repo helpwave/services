@@ -31,7 +31,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.21.0
 	golang.org/x/text v0.14.0
 	google.golang.org/protobuf v1.32.0
-	hwlocale v0.0.0-00010101000000-000000000000
+	hwlocale v0.0.0
 )
 
 require (

@@ -9,8 +9,7 @@ require (
 	github.com/nicksnyder/go-i18n/v2 v2.4.0
 	github.com/rs/zerolog v1.32.0
 	golang.org/x/text v0.14.0
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240205150955-31a09d347014
-	hwutil v0.0.0-00010101000000-000000000000
+	hwutil v0.0.0
 )
 
 require (

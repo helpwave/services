@@ -412,7 +412,7 @@ func errorQualityControlInterceptor(ctx context.Context, req interface{}, info *
 
 		if !hasLocalizedMessage {
 			log.Warn().Err(err).Msg("status error does not have LocalizedMessage")
-			statusError, err = statusError.WithDetails(hwlocale.LocalizedMessage(ctx, locale.GenericError(ctx)))
+			statusError, err = statusError.WithDetails(LocalizedMessage(ctx, locale.GenericError(ctx)))
 			if statusError != nil {
 				err = statusError.Err()
 			}
@@ -521,6 +521,7 @@ func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.U
 }
 
 func validateFieldErrDescription(ctx context.Context, fieldErr validator.FieldError) string {
+	log := zlog.Ctx(ctx)
 	var l hwlocale.Locale
 	switch fieldErr.Tag() {
 	case "required":
@@ -528,6 +529,7 @@ func validateFieldErrDescription(ctx context.Context, fieldErr validator.FieldEr
 		break
 	// TODO: add more tags
 	default:
+		log.Warn().Str("tag", fieldErr.Tag()).Msg("tag unhandled, falling back to InvalidFieldError description")
 		l = locale.InvalidFieldError(ctx)
 	}
 
@@ -648,9 +650,8 @@ func NewStatusError(ctx context.Context, code codes.Code, msg string, locale hwl
 
 	if locale.Bundle == nil || locale.Config == nil {
 		log.Warn().Msg("creating Status Error without valid locale")
-		// TODO: replace Locale with generic error
 	} else {
-		details = append(details, hwlocale.LocalizedMessage(ctx, locale))
+		details = append(details, LocalizedMessage(ctx, locale))
 	}
 
 	s, err := statusNoDetails.WithDetails(details...)
@@ -661,4 +662,14 @@ func NewStatusError(ctx context.Context, code codes.Code, msg string, locale hwl
 		return statusNoDetails.Err()
 	}
 	return s.Err()
+}
+
+// LocalizedMessage returns a LocalizedMessage Error Detail as per https://cloud.google.com/apis/design/errors#error_details
+// Also see NewStatusError, which constructs a LocalizedMessage for you
+func LocalizedMessage(ctx context.Context, locale hwlocale.Locale) *errdetails.LocalizedMessage {
+	str, tag := hwlocale.LocalizeWithTag(ctx, locale)
+	return &errdetails.LocalizedMessage{
+		Locale:  tag.String(),
+		Message: str,
+	}
 }
