@@ -390,7 +390,6 @@ func errorQualityControlInterceptor(ctx context.Context, req interface{}, info *
 		hasErrorInfo := false
 		hasResourceInfo := false
 		hasQuotaFailure := false
-		hasDebugInfo := false
 
 		for _, detail := range statusError.Details() {
 			if _, ok := detail.(*errdetails.LocalizedMessage); ok {
@@ -410,9 +409,6 @@ func errorQualityControlInterceptor(ctx context.Context, req interface{}, info *
 			}
 			if _, ok := detail.(*errdetails.QuotaFailure); ok {
 				hasQuotaFailure = true
-			}
-			if _, ok := detail.(*errdetails.DebugInfo); ok {
-				hasDebugInfo = true
 			}
 		}
 
@@ -459,20 +455,6 @@ func errorQualityControlInterceptor(ctx context.Context, req interface{}, info *
 			}
 		case codes.ResourceExhausted:
 			if !hasQuotaFailure {
-				log.Warn().
-					Str("code", statusError.Code().String()).
-					Msg("status errors with this code should have a QuotaFailure detail, but none found")
-			}
-		case codes.DataLoss:
-			fallthrough
-		case codes.Unknown:
-			fallthrough
-		case codes.Internal:
-			fallthrough
-		case codes.Unavailable:
-			fallthrough
-		case codes.DeadlineExceeded:
-			if !hasDebugInfo {
 				log.Warn().
 					Str("code", statusError.Code().String()).
 					Msg("status errors with this code should have a QuotaFailure detail, but none found")
