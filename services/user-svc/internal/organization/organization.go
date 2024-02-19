@@ -786,7 +786,7 @@ func AddUserToOrganization(ctx context.Context, userId uuid.UUID, organizationId
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	log.Info().
