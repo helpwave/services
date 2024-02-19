@@ -10,7 +10,7 @@ FROM golang:1.22-bookworm
 # update debian package list and packages, also install some
 RUN apt update \
     && apt upgrade \
-    && apt install sudo vim nano jq dnsutils postgresql-client lsb-release gpg redis-tools \
+    && apt install sudo vim nano jq dnsutils postgresql-client-16 lsb-release gpg redis-tools \
     	apt-transport-https ca-certificates curl gnupg2 software-properties-common \
 		-y \
     && apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*

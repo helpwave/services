@@ -89,7 +89,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15
+        image: postgres:16
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -110,15 +110,15 @@ jobs:
         with:
           version: ${{ env.FLY_CLI_VERSION }}
       # ubuntu-22.04 ships with psql 14.x,
-      # whose pg_dump is incompatible with our postgres server (15.x)
+      # whose pg_dump is incompatible with our postgres server (16.x)
       - name: Setup postgres client
         run: |
           sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
           wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
           sudo apt update
           sudo apt remove postgresql-client
-          sudo apt install postgresql-client-15 -y
-          /usr/lib/postgresql/15/bin/pg_dump --version
+          sudo apt install postgresql-client-16 -y
+          /usr/lib/postgresql/16/bin/pg_dump --version
       - name: install migrate
         run: |
           TEMP_DEB="$(mktemp)"
@@ -141,8 +141,8 @@ jobs:
           REMOTE=postgres://$STAGING_DB_USER:$STAGING_DB_PASS@localhost:5431/$REMOTE_DB
           LOCAL=postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB
           # Remote -> SQL -> Local
-          /usr/lib/postgresql/15/bin/pg_dump -C -c --if-exists --no-comments -O -x $REMOTE -f dump.sql
-          /usr/lib/postgresql/15/bin/psql -q $LOCAL -f dump.sql
+          /usr/lib/postgresql/16/bin/pg_dump -C -c --if-exists --no-comments -O -x $REMOTE -f dump.sql
+          /usr/lib/postgresql/16/bin/psql -q $LOCAL -f dump.sql
           # Use newly created database from now on
           echo "POSTGRES_DB=$REMOTE_DB" >> "$GITHUB_ENV"
         env:
