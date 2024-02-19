@@ -29,7 +29,7 @@ jobs:
 
       - name: Detect changes in libs
         id: changes-in-libs
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v42
         with:
           files: |
             .github/**
@@ -39,14 +39,14 @@ jobs:
 
       - name: Detect changes in services
         id: changes-in-services
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v42
         with:
           files: |
             services/*-svc/**
 
       - name: Detect changes in images
         id: changes-in-images
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v42
         with:
           files: |
             images/**
