@@ -1,6 +1,6 @@
 module decaying_lru
 
-go 1.20
+go 1.22
 
 replace (
 	common => ../common
