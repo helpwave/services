@@ -1,6 +1,6 @@
 module emergency-room-svc
 
-go 1.20
+go 1.22
 
 replace (
 	common => ../../libs/common
