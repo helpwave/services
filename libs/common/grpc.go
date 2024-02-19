@@ -532,7 +532,6 @@ func validateFieldErrDescription(ctx context.Context, fieldErr validator.FieldEr
 	switch fieldErr.Tag() {
 	case "required":
 		l = locale.RequiredError(ctx)
-		break
 	// TODO: add more tags
 	default:
 		log.Warn().Str("tag", fieldErr.Tag()).Msg("tag unhandled, falling back to InvalidFieldError description")
