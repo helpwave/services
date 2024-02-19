@@ -313,6 +313,10 @@ func localeInterceptor(ctx context.Context, req interface{}, info *grpc.UnarySer
 	return next(hwlocale.WithLocales(ctx, tags), req)
 }
 
+// parseLocales parses an HTTP Accept-Language Header Value into a descending-sorted language.Tag slice wrt. priority.
+// The bool indicates success.
+// See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language
+// and: https://datatracker.ietf.org/doc/html/rfc2616#section-14.4
 func parseLocales(langHeader string) ([]language.Tag, bool) {
 	type langT struct {
 		tag language.Tag

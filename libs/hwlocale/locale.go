@@ -11,11 +11,17 @@ import (
 	"strings"
 )
 
+// Locale is a tuple of an *i18n.Bundle and *i18n.LocalizeConfig.
+// This way we bind a Config to the Bundle, which is able to process it.
+// All hwlocale functions should only use this type instead of raw i18n.LocalizeConfigs
 type Locale struct {
 	Bundle *i18n.Bundle
 	Config *i18n.LocalizeConfig
 }
 
+// NewLocaleBundle constructs a new LocaleBundle, optionally with an embedded file-system.
+// At the fsys' root there must be files with the pattern "locale.<LANG>.toml", where LANG is a BCP 47 tag (e.g., "en")
+// The format of which is akin to this struct: https://github.com/nicksnyder/go-i18n/blob/v2.4.0/v2/i18n/message.go
 func NewLocaleBundle(ctx context.Context, fsys *embed.FS) *i18n.Bundle {
 	log := zerolog.Ctx(ctx)
 
@@ -31,6 +37,7 @@ func NewLocaleBundle(ctx context.Context, fsys *embed.FS) *i18n.Bundle {
 	return bundle
 }
 
+// FallbackLanguage returns the set fallback language from the environment
 func FallbackLanguage(ctx context.Context) language.Tag {
 	str := hwutil.GetEnvOr("FALLBACK_LANGUAGE", "en")
 	tag, err := language.Parse(str)
@@ -43,6 +50,7 @@ func FallbackLanguage(ctx context.Context) language.Tag {
 	return tag
 }
 
+// Localizer builds a Bundle-Localizer. Optional overrideTags can be set to specify the languages to use
 func Localizer(ctx context.Context, bundle *i18n.Bundle, overrideTags ...string) *i18n.Localizer {
 	locales := overrideTags
 	if len(locales) == 0 {
