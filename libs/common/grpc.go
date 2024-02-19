@@ -8,7 +8,7 @@ import (
 	"github.com/dapr/dapr/pkg/proto/runtime/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/go-playground/validator/v10"
-	"github.com/golang/protobuf/proto"
+	"github.com/golang/protobuf/proto" //nolint:SA1019
 	"github.com/google/uuid"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
