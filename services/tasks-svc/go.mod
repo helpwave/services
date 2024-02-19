@@ -14,7 +14,7 @@ require (
 	common v0.0.0
 	gen v0.0.0
 	github.com/dapr/go-sdk v1.9.1
-	github.com/google/uuid v1.5.0
+	github.com/google/uuid v1.6.0
 	google.golang.org/grpc v1.60.1
 	google.golang.org/protobuf v1.32.0
 	hwes v0.0.0

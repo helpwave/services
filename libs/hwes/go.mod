@@ -6,7 +6,7 @@ replace hwutil => ../hwutil
 
 require (
 	github.com/EventStore/EventStore-Client-Go v1.0.2
-	github.com/google/uuid v1.4.0
+	github.com/google/uuid v1.6.0
 	github.com/rs/zerolog v1.31.0
 	hwutil v0.0.0
 )
