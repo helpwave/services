@@ -21,6 +21,7 @@ jobs:
     outputs:
       services: ${{ steps.aggregate-changes.outputs.services }}
       libs: ${{ steps.aggregate-changes.outputs.libs }}
+      images: ${{ steps.aggregate-changes.outputs.images }}
       commit_hash: ${{ steps.commit.outputs.short }}
     steps:
       - uses: actions/checkout@v4
