@@ -19,7 +19,7 @@ require (
 	gen v0.0.0
 	github.com/dapr/go-sdk v1.9.1
 	github.com/google/uuid v1.6.0
-	github.com/jackc/pgx/v5 v5.5.1
+	github.com/jackc/pgx/v5 v5.5.3
 	github.com/rs/zerolog v1.31.0
 	google.golang.org/grpc v1.60.1
 	google.golang.org/protobuf v1.31.0
