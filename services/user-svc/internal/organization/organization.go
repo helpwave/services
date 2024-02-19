@@ -420,7 +420,7 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 	if err != nil {
 		return nil, err
 	}
-	else if !doesOrganizationExist {
+	if !doesOrganizationExist {
 		return &pb.GetInvitationsByOrganizationResponse{}, nil
 	}
 
