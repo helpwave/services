@@ -299,6 +299,8 @@ func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
 	}
 }
 
+// localeInterceptor parses the Accept-Language header.
+// Also see hwlocale.WithLocales, hwlocale.GetLocalesTags and hwlocale.GetLocalesStrings
 func localeInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
 	log := zlog.Ctx(ctx)
 
