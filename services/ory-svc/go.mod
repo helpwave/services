@@ -17,7 +17,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/mitchellh/mapstructure v1.5.1-0.20231216201459-8508981c8b6c
 	github.com/ory/client-go v1.2.17
-	github.com/rs/zerolog v1.31.0
+	github.com/rs/zerolog v1.32.0
 	google.golang.org/grpc v1.59.0
 	hwutil v0.0.0
 )

@@ -10,7 +10,7 @@ replace (
 require (
 	github.com/jackc/pgconn v1.14.1
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa
-	github.com/rs/zerolog v1.31.0
+	github.com/rs/zerolog v1.32.0
 	gorm.io/driver/postgres v1.4.5
 	gorm.io/gorm v1.24.2
 	hwutil v0.0.0

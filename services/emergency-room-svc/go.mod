@@ -16,7 +16,7 @@ require (
 	gen v0.0.0
 	github.com/dapr/go-sdk v1.9.1
 	github.com/google/uuid v1.6.0
-	github.com/rs/zerolog v1.31.0
+	github.com/rs/zerolog v1.32.0
 	google.golang.org/grpc v1.59.0
 	gorm.io/gorm v1.25.5
 	hwgorm v0.0.0

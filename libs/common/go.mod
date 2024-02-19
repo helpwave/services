@@ -12,7 +12,7 @@ require (
 	github.com/dapr/go-sdk v1.9.1
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/joho/godotenv v1.5.1
-	github.com/rs/zerolog v1.31.0
+	github.com/rs/zerolog v1.32.0
 	golang.org/x/oauth2 v0.11.0
 	google.golang.org/grpc v1.59.0
 	hwutil v0.0.0
