@@ -60,7 +60,7 @@ jobs:
 
             # Exception for "libs/proto_helpers" due to the fact that this package does not require any direct external packages.
             # If the CI runs "go get .", the command exits (1) with "go: .: no package to get in current directory".
-            echo "libs=$(ls libs | grep -v 'proto_helpers' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
+            echo "libs=$(ls libs | grep -v -e 'python' -e 'proto_helpers' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           else
             echo "services=$(echo $changesInServices | awk -F / '$1 ~ /services/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           fi
