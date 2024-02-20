@@ -7,7 +7,7 @@ set -e
 if [[ -z $1 ]]; then
 	for file in services/*-svc; do
 	  	echo $(basename "$file")
-		bash $0 $(basename "$file")
+		bash $0 $(basename "$file") || echo "skipped"
 	done
 	exit 0
 fi
