@@ -11,6 +11,9 @@ import (
 
 const subscriptionGroupName = "custom"
 
+// PersistentSubscriptionFailedCreationErrorCode https://github.com/EventStore/EventStore-Client-Go/blob/v1.0.2/esdb/types.go#L95
+const PersistentSubscriptionFailedCreationErrorCode = 6
+
 type eventHandler func(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Action)
 
 type CustomProjection struct {
@@ -49,7 +52,7 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 	err := p.es.CreatePersistentSubscriptionAll(ctx, subscriptionGroupName, persistentAllSubscriptionOptions)
 	if err != nil {
 		// Ignore subscription already exists error
-		if persistentSubscriptionError, ok := err.(*esdb.PersistentSubscriptionError); !ok || ok && (persistentSubscriptionError.Code != 6) {
+		if persistentSubscriptionError, ok := err.(*esdb.PersistentSubscriptionError); !ok || ok && (persistentSubscriptionError.Code != PersistentSubscriptionFailedCreationErrorCode) {
 			log.Warn().Err(err).Msg("ignoring subscription already exists error")
 			return err
 		}
