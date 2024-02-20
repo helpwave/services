@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.4 (Debian 15.4-2.pgdg120+1)
--- Dumped by pg_dump version 15.6 (Debian 15.6-0+deb12u1)
+-- Dumped from database version 15.4
+-- Dumped by pg_dump version 15.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -24,7 +24,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
 --
 
 COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
@@ -35,7 +35,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: invitations; Type: TABLE; Schema: public; Owner: postgres
+-- Name: invitations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.invitations (
@@ -46,10 +46,8 @@ CREATE TABLE public.invitations (
 );
 
 
-ALTER TABLE public.invitations OWNER TO postgres;
-
 --
--- Name: memberships; Type: TABLE; Schema: public; Owner: postgres
+-- Name: memberships; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.memberships (
@@ -60,10 +58,8 @@ CREATE TABLE public.memberships (
 );
 
 
-ALTER TABLE public.memberships OWNER TO postgres;
-
 --
--- Name: organizations; Type: TABLE; Schema: public; Owner: postgres
+-- Name: organizations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.organizations (
@@ -77,10 +73,8 @@ CREATE TABLE public.organizations (
 );
 
 
-ALTER TABLE public.organizations OWNER TO postgres;
-
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: postgres
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.schema_migrations (
@@ -89,10 +83,8 @@ CREATE TABLE public.schema_migrations (
 );
 
 
-ALTER TABLE public.schema_migrations OWNER TO postgres;
-
 --
--- Name: users; Type: TABLE; Schema: public; Owner: postgres
+-- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.users (
@@ -104,10 +96,8 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO postgres;
-
 --
--- Name: invitations invitations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: invitations invitations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.invitations
@@ -115,7 +105,7 @@ ALTER TABLE ONLY public.invitations
 
 
 --
--- Name: memberships members_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: memberships members_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.memberships
@@ -123,7 +113,7 @@ ALTER TABLE ONLY public.memberships
 
 
 --
--- Name: memberships memberships_user_id_organization_id_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: memberships memberships_user_id_organization_id_unique; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.memberships
@@ -131,7 +121,7 @@ ALTER TABLE ONLY public.memberships
 
 
 --
--- Name: organizations organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: organizations organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.organizations
@@ -139,7 +129,7 @@ ALTER TABLE ONLY public.organizations
 
 
 --
--- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.schema_migrations
@@ -147,7 +137,7 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
@@ -155,7 +145,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: invitations invitations_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: invitations invitations_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.invitations
@@ -163,7 +153,7 @@ ALTER TABLE ONLY public.invitations
 
 
 --
--- Name: memberships members_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: memberships members_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.memberships

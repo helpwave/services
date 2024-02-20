@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.4 (Debian 15.4-2.pgdg120+1)
--- Dumped by pg_dump version 15.6 (Debian 15.6-0+deb12u1)
+-- Dumped from database version 15.4
+-- Dumped by pg_dump version 15.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -24,7 +24,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
 --
 
 COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
@@ -35,7 +35,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: beds; Type: TABLE; Schema: public; Owner: postgres
+-- Name: beds; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.beds (
@@ -46,10 +46,8 @@ CREATE TABLE public.beds (
 );
 
 
-ALTER TABLE public.beds OWNER TO postgres;
-
 --
--- Name: patients; Type: TABLE; Schema: public; Owner: postgres
+-- Name: patients; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.patients (
@@ -64,10 +62,8 @@ CREATE TABLE public.patients (
 );
 
 
-ALTER TABLE public.patients OWNER TO postgres;
-
 --
--- Name: rooms; Type: TABLE; Schema: public; Owner: postgres
+-- Name: rooms; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.rooms (
@@ -78,10 +74,8 @@ CREATE TABLE public.rooms (
 );
 
 
-ALTER TABLE public.rooms OWNER TO postgres;
-
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: postgres
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.schema_migrations (
@@ -90,10 +84,8 @@ CREATE TABLE public.schema_migrations (
 );
 
 
-ALTER TABLE public.schema_migrations OWNER TO postgres;
-
 --
--- Name: subtasks; Type: TABLE; Schema: public; Owner: postgres
+-- Name: subtasks; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.subtasks (
@@ -106,10 +98,8 @@ CREATE TABLE public.subtasks (
 );
 
 
-ALTER TABLE public.subtasks OWNER TO postgres;
-
 --
--- Name: task_template_subtasks; Type: TABLE; Schema: public; Owner: postgres
+-- Name: task_template_subtasks; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.task_template_subtasks (
@@ -119,10 +109,8 @@ CREATE TABLE public.task_template_subtasks (
 );
 
 
-ALTER TABLE public.task_template_subtasks OWNER TO postgres;
-
 --
--- Name: task_templates; Type: TABLE; Schema: public; Owner: postgres
+-- Name: task_templates; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.task_templates (
@@ -135,10 +123,8 @@ CREATE TABLE public.task_templates (
 );
 
 
-ALTER TABLE public.task_templates OWNER TO postgres;
-
 --
--- Name: tasks; Type: TABLE; Schema: public; Owner: postgres
+-- Name: tasks; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.tasks (
@@ -155,10 +141,8 @@ CREATE TABLE public.tasks (
 );
 
 
-ALTER TABLE public.tasks OWNER TO postgres;
-
 --
--- Name: wards; Type: TABLE; Schema: public; Owner: postgres
+-- Name: wards; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.wards (
@@ -168,10 +152,8 @@ CREATE TABLE public.wards (
 );
 
 
-ALTER TABLE public.wards OWNER TO postgres;
-
 --
--- Name: beds beds_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: beds beds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.beds
@@ -179,7 +161,7 @@ ALTER TABLE ONLY public.beds
 
 
 --
--- Name: patients patients_bed_id_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: patients patients_bed_id_unique; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.patients
@@ -187,7 +169,7 @@ ALTER TABLE ONLY public.patients
 
 
 --
--- Name: patients patients_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: patients patients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.patients
@@ -195,7 +177,7 @@ ALTER TABLE ONLY public.patients
 
 
 --
--- Name: rooms rooms_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: rooms rooms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.rooms
@@ -203,7 +185,7 @@ ALTER TABLE ONLY public.rooms
 
 
 --
--- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.schema_migrations
@@ -211,7 +193,7 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
--- Name: subtasks subtasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: subtasks subtasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.subtasks
@@ -219,7 +201,7 @@ ALTER TABLE ONLY public.subtasks
 
 
 --
--- Name: task_template_subtasks task_template_subtasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: task_template_subtasks task_template_subtasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.task_template_subtasks
@@ -227,7 +209,7 @@ ALTER TABLE ONLY public.task_template_subtasks
 
 
 --
--- Name: task_templates task_templates_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: task_templates task_templates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.task_templates
@@ -235,7 +217,7 @@ ALTER TABLE ONLY public.task_templates
 
 
 --
--- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tasks
@@ -243,7 +225,7 @@ ALTER TABLE ONLY public.tasks
 
 
 --
--- Name: wards wards_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: wards wards_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.wards
@@ -251,7 +233,7 @@ ALTER TABLE ONLY public.wards
 
 
 --
--- Name: beds beds_room_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: beds beds_room_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.beds
@@ -259,7 +241,7 @@ ALTER TABLE ONLY public.beds
 
 
 --
--- Name: patients patients_bed_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: patients patients_bed_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.patients
@@ -267,7 +249,7 @@ ALTER TABLE ONLY public.patients
 
 
 --
--- Name: rooms rooms_ward_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: rooms rooms_ward_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.rooms
@@ -275,7 +257,7 @@ ALTER TABLE ONLY public.rooms
 
 
 --
--- Name: subtasks subtasks_task_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: subtasks subtasks_task_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.subtasks
@@ -283,7 +265,7 @@ ALTER TABLE ONLY public.subtasks
 
 
 --
--- Name: task_template_subtasks task_template_subtasks_task_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: task_template_subtasks task_template_subtasks_task_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.task_template_subtasks
@@ -291,7 +273,7 @@ ALTER TABLE ONLY public.task_template_subtasks
 
 
 --
--- Name: task_templates task_templates_ward_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: task_templates task_templates_ward_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.task_templates

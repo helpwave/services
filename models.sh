@@ -21,6 +21,10 @@ fi
 
 # Generate schema.sql
 # TODO: use parameters
-pg_dump postgres://postgres:postgres@postgres:5432/$1 --schema-only > ./services/$1/schema.sql
+pg_dump postgres://postgres:postgres@postgres:5432/$1 --schema-only -O > ./services/$1/schema.sql
+
+# remove build information
+sed 's/\(-- Dumped from database version [0-9]\+\.[0-9]\+\).*/\1/' -i ./services/$1/schema.sql
+sed 's/\(-- Dumped by pg_dump version [0-9]\+\.[0-9]\+\).*/\1/' -i ./services/$1/schema.sql
 
 cd services/$1 && sqlc generate
