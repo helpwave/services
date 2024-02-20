@@ -172,7 +172,7 @@ jobs:
       - name: Run UP migrations (1/2)
         run: ./migrate.sh $svc up
       - name: Generate schema.sql
-        run: pg_dump postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB --schema-only > ./services/${{ matrix.service }}/schema.sql
+        run: /usr/lib/postgresql/15/bin/pg_dump postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB --schema-only > ./services/${{ matrix.service }}/schema.sql
       - name: Generate models
         run: cd services/${{ matrix.service }} && sqlc generate
       - name: Verify schema.sql and models were generated properly before
