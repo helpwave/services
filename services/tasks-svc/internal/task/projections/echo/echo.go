@@ -31,6 +31,7 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 
 	var payload taskEventsV1.TaskCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
 		return err, esdb.Nack_Retry
 	}
 
