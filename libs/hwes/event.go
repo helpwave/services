@@ -145,7 +145,7 @@ func (e *Event) GetJsonData(data interface{}) error {
 	return json.Unmarshal(e.Data, data)
 }
 
-func (e *Event) Log(l *zerolog.Event) *zerolog.Event {
+func (e *Event) GetLogEvent(l *zerolog.Event) *zerolog.Event {
 	return l.
 		Str("eventId", e.EventID.String()).
 		Str("eventType", e.EventType).

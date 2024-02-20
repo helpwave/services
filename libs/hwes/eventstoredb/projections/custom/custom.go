@@ -50,7 +50,7 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 	if err != nil {
 		// Ignore subscription already exists error
 		if persistentSubscriptionError, ok := err.(*esdb.PersistentSubscriptionError); !ok || ok && (persistentSubscriptionError.Code != 6) {
-			zlog.Ctx(ctx).Warn().Err(err).Send()
+			log.Warn().Err(err).Msg("ignoring subscription already exists error")
 			return err
 		}
 	}

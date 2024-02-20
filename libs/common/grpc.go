@@ -41,7 +41,7 @@ type organizationIDKey struct{}
 //	})
 //	// cleanup after yourself here
 func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook func(*daprd.Server)) {
-	log := zlog.Logger
+	log := zlog.Ctx(ctx)
 
 	// middlewares
 	chain := grpc_middleware.ChainUnaryServer(

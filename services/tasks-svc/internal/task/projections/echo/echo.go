@@ -14,8 +14,9 @@ type Projection struct {
 }
 
 func NewProjection(es *esdb.Client) *Projection {
-	p := &Projection{}
-	p.Base = custom.NewCustomProjection(es)
+	p := &Projection{
+		Base: custom.NewCustomProjection(es),
+	}
 	p.initEventListeners()
 	return p
 }
