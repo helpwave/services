@@ -16,6 +16,13 @@ env:
 
 jobs:
 
+  envs:
+    runs-on: ubuntu-22.04
+    steps:
+      - run: echo "This is needed because sometimes env is not accessible, whereas the output of this step is"
+    outputs:
+      DEV_TAG: ${{ env.DEV_TAG }}
+
   detect-changes:
     runs-on: ubuntu-22.04
     outputs:
@@ -113,7 +120,9 @@ jobs:
     secrets: inherit
 
   cicd-images:
-    needs: detect-changes
+    needs:
+     - detect-changes
+     - envs
     if: ${{ needs.detect-changes.outputs.images != '[]' && needs.detect-changes.outputs.images != '' }}
     strategy:
       matrix:
@@ -126,7 +135,7 @@ jobs:
     with:
       deploy: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
       image: ${{ matrix.image }}
-      custom_tag: ${{ matrix.image == 'dev-go' && env.DEV_TAG || '' }}
+      custom_tag: ${{ matrix.image == 'dev-go' && needs.envs.outputs.DEV_TAG || '' }}
     secrets: inherit
 
   fly-deploy-staging:
