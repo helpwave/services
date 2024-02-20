@@ -51,6 +51,7 @@ func (a *PatientAggregate) onPatientCreated(evt hwes.Event) error {
 	a.Patient.Notes = payload.Notes
 	a.Patient.HumanReadableIdentifier = payload.HumanReadableIdentifier
 	a.Patient.CreatedAt = evt.Timestamp
+	a.Patient.UpdatedAt = evt.Timestamp
 
 	return nil
 }
@@ -67,17 +68,20 @@ func (a *PatientAggregate) onBedAssigned(evt hwes.Event) error {
 	}
 
 	a.Patient.BedID = uuid.NullUUID{UUID: bedID, Valid: true}
+	a.Patient.UpdatedAt = evt.Timestamp
 
 	return nil
 }
 
-func (a *PatientAggregate) onBedUnassigned(_ hwes.Event) error {
+func (a *PatientAggregate) onBedUnassigned(evt hwes.Event) error {
 	a.Patient.BedID = uuid.NullUUID{UUID: uuid.Nil, Valid: false}
+	a.Patient.UpdatedAt = evt.Timestamp
 	return nil
 }
 
-func (a *PatientAggregate) onPatientDischarged(_ hwes.Event) error {
+func (a *PatientAggregate) onPatientDischarged(evt hwes.Event) error {
 	a.Patient.IsDischarged = true
+	a.Patient.UpdatedAt = evt.Timestamp
 	return nil
 }
 
@@ -89,7 +93,6 @@ func (a *PatientAggregate) onNotesUpdated(evt hwes.Event) error {
 
 	a.Patient.Notes = payload.Notes
 	a.Patient.UpdatedAt = evt.Timestamp
-
 	return nil
 }
 
@@ -101,11 +104,11 @@ func (a *PatientAggregate) onHumanReadableIdentifierUpdated(evt hwes.Event) erro
 
 	a.Patient.HumanReadableIdentifier = payload.HumanReadableIdentifier
 	a.Patient.UpdatedAt = evt.Timestamp
-
 	return nil
 }
 
-func (a *PatientAggregate) onPatientReadmitted(_ hwes.Event) error {
+func (a *PatientAggregate) onPatientReadmitted(evt hwes.Event) error {
 	a.Patient.IsDischarged = false
+	a.Patient.UpdatedAt = evt.Timestamp
 	return nil
 }
