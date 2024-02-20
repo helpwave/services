@@ -17,8 +17,8 @@ func (a *PatientAggregate) CreatePatient(ctx context.Context, humanReadableIdent
 	return a.Apply(event)
 }
 
-func (a *PatientAggregate) AssignBed(ctx context.Context, currentBedID uuid.NullUUID, newBedID uuid.UUID) error {
-	event, err := patientEventsV1.NewBedAssignedEvent(a, currentBedID, newBedID)
+func (a *PatientAggregate) AssignBed(ctx context.Context, newBedID uuid.UUID) error {
+	event, err := patientEventsV1.NewBedAssignedEvent(a, a.Patient.BedID, newBedID)
 	if err != nil {
 		return err
 	}
@@ -33,16 +33,16 @@ func (a *PatientAggregate) DischargePatient(ctx context.Context) error {
 	return a.Apply(patientEventsV1.NewPatientDischargedEvent(a))
 }
 
-func (a *PatientAggregate) UpdateHumanReadableIdentifier(ctx context.Context, currentHumanReadableIdentifier string, newHumanReadableIdentifier string) error {
-	event, err := patientEventsV1.NewHumanReadableIdentifierUpdatedEvent(a, currentHumanReadableIdentifier, newHumanReadableIdentifier)
+func (a *PatientAggregate) UpdateHumanReadableIdentifier(ctx context.Context, newHumanReadableIdentifier string) error {
+	event, err := patientEventsV1.NewHumanReadableIdentifierUpdatedEvent(a, a.Patient.HumanReadableIdentifier, newHumanReadableIdentifier)
 	if err != nil {
 		return err
 	}
 	return a.Apply(event)
 }
 
-func (a *PatientAggregate) UpdateNotes(ctx context.Context, currentNotes string, newNotes string) error {
-	event, err := patientEventsV1.NewNotesUpdatedEvent(a, currentNotes, newNotes)
+func (a *PatientAggregate) UpdateNotes(ctx context.Context, newNotes string) error {
+	event, err := patientEventsV1.NewNotesUpdatedEvent(a, a.Patient.Notes, newNotes)
 	if err != nil {
 		return err
 	}

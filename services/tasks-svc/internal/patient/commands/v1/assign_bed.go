@@ -16,7 +16,7 @@ func NewAssignBedCommandHandler(as hwes.AggregateStore) AssignBedCommandHandler 
 			return err
 		}
 
-		if err := a.AssignBed(ctx, a.Patient.BedID, bedID); err != nil {
+		if err := a.AssignBed(ctx, bedID); err != nil {
 			return err
 		}
 		return as.Save(ctx, a)

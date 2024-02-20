@@ -17,13 +17,13 @@ func NewUpdatePatientCommandHandler(as hwes.AggregateStore) UpdatePatientCommand
 		}
 
 		if humanReadableIdentifier != nil {
-			if err := a.UpdateHumanReadableIdentifier(ctx, a.Patient.HumanReadableIdentifier, *humanReadableIdentifier); err != nil {
+			if err := a.UpdateHumanReadableIdentifier(ctx, *humanReadableIdentifier); err != nil {
 				return err
 			}
 		}
 
 		if notes != nil {
-			if err := a.UpdateNotes(ctx, a.Patient.Notes, *notes); err != nil {
+			if err := a.UpdateNotes(ctx, *notes); err != nil {
 				return err
 			}
 		}
