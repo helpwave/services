@@ -14,6 +14,9 @@ const subscriptionGroupName = "custom"
 // PersistentSubscriptionFailedCreationErrorCode https://github.com/EventStore/EventStore-Client-Go/blob/v1.0.2/esdb/types.go#L95
 const PersistentSubscriptionFailedCreationErrorCode = 6
 
+// EventStoreDBInternalEventPrefix https://developers.eventstore.com/server/v23.10/streams.html#reserved-names
+const EventStoreDBInternalEventPrefix = "$"
+
 type eventHandler func(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Action)
 
 type CustomProjection struct {
@@ -101,9 +104,8 @@ func (p *CustomProjection) process(ctx context.Context, stream *esdb.PersistentS
 			continue
 		}
 
-		if strings.HasPrefix(esdbEvent.EventAppeared.Event.EventType, "$") {
+		if strings.HasPrefix(esdbEvent.EventAppeared.Event.EventType, EventStoreDBInternalEventPrefix) {
 			// Skip internal events
-			// https://developers.eventstore.com/server/v23.10/streams.html#reserved-names
 			continue
 		}
 
