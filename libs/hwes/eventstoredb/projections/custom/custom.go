@@ -49,12 +49,19 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 
 	// Create subscription on EventStoreDB
 	persistentAllSubscriptionOptions := esdb.PersistentAllSubscriptionOptions{}
+	// TODO: Do we need to manage the subscriptions? E.g. delete persistent subscriptions?
 	err := p.es.CreatePersistentSubscriptionAll(ctx, subscriptionGroupName, persistentAllSubscriptionOptions)
 	if err != nil {
 		// Ignore subscription already exists error
+		// The state of a persistent subscriptions is managed on the server-side by EventStoreDB.
+		// A persistent subscription must be created before connection.
+		// We ignore a failed creation to ensure idempotency.
+		// If a creation
+		// https://developers.eventstore.com/server/v23.10/persistent-subscriptions.html
 		if persistentSubscriptionError, ok := err.(*esdb.PersistentSubscriptionError); !ok || ok && (persistentSubscriptionError.Code != PersistentSubscriptionFailedCreationErrorCode) {
-			log.Warn().Err(err).Msg("ignoring subscription already exists error")
 			return err
+		} else {
+			log.Debug().Err(err).Msg("ignoring subscription already exists error")
 		}
 	}
 
