@@ -128,7 +128,7 @@ jobs:
           sudo dpkg -i "$TEMP_DEB"
           rm -f "$TEMP_DEB"
       - name: install sqlc
-        run: wget -qO- https://downloads.sqlc.dev/sqlc_${{ env.SQLC_VERSION }}_linux_amd64.tar.gz | tar xvz -C /usr/bin
+        run: wget -qO- https://downloads.sqlc.dev/sqlc_${{ env.SQLC_VERSION }}_linux_amd64.tar.gz | sudo tar xvz -C /usr/bin
       - name: Clone Repo
         uses: actions/checkout@v4
       - name: Open tunnel to staging db
