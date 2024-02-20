@@ -61,8 +61,9 @@
     },
     {
       "customType": "regex",
-      "fileMatch": ["dev/docker-compose.yaml", ".github/workflows/cicd.yaml"],
+      "fileMatch": ["dev/docker-compose.yaml", "images/dev-go/update-dev-tag.sh", ".github/workflows/cicd.yaml"],
       "matchStrings": [
+        "# renovate: dev-tag\\s+TAG='(?<currentValue>[0-9A-Za-z.-]+)'\\s",
         "# renovate: dev-tag\\s+TAG: '?(?<currentValue>[0-9A-Za-z.-]+)'?\\s",
         "# renovate: dev-tag\\s+DEV_TAG: '?(?<currentValue>[0-9A-Za-z.-]+)'?\\s"
       ],
