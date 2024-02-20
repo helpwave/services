@@ -106,6 +106,9 @@ func (p *CustomProjection) process(ctx context.Context, stream *esdb.PersistentS
 
 		if strings.HasPrefix(esdbEvent.EventAppeared.Event.EventType, EventStoreDBInternalEventPrefix) {
 			// Skip internal events
+			log.Debug().
+				Str("esdbEventID", esdbEvent.EventAppeared.Event.EventID.String()).
+				Msg("Received internal event, skip")
 			continue
 		}
 
