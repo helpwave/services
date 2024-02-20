@@ -25,6 +25,10 @@ upstreams:
     scheme: http
     nodes:
       "localhost:3500": 1
+  - id: impulse-svc
+    scheme: http
+    nodes:
+      "$ENV://IMPULSE_SVC_NODE": 1
 
 # Services define groups of API endpoints, which correspond to logical (and in our case physical) services.
 # Most services have a plugin chain like this:
@@ -64,16 +68,6 @@ services:
   # ory-svc is the only service (for now) that exposes a http API
   - id: ory-svc
     upstream_id: dapr-http
-    plugins:
-      cors:
-        allow_origins: "**"
-        allow_methods: "**"
-        allow_headers: "**"
-        expose_headers: "**"
-        max_age: 5
-        allow_credential: true
-        _meta:
-          priority: -1
 
 global_rules:
   - id: 1
@@ -154,6 +148,10 @@ routes:
     plugins:
       proxy-rewrite:
         uri: /v1.0/invoke/ory-svc/method/oauth2_consent
+
+  - id: impulse-svc
+    uri: /impulse-svc
+    upstream_id: impulse-svc
 
   # Catch-all: route grpc traffic to dapr-grpc (without grpc-web!)
   # used by mobile, which talks grpc
