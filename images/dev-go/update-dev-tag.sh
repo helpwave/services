@@ -4,7 +4,7 @@
 set -e
 
 # update this value, when you update the Dockerfile
-TAG='1'
+TAG='3'
 
 # go to repo root
 cd $(git rev-parse --show-toplevel)

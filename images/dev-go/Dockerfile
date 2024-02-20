@@ -7,6 +7,10 @@
 # for now this only builds x86_64 images (TODO)
 FROM golang:1.22-bookworm
 
+# appearently this is not set by the go image
+ENV GOROOT="/usr/local/go"
+ENV PATH="$PATH:$GOROOT/bin"
+
 # update debian package list and packages, also install some
 RUN apt update \
     && apt upgrade \

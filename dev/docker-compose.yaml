@@ -93,7 +93,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '2'
+        TAG: '3'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -126,7 +126,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '2'
+        TAG: '3'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
