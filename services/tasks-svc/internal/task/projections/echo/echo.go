@@ -35,5 +35,6 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 	}
 
 	log.Info().Str("taskID", payload.ID).Msg("task created, emitted from echo projection")
+	// This empty projection is an example and fully indented to be empty and will get overridden soon
 	return nil, esdb.Nack_Unknown
 }
