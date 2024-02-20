@@ -10,7 +10,7 @@ replace (
 require (
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/dapr/go-sdk v1.9.1
-	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/joho/godotenv v1.4.0
 	github.com/rs/zerolog v1.31.0
 	golang.org/x/oauth2 v0.11.0
