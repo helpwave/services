@@ -53,39 +53,20 @@ This will install a backend client for your IDE in the `devcontainer` container,
 
 #### Development Containers and IntelliJ ([GoLand](https://www.jetbrains.com/de-de/go/))
 
-##### [The short route](https://www.jetbrains.com/help/go/connect-to-devcontainer.html#start_container_from_product)
-
-> [!WARNING]
-> Currently (Jan. 2024) the short route does not work due to bugs in IntelliJ.
+[Relevant Docs](https://www.jetbrains.com/help/go/connect-to-devcontainer.html#start_container_from_product)
 
 1. Start GoLand and close any open projects.
-2. Make sure your docker setup is correctly configured
-3. Under "Remote Development" -> "Dev Containers" create a new Dev Container
-4. Copy in `git@github.com:helpwave/services.git` and select your branch of choice
-5. Wait, follow further instructions, and select the editor you want to launch (likely GoLand)
-6. GoLand will start *in* a docker container, you can start hacking!
-7. Use the usual GoLand UI to open a terminal, where you will find a bunch of tools pre-installed for you.
-8. Next time, you can find the Dev Container ready to start.
+2. Alternatively, start [JetBrains Gateway](https://www.jetbrains.com/remote-development/gateway/).
+3. Make sure your docker setup is correctly configured
+4. Under "Remote Development" -> "Dev Containers" create a new Dev Container
+5. Copy in `git@github.com:helpwave/services.git` and select your branch of choice.
+6. Alternatively, click on "From Local Project" and navigate to a local copy of the repo's `.devcontainer/devcontainer.json`
+7. Wait, follow further instructions, and select the editor you want to launch (likely GoLand)
+8. GoLand will start *in* a docker container, you can start hacking!
+9. Use the usual GoLand UI to open a terminal, where you will find a bunch of tools pre-installed for you.
+10. Next time, you can find the Dev Container ready to start.
 
 Next Steps: [Read on here](#development)
-
-##### [The slightly longer route](https://www.jetbrains.com/help/go/connect-to-devcontainer.html#create_dev_container_inside_ide)
-
-The short route will clone the repo *somewhere*. If you like to have control about this, ...
-
-1. ... clone the repo and open it in GoLand.
-2. Navigate to ./dev-container/devcontainer.json
-3. Click on the Dev Container Logo next to the first line and "Create Dev Container and Mount Sources"
-4. Wait, follow further instructions, and select the editor you want to launch (likely GoLand)
-5. GoLand will start *in* a docker container, you can start hacking!
-6. Quit both the new, and the old GoLand instances.
-7. Open GoLand again and close any open projects.
-8. In the Welcome Screen, under "Remote Development" -> "Dev Containers" the Dev Container should be listed.
-9. From now on, you can start it from there.
-
-Next Steps: [Read on here](#development)
-
-*We can remove the subsection above once/if JetBrains allows us to start a Dev Container from a local directory (kind of wild that we can't).*
 
 #### Development Containers and VSCode
 
