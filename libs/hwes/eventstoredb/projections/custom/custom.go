@@ -107,29 +107,29 @@ func (p *CustomProjection) process(ctx context.Context, stream *esdb.PersistentS
 			continue
 		}
 
-		event.Log(log.Debug()).Msg("process event")
+		event.GetLogEvent(log.Debug()).Msg("process event")
 
 		if err, nackAction := p.handleEvent(ctx, event); err != nil {
-			event.Log(log.Error()).Err(err).Msg("error during processing of event")
+			event.GetLogEvent(log.Error()).Err(err).Msg("error during processing of event")
 
-			event.Log(log.Warn()).Msg("nack event")
+			event.GetLogEvent(log.Warn()).Msg("nack event")
 			if err := stream.Nack(err.Error(), nackAction, esdbEvent.EventAppeared); err != nil {
-				event.Log(log.Error()).Err(err).Msg("error during nack of event")
+				event.GetLogEvent(log.Error()).Err(err).Msg("error during nack of event")
 				continue
 			}
-			event.Log(log.Debug()).Msg("event nack`ed")
+			event.GetLogEvent(log.Debug()).Msg("event nack`ed")
 
 			continue
 		}
 
-		event.Log(log.Debug()).Msg("ack event")
+		event.GetLogEvent(log.Debug()).Msg("ack event")
 		err = stream.Ack(esdbEvent.EventAppeared)
 		if err != nil {
-			event.Log(log.Error()).Err(err).Msg("error during ack of event")
+			event.GetLogEvent(log.Error()).Err(err).Msg("error during ack of event")
 			continue
 		}
-		event.Log(log.Debug()).Msg("event ack`ed")
+		event.GetLogEvent(log.Debug()).Msg("event ack`ed")
 
-		event.Log(log.Debug()).Msg("event processed")
+		event.GetLogEvent(log.Debug()).Msg("event processed")
 	}
 }
