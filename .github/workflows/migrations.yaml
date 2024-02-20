@@ -182,7 +182,7 @@ jobs:
       - name: Generate models
         run: cd services/${{ matrix.service }} && sqlc generate
       - name: Verify schema.sql and models were generated properly before
-        run: git diff --quiet services/${{ matrix.service }} || (echo "You forgot to run ./models.sh before checking in" && exit 1)
+        run: git diff --exit-code -- services/${{ matrix.service }} || (echo "You forgot to run ./models.sh before checking in" && exit 1)
       - name: Run DOWN migrations (1/2)
         run: ./migrate.sh $svc goto $VERSION
         env:
