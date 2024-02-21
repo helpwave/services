@@ -81,12 +81,16 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 	defer stream.Close()
 
 	log.Info().Msg("Start custom projection")
-	err = p.process(ctx, stream)
+	err = p.processReceivedEventsFromStream(ctx, stream)
 	log.Info().Msg("Stop custom projection")
 	return err
 }
 
-func (p *CustomProjection) process(ctx context.Context, stream *esdb.PersistentSubscription) error {
+// processReceivedEventsFromStream acts as a worker on the subscribed stream
+// This functions tries to receive an event from the passed stream
+// and calls the according event handler based on the received event
+// This function blocks the thread until the passed context gets canceled
+func (p *CustomProjection) processReceivedEventsFromStream(ctx context.Context, stream *esdb.PersistentSubscription) error {
 	log := zlog.Ctx(ctx)
 
 	for {
