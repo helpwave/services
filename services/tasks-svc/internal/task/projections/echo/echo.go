@@ -10,20 +10,17 @@ import (
 )
 
 type Projection struct {
-	Base *custom.CustomProjection
+	*custom.CustomProjection
 }
 
 func NewProjection(es *esdb.Client) *Projection {
-	p := &Projection{
-		Base: custom.NewCustomProjection(es),
-	}
+	p := &Projection{custom.NewCustomProjection(es)}
 	p.initEventListeners()
 	return p
 }
 
 func (p *Projection) initEventListeners() {
-	p.Base.
-		RegisterEventListener(taskEventsV1.TaskCreated, p.onTaskCreated)
+	p.RegisterEventListener(taskEventsV1.TaskCreated, p.onTaskCreated)
 }
 
 func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Action) {

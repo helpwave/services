@@ -26,7 +26,7 @@ func main() {
 
 	echoProjection := echo.NewProjection(eventStore)
 	go func() {
-		if err := echoProjection.Base.Subscribe(ctx); err != nil {
+		if err := echoProjection.Subscribe(ctx); err != nil {
 			log.Err(err).Msg("error during echo subscription")
 			cancel()
 		}
