@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: bufbuild/buf-setup-action@v1
+      - uses: bufbuild/buf-setup-action@v1.29.0
         with:
           version: v${{ env.BUF_CLI_VERSION }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
