@@ -19,6 +19,9 @@ const EventStoreDBInternalEventPrefix = "$"
 
 type eventHandler func(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Action)
 
+// CustomProjection can be used to develop own projections
+// A projection is an event sourcing pattern to build up
+// a read model based on the underlying event data.
 type CustomProjection struct {
 	es            *esdb.Client
 	eventHandlers map[string]eventHandler
@@ -47,6 +50,10 @@ func (p *CustomProjection) handleEvent(ctx context.Context, event hwes.Event) (e
 	return eventHandler(ctx, event)
 }
 
+// Subscribe creates and subscribes to a persistent subscription in EventStoreDB
+// A persistent subscription is a type of subscription where the state is saved on the server-side
+// This function blocks the thread until the passed context gets canceled
+// https://developers.eventstore.com/server/v23.10/persistent-subscriptions.html
 func (p *CustomProjection) Subscribe(ctx context.Context) error {
 	log := zlog.Ctx(ctx)
 
@@ -59,8 +66,6 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 		// The state of a persistent subscriptions is managed on the server-side by EventStoreDB.
 		// A persistent subscription must be created before connection.
 		// We ignore a failed creation to ensure idempotency.
-		// If a creation
-		// https://developers.eventstore.com/server/v23.10/persistent-subscriptions.html
 		if persistentSubscriptionError, ok := err.(*esdb.PersistentSubscriptionError); !ok || ok && (persistentSubscriptionError.Code != PersistentSubscriptionFailedCreationErrorCode) {
 			return err
 		} else {
@@ -68,7 +73,7 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 		}
 	}
 
-	// Subscribe to server side subscription
+	// After a potential successful creation of a persistent subscription, we are trying to establish a connection to that subscription
 	stream, err := p.es.ConnectToPersistentSubscriptionToAll(ctx, subscriptionGroupName, esdb.ConnectToPersistentSubscriptionOptions{})
 	if err != nil {
 		return err
