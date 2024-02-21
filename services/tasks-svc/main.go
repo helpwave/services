@@ -37,4 +37,7 @@ func main() {
 
 		pb.RegisterTaskServiceServer(grpcServer, api.NewTaskGrpcService(aggregateStore))
 	})
+
+	// Close context
+	cancel()
 }
