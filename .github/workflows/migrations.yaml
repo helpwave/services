@@ -11,7 +11,7 @@ env:
   # renovate: datasource=github-releases depName=golang-migrate/migrate
   MIGRATE_VERSION: '4.17.0'
   # renovate: datasource=github-releases depName=superfly/flyctl versioning=semver
-  FLY_CLI_VERSION: '0.1.146'
+  FLY_CLI_VERSION: '0.2.8'
 
 jobs:
   detect-changes:
@@ -29,7 +29,7 @@ jobs:
       # as a json array (it's a string)
       - name: Detect changes in migrations
         id: changes
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v42
         with:
           json: "true"
           escape_json: "false"
@@ -55,7 +55,7 @@ jobs:
 
       - name: Detect modifications in migrations
         id: changes
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v42
         with:
           json: "true"
           escape_json: "false"

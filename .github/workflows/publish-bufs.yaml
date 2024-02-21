@@ -9,10 +9,10 @@ on:
 
 env:
   # renovate: datasource=github-releases depName=bufbuild/buf
-  BUF_CLI_VERSION: '1.28.1'
+  BUF_CLI_VERSION: '1.29.0'
   NODE_VERSION: '18.x'
   # renovate: datasource=dart-version depName=dart
-  DART_VERSION: '3.2.6'
+  DART_VERSION: '3.3.0'
 
 jobs:
   check-preconditions:
@@ -28,8 +28,11 @@ jobs:
     - uses: bufbuild/buf-setup-action@v1
       with:
         version: ${{ env.BUF_CLI_VERSION }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - uses: bufbuild/buf-lint-action@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
     # TODO (arm-versioning): Arm versioning by remove the comment of ONLY the next line
     # - name: Check for illegal breakage
       # Only deletions are allowed. Breaking updates must happen in a new version of the package(s) in question.
@@ -118,11 +121,11 @@ jobs:
       with:
         sdk: ${{ env.DART_VERSION }}
     - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v1'
+      uses: 'google-github-actions/setup-gcloud@v2'
       with:
         version: '>= 363.0.0'
     - name: Auth Service Account
-      uses: 'google-github-actions/auth@v1'
+      uses: 'google-github-actions/auth@v2'
       with:
         credentials_json: ${{ secrets.PUB_DEV_KEY }}
     - name: Set pub.dev token
