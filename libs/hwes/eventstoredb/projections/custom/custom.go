@@ -22,6 +22,31 @@ type eventHandler func(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Ac
 // CustomProjection can be used to develop own projections
 // A projection is an event sourcing pattern to build up
 // a read model based on the underlying event data.
+//
+// Example:
+//
+//	type Projection struct {
+//		*custom.CustomProjection
+//	}
+//
+//	func NewProjection(es *esdb.Client) *Projection {
+//		p := &Projection{custom.NewCustomProjection(es)}
+//		p.RegisterEventListener(taskEventsV1.TaskCreated, p.onTaskCreated)
+//		return p
+//	}
+//
+//	func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Action) {
+//		log := zlog.Ctx(ctx)
+//
+//		var payload taskEventsV1.TaskCreatedEvent
+//		if err := evt.GetJsonData(&payload); err != nil {
+//			log.Error().Err(err).Msg("unmarshal failed")
+//			return err, esdb.Nack_Retry
+//		}
+//
+//		log.Info().Str("taskID", payload.ID).Msg("task created, emitted from echo projection")
+//		return nil, esdb.Nack_Unknown
+//	}
 type CustomProjection struct {
 	es            *esdb.Client
 	eventHandlers map[string]eventHandler
