@@ -19,7 +19,7 @@ func (a *TaskAggregate) CreateTask(ctx context.Context, name string, patientID u
 }
 
 func (a *TaskAggregate) UpdateName(ctx context.Context, newName string) error {
-	event, err := taskEventsV1.NewTaskNameUpdatedEvent(a, a.Task.Name, newName)
+	event, err := taskEventsV1.NewTaskNameUpdatedEvent(a, newName)
 	if err != nil {
 		return err
 	}
@@ -27,7 +27,7 @@ func (a *TaskAggregate) UpdateName(ctx context.Context, newName string) error {
 }
 
 func (a *TaskAggregate) UpdateDescription(ctx context.Context, newDescription string) error {
-	event, err := taskEventsV1.NewTaskDescriptionUpdatedEvent(a, a.Task.Description, newDescription)
+	event, err := taskEventsV1.NewTaskDescriptionUpdatedEvent(a, newDescription)
 	if err != nil {
 		return err
 	}

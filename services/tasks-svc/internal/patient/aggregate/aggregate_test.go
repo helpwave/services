@@ -58,7 +58,7 @@ func TestPatientAggregate_UpdateNotes(t *testing.T) {
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewNotesUpdatedEvent(patientAggregate, initialPatientNotes, updatedPatientNotes)
+		return patientEventsV1.NewNotesUpdatedEvent(patientAggregate, updatedPatientNotes)
 	})
 
 	if patientAggregate.Patient.Notes != updatedPatientNotes {
@@ -83,7 +83,7 @@ func TestPatientAggregate_UpdateHumanReadableIdentifier(t *testing.T) {
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewHumanReadableIdentifierUpdatedEvent(patientAggregate, initialPatientHumanReadableIdentifier, updatedPatientHumanReadableIdentifier)
+		return patientEventsV1.NewHumanReadableIdentifierUpdatedEvent(patientAggregate, updatedPatientHumanReadableIdentifier)
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != updatedPatientHumanReadableIdentifier {
@@ -137,7 +137,7 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewBedAssignedEvent(patientAggregate, patientAggregate.Patient.BedID, newBedID)
+		return patientEventsV1.NewBedAssignedEvent(patientAggregate, newBedID)
 	})
 
 	if patientAggregate.Patient.BedID.UUID != newBedID {
