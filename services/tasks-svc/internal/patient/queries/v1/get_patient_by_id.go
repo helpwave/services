@@ -8,7 +8,7 @@ import (
 	"tasks-svc/internal/patient/models"
 )
 
-type GetPatientByIDQueryHandler func(ctx context.Context, taskID uuid.UUID) (*models.Patient, error)
+type GetPatientByIDQueryHandler func(ctx context.Context, patientID uuid.UUID) (*models.Patient, error)
 
 func NewGetPatientByIDQueryHandler(as hwes.AggregateStore) GetPatientByIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) (*models.Patient, error) {
