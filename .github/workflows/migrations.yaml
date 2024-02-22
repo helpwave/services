@@ -12,6 +12,8 @@ env:
   MIGRATE_VERSION: '4.17.0'
   # renovate: datasource=github-releases depName=superfly/flyctl versioning=semver
   FLY_CLI_VERSION: '0.2.8'
+  # renovate: datasource=github-releases depName=sqlc-dev/sqlc
+  SQLC_VERSION: '1.25.0'
 
 jobs:
   detect-changes:
@@ -89,7 +91,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15
+        image: postgres:15.6
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -125,6 +127,8 @@ jobs:
           wget -O "$TEMP_DEB" 'https://github.com/golang-migrate/migrate/releases/download/v${{ env.MIGRATE_VERSION }}/migrate.linux-amd64.deb'
           sudo dpkg -i "$TEMP_DEB"
           rm -f "$TEMP_DEB"
+      - name: install sqlc
+        run: wget -qO- https://downloads.sqlc.dev/sqlc_${{ env.SQLC_VERSION }}_linux_amd64.tar.gz | sudo tar xvz -C /usr/bin
       - name: Clone Repo
         uses: actions/checkout@v4
       - name: Open tunnel to staging db
@@ -167,6 +171,18 @@ jobs:
 
       - name: Run UP migrations (1/2)
         run: ./migrate.sh $svc up
+      - name: Generate schema.sql
+        run: |
+          /usr/lib/postgresql/15/bin/pg_dump \
+            postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB \
+            --schema-only -O > ./services/${{ matrix.service }}/schema.sql
+
+          sed 's/\(-- Dumped from database version [0-9]\+\.[0-9]\+\).*/\1/' -i ./services/${{ matrix.service }}/schema.sql
+          sed 's/\(-- Dumped by pg_dump version [0-9]\+\.[0-9]\+\).*/\1/' -i ./services/${{ matrix.service }}/schema.sql
+      - name: Generate models
+        run: cd services/${{ matrix.service }} && sqlc generate
+      - name: Verify schema.sql and models were generated properly before
+        run: git diff --exit-code -- services/${{ matrix.service }} || (echo "You forgot to run ./models.sh before checking in" && exit 1)
       - name: Run DOWN migrations (1/2)
         run: ./migrate.sh $svc goto $VERSION
         env:
