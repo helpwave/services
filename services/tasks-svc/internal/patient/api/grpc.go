@@ -41,3 +41,34 @@ func (s *PatientGrpcService) UpdatePatient(ctx context.Context, req *pb.UpdatePa
 
 	return &pb.UpdatePatientResponse{}, nil
 }
+
+func (s *PatientGrpcService) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*pb.AssignBedResponse, error) {
+	patientID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	bedID, err := uuid.Parse(req.BedId)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := commandsV1.NewAssignBedCommandHandler(s.as)(ctx, patientID, bedID); err != nil {
+		return nil, err
+	}
+
+	return &pb.AssignBedResponse{}, nil
+}
+
+func (s *PatientGrpcService) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest) (*pb.UnassignBedResponse, error) {
+	patientID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := commandsV1.NewUnassignBedCommandHandler(s.as)(ctx, patientID); err != nil {
+		return nil, err
+	}
+
+	return &pb.UnassignBedResponse{}, nil
+}

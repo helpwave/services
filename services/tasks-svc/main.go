@@ -5,7 +5,8 @@ import (
 	pb "gen/proto/services/tasks_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwes/eventstoredb"
-	"tasks-svc/internal/task/api"
+	patient "tasks-svc/internal/patient/api"
+	task "tasks-svc/internal/task/api"
 )
 
 const ServiceName = "tasks-svc"
@@ -22,6 +23,7 @@ func main() {
 	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
-		pb.RegisterTaskServiceServer(grpcServer, api.NewTaskGrpcService(aggregateStore))
+		pb.RegisterTaskServiceServer(grpcServer, task.NewTaskGrpcService(aggregateStore))
+		pb.RegisterPatientServiceServer(grpcServer, patient.NewPatientGrpcService(aggregateStore))
 	})
 }
