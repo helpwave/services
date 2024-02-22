@@ -20,7 +20,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Generate schema.sql
-# TODO: use parameters
+# TODO: use parameters to run this script [from our CI](https://github.com/helpwave/services/pull/664/files#diff-5054c9340509a426d62acf155169b7d853bdddb4b2c8ba590b506f3282d6775eR175) as well
 pg_dump postgres://postgres:postgres@postgres:5432/$1 --schema-only -O > ./services/$1/schema.sql
 
 # remove build information
