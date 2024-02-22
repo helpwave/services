@@ -15,28 +15,28 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'user_svc.pb.dart' as $11;
+import 'user_svc.pb.dart' as $12;
 
 export 'user_svc.pb.dart';
 
 @$pb.GrpcServiceName('proto.services.user_svc.v1.UserService')
 class UserServiceClient extends $grpc.Client {
-  static final _$createUser = $grpc.ClientMethod<$11.CreateUserRequest, $11.CreateUserResponse>(
+  static final _$createUser = $grpc.ClientMethod<$12.CreateUserRequest, $12.CreateUserResponse>(
       '/proto.services.user_svc.v1.UserService/CreateUser',
-      ($11.CreateUserRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $11.CreateUserResponse.fromBuffer(value));
-  static final _$readSelf = $grpc.ClientMethod<$11.ReadSelfRequest, $11.ReadSelfResponse>(
+      ($12.CreateUserRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $12.CreateUserResponse.fromBuffer(value));
+  static final _$readSelf = $grpc.ClientMethod<$12.ReadSelfRequest, $12.ReadSelfResponse>(
       '/proto.services.user_svc.v1.UserService/ReadSelf',
-      ($11.ReadSelfRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $11.ReadSelfResponse.fromBuffer(value));
-  static final _$readPublicProfile = $grpc.ClientMethod<$11.ReadPublicProfileRequest, $11.ReadPublicProfileResponse>(
+      ($12.ReadSelfRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $12.ReadSelfResponse.fromBuffer(value));
+  static final _$readPublicProfile = $grpc.ClientMethod<$12.ReadPublicProfileRequest, $12.ReadPublicProfileResponse>(
       '/proto.services.user_svc.v1.UserService/ReadPublicProfile',
-      ($11.ReadPublicProfileRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $11.ReadPublicProfileResponse.fromBuffer(value));
-  static final _$updateUser = $grpc.ClientMethod<$11.UpdateUserRequest, $11.UpdateUserResponse>(
+      ($12.ReadPublicProfileRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $12.ReadPublicProfileResponse.fromBuffer(value));
+  static final _$updateUser = $grpc.ClientMethod<$12.UpdateUserRequest, $12.UpdateUserResponse>(
       '/proto.services.user_svc.v1.UserService/UpdateUser',
-      ($11.UpdateUserRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $11.UpdateUserResponse.fromBuffer(value));
+      ($12.UpdateUserRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $12.UpdateUserResponse.fromBuffer(value));
 
   UserServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -44,19 +44,19 @@ class UserServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$11.CreateUserResponse> createUser($11.CreateUserRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$12.CreateUserResponse> createUser($12.CreateUserRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createUser, request, options: options);
   }
 
-  $grpc.ResponseFuture<$11.ReadSelfResponse> readSelf($11.ReadSelfRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$12.ReadSelfResponse> readSelf($12.ReadSelfRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$readSelf, request, options: options);
   }
 
-  $grpc.ResponseFuture<$11.ReadPublicProfileResponse> readPublicProfile($11.ReadPublicProfileRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$12.ReadPublicProfileResponse> readPublicProfile($12.ReadPublicProfileRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$readPublicProfile, request, options: options);
   }
 
-  $grpc.ResponseFuture<$11.UpdateUserResponse> updateUser($11.UpdateUserRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$12.UpdateUserResponse> updateUser($12.UpdateUserRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$updateUser, request, options: options);
   }
 }
@@ -66,54 +66,54 @@ abstract class UserServiceBase extends $grpc.Service {
   $core.String get $name => 'proto.services.user_svc.v1.UserService';
 
   UserServiceBase() {
-    $addMethod($grpc.ServiceMethod<$11.CreateUserRequest, $11.CreateUserResponse>(
+    $addMethod($grpc.ServiceMethod<$12.CreateUserRequest, $12.CreateUserResponse>(
         'CreateUser',
         createUser_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $11.CreateUserRequest.fromBuffer(value),
-        ($11.CreateUserResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$11.ReadSelfRequest, $11.ReadSelfResponse>(
+        ($core.List<$core.int> value) => $12.CreateUserRequest.fromBuffer(value),
+        ($12.CreateUserResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$12.ReadSelfRequest, $12.ReadSelfResponse>(
         'ReadSelf',
         readSelf_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $11.ReadSelfRequest.fromBuffer(value),
-        ($11.ReadSelfResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$11.ReadPublicProfileRequest, $11.ReadPublicProfileResponse>(
+        ($core.List<$core.int> value) => $12.ReadSelfRequest.fromBuffer(value),
+        ($12.ReadSelfResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$12.ReadPublicProfileRequest, $12.ReadPublicProfileResponse>(
         'ReadPublicProfile',
         readPublicProfile_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $11.ReadPublicProfileRequest.fromBuffer(value),
-        ($11.ReadPublicProfileResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$11.UpdateUserRequest, $11.UpdateUserResponse>(
+        ($core.List<$core.int> value) => $12.ReadPublicProfileRequest.fromBuffer(value),
+        ($12.ReadPublicProfileResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$12.UpdateUserRequest, $12.UpdateUserResponse>(
         'UpdateUser',
         updateUser_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $11.UpdateUserRequest.fromBuffer(value),
-        ($11.UpdateUserResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $12.UpdateUserRequest.fromBuffer(value),
+        ($12.UpdateUserResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$11.CreateUserResponse> createUser_Pre($grpc.ServiceCall call, $async.Future<$11.CreateUserRequest> request) async {
+  $async.Future<$12.CreateUserResponse> createUser_Pre($grpc.ServiceCall call, $async.Future<$12.CreateUserRequest> request) async {
     return createUser(call, await request);
   }
 
-  $async.Future<$11.ReadSelfResponse> readSelf_Pre($grpc.ServiceCall call, $async.Future<$11.ReadSelfRequest> request) async {
+  $async.Future<$12.ReadSelfResponse> readSelf_Pre($grpc.ServiceCall call, $async.Future<$12.ReadSelfRequest> request) async {
     return readSelf(call, await request);
   }
 
-  $async.Future<$11.ReadPublicProfileResponse> readPublicProfile_Pre($grpc.ServiceCall call, $async.Future<$11.ReadPublicProfileRequest> request) async {
+  $async.Future<$12.ReadPublicProfileResponse> readPublicProfile_Pre($grpc.ServiceCall call, $async.Future<$12.ReadPublicProfileRequest> request) async {
     return readPublicProfile(call, await request);
   }
 
-  $async.Future<$11.UpdateUserResponse> updateUser_Pre($grpc.ServiceCall call, $async.Future<$11.UpdateUserRequest> request) async {
+  $async.Future<$12.UpdateUserResponse> updateUser_Pre($grpc.ServiceCall call, $async.Future<$12.UpdateUserRequest> request) async {
     return updateUser(call, await request);
   }
 
-  $async.Future<$11.CreateUserResponse> createUser($grpc.ServiceCall call, $11.CreateUserRequest request);
-  $async.Future<$11.ReadSelfResponse> readSelf($grpc.ServiceCall call, $11.ReadSelfRequest request);
-  $async.Future<$11.ReadPublicProfileResponse> readPublicProfile($grpc.ServiceCall call, $11.ReadPublicProfileRequest request);
-  $async.Future<$11.UpdateUserResponse> updateUser($grpc.ServiceCall call, $11.UpdateUserRequest request);
+  $async.Future<$12.CreateUserResponse> createUser($grpc.ServiceCall call, $12.CreateUserRequest request);
+  $async.Future<$12.ReadSelfResponse> readSelf($grpc.ServiceCall call, $12.ReadSelfRequest request);
+  $async.Future<$12.ReadPublicProfileResponse> readPublicProfile($grpc.ServiceCall call, $12.ReadPublicProfileRequest request);
+  $async.Future<$12.UpdateUserResponse> updateUser($grpc.ServiceCall call, $12.UpdateUserRequest request);
 }
