@@ -3,7 +3,6 @@ package v1
 import (
 	"github.com/google/uuid"
 	"hwes"
-	"hwutil"
 )
 
 const (
@@ -13,7 +12,6 @@ const (
 	BedAssigned                    = "BED_ASSIGNED_v1"
 	BedUnsassigned                 = "BED_UNASSIGNED_v1"
 	PatientDischarged              = "PATIENT_DISCHARGED_v1"
-	PatientDeleted                 = "PATIENT_DELETED_v1"
 	PatientReadmitted              = "PATIENT_READMITTED_v1"
 )
 
@@ -24,20 +22,17 @@ type PatientCreatedEvent struct {
 }
 
 type HumanReadableIdentifierUpdatedEvent struct {
-	PatientID                       string `json:"patient_id"`
-	PreviousHumanReadableIdentifier string `json:"previous_human_readable_identifier"`
-	HumanReadableIdentifier         string `json:"human_readable_identifier"`
+	PatientID               string `json:"patient_id"`
+	HumanReadableIdentifier string `json:"human_readable_identifier"`
 }
 
 type NotesUpdatedEvent struct {
-	PatientID     string `json:"patient_id"`
-	PreviousNotes string `json:"previous_notes"`
-	Notes         string `json:"notes"`
+	PatientID string `json:"patient_id"`
+	Notes     string `json:"notes"`
 }
 
 type BedAssignedEvent struct {
-	PreviousBedID string `json:"previous_bed_id"`
-	BedID         string `json:"bed_id"`
+	BedID string `json:"bed_id"`
 }
 
 type PatientDischargedEvent struct {
@@ -57,32 +52,23 @@ func NewPatientCreatedEvent(a hwes.Aggregate, id uuid.UUID, humanReadableIdentif
 	return hwes.NewEventWithData(a, PatientCreated, payload)
 }
 
-func NewHumanReadableIdentifierUpdatedEvent(a hwes.Aggregate, PreviousHumanReadableIdentifier, humanReadableIdentifier string) (hwes.Event, error) {
+func NewHumanReadableIdentifierUpdatedEvent(a hwes.Aggregate, humanReadableIdentifier string) (hwes.Event, error) {
 	payload := HumanReadableIdentifierUpdatedEvent{
-		PreviousHumanReadableIdentifier: PreviousHumanReadableIdentifier,
-		HumanReadableIdentifier:         humanReadableIdentifier,
+		HumanReadableIdentifier: humanReadableIdentifier,
 	}
 	return hwes.NewEventWithData(a, HumanReadableIdentifierUpdated, payload)
 }
 
-func NewNotesUpdatedEvent(a hwes.Aggregate, previousNotes, notes string) (hwes.Event, error) {
+func NewNotesUpdatedEvent(a hwes.Aggregate, notes string) (hwes.Event, error) {
 	payload := NotesUpdatedEvent{
-		PreviousNotes: previousNotes,
-		Notes:         notes,
+		Notes: notes,
 	}
 	return hwes.NewEventWithData(a, NotesUpdated, payload)
 }
 
-func NewBedAssignedEvent(a hwes.Aggregate, previousBedID uuid.NullUUID, bedID uuid.UUID) (hwes.Event, error) {
-	value := hwutil.NullUUIDToStringPtr(previousBedID)
-	truePreviousBedID := ""
-	if value != nil {
-		truePreviousBedID = *value
-	}
-
+func NewBedAssignedEvent(a hwes.Aggregate, bedID uuid.UUID) (hwes.Event, error) {
 	payload := BedAssignedEvent{
-		PreviousBedID: truePreviousBedID,
-		BedID:         bedID.String(),
+		BedID: bedID.String(),
 	}
 	return hwes.NewEventWithData(a, BedAssigned, payload)
 }

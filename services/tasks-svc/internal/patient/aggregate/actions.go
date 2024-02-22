@@ -18,7 +18,7 @@ func (a *PatientAggregate) CreatePatient(ctx context.Context, humanReadableIdent
 }
 
 func (a *PatientAggregate) AssignBed(ctx context.Context, newBedID uuid.UUID) error {
-	event, err := patientEventsV1.NewBedAssignedEvent(a, a.Patient.BedID, newBedID)
+	event, err := patientEventsV1.NewBedAssignedEvent(a, newBedID)
 	if err != nil {
 		return err
 	}
@@ -34,7 +34,7 @@ func (a *PatientAggregate) DischargePatient(ctx context.Context) error {
 }
 
 func (a *PatientAggregate) UpdateHumanReadableIdentifier(ctx context.Context, newHumanReadableIdentifier string) error {
-	event, err := patientEventsV1.NewHumanReadableIdentifierUpdatedEvent(a, a.Patient.HumanReadableIdentifier, newHumanReadableIdentifier)
+	event, err := patientEventsV1.NewHumanReadableIdentifierUpdatedEvent(a, newHumanReadableIdentifier)
 	if err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (a *PatientAggregate) UpdateHumanReadableIdentifier(ctx context.Context, ne
 }
 
 func (a *PatientAggregate) UpdateNotes(ctx context.Context, newNotes string) error {
-	event, err := patientEventsV1.NewNotesUpdatedEvent(a, a.Patient.Notes, newNotes)
+	event, err := patientEventsV1.NewNotesUpdatedEvent(a, newNotes)
 	if err != nil {
 		return err
 	}
