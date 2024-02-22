@@ -18,14 +18,18 @@ const CreatePatientRequest$json = {
   '1': 'CreatePatientRequest',
   '2': [
     {'1': 'human_readable_identifier', '3': 1, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
-    {'1': 'notes', '3': 2, '4': 1, '5': 9, '10': 'notes'},
+    {'1': 'notes', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'notes', '17': true},
+  ],
+  '8': [
+    {'1': '_notes'},
   ],
 };
 
 /// Descriptor for `CreatePatientRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createPatientRequestDescriptor = $convert.base64Decode(
     'ChRDcmVhdGVQYXRpZW50UmVxdWVzdBI6ChlodW1hbl9yZWFkYWJsZV9pZGVudGlmaWVyGAEgAS'
-    'gJUhdodW1hblJlYWRhYmxlSWRlbnRpZmllchIUCgVub3RlcxgCIAEoCVIFbm90ZXM=');
+    'gJUhdodW1hblJlYWRhYmxlSWRlbnRpZmllchIZCgVub3RlcxgCIAEoCUgAUgVub3Rlc4gBAUII'
+    'CgZfbm90ZXM=');
 
 @$core.Deprecated('Use createPatientResponseDescriptor instead')
 const CreatePatientResponse$json = {

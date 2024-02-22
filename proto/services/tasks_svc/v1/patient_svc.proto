@@ -10,7 +10,7 @@ option go_package = "gen/proto/service/tasks-svc";
 
 message CreatePatientRequest {
   string human_readable_identifier = 1; // @gotags: validate: "required"
-  string notes = 2;
+  optional string notes = 2;
 }
 
 message CreatePatientResponse {

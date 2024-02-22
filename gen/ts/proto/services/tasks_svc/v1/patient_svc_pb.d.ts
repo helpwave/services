@@ -8,6 +8,8 @@ export class CreatePatientRequest extends jspb.Message {
 
   getNotes(): string;
   setNotes(value: string): CreatePatientRequest;
+  hasNotes(): boolean;
+  clearNotes(): CreatePatientRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreatePatientRequest.AsObject;
@@ -20,7 +22,12 @@ export class CreatePatientRequest extends jspb.Message {
 export namespace CreatePatientRequest {
   export type AsObject = {
     humanReadableIdentifier: string,
-    notes: string,
+    notes?: string,
+  }
+
+  export enum NotesCase { 
+    _NOTES_NOT_SET = 0,
+    NOTES = 2,
   }
 }
 

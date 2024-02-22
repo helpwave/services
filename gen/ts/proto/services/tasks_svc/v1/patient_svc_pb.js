@@ -487,8 +487,8 @@ proto.proto.services.tasks_svc.v1.CreatePatientRequest.serializeBinaryToWriter =
       f
     );
   }
-  f = message.getNotes();
-  if (f.length > 0) {
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
     writer.writeString(
       2,
       f
@@ -529,7 +529,25 @@ proto.proto.services.tasks_svc.v1.CreatePatientRequest.prototype.getNotes = func
  * @return {!proto.proto.services.tasks_svc.v1.CreatePatientRequest} returns this
  */
 proto.proto.services.tasks_svc.v1.CreatePatientRequest.prototype.setNotes = function(value) {
-  return jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setField(this, 2, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.CreatePatientRequest} returns this
+ */
+proto.proto.services.tasks_svc.v1.CreatePatientRequest.prototype.clearNotes = function() {
+  return jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.CreatePatientRequest.prototype.hasNotes = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
