@@ -28,13 +28,6 @@ if [[ $2 = "desired" ]]; then
 	exit 0
 fi
 
-# Default values
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-POSTGRES_HOST=postgres
-POSTGRES_PORT=5432
-POSTGRES_DB=postgres
-
 # test if .env exists for service
 if [ ! -f $WORKING_DIRECTORY/.env ]; then
     echo "WARNING: .env file for service $1 does not exist" >&2
@@ -42,6 +35,13 @@ else
 	# load service's .env
 	export $(grep -v '^#' $WORKING_DIRECTORY/.env | xargs)
 fi
+
+# Default values
+POSTGRES_USER="${POSTGRES_USER:-postgres}"
+POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-postgres}"
+POSTGRES_HOST="${POSTGRES_HOST:-postgres}"
+POSTGRES_PORT="${POSTGRES_PORT:-5432}"
+POSTGRES_DB="${POSTGRES_DB:-postgres}"
 
 # prepare args for piping to migrate
 # by removing the first argument (the service)

@@ -39,7 +39,7 @@ jobs:
         with:
           version: v${{ env.BUF_CLI_VERSION }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
       - run: go install github.com/favadi/protoc-go-inject-tag@v${{ env.PROTOC_GO_INJECT_TAG_VERSION }}

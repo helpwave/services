@@ -3,11 +3,6 @@
 import os
 import sys
 
-from django_grpc import utils
-from grpc_service.monkey_patch import create_server
-
-utils.create_server = create_server
-
 
 def main():
     """Run administrative tasks."""
