@@ -29,13 +29,11 @@ type TaskCreatedEvent struct {
 }
 
 type TaskNameUpdatedEvent struct {
-	PreviousName string `json:"previous_name"`
-	Name         string `json:"name"`
+	Name string `json:"name"`
 }
 
 type TaskDescriptionUpdatedEvent struct {
-	PreviousDescription string `json:"previous_description"`
-	Description         string `json:"description"`
+	Description string `json:"description"`
 }
 
 type TaskAssignedEvent struct {
@@ -84,18 +82,16 @@ func NewTaskCreatedEvent(a hwes.Aggregate, id uuid.UUID, name string, patientID 
 	return hwes.NewEventWithData(a, TaskCreated, payload)
 }
 
-func NewTaskNameUpdatedEvent(a hwes.Aggregate, previousName, name string) (hwes.Event, error) {
+func NewTaskNameUpdatedEvent(a hwes.Aggregate, name string) (hwes.Event, error) {
 	payload := TaskNameUpdatedEvent{
-		PreviousName: previousName,
-		Name:         name,
+		Name: name,
 	}
 	return hwes.NewEventWithData(a, TaskNameUpdated, payload)
 }
 
-func NewTaskDescriptionUpdatedEvent(a hwes.Aggregate, previousDescription, description string) (hwes.Event, error) {
+func NewTaskDescriptionUpdatedEvent(a hwes.Aggregate, description string) (hwes.Event, error) {
 	payload := TaskDescriptionUpdatedEvent{
-		PreviousDescription: previousDescription,
-		Description:         description,
+		Description: description,
 	}
 	return hwes.NewEventWithData(a, TaskDescriptionUpdated, payload)
 }
