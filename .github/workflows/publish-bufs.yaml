@@ -28,8 +28,11 @@ jobs:
     - uses: bufbuild/buf-setup-action@v1
       with:
         version: ${{ env.BUF_CLI_VERSION }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - uses: bufbuild/buf-lint-action@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
     # TODO (arm-versioning): Arm versioning by remove the comment of ONLY the next line
     # - name: Check for illegal breakage
       # Only deletions are allowed. Breaking updates must happen in a new version of the package(s) in question.
