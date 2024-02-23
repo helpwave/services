@@ -77,7 +77,7 @@ jobs:
           context: images/${{ inputs.image }}
           platforms: linux/amd64
           push: ${{ inputs.deploy }}
-          tags: ${{ inputs.custom_tag && '${{ env.IMAGE_NAME }}:${{ inputs.custom_tag }}' || steps.meta.outputs.tags }}
+          tags: ${{ inputs.custom_tag && format('{0}:{1}', env.IMAGE_NAME, inputs.custom_tag) || steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
