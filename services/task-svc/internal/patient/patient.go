@@ -5,7 +5,6 @@ import (
 	"context"
 	pb "gen/proto/services/task_svc/v1"
 	"hwdb"
-	"hwgorm"
 	"hwutil"
 	"task-svc/internal/tracking"
 	"task-svc/repos/bed_repo"
@@ -148,11 +147,7 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 	})
 
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.GetPatientsByWardResponse{
@@ -179,11 +174,7 @@ func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.Get
 
 	rows, err := roomRepo.GetRoomsWithBedsWithPatientsByWard(ctx, wardID)
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	processedRooms := make(map[uuid.UUID]bool)
@@ -357,11 +348,7 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 		BedID: uuid.NullUUID{UUID: bedID, Valid: true},
 	})
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "patient id not found or bed in use")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	log.Info().
@@ -387,11 +374,7 @@ func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest
 
 	err = patientRepo.UnassignBedFromPatient(ctx, patientId)
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "patientId not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	log.Info().
@@ -417,11 +400,7 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 	err = patientRepo.DischargePatient(ctx, patientId)
 
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "patientId not found")
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	log.Info().

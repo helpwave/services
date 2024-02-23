@@ -1,6 +1,15 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text eol=lf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+
 gen/** linguist-generated=true
 gen/**/helpers.go linguist-generated=false
 services/impulse_svc/gen/** linguist-generated=true
 services/**/schema.sql linguist-generated=true
 **/*.expected linguist-generated=true
+services/user-svc/repos/**/ linguist-generated=true
 services/*/repos/**/ linguist-generated=true
+

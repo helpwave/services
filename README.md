@@ -1,21 +1,131 @@
 # services
-    
+
 helpwave's microservices
 
 ## Getting started
 
-This repository utilizes [devenv.sh](https://devenv.sh) (on top of [Nix](https://nixos.org/)) for our development environments.
+> [!NOTE]
+> Make sure you have [Git](https://git-scm.com/), [Docker](https://docs.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
+> installed on your system.
 
-1. [Install devenv](https://devenv.sh/getting-started/)
-2. Start the environment of this repository by running `devenv up` in the root. On first run, this command can take a while. This starts our database and all services including a hot-reload.
-3. Develop!
+> [!NOTE]
+> There seem to be service-discovery issues on Windows Hosts.
 
-- Use `devenv shell` to enter a shell that contains all necessary packages and utilities for this repository
-- For direct client to service requests via gRPC, add the following metadata to your requests:
-	- `X-Organization: [An organization id. Most requests are performed on the side of an organization. The id must be part of your passed access token]`
-	- `dapr-app-id: [the app id of the targeted service]`
+### Using Docker Compose next to your IDE
 
-### Ports
+Using this setup, you use your editor of choice on your system and start the docker compose stack next to it.
+The main downside to this is that your IDE will use your local toolchain and dependencies, which may not be in sync.
+
+> [!TIP]
+> `./up.sh -d` starts the compose stack in the background
+
+1. Clone the repo locally
+	```bash
+	$ git clone git@github.com:helpwave/services.git
+	```
+2. Start the docker compose stack using the `$ ./up.sh` script
+3. Start your IDE of choice and start hacking!
+4. You can use the tools installed in the dev docker container by opening a shell on it:
+   ```bash
+   $ ./dev.sh
+   # you are now in the container
+   $ psql -d user-svc
+   ```
+
+Next Steps: [Read on here](#development)
+
+### Using Development Containers
+
+You can start your IDE and Docker Compose together using Dev Containers.
+This will install a backend client for your IDE in the `devcontainer` container, which it uses instead of your local setup.
+
+> [!IMPORTANT]
+> [Development Containers](https://containers.dev/) is still relatively new technology.
+> Things are likely to change and/or break.
+
+> [!WARNING]
+> Even though containers are a somewhat isolated environment,
+> the devcontainer has access to the host's docker socket.
+> This means malicious code can still mess with your system.
+> Just like on your host system (assuming your user is in the docker group), everything could run as root, if it tried hard enough.
+> For example by spawning a new container, which mounts `/` and runs `rf -rf /`.
+> You can disable docker-out-of-docker by setting `DOCKER_SOCK` in `dev`'s `.env` to `/dev/null`.
+
+#### Development Containers and IntelliJ ([GoLand](https://www.jetbrains.com/de-de/go/))
+
+[Relevant Docs](https://www.jetbrains.com/help/go/connect-to-devcontainer.html#start_container_from_product)
+
+1. Start GoLand and close any open projects.
+2. Alternatively, start [JetBrains Gateway](https://www.jetbrains.com/remote-development/gateway/).
+3. Make sure your docker setup is correctly configured
+4. Under "Remote Development" -> "Dev Containers" create a new Dev Container
+5. Copy in `git@github.com:helpwave/services.git` and select your branch of choice.
+6. Alternatively, click on "From Local Project" and navigate to a local copy of the repo's `.devcontainer/devcontainer.json`
+7. Wait, follow further instructions, and select the editor you want to launch (likely GoLand)
+8. GoLand will start *in* a docker container, you can start hacking!
+9. Use the usual GoLand UI to open a terminal, where you will find a bunch of tools pre-installed for you.
+10. Next time, you can find the Dev Container ready to start.
+
+Next Steps: [Read on here](#development)
+
+#### Development Containers and VSCode
+
+1. Clone the Repo and open it in VSCode
+2. On the lower left, click on the remote development icon
+3. Select "Reopen in Container"
+4. VSCode will restart *in* a docker container, you can start hacking!
+5. Use the VSCode UI to open a terminal, where you will find a bunch of tools pre-installed for you.
+6. Closing VSCode will *not* stop the docker compose stack. You can do that manually, close VSCode and navigate to `dev`, there, run `docker compose down`.
+
+## Development
+
+Following the steps above, you should now have a docker compose stack running and are able to execute commands in the `dev-devcontainer-1` container.
+
+To see what compose actually starts, we recommend a look into the [docker-compose.yaml](https://github.com/helpwave/services/blob/main/dev/docker-compose.yaml), but here is the gist:
+
+* Dependencies (e.g., Redis, Postgres and EventStore)
+* `apisix`
+* `services`
+* `devcontainer`
+
+Of particular interest are the `services` and `devcontainer` containers. The former starts all go services using [air](https://github.com/cosmtrek/air), a tool that automatically recompiles and restarts the service on reload.
+The latter gives you a playground for development with all the tools you need. As it is in the docker network you can use the names of the other (docker compose) services as hostnames (i.e., `postgres` will be resolved to the container in which the postgres instance is running on).
+**It also has access to docker.** This means you can, for example, read the services logs like this: `docker compose logs services -f`, and start / stop / restart containers.
+
+A lot of ports will be allocated on your host system for additional debugging. Have a look at the [table below](#ports) for more information.
+
+### Networking
+
+The microservices are tied together using [dapr](https://dapr.io/). Most services provide a grpc API, as defined by the protobufs in `/proto`.
+
+We provide one unified entrypoint for clients in form of the API-gateway [APISIX](https://apisix.apache.org/). It exposes a [grpc-web](https://github.com/grpc/grpc-web) api for http-only clients (i.e., web), but falls back to a grpc proxy for those clients that support it (i.e., mobile).
+
+#### How do I talk to a service?
+
+##### Using helpwave/web
+
+The frontend is a great way to test regressions. Hop over to [the web repo](https://github.com/helpwave/web) to find out how to set it up and point it to APISIX.
+
+##### Using APISIX over grpc-web
+
+Using this approach, you are closest to the actual calls made by the frontends. 
+
+TODO: We are still looking for a tool that works well for this :/
+
+##### Directly
+
+<https://github.com/fullstorydev/grpcurl>
+
+```bash
+grpcurl --plaintext \
+	-H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
+	-H "Authorization: Bearer <...>" \
+	-d '{}' \
+	localhost:3001 \
+	proto.services.task_svc.v1.WardService/GetWards
+```
+
+## Ports
 
 | Service       | Port  | Protocol                |
 |---------------|-------|-------------------------|
@@ -35,13 +145,27 @@ This repository utilizes [devenv.sh](https://devenv.sh) (on top of [Nix](https:/
 
 ### Scripts
 
-You can either run `<script>` in the shell (`devenv shell`) or outside the shell via `devenv shell <script>`.
+These scripts can be run on your local machine:
 
-- `proto`: Generate protos
-- `proto-lint`: Lint protos
-- `nix-lint`: Lint .nix
-- `migratesh`: [migrate.sh](#migratesh---running-migratemigrate-inside-docker)
-- `models`
+* `shell.sh` - Opens a Shell in the devcontainer
+* `up.sh` - Starts the docker compose stack, accepts `docker compose up` arguments. Your IDE might do this for you!
+* `down.sh` - Shuts down the docker compose stack, accepts `docker compose down` arguments
+
+These scripts can be run in the devcontainer:
+
+* `protos.sh`: Lint and Generate protos
+* `migrate.sh`: [migrate.sh](#migratesh---running-migratemigrate-inside-docker)
+* `models.sh`: [models.sh](#modelssh---generate-models-from-sql-queries)
+
+Example:
+
+```bash
+$ ./shell.sh protos.sh
+
+# or
+$ ./shell.sh
+$ ./proto.sh
+```
 
 ## Fake token
 
@@ -55,7 +179,8 @@ Only do this in development environments!
 Fake tokens are used just like JWTs: As bearer tokens in the Authorization header of your gRPC requests.
 
 Here is an example fake-token that can be used as the bearer authorization token.
-```
+
+```text
 eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19
 ---
 # decoded
@@ -71,22 +196,42 @@ eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3Rp
 ## Docker images
 
 You can build a docker image for a service using `make`:
+
 ```bash
 make <servicename>
 ```
+
  e.g.:
+
 ```bash
  make user-svc
 ```
 
 Each service should have a Makefile, that includes the root's Makefile.
 In the context of a service directory you should be able to use
+
 ```bash
  make this
 ```
+
 to build the corresponding docker image as well.
 
-### Our images
+### Docker Images
+
+#### dev-go
+
+The dev-go image is a common development environment for go services. It includes go and a whole lot of tools and dependencies.
+When updating the Dockerfile, also increase the `DEV_TAG` variable in the `up.sh` file.
+
+#### dev-go-custom
+
+For this image we only provide a Dockerfile, you can not pull it from the registry.
+It is built by docker-compose using your uid and gid as build arguments to reduce friction when it comes to mounted files.
+
+The other function of this image is to allow customization of the dev container.
+Feel free to install custom tooling (e.g. zsh, nano, ...) there.
+Please mind the instructions at the top of the Dockerfile though.
+If you think a tool might be useful to others, install it in the dev-go image instead.
 
 #### Dockerfile.apisix
 
@@ -103,11 +248,14 @@ This image contains the service including the daprd sidecar. These two processes
 side by side in the container via [hivemind](https://github.com/DarthSim/hivemind).
 
 ## Migrations
+
 We use [migrate](https://github.com/golang-migrate/migrate) to handle changes to our database tables
 It uses change versioning, e.g.
-- `000009_some_name.up.sql` contains all changes from version 8 to 9
-- `000009_some_name.down.sql` contains all changes from version 9 to 8 in reverse order from
-```
+
+* `000009_some_name.up.sql` contains all changes from version 8 to 9
+* `000009_some_name.down.sql` contains all changes from version 9 to 8 in reverse order from
+
+```bash
 migrate -path services/<service>/migrations/ -database postgres://postgres:postgres@localhost:5432/<service>?sslmode=disable up [version]
 migrate -path services/<service>/migrations/ -database postgres://postgres:postgres@localhost:5432/<service>?sslmode=disable down [version]
 ```
@@ -123,18 +271,21 @@ you arguments into migrate/migrate running in a container.
 `migrate.sh` will use the database setup of the passed service. Therefore, a .env file is required.
 
 #### Usage
+
 `./migrate.sh <service> [... arguments for migrate/migrate]`
 
-- `<service>` must be one of the services inside `/services/`
-- `[... arguments for migrate/migrate]` gets passed directly to migrate/migrate
+* `<service>` must be one of the services inside `/services/`
+* `[... arguments for migrate/migrate]` gets passed directly to migrate/migrate
 
 
-#### Examples:
-- Migrate the task-svc database all the way up `./migrate.sh task-svc up`
-- Migrate the task-svc database one down: `./migrate.sh task-svc down 1`
-- Current migration version of the task-svc database: `./migrate.sh task-svc version`
+#### Examples
 
-#### desired:
+* Migrate the task-svc database all the way up `./migrate.sh task-svc up`
+* Migrate the task-svc database one down: `./migrate.sh task-svc down 1`
+* Current migration version of the task-svc database: `./migrate.sh task-svc version`
+
+#### desired
+
 Additionally, the script allows you to query the highest available migration version
 based on the migration files available in the service:
 
@@ -142,28 +293,33 @@ based on the migration files available in the service:
 ./migrate <service> desired
 ```
 
-### `devenv shell models` - Generate models from SQL Queries
+### `./models.sh` - Generate models from SQL Queries
 
 > [!IMPORTANT]
 > Requires a running database, it's best to run `devenv up` before running this script.
 
 We use [sqlc](https://docs.sqlc.dev/en/latest/), a compiler that generates go functions based on SQL queries and a schema.
 This script
+
 1. Makes sure the database is fully migrated up (see migration.sh)
 2. Generates a `schema.sql` using pg_dump
-	> [!TIP]
-	> The `schema.sql` is also a great place to familiarize yourself with the data model(s)!
 3. Invokes sqlc to generate go code based on a `sqlc.yaml`
 
+> [!TIP]
+> The `schema.sql` is also a great place to familiarize yourself with the data model(s)!
+
 Usage:
-- `devenv shell models <some-svc>` generates models for a specific service
-- `devenv shell models` generates models for all services
+
+* `./models.sh <some-svc>` generates models for a specific service
+* `./models.sh models` generates models for all services
 
 ## Enviroment variables
+
 Every service should contain a `.env.example` file which should be copied to a usable `.env` file
 
 Default Variables:
-```
+
+```bash
 # The mode used, options available
 #  development, production
 MODE=development
@@ -184,7 +340,7 @@ POSTGRES_DB=postgres
 
 # EventStoreDB related configurations
 
-EVENTSTORE_CS=sdb://admin:changeit@localhost:2113?tls=false
+EVENTSTORE_CS=esdb://admin:changeit@localhost:2113?tls=false
 
 # For development purposes
 INSECURE_FAKE_TOKEN_ENABLE=true
