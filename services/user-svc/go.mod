@@ -7,7 +7,6 @@ replace (
 	gen => ../../gen/go
 	hwdb => ../../libs/hwdb
 	hwutil => ../../libs/hwutil
-	proto_helpers => ../../libs/proto_helpers
 	telemetry => ../../libs/telemetry
 )
 

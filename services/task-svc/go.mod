@@ -9,7 +9,6 @@ replace (
 	hwdb => ../../libs/hwdb
 	hwes => ../../libs/hwes
 	hwutil => ../../libs/hwutil
-	proto_helpers => ../../libs/proto_helpers
 	telemetry => ../../libs/telemetry
 )
 
