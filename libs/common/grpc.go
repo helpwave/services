@@ -415,9 +415,16 @@ func errorQualityControlInterceptor(ctx context.Context, req interface{}, info *
 
 		if !hasLocalizedMessage {
 			log.Warn().Err(err).Msg("status error does not have LocalizedMessage")
-			statusError, err = statusError.WithDetails(LocalizedMessage(ctx, locale.GenericError(ctx)))
+
+			var err2 error
+			statusError, err2 = statusError.WithDetails(LocalizedMessage(ctx, locale.GenericError(ctx)))
 			if statusError != nil {
-				err = statusError.Err()
+				err2 = statusError.Err()
+			} else {
+				log.Error().
+					Err(err2).
+					Msg("there was an error while creating the generic fallback statusError")
+				return res, err
 			}
 		}
 
