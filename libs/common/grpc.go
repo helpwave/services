@@ -16,6 +16,7 @@ import (
 	"github.com/rs/zerolog"
 	zlog "github.com/rs/zerolog/log"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
+	otelCodes "go.opentelemetry.io/otel/codes"
 	"golang.org/x/text/language"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc"
@@ -362,7 +363,7 @@ func handlerSpanInterceptor(ctx context.Context, req interface{}, info *grpc.Una
 	ctx, span, _ := telemetry.StartSpan(ctx, "handler")
 	res, err := next(ctx, req)
 	if err != nil {
-		span.SetStatus(1, err.Error())
+		span.SetStatus(otelCodes.Error, err.Error())
 	}
 	span.End()
 	return res, err
@@ -464,13 +465,18 @@ func errorQualityControlInterceptor(ctx context.Context, req interface{}, info *
 	return res, err
 }
 
-func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (res interface{}, err error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "validate_interceptor")
-	defer span.End()
+	defer func() {
+		if err != nil {
+			span.SetStatus(otelCodes.Error, err.Error())
+		}
+		span.End()
+	}()
+
 	log := zlog.Ctx(ctx)
 
 	if err := hwutil.Validate(req); err != nil {
-
 		var internalErr *validator.InvalidValidationError
 
 		if errors.As(err, &internalErr) {
