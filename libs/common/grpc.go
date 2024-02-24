@@ -476,42 +476,49 @@ func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.U
 
 	log := zlog.Ctx(ctx)
 
-	if err := hwutil.Validate(req); err != nil {
-		var internalErr *validator.InvalidValidationError
+	err = hwutil.Validate(req)
 
-		if errors.As(err, &internalErr) {
-			return nil, NewStatusError(ctx, codes.Internal, err.Error(), locale.GenericError(ctx))
-		}
+	// no error, go to next in chain
+	if err == nil {
+		return next(ctx, req)
+	}
 
-		var valErrs validator.ValidationErrors
+	// validate either returns an InvalidValidationError (in case there was an issue with the setup)
+	// or ValidationErrors (in case the input has validation issues)
 
-		if errors.As(err, &valErrs) {
-			br := &errdetails.BadRequest{FieldViolations: make([]*errdetails.BadRequest_FieldViolation, 0)}
+	var internalErr *validator.InvalidValidationError
 
-			for _, valErr := range valErrs {
-				br.FieldViolations = append(br.FieldViolations, &errdetails.BadRequest_FieldViolation{
-					Field:       valErr.Field(), // TODO: use json key
-					Description: validateFieldErrDescription(ctx, valErr),
-				})
-			}
-
-			return nil, NewStatusError(
-				ctx,
-				codes.InvalidArgument,
-				err.Error(),
-				locale.GenericInvalidArgsError(ctx, len(valErrs)),
-				br,
-			)
-		}
-
-		log.Error().
-			Err(err).
-			Str("type", reflect.TypeOf(err).String()).
-			Msg("validate returned unexpected error")
-
+	if errors.As(err, &internalErr) {
 		return nil, NewStatusError(ctx, codes.Internal, err.Error(), locale.GenericError(ctx))
 	}
-	return next(ctx, req)
+
+	var valErrs validator.ValidationErrors
+
+	if errors.As(err, &valErrs) {
+		br := &errdetails.BadRequest{FieldViolations: make([]*errdetails.BadRequest_FieldViolation, 0)}
+
+		for _, valErr := range valErrs {
+			br.FieldViolations = append(br.FieldViolations, &errdetails.BadRequest_FieldViolation{
+				Field:       valErr.Field(), // TODO: use json key
+				Description: validateFieldErrDescription(ctx, valErr),
+			})
+		}
+
+		return nil, NewStatusError(
+			ctx,
+			codes.InvalidArgument,
+			err.Error(),
+			locale.GenericInvalidArgsError(ctx, len(valErrs)),
+			br,
+		)
+	}
+
+	log.Error().
+		Err(err).
+		Str("type", reflect.TypeOf(err).String()).
+		Msg("validate returned unexpected error")
+
+	return nil, NewStatusError(ctx, codes.Internal, err.Error(), locale.GenericError(ctx))
 }
 
 func validateFieldErrDescription(ctx context.Context, fieldErr validator.FieldError) string {
