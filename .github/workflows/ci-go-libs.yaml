@@ -10,7 +10,7 @@ on:
 
 env:
   # renovate: datasource=docker depName=golang versioning=docker
-  GO_VERSION: '1.21'
+  GO_VERSION: '1.22'
 
 jobs:
 
@@ -20,19 +20,19 @@ jobs:
       run:
         working-directory: libs/${{ inputs.lib }}
     steps:
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
 
       - uses: actions/checkout@v4
 
       - name: Cache build dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/_go.sum') }}
 
-      - uses: golangci/golangci-lint-action@v3
+      - uses: golangci/golangci-lint-action@v4
         with:
           # Can this be a bug in golangci-lint? We already defined the working-directory for this step.
           working-directory: libs/${{ inputs.lib }}
@@ -44,14 +44,14 @@ jobs:
       run:
         working-directory: libs/${{ inputs.lib }}
     steps:
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
 
       - uses: actions/checkout@v4
 
       - name: Cache build dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/_go.sum') }}
