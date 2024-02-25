@@ -26,7 +26,7 @@ func main() {
 	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
 	defer closeDBPool()
 
-	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
+	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
 		daprClient := common.MustNewDaprGRPCClient()
