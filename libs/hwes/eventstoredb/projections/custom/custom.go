@@ -21,9 +21,10 @@ type eventHandler func(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Ac
 // CustomProjection can be used to develop own projections
 // A projection is an event sourcing pattern to build up
 // a read model based on the underlying event data.
-// IMPORTANT: The passed subscriptionGroupName identifies you subscription
-// on behalf of EventStoreDB. Its highly recommended that the caller
-// prefixes this name with the ServiceName.
+// IMPORTANT: The passed subscriptionGroupName groups your projection
+// on behalf of EventStoreDB. Every instance of a projection must have the same name,
+// so that EventStoreDB can handle the concurrency.
+// Its highly recommended that the caller prefixes this name with the ServiceName.
 //
 // Example:
 //
