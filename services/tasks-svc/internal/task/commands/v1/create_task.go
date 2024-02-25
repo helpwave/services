@@ -34,7 +34,7 @@ func NewCreateTaskCommandHandler(as hwes.AggregateStore) CreateTaskCommandHandle
 		}
 
 		if description != nil {
-			if err := a.UpdateDescription(ctx, a.Task.Description, *description); err != nil {
+			if err := a.UpdateDescription(ctx, *description); err != nil {
 				return err
 			}
 		}

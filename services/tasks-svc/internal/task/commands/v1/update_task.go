@@ -17,13 +17,13 @@ func NewUpdateTaskCommandHandler(as hwes.AggregateStore) UpdateTaskCommandHandle
 		}
 
 		if name != nil {
-			if err := a.UpdateName(ctx, a.Task.Name, *name); err != nil {
+			if err := a.UpdateName(ctx, *name); err != nil {
 				return err
 			}
 		}
 
 		if description != nil {
-			if err := a.UpdateDescription(ctx, a.Task.Description, *description); err != nil {
+			if err := a.UpdateDescription(ctx, *description); err != nil {
 				return err
 			}
 		}
