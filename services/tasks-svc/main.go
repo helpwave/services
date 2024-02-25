@@ -32,7 +32,7 @@ func main() {
 		}
 	}()
 
-	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
+	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
 		pb.RegisterTaskServiceServer(grpcServer, api.NewTaskGrpcService(aggregateStore))
