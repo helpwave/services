@@ -2,6 +2,7 @@ package echo
 
 import (
 	"context"
+	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/esdb"
 	zlog "github.com/rs/zerolog/log"
 	"hwes"
@@ -13,8 +14,9 @@ type Projection struct {
 	*custom.CustomProjection
 }
 
-func NewProjection(es *esdb.Client) *Projection {
-	p := &Projection{custom.NewCustomProjection(es)}
+func NewProjection(es *esdb.Client, serviceName string) *Projection {
+	subscriptionGroupName := fmt.Sprintf("%s-echo-projection", serviceName)
+	p := &Projection{custom.NewCustomProjection(es, subscriptionGroupName)}
 	p.initEventListeners()
 	return p
 }
