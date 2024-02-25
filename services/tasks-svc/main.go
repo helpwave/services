@@ -24,8 +24,8 @@ func main() {
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
 
-	echoProjection := echo.NewProjection(eventStore)
 	go func() {
+		echoProjection := echo.NewProjection(eventStore)
 		if err := echoProjection.Subscribe(ctx); err != nil {
 			log.Err(err).Msg("error during echo subscription")
 			cancel()
