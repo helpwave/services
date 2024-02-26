@@ -44,9 +44,9 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 		OrganizationID: organizationID,
 		WardID:         wardId,
 	})
-
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	log.Info().
@@ -69,8 +69,9 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 	}
 
 	rows, err := roomRepo.GetRoomWithBedsById(ctx, id)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	if len(rows) == 0 {
@@ -114,9 +115,9 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 		ID:   patientID,
 		Name: req.Name,
 	})
-
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	return &pb.UpdateRoomResponse{}, nil
@@ -135,8 +136,9 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 	rows, err := roomRepo.GetRoomsWithBedsForOrganization(ctx, room_repo.GetRoomsWithBedsForOrganizationParams{
 		OrganizationID: organizationID,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	processedRooms := make(map[uuid.UUID]bool)
@@ -191,9 +193,9 @@ func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardR
 		OrganizationID: organizationID,
 		WardID:         uuid.NullUUID{UUID: wardId, Valid: true},
 	})
-
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	processedRooms := make(map[uuid.UUID]bool)
@@ -239,8 +241,10 @@ func (ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := roomRepo.DeleteRoom(ctx, id); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	err = roomRepo.DeleteRoom(ctx, id)
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	// TODO: Handle beds
@@ -269,8 +273,9 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 			WardID:           wardId,
 			OrganizationID:   organizationID,
 		})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	processedRooms := make(map[uuid.UUID]bool)
