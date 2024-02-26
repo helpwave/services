@@ -52,8 +52,8 @@ type organizationIDKey struct{}
 //		api.RegisterMyServiceServer(grpcServer, &myServiceServer{})
 //	})
 //	// cleanup after yourself here
-func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
-	log := zlog.Logger
+func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook func(*daprd.Server)) {
+	log := zlog.Ctx(ctx)
 
 	// middlewares
 	chain := grpc_middleware.ChainUnaryServer(
@@ -91,7 +91,7 @@ func StartNewGRPCServer(addr string, registerServerHook func(*daprd.Server)) {
 		log.Warn().Msg("grpc reflection enabled")
 	}
 
-	interrupted, err := hwutil.RunUntilInterrupted(context.Background(), func() error {
+	interrupted, err := hwutil.RunUntilInterrupted(ctx, func() error {
 		log.Info().Str("addr", addr).Msg("starting grpc service")
 		return server.Serve(listener)
 	})

@@ -14,8 +14,10 @@ replace (
 require (
 	common v0.0.0
 	gen v0.0.0
+	github.com/EventStore/EventStore-Client-Go v1.0.2
 	github.com/dapr/go-sdk v1.9.1
 	github.com/google/uuid v1.6.0
+	github.com/rs/zerolog v1.32.0
 	google.golang.org/grpc v1.61.1
 	google.golang.org/protobuf v1.32.0
 	hwes v0.0.0
@@ -24,7 +26,6 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.3.2 // indirect
-	github.com/EventStore/EventStore-Client-Go v1.0.2 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
 	github.com/dapr/dapr v1.12.2 // indirect
@@ -47,7 +48,6 @@ require (
 	github.com/nicksnyder/go-i18n/v2 v2.4.0 // indirect
 	github.com/openzipkin/zipkin-go v0.4.2 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
-	github.com/rs/zerolog v1.32.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.46.1 // indirect
 	go.opentelemetry.io/otel v1.23.1 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.23.1 // indirect

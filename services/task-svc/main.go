@@ -29,7 +29,7 @@ func main() {
 
 	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
 
-	common.StartNewGRPCServer(common.ResolveAddrFromEnv(), func(server *daprd.Server) {
+	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 		pb.RegisterTaskServiceServer(grpcServer, task.NewServiceServer())
 		pb.RegisterPatientServiceServer(grpcServer, patient.NewServiceServer())
