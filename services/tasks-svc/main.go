@@ -9,6 +9,8 @@ import (
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
+	patient "tasks-svc/internal/patient/api"
+	task "tasks-svc/internal/task/api"
 )
 
 const ServiceName = "tasks-svc"
