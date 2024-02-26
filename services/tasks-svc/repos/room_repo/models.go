@@ -6,7 +6,6 @@ package room_repo
 
 import (
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Bed struct {
@@ -14,17 +13,6 @@ type Bed struct {
 	RoomID         uuid.UUID
 	OrganizationID uuid.UUID
 	Name           string
-}
-
-type Patient struct {
-	ID                      uuid.UUID
-	HumanReadableIdentifier string
-	OrganizationID          uuid.UUID
-	Notes                   string
-	BedID                   uuid.NullUUID
-	IsDischarged            int32
-	CreatedAt               pgtype.Timestamp
-	UpdatedAt               pgtype.Timestamp
 }
 
 type Room struct {
@@ -37,28 +25,6 @@ type Room struct {
 type SchemaMigration struct {
 	Version int64
 	Dirty   bool
-}
-
-type Subtask struct {
-	ID           uuid.UUID
-	TaskID       uuid.UUID
-	Name         string
-	Done         bool
-	CreatedBy    uuid.UUID
-	CreationDate pgtype.Timestamp
-}
-
-type Task struct {
-	ID             uuid.UUID
-	Name           string
-	Description    string
-	Status         int32
-	AssignedUserID uuid.NullUUID
-	PatientID      uuid.UUID
-	Public         bool
-	OrganizationID uuid.UUID
-	CreatedBy      uuid.UUID
-	DueAt          pgtype.Timestamp
 }
 
 type TaskTemplate struct {
