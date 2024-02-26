@@ -81,7 +81,7 @@ message GetRecentPatientsResponse {
 //
 
 message UpdatePatientRequest {
-string id = 1; // @gotags: validate:"uuid4"
+  string id = 1; // @gotags: validate:"uuid4"
   optional string human_readable_identifier = 2;
   optional string notes = 3;
   }

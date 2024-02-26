@@ -124,7 +124,6 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 		}
 		patient, err := v1queries.NewGetPatientByIDQueryHandler(s.as)(ctx, parsedUUID)
 		if err != nil {
-			log.Warn().Str("uuid", id).Msg("GetRecentPatientsForUser: user not found.")
 			return nil
 		}
 
@@ -133,7 +132,7 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 		if patient.BedID.Valid {
 			bed, err := hwdb.Optional(bedRepo.GetBedById)(ctx, patient.BedID.UUID)
 			if err != nil {
-				return nil
+				log.Warn().Str("bedID", patient.BedID.UUID.String()).Msg("error querying getBedById")
 			} else if bed != nil {
 				bedRes = &pb.GetRecentPatientsResponse_Bed{
 					Id:   bed.ID.String(),
@@ -143,7 +142,7 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 
 			room, err := hwdb.Optional(roomRepo.GetRoomByBedId)(ctx, patient.BedID.UUID)
 			if err != nil {
-				return nil
+				log.Warn().Str("bedID", patient.BedID.UUID.String()).Msg("error querying getRoomByBedId")
 			} else if room != nil {
 				roomRes = &pb.GetRecentPatientsResponse_Room{
 					Id:     room.ID.String(),
