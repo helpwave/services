@@ -4,6 +4,7 @@ import (
 	"common"
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
+	"hwdb"
 	"hwes/eventstoredb"
 	"tasks-svc/internal/task/projections/echo"
 
@@ -22,6 +23,9 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	common.Setup(ServiceName, Version, true)
+
+	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
+	defer closeDBPool()
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)

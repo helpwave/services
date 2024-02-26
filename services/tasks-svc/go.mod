@@ -5,6 +5,7 @@ go 1.22
 replace (
 	common => ../../libs/common
 	gen => ../../gen/go
+	hwdb => ../../libs/hwdb
 	hwes => ../../libs/hwes
 	hwutil => ../../libs/hwutil
 	telemetry => ../../libs/telemetry
@@ -16,9 +17,11 @@ require (
 	github.com/EventStore/EventStore-Client-Go v1.0.2
 	github.com/dapr/go-sdk v1.9.1
 	github.com/google/uuid v1.6.0
+	github.com/jackc/pgx/v5 v5.5.3
 	github.com/rs/zerolog v1.32.0
 	google.golang.org/grpc v1.61.1
 	google.golang.org/protobuf v1.32.0
+	hwdb v0.0.0-00010101000000-000000000000
 	hwes v0.0.0
 	hwutil v0.0.0
 )
@@ -39,12 +42,16 @@ require (
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.0 // indirect
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
+	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/openzipkin/zipkin-go v0.4.2 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
+	github.com/vgarvardt/pgx-google-uuid/v5 v5.0.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.46.1 // indirect
 	go.opentelemetry.io/otel v1.23.1 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.23.1 // indirect
@@ -58,6 +65,7 @@ require (
 	golang.org/x/crypto v0.19.0 // indirect
 	golang.org/x/net v0.21.0 // indirect
 	golang.org/x/oauth2 v0.15.0 // indirect
+	golang.org/x/sync v0.5.0 // indirect
 	golang.org/x/sys v0.17.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
