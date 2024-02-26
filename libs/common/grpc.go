@@ -423,7 +423,7 @@ func errorQualityControlInterceptor(ctx context.Context, req interface{}, info *
 		var err2 error
 		statusError, err2 = statusError.WithDetails(LocalizedMessage(ctx, locale.GenericError(ctx)))
 		if statusError != nil {
-			err2 = statusError.Err()
+			err = statusError.Err()
 		} else {
 			log.Error().
 				Err(err2).
