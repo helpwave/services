@@ -17,7 +17,6 @@ message CreatePatientResponse {
   string id = 1;
 }
 
-
 //
 // GetPatient
 //
@@ -47,6 +46,35 @@ message GetPatientResponse {
     string name = 2;
   }
 }
+
+//
+// GetRecentPatients
+//
+
+message GetRecentPatientsRequest {}
+
+message GetRecentPatientsResponse {
+  repeated PatientWithRoomAndBed recent_patients = 1;
+
+  message Bed {
+    string id = 1;
+    string name = 2;
+  }
+
+  message  Room {
+    string  id = 1;
+    string  name = 2;
+    string  ward_id = 3;
+  }
+
+  message PatientWithRoomAndBed {
+    string id = 1;
+    string human_readable_identifier = 2;
+    Room room = 3;
+    Bed bed = 4;
+  }
+}
+
 
 //
 // UpdatePatient

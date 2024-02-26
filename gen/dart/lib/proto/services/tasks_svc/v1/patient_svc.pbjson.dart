@@ -125,6 +125,67 @@ final $typed_data.Uint8List getPatientResponseDescriptor = $convert.base64Decode
     'FyZF9pZBgDIAEoCVIGd2FyZElkGikKA0JlZBIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEo'
     'CVIEbmFtZUIJCgdfYmVkX2lkQgoKCF93YXJkX2lkQgcKBV9yb29tQgYKBF9iZWQ=');
 
+@$core.Deprecated('Use getRecentPatientsRequestDescriptor instead')
+const GetRecentPatientsRequest$json = {
+  '1': 'GetRecentPatientsRequest',
+};
+
+/// Descriptor for `GetRecentPatientsRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRecentPatientsRequestDescriptor = $convert.base64Decode(
+    'ChhHZXRSZWNlbnRQYXRpZW50c1JlcXVlc3Q=');
+
+@$core.Deprecated('Use getRecentPatientsResponseDescriptor instead')
+const GetRecentPatientsResponse$json = {
+  '1': 'GetRecentPatientsResponse',
+  '2': [
+    {'1': 'recent_patients', '3': 1, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetRecentPatientsResponse.PatientWithRoomAndBed', '10': 'recentPatients'},
+  ],
+  '3': [GetRecentPatientsResponse_Bed$json, GetRecentPatientsResponse_Room$json, GetRecentPatientsResponse_PatientWithRoomAndBed$json],
+};
+
+@$core.Deprecated('Use getRecentPatientsResponseDescriptor instead')
+const GetRecentPatientsResponse_Bed$json = {
+  '1': 'Bed',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+  ],
+};
+
+@$core.Deprecated('Use getRecentPatientsResponseDescriptor instead')
+const GetRecentPatientsResponse_Room$json = {
+  '1': 'Room',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'ward_id', '3': 3, '4': 1, '5': 9, '10': 'wardId'},
+  ],
+};
+
+@$core.Deprecated('Use getRecentPatientsResponseDescriptor instead')
+const GetRecentPatientsResponse_PatientWithRoomAndBed$json = {
+  '1': 'PatientWithRoomAndBed',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
+    {'1': 'room', '3': 3, '4': 1, '5': 11, '6': '.proto.services.tasks_svc.v1.GetRecentPatientsResponse.Room', '10': 'room'},
+    {'1': 'bed', '3': 4, '4': 1, '5': 11, '6': '.proto.services.tasks_svc.v1.GetRecentPatientsResponse.Bed', '10': 'bed'},
+  ],
+};
+
+/// Descriptor for `GetRecentPatientsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRecentPatientsResponseDescriptor = $convert.base64Decode(
+    'ChlHZXRSZWNlbnRQYXRpZW50c1Jlc3BvbnNlEnUKD3JlY2VudF9wYXRpZW50cxgBIAMoCzJMLn'
+    'Byb3RvLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRSZWNlbnRQYXRpZW50c1Jlc3BvbnNlLlBh'
+    'dGllbnRXaXRoUm9vbUFuZEJlZFIOcmVjZW50UGF0aWVudHMaKQoDQmVkEg4KAmlkGAEgASgJUg'
+    'JpZBISCgRuYW1lGAIgASgJUgRuYW1lGkMKBFJvb20SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUY'
+    'AiABKAlSBG5hbWUSFwoHd2FyZF9pZBgDIAEoCVIGd2FyZElkGoICChVQYXRpZW50V2l0aFJvb2'
+    '1BbmRCZWQSDgoCaWQYASABKAlSAmlkEjoKGWh1bWFuX3JlYWRhYmxlX2lkZW50aWZpZXIYAiAB'
+    'KAlSF2h1bWFuUmVhZGFibGVJZGVudGlmaWVyEk8KBHJvb20YAyABKAsyOy5wcm90by5zZXJ2aW'
+    'Nlcy50YXNrc19zdmMudjEuR2V0UmVjZW50UGF0aWVudHNSZXNwb25zZS5Sb29tUgRyb29tEkwK'
+    'A2JlZBgEIAEoCzI6LnByb3RvLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRSZWNlbnRQYXRpZW'
+    '50c1Jlc3BvbnNlLkJlZFIDYmVk');
+
 @$core.Deprecated('Use updatePatientRequestDescriptor instead')
 const UpdatePatientRequest$json = {
   '1': 'UpdatePatientRequest',

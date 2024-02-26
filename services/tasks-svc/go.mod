@@ -4,6 +4,7 @@ go 1.22
 
 replace (
 	common => ../../libs/common
+	decaying_lru => ../../libs/decaying_lru
 	gen => ../../gen/go
 	hwdb => ../../libs/hwdb
 	hwes => ../../libs/hwes
@@ -13,6 +14,7 @@ replace (
 
 require (
 	common v0.0.0
+	decaying_lru v0.0.0-00010101000000-000000000000
 	gen v0.0.0
 	github.com/EventStore/EventStore-Client-Go v1.0.2
 	github.com/dapr/go-sdk v1.9.1
@@ -28,8 +30,10 @@ require (
 
 require (
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
+	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
 	github.com/dapr/dapr v1.12.2 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
@@ -51,6 +55,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/openzipkin/zipkin-go v0.4.2 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
+	github.com/redis/go-redis/v9 v9.1.0 // indirect
 	github.com/vgarvardt/pgx-google-uuid/v5 v5.0.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.46.1 // indirect
 	go.opentelemetry.io/otel v1.23.1 // indirect
