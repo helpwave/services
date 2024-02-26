@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package proto.services.property_svc.v1;
+
+option go_package = "gen/proto/services/property-svc";
+
+// TODO: This proto is just an hello-world example and far from where it should be!
+
+//
+// CreatePropertyValue
+//
+message CreatePropertyValueRequest{
+  string subject_id = 1;
+  string subject_type = 2;
+  string property_id = 3;
+  oneof value {
+    bool is_undefined = 4; // if it exists, it's true
+    string text_value = 5; // FIELD_TYPE_TEXT
+    float number_value = 6; // FIELD_TYPE_NUMBER
+    bool bool_value = 7; // FIELD_TYPE_CHECKBOX
+    string date_value = 8; // FIELD_TYPE_DATE TODO: is there a proto date type?
+    string date_time_value = 9; // FIELD_TYPE_DATE_TIME
+    string select_value = 10; // FIELD_TYPE_SELECT, id of option
+  }
+}
+
+message CreatePropertyValueResponse{
+  string id = 1;
+}
+
+message GetPropertyValueRequest{
+  string id = 1;
+}
+
+message GetPropertyValueResponse{
+  string id = 1;
+  string subject_type = 2;
+  string property_id = 3;
+  oneof value {
+    bool is_undefined = 4; // if it exists, it's true
+    string text_value = 5; // FIELD_TYPE_TEXT
+    float number_value = 6; // FIELD_TYPE_NUMBER
+    bool bool_value = 7; // FIELD_TYPE_CHECKBOX
+    string date_value = 8; // FIELD_TYPE_DATE TODO: is there a proto date type?
+    string date_time_value = 9; // FIELD_TYPE_DATE_TIME
+    string select_value = 10; // FIELD_TYPE_SELECT, id of option
+  }
+}
+
+//
+// PropertyValueService
+//
+
+service PropertyValueService {
+  rpc CreatePropertyValue(CreatePropertyValueRequest) returns (CreatePropertyValueResponse) {}
+  rpc GetPropertyValue(GetPropertyValueRequest) returns (GetPropertyValueResponse) {}
+}
+

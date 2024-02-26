@@ -133,8 +133,6 @@ export namespace GetAllTaskTemplatesResponse {
 
     getCreatedBy(): string;
     setCreatedBy(value: string): TaskTemplate;
-    hasCreatedBy(): boolean;
-    clearCreatedBy(): TaskTemplate;
 
     getSubtasksList(): Array<GetAllTaskTemplatesResponse.TaskTemplate.SubTask>;
     setSubtasksList(value: Array<GetAllTaskTemplatesResponse.TaskTemplate.SubTask>): TaskTemplate;
@@ -155,7 +153,7 @@ export namespace GetAllTaskTemplatesResponse {
       name: string,
       description: string,
       isPublic: boolean,
-      createdBy?: string,
+      createdBy: string,
       subtasksList: Array<GetAllTaskTemplatesResponse.TaskTemplate.SubTask.AsObject>,
     }
 
@@ -185,11 +183,6 @@ export namespace GetAllTaskTemplatesResponse {
       }
     }
 
-
-    export enum CreatedByCase { 
-      _CREATED_BY_NOT_SET = 0,
-      CREATED_BY = 6,
-    }
   }
 
 }
@@ -399,6 +392,11 @@ export class GetAllTaskTemplatesByCreatorRequest extends jspb.Message {
   getCreatedBy(): string;
   setCreatedBy(value: string): GetAllTaskTemplatesByCreatorRequest;
 
+  getPrivateOnly(): boolean;
+  setPrivateOnly(value: boolean): GetAllTaskTemplatesByCreatorRequest;
+  hasPrivateOnly(): boolean;
+  clearPrivateOnly(): GetAllTaskTemplatesByCreatorRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetAllTaskTemplatesByCreatorRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesByCreatorRequest): GetAllTaskTemplatesByCreatorRequest.AsObject;
@@ -410,6 +408,12 @@ export class GetAllTaskTemplatesByCreatorRequest extends jspb.Message {
 export namespace GetAllTaskTemplatesByCreatorRequest {
   export type AsObject = {
     createdBy: string,
+    privateOnly?: boolean,
+  }
+
+  export enum PrivateOnlyCase { 
+    _PRIVATE_ONLY_NOT_SET = 0,
+    PRIVATE_ONLY = 2,
   }
 }
 
@@ -549,8 +553,6 @@ export namespace GetAllTaskTemplatesByWardResponse {
 
     getCreatedBy(): string;
     setCreatedBy(value: string): TaskTemplate;
-    hasCreatedBy(): boolean;
-    clearCreatedBy(): TaskTemplate;
 
     getSubtasksList(): Array<GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask>;
     setSubtasksList(value: Array<GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask>): TaskTemplate;
@@ -571,7 +573,7 @@ export namespace GetAllTaskTemplatesByWardResponse {
       name: string,
       description: string,
       isPublic: boolean,
-      createdBy?: string,
+      createdBy: string,
       subtasksList: Array<GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask.AsObject>,
     }
 
@@ -601,11 +603,6 @@ export namespace GetAllTaskTemplatesByWardResponse {
       }
     }
 
-
-    export enum CreatedByCase { 
-      _CREATED_BY_NOT_SET = 0,
-      CREATED_BY = 6,
-    }
   }
 
 }

@@ -39,7 +39,7 @@ func TestTaskAggregate_UpdateName(t *testing.T) {
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewTaskNameUpdatedEvent(taskAggregate, initialTaskName, updatedTaskName)
+		return taskEventsV1.NewTaskNameUpdatedEvent(taskAggregate, updatedTaskName)
 	})
 
 	if taskAggregate.Task.Name != updatedTaskName {
@@ -65,7 +65,7 @@ func TestTaskAggregate_UpdateDescription(t *testing.T) {
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewTaskDescriptionUpdatedEvent(taskAggregate, initialTaskDescription, updatedTaskDescription)
+		return taskEventsV1.NewTaskDescriptionUpdatedEvent(taskAggregate, updatedTaskDescription)
 	})
 
 	if taskAggregate.Task.Description != updatedTaskDescription {

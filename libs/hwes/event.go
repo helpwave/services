@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/esdb"
 	"github.com/google/uuid"
+	"github.com/rs/zerolog"
 	"strings"
 	"time"
 )
@@ -142,4 +143,16 @@ func (e *Event) SetJsonData(data interface{}) error {
 
 func (e *Event) GetJsonData(data interface{}) error {
 	return json.Unmarshal(e.Data, data)
+}
+
+// GetZerologDict to enrich some logs
+//
+// Example:
+//
+// zerolog.Ctx(ctx).Debug().Dict("event", event.GetZerologDict()).Msg("process event")
+func (e *Event) GetZerologDict() *zerolog.Event {
+	return zerolog.Dict().
+		Str("eventId", e.EventID.String()).
+		Str("eventType", e.EventType).
+		Uint64("eventVersion", e.Version)
 }

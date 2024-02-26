@@ -4,6 +4,8 @@ metadata:
   name: daprConfig
 spec:
   nameResolution:
-    component: "kubernetes"
+    component: "consul"
     configuration:
-      template: "{{.ID}}:{{.Port}}"
+      selfRegister: true
+      client:
+        address: "consul:8500"
