@@ -23,15 +23,13 @@ type PatientCreatedEvent struct {
 }
 
 type HumanReadableIdentifierUpdatedEvent struct {
-	PatientID                       string `json:"patient_id"`
-	PreviousHumanReadableIdentifier string `json:"previous_human_readable_identifier"`
-	HumanReadableIdentifier         string `json:"human_readable_identifier"`
+	PatientID               string `json:"patient_id"`
+	HumanReadableIdentifier string `json:"human_readable_identifier"`
 }
 
 type NotesUpdatedEvent struct {
-	PatientID     string `json:"patient_id"`
-	PreviousNotes string `json:"previous_notes"`
-	Notes         string `json:"notes"`
+	PatientID string `json:"patient_id"`
+	Notes     string `json:"notes"`
 }
 
 type BedAssignedEvent struct {

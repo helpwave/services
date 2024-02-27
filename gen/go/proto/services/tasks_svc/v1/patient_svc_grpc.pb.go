@@ -19,13 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	PatientService_CreatePatient_FullMethodName    = "/proto.services.tasks_svc.v1.PatientService/CreatePatient"
-	PatientService_GetPatient_FullMethodName       = "/proto.services.tasks_svc.v1.PatientService/GetPatient"
-	PatientService_UpdatePatient_FullMethodName    = "/proto.services.tasks_svc.v1.PatientService/UpdatePatient"
-	PatientService_AssignBed_FullMethodName        = "/proto.services.tasks_svc.v1.PatientService/AssignBed"
-	PatientService_UnassignBed_FullMethodName      = "/proto.services.tasks_svc.v1.PatientService/UnassignBed"
-	PatientService_DischargePatient_FullMethodName = "/proto.services.tasks_svc.v1.PatientService/DischargePatient"
-	PatientService_ReadmitPatient_FullMethodName   = "/proto.services.tasks_svc.v1.PatientService/ReadmitPatient"
+	PatientService_CreatePatient_FullMethodName     = "/proto.services.tasks_svc.v1.PatientService/CreatePatient"
+	PatientService_GetPatient_FullMethodName        = "/proto.services.tasks_svc.v1.PatientService/GetPatient"
+	PatientService_GetRecentPatients_FullMethodName = "/proto.services.tasks_svc.v1.PatientService/GetRecentPatients"
+	PatientService_UpdatePatient_FullMethodName     = "/proto.services.tasks_svc.v1.PatientService/UpdatePatient"
+	PatientService_AssignBed_FullMethodName         = "/proto.services.tasks_svc.v1.PatientService/AssignBed"
+	PatientService_UnassignBed_FullMethodName       = "/proto.services.tasks_svc.v1.PatientService/UnassignBed"
+	PatientService_DischargePatient_FullMethodName  = "/proto.services.tasks_svc.v1.PatientService/DischargePatient"
+	PatientService_ReadmitPatient_FullMethodName    = "/proto.services.tasks_svc.v1.PatientService/ReadmitPatient"
 )
 
 // PatientServiceClient is the client API for PatientService service.
@@ -34,6 +35,7 @@ const (
 type PatientServiceClient interface {
 	CreatePatient(ctx context.Context, in *CreatePatientRequest, opts ...grpc.CallOption) (*CreatePatientResponse, error)
 	GetPatient(ctx context.Context, in *GetPatientRequest, opts ...grpc.CallOption) (*GetPatientResponse, error)
+	GetRecentPatients(ctx context.Context, in *GetRecentPatientsRequest, opts ...grpc.CallOption) (*GetRecentPatientsResponse, error)
 	UpdatePatient(ctx context.Context, in *UpdatePatientRequest, opts ...grpc.CallOption) (*UpdatePatientResponse, error)
 	AssignBed(ctx context.Context, in *AssignBedRequest, opts ...grpc.CallOption) (*AssignBedResponse, error)
 	UnassignBed(ctx context.Context, in *UnassignBedRequest, opts ...grpc.CallOption) (*UnassignBedResponse, error)
@@ -61,6 +63,15 @@ func (c *patientServiceClient) CreatePatient(ctx context.Context, in *CreatePati
 func (c *patientServiceClient) GetPatient(ctx context.Context, in *GetPatientRequest, opts ...grpc.CallOption) (*GetPatientResponse, error) {
 	out := new(GetPatientResponse)
 	err := c.cc.Invoke(ctx, PatientService_GetPatient_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *patientServiceClient) GetRecentPatients(ctx context.Context, in *GetRecentPatientsRequest, opts ...grpc.CallOption) (*GetRecentPatientsResponse, error) {
+	out := new(GetRecentPatientsResponse)
+	err := c.cc.Invoke(ctx, PatientService_GetRecentPatients_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -118,6 +129,7 @@ func (c *patientServiceClient) ReadmitPatient(ctx context.Context, in *ReadmitPa
 type PatientServiceServer interface {
 	CreatePatient(context.Context, *CreatePatientRequest) (*CreatePatientResponse, error)
 	GetPatient(context.Context, *GetPatientRequest) (*GetPatientResponse, error)
+	GetRecentPatients(context.Context, *GetRecentPatientsRequest) (*GetRecentPatientsResponse, error)
 	UpdatePatient(context.Context, *UpdatePatientRequest) (*UpdatePatientResponse, error)
 	AssignBed(context.Context, *AssignBedRequest) (*AssignBedResponse, error)
 	UnassignBed(context.Context, *UnassignBedRequest) (*UnassignBedResponse, error)
@@ -135,6 +147,9 @@ func (UnimplementedPatientServiceServer) CreatePatient(context.Context, *CreateP
 }
 func (UnimplementedPatientServiceServer) GetPatient(context.Context, *GetPatientRequest) (*GetPatientResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPatient not implemented")
+}
+func (UnimplementedPatientServiceServer) GetRecentPatients(context.Context, *GetRecentPatientsRequest) (*GetRecentPatientsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRecentPatients not implemented")
 }
 func (UnimplementedPatientServiceServer) UpdatePatient(context.Context, *UpdatePatientRequest) (*UpdatePatientResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePatient not implemented")
@@ -196,6 +211,24 @@ func _PatientService_GetPatient_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PatientServiceServer).GetPatient(ctx, req.(*GetPatientRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PatientService_GetRecentPatients_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRecentPatientsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PatientServiceServer).GetRecentPatients(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PatientService_GetRecentPatients_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PatientServiceServer).GetRecentPatients(ctx, req.(*GetRecentPatientsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -304,6 +337,10 @@ var PatientService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPatient",
 			Handler:    _PatientService_GetPatient_Handler,
+		},
+		{
+			MethodName: "GetRecentPatients",
+			Handler:    _PatientService_GetRecentPatients_Handler,
 		},
 		{
 			MethodName: "UpdatePatient",

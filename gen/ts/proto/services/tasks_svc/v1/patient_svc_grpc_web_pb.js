@@ -202,6 +202,67 @@ proto.proto.services.tasks_svc.v1.PatientServicePromiseClient.prototype.getPatie
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.GetRecentPatientsRequest,
+ *   !proto.proto.services.tasks_svc.v1.GetRecentPatientsResponse>}
+ */
+const methodDescriptor_PatientService_GetRecentPatients = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.PatientService/GetRecentPatients',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.GetRecentPatientsRequest,
+  proto.proto.services.tasks_svc.v1.GetRecentPatientsResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.GetRecentPatientsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.GetRecentPatientsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.GetRecentPatientsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.GetRecentPatientsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.GetRecentPatientsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.PatientServiceClient.prototype.getRecentPatients =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PatientService/GetRecentPatients',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetRecentPatients,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.GetRecentPatientsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.GetRecentPatientsResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.PatientServicePromiseClient.prototype.getRecentPatients =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PatientService/GetRecentPatients',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetRecentPatients);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.proto.services.tasks_svc.v1.UpdatePatientRequest,
  *   !proto.proto.services.tasks_svc.v1.UpdatePatientResponse>}
  */

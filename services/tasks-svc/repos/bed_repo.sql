@@ -1,4 +1,7 @@
--- name: GetBedById :one
-SELECT * FROM beds
-	WHERE id = $1
-	LIMIT 1;
+-- name: GetBedAndRoomByBedId :one
+SELECT
+	sqlc.embed(beds),
+	sqlc.embed(rooms)
+	FROM beds
+	JOIN rooms on beds.room_id = rooms.id
+	WHERE beds.id = $1;

@@ -28,6 +28,11 @@ class PatientServiceStub(object):
                 request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientRequest.SerializeToString,
                 response_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientResponse.FromString,
                 )
+        self.GetRecentPatients = channel.unary_unary(
+                '/proto.services.tasks_svc.v1.PatientService/GetRecentPatients',
+                request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetRecentPatientsRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetRecentPatientsResponse.FromString,
+                )
         self.UpdatePatient = channel.unary_unary(
                 '/proto.services.tasks_svc.v1.PatientService/UpdatePatient',
                 request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.UpdatePatientRequest.SerializeToString,
@@ -69,6 +74,12 @@ class PatientServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetPatient(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetRecentPatients(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -116,6 +127,11 @@ def add_PatientServiceServicer_to_server(servicer, server):
                     servicer.GetPatient,
                     request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientRequest.FromString,
                     response_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientResponse.SerializeToString,
+            ),
+            'GetRecentPatients': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetRecentPatients,
+                    request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetRecentPatientsRequest.FromString,
+                    response_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetRecentPatientsResponse.SerializeToString,
             ),
             'UpdatePatient': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdatePatient,
@@ -187,6 +203,23 @@ class PatientService(object):
         return grpc.experimental.unary_unary(request, target, '/proto.services.tasks_svc.v1.PatientService/GetPatient',
             proto_dot_services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientRequest.SerializeToString,
             proto_dot_services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetRecentPatients(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.tasks_svc.v1.PatientService/GetRecentPatients',
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetRecentPatientsRequest.SerializeToString,
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetRecentPatientsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

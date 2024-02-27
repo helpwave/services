@@ -29,6 +29,10 @@ class PatientServiceClient extends $grpc.Client {
       '/proto.services.tasks_svc.v1.PatientService/GetPatient',
       ($11.GetPatientRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $11.GetPatientResponse.fromBuffer(value));
+  static final _$getRecentPatients = $grpc.ClientMethod<$11.GetRecentPatientsRequest, $11.GetRecentPatientsResponse>(
+      '/proto.services.tasks_svc.v1.PatientService/GetRecentPatients',
+      ($11.GetRecentPatientsRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $11.GetRecentPatientsResponse.fromBuffer(value));
   static final _$updatePatient = $grpc.ClientMethod<$11.UpdatePatientRequest, $11.UpdatePatientResponse>(
       '/proto.services.tasks_svc.v1.PatientService/UpdatePatient',
       ($11.UpdatePatientRequest value) => value.writeToBuffer(),
@@ -62,6 +66,10 @@ class PatientServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$11.GetPatientResponse> getPatient($11.GetPatientRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getPatient, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$11.GetRecentPatientsResponse> getRecentPatients($11.GetRecentPatientsRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getRecentPatients, request, options: options);
   }
 
   $grpc.ResponseFuture<$11.UpdatePatientResponse> updatePatient($11.UpdatePatientRequest request, {$grpc.CallOptions? options}) {
@@ -104,6 +112,13 @@ abstract class PatientServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $11.GetPatientRequest.fromBuffer(value),
         ($11.GetPatientResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$11.GetRecentPatientsRequest, $11.GetRecentPatientsResponse>(
+        'GetRecentPatients',
+        getRecentPatients_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $11.GetRecentPatientsRequest.fromBuffer(value),
+        ($11.GetRecentPatientsResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$11.UpdatePatientRequest, $11.UpdatePatientResponse>(
         'UpdatePatient',
         updatePatient_Pre,
@@ -149,6 +164,10 @@ abstract class PatientServiceBase extends $grpc.Service {
     return getPatient(call, await request);
   }
 
+  $async.Future<$11.GetRecentPatientsResponse> getRecentPatients_Pre($grpc.ServiceCall call, $async.Future<$11.GetRecentPatientsRequest> request) async {
+    return getRecentPatients(call, await request);
+  }
+
   $async.Future<$11.UpdatePatientResponse> updatePatient_Pre($grpc.ServiceCall call, $async.Future<$11.UpdatePatientRequest> request) async {
     return updatePatient(call, await request);
   }
@@ -171,6 +190,7 @@ abstract class PatientServiceBase extends $grpc.Service {
 
   $async.Future<$11.CreatePatientResponse> createPatient($grpc.ServiceCall call, $11.CreatePatientRequest request);
   $async.Future<$11.GetPatientResponse> getPatient($grpc.ServiceCall call, $11.GetPatientRequest request);
+  $async.Future<$11.GetRecentPatientsResponse> getRecentPatients($grpc.ServiceCall call, $11.GetRecentPatientsRequest request);
   $async.Future<$11.UpdatePatientResponse> updatePatient($grpc.ServiceCall call, $11.UpdatePatientRequest request);
   $async.Future<$11.AssignBedResponse> assignBed($grpc.ServiceCall call, $11.AssignBedRequest request);
   $async.Future<$11.UnassignBedResponse> unassignBed($grpc.ServiceCall call, $11.UnassignBedRequest request);

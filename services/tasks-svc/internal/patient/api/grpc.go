@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -14,7 +15,6 @@ import (
 	v1queries "tasks-svc/internal/patient/queries/v1"
 	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/bed_repo"
-	"tasks-svc/repos/room_repo"
 )
 
 type PatientGrpcService struct {
@@ -50,7 +50,6 @@ func (s *PatientGrpcService) GetPatient(ctx context.Context, req *pb.GetPatientR
 	}
 
 	bedRepo := bed_repo.New(hwdb.GetDB())
-	roomRepo := room_repo.New(hwdb.GetDB())
 
 	patient, err := v1queries.NewGetPatientByIDQueryHandler(s.as)(ctx, patientID)
 	if err != nil {
@@ -61,24 +60,18 @@ func (s *PatientGrpcService) GetPatient(ctx context.Context, req *pb.GetPatientR
 	var roomRes *pb.GetPatientResponse_Room = nil
 
 	if patient.BedID.Valid {
-		bed, err := hwdb.Optional(bedRepo.GetBedById)(ctx, patient.BedID.UUID)
+		result, err := hwdb.Optional(bedRepo.GetBedAndRoomByBedId)(ctx, patient.BedID.UUID)
 		if err != nil {
 			return nil, status.Error(codes.Internal, err.Error())
-		} else if bed != nil {
+		} else if result != nil {
 			bedRes = &pb.GetPatientResponse_Bed{
-				Id:   bed.ID.String(),
-				Name: bed.Name,
+				Id:   result.Bed.ID.String(),
+				Name: result.Bed.Name,
 			}
-		}
-
-		room, err := hwdb.Optional(roomRepo.GetRoomByBedId)(ctx, patient.BedID.UUID)
-		if err != nil {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else if room != nil {
 			roomRes = &pb.GetPatientResponse_Room{
-				Id:     room.ID.String(),
-				Name:   room.Name,
-				WardId: room.WardID.String(),
+				Id:     result.Room.ID.String(),
+				Name:   result.Room.Name,
+				WardId: result.Room.WardID.String(),
 			}
 		}
 	}
@@ -95,7 +88,6 @@ func (s *PatientGrpcService) GetPatient(ctx context.Context, req *pb.GetPatientR
 func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetRecentPatientsRequest) (*pb.GetRecentPatientsResponse, error) {
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
-	roomRepo := room_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
 	recentPatientIdsStrs, err := tracking.GetRecentPatientsForUser(ctx)
@@ -118,6 +110,7 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 	// get all Patients for valid uuids
 	recentPatients := hwutil.Map(recentPatientIdsStrs, func(id string) *pb.GetRecentPatientsResponse_PatientWithRoomAndBed {
 		parsedUUID, err := uuid.Parse(id)
+		fmt.Println(parsedUUID)
 		if err != nil {
 			log.Warn().Str("uuid", id).Msg("GetRecentPatientsForUser returned invalid uuid")
 			return nil
@@ -129,25 +122,20 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 
 		var bedRes *pb.GetRecentPatientsResponse_Bed = nil
 		var roomRes *pb.GetRecentPatientsResponse_Room = nil
-		if patient.BedID.Valid {
-			bed, err := hwdb.Optional(bedRepo.GetBedById)(ctx, patient.BedID.UUID)
-			if err != nil {
-				log.Warn().Str("bedID", patient.BedID.UUID.String()).Msg("error querying getBedById")
-			} else if bed != nil {
-				bedRes = &pb.GetRecentPatientsResponse_Bed{
-					Id:   bed.ID.String(),
-					Name: bed.Name,
-				}
-			}
 
-			room, err := hwdb.Optional(roomRepo.GetRoomByBedId)(ctx, patient.BedID.UUID)
+		if patient.BedID.Valid {
+			result, err := hwdb.Optional(bedRepo.GetBedAndRoomByBedId)(ctx, patient.BedID.UUID)
 			if err != nil {
-				log.Warn().Str("bedID", patient.BedID.UUID.String()).Msg("error querying getRoomByBedId")
-			} else if room != nil {
+				log.Warn().Str("bedID", patient.BedID.UUID.String()).Msg("error querying getBedAndRoomByBed")
+			} else if result != nil {
+				bedRes = &pb.GetRecentPatientsResponse_Bed{
+					Id:   result.Bed.ID.String(),
+					Name: result.Bed.Name,
+				}
 				roomRes = &pb.GetRecentPatientsResponse_Room{
-					Id:     room.ID.String(),
-					Name:   room.Name,
-					WardId: room.WardID.String(),
+					Id:     result.Room.ID.String(),
+					Name:   result.Room.Name,
+					WardId: result.Room.WardID.String(),
 				}
 			}
 		}

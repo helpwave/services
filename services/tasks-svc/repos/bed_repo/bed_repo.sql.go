@@ -11,20 +11,32 @@ import (
 	"github.com/google/uuid"
 )
 
-const getBedById = `-- name: GetBedById :one
-SELECT id, room_id, organization_id, name FROM beds
-	WHERE id = $1
-	LIMIT 1
+const getBedAndRoomByBedId = `-- name: GetBedAndRoomByBedId :one
+SELECT
+	beds.id, beds.room_id, beds.organization_id, beds.name,
+	rooms.id, rooms.name, rooms.organization_id, rooms.ward_id
+	FROM beds
+	JOIN rooms on beds.room_id = rooms.id
+	WHERE beds.id = $1
 `
 
-func (q *Queries) GetBedById(ctx context.Context, id uuid.UUID) (Bed, error) {
-	row := q.db.QueryRow(ctx, getBedById, id)
-	var i Bed
+type GetBedAndRoomByBedIdRow struct {
+	Bed  Bed
+	Room Room
+}
+
+func (q *Queries) GetBedAndRoomByBedId(ctx context.Context, id uuid.UUID) (GetBedAndRoomByBedIdRow, error) {
+	row := q.db.QueryRow(ctx, getBedAndRoomByBedId, id)
+	var i GetBedAndRoomByBedIdRow
 	err := row.Scan(
-		&i.ID,
-		&i.RoomID,
-		&i.OrganizationID,
-		&i.Name,
+		&i.Bed.ID,
+		&i.Bed.RoomID,
+		&i.Bed.OrganizationID,
+		&i.Bed.Name,
+		&i.Room.ID,
+		&i.Room.Name,
+		&i.Room.OrganizationID,
+		&i.Room.WardID,
 	)
 	return i, err
 }

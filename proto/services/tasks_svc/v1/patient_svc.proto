@@ -135,6 +135,7 @@ message ReadmitPatientResponse {}
 service PatientService {
   rpc CreatePatient(CreatePatientRequest) returns (CreatePatientResponse) {}
   rpc GetPatient(GetPatientRequest) returns (GetPatientResponse) {}
+  rpc GetRecentPatients(GetRecentPatientsRequest) returns (GetRecentPatientsResponse) {}
   rpc UpdatePatient(UpdatePatientRequest) returns (UpdatePatientResponse) {}
   rpc AssignBed(AssignBedRequest) returns (AssignBedResponse) {}
   rpc UnassignBed(UnassignBedRequest) returns (UnassignBedResponse) {}
