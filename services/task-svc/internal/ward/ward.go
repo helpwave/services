@@ -9,7 +9,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwdb"
-	"hwgorm"
 	"hwutil"
 	"task-svc/internal/tracking"
 	"task-svc/repos/ward_repo"
@@ -36,9 +35,9 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 		Name:           req.Name,
 		OrganizationID: organizationID,
 	})
-
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	log.Info().
@@ -71,8 +70,10 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 	})
 	if ward == nil {
 		return nil, status.Error(codes.InvalidArgument, "id not found")
-	} else if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	}
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.GetWardResponse{
@@ -91,9 +92,9 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 	}
 
 	wards, err := wardRepo.GetWards(ctx, organizationID)
-
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	return &pb.GetWardsResponse{
@@ -140,9 +141,9 @@ func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsR
 		OrganizationID:   organizationID,
 		WardIds:          recentWardIDs,
 	})
-
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	response := hwutil.Map(rows, func(row ward_repo.GetWardsWithCountsRow) *pb.GetRecentWardsResponse_Ward {
@@ -173,9 +174,9 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 		ID:   id,
 		Name: req.Name,
 	})
-
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	tracking.AddWardToRecentActivity(ctx, id.String())
@@ -203,12 +204,15 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 	if !exists {
 		return nil, nil
 	}
+	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := wardRepo.DeleteWard(ctx, id); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	err = wardRepo.DeleteWard(ctx, id)
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	tracking.RemoveWardFromRecentActivity(ctx, id.String())
@@ -231,12 +235,9 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 		OrganizationID:   organizationID,
 		WardIds:          nil,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		if hwgorm.IsOurFault(err) {
-			return nil, status.Error(codes.Internal, err.Error())
-		} else {
-			return nil, status.Error(codes.InvalidArgument, "id not found")
-		}
+		return nil, err
 	}
 
 	resWards := hwutil.Map(rows, func(row ward_repo.GetWardsWithCountsRow) *pb.GetWardOverviewsResponse_Ward {
@@ -270,8 +271,9 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		OrganizationID: organizationID,
 		WardID:         wardID,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	} else if len(rows) == 0 {
 		return nil, status.Error(codes.InvalidArgument, "id not found")
 	}

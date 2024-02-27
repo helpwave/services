@@ -3,7 +3,8 @@
 
 # builder builds a go service
 # the build args SERVICE and VERSION must be set!
-FROM golang:1.21 AS builder
+
+FROM golang:1.22 AS builder
 
 ARG SERVICE
 ARG VERSION

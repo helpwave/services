@@ -35,6 +35,50 @@
       "matchUpdateTypes": [
         "major"
       ]
+    },
+    {
+      "matchDatasources": ["github-releases"],
+      "extractVersion": "^v?(?<version>.*)$"
+    }
+  ],
+  "ignoreDeps": ["common", "decaying_lru", "hwdb", "hwes", "hwutil", "hwgorm", "proto_helpers", "telemetry", "gen"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^.*Dockerfile(\\.[\\w_-]+)?$"],
+      "matchStrings": [
+        "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s(ENV|ARG) .*?_VERSION=(?<currentValue>.*)\\s"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/)(\\.github/(?:workflows|actions))/.+\\.ya?ml$"],
+      "matchStrings": [
+        "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?_VERSION: '?(?<currentValue>[0-9A-Za-z.-]+)'?\\s"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["dev/docker-compose.yaml", "images/dev-go/update-dev-tag.sh", ".github/workflows/cicd.yaml"],
+      "matchStrings": [
+        "# renovate: dev-tag\\s+TAG='(?<currentValue>[0-9A-Za-z.-]+)'\\s",
+        "# renovate: dev-tag\\s+TAG: '?(?<currentValue>[0-9A-Za-z.-]+)'?\\s",
+        "# renovate: dev-tag\\s+DEV_TAG: '?(?<currentValue>[0-9A-Za-z.-]+)'?\\s"
+      ],
+      "depNameTemplate": "ghcr.io/helpwave/dev-go",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "fileMatch": [
+        "go.mod$"
+      ],
+      "matchStrings": [
+        "\\sgo (?<currentValue>.+?)\\s"
+      ],
+      "depNameTemplate": "golang",
+      "datasourceTemplate": "docker"
     }
   ]
 }

@@ -9,6 +9,7 @@ import (
 	"hwutil"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"tasks-svc/internal/task/models"
+	"time"
 )
 
 const TaskAggregateType = "task"
@@ -19,9 +20,13 @@ type TaskAggregate struct {
 }
 
 func NewTaskAggregate(id uuid.UUID) *TaskAggregate {
-	aggregate := &TaskAggregate{Task: models.NewTask()}
+	aggregate := &TaskAggregate{Task: &models.Task{
+		ID:            id,
+		CreatedAt:     time.Now().UTC(),
+		AssignedUsers: make([]uuid.UUID, 0),
+		Subtasks:      make(map[uuid.UUID]models.Subtask, 0),
+	}}
 	aggregate.AggregateBase = hwes.NewAggregateBase(TaskAggregateType, id)
-	aggregate.Task.ID = id
 	aggregate.initEventListeners()
 	return aggregate
 }
@@ -63,7 +68,11 @@ func (a *TaskAggregate) onTaskCreated(evt hwes.Event) error {
 		return err
 	}
 
-	status := (pb.TaskStatus)(pb.TaskStatus_value[payload.Status])
+	value, found := pb.TaskStatus_value[payload.Status]
+	if !found {
+		return fmt.Errorf("invalid taskStatus: %s", payload.Status)
+	}
+	status := (pb.TaskStatus)(value)
 
 	a.Task.Name = payload.Name
 	a.Task.PatientID = patientID
@@ -167,9 +176,12 @@ func (a *TaskAggregate) onSubtaskCreated(evt hwes.Event) error {
 		return err
 	}
 
-	subtask := models.NewSubtask()
-	subtask.ID = subtaskID
-	subtask.Name = payload.Name
+	subtask := &models.Subtask{
+		ID:        subtaskID,
+		Name:      payload.Name,
+		CreatedAt: time.Now().UTC(),
+		Done:      false,
+	}
 
 	a.Task.Subtasks[subtaskID] = *subtask
 

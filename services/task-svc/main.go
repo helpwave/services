@@ -6,7 +6,6 @@ import (
 	pb "gen/proto/services/task_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwdb"
-	"hwgorm"
 	"task-svc/internal/bed"
 	"task-svc/internal/patient"
 	"task-svc/internal/room"
@@ -24,8 +23,6 @@ var Version string
 
 func main() {
 	common.Setup(ServiceName, Version, true)
-
-	hwgorm.SetupDatabaseByEnvs() // TODO: to be removed
 
 	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
 	defer closeDBPool()
