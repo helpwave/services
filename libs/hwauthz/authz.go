@@ -1,10 +1,12 @@
 package hwauthz
 
 import (
+	"common"
+	"common/locale"
 	"context"
+	"fmt"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 type ConsistencyToken = string
@@ -114,7 +116,15 @@ func CheckGrpcWrapper(ctx context.Context, authz AuthZ, permissions ...Permissio
 	if err != nil {
 		return err
 	} else if !hasPermission {
-		return status.Errorf(codes.PermissionDenied, "subject '%s:%s' needs permission '%s' for resource '%s:%s'", permission.SubjectType, permission.SubjectID, permission.Permission, permission.ResourceType, permission.ResourceID)
+		msg := fmt.Sprintf(
+			"subject '%s:%s' needs permission '%s' for resource '%s:%s'",
+			permission.SubjectType,
+			permission.SubjectID,
+			permission.Permission,
+			permission.ResourceType,
+			permission.ResourceID,
+		)
+		return common.NewStatusError(ctx, codes.PermissionDenied, msg, locale.PermissionDeniedError(ctx))
 	}
 
 	return nil
