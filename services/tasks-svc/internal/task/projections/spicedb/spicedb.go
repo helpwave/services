@@ -3,38 +3,37 @@ package spicedb
 import (
 	"common"
 	"context"
+	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/esdb"
-	"github.com/authzed/authzed-go/v1"
 	"github.com/google/uuid"
 	"hwauthz"
-	hwspicedb "hwauthz/spicedb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	eventsV1 "tasks-svc/internal/task/events/v1"
+	taskEventsV1 "tasks-svc/internal/task/events/v1"
 )
 
-type spiceDBProjection struct {
-	Cp    *custom.CustomProjection
+type Projection struct {
+	*custom.CustomProjection
 	authz hwauthz.AuthZ
 }
 
-func NewSpiceDBProjection(es *esdb.Client, sdb *authzed.Client) *spiceDBProjection {
-	cp := custom.NewCustomProjection(es)
-	return &spiceDBProjection{Cp: cp, authz: hwspicedb.NewSpiceDBAuthZ(sdb)}
-}
-
-func (p *spiceDBProjection) When(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Action) {
-	switch evt.EventType {
-	case eventsV1.TaskCreated:
-		return p.onTaskCreated(ctx, evt)
-	case eventsV1.TaskUnassigned:
-		return p.onTaskUnassignedEvent(ctx, evt)
-	default:
-		return nil, esdb.Nack_Unknown
+func NewSpiceDBProjection(es *esdb.Client, authz hwauthz.AuthZ, serviceName string) *Projection {
+	subscriptionGroupName := fmt.Sprintf("%s-spicedb-projection", serviceName)
+	p := &Projection{
+		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName),
+		authz:            authz,
 	}
+	p.initEventListeners()
+	return p
 }
 
-func (p *spiceDBProjection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Action) {
+func (p *Projection) initEventListeners() {
+	p.RegisterEventListener(taskEventsV1.TaskCreated, p.onTaskCreated)
+	p.RegisterEventListener(taskEventsV1.TaskUnassigned, p.onTaskUnassigned)
+}
+
+func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Action) {
 	var payload eventsV1.TaskCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err, esdb.Nack_Retry
@@ -66,7 +65,7 @@ func (p *spiceDBProjection) onTaskCreated(ctx context.Context, evt hwes.Event) (
 	return nil, esdb.Nack_Unknown
 }
 
-func (p *spiceDBProjection) onTaskUnassignedEvent(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Action) {
+func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Action) {
 	var payload eventsV1.TaskUnassignedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err, esdb.Nack_Retry
