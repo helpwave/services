@@ -10,7 +10,6 @@ replace (
 	hwes => ../../libs/hwes
 	hwlocale => ../../libs/hwlocale
 	hwutil => ../../libs/hwutil
-	proto_helpers => ../../libs/proto_helpers
 	telemetry => ../../libs/telemetry
 )
 
@@ -46,7 +45,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.16.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
-	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.0 // indirect
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
