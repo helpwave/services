@@ -12,7 +12,6 @@ const (
 	BedAssigned                    = "BED_ASSIGNED_v1"
 	BedUnsassigned                 = "BED_UNASSIGNED_v1"
 	PatientDischarged              = "PATIENT_DISCHARGED_v1"
-	PatientDeleted                 = "PATIENT_DELETED_v1"
 	PatientReadmitted              = "PATIENT_READMITTED_v1"
 )
 
@@ -33,12 +32,7 @@ type NotesUpdatedEvent struct {
 }
 
 type BedAssignedEvent struct {
-	PatientID string `json:"patient_id"`
-	BedID     string `json:"bed_id"`
-}
-
-type BedUnassignedEvent struct {
-	PatientID string `json:"patient_id"`
+	BedID string `json:"bed_id"`
 }
 
 type PatientDischargedEvent struct {
@@ -46,10 +40,6 @@ type PatientDischargedEvent struct {
 }
 
 type PatientDeletedEvent struct {
-	PatientID string `json:"patient_id"`
-}
-
-type PatientReadmittedEvent struct {
 	PatientID string `json:"patient_id"`
 }
 
@@ -62,54 +52,36 @@ func NewPatientCreatedEvent(a hwes.Aggregate, id uuid.UUID, humanReadableIdentif
 	return hwes.NewEventWithData(a, PatientCreated, payload)
 }
 
-func NewHumanReadableIdentifierUpdatedEvent(a hwes.Aggregate, patientID uuid.UUID, humanReadableIdentifier string) (hwes.Event, error) {
+func NewHumanReadableIdentifierUpdatedEvent(a hwes.Aggregate, humanReadableIdentifier string) (hwes.Event, error) {
 	payload := HumanReadableIdentifierUpdatedEvent{
-		PatientID:               patientID.String(),
 		HumanReadableIdentifier: humanReadableIdentifier,
 	}
 	return hwes.NewEventWithData(a, HumanReadableIdentifierUpdated, payload)
 }
 
-func NewNotesUpdatedEvent(a hwes.Aggregate, patientID uuid.UUID, notes string) (hwes.Event, error) {
+func NewNotesUpdatedEvent(a hwes.Aggregate, notes string) (hwes.Event, error) {
 	payload := NotesUpdatedEvent{
-		PatientID: patientID.String(),
-		Notes:     notes,
+		Notes: notes,
 	}
 	return hwes.NewEventWithData(a, NotesUpdated, payload)
 }
 
-func NewBedAssignedEvent(a hwes.Aggregate, patientID uuid.UUID, bedID uuid.UUID) (hwes.Event, error) {
+func NewBedAssignedEvent(a hwes.Aggregate, bedID uuid.UUID) (hwes.Event, error) {
 	payload := BedAssignedEvent{
-		PatientID: patientID.String(),
-		BedID:     bedID.String(),
+		BedID: bedID.String(),
 	}
 	return hwes.NewEventWithData(a, BedAssigned, payload)
 }
 
-func NewBedUnassignedEvent(a hwes.Aggregate, patientID uuid.UUID) (hwes.Event, error) {
-	payload := BedUnassignedEvent{
-		PatientID: patientID.String(),
-	}
-	return hwes.NewEventWithData(a, BedUnsassigned, payload)
+// We don't need a payload here
+func NewBedUnassignedEvent(a hwes.Aggregate) hwes.Event {
+	return hwes.NewEvent(a, BedUnsassigned)
 }
 
-func NewPatientDischargedEvent(a hwes.Aggregate, patientID uuid.UUID) (hwes.Event, error) {
-	payload := PatientDischargedEvent{
-		PatientID: patientID.String(),
-	}
-	return hwes.NewEventWithData(a, PatientDischarged, payload)
+func NewPatientDischargedEvent(a hwes.Aggregate) hwes.Event {
+	return hwes.NewEvent(a, PatientDischarged)
 }
 
-func NewPatientDeletedEvent(a hwes.Aggregate, patientID uuid.UUID) (hwes.Event, error) {
-	payload := PatientDeletedEvent{
-		PatientID: patientID.String(),
-	}
-	return hwes.NewEventWithData(a, PatientDeleted, payload)
-}
-
-func NewPatientReadmittedEvent(a hwes.Aggregate, patientID uuid.UUID) (hwes.Event, error) {
-	payload := PatientReadmittedEvent{
-		PatientID: patientID.String(),
-	}
-	return hwes.NewEventWithData(a, PatientReadmitted, payload)
+func NewPatientReadmittedEvent(a hwes.Aggregate) hwes.Event {
+	return hwes.NewEvent(a, PatientReadmitted)
 }

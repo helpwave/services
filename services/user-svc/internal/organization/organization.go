@@ -92,8 +92,9 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 	}
 
 	rows, err := organizationRepo.GetOrganizationWithMemberById(ctx, id)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 	if len(rows) == 0 {
 		return nil, status.Error(codes.InvalidArgument, "id not found")
@@ -167,8 +168,9 @@ func GetOrganizationsByUserId(ctx context.Context, userId uuid.UUID) ([]Organiza
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	rows, err := organizationRepo.GetOrganizationsWithMembersByUser(ctx, userId)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 	if len(rows) == 0 {
 		return []OrganizationWithMembers{}, nil
@@ -248,15 +250,17 @@ func (s ServiceServer) UpdateOrganization(ctx context.Context, req *pb.UpdateOrg
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := organizationRepo.UpdateOrganization(ctx, organization_repo.UpdateOrganizationParams{
+	err = organizationRepo.UpdateOrganization(ctx, organization_repo.UpdateOrganizationParams{
 		ID:           organizationID,
 		ContactEmail: req.ContactEmail,
 		LongName:     req.LongName,
 		ShortName:    req.ShortName,
 		IsPersonal:   req.IsPersonal,
 		AvatarUrl:    req.AvatarUrl,
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.UpdateOrganizationResponse{}, nil
@@ -270,8 +274,10 @@ func (s ServiceServer) DeleteOrganization(ctx context.Context, req *pb.DeleteOrg
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := organizationRepo.DeleteOrganization(ctx, organizationID); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	err = organizationRepo.DeleteOrganization(ctx, organizationID)
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	organizationDeletedEvent := &events.OrganizationDeletedEvent{
@@ -299,10 +305,12 @@ func (s ServiceServer) AddMember(ctx context.Context, req *pb.AddMemberRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
+	err = organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
 		UserID:         userID,
 		OrganizationID: organizationID,
-	}); err != nil {
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
 		return nil, err
 	}
 
@@ -328,11 +336,13 @@ func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberReq
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := organizationRepo.RemoveMember(ctx, organization_repo.RemoveMemberParams{
+	err = organizationRepo.RemoveMember(ctx, organization_repo.RemoveMemberParams{
 		OrganizationID: organizationID,
 		UserID:         userID,
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	log.Info().
@@ -359,8 +369,9 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		Email:          req.Email,
 		States:         []int32{int32(pb.InvitationState_INVITATION_STATE_ACCEPTED.Number()), int32(pb.InvitationState_INVITATION_STATE_PENDING.Number())},
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	if !conditions.DoesOrganizationExist {
@@ -375,8 +386,9 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 			OrganizationID: organizationId,
 			State:          int32(pb.InvitationState_INVITATION_STATE_PENDING.Number()),
 		})
+		err = hwdb.Error(ctx, err)
 		if err != nil {
-			return nil, status.Error(codes.Internal, err.Error())
+			return nil, err
 		}
 
 		log.Info().
@@ -404,9 +416,11 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 	}
 
 	doesOrganizationExist, err := organizationRepo.DoesOrganizationExist(ctx, organizationID)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	} else if !doesOrganizationExist {
+		return nil, err
+	}
+	if !doesOrganizationExist {
 		return &pb.GetInvitationsByOrganizationResponse{}, nil
 	}
 
@@ -414,8 +428,9 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 		Organizationid: organizationID,
 		Userid:         userID,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 	if !hasAccess {
 		return nil, status.Error(codes.Unauthenticated, "Not a member of this Organization")
@@ -425,8 +440,9 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 		OrganizationID: uuid.NullUUID{UUID: organizationID, Valid: true},
 		State:          (*int32)(req.State),
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	invitationsResponse := hwutil.Map(invitations, func(invitation organization_repo.Invitation) *pb.GetInvitationsByOrganizationResponse_Invitation {
@@ -455,8 +471,9 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 		Email: claims.Email,
 		State: (*int32)(req.State),
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	invitationResponse := hwutil.Map(invitations, func(invitation organization_repo.GetInvitationsWithOrganizationByUserRow) *pb.GetInvitationsByUserResponse_Invitation {
@@ -492,8 +509,9 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 	}
 
 	doesOrganizationExist, err := organizationRepo.DoesOrganizationExist(ctx, organizationID)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	} else if !doesOrganizationExist {
 		return &pb.GetMembersByOrganizationResponse{}, nil
 	}
@@ -502,8 +520,9 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 		Organizationid: organizationID,
 		Userid:         userID,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	if !hasAccess {
@@ -511,8 +530,9 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 	}
 
 	members, err := organizationRepo.GetMembersByOrganization(ctx, organizationID)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	mappedMembers := hwutil.Map(members, func(member organization_repo.User) *pb.GetMembersByOrganizationResponse_Member {
@@ -547,8 +567,9 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 		ID:    uuid.NullUUID{UUID: invitationId, Valid: true},
 		Email: &claims.Email,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	} else if len(rows) == 0 {
 		return nil, status.Error(codes.InvalidArgument, "record not found")
 	}
@@ -561,11 +582,13 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 	}
 
 	// Update Invitation State
-	if err := organizationRepo.UpdateInvitationState(ctx, organization_repo.UpdateInvitationStateParams{
+	err = organizationRepo.UpdateInvitationState(ctx, organization_repo.UpdateInvitationStateParams{
 		ID:    invitationId,
 		State: int32(pb.InvitationState_INVITATION_STATE_ACCEPTED.Number()),
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	userID, err := common.GetUserID(ctx)
@@ -599,8 +622,9 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 		ID:    uuid.NullUUID{UUID: invitationId, Valid: true},
 		Email: &claims.Email,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	} else if len(rows) == 0 {
 		return nil, status.Error(codes.InvalidArgument, "record not found")
 	}
@@ -613,11 +637,13 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 	}
 
 	// Update invitation state
-	if err := organizationRepo.UpdateInvitationState(ctx, organization_repo.UpdateInvitationStateParams{
+	err = organizationRepo.UpdateInvitationState(ctx, organization_repo.UpdateInvitationStateParams{
 		ID:    invitationId,
 		State: int32(pb.InvitationState_INVITATION_STATE_REJECTED.Number()),
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.DeclineInvitationResponse{}, nil
@@ -636,8 +662,9 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 	rows, err := organizationRepo.GetInvitations(ctx, organization_repo.GetInvitationsParams{
 		ID: uuid.NullUUID{UUID: invitationId, Valid: true},
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	} else if len(rows) == 0 {
 		return nil, status.Error(codes.InvalidArgument, "record not found")
 	}
@@ -655,8 +682,9 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 		OrganizationID: organizationID,
 		UserID:         userID,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	if !isAdmin {
@@ -668,11 +696,13 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 	}
 
 	// Update invitation state
-	if err := organizationRepo.UpdateInvitationState(ctx, organization_repo.UpdateInvitationStateParams{
+	err = organizationRepo.UpdateInvitationState(ctx, organization_repo.UpdateInvitationStateParams{
 		ID:    invitationId,
 		State: int32(pb.InvitationState_INVITATION_STATE_REVOKED.Number()),
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	log.Info().
@@ -707,21 +737,26 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 		IsPersonal:      attr.IsPersonal,
 		CreatedByUserID: userID,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
+	err = organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
 		UserID:         userID,
 		OrganizationID: organization.ID,
-	}); err != nil {
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
 		return nil, err
 	}
 
-	if err := organizationRepo.ChangeMembershipAdminStatus(ctx, organization_repo.ChangeMembershipAdminStatusParams{
+	err = organizationRepo.ChangeMembershipAdminStatus(ctx, organization_repo.ChangeMembershipAdminStatusParams{
 		UserID:         userID,
 		OrganizationID: organization.ID,
-	}); err != nil {
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
 		return nil, err
 	}
 
@@ -745,10 +780,12 @@ func AddUserToOrganization(ctx context.Context, userId uuid.UUID, organizationId
 	log := zlog.Ctx(ctx)
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
-	if err := organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
+	err := organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
 		UserID:         userId,
 		OrganizationID: organizationId,
-	}); err != nil {
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
 		return err
 	}
 

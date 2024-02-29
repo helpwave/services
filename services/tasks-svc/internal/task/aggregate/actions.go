@@ -18,16 +18,16 @@ func (a *TaskAggregate) CreateTask(ctx context.Context, name string, patientID u
 	return a.Apply(event)
 }
 
-func (a *TaskAggregate) UpdateName(ctx context.Context, currentName, newName string) error {
-	event, err := taskEventsV1.NewTaskNameUpdatedEvent(a, currentName, newName)
+func (a *TaskAggregate) UpdateName(ctx context.Context, newName string) error {
+	event, err := taskEventsV1.NewTaskNameUpdatedEvent(a, newName)
 	if err != nil {
 		return err
 	}
 	return a.Apply(event)
 }
 
-func (a *TaskAggregate) UpdateDescription(ctx context.Context, currentDescription, newDescription string) error {
-	event, err := taskEventsV1.NewTaskDescriptionUpdatedEvent(a, currentDescription, newDescription)
+func (a *TaskAggregate) UpdateDescription(ctx context.Context, newDescription string) error {
+	event, err := taskEventsV1.NewTaskDescriptionUpdatedEvent(a, newDescription)
 	if err != nil {
 		return err
 	}

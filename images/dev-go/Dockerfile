@@ -63,7 +63,7 @@ ENV HOME="/home/${UNAME}"
 # install air
 #  https://github.com/cosmtrek/air
 # renovate: datasource=github-releases depName=cosmtrek/air
-ENV AIR_VERSION=1.49.0
+ENV AIR_VERSION=1.50.0
 RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v${AIR_VERSION}
 
 # install dapr-cli

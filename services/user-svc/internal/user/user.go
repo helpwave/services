@@ -43,8 +43,9 @@ func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest
 
 	var createdUser user_repo.User
 	result, err := hwdb.Optional(userRepo.GetUserById)(ctx, userID)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	} else if result != nil {
 		return nil, status.Error(codes.InvalidArgument, "user already exists")
 	} else {
@@ -58,8 +59,9 @@ func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest
 			Name:      req.Name,
 			AvatarUrl: &avatarUrl,
 		})
+		err = hwdb.Error(ctx, err)
 		if err != nil {
-			return nil, status.Error(codes.Internal, err.Error())
+			return nil, err
 		}
 
 		userCreatedEvent := &events.UserCreatedEvent{
@@ -85,8 +87,9 @@ func (s ServiceServer) ReadPublicProfile(ctx context.Context, req *pb.ReadPublic
 	}
 
 	user, err := hwdb.Optional(userRepo.GetUserById)(ctx, userID)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	} else if user == nil {
 		return nil, status.Error(codes.Internal, "record not found")
 	}
@@ -115,13 +118,14 @@ func HandleUserUpdatedEvent(ctx context.Context, evt *daprcmn.TopicEvent) (retry
 		return true, err
 	}
 
-	if err := userRepo.UpdateUser(ctx, user_repo.UpdateUserParams{
+	err = userRepo.UpdateUser(ctx, user_repo.UpdateUserParams{
 		ID:       userId,
 		Email:    payload.Email,
 		Name:     payload.Name,
 		Nickname: payload.Nickname,
-	}); err != nil {
-		log.Error().Err(err).Send()
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
 		return true, err
 	}
 

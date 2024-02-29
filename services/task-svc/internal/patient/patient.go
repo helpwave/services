@@ -43,8 +43,9 @@ func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientReq
 		Notes:                   req.Notes,
 	})
 
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	log.Info().
@@ -72,8 +73,9 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 	if res == nil {
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	return &pb.GetPatientResponse{
@@ -114,8 +116,10 @@ func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBe
 	})
 	if patient == nil {
 		return nil, status.Error(codes.InvalidArgument, "id not found")
-	} else if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	}
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.GetPatientByBedResponse{
@@ -173,8 +177,9 @@ func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.Get
 	}
 
 	rows, err := roomRepo.GetRoomsWithBedsWithPatientsByWard(ctx, wardID)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	processedRooms := make(map[uuid.UUID]bool)
@@ -233,7 +238,9 @@ func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPat
 	// WORKAROUND: Until https://github.com/helpwave/services/issues/458 is fixed
 	if len(recentPatientIdsStrs) == 0 {
 		log.Debug().Msg("recentPatientIdsStrs was empty")
-		if patientIds, err := patientRepo.GetLastUpdatedPatientIDsForOrganization(ctx, organizationID); err == nil {
+		patientIds, err := patientRepo.GetLastUpdatedPatientIDsForOrganization(ctx, organizationID)
+		err = hwdb.Error(ctx, err)
+		if err == nil {
 			recentPatientIdsStrs = hwutil.Map(patientIds, func(patientId uuid.UUID) string {
 				return patientId.String()
 			})
@@ -251,9 +258,9 @@ func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPat
 	})
 
 	patientsRes, err := patientRepo.GetPatientsWithBedAndRoom(ctx, recentPatientIds)
-
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	recentPatients := hwutil.Map(patientsRes, func(res patient_repo.GetPatientsWithBedAndRoomRow) *pb.GetRecentPatientsResponse_PatientWithRoomAndBed {
@@ -300,9 +307,9 @@ func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientReq
 		HumanReadableIdentifier: req.HumanReadableIdentifier,
 		Notes:                   req.Notes,
 	})
-
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	tracking.AddPatientToRecentActivity(ctx, patientID.String())
@@ -337,8 +344,9 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 		ID:             bedID,
 		OrganizationID: organizationID,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	} else if !bedExists {
 		return nil, status.Error(codes.InvalidArgument, "bed not found")
 	}
@@ -347,8 +355,9 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 		ID:    patientID,
 		BedID: uuid.NullUUID{UUID: bedID, Valid: true},
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	log.Info().
@@ -373,8 +382,9 @@ func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest
 	}
 
 	err = patientRepo.UnassignBedFromPatient(ctx, patientId)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	log.Info().
@@ -398,9 +408,9 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 	}
 
 	err = patientRepo.DischargePatient(ctx, patientId)
-
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	log.Info().
@@ -432,14 +442,16 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 	if patientRes == nil {
 		return nil, status.Error(codes.InvalidArgument, "patient not found")
 	}
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	taskRows, err := taskRepo.GetTasksWithSubTasksByPatient(ctx, task_repo.GetTasksWithSubTasksByPatientParams{
 		PatientID:      patientID,
 		OrganizationID: organizationID,
 	})
+	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
 	}
@@ -518,9 +530,9 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 	}
 
 	rows, err := patientRepo.GetPatientsWithTasksBedAndRoomForOrganization(ctx, organizationID)
-
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	dischargedRows, chargedRows := hwutil.Partition(rows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
@@ -694,6 +706,7 @@ func (ServiceServer) DeletePatient(ctx context.Context, req *pb.DeletePatientReq
 
 	patientRepo := patient_repo.New(hwdb.GetDB())
 	err = patientRepo.DeletePatient(ctx, patientID)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
 	}
@@ -713,6 +726,7 @@ func (ServiceServer) ReadmitPatient(ctx context.Context, req *pb.ReadmitPatientR
 
 	patientRepo := patient_repo.New(hwdb.GetDB())
 	err = patientRepo.ReadmitPatient(ctx, patientID)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
 	}

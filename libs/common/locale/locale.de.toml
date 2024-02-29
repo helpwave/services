@@ -1,0 +1,12 @@
+[GenericError]
+other = "Es ist ein Fehler aufgetreten"
+
+[GenericInvalidArgsError]
+one = "Ein Feld in der Anfrage ist fehlerhaft"
+other = "Mehrere Felder in der Anfrage sind fehlerhaft"
+
+[InvalidFieldError]
+other = "ist fehlerhaft"
+
+[RequiredError]
+other = "ist erforderlich"
