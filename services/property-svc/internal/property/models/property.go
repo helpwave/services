@@ -2,40 +2,35 @@ package models
 
 import (
 	pb "gen/proto/services/property_svc/v1"
+
 	"github.com/google/uuid"
 )
 
 type Property struct {
 	ID          uuid.UUID
-	SubjectID   uuid.UUID
-	SubjectType string
+	ViewContext pb.ViewContext
+	SubjectType pb.SubjectType
 	FieldType   pb.FieldType
 
 	Name        string
 	Description string
-	IsArchived  bool
 
-	_setID uuid.UUID //nolint:unused
-
-	SelectOptions []SelectOption
+	SetID                          uuid.UUID
+	AlwaysIncludeForCurrentContext bool
+	FieldTypeData                  interface{}
 }
 
-func NewProperty() *Property {
-	return &Property{
-		Name:        "",
-		Description: "",
-		IsArchived:  false,
-	}
+type FieldTypeData struct {
+	None       *bool       `json:"none,omitempty"`
+	SelectData *SelectData `json:"select_data,omitempty"`
+}
+
+type SelectData struct {
+	AllowFreetext bool           `json:"allow_freetext"`
+	SelectOptions []SelectOption ` json:"select_options"`
 }
 
 type SelectOption struct {
-	ID          uuid.UUID
 	Name        string
 	Description string
-}
-
-func NewSelectOption() *SelectOption {
-	return &SelectOption{
-		Name: "",
-	}
 }

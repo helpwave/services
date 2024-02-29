@@ -5,7 +5,9 @@ import (
 	pb "gen/proto/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
+	"hwutil"
 	commandsV1 "property-svc/internal/property/commands/v1"
+	"property-svc/internal/property/models"
 	v1queries "property-svc/internal/property/queries/v1"
 )
 
@@ -21,16 +23,47 @@ func NewPropertyService(aggregateStore hwes.AggregateStore) *PropertyGrpcService
 func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.CreatePropertyRequest) (*pb.CreatePropertyResponse, error) {
 	propertyID := uuid.New()
 
-	subjectID, err := uuid.Parse(req.GetSubjectId())
-	if err != nil {
-		return nil, err
+	var setID *uuid.UUID
+	if req.SetId != nil {
+		id, err := uuid.Parse(req.GetSetId())
+		if err != nil {
+			return nil, err
+		}
+		setID = &id
 	}
-	if err := commandsV1.NewCreatePropertyCommandHandler(s.as)(ctx, propertyID, subjectID, req.GetSubjectType(), req.GetFieldType(), req.GetName()); err != nil {
+
+	var none *bool
+	var selectData *models.SelectData
+	switch req.FieldTypeData.(type) {
+	case *pb.CreatePropertyRequest_None:
+		val := req.GetNone()
+		none = &val
+	case *pb.CreatePropertyRequest_SelectData_:
+		val := req.GetSelectData()
+		if val != nil {
+			selectData = &models.SelectData{
+				AllowFreetext: val.GetAllowFreetext(),
+				SelectOptions: hwutil.Map(val.Options, func(option *pb.CreatePropertyRequest_SelectData_SelectOption) models.SelectOption {
+					return models.SelectOption{
+						Name:        option.Name,
+						Description: *option.Description,
+					}
+				}),
+			}
+		}
+	}
+
+	fieldTypeData := models.FieldTypeData{
+		None:       none,
+		SelectData: selectData,
+	}
+
+	if err := commandsV1.NewCreatePropertyCommandHandler(s.as)(ctx, propertyID, req.GetContext(), req.GetSubjectType(), req.GetFieldType(), req.GetName(), req.Description, setID, req.AlwaysIncludeForCurrentContext, fieldTypeData); err != nil {
 		return nil, err
 	}
 
 	return &pb.CreatePropertyResponse{
-		Id: propertyID.String(),
+		PropertyId: propertyID.String(),
 	}, nil
 }
 
@@ -48,10 +81,8 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 	return &pb.GetPropertyResponse{
 		Id:          property.ID.String(),
 		Name:        property.Name,
-		SubjectType: property.SubjectType,
-		SubjectId:   property.SubjectID.String(),
+		SubjectType: property.SubjectType.String(),
 		FieldType:   property.FieldType,
 		Description: &property.Description,
-		IsArchived:  &property.IsArchived,
 	}, nil
 }

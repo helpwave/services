@@ -7,12 +7,13 @@ import (
 	"github.com/google/uuid"
 	"hwes"
 	"property-svc/internal/property/aggregate"
+	"property-svc/internal/property/models"
 )
 
-type CreatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectID uuid.UUID, subjectType string, fieldType pb.FieldType, name string) error
+type CreatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, viewContext pb.ViewContext, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *uuid.UUID, alwaysIncludeForCurrentContext *bool, fieldTypeData models.FieldTypeData) error
 
 func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectID uuid.UUID, subjectType string, fieldType pb.FieldType, name string) error {
+	return func(ctx context.Context, propertyID uuid.UUID, viewContext pb.ViewContext, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *uuid.UUID, alwaysIncludeForCurrentContext *bool, fieldTypeData models.FieldTypeData) error {
 		a := aggregate.NewPropertyAggregate(propertyID)
 
 		exists, err := as.Exists(ctx, a)
@@ -24,8 +25,26 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyComma
 			return errors.New("cannot create an already existing aggregate")
 		}
 
-		if err := a.CreateProperty(ctx, subjectID, subjectType, fieldType, name); err != nil {
+		if err := a.CreateProperty(ctx, viewContext, subjectType, fieldType, name, fieldTypeData); err != nil {
 			return err
+		}
+
+		if description != nil {
+			if err := a.UpdateDescription(ctx, *description); err != nil {
+				return err
+			}
+		}
+
+		if setID != nil {
+			if err := a.UpdateSetID(ctx, *setID); err != nil {
+				return err
+			}
+		}
+
+		if alwaysIncludeForCurrentContext != nil {
+			if err := a.UpdateAlwaysIncludeForCurrentContext(ctx, *alwaysIncludeForCurrentContext); err != nil {
+				return err
+			}
 		}
 
 		return as.Save(ctx, a)
