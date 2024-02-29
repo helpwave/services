@@ -195,7 +195,7 @@ jobs:
           if [[ $version_output =~ ^[0-9]+$ ]]; then
             echo $version_output >> $GITHUB_OUTPUT
           else
-            echo "Error: Version is not a number: $version_output" >&2
+            echo "Error Version is not a number $version_output" >&2
             echo "0" >> $GITHUB_OUTPUT
           fi
         env:
