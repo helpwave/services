@@ -62,8 +62,9 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		WardID:         wardID,
 	})
 	// This also implicitly checks the wardID because of the foreignKey constraint in the sql
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	if req.Subtasks != nil {
@@ -74,8 +75,10 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 			}
 		})
 
-		if _, err := templateRepo.AppendSubTasks(ctx, subtaskNames); err != nil {
-			return nil, status.Error(codes.Internal, "could not append subtask"+err.Error())
+		_, err = templateRepo.AppendSubTasks(ctx, subtaskNames)
+		err = hwdb.Error(ctx, err)
+		if err != nil {
+			return nil, err
 		}
 	}
 
@@ -107,8 +110,9 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 		},
 	})
 
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	templates := make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate, 0)
@@ -156,8 +160,10 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := templateRepo.DeleteTaskTemplate(ctx, id); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	err = templateRepo.DeleteTaskTemplate(ctx, id)
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	log.Info().
@@ -179,8 +185,9 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 	}
 
 	subtask, err := templateRepo.DeleteSubtask(ctx, id)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	log.Info().
@@ -201,12 +208,14 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+	err = templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
 		Name:        req.Name,
 		Description: req.Description,
 		ID:          id,
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.UpdateTaskTemplateResponse{}, nil
@@ -222,11 +231,13 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := templateRepo.UpdateSubtask(ctx, task_template_repo.UpdateSubtaskParams{
+	err = templateRepo.UpdateSubtask(ctx, task_template_repo.UpdateSubtaskParams{
 		Name: req.Name,
 		ID:   id,
-	}); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.UpdateTaskTemplateSubTaskResponse{}, nil
@@ -272,8 +283,9 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.G
 	}
 
 	createdBy, err := uuid.Parse(req.CreatedBy)
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		return nil, err
 	}
 
 	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx, task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
@@ -288,8 +300,9 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.G
 		PrivateOnly: req.GetPrivateOnly(),
 	})
 
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	templates := make([]*pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate, 0)
@@ -340,8 +353,9 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 		},
 	})
 
+	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	templates := make([]*pb.GetAllTaskTemplatesByWardResponse_TaskTemplate, 0)

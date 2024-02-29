@@ -8,6 +8,7 @@ replace (
 	gen => ../../gen/go
 	hwdb => ../../libs/hwdb
 	hwes => ../../libs/hwes
+	hwlocale => ../../libs/hwlocale
 	hwutil => ../../libs/hwutil
 	telemetry => ../../libs/telemetry
 )
@@ -29,6 +30,7 @@ require (
 )
 
 require (
+	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
@@ -53,6 +55,7 @@ require (
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/nicksnyder/go-i18n/v2 v2.4.0 // indirect
 	github.com/openzipkin/zipkin-go v0.4.2 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
 	github.com/redis/go-redis/v9 v9.1.0 // indirect
@@ -75,8 +78,9 @@ require (
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240102182953-50ed04b92917 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240102182953-50ed04b92917 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240205150955-31a09d347014 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	hwlocale v0.0.0 // indirect
 	telemetry v0.0.0 // indirect
 )

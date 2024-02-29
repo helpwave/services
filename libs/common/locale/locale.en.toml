@@ -1,0 +1,16 @@
+[GenericError]
+description = "error returned, when we have nothing better to return"
+other = "An error has occurred"
+
+[GenericInvalidArgsError]
+description = "error returned, when the user provided bad data"
+one = "A field in your request is invalid"
+other = "Multiple fields in your request are invalid"
+
+[InvalidFieldError]
+description = "default field error"
+other = "is invalid"
+
+[RequiredError]
+description = "error returned, when a field is missing"
+other = "is required"
