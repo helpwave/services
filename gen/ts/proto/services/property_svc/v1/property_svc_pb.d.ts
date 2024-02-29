@@ -1,19 +1,45 @@
 import * as jspb from 'google-protobuf'
 
+import * as proto_services_property_svc_v1_types_pb from '../../../../proto/services/property_svc/v1/types_pb'; // proto import: "proto/services/property_svc/v1/types.proto"
 
 
 export class CreatePropertyRequest extends jspb.Message {
-  getSubjectId(): string;
-  setSubjectId(value: string): CreatePropertyRequest;
+  getContext(): proto_services_property_svc_v1_types_pb.ViewContext;
+  setContext(value: proto_services_property_svc_v1_types_pb.ViewContext): CreatePropertyRequest;
 
-  getSubjectType(): string;
-  setSubjectType(value: string): CreatePropertyRequest;
+  getSubjectType(): proto_services_property_svc_v1_types_pb.SubjectType;
+  setSubjectType(value: proto_services_property_svc_v1_types_pb.SubjectType): CreatePropertyRequest;
 
-  getFieldType(): FieldType;
-  setFieldType(value: FieldType): CreatePropertyRequest;
+  getFieldType(): proto_services_property_svc_v1_types_pb.FieldType;
+  setFieldType(value: proto_services_property_svc_v1_types_pb.FieldType): CreatePropertyRequest;
 
   getName(): string;
   setName(value: string): CreatePropertyRequest;
+
+  getDescription(): string;
+  setDescription(value: string): CreatePropertyRequest;
+  hasDescription(): boolean;
+  clearDescription(): CreatePropertyRequest;
+
+  getSetId(): string;
+  setSetId(value: string): CreatePropertyRequest;
+  hasSetId(): boolean;
+  clearSetId(): CreatePropertyRequest;
+
+  getAlwaysIncludeForCurrentContext(): boolean;
+  setAlwaysIncludeForCurrentContext(value: boolean): CreatePropertyRequest;
+  hasAlwaysIncludeForCurrentContext(): boolean;
+  clearAlwaysIncludeForCurrentContext(): CreatePropertyRequest;
+
+  getNone(): boolean;
+  setNone(value: boolean): CreatePropertyRequest;
+
+  getSelectData(): CreatePropertyRequest.SelectData | undefined;
+  setSelectData(value?: CreatePropertyRequest.SelectData): CreatePropertyRequest;
+  hasSelectData(): boolean;
+  clearSelectData(): CreatePropertyRequest;
+
+  getFieldTypeDataCase(): CreatePropertyRequest.FieldTypeDataCase;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreatePropertyRequest.AsObject;
@@ -25,16 +51,104 @@ export class CreatePropertyRequest extends jspb.Message {
 
 export namespace CreatePropertyRequest {
   export type AsObject = {
-    subjectId: string,
-    subjectType: string,
-    fieldType: FieldType,
+    context: proto_services_property_svc_v1_types_pb.ViewContext,
+    subjectType: proto_services_property_svc_v1_types_pb.SubjectType,
+    fieldType: proto_services_property_svc_v1_types_pb.FieldType,
     name: string,
+    description?: string,
+    setId?: string,
+    alwaysIncludeForCurrentContext?: boolean,
+    none: boolean,
+    selectData?: CreatePropertyRequest.SelectData.AsObject,
+  }
+
+  export class SelectData extends jspb.Message {
+    getAllowFreetext(): boolean;
+    setAllowFreetext(value: boolean): SelectData;
+    hasAllowFreetext(): boolean;
+    clearAllowFreetext(): SelectData;
+
+    getOptionsList(): Array<CreatePropertyRequest.SelectData.SelectOption>;
+    setOptionsList(value: Array<CreatePropertyRequest.SelectData.SelectOption>): SelectData;
+    clearOptionsList(): SelectData;
+    addOptions(value?: CreatePropertyRequest.SelectData.SelectOption, index?: number): CreatePropertyRequest.SelectData.SelectOption;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SelectData.AsObject;
+    static toObject(includeInstance: boolean, msg: SelectData): SelectData.AsObject;
+    static serializeBinaryToWriter(message: SelectData, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SelectData;
+    static deserializeBinaryFromReader(message: SelectData, reader: jspb.BinaryReader): SelectData;
+  }
+
+  export namespace SelectData {
+    export type AsObject = {
+      allowFreetext?: boolean,
+      optionsList: Array<CreatePropertyRequest.SelectData.SelectOption.AsObject>,
+    }
+
+    export class SelectOption extends jspb.Message {
+      getName(): string;
+      setName(value: string): SelectOption;
+
+      getDescription(): string;
+      setDescription(value: string): SelectOption;
+      hasDescription(): boolean;
+      clearDescription(): SelectOption;
+
+      serializeBinary(): Uint8Array;
+      toObject(includeInstance?: boolean): SelectOption.AsObject;
+      static toObject(includeInstance: boolean, msg: SelectOption): SelectOption.AsObject;
+      static serializeBinaryToWriter(message: SelectOption, writer: jspb.BinaryWriter): void;
+      static deserializeBinary(bytes: Uint8Array): SelectOption;
+      static deserializeBinaryFromReader(message: SelectOption, reader: jspb.BinaryReader): SelectOption;
+    }
+
+    export namespace SelectOption {
+      export type AsObject = {
+        name: string,
+        description?: string,
+      }
+
+      export enum DescriptionCase { 
+        _DESCRIPTION_NOT_SET = 0,
+        DESCRIPTION = 2,
+      }
+    }
+
+
+    export enum AllowFreetextCase { 
+      _ALLOW_FREETEXT_NOT_SET = 0,
+      ALLOW_FREETEXT = 1,
+    }
+  }
+
+
+  export enum FieldTypeDataCase { 
+    FIELD_TYPE_DATA_NOT_SET = 0,
+    NONE = 8,
+    SELECT_DATA = 9,
+  }
+
+  export enum DescriptionCase { 
+    _DESCRIPTION_NOT_SET = 0,
+    DESCRIPTION = 5,
+  }
+
+  export enum SetIdCase { 
+    _SET_ID_NOT_SET = 0,
+    SET_ID = 6,
+  }
+
+  export enum AlwaysIncludeForCurrentContextCase { 
+    _ALWAYS_INCLUDE_FOR_CURRENT_CONTEXT_NOT_SET = 0,
+    ALWAYS_INCLUDE_FOR_CURRENT_CONTEXT = 7,
   }
 }
 
 export class CreatePropertyResponse extends jspb.Message {
-  getId(): string;
-  setId(value: string): CreatePropertyResponse;
+  getPropertyId(): string;
+  setPropertyId(value: string): CreatePropertyResponse;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreatePropertyResponse.AsObject;
@@ -46,7 +160,7 @@ export class CreatePropertyResponse extends jspb.Message {
 
 export namespace CreatePropertyResponse {
   export type AsObject = {
-    id: string,
+    propertyId: string,
   }
 }
 
@@ -81,8 +195,8 @@ export class GetPropertyResponse extends jspb.Message {
   getSubjectId(): string;
   setSubjectId(value: string): GetPropertyResponse;
 
-  getFieldType(): FieldType;
-  setFieldType(value: FieldType): GetPropertyResponse;
+  getFieldType(): proto_services_property_svc_v1_types_pb.FieldType;
+  setFieldType(value: proto_services_property_svc_v1_types_pb.FieldType): GetPropertyResponse;
 
   getDescription(): string;
   setDescription(value: string): GetPropertyResponse;
@@ -113,7 +227,7 @@ export namespace GetPropertyResponse {
     name: string,
     subjectType: string,
     subjectId: string,
-    fieldType: FieldType,
+    fieldType: proto_services_property_svc_v1_types_pb.FieldType,
     description?: string,
     isArchived?: boolean,
     isSoftRequired?: boolean,
@@ -135,12 +249,3 @@ export namespace GetPropertyResponse {
   }
 }
 
-export enum FieldType { 
-  FIELD_TYPE_UNSPECIFIED = 0,
-  FIELD_TYPE_TEXT = 1,
-  FIELD_TYPE_NUMBER = 2,
-  FIELD_TYPE_CHECKBOX = 3,
-  FIELD_TYPE_DATE = 4,
-  FIELD_TYPE_DATETIME = 5,
-  FIELD_TYPE_SELECT = 6,
-}
