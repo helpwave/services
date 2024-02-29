@@ -303,9 +303,9 @@ func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
 func localeInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
 	log := zlog.Ctx(ctx)
 
-	metadata := metautils.ExtractIncoming(ctx)
+	metaData := metadata.ExtractIncoming(ctx)
 
-	langHeader := metadata.Get("accept-language")
+	langHeader := metaData.Get("accept-language")
 	tags, ok := parseLocales(langHeader)
 	if !ok {
 		log.Warn().Str("langHeader", langHeader).Msg("invalid accept-language header received")
