@@ -26,11 +26,11 @@ message GetPatientRequest {
 }
 
 message GetPatientResponse {
-  string id = 1; // @gotags: validate:"uuid4"
-  string human_readable_identifier = 2; // @gotags: validate:"required"
+  string id = 1;
+  string human_readable_identifier = 2;
   string notes = 3;
-  optional string bed_id = 4 [deprecated=true];
-  optional string ward_id = 5 [deprecated=true];
+  optional string bed_id = 4;
+  optional string ward_id = 5;
 
   optional Room room = 7;
   optional Bed bed = 8;
@@ -84,7 +84,7 @@ message UpdatePatientRequest {
   string id = 1; // @gotags: validate:"uuid4"
   optional string human_readable_identifier = 2;
   optional string notes = 3;
-  }
+}
 
 message UpdatePatientResponse {}
 

@@ -15,7 +15,7 @@ replace (
 
 require (
 	common v0.0.0
-	decaying_lru v0.0.0-00010101000000-000000000000
+	decaying_lru v0.0.0
 	gen v0.0.0
 	github.com/EventStore/EventStore-Client-Go v1.0.2
 	github.com/dapr/go-sdk v1.9.1
@@ -24,7 +24,7 @@ require (
 	github.com/rs/zerolog v1.32.0
 	google.golang.org/grpc v1.61.1
 	google.golang.org/protobuf v1.32.0
-	hwdb v0.0.0-00010101000000-000000000000
+	hwdb v0.0.0
 	hwes v0.0.0
 	hwutil v0.0.0
 )
@@ -46,7 +46,7 @@ require (
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
-	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.0 // indirect
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
