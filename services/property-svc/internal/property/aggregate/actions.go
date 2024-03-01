@@ -42,3 +42,35 @@ func (a *PropertyAggregate) UpdateAlwaysIncludeForCurrentContext(ctx context.Con
 	}
 	return a.Apply(event)
 }
+
+func (a *PropertyAggregate) UpdateSubjectType(ctx context.Context, subjectType pb.SubjectType) error {
+	event, err := propertyEventsV1.NewPropertySubjectTypeUpdatedEvent(a, subjectType)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *PropertyAggregate) UpdateFieldType(ctx context.Context, fieldType pb.FieldType) error {
+	event, err := propertyEventsV1.NewPropertyFieldTypeUpdatedEvent(a, fieldType)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *PropertyAggregate) UpdateName(ctx context.Context, name string) error {
+	event, err := propertyEventsV1.NewPropertyNameUpdatedEvent(a, name)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *PropertyAggregate) UpdateFieldTypeData(ctx context.Context, fieldTypeData models.FieldTypeData) error {
+	event, err := propertyEventsV1.NewFieldTypeDataUpadtedEvent(a, fieldTypeData)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}

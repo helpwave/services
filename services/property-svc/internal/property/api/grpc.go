@@ -111,3 +111,24 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 
 	return response, nil
 }
+
+func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.UpdatePropertyRequest) (*pb.UpdatePropertyResponse, error) {
+	propertyID, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+
+	// TODO: Handle correctly
+	setID, err := uuid.Parse(req.GetSetId())
+	if err != nil {
+		return nil, err
+	}
+
+	// TODO: fieldTypeData has to be updateable
+	// TODO: validation
+	if err := commandsV1.NewUpdatePropertyCommandHandler(s.as)(ctx, propertyID, req.SubjectType, req.FieldType, req.Name, req.Description, &setID, &models.FieldTypeData{}); err != nil {
+		return nil, err
+	}
+
+	return &pb.UpdatePropertyResponse{}, nil
+}

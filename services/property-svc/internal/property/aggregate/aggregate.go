@@ -40,6 +40,10 @@ func (a *PropertyAggregate) initEventListeners() {
 	a.RegisterEventListener(propertyEventsV1.PropertyDescriptionUpdated, a.onDescriptionUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertySetIDUpdated, a.onSetIDUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyAlwaysIncludeForCurrentContextUpdated, a.onAlwaysIncludeForCurrentContextUpdated)
+	a.RegisterEventListener(propertyEventsV1.PropertySubjectTypeUpdated, a.onSubjectTypeUpdated)
+	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeUpdated, a.onFieldTypeUpdated)
+	a.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, a.onNameUpdated)
+	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataUpdated, a.onFieldTypeDataUpdated)
 }
 
 // Event handlers
@@ -101,6 +105,7 @@ func (a *PropertyAggregate) onSetIDUpdated(evt hwes.Event) error {
 	a.Property.SetID = &setID
 	return nil
 }
+
 func (a *PropertyAggregate) onAlwaysIncludeForCurrentContextUpdated(evt hwes.Event) error {
 	var payload propertyEventsV1.PropertyAlwaysIncludeForCurrentContextUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -108,5 +113,57 @@ func (a *PropertyAggregate) onAlwaysIncludeForCurrentContextUpdated(evt hwes.Eve
 	}
 
 	a.Property.AlwaysIncludeForCurrentContext = payload.AlwaysIncludeForCurrentContext
+	return nil
+}
+
+func (a *PropertyAggregate) onSubjectTypeUpdated(evt hwes.Event) error {
+	var payload propertyEventsV1.PropertySubjectTypeUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	value, found := pb.SubjectType_value[payload.SubjectType]
+	if !found {
+		return fmt.Errorf("invalid subjectType: %s", payload.SubjectType)
+	}
+	subjectType := (pb.SubjectType)(value)
+
+	a.Property.SubjectType = subjectType
+	return nil
+}
+
+func (a *PropertyAggregate) onFieldTypeUpdated(evt hwes.Event) error {
+	var payload propertyEventsV1.PropertyFieldTypeUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	value, found := pb.FieldType_value[payload.FieldType]
+	if !found {
+		return fmt.Errorf("invalid fieldType: %s", payload.FieldType)
+	}
+	fieldType := (pb.FieldType)(value)
+
+	a.Property.FieldType = fieldType
+	return nil
+}
+
+func (a *PropertyAggregate) onNameUpdated(evt hwes.Event) error {
+	var payload propertyEventsV1.PropertyNameUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	a.Property.Name = payload.Name
+	return nil
+}
+
+func (a *PropertyAggregate) onFieldTypeDataUpdated(evt hwes.Event) error {
+	var payload propertyEventsV1.FieldTypeDataUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	a.Property.FieldTypeData = payload.FieldTypeData
 	return nil
 }
