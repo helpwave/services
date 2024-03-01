@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwauthz"
@@ -13,8 +14,11 @@ type CreateSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uui
 
 func NewCreateSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) CreateSubtaskCommandHandler {
 	return func(ctx context.Context, taskID, subtaskID uuid.UUID, name string) error {
-		// TODO: Use context
-		userID := uuid.MustParse("18159713-5d4e-4ad5-94ad-fbb6bb147984")
+		userID, err := common.GetUserID(ctx)
+		if err != nil {
+			return err
+		}
+
 		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserCreateSubtaskOnTaskPermission(userID, taskID)); err != nil {
 			return err
 		}

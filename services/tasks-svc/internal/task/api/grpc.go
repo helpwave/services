@@ -63,7 +63,7 @@ func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequ
 		return nil, err
 	}
 
-	if err := commandsV1.NewAssignTaskCommandHandler(s.as)(ctx, taskID, userID); err != nil {
+	if err := commandsV1.NewAssignTaskCommandHandler(s.as, s.authz)(ctx, taskID, userID); err != nil {
 		return nil, err
 	}
 
@@ -167,7 +167,7 @@ func (s *TaskGrpcService) CompleteSubtask(ctx context.Context, req *pb.CompleteS
 		return nil, err
 	}
 
-	if err := commandsV1.NewCompleteSubtaskCommandHandler(s.as)(ctx, taskID, subtaskID); err != nil {
+	if err := commandsV1.NewCompleteSubtaskCommandHandler(s.as, s.authz)(ctx, taskID, subtaskID); err != nil {
 		return nil, err
 	}
 

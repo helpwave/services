@@ -13,6 +13,7 @@ import (
 	"hwauthz"
 	"hwutil"
 	"io"
+	"telemetry"
 )
 
 func SetupSpiceDbByEnv() *authzed.Client {
@@ -33,104 +34,20 @@ func SetupSpiceDb(endpoint, token string) *authzed.Client {
 	return client
 }
 
-type relation struct {
-	Operation    v1.RelationshipUpdate_Operation
-	ResourceType string
-	ResourceID   string
-	Relation     string
-	SubjectType  string
-	SubjectID    string
-}
-
-func newRelation(operation v1.RelationshipUpdate_Operation, resourceType, resourceID, rel, subjectType, subjectID string) relation {
-	return relation{
-		Operation:    operation,
-		ResourceType: resourceType,
-		ResourceID:   resourceID,
-		Relation:     rel,
-		SubjectType:  subjectType,
-		SubjectID:    subjectID,
-	}
-}
-
-func newCreateRelation(resourceType, resourceID, relation, subjectType, subjectID string) relation {
-	return newRelation(
-		v1.RelationshipUpdate_OPERATION_TOUCH, // TOUCH to be idempotent?
-		resourceType,
-		resourceID,
-		relation,
-		subjectType,
-		subjectID,
-	)
-}
-
-func NewDeleteRelation(resourceType, resourceID, relation, subjectType, subjectID string) relation {
-	return newRelation(
-		v1.RelationshipUpdate_OPERATION_DELETE,
-		resourceType,
-		resourceID,
-		relation,
-		subjectType,
-		subjectID,
-	)
-}
-
-func (r *relation) ToSpiceDBRelationship() *v1.Relationship {
+func relationToSpiceDBRelation(relation hwauthz.Relation) *v1.Relationship {
 	return &v1.Relationship{
 		Resource: &v1.ObjectReference{
-			ObjectType: r.ResourceType,
-			ObjectId:   r.ResourceID,
+			ObjectType: relation.ResourceType,
+			ObjectId:   relation.ResourceID,
 		},
-		Relation: r.Relation,
+		Relation: relation.Relation,
 		Subject: &v1.SubjectReference{
 			Object: &v1.ObjectReference{
-				ObjectType: r.SubjectType,
-				ObjectId:   r.SubjectID,
+				ObjectType: relation.SubjectType,
+				ObjectId:   relation.SubjectID,
 			},
 		},
 	}
-}
-
-func writeRelation(ctx context.Context, client *authzed.Client, relations []relation) (string, error) {
-	req := &v1.WriteRelationshipsRequest{
-		Updates: hwutil.Map(relations, func(relation relation) *v1.RelationshipUpdate {
-			return &v1.RelationshipUpdate{
-				Operation:    relation.Operation,
-				Relationship: relation.ToSpiceDBRelationship(),
-			}
-		}),
-	}
-
-	res, err := client.WriteRelationships(ctx, req)
-	if err != nil {
-		return "", err
-	}
-
-	return res.WrittenAt.Token, nil
-}
-
-func checkPermission(ctx context.Context, client *authzed.Client, resourceType, resourceID, permission, subjectType, subjectID string) (bool, error) {
-	req := &v1.CheckPermissionRequest{
-		Resource: &v1.ObjectReference{
-			ObjectType: resourceType,
-			ObjectId:   resourceID,
-		},
-		Permission: permission,
-		Subject: &v1.SubjectReference{
-			Object: &v1.ObjectReference{
-				ObjectType: subjectType,
-				ObjectId:   subjectID,
-			},
-		},
-	}
-
-	res, err := client.CheckPermission(ctx, req)
-	if err != nil {
-		return false, err
-	}
-
-	hasPermission := res.Permissionship == v1.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION
-	return hasPermission, nil
 }
 
 func LookupResources(ctx context.Context, client *authzed.Client, resourceType, permission, subjectType, subjectId string) ([]uuid.UUID, error) {
@@ -179,25 +96,75 @@ func NewSpiceDBAuthZ(client *authzed.Client) *SpiceDBAuthZ {
 }
 
 func (s *SpiceDBAuthZ) Write(ctx context.Context, relations ...hwauthz.Relation) (hwauthz.ConsistencyToken, error) {
-	return writeRelation(ctx, s.client, hwutil.Map(relations, func(relation hwauthz.Relation) relation {
-		return newCreateRelation(relation.ResourceType, relation.ResourceID, relation.Relation, relation.SubjectType, relation.SubjectID)
-	}))
+	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Write")
+	defer span.End()
+
+	req := &v1.WriteRelationshipsRequest{
+		Updates: hwutil.Map(relations, func(relation hwauthz.Relation) *v1.RelationshipUpdate {
+			telemetry.SetSpanAttributes(ctx, relation.ToSpanAttributeKeyValue()...)
+			return &v1.RelationshipUpdate{
+				Operation:    v1.RelationshipUpdate_OPERATION_TOUCH, // TOUCH to be idempotent?
+				Relationship: relationToSpiceDBRelation(relation),
+			}
+		}),
+	}
+
+	res, err := s.client.WriteRelationships(ctx, req)
+	if err != nil {
+		return "", err
+	}
+
+	return res.WrittenAt.Token, nil
 }
 
 func (s *SpiceDBAuthZ) Delete(ctx context.Context, relations ...hwauthz.Relation) (hwauthz.ConsistencyToken, error) {
-	return writeRelation(ctx, s.client, hwutil.Map(relations, func(relation hwauthz.Relation) relation {
-		return NewDeleteRelation(relation.ResourceType, relation.ResourceID, relation.Relation, relation.SubjectType, relation.SubjectID)
-	}))
+	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Delete")
+	defer span.End()
+
+	req := &v1.WriteRelationshipsRequest{
+		Updates: hwutil.Map(relations, func(relation hwauthz.Relation) *v1.RelationshipUpdate {
+			telemetry.SetSpanAttributes(ctx, relation.ToSpanAttributeKeyValue()...)
+			return &v1.RelationshipUpdate{
+				Operation:    v1.RelationshipUpdate_OPERATION_DELETE, // TOUCH to be idempotent?
+				Relationship: relationToSpiceDBRelation(relation),
+			}
+		}),
+	}
+
+	res, err := s.client.WriteRelationships(ctx, req)
+	if err != nil {
+		return "", err
+	}
+
+	return res.WrittenAt.Token, nil
 }
 
 func (s *SpiceDBAuthZ) Check(ctx context.Context, permission hwauthz.Permission) (bool, error) {
-	hasPermission, err := checkPermission(ctx, s.client, permission.ResourceType, permission.ResourceID, permission.Permission, permission.SubjectType, permission.SubjectID)
+	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Check")
+	defer span.End()
 
-	if err != nil {
-		return false, err
-	} else if !hasPermission {
-		return false, nil
+	telemetry.SetSpanAttributes(ctx, permission.ToSpanAttributeKeyValue()...)
+
+	req := &v1.CheckPermissionRequest{
+		Resource: &v1.ObjectReference{
+			ObjectType: permission.ResourceType,
+			ObjectId:   permission.ResourceID,
+		},
+		Permission: permission.Permission,
+		Subject: &v1.SubjectReference{
+			Object: &v1.ObjectReference{
+				ObjectType: permission.SubjectType,
+				ObjectId:   permission.SubjectID,
+			},
+		},
 	}
 
-	return true, nil
+	res, err := s.client.CheckPermission(ctx, req)
+	if err != nil {
+		return false, err
+	}
+
+	hasPermission := res.Permissionship == v1.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION
+	telemetry.SetSpanBool(ctx, "hasPermission", hasPermission)
+	return hasPermission, nil
 }

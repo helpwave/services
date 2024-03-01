@@ -52,6 +52,10 @@ func SetSpanStr(ctx context.Context, key, value string) {
 	SetSpanAttributes(ctx, attribute.String(key, value))
 }
 
+func SetSpanBool(ctx context.Context, key string, value bool) {
+	SetSpanAttributes(ctx, attribute.Bool(key, value))
+}
+
 // zerologTraceHook calls addSpanIdToLogEvent and TODO for log events
 func zerologTraceHook() zerolog.HookFunc {
 	return func(event *zerolog.Event, level zerolog.Level, message string) {

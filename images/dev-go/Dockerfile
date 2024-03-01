@@ -39,8 +39,16 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
     && apt update \
-    && apt install gh -y \
-    && apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+    && apt install gh -y
+
+# install zed, CLI for SpiceDB
+#  https://github.com/authzed/zed
+RUN curl https://apt.fury.io/authzed/gpg.key | apt-key add - \
+    && echo "deb https://apt.fury.io/authzed/ * *" > /etc/apt/sources.list.d/fury.list \
+    && apt update \
+    && apt install -y zed
+
+RUN apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 # create user, reduces friction with mounted file permissions
 # 1000:1000 is a good guess (at least on linux)

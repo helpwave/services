@@ -99,7 +99,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '2'
+        TAG: '3'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -115,6 +115,8 @@ services:
         condition: service_healthy
       consul:
         condition: service_started
+      spicedb:
+        condition: service_started
     environment:
       SECRETSTORE_REDIS_HOST: "redis:6379"
     command:
@@ -122,6 +124,7 @@ services:
       - -c
       - |
         bash migrate.sh
+        zed import --insecure --token helpwave --endpoint spicedb:50051 spicedb.yaml
         dapr run --run-file dev/dapr_run.yaml --config dev/dapr.yaml
     restart: unless-stopped
     network_mode: "service:devcontainer" # share ports with devcontainer
@@ -132,7 +135,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '2'
+        TAG: '3'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:

@@ -15,6 +15,11 @@ func (a *TaskAggregate) CreateTask(ctx context.Context, name string, patientID u
 	if err != nil {
 		return err
 	}
+
+	if err := event.InjectUserFromContext(ctx); err != nil {
+		return err
+	}
+
 	return a.Apply(event)
 }
 
@@ -23,6 +28,11 @@ func (a *TaskAggregate) UpdateName(ctx context.Context, newName string) error {
 	if err != nil {
 		return err
 	}
+
+	if err := event.InjectUserFromContext(ctx); err != nil {
+		return err
+	}
+
 	return a.Apply(event)
 }
 

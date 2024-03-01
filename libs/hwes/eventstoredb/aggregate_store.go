@@ -3,6 +3,7 @@ package eventstoredb
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/esdb"
 	"hwes"
 	"hwutil"
@@ -129,6 +130,10 @@ func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 		event, err := hwes.NewEventFromRecordedEvent(esdbEvent.Event)
 		if err != nil {
 			return err
+		}
+
+		if event.UserID != nil {
+			fmt.Printf("UserID: %s\n", event.UserID.String())
 		}
 
 		if err := aggregate.Progress(event); err != nil {

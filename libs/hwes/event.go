@@ -1,6 +1,8 @@
 package hwes
 
 import (
+	"common"
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/esdb"
@@ -18,6 +20,11 @@ type Event struct {
 	Data          []byte
 	Timestamp     time.Time
 	Version       uint64
+	UserID        *uuid.UUID
+}
+
+type metadata struct {
+	userID string
 }
 
 func NewEvent(aggregate Aggregate, eventType string) Event {
@@ -86,6 +93,18 @@ func NewEventFromRecordedEvent(event *esdb.RecordedEvent) (Event, error) {
 		return Event{}, err
 	}
 
+	m := metadata{}
+	if err := json.Unmarshal(event.UserMetadata, &m); err != nil {
+		return Event{}, err
+	}
+
+	fmt.Printf("UserMetadata: %+v\n", event.UserMetadata)
+
+	var userID *uuid.UUID
+	if id, err := uuid.Parse(m.userID); err == nil {
+		userID = &id
+	}
+
 	return Event{
 		EventID:       id,
 		EventType:     event.EventType,
@@ -94,6 +113,7 @@ func NewEventFromRecordedEvent(event *esdb.RecordedEvent) (Event, error) {
 		Data:          event.Data,
 		Timestamp:     event.CreatedDate,
 		Version:       event.EventNumber,
+		UserID:        userID,
 	}, nil
 }
 
@@ -119,11 +139,27 @@ func (e *Event) GetVersion() uint64 {
 	return e.Version
 }
 
+func (e *Event) getMetadata() []byte {
+	m := &metadata{}
+
+	if e.UserID != nil {
+		m.userID = e.UserID.String()
+	}
+
+	b, err := json.Marshal(m)
+	if err != nil {
+		return nil
+	}
+
+	return b
+}
+
 func (e *Event) ToEventData() esdb.EventData {
 	return esdb.EventData{
 		EventType:   e.EventType,
 		ContentType: esdb.JsonContentType,
 		Data:        e.Data,
+		Metadata:    e.getMetadata(),
 	}
 }
 
@@ -155,4 +191,13 @@ func (e *Event) GetZerologDict() *zerolog.Event {
 		Str("eventId", e.EventID.String()).
 		Str("eventType", e.EventType).
 		Uint64("eventVersion", e.Version)
+}
+
+func (e *Event) InjectUserFromContext(ctx context.Context) error {
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return err
+	}
+	e.UserID = &userID
+	return nil
 }

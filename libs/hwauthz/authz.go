@@ -5,8 +5,10 @@ import (
 	"common/locale"
 	"context"
 	"fmt"
+	"go.opentelemetry.io/otel/attribute"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc/codes"
+	"telemetry"
 )
 
 type ConsistencyToken = string
@@ -29,6 +31,16 @@ func NewPermission(resourceType, resourceID, permission, subjectType, subjectID 
 	}
 }
 
+func (p *Permission) ToSpanAttributeKeyValue() []attribute.KeyValue {
+	return []attribute.KeyValue{
+		attribute.String("resourceType", p.ResourceType),
+		attribute.String("resourceID", p.ResourceID),
+		attribute.String("permission", p.Permission),
+		attribute.String("subjectType", p.SubjectType),
+		attribute.String("subjectID", p.SubjectID),
+	}
+}
+
 type Relation struct {
 	ResourceType    string
 	ResourceID      string
@@ -45,6 +57,17 @@ func NewRelation(resourceType, resourceID, relation, subjectType, subjectID stri
 		Relation:     relation,
 		SubjectType:  subjectType,
 		SubjectID:    subjectID,
+	}
+}
+
+func (r *Relation) ToSpanAttributeKeyValue() []attribute.KeyValue {
+	return []attribute.KeyValue{
+		attribute.String("resourceType", r.ResourceType),
+		attribute.String("resourceID", r.ResourceID),
+		attribute.String("relation", r.Relation),
+		attribute.String("subjectType", r.SubjectType),
+		attribute.String("subjectID", r.SubjectID),
+		attribute.String("subjectRelation", r.SubjectRelation),
 	}
 }
 
@@ -70,6 +93,9 @@ type AuthZ interface {
 // If the first bool param is false and the third error param is not nil
 // The second *Permission param contains the falsy/invalid permission
 func CheckMany(ctx context.Context, authz AuthZ, permissions ...Permission) (bool, *Permission, error) {
+	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.CheckMany")
+	defer span.End()
+
 	type res struct {
 		Permission    Permission
 		HasPermission bool
@@ -81,6 +107,9 @@ func CheckMany(ctx context.Context, authz AuthZ, permissions ...Permission) (boo
 
 	for _, permission := range permissions {
 		eg.Go(func() error {
+			ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.CheckMany.Check")
+			defer span.End()
+
 			hasPermission, err := authz.Check(ctx, permission)
 			if err != nil {
 				return err
@@ -111,6 +140,9 @@ func CheckMany(ctx context.Context, authz AuthZ, permissions ...Permission) (boo
 }
 
 func CheckGrpcWrapper(ctx context.Context, authz AuthZ, permissions ...Permission) error {
+	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.CheckGrpcWrapper")
+	defer span.End()
+
 	hasPermission, permission, err := CheckMany(ctx, authz, permissions...)
 
 	if err != nil {
