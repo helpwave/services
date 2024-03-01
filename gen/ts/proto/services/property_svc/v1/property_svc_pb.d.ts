@@ -333,3 +333,209 @@ export namespace GetPropertyResponse {
   }
 }
 
+export class UpdatePropertyRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): UpdatePropertyRequest;
+
+  getSubjectType(): proto_services_property_svc_v1_types_pb.SubjectType;
+  setSubjectType(value: proto_services_property_svc_v1_types_pb.SubjectType): UpdatePropertyRequest;
+  hasSubjectType(): boolean;
+  clearSubjectType(): UpdatePropertyRequest;
+
+  getFieldType(): proto_services_property_svc_v1_types_pb.FieldType;
+  setFieldType(value: proto_services_property_svc_v1_types_pb.FieldType): UpdatePropertyRequest;
+  hasFieldType(): boolean;
+  clearFieldType(): UpdatePropertyRequest;
+
+  getName(): string;
+  setName(value: string): UpdatePropertyRequest;
+  hasName(): boolean;
+  clearName(): UpdatePropertyRequest;
+
+  getDescription(): string;
+  setDescription(value: string): UpdatePropertyRequest;
+  hasDescription(): boolean;
+  clearDescription(): UpdatePropertyRequest;
+
+  getIsArchived(): boolean;
+  setIsArchived(value: boolean): UpdatePropertyRequest;
+  hasIsArchived(): boolean;
+  clearIsArchived(): UpdatePropertyRequest;
+
+  getSetId(): string;
+  setSetId(value: string): UpdatePropertyRequest;
+  hasSetId(): boolean;
+  clearSetId(): UpdatePropertyRequest;
+
+  getNone(): boolean;
+  setNone(value: boolean): UpdatePropertyRequest;
+
+  getSelectData(): UpdatePropertyRequest.SelectData | undefined;
+  setSelectData(value?: UpdatePropertyRequest.SelectData): UpdatePropertyRequest;
+  hasSelectData(): boolean;
+  clearSelectData(): UpdatePropertyRequest;
+
+  getFieldTypeDataCase(): UpdatePropertyRequest.FieldTypeDataCase;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdatePropertyRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdatePropertyRequest): UpdatePropertyRequest.AsObject;
+  static serializeBinaryToWriter(message: UpdatePropertyRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdatePropertyRequest;
+  static deserializeBinaryFromReader(message: UpdatePropertyRequest, reader: jspb.BinaryReader): UpdatePropertyRequest;
+}
+
+export namespace UpdatePropertyRequest {
+  export type AsObject = {
+    id: string,
+    subjectType?: proto_services_property_svc_v1_types_pb.SubjectType,
+    fieldType?: proto_services_property_svc_v1_types_pb.FieldType,
+    name?: string,
+    description?: string,
+    isArchived?: boolean,
+    setId?: string,
+    none: boolean,
+    selectData?: UpdatePropertyRequest.SelectData.AsObject,
+  }
+
+  export class SelectData extends jspb.Message {
+    getAllowFreetext(): boolean;
+    setAllowFreetext(value: boolean): SelectData;
+    hasAllowFreetext(): boolean;
+    clearAllowFreetext(): SelectData;
+
+    getRemoveOptionsList(): Array<string>;
+    setRemoveOptionsList(value: Array<string>): SelectData;
+    clearRemoveOptionsList(): SelectData;
+    addRemoveOptions(value: string, index?: number): SelectData;
+
+    getUpsertOptionsList(): Array<UpdatePropertyRequest.SelectData.SelectOption>;
+    setUpsertOptionsList(value: Array<UpdatePropertyRequest.SelectData.SelectOption>): SelectData;
+    clearUpsertOptionsList(): SelectData;
+    addUpsertOptions(value?: UpdatePropertyRequest.SelectData.SelectOption, index?: number): UpdatePropertyRequest.SelectData.SelectOption;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SelectData.AsObject;
+    static toObject(includeInstance: boolean, msg: SelectData): SelectData.AsObject;
+    static serializeBinaryToWriter(message: SelectData, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SelectData;
+    static deserializeBinaryFromReader(message: SelectData, reader: jspb.BinaryReader): SelectData;
+  }
+
+  export namespace SelectData {
+    export type AsObject = {
+      allowFreetext?: boolean,
+      removeOptionsList: Array<string>,
+      upsertOptionsList: Array<UpdatePropertyRequest.SelectData.SelectOption.AsObject>,
+    }
+
+    export class SelectOption extends jspb.Message {
+      getId(): string;
+      setId(value: string): SelectOption;
+
+      getName(): string;
+      setName(value: string): SelectOption;
+      hasName(): boolean;
+      clearName(): SelectOption;
+
+      getDescription(): string;
+      setDescription(value: string): SelectOption;
+      hasDescription(): boolean;
+      clearDescription(): SelectOption;
+
+      getIsCustom(): boolean;
+      setIsCustom(value: boolean): SelectOption;
+      hasIsCustom(): boolean;
+      clearIsCustom(): SelectOption;
+
+      serializeBinary(): Uint8Array;
+      toObject(includeInstance?: boolean): SelectOption.AsObject;
+      static toObject(includeInstance: boolean, msg: SelectOption): SelectOption.AsObject;
+      static serializeBinaryToWriter(message: SelectOption, writer: jspb.BinaryWriter): void;
+      static deserializeBinary(bytes: Uint8Array): SelectOption;
+      static deserializeBinaryFromReader(message: SelectOption, reader: jspb.BinaryReader): SelectOption;
+    }
+
+    export namespace SelectOption {
+      export type AsObject = {
+        id: string,
+        name?: string,
+        description?: string,
+        isCustom?: boolean,
+      }
+
+      export enum NameCase { 
+        _NAME_NOT_SET = 0,
+        NAME = 2,
+      }
+
+      export enum DescriptionCase { 
+        _DESCRIPTION_NOT_SET = 0,
+        DESCRIPTION = 3,
+      }
+
+      export enum IsCustomCase { 
+        _IS_CUSTOM_NOT_SET = 0,
+        IS_CUSTOM = 4,
+      }
+    }
+
+
+    export enum AllowFreetextCase { 
+      _ALLOW_FREETEXT_NOT_SET = 0,
+      ALLOW_FREETEXT = 1,
+    }
+  }
+
+
+  export enum FieldTypeDataCase { 
+    FIELD_TYPE_DATA_NOT_SET = 0,
+    NONE = 9,
+    SELECT_DATA = 10,
+  }
+
+  export enum SubjectTypeCase { 
+    _SUBJECT_TYPE_NOT_SET = 0,
+    SUBJECT_TYPE = 2,
+  }
+
+  export enum FieldTypeCase { 
+    _FIELD_TYPE_NOT_SET = 0,
+    FIELD_TYPE = 3,
+  }
+
+  export enum NameCase { 
+    _NAME_NOT_SET = 0,
+    NAME = 4,
+  }
+
+  export enum DescriptionCase { 
+    _DESCRIPTION_NOT_SET = 0,
+    DESCRIPTION = 5,
+  }
+
+  export enum IsArchivedCase { 
+    _IS_ARCHIVED_NOT_SET = 0,
+    IS_ARCHIVED = 6,
+  }
+
+  export enum SetIdCase { 
+    _SET_ID_NOT_SET = 0,
+    SET_ID = 8,
+  }
+}
+
+export class UpdatePropertyResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdatePropertyResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdatePropertyResponse): UpdatePropertyResponse.AsObject;
+  static serializeBinaryToWriter(message: UpdatePropertyResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdatePropertyResponse;
+  static deserializeBinaryFromReader(message: UpdatePropertyResponse, reader: jspb.BinaryReader): UpdatePropertyResponse;
+}
+
+export namespace UpdatePropertyResponse {
+  export type AsObject = {
+  }
+}
+
