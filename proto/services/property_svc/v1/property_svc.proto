@@ -13,11 +13,11 @@ option go_package = "gen/proto/services/property-svc";
 //
 message CreatePropertyRequest {
   ViewContext context = 1;
-  SubjectType subject_type = 2; // TODO: add validation here (not-unspecified check)
-  FieldType field_type = 3; // TODO: add validation here (not-unspecified check)
+  SubjectType subject_type = 2; // @gotags: validate:"required"
+  FieldType field_type = 3; // @gotags: validate:"required"
 
-  string name = 4; // TODO: add validation (at least non-empty checks)
-  optional string description = 5; // TODO: add validation, if needed
+  string name = 4; // @gotags: validate:"required"
+  optional string description = 5; // TODO: validation needed?
 
   // ID of set this Property should belong to
   optional string set_id = 6;
@@ -33,11 +33,10 @@ message CreatePropertyRequest {
     optional bool allow_freetext = 1;
     repeated SelectOption options = 2;
     message SelectOption {
-      string name = 1; // TODO: add validation (at least non-empty checks)
-      optional string description = 2; // TODO: add validation, if needed
+      string name = 1; // @gotags: validate:"required"
+      optional string description = 2; // TODO: validation needed?
     }
   }
-
 }
 
 message CreatePropertyResponse {

@@ -27,10 +27,10 @@ type CreatePropertyRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	Context     ViewContext `protobuf:"varint,1,opt,name=context,proto3,enum=proto.services.property_svc.v1.ViewContext" json:"context,omitempty"`
-	SubjectType SubjectType `protobuf:"varint,2,opt,name=subject_type,json=subjectType,proto3,enum=proto.services.property_svc.v1.SubjectType" json:"subject_type,omitempty"` // TODO: add validation here (not-unspecified check)
-	FieldType   FieldType   `protobuf:"varint,3,opt,name=field_type,json=fieldType,proto3,enum=proto.services.property_svc.v1.FieldType" json:"field_type,omitempty"`         // TODO: add validation here (not-unspecified check)
-	Name        string      `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`                                                                                   // TODO: add validation (at least non-empty checks)
-	Description *string     `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`                                                               // TODO: add validation, if needed
+	SubjectType SubjectType `protobuf:"varint,2,opt,name=subject_type,json=subjectType,proto3,enum=proto.services.property_svc.v1.SubjectType" json:"subject_type,omitempty" validate:"required"` // @gotags: validate:"required"
+	FieldType   FieldType   `protobuf:"varint,3,opt,name=field_type,json=fieldType,proto3,enum=proto.services.property_svc.v1.FieldType" json:"field_type,omitempty" validate:"required"`         // @gotags: validate:"required"
+	Name        string      `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" validate:"required"`                                                                                   // @gotags: validate:"required"
+	Description *string     `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`                                                                                   // TODO: validation needed?
 	// ID of set this Property should belong to
 	SetId                          *string `protobuf:"bytes,6,opt,name=set_id,json=setId,proto3,oneof" json:"set_id,omitempty"`
 	AlwaysIncludeForCurrentContext *bool   `protobuf:"varint,7,opt,name=always_include_for_current_context,json=alwaysIncludeForCurrentContext,proto3,oneof" json:"always_include_for_current_context,omitempty"`
@@ -211,8 +211,8 @@ type GetPropertyRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id      string      `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
-	Context ViewContext `protobuf:"varint,2,opt,name=context,proto3,enum=proto.services.property_svc.v1.ViewContext" json:"context,omitempty"`
+	Id      string      `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`                                           // @gotags: validate:"uuid4"
+	Context ViewContext `protobuf:"varint,2,opt,name=context,proto3,enum=proto.services.property_svc.v1.ViewContext" json:"context,omitempty"` // TODO: Why is that here?
 }
 
 func (x *GetPropertyRequest) Reset() {
@@ -271,7 +271,7 @@ type GetPropertyResponse struct {
 	FieldType   FieldType   `protobuf:"varint,3,opt,name=field_type,json=fieldType,proto3,enum=proto.services.property_svc.v1.FieldType" json:"field_type,omitempty"`
 	Name        string      `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 	Description *string     `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	IsArchived  bool        `protobuf:"varint,6,opt,name=is_archived,json=isArchived,proto3" json:"is_archived,omitempty"`
+	IsArchived  bool        `protobuf:"varint,6,opt,name=is_archived,json=isArchived,proto3" json:"is_archived,omitempty"` //TODO: Is that still part of property model?
 	// ID of set this Property should belong to
 	SetId *string `protobuf:"bytes,8,opt,name=set_id,json=setId,proto3,oneof" json:"set_id,omitempty"`
 	// Types that are assignable to FieldTypeData:
@@ -279,7 +279,7 @@ type GetPropertyResponse struct {
 	//	*GetPropertyResponse_None
 	//	*GetPropertyResponse_SelectData_
 	FieldTypeData                  isGetPropertyResponse_FieldTypeData `protobuf_oneof:"field_type_data"`
-	AlwaysIncludeForCurrentContext *bool                               `protobuf:"varint,11,opt,name=always_include_for_current_context,json=alwaysIncludeForCurrentContext,proto3,oneof" json:"always_include_for_current_context,omitempty"`
+	AlwaysIncludeForCurrentContext *bool                               `protobuf:"varint,11,opt,name=always_include_for_current_context,json=alwaysIncludeForCurrentContext,proto3,oneof" json:"always_include_for_current_context,omitempty"` // TODO: Is that still part of property model?
 }
 
 func (x *GetPropertyResponse) Reset() {
@@ -467,8 +467,8 @@ type CreatePropertyRequest_SelectData_SelectOption struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name        string  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`                     // TODO: add validation (at least non-empty checks)
-	Description *string `protobuf:"bytes,2,opt,name=description,proto3,oneof" json:"description,omitempty"` // TODO: add validation, if needed
+	Name        string  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" validate:"required"` // @gotags: validate:"required"
+	Description *string `protobuf:"bytes,2,opt,name=description,proto3,oneof" json:"description,omitempty"` // TODO: validation needed?
 }
 
 func (x *CreatePropertyRequest_SelectData_SelectOption) Reset() {
