@@ -50,7 +50,7 @@ message CreatePropertyResponse {
 
 message GetPropertyRequest {
   string id = 1; // @gotags: validate:"uuid4"
-  ViewContext context = 2;
+  ViewContext context = 2; // TODO: Why is that here?
 }
 
 message GetPropertyResponse {
@@ -61,7 +61,7 @@ message GetPropertyResponse {
   string name = 4;
   optional string description = 5;
 
-  bool is_archived = 6;
+  bool is_archived = 6; //TODO: Is that still part of property model?
 
   // ID of set this Property should belong to
   optional string set_id = 8;
@@ -81,7 +81,7 @@ message GetPropertyResponse {
     }
   }
 
-  optional bool always_include_for_current_context = 11;
+  optional bool always_include_for_current_context = 11; // TODO: Is that still part of property model?
 }
 
 //

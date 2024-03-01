@@ -78,10 +78,36 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		return nil, err
 	}
 
-	return &pb.GetPropertyResponse{
+	var setID string
+	if property.SetID != nil {
+		setID = property.SetID.String()
+	}
+
+	response := &pb.GetPropertyResponse{
 		Id:          property.ID.String(),
-		Name:        property.Name,
+		SubjectType: property.SubjectType,
 		FieldType:   property.FieldType,
+
+		Name:        property.Name,
 		Description: &property.Description,
-	}, nil
+		SetId:       &setID,
+	}
+
+	switch {
+	case property.FieldTypeData.SelectData != nil:
+		response.FieldTypeData = &pb.GetPropertyResponse_SelectData_{
+			SelectData: &pb.GetPropertyResponse_SelectData{
+				AllowFreetext: &property.FieldTypeData.SelectData.AllowFreetext,
+				Options: hwutil.Map(property.FieldTypeData.SelectData.SelectOptions, func(option models.SelectOption) *pb.GetPropertyResponse_SelectData_SelectOption {
+					return &pb.GetPropertyResponse_SelectData_SelectOption{
+						Name:        option.Name,
+						Description: &option.Description,
+					}
+				}),
+			}}
+	case property.FieldTypeData.None != nil:
+		response.FieldTypeData = &pb.GetPropertyResponse_None{None: *property.FieldTypeData.None}
+	}
+
+	return response, nil
 }

@@ -98,7 +98,7 @@ func (a *PropertyAggregate) onSetIDUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	a.Property.SetID = setID
+	a.Property.SetID = &setID
 	return nil
 }
 func (a *PropertyAggregate) onAlwaysIncludeForCurrentContextUpdated(evt hwes.Event) error {

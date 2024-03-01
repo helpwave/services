@@ -15,9 +15,9 @@ type Property struct {
 	Name        string
 	Description string
 
-	SetID                          uuid.UUID
+	SetID                          *uuid.UUID
 	AlwaysIncludeForCurrentContext bool
-	FieldTypeData                  interface{}
+	FieldTypeData                  FieldTypeData
 }
 
 type FieldTypeData struct {
