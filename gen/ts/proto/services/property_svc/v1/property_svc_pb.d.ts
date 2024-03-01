@@ -168,6 +168,9 @@ export class GetPropertyRequest extends jspb.Message {
   getId(): string;
   setId(value: string): GetPropertyRequest;
 
+  getContext(): proto_services_property_svc_v1_types_pb.ViewContext;
+  setContext(value: proto_services_property_svc_v1_types_pb.ViewContext): GetPropertyRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPropertyRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetPropertyRequest): GetPropertyRequest.AsObject;
@@ -179,6 +182,7 @@ export class GetPropertyRequest extends jspb.Message {
 export namespace GetPropertyRequest {
   export type AsObject = {
     id: string,
+    context: proto_services_property_svc_v1_types_pb.ViewContext,
   }
 }
 
@@ -186,17 +190,14 @@ export class GetPropertyResponse extends jspb.Message {
   getId(): string;
   setId(value: string): GetPropertyResponse;
 
-  getName(): string;
-  setName(value: string): GetPropertyResponse;
-
-  getSubjectType(): string;
-  setSubjectType(value: string): GetPropertyResponse;
-
-  getSubjectId(): string;
-  setSubjectId(value: string): GetPropertyResponse;
+  getSubjectType(): proto_services_property_svc_v1_types_pb.SubjectType;
+  setSubjectType(value: proto_services_property_svc_v1_types_pb.SubjectType): GetPropertyResponse;
 
   getFieldType(): proto_services_property_svc_v1_types_pb.FieldType;
   setFieldType(value: proto_services_property_svc_v1_types_pb.FieldType): GetPropertyResponse;
+
+  getName(): string;
+  setName(value: string): GetPropertyResponse;
 
   getDescription(): string;
   setDescription(value: string): GetPropertyResponse;
@@ -205,13 +206,26 @@ export class GetPropertyResponse extends jspb.Message {
 
   getIsArchived(): boolean;
   setIsArchived(value: boolean): GetPropertyResponse;
-  hasIsArchived(): boolean;
-  clearIsArchived(): GetPropertyResponse;
 
-  getIsSoftRequired(): boolean;
-  setIsSoftRequired(value: boolean): GetPropertyResponse;
-  hasIsSoftRequired(): boolean;
-  clearIsSoftRequired(): GetPropertyResponse;
+  getSetId(): string;
+  setSetId(value: string): GetPropertyResponse;
+  hasSetId(): boolean;
+  clearSetId(): GetPropertyResponse;
+
+  getNone(): boolean;
+  setNone(value: boolean): GetPropertyResponse;
+
+  getSelectData(): GetPropertyResponse.SelectData | undefined;
+  setSelectData(value?: GetPropertyResponse.SelectData): GetPropertyResponse;
+  hasSelectData(): boolean;
+  clearSelectData(): GetPropertyResponse;
+
+  getAlwaysIncludeForCurrentContext(): boolean;
+  setAlwaysIncludeForCurrentContext(value: boolean): GetPropertyResponse;
+  hasAlwaysIncludeForCurrentContext(): boolean;
+  clearAlwaysIncludeForCurrentContext(): GetPropertyResponse;
+
+  getFieldTypeDataCase(): GetPropertyResponse.FieldTypeDataCase;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPropertyResponse.AsObject;
@@ -224,28 +238,98 @@ export class GetPropertyResponse extends jspb.Message {
 export namespace GetPropertyResponse {
   export type AsObject = {
     id: string,
-    name: string,
-    subjectType: string,
-    subjectId: string,
+    subjectType: proto_services_property_svc_v1_types_pb.SubjectType,
     fieldType: proto_services_property_svc_v1_types_pb.FieldType,
+    name: string,
     description?: string,
-    isArchived?: boolean,
-    isSoftRequired?: boolean,
+    isArchived: boolean,
+    setId?: string,
+    none: boolean,
+    selectData?: GetPropertyResponse.SelectData.AsObject,
+    alwaysIncludeForCurrentContext?: boolean,
+  }
+
+  export class SelectData extends jspb.Message {
+    getAllowFreetext(): boolean;
+    setAllowFreetext(value: boolean): SelectData;
+    hasAllowFreetext(): boolean;
+    clearAllowFreetext(): SelectData;
+
+    getOptionsList(): Array<GetPropertyResponse.SelectData.SelectOption>;
+    setOptionsList(value: Array<GetPropertyResponse.SelectData.SelectOption>): SelectData;
+    clearOptionsList(): SelectData;
+    addOptions(value?: GetPropertyResponse.SelectData.SelectOption, index?: number): GetPropertyResponse.SelectData.SelectOption;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SelectData.AsObject;
+    static toObject(includeInstance: boolean, msg: SelectData): SelectData.AsObject;
+    static serializeBinaryToWriter(message: SelectData, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SelectData;
+    static deserializeBinaryFromReader(message: SelectData, reader: jspb.BinaryReader): SelectData;
+  }
+
+  export namespace SelectData {
+    export type AsObject = {
+      allowFreetext?: boolean,
+      optionsList: Array<GetPropertyResponse.SelectData.SelectOption.AsObject>,
+    }
+
+    export class SelectOption extends jspb.Message {
+      getName(): string;
+      setName(value: string): SelectOption;
+
+      getDescription(): string;
+      setDescription(value: string): SelectOption;
+      hasDescription(): boolean;
+      clearDescription(): SelectOption;
+
+      serializeBinary(): Uint8Array;
+      toObject(includeInstance?: boolean): SelectOption.AsObject;
+      static toObject(includeInstance: boolean, msg: SelectOption): SelectOption.AsObject;
+      static serializeBinaryToWriter(message: SelectOption, writer: jspb.BinaryWriter): void;
+      static deserializeBinary(bytes: Uint8Array): SelectOption;
+      static deserializeBinaryFromReader(message: SelectOption, reader: jspb.BinaryReader): SelectOption;
+    }
+
+    export namespace SelectOption {
+      export type AsObject = {
+        name: string,
+        description?: string,
+      }
+
+      export enum DescriptionCase { 
+        _DESCRIPTION_NOT_SET = 0,
+        DESCRIPTION = 2,
+      }
+    }
+
+
+    export enum AllowFreetextCase { 
+      _ALLOW_FREETEXT_NOT_SET = 0,
+      ALLOW_FREETEXT = 1,
+    }
+  }
+
+
+  export enum FieldTypeDataCase { 
+    FIELD_TYPE_DATA_NOT_SET = 0,
+    NONE = 9,
+    SELECT_DATA = 10,
   }
 
   export enum DescriptionCase { 
     _DESCRIPTION_NOT_SET = 0,
-    DESCRIPTION = 6,
+    DESCRIPTION = 5,
   }
 
-  export enum IsArchivedCase { 
-    _IS_ARCHIVED_NOT_SET = 0,
-    IS_ARCHIVED = 7,
+  export enum SetIdCase { 
+    _SET_ID_NOT_SET = 0,
+    SET_ID = 8,
   }
 
-  export enum IsSoftRequiredCase { 
-    _IS_SOFT_REQUIRED_NOT_SET = 0,
-    IS_SOFT_REQUIRED = 8,
+  export enum AlwaysIncludeForCurrentContextCase { 
+    _ALWAYS_INCLUDE_FOR_CURRENT_CONTEXT_NOT_SET = 0,
+    ALWAYS_INCLUDE_FOR_CURRENT_CONTEXT = 11,
   }
 }
 

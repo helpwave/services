@@ -81,7 +81,6 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 	return &pb.GetPropertyResponse{
 		Id:          property.ID.String(),
 		Name:        property.Name,
-		SubjectType: property.SubjectType.String(),
 		FieldType:   property.FieldType,
 		Description: &property.Description,
 	}, nil

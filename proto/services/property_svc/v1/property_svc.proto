@@ -49,19 +49,39 @@ message CreatePropertyResponse {
 //
 
 message GetPropertyRequest {
-  string id = 1;
+  string id = 1; // @gotags: validate:"uuid4"
+  ViewContext context = 2;
 }
 
 message GetPropertyResponse {
   string id = 1;
-  string name = 2;
-  string subject_type = 3;
-  string subject_id = 4;
-  FieldType field_type = 5;
+  SubjectType subject_type = 2;
+  FieldType field_type = 3;
 
-  optional string description = 6;
-  optional bool is_archived = 7;
-  optional bool is_soft_required = 8;
+  string name = 4;
+  optional string description = 5;
+
+  bool is_archived = 6;
+
+  // ID of set this Property should belong to
+  optional string set_id = 8;
+
+  oneof field_type_data {
+    bool none = 9;
+    SelectData select_data = 10;
+  }
+
+  message SelectData {
+    optional bool allow_freetext = 1;
+    repeated SelectOption options = 2;
+
+    message SelectOption {
+      string name = 1;
+      optional string description = 2;
+    }
+  }
+
+  optional bool always_include_for_current_context = 11;
 }
 
 //
