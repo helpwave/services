@@ -44,9 +44,13 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 			selectData = &models.SelectData{
 				AllowFreetext: val.GetAllowFreetext(),
 				SelectOptions: hwutil.Map(val.Options, func(option *pb.CreatePropertyRequest_SelectData_SelectOption) models.SelectOption {
+					var description string
+					if option.Description != nil {
+						description = *option.Description
+					}
 					return models.SelectOption{
 						Name:        option.Name,
-						Description: *option.Description,
+						Description: description,
 					}
 				}),
 			}
