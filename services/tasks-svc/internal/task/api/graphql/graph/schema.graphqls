@@ -1,0 +1,27 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type Task {
+	id: UUID!
+	name: String!
+	description: String!
+	subtasks: [Subtask!]!
+}
+
+type Subtask {
+	id: UUID!
+	name: String!
+	done: Boolean!
+}
+
+type Query {
+	task(id: UUID!): Task!
+  	tasks: [Task!]!
+}
+
+schema {
+	query: Query
+}
+
+scalar UUID

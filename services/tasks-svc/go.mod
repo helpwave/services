@@ -14,10 +14,12 @@ replace (
 require (
 	common v0.0.0
 	gen v0.0.0
+	github.com/99designs/gqlgen v0.17.44
 	github.com/EventStore/EventStore-Client-Go v1.0.2
 	github.com/dapr/go-sdk v1.9.1
 	github.com/google/uuid v1.6.0
 	github.com/rs/zerolog v1.32.0
+	github.com/vektah/gqlparser/v2 v2.5.11
 	google.golang.org/grpc v1.61.1
 	google.golang.org/protobuf v1.32.0
 	hwes v0.0.0
@@ -26,6 +28,7 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.3.2 // indirect
+	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
 	github.com/dapr/dapr v1.12.2 // indirect
@@ -39,15 +42,19 @@ require (
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
+	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.0 // indirect
+	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/mitchellh/mapstructure v1.5.1-0.20220423185008-bf980b35cac4 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.4.0 // indirect
 	github.com/openzipkin/zipkin-go v0.4.2 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
+	github.com/sosodev/duration v1.2.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.46.1 // indirect
 	go.opentelemetry.io/otel v1.23.1 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.23.1 // indirect
