@@ -72,6 +72,7 @@ jobs:
           password: ${{ github.token }}
 
       - name: Build
+        id: build
         uses: docker/build-push-action@v5
         with:
           context: images/${{ inputs.image }}
@@ -90,4 +91,4 @@ jobs:
       - name: Check manifest
         if: inputs.deploy
         run: |
-          docker buildx imagetools inspect ${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+          docker buildx imagetools inspect ${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
