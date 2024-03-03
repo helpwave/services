@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
+	"hwes"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 )
 
@@ -12,6 +13,10 @@ func (a *TaskAggregate) CreateTask(ctx context.Context, name string, patientID u
 	// Therefore, we are using the same ID
 	id := a.GetID()
 	event, err := taskEventsV1.NewTaskCreatedEvent(a, id, name, patientID, status)
+	if err != nil {
+		return err
+	}
+	event, err = hwes.EventWithUserID(ctx, event)
 	if err != nil {
 		return err
 	}

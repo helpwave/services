@@ -1,12 +1,15 @@
 package hwes
 
 import (
+	"common"
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/esdb"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
 	"strings"
+	"telemetry"
 	"time"
 )
 
@@ -18,6 +21,11 @@ type Event struct {
 	Data          []byte
 	Timestamp     time.Time
 	Version       uint64
+	UserID        *uuid.UUID
+}
+
+type metadata struct {
+	UserID string `json:"user_id"`
 }
 
 func NewEvent(aggregate Aggregate, eventType string) Event {
@@ -27,6 +35,7 @@ func NewEvent(aggregate Aggregate, eventType string) Event {
 		AggregateID:   aggregate.GetID(),
 		AggregateType: aggregate.GetType(),
 		Timestamp:     time.Now().UTC(),
+		UserID:        nil,
 	}
 }
 
@@ -37,6 +46,28 @@ func NewEventWithData(aggregate Aggregate, eventType string, data interface{}) (
 	if err := event.SetJsonData(&data); err != nil {
 		return Event{}, err
 	}
+	return event, nil
+}
+
+// EventWithUserID injects the UserID from the passed context via common.GetUserID().
+// If no UserID was injected, prior to this function call, an error will be returned.
+// Make sure to inject the UserID via a Middleware in the API layer.
+func EventWithUserID(ctx context.Context, event Event) (Event, error) {
+	ctx, span, _ := telemetry.StartSpan(ctx, "hwes.EventWithUserID")
+	defer span.End()
+
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return Event{}, err
+	}
+	event.UserID = &userID
+
+	// Just to make sure we are actually dealing with a valid UUID
+	if _, err := uuid.Parse(event.UserID.String()); err != nil {
+		return Event{}, err
+	}
+
+	telemetry.SetSpanStr(ctx, "userID", event.UserID.String())
 	return event, nil
 }
 
@@ -75,26 +106,38 @@ func resolveAggregateIDAndTypeFromStreamID(streamID string) (aggregateType Aggre
 // NewEventFromRecordedEvent is a helper function for EventStore.
 // This function transforms esdb.RecordedEvent to hwes.Event.
 // We expect that the StreamID of the aggregate is in the format of "[aggregateType]-[aggregateID]".
-func NewEventFromRecordedEvent(event *esdb.RecordedEvent) (Event, error) {
-	id, err := uuid.Parse(event.EventID.String())
+func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
+	id, err := uuid.Parse(esdbEvent.EventID.String())
 	if err != nil {
 		return Event{}, err
 	}
 
-	aggregateType, aggregateID, err := resolveAggregateIDAndTypeFromStreamID(event.StreamID)
+	aggregateType, aggregateID, err := resolveAggregateIDAndTypeFromStreamID(esdbEvent.StreamID)
 	if err != nil {
 		return Event{}, err
 	}
 
-	return Event{
+	md := metadata{}
+	if err := json.Unmarshal(esdbEvent.UserMetadata, &md); err != nil {
+		return Event{}, err
+	}
+
+	event := Event{
 		EventID:       id,
-		EventType:     event.EventType,
+		EventType:     esdbEvent.EventType,
 		AggregateID:   aggregateID,
 		AggregateType: aggregateType,
-		Data:          event.Data,
-		Timestamp:     event.CreatedDate,
-		Version:       event.EventNumber,
-	}, nil
+		Data:          esdbEvent.Data,
+		Timestamp:     esdbEvent.CreatedDate,
+		Version:       esdbEvent.EventNumber,
+	}
+
+	userID, err := uuid.Parse(md.UserID)
+	if err == nil {
+		event.UserID = &userID
+	}
+
+	return event, nil
 }
 
 func (e *Event) GetAggregateID() uuid.UUID {
@@ -120,10 +163,21 @@ func (e *Event) GetVersion() uint64 {
 }
 
 func (e *Event) ToEventData() esdb.EventData {
+	md := metadata{}
+	if e.UserID != nil {
+		md.UserID = e.UserID.String()
+	}
+
+	mdBytes, err := json.Marshal(md)
+	if err != nil {
+		// TODO: Handle
+	}
+
 	return esdb.EventData{
 		EventType:   e.EventType,
 		ContentType: esdb.JsonContentType,
 		Data:        e.Data,
+		Metadata:    mdBytes,
 	}
 }
 
@@ -151,8 +205,14 @@ func (e *Event) GetJsonData(data interface{}) error {
 //
 // zerolog.Ctx(ctx).Debug().Dict("event", event.GetZerologDict()).Msg("process event")
 func (e *Event) GetZerologDict() *zerolog.Event {
-	return zerolog.Dict().
+	dict := zerolog.Dict().
 		Str("eventId", e.EventID.String()).
 		Str("eventType", e.EventType).
 		Uint64("eventVersion", e.Version)
+
+	if e.UserID != nil {
+		dict.Str("userID", e.UserID.String())
+	}
+
+	return dict
 }
