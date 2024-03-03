@@ -7,4 +7,4 @@ spec:
     component: "kubernetes"
     configuration:
       # https://fly.io/docs/reference/private-networking/#fly-internal-addresses
-      template: "helpwave-staging-{{.ID}}.internal:{{.Port}}" # "helpwave-staging" will be replaced by the actual organization in fly-deploy.yaml
+      template: "helpwave-production-{{.ID}}.internal:{{.Port}}" # "helpwave-staging" will be replaced by the actual organization in fly-deploy.yaml

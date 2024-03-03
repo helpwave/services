@@ -1,6 +1,7 @@
 package aggregate_test
 
 import (
+	"common"
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
@@ -145,7 +146,7 @@ func TestTaskAggregate_CompleteSubtask(t *testing.T) {
 }
 
 func TestTaskAggregate_AssignTask(t *testing.T) {
-	ctx := context.Background()
+	ctx := common.ContextWithUserID(context.Background(), uuid.New())
 
 	taskID := uuid.New()
 	patientID := uuid.New()
