@@ -162,7 +162,7 @@ func (e *Event) GetVersion() uint64 {
 	return e.Version
 }
 
-func (e *Event) ToEventData() esdb.EventData {
+func (e *Event) ToEventData() (esdb.EventData, error) {
 	md := metadata{}
 	if e.UserID != nil {
 		md.UserID = e.UserID.String()
@@ -170,7 +170,7 @@ func (e *Event) ToEventData() esdb.EventData {
 
 	mdBytes, err := json.Marshal(md)
 	if err != nil {
-		// TODO: Handle
+		return esdb.EventData{}, err
 	}
 
 	return esdb.EventData{
@@ -178,7 +178,7 @@ func (e *Event) ToEventData() esdb.EventData {
 		ContentType: esdb.JsonContentType,
 		Data:        e.Data,
 		Metadata:    mdBytes,
-	}
+	}, nil
 }
 
 func (e *Event) SetData(data []byte) *Event {
