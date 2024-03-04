@@ -75,7 +75,7 @@ func NewPropertyAlwaysIncludeForCurrentContextUpdatedEvent(a hwes.Aggregate, alw
 }
 
 type PropertySubjectTypeUpdatedEvent struct {
-	SubjectType string `json:subject_type`
+	SubjectType string `json:"subject_type"`
 }
 
 func NewPropertySubjectTypeUpdatedEvent(a hwes.Aggregate, subjectType pb.SubjectType) (hwes.Event, error) {
@@ -86,7 +86,7 @@ func NewPropertySubjectTypeUpdatedEvent(a hwes.Aggregate, subjectType pb.Subject
 }
 
 type PropertyFieldTypeUpdatedEvent struct {
-	FieldType string `json:field_type`
+	FieldType string `json:"field_type"`
 }
 
 func NewPropertyFieldTypeUpdatedEvent(a hwes.Aggregate, fieldType pb.FieldType) (hwes.Event, error) {
@@ -97,7 +97,7 @@ func NewPropertyFieldTypeUpdatedEvent(a hwes.Aggregate, fieldType pb.FieldType) 
 }
 
 type PropertyNameUpdatedEvent struct {
-	Name string `json:name`
+	Name string `json:"name"`
 }
 
 func NewPropertyNameUpdatedEvent(a hwes.Aggregate, name string) (hwes.Event, error) {
@@ -108,7 +108,7 @@ func NewPropertyNameUpdatedEvent(a hwes.Aggregate, name string) (hwes.Event, err
 }
 
 type FieldTypeDataUpdatedEvent struct {
-	FieldTypeData models.FieldTypeData `json:field_type_data`
+	FieldTypeData models.FieldTypeData `json:"field_type_data"`
 }
 
 func NewFieldTypeDataUpadtedEvent(a hwes.Aggregate, fieldTypeData models.FieldTypeData) (hwes.Event, error) {
