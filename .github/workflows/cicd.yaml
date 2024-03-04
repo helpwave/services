@@ -62,6 +62,8 @@ jobs:
       - name: Aggregate changes
         id: aggregate-changes
         run: |
+          echo "images=$(echo $changesInImages | awk -F / '$1 ~ /images/ {print $2}' | uniq | grep -v dev-go-custom | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
+
           if [[ "$libsChanged" == "true" ]]; then
             # Exception for the Python "impulse_svc". Our workflows are very Golang opinionated.
             echo "services=$(ls services | grep -v 'impulse_svc' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
@@ -69,10 +71,11 @@ jobs:
             # Exception for "libs/proto_helpers" due to the fact that this package does not require any direct external packages.
             # If the CI runs "go get .", the command exits (1) with "go: .: no package to get in current directory".
             echo "libs=$(ls libs | grep -v -e 'python' -e 'proto_helpers' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
+
+            echo "images=$(ls images | grep -v dev-go-custom | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           else
             echo "services=$(echo $changesInServices | awk -F / '$1 ~ /services/ {print $2}' | uniq | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
           fi
-          echo "images=$(echo $changesInImages | awk -F / '$1 ~ /images/ {print $2}' | uniq | grep -v dev-go-custom | jq -R . | jq -sc .)" >> $GITHUB_OUTPUT
         env:
           libsChanged: ${{ steps.changes-in-libs.outputs.any_changed }}
           changesInServices: ${{ steps.changes-in-services.outputs.all_changed_files }}
