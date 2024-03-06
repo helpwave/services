@@ -168,9 +168,6 @@ export class GetPropertyRequest extends jspb.Message {
   getId(): string;
   setId(value: string): GetPropertyRequest;
 
-  getContext(): proto_services_property_svc_v1_types_pb.ViewContext;
-  setContext(value: proto_services_property_svc_v1_types_pb.ViewContext): GetPropertyRequest;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPropertyRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetPropertyRequest): GetPropertyRequest.AsObject;
@@ -182,8 +179,38 @@ export class GetPropertyRequest extends jspb.Message {
 export namespace GetPropertyRequest {
   export type AsObject = {
     id: string,
-    context: proto_services_property_svc_v1_types_pb.ViewContext,
   }
+
+  export class ViewSource extends jspb.Message {
+    getGlobal(): boolean;
+    setGlobal(value: boolean): ViewSource;
+
+    getWardId(): string;
+    setWardId(value: string): ViewSource;
+
+    getValueCase(): ViewSource.ValueCase;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): ViewSource.AsObject;
+    static toObject(includeInstance: boolean, msg: ViewSource): ViewSource.AsObject;
+    static serializeBinaryToWriter(message: ViewSource, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): ViewSource;
+    static deserializeBinaryFromReader(message: ViewSource, reader: jspb.BinaryReader): ViewSource;
+  }
+
+  export namespace ViewSource {
+    export type AsObject = {
+      global: boolean,
+      wardId: string,
+    }
+
+    export enum ValueCase { 
+      VALUE_NOT_SET = 0,
+      GLOBAL = 1,
+      WARD_ID = 2,
+    }
+  }
+
 }
 
 export class GetPropertyResponse extends jspb.Message {

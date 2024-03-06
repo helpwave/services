@@ -369,17 +369,94 @@ class CreatePropertyResponse extends $pb.GeneratedMessage {
   void clearPropertyId() => clearField(1);
 }
 
+enum GetPropertyRequest_ViewSource_Value {
+  global, 
+  wardId, 
+  notSet
+}
+
+/// The ViewSource describes from which View (global, ward, ...) the property is accesed from
+/// The attribute "always_include_for_current_context" depends on this ViewSource
+class GetPropertyRequest_ViewSource extends $pb.GeneratedMessage {
+  factory GetPropertyRequest_ViewSource({
+    $core.bool? global,
+    $core.String? wardId,
+  }) {
+    final $result = create();
+    if (global != null) {
+      $result.global = global;
+    }
+    if (wardId != null) {
+      $result.wardId = wardId;
+    }
+    return $result;
+  }
+  GetPropertyRequest_ViewSource._() : super();
+  factory GetPropertyRequest_ViewSource.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPropertyRequest_ViewSource.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static const $core.Map<$core.int, GetPropertyRequest_ViewSource_Value> _GetPropertyRequest_ViewSource_ValueByTag = {
+    1 : GetPropertyRequest_ViewSource_Value.global,
+    2 : GetPropertyRequest_ViewSource_Value.wardId,
+    0 : GetPropertyRequest_ViewSource_Value.notSet
+  };
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyRequest.ViewSource', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..oo(0, [1, 2])
+    ..aOB(1, _omitFieldNames ? '' : 'global')
+    ..aOS(2, _omitFieldNames ? '' : 'wardId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetPropertyRequest_ViewSource clone() => GetPropertyRequest_ViewSource()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetPropertyRequest_ViewSource copyWith(void Function(GetPropertyRequest_ViewSource) updates) => super.copyWith((message) => updates(message as GetPropertyRequest_ViewSource)) as GetPropertyRequest_ViewSource;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetPropertyRequest_ViewSource create() => GetPropertyRequest_ViewSource._();
+  GetPropertyRequest_ViewSource createEmptyInstance() => create();
+  static $pb.PbList<GetPropertyRequest_ViewSource> createRepeated() => $pb.PbList<GetPropertyRequest_ViewSource>();
+  @$core.pragma('dart2js:noInline')
+  static GetPropertyRequest_ViewSource getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPropertyRequest_ViewSource>(create);
+  static GetPropertyRequest_ViewSource? _defaultInstance;
+
+  GetPropertyRequest_ViewSource_Value whichValue() => _GetPropertyRequest_ViewSource_ValueByTag[$_whichOneof(0)]!;
+  void clearValue() => clearField($_whichOneof(0));
+
+  @$pb.TagNumber(1)
+  $core.bool get global => $_getBF(0);
+  @$pb.TagNumber(1)
+  set global($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasGlobal() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearGlobal() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get wardId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set wardId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasWardId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearWardId() => clearField(2);
+}
+
 class GetPropertyRequest extends $pb.GeneratedMessage {
   factory GetPropertyRequest({
     $core.String? id,
-    $14.ViewContext? context,
   }) {
     final $result = create();
     if (id != null) {
       $result.id = id;
-    }
-    if (context != null) {
-      $result.context = context;
     }
     return $result;
   }
@@ -389,7 +466,6 @@ class GetPropertyRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..e<$14.ViewContext>(2, _omitFieldNames ? '' : 'context', $pb.PbFieldType.OE, defaultOrMaker: $14.ViewContext.VIEW_CONTEXT_UNSPECIFIED, valueOf: $14.ViewContext.valueOf, enumValues: $14.ViewContext.values)
     ..hasRequiredFields = false
   ;
 
@@ -422,15 +498,6 @@ class GetPropertyRequest extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $14.ViewContext get context => $_getN(1);
-  @$pb.TagNumber(2)
-  set context($14.ViewContext v) { setField(2, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasContext() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearContext() => clearField(2);
 }
 
 class GetPropertyResponse_SelectData_SelectOption extends $pb.GeneratedMessage {

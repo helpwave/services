@@ -19,6 +19,7 @@ enum FieldType {
   FIELD_TYPE_SELECT = 6;
 }
 
+// TODO: Why do we need this if Properties are always on the organization-level/global?
 // TODO: View"Context" is too general of a name for this in my opinion
 enum ViewContext {
   VIEW_CONTEXT_UNSPECIFIED = 0;

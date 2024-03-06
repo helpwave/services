@@ -14,6 +14,7 @@ type Property struct {
 
 	Name        string
 	Description string
+	IsArchived  bool
 
 	SetID                          *uuid.UUID
 	AlwaysIncludeForCurrentContext bool

@@ -87,6 +87,10 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		setID = property.SetID.String()
 	}
 
+	// TODO: Implement the logic of what value alwaysIncludeForCurrentContext has, depending on the context given from req.context
+	// req.context can either be global or a ward_id
+	alwaysIncludeForCurrentContext := true
+
 	response := &pb.GetPropertyResponse{
 		Id:          property.ID.String(),
 		SubjectType: property.SubjectType,
@@ -94,7 +98,10 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 
 		Name:        property.Name,
 		Description: &property.Description,
-		SetId:       &setID,
+		IsArchived:  property.IsArchived,
+
+		SetId:                          &setID,
+		AlwaysIncludeForCurrentContext: &alwaysIncludeForCurrentContext,
 	}
 
 	switch {

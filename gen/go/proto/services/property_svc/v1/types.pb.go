@@ -127,6 +127,7 @@ func (FieldType) EnumDescriptor() ([]byte, []int) {
 	return file_proto_services_property_svc_v1_types_proto_rawDescGZIP(), []int{1}
 }
 
+// TODO: Why do we need this if Properties are always on the organization-level/global?
 // TODO: View"Context" is too general of a name for this in my opinion
 type ViewContext int32
 
