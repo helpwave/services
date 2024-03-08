@@ -48,7 +48,8 @@ func (a *PropertyAggregate) initEventListeners() {
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataNoneUpdated, a.onFieldTypeNoneUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsUpserted, a.onFieldTypeDataSelectOptionsUpserted)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsRemoved, a.onFieldTypeDataSelectOptionsRemoved)
-
+	a.RegisterEventListener(propertyEventsV1.PropertyArchived, a.onPropertyArchived)
+	a.RegisterEventListener(propertyEventsV1.PropertyRetrieved, a.onPropertyRetrieved)
 }
 
 // Event handlers
@@ -213,5 +214,15 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsRemoved(evt hwes.Event) 
 		})
 	}
 
+	return nil
+}
+
+func (a *PropertyAggregate) onPropertyArchived(evt hwes.Event) error {
+	a.Property.IsArchived = true
+	return nil
+}
+
+func (a *PropertyAggregate) onPropertyRetrieved(evt hwes.Event) error {
+	a.Property.IsArchived = false
 	return nil
 }

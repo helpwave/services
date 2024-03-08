@@ -9,10 +9,10 @@ import (
 	"property-svc/internal/property/models"
 )
 
-type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *uuid.UUID, allowFreetext *bool, none *bool, upsertOptions *[]models.SelectOption, removeOptions *[]string) error
+type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *uuid.UUID, allowFreetext *bool, none *bool, upsertOptions *[]models.SelectOption, removeOptions *[]string, isArchived *bool) error
 
 func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *uuid.UUID, allowFreetext *bool, none *bool, upsertOptions *[]models.SelectOption, removeOptions *[]string) error {
+	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *uuid.UUID, allowFreetext *bool, none *bool, upsertOptions *[]models.SelectOption, removeOptions *[]string, isArchived *bool) error {
 		a, err := aggregate.LoadPropertyAggregate(ctx, as, propertyID)
 		if err != nil {
 			return err
@@ -70,6 +70,18 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyComma
 			// TODO: check if remove options exist in aggregate SelectOptions?
 			if err := a.FieldTypeDataRemoveOptions(ctx, *removeOptions); err != nil {
 				return err
+			}
+		}
+
+		if isArchived != nil {
+			if *isArchived {
+				if err := a.ArchiveProperty(ctx); err != nil {
+					return err
+				}
+			} else {
+				if err := a.RetrieveProperty(ctx); err != nil {
+					return err
+				}
 			}
 		}
 

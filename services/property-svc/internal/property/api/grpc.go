@@ -47,7 +47,7 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 					description = *option.Description
 				}
 				return models.SelectOption{
-					ID: uuid.New().String(),
+					ID:          uuid.New().String(),
 					Name:        option.Name,
 					Description: description,
 				}
@@ -173,7 +173,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 		}
 	}
 
-	if err := commandsV1.NewUpdatePropertyCommandHandler(s.as)(ctx, propertyID, req.SubjectType, req.FieldType, req.Name, req.Description, setID, allowFreetext, none, upsertOptions, removeOptions); err != nil {
+	if err := commandsV1.NewUpdatePropertyCommandHandler(s.as)(ctx, propertyID, req.SubjectType, req.FieldType, req.Name, req.Description, setID, allowFreetext, none, upsertOptions, removeOptions, req.IsArchived); err != nil {
 		return nil, err
 	}
 

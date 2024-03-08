@@ -19,6 +19,8 @@ const (
 	PropertyFieldTypeDataAllowFreetextUpdated     = "PROPERTY_FIELD_TYPE_DATA_ALLOW_FREETEXT_UPDATED_v1"
 	PropertyFieldTypeDataSelectOptionsRemoved     = "PROPERTY_FIELD_TYPE_DATA_SELECT_OPTIONS_REMOVED_v1"
 	PropertyFieldTypeDataSelectOptionsUpserted    = "PROPERTY_FIELD_TYPE_DATA_SELECT_OPTIONS_UPSERTED_v1"
+	PropertyArchived                              = "PROPERTY_ARCHIVED_v1"
+	PropertyRetrieved                             = "PROPERTY_RETRIEVED_v1"
 )
 
 type PropertyCreatedEvent struct {
@@ -150,4 +152,12 @@ func NewFieldTypeDataSelectOptionsUpsertedEvent(a hwes.Aggregate, toBeAdded []mo
 		UpsertedSelectOptions: toBeAdded,
 	}
 	return hwes.NewEventWithData(a, PropertyFieldTypeDataSelectOptionsUpserted, payload)
+}
+
+func NewPropertyArchivedEvent(a hwes.Aggregate) (hwes.Event, error) {
+	return hwes.NewEvent(a, PropertyArchived), nil
+}
+
+func NewPropertyRetrievedEvent(a hwes.Aggregate) (hwes.Event, error) {
+	return hwes.NewEvent(a, PropertyRetrieved), nil
 }

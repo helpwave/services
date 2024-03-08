@@ -98,3 +98,13 @@ func (a *PropertyAggregate) FieldTypeDataRemoveOptions(ctx context.Context, remo
 	}
 	return a.Apply(event)
 }
+
+func (a *PropertyAggregate) ArchiveProperty(ctx context.Context) error {
+	event, _ := propertyEventsV1.NewPropertyArchivedEvent(a)
+	return a.Apply(event)
+}
+
+func (a *PropertyAggregate) RetrieveProperty(ctx context.Context) error {
+	event, _ := propertyEventsV1.NewPropertyRetrievedEvent(a)
+	return a.Apply(event)
+}
