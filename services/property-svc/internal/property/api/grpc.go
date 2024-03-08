@@ -34,26 +34,24 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 
 	var none *bool
 	var selectData *models.SelectData
-	switch req.FieldTypeData.(type) {
+
+	switch ftData := req.FieldTypeData.(type) {
 	case *pb.CreatePropertyRequest_None:
-		val := req.GetNone()
-		none = &val
+		none = &ftData.None
 	case *pb.CreatePropertyRequest_SelectData_:
-		val := req.GetSelectData()
-		if val != nil {
-			selectData = &models.SelectData{
-				AllowFreetext: val.GetAllowFreetext(),
-				SelectOptions: hwutil.Map(val.Options, func(option *pb.CreatePropertyRequest_SelectData_SelectOption) models.SelectOption {
-					var description string
-					if option.Description != nil {
-						description = *option.Description
-					}
-					return models.SelectOption{
-						Name:        option.Name,
-						Description: description,
-					}
-				}),
-			}
+		selectData = &models.SelectData{
+			AllowFreetext: ftData.SelectData.GetAllowFreetext(),
+			SelectOptions: hwutil.Map(ftData.SelectData.Options, func(option *pb.CreatePropertyRequest_SelectData_SelectOption) models.SelectOption {
+				var description string
+				if option.Description != nil {
+					description = *option.Description
+				}
+				return models.SelectOption{
+					//TODO: ID, will be added with #677,
+					Name:        option.Name,
+					Description: description,
+				}
+			}),
 		}
 	}
 
@@ -62,7 +60,7 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 		SelectData: selectData,
 	}
 
-	if err := commandsV1.NewCreatePropertyCommandHandler(s.as)(ctx, propertyID, req.GetContext(), req.GetSubjectType(), req.GetFieldType(), req.GetName(), req.Description, setID, req.AlwaysIncludeForCurrentContext, fieldTypeData); err != nil {
+	if err := commandsV1.NewCreatePropertyCommandHandler(s.as)(ctx, propertyID, req.GetSubjectType(), req.GetFieldType(), req.GetName(), req.Description, setID, req.AlwaysIncludeForCurrentContext, fieldTypeData); err != nil {
 		return nil, err
 	}
 
@@ -111,6 +109,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 				AllowFreetext: &property.FieldTypeData.SelectData.AllowFreetext,
 				Options: hwutil.Map(property.FieldTypeData.SelectData.SelectOptions, func(option models.SelectOption) *pb.GetPropertyResponse_SelectData_SelectOption {
 					return &pb.GetPropertyResponse_SelectData_SelectOption{
+						// TODO: ID whill be added with #744,
 						Name:        option.Name,
 						Description: &option.Description,
 					}

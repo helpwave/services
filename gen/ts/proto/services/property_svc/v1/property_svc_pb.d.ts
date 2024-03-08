@@ -4,9 +4,6 @@ import * as proto_services_property_svc_v1_types_pb from '../../../../proto/serv
 
 
 export class CreatePropertyRequest extends jspb.Message {
-  getContext(): proto_services_property_svc_v1_types_pb.ViewContext;
-  setContext(value: proto_services_property_svc_v1_types_pb.ViewContext): CreatePropertyRequest;
-
   getSubjectType(): proto_services_property_svc_v1_types_pb.SubjectType;
   setSubjectType(value: proto_services_property_svc_v1_types_pb.SubjectType): CreatePropertyRequest;
 
@@ -51,7 +48,6 @@ export class CreatePropertyRequest extends jspb.Message {
 
 export namespace CreatePropertyRequest {
   export type AsObject = {
-    context: proto_services_property_svc_v1_types_pb.ViewContext,
     subjectType: proto_services_property_svc_v1_types_pb.SubjectType,
     fieldType: proto_services_property_svc_v1_types_pb.FieldType,
     name: string,

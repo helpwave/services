@@ -282,7 +282,6 @@ proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.toObject = 
  */
 proto.proto.services.property_svc.v1.CreatePropertyRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    context: jspb.Message.getFieldWithDefault(msg, 1, 0),
     subjectType: jspb.Message.getFieldWithDefault(msg, 2, 0),
     fieldType: jspb.Message.getFieldWithDefault(msg, 3, 0),
     name: jspb.Message.getFieldWithDefault(msg, 4, ""),
@@ -327,10 +326,6 @@ proto.proto.services.property_svc.v1.CreatePropertyRequest.deserializeBinaryFrom
     }
     var field = reader.getFieldNumber();
     switch (field) {
-    case 1:
-      var value = /** @type {!proto.proto.services.property_svc.v1.ViewContext} */ (reader.readEnum());
-      msg.setContext(value);
-      break;
     case 2:
       var value = /** @type {!proto.proto.services.property_svc.v1.SubjectType} */ (reader.readEnum());
       msg.setSubjectType(value);
@@ -393,13 +388,6 @@ proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.serializeBi
  */
 proto.proto.services.property_svc.v1.CreatePropertyRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getContext();
-  if (f !== 0.0) {
-    writer.writeEnum(
-      1,
-      f
-    );
-  }
   f = message.getSubjectType();
   if (f !== 0.0) {
     writer.writeEnum(
@@ -843,24 +831,6 @@ proto.proto.services.property_svc.v1.CreatePropertyRequest.SelectData.prototype.
  */
 proto.proto.services.property_svc.v1.CreatePropertyRequest.SelectData.prototype.clearOptionsList = function() {
   return this.setOptionsList([]);
-};
-
-
-/**
- * optional ViewContext context = 1;
- * @return {!proto.proto.services.property_svc.v1.ViewContext}
- */
-proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.getContext = function() {
-  return /** @type {!proto.proto.services.property_svc.v1.ViewContext} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
-};
-
-
-/**
- * @param {!proto.proto.services.property_svc.v1.ViewContext} value
- * @return {!proto.proto.services.property_svc.v1.CreatePropertyRequest} returns this
- */
-proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.setContext = function(value) {
-  return jspb.Message.setProto3EnumField(this, 1, value);
 };
 
 

@@ -61,13 +61,6 @@ func (a *PropertyAggregate) onPropertyCreated(evt hwes.Event) error {
 	}
 	subjectType := (pb.SubjectType)(val)
 
-	val, found = pb.ViewContext_value[payload.ViewContext]
-	if !found {
-		return fmt.Errorf("invalid property viewContext: %s", payload.ViewContext)
-	}
-	viewContext := (pb.ViewContext)(val)
-
-	a.Property.ViewContext = viewContext
 	a.Property.SubjectType = subjectType
 	a.Property.FieldType = fieldType
 	a.Property.Name = payload.Name

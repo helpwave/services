@@ -147,7 +147,6 @@ enum CreatePropertyRequest_FieldTypeData {
 ///  CreateProperty
 class CreatePropertyRequest extends $pb.GeneratedMessage {
   factory CreatePropertyRequest({
-    $14.ViewContext? context,
     $14.SubjectType? subjectType,
     $14.FieldType? fieldType,
     $core.String? name,
@@ -158,9 +157,6 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
     CreatePropertyRequest_SelectData? selectData,
   }) {
     final $result = create();
-    if (context != null) {
-      $result.context = context;
-    }
     if (subjectType != null) {
       $result.subjectType = subjectType;
     }
@@ -198,7 +194,6 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [8, 9])
-    ..e<$14.ViewContext>(1, _omitFieldNames ? '' : 'context', $pb.PbFieldType.OE, defaultOrMaker: $14.ViewContext.VIEW_CONTEXT_UNSPECIFIED, valueOf: $14.ViewContext.valueOf, enumValues: $14.ViewContext.values)
     ..e<$14.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $14.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $14.SubjectType.valueOf, enumValues: $14.SubjectType.values)
     ..e<$14.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $14.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $14.FieldType.valueOf, enumValues: $14.FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
@@ -234,89 +229,80 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   CreatePropertyRequest_FieldTypeData whichFieldTypeData() => _CreatePropertyRequest_FieldTypeDataByTag[$_whichOneof(0)]!;
   void clearFieldTypeData() => clearField($_whichOneof(0));
 
-  @$pb.TagNumber(1)
-  $14.ViewContext get context => $_getN(0);
-  @$pb.TagNumber(1)
-  set context($14.ViewContext v) { setField(1, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasContext() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearContext() => clearField(1);
-
   @$pb.TagNumber(2)
-  $14.SubjectType get subjectType => $_getN(1);
+  $14.SubjectType get subjectType => $_getN(0);
   @$pb.TagNumber(2)
   set subjectType($14.SubjectType v) { setField(2, v); }
   @$pb.TagNumber(2)
-  $core.bool hasSubjectType() => $_has(1);
+  $core.bool hasSubjectType() => $_has(0);
   @$pb.TagNumber(2)
   void clearSubjectType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $14.FieldType get fieldType => $_getN(2);
+  $14.FieldType get fieldType => $_getN(1);
   @$pb.TagNumber(3)
   set fieldType($14.FieldType v) { setField(3, v); }
   @$pb.TagNumber(3)
-  $core.bool hasFieldType() => $_has(2);
+  $core.bool hasFieldType() => $_has(1);
   @$pb.TagNumber(3)
   void clearFieldType() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get name => $_getSZ(3);
+  $core.String get name => $_getSZ(2);
   @$pb.TagNumber(4)
-  set name($core.String v) { $_setString(3, v); }
+  set name($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(4)
-  $core.bool hasName() => $_has(3);
+  $core.bool hasName() => $_has(2);
   @$pb.TagNumber(4)
   void clearName() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get description => $_getSZ(4);
+  $core.String get description => $_getSZ(3);
   @$pb.TagNumber(5)
-  set description($core.String v) { $_setString(4, v); }
+  set description($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(5)
-  $core.bool hasDescription() => $_has(4);
+  $core.bool hasDescription() => $_has(3);
   @$pb.TagNumber(5)
   void clearDescription() => clearField(5);
 
   /// ID of set this Property should belong to
   @$pb.TagNumber(6)
-  $core.String get setId => $_getSZ(5);
+  $core.String get setId => $_getSZ(4);
   @$pb.TagNumber(6)
-  set setId($core.String v) { $_setString(5, v); }
+  set setId($core.String v) { $_setString(4, v); }
   @$pb.TagNumber(6)
-  $core.bool hasSetId() => $_has(5);
+  $core.bool hasSetId() => $_has(4);
   @$pb.TagNumber(6)
   void clearSetId() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.bool get alwaysIncludeForCurrentContext => $_getBF(6);
+  $core.bool get alwaysIncludeForCurrentContext => $_getBF(5);
   @$pb.TagNumber(7)
-  set alwaysIncludeForCurrentContext($core.bool v) { $_setBool(6, v); }
+  set alwaysIncludeForCurrentContext($core.bool v) { $_setBool(5, v); }
   @$pb.TagNumber(7)
-  $core.bool hasAlwaysIncludeForCurrentContext() => $_has(6);
+  $core.bool hasAlwaysIncludeForCurrentContext() => $_has(5);
   @$pb.TagNumber(7)
   void clearAlwaysIncludeForCurrentContext() => clearField(7);
 
   @$pb.TagNumber(8)
-  $core.bool get none => $_getBF(7);
+  $core.bool get none => $_getBF(6);
   @$pb.TagNumber(8)
-  set none($core.bool v) { $_setBool(7, v); }
+  set none($core.bool v) { $_setBool(6, v); }
   @$pb.TagNumber(8)
-  $core.bool hasNone() => $_has(7);
+  $core.bool hasNone() => $_has(6);
   @$pb.TagNumber(8)
   void clearNone() => clearField(8);
 
   @$pb.TagNumber(9)
-  CreatePropertyRequest_SelectData get selectData => $_getN(8);
+  CreatePropertyRequest_SelectData get selectData => $_getN(7);
   @$pb.TagNumber(9)
   set selectData(CreatePropertyRequest_SelectData v) { setField(9, v); }
   @$pb.TagNumber(9)
-  $core.bool hasSelectData() => $_has(8);
+  $core.bool hasSelectData() => $_has(7);
   @$pb.TagNumber(9)
   void clearSelectData() => clearField(9);
   @$pb.TagNumber(9)
-  CreatePropertyRequest_SelectData ensureSelectData() => $_ensure(8);
+  CreatePropertyRequest_SelectData ensureSelectData() => $_ensure(7);
 }
 
 class CreatePropertyResponse extends $pb.GeneratedMessage {

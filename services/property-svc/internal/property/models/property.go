@@ -8,7 +8,6 @@ import (
 
 type Property struct {
 	ID          uuid.UUID
-	ViewContext pb.ViewContext
 	SubjectType pb.SubjectType
 	FieldType   pb.FieldType
 
@@ -32,6 +31,7 @@ type SelectData struct {
 }
 
 type SelectOption struct {
+	// TODO: ID will be added with #744
 	Name        string
 	Description string
 }
