@@ -6,6 +6,7 @@ import (
 	pb "gen/proto/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
+	"hwutil"
 	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/models"
 )
@@ -43,7 +44,11 @@ func (a *PropertyAggregate) initEventListeners() {
 	a.RegisterEventListener(propertyEventsV1.PropertySubjectTypeUpdated, a.onSubjectTypeUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeUpdated, a.onFieldTypeUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, a.onNameUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataUpdated, a.onFieldTypeDataUpdated)
+	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, a.onAllowFreetextUpdated)
+	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataNoneUpdated, a.onFieldTypeNoneUpdated)
+	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsUpserted, a.onFieldTypeDataSelectOptionsUpserted)
+	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsRemoved, a.onFieldTypeDataSelectOptionsRemoved)
+
 }
 
 // Event handlers
@@ -158,12 +163,59 @@ func (a *PropertyAggregate) onNameUpdated(evt hwes.Event) error {
 	return nil
 }
 
-func (a *PropertyAggregate) onFieldTypeDataUpdated(evt hwes.Event) error {
-	var payload propertyEventsV1.FieldTypeDataUpdatedEvent
+func (a *PropertyAggregate) onAllowFreetextUpdated(evt hwes.Event) error {
+	var payload propertyEventsV1.FieldTypeDataAllowFreetextUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err
 	}
 
-	a.Property.FieldTypeData = payload.FieldTypeData
+	a.Property.FieldTypeData.SelectData.AllowFreetext = payload.NewAllowFreetext
+	return nil
+}
+
+func (a *PropertyAggregate) onFieldTypeNoneUpdated(evt hwes.Event) error {
+	var payload propertyEventsV1.FieldTypeDataNoneUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	a.Property.FieldTypeData = models.FieldTypeData{None: &payload.None}
+	return nil
+}
+
+func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event) error {
+	var payload propertyEventsV1.FieldTypeDataSelectOptionsUpsertedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	if a.Property.FieldTypeData.SelectData != nil {
+		a.Property.FieldTypeData.SelectData.SelectOptions = append(a.Property.FieldTypeData.SelectData.SelectOptions, payload.UpsertedSelectOptions...)
+	} else {
+		a.Property.FieldTypeData.SelectData = &models.SelectData{
+			SelectOptions: payload.UpsertedSelectOptions,
+		}
+	}
+
+	return nil
+}
+
+func (a *PropertyAggregate) onFieldTypeDataSelectOptionsRemoved(evt hwes.Event) error {
+	var payload propertyEventsV1.FieldTypeDataSelectOptionsRemovedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	if a.Property.FieldTypeData.SelectData != nil {
+		a.Property.FieldTypeData.SelectData.SelectOptions = hwutil.Filter(a.Property.FieldTypeData.SelectData.SelectOptions, func(selectOption models.SelectOption) bool {
+			for _, id := range payload.RemovedSelectOptions {
+				if selectOption.ID == id {
+					return false
+				}
+			}
+			return true
+		})
+	}
+
 	return nil
 }

@@ -67,8 +67,32 @@ func (a *PropertyAggregate) UpdateName(ctx context.Context, name string) error {
 	return a.Apply(event)
 }
 
-func (a *PropertyAggregate) UpdateFieldTypeData(ctx context.Context, fieldTypeData models.FieldTypeData) error {
-	event, err := propertyEventsV1.NewFieldTypeDataUpadtedEvent(a, fieldTypeData)
+func (a *PropertyAggregate) UpdateAllowFreetext(ctx context.Context, allowFreetext bool) error {
+	event, err := propertyEventsV1.NewFieldTypeDataAllowFreetextUpdatedEvent(a, allowFreetext)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *PropertyAggregate) FieldTypeDataNoneUpdated(ctx context.Context, none bool) error {
+	event, err := propertyEventsV1.NewFieldTypeDataNoneUpdatedEvent(a, none)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *PropertyAggregate) FieldTypeDataUpsertOptions(ctx context.Context, upsertOptions []models.SelectOption) error {
+	event, err := propertyEventsV1.NewFieldTypeDataSelectOptionsUpsertedEvent(a, upsertOptions)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *PropertyAggregate) FieldTypeDataRemoveOptions(ctx context.Context, removeOptions []string) error {
+	event, err := propertyEventsV1.NewFieldTypeDataSelectOptionsRemovedEvent(a, removeOptions)
 	if err != nil {
 		return err
 	}

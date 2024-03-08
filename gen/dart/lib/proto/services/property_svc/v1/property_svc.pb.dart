@@ -435,10 +435,14 @@ class GetPropertyRequest extends $pb.GeneratedMessage {
 
 class GetPropertyResponse_SelectData_SelectOption extends $pb.GeneratedMessage {
   factory GetPropertyResponse_SelectData_SelectOption({
+    $core.String? id,
     $core.String? name,
     $core.String? description,
   }) {
     final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
     if (name != null) {
       $result.name = name;
     }
@@ -452,8 +456,9 @@ class GetPropertyResponse_SelectData_SelectOption extends $pb.GeneratedMessage {
   factory GetPropertyResponse_SelectData_SelectOption.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyResponse.SelectData.SelectOption', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'name')
-    ..aOS(2, _omitFieldNames ? '' : 'description')
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'description')
     ..hasRequiredFields = false
   ;
 
@@ -479,22 +484,31 @@ class GetPropertyResponse_SelectData_SelectOption extends $pb.GeneratedMessage {
   static GetPropertyResponse_SelectData_SelectOption? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get name => $_getSZ(0);
+  $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String v) { $_setString(0, v); }
+  set id($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasName() => $_has(0);
+  $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearName() => clearField(1);
+  void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get description => $_getSZ(1);
+  $core.String get name => $_getSZ(1);
   @$pb.TagNumber(2)
-  set description($core.String v) { $_setString(1, v); }
+  set name($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasDescription() => $_has(1);
+  $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
-  void clearDescription() => clearField(2);
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get description => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set description($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDescription() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDescription() => clearField(3);
 }
 
 class GetPropertyResponse_SelectData extends $pb.GeneratedMessage {
@@ -754,7 +768,6 @@ class UpdatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    $core.bool? isCustom,
   }) {
     final $result = create();
     if (id != null) {
@@ -766,9 +779,6 @@ class UpdatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage
     if (description != null) {
       $result.description = description;
     }
-    if (isCustom != null) {
-      $result.isCustom = isCustom;
-    }
     return $result;
   }
   UpdatePropertyRequest_SelectData_SelectOption._() : super();
@@ -779,7 +789,6 @@ class UpdatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..aOB(4, _omitFieldNames ? '' : 'isCustom')
     ..hasRequiredFields = false
   ;
 
@@ -830,15 +839,6 @@ class UpdatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage
   $core.bool hasDescription() => $_has(2);
   @$pb.TagNumber(3)
   void clearDescription() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.bool get isCustom => $_getBF(3);
-  @$pb.TagNumber(4)
-  set isCustom($core.bool v) { $_setBool(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasIsCustom() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearIsCustom() => clearField(4);
 }
 
 class UpdatePropertyRequest_SelectData extends $pb.GeneratedMessage {

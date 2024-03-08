@@ -275,6 +275,9 @@ export namespace GetPropertyResponse {
     }
 
     export class SelectOption extends jspb.Message {
+      getId(): string;
+      setId(value: string): SelectOption;
+
       getName(): string;
       setName(value: string): SelectOption;
 
@@ -293,13 +296,14 @@ export namespace GetPropertyResponse {
 
     export namespace SelectOption {
       export type AsObject = {
+        id: string,
         name: string,
         description?: string,
       }
 
       export enum DescriptionCase { 
         _DESCRIPTION_NOT_SET = 0,
-        DESCRIPTION = 2,
+        DESCRIPTION = 3,
       }
     }
 
@@ -443,11 +447,6 @@ export namespace UpdatePropertyRequest {
       hasDescription(): boolean;
       clearDescription(): SelectOption;
 
-      getIsCustom(): boolean;
-      setIsCustom(value: boolean): SelectOption;
-      hasIsCustom(): boolean;
-      clearIsCustom(): SelectOption;
-
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SelectOption.AsObject;
       static toObject(includeInstance: boolean, msg: SelectOption): SelectOption.AsObject;
@@ -461,7 +460,6 @@ export namespace UpdatePropertyRequest {
         id: string,
         name?: string,
         description?: string,
-        isCustom?: boolean,
       }
 
       export enum NameCase { 
@@ -472,11 +470,6 @@ export namespace UpdatePropertyRequest {
       export enum DescriptionCase { 
         _DESCRIPTION_NOT_SET = 0,
         DESCRIPTION = 3,
-      }
-
-      export enum IsCustomCase { 
-        _IS_CUSTOM_NOT_SET = 0,
-        IS_CUSTOM = 4,
       }
     }
 

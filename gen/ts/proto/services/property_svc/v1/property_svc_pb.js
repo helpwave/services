@@ -1869,8 +1869,9 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
  */
 proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.toObject = function(includeInstance, msg) {
   var f, obj = {
-    name: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    description: jspb.Message.getFieldWithDefault(msg, 2, "")
+    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    description: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -1909,9 +1910,13 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setName(value);
+      msg.setId(value);
       break;
     case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setName(value);
+      break;
+    case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setDescription(value);
       break;
@@ -1944,17 +1949,24 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
  */
 proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getName();
+  f = message.getId();
   if (f.length > 0) {
     writer.writeString(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(message, 2));
-  if (f != null) {
+  f = message.getName();
+  if (f.length > 0) {
     writer.writeString(
       2,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 3));
+  if (f != null) {
+    writer.writeString(
+      3,
       f
     );
   }
@@ -1962,10 +1974,10 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
 
 
 /**
- * optional string name = 1;
+ * optional string id = 1;
  * @return {string}
  */
-proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.getName = function() {
+proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.getId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -1974,16 +1986,16 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
  * @param {string} value
  * @return {!proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption} returns this
  */
-proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.setName = function(value) {
+proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.setId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
 /**
- * optional string description = 2;
+ * optional string name = 2;
  * @return {string}
  */
-proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.getDescription = function() {
+proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.getName = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
@@ -1992,8 +2004,26 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
  * @param {string} value
  * @return {!proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption} returns this
  */
+proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.setName = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string description = 3;
+ * @return {string}
+ */
+proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.getDescription = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption} returns this
+ */
 proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.setDescription = function(value) {
-  return jspb.Message.setField(this, 2, value);
+  return jspb.Message.setField(this, 3, value);
 };
 
 
@@ -2002,7 +2032,7 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
  * @return {!proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption} returns this
  */
 proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.clearDescription = function() {
-  return jspb.Message.setField(this, 2, undefined);
+  return jspb.Message.setField(this, 3, undefined);
 };
 
 
@@ -2011,7 +2041,7 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
  * @return {boolean}
  */
 proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.hasDescription = function() {
-  return jspb.Message.getField(this, 2) != null;
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
@@ -2776,8 +2806,7 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOpti
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    description: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    isCustom: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
+    description: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -2826,10 +2855,6 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOpti
       var value = /** @type {string} */ (reader.readString());
       msg.setDescription(value);
       break;
-    case 4:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setIsCustom(value);
-      break;
     default:
       reader.skipField();
       break;
@@ -2877,13 +2902,6 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOpti
   if (f != null) {
     writer.writeString(
       3,
-      f
-    );
-  }
-  f = /** @type {boolean} */ (jspb.Message.getField(message, 4));
-  if (f != null) {
-    writer.writeBool(
-      4,
       f
     );
   }
@@ -2977,42 +2995,6 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOpti
  */
 proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption.prototype.hasDescription = function() {
   return jspb.Message.getField(this, 3) != null;
-};
-
-
-/**
- * optional bool is_custom = 4;
- * @return {boolean}
- */
-proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption.prototype.getIsCustom = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption} returns this
- */
-proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption.prototype.setIsCustom = function(value) {
-  return jspb.Message.setField(this, 4, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption} returns this
- */
-proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption.prototype.clearIsCustom = function() {
-  return jspb.Message.setField(this, 4, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption.prototype.hasIsCustom = function() {
-  return jspb.Message.getField(this, 4) != null;
 };
 
 

@@ -9,10 +9,10 @@ import (
 	"property-svc/internal/property/models"
 )
 
-type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *uuid.UUID, fieldTypeData *models.FieldTypeData) error
+type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *uuid.UUID, allowFreetext *bool, none *bool, upsertOptions *[]models.SelectOption, removeOptions *[]string) error
 
 func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *uuid.UUID, fieldTypeData *models.FieldTypeData) error {
+	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *uuid.UUID, allowFreetext *bool, none *bool, upsertOptions *[]models.SelectOption, removeOptions *[]string) error {
 		a, err := aggregate.LoadPropertyAggregate(ctx, as, propertyID)
 		if err != nil {
 			return err
@@ -48,8 +48,27 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyComma
 			}
 		}
 
-		if fieldTypeData != nil {
-			if err := a.UpdateFieldTypeData(ctx, *fieldTypeData); err != nil {
+		if allowFreetext != nil {
+			if err := a.UpdateAllowFreetext(ctx, *allowFreetext); err != nil {
+				return err
+			}
+		}
+
+		if none != nil {
+			if err := a.FieldTypeDataNoneUpdated(ctx, *none); err != nil {
+				return err
+			}
+		}
+
+		if upsertOptions != nil {
+			if err := a.FieldTypeDataUpsertOptions(ctx, *upsertOptions); err != nil {
+				return err
+			}
+		}
+
+		if removeOptions != nil {
+			// TODO: check if remove options exist in aggregate SelectOptions?
+			if err := a.FieldTypeDataRemoveOptions(ctx, *removeOptions); err != nil {
 				return err
 			}
 		}

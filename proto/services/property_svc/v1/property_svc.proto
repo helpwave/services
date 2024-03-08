@@ -75,8 +75,9 @@ message GetPropertyResponse {
     repeated SelectOption options = 2;
 
     message SelectOption {
-      string name = 1;
-      optional string description = 2;
+      string id = 1;
+      string name = 2;
+      optional string description = 3;
     }
   }
 
@@ -93,8 +94,8 @@ message UpdatePropertyRequest {
   optional SubjectType subject_type = 2;
   optional FieldType field_type = 3;
 
-  optional string name = 4; // TODO: validation
-  optional string description = 5; // TODO: validation
+  optional string name = 4;
+  optional string description = 5;
 
   optional bool is_archived = 6;
 
@@ -115,10 +116,9 @@ message UpdatePropertyRequest {
       string id = 1;
       optional string name = 2;
       optional string description = 3;
-      optional bool is_custom = 4;
+      // TODO: TBD: optional bool is_custom = 4; why is that only in updateProperty and not in createProperty?
     }
   }
-
 
   // TODO: TBD: optional bool always_include_for_current_context = 11;
 }

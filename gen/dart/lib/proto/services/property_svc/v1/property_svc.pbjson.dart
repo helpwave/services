@@ -149,8 +149,9 @@ const GetPropertyResponse_SelectData$json = {
 const GetPropertyResponse_SelectData_SelectOption$json = {
   '1': 'SelectOption',
   '2': [
-    {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'description', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'description', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
   ],
   '8': [
     {'1': '_description'},
@@ -168,13 +169,13 @@ final $typed_data.Uint8List getPropertyResponseDescriptor = $convert.base64Decod
     'EmEKC3NlbGVjdF9kYXRhGAogASgLMj4ucHJvdG8uc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLk'
     'dldFByb3BlcnR5UmVzcG9uc2UuU2VsZWN0RGF0YUgAUgpzZWxlY3REYXRhEk8KImFsd2F5c19p'
     'bmNsdWRlX2Zvcl9jdXJyZW50X2NvbnRleHQYCyABKAhIA1IeYWx3YXlzSW5jbHVkZUZvckN1cn'
-    'JlbnRDb250ZXh0iAEBGo0CCgpTZWxlY3REYXRhEioKDmFsbG93X2ZyZWV0ZXh0GAEgASgISABS'
+    'JlbnRDb250ZXh0iAEBGp0CCgpTZWxlY3REYXRhEioKDmFsbG93X2ZyZWV0ZXh0GAEgASgISABS'
     'DWFsbG93RnJlZXRleHSIAQESZQoHb3B0aW9ucxgCIAMoCzJLLnByb3RvLnNlcnZpY2VzLnByb3'
     'BlcnR5X3N2Yy52MS5HZXRQcm9wZXJ0eVJlc3BvbnNlLlNlbGVjdERhdGEuU2VsZWN0T3B0aW9u'
-    'UgdvcHRpb25zGlkKDFNlbGVjdE9wdGlvbhISCgRuYW1lGAEgASgJUgRuYW1lEiUKC2Rlc2NyaX'
-    'B0aW9uGAIgASgJSABSC2Rlc2NyaXB0aW9uiAEBQg4KDF9kZXNjcmlwdGlvbkIRCg9fYWxsb3df'
-    'ZnJlZXRleHRCEQoPZmllbGRfdHlwZV9kYXRhQg4KDF9kZXNjcmlwdGlvbkIJCgdfc2V0X2lkQi'
-    'UKI19hbHdheXNfaW5jbHVkZV9mb3JfY3VycmVudF9jb250ZXh0');
+    'UgdvcHRpb25zGmkKDFNlbGVjdE9wdGlvbhIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCV'
+    'IEbmFtZRIlCgtkZXNjcmlwdGlvbhgDIAEoCUgAUgtkZXNjcmlwdGlvbogBAUIOCgxfZGVzY3Jp'
+    'cHRpb25CEQoPX2FsbG93X2ZyZWV0ZXh0QhEKD2ZpZWxkX3R5cGVfZGF0YUIOCgxfZGVzY3JpcH'
+    'Rpb25CCQoHX3NldF9pZEIlCiNfYWx3YXlzX2luY2x1ZGVfZm9yX2N1cnJlbnRfY29udGV4dA==');
 
 @$core.Deprecated('Use updatePropertyRequestDescriptor instead')
 const UpdatePropertyRequest$json = {
@@ -223,12 +224,10 @@ const UpdatePropertyRequest_SelectData_SelectOption$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'name', '17': true},
     {'1': 'description', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'description', '17': true},
-    {'1': 'is_custom', '3': 4, '4': 1, '5': 8, '9': 2, '10': 'isCustom', '17': true},
   ],
   '8': [
     {'1': '_name'},
     {'1': '_description'},
-    {'1': '_is_custom'},
   ],
 };
 
@@ -242,16 +241,15 @@ final $typed_data.Uint8List updatePropertyRequestDescriptor = $convert.base64Dec
     'hpdmVkGAYgASgISAVSCmlzQXJjaGl2ZWSIAQESGgoGc2V0X2lkGAggASgJSAZSBXNldElkiAEB'
     'EhQKBG5vbmUYCSABKAhIAFIEbm9uZRJjCgtzZWxlY3RfZGF0YRgKIAEoCzJALnByb3RvLnNlcn'
     'ZpY2VzLnByb3BlcnR5X3N2Yy52MS5VcGRhdGVQcm9wZXJ0eVJlcXVlc3QuU2VsZWN0RGF0YUgA'
-    'UgpzZWxlY3REYXRhGpIDCgpTZWxlY3REYXRhEioKDmFsbG93X2ZyZWV0ZXh0GAEgASgISABSDW'
+    'UgpzZWxlY3REYXRhGuECCgpTZWxlY3REYXRhEioKDmFsbG93X2ZyZWV0ZXh0GAEgASgISABSDW'
     'FsbG93RnJlZXRleHSIAQESJQoOcmVtb3ZlX29wdGlvbnMYAiADKAlSDXJlbW92ZU9wdGlvbnMS'
     'dAoOdXBzZXJ0X29wdGlvbnMYAyADKAsyTS5wcm90by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudj'
     'EuVXBkYXRlUHJvcGVydHlSZXF1ZXN0LlNlbGVjdERhdGEuU2VsZWN0T3B0aW9uUg11cHNlcnRP'
-    'cHRpb25zGqcBCgxTZWxlY3RPcHRpb24SDgoCaWQYASABKAlSAmlkEhcKBG5hbWUYAiABKAlIAF'
-    'IEbmFtZYgBARIlCgtkZXNjcmlwdGlvbhgDIAEoCUgBUgtkZXNjcmlwdGlvbogBARIgCglpc19j'
-    'dXN0b20YBCABKAhIAlIIaXNDdXN0b22IAQFCBwoFX25hbWVCDgoMX2Rlc2NyaXB0aW9uQgwKCl'
-    '9pc19jdXN0b21CEQoPX2FsbG93X2ZyZWV0ZXh0QhEKD2ZpZWxkX3R5cGVfZGF0YUIPCg1fc3Vi'
-    'amVjdF90eXBlQg0KC19maWVsZF90eXBlQgcKBV9uYW1lQg4KDF9kZXNjcmlwdGlvbkIOCgxfaX'
-    'NfYXJjaGl2ZWRCCQoHX3NldF9pZA==');
+    'cHRpb25zGncKDFNlbGVjdE9wdGlvbhIOCgJpZBgBIAEoCVICaWQSFwoEbmFtZRgCIAEoCUgAUg'
+    'RuYW1liAEBEiUKC2Rlc2NyaXB0aW9uGAMgASgJSAFSC2Rlc2NyaXB0aW9uiAEBQgcKBV9uYW1l'
+    'Qg4KDF9kZXNjcmlwdGlvbkIRCg9fYWxsb3dfZnJlZXRleHRCEQoPZmllbGRfdHlwZV9kYXRhQg'
+    '8KDV9zdWJqZWN0X3R5cGVCDQoLX2ZpZWxkX3R5cGVCBwoFX25hbWVCDgoMX2Rlc2NyaXB0aW9u'
+    'Qg4KDF9pc19hcmNoaXZlZEIJCgdfc2V0X2lk');
 
 @$core.Deprecated('Use updatePropertyResponseDescriptor instead')
 const UpdatePropertyResponse$json = {

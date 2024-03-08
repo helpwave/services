@@ -31,6 +31,7 @@ type SelectData struct {
 }
 
 type SelectOption struct {
+	ID          string
 	Name        string
 	Description string
 }

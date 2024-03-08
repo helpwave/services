@@ -49,6 +49,7 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 						description = *option.Description
 					}
 					return models.SelectOption{
+						ID:          uuid.New().String(),
 						Name:        option.Name,
 						Description: description,
 					}
@@ -104,6 +105,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 				AllowFreetext: &property.FieldTypeData.SelectData.AllowFreetext,
 				Options: hwutil.Map(property.FieldTypeData.SelectData.SelectOptions, func(option models.SelectOption) *pb.GetPropertyResponse_SelectData_SelectOption {
 					return &pb.GetPropertyResponse_SelectData_SelectOption{
+						Id:          option.ID,
 						Name:        option.Name,
 						Description: &option.Description,
 					}
@@ -131,11 +133,40 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 		setID = &id
 	}
 
-	// TODO: fieldTypeData has to be updateable
-	// Adding and removing from options
+	var none *bool
+	var allowFreetext *bool
+	var removeOptions *[]string
+	var upsertOptions *[]models.SelectOption
 
-	// TODO: validation
-	if err := commandsV1.NewUpdatePropertyCommandHandler(s.as)(ctx, propertyID, req.SubjectType, req.FieldType, req.Name, req.Description, setID, &models.FieldTypeData{}); err != nil {
+	switch ftData := req.FieldTypeData.(type) {
+	case *pb.UpdatePropertyRequest_None:
+		none = &ftData.None
+	case *pb.UpdatePropertyRequest_SelectData_:
+		allowFreetext = ftData.SelectData.AllowFreetext
+		if ftData.SelectData.RemoveOptions != nil {
+			removeOptions = &ftData.SelectData.RemoveOptions
+		}
+		if ftData.SelectData.UpsertOptions != nil {
+			opt := hwutil.Map(ftData.SelectData.UpsertOptions, func(option *pb.UpdatePropertyRequest_SelectData_SelectOption) models.SelectOption {
+				var description string
+				var name string
+				if option.Description != nil {
+					description = *option.Description
+				}
+				if option.Name != nil {
+					name = *option.Name
+				}
+				return models.SelectOption{
+					ID:          uuid.New().String(),
+					Name:        name,
+					Description: description,
+				}
+			})
+			upsertOptions = &opt
+		}
+	}
+
+	if err := commandsV1.NewUpdatePropertyCommandHandler(s.as)(ctx, propertyID, req.SubjectType, req.FieldType, req.Name, req.Description, setID, allowFreetext, none, upsertOptions, removeOptions); err != nil {
 		return nil, err
 	}
 
