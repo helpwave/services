@@ -6,18 +6,15 @@ import "proto/services/property_svc/v1/types.proto";
 
 option go_package = "gen/proto/services/property-svc";
 
-// TODO: This proto is just an hello-world example and far from where it should be!
-
 //
 // CreateProperty
 //
 message CreatePropertyRequest {
-  ViewContext context = 1;
   SubjectType subject_type = 2; // @gotags: validate:"required"
   FieldType field_type = 3; // @gotags: validate:"required"
 
   string name = 4; // @gotags: validate:"required"
-  optional string description = 5; // TODO: validation needed?
+  optional string description = 5;
 
   // ID of set this Property should belong to
   optional string set_id = 6;
@@ -34,7 +31,7 @@ message CreatePropertyRequest {
     repeated SelectOption options = 2;
     message SelectOption {
       string name = 1; // @gotags: validate:"required"
-      optional string description = 2; // TODO: validation needed?
+      optional string description = 2;
     }
   }
 }
@@ -49,7 +46,14 @@ message CreatePropertyResponse {
 
 message GetPropertyRequest {
   string id = 1; // @gotags: validate:"uuid4"
-  ViewContext context = 2; // TODO: Why is that here?
+  // The ViewSource describes from which View (global, ward, ...) the property is accesed from
+  // The attribute "always_include_for_current_context" depends on this ViewSource
+  message ViewSource {
+    oneof value {
+      bool global = 1;
+      string ward_id = 2; // @gotags: validate:"uuid4"
+    }
+  }
 }
 
 message GetPropertyResponse {
@@ -60,7 +64,7 @@ message GetPropertyResponse {
   string name = 4;
   optional string description = 5;
 
-  bool is_archived = 6; //TODO: Is that still part of property model?
+  bool is_archived = 6;
 
   // ID of set this Property should belong to
   optional string set_id = 8;
@@ -81,7 +85,7 @@ message GetPropertyResponse {
     }
   }
 
-  optional bool always_include_for_current_context = 11; // TODO: Is that still part of property model?
+  optional bool always_include_for_current_context = 11; // This value is dependend on the ViewSource
 }
 
 //

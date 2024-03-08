@@ -24,7 +24,6 @@ const (
 type PropertyCreatedEvent struct {
 	ID string `json:"id"`
 
-	ViewContext string `json:"context"`
 	SubjectType string `json:"subject_type"`
 	FieldType   string `json:"field_type"`
 
@@ -32,10 +31,9 @@ type PropertyCreatedEvent struct {
 	FieldTypeData models.FieldTypeData `json:"field_type_data"`
 }
 
-func NewPropertyCreatedEvent(a hwes.Aggregate, id uuid.UUID, viewContext pb.ViewContext, subjectType pb.SubjectType, fieldType pb.FieldType, name string, fieldTypeData models.FieldTypeData) (hwes.Event, error) {
+func NewPropertyCreatedEvent(a hwes.Aggregate, id uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, fieldTypeData models.FieldTypeData) (hwes.Event, error) {
 	payload := PropertyCreatedEvent{
 		ID:            id.String(),
-		ViewContext:   viewContext.String(),
 		SubjectType:   subjectType.String(),
 		FieldType:     fieldType.String(),
 		Name:          name,

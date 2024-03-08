@@ -8,12 +8,12 @@ import (
 
 type Property struct {
 	ID          uuid.UUID
-	ViewContext pb.ViewContext
 	SubjectType pb.SubjectType
 	FieldType   pb.FieldType
 
 	Name        string
 	Description string
+	IsArchived  bool
 
 	SetID                          *uuid.UUID
 	AlwaysIncludeForCurrentContext bool

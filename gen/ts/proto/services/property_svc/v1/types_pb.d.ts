@@ -15,8 +15,3 @@ export enum FieldType {
   FIELD_TYPE_DATE_TIME = 5,
   FIELD_TYPE_SELECT = 6,
 }
-export enum ViewContext { 
-  VIEW_CONTEXT_UNSPECIFIED = 0,
-  VIEW_CONTEXT_GLOBAL = 1,
-  VIEW_CONTEXT_WARD = 2,
-}

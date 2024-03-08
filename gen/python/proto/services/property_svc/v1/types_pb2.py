@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*proto/services/property_svc/v1/types.proto\x12\x1eproto.services.property_svc.v1*E\n\x0bSubjectType\x12\x1c\n\x18SUBJECT_TYPE_UNSPECIFIED\x10\x00\x12\x18\n\x14SUBJECT_TYPE_PATIENT\x10\x01*\xb2\x01\n\tFieldType\x12\x1a\n\x16\x46IELD_TYPE_UNSPECIFIED\x10\x00\x12\x13\n\x0f\x46IELD_TYPE_TEXT\x10\x01\x12\x15\n\x11\x46IELD_TYPE_NUMBER\x10\x02\x12\x17\n\x13\x46IELD_TYPE_CHECKBOX\x10\x03\x12\x13\n\x0f\x46IELD_TYPE_DATE\x10\x04\x12\x18\n\x14\x46IELD_TYPE_DATE_TIME\x10\x05\x12\x15\n\x11\x46IELD_TYPE_SELECT\x10\x06*[\n\x0bViewContext\x12\x1c\n\x18VIEW_CONTEXT_UNSPECIFIED\x10\x00\x12\x17\n\x13VIEW_CONTEXT_GLOBAL\x10\x01\x12\x15\n\x11VIEW_CONTEXT_WARD\x10\x02\x42\xe8\x01\n\"com.proto.services.property_svc.v1B\nTypesProtoP\x01Z\x1fgen/proto/services/property-svc\xa2\x02\x03PSP\xaa\x02\x1dProto.Services.PropertySvc.V1\xca\x02\x1dProto\\Services\\PropertySvc\\V1\xe2\x02)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\xea\x02 Proto::Services::PropertySvc::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*proto/services/property_svc/v1/types.proto\x12\x1eproto.services.property_svc.v1*E\n\x0bSubjectType\x12\x1c\n\x18SUBJECT_TYPE_UNSPECIFIED\x10\x00\x12\x18\n\x14SUBJECT_TYPE_PATIENT\x10\x01*\xb2\x01\n\tFieldType\x12\x1a\n\x16\x46IELD_TYPE_UNSPECIFIED\x10\x00\x12\x13\n\x0f\x46IELD_TYPE_TEXT\x10\x01\x12\x15\n\x11\x46IELD_TYPE_NUMBER\x10\x02\x12\x17\n\x13\x46IELD_TYPE_CHECKBOX\x10\x03\x12\x13\n\x0f\x46IELD_TYPE_DATE\x10\x04\x12\x18\n\x14\x46IELD_TYPE_DATE_TIME\x10\x05\x12\x15\n\x11\x46IELD_TYPE_SELECT\x10\x06\x42\xe8\x01\n\"com.proto.services.property_svc.v1B\nTypesProtoP\x01Z\x1fgen/proto/services/property-svc\xa2\x02\x03PSP\xaa\x02\x1dProto.Services.PropertySvc.V1\xca\x02\x1dProto\\Services\\PropertySvc\\V1\xe2\x02)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\xea\x02 Proto::Services::PropertySvc::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -26,6 +26,4 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_SUBJECTTYPE']._serialized_end=147
   _globals['_FIELDTYPE']._serialized_start=150
   _globals['_FIELDTYPE']._serialized_end=328
-  _globals['_VIEWCONTEXT']._serialized_start=330
-  _globals['_VIEWCONTEXT']._serialized_end=421
 # @@protoc_insertion_point(module_scope)

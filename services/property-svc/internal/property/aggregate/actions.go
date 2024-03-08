@@ -8,11 +8,11 @@ import (
 	"property-svc/internal/property/models"
 )
 
-func (a *PropertyAggregate) CreateProperty(ctx context.Context, viewContext pb.ViewContext, subjectType pb.SubjectType, fieldType pb.FieldType, name string, fieldTypeData models.FieldTypeData) error {
+func (a *PropertyAggregate) CreateProperty(ctx context.Context, subjectType pb.SubjectType, fieldType pb.FieldType, name string, fieldTypeData models.FieldTypeData) error {
 
 	id := a.GetID()
 
-	event, err := propertyEventsV1.NewPropertyCreatedEvent(a, id, viewContext, subjectType, fieldType, name, fieldTypeData)
+	event, err := propertyEventsV1.NewPropertyCreatedEvent(a, id, subjectType, fieldType, name, fieldTypeData)
 	if err != nil {
 		return err
 	}
