@@ -53,6 +53,9 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 				}
 			}),
 		}
+	default:
+		defaultValue := true
+		none = &defaultValue
 	}
 
 	fieldTypeData := models.FieldTypeData{
