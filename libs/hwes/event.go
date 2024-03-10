@@ -25,7 +25,8 @@ type Event struct {
 }
 
 type metadata struct {
-	UserID string `json:"user_id"`
+	// CommitterId represents some sort of optional identity that is directly responsible for this event
+	CommitterID string `json:"committer_id"`
 }
 
 func NewEvent(aggregate Aggregate, eventType string) Event {
@@ -39,6 +40,15 @@ func NewEvent(aggregate Aggregate, eventType string) Event {
 	}
 }
 
+// NewEventWithUser will call hwes.NewEvent() and injects the UserID afterward into the event
+func NewEventWithUser(ctx context.Context, aggregate Aggregate, eventType string) (Event, error) {
+	event, err := InjectUserIDInEventFromContext(ctx, NewEvent(aggregate, eventType))
+	if err != nil {
+		return Event{}, err
+	}
+	return event, nil
+}
+
 // NewEventWithData will call hwes.NewEvent() with the passed aggregate and eventType
 // to marshall the data to json via hwes.Event.SetJsonData().
 func NewEventWithData(aggregate Aggregate, eventType string, data interface{}) (Event, error) {
@@ -49,10 +59,25 @@ func NewEventWithData(aggregate Aggregate, eventType string, data interface{}) (
 	return event, nil
 }
 
-// EventWithUserID injects the UserID from the passed context via common.GetUserID().
+// NewEventWithUserAndData will call hwes.NewEventWithData() and injects the UserID afterward into the event
+func NewEventWithUserAndData(ctx context.Context, aggregate Aggregate, eventType string, data interface{}) (Event, error) {
+	event, err := NewEventWithData(aggregate, eventType, data)
+	if err != nil {
+		return Event{}, err
+	}
+
+	event, err = InjectUserIDInEventFromContext(ctx, event)
+	if err != nil {
+		return Event{}, err
+	}
+
+	return event, err
+}
+
+// InjectUserIDInEventFromContext injects the UserID from the passed context via common.GetUserID().
 // If no UserID was injected, prior to this function call, an error will be returned.
 // Make sure to inject the UserID via a Middleware in the API layer.
-func EventWithUserID(ctx context.Context, event Event) (Event, error) {
+func InjectUserIDInEventFromContext(ctx context.Context, event Event) (Event, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwes.EventWithUserID")
 	defer span.End()
 
@@ -74,7 +99,7 @@ func EventWithUserID(ctx context.Context, event Event) (Event, error) {
 // resolveAggregateIDAndTypeFromStreamID extracts the aggregateType and aggregateID of a given streamID
 // See aggregate.GetTypeID
 //
-// # Example
+// Example:
 //
 // StreamID:		task-d9027be3-d00f-4eec-b50e-5f489df20433
 // AggregateType: 	task
@@ -132,9 +157,9 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 		Version:       esdbEvent.EventNumber,
 	}
 
-	userID, err := uuid.Parse(md.UserID)
+	eventCommitterID, err := uuid.Parse(md.CommitterID)
 	if err == nil {
-		event.UserID = &userID
+		event.UserID = &eventCommitterID
 	}
 
 	return event, nil
@@ -165,7 +190,7 @@ func (e *Event) GetVersion() uint64 {
 func (e *Event) ToEventData() (esdb.EventData, error) {
 	md := metadata{}
 	if e.UserID != nil {
-		md.UserID = e.UserID.String()
+		md.CommitterID = e.UserID.String()
 	}
 
 	mdBytes, err := json.Marshal(md)

@@ -15,7 +15,7 @@ func TestEventWithUserID(t *testing.T) {
 
 	ctx = common.ContextWithUserID(ctx, u)
 
-	e, err := hwes.EventWithUserID(ctx, e)
+	e, err := hwes.InjectUserIDInEventFromContext(ctx, e)
 	if err != nil {
 		t.Error(err)
 	}
