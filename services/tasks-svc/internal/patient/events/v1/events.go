@@ -1,8 +1,9 @@
 package v1
 
 import (
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
 )
 
 const (

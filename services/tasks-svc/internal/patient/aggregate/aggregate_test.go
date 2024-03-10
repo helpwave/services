@@ -1,11 +1,12 @@
 package aggregate_test
 
 import (
-	"github.com/google/uuid"
 	"hwes"
 	"tasks-svc/internal/patient/aggregate"
 	patientEventsV1 "tasks-svc/internal/patient/events/v1"
 	"testing"
+
+	"github.com/google/uuid"
 )
 
 func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwes.Event, error)) {
