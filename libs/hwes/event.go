@@ -3,7 +3,7 @@ package hwes
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/EventStore/EventStore-Client-Go/esdb"
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
 	"strings"
@@ -122,7 +122,7 @@ func (e *Event) GetVersion() uint64 {
 func (e *Event) ToEventData() esdb.EventData {
 	return esdb.EventData{
 		EventType:   e.EventType,
-		ContentType: esdb.JsonContentType,
+		ContentType: esdb.ContentTypeJson,
 		Data:        e.Data,
 	}
 }

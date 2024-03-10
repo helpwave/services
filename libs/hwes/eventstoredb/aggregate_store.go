@@ -3,7 +3,8 @@ package eventstoredb
 import (
 	"context"
 	"errors"
-	"github.com/EventStore/EventStore-Client-Go/esdb"
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	zlog "github.com/rs/zerolog/log"
 	"hwes"
 	"hwutil"
 	"io"
@@ -148,10 +149,16 @@ func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) err
 }
 
 func (a *AggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (bool, error) {
+	log := zlog.Ctx(ctx)
 	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.Revision(1)}
 	stream, err := a.es.ReadStream(ctx, aggregate.GetTypeID(), readOpts, 1)
 	if err != nil {
-		if errors.Is(err, esdb.ErrStreamNotFound) {
+		var esErr *esdb.Error
+		if !errors.As(err, &esErr) {
+			log.Warn().Err(err).Msg("non esdb.Error returned")
+			return false, err
+		}
+		if esErr.IsErrorCode(esdb.ErrorCodeResourceNotFound) {
 			return false, nil
 		} else {
 			return false, err
@@ -161,7 +168,12 @@ func (a *AggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (
 
 	_, err = stream.Recv()
 	if err != nil {
-		if errors.Is(err, esdb.ErrStreamNotFound) {
+		var esErr *esdb.Error
+		if !errors.As(err, &esErr) {
+			log.Warn().Err(err).Msg("non esdb.Error returned")
+			return false, err
+		}
+		if esErr.IsErrorCode(esdb.ErrorCodeResourceNotFound) {
 			return false, nil
 		} else {
 			return false, err
