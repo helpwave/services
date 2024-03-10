@@ -1,0 +1,6 @@
+ALTER TABLE patients
+	ADD COLUMN notes  text NOT NULL DEFAULT '',
+	ADD COLUMN bed_id uuid DEFAULT NULL,
+	ADD FOREIGN KEY (bed_id)
+		REFERENCES beds (id)
+		ON DELETE SET NULL;
