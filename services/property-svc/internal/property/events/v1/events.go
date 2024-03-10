@@ -49,9 +49,9 @@ type PropertySetIDUpdatedEvent struct {
 	SetID string `json:"set_id"`
 }
 
-func NewPropertySetIDUpdatedEvent(a hwes.Aggregate, setID uuid.UUID) (hwes.Event, error) {
+func NewPropertySetIDUpdatedEvent(a hwes.Aggregate, setID uuid.NullUUID) (hwes.Event, error) {
 	payload := PropertySetIDUpdatedEvent{
-		SetID: setID.String(),
+		SetID: setID.UUID.String(),
 	}
 	return hwes.NewEventWithData(a, PropertySetIDUpdated, payload)
 }

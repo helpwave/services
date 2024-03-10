@@ -23,13 +23,13 @@ func NewPropertyService(aggregateStore hwes.AggregateStore) *PropertyGrpcService
 func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.CreatePropertyRequest) (*pb.CreatePropertyResponse, error) {
 	propertyID := uuid.New()
 
-	var setID *uuid.UUID
+	var setID uuid.NullUUID
 	if req.SetId != nil {
 		id, err := uuid.Parse(req.GetSetId())
 		if err != nil {
 			return nil, err
 		}
-		setID = &id
+		setID = uuid.NullUUID{UUID: id, Valid: true}
 	}
 
 	var none *bool
@@ -83,10 +83,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		return nil, err
 	}
 
-	var setID string
-	if property.SetID != nil {
-		setID = property.SetID.String()
-	}
+	setID := hwutil.NullUUIDToStringPtr(property.SetID)
 
 	response := &pb.GetPropertyResponse{
 		Id:          property.ID.String(),
@@ -97,7 +94,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		Description: &property.Description,
 		IsArchived:  property.IsArchived,
 
-		SetId:                      &setID,
+		SetId:                      setID,
 		AlwaysIncludeForViewSource: nil, //TODO
 	}
 

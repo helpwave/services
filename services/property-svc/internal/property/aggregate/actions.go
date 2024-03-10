@@ -27,7 +27,7 @@ func (a *PropertyAggregate) UpdateDescription(ctx context.Context, newDescriptio
 	return a.Apply(event)
 }
 
-func (a *PropertyAggregate) UpdateSetID(ctx context.Context, newSetID uuid.UUID) error {
+func (a *PropertyAggregate) UpdateSetID(ctx context.Context, newSetID uuid.NullUUID) error {
 	event, err := propertyEventsV1.NewPropertySetIDUpdatedEvent(a, newSetID)
 	if err != nil {
 		return err

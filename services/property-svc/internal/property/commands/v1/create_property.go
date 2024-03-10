@@ -10,10 +10,10 @@ import (
 	"property-svc/internal/property/models"
 )
 
-type CreatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *uuid.UUID, fieldTypeData models.FieldTypeData) error
+type CreatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID uuid.NullUUID, fieldTypeData models.FieldTypeData) error
 
 func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *uuid.UUID, fieldTypeData models.FieldTypeData) error {
+	return func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID uuid.NullUUID, fieldTypeData models.FieldTypeData) error {
 		a := aggregate.NewPropertyAggregate(propertyID)
 
 		exists, err := as.Exists(ctx, a)
@@ -35,8 +35,8 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyComma
 			}
 		}
 
-		if setID != nil {
-			if err := a.UpdateSetID(ctx, *setID); err != nil {
+		if setID.Valid {
+			if err := a.UpdateSetID(ctx, setID); err != nil {
 				return err
 			}
 		}

@@ -15,7 +15,7 @@ type Property struct {
 	Description string
 	IsArchived  bool
 
-	SetID         *uuid.UUID
+	SetID         uuid.NullUUID
 	FieldTypeData FieldTypeData
 }
 
