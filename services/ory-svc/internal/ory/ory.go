@@ -14,12 +14,12 @@ var exampleOrganizationID = uuid.MustParse("3b25c6f5-4705-4074-9fc6-a50c28eba406
 
 func getConsentRequestForConsentChallenge(ctx context.Context, client *ory.APIClient, consentChallenge string) (*ory.OAuth2ConsentRequest, error) {
 	req := client.
-		OAuth2Api.
+		OAuth2API.
 		GetOAuth2ConsentRequest(ctx).
 		ConsentChallenge(consentChallenge)
 
 	res, _, err := client.
-		OAuth2Api.
+		OAuth2API.
 		GetOAuth2ConsentRequestExecute(req)
 
 	if err != nil {
@@ -29,8 +29,8 @@ func getConsentRequestForConsentChallenge(ctx context.Context, client *ory.APICl
 }
 
 func getIdentity(ctx context.Context, client *ory.APIClient, id string) (*ory.Identity, error) {
-	req := client.IdentityApi.GetIdentity(ctx, id)
-	res, _, err := client.IdentityApi.GetIdentityExecute(req)
+	req := client.IdentityAPI.GetIdentity(ctx, id)
+	res, _, err := client.IdentityAPI.GetIdentityExecute(req)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func acceptConsentRequest(
 	consentRequest *ory.OAuth2ConsentRequest,
 	idTokenClaims *common.IDTokenClaims,
 ) (*ory.OAuth2RedirectTo, error) {
-	req := client.OAuth2Api.AcceptOAuth2ConsentRequest(ctx).
+	req := client.OAuth2API.AcceptOAuth2ConsentRequest(ctx).
 		ConsentChallenge(consentChallenge).
 		AcceptOAuth2ConsentRequest(ory.AcceptOAuth2ConsentRequest{
 			GrantAccessTokenAudience: consentRequest.GetRequestedAccessTokenAudience(),
@@ -54,7 +54,7 @@ func acceptConsentRequest(
 			},
 		})
 
-	res, _, err := client.OAuth2Api.AcceptOAuth2ConsentRequestExecute(req)
+	res, _, err := client.OAuth2API.AcceptOAuth2ConsentRequestExecute(req)
 
 	if err != nil {
 		return nil, err
@@ -157,7 +157,7 @@ func UpdateIdentityMetadataPublic(ctx context.Context, oryClient *ory.APIClient,
 
 	// TODO: Increase overall resiliency to external endpoints
 
-	req := oryClient.IdentityApi.PatchIdentity(ctx, id.String())
+	req := oryClient.IdentityAPI.PatchIdentity(ctx, id.String())
 	_, _, err := req.JsonPatch([]ory.JsonPatch{
 		{
 			Op:    "replace",
