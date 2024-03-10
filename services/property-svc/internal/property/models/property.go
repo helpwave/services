@@ -15,9 +15,8 @@ type Property struct {
 	Description string
 	IsArchived  bool
 
-	SetID                          *uuid.UUID
-	AlwaysIncludeForCurrentContext bool
-	FieldTypeData                  FieldTypeData
+	SetID         *uuid.UUID
+	FieldTypeData FieldTypeData
 }
 
 type FieldTypeData struct {

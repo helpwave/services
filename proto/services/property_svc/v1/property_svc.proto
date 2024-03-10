@@ -19,8 +19,6 @@ message CreatePropertyRequest {
   // ID of set this Property should belong to
   optional string set_id = 6;
 
-  optional bool always_include_for_current_context = 7;
-
   oneof field_type_data {
     bool none = 8;
     SelectData select_data = 9;
@@ -46,7 +44,7 @@ message CreatePropertyResponse {
 
 message GetPropertyRequest {
   string id = 1; // @gotags: validate:"uuid4"
-  // The ViewSource describes from which View (global, ward, ...) the property is accesed from
+  // describes from which View (global, ward, ...) the property is accessed from
   // The attribute "always_include_for_current_context" depends on this ViewSource
   message ViewSource {
     oneof value {
@@ -66,7 +64,7 @@ message GetPropertyResponse {
 
   bool is_archived = 6;
 
-  // ID of set this Property should belong to
+  // id of set this Property should belong to
   optional string set_id = 8;
 
   oneof field_type_data {
@@ -84,7 +82,7 @@ message GetPropertyResponse {
     }
   }
 
-  optional bool always_include_for_current_context = 11; // This value is dependend on the ViewSource
+  optional bool always_include_for_view_source = 11; // This value is dependend on the ViewSource
 }
 
 //

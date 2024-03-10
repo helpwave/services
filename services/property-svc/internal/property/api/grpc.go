@@ -63,7 +63,7 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 		SelectData: selectData,
 	}
 
-	if err := commandsV1.NewCreatePropertyCommandHandler(s.as)(ctx, propertyID, req.GetSubjectType(), req.GetFieldType(), req.GetName(), req.Description, setID, req.AlwaysIncludeForCurrentContext, fieldTypeData); err != nil {
+	if err := commandsV1.NewCreatePropertyCommandHandler(s.as)(ctx, propertyID, req.GetSubjectType(), req.GetFieldType(), req.GetName(), req.Description, setID, fieldTypeData); err != nil {
 		return nil, err
 	}
 
@@ -88,10 +88,6 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		setID = property.SetID.String()
 	}
 
-	// TODO: Implement the logic of what value alwaysIncludeForCurrentContext has, depending on the context given from req.context
-	// req.context can either be global or a ward_id
-	alwaysIncludeForCurrentContext := true
-
 	response := &pb.GetPropertyResponse{
 		Id:          property.ID.String(),
 		SubjectType: property.SubjectType,
@@ -101,8 +97,8 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		Description: &property.Description,
 		IsArchived:  property.IsArchived,
 
-		SetId:                          &setID,
-		AlwaysIncludeForCurrentContext: &alwaysIncludeForCurrentContext,
+		SetId:                      &setID,
+		AlwaysIncludeForViewSource: nil, //TODO
 	}
 
 	switch {
@@ -112,7 +108,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 				AllowFreetext: &property.FieldTypeData.SelectData.AllowFreetext,
 				Options: hwutil.Map(property.FieldTypeData.SelectData.SelectOptions, func(option models.SelectOption) *pb.GetPropertyResponse_SelectData_SelectOption {
 					return &pb.GetPropertyResponse_SelectData_SelectOption{
-						// TODO: ID whill be added with #744,
+						// TODO: ID will be added with #744,
 						Name:        option.Name,
 						Description: &option.Description,
 					}

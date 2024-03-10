@@ -39,7 +39,6 @@ func (a *PropertyAggregate) initEventListeners() {
 	a.RegisterEventListener(propertyEventsV1.PropertyCreated, a.onPropertyCreated)
 	a.RegisterEventListener(propertyEventsV1.PropertyDescriptionUpdated, a.onDescriptionUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertySetIDUpdated, a.onSetIDUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertyAlwaysIncludeForCurrentContextUpdated, a.onAlwaysIncludeForCurrentContextUpdated)
 }
 
 // Event handlers
@@ -92,14 +91,5 @@ func (a *PropertyAggregate) onSetIDUpdated(evt hwes.Event) error {
 	}
 
 	a.Property.SetID = &setID
-	return nil
-}
-func (a *PropertyAggregate) onAlwaysIncludeForCurrentContextUpdated(evt hwes.Event) error {
-	var payload propertyEventsV1.PropertyAlwaysIncludeForCurrentContextUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
-		return err
-	}
-
-	a.Property.AlwaysIncludeForCurrentContext = payload.AlwaysIncludeForCurrentContext
 	return nil
 }

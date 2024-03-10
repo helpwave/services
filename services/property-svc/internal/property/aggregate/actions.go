@@ -34,11 +34,3 @@ func (a *PropertyAggregate) UpdateSetID(ctx context.Context, newSetID uuid.UUID)
 	}
 	return a.Apply(event)
 }
-
-func (a *PropertyAggregate) UpdateAlwaysIncludeForCurrentContext(ctx context.Context, alwaysIncludeForCurrentContext bool) error {
-	event, err := propertyEventsV1.NewPropertyAlwaysIncludeForCurrentContextUpdatedEvent(a, alwaysIncludeForCurrentContext)
-	if err != nil {
-		return err
-	}
-	return a.Apply(event)
-}

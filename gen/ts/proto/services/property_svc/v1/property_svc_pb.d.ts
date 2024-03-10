@@ -23,11 +23,6 @@ export class CreatePropertyRequest extends jspb.Message {
   hasSetId(): boolean;
   clearSetId(): CreatePropertyRequest;
 
-  getAlwaysIncludeForCurrentContext(): boolean;
-  setAlwaysIncludeForCurrentContext(value: boolean): CreatePropertyRequest;
-  hasAlwaysIncludeForCurrentContext(): boolean;
-  clearAlwaysIncludeForCurrentContext(): CreatePropertyRequest;
-
   getNone(): boolean;
   setNone(value: boolean): CreatePropertyRequest;
 
@@ -53,7 +48,6 @@ export namespace CreatePropertyRequest {
     name: string,
     description?: string,
     setId?: string,
-    alwaysIncludeForCurrentContext?: boolean,
     none: boolean,
     selectData?: CreatePropertyRequest.SelectData.AsObject,
   }
@@ -134,11 +128,6 @@ export namespace CreatePropertyRequest {
   export enum SetIdCase { 
     _SET_ID_NOT_SET = 0,
     SET_ID = 6,
-  }
-
-  export enum AlwaysIncludeForCurrentContextCase { 
-    _ALWAYS_INCLUDE_FOR_CURRENT_CONTEXT_NOT_SET = 0,
-    ALWAYS_INCLUDE_FOR_CURRENT_CONTEXT = 7,
   }
 }
 
@@ -243,10 +232,10 @@ export class GetPropertyResponse extends jspb.Message {
   hasSelectData(): boolean;
   clearSelectData(): GetPropertyResponse;
 
-  getAlwaysIncludeForCurrentContext(): boolean;
-  setAlwaysIncludeForCurrentContext(value: boolean): GetPropertyResponse;
-  hasAlwaysIncludeForCurrentContext(): boolean;
-  clearAlwaysIncludeForCurrentContext(): GetPropertyResponse;
+  getAlwaysIncludeForViewSource(): boolean;
+  setAlwaysIncludeForViewSource(value: boolean): GetPropertyResponse;
+  hasAlwaysIncludeForViewSource(): boolean;
+  clearAlwaysIncludeForViewSource(): GetPropertyResponse;
 
   getFieldTypeDataCase(): GetPropertyResponse.FieldTypeDataCase;
 
@@ -269,7 +258,7 @@ export namespace GetPropertyResponse {
     setId?: string,
     none: boolean,
     selectData?: GetPropertyResponse.SelectData.AsObject,
-    alwaysIncludeForCurrentContext?: boolean,
+    alwaysIncludeForViewSource?: boolean,
   }
 
   export class SelectData extends jspb.Message {
@@ -350,9 +339,9 @@ export namespace GetPropertyResponse {
     SET_ID = 8,
   }
 
-  export enum AlwaysIncludeForCurrentContextCase { 
-    _ALWAYS_INCLUDE_FOR_CURRENT_CONTEXT_NOT_SET = 0,
-    ALWAYS_INCLUDE_FOR_CURRENT_CONTEXT = 11,
+  export enum AlwaysIncludeForViewSourceCase { 
+    _ALWAYS_INCLUDE_FOR_VIEW_SOURCE_NOT_SET = 0,
+    ALWAYS_INCLUDE_FOR_VIEW_SOURCE = 11,
   }
 }
 

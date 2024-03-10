@@ -8,10 +8,9 @@ import (
 )
 
 const (
-	PropertyCreated                               = "PROPERTY_CREATED_v1"
-	PropertyDescriptionUpdated                    = "PROPERTY_DESCRIPTION_UPDATED_v1"
-	PropertySetIDUpdated                          = "PROPERTY_SET_ID_UPDATED_v1"
-	PropertyAlwaysIncludeForCurrentContextUpdated = "PROPERTY_ALWAYS_INCLUDE_FOR_CURRENT_CONTEXT_UPDATED_v1"
+	PropertyCreated            = "PROPERTY_CREATED_v1"
+	PropertyDescriptionUpdated = "PROPERTY_DESCRIPTION_UPDATED_v1"
+	PropertySetIDUpdated       = "PROPERTY_SET_ID_UPDATED_v1"
 )
 
 type PropertyCreatedEvent struct {
@@ -55,15 +54,4 @@ func NewPropertySetIDUpdatedEvent(a hwes.Aggregate, setID uuid.UUID) (hwes.Event
 		SetID: setID.String(),
 	}
 	return hwes.NewEventWithData(a, PropertySetIDUpdated, payload)
-}
-
-type PropertyAlwaysIncludeForCurrentContextUpdatedEvent struct {
-	AlwaysIncludeForCurrentContext bool `json:"always_include_for_current_context"`
-}
-
-func NewPropertyAlwaysIncludeForCurrentContextUpdatedEvent(a hwes.Aggregate, alwaysIncludeForCurrentContext bool) (hwes.Event, error) {
-	payload := PropertyAlwaysIncludeForCurrentContextUpdatedEvent{
-		AlwaysIncludeForCurrentContext: alwaysIncludeForCurrentContext,
-	}
-	return hwes.NewEventWithData(a, PropertyAlwaysIncludeForCurrentContextUpdated, payload)
 }
