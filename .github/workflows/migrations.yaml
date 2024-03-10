@@ -156,9 +156,18 @@ jobs:
         id: collect-version
         run: |
           echo -n "VERSION=" > $GITHUB_OUTPUT
+
           # for some reason, beyond my comprehension,
           # the output of migrate is sent to stderr in the CI, but stdout on local
-          ./migrate.sh $svc version 2>&1 | tail -n1 >> $GITHUB_OUTPUT
+          version_output=$(./migrate.sh $svc version 2>&1 | tail -n1)
+    
+          # Check if the version_output is a number
+          if [[ $version_output =~ ^[0-9]+$ ]]; then
+            echo $version_output >> $GITHUB_OUTPUT
+          else
+            echo "Error: Version is not a number: $version_output" >&2
+            echo "0" >> $GITHUB_OUTPUT
+          fi
       - name: Check version
         run: |
           ./migrate.sh $svc desired
@@ -184,34 +193,12 @@ jobs:
       - name: Verify schema.sql and models were generated properly before
         run: git diff --exit-code -- services/${{ matrix.service }} || (echo "You forgot to run ./models.sh before checking in" && exit 1)
       - name: Run DOWN migrations (1/2)
-        run: |
-          # for some reason, beyond my comprehension,
-          # the output of migrate is sent to stderr in the CI, but stdout on local
-          version_output=$(./migrate.sh $svc version 2>&1 | tail -n1)
-    
-          # Check if the version_output is a number
-          if [[ $version_output =~ ^[0-9]+$ ]]; then
-            echo $version_output >> "$VERSION"
-          else
-            echo "Error Version is not a number $version_output" >&2
-            echo "0" >> "$VERSION"
-          fi
+        run: ./migrate.sh $svc goto $VERSION
         env:
           VERSION: ${{ steps.collect-version.outputs.VERSION }}
       - name: Run UP migrations (2/2)
         run: ./migrate.sh $svc up
       - name: Run DOWN migrations (2/2)
-        run: |
-          # for some reason, beyond my comprehension,
-          # the output of migrate is sent to stderr in the CI, but stdout on local
-          version_output=$(./migrate.sh $svc version 2>&1 | tail -n1)
-        
-          # Check if the version_output is a number
-          if [[ $version_output =~ ^[0-9]+$ ]]; then
-            echo $version_output >> "$VERSION"
-          else
-            echo "Error Version is not a number $version_output" >&2
-            echo "0" >> "$VERSION"
-          fi
+        run: ./migrate.sh $svc goto $VERSION
         env:
           VERSION: ${{ steps.collect-version.outputs.VERSION }}
