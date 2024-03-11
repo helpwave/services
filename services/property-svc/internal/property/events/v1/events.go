@@ -50,8 +50,12 @@ type PropertySetIDUpdatedEvent struct {
 }
 
 func NewPropertySetIDUpdatedEvent(a hwes.Aggregate, setID uuid.NullUUID) (hwes.Event, error) {
+	sids := ""
+	if setID.Valid {
+		sids = setID.UUID.String()
+	}
 	payload := PropertySetIDUpdatedEvent{
-		SetID: setID.UUID.String(),
+		SetID: sids,
 	}
 	return hwes.NewEventWithData(a, PropertySetIDUpdated, payload)
 }

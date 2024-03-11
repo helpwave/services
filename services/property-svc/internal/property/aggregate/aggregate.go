@@ -6,6 +6,7 @@ import (
 	pb "gen/proto/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
+	"hwutil"
 	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/models"
 )
@@ -85,10 +86,9 @@ func (a *PropertyAggregate) onSetIDUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	var setID uuid.NullUUID
-	id, err := uuid.Parse(payload.SetID)
-	if err == nil {
-		setID = uuid.NullUUID{UUID: id, Valid: true}
+	setID, err := hwutil.ParseNullUUID(&payload.SetID)
+	if err != nil {
+		return err
 	}
 
 	a.Property.SetID = setID

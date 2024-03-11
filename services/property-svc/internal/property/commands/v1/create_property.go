@@ -35,10 +35,8 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyComma
 			}
 		}
 
-		if setID.Valid {
-			if err := a.UpdateSetID(ctx, setID); err != nil {
-				return err
-			}
+		if err := a.UpdateSetID(ctx, setID); err != nil {
+			return err
 		}
 
 		return as.Save(ctx, a)

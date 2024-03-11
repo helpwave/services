@@ -23,13 +23,9 @@ func NewPropertyService(aggregateStore hwes.AggregateStore) *PropertyGrpcService
 func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.CreatePropertyRequest) (*pb.CreatePropertyResponse, error) {
 	propertyID := uuid.New()
 
-	var setID uuid.NullUUID
-	if req.SetId != nil {
-		id, err := uuid.Parse(req.GetSetId())
-		if err != nil {
-			return nil, err
-		}
-		setID = uuid.NullUUID{UUID: id, Valid: true}
+	setID, err := hwutil.ParseNullUUID(req.SetId)
+	if err != nil {
+		return nil, err
 	}
 
 	var none *bool
