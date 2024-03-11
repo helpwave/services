@@ -120,13 +120,9 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 		return nil, err
 	}
 
-	var setID *uuid.UUID
-	if req.SetId != nil {
-		id, err := uuid.Parse(req.GetSetId())
-		if err != nil {
-			return nil, err
-		}
-		setID = &id
+	setID, err := hwutil.ParseNullUUID(req.SetId)
+	if err != nil {
+		return nil, err
 	}
 
 	var none *bool
