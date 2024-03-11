@@ -13,7 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'types.pbenum.dart' as $14;
+import 'types.pbenum.dart' as $15;
 
 class CreatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage {
   factory CreatePropertyRequest_SelectData_SelectOption({
@@ -147,12 +147,11 @@ enum CreatePropertyRequest_FieldTypeData {
 ///  CreateProperty
 class CreatePropertyRequest extends $pb.GeneratedMessage {
   factory CreatePropertyRequest({
-    $14.SubjectType? subjectType,
-    $14.FieldType? fieldType,
+    $15.SubjectType? subjectType,
+    $15.FieldType? fieldType,
     $core.String? name,
     $core.String? description,
     $core.String? setId,
-    $core.bool? alwaysIncludeForCurrentContext,
     $core.bool? none,
     CreatePropertyRequest_SelectData? selectData,
   }) {
@@ -171,9 +170,6 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
     }
     if (setId != null) {
       $result.setId = setId;
-    }
-    if (alwaysIncludeForCurrentContext != null) {
-      $result.alwaysIncludeForCurrentContext = alwaysIncludeForCurrentContext;
     }
     if (none != null) {
       $result.none = none;
@@ -194,12 +190,11 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [8, 9])
-    ..e<$14.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $14.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $14.SubjectType.valueOf, enumValues: $14.SubjectType.values)
-    ..e<$14.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $14.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $14.FieldType.valueOf, enumValues: $14.FieldType.values)
+    ..e<$15.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $15.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $15.SubjectType.valueOf, enumValues: $15.SubjectType.values)
+    ..e<$15.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $15.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $15.FieldType.valueOf, enumValues: $15.FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOS(6, _omitFieldNames ? '' : 'setId')
-    ..aOB(7, _omitFieldNames ? '' : 'alwaysIncludeForCurrentContext')
     ..aOB(8, _omitFieldNames ? '' : 'none')
     ..aOM<CreatePropertyRequest_SelectData>(9, _omitFieldNames ? '' : 'selectData', subBuilder: CreatePropertyRequest_SelectData.create)
     ..hasRequiredFields = false
@@ -230,18 +225,18 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   void clearFieldTypeData() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(2)
-  $14.SubjectType get subjectType => $_getN(0);
+  $15.SubjectType get subjectType => $_getN(0);
   @$pb.TagNumber(2)
-  set subjectType($14.SubjectType v) { setField(2, v); }
+  set subjectType($15.SubjectType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasSubjectType() => $_has(0);
   @$pb.TagNumber(2)
   void clearSubjectType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $14.FieldType get fieldType => $_getN(1);
+  $15.FieldType get fieldType => $_getN(1);
   @$pb.TagNumber(3)
-  set fieldType($14.FieldType v) { setField(3, v); }
+  set fieldType($15.FieldType v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasFieldType() => $_has(1);
   @$pb.TagNumber(3)
@@ -275,34 +270,25 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   void clearSetId() => clearField(6);
 
-  @$pb.TagNumber(7)
-  $core.bool get alwaysIncludeForCurrentContext => $_getBF(5);
-  @$pb.TagNumber(7)
-  set alwaysIncludeForCurrentContext($core.bool v) { $_setBool(5, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasAlwaysIncludeForCurrentContext() => $_has(5);
-  @$pb.TagNumber(7)
-  void clearAlwaysIncludeForCurrentContext() => clearField(7);
-
   @$pb.TagNumber(8)
-  $core.bool get none => $_getBF(6);
+  $core.bool get none => $_getBF(5);
   @$pb.TagNumber(8)
-  set none($core.bool v) { $_setBool(6, v); }
+  set none($core.bool v) { $_setBool(5, v); }
   @$pb.TagNumber(8)
-  $core.bool hasNone() => $_has(6);
+  $core.bool hasNone() => $_has(5);
   @$pb.TagNumber(8)
   void clearNone() => clearField(8);
 
   @$pb.TagNumber(9)
-  CreatePropertyRequest_SelectData get selectData => $_getN(7);
+  CreatePropertyRequest_SelectData get selectData => $_getN(6);
   @$pb.TagNumber(9)
   set selectData(CreatePropertyRequest_SelectData v) { setField(9, v); }
   @$pb.TagNumber(9)
-  $core.bool hasSelectData() => $_has(7);
+  $core.bool hasSelectData() => $_has(6);
   @$pb.TagNumber(9)
   void clearSelectData() => clearField(9);
   @$pb.TagNumber(9)
-  CreatePropertyRequest_SelectData ensureSelectData() => $_ensure(7);
+  CreatePropertyRequest_SelectData ensureSelectData() => $_ensure(6);
 }
 
 class CreatePropertyResponse extends $pb.GeneratedMessage {
@@ -361,7 +347,7 @@ enum GetPropertyRequest_ViewSource_Value {
   notSet
 }
 
-/// The ViewSource describes from which View (global, ward, ...) the property is accesed from
+/// describes from which View (global, ward, ...) the property is accessed from
 /// The attribute "always_include_for_current_context" depends on this ViewSource
 class GetPropertyRequest_ViewSource extends $pb.GeneratedMessage {
   factory GetPropertyRequest_ViewSource({
@@ -631,15 +617,15 @@ enum GetPropertyResponse_FieldTypeData {
 class GetPropertyResponse extends $pb.GeneratedMessage {
   factory GetPropertyResponse({
     $core.String? id,
-    $14.SubjectType? subjectType,
-    $14.FieldType? fieldType,
+    $15.SubjectType? subjectType,
+    $15.FieldType? fieldType,
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
     $core.String? setId,
     $core.bool? none,
     GetPropertyResponse_SelectData? selectData,
-    $core.bool? alwaysIncludeForCurrentContext,
+    $core.bool? alwaysIncludeForViewSource,
   }) {
     final $result = create();
     if (id != null) {
@@ -669,8 +655,8 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
     if (selectData != null) {
       $result.selectData = selectData;
     }
-    if (alwaysIncludeForCurrentContext != null) {
-      $result.alwaysIncludeForCurrentContext = alwaysIncludeForCurrentContext;
+    if (alwaysIncludeForViewSource != null) {
+      $result.alwaysIncludeForViewSource = alwaysIncludeForViewSource;
     }
     return $result;
   }
@@ -686,15 +672,15 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [9, 10])
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..e<$14.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $14.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $14.SubjectType.valueOf, enumValues: $14.SubjectType.values)
-    ..e<$14.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $14.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $14.FieldType.valueOf, enumValues: $14.FieldType.values)
+    ..e<$15.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $15.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $15.SubjectType.valueOf, enumValues: $15.SubjectType.values)
+    ..e<$15.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $15.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $15.FieldType.valueOf, enumValues: $15.FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
     ..aOS(8, _omitFieldNames ? '' : 'setId')
     ..aOB(9, _omitFieldNames ? '' : 'none')
     ..aOM<GetPropertyResponse_SelectData>(10, _omitFieldNames ? '' : 'selectData', subBuilder: GetPropertyResponse_SelectData.create)
-    ..aOB(11, _omitFieldNames ? '' : 'alwaysIncludeForCurrentContext')
+    ..aOB(11, _omitFieldNames ? '' : 'alwaysIncludeForViewSource')
     ..hasRequiredFields = false
   ;
 
@@ -732,18 +718,18 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $14.SubjectType get subjectType => $_getN(1);
+  $15.SubjectType get subjectType => $_getN(1);
   @$pb.TagNumber(2)
-  set subjectType($14.SubjectType v) { setField(2, v); }
+  set subjectType($15.SubjectType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasSubjectType() => $_has(1);
   @$pb.TagNumber(2)
   void clearSubjectType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $14.FieldType get fieldType => $_getN(2);
+  $15.FieldType get fieldType => $_getN(2);
   @$pb.TagNumber(3)
-  set fieldType($14.FieldType v) { setField(3, v); }
+  set fieldType($15.FieldType v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasFieldType() => $_has(2);
   @$pb.TagNumber(3)
@@ -776,7 +762,7 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   void clearIsArchived() => clearField(6);
 
-  /// ID of set this Property should belong to
+  /// id of set this Property should belong to
   @$pb.TagNumber(8)
   $core.String get setId => $_getSZ(6);
   @$pb.TagNumber(8)
@@ -807,13 +793,13 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   GetPropertyResponse_SelectData ensureSelectData() => $_ensure(8);
 
   @$pb.TagNumber(11)
-  $core.bool get alwaysIncludeForCurrentContext => $_getBF(9);
+  $core.bool get alwaysIncludeForViewSource => $_getBF(9);
   @$pb.TagNumber(11)
-  set alwaysIncludeForCurrentContext($core.bool v) { $_setBool(9, v); }
+  set alwaysIncludeForViewSource($core.bool v) { $_setBool(9, v); }
   @$pb.TagNumber(11)
-  $core.bool hasAlwaysIncludeForCurrentContext() => $_has(9);
+  $core.bool hasAlwaysIncludeForViewSource() => $_has(9);
   @$pb.TagNumber(11)
-  void clearAlwaysIncludeForCurrentContext() => clearField(11);
+  void clearAlwaysIncludeForViewSource() => clearField(11);
 }
 
 class UpdatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage {
@@ -969,8 +955,8 @@ enum UpdatePropertyRequest_FieldTypeData {
 class UpdatePropertyRequest extends $pb.GeneratedMessage {
   factory UpdatePropertyRequest({
     $core.String? id,
-    $14.SubjectType? subjectType,
-    $14.FieldType? fieldType,
+    $15.SubjectType? subjectType,
+    $15.FieldType? fieldType,
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
@@ -1020,8 +1006,8 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [9, 10])
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..e<$14.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $14.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $14.SubjectType.valueOf, enumValues: $14.SubjectType.values)
-    ..e<$14.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $14.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $14.FieldType.valueOf, enumValues: $14.FieldType.values)
+    ..e<$15.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $15.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $15.SubjectType.valueOf, enumValues: $15.SubjectType.values)
+    ..e<$15.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $15.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $15.FieldType.valueOf, enumValues: $15.FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
@@ -1065,18 +1051,18 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $14.SubjectType get subjectType => $_getN(1);
+  $15.SubjectType get subjectType => $_getN(1);
   @$pb.TagNumber(2)
-  set subjectType($14.SubjectType v) { setField(2, v); }
+  set subjectType($15.SubjectType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasSubjectType() => $_has(1);
   @$pb.TagNumber(2)
   void clearSubjectType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $14.FieldType get fieldType => $_getN(2);
+  $15.FieldType get fieldType => $_getN(2);
   @$pb.TagNumber(3)
-  set fieldType($14.FieldType v) { setField(3, v); }
+  set fieldType($15.FieldType v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasFieldType() => $_has(2);
   @$pb.TagNumber(3)

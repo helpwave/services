@@ -376,7 +376,6 @@ proto.proto.services.property_svc.v1.CreatePropertyRequest.toObject = function(i
     name: jspb.Message.getFieldWithDefault(msg, 4, ""),
     description: jspb.Message.getFieldWithDefault(msg, 5, ""),
     setId: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    alwaysIncludeForCurrentContext: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
     none: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
     selectData: (f = msg.getSelectData()) && proto.proto.services.property_svc.v1.CreatePropertyRequest.SelectData.toObject(includeInstance, f)
   };
@@ -434,10 +433,6 @@ proto.proto.services.property_svc.v1.CreatePropertyRequest.deserializeBinaryFrom
     case 6:
       var value = /** @type {string} */ (reader.readString());
       msg.setSetId(value);
-      break;
-    case 7:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setAlwaysIncludeForCurrentContext(value);
       break;
     case 8:
       var value = /** @type {boolean} */ (reader.readBool());
@@ -509,13 +504,6 @@ proto.proto.services.property_svc.v1.CreatePropertyRequest.serializeBinaryToWrit
   if (f != null) {
     writer.writeString(
       6,
-      f
-    );
-  }
-  f = /** @type {boolean} */ (jspb.Message.getField(message, 7));
-  if (f != null) {
-    writer.writeBool(
-      7,
       f
     );
   }
@@ -1046,42 +1034,6 @@ proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.clearSetId 
  */
 proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.hasSetId = function() {
   return jspb.Message.getField(this, 6) != null;
-};
-
-
-/**
- * optional bool always_include_for_current_context = 7;
- * @return {boolean}
- */
-proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.getAlwaysIncludeForCurrentContext = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 7, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.proto.services.property_svc.v1.CreatePropertyRequest} returns this
- */
-proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.setAlwaysIncludeForCurrentContext = function(value) {
-  return jspb.Message.setField(this, 7, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.proto.services.property_svc.v1.CreatePropertyRequest} returns this
- */
-proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.clearAlwaysIncludeForCurrentContext = function() {
-  return jspb.Message.setField(this, 7, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.hasAlwaysIncludeForCurrentContext = function() {
-  return jspb.Message.getField(this, 7) != null;
 };
 
 
@@ -1707,7 +1659,7 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.toObject = function(inc
     setId: jspb.Message.getFieldWithDefault(msg, 8, ""),
     none: jspb.Message.getBooleanFieldWithDefault(msg, 9, false),
     selectData: (f = msg.getSelectData()) && proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.toObject(includeInstance, f),
-    alwaysIncludeForCurrentContext: jspb.Message.getBooleanFieldWithDefault(msg, 11, false)
+    alwaysIncludeForViewSource: jspb.Message.getBooleanFieldWithDefault(msg, 11, false)
   };
 
   if (includeInstance) {
@@ -1783,7 +1735,7 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.deserializeBinaryFromRe
       break;
     case 11:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setAlwaysIncludeForCurrentContext(value);
+      msg.setAlwaysIncludeForViewSource(value);
       break;
     default:
       reader.skipField();
@@ -2540,10 +2492,10 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.hasSelectData
 
 
 /**
- * optional bool always_include_for_current_context = 11;
+ * optional bool always_include_for_view_source = 11;
  * @return {boolean}
  */
-proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.getAlwaysIncludeForCurrentContext = function() {
+proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.getAlwaysIncludeForViewSource = function() {
   return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 11, false));
 };
 
@@ -2552,7 +2504,7 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.getAlwaysIncl
  * @param {boolean} value
  * @return {!proto.proto.services.property_svc.v1.GetPropertyResponse} returns this
  */
-proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.setAlwaysIncludeForCurrentContext = function(value) {
+proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.setAlwaysIncludeForViewSource = function(value) {
   return jspb.Message.setField(this, 11, value);
 };
 
@@ -2561,7 +2513,7 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.setAlwaysIncl
  * Clears the field making it undefined.
  * @return {!proto.proto.services.property_svc.v1.GetPropertyResponse} returns this
  */
-proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.clearAlwaysIncludeForCurrentContext = function() {
+proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.clearAlwaysIncludeForViewSource = function() {
   return jspb.Message.setField(this, 11, undefined);
 };
 
@@ -2570,7 +2522,7 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.clearAlwaysIn
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.hasAlwaysIncludeForCurrentContext = function() {
+proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.hasAlwaysIncludeForViewSource = function() {
   return jspb.Message.getField(this, 11) != null;
 };
 

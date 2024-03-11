@@ -7,6 +7,10 @@
 # for now this only builds x86_64 images (TODO)
 FROM golang:1.22-bookworm
 
+# appearently this is not set by the go image
+ENV GOROOT="/usr/local/go"
+ENV PATH="$PATH:$GOROOT/bin"
+
 # update debian package list and packages, also install some
 RUN apt update \
     && apt upgrade \
@@ -29,7 +33,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
 # install buf
 #  https://buf.build/
 # renovate: datasource=github-releases depName=bufbuild/buf
-ENV BUF_VERSION=1.29.0
+ENV BUF_VERSION=1.30.0
 RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-Linux-x86_64 -O /usr/local/bin/buf \
     && chmod +x /usr/local/bin/buf
 
@@ -59,16 +63,16 @@ ENV HOME="/home/${UNAME}"
 # install air
 #  https://github.com/cosmtrek/air
 # renovate: datasource=github-releases depName=cosmtrek/air
-ENV AIR_VERSION=1.50.0
+ENV AIR_VERSION=1.51.0
 RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v${AIR_VERSION}
 
 # install dapr-cli
 #  https://docs.dapr.io/
 
 # renovate: datasource=github-releases depName=dapr/cli
-ENV DAPR_CLI_VERSION=1.12.0
+ENV DAPR_CLI_VERSION=1.13.0
 # renovate: datasource=github-releases depName=dapr/dapr
-ENV DAPR_RT_VERSION=1.12.5
+ENV DAPR_RT_VERSION=1.13.0
 
 ENV PATH="$PATH:$HOME/dapr"
 RUN mkdir "$HOME/dapr" \

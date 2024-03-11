@@ -36,7 +36,7 @@ services:
       - "6379:6379"
 
   jaeger:
-    image: jaegertracing/all-in-one:1.54
+    image: jaegertracing/all-in-one:1.55
     environment:
       COLLECTOR_OTLP_ENABLED: "true"
     ports:
@@ -69,7 +69,7 @@ services:
 
   # dapr sidecar for apisix
   apisix-dapr:
-    image: "daprio/daprd:1.12.5"
+    image: "daprio/daprd:1.13.0"
     restart: unless-stopped
     depends_on:
       - apisix
@@ -93,7 +93,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '2'
+        TAG: '3'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -126,7 +126,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '2'
+        TAG: '3'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:

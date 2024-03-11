@@ -9,7 +9,6 @@ import (
 )
 
 func (a *PropertyAggregate) CreateProperty(ctx context.Context, subjectType pb.SubjectType, fieldType pb.FieldType, name string, fieldTypeData models.FieldTypeData) error {
-
 	id := a.GetID()
 
 	event, err := propertyEventsV1.NewPropertyCreatedEvent(a, id, subjectType, fieldType, name, fieldTypeData)
@@ -27,22 +26,13 @@ func (a *PropertyAggregate) UpdateDescription(ctx context.Context, newDescriptio
 	return a.Apply(event)
 }
 
-func (a *PropertyAggregate) UpdateSetID(ctx context.Context, newSetID uuid.UUID) error {
+func (a *PropertyAggregate) UpdateSetID(ctx context.Context, newSetID uuid.NullUUID) error {
 	event, err := propertyEventsV1.NewPropertySetIDUpdatedEvent(a, newSetID)
 	if err != nil {
 		return err
 	}
 	return a.Apply(event)
 }
-
-func (a *PropertyAggregate) UpdateAlwaysIncludeForCurrentContext(ctx context.Context, alwaysIncludeForCurrentContext bool) error {
-	event, err := propertyEventsV1.NewPropertyAlwaysIncludeForCurrentContextUpdatedEvent(a, alwaysIncludeForCurrentContext)
-	if err != nil {
-		return err
-	}
-	return a.Apply(event)
-}
-
 func (a *PropertyAggregate) UpdateSubjectType(ctx context.Context, subjectType pb.SubjectType) error {
 	event, err := propertyEventsV1.NewPropertySubjectTypeUpdatedEvent(a, subjectType)
 	if err != nil {

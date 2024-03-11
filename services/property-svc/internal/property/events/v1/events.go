@@ -8,19 +8,18 @@ import (
 )
 
 const (
-	PropertyCreated                               = "PROPERTY_CREATED_v1"
-	PropertyDescriptionUpdated                    = "PROPERTY_DESCRIPTION_UPDATED_v1"
-	PropertySetIDUpdated                          = "PROPERTY_SET_ID_UPDATED_v1"
-	PropertyAlwaysIncludeForCurrentContextUpdated = "PROPERTY_ALWAYS_INCLUDE_FOR_CURRENT_CONTEXT_UPDATED_v1"
-	PropertySubjectTypeUpdated                    = "PROPERTY_SUBJECT_TYPE_UPDATED_v1"
-	PropertyFieldTypeUpdated                      = "PROPERTY_FIELD_TYPE_UPDATED_v1"
-	PropertyNameUpdated                           = "PROPERTY_NAME_UPDATED_v1"
-	PropertyFieldTypeDataNoneUpdated              = "PROPERTY_FIELD_TYPE_DATA_NONE_UPDATED_v1"
-	PropertyFieldTypeDataAllowFreetextUpdated     = "PROPERTY_FIELD_TYPE_DATA_ALLOW_FREETEXT_UPDATED_v1"
-	PropertyFieldTypeDataSelectOptionsRemoved     = "PROPERTY_FIELD_TYPE_DATA_SELECT_OPTIONS_REMOVED_v1"
-	PropertyFieldTypeDataSelectOptionsUpserted    = "PROPERTY_FIELD_TYPE_DATA_SELECT_OPTIONS_UPSERTED_v1"
-	PropertyArchived                              = "PROPERTY_ARCHIVED_v1"
-	PropertyRetrieved                             = "PROPERTY_RETRIEVED_v1"
+	PropertyCreated                            = "PROPERTY_CREATED_v1"
+	PropertyDescriptionUpdated                 = "PROPERTY_DESCRIPTION_UPDATED_v1"
+	PropertySetIDUpdated                       = "PROPERTY_SET_ID_UPDATED_v1"
+	PropertySubjectTypeUpdated                 = "PROPERTY_SUBJECT_TYPE_UPDATED_v1"
+	PropertyFieldTypeUpdated                   = "PROPERTY_FIELD_TYPE_UPDATED_v1"
+	PropertyNameUpdated                        = "PROPERTY_NAME_UPDATED_v1"
+	PropertyFieldTypeDataNoneUpdated           = "PROPERTY_FIELD_TYPE_DATA_NONE_UPDATED_v1"
+	PropertyFieldTypeDataAllowFreetextUpdated  = "PROPERTY_FIELD_TYPE_DATA_ALLOW_FREETEXT_UPDATED_v1"
+	PropertyFieldTypeDataSelectOptionsRemoved  = "PROPERTY_FIELD_TYPE_DATA_SELECT_OPTIONS_REMOVED_v1"
+	PropertyFieldTypeDataSelectOptionsUpserted = "PROPERTY_FIELD_TYPE_DATA_SELECT_OPTIONS_UPSERTED_v1"
+	PropertyArchived                           = "PROPERTY_ARCHIVED_v1"
+	PropertyRetrieved                          = "PROPERTY_RETRIEVED_v1"
 )
 
 type PropertyCreatedEvent struct {
@@ -59,22 +58,15 @@ type PropertySetIDUpdatedEvent struct {
 	SetID string `json:"set_id"`
 }
 
-func NewPropertySetIDUpdatedEvent(a hwes.Aggregate, setID uuid.UUID) (hwes.Event, error) {
+func NewPropertySetIDUpdatedEvent(a hwes.Aggregate, setID uuid.NullUUID) (hwes.Event, error) {
+	sids := ""
+	if setID.Valid {
+		sids = setID.UUID.String()
+	}
 	payload := PropertySetIDUpdatedEvent{
-		SetID: setID.String(),
+		SetID: sids,
 	}
 	return hwes.NewEventWithData(a, PropertySetIDUpdated, payload)
-}
-
-type PropertyAlwaysIncludeForCurrentContextUpdatedEvent struct {
-	AlwaysIncludeForCurrentContext bool `json:"always_include_for_current_context"`
-}
-
-func NewPropertyAlwaysIncludeForCurrentContextUpdatedEvent(a hwes.Aggregate, alwaysIncludeForCurrentContext bool) (hwes.Event, error) {
-	payload := PropertyAlwaysIncludeForCurrentContextUpdatedEvent{
-		AlwaysIncludeForCurrentContext: alwaysIncludeForCurrentContext,
-	}
-	return hwes.NewEventWithData(a, PropertyAlwaysIncludeForCurrentContextUpdated, payload)
 }
 
 type PropertySubjectTypeUpdatedEvent struct {

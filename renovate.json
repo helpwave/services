@@ -41,7 +41,7 @@
       "extractVersion": "^v?(?<version>.*)$"
     }
   ],
-  "ignoreDeps": ["common", "decaying_lru", "hwdb", "hwes", "hwutil", "hwgorm", "proto_helpers", "telemetry", "gen"],
+  "ignoreDeps": ["common", "decaying_lru", "hwdb", "hwes", "hwutil", "hwlocale", "telemetry", "gen"],
   "customManagers": [
     {
       "customType": "regex",

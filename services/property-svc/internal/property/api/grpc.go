@@ -23,13 +23,9 @@ func NewPropertyService(aggregateStore hwes.AggregateStore) *PropertyGrpcService
 func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.CreatePropertyRequest) (*pb.CreatePropertyResponse, error) {
 	propertyID := uuid.New()
 
-	var setID *uuid.UUID
-	if req.SetId != nil {
-		id, err := uuid.Parse(req.GetSetId())
-		if err != nil {
-			return nil, err
-		}
-		setID = &id
+	setID, err := hwutil.ParseNullUUID(req.SetId)
+	if err != nil {
+		return nil, err
 	}
 
 	var none *bool
@@ -47,7 +43,7 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 					description = *option.Description
 				}
 				return models.SelectOption{
-					ID:          uuid.New().String(),
+					ID:          uuid.New(),
 					Name:        option.Name,
 					Description: description,
 				}
@@ -63,7 +59,7 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 		SelectData: selectData,
 	}
 
-	if err := commandsV1.NewCreatePropertyCommandHandler(s.as)(ctx, propertyID, req.GetSubjectType(), req.GetFieldType(), req.GetName(), req.Description, setID, req.AlwaysIncludeForCurrentContext, fieldTypeData); err != nil {
+	if err := commandsV1.NewCreatePropertyCommandHandler(s.as)(ctx, propertyID, req.GetSubjectType(), req.GetFieldType(), req.GetName(), req.Description, setID, fieldTypeData); err != nil {
 		return nil, err
 	}
 
@@ -83,14 +79,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		return nil, err
 	}
 
-	var setID string
-	if property.SetID != nil {
-		setID = property.SetID.String()
-	}
-
-	// TODO: Implement the logic of what value alwaysIncludeForCurrentContext has, depending on the context given from req.context
-	// req.context can either be global or a ward_id
-	alwaysIncludeForCurrentContext := true
+	setID := hwutil.NullUUIDToStringPtr(property.SetID)
 
 	response := &pb.GetPropertyResponse{
 		Id:          property.ID.String(),
@@ -101,8 +90,8 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		Description: &property.Description,
 		IsArchived:  property.IsArchived,
 
-		SetId:                          &setID,
-		AlwaysIncludeForCurrentContext: &alwaysIncludeForCurrentContext,
+		SetId:                      setID,
+		AlwaysIncludeForViewSource: nil, //TODO
 	}
 
 	switch {
@@ -112,7 +101,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 				AllowFreetext: &property.FieldTypeData.SelectData.AllowFreetext,
 				Options: hwutil.Map(property.FieldTypeData.SelectData.SelectOptions, func(option models.SelectOption) *pb.GetPropertyResponse_SelectData_SelectOption {
 					return &pb.GetPropertyResponse_SelectData_SelectOption{
-						Id:          option.ID,
+						Id:          option.ID.String(),
 						Name:        option.Name,
 						Description: &option.Description,
 					}
@@ -164,7 +153,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 					name = *option.Name
 				}
 				return models.SelectOption{
-					ID:          uuid.New().String(),
+					ID:          uuid.New(),
 					Name:        name,
 					Description: description,
 				}

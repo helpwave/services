@@ -2,7 +2,6 @@ package models
 
 import (
 	pb "gen/proto/services/property_svc/v1"
-
 	"github.com/google/uuid"
 )
 
@@ -15,9 +14,8 @@ type Property struct {
 	Description string
 	IsArchived  bool
 
-	SetID                          *uuid.UUID
-	AlwaysIncludeForCurrentContext bool
-	FieldTypeData                  FieldTypeData
+	SetID         uuid.NullUUID
+	FieldTypeData FieldTypeData
 }
 
 type FieldTypeData struct {
@@ -31,7 +29,8 @@ type SelectData struct {
 }
 
 type SelectOption struct {
-	ID          string
+	ID          uuid.UUID
 	Name        string
 	Description string
 }
+

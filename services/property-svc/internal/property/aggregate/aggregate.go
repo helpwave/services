@@ -19,10 +19,13 @@ type PropertyAggregate struct {
 }
 
 func NewPropertyAggregate(id uuid.UUID) *PropertyAggregate {
-	aggregate := &PropertyAggregate{Property: &models.Property{
-		ID: id,
-	}}
-	aggregate.AggregateBase = hwes.NewAggregateBase(PropertyAggregateType, id)
+	aggregate := &PropertyAggregate{
+		AggregateBase: hwes.NewAggregateBase(PropertyAggregateType, id),
+		Property: &models.Property{
+			ID: id,
+		},
+	}
+
 	aggregate.Property.ID = id
 	aggregate.initEventListeners()
 	return aggregate
@@ -40,7 +43,6 @@ func (a *PropertyAggregate) initEventListeners() {
 	a.RegisterEventListener(propertyEventsV1.PropertyCreated, a.onPropertyCreated)
 	a.RegisterEventListener(propertyEventsV1.PropertyDescriptionUpdated, a.onDescriptionUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertySetIDUpdated, a.onSetIDUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertyAlwaysIncludeForCurrentContextUpdated, a.onAlwaysIncludeForCurrentContextUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertySubjectTypeUpdated, a.onSubjectTypeUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeUpdated, a.onFieldTypeUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, a.onNameUpdated)
@@ -96,22 +98,16 @@ func (a *PropertyAggregate) onSetIDUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	setID, err := uuid.Parse(payload.SetID)
-	if err != nil {
-		return err
+	setID := uuid.NullUUID{UUID: uuid.Nil, Valid: false}
+	if len(payload.SetID) > 0 {
+		parsedID, err := hwutil.ParseNullUUID(&payload.SetID)
+		if err != nil {
+			return err
+		}
+		setID = parsedID
 	}
 
-	a.Property.SetID = &setID
-	return nil
-}
-
-func (a *PropertyAggregate) onAlwaysIncludeForCurrentContextUpdated(evt hwes.Event) error {
-	var payload propertyEventsV1.PropertyAlwaysIncludeForCurrentContextUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
-		return err
-	}
-
-	a.Property.AlwaysIncludeForCurrentContext = payload.AlwaysIncludeForCurrentContext
+	a.Property.SetID = setID
 	return nil
 }
 
@@ -206,9 +202,7 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsRemoved(evt hwes.Event) 
 	if a.Property.FieldTypeData.SelectData != nil {
 		a.Property.FieldTypeData.SelectData.SelectOptions = hwutil.Filter(a.Property.FieldTypeData.SelectData.SelectOptions, func(selectOption models.SelectOption) bool {
 			for _, id := range payload.RemovedSelectOptions {
-				if selectOption.ID == id {
-					return false
-				}
+				return !(selectOption.ID.String() == id) // TODO: Is that okay?
 			}
 			return true
 		})
