@@ -19,10 +19,13 @@ type PropertyAggregate struct {
 }
 
 func NewPropertyAggregate(id uuid.UUID) *PropertyAggregate {
-	aggregate := &PropertyAggregate{Property: &models.Property{
-		ID: id,
-	}}
-	aggregate.AggregateBase = hwes.NewAggregateBase(PropertyAggregateType, id)
+	aggregate := &PropertyAggregate{
+		AggregateBase: hwes.NewAggregateBase(PropertyAggregateType, id),
+		Property: &models.Property{
+			ID: id,
+		},
+	}
+
 	aggregate.Property.ID = id
 	aggregate.initEventListeners()
 	return aggregate
@@ -86,9 +89,13 @@ func (a *PropertyAggregate) onSetIDUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	setID, err := hwutil.ParseNullUUID(&payload.SetID)
-	if err != nil {
-		return err
+	setID := uuid.NullUUID{UUID: uuid.Nil, Valid: false}
+	if len(payload.SetID) > 0 {
+		parsedID, err := hwutil.ParseNullUUID(&payload.SetID)
+		if err != nil {
+			return err
+		}
+		setID = parsedID
 	}
 
 	a.Property.SetID = setID

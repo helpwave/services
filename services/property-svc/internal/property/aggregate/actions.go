@@ -28,12 +28,9 @@ func (a *PropertyAggregate) UpdateDescription(ctx context.Context, newDescriptio
 }
 
 func (a *PropertyAggregate) UpdateSetID(ctx context.Context, newSetID uuid.NullUUID) error {
-	if newSetID.Valid {
-		event, err := propertyEventsV1.NewPropertySetIDUpdatedEvent(a, newSetID)
-		if err != nil {
-			return err
-		}
-		return a.Apply(event)
+	event, err := propertyEventsV1.NewPropertySetIDUpdatedEvent(a, newSetID)
+	if err != nil {
+		return err
 	}
-	return nil
+	return a.Apply(event)
 }
