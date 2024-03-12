@@ -213,6 +213,7 @@ message GetPatientDetailsResponse {
   optional string ward_id = 6 [deprecated=true];
   optional Room room = 7;
   optional Bed bed = 8;
+  bool is_discharged = 9;
 
   message Room {
     string id = 1;
