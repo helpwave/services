@@ -15,7 +15,6 @@ const (
 	PropertyFieldTypeUpdated                   = "PROPERTY_FIELD_TYPE_UPDATED_v1"
 	PropertyFieldTypeDataUpdated               = "PROPERTY_FIELD_TYPE_DATA_UPDATED_v1"
 	PropertyNameUpdated                        = "PROPERTY_NAME_UPDATED_v1"
-	PropertyFieldTypeDataNoneUpdated           = "PROPERTY_FIELD_TYPE_DATA_NONE_UPDATED_v1"
 	PropertyFieldTypeDataAllowFreetextUpdated  = "PROPERTY_FIELD_TYPE_DATA_ALLOW_FREETEXT_UPDATED_v1"
 	PropertyFieldTypeDataSelectOptionsRemoved  = "PROPERTY_FIELD_TYPE_DATA_SELECT_OPTIONS_REMOVED_v1"
 	PropertyFieldTypeDataSelectOptionsUpserted = "PROPERTY_FIELD_TYPE_DATA_SELECT_OPTIONS_UPSERTED_v1"
@@ -112,17 +111,6 @@ func NewPropertyNameUpdatedEvent(a hwes.Aggregate, name string) (hwes.Event, err
 	return hwes.NewEventWithData(a, PropertyNameUpdated, payload)
 }
 
-type FieldTypeDataNoneUpdatedEvent struct {
-	None bool `json:"none"`
-}
-
-func NewFieldTypeDataNoneUpdatedEvent(a hwes.Aggregate, none bool) (hwes.Event, error) {
-	payload := FieldTypeDataNoneUpdatedEvent{
-		None: none,
-	}
-	return hwes.NewEventWithData(a, PropertyFieldTypeDataNoneUpdated, payload)
-}
-
 type FieldTypeDataAllowFreetextUpdatedEvent struct {
 	NewAllowFreetext bool `json:"new_allow_freetext"`
 }
@@ -149,9 +137,9 @@ type FieldTypeDataSelectOptionsUpsertedEvent struct {
 	UpsertedSelectOptions []models.SelectOption `json:"UpsertedSelectOptions"`
 }
 
-func NewFieldTypeDataSelectOptionsUpsertedEvent(a hwes.Aggregate, toBeAdded []models.SelectOption) (hwes.Event, error) {
+func NewFieldTypeDataSelectOptionsUpsertedEvent(a hwes.Aggregate, upsertOptions []models.SelectOption) (hwes.Event, error) {
 	payload := FieldTypeDataSelectOptionsUpsertedEvent{
-		UpsertedSelectOptions: toBeAdded,
+		UpsertedSelectOptions: upsertOptions,
 	}
 	return hwes.NewEventWithData(a, PropertyFieldTypeDataSelectOptionsUpserted, payload)
 }

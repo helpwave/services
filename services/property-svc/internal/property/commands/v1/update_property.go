@@ -54,12 +54,6 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyComma
 			}
 		}
 
-		if none != nil {
-			if err := a.FieldTypeDataNoneUpdated(ctx, *none); err != nil {
-				return err
-			}
-		}
-
 		if upsertOptions != nil {
 			if err := a.FieldTypeDataUpsertOptions(ctx, *upsertOptions); err != nil {
 				return err

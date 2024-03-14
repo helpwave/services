@@ -77,14 +77,6 @@ func (a *PropertyAggregate) UpdateAllowFreetext(ctx context.Context, allowFreete
 	return a.Apply(event)
 }
 
-func (a *PropertyAggregate) FieldTypeDataNoneUpdated(ctx context.Context, none bool) error {
-	event, err := propertyEventsV1.NewFieldTypeDataNoneUpdatedEvent(a, none)
-	if err != nil {
-		return err
-	}
-	return a.Apply(event)
-}
-
 func (a *PropertyAggregate) FieldTypeDataUpsertOptions(ctx context.Context, upsertOptions []models.SelectOption) error {
 	event, err := propertyEventsV1.NewFieldTypeDataSelectOptionsUpsertedEvent(a, upsertOptions)
 	if err != nil {

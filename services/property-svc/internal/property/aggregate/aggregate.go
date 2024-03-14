@@ -48,7 +48,6 @@ func (a *PropertyAggregate) initEventListeners() {
 	a.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, a.onNameUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataUpdated, a.onFieldTypeDataUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, a.onAllowFreetextUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataNoneUpdated, a.onFieldTypeNoneUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsUpserted, a.onFieldTypeDataSelectOptionsUpserted)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsRemoved, a.onFieldTypeDataSelectOptionsRemoved)
 	a.RegisterEventListener(propertyEventsV1.PropertyArchived, a.onPropertyArchived)
@@ -177,16 +176,6 @@ func (a *PropertyAggregate) onAllowFreetextUpdated(evt hwes.Event) error {
 	return nil
 }
 
-func (a *PropertyAggregate) onFieldTypeNoneUpdated(evt hwes.Event) error {
-	var payload propertyEventsV1.FieldTypeDataNoneUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
-		return err
-	}
-
-	a.Property.FieldTypeData = models.FieldTypeData{}
-	return nil
-}
-
 func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event) error {
 	var payload propertyEventsV1.FieldTypeDataSelectOptionsUpsertedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -194,6 +183,7 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event)
 	}
 
 	if a.Property.FieldTypeData.SelectData != nil {
+		// TODO: Check and update already existing SelectOptions don't just append them
 		a.Property.FieldTypeData.SelectData.SelectOptions = append(a.Property.FieldTypeData.SelectData.SelectOptions, payload.UpsertedSelectOptions...)
 	} else {
 		a.Property.FieldTypeData.SelectData = &models.SelectData{

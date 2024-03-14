@@ -29,6 +29,6 @@ type SelectData struct {
 
 type SelectOption struct {
 	ID          uuid.UUID
-	Name        string
-	Description string
+	Name        *string
+	Description *string
 }

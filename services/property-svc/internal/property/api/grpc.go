@@ -36,8 +36,8 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 					}
 					return models.SelectOption{
 						ID:          uuid.New(),
-						Name:        option.Name,
-						Description: description,
+						Name:        &option.Name,
+						Description: &description,
 					}
 				}),
 			},
@@ -86,10 +86,14 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 			SelectData: &pb.GetPropertyResponse_SelectData{
 				AllowFreetext: &property.FieldTypeData.SelectData.AllowFreetext,
 				Options: hwutil.Map(property.FieldTypeData.SelectData.SelectOptions, func(option models.SelectOption) *pb.GetPropertyResponse_SelectData_SelectOption {
+					var name string
+					if option.Name != nil {
+						name = *option.Name
+					}
 					return &pb.GetPropertyResponse_SelectData_SelectOption{
 						Id:          option.ID.String(),
-						Name:        option.Name,
-						Description: &option.Description,
+						Name:        name,
+						Description: option.Description,
 					}
 				}),
 			}}
@@ -116,21 +120,20 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 			removeOptions = &ftData.SelectData.RemoveOptions
 		}
 		if ftData.SelectData.UpsertOptions != nil {
-			opt := hwutil.Map(ftData.SelectData.UpsertOptions, func(option *pb.UpdatePropertyRequest_SelectData_SelectOption) models.SelectOption {
-				var description string
-				var name string
-				if option.Description != nil {
-					description = *option.Description
-				}
-				if option.Name != nil {
-					name = *option.Name
+			opt, err := hwutil.MapWithErr(ftData.SelectData.UpsertOptions, func(option *pb.UpdatePropertyRequest_SelectData_SelectOption) (models.SelectOption, error) {
+				id, err := uuid.Parse(option.Id) // TODO: Dont just ignore
+				if err != nil {
+					return models.SelectOption{}, err
 				}
 				return models.SelectOption{
-					ID:          uuid.New(),
-					Name:        name,
-					Description: description,
-				}
+					ID:          id,
+					Name:        option.Name,
+					Description: option.Description,
+				}, nil
 			})
+			if err != nil {
+				return nil, err
+			}
 			upsertOptions = &opt
 		}
 	}
