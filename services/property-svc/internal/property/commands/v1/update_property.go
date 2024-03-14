@@ -9,10 +9,10 @@ import (
 	"property-svc/internal/property/models"
 )
 
-type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *string, allowFreetext *bool, none *bool, upsertOptions *[]models.SelectOption, removeOptions *[]string, isArchived *bool) error
+type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) error
 
 func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *string, allowFreetext *bool, none *bool, upsertOptions *[]models.SelectOption, removeOptions *[]string, isArchived *bool) error {
+	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) error {
 		a, err := aggregate.LoadPropertyAggregate(ctx, as, propertyID)
 		if err != nil {
 			return err
@@ -60,9 +60,9 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyComma
 			}
 		}
 
-		if removeOptions != nil {
+		if len(removeOptions) > 0 {
 			// TODO: check if remove options exist in aggregate SelectOptions?
-			if err := a.FieldTypeDataRemoveOptions(ctx, *removeOptions); err != nil {
+			if err := a.FieldTypeDataRemoveOptions(ctx, removeOptions); err != nil {
 				return err
 			}
 		}

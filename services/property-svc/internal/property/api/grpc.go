@@ -36,7 +36,7 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 					}
 					return models.SelectOption{
 						ID:          uuid.New(),
-						Name:        &option.Name,
+						Name:        option.Name,
 						Description: &description,
 					}
 				}),
@@ -80,23 +80,21 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		FieldTypeData:              nil,
 	}
 
-	switch {
-	case property.FieldTypeData.SelectData != nil:
-		response.FieldTypeData = &pb.GetPropertyResponse_SelectData_{
-			SelectData: &pb.GetPropertyResponse_SelectData{
-				AllowFreetext: &property.FieldTypeData.SelectData.AllowFreetext,
-				Options: hwutil.Map(property.FieldTypeData.SelectData.SelectOptions, func(option models.SelectOption) *pb.GetPropertyResponse_SelectData_SelectOption {
-					var name string
-					if option.Name != nil {
-						name = *option.Name
-					}
-					return &pb.GetPropertyResponse_SelectData_SelectOption{
-						Id:          option.ID.String(),
-						Name:        name,
-						Description: option.Description,
-					}
-				}),
-			}}
+	if property.FieldTypeData != nil {
+		switch {
+		case property.FieldTypeData.SelectData != nil:
+			response.FieldTypeData = &pb.GetPropertyResponse_SelectData_{
+				SelectData: &pb.GetPropertyResponse_SelectData{
+					AllowFreetext: &property.FieldTypeData.SelectData.AllowFreetext,
+					Options: hwutil.Map(property.FieldTypeData.SelectData.SelectOptions, func(option models.SelectOption) *pb.GetPropertyResponse_SelectData_SelectOption {
+						return &pb.GetPropertyResponse_SelectData_SelectOption{
+							Id:          option.ID.String(),
+							Name:        option.Name,
+							Description: option.Description,
+						}
+					}),
+				}}
+		}
 	}
 
 	return response, nil
@@ -108,24 +106,21 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 		return nil, err
 	}
 
-	var none *bool
 	var allowFreetext *bool
-	var removeOptions *[]string
-	var upsertOptions *[]models.SelectOption
+	var removeOptions []string
+	var upsertOptions *[]models.UpdateSelectOption
 
 	switch ftData := req.FieldTypeData.(type) {
 	case *pb.UpdatePropertyRequest_SelectData_:
 		allowFreetext = ftData.SelectData.AllowFreetext
-		if ftData.SelectData.RemoveOptions != nil {
-			removeOptions = &ftData.SelectData.RemoveOptions
-		}
+		removeOptions = ftData.SelectData.RemoveOptions
 		if ftData.SelectData.UpsertOptions != nil {
-			opt, err := hwutil.MapWithErr(ftData.SelectData.UpsertOptions, func(option *pb.UpdatePropertyRequest_SelectData_SelectOption) (models.SelectOption, error) {
-				id, err := uuid.Parse(option.Id) // TODO: Dont just ignore
+			opt, err := hwutil.MapWithErr(ftData.SelectData.UpsertOptions, func(option *pb.UpdatePropertyRequest_SelectData_SelectOption) (models.UpdateSelectOption, error) {
+				id, err := uuid.Parse(option.Id)
 				if err != nil {
-					return models.SelectOption{}, err
+					return models.UpdateSelectOption{}, err
 				}
-				return models.SelectOption{
+				return models.UpdateSelectOption{
 					ID:          id,
 					Name:        option.Name,
 					Description: option.Description,
@@ -138,7 +133,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 		}
 	}
 
-	if err := commandsV1.NewUpdatePropertyCommandHandler(s.as)(ctx, propertyID, req.SubjectType, req.FieldType, req.Name, req.Description, req.SetId, allowFreetext, none, upsertOptions, removeOptions, req.IsArchived); err != nil {
+	if err := commandsV1.NewUpdatePropertyCommandHandler(s.as)(ctx, propertyID, req.SubjectType, req.FieldType, req.Name, req.Description, req.SetId, allowFreetext, upsertOptions, removeOptions, req.IsArchived); err != nil {
 		return nil, err
 	}
 

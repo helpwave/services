@@ -77,7 +77,7 @@ func (a *PropertyAggregate) UpdateAllowFreetext(ctx context.Context, allowFreete
 	return a.Apply(event)
 }
 
-func (a *PropertyAggregate) FieldTypeDataUpsertOptions(ctx context.Context, upsertOptions []models.SelectOption) error {
+func (a *PropertyAggregate) FieldTypeDataUpsertOptions(ctx context.Context, upsertOptions []models.UpdateSelectOption) error {
 	event, err := propertyEventsV1.NewFieldTypeDataSelectOptionsUpsertedEvent(a, upsertOptions)
 	if err != nil {
 		return err

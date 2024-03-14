@@ -134,10 +134,10 @@ func NewFieldTypeDataSelectOptionsRemovedEvent(a hwes.Aggregate, toBeRemoved []s
 }
 
 type FieldTypeDataSelectOptionsUpsertedEvent struct {
-	UpsertedSelectOptions []models.SelectOption `json:"UpsertedSelectOptions"`
+	UpsertedSelectOptions []models.UpdateSelectOption `json:"UpsertedSelectOptions"`
 }
 
-func NewFieldTypeDataSelectOptionsUpsertedEvent(a hwes.Aggregate, upsertOptions []models.SelectOption) (hwes.Event, error) {
+func NewFieldTypeDataSelectOptionsUpsertedEvent(a hwes.Aggregate, upsertOptions []models.UpdateSelectOption) (hwes.Event, error) {
 	payload := FieldTypeDataSelectOptionsUpsertedEvent{
 		UpsertedSelectOptions: upsertOptions,
 	}

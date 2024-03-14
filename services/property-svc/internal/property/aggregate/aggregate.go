@@ -86,7 +86,7 @@ func (a *PropertyAggregate) onFieldTypeDataUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	a.Property.FieldTypeData = payload.FieldTypeData
+	a.Property.FieldTypeData = &payload.FieldTypeData
 
 	return nil
 }
@@ -169,8 +169,10 @@ func (a *PropertyAggregate) onAllowFreetextUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	if a.Property.FieldTypeData.SelectData != nil {
-		a.Property.FieldTypeData.SelectData.AllowFreetext = payload.NewAllowFreetext
+	if a.Property.FieldTypeData != nil {
+		if a.Property.FieldTypeData.SelectData != nil {
+			a.Property.FieldTypeData.SelectData.AllowFreetext = payload.NewAllowFreetext
+		}
 	}
 
 	return nil
@@ -182,13 +184,71 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event)
 		return err
 	}
 
-	if a.Property.FieldTypeData.SelectData != nil {
-		// TODO: Check and update already existing SelectOptions don't just append them
-		a.Property.FieldTypeData.SelectData.SelectOptions = append(a.Property.FieldTypeData.SelectData.SelectOptions, payload.UpsertedSelectOptions...)
-	} else {
-		a.Property.FieldTypeData.SelectData = &models.SelectData{
-			SelectOptions: payload.UpsertedSelectOptions,
+	existingSelectOptions := make(map[uuid.UUID]models.SelectOption)
+	if a.Property.FieldTypeData != nil {
+		for _, option := range a.Property.FieldTypeData.SelectData.SelectOptions {
+			existingSelectOptions[option.ID] = option
 		}
+	}
+
+	collectAdders := func(options []models.UpdateSelectOption) ([]models.SelectOption, error) {
+		var adders []models.SelectOption
+		for _, option := range options {
+			if _, exists := existingSelectOptions[option.ID]; !exists {
+				if option.Name == nil {
+					return []models.SelectOption{}, fmt.Errorf("name missing for selectOption with id %s", option.ID.String())
+				}
+				adders = append(adders, models.SelectOption{
+					ID:          option.ID,
+					Name:        *option.Name,
+					Description: option.Description,
+				})
+			}
+		}
+		// append already existing ones
+		for _, existing := range existingSelectOptions {
+			adders = append(adders, existing)
+		}
+		return adders, nil
+	}
+	collectUpdated := func(options []models.UpdateSelectOption) []models.SelectOption {
+		var updated []models.SelectOption
+		for _, option := range options {
+			if _, exists := existingSelectOptions[option.ID]; exists {
+				updatedOpt := existingSelectOptions[option.ID]
+				if option.Name != nil {
+					updatedOpt.Name = *option.Name
+				}
+				if option.Description != nil {
+					updatedOpt.Description = option.Description
+				}
+				updated = append(updated, updatedOpt)
+			}
+		}
+
+		return updated
+	}
+
+	// TODO: Can we replace FieldTypeData always?
+	if a.Property.FieldTypeData == nil {
+		insert, err := collectAdders(payload.UpsertedSelectOptions)
+		if err != nil {
+			return err
+		}
+		a.Property.FieldTypeData = &models.FieldTypeData{
+			SelectData: &models.SelectData{
+				SelectOptions: insert,
+			},
+		}
+	} else {
+		// Upsert
+		insert, err := collectAdders(payload.UpsertedSelectOptions)
+		if err != nil {
+			return err
+		}
+		updated := collectUpdated(payload.UpsertedSelectOptions)
+
+		a.Property.FieldTypeData.SelectData.SelectOptions = append(insert, updated...)
 	}
 
 	return nil
@@ -200,15 +260,17 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsRemoved(evt hwes.Event) 
 		return err
 	}
 
-	if a.Property.FieldTypeData.SelectData != nil {
-		a.Property.FieldTypeData.SelectData.SelectOptions = hwutil.Filter(a.Property.FieldTypeData.SelectData.SelectOptions, func(selectOption models.SelectOption) bool {
-			for _, id := range payload.RemovedSelectOptions {
-				if selectOption.ID.String() == id {
-					return false
+	if a.Property.FieldTypeData != nil {
+		if a.Property.FieldTypeData.SelectData != nil {
+			a.Property.FieldTypeData.SelectData.SelectOptions = hwutil.Filter(a.Property.FieldTypeData.SelectData.SelectOptions, func(selectOption models.SelectOption) bool {
+				for _, id := range payload.RemovedSelectOptions {
+					if selectOption.ID.String() == id {
+						return false
+					}
 				}
-			}
-			return true
-		})
+				return true
+			})
+		}
 	}
 
 	return nil

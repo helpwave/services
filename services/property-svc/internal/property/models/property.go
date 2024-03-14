@@ -15,7 +15,7 @@ type Property struct {
 	IsArchived  bool
 
 	SetID         uuid.NullUUID
-	FieldTypeData FieldTypeData
+	FieldTypeData *FieldTypeData
 }
 
 type FieldTypeData struct {
@@ -28,6 +28,12 @@ type SelectData struct {
 }
 
 type SelectOption struct {
+	ID          uuid.UUID
+	Name        string
+	Description *string
+}
+
+type UpdateSelectOption struct {
 	ID          uuid.UUID
 	Name        *string
 	Description *string
