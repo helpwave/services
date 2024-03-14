@@ -138,7 +138,6 @@ class CreatePropertyRequest_SelectData extends $pb.GeneratedMessage {
 }
 
 enum CreatePropertyRequest_FieldTypeData {
-  none, 
   selectData, 
   notSet
 }
@@ -152,7 +151,6 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? description,
     $core.String? setId,
-    $core.bool? none,
     CreatePropertyRequest_SelectData? selectData,
   }) {
     final $result = create();
@@ -171,9 +169,6 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
     if (setId != null) {
       $result.setId = setId;
     }
-    if (none != null) {
-      $result.none = none;
-    }
     if (selectData != null) {
       $result.selectData = selectData;
     }
@@ -184,18 +179,16 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   factory CreatePropertyRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static const $core.Map<$core.int, CreatePropertyRequest_FieldTypeData> _CreatePropertyRequest_FieldTypeDataByTag = {
-    8 : CreatePropertyRequest_FieldTypeData.none,
     9 : CreatePropertyRequest_FieldTypeData.selectData,
     0 : CreatePropertyRequest_FieldTypeData.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [8, 9])
+    ..oo(0, [9])
     ..e<$15.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $15.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $15.SubjectType.valueOf, enumValues: $15.SubjectType.values)
     ..e<$15.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $15.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $15.FieldType.valueOf, enumValues: $15.FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOS(6, _omitFieldNames ? '' : 'setId')
-    ..aOB(8, _omitFieldNames ? '' : 'none')
     ..aOM<CreatePropertyRequest_SelectData>(9, _omitFieldNames ? '' : 'selectData', subBuilder: CreatePropertyRequest_SelectData.create)
     ..hasRequiredFields = false
   ;
@@ -270,25 +263,16 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   void clearSetId() => clearField(6);
 
-  @$pb.TagNumber(8)
-  $core.bool get none => $_getBF(5);
-  @$pb.TagNumber(8)
-  set none($core.bool v) { $_setBool(5, v); }
-  @$pb.TagNumber(8)
-  $core.bool hasNone() => $_has(5);
-  @$pb.TagNumber(8)
-  void clearNone() => clearField(8);
-
   @$pb.TagNumber(9)
-  CreatePropertyRequest_SelectData get selectData => $_getN(6);
+  CreatePropertyRequest_SelectData get selectData => $_getN(5);
   @$pb.TagNumber(9)
   set selectData(CreatePropertyRequest_SelectData v) { setField(9, v); }
   @$pb.TagNumber(9)
-  $core.bool hasSelectData() => $_has(6);
+  $core.bool hasSelectData() => $_has(5);
   @$pb.TagNumber(9)
   void clearSelectData() => clearField(9);
   @$pb.TagNumber(9)
-  CreatePropertyRequest_SelectData ensureSelectData() => $_ensure(6);
+  CreatePropertyRequest_SelectData ensureSelectData() => $_ensure(5);
 }
 
 class CreatePropertyResponse extends $pb.GeneratedMessage {
@@ -609,7 +593,6 @@ class GetPropertyResponse_SelectData extends $pb.GeneratedMessage {
 }
 
 enum GetPropertyResponse_FieldTypeData {
-  none, 
   selectData, 
   notSet
 }
@@ -623,7 +606,6 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
     $core.String? description,
     $core.bool? isArchived,
     $core.String? setId,
-    $core.bool? none,
     GetPropertyResponse_SelectData? selectData,
     $core.bool? alwaysIncludeForViewSource,
   }) {
@@ -649,9 +631,6 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
     if (setId != null) {
       $result.setId = setId;
     }
-    if (none != null) {
-      $result.none = none;
-    }
     if (selectData != null) {
       $result.selectData = selectData;
     }
@@ -665,12 +644,11 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   factory GetPropertyResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static const $core.Map<$core.int, GetPropertyResponse_FieldTypeData> _GetPropertyResponse_FieldTypeDataByTag = {
-    9 : GetPropertyResponse_FieldTypeData.none,
     10 : GetPropertyResponse_FieldTypeData.selectData,
     0 : GetPropertyResponse_FieldTypeData.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [9, 10])
+    ..oo(0, [10])
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..e<$15.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $15.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $15.SubjectType.valueOf, enumValues: $15.SubjectType.values)
     ..e<$15.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $15.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $15.FieldType.valueOf, enumValues: $15.FieldType.values)
@@ -678,7 +656,6 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
     ..aOS(8, _omitFieldNames ? '' : 'setId')
-    ..aOB(9, _omitFieldNames ? '' : 'none')
     ..aOM<GetPropertyResponse_SelectData>(10, _omitFieldNames ? '' : 'selectData', subBuilder: GetPropertyResponse_SelectData.create)
     ..aOB(11, _omitFieldNames ? '' : 'alwaysIncludeForViewSource')
     ..hasRequiredFields = false
@@ -772,32 +749,23 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   void clearSetId() => clearField(8);
 
-  @$pb.TagNumber(9)
-  $core.bool get none => $_getBF(7);
-  @$pb.TagNumber(9)
-  set none($core.bool v) { $_setBool(7, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasNone() => $_has(7);
-  @$pb.TagNumber(9)
-  void clearNone() => clearField(9);
-
   @$pb.TagNumber(10)
-  GetPropertyResponse_SelectData get selectData => $_getN(8);
+  GetPropertyResponse_SelectData get selectData => $_getN(7);
   @$pb.TagNumber(10)
   set selectData(GetPropertyResponse_SelectData v) { setField(10, v); }
   @$pb.TagNumber(10)
-  $core.bool hasSelectData() => $_has(8);
+  $core.bool hasSelectData() => $_has(7);
   @$pb.TagNumber(10)
   void clearSelectData() => clearField(10);
   @$pb.TagNumber(10)
-  GetPropertyResponse_SelectData ensureSelectData() => $_ensure(8);
+  GetPropertyResponse_SelectData ensureSelectData() => $_ensure(7);
 
   @$pb.TagNumber(11)
-  $core.bool get alwaysIncludeForViewSource => $_getBF(9);
+  $core.bool get alwaysIncludeForViewSource => $_getBF(8);
   @$pb.TagNumber(11)
-  set alwaysIncludeForViewSource($core.bool v) { $_setBool(9, v); }
+  set alwaysIncludeForViewSource($core.bool v) { $_setBool(8, v); }
   @$pb.TagNumber(11)
-  $core.bool hasAlwaysIncludeForViewSource() => $_has(9);
+  $core.bool hasAlwaysIncludeForViewSource() => $_has(8);
   @$pb.TagNumber(11)
   void clearAlwaysIncludeForViewSource() => clearField(11);
 }
@@ -947,7 +915,6 @@ class UpdatePropertyRequest_SelectData extends $pb.GeneratedMessage {
 }
 
 enum UpdatePropertyRequest_FieldTypeData {
-  none, 
   selectData, 
   notSet
 }
@@ -961,7 +928,6 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
     $core.String? description,
     $core.bool? isArchived,
     $core.String? setId,
-    $core.bool? none,
     UpdatePropertyRequest_SelectData? selectData,
   }) {
     final $result = create();
@@ -986,9 +952,6 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
     if (setId != null) {
       $result.setId = setId;
     }
-    if (none != null) {
-      $result.none = none;
-    }
     if (selectData != null) {
       $result.selectData = selectData;
     }
@@ -999,12 +962,11 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
   factory UpdatePropertyRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static const $core.Map<$core.int, UpdatePropertyRequest_FieldTypeData> _UpdatePropertyRequest_FieldTypeDataByTag = {
-    9 : UpdatePropertyRequest_FieldTypeData.none,
     10 : UpdatePropertyRequest_FieldTypeData.selectData,
     0 : UpdatePropertyRequest_FieldTypeData.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [9, 10])
+    ..oo(0, [10])
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..e<$15.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $15.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $15.SubjectType.valueOf, enumValues: $15.SubjectType.values)
     ..e<$15.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $15.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $15.FieldType.valueOf, enumValues: $15.FieldType.values)
@@ -1012,7 +974,6 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
     ..aOS(8, _omitFieldNames ? '' : 'setId')
-    ..aOB(9, _omitFieldNames ? '' : 'none')
     ..aOM<UpdatePropertyRequest_SelectData>(10, _omitFieldNames ? '' : 'selectData', subBuilder: UpdatePropertyRequest_SelectData.create)
     ..hasRequiredFields = false
   ;
@@ -1105,25 +1066,16 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   void clearSetId() => clearField(8);
 
-  @$pb.TagNumber(9)
-  $core.bool get none => $_getBF(7);
-  @$pb.TagNumber(9)
-  set none($core.bool v) { $_setBool(7, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasNone() => $_has(7);
-  @$pb.TagNumber(9)
-  void clearNone() => clearField(9);
-
   @$pb.TagNumber(10)
-  UpdatePropertyRequest_SelectData get selectData => $_getN(8);
+  UpdatePropertyRequest_SelectData get selectData => $_getN(7);
   @$pb.TagNumber(10)
   set selectData(UpdatePropertyRequest_SelectData v) { setField(10, v); }
   @$pb.TagNumber(10)
-  $core.bool hasSelectData() => $_has(8);
+  $core.bool hasSelectData() => $_has(7);
   @$pb.TagNumber(10)
   void clearSelectData() => clearField(10);
   @$pb.TagNumber(10)
-  UpdatePropertyRequest_SelectData ensureSelectData() => $_ensure(8);
+  UpdatePropertyRequest_SelectData ensureSelectData() => $_ensure(7);
 }
 
 class UpdatePropertyResponse extends $pb.GeneratedMessage {

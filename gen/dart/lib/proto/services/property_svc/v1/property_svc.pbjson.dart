@@ -22,7 +22,6 @@ const CreatePropertyRequest$json = {
     {'1': 'name', '3': 4, '4': 1, '5': 9, '10': 'name'},
     {'1': 'description', '3': 5, '4': 1, '5': 9, '9': 1, '10': 'description', '17': true},
     {'1': 'set_id', '3': 6, '4': 1, '5': 9, '9': 2, '10': 'setId', '17': true},
-    {'1': 'none', '3': 8, '4': 1, '5': 8, '9': 0, '10': 'none'},
     {'1': 'select_data', '3': 9, '4': 1, '5': 11, '6': '.proto.services.property_svc.v1.CreatePropertyRequest.SelectData', '9': 0, '10': 'selectData'},
   ],
   '3': [CreatePropertyRequest_SelectData$json],
@@ -64,15 +63,15 @@ final $typed_data.Uint8List createPropertyRequestDescriptor = $convert.base64Dec
     'VydmljZXMucHJvcGVydHlfc3ZjLnYxLlN1YmplY3RUeXBlUgtzdWJqZWN0VHlwZRJICgpmaWVs'
     'ZF90eXBlGAMgASgOMikucHJvdG8uc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkZpZWxkVHlwZV'
     'IJZmllbGRUeXBlEhIKBG5hbWUYBCABKAlSBG5hbWUSJQoLZGVzY3JpcHRpb24YBSABKAlIAVIL'
-    'ZGVzY3JpcHRpb26IAQESGgoGc2V0X2lkGAYgASgJSAJSBXNldElkiAEBEhQKBG5vbmUYCCABKA'
-    'hIAFIEbm9uZRJjCgtzZWxlY3RfZGF0YRgJIAEoCzJALnByb3RvLnNlcnZpY2VzLnByb3BlcnR5'
-    'X3N2Yy52MS5DcmVhdGVQcm9wZXJ0eVJlcXVlc3QuU2VsZWN0RGF0YUgAUgpzZWxlY3REYXRhGo'
-    '8CCgpTZWxlY3REYXRhEioKDmFsbG93X2ZyZWV0ZXh0GAEgASgISABSDWFsbG93RnJlZXRleHSI'
-    'AQESZwoHb3B0aW9ucxgCIAMoCzJNLnByb3RvLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5Dcm'
-    'VhdGVQcm9wZXJ0eVJlcXVlc3QuU2VsZWN0RGF0YS5TZWxlY3RPcHRpb25SB29wdGlvbnMaWQoM'
-    'U2VsZWN0T3B0aW9uEhIKBG5hbWUYASABKAlSBG5hbWUSJQoLZGVzY3JpcHRpb24YAiABKAlIAF'
-    'ILZGVzY3JpcHRpb26IAQFCDgoMX2Rlc2NyaXB0aW9uQhEKD19hbGxvd19mcmVldGV4dEIRCg9m'
-    'aWVsZF90eXBlX2RhdGFCDgoMX2Rlc2NyaXB0aW9uQgkKB19zZXRfaWQ=');
+    'ZGVzY3JpcHRpb26IAQESGgoGc2V0X2lkGAYgASgJSAJSBXNldElkiAEBEmMKC3NlbGVjdF9kYX'
+    'RhGAkgASgLMkAucHJvdG8uc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkNyZWF0ZVByb3BlcnR5'
+    'UmVxdWVzdC5TZWxlY3REYXRhSABSCnNlbGVjdERhdGEajwIKClNlbGVjdERhdGESKgoOYWxsb3'
+    'dfZnJlZXRleHQYASABKAhIAFINYWxsb3dGcmVldGV4dIgBARJnCgdvcHRpb25zGAIgAygLMk0u'
+    'cHJvdG8uc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkNyZWF0ZVByb3BlcnR5UmVxdWVzdC5TZW'
+    'xlY3REYXRhLlNlbGVjdE9wdGlvblIHb3B0aW9ucxpZCgxTZWxlY3RPcHRpb24SEgoEbmFtZRgB'
+    'IAEoCVIEbmFtZRIlCgtkZXNjcmlwdGlvbhgCIAEoCUgAUgtkZXNjcmlwdGlvbogBAUIOCgxfZG'
+    'VzY3JpcHRpb25CEQoPX2FsbG93X2ZyZWV0ZXh0QhEKD2ZpZWxkX3R5cGVfZGF0YUIOCgxfZGVz'
+    'Y3JpcHRpb25CCQoHX3NldF9pZA==');
 
 @$core.Deprecated('Use createPropertyResponseDescriptor instead')
 const CreatePropertyResponse$json = {
@@ -125,7 +124,6 @@ const GetPropertyResponse$json = {
     {'1': 'description', '3': 5, '4': 1, '5': 9, '9': 1, '10': 'description', '17': true},
     {'1': 'is_archived', '3': 6, '4': 1, '5': 8, '10': 'isArchived'},
     {'1': 'set_id', '3': 8, '4': 1, '5': 9, '9': 2, '10': 'setId', '17': true},
-    {'1': 'none', '3': 9, '4': 1, '5': 8, '9': 0, '10': 'none'},
     {'1': 'select_data', '3': 10, '4': 1, '5': 11, '6': '.proto.services.property_svc.v1.GetPropertyResponse.SelectData', '9': 0, '10': 'selectData'},
     {'1': 'always_include_for_view_source', '3': 11, '4': 1, '5': 8, '9': 3, '10': 'alwaysIncludeForViewSource', '17': true},
   ],
@@ -171,17 +169,17 @@ final $typed_data.Uint8List getPropertyResponseDescriptor = $convert.base64Decod
     'Y3RUeXBlEkgKCmZpZWxkX3R5cGUYAyABKA4yKS5wcm90by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdm'
     'MudjEuRmllbGRUeXBlUglmaWVsZFR5cGUSEgoEbmFtZRgEIAEoCVIEbmFtZRIlCgtkZXNjcmlw'
     'dGlvbhgFIAEoCUgBUgtkZXNjcmlwdGlvbogBARIfCgtpc19hcmNoaXZlZBgGIAEoCFIKaXNBcm'
-    'NoaXZlZBIaCgZzZXRfaWQYCCABKAlIAlIFc2V0SWSIAQESFAoEbm9uZRgJIAEoCEgAUgRub25l'
-    'EmEKC3NlbGVjdF9kYXRhGAogASgLMj4ucHJvdG8uc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLk'
-    'dldFByb3BlcnR5UmVzcG9uc2UuU2VsZWN0RGF0YUgAUgpzZWxlY3REYXRhEkcKHmFsd2F5c19p'
-    'bmNsdWRlX2Zvcl92aWV3X3NvdXJjZRgLIAEoCEgDUhphbHdheXNJbmNsdWRlRm9yVmlld1NvdX'
-    'JjZYgBARqdAgoKU2VsZWN0RGF0YRIqCg5hbGxvd19mcmVldGV4dBgBIAEoCEgAUg1hbGxvd0Zy'
-    'ZWV0ZXh0iAEBEmUKB29wdGlvbnMYAiADKAsySy5wcm90by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdm'
-    'MudjEuR2V0UHJvcGVydHlSZXNwb25zZS5TZWxlY3REYXRhLlNlbGVjdE9wdGlvblIHb3B0aW9u'
-    'cxppCgxTZWxlY3RPcHRpb24SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSJQ'
-    'oLZGVzY3JpcHRpb24YAyABKAlIAFILZGVzY3JpcHRpb26IAQFCDgoMX2Rlc2NyaXB0aW9uQhEK'
-    'D19hbGxvd19mcmVldGV4dEIRCg9maWVsZF90eXBlX2RhdGFCDgoMX2Rlc2NyaXB0aW9uQgkKB1'
-    '9zZXRfaWRCIQofX2Fsd2F5c19pbmNsdWRlX2Zvcl92aWV3X3NvdXJjZQ==');
+    'NoaXZlZBIaCgZzZXRfaWQYCCABKAlIAlIFc2V0SWSIAQESYQoLc2VsZWN0X2RhdGEYCiABKAsy'
+    'Pi5wcm90by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuR2V0UHJvcGVydHlSZXNwb25zZS5TZW'
+    'xlY3REYXRhSABSCnNlbGVjdERhdGESRwoeYWx3YXlzX2luY2x1ZGVfZm9yX3ZpZXdfc291cmNl'
+    'GAsgASgISANSGmFsd2F5c0luY2x1ZGVGb3JWaWV3U291cmNliAEBGp0CCgpTZWxlY3REYXRhEi'
+    'oKDmFsbG93X2ZyZWV0ZXh0GAEgASgISABSDWFsbG93RnJlZXRleHSIAQESZQoHb3B0aW9ucxgC'
+    'IAMoCzJLLnByb3RvLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5HZXRQcm9wZXJ0eVJlc3Bvbn'
+    'NlLlNlbGVjdERhdGEuU2VsZWN0T3B0aW9uUgdvcHRpb25zGmkKDFNlbGVjdE9wdGlvbhIOCgJp'
+    'ZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIlCgtkZXNjcmlwdGlvbhgDIAEoCUgAUg'
+    'tkZXNjcmlwdGlvbogBAUIOCgxfZGVzY3JpcHRpb25CEQoPX2FsbG93X2ZyZWV0ZXh0QhEKD2Zp'
+    'ZWxkX3R5cGVfZGF0YUIOCgxfZGVzY3JpcHRpb25CCQoHX3NldF9pZEIhCh9fYWx3YXlzX2luY2'
+    'x1ZGVfZm9yX3ZpZXdfc291cmNl');
 
 @$core.Deprecated('Use updatePropertyRequestDescriptor instead')
 const UpdatePropertyRequest$json = {
@@ -194,7 +192,6 @@ const UpdatePropertyRequest$json = {
     {'1': 'description', '3': 5, '4': 1, '5': 9, '9': 4, '10': 'description', '17': true},
     {'1': 'is_archived', '3': 6, '4': 1, '5': 8, '9': 5, '10': 'isArchived', '17': true},
     {'1': 'set_id', '3': 8, '4': 1, '5': 9, '9': 6, '10': 'setId', '17': true},
-    {'1': 'none', '3': 9, '4': 1, '5': 8, '9': 0, '10': 'none'},
     {'1': 'select_data', '3': 10, '4': 1, '5': 11, '6': '.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData', '9': 0, '10': 'selectData'},
   ],
   '3': [UpdatePropertyRequest_SelectData$json],
@@ -245,17 +242,17 @@ final $typed_data.Uint8List updatePropertyRequestDescriptor = $convert.base64Dec
     'VydHlfc3ZjLnYxLkZpZWxkVHlwZUgCUglmaWVsZFR5cGWIAQESFwoEbmFtZRgEIAEoCUgDUgRu'
     'YW1liAEBEiUKC2Rlc2NyaXB0aW9uGAUgASgJSARSC2Rlc2NyaXB0aW9uiAEBEiQKC2lzX2FyY2'
     'hpdmVkGAYgASgISAVSCmlzQXJjaGl2ZWSIAQESGgoGc2V0X2lkGAggASgJSAZSBXNldElkiAEB'
-    'EhQKBG5vbmUYCSABKAhIAFIEbm9uZRJjCgtzZWxlY3RfZGF0YRgKIAEoCzJALnByb3RvLnNlcn'
-    'ZpY2VzLnByb3BlcnR5X3N2Yy52MS5VcGRhdGVQcm9wZXJ0eVJlcXVlc3QuU2VsZWN0RGF0YUgA'
-    'UgpzZWxlY3REYXRhGuECCgpTZWxlY3REYXRhEioKDmFsbG93X2ZyZWV0ZXh0GAEgASgISABSDW'
-    'FsbG93RnJlZXRleHSIAQESJQoOcmVtb3ZlX29wdGlvbnMYAiADKAlSDXJlbW92ZU9wdGlvbnMS'
-    'dAoOdXBzZXJ0X29wdGlvbnMYAyADKAsyTS5wcm90by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudj'
-    'EuVXBkYXRlUHJvcGVydHlSZXF1ZXN0LlNlbGVjdERhdGEuU2VsZWN0T3B0aW9uUg11cHNlcnRP'
-    'cHRpb25zGncKDFNlbGVjdE9wdGlvbhIOCgJpZBgBIAEoCVICaWQSFwoEbmFtZRgCIAEoCUgAUg'
-    'RuYW1liAEBEiUKC2Rlc2NyaXB0aW9uGAMgASgJSAFSC2Rlc2NyaXB0aW9uiAEBQgcKBV9uYW1l'
-    'Qg4KDF9kZXNjcmlwdGlvbkIRCg9fYWxsb3dfZnJlZXRleHRCEQoPZmllbGRfdHlwZV9kYXRhQg'
-    '8KDV9zdWJqZWN0X3R5cGVCDQoLX2ZpZWxkX3R5cGVCBwoFX25hbWVCDgoMX2Rlc2NyaXB0aW9u'
-    'Qg4KDF9pc19hcmNoaXZlZEIJCgdfc2V0X2lk');
+    'EmMKC3NlbGVjdF9kYXRhGAogASgLMkAucHJvdG8uc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLl'
+    'VwZGF0ZVByb3BlcnR5UmVxdWVzdC5TZWxlY3REYXRhSABSCnNlbGVjdERhdGEa4QIKClNlbGVj'
+    'dERhdGESKgoOYWxsb3dfZnJlZXRleHQYASABKAhIAFINYWxsb3dGcmVldGV4dIgBARIlCg5yZW'
+    '1vdmVfb3B0aW9ucxgCIAMoCVINcmVtb3ZlT3B0aW9ucxJ0Cg51cHNlcnRfb3B0aW9ucxgDIAMo'
+    'CzJNLnByb3RvLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5VcGRhdGVQcm9wZXJ0eVJlcXVlc3'
+    'QuU2VsZWN0RGF0YS5TZWxlY3RPcHRpb25SDXVwc2VydE9wdGlvbnMadwoMU2VsZWN0T3B0aW9u'
+    'Eg4KAmlkGAEgASgJUgJpZBIXCgRuYW1lGAIgASgJSABSBG5hbWWIAQESJQoLZGVzY3JpcHRpb2'
+    '4YAyABKAlIAVILZGVzY3JpcHRpb26IAQFCBwoFX25hbWVCDgoMX2Rlc2NyaXB0aW9uQhEKD19h'
+    'bGxvd19mcmVldGV4dEIRCg9maWVsZF90eXBlX2RhdGFCDwoNX3N1YmplY3RfdHlwZUINCgtfZm'
+    'llbGRfdHlwZUIHCgVfbmFtZUIOCgxfZGVzY3JpcHRpb25CDgoMX2lzX2FyY2hpdmVkQgkKB19z'
+    'ZXRfaWQ=');
 
 @$core.Deprecated('Use updatePropertyResponseDescriptor instead')
 const UpdatePropertyResponse$json = {

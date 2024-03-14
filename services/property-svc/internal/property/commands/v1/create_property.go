@@ -10,10 +10,10 @@ import (
 	"property-svc/internal/property/models"
 )
 
-type CreatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID uuid.NullUUID, fieldTypeData models.FieldTypeData) error
+type CreatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *string, fieldTypeData *models.FieldTypeData) error
 
 func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID uuid.NullUUID, fieldTypeData models.FieldTypeData) error {
+	return func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *string, fieldTypeData *models.FieldTypeData) error {
 		a := aggregate.NewPropertyAggregate(propertyID)
 
 		exists, err := as.Exists(ctx, a)
@@ -25,8 +25,14 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyComma
 			return errors.New("cannot create an already existing aggregate")
 		}
 
-		if err := a.CreateProperty(ctx, subjectType, fieldType, name, fieldTypeData); err != nil {
+		if err := a.CreateProperty(ctx, subjectType, fieldType, name); err != nil {
 			return err
+		}
+
+		if fieldTypeData != nil {
+			if err := a.UpdateFieldTypeData(ctx, *fieldTypeData); err != nil {
+				return err
+			}
 		}
 
 		if description != nil {
@@ -35,8 +41,10 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyComma
 			}
 		}
 
-		if err := a.UpdateSetID(ctx, setID); err != nil {
-			return err
+		if setID != nil {
+			if err := a.UpdateSetID(ctx, *setID); err != nil {
+				return err
+			}
 		}
 
 		return as.Save(ctx, a)

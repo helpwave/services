@@ -322,14 +322,13 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.proto.services.property_svc.v1.CreatePropertyRequest.oneofGroups_ = [[8,9]];
+proto.proto.services.property_svc.v1.CreatePropertyRequest.oneofGroups_ = [[9]];
 
 /**
  * @enum {number}
  */
 proto.proto.services.property_svc.v1.CreatePropertyRequest.FieldTypeDataCase = {
   FIELD_TYPE_DATA_NOT_SET: 0,
-  NONE: 8,
   SELECT_DATA: 9
 };
 
@@ -376,7 +375,6 @@ proto.proto.services.property_svc.v1.CreatePropertyRequest.toObject = function(i
     name: jspb.Message.getFieldWithDefault(msg, 4, ""),
     description: jspb.Message.getFieldWithDefault(msg, 5, ""),
     setId: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    none: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
     selectData: (f = msg.getSelectData()) && proto.proto.services.property_svc.v1.CreatePropertyRequest.SelectData.toObject(includeInstance, f)
   };
 
@@ -433,10 +431,6 @@ proto.proto.services.property_svc.v1.CreatePropertyRequest.deserializeBinaryFrom
     case 6:
       var value = /** @type {string} */ (reader.readString());
       msg.setSetId(value);
-      break;
-    case 8:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setNone(value);
       break;
     case 9:
       var value = new proto.proto.services.property_svc.v1.CreatePropertyRequest.SelectData;
@@ -504,13 +498,6 @@ proto.proto.services.property_svc.v1.CreatePropertyRequest.serializeBinaryToWrit
   if (f != null) {
     writer.writeString(
       6,
-      f
-    );
-  }
-  f = /** @type {boolean} */ (jspb.Message.getField(message, 8));
-  if (f != null) {
-    writer.writeBool(
-      8,
       f
     );
   }
@@ -1034,42 +1021,6 @@ proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.clearSetId 
  */
 proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.hasSetId = function() {
   return jspb.Message.getField(this, 6) != null;
-};
-
-
-/**
- * optional bool none = 8;
- * @return {boolean}
- */
-proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.getNone = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 8, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.proto.services.property_svc.v1.CreatePropertyRequest} returns this
- */
-proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.setNone = function(value) {
-  return jspb.Message.setOneofField(this, 8, proto.proto.services.property_svc.v1.CreatePropertyRequest.oneofGroups_[0], value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.proto.services.property_svc.v1.CreatePropertyRequest} returns this
- */
-proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.clearNone = function() {
-  return jspb.Message.setOneofField(this, 8, proto.proto.services.property_svc.v1.CreatePropertyRequest.oneofGroups_[0], undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.proto.services.property_svc.v1.CreatePropertyRequest.prototype.hasNone = function() {
-  return jspb.Message.getField(this, 8) != null;
 };
 
 
@@ -1601,14 +1552,13 @@ proto.proto.services.property_svc.v1.GetPropertyRequest.prototype.setId = functi
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.proto.services.property_svc.v1.GetPropertyResponse.oneofGroups_ = [[9,10]];
+proto.proto.services.property_svc.v1.GetPropertyResponse.oneofGroups_ = [[10]];
 
 /**
  * @enum {number}
  */
 proto.proto.services.property_svc.v1.GetPropertyResponse.FieldTypeDataCase = {
   FIELD_TYPE_DATA_NOT_SET: 0,
-  NONE: 9,
   SELECT_DATA: 10
 };
 
@@ -1657,7 +1607,6 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.toObject = function(inc
     description: jspb.Message.getFieldWithDefault(msg, 5, ""),
     isArchived: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
     setId: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    none: jspb.Message.getBooleanFieldWithDefault(msg, 9, false),
     selectData: (f = msg.getSelectData()) && proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.toObject(includeInstance, f),
     alwaysIncludeForViewSource: jspb.Message.getBooleanFieldWithDefault(msg, 11, false)
   };
@@ -1723,10 +1672,6 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.deserializeBinaryFromRe
     case 8:
       var value = /** @type {string} */ (reader.readString());
       msg.setSetId(value);
-      break;
-    case 9:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setNone(value);
       break;
     case 10:
       var value = new proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData;
@@ -1812,13 +1757,6 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.serializeBinaryToWriter
   if (f != null) {
     writer.writeString(
       8,
-      f
-    );
-  }
-  f = /** @type {boolean} */ (jspb.Message.getField(message, 9));
-  if (f != null) {
-    writer.writeBool(
-      9,
       f
     );
   }
@@ -2419,42 +2357,6 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.hasSetId = fu
 
 
 /**
- * optional bool none = 9;
- * @return {boolean}
- */
-proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.getNone = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 9, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.proto.services.property_svc.v1.GetPropertyResponse} returns this
- */
-proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.setNone = function(value) {
-  return jspb.Message.setOneofField(this, 9, proto.proto.services.property_svc.v1.GetPropertyResponse.oneofGroups_[0], value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.proto.services.property_svc.v1.GetPropertyResponse} returns this
- */
-proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.clearNone = function() {
-  return jspb.Message.setOneofField(this, 9, proto.proto.services.property_svc.v1.GetPropertyResponse.oneofGroups_[0], undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.hasNone = function() {
-  return jspb.Message.getField(this, 9) != null;
-};
-
-
-/**
  * optional SelectData select_data = 10;
  * @return {?proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData}
  */
@@ -2536,14 +2438,13 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.prototype.hasAlwaysIncl
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.proto.services.property_svc.v1.UpdatePropertyRequest.oneofGroups_ = [[9,10]];
+proto.proto.services.property_svc.v1.UpdatePropertyRequest.oneofGroups_ = [[10]];
 
 /**
  * @enum {number}
  */
 proto.proto.services.property_svc.v1.UpdatePropertyRequest.FieldTypeDataCase = {
   FIELD_TYPE_DATA_NOT_SET: 0,
-  NONE: 9,
   SELECT_DATA: 10
 };
 
@@ -2592,7 +2493,6 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.toObject = function(i
     description: jspb.Message.getFieldWithDefault(msg, 5, ""),
     isArchived: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
     setId: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    none: jspb.Message.getBooleanFieldWithDefault(msg, 9, false),
     selectData: (f = msg.getSelectData()) && proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.toObject(includeInstance, f)
   };
 
@@ -2657,10 +2557,6 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.deserializeBinaryFrom
     case 8:
       var value = /** @type {string} */ (reader.readString());
       msg.setSetId(value);
-      break;
-    case 9:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setNone(value);
       break;
     case 10:
       var value = new proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData;
@@ -2742,13 +2638,6 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.serializeBinaryToWrit
   if (f != null) {
     writer.writeString(
       8,
-      f
-    );
-  }
-  f = /** @type {boolean} */ (jspb.Message.getField(message, 9));
-  if (f != null) {
-    writer.writeBool(
-      9,
       f
     );
   }
@@ -3477,42 +3366,6 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.prototype.clearSetId 
  */
 proto.proto.services.property_svc.v1.UpdatePropertyRequest.prototype.hasSetId = function() {
   return jspb.Message.getField(this, 8) != null;
-};
-
-
-/**
- * optional bool none = 9;
- * @return {boolean}
- */
-proto.proto.services.property_svc.v1.UpdatePropertyRequest.prototype.getNone = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 9, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.proto.services.property_svc.v1.UpdatePropertyRequest} returns this
- */
-proto.proto.services.property_svc.v1.UpdatePropertyRequest.prototype.setNone = function(value) {
-  return jspb.Message.setOneofField(this, 9, proto.proto.services.property_svc.v1.UpdatePropertyRequest.oneofGroups_[0], value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.proto.services.property_svc.v1.UpdatePropertyRequest} returns this
- */
-proto.proto.services.property_svc.v1.UpdatePropertyRequest.prototype.clearNone = function() {
-  return jspb.Message.setOneofField(this, 9, proto.proto.services.property_svc.v1.UpdatePropertyRequest.oneofGroups_[0], undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.proto.services.property_svc.v1.UpdatePropertyRequest.prototype.hasNone = function() {
-  return jspb.Message.getField(this, 9) != null;
 };
 
 

@@ -13,6 +13,7 @@ const (
 	PropertySetIDUpdated                       = "PROPERTY_SET_ID_UPDATED_v1"
 	PropertySubjectTypeUpdated                 = "PROPERTY_SUBJECT_TYPE_UPDATED_v1"
 	PropertyFieldTypeUpdated                   = "PROPERTY_FIELD_TYPE_UPDATED_v1"
+	PropertyFieldTypeDataUpdated               = "PROPERTY_FIELD_TYPE_DATA_UPDATED_v1"
 	PropertyNameUpdated                        = "PROPERTY_NAME_UPDATED_v1"
 	PropertyFieldTypeDataNoneUpdated           = "PROPERTY_FIELD_TYPE_DATA_NONE_UPDATED_v1"
 	PropertyFieldTypeDataAllowFreetextUpdated  = "PROPERTY_FIELD_TYPE_DATA_ALLOW_FREETEXT_UPDATED_v1"
@@ -28,19 +29,28 @@ type PropertyCreatedEvent struct {
 	SubjectType string `json:"subject_type"`
 	FieldType   string `json:"field_type"`
 
-	Name          string               `json:"name"`
-	FieldTypeData models.FieldTypeData `json:"field_type_data"`
+	Name string `json:"name"`
 }
 
-func NewPropertyCreatedEvent(a hwes.Aggregate, id uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, fieldTypeData models.FieldTypeData) (hwes.Event, error) {
+func NewPropertyCreatedEvent(a hwes.Aggregate, id uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string) (hwes.Event, error) {
 	payload := PropertyCreatedEvent{
-		ID:            id.String(),
-		SubjectType:   subjectType.String(),
-		FieldType:     fieldType.String(),
-		Name:          name,
-		FieldTypeData: fieldTypeData,
+		ID:          id.String(),
+		SubjectType: subjectType.String(),
+		FieldType:   fieldType.String(),
+		Name:        name,
 	}
 	return hwes.NewEventWithData(a, PropertyCreated, payload)
+}
+
+type FieldTypeDataUpdatedEvent struct {
+	FieldTypeData models.FieldTypeData
+}
+
+func NewFieldTypeDataUpdatedEvent(a hwes.Aggregate, fieldTypeData models.FieldTypeData) (hwes.Event, error) {
+	payload := FieldTypeDataUpdatedEvent{
+		FieldTypeData: fieldTypeData,
+	}
+	return hwes.NewEventWithData(a, PropertyFieldTypeDataUpdated, payload)
 }
 
 type PropertyDescriptionUpdatedEvent struct {

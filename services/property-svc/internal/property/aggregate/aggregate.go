@@ -46,6 +46,7 @@ func (a *PropertyAggregate) initEventListeners() {
 	a.RegisterEventListener(propertyEventsV1.PropertySubjectTypeUpdated, a.onSubjectTypeUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeUpdated, a.onFieldTypeUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, a.onNameUpdated)
+	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataUpdated, a.onFieldTypeDataUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, a.onAllowFreetextUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataNoneUpdated, a.onFieldTypeNoneUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsUpserted, a.onFieldTypeDataSelectOptionsUpserted)
@@ -76,6 +77,16 @@ func (a *PropertyAggregate) onPropertyCreated(evt hwes.Event) error {
 	a.Property.SubjectType = subjectType
 	a.Property.FieldType = fieldType
 	a.Property.Name = payload.Name
+
+	return nil
+}
+
+func (a *PropertyAggregate) onFieldTypeDataUpdated(evt hwes.Event) error {
+	var payload propertyEventsV1.FieldTypeDataUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
 	a.Property.FieldTypeData = payload.FieldTypeData
 
 	return nil
@@ -172,7 +183,7 @@ func (a *PropertyAggregate) onFieldTypeNoneUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	a.Property.FieldTypeData = models.FieldTypeData{None: &payload.None}
+	a.Property.FieldTypeData = models.FieldTypeData{}
 	return nil
 }
 

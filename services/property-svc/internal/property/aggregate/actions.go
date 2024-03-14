@@ -3,15 +3,23 @@ package aggregate
 import (
 	"context"
 	pb "gen/proto/services/property_svc/v1"
-	"github.com/google/uuid"
+	"hwutil"
 	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/models"
 )
 
-func (a *PropertyAggregate) CreateProperty(ctx context.Context, subjectType pb.SubjectType, fieldType pb.FieldType, name string, fieldTypeData models.FieldTypeData) error {
+func (a *PropertyAggregate) CreateProperty(ctx context.Context, subjectType pb.SubjectType, fieldType pb.FieldType, name string) error {
 	id := a.GetID()
 
-	event, err := propertyEventsV1.NewPropertyCreatedEvent(a, id, subjectType, fieldType, name, fieldTypeData)
+	event, err := propertyEventsV1.NewPropertyCreatedEvent(a, id, subjectType, fieldType, name)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *PropertyAggregate) UpdateFieldTypeData(ctx context.Context, fieldTypeData models.FieldTypeData) error {
+	event, err := propertyEventsV1.NewFieldTypeDataUpdatedEvent(a, fieldTypeData)
 	if err != nil {
 		return err
 	}
@@ -26,8 +34,12 @@ func (a *PropertyAggregate) UpdateDescription(ctx context.Context, newDescriptio
 	return a.Apply(event)
 }
 
-func (a *PropertyAggregate) UpdateSetID(ctx context.Context, newSetID uuid.NullUUID) error {
-	event, err := propertyEventsV1.NewPropertySetIDUpdatedEvent(a, newSetID)
+func (a *PropertyAggregate) UpdateSetID(ctx context.Context, newSetID string) error {
+	id, err := hwutil.ParseNullUUID(&newSetID)
+	if len(newSetID) > 0 && err != nil {
+		return err
+	}
+	event, err := propertyEventsV1.NewPropertySetIDUpdatedEvent(a, id)
 	if err != nil {
 		return err
 	}

@@ -9,10 +9,10 @@ import (
 	"property-svc/internal/property/models"
 )
 
-type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID uuid.NullUUID, allowFreetext *bool, none *bool, upsertOptions *[]models.SelectOption, removeOptions *[]string, isArchived *bool) error
+type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *string, allowFreetext *bool, none *bool, upsertOptions *[]models.SelectOption, removeOptions *[]string, isArchived *bool) error
 
 func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID uuid.NullUUID, allowFreetext *bool, none *bool, upsertOptions *[]models.SelectOption, removeOptions *[]string, isArchived *bool) error {
+	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *string, allowFreetext *bool, none *bool, upsertOptions *[]models.SelectOption, removeOptions *[]string, isArchived *bool) error {
 		a, err := aggregate.LoadPropertyAggregate(ctx, as, propertyID)
 		if err != nil {
 			return err
@@ -42,8 +42,10 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyComma
 			}
 		}
 
-		if err := a.UpdateSetID(ctx, setID); err != nil {
-			return err
+		if setID != nil {
+			if err := a.UpdateSetID(ctx, *setID); err != nil {
+				return err
+			}
 		}
 
 		if allowFreetext != nil {

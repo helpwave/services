@@ -23,9 +23,6 @@ export class CreatePropertyRequest extends jspb.Message {
   hasSetId(): boolean;
   clearSetId(): CreatePropertyRequest;
 
-  getNone(): boolean;
-  setNone(value: boolean): CreatePropertyRequest;
-
   getSelectData(): CreatePropertyRequest.SelectData | undefined;
   setSelectData(value?: CreatePropertyRequest.SelectData): CreatePropertyRequest;
   hasSelectData(): boolean;
@@ -48,7 +45,6 @@ export namespace CreatePropertyRequest {
     name: string,
     description?: string,
     setId?: string,
-    none: boolean,
     selectData?: CreatePropertyRequest.SelectData.AsObject,
   }
 
@@ -116,7 +112,6 @@ export namespace CreatePropertyRequest {
 
   export enum FieldTypeDataCase { 
     FIELD_TYPE_DATA_NOT_SET = 0,
-    NONE = 8,
     SELECT_DATA = 9,
   }
 
@@ -224,9 +219,6 @@ export class GetPropertyResponse extends jspb.Message {
   hasSetId(): boolean;
   clearSetId(): GetPropertyResponse;
 
-  getNone(): boolean;
-  setNone(value: boolean): GetPropertyResponse;
-
   getSelectData(): GetPropertyResponse.SelectData | undefined;
   setSelectData(value?: GetPropertyResponse.SelectData): GetPropertyResponse;
   hasSelectData(): boolean;
@@ -256,7 +248,6 @@ export namespace GetPropertyResponse {
     description?: string,
     isArchived: boolean,
     setId?: string,
-    none: boolean,
     selectData?: GetPropertyResponse.SelectData.AsObject,
     alwaysIncludeForViewSource?: boolean,
   }
@@ -329,7 +320,6 @@ export namespace GetPropertyResponse {
 
   export enum FieldTypeDataCase { 
     FIELD_TYPE_DATA_NOT_SET = 0,
-    NONE = 9,
     SELECT_DATA = 10,
   }
 
@@ -383,9 +373,6 @@ export class UpdatePropertyRequest extends jspb.Message {
   hasSetId(): boolean;
   clearSetId(): UpdatePropertyRequest;
 
-  getNone(): boolean;
-  setNone(value: boolean): UpdatePropertyRequest;
-
   getSelectData(): UpdatePropertyRequest.SelectData | undefined;
   setSelectData(value?: UpdatePropertyRequest.SelectData): UpdatePropertyRequest;
   hasSelectData(): boolean;
@@ -410,7 +397,6 @@ export namespace UpdatePropertyRequest {
     description?: string,
     isArchived?: boolean,
     setId?: string,
-    none: boolean,
     selectData?: UpdatePropertyRequest.SelectData.AsObject,
   }
 
@@ -495,7 +481,6 @@ export namespace UpdatePropertyRequest {
 
   export enum FieldTypeDataCase { 
     FIELD_TYPE_DATA_NOT_SET = 0,
-    NONE = 9,
     SELECT_DATA = 10,
   }
 

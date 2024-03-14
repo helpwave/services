@@ -19,7 +19,6 @@ type Property struct {
 }
 
 type FieldTypeData struct {
-	None       *bool       `json:"none,omitempty"`
 	SelectData *SelectData `json:"select_data,omitempty"`
 }
 
@@ -33,4 +32,3 @@ type SelectOption struct {
 	Name        string
 	Description string
 }
-
