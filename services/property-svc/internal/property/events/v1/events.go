@@ -13,7 +13,7 @@ const (
 	PropertySetIDUpdated                       = "PROPERTY_SET_ID_UPDATED_v1"
 	PropertySubjectTypeUpdated                 = "PROPERTY_SUBJECT_TYPE_UPDATED_v1"
 	PropertyFieldTypeUpdated                   = "PROPERTY_FIELD_TYPE_UPDATED_v1"
-	PropertyFieldTypeDataUpdated               = "PROPERTY_FIELD_TYPE_DATA_UPDATED_v1"
+	PropertyFieldTypeDataCreated               = "PROPERTY_FIELD_TYPE_DATA_CREATED_v1"
 	PropertyNameUpdated                        = "PROPERTY_NAME_UPDATED_v1"
 	PropertyFieldTypeDataAllowFreetextUpdated  = "PROPERTY_FIELD_TYPE_DATA_ALLOW_FREETEXT_UPDATED_v1"
 	PropertyFieldTypeDataSelectOptionsRemoved  = "PROPERTY_FIELD_TYPE_DATA_SELECT_OPTIONS_REMOVED_v1"
@@ -41,15 +41,15 @@ func NewPropertyCreatedEvent(a hwes.Aggregate, id uuid.UUID, subjectType pb.Subj
 	return hwes.NewEventWithData(a, PropertyCreated, payload)
 }
 
-type FieldTypeDataUpdatedEvent struct {
+type FieldTypeDataCreatedEvent struct {
 	FieldTypeData models.FieldTypeData
 }
 
-func NewFieldTypeDataUpdatedEvent(a hwes.Aggregate, fieldTypeData models.FieldTypeData) (hwes.Event, error) {
-	payload := FieldTypeDataUpdatedEvent{
+func NewFieldTypeDataCreatedEvent(a hwes.Aggregate, fieldTypeData models.FieldTypeData) (hwes.Event, error) {
+	payload := FieldTypeDataCreatedEvent{
 		FieldTypeData: fieldTypeData,
 	}
-	return hwes.NewEventWithData(a, PropertyFieldTypeDataUpdated, payload)
+	return hwes.NewEventWithData(a, PropertyFieldTypeDataCreated, payload)
 }
 
 type PropertyDescriptionUpdatedEvent struct {

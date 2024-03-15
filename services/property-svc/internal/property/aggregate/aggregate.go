@@ -46,7 +46,7 @@ func (a *PropertyAggregate) initEventListeners() {
 	a.RegisterEventListener(propertyEventsV1.PropertySubjectTypeUpdated, a.onSubjectTypeUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeUpdated, a.onFieldTypeUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, a.onNameUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataUpdated, a.onFieldTypeDataUpdated)
+	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataCreated, a.onFieldTypeDataCreated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, a.onAllowFreetextUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsUpserted, a.onFieldTypeDataSelectOptionsUpserted)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsRemoved, a.onFieldTypeDataSelectOptionsRemoved)
@@ -80,8 +80,8 @@ func (a *PropertyAggregate) onPropertyCreated(evt hwes.Event) error {
 	return nil
 }
 
-func (a *PropertyAggregate) onFieldTypeDataUpdated(evt hwes.Event) error {
-	var payload propertyEventsV1.FieldTypeDataUpdatedEvent
+func (a *PropertyAggregate) onFieldTypeDataCreated(evt hwes.Event) error {
+	var payload propertyEventsV1.FieldTypeDataCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err
 	}

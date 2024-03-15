@@ -18,8 +18,8 @@ func (a *PropertyAggregate) CreateProperty(ctx context.Context, subjectType pb.S
 	return a.Apply(event)
 }
 
-func (a *PropertyAggregate) UpdateFieldTypeData(ctx context.Context, fieldTypeData models.FieldTypeData) error {
-	event, err := propertyEventsV1.NewFieldTypeDataUpdatedEvent(a, fieldTypeData)
+func (a *PropertyAggregate) CreateFieldTypeData(ctx context.Context, fieldTypeData models.FieldTypeData) error {
+	event, err := propertyEventsV1.NewFieldTypeDataCreatedEvent(a, fieldTypeData)
 	if err != nil {
 		return err
 	}
