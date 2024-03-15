@@ -78,6 +78,7 @@ message GetPropertyResponse {
       string id = 1;
       string name = 2;
       optional string description = 3;
+      bool is_custom = 4;
     }
   }
 

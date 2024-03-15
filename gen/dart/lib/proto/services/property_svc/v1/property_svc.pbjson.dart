@@ -156,6 +156,7 @@ const GetPropertyResponse_SelectData_SelectOption$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'description', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
+    {'1': 'is_custom', '3': 4, '4': 1, '5': 8, '10': 'isCustom'},
   ],
   '8': [
     {'1': '_description'},
@@ -172,14 +173,14 @@ final $typed_data.Uint8List getPropertyResponseDescriptor = $convert.base64Decod
     'NoaXZlZBIaCgZzZXRfaWQYCCABKAlIAlIFc2V0SWSIAQESYQoLc2VsZWN0X2RhdGEYCiABKAsy'
     'Pi5wcm90by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuR2V0UHJvcGVydHlSZXNwb25zZS5TZW'
     'xlY3REYXRhSABSCnNlbGVjdERhdGESRwoeYWx3YXlzX2luY2x1ZGVfZm9yX3ZpZXdfc291cmNl'
-    'GAsgASgISANSGmFsd2F5c0luY2x1ZGVGb3JWaWV3U291cmNliAEBGp0CCgpTZWxlY3REYXRhEi'
+    'GAsgASgISANSGmFsd2F5c0luY2x1ZGVGb3JWaWV3U291cmNliAEBGrsCCgpTZWxlY3REYXRhEi'
     'oKDmFsbG93X2ZyZWV0ZXh0GAEgASgISABSDWFsbG93RnJlZXRleHSIAQESZQoHb3B0aW9ucxgC'
     'IAMoCzJLLnByb3RvLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5HZXRQcm9wZXJ0eVJlc3Bvbn'
-    'NlLlNlbGVjdERhdGEuU2VsZWN0T3B0aW9uUgdvcHRpb25zGmkKDFNlbGVjdE9wdGlvbhIOCgJp'
-    'ZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIlCgtkZXNjcmlwdGlvbhgDIAEoCUgAUg'
-    'tkZXNjcmlwdGlvbogBAUIOCgxfZGVzY3JpcHRpb25CEQoPX2FsbG93X2ZyZWV0ZXh0QhEKD2Zp'
-    'ZWxkX3R5cGVfZGF0YUIOCgxfZGVzY3JpcHRpb25CCQoHX3NldF9pZEIhCh9fYWx3YXlzX2luY2'
-    'x1ZGVfZm9yX3ZpZXdfc291cmNl');
+    'NlLlNlbGVjdERhdGEuU2VsZWN0T3B0aW9uUgdvcHRpb25zGoYBCgxTZWxlY3RPcHRpb24SDgoC'
+    'aWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSJQoLZGVzY3JpcHRpb24YAyABKAlIAF'
+    'ILZGVzY3JpcHRpb26IAQESGwoJaXNfY3VzdG9tGAQgASgIUghpc0N1c3RvbUIOCgxfZGVzY3Jp'
+    'cHRpb25CEQoPX2FsbG93X2ZyZWV0ZXh0QhEKD2ZpZWxkX3R5cGVfZGF0YUIOCgxfZGVzY3JpcH'
+    'Rpb25CCQoHX3NldF9pZEIhCh9fYWx3YXlzX2luY2x1ZGVfZm9yX3ZpZXdfc291cmNl');
 
 @$core.Deprecated('Use updatePropertyRequestDescriptor instead')
 const UpdatePropertyRequest$json = {

@@ -1946,7 +1946,8 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    description: jspb.Message.getFieldWithDefault(msg, 3, "")
+    description: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    isCustom: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
   };
 
   if (includeInstance) {
@@ -1995,6 +1996,10 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
       var value = /** @type {string} */ (reader.readString());
       msg.setDescription(value);
       break;
+    case 4:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsCustom(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -2042,6 +2047,13 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
   if (f != null) {
     writer.writeString(
       3,
+      f
+    );
+  }
+  f = message.getIsCustom();
+  if (f) {
+    writer.writeBool(
+      4,
       f
     );
   }
@@ -2117,6 +2129,24 @@ proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
  */
 proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.hasDescription = function() {
   return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional bool is_custom = 4;
+ * @return {boolean}
+ */
+proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.getIsCustom = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption} returns this
+ */
+proto.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.setIsCustom = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 4, value);
 };
 
 

@@ -91,6 +91,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 							Id:          option.ID.String(),
 							Name:        option.Name,
 							Description: option.Description,
+							IsCustom:    option.IsCustom,
 						}
 					}),
 				}}

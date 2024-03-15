@@ -289,6 +289,9 @@ export namespace GetPropertyResponse {
       hasDescription(): boolean;
       clearDescription(): SelectOption;
 
+      getIsCustom(): boolean;
+      setIsCustom(value: boolean): SelectOption;
+
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SelectOption.AsObject;
       static toObject(includeInstance: boolean, msg: SelectOption): SelectOption.AsObject;
@@ -302,6 +305,7 @@ export namespace GetPropertyResponse {
         id: string,
         name: string,
         description?: string,
+        isCustom: boolean,
       }
 
       export enum DescriptionCase { 
