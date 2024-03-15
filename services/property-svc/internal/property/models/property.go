@@ -31,10 +31,12 @@ type SelectOption struct {
 	ID          uuid.UUID
 	Name        string
 	Description *string
+	IsCustom    bool
 }
 
 type UpdateSelectOption struct {
 	ID          uuid.UUID
 	Name        *string
 	Description *string
+	IsCustom    *bool
 }

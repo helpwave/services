@@ -775,6 +775,7 @@ class UpdatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage
     $core.String? id,
     $core.String? name,
     $core.String? description,
+    $core.bool? isCustom,
   }) {
     final $result = create();
     if (id != null) {
@@ -786,6 +787,9 @@ class UpdatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage
     if (description != null) {
       $result.description = description;
     }
+    if (isCustom != null) {
+      $result.isCustom = isCustom;
+    }
     return $result;
   }
   UpdatePropertyRequest_SelectData_SelectOption._() : super();
@@ -796,6 +800,7 @@ class UpdatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
+    ..aOB(4, _omitFieldNames ? '' : 'isCustom')
     ..hasRequiredFields = false
   ;
 
@@ -846,6 +851,15 @@ class UpdatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage
   $core.bool hasDescription() => $_has(2);
   @$pb.TagNumber(3)
   void clearDescription() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get isCustom => $_getBF(3);
+  @$pb.TagNumber(4)
+  set isCustom($core.bool v) { $_setBool(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasIsCustom() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearIsCustom() => clearField(4);
 }
 
 class UpdatePropertyRequest_SelectData extends $pb.GeneratedMessage {

@@ -115,7 +115,7 @@ message UpdatePropertyRequest {
       string id = 1;
       optional string name = 2;
       optional string description = 3;
-      // TODO: TBD: optional bool is_custom = 4; why is that only in updateProperty and not in createProperty?
+      optional bool is_custom = 4;
     }
   }
 

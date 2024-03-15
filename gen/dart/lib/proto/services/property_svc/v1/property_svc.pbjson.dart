@@ -227,10 +227,12 @@ const UpdatePropertyRequest_SelectData_SelectOption$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'name', '17': true},
     {'1': 'description', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'description', '17': true},
+    {'1': 'is_custom', '3': 4, '4': 1, '5': 8, '9': 2, '10': 'isCustom', '17': true},
   ],
   '8': [
     {'1': '_name'},
     {'1': '_description'},
+    {'1': '_is_custom'},
   ],
 };
 
@@ -243,16 +245,16 @@ final $typed_data.Uint8List updatePropertyRequestDescriptor = $convert.base64Dec
     'YW1liAEBEiUKC2Rlc2NyaXB0aW9uGAUgASgJSARSC2Rlc2NyaXB0aW9uiAEBEiQKC2lzX2FyY2'
     'hpdmVkGAYgASgISAVSCmlzQXJjaGl2ZWSIAQESGgoGc2V0X2lkGAggASgJSAZSBXNldElkiAEB'
     'EmMKC3NlbGVjdF9kYXRhGAogASgLMkAucHJvdG8uc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLl'
-    'VwZGF0ZVByb3BlcnR5UmVxdWVzdC5TZWxlY3REYXRhSABSCnNlbGVjdERhdGEa4QIKClNlbGVj'
+    'VwZGF0ZVByb3BlcnR5UmVxdWVzdC5TZWxlY3REYXRhSABSCnNlbGVjdERhdGEakgMKClNlbGVj'
     'dERhdGESKgoOYWxsb3dfZnJlZXRleHQYASABKAhIAFINYWxsb3dGcmVldGV4dIgBARIlCg5yZW'
     '1vdmVfb3B0aW9ucxgCIAMoCVINcmVtb3ZlT3B0aW9ucxJ0Cg51cHNlcnRfb3B0aW9ucxgDIAMo'
     'CzJNLnByb3RvLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5VcGRhdGVQcm9wZXJ0eVJlcXVlc3'
-    'QuU2VsZWN0RGF0YS5TZWxlY3RPcHRpb25SDXVwc2VydE9wdGlvbnMadwoMU2VsZWN0T3B0aW9u'
-    'Eg4KAmlkGAEgASgJUgJpZBIXCgRuYW1lGAIgASgJSABSBG5hbWWIAQESJQoLZGVzY3JpcHRpb2'
-    '4YAyABKAlIAVILZGVzY3JpcHRpb26IAQFCBwoFX25hbWVCDgoMX2Rlc2NyaXB0aW9uQhEKD19h'
-    'bGxvd19mcmVldGV4dEIRCg9maWVsZF90eXBlX2RhdGFCDwoNX3N1YmplY3RfdHlwZUINCgtfZm'
-    'llbGRfdHlwZUIHCgVfbmFtZUIOCgxfZGVzY3JpcHRpb25CDgoMX2lzX2FyY2hpdmVkQgkKB19z'
-    'ZXRfaWQ=');
+    'QuU2VsZWN0RGF0YS5TZWxlY3RPcHRpb25SDXVwc2VydE9wdGlvbnMapwEKDFNlbGVjdE9wdGlv'
+    'bhIOCgJpZBgBIAEoCVICaWQSFwoEbmFtZRgCIAEoCUgAUgRuYW1liAEBEiUKC2Rlc2NyaXB0aW'
+    '9uGAMgASgJSAFSC2Rlc2NyaXB0aW9uiAEBEiAKCWlzX2N1c3RvbRgEIAEoCEgCUghpc0N1c3Rv'
+    'bYgBAUIHCgVfbmFtZUIOCgxfZGVzY3JpcHRpb25CDAoKX2lzX2N1c3RvbUIRCg9fYWxsb3dfZn'
+    'JlZXRleHRCEQoPZmllbGRfdHlwZV9kYXRhQg8KDV9zdWJqZWN0X3R5cGVCDQoLX2ZpZWxkX3R5'
+    'cGVCBwoFX25hbWVCDgoMX2Rlc2NyaXB0aW9uQg4KDF9pc19hcmNoaXZlZEIJCgdfc2V0X2lk');
 
 @$core.Deprecated('Use updatePropertyResponseDescriptor instead')
 const UpdatePropertyResponse$json = {

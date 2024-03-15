@@ -2832,7 +2832,8 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOpti
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    description: jspb.Message.getFieldWithDefault(msg, 3, "")
+    description: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    isCustom: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
   };
 
   if (includeInstance) {
@@ -2881,6 +2882,10 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOpti
       var value = /** @type {string} */ (reader.readString());
       msg.setDescription(value);
       break;
+    case 4:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsCustom(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -2928,6 +2933,13 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOpti
   if (f != null) {
     writer.writeString(
       3,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
+    writer.writeBool(
+      4,
       f
     );
   }
@@ -3021,6 +3033,42 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOpti
  */
 proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption.prototype.hasDescription = function() {
   return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional bool is_custom = 4;
+ * @return {boolean}
+ */
+proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption.prototype.getIsCustom = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption} returns this
+ */
+proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption.prototype.setIsCustom = function(value) {
+  return jspb.Message.setField(this, 4, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption} returns this
+ */
+proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption.prototype.clearIsCustom = function() {
+  return jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption.prototype.hasIsCustom = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 

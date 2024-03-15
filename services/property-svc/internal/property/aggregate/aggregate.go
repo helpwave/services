@@ -215,6 +215,9 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event)
 			if option.Description != nil {
 				updatedOpt.Description = option.Description
 			}
+			if option.IsCustom != nil {
+				updatedOpt.IsCustom = *option.IsCustom
+			}
 			existingSelectOptions[option.ID] = updatedOpt
 		}
 	}

@@ -124,6 +124,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 					ID:          id,
 					Name:        option.Name,
 					Description: option.Description,
+					IsCustom:    option.IsCustom,
 				}, nil
 			})
 			if err != nil {
