@@ -184,71 +184,51 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event)
 		return err
 	}
 
+	var initialAllowFreetext bool
 	existingSelectOptions := make(map[uuid.UUID]models.SelectOption)
-	if a.Property.FieldTypeData != nil {
-		for _, option := range a.Property.FieldTypeData.SelectData.SelectOptions {
-			existingSelectOptions[option.ID] = option
-		}
-	}
 
-	collectAdders := func(options []models.UpdateSelectOption) ([]models.SelectOption, error) {
-		var adders []models.SelectOption
-		for _, option := range options {
-			if _, exists := existingSelectOptions[option.ID]; !exists {
-				if option.Name == nil {
-					return []models.SelectOption{}, fmt.Errorf("name missing for selectOption with id %s", option.ID.String())
-				}
-				adders = append(adders, models.SelectOption{
-					ID:          option.ID,
-					Name:        *option.Name,
-					Description: option.Description,
-				})
+	initialFieldTypeData := a.Property.FieldTypeData
+	if initialFieldTypeData != nil {
+		if initialFieldTypeData.SelectData != nil {
+			initialAllowFreetext = initialFieldTypeData.SelectData.AllowFreetext
+			for _, option := range initialFieldTypeData.SelectData.SelectOptions {
+				existingSelectOptions[option.ID] = option
 			}
 		}
-		// append already existing ones
-		for _, existing := range existingSelectOptions {
-			adders = append(adders, existing)
-		}
-		return adders, nil
 	}
-	collectUpdated := func(options []models.UpdateSelectOption) []models.SelectOption {
-		var updated []models.SelectOption
-		for _, option := range options {
-			if _, exists := existingSelectOptions[option.ID]; exists {
-				updatedOpt := existingSelectOptions[option.ID]
-				if option.Name != nil {
-					updatedOpt.Name = *option.Name
-				}
-				if option.Description != nil {
-					updatedOpt.Description = option.Description
-				}
-				updated = append(updated, updatedOpt)
+
+	for _, option := range payload.UpsertedSelectOptions {
+		if _, exists := existingSelectOptions[option.ID]; !exists {
+			if option.Name == nil {
+				return fmt.Errorf("name missing for selectOption with id %s", option.ID.String())
 			}
+			existingSelectOptions[option.ID] = models.SelectOption{
+				ID:          option.ID,
+				Name:        *option.Name,
+				Description: option.Description,
+			}
+		} else {
+			updatedOpt := existingSelectOptions[option.ID]
+			if option.Name != nil {
+				updatedOpt.Name = *option.Name
+			}
+			if option.Description != nil {
+				updatedOpt.Description = option.Description
+			}
+			existingSelectOptions[option.ID] = updatedOpt
 		}
-
-		return updated
 	}
 
-	// TODO: Can we replace FieldTypeData always?
-	if a.Property.FieldTypeData == nil {
-		insert, err := collectAdders(payload.UpsertedSelectOptions)
-		if err != nil {
-			return err
-		}
-		a.Property.FieldTypeData = &models.FieldTypeData{
-			SelectData: &models.SelectData{
-				SelectOptions: insert,
-			},
-		}
-	} else {
-		// Upsert
-		insert, err := collectAdders(payload.UpsertedSelectOptions)
-		if err != nil {
-			return err
-		}
-		updated := collectUpdated(payload.UpsertedSelectOptions)
+	var updatedSelectOptions []models.SelectOption
+	for _, opt := range existingSelectOptions {
+		updatedSelectOptions = append(updatedSelectOptions, opt)
+	}
 
-		a.Property.FieldTypeData.SelectData.SelectOptions = append(insert, updated...)
+	a.Property.FieldTypeData = &models.FieldTypeData{
+		SelectData: &models.SelectData{
+			AllowFreetext: initialAllowFreetext,
+			SelectOptions: updatedSelectOptions,
+		},
 	}
 
 	return nil
