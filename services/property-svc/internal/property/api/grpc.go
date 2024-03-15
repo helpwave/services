@@ -80,22 +80,20 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		FieldTypeData:              nil,
 	}
 
-	if property.FieldTypeData != nil {
-		switch {
-		case property.FieldTypeData.SelectData != nil:
-			response.FieldTypeData = &pb.GetPropertyResponse_SelectData_{
-				SelectData: &pb.GetPropertyResponse_SelectData{
-					AllowFreetext: &property.FieldTypeData.SelectData.AllowFreetext,
-					Options: hwutil.Map(property.FieldTypeData.SelectData.SelectOptions, func(option models.SelectOption) *pb.GetPropertyResponse_SelectData_SelectOption {
-						return &pb.GetPropertyResponse_SelectData_SelectOption{
-							Id:          option.ID.String(),
-							Name:        option.Name,
-							Description: option.Description,
-							IsCustom:    option.IsCustom,
-						}
-					}),
-				}}
-		}
+	switch {
+	case property.FieldTypeData.SelectData != nil:
+		response.FieldTypeData = &pb.GetPropertyResponse_SelectData_{
+			SelectData: &pb.GetPropertyResponse_SelectData{
+				AllowFreetext: &property.FieldTypeData.SelectData.AllowFreetext,
+				Options: hwutil.Map(property.FieldTypeData.SelectData.SelectOptions, func(option models.SelectOption) *pb.GetPropertyResponse_SelectData_SelectOption {
+					return &pb.GetPropertyResponse_SelectData_SelectOption{
+						Id:          option.ID.String(),
+						Name:        option.Name,
+						Description: option.Description,
+						IsCustom:    option.IsCustom,
+					}
+				}),
+			}}
 	}
 
 	return response, nil

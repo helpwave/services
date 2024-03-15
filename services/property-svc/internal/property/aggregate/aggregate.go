@@ -86,7 +86,7 @@ func (a *PropertyAggregate) onFieldTypeDataCreated(evt hwes.Event) error {
 		return err
 	}
 
-	a.Property.FieldTypeData = &payload.FieldTypeData
+	a.Property.FieldTypeData = payload.FieldTypeData
 
 	return nil
 }
@@ -149,7 +149,7 @@ func (a *PropertyAggregate) onFieldTypeUpdated(evt hwes.Event) error {
 	}
 	fieldType := (pb.FieldType)(value)
 
-	if a.Property.FieldTypeData != nil && fieldType != pb.FieldType_FIELD_TYPE_SELECT {
+	if fieldType != pb.FieldType_FIELD_TYPE_SELECT {
 		a.Property.FieldTypeData.SelectData = nil
 	}
 
@@ -173,18 +173,8 @@ func (a *PropertyAggregate) onAllowFreetextUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	var initialSelectOptions []models.SelectOption
-	if a.Property.FieldTypeData != nil {
-		if a.Property.FieldTypeData.SelectData != nil {
-			initialSelectOptions = a.Property.FieldTypeData.SelectData.SelectOptions
-		}
-	}
-
-	a.Property.FieldTypeData = &models.FieldTypeData{
-		SelectData: &models.SelectData{
-			AllowFreetext: payload.NewAllowFreetext,
-			SelectOptions: initialSelectOptions,
-		},
+	if a.Property.FieldTypeData.SelectData != nil {
+		a.Property.FieldTypeData.SelectData.AllowFreetext = payload.NewAllowFreetext
 	}
 
 	return nil
@@ -196,31 +186,26 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event)
 		return err
 	}
 
-	var initialAllowFreetext bool
-	existingSelectOptions := make(map[uuid.UUID]models.SelectOption)
+	selectOptions := make(map[uuid.UUID]models.SelectOption)
 
-	initialFieldTypeData := a.Property.FieldTypeData
-	if initialFieldTypeData != nil {
-		if initialFieldTypeData.SelectData != nil {
-			initialAllowFreetext = initialFieldTypeData.SelectData.AllowFreetext
-			for _, option := range initialFieldTypeData.SelectData.SelectOptions {
-				existingSelectOptions[option.ID] = option
-			}
+	if a.Property.FieldTypeData.SelectData != nil {
+		for _, option := range a.Property.FieldTypeData.SelectData.SelectOptions {
+			selectOptions[option.ID] = option
 		}
 	}
 
 	for _, option := range payload.UpsertedSelectOptions {
-		if _, exists := existingSelectOptions[option.ID]; !exists {
+		if _, exists := selectOptions[option.ID]; !exists {
 			if option.Name == nil {
 				return fmt.Errorf("name missing for selectOption with id %s", option.ID.String())
 			}
-			existingSelectOptions[option.ID] = models.SelectOption{
+			selectOptions[option.ID] = models.SelectOption{
 				ID:          option.ID,
 				Name:        *option.Name,
 				Description: option.Description,
 			}
 		} else {
-			updatedOpt := existingSelectOptions[option.ID]
+			updatedOpt := selectOptions[option.ID]
 			if option.Name != nil {
 				updatedOpt.Name = *option.Name
 			}
@@ -230,20 +215,25 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event)
 			if option.IsCustom != nil {
 				updatedOpt.IsCustom = *option.IsCustom
 			}
-			existingSelectOptions[option.ID] = updatedOpt
+			selectOptions[option.ID] = updatedOpt
 		}
 	}
 
-	var updatedSelectOptions []models.SelectOption
-	for _, opt := range existingSelectOptions {
-		updatedSelectOptions = append(updatedSelectOptions, opt)
+	var updatedSelectOptions = make([]models.SelectOption, len(selectOptions))
+	var idx uint8 = 0
+	for _, opt := range selectOptions {
+		updatedSelectOptions[idx] = opt
+		idx++
 	}
 
-	a.Property.FieldTypeData = &models.FieldTypeData{
-		SelectData: &models.SelectData{
-			AllowFreetext: initialAllowFreetext,
-			SelectOptions: updatedSelectOptions,
-		},
+	if a.Property.FieldTypeData.SelectData != nil {
+		a.Property.FieldTypeData.SelectData.SelectOptions = updatedSelectOptions
+	} else {
+		a.Property.FieldTypeData = models.FieldTypeData{
+			SelectData: &models.SelectData{
+				SelectOptions: updatedSelectOptions,
+			},
+		}
 	}
 
 	return nil
@@ -255,17 +245,15 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsRemoved(evt hwes.Event) 
 		return err
 	}
 
-	if a.Property.FieldTypeData != nil {
-		if a.Property.FieldTypeData.SelectData != nil {
-			a.Property.FieldTypeData.SelectData.SelectOptions = hwutil.Filter(a.Property.FieldTypeData.SelectData.SelectOptions, func(selectOption models.SelectOption) bool {
-				for _, id := range payload.RemovedSelectOptions {
-					if selectOption.ID.String() == id {
-						return false
-					}
+	if a.Property.FieldTypeData.SelectData != nil {
+		a.Property.FieldTypeData.SelectData.SelectOptions = hwutil.Filter(a.Property.FieldTypeData.SelectData.SelectOptions, func(selectOption models.SelectOption) bool {
+			for _, id := range payload.RemovedSelectOptions {
+				if selectOption.ID.String() == id {
+					return false
 				}
-				return true
-			})
-		}
+			}
+			return true
+		})
 	}
 
 	return nil
