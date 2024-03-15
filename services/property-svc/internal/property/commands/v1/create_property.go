@@ -30,8 +30,10 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyComma
 		}
 
 		if fieldTypeData != nil {
-			if err := a.CreateFieldTypeData(ctx, *fieldTypeData); err != nil {
-				return err
+			if fieldTypeData.SelectData != nil && fieldType == pb.FieldType_FIELD_TYPE_SELECT {
+				if err := a.CreateFieldTypeData(ctx, *fieldTypeData); err != nil {
+					return err
+				}
 			}
 		}
 
