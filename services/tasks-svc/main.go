@@ -6,7 +6,7 @@ import (
 	pb "gen/proto/services/tasks_svc/v1"
 	"hwdb"
 	"hwes/eventstoredb"
-	"tasks-svc/internal/task/projections/echo"
+	"tasks-svc/internal/task/projections/postgres"
 	"tasks-svc/internal/tracking"
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
@@ -35,9 +35,9 @@ func main() {
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
 
 	go func() {
-		echoProjection := echo.NewProjection(eventStore, ServiceName)
-		if err := echoProjection.Subscribe(ctx); err != nil {
-			log.Err(err).Msg("error during echo subscription")
+		postgresTaskProjection := postgres.NewProjection(eventStore, ServiceName)
+		if err := postgresTaskProjection.Subscribe(ctx); err != nil {
+			log.Err(err).Msg("error during task-postgres subscription")
 			cancel()
 		}
 	}()

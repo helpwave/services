@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 15.6
--- Dumped by pg_dump version 15.6
+-- Dumped by pg_dump version 15.5
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -47,6 +47,22 @@ CREATE TABLE public.beds (
 
 
 --
+-- Name: patients; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.patients (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    human_readable_identifier text NOT NULL,
+    organization_id uuid NOT NULL,
+    notes text DEFAULT ''::text NOT NULL,
+    bed_id uuid,
+    is_discharged integer DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
 -- Name: rooms; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -65,6 +81,20 @@ CREATE TABLE public.rooms (
 CREATE TABLE public.schema_migrations (
     version bigint NOT NULL,
     dirty boolean NOT NULL
+);
+
+
+--
+-- Name: subtasks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.subtasks (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    task_id uuid NOT NULL,
+    name text NOT NULL,
+    done boolean DEFAULT false NOT NULL,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
+    creation_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -94,6 +124,24 @@ CREATE TABLE public.task_templates (
 
 
 --
+-- Name: tasks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tasks (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    name text NOT NULL,
+    description text DEFAULT ''::text NOT NULL,
+    status integer NOT NULL,
+    assigned_user_id uuid DEFAULT public.uuid_nil(),
+    patient_id uuid NOT NULL,
+    public boolean DEFAULT false NOT NULL,
+    organization_id uuid NOT NULL,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
+    due_at timestamp without time zone DEFAULT '1970-01-01 00:00:00'::timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: wards; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -113,6 +161,22 @@ ALTER TABLE ONLY public.beds
 
 
 --
+-- Name: patients patients_bed_id_unique; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.patients
+    ADD CONSTRAINT patients_bed_id_unique UNIQUE (bed_id);
+
+
+--
+-- Name: patients patients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.patients
+    ADD CONSTRAINT patients_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: rooms rooms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -126,6 +190,14 @@ ALTER TABLE ONLY public.rooms
 
 ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: subtasks subtasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.subtasks
+    ADD CONSTRAINT subtasks_pkey PRIMARY KEY (id);
 
 
 --
@@ -145,6 +217,14 @@ ALTER TABLE ONLY public.task_templates
 
 
 --
+-- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT tasks_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: wards wards_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -161,11 +241,27 @@ ALTER TABLE ONLY public.beds
 
 
 --
+-- Name: patients patients_bed_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.patients
+    ADD CONSTRAINT patients_bed_id_fkey FOREIGN KEY (bed_id) REFERENCES public.beds(id) ON DELETE SET NULL;
+
+
+--
 -- Name: rooms rooms_ward_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.rooms
     ADD CONSTRAINT rooms_ward_id_fk FOREIGN KEY (ward_id) REFERENCES public.wards(id) ON DELETE CASCADE;
+
+
+--
+-- Name: subtasks subtasks_task_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.subtasks
+    ADD CONSTRAINT subtasks_task_id_fkey FOREIGN KEY (task_id) REFERENCES public.tasks(id) ON DELETE CASCADE;
 
 
 --
