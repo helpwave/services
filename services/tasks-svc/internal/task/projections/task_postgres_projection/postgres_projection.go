@@ -1,4 +1,4 @@
-package postgres
+package task_postgres_projection
 
 import (
 	"context"
