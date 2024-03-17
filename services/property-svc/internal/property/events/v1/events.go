@@ -42,7 +42,7 @@ func NewPropertyDescriptionUpdatedEvent(a hwes.Aggregate, description string) (h
 	payload := PropertyDescriptionUpdatedEvent{
 		Description: description,
 	}
-	return hwes.NewEventWithData(a, PropertyDescriptionUpdated, payload)
+	return hwes.NewEvent(a, PropertyDescriptionUpdated, hwes.WithData(payload))
 }
 
 type PropertySetIDUpdatedEvent struct {
@@ -57,5 +57,5 @@ func NewPropertySetIDUpdatedEvent(a hwes.Aggregate, setID uuid.NullUUID) (hwes.E
 	payload := PropertySetIDUpdatedEvent{
 		SetID: sids,
 	}
-	return hwes.NewEventWithData(a, PropertySetIDUpdated, payload)
+	return hwes.NewEvent(a, PropertySetIDUpdated, hwes.WithData(payload))
 }
