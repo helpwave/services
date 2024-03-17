@@ -4,16 +4,13 @@ import (
 	"common"
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
-	"hwdb"
-	"hwes/eventstoredb"
-	"tasks-svc/internal/task/projections/echo"
-	"tasks-svc/internal/tracking"
-
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
+	"hwdb"
+	"hwes/eventstoredb"
 	patient "tasks-svc/internal/patient/api"
 	task "tasks-svc/internal/task/api"
-	"time"
+	"tasks-svc/internal/task/projections/echo"
 )
 
 const ServiceName = "tasks-svc"
@@ -29,7 +26,8 @@ func main() {
 	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
 	defer closeDBPool()
 
-	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
+	// TODO: https://github.com/helpwave/services/issues/694
+	// tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
