@@ -50,38 +50,38 @@ func NewPatientCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID,
 		HumanReadableIdentifier: humanReadableIdentifier,
 		Notes:                   notes,
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, PatientCreated, payload)
+	return hwes.NewEvent(a, PatientCreated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewHumanReadableIdentifierUpdatedEvent(ctx context.Context, a hwes.Aggregate, humanReadableIdentifier string) (hwes.Event, error) {
 	payload := HumanReadableIdentifierUpdatedEvent{
 		HumanReadableIdentifier: humanReadableIdentifier,
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, HumanReadableIdentifierUpdated, payload)
+	return hwes.NewEvent(a, HumanReadableIdentifierUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewNotesUpdatedEvent(ctx context.Context, a hwes.Aggregate, notes string) (hwes.Event, error) {
 	payload := NotesUpdatedEvent{
 		Notes: notes,
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, NotesUpdated, payload)
+	return hwes.NewEvent(a, NotesUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewBedAssignedEvent(ctx context.Context, a hwes.Aggregate, bedID uuid.UUID) (hwes.Event, error) {
 	payload := BedAssignedEvent{
 		BedID: bedID.String(),
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, BedAssigned, payload)
+	return hwes.NewEvent(a, BedAssigned, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewBedUnassignedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
-	return hwes.NewEventWithUser(ctx, a, BedUnsassigned)
+	return hwes.NewEvent(a, BedUnsassigned, hwes.WithContext(ctx))
 }
 
 func NewPatientDischargedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
-	return hwes.NewEventWithUser(ctx, a, PatientDischarged)
+	return hwes.NewEvent(a, PatientDischarged, hwes.WithContext(ctx))
 }
 
 func NewPatientReadmittedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
-	return hwes.NewEventWithUser(ctx, a, PatientReadmitted)
+	return hwes.NewEvent(a, PatientReadmitted, hwes.WithContext(ctx))
 }

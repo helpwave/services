@@ -26,5 +26,5 @@ func NewPropertyCreatedEvent(a hwes.Aggregate, id uuid.UUID, subjectID uuid.UUID
 		FieldType:   fieldType.String(),
 		Name:        name,
 	}
-	return hwes.NewEventWithData(a, PropertyCreated, payload)
+	return hwes.NewEvent(a, PropertyCreated, hwes.WithData(payload))
 }

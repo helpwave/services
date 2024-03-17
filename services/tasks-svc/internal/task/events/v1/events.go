@@ -80,47 +80,47 @@ func NewTaskCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, na
 		PatientID: patientID.String(),
 		Status:    status.String(),
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, TaskCreated, payload)
+	return hwes.NewEvent(a, TaskCreated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewTaskNameUpdatedEvent(ctx context.Context, a hwes.Aggregate, name string) (hwes.Event, error) {
 	payload := TaskNameUpdatedEvent{
 		Name: name,
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, TaskNameUpdated, payload)
+	return hwes.NewEvent(a, TaskNameUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewTaskDescriptionUpdatedEvent(ctx context.Context, a hwes.Aggregate, description string) (hwes.Event, error) {
 	payload := TaskDescriptionUpdatedEvent{
 		Description: description,
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, TaskDescriptionUpdated, payload)
+	return hwes.NewEvent(a, TaskDescriptionUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewTaskAssignedEvent(ctx context.Context, a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
 	payload := TaskAssignedEvent{
 		UserID: userID.String(),
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, TaskAssigned, payload)
+	return hwes.NewEvent(a, TaskAssigned, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewTaskSelfAssignedEvent(ctx context.Context, a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
 	payload := TaskSelfAssignedEvent{
 		UserID: userID.String(),
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, TaskSelfAssigned, payload)
+	return hwes.NewEvent(a, TaskSelfAssigned, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewTaskUnassignedEvent(ctx context.Context, a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
 	payload := TaskUnassignedEvent{
 		UserID: userID.String(),
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, TaskUnassigned, payload)
+	return hwes.NewEvent(a, TaskUnassigned, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewTaskPublishedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
 	payload := TaskPublishedEvent{}
-	return hwes.NewEventWithUserAndData(ctx, a, TaskPublished, payload)
+	return hwes.NewEvent(a, TaskPublished, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewSubtaskCreatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
@@ -128,7 +128,7 @@ func NewSubtaskCreatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uui
 		SubtaskID: subtaskID.String(),
 		Name:      name,
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, SubtaskCreated, payload)
+	return hwes.NewEvent(a, SubtaskCreated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewSubtaskNameUpdatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
@@ -136,26 +136,26 @@ func NewSubtaskNameUpdatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID
 		SubtaskID: subtaskID.String(),
 		Name:      name,
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, SubtaskNameUpdated, payload)
+	return hwes.NewEvent(a, SubtaskNameUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewSubtaskCompletedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
 	payload := SubtaskCompletedEvent{
 		SubtaskID: subtaskID.String(),
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, SubtaskCompleted, payload)
+	return hwes.NewEvent(a, SubtaskCompleted, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewSubtaskUncompletedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
 	payload := SubtaskUncompletedEvent{
 		SubtaskID: subtaskID.String(),
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, SubtaskUncompleted, payload)
+	return hwes.NewEvent(a, SubtaskUncompleted, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewSubtaskDeletedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
 	payload := SubtaskDeletedEvent{
 		SubtaskID: subtaskID.String(),
 	}
-	return hwes.NewEventWithUserAndData(ctx, a, SubtaskDeleted, payload)
+	return hwes.NewEvent(a, SubtaskDeleted, hwes.WithContext(ctx), hwes.WithData(payload))
 }
