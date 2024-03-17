@@ -1,6 +1,7 @@
 package api_test
 
 import (
+	"common"
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
@@ -21,7 +22,13 @@ func server(ctx context.Context) (pb.PatientServiceClient, func()) {
 	aggregateStore := hwes_test.NewAggregateStore()
 	patientGrpcService := api.NewPatientGrpcService(aggregateStore)
 
-	grpcServer := grpc.NewServer()
+	chain := grpc.UnaryInterceptor(func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+		// TODO: Implement a non naive approach?
+		userID := uuid.New()
+		ctx = common.ContextWithUserID(ctx, userID)
+		return next(ctx, req)
+	})
+	grpcServer := grpc.NewServer(chain)
 
 	pb.RegisterPatientServiceServer(grpcServer, patientGrpcService)
 	go func() {
