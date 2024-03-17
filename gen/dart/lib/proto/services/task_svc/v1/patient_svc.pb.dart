@@ -2302,6 +2302,7 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
     $core.String? wardId,
     GetPatientDetailsResponse_Room? room,
     GetPatientDetailsResponse_Bed? bed,
+    $core.bool? isDischarged,
   }) {
     final $result = create();
     if (id != null) {
@@ -2329,6 +2330,9 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
     if (bed != null) {
       $result.bed = bed;
     }
+    if (isDischarged != null) {
+      $result.isDischarged = isDischarged;
+    }
     return $result;
   }
   GetPatientDetailsResponse._() : super();
@@ -2344,6 +2348,7 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
     ..aOS(6, _omitFieldNames ? '' : 'wardId')
     ..aOM<GetPatientDetailsResponse_Room>(7, _omitFieldNames ? '' : 'room', subBuilder: GetPatientDetailsResponse_Room.create)
     ..aOM<GetPatientDetailsResponse_Bed>(8, _omitFieldNames ? '' : 'bed', subBuilder: GetPatientDetailsResponse_Bed.create)
+    ..aOB(9, _omitFieldNames ? '' : 'isDischarged')
     ..hasRequiredFields = false
   ;
 
@@ -2442,6 +2447,15 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
   void clearBed() => clearField(8);
   @$pb.TagNumber(8)
   GetPatientDetailsResponse_Bed ensureBed() => $_ensure(7);
+
+  @$pb.TagNumber(9)
+  $core.bool get isDischarged => $_getBF(8);
+  @$pb.TagNumber(9)
+  set isDischarged($core.bool v) { $_setBool(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasIsDischarged() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearIsDischarged() => clearField(9);
 }
 
 class GetPatientListRequest extends $pb.GeneratedMessage {

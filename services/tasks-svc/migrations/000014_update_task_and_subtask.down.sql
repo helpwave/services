@@ -1,0 +1,6 @@
+ALTER TABLE IF EXISTS tasks
+	DROP COLUMN created_by,
+	DROP COLUMN due_at;
+
+ALTER TABLE IF EXISTS subtasks
+	DROP COLUMN created_by;

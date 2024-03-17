@@ -25,7 +25,7 @@ services:
       EVENTSTORE_LOG_LEVEL: "Warning"
       EVENTSTORE_INSECURE: "true"
       EVENTSTORE_RUN_PROJECTIONS: "All"
-      ENABLE_ATOM_PUB_OVER_HTTP: "true"
+      EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP: "true"
     ports:
       - "2113:2113"
 
@@ -36,7 +36,7 @@ services:
       - "6379:6379"
 
   jaeger:
-    image: jaegertracing/all-in-one:1.54
+    image: jaegertracing/all-in-one:1.55
     environment:
       COLLECTOR_OTLP_ENABLED: "true"
     ports:
@@ -69,7 +69,7 @@ services:
 
   # dapr sidecar for apisix
   apisix-dapr:
-    image: "daprio/daprd:1.12.5"
+    image: "daprio/daprd:1.13.0"
     restart: unless-stopped
     depends_on:
       - apisix

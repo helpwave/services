@@ -19,6 +19,8 @@
 const grpc = {};
 grpc.web = require('grpc-web');
 
+
+var proto_services_property_svc_v1_types_pb = require('../../../../proto/services/property_svc/v1/types_pb.js')
 const proto = {};
 proto.proto = {};
 proto.proto.services = {};

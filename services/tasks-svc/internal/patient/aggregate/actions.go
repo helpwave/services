@@ -2,8 +2,9 @@ package aggregate
 
 import (
 	"context"
-	"github.com/google/uuid"
 	patientEventsV1 "tasks-svc/internal/patient/events/v1"
+
+	"github.com/google/uuid"
 )
 
 func (a *PatientAggregate) CreatePatient(ctx context.Context, humanReadableIdentifier string, notes string) error {

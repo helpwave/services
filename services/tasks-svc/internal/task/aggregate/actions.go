@@ -3,8 +3,9 @@ package aggregate
 import (
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
-	"github.com/google/uuid"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
+
+	"github.com/google/uuid"
 )
 
 func (a *TaskAggregate) CreateTask(ctx context.Context, name string, patientID uuid.UUID, status pb.TaskStatus) error {
