@@ -25,7 +25,7 @@ type Event struct {
 }
 
 type metadata struct {
-	// CommitterId represents some sort of optional identity that is directly responsible for this event
+	// CommitterId represents some sort of optional identity that is directly responsible for this event (e.g., a user id). Must be a uuid
 	CommitterID string `json:"committer_id"`
 }
 
