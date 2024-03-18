@@ -124,6 +124,7 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 		Data:          esdbEvent.Data,
 		Timestamp:     esdbEvent.CreatedDate,
 		Version:       esdbEvent.EventNumber,
+		UserID:        nil,
 	}
 
 	eventCommitterID, err := uuid.Parse(md.CommitterID)
