@@ -19,7 +19,7 @@ func TestEventWithUserID(t *testing.T) {
 		t.Error(err)
 	}
 
-	if *e.UserID != u {
-		t.Error("event does not have the correct UserID")
+	if *e.CommitterUserID != u {
+		t.Error("event does not have the correct CommitterUserID")
 	}
 }

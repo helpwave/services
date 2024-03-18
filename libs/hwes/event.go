@@ -14,19 +14,19 @@ import (
 )
 
 type Event struct {
-	EventID       uuid.UUID
-	EventType     string
-	AggregateID   uuid.UUID
-	AggregateType AggregateType
-	Data          []byte
-	Timestamp     time.Time
-	Version       uint64
-	UserID        *uuid.UUID
+	EventID         uuid.UUID
+	EventType       string
+	AggregateID     uuid.UUID
+	AggregateType   AggregateType
+	Data            []byte
+	Timestamp       time.Time
+	Version         uint64
+	CommitterUserID *uuid.UUID
 }
 
 type metadata struct {
-	// CommitterId represents some sort of optional identity that is directly responsible for this event (e.g., a user id). Must be a uuid
-	CommitterID string `json:"committer_id"`
+	// CommitterUserID represents an optional UUID that identifies the user that is directly responsible for this event
+	CommitterUserID string `json:"committer_user_id"`
 }
 
 // EventOption used to apply configurations in hwes.NewEvent()
@@ -48,12 +48,12 @@ func WithData(data interface{}) EventOption {
 
 func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event, error) {
 	evt := Event{
-		EventID:       uuid.New(),
-		EventType:     eventType,
-		AggregateID:   aggregate.GetID(),
-		AggregateType: aggregate.GetType(),
-		Timestamp:     time.Now().UTC(),
-		UserID:        nil,
+		EventID:         uuid.New(),
+		EventType:       eventType,
+		AggregateID:     aggregate.GetID(),
+		AggregateType:   aggregate.GetType(),
+		Timestamp:       time.Now().UTC(),
+		CommitterUserID: nil,
 	}
 
 	for _, opt := range opts {
@@ -117,19 +117,19 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 	}
 
 	event := Event{
-		EventID:       id,
-		EventType:     esdbEvent.EventType,
-		AggregateID:   aggregateID,
-		AggregateType: aggregateType,
-		Data:          esdbEvent.Data,
-		Timestamp:     esdbEvent.CreatedDate,
-		Version:       esdbEvent.EventNumber,
-		UserID:        nil,
+		EventID:         id,
+		EventType:       esdbEvent.EventType,
+		AggregateID:     aggregateID,
+		AggregateType:   aggregateType,
+		Data:            esdbEvent.Data,
+		Timestamp:       esdbEvent.CreatedDate,
+		Version:         esdbEvent.EventNumber,
+		CommitterUserID: nil,
 	}
 
-	eventCommitterID, err := uuid.Parse(md.CommitterID)
+	eventCommitterUserID, err := uuid.Parse(md.CommitterUserID)
 	if err == nil {
-		event.UserID = &eventCommitterID
+		event.CommitterUserID = &eventCommitterUserID
 	}
 
 	return event, nil
@@ -159,8 +159,8 @@ func (e *Event) GetVersion() uint64 {
 
 func (e *Event) ToEventData() (esdb.EventData, error) {
 	md := metadata{}
-	if e.UserID != nil {
-		md.CommitterID = e.UserID.String()
+	if e.CommitterUserID != nil {
+		md.CommitterUserID = e.CommitterUserID.String()
 	}
 
 	mdBytes, err := json.Marshal(md)
@@ -205,14 +205,14 @@ func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	e.UserID = &userID
+	e.CommitterUserID = &userID
 
 	// Just to make sure we are actually dealing with a valid UUID
-	if _, err := uuid.Parse(e.UserID.String()); err != nil {
+	if _, err := uuid.Parse(e.CommitterUserID.String()); err != nil {
 		return err
 	}
 
-	telemetry.SetSpanStr(ctx, "userID", e.UserID.String())
+	telemetry.SetSpanStr(ctx, "committerUserID", e.CommitterUserID.String())
 	return nil
 }
 
@@ -227,8 +227,8 @@ func (e *Event) GetZerologDict() *zerolog.Event {
 		Str("eventType", e.EventType).
 		Uint64("eventVersion", e.Version)
 
-	if e.UserID != nil {
-		dict.Str("userID", e.UserID.String())
+	if e.CommitterUserID != nil {
+		dict.Str("committerUserID", e.CommitterUserID.String())
 	}
 
 	return dict
