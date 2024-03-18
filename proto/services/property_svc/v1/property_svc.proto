@@ -20,7 +20,6 @@ message CreatePropertyRequest {
   optional string set_id = 6;
 
   oneof field_type_data {
-    bool none = 8;
     SelectData select_data = 9;
   }
 
@@ -68,7 +67,6 @@ message GetPropertyResponse {
   optional string set_id = 8;
 
   oneof field_type_data {
-    bool none = 9;
     SelectData select_data = 10;
   }
 
@@ -77,13 +75,55 @@ message GetPropertyResponse {
     repeated SelectOption options = 2;
 
     message SelectOption {
-      string name = 1;
-      optional string description = 2;
+      string id = 1;
+      string name = 2;
+      optional string description = 3;
+      bool is_custom = 4;
     }
   }
 
   optional bool always_include_for_view_source = 11; // This value is dependend on the ViewSource
 }
+
+//
+// UpdateProperty
+//
+
+message UpdatePropertyRequest {
+  string id = 1;
+
+  optional SubjectType subject_type = 2;
+  optional FieldType field_type = 3;
+
+  optional string name = 4;
+  optional string description = 5;
+
+  optional bool is_archived = 6;
+
+  // ID of set this Property should belong to
+  optional string set_id = 8;
+
+  oneof field_type_data {
+    SelectData select_data = 10;
+  }
+
+  message SelectData {
+    optional bool allow_freetext = 1;
+    repeated string remove_options = 2; // @gotags: validate:"dive,uuid4"
+    repeated SelectOption upsert_options = 3;
+
+    message SelectOption {
+      string id = 1;
+      optional string name = 2;
+      optional string description = 3;
+      optional bool is_custom = 4;
+    }
+  }
+
+  // TODO: TBD: optional bool always_include_for_current_context = 11;
+}
+
+message UpdatePropertyResponse {}
 
 //
 // PropertyService
@@ -92,4 +132,5 @@ message GetPropertyResponse {
 service PropertyService {
   rpc CreateProperty(CreatePropertyRequest) returns (CreatePropertyResponse) {}
   rpc GetProperty(GetPropertyRequest) returns (GetPropertyResponse) {}
+  rpc UpdateProperty(UpdatePropertyRequest) returns (UpdatePropertyResponse) {}
 }
