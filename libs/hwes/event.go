@@ -29,14 +29,17 @@ type metadata struct {
 	CommitterID string `json:"committer_id"`
 }
 
+// EventOption used to apply configurations in hwes.NewEvent()
 type EventOption func(*Event) error
 
+// WithContext applies SetCommitterFromCtx after construction
 func WithContext(ctx context.Context) EventOption {
 	return func(event *Event) error {
 		return event.SetCommitterFromCtx(ctx)
 	}
 }
 
+// WithData applies SetJsonData after construction
 func WithData(data interface{}) EventOption {
 	return func(event *Event) error {
 		return event.SetJsonData(data)
