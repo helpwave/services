@@ -65,15 +65,15 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 	return evt, nil
 }
 
-// resolveAggregateIDAndTypeFromStreamID extracts the aggregateType and aggregateID of a given streamID
+// resolveAggregateIDAndTypeFromStreamID extracts the aggregateID and aggregateType of a given streamID
 // See aggregate.GetTypeID
 //
 // Example:
 //
 // StreamID:		task-d9027be3-d00f-4eec-b50e-5f489df20433
-// AggregateType: 	task
 // AggregateID: 	d9027be3-d00f-4eec-b50e-5f489df20433
-func resolveAggregateIDAndTypeFromStreamID(streamID string) (aggregateType AggregateType, aggregateID uuid.UUID, err error) {
+// AggregateType: 	task
+func resolveAggregateIDAndTypeFromStreamID(streamID string) (aggregateID uuid.UUID, aggregateType AggregateType, err error) {
 	streamIDParts := strings.SplitN(streamID, "-", 2)
 
 	var aggregateTypeStr, aggregateIDStr string
@@ -106,7 +106,7 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 		return Event{}, err
 	}
 
-	aggregateType, aggregateID, err := resolveAggregateIDAndTypeFromStreamID(esdbEvent.StreamID)
+	aggregateID, aggregateType, err := resolveAggregateIDAndTypeFromStreamID(esdbEvent.StreamID)
 	if err != nil {
 		return Event{}, err
 	}

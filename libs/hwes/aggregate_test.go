@@ -42,7 +42,7 @@ func TestResolveAggregateIDAndTypeFromStreamID(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		aggregateType, aggregateID, err := resolveAggregateIDAndTypeFromStreamID(testCase.streamID)
+		aggregateID, aggregateType, err := resolveAggregateIDAndTypeFromStreamID(testCase.streamID)
 		if err != nil && testCase.expectedError {
 			continue
 		} else if err != nil {
