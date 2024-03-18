@@ -139,7 +139,7 @@ jobs:
       run: |
         VERSION=$(curl https://pub.dev/api/packages/helpwave_proto_dart -H "Accept: application/vnd.pub.v2+json" | jq ".latest.version" -r)
         NEW_VERSION=$(semver bump $BUMP $VERSION)
-        NEW_VERSION=$(semver bump prerel $SHA.0 $NEW_VERSION)
+        NEW_VERSION=$(semver bump prerel $SHA $NEW_VERSION)
         sed "s/version:.*/version: $NEW_VERSION/" pubspec.yaml -i
     - name: Publish to pub.dev
       working-directory: gen/dart
