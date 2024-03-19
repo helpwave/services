@@ -10,7 +10,11 @@ primary_region = "ams"
   EVENTSTORE_RUN_PROJECTIONS="All"
   EVENTSTORE_TELEMETRY_OPTOUT=true
 
+[mounts]
+  source = "helpwave_staging_eventstoredb"
+  destination = "/var/lib/eventstore"
+
 [[vm]]
-  memory = "512MB"
+  memory = "768MB"
   cpu_kind = "shared"
   cpus = 1
