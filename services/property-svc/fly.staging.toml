@@ -12,7 +12,6 @@ primary_region = "ams"
 
 [deploy]
   strategy = "bluegreen"
-#  release_command = "./run-migrations.sh"
 
 [checks]
   [checks.dapr_sidecar]
