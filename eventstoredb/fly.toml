@@ -1,0 +1,16 @@
+primary_region = "ams"
+
+[build]
+  image = "eventstore/eventstore:lts"
+
+[env]
+  EVENTSTORE_NODE_IP="::"
+  EVENTSTORE_INSECURE=true
+  EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+  EVENTSTORE_RUN_PROJECTIONS="All"
+  EVENTSTORE_TELEMETRY_OPTOUT=true
+
+[[vm]]
+  memory = "512MB"
+  cpu_kind = "shared"
+  cpus = 1
