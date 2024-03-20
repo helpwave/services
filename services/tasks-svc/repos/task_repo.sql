@@ -8,12 +8,15 @@ UPDATE tasks
 SET name = coalesce(sqlc.narg('name'), name),
 	description = coalesce(sqlc.narg('description'), description),
 	status = coalesce(sqlc.narg('status'), status),
-	patient_id = coalesce(sqlc.narg('patient_id'), patient_id),
 	public = coalesce(sqlc.narg('public'), public),
 	created_by = coalesce(sqlc.narg('created_by'), created_by),
-	assigned_user_id = coalesce(sqlc.narg('assigned_user_id'), assigned_user_id),
 	due_at = coalesce(sqlc.narg('due_at'), due_at)
 WHERE id = $1;
+
+-- name: UpdateTaskAssignedUser :exec
+UPDATE tasks
+SET assigned_user_id = @assigned_user_id
+WHERE id = @id;
 
 -- name: CreateSubtask :exec
 INSERT INTO subtasks

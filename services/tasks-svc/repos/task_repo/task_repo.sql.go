@@ -92,24 +92,20 @@ UPDATE tasks
 SET name = coalesce($2, name),
 	description = coalesce($3, description),
 	status = coalesce($4, status),
-	patient_id = coalesce($5, patient_id),
-	public = coalesce($6, public),
-	created_by = coalesce($7, created_by),
-	assigned_user_id = coalesce($8, assigned_user_id),
-	due_at = coalesce($9, due_at)
+	public = coalesce($5, public),
+	created_by = coalesce($6, created_by),
+	due_at = coalesce($7, due_at)
 WHERE id = $1
 `
 
 type UpdateTaskParams struct {
-	ID             uuid.UUID
-	Name           *string
-	Description    *string
-	Status         *int32
-	PatientID      uuid.NullUUID
-	Public         *bool
-	CreatedBy      uuid.NullUUID
-	AssignedUserID uuid.NullUUID
-	DueAt          pgtype.Timestamp
+	ID          uuid.UUID
+	Name        *string
+	Description *string
+	Status      *int32
+	Public      *bool
+	CreatedBy   uuid.NullUUID
+	DueAt       pgtype.Timestamp
 }
 
 func (q *Queries) UpdateTask(ctx context.Context, arg UpdateTaskParams) error {
@@ -118,11 +114,25 @@ func (q *Queries) UpdateTask(ctx context.Context, arg UpdateTaskParams) error {
 		arg.Name,
 		arg.Description,
 		arg.Status,
-		arg.PatientID,
 		arg.Public,
 		arg.CreatedBy,
-		arg.AssignedUserID,
 		arg.DueAt,
 	)
+	return err
+}
+
+const updateTaskAssignedUser = `-- name: UpdateTaskAssignedUser :exec
+UPDATE tasks
+SET assigned_user_id = $1
+WHERE id = $2
+`
+
+type UpdateTaskAssignedUserParams struct {
+	AssignedUserID uuid.NullUUID
+	ID             uuid.UUID
+}
+
+func (q *Queries) UpdateTaskAssignedUser(ctx context.Context, arg UpdateTaskAssignedUserParams) error {
+	_, err := q.db.Exec(ctx, updateTaskAssignedUser, arg.AssignedUserID, arg.ID)
 	return err
 }

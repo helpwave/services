@@ -67,9 +67,11 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 	}
 	status := (pb.TaskStatus)(value)
 
-	var commiterID uuid.UUID
+	var committerID uuid.UUID
 	if evt.CommitterUserID != nil {
-		commiterID = *evt.CommitterUserID
+		committerID = *evt.CommitterUserID
+	} else {
+		return fmt.Errorf("commiterId is not set"), esdb.Nack_Retry
 	}
 
 	// Add to db
@@ -78,7 +80,7 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 		Name:      payload.Name,
 		PatientID: patientID,
 		Status:    int32(status),
-		CreatedBy: commiterID,
+		CreatedBy: committerID,
 	}); err != nil {
 		return err, esdb.Nack_Retry
 	}
@@ -165,7 +167,7 @@ func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error,
 		return err, esdb.Nack_Retry
 	}
 
-	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, AssignedUserID: userID}); err != nil {
+	if err := taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{ID: evt.AggregateID, AssignedUserID: userID}); err != nil {
 		return err, esdb.Nack_Retry
 	}
 
@@ -182,8 +184,7 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (erro
 		return err, esdb.Nack_Retry
 	}
 
-	// TODO: Why not working?
-	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, AssignedUserID: uuid.NullUUID{UUID: uuid.Nil, Valid: false}}); err != nil {
+	if err := taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{ID: evt.AggregateID, AssignedUserID: uuid.NullUUID{}}); err != nil {
 		return err, esdb.Nack_Retry
 	}
 
@@ -214,6 +215,8 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (erro
 	var committerID uuid.UUID
 	if evt.CommitterUserID != nil {
 		committerID = *evt.CommitterUserID
+	} else {
+		return fmt.Errorf("committerID not set"), esdb.Nack_Retry
 	}
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
