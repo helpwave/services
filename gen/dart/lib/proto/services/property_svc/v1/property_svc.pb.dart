@@ -13,23 +13,147 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'property_svc.pbenum.dart';
+import 'types.pbenum.dart' as $15;
 
-export 'property_svc.pbenum.dart';
+class CreatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage {
+  factory CreatePropertyRequest_SelectData_SelectOption({
+    $core.String? name,
+    $core.String? description,
+  }) {
+    final $result = create();
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    return $result;
+  }
+  CreatePropertyRequest_SelectData_SelectOption._() : super();
+  factory CreatePropertyRequest_SelectData_SelectOption.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreatePropertyRequest_SelectData_SelectOption.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyRequest.SelectData.SelectOption', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'name')
+    ..aOS(2, _omitFieldNames ? '' : 'description')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreatePropertyRequest_SelectData_SelectOption clone() => CreatePropertyRequest_SelectData_SelectOption()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreatePropertyRequest_SelectData_SelectOption copyWith(void Function(CreatePropertyRequest_SelectData_SelectOption) updates) => super.copyWith((message) => updates(message as CreatePropertyRequest_SelectData_SelectOption)) as CreatePropertyRequest_SelectData_SelectOption;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreatePropertyRequest_SelectData_SelectOption create() => CreatePropertyRequest_SelectData_SelectOption._();
+  CreatePropertyRequest_SelectData_SelectOption createEmptyInstance() => create();
+  static $pb.PbList<CreatePropertyRequest_SelectData_SelectOption> createRepeated() => $pb.PbList<CreatePropertyRequest_SelectData_SelectOption>();
+  @$core.pragma('dart2js:noInline')
+  static CreatePropertyRequest_SelectData_SelectOption getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreatePropertyRequest_SelectData_SelectOption>(create);
+  static CreatePropertyRequest_SelectData_SelectOption? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get name => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set name($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasName() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get description => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set description($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasDescription() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDescription() => clearField(2);
+}
+
+class CreatePropertyRequest_SelectData extends $pb.GeneratedMessage {
+  factory CreatePropertyRequest_SelectData({
+    $core.bool? allowFreetext,
+    $core.Iterable<CreatePropertyRequest_SelectData_SelectOption>? options,
+  }) {
+    final $result = create();
+    if (allowFreetext != null) {
+      $result.allowFreetext = allowFreetext;
+    }
+    if (options != null) {
+      $result.options.addAll(options);
+    }
+    return $result;
+  }
+  CreatePropertyRequest_SelectData._() : super();
+  factory CreatePropertyRequest_SelectData.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreatePropertyRequest_SelectData.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyRequest.SelectData', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'allowFreetext')
+    ..pc<CreatePropertyRequest_SelectData_SelectOption>(2, _omitFieldNames ? '' : 'options', $pb.PbFieldType.PM, subBuilder: CreatePropertyRequest_SelectData_SelectOption.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreatePropertyRequest_SelectData clone() => CreatePropertyRequest_SelectData()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreatePropertyRequest_SelectData copyWith(void Function(CreatePropertyRequest_SelectData) updates) => super.copyWith((message) => updates(message as CreatePropertyRequest_SelectData)) as CreatePropertyRequest_SelectData;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreatePropertyRequest_SelectData create() => CreatePropertyRequest_SelectData._();
+  CreatePropertyRequest_SelectData createEmptyInstance() => create();
+  static $pb.PbList<CreatePropertyRequest_SelectData> createRepeated() => $pb.PbList<CreatePropertyRequest_SelectData>();
+  @$core.pragma('dart2js:noInline')
+  static CreatePropertyRequest_SelectData getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreatePropertyRequest_SelectData>(create);
+  static CreatePropertyRequest_SelectData? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get allowFreetext => $_getBF(0);
+  @$pb.TagNumber(1)
+  set allowFreetext($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasAllowFreetext() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAllowFreetext() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<CreatePropertyRequest_SelectData_SelectOption> get options => $_getList(1);
+}
+
+enum CreatePropertyRequest_FieldTypeData {
+  selectData, 
+  notSet
+}
 
 ///
 ///  CreateProperty
 class CreatePropertyRequest extends $pb.GeneratedMessage {
   factory CreatePropertyRequest({
-    $core.String? subjectId,
-    $core.String? subjectType,
-    FieldType? fieldType,
+    $15.SubjectType? subjectType,
+    $15.FieldType? fieldType,
     $core.String? name,
+    $core.String? description,
+    $core.String? setId,
+    CreatePropertyRequest_SelectData? selectData,
   }) {
     final $result = create();
-    if (subjectId != null) {
-      $result.subjectId = subjectId;
-    }
     if (subjectType != null) {
       $result.subjectType = subjectType;
     }
@@ -39,17 +163,33 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
     if (name != null) {
       $result.name = name;
     }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (setId != null) {
+      $result.setId = setId;
+    }
+    if (selectData != null) {
+      $result.selectData = selectData;
+    }
     return $result;
   }
   CreatePropertyRequest._() : super();
   factory CreatePropertyRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CreatePropertyRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
+  static const $core.Map<$core.int, CreatePropertyRequest_FieldTypeData> _CreatePropertyRequest_FieldTypeDataByTag = {
+    9 : CreatePropertyRequest_FieldTypeData.selectData,
+    0 : CreatePropertyRequest_FieldTypeData.notSet
+  };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'subjectId')
-    ..aOS(2, _omitFieldNames ? '' : 'subjectType')
-    ..e<FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: FieldType.valueOf, enumValues: FieldType.values)
+    ..oo(0, [9])
+    ..e<$15.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $15.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $15.SubjectType.valueOf, enumValues: $15.SubjectType.values)
+    ..e<$15.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $15.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $15.FieldType.valueOf, enumValues: $15.FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
+    ..aOS(5, _omitFieldNames ? '' : 'description')
+    ..aOS(6, _omitFieldNames ? '' : 'setId')
+    ..aOM<CreatePropertyRequest_SelectData>(9, _omitFieldNames ? '' : 'selectData', subBuilder: CreatePropertyRequest_SelectData.create)
     ..hasRequiredFields = false
   ;
 
@@ -74,50 +214,74 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   static CreatePropertyRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreatePropertyRequest>(create);
   static CreatePropertyRequest? _defaultInstance;
 
-  @$pb.TagNumber(1)
-  $core.String get subjectId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set subjectId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasSubjectId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearSubjectId() => clearField(1);
+  CreatePropertyRequest_FieldTypeData whichFieldTypeData() => _CreatePropertyRequest_FieldTypeDataByTag[$_whichOneof(0)]!;
+  void clearFieldTypeData() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(2)
-  $core.String get subjectType => $_getSZ(1);
+  $15.SubjectType get subjectType => $_getN(0);
   @$pb.TagNumber(2)
-  set subjectType($core.String v) { $_setString(1, v); }
+  set subjectType($15.SubjectType v) { setField(2, v); }
   @$pb.TagNumber(2)
-  $core.bool hasSubjectType() => $_has(1);
+  $core.bool hasSubjectType() => $_has(0);
   @$pb.TagNumber(2)
   void clearSubjectType() => clearField(2);
 
   @$pb.TagNumber(3)
-  FieldType get fieldType => $_getN(2);
+  $15.FieldType get fieldType => $_getN(1);
   @$pb.TagNumber(3)
-  set fieldType(FieldType v) { setField(3, v); }
+  set fieldType($15.FieldType v) { setField(3, v); }
   @$pb.TagNumber(3)
-  $core.bool hasFieldType() => $_has(2);
+  $core.bool hasFieldType() => $_has(1);
   @$pb.TagNumber(3)
   void clearFieldType() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get name => $_getSZ(3);
+  $core.String get name => $_getSZ(2);
   @$pb.TagNumber(4)
-  set name($core.String v) { $_setString(3, v); }
+  set name($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(4)
-  $core.bool hasName() => $_has(3);
+  $core.bool hasName() => $_has(2);
   @$pb.TagNumber(4)
   void clearName() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get description => $_getSZ(3);
+  @$pb.TagNumber(5)
+  set description($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasDescription() => $_has(3);
+  @$pb.TagNumber(5)
+  void clearDescription() => clearField(5);
+
+  /// ID of set this Property should belong to
+  @$pb.TagNumber(6)
+  $core.String get setId => $_getSZ(4);
+  @$pb.TagNumber(6)
+  set setId($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasSetId() => $_has(4);
+  @$pb.TagNumber(6)
+  void clearSetId() => clearField(6);
+
+  @$pb.TagNumber(9)
+  CreatePropertyRequest_SelectData get selectData => $_getN(5);
+  @$pb.TagNumber(9)
+  set selectData(CreatePropertyRequest_SelectData v) { setField(9, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasSelectData() => $_has(5);
+  @$pb.TagNumber(9)
+  void clearSelectData() => clearField(9);
+  @$pb.TagNumber(9)
+  CreatePropertyRequest_SelectData ensureSelectData() => $_ensure(5);
 }
 
 class CreatePropertyResponse extends $pb.GeneratedMessage {
   factory CreatePropertyResponse({
-    $core.String? id,
+    $core.String? propertyId,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (propertyId != null) {
+      $result.propertyId = propertyId;
     }
     return $result;
   }
@@ -126,7 +290,7 @@ class CreatePropertyResponse extends $pb.GeneratedMessage {
   factory CreatePropertyResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(1, _omitFieldNames ? '' : 'propertyId')
     ..hasRequiredFields = false
   ;
 
@@ -152,13 +316,94 @@ class CreatePropertyResponse extends $pb.GeneratedMessage {
   static CreatePropertyResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get propertyId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set propertyId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasPropertyId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearPropertyId() => clearField(1);
+}
+
+enum GetPropertyRequest_ViewSource_Value {
+  global, 
+  wardId, 
+  notSet
+}
+
+/// describes from which View (global, ward, ...) the property is accessed from
+/// The attribute "always_include_for_current_context" depends on this ViewSource
+class GetPropertyRequest_ViewSource extends $pb.GeneratedMessage {
+  factory GetPropertyRequest_ViewSource({
+    $core.bool? global,
+    $core.String? wardId,
+  }) {
+    final $result = create();
+    if (global != null) {
+      $result.global = global;
+    }
+    if (wardId != null) {
+      $result.wardId = wardId;
+    }
+    return $result;
+  }
+  GetPropertyRequest_ViewSource._() : super();
+  factory GetPropertyRequest_ViewSource.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPropertyRequest_ViewSource.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static const $core.Map<$core.int, GetPropertyRequest_ViewSource_Value> _GetPropertyRequest_ViewSource_ValueByTag = {
+    1 : GetPropertyRequest_ViewSource_Value.global,
+    2 : GetPropertyRequest_ViewSource_Value.wardId,
+    0 : GetPropertyRequest_ViewSource_Value.notSet
+  };
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyRequest.ViewSource', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..oo(0, [1, 2])
+    ..aOB(1, _omitFieldNames ? '' : 'global')
+    ..aOS(2, _omitFieldNames ? '' : 'wardId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetPropertyRequest_ViewSource clone() => GetPropertyRequest_ViewSource()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetPropertyRequest_ViewSource copyWith(void Function(GetPropertyRequest_ViewSource) updates) => super.copyWith((message) => updates(message as GetPropertyRequest_ViewSource)) as GetPropertyRequest_ViewSource;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetPropertyRequest_ViewSource create() => GetPropertyRequest_ViewSource._();
+  GetPropertyRequest_ViewSource createEmptyInstance() => create();
+  static $pb.PbList<GetPropertyRequest_ViewSource> createRepeated() => $pb.PbList<GetPropertyRequest_ViewSource>();
+  @$core.pragma('dart2js:noInline')
+  static GetPropertyRequest_ViewSource getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPropertyRequest_ViewSource>(create);
+  static GetPropertyRequest_ViewSource? _defaultInstance;
+
+  GetPropertyRequest_ViewSource_Value whichValue() => _GetPropertyRequest_ViewSource_ValueByTag[$_whichOneof(0)]!;
+  void clearValue() => clearField($_whichOneof(0));
+
+  @$pb.TagNumber(1)
+  $core.bool get global => $_getBF(0);
+  @$pb.TagNumber(1)
+  set global($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasGlobal() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearGlobal() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get wardId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set wardId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasWardId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearWardId() => clearField(2);
 }
 
 class GetPropertyRequest extends $pb.GeneratedMessage {
@@ -211,16 +456,12 @@ class GetPropertyRequest extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 }
 
-class GetPropertyResponse extends $pb.GeneratedMessage {
-  factory GetPropertyResponse({
+class GetPropertyResponse_SelectData_SelectOption extends $pb.GeneratedMessage {
+  factory GetPropertyResponse_SelectData_SelectOption({
     $core.String? id,
     $core.String? name,
-    $core.String? subjectType,
-    $core.String? subjectId,
-    FieldType? fieldType,
     $core.String? description,
-    $core.bool? isArchived,
-    $core.bool? isSoftRequired,
+    $core.bool? isCustom,
   }) {
     final $result = create();
     if (id != null) {
@@ -229,14 +470,171 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
     if (name != null) {
       $result.name = name;
     }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (isCustom != null) {
+      $result.isCustom = isCustom;
+    }
+    return $result;
+  }
+  GetPropertyResponse_SelectData_SelectOption._() : super();
+  factory GetPropertyResponse_SelectData_SelectOption.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPropertyResponse_SelectData_SelectOption.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyResponse.SelectData.SelectOption', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'description')
+    ..aOB(4, _omitFieldNames ? '' : 'isCustom')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetPropertyResponse_SelectData_SelectOption clone() => GetPropertyResponse_SelectData_SelectOption()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetPropertyResponse_SelectData_SelectOption copyWith(void Function(GetPropertyResponse_SelectData_SelectOption) updates) => super.copyWith((message) => updates(message as GetPropertyResponse_SelectData_SelectOption)) as GetPropertyResponse_SelectData_SelectOption;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetPropertyResponse_SelectData_SelectOption create() => GetPropertyResponse_SelectData_SelectOption._();
+  GetPropertyResponse_SelectData_SelectOption createEmptyInstance() => create();
+  static $pb.PbList<GetPropertyResponse_SelectData_SelectOption> createRepeated() => $pb.PbList<GetPropertyResponse_SelectData_SelectOption>();
+  @$core.pragma('dart2js:noInline')
+  static GetPropertyResponse_SelectData_SelectOption getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPropertyResponse_SelectData_SelectOption>(create);
+  static GetPropertyResponse_SelectData_SelectOption? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get description => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set description($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDescription() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDescription() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get isCustom => $_getBF(3);
+  @$pb.TagNumber(4)
+  set isCustom($core.bool v) { $_setBool(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasIsCustom() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearIsCustom() => clearField(4);
+}
+
+class GetPropertyResponse_SelectData extends $pb.GeneratedMessage {
+  factory GetPropertyResponse_SelectData({
+    $core.bool? allowFreetext,
+    $core.Iterable<GetPropertyResponse_SelectData_SelectOption>? options,
+  }) {
+    final $result = create();
+    if (allowFreetext != null) {
+      $result.allowFreetext = allowFreetext;
+    }
+    if (options != null) {
+      $result.options.addAll(options);
+    }
+    return $result;
+  }
+  GetPropertyResponse_SelectData._() : super();
+  factory GetPropertyResponse_SelectData.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPropertyResponse_SelectData.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyResponse.SelectData', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'allowFreetext')
+    ..pc<GetPropertyResponse_SelectData_SelectOption>(2, _omitFieldNames ? '' : 'options', $pb.PbFieldType.PM, subBuilder: GetPropertyResponse_SelectData_SelectOption.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetPropertyResponse_SelectData clone() => GetPropertyResponse_SelectData()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetPropertyResponse_SelectData copyWith(void Function(GetPropertyResponse_SelectData) updates) => super.copyWith((message) => updates(message as GetPropertyResponse_SelectData)) as GetPropertyResponse_SelectData;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetPropertyResponse_SelectData create() => GetPropertyResponse_SelectData._();
+  GetPropertyResponse_SelectData createEmptyInstance() => create();
+  static $pb.PbList<GetPropertyResponse_SelectData> createRepeated() => $pb.PbList<GetPropertyResponse_SelectData>();
+  @$core.pragma('dart2js:noInline')
+  static GetPropertyResponse_SelectData getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPropertyResponse_SelectData>(create);
+  static GetPropertyResponse_SelectData? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get allowFreetext => $_getBF(0);
+  @$pb.TagNumber(1)
+  set allowFreetext($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasAllowFreetext() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAllowFreetext() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<GetPropertyResponse_SelectData_SelectOption> get options => $_getList(1);
+}
+
+enum GetPropertyResponse_FieldTypeData {
+  selectData, 
+  notSet
+}
+
+class GetPropertyResponse extends $pb.GeneratedMessage {
+  factory GetPropertyResponse({
+    $core.String? id,
+    $15.SubjectType? subjectType,
+    $15.FieldType? fieldType,
+    $core.String? name,
+    $core.String? description,
+    $core.bool? isArchived,
+    $core.String? setId,
+    GetPropertyResponse_SelectData? selectData,
+    $core.bool? alwaysIncludeForViewSource,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
     if (subjectType != null) {
       $result.subjectType = subjectType;
     }
-    if (subjectId != null) {
-      $result.subjectId = subjectId;
-    }
     if (fieldType != null) {
       $result.fieldType = fieldType;
+    }
+    if (name != null) {
+      $result.name = name;
     }
     if (description != null) {
       $result.description = description;
@@ -244,8 +642,14 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
     if (isArchived != null) {
       $result.isArchived = isArchived;
     }
-    if (isSoftRequired != null) {
-      $result.isSoftRequired = isSoftRequired;
+    if (setId != null) {
+      $result.setId = setId;
+    }
+    if (selectData != null) {
+      $result.selectData = selectData;
+    }
+    if (alwaysIncludeForViewSource != null) {
+      $result.alwaysIncludeForViewSource = alwaysIncludeForViewSource;
     }
     return $result;
   }
@@ -253,15 +657,21 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   factory GetPropertyResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetPropertyResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
+  static const $core.Map<$core.int, GetPropertyResponse_FieldTypeData> _GetPropertyResponse_FieldTypeDataByTag = {
+    10 : GetPropertyResponse_FieldTypeData.selectData,
+    0 : GetPropertyResponse_FieldTypeData.notSet
+  };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..oo(0, [10])
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..aOS(3, _omitFieldNames ? '' : 'subjectType')
-    ..aOS(4, _omitFieldNames ? '' : 'subjectId')
-    ..e<FieldType>(5, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: FieldType.valueOf, enumValues: FieldType.values)
-    ..aOS(6, _omitFieldNames ? '' : 'description')
-    ..aOB(7, _omitFieldNames ? '' : 'isArchived')
-    ..aOB(8, _omitFieldNames ? '' : 'isSoftRequired')
+    ..e<$15.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $15.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $15.SubjectType.valueOf, enumValues: $15.SubjectType.values)
+    ..e<$15.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $15.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $15.FieldType.valueOf, enumValues: $15.FieldType.values)
+    ..aOS(4, _omitFieldNames ? '' : 'name')
+    ..aOS(5, _omitFieldNames ? '' : 'description')
+    ..aOB(6, _omitFieldNames ? '' : 'isArchived')
+    ..aOS(8, _omitFieldNames ? '' : 'setId')
+    ..aOM<GetPropertyResponse_SelectData>(10, _omitFieldNames ? '' : 'selectData', subBuilder: GetPropertyResponse_SelectData.create)
+    ..aOB(11, _omitFieldNames ? '' : 'alwaysIncludeForViewSource')
     ..hasRequiredFields = false
   ;
 
@@ -286,6 +696,149 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   static GetPropertyResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPropertyResponse>(create);
   static GetPropertyResponse? _defaultInstance;
 
+  GetPropertyResponse_FieldTypeData whichFieldTypeData() => _GetPropertyResponse_FieldTypeDataByTag[$_whichOneof(0)]!;
+  void clearFieldTypeData() => clearField($_whichOneof(0));
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $15.SubjectType get subjectType => $_getN(1);
+  @$pb.TagNumber(2)
+  set subjectType($15.SubjectType v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasSubjectType() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearSubjectType() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $15.FieldType get fieldType => $_getN(2);
+  @$pb.TagNumber(3)
+  set fieldType($15.FieldType v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasFieldType() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearFieldType() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get name => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set name($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasName() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearName() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get description => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set description($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasDescription() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearDescription() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.bool get isArchived => $_getBF(5);
+  @$pb.TagNumber(6)
+  set isArchived($core.bool v) { $_setBool(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasIsArchived() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearIsArchived() => clearField(6);
+
+  /// id of set this Property should belong to
+  @$pb.TagNumber(8)
+  $core.String get setId => $_getSZ(6);
+  @$pb.TagNumber(8)
+  set setId($core.String v) { $_setString(6, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasSetId() => $_has(6);
+  @$pb.TagNumber(8)
+  void clearSetId() => clearField(8);
+
+  @$pb.TagNumber(10)
+  GetPropertyResponse_SelectData get selectData => $_getN(7);
+  @$pb.TagNumber(10)
+  set selectData(GetPropertyResponse_SelectData v) { setField(10, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasSelectData() => $_has(7);
+  @$pb.TagNumber(10)
+  void clearSelectData() => clearField(10);
+  @$pb.TagNumber(10)
+  GetPropertyResponse_SelectData ensureSelectData() => $_ensure(7);
+
+  @$pb.TagNumber(11)
+  $core.bool get alwaysIncludeForViewSource => $_getBF(8);
+  @$pb.TagNumber(11)
+  set alwaysIncludeForViewSource($core.bool v) { $_setBool(8, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasAlwaysIncludeForViewSource() => $_has(8);
+  @$pb.TagNumber(11)
+  void clearAlwaysIncludeForViewSource() => clearField(11);
+}
+
+class UpdatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage {
+  factory UpdatePropertyRequest_SelectData_SelectOption({
+    $core.String? id,
+    $core.String? name,
+    $core.String? description,
+    $core.bool? isCustom,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (isCustom != null) {
+      $result.isCustom = isCustom;
+    }
+    return $result;
+  }
+  UpdatePropertyRequest_SelectData_SelectOption._() : super();
+  factory UpdatePropertyRequest_SelectData_SelectOption.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdatePropertyRequest_SelectData_SelectOption.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePropertyRequest.SelectData.SelectOption', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'description')
+    ..aOB(4, _omitFieldNames ? '' : 'isCustom')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdatePropertyRequest_SelectData_SelectOption clone() => UpdatePropertyRequest_SelectData_SelectOption()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdatePropertyRequest_SelectData_SelectOption copyWith(void Function(UpdatePropertyRequest_SelectData_SelectOption) updates) => super.copyWith((message) => updates(message as UpdatePropertyRequest_SelectData_SelectOption)) as UpdatePropertyRequest_SelectData_SelectOption;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdatePropertyRequest_SelectData_SelectOption create() => UpdatePropertyRequest_SelectData_SelectOption._();
+  UpdatePropertyRequest_SelectData_SelectOption createEmptyInstance() => create();
+  static $pb.PbList<UpdatePropertyRequest_SelectData_SelectOption> createRepeated() => $pb.PbList<UpdatePropertyRequest_SelectData_SelectOption>();
+  @$core.pragma('dart2js:noInline')
+  static UpdatePropertyRequest_SelectData_SelectOption getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdatePropertyRequest_SelectData_SelectOption>(create);
+  static UpdatePropertyRequest_SelectData_SelectOption? _defaultInstance;
+
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
@@ -305,58 +858,284 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   void clearName() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get subjectType => $_getSZ(2);
+  $core.String get description => $_getSZ(2);
   @$pb.TagNumber(3)
-  set subjectType($core.String v) { $_setString(2, v); }
+  set description($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasSubjectType() => $_has(2);
+  $core.bool hasDescription() => $_has(2);
   @$pb.TagNumber(3)
-  void clearSubjectType() => clearField(3);
+  void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get subjectId => $_getSZ(3);
+  $core.bool get isCustom => $_getBF(3);
   @$pb.TagNumber(4)
-  set subjectId($core.String v) { $_setString(3, v); }
+  set isCustom($core.bool v) { $_setBool(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasSubjectId() => $_has(3);
+  $core.bool hasIsCustom() => $_has(3);
   @$pb.TagNumber(4)
-  void clearSubjectId() => clearField(4);
+  void clearIsCustom() => clearField(4);
+}
+
+class UpdatePropertyRequest_SelectData extends $pb.GeneratedMessage {
+  factory UpdatePropertyRequest_SelectData({
+    $core.bool? allowFreetext,
+    $core.Iterable<$core.String>? removeOptions,
+    $core.Iterable<UpdatePropertyRequest_SelectData_SelectOption>? upsertOptions,
+  }) {
+    final $result = create();
+    if (allowFreetext != null) {
+      $result.allowFreetext = allowFreetext;
+    }
+    if (removeOptions != null) {
+      $result.removeOptions.addAll(removeOptions);
+    }
+    if (upsertOptions != null) {
+      $result.upsertOptions.addAll(upsertOptions);
+    }
+    return $result;
+  }
+  UpdatePropertyRequest_SelectData._() : super();
+  factory UpdatePropertyRequest_SelectData.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdatePropertyRequest_SelectData.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePropertyRequest.SelectData', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'allowFreetext')
+    ..pPS(2, _omitFieldNames ? '' : 'removeOptions')
+    ..pc<UpdatePropertyRequest_SelectData_SelectOption>(3, _omitFieldNames ? '' : 'upsertOptions', $pb.PbFieldType.PM, subBuilder: UpdatePropertyRequest_SelectData_SelectOption.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdatePropertyRequest_SelectData clone() => UpdatePropertyRequest_SelectData()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdatePropertyRequest_SelectData copyWith(void Function(UpdatePropertyRequest_SelectData) updates) => super.copyWith((message) => updates(message as UpdatePropertyRequest_SelectData)) as UpdatePropertyRequest_SelectData;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdatePropertyRequest_SelectData create() => UpdatePropertyRequest_SelectData._();
+  UpdatePropertyRequest_SelectData createEmptyInstance() => create();
+  static $pb.PbList<UpdatePropertyRequest_SelectData> createRepeated() => $pb.PbList<UpdatePropertyRequest_SelectData>();
+  @$core.pragma('dart2js:noInline')
+  static UpdatePropertyRequest_SelectData getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdatePropertyRequest_SelectData>(create);
+  static UpdatePropertyRequest_SelectData? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get allowFreetext => $_getBF(0);
+  @$pb.TagNumber(1)
+  set allowFreetext($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasAllowFreetext() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAllowFreetext() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.String> get removeOptions => $_getList(1);
+
+  @$pb.TagNumber(3)
+  $core.List<UpdatePropertyRequest_SelectData_SelectOption> get upsertOptions => $_getList(2);
+}
+
+enum UpdatePropertyRequest_FieldTypeData {
+  selectData, 
+  notSet
+}
+
+class UpdatePropertyRequest extends $pb.GeneratedMessage {
+  factory UpdatePropertyRequest({
+    $core.String? id,
+    $15.SubjectType? subjectType,
+    $15.FieldType? fieldType,
+    $core.String? name,
+    $core.String? description,
+    $core.bool? isArchived,
+    $core.String? setId,
+    UpdatePropertyRequest_SelectData? selectData,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (subjectType != null) {
+      $result.subjectType = subjectType;
+    }
+    if (fieldType != null) {
+      $result.fieldType = fieldType;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (isArchived != null) {
+      $result.isArchived = isArchived;
+    }
+    if (setId != null) {
+      $result.setId = setId;
+    }
+    if (selectData != null) {
+      $result.selectData = selectData;
+    }
+    return $result;
+  }
+  UpdatePropertyRequest._() : super();
+  factory UpdatePropertyRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdatePropertyRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static const $core.Map<$core.int, UpdatePropertyRequest_FieldTypeData> _UpdatePropertyRequest_FieldTypeDataByTag = {
+    10 : UpdatePropertyRequest_FieldTypeData.selectData,
+    0 : UpdatePropertyRequest_FieldTypeData.notSet
+  };
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..oo(0, [10])
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..e<$15.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $15.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $15.SubjectType.valueOf, enumValues: $15.SubjectType.values)
+    ..e<$15.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $15.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $15.FieldType.valueOf, enumValues: $15.FieldType.values)
+    ..aOS(4, _omitFieldNames ? '' : 'name')
+    ..aOS(5, _omitFieldNames ? '' : 'description')
+    ..aOB(6, _omitFieldNames ? '' : 'isArchived')
+    ..aOS(8, _omitFieldNames ? '' : 'setId')
+    ..aOM<UpdatePropertyRequest_SelectData>(10, _omitFieldNames ? '' : 'selectData', subBuilder: UpdatePropertyRequest_SelectData.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdatePropertyRequest clone() => UpdatePropertyRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdatePropertyRequest copyWith(void Function(UpdatePropertyRequest) updates) => super.copyWith((message) => updates(message as UpdatePropertyRequest)) as UpdatePropertyRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdatePropertyRequest create() => UpdatePropertyRequest._();
+  UpdatePropertyRequest createEmptyInstance() => create();
+  static $pb.PbList<UpdatePropertyRequest> createRepeated() => $pb.PbList<UpdatePropertyRequest>();
+  @$core.pragma('dart2js:noInline')
+  static UpdatePropertyRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdatePropertyRequest>(create);
+  static UpdatePropertyRequest? _defaultInstance;
+
+  UpdatePropertyRequest_FieldTypeData whichFieldTypeData() => _UpdatePropertyRequest_FieldTypeDataByTag[$_whichOneof(0)]!;
+  void clearFieldTypeData() => clearField($_whichOneof(0));
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $15.SubjectType get subjectType => $_getN(1);
+  @$pb.TagNumber(2)
+  set subjectType($15.SubjectType v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasSubjectType() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearSubjectType() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $15.FieldType get fieldType => $_getN(2);
+  @$pb.TagNumber(3)
+  set fieldType($15.FieldType v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasFieldType() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearFieldType() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get name => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set name($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasName() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearName() => clearField(4);
 
   @$pb.TagNumber(5)
-  FieldType get fieldType => $_getN(4);
+  $core.String get description => $_getSZ(4);
   @$pb.TagNumber(5)
-  set fieldType(FieldType v) { setField(5, v); }
+  set description($core.String v) { $_setString(4, v); }
   @$pb.TagNumber(5)
-  $core.bool hasFieldType() => $_has(4);
+  $core.bool hasDescription() => $_has(4);
   @$pb.TagNumber(5)
-  void clearFieldType() => clearField(5);
+  void clearDescription() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get description => $_getSZ(5);
+  $core.bool get isArchived => $_getBF(5);
   @$pb.TagNumber(6)
-  set description($core.String v) { $_setString(5, v); }
+  set isArchived($core.bool v) { $_setBool(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasDescription() => $_has(5);
+  $core.bool hasIsArchived() => $_has(5);
   @$pb.TagNumber(6)
-  void clearDescription() => clearField(6);
+  void clearIsArchived() => clearField(6);
 
-  @$pb.TagNumber(7)
-  $core.bool get isArchived => $_getBF(6);
-  @$pb.TagNumber(7)
-  set isArchived($core.bool v) { $_setBool(6, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasIsArchived() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearIsArchived() => clearField(7);
+  /// ID of set this Property should belong to
+  @$pb.TagNumber(8)
+  $core.String get setId => $_getSZ(6);
+  @$pb.TagNumber(8)
+  set setId($core.String v) { $_setString(6, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasSetId() => $_has(6);
+  @$pb.TagNumber(8)
+  void clearSetId() => clearField(8);
 
-  @$pb.TagNumber(8)
-  $core.bool get isSoftRequired => $_getBF(7);
-  @$pb.TagNumber(8)
-  set isSoftRequired($core.bool v) { $_setBool(7, v); }
-  @$pb.TagNumber(8)
-  $core.bool hasIsSoftRequired() => $_has(7);
-  @$pb.TagNumber(8)
-  void clearIsSoftRequired() => clearField(8);
+  @$pb.TagNumber(10)
+  UpdatePropertyRequest_SelectData get selectData => $_getN(7);
+  @$pb.TagNumber(10)
+  set selectData(UpdatePropertyRequest_SelectData v) { setField(10, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasSelectData() => $_has(7);
+  @$pb.TagNumber(10)
+  void clearSelectData() => clearField(10);
+  @$pb.TagNumber(10)
+  UpdatePropertyRequest_SelectData ensureSelectData() => $_ensure(7);
+}
+
+class UpdatePropertyResponse extends $pb.GeneratedMessage {
+  factory UpdatePropertyResponse() => create();
+  UpdatePropertyResponse._() : super();
+  factory UpdatePropertyResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdatePropertyResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePropertyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdatePropertyResponse clone() => UpdatePropertyResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdatePropertyResponse copyWith(void Function(UpdatePropertyResponse) updates) => super.copyWith((message) => updates(message as UpdatePropertyResponse)) as UpdatePropertyResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdatePropertyResponse create() => UpdatePropertyResponse._();
+  UpdatePropertyResponse createEmptyInstance() => create();
+  static $pb.PbList<UpdatePropertyResponse> createRepeated() => $pb.PbList<UpdatePropertyResponse>();
+  @$core.pragma('dart2js:noInline')
+  static UpdatePropertyResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdatePropertyResponse>(create);
+  static UpdatePropertyResponse? _defaultInstance;
 }
 
 

@@ -22,6 +22,13 @@ export class PropertyServiceClient {
                response: proto_services_property_svc_v1_property_svc_pb.GetPropertyResponse) => void
   ): grpcWeb.ClientReadableStream<proto_services_property_svc_v1_property_svc_pb.GetPropertyResponse>;
 
+  updateProperty(
+    request: proto_services_property_svc_v1_property_svc_pb.UpdatePropertyRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: proto_services_property_svc_v1_property_svc_pb.UpdatePropertyResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_property_svc_v1_property_svc_pb.UpdatePropertyResponse>;
+
 }
 
 export class PropertyServicePromiseClient {
@@ -38,6 +45,11 @@ export class PropertyServicePromiseClient {
     request: proto_services_property_svc_v1_property_svc_pb.GetPropertyRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<proto_services_property_svc_v1_property_svc_pb.GetPropertyResponse>;
+
+  updateProperty(
+    request: proto_services_property_svc_v1_property_svc_pb.UpdatePropertyRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<proto_services_property_svc_v1_property_svc_pb.UpdatePropertyResponse>;
 
 }
 

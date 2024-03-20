@@ -474,6 +474,7 @@ const GetPatientDetailsResponse$json = {
     },
     {'1': 'room', '3': 7, '4': 1, '5': 11, '6': '.proto.services.task_svc.v1.GetPatientDetailsResponse.Room', '9': 1, '10': 'room', '17': true},
     {'1': 'bed', '3': 8, '4': 1, '5': 11, '6': '.proto.services.task_svc.v1.GetPatientDetailsResponse.Bed', '9': 2, '10': 'bed', '17': true},
+    {'1': 'is_discharged', '3': 9, '4': 1, '5': 8, '10': 'isDischarged'},
   ],
   '3': [GetPatientDetailsResponse_Room$json, GetPatientDetailsResponse_Bed$json, GetPatientDetailsResponse_Task$json],
   '4': [GetPatientDetailsResponse_TaskStatus$json],
@@ -552,20 +553,21 @@ final $typed_data.Uint8List getPatientDetailsResponseDescriptor = $convert.base6
     'dGFza3MSIAoHd2FyZF9pZBgGIAEoCUICGAFIAFIGd2FyZElkiAEBElMKBHJvb20YByABKAsyOi'
     '5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5HZXRQYXRpZW50RGV0YWlsc1Jlc3BvbnNlLlJv'
     'b21IAVIEcm9vbYgBARJQCgNiZWQYCCABKAsyOS5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS'
-    '5HZXRQYXRpZW50RGV0YWlsc1Jlc3BvbnNlLkJlZEgCUgNiZWSIAQEaQwoEUm9vbRIOCgJpZBgB'
-    'IAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIXCgd3YXJkX2lkGAMgASgJUgZ3YXJkSWQaKQ'
-    'oDQmVkEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lGsQDCgRUYXNrEg4KAmlk'
-    'GAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW9uGAMgASgJUgtkZX'
-    'NjcmlwdGlvbhJYCgZzdGF0dXMYBCABKA4yQC5wcm90by5zZXJ2aWNlcy50YXNrX3N2Yy52MS5H'
-    'ZXRQYXRpZW50RGV0YWlsc1Jlc3BvbnNlLlRhc2tTdGF0dXNSBnN0YXR1cxItChBhc3NpZ25lZF'
-    '91c2VyX2lkGAUgASgJSABSDmFzc2lnbmVkVXNlcklkiAEBEh0KCnBhdGllbnRfaWQYBiABKAlS'
-    'CXBhdGllbnRJZBIWCgZwdWJsaWMYByABKAhSBnB1YmxpYxJeCghzdWJ0YXNrcxgIIAMoCzJCLn'
-    'Byb3RvLnNlcnZpY2VzLnRhc2tfc3ZjLnYxLkdldFBhdGllbnREZXRhaWxzUmVzcG9uc2UuVGFz'
-    'ay5TdWJUYXNrUghzdWJ0YXNrcxpBCgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGA'
-    'IgASgJUgRuYW1lEhIKBGRvbmUYAyABKAhSBGRvbmVCEwoRX2Fzc2lnbmVkX3VzZXJfaWQicgoK'
-    'VGFza1N0YXR1cxIbChdUQVNLX1NUQVRVU19VTlNQRUNJRklFRBAAEhQKEFRBU0tfU1RBVFVTX1'
-    'RPRE8QARIbChdUQVNLX1NUQVRVU19JTl9QUk9HUkVTUxACEhQKEFRBU0tfU1RBVFVTX0RPTkUQ'
-    'A0IKCghfd2FyZF9pZEIHCgVfcm9vbUIGCgRfYmVk');
+    '5HZXRQYXRpZW50RGV0YWlsc1Jlc3BvbnNlLkJlZEgCUgNiZWSIAQESIwoNaXNfZGlzY2hhcmdl'
+    'ZBgJIAEoCFIMaXNEaXNjaGFyZ2VkGkMKBFJvb20SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAi'
+    'ABKAlSBG5hbWUSFwoHd2FyZF9pZBgDIAEoCVIGd2FyZElkGikKA0JlZBIOCgJpZBgBIAEoCVIC'
+    'aWQSEgoEbmFtZRgCIAEoCVIEbmFtZRrEAwoEVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZR'
+    'gCIAEoCVIEbmFtZRIgCgtkZXNjcmlwdGlvbhgDIAEoCVILZGVzY3JpcHRpb24SWAoGc3RhdHVz'
+    'GAQgASgOMkAucHJvdG8uc2VydmljZXMudGFza19zdmMudjEuR2V0UGF0aWVudERldGFpbHNSZX'
+    'Nwb25zZS5UYXNrU3RhdHVzUgZzdGF0dXMSLQoQYXNzaWduZWRfdXNlcl9pZBgFIAEoCUgAUg5h'
+    'c3NpZ25lZFVzZXJJZIgBARIdCgpwYXRpZW50X2lkGAYgASgJUglwYXRpZW50SWQSFgoGcHVibG'
+    'ljGAcgASgIUgZwdWJsaWMSXgoIc3VidGFza3MYCCADKAsyQi5wcm90by5zZXJ2aWNlcy50YXNr'
+    'X3N2Yy52MS5HZXRQYXRpZW50RGV0YWlsc1Jlc3BvbnNlLlRhc2suU3ViVGFza1IIc3VidGFza3'
+    'MaQQoHU3ViVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRISCgRkb25l'
+    'GAMgASgIUgRkb25lQhMKEV9hc3NpZ25lZF91c2VyX2lkInIKClRhc2tTdGF0dXMSGwoXVEFTS1'
+    '9TVEFUVVNfVU5TUEVDSUZJRUQQABIUChBUQVNLX1NUQVRVU19UT0RPEAESGwoXVEFTS19TVEFU'
+    'VVNfSU5fUFJPR1JFU1MQAhIUChBUQVNLX1NUQVRVU19ET05FEANCCgoIX3dhcmRfaWRCBwoFX3'
+    'Jvb21CBgoEX2JlZA==');
 
 @$core.Deprecated('Use getPatientListRequestDescriptor instead')
 const GetPatientListRequest$json = {

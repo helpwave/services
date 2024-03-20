@@ -12,9 +12,10 @@ from google.protobuf.internal import builder as _builder
 _sym_db = _symbol_database.Default()
 
 
+from proto.services.property_svc.v1 import types_pb2 as proto_dot_services_dot_property__svc_dot_v1_dot_types__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n1proto/services/property_svc/v1/property_svc.proto\x12\x1eproto.services.property_svc.v1\"\xb7\x01\n\x15\x43reatePropertyRequest\x12\x1d\n\nsubject_id\x18\x01 \x01(\tR\tsubjectId\x12!\n\x0csubject_type\x18\x02 \x01(\tR\x0bsubjectType\x12H\n\nfield_type\x18\x03 \x01(\x0e\x32).proto.services.property_svc.v1.FieldTypeR\tfieldType\x12\x12\n\x04name\x18\x04 \x01(\tR\x04name\"(\n\x16\x43reatePropertyResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"$\n\x12GetPropertyRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"\xf6\x02\n\x13GetPropertyResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12!\n\x0csubject_type\x18\x03 \x01(\tR\x0bsubjectType\x12\x1d\n\nsubject_id\x18\x04 \x01(\tR\tsubjectId\x12H\n\nfield_type\x18\x05 \x01(\x0e\x32).proto.services.property_svc.v1.FieldTypeR\tfieldType\x12%\n\x0b\x64\x65scription\x18\x06 \x01(\tH\x00R\x0b\x64\x65scription\x88\x01\x01\x12$\n\x0bis_archived\x18\x07 \x01(\x08H\x01R\nisArchived\x88\x01\x01\x12-\n\x10is_soft_required\x18\x08 \x01(\x08H\x02R\x0eisSoftRequired\x88\x01\x01\x42\x0e\n\x0c_descriptionB\x0e\n\x0c_is_archivedB\x13\n\x11_is_soft_required*\xb1\x01\n\tFieldType\x12\x1a\n\x16\x46IELD_TYPE_UNSPECIFIED\x10\x00\x12\x13\n\x0f\x46IELD_TYPE_TEXT\x10\x01\x12\x15\n\x11\x46IELD_TYPE_NUMBER\x10\x02\x12\x17\n\x13\x46IELD_TYPE_CHECKBOX\x10\x03\x12\x13\n\x0f\x46IELD_TYPE_DATE\x10\x04\x12\x17\n\x13\x46IELD_TYPE_DATETIME\x10\x05\x12\x15\n\x11\x46IELD_TYPE_SELECT\x10\x06\x32\x8f\x02\n\x0fPropertyService\x12\x81\x01\n\x0e\x43reateProperty\x12\x35.proto.services.property_svc.v1.CreatePropertyRequest\x1a\x36.proto.services.property_svc.v1.CreatePropertyResponse\"\x00\x12x\n\x0bGetProperty\x12\x32.proto.services.property_svc.v1.GetPropertyRequest\x1a\x33.proto.services.property_svc.v1.GetPropertyResponse\"\x00\x42\xee\x01\n\"com.proto.services.property_svc.v1B\x10PropertySvcProtoP\x01Z\x1fgen/proto/services/property-svc\xa2\x02\x03PSP\xaa\x02\x1dProto.Services.PropertySvc.V1\xca\x02\x1dProto\\Services\\PropertySvc\\V1\xe2\x02)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\xea\x02 Proto::Services::PropertySvc::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n1proto/services/property_svc/v1/property_svc.proto\x12\x1eproto.services.property_svc.v1\x1a*proto/services/property_svc/v1/types.proto\"\xad\x05\n\x15\x43reatePropertyRequest\x12N\n\x0csubject_type\x18\x02 \x01(\x0e\x32+.proto.services.property_svc.v1.SubjectTypeR\x0bsubjectType\x12H\n\nfield_type\x18\x03 \x01(\x0e\x32).proto.services.property_svc.v1.FieldTypeR\tfieldType\x12\x12\n\x04name\x18\x04 \x01(\tR\x04name\x12%\n\x0b\x64\x65scription\x18\x05 \x01(\tH\x01R\x0b\x64\x65scription\x88\x01\x01\x12\x1a\n\x06set_id\x18\x06 \x01(\tH\x02R\x05setId\x88\x01\x01\x12\x63\n\x0bselect_data\x18\t \x01(\x0b\x32@.proto.services.property_svc.v1.CreatePropertyRequest.SelectDataH\x00R\nselectData\x1a\x8f\x02\n\nSelectData\x12*\n\x0e\x61llow_freetext\x18\x01 \x01(\x08H\x00R\rallowFreetext\x88\x01\x01\x12g\n\x07options\x18\x02 \x03(\x0b\x32M.proto.services.property_svc.v1.CreatePropertyRequest.SelectData.SelectOptionR\x07options\x1aY\n\x0cSelectOption\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12%\n\x0b\x64\x65scription\x18\x02 \x01(\tH\x00R\x0b\x64\x65scription\x88\x01\x01\x42\x0e\n\x0c_descriptionB\x11\n\x0f_allow_freetextB\x11\n\x0f\x66ield_type_dataB\x0e\n\x0c_descriptionB\t\n\x07_set_id\"9\n\x16\x43reatePropertyResponse\x12\x1f\n\x0bproperty_id\x18\x01 \x01(\tR\npropertyId\"p\n\x12GetPropertyRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x1aJ\n\nViewSource\x12\x18\n\x06global\x18\x01 \x01(\x08H\x00R\x06global\x12\x19\n\x07ward_id\x18\x02 \x01(\tH\x00R\x06wardIdB\x07\n\x05value\"\xf2\x06\n\x13GetPropertyResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12N\n\x0csubject_type\x18\x02 \x01(\x0e\x32+.proto.services.property_svc.v1.SubjectTypeR\x0bsubjectType\x12H\n\nfield_type\x18\x03 \x01(\x0e\x32).proto.services.property_svc.v1.FieldTypeR\tfieldType\x12\x12\n\x04name\x18\x04 \x01(\tR\x04name\x12%\n\x0b\x64\x65scription\x18\x05 \x01(\tH\x01R\x0b\x64\x65scription\x88\x01\x01\x12\x1f\n\x0bis_archived\x18\x06 \x01(\x08R\nisArchived\x12\x1a\n\x06set_id\x18\x08 \x01(\tH\x02R\x05setId\x88\x01\x01\x12\x61\n\x0bselect_data\x18\n \x01(\x0b\x32>.proto.services.property_svc.v1.GetPropertyResponse.SelectDataH\x00R\nselectData\x12G\n\x1e\x61lways_include_for_view_source\x18\x0b \x01(\x08H\x03R\x1a\x61lwaysIncludeForViewSource\x88\x01\x01\x1a\xbb\x02\n\nSelectData\x12*\n\x0e\x61llow_freetext\x18\x01 \x01(\x08H\x00R\rallowFreetext\x88\x01\x01\x12\x65\n\x07options\x18\x02 \x03(\x0b\x32K.proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOptionR\x07options\x1a\x86\x01\n\x0cSelectOption\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12%\n\x0b\x64\x65scription\x18\x03 \x01(\tH\x00R\x0b\x64\x65scription\x88\x01\x01\x12\x1b\n\tis_custom\x18\x04 \x01(\x08R\x08isCustomB\x0e\n\x0c_descriptionB\x11\n\x0f_allow_freetextB\x11\n\x0f\x66ield_type_dataB\x0e\n\x0c_descriptionB\t\n\x07_set_idB!\n\x1f_always_include_for_view_source\"\xae\x07\n\x15UpdatePropertyRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12S\n\x0csubject_type\x18\x02 \x01(\x0e\x32+.proto.services.property_svc.v1.SubjectTypeH\x01R\x0bsubjectType\x88\x01\x01\x12M\n\nfield_type\x18\x03 \x01(\x0e\x32).proto.services.property_svc.v1.FieldTypeH\x02R\tfieldType\x88\x01\x01\x12\x17\n\x04name\x18\x04 \x01(\tH\x03R\x04name\x88\x01\x01\x12%\n\x0b\x64\x65scription\x18\x05 \x01(\tH\x04R\x0b\x64\x65scription\x88\x01\x01\x12$\n\x0bis_archived\x18\x06 \x01(\x08H\x05R\nisArchived\x88\x01\x01\x12\x1a\n\x06set_id\x18\x08 \x01(\tH\x06R\x05setId\x88\x01\x01\x12\x63\n\x0bselect_data\x18\n \x01(\x0b\x32@.proto.services.property_svc.v1.UpdatePropertyRequest.SelectDataH\x00R\nselectData\x1a\x92\x03\n\nSelectData\x12*\n\x0e\x61llow_freetext\x18\x01 \x01(\x08H\x00R\rallowFreetext\x88\x01\x01\x12%\n\x0eremove_options\x18\x02 \x03(\tR\rremoveOptions\x12t\n\x0eupsert_options\x18\x03 \x03(\x0b\x32M.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOptionR\rupsertOptions\x1a\xa7\x01\n\x0cSelectOption\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n\x04name\x18\x02 \x01(\tH\x00R\x04name\x88\x01\x01\x12%\n\x0b\x64\x65scription\x18\x03 \x01(\tH\x01R\x0b\x64\x65scription\x88\x01\x01\x12 \n\tis_custom\x18\x04 \x01(\x08H\x02R\x08isCustom\x88\x01\x01\x42\x07\n\x05_nameB\x0e\n\x0c_descriptionB\x0c\n\n_is_customB\x11\n\x0f_allow_freetextB\x11\n\x0f\x66ield_type_dataB\x0f\n\r_subject_typeB\r\n\x0b_field_typeB\x07\n\x05_nameB\x0e\n\x0c_descriptionB\x0e\n\x0c_is_archivedB\t\n\x07_set_id\"\x18\n\x16UpdatePropertyResponse2\x93\x03\n\x0fPropertyService\x12\x81\x01\n\x0e\x43reateProperty\x12\x35.proto.services.property_svc.v1.CreatePropertyRequest\x1a\x36.proto.services.property_svc.v1.CreatePropertyResponse\"\x00\x12x\n\x0bGetProperty\x12\x32.proto.services.property_svc.v1.GetPropertyRequest\x1a\x33.proto.services.property_svc.v1.GetPropertyResponse\"\x00\x12\x81\x01\n\x0eUpdateProperty\x12\x35.proto.services.property_svc.v1.UpdatePropertyRequest\x1a\x36.proto.services.property_svc.v1.UpdatePropertyResponse\"\x00\x42\xee\x01\n\"com.proto.services.property_svc.v1B\x10PropertySvcProtoP\x01Z\x1fgen/proto/services/property-svc\xa2\x02\x03PSP\xaa\x02\x1dProto.Services.PropertySvc.V1\xca\x02\x1dProto\\Services\\PropertySvc\\V1\xe2\x02)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\xea\x02 Proto::Services::PropertySvc::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -22,16 +23,32 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'proto.services.property_svc
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\"com.proto.services.property_svc.v1B\020PropertySvcProtoP\001Z\037gen/proto/services/property-svc\242\002\003PSP\252\002\035Proto.Services.PropertySvc.V1\312\002\035Proto\\Services\\PropertySvc\\V1\342\002)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\352\002 Proto::Services::PropertySvc::V1'
-  _globals['_FIELDTYPE']._serialized_start=729
-  _globals['_FIELDTYPE']._serialized_end=906
-  _globals['_CREATEPROPERTYREQUEST']._serialized_start=86
-  _globals['_CREATEPROPERTYREQUEST']._serialized_end=269
-  _globals['_CREATEPROPERTYRESPONSE']._serialized_start=271
-  _globals['_CREATEPROPERTYRESPONSE']._serialized_end=311
-  _globals['_GETPROPERTYREQUEST']._serialized_start=313
-  _globals['_GETPROPERTYREQUEST']._serialized_end=349
-  _globals['_GETPROPERTYRESPONSE']._serialized_start=352
-  _globals['_GETPROPERTYRESPONSE']._serialized_end=726
-  _globals['_PROPERTYSERVICE']._serialized_start=909
-  _globals['_PROPERTYSERVICE']._serialized_end=1180
+  _globals['_CREATEPROPERTYREQUEST']._serialized_start=130
+  _globals['_CREATEPROPERTYREQUEST']._serialized_end=815
+  _globals['_CREATEPROPERTYREQUEST_SELECTDATA']._serialized_start=498
+  _globals['_CREATEPROPERTYREQUEST_SELECTDATA']._serialized_end=769
+  _globals['_CREATEPROPERTYREQUEST_SELECTDATA_SELECTOPTION']._serialized_start=661
+  _globals['_CREATEPROPERTYREQUEST_SELECTDATA_SELECTOPTION']._serialized_end=750
+  _globals['_CREATEPROPERTYRESPONSE']._serialized_start=817
+  _globals['_CREATEPROPERTYRESPONSE']._serialized_end=874
+  _globals['_GETPROPERTYREQUEST']._serialized_start=876
+  _globals['_GETPROPERTYREQUEST']._serialized_end=988
+  _globals['_GETPROPERTYREQUEST_VIEWSOURCE']._serialized_start=914
+  _globals['_GETPROPERTYREQUEST_VIEWSOURCE']._serialized_end=988
+  _globals['_GETPROPERTYRESPONSE']._serialized_start=991
+  _globals['_GETPROPERTYRESPONSE']._serialized_end=1873
+  _globals['_GETPROPERTYRESPONSE_SELECTDATA']._serialized_start=1477
+  _globals['_GETPROPERTYRESPONSE_SELECTDATA']._serialized_end=1792
+  _globals['_GETPROPERTYRESPONSE_SELECTDATA_SELECTOPTION']._serialized_start=1639
+  _globals['_GETPROPERTYRESPONSE_SELECTDATA_SELECTOPTION']._serialized_end=1773
+  _globals['_UPDATEPROPERTYREQUEST']._serialized_start=1876
+  _globals['_UPDATEPROPERTYREQUEST']._serialized_end=2818
+  _globals['_UPDATEPROPERTYREQUEST_SELECTDATA']._serialized_start=2313
+  _globals['_UPDATEPROPERTYREQUEST_SELECTDATA']._serialized_end=2715
+  _globals['_UPDATEPROPERTYREQUEST_SELECTDATA_SELECTOPTION']._serialized_start=2529
+  _globals['_UPDATEPROPERTYREQUEST_SELECTDATA_SELECTOPTION']._serialized_end=2696
+  _globals['_UPDATEPROPERTYRESPONSE']._serialized_start=2820
+  _globals['_UPDATEPROPERTYRESPONSE']._serialized_end=2844
+  _globals['_PROPERTYSERVICE']._serialized_start=2847
+  _globals['_PROPERTYSERVICE']._serialized_end=3250
 # @@protoc_insertion_point(module_scope)

@@ -7,35 +7,36 @@ import (
 
 type Property struct {
 	ID          uuid.UUID
-	SubjectID   uuid.UUID
-	SubjectType string
+	SubjectType pb.SubjectType
 	FieldType   pb.FieldType
 
 	Name        string
 	Description string
 	IsArchived  bool
 
-	_setID uuid.UUID //nolint:unused
-
-	SelectOptions []SelectOption
+	SetID         uuid.NullUUID
+	FieldTypeData FieldTypeData
 }
 
-func NewProperty() *Property {
-	return &Property{
-		Name:        "",
-		Description: "",
-		IsArchived:  false,
-	}
+type FieldTypeData struct {
+	SelectData *SelectData `json:"select_data,omitempty"`
+}
+
+type SelectData struct {
+	AllowFreetext bool           `json:"allow_freetext"`
+	SelectOptions []SelectOption ` json:"select_options"`
 }
 
 type SelectOption struct {
 	ID          uuid.UUID
 	Name        string
-	Description string
+	Description *string
+	IsCustom    bool
 }
 
-func NewSelectOption() *SelectOption {
-	return &SelectOption{
-		Name: "",
-	}
+type UpdateSelectOption struct {
+	ID          uuid.UUID
+	Name        *string
+	Description *string
+	IsCustom    *bool
 }

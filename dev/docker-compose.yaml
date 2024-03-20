@@ -25,7 +25,7 @@ services:
       EVENTSTORE_LOG_LEVEL: "Warning"
       EVENTSTORE_INSECURE: "true"
       EVENTSTORE_RUN_PROJECTIONS: "All"
-      ENABLE_ATOM_PUB_OVER_HTTP: "true"
+      EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP: "true"
     ports:
       - "2113:2113"
 

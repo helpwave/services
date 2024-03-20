@@ -1,3 +1,3 @@
-proto/libs
-.gitignore
-.dart_tool
+!lib
+lib/proto/libs
+

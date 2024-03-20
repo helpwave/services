@@ -19,6 +19,8 @@
 const grpc = {};
 grpc.web = require('grpc-web');
 
+
+var proto_services_property_svc_v1_types_pb = require('../../../../proto/services/property_svc/v1/types_pb.js')
 const proto = {};
 proto.proto = {};
 proto.proto.services = {};
@@ -196,6 +198,67 @@ proto.proto.services.property_svc.v1.PropertyServicePromiseClient.prototype.getP
       request,
       metadata || {},
       methodDescriptor_PropertyService_GetProperty);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.property_svc.v1.UpdatePropertyRequest,
+ *   !proto.proto.services.property_svc.v1.UpdatePropertyResponse>}
+ */
+const methodDescriptor_PropertyService_UpdateProperty = new grpc.web.MethodDescriptor(
+  '/proto.services.property_svc.v1.PropertyService/UpdateProperty',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.property_svc.v1.UpdatePropertyRequest,
+  proto.proto.services.property_svc.v1.UpdatePropertyResponse,
+  /**
+   * @param {!proto.proto.services.property_svc.v1.UpdatePropertyRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.property_svc.v1.UpdatePropertyResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.property_svc.v1.UpdatePropertyRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.property_svc.v1.UpdatePropertyResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.property_svc.v1.UpdatePropertyResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.property_svc.v1.PropertyServiceClient.prototype.updateProperty =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.property_svc.v1.PropertyService/UpdateProperty',
+      request,
+      metadata || {},
+      methodDescriptor_PropertyService_UpdateProperty,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.property_svc.v1.UpdatePropertyRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.property_svc.v1.UpdatePropertyResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.property_svc.v1.PropertyServicePromiseClient.prototype.updateProperty =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.property_svc.v1.PropertyService/UpdateProperty',
+      request,
+      metadata || {},
+      methodDescriptor_PropertyService_UpdateProperty);
 };
 
 

@@ -497,6 +497,7 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		Notes:                   patientRes.Notes,
 		Name:                    patientRes.HumanReadableIdentifier, // TODO replace later
 		Tasks:                   tasks,
+		IsDischarged:            patientRes.IsDischarged != 0,
 		WardId:                  hwutil.NullUUIDToStringPtr(patientRes.WardID),
 		Room: hwutil.MapIf(patientRes.RoomID.Valid, *patientRes, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientDetailsResponse_Room {
 			return pb.GetPatientDetailsResponse_Room{
