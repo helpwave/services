@@ -1,12 +1,13 @@
 package aggregate_test
 
 import (
+	"common"
+	"context"
+	"github.com/google/uuid"
 	"hwes"
 	"tasks-svc/internal/patient/aggregate"
 	patientEventsV1 "tasks-svc/internal/patient/events/v1"
 	"testing"
-
-	"github.com/google/uuid"
 )
 
 func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwes.Event, error)) {
@@ -21,6 +22,8 @@ func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwe
 }
 
 func TestPatientAggregate_CreatePatient(t *testing.T) {
+	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+
 	patientID := uuid.New()
 
 	patientHumanReadableIdentifier := "tester"
@@ -29,7 +32,7 @@ func TestPatientAggregate_CreatePatient(t *testing.T) {
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(patientAggregate, patientID, patientHumanReadableIdentifier, patientNotes)
+		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, patientHumanReadableIdentifier, patientNotes)
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != patientHumanReadableIdentifier {
@@ -42,6 +45,8 @@ func TestPatientAggregate_CreatePatient(t *testing.T) {
 }
 
 func TestPatientAggregate_UpdateNotes(t *testing.T) {
+	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+
 	patientID := uuid.New()
 
 	patientHumanReadableIdentifier := "tester"
@@ -51,7 +56,7 @@ func TestPatientAggregate_UpdateNotes(t *testing.T) {
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(patientAggregate, patientID, patientHumanReadableIdentifier, initialPatientNotes)
+		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, patientHumanReadableIdentifier, initialPatientNotes)
 	})
 
 	if patientAggregate.Patient.Notes != initialPatientNotes {
@@ -59,7 +64,7 @@ func TestPatientAggregate_UpdateNotes(t *testing.T) {
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewNotesUpdatedEvent(patientAggregate, updatedPatientNotes)
+		return patientEventsV1.NewNotesUpdatedEvent(ctx, patientAggregate, updatedPatientNotes)
 	})
 
 	if patientAggregate.Patient.Notes != updatedPatientNotes {
@@ -68,6 +73,8 @@ func TestPatientAggregate_UpdateNotes(t *testing.T) {
 }
 
 func TestPatientAggregate_UpdateHumanReadableIdentifier(t *testing.T) {
+	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+
 	patientID := uuid.New()
 
 	initialPatientHumanReadableIdentifier := "tester"
@@ -76,7 +83,7 @@ func TestPatientAggregate_UpdateHumanReadableIdentifier(t *testing.T) {
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(patientAggregate, patientID, initialPatientHumanReadableIdentifier, "")
+		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, initialPatientHumanReadableIdentifier, "")
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != initialPatientHumanReadableIdentifier {
@@ -84,7 +91,7 @@ func TestPatientAggregate_UpdateHumanReadableIdentifier(t *testing.T) {
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewHumanReadableIdentifierUpdatedEvent(patientAggregate, updatedPatientHumanReadableIdentifier)
+		return patientEventsV1.NewHumanReadableIdentifierUpdatedEvent(ctx, patientAggregate, updatedPatientHumanReadableIdentifier)
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != updatedPatientHumanReadableIdentifier {
@@ -93,12 +100,14 @@ func TestPatientAggregate_UpdateHumanReadableIdentifier(t *testing.T) {
 }
 
 func TestPatientAggregate_DischargeReadmitPatient(t *testing.T) {
+	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+
 	patientID := uuid.New()
 	patientHumanReadableIdentifier := "tester"
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(patientAggregate, patientID, patientHumanReadableIdentifier, "")
+		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, patientHumanReadableIdentifier, "")
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != patientHumanReadableIdentifier {
@@ -106,7 +115,7 @@ func TestPatientAggregate_DischargeReadmitPatient(t *testing.T) {
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientDischargedEvent(patientAggregate), nil
+		return patientEventsV1.NewPatientDischargedEvent(ctx, patientAggregate)
 	})
 
 	if !patientAggregate.Patient.IsDischarged {
@@ -114,7 +123,7 @@ func TestPatientAggregate_DischargeReadmitPatient(t *testing.T) {
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientReadmittedEvent(patientAggregate), nil
+		return patientEventsV1.NewPatientReadmittedEvent(ctx, patientAggregate)
 	})
 
 	if patientAggregate.Patient.IsDischarged {
@@ -123,6 +132,8 @@ func TestPatientAggregate_DischargeReadmitPatient(t *testing.T) {
 }
 
 func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
+	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+
 	patientID := uuid.New()
 
 	newBedID := uuid.New()
@@ -130,7 +141,7 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(patientAggregate, patientID, patientHumanReadableIdentifier, "")
+		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, patientHumanReadableIdentifier, "")
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != patientHumanReadableIdentifier {
@@ -138,7 +149,7 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewBedAssignedEvent(patientAggregate, newBedID)
+		return patientEventsV1.NewBedAssignedEvent(ctx, patientAggregate, newBedID)
 	})
 
 	if patientAggregate.Patient.BedID.UUID != newBedID {
@@ -146,7 +157,7 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewBedUnassignedEvent(patientAggregate), nil
+		return patientEventsV1.NewBedUnassignedEvent(ctx, patientAggregate)
 	})
 
 	if patientAggregate.Patient.BedID.UUID != uuid.Nil {

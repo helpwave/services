@@ -65,9 +65,12 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 		return nil
 	}
 
-	eventsData := hwutil.Map(aggregate.GetUncommittedEvents(), func(event hwes.Event) esdb.EventData {
+	eventsData, err := hwutil.MapWithErr(aggregate.GetUncommittedEvents(), func(event hwes.Event) (esdb.EventData, error) {
 		return event.ToEventData()
 	})
+	if err != nil {
+		return err
+	}
 
 	// If AppliedEvents are empty, we imply that this entity was not loaded from an event store and therefore non-existing.
 	if len(aggregate.GetAppliedEvents()) == 0 {

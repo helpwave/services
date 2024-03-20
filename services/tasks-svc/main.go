@@ -6,8 +6,7 @@ import (
 	pb "gen/proto/services/tasks_svc/v1"
 	"hwdb"
 	"hwes/eventstoredb"
-	"tasks-svc/internal/patient/projections/patient_postgres_projection"
-	"tasks-svc/internal/task/projections/task_postgres_projection"
+	"tasks-svc/internal/task/projections/echo"
 	"tasks-svc/internal/tracking"
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
@@ -30,7 +29,8 @@ func main() {
 	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
 	defer closeDBPool()
 
-	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
+	// TODO: https://github.com/helpwave/services/issues/694
+	// tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)

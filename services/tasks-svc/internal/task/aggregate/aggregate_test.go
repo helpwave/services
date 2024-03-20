@@ -1,6 +1,7 @@
 package aggregate_test
 
 import (
+	"common"
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
@@ -22,6 +23,8 @@ func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwe
 }
 
 func TestTaskAggregate_UpdateName(t *testing.T) {
+	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+
 	taskID := uuid.New()
 	patientID := uuid.New()
 
@@ -31,7 +34,7 @@ func TestTaskAggregate_UpdateName(t *testing.T) {
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewTaskCreatedEvent(taskAggregate, taskID, initialTaskName, patientID, pb.TaskStatus_TASK_STATUS_TODO)
+		return taskEventsV1.NewTaskCreatedEvent(ctx, taskAggregate, taskID, initialTaskName, patientID, pb.TaskStatus_TASK_STATUS_TODO)
 	})
 
 	if taskAggregate.Task.Name != initialTaskName {
@@ -39,7 +42,7 @@ func TestTaskAggregate_UpdateName(t *testing.T) {
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewTaskNameUpdatedEvent(taskAggregate, updatedTaskName)
+		return taskEventsV1.NewTaskNameUpdatedEvent(ctx, taskAggregate, updatedTaskName)
 	})
 
 	if taskAggregate.Task.Name != updatedTaskName {
@@ -48,6 +51,8 @@ func TestTaskAggregate_UpdateName(t *testing.T) {
 }
 
 func TestTaskAggregate_UpdateDescription(t *testing.T) {
+	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+
 	taskID := uuid.New()
 	patientID := uuid.New()
 
@@ -57,7 +62,7 @@ func TestTaskAggregate_UpdateDescription(t *testing.T) {
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewTaskCreatedEvent(taskAggregate, taskID, "Test task", patientID, pb.TaskStatus_TASK_STATUS_TODO)
+		return taskEventsV1.NewTaskCreatedEvent(ctx, taskAggregate, taskID, "Test task", patientID, pb.TaskStatus_TASK_STATUS_TODO)
 	})
 
 	if taskAggregate.Task.Description != initialTaskDescription {
@@ -65,7 +70,7 @@ func TestTaskAggregate_UpdateDescription(t *testing.T) {
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewTaskDescriptionUpdatedEvent(taskAggregate, updatedTaskDescription)
+		return taskEventsV1.NewTaskDescriptionUpdatedEvent(ctx, taskAggregate, updatedTaskDescription)
 	})
 
 	if taskAggregate.Task.Description != updatedTaskDescription {
@@ -74,6 +79,8 @@ func TestTaskAggregate_UpdateDescription(t *testing.T) {
 }
 
 func TestTaskAggregate_UpdateSubtaskName(t *testing.T) {
+	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+
 	taskID := uuid.New()
 	subtaskID := uuid.New()
 	patientID := uuid.New()
@@ -84,11 +91,11 @@ func TestTaskAggregate_UpdateSubtaskName(t *testing.T) {
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewTaskCreatedEvent(taskAggregate, taskID, "Test task", patientID, pb.TaskStatus_TASK_STATUS_TODO)
+		return taskEventsV1.NewTaskCreatedEvent(ctx, taskAggregate, taskID, "Test task", patientID, pb.TaskStatus_TASK_STATUS_TODO)
 	})
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewSubtaskCreatedEvent(taskAggregate, subtaskID, subtaskName)
+		return taskEventsV1.NewSubtaskCreatedEvent(ctx, taskAggregate, subtaskID, subtaskName)
 	})
 
 	if taskAggregate.Task.Subtasks[subtaskID].Name != subtaskName {
@@ -96,7 +103,7 @@ func TestTaskAggregate_UpdateSubtaskName(t *testing.T) {
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewSubtaskNameUpdatedEvent(taskAggregate, subtaskID, subtaskName)
+		return taskEventsV1.NewSubtaskNameUpdatedEvent(ctx, taskAggregate, subtaskID, subtaskName)
 	})
 
 	if taskAggregate.Task.Subtasks[subtaskID].Name != subtaskName {
@@ -105,6 +112,8 @@ func TestTaskAggregate_UpdateSubtaskName(t *testing.T) {
 }
 
 func TestTaskAggregate_CompleteSubtask(t *testing.T) {
+	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+
 	taskID := uuid.New()
 	subtaskID := uuid.New()
 	patientID := uuid.New()
@@ -115,7 +124,7 @@ func TestTaskAggregate_CompleteSubtask(t *testing.T) {
 	taskAggregate := aggregate.NewTaskAggregate(taskID)
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewTaskCreatedEvent(taskAggregate, taskID, taskName, patientID, pb.TaskStatus_TASK_STATUS_TODO)
+		return taskEventsV1.NewTaskCreatedEvent(ctx, taskAggregate, taskID, taskName, patientID, pb.TaskStatus_TASK_STATUS_TODO)
 	})
 
 	if taskAggregate.Task.Name != taskName {
@@ -123,7 +132,7 @@ func TestTaskAggregate_CompleteSubtask(t *testing.T) {
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewSubtaskCreatedEvent(taskAggregate, subtaskID, subtaskName)
+		return taskEventsV1.NewSubtaskCreatedEvent(ctx, taskAggregate, subtaskID, subtaskName)
 	})
 
 	if taskAggregate.Task.Name != taskName {
@@ -131,12 +140,12 @@ func TestTaskAggregate_CompleteSubtask(t *testing.T) {
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewSubtaskCompletedEvent(taskAggregate, subtaskID)
+		return taskEventsV1.NewSubtaskCompletedEvent(ctx, taskAggregate, subtaskID)
 	})
 
 	// Apply two times
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewSubtaskCompletedEvent(taskAggregate, subtaskID)
+		return taskEventsV1.NewSubtaskCompletedEvent(ctx, taskAggregate, subtaskID)
 	})
 
 	if !taskAggregate.Task.Subtasks[subtaskID].Done {
@@ -145,7 +154,7 @@ func TestTaskAggregate_CompleteSubtask(t *testing.T) {
 }
 
 func TestTaskAggregate_AssignTask(t *testing.T) {
-	ctx := context.Background()
+	ctx := common.ContextWithUserID(context.Background(), uuid.New())
 
 	taskID := uuid.New()
 	patientID := uuid.New()

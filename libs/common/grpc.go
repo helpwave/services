@@ -185,7 +185,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	}
 
 	// attach userID to context, so we can get it in a handler using GetUserID()
-	ctx = context.WithValue(ctx, userIDKey{}, userID)
+	ctx = ContextWithUserID(ctx, userID)
 
 	// attach userID to current span (should be the auth interceptor span)
 	telemetry.SetSpanStr(ctx, "user.id", userID.String())
@@ -198,6 +198,10 @@ func authFunc(ctx context.Context) (context.Context, error) {
 		WithContext(ctx)
 
 	return ctx, nil
+}
+
+func ContextWithUserID(ctx context.Context, userID uuid.UUID) context.Context {
+	return context.WithValue(ctx, userIDKey{}, userID)
 }
 
 // handleOrganizationIDForAuthFunc is a part of our auth middleware.

@@ -23,43 +23,28 @@ func NewPropertyService(aggregateStore hwes.AggregateStore) *PropertyGrpcService
 func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.CreatePropertyRequest) (*pb.CreatePropertyResponse, error) {
 	propertyID := uuid.New()
 
-	setID, err := hwutil.ParseNullUUID(req.SetId)
-	if err != nil {
-		return nil, err
-	}
-
-	var none *bool
-	var selectData *models.SelectData
-
+	var fieldTypeData *models.FieldTypeData
 	switch ftData := req.FieldTypeData.(type) {
-	case *pb.CreatePropertyRequest_None:
-		none = &ftData.None
 	case *pb.CreatePropertyRequest_SelectData_:
-		selectData = &models.SelectData{
-			AllowFreetext: ftData.SelectData.GetAllowFreetext(),
-			SelectOptions: hwutil.Map(ftData.SelectData.Options, func(option *pb.CreatePropertyRequest_SelectData_SelectOption) models.SelectOption {
-				var description string
-				if option.Description != nil {
-					description = *option.Description
-				}
-				return models.SelectOption{
-					//TODO: ID, will be added with #677,
-					Name:        option.Name,
-					Description: description,
-				}
-			}),
+		fieldTypeData = &models.FieldTypeData{
+			SelectData: &models.SelectData{
+				AllowFreetext: ftData.SelectData.GetAllowFreetext(),
+				SelectOptions: hwutil.Map(ftData.SelectData.Options, func(option *pb.CreatePropertyRequest_SelectData_SelectOption) models.SelectOption {
+					var description string
+					if option.Description != nil {
+						description = *option.Description
+					}
+					return models.SelectOption{
+						ID:          uuid.New(),
+						Name:        option.Name,
+						Description: &description,
+					}
+				}),
+			},
 		}
-	default:
-		defaultValue := true
-		none = &defaultValue
 	}
 
-	fieldTypeData := models.FieldTypeData{
-		None:       none,
-		SelectData: selectData,
-	}
-
-	if err := commandsV1.NewCreatePropertyCommandHandler(s.as)(ctx, propertyID, req.GetSubjectType(), req.GetFieldType(), req.GetName(), req.Description, setID, fieldTypeData); err != nil {
+	if err := commandsV1.NewCreatePropertyCommandHandler(s.as)(ctx, propertyID, req.GetSubjectType(), req.GetFieldType(), req.GetName(), req.Description, req.SetId, fieldTypeData); err != nil {
 		return nil, err
 	}
 
@@ -92,6 +77,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 
 		SetId:                      setID,
 		AlwaysIncludeForViewSource: nil, //TODO
+		FieldTypeData:              nil,
 	}
 
 	switch {
@@ -101,15 +87,55 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 				AllowFreetext: &property.FieldTypeData.SelectData.AllowFreetext,
 				Options: hwutil.Map(property.FieldTypeData.SelectData.SelectOptions, func(option models.SelectOption) *pb.GetPropertyResponse_SelectData_SelectOption {
 					return &pb.GetPropertyResponse_SelectData_SelectOption{
-						// TODO: ID will be added with #744,
+						Id:          option.ID.String(),
 						Name:        option.Name,
-						Description: &option.Description,
+						Description: option.Description,
+						IsCustom:    option.IsCustom,
 					}
 				}),
 			}}
-	case property.FieldTypeData.None != nil:
-		response.FieldTypeData = &pb.GetPropertyResponse_None{None: *property.FieldTypeData.None}
 	}
 
 	return response, nil
+}
+
+func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.UpdatePropertyRequest) (*pb.UpdatePropertyResponse, error) {
+	propertyID, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+
+	var allowFreetext *bool
+	var removeOptions []string
+	var upsertOptions *[]models.UpdateSelectOption
+
+	switch ftData := req.FieldTypeData.(type) {
+	case *pb.UpdatePropertyRequest_SelectData_:
+		allowFreetext = ftData.SelectData.AllowFreetext
+		removeOptions = ftData.SelectData.RemoveOptions
+		if ftData.SelectData.UpsertOptions != nil {
+			opt, err := hwutil.MapWithErr(ftData.SelectData.UpsertOptions, func(option *pb.UpdatePropertyRequest_SelectData_SelectOption) (models.UpdateSelectOption, error) {
+				id, err := uuid.Parse(option.Id)
+				if err != nil {
+					return models.UpdateSelectOption{}, err
+				}
+				return models.UpdateSelectOption{
+					ID:          id,
+					Name:        option.Name,
+					Description: option.Description,
+					IsCustom:    option.IsCustom,
+				}, nil
+			})
+			if err != nil {
+				return nil, err
+			}
+			upsertOptions = &opt
+		}
+	}
+
+	if err := commandsV1.NewUpdatePropertyCommandHandler(s.as)(ctx, propertyID, req.SubjectType, req.FieldType, req.Name, req.Description, req.SetId, allowFreetext, upsertOptions, removeOptions, req.IsArchived); err != nil {
+		return nil, err
+	}
+
+	return &pb.UpdatePropertyResponse{}, nil
 }

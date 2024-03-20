@@ -2,7 +2,6 @@ package models
 
 import (
 	pb "gen/proto/services/property_svc/v1"
-
 	"github.com/google/uuid"
 )
 
@@ -20,7 +19,6 @@ type Property struct {
 }
 
 type FieldTypeData struct {
-	None       *bool       `json:"none,omitempty"`
 	SelectData *SelectData `json:"select_data,omitempty"`
 }
 
@@ -30,7 +28,15 @@ type SelectData struct {
 }
 
 type SelectOption struct {
-	// TODO: ID will be added with #744
+	ID          uuid.UUID
 	Name        string
-	Description string
+	Description *string
+	IsCustom    bool
+}
+
+type UpdateSelectOption struct {
+	ID          uuid.UUID
+	Name        *string
+	Description *string
+	IsCustom    *bool
 }
