@@ -82,7 +82,7 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 	}
 
 	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
-	if err := patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
+	if err := patientRepo.UpdatePatientBedId(ctx, patient_repo.UpdatePatientBedIdParams{
 		ID:        evt.AggregateID,
 		BedID:     bedId,
 		UpdatedAt: timestamp,
@@ -96,15 +96,13 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 func (a *Projection) onBedUnassigned(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Action) {
 	patientRepo := patient_repo.New(hwdb.GetDB())
 
-	newBed := uuid.NullUUID{UUID: uuid.Nil, Valid: false}
-
 	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
-	if err := patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
+	if err := patientRepo.UpdatePatientBedId(ctx, patient_repo.UpdatePatientBedIdParams{
 		ID:        evt.AggregateID,
-		BedID:     newBed,
+		BedID:     uuid.NullUUID{},
 		UpdatedAt: timestamp,
 	}); err != nil {
-		return err, esdb.Nack_Retry
+		return nil, esdb.Nack_Retry
 	}
 
 	return nil, esdb.Nack_Unknown

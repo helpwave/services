@@ -41,9 +41,8 @@ const updatePatient = `-- name: UpdatePatient :exec
 UPDATE patients
 SET human_readable_identifier = coalesce($2, human_readable_identifier),
     notes = coalesce($3, notes),
-	bed_id = coalesce($4, bed_id),
-	updated_at = coalesce($5, updated_at),
-	is_discharged = coalesce($6, is_discharged)
+	updated_at = coalesce($4, updated_at),
+	is_discharged = coalesce($5, is_discharged)
 WHERE id = $1
 `
 
@@ -51,7 +50,6 @@ type UpdatePatientParams struct {
 	ID                     uuid.UUID
 	HumanReadableIdentfier *string
 	Notes                  *string
-	BedID                  uuid.NullUUID
 	UpdatedAt              pgtype.Timestamp
 	IsDischarged           *int32
 }
@@ -61,9 +59,26 @@ func (q *Queries) UpdatePatient(ctx context.Context, arg UpdatePatientParams) er
 		arg.ID,
 		arg.HumanReadableIdentfier,
 		arg.Notes,
-		arg.BedID,
 		arg.UpdatedAt,
 		arg.IsDischarged,
 	)
+	return err
+}
+
+const updatePatientBedId = `-- name: UpdatePatientBedId :exec
+UPDATE patients
+	SET bed_id = $1,
+		updated_at = $2
+WHERE id = $3
+`
+
+type UpdatePatientBedIdParams struct {
+	BedID     uuid.NullUUID
+	UpdatedAt pgtype.Timestamp
+	ID        uuid.UUID
+}
+
+func (q *Queries) UpdatePatientBedId(ctx context.Context, arg UpdatePatientBedIdParams) error {
+	_, err := q.db.Exec(ctx, updatePatientBedId, arg.BedID, arg.UpdatedAt, arg.ID)
 	return err
 }
