@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createSubtask = `-- name: CreateSubtask :exec
@@ -36,16 +37,16 @@ func (q *Queries) CreateSubtask(ctx context.Context, arg CreateSubtaskParams) er
 
 const createTask = `-- name: CreateTask :exec
 INSERT INTO tasks
-	(id, name, patient_id, status, organization_id)
+	(id, name, patient_id, status, created_by)
 VALUES ($1, $2, $3, $4, $5)
 `
 
 type CreateTaskParams struct {
-	ID             uuid.UUID
-	Name           string
-	PatientID      uuid.UUID
-	Status         int32
-	OrganizationID uuid.UUID
+	ID        uuid.UUID
+	Name      string
+	PatientID uuid.UUID
+	Status    int32
+	CreatedBy uuid.UUID
 }
 
 func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) error {
@@ -54,7 +55,7 @@ func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) error {
 		arg.Name,
 		arg.PatientID,
 		arg.Status,
-		arg.OrganizationID,
+		arg.CreatedBy,
 	)
 	return err
 }
@@ -93,9 +94,9 @@ SET name = coalesce($2, name),
 	status = coalesce($4, status),
 	patient_id = coalesce($5, patient_id),
 	public = coalesce($6, public),
-	organization_id = coalesce($7, organization_id),
-	created_by = coalesce($8, created_by),
-	assigned_user_id = coalesce($9, assigned_user_id)
+	created_by = coalesce($7, created_by),
+	assigned_user_id = coalesce($8, assigned_user_id),
+	due_at = coalesce($9, due_at)
 WHERE id = $1
 `
 
@@ -106,9 +107,9 @@ type UpdateTaskParams struct {
 	Status         *int32
 	PatientID      uuid.NullUUID
 	Public         *bool
-	OrganizationID uuid.NullUUID
 	CreatedBy      uuid.NullUUID
 	AssignedUserID uuid.NullUUID
+	DueAt          pgtype.Timestamp
 }
 
 func (q *Queries) UpdateTask(ctx context.Context, arg UpdateTaskParams) error {
@@ -119,9 +120,9 @@ func (q *Queries) UpdateTask(ctx context.Context, arg UpdateTaskParams) error {
 		arg.Status,
 		arg.PatientID,
 		arg.Public,
-		arg.OrganizationID,
 		arg.CreatedBy,
 		arg.AssignedUserID,
+		arg.DueAt,
 	)
 	return err
 }

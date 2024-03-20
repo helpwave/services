@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -29,6 +30,14 @@ func (a *TaskAggregate) UpdateName(ctx context.Context, newName string) error {
 
 func (a *TaskAggregate) UpdateDescription(ctx context.Context, newDescription string) error {
 	event, err := taskEventsV1.NewTaskDescriptionUpdatedEvent(ctx, a, newDescription)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *TaskAggregate) UpdateDueAt(ctx context.Context, dueAt time.Time) error {
+	event, err := taskEventsV1.NewTaskDueAtUpdatedEvent(ctx, a, dueAt)
 	if err != nil {
 		return err
 	}

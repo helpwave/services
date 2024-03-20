@@ -30,6 +30,7 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(taskEventsV1.TaskCreated, p.onTaskCreated)
 	p.RegisterEventListener(taskEventsV1.TaskNameUpdated, p.onTaskNameUpdated)
 	p.RegisterEventListener(taskEventsV1.TaskDescriptionUpdated, p.onTaskDescriptionUpdated)
+	p.RegisterEventListener(taskEventsV1.TaskDueAtUpdated, p.onTaskDueAtUpdated)
 	p.RegisterEventListener(taskEventsV1.TaskAssigned, p.onTaskAssigned)
 	p.RegisterEventListener(taskEventsV1.TaskUnassigned, p.onTaskUnassigned)
 	p.RegisterEventListener(taskEventsV1.TaskPublished, p.onTaskPublished)
@@ -66,13 +67,18 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 	}
 	status := (pb.TaskStatus)(value)
 
+	var commiterID uuid.UUID
+	if evt.CommitterUserID != nil {
+		commiterID = *evt.CommitterUserID
+	}
+
 	// Add to db
 	if err := taskRepo.CreateTask(ctx, task_repo.CreateTaskParams{
-		ID:             taskID,
-		Name:           payload.Name,
-		PatientID:      patientID,
-		Status:         int32(status),
-		OrganizationID: uuid.New(), // TODO: Remove?
+		ID:        taskID,
+		Name:      payload.Name,
+		PatientID: patientID,
+		Status:    int32(status),
+		CreatedBy: commiterID,
 	}); err != nil {
 		return err, esdb.Nack_Retry
 	}
@@ -108,6 +114,23 @@ func (p *Projection) onTaskDescriptionUpdated(ctx context.Context, evt hwes.Even
 	}
 
 	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, Description: &payload.Description}); err != nil {
+		return err, esdb.Nack_Retry
+	}
+
+	return nil, esdb.Nack_Unknown
+}
+
+func (p *Projection) onTaskDueAtUpdated(ctx context.Context, evt hwes.Event) (error, esdb.Nack_Action) {
+	log := zlog.Ctx(ctx)
+	taskRepo := task_repo.New(hwdb.GetDB())
+
+	var payload taskEventsV1.TaskDueAtUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, esdb.Nack_Retry
+	}
+
+	if err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, DueAt: hwdb.TimeToTimestamp(payload.DueAt)}); err != nil {
 		return err, esdb.Nack_Retry
 	}
 
@@ -188,6 +211,11 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (erro
 		return err, esdb.Nack_Retry
 	}
 
+	var committerID uuid.UUID
+	if evt.CommitterUserID != nil {
+		committerID = *evt.CommitterUserID
+	}
+
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
 	if err != nil {
 		return err, esdb.Nack_Retry
@@ -197,7 +225,7 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (erro
 		ID:        subtaskID,
 		TaskID:    evt.AggregateID,
 		Name:      payload.Name,
-		CreatedBy: uuid.New(), // TODO: with common.GetUserId not working
+		CreatedBy: committerID,
 	}); err != nil {
 		return err, esdb.Nack_Retry
 	}

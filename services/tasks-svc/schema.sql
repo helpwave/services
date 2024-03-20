@@ -41,7 +41,6 @@ SET default_table_access_method = heap;
 CREATE TABLE public.beds (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     room_id uuid NOT NULL,
-    organization_id uuid NOT NULL,
     name text DEFAULT 'Unnamed Bed'::text NOT NULL
 );
 
@@ -53,7 +52,6 @@ CREATE TABLE public.beds (
 CREATE TABLE public.patients (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     human_readable_identifier text NOT NULL,
-    organization_id uuid NOT NULL,
     notes text DEFAULT ''::text NOT NULL,
     bed_id uuid,
     is_discharged integer DEFAULT 0 NOT NULL,
@@ -69,7 +67,6 @@ CREATE TABLE public.patients (
 CREATE TABLE public.rooms (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     name text NOT NULL,
-    organization_id uuid NOT NULL,
     ward_id uuid NOT NULL
 );
 
@@ -118,8 +115,7 @@ CREATE TABLE public.task_templates (
     name text NOT NULL,
     description text NOT NULL,
     ward_id uuid,
-    created_by uuid NOT NULL,
-    organization_id uuid NOT NULL
+    created_by uuid NOT NULL
 );
 
 
@@ -135,7 +131,6 @@ CREATE TABLE public.tasks (
     assigned_user_id uuid DEFAULT public.uuid_nil(),
     patient_id uuid NOT NULL,
     public boolean DEFAULT false NOT NULL,
-    organization_id uuid NOT NULL,
     created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
     due_at timestamp without time zone DEFAULT '1970-01-01 00:00:00'::timestamp without time zone NOT NULL
 );
@@ -147,8 +142,7 @@ CREATE TABLE public.tasks (
 
 CREATE TABLE public.wards (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    name text NOT NULL,
-    organization_id uuid NOT NULL
+    name text NOT NULL
 );
 
 

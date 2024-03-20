@@ -6,14 +6,13 @@ import (
 	pb "gen/proto/services/tasks_svc/v1"
 	"hwdb"
 	"hwes/eventstoredb"
-	"tasks-svc/internal/task/projections/echo"
-	"tasks-svc/internal/tracking"
+	"tasks-svc/internal/patient/projections/patient_postgres_projection"
+	"tasks-svc/internal/task/projections/task_postgres_projection"
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
 	patient "tasks-svc/internal/patient/api"
 	task "tasks-svc/internal/task/api"
-	"time"
 )
 
 const ServiceName = "tasks-svc"

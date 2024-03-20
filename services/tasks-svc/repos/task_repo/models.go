@@ -10,16 +10,14 @@ import (
 )
 
 type Bed struct {
-	ID             uuid.UUID
-	RoomID         uuid.UUID
-	OrganizationID uuid.UUID
-	Name           string
+	ID     uuid.UUID
+	RoomID uuid.UUID
+	Name   string
 }
 
 type Patient struct {
 	ID                      uuid.UUID
 	HumanReadableIdentifier string
-	OrganizationID          uuid.UUID
 	Notes                   string
 	BedID                   uuid.NullUUID
 	IsDischarged            int32
@@ -28,10 +26,9 @@ type Patient struct {
 }
 
 type Room struct {
-	ID             uuid.UUID
-	Name           string
-	OrganizationID uuid.UUID
-	WardID         uuid.UUID
+	ID     uuid.UUID
+	Name   string
+	WardID uuid.UUID
 }
 
 type SchemaMigration struct {
@@ -56,18 +53,16 @@ type Task struct {
 	AssignedUserID uuid.NullUUID
 	PatientID      uuid.UUID
 	Public         bool
-	OrganizationID uuid.UUID
 	CreatedBy      uuid.UUID
 	DueAt          pgtype.Timestamp
 }
 
 type TaskTemplate struct {
-	ID             uuid.UUID
-	Name           string
-	Description    string
-	WardID         uuid.NullUUID
-	CreatedBy      uuid.UUID
-	OrganizationID uuid.UUID
+	ID          uuid.UUID
+	Name        string
+	Description string
+	WardID      uuid.NullUUID
+	CreatedBy   uuid.UUID
 }
 
 type TaskTemplateSubtask struct {
@@ -77,7 +72,6 @@ type TaskTemplateSubtask struct {
 }
 
 type Ward struct {
-	ID             uuid.UUID
-	Name           string
-	OrganizationID uuid.UUID
+	ID   uuid.UUID
+	Name string
 }

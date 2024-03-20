@@ -5,12 +5,14 @@ import (
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
+	"time"
 )
 
 const (
 	TaskCreated            = "TASK_CREATED_v1"
 	TaskNameUpdated        = "TASK_NAME_UPDATED_v1"
 	TaskDescriptionUpdated = "TASK_DESCRIPTION_UPDATED_v1"
+	TaskDueAtUpdated       = "TASK_DUE_AT_UPDATED_v1"
 	TaskAssigned           = "TASK_ASSIGNED_v1"
 	TaskSelfAssigned       = "TASK_SELF_ASSIGNED_v1"
 	TaskUnassigned         = "TASK_UNASSIGNED_v1"
@@ -35,6 +37,10 @@ type TaskNameUpdatedEvent struct {
 
 type TaskDescriptionUpdatedEvent struct {
 	Description string `json:"description"`
+}
+
+type TaskDueAtUpdatedEvent struct {
+	DueAt time.Time `json:"due_at"`
 }
 
 type TaskAssignedEvent struct {
@@ -95,6 +101,13 @@ func NewTaskDescriptionUpdatedEvent(ctx context.Context, a hwes.Aggregate, descr
 		Description: description,
 	}
 	return hwes.NewEvent(a, TaskDescriptionUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
+}
+
+func NewTaskDueAtUpdatedEvent(ctx context.Context, a hwes.Aggregate, dueAt time.Time) (hwes.Event, error) {
+	payload := TaskDueAtUpdatedEvent{
+		DueAt: dueAt,
+	}
+	return hwes.NewEvent(a, TaskDueAtUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewTaskAssignedEvent(ctx context.Context, a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {

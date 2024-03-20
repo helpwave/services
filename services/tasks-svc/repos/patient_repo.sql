@@ -1,7 +1,7 @@
 -- name: CreatePatient :exec
 INSERT INTO patients
-	(id, human_readable_identifier, notes, organization_id, created_at, updated_at)
-VALUES ($1, $2, $3, $4, $5, $6);
+	(id, human_readable_identifier, notes, created_at, updated_at)
+VALUES ($1, $2, $3, $4, $5);
 
 -- name: UpdatePatient :exec
 UPDATE patients

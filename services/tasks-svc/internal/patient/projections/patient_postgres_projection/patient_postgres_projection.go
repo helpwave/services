@@ -52,12 +52,11 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 		return err, esdb.Nack_Retry
 	}
 
-	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true} // TODO: When is valid = false? Is that safe?
+	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
 	if err := patientRepo.CreatePatient(ctx, patient_repo.CreatePatientParams{
 		ID:                      patientID,
 		HumanReadableIdentifier: payload.HumanReadableIdentifier,
 		Notes:                   payload.Notes,
-		OrganizationID:          uuid.New(), // TODO: remove?
 		CreatedAt:               timestamp,
 		UpdatedAt:               timestamp,
 	}); err != nil {
