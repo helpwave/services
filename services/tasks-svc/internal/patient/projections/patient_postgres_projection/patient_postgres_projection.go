@@ -17,11 +17,12 @@ import (
 
 type Projection struct {
 	*custom.CustomProjection
+	patientRepo *patient_repo.Queries
 }
 
 func NewProjection(es *esdb.Client, serviceName string) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-postgres-projection", serviceName)
-	p := &Projection{custom.NewCustomProjection(es, subscriptionGroupName)}
+	p := &Projection{custom.NewCustomProjection(es, subscriptionGroupName), patient_repo.New(hwdb.GetDB())}
 	p.initEventListeners()
 	return p
 }
@@ -39,7 +40,6 @@ func (p *Projection) initEventListeners() {
 // Event handlers
 func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	var payload patientEventsV1.PatientCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -53,7 +53,7 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 	}
 
 	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
-	err = patientRepo.CreatePatient(ctx, patient_repo.CreatePatientParams{
+	err = a.patientRepo.CreatePatient(ctx, patient_repo.CreatePatientParams{
 		ID:                      patientID,
 		HumanReadableIdentifier: payload.HumanReadableIdentifier,
 		Notes:                   payload.Notes,
@@ -70,7 +70,6 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 
 func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	var payload patientEventsV1.BedAssignedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -84,7 +83,7 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 	}
 
 	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
-	err = patientRepo.UpdatePatientBedId(ctx, patient_repo.UpdatePatientBedIdParams{
+	err = a.patientRepo.UpdatePatientBedId(ctx, patient_repo.UpdatePatientBedIdParams{
 		ID:        evt.AggregateID,
 		BedID:     bedId,
 		UpdatedAt: timestamp,
@@ -98,10 +97,8 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 }
 
 func (a *Projection) onBedUnassigned(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	patientRepo := patient_repo.New(hwdb.GetDB())
-
 	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
-	err := patientRepo.UpdatePatientBedId(ctx, patient_repo.UpdatePatientBedIdParams{
+	err := a.patientRepo.UpdatePatientBedId(ctx, patient_repo.UpdatePatientBedIdParams{
 		ID:        evt.AggregateID,
 		BedID:     uuid.NullUUID{},
 		UpdatedAt: timestamp,
@@ -115,10 +112,8 @@ func (a *Projection) onBedUnassigned(ctx context.Context, evt hwes.Event) (error
 }
 
 func (a *Projection) onPatientDischarged(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	patientRepo := patient_repo.New(hwdb.GetDB())
-
 	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
-	err := patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
+	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:           evt.AggregateID,
 		IsDischarged: hwutil.PtrTo(int32(1)),
 		UpdatedAt:    timestamp,
@@ -133,7 +128,6 @@ func (a *Projection) onPatientDischarged(ctx context.Context, evt hwes.Event) (e
 
 func (a *Projection) onNotesUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	var payload patientEventsV1.NotesUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -143,7 +137,7 @@ func (a *Projection) onNotesUpdated(ctx context.Context, evt hwes.Event) (error,
 
 	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
 
-	err := patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
+	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:        evt.AggregateID,
 		Notes:     &payload.Notes,
 		UpdatedAt: timestamp,
@@ -158,7 +152,6 @@ func (a *Projection) onNotesUpdated(ctx context.Context, evt hwes.Event) (error,
 
 func (a *Projection) onHumanReadableIdentifierUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	var payload patientEventsV1.HumanReadableIdentifierUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -167,7 +160,7 @@ func (a *Projection) onHumanReadableIdentifierUpdated(ctx context.Context, evt h
 	}
 
 	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
-	err := patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
+	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:                     evt.AggregateID,
 		HumanReadableIdentfier: &payload.HumanReadableIdentifier,
 		UpdatedAt:              timestamp,
@@ -181,10 +174,8 @@ func (a *Projection) onHumanReadableIdentifierUpdated(ctx context.Context, evt h
 }
 
 func (a *Projection) onPatientReadmitted(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	patientRepo := patient_repo.New(hwdb.GetDB())
-
 	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
-	err := patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
+	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:           evt.AggregateID,
 		IsDischarged: hwutil.PtrTo(int32(0)),
 		UpdatedAt:    timestamp,

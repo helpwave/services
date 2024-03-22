@@ -17,11 +17,12 @@ import (
 
 type Projection struct {
 	*custom.CustomProjection
+	taskRepo *task_repo.Queries
 }
 
 func NewProjection(es *esdb.Client, serviceName string) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-postgres-projection", serviceName)
-	p := &Projection{custom.NewCustomProjection(es, subscriptionGroupName)}
+	p := &Projection{custom.NewCustomProjection(es, subscriptionGroupName), task_repo.New(hwdb.GetDB())}
 	p.initEventListeners()
 	return p
 }
@@ -43,7 +44,6 @@ func (p *Projection) initEventListeners() {
 
 func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	taskRepo := task_repo.New(hwdb.GetDB())
 
 	var payload taskEventsV1.TaskCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -75,7 +75,7 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 	}
 
 	// Add to db
-	err = taskRepo.CreateTask(ctx, task_repo.CreateTaskParams{
+	err = p.taskRepo.CreateTask(ctx, task_repo.CreateTaskParams{
 		ID:        taskID,
 		Name:      payload.Name,
 		PatientID: patientID,
@@ -92,7 +92,6 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 
 func (p *Projection) onTaskNameUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	taskRepo := task_repo.New(hwdb.GetDB())
 
 	var payload taskEventsV1.TaskNameUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -100,7 +99,7 @@ func (p *Projection) onTaskNameUpdated(ctx context.Context, evt hwes.Event) (err
 		return err, esdb.NackActionRetry
 	}
 
-	err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, Name: &payload.Name})
+	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, Name: &payload.Name})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, esdb.NackActionRetry
@@ -111,7 +110,6 @@ func (p *Projection) onTaskNameUpdated(ctx context.Context, evt hwes.Event) (err
 
 func (p *Projection) onTaskDescriptionUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	taskRepo := task_repo.New(hwdb.GetDB())
 
 	var payload taskEventsV1.TaskDescriptionUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -119,7 +117,7 @@ func (p *Projection) onTaskDescriptionUpdated(ctx context.Context, evt hwes.Even
 		return err, esdb.NackActionRetry
 	}
 
-	err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, Description: &payload.Description})
+	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, Description: &payload.Description})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, esdb.NackActionRetry
@@ -130,7 +128,6 @@ func (p *Projection) onTaskDescriptionUpdated(ctx context.Context, evt hwes.Even
 
 func (p *Projection) onTaskDueAtUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	taskRepo := task_repo.New(hwdb.GetDB())
 
 	var payload taskEventsV1.TaskDueAtUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -138,7 +135,7 @@ func (p *Projection) onTaskDueAtUpdated(ctx context.Context, evt hwes.Event) (er
 		return err, esdb.NackActionRetry
 	}
 
-	err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, DueAt: hwdb.TimeToTimestamp(payload.DueAt)})
+	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, DueAt: hwdb.TimeToTimestamp(payload.DueAt)})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, esdb.NackActionRetry
@@ -149,7 +146,6 @@ func (p *Projection) onTaskDueAtUpdated(ctx context.Context, evt hwes.Event) (er
 
 func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	taskRepo := task_repo.New(hwdb.GetDB())
 
 	var userIDStr string
 
@@ -175,7 +171,7 @@ func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error,
 		return err, esdb.NackActionRetry
 	}
 
-	err = taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{ID: evt.AggregateID, AssignedUserID: userID})
+	err = p.taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{ID: evt.AggregateID, AssignedUserID: userID})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, esdb.NackActionRetry
@@ -186,7 +182,6 @@ func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error,
 
 func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	taskRepo := task_repo.New(hwdb.GetDB())
 
 	var payload taskEventsV1.TaskUnassignedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -194,7 +189,7 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (erro
 		return err, esdb.NackActionRetry
 	}
 
-	err := taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{ID: evt.AggregateID, AssignedUserID: uuid.NullUUID{}})
+	err := p.taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{ID: evt.AggregateID, AssignedUserID: uuid.NullUUID{}})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, esdb.NackActionRetry
@@ -204,9 +199,7 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (erro
 }
 
 func (p *Projection) onTaskPublished(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	taskRepo := task_repo.New(hwdb.GetDB())
-
-	err := taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, Public: hwutil.PtrTo(true)})
+	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, Public: hwutil.PtrTo(true)})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, esdb.NackActionRetry
@@ -217,7 +210,6 @@ func (p *Projection) onTaskPublished(ctx context.Context, evt hwes.Event) (error
 
 func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	taskRepo := task_repo.New(hwdb.GetDB())
 
 	var payload taskEventsV1.SubtaskCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -237,7 +229,7 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (erro
 		return err, esdb.NackActionRetry
 	}
 
-	err = taskRepo.CreateSubtask(ctx, task_repo.CreateSubtaskParams{
+	err = p.taskRepo.CreateSubtask(ctx, task_repo.CreateSubtaskParams{
 		ID:        subtaskID,
 		TaskID:    evt.AggregateID,
 		Name:      payload.Name,
@@ -252,7 +244,6 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (erro
 }
 
 func (p *Projection) onSubtaskNameUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	taskRepo := task_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskCreatedEvent
@@ -266,7 +257,7 @@ func (p *Projection) onSubtaskNameUpdated(ctx context.Context, evt hwes.Event) (
 		return err, esdb.NackActionRetry
 	}
 
-	err = taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{ID: subtaskID, Name: &payload.Name})
+	err = p.taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{ID: subtaskID, Name: &payload.Name})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, esdb.NackActionRetry
@@ -276,7 +267,6 @@ func (p *Projection) onSubtaskNameUpdated(ctx context.Context, evt hwes.Event) (
 }
 
 func (p *Projection) onSubtaskCompleted(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	taskRepo := task_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskCompletedEvent
@@ -290,7 +280,7 @@ func (p *Projection) onSubtaskCompleted(ctx context.Context, evt hwes.Event) (er
 		return err, esdb.NackActionRetry
 	}
 
-	err = taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{ID: subtaskID, Done: hwutil.PtrTo(true)})
+	err = p.taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{ID: subtaskID, Done: hwutil.PtrTo(true)})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, esdb.NackActionRetry
@@ -300,7 +290,6 @@ func (p *Projection) onSubtaskCompleted(ctx context.Context, evt hwes.Event) (er
 }
 
 func (p *Projection) onSubtaskUncompleted(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	taskRepo := task_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskUncompletedEvent
@@ -314,7 +303,7 @@ func (p *Projection) onSubtaskUncompleted(ctx context.Context, evt hwes.Event) (
 		return err, esdb.NackActionRetry
 	}
 
-	err = taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{ID: subtaskID, Done: hwutil.PtrTo(false)})
+	err = p.taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{ID: subtaskID, Done: hwutil.PtrTo(false)})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, esdb.NackActionRetry
@@ -324,7 +313,6 @@ func (p *Projection) onSubtaskUncompleted(ctx context.Context, evt hwes.Event) (
 }
 
 func (p *Projection) onSubtaskDeleted(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	taskRepo := task_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
 	var payload taskEventsV1.SubtaskDeletedEvent
@@ -338,7 +326,7 @@ func (p *Projection) onSubtaskDeleted(ctx context.Context, evt hwes.Event) (erro
 		return err, esdb.NackActionRetry
 	}
 
-	err = taskRepo.DeleteSubtask(ctx, subtaskID)
+	err = p.taskRepo.DeleteSubtask(ctx, subtaskID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, esdb.NackActionRetry
