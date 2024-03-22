@@ -41,8 +41,22 @@ SET default_table_access_method = heap;
 CREATE TABLE public.beds (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     room_id uuid NOT NULL,
-    organization_id uuid NOT NULL,
     name text DEFAULT 'Unnamed Bed'::text NOT NULL
+);
+
+
+--
+-- Name: patients; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.patients (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    human_readable_identifier text NOT NULL,
+    notes text DEFAULT ''::text NOT NULL,
+    bed_id uuid,
+    is_discharged integer DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -53,7 +67,6 @@ CREATE TABLE public.beds (
 CREATE TABLE public.rooms (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     name text NOT NULL,
-    organization_id uuid NOT NULL,
     ward_id uuid NOT NULL
 );
 
@@ -65,6 +78,20 @@ CREATE TABLE public.rooms (
 CREATE TABLE public.schema_migrations (
     version bigint NOT NULL,
     dirty boolean NOT NULL
+);
+
+
+--
+-- Name: subtasks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.subtasks (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    task_id uuid NOT NULL,
+    name text NOT NULL,
+    done boolean DEFAULT false NOT NULL,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
+    creation_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -88,8 +115,24 @@ CREATE TABLE public.task_templates (
     name text NOT NULL,
     description text NOT NULL,
     ward_id uuid,
-    created_by uuid NOT NULL,
-    organization_id uuid NOT NULL
+    created_by uuid NOT NULL
+);
+
+
+--
+-- Name: tasks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tasks (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    name text NOT NULL,
+    description text DEFAULT ''::text NOT NULL,
+    status integer NOT NULL,
+    assigned_user_id uuid DEFAULT public.uuid_nil(),
+    patient_id uuid NOT NULL,
+    public boolean DEFAULT false NOT NULL,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
+    due_at timestamp without time zone DEFAULT '1970-01-01 00:00:00'::timestamp without time zone NOT NULL
 );
 
 
@@ -99,8 +142,7 @@ CREATE TABLE public.task_templates (
 
 CREATE TABLE public.wards (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    name text NOT NULL,
-    organization_id uuid NOT NULL
+    name text NOT NULL
 );
 
 
@@ -110,6 +152,14 @@ CREATE TABLE public.wards (
 
 ALTER TABLE ONLY public.beds
     ADD CONSTRAINT beds_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: patients patients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.patients
+    ADD CONSTRAINT patients_pkey PRIMARY KEY (id);
 
 
 --
@@ -129,6 +179,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: subtasks subtasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.subtasks
+    ADD CONSTRAINT subtasks_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: task_template_subtasks task_template_subtasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -142,6 +200,14 @@ ALTER TABLE ONLY public.task_template_subtasks
 
 ALTER TABLE ONLY public.task_templates
     ADD CONSTRAINT task_templates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT tasks_pkey PRIMARY KEY (id);
 
 
 --
@@ -166,6 +232,14 @@ ALTER TABLE ONLY public.beds
 
 ALTER TABLE ONLY public.rooms
     ADD CONSTRAINT rooms_ward_id_fk FOREIGN KEY (ward_id) REFERENCES public.wards(id) ON DELETE CASCADE;
+
+
+--
+-- Name: subtasks subtasks_task_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.subtasks
+    ADD CONSTRAINT subtasks_task_id_fkey FOREIGN KEY (task_id) REFERENCES public.tasks(id) ON DELETE CASCADE;
 
 
 --

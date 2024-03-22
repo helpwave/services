@@ -4,13 +4,15 @@ import (
 	"common"
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
-	daprd "github.com/dapr/go-sdk/service/grpc"
-	"github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes/eventstoredb"
+	"tasks-svc/internal/patient/projections/patient_postgres_projection"
+	"tasks-svc/internal/task/projections/task_postgres_projection"
+
+	daprd "github.com/dapr/go-sdk/service/grpc"
+	"github.com/rs/zerolog/log"
 	patient "tasks-svc/internal/patient/api"
 	task "tasks-svc/internal/task/api"
-	"tasks-svc/internal/task/projections/echo"
 )
 
 const ServiceName = "tasks-svc"
@@ -33,9 +35,17 @@ func main() {
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
 
 	go func() {
-		echoProjection := echo.NewProjection(eventStore, ServiceName)
-		if err := echoProjection.Subscribe(ctx); err != nil {
-			log.Err(err).Msg("error during echo subscription")
+		postgresTaskProjection := task_postgres_projection.NewProjection(eventStore, ServiceName)
+		if err := postgresTaskProjection.Subscribe(ctx); err != nil {
+			log.Err(err).Msg("error during task-postgres subscription")
+			cancel()
+		}
+	}()
+
+	go func() {
+		postgresPatientProjection := patient_postgres_projection.NewProjection(eventStore, ServiceName)
+		if err := postgresPatientProjection.Subscribe(ctx); err != nil {
+			log.Err(err).Msg("error during patient-postgres subscription")
 			cancel()
 		}
 	}()

@@ -13,8 +13,8 @@ import (
 
 const getBedAndRoomByBedId = `-- name: GetBedAndRoomByBedId :one
 SELECT
-	beds.id, beds.room_id, beds.organization_id, beds.name,
-	rooms.id, rooms.name, rooms.organization_id, rooms.ward_id
+	beds.id, beds.room_id, beds.name,
+	rooms.id, rooms.name, rooms.ward_id
 	FROM beds
 	JOIN rooms on beds.room_id = rooms.id
 	WHERE beds.id = $1
@@ -31,11 +31,9 @@ func (q *Queries) GetBedAndRoomByBedId(ctx context.Context, id uuid.UUID) (GetBe
 	err := row.Scan(
 		&i.Bed.ID,
 		&i.Bed.RoomID,
-		&i.Bed.OrganizationID,
 		&i.Bed.Name,
 		&i.Room.ID,
 		&i.Room.Name,
-		&i.Room.OrganizationID,
 		&i.Room.WardID,
 	)
 	return i, err

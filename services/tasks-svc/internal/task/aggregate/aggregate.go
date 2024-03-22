@@ -44,6 +44,7 @@ func (a *TaskAggregate) initEventListeners() {
 		RegisterEventListener(taskEventsV1.TaskCreated, a.onTaskCreated).
 		RegisterEventListener(taskEventsV1.TaskNameUpdated, a.onTaskNameUpdated).
 		RegisterEventListener(taskEventsV1.TaskDescriptionUpdated, a.onTaskDescriptionUpdated).
+		RegisterEventListener(taskEventsV1.TaskDueAtUpdated, a.onTaskDueAtUpdated).
 		RegisterEventListener(taskEventsV1.TaskAssigned, a.onTaskAssigned).
 		RegisterEventListener(taskEventsV1.TaskSelfAssigned, a.onTaskAssigned).
 		RegisterEventListener(taskEventsV1.TaskUnassigned, a.onTaskUnassigned).
@@ -100,6 +101,17 @@ func (a *TaskAggregate) onTaskDescriptionUpdated(evt hwes.Event) error {
 	}
 
 	a.Task.Description = payload.Description
+
+	return nil
+}
+
+func (a *TaskAggregate) onTaskDueAtUpdated(evt hwes.Event) error {
+	var payload taskEventsV1.TaskDueAtUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	a.Task.DueAt = payload.DueAt
 
 	return nil
 }

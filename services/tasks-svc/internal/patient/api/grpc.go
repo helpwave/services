@@ -252,7 +252,7 @@ func (s *PatientGrpcService) ReadmitPatient(ctx context.Context, req *pb.Readmit
 
 	// TODO: admin check
 
-	if err := commandsV1.NewDischargePatientCommandHandler(s.as)(ctx, patientID); err != nil {
+	if err := commandsV1.NewReadmitPatientCommandHandler(s.as)(ctx, patientID); err != nil {
 		return nil, err
 	}
 

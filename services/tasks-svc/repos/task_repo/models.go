@@ -2,7 +2,7 @@
 // versions:
 //   sqlc v1.25.0
 
-package bed_repo
+package task_repo
 
 import (
 	"github.com/google/uuid"
