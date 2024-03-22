@@ -155,14 +155,6 @@ ALTER TABLE ONLY public.beds
 
 
 --
--- Name: patients patients_bed_id_unique; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.patients
-    ADD CONSTRAINT patients_bed_id_unique UNIQUE (bed_id);
-
-
---
 -- Name: patients patients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -232,14 +224,6 @@ ALTER TABLE ONLY public.wards
 
 ALTER TABLE ONLY public.beds
     ADD CONSTRAINT beds_room_id_fkey FOREIGN KEY (room_id) REFERENCES public.rooms(id) ON DELETE CASCADE;
-
-
---
--- Name: patients patients_bed_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.patients
-    ADD CONSTRAINT patients_bed_id_fkey FOREIGN KEY (bed_id) REFERENCES public.beds(id) ON DELETE SET NULL;
 
 
 --
