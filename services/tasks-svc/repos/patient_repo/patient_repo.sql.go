@@ -41,8 +41,8 @@ const updatePatient = `-- name: UpdatePatient :exec
 UPDATE patients
 SET human_readable_identifier = coalesce($2, human_readable_identifier),
     notes = coalesce($3, notes),
-	updated_at = coalesce($4, updated_at),
-	is_discharged = coalesce($5, is_discharged)
+    updated_at = coalesce($4, updated_at),
+    is_discharged = coalesce($5, is_discharged)
 WHERE id = $1
 `
 
@@ -67,8 +67,8 @@ func (q *Queries) UpdatePatient(ctx context.Context, arg UpdatePatientParams) er
 
 const updatePatientBedId = `-- name: UpdatePatientBedId :exec
 UPDATE patients
-	SET bed_id = $1,
-	updated_at = $2
+SET bed_id = $1,
+    updated_at = $2
 WHERE id = $3
 `
 
