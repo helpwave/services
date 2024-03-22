@@ -14,5 +14,5 @@ WHERE id = $1;
 -- name: UpdatePatientBedId :exec
 UPDATE patients
 	SET bed_id = @bed_id,
-		updated_at = @updated_at
+	updated_at = @updated_at
 WHERE id = @id;

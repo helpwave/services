@@ -68,7 +68,7 @@ func (q *Queries) UpdatePatient(ctx context.Context, arg UpdatePatientParams) er
 const updatePatientBedId = `-- name: UpdatePatientBedId :exec
 UPDATE patients
 	SET bed_id = $1,
-		updated_at = $2
+	updated_at = $2
 WHERE id = $3
 `
 
