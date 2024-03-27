@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS properties;
+DROP EXTENSION IF EXISTS "uuid-ossp";

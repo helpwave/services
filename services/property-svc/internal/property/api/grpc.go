@@ -4,11 +4,13 @@ import (
 	"context"
 	pb "gen/proto/services/property_svc/v1"
 	"github.com/google/uuid"
+	"hwdb"
 	"hwes"
 	"hwutil"
 	commandsV1 "property-svc/internal/property/commands/v1"
 	"property-svc/internal/property/models"
 	v1queries "property-svc/internal/property/queries/v1"
+	"property-svc/repos/property_repo"
 )
 
 type PropertyGrpcService struct {
@@ -54,12 +56,14 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 }
 
 func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetPropertyRequest) (*pb.GetPropertyResponse, error) {
+	propertyRepo := property_repo.New(hwdb.GetDB())
+
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err
 	}
 
-	property, err := v1queries.NewGetPropertyByIDQueryHandler(s.as)(ctx, id)
+	property, err := v1queries.NewGetPropertyByIDQueryHandler(s.as, propertyRepo)(ctx, id)
 	if err != nil {
 		return nil, err
 	}

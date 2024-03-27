@@ -15,6 +15,7 @@ common:
     POSTGRES_PORT: 5432
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
+    EVENTSTORE_CS: esdb://admin:changeit@eventstore:2113?tls=false
     INSECURE_FAKE_TOKEN_ENABLE: true
     REDIS_ADDR: redis:6379
     INSECURE_REDIS_NO_TLS: true
