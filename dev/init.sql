@@ -3,3 +3,4 @@ CREATE DATABASE "task-svc";
 CREATE DATABASE "user-svc";
 CREATE DATABASE "impulse-svc";
 CREATE DATABASE "tasks-svc";
+CREATE DATABASE "property-svc";
