@@ -39,7 +39,7 @@ func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) 
 }
 
 const getPropertyById = `-- name: GetPropertyById :one
-SELECT id, subject_type, field_type, name, description, is_archived FROM properties WHERE id = $1
+SELECT id, subject_type, field_type, name, description, is_archived, set_id FROM properties WHERE id = $1
 `
 
 func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, error) {
@@ -52,12 +52,13 @@ func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, 
 		&i.Name,
 		&i.Description,
 		&i.IsArchived,
+		&i.SetID,
 	)
 	return i, err
 }
 
 const getPropertyBySubjectType = `-- name: GetPropertyBySubjectType :many
-SELECT id, subject_type, field_type, name, description, is_archived FROM properties WHERE subject_type = $1
+SELECT id, subject_type, field_type, name, description, is_archived, set_id FROM properties WHERE subject_type = $1
 `
 
 func (q *Queries) GetPropertyBySubjectType(ctx context.Context, subjectType int32) ([]Property, error) {
@@ -76,6 +77,7 @@ func (q *Queries) GetPropertyBySubjectType(ctx context.Context, subjectType int3
 			&i.Name,
 			&i.Description,
 			&i.IsArchived,
+			&i.SetID,
 		); err != nil {
 			return nil, err
 		}
@@ -87,18 +89,49 @@ func (q *Queries) GetPropertyBySubjectType(ctx context.Context, subjectType int3
 	return items, nil
 }
 
-const updateIsArchived = `-- name: UpdateIsArchived :exec
+const updateProperty = `-- name: UpdateProperty :exec
 UPDATE properties
-SET is_archived = $1
+SET subject_type = coalesce($2, subject_type),
+	field_type = coalesce($3, field_type),
+	name = coalesce($4, name),
+	description = coalesce($5, description),
+	is_archived = coalesce($6, is_archived)
+WHERE id = $1
+`
+
+type UpdatePropertyParams struct {
+	ID          uuid.UUID
+	SubjectType *int32
+	FieldType   *int32
+	Name        *string
+	Description *string
+	IsArchived  *bool
+}
+
+func (q *Queries) UpdateProperty(ctx context.Context, arg UpdatePropertyParams) error {
+	_, err := q.db.Exec(ctx, updateProperty,
+		arg.ID,
+		arg.SubjectType,
+		arg.FieldType,
+		arg.Name,
+		arg.Description,
+		arg.IsArchived,
+	)
+	return err
+}
+
+const updatePropertySetID = `-- name: UpdatePropertySetID :exec
+UPDATE properties
+SET set_id = $1
 WHERE id = $2
 `
 
-type UpdateIsArchivedParams struct {
-	IsArchived bool
-	ID         uuid.UUID
+type UpdatePropertySetIDParams struct {
+	SetID uuid.NullUUID
+	ID    uuid.UUID
 }
 
-func (q *Queries) UpdateIsArchived(ctx context.Context, arg UpdateIsArchivedParams) error {
-	_, err := q.db.Exec(ctx, updateIsArchived, arg.IsArchived, arg.ID)
+func (q *Queries) UpdatePropertySetID(ctx context.Context, arg UpdatePropertySetIDParams) error {
+	_, err := q.db.Exec(ctx, updatePropertySetID, arg.SetID, arg.ID)
 	return err
 }

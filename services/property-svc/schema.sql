@@ -44,7 +44,8 @@ CREATE TABLE public.properties (
     field_type integer NOT NULL,
     name text NOT NULL,
     description text DEFAULT ''::text NOT NULL,
-    is_archived boolean DEFAULT false NOT NULL
+    is_archived boolean DEFAULT false NOT NULL,
+    set_id uuid
 );
 
 

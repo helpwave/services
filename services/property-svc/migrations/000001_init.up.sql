@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS properties (
 	field_type integer NOT NULL,
 	name text NOT NULL,
 	description text NOT NULL DEFAULT '',
-	is_archived boolean NOT NULL DEFAULT false
+	is_archived boolean NOT NULL DEFAULT false,
+	set_id uuid DEFAULT NULL
 );

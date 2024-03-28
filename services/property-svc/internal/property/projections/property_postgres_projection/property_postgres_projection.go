@@ -10,6 +10,7 @@ import (
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
+	"hwutil"
 	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/repos/property_repo"
 )
@@ -28,8 +29,13 @@ func NewProjection(es *esdb.Client, serviceName string) *Projection {
 
 func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(propertyEventsV1.PropertyCreated, p.onPropertyCreated)
+	p.RegisterEventListener(propertyEventsV1.PropertyDescriptionUpdated, p.onPropertyDescriptionUpdated)
+	p.RegisterEventListener(propertyEventsV1.PropertySetIDUpdated, p.onPropertySetIDUpdated)
+	p.RegisterEventListener(propertyEventsV1.PropertySubjectTypeUpdated, p.onSubjectTypeUpdated)
+	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeUpdated, p.onFieldTypeUpdated)
+	p.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, p.onNameUpdated)
 	p.RegisterEventListener(propertyEventsV1.PropertyArchived, p.onPropertyArchived)
-	p.RegisterEventListener(propertyEventsV1.PropertyRetrieved, p.onPropertyUnarchived)
+	p.RegisterEventListener(propertyEventsV1.PropertyRetrieved, p.onPropertyRetrieved)
 }
 
 func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
@@ -73,22 +79,150 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	return nil, esdb.NackActionUnknown
 }
 
-func (p *Projection) onPropertyArchived(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	if err := p.propertyRepo.UpdateIsArchived(ctx, property_repo.UpdateIsArchivedParams{
-		ID:         evt.GetAggregateID(),
-		IsArchived: true,
-	}); err != nil {
+func (p *Projection) onPropertyDescriptionUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+
+	var payload propertyEventsV1.PropertyDescriptionUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, esdb.NackActionRetry
+	}
+
+	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+		ID:          evt.AggregateID,
+		Description: &payload.Description,
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
 		return err, esdb.NackActionRetry
 	}
 
 	return nil, esdb.NackActionUnknown
 }
 
-func (p *Projection) onPropertyUnarchived(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	if err := p.propertyRepo.UpdateIsArchived(ctx, property_repo.UpdateIsArchivedParams{
+func (p *Projection) onPropertySetIDUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+
+	var payload propertyEventsV1.PropertySetIDUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, esdb.NackActionRetry
+	}
+
+	setID := uuid.NullUUID{UUID: uuid.Nil, Valid: false}
+	if len(payload.SetID) > 0 {
+		parsedID, err := hwutil.ParseNullUUID(&payload.SetID)
+		if err != nil {
+			return err, esdb.NackActionRetry
+		}
+		setID = parsedID
+	}
+
+	err := p.propertyRepo.UpdatePropertySetID(ctx, property_repo.UpdatePropertySetIDParams{
+		ID:    evt.AggregateID,
+		SetID: setID,
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	return nil, esdb.NackActionUnknown
+}
+
+func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+
+	var payload propertyEventsV1.PropertySubjectTypeUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, esdb.NackActionRetry
+	}
+
+	value, found := pb.SubjectType_value[payload.SubjectType]
+	if !found {
+		return fmt.Errorf("invalid fieldType: %s", payload.SubjectType), esdb.NackActionRetry
+	}
+	subjectType := (pb.SubjectType)(value)
+
+	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+		SubjectType: hwutil.PtrTo(int32(subjectType)),
+		ID:          evt.AggregateID,
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	return nil, esdb.NackActionUnknown
+}
+
+func (p *Projection) onFieldTypeUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+
+	var payload propertyEventsV1.PropertyFieldTypeUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, esdb.NackActionRetry
+	}
+
+	value, found := pb.FieldType_value[payload.FieldType]
+	if !found {
+		return fmt.Errorf("invalid fieldType: %s", payload.FieldType), esdb.NackActionRetry
+	}
+	fieldType := (pb.SubjectType)(value)
+
+	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+		FieldType: hwutil.PtrTo(int32(fieldType)),
+		ID:        evt.AggregateID,
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	return nil, esdb.NackActionUnknown
+}
+
+func (p *Projection) onNameUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+
+	var payload propertyEventsV1.PropertyNameUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, esdb.NackActionRetry
+	}
+
+	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+		ID:   evt.AggregateID,
+		Name: &payload.Name,
+	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	return nil, esdb.NackActionUnknown
+}
+
+func (p *Projection) onPropertyArchived(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
 		ID:         evt.GetAggregateID(),
-		IsArchived: false,
-	}); err != nil {
+		IsArchived: hwutil.PtrTo(true),
+	})
+	if err := hwdb.Error(ctx, err); err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	return nil, esdb.NackActionUnknown
+}
+
+func (p *Projection) onPropertyRetrieved(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+		ID:         evt.GetAggregateID(),
+		IsArchived: hwutil.PtrTo(false),
+	})
+	if err := hwdb.Error(ctx, err); err != nil {
 		return err, esdb.NackActionRetry
 	}
 
