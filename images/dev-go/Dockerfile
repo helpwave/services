@@ -72,7 +72,7 @@ RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh 
 # renovate: datasource=github-releases depName=dapr/cli
 ENV DAPR_CLI_VERSION=1.13.0
 # renovate: datasource=github-releases depName=dapr/dapr
-ENV DAPR_RT_VERSION=1.13.0
+ENV DAPR_RT_VERSION=1.13.1
 
 ENV PATH="$PATH:$HOME/dapr"
 RUN mkdir "$HOME/dapr" \
@@ -101,7 +101,7 @@ RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@v${GRPCURL_VERSION} \
 # install sqlc
 #  https://sqlc.dev/
 # renovate: datasource=github-releases depName=sqlc-dev/sqlc
-ENV SQLC_VERSION=1.25.0
+ENV SQLC_VERSION=1.26.0
 RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v${SQLC_VERSION}\
 	&& go clean -modcache
 
