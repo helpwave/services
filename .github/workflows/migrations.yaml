@@ -11,9 +11,9 @@ env:
   # renovate: datasource=github-releases depName=golang-migrate/migrate
   MIGRATE_VERSION: '4.17.0'
   # renovate: datasource=github-releases depName=superfly/flyctl versioning=semver
-  FLY_CLI_VERSION: '0.2.23'
+  FLY_CLI_VERSION: '0.2.25'
   # renovate: datasource=github-releases depName=sqlc-dev/sqlc
-  SQLC_VERSION: '1.25.0'
+  SQLC_VERSION: '1.26.0'
 
 jobs:
   detect-changes:
