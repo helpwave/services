@@ -140,6 +140,7 @@ grpcurl --plaintext \
 | APISIX        | 9091  | http  (prometheus)      |
 | postgres      | 5432  |                         |
 | redis         | 6379  |                         |
+| eventstore    | 2113  |                         |
 | jaeger (UI)   | 16686 | http                    |
 | jaeger (OTLP) | 4317  | grpc                    |
 

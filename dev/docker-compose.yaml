@@ -18,7 +18,7 @@ services:
       retries: 5
 
   eventstore:
-    image: eventstore/eventstore:lts
+    image: eventstore/eventstore:23.10.1-jammy
     restart: unless-stopped
     environment:
       EVENTSTORE_TELEMETRY_OPTOUT: "true"
