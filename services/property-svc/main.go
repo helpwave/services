@@ -17,7 +17,7 @@ const ServiceName = "property-svc"
 var Version string
 
 func main() {
-	common.Setup(ServiceName, Version, true)
+	common.Setup(ServiceName, Version, common.WithAuth())
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
