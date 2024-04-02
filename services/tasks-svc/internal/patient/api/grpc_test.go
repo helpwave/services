@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	hwes_test "hwes/test"
+	"hwutil"
 	"tasks-svc/internal/patient/api"
 	"testing"
 )
@@ -26,6 +27,7 @@ func server(ctx context.Context) (pb.PatientServiceClient, func()) {
 	pb.RegisterPatientServiceServer(grpcServer, patientGrpcService)
 	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
 
+	// Build client
 	client := pb.NewPatientServiceClient(conn)
 
 	return client, closer
