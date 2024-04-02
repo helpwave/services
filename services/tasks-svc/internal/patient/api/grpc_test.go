@@ -10,7 +10,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	hwes_test "hwes/test"
-	"hwutil"
 	"tasks-svc/internal/patient/api"
 	"testing"
 )
@@ -58,8 +57,9 @@ func TestPatientGrpcService_GetPatientValidation(t *testing.T) {
 }
 
 func TestPatientGrpcService_CreatePatient(t *testing.T) {
-	ctx, client, teardown := setup()
-	defer teardown()
+	ctx := common_test.AuthenticatedUserContext(context.Background(), uuid.NewString())
+	client, closer := server(ctx)
+	defer closer()
 
 	humanReadableIdentifier := "Test patient"
 	notes := "notes"
@@ -88,8 +88,9 @@ func TestPatientGrpcService_CreatePatient(t *testing.T) {
 }
 
 func TestPatientGrpcService_UpdatePatient(t *testing.T) {
-	ctx, client, teardown := setup()
-	defer teardown()
+	ctx := common_test.AuthenticatedUserContext(context.Background(), uuid.NewString())
+	client, closer := server(ctx)
+	defer closer()
 
 	humanReadableIdentifier1 := "Test patient"
 	notes1 := "notes"
