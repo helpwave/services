@@ -14,13 +14,12 @@ message CreatePropertyValueRequest{
   string subject_type = 2;
   string property_id = 3;
   oneof value {
-    bool is_undefined = 4; // if it exists, it's true
-    string text_value = 5; // FIELD_TYPE_TEXT
-    float number_value = 6; // FIELD_TYPE_NUMBER
-    bool bool_value = 7; // FIELD_TYPE_CHECKBOX
-    string date_value = 8; // FIELD_TYPE_DATE TODO: is there a proto date type?
-    string date_time_value = 9; // FIELD_TYPE_DATE_TIME
-    string select_value = 10; // FIELD_TYPE_SELECT, id of option
+    string text_value = 4; // FIELD_TYPE_TEXT
+    float number_value = 5; // FIELD_TYPE_NUMBER
+    bool bool_value = 6; // FIELD_TYPE_CHECKBOX
+    string date_value = 7; // FIELD_TYPE_DATE TODO: is there a proto date type?
+    string date_time_value = 8; // FIELD_TYPE_DATE_TIME
+    string select_value = 9; // FIELD_TYPE_SELECT, id of option
   }
 }
 
@@ -37,13 +36,12 @@ message GetPropertyValueResponse{
   string subject_type = 2;
   string property_id = 3;
   oneof value {
-    bool is_undefined = 4; // if it exists, it's true
-    string text_value = 5; // FIELD_TYPE_TEXT
-    float number_value = 6; // FIELD_TYPE_NUMBER
-    bool bool_value = 7; // FIELD_TYPE_CHECKBOX
-    string date_value = 8; // FIELD_TYPE_DATE TODO: is there a proto date type?
-    string date_time_value = 9; // FIELD_TYPE_DATE_TIME
-    string select_value = 10; // FIELD_TYPE_SELECT, id of option
+    string text_value = 4; // FIELD_TYPE_TEXT
+    float number_value = 5; // FIELD_TYPE_NUMBER
+    bool bool_value = 6; // FIELD_TYPE_CHECKBOX
+    string date_value = 7; // FIELD_TYPE_DATE TODO: is there a proto date type?
+    string date_time_value = 8; // FIELD_TYPE_DATE_TIME
+    string select_value = 9; // FIELD_TYPE_SELECT, id of option
   }
 }
 
