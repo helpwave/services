@@ -13,6 +13,7 @@ import (
 )
 
 var (
+	onlyFakeAuthEnabled      bool
 	oauthConfig              *oauth2.Config
 	verifier                 *oidc.IDTokenVerifier
 	DEFAULT_OAUTH_ISSUER_URL = "https://auth.helpwave.de"
@@ -79,12 +80,21 @@ func (t IDTokenClaims) AsExpected() error {
 	return nil
 }
 
+// When isAuthSetUp is true, getOAuthConfig and getIDTokenVerifier can be accessed safely
 func isAuthSetUp() bool {
 	return oauthConfig != nil && verifier != nil
 }
 
-func setupAuth(ctx context.Context) {
+// setupAuth sets up auth, such that getIDTokenVerifier and getOAuthConfig work
+// optionally, this can be skipped by enabling only fake tokens (for testing)
+func setupAuth(ctx context.Context, fakeOnly bool) {
 	log := zlog.Ctx(ctx)
+
+	if fakeOnly {
+		log.Error().Msg("only setting up auth for fake tokens. Never do this in production!")
+		onlyFakeAuthEnabled = true
+		return
+	}
 
 	issuerUrl := hwutil.GetEnvOr("OAUTH_ISSUER_URL", DEFAULT_OAUTH_ISSUER_URL)
 	if issuerUrl != DEFAULT_OAUTH_ISSUER_URL {

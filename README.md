@@ -132,6 +132,7 @@ grpcurl --plaintext \
 | task-svc      | 3001  | gRPC                    |
 | user-svc      | 3002  | gRPC                    |
 | ory-svc       | 3003  | gRPC                    |
+| tasks-svc     | 3004  | gRPC                    |
 | APISIX (dapr) | 3500  | http                    |
 | APISIX (dapr) | 35001 | grpc                    |
 | APISIX        | 9080  | http  (mostly grcp-web) |
@@ -340,7 +341,6 @@ POSTGRES_PASSWORD=postgres
 POSTGRES_DB=postgres
 
 # EventStoreDB related configurations
-
 EVENTSTORE_CS=esdb://admin:changeit@localhost:2113?tls=false
 
 # For development purposes
@@ -400,11 +400,6 @@ if err != nil {
 
 [We disarmed the versioning for pre-production.](https://github.com/helpwave/services/issues/125).
 To arm the versioning, search for "arm-versioning" in the codebase.
-
-### Event Sourcing
-
-We are currently in the progress of adopting event sourcing for some entities.
-Therefore, event sourcing is entirely optional and behind a feature flag (environment variable: `FEATURE_FLAG_EVENT_SOURCING`).
 
 ## Deployment
 
