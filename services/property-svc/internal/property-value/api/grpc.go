@@ -42,8 +42,8 @@ func (s *PropertyValueGrpcService) CreatePropertyValue(ctx context.Context, req 
 		value = req.GetDateValue()
 	case *pb.CreatePropertyValueRequest_DateTimeValue:
 		value = req.GetDateTimeValue()
-	case *pb.CreatePropertyValueRequest_IsUndefined:
-		value = true
+	default:
+		value = nil
 	}
 
 	if err := commandsV1.NewCreatePropertyValueCommandHandler(s.as)(ctx, propertyValueID, propertyID, subjectID, req.GetSubjectType(), value); err != nil {
@@ -81,7 +81,7 @@ func (s *PropertyValueGrpcService) GetPropertyValue(ctx context.Context, req *pb
 	case bool:
 		response.Value = &pb.GetPropertyValueResponse_BoolValue{BoolValue: v}
 	default:
-		response.Value = &pb.GetPropertyValueResponse_IsUndefined{IsUndefined: true}
+		response.Value = nil
 	}
 
 	return response, nil
