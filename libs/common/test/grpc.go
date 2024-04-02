@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -92,7 +91,7 @@ func AuthenticatedUserMetadata(userID string) metadata.MD {
 // It can be used to test authenticated endpoints
 func AuthenticatedUserInterceptor(userID string) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
-		ctx = metadata.NewIncomingContext(ctx, AuthenticatedUserMetadata(uuid.NewString()))
+		ctx = metadata.NewIncomingContext(ctx, AuthenticatedUserMetadata(userID))
 		return next(ctx, req)
 	}
 }
