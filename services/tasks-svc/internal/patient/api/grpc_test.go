@@ -4,14 +4,18 @@ import (
 	"common"
 	common_test "common/test"
 	"context"
+	"decaying_lru"
 	pb "gen/proto/services/tasks_svc/v1"
+	"github.com/go-redis/redismock/v9"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	hwes_test "hwes/test"
 	"tasks-svc/internal/patient/api"
+	"tasks-svc/internal/tracking"
 	"testing"
+	"time"
 )
 
 func server(ctx context.Context) (pb.PatientServiceClient, func()) {
@@ -31,15 +35,19 @@ func server(ctx context.Context) (pb.PatientServiceClient, func()) {
 	return client, closer
 }
 
-func setup() (ctx context.Context, client pb.PatientServiceClient, teardown func()) {
+func setup(t *testing.T) (ctx context.Context, client pb.PatientServiceClient, redisMock redismock.ClientMock, teardown func()) {
 	ctx = context.Background()
 	client, teardown = server(ctx)
 	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
-	return ctx, client, teardown
+
+	redisClient, redisMock := redismock.NewClientMock()
+	tracking.SetLRU(decaying_lru.CustomSetup("tasks-svc-test-"+t.Name(), 10, time.Second, 20, nil, redisClient))
+
+	return ctx, client, redisMock, teardown
 }
 
 func TestPatientGrpcService_GetPatientValidation(t *testing.T) {
-	ctx, client, teardown := setup()
+	ctx, client, _, teardown := setup(t)
 	defer teardown()
 
 	// ID missing -> Error
@@ -56,7 +64,7 @@ func TestPatientGrpcService_GetPatientValidation(t *testing.T) {
 }
 
 func TestPatientGrpcService_CreatePatient(t *testing.T) {
-	ctx, client, teardown := setup()
+	ctx, client, _, teardown := setup(t)
 	defer teardown()
 
 	humanReadableIdentifier := "Test patient"
@@ -86,7 +94,7 @@ func TestPatientGrpcService_CreatePatient(t *testing.T) {
 }
 
 func TestPatientGrpcService_UpdatePatient(t *testing.T) {
-	ctx, client, teardown := setup()
+	ctx, client, _, teardown := setup(t)
 	defer teardown()
 
 	humanReadableIdentifier1 := "Test patient"

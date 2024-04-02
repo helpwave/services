@@ -8,6 +8,8 @@ import (
 	"hwes/eventstoredb"
 	"tasks-svc/internal/patient/projections/patient_postgres_projection"
 	"tasks-svc/internal/task/projections/task_postgres_projection"
+	"tasks-svc/internal/tracking"
+	"time"
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
@@ -28,8 +30,7 @@ func main() {
 	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
 	defer closeDBPool()
 
-	// TODO: https://github.com/helpwave/services/issues/694
-	// tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
+	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
