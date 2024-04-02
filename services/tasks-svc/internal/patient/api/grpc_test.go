@@ -128,3 +128,5 @@ func TestPatientGrpcService_UpdatePatient(t *testing.T) {
 	assert.Equal(t, humanReadableIdentifier2, getPatientResponse.HumanReadableIdentifier)
 	assert.Equal(t, notes2, getPatientResponse.Notes)
 }
+
+// TODO: test GetRecentPatients, once we have a running redis instance (#458)

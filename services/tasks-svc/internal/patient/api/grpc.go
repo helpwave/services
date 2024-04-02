@@ -1,6 +1,7 @@
 package api
 
 import (
+	"common"
 	"context"
 	"fmt"
 	pb "gen/proto/services/tasks_svc/v1"
@@ -9,6 +10,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwdb"
+	"hwdb/locale"
 	"hwes"
 	"hwutil"
 	commandsV1 "tasks-svc/internal/patient/commands/v1"
@@ -89,14 +91,15 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	// TODO: https://github.com/helpwave/services/issues/694
 	var recentPatientIdsStrs []string
-	/*
-		recentPatientIdsStrs, err := tracking.GetRecentPatientsForUser(ctx)
-		if err != nil {
-			return nil, status.Error(codes.Internal, err.Error())
-		}
-	*/
+	recentPatientIdsStrs, err := tracking.GetRecentPatientsForUser(ctx)
+	if err != nil {
+		return nil, common.NewStatusError(ctx,
+			codes.Internal,
+			"decaying_lru error: "+err.Error(),
+			locale.GenericError(ctx),
+		)
+	}
 
 	// WORKAROUND: Until https://github.com/helpwave/services/issues/458 is fixed
 	/* TODO: Projection for that workaround?
