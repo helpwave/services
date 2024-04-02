@@ -10,7 +10,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	hwes_test "hwes/test"
-	"hwutil"
 	"tasks-svc/internal/patient/api"
 	"testing"
 )
@@ -22,14 +21,8 @@ func server(ctx context.Context) (pb.PatientServiceClient, func()) {
 
 	common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 
-	interceptors := hwutil.Prepend(
-		common_test.AuthenticatedUserInterceptor(uuid.NewString()),
-		common.DefaultInterceptors(),
-	)
-	chain := grpc.ChainUnaryInterceptor(interceptors...)
-
 	// Start Server
-	grpcServer := grpc.NewServer(chain)
+	grpcServer := grpc.NewServer(common.DefaultInterceptorChain())
 	pb.RegisterPatientServiceServer(grpcServer, patientGrpcService)
 	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
 
@@ -40,7 +33,7 @@ func server(ctx context.Context) (pb.PatientServiceClient, func()) {
 }
 
 func TestPatientGrpcService_GetPatientValidation(t *testing.T) {
-	ctx := context.Background()
+	ctx := common_test.AuthenticatedUserContext(context.Background(), uuid.NewString())
 	client, closer := server(ctx)
 	defer closer()
 
@@ -58,7 +51,7 @@ func TestPatientGrpcService_GetPatientValidation(t *testing.T) {
 }
 
 func TestPatientGrpcService_CreatePatient(t *testing.T) {
-	ctx := context.Background()
+	ctx := common_test.AuthenticatedUserContext(context.Background(), uuid.NewString())
 	client, closer := server(ctx)
 	defer closer()
 
@@ -89,7 +82,7 @@ func TestPatientGrpcService_CreatePatient(t *testing.T) {
 }
 
 func TestPatientGrpcService_UpdatePatient(t *testing.T) {
-	ctx := context.Background()
+	ctx := common_test.AuthenticatedUserContext(context.Background(), uuid.NewString())
 	client, closer := server(ctx)
 	defer closer()
 
