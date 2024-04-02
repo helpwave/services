@@ -89,9 +89,8 @@ func AuthenticatedUserMetadata(userID string) metadata.MD {
 
 func AuthenticatedUserContext(ctx context.Context, userId string) context.Context {
 	md := AuthenticatedUserMetadata(userId)
-	existing, existed := metadata.FromOutgoingContext(ctx)
-	if existed {
-		md = metadata.Join(existing, md)
+	if existing, existed := metadata.FromOutgoingContext(ctx); existed {
+		md = metadata.Join(md, existing)
 	}
 	return metadata.NewOutgoingContext(ctx, md)
 }
@@ -100,7 +99,11 @@ func AuthenticatedUserContext(ctx context.Context, userId string) context.Contex
 // It can be used to test authenticated endpoints
 func AuthenticatedUserInterceptor(userID string) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
-		ctx = metadata.NewIncomingContext(ctx, AuthenticatedUserMetadata(userID))
+		md := AuthenticatedUserMetadata(userID)
+		if existing, existed := metadata.FromIncomingContext(ctx); existed {
+			md = metadata.Join(md, existing)
+		}
+		ctx = metadata.NewIncomingContext(ctx, md)
 		return next(ctx, req)
 	}
 }

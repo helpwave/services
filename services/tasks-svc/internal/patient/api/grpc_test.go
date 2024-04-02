@@ -26,16 +26,21 @@ func server(ctx context.Context) (pb.PatientServiceClient, func()) {
 	pb.RegisterPatientServiceServer(grpcServer, patientGrpcService)
 	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
 
-	// Build client
 	client := pb.NewPatientServiceClient(conn)
 
 	return client, closer
 }
 
+func setup() (ctx context.Context, client pb.PatientServiceClient, teardown func()) {
+	ctx = context.Background()
+	client, teardown = server(ctx)
+	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
+	return ctx, client, teardown
+}
+
 func TestPatientGrpcService_GetPatientValidation(t *testing.T) {
-	ctx := common_test.AuthenticatedUserContext(context.Background(), uuid.NewString())
-	client, closer := server(ctx)
-	defer closer()
+	ctx, client, teardown := setup()
+	defer teardown()
 
 	// ID missing -> Error
 	_, err := client.GetPatient(ctx, &pb.GetPatientRequest{Id: ""})
@@ -51,9 +56,8 @@ func TestPatientGrpcService_GetPatientValidation(t *testing.T) {
 }
 
 func TestPatientGrpcService_CreatePatient(t *testing.T) {
-	ctx := common_test.AuthenticatedUserContext(context.Background(), uuid.NewString())
-	client, closer := server(ctx)
-	defer closer()
+	ctx, client, teardown := setup()
+	defer teardown()
 
 	humanReadableIdentifier := "Test patient"
 	notes := "notes"
@@ -82,9 +86,8 @@ func TestPatientGrpcService_CreatePatient(t *testing.T) {
 }
 
 func TestPatientGrpcService_UpdatePatient(t *testing.T) {
-	ctx := common_test.AuthenticatedUserContext(context.Background(), uuid.NewString())
-	client, closer := server(ctx)
-	defer closer()
+	ctx, client, teardown := setup()
+	defer teardown()
 
 	humanReadableIdentifier1 := "Test patient"
 	notes1 := "notes"
