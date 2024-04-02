@@ -11,19 +11,31 @@ import (
 	"github.com/google/uuid"
 )
 
+const createFieldTypeData = `-- name: CreateFieldTypeData :one
+INSERT INTO field_type_datas DEFAULT VALUES RETURNING id
+`
+
+func (q *Queries) CreateFieldTypeData(ctx context.Context) (uuid.UUID, error) {
+	row := q.db.QueryRow(ctx, createFieldTypeData)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
+}
+
 const createProperty = `-- name: CreateProperty :exec
 INSERT INTO properties
-	(id, subject_type, field_type, name, description, is_archived)
-VALUES ($1, $2, $3, $4, $5, $6)
+	(id, subject_type, field_type, name, description, is_archived, field_type_data_id)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
 `
 
 type CreatePropertyParams struct {
-	ID          uuid.UUID
-	SubjectType int32
-	FieldType   int32
-	Name        string
-	Description string
-	IsArchived  bool
+	ID              uuid.UUID
+	SubjectType     int32
+	FieldType       int32
+	Name            string
+	Description     string
+	IsArchived      bool
+	FieldTypeDataID uuid.UUID
 }
 
 func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) error {
@@ -34,12 +46,13 @@ func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) 
 		arg.Name,
 		arg.Description,
 		arg.IsArchived,
+		arg.FieldTypeDataID,
 	)
 	return err
 }
 
 const getPropertyById = `-- name: GetPropertyById :one
-SELECT id, subject_type, field_type, name, description, is_archived, set_id FROM properties WHERE id = $1
+SELECT id, subject_type, field_type, name, description, is_archived, set_id, field_type_data_id FROM properties WHERE id = $1
 `
 
 func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, error) {
@@ -53,12 +66,13 @@ func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, 
 		&i.Description,
 		&i.IsArchived,
 		&i.SetID,
+		&i.FieldTypeDataID,
 	)
 	return i, err
 }
 
 const getPropertyBySubjectType = `-- name: GetPropertyBySubjectType :many
-SELECT id, subject_type, field_type, name, description, is_archived, set_id FROM properties WHERE subject_type = $1
+SELECT id, subject_type, field_type, name, description, is_archived, set_id, field_type_data_id FROM properties WHERE subject_type = $1
 `
 
 func (q *Queries) GetPropertyBySubjectType(ctx context.Context, subjectType int32) ([]Property, error) {
@@ -78,6 +92,7 @@ func (q *Queries) GetPropertyBySubjectType(ctx context.Context, subjectType int3
 			&i.Description,
 			&i.IsArchived,
 			&i.SetID,
+			&i.FieldTypeDataID,
 		); err != nil {
 			return nil, err
 		}

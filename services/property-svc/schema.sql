@@ -35,6 +35,16 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: field_type_datas; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.field_type_datas (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    select_data_id uuid
+);
+
+
+--
 -- Name: properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -45,7 +55,8 @@ CREATE TABLE public.properties (
     name text NOT NULL,
     description text DEFAULT ''::text NOT NULL,
     is_archived boolean DEFAULT false NOT NULL,
-    set_id uuid
+    set_id uuid,
+    field_type_data_id uuid NOT NULL
 );
 
 
@@ -57,6 +68,37 @@ CREATE TABLE public.schema_migrations (
     version bigint NOT NULL,
     dirty boolean NOT NULL
 );
+
+
+--
+-- Name: select_datas; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.select_datas (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    allow_freetext boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: select_options; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.select_options (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    name text NOT NULL,
+    description text DEFAULT ''::text NOT NULL,
+    is_custom boolean DEFAULT false NOT NULL,
+    select_data_id uuid NOT NULL
+);
+
+
+--
+-- Name: field_type_datas field_type_datas_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.field_type_datas
+    ADD CONSTRAINT field_type_datas_pkey PRIMARY KEY (id);
 
 
 --
@@ -73,6 +115,46 @@ ALTER TABLE ONLY public.properties
 
 ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: select_datas select_datas_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.select_datas
+    ADD CONSTRAINT select_datas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: select_options select_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.select_options
+    ADD CONSTRAINT select_options_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: field_type_datas field_type_datas_select_data_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.field_type_datas
+    ADD CONSTRAINT field_type_datas_select_data_id_fkey FOREIGN KEY (select_data_id) REFERENCES public.select_datas(id) ON DELETE SET NULL;
+
+
+--
+-- Name: properties properties_field_type_data_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.properties
+    ADD CONSTRAINT properties_field_type_data_id_fkey FOREIGN KEY (field_type_data_id) REFERENCES public.field_type_datas(id) ON DELETE CASCADE;
+
+
+--
+-- Name: select_options select_options_select_data_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.select_options
+    ADD CONSTRAINT select_options_select_data_id_fkey FOREIGN KEY (select_data_id) REFERENCES public.select_datas(id) ON DELETE CASCADE;
 
 
 --

@@ -8,17 +8,36 @@ import (
 	"github.com/google/uuid"
 )
 
+type FieldTypeData struct {
+	ID           uuid.UUID
+	SelectDataID uuid.NullUUID
+}
+
 type Property struct {
-	ID          uuid.UUID
-	SubjectType int32
-	FieldType   int32
-	Name        string
-	Description string
-	IsArchived  bool
-	SetID       uuid.NullUUID
+	ID              uuid.UUID
+	SubjectType     int32
+	FieldType       int32
+	Name            string
+	Description     string
+	IsArchived      bool
+	SetID           uuid.NullUUID
+	FieldTypeDataID uuid.UUID
 }
 
 type SchemaMigration struct {
 	Version int64
 	Dirty   bool
+}
+
+type SelectData struct {
+	ID            uuid.UUID
+	AllowFreetext bool
+}
+
+type SelectOption struct {
+	ID           uuid.UUID
+	Name         string
+	Description  string
+	IsCustom     bool
+	SelectDataID uuid.UUID
 }

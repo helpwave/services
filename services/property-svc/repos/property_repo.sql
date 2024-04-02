@@ -1,7 +1,7 @@
 -- name: CreateProperty :exec
 INSERT INTO properties
-	(id, subject_type, field_type, name, description, is_archived)
-VALUES ($1, $2, $3, $4, $5, $6);
+	(id, subject_type, field_type, name, description, is_archived, field_type_data_id)
+VALUES ($1, $2, $3, $4, $5, $6, $7);
 
 -- name: GetPropertyById :one
 SELECT * FROM properties WHERE id = $1;
@@ -22,3 +22,6 @@ WHERE id = $1;
 UPDATE properties
 SET set_id = @set_id
 WHERE id = @id;
+
+-- name: CreateFieldTypeData :one
+INSERT INTO field_type_datas DEFAULT VALUES RETURNING id;

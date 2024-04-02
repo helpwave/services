@@ -40,10 +40,29 @@ func (p *Projection) initEventListeners() {
 
 func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
+	db := hwdb.GetDB()
+
+	tx, err := db.Begin(ctx)
+	if err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	defer func() {
+		// TODO: log Rollback errors
+		_ = tx.Rollback(ctx)
+	}()
+
+	propertyRepo := property_repo.New(db).WithTx(tx)
 
 	var payload propertyEventsV1.PropertyCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
+		return err, esdb.NackActionRetry
+	}
+
+	// Create FieldTypeData
+	fieldTypeDataID, err := propertyRepo.CreateFieldTypeData(ctx)
+	if err := hwdb.Error(ctx, err); err != nil {
 		return err, esdb.NackActionRetry
 	}
 
@@ -64,15 +83,20 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	}
 	fieldType := (pb.FieldType)(value)
 
-	err = p.propertyRepo.CreateProperty(ctx, property_repo.CreatePropertyParams{
-		ID:          propertyID,
-		SubjectType: int32(subjectType),
-		FieldType:   int32(fieldType),
-		Name:        payload.Name,
-		Description: "",
-		IsArchived:  false,
+	err = propertyRepo.CreateProperty(ctx, property_repo.CreatePropertyParams{
+		ID:              propertyID,
+		SubjectType:     int32(subjectType),
+		FieldType:       int32(fieldType),
+		Name:            payload.Name,
+		Description:     "",
+		IsArchived:      false,
+		FieldTypeDataID: fieldTypeDataID,
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	if err := tx.Commit(ctx); err != nil {
 		return err, esdb.NackActionRetry
 	}
 
