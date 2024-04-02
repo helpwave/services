@@ -36,6 +36,7 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, p.onNameUpdated)
 	p.RegisterEventListener(propertyEventsV1.PropertyArchived, p.onPropertyArchived)
 	p.RegisterEventListener(propertyEventsV1.PropertyRetrieved, p.onPropertyRetrieved)
+	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataCreated, p.onPropertyFieldTypeDataCreated)
 }
 
 func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
@@ -66,6 +67,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 		return err, esdb.NackActionRetry
 	}
 
+	// Create Property
 	propertyID, err := uuid.Parse(payload.ID)
 	if err != nil {
 		return err, esdb.NackActionRetry
@@ -247,6 +249,63 @@ func (p *Projection) onPropertyRetrieved(ctx context.Context, evt hwes.Event) (e
 		IsArchived: hwutil.PtrTo(false),
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	return nil, esdb.NackActionUnknown
+}
+
+func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+	db := hwdb.GetDB()
+
+	tx, err := db.Begin(ctx)
+	if err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	defer func() {
+		// TODO: log Rollback errors
+		_ = tx.Rollback(ctx)
+	}()
+
+	var payload propertyEventsV1.FieldTypeDataCreatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, esdb.NackActionRetry
+	}
+
+	propertyRepo := property_repo.New(db).WithTx(tx)
+	if payload.FieldTypeData.SelectData != nil {
+		selectDataID := uuid.New()
+		err := propertyRepo.CreateSelectData(ctx, property_repo.CreateSelectDataParams{
+			ID:            selectDataID,
+			AllowFreetext: payload.FieldTypeData.SelectData.AllowFreetext,
+		})
+		if err := hwdb.Error(ctx, err); err != nil {
+			return err, esdb.NackActionRetry
+		}
+		for _, option := range payload.FieldTypeData.SelectData.SelectOptions {
+			err := propertyRepo.CreateSelectOption(ctx, property_repo.CreateSelectOptionParams{
+				ID:           option.ID,
+				Name:         option.Name,
+				Description:  *option.Description, // TODO
+				IsCustom:     option.IsCustom,
+				SelectDataID: selectDataID,
+			})
+			if err := hwdb.Error(ctx, err); err != nil {
+				return err, esdb.NackActionRetry
+			}
+		}
+
+		// Update FieldTypeData
+		err = propertyRepo.UpdateFieldTypeDataSelectDataIDByPropertyID(ctx, property_repo.UpdateFieldTypeDataSelectDataIDByPropertyIDParams{ID: evt.AggregateID, SelectDataID: uuid.NullUUID{UUID: selectDataID, Valid: true}})
+		if err := hwdb.Error(ctx, err); err != nil {
+			return err, esdb.NackActionRetry
+		}
+	}
+
+	if err := tx.Commit(ctx); err != nil {
 		return err, esdb.NackActionRetry
 	}
 

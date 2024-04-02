@@ -25,3 +25,20 @@ WHERE id = @id;
 
 -- name: CreateFieldTypeData :one
 INSERT INTO field_type_datas DEFAULT VALUES RETURNING id;
+
+-- name: UpdateFieldTypeDataSelectDataIDByPropertyID :exec
+UPDATE field_type_datas
+SET select_data_id = @select_data_id
+FROM properties
+WHERE field_type_datas.id = properties.field_type_data_id
+AND properties.id = @id;
+
+-- name: CreateSelectData :exec
+INSERT INTO select_datas
+	(id, allow_freetext)
+VALUES ($1, $2);
+
+-- name: CreateSelectOption :exec
+INSERT INTO select_options
+	(id, name, description, is_custom, select_data_id)
+VALUES ($1, $2, $3, $4, $5);
