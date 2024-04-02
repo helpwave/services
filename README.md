@@ -158,6 +158,7 @@ These scripts can be run in the devcontainer:
 * `protos.sh`: Lint and Generate protos
 * `migrate.sh`: [migrate.sh](#migratesh---running-migratemigrate-inside-docker)
 * `models.sh`: [models.sh](#modelssh---generate-models-from-sql-queries)
+* `lint.sh`: Lint go code
 
 Example:
 
