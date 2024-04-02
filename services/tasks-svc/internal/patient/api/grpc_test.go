@@ -64,86 +64,67 @@ func TestPatientGrpcService_GetPatientValidation(t *testing.T) {
 }
 
 func TestPatientGrpcService_CreatePatient(t *testing.T) {
+	// Setup
 	ctx, client, _, teardown := setup(t)
 	defer teardown()
 
+	// First, create a new Patient
 	humanReadableIdentifier := "Test patient"
 	notes := "notes"
 
 	createPatientResponse, err := client.CreatePatient(ctx, &pb.CreatePatientRequest{HumanReadableIdentifier: humanReadableIdentifier, Notes: &notes})
-	if err != nil {
-		t.Error(err)
+	if !assert.NoError(t, err, "could not create patient") {
+		return
 	}
 
-	if _, err := uuid.Parse(createPatientResponse.GetId()); err != nil {
-		t.Error(err)
+	// new patient's id must be a uuid
+	_, err = uuid.Parse(createPatientResponse.Id)
+	if !assert.NoError(t, err, "created patient's id is not a uuid") {
+		return
 	}
 
-	getPatientResponse, err := client.GetPatient(ctx, &pb.GetPatientRequest{Id: createPatientResponse.GetId()})
-	if err != nil {
-		t.Error(err)
+	// Now, fetch newly created patient
+	getPatientResponse, err := client.GetPatient(ctx, &pb.GetPatientRequest{Id: createPatientResponse.Id})
+	if !assert.NoError(t, err, "could not get after create") {
+		return
 	}
-
-	if getPatientResponse.HumanReadableIdentifier != humanReadableIdentifier {
-		t.Errorf("Task name: expected '%s' got '%s'", humanReadableIdentifier, getPatientResponse.HumanReadableIdentifier)
-	}
-
-	if getPatientResponse.GetNotes() != notes {
-		t.Errorf("Task description: expected '%s' got '%s'", notes, getPatientResponse.GetNotes())
-	}
+	assert.Equal(t, humanReadableIdentifier, getPatientResponse.HumanReadableIdentifier)
+	assert.Equal(t, notes, getPatientResponse.Notes)
 }
 
 func TestPatientGrpcService_UpdatePatient(t *testing.T) {
 	ctx, client, _, teardown := setup(t)
 	defer teardown()
 
+	// Initial values
 	humanReadableIdentifier1 := "Test patient"
 	notes1 := "notes"
 
+	// First, create a new patient
 	createPatientResponse, err := client.CreatePatient(ctx, &pb.CreatePatientRequest{HumanReadableIdentifier: humanReadableIdentifier1, Notes: &notes1})
-	if err != nil {
-		t.Error(err)
+	if !assert.NoError(t, err, "could not create patient") {
+		return
 	}
 
-	if _, err := uuid.Parse(createPatientResponse.GetId()); err != nil {
-		t.Error(err)
-	}
-
-	getPatientResponse, err := client.GetPatient(ctx, &pb.GetPatientRequest{Id: createPatientResponse.GetId()})
-	if err != nil {
-		t.Error(err)
-	}
-
-	if getPatientResponse.HumanReadableIdentifier != humanReadableIdentifier1 {
-		t.Errorf("Task name: expected '%s' got '%s'", humanReadableIdentifier1, getPatientResponse.HumanReadableIdentifier)
-	}
-
-	if getPatientResponse.GetNotes() != notes1 {
-		t.Errorf("Task description: expected '%s' got '%s'", notes1, getPatientResponse.GetNotes())
-	}
-
+	// Then, update the values
 	humanReadableIdentifier2 := "update"
 	notes2 := "test"
 
 	_, err = client.UpdatePatient(ctx, &pb.UpdatePatientRequest{
-		Id:                      createPatientResponse.GetId(),
+		Id:                      createPatientResponse.Id,
 		HumanReadableIdentifier: &humanReadableIdentifier2,
 		Notes:                   &notes2,
 	})
-	if err != nil {
-		t.Error(err)
+	if !assert.NoError(t, err, "update failed") {
+		return
 	}
 
-	getPatientResponse, err = client.GetPatient(ctx, &pb.GetPatientRequest{Id: createPatientResponse.GetId()})
-	if err != nil {
-		t.Error(err)
+	// Finally, fetch new state
+	getPatientResponse, err := client.GetPatient(ctx, &pb.GetPatientRequest{Id: createPatientResponse.Id})
+	if !assert.NoError(t, err, "could not get updated patient") {
+		return
 	}
 
-	if getPatientResponse.HumanReadableIdentifier != humanReadableIdentifier2 {
-		t.Errorf("Task name: expected '%s' got '%s'", humanReadableIdentifier2, getPatientResponse.HumanReadableIdentifier)
-	}
-
-	if getPatientResponse.GetNotes() != notes2 {
-		t.Errorf("Task description: expected '%s' got '%s'", notes2, getPatientResponse.GetNotes())
-	}
+	assert.Equal(t, humanReadableIdentifier2, getPatientResponse.HumanReadableIdentifier)
+	assert.Equal(t, notes2, getPatientResponse.Notes)
 }
