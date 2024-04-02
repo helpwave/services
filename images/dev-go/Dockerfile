@@ -13,11 +13,11 @@ ENV PATH="$PATH:$GOROOT/bin"
 
 # update debian package list and packages, also install some
 RUN apt update \
-    && apt upgrade \
+    && apt upgrade -y \
     && apt install sudo vim nano jq dnsutils postgresql-client lsb-release gpg redis-tools \
     	apt-transport-https ca-certificates curl gnupg2 software-properties-common \
 		-y \
-    && apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+    && apt-get clean autoclean -y && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 # install docker
 #  using a mounted docker socket we can manage the host's docker (Docker out of Docker):
