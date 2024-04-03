@@ -92,6 +92,35 @@ func (q *Queries) CreateSelectOption(ctx context.Context, arg CreateSelectOption
 	return err
 }
 
+const deleteSelectDataByPropertyID = `-- name: DeleteSelectDataByPropertyID :exec
+DELETE FROM select_datas
+WHERE id IN (
+	SELECT field_type_datas.select_data_id
+	FROM field_type_datas
+	JOIN properties ON properties.field_type_data_id = field_type_datas.id
+	WHERE properties.id = $1
+)
+`
+
+func (q *Queries) DeleteSelectDataByPropertyID(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteSelectDataByPropertyID, id)
+	return err
+}
+
+const getFieldTypeDataByPropertyID = `-- name: GetFieldTypeDataByPropertyID :one
+SELECT field_type_datas.id, field_type_datas.select_data_id
+	FROM properties
+	JOIN field_type_datas ON properties.field_type_data_id = field_type_datas.id
+	WHERE properties.id = $1
+`
+
+func (q *Queries) GetFieldTypeDataByPropertyID(ctx context.Context, id uuid.UUID) (FieldTypeData, error) {
+	row := q.db.QueryRow(ctx, getFieldTypeDataByPropertyID, id)
+	var i FieldTypeData
+	err := row.Scan(&i.ID, &i.SelectDataID)
+	return i, err
+}
+
 const getPropertyById = `-- name: GetPropertyById :one
 SELECT id, subject_type, field_type, name, description, is_archived, set_id, field_type_data_id FROM properties WHERE id = $1
 `
@@ -207,5 +236,21 @@ type UpdatePropertySetIDParams struct {
 
 func (q *Queries) UpdatePropertySetID(ctx context.Context, arg UpdatePropertySetIDParams) error {
 	_, err := q.db.Exec(ctx, updatePropertySetID, arg.SetID, arg.ID)
+	return err
+}
+
+const updateSelectData = `-- name: UpdateSelectData :exec
+UPDATE select_datas
+SET allow_freetext = $1
+WHERE id = $2
+`
+
+type UpdateSelectDataParams struct {
+	AllowFreetext bool
+	ID            uuid.UUID
+}
+
+func (q *Queries) UpdateSelectData(ctx context.Context, arg UpdateSelectDataParams) error {
+	_, err := q.db.Exec(ctx, updateSelectData, arg.AllowFreetext, arg.ID)
 	return err
 }

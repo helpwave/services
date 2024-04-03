@@ -26,6 +26,17 @@ WHERE id = @id;
 -- name: CreateFieldTypeData :one
 INSERT INTO field_type_datas DEFAULT VALUES RETURNING id;
 
+-- name: GetFieldTypeDataByPropertyID :one
+SELECT field_type_datas.*
+	FROM properties
+	JOIN field_type_datas ON properties.field_type_data_id = field_type_datas.id
+	WHERE properties.id = @id;
+
+-- name: UpdateSelectData :exec
+UPDATE select_datas
+SET allow_freetext = @allow_freetext
+WHERE id = @id;
+
 -- name: UpdateFieldTypeDataSelectDataIDByPropertyID :exec
 UPDATE field_type_datas
 SET select_data_id = @select_data_id
@@ -37,6 +48,15 @@ AND properties.id = @id;
 INSERT INTO select_datas
 	(id, allow_freetext)
 VALUES ($1, $2);
+
+-- name: DeleteSelectDataByPropertyID :exec
+DELETE FROM select_datas
+WHERE id IN (
+	SELECT field_type_datas.select_data_id
+	FROM field_type_datas
+	JOIN properties ON properties.field_type_data_id = field_type_datas.id
+	WHERE properties.id = @id
+);
 
 -- name: CreateSelectOption :exec
 INSERT INTO select_options

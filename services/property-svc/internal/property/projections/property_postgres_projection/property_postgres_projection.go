@@ -37,6 +37,7 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(propertyEventsV1.PropertyArchived, p.onPropertyArchived)
 	p.RegisterEventListener(propertyEventsV1.PropertyRetrieved, p.onPropertyRetrieved)
 	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataCreated, p.onPropertyFieldTypeDataCreated)
+	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, p.onAllowFreetextUpdated)
 }
 
 func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
@@ -185,6 +186,19 @@ func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (
 
 func (p *Projection) onFieldTypeUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
+	db := hwdb.GetDB()
+
+	tx, err := db.Begin(ctx)
+	if err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	defer func() {
+		// TODO: log Rollback errors
+		_ = tx.Rollback(ctx)
+	}()
+
+	propertyRepo := property_repo.New(db).WithTx(tx)
 
 	var payload propertyEventsV1.PropertyFieldTypeUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -196,14 +210,26 @@ func (p *Projection) onFieldTypeUpdated(ctx context.Context, evt hwes.Event) (er
 	if !found {
 		return fmt.Errorf("invalid fieldType: %s", payload.FieldType), esdb.NackActionRetry
 	}
-	fieldType := (pb.SubjectType)(value)
+	fieldType := (pb.FieldType)(value)
 
-	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+	err = propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
 		FieldType: hwutil.PtrTo(int32(fieldType)),
 		ID:        evt.AggregateID,
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	if fieldType != pb.FieldType_FIELD_TYPE_SELECT {
+		err = propertyRepo.DeleteSelectDataByPropertyID(ctx, evt.AggregateID)
+		err = hwdb.Error(ctx, err)
+		if err != nil {
+			return err, esdb.NackActionRetry
+		}
+	}
+
+	if err := tx.Commit(ctx); err != nil {
 		return err, esdb.NackActionRetry
 	}
 
@@ -269,13 +295,14 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 		_ = tx.Rollback(ctx)
 	}()
 
+	propertyRepo := property_repo.New(db).WithTx(tx)
+
 	var payload propertyEventsV1.FieldTypeDataCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, esdb.NackActionRetry
 	}
 
-	propertyRepo := property_repo.New(db).WithTx(tx)
 	if payload.FieldTypeData.SelectData != nil {
 		selectDataID := uuid.New()
 		err := propertyRepo.CreateSelectData(ctx, property_repo.CreateSelectDataParams{
@@ -307,6 +334,33 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 
 	if err := tx.Commit(ctx); err != nil {
 		return err, esdb.NackActionRetry
+	}
+
+	return nil, esdb.NackActionUnknown
+}
+
+func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+
+	var payload propertyEventsV1.FieldTypeDataAllowFreetextUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, esdb.NackActionRetry
+	}
+
+	fieldTypeData, err := p.propertyRepo.GetFieldTypeDataByPropertyID(ctx, evt.AggregateID)
+	if err := hwdb.Error(ctx, err); err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	if fieldTypeData.SelectDataID.Valid {
+		err := p.propertyRepo.UpdateSelectData(ctx, property_repo.UpdateSelectDataParams{
+			ID:            fieldTypeData.SelectDataID.UUID,
+			AllowFreetext: payload.NewAllowFreetext,
+		})
+		if err := hwdb.Error(ctx, err); err != nil {
+			return err, esdb.NackActionRetry
+		}
 	}
 
 	return nil, esdb.NackActionUnknown
