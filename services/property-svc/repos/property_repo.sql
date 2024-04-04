@@ -62,3 +62,6 @@ WHERE id IN (
 INSERT INTO select_options
 	(id, name, description, is_custom, select_data_id)
 VALUES ($1, $2, $3, $4, $5);
+
+-- name: DeleteSelectOption :batchexec
+DELETE FROM select_options WHERE id = @id;

@@ -38,6 +38,7 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(propertyEventsV1.PropertyRetrieved, p.onPropertyRetrieved)
 	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataCreated, p.onPropertyFieldTypeDataCreated)
 	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, p.onAllowFreetextUpdated)
+	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsRemoved, p.onFieldTypeDataSelectOptionsRemoved)
 }
 
 func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
@@ -291,8 +292,8 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 	}
 
 	defer func() {
-		// TODO: log Rollback errors
-		_ = tx.Rollback(ctx)
+		err := tx.Rollback(ctx)
+		log.Error().Err(err).Msg("rollback failed.")
 	}()
 
 	propertyRepo := property_repo.New(db).WithTx(tx)
@@ -361,6 +362,61 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
 		}
+	}
+
+	return nil, esdb.NackActionUnknown
+}
+
+func (p *Projection) onFieldTypeDataSelectOptionsRemoved(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+	db := hwdb.GetDB()
+
+	tx, err := db.Begin(ctx)
+	if err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	defer func() {
+		err := tx.Rollback(ctx)
+		log.Error().Err(err).Msg("rollback failed.")
+	}()
+	propertyRepo := p.propertyRepo.WithTx(tx)
+
+	var payload propertyEventsV1.FieldTypeDataSelectOptionsRemovedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, esdb.NackActionRetry
+	}
+
+	parsedIDs := hwutil.FlatMap(payload.RemovedSelectOptions, func(s string) *uuid.UUID {
+		parsed, err := uuid.Parse(s)
+		if err != nil {
+			log.Warn().Str("uuid", s).Msg("invalid uuid in removedSelectOptions.")
+			return nil
+		}
+		return &parsed
+	})
+
+	batch := propertyRepo.DeleteSelectOption(ctx, parsedIDs)
+	var batchErr error
+	batch.Exec(func(idx int, err error) {
+		if err != nil {
+			batchErr = err
+			return
+		}
+	})
+	if batchErr != nil {
+		log.Error().Err(batchErr).Msg("batch execution failed.")
+		return batchErr, esdb.NackActionRetry
+	}
+
+	if err := batch.Close(); err != nil {
+		log.Err(err).Msg("failed while closing batch.")
+		return err, esdb.NackActionRetry
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return err, esdb.NackActionRetry
 	}
 
 	return nil, esdb.NackActionUnknown
