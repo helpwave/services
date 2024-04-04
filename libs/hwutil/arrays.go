@@ -76,3 +76,8 @@ func CountElements[K any](values []K, condition func(K) bool) int {
 	}
 	return count
 }
+
+// Prepend prepends a single value to a slice and returns it
+func Prepend[T any](value T, slice []T) []T {
+	return append([]T{value}, slice...)
+}
