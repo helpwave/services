@@ -54,7 +54,7 @@ type organizationIDKey struct{}
 func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook func(*daprd.Server)) {
 	log := zlog.Ctx(ctx)
 
-	chain := grpc.ChainUnaryInterceptor(DefaultInterceptors()...)
+	chain := DefaultInterceptorChain()
 	statsHandler := grpc.StatsHandler(otelgrpc.NewServerHandler())
 
 	listener, err := net.Listen("tcp", addr)
@@ -104,6 +104,7 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 }
 
 // DefaultInterceptors returns the slice of default Interceptors for the GRPC service
+// Also see DefaultInterceptorChain
 //
 //	chain := grpc.ChainUnaryInterceptor(common.DefaultInterceptors()...)
 func DefaultInterceptors() []grpc.UnaryServerInterceptor {
@@ -116,6 +117,10 @@ func DefaultInterceptors() []grpc.UnaryServerInterceptor {
 		handlerSpanInterceptor,
 	}
 	return interceptors
+}
+
+func DefaultInterceptorChain() grpc.ServerOption {
+	return grpc.ChainUnaryInterceptor(DefaultInterceptors()...)
 }
 
 func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {

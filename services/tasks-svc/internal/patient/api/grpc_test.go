@@ -2,112 +2,53 @@ package api_test
 
 import (
 	"common"
+	common_test "common/test"
 	"context"
-	"encoding/base64"
-	"encoding/json"
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
-	"google.golang.org/grpc/test/bufconn"
 	hwes_test "hwes/test"
-	"log"
-	"net"
 	"tasks-svc/internal/patient/api"
 	"testing"
 )
 
-func assertInvalidArgumentError(t *testing.T, err error, msg string) {
-	if assert.Error(t, err, msg) {
-		sE, ok := status.FromError(err)
-		assert.True(t, ok, "not a status error")
-		assert.Equal(t, sE.Code(), codes.InvalidArgument)
-	}
-}
-
 func server(ctx context.Context) (pb.PatientServiceClient, func()) {
-	common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
-
-	// Create Listener
-	buffer := 1024 * 1024
-	listener := bufconn.Listen(buffer)
-
-	// Build gRPC service with custom interceptor
+	// Build gRPC service
 	aggregateStore := hwes_test.NewAggregateStore()
 	patientGrpcService := api.NewPatientGrpcService(aggregateStore)
 
-	injectUserID := func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
-		organizationID := "3b25c6f5-4705-4074-9fc6-a50c28eba406"
-		auth, err := json.Marshal(map[string]interface{}{
-			"sub":           uuid.NewString(),
-			"email":         "testine.test@helpwave.de",
-			"name":          "Testine Test",
-			"nickname":      "testine.test",
-			"organizations": []string{organizationID},
-		})
-		if err != nil {
-			log.Fatal(err)
-		}
-		ctx = metadata.NewIncomingContext(ctx, metadata.New(map[string]string{
-			"X-Organization": organizationID,
-			"Authorization":  "Bearer " + base64.StdEncoding.EncodeToString(auth),
-		}))
-		return next(ctx, req)
-	}
-	interceptors := append([]grpc.UnaryServerInterceptor{injectUserID}, common.DefaultInterceptors()...)
-	chain := grpc.ChainUnaryInterceptor(interceptors...)
-
-	grpcServer := grpc.NewServer(chain)
+	common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 
 	// Start Server
+	grpcServer := grpc.NewServer(common.DefaultInterceptorChain())
 	pb.RegisterPatientServiceServer(grpcServer, patientGrpcService)
-	go func() {
-		if err := grpcServer.Serve(listener); err != nil {
-			log.Fatal(err)
-		}
-	}()
+	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
 
-	// Start Connection
-	conn, err := grpc.DialContext(ctx, "",
-		grpc.WithContextDialer(func(ctx context.Context, s string) (net.Conn, error) {
-			return listener.Dial()
-		}),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	closer := func() {
-		err := listener.Close()
-		if err != nil {
-			log.Fatal(err)
-		}
-		grpcServer.Stop()
-	}
-
-	// Build client
 	client := pb.NewPatientServiceClient(conn)
 
 	return client, closer
 }
 
+func setup() (ctx context.Context, client pb.PatientServiceClient, teardown func()) {
+	ctx = context.Background()
+	client, teardown = server(ctx)
+	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
+	return ctx, client, teardown
+}
+
 func TestPatientGrpcService_GetPatientValidation(t *testing.T) {
-	ctx := context.Background()
-	client, closer := server(ctx)
-	defer closer()
+	ctx, client, teardown := setup()
+	defer teardown()
 
 	// ID missing -> Error
 	_, err := client.GetPatient(ctx, &pb.GetPatientRequest{Id: ""})
-	assertInvalidArgumentError(t, err, "accepts empty ids")
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts empty ids")
 
 	// ID no uuid -> Error
 	_, err = client.GetPatient(ctx, &pb.GetPatientRequest{Id: "asdasdasdsa"})
-	assertInvalidArgumentError(t, err, "accepts invalid ids")
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts invalid ids")
 
 	// ID Valid -> No Error
 	_, err = client.GetPatient(ctx, &pb.GetPatientRequest{Id: uuid.NewString()})
@@ -115,9 +56,8 @@ func TestPatientGrpcService_GetPatientValidation(t *testing.T) {
 }
 
 func TestPatientGrpcService_CreatePatient(t *testing.T) {
-	ctx := context.Background()
-	client, closer := server(ctx)
-	defer closer()
+	ctx, client, teardown := setup()
+	defer teardown()
 
 	humanReadableIdentifier := "Test patient"
 	notes := "notes"
@@ -146,9 +86,8 @@ func TestPatientGrpcService_CreatePatient(t *testing.T) {
 }
 
 func TestPatientGrpcService_UpdatePatient(t *testing.T) {
-	ctx := context.Background()
-	client, closer := server(ctx)
-	defer closer()
+	ctx, client, teardown := setup()
+	defer teardown()
 
 	humanReadableIdentifier1 := "Test patient"
 	notes1 := "notes"
