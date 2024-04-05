@@ -225,16 +225,33 @@ func (p *Projection) onFieldTypeUpdated(ctx context.Context, evt hwes.Event) (er
 		FieldType: hwutil.PtrTo(int32(fieldType)),
 		ID:        evt.AggregateID,
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err = hwdb.Error(ctx, err); err != nil {
 		return err, esdb.NackActionRetry
 	}
 
 	if fieldType != pb.FieldType_FIELD_TYPE_SELECT {
 		err = propertyRepo.DeleteSelectDataByPropertyID(ctx, evt.AggregateID)
-		err = hwdb.Error(ctx, err)
-		if err != nil {
+		if err = hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
+		}
+	} else {
+		fieldTypeData, err := propertyRepo.GetFieldTypeDataByPropertyID(ctx, evt.AggregateID)
+		if err := hwdb.Error(ctx, err); err != nil {
+			return err, esdb.NackActionRetry
+		}
+		fmt.Println(fieldTypeData)
+		if !fieldTypeData.SelectDataID.Valid {
+			sdID, err := propertyRepo.CreateSelectData(ctx, false)
+			if err := hwdb.Error(ctx, err); err != nil {
+				return err, esdb.NackActionRetry
+			}
+			err = propertyRepo.UpdateFieldTypeDataSelectDataID(ctx, property_repo.UpdateFieldTypeDataSelectDataIDParams{
+				ID:           fieldTypeData.ID,
+				SelectDataID: uuid.NullUUID{UUID: sdID, Valid: true},
+			})
+			if err := hwdb.Error(ctx, err); err != nil {
+				return err, esdb.NackActionRetry
+			}
 		}
 	}
 
@@ -382,15 +399,6 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
 		}
-	} else {
-		sdID, err := propertyRepo.CreateSelectData(ctx, payload.NewAllowFreetext)
-		if err := hwdb.Error(ctx, err); err != nil {
-			return err, esdb.NackActionRetry
-		}
-		err = propertyRepo.UpdateFieldTypeDataSelectDataID(ctx, property_repo.UpdateFieldTypeDataSelectDataIDParams{ID: sdID})
-		if err := hwdb.Error(ctx, err); err != nil {
-			return err, esdb.NackActionRetry
-		}
 	}
 
 	if err := tx.Commit(ctx); err != nil {
@@ -436,7 +444,10 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
 		}
-		err = propertyRepo.UpdateFieldTypeDataSelectDataID(ctx, property_repo.UpdateFieldTypeDataSelectDataIDParams{ID: sdID})
+		err = propertyRepo.UpdateFieldTypeDataSelectDataID(ctx, property_repo.UpdateFieldTypeDataSelectDataIDParams{
+			ID:           fieldTypeData.ID,
+			SelectDataID: uuid.NullUUID{UUID: sdID, Valid: true},
+		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
 		}

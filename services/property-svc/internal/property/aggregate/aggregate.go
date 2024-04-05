@@ -151,6 +151,10 @@ func (a *PropertyAggregate) onFieldTypeUpdated(evt hwes.Event) error {
 
 	if fieldType != pb.FieldType_FIELD_TYPE_SELECT {
 		a.Property.FieldTypeData.SelectData = nil
+	} else {
+		if a.Property.FieldTypeData.SelectData == nil {
+			a.Property.FieldTypeData.SelectData = &models.SelectData{}
+		}
 	}
 
 	a.Property.FieldType = fieldType
@@ -175,10 +179,6 @@ func (a *PropertyAggregate) onAllowFreetextUpdated(evt hwes.Event) error {
 
 	if a.Property.FieldTypeData.SelectData != nil {
 		a.Property.FieldTypeData.SelectData.AllowFreetext = payload.NewAllowFreetext
-	} else {
-		a.Property.FieldTypeData.SelectData = &models.SelectData{
-			AllowFreetext: payload.NewAllowFreetext,
-		}
 	}
 
 	return nil
