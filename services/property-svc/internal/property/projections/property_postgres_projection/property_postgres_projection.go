@@ -55,8 +55,10 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	}
 
 	defer func() {
-		// TODO: log Rollback errors
-		_ = tx.Rollback(ctx)
+		err := tx.Rollback(ctx)
+		if !errors.Is(err, pgx.ErrTxClosed) {
+			log.Error().Err(err).Msg("rollback failed.")
+		}
 	}()
 
 	propertyRepo := property_repo.New(db).WithTx(tx)
@@ -199,8 +201,10 @@ func (p *Projection) onFieldTypeUpdated(ctx context.Context, evt hwes.Event) (er
 	}
 
 	defer func() {
-		// TODO: log Rollback errors
-		_ = tx.Rollback(ctx)
+		err := tx.Rollback(ctx)
+		if !errors.Is(err, pgx.ErrTxClosed) {
+			log.Error().Err(err).Msg("rollback failed.")
+		}
 	}()
 
 	propertyRepo := property_repo.New(db).WithTx(tx)
@@ -297,7 +301,9 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 
 	defer func() {
 		err := tx.Rollback(ctx)
-		log.Error().Err(err).Msg("rollback failed.")
+		if !errors.Is(err, pgx.ErrTxClosed) {
+			log.Error().Err(err).Msg("rollback failed.")
+		}
 	}()
 
 	propertyRepo := property_repo.New(db).WithTx(tx)
@@ -357,7 +363,9 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 
 	defer func() {
 		err := tx.Rollback(ctx)
-		log.Error().Err(err).Msg("rollback failed.") // TODO
+		if !errors.Is(err, pgx.ErrTxClosed) {
+			log.Error().Err(err).Msg("rollback failed.")
+		}
 	}()
 	propertyRepo := p.propertyRepo.WithTx(tx)
 
@@ -403,7 +411,9 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 
 	defer func() {
 		err := tx.Rollback(ctx)
-		log.Error().Err(err).Msg("rollback failed.") // TODO
+		if !errors.Is(err, pgx.ErrTxClosed) {
+			log.Error().Err(err).Msg("rollback failed.")
+		}
 	}()
 	propertyRepo := p.propertyRepo.WithTx(tx)
 
@@ -546,7 +556,9 @@ func (p *Projection) onFieldTypeDataSelectOptionsRemoved(ctx context.Context, ev
 
 	defer func() {
 		err := tx.Rollback(ctx)
-		log.Error().Err(err).Msg("rollback failed.")
+		if !errors.Is(err, pgx.ErrTxClosed) {
+			log.Error().Err(err).Msg("rollback failed.")
+		}
 	}()
 	propertyRepo := p.propertyRepo.WithTx(tx)
 
