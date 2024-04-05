@@ -2,16 +2,19 @@ package property_postgres_projection
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	pb "gen/proto/services/property_svc/v1"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	zlog "github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
 	propertyEventsV1 "property-svc/internal/property/events/v1"
+	"property-svc/internal/property/models"
 	"property-svc/repos/property_repo"
 )
 
@@ -39,6 +42,7 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataCreated, p.onPropertyFieldTypeDataCreated)
 	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, p.onAllowFreetextUpdated)
 	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsRemoved, p.onFieldTypeDataSelectOptionsRemoved)
+	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsUpserted, p.onFieldTypeDataSelectOptionsUpserted)
 }
 
 func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
@@ -305,11 +309,7 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 	}
 
 	if payload.FieldTypeData.SelectData != nil {
-		selectDataID := uuid.New()
-		err := propertyRepo.CreateSelectData(ctx, property_repo.CreateSelectDataParams{
-			ID:            selectDataID,
-			AllowFreetext: payload.FieldTypeData.SelectData.AllowFreetext,
-		})
+		selectDataID, err := propertyRepo.CreateSelectData(ctx, payload.FieldTypeData.SelectData.AllowFreetext)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
 		}
@@ -317,7 +317,7 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 			err := propertyRepo.CreateSelectOption(ctx, property_repo.CreateSelectOptionParams{
 				ID:           option.ID,
 				Name:         option.Name,
-				Description:  *option.Description, // TODO
+				Description:  option.Description,
 				IsCustom:     option.IsCustom,
 				SelectDataID: selectDataID,
 			})
@@ -342,6 +342,7 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 
 func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
+	db := hwdb.GetDB()
 
 	var payload propertyEventsV1.FieldTypeDataAllowFreetextUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -349,19 +350,186 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 		return err, esdb.NackActionRetry
 	}
 
-	fieldTypeData, err := p.propertyRepo.GetFieldTypeDataByPropertyID(ctx, evt.AggregateID)
+	tx, err := db.Begin(ctx)
+	if err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	defer func() {
+		err := tx.Rollback(ctx)
+		log.Error().Err(err).Msg("rollback failed.") // TODO
+	}()
+	propertyRepo := p.propertyRepo.WithTx(tx)
+
+	fieldTypeData, err := propertyRepo.GetFieldTypeDataByPropertyID(ctx, evt.AggregateID)
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, esdb.NackActionRetry
 	}
 
 	if fieldTypeData.SelectDataID.Valid {
-		err := p.propertyRepo.UpdateSelectData(ctx, property_repo.UpdateSelectDataParams{
+		err := propertyRepo.UpdateSelectData(ctx, property_repo.UpdateSelectDataParams{
 			ID:            fieldTypeData.SelectDataID.UUID,
 			AllowFreetext: payload.NewAllowFreetext,
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
 		}
+	} else {
+		sdID, err := propertyRepo.CreateSelectData(ctx, payload.NewAllowFreetext)
+		if err := hwdb.Error(ctx, err); err != nil {
+			return err, esdb.NackActionRetry
+		}
+		err = propertyRepo.UpdateFieldTypeDataSelectDataID(ctx, property_repo.UpdateFieldTypeDataSelectDataIDParams{ID: sdID})
+		if err := hwdb.Error(ctx, err); err != nil {
+			return err, esdb.NackActionRetry
+		}
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	return nil, esdb.NackActionUnknown
+}
+
+func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+	db := hwdb.GetDB()
+
+	tx, err := db.Begin(ctx)
+	if err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	defer func() {
+		err := tx.Rollback(ctx)
+		log.Error().Err(err).Msg("rollback failed.") // TODO
+	}()
+	propertyRepo := p.propertyRepo.WithTx(tx)
+
+	var payload propertyEventsV1.FieldTypeDataSelectOptionsUpsertedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, esdb.NackActionRetry
+	}
+
+	fieldTypeData, err := propertyRepo.GetFieldTypeDataByPropertyID(ctx, evt.AggregateID)
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	var selectDataID uuid.UUID
+	if !fieldTypeData.SelectDataID.Valid {
+		// Create SelectData and reference from fieldTypeData
+		sdID, err := propertyRepo.CreateSelectData(ctx, false)
+		if err := hwdb.Error(ctx, err); err != nil {
+			return err, esdb.NackActionRetry
+		}
+		err = propertyRepo.UpdateFieldTypeDataSelectDataID(ctx, property_repo.UpdateFieldTypeDataSelectDataIDParams{ID: sdID})
+		if err := hwdb.Error(ctx, err); err != nil {
+			return err, esdb.NackActionRetry
+		}
+		selectDataID = sdID
+	} else {
+		selectDataID = fieldTypeData.SelectDataID.UUID
+	}
+
+	selectOptions := make(map[uuid.UUID]models.UpdateSelectOption)
+	existsSelectOptions := make(map[uuid.UUID]bool) // Map indicates if selectOption already exists
+	for _, option := range payload.UpsertedSelectOptions {
+		selectOptions[option.ID] = option
+		existsSelectOptions[option.ID] = false
+	}
+
+	selectOptionsID := hwutil.Map(payload.UpsertedSelectOptions, func(opt models.UpdateSelectOption) uuid.UUID {
+		return opt.ID
+	})
+
+	// Check for existing SelectOptions
+	var existsBatchErr error
+	existsBatch := propertyRepo.GetSelectOptionsBatch(ctx, selectOptionsID)
+	existsBatch.QueryRow(func(idx int, row property_repo.SelectOption, err error) {
+		if err != nil && !errors.Is(err, pgx.ErrNoRows) {
+			existsBatchErr = err
+			return
+		}
+		if row.ID != uuid.Nil {
+			existsSelectOptions[row.ID] = true
+		}
+	})
+
+	if existsBatchErr != nil {
+		return existsBatchErr, esdb.NackActionRetry
+	}
+	if err := existsBatch.Close(); err != nil {
+		log.Err(err).Msg("failed while closing existsBatch.")
+		return err, esdb.NackActionRetry
+	}
+
+	var existingSelectOptions []property_repo.UpdateSelectOptionsBatchParams
+	var newSelectOptions []property_repo.InsertSelectOptionsBatchParams
+	for idx, exists := range existsSelectOptions {
+		selOpt := selectOptions[idx]
+		if exists {
+			existingSelectOptions = append(existingSelectOptions, property_repo.UpdateSelectOptionsBatchParams{
+				ID:          selOpt.ID,
+				Name:        selOpt.Name,
+				Description: selOpt.Description,
+				IsCustom:    selOpt.IsCustom,
+			})
+		} else {
+			fmt.Println(selOpt)
+			if selOpt.Name == nil {
+				log.Error().Msg("selectOption name has to be set on create")
+				return nil, esdb.NackActionRetry
+			}
+			newSelectOptions = append(newSelectOptions, property_repo.InsertSelectOptionsBatchParams{
+				ID:           selOpt.ID,
+				Name:         *selOpt.Name,
+				Description:  selOpt.Description,
+				IsCustom:     selOpt.IsCustom,
+				SelectDataID: selectDataID,
+			})
+		}
+	}
+
+	// Update
+	batchUpdate := propertyRepo.UpdateSelectOptionsBatch(ctx, existingSelectOptions)
+	var batchUpdateErr error
+	batchUpdate.Exec(func(idx int, err error) {
+		if err != nil {
+			batchUpdateErr = err
+			return
+		}
+	})
+	if batchUpdateErr != nil {
+		return batchUpdateErr, esdb.NackActionRetry
+	}
+	if err := batchUpdate.Close(); err != nil {
+		log.Err(err).Msg("failed while closing updateBatch.")
+		return err, esdb.NackActionRetry
+	}
+
+	// Insert
+	batchInsert := propertyRepo.InsertSelectOptionsBatch(ctx, newSelectOptions)
+	var batchInsertErr error
+	batchInsert.Exec(func(idx int, err error) {
+		if err != nil {
+			batchInsertErr = err
+			return
+		}
+	})
+	if batchInsertErr != nil {
+		return batchInsertErr, esdb.NackActionRetry
+	}
+	if err := batchInsert.Close(); err != nil {
+		log.Err(err).Msg("failed while closing insertBatch.")
+		return err, esdb.NackActionRetry
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return err, esdb.NackActionRetry
 	}
 
 	return nil, esdb.NackActionUnknown
@@ -397,7 +565,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsRemoved(ctx context.Context, ev
 		return &parsed
 	})
 
-	batch := propertyRepo.DeleteSelectOption(ctx, parsedIDs)
+	batch := propertyRepo.DeleteSelectOptions(ctx, parsedIDs)
 	var batchErr error
 	batch.Exec(func(idx int, err error) {
 		if err != nil {

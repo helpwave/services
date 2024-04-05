@@ -37,6 +37,11 @@ UPDATE select_datas
 SET allow_freetext = @allow_freetext
 WHERE id = @id;
 
+-- name: UpdateFieldTypeDataSelectDataID :exec
+UPDATE field_type_datas
+SET select_data_id = @select_data_id
+WHERE id = $1;
+
 -- name: UpdateFieldTypeDataSelectDataIDByPropertyID :exec
 UPDATE field_type_datas
 SET select_data_id = @select_data_id
@@ -44,10 +49,11 @@ FROM properties
 WHERE field_type_datas.id = properties.field_type_data_id
 AND properties.id = @id;
 
--- name: CreateSelectData :exec
+-- name: CreateSelectData :one
 INSERT INTO select_datas
-	(id, allow_freetext)
-VALUES ($1, $2);
+	(allow_freetext)
+VALUES ($1)
+RETURNING id;
 
 -- name: DeleteSelectDataByPropertyID :exec
 DELETE FROM select_datas
@@ -61,7 +67,30 @@ WHERE id IN (
 -- name: CreateSelectOption :exec
 INSERT INTO select_options
 	(id, name, description, is_custom, select_data_id)
-VALUES ($1, $2, $3, $4, $5);
+VALUES (@id, @name, coalesce(sqlc.narg('description'), ''), @is_custom, @select_data_id);
 
--- name: DeleteSelectOption :batchexec
+-- name: DeleteSelectOptions :batchexec
 DELETE FROM select_options WHERE id = @id;
+
+-- name: GetSelectOptionsBatch :batchone
+SELECT *
+FROM select_options
+WHERE id = @id;
+
+-- name: InsertSelectOptionsBatch :batchexec
+INSERT INTO select_options
+      (id, name, description, is_custom, select_data_id)
+VALUES (
+    @id,
+    @name,
+    coalesce(sqlc.narg('description'), ''),
+    coalesce(sqlc.narg('is_custom'), false),
+    @select_data_id
+);
+
+-- name: UpdateSelectOptionsBatch :batchexec
+UPDATE select_options
+SET is_custom = coalesce(sqlc.narg('is_custom'), is_custom),
+    name = coalesce(sqlc.narg('name'), name),
+	description = coalesce(sqlc.narg('description'), description)
+WHERE id = @id;

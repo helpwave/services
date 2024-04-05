@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 	zlog "github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes"
@@ -52,13 +51,12 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 		return err, esdb.NackActionRetry
 	}
 
-	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
 	err = a.patientRepo.CreatePatient(ctx, patient_repo.CreatePatientParams{
 		ID:                      patientID,
 		HumanReadableIdentifier: payload.HumanReadableIdentifier,
 		Notes:                   payload.Notes,
-		CreatedAt:               timestamp,
-		UpdatedAt:               timestamp,
+		CreatedAt:               hwdb.TimeToTimestamp(evt.Timestamp),
+		UpdatedAt:               hwdb.TimeToTimestamp(evt.Timestamp),
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -82,11 +80,10 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 		return err, esdb.NackActionRetry
 	}
 
-	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
 	err = a.patientRepo.UpdatePatientBedId(ctx, patient_repo.UpdatePatientBedIdParams{
 		ID:        evt.AggregateID,
 		BedID:     bedId,
-		UpdatedAt: timestamp,
+		UpdatedAt: hwdb.TimeToTimestamp(evt.Timestamp),
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -97,11 +94,10 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 }
 
 func (a *Projection) onBedUnassigned(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
 	err := a.patientRepo.UpdatePatientBedId(ctx, patient_repo.UpdatePatientBedIdParams{
 		ID:        evt.AggregateID,
 		BedID:     uuid.NullUUID{},
-		UpdatedAt: timestamp,
+		UpdatedAt: hwdb.TimeToTimestamp(evt.Timestamp),
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -112,11 +108,10 @@ func (a *Projection) onBedUnassigned(ctx context.Context, evt hwes.Event) (error
 }
 
 func (a *Projection) onPatientDischarged(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
 	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:           evt.AggregateID,
 		IsDischarged: hwutil.PtrTo(int32(1)),
-		UpdatedAt:    timestamp,
+		UpdatedAt:    hwdb.TimeToTimestamp(evt.Timestamp),
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -135,12 +130,10 @@ func (a *Projection) onNotesUpdated(ctx context.Context, evt hwes.Event) (error,
 		return err, esdb.NackActionRetry
 	}
 
-	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
-
 	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:        evt.AggregateID,
 		Notes:     &payload.Notes,
-		UpdatedAt: timestamp,
+		UpdatedAt: hwdb.TimeToTimestamp(evt.Timestamp),
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -159,11 +152,10 @@ func (a *Projection) onHumanReadableIdentifierUpdated(ctx context.Context, evt h
 		return err, esdb.NackActionRetry
 	}
 
-	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
 	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:                     evt.AggregateID,
 		HumanReadableIdentfier: &payload.HumanReadableIdentifier,
-		UpdatedAt:              timestamp,
+		UpdatedAt:              hwdb.TimeToTimestamp(evt.Timestamp),
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -174,11 +166,10 @@ func (a *Projection) onHumanReadableIdentifierUpdated(ctx context.Context, evt h
 }
 
 func (a *Projection) onPatientReadmitted(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	timestamp := pgtype.Timestamp{Time: evt.Timestamp, Valid: true}
 	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:           evt.AggregateID,
 		IsDischarged: hwutil.PtrTo(int32(0)),
-		UpdatedAt:    timestamp,
+		UpdatedAt:    hwdb.TimeToTimestamp(evt.Timestamp),
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {

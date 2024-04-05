@@ -51,32 +51,30 @@ func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) 
 	return err
 }
 
-const createSelectData = `-- name: CreateSelectData :exec
+const createSelectData = `-- name: CreateSelectData :one
 INSERT INTO select_datas
-	(id, allow_freetext)
-VALUES ($1, $2)
+	(allow_freetext)
+VALUES ($1)
+RETURNING id
 `
 
-type CreateSelectDataParams struct {
-	ID            uuid.UUID
-	AllowFreetext bool
-}
-
-func (q *Queries) CreateSelectData(ctx context.Context, arg CreateSelectDataParams) error {
-	_, err := q.db.Exec(ctx, createSelectData, arg.ID, arg.AllowFreetext)
-	return err
+func (q *Queries) CreateSelectData(ctx context.Context, allowFreetext bool) (uuid.UUID, error) {
+	row := q.db.QueryRow(ctx, createSelectData, allowFreetext)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
 }
 
 const createSelectOption = `-- name: CreateSelectOption :exec
 INSERT INTO select_options
 	(id, name, description, is_custom, select_data_id)
-VALUES ($1, $2, $3, $4, $5)
+VALUES ($1, $2, coalesce($3, ''), $4, $5)
 `
 
 type CreateSelectOptionParams struct {
 	ID           uuid.UUID
 	Name         string
-	Description  string
+	Description  interface{}
 	IsCustom     bool
 	SelectDataID uuid.UUID
 }
@@ -172,6 +170,22 @@ func (q *Queries) GetPropertyBySubjectType(ctx context.Context, subjectType int3
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateFieldTypeDataSelectDataID = `-- name: UpdateFieldTypeDataSelectDataID :exec
+UPDATE field_type_datas
+SET select_data_id = $2
+WHERE id = $1
+`
+
+type UpdateFieldTypeDataSelectDataIDParams struct {
+	ID           uuid.UUID
+	SelectDataID uuid.NullUUID
+}
+
+func (q *Queries) UpdateFieldTypeDataSelectDataID(ctx context.Context, arg UpdateFieldTypeDataSelectDataIDParams) error {
+	_, err := q.db.Exec(ctx, updateFieldTypeDataSelectDataID, arg.ID, arg.SelectDataID)
+	return err
 }
 
 const updateFieldTypeDataSelectDataIDByPropertyID = `-- name: UpdateFieldTypeDataSelectDataIDByPropertyID :exec
