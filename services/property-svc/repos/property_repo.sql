@@ -12,10 +12,10 @@ SELECT * FROM properties WHERE subject_type = $1;
 -- name: UpdateProperty :exec
 UPDATE properties
 SET subject_type = coalesce(sqlc.narg('subject_type'), subject_type),
-	field_type = coalesce(sqlc.narg('field_type'), field_type),
-	name = coalesce(sqlc.narg('name'), name),
-	description = coalesce(sqlc.narg('description'), description),
-	is_archived = coalesce(sqlc.narg('is_archived'), is_archived)
+    field_type = coalesce(sqlc.narg('field_type'), field_type),
+    name = coalesce(sqlc.narg('name'), name),
+    description = coalesce(sqlc.narg('description'), description),
+    is_archived = coalesce(sqlc.narg('is_archived'), is_archived)
 WHERE id = $1;
 
 -- name: UpdatePropertySetID :exec
@@ -92,5 +92,5 @@ VALUES (
 UPDATE select_options
 SET is_custom = coalesce(sqlc.narg('is_custom'), is_custom),
     name = coalesce(sqlc.narg('name'), name),
-	description = coalesce(sqlc.narg('description'), description)
+    description = coalesce(sqlc.narg('description'), description)
 WHERE id = @id;
