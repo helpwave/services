@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n7proto/services/property_svc/v1/property_value_svc.proto\x12\x1eproto.services.property_svc.v1\"\x84\x03\n\x1a\x43reatePropertyValueRequest\x12\x1d\n\nsubject_id\x18\x01 \x01(\tR\tsubjectId\x12!\n\x0csubject_type\x18\x02 \x01(\tR\x0bsubjectType\x12\x1f\n\x0bproperty_id\x18\x03 \x01(\tR\npropertyId\x12#\n\x0cis_undefined\x18\x04 \x01(\x08H\x00R\x0bisUndefined\x12\x1f\n\ntext_value\x18\x05 \x01(\tH\x00R\ttextValue\x12#\n\x0cnumber_value\x18\x06 \x01(\x02H\x00R\x0bnumberValue\x12\x1f\n\nbool_value\x18\x07 \x01(\x08H\x00R\tboolValue\x12\x1f\n\ndate_value\x18\x08 \x01(\tH\x00R\tdateValue\x12(\n\x0f\x64\x61te_time_value\x18\t \x01(\tH\x00R\rdateTimeValue\x12#\n\x0cselect_value\x18\n \x01(\tH\x00R\x0bselectValueB\x07\n\x05value\"-\n\x1b\x43reatePropertyValueResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\")\n\x17GetPropertyValueRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"\xf3\x02\n\x18GetPropertyValueResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12!\n\x0csubject_type\x18\x02 \x01(\tR\x0bsubjectType\x12\x1f\n\x0bproperty_id\x18\x03 \x01(\tR\npropertyId\x12#\n\x0cis_undefined\x18\x04 \x01(\x08H\x00R\x0bisUndefined\x12\x1f\n\ntext_value\x18\x05 \x01(\tH\x00R\ttextValue\x12#\n\x0cnumber_value\x18\x06 \x01(\x02H\x00R\x0bnumberValue\x12\x1f\n\nbool_value\x18\x07 \x01(\x08H\x00R\tboolValue\x12\x1f\n\ndate_value\x18\x08 \x01(\tH\x00R\tdateValue\x12(\n\x0f\x64\x61te_time_value\x18\t \x01(\tH\x00R\rdateTimeValue\x12#\n\x0cselect_value\x18\n \x01(\tH\x00R\x0bselectValueB\x07\n\x05value2\xb3\x02\n\x14PropertyValueService\x12\x90\x01\n\x13\x43reatePropertyValue\x12:.proto.services.property_svc.v1.CreatePropertyValueRequest\x1a;.proto.services.property_svc.v1.CreatePropertyValueResponse\"\x00\x12\x87\x01\n\x10GetPropertyValue\x12\x37.proto.services.property_svc.v1.GetPropertyValueRequest\x1a\x38.proto.services.property_svc.v1.GetPropertyValueResponse\"\x00\x42\xf3\x01\n\"com.proto.services.property_svc.v1B\x15PropertyValueSvcProtoP\x01Z\x1fgen/proto/services/property-svc\xa2\x02\x03PSP\xaa\x02\x1dProto.Services.PropertySvc.V1\xca\x02\x1dProto\\Services\\PropertySvc\\V1\xe2\x02)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\xea\x02 Proto::Services::PropertySvc::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n7proto/services/property_svc/v1/property_value_svc.proto\x12\x1eproto.services.property_svc.v1\"\xdf\x02\n\x1a\x43reatePropertyValueRequest\x12\x1d\n\nsubject_id\x18\x01 \x01(\tR\tsubjectId\x12!\n\x0csubject_type\x18\x02 \x01(\tR\x0bsubjectType\x12\x1f\n\x0bproperty_id\x18\x03 \x01(\tR\npropertyId\x12\x1f\n\ntext_value\x18\x04 \x01(\tH\x00R\ttextValue\x12#\n\x0cnumber_value\x18\x05 \x01(\x02H\x00R\x0bnumberValue\x12\x1f\n\nbool_value\x18\x06 \x01(\x08H\x00R\tboolValue\x12\x1f\n\ndate_value\x18\x07 \x01(\tH\x00R\tdateValue\x12(\n\x0f\x64\x61te_time_value\x18\x08 \x01(\tH\x00R\rdateTimeValue\x12#\n\x0cselect_value\x18\t \x01(\tH\x00R\x0bselectValueB\x07\n\x05value\"-\n\x1b\x43reatePropertyValueResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\")\n\x17GetPropertyValueRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"\xce\x02\n\x18GetPropertyValueResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12!\n\x0csubject_type\x18\x02 \x01(\tR\x0bsubjectType\x12\x1f\n\x0bproperty_id\x18\x03 \x01(\tR\npropertyId\x12\x1f\n\ntext_value\x18\x04 \x01(\tH\x00R\ttextValue\x12#\n\x0cnumber_value\x18\x05 \x01(\x02H\x00R\x0bnumberValue\x12\x1f\n\nbool_value\x18\x06 \x01(\x08H\x00R\tboolValue\x12\x1f\n\ndate_value\x18\x07 \x01(\tH\x00R\tdateValue\x12(\n\x0f\x64\x61te_time_value\x18\x08 \x01(\tH\x00R\rdateTimeValue\x12#\n\x0cselect_value\x18\t \x01(\tH\x00R\x0bselectValueB\x07\n\x05value2\xb3\x02\n\x14PropertyValueService\x12\x90\x01\n\x13\x43reatePropertyValue\x12:.proto.services.property_svc.v1.CreatePropertyValueRequest\x1a;.proto.services.property_svc.v1.CreatePropertyValueResponse\"\x00\x12\x87\x01\n\x10GetPropertyValue\x12\x37.proto.services.property_svc.v1.GetPropertyValueRequest\x1a\x38.proto.services.property_svc.v1.GetPropertyValueResponse\"\x00\x42\xf3\x01\n\"com.proto.services.property_svc.v1B\x15PropertyValueSvcProtoP\x01Z\x1fgen/proto/services/property-svc\xa2\x02\x03PSP\xaa\x02\x1dProto.Services.PropertySvc.V1\xca\x02\x1dProto\\Services\\PropertySvc\\V1\xe2\x02)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\xea\x02 Proto::Services::PropertySvc::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -23,13 +23,13 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\"com.proto.services.property_svc.v1B\025PropertyValueSvcProtoP\001Z\037gen/proto/services/property-svc\242\002\003PSP\252\002\035Proto.Services.PropertySvc.V1\312\002\035Proto\\Services\\PropertySvc\\V1\342\002)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\352\002 Proto::Services::PropertySvc::V1'
   _globals['_CREATEPROPERTYVALUEREQUEST']._serialized_start=92
-  _globals['_CREATEPROPERTYVALUEREQUEST']._serialized_end=480
-  _globals['_CREATEPROPERTYVALUERESPONSE']._serialized_start=482
-  _globals['_CREATEPROPERTYVALUERESPONSE']._serialized_end=527
-  _globals['_GETPROPERTYVALUEREQUEST']._serialized_start=529
-  _globals['_GETPROPERTYVALUEREQUEST']._serialized_end=570
-  _globals['_GETPROPERTYVALUERESPONSE']._serialized_start=573
-  _globals['_GETPROPERTYVALUERESPONSE']._serialized_end=944
-  _globals['_PROPERTYVALUESERVICE']._serialized_start=947
-  _globals['_PROPERTYVALUESERVICE']._serialized_end=1254
+  _globals['_CREATEPROPERTYVALUEREQUEST']._serialized_end=443
+  _globals['_CREATEPROPERTYVALUERESPONSE']._serialized_start=445
+  _globals['_CREATEPROPERTYVALUERESPONSE']._serialized_end=490
+  _globals['_GETPROPERTYVALUEREQUEST']._serialized_start=492
+  _globals['_GETPROPERTYVALUEREQUEST']._serialized_end=533
+  _globals['_GETPROPERTYVALUERESPONSE']._serialized_start=536
+  _globals['_GETPROPERTYVALUERESPONSE']._serialized_end=870
+  _globals['_PROPERTYVALUESERVICE']._serialized_start=873
+  _globals['_PROPERTYVALUESERVICE']._serialized_end=1180
 # @@protoc_insertion_point(module_scope)

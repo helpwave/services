@@ -25,7 +25,7 @@ type CreatePatientRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	HumanReadableIdentifier string  `protobuf:"bytes,1,opt,name=human_readable_identifier,json=humanReadableIdentifier,proto3" json:"human_readable_identifier,omitempty"` // @gotags: validate: "required"
+	HumanReadableIdentifier string  `protobuf:"bytes,1,opt,name=human_readable_identifier,json=humanReadableIdentifier,proto3" json:"human_readable_identifier,omitempty" validate:"required"` // @gotags: validate:"required"
 	Notes                   *string `protobuf:"bytes,2,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 }
 
@@ -127,7 +127,7 @@ type GetPatientRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate: "uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetPatientRequest) Reset() {

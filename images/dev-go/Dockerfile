@@ -13,11 +13,11 @@ ENV PATH="$PATH:$GOROOT/bin"
 
 # update debian package list and packages, also install some
 RUN apt update \
-    && apt upgrade \
+    && apt upgrade -y \
     && apt install sudo vim nano jq dnsutils postgresql-client lsb-release gpg redis-tools \
     	apt-transport-https ca-certificates curl gnupg2 software-properties-common \
 		-y \
-    && apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+    && apt-get clean autoclean -y && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 # install docker
 #  using a mounted docker socket we can manage the host's docker (Docker out of Docker):
@@ -72,7 +72,7 @@ RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh 
 # renovate: datasource=github-releases depName=dapr/cli
 ENV DAPR_CLI_VERSION=1.13.0
 # renovate: datasource=github-releases depName=dapr/dapr
-ENV DAPR_RT_VERSION=1.13.0
+ENV DAPR_RT_VERSION=1.13.1
 
 ENV PATH="$PATH:$HOME/dapr"
 RUN mkdir "$HOME/dapr" \
@@ -101,7 +101,7 @@ RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@v${GRPCURL_VERSION} \
 # install sqlc
 #  https://sqlc.dev/
 # renovate: datasource=github-releases depName=sqlc-dev/sqlc
-ENV SQLC_VERSION=1.25.0
+ENV SQLC_VERSION=1.26.0
 RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v${SQLC_VERSION}\
 	&& go clean -modcache
 
@@ -112,6 +112,13 @@ RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v${SQLC_VERSION}\
 ENV GO_INJECT_TAG_VERSION=1.4.0
 RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} \
 	&& go clean -modcache
+
+# install golangci-lint, the linter we also use in the CI
+#  https://golangci-lint.run/
+# renovate: datasource=github-releases depName=golangci/golangci-lint
+ENV GOLANGCI_LINT_VERSION=1.57.2
+RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
+	| sh -s -- -b $(go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

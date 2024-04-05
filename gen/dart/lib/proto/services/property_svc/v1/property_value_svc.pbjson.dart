@@ -20,13 +20,12 @@ const CreatePropertyValueRequest$json = {
     {'1': 'subject_id', '3': 1, '4': 1, '5': 9, '10': 'subjectId'},
     {'1': 'subject_type', '3': 2, '4': 1, '5': 9, '10': 'subjectType'},
     {'1': 'property_id', '3': 3, '4': 1, '5': 9, '10': 'propertyId'},
-    {'1': 'is_undefined', '3': 4, '4': 1, '5': 8, '9': 0, '10': 'isUndefined'},
-    {'1': 'text_value', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'textValue'},
-    {'1': 'number_value', '3': 6, '4': 1, '5': 2, '9': 0, '10': 'numberValue'},
-    {'1': 'bool_value', '3': 7, '4': 1, '5': 8, '9': 0, '10': 'boolValue'},
-    {'1': 'date_value', '3': 8, '4': 1, '5': 9, '9': 0, '10': 'dateValue'},
-    {'1': 'date_time_value', '3': 9, '4': 1, '5': 9, '9': 0, '10': 'dateTimeValue'},
-    {'1': 'select_value', '3': 10, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
+    {'1': 'text_value', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'textValue'},
+    {'1': 'number_value', '3': 5, '4': 1, '5': 2, '9': 0, '10': 'numberValue'},
+    {'1': 'bool_value', '3': 6, '4': 1, '5': 8, '9': 0, '10': 'boolValue'},
+    {'1': 'date_value', '3': 7, '4': 1, '5': 9, '9': 0, '10': 'dateValue'},
+    {'1': 'date_time_value', '3': 8, '4': 1, '5': 9, '9': 0, '10': 'dateTimeValue'},
+    {'1': 'select_value', '3': 9, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
   ],
   '8': [
     {'1': 'value'},
@@ -37,12 +36,11 @@ const CreatePropertyValueRequest$json = {
 final $typed_data.Uint8List createPropertyValueRequestDescriptor = $convert.base64Decode(
     'ChpDcmVhdGVQcm9wZXJ0eVZhbHVlUmVxdWVzdBIdCgpzdWJqZWN0X2lkGAEgASgJUglzdWJqZW'
     'N0SWQSIQoMc3ViamVjdF90eXBlGAIgASgJUgtzdWJqZWN0VHlwZRIfCgtwcm9wZXJ0eV9pZBgD'
-    'IAEoCVIKcHJvcGVydHlJZBIjCgxpc191bmRlZmluZWQYBCABKAhIAFILaXNVbmRlZmluZWQSHw'
-    'oKdGV4dF92YWx1ZRgFIAEoCUgAUgl0ZXh0VmFsdWUSIwoMbnVtYmVyX3ZhbHVlGAYgASgCSABS'
-    'C251bWJlclZhbHVlEh8KCmJvb2xfdmFsdWUYByABKAhIAFIJYm9vbFZhbHVlEh8KCmRhdGVfdm'
-    'FsdWUYCCABKAlIAFIJZGF0ZVZhbHVlEigKD2RhdGVfdGltZV92YWx1ZRgJIAEoCUgAUg1kYXRl'
-    'VGltZVZhbHVlEiMKDHNlbGVjdF92YWx1ZRgKIAEoCUgAUgtzZWxlY3RWYWx1ZUIHCgV2YWx1ZQ'
-    '==');
+    'IAEoCVIKcHJvcGVydHlJZBIfCgp0ZXh0X3ZhbHVlGAQgASgJSABSCXRleHRWYWx1ZRIjCgxudW'
+    '1iZXJfdmFsdWUYBSABKAJIAFILbnVtYmVyVmFsdWUSHwoKYm9vbF92YWx1ZRgGIAEoCEgAUgli'
+    'b29sVmFsdWUSHwoKZGF0ZV92YWx1ZRgHIAEoCUgAUglkYXRlVmFsdWUSKAoPZGF0ZV90aW1lX3'
+    'ZhbHVlGAggASgJSABSDWRhdGVUaW1lVmFsdWUSIwoMc2VsZWN0X3ZhbHVlGAkgASgJSABSC3Nl'
+    'bGVjdFZhbHVlQgcKBXZhbHVl');
 
 @$core.Deprecated('Use createPropertyValueResponseDescriptor instead')
 const CreatePropertyValueResponse$json = {
@@ -75,13 +73,12 @@ const GetPropertyValueResponse$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'subject_type', '3': 2, '4': 1, '5': 9, '10': 'subjectType'},
     {'1': 'property_id', '3': 3, '4': 1, '5': 9, '10': 'propertyId'},
-    {'1': 'is_undefined', '3': 4, '4': 1, '5': 8, '9': 0, '10': 'isUndefined'},
-    {'1': 'text_value', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'textValue'},
-    {'1': 'number_value', '3': 6, '4': 1, '5': 2, '9': 0, '10': 'numberValue'},
-    {'1': 'bool_value', '3': 7, '4': 1, '5': 8, '9': 0, '10': 'boolValue'},
-    {'1': 'date_value', '3': 8, '4': 1, '5': 9, '9': 0, '10': 'dateValue'},
-    {'1': 'date_time_value', '3': 9, '4': 1, '5': 9, '9': 0, '10': 'dateTimeValue'},
-    {'1': 'select_value', '3': 10, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
+    {'1': 'text_value', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'textValue'},
+    {'1': 'number_value', '3': 5, '4': 1, '5': 2, '9': 0, '10': 'numberValue'},
+    {'1': 'bool_value', '3': 6, '4': 1, '5': 8, '9': 0, '10': 'boolValue'},
+    {'1': 'date_value', '3': 7, '4': 1, '5': 9, '9': 0, '10': 'dateValue'},
+    {'1': 'date_time_value', '3': 8, '4': 1, '5': 9, '9': 0, '10': 'dateTimeValue'},
+    {'1': 'select_value', '3': 9, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
   ],
   '8': [
     {'1': 'value'},
@@ -92,9 +89,9 @@ const GetPropertyValueResponse$json = {
 final $typed_data.Uint8List getPropertyValueResponseDescriptor = $convert.base64Decode(
     'ChhHZXRQcm9wZXJ0eVZhbHVlUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEiEKDHN1YmplY3RfdH'
     'lwZRgCIAEoCVILc3ViamVjdFR5cGUSHwoLcHJvcGVydHlfaWQYAyABKAlSCnByb3BlcnR5SWQS'
-    'IwoMaXNfdW5kZWZpbmVkGAQgASgISABSC2lzVW5kZWZpbmVkEh8KCnRleHRfdmFsdWUYBSABKA'
-    'lIAFIJdGV4dFZhbHVlEiMKDG51bWJlcl92YWx1ZRgGIAEoAkgAUgtudW1iZXJWYWx1ZRIfCgpi'
-    'b29sX3ZhbHVlGAcgASgISABSCWJvb2xWYWx1ZRIfCgpkYXRlX3ZhbHVlGAggASgJSABSCWRhdG'
-    'VWYWx1ZRIoCg9kYXRlX3RpbWVfdmFsdWUYCSABKAlIAFINZGF0ZVRpbWVWYWx1ZRIjCgxzZWxl'
-    'Y3RfdmFsdWUYCiABKAlIAFILc2VsZWN0VmFsdWVCBwoFdmFsdWU=');
+    'HwoKdGV4dF92YWx1ZRgEIAEoCUgAUgl0ZXh0VmFsdWUSIwoMbnVtYmVyX3ZhbHVlGAUgASgCSA'
+    'BSC251bWJlclZhbHVlEh8KCmJvb2xfdmFsdWUYBiABKAhIAFIJYm9vbFZhbHVlEh8KCmRhdGVf'
+    'dmFsdWUYByABKAlIAFIJZGF0ZVZhbHVlEigKD2RhdGVfdGltZV92YWx1ZRgIIAEoCUgAUg1kYX'
+    'RlVGltZVZhbHVlEiMKDHNlbGVjdF92YWx1ZRgJIAEoCUgAUgtzZWxlY3RWYWx1ZUIHCgV2YWx1'
+    'ZQ==');
 

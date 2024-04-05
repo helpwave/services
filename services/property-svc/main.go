@@ -21,8 +21,7 @@ var Version string
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
-
-	common.Setup(ServiceName, Version, true)
+	common.Setup(ServiceName, Version, common.WithAuth())
 
 	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()

@@ -18,7 +18,7 @@ services:
       retries: 5
 
   eventstore:
-    image: eventstore/eventstore:lts
+    image: eventstore/eventstore:23.10.1-jammy
     restart: unless-stopped
     environment:
       EVENTSTORE_TELEMETRY_OPTOUT: "true"
@@ -69,7 +69,7 @@ services:
 
   # dapr sidecar for apisix
   apisix-dapr:
-    image: "daprio/daprd:1.13.0"
+    image: "daprio/daprd:1.13.1"
     restart: unless-stopped
     depends_on:
       - apisix
@@ -93,7 +93,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '3'
+        TAG: '4'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -126,7 +126,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '3'
+        TAG: '4'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:

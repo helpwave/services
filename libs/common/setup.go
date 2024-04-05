@@ -23,17 +23,50 @@ var (
 const DevelopmentMode = "development"
 const ProductionMode = "production"
 
-var skipAuthForMethods []string
-
-// Setup wraps SetupWithUnauthenticatedMethods for a setup without unauthenticated methods
-func Setup(serviceName, version string, auth bool) {
-	SetupWithUnauthenticatedMethods(serviceName, version, auth, nil)
+type SetupOptions struct {
+	auth                   bool
+	fakeAuthOnly           bool
+	unauthenticatedMethods []string
 }
 
-// SetupWithUnauthenticatedMethods loads the .env file and sets up logging,
+type SetupOption func(*SetupOptions)
+
+// WithAuth enables Authentication for this service
+func WithAuth() SetupOption {
+	return func(options *SetupOptions) {
+		options.auth = true
+	}
+}
+
+// WithFakeAuthOnly enables auth, only for fake tokens. Useful for tests / offline development.
+// Requires DevelopmentMode. Implies WithAuth.
+func WithFakeAuthOnly() SetupOption {
+	return func(options *SetupOptions) {
+		WithAuth()(options)
+		options.fakeAuthOnly = true
+	}
+}
+
+func WithUnauthenticatedMethods(unauthenticatedMethods []string) SetupOption {
+	return func(options *SetupOptions) {
+		options.unauthenticatedMethods = unauthenticatedMethods
+	}
+}
+
+var skipAuthForMethods []string
+
+// Setup loads the .env file and sets up logging,
 // also sets up tokens when the service requires auth.
-func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, unauthenticatedMethods *[]string) {
+func Setup(serviceName, version string, opts ...SetupOption) {
 	ctx := context.Background()
+
+	// Collect options
+	options := SetupOptions{}
+	for _, opt := range opts {
+		opt(&options)
+	}
+
+	// Load .env file
 	dotenvErr := godotenv.Load()
 
 	Mode = hwutil.GetEnvOr("MODE", DevelopmentMode)
@@ -74,7 +107,7 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 		log.Warn().Msg("InsecureSkipVerify enabled, not verifying certificates!")
 	}
 
-	if auth {
+	if options.auth {
 		if strings.ToLower(hwutil.GetEnvOr("INSECURE_FAKE_TOKEN_ENABLE", "false")) == "true" {
 			InsecureFakeTokenEnable = true
 			log.Error().Msg("INSECURE_FAKE_TOKEN_ENABLE is set to true, accepting fake tokens")
@@ -93,11 +126,9 @@ func SetupWithUnauthenticatedMethods(serviceName, version string, auth bool, una
 		}
 
 		// Only modify skipAuthForMethods once on startup
-		if unauthenticatedMethods != nil {
-			skipAuthForMethods = *unauthenticatedMethods
-		}
+		skipAuthForMethods = options.unauthenticatedMethods
 
-		setupAuth(ctx)
+		setupAuth(ctx, options.fakeAuthOnly)
 	}
 }
 

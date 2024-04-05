@@ -12,9 +12,6 @@ export class CreatePropertyValueRequest extends jspb.Message {
   getPropertyId(): string;
   setPropertyId(value: string): CreatePropertyValueRequest;
 
-  getIsUndefined(): boolean;
-  setIsUndefined(value: boolean): CreatePropertyValueRequest;
-
   getTextValue(): string;
   setTextValue(value: string): CreatePropertyValueRequest;
 
@@ -48,7 +45,6 @@ export namespace CreatePropertyValueRequest {
     subjectId: string,
     subjectType: string,
     propertyId: string,
-    isUndefined: boolean,
     textValue: string,
     numberValue: number,
     boolValue: boolean,
@@ -59,13 +55,12 @@ export namespace CreatePropertyValueRequest {
 
   export enum ValueCase { 
     VALUE_NOT_SET = 0,
-    IS_UNDEFINED = 4,
-    TEXT_VALUE = 5,
-    NUMBER_VALUE = 6,
-    BOOL_VALUE = 7,
-    DATE_VALUE = 8,
-    DATE_TIME_VALUE = 9,
-    SELECT_VALUE = 10,
+    TEXT_VALUE = 4,
+    NUMBER_VALUE = 5,
+    BOOL_VALUE = 6,
+    DATE_VALUE = 7,
+    DATE_TIME_VALUE = 8,
+    SELECT_VALUE = 9,
   }
 }
 
@@ -115,9 +110,6 @@ export class GetPropertyValueResponse extends jspb.Message {
   getPropertyId(): string;
   setPropertyId(value: string): GetPropertyValueResponse;
 
-  getIsUndefined(): boolean;
-  setIsUndefined(value: boolean): GetPropertyValueResponse;
-
   getTextValue(): string;
   setTextValue(value: string): GetPropertyValueResponse;
 
@@ -151,7 +143,6 @@ export namespace GetPropertyValueResponse {
     id: string,
     subjectType: string,
     propertyId: string,
-    isUndefined: boolean,
     textValue: string,
     numberValue: number,
     boolValue: boolean,
@@ -162,13 +153,12 @@ export namespace GetPropertyValueResponse {
 
   export enum ValueCase { 
     VALUE_NOT_SET = 0,
-    IS_UNDEFINED = 4,
-    TEXT_VALUE = 5,
-    NUMBER_VALUE = 6,
-    BOOL_VALUE = 7,
-    DATE_VALUE = 8,
-    DATE_TIME_VALUE = 9,
-    SELECT_VALUE = 10,
+    TEXT_VALUE = 4,
+    NUMBER_VALUE = 5,
+    BOOL_VALUE = 6,
+    DATE_VALUE = 7,
+    DATE_TIME_VALUE = 8,
+    SELECT_VALUE = 9,
   }
 }
 
