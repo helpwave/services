@@ -18,8 +18,7 @@ func NewGetPropertyByIDQueryHandler(propertyRepo *property_repo.Queries) GetProp
 			return nil, err
 		}
 
-		var property *models.Property
-		property = &models.Property{
+		property := &models.Property{
 			ID:            rows[0].Property.ID,
 			Name:          rows[0].Property.Name,
 			IsArchived:    rows[0].Property.IsArchived,
