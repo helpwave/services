@@ -6,11 +6,7 @@ from proto.services.property_svc.v1 import property_svc_pb2 as proto_dot_service
 
 
 class PropertyServiceStub(object):
-    """
-    PropertyService
-
-
-    """
+    """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
         """Constructor.
@@ -33,14 +29,15 @@ class PropertyServiceStub(object):
                 request_serializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.UpdatePropertyRequest.SerializeToString,
                 response_deserializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.UpdatePropertyResponse.FromString,
                 )
+        self.GetPropertiesBySubjectType = channel.unary_unary(
+                '/proto.services.property_svc.v1.PropertyService/GetPropertiesBySubjectType',
+                request_serializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.GetPropertiesBySubjectTypeRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.GetPropertiesBySubjectTypeResponse.FromString,
+                )
 
 
 class PropertyServiceServicer(object):
-    """
-    PropertyService
-
-
-    """
+    """Missing associated documentation comment in .proto file."""
 
     def CreateProperty(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -55,6 +52,12 @@ class PropertyServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def UpdateProperty(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetPropertiesBySubjectType(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -78,6 +81,11 @@ def add_PropertyServiceServicer_to_server(servicer, server):
                     request_deserializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.UpdatePropertyRequest.FromString,
                     response_serializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.UpdatePropertyResponse.SerializeToString,
             ),
+            'GetPropertiesBySubjectType': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetPropertiesBySubjectType,
+                    request_deserializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.GetPropertiesBySubjectTypeRequest.FromString,
+                    response_serializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.GetPropertiesBySubjectTypeResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'proto.services.property_svc.v1.PropertyService', rpc_method_handlers)
@@ -86,11 +94,7 @@ def add_PropertyServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class PropertyService(object):
-    """
-    PropertyService
-
-
-    """
+    """Missing associated documentation comment in .proto file."""
 
     @staticmethod
     def CreateProperty(request,
@@ -140,5 +144,22 @@ class PropertyService(object):
         return grpc.experimental.unary_unary(request, target, '/proto.services.property_svc.v1.PropertyService/UpdateProperty',
             proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.UpdatePropertyRequest.SerializeToString,
             proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.UpdatePropertyResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetPropertiesBySubjectType(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.property_svc.v1.PropertyService/GetPropertiesBySubjectType',
+            proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.GetPropertiesBySubjectTypeRequest.SerializeToString,
+            proto_dot_services_dot_property__svc_dot_v1_dot_property__svc__pb2.GetPropertiesBySubjectTypeResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

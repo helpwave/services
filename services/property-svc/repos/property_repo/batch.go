@@ -180,7 +180,7 @@ const updateSelectOptionsBatch = `-- name: UpdateSelectOptionsBatch :batchexec
 UPDATE select_options
 SET is_custom = coalesce($1, is_custom),
     name = coalesce($2, name),
-	description = coalesce($3, description)
+    description = coalesce($3, description)
 WHERE id = $4
 `
 

@@ -266,3 +266,95 @@ const UpdatePropertyResponse$json = {
 final $typed_data.Uint8List updatePropertyResponseDescriptor = $convert.base64Decode(
     'ChZVcGRhdGVQcm9wZXJ0eVJlc3BvbnNl');
 
+@$core.Deprecated('Use getPropertiesBySubjectTypeRequestDescriptor instead')
+const GetPropertiesBySubjectTypeRequest$json = {
+  '1': 'GetPropertiesBySubjectTypeRequest',
+  '2': [
+    {'1': 'subject_type', '3': 1, '4': 1, '5': 14, '6': '.proto.services.property_svc.v1.SubjectType', '10': 'subjectType'},
+  ],
+};
+
+/// Descriptor for `GetPropertiesBySubjectTypeRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPropertiesBySubjectTypeRequestDescriptor = $convert.base64Decode(
+    'CiFHZXRQcm9wZXJ0aWVzQnlTdWJqZWN0VHlwZVJlcXVlc3QSTgoMc3ViamVjdF90eXBlGAEgAS'
+    'gOMisucHJvdG8uc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLlN1YmplY3RUeXBlUgtzdWJqZWN0'
+    'VHlwZQ==');
+
+@$core.Deprecated('Use getPropertiesBySubjectTypeResponseDescriptor instead')
+const GetPropertiesBySubjectTypeResponse$json = {
+  '1': 'GetPropertiesBySubjectTypeResponse',
+  '2': [
+    {'1': 'properties', '3': 1, '4': 3, '5': 11, '6': '.proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property', '10': 'properties'},
+  ],
+  '3': [GetPropertiesBySubjectTypeResponse_Property$json],
+};
+
+@$core.Deprecated('Use getPropertiesBySubjectTypeResponseDescriptor instead')
+const GetPropertiesBySubjectTypeResponse_Property$json = {
+  '1': 'Property',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'subject_type', '3': 2, '4': 1, '5': 14, '6': '.proto.services.property_svc.v1.SubjectType', '10': 'subjectType'},
+    {'1': 'field_type', '3': 3, '4': 1, '5': 14, '6': '.proto.services.property_svc.v1.FieldType', '10': 'fieldType'},
+    {'1': 'name', '3': 4, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'description', '3': 5, '4': 1, '5': 9, '9': 1, '10': 'description', '17': true},
+    {'1': 'is_archived', '3': 6, '4': 1, '5': 8, '10': 'isArchived'},
+    {'1': 'set_id', '3': 8, '4': 1, '5': 9, '9': 2, '10': 'setId', '17': true},
+    {'1': 'select_data', '3': 10, '4': 1, '5': 11, '6': '.proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData', '9': 0, '10': 'selectData'},
+  ],
+  '3': [GetPropertiesBySubjectTypeResponse_Property_SelectData$json],
+  '8': [
+    {'1': 'field_type_data'},
+    {'1': '_description'},
+    {'1': '_set_id'},
+  ],
+};
+
+@$core.Deprecated('Use getPropertiesBySubjectTypeResponseDescriptor instead')
+const GetPropertiesBySubjectTypeResponse_Property_SelectData$json = {
+  '1': 'SelectData',
+  '2': [
+    {'1': 'allow_freetext', '3': 1, '4': 1, '5': 8, '9': 0, '10': 'allowFreetext', '17': true},
+    {'1': 'options', '3': 2, '4': 3, '5': 11, '6': '.proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption', '10': 'options'},
+  ],
+  '3': [GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption$json],
+  '8': [
+    {'1': '_allow_freetext'},
+  ],
+};
+
+@$core.Deprecated('Use getPropertiesBySubjectTypeResponseDescriptor instead')
+const GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption$json = {
+  '1': 'SelectOption',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'description', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
+    {'1': 'is_custom', '3': 4, '4': 1, '5': 8, '10': 'isCustom'},
+  ],
+  '8': [
+    {'1': '_description'},
+  ],
+};
+
+/// Descriptor for `GetPropertiesBySubjectTypeResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPropertiesBySubjectTypeResponseDescriptor = $convert.base64Decode(
+    'CiJHZXRQcm9wZXJ0aWVzQnlTdWJqZWN0VHlwZVJlc3BvbnNlEmsKCnByb3BlcnRpZXMYASADKA'
+    'sySy5wcm90by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuR2V0UHJvcGVydGllc0J5U3ViamVj'
+    'dFR5cGVSZXNwb25zZS5Qcm9wZXJ0eVIKcHJvcGVydGllcxqrBgoIUHJvcGVydHkSDgoCaWQYAS'
+    'ABKAlSAmlkEk4KDHN1YmplY3RfdHlwZRgCIAEoDjIrLnByb3RvLnNlcnZpY2VzLnByb3BlcnR5'
+    'X3N2Yy52MS5TdWJqZWN0VHlwZVILc3ViamVjdFR5cGUSSAoKZmllbGRfdHlwZRgDIAEoDjIpLn'
+    'Byb3RvLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5GaWVsZFR5cGVSCWZpZWxkVHlwZRISCgRu'
+    'YW1lGAQgASgJUgRuYW1lEiUKC2Rlc2NyaXB0aW9uGAUgASgJSAFSC2Rlc2NyaXB0aW9uiAEBEh'
+    '8KC2lzX2FyY2hpdmVkGAYgASgIUgppc0FyY2hpdmVkEhoKBnNldF9pZBgIIAEoCUgCUgVzZXRJ'
+    'ZIgBARJ5CgtzZWxlY3RfZGF0YRgKIAEoCzJWLnByb3RvLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy'
+    '52MS5HZXRQcm9wZXJ0aWVzQnlTdWJqZWN0VHlwZVJlc3BvbnNlLlByb3BlcnR5LlNlbGVjdERh'
+    'dGFIAFIKc2VsZWN0RGF0YRrTAgoKU2VsZWN0RGF0YRIqCg5hbGxvd19mcmVldGV4dBgBIAEoCE'
+    'gAUg1hbGxvd0ZyZWV0ZXh0iAEBEn0KB29wdGlvbnMYAiADKAsyYy5wcm90by5zZXJ2aWNlcy5w'
+    'cm9wZXJ0eV9zdmMudjEuR2V0UHJvcGVydGllc0J5U3ViamVjdFR5cGVSZXNwb25zZS5Qcm9wZX'
+    'J0eS5TZWxlY3REYXRhLlNlbGVjdE9wdGlvblIHb3B0aW9ucxqGAQoMU2VsZWN0T3B0aW9uEg4K'
+    'AmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiUKC2Rlc2NyaXB0aW9uGAMgASgJSA'
+    'BSC2Rlc2NyaXB0aW9uiAEBEhsKCWlzX2N1c3RvbRgEIAEoCFIIaXNDdXN0b21CDgoMX2Rlc2Ny'
+    'aXB0aW9uQhEKD19hbGxvd19mcmVldGV4dEIRCg9maWVsZF90eXBlX2RhdGFCDgoMX2Rlc2NyaX'
+    'B0aW9uQgkKB19zZXRfaWQ=');
+

@@ -517,6 +517,100 @@ func (*UpdatePropertyResponse) Descriptor() ([]byte, []int) {
 	return file_proto_services_property_svc_v1_property_svc_proto_rawDescGZIP(), []int{5}
 }
 
+type GetPropertiesBySubjectTypeRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	SubjectType SubjectType `protobuf:"varint,1,opt,name=subject_type,json=subjectType,proto3,enum=proto.services.property_svc.v1.SubjectType" json:"subject_type,omitempty"`
+}
+
+func (x *GetPropertiesBySubjectTypeRequest) Reset() {
+	*x = GetPropertiesBySubjectTypeRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetPropertiesBySubjectTypeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPropertiesBySubjectTypeRequest) ProtoMessage() {}
+
+func (x *GetPropertiesBySubjectTypeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPropertiesBySubjectTypeRequest.ProtoReflect.Descriptor instead.
+func (*GetPropertiesBySubjectTypeRequest) Descriptor() ([]byte, []int) {
+	return file_proto_services_property_svc_v1_property_svc_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetPropertiesBySubjectTypeRequest) GetSubjectType() SubjectType {
+	if x != nil {
+		return x.SubjectType
+	}
+	return SubjectType_SUBJECT_TYPE_UNSPECIFIED
+}
+
+type GetPropertiesBySubjectTypeResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Properties []*GetPropertiesBySubjectTypeResponse_Property `protobuf:"bytes,1,rep,name=properties,proto3" json:"properties,omitempty"`
+}
+
+func (x *GetPropertiesBySubjectTypeResponse) Reset() {
+	*x = GetPropertiesBySubjectTypeResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetPropertiesBySubjectTypeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPropertiesBySubjectTypeResponse) ProtoMessage() {}
+
+func (x *GetPropertiesBySubjectTypeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPropertiesBySubjectTypeResponse.ProtoReflect.Descriptor instead.
+func (*GetPropertiesBySubjectTypeResponse) Descriptor() ([]byte, []int) {
+	return file_proto_services_property_svc_v1_property_svc_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetPropertiesBySubjectTypeResponse) GetProperties() []*GetPropertiesBySubjectTypeResponse_Property {
+	if x != nil {
+		return x.Properties
+	}
+	return nil
+}
+
 type CreatePropertyRequest_SelectData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -529,7 +623,7 @@ type CreatePropertyRequest_SelectData struct {
 func (x *CreatePropertyRequest_SelectData) Reset() {
 	*x = CreatePropertyRequest_SelectData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[6]
+		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -542,7 +636,7 @@ func (x *CreatePropertyRequest_SelectData) String() string {
 func (*CreatePropertyRequest_SelectData) ProtoMessage() {}
 
 func (x *CreatePropertyRequest_SelectData) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[6]
+	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -584,7 +678,7 @@ type CreatePropertyRequest_SelectData_SelectOption struct {
 func (x *CreatePropertyRequest_SelectData_SelectOption) Reset() {
 	*x = CreatePropertyRequest_SelectData_SelectOption{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[7]
+		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -597,7 +691,7 @@ func (x *CreatePropertyRequest_SelectData_SelectOption) String() string {
 func (*CreatePropertyRequest_SelectData_SelectOption) ProtoMessage() {}
 
 func (x *CreatePropertyRequest_SelectData_SelectOption) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[7]
+	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -644,7 +738,7 @@ type GetPropertyRequest_ViewSource struct {
 func (x *GetPropertyRequest_ViewSource) Reset() {
 	*x = GetPropertyRequest_ViewSource{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[8]
+		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -657,7 +751,7 @@ func (x *GetPropertyRequest_ViewSource) String() string {
 func (*GetPropertyRequest_ViewSource) ProtoMessage() {}
 
 func (x *GetPropertyRequest_ViewSource) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[8]
+	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -722,7 +816,7 @@ type GetPropertyResponse_SelectData struct {
 func (x *GetPropertyResponse_SelectData) Reset() {
 	*x = GetPropertyResponse_SelectData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[9]
+		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -735,7 +829,7 @@ func (x *GetPropertyResponse_SelectData) String() string {
 func (*GetPropertyResponse_SelectData) ProtoMessage() {}
 
 func (x *GetPropertyResponse_SelectData) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[9]
+	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -779,7 +873,7 @@ type GetPropertyResponse_SelectData_SelectOption struct {
 func (x *GetPropertyResponse_SelectData_SelectOption) Reset() {
 	*x = GetPropertyResponse_SelectData_SelectOption{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[10]
+		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -792,7 +886,7 @@ func (x *GetPropertyResponse_SelectData_SelectOption) String() string {
 func (*GetPropertyResponse_SelectData_SelectOption) ProtoMessage() {}
 
 func (x *GetPropertyResponse_SelectData_SelectOption) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[10]
+	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -849,7 +943,7 @@ type UpdatePropertyRequest_SelectData struct {
 func (x *UpdatePropertyRequest_SelectData) Reset() {
 	*x = UpdatePropertyRequest_SelectData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[11]
+		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -862,7 +956,7 @@ func (x *UpdatePropertyRequest_SelectData) String() string {
 func (*UpdatePropertyRequest_SelectData) ProtoMessage() {}
 
 func (x *UpdatePropertyRequest_SelectData) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[11]
+	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -913,7 +1007,7 @@ type UpdatePropertyRequest_SelectData_SelectOption struct {
 func (x *UpdatePropertyRequest_SelectData_SelectOption) Reset() {
 	*x = UpdatePropertyRequest_SelectData_SelectOption{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[12]
+		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -926,7 +1020,7 @@ func (x *UpdatePropertyRequest_SelectData_SelectOption) String() string {
 func (*UpdatePropertyRequest_SelectData_SelectOption) ProtoMessage() {}
 
 func (x *UpdatePropertyRequest_SelectData_SelectOption) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[12]
+	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -966,6 +1060,257 @@ func (x *UpdatePropertyRequest_SelectData_SelectOption) GetDescription() string 
 func (x *UpdatePropertyRequest_SelectData_SelectOption) GetIsCustom() bool {
 	if x != nil && x.IsCustom != nil {
 		return *x.IsCustom
+	}
+	return false
+}
+
+type GetPropertiesBySubjectTypeResponse_Property struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id          string      `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	SubjectType SubjectType `protobuf:"varint,2,opt,name=subject_type,json=subjectType,proto3,enum=proto.services.property_svc.v1.SubjectType" json:"subject_type,omitempty"`
+	FieldType   FieldType   `protobuf:"varint,3,opt,name=field_type,json=fieldType,proto3,enum=proto.services.property_svc.v1.FieldType" json:"field_type,omitempty"`
+	Name        string      `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Description *string     `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	IsArchived  bool        `protobuf:"varint,6,opt,name=is_archived,json=isArchived,proto3" json:"is_archived,omitempty"`
+	// id of set this Property should belong to
+	SetId *string `protobuf:"bytes,8,opt,name=set_id,json=setId,proto3,oneof" json:"set_id,omitempty"`
+	// Types that are assignable to FieldTypeData:
+	//
+	//	*GetPropertiesBySubjectTypeResponse_Property_SelectData_
+	FieldTypeData isGetPropertiesBySubjectTypeResponse_Property_FieldTypeData `protobuf_oneof:"field_type_data"`
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property) Reset() {
+	*x = GetPropertiesBySubjectTypeResponse_Property{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[15]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPropertiesBySubjectTypeResponse_Property) ProtoMessage() {}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[15]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPropertiesBySubjectTypeResponse_Property.ProtoReflect.Descriptor instead.
+func (*GetPropertiesBySubjectTypeResponse_Property) Descriptor() ([]byte, []int) {
+	return file_proto_services_property_svc_v1_property_svc_proto_rawDescGZIP(), []int{7, 0}
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property) GetSubjectType() SubjectType {
+	if x != nil {
+		return x.SubjectType
+	}
+	return SubjectType_SUBJECT_TYPE_UNSPECIFIED
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property) GetFieldType() FieldType {
+	if x != nil {
+		return x.FieldType
+	}
+	return FieldType_FIELD_TYPE_UNSPECIFIED
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
+	}
+	return ""
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property) GetIsArchived() bool {
+	if x != nil {
+		return x.IsArchived
+	}
+	return false
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property) GetSetId() string {
+	if x != nil && x.SetId != nil {
+		return *x.SetId
+	}
+	return ""
+}
+
+func (m *GetPropertiesBySubjectTypeResponse_Property) GetFieldTypeData() isGetPropertiesBySubjectTypeResponse_Property_FieldTypeData {
+	if m != nil {
+		return m.FieldTypeData
+	}
+	return nil
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property) GetSelectData() *GetPropertiesBySubjectTypeResponse_Property_SelectData {
+	if x, ok := x.GetFieldTypeData().(*GetPropertiesBySubjectTypeResponse_Property_SelectData_); ok {
+		return x.SelectData
+	}
+	return nil
+}
+
+type isGetPropertiesBySubjectTypeResponse_Property_FieldTypeData interface {
+	isGetPropertiesBySubjectTypeResponse_Property_FieldTypeData()
+}
+
+type GetPropertiesBySubjectTypeResponse_Property_SelectData_ struct {
+	SelectData *GetPropertiesBySubjectTypeResponse_Property_SelectData `protobuf:"bytes,10,opt,name=select_data,json=selectData,proto3,oneof"`
+}
+
+func (*GetPropertiesBySubjectTypeResponse_Property_SelectData_) isGetPropertiesBySubjectTypeResponse_Property_FieldTypeData() {
+}
+
+type GetPropertiesBySubjectTypeResponse_Property_SelectData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	AllowFreetext *bool                                                                  `protobuf:"varint,1,opt,name=allow_freetext,json=allowFreetext,proto3,oneof" json:"allow_freetext,omitempty"`
+	Options       []*GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption `protobuf:"bytes,2,rep,name=options,proto3" json:"options,omitempty"`
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property_SelectData) Reset() {
+	*x = GetPropertiesBySubjectTypeResponse_Property_SelectData{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[16]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property_SelectData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPropertiesBySubjectTypeResponse_Property_SelectData) ProtoMessage() {}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property_SelectData) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[16]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPropertiesBySubjectTypeResponse_Property_SelectData.ProtoReflect.Descriptor instead.
+func (*GetPropertiesBySubjectTypeResponse_Property_SelectData) Descriptor() ([]byte, []int) {
+	return file_proto_services_property_svc_v1_property_svc_proto_rawDescGZIP(), []int{7, 0, 0}
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property_SelectData) GetAllowFreetext() bool {
+	if x != nil && x.AllowFreetext != nil {
+		return *x.AllowFreetext
+	}
+	return false
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property_SelectData) GetOptions() []*GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption {
+	if x != nil {
+		return x.Options
+	}
+	return nil
+}
+
+type GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id          string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name        string  `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description *string `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	IsCustom    bool    `protobuf:"varint,4,opt,name=is_custom,json=isCustom,proto3" json:"is_custom,omitempty"`
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption) Reset() {
+	*x = GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[17]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption) ProtoMessage() {}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_services_property_svc_v1_property_svc_proto_msgTypes[17]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption.ProtoReflect.Descriptor instead.
+func (*GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption) Descriptor() ([]byte, []int) {
+	return file_proto_services_property_svc_v1_property_svc_proto_rawDescGZIP(), []int{7, 0, 0, 0}
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
+	}
+	return ""
+}
+
+func (x *GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption) GetIsCustom() bool {
+	if x != nil {
+		return x.IsCustom
 	}
 	return false
 }
@@ -1150,48 +1495,126 @@ var file_proto_services_property_svc_v1_property_svc_proto_rawDesc = []byte{
 	0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0e, 0x0a, 0x0c, 0x5f, 0x69, 0x73, 0x5f, 0x61,
 	0x72, 0x63, 0x68, 0x69, 0x76, 0x65, 0x64, 0x42, 0x09, 0x0a, 0x07, 0x5f, 0x73, 0x65, 0x74, 0x5f,
 	0x69, 0x64, 0x22, 0x18, 0x0a, 0x16, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x70,
-	0x65, 0x72, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x93, 0x03, 0x0a,
-	0x0f, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x12, 0x81, 0x01, 0x0a, 0x0e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x70, 0x65,
-	0x72, 0x74, 0x79, 0x12, 0x35, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x5f, 0x73, 0x76,
-	0x63, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x70, 0x65,
-	0x72, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x36, 0x2e, 0x70, 0x72, 0x6f,
+	0x65, 0x72, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x73, 0x0a, 0x21,
+	0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x69, 0x65, 0x73, 0x42, 0x79, 0x53,
+	0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x54, 0x79, 0x70, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x4e, 0x0a, 0x0c, 0x73, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x5f, 0x74, 0x79, 0x70,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x2b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e,
+	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74,
+	0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74,
+	0x54, 0x79, 0x70, 0x65, 0x52, 0x0b, 0x73, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x54, 0x79, 0x70,
+	0x65, 0x22, 0xbf, 0x07, 0x0a, 0x22, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74,
+	0x69, 0x65, 0x73, 0x42, 0x79, 0x53, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x54, 0x79, 0x70, 0x65,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6b, 0x0a, 0x0a, 0x70, 0x72, 0x6f, 0x70,
+	0x65, 0x72, 0x74, 0x69, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x4b, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72,
+	0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65,
+	0x74, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x69, 0x65, 0x73, 0x42, 0x79, 0x53, 0x75, 0x62,
+	0x6a, 0x65, 0x63, 0x74, 0x54, 0x79, 0x70, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x2e, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x52, 0x0a, 0x70, 0x72, 0x6f, 0x70, 0x65,
+	0x72, 0x74, 0x69, 0x65, 0x73, 0x1a, 0xab, 0x06, 0x0a, 0x08, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72,
+	0x74, 0x79, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02,
+	0x69, 0x64, 0x12, 0x4e, 0x0a, 0x0c, 0x73, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x5f, 0x74, 0x79,
+	0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x2b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72,
+	0x74, 0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x75, 0x62, 0x6a, 0x65, 0x63,
+	0x74, 0x54, 0x79, 0x70, 0x65, 0x52, 0x0b, 0x73, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x54, 0x79,
+	0x70, 0x65, 0x12, 0x48, 0x0a, 0x0a, 0x66, 0x69, 0x65, 0x6c, 0x64, 0x5f, 0x74, 0x79, 0x70, 0x65,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x29, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79,
+	0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x54, 0x79, 0x70,
+	0x65, 0x52, 0x09, 0x66, 0x69, 0x65, 0x6c, 0x64, 0x54, 0x79, 0x70, 0x65, 0x12, 0x12, 0x0a, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65,
+	0x12, 0x25, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18,
+	0x05, 0x20, 0x01, 0x28, 0x09, 0x48, 0x01, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70,
+	0x74, 0x69, 0x6f, 0x6e, 0x88, 0x01, 0x01, 0x12, 0x1f, 0x0a, 0x0b, 0x69, 0x73, 0x5f, 0x61, 0x72,
+	0x63, 0x68, 0x69, 0x76, 0x65, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0a, 0x69, 0x73,
+	0x41, 0x72, 0x63, 0x68, 0x69, 0x76, 0x65, 0x64, 0x12, 0x1a, 0x0a, 0x06, 0x73, 0x65, 0x74, 0x5f,
+	0x69, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x48, 0x02, 0x52, 0x05, 0x73, 0x65, 0x74, 0x49,
+	0x64, 0x88, 0x01, 0x01, 0x12, 0x79, 0x0a, 0x0b, 0x73, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x5f, 0x64,
+	0x61, 0x74, 0x61, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x56, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70, 0x65,
+	0x72, 0x74, 0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x72,
+	0x6f, 0x70, 0x65, 0x72, 0x74, 0x69, 0x65, 0x73, 0x42, 0x79, 0x53, 0x75, 0x62, 0x6a, 0x65, 0x63,
+	0x74, 0x54, 0x79, 0x70, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x2e, 0x50, 0x72,
+	0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x2e, 0x53, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x44, 0x61, 0x74,
+	0x61, 0x48, 0x00, 0x52, 0x0a, 0x73, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x44, 0x61, 0x74, 0x61, 0x1a,
+	0xd3, 0x02, 0x0a, 0x0a, 0x53, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x44, 0x61, 0x74, 0x61, 0x12, 0x2a,
+	0x0a, 0x0e, 0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x5f, 0x66, 0x72, 0x65, 0x65, 0x74, 0x65, 0x78, 0x74,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x48, 0x00, 0x52, 0x0d, 0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x46,
+	0x72, 0x65, 0x65, 0x74, 0x65, 0x78, 0x74, 0x88, 0x01, 0x01, 0x12, 0x7d, 0x0a, 0x07, 0x6f, 0x70,
+	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x63, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f,
+	0x70, 0x65, 0x72, 0x74, 0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74,
+	0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x69, 0x65, 0x73, 0x42, 0x79, 0x53, 0x75, 0x62, 0x6a,
+	0x65, 0x63, 0x74, 0x54, 0x79, 0x70, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x2e,
+	0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x2e, 0x53, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x44,
+	0x61, 0x74, 0x61, 0x2e, 0x53, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e,
+	0x52, 0x07, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x1a, 0x86, 0x01, 0x0a, 0x0c, 0x53, 0x65,
+	0x6c, 0x65, 0x63, 0x74, 0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61,
+	0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x25,
+	0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x88, 0x01, 0x01, 0x12, 0x1b, 0x0a, 0x09, 0x69, 0x73, 0x5f, 0x63, 0x75, 0x73, 0x74,
+	0x6f, 0x6d, 0x18, 0x04, 0x20, 0x01, 0x28, 0x08, 0x52, 0x08, 0x69, 0x73, 0x43, 0x75, 0x73, 0x74,
+	0x6f, 0x6d, 0x42, 0x0e, 0x0a, 0x0c, 0x5f, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x42, 0x11, 0x0a, 0x0f, 0x5f, 0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x5f, 0x66, 0x72, 0x65,
+	0x65, 0x74, 0x65, 0x78, 0x74, 0x42, 0x11, 0x0a, 0x0f, 0x66, 0x69, 0x65, 0x6c, 0x64, 0x5f, 0x74,
+	0x79, 0x70, 0x65, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x42, 0x0e, 0x0a, 0x0c, 0x5f, 0x64, 0x65, 0x73,
+	0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x09, 0x0a, 0x07, 0x5f, 0x73, 0x65, 0x74,
+	0x5f, 0x69, 0x64, 0x32, 0xbb, 0x04, 0x0a, 0x0f, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x81, 0x01, 0x0a, 0x0e, 0x43, 0x72, 0x65, 0x61,
+	0x74, 0x65, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x12, 0x35, 0x2e, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70,
 	0x65, 0x72, 0x74, 0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x00, 0x12, 0x78, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x70, 0x65,
-	0x72, 0x74, 0x79, 0x12, 0x32, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x5f, 0x73, 0x76,
-	0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x33, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e,
-	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74,
-	0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x70,
-	0x65, 0x72, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x81,
-	0x01, 0x0a, 0x0e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74,
-	0x79, 0x12, 0x35, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x74, 0x65, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x36, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
 	0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e,
-	0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74,
-	0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x36, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x76, 0x31, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74,
+	0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x78, 0x0a, 0x0b, 0x47,
+	0x65, 0x74, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x12, 0x32, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70,
+	0x65, 0x72, 0x74, 0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x50,
+	0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x33,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e,
+	0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e,
+	0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x81, 0x01, 0x0a, 0x0e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x12, 0x35, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72,
 	0x74, 0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
-	0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x22, 0x00, 0x42, 0xee, 0x01, 0x0a, 0x22, 0x63, 0x6f, 0x6d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x36, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x2e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31,
+	0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0xa5, 0x01, 0x0a, 0x1a, 0x47, 0x65,
+	0x74, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x69, 0x65, 0x73, 0x42, 0x79, 0x53, 0x75, 0x62,
+	0x6a, 0x65, 0x63, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12, 0x41, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72,
-	0x74, 0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x42, 0x10, 0x50, 0x72, 0x6f, 0x70, 0x65,
-	0x72, 0x74, 0x79, 0x53, 0x76, 0x63, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1f, 0x67,
-	0x65, 0x6e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x73, 0x2f, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x2d, 0x73, 0x76, 0x63, 0xa2, 0x02,
-	0x03, 0x50, 0x53, 0x50, 0xaa, 0x02, 0x1d, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x53, 0x76,
-	0x63, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x1d, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x5c, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x73, 0x5c, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x53, 0x76,
-	0x63, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x29, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x5c, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x73, 0x5c, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x53, 0x76,
-	0x63, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
-	0xea, 0x02, 0x20, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x3a, 0x3a, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x73, 0x3a, 0x3a, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x53, 0x76, 0x63, 0x3a,
-	0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f,
+	0x70, 0x65, 0x72, 0x74, 0x69, 0x65, 0x73, 0x42, 0x79, 0x53, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74,
+	0x54, 0x79, 0x70, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x42, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f,
+	0x70, 0x65, 0x72, 0x74, 0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74,
+	0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x69, 0x65, 0x73, 0x42, 0x79, 0x53, 0x75, 0x62, 0x6a,
+	0x65, 0x63, 0x74, 0x54, 0x79, 0x70, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x00, 0x42, 0xee, 0x01, 0x0a, 0x22, 0x63, 0x6f, 0x6d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e,
+	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74,
+	0x79, 0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x42, 0x10, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72,
+	0x74, 0x79, 0x53, 0x76, 0x63, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x1f, 0x67, 0x65,
+	0x6e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x2f, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x2d, 0x73, 0x76, 0x63, 0xa2, 0x02, 0x03,
+	0x50, 0x53, 0x50, 0xaa, 0x02, 0x1d, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x73, 0x2e, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x53, 0x76, 0x63,
+	0x2e, 0x56, 0x31, 0xca, 0x02, 0x1d, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x5c, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x73, 0x5c, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x53, 0x76, 0x63,
+	0x5c, 0x56, 0x31, 0xe2, 0x02, 0x29, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x5c, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x73, 0x5c, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x53, 0x76, 0x63,
+	0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
+	0x02, 0x20, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x3a, 0x3a, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x73, 0x3a, 0x3a, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x53, 0x76, 0x63, 0x3a, 0x3a,
+	0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1206,48 +1629,61 @@ func file_proto_services_property_svc_v1_property_svc_proto_rawDescGZIP() []byte
 	return file_proto_services_property_svc_v1_property_svc_proto_rawDescData
 }
 
-var file_proto_services_property_svc_v1_property_svc_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_proto_services_property_svc_v1_property_svc_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_proto_services_property_svc_v1_property_svc_proto_goTypes = []interface{}{
-	(*CreatePropertyRequest)(nil),                         // 0: proto.services.property_svc.v1.CreatePropertyRequest
-	(*CreatePropertyResponse)(nil),                        // 1: proto.services.property_svc.v1.CreatePropertyResponse
-	(*GetPropertyRequest)(nil),                            // 2: proto.services.property_svc.v1.GetPropertyRequest
-	(*GetPropertyResponse)(nil),                           // 3: proto.services.property_svc.v1.GetPropertyResponse
-	(*UpdatePropertyRequest)(nil),                         // 4: proto.services.property_svc.v1.UpdatePropertyRequest
-	(*UpdatePropertyResponse)(nil),                        // 5: proto.services.property_svc.v1.UpdatePropertyResponse
-	(*CreatePropertyRequest_SelectData)(nil),              // 6: proto.services.property_svc.v1.CreatePropertyRequest.SelectData
-	(*CreatePropertyRequest_SelectData_SelectOption)(nil), // 7: proto.services.property_svc.v1.CreatePropertyRequest.SelectData.SelectOption
-	(*GetPropertyRequest_ViewSource)(nil),                 // 8: proto.services.property_svc.v1.GetPropertyRequest.ViewSource
-	(*GetPropertyResponse_SelectData)(nil),                // 9: proto.services.property_svc.v1.GetPropertyResponse.SelectData
-	(*GetPropertyResponse_SelectData_SelectOption)(nil),   // 10: proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
-	(*UpdatePropertyRequest_SelectData)(nil),              // 11: proto.services.property_svc.v1.UpdatePropertyRequest.SelectData
-	(*UpdatePropertyRequest_SelectData_SelectOption)(nil), // 12: proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption
-	(SubjectType)(0),                                      // 13: proto.services.property_svc.v1.SubjectType
-	(FieldType)(0),                                        // 14: proto.services.property_svc.v1.FieldType
+	(*CreatePropertyRequest)(nil),                                               // 0: proto.services.property_svc.v1.CreatePropertyRequest
+	(*CreatePropertyResponse)(nil),                                              // 1: proto.services.property_svc.v1.CreatePropertyResponse
+	(*GetPropertyRequest)(nil),                                                  // 2: proto.services.property_svc.v1.GetPropertyRequest
+	(*GetPropertyResponse)(nil),                                                 // 3: proto.services.property_svc.v1.GetPropertyResponse
+	(*UpdatePropertyRequest)(nil),                                               // 4: proto.services.property_svc.v1.UpdatePropertyRequest
+	(*UpdatePropertyResponse)(nil),                                              // 5: proto.services.property_svc.v1.UpdatePropertyResponse
+	(*GetPropertiesBySubjectTypeRequest)(nil),                                   // 6: proto.services.property_svc.v1.GetPropertiesBySubjectTypeRequest
+	(*GetPropertiesBySubjectTypeResponse)(nil),                                  // 7: proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse
+	(*CreatePropertyRequest_SelectData)(nil),                                    // 8: proto.services.property_svc.v1.CreatePropertyRequest.SelectData
+	(*CreatePropertyRequest_SelectData_SelectOption)(nil),                       // 9: proto.services.property_svc.v1.CreatePropertyRequest.SelectData.SelectOption
+	(*GetPropertyRequest_ViewSource)(nil),                                       // 10: proto.services.property_svc.v1.GetPropertyRequest.ViewSource
+	(*GetPropertyResponse_SelectData)(nil),                                      // 11: proto.services.property_svc.v1.GetPropertyResponse.SelectData
+	(*GetPropertyResponse_SelectData_SelectOption)(nil),                         // 12: proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
+	(*UpdatePropertyRequest_SelectData)(nil),                                    // 13: proto.services.property_svc.v1.UpdatePropertyRequest.SelectData
+	(*UpdatePropertyRequest_SelectData_SelectOption)(nil),                       // 14: proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption
+	(*GetPropertiesBySubjectTypeResponse_Property)(nil),                         // 15: proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property
+	(*GetPropertiesBySubjectTypeResponse_Property_SelectData)(nil),              // 16: proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData
+	(*GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption)(nil), // 17: proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption
+	(SubjectType)(0), // 18: proto.services.property_svc.v1.SubjectType
+	(FieldType)(0),   // 19: proto.services.property_svc.v1.FieldType
 }
 var file_proto_services_property_svc_v1_property_svc_proto_depIdxs = []int32{
-	13, // 0: proto.services.property_svc.v1.CreatePropertyRequest.subject_type:type_name -> proto.services.property_svc.v1.SubjectType
-	14, // 1: proto.services.property_svc.v1.CreatePropertyRequest.field_type:type_name -> proto.services.property_svc.v1.FieldType
-	6,  // 2: proto.services.property_svc.v1.CreatePropertyRequest.select_data:type_name -> proto.services.property_svc.v1.CreatePropertyRequest.SelectData
-	13, // 3: proto.services.property_svc.v1.GetPropertyResponse.subject_type:type_name -> proto.services.property_svc.v1.SubjectType
-	14, // 4: proto.services.property_svc.v1.GetPropertyResponse.field_type:type_name -> proto.services.property_svc.v1.FieldType
-	9,  // 5: proto.services.property_svc.v1.GetPropertyResponse.select_data:type_name -> proto.services.property_svc.v1.GetPropertyResponse.SelectData
-	13, // 6: proto.services.property_svc.v1.UpdatePropertyRequest.subject_type:type_name -> proto.services.property_svc.v1.SubjectType
-	14, // 7: proto.services.property_svc.v1.UpdatePropertyRequest.field_type:type_name -> proto.services.property_svc.v1.FieldType
-	11, // 8: proto.services.property_svc.v1.UpdatePropertyRequest.select_data:type_name -> proto.services.property_svc.v1.UpdatePropertyRequest.SelectData
-	7,  // 9: proto.services.property_svc.v1.CreatePropertyRequest.SelectData.options:type_name -> proto.services.property_svc.v1.CreatePropertyRequest.SelectData.SelectOption
-	10, // 10: proto.services.property_svc.v1.GetPropertyResponse.SelectData.options:type_name -> proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
-	12, // 11: proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.upsert_options:type_name -> proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption
-	0,  // 12: proto.services.property_svc.v1.PropertyService.CreateProperty:input_type -> proto.services.property_svc.v1.CreatePropertyRequest
-	2,  // 13: proto.services.property_svc.v1.PropertyService.GetProperty:input_type -> proto.services.property_svc.v1.GetPropertyRequest
-	4,  // 14: proto.services.property_svc.v1.PropertyService.UpdateProperty:input_type -> proto.services.property_svc.v1.UpdatePropertyRequest
-	1,  // 15: proto.services.property_svc.v1.PropertyService.CreateProperty:output_type -> proto.services.property_svc.v1.CreatePropertyResponse
-	3,  // 16: proto.services.property_svc.v1.PropertyService.GetProperty:output_type -> proto.services.property_svc.v1.GetPropertyResponse
-	5,  // 17: proto.services.property_svc.v1.PropertyService.UpdateProperty:output_type -> proto.services.property_svc.v1.UpdatePropertyResponse
-	15, // [15:18] is the sub-list for method output_type
-	12, // [12:15] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	18, // 0: proto.services.property_svc.v1.CreatePropertyRequest.subject_type:type_name -> proto.services.property_svc.v1.SubjectType
+	19, // 1: proto.services.property_svc.v1.CreatePropertyRequest.field_type:type_name -> proto.services.property_svc.v1.FieldType
+	8,  // 2: proto.services.property_svc.v1.CreatePropertyRequest.select_data:type_name -> proto.services.property_svc.v1.CreatePropertyRequest.SelectData
+	18, // 3: proto.services.property_svc.v1.GetPropertyResponse.subject_type:type_name -> proto.services.property_svc.v1.SubjectType
+	19, // 4: proto.services.property_svc.v1.GetPropertyResponse.field_type:type_name -> proto.services.property_svc.v1.FieldType
+	11, // 5: proto.services.property_svc.v1.GetPropertyResponse.select_data:type_name -> proto.services.property_svc.v1.GetPropertyResponse.SelectData
+	18, // 6: proto.services.property_svc.v1.UpdatePropertyRequest.subject_type:type_name -> proto.services.property_svc.v1.SubjectType
+	19, // 7: proto.services.property_svc.v1.UpdatePropertyRequest.field_type:type_name -> proto.services.property_svc.v1.FieldType
+	13, // 8: proto.services.property_svc.v1.UpdatePropertyRequest.select_data:type_name -> proto.services.property_svc.v1.UpdatePropertyRequest.SelectData
+	18, // 9: proto.services.property_svc.v1.GetPropertiesBySubjectTypeRequest.subject_type:type_name -> proto.services.property_svc.v1.SubjectType
+	15, // 10: proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.properties:type_name -> proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property
+	9,  // 11: proto.services.property_svc.v1.CreatePropertyRequest.SelectData.options:type_name -> proto.services.property_svc.v1.CreatePropertyRequest.SelectData.SelectOption
+	12, // 12: proto.services.property_svc.v1.GetPropertyResponse.SelectData.options:type_name -> proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
+	14, // 13: proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.upsert_options:type_name -> proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption
+	18, // 14: proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.subject_type:type_name -> proto.services.property_svc.v1.SubjectType
+	19, // 15: proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.field_type:type_name -> proto.services.property_svc.v1.FieldType
+	16, // 16: proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.select_data:type_name -> proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData
+	17, // 17: proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.options:type_name -> proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption
+	0,  // 18: proto.services.property_svc.v1.PropertyService.CreateProperty:input_type -> proto.services.property_svc.v1.CreatePropertyRequest
+	2,  // 19: proto.services.property_svc.v1.PropertyService.GetProperty:input_type -> proto.services.property_svc.v1.GetPropertyRequest
+	4,  // 20: proto.services.property_svc.v1.PropertyService.UpdateProperty:input_type -> proto.services.property_svc.v1.UpdatePropertyRequest
+	6,  // 21: proto.services.property_svc.v1.PropertyService.GetPropertiesBySubjectType:input_type -> proto.services.property_svc.v1.GetPropertiesBySubjectTypeRequest
+	1,  // 22: proto.services.property_svc.v1.PropertyService.CreateProperty:output_type -> proto.services.property_svc.v1.CreatePropertyResponse
+	3,  // 23: proto.services.property_svc.v1.PropertyService.GetProperty:output_type -> proto.services.property_svc.v1.GetPropertyResponse
+	5,  // 24: proto.services.property_svc.v1.PropertyService.UpdateProperty:output_type -> proto.services.property_svc.v1.UpdatePropertyResponse
+	7,  // 25: proto.services.property_svc.v1.PropertyService.GetPropertiesBySubjectType:output_type -> proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse
+	22, // [22:26] is the sub-list for method output_type
+	18, // [18:22] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_proto_services_property_svc_v1_property_svc_proto_init() }
@@ -1330,7 +1766,7 @@ func file_proto_services_property_svc_v1_property_svc_proto_init() {
 			}
 		}
 		file_proto_services_property_svc_v1_property_svc_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreatePropertyRequest_SelectData); i {
+			switch v := v.(*GetPropertiesBySubjectTypeRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1342,7 +1778,7 @@ func file_proto_services_property_svc_v1_property_svc_proto_init() {
 			}
 		}
 		file_proto_services_property_svc_v1_property_svc_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreatePropertyRequest_SelectData_SelectOption); i {
+			switch v := v.(*GetPropertiesBySubjectTypeResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1354,7 +1790,7 @@ func file_proto_services_property_svc_v1_property_svc_proto_init() {
 			}
 		}
 		file_proto_services_property_svc_v1_property_svc_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetPropertyRequest_ViewSource); i {
+			switch v := v.(*CreatePropertyRequest_SelectData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1366,7 +1802,7 @@ func file_proto_services_property_svc_v1_property_svc_proto_init() {
 			}
 		}
 		file_proto_services_property_svc_v1_property_svc_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetPropertyResponse_SelectData); i {
+			switch v := v.(*CreatePropertyRequest_SelectData_SelectOption); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1378,7 +1814,7 @@ func file_proto_services_property_svc_v1_property_svc_proto_init() {
 			}
 		}
 		file_proto_services_property_svc_v1_property_svc_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetPropertyResponse_SelectData_SelectOption); i {
+			switch v := v.(*GetPropertyRequest_ViewSource); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1390,7 +1826,7 @@ func file_proto_services_property_svc_v1_property_svc_proto_init() {
 			}
 		}
 		file_proto_services_property_svc_v1_property_svc_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdatePropertyRequest_SelectData); i {
+			switch v := v.(*GetPropertyResponse_SelectData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1402,7 +1838,67 @@ func file_proto_services_property_svc_v1_property_svc_proto_init() {
 			}
 		}
 		file_proto_services_property_svc_v1_property_svc_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetPropertyResponse_SelectData_SelectOption); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_services_property_svc_v1_property_svc_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdatePropertyRequest_SelectData); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_services_property_svc_v1_property_svc_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdatePropertyRequest_SelectData_SelectOption); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_services_property_svc_v1_property_svc_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetPropertiesBySubjectTypeResponse_Property); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_services_property_svc_v1_property_svc_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetPropertiesBySubjectTypeResponse_Property_SelectData); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_services_property_svc_v1_property_svc_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1423,23 +1919,28 @@ func file_proto_services_property_svc_v1_property_svc_proto_init() {
 	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[4].OneofWrappers = []interface{}{
 		(*UpdatePropertyRequest_SelectData_)(nil),
 	}
-	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[6].OneofWrappers = []interface{}{}
-	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[7].OneofWrappers = []interface{}{}
-	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[8].OneofWrappers = []interface{}{
+	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[8].OneofWrappers = []interface{}{}
+	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[9].OneofWrappers = []interface{}{}
+	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[10].OneofWrappers = []interface{}{
 		(*GetPropertyRequest_ViewSource_Global)(nil),
 		(*GetPropertyRequest_ViewSource_WardId)(nil),
 	}
-	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[9].OneofWrappers = []interface{}{}
-	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[10].OneofWrappers = []interface{}{}
 	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[11].OneofWrappers = []interface{}{}
 	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[12].OneofWrappers = []interface{}{}
+	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[13].OneofWrappers = []interface{}{}
+	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[14].OneofWrappers = []interface{}{}
+	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[15].OneofWrappers = []interface{}{
+		(*GetPropertiesBySubjectTypeResponse_Property_SelectData_)(nil),
+	}
+	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[16].OneofWrappers = []interface{}{}
+	file_proto_services_property_svc_v1_property_svc_proto_msgTypes[17].OneofWrappers = []interface{}{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_services_property_svc_v1_property_svc_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

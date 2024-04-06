@@ -40,7 +40,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.field_type_datas (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    select_data_id uuid
+    select_data_id uuid,
+    CONSTRAINT field_type_datas_select_data_id_check CHECK ((((select_data_id IS NOT NULL))::integer <= 1))
 );
 
 

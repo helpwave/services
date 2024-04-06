@@ -6,8 +6,35 @@ VALUES ($1, $2, $3, $4, $5, $6, $7);
 -- name: GetPropertyById :one
 SELECT * FROM properties WHERE id = $1;
 
--- name: GetPropertyBySubjectType :many
-SELECT * FROM properties WHERE subject_type = $1;
+-- name: GetPropertyWithSelectDataAndOptionsByID :many
+SELECT
+	sqlc.embed(properties),
+	select_options.id as select_option_id,
+	select_options.name as select_option_name,
+	select_options.description as select_option_description,
+	select_options.is_custom as select_option_is_custom,
+	select_datas.id as select_datas_id,
+	select_datas.allow_freetext as select_datas_allow_freetext
+	FROM properties
+	LEFT JOIN field_type_datas ON properties.field_type_data_id = field_type_datas.id
+	LEFT JOIN select_datas ON field_type_datas.select_data_id = select_datas.id
+	LEFT JOIN select_options ON select_options.select_data_id = select_datas.id
+	WHERE properties.id = $1;
+
+-- name: GetPropertiesWithSelectDataAndOptionsBySubjectType :many
+SELECT
+	sqlc.embed(properties),
+	select_options.id as select_option_id,
+	select_options.name as select_option_name,
+	select_options.description as select_option_description,
+	select_options.is_custom as select_option_is_custom,
+	select_datas.id as select_datas_id,
+	select_datas.allow_freetext as select_datas_allow_freetext
+	FROM properties
+	LEFT JOIN field_type_datas ON properties.field_type_data_id = field_type_datas.id
+	LEFT JOIN select_datas ON field_type_datas.select_data_id = select_datas.id
+	LEFT JOIN select_options ON select_options.select_data_id = select_datas.id
+ 	WHERE subject_type = $1;
 
 -- name: UpdateProperty :exec
 UPDATE properties

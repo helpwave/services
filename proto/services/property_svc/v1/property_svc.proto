@@ -126,6 +126,48 @@ message UpdatePropertyRequest {
 message UpdatePropertyResponse {}
 
 //
+// GetPropertiesBySubjectType
+//
+
+message GetPropertiesBySubjectTypeRequest {
+  SubjectType subject_type = 1;
+}
+
+message GetPropertiesBySubjectTypeResponse {
+  message Property {
+    string id = 1;
+    SubjectType subject_type = 2;
+    FieldType field_type = 3;
+
+    string name = 4;
+    optional string description = 5;
+
+    bool is_archived = 6;
+
+    // id of set this Property should belong to
+    optional string set_id = 8;
+
+    oneof field_type_data {
+      SelectData select_data = 10;
+    }
+
+    message SelectData {
+      optional bool allow_freetext = 1;
+      repeated SelectOption options = 2;
+
+      message SelectOption {
+        string id = 1;
+        string name = 2;
+        optional string description = 3;
+        bool is_custom = 4;
+      }
+    }
+    // TODO: TBD: optional bool always_include_for_current_context = 11;
+  }
+
+  repeated Property properties = 1;
+}
+//
 // PropertyService
 //
 
@@ -133,4 +175,5 @@ service PropertyService {
   rpc CreateProperty(CreatePropertyRequest) returns (CreatePropertyResponse) {}
   rpc GetProperty(GetPropertyRequest) returns (GetPropertyResponse) {}
   rpc UpdateProperty(UpdatePropertyRequest) returns (UpdatePropertyResponse) {}
+  rpc GetPropertiesBySubjectType(GetPropertiesBySubjectTypeRequest) returns (GetPropertiesBySubjectTypeResponse) {}
 }
