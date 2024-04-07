@@ -193,12 +193,14 @@ jobs:
       - name: Verify schema.sql and models were generated properly before
         run: git diff --exit-code -- services/${{ matrix.service }} || (echo "You forgot to run ./models.sh before checking in" && exit 1)
       - name: Run DOWN migrations (1/2)
-        run: ./migrate.sh $svc goto $VERSION
+        run: |
+          [ "$VERSION" -eq 0 ] && yes | ./migrate.sh $svc down || ./migrate.sh $svc goto $VERSION
         env:
           VERSION: ${{ steps.collect-version.outputs.VERSION }}
       - name: Run UP migrations (2/2)
         run: ./migrate.sh $svc up
       - name: Run DOWN migrations (2/2)
-        run: ./migrate.sh $svc goto $VERSION
+        run: |
+          [ "$VERSION" -eq 0 ] && yes | ./migrate.sh $svc down || ./migrate.sh $svc goto $VERSION
         env:
           VERSION: ${{ steps.collect-version.outputs.VERSION }}
