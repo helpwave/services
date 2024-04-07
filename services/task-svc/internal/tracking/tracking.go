@@ -34,7 +34,7 @@ func SetupTracking(serviceName string, lruSize int64, decay time.Duration, invP 
 		redisOptions.Password = hwutil.GetEnvOr("SECRETSTORE_REDIS_PASSWORD", "")
 	}
 
-	lru = decaying_lru.CustomSetup(serviceName, lruSize, decay, invP, redisOptions)
+	lru = decaying_lru.CustomSetup(serviceName, lruSize, decay, invP, redisOptions, nil)
 }
 
 func getUserID(ctx context.Context) string {

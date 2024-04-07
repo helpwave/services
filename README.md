@@ -159,6 +159,7 @@ These scripts can be run in the devcontainer:
 * `migrate.sh`: [migrate.sh](#migratesh---running-migratemigrate-inside-docker)
 * `models.sh`: [models.sh](#modelssh---generate-models-from-sql-queries)
 * `lint.sh`: Lint go code
+* `tidy.sh`: Runs `go mod tidy` across the workspace. Recommended to run after modifying any dependencies.
 
 Example:
 
