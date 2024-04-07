@@ -119,7 +119,7 @@ func (q *Queries) GetFieldTypeDataByPropertyID(ctx context.Context, id uuid.UUID
 	return i, err
 }
 
-const getPropertiesWithSelectDataAndOptionsBySubjectType = `-- name: GetPropertiesWithSelectDataAndOptionsBySubjectType :many
+const getPropertiesWithSelectDataAndOptionsBySubjectTypeOrID = `-- name: GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID :many
 SELECT
 	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.field_type_data_id,
 	select_options.id as select_option_id,
@@ -132,10 +132,15 @@ SELECT
 	LEFT JOIN field_type_datas ON properties.field_type_data_id = field_type_datas.id
 	LEFT JOIN select_datas ON field_type_datas.select_data_id = select_datas.id
 	LEFT JOIN select_options ON select_options.select_data_id = select_datas.id
- 	WHERE subject_type = $1
+ 	WHERE subject_type = $1 OR properties.id = $2
 `
 
-type GetPropertiesWithSelectDataAndOptionsBySubjectTypeRow struct {
+type GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams struct {
+	SubjectType *int32
+	ID          uuid.NullUUID
+}
+
+type GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDRow struct {
 	Property                 Property
 	SelectOptionID           uuid.NullUUID
 	SelectOptionName         *string
@@ -145,15 +150,15 @@ type GetPropertiesWithSelectDataAndOptionsBySubjectTypeRow struct {
 	SelectDatasAllowFreetext *bool
 }
 
-func (q *Queries) GetPropertiesWithSelectDataAndOptionsBySubjectType(ctx context.Context, subjectType int32) ([]GetPropertiesWithSelectDataAndOptionsBySubjectTypeRow, error) {
-	rows, err := q.db.Query(ctx, getPropertiesWithSelectDataAndOptionsBySubjectType, subjectType)
+func (q *Queries) GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx context.Context, arg GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams) ([]GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDRow, error) {
+	rows, err := q.db.Query(ctx, getPropertiesWithSelectDataAndOptionsBySubjectTypeOrID, arg.SubjectType, arg.ID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []GetPropertiesWithSelectDataAndOptionsBySubjectTypeRow{}
+	items := []GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDRow{}
 	for rows.Next() {
-		var i GetPropertiesWithSelectDataAndOptionsBySubjectTypeRow
+		var i GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDRow
 		if err := rows.Scan(
 			&i.Property.ID,
 			&i.Property.SubjectType,
@@ -198,67 +203,6 @@ func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, 
 		&i.FieldTypeDataID,
 	)
 	return i, err
-}
-
-const getPropertyWithSelectDataAndOptionsByID = `-- name: GetPropertyWithSelectDataAndOptionsByID :many
-SELECT
-	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.field_type_data_id,
-	select_options.id as select_option_id,
-	select_options.name as select_option_name,
-	select_options.description as select_option_description,
-	select_options.is_custom as select_option_is_custom,
-	select_datas.id as select_datas_id,
-	select_datas.allow_freetext as select_datas_allow_freetext
-	FROM properties
-	LEFT JOIN field_type_datas ON properties.field_type_data_id = field_type_datas.id
-	LEFT JOIN select_datas ON field_type_datas.select_data_id = select_datas.id
-	LEFT JOIN select_options ON select_options.select_data_id = select_datas.id
-	WHERE properties.id = $1
-`
-
-type GetPropertyWithSelectDataAndOptionsByIDRow struct {
-	Property                 Property
-	SelectOptionID           uuid.NullUUID
-	SelectOptionName         *string
-	SelectOptionDescription  *string
-	SelectOptionIsCustom     *bool
-	SelectDatasID            uuid.NullUUID
-	SelectDatasAllowFreetext *bool
-}
-
-func (q *Queries) GetPropertyWithSelectDataAndOptionsByID(ctx context.Context, id uuid.UUID) ([]GetPropertyWithSelectDataAndOptionsByIDRow, error) {
-	rows, err := q.db.Query(ctx, getPropertyWithSelectDataAndOptionsByID, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []GetPropertyWithSelectDataAndOptionsByIDRow{}
-	for rows.Next() {
-		var i GetPropertyWithSelectDataAndOptionsByIDRow
-		if err := rows.Scan(
-			&i.Property.ID,
-			&i.Property.SubjectType,
-			&i.Property.FieldType,
-			&i.Property.Name,
-			&i.Property.Description,
-			&i.Property.IsArchived,
-			&i.Property.SetID,
-			&i.Property.FieldTypeDataID,
-			&i.SelectOptionID,
-			&i.SelectOptionName,
-			&i.SelectOptionDescription,
-			&i.SelectOptionIsCustom,
-			&i.SelectDatasID,
-			&i.SelectDatasAllowFreetext,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
 }
 
 const updateFieldTypeDataSelectDataID = `-- name: UpdateFieldTypeDataSelectDataID :exec

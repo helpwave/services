@@ -19,12 +19,6 @@ CREATE TABLE IF NOT EXISTS select_options (
 CREATE TABLE IF NOT EXISTS field_type_datas (
 	id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
 	select_data_id uuid DEFAULT NULL,
-	-- check: oneof
-	check(
-		(
-			(select_data_id is not null)::integer
-		) <= 1
-	),
 	FOREIGN KEY (select_data_id)
 		REFERENCES select_datas(id)
 		ON DELETE SET NULL
