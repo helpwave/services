@@ -52,28 +52,10 @@ func (p *Projection) initEventListeners() {
 
 func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	tx, err := p.db.Begin(ctx)
-	if err != nil {
-		return err, esdb.NackActionRetry
-	}
-	propertyRepo := p.propertyRepo.WithTx(tx)
-
-	defer func() {
-		err := tx.Rollback(ctx)
-		if !errors.Is(err, pgx.ErrTxClosed) {
-			log.Error().Err(err).Msg("rollback failed.")
-		}
-	}()
 
 	var payload propertyEventsV1.PropertyCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
-	}
-
-	// Create FieldTypeData
-	fieldTypeDataID, err := propertyRepo.CreateFieldTypeData(ctx)
-	if err := hwdb.Error(ctx, err); err != nil {
 		return err, esdb.NackActionRetry
 	}
 
@@ -95,18 +77,13 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	}
 	fieldType := (pb.FieldType)(value)
 
-	err = propertyRepo.CreateProperty(ctx, property_repo.CreatePropertyParams{
-		ID:              propertyID,
-		SubjectType:     int32(subjectType),
-		FieldType:       int32(fieldType),
-		Name:            payload.Name,
-		FieldTypeDataID: fieldTypeDataID,
+	err = p.propertyRepo.CreateProperty(ctx, property_repo.CreatePropertyParams{
+		ID:          propertyID,
+		SubjectType: int32(subjectType),
+		FieldType:   int32(fieldType),
+		Name:        payload.Name,
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
-		return err, esdb.NackActionRetry
-	}
-
-	if err := tx.Commit(ctx); err != nil {
 		return err, esdb.NackActionRetry
 	}
 
@@ -226,24 +203,28 @@ func (p *Projection) onFieldTypeUpdated(ctx context.Context, evt hwes.Event) (er
 		return err, esdb.NackActionRetry
 	}
 
+	property, err := propertyRepo.GetPropertyById(ctx, evt.AggregateID)
+	if err = hwdb.Error(ctx, err); err != nil {
+		return err, esdb.NackActionRetry
+	}
+
 	if fieldType != pb.FieldType_FIELD_TYPE_SELECT {
 		err = propertyRepo.DeleteSelectDataByPropertyID(ctx, evt.AggregateID)
 		if err = hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
 		}
 	} else {
-		fieldTypeData, err := propertyRepo.GetFieldTypeDataByPropertyID(ctx, evt.AggregateID)
+		// Create
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
 		}
-		fmt.Println(fieldTypeData)
-		if !fieldTypeData.SelectDataID.Valid {
+		if property.SelectDataID.Valid {
 			sdID, err := propertyRepo.CreateSelectData(ctx, false)
 			if err := hwdb.Error(ctx, err); err != nil {
 				return err, esdb.NackActionRetry
 			}
-			err = propertyRepo.UpdateFieldTypeDataSelectDataID(ctx, property_repo.UpdateFieldTypeDataSelectDataIDParams{
-				ID:           fieldTypeData.ID,
+			err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
+				ID:           evt.AggregateID,
 				SelectDataID: uuid.NullUUID{UUID: sdID, Valid: true},
 			})
 			if err := hwdb.Error(ctx, err); err != nil {
@@ -343,8 +324,11 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 			}
 		}
 
-		// Update FieldTypeData
-		err = propertyRepo.UpdateFieldTypeDataSelectDataIDByPropertyID(ctx, property_repo.UpdateFieldTypeDataSelectDataIDByPropertyIDParams{ID: evt.AggregateID, SelectDataID: uuid.NullUUID{UUID: selectDataID, Valid: true}})
+		// Update Property SelectDataId
+		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
+			ID:           evt.AggregateID,
+			SelectDataID: uuid.NullUUID{UUID: selectDataID, Valid: true},
+		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
 		}
@@ -378,20 +362,21 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 		return err, esdb.NackActionRetry
 	}
 
-	fieldTypeData, err := propertyRepo.GetFieldTypeDataByPropertyID(ctx, evt.AggregateID)
+	property, err := propertyRepo.GetPropertyById(ctx, evt.AggregateID)
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, esdb.NackActionRetry
 	}
 
-	if fieldTypeData.SelectDataID.Valid {
+	if property.SelectDataID.Valid {
 		err := propertyRepo.UpdateSelectData(ctx, property_repo.UpdateSelectDataParams{
-			ID:            fieldTypeData.SelectDataID.UUID,
+			ID:            property.SelectDataID.UUID,
 			AllowFreetext: payload.NewAllowFreetext,
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
 		}
 	}
+	// TODO: add select Data?
 
 	if err := tx.Commit(ctx); err != nil {
 		return err, esdb.NackActionRetry
@@ -421,21 +406,21 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 		return err, esdb.NackActionRetry
 	}
 
-	fieldTypeData, err := propertyRepo.GetFieldTypeDataByPropertyID(ctx, evt.AggregateID)
+	property, err := propertyRepo.GetPropertyById(ctx, evt.AggregateID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, esdb.NackActionRetry
 	}
 
 	var selectDataID uuid.UUID
-	if !fieldTypeData.SelectDataID.Valid {
-		// Create SelectData and reference from fieldTypeData
+	if !property.SelectDataID.Valid {
+		// Create SelectData and reference from property
 		sdID, err := propertyRepo.CreateSelectData(ctx, false)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
 		}
-		err = propertyRepo.UpdateFieldTypeDataSelectDataID(ctx, property_repo.UpdateFieldTypeDataSelectDataIDParams{
-			ID:           fieldTypeData.ID,
+		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
+			ID:           evt.AggregateID,
 			SelectDataID: uuid.NullUUID{UUID: sdID, Valid: true},
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
@@ -443,7 +428,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 		}
 		selectDataID = sdID
 	} else {
-		selectDataID = fieldTypeData.SelectDataID.UUID
+		selectDataID = property.SelectDataID.UUID
 	}
 
 	selectOptions := make(map[uuid.UUID]models.UpdateSelectOption)
@@ -490,7 +475,6 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 				IsCustom:    selOpt.IsCustom,
 			})
 		} else {
-			fmt.Println(selOpt)
 			if selOpt.Name == nil {
 				log.Error().Msg("selectOption name has to be set on create")
 				return nil, esdb.NackActionRetry

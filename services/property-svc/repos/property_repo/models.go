@@ -8,20 +8,15 @@ import (
 	"github.com/google/uuid"
 )
 
-type FieldTypeData struct {
-	ID           uuid.UUID
-	SelectDataID uuid.NullUUID
-}
-
 type Property struct {
-	ID              uuid.UUID
-	SubjectType     int32
-	FieldType       int32
-	Name            string
-	Description     string
-	IsArchived      bool
-	SetID           uuid.NullUUID
-	FieldTypeDataID uuid.UUID
+	ID           uuid.UUID
+	SubjectType  int32
+	FieldType    int32
+	Name         string
+	Description  string
+	IsArchived   bool
+	SetID        uuid.NullUUID
+	SelectDataID uuid.NullUUID
 }
 
 type SchemaMigration struct {

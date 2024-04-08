@@ -1,7 +1,7 @@
 -- name: CreateProperty :exec
 INSERT INTO properties
-	(id, subject_type, field_type, name, field_type_data_id)
-VALUES ($1, $2, $3, $4, $5);
+	(id, subject_type, field_type, name)
+VALUES ($1, $2, $3, $4);
 
 -- name: GetPropertyById :one
 SELECT * FROM properties WHERE id = $1;
@@ -16,8 +16,7 @@ SELECT
 	select_datas.id as select_datas_id,
 	select_datas.allow_freetext as select_datas_allow_freetext
 	FROM properties
-	LEFT JOIN field_type_datas ON properties.field_type_data_id = field_type_datas.id
-	LEFT JOIN select_datas ON field_type_datas.select_data_id = select_datas.id
+	LEFT JOIN select_datas ON properties.select_data_id = select_datas.id
 	LEFT JOIN select_options ON select_options.select_data_id = select_datas.id
  	WHERE subject_type = sqlc.narg('subject_type') OR properties.id = sqlc.narg('id');
 
@@ -35,31 +34,15 @@ UPDATE properties
 SET set_id = @set_id
 WHERE id = @id;
 
--- name: CreateFieldTypeData :one
-INSERT INTO field_type_datas DEFAULT VALUES RETURNING id;
-
--- name: GetFieldTypeDataByPropertyID :one
-SELECT field_type_datas.*
-	FROM properties
-	JOIN field_type_datas ON properties.field_type_data_id = field_type_datas.id
-	WHERE properties.id = @id;
-
 -- name: UpdateSelectData :exec
 UPDATE select_datas
 SET allow_freetext = @allow_freetext
 WHERE id = @id;
 
--- name: UpdateFieldTypeDataSelectDataID :exec
-UPDATE field_type_datas
+-- name: UpdatePropertySelectDataID :exec
+UPDATE properties
 SET select_data_id = @select_data_id
 WHERE id = $1;
-
--- name: UpdateFieldTypeDataSelectDataIDByPropertyID :exec
-UPDATE field_type_datas
-SET select_data_id = @select_data_id
-FROM properties
-WHERE field_type_datas.id = properties.field_type_data_id
-AND properties.id = @id;
 
 -- name: CreateSelectData :one
 INSERT INTO select_datas
@@ -69,12 +52,11 @@ RETURNING id;
 
 -- name: DeleteSelectDataByPropertyID :exec
 DELETE FROM select_datas
-WHERE id IN (
-	SELECT field_type_datas.select_data_id
-	FROM field_type_datas
-	JOIN properties ON properties.field_type_data_id = field_type_datas.id
-	WHERE properties.id = @id
-);
+    WHERE id IN (
+        SELECT properties.select_data_id
+        FROM properties
+        WHERE properties.id = @id
+	);
 
 -- name: CreateSelectOption :exec
 INSERT INTO select_options

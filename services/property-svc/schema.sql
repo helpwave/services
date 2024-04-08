@@ -35,16 +35,6 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: field_type_datas; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.field_type_datas (
-    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    select_data_id uuid
-);
-
-
---
 -- Name: properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -56,7 +46,7 @@ CREATE TABLE public.properties (
     description text DEFAULT ''::text NOT NULL,
     is_archived boolean DEFAULT false NOT NULL,
     set_id uuid,
-    field_type_data_id uuid NOT NULL
+    select_data_id uuid
 );
 
 
@@ -94,14 +84,6 @@ CREATE TABLE public.select_options (
 
 
 --
--- Name: field_type_datas field_type_datas_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.field_type_datas
-    ADD CONSTRAINT field_type_datas_pkey PRIMARY KEY (id);
-
-
---
 -- Name: properties properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -134,19 +116,11 @@ ALTER TABLE ONLY public.select_options
 
 
 --
--- Name: field_type_datas field_type_datas_select_data_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.field_type_datas
-    ADD CONSTRAINT field_type_datas_select_data_id_fkey FOREIGN KEY (select_data_id) REFERENCES public.select_datas(id) ON DELETE SET NULL;
-
-
---
--- Name: properties properties_field_type_data_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: properties properties_select_data_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.properties
-    ADD CONSTRAINT properties_field_type_data_id_fkey FOREIGN KEY (field_type_data_id) REFERENCES public.field_type_datas(id) ON DELETE CASCADE;
+    ADD CONSTRAINT properties_select_data_id_fkey FOREIGN KEY (select_data_id) REFERENCES public.select_datas(id) ON DELETE SET NULL;
 
 
 --

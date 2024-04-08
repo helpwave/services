@@ -11,29 +11,17 @@ import (
 	"github.com/google/uuid"
 )
 
-const createFieldTypeData = `-- name: CreateFieldTypeData :one
-INSERT INTO field_type_datas DEFAULT VALUES RETURNING id
-`
-
-func (q *Queries) CreateFieldTypeData(ctx context.Context) (uuid.UUID, error) {
-	row := q.db.QueryRow(ctx, createFieldTypeData)
-	var id uuid.UUID
-	err := row.Scan(&id)
-	return id, err
-}
-
 const createProperty = `-- name: CreateProperty :exec
 INSERT INTO properties
-	(id, subject_type, field_type, name, field_type_data_id)
-VALUES ($1, $2, $3, $4, $5)
+	(id, subject_type, field_type, name)
+VALUES ($1, $2, $3, $4)
 `
 
 type CreatePropertyParams struct {
-	ID              uuid.UUID
-	SubjectType     int32
-	FieldType       int32
-	Name            string
-	FieldTypeDataID uuid.UUID
+	ID          uuid.UUID
+	SubjectType int32
+	FieldType   int32
+	Name        string
 }
 
 func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) error {
@@ -42,7 +30,6 @@ func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) 
 		arg.SubjectType,
 		arg.FieldType,
 		arg.Name,
-		arg.FieldTypeDataID,
 	)
 	return err
 }
@@ -88,12 +75,11 @@ func (q *Queries) CreateSelectOption(ctx context.Context, arg CreateSelectOption
 
 const deleteSelectDataByPropertyID = `-- name: DeleteSelectDataByPropertyID :exec
 DELETE FROM select_datas
-WHERE id IN (
-	SELECT field_type_datas.select_data_id
-	FROM field_type_datas
-	JOIN properties ON properties.field_type_data_id = field_type_datas.id
-	WHERE properties.id = $1
-)
+    WHERE id IN (
+        SELECT properties.select_data_id
+        FROM properties
+        WHERE properties.id = $1
+	)
 `
 
 func (q *Queries) DeleteSelectDataByPropertyID(ctx context.Context, id uuid.UUID) error {
@@ -101,23 +87,9 @@ func (q *Queries) DeleteSelectDataByPropertyID(ctx context.Context, id uuid.UUID
 	return err
 }
 
-const getFieldTypeDataByPropertyID = `-- name: GetFieldTypeDataByPropertyID :one
-SELECT field_type_datas.id, field_type_datas.select_data_id
-	FROM properties
-	JOIN field_type_datas ON properties.field_type_data_id = field_type_datas.id
-	WHERE properties.id = $1
-`
-
-func (q *Queries) GetFieldTypeDataByPropertyID(ctx context.Context, id uuid.UUID) (FieldTypeData, error) {
-	row := q.db.QueryRow(ctx, getFieldTypeDataByPropertyID, id)
-	var i FieldTypeData
-	err := row.Scan(&i.ID, &i.SelectDataID)
-	return i, err
-}
-
 const getPropertiesWithSelectDataAndOptionsBySubjectTypeOrID = `-- name: GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID :many
 SELECT
-	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.field_type_data_id,
+	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.select_data_id,
 	select_options.id as select_option_id,
 	select_options.name as select_option_name,
 	select_options.description as select_option_description,
@@ -125,8 +97,7 @@ SELECT
 	select_datas.id as select_datas_id,
 	select_datas.allow_freetext as select_datas_allow_freetext
 	FROM properties
-	LEFT JOIN field_type_datas ON properties.field_type_data_id = field_type_datas.id
-	LEFT JOIN select_datas ON field_type_datas.select_data_id = select_datas.id
+	LEFT JOIN select_datas ON properties.select_data_id = select_datas.id
 	LEFT JOIN select_options ON select_options.select_data_id = select_datas.id
  	WHERE subject_type = $1 OR properties.id = $2
 `
@@ -163,7 +134,7 @@ func (q *Queries) GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx con
 			&i.Property.Description,
 			&i.Property.IsArchived,
 			&i.Property.SetID,
-			&i.Property.FieldTypeDataID,
+			&i.Property.SelectDataID,
 			&i.SelectOptionID,
 			&i.SelectOptionName,
 			&i.SelectOptionDescription,
@@ -182,7 +153,7 @@ func (q *Queries) GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx con
 }
 
 const getPropertyById = `-- name: GetPropertyById :one
-SELECT id, subject_type, field_type, name, description, is_archived, set_id, field_type_data_id FROM properties WHERE id = $1
+SELECT id, subject_type, field_type, name, description, is_archived, set_id, select_data_id FROM properties WHERE id = $1
 `
 
 func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, error) {
@@ -196,43 +167,9 @@ func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, 
 		&i.Description,
 		&i.IsArchived,
 		&i.SetID,
-		&i.FieldTypeDataID,
+		&i.SelectDataID,
 	)
 	return i, err
-}
-
-const updateFieldTypeDataSelectDataID = `-- name: UpdateFieldTypeDataSelectDataID :exec
-UPDATE field_type_datas
-SET select_data_id = $2
-WHERE id = $1
-`
-
-type UpdateFieldTypeDataSelectDataIDParams struct {
-	ID           uuid.UUID
-	SelectDataID uuid.NullUUID
-}
-
-func (q *Queries) UpdateFieldTypeDataSelectDataID(ctx context.Context, arg UpdateFieldTypeDataSelectDataIDParams) error {
-	_, err := q.db.Exec(ctx, updateFieldTypeDataSelectDataID, arg.ID, arg.SelectDataID)
-	return err
-}
-
-const updateFieldTypeDataSelectDataIDByPropertyID = `-- name: UpdateFieldTypeDataSelectDataIDByPropertyID :exec
-UPDATE field_type_datas
-SET select_data_id = $1
-FROM properties
-WHERE field_type_datas.id = properties.field_type_data_id
-AND properties.id = $2
-`
-
-type UpdateFieldTypeDataSelectDataIDByPropertyIDParams struct {
-	SelectDataID uuid.NullUUID
-	ID           uuid.UUID
-}
-
-func (q *Queries) UpdateFieldTypeDataSelectDataIDByPropertyID(ctx context.Context, arg UpdateFieldTypeDataSelectDataIDByPropertyIDParams) error {
-	_, err := q.db.Exec(ctx, updateFieldTypeDataSelectDataIDByPropertyID, arg.SelectDataID, arg.ID)
-	return err
 }
 
 const updateProperty = `-- name: UpdateProperty :exec
@@ -263,6 +200,22 @@ func (q *Queries) UpdateProperty(ctx context.Context, arg UpdatePropertyParams) 
 		arg.Description,
 		arg.IsArchived,
 	)
+	return err
+}
+
+const updatePropertySelectDataID = `-- name: UpdatePropertySelectDataID :exec
+UPDATE properties
+SET select_data_id = $2
+WHERE id = $1
+`
+
+type UpdatePropertySelectDataIDParams struct {
+	ID           uuid.UUID
+	SelectDataID uuid.NullUUID
+}
+
+func (q *Queries) UpdatePropertySelectDataID(ctx context.Context, arg UpdatePropertySelectDataIDParams) error {
+	_, err := q.db.Exec(ctx, updatePropertySelectDataID, arg.ID, arg.SelectDataID)
 	return err
 }
 
