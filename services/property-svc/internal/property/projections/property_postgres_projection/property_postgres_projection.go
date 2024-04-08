@@ -8,6 +8,7 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	zlog "github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes"
@@ -20,12 +21,16 @@ import (
 
 type Projection struct {
 	*custom.CustomProjection
+	db           *pgxpool.Pool
 	propertyRepo *property_repo.Queries
 }
 
 func NewProjection(es *esdb.Client, serviceName string) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-postgres-projection", serviceName)
-	p := &Projection{custom.NewCustomProjection(es, subscriptionGroupName), property_repo.New(hwdb.GetDB())}
+	p := &Projection{
+		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName),
+		db:               hwdb.GetDB(),
+		propertyRepo:     property_repo.New(hwdb.GetDB())}
 	p.initEventListeners()
 	return p
 }
@@ -47,12 +52,11 @@ func (p *Projection) initEventListeners() {
 
 func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	db := hwdb.GetDB()
-
-	tx, err := db.Begin(ctx)
+	tx, err := p.db.Begin(ctx)
 	if err != nil {
 		return err, esdb.NackActionRetry
 	}
+	propertyRepo := p.propertyRepo.WithTx(tx)
 
 	defer func() {
 		err := tx.Rollback(ctx)
@@ -60,8 +64,6 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 			log.Error().Err(err).Msg("rollback failed.")
 		}
 	}()
-
-	propertyRepo := property_repo.New(db).WithTx(tx)
 
 	var payload propertyEventsV1.PropertyCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -191,12 +193,11 @@ func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (
 
 func (p *Projection) onFieldTypeUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	db := hwdb.GetDB()
-
-	tx, err := db.Begin(ctx)
+	tx, err := p.db.Begin(ctx)
 	if err != nil {
 		return err, esdb.NackActionRetry
 	}
+	propertyRepo := p.propertyRepo.WithTx(tx)
 
 	defer func() {
 		err := tx.Rollback(ctx)
@@ -204,8 +205,6 @@ func (p *Projection) onFieldTypeUpdated(ctx context.Context, evt hwes.Event) (er
 			log.Error().Err(err).Msg("rollback failed.")
 		}
 	}()
-
-	propertyRepo := property_repo.New(db).WithTx(tx)
 
 	var payload propertyEventsV1.PropertyFieldTypeUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -307,12 +306,11 @@ func (p *Projection) onPropertyRetrieved(ctx context.Context, evt hwes.Event) (e
 
 func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	db := hwdb.GetDB()
-
-	tx, err := db.Begin(ctx)
+	tx, err := p.db.Begin(ctx)
 	if err != nil {
 		return err, esdb.NackActionRetry
 	}
+	propertyRepo := p.propertyRepo.WithTx(tx)
 
 	defer func() {
 		err := tx.Rollback(ctx)
@@ -320,8 +318,6 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 			log.Error().Err(err).Msg("rollback failed.")
 		}
 	}()
-
-	propertyRepo := property_repo.New(db).WithTx(tx)
 
 	var payload propertyEventsV1.FieldTypeDataCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -363,18 +359,11 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 
 func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	db := hwdb.GetDB()
-
-	var payload propertyEventsV1.FieldTypeDataAllowFreetextUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
-		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
-	}
-
-	tx, err := db.Begin(ctx)
+	tx, err := p.db.Begin(ctx)
 	if err != nil {
 		return err, esdb.NackActionRetry
 	}
+	propertyRepo := p.propertyRepo.WithTx(tx)
 
 	defer func() {
 		err := tx.Rollback(ctx)
@@ -382,7 +371,12 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 			log.Error().Err(err).Msg("rollback failed.")
 		}
 	}()
-	propertyRepo := p.propertyRepo.WithTx(tx)
+
+	var payload propertyEventsV1.FieldTypeDataAllowFreetextUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, esdb.NackActionRetry
+	}
 
 	fieldTypeData, err := propertyRepo.GetFieldTypeDataByPropertyID(ctx, evt.AggregateID)
 	if err := hwdb.Error(ctx, err); err != nil {
@@ -408,12 +402,11 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 
 func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	db := hwdb.GetDB()
-
-	tx, err := db.Begin(ctx)
+	tx, err := p.db.Begin(ctx)
 	if err != nil {
 		return err, esdb.NackActionRetry
 	}
+	propertyRepo := p.propertyRepo.WithTx(tx)
 
 	defer func() {
 		err := tx.Rollback(ctx)
@@ -421,7 +414,6 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 			log.Error().Err(err).Msg("rollback failed.")
 		}
 	}()
-	propertyRepo := p.propertyRepo.WithTx(tx)
 
 	var payload propertyEventsV1.FieldTypeDataSelectOptionsUpsertedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
@@ -556,12 +548,11 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 
 func (p *Projection) onFieldTypeDataSelectOptionsRemoved(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
 	log := zlog.Ctx(ctx)
-	db := hwdb.GetDB()
-
-	tx, err := db.Begin(ctx)
+	tx, err := p.db.Begin(ctx)
 	if err != nil {
 		return err, esdb.NackActionRetry
 	}
+	propertyRepo := p.propertyRepo.WithTx(tx)
 
 	defer func() {
 		err := tx.Rollback(ctx)
@@ -569,7 +560,6 @@ func (p *Projection) onFieldTypeDataSelectOptionsRemoved(ctx context.Context, ev
 			log.Error().Err(err).Msg("rollback failed.")
 		}
 	}()
-	propertyRepo := p.propertyRepo.WithTx(tx)
 
 	var payload propertyEventsV1.FieldTypeDataSelectOptionsRemovedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
