@@ -12,9 +12,11 @@ from google.protobuf.internal import builder as _builder
 _sym_db = _symbol_database.Default()
 
 
+from proto.services.property_svc.v1 import types_pb2 as proto_dot_services_dot_property__svc_dot_v1_dot_types__pb2
+from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n7proto/services/property_svc/v1/property_value_svc.proto\x12\x1eproto.services.property_svc.v1\"\xdf\x02\n\x1a\x43reatePropertyValueRequest\x12\x1d\n\nsubject_id\x18\x01 \x01(\tR\tsubjectId\x12!\n\x0csubject_type\x18\x02 \x01(\tR\x0bsubjectType\x12\x1f\n\x0bproperty_id\x18\x03 \x01(\tR\npropertyId\x12\x1f\n\ntext_value\x18\x04 \x01(\tH\x00R\ttextValue\x12#\n\x0cnumber_value\x18\x05 \x01(\x02H\x00R\x0bnumberValue\x12\x1f\n\nbool_value\x18\x06 \x01(\x08H\x00R\tboolValue\x12\x1f\n\ndate_value\x18\x07 \x01(\tH\x00R\tdateValue\x12(\n\x0f\x64\x61te_time_value\x18\x08 \x01(\tH\x00R\rdateTimeValue\x12#\n\x0cselect_value\x18\t \x01(\tH\x00R\x0bselectValueB\x07\n\x05value\"-\n\x1b\x43reatePropertyValueResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\")\n\x17GetPropertyValueRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"\xce\x02\n\x18GetPropertyValueResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12!\n\x0csubject_type\x18\x02 \x01(\tR\x0bsubjectType\x12\x1f\n\x0bproperty_id\x18\x03 \x01(\tR\npropertyId\x12\x1f\n\ntext_value\x18\x04 \x01(\tH\x00R\ttextValue\x12#\n\x0cnumber_value\x18\x05 \x01(\x02H\x00R\x0bnumberValue\x12\x1f\n\nbool_value\x18\x06 \x01(\x08H\x00R\tboolValue\x12\x1f\n\ndate_value\x18\x07 \x01(\tH\x00R\tdateValue\x12(\n\x0f\x64\x61te_time_value\x18\x08 \x01(\tH\x00R\rdateTimeValue\x12#\n\x0cselect_value\x18\t \x01(\tH\x00R\x0bselectValueB\x07\n\x05value2\xb3\x02\n\x14PropertyValueService\x12\x90\x01\n\x13\x43reatePropertyValue\x12:.proto.services.property_svc.v1.CreatePropertyValueRequest\x1a;.proto.services.property_svc.v1.CreatePropertyValueResponse\"\x00\x12\x87\x01\n\x10GetPropertyValue\x12\x37.proto.services.property_svc.v1.GetPropertyValueRequest\x1a\x38.proto.services.property_svc.v1.GetPropertyValueResponse\"\x00\x42\xf3\x01\n\"com.proto.services.property_svc.v1B\x15PropertyValueSvcProtoP\x01Z\x1fgen/proto/services/property-svc\xa2\x02\x03PSP\xaa\x02\x1dProto.Services.PropertySvc.V1\xca\x02\x1dProto\\Services\\PropertySvc\\V1\xe2\x02)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\xea\x02 Proto::Services::PropertySvc::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n7proto/services/property_svc/v1/property_value_svc.proto\x12\x1eproto.services.property_svc.v1\x1a*proto/services/property_svc/v1/types.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xce\x03\n\x1a\x41ttachPropertyValueRequest\x12\x1d\n\nsubject_id\x18\x01 \x01(\tR\tsubjectId\x12N\n\x0csubject_type\x18\x02 \x01(\x0e\x32+.proto.services.property_svc.v1.SubjectTypeR\x0bsubjectType\x12\x1f\n\x0bproperty_id\x18\x03 \x01(\tR\npropertyId\x12\x1f\n\ntext_value\x18\x04 \x01(\tH\x00R\ttextValue\x12#\n\x0cnumber_value\x18\x05 \x01(\x02H\x00R\x0bnumberValue\x12\x1f\n\nbool_value\x18\x06 \x01(\x08H\x00R\tboolValue\x12\x45\n\ndate_value\x18\x07 \x01(\x0b\x32$.proto.services.property_svc.v1.DateH\x00R\tdateValue\x12\x44\n\x0f\x64\x61te_time_value\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00R\rdateTimeValue\x12#\n\x0cselect_value\x18\t \x01(\tH\x00R\x0bselectValueB\x07\n\x05value\"I\n\x1b\x41ttachPropertyValueResponse\x12*\n\x11property_value_id\x18\x01 \x01(\tR\x0fpropertyValueId\"A\n GetAttachedPropertyValuesRequest\x12\x1d\n\nsubject_id\x18\x01 \x01(\tR\tsubjectId\"\xc8\x06\n!GetAttachedPropertyValuesResponse\x12_\n\x06values\x18\x01 \x03(\x0b\x32G.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.ValueR\x06values\x1a\xc1\x05\n\x05Value\x12\x1f\n\x0bproperty_id\x18\x01 \x01(\tR\npropertyId\x12H\n\nfield_type\x18\x02 \x01(\x0e\x32).proto.services.property_svc.v1.FieldTypeR\tfieldType\x12\x12\n\x04name\x18\x03 \x01(\tR\x04name\x12%\n\x0b\x64\x65scription\x18\x04 \x01(\tH\x01R\x0b\x64\x65scription\x88\x01\x01\x12\x1f\n\x0bis_archived\x18\x05 \x01(\x08R\nisArchived\x12(\n\x10is_soft_required\x18\x06 \x01(\x08R\x0eisSoftRequired\x12\x62\n\x03set\x18\x07 \x01(\x0b\x32K.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.SetH\x02R\x03set\x88\x01\x01\x12\x1f\n\ntext_value\x18\t \x01(\tH\x00R\ttextValue\x12#\n\x0cnumber_value\x18\n \x01(\x02H\x00R\x0bnumberValue\x12\x1f\n\nbool_value\x18\x0b \x01(\x08H\x00R\tboolValue\x12\x45\n\ndate_value\x18\x0c \x01(\x0b\x32$.proto.services.property_svc.v1.DateH\x00R\tdateValue\x12\x44\n\x0f\x64\x61te_time_value\x18\r \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00R\rdateTimeValue\x12#\n\x0cselect_value\x18\x0e \x01(\tH\x00R\x0bselectValue\x1a)\n\x03Set\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04nameB\x07\n\x05valueB\x0e\n\x0c_descriptionB\x06\n\x04_set\")\n\x17GetPropertyValueRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"\xce\x02\n\x18GetPropertyValueResponse\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12!\n\x0csubject_type\x18\x02 \x01(\tR\x0bsubjectType\x12\x1f\n\x0bproperty_id\x18\x03 \x01(\tR\npropertyId\x12\x1f\n\ntext_value\x18\x04 \x01(\tH\x00R\ttextValue\x12#\n\x0cnumber_value\x18\x05 \x01(\x02H\x00R\x0bnumberValue\x12\x1f\n\nbool_value\x18\x06 \x01(\x08H\x00R\tboolValue\x12\x1f\n\ndate_value\x18\x07 \x01(\tH\x00R\tdateValue\x12(\n\x0f\x64\x61te_time_value\x18\x08 \x01(\tH\x00R\rdateTimeValue\x12#\n\x0cselect_value\x18\t \x01(\tH\x00R\x0bselectValueB\x07\n\x05value2\xb3\x02\n\x14PropertyValueService\x12\x90\x01\n\x13\x41ttachPropertyValue\x12:.proto.services.property_svc.v1.AttachPropertyValueRequest\x1a;.proto.services.property_svc.v1.AttachPropertyValueResponse\"\x00\x12\x87\x01\n\x10GetPropertyValue\x12\x37.proto.services.property_svc.v1.GetPropertyValueRequest\x1a\x38.proto.services.property_svc.v1.GetPropertyValueResponse\"\x00\x42\xf3\x01\n\"com.proto.services.property_svc.v1B\x15PropertyValueSvcProtoP\x01Z\x1fgen/proto/services/property-svc\xa2\x02\x03PSP\xaa\x02\x1dProto.Services.PropertySvc.V1\xca\x02\x1dProto\\Services\\PropertySvc\\V1\xe2\x02)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\xea\x02 Proto::Services::PropertySvc::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -22,14 +24,22 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'proto.services.property_svc
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\"com.proto.services.property_svc.v1B\025PropertyValueSvcProtoP\001Z\037gen/proto/services/property-svc\242\002\003PSP\252\002\035Proto.Services.PropertySvc.V1\312\002\035Proto\\Services\\PropertySvc\\V1\342\002)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\352\002 Proto::Services::PropertySvc::V1'
-  _globals['_CREATEPROPERTYVALUEREQUEST']._serialized_start=92
-  _globals['_CREATEPROPERTYVALUEREQUEST']._serialized_end=443
-  _globals['_CREATEPROPERTYVALUERESPONSE']._serialized_start=445
-  _globals['_CREATEPROPERTYVALUERESPONSE']._serialized_end=490
-  _globals['_GETPROPERTYVALUEREQUEST']._serialized_start=492
-  _globals['_GETPROPERTYVALUEREQUEST']._serialized_end=533
-  _globals['_GETPROPERTYVALUERESPONSE']._serialized_start=536
-  _globals['_GETPROPERTYVALUERESPONSE']._serialized_end=870
-  _globals['_PROPERTYVALUESERVICE']._serialized_start=873
-  _globals['_PROPERTYVALUESERVICE']._serialized_end=1180
+  _globals['_ATTACHPROPERTYVALUEREQUEST']._serialized_start=169
+  _globals['_ATTACHPROPERTYVALUEREQUEST']._serialized_end=631
+  _globals['_ATTACHPROPERTYVALUERESPONSE']._serialized_start=633
+  _globals['_ATTACHPROPERTYVALUERESPONSE']._serialized_end=706
+  _globals['_GETATTACHEDPROPERTYVALUESREQUEST']._serialized_start=708
+  _globals['_GETATTACHEDPROPERTYVALUESREQUEST']._serialized_end=773
+  _globals['_GETATTACHEDPROPERTYVALUESRESPONSE']._serialized_start=776
+  _globals['_GETATTACHEDPROPERTYVALUESRESPONSE']._serialized_end=1616
+  _globals['_GETATTACHEDPROPERTYVALUESRESPONSE_VALUE']._serialized_start=911
+  _globals['_GETATTACHEDPROPERTYVALUESRESPONSE_VALUE']._serialized_end=1616
+  _globals['_GETATTACHEDPROPERTYVALUESRESPONSE_VALUE_SET']._serialized_start=1542
+  _globals['_GETATTACHEDPROPERTYVALUESRESPONSE_VALUE_SET']._serialized_end=1583
+  _globals['_GETPROPERTYVALUEREQUEST']._serialized_start=1618
+  _globals['_GETPROPERTYVALUEREQUEST']._serialized_end=1659
+  _globals['_GETPROPERTYVALUERESPONSE']._serialized_start=1662
+  _globals['_GETPROPERTYVALUERESPONSE']._serialized_end=1996
+  _globals['_PROPERTYVALUESERVICE']._serialized_start=1999
+  _globals['_PROPERTYVALUESERVICE']._serialized_end=2306
 # @@protoc_insertion_point(module_scope)

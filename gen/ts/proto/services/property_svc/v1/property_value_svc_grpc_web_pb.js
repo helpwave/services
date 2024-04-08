@@ -19,6 +19,10 @@
 const grpc = {};
 grpc.web = require('grpc-web');
 
+
+var proto_services_property_svc_v1_types_pb = require('../../../../proto/services/property_svc/v1/types_pb.js')
+
+var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js')
 const proto = {};
 proto.proto = {};
 proto.proto.services = {};
@@ -80,61 +84,61 @@ proto.proto.services.property_svc.v1.PropertyValueServicePromiseClient =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.property_svc.v1.CreatePropertyValueRequest,
- *   !proto.proto.services.property_svc.v1.CreatePropertyValueResponse>}
+ *   !proto.proto.services.property_svc.v1.AttachPropertyValueRequest,
+ *   !proto.proto.services.property_svc.v1.AttachPropertyValueResponse>}
  */
-const methodDescriptor_PropertyValueService_CreatePropertyValue = new grpc.web.MethodDescriptor(
-  '/proto.services.property_svc.v1.PropertyValueService/CreatePropertyValue',
+const methodDescriptor_PropertyValueService_AttachPropertyValue = new grpc.web.MethodDescriptor(
+  '/proto.services.property_svc.v1.PropertyValueService/AttachPropertyValue',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.property_svc.v1.CreatePropertyValueRequest,
-  proto.proto.services.property_svc.v1.CreatePropertyValueResponse,
+  proto.proto.services.property_svc.v1.AttachPropertyValueRequest,
+  proto.proto.services.property_svc.v1.AttachPropertyValueResponse,
   /**
-   * @param {!proto.proto.services.property_svc.v1.CreatePropertyValueRequest} request
+   * @param {!proto.proto.services.property_svc.v1.AttachPropertyValueRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.property_svc.v1.CreatePropertyValueResponse.deserializeBinary
+  proto.proto.services.property_svc.v1.AttachPropertyValueResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.property_svc.v1.CreatePropertyValueRequest} request The
+ * @param {!proto.proto.services.property_svc.v1.AttachPropertyValueRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.property_svc.v1.CreatePropertyValueResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.property_svc.v1.AttachPropertyValueResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.property_svc.v1.CreatePropertyValueResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.property_svc.v1.AttachPropertyValueResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.property_svc.v1.PropertyValueServiceClient.prototype.createPropertyValue =
+proto.proto.services.property_svc.v1.PropertyValueServiceClient.prototype.attachPropertyValue =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.property_svc.v1.PropertyValueService/CreatePropertyValue',
+      '/proto.services.property_svc.v1.PropertyValueService/AttachPropertyValue',
       request,
       metadata || {},
-      methodDescriptor_PropertyValueService_CreatePropertyValue,
+      methodDescriptor_PropertyValueService_AttachPropertyValue,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.property_svc.v1.CreatePropertyValueRequest} request The
+ * @param {!proto.proto.services.property_svc.v1.AttachPropertyValueRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.property_svc.v1.CreatePropertyValueResponse>}
+ * @return {!Promise<!proto.proto.services.property_svc.v1.AttachPropertyValueResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.property_svc.v1.PropertyValueServicePromiseClient.prototype.createPropertyValue =
+proto.proto.services.property_svc.v1.PropertyValueServicePromiseClient.prototype.attachPropertyValue =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.property_svc.v1.PropertyValueService/CreatePropertyValue',
+      '/proto.services.property_svc.v1.PropertyValueService/AttachPropertyValue',
       request,
       metadata || {},
-      methodDescriptor_PropertyValueService_CreatePropertyValue);
+      methodDescriptor_PropertyValueService_AttachPropertyValue);
 };
 
 

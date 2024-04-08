@@ -18,13 +18,14 @@ func NewPropertyValueService(aggregateStore hwes.AggregateStore) *PropertyValueG
 	return &PropertyValueGrpcService{as: aggregateStore}
 }
 
-func (s *PropertyValueGrpcService) CreatePropertyValue(ctx context.Context, req *pb.CreatePropertyValueRequest) (*pb.CreatePropertyValueResponse, error) {
+func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req *pb.AttachPropertyValueRequest) (*pb.AttachPropertyValueResponse, error) {
 	propertyValueID := uuid.New()
 
-	subjectID, err := uuid.Parse(req.GetSubjectId())
+	_, err := uuid.Parse(req.GetSubjectId())
 	if err != nil {
 		return nil, err
 	}
+
 	propertyID, err := uuid.Parse(req.GetPropertyId())
 	if err != nil {
 		return nil, err
@@ -32,26 +33,28 @@ func (s *PropertyValueGrpcService) CreatePropertyValue(ctx context.Context, req 
 
 	var value interface{}
 	switch req.Value.(type) {
-	case *pb.CreatePropertyValueRequest_TextValue:
+	case *pb.AttachPropertyValueRequest_TextValue:
 		value = req.GetTextValue()
-	case *pb.CreatePropertyValueRequest_NumberValue:
+	case *pb.AttachPropertyValueRequest_NumberValue:
 		value = req.GetNumberValue()
-	case *pb.CreatePropertyValueRequest_BoolValue:
+	case *pb.AttachPropertyValueRequest_BoolValue:
 		value = req.GetBoolValue()
-	case *pb.CreatePropertyValueRequest_DateValue:
+	case *pb.AttachPropertyValueRequest_DateValue:
 		value = req.GetDateValue()
-	case *pb.CreatePropertyValueRequest_DateTimeValue:
+	case *pb.AttachPropertyValueRequest_DateTimeValue:
 		value = req.GetDateTimeValue()
+	case *pb.AttachPropertyValueRequest_SelectValue:
+		value = req.GetSelectValue()
 	default:
 		value = nil
 	}
 
-	if err := commandsV1.NewCreatePropertyValueCommandHandler(s.as)(ctx, propertyValueID, propertyID, subjectID, req.GetSubjectType(), value); err != nil {
+	if err := commandsV1.NewAttachPropertyValueCommandHandler(s.as)(ctx, propertyValueID, propertyID, value); err != nil {
 		return nil, err
 	}
 
-	return &pb.CreatePropertyValueResponse{
-		Id: propertyValueID.String(),
+	return &pb.AttachPropertyValueResponse{
+		PropertyValueId: propertyValueID.String(),
 	}, nil
 }
 
@@ -61,19 +64,18 @@ func (s *PropertyValueGrpcService) GetPropertyValue(ctx context.Context, req *pb
 		return nil, err
 	}
 
-	property, err := v1queries.NewGetPropertyValueByIDQueryHandler(s.as)(ctx, id)
+	propertyValue, err := v1queries.NewGetPropertyValueByIDQueryHandler(s.as)(ctx, id)
 	if err != nil {
 		return nil, err
 	}
 
 	response := &pb.GetPropertyValueResponse{
-		Id:          property.ID.String(),
-		SubjectType: property.SubjectType,
-		PropertyId:  property.PropertyID.String(),
+		Id:         propertyValue.ID.String(),
+		PropertyId: propertyValue.PropertyID.String(),
 	}
 
 	// TODO: handle Date, datetime, select
-	switch v := property.Value.(type) {
+	switch v := propertyValue.Value.(type) {
 	case string:
 		response.Value = &pb.GetPropertyValueResponse_TextValue{TextValue: v}
 	case float32:
