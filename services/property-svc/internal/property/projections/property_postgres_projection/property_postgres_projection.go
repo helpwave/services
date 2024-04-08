@@ -98,8 +98,6 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 		SubjectType:     int32(subjectType),
 		FieldType:       int32(fieldType),
 		Name:            payload.Name,
-		Description:     "",
-		IsArchived:      false,
 		FieldTypeDataID: fieldTypeDataID,
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
@@ -144,12 +142,12 @@ func (p *Projection) onPropertySetIDUpdated(ctx context.Context, evt hwes.Event)
 	}
 
 	setID := uuid.NullUUID{UUID: uuid.Nil, Valid: false}
-	if len(payload.SetID) > 0 {
-		parsedID, err := hwutil.ParseNullUUID(&payload.SetID)
-		if err != nil {
+	if payload.SetID != "" {
+		if parsedID, err := hwutil.ParseNullUUID(&payload.SetID); err != nil {
 			return err, esdb.NackActionRetry
+		} else {
+			setID = parsedID
 		}
-		setID = parsedID
 	}
 
 	err := p.propertyRepo.UpdatePropertySetID(ctx, property_repo.UpdatePropertySetIDParams{
@@ -180,8 +178,8 @@ func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (
 	subjectType := (pb.SubjectType)(value)
 
 	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
-		SubjectType: hwutil.PtrTo(int32(subjectType)),
 		ID:          evt.AggregateID,
+		SubjectType: hwutil.PtrTo(int32(subjectType)),
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {

@@ -1,7 +1,7 @@
 -- name: CreateProperty :exec
 INSERT INTO properties
-	(id, subject_type, field_type, name, description, is_archived, field_type_data_id)
-VALUES ($1, $2, $3, $4, $5, $6, $7);
+	(id, subject_type, field_type, name, field_type_data_id)
+VALUES ($1, $2, $3, $4, $5);
 
 -- name: GetPropertyById :one
 SELECT * FROM properties WHERE id = $1;

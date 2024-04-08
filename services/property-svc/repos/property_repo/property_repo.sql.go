@@ -24,8 +24,8 @@ func (q *Queries) CreateFieldTypeData(ctx context.Context) (uuid.UUID, error) {
 
 const createProperty = `-- name: CreateProperty :exec
 INSERT INTO properties
-	(id, subject_type, field_type, name, description, is_archived, field_type_data_id)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+	(id, subject_type, field_type, name, field_type_data_id)
+VALUES ($1, $2, $3, $4, $5)
 `
 
 type CreatePropertyParams struct {
@@ -33,8 +33,6 @@ type CreatePropertyParams struct {
 	SubjectType     int32
 	FieldType       int32
 	Name            string
-	Description     string
-	IsArchived      bool
 	FieldTypeDataID uuid.UUID
 }
 
@@ -44,8 +42,6 @@ func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) 
 		arg.SubjectType,
 		arg.FieldType,
 		arg.Name,
-		arg.Description,
-		arg.IsArchived,
 		arg.FieldTypeDataID,
 	)
 	return err
