@@ -218,7 +218,7 @@ func (p *Projection) onFieldTypeUpdated(ctx context.Context, evt hwes.Event) (er
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
 		}
-		if property.SelectDataID.Valid {
+		if !property.SelectDataID.Valid {
 			sdID, err := propertyRepo.CreateSelectData(ctx, false)
 			if err := hwdb.Error(ctx, err); err != nil {
 				return err, esdb.NackActionRetry
@@ -375,8 +375,20 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, esdb.NackActionRetry
 		}
+	} else if property.FieldType == int32(pb.FieldType_FIELD_TYPE_SELECT) {
+		// if the property was created with field_type_select but selectData wasn't created initially we have to do it here
+		sdID, err := propertyRepo.CreateSelectData(ctx, payload.NewAllowFreetext)
+		if err := hwdb.Error(ctx, err); err != nil {
+			return err, esdb.NackActionRetry
+		}
+		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
+			ID:           evt.AggregateID,
+			SelectDataID: uuid.NullUUID{UUID: sdID, Valid: true},
+		})
+		if err := hwdb.Error(ctx, err); err != nil {
+			return err, esdb.NackActionRetry
+		}
 	}
-	// TODO: add select Data?
 
 	if err := tx.Commit(ctx); err != nil {
 		return err, esdb.NackActionRetry
