@@ -29,7 +29,7 @@ func StartGRPCServer(ctx context.Context, grpcServer *grpc.Server) (conn *grpc.C
 	}()
 
 	// Start Connection
-	conn, err := grpc.DialContext(ctx, "",
+	conn, err := grpc.NewClient("passthrough://" + listener.Addr().String(),
 		grpc.WithContextDialer(func(ctx context.Context, s string) (net.Conn, error) {
 			return listener.Dial()
 		}),

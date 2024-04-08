@@ -1,6 +1,7 @@
 package api
 
 import (
+	"common"
 	"context"
 	"fmt"
 	pb "gen/proto/services/tasks_svc/v1"
@@ -9,10 +10,12 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwdb"
+	"hwdb/locale"
 	"hwes"
 	"hwutil"
 	commandsV1 "tasks-svc/internal/patient/commands/v1"
 	v1queries "tasks-svc/internal/patient/queries/v1"
+	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/bed_repo"
 )
 
@@ -35,8 +38,7 @@ func (s *PatientGrpcService) CreatePatient(ctx context.Context, req *pb.CreatePa
 
 	log.Info().Str("patientID", patientID.String()).Msg("patient created")
 
-	// TODO: https://github.com/helpwave/services/issues/694
-	// tracking.AddPatientToRecentActivity(ctx, patientID.String())
+	tracking.AddPatientToRecentActivity(ctx, patientID.String())
 
 	return &pb.CreatePatientResponse{
 		Id: patientID.String(),
@@ -89,14 +91,15 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	// TODO: https://github.com/helpwave/services/issues/694
 	var recentPatientIdsStrs []string
-	/*
-		recentPatientIdsStrs, err := tracking.GetRecentPatientsForUser(ctx)
-		if err != nil {
-			return nil, status.Error(codes.Internal, err.Error())
-		}
-	*/
+	recentPatientIdsStrs, err := tracking.GetRecentPatientsForUser(ctx)
+	if err != nil {
+		return nil, common.NewStatusError(ctx,
+			codes.Internal,
+			"decaying_lru error: "+err.Error(),
+			locale.GenericError(ctx),
+		)
+	}
 
 	// WORKAROUND: Until https://github.com/helpwave/services/issues/458 is fixed
 	/* TODO: Projection for that workaround?
@@ -167,8 +170,7 @@ func (s *PatientGrpcService) UpdatePatient(ctx context.Context, req *pb.UpdatePa
 		return nil, err
 	}
 
-	// TODO: https://github.com/helpwave/services/issues/694
-	// tracking.AddPatientToRecentActivity(ctx, patientID.String())
+	tracking.AddPatientToRecentActivity(ctx, patientID.String())
 
 	return &pb.UpdatePatientResponse{}, nil
 }
@@ -194,8 +196,7 @@ func (s *PatientGrpcService) AssignBed(ctx context.Context, req *pb.AssignBedReq
 
 	log.Info().Str("patientID", patientID.String()).Str("bedID", bedID.String()).Msg("assigned bed to patient")
 
-	// TODO: https://github.com/helpwave/services/issues/694
-	// tracking.AddWardToRecentActivity(ctx, patientID.String())
+	tracking.AddWardToRecentActivity(ctx, patientID.String())
 
 	return &pb.AssignBedResponse{}, nil
 }
@@ -216,8 +217,7 @@ func (s *PatientGrpcService) UnassignBed(ctx context.Context, req *pb.UnassignBe
 
 	log.Info().Str("patientID", patientID.String()).Msg("unassigned bed from patient")
 
-	// TODO: https://github.com/helpwave/services/issues/694
-	// tracking.AddPatientToRecentActivity(ctx, patientID.String())
+	tracking.AddPatientToRecentActivity(ctx, patientID.String())
 
 	return &pb.UnassignBedResponse{}, nil
 }
@@ -238,8 +238,7 @@ func (s *PatientGrpcService) DischargePatient(ctx context.Context, req *pb.Disch
 
 	log.Info().Str("patientID", patientID.String()).Msg("patient discharged")
 
-	// TODO: https://github.com/helpwave/services/issues/694
-	// tracking.RemovePatientFromRecentActivity(ctx, patientID.String())
+	tracking.RemovePatientFromRecentActivity(ctx, patientID.String())
 
 	return &pb.DischargePatientResponse{}, nil
 }
@@ -256,8 +255,7 @@ func (s *PatientGrpcService) ReadmitPatient(ctx context.Context, req *pb.Readmit
 		return nil, err
 	}
 
-	// TODO: https://github.com/helpwave/services/issues/694
-	// tracking.AddPatientToRecentActivity(ctx, patientID.String())
+	tracking.AddPatientToRecentActivity(ctx, patientID.String())
 
 	return &pb.ReadmitPatientResponse{}, nil
 }
