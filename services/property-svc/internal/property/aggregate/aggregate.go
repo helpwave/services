@@ -149,8 +149,12 @@ func (a *PropertyAggregate) onFieldTypeUpdated(evt hwes.Event) error {
 	}
 	fieldType := (pb.FieldType)(value)
 
+	// removes the selectData if the fieldType changes to something else than field_type_select
+	// adds selectData if fieldType changes to field_type_select and selectData is not already set
 	if fieldType != pb.FieldType_FIELD_TYPE_SELECT {
 		a.Property.FieldTypeData.SelectData = nil
+	} else if a.Property.FieldTypeData.SelectData == nil {
+		a.Property.FieldTypeData.SelectData = &models.SelectData{}
 	}
 
 	a.Property.FieldType = fieldType
@@ -175,6 +179,10 @@ func (a *PropertyAggregate) onAllowFreetextUpdated(evt hwes.Event) error {
 
 	if a.Property.FieldTypeData.SelectData != nil {
 		a.Property.FieldTypeData.SelectData.AllowFreetext = payload.NewAllowFreetext
+	} else if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT {
+		a.Property.FieldTypeData.SelectData = &models.SelectData{
+			AllowFreetext: payload.NewAllowFreetext,
+		}
 	}
 
 	return nil

@@ -151,3 +151,4 @@ services:
       - "3001:3001" # task-svc
       - "3002:3002" # user-svc
       - "3003:3003" # ory-svc
+      - "3004:3004" # property-svc

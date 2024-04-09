@@ -262,5 +262,66 @@ proto.proto.services.property_svc.v1.PropertyServicePromiseClient.prototype.upda
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.property_svc.v1.GetPropertiesBySubjectTypeRequest,
+ *   !proto.proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse>}
+ */
+const methodDescriptor_PropertyService_GetPropertiesBySubjectType = new grpc.web.MethodDescriptor(
+  '/proto.services.property_svc.v1.PropertyService/GetPropertiesBySubjectType',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.property_svc.v1.GetPropertiesBySubjectTypeRequest,
+  proto.proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse,
+  /**
+   * @param {!proto.proto.services.property_svc.v1.GetPropertiesBySubjectTypeRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.property_svc.v1.GetPropertiesBySubjectTypeRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.property_svc.v1.PropertyServiceClient.prototype.getPropertiesBySubjectType =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.property_svc.v1.PropertyService/GetPropertiesBySubjectType',
+      request,
+      metadata || {},
+      methodDescriptor_PropertyService_GetPropertiesBySubjectType,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.property_svc.v1.GetPropertiesBySubjectTypeRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.property_svc.v1.PropertyServicePromiseClient.prototype.getPropertiesBySubjectType =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.property_svc.v1.PropertyService/GetPropertiesBySubjectType',
+      request,
+      metadata || {},
+      methodDescriptor_PropertyService_GetPropertiesBySubjectType);
+};
+
+
 module.exports = proto.proto.services.property_svc.v1;
 
