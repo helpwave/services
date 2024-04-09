@@ -47,8 +47,14 @@ func (a *PropertyValueAggregate) onPropertyValueCreated(evt hwes.Event) error {
 		return err
 	}
 
+	subjectID, err := uuid.Parse(payload.SubjectID)
+	if err != nil {
+		return err
+	}
+
 	a.PropertyValue.PropertyID = propertyID
 	a.PropertyValue.Value = payload.Value
+	a.PropertyValue.SubjectID = subjectID
 
 	return nil
 }

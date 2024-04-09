@@ -2,20 +2,22 @@ package v1
 
 import (
 	"context"
-	pb "gen/proto/services/property_svc/v1"
 	"github.com/google/uuid"
+	"hwdb"
 	"hwes"
 	"property-svc/internal/property-value/aggregate"
+	"property-svc/repos/property_value_repo"
 )
 
-type AttachPropertyValueCommandHandler func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID, subjectType pb.SubjectType) error
+type AttachPropertyValueCommandHandler func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) error
 
 func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachPropertyValueCommandHandler {
-	return func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID, subjectType pb.SubjectType) error {
+	return func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) error {
 		a := aggregate.NewPropertyValueAggregate(propertyValueID)
+		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 
-		exists, err := as.Exists(ctx, a)
-		if err != nil {
+		exists, err := propertyValueRepo.ExistsPropertyValue(ctx, property_value_repo.ExistsPropertyValueParams{PropertyID: propertyID, SubjectID: subjectID})
+		if err := hwdb.Error(ctx, err); err != nil {
 			return err
 		}
 
@@ -24,7 +26,7 @@ func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachProperty
 				return err
 			}
 		} else {
-			if err := a.CreatePropertyValue(ctx, propertyID, value, subjectID, subjectType); err != nil {
+			if err := a.CreatePropertyValue(ctx, propertyID, value, subjectID); err != nil {
 				return err
 			}
 		}

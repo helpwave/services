@@ -8,9 +8,6 @@ export class AttachPropertyValueRequest extends jspb.Message {
   getSubjectId(): string;
   setSubjectId(value: string): AttachPropertyValueRequest;
 
-  getSubjectType(): proto_services_property_svc_v1_types_pb.SubjectType;
-  setSubjectType(value: proto_services_property_svc_v1_types_pb.SubjectType): AttachPropertyValueRequest;
-
   getPropertyId(): string;
   setPropertyId(value: string): AttachPropertyValueRequest;
 
@@ -49,7 +46,6 @@ export class AttachPropertyValueRequest extends jspb.Message {
 export namespace AttachPropertyValueRequest {
   export type AsObject = {
     subjectId: string,
-    subjectType: proto_services_property_svc_v1_types_pb.SubjectType,
     propertyId: string,
     textValue: string,
     numberValue: number,
@@ -268,9 +264,6 @@ export class GetPropertyValueResponse extends jspb.Message {
   getId(): string;
   setId(value: string): GetPropertyValueResponse;
 
-  getSubjectType(): string;
-  setSubjectType(value: string): GetPropertyValueResponse;
-
   getPropertyId(): string;
   setPropertyId(value: string): GetPropertyValueResponse;
 
@@ -305,7 +298,6 @@ export class GetPropertyValueResponse extends jspb.Message {
 export namespace GetPropertyValueResponse {
   export type AsObject = {
     id: string,
-    subjectType: string,
     propertyId: string,
     textValue: string,
     numberValue: number,

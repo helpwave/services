@@ -267,7 +267,6 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.toObje
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     subjectId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    subjectType: jspb.Message.getFieldWithDefault(msg, 2, 0),
     propertyId: jspb.Message.getFieldWithDefault(msg, 3, ""),
     textValue: jspb.Message.getFieldWithDefault(msg, 4, ""),
     numberValue: jspb.Message.getFloatingPointFieldWithDefault(msg, 5, 0.0),
@@ -314,10 +313,6 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.deserializeBinar
     case 1:
       var value = /** @type {string} */ (reader.readString());
       msg.setSubjectId(value);
-      break;
-    case 2:
-      var value = /** @type {!proto.proto.services.property_svc.v1.SubjectType} */ (reader.readEnum());
-      msg.setSubjectType(value);
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
@@ -382,13 +377,6 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.serializeBinaryT
   if (f.length > 0) {
     writer.writeString(
       1,
-      f
-    );
-  }
-  f = message.getSubjectType();
-  if (f !== 0.0) {
-    writer.writeEnum(
-      2,
       f
     );
   }
@@ -461,24 +449,6 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.getSub
  */
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.setSubjectId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
-};
-
-
-/**
- * optional SubjectType subject_type = 2;
- * @return {!proto.proto.services.property_svc.v1.SubjectType}
- */
-proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.getSubjectType = function() {
-  return /** @type {!proto.proto.services.property_svc.v1.SubjectType} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/**
- * @param {!proto.proto.services.property_svc.v1.SubjectType} value
- * @return {!proto.proto.services.property_svc.v1.AttachPropertyValueRequest} returns this
- */
-proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.setSubjectType = function(value) {
-  return jspb.Message.setProto3EnumField(this, 2, value);
 };
 
 
@@ -2164,7 +2134,6 @@ proto.proto.services.property_svc.v1.GetPropertyValueResponse.prototype.toObject
 proto.proto.services.property_svc.v1.GetPropertyValueResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    subjectType: jspb.Message.getFieldWithDefault(msg, 2, ""),
     propertyId: jspb.Message.getFieldWithDefault(msg, 3, ""),
     textValue: jspb.Message.getFieldWithDefault(msg, 4, ""),
     numberValue: jspb.Message.getFloatingPointFieldWithDefault(msg, 5, 0.0),
@@ -2211,10 +2180,6 @@ proto.proto.services.property_svc.v1.GetPropertyValueResponse.deserializeBinaryF
     case 1:
       var value = /** @type {string} */ (reader.readString());
       msg.setId(value);
-      break;
-    case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setSubjectType(value);
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
@@ -2277,13 +2242,6 @@ proto.proto.services.property_svc.v1.GetPropertyValueResponse.serializeBinaryToW
   if (f.length > 0) {
     writer.writeString(
       1,
-      f
-    );
-  }
-  f = message.getSubjectType();
-  if (f.length > 0) {
-    writer.writeString(
-      2,
       f
     );
   }
@@ -2354,24 +2312,6 @@ proto.proto.services.property_svc.v1.GetPropertyValueResponse.prototype.getId = 
  */
 proto.proto.services.property_svc.v1.GetPropertyValueResponse.prototype.setId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
-};
-
-
-/**
- * optional string subject_type = 2;
- * @return {string}
- */
-proto.proto.services.property_svc.v1.GetPropertyValueResponse.prototype.getSubjectType = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.proto.services.property_svc.v1.GetPropertyValueResponse} returns this
- */
-proto.proto.services.property_svc.v1.GetPropertyValueResponse.prototype.setSubjectType = function(value) {
-  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

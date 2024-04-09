@@ -32,7 +32,6 @@ enum AttachPropertyValueRequest_Value {
 class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   factory AttachPropertyValueRequest({
     $core.String? subjectId,
-    $15.SubjectType? subjectType,
     $core.String? propertyId,
     $core.String? textValue,
     $core.double? numberValue,
@@ -44,9 +43,6 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     final $result = create();
     if (subjectId != null) {
       $result.subjectId = subjectId;
-    }
-    if (subjectType != null) {
-      $result.subjectType = subjectType;
     }
     if (propertyId != null) {
       $result.propertyId = propertyId;
@@ -87,7 +83,6 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttachPropertyValueRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [4, 5, 6, 7, 8, 9])
     ..aOS(1, _omitFieldNames ? '' : 'subjectId')
-    ..e<$15.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $15.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $15.SubjectType.valueOf, enumValues: $15.SubjectType.values)
     ..aOS(3, _omitFieldNames ? '' : 'propertyId')
     ..aOS(4, _omitFieldNames ? '' : 'textValue')
     ..a<$core.double>(5, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OF)
@@ -131,79 +126,70 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   void clearSubjectId() => clearField(1);
 
-  @$pb.TagNumber(2)
-  $15.SubjectType get subjectType => $_getN(1);
-  @$pb.TagNumber(2)
-  set subjectType($15.SubjectType v) { setField(2, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasSubjectType() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearSubjectType() => clearField(2);
-
   @$pb.TagNumber(3)
-  $core.String get propertyId => $_getSZ(2);
+  $core.String get propertyId => $_getSZ(1);
   @$pb.TagNumber(3)
-  set propertyId($core.String v) { $_setString(2, v); }
+  set propertyId($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(3)
-  $core.bool hasPropertyId() => $_has(2);
+  $core.bool hasPropertyId() => $_has(1);
   @$pb.TagNumber(3)
   void clearPropertyId() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get textValue => $_getSZ(3);
+  $core.String get textValue => $_getSZ(2);
   @$pb.TagNumber(4)
-  set textValue($core.String v) { $_setString(3, v); }
+  set textValue($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(4)
-  $core.bool hasTextValue() => $_has(3);
+  $core.bool hasTextValue() => $_has(2);
   @$pb.TagNumber(4)
   void clearTextValue() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.double get numberValue => $_getN(4);
+  $core.double get numberValue => $_getN(3);
   @$pb.TagNumber(5)
-  set numberValue($core.double v) { $_setFloat(4, v); }
+  set numberValue($core.double v) { $_setFloat(3, v); }
   @$pb.TagNumber(5)
-  $core.bool hasNumberValue() => $_has(4);
+  $core.bool hasNumberValue() => $_has(3);
   @$pb.TagNumber(5)
   void clearNumberValue() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.bool get boolValue => $_getBF(5);
+  $core.bool get boolValue => $_getBF(4);
   @$pb.TagNumber(6)
-  set boolValue($core.bool v) { $_setBool(5, v); }
+  set boolValue($core.bool v) { $_setBool(4, v); }
   @$pb.TagNumber(6)
-  $core.bool hasBoolValue() => $_has(5);
+  $core.bool hasBoolValue() => $_has(4);
   @$pb.TagNumber(6)
   void clearBoolValue() => clearField(6);
 
   @$pb.TagNumber(7)
-  $15.Date get dateValue => $_getN(6);
+  $15.Date get dateValue => $_getN(5);
   @$pb.TagNumber(7)
   set dateValue($15.Date v) { setField(7, v); }
   @$pb.TagNumber(7)
-  $core.bool hasDateValue() => $_has(6);
+  $core.bool hasDateValue() => $_has(5);
   @$pb.TagNumber(7)
   void clearDateValue() => clearField(7);
   @$pb.TagNumber(7)
-  $15.Date ensureDateValue() => $_ensure(6);
+  $15.Date ensureDateValue() => $_ensure(5);
 
   @$pb.TagNumber(8)
-  $16.Timestamp get dateTimeValue => $_getN(7);
+  $16.Timestamp get dateTimeValue => $_getN(6);
   @$pb.TagNumber(8)
   set dateTimeValue($16.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
-  $core.bool hasDateTimeValue() => $_has(7);
+  $core.bool hasDateTimeValue() => $_has(6);
   @$pb.TagNumber(8)
   void clearDateTimeValue() => clearField(8);
   @$pb.TagNumber(8)
-  $16.Timestamp ensureDateTimeValue() => $_ensure(7);
+  $16.Timestamp ensureDateTimeValue() => $_ensure(6);
 
   @$pb.TagNumber(9)
-  $core.String get selectValue => $_getSZ(8);
+  $core.String get selectValue => $_getSZ(7);
   @$pb.TagNumber(9)
-  set selectValue($core.String v) { $_setString(8, v); }
+  set selectValue($core.String v) { $_setString(7, v); }
   @$pb.TagNumber(9)
-  $core.bool hasSelectValue() => $_has(8);
+  $core.bool hasSelectValue() => $_has(7);
   @$pb.TagNumber(9)
   void clearSelectValue() => clearField(9);
 }
@@ -728,7 +714,6 @@ enum GetPropertyValueResponse_Value {
 class GetPropertyValueResponse extends $pb.GeneratedMessage {
   factory GetPropertyValueResponse({
     $core.String? id,
-    $core.String? subjectType,
     $core.String? propertyId,
     $core.String? textValue,
     $core.double? numberValue,
@@ -740,9 +725,6 @@ class GetPropertyValueResponse extends $pb.GeneratedMessage {
     final $result = create();
     if (id != null) {
       $result.id = id;
-    }
-    if (subjectType != null) {
-      $result.subjectType = subjectType;
     }
     if (propertyId != null) {
       $result.propertyId = propertyId;
@@ -783,7 +765,6 @@ class GetPropertyValueResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyValueResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [4, 5, 6, 7, 8, 9])
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'subjectType')
     ..aOS(3, _omitFieldNames ? '' : 'propertyId')
     ..aOS(4, _omitFieldNames ? '' : 'textValue')
     ..a<$core.double>(5, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OF)
@@ -827,75 +808,66 @@ class GetPropertyValueResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
 
-  @$pb.TagNumber(2)
-  $core.String get subjectType => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set subjectType($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasSubjectType() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearSubjectType() => clearField(2);
-
   @$pb.TagNumber(3)
-  $core.String get propertyId => $_getSZ(2);
+  $core.String get propertyId => $_getSZ(1);
   @$pb.TagNumber(3)
-  set propertyId($core.String v) { $_setString(2, v); }
+  set propertyId($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(3)
-  $core.bool hasPropertyId() => $_has(2);
+  $core.bool hasPropertyId() => $_has(1);
   @$pb.TagNumber(3)
   void clearPropertyId() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get textValue => $_getSZ(3);
+  $core.String get textValue => $_getSZ(2);
   @$pb.TagNumber(4)
-  set textValue($core.String v) { $_setString(3, v); }
+  set textValue($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(4)
-  $core.bool hasTextValue() => $_has(3);
+  $core.bool hasTextValue() => $_has(2);
   @$pb.TagNumber(4)
   void clearTextValue() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.double get numberValue => $_getN(4);
+  $core.double get numberValue => $_getN(3);
   @$pb.TagNumber(5)
-  set numberValue($core.double v) { $_setFloat(4, v); }
+  set numberValue($core.double v) { $_setFloat(3, v); }
   @$pb.TagNumber(5)
-  $core.bool hasNumberValue() => $_has(4);
+  $core.bool hasNumberValue() => $_has(3);
   @$pb.TagNumber(5)
   void clearNumberValue() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.bool get boolValue => $_getBF(5);
+  $core.bool get boolValue => $_getBF(4);
   @$pb.TagNumber(6)
-  set boolValue($core.bool v) { $_setBool(5, v); }
+  set boolValue($core.bool v) { $_setBool(4, v); }
   @$pb.TagNumber(6)
-  $core.bool hasBoolValue() => $_has(5);
+  $core.bool hasBoolValue() => $_has(4);
   @$pb.TagNumber(6)
   void clearBoolValue() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get dateValue => $_getSZ(6);
+  $core.String get dateValue => $_getSZ(5);
   @$pb.TagNumber(7)
-  set dateValue($core.String v) { $_setString(6, v); }
+  set dateValue($core.String v) { $_setString(5, v); }
   @$pb.TagNumber(7)
-  $core.bool hasDateValue() => $_has(6);
+  $core.bool hasDateValue() => $_has(5);
   @$pb.TagNumber(7)
   void clearDateValue() => clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get dateTimeValue => $_getSZ(7);
+  $core.String get dateTimeValue => $_getSZ(6);
   @$pb.TagNumber(8)
-  set dateTimeValue($core.String v) { $_setString(7, v); }
+  set dateTimeValue($core.String v) { $_setString(6, v); }
   @$pb.TagNumber(8)
-  $core.bool hasDateTimeValue() => $_has(7);
+  $core.bool hasDateTimeValue() => $_has(6);
   @$pb.TagNumber(8)
   void clearDateTimeValue() => clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get selectValue => $_getSZ(8);
+  $core.String get selectValue => $_getSZ(7);
   @$pb.TagNumber(9)
-  set selectValue($core.String v) { $_setString(8, v); }
+  set selectValue($core.String v) { $_setString(7, v); }
   @$pb.TagNumber(9)
-  $core.bool hasSelectValue() => $_has(8);
+  $core.bool hasSelectValue() => $_has(7);
   @$pb.TagNumber(9)
   void clearSelectValue() => clearField(9);
 }

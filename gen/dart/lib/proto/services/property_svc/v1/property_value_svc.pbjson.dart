@@ -18,7 +18,6 @@ const AttachPropertyValueRequest$json = {
   '1': 'AttachPropertyValueRequest',
   '2': [
     {'1': 'subject_id', '3': 1, '4': 1, '5': 9, '10': 'subjectId'},
-    {'1': 'subject_type', '3': 2, '4': 1, '5': 14, '6': '.proto.services.property_svc.v1.SubjectType', '10': 'subjectType'},
     {'1': 'property_id', '3': 3, '4': 1, '5': 9, '10': 'propertyId'},
     {'1': 'text_value', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'textValue'},
     {'1': 'number_value', '3': 5, '4': 1, '5': 2, '9': 0, '10': 'numberValue'},
@@ -35,14 +34,12 @@ const AttachPropertyValueRequest$json = {
 /// Descriptor for `AttachPropertyValueRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List attachPropertyValueRequestDescriptor = $convert.base64Decode(
     'ChpBdHRhY2hQcm9wZXJ0eVZhbHVlUmVxdWVzdBIdCgpzdWJqZWN0X2lkGAEgASgJUglzdWJqZW'
-    'N0SWQSTgoMc3ViamVjdF90eXBlGAIgASgOMisucHJvdG8uc2VydmljZXMucHJvcGVydHlfc3Zj'
-    'LnYxLlN1YmplY3RUeXBlUgtzdWJqZWN0VHlwZRIfCgtwcm9wZXJ0eV9pZBgDIAEoCVIKcHJvcG'
-    'VydHlJZBIfCgp0ZXh0X3ZhbHVlGAQgASgJSABSCXRleHRWYWx1ZRIjCgxudW1iZXJfdmFsdWUY'
-    'BSABKAJIAFILbnVtYmVyVmFsdWUSHwoKYm9vbF92YWx1ZRgGIAEoCEgAUglib29sVmFsdWUSRQ'
-    'oKZGF0ZV92YWx1ZRgHIAEoCzIkLnByb3RvLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5EYXRl'
-    'SABSCWRhdGVWYWx1ZRJECg9kYXRlX3RpbWVfdmFsdWUYCCABKAsyGi5nb29nbGUucHJvdG9idW'
-    'YuVGltZXN0YW1wSABSDWRhdGVUaW1lVmFsdWUSIwoMc2VsZWN0X3ZhbHVlGAkgASgJSABSC3Nl'
-    'bGVjdFZhbHVlQgcKBXZhbHVl');
+    'N0SWQSHwoLcHJvcGVydHlfaWQYAyABKAlSCnByb3BlcnR5SWQSHwoKdGV4dF92YWx1ZRgEIAEo'
+    'CUgAUgl0ZXh0VmFsdWUSIwoMbnVtYmVyX3ZhbHVlGAUgASgCSABSC251bWJlclZhbHVlEh8KCm'
+    'Jvb2xfdmFsdWUYBiABKAhIAFIJYm9vbFZhbHVlEkUKCmRhdGVfdmFsdWUYByABKAsyJC5wcm90'
+    'by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuRGF0ZUgAUglkYXRlVmFsdWUSRAoPZGF0ZV90aW'
+    '1lX3ZhbHVlGAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEgAUg1kYXRlVGltZVZh'
+    'bHVlEiMKDHNlbGVjdF92YWx1ZRgJIAEoCUgAUgtzZWxlY3RWYWx1ZUIHCgV2YWx1ZQ==');
 
 @$core.Deprecated('Use attachPropertyValueResponseDescriptor instead')
 const AttachPropertyValueResponse$json = {
@@ -150,7 +147,6 @@ const GetPropertyValueResponse$json = {
   '1': 'GetPropertyValueResponse',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'subject_type', '3': 2, '4': 1, '5': 9, '10': 'subjectType'},
     {'1': 'property_id', '3': 3, '4': 1, '5': 9, '10': 'propertyId'},
     {'1': 'text_value', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'textValue'},
     {'1': 'number_value', '3': 5, '4': 1, '5': 2, '9': 0, '10': 'numberValue'},
@@ -166,11 +162,10 @@ const GetPropertyValueResponse$json = {
 
 /// Descriptor for `GetPropertyValueResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getPropertyValueResponseDescriptor = $convert.base64Decode(
-    'ChhHZXRQcm9wZXJ0eVZhbHVlUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEiEKDHN1YmplY3RfdH'
-    'lwZRgCIAEoCVILc3ViamVjdFR5cGUSHwoLcHJvcGVydHlfaWQYAyABKAlSCnByb3BlcnR5SWQS'
-    'HwoKdGV4dF92YWx1ZRgEIAEoCUgAUgl0ZXh0VmFsdWUSIwoMbnVtYmVyX3ZhbHVlGAUgASgCSA'
-    'BSC251bWJlclZhbHVlEh8KCmJvb2xfdmFsdWUYBiABKAhIAFIJYm9vbFZhbHVlEh8KCmRhdGVf'
-    'dmFsdWUYByABKAlIAFIJZGF0ZVZhbHVlEigKD2RhdGVfdGltZV92YWx1ZRgIIAEoCUgAUg1kYX'
-    'RlVGltZVZhbHVlEiMKDHNlbGVjdF92YWx1ZRgJIAEoCUgAUgtzZWxlY3RWYWx1ZUIHCgV2YWx1'
-    'ZQ==');
+    'ChhHZXRQcm9wZXJ0eVZhbHVlUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEh8KC3Byb3BlcnR5X2'
+    'lkGAMgASgJUgpwcm9wZXJ0eUlkEh8KCnRleHRfdmFsdWUYBCABKAlIAFIJdGV4dFZhbHVlEiMK'
+    'DG51bWJlcl92YWx1ZRgFIAEoAkgAUgtudW1iZXJWYWx1ZRIfCgpib29sX3ZhbHVlGAYgASgISA'
+    'BSCWJvb2xWYWx1ZRIfCgpkYXRlX3ZhbHVlGAcgASgJSABSCWRhdGVWYWx1ZRIoCg9kYXRlX3Rp'
+    'bWVfdmFsdWUYCCABKAlIAFINZGF0ZVRpbWVWYWx1ZRIjCgxzZWxlY3RfdmFsdWUYCSABKAlIAF'
+    'ILc2VsZWN0VmFsdWVCBwoFdmFsdWU=');
 

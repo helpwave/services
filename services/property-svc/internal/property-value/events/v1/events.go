@@ -1,7 +1,6 @@
 package v1
 
 import (
-	pb "gen/proto/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
 )
@@ -12,20 +11,18 @@ const (
 )
 
 type PropertyValueCreatedEvent struct {
-	ID          string      `json:"id"`
-	PropertyID  string      `json:"property_id"`
-	Value       interface{} `json:"value"`
-	SubjectID   string      `json:"subject_id"`
-	SubjectType string      `json:"subject_type"`
+	ID         string      `json:"id"`
+	PropertyID string      `json:"property_id"`
+	Value      interface{} `json:"value"`
+	SubjectID  string      `json:"subject_id"`
 }
 
-func NewPropertyValueCreatedEvent(a hwes.Aggregate, id uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID, subjectType pb.SubjectType) (hwes.Event, error) {
+func NewPropertyValueCreatedEvent(a hwes.Aggregate, id uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) (hwes.Event, error) {
 	payload := PropertyValueCreatedEvent{
-		ID:          id.String(),
-		PropertyID:  propertyID.String(),
-		Value:       value,
-		SubjectID:   subjectID.String(),
-		SubjectType: subjectType.String(),
+		ID:         id.String(),
+		PropertyID: propertyID.String(),
+		Value:      value,
+		SubjectID:  subjectID.String(),
 	}
 	return hwes.NewEvent(a, PropertyValueCreated, hwes.WithData(payload))
 }
