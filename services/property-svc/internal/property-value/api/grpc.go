@@ -31,6 +31,11 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		return nil, err
 	}
 
+	subjectID, err := uuid.Parse(req.GetSubjectId())
+	if err != nil {
+		return nil, err
+	}
+
 	var value interface{}
 	switch req.Value.(type) {
 	case *pb.AttachPropertyValueRequest_TextValue:
@@ -49,7 +54,7 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		value = nil
 	}
 
-	if err := commandsV1.NewAttachPropertyValueCommandHandler(s.as)(ctx, propertyValueID, propertyID, value); err != nil {
+	if err := commandsV1.NewAttachPropertyValueCommandHandler(s.as)(ctx, propertyValueID, propertyID, value, subjectID, req.GetSubjectType()); err != nil {
 		return nil, err
 	}
 
