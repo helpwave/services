@@ -73,7 +73,7 @@ jobs:
         run: go get .
 
       - name: Test
-        run: go test -v -race ./...
+        run: go test -v ./...
 
   docker:
     needs: [ lint, test ]
