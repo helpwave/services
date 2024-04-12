@@ -94,7 +94,7 @@ RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate
 # install grpcurl
 #  https://github.com/fullstorydev/grpcurl
 # renovate: datasource=github-releases depName=fullstorydev/grpcurl
-ENV GRPCURL_VERSION=1.8.9
+ENV GRPCURL_VERSION=1.9.1
 RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@v${GRPCURL_VERSION} \
 	&& go clean -modcache
 
