@@ -1,9 +1,9 @@
 # mounted to /usr/local/apisix/conf/config.yaml
 
 apisix:
+  enable_http2: false
   node_listen:
     - port: 9080
-      enable_http2: false
   enable_control: true
   control:
     ip: "127.0.0.1"
