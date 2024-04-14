@@ -28,10 +28,10 @@ func NewPropertyValueCreatedEvent(a hwes.Aggregate, id uuid.UUID, propertyID uui
 }
 
 type PropertyValueUpdatedEvent struct {
-	Value *interface{} `json:"value"`
+	Value interface{} `json:"value"`
 }
 
-func NewPropertyValueUpdatedEvent(a hwes.Aggregate, value *interface{}) (hwes.Event, error) {
+func NewPropertyValueUpdatedEvent(a hwes.Aggregate, value interface{}) (hwes.Event, error) {
 	payload := PropertyValueUpdatedEvent{
 		Value: value,
 	}

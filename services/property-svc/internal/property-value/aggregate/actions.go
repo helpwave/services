@@ -16,7 +16,7 @@ func (a *PropertyValueAggregate) CreatePropertyValue(ctx context.Context, proper
 	return a.Apply(event)
 }
 
-func (a *PropertyValueAggregate) UpdatePropertyValue(ctx context.Context, value *interface{}) error {
+func (a *PropertyValueAggregate) UpdatePropertyValue(ctx context.Context, value interface{}) error {
 	event, err := propertyEventsV1.NewPropertyValueUpdatedEvent(a, value)
 	if err != nil {
 		return err

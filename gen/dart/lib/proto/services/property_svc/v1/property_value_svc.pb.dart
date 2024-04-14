@@ -83,7 +83,7 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttachPropertyValueRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [4, 5, 6, 7, 8, 9])
     ..aOS(1, _omitFieldNames ? '' : 'subjectId')
-    ..aOS(3, _omitFieldNames ? '' : 'propertyId')
+    ..aOS(2, _omitFieldNames ? '' : 'propertyId')
     ..aOS(4, _omitFieldNames ? '' : 'textValue')
     ..a<$core.double>(5, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OF)
     ..aOB(6, _omitFieldNames ? '' : 'boolValue')
@@ -126,14 +126,14 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   void clearSubjectId() => clearField(1);
 
-  @$pb.TagNumber(3)
+  @$pb.TagNumber(2)
   $core.String get propertyId => $_getSZ(1);
-  @$pb.TagNumber(3)
+  @$pb.TagNumber(2)
   set propertyId($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(3)
+  @$pb.TagNumber(2)
   $core.bool hasPropertyId() => $_has(1);
-  @$pb.TagNumber(3)
-  void clearPropertyId() => clearField(3);
+  @$pb.TagNumber(2)
+  void clearPropertyId() => clearField(2);
 
   @$pb.TagNumber(4)
   $core.String get textValue => $_getSZ(2);

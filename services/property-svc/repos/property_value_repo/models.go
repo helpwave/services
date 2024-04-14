@@ -25,9 +25,9 @@ type PropertyValue struct {
 	PropertyID    uuid.UUID
 	SubjectID     uuid.UUID
 	TextValue     *string
-	NumberValue   *int32
+	NumberValue   *float64
 	BoolValue     *bool
-	DateValue     *string
+	DateValue     pgtype.Date
 	DateTimeValue pgtype.Timestamp
 	SelectValue   uuid.NullUUID
 }

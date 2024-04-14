@@ -7,8 +7,8 @@ import (
 type PropertyValue struct {
 	ID         uuid.UUID
 	PropertyID uuid.UUID
-	Value      interface{}
 	SubjectID  uuid.UUID
+	Value      interface{}
 }
 
 func NewPropertyValue() *PropertyValue {

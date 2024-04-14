@@ -21,7 +21,7 @@ type Projection struct {
 }
 
 func NewProjection(es *esdb.Client, serviceName string) *Projection {
-	subscriptionGroupName := fmt.Sprintf("%s-postgres-projection", serviceName)
+	subscriptionGroupName := fmt.Sprintf("%s-task-postgres-projection", serviceName)
 	p := &Projection{custom.NewCustomProjection(es, subscriptionGroupName), task_repo.New(hwdb.GetDB())}
 	p.initEventListeners()
 	return p

@@ -267,7 +267,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.toObje
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     subjectId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    propertyId: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    propertyId: jspb.Message.getFieldWithDefault(msg, 2, ""),
     textValue: jspb.Message.getFieldWithDefault(msg, 4, ""),
     numberValue: jspb.Message.getFloatingPointFieldWithDefault(msg, 5, 0.0),
     boolValue: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
@@ -314,7 +314,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.deserializeBinar
       var value = /** @type {string} */ (reader.readString());
       msg.setSubjectId(value);
       break;
-    case 3:
+    case 2:
       var value = /** @type {string} */ (reader.readString());
       msg.setPropertyId(value);
       break;
@@ -383,7 +383,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.serializeBinaryT
   f = message.getPropertyId();
   if (f.length > 0) {
     writer.writeString(
-      3,
+      2,
       f
     );
   }
@@ -453,11 +453,11 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.setSub
 
 
 /**
- * optional string property_id = 3;
+ * optional string property_id = 2;
  * @return {string}
  */
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.getPropertyId = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
@@ -466,7 +466,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.getPro
  * @return {!proto.proto.services.property_svc.v1.AttachPropertyValueRequest} returns this
  */
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.setPropertyId = function(value) {
-  return jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

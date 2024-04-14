@@ -18,7 +18,7 @@ const AttachPropertyValueRequest$json = {
   '1': 'AttachPropertyValueRequest',
   '2': [
     {'1': 'subject_id', '3': 1, '4': 1, '5': 9, '10': 'subjectId'},
-    {'1': 'property_id', '3': 3, '4': 1, '5': 9, '10': 'propertyId'},
+    {'1': 'property_id', '3': 2, '4': 1, '5': 9, '10': 'propertyId'},
     {'1': 'text_value', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'textValue'},
     {'1': 'number_value', '3': 5, '4': 1, '5': 2, '9': 0, '10': 'numberValue'},
     {'1': 'bool_value', '3': 6, '4': 1, '5': 8, '9': 0, '10': 'boolValue'},
@@ -34,7 +34,7 @@ const AttachPropertyValueRequest$json = {
 /// Descriptor for `AttachPropertyValueRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List attachPropertyValueRequestDescriptor = $convert.base64Decode(
     'ChpBdHRhY2hQcm9wZXJ0eVZhbHVlUmVxdWVzdBIdCgpzdWJqZWN0X2lkGAEgASgJUglzdWJqZW'
-    'N0SWQSHwoLcHJvcGVydHlfaWQYAyABKAlSCnByb3BlcnR5SWQSHwoKdGV4dF92YWx1ZRgEIAEo'
+    'N0SWQSHwoLcHJvcGVydHlfaWQYAiABKAlSCnByb3BlcnR5SWQSHwoKdGV4dF92YWx1ZRgEIAEo'
     'CUgAUgl0ZXh0VmFsdWUSIwoMbnVtYmVyX3ZhbHVlGAUgASgCSABSC251bWJlclZhbHVlEh8KCm'
     'Jvb2xfdmFsdWUYBiABKAhIAFIJYm9vbFZhbHVlEkUKCmRhdGVfdmFsdWUYByABKAsyJC5wcm90'
     'by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuRGF0ZUgAUglkYXRlVmFsdWUSRAoPZGF0ZV90aW'

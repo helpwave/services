@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createPropertyValue = `-- name: CreatePropertyValue :exec
@@ -18,12 +19,12 @@ VALUES (
         $1,
         $2,
         $3,
-        coalesce($4, NULL),
-        coalesce($5, NULL),
-        coalesce($6, NULL),
-        coalesce($7, NULL),
-        coalesce($8, NULL),
-        coalesce($9, NULL)
+        $4,
+        $5,
+        $6,
+        $7,
+        $8,
+        $9
 )
 `
 
@@ -31,12 +32,12 @@ type CreatePropertyValueParams struct {
 	ID            uuid.UUID
 	PropertyID    uuid.UUID
 	SubjectID     uuid.UUID
-	TextValue     interface{}
-	NumberValue   interface{}
-	BoolValue     interface{}
-	DateValue     interface{}
-	DateTimeValue interface{}
-	SelectValue   interface{}
+	TextValue     *string
+	NumberValue   *float64
+	BoolValue     *bool
+	DateValue     pgtype.Date
+	DateTimeValue pgtype.Timestamp
+	SelectValue   uuid.NullUUID
 }
 
 func (q *Queries) CreatePropertyValue(ctx context.Context, arg CreatePropertyValueParams) error {
@@ -54,22 +55,75 @@ func (q *Queries) CreatePropertyValue(ctx context.Context, arg CreatePropertyVal
 	return err
 }
 
-const existsPropertyValue = `-- name: ExistsPropertyValue :one
-SELECT EXISTS (
-	SELECT 1
-	FROM property_values
-	WHERE subject_id = $1 AND property_id = $2
-) as value_already_exists
+const getPropertyValueByID = `-- name: GetPropertyValueByID :one
+SELECT id, property_id, subject_id, text_value, number_value, bool_value, date_value, date_time_value, select_value FROM property_values WHERE id = $1
 `
 
-type ExistsPropertyValueParams struct {
+func (q *Queries) GetPropertyValueByID(ctx context.Context, id uuid.UUID) (PropertyValue, error) {
+	row := q.db.QueryRow(ctx, getPropertyValueByID, id)
+	var i PropertyValue
+	err := row.Scan(
+		&i.ID,
+		&i.PropertyID,
+		&i.SubjectID,
+		&i.TextValue,
+		&i.NumberValue,
+		&i.BoolValue,
+		&i.DateValue,
+		&i.DateTimeValue,
+		&i.SelectValue,
+	)
+	return i, err
+}
+
+const getPropertyValueBySubjectIDAndPropertyID = `-- name: GetPropertyValueBySubjectIDAndPropertyID :one
+SELECT id
+FROM property_values
+WHERE subject_id = $1 AND property_id = $2
+`
+
+type GetPropertyValueBySubjectIDAndPropertyIDParams struct {
 	SubjectID  uuid.UUID
 	PropertyID uuid.UUID
 }
 
-func (q *Queries) ExistsPropertyValue(ctx context.Context, arg ExistsPropertyValueParams) (bool, error) {
-	row := q.db.QueryRow(ctx, existsPropertyValue, arg.SubjectID, arg.PropertyID)
-	var value_already_exists bool
-	err := row.Scan(&value_already_exists)
-	return value_already_exists, err
+func (q *Queries) GetPropertyValueBySubjectIDAndPropertyID(ctx context.Context, arg GetPropertyValueBySubjectIDAndPropertyIDParams) (uuid.UUID, error) {
+	row := q.db.QueryRow(ctx, getPropertyValueBySubjectIDAndPropertyID, arg.SubjectID, arg.PropertyID)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
+}
+
+const updatePropertyValueByID = `-- name: UpdatePropertyValueByID :exec
+UPDATE property_values
+SET text_value = $2,
+	number_value = $3,
+	bool_value = $4,
+	date_value = $5,
+	date_time_value = $6,
+	select_value = $7
+WHERE id = $1
+`
+
+type UpdatePropertyValueByIDParams struct {
+	ID            uuid.UUID
+	TextValue     *string
+	NumberValue   *float64
+	BoolValue     *bool
+	DateValue     pgtype.Date
+	DateTimeValue pgtype.Timestamp
+	SelectValue   uuid.NullUUID
+}
+
+func (q *Queries) UpdatePropertyValueByID(ctx context.Context, arg UpdatePropertyValueByIDParams) error {
+	_, err := q.db.Exec(ctx, updatePropertyValueByID,
+		arg.ID,
+		arg.TextValue,
+		arg.NumberValue,
+		arg.BoolValue,
+		arg.DateValue,
+		arg.DateTimeValue,
+		arg.SelectValue,
+	)
+	return err
 }

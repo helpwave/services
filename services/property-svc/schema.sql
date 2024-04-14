@@ -59,9 +59,9 @@ CREATE TABLE public.property_values (
     property_id uuid NOT NULL,
     subject_id uuid NOT NULL,
     text_value text,
-    number_value integer,
+    number_value double precision,
     bool_value boolean,
-    date_value text,
+    date_value date,
     date_time_value timestamp without time zone,
     select_value uuid,
     CONSTRAINT property_values_check CHECK (((((((((text_value IS NOT NULL))::integer + ((number_value IS NOT NULL))::integer) + ((bool_value IS NOT NULL))::integer) + ((date_value IS NOT NULL))::integer) + ((date_time_value IS NOT NULL))::integer) + ((select_value IS NOT NULL))::integer) <= 1))

@@ -3,9 +3,9 @@ CREATE TABLE IF NOT EXISTS property_values (
 	property_id uuid NOT NULL,
 	subject_id uuid NOT NULL,
 	text_value text DEFAULT NULL,
-	number_value integer DEFAULT NULL,
+	number_value FLOAT DEFAULT NULL,
 	bool_value boolean DEFAULT NULL,
-	date_value text DEFAULT NULL, -- TODO
+	date_value DATE DEFAULT NULL,
 	date_time_value timestamp DEFAULT NULL,
 	select_value uuid DEFAULT NULL,
 	-- check if at most one value field is set

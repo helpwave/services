@@ -4,9 +4,11 @@ import (
 	"context"
 	pb "gen/proto/services/property_svc/v1"
 	"github.com/google/uuid"
+	"hwdb"
 	"hwes"
 	commandsV1 "property-svc/internal/property-value/commands/v1"
 	v1queries "property-svc/internal/property-value/queries/v1"
+	"property-svc/repos/property_value_repo"
 )
 
 type PropertyValueGrpcService struct {
@@ -19,12 +21,9 @@ func NewPropertyValueService(aggregateStore hwes.AggregateStore) *PropertyValueG
 }
 
 func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req *pb.AttachPropertyValueRequest) (*pb.AttachPropertyValueResponse, error) {
+	var alreadyExists bool
+	propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 	propertyValueID := uuid.New()
-
-	_, err := uuid.Parse(req.GetSubjectId())
-	if err != nil {
-		return nil, err
-	}
 
 	propertyID, err := uuid.Parse(req.GetPropertyId())
 	if err != nil {
@@ -34,6 +33,18 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 	subjectID, err := uuid.Parse(req.GetSubjectId())
 	if err != nil {
 		return nil, err
+	}
+
+	existingPropertyValueID, err := hwdb.Optional(propertyValueRepo.GetPropertyValueBySubjectIDAndPropertyID)(ctx, property_value_repo.GetPropertyValueBySubjectIDAndPropertyIDParams{
+		PropertyID: propertyID,
+		SubjectID:  subjectID,
+	})
+	if err := hwdb.Error(ctx, err); err != nil {
+		return nil, err
+	}
+	if existingPropertyValueID != nil {
+		alreadyExists = true
+		propertyValueID = *existingPropertyValueID
 	}
 
 	var value interface{}
@@ -54,7 +65,7 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		value = nil
 	}
 
-	if err := commandsV1.NewAttachPropertyValueCommandHandler(s.as)(ctx, propertyValueID, propertyID, value, subjectID); err != nil {
+	if err := commandsV1.NewAttachPropertyValueCommandHandler(s.as)(ctx, propertyValueID, propertyID, value, subjectID, alreadyExists); err != nil {
 		return nil, err
 	}
 
