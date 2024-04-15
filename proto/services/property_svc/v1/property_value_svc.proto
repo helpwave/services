@@ -15,7 +15,7 @@ message AttachPropertyValueRequest{
   string property_id = 2; // @gotags: validate:"uuid4"
 
   oneof value {
-    string text_value = 4; // FIELD_TYPE_TEXT
+    string text_value = 4; // @gotags: validate:"required" // FIELD_TYPE_TEXT
     double number_value = 5; // FIELD_TYPE_NUMBER
     bool bool_value = 6; // FIELD_TYPE_CHECKBOX
     Date date_value = 7; // FIELD_TYPE_DATE

@@ -24,8 +24,6 @@ func NewPropertyValueService(aggregateStore hwes.AggregateStore) *PropertyValueG
 }
 
 func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req *pb.AttachPropertyValueRequest) (*pb.AttachPropertyValueResponse, error) {
-	var alreadyExists bool
-	propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 	propertyValueID := uuid.New()
 
 	propertyID, err := uuid.Parse(req.GetPropertyId())
@@ -36,18 +34,6 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 	subjectID, err := uuid.Parse(req.GetSubjectId())
 	if err != nil {
 		return nil, err
-	}
-
-	existingPropertyValueID, err := hwdb.Optional(propertyValueRepo.GetPropertyValueBySubjectIDAndPropertyID)(ctx, property_value_repo.GetPropertyValueBySubjectIDAndPropertyIDParams{
-		PropertyID: propertyID,
-		SubjectID:  subjectID,
-	})
-	if err := hwdb.Error(ctx, err); err != nil {
-		return nil, err
-	}
-	if existingPropertyValueID != nil {
-		alreadyExists = true
-		propertyValueID = *existingPropertyValueID
 	}
 
 	var value interface{}
@@ -68,7 +54,7 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		value = nil
 	}
 
-	if err := commandsV1.NewAttachPropertyValueCommandHandler(s.as)(ctx, propertyValueID, propertyID, value, subjectID, alreadyExists); err != nil {
+	if err := commandsV1.NewAttachPropertyValueCommandHandler(s.as)(ctx, propertyValueID, propertyID, value, subjectID); err != nil {
 		return nil, err
 	}
 

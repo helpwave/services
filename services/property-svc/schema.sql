@@ -158,6 +158,14 @@ ALTER TABLE ONLY public.properties
 
 
 --
+-- Name: property_values property_values_property_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.property_values
+    ADD CONSTRAINT property_values_property_id_fkey FOREIGN KEY (property_id) REFERENCES public.properties(id) ON DELETE CASCADE;
+
+
+--
 -- Name: property_values property_values_select_value_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 

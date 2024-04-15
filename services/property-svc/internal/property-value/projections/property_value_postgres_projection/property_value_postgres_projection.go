@@ -6,6 +6,7 @@ import (
 	pb "gen/proto/services/property_svc/v1"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jackc/pgx/v5/pgxpool"
 	zlog "github.com/rs/zerolog/log"
 	"hwdb"
@@ -47,7 +48,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 	var payload propertyValueEventsV1.PropertyValueCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	propertyID, err := uuid.Parse(payload.PropertyID)
@@ -63,7 +64,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 	// GetProperty for the fieldType
 	property, err := hwdb.Optional(p.propertyRepo.GetPropertyById)(ctx, propertyID)
 	if property == nil {
-		return fmt.Errorf("property with id %s not found for propertyValue", payload.PropertyID), esdb.NackActionRetry
+		return fmt.Errorf("property with id %s not found for propertyValue", payload.PropertyID), esdb.NackActionPark
 	}
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, esdb.NackActionRetry
@@ -76,50 +77,52 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 		SubjectID:  subjectID,
 	}
 
-	switch {
-	case fieldType == pb.FieldType_FIELD_TYPE_TEXT:
-		createPropertyValueParams.TextValue = hwutil.PtrTo(fmt.Sprintf("%v", payload.Value))
-	case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
-		val, ok := payload.Value.(float64)
-		if !ok {
-			log.Error().Msg("could not assert number.")
-			return nil, esdb.NackActionRetry
+	if payload.Value != nil {
+		switch {
+		case fieldType == pb.FieldType_FIELD_TYPE_TEXT:
+			createPropertyValueParams.TextValue = hwutil.PtrTo(fmt.Sprintf("%v", payload.Value))
+		case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
+			val, ok := payload.Value.(float64)
+			if !ok {
+				log.Error().Msg("could not assert number.")
+				return nil, esdb.NackActionPark
+			}
+			createPropertyValueParams.NumberValue = &val
+		case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
+			val, ok := payload.Value.(bool)
+			if !ok {
+				log.Error().Msg("could not assert bool.")
+				return nil, esdb.NackActionPark
+			}
+			createPropertyValueParams.BoolValue = &val
+		case fieldType == pb.FieldType_FIELD_TYPE_DATE:
+			// TBD: Is this the right timezone?
+			val, err := hwutil.AssertDate(payload.Value, time.UTC)
+			if err != nil {
+				log.Error().Err(err)
+				return nil, esdb.NackActionPark
+			}
+			createPropertyValueParams.DateValue = hwdb.TimeToDate(*val)
+		case fieldType == pb.FieldType_FIELD_TYPE_DATE_TIME:
+			val, err := hwutil.AssertTimestampToTime(payload.Value)
+			if err != nil {
+				log.Error().Err(err)
+				return nil, esdb.NackActionPark
+			}
+			createPropertyValueParams.DateTimeValue = hwdb.TimeToTimestamp(*val)
+		case fieldType == pb.FieldType_FIELD_TYPE_SELECT:
+			val, ok := payload.Value.(string)
+			if !ok {
+				log.Error().Msg("could not assert string.")
+				return nil, esdb.NackActionPark
+			}
+			id, err := hwutil.ParseNullUUID(&val)
+			if err != nil {
+				log.Error().Err(err)
+				return nil, esdb.NackActionPark
+			}
+			createPropertyValueParams.SelectValue = id
 		}
-		createPropertyValueParams.NumberValue = &val
-	case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
-		val, ok := payload.Value.(bool)
-		if !ok {
-			log.Error().Msg("could not assert bool.")
-			return nil, esdb.NackActionRetry
-		}
-		createPropertyValueParams.BoolValue = &val
-	case fieldType == pb.FieldType_FIELD_TYPE_DATE:
-		// TBD: Is this the right timezone?
-		val, err := hwutil.AssertDate(payload.Value, time.UTC)
-		if err != nil {
-			log.Error().Err(err)
-			return nil, esdb.NackActionRetry
-		}
-		createPropertyValueParams.DateValue = hwdb.TimeToDate(*val)
-	case fieldType == pb.FieldType_FIELD_TYPE_DATE_TIME:
-		val, err := hwutil.AssertTimestampToTime(payload.Value)
-		if err != nil {
-			log.Error().Err(err)
-			return nil, esdb.NackActionRetry
-		}
-		createPropertyValueParams.DateTimeValue = hwdb.TimeToTimestamp(*val)
-	case fieldType == pb.FieldType_FIELD_TYPE_SELECT:
-		val, ok := payload.Value.(string)
-		if !ok {
-			log.Error().Msg("could not assert string.")
-			return nil, esdb.NackActionRetry
-		}
-		id, err := hwutil.ParseNullUUID(&val)
-		if err != nil {
-			log.Error().Err(err)
-			return nil, esdb.NackActionRetry
-		}
-		createPropertyValueParams.SelectValue = id
 	}
 
 	err = p.propertyValueRepo.CreatePropertyValue(ctx, createPropertyValueParams)
@@ -136,7 +139,11 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 	var payload propertyValueEventsV1.PropertyValueUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
+	}
+
+	if payload.Value == nil {
+
 	}
 
 	// Get Property for FieldType
@@ -150,7 +157,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 
 	property, err := hwdb.Optional(p.propertyRepo.GetPropertyById)(ctx, propertyValue.PropertyID)
 	if property == nil {
-		return fmt.Errorf("property with id %s not found for propertyValue", propertyValue.PropertyID.String()), esdb.NackActionRetry
+		return fmt.Errorf("property with id %s not found for propertyValue", propertyValue.PropertyID.String()), esdb.NackActionPark
 	}
 	if err := hwdb.Error(ctx, err); err != nil {
 		return nil, esdb.NackActionRetry
@@ -162,56 +169,62 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 		ID: evt.AggregateID,
 	}
 
-	switch {
-	case fieldType == pb.FieldType_FIELD_TYPE_TEXT:
-		updatePropertyValueParams.TextValue = hwutil.PtrTo(fmt.Sprintf("%v", payload.Value))
-	case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
-		val, ok := payload.Value.(float64)
-		if !ok {
-			fmt.Println(payload.Value)
-			log.Error().Msg("could not assert number.")
-			return nil, esdb.NackActionRetry
-		}
-		updatePropertyValueParams.NumberValue = &val
-	case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
-		val, ok := payload.Value.(bool)
-		if !ok {
-			log.Error().Msg("could not assert bool.")
-			return nil, esdb.NackActionRetry
-		}
-		updatePropertyValueParams.BoolValue = &val
-	case fieldType == pb.FieldType_FIELD_TYPE_DATE:
-		// TBD: How do we "unset" the date?
-		val, err := hwutil.AssertDate(payload.Value, time.UTC)
-		if err != nil {
-			log.Error().Err(err)
-			return nil, esdb.NackActionRetry
-		}
-		updatePropertyValueParams.DateValue = hwdb.TimeToDate(*val)
-	case fieldType == pb.FieldType_FIELD_TYPE_DATE_TIME:
-		// TBD: How do we "unset" date_time
-		val, err := hwutil.AssertTimestampToTime(payload.Value)
-		if err != nil {
-			log.Error().Err(err)
-			return nil, esdb.NackActionRetry
-		}
-		updatePropertyValueParams.DateTimeValue = hwdb.TimeToTimestamp(*val)
-	case fieldType == pb.FieldType_FIELD_TYPE_SELECT:
-		val, ok := payload.Value.(string)
-		if !ok {
-			log.Error().Msg("could not assert string.")
-			return nil, esdb.NackActionRetry
-		}
-		id := uuid.NullUUID{UUID: uuid.Nil, Valid: false}
-		if val != "" {
-			if parsedID, err := hwutil.ParseNullUUID(&val); err != nil {
-				log.Error().Err(err)
-				return err, esdb.NackActionRetry
-			} else {
-				id = parsedID
+	if payload.Value != nil {
+		switch {
+		case fieldType == pb.FieldType_FIELD_TYPE_TEXT:
+			updatePropertyValueParams.TextValue = hwutil.PtrTo(fmt.Sprintf("%v", payload.Value))
+		case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
+			val, ok := payload.Value.(float64)
+			if !ok {
+				log.Error().Msg("could not assert number.")
+				return nil, esdb.NackActionPark
 			}
+			updatePropertyValueParams.NumberValue = &val
+		case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
+			val, ok := payload.Value.(bool)
+			if !ok {
+				log.Error().Msg("could not assert bool.")
+				return nil, esdb.NackActionPark
+			}
+			updatePropertyValueParams.BoolValue = &val
+		case fieldType == pb.FieldType_FIELD_TYPE_DATE:
+			val, err := hwutil.AssertDate(payload.Value, time.UTC)
+			if err != nil {
+				log.Error().Err(err)
+				return nil, esdb.NackActionPark
+			}
+			updatePropertyValueParams.DateValue = hwdb.TimeToDate(*val)
+		case fieldType == pb.FieldType_FIELD_TYPE_DATE_TIME:
+			val, err := hwutil.AssertTimestampToTime(payload.Value)
+			if err != nil {
+				log.Error().Err(err)
+				return nil, esdb.NackActionPark
+			}
+			updatePropertyValueParams.DateTimeValue = hwdb.TimeToTimestamp(*val)
+		case fieldType == pb.FieldType_FIELD_TYPE_SELECT:
+			val, ok := payload.Value.(string)
+			if !ok {
+				log.Error().Msg("could not assert string.")
+				return nil, esdb.NackActionPark
+			}
+			parsedID, err := hwutil.ParseNullUUID(&val)
+			if err != nil {
+				log.Error().Err(err)
+				return err, esdb.NackActionPark
+			}
+			updatePropertyValueParams.SelectValue = parsedID
 		}
-		updatePropertyValueParams.SelectValue = id
+	} else {
+		// Unset all values
+		updatePropertyValueParams = property_value_repo.UpdatePropertyValueByIDParams{
+			ID:            evt.AggregateID,
+			TextValue:     nil,
+			NumberValue:   nil,
+			BoolValue:     nil,
+			SelectValue:   uuid.NullUUID{UUID: uuid.Nil, Valid: false},
+			DateValue:     pgtype.Date{Valid: false},
+			DateTimeValue: pgtype.Timestamp{Valid: false},
+		}
 	}
 
 	err = p.propertyValueRepo.UpdatePropertyValueByID(ctx, updatePropertyValueParams)

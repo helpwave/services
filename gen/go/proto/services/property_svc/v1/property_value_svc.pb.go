@@ -140,7 +140,7 @@ type isAttachPropertyValueRequest_Value interface {
 }
 
 type AttachPropertyValueRequest_TextValue struct {
-	TextValue string `protobuf:"bytes,4,opt,name=text_value,json=textValue,proto3,oneof"` // FIELD_TYPE_TEXT
+	TextValue string `protobuf:"bytes,4,opt,name=text_value,json=textValue,proto3,oneof" validate:"required"` // @gotags: validate:"required" // FIELD_TYPE_TEXT
 }
 
 type AttachPropertyValueRequest_NumberValue struct {

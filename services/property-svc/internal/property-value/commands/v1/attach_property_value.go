@@ -3,19 +3,30 @@ package v1
 import (
 	"context"
 	"github.com/google/uuid"
+	"hwdb"
 	"hwes"
 	"property-svc/internal/property-value/aggregate"
+	"property-svc/repos/property_value_repo"
 )
 
-type AttachPropertyValueCommandHandler func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID, alreadyExists bool) error
+type AttachPropertyValueCommandHandler func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) error
 
 func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachPropertyValueCommandHandler {
-	return func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID, alreadyExists bool) error {
+	return func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) error {
+		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 		var a *aggregate.PropertyValueAggregate
-		var err error
 
-		if alreadyExists {
-			if a, err = aggregate.LoadPropertyValueAggregate(ctx, as, propertyValueID); err != nil {
+		// TODO: ensure eventual consistency by not using the projection here
+		existingPropertyValueID, err := hwdb.Optional(propertyValueRepo.GetPropertyValueBySubjectIDAndPropertyID)(ctx, property_value_repo.GetPropertyValueBySubjectIDAndPropertyIDParams{
+			PropertyID: propertyID,
+			SubjectID:  subjectID,
+		})
+		if err := hwdb.Error(ctx, err); err != nil {
+			return err
+		}
+
+		if existingPropertyValueID != nil {
+			if a, err = aggregate.LoadPropertyValueAggregate(ctx, as, *existingPropertyValueID); err != nil {
 				return err
 			}
 			// TBD: update value will be triggered, even if the value is not the type the property defines
