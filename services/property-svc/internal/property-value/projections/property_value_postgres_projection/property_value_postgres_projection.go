@@ -142,10 +142,6 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 		return err, esdb.NackActionPark
 	}
 
-	if payload.Value == nil {
-
-	}
-
 	// Get Property for FieldType
 	propertyValue, err := hwdb.Optional(p.propertyValueRepo.GetPropertyValueByID)(ctx, evt.AggregateID)
 	if propertyValue == nil {
