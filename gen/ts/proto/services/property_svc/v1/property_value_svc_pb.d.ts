@@ -139,14 +139,6 @@ export namespace GetAttachedPropertyValuesResponse {
     getIsArchived(): boolean;
     setIsArchived(value: boolean): Value;
 
-    getIsSoftRequired(): boolean;
-    setIsSoftRequired(value: boolean): Value;
-
-    getSet(): GetAttachedPropertyValuesResponse.Value.Set | undefined;
-    setSet(value?: GetAttachedPropertyValuesResponse.Value.Set): Value;
-    hasSet(): boolean;
-    clearSet(): Value;
-
     getTextValue(): string;
     setTextValue(value: string): Value;
 
@@ -186,8 +178,6 @@ export namespace GetAttachedPropertyValuesResponse {
       name: string,
       description?: string,
       isArchived: boolean,
-      isSoftRequired: boolean,
-      set?: GetAttachedPropertyValuesResponse.Value.Set.AsObject,
       textValue: string,
       numberValue: number,
       boolValue: boolean,
@@ -195,29 +185,6 @@ export namespace GetAttachedPropertyValuesResponse {
       dateTimeValue?: google_protobuf_timestamp_pb.Timestamp.AsObject,
       selectValue: string,
     }
-
-    export class Set extends jspb.Message {
-      getId(): string;
-      setId(value: string): Set;
-
-      getName(): string;
-      setName(value: string): Set;
-
-      serializeBinary(): Uint8Array;
-      toObject(includeInstance?: boolean): Set.AsObject;
-      static toObject(includeInstance: boolean, msg: Set): Set.AsObject;
-      static serializeBinaryToWriter(message: Set, writer: jspb.BinaryWriter): void;
-      static deserializeBinary(bytes: Uint8Array): Set;
-      static deserializeBinaryFromReader(message: Set, reader: jspb.BinaryReader): Set;
-    }
-
-    export namespace Set {
-      export type AsObject = {
-        id: string,
-        name: string,
-      }
-    }
-
 
     export enum ValueCase { 
       VALUE_NOT_SET = 0,
@@ -233,88 +200,7 @@ export namespace GetAttachedPropertyValuesResponse {
       _DESCRIPTION_NOT_SET = 0,
       DESCRIPTION = 4,
     }
-
-    export enum SetCase { 
-      _SET_NOT_SET = 0,
-      SET = 7,
-    }
   }
 
-}
-
-export class GetPropertyValueRequest extends jspb.Message {
-  getId(): string;
-  setId(value: string): GetPropertyValueRequest;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetPropertyValueRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetPropertyValueRequest): GetPropertyValueRequest.AsObject;
-  static serializeBinaryToWriter(message: GetPropertyValueRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetPropertyValueRequest;
-  static deserializeBinaryFromReader(message: GetPropertyValueRequest, reader: jspb.BinaryReader): GetPropertyValueRequest;
-}
-
-export namespace GetPropertyValueRequest {
-  export type AsObject = {
-    id: string,
-  }
-}
-
-export class GetPropertyValueResponse extends jspb.Message {
-  getId(): string;
-  setId(value: string): GetPropertyValueResponse;
-
-  getPropertyId(): string;
-  setPropertyId(value: string): GetPropertyValueResponse;
-
-  getTextValue(): string;
-  setTextValue(value: string): GetPropertyValueResponse;
-
-  getNumberValue(): number;
-  setNumberValue(value: number): GetPropertyValueResponse;
-
-  getBoolValue(): boolean;
-  setBoolValue(value: boolean): GetPropertyValueResponse;
-
-  getDateValue(): string;
-  setDateValue(value: string): GetPropertyValueResponse;
-
-  getDateTimeValue(): string;
-  setDateTimeValue(value: string): GetPropertyValueResponse;
-
-  getSelectValue(): string;
-  setSelectValue(value: string): GetPropertyValueResponse;
-
-  getValueCase(): GetPropertyValueResponse.ValueCase;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetPropertyValueResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetPropertyValueResponse): GetPropertyValueResponse.AsObject;
-  static serializeBinaryToWriter(message: GetPropertyValueResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetPropertyValueResponse;
-  static deserializeBinaryFromReader(message: GetPropertyValueResponse, reader: jspb.BinaryReader): GetPropertyValueResponse;
-}
-
-export namespace GetPropertyValueResponse {
-  export type AsObject = {
-    id: string,
-    propertyId: string,
-    textValue: string,
-    numberValue: number,
-    boolValue: boolean,
-    dateValue: string,
-    dateTimeValue: string,
-    selectValue: string,
-  }
-
-  export enum ValueCase { 
-    VALUE_NOT_SET = 0,
-    TEXT_VALUE = 4,
-    NUMBER_VALUE = 5,
-    BOOL_VALUE = 6,
-    DATE_VALUE = 7,
-    DATE_TIME_VALUE = 8,
-    SELECT_VALUE = 9,
-  }
 }
 

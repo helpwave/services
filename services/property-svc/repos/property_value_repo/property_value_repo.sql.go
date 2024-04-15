@@ -94,6 +94,40 @@ func (q *Queries) GetPropertyValueBySubjectIDAndPropertyID(ctx context.Context, 
 	return id, err
 }
 
+const getPropertyValuesBySubjectID = `-- name: GetPropertyValuesBySubjectID :many
+SELECT id, property_id, subject_id, text_value, number_value, bool_value, date_value, date_time_value, select_value FROM property_values WHERE subject_id = $1
+`
+
+func (q *Queries) GetPropertyValuesBySubjectID(ctx context.Context, subjectID uuid.UUID) ([]PropertyValue, error) {
+	rows, err := q.db.Query(ctx, getPropertyValuesBySubjectID, subjectID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []PropertyValue{}
+	for rows.Next() {
+		var i PropertyValue
+		if err := rows.Scan(
+			&i.ID,
+			&i.PropertyID,
+			&i.SubjectID,
+			&i.TextValue,
+			&i.NumberValue,
+			&i.BoolValue,
+			&i.DateValue,
+			&i.DateTimeValue,
+			&i.SelectValue,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updatePropertyValueByID = `-- name: UpdatePropertyValueByID :exec
 UPDATE property_values
 SET text_value = $2,

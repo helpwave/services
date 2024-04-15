@@ -145,61 +145,61 @@ proto.proto.services.property_svc.v1.PropertyValueServicePromiseClient.prototype
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.property_svc.v1.GetPropertyValueRequest,
- *   !proto.proto.services.property_svc.v1.GetPropertyValueResponse>}
+ *   !proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest,
+ *   !proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse>}
  */
-const methodDescriptor_PropertyValueService_GetPropertyValue = new grpc.web.MethodDescriptor(
-  '/proto.services.property_svc.v1.PropertyValueService/GetPropertyValue',
+const methodDescriptor_PropertyValueService_GetAttachedPropertyValues = new grpc.web.MethodDescriptor(
+  '/proto.services.property_svc.v1.PropertyValueService/GetAttachedPropertyValues',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.property_svc.v1.GetPropertyValueRequest,
-  proto.proto.services.property_svc.v1.GetPropertyValueResponse,
+  proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest,
+  proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse,
   /**
-   * @param {!proto.proto.services.property_svc.v1.GetPropertyValueRequest} request
+   * @param {!proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.property_svc.v1.GetPropertyValueResponse.deserializeBinary
+  proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.property_svc.v1.GetPropertyValueRequest} request The
+ * @param {!proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.property_svc.v1.GetPropertyValueResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.property_svc.v1.GetPropertyValueResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.property_svc.v1.PropertyValueServiceClient.prototype.getPropertyValue =
+proto.proto.services.property_svc.v1.PropertyValueServiceClient.prototype.getAttachedPropertyValues =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.property_svc.v1.PropertyValueService/GetPropertyValue',
+      '/proto.services.property_svc.v1.PropertyValueService/GetAttachedPropertyValues',
       request,
       metadata || {},
-      methodDescriptor_PropertyValueService_GetPropertyValue,
+      methodDescriptor_PropertyValueService_GetAttachedPropertyValues,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.property_svc.v1.GetPropertyValueRequest} request The
+ * @param {!proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.property_svc.v1.GetPropertyValueResponse>}
+ * @return {!Promise<!proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.property_svc.v1.PropertyValueServicePromiseClient.prototype.getPropertyValue =
+proto.proto.services.property_svc.v1.PropertyValueServicePromiseClient.prototype.getAttachedPropertyValues =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.property_svc.v1.PropertyValueService/GetPropertyValue',
+      '/proto.services.property_svc.v1.PropertyValueService/GetAttachedPropertyValues',
       request,
       metadata || {},
-      methodDescriptor_PropertyValueService_GetPropertyValue);
+      methodDescriptor_PropertyValueService_GetAttachedPropertyValues);
 };
 
 

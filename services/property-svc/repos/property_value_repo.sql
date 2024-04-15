@@ -30,3 +30,6 @@ WHERE id = $1;
 
 -- name: GetPropertyValueByID :one
 SELECT * FROM property_values WHERE id = $1;
+
+-- name: GetPropertyValuesBySubjectID :many
+SELECT * FROM property_values WHERE subject_id = $1;

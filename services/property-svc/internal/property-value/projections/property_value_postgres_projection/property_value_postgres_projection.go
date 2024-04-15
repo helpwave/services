@@ -168,6 +168,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 	case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
 		val, ok := payload.Value.(float64)
 		if !ok {
+			fmt.Println(payload.Value)
 			log.Error().Msg("could not assert number.")
 			return nil, esdb.NackActionRetry
 		}

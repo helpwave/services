@@ -11,12 +11,12 @@ option go_package = "gen/proto/services/property-svc";
 // AttachPropertyValueRequest
 //
 message AttachPropertyValueRequest{
-  string subject_id = 1;
-  string property_id = 2;
+  string subject_id = 1; // @gotags: validate:"uuid4"
+  string property_id = 2; // @gotags: validate:"uuid4"
 
   oneof value {
     string text_value = 4; // FIELD_TYPE_TEXT
-    float number_value = 5; // FIELD_TYPE_NUMBER
+    double number_value = 5; // FIELD_TYPE_NUMBER
     bool bool_value = 6; // FIELD_TYPE_CHECKBOX
     Date date_value = 7; // FIELD_TYPE_DATE
     google.protobuf.Timestamp date_time_value = 8; // FIELD_TYPE_DATE_TIME
@@ -43,17 +43,19 @@ message GetAttachedPropertyValuesResponse {
     optional string description = 4;
 
     bool is_archived = 5;
-    bool is_soft_required = 6;
 
+    /* TODO:
+    bool is_soft_required = 6;
     message Set {
       string id = 1;
       string name = 2;
     }
     optional Set set = 7;
+    */
 
     oneof value {
       string text_value = 9; // FIELD_TYPE_TEXT
-      float number_value = 10; // FIELD_TYPE_NUMBER
+      double number_value = 10; // FIELD_TYPE_NUMBER
       bool bool_value = 11; // FIELD_TYPE_CHECKBOX
       Date date_value = 12; // FIELD_TYPE_DATE
       google.protobuf.Timestamp date_time_value = 13; // FIELD_TYPE_DATE_TIME
@@ -65,29 +67,12 @@ message GetAttachedPropertyValuesResponse {
   // TODO: TBD: Property Information for Values
 }
 
-message GetPropertyValueRequest{
-  string id = 1;
-}
-
-message GetPropertyValueResponse{
-  string id = 1;
-  string property_id = 3;
-  oneof value {
-    string text_value = 4; // FIELD_TYPE_TEXT
-    float number_value = 5; // FIELD_TYPE_NUMBER
-    bool bool_value = 6; // FIELD_TYPE_CHECKBOX
-    string date_value = 7; // FIELD_TYPE_DATE TODO: is there a proto date type?
-    string date_time_value = 8; // FIELD_TYPE_DATE_TIME
-    string select_value = 9; // FIELD_TYPE_SELECT, id of option
-  }
-}
-
 //
 // PropertyValueService
 //
 
 service PropertyValueService {
   rpc AttachPropertyValue(AttachPropertyValueRequest) returns (AttachPropertyValueResponse) {}
-  rpc GetPropertyValue(GetPropertyValueRequest) returns (GetPropertyValueResponse) {}
+  rpc GetAttachedPropertyValues(GetAttachedPropertyValuesRequest) returns (GetAttachedPropertyValuesResponse) {}
 }
 

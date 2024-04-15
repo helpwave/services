@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	PropertyValueService_AttachPropertyValue_FullMethodName = "/proto.services.property_svc.v1.PropertyValueService/AttachPropertyValue"
-	PropertyValueService_GetPropertyValue_FullMethodName    = "/proto.services.property_svc.v1.PropertyValueService/GetPropertyValue"
+	PropertyValueService_AttachPropertyValue_FullMethodName       = "/proto.services.property_svc.v1.PropertyValueService/AttachPropertyValue"
+	PropertyValueService_GetAttachedPropertyValues_FullMethodName = "/proto.services.property_svc.v1.PropertyValueService/GetAttachedPropertyValues"
 )
 
 // PropertyValueServiceClient is the client API for PropertyValueService service.
@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PropertyValueServiceClient interface {
 	AttachPropertyValue(ctx context.Context, in *AttachPropertyValueRequest, opts ...grpc.CallOption) (*AttachPropertyValueResponse, error)
-	GetPropertyValue(ctx context.Context, in *GetPropertyValueRequest, opts ...grpc.CallOption) (*GetPropertyValueResponse, error)
+	GetAttachedPropertyValues(ctx context.Context, in *GetAttachedPropertyValuesRequest, opts ...grpc.CallOption) (*GetAttachedPropertyValuesResponse, error)
 }
 
 type propertyValueServiceClient struct {
@@ -48,9 +48,9 @@ func (c *propertyValueServiceClient) AttachPropertyValue(ctx context.Context, in
 	return out, nil
 }
 
-func (c *propertyValueServiceClient) GetPropertyValue(ctx context.Context, in *GetPropertyValueRequest, opts ...grpc.CallOption) (*GetPropertyValueResponse, error) {
-	out := new(GetPropertyValueResponse)
-	err := c.cc.Invoke(ctx, PropertyValueService_GetPropertyValue_FullMethodName, in, out, opts...)
+func (c *propertyValueServiceClient) GetAttachedPropertyValues(ctx context.Context, in *GetAttachedPropertyValuesRequest, opts ...grpc.CallOption) (*GetAttachedPropertyValuesResponse, error) {
+	out := new(GetAttachedPropertyValuesResponse)
+	err := c.cc.Invoke(ctx, PropertyValueService_GetAttachedPropertyValues_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (c *propertyValueServiceClient) GetPropertyValue(ctx context.Context, in *G
 // for forward compatibility
 type PropertyValueServiceServer interface {
 	AttachPropertyValue(context.Context, *AttachPropertyValueRequest) (*AttachPropertyValueResponse, error)
-	GetPropertyValue(context.Context, *GetPropertyValueRequest) (*GetPropertyValueResponse, error)
+	GetAttachedPropertyValues(context.Context, *GetAttachedPropertyValuesRequest) (*GetAttachedPropertyValuesResponse, error)
 	mustEmbedUnimplementedPropertyValueServiceServer()
 }
 
@@ -73,8 +73,8 @@ type UnimplementedPropertyValueServiceServer struct {
 func (UnimplementedPropertyValueServiceServer) AttachPropertyValue(context.Context, *AttachPropertyValueRequest) (*AttachPropertyValueResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AttachPropertyValue not implemented")
 }
-func (UnimplementedPropertyValueServiceServer) GetPropertyValue(context.Context, *GetPropertyValueRequest) (*GetPropertyValueResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPropertyValue not implemented")
+func (UnimplementedPropertyValueServiceServer) GetAttachedPropertyValues(context.Context, *GetAttachedPropertyValuesRequest) (*GetAttachedPropertyValuesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAttachedPropertyValues not implemented")
 }
 func (UnimplementedPropertyValueServiceServer) mustEmbedUnimplementedPropertyValueServiceServer() {}
 
@@ -107,20 +107,20 @@ func _PropertyValueService_AttachPropertyValue_Handler(srv interface{}, ctx cont
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PropertyValueService_GetPropertyValue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPropertyValueRequest)
+func _PropertyValueService_GetAttachedPropertyValues_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAttachedPropertyValuesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PropertyValueServiceServer).GetPropertyValue(ctx, in)
+		return srv.(PropertyValueServiceServer).GetAttachedPropertyValues(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PropertyValueService_GetPropertyValue_FullMethodName,
+		FullMethod: PropertyValueService_GetAttachedPropertyValues_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PropertyValueServiceServer).GetPropertyValue(ctx, req.(*GetPropertyValueRequest))
+		return srv.(PropertyValueServiceServer).GetAttachedPropertyValues(ctx, req.(*GetAttachedPropertyValuesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -137,8 +137,8 @@ var PropertyValueService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PropertyValueService_AttachPropertyValue_Handler,
 		},
 		{
-			MethodName: "GetPropertyValue",
-			Handler:    _PropertyValueService_GetPropertyValue_Handler,
+			MethodName: "GetAttachedPropertyValues",
+			Handler:    _PropertyValueService_GetAttachedPropertyValues_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
