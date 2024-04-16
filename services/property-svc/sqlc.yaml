@@ -18,3 +18,17 @@ sql:
           - db_type: "uuid"
             go_type: "github.com/google/uuid.NullUUID"
             nullable: true
+  - <<: *repo
+    queries: "./repos/views_repo.sql"
+    gen:
+      go:
+        <<: *repo-go
+        package: "views_repo"
+        out: "repos/views_repo"
+  - <<: *repo
+    queries: "./repos/task_views_repo.sql"
+    gen:
+      go:
+        <<: *repo-go
+        package: "task_views_repo"
+        out: "repos/task_views_repo"

@@ -19,6 +19,16 @@ type Property struct {
 	SelectDataID uuid.NullUUID
 }
 
+type PropertyViewFilterAlwaysIncludeItem struct {
+	DontAlwaysInclude bool
+	RuleID            uuid.UUID
+	PropertyID        uuid.UUID
+}
+
+type PropertyViewRule struct {
+	RuleID uuid.UUID
+}
+
 type SchemaMigration struct {
 	Version int64
 	Dirty   bool
@@ -35,4 +45,10 @@ type SelectOption struct {
 	Description  string
 	IsCustom     bool
 	SelectDataID uuid.UUID
+}
+
+type TaskPropertyViewRule struct {
+	RuleID uuid.UUID
+	WardID uuid.NullUUID
+	TaskID uuid.NullUUID
 }

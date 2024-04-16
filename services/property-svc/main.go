@@ -10,6 +10,7 @@ import (
 	"hwes/eventstoredb"
 	propertySet "property-svc/internal/property-set/api"
 	propertyValue "property-svc/internal/property-value/api"
+	propertyViews "property-svc/internal/property-view/api"
 	property "property-svc/internal/property/api"
 	"property-svc/internal/property/projections/property_postgres_projection"
 )
@@ -43,6 +44,7 @@ func main() {
 		pb.RegisterPropertyServiceServer(grpcServer, property.NewPropertyService(aggregateStore))
 		pb.RegisterPropertySetServiceServer(grpcServer, propertySet.NewPropertySetService(aggregateStore))
 		pb.RegisterPropertyValueServiceServer(grpcServer, propertyValue.NewPropertyValueService(aggregateStore))
+		pb.RegisterPropertyViewsServiceServer(grpcServer, propertyViews.NewPropertyViewService(aggregateStore))
 	})
 
 	cancel()

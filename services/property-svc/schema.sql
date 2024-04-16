@@ -30,6 +30,26 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
 
 
+--
+-- Name: calc_rule_specificity(boolean[]); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.calc_rule_specificity(VARIADIC args boolean[]) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	result INTEGER := 0;
+	i INT;
+BEGIN
+	FOR i IN 1..COALESCE(array_length(args, 1), 0)
+	LOOP
+		result := result | args[i] :: integer << (31 - i);
+	END LOOP;
+	RETURN result;
+END;
+$$;
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -47,6 +67,26 @@ CREATE TABLE public.properties (
     is_archived boolean DEFAULT false NOT NULL,
     set_id uuid,
     select_data_id uuid
+);
+
+
+--
+-- Name: property_view_filter_always_include_items; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.property_view_filter_always_include_items (
+    dont_always_include boolean NOT NULL,
+    rule_id uuid NOT NULL,
+    property_id uuid NOT NULL
+);
+
+
+--
+-- Name: property_view_rules; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.property_view_rules (
+    rule_id uuid DEFAULT public.uuid_generate_v4() NOT NULL
 );
 
 
@@ -84,11 +124,45 @@ CREATE TABLE public.select_options (
 
 
 --
+-- Name: task_property_view_rules; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.task_property_view_rules (
+    ward_id uuid,
+    task_id uuid
+)
+INHERITS (public.property_view_rules);
+
+
+--
+-- Name: task_property_view_rules rule_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.task_property_view_rules ALTER COLUMN rule_id SET DEFAULT public.uuid_generate_v4();
+
+
+--
 -- Name: properties properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.properties
     ADD CONSTRAINT properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: property_view_filter_always_include_items property_view_filter_always_include_items_property_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.property_view_filter_always_include_items
+    ADD CONSTRAINT property_view_filter_always_include_items_property_id_key UNIQUE (property_id);
+
+
+--
+-- Name: property_view_rules property_view_rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.property_view_rules
+    ADD CONSTRAINT property_view_rules_pkey PRIMARY KEY (rule_id);
 
 
 --
@@ -116,11 +190,42 @@ ALTER TABLE ONLY public.select_options
 
 
 --
+-- Name: task_property_view_rules task_property_view_rules_ward_id_task_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.task_property_view_rules
+    ADD CONSTRAINT task_property_view_rules_ward_id_task_id_key UNIQUE (ward_id, task_id);
+
+
+--
+-- Name: idx_property_view_filter_always_include_items_rule_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_property_view_filter_always_include_items_rule_id ON public.property_view_filter_always_include_items USING btree (rule_id);
+
+
+--
 -- Name: properties properties_select_data_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.properties
     ADD CONSTRAINT properties_select_data_id_fkey FOREIGN KEY (select_data_id) REFERENCES public.select_datas(id) ON DELETE SET NULL;
+
+
+--
+-- Name: property_view_filter_always_include_items property_view_filter_always_include_items_property_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.property_view_filter_always_include_items
+    ADD CONSTRAINT property_view_filter_always_include_items_property_id_fkey FOREIGN KEY (property_id) REFERENCES public.properties(id) ON DELETE CASCADE;
+
+
+--
+-- Name: property_view_filter_always_include_items property_view_filter_always_include_items_rule_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.property_view_filter_always_include_items
+    ADD CONSTRAINT property_view_filter_always_include_items_rule_id_fkey FOREIGN KEY (rule_id) REFERENCES public.property_view_rules(rule_id) ON DELETE CASCADE;
 
 
 --
