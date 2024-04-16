@@ -103,6 +103,7 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 			Type:     esdb.StreamFilterType,
 			Prefixes: *p.streamPrefixFilters,
 		}
+		persistentAllSubscriptionOptions.Filter = esdb.ExcludeSystemEventsFilter()
 	}
 
 	// TODO: Do we need to manage the subscriptions? E.g. delete persistent subscriptions?
