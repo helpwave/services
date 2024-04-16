@@ -53,13 +53,15 @@ type CustomProjection struct {
 	es                    *esdb.Client
 	eventHandlers         map[string]eventHandler
 	subscriptionGroupName string
+	streamPrefixFilters   *[]string
 }
 
-func NewCustomProjection(esdbClient *esdb.Client, subscriptionGroupName string) *CustomProjection {
+func NewCustomProjection(esdbClient *esdb.Client, subscriptionGroupName string, streamPrefixFilters *[]string) *CustomProjection {
 	return &CustomProjection{
 		es:                    esdbClient,
 		eventHandlers:         make(map[string]eventHandler),
 		subscriptionGroupName: subscriptionGroupName,
+		streamPrefixFilters:   streamPrefixFilters,
 	}
 }
 
@@ -94,6 +96,15 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 
 	// Create subscription on EventStoreDB
 	persistentAllSubscriptionOptions := esdb.PersistentAllSubscriptionOptions{}
+
+	if p.streamPrefixFilters != nil {
+		// Filter stream by prefix
+		persistentAllSubscriptionOptions.Filter = &esdb.SubscriptionFilter{
+			Type:     esdb.StreamFilterType,
+			Prefixes: *p.streamPrefixFilters,
+		}
+	}
+
 	// TODO: Do we need to manage the subscriptions? E.g. delete persistent subscriptions?
 	err := p.es.CreatePersistentSubscriptionToAll(ctx, p.subscriptionGroupName, persistentAllSubscriptionOptions)
 	if err != nil {
