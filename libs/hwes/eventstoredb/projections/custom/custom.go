@@ -7,7 +7,6 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	zlog "github.com/rs/zerolog/log"
 	"hwes"
-	"strings"
 	"telemetry"
 )
 
@@ -94,8 +93,10 @@ func (p *CustomProjection) handleEvent(ctx context.Context, event hwes.Event) (e
 func (p *CustomProjection) Subscribe(ctx context.Context) error {
 	log := zlog.Ctx(ctx)
 
-	// Create subscription on EventStoreDB
-	persistentAllSubscriptionOptions := esdb.PersistentAllSubscriptionOptions{}
+	// Create subscription on EventStoreDB, exclude systemEvents
+	persistentAllSubscriptionOptions := esdb.PersistentAllSubscriptionOptions{
+		Filter: esdb.ExcludeSystemEventsFilter(),
+	}
 
 	if p.streamPrefixFilters != nil {
 		// Filter stream by prefix
@@ -165,14 +166,6 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 
 	if esdbEvent.EventAppeared == nil || esdbEvent.EventAppeared.Event == nil {
 		log.Debug().Msg("Received empty event, skip")
-		return nil
-	}
-
-	if strings.HasPrefix(esdbEvent.EventAppeared.Event.Event.EventType, EventStoreDBInternalEventPrefix) {
-		// Skip internal events
-		log.Debug().
-			Str("esdbEventID", esdbEvent.EventAppeared.Event.Event.EventID.String()).
-			Msg("Received internal event, skip")
 		return nil
 	}
 
