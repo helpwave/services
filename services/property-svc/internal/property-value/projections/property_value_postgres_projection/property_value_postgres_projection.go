@@ -13,6 +13,7 @@ import (
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+	"property-svc/internal/property-value/aggregate"
 	propertyValueEventsV1 "property-svc/internal/property-value/events/v1"
 	"property-svc/repos/property_repo"
 	"property-svc/repos/property_value_repo"
@@ -29,7 +30,7 @@ type Projection struct {
 func NewProjection(es *esdb.Client, serviceName string) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-value-postgres-projection", serviceName)
 	p := &Projection{
-		CustomProjection:  custom.NewCustomProjection(es, subscriptionGroupName),
+		CustomProjection:  custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PropertyValueAggregateType)}),
 		db:                hwdb.GetDB(),
 		propertyRepo:      property_repo.New(hwdb.GetDB()),
 		propertyValueRepo: property_value_repo.New(hwdb.GetDB())}
