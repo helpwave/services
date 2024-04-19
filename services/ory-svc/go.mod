@@ -19,7 +19,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.1-0.20231216201459-8508981c8b6c
 	github.com/ory/client-go v1.9.0
 	github.com/rs/zerolog v1.32.0
-	google.golang.org/grpc v1.63.0
+	google.golang.org/grpc v1.63.2
 	hwutil v0.0.0
 )
 

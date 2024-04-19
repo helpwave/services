@@ -11,6 +11,7 @@ import (
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+	"tasks-svc/internal/task/aggregate"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"tasks-svc/repos/task_repo"
 )
@@ -22,7 +23,9 @@ type Projection struct {
 
 func NewProjection(es *esdb.Client, serviceName string) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-task-postgres-projection", serviceName)
-	p := &Projection{custom.NewCustomProjection(es, subscriptionGroupName), task_repo.New(hwdb.GetDB())}
+	p := &Projection{
+		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.TaskAggregateType)}),
+		taskRepo:         task_repo.New(hwdb.GetDB())}
 	p.initEventListeners()
 	return p
 }

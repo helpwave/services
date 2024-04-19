@@ -7,7 +7,6 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	zlog "github.com/rs/zerolog/log"
 	"hwes"
-	"strings"
 	"telemetry"
 )
 
@@ -53,13 +52,15 @@ type CustomProjection struct {
 	es                    *esdb.Client
 	eventHandlers         map[string]eventHandler
 	subscriptionGroupName string
+	streamPrefixFilters   *[]string
 }
 
-func NewCustomProjection(esdbClient *esdb.Client, subscriptionGroupName string) *CustomProjection {
+func NewCustomProjection(esdbClient *esdb.Client, subscriptionGroupName string, streamPrefixFilters *[]string) *CustomProjection {
 	return &CustomProjection{
 		es:                    esdbClient,
 		eventHandlers:         make(map[string]eventHandler),
 		subscriptionGroupName: subscriptionGroupName,
+		streamPrefixFilters:   streamPrefixFilters,
 	}
 }
 
@@ -92,8 +93,19 @@ func (p *CustomProjection) handleEvent(ctx context.Context, event hwes.Event) (e
 func (p *CustomProjection) Subscribe(ctx context.Context) error {
 	log := zlog.Ctx(ctx)
 
-	// Create subscription on EventStoreDB
-	persistentAllSubscriptionOptions := esdb.PersistentAllSubscriptionOptions{}
+	// Create subscription on EventStoreDB, exclude systemEvents
+	persistentAllSubscriptionOptions := esdb.PersistentAllSubscriptionOptions{
+		Filter: esdb.ExcludeSystemEventsFilter(),
+	}
+
+	if p.streamPrefixFilters != nil {
+		// Filter stream by prefix
+		persistentAllSubscriptionOptions.Filter = &esdb.SubscriptionFilter{
+			Type:     esdb.StreamFilterType,
+			Prefixes: *p.streamPrefixFilters,
+		}
+	}
+
 	// TODO: Do we need to manage the subscriptions? E.g. delete persistent subscriptions?
 	err := p.es.CreatePersistentSubscriptionToAll(ctx, p.subscriptionGroupName, persistentAllSubscriptionOptions)
 	if err != nil {
@@ -153,14 +165,6 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 
 	if esdbEvent.EventAppeared == nil || esdbEvent.EventAppeared.Event == nil {
 		log.Debug().Msg("Received empty event, skip")
-		return nil
-	}
-
-	if strings.HasPrefix(esdbEvent.EventAppeared.Event.Event.EventType, EventStoreDBInternalEventPrefix) {
-		// Skip internal events
-		log.Debug().
-			Str("esdbEventID", esdbEvent.EventAppeared.Event.Event.EventID.String()).
-			Msg("Received internal event, skip")
 		return nil
 	}
 

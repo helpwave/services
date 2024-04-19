@@ -10,6 +10,7 @@ import (
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+	"tasks-svc/internal/patient/aggregate"
 	patientEventsV1 "tasks-svc/internal/patient/events/v1"
 	"tasks-svc/repos/patient_repo"
 )
@@ -21,7 +22,9 @@ type Projection struct {
 
 func NewProjection(es *esdb.Client, serviceName string) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-patient-postgres-projection", serviceName)
-	p := &Projection{custom.NewCustomProjection(es, subscriptionGroupName), patient_repo.New(hwdb.GetDB())}
+	p := &Projection{
+		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PatientAggregateType)}),
+		patientRepo:      patient_repo.New(hwdb.GetDB())}
 	p.initEventListeners()
 	return p
 }

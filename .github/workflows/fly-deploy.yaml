@@ -5,7 +5,7 @@ name: 'Deploy to Fly'
 
 env:
   # renovate: datasource=github-releases depName=superfly/flyctl versioning=semver
-  FLY_CLI_VERSION: '0.2.28'
+  FLY_CLI_VERSION: '0.2.31'
 
 on:
   workflow_call:
