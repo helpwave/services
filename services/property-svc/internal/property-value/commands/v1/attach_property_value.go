@@ -16,7 +16,7 @@ func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachProperty
 		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 		var a *aggregate.PropertyValueAggregate
 
-		// TODO: ensure eventual consistency by not using the projection here
+		// TODO: Do not use the data from the projection here, could be outdated
 		existingPropertyValueID, err := hwdb.Optional(propertyValueRepo.GetPropertyValueBySubjectIDAndPropertyID)(ctx, property_value_repo.GetPropertyValueBySubjectIDAndPropertyIDParams{
 			PropertyID: propertyID,
 			SubjectID:  subjectID,
@@ -29,7 +29,7 @@ func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachProperty
 			if a, err = aggregate.LoadPropertyValueAggregate(ctx, as, *existingPropertyValueID); err != nil {
 				return err
 			}
-			// TBD: update value will be triggered, even if the value is not the type the property defines
+			// TODO: update value will be triggered, even if the value is not the type the property defines
 			if err := a.UpdatePropertyValue(ctx, value); err != nil {
 				return err
 			}

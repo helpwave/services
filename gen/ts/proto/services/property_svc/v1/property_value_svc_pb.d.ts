@@ -57,12 +57,12 @@ export namespace AttachPropertyValueRequest {
 
   export enum ValueCase { 
     VALUE_NOT_SET = 0,
-    TEXT_VALUE = 4,
-    NUMBER_VALUE = 5,
-    BOOL_VALUE = 6,
-    DATE_VALUE = 7,
-    DATE_TIME_VALUE = 8,
-    SELECT_VALUE = 9,
+    TEXT_VALUE = 3,
+    NUMBER_VALUE = 4,
+    BOOL_VALUE = 5,
+    DATE_VALUE = 6,
+    DATE_TIME_VALUE = 7,
+    SELECT_VALUE = 10,
   }
 }
 
@@ -188,12 +188,12 @@ export namespace GetAttachedPropertyValuesResponse {
 
     export enum ValueCase { 
       VALUE_NOT_SET = 0,
-      TEXT_VALUE = 9,
-      NUMBER_VALUE = 10,
-      BOOL_VALUE = 11,
-      DATE_VALUE = 12,
-      DATE_TIME_VALUE = 13,
-      SELECT_VALUE = 14,
+      TEXT_VALUE = 6,
+      NUMBER_VALUE = 7,
+      BOOL_VALUE = 8,
+      DATE_VALUE = 9,
+      DATE_TIME_VALUE = 10,
+      SELECT_VALUE = 11,
     }
 
     export enum DescriptionCase { 
