@@ -9,13 +9,14 @@ import (
 type PropertyMatchers interface {
 	// QueryRule queries (presumably the projection) for the one rule that has these matchers
 	// MUST return (nil, nil) if no such rule exists
+	// TODO: is it sufficient to only return the id?
 	QueryRule(context.Context) (*PropertyViewRule, error)
 }
 
 type PropertyViewRule struct {
 	RuleId uuid.UUID
 
-	Specificity int32 /* calculated by the database: calc_rule_specificity */
+	// TODO: never needed in go code I think Specificity int32 /* calculated by the database: calc_rule_specificity */
 
 	/* matchers */
 	// WardId    *string
