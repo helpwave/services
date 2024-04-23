@@ -3,8 +3,10 @@ package hwdb
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"time"
 )
@@ -39,4 +41,36 @@ func PbToTimestamp(src *timestamppb.Timestamp) pgtype.Timestamp {
 		return pgtype.Timestamp{Valid: false}
 	}
 	return pgtype.Timestamp{Time: (*src).AsTime().UTC(), Valid: true}
+}
+
+// TruncateAllTables truncates all tables of the currently connected database
+func TruncateAllTables(ctx context.Context) error {
+	db := GetDB()
+
+	rows, err := db.Query(ctx, `
+		SELECT table_name
+		FROM information_schema.tables
+		WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
+	`)
+
+	if err != nil {
+		return err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var tableName string
+		if err := rows.Scan(&tableName); err != nil {
+			return err
+		}
+
+		if _, err := db.Exec(ctx, fmt.Sprintf("TRUNCATE TABLE %s CASCADE", tableName)); err != nil {
+			return err
+		}
+
+		log.Debug().Str("table_name", tableName).Msg("table truncated")
+	}
+
+	return rows.Err()
 }
