@@ -31,5 +31,10 @@ WHERE id = $1;
 -- name: GetPropertyValueByID :one
 SELECT * FROM property_values WHERE id = $1;
 
--- name: GetPropertyValuesBySubjectID :many
-SELECT * FROM property_values WHERE subject_id = $1;
+-- name: GetPropertyValuesWithPropertyBySubjectID :many
+SELECT
+	sqlc.embed(properties),
+	sqlc.embed(property_values)
+FROM property_values
+	LEFT JOIN properties ON property_values.property_id = properties.id
+WHERE subject_id = $1;

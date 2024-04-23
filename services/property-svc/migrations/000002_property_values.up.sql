@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS property_values (
 		) <= 1
 	),
 	UNIQUE (property_id, subject_id),
+
 	FOREIGN KEY (property_id)
 		REFERENCES properties(id)
 		ON DELETE CASCADE,
