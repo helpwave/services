@@ -33,7 +33,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
 # install buf
 #  https://buf.build/
 # renovate: datasource=github-releases depName=bufbuild/buf
-ENV BUF_VERSION=1.30.1
+ENV BUF_VERSION=1.31.0
 RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-Linux-x86_64 -O /usr/local/bin/buf \
     && chmod +x /usr/local/bin/buf
 
@@ -87,7 +87,7 @@ ENV PATH="$PATH:$HOME/.fly/bin"
 # install go-migrate
 #  https://github.com/golang-migrate/migrate
 # renovate: datasource=github-releases depName=golang-migrate/migrate
-ENV MIGRATE_VERSION=4.17.0
+ENV MIGRATE_VERSION=4.17.1
 RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v${MIGRATE_VERSION} \
 	&& go clean -modcache
 
