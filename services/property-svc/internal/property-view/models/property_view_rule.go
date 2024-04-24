@@ -7,21 +7,16 @@ import (
 
 // PropertyMatchers have to be safe to JSON marshal
 type PropertyMatchers interface {
-	// QueryRule queries (presumably the projection) for the one rule that has these matchers
+	// FindExactRuleId queries (presumably the projection) for the one rule that has these matchers
 	// MUST return (nil, nil) if no such rule exists
-	// TODO: is it sufficient to only return the id?
-	QueryRule(context.Context) (*PropertyViewRule, error)
+	FindExactRuleId(context.Context) (*uuid.UUID, error)
 }
 
 type PropertyViewRule struct {
 	RuleId uuid.UUID
 
-	// TODO: never needed in go code I think Specificity int32 /* calculated by the database: calc_rule_specificity */
-
 	/* matchers */
-	// WardId    *string
-	// SubjectId *string
-	matchers PropertyMatchers
+	Matchers PropertyMatchers
 
 	/* filters */
 	// TODO: softRequired      *bool       /* show all softRequired, don't show all softRequired, no-rule (parent might have one) */

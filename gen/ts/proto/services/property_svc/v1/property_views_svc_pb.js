@@ -35,7 +35,7 @@ goog.exportSymbol('proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRu
  * @constructor
  */
 proto.proto.services.property_svc.v1.FilterUpdate = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.services.property_svc.v1.FilterUpdate.repeatedFields_, null);
 };
 goog.inherits(proto.proto.services.property_svc.v1.FilterUpdate, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -88,6 +88,13 @@ if (goog.DEBUG && !COMPILED) {
   proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleResponse.displayName = 'proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleResponse';
 }
 
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.services.property_svc.v1.FilterUpdate.repeatedFields_ = [1,2,3,4];
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -119,10 +126,10 @@ proto.proto.services.property_svc.v1.FilterUpdate.prototype.toObject = function(
  */
 proto.proto.services.property_svc.v1.FilterUpdate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    appendToAlwaysInclude: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    removeFromAlwaysInclude: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    appendToDontAlwaysInclude: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    removeFromDontAlwaysInclude: jspb.Message.getFieldWithDefault(msg, 4, "")
+    appendToAlwaysIncludeList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f,
+    removeFromAlwaysIncludeList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f,
+    appendToDontAlwaysIncludeList: (f = jspb.Message.getRepeatedField(msg, 3)) == null ? undefined : f,
+    removeFromDontAlwaysIncludeList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -161,19 +168,19 @@ proto.proto.services.property_svc.v1.FilterUpdate.deserializeBinaryFromReader = 
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setAppendToAlwaysInclude(value);
+      msg.addAppendToAlwaysInclude(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setRemoveFromAlwaysInclude(value);
+      msg.addRemoveFromAlwaysInclude(value);
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
-      msg.setAppendToDontAlwaysInclude(value);
+      msg.addAppendToDontAlwaysInclude(value);
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
-      msg.setRemoveFromDontAlwaysInclude(value);
+      msg.addRemoveFromDontAlwaysInclude(value);
       break;
     default:
       reader.skipField();
@@ -204,30 +211,30 @@ proto.proto.services.property_svc.v1.FilterUpdate.prototype.serializeBinary = fu
  */
 proto.proto.services.property_svc.v1.FilterUpdate.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {string} */ (jspb.Message.getField(message, 1));
-  if (f != null) {
-    writer.writeString(
+  f = message.getAppendToAlwaysIncludeList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
       1,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(message, 2));
-  if (f != null) {
-    writer.writeString(
+  f = message.getRemoveFromAlwaysIncludeList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
       2,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(message, 3));
-  if (f != null) {
-    writer.writeString(
+  f = message.getAppendToDontAlwaysIncludeList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
       3,
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(message, 4));
-  if (f != null) {
-    writer.writeString(
+  f = message.getRemoveFromDontAlwaysIncludeList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
       4,
       f
     );
@@ -236,146 +243,150 @@ proto.proto.services.property_svc.v1.FilterUpdate.serializeBinaryToWriter = func
 
 
 /**
- * optional string append_to_always_include = 1;
- * @return {string}
+ * repeated string append_to_always_include = 1;
+ * @return {!Array<string>}
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.getAppendToAlwaysInclude = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.getAppendToAlwaysIncludeList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 1));
+};
+
+
+/**
+ * @param {!Array<string>} value
+ * @return {!proto.proto.services.property_svc.v1.FilterUpdate} returns this
+ */
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.setAppendToAlwaysIncludeList = function(value) {
+  return jspb.Message.setField(this, 1, value || []);
 };
 
 
 /**
  * @param {string} value
+ * @param {number=} opt_index
  * @return {!proto.proto.services.property_svc.v1.FilterUpdate} returns this
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.setAppendToAlwaysInclude = function(value) {
-  return jspb.Message.setField(this, 1, value);
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.addAppendToAlwaysInclude = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 1, value, opt_index);
 };
 
 
 /**
- * Clears the field making it undefined.
+ * Clears the list making it empty but non-null.
  * @return {!proto.proto.services.property_svc.v1.FilterUpdate} returns this
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.clearAppendToAlwaysInclude = function() {
-  return jspb.Message.setField(this, 1, undefined);
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.clearAppendToAlwaysIncludeList = function() {
+  return this.setAppendToAlwaysIncludeList([]);
 };
 
 
 /**
- * Returns whether this field is set.
- * @return {boolean}
+ * repeated string remove_from_always_include = 2;
+ * @return {!Array<string>}
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.hasAppendToAlwaysInclude = function() {
-  return jspb.Message.getField(this, 1) != null;
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.getRemoveFromAlwaysIncludeList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 2));
 };
 
 
 /**
- * optional string remove_from_always_include = 2;
- * @return {string}
+ * @param {!Array<string>} value
+ * @return {!proto.proto.services.property_svc.v1.FilterUpdate} returns this
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.getRemoveFromAlwaysInclude = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.setRemoveFromAlwaysIncludeList = function(value) {
+  return jspb.Message.setField(this, 2, value || []);
 };
 
 
 /**
  * @param {string} value
+ * @param {number=} opt_index
  * @return {!proto.proto.services.property_svc.v1.FilterUpdate} returns this
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.setRemoveFromAlwaysInclude = function(value) {
-  return jspb.Message.setField(this, 2, value);
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.addRemoveFromAlwaysInclude = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 2, value, opt_index);
 };
 
 
 /**
- * Clears the field making it undefined.
+ * Clears the list making it empty but non-null.
  * @return {!proto.proto.services.property_svc.v1.FilterUpdate} returns this
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.clearRemoveFromAlwaysInclude = function() {
-  return jspb.Message.setField(this, 2, undefined);
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.clearRemoveFromAlwaysIncludeList = function() {
+  return this.setRemoveFromAlwaysIncludeList([]);
 };
 
 
 /**
- * Returns whether this field is set.
- * @return {boolean}
+ * repeated string append_to_dont_always_include = 3;
+ * @return {!Array<string>}
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.hasRemoveFromAlwaysInclude = function() {
-  return jspb.Message.getField(this, 2) != null;
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.getAppendToDontAlwaysIncludeList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 3));
 };
 
 
 /**
- * optional string append_to_dont_always_include = 3;
- * @return {string}
+ * @param {!Array<string>} value
+ * @return {!proto.proto.services.property_svc.v1.FilterUpdate} returns this
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.getAppendToDontAlwaysInclude = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.setAppendToDontAlwaysIncludeList = function(value) {
+  return jspb.Message.setField(this, 3, value || []);
 };
 
 
 /**
  * @param {string} value
+ * @param {number=} opt_index
  * @return {!proto.proto.services.property_svc.v1.FilterUpdate} returns this
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.setAppendToDontAlwaysInclude = function(value) {
-  return jspb.Message.setField(this, 3, value);
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.addAppendToDontAlwaysInclude = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 3, value, opt_index);
 };
 
 
 /**
- * Clears the field making it undefined.
+ * Clears the list making it empty but non-null.
  * @return {!proto.proto.services.property_svc.v1.FilterUpdate} returns this
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.clearAppendToDontAlwaysInclude = function() {
-  return jspb.Message.setField(this, 3, undefined);
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.clearAppendToDontAlwaysIncludeList = function() {
+  return this.setAppendToDontAlwaysIncludeList([]);
 };
 
 
 /**
- * Returns whether this field is set.
- * @return {boolean}
+ * repeated string remove_from_dont_always_include = 4;
+ * @return {!Array<string>}
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.hasAppendToDontAlwaysInclude = function() {
-  return jspb.Message.getField(this, 3) != null;
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.getRemoveFromDontAlwaysIncludeList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 4));
 };
 
 
 /**
- * optional string remove_from_dont_always_include = 4;
- * @return {string}
+ * @param {!Array<string>} value
+ * @return {!proto.proto.services.property_svc.v1.FilterUpdate} returns this
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.getRemoveFromDontAlwaysInclude = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.setRemoveFromDontAlwaysIncludeList = function(value) {
+  return jspb.Message.setField(this, 4, value || []);
 };
 
 
 /**
  * @param {string} value
+ * @param {number=} opt_index
  * @return {!proto.proto.services.property_svc.v1.FilterUpdate} returns this
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.setRemoveFromDontAlwaysInclude = function(value) {
-  return jspb.Message.setField(this, 4, value);
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.addRemoveFromDontAlwaysInclude = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 4, value, opt_index);
 };
 
 
 /**
- * Clears the field making it undefined.
+ * Clears the list making it empty but non-null.
  * @return {!proto.proto.services.property_svc.v1.FilterUpdate} returns this
  */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.clearRemoveFromDontAlwaysInclude = function() {
-  return jspb.Message.setField(this, 4, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.proto.services.property_svc.v1.FilterUpdate.prototype.hasRemoveFromDontAlwaysInclude = function() {
-  return jspb.Message.getField(this, 4) != null;
+proto.proto.services.property_svc.v1.FilterUpdate.prototype.clearRemoveFromDontAlwaysIncludeList = function() {
+  return this.setRemoveFromDontAlwaysIncludeList([]);
 };
 
 

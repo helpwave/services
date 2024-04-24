@@ -8,35 +8,39 @@ import (
 	"property-svc/internal/property-view/models"
 )
 
-type UpdatePropertyViewRuleCommandHandler func(context.Context, models.PropertyMatchers, []uuid.UUID, []uuid.UUID) error
+type UpdatePropertyViewRuleCommandHandler func(context.Context, models.PropertyMatchers, []uuid.UUID, []uuid.UUID, []uuid.UUID, []uuid.UUID) error
 
 func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePropertyViewRuleCommandHandler {
-	return func(ctx context.Context, matchers models.PropertyMatchers, alwaysInclude []uuid.UUID, dontAlwaysInclude []uuid.UUID) error {
+	return func(ctx context.Context, matchers models.PropertyMatchers, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude []uuid.UUID) error {
 
-		rule, err := matchers.QueryRule(ctx)
+		ruleID, err := matchers.FindExactRuleId(ctx)
 		if err != nil {
 			return err
 		}
 
+		// upsert
 		var ruleAgg *aggregate.PropertyViewRuleAggregate
-		if rule != nil {
-			ruleAgg = aggregate.NewPropertyViewRuleAggregate(rule.RuleId)
+		if ruleID != nil {
+			// update
+			ruleAgg = aggregate.NewPropertyViewRuleAggregate(*ruleID)
 			if err := as.Load(ctx, ruleAgg); err != nil {
 				return err
 			}
 
-			if err := ruleAgg.AppendLists(alwaysInclude, dontAlwaysInclude); err != nil {
+			if err := ruleAgg.UpdateLists(ctx, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude); err != nil {
 				return err
 			}
 		} else {
+			// create
 			ruleID := uuid.New()
 			ruleAgg = aggregate.NewPropertyViewRuleAggregate(ruleID)
 			rule := models.PropertyViewRule{
 				RuleId:            ruleID,
-				AlwaysInclude:     alwaysInclude,
-				DontAlwaysInclude: dontAlwaysInclude,
+				AlwaysInclude:     appendToAlwaysInclude,
+				DontAlwaysInclude: appendToDontAlwaysInclude,
+				// remove makes no sense, ignoring
 			}
-			if err := ruleAgg.Create(rule); err != nil {
+			if err := ruleAgg.Create(ctx, rule); err != nil {
 				return err
 			}
 		}

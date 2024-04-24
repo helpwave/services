@@ -27,56 +27,26 @@ func (q *Queries) CreateTaskRule(ctx context.Context, arg CreateTaskRuleParams) 
 	return err
 }
 
-const getTaskRuleUsingExactMatchers = `-- name: GetTaskRuleUsingExactMatchers :many
+const getTaskRuleIdUsingExactMatchers = `-- name: GetTaskRuleIdUsingExactMatchers :one
 
 
 SELECT
-	rules.rule_id as rule_id,
-	items.property_id,
-	items.dont_always_include,
-	calc_rule_specificity($1 IS NOT NULL, $2 IS NOT NULL) as specificity
+	rules.rule_id as rule_id
 	FROM task_property_view_rules as rules
-	LEFT JOIN property_view_filter_always_include_items as items
-		ON items.rule_id = rules.rule_id
 	WHERE
 		rules.ward_id = $1
 		AND rules.task_id = $2
 `
 
-type GetTaskRuleUsingExactMatchersParams struct {
-	WardID interface{}
-	TaskID interface{}
-}
-
-type GetTaskRuleUsingExactMatchersRow struct {
-	RuleID            uuid.UUID
-	PropertyID        uuid.NullUUID
-	DontAlwaysInclude *bool
-	Specificity       int32
+type GetTaskRuleIdUsingExactMatchersParams struct {
+	WardID uuid.NullUUID
+	TaskID uuid.NullUUID
 }
 
 // NOTE: views_repo.CreateRule MUST be invoked with the same id in the same transaction!!
-func (q *Queries) GetTaskRuleUsingExactMatchers(ctx context.Context, arg GetTaskRuleUsingExactMatchersParams) ([]GetTaskRuleUsingExactMatchersRow, error) {
-	rows, err := q.db.Query(ctx, getTaskRuleUsingExactMatchers, arg.WardID, arg.TaskID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []GetTaskRuleUsingExactMatchersRow{}
-	for rows.Next() {
-		var i GetTaskRuleUsingExactMatchersRow
-		if err := rows.Scan(
-			&i.RuleID,
-			&i.PropertyID,
-			&i.DontAlwaysInclude,
-			&i.Specificity,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
+func (q *Queries) GetTaskRuleIdUsingExactMatchers(ctx context.Context, arg GetTaskRuleIdUsingExactMatchersParams) (uuid.UUID, error) {
+	row := q.db.QueryRow(ctx, getTaskRuleIdUsingExactMatchers, arg.WardID, arg.TaskID)
+	var rule_id uuid.UUID
+	err := row.Scan(&rule_id)
+	return rule_id, err
 }

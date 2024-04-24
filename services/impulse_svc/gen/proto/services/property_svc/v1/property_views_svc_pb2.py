@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n7proto/services/property_svc/v1/property_views_svc.proto\x12\x1eproto.services.property_svc.v1\"\xa2\x03\n\x0c\x46ilterUpdate\x12<\n\x18\x61ppend_to_always_include\x18\x01 \x01(\tH\x00R\x15\x61ppendToAlwaysInclude\x88\x01\x01\x12@\n\x1aremove_from_always_include\x18\x02 \x01(\tH\x01R\x17removeFromAlwaysInclude\x88\x01\x01\x12\x45\n\x1d\x61ppend_to_dont_always_include\x18\x03 \x01(\tH\x02R\x19\x61ppendToDontAlwaysInclude\x88\x01\x01\x12I\n\x1fremove_from_dont_always_include\x18\x04 \x01(\tH\x03R\x1bremoveFromDontAlwaysInclude\x88\x01\x01\x42\x1b\n\x19_append_to_always_includeB\x1d\n\x1b_remove_from_always_includeB \n\x1e_append_to_dont_always_includeB\"\n _remove_from_dont_always_include\"\xca\x01\n!UpdateTaskPropertyViewRuleRequest\x12\x1c\n\x07ward_id\x18\x01 \x01(\tH\x00R\x06wardId\x88\x01\x01\x12\x1c\n\x07task_id\x18\x02 \x01(\tH\x01R\x06taskId\x88\x01\x01\x12Q\n\rfilter_update\x18\x03 \x01(\x0b\x32,.proto.services.property_svc.v1.FilterUpdateR\x0c\x66ilterUpdateB\n\n\x08_ward_idB\n\n\x08_task_id\"$\n\"UpdateTaskPropertyViewRuleResponse2\xbe\x01\n\x14PropertyViewsService\x12\xa5\x01\n\x1aUpdateTaskPropertyViewRule\x12\x41.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleRequest\x1a\x42.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleResponse\"\x00\x42\xf3\x01\n\"com.proto.services.property_svc.v1B\x15PropertyViewsSvcProtoP\x01Z\x1fgen/proto/services/property-svc\xa2\x02\x03PSP\xaa\x02\x1dProto.Services.PropertySvc.V1\xca\x02\x1dProto\\Services\\PropertySvc\\V1\xe2\x02)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\xea\x02 Proto::Services::PropertySvc::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n7proto/services/property_svc/v1/property_views_svc.proto\x12\x1eproto.services.property_svc.v1\"\x8c\x02\n\x0c\x46ilterUpdate\x12\x37\n\x18\x61ppend_to_always_include\x18\x01 \x03(\tR\x15\x61ppendToAlwaysInclude\x12;\n\x1aremove_from_always_include\x18\x02 \x03(\tR\x17removeFromAlwaysInclude\x12@\n\x1d\x61ppend_to_dont_always_include\x18\x03 \x03(\tR\x19\x61ppendToDontAlwaysInclude\x12\x44\n\x1fremove_from_dont_always_include\x18\x04 \x03(\tR\x1bremoveFromDontAlwaysInclude\"\xca\x01\n!UpdateTaskPropertyViewRuleRequest\x12\x1c\n\x07ward_id\x18\x01 \x01(\tH\x00R\x06wardId\x88\x01\x01\x12\x1c\n\x07task_id\x18\x02 \x01(\tH\x01R\x06taskId\x88\x01\x01\x12Q\n\rfilter_update\x18\x03 \x01(\x0b\x32,.proto.services.property_svc.v1.FilterUpdateR\x0c\x66ilterUpdateB\n\n\x08_ward_idB\n\n\x08_task_id\"$\n\"UpdateTaskPropertyViewRuleResponse2\xbe\x01\n\x14PropertyViewsService\x12\xa5\x01\n\x1aUpdateTaskPropertyViewRule\x12\x41.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleRequest\x1a\x42.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleResponse\"\x00\x42\xf3\x01\n\"com.proto.services.property_svc.v1B\x15PropertyViewsSvcProtoP\x01Z\x1fgen/proto/services/property-svc\xa2\x02\x03PSP\xaa\x02\x1dProto.Services.PropertySvc.V1\xca\x02\x1dProto\\Services\\PropertySvc\\V1\xe2\x02)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\xea\x02 Proto::Services::PropertySvc::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -23,11 +23,11 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\"com.proto.services.property_svc.v1B\025PropertyViewsSvcProtoP\001Z\037gen/proto/services/property-svc\242\002\003PSP\252\002\035Proto.Services.PropertySvc.V1\312\002\035Proto\\Services\\PropertySvc\\V1\342\002)Proto\\Services\\PropertySvc\\V1\\GPBMetadata\352\002 Proto::Services::PropertySvc::V1'
   _globals['_FILTERUPDATE']._serialized_start=92
-  _globals['_FILTERUPDATE']._serialized_end=510
-  _globals['_UPDATETASKPROPERTYVIEWRULEREQUEST']._serialized_start=513
-  _globals['_UPDATETASKPROPERTYVIEWRULEREQUEST']._serialized_end=715
-  _globals['_UPDATETASKPROPERTYVIEWRULERESPONSE']._serialized_start=717
-  _globals['_UPDATETASKPROPERTYVIEWRULERESPONSE']._serialized_end=753
-  _globals['_PROPERTYVIEWSSERVICE']._serialized_start=756
-  _globals['_PROPERTYVIEWSSERVICE']._serialized_end=946
+  _globals['_FILTERUPDATE']._serialized_end=360
+  _globals['_UPDATETASKPROPERTYVIEWRULEREQUEST']._serialized_start=363
+  _globals['_UPDATETASKPROPERTYVIEWRULEREQUEST']._serialized_end=565
+  _globals['_UPDATETASKPROPERTYVIEWRULERESPONSE']._serialized_start=567
+  _globals['_UPDATETASKPROPERTYVIEWRULERESPONSE']._serialized_end=603
+  _globals['_PROPERTYVIEWSSERVICE']._serialized_start=606
+  _globals['_PROPERTYVIEWSSERVICE']._serialized_end=796
 # @@protoc_insertion_point(module_scope)

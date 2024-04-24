@@ -3,25 +3,25 @@ import * as jspb from 'google-protobuf'
 
 
 export class FilterUpdate extends jspb.Message {
-  getAppendToAlwaysInclude(): string;
-  setAppendToAlwaysInclude(value: string): FilterUpdate;
-  hasAppendToAlwaysInclude(): boolean;
-  clearAppendToAlwaysInclude(): FilterUpdate;
+  getAppendToAlwaysIncludeList(): Array<string>;
+  setAppendToAlwaysIncludeList(value: Array<string>): FilterUpdate;
+  clearAppendToAlwaysIncludeList(): FilterUpdate;
+  addAppendToAlwaysInclude(value: string, index?: number): FilterUpdate;
 
-  getRemoveFromAlwaysInclude(): string;
-  setRemoveFromAlwaysInclude(value: string): FilterUpdate;
-  hasRemoveFromAlwaysInclude(): boolean;
-  clearRemoveFromAlwaysInclude(): FilterUpdate;
+  getRemoveFromAlwaysIncludeList(): Array<string>;
+  setRemoveFromAlwaysIncludeList(value: Array<string>): FilterUpdate;
+  clearRemoveFromAlwaysIncludeList(): FilterUpdate;
+  addRemoveFromAlwaysInclude(value: string, index?: number): FilterUpdate;
 
-  getAppendToDontAlwaysInclude(): string;
-  setAppendToDontAlwaysInclude(value: string): FilterUpdate;
-  hasAppendToDontAlwaysInclude(): boolean;
-  clearAppendToDontAlwaysInclude(): FilterUpdate;
+  getAppendToDontAlwaysIncludeList(): Array<string>;
+  setAppendToDontAlwaysIncludeList(value: Array<string>): FilterUpdate;
+  clearAppendToDontAlwaysIncludeList(): FilterUpdate;
+  addAppendToDontAlwaysInclude(value: string, index?: number): FilterUpdate;
 
-  getRemoveFromDontAlwaysInclude(): string;
-  setRemoveFromDontAlwaysInclude(value: string): FilterUpdate;
-  hasRemoveFromDontAlwaysInclude(): boolean;
-  clearRemoveFromDontAlwaysInclude(): FilterUpdate;
+  getRemoveFromDontAlwaysIncludeList(): Array<string>;
+  setRemoveFromDontAlwaysIncludeList(value: Array<string>): FilterUpdate;
+  clearRemoveFromDontAlwaysIncludeList(): FilterUpdate;
+  addRemoveFromDontAlwaysInclude(value: string, index?: number): FilterUpdate;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): FilterUpdate.AsObject;
@@ -33,30 +33,10 @@ export class FilterUpdate extends jspb.Message {
 
 export namespace FilterUpdate {
   export type AsObject = {
-    appendToAlwaysInclude?: string,
-    removeFromAlwaysInclude?: string,
-    appendToDontAlwaysInclude?: string,
-    removeFromDontAlwaysInclude?: string,
-  }
-
-  export enum AppendToAlwaysIncludeCase { 
-    _APPEND_TO_ALWAYS_INCLUDE_NOT_SET = 0,
-    APPEND_TO_ALWAYS_INCLUDE = 1,
-  }
-
-  export enum RemoveFromAlwaysIncludeCase { 
-    _REMOVE_FROM_ALWAYS_INCLUDE_NOT_SET = 0,
-    REMOVE_FROM_ALWAYS_INCLUDE = 2,
-  }
-
-  export enum AppendToDontAlwaysIncludeCase { 
-    _APPEND_TO_DONT_ALWAYS_INCLUDE_NOT_SET = 0,
-    APPEND_TO_DONT_ALWAYS_INCLUDE = 3,
-  }
-
-  export enum RemoveFromDontAlwaysIncludeCase { 
-    _REMOVE_FROM_DONT_ALWAYS_INCLUDE_NOT_SET = 0,
-    REMOVE_FROM_DONT_ALWAYS_INCLUDE = 4,
+    appendToAlwaysIncludeList: Array<string>,
+    removeFromAlwaysIncludeList: Array<string>,
+    appendToDontAlwaysIncludeList: Array<string>,
+    removeFromDontAlwaysIncludeList: Array<string>,
   }
 }
 
