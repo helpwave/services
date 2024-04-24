@@ -9,6 +9,8 @@ import (
 	"hwes"
 	"hwutil"
 	commandsV1 "property-svc/internal/property-value/commands/v1"
+	"property-svc/internal/property-value/models"
+	v1queries "property-svc/internal/property-value/queries/v1"
 	"property-svc/repos/property_value_repo"
 )
 
@@ -70,47 +72,40 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 		return nil, err
 	}
 
-	propertyValuesWithProperties, err := hwdb.Optional(propertyValueRepo.GetPropertyValuesWithPropertyBySubjectID)(ctx, subjectID)
-	if err := hwdb.Error(ctx, err); err != nil {
+	propertyValues, err := v1queries.NewGetPropertyValuesWithPropertiesBySubjectIDQueryHandler(propertyValueRepo)(ctx, subjectID)
+	if err != nil {
 		return nil, err
 	}
 
-	if propertyValuesWithProperties != nil {
-		return &pb.GetAttachedPropertyValuesResponse{
-			Values: hwutil.Map(*propertyValuesWithProperties, func(row property_value_repo.GetPropertyValuesWithPropertyBySubjectIDRow) *pb.GetAttachedPropertyValuesResponse_Value {
-				fieldType := (pb.FieldType)(row.Property.FieldType)
-				res := &pb.GetAttachedPropertyValuesResponse_Value{
-					PropertyId: row.Property.ID.String(),
-					Name:       row.Property.Name,
-					IsArchived: row.Property.IsArchived,
-					FieldType:  fieldType,
-					// TODO: isSoftRequired
-				}
-				switch {
-				case row.PropertyValue.TextValue != nil:
-					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_TextValue{TextValue: *row.PropertyValue.TextValue}
-				case row.PropertyValue.BoolValue != nil:
-					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_BoolValue{BoolValue: *row.PropertyValue.BoolValue}
-				case row.PropertyValue.NumberValue != nil:
-					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_NumberValue{NumberValue: *row.PropertyValue.NumberValue}
-				case row.PropertyValue.SelectValue.Valid:
-					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{SelectValue: row.PropertyValue.SelectValue.UUID.String()}
-				case row.PropertyValue.DateTimeValue.Valid:
-					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateTimeValue{DateTimeValue: timestamppb.New(row.PropertyValue.DateTimeValue.Time)}
-				case row.PropertyValue.DateValue.Valid:
-					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateValue{
-						DateValue: &pb.Date{
-							Day:   int32(row.PropertyValue.DateValue.Time.Day()),
-							Month: int32(row.PropertyValue.DateValue.Time.Month()),
-							Year:  int32(row.PropertyValue.DateValue.Time.Year()),
-						},
-					}
-				}
-				return res
-			}),
-		}, nil
-	}
 	return &pb.GetAttachedPropertyValuesResponse{
-		Values: []*pb.GetAttachedPropertyValuesResponse_Value{},
+		Values: hwutil.Map(propertyValues, func(pv models.PropertyValueWithProperty) *pb.GetAttachedPropertyValuesResponse_Value {
+			res := &pb.GetAttachedPropertyValuesResponse_Value{
+				PropertyId: pv.PropertyID.String(),
+				Name:       pv.Name,
+				IsArchived: pv.IsArchived,
+				FieldType:  pv.FieldType,
+			}
+			switch {
+			case pv.TextValue != nil:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_TextValue{TextValue: *pv.TextValue}
+			case pv.BoolValue != nil:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_BoolValue{BoolValue: *pv.BoolValue}
+			case pv.NumberValue != nil:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_NumberValue{NumberValue: *pv.NumberValue}
+			case pv.SelectValue.Valid:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{SelectValue: pv.SelectValue.UUID.String()}
+			case pv.DateTimeValue != nil:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateTimeValue{DateTimeValue: timestamppb.New(*pv.DateTimeValue)}
+			case pv.DateValue != nil:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateValue{
+					DateValue: &pb.Date{
+						Day:   int32(pv.DateValue.Day()),
+						Month: int32(pv.DateValue.Month()),
+						Year:  int32(pv.DateValue.Year()),
+					},
+				}
+			}
+			return res
+		}),
 	}, nil
 }
