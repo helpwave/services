@@ -1,3 +1,20 @@
+CREATE OR REPLACE FUNCTION validate_select_option(property_id uuid, select_value uuid)
+RETURNS BOOLEAN AS $$
+BEGIN
+	IF select_value IS NOT NULL THEN
+		RETURN EXISTS (
+			SELECT 1
+	   		FROM properties
+	   			RIGHT JOIN select_datas ON properties.select_data_id = select_datas.id
+				RIGHT JOIN select_options ON select_datas.id = select_options.select_data_id
+			WHERE properties.id = property_id AND select_options.id = select_value
+		);
+	ELSE
+		RETURN TRUE;
+	END IF;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE TABLE IF NOT EXISTS property_values (
 	id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
 	property_id uuid NOT NULL,
@@ -19,6 +36,7 @@ CREATE TABLE IF NOT EXISTS property_values (
 			(select_value is not null)::integer
 		) <= 1
 	),
+
 	UNIQUE (property_id, subject_id),
 
 	FOREIGN KEY (property_id)
@@ -27,5 +45,8 @@ CREATE TABLE IF NOT EXISTS property_values (
 
 	FOREIGN KEY (select_value)
 		REFERENCES select_options(id)
-		ON DELETE SET NULL
+		ON DELETE SET NULL,
+
+	-- check if select_option belongs to the property
+	check (validate_select_option(property_id, select_value))
 )

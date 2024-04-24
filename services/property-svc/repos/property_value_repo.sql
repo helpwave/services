@@ -16,7 +16,7 @@ VALUES (
 -- name: GetPropertyValueBySubjectIDAndPropertyID :one
 SELECT id
 FROM property_values
-WHERE subject_id = $1 AND property_id = $2;
+WHERE (subject_id = @subject_id AND property_id = @property_id) OR id = @id;
 
 -- name: UpdatePropertyValueByID :exec
 UPDATE property_values
