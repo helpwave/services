@@ -79,16 +79,17 @@ func (q *Queries) GetPropertyValueByID(ctx context.Context, id uuid.UUID) (Prope
 const getPropertyValueBySubjectIDAndPropertyID = `-- name: GetPropertyValueBySubjectIDAndPropertyID :one
 SELECT id
 FROM property_values
-WHERE subject_id = $1 AND property_id = $2
+WHERE (subject_id = $1 AND property_id = $2) OR id = $3
 `
 
 type GetPropertyValueBySubjectIDAndPropertyIDParams struct {
 	SubjectID  uuid.UUID
 	PropertyID uuid.UUID
+	ID         uuid.UUID
 }
 
 func (q *Queries) GetPropertyValueBySubjectIDAndPropertyID(ctx context.Context, arg GetPropertyValueBySubjectIDAndPropertyIDParams) (uuid.UUID, error) {
-	row := q.db.QueryRow(ctx, getPropertyValueBySubjectIDAndPropertyID, arg.SubjectID, arg.PropertyID)
+	row := q.db.QueryRow(ctx, getPropertyValueBySubjectIDAndPropertyID, arg.SubjectID, arg.PropertyID, arg.ID)
 	var id uuid.UUID
 	err := row.Scan(&id)
 	return id, err
