@@ -24,7 +24,7 @@ const AttachPropertyValueRequest$json = {
     {'1': 'bool_value', '3': 5, '4': 1, '5': 8, '9': 0, '10': 'boolValue'},
     {'1': 'date_value', '3': 6, '4': 1, '5': 11, '6': '.proto.services.property_svc.v1.Date', '9': 0, '10': 'dateValue'},
     {'1': 'date_time_value', '3': 7, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'dateTimeValue'},
-    {'1': 'select_value', '3': 10, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
+    {'1': 'select_value', '3': 8, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
   ],
   '8': [
     {'1': 'value'},
@@ -39,7 +39,7 @@ final $typed_data.Uint8List attachPropertyValueRequestDescriptor = $convert.base
     'Jvb2xfdmFsdWUYBSABKAhIAFIJYm9vbFZhbHVlEkUKCmRhdGVfdmFsdWUYBiABKAsyJC5wcm90'
     'by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuRGF0ZUgAUglkYXRlVmFsdWUSRAoPZGF0ZV90aW'
     '1lX3ZhbHVlGAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEgAUg1kYXRlVGltZVZh'
-    'bHVlEiMKDHNlbGVjdF92YWx1ZRgKIAEoCUgAUgtzZWxlY3RWYWx1ZUIHCgV2YWx1ZQ==');
+    'bHVlEiMKDHNlbGVjdF92YWx1ZRgIIAEoCUgAUgtzZWxlY3RWYWx1ZUIHCgV2YWx1ZQ==');
 
 @$core.Deprecated('Use attachPropertyValueResponseDescriptor instead')
 const AttachPropertyValueResponse$json = {

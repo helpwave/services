@@ -31,10 +31,10 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 
 
 --
--- Name: validate_select_option(uuid, uuid); Type: FUNCTION; Schema: public; Owner: -
+-- Name: does_select_option_belong_to_property(uuid, uuid); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION public.validate_select_option(property_id uuid, select_value uuid) RETURNS boolean
+CREATE FUNCTION public.does_select_option_belong_to_property(property_id uuid, select_value uuid) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -88,7 +88,7 @@ CREATE TABLE public.property_values (
     date_time_value timestamp without time zone,
     select_value uuid,
     CONSTRAINT property_values_check CHECK (((((((((text_value IS NOT NULL))::integer + ((number_value IS NOT NULL))::integer) + ((bool_value IS NOT NULL))::integer) + ((date_value IS NOT NULL))::integer) + ((date_time_value IS NOT NULL))::integer) + ((select_value IS NOT NULL))::integer) <= 1)),
-    CONSTRAINT property_values_check1 CHECK (public.validate_select_option(property_id, select_value))
+    CONSTRAINT property_values_check1 CHECK (public.does_select_option_belong_to_property(property_id, select_value))
 );
 
 
@@ -171,6 +171,13 @@ ALTER TABLE ONLY public.select_datas
 
 ALTER TABLE ONLY public.select_options
     ADD CONSTRAINT select_options_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: idx_property_subject; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_property_subject ON public.property_values USING btree (property_id, subject_id);
 
 
 --

@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION validate_select_option(property_id uuid, select_value uuid)
+CREATE OR REPLACE FUNCTION does_select_option_belong_to_property(property_id uuid, select_value uuid)
 RETURNS BOOLEAN AS $$
 BEGIN
 	IF select_value IS NOT NULL THEN
@@ -48,5 +48,7 @@ CREATE TABLE IF NOT EXISTS property_values (
 		ON DELETE SET NULL,
 
 	-- check if select_option belongs to the property
-	check (validate_select_option(property_id, select_value))
-)
+	check (does_select_option_belong_to_property(property_id, select_value))
+);
+
+CREATE INDEX idx_property_subject ON property_values (property_id, subject_id);

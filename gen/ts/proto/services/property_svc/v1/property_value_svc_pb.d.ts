@@ -62,7 +62,7 @@ export namespace AttachPropertyValueRequest {
     BOOL_VALUE = 5,
     DATE_VALUE = 6,
     DATE_TIME_VALUE = 7,
-    SELECT_VALUE = 10,
+    SELECT_VALUE = 8,
   }
 }
 

@@ -20,7 +20,7 @@ message AttachPropertyValueRequest{
     bool bool_value = 5; // FIELD_TYPE_CHECKBOX
     Date date_value = 6; // FIELD_TYPE_DATE
     google.protobuf.Timestamp date_time_value = 7; // FIELD_TYPE_DATE_TIME
-    string select_value = 10; // FIELD_TYPE_SELECT, id of option
+    string select_value = 8; // FIELD_TYPE_SELECT, id of option
   }
 }
 

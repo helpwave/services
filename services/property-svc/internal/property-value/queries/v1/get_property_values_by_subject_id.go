@@ -15,13 +15,13 @@ type GetPropertyValuesWithPropertiesBySubjectIQueryHandler func(ctx context.Cont
 func NewGetPropertyValuesWithPropertiesBySubjectIDQueryHandler(propertyValueRepo *property_value_repo.Queries) GetPropertyValuesWithPropertiesBySubjectIQueryHandler {
 	return func(ctx context.Context, subjectID uuid.UUID) ([]models.PropertyValueWithProperty, error) {
 
-		propertyValuesWithProperties, err := hwdb.Optional(propertyValueRepo.GetPropertyValuesWithPropertyBySubjectID)(ctx, subjectID)
+		propertyValuesWithProperties, err := propertyValueRepo.GetPropertyValuesWithPropertyBySubjectID(ctx, subjectID)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, err
 		}
 
 		if propertyValuesWithProperties != nil {
-			return hwutil.Map(*propertyValuesWithProperties, func(row property_value_repo.GetPropertyValuesWithPropertyBySubjectIDRow) models.PropertyValueWithProperty {
+			return hwutil.Map(propertyValuesWithProperties, func(row property_value_repo.GetPropertyValuesWithPropertyBySubjectIDRow) models.PropertyValueWithProperty {
 				fieldType := (pb.FieldType)(row.Property.FieldType)
 				res := models.PropertyValueWithProperty{
 					ID:         row.PropertyValue.ID,

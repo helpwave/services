@@ -1,2 +1,2 @@
 DROP TABLE IF EXISTS property_values;
-DROP FUNCTION IF EXISTS validate_select_option;
+DROP FUNCTION IF EXISTS does_select_option_belong_to_property;

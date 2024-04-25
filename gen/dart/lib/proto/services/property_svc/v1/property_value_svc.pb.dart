@@ -77,11 +77,11 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     5 : AttachPropertyValueRequest_Value.boolValue,
     6 : AttachPropertyValueRequest_Value.dateValue,
     7 : AttachPropertyValueRequest_Value.dateTimeValue,
-    10 : AttachPropertyValueRequest_Value.selectValue,
+    8 : AttachPropertyValueRequest_Value.selectValue,
     0 : AttachPropertyValueRequest_Value.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttachPropertyValueRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [3, 4, 5, 6, 7, 10])
+    ..oo(0, [3, 4, 5, 6, 7, 8])
     ..aOS(1, _omitFieldNames ? '' : 'subjectId')
     ..aOS(2, _omitFieldNames ? '' : 'propertyId')
     ..aOS(3, _omitFieldNames ? '' : 'textValue')
@@ -89,7 +89,7 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     ..aOB(5, _omitFieldNames ? '' : 'boolValue')
     ..aOM<$15.Date>(6, _omitFieldNames ? '' : 'dateValue', subBuilder: $15.Date.create)
     ..aOM<$16.Timestamp>(7, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $16.Timestamp.create)
-    ..aOS(10, _omitFieldNames ? '' : 'selectValue')
+    ..aOS(8, _omitFieldNames ? '' : 'selectValue')
     ..hasRequiredFields = false
   ;
 
@@ -184,14 +184,14 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $16.Timestamp ensureDateTimeValue() => $_ensure(6);
 
-  @$pb.TagNumber(10)
+  @$pb.TagNumber(8)
   $core.String get selectValue => $_getSZ(7);
-  @$pb.TagNumber(10)
+  @$pb.TagNumber(8)
   set selectValue($core.String v) { $_setString(7, v); }
-  @$pb.TagNumber(10)
+  @$pb.TagNumber(8)
   $core.bool hasSelectValue() => $_has(7);
-  @$pb.TagNumber(10)
-  void clearSelectValue() => clearField(10);
+  @$pb.TagNumber(8)
+  void clearSelectValue() => clearField(8);
 }
 
 class AttachPropertyValueResponse extends $pb.GeneratedMessage {

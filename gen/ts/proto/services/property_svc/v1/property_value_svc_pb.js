@@ -146,7 +146,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.proto.services.property_svc.v1.AttachPropertyValueRequest.oneofGroups_ = [[3,4,5,6,7,10]];
+proto.proto.services.property_svc.v1.AttachPropertyValueRequest.oneofGroups_ = [[3,4,5,6,7,8]];
 
 /**
  * @enum {number}
@@ -158,7 +158,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.ValueCase = {
   BOOL_VALUE: 5,
   DATE_VALUE: 6,
   DATE_TIME_VALUE: 7,
-  SELECT_VALUE: 10
+  SELECT_VALUE: 8
 };
 
 /**
@@ -206,7 +206,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.toObject = funct
     boolValue: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
     dateValue: (f = msg.getDateValue()) && proto_services_property_svc_v1_types_pb.Date.toObject(includeInstance, f),
     dateTimeValue: (f = msg.getDateTimeValue()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
-    selectValue: jspb.Message.getFieldWithDefault(msg, 10, "")
+    selectValue: jspb.Message.getFieldWithDefault(msg, 8, "")
   };
 
   if (includeInstance) {
@@ -273,7 +273,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.deserializeBinar
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
       msg.setDateTimeValue(value);
       break;
-    case 10:
+    case 8:
       var value = /** @type {string} */ (reader.readString());
       msg.setSelectValue(value);
       break;
@@ -357,10 +357,10 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.serializeBinaryT
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(message, 10));
+  f = /** @type {string} */ (jspb.Message.getField(message, 8));
   if (f != null) {
     writer.writeString(
-      10,
+      8,
       f
     );
   }
@@ -586,11 +586,11 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.hasDat
 
 
 /**
- * optional string select_value = 10;
+ * optional string select_value = 8;
  * @return {string}
  */
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.getSelectValue = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 10, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
 };
 
 
@@ -599,7 +599,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.getSel
  * @return {!proto.proto.services.property_svc.v1.AttachPropertyValueRequest} returns this
  */
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.setSelectValue = function(value) {
-  return jspb.Message.setOneofField(this, 10, proto.proto.services.property_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], value);
+  return jspb.Message.setOneofField(this, 8, proto.proto.services.property_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], value);
 };
 
 
@@ -608,7 +608,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.setSel
  * @return {!proto.proto.services.property_svc.v1.AttachPropertyValueRequest} returns this
  */
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.clearSelectValue = function() {
-  return jspb.Message.setOneofField(this, 10, proto.proto.services.property_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], undefined);
+  return jspb.Message.setOneofField(this, 8, proto.proto.services.property_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], undefined);
 };
 
 
@@ -617,7 +617,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.clearS
  * @return {boolean}
  */
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.hasSelectValue = function() {
-  return jspb.Message.getField(this, 10) != null;
+  return jspb.Message.getField(this, 8) != null;
 };
 
 
