@@ -10,6 +10,7 @@ import (
 	"hwes/eventstoredb"
 	propertySet "property-svc/internal/property-set/api"
 	propertyValue "property-svc/internal/property-value/api"
+	"property-svc/internal/property-value/projections/property_value_postgres_projection"
 	property "property-svc/internal/property/api"
 	"property-svc/internal/property/projections/property_postgres_projection"
 )
@@ -33,6 +34,14 @@ func main() {
 		propertyPostgresProjection := property_postgres_projection.NewProjection(eventStore, ServiceName)
 		if err := propertyPostgresProjection.Subscribe(ctx); err != nil {
 			log.Err(err).Msg("error during property-postgres projection subscription")
+			cancel()
+		}
+	}()
+
+	go func() {
+		propertyValuePostgresProjection := property_value_postgres_projection.NewProjection(eventStore, ServiceName)
+		if err := propertyValuePostgresProjection.Subscribe(ctx); err != nil {
+			log.Err(err).Msg("error during propertyValue-postgres projection subscription")
 			cancel()
 		}
 	}()
