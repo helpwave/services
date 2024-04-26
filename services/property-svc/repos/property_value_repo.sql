@@ -33,8 +33,17 @@ SELECT * FROM property_values WHERE id = $1;
 
 -- name: GetPropertyValuesWithPropertyBySubjectID :many
 SELECT
-	sqlc.embed(properties),
-	sqlc.embed(property_values)
+	property_values.id as property_value_id,
+	property_values.text_value,
+	property_values.bool_value,
+	property_values.number_value,
+	property_values.select_value,
+	property_values.date_time_value,
+	property_values.date_value,
+	properties.id as property_id,
+	properties.name as property_name,
+	properties.is_archived as property_is_archived,
+	properties.field_type as field_type
 FROM property_values
 	LEFT JOIN properties ON property_values.property_id = properties.id
 WHERE subject_id = $1;

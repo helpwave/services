@@ -22,24 +22,24 @@ func NewGetPropertyValuesWithPropertiesBySubjectIDQueryHandler(propertyValueRepo
 
 		if propertyValuesWithProperties != nil {
 			return hwutil.Map(propertyValuesWithProperties, func(row property_value_repo.GetPropertyValuesWithPropertyBySubjectIDRow) models.PropertyValueWithProperty {
-				fieldType := (pb.FieldType)(row.Property.FieldType)
+				fieldType := (pb.FieldType)(*row.FieldType) // safe, because it's NOT NULL
 				res := models.PropertyValueWithProperty{
-					ID:         row.PropertyValue.ID,
-					PropertyID: row.Property.ID,
-					Name:       row.Property.Name,
-					IsArchived: row.Property.IsArchived,
+					ID:         row.PropertyValueID,
+					PropertyID: row.PropertyID.UUID,
+					Name:       *row.PropertyName,       // NOT NULL
+					IsArchived: *row.PropertyIsArchived, // NOT NULL
 					FieldType:  fieldType,
 					// TODO: isSoftRequired
-					TextValue:   row.PropertyValue.TextValue,
-					BoolValue:   row.PropertyValue.BoolValue,
-					NumberValue: row.PropertyValue.NumberValue,
-					SelectValue: row.PropertyValue.SelectValue,
+					TextValue:   row.TextValue,
+					BoolValue:   row.BoolValue,
+					NumberValue: row.NumberValue,
+					SelectValue: row.SelectValue,
 				}
-				if row.PropertyValue.DateTimeValue.Valid {
-					res.DateTimeValue = &row.PropertyValue.DateTimeValue.Time
+				if row.DateTimeValue.Valid {
+					res.DateTimeValue = &row.DateTimeValue.Time
 				}
-				if row.PropertyValue.DateValue.Valid {
-					res.DateValue = &row.PropertyValue.DateValue.Time
+				if row.DateValue.Valid {
+					res.DateValue = &row.DateValue.Time
 				}
 				return res
 			}), nil

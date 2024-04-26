@@ -106,16 +106,34 @@ func (q *Queries) GetPropertyValueBySubjectIDAndPropertyID(ctx context.Context, 
 
 const getPropertyValuesWithPropertyBySubjectID = `-- name: GetPropertyValuesWithPropertyBySubjectID :many
 SELECT
-	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.select_data_id,
-	property_values.id, property_values.property_id, property_values.subject_id, property_values.text_value, property_values.number_value, property_values.bool_value, property_values.date_value, property_values.date_time_value, property_values.select_value
+	property_values.id as property_value_id,
+	property_values.text_value,
+	property_values.bool_value,
+	property_values.number_value,
+	property_values.select_value,
+	property_values.date_time_value,
+	property_values.date_value,
+	properties.id as property_id,
+	properties.name as property_name,
+	properties.is_archived as property_is_archived,
+	properties.field_type as field_type
 FROM property_values
 	LEFT JOIN properties ON property_values.property_id = properties.id
 WHERE subject_id = $1
 `
 
 type GetPropertyValuesWithPropertyBySubjectIDRow struct {
-	Property      Property
-	PropertyValue PropertyValue
+	PropertyValueID    uuid.UUID
+	TextValue          *string
+	BoolValue          *bool
+	NumberValue        *float64
+	SelectValue        uuid.NullUUID
+	DateTimeValue      pgtype.Timestamp
+	DateValue          pgtype.Date
+	PropertyID         uuid.NullUUID
+	PropertyName       *string
+	PropertyIsArchived *bool
+	FieldType          *int32
 }
 
 func (q *Queries) GetPropertyValuesWithPropertyBySubjectID(ctx context.Context, subjectID uuid.UUID) ([]GetPropertyValuesWithPropertyBySubjectIDRow, error) {
@@ -128,23 +146,17 @@ func (q *Queries) GetPropertyValuesWithPropertyBySubjectID(ctx context.Context, 
 	for rows.Next() {
 		var i GetPropertyValuesWithPropertyBySubjectIDRow
 		if err := rows.Scan(
-			&i.Property.ID,
-			&i.Property.SubjectType,
-			&i.Property.FieldType,
-			&i.Property.Name,
-			&i.Property.Description,
-			&i.Property.IsArchived,
-			&i.Property.SetID,
-			&i.Property.SelectDataID,
-			&i.PropertyValue.ID,
-			&i.PropertyValue.PropertyID,
-			&i.PropertyValue.SubjectID,
-			&i.PropertyValue.TextValue,
-			&i.PropertyValue.NumberValue,
-			&i.PropertyValue.BoolValue,
-			&i.PropertyValue.DateValue,
-			&i.PropertyValue.DateTimeValue,
-			&i.PropertyValue.SelectValue,
+			&i.PropertyValueID,
+			&i.TextValue,
+			&i.BoolValue,
+			&i.NumberValue,
+			&i.SelectValue,
+			&i.DateTimeValue,
+			&i.DateValue,
+			&i.PropertyID,
+			&i.PropertyName,
+			&i.PropertyIsArchived,
+			&i.FieldType,
 		); err != nil {
 			return nil, err
 		}
