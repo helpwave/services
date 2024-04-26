@@ -38,3 +38,6 @@ SELECT
 FROM property_values
 	LEFT JOIN properties ON property_values.property_id = properties.id
 WHERE subject_id = $1;
+
+-- name: DeletePropertyValue :exec
+DELETE FROM property_values WHERE id = $1;

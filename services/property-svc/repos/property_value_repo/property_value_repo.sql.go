@@ -55,6 +55,15 @@ func (q *Queries) CreatePropertyValue(ctx context.Context, arg CreatePropertyVal
 	return err
 }
 
+const deletePropertyValue = `-- name: DeletePropertyValue :exec
+DELETE FROM property_values WHERE id = $1
+`
+
+func (q *Queries) DeletePropertyValue(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deletePropertyValue, id)
+	return err
+}
+
 const getPropertyValueByID = `-- name: GetPropertyValueByID :one
 SELECT id, property_id, subject_id, text_value, number_value, bool_value, date_value, date_time_value, select_value FROM property_values WHERE id = $1
 `

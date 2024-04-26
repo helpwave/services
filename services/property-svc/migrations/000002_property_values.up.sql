@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS property_values (
 			(date_value is not null)::integer +
 			(date_time_value is not null)::integer +
 			(select_value is not null)::integer
-		) <= 1
+		) = 1
 	),
 
 	UNIQUE (property_id, subject_id),
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS property_values (
 
 	FOREIGN KEY (select_value)
 		REFERENCES select_options(id)
-		ON DELETE SET NULL,
+		ON DELETE CASCADE,
 
 	-- check if select_option belongs to the property
 	check (does_select_option_belong_to_property(property_id, select_value))

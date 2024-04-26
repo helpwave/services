@@ -6,7 +6,6 @@ import (
 	pb "gen/proto/services/property_svc/v1"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jackc/pgx/v5/pgxpool"
 	zlog "github.com/rs/zerolog/log"
 	"hwdb"
@@ -212,15 +211,10 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 			updatePropertyValueParams.SelectValue = parsedID
 		}
 	} else {
-		// Unset all values
-		updatePropertyValueParams = property_value_repo.UpdatePropertyValueByIDParams{
-			ID:            evt.AggregateID,
-			TextValue:     nil,
-			NumberValue:   nil,
-			BoolValue:     nil,
-			SelectValue:   uuid.NullUUID{UUID: uuid.Nil, Valid: false},
-			DateValue:     pgtype.Date{Valid: false},
-			DateTimeValue: pgtype.Timestamp{Valid: false},
+		// Delete PropertyValue
+		err := p.propertyValueRepo.DeletePropertyValue(ctx, evt.AggregateID)
+		if err := hwdb.Error(ctx, err); err != nil {
+			return nil, esdb.NackActionRetry
 		}
 	}
 

@@ -87,7 +87,7 @@ CREATE TABLE public.property_values (
     date_value date,
     date_time_value timestamp without time zone,
     select_value uuid,
-    CONSTRAINT property_values_check CHECK (((((((((text_value IS NOT NULL))::integer + ((number_value IS NOT NULL))::integer) + ((bool_value IS NOT NULL))::integer) + ((date_value IS NOT NULL))::integer) + ((date_time_value IS NOT NULL))::integer) + ((select_value IS NOT NULL))::integer) <= 1)),
+    CONSTRAINT property_values_check CHECK (((((((((text_value IS NOT NULL))::integer + ((number_value IS NOT NULL))::integer) + ((bool_value IS NOT NULL))::integer) + ((date_value IS NOT NULL))::integer) + ((date_time_value IS NOT NULL))::integer) + ((select_value IS NOT NULL))::integer) = 1)),
     CONSTRAINT property_values_check1 CHECK (public.does_select_option_belong_to_property(property_id, select_value))
 );
 
@@ -201,7 +201,7 @@ ALTER TABLE ONLY public.property_values
 --
 
 ALTER TABLE ONLY public.property_values
-    ADD CONSTRAINT property_values_select_value_fkey FOREIGN KEY (select_value) REFERENCES public.select_options(id) ON DELETE SET NULL;
+    ADD CONSTRAINT property_values_select_value_fkey FOREIGN KEY (select_value) REFERENCES public.select_options(id) ON DELETE CASCADE;
 
 
 --
