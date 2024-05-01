@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"context"
 	"github.com/google/uuid"
 	"hwes"
 )
@@ -43,45 +44,44 @@ type PatientDeletedEvent struct {
 	PatientID string `json:"patient_id"`
 }
 
-func NewPatientCreatedEvent(a hwes.Aggregate, id uuid.UUID, humanReadableIdentifier string, notes string) (hwes.Event, error) {
+func NewPatientCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, humanReadableIdentifier string, notes string) (hwes.Event, error) {
 	payload := PatientCreatedEvent{
 		ID:                      id.String(),
 		HumanReadableIdentifier: humanReadableIdentifier,
 		Notes:                   notes,
 	}
-	return hwes.NewEventWithData(a, PatientCreated, payload)
+	return hwes.NewEvent(a, PatientCreated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewHumanReadableIdentifierUpdatedEvent(a hwes.Aggregate, humanReadableIdentifier string) (hwes.Event, error) {
+func NewHumanReadableIdentifierUpdatedEvent(ctx context.Context, a hwes.Aggregate, humanReadableIdentifier string) (hwes.Event, error) {
 	payload := HumanReadableIdentifierUpdatedEvent{
 		HumanReadableIdentifier: humanReadableIdentifier,
 	}
-	return hwes.NewEventWithData(a, HumanReadableIdentifierUpdated, payload)
+	return hwes.NewEvent(a, HumanReadableIdentifierUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewNotesUpdatedEvent(a hwes.Aggregate, notes string) (hwes.Event, error) {
+func NewNotesUpdatedEvent(ctx context.Context, a hwes.Aggregate, notes string) (hwes.Event, error) {
 	payload := NotesUpdatedEvent{
 		Notes: notes,
 	}
-	return hwes.NewEventWithData(a, NotesUpdated, payload)
+	return hwes.NewEvent(a, NotesUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewBedAssignedEvent(a hwes.Aggregate, bedID uuid.UUID) (hwes.Event, error) {
+func NewBedAssignedEvent(ctx context.Context, a hwes.Aggregate, bedID uuid.UUID) (hwes.Event, error) {
 	payload := BedAssignedEvent{
 		BedID: bedID.String(),
 	}
-	return hwes.NewEventWithData(a, BedAssigned, payload)
+	return hwes.NewEvent(a, BedAssigned, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-// We don't need a payload here
-func NewBedUnassignedEvent(a hwes.Aggregate) hwes.Event {
-	return hwes.NewEvent(a, BedUnsassigned)
+func NewBedUnassignedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
+	return hwes.NewEvent(a, BedUnsassigned, hwes.WithContext(ctx))
 }
 
-func NewPatientDischargedEvent(a hwes.Aggregate) hwes.Event {
-	return hwes.NewEvent(a, PatientDischarged)
+func NewPatientDischargedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
+	return hwes.NewEvent(a, PatientDischarged, hwes.WithContext(ctx))
 }
 
-func NewPatientReadmittedEvent(a hwes.Aggregate) hwes.Event {
-	return hwes.NewEvent(a, PatientReadmitted)
+func NewPatientReadmittedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
+	return hwes.NewEvent(a, PatientReadmitted, hwes.WithContext(ctx))
 }

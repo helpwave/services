@@ -18,14 +18,14 @@ services:
       retries: 5
 
   eventstore:
-    image: eventstore/eventstore:lts
+    image: eventstore/eventstore:23.10.1-jammy
     restart: unless-stopped
     environment:
       EVENTSTORE_TELEMETRY_OPTOUT: "true"
       EVENTSTORE_LOG_LEVEL: "Warning"
       EVENTSTORE_INSECURE: "true"
       EVENTSTORE_RUN_PROJECTIONS: "All"
-      ENABLE_ATOM_PUB_OVER_HTTP: "true"
+      EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP: "true"
     ports:
       - "2113:2113"
 
@@ -42,7 +42,7 @@ services:
       - "6379:6379"
 
   jaeger:
-    image: jaegertracing/all-in-one:1.54
+    image: jaegertracing/all-in-one:1.56
     environment:
       COLLECTOR_OTLP_ENABLED: "true"
     ports:
@@ -75,7 +75,7 @@ services:
 
   # dapr sidecar for apisix
   apisix-dapr:
-    image: "daprio/daprd:1.12.5"
+    image: "daprio/daprd:1.13.2"
     restart: unless-stopped
     depends_on:
       - apisix
@@ -99,7 +99,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '3'
+        TAG: '5'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -135,7 +135,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '3'
+        TAG: '5'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -160,3 +160,4 @@ services:
       - "3001:3001" # task-svc
       - "3002:3002" # user-svc
       - "3003:3003" # ory-svc
+      - "3004:3004" # property-svc

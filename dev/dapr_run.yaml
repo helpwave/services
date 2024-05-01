@@ -15,10 +15,12 @@ common:
     POSTGRES_PORT: 5432
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
+    EVENTSTORE_CS: esdb://admin:changeit@eventstore:2113?tls=false
     INSECURE_FAKE_TOKEN_ENABLE: true
     REDIS_ADDR: redis:6379
     INSECURE_REDIS_NO_TLS: true
     ORGANIZATION_ID: 3b25c6f5-4705-4074-9fc6-a50c28eba405
+    EVENTSTORE_CS: esdb://admin:changeit@eventstore:2113?tls=false
 
     OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
     OTEL_EXPORTER_OTLP_INSECURE: true
@@ -47,4 +49,13 @@ apps:
     env:
       SERVICE: ory-svc
       ORY_APIKEY: 2341
+    command: ["air"]
+
+  - appID: tasks-svc
+    appDirPath: ../services/tasks-svc
+    appPort: 3004
+    appProtocol: http
+    env:
+      SERVICE: tasks-svc
+      POSTGRES_DB: tasks-svc
     command: ["air"]

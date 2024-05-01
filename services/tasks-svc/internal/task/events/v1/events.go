@@ -1,15 +1,18 @@
 package v1
 
 import (
+	"context"
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
+	"time"
 )
 
 const (
 	TaskCreated            = "TASK_CREATED_v1"
 	TaskNameUpdated        = "TASK_NAME_UPDATED_v1"
 	TaskDescriptionUpdated = "TASK_DESCRIPTION_UPDATED_v1"
+	TaskDueAtUpdated       = "TASK_DUE_AT_UPDATED_v1"
 	TaskAssigned           = "TASK_ASSIGNED_v1"
 	TaskSelfAssigned       = "TASK_SELF_ASSIGNED_v1"
 	TaskUnassigned         = "TASK_UNASSIGNED_v1"
@@ -34,6 +37,10 @@ type TaskNameUpdatedEvent struct {
 
 type TaskDescriptionUpdatedEvent struct {
 	Description string `json:"description"`
+}
+
+type TaskDueAtUpdatedEvent struct {
+	DueAt time.Time `json:"due_at"`
 }
 
 type TaskAssignedEvent struct {
@@ -72,89 +79,96 @@ type SubtaskDeletedEvent struct {
 
 type TaskPublishedEvent struct{}
 
-func NewTaskCreatedEvent(a hwes.Aggregate, id uuid.UUID, name string, patientID uuid.UUID, status pb.TaskStatus) (hwes.Event, error) {
+func NewTaskCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, name string, patientID uuid.UUID, status pb.TaskStatus) (hwes.Event, error) {
 	payload := TaskCreatedEvent{
 		ID:        id.String(),
 		Name:      name,
 		PatientID: patientID.String(),
 		Status:    status.String(),
 	}
-	return hwes.NewEventWithData(a, TaskCreated, payload)
+	return hwes.NewEvent(a, TaskCreated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewTaskNameUpdatedEvent(a hwes.Aggregate, name string) (hwes.Event, error) {
+func NewTaskNameUpdatedEvent(ctx context.Context, a hwes.Aggregate, name string) (hwes.Event, error) {
 	payload := TaskNameUpdatedEvent{
 		Name: name,
 	}
-	return hwes.NewEventWithData(a, TaskNameUpdated, payload)
+	return hwes.NewEvent(a, TaskNameUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewTaskDescriptionUpdatedEvent(a hwes.Aggregate, description string) (hwes.Event, error) {
+func NewTaskDescriptionUpdatedEvent(ctx context.Context, a hwes.Aggregate, description string) (hwes.Event, error) {
 	payload := TaskDescriptionUpdatedEvent{
 		Description: description,
 	}
-	return hwes.NewEventWithData(a, TaskDescriptionUpdated, payload)
+	return hwes.NewEvent(a, TaskDescriptionUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewTaskAssignedEvent(a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
+func NewTaskDueAtUpdatedEvent(ctx context.Context, a hwes.Aggregate, dueAt time.Time) (hwes.Event, error) {
+	payload := TaskDueAtUpdatedEvent{
+		DueAt: dueAt,
+	}
+	return hwes.NewEvent(a, TaskDueAtUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
+}
+
+func NewTaskAssignedEvent(ctx context.Context, a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
 	payload := TaskAssignedEvent{
 		UserID: userID.String(),
 	}
-	return hwes.NewEventWithData(a, TaskAssigned, payload)
+	return hwes.NewEvent(a, TaskAssigned, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewTaskSelfAssignedEvent(a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
+func NewTaskSelfAssignedEvent(ctx context.Context, a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
 	payload := TaskSelfAssignedEvent{
 		UserID: userID.String(),
 	}
-	return hwes.NewEventWithData(a, TaskSelfAssigned, payload)
+	return hwes.NewEvent(a, TaskSelfAssigned, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewTaskUnassignedEvent(a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
+func NewTaskUnassignedEvent(ctx context.Context, a hwes.Aggregate, userID uuid.UUID) (hwes.Event, error) {
 	payload := TaskUnassignedEvent{
 		UserID: userID.String(),
 	}
-	return hwes.NewEventWithData(a, TaskUnassigned, payload)
+	return hwes.NewEvent(a, TaskUnassigned, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewTaskPublishedEvent(a hwes.Aggregate) (hwes.Event, error) {
+func NewTaskPublishedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
 	payload := TaskPublishedEvent{}
-	return hwes.NewEventWithData(a, TaskPublished, payload)
+	return hwes.NewEvent(a, TaskPublished, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewSubtaskCreatedEvent(a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
+func NewSubtaskCreatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
 	payload := SubtaskCreatedEvent{
 		SubtaskID: subtaskID.String(),
 		Name:      name,
 	}
-	return hwes.NewEventWithData(a, SubtaskCreated, payload)
+	return hwes.NewEvent(a, SubtaskCreated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewSubtaskNameUpdatedEvent(a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
+func NewSubtaskNameUpdatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
 	payload := SubtaskNameUpdatedEvent{
 		SubtaskID: subtaskID.String(),
 		Name:      name,
 	}
-	return hwes.NewEventWithData(a, SubtaskNameUpdated, payload)
+	return hwes.NewEvent(a, SubtaskNameUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewSubtaskCompletedEvent(a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
+func NewSubtaskCompletedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
 	payload := SubtaskCompletedEvent{
 		SubtaskID: subtaskID.String(),
 	}
-	return hwes.NewEventWithData(a, SubtaskCompleted, payload)
+	return hwes.NewEvent(a, SubtaskCompleted, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewSubtaskUncompletedEvent(a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
+func NewSubtaskUncompletedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
 	payload := SubtaskUncompletedEvent{
 		SubtaskID: subtaskID.String(),
 	}
-	return hwes.NewEventWithData(a, SubtaskUncompleted, payload)
+	return hwes.NewEvent(a, SubtaskUncompleted, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewSubtaskDeletedEvent(a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
+func NewSubtaskDeletedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID) (hwes.Event, error) {
 	payload := SubtaskDeletedEvent{
 		SubtaskID: subtaskID.String(),
 	}
-	return hwes.NewEventWithData(a, SubtaskDeleted, payload)
+	return hwes.NewEvent(a, SubtaskDeleted, hwes.WithContext(ctx), hwes.WithData(payload))
 }

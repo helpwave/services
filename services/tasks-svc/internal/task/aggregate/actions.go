@@ -3,41 +3,41 @@ package aggregate
 import (
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
-	"github.com/google/uuid"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 func (a *TaskAggregate) CreateTask(ctx context.Context, name string, patientID uuid.UUID, status pb.TaskStatus) error {
 	// The "Task" entity is our main entity in this aggregate.
 	// Therefore, we are using the same ID
 	id := a.GetID()
-	event, err := taskEventsV1.NewTaskCreatedEvent(a, id, name, patientID, status)
+	event, err := taskEventsV1.NewTaskCreatedEvent(ctx, a, id, name, patientID, status)
 	if err != nil {
 		return err
 	}
-
-	if err := event.InjectUserFromContext(ctx); err != nil {
-		return err
-	}
-
 	return a.Apply(event)
 }
 
 func (a *TaskAggregate) UpdateName(ctx context.Context, newName string) error {
-	event, err := taskEventsV1.NewTaskNameUpdatedEvent(a, newName)
+	event, err := taskEventsV1.NewTaskNameUpdatedEvent(ctx, a, newName)
 	if err != nil {
 		return err
 	}
-
-	if err := event.InjectUserFromContext(ctx); err != nil {
-		return err
-	}
-
 	return a.Apply(event)
 }
 
 func (a *TaskAggregate) UpdateDescription(ctx context.Context, newDescription string) error {
-	event, err := taskEventsV1.NewTaskDescriptionUpdatedEvent(a, newDescription)
+	event, err := taskEventsV1.NewTaskDescriptionUpdatedEvent(ctx, a, newDescription)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *TaskAggregate) UpdateDueAt(ctx context.Context, dueAt time.Time) error {
+	event, err := taskEventsV1.NewTaskDueAtUpdatedEvent(ctx, a, dueAt)
 	if err != nil {
 		return err
 	}
@@ -45,7 +45,7 @@ func (a *TaskAggregate) UpdateDescription(ctx context.Context, newDescription st
 }
 
 func (a *TaskAggregate) AssignTask(ctx context.Context, userID uuid.UUID) error {
-	event, err := taskEventsV1.NewTaskAssignedEvent(a, userID)
+	event, err := taskEventsV1.NewTaskAssignedEvent(ctx, a, userID)
 	if err != nil {
 		return err
 	}
@@ -53,7 +53,7 @@ func (a *TaskAggregate) AssignTask(ctx context.Context, userID uuid.UUID) error 
 }
 
 func (a *TaskAggregate) SelfAssignTask(ctx context.Context, userID uuid.UUID) error {
-	event, err := taskEventsV1.NewTaskSelfAssignedEvent(a, userID)
+	event, err := taskEventsV1.NewTaskSelfAssignedEvent(ctx, a, userID)
 	if err != nil {
 		return err
 	}
@@ -61,7 +61,7 @@ func (a *TaskAggregate) SelfAssignTask(ctx context.Context, userID uuid.UUID) er
 }
 
 func (a *TaskAggregate) UnassignTask(ctx context.Context, userID uuid.UUID) error {
-	event, err := taskEventsV1.NewTaskUnassignedEvent(a, userID)
+	event, err := taskEventsV1.NewTaskUnassignedEvent(ctx, a, userID)
 	if err != nil {
 		return err
 	}
@@ -69,7 +69,7 @@ func (a *TaskAggregate) UnassignTask(ctx context.Context, userID uuid.UUID) erro
 }
 
 func (a *TaskAggregate) PublishTask(ctx context.Context) error {
-	event, err := taskEventsV1.NewTaskPublishedEvent(a)
+	event, err := taskEventsV1.NewTaskPublishedEvent(ctx, a)
 	if err != nil {
 		return err
 	}
@@ -77,7 +77,7 @@ func (a *TaskAggregate) PublishTask(ctx context.Context) error {
 }
 
 func (a *TaskAggregate) CreateSubtask(ctx context.Context, subtaskID uuid.UUID, name string) error {
-	event, err := taskEventsV1.NewSubtaskCreatedEvent(a, subtaskID, name)
+	event, err := taskEventsV1.NewSubtaskCreatedEvent(ctx, a, subtaskID, name)
 	if err != nil {
 		return err
 	}
@@ -85,7 +85,7 @@ func (a *TaskAggregate) CreateSubtask(ctx context.Context, subtaskID uuid.UUID, 
 }
 
 func (a *TaskAggregate) UpdateSubtaskName(ctx context.Context, subtaskID uuid.UUID, name string) error {
-	event, err := taskEventsV1.NewSubtaskNameUpdatedEvent(a, subtaskID, name)
+	event, err := taskEventsV1.NewSubtaskNameUpdatedEvent(ctx, a, subtaskID, name)
 	if err != nil {
 		return err
 	}
@@ -93,7 +93,7 @@ func (a *TaskAggregate) UpdateSubtaskName(ctx context.Context, subtaskID uuid.UU
 }
 
 func (a *TaskAggregate) CompleteSubtask(ctx context.Context, subtaskID uuid.UUID) error {
-	event, err := taskEventsV1.NewSubtaskCompletedEvent(a, subtaskID)
+	event, err := taskEventsV1.NewSubtaskCompletedEvent(ctx, a, subtaskID)
 	if err != nil {
 		return err
 	}
@@ -101,7 +101,7 @@ func (a *TaskAggregate) CompleteSubtask(ctx context.Context, subtaskID uuid.UUID
 }
 
 func (a *TaskAggregate) UncompleteSubtask(ctx context.Context, subtaskID uuid.UUID) error {
-	event, err := taskEventsV1.NewSubtaskUncompletedEvent(a, subtaskID)
+	event, err := taskEventsV1.NewSubtaskUncompletedEvent(ctx, a, subtaskID)
 	if err != nil {
 		return err
 	}
@@ -109,7 +109,7 @@ func (a *TaskAggregate) UncompleteSubtask(ctx context.Context, subtaskID uuid.UU
 }
 
 func (a *TaskAggregate) DeleteSubtask(ctx context.Context, subtaskID uuid.UUID) error {
-	event, err := taskEventsV1.NewSubtaskDeletedEvent(a, subtaskID)
+	event, err := taskEventsV1.NewSubtaskDeletedEvent(ctx, a, subtaskID)
 	if err != nil {
 		return err
 	}

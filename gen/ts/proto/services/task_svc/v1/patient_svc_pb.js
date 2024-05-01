@@ -6323,7 +6323,8 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.toObject = function(i
     proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Task.toObject, includeInstance),
     wardId: jspb.Message.getFieldWithDefault(msg, 6, ""),
     room: (f = msg.getRoom()) && proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Room.toObject(includeInstance, f),
-    bed: (f = msg.getBed()) && proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Bed.toObject(includeInstance, f)
+    bed: (f = msg.getBed()) && proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Bed.toObject(includeInstance, f),
+    isDischarged: jspb.Message.getBooleanFieldWithDefault(msg, 9, false)
   };
 
   if (includeInstance) {
@@ -6394,6 +6395,10 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.deserializeBinaryFrom
       var value = new proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Bed;
       reader.readMessage(value,proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Bed.deserializeBinaryFromReader);
       msg.setBed(value);
+      break;
+    case 9:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsDischarged(value);
       break;
     default:
       reader.skipField();
@@ -6481,6 +6486,13 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.serializeBinaryToWrit
       8,
       f,
       proto.proto.services.task_svc.v1.GetPatientDetailsResponse.Bed.serializeBinaryToWriter
+    );
+  }
+  f = message.getIsDischarged();
+  if (f) {
+    writer.writeBool(
+      9,
+      f
     );
   }
 };
@@ -7641,6 +7653,24 @@ proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.clearBed = 
  */
 proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.hasBed = function() {
   return jspb.Message.getField(this, 8) != null;
+};
+
+
+/**
+ * optional bool is_discharged = 9;
+ * @return {boolean}
+ */
+proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.getIsDischarged = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 9, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.services.task_svc.v1.GetPatientDetailsResponse} returns this
+ */
+proto.proto.services.task_svc.v1.GetPatientDetailsResponse.prototype.setIsDischarged = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 9, value);
 };
 
 

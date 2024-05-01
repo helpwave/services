@@ -10,9 +10,8 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/golang/protobuf/proto" //nolint:staticcheck
 	"github.com/google/uuid"
-	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
-	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
-	"github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/metadata"
 	"github.com/rs/zerolog"
 	zlog "github.com/rs/zerolog/log"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
@@ -55,18 +54,8 @@ type organizationIDKey struct{}
 func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook func(*daprd.Server)) {
 	log := zlog.Ctx(ctx)
 
-	// middlewares
-	chain := grpc_middleware.ChainUnaryServer(
-		loggingUnaryInterceptor,
-		errorQualityControlInterceptor,
-		localeInterceptor,
-		authUnaryInterceptor,
-		validateUnaryInterceptor,
-		handlerSpanInterceptor,
-	)
-	interceptorChainServerOption := grpc.UnaryInterceptor(chain)
-
-	otelServerOption := grpc.StatsHandler(otelgrpc.NewServerHandler())
+	chain := DefaultInterceptorChain()
+	statsHandler := grpc.StatsHandler(otelgrpc.NewServerHandler())
 
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
@@ -74,7 +63,7 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 	}
 
 	// dapr/grpc service
-	service := daprd.NewServiceWithListener(listener, interceptorChainServerOption, otelServerOption).(*daprd.Server)
+	service := daprd.NewServiceWithListener(listener, chain, statsHandler).(*daprd.Server)
 	server := service.GrpcServer()
 
 	if err := service.AddHealthCheckHandler("", func(ctx context.Context) error {
@@ -114,6 +103,26 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 	Shutdown()
 }
 
+// DefaultInterceptors returns the slice of default Interceptors for the GRPC service
+// Also see DefaultInterceptorChain
+//
+//	chain := grpc.ChainUnaryInterceptor(common.DefaultInterceptors()...)
+func DefaultInterceptors() []grpc.UnaryServerInterceptor {
+	interceptors := []grpc.UnaryServerInterceptor{
+		loggingUnaryInterceptor,
+		errorQualityControlInterceptor,
+		localeInterceptor,
+		authUnaryInterceptor,
+		validateUnaryInterceptor,
+		handlerSpanInterceptor,
+	}
+	return interceptors
+}
+
+func DefaultInterceptorChain() grpc.ServerOption {
+	return grpc.ChainUnaryInterceptor(DefaultInterceptors()...)
+}
+
 func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
 	ctx, span, log := telemetry.StartSpan(ctx, "auth_interceptor")
 	defer span.End()
@@ -148,22 +157,30 @@ func isUnaryRPCForDaprInternal(info *grpc.UnaryServerInfo) bool {
 func authFunc(ctx context.Context) (context.Context, error) {
 	log := zlog.Ctx(ctx)
 
-	if !isAuthSetUp() {
+	if !isAuthSetUp() && !onlyFakeAuthEnabled {
 		log.Trace().Msg("skipping auth middleware, as auth is not set up")
 		// skip injecting claims into context
 		return ctx, nil
 	}
 
 	// get token from gRPC metadata
-	token, err := grpc_auth.AuthFromMD(ctx, "bearer")
+	token, err := auth.AuthFromMD(ctx, "bearer")
 
 	if err != nil {
 		log.Trace().Err(err).Msg("no valid auth header found")
 		return nil, status.Errorf(codes.Unauthenticated, "no auth token: %v", err)
 	}
 
-	// verify token -> if fakeToken is used claims will be nil and we will get an error
-	claims, err := VerifyIDToken(ctx, token)
+	var claims *IDTokenClaims
+
+	if onlyFakeAuthEnabled {
+		log.Warn().
+			Msg("only fake auth is enabled! no attempt verifying token. falling back to fake token instead")
+		claims, err = VerifyFakeToken(ctx, token)
+	} else {
+		// verify token -> if fakeToken is used claims will be nil and we will get an error
+		claims, err = VerifyIDToken(ctx, token)
+	}
 
 	// If InsecureFakeTokenEnable is true and Mode is development,
 	// we accept unverified Base64 encoded json structure in the schema of IDTokenClaims as well.
@@ -174,7 +191,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 		claims, err = VerifyFakeToken(ctx, token)
 	}
 
-	if err != nil {
+	if err != nil || claims == nil {
 		return nil, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err)
 	}
 
@@ -187,7 +204,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	}
 
 	// attach userID to context, so we can get it in a handler using GetUserID()
-	ctx = context.WithValue(ctx, userIDKey{}, userID)
+	ctx = ContextWithUserID(ctx, userID)
 
 	// attach userID to current span (should be the auth interceptor span)
 	telemetry.SetSpanStr(ctx, "user.id", userID.String())
@@ -200,6 +217,10 @@ func authFunc(ctx context.Context) (context.Context, error) {
 		WithContext(ctx)
 
 	return ctx, nil
+}
+
+func ContextWithUserID(ctx context.Context, userID uuid.UUID) context.Context {
+	return context.WithValue(ctx, userIDKey{}, userID)
 }
 
 // handleOrganizationIDForAuthFunc is a part of our auth middleware.
@@ -305,9 +326,9 @@ func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
 func localeInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
 	log := zlog.Ctx(ctx)
 
-	metadata := metautils.ExtractIncoming(ctx)
+	metaData := metadata.ExtractIncoming(ctx)
 
-	langHeader := metadata.Get("accept-language")
+	langHeader := metaData.Get("accept-language")
 	tags, ok := parseLocales(langHeader)
 	if !ok {
 		log.Warn().Str("langHeader", langHeader).Msg("invalid accept-language header received")
@@ -491,6 +512,7 @@ func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.U
 
 	// no error, go to next in chain
 	if err == nil {
+		log.Info().Msg("input validation ok")
 		return next(ctx, req)
 	}
 
@@ -551,7 +573,7 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 	ctx, span, log := telemetry.StartSpan(ctx, "logging_interceptor")
 	defer span.End()
 
-	metadata := metautils.ExtractIncoming(ctx)
+	metaData := metadata.ExtractIncoming(ctx)
 
 	// Add request information
 	builder := log.
@@ -579,7 +601,7 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 	// context, with new logger attached
 	ctx = log.WithContext(ctx)
 
-	log.Trace().Interface("metadata", redactMetadata(metadata)).Send()
+	log.Trace().Interface("metaData", redactMetadata(metaData)).Send()
 
 	logBody := req
 
@@ -588,7 +610,7 @@ func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Un
 		logBody = loggable.LoggableFields()
 	}
 	if !omitBody {
-		log.Debug().Interface("body", logBody).Send()
+		log.Debug().Interface("body", logBody).Type("bodyType", req).Send()
 	}
 
 	// Call next in chain
@@ -629,7 +651,7 @@ func resolveLogLevelForError(err error) zerolog.Level {
 	return zerolog.WarnLevel
 }
 
-func redactMetadata(m metautils.NiceMD) metautils.NiceMD {
+func redactMetadata(m metadata.MD) metadata.MD {
 	if arr := m["authorization"]; arr != nil {
 		for i := range arr {
 			arr[i] = telemetry.OmitAll(arr[i])
@@ -641,7 +663,7 @@ func redactMetadata(m metautils.NiceMD) metautils.NiceMD {
 // OrganizationIDFromMD retrieves the user defined organizationID
 // from the metadata of the request
 func OrganizationIDFromMD(ctx context.Context) (string, error) {
-	val := metautils.ExtractIncoming(ctx).Get("X-Organization")
+	val := metadata.ExtractIncoming(ctx).Get("X-Organization")
 	if val == "" {
 		return "", status.Errorf(codes.Unauthenticated, "organization header missing")
 	}

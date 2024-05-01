@@ -1,0 +1,27 @@
+version: "2"
+sql:
+  - &repo
+    engine: "postgresql"
+    queries: "./repos/property_repo.sql"
+    schema: "schema.sql"
+    gen:
+      go:
+        &repo-go
+        package: "property_repo"
+        out: "repos/property_repo"
+        sql_package: "pgx/v5"
+        emit_empty_slices: true
+        emit_pointers_for_null_types: true
+        overrides:
+          - db_type: "uuid"
+            go_type: "github.com/google/uuid.UUID"
+          - db_type: "uuid"
+            go_type: "github.com/google/uuid.NullUUID"
+            nullable: true
+  - <<: *repo
+    queries: "./repos/property_value_repo.sql"
+    gen:
+      go:
+        <<: *repo-go
+        package: "property_value_repo"
+        out: "repos/property_value_repo"

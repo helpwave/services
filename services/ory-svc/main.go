@@ -43,7 +43,7 @@ func newErrAndLog(ctx context.Context, msg string) error {
 }
 
 func main() {
-	common.Setup(ServiceName, Version, false)
+	common.Setup(ServiceName, Version)
 
 	ctx := context.Background()
 	log := zlog.Ctx(ctx)

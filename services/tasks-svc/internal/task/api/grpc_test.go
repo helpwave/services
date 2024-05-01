@@ -1,65 +1,45 @@
 package api_test
 
 import (
+	"common"
+	common_test "common/test"
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/test/bufconn"
 	hwauthz_test "hwauthz/test"
 	hwes_test "hwes/test"
 	"hwutil"
-	"log"
-	"net"
 	"tasks-svc/internal/task/api"
 	"testing"
 )
 
 func server(ctx context.Context) (pb.TaskServiceClient, func()) {
-	buffer := 1024 * 1024
-	listener := bufconn.Listen(buffer)
-
 	aggregateStore := hwes_test.NewAggregateStore()
 	authz := hwauthz_test.NewTrueAuthZ()
 	taskGrpcService := api.NewTaskGrpcService(aggregateStore, authz)
 
-	grpcServer := grpc.NewServer()
+	common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 
+	// Start Server
+	grpcServer := grpc.NewServer(common.DefaultInterceptorChain())
 	pb.RegisterTaskServiceServer(grpcServer, taskGrpcService)
-	go func() {
-		if err := grpcServer.Serve(listener); err != nil {
-			log.Fatal(err)
-		}
-	}()
-
-	conn, err := grpc.DialContext(ctx, "",
-		grpc.WithContextDialer(func(ctx context.Context, s string) (net.Conn, error) {
-			return listener.Dial()
-		}),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	closer := func() {
-		err := listener.Close()
-		if err != nil {
-			log.Fatal(err)
-		}
-		grpcServer.Stop()
-	}
+	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
 
 	client := pb.NewTaskServiceClient(conn)
-
 	return client, closer
 }
 
+func setup() (ctx context.Context, client pb.TaskServiceClient, teardown func()) {
+	ctx = context.Background()
+	client, teardown = server(ctx)
+	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
+	return ctx, client, teardown
+}
+
 func TestTaskGrpcService_CreateTask(t *testing.T) {
-	ctx := context.Background()
-	client, closer := server(ctx)
-	defer closer()
+	ctx, client, teardown := setup()
+	defer teardown()
 
 	patientID := uuid.New()
 	taskName := "Test task"
@@ -89,9 +69,8 @@ func TestTaskGrpcService_CreateTask(t *testing.T) {
 }
 
 func TestTaskGrpcService_UpdateTask(t *testing.T) {
-	ctx := context.Background()
-	client, closer := server(ctx)
-	defer closer()
+	ctx, client, teardown := setup()
+	defer teardown()
 
 	patientID := uuid.New()
 	taskName1 := "Test task"
@@ -146,9 +125,8 @@ func TestTaskGrpcService_UpdateTask(t *testing.T) {
 }
 
 func TestTaskGrpcService_AssignTask(t *testing.T) {
-	ctx := context.Background()
-	client, closer := server(ctx)
-	defer closer()
+	ctx, client, teardown := setup()
+	defer teardown()
 
 	patientID := uuid.New()
 	userID := uuid.New()
@@ -188,9 +166,8 @@ func TestTaskGrpcService_AssignTask(t *testing.T) {
 }
 
 func TestTaskGrpcService_UnassignTask(t *testing.T) {
-	ctx := context.Background()
-	client, closer := server(ctx)
-	defer closer()
+	ctx, client, teardown := setup()
+	defer teardown()
 
 	patientID := uuid.New()
 	userOneID := uuid.New()
@@ -248,9 +225,8 @@ func TestTaskGrpcService_UnassignTask(t *testing.T) {
 }
 
 func TestTaskGrpcService_Subtask(t *testing.T) {
-	ctx := context.Background()
-	client, closer := server(ctx)
-	defer closer()
+	ctx, client, teardown := setup()
+	defer teardown()
 
 	patientID := uuid.New()
 

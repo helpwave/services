@@ -16,7 +16,7 @@ import (
 // decay is the time in seconds after which a key is evicted, reset with every write
 // We expect a garbage collection for a key to run every invP add calls
 func Setup(serviceName string, size int64, decay time.Duration, invP int) DecayingLRU {
-	return CustomSetup(serviceName, size, decay, invP, nil)
+	return CustomSetup(serviceName, size, decay, invP, nil, nil)
 }
 
 // DefaultRedisOptions collects values from env (read the README so see which vars are respected)
@@ -48,8 +48,10 @@ func redisOptionsOrDefault(serviceName string, redisOptions *redis.Options) *red
 	return DefaultRedisOptions(serviceName)
 }
 
-func CustomSetup(serviceName string, size int64, decay time.Duration, invP int, redisOptions *redis.Options) DecayingLRU {
-	redisClient := redis.NewClient(redisOptionsOrDefault(serviceName, redisOptions))
+func CustomSetup(serviceName string, size int64, decay time.Duration, invP int, redisOptions *redis.Options, redisClient *redis.Client) DecayingLRU {
+	if redisClient == nil {
+		redisClient = redis.NewClient(redisOptionsOrDefault(serviceName, redisOptions))
+	}
 
 	lru := DecayingLRU{
 		ctx:         context.Background(),

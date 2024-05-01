@@ -9,10 +9,10 @@ on:
 
 env:
   # renovate: datasource=github-releases depName=bufbuild/buf
-  BUF_CLI_VERSION: '1.29.0'
+  BUF_CLI_VERSION: '1.31.0'
   NODE_VERSION: '18.x'
   # renovate: datasource=dart-version depName=dart
-  DART_VERSION: '3.3.0'
+  DART_VERSION: '3.3.4'
 
 jobs:
   check-preconditions:
@@ -25,7 +25,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 2
-    - uses: bufbuild/buf-setup-action@v1.29.0
+    - uses: bufbuild/buf-setup-action@v1.31.0
       with:
         version: ${{ env.BUF_CLI_VERSION }}
         github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -139,7 +139,7 @@ jobs:
       run: |
         VERSION=$(curl https://pub.dev/api/packages/helpwave_proto_dart -H "Accept: application/vnd.pub.v2+json" | jq ".latest.version" -r)
         NEW_VERSION=$(semver bump $BUMP $VERSION)
-        NEW_VERSION=$(semver bump prerel $SHA.0 $NEW_VERSION)
+        NEW_VERSION=$(semver bump prerel $SHA $NEW_VERSION)
         sed "s/version:.*/version: $NEW_VERSION/" pubspec.yaml -i
     - name: Publish to pub.dev
       working-directory: gen/dart

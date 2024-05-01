@@ -791,6 +791,9 @@ export class GetPatientDetailsResponse extends jspb.Message {
   hasBed(): boolean;
   clearBed(): GetPatientDetailsResponse;
 
+  getIsDischarged(): boolean;
+  setIsDischarged(value: boolean): GetPatientDetailsResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPatientDetailsResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetPatientDetailsResponse): GetPatientDetailsResponse.AsObject;
@@ -809,6 +812,7 @@ export namespace GetPatientDetailsResponse {
     wardId?: string,
     room?: GetPatientDetailsResponse.Room.AsObject,
     bed?: GetPatientDetailsResponse.Bed.AsObject,
+    isDischarged: boolean,
   }
 
   export class Room extends jspb.Message {

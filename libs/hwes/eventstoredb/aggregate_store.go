@@ -3,8 +3,8 @@ package eventstoredb
 import (
 	"context"
 	"errors"
-	"fmt"
-	"github.com/EventStore/EventStore-Client-Go/esdb"
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	zlog "github.com/rs/zerolog/log"
 	"hwes"
 	"hwutil"
 	"io"
@@ -66,9 +66,12 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 		return nil
 	}
 
-	eventsData := hwutil.Map(aggregate.GetUncommittedEvents(), func(event hwes.Event) esdb.EventData {
+	eventsData, err := hwutil.MapWithErr(aggregate.GetUncommittedEvents(), func(event hwes.Event) (esdb.EventData, error) {
 		return event.ToEventData()
 	})
+	if err != nil {
+		return err
+	}
 
 	// If AppliedEvents are empty, we imply that this entity was not loaded from an event store and therefore non-existing.
 	if len(aggregate.GetAppliedEvents()) == 0 {
@@ -132,10 +135,6 @@ func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 			return err
 		}
 
-		if event.UserID != nil {
-			fmt.Printf("UserID: %s\n", event.UserID.String())
-		}
-
 		if err := aggregate.Progress(event); err != nil {
 			return err
 		}
@@ -153,10 +152,16 @@ func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) err
 }
 
 func (a *AggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (bool, error) {
+	log := zlog.Ctx(ctx)
 	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.Revision(1)}
 	stream, err := a.es.ReadStream(ctx, aggregate.GetTypeID(), readOpts, 1)
 	if err != nil {
-		if errors.Is(err, esdb.ErrStreamNotFound) {
+		var esErr *esdb.Error
+		if !errors.As(err, &esErr) {
+			log.Warn().Err(err).Msg("non esdb.Error returned")
+			return false, err
+		}
+		if esErr.IsErrorCode(esdb.ErrorCodeResourceNotFound) {
 			return false, nil
 		} else {
 			return false, err
@@ -166,7 +171,12 @@ func (a *AggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (
 
 	_, err = stream.Recv()
 	if err != nil {
-		if errors.Is(err, esdb.ErrStreamNotFound) {
+		var esErr *esdb.Error
+		if !errors.As(err, &esErr) {
+			log.Warn().Err(err).Msg("non esdb.Error returned")
+			return false, err
+		}
+		if esErr.IsErrorCode(esdb.ErrorCodeResourceNotFound) {
 			return false, nil
 		} else {
 			return false, err

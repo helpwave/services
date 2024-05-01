@@ -2,7 +2,7 @@ package eventstoredb
 
 import (
 	"context"
-	"github.com/EventStore/EventStore-Client-Go/esdb"
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/rs/zerolog/log"
 	"hwutil"
 )

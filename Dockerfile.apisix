@@ -3,7 +3,7 @@ FROM debian:bookworm AS deps
 # renovate: datasource=github-releases depName=DarthSim/hivemind
 ARG HIVEMIND_VERSION=1.1.0
 # renovate: datasource=github-releases depName=dapr/dapr
-ARG DAPR_VERSION=1.12.5
+ARG DAPR_VERSION=1.13.2
 
 RUN apt update && \
 	apt install -y wget
@@ -16,7 +16,7 @@ RUN wget -q -O hivemind.gz https://github.com/DarthSim/hivemind/releases/downloa
 # get daprd
 RUN wget -q https://github.com/dapr/dapr/releases/download/v$DAPR_VERSION/daprd_linux_amd64.tar.gz -O - | tar -xzvf - daprd
 
-FROM apache/apisix:3.8.0-debian
+FROM apache/apisix:3.9.0-debian
 USER root
 ENV DAPR_APP_ID=gateway
 # DAPR_HTTP_READ_BUFFER_SIZE: default 4KB

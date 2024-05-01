@@ -30,7 +30,7 @@ func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequ
 		return nil, err
 	}
 
-	if err := commandsV1.NewCreateTaskCommandHandler(s.as)(ctx, taskID, req.GetName(), req.Description, patientID, req.Public, req.InitialStatus); err != nil {
+	if err := commandsV1.NewCreateTaskCommandHandler(s.as)(ctx, taskID, req.GetName(), req.Description, patientID, req.Public, req.InitialStatus, req.DueAt); err != nil {
 		return nil, err
 	}
 

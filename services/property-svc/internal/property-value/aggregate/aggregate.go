@@ -33,17 +33,12 @@ func LoadPropertyValueAggregate(ctx context.Context, as hwes.AggregateStore, id 
 
 func (a *PropertyValueAggregate) initEventListeners() {
 	a.RegisterEventListener(propertyEventsV1.PropertyValueCreated, a.onPropertyValueCreated)
+	a.RegisterEventListener(propertyEventsV1.PropertyValueUpdated, a.onPropertyValueUpdated)
 }
 
-// Event handlers
 func (a *PropertyValueAggregate) onPropertyValueCreated(evt hwes.Event) error {
 	var payload propertyEventsV1.PropertyValueCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
-		return err
-	}
-
-	subjectID, err := uuid.Parse(payload.SubjectID)
-	if err != nil {
 		return err
 	}
 
@@ -52,9 +47,24 @@ func (a *PropertyValueAggregate) onPropertyValueCreated(evt hwes.Event) error {
 		return err
 	}
 
+	subjectID, err := uuid.Parse(payload.SubjectID)
+	if err != nil {
+		return err
+	}
+
 	a.PropertyValue.PropertyID = propertyID
+	a.PropertyValue.Value = payload.Value
 	a.PropertyValue.SubjectID = subjectID
-	a.PropertyValue.SubjectType = payload.SubjectType
+
+	return nil
+}
+
+func (a *PropertyValueAggregate) onPropertyValueUpdated(evt hwes.Event) error {
+	var payload propertyEventsV1.PropertyValueUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
 	a.PropertyValue.Value = payload.Value
 
 	return nil

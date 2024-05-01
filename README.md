@@ -132,6 +132,7 @@ grpcurl --plaintext \
 | task-svc      | 3001  | gRPC                    |
 | user-svc      | 3002  | gRPC                    |
 | ory-svc       | 3003  | gRPC                    |
+| tasks-svc     | 3004  | gRPC                    |
 | APISIX (dapr) | 3500  | http                    |
 | APISIX (dapr) | 35001 | grpc                    |
 | APISIX        | 9080  | http  (mostly grcp-web) |
@@ -140,6 +141,7 @@ grpcurl --plaintext \
 | APISIX        | 9091  | http  (prometheus)      |
 | postgres      | 5432  |                         |
 | redis         | 6379  |                         |
+| eventstore    | 2113  |                         |
 | jaeger (UI)   | 16686 | http                    |
 | jaeger (OTLP) | 4317  | grpc                    |
 
@@ -156,6 +158,8 @@ These scripts can be run in the devcontainer:
 * `protos.sh`: Lint and Generate protos
 * `migrate.sh`: [migrate.sh](#migratesh---running-migratemigrate-inside-docker)
 * `models.sh`: [models.sh](#modelssh---generate-models-from-sql-queries)
+* `lint.sh`: Lint go code
+* `tidy.sh`: Runs `go mod tidy` across the workspace. Recommended to run after modifying any dependencies.
 
 Example:
 
@@ -339,7 +343,6 @@ POSTGRES_PASSWORD=postgres
 POSTGRES_DB=postgres
 
 # EventStoreDB related configurations
-
 EVENTSTORE_CS=esdb://admin:changeit@localhost:2113?tls=false
 
 # For development purposes
@@ -399,11 +402,6 @@ if err != nil {
 
 [We disarmed the versioning for pre-production.](https://github.com/helpwave/services/issues/125).
 To arm the versioning, search for "arm-versioning" in the codebase.
-
-### Event Sourcing
-
-We are currently in the progress of adopting event sourcing for some entities.
-Therefore, event sourcing is entirely optional and behind a feature flag (environment variable: `FEATURE_FLAG_EVENT_SOURCING`).
 
 ## Deployment
 

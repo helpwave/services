@@ -5,10 +5,14 @@ import (
 	"context"
 	pb "gen/proto/services/property_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
+	"github.com/rs/zerolog/log"
+	"hwdb"
 	"hwes/eventstoredb"
-	propertySetApi "property-svc/internal/property-set/api"
-	propertyValueApi "property-svc/internal/property-value/api"
-	propertyApi "property-svc/internal/property/api"
+	propertySet "property-svc/internal/property-set/api"
+	propertyValue "property-svc/internal/property-value/api"
+	"property-svc/internal/property-value/projections/property_value_postgres_projection"
+	property "property-svc/internal/property/api"
+	"property-svc/internal/property/projections/property_postgres_projection"
 )
 
 const ServiceName = "property-svc"
@@ -17,16 +21,38 @@ const ServiceName = "property-svc"
 var Version string
 
 func main() {
-	common.Setup(ServiceName, Version, true)
+	ctx, cancel := context.WithCancel(context.Background())
+	common.Setup(ServiceName, Version, common.WithAuth())
+
+	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
+	defer closeDBPool()
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
 
+	go func() {
+		propertyPostgresProjection := property_postgres_projection.NewProjection(eventStore, ServiceName)
+		if err := propertyPostgresProjection.Subscribe(ctx); err != nil {
+			log.Err(err).Msg("error during property-postgres projection subscription")
+			cancel()
+		}
+	}()
+
+	go func() {
+		propertyValuePostgresProjection := property_value_postgres_projection.NewProjection(eventStore, ServiceName)
+		if err := propertyValuePostgresProjection.Subscribe(ctx); err != nil {
+			log.Err(err).Msg("error during propertyValue-postgres projection subscription")
+			cancel()
+		}
+	}()
+
 	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
-		pb.RegisterPropertyServiceServer(grpcServer, propertyApi.NewPropertyService(aggregateStore))
-		pb.RegisterPropertySetServiceServer(grpcServer, propertySetApi.NewPropertySetService(aggregateStore))
-		pb.RegisterPropertyValueServiceServer(grpcServer, propertyValueApi.NewPropertyValueService(aggregateStore))
+		pb.RegisterPropertyServiceServer(grpcServer, property.NewPropertyService(aggregateStore))
+		pb.RegisterPropertySetServiceServer(grpcServer, propertySet.NewPropertySetService(aggregateStore))
+		pb.RegisterPropertyValueServiceServer(grpcServer, propertyValue.NewPropertyValueService(aggregateStore))
 	})
+
+	cancel()
 }
