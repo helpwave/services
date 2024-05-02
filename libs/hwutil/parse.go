@@ -101,3 +101,8 @@ func ParseNullUUID(ptr *string) (uuid.NullUUID, error) {
 func PtrTo[T any](v T) *T {
 	return &v
 }
+
+type JSONAble interface {
+	ToJSON() ([]byte, error)
+	FromJSON([]byte) error
+}

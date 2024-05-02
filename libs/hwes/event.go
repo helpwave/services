@@ -8,6 +8,7 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
+	"hwutil"
 	"strings"
 	"telemetry"
 	"time"
@@ -182,7 +183,16 @@ func (e *Event) SetData(data []byte) *Event {
 }
 
 func (e *Event) SetJsonData(data interface{}) error {
-	dataBytes, err := json.Marshal(data)
+	var dataBytes []byte
+	var err error
+
+	// FIXME: for some reason data is not JSONAble if it is a PropertyRuleCreatedEvent
+
+	if jsonable, ok := data.(hwutil.JSONAble); ok {
+		dataBytes, err = jsonable.ToJSON()
+	} else {
+		dataBytes, err = json.Marshal(data)
+	}
 	if err != nil {
 		return err
 	}
@@ -191,6 +201,10 @@ func (e *Event) SetJsonData(data interface{}) error {
 }
 
 func (e *Event) GetJsonData(data interface{}) error {
+	if jsonable, ok := data.(hwutil.JSONAble); ok {
+		err := jsonable.FromJSON(e.Data)
+		return err
+	}
 	return json.Unmarshal(e.Data, data)
 }
 

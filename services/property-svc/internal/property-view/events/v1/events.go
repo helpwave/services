@@ -2,7 +2,11 @@ package v1
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
+	"github.com/fatih/structs"
 	"github.com/google/uuid"
+	"github.com/mitchellh/mapstructure"
 	"hwes"
 	"property-svc/internal/property-view/models"
 )
@@ -14,6 +18,35 @@ const (
 
 type PropertyRuleCreatedEvent struct {
 	models.PropertyViewRule
+}
+
+func (m *PropertyRuleCreatedEvent) ToJSON() ([]byte, error) {
+	inter := structs.Map(m.PropertyViewRule)
+	return json.Marshal(inter)
+}
+
+func (m *PropertyRuleCreatedEvent) FromJSON(data []byte) error {
+	var inter map[string]interface{}
+	if err := json.Unmarshal(data, &inter); err != nil {
+		return err
+	}
+
+	// parse everything except matchers
+	var rule models.PropertyViewRule
+	if err := json.Unmarshal(data, &rule); err != nil {
+		return err
+	}
+
+	var taskMatchers models.TaskPropertyMatchers
+	err := mapstructure.Decode(inter["matchers"], &taskMatchers)
+	if err == nil {
+		rule.Matchers = taskMatchers
+		m.PropertyViewRule = rule
+		return nil
+	}
+	// add other matchers once we have more
+
+	return errors.New("could not find matcher in event")
 }
 
 func NewPropertyRuleCreatedEvent(ctx context.Context, a hwes.Aggregate, rule models.PropertyViewRule) (hwes.Event, error) {

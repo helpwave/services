@@ -17,9 +17,12 @@ require (
 	gen v0.0.0
 	github.com/EventStore/EventStore-Client-Go/v4 v4.0.0
 	github.com/dapr/go-sdk v1.10.1
+	github.com/fatih/structs v1.1.0
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.5.5
+	github.com/mitchellh/mapstructure v1.5.1-0.20220423185008-bf980b35cac4
 	github.com/rs/zerolog v1.32.0
+	google.golang.org/protobuf v1.33.0
 	hwdb v0.0.0
 	hwes v0.0.0
 	hwutil v0.0.0
@@ -30,7 +33,6 @@ require (
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
 	github.com/dapr/dapr v1.13.2 // indirect
-	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
@@ -71,7 +73,6 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20240227224415-6ceb2ff114de // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240401170217-c3f982113cda // indirect
 	google.golang.org/grpc v1.63.2 // indirect
-	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	hwlocale v0.0.0 // indirect

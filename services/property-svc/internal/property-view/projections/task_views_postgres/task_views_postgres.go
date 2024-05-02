@@ -1,4 +1,4 @@
-package projections
+package task_views_postgres
 
 import (
 	"context"
@@ -48,6 +48,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	log := zlog.Ctx(ctx)
 
 	var payload eventsV1.PropertyRuleCreatedEvent
+	log.Debug().Any("payload", payload).Msg("payload")
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, esdb.NackActionSkip
@@ -56,6 +57,8 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	if payload.RuleId == uuid.Nil {
 		return fmt.Errorf("ruleID missing"), esdb.NackActionSkip
 	}
+
+	// TODO: add more matchers
 
 	matchers, ok := payload.Matchers.(models.TaskPropertyMatchers)
 	if !ok {
@@ -82,8 +85,6 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 		log.Error().Err(err).Msg("could not create view rule")
 		return err, esdb.NackActionUnknown
 	}
-
-	// TODO: determine this is a create task rule, same in event listener
 
 	err = taskViewsQuery.CreateTaskRule(ctx, task_views_repo.CreateTaskRuleParams{
 		RuleID: payload.RuleId,
