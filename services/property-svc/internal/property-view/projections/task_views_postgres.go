@@ -12,24 +12,30 @@ import (
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
+	"hwutil"
 	"property-svc/internal/property-view/aggregate"
 	eventsV1 "property-svc/internal/property-view/events/v1"
 	"property-svc/internal/property-view/models"
 	"property-svc/repos/task_views_repo"
+	"property-svc/repos/views_repo"
+	"slices"
 )
 
 type Projection struct {
 	*custom.CustomProjection
 	db            *pgxpool.Pool
 	taskViewsRepo *task_views_repo.Queries
+	viewsRepo     *views_repo.Queries
 }
 
 func NewProjection(es *esdb.Client, serviceName string) *Projection {
-	subscriptionGroupName := fmt.Sprintf("%s-patient-postgres-projection", serviceName)
+	subscriptionGroupName := fmt.Sprintf("%s-task-views-postgres-projection", serviceName)
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PropertyViewRuleAggregateType)}),
 		db:               hwdb.GetDB(),
-		taskViewsRepo:    task_views_repo.New(hwdb.GetDB())}
+		taskViewsRepo:    task_views_repo.New(hwdb.GetDB()),
+		viewsRepo:        views_repo.New(hwdb.GetDB()),
+	}
 	p.initEventListeners()
 	return p
 }
@@ -68,9 +74,18 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 		}
 	}()
 
-	query := p.taskViewsRepo.WithTx(tx)
+	taskViewsQuery := p.taskViewsRepo.WithTx(tx)
+	viewsQuery := p.viewsRepo.WithTx(tx)
 
-	err = query.CreateTaskRule(ctx, task_views_repo.CreateTaskRuleParams{
+	err = viewsQuery.CreateRule(ctx, payload.RuleId)
+	if err != nil {
+		log.Error().Err(err).Msg("could not create view rule")
+		return err, esdb.NackActionUnknown
+	}
+
+	// TODO: determine this is a create task rule, same in event listener
+
+	err = taskViewsQuery.CreateTaskRule(ctx, task_views_repo.CreateTaskRuleParams{
 		RuleID: payload.RuleId,
 		WardID: matchers.WardID,
 		TaskID: matchers.TaskID,
@@ -79,9 +94,87 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 		log.Error().Err(err).Msg("could not create task rule")
 		return err, esdb.NackActionRetry
 	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("could not commit")
+		return err, esdb.NackActionRetry
+	}
 	return nil, esdb.NackActionUnknown
 }
 
 func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	// TODO
+	log := zlog.Ctx(ctx)
+
+	var payload eventsV1.PropertyRuleListsUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, esdb.NackActionSkip
+	}
+
+	tx, err := p.db.Begin(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to begin transaction")
+		return err, esdb.NackActionRetry
+	}
+	defer func() {
+		err := tx.Rollback(ctx)
+		if !errors.Is(err, pgx.ErrTxClosed) {
+			log.Error().Err(err).Msg("rollback failed")
+		}
+	}()
+
+	viewsQuery := p.viewsRepo.WithTx(tx)
+
+	// TODO: What if we re-add into the same list?
+
+	mapper := func(dontAlwaysInclude bool) func(uuid.UUID) views_repo.AddToAlwaysIncludeParams {
+		return func(propertyId uuid.UUID) views_repo.AddToAlwaysIncludeParams {
+			return views_repo.AddToAlwaysIncludeParams{
+				RuleID:            payload.RuleId,
+				PropertyID:        propertyId,
+				DontAlwaysInclude: dontAlwaysInclude,
+			}
+		}
+	}
+
+	appendToAlwaysInclude := hwutil.Map(payload.AppendToAlwaysInclude, mapper(false))
+	appendToDontAlwaysInclude := hwutil.Map(payload.AppendToDontAlwaysInclude, mapper(true))
+	toAppend := slices.Concat(appendToAlwaysInclude, appendToDontAlwaysInclude)
+
+	_, err = viewsQuery.AddToAlwaysInclude(ctx, toAppend)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to append to lists")
+		return err, esdb.NackActionRetry
+	}
+
+	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
+		RuleID:            payload.RuleId,
+		PropertyIds:       payload.RemoveFromAlwaysInclude,
+		DontAlwaysInclude: false,
+	})
+
+	if err != nil {
+		log.Error().Err(err).Msg("failed to delete from always include list")
+		return err, esdb.NackActionRetry
+	}
+
+	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
+		RuleID:            payload.RuleId,
+		PropertyIds:       payload.RemoveFromDontAlwaysInclude,
+		DontAlwaysInclude: true,
+	})
+
+	if err != nil {
+		log.Error().Err(err).Msg("failed to delete from dont always include list")
+		return err, esdb.NackActionRetry
+	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("could not commit")
+		return err, esdb.NackActionRetry
+	}
+
+	return nil, esdb.NackActionUnknown
 }

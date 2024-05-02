@@ -24,14 +24,16 @@ func NewPropertyRuleCreatedEvent(ctx context.Context, a hwes.Aggregate, rule mod
 }
 
 type PropertyRuleListsUpdatedEvent struct {
+	RuleId                      uuid.UUID
 	AppendToAlwaysInclude       []uuid.UUID
 	RemoveFromAlwaysInclude     []uuid.UUID
 	AppendToDontAlwaysInclude   []uuid.UUID
 	RemoveFromDontAlwaysInclude []uuid.UUID
 }
 
-func NewPropertyRuleListsUpdatedEvent(ctx context.Context, a hwes.Aggregate, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude []uuid.UUID) (hwes.Event, error) {
+func NewPropertyRuleListsUpdatedEvent(ctx context.Context, a hwes.Aggregate, ruleId uuid.UUID, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude []uuid.UUID) (hwes.Event, error) {
 	payload := PropertyRuleListsUpdatedEvent{
+		RuleId:                      ruleId,
 		AppendToAlwaysInclude:       appendToAlwaysInclude,
 		RemoveFromAlwaysInclude:     removeFromAlwaysInclude,
 		AppendToDontAlwaysInclude:   appendToDontAlwaysInclude,

@@ -27,7 +27,7 @@ func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePrope
 				return err
 			}
 
-			if err := ruleAgg.UpdateLists(ctx, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude); err != nil {
+			if err := ruleAgg.UpdateLists(ctx, *ruleID, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude); err != nil {
 				return err
 			}
 		} else {

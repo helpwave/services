@@ -36,7 +36,7 @@ func LoadPropertyViewAggregate(ctx context.Context, as hwes.AggregateStore, id u
 
 func (a *PropertyViewRuleAggregate) initEventListeners() {
 	a.RegisterEventListener(propertyViewEventsV1.PropertyRuleCreated, a.onPropertyRuleCreated)
-	a.RegisterEventListener(propertyViewEventsV1.PropertyRuleListsUpdated, a.onPropertyRuleListsAppended)
+	a.RegisterEventListener(propertyViewEventsV1.PropertyRuleListsUpdated, a.onPropertyRuleListsUpdated)
 }
 
 func (a *PropertyViewRuleAggregate) onPropertyRuleCreated(event hwes.Event) error {
@@ -57,7 +57,7 @@ func (a *PropertyViewRuleAggregate) onPropertyRuleCreated(event hwes.Event) erro
 	return nil
 }
 
-func (a *PropertyViewRuleAggregate) onPropertyRuleListsAppended(event hwes.Event) error {
+func (a *PropertyViewRuleAggregate) onPropertyRuleListsUpdated(event hwes.Event) error {
 	var payload propertyViewEventsV1.PropertyRuleListsUpdatedEvent
 	if err := event.GetJsonData(&payload); err != nil {
 		return err

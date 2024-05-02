@@ -27,16 +27,21 @@ func (q *Queries) CreateRule(ctx context.Context, id uuid.UUID) error {
 }
 
 const deleteFromAlwaysInclude = `-- name: DeleteFromAlwaysInclude :exec
-DELETE FROM property_view_filter_always_include_items WHERE (rule_id = $1 AND property_id = $2 AND dont_always_include = $3)
+DELETE FROM property_view_filter_always_include_items
+	WHERE (
+		rule_id = $1 AND
+		property_id = ANY($2 :: uuid[])
+		AND dont_always_include = $3
+	)
 `
 
 type DeleteFromAlwaysIncludeParams struct {
 	RuleID            uuid.UUID
-	PropertyID        uuid.UUID
+	PropertyIds       []uuid.UUID
 	DontAlwaysInclude bool
 }
 
 func (q *Queries) DeleteFromAlwaysInclude(ctx context.Context, arg DeleteFromAlwaysIncludeParams) error {
-	_, err := q.db.Exec(ctx, deleteFromAlwaysInclude, arg.RuleID, arg.PropertyID, arg.DontAlwaysInclude)
+	_, err := q.db.Exec(ctx, deleteFromAlwaysInclude, arg.RuleID, arg.PropertyIds, arg.DontAlwaysInclude)
 	return err
 }
