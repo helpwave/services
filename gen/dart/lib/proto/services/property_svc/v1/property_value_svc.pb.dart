@@ -13,7 +13,11 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-enum CreatePropertyValueRequest_Value {
+import '../../../../google/protobuf/timestamp.pb.dart' as $16;
+import 'types.pb.dart' as $15;
+import 'types.pbenum.dart' as $15;
+
+enum AttachPropertyValueRequest_Value {
   textValue, 
   numberValue, 
   boolValue, 
@@ -24,25 +28,21 @@ enum CreatePropertyValueRequest_Value {
 }
 
 ///
-///  CreatePropertyValue
-class CreatePropertyValueRequest extends $pb.GeneratedMessage {
-  factory CreatePropertyValueRequest({
+///  AttachPropertyValueRequest
+class AttachPropertyValueRequest extends $pb.GeneratedMessage {
+  factory AttachPropertyValueRequest({
     $core.String? subjectId,
-    $core.String? subjectType,
     $core.String? propertyId,
     $core.String? textValue,
     $core.double? numberValue,
     $core.bool? boolValue,
-    $core.String? dateValue,
-    $core.String? dateTimeValue,
+    $15.Date? dateValue,
+    $16.Timestamp? dateTimeValue,
     $core.String? selectValue,
   }) {
     final $result = create();
     if (subjectId != null) {
       $result.subjectId = subjectId;
-    }
-    if (subjectType != null) {
-      $result.subjectType = subjectType;
     }
     if (propertyId != null) {
       $result.propertyId = propertyId;
@@ -67,30 +67,29 @@ class CreatePropertyValueRequest extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  CreatePropertyValueRequest._() : super();
-  factory CreatePropertyValueRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreatePropertyValueRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  AttachPropertyValueRequest._() : super();
+  factory AttachPropertyValueRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AttachPropertyValueRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static const $core.Map<$core.int, CreatePropertyValueRequest_Value> _CreatePropertyValueRequest_ValueByTag = {
-    4 : CreatePropertyValueRequest_Value.textValue,
-    5 : CreatePropertyValueRequest_Value.numberValue,
-    6 : CreatePropertyValueRequest_Value.boolValue,
-    7 : CreatePropertyValueRequest_Value.dateValue,
-    8 : CreatePropertyValueRequest_Value.dateTimeValue,
-    9 : CreatePropertyValueRequest_Value.selectValue,
-    0 : CreatePropertyValueRequest_Value.notSet
+  static const $core.Map<$core.int, AttachPropertyValueRequest_Value> _AttachPropertyValueRequest_ValueByTag = {
+    3 : AttachPropertyValueRequest_Value.textValue,
+    4 : AttachPropertyValueRequest_Value.numberValue,
+    5 : AttachPropertyValueRequest_Value.boolValue,
+    6 : AttachPropertyValueRequest_Value.dateValue,
+    7 : AttachPropertyValueRequest_Value.dateTimeValue,
+    8 : AttachPropertyValueRequest_Value.selectValue,
+    0 : AttachPropertyValueRequest_Value.notSet
   };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyValueRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [4, 5, 6, 7, 8, 9])
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttachPropertyValueRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..oo(0, [3, 4, 5, 6, 7, 8])
     ..aOS(1, _omitFieldNames ? '' : 'subjectId')
-    ..aOS(2, _omitFieldNames ? '' : 'subjectType')
-    ..aOS(3, _omitFieldNames ? '' : 'propertyId')
-    ..aOS(4, _omitFieldNames ? '' : 'textValue')
-    ..a<$core.double>(5, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OF)
-    ..aOB(6, _omitFieldNames ? '' : 'boolValue')
-    ..aOS(7, _omitFieldNames ? '' : 'dateValue')
-    ..aOS(8, _omitFieldNames ? '' : 'dateTimeValue')
-    ..aOS(9, _omitFieldNames ? '' : 'selectValue')
+    ..aOS(2, _omitFieldNames ? '' : 'propertyId')
+    ..aOS(3, _omitFieldNames ? '' : 'textValue')
+    ..a<$core.double>(4, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OD)
+    ..aOB(5, _omitFieldNames ? '' : 'boolValue')
+    ..aOM<$15.Date>(6, _omitFieldNames ? '' : 'dateValue', subBuilder: $15.Date.create)
+    ..aOM<$16.Timestamp>(7, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $16.Timestamp.create)
+    ..aOS(8, _omitFieldNames ? '' : 'selectValue')
     ..hasRequiredFields = false
   ;
 
@@ -98,24 +97,24 @@ class CreatePropertyValueRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  CreatePropertyValueRequest clone() => CreatePropertyValueRequest()..mergeFromMessage(this);
+  AttachPropertyValueRequest clone() => AttachPropertyValueRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  CreatePropertyValueRequest copyWith(void Function(CreatePropertyValueRequest) updates) => super.copyWith((message) => updates(message as CreatePropertyValueRequest)) as CreatePropertyValueRequest;
+  AttachPropertyValueRequest copyWith(void Function(AttachPropertyValueRequest) updates) => super.copyWith((message) => updates(message as AttachPropertyValueRequest)) as AttachPropertyValueRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static CreatePropertyValueRequest create() => CreatePropertyValueRequest._();
-  CreatePropertyValueRequest createEmptyInstance() => create();
-  static $pb.PbList<CreatePropertyValueRequest> createRepeated() => $pb.PbList<CreatePropertyValueRequest>();
+  static AttachPropertyValueRequest create() => AttachPropertyValueRequest._();
+  AttachPropertyValueRequest createEmptyInstance() => create();
+  static $pb.PbList<AttachPropertyValueRequest> createRepeated() => $pb.PbList<AttachPropertyValueRequest>();
   @$core.pragma('dart2js:noInline')
-  static CreatePropertyValueRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreatePropertyValueRequest>(create);
-  static CreatePropertyValueRequest? _defaultInstance;
+  static AttachPropertyValueRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AttachPropertyValueRequest>(create);
+  static AttachPropertyValueRequest? _defaultInstance;
 
-  CreatePropertyValueRequest_Value whichValue() => _CreatePropertyValueRequest_ValueByTag[$_whichOneof(0)]!;
+  AttachPropertyValueRequest_Value whichValue() => _AttachPropertyValueRequest_ValueByTag[$_whichOneof(0)]!;
   void clearValue() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -128,94 +127,89 @@ class CreatePropertyValueRequest extends $pb.GeneratedMessage {
   void clearSubjectId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get subjectType => $_getSZ(1);
+  $core.String get propertyId => $_getSZ(1);
   @$pb.TagNumber(2)
-  set subjectType($core.String v) { $_setString(1, v); }
+  set propertyId($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasSubjectType() => $_has(1);
+  $core.bool hasPropertyId() => $_has(1);
   @$pb.TagNumber(2)
-  void clearSubjectType() => clearField(2);
+  void clearPropertyId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get propertyId => $_getSZ(2);
+  $core.String get textValue => $_getSZ(2);
   @$pb.TagNumber(3)
-  set propertyId($core.String v) { $_setString(2, v); }
+  set textValue($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasPropertyId() => $_has(2);
+  $core.bool hasTextValue() => $_has(2);
   @$pb.TagNumber(3)
-  void clearPropertyId() => clearField(3);
+  void clearTextValue() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get textValue => $_getSZ(3);
+  $core.double get numberValue => $_getN(3);
   @$pb.TagNumber(4)
-  set textValue($core.String v) { $_setString(3, v); }
+  set numberValue($core.double v) { $_setDouble(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasTextValue() => $_has(3);
+  $core.bool hasNumberValue() => $_has(3);
   @$pb.TagNumber(4)
-  void clearTextValue() => clearField(4);
+  void clearNumberValue() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.double get numberValue => $_getN(4);
+  $core.bool get boolValue => $_getBF(4);
   @$pb.TagNumber(5)
-  set numberValue($core.double v) { $_setFloat(4, v); }
+  set boolValue($core.bool v) { $_setBool(4, v); }
   @$pb.TagNumber(5)
-  $core.bool hasNumberValue() => $_has(4);
+  $core.bool hasBoolValue() => $_has(4);
   @$pb.TagNumber(5)
-  void clearNumberValue() => clearField(5);
+  void clearBoolValue() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.bool get boolValue => $_getBF(5);
+  $15.Date get dateValue => $_getN(5);
   @$pb.TagNumber(6)
-  set boolValue($core.bool v) { $_setBool(5, v); }
+  set dateValue($15.Date v) { setField(6, v); }
   @$pb.TagNumber(6)
-  $core.bool hasBoolValue() => $_has(5);
+  $core.bool hasDateValue() => $_has(5);
   @$pb.TagNumber(6)
-  void clearBoolValue() => clearField(6);
+  void clearDateValue() => clearField(6);
+  @$pb.TagNumber(6)
+  $15.Date ensureDateValue() => $_ensure(5);
 
   @$pb.TagNumber(7)
-  $core.String get dateValue => $_getSZ(6);
+  $16.Timestamp get dateTimeValue => $_getN(6);
   @$pb.TagNumber(7)
-  set dateValue($core.String v) { $_setString(6, v); }
+  set dateTimeValue($16.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
-  $core.bool hasDateValue() => $_has(6);
+  $core.bool hasDateTimeValue() => $_has(6);
   @$pb.TagNumber(7)
-  void clearDateValue() => clearField(7);
+  void clearDateTimeValue() => clearField(7);
+  @$pb.TagNumber(7)
+  $16.Timestamp ensureDateTimeValue() => $_ensure(6);
 
   @$pb.TagNumber(8)
-  $core.String get dateTimeValue => $_getSZ(7);
+  $core.String get selectValue => $_getSZ(7);
   @$pb.TagNumber(8)
-  set dateTimeValue($core.String v) { $_setString(7, v); }
+  set selectValue($core.String v) { $_setString(7, v); }
   @$pb.TagNumber(8)
-  $core.bool hasDateTimeValue() => $_has(7);
+  $core.bool hasSelectValue() => $_has(7);
   @$pb.TagNumber(8)
-  void clearDateTimeValue() => clearField(8);
-
-  @$pb.TagNumber(9)
-  $core.String get selectValue => $_getSZ(8);
-  @$pb.TagNumber(9)
-  set selectValue($core.String v) { $_setString(8, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasSelectValue() => $_has(8);
-  @$pb.TagNumber(9)
-  void clearSelectValue() => clearField(9);
+  void clearSelectValue() => clearField(8);
 }
 
-class CreatePropertyValueResponse extends $pb.GeneratedMessage {
-  factory CreatePropertyValueResponse({
-    $core.String? id,
+class AttachPropertyValueResponse extends $pb.GeneratedMessage {
+  factory AttachPropertyValueResponse({
+    $core.String? propertyValueId,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (propertyValueId != null) {
+      $result.propertyValueId = propertyValueId;
     }
     return $result;
   }
-  CreatePropertyValueResponse._() : super();
-  factory CreatePropertyValueResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreatePropertyValueResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  AttachPropertyValueResponse._() : super();
+  factory AttachPropertyValueResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AttachPropertyValueResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyValueResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttachPropertyValueResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'propertyValueId')
     ..hasRequiredFields = false
   ;
 
@@ -223,49 +217,51 @@ class CreatePropertyValueResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  CreatePropertyValueResponse clone() => CreatePropertyValueResponse()..mergeFromMessage(this);
+  AttachPropertyValueResponse clone() => AttachPropertyValueResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  CreatePropertyValueResponse copyWith(void Function(CreatePropertyValueResponse) updates) => super.copyWith((message) => updates(message as CreatePropertyValueResponse)) as CreatePropertyValueResponse;
+  AttachPropertyValueResponse copyWith(void Function(AttachPropertyValueResponse) updates) => super.copyWith((message) => updates(message as AttachPropertyValueResponse)) as AttachPropertyValueResponse;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static CreatePropertyValueResponse create() => CreatePropertyValueResponse._();
-  CreatePropertyValueResponse createEmptyInstance() => create();
-  static $pb.PbList<CreatePropertyValueResponse> createRepeated() => $pb.PbList<CreatePropertyValueResponse>();
+  static AttachPropertyValueResponse create() => AttachPropertyValueResponse._();
+  AttachPropertyValueResponse createEmptyInstance() => create();
+  static $pb.PbList<AttachPropertyValueResponse> createRepeated() => $pb.PbList<AttachPropertyValueResponse>();
   @$core.pragma('dart2js:noInline')
-  static CreatePropertyValueResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreatePropertyValueResponse>(create);
-  static CreatePropertyValueResponse? _defaultInstance;
+  static AttachPropertyValueResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AttachPropertyValueResponse>(create);
+  static AttachPropertyValueResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get propertyValueId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set propertyValueId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasPropertyValueId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearPropertyValueId() => clearField(1);
 }
 
-class GetPropertyValueRequest extends $pb.GeneratedMessage {
-  factory GetPropertyValueRequest({
-    $core.String? id,
+///
+///  GetAttachedPropertyValue
+class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
+  factory GetAttachedPropertyValuesRequest({
+    $core.String? subjectId,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
+    if (subjectId != null) {
+      $result.subjectId = subjectId;
     }
     return $result;
   }
-  GetPropertyValueRequest._() : super();
-  factory GetPropertyValueRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetPropertyValueRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetAttachedPropertyValuesRequest._() : super();
+  factory GetAttachedPropertyValuesRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAttachedPropertyValuesRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyValueRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAttachedPropertyValuesRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'subjectId')
     ..hasRequiredFields = false
   ;
 
@@ -273,34 +269,34 @@ class GetPropertyValueRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetPropertyValueRequest clone() => GetPropertyValueRequest()..mergeFromMessage(this);
+  GetAttachedPropertyValuesRequest clone() => GetAttachedPropertyValuesRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetPropertyValueRequest copyWith(void Function(GetPropertyValueRequest) updates) => super.copyWith((message) => updates(message as GetPropertyValueRequest)) as GetPropertyValueRequest;
+  GetAttachedPropertyValuesRequest copyWith(void Function(GetAttachedPropertyValuesRequest) updates) => super.copyWith((message) => updates(message as GetAttachedPropertyValuesRequest)) as GetAttachedPropertyValuesRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetPropertyValueRequest create() => GetPropertyValueRequest._();
-  GetPropertyValueRequest createEmptyInstance() => create();
-  static $pb.PbList<GetPropertyValueRequest> createRepeated() => $pb.PbList<GetPropertyValueRequest>();
+  static GetAttachedPropertyValuesRequest create() => GetAttachedPropertyValuesRequest._();
+  GetAttachedPropertyValuesRequest createEmptyInstance() => create();
+  static $pb.PbList<GetAttachedPropertyValuesRequest> createRepeated() => $pb.PbList<GetAttachedPropertyValuesRequest>();
   @$core.pragma('dart2js:noInline')
-  static GetPropertyValueRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPropertyValueRequest>(create);
-  static GetPropertyValueRequest? _defaultInstance;
+  static GetAttachedPropertyValuesRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAttachedPropertyValuesRequest>(create);
+  static GetAttachedPropertyValuesRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get subjectId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set subjectId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasSubjectId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearSubjectId() => clearField(1);
 }
 
-enum GetPropertyValueResponse_Value {
+enum GetAttachedPropertyValuesResponse_Value_Value {
   textValue, 
   numberValue, 
   boolValue, 
@@ -310,27 +306,35 @@ enum GetPropertyValueResponse_Value {
   notSet
 }
 
-class GetPropertyValueResponse extends $pb.GeneratedMessage {
-  factory GetPropertyValueResponse({
-    $core.String? id,
-    $core.String? subjectType,
+class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
+  factory GetAttachedPropertyValuesResponse_Value({
     $core.String? propertyId,
+    $15.FieldType? fieldType,
+    $core.String? name,
+    $core.String? description,
+    $core.bool? isArchived,
     $core.String? textValue,
     $core.double? numberValue,
     $core.bool? boolValue,
-    $core.String? dateValue,
-    $core.String? dateTimeValue,
+    $15.Date? dateValue,
+    $16.Timestamp? dateTimeValue,
     $core.String? selectValue,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
-    }
-    if (subjectType != null) {
-      $result.subjectType = subjectType;
-    }
     if (propertyId != null) {
       $result.propertyId = propertyId;
+    }
+    if (fieldType != null) {
+      $result.fieldType = fieldType;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (description != null) {
+      $result.description = description;
+    }
+    if (isArchived != null) {
+      $result.isArchived = isArchived;
     }
     if (textValue != null) {
       $result.textValue = textValue;
@@ -352,30 +356,32 @@ class GetPropertyValueResponse extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  GetPropertyValueResponse._() : super();
-  factory GetPropertyValueResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetPropertyValueResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetAttachedPropertyValuesResponse_Value._() : super();
+  factory GetAttachedPropertyValuesResponse_Value.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAttachedPropertyValuesResponse_Value.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static const $core.Map<$core.int, GetPropertyValueResponse_Value> _GetPropertyValueResponse_ValueByTag = {
-    4 : GetPropertyValueResponse_Value.textValue,
-    5 : GetPropertyValueResponse_Value.numberValue,
-    6 : GetPropertyValueResponse_Value.boolValue,
-    7 : GetPropertyValueResponse_Value.dateValue,
-    8 : GetPropertyValueResponse_Value.dateTimeValue,
-    9 : GetPropertyValueResponse_Value.selectValue,
-    0 : GetPropertyValueResponse_Value.notSet
+  static const $core.Map<$core.int, GetAttachedPropertyValuesResponse_Value_Value> _GetAttachedPropertyValuesResponse_Value_ValueByTag = {
+    6 : GetAttachedPropertyValuesResponse_Value_Value.textValue,
+    7 : GetAttachedPropertyValuesResponse_Value_Value.numberValue,
+    8 : GetAttachedPropertyValuesResponse_Value_Value.boolValue,
+    9 : GetAttachedPropertyValuesResponse_Value_Value.dateValue,
+    10 : GetAttachedPropertyValuesResponse_Value_Value.dateTimeValue,
+    11 : GetAttachedPropertyValuesResponse_Value_Value.selectValue,
+    0 : GetAttachedPropertyValuesResponse_Value_Value.notSet
   };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyValueResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [4, 5, 6, 7, 8, 9])
-    ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'subjectType')
-    ..aOS(3, _omitFieldNames ? '' : 'propertyId')
-    ..aOS(4, _omitFieldNames ? '' : 'textValue')
-    ..a<$core.double>(5, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OF)
-    ..aOB(6, _omitFieldNames ? '' : 'boolValue')
-    ..aOS(7, _omitFieldNames ? '' : 'dateValue')
-    ..aOS(8, _omitFieldNames ? '' : 'dateTimeValue')
-    ..aOS(9, _omitFieldNames ? '' : 'selectValue')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAttachedPropertyValuesResponse.Value', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..oo(0, [6, 7, 8, 9, 10, 11])
+    ..aOS(1, _omitFieldNames ? '' : 'propertyId')
+    ..e<$15.FieldType>(2, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $15.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $15.FieldType.valueOf, enumValues: $15.FieldType.values)
+    ..aOS(3, _omitFieldNames ? '' : 'name')
+    ..aOS(4, _omitFieldNames ? '' : 'description')
+    ..aOB(5, _omitFieldNames ? '' : 'isArchived')
+    ..aOS(6, _omitFieldNames ? '' : 'textValue')
+    ..a<$core.double>(7, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OD)
+    ..aOB(8, _omitFieldNames ? '' : 'boolValue')
+    ..aOM<$15.Date>(9, _omitFieldNames ? '' : 'dateValue', subBuilder: $15.Date.create)
+    ..aOM<$16.Timestamp>(10, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $16.Timestamp.create)
+    ..aOS(11, _omitFieldNames ? '' : 'selectValue')
     ..hasRequiredFields = false
   ;
 
@@ -383,106 +389,172 @@ class GetPropertyValueResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetPropertyValueResponse clone() => GetPropertyValueResponse()..mergeFromMessage(this);
+  GetAttachedPropertyValuesResponse_Value clone() => GetAttachedPropertyValuesResponse_Value()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetPropertyValueResponse copyWith(void Function(GetPropertyValueResponse) updates) => super.copyWith((message) => updates(message as GetPropertyValueResponse)) as GetPropertyValueResponse;
+  GetAttachedPropertyValuesResponse_Value copyWith(void Function(GetAttachedPropertyValuesResponse_Value) updates) => super.copyWith((message) => updates(message as GetAttachedPropertyValuesResponse_Value)) as GetAttachedPropertyValuesResponse_Value;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetPropertyValueResponse create() => GetPropertyValueResponse._();
-  GetPropertyValueResponse createEmptyInstance() => create();
-  static $pb.PbList<GetPropertyValueResponse> createRepeated() => $pb.PbList<GetPropertyValueResponse>();
+  static GetAttachedPropertyValuesResponse_Value create() => GetAttachedPropertyValuesResponse_Value._();
+  GetAttachedPropertyValuesResponse_Value createEmptyInstance() => create();
+  static $pb.PbList<GetAttachedPropertyValuesResponse_Value> createRepeated() => $pb.PbList<GetAttachedPropertyValuesResponse_Value>();
   @$core.pragma('dart2js:noInline')
-  static GetPropertyValueResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPropertyValueResponse>(create);
-  static GetPropertyValueResponse? _defaultInstance;
+  static GetAttachedPropertyValuesResponse_Value getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAttachedPropertyValuesResponse_Value>(create);
+  static GetAttachedPropertyValuesResponse_Value? _defaultInstance;
 
-  GetPropertyValueResponse_Value whichValue() => _GetPropertyValueResponse_ValueByTag[$_whichOneof(0)]!;
+  GetAttachedPropertyValuesResponse_Value_Value whichValue() => _GetAttachedPropertyValuesResponse_Value_ValueByTag[$_whichOneof(0)]!;
   void clearValue() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get propertyId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set propertyId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasPropertyId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearPropertyId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get subjectType => $_getSZ(1);
+  $15.FieldType get fieldType => $_getN(1);
   @$pb.TagNumber(2)
-  set subjectType($core.String v) { $_setString(1, v); }
+  set fieldType($15.FieldType v) { setField(2, v); }
   @$pb.TagNumber(2)
-  $core.bool hasSubjectType() => $_has(1);
+  $core.bool hasFieldType() => $_has(1);
   @$pb.TagNumber(2)
-  void clearSubjectType() => clearField(2);
+  void clearFieldType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get propertyId => $_getSZ(2);
+  $core.String get name => $_getSZ(2);
   @$pb.TagNumber(3)
-  set propertyId($core.String v) { $_setString(2, v); }
+  set name($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasPropertyId() => $_has(2);
+  $core.bool hasName() => $_has(2);
   @$pb.TagNumber(3)
-  void clearPropertyId() => clearField(3);
+  void clearName() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get textValue => $_getSZ(3);
+  $core.String get description => $_getSZ(3);
   @$pb.TagNumber(4)
-  set textValue($core.String v) { $_setString(3, v); }
+  set description($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasTextValue() => $_has(3);
+  $core.bool hasDescription() => $_has(3);
   @$pb.TagNumber(4)
-  void clearTextValue() => clearField(4);
+  void clearDescription() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.double get numberValue => $_getN(4);
+  $core.bool get isArchived => $_getBF(4);
   @$pb.TagNumber(5)
-  set numberValue($core.double v) { $_setFloat(4, v); }
+  set isArchived($core.bool v) { $_setBool(4, v); }
   @$pb.TagNumber(5)
-  $core.bool hasNumberValue() => $_has(4);
+  $core.bool hasIsArchived() => $_has(4);
   @$pb.TagNumber(5)
-  void clearNumberValue() => clearField(5);
+  void clearIsArchived() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.bool get boolValue => $_getBF(5);
+  $core.String get textValue => $_getSZ(5);
   @$pb.TagNumber(6)
-  set boolValue($core.bool v) { $_setBool(5, v); }
+  set textValue($core.String v) { $_setString(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasBoolValue() => $_has(5);
+  $core.bool hasTextValue() => $_has(5);
   @$pb.TagNumber(6)
-  void clearBoolValue() => clearField(6);
+  void clearTextValue() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get dateValue => $_getSZ(6);
+  $core.double get numberValue => $_getN(6);
   @$pb.TagNumber(7)
-  set dateValue($core.String v) { $_setString(6, v); }
+  set numberValue($core.double v) { $_setDouble(6, v); }
   @$pb.TagNumber(7)
-  $core.bool hasDateValue() => $_has(6);
+  $core.bool hasNumberValue() => $_has(6);
   @$pb.TagNumber(7)
-  void clearDateValue() => clearField(7);
+  void clearNumberValue() => clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get dateTimeValue => $_getSZ(7);
+  $core.bool get boolValue => $_getBF(7);
   @$pb.TagNumber(8)
-  set dateTimeValue($core.String v) { $_setString(7, v); }
+  set boolValue($core.bool v) { $_setBool(7, v); }
   @$pb.TagNumber(8)
-  $core.bool hasDateTimeValue() => $_has(7);
+  $core.bool hasBoolValue() => $_has(7);
   @$pb.TagNumber(8)
-  void clearDateTimeValue() => clearField(8);
+  void clearBoolValue() => clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get selectValue => $_getSZ(8);
+  $15.Date get dateValue => $_getN(8);
   @$pb.TagNumber(9)
-  set selectValue($core.String v) { $_setString(8, v); }
+  set dateValue($15.Date v) { setField(9, v); }
   @$pb.TagNumber(9)
-  $core.bool hasSelectValue() => $_has(8);
+  $core.bool hasDateValue() => $_has(8);
   @$pb.TagNumber(9)
-  void clearSelectValue() => clearField(9);
+  void clearDateValue() => clearField(9);
+  @$pb.TagNumber(9)
+  $15.Date ensureDateValue() => $_ensure(8);
+
+  @$pb.TagNumber(10)
+  $16.Timestamp get dateTimeValue => $_getN(9);
+  @$pb.TagNumber(10)
+  set dateTimeValue($16.Timestamp v) { setField(10, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasDateTimeValue() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearDateTimeValue() => clearField(10);
+  @$pb.TagNumber(10)
+  $16.Timestamp ensureDateTimeValue() => $_ensure(9);
+
+  @$pb.TagNumber(11)
+  $core.String get selectValue => $_getSZ(10);
+  @$pb.TagNumber(11)
+  set selectValue($core.String v) { $_setString(10, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasSelectValue() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearSelectValue() => clearField(11);
+}
+
+class GetAttachedPropertyValuesResponse extends $pb.GeneratedMessage {
+  factory GetAttachedPropertyValuesResponse({
+    $core.Iterable<GetAttachedPropertyValuesResponse_Value>? values,
+  }) {
+    final $result = create();
+    if (values != null) {
+      $result.values.addAll(values);
+    }
+    return $result;
+  }
+  GetAttachedPropertyValuesResponse._() : super();
+  factory GetAttachedPropertyValuesResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAttachedPropertyValuesResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAttachedPropertyValuesResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..pc<GetAttachedPropertyValuesResponse_Value>(1, _omitFieldNames ? '' : 'values', $pb.PbFieldType.PM, subBuilder: GetAttachedPropertyValuesResponse_Value.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetAttachedPropertyValuesResponse clone() => GetAttachedPropertyValuesResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetAttachedPropertyValuesResponse copyWith(void Function(GetAttachedPropertyValuesResponse) updates) => super.copyWith((message) => updates(message as GetAttachedPropertyValuesResponse)) as GetAttachedPropertyValuesResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetAttachedPropertyValuesResponse create() => GetAttachedPropertyValuesResponse._();
+  GetAttachedPropertyValuesResponse createEmptyInstance() => create();
+  static $pb.PbList<GetAttachedPropertyValuesResponse> createRepeated() => $pb.PbList<GetAttachedPropertyValuesResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetAttachedPropertyValuesResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAttachedPropertyValuesResponse>(create);
+  static GetAttachedPropertyValuesResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<GetAttachedPropertyValuesResponse_Value> get values => $_getList(0);
 }
 
 

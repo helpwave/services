@@ -115,7 +115,7 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 		// We ignore a failed creation to ensure idempotency.
 		var esErr *esdb.Error
 		if errors.As(err, &esErr) && esErr.IsErrorCode(esdb.ErrorCodeResourceAlreadyExists) {
-			log.Debug().Err(err).Msg("ignoring subscription already exists error")
+			log.Debug().Err(err).Msgf("ignoring subscription %s already exists error", p.subscriptionGroupName)
 		} else {
 			return err
 		}
@@ -128,7 +128,7 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 	}
 	defer stream.Close()
 
-	log.Info().Msg("Start custom projection")
+	log.Info().Msgf("Start custom projection %s", p.subscriptionGroupName)
 
 	for {
 		esdbEvent := stream.Recv()
@@ -136,7 +136,7 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 		select {
 		case <-ctx.Done():
 			// Return when context gets finished
-			log.Info().Msg("Stop custom projection")
+			log.Info().Msgf("Stop custom projection %s", p.subscriptionGroupName)
 			return nil
 		default:
 		}

@@ -6,6 +6,7 @@ package property_repo
 
 import (
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Property struct {
@@ -17,6 +18,18 @@ type Property struct {
 	IsArchived   bool
 	SetID        uuid.NullUUID
 	SelectDataID uuid.NullUUID
+}
+
+type PropertyValue struct {
+	ID            uuid.UUID
+	PropertyID    uuid.UUID
+	SubjectID     uuid.UUID
+	TextValue     *string
+	NumberValue   *float64
+	BoolValue     *bool
+	DateValue     pgtype.Date
+	DateTimeValue pgtype.Timestamp
+	SelectValue   uuid.NullUUID
 }
 
 type PropertyViewFilterAlwaysIncludeItem struct {

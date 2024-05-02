@@ -4,15 +4,17 @@ import (
 	"common"
 	"context"
 	pb "gen/proto/services/property_svc/v1"
-	daprd "github.com/dapr/go-sdk/service/grpc"
-	"github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes/eventstoredb"
 	propertySet "property-svc/internal/property-set/api"
 	propertyValue "property-svc/internal/property-value/api"
+	"property-svc/internal/property-value/projections/property_value_postgres_projection"
 	propertyViews "property-svc/internal/property-view/api"
 	property "property-svc/internal/property/api"
 	"property-svc/internal/property/projections/property_postgres_projection"
+
+	daprd "github.com/dapr/go-sdk/service/grpc"
+	"github.com/rs/zerolog/log"
 )
 
 const ServiceName = "property-svc"
@@ -34,6 +36,14 @@ func main() {
 		propertyPostgresProjection := property_postgres_projection.NewProjection(eventStore, ServiceName)
 		if err := propertyPostgresProjection.Subscribe(ctx); err != nil {
 			log.Err(err).Msg("error during property-postgres projection subscription")
+			cancel()
+		}
+	}()
+
+	go func() {
+		propertyValuePostgresProjection := property_value_postgres_projection.NewProjection(eventStore, ServiceName)
+		if err := propertyValuePostgresProjection.Subscribe(ctx); err != nil {
+			log.Err(err).Msg("error during propertyValue-postgres projection subscription")
 			cancel()
 		}
 	}()

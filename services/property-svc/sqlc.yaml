@@ -32,3 +32,10 @@ sql:
         <<: *repo-go
         package: "task_views_repo"
         out: "repos/task_views_repo"
+  - <<: *repo
+    queries: "./repos/property_value_repo.sql"
+    gen:
+      go:
+        <<: *repo-go
+        package: "property_value_repo"
+        out: "repos/property_value_repo"

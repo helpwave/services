@@ -2,7 +2,7 @@
 // versions:
 //   sqlc v1.26.0
 
-package task_views_repo
+package property_value_repo
 
 import (
 	"github.com/google/uuid"

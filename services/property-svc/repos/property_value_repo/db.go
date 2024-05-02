@@ -2,7 +2,7 @@
 // versions:
 //   sqlc v1.26.0
 
-package bed_repo
+package property_value_repo
 
 import (
 	"context"
