@@ -14,12 +14,13 @@ type AssignTaskCommandHandler func(ctx context.Context, taskID, userID uuid.UUID
 
 func NewAssignTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) AssignTaskCommandHandler {
 	return func(ctx context.Context, taskID, userID uuid.UUID) error {
-		userID, err := common.GetUserID(ctx)
+		requestUserID, err := common.GetUserID(ctx)
 		if err != nil {
 			return err
 		}
 
-		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserAssignTaskPermission(userID, taskID)); err != nil {
+		// TODO: We need to check both, target user and request user!. Right now, we are just checking the request user.
+		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserAssignTaskPermission(requestUserID, taskID)); err != nil {
 			return err
 		}
 
