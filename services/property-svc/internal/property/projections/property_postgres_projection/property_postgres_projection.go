@@ -57,7 +57,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	var payload propertyEventsV1.PropertyCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	// Create Property
@@ -97,7 +97,7 @@ func (p *Projection) onPropertyDescriptionUpdated(ctx context.Context, evt hwes.
 	var payload propertyEventsV1.PropertyDescriptionUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
@@ -118,7 +118,7 @@ func (p *Projection) onPropertySetIDUpdated(ctx context.Context, evt hwes.Event)
 	var payload propertyEventsV1.PropertySetIDUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	setID := uuid.NullUUID{UUID: uuid.Nil, Valid: false}
@@ -148,7 +148,7 @@ func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (
 	var payload propertyEventsV1.PropertySubjectTypeUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	value, found := pb.SubjectType_value[payload.SubjectType]
@@ -187,7 +187,7 @@ func (p *Projection) onFieldTypeUpdated(ctx context.Context, evt hwes.Event) (er
 	var payload propertyEventsV1.PropertyFieldTypeUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	value, found := pb.FieldType_value[payload.FieldType]
@@ -247,7 +247,7 @@ func (p *Projection) onNameUpdated(ctx context.Context, evt hwes.Event) (error, 
 	var payload propertyEventsV1.PropertyNameUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
@@ -304,7 +304,7 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 	var payload propertyEventsV1.FieldTypeDataCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	if payload.FieldTypeData.SelectData != nil {
@@ -360,7 +360,7 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 	var payload propertyEventsV1.FieldTypeDataAllowFreetextUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	property, err := propertyRepo.GetPropertyById(ctx, evt.AggregateID)
@@ -416,7 +416,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 	var payload propertyEventsV1.FieldTypeDataSelectOptionsUpsertedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	property, err := propertyRepo.GetPropertyById(ctx, evt.AggregateID)
@@ -561,7 +561,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsRemoved(ctx context.Context, ev
 	var payload propertyEventsV1.FieldTypeDataSelectOptionsRemovedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	parsedIDs := hwutil.FlatMap(payload.RemovedSelectOptions, func(s string) *uuid.UUID {

@@ -51,7 +51,7 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 	var payload taskEventsV1.TaskCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	taskID, err := uuid.Parse(payload.ID)
@@ -99,7 +99,7 @@ func (p *Projection) onTaskNameUpdated(ctx context.Context, evt hwes.Event) (err
 	var payload taskEventsV1.TaskNameUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, Name: &payload.Name})
@@ -117,7 +117,7 @@ func (p *Projection) onTaskDescriptionUpdated(ctx context.Context, evt hwes.Even
 	var payload taskEventsV1.TaskDescriptionUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, Description: &payload.Description})
@@ -135,7 +135,7 @@ func (p *Projection) onTaskDueAtUpdated(ctx context.Context, evt hwes.Event) (er
 	var payload taskEventsV1.TaskDueAtUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, DueAt: hwdb.TimeToTimestamp(payload.DueAt)})
@@ -157,14 +157,14 @@ func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error,
 		var payload taskEventsV1.TaskAssignedEvent
 		if err := evt.GetJsonData(&payload); err != nil {
 			log.Error().Err(err).Msg("unmarshal failed")
-			return err, esdb.NackActionRetry
+			return err, esdb.NackActionPark
 		}
 		userIDStr = payload.UserID
 	case taskEventsV1.TaskSelfAssigned:
 		var payload taskEventsV1.TaskSelfAssignedEvent
 		if err := evt.GetJsonData(&payload); err != nil {
 			log.Error().Err(err).Msg("unmarshal failed")
-			return err, esdb.NackActionRetry
+			return err, esdb.NackActionPark
 		}
 		userIDStr = payload.UserID
 	}
@@ -189,7 +189,7 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (erro
 	var payload taskEventsV1.TaskUnassignedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err := p.taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{ID: evt.AggregateID, AssignedUserID: uuid.NullUUID{}})
@@ -217,7 +217,7 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (erro
 	var payload taskEventsV1.SubtaskCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	var committerID uuid.UUID
@@ -252,7 +252,7 @@ func (p *Projection) onSubtaskNameUpdated(ctx context.Context, evt hwes.Event) (
 	var payload taskEventsV1.SubtaskCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
@@ -275,7 +275,7 @@ func (p *Projection) onSubtaskCompleted(ctx context.Context, evt hwes.Event) (er
 	var payload taskEventsV1.SubtaskCompletedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
@@ -298,7 +298,7 @@ func (p *Projection) onSubtaskUncompleted(ctx context.Context, evt hwes.Event) (
 	var payload taskEventsV1.SubtaskUncompletedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
@@ -321,7 +321,7 @@ func (p *Projection) onSubtaskDeleted(ctx context.Context, evt hwes.Event) (erro
 	var payload taskEventsV1.SubtaskDeletedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)

@@ -46,7 +46,7 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 	var payload patientEventsV1.PatientCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	patientID, err := uuid.Parse(payload.ID)
@@ -75,7 +75,7 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 	var payload patientEventsV1.BedAssignedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	bedId, err := hwutil.ParseNullUUID(&payload.BedID)
@@ -130,7 +130,7 @@ func (a *Projection) onNotesUpdated(ctx context.Context, evt hwes.Event) (error,
 	var payload patientEventsV1.NotesUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
@@ -152,7 +152,7 @@ func (a *Projection) onHumanReadableIdentifierUpdated(ctx context.Context, evt h
 	var payload patientEventsV1.HumanReadableIdentifierUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
