@@ -2629,7 +2629,6 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.toObject = function(i
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     subjectType: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    fieldType: jspb.Message.getFieldWithDefault(msg, 3, 0),
     name: jspb.Message.getFieldWithDefault(msg, 4, ""),
     description: jspb.Message.getFieldWithDefault(msg, 5, ""),
     isArchived: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
@@ -2678,10 +2677,6 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.deserializeBinaryFrom
     case 2:
       var value = /** @type {!proto.proto.services.property_svc.v1.SubjectType} */ (reader.readEnum());
       msg.setSubjectType(value);
-      break;
-    case 3:
-      var value = /** @type {!proto.proto.services.property_svc.v1.FieldType} */ (reader.readEnum());
-      msg.setFieldType(value);
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
@@ -2744,13 +2739,6 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.serializeBinaryToWrit
   if (f != null) {
     writer.writeEnum(
       2,
-      f
-    );
-  }
-  f = /** @type {!proto.proto.services.property_svc.v1.FieldType} */ (jspb.Message.getField(message, 3));
-  if (f != null) {
-    writer.writeEnum(
-      3,
       f
     );
   }
@@ -3375,42 +3363,6 @@ proto.proto.services.property_svc.v1.UpdatePropertyRequest.prototype.clearSubjec
  */
 proto.proto.services.property_svc.v1.UpdatePropertyRequest.prototype.hasSubjectType = function() {
   return jspb.Message.getField(this, 2) != null;
-};
-
-
-/**
- * optional FieldType field_type = 3;
- * @return {!proto.proto.services.property_svc.v1.FieldType}
- */
-proto.proto.services.property_svc.v1.UpdatePropertyRequest.prototype.getFieldType = function() {
-  return /** @type {!proto.proto.services.property_svc.v1.FieldType} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
-};
-
-
-/**
- * @param {!proto.proto.services.property_svc.v1.FieldType} value
- * @return {!proto.proto.services.property_svc.v1.UpdatePropertyRequest} returns this
- */
-proto.proto.services.property_svc.v1.UpdatePropertyRequest.prototype.setFieldType = function(value) {
-  return jspb.Message.setField(this, 3, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.proto.services.property_svc.v1.UpdatePropertyRequest} returns this
- */
-proto.proto.services.property_svc.v1.UpdatePropertyRequest.prototype.clearFieldType = function() {
-  return jspb.Message.setField(this, 3, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.proto.services.property_svc.v1.UpdatePropertyRequest.prototype.hasFieldType = function() {
-  return jspb.Message.getField(this, 3) != null;
 };
 
 

@@ -41,7 +41,6 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(propertyEventsV1.PropertyDescriptionUpdated, p.onPropertyDescriptionUpdated)
 	p.RegisterEventListener(propertyEventsV1.PropertySetIDUpdated, p.onPropertySetIDUpdated)
 	p.RegisterEventListener(propertyEventsV1.PropertySubjectTypeUpdated, p.onSubjectTypeUpdated)
-	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeUpdated, p.onFieldTypeUpdated)
 	p.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, p.onNameUpdated)
 	p.RegisterEventListener(propertyEventsV1.PropertyArchived, p.onPropertyArchived)
 	p.RegisterEventListener(propertyEventsV1.PropertyRetrieved, p.onPropertyRetrieved)
@@ -163,78 +162,6 @@ func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return err, esdb.NackActionRetry
-	}
-
-	return nil, esdb.NackActionUnknown
-}
-
-func (p *Projection) onFieldTypeUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
-	log := zlog.Ctx(ctx)
-	tx, err := p.db.Begin(ctx)
-	if err != nil {
-		return err, esdb.NackActionRetry
-	}
-	propertyRepo := p.propertyRepo.WithTx(tx)
-
-	defer func() {
-		err := tx.Rollback(ctx)
-		if !errors.Is(err, pgx.ErrTxClosed) {
-			log.Error().Err(err).Msg("rollback failed.")
-		}
-	}()
-
-	var payload propertyEventsV1.PropertyFieldTypeUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
-		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionRetry
-	}
-
-	value, found := pb.FieldType_value[payload.FieldType]
-	if !found {
-		return fmt.Errorf("invalid fieldType: %s", payload.FieldType), esdb.NackActionRetry
-	}
-	fieldType := (pb.FieldType)(value)
-
-	err = propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
-		FieldType: hwutil.PtrTo(int32(fieldType)),
-		ID:        evt.AggregateID,
-	})
-	if err = hwdb.Error(ctx, err); err != nil {
-		return err, esdb.NackActionRetry
-	}
-
-	property, err := propertyRepo.GetPropertyById(ctx, evt.AggregateID)
-	if err = hwdb.Error(ctx, err); err != nil {
-		return err, esdb.NackActionRetry
-	}
-
-	if fieldType != pb.FieldType_FIELD_TYPE_SELECT {
-		err = propertyRepo.DeleteSelectDataByPropertyID(ctx, evt.AggregateID)
-		if err = hwdb.Error(ctx, err); err != nil {
-			return err, esdb.NackActionRetry
-		}
-	} else {
-		// Create
-		if err := hwdb.Error(ctx, err); err != nil {
-			return err, esdb.NackActionRetry
-		}
-		if !property.SelectDataID.Valid {
-			sdID, err := propertyRepo.CreateSelectData(ctx, false)
-			if err := hwdb.Error(ctx, err); err != nil {
-				return err, esdb.NackActionRetry
-			}
-			err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
-				ID:           evt.AggregateID,
-				SelectDataID: uuid.NullUUID{UUID: sdID, Valid: true},
-			})
-			if err := hwdb.Error(ctx, err); err != nil {
-				return err, esdb.NackActionRetry
-			}
-		}
-	}
-
-	if err := tx.Commit(ctx); err != nil {
 		return err, esdb.NackActionRetry
 	}
 
