@@ -51,7 +51,7 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 
 	patientID, err := uuid.Parse(payload.ID)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err = a.patientRepo.CreatePatient(ctx, patient_repo.CreatePatientParams{
@@ -80,7 +80,7 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 
 	bedId, err := hwutil.ParseNullUUID(&payload.BedID)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err = a.patientRepo.UpdatePatientBedId(ctx, patient_repo.UpdatePatientBedIdParams{

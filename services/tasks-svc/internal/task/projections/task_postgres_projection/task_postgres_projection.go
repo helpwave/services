@@ -56,17 +56,17 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 
 	taskID, err := uuid.Parse(payload.ID)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	patientID, err := uuid.Parse(payload.PatientID)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	value, found := pb.TaskStatus_value[payload.Status]
 	if !found {
-		return fmt.Errorf("invalid taskStatus: %s", payload.Status), esdb.NackActionRetry
+		return fmt.Errorf("invalid taskStatus: %s", payload.Status), esdb.NackActionPark
 	}
 	status := (pb.TaskStatus)(value)
 
@@ -74,7 +74,7 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 	if evt.CommitterUserID != nil {
 		committerID = *evt.CommitterUserID
 	} else {
-		return fmt.Errorf("commiterId is not set"), esdb.NackActionRetry
+		return fmt.Errorf("commiterId is not set"), esdb.NackActionPark
 	}
 
 	// Add to db
@@ -171,7 +171,7 @@ func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error,
 
 	userID, err := hwutil.ParseNullUUID(&userIDStr)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err = p.taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{ID: evt.AggregateID, AssignedUserID: userID})
@@ -224,12 +224,12 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (erro
 	if evt.CommitterUserID != nil {
 		committerID = *evt.CommitterUserID
 	} else {
-		return fmt.Errorf("committerID not set"), esdb.NackActionRetry
+		return fmt.Errorf("committerID not set"), esdb.NackActionPark
 	}
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err = p.taskRepo.CreateSubtask(ctx, task_repo.CreateSubtaskParams{
@@ -257,7 +257,7 @@ func (p *Projection) onSubtaskNameUpdated(ctx context.Context, evt hwes.Event) (
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err = p.taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{ID: subtaskID, Name: &payload.Name})
@@ -280,7 +280,7 @@ func (p *Projection) onSubtaskCompleted(ctx context.Context, evt hwes.Event) (er
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err = p.taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{ID: subtaskID, Done: hwutil.PtrTo(true)})
@@ -303,7 +303,7 @@ func (p *Projection) onSubtaskUncompleted(ctx context.Context, evt hwes.Event) (
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err = p.taskRepo.UpdateSubtask(ctx, task_repo.UpdateSubtaskParams{ID: subtaskID, Done: hwutil.PtrTo(false)})
@@ -326,7 +326,7 @@ func (p *Projection) onSubtaskDeleted(ctx context.Context, evt hwes.Event) (erro
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	err = p.taskRepo.DeleteSubtask(ctx, subtaskID)

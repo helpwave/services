@@ -53,12 +53,12 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 
 	propertyID, err := uuid.Parse(payload.PropertyID)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	subjectID, err := uuid.Parse(payload.SubjectID)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	// GetProperty for the fieldType
@@ -84,42 +84,36 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 		case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
 			val, ok := payload.Value.(float64)
 			if !ok {
-				log.Error().Msg("could not assert number.")
-				return nil, esdb.NackActionPark
+				return fmt.Errorf("could not assert number"), esdb.NackActionPark
 			}
 			createPropertyValueParams.NumberValue = &val
 		case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
 			val, ok := payload.Value.(bool)
 			if !ok {
-				log.Error().Msg("could not assert bool.")
-				return nil, esdb.NackActionPark
+				return fmt.Errorf("could not assert bool"), esdb.NackActionPark
 			}
 			createPropertyValueParams.BoolValue = &val
 		case fieldType == pb.FieldType_FIELD_TYPE_DATE:
 			// TBD: Is this the right timezone?
 			val, err := hwutil.AssertDate(payload.Value, time.UTC)
 			if err != nil {
-				log.Error().Err(err)
-				return nil, esdb.NackActionPark
+				return err, esdb.NackActionPark
 			}
 			createPropertyValueParams.DateValue = hwdb.TimeToDate(*val)
 		case fieldType == pb.FieldType_FIELD_TYPE_DATE_TIME:
 			val, err := hwutil.AssertTimestampToTime(payload.Value)
 			if err != nil {
-				log.Error().Err(err)
-				return nil, esdb.NackActionPark
+				return err, esdb.NackActionPark
 			}
 			createPropertyValueParams.DateTimeValue = hwdb.TimeToTimestamp(*val)
 		case fieldType == pb.FieldType_FIELD_TYPE_SELECT:
 			val, ok := payload.Value.(string)
 			if !ok {
-				log.Error().Msg("could not assert string.")
-				return nil, esdb.NackActionPark
+				return fmt.Errorf("could not assert string"), esdb.NackActionPark
 			}
 			id, err := hwutil.ParseNullUUID(&val)
 			if err != nil {
-				log.Error().Err(err)
-				return nil, esdb.NackActionPark
+				return err, esdb.NackActionPark
 			}
 			createPropertyValueParams.SelectValue = id
 		}
@@ -148,7 +142,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 		return fmt.Errorf("propertyValue with id %s not found", evt.AggregateID), esdb.NackActionRetry
 	}
 	if err := hwdb.Error(ctx, err); err != nil {
-		return nil, esdb.NackActionRetry
+		return err, esdb.NackActionRetry
 	}
 
 	property, err := hwdb.Optional(p.propertyRepo.GetPropertyById)(ctx, propertyValue.PropertyID)
@@ -156,7 +150,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 		return fmt.Errorf("property with id %s not found for propertyValue", propertyValue.PropertyID.String()), esdb.NackActionPark
 	}
 	if err := hwdb.Error(ctx, err); err != nil {
-		return nil, esdb.NackActionRetry
+		return err, esdb.NackActionRetry
 	}
 
 	fieldType := (pb.FieldType)(property.FieldType)
@@ -172,40 +166,34 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 		case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
 			val, ok := payload.Value.(float64)
 			if !ok {
-				log.Error().Msg("could not assert number.")
-				return nil, esdb.NackActionPark
+				return fmt.Errorf("could not assert number"), esdb.NackActionPark
 			}
 			updatePropertyValueParams.NumberValue = &val
 		case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
 			val, ok := payload.Value.(bool)
 			if !ok {
-				log.Error().Msg("could not assert bool.")
-				return nil, esdb.NackActionPark
+				return fmt.Errorf("could not assert bool"), esdb.NackActionPark
 			}
 			updatePropertyValueParams.BoolValue = &val
 		case fieldType == pb.FieldType_FIELD_TYPE_DATE:
 			val, err := hwutil.AssertDate(payload.Value, time.UTC)
 			if err != nil {
-				log.Error().Err(err)
-				return nil, esdb.NackActionPark
+				return err, esdb.NackActionPark
 			}
 			updatePropertyValueParams.DateValue = hwdb.TimeToDate(*val)
 		case fieldType == pb.FieldType_FIELD_TYPE_DATE_TIME:
 			val, err := hwutil.AssertTimestampToTime(payload.Value)
 			if err != nil {
-				log.Error().Err(err)
-				return nil, esdb.NackActionPark
+				return err, esdb.NackActionPark
 			}
 			updatePropertyValueParams.DateTimeValue = hwdb.TimeToTimestamp(*val)
 		case fieldType == pb.FieldType_FIELD_TYPE_SELECT:
 			val, ok := payload.Value.(string)
 			if !ok {
-				log.Error().Msg("could not assert string.")
-				return nil, esdb.NackActionPark
+				return err, esdb.NackActionPark
 			}
 			parsedID, err := hwutil.ParseNullUUID(&val)
 			if err != nil {
-				log.Error().Err(err)
 				return err, esdb.NackActionPark
 			}
 			updatePropertyValueParams.SelectValue = parsedID
@@ -214,7 +202,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 		// Delete PropertyValue
 		err := p.propertyValueRepo.DeletePropertyValue(ctx, evt.AggregateID)
 		if err := hwdb.Error(ctx, err); err != nil {
-			return nil, esdb.NackActionRetry
+			return err, esdb.NackActionRetry
 		}
 	}
 

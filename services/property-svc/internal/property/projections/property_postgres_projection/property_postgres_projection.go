@@ -63,7 +63,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	// Create Property
 	propertyID, err := uuid.Parse(payload.ID)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, esdb.NackActionPark
 	}
 
 	value, found := pb.SubjectType_value[payload.SubjectType]
@@ -124,7 +124,7 @@ func (p *Projection) onPropertySetIDUpdated(ctx context.Context, evt hwes.Event)
 	setID := uuid.NullUUID{UUID: uuid.Nil, Valid: false}
 	if payload.SetID != "" {
 		if parsedID, err := hwutil.ParseNullUUID(&payload.SetID); err != nil {
-			return err, esdb.NackActionRetry
+			return err, esdb.NackActionPark
 		} else {
 			setID = parsedID
 		}
@@ -153,7 +153,7 @@ func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (
 
 	value, found := pb.SubjectType_value[payload.SubjectType]
 	if !found {
-		return fmt.Errorf("invalid fieldType: %s", payload.SubjectType), esdb.NackActionRetry
+		return fmt.Errorf("invalid fieldType: %s", payload.SubjectType), esdb.NackActionPark
 	}
 	subjectType := (pb.SubjectType)(value)
 
@@ -192,7 +192,7 @@ func (p *Projection) onFieldTypeUpdated(ctx context.Context, evt hwes.Event) (er
 
 	value, found := pb.FieldType_value[payload.FieldType]
 	if !found {
-		return fmt.Errorf("invalid fieldType: %s", payload.FieldType), esdb.NackActionRetry
+		return fmt.Errorf("invalid fieldType: %s", payload.FieldType), esdb.NackActionPark
 	}
 	fieldType := (pb.FieldType)(value)
 

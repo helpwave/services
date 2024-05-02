@@ -10,9 +10,6 @@ import (
 	"telemetry"
 )
 
-// EventStoreDBInternalEventPrefix https://developers.eventstore.com/server/v23.10/streams.html#reserved-names
-const EventStoreDBInternalEventPrefix = "$"
-
 type eventHandler func(ctx context.Context, evt hwes.Event) (error, esdb.NackAction)
 
 // CustomProjection can be used to develop own projections
@@ -195,6 +192,7 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 		return nil
 	}
 
+	// TBD: do we really want to ack all events if err == nil?
 	log.Debug().Dict("event", event.GetZerologDict()).Msg("ack event")
 	err = stream.Ack(esdbEvent.EventAppeared.Event)
 	if err != nil {
