@@ -9,10 +9,10 @@ import (
 	"property-svc/internal/property/models"
 )
 
-type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) error
+type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) error
 
 func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, fieldType *pb.FieldType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) error {
+	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) error {
 		a, err := aggregate.LoadPropertyAggregate(ctx, as, propertyID)
 		if err != nil {
 			return err
@@ -20,12 +20,6 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyComma
 
 		if subjectType != nil {
 			if err := a.UpdateSubjectType(ctx, *subjectType); err != nil {
-				return err
-			}
-		}
-
-		if fieldType != nil {
-			if err := a.UpdateFieldType(ctx, *fieldType); err != nil {
 				return err
 			}
 		}

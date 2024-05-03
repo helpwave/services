@@ -44,7 +44,6 @@ func (a *PropertyAggregate) initEventListeners() {
 	a.RegisterEventListener(propertyEventsV1.PropertyDescriptionUpdated, a.onDescriptionUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertySetIDUpdated, a.onSetIDUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertySubjectTypeUpdated, a.onSubjectTypeUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeUpdated, a.onFieldTypeUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, a.onNameUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataCreated, a.onFieldTypeDataCreated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, a.onAllowFreetextUpdated)
@@ -134,30 +133,6 @@ func (a *PropertyAggregate) onSubjectTypeUpdated(evt hwes.Event) error {
 	subjectType := (pb.SubjectType)(value)
 
 	a.Property.SubjectType = subjectType
-	return nil
-}
-
-func (a *PropertyAggregate) onFieldTypeUpdated(evt hwes.Event) error {
-	var payload propertyEventsV1.PropertyFieldTypeUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
-		return err
-	}
-
-	value, found := pb.FieldType_value[payload.FieldType]
-	if !found {
-		return fmt.Errorf("invalid fieldType: %s", payload.FieldType)
-	}
-	fieldType := (pb.FieldType)(value)
-
-	// removes the selectData if the fieldType changes to something else than field_type_select
-	// adds selectData if fieldType changes to field_type_select and selectData is not already set
-	if fieldType != pb.FieldType_FIELD_TYPE_SELECT {
-		a.Property.FieldTypeData.SelectData = nil
-	} else if a.Property.FieldTypeData.SelectData == nil {
-		a.Property.FieldTypeData.SelectData = &models.SelectData{}
-	}
-
-	a.Property.FieldType = fieldType
 	return nil
 }
 

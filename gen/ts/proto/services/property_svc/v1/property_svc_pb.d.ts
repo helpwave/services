@@ -352,11 +352,6 @@ export class UpdatePropertyRequest extends jspb.Message {
   hasSubjectType(): boolean;
   clearSubjectType(): UpdatePropertyRequest;
 
-  getFieldType(): proto_services_property_svc_v1_types_pb.FieldType;
-  setFieldType(value: proto_services_property_svc_v1_types_pb.FieldType): UpdatePropertyRequest;
-  hasFieldType(): boolean;
-  clearFieldType(): UpdatePropertyRequest;
-
   getName(): string;
   setName(value: string): UpdatePropertyRequest;
   hasName(): boolean;
@@ -396,7 +391,6 @@ export namespace UpdatePropertyRequest {
   export type AsObject = {
     id: string,
     subjectType?: proto_services_property_svc_v1_types_pb.SubjectType,
-    fieldType?: proto_services_property_svc_v1_types_pb.FieldType,
     name?: string,
     description?: string,
     isArchived?: boolean,
@@ -502,11 +496,6 @@ export namespace UpdatePropertyRequest {
   export enum SubjectTypeCase { 
     _SUBJECT_TYPE_NOT_SET = 0,
     SUBJECT_TYPE = 2,
-  }
-
-  export enum FieldTypeCase { 
-    _FIELD_TYPE_NOT_SET = 0,
-    FIELD_TYPE = 3,
   }
 
   export enum NameCase { 

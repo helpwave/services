@@ -951,7 +951,6 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
   factory UpdatePropertyRequest({
     $core.String? id,
     $15.SubjectType? subjectType,
-    $15.FieldType? fieldType,
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
@@ -964,9 +963,6 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
     }
     if (subjectType != null) {
       $result.subjectType = subjectType;
-    }
-    if (fieldType != null) {
-      $result.fieldType = fieldType;
     }
     if (name != null) {
       $result.name = name;
@@ -997,7 +993,6 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
     ..oo(0, [10])
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..e<$15.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $15.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $15.SubjectType.valueOf, enumValues: $15.SubjectType.values)
-    ..e<$15.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $15.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $15.FieldType.valueOf, enumValues: $15.FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
@@ -1048,62 +1043,53 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearSubjectType() => clearField(2);
 
-  @$pb.TagNumber(3)
-  $15.FieldType get fieldType => $_getN(2);
-  @$pb.TagNumber(3)
-  set fieldType($15.FieldType v) { setField(3, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasFieldType() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearFieldType() => clearField(3);
-
   @$pb.TagNumber(4)
-  $core.String get name => $_getSZ(3);
+  $core.String get name => $_getSZ(2);
   @$pb.TagNumber(4)
-  set name($core.String v) { $_setString(3, v); }
+  set name($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(4)
-  $core.bool hasName() => $_has(3);
+  $core.bool hasName() => $_has(2);
   @$pb.TagNumber(4)
   void clearName() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get description => $_getSZ(4);
+  $core.String get description => $_getSZ(3);
   @$pb.TagNumber(5)
-  set description($core.String v) { $_setString(4, v); }
+  set description($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(5)
-  $core.bool hasDescription() => $_has(4);
+  $core.bool hasDescription() => $_has(3);
   @$pb.TagNumber(5)
   void clearDescription() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.bool get isArchived => $_getBF(5);
+  $core.bool get isArchived => $_getBF(4);
   @$pb.TagNumber(6)
-  set isArchived($core.bool v) { $_setBool(5, v); }
+  set isArchived($core.bool v) { $_setBool(4, v); }
   @$pb.TagNumber(6)
-  $core.bool hasIsArchived() => $_has(5);
+  $core.bool hasIsArchived() => $_has(4);
   @$pb.TagNumber(6)
   void clearIsArchived() => clearField(6);
 
   /// ID of set this Property should belong to
   @$pb.TagNumber(8)
-  $core.String get setId => $_getSZ(6);
+  $core.String get setId => $_getSZ(5);
   @$pb.TagNumber(8)
-  set setId($core.String v) { $_setString(6, v); }
+  set setId($core.String v) { $_setString(5, v); }
   @$pb.TagNumber(8)
-  $core.bool hasSetId() => $_has(6);
+  $core.bool hasSetId() => $_has(5);
   @$pb.TagNumber(8)
   void clearSetId() => clearField(8);
 
   @$pb.TagNumber(10)
-  UpdatePropertyRequest_SelectData get selectData => $_getN(7);
+  UpdatePropertyRequest_SelectData get selectData => $_getN(6);
   @$pb.TagNumber(10)
   set selectData(UpdatePropertyRequest_SelectData v) { setField(10, v); }
   @$pb.TagNumber(10)
-  $core.bool hasSelectData() => $_has(7);
+  $core.bool hasSelectData() => $_has(6);
   @$pb.TagNumber(10)
   void clearSelectData() => clearField(10);
   @$pb.TagNumber(10)
-  UpdatePropertyRequest_SelectData ensureSelectData() => $_ensure(7);
+  UpdatePropertyRequest_SelectData ensureSelectData() => $_ensure(6);
 }
 
 class UpdatePropertyResponse extends $pb.GeneratedMessage {
