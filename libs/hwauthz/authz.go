@@ -4,6 +4,7 @@ import (
 	"common"
 	"common/locale"
 	"context"
+	"errors"
 	"fmt"
 	"go.opentelemetry.io/otel/attribute"
 	"golang.org/x/sync/errgroup"
@@ -143,7 +144,20 @@ func CheckGrpcWrapper(ctx context.Context, authz AuthZ, permissions ...Permissio
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.CheckGrpcWrapper")
 	defer span.End()
 
-	hasPermission, permission, err := CheckMany(ctx, authz, permissions...)
+	var hasPermission bool
+	var permission *Permission
+	var err error
+
+	if len(permissions) > 1 {
+		// Distribute many auth.Check() via CheckMany()
+		hasPermission, permission, err = CheckMany(ctx, authz, permissions...)
+	} else if len(permissions) == 1 {
+		// Fast path. Directly call auth.Check() for one permission
+		permission = &permissions[0]
+		hasPermission, err = authz.Check(ctx, *permission)
+	} else {
+		return errors.New("you need to pass one or many permissions")
+	}
 
 	if err != nil {
 		return err

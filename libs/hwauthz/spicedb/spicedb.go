@@ -103,7 +103,7 @@ func (s *SpiceDBAuthZ) Write(ctx context.Context, relations ...hwauthz.Relation)
 		Updates: hwutil.Map(relations, func(relation hwauthz.Relation) *v1.RelationshipUpdate {
 			telemetry.SetSpanAttributes(ctx, relation.ToSpanAttributeKeyValue()...)
 			return &v1.RelationshipUpdate{
-				Operation:    v1.RelationshipUpdate_OPERATION_TOUCH, // TOUCH to be idempotent?
+				Operation:    v1.RelationshipUpdate_OPERATION_TOUCH, // TODO: TOUCH to be idempotent?
 				Relationship: relationToSpiceDBRelation(relation),
 			}
 		}),

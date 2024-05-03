@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwauthz"
@@ -14,8 +15,11 @@ type GetTaskByIDQueryHandler func(ctx context.Context, taskID uuid.UUID) (*model
 
 func NewGetTaskByIDQueryHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) GetTaskByIDQueryHandler {
 	return func(ctx context.Context, taskID uuid.UUID) (*models.Task, error) {
-		// TODO: Use context
-		userID := uuid.MustParse("18159713-5d4e-4ad5-94ad-fbb6bb147984")
+		userID, err := common.GetUserID(ctx)
+		if err != nil {
+			return nil, err
+		}
+
 		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserViewTaskPermission(userID, taskID)); err != nil {
 			return nil, err
 		}

@@ -1,8 +1,8 @@
 package spicedb
 
 import (
-	"common"
 	"context"
+	"errors"
 	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
@@ -31,6 +31,7 @@ func NewSpiceDBProjection(es *esdb.Client, authz hwauthz.AuthZ, serviceName stri
 
 func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(taskEventsV1.TaskCreated, p.onTaskCreated)
+	p.RegisterEventListener(taskEventsV1.TaskAssigned, p.onTaskAssigned)
 	p.RegisterEventListener(taskEventsV1.TaskUnassigned, p.onTaskUnassigned)
 }
 
@@ -40,26 +41,45 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 		return err, esdb.NackActionRetry
 	}
 
+	committerID := evt.CommitterUserID
+	if committerID == nil {
+		return errors.New("no committerID found"), esdb.NackActionRetry
+	}
+
 	taskID, err := uuid.Parse(payload.ID)
 	if err != nil {
-		return err, esdb.NackActionPark
+		return err, esdb.NackActionRetry
 	}
 
 	patientID, err := uuid.Parse(payload.PatientID)
 	if err != nil {
-		return err, esdb.NackActionPark
+		return err, esdb.NackActionRetry
 	}
 
-	userID, err := uuid.Parse("18159713-5d4e-4ad5-94ad-fbb6bb147984")
-	if err != nil {
-		return err, esdb.NackActionPark
-	}
-
-	if _, err = p.authz.Write(ctx,
-		hwauthz.NewRelation("task", taskID.String(), "assignee", "user", userID.String()),
+	if _, err := p.authz.Write(ctx,
+		hwauthz.NewRelation("task", taskID.String(), "assignee", "user", committerID.String()),
 		hwauthz.NewRelation("task", taskID.String(), "patient", "patient", patientID.String()),
 	); err != nil {
-		// Retry on failure
+		return err, esdb.NackActionRetry
+	}
+
+	return nil, esdb.NackActionUnknown
+}
+
+func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+	var payload eventsV1.TaskAssignedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	userID, err := uuid.Parse(payload.UserID)
+	if err != nil {
+		return err, esdb.NackActionRetry
+	}
+
+	if _, err := p.authz.Write(ctx,
+		hwauthz.NewRelation("task", evt.AggregateID.String(), "assignee", "user", userID.String()),
+	); err != nil {
 		return nil, esdb.NackActionRetry
 	}
 
@@ -72,17 +92,14 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (erro
 		return err, esdb.NackActionRetry
 	}
 
-	taskID := evt.AggregateID
-
-	userID, err := common.GetUserID(ctx)
+	userID, err := uuid.Parse(payload.UserID)
 	if err != nil {
 		return err, esdb.NackActionPark
 	}
 
-	if _, err = p.authz.Write(ctx,
-		hwauthz.NewRelation("task", taskID.String(), "assignee", "user", userID.String()),
+	if _, err = p.authz.Delete(ctx,
+		hwauthz.NewRelation("task", evt.AggregateID.String(), "assignee", "user", userID.String()),
 	); err != nil {
-		// Retry on failure
 		return nil, esdb.NackActionRetry
 	}
 

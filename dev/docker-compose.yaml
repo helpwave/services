@@ -30,10 +30,17 @@ services:
       - "2113:2113"
 
   spicedb:
-    image: authzed/spicedb:v1.29.1
+    image: authzed/spicedb:v1.31.0
     ports:
       - "50051:50051"
-    command: serve --grpc-preshared-key "helpwave"
+    command: [
+      "serve",
+      "--grpc-preshared-key", "helpwave",
+      "--otel-endpoint", "jaeger:4317",
+      "--otel-insecure",
+      "--otel-sample-ratio", "1",
+      "--otel-provider", "otlpgrpc"
+    ]
 
   redis:
     image: redis:6
@@ -99,7 +106,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '5'
+        TAG: '6'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -135,7 +142,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '5'
+        TAG: '6'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
