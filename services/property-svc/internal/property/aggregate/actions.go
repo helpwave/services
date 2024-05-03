@@ -53,14 +53,6 @@ func (a *PropertyAggregate) UpdateSubjectType(ctx context.Context, subjectType p
 	return a.Apply(event)
 }
 
-func (a *PropertyAggregate) UpdateFieldType(ctx context.Context, fieldType pb.FieldType) error {
-	event, err := propertyEventsV1.NewPropertyFieldTypeUpdatedEvent(ctx, a, fieldType)
-	if err != nil {
-		return err
-	}
-	return a.Apply(event)
-}
-
 func (a *PropertyAggregate) UpdateName(ctx context.Context, name string) error {
 	event, err := propertyEventsV1.NewPropertyNameUpdatedEvent(ctx, a, name)
 	if err != nil {
