@@ -40,18 +40,18 @@ func (p *Projection) initEventListeners() {
 }
 
 // Event handlers
-func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
 	var payload patientEventsV1.PatientCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionPark
+		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	patientID, err := uuid.Parse(payload.ID)
 	if err != nil {
-		return err, esdb.NackActionPark
+		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	err = a.patientRepo.CreatePatient(ctx, patient_repo.CreatePatientParams{
@@ -63,24 +63,24 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
-	return nil, esdb.NackActionUnknown
+	return nil, nil
 }
 
-func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
 	var payload patientEventsV1.BedAssignedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionPark
+		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	bedId, err := hwutil.ParseNullUUID(&payload.BedID)
 	if err != nil {
-		return err, esdb.NackActionPark
+		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	err = a.patientRepo.UpdatePatientBedId(ctx, patient_repo.UpdatePatientBedIdParams{
@@ -90,13 +90,13 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
-	return nil, esdb.NackActionUnknown
+	return nil, nil
 }
 
-func (a *Projection) onBedUnassigned(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+func (a *Projection) onBedUnassigned(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	err := a.patientRepo.UpdatePatientBedId(ctx, patient_repo.UpdatePatientBedIdParams{
 		ID:        evt.AggregateID,
 		BedID:     uuid.NullUUID{},
@@ -104,13 +104,13 @@ func (a *Projection) onBedUnassigned(ctx context.Context, evt hwes.Event) (error
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return nil, esdb.NackActionRetry
+		return nil, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
-	return nil, esdb.NackActionUnknown
+	return nil, nil
 }
 
-func (a *Projection) onPatientDischarged(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+func (a *Projection) onPatientDischarged(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:           evt.AggregateID,
 		IsDischarged: hwutil.PtrTo(int32(1)),
@@ -118,19 +118,19 @@ func (a *Projection) onPatientDischarged(ctx context.Context, evt hwes.Event) (e
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
-	return nil, esdb.NackActionUnknown
+	return nil, nil
 }
 
-func (a *Projection) onNotesUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+func (a *Projection) onNotesUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
 	var payload patientEventsV1.NotesUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionPark
+		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
@@ -140,19 +140,19 @@ func (a *Projection) onNotesUpdated(ctx context.Context, evt hwes.Event) (error,
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
-	return nil, esdb.NackActionUnknown
+	return nil, nil
 }
 
-func (a *Projection) onHumanReadableIdentifierUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+func (a *Projection) onHumanReadableIdentifierUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
 	var payload patientEventsV1.HumanReadableIdentifierUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionPark
+		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
@@ -162,13 +162,13 @@ func (a *Projection) onHumanReadableIdentifierUpdated(ctx context.Context, evt h
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
-	return nil, esdb.NackActionUnknown
+	return nil, nil
 }
 
-func (a *Projection) onPatientReadmitted(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+func (a *Projection) onPatientReadmitted(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:           evt.AggregateID,
 		IsDischarged: hwutil.PtrTo(int32(0)),
@@ -176,8 +176,8 @@ func (a *Projection) onPatientReadmitted(ctx context.Context, evt hwes.Event) (e
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
-	return nil, esdb.NackActionUnknown
+	return nil, nil
 }
