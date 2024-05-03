@@ -195,14 +195,18 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 		return nil
 	}
 
-	// nack event
+	var reason string
+	if err != nil {
+		log.Error().Dict("event", event.GetZerologDict()).Err(err).Msg("error during processing of event")
+		reason = err.Error()
+	}
 	if nackAction == nil {
+		// set "default" nackAction to unknown
 		nackAction = hwutil.PtrTo(esdb.NackActionUnknown)
 	}
-	log.Error().Dict("event", event.GetZerologDict()).Err(err).Msg("error during processing of event")
 
 	log.Warn().Dict("event", event.GetZerologDict()).Msg("nack event")
-	if err := stream.Nack(err.Error(), *nackAction, esdbEvent.EventAppeared.Event); err != nil {
+	if err := stream.Nack(reason, *nackAction, esdbEvent.EventAppeared.Event); err != nil {
 		log.Error().Dict("event", event.GetZerologDict()).Err(err).Msg("error during nack of event")
 		return nil
 	}
