@@ -7,12 +7,14 @@ import (
 	"hwdb"
 	"hwes/eventstoredb"
 	"tasks-svc/internal/patient/projections/patient_postgres_projection"
+	"tasks-svc/internal/task/projections/spicedb"
 	"tasks-svc/internal/task/projections/task_postgres_projection"
 	"tasks-svc/internal/tracking"
 	"time"
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
+	hwspicedb "hwauthz/spicedb"
 	patient "tasks-svc/internal/patient/api"
 	task "tasks-svc/internal/task/api"
 )
@@ -32,8 +34,19 @@ func main() {
 
 	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
 
+	spiceDb := hwspicedb.SetupSpiceDbByEnv()
+	authz := hwspicedb.NewSpiceDBAuthZ(spiceDb)
+
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
+
+	go func() {
+		spicedbProjection := spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName)
+		if err := spicedbProjection.Subscribe(ctx); err != nil {
+			log.Err(err).Msg("error during spicedb subscription")
+			cancel()
+		}
+	}()
 
 	go func() {
 		postgresTaskProjection := task_postgres_projection.NewProjection(eventStore, ServiceName)
@@ -54,7 +67,7 @@ func main() {
 	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
-		pb.RegisterTaskServiceServer(grpcServer, task.NewTaskGrpcService(aggregateStore))
+		pb.RegisterTaskServiceServer(grpcServer, task.NewTaskGrpcService(aggregateStore, authz))
 		pb.RegisterPatientServiceServer(grpcServer, patient.NewPatientGrpcService(aggregateStore))
 	})
 

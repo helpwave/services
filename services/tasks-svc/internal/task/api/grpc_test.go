@@ -7,6 +7,7 @@ import (
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
+	hwauthz_test "hwauthz/test"
 	hwes_test "hwes/test"
 	"hwutil"
 	"tasks-svc/internal/task/api"
@@ -15,7 +16,8 @@ import (
 
 func server(ctx context.Context) (pb.TaskServiceClient, func()) {
 	aggregateStore := hwes_test.NewAggregateStore()
-	taskGrpcService := api.NewTaskGrpcService(aggregateStore)
+	authz := hwauthz_test.NewTrueAuthZ()
+	taskGrpcService := api.NewTaskGrpcService(aggregateStore, authz)
 
 	common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 

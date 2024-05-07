@@ -47,3 +47,12 @@ func RequiredError(ctx context.Context) hwlocale.Locale {
 		},
 	}
 }
+
+func PermissionDeniedError(ctx context.Context) hwlocale.Locale {
+	return hwlocale.Locale{
+		Bundle: lazy.Bundle(ctx),
+		Config: &i18n.LocalizeConfig{
+			MessageID: "PermissionDenied",
+		},
+	}
+}
