@@ -5,6 +5,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
+	"reflect"
 	"strconv"
 )
 
@@ -102,7 +103,31 @@ func PtrTo[T any](v T) *T {
 	return &v
 }
 
+// JSONAble MUST be implemented on pointer-level:
+//
+//	func (s *S) ToJSON() ([]byte, error) { ...}
 type JSONAble interface {
 	ToJSON() ([]byte, error)
 	FromJSON([]byte) error
+}
+
+var jsonableType = reflect.TypeOf(new(JSONAble)).Elem()
+
+func ToJSONAble(data interface{}) (jsonable JSONAble, ok bool) {
+	// checks if a pointer to data implements JSONAble
+	// we cant just check if data.(JSONAble) is ok
+	// Why? Well, JSONAble must pretty much always be implemented on pointer-level
+	// But we get the "raw" value, which does not implement JSONAble!
+	// Instead, we must wrap a pointer around it.
+
+	dataType := reflect.TypeOf(data)
+	dataTypePtr := reflect.PointerTo(dataType)
+	isJsonable := dataTypePtr.Implements(jsonableType)
+	if isJsonable {
+		// jsonable := reflect.New(dataType).Interface().(hwutil.JSONAble) // TODO: remove if it work
+		jsonable = reflect.ValueOf(data).Interface().(JSONAble)
+		return jsonable, true
+	} else {
+		return nil, false
+	}
 }

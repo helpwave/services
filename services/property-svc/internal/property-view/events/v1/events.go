@@ -22,6 +22,7 @@ type PropertyRuleCreatedEvent struct {
 
 func (m *PropertyRuleCreatedEvent) ToJSON() ([]byte, error) {
 	inter := structs.Map(m.PropertyViewRule)
+	// inter["matchers"] = structs.Map(m.PropertyViewRule.Matchers) // TODO: needed?
 	return json.Marshal(inter)
 }
 
