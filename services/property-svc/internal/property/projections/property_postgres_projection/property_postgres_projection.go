@@ -417,6 +417,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 		} else {
 			if selOpt.Name == nil {
 				log.Error().Msg("selectOption name has to be set on create")
+				// existsSelectOptions gets modified by a database result. Thats why we are retrying here.
 				return nil, hwutil.PtrTo(esdb.NackActionRetry)
 			}
 			newSelectOptions = append(newSelectOptions, property_repo.InsertSelectOptionsBatchParams{
