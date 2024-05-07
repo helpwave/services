@@ -63,7 +63,7 @@ ENV HOME="/home/${UNAME}"
 # install air
 #  https://github.com/cosmtrek/air
 # renovate: datasource=github-releases depName=cosmtrek/air
-ENV AIR_VERSION=1.51.0
+ENV AIR_VERSION=1.52.0
 RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v${AIR_VERSION}
 
 # install dapr-cli
@@ -116,7 +116,7 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} 
 # install golangci-lint, the linter we also use in the CI
 #  https://golangci-lint.run/
 # renovate: datasource=github-releases depName=golangci/golangci-lint
-ENV GOLANGCI_LINT_VERSION=1.57.2
+ENV GOLANGCI_LINT_VERSION=1.58.0
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
 	| sh -s -- -b $(go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
 
