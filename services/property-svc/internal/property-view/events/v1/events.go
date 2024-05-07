@@ -22,11 +22,14 @@ type PropertyRuleCreatedEvent struct {
 
 func (m *PropertyRuleCreatedEvent) ToJSON() ([]byte, error) {
 	inter := structs.Map(m.PropertyViewRule)
-	// inter["matchers"] = structs.Map(m.PropertyViewRule.Matchers) // TODO: needed?
+	inter["matchers"] = m.PropertyViewRule.Matchers.ToMap()
 	return json.Marshal(inter)
 }
 
 func (m *PropertyRuleCreatedEvent) FromJSON(data []byte) error {
+
+	// FIXME: this does not work
+
 	var inter map[string]interface{}
 	if err := json.Unmarshal(data, &inter); err != nil {
 		return err
@@ -54,7 +57,7 @@ func NewPropertyRuleCreatedEvent(ctx context.Context, a hwes.Aggregate, rule mod
 	payload := PropertyRuleCreatedEvent{
 		rule,
 	}
-	return hwes.NewEvent(a, PropertyRuleCreated, hwes.WithData(payload), hwes.WithContext(ctx))
+	return hwes.NewEvent(a, PropertyRuleCreated, hwes.WithData(&payload), hwes.WithContext(ctx))
 }
 
 type PropertyRuleListsUpdatedEvent struct {
@@ -73,5 +76,5 @@ func NewPropertyRuleListsUpdatedEvent(ctx context.Context, a hwes.Aggregate, rul
 		AppendToDontAlwaysInclude:   appendToDontAlwaysInclude,
 		RemoveFromDontAlwaysInclude: removeFromDontAlwaysInclude,
 	}
-	return hwes.NewEvent(a, PropertyRuleListsUpdated, hwes.WithData(payload), hwes.WithContext(ctx))
+	return hwes.NewEvent(a, PropertyRuleListsUpdated, hwes.WithData(&payload), hwes.WithContext(ctx))
 }

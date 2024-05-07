@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"github.com/fatih/structs"
 	"github.com/google/uuid"
 	"hwdb"
 	"property-svc/repos/task_views_repo"
@@ -19,4 +20,8 @@ func (m TaskPropertyMatchers) FindExactRuleId(ctx context.Context) (*uuid.UUID, 
 		WardID: m.WardID,
 		TaskID: m.TaskID,
 	})
+}
+
+func (m TaskPropertyMatchers) ToMap() map[string]interface{} {
+	return structs.Map(m)
 }

@@ -187,7 +187,7 @@ func (e *Event) SetJsonData(data interface{}) error {
 	var dataBytes []byte
 	var err error
 
-	if jsonable, ok := hwutil.ToJSONAble(data); ok {
+	if jsonable, ok := data.(hwutil.JSONAble); ok {
 		dataBytes, err = jsonable.ToJSON()
 	} else {
 		dataBytes, err = json.Marshal(data)
@@ -201,7 +201,7 @@ func (e *Event) SetJsonData(data interface{}) error {
 }
 
 func (e *Event) GetJsonData(data interface{}) error {
-	if jsonable, ok := hwutil.ToJSONAble(data); ok {
+	if jsonable, ok := data.(hwutil.JSONAble); ok {
 		err := jsonable.FromJSON(e.Data)
 		return err
 	}

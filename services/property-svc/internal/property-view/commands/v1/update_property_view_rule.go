@@ -35,6 +35,7 @@ func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePrope
 			ruleID := uuid.New()
 			ruleAgg = aggregate.NewPropertyViewRuleAggregate(ruleID)
 			rule := models.PropertyViewRule{
+				Matchers:          matchers,
 				RuleId:            ruleID,
 				AlwaysInclude:     appendToAlwaysInclude,
 				DontAlwaysInclude: appendToDontAlwaysInclude,
