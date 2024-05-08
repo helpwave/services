@@ -2,10 +2,11 @@ package hwutil
 
 import (
 	"encoding/json"
+	"strconv"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
-	"strconv"
 )
 
 var validate *validator.Validate

@@ -118,3 +118,26 @@ func MergeSlices[T comparable](as, bs []T) []T {
 	r, _ := MergeSlicesWithSet(as, bs)
 	return r
 }
+
+func SliceAsStringSlice(as []interface{}) ([]string, bool) {
+	bs := make([]string, len(as))
+	for i, v := range as {
+		s, ok := v.(string)
+		if !ok {
+			return nil, false
+		}
+		bs[i] = s
+	}
+	return bs, true
+}
+
+func InterfaceAsStringSlice(a interface{}) ([]string, bool) {
+	if as, ok := a.([]interface{}); !ok {
+		if as == nil {
+			return make([]string, 0), true
+		}
+		return nil, false
+	} else {
+		return SliceAsStringSlice(as)
+	}
+}

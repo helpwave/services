@@ -2,10 +2,11 @@ package models
 
 import (
 	"context"
-	"github.com/fatih/structs"
-	"github.com/google/uuid"
 	"hwdb"
+	"hwutil"
 	"property-svc/repos/task_views_repo"
+
+	"github.com/google/uuid"
 )
 
 // TaskPropertyMatchers implements PropertyMatchers
@@ -23,5 +24,47 @@ func (m TaskPropertyMatchers) FindExactRuleId(ctx context.Context) (*uuid.UUID, 
 }
 
 func (m TaskPropertyMatchers) ToMap() map[string]interface{} {
-	return structs.Map(m)
+	mp := make(map[string]interface{})
+	if m.WardID.Valid {
+		mp["WardId"] = m.WardID.UUID.String()
+	} else {
+		mp["WardId"] = nil
+	}
+	if m.TaskID.Valid {
+		mp["TaskId"] = m.TaskID.UUID.String()
+	} else {
+		mp["TaskId"] = nil
+	}
+	return mp
+}
+
+func TaskPropertyMatchersFromMap(m interface{}) (TaskPropertyMatchers, bool) {
+	mp, ok := m.(map[string]interface{})
+	if !ok {
+		// not even a map
+		return TaskPropertyMatchers{}, false
+	}
+
+	matcher := TaskPropertyMatchers{}
+
+	if wardIdRaw, ok := mp["WardId"].(string); ok {
+		parsed, err := hwutil.ParseNullUUID(&wardIdRaw)
+		if err != nil {
+			return TaskPropertyMatchers{}, false
+		}
+		matcher.WardID = parsed
+	} else {
+		matcher.WardID = uuid.NullUUID{Valid: false}
+	}
+	if taskIdRaw, ok := mp["TaskId"].(string); ok {
+		parsed, err := hwutil.ParseNullUUID(&taskIdRaw)
+		if err != nil {
+			return TaskPropertyMatchers{}, false
+		}
+		matcher.TaskID = parsed
+	} else {
+		matcher.WardID = uuid.NullUUID{Valid: false}
+	}
+
+	return matcher, true
 }

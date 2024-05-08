@@ -4,11 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"hwes"
+	"hwutil"
+	"property-svc/internal/property-view/models"
+
 	"github.com/fatih/structs"
 	"github.com/google/uuid"
-	"github.com/mitchellh/mapstructure"
-	"hwes"
-	"property-svc/internal/property-view/models"
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -22,32 +24,61 @@ type PropertyRuleCreatedEvent struct {
 
 func (m *PropertyRuleCreatedEvent) ToJSON() ([]byte, error) {
 	inter := structs.Map(m.PropertyViewRule)
-	inter["matchers"] = m.PropertyViewRule.Matchers.ToMap()
+	inter["Matchers"] = m.PropertyViewRule.Matchers.ToMap()
 	return json.Marshal(inter)
 }
 
 func (m *PropertyRuleCreatedEvent) FromJSON(data []byte) error {
-
-	// FIXME: this does not work
-
 	var inter map[string]interface{}
 	if err := json.Unmarshal(data, &inter); err != nil {
 		return err
 	}
 
-	// parse everything except matchers
-	var rule models.PropertyViewRule
-	if err := json.Unmarshal(data, &rule); err != nil {
+	log.Debug().Any("map", inter).Msg("map")
+
+	ruleIdRaw, ok := inter["RuleId"].(string)
+	if !ok {
+		return errors.New("rule_id is not a string")
+	}
+
+	ruleId, err := uuid.Parse(ruleIdRaw)
+	if err != nil {
 		return err
 	}
 
-	var taskMatchers models.TaskPropertyMatchers
-	err := mapstructure.Decode(inter["matchers"], &taskMatchers)
-	if err == nil {
+	alwaysInclude, ok := hwutil.InterfaceAsStringSlice(inter["AlwaysInclude"])
+	if !ok {
+		return errors.New("AlwaysInclude is not a string[]")
+	}
+
+	alwaysIncludeUUIDs, err := hwutil.StringsToUUIDs(alwaysInclude)
+	if err != nil {
+		return err
+	}
+
+	dontAlwaysInclude, ok := hwutil.InterfaceAsStringSlice(inter["DontAlwaysInclude"])
+	if !ok {
+		return errors.New("DontAlwaysInclude is not a string[]")
+	}
+
+	dontAlwaysIncludeUUIDs, err := hwutil.StringsToUUIDs(dontAlwaysInclude)
+	if err != nil {
+		return err
+	}
+
+	rule := models.PropertyViewRule{
+		RuleId:            ruleId,
+		Matchers:          nil, // will be set below
+		AlwaysInclude:     alwaysIncludeUUIDs,
+		DontAlwaysInclude: dontAlwaysIncludeUUIDs,
+	}
+
+	if taskMatchers, ok := models.TaskPropertyMatchersFromMap(inter["Matchers"]); ok {
 		rule.Matchers = taskMatchers
 		m.PropertyViewRule = rule
 		return nil
 	}
+
 	// add other matchers once we have more
 
 	return errors.New("could not find matcher in event")
