@@ -34,8 +34,8 @@ SELECT
 	rules.rule_id as rule_id
 	FROM task_property_view_rules as rules
 	WHERE
-		rules.ward_id = $1
-		AND rules.task_id = $2
+		(rules.ward_id = $1 OR (rules.ward_id IS NULL AND $1 IS NULL))
+		AND ((rules.task_id = $2) OR (rules.task_id IS NULL AND $2 IS NULL))
 `
 
 type GetTaskRuleIdUsingExactMatchersParams struct {

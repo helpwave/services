@@ -8,5 +8,5 @@ SELECT
 	rules.rule_id as rule_id
 	FROM task_property_view_rules as rules
 	WHERE
-		rules.ward_id = sqlc.narg('ward_id')
-		AND rules.task_id = sqlc.narg('task_id');
+		(rules.ward_id = sqlc.narg('ward_id') OR (rules.ward_id IS NULL AND sqlc.narg('ward_id') IS NULL))
+		AND ((rules.task_id = sqlc.narg('task_id')) OR (rules.task_id IS NULL AND sqlc.narg('task_id') IS NULL));
