@@ -63,7 +63,7 @@ func TaskPropertyMatchersFromMap(m interface{}) (TaskPropertyMatchers, bool) {
 		}
 		matcher.TaskID = parsed
 	} else {
-		matcher.WardID = uuid.NullUUID{Valid: false}
+		matcher.TaskID = uuid.NullUUID{Valid: false}
 	}
 
 	return matcher, true

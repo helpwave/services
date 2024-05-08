@@ -10,7 +10,6 @@ import (
 
 	"github.com/fatih/structs"
 	"github.com/google/uuid"
-	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -33,8 +32,6 @@ func (m *PropertyRuleCreatedEvent) FromJSON(data []byte) error {
 	if err := json.Unmarshal(data, &inter); err != nil {
 		return err
 	}
-
-	log.Debug().Any("map", inter).Msg("map")
 
 	ruleIdRaw, ok := inter["RuleId"].(string)
 	if !ok {

@@ -48,11 +48,12 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	log := zlog.Ctx(ctx)
 
 	var payload eventsV1.PropertyRuleCreatedEvent
-	log.Debug().Any("payload", payload).Msg("payload")
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
 		return err, esdb.NackActionSkip
 	}
+
+	log.Debug().Any("payload", payload).Msg("payload")
 
 	if payload.RuleId == uuid.Nil {
 		return fmt.Errorf("ruleID missing"), esdb.NackActionSkip
