@@ -9,24 +9,24 @@ message FilterUpdate {
   // append property_id to the always_include list
   // this means the property is shown, unless a more specific rule (including itself)
   // puts it in its dont_always_include list
-  repeated string append_to_always_include = 1;
+  repeated string append_to_always_include = 1; // @gotags: validate:"dive,uuid4"
 
   // remove property_id to the always_include list, also see append_to_always_include
-  repeated string remove_from_always_include = 2;
+  repeated string remove_from_always_include = 2; // @gotags: validate:"dive,uuid4"
 
   // append property_id to the dont_always_include list, also see append_to_always_include
-  repeated string append_to_dont_always_include = 3;
+  repeated string append_to_dont_always_include = 3; // @gotags: validate:"dive,uuid4"
 
   // remove property_id to the dont_always_include list, also see append_to_always_include
-  repeated string remove_from_dont_always_include = 4;
+  repeated string remove_from_dont_always_include = 4; // @gotags: validate:"dive,uuid4"
 }
 
 message UpdateTaskPropertyViewRuleRequest {
   /* task-specific matchers */
-  optional string ward_id = 1;
-  optional string task_id = 2;
+  optional string ward_id = 1; // @gotags: validate:"omitempty,omitnil,uuid4"
+  optional string task_id = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
 
-  FilterUpdate filter_update = 3;
+  FilterUpdate filter_update = 3; // @gotags: validate:"required"
 }
 
 message UpdateTaskPropertyViewRuleResponse {}

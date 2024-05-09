@@ -141,3 +141,11 @@ func InterfaceAsStringSlice(a interface{}) ([]string, bool) {
 		return SliceAsStringSlice(as)
 	}
 }
+
+// OrEmptySlice returns the slice or, if it is nil, an empty slice of its type
+func OrEmptySlice[T any](as []T) []T {
+	if as != nil {
+		return as
+	}
+	return make([]T, 0)
+}

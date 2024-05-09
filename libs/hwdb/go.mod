@@ -14,6 +14,7 @@ require (
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa
 	github.com/jackc/pgx/v5 v5.5.5
 	github.com/nicksnyder/go-i18n/v2 v2.4.0
+	github.com/pashagolub/pgxmock/v3 v3.4.0
 	github.com/rs/zerolog v1.32.0
 	github.com/vgarvardt/pgx-google-uuid/v5 v5.0.0
 	go.opentelemetry.io/otel v1.25.0

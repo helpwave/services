@@ -28,26 +28,35 @@ func (s PropertyViewGrpcService) UpdateTaskPropertyViewRule(ctx context.Context,
 		return nil, err
 	}
 
+	if req.FilterUpdate == nil {
+		// nothing to update
+		return &pb.UpdateTaskPropertyViewRuleResponse{}, nil
+	}
+
 	// when writing another view rule handler, move this into a common function
-
-	appendToAlwaysInclude, err := hwutil.StringsToUUIDs(req.FilterUpdate.AppendToAlwaysInclude)
+	appendToAlwaysInclude, err := hwutil.StringsToUUIDs(hwutil.OrEmptySlice(req.FilterUpdate.AppendToAlwaysInclude))
 	if err != nil {
 		return nil, err
 	}
 
-	removeFromAlwaysInclude, err := hwutil.StringsToUUIDs(req.FilterUpdate.RemoveFromAlwaysInclude)
+	removeFromAlwaysInclude, err := hwutil.StringsToUUIDs(hwutil.OrEmptySlice(req.FilterUpdate.RemoveFromAlwaysInclude))
 	if err != nil {
 		return nil, err
 	}
 
-	appendToDontAlwaysInclude, err := hwutil.StringsToUUIDs(req.FilterUpdate.AppendToDontAlwaysInclude)
+	appendToDontAlwaysInclude, err := hwutil.StringsToUUIDs(hwutil.OrEmptySlice(req.FilterUpdate.AppendToDontAlwaysInclude))
 	if err != nil {
 		return nil, err
 	}
 
-	removeFromDontAlwaysInclude, err := hwutil.StringsToUUIDs(req.FilterUpdate.RemoveFromDontAlwaysInclude)
+	removeFromDontAlwaysInclude, err := hwutil.StringsToUUIDs(hwutil.OrEmptySlice(req.FilterUpdate.RemoveFromDontAlwaysInclude))
 	if err != nil {
 		return nil, err
+	}
+
+	if len(appendToAlwaysInclude) == 0 && len(removeFromAlwaysInclude) == 0 && len(appendToDontAlwaysInclude) == 0 && len(removeFromDontAlwaysInclude) == 0 {
+		// nothing to update
+		return &pb.UpdateTaskPropertyViewRuleResponse{}, nil
 	}
 
 	// ---
