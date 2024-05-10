@@ -22,8 +22,12 @@ func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjec
 	replay := eventstoredb.NewReplay(
 		eventStore,
 		func(ctx context.Context, event hwes.Event) (err error) {
-			err, _ = propertyPostgresProjection.HandleEvent(ctx, event)
-			err, _ = propertyValuePostgresProjection.HandleEvent(ctx, event)
+			if err, _ = propertyPostgresProjection.HandleEvent(ctx, event); err != nil {
+				return
+			}
+			if err, _ = propertyValuePostgresProjection.HandleEvent(ctx, event); err != nil {
+				return
+			}
 			return
 		},
 		&[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)},
