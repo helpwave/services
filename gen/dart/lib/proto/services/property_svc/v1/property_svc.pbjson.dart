@@ -188,18 +188,16 @@ const UpdatePropertyRequest$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'subject_type', '3': 2, '4': 1, '5': 14, '6': '.proto.services.property_svc.v1.SubjectType', '9': 1, '10': 'subjectType', '17': true},
-    {'1': 'field_type', '3': 3, '4': 1, '5': 14, '6': '.proto.services.property_svc.v1.FieldType', '9': 2, '10': 'fieldType', '17': true},
-    {'1': 'name', '3': 4, '4': 1, '5': 9, '9': 3, '10': 'name', '17': true},
-    {'1': 'description', '3': 5, '4': 1, '5': 9, '9': 4, '10': 'description', '17': true},
-    {'1': 'is_archived', '3': 6, '4': 1, '5': 8, '9': 5, '10': 'isArchived', '17': true},
-    {'1': 'set_id', '3': 8, '4': 1, '5': 9, '9': 6, '10': 'setId', '17': true},
+    {'1': 'name', '3': 4, '4': 1, '5': 9, '9': 2, '10': 'name', '17': true},
+    {'1': 'description', '3': 5, '4': 1, '5': 9, '9': 3, '10': 'description', '17': true},
+    {'1': 'is_archived', '3': 6, '4': 1, '5': 8, '9': 4, '10': 'isArchived', '17': true},
+    {'1': 'set_id', '3': 8, '4': 1, '5': 9, '9': 5, '10': 'setId', '17': true},
     {'1': 'select_data', '3': 10, '4': 1, '5': 11, '6': '.proto.services.property_svc.v1.UpdatePropertyRequest.SelectData', '9': 0, '10': 'selectData'},
   ],
   '3': [UpdatePropertyRequest_SelectData$json],
   '8': [
     {'1': 'field_type_data'},
     {'1': '_subject_type'},
-    {'1': '_field_type'},
     {'1': '_name'},
     {'1': '_description'},
     {'1': '_is_archived'},
@@ -241,21 +239,20 @@ const UpdatePropertyRequest_SelectData_SelectOption$json = {
 final $typed_data.Uint8List updatePropertyRequestDescriptor = $convert.base64Decode(
     'ChVVcGRhdGVQcm9wZXJ0eVJlcXVlc3QSDgoCaWQYASABKAlSAmlkElMKDHN1YmplY3RfdHlwZR'
     'gCIAEoDjIrLnByb3RvLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5TdWJqZWN0VHlwZUgBUgtz'
-    'dWJqZWN0VHlwZYgBARJNCgpmaWVsZF90eXBlGAMgASgOMikucHJvdG8uc2VydmljZXMucHJvcG'
-    'VydHlfc3ZjLnYxLkZpZWxkVHlwZUgCUglmaWVsZFR5cGWIAQESFwoEbmFtZRgEIAEoCUgDUgRu'
-    'YW1liAEBEiUKC2Rlc2NyaXB0aW9uGAUgASgJSARSC2Rlc2NyaXB0aW9uiAEBEiQKC2lzX2FyY2'
-    'hpdmVkGAYgASgISAVSCmlzQXJjaGl2ZWSIAQESGgoGc2V0X2lkGAggASgJSAZSBXNldElkiAEB'
-    'EmMKC3NlbGVjdF9kYXRhGAogASgLMkAucHJvdG8uc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLl'
-    'VwZGF0ZVByb3BlcnR5UmVxdWVzdC5TZWxlY3REYXRhSABSCnNlbGVjdERhdGEakgMKClNlbGVj'
-    'dERhdGESKgoOYWxsb3dfZnJlZXRleHQYASABKAhIAFINYWxsb3dGcmVldGV4dIgBARIlCg5yZW'
-    '1vdmVfb3B0aW9ucxgCIAMoCVINcmVtb3ZlT3B0aW9ucxJ0Cg51cHNlcnRfb3B0aW9ucxgDIAMo'
-    'CzJNLnByb3RvLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5VcGRhdGVQcm9wZXJ0eVJlcXVlc3'
-    'QuU2VsZWN0RGF0YS5TZWxlY3RPcHRpb25SDXVwc2VydE9wdGlvbnMapwEKDFNlbGVjdE9wdGlv'
-    'bhIOCgJpZBgBIAEoCVICaWQSFwoEbmFtZRgCIAEoCUgAUgRuYW1liAEBEiUKC2Rlc2NyaXB0aW'
-    '9uGAMgASgJSAFSC2Rlc2NyaXB0aW9uiAEBEiAKCWlzX2N1c3RvbRgEIAEoCEgCUghpc0N1c3Rv'
-    'bYgBAUIHCgVfbmFtZUIOCgxfZGVzY3JpcHRpb25CDAoKX2lzX2N1c3RvbUIRCg9fYWxsb3dfZn'
-    'JlZXRleHRCEQoPZmllbGRfdHlwZV9kYXRhQg8KDV9zdWJqZWN0X3R5cGVCDQoLX2ZpZWxkX3R5'
-    'cGVCBwoFX25hbWVCDgoMX2Rlc2NyaXB0aW9uQg4KDF9pc19hcmNoaXZlZEIJCgdfc2V0X2lk');
+    'dWJqZWN0VHlwZYgBARIXCgRuYW1lGAQgASgJSAJSBG5hbWWIAQESJQoLZGVzY3JpcHRpb24YBS'
+    'ABKAlIA1ILZGVzY3JpcHRpb26IAQESJAoLaXNfYXJjaGl2ZWQYBiABKAhIBFIKaXNBcmNoaXZl'
+    'ZIgBARIaCgZzZXRfaWQYCCABKAlIBVIFc2V0SWSIAQESYwoLc2VsZWN0X2RhdGEYCiABKAsyQC'
+    '5wcm90by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuVXBkYXRlUHJvcGVydHlSZXF1ZXN0LlNl'
+    'bGVjdERhdGFIAFIKc2VsZWN0RGF0YRqSAwoKU2VsZWN0RGF0YRIqCg5hbGxvd19mcmVldGV4dB'
+    'gBIAEoCEgAUg1hbGxvd0ZyZWV0ZXh0iAEBEiUKDnJlbW92ZV9vcHRpb25zGAIgAygJUg1yZW1v'
+    'dmVPcHRpb25zEnQKDnVwc2VydF9vcHRpb25zGAMgAygLMk0ucHJvdG8uc2VydmljZXMucHJvcG'
+    'VydHlfc3ZjLnYxLlVwZGF0ZVByb3BlcnR5UmVxdWVzdC5TZWxlY3REYXRhLlNlbGVjdE9wdGlv'
+    'blINdXBzZXJ0T3B0aW9ucxqnAQoMU2VsZWN0T3B0aW9uEg4KAmlkGAEgASgJUgJpZBIXCgRuYW'
+    '1lGAIgASgJSABSBG5hbWWIAQESJQoLZGVzY3JpcHRpb24YAyABKAlIAVILZGVzY3JpcHRpb26I'
+    'AQESIAoJaXNfY3VzdG9tGAQgASgISAJSCGlzQ3VzdG9tiAEBQgcKBV9uYW1lQg4KDF9kZXNjcm'
+    'lwdGlvbkIMCgpfaXNfY3VzdG9tQhEKD19hbGxvd19mcmVldGV4dEIRCg9maWVsZF90eXBlX2Rh'
+    'dGFCDwoNX3N1YmplY3RfdHlwZUIHCgVfbmFtZUIOCgxfZGVzY3JpcHRpb25CDgoMX2lzX2FyY2'
+    'hpdmVkQgkKB19zZXRfaWQ=');
 
 @$core.Deprecated('Use updatePropertyResponseDescriptor instead')
 const UpdatePropertyResponse$json = {

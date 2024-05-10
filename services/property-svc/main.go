@@ -11,6 +11,7 @@ import (
 	"hwes/eventstoredb"
 	propertySet "property-svc/internal/property-set/api"
 	propertyValue "property-svc/internal/property-value/api"
+	"property-svc/internal/property-value/projections/property_value_postgres_projection"
 	property "property-svc/internal/property/api"
 	"property-svc/internal/property/projections/property_postgres_projection"
 )
@@ -33,9 +34,10 @@ func main() {
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
 	propertyPostgresProjection := property_postgres_projection.NewProjection(eventStore, ServiceName)
+	propertyValuePostgresProjection := property_value_postgres_projection.NewProjection(eventStore, ServiceName)
 
 	if *replayMode {
-		if err := replay(ctx, eventStore, propertyPostgresProjection); err != nil {
+		if err := replay(ctx, eventStore, propertyPostgresProjection, propertyValuePostgresProjection); err != nil {
 			log.Err(err).Msg("error during replay")
 			cancel()
 		}
@@ -47,6 +49,13 @@ func main() {
 	go func() {
 		if err := propertyPostgresProjection.Subscribe(ctx); err != nil {
 			log.Err(err).Msg("error during property-postgres projection subscription")
+			cancel()
+		}
+	}()
+
+	go func() {
+		if err := propertyValuePostgresProjection.Subscribe(ctx); err != nil {
+			log.Err(err).Msg("error during propertyValue-postgres projection subscription")
 			cancel()
 		}
 	}()

@@ -18,3 +18,10 @@ sql:
           - db_type: "uuid"
             go_type: "github.com/google/uuid.NullUUID"
             nullable: true
+  - <<: *repo
+    queries: "./repos/property_value_repo.sql"
+    gen:
+      go:
+        <<: *repo-go
+        package: "property_value_repo"
+        out: "repos/property_value_repo"

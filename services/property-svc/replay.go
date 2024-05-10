@@ -7,6 +7,7 @@ import (
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb"
+	"property-svc/internal/property-value/projections/property_value_postgres_projection"
 	"property-svc/internal/property/aggregate"
 	"property-svc/internal/property/projections/property_postgres_projection"
 	"telemetry"
@@ -14,7 +15,7 @@ import (
 
 // replay mechanism for projections of the property-svc
 // replay truncates the whole database and replays all events
-func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjection *property_postgres_projection.Projection) error {
+func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjection *property_postgres_projection.Projection, propertyValuePostgresProjection *property_value_postgres_projection.Projection) error {
 	ctx, span, log := telemetry.StartSpan(ctx, "property-svc.replay")
 	defer span.End()
 
@@ -22,6 +23,7 @@ func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjec
 		eventStore,
 		func(ctx context.Context, event hwes.Event) (err error) {
 			err, _ = propertyPostgresProjection.HandleEvent(ctx, event)
+			err, _ = propertyValuePostgresProjection.HandleEvent(ctx, event)
 			return
 		},
 		&[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)},
@@ -33,7 +35,6 @@ func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjec
 		log.Err(err).Msg("cannot begin transaction")
 		return err
 	}
-	defer tx.Rollback(ctx)
 
 	if err := hwdb.TruncateAllTables(ctx); err != nil {
 		log.Err(err).Msg("cannot truncate all tables")
