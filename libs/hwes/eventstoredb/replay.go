@@ -2,65 +2,35 @@ package eventstoredb
 
 import (
 	"context"
-	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	zlog "github.com/rs/zerolog"
 	"hwes"
+	"telemetry"
 )
 
+// Replay provides the ability to re-run existing events from an event stream
+// from the first to the latest event. The latest event will be computed via a read
+// against the event stream during a call the .Run().
+// Users of Replay can use the provided hook to run actions before and after the execution of Replay().
 type Replay struct {
 	es                  *esdb.Client
-	BeforeReplayHook    func() error
 	OnEvent             func(ctx context.Context, event hwes.Event) error
-	AfterReplayHook     func() error
 	streamPrefixFilters *[]string
 }
 
 func NewReplay(es *esdb.Client, onEvent func(ctx context.Context, event hwes.Event) error, streamPrefixFilters *[]string) *Replay {
 	return &Replay{
-		es: es,
-		BeforeReplayHook: func() error {
-			return nil
-		},
-		OnEvent: onEvent,
-		AfterReplayHook: func() error {
-			return nil
-		},
+		es:                  es,
+		OnEvent:             onEvent,
 		streamPrefixFilters: streamPrefixFilters,
 	}
 }
 
-func (r *Replay) readLatestAllEsdbEvent(ctx context.Context) (*esdb.ResolvedEvent, error) {
-	stream, err := r.es.ReadAll(ctx, esdb.ReadAllOptions{
-		Direction: esdb.Backwards,
-		From:      esdb.End{},
-	}, 1)
-
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-
-	defer stream.Close()
-
-	return stream.Recv()
-}
-
 // Run will call the passed .OnEvent() handler for every event
 // in a filtered $all stream up to the event which was the latest when Run() was called
-// BeforeReplayHook() gets called before EventStoreDB gets called for the first time
-// AfterReplayHook() gets called before a successful return
 func (r *Replay) Run(ctx context.Context) error {
-	log := zlog.Ctx(ctx)
-
-	if err := r.BeforeReplayHook(); err != nil {
-		return err
-	}
-
-	latestEsdbEvent, err := r.readLatestAllEsdbEvent(ctx)
-	if err != nil {
-		return err
-	}
+	ctx, span, log := telemetry.StartSpan(ctx, "hwes.Replay.Run")
+	defer span.End()
 
 	subscribeToAllOptions := esdb.SubscribeToAllOptions{
 		From:   esdb.Start{},
@@ -94,6 +64,12 @@ func (r *Replay) Run(ctx context.Context) error {
 			break
 		}
 
+		if esdbEvent.CaughtUp != nil {
+			stream.Close()
+			log.Info().Msg("caught up subscribed event stream")
+			break
+		}
+
 		event, err := r.hwesEventFromReceivedEventFromStream(ctx, esdbEvent)
 		if err != nil {
 			return err
@@ -102,15 +78,10 @@ func (r *Replay) Run(ctx context.Context) error {
 		if err := r.OnEvent(ctx, event); err != nil {
 			return err
 		}
-
-		// Normal exit condition, reached event which was the latest when Run() was called
-		if *esdbEvent.EventAppeared.Commit == *latestEsdbEvent.Commit {
-			log.Debug().Msg("processed latest event")
-			break
-		}
+		log.Info().Dict("event", event.GetZerologDict()).Msg("handled event")
 	}
 
-	return r.AfterReplayHook()
+	return nil
 }
 
 func (r *Replay) hwesEventFromReceivedEventFromStream(ctx context.Context, esdbEvent *esdb.SubscriptionEvent) (hwes.Event, error) {

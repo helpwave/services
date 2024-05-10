@@ -4,17 +4,13 @@ import (
 	"common"
 	"context"
 	"flag"
-	"fmt"
 	pb "gen/proto/services/property_svc/v1"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
 	"hwdb"
-	"hwes"
 	"hwes/eventstoredb"
 	propertySet "property-svc/internal/property-set/api"
 	propertyValue "property-svc/internal/property-value/api"
-	"property-svc/internal/property/aggregate"
 	property "property-svc/internal/property/api"
 	"property-svc/internal/property/projections/property_postgres_projection"
 )
@@ -23,34 +19,6 @@ const ServiceName = "property-svc"
 
 // Version is set at compile time
 var Version string
-
-func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjection *property_postgres_projection.Projection) error {
-	replay := eventstoredb.NewReplay(eventStore, func(ctx context.Context, event hwes.Event) error {
-		log.Info().Dict("event", event.GetZerologDict()).Msg("replay event to projections")
-		if err, _ := propertyPostgresProjection.HandleEvent(ctx, event); err != nil {
-			return err
-		}
-		return nil
-	}, &[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)})
-
-	replay.BeforeReplayHook = func() (err error) {
-		log.Info().Msg("BeforeReplayHook")
-
-		// TOOD: Run in transaction. Only commit after a successful .Run()
-		if err := hwdb.TruncateAllTables(ctx); err != nil {
-			return err
-		}
-
-		return
-	}
-
-	replay.AfterReplayHook = func() (err error) {
-		log.Info().Msg("AfterReplayHook")
-		return nil
-	}
-
-	return replay.Run(ctx)
-}
 
 func main() {
 	replayMode := flag.Bool("replay", false, "")
@@ -71,6 +39,8 @@ func main() {
 			log.Err(err).Msg("error during replay")
 			cancel()
 		}
+		// TODO: Find a more generic approach to run common.Shutdown()
+		common.Shutdown()
 		return
 	}
 
