@@ -1,6 +1,7 @@
 package api_test
 
 import (
+	"bytes"
 	"common"
 	common_test "common/test"
 	"context"
@@ -10,10 +11,15 @@ import (
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 	"hwdb"
+	"hwes"
 	hwes_test "hwes/test"
 	"hwutil"
+	"property-svc/internal/property-view/aggregate"
 	"property-svc/internal/property-view/api"
+	v1 "property-svc/internal/property-view/events/v1"
+	"strings"
 	"testing"
+	"text/template"
 )
 
 func server(ctx context.Context) (pb.PropertyViewsServiceClient, *hwes_test.AggregateStore, func()) {
@@ -178,4 +184,58 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_AllEmptyNoEffect(t *
 	})
 
 	as.ExpectToBeEmpty(t)
+}
+
+func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_GreenPath_Created(t *testing.T) {
+	ctx, client, as, dbMock, teardown := setup(t)
+	defer teardown()
+
+	// Mock Empty Row response from database
+	dbMock.ExpectQuery(".*").
+		WithArgs(uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
+		WillReturnRows(pgxmock.NewRows([]string{}))
+
+	_, _ = client.UpdateTaskPropertyViewRule(ctx, &pb.UpdateTaskPropertyViewRuleRequest{
+		WardId: nil,
+		TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+		FilterUpdate: &pb.FilterUpdate{
+			AppendToAlwaysInclude:       nil,
+			RemoveFromAlwaysInclude:     []string{"a7ff7a87-7787-42b4-9aa8-037293ac9d90", "08b23992-9489-41d2-b80d-d7d49c4c9168"},
+			AppendToDontAlwaysInclude:   []string{"08b23992-9489-41d2-b80d-d7d49c4c9168", "db59dd1b-fd1c-488e-a73c-6926abe68c34"},
+			RemoveFromDontAlwaysInclude: []string{"08b23992-9489-41d2-b80d-d7d49c4c9168"},
+		},
+	})
+
+	as.ExpectFirstStream(t, func(streamName string, events []hwes.Event) bool {
+		if !assert.NotEmpty(t, events) {
+			return false
+		}
+		event := events[0]
+
+		expData := `{
+			"AlwaysInclude":[],
+			"DontAlwaysInclude": [
+				"08b23992-9489-41d2-b80d-d7d49c4c9168",
+				"db59dd1b-fd1c-488e-a73c-6926abe68c34"
+			],
+			"Matchers":{
+				"TaskId":"bca23ec4-e8fd-407d-8e7d-0d0a52ba097f",
+				"WardId":null
+			},
+			"RuleId": "{{ . }}"
+		}`
+		s := ""
+		buf := bytes.NewBufferString(s)
+		tmplt, _ := template.New("").Parse(expData)
+		_ = tmplt.ExecuteTemplate(buf, "", strings.Split(streamName, "property_view_rule-")[1])
+		s = buf.String()
+
+		return assert.Equal(t, v1.PropertyRuleCreated, event.EventType) &&
+			assert.Equal(t, hwes.AggregateType(aggregate.PropertyViewRuleAggregateType), event.AggregateType) &&
+			assert.JSONEq(t, s, string(event.Data))
+	})
+}
+
+func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_GreenPath_Updated(t *testing.T) {
+	// TODO
 }
