@@ -16,7 +16,7 @@ import (
 	"testing"
 )
 
-func server(ctx context.Context) (pb.PropertyViewsServiceClient, func()) {
+func server(ctx context.Context) (pb.PropertyViewsServiceClient, *hwes_test.AggregateStore, func()) {
 	// Build gRPC service
 	aggregateStore := hwes_test.NewAggregateStore()
 	grpcService := api.NewPropertyViewService(aggregateStore)
@@ -30,12 +30,12 @@ func server(ctx context.Context) (pb.PropertyViewsServiceClient, func()) {
 
 	client := pb.NewPropertyViewsServiceClient(conn)
 
-	return client, closer
+	return client, aggregateStore, closer
 }
 
-func setup(t *testing.T) (ctx context.Context, client pb.PropertyViewsServiceClient, dbMock pgxmock.PgxPoolIface, teardown func()) {
+func setup(t *testing.T) (ctx context.Context, client pb.PropertyViewsServiceClient, as *hwes_test.AggregateStore, dbMock pgxmock.PgxPoolIface, teardown func()) {
 	ctx = context.Background()
-	client, closer := server(ctx)
+	client, as, closer := server(ctx)
 	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
 
 	dbMock, err := pgxmock.NewPool()
@@ -49,11 +49,11 @@ func setup(t *testing.T) (ctx context.Context, client pb.PropertyViewsServiceCli
 		dbMock.Close()
 	}
 
-	return ctx, client, dbMock, teardown
+	return ctx, client, as, dbMock, teardown
 }
 
 func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_Validation(t *testing.T) {
-	ctx, client, dbMock, teardown := setup(t)
+	ctx, client, _, dbMock, teardown := setup(t)
 	defer teardown()
 
 	// Empty Request
@@ -159,4 +159,23 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_Validation(t *testin
 		},
 	})
 	assert.NoError(t, err, "rejects fully valid request")
+}
+
+func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_AllEmptyNoEffect(t *testing.T) {
+	ctx, client, as, _, teardown := setup(t)
+	defer teardown()
+
+	// Valid IDs
+	_, _ = client.UpdateTaskPropertyViewRule(ctx, &pb.UpdateTaskPropertyViewRuleRequest{
+		WardId: hwutil.PtrTo("e602f938-66c5-4a08-a251-4aef94a98060"),
+		TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+		FilterUpdate: &pb.FilterUpdate{
+			AppendToAlwaysInclude:       []string{},
+			RemoveFromAlwaysInclude:     []string{},
+			AppendToDontAlwaysInclude:   []string{},
+			RemoveFromDontAlwaysInclude: []string{},
+		},
+	})
+
+	as.ExpectToBeEmpty(t)
 }

@@ -7,7 +7,6 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 	zlog "github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes"
@@ -23,7 +22,7 @@ import (
 
 type Projection struct {
 	*custom.CustomProjection
-	db            *pgxpool.Pool
+	db            hwdb.DBTX
 	taskViewsRepo *task_views_repo.Queries
 	viewsRepo     *views_repo.Queries
 }
