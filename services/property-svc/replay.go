@@ -19,20 +19,6 @@ func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjec
 	ctx, span, log := telemetry.StartSpan(ctx, "property-svc.replay")
 	defer span.End()
 
-	replay := eventstoredb.NewReplay(
-		eventStore,
-		func(ctx context.Context, event hwes.Event) (err error) {
-			if err, _ = propertyPostgresProjection.HandleEvent(ctx, event); err != nil {
-				return
-			}
-			if err, _ = propertyValuePostgresProjection.HandleEvent(ctx, event); err != nil {
-				return
-			}
-			return
-		},
-		&[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)},
-	)
-
 	db := hwdb.GetDB()
 	tx, err := db.Begin(ctx)
 	if err != nil {
@@ -46,7 +32,20 @@ func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjec
 		return err
 	}
 
-	if err := replay.Run(ctx); err != nil {
+	if err := eventstoredb.Replay(
+		ctx,
+		eventStore,
+		func(ctx context.Context, event hwes.Event) (err error) {
+			if err, _ = propertyPostgresProjection.HandleEvent(ctx, event); err != nil {
+				return
+			}
+			if err, _ = propertyValuePostgresProjection.HandleEvent(ctx, event); err != nil {
+				return
+			}
+			return
+		},
+		&[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)},
+	); err != nil {
 		if err := tx.Rollback(ctx); err != nil {
 			log.Err(err).Msg("cannot rollback transaction")
 		}
