@@ -96,6 +96,28 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 		return err, esdb.NackActionRetry
 	}
 
+	mapper := func(dontAlwaysInclude bool) func(uuid.UUID) views_repo.AddToAlwaysIncludeParams {
+		return func(propertyId uuid.UUID) views_repo.AddToAlwaysIncludeParams {
+			return views_repo.AddToAlwaysIncludeParams{
+				RuleID:            payload.RuleId,
+				PropertyID:        propertyId,
+				DontAlwaysInclude: dontAlwaysInclude,
+			}
+		}
+	}
+
+	_, err = viewsQuery.AddToAlwaysInclude(ctx, hwutil.Map(payload.AlwaysInclude, mapper(false)))
+	if err != nil {
+		log.Error().Err(err).Msg("could not insert always include list")
+		return err, esdb.NackActionRetry
+	}
+
+	_, err = viewsQuery.AddToAlwaysInclude(ctx, hwutil.Map(payload.DontAlwaysInclude, mapper(true)))
+	if err != nil {
+		log.Error().Err(err).Msg("could not insert dont always include list")
+		return err, esdb.NackActionRetry
+	}
+
 	err = tx.Commit(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("could not commit")
