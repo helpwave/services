@@ -169,11 +169,19 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 		PropertyIds:       payload.AppendToAlwaysInclude,
 		DontAlwaysInclude: false,
 	})
+	if err != nil {
+		log.Error().Err(err).Msg("failed to clean up before appending to always include list")
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	}
 	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
 		RuleID:            payload.RuleId,
 		PropertyIds:       payload.AppendToDontAlwaysInclude,
 		DontAlwaysInclude: true,
 	})
+	if err != nil {
+		log.Error().Err(err).Msg("failed to clean up before appending to dont always include list")
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	}
 
 	// now, add the new items
 	_, err = viewsQuery.AddToAlwaysInclude(ctx, toAppend)
