@@ -163,12 +163,27 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 	appendToDontAlwaysInclude := hwutil.Map(payload.AppendToDontAlwaysInclude, mapper(true))
 	toAppend := slices.Concat(appendToAlwaysInclude, appendToDontAlwaysInclude)
 
+	// before we can add new items, we have to make sure they don't already exist, or the whole copy operation will be canceled
+	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
+		RuleID:            payload.RuleId,
+		PropertyIds:       payload.AppendToAlwaysInclude,
+		DontAlwaysInclude: false,
+	})
+	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
+		RuleID:            payload.RuleId,
+		PropertyIds:       payload.AppendToDontAlwaysInclude,
+		DontAlwaysInclude: true,
+	})
+
+	// now, add the new items
 	_, err = viewsQuery.AddToAlwaysInclude(ctx, toAppend)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to append to lists")
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
+	// finally, remove things from the lists
+	// we can not merge this with above queries, as we might have to remove things we just added
 	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
 		RuleID:            payload.RuleId,
 		PropertyIds:       payload.RemoveFromAlwaysInclude,
