@@ -83,7 +83,7 @@ func TestPropertyViewTaskViewsProjection_Create_GreenPath(t *testing.T) {
 	})
 
 	assert.NoError(t, err)
-	assert.Equal(t, esdb.NackActionUnknown, action)
+	assert.Nil(t, action)
 }
 
 func TestPropertyViewTaskViewsProjection_Update_GreenPath(t *testing.T) {
@@ -137,5 +137,5 @@ func TestPropertyViewTaskViewsProjection_Update_GreenPath(t *testing.T) {
 	})
 
 	assert.NoError(t, err)
-	assert.Equal(t, esdb.NackActionUnknown, action)
+	assert.Nil(t, action)
 }

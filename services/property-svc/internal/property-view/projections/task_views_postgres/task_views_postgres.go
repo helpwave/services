@@ -43,32 +43,32 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(eventsV1.PropertyRuleListsUpdated, p.onPropertyRuleListsUpdated)
 }
 
-func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
 	var payload eventsV1.PropertyRuleCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionSkip
+		return err, hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
 	log.Debug().Any("payload", payload).Msg("payload")
 
 	if payload.RuleId == uuid.Nil {
-		return fmt.Errorf("ruleID missing"), esdb.NackActionSkip
+		return fmt.Errorf("ruleID missing"), hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
 	// TODO: add more matchers
 
 	matchers, ok := payload.Matchers.(models.TaskPropertyMatchers)
 	if !ok {
-		return fmt.Errorf("wrong type, expected TaskPropertyMatcher, got %T", payload.Matchers), esdb.NackActionSkip
+		return fmt.Errorf("wrong type, expected TaskPropertyMatcher, got %T", payload.Matchers), hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
 	tx, err := p.db.Begin(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to begin transaction")
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 	defer func() {
 		err := tx.Rollback(ctx)
@@ -83,7 +83,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	err = viewsQuery.CreateRule(ctx, payload.RuleId)
 	if err != nil {
 		log.Error().Err(err).Msg("could not create view rule")
-		return err, esdb.NackActionUnknown
+		return err, hwutil.PtrTo(esdb.NackActionUnknown)
 	}
 
 	err = taskViewsQuery.CreateTaskRule(ctx, task_views_repo.CreateTaskRuleParams{
@@ -93,7 +93,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	})
 	if err != nil {
 		log.Error().Err(err).Msg("could not create task rule")
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
 	mapper := func(dontAlwaysInclude bool) func(uuid.UUID) views_repo.AddToAlwaysIncludeParams {
@@ -109,36 +109,36 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	_, err = viewsQuery.AddToAlwaysInclude(ctx, hwutil.Map(payload.AlwaysInclude, mapper(false)))
 	if err != nil {
 		log.Error().Err(err).Msg("could not insert always include list")
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
 	_, err = viewsQuery.AddToAlwaysInclude(ctx, hwutil.Map(payload.DontAlwaysInclude, mapper(true)))
 	if err != nil {
 		log.Error().Err(err).Msg("could not insert dont always include list")
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
 	err = tx.Commit(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("could not commit")
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
-	return nil, esdb.NackActionUnknown
+	return nil, nil
 }
 
-func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Event) (error, esdb.NackAction) {
+func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 
 	var payload eventsV1.PropertyRuleListsUpdatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
-		return err, esdb.NackActionSkip
+		return err, hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
 	tx, err := p.db.Begin(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to begin transaction")
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 	defer func() {
 		err := tx.Rollback(ctx)
@@ -166,7 +166,7 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 	_, err = viewsQuery.AddToAlwaysInclude(ctx, toAppend)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to append to lists")
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
 	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
@@ -177,7 +177,7 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 
 	if err != nil {
 		log.Error().Err(err).Msg("failed to delete from always include list")
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
 	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
@@ -188,14 +188,14 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 
 	if err != nil {
 		log.Error().Err(err).Msg("failed to delete from dont always include list")
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
 	err = tx.Commit(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("could not commit")
-		return err, esdb.NackActionRetry
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
-	return nil, esdb.NackActionUnknown
+	return nil, nil
 }
