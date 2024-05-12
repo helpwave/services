@@ -7,6 +7,7 @@ import (
 	"hwdb"
 	"hwes/eventstoredb"
 	"tasks-svc/internal/patient/projections/patient_postgres_projection"
+	"tasks-svc/internal/task/handlers"
 	"tasks-svc/internal/task/projections/task_postgres_projection"
 	"tasks-svc/internal/tracking"
 	"time"
@@ -34,6 +35,7 @@ func main() {
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
+	taskHandlers := handlers.NewTaskHandlers(aggregateStore)
 
 	go func() {
 		postgresTaskProjection := task_postgres_projection.NewProjection(eventStore, ServiceName)
@@ -54,7 +56,7 @@ func main() {
 	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
-		pb.RegisterTaskServiceServer(grpcServer, task.NewTaskGrpcService(aggregateStore))
+		pb.RegisterTaskServiceServer(grpcServer, task.NewTaskGrpcService(aggregateStore, taskHandlers))
 		pb.RegisterPatientServiceServer(grpcServer, patient.NewPatientGrpcService(aggregateStore))
 	})
 

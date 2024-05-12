@@ -7,6 +7,7 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	zlog "github.com/rs/zerolog/log"
 	"hwes"
+	"hwutil"
 	"telemetry"
 )
 
@@ -25,7 +26,7 @@ type EventStoreClient interface {
 	) error
 }
 
-type eventHandler func(ctx context.Context, evt hwes.Event) (error, esdb.NackAction)
+type eventHandler func(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction)
 
 // CustomProjection can be used to develop own projections
 // A projection is an event sourcing pattern to build up
@@ -87,13 +88,13 @@ func (p *CustomProjection) RegisterEventListener(eventType string, eventHandler 
 	return p
 }
 
-func (p *CustomProjection) handleEvent(ctx context.Context, event hwes.Event) (error, esdb.NackAction) {
+func (p *CustomProjection) handleEvent(ctx context.Context, event hwes.Event) (error, *esdb.NackAction) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "custom_projection.handleEvent")
 	defer span.End()
 
 	eventHandler, found := p.eventHandlers[event.EventType]
 	if !found {
-		return fmt.Errorf("event type '%s' is invalid", event.EventType), esdb.NackActionUnknown
+		return fmt.Errorf("event type '%s' is invalid", event.EventType), hwutil.PtrTo(esdb.NackActionUnknown)
 	}
 	return eventHandler(ctx, event)
 }
@@ -194,27 +195,37 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 
 	log.Debug().Dict("event", event.GetZerologDict()).Msg("process event")
 
-	if err, nackAction := p.handleEvent(ctx, event); err != nil {
-		log.Error().Dict("event", event.GetZerologDict()).Err(err).Msg("error during processing of event")
-
-		log.Warn().Dict("event", event.GetZerologDict()).Msg("nack event")
-		if err := stream.Nack(err.Error(), nackAction, esdbEvent.EventAppeared.Event); err != nil {
-			log.Error().Dict("event", event.GetZerologDict()).Err(err).Msg("error during nack of event")
+	err, nackAction := p.handleEvent(ctx, event)
+	if err == nil && nackAction == nil {
+		// ack event
+		log.Debug().Dict("event", event.GetZerologDict()).Msg("ack event")
+		err = stream.Ack(esdbEvent.EventAppeared.Event)
+		if err != nil {
+			log.Error().Dict("event", event.GetZerologDict()).Err(err).Msg("error during ack of event")
 			return nil
 		}
-		log.Debug().Dict("event", event.GetZerologDict()).Msg("event nack`ed")
+		log.Debug().Dict("event", event.GetZerologDict()).Msg("event ack`ed")
 
+		log.Debug().Dict("event", event.GetZerologDict()).Msg("event processed")
 		return nil
 	}
 
-	log.Debug().Dict("event", event.GetZerologDict()).Msg("ack event")
-	err = stream.Ack(esdbEvent.EventAppeared.Event)
+	var reason string
 	if err != nil {
-		log.Error().Dict("event", event.GetZerologDict()).Err(err).Msg("error during ack of event")
+		log.Error().Dict("event", event.GetZerologDict()).Err(err).Msg("error during processing of event")
+		reason = err.Error()
+	}
+	if nackAction == nil {
+		// set "default" nackAction to unknown
+		nackAction = hwutil.PtrTo(esdb.NackActionUnknown)
+	}
+
+	log.Warn().Dict("event", event.GetZerologDict()).Msg("nack event")
+	if err := stream.Nack(reason, *nackAction, esdbEvent.EventAppeared.Event); err != nil {
+		log.Error().Dict("event", event.GetZerologDict()).Err(err).Msg("error during nack of event")
 		return nil
 	}
-	log.Debug().Dict("event", event.GetZerologDict()).Msg("event ack`ed")
+	log.Debug().Dict("event", event.GetZerologDict()).Msg("event nack`ed")
 
-	log.Debug().Dict("event", event.GetZerologDict()).Msg("event processed")
 	return nil
 }
