@@ -47,8 +47,8 @@ func PbToTimestamp(src *timestamppb.Timestamp) pgtype.Timestamp {
 	return pgtype.Timestamp{Time: (*src).AsTime().UTC(), Valid: true}
 }
 
-// TruncateAllTables truncates all tables of the currently connected database
-func TruncateAllTables(ctx context.Context) error {
+// DANGERTruncateAllTables truncates all tables of the currently connected database
+func DANGERTruncateAllTables(ctx context.Context) error {
 	db := GetDB()
 
 	rows, err := db.Query(ctx, `

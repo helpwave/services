@@ -27,7 +27,7 @@ func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjec
 	}
 
 	// TODO: Pass transaction. db.Begin() results in "conn busy".
-	if err := hwdb.TruncateAllTables(ctx); err != nil {
+	if err := hwdb.DANGERTruncateAllTables(ctx); err != nil {
 		log.Err(err).Msg("cannot truncate all tables")
 		return err
 	}
