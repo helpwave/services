@@ -14,7 +14,6 @@ require (
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa
 	github.com/jackc/pgx/v5 v5.5.5
 	github.com/nicksnyder/go-i18n/v2 v2.4.0
-	github.com/pashagolub/pgxmock/v3 v3.4.0
 	github.com/rs/zerolog v1.32.0
 	github.com/vgarvardt/pgx-google-uuid/v5 v5.0.0
 	go.opentelemetry.io/otel v1.25.0
@@ -52,6 +51,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/openzipkin/zipkin-go v0.4.2 // indirect
 	github.com/pquerna/cachecontrol v0.1.0 // indirect
+	github.com/rogpeppe/go-internal v1.11.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.50.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.25.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.25.0 // indirect
