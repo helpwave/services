@@ -10,8 +10,20 @@ import (
 	"telemetry"
 )
 
-// EventStoreDBInternalEventPrefix https://developers.eventstore.com/server/v23.10/streams.html#reserved-names
-const EventStoreDBInternalEventPrefix = "$"
+// EventStoreClient is an interface that describes all methods of esdb.Client that are used by CustomProjection
+type EventStoreClient interface {
+	SubscribeToPersistentSubscriptionToAll(
+		ctx context.Context,
+		groupName string,
+		options esdb.SubscribeToPersistentSubscriptionOptions,
+	) (*esdb.PersistentSubscription, error)
+
+	CreatePersistentSubscriptionToAll(
+		ctx context.Context,
+		groupName string,
+		options esdb.PersistentAllSubscriptionOptions,
+	) error
+}
 
 type eventHandler func(ctx context.Context, evt hwes.Event) (error, esdb.NackAction)
 
@@ -29,7 +41,7 @@ type eventHandler func(ctx context.Context, evt hwes.Event) (error, esdb.NackAct
 //		*custom.CustomProjection
 //	}
 //
-//	func NewProjection(es *esdb.Client) *Projection {
+//	func NewProjection(es EventStoreClient) *Projection {
 //		subscriptionGroupName := "tasks-svc-echo-projection"
 //		p := &Projection{custom.NewCustomProjection(es, subscriptionGroupName)}
 //		p.RegisterEventListener(taskEventsV1.TaskCreated, p.onTaskCreated)
@@ -49,13 +61,13 @@ type eventHandler func(ctx context.Context, evt hwes.Event) (error, esdb.NackAct
 //		return nil, esdb.Nack_Unknown
 //	}
 type CustomProjection struct {
-	es                    *esdb.Client
+	es                    EventStoreClient
 	eventHandlers         map[string]eventHandler
 	subscriptionGroupName string
 	streamPrefixFilters   *[]string
 }
 
-func NewCustomProjection(esdbClient *esdb.Client, subscriptionGroupName string, streamPrefixFilters *[]string) *CustomProjection {
+func NewCustomProjection(esdbClient EventStoreClient, subscriptionGroupName string, streamPrefixFilters *[]string) *CustomProjection {
 	return &CustomProjection{
 		es:                    esdbClient,
 		eventHandlers:         make(map[string]eventHandler),

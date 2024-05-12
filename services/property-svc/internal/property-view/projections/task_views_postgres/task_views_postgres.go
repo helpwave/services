@@ -27,7 +27,7 @@ type Projection struct {
 	viewsRepo     *views_repo.Queries
 }
 
-func NewProjection(es *esdb.Client, serviceName string) *Projection {
+func NewProjection(es custom.EventStoreClient, serviceName string) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-task-views-postgres-projection", serviceName)
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PropertyViewRuleAggregateType)}),
@@ -126,8 +126,6 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 	}()
 
 	viewsQuery := p.viewsRepo.WithTx(tx)
-
-	// TODO: What if we re-add into the same list?
 
 	mapper := func(dontAlwaysInclude bool) func(uuid.UUID) views_repo.AddToAlwaysIncludeParams {
 		return func(propertyId uuid.UUID) views_repo.AddToAlwaysIncludeParams {

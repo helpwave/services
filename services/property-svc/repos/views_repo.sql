@@ -3,7 +3,7 @@
 INSERT INTO property_view_rules (rule_id) VALUES (@id);
 
 -- name: AddToAlwaysInclude :copyfrom
-INSERT INTO property_view_filter_always_include_items (rule_id, property_id, dont_always_include) VALUES ($1, $2, $3);
+INSERT INTO property_view_filter_always_include_items (rule_id, property_id, dont_always_include) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING;
 
 -- name: DeleteFromAlwaysInclude :exec
 DELETE FROM property_view_filter_always_include_items
