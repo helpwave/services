@@ -207,7 +207,7 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_GreenPath_Created(t 
 		},
 	})
 
-	as.ExpectOneStream(t, func(streamName string, events []hwes.Event) bool {
+	as.ExpectAnyStream(t, func(streamName string, events []hwes.Event) bool {
 		if !assert.NotEmpty(t, events) {
 			return false
 		}
@@ -284,7 +284,7 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_GreenPath_Updated(t 
 		},
 	})
 
-	as.ExpectOneStream(t, func(streamName string, events []hwes.Event) bool {
+	as.ExpectAnyStream(t, func(streamName string, events []hwes.Event) bool {
 		if streamName != nameOfRelevantStream {
 			return false
 		}

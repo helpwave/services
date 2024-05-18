@@ -60,7 +60,8 @@ func (a *AggregateStore) ExpectStream(t *testing.T, expectedStream string, expec
 	return assert.Truef(t, res, "stream %v does not meet requirements", expectedStream)
 }
 
-func (a *AggregateStore) ExpectOneStream(t *testing.T, expectedFn func(streamName string, events []hwes.Event) bool) bool {
+// ExpectAnyStream returns true, if at least one stream fulfills the expector function
+func (a *AggregateStore) ExpectAnyStream(t *testing.T, expectedFn func(streamName string, events []hwes.Event) bool) bool {
 	for name, stream := range a.streams {
 		if expectedFn(name, stream) {
 			return true

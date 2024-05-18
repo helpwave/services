@@ -62,7 +62,6 @@ apps:
   - appID: property-svc
     appDirPath: ../services/property-svc
     appPort: 3005
-    appProtocol: http
     env:
       SERVICE: property-svc
       POSTGRES_DB: property-svc
