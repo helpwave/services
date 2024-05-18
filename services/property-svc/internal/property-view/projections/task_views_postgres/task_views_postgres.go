@@ -83,7 +83,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	err = viewsQuery.CreateRule(ctx, payload.RuleId)
 	if err != nil {
 		log.Error().Err(err).Msg("could not create view rule")
-		return err, hwutil.PtrTo(esdb.NackActionUnknown)
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
 	err = taskViewsQuery.CreateTaskRule(ctx, task_views_repo.CreateTaskRuleParams{
