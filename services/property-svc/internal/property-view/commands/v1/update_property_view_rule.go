@@ -22,10 +22,11 @@ func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePrope
 		var ruleAgg *aggregate.PropertyViewRuleAggregate
 		if ruleID != nil {
 			// update
-			ruleAgg = aggregate.NewPropertyViewRuleAggregate(*ruleID)
-			if err := as.Load(ctx, ruleAgg); err != nil {
+			
+			if ruleAgg, err = aggregate.LoadPropertyViewRuleAggregate(ctx, as, *ruleID); err != nil {
 				return err
 			}
+			
 
 			if err := ruleAgg.UpdateLists(ctx, *ruleID, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude); err != nil {
 				return err
