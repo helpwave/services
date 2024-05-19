@@ -94,7 +94,7 @@
         "plugin: buf.build/(?<depName>.*?):(?<currentValue>.+?)\\s"
       ],
       "datasourceTemplate": "custom.buf",
-      "versioningTemplate": "loose"
+      "versioningTemplate": "semver"
     }
   ]
 }
