@@ -45,7 +45,7 @@
   "customDatasource": {
      "buf": {
         "defaultRegistryUrlTemplate": "https://buf-resource-proxy.fly.dev/{{packageName}}",
-	"transformTemplates": ["{\"resource\": { \"plugin\": { \"version\": $$.(data[id = 'stable'].latest } } }"]
+        "transformTemplates": ["{\"resource\": { \"plugin\": { \"version\": $$.(data[id = 'stable'].latest } } }"]
      } 
   },
   "customManagers": [
@@ -85,6 +85,13 @@
       ],
       "depNameTemplate": "golang",
       "datasourceTemplate": "docker"
+    },
+    {
+      "fileMatch": ["buf.gen.yaml$"],
+      "matchStrings": [
+        "plugin: buf.build/(?<depName>.*?):(?<currentValue>.+?)\\s"
+      ],
+      "datasourceTemplate": "custom.buf"
     }
   ]
 }
