@@ -45,7 +45,7 @@
   "customDatasources": {
      "buf": {
         "defaultRegistryUrlTemplate": "https://buf-resource-proxy.fly.dev/{{packageName}}",
-        "transformTemplates": ["{\"releases\":[{\"version\": $string(resource.plugin.revision)}]}"]
+        "transformTemplates": ["{\"releases\":[{\"version\": $string(resource.plugin.version)}]}"]
      } 
   },
   "customManagers": [
