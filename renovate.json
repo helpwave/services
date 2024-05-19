@@ -93,7 +93,8 @@
       "matchStrings": [
         "plugin: buf.build/(?<depName>.*?):(?<currentValue>.+?)\\s"
       ],
-      "datasourceTemplate": "custom.buf"
+      "datasourceTemplate": "custom.buf",
+      "versioningTemplate": "semver"
     }
   ]
 }
