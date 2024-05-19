@@ -42,7 +42,7 @@
     }
   ],
   "ignoreDeps": ["common", "decaying_lru", "hwdb", "hwes", "hwutil", "hwlocale", "telemetry", "gen"],
-  "customDatasource": {
+  "customDatasources": {
      "buf": {
         "defaultRegistryUrlTemplate": "https://buf-resource-proxy.fly.dev/{{packageName}}",
         "transformTemplates": ["{\"resource\": { \"plugin\": { \"version\": $$.(data[id = 'stable'].latest } } }"]
