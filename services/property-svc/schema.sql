@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 15.6
--- Dumped by pg_dump version 15.7
+-- Dumped by pg_dump version 15.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -208,11 +208,11 @@ ALTER TABLE ONLY public.property_values
 
 
 --
--- Name: property_view_filter_always_include_items property_view_filter_always_include_items_property_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: property_view_filter_always_include_items property_view_filter_always_include_ite_rule_id_property_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.property_view_filter_always_include_items
-    ADD CONSTRAINT property_view_filter_always_include_items_property_id_key UNIQUE (property_id);
+    ADD CONSTRAINT property_view_filter_always_include_ite_rule_id_property_id_key UNIQUE (rule_id, property_id);
 
 
 --

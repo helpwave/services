@@ -11,13 +11,14 @@ CREATE TABLE IF NOT EXISTS property_view_filter_always_include_items (
 		-- true = this is an item in the dont_always_include list of the rule
 		-- false = this is an item in the always_include list of the rule
  	rule_id uuid NOT NULL, -- the rule this always_includes item belongs to
-	property_id uuid NOT NULL UNIQUE, -- the property to (not) always include, unique also prevents a property to be in both lists
+	property_id uuid NOT NULL, -- the property to (not) always include
 	FOREIGN KEY (property_id)
 		REFERENCES properties (id)
 		ON DELETE CASCADE,
 	FOREIGN KEY (rule_id)
 		REFERENCES property_view_rules (rule_id)
-		ON DELETE CASCADE
+		ON DELETE CASCADE,
+	UNIQUE (rule_id, property_id) -- unique prevents a property to be in both lists (or in one multiple times)
 );
 
 -- we will make lookups by rule_id, it cant be a PK, as it is not unique
