@@ -10,5 +10,4 @@ DELETE FROM property_view_filter_always_include_items
 	WHERE (
 		rule_id = @rule_id AND
 		property_id = ANY(@property_ids :: uuid[])
-		AND dont_always_include = @dont_always_include
 	);

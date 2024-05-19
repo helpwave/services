@@ -165,18 +165,10 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 
 	// before we can add new items, we have to make sure they don't already exist, or the whole copy operation will be canceled
 	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
-		RuleID:            payload.RuleId,
-		PropertyIds:       payload.AppendToAlwaysInclude,
-		DontAlwaysInclude: false,
-	})
-	if err != nil {
-		log.Error().Err(err).Msg("failed to clean up before appending to always include list")
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
-	}
-	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
-		RuleID:            payload.RuleId,
-		PropertyIds:       payload.AppendToDontAlwaysInclude,
-		DontAlwaysInclude: true,
+		RuleID: payload.RuleId,
+		PropertyIds: hwutil.Map(toAppend, func(p views_repo.AddToAlwaysIncludeParams) uuid.UUID {
+			return p.PropertyID
+		}),
 	})
 	if err != nil {
 		log.Error().Err(err).Msg("failed to clean up before appending to dont always include list")
@@ -193,24 +185,12 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 	// finally, remove things from the lists
 	// we can not merge this with above queries, as we might have to remove things we just added
 	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
-		RuleID:            payload.RuleId,
-		PropertyIds:       payload.RemoveFromAlwaysInclude,
-		DontAlwaysInclude: false,
+		RuleID:      payload.RuleId,
+		PropertyIds: append(payload.RemoveFromAlwaysInclude, payload.RemoveFromDontAlwaysInclude...),
 	})
 
 	if err != nil {
 		log.Error().Err(err).Msg("failed to delete from always include list")
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
-	}
-
-	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
-		RuleID:            payload.RuleId,
-		PropertyIds:       payload.RemoveFromDontAlwaysInclude,
-		DontAlwaysInclude: true,
-	})
-
-	if err != nil {
-		log.Error().Err(err).Msg("failed to delete from dont always include list")
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 

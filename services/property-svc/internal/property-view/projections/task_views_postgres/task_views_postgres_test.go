@@ -94,16 +94,7 @@ func TestPropertyViewTaskViewsProjection_Update_GreenPath(t *testing.T) {
 	dbMock.ExpectExec("DELETE FROM property_view_filter_always_include_items.*").
 		WithArgs(
 			uuid.MustParse("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"),
-			[]uuid.UUID{},
-			false,
-		).
-		WillReturnResult(pgconn.NewCommandTag("DELETE 1"))
-
-	dbMock.ExpectExec("DELETE FROM property_view_filter_always_include_items.*").
-		WithArgs(
-			uuid.MustParse("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"),
 			[]uuid.UUID{uuid.MustParse("08b23992-9489-41d2-b80d-d7d49c4c9168"), uuid.MustParse("db59dd1b-fd1c-488e-a73c-6926abe68c34")},
-			true,
 		).
 		WillReturnResult(pgconn.NewCommandTag("DELETE 1"))
 
@@ -114,18 +105,10 @@ func TestPropertyViewTaskViewsProjection_Update_GreenPath(t *testing.T) {
 			[]uuid.UUID{
 				uuid.MustParse("a7ff7a87-7787-42b4-9aa8-037293ac9d90"),
 				uuid.MustParse("08b23992-9489-41d2-b80d-d7d49c4c9168"),
+				uuid.MustParse("08b23992-9489-41d2-b80d-d7d49c4c9168"),
 			},
-			false,
 		).
 		WillReturnResult(pgconn.NewCommandTag("DELETE 1"))
-	dbMock.ExpectExec("DELETE FROM property_view_filter_always_include_items.*").
-		WithArgs(
-			uuid.MustParse("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"),
-			[]uuid.UUID{uuid.MustParse("08b23992-9489-41d2-b80d-d7d49c4c9168")},
-			true,
-		).
-		WillReturnResult(pgconn.NewCommandTag("DELETE 1"))
-
 	dbMock.ExpectCommit()
 
 	expData := `{
