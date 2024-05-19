@@ -26,7 +26,7 @@ func NewPropertyViewRuleAggregate(id uuid.UUID) *PropertyViewRuleAggregate {
 	return aggregate
 }
 
-func LoadPropertyViewAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID) (*PropertyViewRuleAggregate, error) {
+func LoadPropertyViewRuleAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID) (*PropertyViewRuleAggregate, error) {
 	propertyView := NewPropertyViewRuleAggregate(id)
 	if err := as.Load(ctx, propertyView); err != nil {
 		return nil, err
