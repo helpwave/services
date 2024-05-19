@@ -42,6 +42,12 @@
     }
   ],
   "ignoreDeps": ["common", "decaying_lru", "hwdb", "hwes", "hwutil", "hwlocale", "telemetry", "gen"],
+  "customDatasource": {
+     "buf": {
+        "defaultRegistryUrlTemplate": "https://buf-resource-proxy.fly.dev/{{packageName}}",
+	"transformTemplates": ["{\"resource\": { \"plugin\": { \"version\": $$.(data[id = 'stable'].latest } } }"]
+     } 
+  },
   "customManagers": [
     {
       "customType": "regex",
