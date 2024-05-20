@@ -119,6 +119,50 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 	}, nil
 }
 
+func (s *TaskGrpcService) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPatientRequest) (*pb.GetTasksByPatientResponse, error) {
+	patientID, err := uuid.Parse(req.PatientId)
+	if err != nil {
+		return nil, err
+	}
+
+	tasksWithSubtasks, err := s.handlers.Queries.V1.GetTasksByPatient(ctx, patientID)
+	if err != nil {
+		return nil, err
+	}
+
+	taskResponse := make([]*pb.GetTasksByPatientResponse_Task, len(tasksWithSubtasks))
+	for ix, item := range tasksWithSubtasks {
+		taskResponse[ix] = &pb.GetTasksByPatientResponse_Task{
+			Id:             item.ID.String(),
+			Name:           item.Name,
+			Description:    item.Description,
+			Status:         item.Status,
+			PatientId:      item.PatientID.String(),
+			Public:         item.Public,
+			CreatedBy:      item.CreatedBy.String(),
+			CreatedAt:      timestamppb.New(item.CreatedAt),
+			DueAt:          timestamppb.New(item.DueAt),
+			Subtasks:       make([]*pb.GetTasksByPatientResponse_Task_SubTask, len(item.Subtasks)),
+			AssignedUserId: hwutil.PtrTo(item.AssignedUsers[0].String()), // TODO: #760
+		}
+
+		subtaskIdx := 0
+		for _, subtask := range item.Subtasks {
+			taskResponse[ix].Subtasks[subtaskIdx] = &pb.GetTasksByPatientResponse_Task_SubTask{
+				Id:        subtask.ID.String(),
+				Name:      subtask.Name,
+				Done:      subtask.Done,
+				CreatedBy: subtask.CreatedBy.String(),
+			}
+			subtaskIdx++
+		}
+	}
+
+	return &pb.GetTasksByPatientResponse{
+		Tasks: taskResponse,
+	}, nil
+}
+
 func (s *TaskGrpcService) CreateSubtask(ctx context.Context, req *pb.CreateSubtaskRequest) (*pb.CreateSubtaskResponse, error) {
 	taskID, err := uuid.Parse(req.GetTaskId())
 	if err != nil {

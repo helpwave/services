@@ -7,10 +7,9 @@ import (
 )
 
 type Task struct {
-	ID             uuid.UUID
-	OrganizationID uuid.UUID
-	CreatedBy      uuid.UUID
-	CreatedAt      time.Time
+	ID        uuid.UUID
+	CreatedBy uuid.UUID
+	CreatedAt time.Time
 
 	Name          string
 	Description   string

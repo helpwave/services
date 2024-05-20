@@ -37,8 +37,8 @@ func (q *Queries) CreateSubtask(ctx context.Context, arg CreateSubtaskParams) er
 
 const createTask = `-- name: CreateTask :exec
 INSERT INTO tasks
-	(id, name, patient_id, status, created_by)
-VALUES ($1, $2, $3, $4, $5)
+	(id, name, patient_id, status, created_by, created_at)
+VALUES ($1, $2, $3, $4, $5, $6)
 `
 
 type CreateTaskParams struct {
@@ -47,6 +47,7 @@ type CreateTaskParams struct {
 	PatientID uuid.UUID
 	Status    int32
 	CreatedBy uuid.UUID
+	CreatedAt pgtype.Timestamp
 }
 
 func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) error {
@@ -56,6 +57,7 @@ func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) error {
 		arg.PatientID,
 		arg.Status,
 		arg.CreatedBy,
+		arg.CreatedAt,
 	)
 	return err
 }
@@ -67,6 +69,62 @@ DELETE FROM subtasks WHERE id = $1
 func (q *Queries) DeleteSubtask(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.Exec(ctx, deleteSubtask, id)
 	return err
+}
+
+const getTasksWithSubtasksByPatient = `-- name: GetTasksWithSubtasksByPatient :many
+SELECT
+	tasks.id, tasks.name, tasks.description, tasks.status, tasks.assigned_user_id, tasks.patient_id, tasks.public, tasks.created_by, tasks.due_at, tasks.created_at,
+	subtasks.id as subtask_id,
+	subtasks.name as subtask_name,
+	subtasks.done as subtask_done,
+	subtasks.created_by as subtask_created_by
+FROM tasks
+JOIN patients ON patients.id = tasks.patient_id
+LEFT JOIN subtasks ON subtasks.task_id = tasks.id
+WHERE tasks.patient_id = $1
+`
+
+type GetTasksWithSubtasksByPatientRow struct {
+	Task             Task
+	SubtaskID        uuid.NullUUID
+	SubtaskName      *string
+	SubtaskDone      *bool
+	SubtaskCreatedBy uuid.NullUUID
+}
+
+func (q *Queries) GetTasksWithSubtasksByPatient(ctx context.Context, patientID uuid.UUID) ([]GetTasksWithSubtasksByPatientRow, error) {
+	rows, err := q.db.Query(ctx, getTasksWithSubtasksByPatient, patientID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetTasksWithSubtasksByPatientRow{}
+	for rows.Next() {
+		var i GetTasksWithSubtasksByPatientRow
+		if err := rows.Scan(
+			&i.Task.ID,
+			&i.Task.Name,
+			&i.Task.Description,
+			&i.Task.Status,
+			&i.Task.AssignedUserID,
+			&i.Task.PatientID,
+			&i.Task.Public,
+			&i.Task.CreatedBy,
+			&i.Task.DueAt,
+			&i.Task.CreatedAt,
+			&i.SubtaskID,
+			&i.SubtaskName,
+			&i.SubtaskDone,
+			&i.SubtaskCreatedBy,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const updateSubtask = `-- name: UpdateSubtask :exec

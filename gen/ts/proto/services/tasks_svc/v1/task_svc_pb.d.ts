@@ -240,19 +240,19 @@ export namespace GetTaskResponse {
 
 }
 
-export class GetTaskByPatientRequest extends jspb.Message {
+export class GetTasksByPatientRequest extends jspb.Message {
   getPatientId(): string;
-  setPatientId(value: string): GetTaskByPatientRequest;
+  setPatientId(value: string): GetTasksByPatientRequest;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetTaskByPatientRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetTaskByPatientRequest): GetTaskByPatientRequest.AsObject;
-  static serializeBinaryToWriter(message: GetTaskByPatientRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetTaskByPatientRequest;
-  static deserializeBinaryFromReader(message: GetTaskByPatientRequest, reader: jspb.BinaryReader): GetTaskByPatientRequest;
+  toObject(includeInstance?: boolean): GetTasksByPatientRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetTasksByPatientRequest): GetTasksByPatientRequest.AsObject;
+  static serializeBinaryToWriter(message: GetTasksByPatientRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetTasksByPatientRequest;
+  static deserializeBinaryFromReader(message: GetTasksByPatientRequest, reader: jspb.BinaryReader): GetTasksByPatientRequest;
 }
 
-export namespace GetTaskByPatientRequest {
+export namespace GetTasksByPatientRequest {
   export type AsObject = {
     patientId: string,
   }
@@ -314,6 +314,11 @@ export namespace GetTasksByPatientResponse {
     clearSubtasksList(): Task;
     addSubtasks(value?: GetTasksByPatientResponse.Task.SubTask, index?: number): GetTasksByPatientResponse.Task.SubTask;
 
+    getCreatedAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
+    setCreatedAt(value?: google_protobuf_timestamp_pb.Timestamp): Task;
+    hasCreatedAt(): boolean;
+    clearCreatedAt(): Task;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Task.AsObject;
     static toObject(includeInstance: boolean, msg: Task): Task.AsObject;
@@ -334,6 +339,7 @@ export namespace GetTasksByPatientResponse {
       dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
       createdBy: string,
       subtasksList: Array<GetTasksByPatientResponse.Task.SubTask.AsObject>,
+      createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     }
 
     export class SubTask extends jspb.Message {

@@ -568,8 +568,8 @@ class GetTaskResponse extends $pb.GeneratedMessage {
   $16.Timestamp ensureCreatedAt() => $_ensure(6);
 }
 
-class GetTaskByPatientRequest extends $pb.GeneratedMessage {
-  factory GetTaskByPatientRequest({
+class GetTasksByPatientRequest extends $pb.GeneratedMessage {
+  factory GetTasksByPatientRequest({
     $core.String? patientId,
   }) {
     final $result = create();
@@ -578,11 +578,11 @@ class GetTaskByPatientRequest extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  GetTaskByPatientRequest._() : super();
-  factory GetTaskByPatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetTaskByPatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetTasksByPatientRequest._() : super();
+  factory GetTasksByPatientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetTasksByPatientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTaskByPatientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTasksByPatientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'patientId')
     ..hasRequiredFields = false
   ;
@@ -591,22 +591,22 @@ class GetTaskByPatientRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetTaskByPatientRequest clone() => GetTaskByPatientRequest()..mergeFromMessage(this);
+  GetTasksByPatientRequest clone() => GetTasksByPatientRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetTaskByPatientRequest copyWith(void Function(GetTaskByPatientRequest) updates) => super.copyWith((message) => updates(message as GetTaskByPatientRequest)) as GetTaskByPatientRequest;
+  GetTasksByPatientRequest copyWith(void Function(GetTasksByPatientRequest) updates) => super.copyWith((message) => updates(message as GetTasksByPatientRequest)) as GetTasksByPatientRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetTaskByPatientRequest create() => GetTaskByPatientRequest._();
-  GetTaskByPatientRequest createEmptyInstance() => create();
-  static $pb.PbList<GetTaskByPatientRequest> createRepeated() => $pb.PbList<GetTaskByPatientRequest>();
+  static GetTasksByPatientRequest create() => GetTasksByPatientRequest._();
+  GetTasksByPatientRequest createEmptyInstance() => create();
+  static $pb.PbList<GetTasksByPatientRequest> createRepeated() => $pb.PbList<GetTasksByPatientRequest>();
   @$core.pragma('dart2js:noInline')
-  static GetTaskByPatientRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTaskByPatientRequest>(create);
-  static GetTaskByPatientRequest? _defaultInstance;
+  static GetTasksByPatientRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTasksByPatientRequest>(create);
+  static GetTasksByPatientRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get patientId => $_getSZ(0);
@@ -722,6 +722,7 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
     $16.Timestamp? dueAt,
     $core.String? createdBy,
     $core.Iterable<GetTasksByPatientResponse_Task_SubTask>? subtasks,
+    $16.Timestamp? createdAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -754,6 +755,9 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
     if (subtasks != null) {
       $result.subtasks.addAll(subtasks);
     }
+    if (createdAt != null) {
+      $result.createdAt = createdAt;
+    }
     return $result;
   }
   GetTasksByPatientResponse_Task._() : super();
@@ -771,6 +775,7 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
     ..aOM<$16.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $16.Timestamp.create)
     ..aOS(9, _omitFieldNames ? '' : 'createdBy')
     ..pc<GetTasksByPatientResponse_Task_SubTask>(10, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTasksByPatientResponse_Task_SubTask.create)
+    ..aOM<$16.Timestamp>(11, _omitFieldNames ? '' : 'createdAt', subBuilder: $16.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -880,6 +885,17 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(10)
   $core.List<GetTasksByPatientResponse_Task_SubTask> get subtasks => $_getList(9);
+
+  @$pb.TagNumber(11)
+  $16.Timestamp get createdAt => $_getN(10);
+  @$pb.TagNumber(11)
+  set createdAt($16.Timestamp v) { setField(11, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasCreatedAt() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearCreatedAt() => clearField(11);
+  @$pb.TagNumber(11)
+  $16.Timestamp ensureCreatedAt() => $_ensure(10);
 }
 
 class GetTasksByPatientResponse extends $pb.GeneratedMessage {

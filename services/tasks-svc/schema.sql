@@ -132,7 +132,8 @@ CREATE TABLE public.tasks (
     patient_id uuid NOT NULL,
     public boolean DEFAULT false NOT NULL,
     created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
-    due_at timestamp without time zone DEFAULT '1970-01-01 00:00:00'::timestamp without time zone NOT NULL
+    due_at timestamp without time zone DEFAULT '1970-01-01 00:00:00'::timestamp without time zone NOT NULL,
+    created_at timestamp without time zone DEFAULT '1970-01-01 00:00:00'::timestamp without time zone NOT NULL
 );
 
 

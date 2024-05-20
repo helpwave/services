@@ -84,6 +84,7 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 		PatientID: patientID,
 		Status:    int32(status),
 		CreatedBy: committerID,
+		CreatedAt: hwdb.TimeToTimestamp(payload.CreatedAt),
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
