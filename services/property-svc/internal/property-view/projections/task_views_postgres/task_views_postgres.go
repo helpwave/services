@@ -149,6 +149,18 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 
 	viewsQuery := p.viewsRepo.WithTx(tx)
 
+	removeFromAlwaysInclude := hwutil.SliceToSet(payload.RemoveFromAlwaysInclude)
+	removeFromDontAlwaysInclude := hwutil.SliceToSet(payload.RemoveFromDontAlwaysInclude)
+
+	appendToAlwaysIncludeFiltered := hwutil.Filter(payload.AppendToAlwaysInclude, func(id uuid.UUID) bool {
+		// the intent of being in the "don't list" is stronger
+		// if an id is in both lists, it gets removed from the "always list"
+		_, inRemove := removeFromAlwaysInclude[id]
+		_, inRemoveFromDont := removeFromDontAlwaysInclude[id]
+
+		return !inRemove && inRemoveFromDont
+	})
+
 	mapper := func(dontAlwaysInclude bool) func(uuid.UUID) views_repo.AddToAlwaysIncludeParams {
 		return func(propertyId uuid.UUID) views_repo.AddToAlwaysIncludeParams {
 			return views_repo.AddToAlwaysIncludeParams{
@@ -159,7 +171,7 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 		}
 	}
 
-	appendToAlwaysInclude := hwutil.Map(payload.AppendToAlwaysInclude, mapper(false))
+	appendToAlwaysInclude := hwutil.Map(appendToAlwaysIncludeFiltered, mapper(false))
 	appendToDontAlwaysInclude := hwutil.Map(payload.AppendToDontAlwaysInclude, mapper(true))
 	toAppend := slices.Concat(appendToAlwaysInclude, appendToDontAlwaysInclude)
 
