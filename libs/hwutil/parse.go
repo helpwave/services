@@ -2,10 +2,11 @@ package hwutil
 
 import (
 	"encoding/json"
+	"strconv"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
-	"strconv"
 )
 
 var validate *validator.Validate
@@ -100,4 +101,13 @@ func ParseNullUUID(ptr *string) (uuid.NullUUID, error) {
 // PtrTo returns the pointer to the passed value
 func PtrTo[T any](v T) *T {
 	return &v
+}
+
+type JSONAble interface {
+	ToJSON() ([]byte, error)
+	FromJSON([]byte) error
+}
+
+type MapAble interface {
+	ToMap() map[string]interface{}
 }
