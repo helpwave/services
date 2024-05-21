@@ -91,6 +91,16 @@ func SliceToSet[T comparable](ts []T) map[T]bool {
 	return unique
 }
 
+func SetToSlice[T comparable](set map[T]bool) []T {
+	slice := make([]T, len(set))
+	for key, t := range set {
+		if t {
+			slice = append(slice, key)
+		}
+	}
+	return slice
+}
+
 // MergeSlicesWithSet merges two slices, only keeping unique elements once, not stable the resulting order may be arbitrary
 // unlike MergeSlices, also returns the set of unique values
 func MergeSlicesWithSet[T comparable](as, bs []T) ([]T, map[T]bool) {

@@ -6,11 +6,21 @@ import (
 	"hwutil"
 )
 
+type PropertiesQueryRow interface {
+	GetPropertyID() uuid.UUID
+	GetDontAlwaysInclude() bool
+	GetSpecificity() int32
+}
+
 type PropertyMatchers interface {
 	hwutil.MapAble
 	// FindExactRuleId queries (presumably the projection) for the one rule that has these matchers
 	// MUST return (nil, nil) if no such rule exists
 	FindExactRuleId(context.Context) (*uuid.UUID, error)
+
+	// QueryProperties queries (presumably the projection) for all properties relevant for the user using the rules
+	// MUST be ordered in ascending order by specificity
+	QueryProperties(context.Context) ([]PropertiesQueryRow, error)
 }
 
 type PropertyViewRule struct {
