@@ -54,18 +54,42 @@ final $typed_data.Uint8List attachPropertyValueResponseDescriptor = $convert.bas
     'ChtBdHRhY2hQcm9wZXJ0eVZhbHVlUmVzcG9uc2USKgoRcHJvcGVydHlfdmFsdWVfaWQYASABKA'
     'lSD3Byb3BlcnR5VmFsdWVJZA==');
 
+@$core.Deprecated('Use taskPropertyMatcherDescriptor instead')
+const TaskPropertyMatcher$json = {
+  '1': 'TaskPropertyMatcher',
+  '2': [
+    {'1': 'ward_id', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'wardId', '17': true},
+    {'1': 'task_id', '3': 2, '4': 1, '5': 9, '9': 1, '10': 'taskId', '17': true},
+  ],
+  '8': [
+    {'1': '_ward_id'},
+    {'1': '_task_id'},
+  ],
+};
+
+/// Descriptor for `TaskPropertyMatcher`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List taskPropertyMatcherDescriptor = $convert.base64Decode(
+    'ChNUYXNrUHJvcGVydHlNYXRjaGVyEhwKB3dhcmRfaWQYASABKAlIAFIGd2FyZElkiAEBEhwKB3'
+    'Rhc2tfaWQYAiABKAlIAVIGdGFza0lkiAEBQgoKCF93YXJkX2lkQgoKCF90YXNrX2lk');
+
 @$core.Deprecated('Use getAttachedPropertyValuesRequestDescriptor instead')
 const GetAttachedPropertyValuesRequest$json = {
   '1': 'GetAttachedPropertyValuesRequest',
   '2': [
     {'1': 'subject_id', '3': 1, '4': 1, '5': 9, '10': 'subjectId'},
+    {'1': 'task_matcher', '3': 2, '4': 1, '5': 11, '6': '.proto.services.property_svc.v1.TaskPropertyMatcher', '9': 0, '10': 'taskMatcher'},
+  ],
+  '8': [
+    {'1': 'matcher'},
   ],
 };
 
 /// Descriptor for `GetAttachedPropertyValuesRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getAttachedPropertyValuesRequestDescriptor = $convert.base64Decode(
     'CiBHZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVxdWVzdBIdCgpzdWJqZWN0X2lkGAEgASgJUg'
-    'lzdWJqZWN0SWQ=');
+    'lzdWJqZWN0SWQSWAoMdGFza19tYXRjaGVyGAIgASgLMjMucHJvdG8uc2VydmljZXMucHJvcGVy'
+    'dHlfc3ZjLnYxLlRhc2tQcm9wZXJ0eU1hdGNoZXJIAFILdGFza01hdGNoZXJCCQoHbWF0Y2hlcg'
+    '==');
 
 @$core.Deprecated('Use getAttachedPropertyValuesResponseDescriptor instead')
 const GetAttachedPropertyValuesResponse$json = {

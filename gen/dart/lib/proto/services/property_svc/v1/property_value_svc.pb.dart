@@ -244,15 +244,86 @@ class AttachPropertyValueResponse extends $pb.GeneratedMessage {
   void clearPropertyValueId() => clearField(1);
 }
 
-///
-///  GetAttachedPropertyValue
+class TaskPropertyMatcher extends $pb.GeneratedMessage {
+  factory TaskPropertyMatcher({
+    $core.String? wardId,
+    $core.String? taskId,
+  }) {
+    final $result = create();
+    if (wardId != null) {
+      $result.wardId = wardId;
+    }
+    if (taskId != null) {
+      $result.taskId = taskId;
+    }
+    return $result;
+  }
+  TaskPropertyMatcher._() : super();
+  factory TaskPropertyMatcher.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory TaskPropertyMatcher.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TaskPropertyMatcher', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'wardId')
+    ..aOS(2, _omitFieldNames ? '' : 'taskId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  TaskPropertyMatcher clone() => TaskPropertyMatcher()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  TaskPropertyMatcher copyWith(void Function(TaskPropertyMatcher) updates) => super.copyWith((message) => updates(message as TaskPropertyMatcher)) as TaskPropertyMatcher;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static TaskPropertyMatcher create() => TaskPropertyMatcher._();
+  TaskPropertyMatcher createEmptyInstance() => create();
+  static $pb.PbList<TaskPropertyMatcher> createRepeated() => $pb.PbList<TaskPropertyMatcher>();
+  @$core.pragma('dart2js:noInline')
+  static TaskPropertyMatcher getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TaskPropertyMatcher>(create);
+  static TaskPropertyMatcher? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get wardId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set wardId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasWardId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWardId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get taskId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set taskId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasTaskId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTaskId() => clearField(2);
+}
+
+enum GetAttachedPropertyValuesRequest_Matcher {
+  taskMatcher, 
+  notSet
+}
+
 class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
   factory GetAttachedPropertyValuesRequest({
     $core.String? subjectId,
+    TaskPropertyMatcher? taskMatcher,
   }) {
     final $result = create();
     if (subjectId != null) {
       $result.subjectId = subjectId;
+    }
+    if (taskMatcher != null) {
+      $result.taskMatcher = taskMatcher;
     }
     return $result;
   }
@@ -260,8 +331,14 @@ class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
   factory GetAttachedPropertyValuesRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetAttachedPropertyValuesRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
+  static const $core.Map<$core.int, GetAttachedPropertyValuesRequest_Matcher> _GetAttachedPropertyValuesRequest_MatcherByTag = {
+    2 : GetAttachedPropertyValuesRequest_Matcher.taskMatcher,
+    0 : GetAttachedPropertyValuesRequest_Matcher.notSet
+  };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAttachedPropertyValuesRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..oo(0, [2])
     ..aOS(1, _omitFieldNames ? '' : 'subjectId')
+    ..aOM<TaskPropertyMatcher>(2, _omitFieldNames ? '' : 'taskMatcher', subBuilder: TaskPropertyMatcher.create)
     ..hasRequiredFields = false
   ;
 
@@ -286,6 +363,9 @@ class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
   static GetAttachedPropertyValuesRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAttachedPropertyValuesRequest>(create);
   static GetAttachedPropertyValuesRequest? _defaultInstance;
 
+  GetAttachedPropertyValuesRequest_Matcher whichMatcher() => _GetAttachedPropertyValuesRequest_MatcherByTag[$_whichOneof(0)]!;
+  void clearMatcher() => clearField($_whichOneof(0));
+
   @$pb.TagNumber(1)
   $core.String get subjectId => $_getSZ(0);
   @$pb.TagNumber(1)
@@ -294,6 +374,17 @@ class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
   $core.bool hasSubjectId() => $_has(0);
   @$pb.TagNumber(1)
   void clearSubjectId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  TaskPropertyMatcher get taskMatcher => $_getN(1);
+  @$pb.TagNumber(2)
+  set taskMatcher(TaskPropertyMatcher v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasTaskMatcher() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTaskMatcher() => clearField(2);
+  @$pb.TagNumber(2)
+  TaskPropertyMatcher ensureTaskMatcher() => $_ensure(1);
 }
 
 enum GetAttachedPropertyValuesResponse_Value_Value {

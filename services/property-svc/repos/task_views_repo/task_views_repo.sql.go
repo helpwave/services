@@ -29,7 +29,6 @@ func (q *Queries) CreateTaskRule(ctx context.Context, arg CreateTaskRuleParams) 
 
 const getTaskPropertiesUsingMatchers = `-- name: GetTaskPropertiesUsingMatchers :many
 SELECT
-	rules.rule_id,
 	list_items.property_id,
 	list_items.dont_always_include,
 	calc_rule_specificity(rules.task_id IS NOT NULL, rules.ward_id IS NOT NULL) as specificity
@@ -38,7 +37,7 @@ JOIN property_view_filter_always_include_items as list_items ON list_items.rule_
 WHERE
 	(rules.ward_id = $1 OR rules.ward_id IS NULL)
 AND (rules.task_id = $2 OR rules.task_id IS NULL)
-ORDER BY specificity DESC
+ORDER BY specificity
 `
 
 type GetTaskPropertiesUsingMatchersParams struct {
@@ -47,7 +46,6 @@ type GetTaskPropertiesUsingMatchersParams struct {
 }
 
 type GetTaskPropertiesUsingMatchersRow struct {
-	RuleID            uuid.UUID
 	PropertyID        uuid.UUID
 	DontAlwaysInclude bool
 	Specificity       int32
@@ -62,12 +60,7 @@ func (q *Queries) GetTaskPropertiesUsingMatchers(ctx context.Context, arg GetTas
 	items := []GetTaskPropertiesUsingMatchersRow{}
 	for rows.Next() {
 		var i GetTaskPropertiesUsingMatchersRow
-		if err := rows.Scan(
-			&i.RuleID,
-			&i.PropertyID,
-			&i.DontAlwaysInclude,
-			&i.Specificity,
-		); err != nil {
+		if err := rows.Scan(&i.PropertyID, &i.DontAlwaysInclude, &i.Specificity); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

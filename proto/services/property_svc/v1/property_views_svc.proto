@@ -26,6 +26,8 @@ message UpdateTaskPropertyViewRuleRequest {
   optional string ward_id = 1; // @gotags: validate:"omitempty,omitnil,uuid4"
   optional string task_id = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
 
+  // TODO: replace above with property_value_svc.TaskPropertyMatcher
+
   FilterUpdate filter_update = 3; // @gotags: validate:"required"
 }
 
