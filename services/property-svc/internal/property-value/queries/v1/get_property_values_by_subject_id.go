@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"fmt"
 	pb "gen/proto/services/property_svc/v1"
 	"hwdb"
 	"hwutil"
@@ -15,10 +16,14 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type GetRelevantPropertyValuesQueryHandler func(ctx context.Context, subjectID uuid.UUID, matcher viewModels.PropertyMatchers) ([]models.PropertyAndValue, error)
+type GetRelevantPropertyValuesQueryHandler func(ctx context.Context, matcher viewModels.PropertyMatchers) ([]models.PropertyAndValue, error)
 
 func NewGetRelevantPropertyValuesQueryHandler(propertyValueRepo *property_value_repo.Queries) GetRelevantPropertyValuesQueryHandler {
-	return func(ctx context.Context, subjectID uuid.UUID, matcher viewModels.PropertyMatchers) ([]models.PropertyAndValue, error) {
+	return func(ctx context.Context, matcher viewModels.PropertyMatchers) ([]models.PropertyAndValue, error) {
+		subjectId, err := matcher.GetSubjectId()
+		if err != nil {
+			return nil, fmt.Errorf("GetRelevantPropertyValuesQueryHandler: matcher error when getting subjectId: %w", err)
+		}
 
 		alwaysInclude, err := viewQueries.GetAlwaysIncludePropertiesByMatcher(ctx, matcher)
 		if err != nil {
@@ -26,7 +31,7 @@ func NewGetRelevantPropertyValuesQueryHandler(propertyValueRepo *property_value_
 		}
 
 		propertyValuesWithProperties, err := propertyValueRepo.GetRelevantPropertyViews(ctx, property_value_repo.GetRelevantPropertyViewsParams{
-			SubjectID:     subjectID,
+			SubjectID:     subjectId,
 			AlwaysInclude: alwaysInclude,
 		})
 		if err := hwdb.Error(ctx, err); err != nil {

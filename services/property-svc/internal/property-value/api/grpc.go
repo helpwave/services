@@ -99,11 +99,6 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 	db := hwdb.GetDB()
 	propertyValueRepo := property_value_repo.New(db)
 
-	subjectID, err := uuid.Parse(req.GetSubjectId())
-	if err != nil {
-		return nil, err
-	}
-
 	// de-mux matchers
 	matcher, err := DeMuxMatchers(req)
 	if err != nil {
@@ -113,7 +108,7 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 	propertiesWithValues := make([]models.PropertyAndValue, 0)
 
 	if matcher != nil {
-		propertiesWithValues, err = v1queries.NewGetRelevantPropertyValuesQueryHandler(propertyValueRepo)(ctx, subjectID, matcher)
+		propertiesWithValues, err = v1queries.NewGetRelevantPropertyValuesQueryHandler(propertyValueRepo)(ctx, matcher)
 		if err != nil {
 			return nil, err
 		}

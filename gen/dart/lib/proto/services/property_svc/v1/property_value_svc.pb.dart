@@ -315,13 +315,9 @@ enum GetAttachedPropertyValuesRequest_Matcher {
 
 class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
   factory GetAttachedPropertyValuesRequest({
-    $core.String? subjectId,
     TaskPropertyMatcher? taskMatcher,
   }) {
     final $result = create();
-    if (subjectId != null) {
-      $result.subjectId = subjectId;
-    }
     if (taskMatcher != null) {
       $result.taskMatcher = taskMatcher;
     }
@@ -332,13 +328,12 @@ class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
   factory GetAttachedPropertyValuesRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static const $core.Map<$core.int, GetAttachedPropertyValuesRequest_Matcher> _GetAttachedPropertyValuesRequest_MatcherByTag = {
-    2 : GetAttachedPropertyValuesRequest_Matcher.taskMatcher,
+    1 : GetAttachedPropertyValuesRequest_Matcher.taskMatcher,
     0 : GetAttachedPropertyValuesRequest_Matcher.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAttachedPropertyValuesRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [2])
-    ..aOS(1, _omitFieldNames ? '' : 'subjectId')
-    ..aOM<TaskPropertyMatcher>(2, _omitFieldNames ? '' : 'taskMatcher', subBuilder: TaskPropertyMatcher.create)
+    ..oo(0, [1])
+    ..aOM<TaskPropertyMatcher>(1, _omitFieldNames ? '' : 'taskMatcher', subBuilder: TaskPropertyMatcher.create)
     ..hasRequiredFields = false
   ;
 
@@ -367,24 +362,15 @@ class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
   void clearMatcher() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
-  $core.String get subjectId => $_getSZ(0);
+  TaskPropertyMatcher get taskMatcher => $_getN(0);
   @$pb.TagNumber(1)
-  set subjectId($core.String v) { $_setString(0, v); }
+  set taskMatcher(TaskPropertyMatcher v) { setField(1, v); }
   @$pb.TagNumber(1)
-  $core.bool hasSubjectId() => $_has(0);
+  $core.bool hasTaskMatcher() => $_has(0);
   @$pb.TagNumber(1)
-  void clearSubjectId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  TaskPropertyMatcher get taskMatcher => $_getN(1);
-  @$pb.TagNumber(2)
-  set taskMatcher(TaskPropertyMatcher v) { setField(2, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasTaskMatcher() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearTaskMatcher() => clearField(2);
-  @$pb.TagNumber(2)
-  TaskPropertyMatcher ensureTaskMatcher() => $_ensure(1);
+  void clearTaskMatcher() => clearField(1);
+  @$pb.TagNumber(1)
+  TaskPropertyMatcher ensureTaskMatcher() => $_ensure(0);
 }
 
 enum GetAttachedPropertyValuesResponse_Value_Value {

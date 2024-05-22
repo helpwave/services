@@ -21,6 +21,8 @@ type PropertyMatchers interface {
 	// QueryProperties queries (presumably the projection) for all properties relevant for the user using the rules
 	// MUST be ordered in ascending order by specificity
 	QueryProperties(context.Context) ([]PropertiesQueryRow, error)
+
+	GetSubjectId() (uuid.UUID, error)
 }
 
 type PropertyViewRule struct {

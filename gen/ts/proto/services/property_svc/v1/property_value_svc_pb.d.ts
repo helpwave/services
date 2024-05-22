@@ -121,9 +121,6 @@ export namespace TaskPropertyMatcher {
 }
 
 export class GetAttachedPropertyValuesRequest extends jspb.Message {
-  getSubjectId(): string;
-  setSubjectId(value: string): GetAttachedPropertyValuesRequest;
-
   getTaskMatcher(): TaskPropertyMatcher | undefined;
   setTaskMatcher(value?: TaskPropertyMatcher): GetAttachedPropertyValuesRequest;
   hasTaskMatcher(): boolean;
@@ -141,13 +138,12 @@ export class GetAttachedPropertyValuesRequest extends jspb.Message {
 
 export namespace GetAttachedPropertyValuesRequest {
   export type AsObject = {
-    subjectId: string,
     taskMatcher?: TaskPropertyMatcher.AsObject,
   }
 
   export enum MatcherCase { 
     MATCHER_NOT_SET = 0,
-    TASK_MATCHER = 2,
+    TASK_MATCHER = 1,
   }
 }
 

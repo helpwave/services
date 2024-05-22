@@ -38,10 +38,8 @@ message TaskPropertyMatcher {
 }
 
 message GetAttachedPropertyValuesRequest {
-  string subject_id = 1; // TODO: remove me?
-
   oneof matcher {
-    TaskPropertyMatcher task_matcher = 2;
+    TaskPropertyMatcher task_matcher = 1;
   }
 }
 

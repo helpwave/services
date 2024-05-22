@@ -979,14 +979,14 @@ proto.proto.services.property_svc.v1.TaskPropertyMatcher.prototype.hasTaskId = f
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.oneofGroups_ = [[2]];
+proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.oneofGroups_ = [[1]];
 
 /**
  * @enum {number}
  */
 proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.MatcherCase = {
   MATCHER_NOT_SET: 0,
-  TASK_MATCHER: 2
+  TASK_MATCHER: 1
 };
 
 /**
@@ -1027,7 +1027,6 @@ proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.prototype.
  */
 proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    subjectId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     taskMatcher: (f = msg.getTaskMatcher()) && proto.proto.services.property_svc.v1.TaskPropertyMatcher.toObject(includeInstance, f)
   };
 
@@ -1066,10 +1065,6 @@ proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.deserializ
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setSubjectId(value);
-      break;
-    case 2:
       var value = new proto.proto.services.property_svc.v1.TaskPropertyMatcher;
       reader.readMessage(value,proto.proto.services.property_svc.v1.TaskPropertyMatcher.deserializeBinaryFromReader);
       msg.setTaskMatcher(value);
@@ -1103,17 +1098,10 @@ proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.prototype.
  */
 proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getSubjectId();
-  if (f.length > 0) {
-    writer.writeString(
-      1,
-      f
-    );
-  }
   f = message.getTaskMatcher();
   if (f != null) {
     writer.writeMessage(
-      2,
+      1,
       f,
       proto.proto.services.property_svc.v1.TaskPropertyMatcher.serializeBinaryToWriter
     );
@@ -1122,30 +1110,12 @@ proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.serializeB
 
 
 /**
- * optional string subject_id = 1;
- * @return {string}
- */
-proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.prototype.getSubjectId = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest} returns this
- */
-proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.prototype.setSubjectId = function(value) {
-  return jspb.Message.setProto3StringField(this, 1, value);
-};
-
-
-/**
- * optional TaskPropertyMatcher task_matcher = 2;
+ * optional TaskPropertyMatcher task_matcher = 1;
  * @return {?proto.proto.services.property_svc.v1.TaskPropertyMatcher}
  */
 proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.prototype.getTaskMatcher = function() {
   return /** @type{?proto.proto.services.property_svc.v1.TaskPropertyMatcher} */ (
-    jspb.Message.getWrapperField(this, proto.proto.services.property_svc.v1.TaskPropertyMatcher, 2));
+    jspb.Message.getWrapperField(this, proto.proto.services.property_svc.v1.TaskPropertyMatcher, 1));
 };
 
 
@@ -1154,7 +1124,7 @@ proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.prototype.
  * @return {!proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest} returns this
 */
 proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.prototype.setTaskMatcher = function(value) {
-  return jspb.Message.setOneofWrapperField(this, 2, proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.oneofGroups_[0], value);
+  return jspb.Message.setOneofWrapperField(this, 1, proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.oneofGroups_[0], value);
 };
 
 
@@ -1172,7 +1142,7 @@ proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.prototype.
  * @return {boolean}
  */
 proto.proto.services.property_svc.v1.GetAttachedPropertyValuesRequest.prototype.hasTaskMatcher = function() {
-  return jspb.Message.getField(this, 2) != null;
+  return jspb.Message.getField(this, 1) != null;
 };
 
 
