@@ -20,6 +20,10 @@ type MatchersRequest interface {
 	GetTaskMatcher() *pb.TaskPropertyMatcher
 }
 
+// DeMuxMatchers de-multiplexes the matchers in a grpc request
+// - the request must implement the MatchersRequest interface (see GetAttachedPropertyValuesRequest)
+// - parsing might fail (i.e., invalid uuids)
+// - a request may also carry no matchers at all, in that case (nil, nil) is returned
 func DeMuxMatchers(req MatchersRequest) (viewModels.PropertyMatchers, error) {
 	var matcher viewModels.PropertyMatchers = nil
 	if taskMatcher := req.GetTaskMatcher(); taskMatcher != nil {
