@@ -92,7 +92,7 @@ func SliceToSet[T comparable](ts []T) map[T]bool {
 }
 
 func SetToSlice[T comparable](set map[T]bool) []T {
-	slice := make([]T, len(set))
+	slice := make([]T, 0, len(set))
 	for key, t := range set {
 		if t {
 			slice = append(slice, key)
@@ -102,7 +102,7 @@ func SetToSlice[T comparable](set map[T]bool) []T {
 }
 
 func MapValuesPtrToSlice[K comparable, V any](set map[K]*V) []V {
-	slice := make([]V, len(set))
+	slice := make([]V, 0, len(set))
 	for _, p := range set {
 		if p != nil {
 			slice = append(slice, *p)

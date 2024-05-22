@@ -62,9 +62,8 @@ FROM properties
 	LEFT JOIN property_values as values ON values.property_id = properties.id
 WHERE
 	properties.is_archived = false
-	AND values.subject_id = @subject_id
 	AND (
-		values.id IS NOT NULL
+		values.subject_id = @subject_id -- implies existence of value
 		OR properties.id = ANY(@always_include :: uuid[])
 	);
 

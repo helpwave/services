@@ -3,9 +3,6 @@ package api
 import (
 	"context"
 	pb "gen/proto/services/property_svc/v1"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwdb"
 	"hwes"
 	"hwutil"
@@ -14,6 +11,10 @@ import (
 	v1queries "property-svc/internal/property-value/queries/v1"
 	viewModels "property-svc/internal/property-view/models"
 	"property-svc/repos/property_value_repo"
+
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type MatchersRequest interface {
@@ -151,8 +152,9 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 						Year:  int32(pv.Value.DateValue.Year()),
 					},
 				}
+			default:
+				log.Error().Any("pv", pv).Msg("pv.Value is in an invalid state!")
 			}
-			log.Error().Any("pv", pv).Msg("pv.Value is in an invalid state!")
 			return res
 		}),
 	}, nil

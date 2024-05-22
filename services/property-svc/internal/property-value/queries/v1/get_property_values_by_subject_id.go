@@ -3,8 +3,6 @@ package v1
 import (
 	"context"
 	pb "gen/proto/services/property_svc/v1"
-	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 	"hwdb"
 	"hwutil"
 	"property-svc/internal/property-value/models"
@@ -12,6 +10,9 @@ import (
 	viewQueries "property-svc/internal/property-view/queries/v1"
 	"property-svc/repos/property_value_repo"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type GetRelevantPropertyValuesQueryHandler func(ctx context.Context, subjectID uuid.UUID, matcher viewModels.PropertyMatchers) ([]models.PropertyAndValue, error)

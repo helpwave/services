@@ -2,9 +2,10 @@ package v1
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"hwutil"
 	"property-svc/internal/property-view/models"
+
+	"github.com/google/uuid"
 )
 
 func GetAlwaysIncludePropertiesByMatcher(ctx context.Context, matcher models.PropertyMatchers) ([]uuid.UUID, error) {
@@ -21,6 +22,5 @@ func GetAlwaysIncludePropertiesByMatcher(ctx context.Context, matcher models.Pro
 	for _, row := range rows {
 		alwaysInclude[row.GetPropertyID()] = !row.GetDontAlwaysInclude()
 	}
-
 	return hwutil.SetToSlice(alwaysInclude), nil
 }

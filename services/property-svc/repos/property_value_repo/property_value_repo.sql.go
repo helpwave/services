@@ -182,9 +182,8 @@ FROM properties
 	LEFT JOIN property_values as values ON values.property_id = properties.id
 WHERE
 	properties.is_archived = false
-	AND values.subject_id = $1
 	AND (
-		values.id IS NOT NULL
+		values.subject_id = $1 -- implies existence of value
 		OR properties.id = ANY($2 :: uuid[])
 	)
 `
