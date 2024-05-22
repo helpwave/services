@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "proto/services/property_svc/v1/property_value_svc.proto";
 
 package proto.services.property_svc.v1;
 
@@ -21,18 +22,16 @@ message FilterUpdate {
   repeated string remove_from_dont_always_include = 4; // @gotags: validate:"dive,uuid4"
 }
 
-message UpdateTaskPropertyViewRuleRequest {
-  /* task-specific matchers */
-  optional string ward_id = 1; // @gotags: validate:"omitempty,omitnil,uuid4"
-  optional string task_id = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
+message UpdatePropertyViewRuleRequest {
+  FilterUpdate filter_update = 1; // @gotags: validate:"required"
 
-  // TODO: replace above with property_value_svc.TaskPropertyMatcher
-
-  FilterUpdate filter_update = 3; // @gotags: validate:"required"
+  oneof matcher {
+    TaskPropertyMatcher task_matcher = 2;
+  }
 }
 
-message UpdateTaskPropertyViewRuleResponse {}
+message UpdatePropertyViewRuleResponse {}
 
 service PropertyViewsService {
-  rpc UpdateTaskPropertyViewRule (UpdateTaskPropertyViewRuleRequest) returns (UpdateTaskPropertyViewRuleResponse) {}
+  rpc UpdatePropertyViewRule (UpdatePropertyViewRuleRequest) returns (UpdatePropertyViewRuleResponse) {}
 }

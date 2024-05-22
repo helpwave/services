@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	PropertyViewsService_UpdateTaskPropertyViewRule_FullMethodName = "/proto.services.property_svc.v1.PropertyViewsService/UpdateTaskPropertyViewRule"
+	PropertyViewsService_UpdatePropertyViewRule_FullMethodName = "/proto.services.property_svc.v1.PropertyViewsService/UpdatePropertyViewRule"
 )
 
 // PropertyViewsServiceClient is the client API for PropertyViewsService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PropertyViewsServiceClient interface {
-	UpdateTaskPropertyViewRule(ctx context.Context, in *UpdateTaskPropertyViewRuleRequest, opts ...grpc.CallOption) (*UpdateTaskPropertyViewRuleResponse, error)
+	UpdatePropertyViewRule(ctx context.Context, in *UpdatePropertyViewRuleRequest, opts ...grpc.CallOption) (*UpdatePropertyViewRuleResponse, error)
 }
 
 type propertyViewsServiceClient struct {
@@ -37,9 +37,9 @@ func NewPropertyViewsServiceClient(cc grpc.ClientConnInterface) PropertyViewsSer
 	return &propertyViewsServiceClient{cc}
 }
 
-func (c *propertyViewsServiceClient) UpdateTaskPropertyViewRule(ctx context.Context, in *UpdateTaskPropertyViewRuleRequest, opts ...grpc.CallOption) (*UpdateTaskPropertyViewRuleResponse, error) {
-	out := new(UpdateTaskPropertyViewRuleResponse)
-	err := c.cc.Invoke(ctx, PropertyViewsService_UpdateTaskPropertyViewRule_FullMethodName, in, out, opts...)
+func (c *propertyViewsServiceClient) UpdatePropertyViewRule(ctx context.Context, in *UpdatePropertyViewRuleRequest, opts ...grpc.CallOption) (*UpdatePropertyViewRuleResponse, error) {
+	out := new(UpdatePropertyViewRuleResponse)
+	err := c.cc.Invoke(ctx, PropertyViewsService_UpdatePropertyViewRule_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (c *propertyViewsServiceClient) UpdateTaskPropertyViewRule(ctx context.Cont
 // All implementations must embed UnimplementedPropertyViewsServiceServer
 // for forward compatibility
 type PropertyViewsServiceServer interface {
-	UpdateTaskPropertyViewRule(context.Context, *UpdateTaskPropertyViewRuleRequest) (*UpdateTaskPropertyViewRuleResponse, error)
+	UpdatePropertyViewRule(context.Context, *UpdatePropertyViewRuleRequest) (*UpdatePropertyViewRuleResponse, error)
 	mustEmbedUnimplementedPropertyViewsServiceServer()
 }
 
@@ -58,8 +58,8 @@ type PropertyViewsServiceServer interface {
 type UnimplementedPropertyViewsServiceServer struct {
 }
 
-func (UnimplementedPropertyViewsServiceServer) UpdateTaskPropertyViewRule(context.Context, *UpdateTaskPropertyViewRuleRequest) (*UpdateTaskPropertyViewRuleResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateTaskPropertyViewRule not implemented")
+func (UnimplementedPropertyViewsServiceServer) UpdatePropertyViewRule(context.Context, *UpdatePropertyViewRuleRequest) (*UpdatePropertyViewRuleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePropertyViewRule not implemented")
 }
 func (UnimplementedPropertyViewsServiceServer) mustEmbedUnimplementedPropertyViewsServiceServer() {}
 
@@ -74,20 +74,20 @@ func RegisterPropertyViewsServiceServer(s grpc.ServiceRegistrar, srv PropertyVie
 	s.RegisterService(&PropertyViewsService_ServiceDesc, srv)
 }
 
-func _PropertyViewsService_UpdateTaskPropertyViewRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateTaskPropertyViewRuleRequest)
+func _PropertyViewsService_UpdatePropertyViewRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePropertyViewRuleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PropertyViewsServiceServer).UpdateTaskPropertyViewRule(ctx, in)
+		return srv.(PropertyViewsServiceServer).UpdatePropertyViewRule(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PropertyViewsService_UpdateTaskPropertyViewRule_FullMethodName,
+		FullMethod: PropertyViewsService_UpdatePropertyViewRule_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PropertyViewsServiceServer).UpdateTaskPropertyViewRule(ctx, req.(*UpdateTaskPropertyViewRuleRequest))
+		return srv.(PropertyViewsServiceServer).UpdatePropertyViewRule(ctx, req.(*UpdatePropertyViewRuleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -100,8 +100,8 @@ var PropertyViewsService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*PropertyViewsServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UpdateTaskPropertyViewRule",
-			Handler:    _PropertyViewsService_UpdateTaskPropertyViewRule_Handler,
+			MethodName: "UpdatePropertyViewRule",
+			Handler:    _PropertyViewsService_UpdatePropertyViewRule_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

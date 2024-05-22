@@ -19,6 +19,8 @@
 const grpc = {};
 grpc.web = require('grpc-web');
 
+
+var proto_services_property_svc_v1_property_value_svc_pb = require('../../../../proto/services/property_svc/v1/property_value_svc_pb.js')
 const proto = {};
 proto.proto = {};
 proto.proto.services = {};
@@ -80,61 +82,61 @@ proto.proto.services.property_svc.v1.PropertyViewsServicePromiseClient =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleRequest,
- *   !proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleResponse>}
+ *   !proto.proto.services.property_svc.v1.UpdatePropertyViewRuleRequest,
+ *   !proto.proto.services.property_svc.v1.UpdatePropertyViewRuleResponse>}
  */
-const methodDescriptor_PropertyViewsService_UpdateTaskPropertyViewRule = new grpc.web.MethodDescriptor(
-  '/proto.services.property_svc.v1.PropertyViewsService/UpdateTaskPropertyViewRule',
+const methodDescriptor_PropertyViewsService_UpdatePropertyViewRule = new grpc.web.MethodDescriptor(
+  '/proto.services.property_svc.v1.PropertyViewsService/UpdatePropertyViewRule',
   grpc.web.MethodType.UNARY,
-  proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleRequest,
-  proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleResponse,
+  proto.proto.services.property_svc.v1.UpdatePropertyViewRuleRequest,
+  proto.proto.services.property_svc.v1.UpdatePropertyViewRuleResponse,
   /**
-   * @param {!proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleRequest} request
+   * @param {!proto.proto.services.property_svc.v1.UpdatePropertyViewRuleRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleResponse.deserializeBinary
+  proto.proto.services.property_svc.v1.UpdatePropertyViewRuleResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleRequest} request The
+ * @param {!proto.proto.services.property_svc.v1.UpdatePropertyViewRuleRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.property_svc.v1.UpdatePropertyViewRuleResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.property_svc.v1.UpdatePropertyViewRuleResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.proto.services.property_svc.v1.PropertyViewsServiceClient.prototype.updateTaskPropertyViewRule =
+proto.proto.services.property_svc.v1.PropertyViewsServiceClient.prototype.updatePropertyViewRule =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/proto.services.property_svc.v1.PropertyViewsService/UpdateTaskPropertyViewRule',
+      '/proto.services.property_svc.v1.PropertyViewsService/UpdatePropertyViewRule',
       request,
       metadata || {},
-      methodDescriptor_PropertyViewsService_UpdateTaskPropertyViewRule,
+      methodDescriptor_PropertyViewsService_UpdatePropertyViewRule,
       callback);
 };
 
 
 /**
- * @param {!proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleRequest} request The
+ * @param {!proto.proto.services.property_svc.v1.UpdatePropertyViewRuleRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.proto.services.property_svc.v1.UpdateTaskPropertyViewRuleResponse>}
+ * @return {!Promise<!proto.proto.services.property_svc.v1.UpdatePropertyViewRuleResponse>}
  *     Promise that resolves to the response
  */
-proto.proto.services.property_svc.v1.PropertyViewsServicePromiseClient.prototype.updateTaskPropertyViewRule =
+proto.proto.services.property_svc.v1.PropertyViewsServicePromiseClient.prototype.updatePropertyViewRule =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/proto.services.property_svc.v1.PropertyViewsService/UpdateTaskPropertyViewRule',
+      '/proto.services.property_svc.v1.PropertyViewsService/UpdatePropertyViewRule',
       request,
       metadata || {},
-      methodDescriptor_PropertyViewsService_UpdateTaskPropertyViewRule);
+      methodDescriptor_PropertyViewsService_UpdatePropertyViewRule);
 };
 
 

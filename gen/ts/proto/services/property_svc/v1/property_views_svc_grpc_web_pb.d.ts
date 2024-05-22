@@ -8,12 +8,12 @@ export class PropertyViewsServiceClient {
                credentials?: null | { [index: string]: string; },
                options?: null | { [index: string]: any; });
 
-  updateTaskPropertyViewRule(
-    request: proto_services_property_svc_v1_property_views_svc_pb.UpdateTaskPropertyViewRuleRequest,
+  updatePropertyViewRule(
+    request: proto_services_property_svc_v1_property_views_svc_pb.UpdatePropertyViewRuleRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: proto_services_property_svc_v1_property_views_svc_pb.UpdateTaskPropertyViewRuleResponse) => void
-  ): grpcWeb.ClientReadableStream<proto_services_property_svc_v1_property_views_svc_pb.UpdateTaskPropertyViewRuleResponse>;
+               response: proto_services_property_svc_v1_property_views_svc_pb.UpdatePropertyViewRuleResponse) => void
+  ): grpcWeb.ClientReadableStream<proto_services_property_svc_v1_property_views_svc_pb.UpdatePropertyViewRuleResponse>;
 
 }
 
@@ -22,10 +22,10 @@ export class PropertyViewsServicePromiseClient {
                credentials?: null | { [index: string]: string; },
                options?: null | { [index: string]: any; });
 
-  updateTaskPropertyViewRule(
-    request: proto_services_property_svc_v1_property_views_svc_pb.UpdateTaskPropertyViewRuleRequest,
+  updatePropertyViewRule(
+    request: proto_services_property_svc_v1_property_views_svc_pb.UpdatePropertyViewRuleRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<proto_services_property_svc_v1_property_views_svc_pb.UpdateTaskPropertyViewRuleResponse>;
+  ): Promise<proto_services_property_svc_v1_property_views_svc_pb.UpdatePropertyViewRuleResponse>;
 
 }
 

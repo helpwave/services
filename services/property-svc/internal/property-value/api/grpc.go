@@ -16,6 +16,30 @@ import (
 	"property-svc/repos/property_value_repo"
 )
 
+type MatchersRequest interface {
+	GetTaskMatcher() *pb.TaskPropertyMatcher
+}
+
+func DeMuxMatchers(req MatchersRequest) (viewModels.PropertyMatchers, error) {
+	var matcher viewModels.PropertyMatchers = nil
+	if taskMatcher := req.GetTaskMatcher(); taskMatcher != nil {
+		wardID, err := hwutil.ParseNullUUID(taskMatcher.WardId)
+		if err != nil {
+			return nil, err
+		}
+		taskID, err := hwutil.ParseNullUUID(taskMatcher.TaskId)
+		if err != nil {
+			return nil, err
+		}
+
+		matcher = viewModels.TaskPropertyMatchers{
+			WardID: wardID,
+			TaskID: taskID,
+		}
+	}
+	return matcher, nil
+}
+
 type PropertyValueGrpcService struct {
 	pb.UnimplementedPropertyValueServiceServer
 	as hwes.AggregateStore
@@ -76,23 +100,10 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 	}
 
 	// de-mux matchers
-	var matcher viewModels.PropertyMatchers = nil
-	if taskMatcher := req.GetTaskMatcher(); taskMatcher != nil {
-		wardID, err := hwutil.ParseNullUUID(taskMatcher.WardId)
-		if err != nil {
-			return nil, err
-		}
-		taskID, err := hwutil.ParseNullUUID(taskMatcher.TaskId)
-		if err != nil {
-			return nil, err
-		}
-
-		matcher = viewModels.TaskPropertyMatchers{
-			WardID: wardID,
-			TaskID: taskID,
-		}
+	matcher, err := DeMuxMatchers(req)
+	if err != nil {
+		return nil, err
 	}
-	// Add more matchers here, once we have more
 
 	propertiesWithValues := make([]models.PropertyAndValue, 0)
 
