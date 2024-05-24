@@ -57,25 +57,30 @@ func DANGERTruncateAllTables(ctx context.Context, db DBTX) error {
 	`)
 
 	if err != nil {
-		return err
+		return fmt.Errorf("DANGERTruncateAllTables: failed to query table names: %w", err)
 	}
 
 	defer rows.Close()
 
+	tableNames := make([]string, 0)
+
 	for rows.Next() {
 		var tableName string
 		if err := rows.Scan(&tableName); err != nil {
-			return err
+			return fmt.Errorf("DANGERTruncateAllTables: could not Scan row: %w", err)
 		}
-		log.Debug().Msg("truncating " + tableName)
+		tableNames = append(tableNames, tableName)
+	}
 
+	log.Info().Strs("tableNames", tableNames).Msg("Start truncating all tables")
+
+	for _, tableName := range tableNames {
+		log.Trace().Str("table_name", tableName).Msg("truncating")
 		if _, err := db.Exec(ctx, fmt.Sprintf("TRUNCATE TABLE %s CASCADE", tableName)); err != nil {
 			return err
 		}
-
 		log.Debug().Str("table_name", tableName).Msg("table truncated")
 	}
-
 	log.Debug().Msg("truncate finished")
 
 	return rows.Err()
