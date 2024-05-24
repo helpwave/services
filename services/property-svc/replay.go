@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	"github.com/jackc/pgx/v5"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb"
@@ -19,18 +21,31 @@ func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjec
 	ctx, span, log := telemetry.StartSpan(ctx, "property-svc.replay")
 	defer span.End()
 
+	log.Info().Msg("starting in replay mode")
+
 	db := hwdb.GetDB()
 	tx, err := db.Begin(ctx)
 	if err != nil {
 		log.Err(err).Msg("cannot begin transaction")
 		return err
 	}
+	defer func() {
+		if err != nil {
+			err = tx.Rollback(ctx)
+			if !errors.Is(err, pgx.ErrTxClosed) {
+				log.Err(err).Msg("failed to rollback transaction")
+			}
+		}
+	}()
 
-	// TODO: Pass transaction. db.Begin() results in "conn busy".
-	if err := hwdb.DANGERTruncateAllTables(ctx); err != nil {
+	log.Info().Msg("truncating all tables...")
+
+	if err := hwdb.DANGERTruncateAllTables(ctx, tx); err != nil {
 		log.Err(err).Msg("cannot truncate all tables")
 		return err
 	}
+
+	log.Info().Msg("starting event replay")
 
 	if err := eventstoredb.Replay(
 		ctx,
@@ -46,9 +61,6 @@ func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjec
 		},
 		&[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)},
 	); err != nil {
-		if err := tx.Rollback(ctx); err != nil {
-			log.Err(err).Msg("cannot rollback transaction")
-		}
 		return err
 	}
 

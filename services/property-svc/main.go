@@ -25,11 +25,12 @@ const ServiceName = "property-svc"
 var Version string
 
 func main() {
-	replayMode := flag.Bool("replay", false, "")
-	flag.Parse()
-
 	ctx, cancel := context.WithCancel(context.Background())
 	common.Setup(ServiceName, Version, common.WithAuth())
+
+	replayMode := flag.Bool("replay", false, "")
+	flag.Parse()
+	log.Debug().Bool("replayMode", *replayMode).Msg("flags")
 
 	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()

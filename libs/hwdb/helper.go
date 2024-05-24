@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/rs/zerolog/log"
+	zlog "github.com/rs/zerolog"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"time"
 )
@@ -47,10 +47,9 @@ func PbToTimestamp(src *timestamppb.Timestamp) pgtype.Timestamp {
 	return pgtype.Timestamp{Time: (*src).AsTime().UTC(), Valid: true}
 }
 
-// DANGERTruncateAllTables truncates all tables of the currently connected database
-func DANGERTruncateAllTables(ctx context.Context) error {
-	db := GetDB()
-
+// DANGERTruncateAllTables truncates all tables of db
+func DANGERTruncateAllTables(ctx context.Context, db DBTX) error {
+	log := zlog.Ctx(ctx)
 	rows, err := db.Query(ctx, `
 		SELECT table_name
 		FROM information_schema.tables
@@ -68,6 +67,7 @@ func DANGERTruncateAllTables(ctx context.Context) error {
 		if err := rows.Scan(&tableName); err != nil {
 			return err
 		}
+		log.Debug().Msg("truncating " + tableName)
 
 		if _, err := db.Exec(ctx, fmt.Sprintf("TRUNCATE TABLE %s CASCADE", tableName)); err != nil {
 			return err
@@ -75,6 +75,8 @@ func DANGERTruncateAllTables(ctx context.Context) error {
 
 		log.Debug().Str("table_name", tableName).Msg("table truncated")
 	}
+
+	log.Debug().Msg("truncate finished")
 
 	return rows.Err()
 }
