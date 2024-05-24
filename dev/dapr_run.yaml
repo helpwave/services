@@ -20,7 +20,6 @@ common:
     REDIS_ADDR: redis:6379
     INSECURE_REDIS_NO_TLS: true
     ORGANIZATION_ID: 3b25c6f5-4705-4074-9fc6-a50c28eba405
-    EVENTSTORE_CS: esdb://admin:changeit@eventstore:2113?tls=false
 
     OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
     OTEL_EXPORTER_OTLP_INSECURE: true
@@ -58,4 +57,12 @@ apps:
     env:
       SERVICE: tasks-svc
       POSTGRES_DB: tasks-svc
+    command: ["air"]
+
+  - appID: property-svc
+    appDirPath: ../services/property-svc
+    appPort: 3005
+    env:
+      SERVICE: property-svc
+      POSTGRES_DB: property-svc
     command: ["air"]

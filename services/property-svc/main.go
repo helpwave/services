@@ -5,15 +5,18 @@ import (
 	"context"
 	"flag"
 	pb "gen/proto/services/property_svc/v1"
-	daprd "github.com/dapr/go-sdk/service/grpc"
-	"github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes/eventstoredb"
 	propertySet "property-svc/internal/property-set/api"
 	propertyValue "property-svc/internal/property-value/api"
 	"property-svc/internal/property-value/projections/property_value_postgres_projection"
+	propertyViews "property-svc/internal/property-view/api"
+	"property-svc/internal/property-view/projections/task_views_postgres"
 	property "property-svc/internal/property/api"
 	"property-svc/internal/property/projections/property_postgres_projection"
+
+	daprd "github.com/dapr/go-sdk/service/grpc"
+	"github.com/rs/zerolog/log"
 )
 
 const ServiceName = "property-svc"
@@ -64,12 +67,21 @@ func main() {
 		}
 	}()
 
+	go func() {
+		taskViewsPostgresProjection := task_views_postgres.NewProjection(eventStore, ServiceName)
+		if err := taskViewsPostgresProjection.Subscribe(ctx); err != nil {
+			log.Err(err).Msg("error during taskViewsPostgresProjection subscription")
+			cancel()
+		}
+	}()
+
 	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
 		pb.RegisterPropertyServiceServer(grpcServer, property.NewPropertyService(aggregateStore))
 		pb.RegisterPropertySetServiceServer(grpcServer, propertySet.NewPropertySetService(aggregateStore))
 		pb.RegisterPropertyValueServiceServer(grpcServer, propertyValue.NewPropertyValueService(aggregateStore))
+		pb.RegisterPropertyViewsServiceServer(grpcServer, propertyViews.NewPropertyViewService(aggregateStore))
 	})
 
 	cancel()

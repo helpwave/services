@@ -13,6 +13,7 @@ import (
 	"google.golang.org/grpc/codes"
 	hwes_test "hwes/test"
 	"tasks-svc/internal/patient/api"
+	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/tracking"
 	"testing"
 	"time"
@@ -21,7 +22,9 @@ import (
 func server(ctx context.Context) (pb.PatientServiceClient, func()) {
 	// Build gRPC service
 	aggregateStore := hwes_test.NewAggregateStore()
-	patientGrpcService := api.NewPatientGrpcService(aggregateStore)
+	patientHandlers := handlers.NewPatientHandlers(aggregateStore)
+
+	patientGrpcService := api.NewPatientGrpcService(aggregateStore, patientHandlers)
 
 	common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 

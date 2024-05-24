@@ -6,8 +6,9 @@ import (
 	pb "gen/proto/services/tasks_svc/v1"
 	"hwdb"
 	"hwes/eventstoredb"
+	ph "tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/projections/patient_postgres_projection"
-	"tasks-svc/internal/task/handlers"
+	th "tasks-svc/internal/task/handlers"
 	"tasks-svc/internal/task/projections/task_postgres_projection"
 	"tasks-svc/internal/tracking"
 	"time"
@@ -35,7 +36,8 @@ func main() {
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
-	taskHandlers := handlers.NewTaskHandlers(aggregateStore)
+	taskHandlers := th.NewTaskHandlers(aggregateStore)
+	patientHandlers := ph.NewPatientHandlers(aggregateStore)
 
 	go func() {
 		postgresTaskProjection := task_postgres_projection.NewProjection(eventStore, ServiceName)
@@ -57,7 +59,7 @@ func main() {
 		grpcServer := server.GrpcServer()
 
 		pb.RegisterTaskServiceServer(grpcServer, task.NewTaskGrpcService(aggregateStore, taskHandlers))
-		pb.RegisterPatientServiceServer(grpcServer, patient.NewPatientGrpcService(aggregateStore))
+		pb.RegisterPatientServiceServer(grpcServer, patient.NewPatientGrpcService(aggregateStore, patientHandlers))
 	})
 
 	// Close context
