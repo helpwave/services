@@ -24,6 +24,7 @@ const (
 	TaskService_GetTask_FullMethodName                         = "/proto.services.tasks_svc.v1.TaskService/GetTask"
 	TaskService_GetTasksByPatient_FullMethodName               = "/proto.services.tasks_svc.v1.TaskService/GetTasksByPatient"
 	TaskService_GetTasksByPatientSortedByStatus_FullMethodName = "/proto.services.tasks_svc.v1.TaskService/GetTasksByPatientSortedByStatus"
+	TaskService_GetAssignedTasks_FullMethodName                = "/proto.services.tasks_svc.v1.TaskService/GetAssignedTasks"
 	TaskService_AssignTask_FullMethodName                      = "/proto.services.tasks_svc.v1.TaskService/AssignTask"
 	TaskService_UnassignTask_FullMethodName                    = "/proto.services.tasks_svc.v1.TaskService/UnassignTask"
 	TaskService_CreateSubtask_FullMethodName                   = "/proto.services.tasks_svc.v1.TaskService/CreateSubtask"
@@ -42,6 +43,7 @@ type TaskServiceClient interface {
 	GetTask(ctx context.Context, in *GetTaskRequest, opts ...grpc.CallOption) (*GetTaskResponse, error)
 	GetTasksByPatient(ctx context.Context, in *GetTasksByPatientRequest, opts ...grpc.CallOption) (*GetTasksByPatientResponse, error)
 	GetTasksByPatientSortedByStatus(ctx context.Context, in *GetTasksByPatientSortedByStatusRequest, opts ...grpc.CallOption) (*GetTasksByPatientSortedByStatusResponse, error)
+	GetAssignedTasks(ctx context.Context, in *GetAssignedTasksRequest, opts ...grpc.CallOption) (*GetAssignedTasksResponse, error)
 	AssignTask(ctx context.Context, in *AssignTaskRequest, opts ...grpc.CallOption) (*AssignTaskResponse, error)
 	UnassignTask(ctx context.Context, in *UnassignTaskRequest, opts ...grpc.CallOption) (*UnassignTaskResponse, error)
 	CreateSubtask(ctx context.Context, in *CreateSubtaskRequest, opts ...grpc.CallOption) (*CreateSubtaskResponse, error)
@@ -98,6 +100,15 @@ func (c *taskServiceClient) GetTasksByPatient(ctx context.Context, in *GetTasksB
 func (c *taskServiceClient) GetTasksByPatientSortedByStatus(ctx context.Context, in *GetTasksByPatientSortedByStatusRequest, opts ...grpc.CallOption) (*GetTasksByPatientSortedByStatusResponse, error) {
 	out := new(GetTasksByPatientSortedByStatusResponse)
 	err := c.cc.Invoke(ctx, TaskService_GetTasksByPatientSortedByStatus_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) GetAssignedTasks(ctx context.Context, in *GetAssignedTasksRequest, opts ...grpc.CallOption) (*GetAssignedTasksResponse, error) {
+	out := new(GetAssignedTasksResponse)
+	err := c.cc.Invoke(ctx, TaskService_GetAssignedTasks_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -176,6 +187,7 @@ type TaskServiceServer interface {
 	GetTask(context.Context, *GetTaskRequest) (*GetTaskResponse, error)
 	GetTasksByPatient(context.Context, *GetTasksByPatientRequest) (*GetTasksByPatientResponse, error)
 	GetTasksByPatientSortedByStatus(context.Context, *GetTasksByPatientSortedByStatusRequest) (*GetTasksByPatientSortedByStatusResponse, error)
+	GetAssignedTasks(context.Context, *GetAssignedTasksRequest) (*GetAssignedTasksResponse, error)
 	AssignTask(context.Context, *AssignTaskRequest) (*AssignTaskResponse, error)
 	UnassignTask(context.Context, *UnassignTaskRequest) (*UnassignTaskResponse, error)
 	CreateSubtask(context.Context, *CreateSubtaskRequest) (*CreateSubtaskResponse, error)
@@ -204,6 +216,9 @@ func (UnimplementedTaskServiceServer) GetTasksByPatient(context.Context, *GetTas
 }
 func (UnimplementedTaskServiceServer) GetTasksByPatientSortedByStatus(context.Context, *GetTasksByPatientSortedByStatusRequest) (*GetTasksByPatientSortedByStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTasksByPatientSortedByStatus not implemented")
+}
+func (UnimplementedTaskServiceServer) GetAssignedTasks(context.Context, *GetAssignedTasksRequest) (*GetAssignedTasksResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAssignedTasks not implemented")
 }
 func (UnimplementedTaskServiceServer) AssignTask(context.Context, *AssignTaskRequest) (*AssignTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AssignTask not implemented")
@@ -325,6 +340,24 @@ func _TaskService_GetTasksByPatientSortedByStatus_Handler(srv interface{}, ctx c
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TaskServiceServer).GetTasksByPatientSortedByStatus(ctx, req.(*GetTasksByPatientSortedByStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_GetAssignedTasks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAssignedTasksRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).GetAssignedTasks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_GetAssignedTasks_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).GetAssignedTasks(ctx, req.(*GetAssignedTasksRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -481,6 +514,10 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTasksByPatientSortedByStatus",
 			Handler:    _TaskService_GetTasksByPatientSortedByStatus_Handler,
+		},
+		{
+			MethodName: "GetAssignedTasks",
+			Handler:    _TaskService_GetAssignedTasks_Handler,
 		},
 		{
 			MethodName: "AssignTask",

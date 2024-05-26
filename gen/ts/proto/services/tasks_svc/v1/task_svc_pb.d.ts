@@ -600,6 +600,11 @@ export namespace GetAssignedTasksResponse {
     clearSubtasksList(): Task;
     addSubtasks(value?: GetAssignedTasksResponse.Task.SubTask, index?: number): GetAssignedTasksResponse.Task.SubTask;
 
+    getCreatedAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
+    setCreatedAt(value?: google_protobuf_timestamp_pb.Timestamp): Task;
+    hasCreatedAt(): boolean;
+    clearCreatedAt(): Task;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Task.AsObject;
     static toObject(includeInstance: boolean, msg: Task): Task.AsObject;
@@ -620,6 +625,7 @@ export namespace GetAssignedTasksResponse {
       dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
       createdBy: string,
       subtasksList: Array<GetAssignedTasksResponse.Task.SubTask.AsObject>,
+      createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     }
 
     export class Patient extends jspb.Message {

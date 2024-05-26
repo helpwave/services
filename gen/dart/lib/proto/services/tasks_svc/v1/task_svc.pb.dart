@@ -1518,6 +1518,7 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
     $16.Timestamp? dueAt,
     $core.String? createdBy,
     $core.Iterable<GetAssignedTasksResponse_Task_SubTask>? subtasks,
+    $16.Timestamp? createdAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -1550,6 +1551,9 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
     if (subtasks != null) {
       $result.subtasks.addAll(subtasks);
     }
+    if (createdAt != null) {
+      $result.createdAt = createdAt;
+    }
     return $result;
   }
   GetAssignedTasksResponse_Task._() : super();
@@ -1567,6 +1571,7 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
     ..aOM<$16.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $16.Timestamp.create)
     ..aOS(9, _omitFieldNames ? '' : 'createdBy')
     ..pc<GetAssignedTasksResponse_Task_SubTask>(10, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetAssignedTasksResponse_Task_SubTask.create)
+    ..aOM<$16.Timestamp>(11, _omitFieldNames ? '' : 'createdAt', subBuilder: $16.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -1678,6 +1683,17 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(10)
   $core.List<GetAssignedTasksResponse_Task_SubTask> get subtasks => $_getList(9);
+
+  @$pb.TagNumber(11)
+  $16.Timestamp get createdAt => $_getN(10);
+  @$pb.TagNumber(11)
+  set createdAt($16.Timestamp v) { setField(11, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasCreatedAt() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearCreatedAt() => clearField(11);
+  @$pb.TagNumber(11)
+  $16.Timestamp ensureCreatedAt() => $_ensure(10);
 }
 
 class GetAssignedTasksResponse extends $pb.GeneratedMessage {

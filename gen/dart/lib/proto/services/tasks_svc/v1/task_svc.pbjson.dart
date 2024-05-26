@@ -328,6 +328,7 @@ const GetAssignedTasksResponse_Task$json = {
     {'1': 'due_at', '3': 8, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'dueAt'},
     {'1': 'created_by', '3': 9, '4': 1, '5': 9, '10': 'createdBy'},
     {'1': 'subtasks', '3': 10, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetAssignedTasksResponse.Task.SubTask', '10': 'subtasks'},
+    {'1': 'created_at', '3': 11, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
   ],
   '3': [GetAssignedTasksResponse_Task_Patient$json, GetAssignedTasksResponse_Task_SubTask$json],
 };
@@ -355,7 +356,7 @@ const GetAssignedTasksResponse_Task_SubTask$json = {
 /// Descriptor for `GetAssignedTasksResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getAssignedTasksResponseDescriptor = $convert.base64Decode(
     'ChhHZXRBc3NpZ25lZFRhc2tzUmVzcG9uc2USUAoFdGFza3MYASADKAsyOi5wcm90by5zZXJ2aW'
-    'Nlcy50YXNrc19zdmMudjEuR2V0QXNzaWduZWRUYXNrc1Jlc3BvbnNlLlRhc2tSBXRhc2tzGvAE'
+    'Nlcy50YXNrc19zdmMudjEuR2V0QXNzaWduZWRUYXNrc1Jlc3BvbnNlLlRhc2tSBXRhc2tzGqsF'
     'CgRUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW'
     '9uGAMgASgJUgtkZXNjcmlwdGlvbhI/CgZzdGF0dXMYBCABKA4yJy5wcm90by5zZXJ2aWNlcy50'
     'YXNrc19zdmMudjEuVGFza1N0YXR1c1IGc3RhdHVzEigKEGFzc2lnbmVkX3VzZXJfaWQYBSABKA'
@@ -364,10 +365,11 @@ final $typed_data.Uint8List getAssignedTasksResponseDescriptor = $convert.base64
     'IWCgZwdWJsaWMYByABKAhSBnB1YmxpYxIxCgZkdWVfYXQYCCABKAsyGi5nb29nbGUucHJvdG9i'
     'dWYuVGltZXN0YW1wUgVkdWVBdBIdCgpjcmVhdGVkX2J5GAkgASgJUgljcmVhdGVkQnkSXgoIc3'
     'VidGFza3MYCiADKAsyQi5wcm90by5zZXJ2aWNlcy50YXNrc19zdmMudjEuR2V0QXNzaWduZWRU'
-    'YXNrc1Jlc3BvbnNlLlRhc2suU3ViVGFza1IIc3VidGFza3MaLQoHUGF0aWVudBIOCgJpZBgBIA'
-    'EoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRpgCgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBIS'
-    'CgRuYW1lGAIgASgJUgRuYW1lEhIKBGRvbmUYAyABKAhSBGRvbmUSHQoKY3JlYXRlZF9ieRgEIA'
-    'EoCVIJY3JlYXRlZEJ5');
+    'YXNrc1Jlc3BvbnNlLlRhc2suU3ViVGFza1IIc3VidGFza3MSOQoKY3JlYXRlZF9hdBgLIAEoCz'
+    'IaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBotCgdQYXRpZW50Eg4KAmlk'
+    'GAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lGmAKB1N1YlRhc2sSDgoCaWQYASABKAlSAm'
+    'lkEhIKBG5hbWUYAiABKAlSBG5hbWUSEgoEZG9uZRgDIAEoCFIEZG9uZRIdCgpjcmVhdGVkX2J5'
+    'GAQgASgJUgljcmVhdGVkQnk=');
 
 @$core.Deprecated('Use assignTaskRequestDescriptor instead')
 const AssignTaskRequest$json = {

@@ -1,9 +1,12 @@
 package api
 
 import (
+	"common"
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwes"
 	"hwutil"
@@ -231,6 +234,53 @@ func (s *TaskGrpcService) GetTasksByPatientSortedByStatus(ctx context.Context, r
 		Todo:       collectTasks(todo),
 		InProgress: collectTasks(inprogress),
 		Done:       collectTasks(done),
+	}, nil
+}
+
+func (s *TaskGrpcService) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTasksRequest) (*pb.GetAssignedTasksResponse, error) {
+	asigneeID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	tasksWithPatients, err := s.handlers.Queries.V1.GetTasksWithPatientsByAssignee(ctx, asigneeID)
+	if err != nil {
+		return nil, err
+	}
+
+	taskResponse := make([]*pb.GetAssignedTasksResponse_Task, len(tasksWithPatients))
+	for ix, item := range tasksWithPatients {
+		taskResponse[ix] = &pb.GetAssignedTasksResponse_Task{
+			Id:             item.ID.String(),
+			Name:           item.Name,
+			Description:    item.Description,
+			Status:         item.Status,
+			Public:         item.Public,
+			CreatedBy:      item.CreatedBy.String(),
+			CreatedAt:      timestamppb.New(item.CreatedAt),
+			DueAt:          timestamppb.New(item.DueAt),
+			Subtasks:       make([]*pb.GetAssignedTasksResponse_Task_SubTask, len(item.Subtasks)),
+			AssignedUserId: item.AssignedUsers[0].String(), // TODO: #760
+			Patient: &pb.GetAssignedTasksResponse_Task_Patient{
+				Id:   item.PatientID.String(),
+				Name: item.PatientName,
+			},
+		}
+
+		subtaskIdx := 0
+		for _, subtask := range item.Subtasks {
+			taskResponse[ix].Subtasks[subtaskIdx] = &pb.GetAssignedTasksResponse_Task_SubTask{
+				Id:        subtask.ID.String(),
+				Name:      subtask.Name,
+				Done:      subtask.Done,
+				CreatedBy: subtask.CreatedBy.String(),
+			}
+			subtaskIdx++
+		}
+	}
+
+	return &pb.GetAssignedTasksResponse{
+		Tasks: taskResponse,
 	}, nil
 }
 

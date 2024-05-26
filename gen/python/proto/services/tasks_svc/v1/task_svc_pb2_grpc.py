@@ -43,6 +43,11 @@ class TaskServiceStub(object):
                 request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusRequest.SerializeToString,
                 response_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusResponse.FromString,
                 )
+        self.GetAssignedTasks = channel.unary_unary(
+                '/proto.services.tasks_svc.v1.TaskService/GetAssignedTasks',
+                request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetAssignedTasksRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetAssignedTasksResponse.FromString,
+                )
         self.AssignTask = channel.unary_unary(
                 '/proto.services.tasks_svc.v1.TaskService/AssignTask',
                 request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.AssignTaskRequest.SerializeToString,
@@ -117,6 +122,12 @@ class TaskServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetAssignedTasks(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def AssignTask(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -186,6 +197,11 @@ def add_TaskServiceServicer_to_server(servicer, server):
                     servicer.GetTasksByPatientSortedByStatus,
                     request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusRequest.FromString,
                     response_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusResponse.SerializeToString,
+            ),
+            'GetAssignedTasks': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetAssignedTasks,
+                    request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetAssignedTasksRequest.FromString,
+                    response_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetAssignedTasksResponse.SerializeToString,
             ),
             'AssignTask': grpc.unary_unary_rpc_method_handler(
                     servicer.AssignTask,
@@ -318,6 +334,23 @@ class TaskService(object):
         return grpc.experimental.unary_unary(request, target, '/proto.services.tasks_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
             proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusRequest.SerializeToString,
             proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetAssignedTasks(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.tasks_svc.v1.TaskService/GetAssignedTasks',
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetAssignedTasksRequest.SerializeToString,
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetAssignedTasksResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

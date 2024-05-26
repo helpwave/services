@@ -29,3 +29,8 @@ type Subtask struct {
 	Name string
 	Done bool
 }
+
+type TaskWithPatient struct {
+	Task
+	PatientName string
+}
