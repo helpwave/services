@@ -51,13 +51,13 @@ WHERE subject_id = $1;
 -- name: GetRelevantPropertyViews :many
 SELECT
 	sqlc.embed(properties),
-		values.id as value_id,
-		values.text_value,
-	   	values.bool_value,
-	   	values.number_value,
-	   	values.select_value,
-	   	values.date_time_value,
-	   	values.date_value
+	values.id as value_id,
+	values.text_value,
+	values.bool_value,
+	values.number_value,
+	values.select_value,
+	values.date_time_value,
+	values.date_value
 FROM properties
 	LEFT JOIN property_values as values ON values.property_id = properties.id
 WHERE
