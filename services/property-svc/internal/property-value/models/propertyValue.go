@@ -30,3 +30,26 @@ type PropertyValueWithProperty struct {
 	DateTimeValue *time.Time
 	DateValue     *time.Time
 }
+
+type TypedValue struct {
+	TextValue     *string
+	BoolValue     *bool
+	NumberValue   *float64
+	SelectValue   uuid.NullUUID
+	DateTimeValue *time.Time
+	DateValue     *time.Time
+}
+
+type PropertyAndValue struct {
+	PropertyID  uuid.UUID
+	SubjectType pb.SubjectType
+	FieldType   pb.FieldType
+
+	Name        string
+	Description string
+	IsArchived  bool
+
+	SetID uuid.NullUUID
+
+	Value *TypedValue
+}

@@ -14,17 +14,17 @@ class PropertyViewsServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.UpdateTaskPropertyViewRule = channel.unary_unary(
-                '/proto.services.property_svc.v1.PropertyViewsService/UpdateTaskPropertyViewRule',
-                request_serializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__views__svc__pb2.UpdateTaskPropertyViewRuleRequest.SerializeToString,
-                response_deserializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__views__svc__pb2.UpdateTaskPropertyViewRuleResponse.FromString,
+        self.UpdatePropertyViewRule = channel.unary_unary(
+                '/proto.services.property_svc.v1.PropertyViewsService/UpdatePropertyViewRule',
+                request_serializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__views__svc__pb2.UpdatePropertyViewRuleRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__views__svc__pb2.UpdatePropertyViewRuleResponse.FromString,
                 )
 
 
 class PropertyViewsServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def UpdateTaskPropertyViewRule(self, request, context):
+    def UpdatePropertyViewRule(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -33,10 +33,10 @@ class PropertyViewsServiceServicer(object):
 
 def add_PropertyViewsServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'UpdateTaskPropertyViewRule': grpc.unary_unary_rpc_method_handler(
-                    servicer.UpdateTaskPropertyViewRule,
-                    request_deserializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__views__svc__pb2.UpdateTaskPropertyViewRuleRequest.FromString,
-                    response_serializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__views__svc__pb2.UpdateTaskPropertyViewRuleResponse.SerializeToString,
+            'UpdatePropertyViewRule': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdatePropertyViewRule,
+                    request_deserializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__views__svc__pb2.UpdatePropertyViewRuleRequest.FromString,
+                    response_serializer=proto_dot_services_dot_property__svc_dot_v1_dot_property__views__svc__pb2.UpdatePropertyViewRuleResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -49,7 +49,7 @@ class PropertyViewsService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def UpdateTaskPropertyViewRule(request,
+    def UpdatePropertyViewRule(request,
             target,
             options=(),
             channel_credentials=None,
@@ -59,8 +59,8 @@ class PropertyViewsService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/proto.services.property_svc.v1.PropertyViewsService/UpdateTaskPropertyViewRule',
-            proto_dot_services_dot_property__svc_dot_v1_dot_property__views__svc__pb2.UpdateTaskPropertyViewRuleRequest.SerializeToString,
-            proto_dot_services_dot_property__svc_dot_v1_dot_property__views__svc__pb2.UpdateTaskPropertyViewRuleResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/proto.services.property_svc.v1.PropertyViewsService/UpdatePropertyViewRule',
+            proto_dot_services_dot_property__svc_dot_v1_dot_property__views__svc__pb2.UpdatePropertyViewRuleRequest.SerializeToString,
+            proto_dot_services_dot_property__svc_dot_v1_dot_property__views__svc__pb2.UpdatePropertyViewRuleResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

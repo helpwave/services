@@ -31,8 +31,16 @@ message AttachPropertyValueResponse {
 //
 // GetAttachedPropertyValue
 //
+
+message TaskPropertyMatcher {
+  optional string ward_id = 1; // @gotags: validate:"omitempty,omitnil,uuid4"
+  optional string task_id = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
+}
+
 message GetAttachedPropertyValuesRequest {
-  string subject_id = 1;
+  oneof matcher {
+    TaskPropertyMatcher task_matcher = 1;
+  }
 }
 
 message GetAttachedPropertyValuesResponse {

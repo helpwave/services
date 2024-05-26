@@ -59,22 +59,25 @@ func setup(t *testing.T) (ctx context.Context, client pb.PropertyViewsServiceCli
 	return ctx, client, as, dbMock, teardown
 }
 
-func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_Validation(t *testing.T) {
+func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T) {
 	ctx, client, _, dbMock, teardown := setup(t)
 	defer teardown()
 
 	// Empty Request
-	_, err := client.UpdateTaskPropertyViewRule(ctx, &pb.UpdateTaskPropertyViewRuleRequest{
-		WardId:       nil,
-		TaskId:       nil,
+	_, err := client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
 		FilterUpdate: nil,
+		Matcher:      nil,
 	})
 	assert.Error(t, err, "accepts empty requests")
 
 	// Semi-Empty Request
-	_, err = client.UpdateTaskPropertyViewRule(ctx, &pb.UpdateTaskPropertyViewRuleRequest{
-		WardId: nil,
-		TaskId: nil,
+	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
+		Matcher: &pb.UpdatePropertyViewRuleRequest_TaskMatcher{
+			TaskMatcher: &pb.TaskPropertyMatcher{
+				WardId: nil,
+				TaskId: nil,
+			},
+		},
 		FilterUpdate: &pb.FilterUpdate{
 			AppendToAlwaysInclude:       nil,
 			RemoveFromAlwaysInclude:     nil,
@@ -85,9 +88,13 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_Validation(t *testin
 	assert.NoError(t, err, "rejects semi-empty requests")
 
 	// Array-based Semi-Empty Request
-	_, err = client.UpdateTaskPropertyViewRule(ctx, &pb.UpdateTaskPropertyViewRuleRequest{
-		WardId: nil,
-		TaskId: nil,
+	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
+		Matcher: &pb.UpdatePropertyViewRuleRequest_TaskMatcher{
+			TaskMatcher: &pb.TaskPropertyMatcher{
+				WardId: nil,
+				TaskId: nil,
+			},
+		},
 		FilterUpdate: &pb.FilterUpdate{
 			AppendToAlwaysInclude:       make([]string, 0),
 			RemoveFromAlwaysInclude:     make([]string, 0),
@@ -98,9 +105,13 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_Validation(t *testin
 	assert.NoError(t, err, "rejects array based semi-empty requests")
 
 	// Invalid WardID
-	_, err = client.UpdateTaskPropertyViewRule(ctx, &pb.UpdateTaskPropertyViewRuleRequest{
-		WardId: hwutil.PtrTo("asdasdads"),
-		TaskId: nil,
+	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
+		Matcher: &pb.UpdatePropertyViewRuleRequest_TaskMatcher{
+			TaskMatcher: &pb.TaskPropertyMatcher{
+				WardId: hwutil.PtrTo("asdasdads"),
+				TaskId: nil,
+			},
+		},
 		FilterUpdate: &pb.FilterUpdate{
 			AppendToAlwaysInclude:       nil,
 			RemoveFromAlwaysInclude:     nil,
@@ -111,9 +122,13 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_Validation(t *testin
 	assert.Error(t, err, "accepts invalid ward_id")
 
 	// Invalid TaskID
-	_, err = client.UpdateTaskPropertyViewRule(ctx, &pb.UpdateTaskPropertyViewRuleRequest{
-		WardId: nil,
-		TaskId: hwutil.PtrTo("asdasdads"),
+	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
+		Matcher: &pb.UpdatePropertyViewRuleRequest_TaskMatcher{
+			TaskMatcher: &pb.TaskPropertyMatcher{
+				TaskId: hwutil.PtrTo("asdasdads"),
+				WardId: nil,
+			},
+		},
 		FilterUpdate: &pb.FilterUpdate{
 			AppendToAlwaysInclude:       nil,
 			RemoveFromAlwaysInclude:     nil,
@@ -124,9 +139,13 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_Validation(t *testin
 	assert.Error(t, err, "accepts invalid task_id")
 
 	// Valid IDs
-	_, err = client.UpdateTaskPropertyViewRule(ctx, &pb.UpdateTaskPropertyViewRuleRequest{
-		WardId: hwutil.PtrTo("e602f938-66c5-4a08-a251-4aef94a98060"),
-		TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
+		Matcher: &pb.UpdatePropertyViewRuleRequest_TaskMatcher{
+			TaskMatcher: &pb.TaskPropertyMatcher{
+				WardId: hwutil.PtrTo("e602f938-66c5-4a08-a251-4aef94a98060"),
+				TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+			},
+		},
 		FilterUpdate: &pb.FilterUpdate{
 			AppendToAlwaysInclude:       nil,
 			RemoveFromAlwaysInclude:     nil,
@@ -137,9 +156,13 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_Validation(t *testin
 	assert.NoError(t, err, "rejects valid matchers")
 
 	// Invalid updates
-	_, err = client.UpdateTaskPropertyViewRule(ctx, &pb.UpdateTaskPropertyViewRuleRequest{
-		WardId: hwutil.PtrTo("e602f938-66c5-4a08-a251-4aef94a98060"),
-		TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
+		Matcher: &pb.UpdatePropertyViewRuleRequest_TaskMatcher{
+			TaskMatcher: &pb.TaskPropertyMatcher{
+				WardId: hwutil.PtrTo("e602f938-66c5-4a08-a251-4aef94a98060"),
+				TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+			},
+		},
 		FilterUpdate: &pb.FilterUpdate{
 			AppendToAlwaysInclude:       nil,
 			RemoveFromAlwaysInclude:     []string{"asdasdasda"},
@@ -155,9 +178,13 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_Validation(t *testin
 		WithArgs(uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
 		WillReturnRows(pgxmock.NewRows([]string{}))
 
-	_, err = client.UpdateTaskPropertyViewRule(ctx, &pb.UpdateTaskPropertyViewRuleRequest{
-		WardId: nil,
-		TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
+		Matcher: &pb.UpdatePropertyViewRuleRequest_TaskMatcher{
+			TaskMatcher: &pb.TaskPropertyMatcher{
+				WardId: nil,
+				TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+			},
+		},
 		FilterUpdate: &pb.FilterUpdate{
 			AppendToAlwaysInclude:       nil,
 			RemoveFromAlwaysInclude:     []string{"a7ff7a87-7787-42b4-9aa8-037293ac9d90", "08b23992-9489-41d2-b80d-d7d49c4c9168"},
@@ -168,14 +195,18 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_Validation(t *testin
 	assert.NoError(t, err, "rejects fully valid request")
 }
 
-func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_AllEmptyNoEffect(t *testing.T) {
+func TestPropertyViewGrpcService_UpdatePropertyViewRule_AllEmptyNoEffect(t *testing.T) {
 	ctx, client, as, _, teardown := setup(t)
 	defer teardown()
 
 	// Valid IDs
-	_, _ = client.UpdateTaskPropertyViewRule(ctx, &pb.UpdateTaskPropertyViewRuleRequest{
-		WardId: hwutil.PtrTo("e602f938-66c5-4a08-a251-4aef94a98060"),
-		TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+	_, _ = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
+		Matcher: &pb.UpdatePropertyViewRuleRequest_TaskMatcher{
+			TaskMatcher: &pb.TaskPropertyMatcher{
+				WardId: hwutil.PtrTo("e602f938-66c5-4a08-a251-4aef94a98060"),
+				TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+			},
+		},
 		FilterUpdate: &pb.FilterUpdate{
 			AppendToAlwaysInclude:       []string{},
 			RemoveFromAlwaysInclude:     []string{},
@@ -187,7 +218,7 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_AllEmptyNoEffect(t *
 	as.ExpectToBeEmpty(t)
 }
 
-func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_GreenPath_Created(t *testing.T) {
+func TestPropertyViewGrpcService_UpdatePropertyViewRule_GreenPath_Created(t *testing.T) {
 	ctx, client, as, dbMock, teardown := setup(t)
 	defer teardown()
 
@@ -196,9 +227,13 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_GreenPath_Created(t 
 		WithArgs(uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
 		WillReturnRows(pgxmock.NewRows([]string{}))
 
-	_, _ = client.UpdateTaskPropertyViewRule(ctx, &pb.UpdateTaskPropertyViewRuleRequest{
-		WardId: nil,
-		TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+	_, _ = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
+		Matcher: &pb.UpdatePropertyViewRuleRequest_TaskMatcher{
+			TaskMatcher: &pb.TaskPropertyMatcher{
+				WardId: nil,
+				TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+			},
+		},
 		FilterUpdate: &pb.FilterUpdate{
 			AppendToAlwaysInclude:       nil,
 			RemoveFromAlwaysInclude:     []string{"a7ff7a87-7787-42b4-9aa8-037293ac9d90", "08b23992-9489-41d2-b80d-d7d49c4c9168"},
@@ -237,7 +272,7 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_GreenPath_Created(t 
 	})
 }
 
-func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_GreenPath_Updated(t *testing.T) {
+func TestPropertyViewGrpcService_UpdatePropertyViewRule_GreenPath_Updated(t *testing.T) {
 	ctx, client, as, dbMock, teardown := setup(t)
 	defer teardown()
 
@@ -273,9 +308,13 @@ func TestPropertyViewGrpcService_UpdateTaskPropertyViewRule_GreenPath_Updated(t 
 	}
 	as.SetStreams(streamsPrior)
 
-	_, _ = client.UpdateTaskPropertyViewRule(ctx, &pb.UpdateTaskPropertyViewRuleRequest{
-		WardId: nil,
-		TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+	_, _ = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
+		Matcher: &pb.UpdatePropertyViewRuleRequest_TaskMatcher{
+			TaskMatcher: &pb.TaskPropertyMatcher{
+				WardId: nil,
+				TaskId: hwutil.PtrTo("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"),
+			},
+		},
 		FilterUpdate: &pb.FilterUpdate{
 			AppendToAlwaysInclude:       nil,
 			RemoveFromAlwaysInclude:     []string{"a7ff7a87-7787-42b4-9aa8-037293ac9d90", "08b23992-9489-41d2-b80d-d7d49c4c9168"},
