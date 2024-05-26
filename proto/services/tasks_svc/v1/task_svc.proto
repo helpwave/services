@@ -123,6 +123,7 @@ message GetTasksByPatientSortedByStatusResponse {
     google.protobuf.Timestamp due_at = 8;
     string created_by = 9;
     repeated SubTask subtasks = 10;
+    google.protobuf.Timestamp created_at = 11;
 
     message SubTask {
       string id = 1;
@@ -266,6 +267,7 @@ service TaskService {
   rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse) {}
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
   rpc GetTasksByPatient(GetTasksByPatientRequest) returns (GetTasksByPatientResponse) {}
+  rpc GetTasksByPatientSortedByStatus(GetTasksByPatientSortedByStatusRequest) returns (GetTasksByPatientSortedByStatusResponse) {}
   rpc AssignTask(AssignTaskRequest) returns (AssignTaskResponse) {}
   rpc UnassignTask(UnassignTaskRequest) returns (UnassignTaskResponse) {}
   rpc CreateSubtask(CreateSubtaskRequest) returns (CreateSubtaskResponse) {}

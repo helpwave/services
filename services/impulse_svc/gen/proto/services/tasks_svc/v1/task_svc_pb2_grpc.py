@@ -38,6 +38,11 @@ class TaskServiceStub(object):
                 request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientRequest.SerializeToString,
                 response_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientResponse.FromString,
                 )
+        self.GetTasksByPatientSortedByStatus = channel.unary_unary(
+                '/proto.services.tasks_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
+                request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusRequest.SerializeToString,
+                response_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusResponse.FromString,
+                )
         self.AssignTask = channel.unary_unary(
                 '/proto.services.tasks_svc.v1.TaskService/AssignTask',
                 request_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.AssignTaskRequest.SerializeToString,
@@ -101,6 +106,12 @@ class TaskServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetTasksByPatient(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetTasksByPatientSortedByStatus(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -170,6 +181,11 @@ def add_TaskServiceServicer_to_server(servicer, server):
                     servicer.GetTasksByPatient,
                     request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientRequest.FromString,
                     response_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientResponse.SerializeToString,
+            ),
+            'GetTasksByPatientSortedByStatus': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetTasksByPatientSortedByStatus,
+                    request_deserializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusRequest.FromString,
+                    response_serializer=proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusResponse.SerializeToString,
             ),
             'AssignTask': grpc.unary_unary_rpc_method_handler(
                     servicer.AssignTask,
@@ -285,6 +301,23 @@ class TaskService(object):
         return grpc.experimental.unary_unary(request, target, '/proto.services.tasks_svc.v1.TaskService/GetTasksByPatient',
             proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientRequest.SerializeToString,
             proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetTasksByPatientSortedByStatus(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/proto.services.tasks_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusRequest.SerializeToString,
+            proto_dot_services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

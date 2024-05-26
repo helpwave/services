@@ -257,6 +257,7 @@ const GetTasksByPatientSortedByStatusResponse_Task$json = {
     {'1': 'due_at', '3': 8, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'dueAt'},
     {'1': 'created_by', '3': 9, '4': 1, '5': 9, '10': 'createdBy'},
     {'1': 'subtasks', '3': 10, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask', '10': 'subtasks'},
+    {'1': 'created_at', '3': 11, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
   ],
   '3': [GetTasksByPatientSortedByStatusResponse_Task_SubTask$json],
   '8': [
@@ -283,16 +284,17 @@ final $typed_data.Uint8List getTasksByPatientSortedByStatusResponseDescriptor = 
     'NlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRUYXNrc0J5UGF0aWVudFNvcnRlZEJ5U3RhdHVzUmVz'
     'cG9uc2UuVGFza1IKaW5Qcm9ncmVzcxJdCgRkb25lGAMgAygLMkkucHJvdG8uc2VydmljZXMudG'
     'Fza3Nfc3ZjLnYxLkdldFRhc2tzQnlQYXRpZW50U29ydGVkQnlTdGF0dXNSZXNwb25zZS5UYXNr'
-    'UgRkb25lGuoDCgRUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2'
+    'UgRkb25lGqUECgRUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2'
     'Rlc2NyaXB0aW9uGAMgASgJUgtkZXNjcmlwdGlvbhItChBhc3NpZ25lZF91c2VyX2lkGAUgASgJ'
     'SABSDmFzc2lnbmVkVXNlcklkiAEBEh0KCnBhdGllbnRfaWQYBiABKAlSCXBhdGllbnRJZBIWCg'
     'ZwdWJsaWMYByABKAhSBnB1YmxpYxIxCgZkdWVfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYu'
     'VGltZXN0YW1wUgVkdWVBdBIdCgpjcmVhdGVkX2J5GAkgASgJUgljcmVhdGVkQnkSbQoIc3VidG'
     'Fza3MYCiADKAsyUS5wcm90by5zZXJ2aWNlcy50YXNrc19zdmMudjEuR2V0VGFza3NCeVBhdGll'
-    'bnRTb3J0ZWRCeVN0YXR1c1Jlc3BvbnNlLlRhc2suU3ViVGFza1IIc3VidGFza3MaYAoHU3ViVG'
-    'FzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRISCgRkb25lGAMgASgIUgRk'
-    'b25lEh0KCmNyZWF0ZWRfYnkYBCABKAlSCWNyZWF0ZWRCeUITChFfYXNzaWduZWRfdXNlcl9pZA'
-    '==');
+    'bnRTb3J0ZWRCeVN0YXR1c1Jlc3BvbnNlLlRhc2suU3ViVGFza1IIc3VidGFza3MSOQoKY3JlYX'
+    'RlZF9hdBgLIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBpgCgdT'
+    'dWJUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhIKBGRvbmUYAyABKA'
+    'hSBGRvbmUSHQoKY3JlYXRlZF9ieRgEIAEoCVIJY3JlYXRlZEJ5QhMKEV9hc3NpZ25lZF91c2Vy'
+    'X2lk');
 
 @$core.Deprecated('Use getAssignedTasksRequestDescriptor instead')
 const GetAssignedTasksRequest$json = {

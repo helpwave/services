@@ -119,6 +119,7 @@ message GetTasksByPatientSortedByStatusResponse {
     bool public = 7;
     google.protobuf.Timestamp due_at = 8;
     string created_by = 9;
+
     repeated SubTask subtasks = 10;
 
     message SubTask {

@@ -3739,7 +3739,8 @@ proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.t
     dueAt: (f = msg.getDueAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     createdBy: jspb.Message.getFieldWithDefault(msg, 9, ""),
     subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
-    proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask.toObject, includeInstance)
+    proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask.toObject, includeInstance),
+    createdAt: (f = msg.getCreatedAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -3813,6 +3814,11 @@ proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.d
       var value = new proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask;
       reader.readMessage(value,proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask.deserializeBinaryFromReader);
       msg.addSubtasks(value);
+      break;
+    case 11:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setCreatedAt(value);
       break;
     default:
       reader.skipField();
@@ -3906,6 +3912,14 @@ proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.s
       10,
       f,
       proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask.serializeBinaryToWriter
+    );
+  }
+  f = message.getCreatedAt();
+  if (f != null) {
+    writer.writeMessage(
+      11,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
   }
 };
@@ -4347,6 +4361,43 @@ proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.p
  */
 proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.clearSubtasksList = function() {
   return this.setSubtasksList([]);
+};
+
+
+/**
+ * optional google.protobuf.Timestamp created_at = 11;
+ * @return {?proto.google.protobuf.Timestamp}
+ */
+proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.getCreatedAt = function() {
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 11));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task} returns this
+*/
+proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.setCreatedAt = function(value) {
+  return jspb.Message.setWrapperField(this, 11, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task} returns this
+ */
+proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.clearCreatedAt = function() {
+  return this.setCreatedAt(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.hasCreatedAt = function() {
+  return jspb.Message.getField(this, 11) != null;
 };
 
 

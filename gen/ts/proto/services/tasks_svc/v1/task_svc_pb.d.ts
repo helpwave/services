@@ -464,6 +464,11 @@ export namespace GetTasksByPatientSortedByStatusResponse {
     clearSubtasksList(): Task;
     addSubtasks(value?: GetTasksByPatientSortedByStatusResponse.Task.SubTask, index?: number): GetTasksByPatientSortedByStatusResponse.Task.SubTask;
 
+    getCreatedAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
+    setCreatedAt(value?: google_protobuf_timestamp_pb.Timestamp): Task;
+    hasCreatedAt(): boolean;
+    clearCreatedAt(): Task;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Task.AsObject;
     static toObject(includeInstance: boolean, msg: Task): Task.AsObject;
@@ -483,6 +488,7 @@ export namespace GetTasksByPatientSortedByStatusResponse {
       dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
       createdBy: string,
       subtasksList: Array<GetTasksByPatientSortedByStatusResponse.Task.SubTask.AsObject>,
+      createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     }
 
     export class SubTask extends jspb.Message {
