@@ -21,6 +21,8 @@ var global =
     (function () { return this; }).call(null) ||
     Function('return this')();
 
+var proto_services_tasks_svc_v1_types_pb = require('../../../../proto/services/tasks_svc/v1/types_pb.js');
+goog.object.extend(proto, proto_services_tasks_svc_v1_types_pb);
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 goog.object.extend(proto, google_protobuf_timestamp_pb);
 goog.exportSymbol('proto.proto.services.tasks_svc.v1.AssignTaskRequest', null, global);
@@ -50,7 +52,6 @@ goog.exportSymbol('proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedBySt
 goog.exportSymbol('proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse', null, global);
 goog.exportSymbol('proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task', null, global);
 goog.exportSymbol('proto.proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask', null, global);
-goog.exportSymbol('proto.proto.services.tasks_svc.v1.TaskStatus', null, global);
 goog.exportSymbol('proto.proto.services.tasks_svc.v1.UnassignTaskRequest', null, global);
 goog.exportSymbol('proto.proto.services.tasks_svc.v1.UnassignTaskResponse', null, global);
 goog.exportSymbol('proto.proto.services.tasks_svc.v1.UncompleteSubtaskRequest', null, global);
@@ -7884,15 +7885,5 @@ proto.proto.services.tasks_svc.v1.DeleteSubtaskResponse.serializeBinaryToWriter 
   var f = undefined;
 };
 
-
-/**
- * @enum {number}
- */
-proto.proto.services.tasks_svc.v1.TaskStatus = {
-  TASK_STATUS_UNSPECIFIED: 0,
-  TASK_STATUS_TODO: 1,
-  TASK_STATUS_IN_PROGRESS: 2,
-  TASK_STATUS_DONE: 3
-};
 
 goog.object.extend(exports, proto.proto.services.tasks_svc.v1);

@@ -33,7 +33,8 @@ func NewPatientHandlers(as hwes.AggregateStore) *Handlers {
 		},
 		Queries: &Queries{
 			V1: &queriesV1.PatientQueries{
-				GetPatientByID: queriesV1.NewGetPatientByIDQueryHandler(as),
+				GetPatientByID:  queriesV1.NewGetPatientByIDQueryHandler(as),
+				GetPatientByBed: queriesV1.NewGetPatientByBedQueryHandler(as),
 			},
 		},
 	}

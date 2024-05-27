@@ -16,3 +16,9 @@ UPDATE patients
 SET bed_id = @bed_id,
     updated_at = @updated_at
 WHERE id = @id;
+
+-- name: GetPatientByBed :one
+SELECT patients.*
+FROM patients
+WHERE bed_id = @bed_id
+	LIMIT 1;

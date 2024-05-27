@@ -1,5 +1,6 @@
 import * as jspb from 'google-protobuf'
 
+import * as proto_services_tasks_svc_v1_types_pb from '../../../../proto/services/tasks_svc/v1/types_pb'; // proto import: "proto/services/tasks_svc/v1/types.proto"
 import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb'; // proto import: "google/protobuf/timestamp.proto"
 
 
@@ -25,8 +26,8 @@ export class CreateTaskRequest extends jspb.Message {
   hasDueAt(): boolean;
   clearDueAt(): CreateTaskRequest;
 
-  getInitialStatus(): TaskStatus;
-  setInitialStatus(value: TaskStatus): CreateTaskRequest;
+  getInitialStatus(): proto_services_tasks_svc_v1_types_pb.TaskStatus;
+  setInitialStatus(value: proto_services_tasks_svc_v1_types_pb.TaskStatus): CreateTaskRequest;
   hasInitialStatus(): boolean;
   clearInitialStatus(): CreateTaskRequest;
 
@@ -45,7 +46,7 @@ export namespace CreateTaskRequest {
     patientId: string,
     pb_public?: boolean,
     dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
-    initialStatus?: TaskStatus,
+    initialStatus?: proto_services_tasks_svc_v1_types_pb.TaskStatus,
   }
 
   export enum DescriptionCase { 
@@ -185,8 +186,8 @@ export class GetTaskResponse extends jspb.Message {
   clearSubtasksList(): GetTaskResponse;
   addSubtasks(value?: GetTaskResponse.Subtask, index?: number): GetTaskResponse.Subtask;
 
-  getStatus(): TaskStatus;
-  setStatus(value: TaskStatus): GetTaskResponse;
+  getStatus(): proto_services_tasks_svc_v1_types_pb.TaskStatus;
+  setStatus(value: proto_services_tasks_svc_v1_types_pb.TaskStatus): GetTaskResponse;
 
   getCreatedAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
   setCreatedAt(value?: google_protobuf_timestamp_pb.Timestamp): GetTaskResponse;
@@ -208,7 +209,7 @@ export namespace GetTaskResponse {
     description: string,
     assignedUsersList: Array<string>,
     subtasksList: Array<GetTaskResponse.Subtask.AsObject>,
-    status: TaskStatus,
+    status: proto_services_tasks_svc_v1_types_pb.TaskStatus,
     createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
   }
 
@@ -287,8 +288,8 @@ export namespace GetTasksByPatientResponse {
     getDescription(): string;
     setDescription(value: string): Task;
 
-    getStatus(): TaskStatus;
-    setStatus(value: TaskStatus): Task;
+    getStatus(): proto_services_tasks_svc_v1_types_pb.TaskStatus;
+    setStatus(value: proto_services_tasks_svc_v1_types_pb.TaskStatus): Task;
 
     getAssignedUserId(): string;
     setAssignedUserId(value: string): Task;
@@ -332,7 +333,7 @@ export namespace GetTasksByPatientResponse {
       id: string,
       name: string,
       description: string,
-      status: TaskStatus,
+      status: proto_services_tasks_svc_v1_types_pb.TaskStatus,
       assignedUserId?: string,
       patientId: string,
       pb_public: boolean,
@@ -573,8 +574,8 @@ export namespace GetAssignedTasksResponse {
     getDescription(): string;
     setDescription(value: string): Task;
 
-    getStatus(): TaskStatus;
-    setStatus(value: TaskStatus): Task;
+    getStatus(): proto_services_tasks_svc_v1_types_pb.TaskStatus;
+    setStatus(value: proto_services_tasks_svc_v1_types_pb.TaskStatus): Task;
 
     getAssignedUserId(): string;
     setAssignedUserId(value: string): Task;
@@ -618,7 +619,7 @@ export namespace GetAssignedTasksResponse {
       id: string,
       name: string,
       description: string,
-      status: TaskStatus,
+      status: proto_services_tasks_svc_v1_types_pb.TaskStatus,
       assignedUserId: string,
       patient?: GetAssignedTasksResponse.Task.Patient.AsObject,
       pb_public: boolean,
@@ -994,9 +995,3 @@ export namespace DeleteSubtaskResponse {
   }
 }
 
-export enum TaskStatus { 
-  TASK_STATUS_UNSPECIFIED = 0,
-  TASK_STATUS_TODO = 1,
-  TASK_STATUS_IN_PROGRESS = 2,
-  TASK_STATUS_DONE = 3,
-}

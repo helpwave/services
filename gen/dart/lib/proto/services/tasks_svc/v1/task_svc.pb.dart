@@ -14,9 +14,7 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import '../../../../google/protobuf/timestamp.pb.dart' as $16;
-import 'task_svc.pbenum.dart';
-
-export 'task_svc.pbenum.dart';
+import 'types.pbenum.dart' as $17;
 
 class CreateTaskRequest extends $pb.GeneratedMessage {
   factory CreateTaskRequest({
@@ -25,7 +23,7 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     $core.String? patientId,
     $core.bool? public,
     $16.Timestamp? dueAt,
-    TaskStatus? initialStatus,
+    $17.TaskStatus? initialStatus,
   }) {
     final $result = create();
     if (name != null) {
@@ -58,7 +56,7 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'patientId')
     ..aOB(4, _omitFieldNames ? '' : 'public')
     ..aOM<$16.Timestamp>(5, _omitFieldNames ? '' : 'dueAt', subBuilder: $16.Timestamp.create)
-    ..e<TaskStatus>(6, _omitFieldNames ? '' : 'initialStatus', $pb.PbFieldType.OE, defaultOrMaker: TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: TaskStatus.valueOf, enumValues: TaskStatus.values)
+    ..e<$17.TaskStatus>(6, _omitFieldNames ? '' : 'initialStatus', $pb.PbFieldType.OE, defaultOrMaker: $17.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $17.TaskStatus.valueOf, enumValues: $17.TaskStatus.values)
     ..hasRequiredFields = false
   ;
 
@@ -131,9 +129,9 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
   $16.Timestamp ensureDueAt() => $_ensure(4);
 
   @$pb.TagNumber(6)
-  TaskStatus get initialStatus => $_getN(5);
+  $17.TaskStatus get initialStatus => $_getN(5);
   @$pb.TagNumber(6)
-  set initialStatus(TaskStatus v) { setField(6, v); }
+  set initialStatus($17.TaskStatus v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasInitialStatus() => $_has(5);
   @$pb.TagNumber(6)
@@ -451,7 +449,7 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     $core.String? description,
     $core.Iterable<$core.String>? assignedUsers,
     $core.Iterable<GetTaskResponse_Subtask>? subtasks,
-    TaskStatus? status,
+    $17.TaskStatus? status,
     $16.Timestamp? createdAt,
   }) {
     final $result = create();
@@ -488,7 +486,7 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..pPS(4, _omitFieldNames ? '' : 'assignedUsers')
     ..pc<GetTaskResponse_Subtask>(5, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTaskResponse_Subtask.create)
-    ..e<TaskStatus>(6, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: TaskStatus.valueOf, enumValues: TaskStatus.values)
+    ..e<$17.TaskStatus>(6, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $17.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $17.TaskStatus.valueOf, enumValues: $17.TaskStatus.values)
     ..aOM<$16.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $16.Timestamp.create)
     ..hasRequiredFields = false
   ;
@@ -548,9 +546,9 @@ class GetTaskResponse extends $pb.GeneratedMessage {
   $core.List<GetTaskResponse_Subtask> get subtasks => $_getList(4);
 
   @$pb.TagNumber(6)
-  TaskStatus get status => $_getN(5);
+  $17.TaskStatus get status => $_getN(5);
   @$pb.TagNumber(6)
-  set status(TaskStatus v) { setField(6, v); }
+  set status($17.TaskStatus v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasStatus() => $_has(5);
   @$pb.TagNumber(6)
@@ -715,7 +713,7 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    TaskStatus? status,
+    $17.TaskStatus? status,
     $core.String? assignedUserId,
     $core.String? patientId,
     $core.bool? public,
@@ -768,7 +766,7 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..e<TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: TaskStatus.valueOf, enumValues: TaskStatus.values)
+    ..e<$17.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $17.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $17.TaskStatus.valueOf, enumValues: $17.TaskStatus.values)
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOS(6, _omitFieldNames ? '' : 'patientId')
     ..aOB(7, _omitFieldNames ? '' : 'public')
@@ -828,9 +826,9 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  TaskStatus get status => $_getN(3);
+  $17.TaskStatus get status => $_getN(3);
   @$pb.TagNumber(4)
-  set status(TaskStatus v) { setField(4, v); }
+  set status($17.TaskStatus v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)
@@ -1511,7 +1509,7 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    TaskStatus? status,
+    $17.TaskStatus? status,
     $core.String? assignedUserId,
     GetAssignedTasksResponse_Task_Patient? patient,
     $core.bool? public,
@@ -1564,7 +1562,7 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..e<TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: TaskStatus.valueOf, enumValues: TaskStatus.values)
+    ..e<$17.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $17.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $17.TaskStatus.valueOf, enumValues: $17.TaskStatus.values)
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOM<GetAssignedTasksResponse_Task_Patient>(6, _omitFieldNames ? '' : 'patient', subBuilder: GetAssignedTasksResponse_Task_Patient.create)
     ..aOB(7, _omitFieldNames ? '' : 'public')
@@ -1624,9 +1622,9 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  TaskStatus get status => $_getN(3);
+  $17.TaskStatus get status => $_getN(3);
   @$pb.TagNumber(4)
-  set status(TaskStatus v) { setField(4, v); }
+  set status($17.TaskStatus v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)

@@ -1,5 +1,6 @@
 package v1
 
 type PatientQueries struct {
-	GetPatientByID GetPatientByIDQueryHandler
+	GetPatientByID  GetPatientByIDQueryHandler
+	GetPatientByBed GetPatientByBedQueryHandler
 }

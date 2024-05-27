@@ -12,7 +12,7 @@ import (
 
 type GetTasksByPatientIDQueryHandler func(ctx context.Context, patientID uuid.UUID) ([]*models.Task, error)
 
-func NewGetTasksByPatientIDQueryHandler(as hwes.AggregateStore) GetTasksByPatientIDQueryHandler {
+func NewGetTasksByPatientIDQueryHandler(_ hwes.AggregateStore) GetTasksByPatientIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) ([]*models.Task, error) {
 		db := hwdb.GetDB()
 		taskRepo := task_repo.New(db)

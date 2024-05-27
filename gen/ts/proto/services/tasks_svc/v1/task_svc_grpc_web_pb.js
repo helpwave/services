@@ -20,6 +20,8 @@ const grpc = {};
 grpc.web = require('grpc-web');
 
 
+var proto_services_tasks_svc_v1_types_pb = require('../../../../proto/services/tasks_svc/v1/types_pb.js')
+
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js')
 const proto = {};
 proto.proto = {};

@@ -87,6 +87,28 @@ func (s *PatientGrpcService) GetPatient(ctx context.Context, req *pb.GetPatientR
 	}, nil
 }
 
+func (s *PatientGrpcService) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBedRequest) (*pb.GetPatientByBedResponse, error) {
+	bedID, err := uuid.Parse(req.BedId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	patient, err := s.handlers.Queries.V1.GetPatientByBed(ctx, bedID)
+	if err != nil {
+		return nil, err
+	}
+	if patient == nil {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
+	}
+
+	return &pb.GetPatientByBedResponse{
+		Id:                      patient.ID.String(),
+		HumanReadableIdentifier: patient.HumanReadableIdentifier,
+		Notes:                   patient.Notes,
+		BedId:                   &req.BedId,
+	}, nil
+}
+
 func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetRecentPatientsRequest) (*pb.GetRecentPatientsResponse, error) {
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())

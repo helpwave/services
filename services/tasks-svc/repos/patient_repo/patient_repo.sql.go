@@ -37,6 +37,28 @@ func (q *Queries) CreatePatient(ctx context.Context, arg CreatePatientParams) er
 	return err
 }
 
+const getPatientByBed = `-- name: GetPatientByBed :one
+SELECT patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at
+FROM patients
+WHERE bed_id = $1
+	LIMIT 1
+`
+
+func (q *Queries) GetPatientByBed(ctx context.Context, bedID uuid.NullUUID) (Patient, error) {
+	row := q.db.QueryRow(ctx, getPatientByBed, bedID)
+	var i Patient
+	err := row.Scan(
+		&i.ID,
+		&i.HumanReadableIdentifier,
+		&i.Notes,
+		&i.BedID,
+		&i.IsDischarged,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const updatePatient = `-- name: UpdatePatient :exec
 UPDATE patients
 SET human_readable_identifier = coalesce($2, human_readable_identifier),
