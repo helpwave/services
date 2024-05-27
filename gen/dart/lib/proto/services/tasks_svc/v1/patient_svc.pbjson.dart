@@ -370,22 +370,11 @@ final $typed_data.Uint8List getPatientListRequestDescriptor = $convert.base64Dec
 const GetPatientListResponse$json = {
   '1': 'GetPatientListResponse',
   '2': [
-    {'1': 'active', '3': 1, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientListResponse.PatientWithRoomAndBed', '10': 'active'},
+    {'1': 'active', '3': 1, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientListResponse.Patient', '10': 'active'},
     {'1': 'unassigned_patients', '3': 2, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientListResponse.Patient', '10': 'unassignedPatients'},
     {'1': 'discharged_patients', '3': 3, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientListResponse.Patient', '10': 'dischargedPatients'},
   ],
-  '3': [GetPatientListResponse_Patient$json, GetPatientListResponse_Bed$json, GetPatientListResponse_Room$json, GetPatientListResponse_PatientWithRoomAndBed$json, GetPatientListResponse_Task$json],
-};
-
-@$core.Deprecated('Use getPatientListResponseDescriptor instead')
-const GetPatientListResponse_Patient$json = {
-  '1': 'Patient',
-  '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
-    {'1': 'notes', '3': 3, '4': 1, '5': 9, '10': 'notes'},
-    {'1': 'tasks', '3': 4, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientListResponse.Task', '10': 'tasks'},
-  ],
+  '3': [GetPatientListResponse_Bed$json, GetPatientListResponse_Room$json, GetPatientListResponse_Patient$json, GetPatientListResponse_Task$json],
 };
 
 @$core.Deprecated('Use getPatientListResponseDescriptor instead')
@@ -408,8 +397,8 @@ const GetPatientListResponse_Room$json = {
 };
 
 @$core.Deprecated('Use getPatientListResponseDescriptor instead')
-const GetPatientListResponse_PatientWithRoomAndBed$json = {
-  '1': 'PatientWithRoomAndBed',
+const GetPatientListResponse_Patient$json = {
+  '1': 'Patient',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
@@ -451,32 +440,28 @@ const GetPatientListResponse_Task_SubTask$json = {
 
 /// Descriptor for `GetPatientListResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getPatientListResponseDescriptor = $convert.base64Decode(
-    'ChZHZXRQYXRpZW50TGlzdFJlc3BvbnNlEmEKBmFjdGl2ZRgBIAMoCzJJLnByb3RvLnNlcnZpY2'
-    'VzLnRhc2tzX3N2Yy52MS5HZXRQYXRpZW50TGlzdFJlc3BvbnNlLlBhdGllbnRXaXRoUm9vbUFu'
-    'ZEJlZFIGYWN0aXZlEmwKE3VuYXNzaWduZWRfcGF0aWVudHMYAiADKAsyOy5wcm90by5zZXJ2aW'
-    'Nlcy50YXNrc19zdmMudjEuR2V0UGF0aWVudExpc3RSZXNwb25zZS5QYXRpZW50UhJ1bmFzc2ln'
-    'bmVkUGF0aWVudHMSbAoTZGlzY2hhcmdlZF9wYXRpZW50cxgDIAMoCzI7LnByb3RvLnNlcnZpY2'
-    'VzLnRhc2tzX3N2Yy52MS5HZXRQYXRpZW50TGlzdFJlc3BvbnNlLlBhdGllbnRSEmRpc2NoYXJn'
-    'ZWRQYXRpZW50cxq7AQoHUGF0aWVudBIOCgJpZBgBIAEoCVICaWQSOgoZaHVtYW5fcmVhZGFibG'
-    'VfaWRlbnRpZmllchgCIAEoCVIXaHVtYW5SZWFkYWJsZUlkZW50aWZpZXISFAoFbm90ZXMYAyAB'
-    'KAlSBW5vdGVzEk4KBXRhc2tzGAQgAygLMjgucHJvdG8uc2VydmljZXMudGFza3Nfc3ZjLnYxLk'
-    'dldFBhdGllbnRMaXN0UmVzcG9uc2UuVGFza1IFdGFza3MaKQoDQmVkEg4KAmlkGAEgASgJUgJp'
-    'ZBISCgRuYW1lGAIgASgJUgRuYW1lGkMKBFJvb20SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAi'
-    'ABKAlSBG5hbWUSFwoHd2FyZF9pZBgDIAEoCVIGd2FyZElkGuICChVQYXRpZW50V2l0aFJvb21B'
-    'bmRCZWQSDgoCaWQYASABKAlSAmlkEjoKGWh1bWFuX3JlYWRhYmxlX2lkZW50aWZpZXIYAiABKA'
-    'lSF2h1bWFuUmVhZGFibGVJZGVudGlmaWVyEkwKBHJvb20YAyABKAsyOC5wcm90by5zZXJ2aWNl'
-    'cy50YXNrc19zdmMudjEuR2V0UGF0aWVudExpc3RSZXNwb25zZS5Sb29tUgRyb29tEkkKA2JlZB'
-    'gEIAEoCzI3LnByb3RvLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRQYXRpZW50TGlzdFJlc3Bv'
-    'bnNlLkJlZFIDYmVkEhQKBW5vdGVzGAUgASgJUgVub3RlcxJOCgV0YXNrcxgGIAMoCzI4LnByb3'
-    'RvLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRQYXRpZW50TGlzdFJlc3BvbnNlLlRhc2tSBXRh'
-    'c2tzGqkDCgRUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2Rlc2'
-    'NyaXB0aW9uGAMgASgJUgtkZXNjcmlwdGlvbhI/CgZzdGF0dXMYBCABKA4yJy5wcm90by5zZXJ2'
-    'aWNlcy50YXNrc19zdmMudjEuVGFza1N0YXR1c1IGc3RhdHVzEi0KEGFzc2lnbmVkX3VzZXJfaW'
-    'QYBSABKAlIAFIOYXNzaWduZWRVc2VySWSIAQESHQoKcGF0aWVudF9pZBgGIAEoCVIJcGF0aWVu'
-    'dElkEhYKBnB1YmxpYxgHIAEoCFIGcHVibGljElwKCHN1YnRhc2tzGAggAygLMkAucHJvdG8uc2'
-    'VydmljZXMudGFza3Nfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuVGFzay5TdWJUYXNr'
-    'UghzdWJ0YXNrcxpBCgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW'
-    '1lEhIKBGRvbmUYAyABKAhSBGRvbmVCEwoRX2Fzc2lnbmVkX3VzZXJfaWQ=');
+    'ChZHZXRQYXRpZW50TGlzdFJlc3BvbnNlElMKBmFjdGl2ZRgBIAMoCzI7LnByb3RvLnNlcnZpY2'
+    'VzLnRhc2tzX3N2Yy52MS5HZXRQYXRpZW50TGlzdFJlc3BvbnNlLlBhdGllbnRSBmFjdGl2ZRJs'
+    'ChN1bmFzc2lnbmVkX3BhdGllbnRzGAIgAygLMjsucHJvdG8uc2VydmljZXMudGFza3Nfc3ZjLn'
+    'YxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuUGF0aWVudFISdW5hc3NpZ25lZFBhdGllbnRzEmwK'
+    'E2Rpc2NoYXJnZWRfcGF0aWVudHMYAyADKAsyOy5wcm90by5zZXJ2aWNlcy50YXNrc19zdmMudj'
+    'EuR2V0UGF0aWVudExpc3RSZXNwb25zZS5QYXRpZW50UhJkaXNjaGFyZ2VkUGF0aWVudHMaKQoD'
+    'QmVkEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lGkMKBFJvb20SDgoCaWQYAS'
+    'ABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSFwoHd2FyZF9pZBgDIAEoCVIGd2FyZElkGtQC'
+    'CgdQYXRpZW50Eg4KAmlkGAEgASgJUgJpZBI6ChlodW1hbl9yZWFkYWJsZV9pZGVudGlmaWVyGA'
+    'IgASgJUhdodW1hblJlYWRhYmxlSWRlbnRpZmllchJMCgRyb29tGAMgASgLMjgucHJvdG8uc2Vy'
+    'dmljZXMudGFza3Nfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuUm9vbVIEcm9vbRJJCg'
+    'NiZWQYBCABKAsyNy5wcm90by5zZXJ2aWNlcy50YXNrc19zdmMudjEuR2V0UGF0aWVudExpc3RS'
+    'ZXNwb25zZS5CZWRSA2JlZBIUCgVub3RlcxgFIAEoCVIFbm90ZXMSTgoFdGFza3MYBiADKAsyOC'
+    '5wcm90by5zZXJ2aWNlcy50YXNrc19zdmMudjEuR2V0UGF0aWVudExpc3RSZXNwb25zZS5UYXNr'
+    'UgV0YXNrcxqpAwoEVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCg'
+    'tkZXNjcmlwdGlvbhgDIAEoCVILZGVzY3JpcHRpb24SPwoGc3RhdHVzGAQgASgOMicucHJvdG8u'
+    'c2VydmljZXMudGFza3Nfc3ZjLnYxLlRhc2tTdGF0dXNSBnN0YXR1cxItChBhc3NpZ25lZF91c2'
+    'VyX2lkGAUgASgJSABSDmFzc2lnbmVkVXNlcklkiAEBEh0KCnBhdGllbnRfaWQYBiABKAlSCXBh'
+    'dGllbnRJZBIWCgZwdWJsaWMYByABKAhSBnB1YmxpYxJcCghzdWJ0YXNrcxgIIAMoCzJALnByb3'
+    'RvLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRQYXRpZW50TGlzdFJlc3BvbnNlLlRhc2suU3Vi'
+    'VGFza1IIc3VidGFza3MaQQoHU3ViVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCV'
+    'IEbmFtZRISCgRkb25lGAMgASgIUgRkb25lQhMKEV9hc3NpZ25lZF91c2VyX2lk');
 
 @$core.Deprecated('Use getRecentPatientsRequestDescriptor instead')
 const GetRecentPatientsRequest$json = {

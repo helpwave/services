@@ -37,6 +37,90 @@ func (q *Queries) CreatePatient(ctx context.Context, arg CreatePatientParams) er
 	return err
 }
 
+const getAllPatientsWithTasksBedAndRoom = `-- name: GetAllPatientsWithTasksBedAndRoom :many
+SELECT
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at,
+	tasks.id as task_id,
+	tasks.name as task_name,
+	tasks.description as task_description,
+	tasks.status as task_status,
+	tasks.assigned_user_id as task_assigned_user_id,
+	tasks.public as task_public,
+	subtasks.id as subtask_id,
+	subtasks.name as subtask_name,
+	subtasks.done as subtask_done,
+	beds.id as bed_id,
+	beds.name as bed_name,
+	rooms.id as room_id,
+	rooms.name as room_name,
+	rooms.ward_id as ward_id
+FROM patients
+		 LEFT JOIN tasks ON tasks.patient_id = patients.id
+		 LEFT JOIN subtasks ON subtasks.task_id = tasks.id
+		 LEFT JOIN beds ON beds.id = patients.bed_id
+		 LEFT JOIN rooms ON rooms.id = beds.room_id
+`
+
+type GetAllPatientsWithTasksBedAndRoomRow struct {
+	Patient            Patient
+	TaskID             uuid.NullUUID
+	TaskName           *string
+	TaskDescription    *string
+	TaskStatus         *int32
+	TaskAssignedUserID uuid.NullUUID
+	TaskPublic         *bool
+	SubtaskID          uuid.NullUUID
+	SubtaskName        *string
+	SubtaskDone        *bool
+	BedID              uuid.NullUUID
+	BedName            *string
+	RoomID             uuid.NullUUID
+	RoomName           *string
+	WardID             uuid.NullUUID
+}
+
+func (q *Queries) GetAllPatientsWithTasksBedAndRoom(ctx context.Context) ([]GetAllPatientsWithTasksBedAndRoomRow, error) {
+	rows, err := q.db.Query(ctx, getAllPatientsWithTasksBedAndRoom)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetAllPatientsWithTasksBedAndRoomRow{}
+	for rows.Next() {
+		var i GetAllPatientsWithTasksBedAndRoomRow
+		if err := rows.Scan(
+			&i.Patient.ID,
+			&i.Patient.HumanReadableIdentifier,
+			&i.Patient.Notes,
+			&i.Patient.BedID,
+			&i.Patient.IsDischarged,
+			&i.Patient.CreatedAt,
+			&i.Patient.UpdatedAt,
+			&i.TaskID,
+			&i.TaskName,
+			&i.TaskDescription,
+			&i.TaskStatus,
+			&i.TaskAssignedUserID,
+			&i.TaskPublic,
+			&i.SubtaskID,
+			&i.SubtaskName,
+			&i.SubtaskDone,
+			&i.BedID,
+			&i.BedName,
+			&i.RoomID,
+			&i.RoomName,
+			&i.WardID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getPatientByBed = `-- name: GetPatientByBed :one
 SELECT patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at
 FROM patients

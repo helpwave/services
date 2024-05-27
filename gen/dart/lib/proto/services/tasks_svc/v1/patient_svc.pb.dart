@@ -1691,92 +1691,6 @@ class GetPatientListRequest extends $pb.GeneratedMessage {
   void clearWardId() => clearField(1);
 }
 
-class GetPatientListResponse_Patient extends $pb.GeneratedMessage {
-  factory GetPatientListResponse_Patient({
-    $core.String? id,
-    $core.String? humanReadableIdentifier,
-    $core.String? notes,
-    $core.Iterable<GetPatientListResponse_Task>? tasks,
-  }) {
-    final $result = create();
-    if (id != null) {
-      $result.id = id;
-    }
-    if (humanReadableIdentifier != null) {
-      $result.humanReadableIdentifier = humanReadableIdentifier;
-    }
-    if (notes != null) {
-      $result.notes = notes;
-    }
-    if (tasks != null) {
-      $result.tasks.addAll(tasks);
-    }
-    return $result;
-  }
-  GetPatientListResponse_Patient._() : super();
-  factory GetPatientListResponse_Patient.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetPatientListResponse_Patient.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientListResponse.Patient', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
-    ..aOS(3, _omitFieldNames ? '' : 'notes')
-    ..pc<GetPatientListResponse_Task>(4, _omitFieldNames ? '' : 'tasks', $pb.PbFieldType.PM, subBuilder: GetPatientListResponse_Task.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetPatientListResponse_Patient clone() => GetPatientListResponse_Patient()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetPatientListResponse_Patient copyWith(void Function(GetPatientListResponse_Patient) updates) => super.copyWith((message) => updates(message as GetPatientListResponse_Patient)) as GetPatientListResponse_Patient;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetPatientListResponse_Patient create() => GetPatientListResponse_Patient._();
-  GetPatientListResponse_Patient createEmptyInstance() => create();
-  static $pb.PbList<GetPatientListResponse_Patient> createRepeated() => $pb.PbList<GetPatientListResponse_Patient>();
-  @$core.pragma('dart2js:noInline')
-  static GetPatientListResponse_Patient getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPatientListResponse_Patient>(create);
-  static GetPatientListResponse_Patient? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get humanReadableIdentifier => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set humanReadableIdentifier($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasHumanReadableIdentifier() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearHumanReadableIdentifier() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get notes => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set notes($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasNotes() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearNotes() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.List<GetPatientListResponse_Task> get tasks => $_getList(3);
-}
-
 class GetPatientListResponse_Bed extends $pb.GeneratedMessage {
   factory GetPatientListResponse_Bed({
     $core.String? id,
@@ -1919,8 +1833,8 @@ class GetPatientListResponse_Room extends $pb.GeneratedMessage {
   void clearWardId() => clearField(3);
 }
 
-class GetPatientListResponse_PatientWithRoomAndBed extends $pb.GeneratedMessage {
-  factory GetPatientListResponse_PatientWithRoomAndBed({
+class GetPatientListResponse_Patient extends $pb.GeneratedMessage {
+  factory GetPatientListResponse_Patient({
     $core.String? id,
     $core.String? humanReadableIdentifier,
     GetPatientListResponse_Room? room,
@@ -1949,11 +1863,11 @@ class GetPatientListResponse_PatientWithRoomAndBed extends $pb.GeneratedMessage 
     }
     return $result;
   }
-  GetPatientListResponse_PatientWithRoomAndBed._() : super();
-  factory GetPatientListResponse_PatientWithRoomAndBed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetPatientListResponse_PatientWithRoomAndBed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetPatientListResponse_Patient._() : super();
+  factory GetPatientListResponse_Patient.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPatientListResponse_Patient.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientListResponse.PatientWithRoomAndBed', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientListResponse.Patient', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
     ..aOM<GetPatientListResponse_Room>(3, _omitFieldNames ? '' : 'room', subBuilder: GetPatientListResponse_Room.create)
@@ -1967,22 +1881,22 @@ class GetPatientListResponse_PatientWithRoomAndBed extends $pb.GeneratedMessage 
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetPatientListResponse_PatientWithRoomAndBed clone() => GetPatientListResponse_PatientWithRoomAndBed()..mergeFromMessage(this);
+  GetPatientListResponse_Patient clone() => GetPatientListResponse_Patient()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetPatientListResponse_PatientWithRoomAndBed copyWith(void Function(GetPatientListResponse_PatientWithRoomAndBed) updates) => super.copyWith((message) => updates(message as GetPatientListResponse_PatientWithRoomAndBed)) as GetPatientListResponse_PatientWithRoomAndBed;
+  GetPatientListResponse_Patient copyWith(void Function(GetPatientListResponse_Patient) updates) => super.copyWith((message) => updates(message as GetPatientListResponse_Patient)) as GetPatientListResponse_Patient;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetPatientListResponse_PatientWithRoomAndBed create() => GetPatientListResponse_PatientWithRoomAndBed._();
-  GetPatientListResponse_PatientWithRoomAndBed createEmptyInstance() => create();
-  static $pb.PbList<GetPatientListResponse_PatientWithRoomAndBed> createRepeated() => $pb.PbList<GetPatientListResponse_PatientWithRoomAndBed>();
+  static GetPatientListResponse_Patient create() => GetPatientListResponse_Patient._();
+  GetPatientListResponse_Patient createEmptyInstance() => create();
+  static $pb.PbList<GetPatientListResponse_Patient> createRepeated() => $pb.PbList<GetPatientListResponse_Patient>();
   @$core.pragma('dart2js:noInline')
-  static GetPatientListResponse_PatientWithRoomAndBed getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPatientListResponse_PatientWithRoomAndBed>(create);
-  static GetPatientListResponse_PatientWithRoomAndBed? _defaultInstance;
+  static GetPatientListResponse_Patient getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPatientListResponse_Patient>(create);
+  static GetPatientListResponse_Patient? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
@@ -2259,7 +2173,7 @@ class GetPatientListResponse_Task extends $pb.GeneratedMessage {
 
 class GetPatientListResponse extends $pb.GeneratedMessage {
   factory GetPatientListResponse({
-    $core.Iterable<GetPatientListResponse_PatientWithRoomAndBed>? active,
+    $core.Iterable<GetPatientListResponse_Patient>? active,
     $core.Iterable<GetPatientListResponse_Patient>? unassignedPatients,
     $core.Iterable<GetPatientListResponse_Patient>? dischargedPatients,
   }) {
@@ -2280,7 +2194,7 @@ class GetPatientListResponse extends $pb.GeneratedMessage {
   factory GetPatientListResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientListResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
-    ..pc<GetPatientListResponse_PatientWithRoomAndBed>(1, _omitFieldNames ? '' : 'active', $pb.PbFieldType.PM, subBuilder: GetPatientListResponse_PatientWithRoomAndBed.create)
+    ..pc<GetPatientListResponse_Patient>(1, _omitFieldNames ? '' : 'active', $pb.PbFieldType.PM, subBuilder: GetPatientListResponse_Patient.create)
     ..pc<GetPatientListResponse_Patient>(2, _omitFieldNames ? '' : 'unassignedPatients', $pb.PbFieldType.PM, subBuilder: GetPatientListResponse_Patient.create)
     ..pc<GetPatientListResponse_Patient>(3, _omitFieldNames ? '' : 'dischargedPatients', $pb.PbFieldType.PM, subBuilder: GetPatientListResponse_Patient.create)
     ..hasRequiredFields = false
@@ -2308,7 +2222,7 @@ class GetPatientListResponse extends $pb.GeneratedMessage {
   static GetPatientListResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<GetPatientListResponse_PatientWithRoomAndBed> get active => $_getList(0);
+  $core.List<GetPatientListResponse_Patient> get active => $_getList(0);
 
   @$pb.TagNumber(2)
   $core.List<GetPatientListResponse_Patient> get unassignedPatients => $_getList(1);

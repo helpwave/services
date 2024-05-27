@@ -168,16 +168,9 @@ message GetPatientListRequest {
 }
 
 message GetPatientListResponse {
-  repeated PatientWithRoomAndBed active = 1;
+  repeated Patient active = 1;
   repeated Patient unassigned_patients = 2;
   repeated Patient discharged_patients = 3;
-
-  message Patient {
-    string id = 1;
-    string human_readable_identifier = 2;
-    string notes = 3;
-    repeated Task tasks = 4;
-  }
 
   message Bed {
     string id = 1;
@@ -190,7 +183,7 @@ message GetPatientListResponse {
     string  ward_id = 3;
   }
 
-  message PatientWithRoomAndBed {
+  message Patient {
     string id = 1;
     string human_readable_identifier = 2;
     Room room = 3;
