@@ -263,7 +263,7 @@ func (s *TaskGrpcService) GetAssignedTasks(ctx context.Context, _ *pb.GetAssigne
 			AssignedUserId: item.AssignedUsers[0].String(), // TODO: #760
 			Patient: &pb.GetAssignedTasksResponse_Task_Patient{
 				Id:   item.PatientID.String(),
-				Name: item.PatientName,
+				Name: item.Patient.HumanReadableIdentifier,
 			},
 		}
 

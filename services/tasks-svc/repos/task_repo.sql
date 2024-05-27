@@ -47,8 +47,7 @@ WHERE tasks.patient_id = $1;
 -- name: GetTasksWithPatientByAssignee :many
 SELECT
 	sqlc.embed(tasks),
-	patients.id as patient_id,
-	patients.human_readable_identifier as patient_name,
+	sqlc.embed(patients),
 	subtasks.id as subtask_id,
 	subtasks.name as subtask_name,
 	subtasks.done as subtask_done,

@@ -28,7 +28,6 @@ func NewGetPatientWithDetailsByIDQueryHandler(as hwes.AggregateStore) GetPatient
 			return nil, err
 		}
 
-		// TODO: use the right models here
 		var bed *models.Bed
 		var room *models.Room
 

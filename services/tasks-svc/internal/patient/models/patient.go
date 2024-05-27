@@ -23,7 +23,6 @@ type PatientDetails struct {
 	Room  *Room
 }
 
-// TODO: Use the right models here
 type Bed struct {
 	ID   uuid.UUID
 	Name string
