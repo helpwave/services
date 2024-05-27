@@ -32,5 +32,6 @@ type Subtask struct {
 
 type TaskWithPatient struct {
 	Task
+	// TODO: use models.Patient here
 	PatientName string
 }

@@ -59,6 +59,51 @@ func (q *Queries) GetPatientByBed(ctx context.Context, bedID uuid.NullUUID) (Pat
 	return i, err
 }
 
+const getPatientWithBedAndRoom = `-- name: GetPatientWithBedAndRoom :one
+SELECT
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at,
+	beds.name as bed_name,
+	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+FROM patients
+		 LEFT JOIN beds ON patients.bed_id = beds.id
+		 LEFT JOIN rooms ON beds.room_id = rooms.id
+WHERE patients.id = $1
+LIMIT 1
+`
+
+type GetPatientWithBedAndRoomRow struct {
+	ID                      uuid.UUID
+	HumanReadableIdentifier string
+	Notes                   string
+	BedID                   uuid.NullUUID
+	IsDischarged            int32
+	CreatedAt               pgtype.Timestamp
+	UpdatedAt               pgtype.Timestamp
+	BedName                 *string
+	RoomID                  uuid.NullUUID
+	RoomName                *string
+	WardID                  uuid.NullUUID
+}
+
+func (q *Queries) GetPatientWithBedAndRoom(ctx context.Context, patientID uuid.UUID) (GetPatientWithBedAndRoomRow, error) {
+	row := q.db.QueryRow(ctx, getPatientWithBedAndRoom, patientID)
+	var i GetPatientWithBedAndRoomRow
+	err := row.Scan(
+		&i.ID,
+		&i.HumanReadableIdentifier,
+		&i.Notes,
+		&i.BedID,
+		&i.IsDischarged,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.BedName,
+		&i.RoomID,
+		&i.RoomName,
+		&i.WardID,
+	)
+	return i, err
+}
+
 const getPatientsByWard = `-- name: GetPatientsByWard :many
 SELECT
 	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at

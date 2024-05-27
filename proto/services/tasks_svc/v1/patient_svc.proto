@@ -123,15 +123,12 @@ message GetPatientDetailsRequest {
 
 message GetPatientDetailsResponse {
   string id = 1;
-  string name = 2;
-  string human_readable_identifier = 3;
-  string notes = 4;
-  // "bed_index": number,
-  repeated Task tasks = 5;
-  optional string ward_id = 6 [deprecated = true];
-  optional Room room = 7;
-  optional Bed bed = 8;
-  bool is_discharged = 9;
+  string human_readable_identifier = 2;
+  string notes = 3;
+  repeated Task tasks = 4;
+  optional Room room = 5;
+  optional Bed bed = 6;
+  bool is_discharged = 7;
 
   message Room {
     string id = 1;

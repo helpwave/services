@@ -24,7 +24,6 @@ func NewGetPatientByBedQueryHandler(_ hwes.AggregateStore) GetPatientByBedQueryH
 			return nil, err
 		}
 
-		// TODO: IsDischarged
 		return &models.Patient{
 			ID:                      patient.ID,
 			HumanReadableIdentifier: patient.HumanReadableIdentifier,

@@ -122,7 +122,7 @@ func (s *PatientGrpcService) GetPatientsByWard(ctx context.Context, req *pb.GetP
 	}
 
 	return &pb.GetPatientsByWardResponse{
-		Patients: hwutil.Map(patients, func(patient models.Patient) *pb.GetPatientsByWardResponse_Patient {
+		Patients: hwutil.Map(patients, func(patient *models.Patient) *pb.GetPatientsByWardResponse_Patient {
 			return &pb.GetPatientsByWardResponse_Patient{
 				Id:                      patient.ID.String(),
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
@@ -130,6 +130,70 @@ func (s *PatientGrpcService) GetPatientsByWard(ctx context.Context, req *pb.GetP
 				BedId:                   hwutil.NullUUIDToStringPtr(patient.BedID),
 			}
 		}),
+	}, nil
+}
+
+func (s *PatientGrpcService) GetPatientDetails(ctx context.Context, req *pb.GetPatientDetailsRequest) (*pb.GetPatientDetailsResponse, error) {
+	patientID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	patientDetails, err := s.handlers.Queries.V1.GetPatientDetailsByID(ctx, patientID)
+	if err != nil {
+		return nil, err
+	}
+
+	var roomResponse *pb.GetPatientDetailsResponse_Room
+	if patientDetails.Room != nil {
+		roomResponse = &pb.GetPatientDetailsResponse_Room{
+			Id:     patientDetails.Room.ID.String(),
+			Name:   patientDetails.Room.Name,
+			WardId: patientDetails.Room.WardID.String(),
+		}
+	}
+
+	var bedResponse *pb.GetPatientDetailsResponse_Bed
+	if patientDetails.Bed != nil {
+		bedResponse = &pb.GetPatientDetailsResponse_Bed{
+			Id:   patientDetails.Bed.ID.String(),
+			Name: patientDetails.Bed.Name,
+		}
+	}
+
+	taskResponse := make([]*pb.GetPatientDetailsResponse_Task, len(patientDetails.Tasks))
+	for ix, item := range patientDetails.Tasks {
+		taskResponse[ix] = &pb.GetPatientDetailsResponse_Task{
+			Id:             item.ID.String(),
+			Name:           item.Name,
+			Description:    item.Description,
+			Status:         item.Status,
+			Public:         item.Public,
+			Subtasks:       make([]*pb.GetPatientDetailsResponse_Task_SubTask, len(item.Subtasks)),
+			AssignedUserId: hwutil.PtrTo(item.AssignedUsers[0].String()), // TODO: #760
+		}
+
+		subtaskIdx := 0
+		for _, subtask := range item.Subtasks {
+			taskResponse[ix].Subtasks[subtaskIdx] = &pb.GetPatientDetailsResponse_Task_SubTask{
+				Id:   subtask.ID.String(),
+				Name: subtask.Name,
+				Done: subtask.Done,
+			}
+			subtaskIdx++
+		}
+	}
+
+	// TODO: add patient to recent activity
+
+	return &pb.GetPatientDetailsResponse{
+		Id:                      patientDetails.ID.String(),
+		HumanReadableIdentifier: patientDetails.HumanReadableIdentifier,
+		Notes:                   patientDetails.Notes,
+		Tasks:                   taskResponse,
+		IsDischarged:            patientDetails.IsDischarged,
+		Room:                    roomResponse,
+		Bed:                     bedResponse,
 	}, nil
 }
 

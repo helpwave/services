@@ -30,3 +30,15 @@ FROM patients
 		 JOIN beds ON patients.bed_id = beds.id
 		 JOIN rooms ON beds.room_id = rooms.id
 WHERE rooms.ward_id = @ward_id;
+
+-- name: GetPatientWithBedAndRoom :one
+SELECT
+	patients.*,
+	beds.name as bed_name,
+	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+FROM patients
+		 LEFT JOIN beds ON patients.bed_id = beds.id
+		 LEFT JOIN rooms ON beds.room_id = rooms.id
+WHERE patients.id = @patient_id
+LIMIT 1;
+

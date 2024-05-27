@@ -10,10 +10,10 @@ import (
 	"tasks-svc/repos/patient_repo"
 )
 
-type GetPatientsByWardQueryHandler func(ctx context.Context, wardID uuid.UUID) ([]models.Patient, error)
+type GetPatientsByWardQueryHandler func(ctx context.Context, wardID uuid.UUID) ([]*models.Patient, error)
 
 func NewGetPatientsByWardQueryHandler(_ hwes.AggregateStore) GetPatientsByWardQueryHandler {
-	return func(ctx context.Context, wardID uuid.UUID) ([]models.Patient, error) {
+	return func(ctx context.Context, wardID uuid.UUID) ([]*models.Patient, error) {
 		db := hwdb.GetDB()
 		patientRepo := patient_repo.New(db)
 
@@ -22,8 +22,8 @@ func NewGetPatientsByWardQueryHandler(_ hwes.AggregateStore) GetPatientsByWardQu
 			return nil, err
 		}
 
-		return hwutil.Map(patients, func(patient patient_repo.Patient) models.Patient {
-			return models.Patient{
+		return hwutil.Map(patients, func(patient patient_repo.Patient) *models.Patient {
+			return &models.Patient{
 				ID:                      patient.ID,
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
 				Notes:                   patient.Notes,

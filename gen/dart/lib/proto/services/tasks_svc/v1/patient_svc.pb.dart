@@ -1512,12 +1512,9 @@ class GetPatientDetailsResponse_Task extends $pb.GeneratedMessage {
 class GetPatientDetailsResponse extends $pb.GeneratedMessage {
   factory GetPatientDetailsResponse({
     $core.String? id,
-    $core.String? name,
     $core.String? humanReadableIdentifier,
     $core.String? notes,
     $core.Iterable<GetPatientDetailsResponse_Task>? tasks,
-  @$core.Deprecated('This field is deprecated.')
-    $core.String? wardId,
     GetPatientDetailsResponse_Room? room,
     GetPatientDetailsResponse_Bed? bed,
     $core.bool? isDischarged,
@@ -1525,9 +1522,6 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
     final $result = create();
     if (id != null) {
       $result.id = id;
-    }
-    if (name != null) {
-      $result.name = name;
     }
     if (humanReadableIdentifier != null) {
       $result.humanReadableIdentifier = humanReadableIdentifier;
@@ -1537,10 +1531,6 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
     }
     if (tasks != null) {
       $result.tasks.addAll(tasks);
-    }
-    if (wardId != null) {
-      // ignore: deprecated_member_use_from_same_package
-      $result.wardId = wardId;
     }
     if (room != null) {
       $result.room = room;
@@ -1559,14 +1549,12 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPatientDetailsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..aOS(3, _omitFieldNames ? '' : 'humanReadableIdentifier')
-    ..aOS(4, _omitFieldNames ? '' : 'notes')
-    ..pc<GetPatientDetailsResponse_Task>(5, _omitFieldNames ? '' : 'tasks', $pb.PbFieldType.PM, subBuilder: GetPatientDetailsResponse_Task.create)
-    ..aOS(6, _omitFieldNames ? '' : 'wardId')
-    ..aOM<GetPatientDetailsResponse_Room>(7, _omitFieldNames ? '' : 'room', subBuilder: GetPatientDetailsResponse_Room.create)
-    ..aOM<GetPatientDetailsResponse_Bed>(8, _omitFieldNames ? '' : 'bed', subBuilder: GetPatientDetailsResponse_Bed.create)
-    ..aOB(9, _omitFieldNames ? '' : 'isDischarged')
+    ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
+    ..aOS(3, _omitFieldNames ? '' : 'notes')
+    ..pc<GetPatientDetailsResponse_Task>(4, _omitFieldNames ? '' : 'tasks', $pb.PbFieldType.PM, subBuilder: GetPatientDetailsResponse_Task.create)
+    ..aOM<GetPatientDetailsResponse_Room>(5, _omitFieldNames ? '' : 'room', subBuilder: GetPatientDetailsResponse_Room.create)
+    ..aOM<GetPatientDetailsResponse_Bed>(6, _omitFieldNames ? '' : 'bed', subBuilder: GetPatientDetailsResponse_Bed.create)
+    ..aOB(7, _omitFieldNames ? '' : 'isDischarged')
     ..hasRequiredFields = false
   ;
 
@@ -1601,79 +1589,56 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get name => $_getSZ(1);
+  $core.String get humanReadableIdentifier => $_getSZ(1);
   @$pb.TagNumber(2)
-  set name($core.String v) { $_setString(1, v); }
+  set humanReadableIdentifier($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasName() => $_has(1);
+  $core.bool hasHumanReadableIdentifier() => $_has(1);
   @$pb.TagNumber(2)
-  void clearName() => clearField(2);
+  void clearHumanReadableIdentifier() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get humanReadableIdentifier => $_getSZ(2);
+  $core.String get notes => $_getSZ(2);
   @$pb.TagNumber(3)
-  set humanReadableIdentifier($core.String v) { $_setString(2, v); }
+  set notes($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasHumanReadableIdentifier() => $_has(2);
+  $core.bool hasNotes() => $_has(2);
   @$pb.TagNumber(3)
-  void clearHumanReadableIdentifier() => clearField(3);
+  void clearNotes() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get notes => $_getSZ(3);
-  @$pb.TagNumber(4)
-  set notes($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasNotes() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearNotes() => clearField(4);
+  $core.List<GetPatientDetailsResponse_Task> get tasks => $_getList(3);
 
-  /// "bed_index": number,
   @$pb.TagNumber(5)
-  $core.List<GetPatientDetailsResponse_Task> get tasks => $_getList(4);
+  GetPatientDetailsResponse_Room get room => $_getN(4);
+  @$pb.TagNumber(5)
+  set room(GetPatientDetailsResponse_Room v) { setField(5, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasRoom() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearRoom() => clearField(5);
+  @$pb.TagNumber(5)
+  GetPatientDetailsResponse_Room ensureRoom() => $_ensure(4);
 
-  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(6)
-  $core.String get wardId => $_getSZ(5);
-  @$core.Deprecated('This field is deprecated.')
+  GetPatientDetailsResponse_Bed get bed => $_getN(5);
   @$pb.TagNumber(6)
-  set wardId($core.String v) { $_setString(5, v); }
-  @$core.Deprecated('This field is deprecated.')
+  set bed(GetPatientDetailsResponse_Bed v) { setField(6, v); }
   @$pb.TagNumber(6)
-  $core.bool hasWardId() => $_has(5);
-  @$core.Deprecated('This field is deprecated.')
+  $core.bool hasBed() => $_has(5);
   @$pb.TagNumber(6)
-  void clearWardId() => clearField(6);
+  void clearBed() => clearField(6);
+  @$pb.TagNumber(6)
+  GetPatientDetailsResponse_Bed ensureBed() => $_ensure(5);
 
   @$pb.TagNumber(7)
-  GetPatientDetailsResponse_Room get room => $_getN(6);
+  $core.bool get isDischarged => $_getBF(6);
   @$pb.TagNumber(7)
-  set room(GetPatientDetailsResponse_Room v) { setField(7, v); }
+  set isDischarged($core.bool v) { $_setBool(6, v); }
   @$pb.TagNumber(7)
-  $core.bool hasRoom() => $_has(6);
+  $core.bool hasIsDischarged() => $_has(6);
   @$pb.TagNumber(7)
-  void clearRoom() => clearField(7);
-  @$pb.TagNumber(7)
-  GetPatientDetailsResponse_Room ensureRoom() => $_ensure(6);
-
-  @$pb.TagNumber(8)
-  GetPatientDetailsResponse_Bed get bed => $_getN(7);
-  @$pb.TagNumber(8)
-  set bed(GetPatientDetailsResponse_Bed v) { setField(8, v); }
-  @$pb.TagNumber(8)
-  $core.bool hasBed() => $_has(7);
-  @$pb.TagNumber(8)
-  void clearBed() => clearField(8);
-  @$pb.TagNumber(8)
-  GetPatientDetailsResponse_Bed ensureBed() => $_ensure(7);
-
-  @$pb.TagNumber(9)
-  $core.bool get isDischarged => $_getBF(8);
-  @$pb.TagNumber(9)
-  set isDischarged($core.bool v) { $_setBool(8, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasIsDischarged() => $_has(8);
-  @$pb.TagNumber(9)
-  void clearIsDischarged() => clearField(9);
+  void clearIsDischarged() => clearField(7);
 }
 
 class GetPatientListRequest extends $pb.GeneratedMessage {

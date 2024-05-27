@@ -465,9 +465,6 @@ export class GetPatientDetailsResponse extends jspb.Message {
   getId(): string;
   setId(value: string): GetPatientDetailsResponse;
 
-  getName(): string;
-  setName(value: string): GetPatientDetailsResponse;
-
   getHumanReadableIdentifier(): string;
   setHumanReadableIdentifier(value: string): GetPatientDetailsResponse;
 
@@ -478,11 +475,6 @@ export class GetPatientDetailsResponse extends jspb.Message {
   setTasksList(value: Array<GetPatientDetailsResponse.Task>): GetPatientDetailsResponse;
   clearTasksList(): GetPatientDetailsResponse;
   addTasks(value?: GetPatientDetailsResponse.Task, index?: number): GetPatientDetailsResponse.Task;
-
-  getWardId(): string;
-  setWardId(value: string): GetPatientDetailsResponse;
-  hasWardId(): boolean;
-  clearWardId(): GetPatientDetailsResponse;
 
   getRoom(): GetPatientDetailsResponse.Room | undefined;
   setRoom(value?: GetPatientDetailsResponse.Room): GetPatientDetailsResponse;
@@ -508,11 +500,9 @@ export class GetPatientDetailsResponse extends jspb.Message {
 export namespace GetPatientDetailsResponse {
   export type AsObject = {
     id: string,
-    name: string,
     humanReadableIdentifier: string,
     notes: string,
     tasksList: Array<GetPatientDetailsResponse.Task.AsObject>,
-    wardId?: string,
     room?: GetPatientDetailsResponse.Room.AsObject,
     bed?: GetPatientDetailsResponse.Bed.AsObject,
     isDischarged: boolean,
@@ -651,19 +641,14 @@ export namespace GetPatientDetailsResponse {
   }
 
 
-  export enum WardIdCase { 
-    _WARD_ID_NOT_SET = 0,
-    WARD_ID = 6,
-  }
-
   export enum RoomCase { 
     _ROOM_NOT_SET = 0,
-    ROOM = 7,
+    ROOM = 5,
   }
 
   export enum BedCase { 
     _BED_NOT_SET = 0,
-    BED = 8,
+    BED = 6,
   }
 }
 
