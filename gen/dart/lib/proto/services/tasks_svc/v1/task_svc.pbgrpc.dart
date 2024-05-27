@@ -33,6 +33,18 @@ class TaskServiceClient extends $grpc.Client {
       '/proto.services.tasks_svc.v1.TaskService/GetTask',
       ($13.GetTaskRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $13.GetTaskResponse.fromBuffer(value));
+  static final _$getTasksByPatient = $grpc.ClientMethod<$13.GetTasksByPatientRequest, $13.GetTasksByPatientResponse>(
+      '/proto.services.tasks_svc.v1.TaskService/GetTasksByPatient',
+      ($13.GetTasksByPatientRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $13.GetTasksByPatientResponse.fromBuffer(value));
+  static final _$getTasksByPatientSortedByStatus = $grpc.ClientMethod<$13.GetTasksByPatientSortedByStatusRequest, $13.GetTasksByPatientSortedByStatusResponse>(
+      '/proto.services.tasks_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
+      ($13.GetTasksByPatientSortedByStatusRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $13.GetTasksByPatientSortedByStatusResponse.fromBuffer(value));
+  static final _$getAssignedTasks = $grpc.ClientMethod<$13.GetAssignedTasksRequest, $13.GetAssignedTasksResponse>(
+      '/proto.services.tasks_svc.v1.TaskService/GetAssignedTasks',
+      ($13.GetAssignedTasksRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $13.GetAssignedTasksResponse.fromBuffer(value));
   static final _$assignTask = $grpc.ClientMethod<$13.AssignTaskRequest, $13.AssignTaskResponse>(
       '/proto.services.tasks_svc.v1.TaskService/AssignTask',
       ($13.AssignTaskRequest value) => value.writeToBuffer(),
@@ -78,6 +90,18 @@ class TaskServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$13.GetTaskResponse> getTask($13.GetTaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getTask, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$13.GetTasksByPatientResponse> getTasksByPatient($13.GetTasksByPatientRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getTasksByPatient, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$13.GetTasksByPatientSortedByStatusResponse> getTasksByPatientSortedByStatus($13.GetTasksByPatientSortedByStatusRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getTasksByPatientSortedByStatus, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$13.GetAssignedTasksResponse> getAssignedTasks($13.GetAssignedTasksRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getAssignedTasks, request, options: options);
   }
 
   $grpc.ResponseFuture<$13.AssignTaskResponse> assignTask($13.AssignTaskRequest request, {$grpc.CallOptions? options}) {
@@ -135,6 +159,27 @@ abstract class TaskServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $13.GetTaskRequest.fromBuffer(value),
         ($13.GetTaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$13.GetTasksByPatientRequest, $13.GetTasksByPatientResponse>(
+        'GetTasksByPatient',
+        getTasksByPatient_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $13.GetTasksByPatientRequest.fromBuffer(value),
+        ($13.GetTasksByPatientResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$13.GetTasksByPatientSortedByStatusRequest, $13.GetTasksByPatientSortedByStatusResponse>(
+        'GetTasksByPatientSortedByStatus',
+        getTasksByPatientSortedByStatus_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $13.GetTasksByPatientSortedByStatusRequest.fromBuffer(value),
+        ($13.GetTasksByPatientSortedByStatusResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$13.GetAssignedTasksRequest, $13.GetAssignedTasksResponse>(
+        'GetAssignedTasks',
+        getAssignedTasks_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $13.GetAssignedTasksRequest.fromBuffer(value),
+        ($13.GetAssignedTasksResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$13.AssignTaskRequest, $13.AssignTaskResponse>(
         'AssignTask',
         assignTask_Pre,
@@ -198,6 +243,18 @@ abstract class TaskServiceBase extends $grpc.Service {
     return getTask(call, await request);
   }
 
+  $async.Future<$13.GetTasksByPatientResponse> getTasksByPatient_Pre($grpc.ServiceCall call, $async.Future<$13.GetTasksByPatientRequest> request) async {
+    return getTasksByPatient(call, await request);
+  }
+
+  $async.Future<$13.GetTasksByPatientSortedByStatusResponse> getTasksByPatientSortedByStatus_Pre($grpc.ServiceCall call, $async.Future<$13.GetTasksByPatientSortedByStatusRequest> request) async {
+    return getTasksByPatientSortedByStatus(call, await request);
+  }
+
+  $async.Future<$13.GetAssignedTasksResponse> getAssignedTasks_Pre($grpc.ServiceCall call, $async.Future<$13.GetAssignedTasksRequest> request) async {
+    return getAssignedTasks(call, await request);
+  }
+
   $async.Future<$13.AssignTaskResponse> assignTask_Pre($grpc.ServiceCall call, $async.Future<$13.AssignTaskRequest> request) async {
     return assignTask(call, await request);
   }
@@ -229,6 +286,9 @@ abstract class TaskServiceBase extends $grpc.Service {
   $async.Future<$13.CreateTaskResponse> createTask($grpc.ServiceCall call, $13.CreateTaskRequest request);
   $async.Future<$13.UpdateTaskResponse> updateTask($grpc.ServiceCall call, $13.UpdateTaskRequest request);
   $async.Future<$13.GetTaskResponse> getTask($grpc.ServiceCall call, $13.GetTaskRequest request);
+  $async.Future<$13.GetTasksByPatientResponse> getTasksByPatient($grpc.ServiceCall call, $13.GetTasksByPatientRequest request);
+  $async.Future<$13.GetTasksByPatientSortedByStatusResponse> getTasksByPatientSortedByStatus($grpc.ServiceCall call, $13.GetTasksByPatientSortedByStatusRequest request);
+  $async.Future<$13.GetAssignedTasksResponse> getAssignedTasks($grpc.ServiceCall call, $13.GetAssignedTasksRequest request);
   $async.Future<$13.AssignTaskResponse> assignTask($grpc.ServiceCall call, $13.AssignTaskRequest request);
   $async.Future<$13.UnassignTaskResponse> unassignTask($grpc.ServiceCall call, $13.UnassignTaskRequest request);
   $async.Future<$13.CreateSubtaskResponse> createSubtask($grpc.ServiceCall call, $13.CreateSubtaskRequest request);
