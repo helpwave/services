@@ -16,10 +16,13 @@ func NewGetPatientByBedQueryHandler(_ hwes.AggregateStore) GetPatientByBedQueryH
 		db := hwdb.GetDB()
 		patientRepo := patient_repo.New(db)
 
-		patient, err := patientRepo.GetPatientByBed(ctx, uuid.NullUUID{
+		patient, err := hwdb.Optional(patientRepo.GetPatientByBed)(ctx, uuid.NullUUID{
 			UUID:  bedID,
 			Valid: true,
 		})
+		if patient == nil {
+			return nil, nil
+		}
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, err
 		}

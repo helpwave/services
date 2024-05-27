@@ -3,8 +3,6 @@ package v1
 import (
 	"context"
 	"github.com/google/uuid"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"hwdb"
 	"hwes"
 	"tasks-svc/internal/patient/models"
@@ -22,7 +20,7 @@ func NewGetPatientWithDetailsByIDQueryHandler(as hwes.AggregateStore) GetPatient
 
 		patientRes, err := hwdb.Optional(patientRepo.GetPatientWithBedAndRoom)(ctx, patientID)
 		if patientRes == nil {
-			return nil, status.Error(codes.InvalidArgument, "patient not found")
+			return nil, nil
 		}
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, err

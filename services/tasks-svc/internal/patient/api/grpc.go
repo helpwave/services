@@ -95,11 +95,11 @@ func (s *PatientGrpcService) GetPatientByBed(ctx context.Context, req *pb.GetPat
 	}
 
 	patient, err := s.handlers.Queries.V1.GetPatientByBed(ctx, bedID)
-	if err != nil {
-		return nil, err
-	}
 	if patient == nil {
 		return nil, status.Error(codes.InvalidArgument, "id not found")
+	}
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.GetPatientByBedResponse{
@@ -139,30 +139,33 @@ func (s *PatientGrpcService) GetPatientDetails(ctx context.Context, req *pb.GetP
 		return nil, err
 	}
 
-	patientDetails, err := s.handlers.Queries.V1.GetPatientDetailsByID(ctx, patientID)
+	patientWithDetails, err := s.handlers.Queries.V1.GetPatientDetailsByID(ctx, patientID)
+	if patientWithDetails == nil {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
+	}
 	if err != nil {
 		return nil, err
 	}
 
 	var roomResponse *pb.GetPatientDetailsResponse_Room
-	if patientDetails.Room != nil {
+	if patientWithDetails.Room != nil {
 		roomResponse = &pb.GetPatientDetailsResponse_Room{
-			Id:     patientDetails.Room.ID.String(),
-			Name:   patientDetails.Room.Name,
-			WardId: patientDetails.Room.WardID.String(),
+			Id:     patientWithDetails.Room.ID.String(),
+			Name:   patientWithDetails.Room.Name,
+			WardId: patientWithDetails.Room.WardID.String(),
 		}
 	}
 
 	var bedResponse *pb.GetPatientDetailsResponse_Bed
-	if patientDetails.Bed != nil {
+	if patientWithDetails.Bed != nil {
 		bedResponse = &pb.GetPatientDetailsResponse_Bed{
-			Id:   patientDetails.Bed.ID.String(),
-			Name: patientDetails.Bed.Name,
+			Id:   patientWithDetails.Bed.ID.String(),
+			Name: patientWithDetails.Bed.Name,
 		}
 	}
 
-	taskResponse := make([]*pb.GetPatientDetailsResponse_Task, len(patientDetails.Tasks))
-	for ix, item := range patientDetails.Tasks {
+	taskResponse := make([]*pb.GetPatientDetailsResponse_Task, len(patientWithDetails.Tasks))
+	for ix, item := range patientWithDetails.Tasks {
 		taskResponse[ix] = &pb.GetPatientDetailsResponse_Task{
 			Id:             item.ID.String(),
 			Name:           item.Name,
@@ -187,11 +190,11 @@ func (s *PatientGrpcService) GetPatientDetails(ctx context.Context, req *pb.GetP
 	// TODO: add patient to recent activity
 
 	return &pb.GetPatientDetailsResponse{
-		Id:                      patientDetails.ID.String(),
-		HumanReadableIdentifier: patientDetails.HumanReadableIdentifier,
-		Notes:                   patientDetails.Notes,
+		Id:                      patientWithDetails.ID.String(),
+		HumanReadableIdentifier: patientWithDetails.HumanReadableIdentifier,
+		Notes:                   patientWithDetails.Notes,
 		Tasks:                   taskResponse,
-		IsDischarged:            patientDetails.IsDischarged,
+		IsDischarged:            patientWithDetails.IsDischarged,
 		Room:                    roomResponse,
 		Bed:                     bedResponse,
 	}, nil

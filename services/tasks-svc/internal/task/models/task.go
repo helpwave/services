@@ -3,7 +3,6 @@ package models
 import (
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
-	"tasks-svc/internal/patient/models"
 	"time"
 )
 
@@ -31,7 +30,15 @@ type Subtask struct {
 	Done bool
 }
 
+type Patient struct {
+	ID                      uuid.UUID
+	HumanReadableIdentifier string
+	Notes                   string
+	BedID                   uuid.NullUUID
+	IsDischarged            bool
+}
+
 type TaskWithPatient struct {
 	Task
-	Patient models.Patient
+	Patient Patient
 }

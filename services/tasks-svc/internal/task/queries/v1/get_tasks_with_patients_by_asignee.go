@@ -6,7 +6,6 @@ import (
 	"github.com/google/uuid"
 	"hwdb"
 	"hwes"
-	patientModels "tasks-svc/internal/patient/models"
 	"tasks-svc/internal/task/models"
 	"tasks-svc/repos/task_repo"
 )
@@ -49,14 +48,12 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler(_ hwes.AggregateStore) GetTas
 						CreatedAt:     row.Task.CreatedAt.Time,
 						Subtasks:      make(map[uuid.UUID]models.Subtask),
 					},
-					Patient: patientModels.Patient{
+					Patient: models.Patient{
 						ID:                      row.Patient.ID,
 						HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
 						Notes:                   row.Patient.Notes,
 						BedID:                   row.Patient.BedID,
 						IsDischarged:            row.Patient.IsDischarged != 0,
-						CreatedAt:               row.Patient.CreatedAt.Time,
-						UpdatedAt:               row.Patient.UpdatedAt.Time,
 					},
 				}
 				tasks = append(tasks, task)
