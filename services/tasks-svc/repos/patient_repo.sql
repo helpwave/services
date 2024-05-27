@@ -22,3 +22,11 @@ SELECT patients.*
 FROM patients
 WHERE bed_id = @bed_id
 	LIMIT 1;
+
+-- name: GetPatientsByWard :many
+SELECT
+	patients.*
+FROM patients
+		 JOIN beds ON patients.bed_id = beds.id
+		 JOIN rooms ON beds.room_id = rooms.id
+WHERE rooms.ward_id = @ward_id;

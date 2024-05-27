@@ -59,6 +59,43 @@ func (q *Queries) GetPatientByBed(ctx context.Context, bedID uuid.NullUUID) (Pat
 	return i, err
 }
 
+const getPatientsByWard = `-- name: GetPatientsByWard :many
+SELECT
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at
+FROM patients
+		 JOIN beds ON patients.bed_id = beds.id
+		 JOIN rooms ON beds.room_id = rooms.id
+WHERE rooms.ward_id = $1
+`
+
+func (q *Queries) GetPatientsByWard(ctx context.Context, wardID uuid.UUID) ([]Patient, error) {
+	rows, err := q.db.Query(ctx, getPatientsByWard, wardID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Patient{}
+	for rows.Next() {
+		var i Patient
+		if err := rows.Scan(
+			&i.ID,
+			&i.HumanReadableIdentifier,
+			&i.Notes,
+			&i.BedID,
+			&i.IsDischarged,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updatePatient = `-- name: UpdatePatient :exec
 UPDATE patients
 SET human_readable_identifier = coalesce($2, human_readable_identifier),

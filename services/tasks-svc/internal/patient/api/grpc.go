@@ -14,6 +14,7 @@ import (
 	"hwes"
 	"hwutil"
 	"tasks-svc/internal/patient/handlers"
+	"tasks-svc/internal/patient/models"
 	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/bed_repo"
 )
@@ -106,6 +107,29 @@ func (s *PatientGrpcService) GetPatientByBed(ctx context.Context, req *pb.GetPat
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
 		BedId:                   &req.BedId,
+	}, nil
+}
+
+func (s *PatientGrpcService) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsByWardRequest) (*pb.GetPatientsByWardResponse, error) {
+	wardID, err := uuid.Parse(req.WardId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	patients, err := s.handlers.Queries.V1.GetPatientsByWard(ctx, wardID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.GetPatientsByWardResponse{
+		Patients: hwutil.Map(patients, func(patient models.Patient) *pb.GetPatientsByWardResponse_Patient {
+			return &pb.GetPatientsByWardResponse_Patient{
+				Id:                      patient.ID.String(),
+				HumanReadableIdentifier: patient.HumanReadableIdentifier,
+				Notes:                   patient.Notes,
+				BedId:                   hwutil.NullUUIDToStringPtr(patient.BedID),
+			}
+		}),
 	}, nil
 }
 
