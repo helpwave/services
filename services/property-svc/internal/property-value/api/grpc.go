@@ -3,16 +3,47 @@ package api
 import (
 	"context"
 	pb "gen/proto/services/property_svc/v1"
-	"github.com/google/uuid"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwdb"
 	"hwes"
 	"hwutil"
 	commandsV1 "property-svc/internal/property-value/commands/v1"
 	"property-svc/internal/property-value/models"
 	v1queries "property-svc/internal/property-value/queries/v1"
+	viewModels "property-svc/internal/property-view/models"
 	"property-svc/repos/property_value_repo"
+
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
+
+type MatchersRequest interface {
+	GetTaskMatcher() *pb.TaskPropertyMatcher
+}
+
+// DeMuxMatchers de-multiplexes the matchers in a grpc request
+// - the request must implement the MatchersRequest interface (see GetAttachedPropertyValuesRequest)
+// - parsing might fail (i.e., invalid uuids)
+// - a request may also carry no matchers at all, in that case (nil, nil) is returned
+func DeMuxMatchers(req MatchersRequest) (viewModels.PropertyMatchers, error) {
+	var matcher viewModels.PropertyMatchers = nil
+	if taskMatcher := req.GetTaskMatcher(); taskMatcher != nil {
+		wardID, err := hwutil.ParseNullUUID(taskMatcher.WardId)
+		if err != nil {
+			return nil, err
+		}
+		taskID, err := hwutil.ParseNullUUID(taskMatcher.TaskId)
+		if err != nil {
+			return nil, err
+		}
+
+		matcher = viewModels.TaskPropertyMatchers{
+			WardID: wardID,
+			TaskID: taskID,
+		}
+	}
+	return matcher, nil
+}
 
 type PropertyValueGrpcService struct {
 	pb.UnimplementedPropertyValueServiceServer
@@ -64,46 +95,60 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 }
 
 func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context, req *pb.GetAttachedPropertyValuesRequest) (*pb.GetAttachedPropertyValuesResponse, error) {
+	log := zlog.Ctx(ctx)
 	db := hwdb.GetDB()
 	propertyValueRepo := property_value_repo.New(db)
 
-	subjectID, err := uuid.Parse(req.GetSubjectId())
+	// de-mux matchers
+	matcher, err := DeMuxMatchers(req)
 	if err != nil {
 		return nil, err
 	}
 
-	propertyValues, err := v1queries.NewGetPropertyValuesWithPropertiesBySubjectIDQueryHandler(propertyValueRepo)(ctx, subjectID)
-	if err != nil {
-		return nil, err
+	propertiesWithValues := make([]models.PropertyAndValue, 0)
+
+	if matcher != nil {
+		propertiesWithValues, err = v1queries.NewGetRelevantPropertyValuesQueryHandler(propertyValueRepo)(ctx, matcher)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		log.Warn().Msg("Request is missing a matcher, can not determine relevant properties")
 	}
 
 	return &pb.GetAttachedPropertyValuesResponse{
-		Values: hwutil.Map(propertyValues, func(pv models.PropertyValueWithProperty) *pb.GetAttachedPropertyValuesResponse_Value {
+		Values: hwutil.Map(propertiesWithValues, func(pv models.PropertyAndValue) *pb.GetAttachedPropertyValuesResponse_Value {
 			res := &pb.GetAttachedPropertyValuesResponse_Value{
-				PropertyId: pv.PropertyID.String(),
-				Name:       pv.Name,
-				IsArchived: pv.IsArchived,
-				FieldType:  pv.FieldType,
+				PropertyId:  pv.PropertyID.String(),
+				FieldType:   pv.FieldType,
+				Name:        pv.Name,
+				Description: hwutil.MapIf(pv.Description != "", pv.Description, func(s string) string { return s }),
+				IsArchived:  pv.IsArchived,
+				Value:       nil,
 			}
 			switch {
-			case pv.TextValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_TextValue{TextValue: *pv.TextValue}
-			case pv.BoolValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_BoolValue{BoolValue: *pv.BoolValue}
-			case pv.NumberValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_NumberValue{NumberValue: *pv.NumberValue}
-			case pv.SelectValue.Valid:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{SelectValue: pv.SelectValue.UUID.String()}
-			case pv.DateTimeValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateTimeValue{DateTimeValue: timestamppb.New(*pv.DateTimeValue)}
-			case pv.DateValue != nil:
+			case pv.Value == nil:
+				return res
+			case pv.Value.TextValue != nil:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_TextValue{TextValue: *pv.Value.TextValue}
+			case pv.Value.BoolValue != nil:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_BoolValue{BoolValue: *pv.Value.BoolValue}
+			case pv.Value.NumberValue != nil:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_NumberValue{NumberValue: *pv.Value.NumberValue}
+			case pv.Value.SelectValue.Valid:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{SelectValue: pv.Value.SelectValue.UUID.String()}
+			case pv.Value.DateTimeValue != nil:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateTimeValue{DateTimeValue: timestamppb.New(*pv.Value.DateTimeValue)}
+			case pv.Value.DateValue != nil:
 				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateValue{
 					DateValue: &pb.Date{
-						Day:   int32(pv.DateValue.Day()),
-						Month: int32(pv.DateValue.Month()),
-						Year:  int32(pv.DateValue.Year()),
+						Day:   int32(pv.Value.DateValue.Day()),
+						Month: int32(pv.Value.DateValue.Month()),
+						Year:  int32(pv.Value.DateValue.Year()),
 					},
 				}
+			default:
+				log.Error().Any("pv", pv).Msg("pv.Value is in an invalid state!")
 			}
 			return res
 		}),

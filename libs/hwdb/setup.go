@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog/log"
 	"hwdb/pgx_zerolog"
@@ -12,8 +13,18 @@ import (
 	pgxUUID "github.com/vgarvardt/pgx-google-uuid/v5"
 )
 
+type DBTX interface {
+	Exec(context.Context, string, ...interface{}) (pgconn.CommandTag, error)
+	Query(context.Context, string, ...interface{}) (pgx.Rows, error)
+	QueryRow(context.Context, string, ...interface{}) pgx.Row
+	CopyFrom(ctx context.Context, tableName pgx.Identifier, columnNames []string, rowSrc pgx.CopyFromSource) (int64, error)
+	SendBatch(context.Context, *pgx.Batch) pgx.BatchResults
+
+	Begin(ctx context.Context) (pgx.Tx, error)
+}
+
 // connectionPool is set in OpenDatabase() and allows for concurrent access to the database
-var connectionPool *pgxpool.Pool = nil
+var connectionPool DBTX = nil
 
 // SetupDatabaseFromEnv prefers the env POSTGRES_DSN and will be configured the database connection accordingly.
 // When this env does not exist, a fallback to the following envs with proper default values will take place.
@@ -95,9 +106,14 @@ func openDatabasePool(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
 	return dbpool, nil
 }
 
-func GetDB() *pgxpool.Pool {
+func GetDB() DBTX {
 	if connectionPool == nil {
 		log.Error().Msg("GetDB called without set-up database, you will run into nil-pointers. Make sure to call SetupDatabaseFromEnv()!")
 	}
 	return connectionPool
+}
+
+// TestingSetDB should only be called by testing code
+func TestingSetDB(pool DBTX) {
+	connectionPool = pool
 }

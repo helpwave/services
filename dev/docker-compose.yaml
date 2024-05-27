@@ -93,7 +93,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '5'
+        TAG: '6'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -126,7 +126,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '5'
+        TAG: '6'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -151,4 +151,5 @@ services:
       - "3001:3001" # task-svc
       - "3002:3002" # user-svc
       - "3003:3003" # ory-svc
-      - "3004:3004" # property-svc
+      - "3004:3004" # tasks-svc
+      - "3005:3005" # property-svc

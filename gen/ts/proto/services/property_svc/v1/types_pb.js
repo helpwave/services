@@ -240,7 +240,8 @@ proto.proto.services.property_svc.v1.Date.prototype.setYear = function(value) {
  */
 proto.proto.services.property_svc.v1.SubjectType = {
   SUBJECT_TYPE_UNSPECIFIED: 0,
-  SUBJECT_TYPE_PATIENT: 1
+  SUBJECT_TYPE_PATIENT: 1,
+  SUBJECT_TYPE_TASK: 2
 };
 
 /**

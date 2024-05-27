@@ -116,7 +116,7 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} 
 # install golangci-lint, the linter we also use in the CI
 #  https://golangci-lint.run/
 # renovate: datasource=github-releases depName=golangci/golangci-lint
-ENV GOLANGCI_LINT_VERSION=1.58.0
+ENV GOLANGCI_LINT_VERSION=1.58.1
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
 	| sh -s -- -b $(go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
 
