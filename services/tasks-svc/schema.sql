@@ -228,6 +228,14 @@ ALTER TABLE ONLY public.beds
 
 
 --
+-- Name: patients patients_bed_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.patients
+    ADD CONSTRAINT patients_bed_id_fk FOREIGN KEY (bed_id) REFERENCES public.beds(id) ON DELETE SET NULL;
+
+
+--
 -- Name: rooms rooms_ward_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 

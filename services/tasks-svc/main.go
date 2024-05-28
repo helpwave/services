@@ -15,6 +15,7 @@ import (
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
+	bed "tasks-svc/internal/bed"
 	patient "tasks-svc/internal/patient/api"
 	task "tasks-svc/internal/task/api"
 )
@@ -60,6 +61,7 @@ func main() {
 
 		pb.RegisterTaskServiceServer(grpcServer, task.NewTaskGrpcService(aggregateStore, taskHandlers))
 		pb.RegisterPatientServiceServer(grpcServer, patient.NewPatientGrpcService(aggregateStore, patientHandlers))
+		pb.RegisterBedServiceServer(grpcServer, bed.NewServiceServer())
 	})
 
 	// Close context
