@@ -15,76 +15,76 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'organization_svc.pb.dart' as $15;
+import 'organization_svc.pb.dart' as $16;
 
 export 'organization_svc.pb.dart';
 
 @$pb.GrpcServiceName('proto.services.user_svc.v1.OrganizationService')
 class OrganizationServiceClient extends $grpc.Client {
-  static final _$createOrganization = $grpc.ClientMethod<$15.CreateOrganizationRequest, $15.CreateOrganizationResponse>(
+  static final _$createOrganization = $grpc.ClientMethod<$16.CreateOrganizationRequest, $16.CreateOrganizationResponse>(
       '/proto.services.user_svc.v1.OrganizationService/CreateOrganization',
-      ($15.CreateOrganizationRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.CreateOrganizationResponse.fromBuffer(value));
-  static final _$createOrganizationForUser = $grpc.ClientMethod<$15.CreateOrganizationForUserRequest, $15.CreateOrganizationForUserResponse>(
+      ($16.CreateOrganizationRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.CreateOrganizationResponse.fromBuffer(value));
+  static final _$createOrganizationForUser = $grpc.ClientMethod<$16.CreateOrganizationForUserRequest, $16.CreateOrganizationForUserResponse>(
       '/proto.services.user_svc.v1.OrganizationService/CreateOrganizationForUser',
-      ($15.CreateOrganizationForUserRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.CreateOrganizationForUserResponse.fromBuffer(value));
-  static final _$getOrganization = $grpc.ClientMethod<$15.GetOrganizationRequest, $15.GetOrganizationResponse>(
+      ($16.CreateOrganizationForUserRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.CreateOrganizationForUserResponse.fromBuffer(value));
+  static final _$getOrganization = $grpc.ClientMethod<$16.GetOrganizationRequest, $16.GetOrganizationResponse>(
       '/proto.services.user_svc.v1.OrganizationService/GetOrganization',
-      ($15.GetOrganizationRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.GetOrganizationResponse.fromBuffer(value));
-  static final _$getOrganizationsByUser = $grpc.ClientMethod<$15.GetOrganizationsByUserRequest, $15.GetOrganizationsByUserResponse>(
+      ($16.GetOrganizationRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.GetOrganizationResponse.fromBuffer(value));
+  static final _$getOrganizationsByUser = $grpc.ClientMethod<$16.GetOrganizationsByUserRequest, $16.GetOrganizationsByUserResponse>(
       '/proto.services.user_svc.v1.OrganizationService/GetOrganizationsByUser',
-      ($15.GetOrganizationsByUserRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.GetOrganizationsByUserResponse.fromBuffer(value));
-  static final _$getOrganizationsForUser = $grpc.ClientMethod<$15.GetOrganizationsForUserRequest, $15.GetOrganizationsForUserResponse>(
+      ($16.GetOrganizationsByUserRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.GetOrganizationsByUserResponse.fromBuffer(value));
+  static final _$getOrganizationsForUser = $grpc.ClientMethod<$16.GetOrganizationsForUserRequest, $16.GetOrganizationsForUserResponse>(
       '/proto.services.user_svc.v1.OrganizationService/GetOrganizationsForUser',
-      ($15.GetOrganizationsForUserRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.GetOrganizationsForUserResponse.fromBuffer(value));
-  static final _$updateOrganization = $grpc.ClientMethod<$15.UpdateOrganizationRequest, $15.UpdateOrganizationResponse>(
+      ($16.GetOrganizationsForUserRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.GetOrganizationsForUserResponse.fromBuffer(value));
+  static final _$updateOrganization = $grpc.ClientMethod<$16.UpdateOrganizationRequest, $16.UpdateOrganizationResponse>(
       '/proto.services.user_svc.v1.OrganizationService/UpdateOrganization',
-      ($15.UpdateOrganizationRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.UpdateOrganizationResponse.fromBuffer(value));
-  static final _$deleteOrganization = $grpc.ClientMethod<$15.DeleteOrganizationRequest, $15.DeleteOrganizationResponse>(
+      ($16.UpdateOrganizationRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.UpdateOrganizationResponse.fromBuffer(value));
+  static final _$deleteOrganization = $grpc.ClientMethod<$16.DeleteOrganizationRequest, $16.DeleteOrganizationResponse>(
       '/proto.services.user_svc.v1.OrganizationService/DeleteOrganization',
-      ($15.DeleteOrganizationRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.DeleteOrganizationResponse.fromBuffer(value));
-  static final _$getMembersByOrganization = $grpc.ClientMethod<$15.GetMembersByOrganizationRequest, $15.GetMembersByOrganizationResponse>(
+      ($16.DeleteOrganizationRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.DeleteOrganizationResponse.fromBuffer(value));
+  static final _$getMembersByOrganization = $grpc.ClientMethod<$16.GetMembersByOrganizationRequest, $16.GetMembersByOrganizationResponse>(
       '/proto.services.user_svc.v1.OrganizationService/GetMembersByOrganization',
-      ($15.GetMembersByOrganizationRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.GetMembersByOrganizationResponse.fromBuffer(value));
-  static final _$addMember = $grpc.ClientMethod<$15.AddMemberRequest, $15.AddMemberResponse>(
+      ($16.GetMembersByOrganizationRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.GetMembersByOrganizationResponse.fromBuffer(value));
+  static final _$addMember = $grpc.ClientMethod<$16.AddMemberRequest, $16.AddMemberResponse>(
       '/proto.services.user_svc.v1.OrganizationService/AddMember',
-      ($15.AddMemberRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.AddMemberResponse.fromBuffer(value));
-  static final _$removeMember = $grpc.ClientMethod<$15.RemoveMemberRequest, $15.RemoveMemberResponse>(
+      ($16.AddMemberRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.AddMemberResponse.fromBuffer(value));
+  static final _$removeMember = $grpc.ClientMethod<$16.RemoveMemberRequest, $16.RemoveMemberResponse>(
       '/proto.services.user_svc.v1.OrganizationService/RemoveMember',
-      ($15.RemoveMemberRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.RemoveMemberResponse.fromBuffer(value));
-  static final _$inviteMember = $grpc.ClientMethod<$15.InviteMemberRequest, $15.InviteMemberResponse>(
+      ($16.RemoveMemberRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.RemoveMemberResponse.fromBuffer(value));
+  static final _$inviteMember = $grpc.ClientMethod<$16.InviteMemberRequest, $16.InviteMemberResponse>(
       '/proto.services.user_svc.v1.OrganizationService/InviteMember',
-      ($15.InviteMemberRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.InviteMemberResponse.fromBuffer(value));
-  static final _$getInvitationsByOrganization = $grpc.ClientMethod<$15.GetInvitationsByOrganizationRequest, $15.GetInvitationsByOrganizationResponse>(
+      ($16.InviteMemberRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.InviteMemberResponse.fromBuffer(value));
+  static final _$getInvitationsByOrganization = $grpc.ClientMethod<$16.GetInvitationsByOrganizationRequest, $16.GetInvitationsByOrganizationResponse>(
       '/proto.services.user_svc.v1.OrganizationService/GetInvitationsByOrganization',
-      ($15.GetInvitationsByOrganizationRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.GetInvitationsByOrganizationResponse.fromBuffer(value));
-  static final _$getInvitationsByUser = $grpc.ClientMethod<$15.GetInvitationsByUserRequest, $15.GetInvitationsByUserResponse>(
+      ($16.GetInvitationsByOrganizationRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.GetInvitationsByOrganizationResponse.fromBuffer(value));
+  static final _$getInvitationsByUser = $grpc.ClientMethod<$16.GetInvitationsByUserRequest, $16.GetInvitationsByUserResponse>(
       '/proto.services.user_svc.v1.OrganizationService/GetInvitationsByUser',
-      ($15.GetInvitationsByUserRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.GetInvitationsByUserResponse.fromBuffer(value));
-  static final _$acceptInvitation = $grpc.ClientMethod<$15.AcceptInvitationRequest, $15.AcceptInvitationResponse>(
+      ($16.GetInvitationsByUserRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.GetInvitationsByUserResponse.fromBuffer(value));
+  static final _$acceptInvitation = $grpc.ClientMethod<$16.AcceptInvitationRequest, $16.AcceptInvitationResponse>(
       '/proto.services.user_svc.v1.OrganizationService/AcceptInvitation',
-      ($15.AcceptInvitationRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.AcceptInvitationResponse.fromBuffer(value));
-  static final _$declineInvitation = $grpc.ClientMethod<$15.DeclineInvitationRequest, $15.DeclineInvitationResponse>(
+      ($16.AcceptInvitationRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.AcceptInvitationResponse.fromBuffer(value));
+  static final _$declineInvitation = $grpc.ClientMethod<$16.DeclineInvitationRequest, $16.DeclineInvitationResponse>(
       '/proto.services.user_svc.v1.OrganizationService/DeclineInvitation',
-      ($15.DeclineInvitationRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.DeclineInvitationResponse.fromBuffer(value));
-  static final _$revokeInvitation = $grpc.ClientMethod<$15.RevokeInvitationRequest, $15.RevokeInvitationResponse>(
+      ($16.DeclineInvitationRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.DeclineInvitationResponse.fromBuffer(value));
+  static final _$revokeInvitation = $grpc.ClientMethod<$16.RevokeInvitationRequest, $16.RevokeInvitationResponse>(
       '/proto.services.user_svc.v1.OrganizationService/RevokeInvitation',
-      ($15.RevokeInvitationRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.RevokeInvitationResponse.fromBuffer(value));
+      ($16.RevokeInvitationRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $16.RevokeInvitationResponse.fromBuffer(value));
 
   OrganizationServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -92,67 +92,67 @@ class OrganizationServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$15.CreateOrganizationResponse> createOrganization($15.CreateOrganizationRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.CreateOrganizationResponse> createOrganization($16.CreateOrganizationRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createOrganization, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.CreateOrganizationForUserResponse> createOrganizationForUser($15.CreateOrganizationForUserRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.CreateOrganizationForUserResponse> createOrganizationForUser($16.CreateOrganizationForUserRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createOrganizationForUser, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.GetOrganizationResponse> getOrganization($15.GetOrganizationRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.GetOrganizationResponse> getOrganization($16.GetOrganizationRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getOrganization, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.GetOrganizationsByUserResponse> getOrganizationsByUser($15.GetOrganizationsByUserRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.GetOrganizationsByUserResponse> getOrganizationsByUser($16.GetOrganizationsByUserRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getOrganizationsByUser, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.GetOrganizationsForUserResponse> getOrganizationsForUser($15.GetOrganizationsForUserRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.GetOrganizationsForUserResponse> getOrganizationsForUser($16.GetOrganizationsForUserRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getOrganizationsForUser, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.UpdateOrganizationResponse> updateOrganization($15.UpdateOrganizationRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.UpdateOrganizationResponse> updateOrganization($16.UpdateOrganizationRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$updateOrganization, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.DeleteOrganizationResponse> deleteOrganization($15.DeleteOrganizationRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.DeleteOrganizationResponse> deleteOrganization($16.DeleteOrganizationRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$deleteOrganization, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.GetMembersByOrganizationResponse> getMembersByOrganization($15.GetMembersByOrganizationRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.GetMembersByOrganizationResponse> getMembersByOrganization($16.GetMembersByOrganizationRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getMembersByOrganization, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.AddMemberResponse> addMember($15.AddMemberRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.AddMemberResponse> addMember($16.AddMemberRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$addMember, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.RemoveMemberResponse> removeMember($15.RemoveMemberRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.RemoveMemberResponse> removeMember($16.RemoveMemberRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$removeMember, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.InviteMemberResponse> inviteMember($15.InviteMemberRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.InviteMemberResponse> inviteMember($16.InviteMemberRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$inviteMember, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.GetInvitationsByOrganizationResponse> getInvitationsByOrganization($15.GetInvitationsByOrganizationRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.GetInvitationsByOrganizationResponse> getInvitationsByOrganization($16.GetInvitationsByOrganizationRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getInvitationsByOrganization, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.GetInvitationsByUserResponse> getInvitationsByUser($15.GetInvitationsByUserRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.GetInvitationsByUserResponse> getInvitationsByUser($16.GetInvitationsByUserRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getInvitationsByUser, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.AcceptInvitationResponse> acceptInvitation($15.AcceptInvitationRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.AcceptInvitationResponse> acceptInvitation($16.AcceptInvitationRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$acceptInvitation, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.DeclineInvitationResponse> declineInvitation($15.DeclineInvitationRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.DeclineInvitationResponse> declineInvitation($16.DeclineInvitationRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$declineInvitation, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.RevokeInvitationResponse> revokeInvitation($15.RevokeInvitationRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$16.RevokeInvitationResponse> revokeInvitation($16.RevokeInvitationRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$revokeInvitation, request, options: options);
   }
 }
@@ -162,198 +162,198 @@ abstract class OrganizationServiceBase extends $grpc.Service {
   $core.String get $name => 'proto.services.user_svc.v1.OrganizationService';
 
   OrganizationServiceBase() {
-    $addMethod($grpc.ServiceMethod<$15.CreateOrganizationRequest, $15.CreateOrganizationResponse>(
+    $addMethod($grpc.ServiceMethod<$16.CreateOrganizationRequest, $16.CreateOrganizationResponse>(
         'CreateOrganization',
         createOrganization_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.CreateOrganizationRequest.fromBuffer(value),
-        ($15.CreateOrganizationResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.CreateOrganizationForUserRequest, $15.CreateOrganizationForUserResponse>(
+        ($core.List<$core.int> value) => $16.CreateOrganizationRequest.fromBuffer(value),
+        ($16.CreateOrganizationResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.CreateOrganizationForUserRequest, $16.CreateOrganizationForUserResponse>(
         'CreateOrganizationForUser',
         createOrganizationForUser_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.CreateOrganizationForUserRequest.fromBuffer(value),
-        ($15.CreateOrganizationForUserResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.GetOrganizationRequest, $15.GetOrganizationResponse>(
+        ($core.List<$core.int> value) => $16.CreateOrganizationForUserRequest.fromBuffer(value),
+        ($16.CreateOrganizationForUserResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.GetOrganizationRequest, $16.GetOrganizationResponse>(
         'GetOrganization',
         getOrganization_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.GetOrganizationRequest.fromBuffer(value),
-        ($15.GetOrganizationResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.GetOrganizationsByUserRequest, $15.GetOrganizationsByUserResponse>(
+        ($core.List<$core.int> value) => $16.GetOrganizationRequest.fromBuffer(value),
+        ($16.GetOrganizationResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.GetOrganizationsByUserRequest, $16.GetOrganizationsByUserResponse>(
         'GetOrganizationsByUser',
         getOrganizationsByUser_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.GetOrganizationsByUserRequest.fromBuffer(value),
-        ($15.GetOrganizationsByUserResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.GetOrganizationsForUserRequest, $15.GetOrganizationsForUserResponse>(
+        ($core.List<$core.int> value) => $16.GetOrganizationsByUserRequest.fromBuffer(value),
+        ($16.GetOrganizationsByUserResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.GetOrganizationsForUserRequest, $16.GetOrganizationsForUserResponse>(
         'GetOrganizationsForUser',
         getOrganizationsForUser_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.GetOrganizationsForUserRequest.fromBuffer(value),
-        ($15.GetOrganizationsForUserResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.UpdateOrganizationRequest, $15.UpdateOrganizationResponse>(
+        ($core.List<$core.int> value) => $16.GetOrganizationsForUserRequest.fromBuffer(value),
+        ($16.GetOrganizationsForUserResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.UpdateOrganizationRequest, $16.UpdateOrganizationResponse>(
         'UpdateOrganization',
         updateOrganization_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.UpdateOrganizationRequest.fromBuffer(value),
-        ($15.UpdateOrganizationResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.DeleteOrganizationRequest, $15.DeleteOrganizationResponse>(
+        ($core.List<$core.int> value) => $16.UpdateOrganizationRequest.fromBuffer(value),
+        ($16.UpdateOrganizationResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.DeleteOrganizationRequest, $16.DeleteOrganizationResponse>(
         'DeleteOrganization',
         deleteOrganization_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.DeleteOrganizationRequest.fromBuffer(value),
-        ($15.DeleteOrganizationResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.GetMembersByOrganizationRequest, $15.GetMembersByOrganizationResponse>(
+        ($core.List<$core.int> value) => $16.DeleteOrganizationRequest.fromBuffer(value),
+        ($16.DeleteOrganizationResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.GetMembersByOrganizationRequest, $16.GetMembersByOrganizationResponse>(
         'GetMembersByOrganization',
         getMembersByOrganization_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.GetMembersByOrganizationRequest.fromBuffer(value),
-        ($15.GetMembersByOrganizationResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.AddMemberRequest, $15.AddMemberResponse>(
+        ($core.List<$core.int> value) => $16.GetMembersByOrganizationRequest.fromBuffer(value),
+        ($16.GetMembersByOrganizationResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.AddMemberRequest, $16.AddMemberResponse>(
         'AddMember',
         addMember_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.AddMemberRequest.fromBuffer(value),
-        ($15.AddMemberResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.RemoveMemberRequest, $15.RemoveMemberResponse>(
+        ($core.List<$core.int> value) => $16.AddMemberRequest.fromBuffer(value),
+        ($16.AddMemberResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.RemoveMemberRequest, $16.RemoveMemberResponse>(
         'RemoveMember',
         removeMember_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.RemoveMemberRequest.fromBuffer(value),
-        ($15.RemoveMemberResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.InviteMemberRequest, $15.InviteMemberResponse>(
+        ($core.List<$core.int> value) => $16.RemoveMemberRequest.fromBuffer(value),
+        ($16.RemoveMemberResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.InviteMemberRequest, $16.InviteMemberResponse>(
         'InviteMember',
         inviteMember_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.InviteMemberRequest.fromBuffer(value),
-        ($15.InviteMemberResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.GetInvitationsByOrganizationRequest, $15.GetInvitationsByOrganizationResponse>(
+        ($core.List<$core.int> value) => $16.InviteMemberRequest.fromBuffer(value),
+        ($16.InviteMemberResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.GetInvitationsByOrganizationRequest, $16.GetInvitationsByOrganizationResponse>(
         'GetInvitationsByOrganization',
         getInvitationsByOrganization_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.GetInvitationsByOrganizationRequest.fromBuffer(value),
-        ($15.GetInvitationsByOrganizationResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.GetInvitationsByUserRequest, $15.GetInvitationsByUserResponse>(
+        ($core.List<$core.int> value) => $16.GetInvitationsByOrganizationRequest.fromBuffer(value),
+        ($16.GetInvitationsByOrganizationResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.GetInvitationsByUserRequest, $16.GetInvitationsByUserResponse>(
         'GetInvitationsByUser',
         getInvitationsByUser_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.GetInvitationsByUserRequest.fromBuffer(value),
-        ($15.GetInvitationsByUserResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.AcceptInvitationRequest, $15.AcceptInvitationResponse>(
+        ($core.List<$core.int> value) => $16.GetInvitationsByUserRequest.fromBuffer(value),
+        ($16.GetInvitationsByUserResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.AcceptInvitationRequest, $16.AcceptInvitationResponse>(
         'AcceptInvitation',
         acceptInvitation_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.AcceptInvitationRequest.fromBuffer(value),
-        ($15.AcceptInvitationResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.DeclineInvitationRequest, $15.DeclineInvitationResponse>(
+        ($core.List<$core.int> value) => $16.AcceptInvitationRequest.fromBuffer(value),
+        ($16.AcceptInvitationResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.DeclineInvitationRequest, $16.DeclineInvitationResponse>(
         'DeclineInvitation',
         declineInvitation_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.DeclineInvitationRequest.fromBuffer(value),
-        ($15.DeclineInvitationResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.RevokeInvitationRequest, $15.RevokeInvitationResponse>(
+        ($core.List<$core.int> value) => $16.DeclineInvitationRequest.fromBuffer(value),
+        ($16.DeclineInvitationResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$16.RevokeInvitationRequest, $16.RevokeInvitationResponse>(
         'RevokeInvitation',
         revokeInvitation_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.RevokeInvitationRequest.fromBuffer(value),
-        ($15.RevokeInvitationResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $16.RevokeInvitationRequest.fromBuffer(value),
+        ($16.RevokeInvitationResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$15.CreateOrganizationResponse> createOrganization_Pre($grpc.ServiceCall call, $async.Future<$15.CreateOrganizationRequest> request) async {
+  $async.Future<$16.CreateOrganizationResponse> createOrganization_Pre($grpc.ServiceCall call, $async.Future<$16.CreateOrganizationRequest> request) async {
     return createOrganization(call, await request);
   }
 
-  $async.Future<$15.CreateOrganizationForUserResponse> createOrganizationForUser_Pre($grpc.ServiceCall call, $async.Future<$15.CreateOrganizationForUserRequest> request) async {
+  $async.Future<$16.CreateOrganizationForUserResponse> createOrganizationForUser_Pre($grpc.ServiceCall call, $async.Future<$16.CreateOrganizationForUserRequest> request) async {
     return createOrganizationForUser(call, await request);
   }
 
-  $async.Future<$15.GetOrganizationResponse> getOrganization_Pre($grpc.ServiceCall call, $async.Future<$15.GetOrganizationRequest> request) async {
+  $async.Future<$16.GetOrganizationResponse> getOrganization_Pre($grpc.ServiceCall call, $async.Future<$16.GetOrganizationRequest> request) async {
     return getOrganization(call, await request);
   }
 
-  $async.Future<$15.GetOrganizationsByUserResponse> getOrganizationsByUser_Pre($grpc.ServiceCall call, $async.Future<$15.GetOrganizationsByUserRequest> request) async {
+  $async.Future<$16.GetOrganizationsByUserResponse> getOrganizationsByUser_Pre($grpc.ServiceCall call, $async.Future<$16.GetOrganizationsByUserRequest> request) async {
     return getOrganizationsByUser(call, await request);
   }
 
-  $async.Future<$15.GetOrganizationsForUserResponse> getOrganizationsForUser_Pre($grpc.ServiceCall call, $async.Future<$15.GetOrganizationsForUserRequest> request) async {
+  $async.Future<$16.GetOrganizationsForUserResponse> getOrganizationsForUser_Pre($grpc.ServiceCall call, $async.Future<$16.GetOrganizationsForUserRequest> request) async {
     return getOrganizationsForUser(call, await request);
   }
 
-  $async.Future<$15.UpdateOrganizationResponse> updateOrganization_Pre($grpc.ServiceCall call, $async.Future<$15.UpdateOrganizationRequest> request) async {
+  $async.Future<$16.UpdateOrganizationResponse> updateOrganization_Pre($grpc.ServiceCall call, $async.Future<$16.UpdateOrganizationRequest> request) async {
     return updateOrganization(call, await request);
   }
 
-  $async.Future<$15.DeleteOrganizationResponse> deleteOrganization_Pre($grpc.ServiceCall call, $async.Future<$15.DeleteOrganizationRequest> request) async {
+  $async.Future<$16.DeleteOrganizationResponse> deleteOrganization_Pre($grpc.ServiceCall call, $async.Future<$16.DeleteOrganizationRequest> request) async {
     return deleteOrganization(call, await request);
   }
 
-  $async.Future<$15.GetMembersByOrganizationResponse> getMembersByOrganization_Pre($grpc.ServiceCall call, $async.Future<$15.GetMembersByOrganizationRequest> request) async {
+  $async.Future<$16.GetMembersByOrganizationResponse> getMembersByOrganization_Pre($grpc.ServiceCall call, $async.Future<$16.GetMembersByOrganizationRequest> request) async {
     return getMembersByOrganization(call, await request);
   }
 
-  $async.Future<$15.AddMemberResponse> addMember_Pre($grpc.ServiceCall call, $async.Future<$15.AddMemberRequest> request) async {
+  $async.Future<$16.AddMemberResponse> addMember_Pre($grpc.ServiceCall call, $async.Future<$16.AddMemberRequest> request) async {
     return addMember(call, await request);
   }
 
-  $async.Future<$15.RemoveMemberResponse> removeMember_Pre($grpc.ServiceCall call, $async.Future<$15.RemoveMemberRequest> request) async {
+  $async.Future<$16.RemoveMemberResponse> removeMember_Pre($grpc.ServiceCall call, $async.Future<$16.RemoveMemberRequest> request) async {
     return removeMember(call, await request);
   }
 
-  $async.Future<$15.InviteMemberResponse> inviteMember_Pre($grpc.ServiceCall call, $async.Future<$15.InviteMemberRequest> request) async {
+  $async.Future<$16.InviteMemberResponse> inviteMember_Pre($grpc.ServiceCall call, $async.Future<$16.InviteMemberRequest> request) async {
     return inviteMember(call, await request);
   }
 
-  $async.Future<$15.GetInvitationsByOrganizationResponse> getInvitationsByOrganization_Pre($grpc.ServiceCall call, $async.Future<$15.GetInvitationsByOrganizationRequest> request) async {
+  $async.Future<$16.GetInvitationsByOrganizationResponse> getInvitationsByOrganization_Pre($grpc.ServiceCall call, $async.Future<$16.GetInvitationsByOrganizationRequest> request) async {
     return getInvitationsByOrganization(call, await request);
   }
 
-  $async.Future<$15.GetInvitationsByUserResponse> getInvitationsByUser_Pre($grpc.ServiceCall call, $async.Future<$15.GetInvitationsByUserRequest> request) async {
+  $async.Future<$16.GetInvitationsByUserResponse> getInvitationsByUser_Pre($grpc.ServiceCall call, $async.Future<$16.GetInvitationsByUserRequest> request) async {
     return getInvitationsByUser(call, await request);
   }
 
-  $async.Future<$15.AcceptInvitationResponse> acceptInvitation_Pre($grpc.ServiceCall call, $async.Future<$15.AcceptInvitationRequest> request) async {
+  $async.Future<$16.AcceptInvitationResponse> acceptInvitation_Pre($grpc.ServiceCall call, $async.Future<$16.AcceptInvitationRequest> request) async {
     return acceptInvitation(call, await request);
   }
 
-  $async.Future<$15.DeclineInvitationResponse> declineInvitation_Pre($grpc.ServiceCall call, $async.Future<$15.DeclineInvitationRequest> request) async {
+  $async.Future<$16.DeclineInvitationResponse> declineInvitation_Pre($grpc.ServiceCall call, $async.Future<$16.DeclineInvitationRequest> request) async {
     return declineInvitation(call, await request);
   }
 
-  $async.Future<$15.RevokeInvitationResponse> revokeInvitation_Pre($grpc.ServiceCall call, $async.Future<$15.RevokeInvitationRequest> request) async {
+  $async.Future<$16.RevokeInvitationResponse> revokeInvitation_Pre($grpc.ServiceCall call, $async.Future<$16.RevokeInvitationRequest> request) async {
     return revokeInvitation(call, await request);
   }
 
-  $async.Future<$15.CreateOrganizationResponse> createOrganization($grpc.ServiceCall call, $15.CreateOrganizationRequest request);
-  $async.Future<$15.CreateOrganizationForUserResponse> createOrganizationForUser($grpc.ServiceCall call, $15.CreateOrganizationForUserRequest request);
-  $async.Future<$15.GetOrganizationResponse> getOrganization($grpc.ServiceCall call, $15.GetOrganizationRequest request);
-  $async.Future<$15.GetOrganizationsByUserResponse> getOrganizationsByUser($grpc.ServiceCall call, $15.GetOrganizationsByUserRequest request);
-  $async.Future<$15.GetOrganizationsForUserResponse> getOrganizationsForUser($grpc.ServiceCall call, $15.GetOrganizationsForUserRequest request);
-  $async.Future<$15.UpdateOrganizationResponse> updateOrganization($grpc.ServiceCall call, $15.UpdateOrganizationRequest request);
-  $async.Future<$15.DeleteOrganizationResponse> deleteOrganization($grpc.ServiceCall call, $15.DeleteOrganizationRequest request);
-  $async.Future<$15.GetMembersByOrganizationResponse> getMembersByOrganization($grpc.ServiceCall call, $15.GetMembersByOrganizationRequest request);
-  $async.Future<$15.AddMemberResponse> addMember($grpc.ServiceCall call, $15.AddMemberRequest request);
-  $async.Future<$15.RemoveMemberResponse> removeMember($grpc.ServiceCall call, $15.RemoveMemberRequest request);
-  $async.Future<$15.InviteMemberResponse> inviteMember($grpc.ServiceCall call, $15.InviteMemberRequest request);
-  $async.Future<$15.GetInvitationsByOrganizationResponse> getInvitationsByOrganization($grpc.ServiceCall call, $15.GetInvitationsByOrganizationRequest request);
-  $async.Future<$15.GetInvitationsByUserResponse> getInvitationsByUser($grpc.ServiceCall call, $15.GetInvitationsByUserRequest request);
-  $async.Future<$15.AcceptInvitationResponse> acceptInvitation($grpc.ServiceCall call, $15.AcceptInvitationRequest request);
-  $async.Future<$15.DeclineInvitationResponse> declineInvitation($grpc.ServiceCall call, $15.DeclineInvitationRequest request);
-  $async.Future<$15.RevokeInvitationResponse> revokeInvitation($grpc.ServiceCall call, $15.RevokeInvitationRequest request);
+  $async.Future<$16.CreateOrganizationResponse> createOrganization($grpc.ServiceCall call, $16.CreateOrganizationRequest request);
+  $async.Future<$16.CreateOrganizationForUserResponse> createOrganizationForUser($grpc.ServiceCall call, $16.CreateOrganizationForUserRequest request);
+  $async.Future<$16.GetOrganizationResponse> getOrganization($grpc.ServiceCall call, $16.GetOrganizationRequest request);
+  $async.Future<$16.GetOrganizationsByUserResponse> getOrganizationsByUser($grpc.ServiceCall call, $16.GetOrganizationsByUserRequest request);
+  $async.Future<$16.GetOrganizationsForUserResponse> getOrganizationsForUser($grpc.ServiceCall call, $16.GetOrganizationsForUserRequest request);
+  $async.Future<$16.UpdateOrganizationResponse> updateOrganization($grpc.ServiceCall call, $16.UpdateOrganizationRequest request);
+  $async.Future<$16.DeleteOrganizationResponse> deleteOrganization($grpc.ServiceCall call, $16.DeleteOrganizationRequest request);
+  $async.Future<$16.GetMembersByOrganizationResponse> getMembersByOrganization($grpc.ServiceCall call, $16.GetMembersByOrganizationRequest request);
+  $async.Future<$16.AddMemberResponse> addMember($grpc.ServiceCall call, $16.AddMemberRequest request);
+  $async.Future<$16.RemoveMemberResponse> removeMember($grpc.ServiceCall call, $16.RemoveMemberRequest request);
+  $async.Future<$16.InviteMemberResponse> inviteMember($grpc.ServiceCall call, $16.InviteMemberRequest request);
+  $async.Future<$16.GetInvitationsByOrganizationResponse> getInvitationsByOrganization($grpc.ServiceCall call, $16.GetInvitationsByOrganizationRequest request);
+  $async.Future<$16.GetInvitationsByUserResponse> getInvitationsByUser($grpc.ServiceCall call, $16.GetInvitationsByUserRequest request);
+  $async.Future<$16.AcceptInvitationResponse> acceptInvitation($grpc.ServiceCall call, $16.AcceptInvitationRequest request);
+  $async.Future<$16.DeclineInvitationResponse> declineInvitation($grpc.ServiceCall call, $16.DeclineInvitationRequest request);
+  $async.Future<$16.RevokeInvitationResponse> revokeInvitation($grpc.ServiceCall call, $16.RevokeInvitationRequest request);
 }

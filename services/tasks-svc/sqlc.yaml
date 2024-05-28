@@ -34,3 +34,11 @@ sql:
         <<: *repo-go
         package: "patient_repo"
         out: "repos/patient_repo"
+
+  - <<: *repo
+    queries: "./repos/room_repo.sql"
+    gen:
+      go:
+        <<: *repo-go
+        package: "room_repo"
+        out: "repos/room_repo"

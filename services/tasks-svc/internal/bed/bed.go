@@ -122,6 +122,7 @@ func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatien
 func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.GetBedsResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
+	// TODO: Check if this query is working properly
 	beds, err := bedRepo.GetBeds(ctx, uuid.NullUUID{UUID: uuid.Nil, Valid: false})
 	if err != nil {
 		return nil, hwdb.Error(ctx, err)
