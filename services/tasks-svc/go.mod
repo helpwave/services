@@ -62,7 +62,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
 	github.com/redis/go-redis/v9 v9.5.1 // indirect
-	github.com/vgarvardt/pgx-google-uuid/v5 v5.0.0 // indirect
+	github.com/vgarvardt/pgx-google-uuid/v5 v5.6.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.52.0 // indirect
 	go.opentelemetry.io/otel v1.27.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.27.0 // indirect
