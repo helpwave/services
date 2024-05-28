@@ -5,14 +5,13 @@ import (
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwdb"
-	"hwes"
 	"tasks-svc/internal/task/models"
 	"tasks-svc/repos/task_repo"
 )
 
 type GetTasksWithPatientsByAssigneeQueryHandler func(ctx context.Context, assigneeID uuid.UUID) ([]*models.TaskWithPatient, error)
 
-func NewGetTasksWithPatientsByAssigneeQueryHandler(_ hwes.AggregateStore) GetTasksWithPatientsByAssigneeQueryHandler {
+func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssigneeQueryHandler {
 	return func(ctx context.Context, assigneeID uuid.UUID) ([]*models.TaskWithPatient, error) {
 		db := hwdb.GetDB()
 		taskRepo := task_repo.New(db)

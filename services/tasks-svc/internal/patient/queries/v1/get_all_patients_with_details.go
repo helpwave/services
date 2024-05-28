@@ -5,7 +5,6 @@ import (
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwdb"
-	"hwes"
 	"tasks-svc/internal/patient/models"
 	tasksModels "tasks-svc/internal/task/models"
 	"tasks-svc/repos/patient_repo"
@@ -13,7 +12,7 @@ import (
 
 type GetAllPatientsWithDetailsQueryHandler func(ctx context.Context) ([]*models.PatientDetails, error)
 
-func NewGetAllPatientsWithDetailsQueryHandler(_ hwes.AggregateStore) GetAllPatientsWithDetailsQueryHandler {
+func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHandler {
 	return func(ctx context.Context) ([]*models.PatientDetails, error) {
 		db := hwdb.GetDB()
 		patientRepo := patient_repo.New(db)

@@ -5,14 +5,13 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
 	"hwdb"
-	"hwes"
 	"tasks-svc/internal/task/models"
 	"tasks-svc/repos/task_repo"
 )
 
 type GetTasksByPatientIDQueryHandler func(ctx context.Context, patientID uuid.UUID) ([]*models.Task, error)
 
-func NewGetTasksByPatientIDQueryHandler(_ hwes.AggregateStore) GetTasksByPatientIDQueryHandler {
+func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) ([]*models.Task, error) {
 		db := hwdb.GetDB()
 		taskRepo := task_repo.New(db)

@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"hwdb"
-	"hwes"
 	"hwutil"
 	"tasks-svc/internal/patient/models"
 	"tasks-svc/repos/patient_repo"
@@ -12,7 +11,7 @@ import (
 
 type GetPatientsByWardQueryHandler func(ctx context.Context, wardID uuid.UUID) ([]*models.Patient, error)
 
-func NewGetPatientsByWardQueryHandler(_ hwes.AggregateStore) GetPatientsByWardQueryHandler {
+func NewGetPatientsByWardQueryHandler() GetPatientsByWardQueryHandler {
 	return func(ctx context.Context, wardID uuid.UUID) ([]*models.Patient, error) {
 		db := hwdb.GetDB()
 		patientRepo := patient_repo.New(db)
