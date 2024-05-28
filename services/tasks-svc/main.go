@@ -19,6 +19,7 @@ import (
 	patient "tasks-svc/internal/patient/api"
 	"tasks-svc/internal/room"
 	task "tasks-svc/internal/task/api"
+	"tasks-svc/internal/ward"
 )
 
 const ServiceName = "tasks-svc"
@@ -64,6 +65,7 @@ func main() {
 		pb.RegisterPatientServiceServer(grpcServer, patient.NewPatientGrpcService(aggregateStore, patientHandlers))
 		pb.RegisterBedServiceServer(grpcServer, bed.NewServiceServer())
 		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer())
+		pb.RegisterWardServiceServer(grpcServer, ward.NewServiceServer())
 	})
 
 	// Close context

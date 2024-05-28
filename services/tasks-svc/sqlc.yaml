@@ -42,3 +42,11 @@ sql:
         <<: *repo-go
         package: "room_repo"
         out: "repos/room_repo"
+
+  - <<: *repo
+    queries: "./repos/ward_repo.sql"
+    gen:
+      go:
+        <<: *repo-go
+        package: "ward_repo"
+        out: "repos/ward_repo"

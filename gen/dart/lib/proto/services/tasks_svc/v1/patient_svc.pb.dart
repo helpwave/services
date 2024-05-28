@@ -13,7 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'types.pbenum.dart' as $20;
+import 'types.pbenum.dart' as $21;
 
 class CreatePatientRequest extends $pb.GeneratedMessage {
   factory CreatePatientRequest({
@@ -1372,7 +1372,7 @@ class GetPatientDetailsResponse_Task extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    $20.TaskStatus? status,
+    $21.TaskStatus? status,
     $core.String? assignedUserId,
     $core.String? patientId,
     $core.bool? public,
@@ -1413,7 +1413,7 @@ class GetPatientDetailsResponse_Task extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..e<$20.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $20.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $20.TaskStatus.valueOf, enumValues: $20.TaskStatus.values)
+    ..e<$21.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $21.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $21.TaskStatus.valueOf, enumValues: $21.TaskStatus.values)
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOS(6, _omitFieldNames ? '' : 'patientId')
     ..aOB(7, _omitFieldNames ? '' : 'public')
@@ -1470,9 +1470,9 @@ class GetPatientDetailsResponse_Task extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $20.TaskStatus get status => $_getN(3);
+  $21.TaskStatus get status => $_getN(3);
   @$pb.TagNumber(4)
-  set status($20.TaskStatus v) { setField(4, v); }
+  set status($21.TaskStatus v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)
@@ -2034,7 +2034,7 @@ class GetPatientListResponse_Task extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    $20.TaskStatus? status,
+    $21.TaskStatus? status,
     $core.String? assignedUserId,
     $core.String? patientId,
     $core.bool? public,
@@ -2075,7 +2075,7 @@ class GetPatientListResponse_Task extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..e<$20.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $20.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $20.TaskStatus.valueOf, enumValues: $20.TaskStatus.values)
+    ..e<$21.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $21.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $21.TaskStatus.valueOf, enumValues: $21.TaskStatus.values)
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOS(6, _omitFieldNames ? '' : 'patientId')
     ..aOB(7, _omitFieldNames ? '' : 'public')
@@ -2132,9 +2132,9 @@ class GetPatientListResponse_Task extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $20.TaskStatus get status => $_getN(3);
+  $21.TaskStatus get status => $_getN(3);
   @$pb.TagNumber(4)
-  set status($20.TaskStatus v) { setField(4, v); }
+  set status($21.TaskStatus v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)

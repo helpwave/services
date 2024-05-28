@@ -119,7 +119,6 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 
 	// TODO: Auth
 
-	// TODO: Check if this query is working properly
 	rows, err := roomRepo.GetRoomsWithBeds(ctx, uuid.NullUUID{UUID: uuid.Nil, Valid: false})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
