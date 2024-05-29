@@ -13,8 +13,7 @@ type GetTasksByPatientIDQueryHandler func(ctx context.Context, patientID uuid.UU
 
 func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) ([]*models.Task, error) {
-		db := hwdb.GetDB()
-		taskRepo := task_repo.New(db)
+		taskRepo := task_repo.New(hwdb.GetDB())
 
 		tasksWithSubtasks, err := taskRepo.GetTasksWithSubtasksByPatient(ctx, patientID)
 		if err := hwdb.Error(ctx, err); err != nil {

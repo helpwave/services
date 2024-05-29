@@ -14,8 +14,7 @@ type GetPatientDetailsByIDQueryHandler func(ctx context.Context, patientID uuid.
 
 func NewGetPatientWithDetailsByIDQueryHandler(as hwes.AggregateStore) GetPatientDetailsByIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) (*models.PatientDetails, error) {
-		db := hwdb.GetDB()
-		patientRepo := patient_repo.New(db)
+		patientRepo := patient_repo.New(hwdb.GetDB())
 		taskHandlers := th.NewTaskHandlers(as)
 
 		patientRes, err := hwdb.Optional(patientRepo.GetPatientWithBedAndRoom)(ctx, patientID)

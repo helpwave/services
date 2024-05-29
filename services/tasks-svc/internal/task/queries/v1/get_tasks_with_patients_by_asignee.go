@@ -13,8 +13,7 @@ type GetTasksWithPatientsByAssigneeQueryHandler func(ctx context.Context, assign
 
 func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssigneeQueryHandler {
 	return func(ctx context.Context, assigneeID uuid.UUID) ([]*models.TaskWithPatient, error) {
-		db := hwdb.GetDB()
-		taskRepo := task_repo.New(db)
+		taskRepo := task_repo.New(hwdb.GetDB())
 
 		rows, err := taskRepo.GetTasksWithPatientByAssignee(ctx, uuid.NullUUID{
 			UUID:  assigneeID,

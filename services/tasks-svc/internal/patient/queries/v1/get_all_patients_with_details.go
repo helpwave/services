@@ -14,8 +14,7 @@ type GetAllPatientsWithDetailsQueryHandler func(ctx context.Context) ([]*models.
 
 func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHandler {
 	return func(ctx context.Context) ([]*models.PatientDetails, error) {
-		db := hwdb.GetDB()
-		patientRepo := patient_repo.New(db)
+		patientRepo := patient_repo.New(hwdb.GetDB())
 
 		rows, err := patientRepo.GetAllPatientsWithTasksBedAndRoom(ctx)
 		if err := hwdb.Error(ctx, err); err != nil {

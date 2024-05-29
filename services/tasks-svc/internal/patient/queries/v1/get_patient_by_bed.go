@@ -12,8 +12,7 @@ type GetPatientByBedQueryHandler func(ctx context.Context, bedID uuid.UUID) (*mo
 
 func NewGetPatientByBedQueryHandler() GetPatientByBedQueryHandler {
 	return func(ctx context.Context, bedID uuid.UUID) (*models.Patient, error) {
-		db := hwdb.GetDB()
-		patientRepo := patient_repo.New(db)
+		patientRepo := patient_repo.New(hwdb.GetDB())
 
 		patient, err := hwdb.Optional(patientRepo.GetPatientByBed)(ctx, uuid.NullUUID{
 			UUID:  bedID,

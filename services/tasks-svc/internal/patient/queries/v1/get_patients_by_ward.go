@@ -13,8 +13,7 @@ type GetPatientsByWardQueryHandler func(ctx context.Context, wardID uuid.UUID) (
 
 func NewGetPatientsByWardQueryHandler() GetPatientsByWardQueryHandler {
 	return func(ctx context.Context, wardID uuid.UUID) ([]*models.Patient, error) {
-		db := hwdb.GetDB()
-		patientRepo := patient_repo.New(db)
+		patientRepo := patient_repo.New(hwdb.GetDB())
 
 		patients, err := patientRepo.GetPatientsByWard(ctx, wardID)
 		if err := hwdb.Error(ctx, err); err != nil {
