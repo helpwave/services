@@ -107,6 +107,362 @@ final $typed_data.Uint8List getPatientResponseDescriptor = $convert.base64Decode
     'ABKAlSBndhcmRJZBopCgNCZWQSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWVC'
     'CQoHX2JlZF9pZEIKCghfd2FyZF9pZEIHCgVfcm9vbUIGCgRfYmVk');
 
+@$core.Deprecated('Use getPatientByBedRequestDescriptor instead')
+const GetPatientByBedRequest$json = {
+  '1': 'GetPatientByBedRequest',
+  '2': [
+    {'1': 'bed_id', '3': 1, '4': 1, '5': 9, '10': 'bedId'},
+  ],
+};
+
+/// Descriptor for `GetPatientByBedRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPatientByBedRequestDescriptor = $convert.base64Decode(
+    'ChZHZXRQYXRpZW50QnlCZWRSZXF1ZXN0EhUKBmJlZF9pZBgBIAEoCVIFYmVkSWQ=');
+
+@$core.Deprecated('Use getPatientByBedResponseDescriptor instead')
+const GetPatientByBedResponse$json = {
+  '1': 'GetPatientByBedResponse',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
+    {'1': 'notes', '3': 3, '4': 1, '5': 9, '10': 'notes'},
+    {'1': 'bed_id', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'bedId', '17': true},
+  ],
+  '8': [
+    {'1': '_bed_id'},
+  ],
+};
+
+/// Descriptor for `GetPatientByBedResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPatientByBedResponseDescriptor = $convert.base64Decode(
+    'ChdHZXRQYXRpZW50QnlCZWRSZXNwb25zZRIOCgJpZBgBIAEoCVICaWQSOgoZaHVtYW5fcmVhZG'
+    'FibGVfaWRlbnRpZmllchgCIAEoCVIXaHVtYW5SZWFkYWJsZUlkZW50aWZpZXISFAoFbm90ZXMY'
+    'AyABKAlSBW5vdGVzEhoKBmJlZF9pZBgEIAEoCUgAUgViZWRJZIgBAUIJCgdfYmVkX2lk');
+
+@$core.Deprecated('Use getPatientsByWardRequestDescriptor instead')
+const GetPatientsByWardRequest$json = {
+  '1': 'GetPatientsByWardRequest',
+  '2': [
+    {'1': 'ward_id', '3': 1, '4': 1, '5': 9, '10': 'wardId'},
+  ],
+};
+
+/// Descriptor for `GetPatientsByWardRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPatientsByWardRequestDescriptor = $convert.base64Decode(
+    'ChhHZXRQYXRpZW50c0J5V2FyZFJlcXVlc3QSFwoHd2FyZF9pZBgBIAEoCVIGd2FyZElk');
+
+@$core.Deprecated('Use getPatientsByWardResponseDescriptor instead')
+const GetPatientsByWardResponse$json = {
+  '1': 'GetPatientsByWardResponse',
+  '2': [
+    {'1': 'patients', '3': 1, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientsByWardResponse.Patient', '10': 'patients'},
+  ],
+  '3': [GetPatientsByWardResponse_Patient$json],
+};
+
+@$core.Deprecated('Use getPatientsByWardResponseDescriptor instead')
+const GetPatientsByWardResponse_Patient$json = {
+  '1': 'Patient',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
+    {'1': 'notes', '3': 3, '4': 1, '5': 9, '10': 'notes'},
+    {'1': 'bed_id', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'bedId', '17': true},
+  ],
+  '8': [
+    {'1': '_bed_id'},
+  ],
+};
+
+/// Descriptor for `GetPatientsByWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPatientsByWardResponseDescriptor = $convert.base64Decode(
+    'ChlHZXRQYXRpZW50c0J5V2FyZFJlc3BvbnNlEloKCHBhdGllbnRzGAEgAygLMj4ucHJvdG8uc2'
+    'VydmljZXMudGFza3Nfc3ZjLnYxLkdldFBhdGllbnRzQnlXYXJkUmVzcG9uc2UuUGF0aWVudFII'
+    'cGF0aWVudHMakgEKB1BhdGllbnQSDgoCaWQYASABKAlSAmlkEjoKGWh1bWFuX3JlYWRhYmxlX2'
+    'lkZW50aWZpZXIYAiABKAlSF2h1bWFuUmVhZGFibGVJZGVudGlmaWVyEhQKBW5vdGVzGAMgASgJ'
+    'UgVub3RlcxIaCgZiZWRfaWQYBCABKAlIAFIFYmVkSWSIAQFCCQoHX2JlZF9pZA==');
+
+@$core.Deprecated('Use getPatientAssignmentByWardRequestDescriptor instead')
+const GetPatientAssignmentByWardRequest$json = {
+  '1': 'GetPatientAssignmentByWardRequest',
+  '2': [
+    {'1': 'ward_id', '3': 1, '4': 1, '5': 9, '10': 'wardId'},
+  ],
+};
+
+/// Descriptor for `GetPatientAssignmentByWardRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPatientAssignmentByWardRequestDescriptor = $convert.base64Decode(
+    'CiFHZXRQYXRpZW50QXNzaWdubWVudEJ5V2FyZFJlcXVlc3QSFwoHd2FyZF9pZBgBIAEoCVIGd2'
+    'FyZElk');
+
+@$core.Deprecated('Use getPatientAssignmentByWardResponseDescriptor instead')
+const GetPatientAssignmentByWardResponse$json = {
+  '1': 'GetPatientAssignmentByWardResponse',
+  '2': [
+    {'1': 'rooms', '3': 1, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room', '10': 'rooms'},
+  ],
+  '3': [GetPatientAssignmentByWardResponse_Room$json],
+};
+
+@$core.Deprecated('Use getPatientAssignmentByWardResponseDescriptor instead')
+const GetPatientAssignmentByWardResponse_Room$json = {
+  '1': 'Room',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'beds', '3': 3, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed', '10': 'beds'},
+  ],
+  '3': [GetPatientAssignmentByWardResponse_Room_Bed$json],
+};
+
+@$core.Deprecated('Use getPatientAssignmentByWardResponseDescriptor instead')
+const GetPatientAssignmentByWardResponse_Room_Bed$json = {
+  '1': 'Bed',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'patient', '3': 3, '4': 1, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse.Room.Bed.Patient', '9': 0, '10': 'patient', '17': true},
+  ],
+  '3': [GetPatientAssignmentByWardResponse_Room_Bed_Patient$json],
+  '8': [
+    {'1': '_patient'},
+  ],
+};
+
+@$core.Deprecated('Use getPatientAssignmentByWardResponseDescriptor instead')
+const GetPatientAssignmentByWardResponse_Room_Bed_Patient$json = {
+  '1': 'Patient',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+  ],
+};
+
+/// Descriptor for `GetPatientAssignmentByWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPatientAssignmentByWardResponseDescriptor = $convert.base64Decode(
+    'CiJHZXRQYXRpZW50QXNzaWdubWVudEJ5V2FyZFJlc3BvbnNlEloKBXJvb21zGAEgAygLMkQucH'
+    'JvdG8uc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldFBhdGllbnRBc3NpZ25tZW50QnlXYXJkUmVz'
+    'cG9uc2UuUm9vbVIFcm9vbXMa4AIKBFJvb20SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKA'
+    'lSBG5hbWUSXAoEYmVkcxgDIAMoCzJILnByb3RvLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRQ'
+    'YXRpZW50QXNzaWdubWVudEJ5V2FyZFJlc3BvbnNlLlJvb20uQmVkUgRiZWRzGtUBCgNCZWQSDg'
+    'oCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSbwoHcGF0aWVudBgDIAEoCzJQLnBy'
+    'b3RvLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRQYXRpZW50QXNzaWdubWVudEJ5V2FyZFJlc3'
+    'BvbnNlLlJvb20uQmVkLlBhdGllbnRIAFIHcGF0aWVudIgBARotCgdQYXRpZW50Eg4KAmlkGAEg'
+    'ASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lQgoKCF9wYXRpZW50');
+
+@$core.Deprecated('Use getPatientDetailsRequestDescriptor instead')
+const GetPatientDetailsRequest$json = {
+  '1': 'GetPatientDetailsRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `GetPatientDetailsRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPatientDetailsRequestDescriptor = $convert.base64Decode(
+    'ChhHZXRQYXRpZW50RGV0YWlsc1JlcXVlc3QSDgoCaWQYASABKAlSAmlk');
+
+@$core.Deprecated('Use getPatientDetailsResponseDescriptor instead')
+const GetPatientDetailsResponse$json = {
+  '1': 'GetPatientDetailsResponse',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
+    {'1': 'notes', '3': 3, '4': 1, '5': 9, '10': 'notes'},
+    {'1': 'tasks', '3': 4, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientDetailsResponse.Task', '10': 'tasks'},
+    {'1': 'room', '3': 5, '4': 1, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientDetailsResponse.Room', '9': 0, '10': 'room', '17': true},
+    {'1': 'bed', '3': 6, '4': 1, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientDetailsResponse.Bed', '9': 1, '10': 'bed', '17': true},
+    {'1': 'is_discharged', '3': 7, '4': 1, '5': 8, '10': 'isDischarged'},
+  ],
+  '3': [GetPatientDetailsResponse_Room$json, GetPatientDetailsResponse_Bed$json, GetPatientDetailsResponse_Task$json],
+  '8': [
+    {'1': '_room'},
+    {'1': '_bed'},
+  ],
+};
+
+@$core.Deprecated('Use getPatientDetailsResponseDescriptor instead')
+const GetPatientDetailsResponse_Room$json = {
+  '1': 'Room',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'ward_id', '3': 3, '4': 1, '5': 9, '10': 'wardId'},
+  ],
+};
+
+@$core.Deprecated('Use getPatientDetailsResponseDescriptor instead')
+const GetPatientDetailsResponse_Bed$json = {
+  '1': 'Bed',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+  ],
+};
+
+@$core.Deprecated('Use getPatientDetailsResponseDescriptor instead')
+const GetPatientDetailsResponse_Task$json = {
+  '1': 'Task',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'status', '3': 4, '4': 1, '5': 14, '6': '.proto.services.tasks_svc.v1.TaskStatus', '10': 'status'},
+    {'1': 'assigned_user_id', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'assignedUserId', '17': true},
+    {'1': 'patient_id', '3': 6, '4': 1, '5': 9, '10': 'patientId'},
+    {'1': 'public', '3': 7, '4': 1, '5': 8, '10': 'public'},
+    {'1': 'subtasks', '3': 8, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientDetailsResponse.Task.SubTask', '10': 'subtasks'},
+  ],
+  '3': [GetPatientDetailsResponse_Task_SubTask$json],
+  '8': [
+    {'1': '_assigned_user_id'},
+  ],
+};
+
+@$core.Deprecated('Use getPatientDetailsResponseDescriptor instead')
+const GetPatientDetailsResponse_Task_SubTask$json = {
+  '1': 'SubTask',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
+  ],
+};
+
+/// Descriptor for `GetPatientDetailsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPatientDetailsResponseDescriptor = $convert.base64Decode(
+    'ChlHZXRQYXRpZW50RGV0YWlsc1Jlc3BvbnNlEg4KAmlkGAEgASgJUgJpZBI6ChlodW1hbl9yZW'
+    'FkYWJsZV9pZGVudGlmaWVyGAIgASgJUhdodW1hblJlYWRhYmxlSWRlbnRpZmllchIUCgVub3Rl'
+    'cxgDIAEoCVIFbm90ZXMSUQoFdGFza3MYBCADKAsyOy5wcm90by5zZXJ2aWNlcy50YXNrc19zdm'
+    'MudjEuR2V0UGF0aWVudERldGFpbHNSZXNwb25zZS5UYXNrUgV0YXNrcxJUCgRyb29tGAUgASgL'
+    'MjsucHJvdG8uc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldFBhdGllbnREZXRhaWxzUmVzcG9uc2'
+    'UuUm9vbUgAUgRyb29tiAEBElEKA2JlZBgGIAEoCzI6LnByb3RvLnNlcnZpY2VzLnRhc2tzX3N2'
+    'Yy52MS5HZXRQYXRpZW50RGV0YWlsc1Jlc3BvbnNlLkJlZEgBUgNiZWSIAQESIwoNaXNfZGlzY2'
+    'hhcmdlZBgHIAEoCFIMaXNEaXNjaGFyZ2VkGkMKBFJvb20SDgoCaWQYASABKAlSAmlkEhIKBG5h'
+    'bWUYAiABKAlSBG5hbWUSFwoHd2FyZF9pZBgDIAEoCVIGd2FyZElkGikKA0JlZBIOCgJpZBgBIA'
+    'EoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRqsAwoEVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoE'
+    'bmFtZRgCIAEoCVIEbmFtZRIgCgtkZXNjcmlwdGlvbhgDIAEoCVILZGVzY3JpcHRpb24SPwoGc3'
+    'RhdHVzGAQgASgOMicucHJvdG8uc2VydmljZXMudGFza3Nfc3ZjLnYxLlRhc2tTdGF0dXNSBnN0'
+    'YXR1cxItChBhc3NpZ25lZF91c2VyX2lkGAUgASgJSABSDmFzc2lnbmVkVXNlcklkiAEBEh0KCn'
+    'BhdGllbnRfaWQYBiABKAlSCXBhdGllbnRJZBIWCgZwdWJsaWMYByABKAhSBnB1YmxpYxJfCghz'
+    'dWJ0YXNrcxgIIAMoCzJDLnByb3RvLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRQYXRpZW50RG'
+    'V0YWlsc1Jlc3BvbnNlLlRhc2suU3ViVGFza1IIc3VidGFza3MaQQoHU3ViVGFzaxIOCgJpZBgB'
+    'IAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRISCgRkb25lGAMgASgIUgRkb25lQhMKEV9hc3'
+    'NpZ25lZF91c2VyX2lkQgcKBV9yb29tQgYKBF9iZWQ=');
+
+@$core.Deprecated('Use getPatientListRequestDescriptor instead')
+const GetPatientListRequest$json = {
+  '1': 'GetPatientListRequest',
+  '2': [
+    {'1': 'ward_id', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'wardId', '17': true},
+  ],
+  '8': [
+    {'1': '_ward_id'},
+  ],
+};
+
+/// Descriptor for `GetPatientListRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPatientListRequestDescriptor = $convert.base64Decode(
+    'ChVHZXRQYXRpZW50TGlzdFJlcXVlc3QSHAoHd2FyZF9pZBgBIAEoCUgAUgZ3YXJkSWSIAQFCCg'
+    'oIX3dhcmRfaWQ=');
+
+@$core.Deprecated('Use getPatientListResponseDescriptor instead')
+const GetPatientListResponse$json = {
+  '1': 'GetPatientListResponse',
+  '2': [
+    {'1': 'active', '3': 1, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientListResponse.Patient', '10': 'active'},
+    {'1': 'unassigned_patients', '3': 2, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientListResponse.Patient', '10': 'unassignedPatients'},
+    {'1': 'discharged_patients', '3': 3, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientListResponse.Patient', '10': 'dischargedPatients'},
+  ],
+  '3': [GetPatientListResponse_Bed$json, GetPatientListResponse_Room$json, GetPatientListResponse_Patient$json, GetPatientListResponse_Task$json],
+};
+
+@$core.Deprecated('Use getPatientListResponseDescriptor instead')
+const GetPatientListResponse_Bed$json = {
+  '1': 'Bed',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+  ],
+};
+
+@$core.Deprecated('Use getPatientListResponseDescriptor instead')
+const GetPatientListResponse_Room$json = {
+  '1': 'Room',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'ward_id', '3': 3, '4': 1, '5': 9, '10': 'wardId'},
+  ],
+};
+
+@$core.Deprecated('Use getPatientListResponseDescriptor instead')
+const GetPatientListResponse_Patient$json = {
+  '1': 'Patient',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
+    {'1': 'room', '3': 3, '4': 1, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientListResponse.Room', '10': 'room'},
+    {'1': 'bed', '3': 4, '4': 1, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientListResponse.Bed', '10': 'bed'},
+    {'1': 'notes', '3': 5, '4': 1, '5': 9, '10': 'notes'},
+    {'1': 'tasks', '3': 6, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientListResponse.Task', '10': 'tasks'},
+  ],
+};
+
+@$core.Deprecated('Use getPatientListResponseDescriptor instead')
+const GetPatientListResponse_Task$json = {
+  '1': 'Task',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'status', '3': 4, '4': 1, '5': 14, '6': '.proto.services.tasks_svc.v1.TaskStatus', '10': 'status'},
+    {'1': 'assigned_user_id', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'assignedUserId', '17': true},
+    {'1': 'patient_id', '3': 6, '4': 1, '5': 9, '10': 'patientId'},
+    {'1': 'public', '3': 7, '4': 1, '5': 8, '10': 'public'},
+    {'1': 'subtasks', '3': 8, '4': 3, '5': 11, '6': '.proto.services.tasks_svc.v1.GetPatientListResponse.Task.SubTask', '10': 'subtasks'},
+  ],
+  '3': [GetPatientListResponse_Task_SubTask$json],
+  '8': [
+    {'1': '_assigned_user_id'},
+  ],
+};
+
+@$core.Deprecated('Use getPatientListResponseDescriptor instead')
+const GetPatientListResponse_Task_SubTask$json = {
+  '1': 'SubTask',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
+  ],
+};
+
+/// Descriptor for `GetPatientListResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPatientListResponseDescriptor = $convert.base64Decode(
+    'ChZHZXRQYXRpZW50TGlzdFJlc3BvbnNlElMKBmFjdGl2ZRgBIAMoCzI7LnByb3RvLnNlcnZpY2'
+    'VzLnRhc2tzX3N2Yy52MS5HZXRQYXRpZW50TGlzdFJlc3BvbnNlLlBhdGllbnRSBmFjdGl2ZRJs'
+    'ChN1bmFzc2lnbmVkX3BhdGllbnRzGAIgAygLMjsucHJvdG8uc2VydmljZXMudGFza3Nfc3ZjLn'
+    'YxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuUGF0aWVudFISdW5hc3NpZ25lZFBhdGllbnRzEmwK'
+    'E2Rpc2NoYXJnZWRfcGF0aWVudHMYAyADKAsyOy5wcm90by5zZXJ2aWNlcy50YXNrc19zdmMudj'
+    'EuR2V0UGF0aWVudExpc3RSZXNwb25zZS5QYXRpZW50UhJkaXNjaGFyZ2VkUGF0aWVudHMaKQoD'
+    'QmVkEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lGkMKBFJvb20SDgoCaWQYAS'
+    'ABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSFwoHd2FyZF9pZBgDIAEoCVIGd2FyZElkGtQC'
+    'CgdQYXRpZW50Eg4KAmlkGAEgASgJUgJpZBI6ChlodW1hbl9yZWFkYWJsZV9pZGVudGlmaWVyGA'
+    'IgASgJUhdodW1hblJlYWRhYmxlSWRlbnRpZmllchJMCgRyb29tGAMgASgLMjgucHJvdG8uc2Vy'
+    'dmljZXMudGFza3Nfc3ZjLnYxLkdldFBhdGllbnRMaXN0UmVzcG9uc2UuUm9vbVIEcm9vbRJJCg'
+    'NiZWQYBCABKAsyNy5wcm90by5zZXJ2aWNlcy50YXNrc19zdmMudjEuR2V0UGF0aWVudExpc3RS'
+    'ZXNwb25zZS5CZWRSA2JlZBIUCgVub3RlcxgFIAEoCVIFbm90ZXMSTgoFdGFza3MYBiADKAsyOC'
+    '5wcm90by5zZXJ2aWNlcy50YXNrc19zdmMudjEuR2V0UGF0aWVudExpc3RSZXNwb25zZS5UYXNr'
+    'UgV0YXNrcxqpAwoEVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCg'
+    'tkZXNjcmlwdGlvbhgDIAEoCVILZGVzY3JpcHRpb24SPwoGc3RhdHVzGAQgASgOMicucHJvdG8u'
+    'c2VydmljZXMudGFza3Nfc3ZjLnYxLlRhc2tTdGF0dXNSBnN0YXR1cxItChBhc3NpZ25lZF91c2'
+    'VyX2lkGAUgASgJSABSDmFzc2lnbmVkVXNlcklkiAEBEh0KCnBhdGllbnRfaWQYBiABKAlSCXBh'
+    'dGllbnRJZBIWCgZwdWJsaWMYByABKAhSBnB1YmxpYxJcCghzdWJ0YXNrcxgIIAMoCzJALnByb3'
+    'RvLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRQYXRpZW50TGlzdFJlc3BvbnNlLlRhc2suU3Vi'
+    'VGFza1IIc3VidGFza3MaQQoHU3ViVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCV'
+    'IEbmFtZRISCgRkb25lGAMgASgIUgRkb25lQhMKEV9hc3NpZ25lZF91c2VyX2lk');
+
 @$core.Deprecated('Use getRecentPatientsRequestDescriptor instead')
 const GetRecentPatientsRequest$json = {
   '1': 'GetRecentPatientsRequest',

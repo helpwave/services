@@ -1,9 +1,12 @@
 package api
 
 import (
+	"common"
 	"context"
 	pb "gen/proto/services/tasks_svc/v1"
 	"github.com/google/uuid"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwes"
 	"hwutil"
@@ -116,6 +119,168 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 		Subtasks:  subtasksRes,
 		Status:    task.Status,
 		CreatedAt: timestamppb.New(task.CreatedAt),
+	}, nil
+}
+
+func (s *TaskGrpcService) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPatientRequest) (*pb.GetTasksByPatientResponse, error) {
+	patientID, err := uuid.Parse(req.PatientId)
+	if err != nil {
+		return nil, err
+	}
+
+	tasksWithSubtasks, err := s.handlers.Queries.V1.GetTasksByPatient(ctx, patientID)
+	if err != nil {
+		return nil, err
+	}
+
+	taskResponse := make([]*pb.GetTasksByPatientResponse_Task, len(tasksWithSubtasks))
+	for ix, item := range tasksWithSubtasks {
+		taskResponse[ix] = &pb.GetTasksByPatientResponse_Task{
+			Id:             item.ID.String(),
+			Name:           item.Name,
+			Description:    item.Description,
+			Status:         item.Status,
+			PatientId:      item.PatientID.String(),
+			Public:         item.Public,
+			CreatedBy:      item.CreatedBy.String(),
+			CreatedAt:      timestamppb.New(item.CreatedAt),
+			DueAt:          timestamppb.New(item.DueAt),
+			Subtasks:       make([]*pb.GetTasksByPatientResponse_Task_SubTask, len(item.Subtasks)),
+			AssignedUserId: hwutil.PtrTo(item.AssignedUsers[0].String()), // TODO: #760
+		}
+
+		subtaskIdx := 0
+		for _, subtask := range item.Subtasks {
+			taskResponse[ix].Subtasks[subtaskIdx] = &pb.GetTasksByPatientResponse_Task_SubTask{
+				Id:        subtask.ID.String(),
+				Name:      subtask.Name,
+				Done:      subtask.Done,
+				CreatedBy: subtask.CreatedBy.String(),
+			}
+			subtaskIdx++
+		}
+	}
+
+	return &pb.GetTasksByPatientResponse{
+		Tasks: taskResponse,
+	}, nil
+}
+
+func (s *TaskGrpcService) GetTasksByPatientSortedByStatus(ctx context.Context, req *pb.GetTasksByPatientSortedByStatusRequest) (*pb.GetTasksByPatientSortedByStatusResponse, error) {
+	patientID, err := uuid.Parse(req.PatientId)
+	if err != nil {
+		return nil, err
+	}
+
+	tasksWithSubtasks, err := s.handlers.Queries.V1.GetTasksByPatient(ctx, patientID)
+	if err != nil {
+		return nil, err
+	}
+
+	todo := make(map[int]bool)
+	inprogress := make(map[int]bool)
+	done := make(map[int]bool)
+
+	// sort
+	for ix, task := range tasksWithSubtasks {
+		if task.Status == pb.TaskStatus_TASK_STATUS_TODO {
+			todo[ix] = true
+		} else if task.Status == pb.TaskStatus_TASK_STATUS_IN_PROGRESS {
+			inprogress[ix] = true
+		} else if task.Status == pb.TaskStatus_TASK_STATUS_DONE {
+			done[ix] = true
+		}
+	}
+
+	collectTasks := func(set map[int]bool) []*pb.GetTasksByPatientSortedByStatusResponse_Task {
+		res := make([]*pb.GetTasksByPatientSortedByStatusResponse_Task, 0, len(set))
+
+		for key, value := range set {
+			task := tasksWithSubtasks[key]
+
+			if value {
+				taskWithSub := &pb.GetTasksByPatientSortedByStatusResponse_Task{
+					Id:             task.ID.String(),
+					Name:           task.Name,
+					Description:    task.Description,
+					PatientId:      task.PatientID.String(),
+					Public:         task.Public,
+					CreatedBy:      task.CreatedBy.String(),
+					CreatedAt:      timestamppb.New(task.CreatedAt),
+					DueAt:          timestamppb.New(task.DueAt),
+					Subtasks:       make([]*pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask, len(task.Subtasks)),
+					AssignedUserId: hwutil.PtrTo(task.AssignedUsers[0].String()), // TODO: #760
+				}
+
+				subtaskIdx := 0
+				for _, subtask := range task.Subtasks {
+					taskWithSub.Subtasks[subtaskIdx] = &pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask{
+						Id:        subtask.ID.String(),
+						Name:      subtask.Name,
+						Done:      subtask.Done,
+						CreatedBy: subtask.CreatedBy.String(),
+					}
+					subtaskIdx++
+				}
+
+				res = append(res, taskWithSub)
+			}
+		}
+
+		return res
+	}
+
+	return &pb.GetTasksByPatientSortedByStatusResponse{
+		Todo:       collectTasks(todo),
+		InProgress: collectTasks(inprogress),
+		Done:       collectTasks(done),
+	}, nil
+}
+
+func (s *TaskGrpcService) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTasksRequest) (*pb.GetAssignedTasksResponse, error) {
+	asigneeID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	tasksWithPatients, err := s.handlers.Queries.V1.GetTasksWithPatientsByAssignee(ctx, asigneeID)
+	if err != nil {
+		return nil, err
+	}
+
+	taskResponse := make([]*pb.GetAssignedTasksResponse_Task, len(tasksWithPatients))
+	for ix, item := range tasksWithPatients {
+		taskResponse[ix] = &pb.GetAssignedTasksResponse_Task{
+			Id:             item.ID.String(),
+			Name:           item.Name,
+			Description:    item.Description,
+			Status:         item.Status,
+			Public:         item.Public,
+			CreatedBy:      item.CreatedBy.String(),
+			CreatedAt:      timestamppb.New(item.CreatedAt),
+			DueAt:          timestamppb.New(item.DueAt),
+			Subtasks:       make([]*pb.GetAssignedTasksResponse_Task_SubTask, len(item.Subtasks)),
+			AssignedUserId: item.AssignedUsers[0].String(), // TODO: #760
+			Patient: &pb.GetAssignedTasksResponse_Task_Patient{
+				Id:   item.PatientID.String(),
+				Name: item.Patient.HumanReadableIdentifier,
+			},
+		}
+
+		subtaskIdx := 0
+		for _, subtask := range item.Subtasks {
+			taskResponse[ix].Subtasks[subtaskIdx] = &pb.GetAssignedTasksResponse_Task_SubTask{
+				Id:        subtask.ID.String(),
+				Name:      subtask.Name,
+				Done:      subtask.Done,
+				CreatedBy: subtask.CreatedBy.String(),
+			}
+			subtaskIdx++
+		}
+	}
+
+	return &pb.GetAssignedTasksResponse{
+		Tasks: taskResponse,
 	}, nil
 }
 

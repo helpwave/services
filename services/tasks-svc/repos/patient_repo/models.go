@@ -55,6 +55,7 @@ type Task struct {
 	Public         bool
 	CreatedBy      uuid.UUID
 	DueAt          pgtype.Timestamp
+	CreatedAt      pgtype.Timestamp
 }
 
 type TaskTemplate struct {

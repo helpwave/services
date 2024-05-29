@@ -19,6 +19,8 @@
 const grpc = {};
 grpc.web = require('grpc-web');
 
+
+var proto_services_tasks_svc_v1_types_pb = require('../../../../proto/services/tasks_svc/v1/types_pb.js')
 const proto = {};
 proto.proto = {};
 proto.proto.services = {};
@@ -196,6 +198,311 @@ proto.proto.services.tasks_svc.v1.PatientServicePromiseClient.prototype.getPatie
       request,
       metadata || {},
       methodDescriptor_PatientService_GetPatient);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.GetPatientByBedRequest,
+ *   !proto.proto.services.tasks_svc.v1.GetPatientByBedResponse>}
+ */
+const methodDescriptor_PatientService_GetPatientByBed = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.PatientService/GetPatientByBed',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.GetPatientByBedRequest,
+  proto.proto.services.tasks_svc.v1.GetPatientByBedResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.GetPatientByBedRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.GetPatientByBedResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.GetPatientByBedRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.GetPatientByBedResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.GetPatientByBedResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.PatientServiceClient.prototype.getPatientByBed =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PatientService/GetPatientByBed',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientByBed,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.GetPatientByBedRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.GetPatientByBedResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.PatientServicePromiseClient.prototype.getPatientByBed =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PatientService/GetPatientByBed',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientByBed);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.GetPatientsByWardRequest,
+ *   !proto.proto.services.tasks_svc.v1.GetPatientsByWardResponse>}
+ */
+const methodDescriptor_PatientService_GetPatientsByWard = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.PatientService/GetPatientsByWard',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.GetPatientsByWardRequest,
+  proto.proto.services.tasks_svc.v1.GetPatientsByWardResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.GetPatientsByWardRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.GetPatientsByWardResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.GetPatientsByWardRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.GetPatientsByWardResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.GetPatientsByWardResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.PatientServiceClient.prototype.getPatientsByWard =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PatientService/GetPatientsByWard',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientsByWard,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.GetPatientsByWardRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.GetPatientsByWardResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.PatientServicePromiseClient.prototype.getPatientsByWard =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PatientService/GetPatientsByWard',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientsByWard);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.GetPatientAssignmentByWardRequest,
+ *   !proto.proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse>}
+ */
+const methodDescriptor_PatientService_GetPatientAssignmentByWard = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.PatientService/GetPatientAssignmentByWard',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.GetPatientAssignmentByWardRequest,
+  proto.proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.GetPatientAssignmentByWardRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.GetPatientAssignmentByWardRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.PatientServiceClient.prototype.getPatientAssignmentByWard =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PatientService/GetPatientAssignmentByWard',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientAssignmentByWard,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.GetPatientAssignmentByWardRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.GetPatientAssignmentByWardResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.PatientServicePromiseClient.prototype.getPatientAssignmentByWard =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PatientService/GetPatientAssignmentByWard',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientAssignmentByWard);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.GetPatientDetailsRequest,
+ *   !proto.proto.services.tasks_svc.v1.GetPatientDetailsResponse>}
+ */
+const methodDescriptor_PatientService_GetPatientDetails = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.PatientService/GetPatientDetails',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.GetPatientDetailsRequest,
+  proto.proto.services.tasks_svc.v1.GetPatientDetailsResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.GetPatientDetailsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.GetPatientDetailsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.GetPatientDetailsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.GetPatientDetailsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.GetPatientDetailsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.PatientServiceClient.prototype.getPatientDetails =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PatientService/GetPatientDetails',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientDetails,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.GetPatientDetailsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.GetPatientDetailsResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.PatientServicePromiseClient.prototype.getPatientDetails =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PatientService/GetPatientDetails',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientDetails);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.proto.services.tasks_svc.v1.GetPatientListRequest,
+ *   !proto.proto.services.tasks_svc.v1.GetPatientListResponse>}
+ */
+const methodDescriptor_PatientService_GetPatientList = new grpc.web.MethodDescriptor(
+  '/proto.services.tasks_svc.v1.PatientService/GetPatientList',
+  grpc.web.MethodType.UNARY,
+  proto.proto.services.tasks_svc.v1.GetPatientListRequest,
+  proto.proto.services.tasks_svc.v1.GetPatientListResponse,
+  /**
+   * @param {!proto.proto.services.tasks_svc.v1.GetPatientListRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.proto.services.tasks_svc.v1.GetPatientListResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.GetPatientListRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.proto.services.tasks_svc.v1.GetPatientListResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.proto.services.tasks_svc.v1.GetPatientListResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.proto.services.tasks_svc.v1.PatientServiceClient.prototype.getPatientList =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PatientService/GetPatientList',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientList,
+      callback);
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.GetPatientListRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.proto.services.tasks_svc.v1.GetPatientListResponse>}
+ *     Promise that resolves to the response
+ */
+proto.proto.services.tasks_svc.v1.PatientServicePromiseClient.prototype.getPatientList =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/proto.services.tasks_svc.v1.PatientService/GetPatientList',
+      request,
+      metadata || {},
+      methodDescriptor_PatientService_GetPatientList);
 };
 
 

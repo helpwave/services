@@ -7,10 +7,9 @@ import (
 )
 
 type Task struct {
-	ID             uuid.UUID
-	OrganizationID uuid.UUID
-	CreatedBy      uuid.UUID
-	CreatedAt      time.Time
+	ID        uuid.UUID
+	CreatedBy uuid.UUID
+	CreatedAt time.Time
 
 	Name          string
 	Description   string
@@ -29,4 +28,17 @@ type Subtask struct {
 
 	Name string
 	Done bool
+}
+
+type Patient struct {
+	ID                      uuid.UUID
+	HumanReadableIdentifier string
+	Notes                   string
+	BedID                   uuid.NullUUID
+	IsDischarged            bool
+}
+
+type TaskWithPatient struct {
+	Task
+	Patient Patient
 }

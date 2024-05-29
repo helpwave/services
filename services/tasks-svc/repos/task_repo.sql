@@ -1,7 +1,7 @@
 -- name: CreateTask :exec
 INSERT INTO tasks
-	(id, name, patient_id, status, created_by)
-VALUES ($1, $2, $3, $4, $5);
+	(id, name, patient_id, status, created_by, created_at)
+VALUES ($1, $2, $3, $4, $5, $6);
 
 -- name: UpdateTask :exec
 UPDATE tasks
@@ -31,3 +31,28 @@ WHERE id = $1;
 
 -- name: DeleteSubtask :exec
 DELETE FROM subtasks WHERE id = $1;
+
+-- name: GetTasksWithSubtasksByPatient :many
+SELECT
+	sqlc.embed(tasks),
+	subtasks.id as subtask_id,
+	subtasks.name as subtask_name,
+	subtasks.done as subtask_done,
+	subtasks.created_by as subtask_created_by
+FROM tasks
+JOIN patients ON patients.id = tasks.patient_id
+LEFT JOIN subtasks ON subtasks.task_id = tasks.id
+WHERE tasks.patient_id = $1;
+
+-- name: GetTasksWithPatientByAssignee :many
+SELECT
+	sqlc.embed(tasks),
+	sqlc.embed(patients),
+	subtasks.id as subtask_id,
+	subtasks.name as subtask_name,
+	subtasks.done as subtask_done,
+	subtasks.created_by as subtask_created_by
+FROM patients
+		 JOIN tasks ON tasks.patient_id = patients.id
+		 LEFT JOIN subtasks ON subtasks.task_id = tasks.id
+WHERE tasks.assigned_user_id = $1;
