@@ -11,6 +11,46 @@ import (
 	"github.com/google/uuid"
 )
 
+const createBed = `-- name: CreateBed :one
+INSERT INTO beds (room_id, name) VALUES ($1, $2) RETURNING id, room_id, name
+`
+
+type CreateBedParams struct {
+	RoomID uuid.UUID
+	Name   string
+}
+
+func (q *Queries) CreateBed(ctx context.Context, arg CreateBedParams) (Bed, error) {
+	row := q.db.QueryRow(ctx, createBed, arg.RoomID, arg.Name)
+	var i Bed
+	err := row.Scan(&i.ID, &i.RoomID, &i.Name)
+	return i, err
+}
+
+const deleteBed = `-- name: DeleteBed :exec
+DELETE FROM beds WHERE id = $1
+`
+
+func (q *Queries) DeleteBed(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteBed, id)
+	return err
+}
+
+const existsBed = `-- name: ExistsBed :one
+SELECT EXISTS (
+	SELECT 1
+	FROM beds
+	WHERE id = $1
+) bed_exists
+`
+
+func (q *Queries) ExistsBed(ctx context.Context, id uuid.UUID) (bool, error) {
+	row := q.db.QueryRow(ctx, existsBed, id)
+	var bed_exists bool
+	err := row.Scan(&bed_exists)
+	return bed_exists, err
+}
+
 const getBedAndRoomByBedId = `-- name: GetBedAndRoomByBedId :one
 SELECT
 	beds.id, beds.room_id, beds.name,
@@ -37,4 +77,94 @@ func (q *Queries) GetBedAndRoomByBedId(ctx context.Context, id uuid.UUID) (GetBe
 		&i.Room.WardID,
 	)
 	return i, err
+}
+
+const getBedById = `-- name: GetBedById :one
+SELECT id, room_id, name FROM beds
+WHERE id = $1
+LIMIT 1
+`
+
+func (q *Queries) GetBedById(ctx context.Context, id uuid.UUID) (Bed, error) {
+	row := q.db.QueryRow(ctx, getBedById, id)
+	var i Bed
+	err := row.Scan(&i.ID, &i.RoomID, &i.Name)
+	return i, err
+}
+
+const getBedWithRoomByPatient = `-- name: GetBedWithRoomByPatient :one
+SELECT
+	beds.id as bed_id, beds.name as bed_name,
+	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+FROM patients
+		 JOIN beds ON patients.bed_id = beds.id
+		 JOIN rooms ON beds.room_id = rooms.id
+WHERE patients.id = $1
+LIMIT 1
+`
+
+type GetBedWithRoomByPatientRow struct {
+	BedID    uuid.UUID
+	BedName  string
+	RoomID   uuid.UUID
+	RoomName string
+	WardID   uuid.UUID
+}
+
+func (q *Queries) GetBedWithRoomByPatient(ctx context.Context, patientID uuid.UUID) (GetBedWithRoomByPatientRow, error) {
+	row := q.db.QueryRow(ctx, getBedWithRoomByPatient, patientID)
+	var i GetBedWithRoomByPatientRow
+	err := row.Scan(
+		&i.BedID,
+		&i.BedName,
+		&i.RoomID,
+		&i.RoomName,
+		&i.WardID,
+	)
+	return i, err
+}
+
+const getBeds = `-- name: GetBeds :many
+SELECT id, room_id, name FROM beds
+WHERE (room_id = $1 OR $1 IS NULL)
+ORDER BY name ASC
+`
+
+func (q *Queries) GetBeds(ctx context.Context, roomID uuid.NullUUID) ([]Bed, error) {
+	rows, err := q.db.Query(ctx, getBeds, roomID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Bed{}
+	for rows.Next() {
+		var i Bed
+		if err := rows.Scan(&i.ID, &i.RoomID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateBed = `-- name: UpdateBed :exec
+UPDATE beds
+SET
+	name = coalesce($1, name),
+	room_id = coalesce($2, room_id)
+WHERE id = $3
+`
+
+type UpdateBedParams struct {
+	Name   *string
+	RoomID uuid.NullUUID
+	ID     uuid.UUID
+}
+
+func (q *Queries) UpdateBed(ctx context.Context, arg UpdateBedParams) error {
+	_, err := q.db.Exec(ctx, updateBed, arg.Name, arg.RoomID, arg.ID)
+	return err
 }

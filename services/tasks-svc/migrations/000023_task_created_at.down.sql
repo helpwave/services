@@ -1,0 +1,2 @@
+ALTER TABLE IF EXISTS tasks
+	DROP COLUMN created_at;
