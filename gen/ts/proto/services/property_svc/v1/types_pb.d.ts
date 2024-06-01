@@ -41,4 +41,5 @@ export enum FieldType {
   FIELD_TYPE_DATE = 4,
   FIELD_TYPE_DATE_TIME = 5,
   FIELD_TYPE_SELECT = 6,
+  FIELD_TYPE_MULTI_SELECT = 7,
 }

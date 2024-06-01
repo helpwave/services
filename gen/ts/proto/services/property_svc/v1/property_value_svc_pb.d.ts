@@ -33,6 +33,9 @@ export class AttachPropertyValueRequest extends jspb.Message {
   getSelectValue(): string;
   setSelectValue(value: string): AttachPropertyValueRequest;
 
+  getMultiSelectValue(): string;
+  setMultiSelectValue(value: string): AttachPropertyValueRequest;
+
   getValueCase(): AttachPropertyValueRequest.ValueCase;
 
   serializeBinary(): Uint8Array;
@@ -53,7 +56,29 @@ export namespace AttachPropertyValueRequest {
     dateValue?: proto_services_property_svc_v1_types_pb.Date.AsObject,
     dateTimeValue?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     selectValue: string,
+    multiSelectValue: string,
   }
+
+  export class MultiSelectValue extends jspb.Message {
+    getSelectValueList(): Array<string>;
+    setSelectValueList(value: Array<string>): MultiSelectValue;
+    clearSelectValueList(): MultiSelectValue;
+    addSelectValue(value: string, index?: number): MultiSelectValue;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): MultiSelectValue.AsObject;
+    static toObject(includeInstance: boolean, msg: MultiSelectValue): MultiSelectValue.AsObject;
+    static serializeBinaryToWriter(message: MultiSelectValue, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): MultiSelectValue;
+    static deserializeBinaryFromReader(message: MultiSelectValue, reader: jspb.BinaryReader): MultiSelectValue;
+  }
+
+  export namespace MultiSelectValue {
+    export type AsObject = {
+      selectValueList: Array<string>,
+    }
+  }
+
 
   export enum ValueCase { 
     VALUE_NOT_SET = 0,
@@ -63,6 +88,7 @@ export namespace AttachPropertyValueRequest {
     DATE_VALUE = 6,
     DATE_TIME_VALUE = 7,
     SELECT_VALUE = 8,
+    MULTI_SELECT_VALUE = 9,
   }
 }
 
@@ -206,6 +232,11 @@ export namespace GetAttachedPropertyValuesResponse {
     getSelectValue(): string;
     setSelectValue(value: string): Value;
 
+    getMultiSelectValue(): GetAttachedPropertyValuesResponse.Value.MultiSelectValue | undefined;
+    setMultiSelectValue(value?: GetAttachedPropertyValuesResponse.Value.MultiSelectValue): Value;
+    hasMultiSelectValue(): boolean;
+    clearMultiSelectValue(): Value;
+
     getValueCase(): Value.ValueCase;
 
     serializeBinary(): Uint8Array;
@@ -229,7 +260,29 @@ export namespace GetAttachedPropertyValuesResponse {
       dateValue?: proto_services_property_svc_v1_types_pb.Date.AsObject,
       dateTimeValue?: google_protobuf_timestamp_pb.Timestamp.AsObject,
       selectValue: string,
+      multiSelectValue?: GetAttachedPropertyValuesResponse.Value.MultiSelectValue.AsObject,
     }
+
+    export class MultiSelectValue extends jspb.Message {
+      getSelectValueList(): Array<string>;
+      setSelectValueList(value: Array<string>): MultiSelectValue;
+      clearSelectValueList(): MultiSelectValue;
+      addSelectValue(value: string, index?: number): MultiSelectValue;
+
+      serializeBinary(): Uint8Array;
+      toObject(includeInstance?: boolean): MultiSelectValue.AsObject;
+      static toObject(includeInstance: boolean, msg: MultiSelectValue): MultiSelectValue.AsObject;
+      static serializeBinaryToWriter(message: MultiSelectValue, writer: jspb.BinaryWriter): void;
+      static deserializeBinary(bytes: Uint8Array): MultiSelectValue;
+      static deserializeBinaryFromReader(message: MultiSelectValue, reader: jspb.BinaryReader): MultiSelectValue;
+    }
+
+    export namespace MultiSelectValue {
+      export type AsObject = {
+        selectValueList: Array<string>,
+      }
+    }
+
 
     export enum ValueCase { 
       VALUE_NOT_SET = 0,
@@ -239,6 +292,7 @@ export namespace GetAttachedPropertyValuesResponse {
       DATE_VALUE = 9,
       DATE_TIME_VALUE = 10,
       SELECT_VALUE = 11,
+      MULTI_SELECT_VALUE = 12,
     }
 
     export enum DescriptionCase { 

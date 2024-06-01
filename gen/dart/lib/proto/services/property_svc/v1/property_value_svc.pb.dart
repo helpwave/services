@@ -17,6 +17,50 @@ import '../../../../google/protobuf/timestamp.pb.dart' as $17;
 import 'types.pb.dart' as $16;
 import 'types.pbenum.dart' as $16;
 
+class AttachPropertyValueRequest_MultiSelectValue extends $pb.GeneratedMessage {
+  factory AttachPropertyValueRequest_MultiSelectValue({
+    $core.Iterable<$core.String>? selectValue,
+  }) {
+    final $result = create();
+    if (selectValue != null) {
+      $result.selectValue.addAll(selectValue);
+    }
+    return $result;
+  }
+  AttachPropertyValueRequest_MultiSelectValue._() : super();
+  factory AttachPropertyValueRequest_MultiSelectValue.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AttachPropertyValueRequest_MultiSelectValue.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttachPropertyValueRequest.MultiSelectValue', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..pPS(1, _omitFieldNames ? '' : 'selectValue')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AttachPropertyValueRequest_MultiSelectValue clone() => AttachPropertyValueRequest_MultiSelectValue()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AttachPropertyValueRequest_MultiSelectValue copyWith(void Function(AttachPropertyValueRequest_MultiSelectValue) updates) => super.copyWith((message) => updates(message as AttachPropertyValueRequest_MultiSelectValue)) as AttachPropertyValueRequest_MultiSelectValue;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static AttachPropertyValueRequest_MultiSelectValue create() => AttachPropertyValueRequest_MultiSelectValue._();
+  AttachPropertyValueRequest_MultiSelectValue createEmptyInstance() => create();
+  static $pb.PbList<AttachPropertyValueRequest_MultiSelectValue> createRepeated() => $pb.PbList<AttachPropertyValueRequest_MultiSelectValue>();
+  @$core.pragma('dart2js:noInline')
+  static AttachPropertyValueRequest_MultiSelectValue getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AttachPropertyValueRequest_MultiSelectValue>(create);
+  static AttachPropertyValueRequest_MultiSelectValue? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.String> get selectValue => $_getList(0);
+}
+
 enum AttachPropertyValueRequest_Value {
   textValue, 
   numberValue, 
@@ -24,6 +68,7 @@ enum AttachPropertyValueRequest_Value {
   dateValue, 
   dateTimeValue, 
   selectValue, 
+  multiSelectValue, 
   notSet
 }
 
@@ -39,6 +84,7 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     $16.Date? dateValue,
     $17.Timestamp? dateTimeValue,
     $core.String? selectValue,
+    $core.String? multiSelectValue,
   }) {
     final $result = create();
     if (subjectId != null) {
@@ -65,6 +111,9 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     if (selectValue != null) {
       $result.selectValue = selectValue;
     }
+    if (multiSelectValue != null) {
+      $result.multiSelectValue = multiSelectValue;
+    }
     return $result;
   }
   AttachPropertyValueRequest._() : super();
@@ -78,10 +127,11 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     6 : AttachPropertyValueRequest_Value.dateValue,
     7 : AttachPropertyValueRequest_Value.dateTimeValue,
     8 : AttachPropertyValueRequest_Value.selectValue,
+    9 : AttachPropertyValueRequest_Value.multiSelectValue,
     0 : AttachPropertyValueRequest_Value.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttachPropertyValueRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [3, 4, 5, 6, 7, 8])
+    ..oo(0, [3, 4, 5, 6, 7, 8, 9])
     ..aOS(1, _omitFieldNames ? '' : 'subjectId')
     ..aOS(2, _omitFieldNames ? '' : 'propertyId')
     ..aOS(3, _omitFieldNames ? '' : 'textValue')
@@ -90,6 +140,7 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     ..aOM<$16.Date>(6, _omitFieldNames ? '' : 'dateValue', subBuilder: $16.Date.create)
     ..aOM<$17.Timestamp>(7, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $17.Timestamp.create)
     ..aOS(8, _omitFieldNames ? '' : 'selectValue')
+    ..aOS(9, _omitFieldNames ? '' : 'multiSelectValue')
     ..hasRequiredFields = false
   ;
 
@@ -192,6 +243,15 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   $core.bool hasSelectValue() => $_has(7);
   @$pb.TagNumber(8)
   void clearSelectValue() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get multiSelectValue => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set multiSelectValue($core.String v) { $_setString(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasMultiSelectValue() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearMultiSelectValue() => clearField(9);
 }
 
 class AttachPropertyValueResponse extends $pb.GeneratedMessage {
@@ -373,6 +433,50 @@ class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
   TaskPropertyMatcher ensureTaskMatcher() => $_ensure(0);
 }
 
+class GetAttachedPropertyValuesResponse_Value_MultiSelectValue extends $pb.GeneratedMessage {
+  factory GetAttachedPropertyValuesResponse_Value_MultiSelectValue({
+    $core.Iterable<$core.String>? selectValue,
+  }) {
+    final $result = create();
+    if (selectValue != null) {
+      $result.selectValue.addAll(selectValue);
+    }
+    return $result;
+  }
+  GetAttachedPropertyValuesResponse_Value_MultiSelectValue._() : super();
+  factory GetAttachedPropertyValuesResponse_Value_MultiSelectValue.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAttachedPropertyValuesResponse_Value_MultiSelectValue.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAttachedPropertyValuesResponse.Value.MultiSelectValue', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
+    ..pPS(1, _omitFieldNames ? '' : 'selectValue')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetAttachedPropertyValuesResponse_Value_MultiSelectValue clone() => GetAttachedPropertyValuesResponse_Value_MultiSelectValue()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetAttachedPropertyValuesResponse_Value_MultiSelectValue copyWith(void Function(GetAttachedPropertyValuesResponse_Value_MultiSelectValue) updates) => super.copyWith((message) => updates(message as GetAttachedPropertyValuesResponse_Value_MultiSelectValue)) as GetAttachedPropertyValuesResponse_Value_MultiSelectValue;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetAttachedPropertyValuesResponse_Value_MultiSelectValue create() => GetAttachedPropertyValuesResponse_Value_MultiSelectValue._();
+  GetAttachedPropertyValuesResponse_Value_MultiSelectValue createEmptyInstance() => create();
+  static $pb.PbList<GetAttachedPropertyValuesResponse_Value_MultiSelectValue> createRepeated() => $pb.PbList<GetAttachedPropertyValuesResponse_Value_MultiSelectValue>();
+  @$core.pragma('dart2js:noInline')
+  static GetAttachedPropertyValuesResponse_Value_MultiSelectValue getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAttachedPropertyValuesResponse_Value_MultiSelectValue>(create);
+  static GetAttachedPropertyValuesResponse_Value_MultiSelectValue? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.String> get selectValue => $_getList(0);
+}
+
 enum GetAttachedPropertyValuesResponse_Value_Value {
   textValue, 
   numberValue, 
@@ -380,6 +484,7 @@ enum GetAttachedPropertyValuesResponse_Value_Value {
   dateValue, 
   dateTimeValue, 
   selectValue, 
+  multiSelectValue, 
   notSet
 }
 
@@ -396,6 +501,7 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     $16.Date? dateValue,
     $17.Timestamp? dateTimeValue,
     $core.String? selectValue,
+    GetAttachedPropertyValuesResponse_Value_MultiSelectValue? multiSelectValue,
   }) {
     final $result = create();
     if (propertyId != null) {
@@ -431,6 +537,9 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     if (selectValue != null) {
       $result.selectValue = selectValue;
     }
+    if (multiSelectValue != null) {
+      $result.multiSelectValue = multiSelectValue;
+    }
     return $result;
   }
   GetAttachedPropertyValuesResponse_Value._() : super();
@@ -444,10 +553,11 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     9 : GetAttachedPropertyValuesResponse_Value_Value.dateValue,
     10 : GetAttachedPropertyValuesResponse_Value_Value.dateTimeValue,
     11 : GetAttachedPropertyValuesResponse_Value_Value.selectValue,
+    12 : GetAttachedPropertyValuesResponse_Value_Value.multiSelectValue,
     0 : GetAttachedPropertyValuesResponse_Value_Value.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAttachedPropertyValuesResponse.Value', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [6, 7, 8, 9, 10, 11])
+    ..oo(0, [6, 7, 8, 9, 10, 11, 12])
     ..aOS(1, _omitFieldNames ? '' : 'propertyId')
     ..e<$16.FieldType>(2, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $16.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $16.FieldType.valueOf, enumValues: $16.FieldType.values)
     ..aOS(3, _omitFieldNames ? '' : 'name')
@@ -459,6 +569,7 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     ..aOM<$16.Date>(9, _omitFieldNames ? '' : 'dateValue', subBuilder: $16.Date.create)
     ..aOM<$17.Timestamp>(10, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $17.Timestamp.create)
     ..aOS(11, _omitFieldNames ? '' : 'selectValue')
+    ..aOM<GetAttachedPropertyValuesResponse_Value_MultiSelectValue>(12, _omitFieldNames ? '' : 'multiSelectValue', subBuilder: GetAttachedPropertyValuesResponse_Value_MultiSelectValue.create)
     ..hasRequiredFields = false
   ;
 
@@ -588,6 +699,17 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
   $core.bool hasSelectValue() => $_has(10);
   @$pb.TagNumber(11)
   void clearSelectValue() => clearField(11);
+
+  @$pb.TagNumber(12)
+  GetAttachedPropertyValuesResponse_Value_MultiSelectValue get multiSelectValue => $_getN(11);
+  @$pb.TagNumber(12)
+  set multiSelectValue(GetAttachedPropertyValuesResponse_Value_MultiSelectValue v) { setField(12, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasMultiSelectValue() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearMultiSelectValue() => clearField(12);
+  @$pb.TagNumber(12)
+  GetAttachedPropertyValuesResponse_Value_MultiSelectValue ensureMultiSelectValue() => $_ensure(11);
 }
 
 class GetAttachedPropertyValuesResponse extends $pb.GeneratedMessage {

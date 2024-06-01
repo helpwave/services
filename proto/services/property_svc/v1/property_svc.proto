@@ -118,8 +118,6 @@ message UpdatePropertyRequest {
       optional bool is_custom = 4;
     }
   }
-
-  // TODO: TBD: optional bool always_include_for_current_context = 11;
 }
 
 message UpdatePropertyResponse {}
@@ -161,7 +159,6 @@ message GetPropertiesBySubjectTypeResponse {
         bool is_custom = 4;
       }
     }
-    // TODO: TBD: optional bool always_include_for_current_context = 11;
   }
 
   repeated Property properties = 1;

@@ -25,9 +25,19 @@ const AttachPropertyValueRequest$json = {
     {'1': 'date_value', '3': 6, '4': 1, '5': 11, '6': '.proto.services.property_svc.v1.Date', '9': 0, '10': 'dateValue'},
     {'1': 'date_time_value', '3': 7, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'dateTimeValue'},
     {'1': 'select_value', '3': 8, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
+    {'1': 'multi_select_value', '3': 9, '4': 1, '5': 9, '9': 0, '10': 'multiSelectValue'},
   ],
+  '3': [AttachPropertyValueRequest_MultiSelectValue$json],
   '8': [
     {'1': 'value'},
+  ],
+};
+
+@$core.Deprecated('Use attachPropertyValueRequestDescriptor instead')
+const AttachPropertyValueRequest_MultiSelectValue$json = {
+  '1': 'MultiSelectValue',
+  '2': [
+    {'1': 'select_value', '3': 1, '4': 3, '5': 9, '10': 'selectValue'},
   ],
 };
 
@@ -39,7 +49,9 @@ final $typed_data.Uint8List attachPropertyValueRequestDescriptor = $convert.base
     'Jvb2xfdmFsdWUYBSABKAhIAFIJYm9vbFZhbHVlEkUKCmRhdGVfdmFsdWUYBiABKAsyJC5wcm90'
     'by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuRGF0ZUgAUglkYXRlVmFsdWUSRAoPZGF0ZV90aW'
     '1lX3ZhbHVlGAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEgAUg1kYXRlVGltZVZh'
-    'bHVlEiMKDHNlbGVjdF92YWx1ZRgIIAEoCUgAUgtzZWxlY3RWYWx1ZUIHCgV2YWx1ZQ==');
+    'bHVlEiMKDHNlbGVjdF92YWx1ZRgIIAEoCUgAUgtzZWxlY3RWYWx1ZRIuChJtdWx0aV9zZWxlY3'
+    'RfdmFsdWUYCSABKAlIAFIQbXVsdGlTZWxlY3RWYWx1ZRo1ChBNdWx0aVNlbGVjdFZhbHVlEiEK'
+    'DHNlbGVjdF92YWx1ZRgBIAMoCVILc2VsZWN0VmFsdWVCBwoFdmFsdWU=');
 
 @$core.Deprecated('Use attachPropertyValueResponseDescriptor instead')
 const AttachPropertyValueResponse$json = {
@@ -113,10 +125,20 @@ const GetAttachedPropertyValuesResponse_Value$json = {
     {'1': 'date_value', '3': 9, '4': 1, '5': 11, '6': '.proto.services.property_svc.v1.Date', '9': 0, '10': 'dateValue'},
     {'1': 'date_time_value', '3': 10, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'dateTimeValue'},
     {'1': 'select_value', '3': 11, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
+    {'1': 'multi_select_value', '3': 12, '4': 1, '5': 11, '6': '.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue', '9': 0, '10': 'multiSelectValue'},
   ],
+  '3': [GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json],
   '8': [
     {'1': 'value'},
     {'1': '_description'},
+  ],
+};
+
+@$core.Deprecated('Use getAttachedPropertyValuesResponseDescriptor instead')
+const GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json = {
+  '1': 'MultiSelectValue',
+  '2': [
+    {'1': 'select_value', '3': 1, '4': 3, '5': 9, '10': 'selectValue'},
   ],
 };
 
@@ -124,7 +146,7 @@ const GetAttachedPropertyValuesResponse_Value$json = {
 final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $convert.base64Decode(
     'CiFHZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2USXwoGdmFsdWVzGAEgAygLMkcucH'
     'JvdG8uc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkdldEF0dGFjaGVkUHJvcGVydHlWYWx1ZXNS'
-    'ZXNwb25zZS5WYWx1ZVIGdmFsdWVzGoAECgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcH'
+    'ZXNwb25zZS5WYWx1ZVIGdmFsdWVzGsIFCgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcH'
     'JvcGVydHlJZBJICgpmaWVsZF90eXBlGAIgASgOMikucHJvdG8uc2VydmljZXMucHJvcGVydHlf'
     'c3ZjLnYxLkZpZWxkVHlwZVIJZmllbGRUeXBlEhIKBG5hbWUYAyABKAlSBG5hbWUSJQoLZGVzY3'
     'JpcHRpb24YBCABKAlIAVILZGVzY3JpcHRpb26IAQESHwoLaXNfYXJjaGl2ZWQYBSABKAhSCmlz'
@@ -133,5 +155,9 @@ final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $conve
     'EkUKCmRhdGVfdmFsdWUYCSABKAsyJC5wcm90by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuRG'
     'F0ZUgAUglkYXRlVmFsdWUSRAoPZGF0ZV90aW1lX3ZhbHVlGAogASgLMhouZ29vZ2xlLnByb3Rv'
     'YnVmLlRpbWVzdGFtcEgAUg1kYXRlVGltZVZhbHVlEiMKDHNlbGVjdF92YWx1ZRgLIAEoCUgAUg'
-    'tzZWxlY3RWYWx1ZUIHCgV2YWx1ZUIOCgxfZGVzY3JpcHRpb24=');
+    'tzZWxlY3RWYWx1ZRKIAQoSbXVsdGlfc2VsZWN0X3ZhbHVlGAwgASgLMlgucHJvdG8uc2Vydmlj'
+    'ZXMucHJvcGVydHlfc3ZjLnYxLkdldEF0dGFjaGVkUHJvcGVydHlWYWx1ZXNSZXNwb25zZS5WYW'
+    'x1ZS5NdWx0aVNlbGVjdFZhbHVlSABSEG11bHRpU2VsZWN0VmFsdWUaNQoQTXVsdGlTZWxlY3RW'
+    'YWx1ZRIhCgxzZWxlY3RfdmFsdWUYASADKAlSC3NlbGVjdFZhbHVlQgcKBXZhbHVlQg4KDF9kZX'
+    'NjcmlwdGlvbg==');
 
