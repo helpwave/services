@@ -25,7 +25,7 @@ message AttachPropertyValueRequest{
   }
 
   message MultiSelectValue {
-    repeated string select_value = 1; // ids of options
+    repeated string select_values = 1; // ids of options
   }
 }
 
@@ -77,7 +77,7 @@ message GetAttachedPropertyValuesResponse {
     }
 
     message MultiSelectValue {
-      repeated string select_value = 1; // ids of options
+      repeated string select_values = 1; // ids of options
     }
   }
 

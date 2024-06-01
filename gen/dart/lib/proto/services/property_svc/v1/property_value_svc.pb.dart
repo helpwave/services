@@ -19,11 +19,11 @@ import 'types.pbenum.dart' as $16;
 
 class AttachPropertyValueRequest_MultiSelectValue extends $pb.GeneratedMessage {
   factory AttachPropertyValueRequest_MultiSelectValue({
-    $core.Iterable<$core.String>? selectValue,
+    $core.Iterable<$core.String>? selectValues,
   }) {
     final $result = create();
-    if (selectValue != null) {
-      $result.selectValue.addAll(selectValue);
+    if (selectValues != null) {
+      $result.selectValues.addAll(selectValues);
     }
     return $result;
   }
@@ -32,7 +32,7 @@ class AttachPropertyValueRequest_MultiSelectValue extends $pb.GeneratedMessage {
   factory AttachPropertyValueRequest_MultiSelectValue.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttachPropertyValueRequest.MultiSelectValue', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..pPS(1, _omitFieldNames ? '' : 'selectValue')
+    ..pPS(1, _omitFieldNames ? '' : 'selectValues')
     ..hasRequiredFields = false
   ;
 
@@ -58,7 +58,7 @@ class AttachPropertyValueRequest_MultiSelectValue extends $pb.GeneratedMessage {
   static AttachPropertyValueRequest_MultiSelectValue? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$core.String> get selectValue => $_getList(0);
+  $core.List<$core.String> get selectValues => $_getList(0);
 }
 
 enum AttachPropertyValueRequest_Value {
@@ -437,11 +437,11 @@ class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
 
 class GetAttachedPropertyValuesResponse_Value_MultiSelectValue extends $pb.GeneratedMessage {
   factory GetAttachedPropertyValuesResponse_Value_MultiSelectValue({
-    $core.Iterable<$core.String>? selectValue,
+    $core.Iterable<$core.String>? selectValues,
   }) {
     final $result = create();
-    if (selectValue != null) {
-      $result.selectValue.addAll(selectValue);
+    if (selectValues != null) {
+      $result.selectValues.addAll(selectValues);
     }
     return $result;
   }
@@ -450,7 +450,7 @@ class GetAttachedPropertyValuesResponse_Value_MultiSelectValue extends $pb.Gener
   factory GetAttachedPropertyValuesResponse_Value_MultiSelectValue.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAttachedPropertyValuesResponse.Value.MultiSelectValue', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto.services.property_svc.v1'), createEmptyInstance: create)
-    ..pPS(1, _omitFieldNames ? '' : 'selectValue')
+    ..pPS(1, _omitFieldNames ? '' : 'selectValues')
     ..hasRequiredFields = false
   ;
 
@@ -476,7 +476,7 @@ class GetAttachedPropertyValuesResponse_Value_MultiSelectValue extends $pb.Gener
   static GetAttachedPropertyValuesResponse_Value_MultiSelectValue? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$core.String> get selectValue => $_getList(0);
+  $core.List<$core.String> get selectValues => $_getList(0);
 }
 
 enum GetAttachedPropertyValuesResponse_Value_Value {

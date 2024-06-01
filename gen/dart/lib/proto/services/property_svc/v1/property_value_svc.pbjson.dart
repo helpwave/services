@@ -37,7 +37,7 @@ const AttachPropertyValueRequest$json = {
 const AttachPropertyValueRequest_MultiSelectValue$json = {
   '1': 'MultiSelectValue',
   '2': [
-    {'1': 'select_value', '3': 1, '4': 3, '5': 9, '10': 'selectValue'},
+    {'1': 'select_values', '3': 1, '4': 3, '5': 9, '10': 'selectValues'},
   ],
 };
 
@@ -52,8 +52,8 @@ final $typed_data.Uint8List attachPropertyValueRequestDescriptor = $convert.base
     'bHVlEiMKDHNlbGVjdF92YWx1ZRgIIAEoCUgAUgtzZWxlY3RWYWx1ZRJ7ChJtdWx0aV9zZWxlY3'
     'RfdmFsdWUYCSABKAsySy5wcm90by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuQXR0YWNoUHJv'
     'cGVydHlWYWx1ZVJlcXVlc3QuTXVsdGlTZWxlY3RWYWx1ZUgAUhBtdWx0aVNlbGVjdFZhbHVlGj'
-    'UKEE11bHRpU2VsZWN0VmFsdWUSIQoMc2VsZWN0X3ZhbHVlGAEgAygJUgtzZWxlY3RWYWx1ZUIH'
-    'CgV2YWx1ZQ==');
+    'cKEE11bHRpU2VsZWN0VmFsdWUSIwoNc2VsZWN0X3ZhbHVlcxgBIAMoCVIMc2VsZWN0VmFsdWVz'
+    'QgcKBXZhbHVl');
 
 @$core.Deprecated('Use attachPropertyValueResponseDescriptor instead')
 const AttachPropertyValueResponse$json = {
@@ -140,7 +140,7 @@ const GetAttachedPropertyValuesResponse_Value$json = {
 const GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json = {
   '1': 'MultiSelectValue',
   '2': [
-    {'1': 'select_value', '3': 1, '4': 3, '5': 9, '10': 'selectValue'},
+    {'1': 'select_values', '3': 1, '4': 3, '5': 9, '10': 'selectValues'},
   ],
 };
 
@@ -148,7 +148,7 @@ const GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json = {
 final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $convert.base64Decode(
     'CiFHZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2USXwoGdmFsdWVzGAEgAygLMkcucH'
     'JvdG8uc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkdldEF0dGFjaGVkUHJvcGVydHlWYWx1ZXNS'
-    'ZXNwb25zZS5WYWx1ZVIGdmFsdWVzGsIFCgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcH'
+    'ZXNwb25zZS5WYWx1ZVIGdmFsdWVzGsQFCgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcH'
     'JvcGVydHlJZBJICgpmaWVsZF90eXBlGAIgASgOMikucHJvdG8uc2VydmljZXMucHJvcGVydHlf'
     'c3ZjLnYxLkZpZWxkVHlwZVIJZmllbGRUeXBlEhIKBG5hbWUYAyABKAlSBG5hbWUSJQoLZGVzY3'
     'JpcHRpb24YBCABKAlIAVILZGVzY3JpcHRpb26IAQESHwoLaXNfYXJjaGl2ZWQYBSABKAhSCmlz'
@@ -159,7 +159,7 @@ final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $conve
     'YnVmLlRpbWVzdGFtcEgAUg1kYXRlVGltZVZhbHVlEiMKDHNlbGVjdF92YWx1ZRgLIAEoCUgAUg'
     'tzZWxlY3RWYWx1ZRKIAQoSbXVsdGlfc2VsZWN0X3ZhbHVlGAwgASgLMlgucHJvdG8uc2Vydmlj'
     'ZXMucHJvcGVydHlfc3ZjLnYxLkdldEF0dGFjaGVkUHJvcGVydHlWYWx1ZXNSZXNwb25zZS5WYW'
-    'x1ZS5NdWx0aVNlbGVjdFZhbHVlSABSEG11bHRpU2VsZWN0VmFsdWUaNQoQTXVsdGlTZWxlY3RW'
-    'YWx1ZRIhCgxzZWxlY3RfdmFsdWUYASADKAlSC3NlbGVjdFZhbHVlQgcKBXZhbHVlQg4KDF9kZX'
-    'NjcmlwdGlvbg==');
+    'x1ZS5NdWx0aVNlbGVjdFZhbHVlSABSEG11bHRpU2VsZWN0VmFsdWUaNwoQTXVsdGlTZWxlY3RW'
+    'YWx1ZRIjCg1zZWxlY3RfdmFsdWVzGAEgAygJUgxzZWxlY3RWYWx1ZXNCBwoFdmFsdWVCDgoMX2'
+    'Rlc2NyaXB0aW9u');
 

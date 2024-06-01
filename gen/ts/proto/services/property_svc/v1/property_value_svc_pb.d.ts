@@ -62,10 +62,10 @@ export namespace AttachPropertyValueRequest {
   }
 
   export class MultiSelectValue extends jspb.Message {
-    getSelectValueList(): Array<string>;
-    setSelectValueList(value: Array<string>): MultiSelectValue;
-    clearSelectValueList(): MultiSelectValue;
-    addSelectValue(value: string, index?: number): MultiSelectValue;
+    getSelectValuesList(): Array<string>;
+    setSelectValuesList(value: Array<string>): MultiSelectValue;
+    clearSelectValuesList(): MultiSelectValue;
+    addSelectValues(value: string, index?: number): MultiSelectValue;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): MultiSelectValue.AsObject;
@@ -77,7 +77,7 @@ export namespace AttachPropertyValueRequest {
 
   export namespace MultiSelectValue {
     export type AsObject = {
-      selectValueList: Array<string>,
+      selectValuesList: Array<string>,
     }
   }
 
@@ -266,10 +266,10 @@ export namespace GetAttachedPropertyValuesResponse {
     }
 
     export class MultiSelectValue extends jspb.Message {
-      getSelectValueList(): Array<string>;
-      setSelectValueList(value: Array<string>): MultiSelectValue;
-      clearSelectValueList(): MultiSelectValue;
-      addSelectValue(value: string, index?: number): MultiSelectValue;
+      getSelectValuesList(): Array<string>;
+      setSelectValuesList(value: Array<string>): MultiSelectValue;
+      clearSelectValuesList(): MultiSelectValue;
+      addSelectValues(value: string, index?: number): MultiSelectValue;
 
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): MultiSelectValue.AsObject;
@@ -281,7 +281,7 @@ export namespace GetAttachedPropertyValuesResponse {
 
     export namespace MultiSelectValue {
       export type AsObject = {
-        selectValueList: Array<string>,
+        selectValuesList: Array<string>,
       }
     }
 

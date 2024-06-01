@@ -488,7 +488,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue
  */
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    selectValueList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
+    selectValuesList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -527,7 +527,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.addSelectValue(value);
+      msg.addSelectValues(value);
       break;
     default:
       reader.skipField();
@@ -558,7 +558,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue
  */
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getSelectValueList();
+  f = message.getSelectValuesList();
   if (f.length > 0) {
     writer.writeRepeatedString(
       1,
@@ -569,10 +569,10 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue
 
 
 /**
- * repeated string select_value = 1;
+ * repeated string select_values = 1;
  * @return {!Array<string>}
  */
-proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.prototype.getSelectValueList = function() {
+proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.prototype.getSelectValuesList = function() {
   return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 1));
 };
 
@@ -581,7 +581,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue
  * @param {!Array<string>} value
  * @return {!proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue} returns this
  */
-proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.prototype.setSelectValueList = function(value) {
+proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.prototype.setSelectValuesList = function(value) {
   return jspb.Message.setField(this, 1, value || []);
 };
 
@@ -591,7 +591,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue
  * @param {number=} opt_index
  * @return {!proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue} returns this
  */
-proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.prototype.addSelectValue = function(value, opt_index) {
+proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.prototype.addSelectValues = function(value, opt_index) {
   return jspb.Message.addToRepeatedField(this, 1, value, opt_index);
 };
 
@@ -600,8 +600,8 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue
  * Clears the list making it empty but non-null.
  * @return {!proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue} returns this
  */
-proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.prototype.clearSelectValueList = function() {
-  return this.setSelectValueList([]);
+proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.prototype.clearSelectValuesList = function() {
+  return this.setSelectValuesList([]);
 };
 
 
@@ -1840,7 +1840,7 @@ proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.Mul
  */
 proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    selectValueList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
+    selectValuesList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -1879,7 +1879,7 @@ proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.Mul
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.addSelectValue(value);
+      msg.addSelectValues(value);
       break;
     default:
       reader.skipField();
@@ -1910,7 +1910,7 @@ proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.Mul
  */
 proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getSelectValueList();
+  f = message.getSelectValuesList();
   if (f.length > 0) {
     writer.writeRepeatedString(
       1,
@@ -1921,10 +1921,10 @@ proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.Mul
 
 
 /**
- * repeated string select_value = 1;
+ * repeated string select_values = 1;
  * @return {!Array<string>}
  */
-proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue.prototype.getSelectValueList = function() {
+proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue.prototype.getSelectValuesList = function() {
   return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 1));
 };
 
@@ -1933,7 +1933,7 @@ proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.Mul
  * @param {!Array<string>} value
  * @return {!proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue} returns this
  */
-proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue.prototype.setSelectValueList = function(value) {
+proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue.prototype.setSelectValuesList = function(value) {
   return jspb.Message.setField(this, 1, value || []);
 };
 
@@ -1943,7 +1943,7 @@ proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.Mul
  * @param {number=} opt_index
  * @return {!proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue} returns this
  */
-proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue.prototype.addSelectValue = function(value, opt_index) {
+proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue.prototype.addSelectValues = function(value, opt_index) {
   return jspb.Message.addToRepeatedField(this, 1, value, opt_index);
 };
 
@@ -1952,8 +1952,8 @@ proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.Mul
  * Clears the list making it empty but non-null.
  * @return {!proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue} returns this
  */
-proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue.prototype.clearSelectValueList = function() {
-  return this.setSelectValueList([]);
+proto.proto.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue.prototype.clearSelectValuesList = function() {
+  return this.setSelectValuesList([]);
 };
 
 
