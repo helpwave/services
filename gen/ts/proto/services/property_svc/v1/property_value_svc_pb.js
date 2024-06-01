@@ -275,7 +275,7 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.toObject = funct
     dateValue: (f = msg.getDateValue()) && proto_services_property_svc_v1_types_pb.Date.toObject(includeInstance, f),
     dateTimeValue: (f = msg.getDateTimeValue()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     selectValue: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    multiSelectValue: jspb.Message.getFieldWithDefault(msg, 9, "")
+    multiSelectValue: (f = msg.getMultiSelectValue()) && proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -347,7 +347,8 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.deserializeBinar
       msg.setSelectValue(value);
       break;
     case 9:
-      var value = /** @type {string} */ (reader.readString());
+      var value = new proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue;
+      reader.readMessage(value,proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.deserializeBinaryFromReader);
       msg.setMultiSelectValue(value);
       break;
     default:
@@ -437,11 +438,12 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.serializeBinaryT
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(message, 9));
+  f = message.getMultiSelectValue();
   if (f != null) {
-    writer.writeString(
+    writer.writeMessage(
       9,
-      f
+      f,
+      proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.serializeBinaryToWriter
     );
   }
 };
@@ -858,29 +860,30 @@ proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.hasSel
 
 
 /**
- * optional string multi_select_value = 9;
- * @return {string}
+ * optional MultiSelectValue multi_select_value = 9;
+ * @return {?proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue}
  */
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.getMultiSelectValue = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
+  return /** @type{?proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue} */ (
+    jspb.Message.getWrapperField(this, proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue, 9));
 };
 
 
 /**
- * @param {string} value
+ * @param {?proto.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue|undefined} value
  * @return {!proto.proto.services.property_svc.v1.AttachPropertyValueRequest} returns this
- */
+*/
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.setMultiSelectValue = function(value) {
-  return jspb.Message.setOneofField(this, 9, proto.proto.services.property_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], value);
+  return jspb.Message.setOneofWrapperField(this, 9, proto.proto.services.property_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], value);
 };
 
 
 /**
- * Clears the field making it undefined.
+ * Clears the message field making it undefined.
  * @return {!proto.proto.services.property_svc.v1.AttachPropertyValueRequest} returns this
  */
 proto.proto.services.property_svc.v1.AttachPropertyValueRequest.prototype.clearMultiSelectValue = function() {
-  return jspb.Message.setOneofField(this, 9, proto.proto.services.property_svc.v1.AttachPropertyValueRequest.oneofGroups_[0], undefined);
+  return this.setMultiSelectValue(undefined);
 };
 
 

@@ -33,8 +33,10 @@ export class AttachPropertyValueRequest extends jspb.Message {
   getSelectValue(): string;
   setSelectValue(value: string): AttachPropertyValueRequest;
 
-  getMultiSelectValue(): string;
-  setMultiSelectValue(value: string): AttachPropertyValueRequest;
+  getMultiSelectValue(): AttachPropertyValueRequest.MultiSelectValue | undefined;
+  setMultiSelectValue(value?: AttachPropertyValueRequest.MultiSelectValue): AttachPropertyValueRequest;
+  hasMultiSelectValue(): boolean;
+  clearMultiSelectValue(): AttachPropertyValueRequest;
 
   getValueCase(): AttachPropertyValueRequest.ValueCase;
 
@@ -56,7 +58,7 @@ export namespace AttachPropertyValueRequest {
     dateValue?: proto_services_property_svc_v1_types_pb.Date.AsObject,
     dateTimeValue?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     selectValue: string,
-    multiSelectValue: string,
+    multiSelectValue?: AttachPropertyValueRequest.MultiSelectValue.AsObject,
   }
 
   export class MultiSelectValue extends jspb.Message {

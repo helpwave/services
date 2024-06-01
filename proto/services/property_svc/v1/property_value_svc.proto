@@ -21,7 +21,7 @@ message AttachPropertyValueRequest{
     Date date_value = 6; // FIELD_TYPE_DATE
     google.protobuf.Timestamp date_time_value = 7; // FIELD_TYPE_DATE_TIME
     string select_value = 8; // FIELD_TYPE_SELECT, id of option
-    string multi_select_value = 9; // FIELD_TYPE_MULTI_SELECT
+    MultiSelectValue multi_select_value = 9; // FIELD_TYPE_MULTI_SELECT
   }
 
   message MultiSelectValue {

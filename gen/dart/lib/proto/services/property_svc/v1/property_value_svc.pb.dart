@@ -84,7 +84,7 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     $16.Date? dateValue,
     $17.Timestamp? dateTimeValue,
     $core.String? selectValue,
-    $core.String? multiSelectValue,
+    AttachPropertyValueRequest_MultiSelectValue? multiSelectValue,
   }) {
     final $result = create();
     if (subjectId != null) {
@@ -140,7 +140,7 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     ..aOM<$16.Date>(6, _omitFieldNames ? '' : 'dateValue', subBuilder: $16.Date.create)
     ..aOM<$17.Timestamp>(7, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $17.Timestamp.create)
     ..aOS(8, _omitFieldNames ? '' : 'selectValue')
-    ..aOS(9, _omitFieldNames ? '' : 'multiSelectValue')
+    ..aOM<AttachPropertyValueRequest_MultiSelectValue>(9, _omitFieldNames ? '' : 'multiSelectValue', subBuilder: AttachPropertyValueRequest_MultiSelectValue.create)
     ..hasRequiredFields = false
   ;
 
@@ -245,13 +245,15 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   void clearSelectValue() => clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get multiSelectValue => $_getSZ(8);
+  AttachPropertyValueRequest_MultiSelectValue get multiSelectValue => $_getN(8);
   @$pb.TagNumber(9)
-  set multiSelectValue($core.String v) { $_setString(8, v); }
+  set multiSelectValue(AttachPropertyValueRequest_MultiSelectValue v) { setField(9, v); }
   @$pb.TagNumber(9)
   $core.bool hasMultiSelectValue() => $_has(8);
   @$pb.TagNumber(9)
   void clearMultiSelectValue() => clearField(9);
+  @$pb.TagNumber(9)
+  AttachPropertyValueRequest_MultiSelectValue ensureMultiSelectValue() => $_ensure(8);
 }
 
 class AttachPropertyValueResponse extends $pb.GeneratedMessage {

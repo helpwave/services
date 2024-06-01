@@ -25,7 +25,7 @@ const AttachPropertyValueRequest$json = {
     {'1': 'date_value', '3': 6, '4': 1, '5': 11, '6': '.proto.services.property_svc.v1.Date', '9': 0, '10': 'dateValue'},
     {'1': 'date_time_value', '3': 7, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'dateTimeValue'},
     {'1': 'select_value', '3': 8, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
-    {'1': 'multi_select_value', '3': 9, '4': 1, '5': 9, '9': 0, '10': 'multiSelectValue'},
+    {'1': 'multi_select_value', '3': 9, '4': 1, '5': 11, '6': '.proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue', '9': 0, '10': 'multiSelectValue'},
   ],
   '3': [AttachPropertyValueRequest_MultiSelectValue$json],
   '8': [
@@ -49,9 +49,11 @@ final $typed_data.Uint8List attachPropertyValueRequestDescriptor = $convert.base
     'Jvb2xfdmFsdWUYBSABKAhIAFIJYm9vbFZhbHVlEkUKCmRhdGVfdmFsdWUYBiABKAsyJC5wcm90'
     'by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuRGF0ZUgAUglkYXRlVmFsdWUSRAoPZGF0ZV90aW'
     '1lX3ZhbHVlGAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEgAUg1kYXRlVGltZVZh'
-    'bHVlEiMKDHNlbGVjdF92YWx1ZRgIIAEoCUgAUgtzZWxlY3RWYWx1ZRIuChJtdWx0aV9zZWxlY3'
-    'RfdmFsdWUYCSABKAlIAFIQbXVsdGlTZWxlY3RWYWx1ZRo1ChBNdWx0aVNlbGVjdFZhbHVlEiEK'
-    'DHNlbGVjdF92YWx1ZRgBIAMoCVILc2VsZWN0VmFsdWVCBwoFdmFsdWU=');
+    'bHVlEiMKDHNlbGVjdF92YWx1ZRgIIAEoCUgAUgtzZWxlY3RWYWx1ZRJ7ChJtdWx0aV9zZWxlY3'
+    'RfdmFsdWUYCSABKAsySy5wcm90by5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuQXR0YWNoUHJv'
+    'cGVydHlWYWx1ZVJlcXVlc3QuTXVsdGlTZWxlY3RWYWx1ZUgAUhBtdWx0aVNlbGVjdFZhbHVlGj'
+    'UKEE11bHRpU2VsZWN0VmFsdWUSIQoMc2VsZWN0X3ZhbHVlGAEgAygJUgtzZWxlY3RWYWx1ZUIH'
+    'CgV2YWx1ZQ==');
 
 @$core.Deprecated('Use attachPropertyValueResponseDescriptor instead')
 const AttachPropertyValueResponse$json = {
