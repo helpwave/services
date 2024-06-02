@@ -17,7 +17,7 @@ import (
 
 // replay mechanism for projections of the property-svc
 // replay truncates the whole database and replays all events
-func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjection *property_postgres_projection.Projection, propertyValuePostgresProjection *property_value_postgres_projection.Projection) error {
+func replay(ctx context.Context, eventStore *esdb.Client) error {
 	ctx, span, log := telemetry.StartSpan(ctx, "property-svc.replay")
 	defer span.End()
 
@@ -26,13 +26,14 @@ func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjec
 	db := hwdb.GetDB()
 	tx, err := db.Begin(ctx)
 	if err != nil {
-		log.Err(err).Msg("cannot begin transaction")
-		return err
+		return fmt.Errorf("cannot begin transaction: %w", err)
 	}
+
+	var errToRollback error
 	defer func() {
-		if err != nil {
+		if errToRollback != nil {
 			err = tx.Rollback(ctx)
-			if !errors.Is(err, pgx.ErrTxClosed) {
+			if err != nil && !errors.Is(err, pgx.ErrTxClosed) {
 				log.Err(err).Msg("failed to rollback transaction")
 			}
 		}
@@ -40,14 +41,16 @@ func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjec
 
 	log.Info().Msg("truncating all tables...")
 
-	if err := hwdb.DANGERTruncateAllTables(ctx, tx); err != nil {
-		log.Err(err).Msg("cannot truncate all tables")
-		return err
+	if errToRollback = hwdb.DANGERTruncateAllTables(ctx, tx); errToRollback != nil {
+		return fmt.Errorf("cannot truncate all tables: %w", err)
 	}
 
 	log.Info().Msg("starting event replay")
 
-	if err := eventstoredb.Replay(
+	propertyPostgresProjection := property_postgres_projection.NewProjection(eventStore, ServiceName, tx)
+	propertyValuePostgresProjection := property_value_postgres_projection.NewProjection(eventStore, ServiceName, tx)
+
+	if errToRollback = eventstoredb.Replay(
 		ctx,
 		eventStore,
 		func(ctx context.Context, event hwes.Event) (err error) {
@@ -60,13 +63,12 @@ func replay(ctx context.Context, eventStore *esdb.Client, propertyPostgresProjec
 			return
 		},
 		&[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)},
-	); err != nil {
-		return err
+	); errToRollback != nil {
+		return errToRollback
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		log.Err(err).Msg("cannot commit transaction")
-		return err
+		return fmt.Errorf("cannot commit transaction: %w", err)
 	}
 
 	return nil

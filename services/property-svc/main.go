@@ -39,13 +39,13 @@ func main() {
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
 
 	propertyPostgresProjection := property_postgres_projection.
-		NewProjection(eventStore, ServiceName)
+		NewProjection(eventStore, ServiceName, hwdb.GetDB())
 
 	propertyValuePostgresProjection := property_value_postgres_projection.
-		NewProjection(eventStore, ServiceName)
+		NewProjection(eventStore, ServiceName, hwdb.GetDB())
 
 	if *replayMode {
-		if err := replay(ctx, eventStore, propertyPostgresProjection, propertyValuePostgresProjection); err != nil {
+		if err := replay(ctx, eventStore); err != nil {
 			log.Err(err).Msg("error during replay")
 			cancel()
 		}

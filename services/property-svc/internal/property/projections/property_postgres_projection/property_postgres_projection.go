@@ -25,12 +25,12 @@ type Projection struct {
 	propertyRepo *property_repo.Queries
 }
 
-func NewProjection(es *esdb.Client, serviceName string) *Projection {
+func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-postgres-projection", serviceName)
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)}),
-		db:               hwdb.GetDB(),
-		propertyRepo:     property_repo.New(hwdb.GetDB())}
+		db:               db,
+		propertyRepo:     property_repo.New(db)}
 	p.initEventListeners()
 	return p
 }
