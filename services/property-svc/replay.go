@@ -9,8 +9,9 @@ import (
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb"
+	propertyValueAggregate "property-svc/internal/property-value/aggregate"
 	"property-svc/internal/property-value/projections/property_value_postgres_projection"
-	"property-svc/internal/property/aggregate"
+	propertyAggregate "property-svc/internal/property/aggregate"
 	"property-svc/internal/property/projections/property_postgres_projection"
 	"telemetry"
 )
@@ -62,7 +63,10 @@ func replay(ctx context.Context, eventStore *esdb.Client) error {
 			}
 			return
 		},
-		&[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)},
+		&[]string{
+			fmt.Sprintf("%s-", propertyAggregate.PropertyAggregateType),
+			fmt.Sprintf("%s-", propertyValueAggregate.PropertyValueAggregateType),
+		},
 	); errToRollback != nil {
 		return errToRollback
 	}
