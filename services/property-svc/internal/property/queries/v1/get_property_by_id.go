@@ -12,8 +12,10 @@ import (
 
 type GetPropertyByIDQueryHandler func(ctx context.Context, propertyID uuid.UUID) (*models.Property, error)
 
-func NewGetPropertyByIDQueryHandler(propertyRepo *property_repo.Queries) GetPropertyByIDQueryHandler {
+func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
 	return func(ctx context.Context, propertyID uuid.UUID) (*models.Property, error) {
+		propertyRepo := property_repo.New(hwdb.GetDB())
+
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx, property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
 			ID: uuid.NullUUID{UUID: propertyID, Valid: true},
 		})

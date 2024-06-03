@@ -4,22 +4,20 @@ import (
 	"context"
 	pb "gen/proto/services/property_svc/v1"
 	"github.com/google/uuid"
-	"hwdb"
 	"hwes"
 	"hwutil"
-	commandsV1 "property-svc/internal/property/commands/v1"
+	"property-svc/internal/property/handlers"
 	"property-svc/internal/property/models"
-	v1queries "property-svc/internal/property/queries/v1"
-	"property-svc/repos/property_repo"
 )
 
 type PropertyGrpcService struct {
 	pb.UnimplementedPropertyServiceServer
-	as hwes.AggregateStore
+	as       hwes.AggregateStore
+	handlers *handlers.Handlers
 }
 
-func NewPropertyService(aggregateStore hwes.AggregateStore) *PropertyGrpcService {
-	return &PropertyGrpcService{as: aggregateStore}
+func NewPropertyService(aggregateStore hwes.AggregateStore, handlers *handlers.Handlers) *PropertyGrpcService {
+	return &PropertyGrpcService{as: aggregateStore, handlers: handlers}
 }
 
 func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.CreatePropertyRequest) (*pb.CreatePropertyResponse, error) {
@@ -46,7 +44,7 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 		}
 	}
 
-	if err := commandsV1.NewCreatePropertyCommandHandler(s.as)(ctx, propertyID, req.GetSubjectType(), req.GetFieldType(), req.GetName(), req.Description, req.SetId, fieldTypeData); err != nil {
+	if err := s.handlers.Commands.V1.CreateProperty(ctx, propertyID, req.GetSubjectType(), req.GetFieldType(), req.GetName(), req.Description, req.SetId, fieldTypeData); err != nil {
 		return nil, err
 	}
 
@@ -56,14 +54,12 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 }
 
 func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetPropertyRequest) (*pb.GetPropertyResponse, error) {
-	propertyRepo := property_repo.New(hwdb.GetDB())
-
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err
 	}
 
-	property, err := v1queries.NewGetPropertyByIDQueryHandler(propertyRepo)(ctx, id)
+	property, err := s.handlers.Queries.V1.GetPropertyByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -134,8 +130,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 			upsertOptions = &opt
 		}
 	}
-
-	if err := commandsV1.NewUpdatePropertyCommandHandler(s.as)(ctx, propertyID, req.SubjectType, req.Name, req.Description, req.SetId, allowFreetext, upsertOptions, removeOptions, req.IsArchived); err != nil {
+	if err := s.handlers.Commands.V1.UpdateProperty(ctx, propertyID, req.SubjectType, req.Name, req.Description, req.SetId, allowFreetext, upsertOptions, removeOptions, req.IsArchived); err != nil {
 		return nil, err
 	}
 
@@ -143,9 +138,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 }
 
 func (s *PropertyGrpcService) GetPropertiesBySubjectType(ctx context.Context, req *pb.GetPropertiesBySubjectTypeRequest) (*pb.GetPropertiesBySubjectTypeResponse, error) {
-	propertyRepo := property_repo.New(hwdb.GetDB())
-
-	properties, err := v1queries.NewGetPropertiesBySubjectTypeQueryHandler(propertyRepo)(ctx, req.SubjectType)
+	properties, err := s.handlers.Queries.V1.GetPropertiesBySubjectType(ctx, req.SubjectType)
 	if err != nil {
 		return nil, err
 	}

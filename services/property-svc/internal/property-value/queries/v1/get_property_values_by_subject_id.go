@@ -5,10 +5,11 @@ import (
 	"fmt"
 	pb "gen/proto/services/property_svc/v1"
 	"hwdb"
+	"hwes"
 	"hwutil"
 	"property-svc/internal/property-value/models"
+	vh "property-svc/internal/property-view/handlers"
 	viewModels "property-svc/internal/property-view/models"
-	viewQueries "property-svc/internal/property-view/queries/v1"
 	"property-svc/repos/property_value_repo"
 	"time"
 
@@ -18,14 +19,17 @@ import (
 
 type GetRelevantPropertyValuesQueryHandler func(ctx context.Context, matcher viewModels.PropertyMatchers) ([]models.PropertyAndValue, error)
 
-func NewGetRelevantPropertyValuesQueryHandler(propertyValueRepo *property_value_repo.Queries) GetRelevantPropertyValuesQueryHandler {
+func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevantPropertyValuesQueryHandler {
 	return func(ctx context.Context, matcher viewModels.PropertyMatchers) ([]models.PropertyAndValue, error) {
+		viewHandlers := vh.NewPropertyViewHandlers(as)
+		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
+
 		subjectId, err := matcher.GetSubjectId()
 		if err != nil {
 			return nil, fmt.Errorf("GetRelevantPropertyValuesQueryHandler: matcher error when getting subjectId: %w", err)
 		}
 
-		alwaysInclude, err := viewQueries.GetAlwaysIncludePropertiesByMatcher(ctx, matcher)
+		alwaysInclude, err := viewHandlers.Queries.V1.GetAlwaysIncludePropertyIDsByMatcher(ctx, matcher)
 		if err != nil {
 			return nil, err
 		}
