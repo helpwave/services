@@ -5,23 +5,23 @@ import (
 	pb "gen/proto/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
-	commandsV1 "property-svc/internal/property-set/commands/v1"
-	v1queries "property-svc/internal/property-set/queries/v1"
+	"property-svc/internal/property-set/handlers"
 )
 
 type PropertySetGrpcService struct {
 	pb.UnimplementedPropertySetServiceServer
-	as hwes.AggregateStore
+	as       hwes.AggregateStore
+	handlers *handlers.Handlers
 }
 
-func NewPropertySetService(aggregateStore hwes.AggregateStore) *PropertySetGrpcService {
-	return &PropertySetGrpcService{as: aggregateStore}
+func NewPropertySetService(aggregateStore hwes.AggregateStore, handlers *handlers.Handlers) *PropertySetGrpcService {
+	return &PropertySetGrpcService{as: aggregateStore, handlers: handlers}
 }
 
 func (s *PropertySetGrpcService) CreatePropertySet(ctx context.Context, req *pb.CreatePropertySetRequest) (*pb.CreatePropertySetResponse, error) {
 	propertySetID := uuid.New()
 
-	if err := commandsV1.NewCreatePropertySetCommandHandler(s.as)(ctx, propertySetID, req.Name); err != nil {
+	if err := s.handlers.Commands.V1.CreatePropertySet(ctx, propertySetID, req.Name); err != nil {
 		return nil, err
 	}
 
@@ -36,7 +36,7 @@ func (s *PropertySetGrpcService) GetPropertySet(ctx context.Context, req *pb.Get
 		return nil, err
 	}
 
-	property, err := v1queries.NewGetPropertySetByIDQueryHandler(s.as)(ctx, id)
+	property, err := s.handlers.Queries.V1.GetPropertySetByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
