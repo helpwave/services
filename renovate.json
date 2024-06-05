@@ -42,6 +42,12 @@
     }
   ],
   "ignoreDeps": ["common", "decaying_lru", "hwdb", "hwes", "hwutil", "hwlocale", "telemetry", "gen"],
+  "customDatasources": {
+     "buf": {
+        "defaultRegistryUrlTemplate": "https://buf-resource-proxy.fly.dev/{{packageName}}",
+        "transformTemplates": ["{\"releases\":[{\"version\": resource.plugin.version }], \"sourceUrl\": resource.plugin.sourceUrl, \"homepage\": $join([\"https://buf.build/\", resource.plugin.owner, \"/\", resource.plugin.name])}"]
+     } 
+  },
   "customManagers": [
     {
       "customType": "regex",
@@ -71,6 +77,7 @@
       "datasourceTemplate": "docker"
     },
     {
+      "customType": "regex",
       "fileMatch": [
         "go.mod$"
       ],
@@ -79,6 +86,15 @@
       ],
       "depNameTemplate": "golang",
       "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["buf.gen.yaml$"],
+      "matchStrings": [
+        "plugin: buf.build/(?<depName>.*?):(?<currentValue>.+?)\\s"
+      ],
+      "datasourceTemplate": "custom.buf",
+      "versioningTemplate": "semver"
     }
   ]
 }

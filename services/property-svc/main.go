@@ -17,6 +17,10 @@ import (
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
+	psh "property-svc/internal/property-set/handlers"
+	pvh "property-svc/internal/property-value/handlers"
+	pvih "property-svc/internal/property-view/handlers"
+	ph "property-svc/internal/property/handlers"
 )
 
 const ServiceName = "property-svc"
@@ -76,13 +80,18 @@ func main() {
 		}
 	}()
 
+	propertyHandlers := ph.NewPropertyHandlers(aggregateStore)
+	propertySetHandlers := psh.NewPropertySetHandlers(aggregateStore)
+	propertyViewHandlers := pvih.NewPropertyViewHandlers(aggregateStore)
+	propertyValueHandlers := pvh.NewPropertyValueHandlers(aggregateStore)
+
 	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
-		pb.RegisterPropertyServiceServer(grpcServer, property.NewPropertyService(aggregateStore))
-		pb.RegisterPropertySetServiceServer(grpcServer, propertySet.NewPropertySetService(aggregateStore))
-		pb.RegisterPropertyValueServiceServer(grpcServer, propertyValue.NewPropertyValueService(aggregateStore))
-		pb.RegisterPropertyViewsServiceServer(grpcServer, propertyViews.NewPropertyViewService(aggregateStore))
+		pb.RegisterPropertyServiceServer(grpcServer, property.NewPropertyService(aggregateStore, propertyHandlers))
+		pb.RegisterPropertySetServiceServer(grpcServer, propertySet.NewPropertySetService(aggregateStore, propertySetHandlers))
+		pb.RegisterPropertyValueServiceServer(grpcServer, propertyValue.NewPropertyValueService(aggregateStore, propertyValueHandlers))
+		pb.RegisterPropertyViewsServiceServer(grpcServer, propertyViews.NewPropertyViewService(aggregateStore, propertyViewHandlers))
 	})
 
 	cancel()

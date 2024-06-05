@@ -172,6 +172,17 @@ func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, 
 	return i, err
 }
 
+const getPropertySubjectType = `-- name: GetPropertySubjectType :one
+SELECT subject_type FROM properties WHERE id = $1
+`
+
+func (q *Queries) GetPropertySubjectType(ctx context.Context, id uuid.UUID) (int32, error) {
+	row := q.db.QueryRow(ctx, getPropertySubjectType, id)
+	var subject_type int32
+	err := row.Scan(&subject_type)
+	return subject_type, err
+}
+
 const updateProperty = `-- name: UpdateProperty :exec
 UPDATE properties
 SET subject_type = coalesce($2, subject_type),

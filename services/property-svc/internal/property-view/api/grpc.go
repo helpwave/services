@@ -2,38 +2,40 @@ package api
 
 import (
 	"context"
+	"fmt"
 	pb "gen/proto/services/property_svc/v1"
+	"github.com/pkg/errors"
 	"hwes"
 	"hwutil"
-	commandsV1 "property-svc/internal/property-view/commands/v1"
-	"property-svc/internal/property-view/models"
+	valuesApi "property-svc/internal/property-value/api"
+	"property-svc/internal/property-view/handlers"
 )
 
 type PropertyViewGrpcService struct {
 	pb.UnimplementedPropertyViewsServiceServer
-	as hwes.AggregateStore
+	as       hwes.AggregateStore
+	handlers *handlers.Handlers
 }
 
-func NewPropertyViewService(aggregateStore hwes.AggregateStore) *PropertyViewGrpcService {
-	return &PropertyViewGrpcService{as: aggregateStore}
+func NewPropertyViewService(aggregateStore hwes.AggregateStore, handlers *handlers.Handlers) *PropertyViewGrpcService {
+	return &PropertyViewGrpcService{as: aggregateStore, handlers: handlers}
 }
 
-func (s PropertyViewGrpcService) UpdateTaskPropertyViewRule(ctx context.Context, req *pb.UpdateTaskPropertyViewRuleRequest) (*pb.UpdateTaskPropertyViewRuleResponse, error) {
-	wardID, err := hwutil.ParseNullUUID(req.WardId)
-	if err != nil {
-		return nil, err
-	}
-	taskID, err := hwutil.ParseNullUUID(req.TaskId)
-	if err != nil {
-		return nil, err
-	}
-
+func (s PropertyViewGrpcService) UpdatePropertyViewRule(ctx context.Context, req *pb.UpdatePropertyViewRuleRequest) (*pb.UpdatePropertyViewRuleResponse, error) {
 	if req.FilterUpdate == nil {
 		// nothing to update
-		return &pb.UpdateTaskPropertyViewRuleResponse{}, nil
+		return &pb.UpdatePropertyViewRuleResponse{}, nil
 	}
 
-	// when writing another view rule handler, move this into a common function
+	matcher, err := valuesApi.DeMuxMatchers(req)
+	if err != nil {
+		return nil, fmt.Errorf("UpdatePropertyViewRule: error in demux: %w", err)
+	}
+
+	if matcher == nil {
+		return nil, errors.New("UpdatePropertyViewRule: no matcher provided")
+	}
+
 	appendToAlwaysInclude, err := hwutil.StringsToUUIDs(hwutil.OrEmptySlice(req.FilterUpdate.AppendToAlwaysInclude))
 	if err != nil {
 		return nil, err
@@ -56,15 +58,10 @@ func (s PropertyViewGrpcService) UpdateTaskPropertyViewRule(ctx context.Context,
 
 	if len(appendToAlwaysInclude) == 0 && len(removeFromAlwaysInclude) == 0 && len(appendToDontAlwaysInclude) == 0 && len(removeFromDontAlwaysInclude) == 0 {
 		// nothing to update
-		return &pb.UpdateTaskPropertyViewRuleResponse{}, nil
+		return &pb.UpdatePropertyViewRuleResponse{}, nil
 	}
 
-	// ---
-
-	if err := commandsV1.NewUpdatePropertyViewRuleCommandHandler(s.as)(ctx, models.TaskPropertyMatchers{
-		WardID: wardID,
-		TaskID: taskID,
-	},
+	if err := s.handlers.Commands.V1.UpdatePropertyViewRule(ctx, matcher,
 		appendToAlwaysInclude,
 		removeFromAlwaysInclude,
 		appendToDontAlwaysInclude,
@@ -73,5 +70,5 @@ func (s PropertyViewGrpcService) UpdateTaskPropertyViewRule(ctx context.Context,
 		return nil, err
 	}
 
-	return &pb.UpdateTaskPropertyViewRuleResponse{}, nil
+	return &pb.UpdatePropertyViewRuleResponse{}, nil
 }

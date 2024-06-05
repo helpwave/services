@@ -31,6 +31,7 @@ export namespace Date {
 export enum SubjectType { 
   SUBJECT_TYPE_UNSPECIFIED = 0,
   SUBJECT_TYPE_PATIENT = 1,
+  SUBJECT_TYPE_TASK = 2,
 }
 export enum FieldType { 
   FIELD_TYPE_UNSPECIFIED = 0,

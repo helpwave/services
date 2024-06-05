@@ -84,9 +84,49 @@ export namespace AttachPropertyValueResponse {
   }
 }
 
+export class TaskPropertyMatcher extends jspb.Message {
+  getWardId(): string;
+  setWardId(value: string): TaskPropertyMatcher;
+  hasWardId(): boolean;
+  clearWardId(): TaskPropertyMatcher;
+
+  getTaskId(): string;
+  setTaskId(value: string): TaskPropertyMatcher;
+  hasTaskId(): boolean;
+  clearTaskId(): TaskPropertyMatcher;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): TaskPropertyMatcher.AsObject;
+  static toObject(includeInstance: boolean, msg: TaskPropertyMatcher): TaskPropertyMatcher.AsObject;
+  static serializeBinaryToWriter(message: TaskPropertyMatcher, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): TaskPropertyMatcher;
+  static deserializeBinaryFromReader(message: TaskPropertyMatcher, reader: jspb.BinaryReader): TaskPropertyMatcher;
+}
+
+export namespace TaskPropertyMatcher {
+  export type AsObject = {
+    wardId?: string,
+    taskId?: string,
+  }
+
+  export enum WardIdCase { 
+    _WARD_ID_NOT_SET = 0,
+    WARD_ID = 1,
+  }
+
+  export enum TaskIdCase { 
+    _TASK_ID_NOT_SET = 0,
+    TASK_ID = 2,
+  }
+}
+
 export class GetAttachedPropertyValuesRequest extends jspb.Message {
-  getSubjectId(): string;
-  setSubjectId(value: string): GetAttachedPropertyValuesRequest;
+  getTaskMatcher(): TaskPropertyMatcher | undefined;
+  setTaskMatcher(value?: TaskPropertyMatcher): GetAttachedPropertyValuesRequest;
+  hasTaskMatcher(): boolean;
+  clearTaskMatcher(): GetAttachedPropertyValuesRequest;
+
+  getMatcherCase(): GetAttachedPropertyValuesRequest.MatcherCase;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetAttachedPropertyValuesRequest.AsObject;
@@ -98,7 +138,12 @@ export class GetAttachedPropertyValuesRequest extends jspb.Message {
 
 export namespace GetAttachedPropertyValuesRequest {
   export type AsObject = {
-    subjectId: string,
+    taskMatcher?: TaskPropertyMatcher.AsObject,
+  }
+
+  export enum MatcherCase { 
+    MATCHER_NOT_SET = 0,
+    TASK_MATCHER = 1,
   }
 }
 

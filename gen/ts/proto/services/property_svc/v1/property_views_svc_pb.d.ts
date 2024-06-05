@@ -1,5 +1,6 @@
 import * as jspb from 'google-protobuf'
 
+import * as proto_services_property_svc_v1_property_value_svc_pb from '../../../../proto/services/property_svc/v1/property_value_svc_pb'; // proto import: "proto/services/property_svc/v1/property_value_svc.proto"
 
 
 export class FilterUpdate extends jspb.Message {
@@ -40,58 +41,49 @@ export namespace FilterUpdate {
   }
 }
 
-export class UpdateTaskPropertyViewRuleRequest extends jspb.Message {
-  getWardId(): string;
-  setWardId(value: string): UpdateTaskPropertyViewRuleRequest;
-  hasWardId(): boolean;
-  clearWardId(): UpdateTaskPropertyViewRuleRequest;
-
-  getTaskId(): string;
-  setTaskId(value: string): UpdateTaskPropertyViewRuleRequest;
-  hasTaskId(): boolean;
-  clearTaskId(): UpdateTaskPropertyViewRuleRequest;
-
+export class UpdatePropertyViewRuleRequest extends jspb.Message {
   getFilterUpdate(): FilterUpdate | undefined;
-  setFilterUpdate(value?: FilterUpdate): UpdateTaskPropertyViewRuleRequest;
+  setFilterUpdate(value?: FilterUpdate): UpdatePropertyViewRuleRequest;
   hasFilterUpdate(): boolean;
-  clearFilterUpdate(): UpdateTaskPropertyViewRuleRequest;
+  clearFilterUpdate(): UpdatePropertyViewRuleRequest;
+
+  getTaskMatcher(): proto_services_property_svc_v1_property_value_svc_pb.TaskPropertyMatcher | undefined;
+  setTaskMatcher(value?: proto_services_property_svc_v1_property_value_svc_pb.TaskPropertyMatcher): UpdatePropertyViewRuleRequest;
+  hasTaskMatcher(): boolean;
+  clearTaskMatcher(): UpdatePropertyViewRuleRequest;
+
+  getMatcherCase(): UpdatePropertyViewRuleRequest.MatcherCase;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): UpdateTaskPropertyViewRuleRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: UpdateTaskPropertyViewRuleRequest): UpdateTaskPropertyViewRuleRequest.AsObject;
-  static serializeBinaryToWriter(message: UpdateTaskPropertyViewRuleRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): UpdateTaskPropertyViewRuleRequest;
-  static deserializeBinaryFromReader(message: UpdateTaskPropertyViewRuleRequest, reader: jspb.BinaryReader): UpdateTaskPropertyViewRuleRequest;
+  toObject(includeInstance?: boolean): UpdatePropertyViewRuleRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdatePropertyViewRuleRequest): UpdatePropertyViewRuleRequest.AsObject;
+  static serializeBinaryToWriter(message: UpdatePropertyViewRuleRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdatePropertyViewRuleRequest;
+  static deserializeBinaryFromReader(message: UpdatePropertyViewRuleRequest, reader: jspb.BinaryReader): UpdatePropertyViewRuleRequest;
 }
 
-export namespace UpdateTaskPropertyViewRuleRequest {
+export namespace UpdatePropertyViewRuleRequest {
   export type AsObject = {
-    wardId?: string,
-    taskId?: string,
     filterUpdate?: FilterUpdate.AsObject,
+    taskMatcher?: proto_services_property_svc_v1_property_value_svc_pb.TaskPropertyMatcher.AsObject,
   }
 
-  export enum WardIdCase { 
-    _WARD_ID_NOT_SET = 0,
-    WARD_ID = 1,
-  }
-
-  export enum TaskIdCase { 
-    _TASK_ID_NOT_SET = 0,
-    TASK_ID = 2,
+  export enum MatcherCase { 
+    MATCHER_NOT_SET = 0,
+    TASK_MATCHER = 2,
   }
 }
 
-export class UpdateTaskPropertyViewRuleResponse extends jspb.Message {
+export class UpdatePropertyViewRuleResponse extends jspb.Message {
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): UpdateTaskPropertyViewRuleResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: UpdateTaskPropertyViewRuleResponse): UpdateTaskPropertyViewRuleResponse.AsObject;
-  static serializeBinaryToWriter(message: UpdateTaskPropertyViewRuleResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): UpdateTaskPropertyViewRuleResponse;
-  static deserializeBinaryFromReader(message: UpdateTaskPropertyViewRuleResponse, reader: jspb.BinaryReader): UpdateTaskPropertyViewRuleResponse;
+  toObject(includeInstance?: boolean): UpdatePropertyViewRuleResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdatePropertyViewRuleResponse): UpdatePropertyViewRuleResponse.AsObject;
+  static serializeBinaryToWriter(message: UpdatePropertyViewRuleResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdatePropertyViewRuleResponse;
+  static deserializeBinaryFromReader(message: UpdatePropertyViewRuleResponse, reader: jspb.BinaryReader): UpdatePropertyViewRuleResponse;
 }
 
-export namespace UpdateTaskPropertyViewRuleResponse {
+export namespace UpdatePropertyViewRuleResponse {
   export type AsObject = {
   }
 }

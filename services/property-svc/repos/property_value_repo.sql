@@ -45,8 +45,27 @@ SELECT
 	properties.is_archived as property_is_archived,
 	properties.field_type as field_type
 FROM property_values
-	LEFT JOIN properties ON property_values.property_id = properties.id
+	JOIN properties ON property_values.property_id = properties.id
 WHERE subject_id = $1;
+
+-- name: GetRelevantPropertyViews :many
+SELECT
+	sqlc.embed(properties),
+	values.id as value_id,
+	values.text_value,
+	values.bool_value,
+	values.number_value,
+	values.select_value,
+	values.date_time_value,
+	values.date_value
+FROM properties
+	LEFT JOIN property_values as values ON values.property_id = properties.id
+WHERE
+	properties.is_archived = false
+	AND (
+		values.subject_id = @subject_id -- implies existence of value
+		OR properties.id = ANY(@always_include :: uuid[])
+	);
 
 -- name: DeletePropertyValue :exec
 DELETE FROM property_values WHERE id = $1;

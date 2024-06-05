@@ -27,6 +27,50 @@ func (q *Queries) CreateTaskRule(ctx context.Context, arg CreateTaskRuleParams) 
 	return err
 }
 
+const getTaskPropertiesUsingMatchers = `-- name: GetTaskPropertiesUsingMatchers :many
+SELECT
+	list_items.property_id,
+	list_items.dont_always_include,
+	calc_rule_specificity(rules.task_id IS NOT NULL, rules.ward_id IS NOT NULL) as specificity
+FROM task_property_view_rules as rules
+JOIN property_view_filter_always_include_items as list_items ON list_items.rule_id = rules.rule_id
+WHERE
+	(rules.ward_id = $1 OR rules.ward_id IS NULL)
+AND (rules.task_id = $2 OR rules.task_id IS NULL)
+ORDER BY specificity
+`
+
+type GetTaskPropertiesUsingMatchersParams struct {
+	WardID uuid.NullUUID
+	TaskID uuid.NullUUID
+}
+
+type GetTaskPropertiesUsingMatchersRow struct {
+	PropertyID        uuid.UUID
+	DontAlwaysInclude bool
+	Specificity       int32
+}
+
+func (q *Queries) GetTaskPropertiesUsingMatchers(ctx context.Context, arg GetTaskPropertiesUsingMatchersParams) ([]GetTaskPropertiesUsingMatchersRow, error) {
+	rows, err := q.db.Query(ctx, getTaskPropertiesUsingMatchers, arg.WardID, arg.TaskID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetTaskPropertiesUsingMatchersRow{}
+	for rows.Next() {
+		var i GetTaskPropertiesUsingMatchersRow
+		if err := rows.Scan(&i.PropertyID, &i.DontAlwaysInclude, &i.Specificity); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getTaskRuleIdUsingExactMatchers = `-- name: GetTaskRuleIdUsingExactMatchers :one
 
 
