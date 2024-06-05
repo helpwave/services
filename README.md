@@ -122,7 +122,7 @@ grpcurl --plaintext \
 	-H "Authorization: Bearer <...>" \
 	-d '{}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.WardService/GetWards
+	services.task_svc.v1.WardService/GetWards
 ```
 
 ## Ports
