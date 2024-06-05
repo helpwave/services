@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
-	zlog "github.com/rs/zerolog"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"telemetry"
 	"time"
 )
 
@@ -49,7 +49,9 @@ func PbToTimestamp(src *timestamppb.Timestamp) pgtype.Timestamp {
 
 // DANGERTruncateAllTables truncates all tables of db
 func DANGERTruncateAllTables(ctx context.Context, db DBTX) error {
-	log := zlog.Ctx(ctx)
+	ctx, span, log := telemetry.StartSpan(ctx, "hwdb.DANGERTruncateAllTables")
+	defer span.End()
+
 	rows, err := db.Query(ctx, `
 		SELECT table_name
 		FROM information_schema.tables
