@@ -28,13 +28,13 @@ type FilterUpdate struct {
 	// append property_id to the always_include list
 	// this means the property is shown, unless a more specific rule (including itself)
 	// puts it in its dont_always_include list
-	AppendToAlwaysInclude []string `protobuf:"bytes,1,rep,name=append_to_always_include,json=appendToAlwaysInclude,proto3" json:"append_to_always_include,omitempty"` // @gotags: validate:"dive,uuid4"
+	AppendToAlwaysInclude []string `protobuf:"bytes,1,rep,name=append_to_always_include,json=appendToAlwaysInclude,proto3" json:"append_to_always_include,omitempty" validate:"dive,uuid4"` // @gotags: validate:"dive,uuid4"
 	// remove property_id to the always_include list, also see append_to_always_include
-	RemoveFromAlwaysInclude []string `protobuf:"bytes,2,rep,name=remove_from_always_include,json=removeFromAlwaysInclude,proto3" json:"remove_from_always_include,omitempty"` // @gotags: validate:"dive,uuid4"
+	RemoveFromAlwaysInclude []string `protobuf:"bytes,2,rep,name=remove_from_always_include,json=removeFromAlwaysInclude,proto3" json:"remove_from_always_include,omitempty" validate:"dive,uuid4"` // @gotags: validate:"dive,uuid4"
 	// append property_id to the dont_always_include list, also see append_to_always_include
-	AppendToDontAlwaysInclude []string `protobuf:"bytes,3,rep,name=append_to_dont_always_include,json=appendToDontAlwaysInclude,proto3" json:"append_to_dont_always_include,omitempty"` // @gotags: validate:"dive,uuid4"
+	AppendToDontAlwaysInclude []string `protobuf:"bytes,3,rep,name=append_to_dont_always_include,json=appendToDontAlwaysInclude,proto3" json:"append_to_dont_always_include,omitempty" validate:"dive,uuid4"` // @gotags: validate:"dive,uuid4"
 	// remove property_id to the dont_always_include list, also see append_to_always_include
-	RemoveFromDontAlwaysInclude []string `protobuf:"bytes,4,rep,name=remove_from_dont_always_include,json=removeFromDontAlwaysInclude,proto3" json:"remove_from_dont_always_include,omitempty"` // @gotags: validate:"dive,uuid4"
+	RemoveFromDontAlwaysInclude []string `protobuf:"bytes,4,rep,name=remove_from_dont_always_include,json=removeFromDontAlwaysInclude,proto3" json:"remove_from_dont_always_include,omitempty" validate:"dive,uuid4"` // @gotags: validate:"dive,uuid4"
 }
 
 func (x *FilterUpdate) Reset() {
@@ -102,7 +102,7 @@ type UpdatePropertyViewRuleRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	FilterUpdate *FilterUpdate `protobuf:"bytes,1,opt,name=filter_update,json=filterUpdate,proto3" json:"filter_update,omitempty"` // @gotags: validate:"required"
+	FilterUpdate *FilterUpdate `protobuf:"bytes,1,opt,name=filter_update,json=filterUpdate,proto3" json:"filter_update,omitempty" validate:"required"` // @gotags: validate:"required"
 	// Types that are assignable to Matcher:
 	//
 	//	*UpdatePropertyViewRuleRequest_TaskMatcher

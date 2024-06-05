@@ -26,9 +26,9 @@ type CreatePropertyRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	SubjectType SubjectType `protobuf:"varint,2,opt,name=subject_type,json=subjectType,proto3,enum=services.property_svc.v1.SubjectType" json:"subject_type,omitempty"` // @gotags: validate:"required"
-	FieldType   FieldType   `protobuf:"varint,3,opt,name=field_type,json=fieldType,proto3,enum=services.property_svc.v1.FieldType" json:"field_type,omitempty"`         // @gotags: validate:"required"
-	Name        string      `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`                                                                             // @gotags: validate:"required"
+	SubjectType SubjectType `protobuf:"varint,2,opt,name=subject_type,json=subjectType,proto3,enum=services.property_svc.v1.SubjectType" json:"subject_type,omitempty" validate:"required"` // @gotags: validate:"required"
+	FieldType   FieldType   `protobuf:"varint,3,opt,name=field_type,json=fieldType,proto3,enum=services.property_svc.v1.FieldType" json:"field_type,omitempty" validate:"required"`         // @gotags: validate:"required"
+	Name        string      `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" validate:"required"`                                                                             // @gotags: validate:"required"
 	Description *string     `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	// ID of set this Property should belong to
 	SetId *string `protobuf:"bytes,6,opt,name=set_id,json=setId,proto3,oneof" json:"set_id,omitempty"`
@@ -181,7 +181,7 @@ type GetPropertyRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetPropertyRequest) Reset() {
@@ -663,7 +663,7 @@ type CreatePropertyRequest_SelectData_SelectOption struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name        string  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"` // @gotags: validate:"required"
+	Name        string  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" validate:"required"` // @gotags: validate:"required"
 	Description *string `protobuf:"bytes,2,opt,name=description,proto3,oneof" json:"description,omitempty"`
 }
 
@@ -789,7 +789,7 @@ type GetPropertyRequest_ViewSource_Global struct {
 }
 
 type GetPropertyRequest_ViewSource_WardId struct {
-	WardId string `protobuf:"bytes,2,opt,name=ward_id,json=wardId,proto3,oneof"` // @gotags: validate:"uuid4"
+	WardId string `protobuf:"bytes,2,opt,name=ward_id,json=wardId,proto3,oneof" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (*GetPropertyRequest_ViewSource_Global) isGetPropertyRequest_ViewSource_Value() {}
@@ -928,7 +928,7 @@ type UpdatePropertyRequest_SelectData struct {
 	unknownFields protoimpl.UnknownFields
 
 	AllowFreetext *bool                                            `protobuf:"varint,1,opt,name=allow_freetext,json=allowFreetext,proto3,oneof" json:"allow_freetext,omitempty"`
-	RemoveOptions []string                                         `protobuf:"bytes,2,rep,name=remove_options,json=removeOptions,proto3" json:"remove_options,omitempty"` // @gotags: validate:"dive,uuid4"
+	RemoveOptions []string                                         `protobuf:"bytes,2,rep,name=remove_options,json=removeOptions,proto3" json:"remove_options,omitempty" validate:"dive,uuid4"` // @gotags: validate:"dive,uuid4"
 	UpsertOptions []*UpdatePropertyRequest_SelectData_SelectOption `protobuf:"bytes,3,rep,name=upsert_options,json=upsertOptions,proto3" json:"upsert_options,omitempty"`
 }
 

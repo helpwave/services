@@ -27,8 +27,8 @@ type AttachPropertyValueRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	SubjectId  string `protobuf:"bytes,1,opt,name=subject_id,json=subjectId,proto3" json:"subject_id,omitempty"`    // @gotags: validate:"uuid4"
-	PropertyId string `protobuf:"bytes,2,opt,name=property_id,json=propertyId,proto3" json:"property_id,omitempty"` // @gotags: validate:"uuid4"
+	SubjectId  string `protobuf:"bytes,1,opt,name=subject_id,json=subjectId,proto3" json:"subject_id,omitempty" validate:"uuid4"`    // @gotags: validate:"uuid4"
+	PropertyId string `protobuf:"bytes,2,opt,name=property_id,json=propertyId,proto3" json:"property_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 	// Types that are assignable to Value:
 	//
 	//	*AttachPropertyValueRequest_TextValue
@@ -140,7 +140,7 @@ type isAttachPropertyValueRequest_Value interface {
 }
 
 type AttachPropertyValueRequest_TextValue struct {
-	TextValue string `protobuf:"bytes,3,opt,name=text_value,json=textValue,proto3,oneof"` // @gotags: validate:"required" // FIELD_TYPE_TEXT
+	TextValue string `protobuf:"bytes,3,opt,name=text_value,json=textValue,proto3,oneof" validate:"required"` // @gotags: validate:"required" // FIELD_TYPE_TEXT
 }
 
 type AttachPropertyValueRequest_NumberValue struct {
@@ -227,8 +227,8 @@ type TaskPropertyMatcher struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WardId *string `protobuf:"bytes,1,opt,name=ward_id,json=wardId,proto3,oneof" json:"ward_id,omitempty"` // @gotags: validate:"omitempty,omitnil,uuid4"
-	TaskId *string `protobuf:"bytes,2,opt,name=task_id,json=taskId,proto3,oneof" json:"task_id,omitempty"` // @gotags: validate:"omitempty,omitnil,uuid4"
+	WardId *string `protobuf:"bytes,1,opt,name=ward_id,json=wardId,proto3,oneof" json:"ward_id,omitempty" validate:"omitempty,omitnil,uuid4"` // @gotags: validate:"omitempty,omitnil,uuid4"
+	TaskId *string `protobuf:"bytes,2,opt,name=task_id,json=taskId,proto3,oneof" json:"task_id,omitempty" validate:"omitempty,omitnil,uuid4"` // @gotags: validate:"omitempty,omitnil,uuid4"
 }
 
 func (x *TaskPropertyMatcher) Reset() {

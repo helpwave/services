@@ -129,7 +129,7 @@ type CreatePatientRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	HumanReadableIdentifier string `protobuf:"bytes,1,opt,name=human_readable_identifier,json=humanReadableIdentifier,proto3" json:"human_readable_identifier,omitempty"` // @gotags: validate:"required"
+	HumanReadableIdentifier string `protobuf:"bytes,1,opt,name=human_readable_identifier,json=humanReadableIdentifier,proto3" json:"human_readable_identifier,omitempty" validate:"required"` // @gotags: validate:"required"
 	Notes                   string `protobuf:"bytes,2,opt,name=notes,proto3" json:"notes,omitempty"`
 }
 
@@ -231,7 +231,7 @@ type GetPatientRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetPatientRequest) Reset() {
@@ -278,8 +278,8 @@ type GetPatientResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                      string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                                            // @gotags: validate:"uuid4"
-	HumanReadableIdentifier string `protobuf:"bytes,2,opt,name=human_readable_identifier,json=humanReadableIdentifier,proto3" json:"human_readable_identifier,omitempty"` // @gotags: validate:"required"
+	Id                      string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`                                                                               // @gotags: validate:"uuid4"
+	HumanReadableIdentifier string `protobuf:"bytes,2,opt,name=human_readable_identifier,json=humanReadableIdentifier,proto3" json:"human_readable_identifier,omitempty" validate:"required"` // @gotags: validate:"required"
 	Notes                   string `protobuf:"bytes,3,opt,name=notes,proto3" json:"notes,omitempty"`
 	// Deprecated: Marked as deprecated in services/task_svc/v1/patient_svc.proto.
 	BedId *string `protobuf:"bytes,4,opt,name=bed_id,json=bedId,proto3,oneof" json:"bed_id,omitempty"`
@@ -378,7 +378,7 @@ type DeletePatientRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *DeletePatientRequest) Reset() {
@@ -463,7 +463,7 @@ type GetPatientByBedRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	BedId string `protobuf:"bytes,1,opt,name=bed_id,json=bedId,proto3" json:"bed_id,omitempty"` // @gotags: validate:"uuid4"
+	BedId string `protobuf:"bytes,1,opt,name=bed_id,json=bedId,proto3" json:"bed_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetPatientByBedRequest) Reset() {
@@ -581,7 +581,7 @@ type GetPatientsByWardRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WardId string `protobuf:"bytes,1,opt,name=ward_id,json=wardId,proto3" json:"ward_id,omitempty"` // @gotags: validate:"uuid4"
+	WardId string `protobuf:"bytes,1,opt,name=ward_id,json=wardId,proto3" json:"ward_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetPatientsByWardRequest) Reset() {
@@ -675,7 +675,7 @@ type GetPatientAssignmentByWardRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WardId string `protobuf:"bytes,1,opt,name=ward_id,json=wardId,proto3" json:"ward_id,omitempty"` // @gotags: validate:"uuid4"
+	WardId string `protobuf:"bytes,1,opt,name=ward_id,json=wardId,proto3" json:"ward_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetPatientAssignmentByWardRequest) Reset() {
@@ -854,7 +854,7 @@ type UpdatePatientRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                      string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id                      string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 	HumanReadableIdentifier *string `protobuf:"bytes,2,opt,name=human_readable_identifier,json=humanReadableIdentifier,proto3,oneof" json:"human_readable_identifier,omitempty"`
 	Notes                   *string `protobuf:"bytes,3,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 }
@@ -955,8 +955,8 @@ type AssignBedRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id    string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                    // @gotags: validate:"uuid4"
-	BedId string `protobuf:"bytes,2,opt,name=bed_id,json=bedId,proto3" json:"bed_id,omitempty"` // @gotags: validate:"uuid4"
+	Id    string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`                    // @gotags: validate:"uuid4"
+	BedId string `protobuf:"bytes,2,opt,name=bed_id,json=bedId,proto3" json:"bed_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *AssignBedRequest) Reset() {
@@ -1048,7 +1048,7 @@ type UnassignBedRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *UnassignBedRequest) Reset() {
@@ -1133,7 +1133,7 @@ type DischargePatientRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *DischargePatientRequest) Reset() {
@@ -1218,7 +1218,7 @@ type GetPatientDetailsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetPatientDetailsRequest) Reset() {
@@ -1489,7 +1489,7 @@ type ReadmitPatientRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PatientId string `protobuf:"bytes,1,opt,name=patient_id,json=patientId,proto3" json:"patient_id,omitempty"` // @gotags: validate:"uuid4"
+	PatientId string `protobuf:"bytes,1,opt,name=patient_id,json=patientId,proto3" json:"patient_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *ReadmitPatientRequest) Reset() {

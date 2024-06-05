@@ -25,10 +25,10 @@ type AfterRegistrationWebhookPayloadRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId   string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // @gotags: validate:"uuid4" json:"userId"
-	Email    string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`                 // @gotags: validate:"required,email" json:"email"
-	Nickname string `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname,omitempty"`           // @gotags: validate:"required" json:"nickname"
-	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`                   // @gotags: validate:"required" json:"name"
+	UserId   string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"userId" validate:"uuid4"` // @gotags: validate:"uuid4" json:"userId"
+	Email    string `protobuf:"bytes,2,opt,name=email,proto3" json:"email" validate:"required,email"`       // @gotags: validate:"required,email" json:"email"
+	Nickname string `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname" validate:"required"`       // @gotags: validate:"required" json:"nickname"
+	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name" validate:"required"`               // @gotags: validate:"required" json:"name"
 }
 
 func (x *AfterRegistrationWebhookPayloadRequest) Reset() {
@@ -96,10 +96,10 @@ type AfterSettingsWebhookPayload struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId   string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // @gotags: validate:"uuid4" json:"userId"
-	Email    string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`                 // @gotags: validate:"required,email" json:"email"
-	Nickname string `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname,omitempty"`           // @gotags: validate:"required" json:"nickname"
-	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`                   // @gotags: validate:"required" json:"name"
+	UserId   string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"userId" validate:"uuid4"` // @gotags: validate:"uuid4" json:"userId"
+	Email    string `protobuf:"bytes,2,opt,name=email,proto3" json:"email" validate:"required,email"`       // @gotags: validate:"required,email" json:"email"
+	Nickname string `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname" validate:"required"`       // @gotags: validate:"required" json:"nickname"
+	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name" validate:"required"`               // @gotags: validate:"required" json:"name"
 }
 
 func (x *AfterSettingsWebhookPayload) Reset() {

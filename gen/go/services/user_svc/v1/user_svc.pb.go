@@ -25,8 +25,8 @@ type CreateUserRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id       string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`       // @gotags: validate:"uuid4"
-	Email    string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"` // @gotags: validate:"email"
+	Id       string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`       // @gotags: validate:"uuid4"
+	Email    string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty" validate:"email"` // @gotags: validate:"email"
 	Nickname string `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname,omitempty"`
 	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 }
@@ -308,7 +308,7 @@ type ReadPublicProfileRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *ReadPublicProfileRequest) Reset() {
@@ -426,7 +426,7 @@ type UpdateUserRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *UpdateUserRequest) Reset() {

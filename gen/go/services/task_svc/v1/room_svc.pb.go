@@ -25,8 +25,8 @@ type CreateRoomRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name   string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`                   // @gotags: validate:"required"
-	WardId string `protobuf:"bytes,2,opt,name=ward_id,json=wardId,proto3" json:"ward_id,omitempty"` // @gotags: validate:"required"
+	Name   string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" validate:"required"`                   // @gotags: validate:"required"
+	WardId string `protobuf:"bytes,2,opt,name=ward_id,json=wardId,proto3" json:"ward_id,omitempty" validate:"required"` // @gotags: validate:"required"
 }
 
 func (x *CreateRoomRequest) Reset() {
@@ -127,7 +127,7 @@ type GetRoomRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetRoomRequest) Reset() {
@@ -338,7 +338,7 @@ type GetRoomsByWardRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WardId string `protobuf:"bytes,1,opt,name=ward_id,json=wardId,proto3" json:"ward_id,omitempty"` // @gotags: validate:"uuid4"
+	WardId string `protobuf:"bytes,1,opt,name=ward_id,json=wardId,proto3" json:"ward_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetRoomsByWardRequest) Reset() {
@@ -432,7 +432,7 @@ type UpdateRoomRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id   string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id   string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 	Name *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 }
 
@@ -525,7 +525,7 @@ type DeleteRoomRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *DeleteRoomRequest) Reset() {
@@ -610,7 +610,7 @@ type GetRoomOverviewsByWardRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // @gotags: validate:"uuid4"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *GetRoomOverviewsByWardRequest) Reset() {
