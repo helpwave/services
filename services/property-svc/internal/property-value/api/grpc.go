@@ -2,7 +2,7 @@ package api
 
 import (
 	"context"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/protobuf/types/known/timestamppb"

@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"gen/proto/libs/events/v1"
-	pb "gen/proto/services/ory_svc/v1"
+	pb "gen/services/ory_svc/v1"
 	userSvcPb "gen/proto/services/user_svc/v1"
 	daprc "github.com/dapr/go-sdk/client"
 	daprcmn "github.com/dapr/go-sdk/service/common"

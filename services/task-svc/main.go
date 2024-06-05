@@ -3,7 +3,7 @@ package main
 import (
 	"common"
 	"context"
-	pb "gen/proto/services/task_svc/v1"
+	pb "gen/services/task_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwdb"
 	"task-svc/internal/bed"

@@ -3,7 +3,7 @@ package main
 import (
 	"common"
 	"context"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"hwdb"
 	"hwes/eventstoredb"
 	ph "tasks-svc/internal/patient/handlers"

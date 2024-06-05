@@ -3,7 +3,7 @@ package property_value_postgres_projection
 import (
 	"context"
 	"fmt"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
