@@ -13,7 +13,7 @@ grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"id": "06f57c97-509e-4b41-9839-233f29197f56"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.PatientService/GetPatientDetails > /dev/null
+	services.task_svc.v1.PatientService/GetPatientDetails > /dev/null
 
 sleep 1
 
@@ -22,7 +22,7 @@ grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"id": "c1c104f0-52c5-46d3-9441-33d0b0c03f87"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.PatientService/GetPatientDetails > /dev/null
+	services.task_svc.v1.PatientService/GetPatientDetails > /dev/null
 sleep 1
 
 echo "Unassigned Patient, with tasks:"
@@ -30,10 +30,10 @@ grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"id": "2e830d2f-69c9-4e38-bd4b-ab43decc7ae3"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.PatientService/GetPatientDetails > /dev/null
+	services.task_svc.v1.PatientService/GetPatientDetails > /dev/null
 
 grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.PatientService/GetRecentPatients
+	services.task_svc.v1.PatientService/GetRecentPatients

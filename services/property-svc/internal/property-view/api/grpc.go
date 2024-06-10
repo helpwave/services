@@ -3,21 +3,22 @@ package api
 import (
 	"context"
 	"fmt"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"github.com/pkg/errors"
 	"hwes"
 	"hwutil"
 	valuesApi "property-svc/internal/property-value/api"
-	commandsV1 "property-svc/internal/property-view/commands/v1"
+	"property-svc/internal/property-view/handlers"
 )
 
 type PropertyViewGrpcService struct {
 	pb.UnimplementedPropertyViewsServiceServer
-	as hwes.AggregateStore
+	as       hwes.AggregateStore
+	handlers *handlers.Handlers
 }
 
-func NewPropertyViewService(aggregateStore hwes.AggregateStore) *PropertyViewGrpcService {
-	return &PropertyViewGrpcService{as: aggregateStore}
+func NewPropertyViewService(aggregateStore hwes.AggregateStore, handlers *handlers.Handlers) *PropertyViewGrpcService {
+	return &PropertyViewGrpcService{as: aggregateStore, handlers: handlers}
 }
 
 func (s PropertyViewGrpcService) UpdatePropertyViewRule(ctx context.Context, req *pb.UpdatePropertyViewRuleRequest) (*pb.UpdatePropertyViewRuleResponse, error) {
@@ -60,7 +61,7 @@ func (s PropertyViewGrpcService) UpdatePropertyViewRule(ctx context.Context, req
 		return &pb.UpdatePropertyViewRuleResponse{}, nil
 	}
 
-	if err := commandsV1.NewUpdatePropertyViewRuleCommandHandler(s.as)(ctx, matcher,
+	if err := s.handlers.Commands.V1.UpdatePropertyViewRule(ctx, matcher,
 		appendToAlwaysInclude,
 		removeFromAlwaysInclude,
 		appendToDontAlwaysInclude,

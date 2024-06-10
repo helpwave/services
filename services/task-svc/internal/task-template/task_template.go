@@ -10,7 +10,7 @@ import (
 	"hwutil"
 	"task-svc/repos/task_template_repo"
 
-	pb "gen/proto/services/task_svc/v1"
+	pb "gen/services/task_svc/v1"
 	zlog "github.com/rs/zerolog/log"
 )
 

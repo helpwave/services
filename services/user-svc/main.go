@@ -3,7 +3,7 @@ package main
 import (
 	"common"
 	"context"
-	pb "gen/proto/services/user_svc/v1"
+	pb "gen/services/user_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwdb"
 	"user-svc/internal/organization"
@@ -17,10 +17,10 @@ var Version string
 
 func main() {
 	common.Setup(ServiceName, Version, common.WithAuth(), common.WithUnauthenticatedMethods([]string{
-		"/proto.services.user_svc.v1.UserService/CreateUser",
-		"/proto.services.user_svc.v1.OrganizationService/CreateOrganizationForUser",
-		"/proto.services.user_svc.v1.OrganizationService/AddMember",
-		"/proto.services.user_svc.v1.OrganizationService/GetOrganizationsByUser",
+		"/services.user_svc.v1.UserService/CreateUser",
+		"/services.user_svc.v1.OrganizationService/CreateOrganizationForUser",
+		"/services.user_svc.v1.OrganizationService/AddMember",
+		"/services.user_svc.v1.OrganizationService/GetOrganizationsByUser",
 	}))
 
 	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())

@@ -5,7 +5,7 @@ import (
 	"common"
 	common_test "common/test"
 	"context"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"github.com/pashagolub/pgxmock/v3"
 	"github.com/stretchr/testify/assert"
@@ -17,6 +17,7 @@ import (
 	"property-svc/internal/property-view/aggregate"
 	"property-svc/internal/property-view/api"
 	v1 "property-svc/internal/property-view/events/v1"
+	"property-svc/internal/property-view/handlers"
 	"strings"
 	"testing"
 	"text/template"
@@ -26,7 +27,8 @@ import (
 func server(ctx context.Context) (pb.PropertyViewsServiceClient, *hwes_test.AggregateStore, func()) {
 	// Build gRPC service
 	aggregateStore := hwes_test.NewAggregateStore()
-	grpcService := api.NewPropertyViewService(aggregateStore)
+	propertyViewHandlers := handlers.NewPropertyViewHandlers(aggregateStore)
+	grpcService := api.NewPropertyViewService(aggregateStore, propertyViewHandlers)
 
 	common.Setup("property-svc", "test", common.WithFakeAuthOnly())
 
