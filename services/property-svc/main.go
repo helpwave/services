@@ -3,6 +3,7 @@ package main
 import (
 	"common"
 	"context"
+	"flag"
 	pb "gen/services/property_svc/v1"
 	"hwdb"
 	"hwes/eventstoredb"
@@ -31,19 +32,33 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	common.Setup(ServiceName, Version, common.WithAuth())
 
+	replayMode := flag.Bool("replay", false, "")
+	flag.Parse()
+	log.Debug().Bool("replayMode", *replayMode).Msg("flags")
+
 	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
 
-	propertyHandlers := ph.NewPropertyHandlers(aggregateStore)
-	propertySetHandlers := psh.NewPropertySetHandlers(aggregateStore)
-	propertyViewHandlers := pvih.NewPropertyViewHandlers(aggregateStore)
-	propertyValueHandlers := pvh.NewPropertyValueHandlers(aggregateStore)
+	propertyPostgresProjection := property_postgres_projection.
+		NewProjection(eventStore, ServiceName, hwdb.GetDB())
+
+	propertyValuePostgresProjection := property_value_postgres_projection.
+		NewProjection(eventStore, ServiceName, hwdb.GetDB())
+
+	if *replayMode {
+		if err := replay(ctx, eventStore); err != nil {
+			log.Err(err).Msg("error during replay")
+			cancel()
+		}
+		// TODO: Find a more generic approach to run common.Shutdown()
+		common.Shutdown()
+		return
+	}
 
 	go func() {
-		propertyPostgresProjection := property_postgres_projection.NewProjection(eventStore, ServiceName)
 		if err := propertyPostgresProjection.Subscribe(ctx); err != nil {
 			log.Err(err).Msg("error during property-postgres projection subscription")
 			cancel()
@@ -51,7 +66,6 @@ func main() {
 	}()
 
 	go func() {
-		propertyValuePostgresProjection := property_value_postgres_projection.NewProjection(eventStore, ServiceName)
 		if err := propertyValuePostgresProjection.Subscribe(ctx); err != nil {
 			log.Err(err).Msg("error during propertyValue-postgres projection subscription")
 			cancel()
@@ -65,6 +79,11 @@ func main() {
 			cancel()
 		}
 	}()
+
+	propertyHandlers := ph.NewPropertyHandlers(aggregateStore)
+	propertySetHandlers := psh.NewPropertySetHandlers(aggregateStore)
+	propertyViewHandlers := pvih.NewPropertyViewHandlers(aggregateStore)
+	propertyValueHandlers := pvh.NewPropertyValueHandlers(aggregateStore)
 
 	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
