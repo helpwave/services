@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"flag"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"hwdb"
 	"hwes/eventstoredb"
 	propertySet "property-svc/internal/property-set/api"

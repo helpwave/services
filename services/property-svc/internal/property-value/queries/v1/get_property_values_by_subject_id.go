@@ -3,7 +3,7 @@ package v1
 import (
 	"context"
 	"fmt"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"hwdb"
 	"hwes"
 	"hwutil"

@@ -4,7 +4,7 @@ import (
 	"common"
 	common_test "common/test"
 	"context"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
 	hwes_test "hwes/test"

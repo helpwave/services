@@ -5,7 +5,7 @@ import (
 	"common"
 	common_test "common/test"
 	"context"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"github.com/pashagolub/pgxmock/v3"
 	"github.com/stretchr/testify/assert"
