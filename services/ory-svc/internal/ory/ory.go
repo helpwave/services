@@ -3,7 +3,7 @@ package ory
 import (
 	"common"
 	"context"
-	userSvcPb "gen/proto/services/user_svc/v1"
+	userSvcPb "gen/services/user_svc/v1"
 	"github.com/google/uuid"
 	ory "github.com/ory/client-go"
 	"hwutil"

@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"errors"
-	"gen/proto/libs/events/v1"
+	"gen/libs/events/v1"
 	pb "gen/services/user_svc/v1"
 	"github.com/jackc/pgx/v5"
 	"hwdb"

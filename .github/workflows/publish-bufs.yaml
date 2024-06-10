@@ -5,7 +5,7 @@ on:
     branches: [ 'main' ]
     paths:
     - proto/**/*.proto
-    - gen/*/proto/**/*
+    - gen/**/*
 
 env:
   # renovate: datasource=github-releases depName=bufbuild/buf

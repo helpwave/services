@@ -11,8 +11,8 @@ import grpc
 
 sys.path.append(settings.PROTO_PATH)
 
-from proto.services.impulse_svc.v1 import impulse_svc_pb2_grpc
-from proto.services.impulse_svc.v1 import impulse_svc_pb2
+from services.impulse_svc.v1 import impulse_svc_pb2_grpc
+from services.impulse_svc.v1 import impulse_svc_pb2
 
 from impulse.models import Challenge, UserChallenge, User, Reward, Team
 
