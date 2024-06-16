@@ -12,9 +12,9 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createPropertyValue = `-- name: CreatePropertyValue :exec
+const createBasicPropertyValue = `-- name: CreateBasicPropertyValue :exec
 INSERT INTO property_values
-	(id, property_id, subject_id, text_value, number_value, bool_value, date_value, date_time_value, select_value)
+	(id, property_id, subject_id, text_value, number_value, bool_value, date_value, date_time_value)
 VALUES (
         $1,
         $2,
@@ -23,12 +23,11 @@ VALUES (
         $5,
         $6,
         $7,
-        $8,
-        $9
+        $8
 )
 `
 
-type CreatePropertyValueParams struct {
+type CreateBasicPropertyValueParams struct {
 	ID            uuid.UUID
 	PropertyID    uuid.UUID
 	SubjectID     uuid.UUID
@@ -37,11 +36,10 @@ type CreatePropertyValueParams struct {
 	BoolValue     *bool
 	DateValue     pgtype.Date
 	DateTimeValue pgtype.Timestamp
-	SelectValue   uuid.NullUUID
 }
 
-func (q *Queries) CreatePropertyValue(ctx context.Context, arg CreatePropertyValueParams) error {
-	_, err := q.db.Exec(ctx, createPropertyValue,
+func (q *Queries) CreateBasicPropertyValue(ctx context.Context, arg CreateBasicPropertyValueParams) error {
+	_, err := q.db.Exec(ctx, createBasicPropertyValue,
 		arg.ID,
 		arg.PropertyID,
 		arg.SubjectID,
@@ -50,7 +48,6 @@ func (q *Queries) CreatePropertyValue(ctx context.Context, arg CreatePropertyVal
 		arg.BoolValue,
 		arg.DateValue,
 		arg.DateTimeValue,
-		arg.SelectValue,
 	)
 	return err
 }
@@ -64,8 +61,17 @@ func (q *Queries) DeletePropertyValue(ctx context.Context, id uuid.UUID) error {
 	return err
 }
 
+const disconnectValueFromAllSelectOptions = `-- name: DisconnectValueFromAllSelectOptions :exec
+DELETE FROM multi_select_values WHERE value_id = $1
+`
+
+func (q *Queries) DisconnectValueFromAllSelectOptions(ctx context.Context, valueID uuid.UUID) error {
+	_, err := q.db.Exec(ctx, disconnectValueFromAllSelectOptions, valueID)
+	return err
+}
+
 const getPropertyValueByID = `-- name: GetPropertyValueByID :one
-SELECT id, property_id, subject_id, text_value, number_value, bool_value, date_value, date_time_value, select_value FROM property_values WHERE id = $1
+SELECT id, property_id, subject_id, text_value, number_value, bool_value, date_value, date_time_value FROM property_values WHERE id = $1
 `
 
 func (q *Queries) GetPropertyValueByID(ctx context.Context, id uuid.UUID) (PropertyValue, error) {
@@ -80,7 +86,6 @@ func (q *Queries) GetPropertyValueByID(ctx context.Context, id uuid.UUID) (Prope
 		&i.BoolValue,
 		&i.DateValue,
 		&i.DateTimeValue,
-		&i.SelectValue,
 	)
 	return i, err
 }
@@ -110,7 +115,6 @@ SELECT
 	property_values.text_value,
 	property_values.bool_value,
 	property_values.number_value,
-	property_values.select_value,
 	property_values.date_time_value,
 	property_values.date_value,
 	properties.id as property_id,
@@ -127,7 +131,6 @@ type GetPropertyValuesWithPropertyBySubjectIDRow struct {
 	TextValue          *string
 	BoolValue          *bool
 	NumberValue        *float64
-	SelectValue        uuid.NullUUID
 	DateTimeValue      pgtype.Timestamp
 	DateValue          pgtype.Date
 	PropertyID         uuid.UUID
@@ -150,7 +153,6 @@ func (q *Queries) GetPropertyValuesWithPropertyBySubjectID(ctx context.Context, 
 			&i.TextValue,
 			&i.BoolValue,
 			&i.NumberValue,
-			&i.SelectValue,
 			&i.DateTimeValue,
 			&i.DateValue,
 			&i.PropertyID,
@@ -175,11 +177,15 @@ SELECT
 	values.text_value,
 	values.bool_value,
 	values.number_value,
-	values.select_value,
 	values.date_time_value,
-	values.date_value
+	values.date_value,
+	so.id as select_option_id,
+	so.name as select_option_name,
+	so.description as select_option_description
 FROM properties
 	LEFT JOIN property_values as values ON values.property_id = properties.id
+	LEFT JOIN multi_select_values as msv ON msv.value_id = values.id
+	LEFT JOIN select_options as so ON so.id = msv.select_option
 WHERE
 	properties.is_archived = false
 	AND (
@@ -194,14 +200,16 @@ type GetRelevantPropertyViewsParams struct {
 }
 
 type GetRelevantPropertyViewsRow struct {
-	Property      Property
-	ValueID       uuid.NullUUID
-	TextValue     *string
-	BoolValue     *bool
-	NumberValue   *float64
-	SelectValue   uuid.NullUUID
-	DateTimeValue pgtype.Timestamp
-	DateValue     pgtype.Date
+	Property                Property
+	ValueID                 uuid.NullUUID
+	TextValue               *string
+	BoolValue               *bool
+	NumberValue             *float64
+	DateTimeValue           pgtype.Timestamp
+	DateValue               pgtype.Date
+	SelectOptionID          uuid.NullUUID
+	SelectOptionName        *string
+	SelectOptionDescription *string
 }
 
 func (q *Queries) GetRelevantPropertyViews(ctx context.Context, arg GetRelevantPropertyViewsParams) ([]GetRelevantPropertyViewsRow, error) {
@@ -226,9 +234,11 @@ func (q *Queries) GetRelevantPropertyViews(ctx context.Context, arg GetRelevantP
 			&i.TextValue,
 			&i.BoolValue,
 			&i.NumberValue,
-			&i.SelectValue,
 			&i.DateTimeValue,
 			&i.DateValue,
+			&i.SelectOptionID,
+			&i.SelectOptionName,
+			&i.SelectOptionDescription,
 		); err != nil {
 			return nil, err
 		}
@@ -246,8 +256,7 @@ SET text_value = $2,
 	number_value = $3,
 	bool_value = $4,
 	date_value = $5,
-	date_time_value = $6,
-	select_value = $7
+	date_time_value = $6
 WHERE id = $1
 `
 
@@ -258,7 +267,6 @@ type UpdatePropertyValueByIDParams struct {
 	BoolValue     *bool
 	DateValue     pgtype.Date
 	DateTimeValue pgtype.Timestamp
-	SelectValue   uuid.NullUUID
 }
 
 func (q *Queries) UpdatePropertyValueByID(ctx context.Context, arg UpdatePropertyValueByIDParams) error {
@@ -269,7 +277,6 @@ func (q *Queries) UpdatePropertyValueByID(ctx context.Context, arg UpdatePropert
 		arg.BoolValue,
 		arg.DateValue,
 		arg.DateTimeValue,
-		arg.SelectValue,
 	)
 	return err
 }

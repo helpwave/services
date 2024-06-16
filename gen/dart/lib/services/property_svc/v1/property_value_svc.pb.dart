@@ -20,10 +20,14 @@ import 'types.pbenum.dart' as $16;
 class AttachPropertyValueRequest_MultiSelectValue extends $pb.GeneratedMessage {
   factory AttachPropertyValueRequest_MultiSelectValue({
     $core.Iterable<$core.String>? selectValues,
+    $core.Iterable<$core.String>? removeSelectValues,
   }) {
     final $result = create();
     if (selectValues != null) {
       $result.selectValues.addAll(selectValues);
+    }
+    if (removeSelectValues != null) {
+      $result.removeSelectValues.addAll(removeSelectValues);
     }
     return $result;
   }
@@ -33,6 +37,7 @@ class AttachPropertyValueRequest_MultiSelectValue extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttachPropertyValueRequest.MultiSelectValue', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..pPS(1, _omitFieldNames ? '' : 'selectValues')
+    ..pPS(2, _omitFieldNames ? '' : 'removeSelectValues')
     ..hasRequiredFields = false
   ;
 
@@ -59,6 +64,9 @@ class AttachPropertyValueRequest_MultiSelectValue extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<$core.String> get selectValues => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.String> get removeSelectValues => $_getList(1);
 }
 
 enum AttachPropertyValueRequest_Value {

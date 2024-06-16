@@ -78,6 +78,12 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		value = req.GetDateTimeValue()
 	case *pb.AttachPropertyValueRequest_SelectValue:
 		value = req.GetSelectValue()
+	case *pb.AttachPropertyValueRequest_MultiSelectValue_:
+		msv := req.GetMultiSelectValue()
+		value = models.MultiSelectChange{
+			SelectValues:       msv.SelectValues,
+			RemoveSelectValues: msv.RemoveSelectValues,
+		}
 	default:
 		value = nil
 	}

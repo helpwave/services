@@ -455,7 +455,7 @@ proto.services.property_svc.v1.AttachPropertyValueRequest.serializeBinaryToWrite
  * @private {!Array<number>}
  * @const
  */
-proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.repeatedFields_ = [1];
+proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.repeatedFields_ = [1,2];
 
 
 
@@ -488,7 +488,8 @@ proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.proto
  */
 proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    selectValuesList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
+    selectValuesList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f,
+    removeSelectValuesList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -529,6 +530,10 @@ proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.deser
       var value = /** @type {string} */ (reader.readString());
       msg.addSelectValues(value);
       break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.addRemoveSelectValues(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -562,6 +567,13 @@ proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.seria
   if (f.length > 0) {
     writer.writeRepeatedString(
       1,
+      f
+    );
+  }
+  f = message.getRemoveSelectValuesList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
+      2,
       f
     );
   }
@@ -602,6 +614,43 @@ proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.proto
  */
 proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.prototype.clearSelectValuesList = function() {
   return this.setSelectValuesList([]);
+};
+
+
+/**
+ * repeated string remove_select_values = 2;
+ * @return {!Array<string>}
+ */
+proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.prototype.getRemoveSelectValuesList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 2));
+};
+
+
+/**
+ * @param {!Array<string>} value
+ * @return {!proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue} returns this
+ */
+proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.prototype.setRemoveSelectValuesList = function(value) {
+  return jspb.Message.setField(this, 2, value || []);
+};
+
+
+/**
+ * @param {string} value
+ * @param {number=} opt_index
+ * @return {!proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue} returns this
+ */
+proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.prototype.addRemoveSelectValues = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 2, value, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue} returns this
+ */
+proto.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue.prototype.clearRemoveSelectValuesList = function() {
+  return this.setRemoveSelectValuesList([]);
 };
 
 

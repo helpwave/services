@@ -67,6 +67,11 @@ export namespace AttachPropertyValueRequest {
     clearSelectValuesList(): MultiSelectValue;
     addSelectValues(value: string, index?: number): MultiSelectValue;
 
+    getRemoveSelectValuesList(): Array<string>;
+    setRemoveSelectValuesList(value: Array<string>): MultiSelectValue;
+    clearRemoveSelectValuesList(): MultiSelectValue;
+    addRemoveSelectValues(value: string, index?: number): MultiSelectValue;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): MultiSelectValue.AsObject;
     static toObject(includeInstance: boolean, msg: MultiSelectValue): MultiSelectValue.AsObject;
@@ -78,6 +83,7 @@ export namespace AttachPropertyValueRequest {
   export namespace MultiSelectValue {
     export type AsObject = {
       selectValuesList: Array<string>,
+      removeSelectValuesList: Array<string>,
     }
   }
 

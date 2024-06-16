@@ -53,3 +53,8 @@ type PropertyAndValue struct {
 
 	Value *TypedValue
 }
+
+type MultiSelectChange struct {
+	SelectValues       []string
+	RemoveSelectValues []string
+}

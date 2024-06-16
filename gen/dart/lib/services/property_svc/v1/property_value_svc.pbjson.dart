@@ -38,6 +38,7 @@ const AttachPropertyValueRequest_MultiSelectValue$json = {
   '1': 'MultiSelectValue',
   '2': [
     {'1': 'select_values', '3': 1, '4': 3, '5': 9, '10': 'selectValues'},
+    {'1': 'remove_select_values', '3': 2, '4': 3, '5': 9, '10': 'removeSelectValues'},
   ],
 };
 
@@ -51,8 +52,9 @@ final $typed_data.Uint8List attachPropertyValueRequestDescriptor = $convert.base
     'VlGAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEgAUg1kYXRlVGltZVZhbHVlEiMK'
     'DHNlbGVjdF92YWx1ZRgIIAEoCUgAUgtzZWxlY3RWYWx1ZRJ1ChJtdWx0aV9zZWxlY3RfdmFsdW'
     'UYCSABKAsyRS5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuQXR0YWNoUHJvcGVydHlWYWx1ZVJl'
-    'cXVlc3QuTXVsdGlTZWxlY3RWYWx1ZUgAUhBtdWx0aVNlbGVjdFZhbHVlGjcKEE11bHRpU2VsZW'
-    'N0VmFsdWUSIwoNc2VsZWN0X3ZhbHVlcxgBIAMoCVIMc2VsZWN0VmFsdWVzQgcKBXZhbHVl');
+    'cXVlc3QuTXVsdGlTZWxlY3RWYWx1ZUgAUhBtdWx0aVNlbGVjdFZhbHVlGmkKEE11bHRpU2VsZW'
+    'N0VmFsdWUSIwoNc2VsZWN0X3ZhbHVlcxgBIAMoCVIMc2VsZWN0VmFsdWVzEjAKFHJlbW92ZV9z'
+    'ZWxlY3RfdmFsdWVzGAIgAygJUhJyZW1vdmVTZWxlY3RWYWx1ZXNCBwoFdmFsdWU=');
 
 @$core.Deprecated('Use attachPropertyValueResponseDescriptor instead')
 const AttachPropertyValueResponse$json = {

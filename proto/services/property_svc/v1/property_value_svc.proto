@@ -20,13 +20,15 @@ message AttachPropertyValueRequest{
     bool bool_value = 5; // FIELD_TYPE_CHECKBOX
     Date date_value = 6; // FIELD_TYPE_DATE
     google.protobuf.Timestamp date_time_value = 7; // FIELD_TYPE_DATE_TIME
-    string select_value = 8; // FIELD_TYPE_SELECT, id of option
+    string select_value = 8; // @gotags: validate:"uuid4" // FIELD_TYPE_SELECT, id of option
     MultiSelectValue multi_select_value = 9; // FIELD_TYPE_MULTI_SELECT
   }
 
   message MultiSelectValue {
-    repeated string select_values = 1; // ids of options
+    repeated string select_values = 1; // @gotags: validate:"dive,uuid4" // ids of options
+    repeated string remove_select_values = 2; // @gotags: validate:"dive,uuid4" // in case a PV is already attached with multiple select values, you can remove them here
   }
+
 }
 
 message AttachPropertyValueResponse {
