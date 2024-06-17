@@ -119,12 +119,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 			})
 		}
 
-		var err error = nil
-		p.propertyValueRepo.ConnectValueWithSelectOptions(ctx, selectsToAdd).Exec(func(_ int, e error) {
-			if e != nil {
-				err = e
-			}
-		})
+		err = hwdb.ExecBatch(p.propertyValueRepo.ConnectValueWithSelectOptions(ctx, selectsToAdd))
 		if err != nil {
 			return fmt.Errorf("onPropertyValueCreated: could not connect value with select options: %w", err), hwutil.PtrTo(esdb.NackActionPark)
 		}
@@ -273,7 +268,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 				if err != nil {
 					return fmt.Errorf("onPropertyValueUpdated: could not parse RemoveSelectValues: %w", err), hwutil.PtrTo(esdb.NackActionPark)
 				}
-				if err := propertyValueRepo.DisconnectValueFromSelectOptions(ctx, arr); err != nil {
+				if err := hwdb.ExecBatch(propertyValueRepo.DisconnectValueFromSelectOptions(ctx, arr)); err != nil {
 					return fmt.Errorf("onPropertyValueUpdated: could not disconnect desired options: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
 				}
 			}
