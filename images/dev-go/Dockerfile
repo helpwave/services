@@ -33,7 +33,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
 # install buf
 #  https://buf.build/
 # renovate: datasource=github-releases depName=bufbuild/buf
-ENV BUF_VERSION=1.32.2
+ENV BUF_VERSION=1.33.0
 RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-Linux-x86_64 -O /usr/local/bin/buf \
     && chmod +x /usr/local/bin/buf
 
@@ -116,7 +116,7 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} 
 # install golangci-lint, the linter we also use in the CI
 #  https://golangci-lint.run/
 # renovate: datasource=github-releases depName=golangci/golangci-lint
-ENV GOLANGCI_LINT_VERSION=1.59.0
+ENV GOLANGCI_LINT_VERSION=1.59.1
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
 	| sh -s -- -b $(go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
 
