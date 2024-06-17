@@ -9,6 +9,11 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type MultiSelectValue struct {
+	ValueID      uuid.UUID
+	SelectOption uuid.UUID
+}
+
 type Property struct {
 	ID           uuid.UUID
 	SubjectType  int32
@@ -29,7 +34,6 @@ type PropertyValue struct {
 	BoolValue     *bool
 	DateValue     pgtype.Date
 	DateTimeValue pgtype.Timestamp
-	SelectValue   uuid.NullUUID
 }
 
 type PropertyViewFilterAlwaysIncludeItem struct {

@@ -1,10 +1,11 @@
-package main
+package property_svc
 
 import (
 	"common"
 	"context"
 	"flag"
 	pb "gen/services/property_svc/v1"
+	"github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes/eventstoredb"
 	propertySet "property-svc/internal/property-set/api"
@@ -16,7 +17,6 @@ import (
 	"property-svc/internal/property/projections/property_postgres_projection"
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
-	"github.com/rs/zerolog/log"
 	psh "property-svc/internal/property-set/handlers"
 	pvh "property-svc/internal/property-value/handlers"
 	pvih "property-svc/internal/property-view/handlers"
@@ -29,6 +29,10 @@ const ServiceName = "property-svc"
 var Version string
 
 func main() {
+	Main(nil)
+}
+
+func Main(ready func()) {
 	ctx, cancel := context.WithCancel(context.Background())
 	common.Setup(ServiceName, Version, common.WithAuth())
 
@@ -55,6 +59,7 @@ func main() {
 		}
 		// TODO: Find a more generic approach to run common.Shutdown()
 		common.Shutdown()
+		cancel()
 		return
 	}
 
@@ -85,13 +90,17 @@ func main() {
 	propertyViewHandlers := pvih.NewPropertyViewHandlers(aggregateStore)
 	propertyValueHandlers := pvh.NewPropertyValueHandlers(aggregateStore)
 
-	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
+	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
 		pb.RegisterPropertyServiceServer(grpcServer, property.NewPropertyService(aggregateStore, propertyHandlers))
 		pb.RegisterPropertySetServiceServer(grpcServer, propertySet.NewPropertySetService(aggregateStore, propertySetHandlers))
 		pb.RegisterPropertyValueServiceServer(grpcServer, propertyValue.NewPropertyValueService(aggregateStore, propertyValueHandlers))
 		pb.RegisterPropertyViewsServiceServer(grpcServer, propertyViews.NewPropertyViewService(aggregateStore, propertyViewHandlers))
+
+		if ready != nil {
+			ready()
+		}
 	})
 
 	cancel()

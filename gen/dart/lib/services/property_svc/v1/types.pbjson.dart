@@ -39,6 +39,7 @@ const FieldType$json = {
     {'1': 'FIELD_TYPE_DATE', '2': 4},
     {'1': 'FIELD_TYPE_DATE_TIME', '2': 5},
     {'1': 'FIELD_TYPE_SELECT', '2': 6},
+    {'1': 'FIELD_TYPE_MULTI_SELECT', '2': 7},
   ],
 };
 
@@ -47,7 +48,7 @@ final $typed_data.Uint8List fieldTypeDescriptor = $convert.base64Decode(
     'CglGaWVsZFR5cGUSGgoWRklFTERfVFlQRV9VTlNQRUNJRklFRBAAEhMKD0ZJRUxEX1RZUEVfVE'
     'VYVBABEhUKEUZJRUxEX1RZUEVfTlVNQkVSEAISFwoTRklFTERfVFlQRV9DSEVDS0JPWBADEhMK'
     'D0ZJRUxEX1RZUEVfREFURRAEEhgKFEZJRUxEX1RZUEVfREFURV9USU1FEAUSFQoRRklFTERfVF'
-    'lQRV9TRUxFQ1QQBg==');
+    'lQRV9TRUxFQ1QQBhIbChdGSUVMRF9UWVBFX01VTFRJX1NFTEVDVBAH');
 
 @$core.Deprecated('Use dateDescriptor instead')
 const Date$json = {
