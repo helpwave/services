@@ -282,7 +282,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 				SelectOption: id,
 			}
 		})
-		if err := propertyValueRepo.ConnectValueWithSelectOptions(ctx, args); err != nil {
+		if err := hwdb.ExecBatch(propertyValueRepo.ConnectValueWithSelectOptions(ctx, args)); err != nil {
 			return fmt.Errorf("onPropertyValueUpdated: could not connect select options: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
 		}
 
