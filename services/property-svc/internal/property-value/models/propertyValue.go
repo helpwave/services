@@ -31,13 +31,19 @@ type PropertyValueWithProperty struct {
 	DateValue     *time.Time
 }
 
+type SelectValueOption struct {
+	Id          uuid.UUID
+	Name        string
+	Description string
+}
+
 type TypedValue struct {
-	TextValue     *string
-	BoolValue     *bool
-	NumberValue   *float64
-	SelectValue   uuid.NullUUID
-	DateTimeValue *time.Time
-	DateValue     *time.Time
+	TextValue         *string
+	BoolValue         *bool
+	NumberValue       *float64
+	MultiSelectValues []SelectValueOption
+	DateTimeValue     *time.Time
+	DateValue         *time.Time
 }
 
 type PropertyAndValue struct {

@@ -127,10 +127,10 @@ const GetAttachedPropertyValuesResponse_Value$json = {
     {'1': 'bool_value', '3': 8, '4': 1, '5': 8, '9': 0, '10': 'boolValue'},
     {'1': 'date_value', '3': 9, '4': 1, '5': 11, '6': '.services.property_svc.v1.Date', '9': 0, '10': 'dateValue'},
     {'1': 'date_time_value', '3': 10, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'dateTimeValue'},
-    {'1': 'select_value', '3': 11, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
+    {'1': 'select_value', '3': 11, '4': 1, '5': 11, '6': '.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.SelectValueOption', '9': 0, '10': 'selectValue'},
     {'1': 'multi_select_value', '3': 12, '4': 1, '5': 11, '6': '.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue', '9': 0, '10': 'multiSelectValue'},
   ],
-  '3': [GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json],
+  '3': [GetAttachedPropertyValuesResponse_Value_SelectValueOption$json, GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json],
   '8': [
     {'1': 'value'},
     {'1': '_description'},
@@ -138,10 +138,20 @@ const GetAttachedPropertyValuesResponse_Value$json = {
 };
 
 @$core.Deprecated('Use getAttachedPropertyValuesResponseDescriptor instead')
+const GetAttachedPropertyValuesResponse_Value_SelectValueOption$json = {
+  '1': 'SelectValueOption',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
+  ],
+};
+
+@$core.Deprecated('Use getAttachedPropertyValuesResponseDescriptor instead')
 const GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json = {
   '1': 'MultiSelectValue',
   '2': [
-    {'1': 'select_values', '3': 1, '4': 3, '5': 9, '10': 'selectValues'},
+    {'1': 'select_values', '3': 1, '4': 3, '5': 11, '6': '.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.SelectValueOption', '10': 'selectValues'},
   ],
 };
 
@@ -149,7 +159,7 @@ const GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json = {
 final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $convert.base64Decode(
     'CiFHZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2USWQoGdmFsdWVzGAEgAygLMkEuc2'
     'VydmljZXMucHJvcGVydHlfc3ZjLnYxLkdldEF0dGFjaGVkUHJvcGVydHlWYWx1ZXNSZXNwb25z'
-    'ZS5WYWx1ZVIGdmFsdWVzGrIFCgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcHJvcGVydH'
+    'ZS5WYWx1ZVIGdmFsdWVzGrgHCgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcHJvcGVydH'
     'lJZBJCCgpmaWVsZF90eXBlGAIgASgOMiMuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkZpZWxk'
     'VHlwZVIJZmllbGRUeXBlEhIKBG5hbWUYAyABKAlSBG5hbWUSJQoLZGVzY3JpcHRpb24YBCABKA'
     'lIAVILZGVzY3JpcHRpb26IAQESHwoLaXNfYXJjaGl2ZWQYBSABKAhSCmlzQXJjaGl2ZWQSHwoK'
@@ -157,9 +167,14 @@ final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $conve
     '51bWJlclZhbHVlEh8KCmJvb2xfdmFsdWUYCCABKAhIAFIJYm9vbFZhbHVlEj8KCmRhdGVfdmFs'
     'dWUYCSABKAsyHi5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuRGF0ZUgAUglkYXRlVmFsdWUSRA'
     'oPZGF0ZV90aW1lX3ZhbHVlGAogASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEgAUg1k'
-    'YXRlVGltZVZhbHVlEiMKDHNlbGVjdF92YWx1ZRgLIAEoCUgAUgtzZWxlY3RWYWx1ZRKCAQoSbX'
-    'VsdGlfc2VsZWN0X3ZhbHVlGAwgASgLMlIuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkdldEF0'
-    'dGFjaGVkUHJvcGVydHlWYWx1ZXNSZXNwb25zZS5WYWx1ZS5NdWx0aVNlbGVjdFZhbHVlSABSEG'
-    '11bHRpU2VsZWN0VmFsdWUaNwoQTXVsdGlTZWxlY3RWYWx1ZRIjCg1zZWxlY3RfdmFsdWVzGAEg'
-    'AygJUgxzZWxlY3RWYWx1ZXNCBwoFdmFsdWVCDgoMX2Rlc2NyaXB0aW9u');
+    'YXRlVGltZVZhbHVlEngKDHNlbGVjdF92YWx1ZRgLIAEoCzJTLnNlcnZpY2VzLnByb3BlcnR5X3'
+    'N2Yy52MS5HZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2UuVmFsdWUuU2VsZWN0VmFs'
+    'dWVPcHRpb25IAFILc2VsZWN0VmFsdWUSggEKEm11bHRpX3NlbGVjdF92YWx1ZRgMIAEoCzJSLn'
+    'NlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5HZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9u'
+    'c2UuVmFsdWUuTXVsdGlTZWxlY3RWYWx1ZUgAUhBtdWx0aVNlbGVjdFZhbHVlGlkKEVNlbGVjdF'
+    'ZhbHVlT3B0aW9uEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2Rlc2Ny'
+    'aXB0aW9uGAMgASgJUgtkZXNjcmlwdGlvbhqMAQoQTXVsdGlTZWxlY3RWYWx1ZRJ4Cg1zZWxlY3'
+    'RfdmFsdWVzGAEgAygLMlMuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkdldEF0dGFjaGVkUHJv'
+    'cGVydHlWYWx1ZXNSZXNwb25zZS5WYWx1ZS5TZWxlY3RWYWx1ZU9wdGlvblIMc2VsZWN0VmFsdW'
+    'VzQgcKBXZhbHVlQg4KDF9kZXNjcmlwdGlvbg==');
 

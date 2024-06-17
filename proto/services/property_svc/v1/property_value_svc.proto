@@ -74,12 +74,18 @@ message GetAttachedPropertyValuesResponse {
       bool bool_value = 8; // FIELD_TYPE_CHECKBOX
       Date date_value = 9; // FIELD_TYPE_DATE
       google.protobuf.Timestamp date_time_value = 10; // FIELD_TYPE_DATE_TIME
-      string select_value = 11; // FIELD_TYPE_SELECT, id of option
+      SelectValueOption select_value = 11; // FIELD_TYPE_SELECT, id of option
       MultiSelectValue multi_select_value = 12;
     }
 
+    message SelectValueOption {
+      string id = 1;
+      string name = 2;
+      string description = 3;
+    }
+
     message MultiSelectValue {
-      repeated string select_values = 1; // ids of options
+      repeated SelectValueOption select_values = 1;
     }
   }
 

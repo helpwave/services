@@ -237,8 +237,10 @@ export namespace GetAttachedPropertyValuesResponse {
     hasDateTimeValue(): boolean;
     clearDateTimeValue(): Value;
 
-    getSelectValue(): string;
-    setSelectValue(value: string): Value;
+    getSelectValue(): GetAttachedPropertyValuesResponse.Value.SelectValueOption | undefined;
+    setSelectValue(value?: GetAttachedPropertyValuesResponse.Value.SelectValueOption): Value;
+    hasSelectValue(): boolean;
+    clearSelectValue(): Value;
 
     getMultiSelectValue(): GetAttachedPropertyValuesResponse.Value.MultiSelectValue | undefined;
     setMultiSelectValue(value?: GetAttachedPropertyValuesResponse.Value.MultiSelectValue): Value;
@@ -267,15 +269,42 @@ export namespace GetAttachedPropertyValuesResponse {
       boolValue: boolean,
       dateValue?: services_property_svc_v1_types_pb.Date.AsObject,
       dateTimeValue?: google_protobuf_timestamp_pb.Timestamp.AsObject,
-      selectValue: string,
+      selectValue?: GetAttachedPropertyValuesResponse.Value.SelectValueOption.AsObject,
       multiSelectValue?: GetAttachedPropertyValuesResponse.Value.MultiSelectValue.AsObject,
     }
 
+    export class SelectValueOption extends jspb.Message {
+      getId(): string;
+      setId(value: string): SelectValueOption;
+
+      getName(): string;
+      setName(value: string): SelectValueOption;
+
+      getDescription(): string;
+      setDescription(value: string): SelectValueOption;
+
+      serializeBinary(): Uint8Array;
+      toObject(includeInstance?: boolean): SelectValueOption.AsObject;
+      static toObject(includeInstance: boolean, msg: SelectValueOption): SelectValueOption.AsObject;
+      static serializeBinaryToWriter(message: SelectValueOption, writer: jspb.BinaryWriter): void;
+      static deserializeBinary(bytes: Uint8Array): SelectValueOption;
+      static deserializeBinaryFromReader(message: SelectValueOption, reader: jspb.BinaryReader): SelectValueOption;
+    }
+
+    export namespace SelectValueOption {
+      export type AsObject = {
+        id: string,
+        name: string,
+        description: string,
+      }
+    }
+
+
     export class MultiSelectValue extends jspb.Message {
-      getSelectValuesList(): Array<string>;
-      setSelectValuesList(value: Array<string>): MultiSelectValue;
+      getSelectValuesList(): Array<GetAttachedPropertyValuesResponse.Value.SelectValueOption>;
+      setSelectValuesList(value: Array<GetAttachedPropertyValuesResponse.Value.SelectValueOption>): MultiSelectValue;
       clearSelectValuesList(): MultiSelectValue;
-      addSelectValues(value: string, index?: number): MultiSelectValue;
+      addSelectValues(value?: GetAttachedPropertyValuesResponse.Value.SelectValueOption, index?: number): GetAttachedPropertyValuesResponse.Value.SelectValueOption;
 
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): MultiSelectValue.AsObject;
@@ -287,7 +316,7 @@ export namespace GetAttachedPropertyValuesResponse {
 
     export namespace MultiSelectValue {
       export type AsObject = {
-        selectValuesList: Array<string>,
+        selectValuesList: Array<GetAttachedPropertyValuesResponse.Value.SelectValueOption.AsObject>,
       }
     }
 
