@@ -1342,6 +1342,8 @@ github.com/BurntSushi/toml v1.4.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/EventStore/EventStore-Client-Go/v4 v4.0.0 h1:2rvSrowYfurK0bm+zyOnl/3WbuxGEOkWiDc9L+NlXPg=
 github.com/EventStore/EventStore-Client-Go/v4 v4.0.0/go.mod h1:Ak51ZT9Cek1IltQ+lwnt5O25jW4qSNnuN3wd1T/3qqo=
+github.com/EventStore/EventStore-Client-Go/v4 v4.1.0 h1:P1dYxz+ReXJd7MAPSgZ5MvZltWoJWN3L/2p99yNKkic=
+github.com/EventStore/EventStore-Client-Go/v4 v4.1.0/go.mod h1:w2z38mcQWUCrN8PzQoS5ZkiC1a2MN6EuSE5CFVBOmfQ=
 github.com/JohnCGriffin/overflow v0.0.0-20211019200055-46fa312c352c/go.mod h1:X0CRv0ky0k6m906ixxpzmDRLvX58TFUKS2eePweuyxk=
 github.com/Microsoft/go-winio v0.4.11/go.mod h1:VhR8bwka0BXejwEJY73c50VrPtXAaKcyvVC4A4RozmA=
 github.com/Microsoft/go-winio v0.4.14/go.mod h1:qXqCSQ3Xa7+6tgxaGTIe4Kpcdsi+P8jBhyzoq1bpyYA=
