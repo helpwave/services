@@ -1,6 +1,8 @@
 module property-svc
 
-go 1.22
+go 1.22.0
+
+toolchain go1.22.4
 
 replace (
 	common => ../../libs/common
@@ -21,6 +23,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.6.0
 	github.com/pashagolub/pgxmock/v3 v3.4.0
+	github.com/pashagolub/pgxmock/v4 v4.1.0
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.9.0
