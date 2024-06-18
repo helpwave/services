@@ -15,7 +15,7 @@ replace (
 require (
 	common v0.0.0
 	gen v0.0.0
-	github.com/EventStore/EventStore-Client-Go/v4 v4.0.0
+	github.com/EventStore/EventStore-Client-Go/v4 v4.1.0
 	github.com/dapr/go-sdk v1.10.1
 	github.com/fatih/structs v1.1.0
 	github.com/google/uuid v1.6.0
@@ -25,10 +25,11 @@ require (
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/grpc v1.64.0
-	google.golang.org/protobuf v1.34.1
+	google.golang.org/protobuf v1.34.2
 	hwdb v0.0.0
 	hwes v0.0.0
 	hwutil v0.0.0
+	telemetry v0.0.0
 )
 
 require (
@@ -80,5 +81,4 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	hwlocale v0.0.0 // indirect
-	telemetry v0.0.0 // indirect
 )

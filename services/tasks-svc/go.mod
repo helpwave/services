@@ -17,7 +17,7 @@ require (
 	common v0.0.0
 	decaying_lru v0.0.0
 	gen v0.0.0
-	github.com/EventStore/EventStore-Client-Go/v4 v4.0.0
+	github.com/EventStore/EventStore-Client-Go/v4 v4.1.0
 	github.com/dapr/go-sdk v1.10.1
 	github.com/go-redis/redismock/v9 v9.2.0
 	github.com/google/uuid v1.6.0
@@ -25,7 +25,7 @@ require (
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/grpc v1.64.0
-	google.golang.org/protobuf v1.34.1
+	google.golang.org/protobuf v1.34.2
 	hwdb v0.0.0
 	hwes v0.0.0
 	hwutil v0.0.0
