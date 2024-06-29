@@ -9,7 +9,7 @@ on:
 
 env:
   # renovate: datasource=github-releases depName=bufbuild/buf
-  BUF_CLI_VERSION: '1.33.0'
+  BUF_CLI_VERSION: '1.34.0'
   NODE_VERSION: '18.x'
   # renovate: datasource=dart-version depName=dart
   DART_VERSION: '3.4.4'
