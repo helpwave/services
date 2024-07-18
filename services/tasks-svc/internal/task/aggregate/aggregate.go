@@ -53,7 +53,8 @@ func (a *TaskAggregate) initEventListeners() {
 		RegisterEventListener(taskEventsV1.SubtaskNameUpdated, a.onSubtaskNameUpdated).
 		RegisterEventListener(taskEventsV1.SubtaskCompleted, a.onSubtaskCompleted).
 		RegisterEventListener(taskEventsV1.SubtaskUncompleted, a.onSubtaskUncompleted).
-		RegisterEventListener(taskEventsV1.SubtaskDeleted, a.onSubtaskDeleted)
+		RegisterEventListener(taskEventsV1.SubtaskDeleted, a.onSubtaskDeleted).
+		RegisterEventListener(taskEventsV1.TaskStatusUpdated, a.onTaskStatusUpdated)
 }
 
 // Event handlers
@@ -79,6 +80,23 @@ func (a *TaskAggregate) onTaskCreated(evt hwes.Event) error {
 	a.Task.PatientID = patientID
 	a.Task.Status = status
 	a.Task.CreatedAt = evt.Timestamp
+
+	return nil
+}
+
+func (a *TaskAggregate) onTaskStatusUpdated(evt hwes.Event) error {
+	var payload taskEventsV1.TaskStatusUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	value, found := pb.TaskStatus_value[payload.Status]
+	if !found {
+		return fmt.Errorf("invalid taskStatus: %s", payload.Status)
+	}
+	status := (pb.TaskStatus)(value)
+
+	a.Task.Status = status
 
 	return nil
 }

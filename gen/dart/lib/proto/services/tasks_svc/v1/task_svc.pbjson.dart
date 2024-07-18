@@ -60,11 +60,13 @@ const UpdateTaskRequest$json = {
     {'1': 'name', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'name', '17': true},
     {'1': 'description', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'description', '17': true},
     {'1': 'due_at', '3': 4, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 2, '10': 'dueAt', '17': true},
+    {'1': 'status', '3': 5, '4': 1, '5': 14, '6': '.proto.services.tasks_svc.v1.TaskStatus', '9': 3, '10': 'status', '17': true},
   ],
   '8': [
     {'1': '_name'},
     {'1': '_description'},
     {'1': '_due_at'},
+    {'1': '_status'},
   ],
 };
 
@@ -72,8 +74,9 @@ const UpdateTaskRequest$json = {
 final $typed_data.Uint8List updateTaskRequestDescriptor = $convert.base64Decode(
     'ChFVcGRhdGVUYXNrUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSFwoEbmFtZRgCIAEoCUgAUgRuYW'
     '1liAEBEiUKC2Rlc2NyaXB0aW9uGAMgASgJSAFSC2Rlc2NyaXB0aW9uiAEBEjYKBmR1ZV9hdBgE'
-    'IAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBIAlIFZHVlQXSIAQFCBwoFX25hbWVCDg'
-    'oMX2Rlc2NyaXB0aW9uQgkKB19kdWVfYXQ=');
+    'IAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBIAlIFZHVlQXSIAQESRAoGc3RhdHVzGA'
+    'UgASgOMicucHJvdG8uc2VydmljZXMudGFza3Nfc3ZjLnYxLlRhc2tTdGF0dXNIA1IGc3RhdHVz'
+    'iAEBQgcKBV9uYW1lQg4KDF9kZXNjcmlwdGlvbkIJCgdfZHVlX2F0QgkKB19zdGF0dXM=');
 
 @$core.Deprecated('Use updateTaskResponseDescriptor instead')
 const UpdateTaskResponse$json = {

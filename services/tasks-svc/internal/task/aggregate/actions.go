@@ -36,6 +36,14 @@ func (a *TaskAggregate) UpdateDescription(ctx context.Context, newDescription st
 	return a.Apply(event)
 }
 
+func (a *TaskAggregate) UpdateStatus(ctx context.Context, status pb.TaskStatus) error {
+	event, err := taskEventsV1.NewTaskStatusUpdatedEvent(ctx, a, status)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
 func (a *TaskAggregate) UpdateDueAt(ctx context.Context, dueAt time.Time) error {
 	event, err := taskEventsV1.NewTaskDueAtUpdatedEvent(ctx, a, dueAt)
 	if err != nil {

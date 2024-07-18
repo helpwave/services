@@ -1337,7 +1337,8 @@ proto.proto.services.tasks_svc.v1.UpdateTaskRequest.toObject = function(includeI
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    dueAt: (f = msg.getDueAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
+    dueAt: (f = msg.getDueAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
+    status: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
 
   if (includeInstance) {
@@ -1390,6 +1391,10 @@ proto.proto.services.tasks_svc.v1.UpdateTaskRequest.deserializeBinaryFromReader 
       var value = new google_protobuf_timestamp_pb.Timestamp;
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
       msg.setDueAt(value);
+      break;
+    case 5:
+      var value = /** @type {!proto.proto.services.tasks_svc.v1.TaskStatus} */ (reader.readEnum());
+      msg.setStatus(value);
       break;
     default:
       reader.skipField();
@@ -1447,6 +1452,13 @@ proto.proto.services.tasks_svc.v1.UpdateTaskRequest.serializeBinaryToWriter = fu
       4,
       f,
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {!proto.proto.services.tasks_svc.v1.TaskStatus} */ (jspb.Message.getField(message, 5));
+  if (f != null) {
+    writer.writeEnum(
+      5,
+      f
     );
   }
 };
@@ -1576,6 +1588,42 @@ proto.proto.services.tasks_svc.v1.UpdateTaskRequest.prototype.clearDueAt = funct
  */
 proto.proto.services.tasks_svc.v1.UpdateTaskRequest.prototype.hasDueAt = function() {
   return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional TaskStatus status = 5;
+ * @return {!proto.proto.services.tasks_svc.v1.TaskStatus}
+ */
+proto.proto.services.tasks_svc.v1.UpdateTaskRequest.prototype.getStatus = function() {
+  return /** @type {!proto.proto.services.tasks_svc.v1.TaskStatus} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {!proto.proto.services.tasks_svc.v1.TaskStatus} value
+ * @return {!proto.proto.services.tasks_svc.v1.UpdateTaskRequest} returns this
+ */
+proto.proto.services.tasks_svc.v1.UpdateTaskRequest.prototype.setStatus = function(value) {
+  return jspb.Message.setField(this, 5, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.services.tasks_svc.v1.UpdateTaskRequest} returns this
+ */
+proto.proto.services.tasks_svc.v1.UpdateTaskRequest.prototype.clearStatus = function() {
+  return jspb.Message.setField(this, 5, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.services.tasks_svc.v1.UpdateTaskRequest.prototype.hasStatus = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 

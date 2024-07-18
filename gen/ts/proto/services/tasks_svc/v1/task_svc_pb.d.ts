@@ -102,6 +102,11 @@ export class UpdateTaskRequest extends jspb.Message {
   hasDueAt(): boolean;
   clearDueAt(): UpdateTaskRequest;
 
+  getStatus(): proto_services_tasks_svc_v1_types_pb.TaskStatus;
+  setStatus(value: proto_services_tasks_svc_v1_types_pb.TaskStatus): UpdateTaskRequest;
+  hasStatus(): boolean;
+  clearStatus(): UpdateTaskRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateTaskRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateTaskRequest): UpdateTaskRequest.AsObject;
@@ -116,6 +121,7 @@ export namespace UpdateTaskRequest {
     name?: string,
     description?: string,
     dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    status?: proto_services_tasks_svc_v1_types_pb.TaskStatus,
   }
 
   export enum NameCase { 
@@ -131,6 +137,11 @@ export namespace UpdateTaskRequest {
   export enum DueAtCase { 
     _DUE_AT_NOT_SET = 0,
     DUE_AT = 4,
+  }
+
+  export enum StatusCase { 
+    _STATUS_NOT_SET = 0,
+    STATUS = 5,
   }
 }
 

@@ -46,7 +46,7 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.UpdateTask(ctx, taskID, req.Name, req.Description); err != nil {
+	if err := s.handlers.Commands.V1.UpdateTask(ctx, taskID, req.Name, req.Description, req.Status); err != nil {
 		return nil, err
 	}
 

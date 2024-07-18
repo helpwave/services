@@ -33,6 +33,7 @@ message UpdateTaskRequest {
   optional string name = 2;
   optional string description = 3;
   optional google.protobuf.Timestamp due_at = 4;
+  optional TaskStatus status = 5;
 }
 
 message UpdateTaskResponse {}

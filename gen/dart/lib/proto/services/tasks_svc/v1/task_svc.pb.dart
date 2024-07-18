@@ -194,6 +194,7 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? description,
     $17.Timestamp? dueAt,
+    $18.TaskStatus? status,
   }) {
     final $result = create();
     if (id != null) {
@@ -208,6 +209,9 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
     if (dueAt != null) {
       $result.dueAt = dueAt;
     }
+    if (status != null) {
+      $result.status = status;
+    }
     return $result;
   }
   UpdateTaskRequest._() : super();
@@ -219,6 +223,7 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOM<$17.Timestamp>(4, _omitFieldNames ? '' : 'dueAt', subBuilder: $17.Timestamp.create)
+    ..e<$18.TaskStatus>(5, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $18.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $18.TaskStatus.valueOf, enumValues: $18.TaskStatus.values)
     ..hasRequiredFields = false
   ;
 
@@ -280,6 +285,15 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
   void clearDueAt() => clearField(4);
   @$pb.TagNumber(4)
   $17.Timestamp ensureDueAt() => $_ensure(3);
+
+  @$pb.TagNumber(5)
+  $18.TaskStatus get status => $_getN(4);
+  @$pb.TagNumber(5)
+  set status($18.TaskStatus v) { setField(5, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasStatus() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearStatus() => clearField(5);
 }
 
 class UpdateTaskResponse extends $pb.GeneratedMessage {
