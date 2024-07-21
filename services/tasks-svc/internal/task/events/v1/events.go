@@ -91,6 +91,7 @@ func NewTaskCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, na
 		Name:      name,
 		PatientID: patientID.String(),
 		Status:    status.String(),
+		CreatedAt: time.Now().UTC(),
 	}
 	return hwes.NewEvent(a, TaskCreated, hwes.WithContext(ctx), hwes.WithData(payload))
 }

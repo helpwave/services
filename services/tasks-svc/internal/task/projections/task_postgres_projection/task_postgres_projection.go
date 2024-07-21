@@ -94,6 +94,30 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 	return nil, nil
 }
 
+func (p *Projection) onTaskStatusUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+
+	var payload taskEventsV1.TaskStatusUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, hwutil.PtrTo(esdb.NackActionPark)
+	}
+
+	value, found := pb.TaskStatus_value[payload.Status]
+	if !found {
+		return fmt.Errorf("invalid taskStatus: %s", payload.Status), hwutil.PtrTo(esdb.NackActionPark)
+	}
+	status := (pb.TaskStatus)(value)
+
+	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{Status: hwutil.PtrTo(int32(status))})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	}
+
+	return nil, nil
+}
+
 func (p *Projection) onTaskNameUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 

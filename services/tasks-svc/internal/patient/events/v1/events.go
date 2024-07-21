@@ -62,7 +62,8 @@ func NewHumanReadableIdentifierUpdatedEvent(ctx context.Context, a hwes.Aggregat
 
 func NewNotesUpdatedEvent(ctx context.Context, a hwes.Aggregate, notes string) (hwes.Event, error) {
 	payload := NotesUpdatedEvent{
-		Notes: notes,
+		PatientID: a.GetID().String(),
+		Notes:     notes,
 	}
 	return hwes.NewEvent(a, NotesUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
