@@ -80,7 +80,10 @@ func NewBedUnassignedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, e
 }
 
 func NewPatientDischargedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
-	return hwes.NewEvent(a, PatientDischarged, hwes.WithContext(ctx))
+	payload := PatientDischargedEvent{
+		PatientID: a.GetID().String(),
+	}
+	return hwes.NewEvent(a, PatientDischarged, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewPatientReadmittedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
