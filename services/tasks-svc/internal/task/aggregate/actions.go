@@ -2,7 +2,7 @@ package aggregate
 
 import (
 	"context"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"time"
 

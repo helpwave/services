@@ -3,9 +3,11 @@ package hwdb
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"telemetry"
 	"time"
 )
 
@@ -43,4 +45,45 @@ func PbToTimestamp(src *timestamppb.Timestamp) pgtype.Timestamp {
 		return pgtype.Timestamp{Valid: false}
 	}
 	return pgtype.Timestamp{Time: (*src).AsTime().UTC(), Valid: true}
+}
+
+// DANGERTruncateAllTables truncates all tables of db
+func DANGERTruncateAllTables(ctx context.Context, db DBTX) error {
+	ctx, span, log := telemetry.StartSpan(ctx, "hwdb.DANGERTruncateAllTables")
+	defer span.End()
+
+	rows, err := db.Query(ctx, `
+		SELECT table_name
+		FROM information_schema.tables
+		WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
+	`)
+
+	if err != nil {
+		return fmt.Errorf("DANGERTruncateAllTables: failed to query table names: %w", err)
+	}
+
+	defer rows.Close()
+
+	tableNames := make([]string, 0)
+
+	for rows.Next() {
+		var tableName string
+		if err := rows.Scan(&tableName); err != nil {
+			return fmt.Errorf("DANGERTruncateAllTables: could not Scan row: %w", err)
+		}
+		tableNames = append(tableNames, tableName)
+	}
+
+	log.Info().Strs("tableNames", tableNames).Msg("Start truncating all tables")
+
+	for _, tableName := range tableNames {
+		log.Trace().Str("table_name", tableName).Msg("truncating")
+		if _, err := db.Exec(ctx, fmt.Sprintf("TRUNCATE TABLE %s CASCADE", tableName)); err != nil {
+			return err
+		}
+		log.Debug().Str("table_name", tableName).Msg("table truncated")
+	}
+	log.Debug().Msg("truncate finished")
+
+	return rows.Err()
 }

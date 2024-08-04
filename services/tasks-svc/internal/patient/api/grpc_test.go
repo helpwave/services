@@ -5,7 +5,7 @@ import (
 	common_test "common/test"
 	"context"
 	"decaying_lru"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/go-redis/redismock/v9"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"

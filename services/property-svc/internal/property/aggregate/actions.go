@@ -2,7 +2,7 @@ package aggregate
 
 import (
 	"context"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"hwutil"
 	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/models"

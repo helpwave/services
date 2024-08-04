@@ -4,44 +4,44 @@ grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"id": "a2f04cb2-4587-48ad-89ee-a01256a80d7c"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.TaskService/GetTask
+	services.task_svc.v1.TaskService/GetTask
 
 
 grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"id": "a2f04cb2-4587-48ad-89ee-a01256a80d7c"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.TaskService/TaskToToDo
+	services.task_svc.v1.TaskService/TaskToToDo
 
 grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"id": "a2f04cb2-4587-48ad-89ee-a01256a80d7c"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.TaskService/GetTask
+	services.task_svc.v1.TaskService/GetTask
 
 grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"id": "a2f04cb2-4587-48ad-89ee-a01256a80d7c"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.TaskService/TaskToInProgress
+	services.task_svc.v1.TaskService/TaskToInProgress
 
 grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"id": "a2f04cb2-4587-48ad-89ee-a01256a80d7c"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.TaskService/GetTask
+	services.task_svc.v1.TaskService/GetTask
 
 grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"id": "a2f04cb2-4587-48ad-89ee-a01256a80d7c"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.TaskService/TaskToDone
+	services.task_svc.v1.TaskService/TaskToDone
 
 grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"id": "a2f04cb2-4587-48ad-89ee-a01256a80d7c"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.TaskService/GetTask
+	services.task_svc.v1.TaskService/GetTask
 
 echo "does not exist"
 
@@ -49,16 +49,16 @@ grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"id": "b2f04cb2-4587-48ad-89ee-a01256a80d7c"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.TaskService/TaskToToDo
+	services.task_svc.v1.TaskService/TaskToToDo
 
 grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"id": "b2f04cb2-4587-48ad-89ee-a01256a80d7c"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.TaskService/TaskToInProgress
+	services.task_svc.v1.TaskService/TaskToInProgress
 
 grpcurl --plaintext -H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19" \
 	-d '{"id": "b2f04cb2-4587-48ad-89ee-a01256a80d7c"}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.TaskService/TaskToDone
+	services.task_svc.v1.TaskService/TaskToDone

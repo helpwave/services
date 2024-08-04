@@ -1,7 +1,7 @@
 syntax = "proto3";
-import "proto/services/property_svc/v1/property_value_svc.proto";
+import "services/property_svc/v1/property_value_svc.proto";
 
-package proto.services.property_svc.v1;
+package services.property_svc.v1;
 
 option go_package = "gen/proto/services/property-svc";
 

@@ -3,7 +3,7 @@ package aggregate_test
 import (
 	"common"
 	"context"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"

@@ -3,7 +3,7 @@ package v1
 import (
 	"context"
 	"fmt"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwdb"
 	"property-svc/internal/property/models"
@@ -12,8 +12,10 @@ import (
 
 type GetPropertyByIDQueryHandler func(ctx context.Context, propertyID uuid.UUID) (*models.Property, error)
 
-func NewGetPropertyByIDQueryHandler(propertyRepo *property_repo.Queries) GetPropertyByIDQueryHandler {
+func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
 	return func(ctx context.Context, propertyID uuid.UUID) (*models.Property, error) {
+		propertyRepo := property_repo.New(hwdb.GetDB())
+
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx, property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
 			ID: uuid.NullUUID{UUID: propertyID, Valid: true},
 		})

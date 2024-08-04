@@ -69,7 +69,7 @@ services:
 
   # dapr sidecar for apisix
   apisix-dapr:
-    image: "daprio/daprd:1.13.2"
+    image: "daprio/daprd:1.13.3"
     restart: unless-stopped
     depends_on:
       - apisix
@@ -93,7 +93,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '6'
+        TAG: '9'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -126,7 +126,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '6'
+        TAG: '9'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:

@@ -2,19 +2,15 @@ package api
 
 import (
 	"context"
-	pb "gen/proto/services/property_svc/v1"
-	"hwdb"
-	"hwes"
-	"hwutil"
-	commandsV1 "property-svc/internal/property-value/commands/v1"
-	"property-svc/internal/property-value/models"
-	v1queries "property-svc/internal/property-value/queries/v1"
-	viewModels "property-svc/internal/property-view/models"
-	"property-svc/repos/property_value_repo"
-
+	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"hwes"
+	"hwutil"
+	"property-svc/internal/property-value/handlers"
+	"property-svc/internal/property-value/models"
+	viewModels "property-svc/internal/property-view/models"
 )
 
 type MatchersRequest interface {
@@ -47,11 +43,12 @@ func DeMuxMatchers(req MatchersRequest) (viewModels.PropertyMatchers, error) {
 
 type PropertyValueGrpcService struct {
 	pb.UnimplementedPropertyValueServiceServer
-	as hwes.AggregateStore
+	as       hwes.AggregateStore
+	handlers *handlers.Handlers
 }
 
-func NewPropertyValueService(aggregateStore hwes.AggregateStore) *PropertyValueGrpcService {
-	return &PropertyValueGrpcService{as: aggregateStore}
+func NewPropertyValueService(aggregateStore hwes.AggregateStore, handlers *handlers.Handlers) *PropertyValueGrpcService {
+	return &PropertyValueGrpcService{as: aggregateStore, handlers: handlers}
 }
 
 func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req *pb.AttachPropertyValueRequest) (*pb.AttachPropertyValueResponse, error) {
@@ -85,7 +82,7 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		value = nil
 	}
 
-	if err := commandsV1.NewAttachPropertyValueCommandHandler(s.as)(ctx, propertyValueID, propertyID, value, subjectID); err != nil {
+	if err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID); err != nil {
 		return nil, err
 	}
 
@@ -96,8 +93,6 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 
 func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context, req *pb.GetAttachedPropertyValuesRequest) (*pb.GetAttachedPropertyValuesResponse, error) {
 	log := zlog.Ctx(ctx)
-	db := hwdb.GetDB()
-	propertyValueRepo := property_value_repo.New(db)
 
 	// de-mux matchers
 	matcher, err := DeMuxMatchers(req)
@@ -108,7 +103,7 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 	propertiesWithValues := make([]models.PropertyAndValue, 0)
 
 	if matcher != nil {
-		propertiesWithValues, err = v1queries.NewGetRelevantPropertyValuesQueryHandler(propertyValueRepo)(ctx, matcher)
+		propertiesWithValues, err = s.handlers.Queries.V1.GetRelevantPropertyValues(ctx, matcher)
 		if err != nil {
 			return nil, err
 		}

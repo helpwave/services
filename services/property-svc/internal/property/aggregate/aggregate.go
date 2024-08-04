@@ -3,7 +3,7 @@ package aggregate
 import (
 	"context"
 	"fmt"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
 	"hwutil"

@@ -171,13 +171,13 @@ func (q *Queries) GetPropertyValuesWithPropertyBySubjectID(ctx context.Context, 
 const getRelevantPropertyViews = `-- name: GetRelevantPropertyViews :many
 SELECT
 	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.select_data_id,
-		values.id as value_id,
-		values.text_value,
-	   	values.bool_value,
-	   	values.number_value,
-	   	values.select_value,
-	   	values.date_time_value,
-	   	values.date_value
+	values.id as value_id,
+	values.text_value,
+	values.bool_value,
+	values.number_value,
+	values.select_value,
+	values.date_time_value,
+	values.date_value
 FROM properties
 	LEFT JOIN property_values as values ON values.property_id = properties.id
 WHERE
