@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-migrate -database $POSTGRES_DSN -path migrations up
+migrate -verbose -database $POSTGRES_DSN -path migrations up
