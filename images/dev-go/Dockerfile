@@ -5,7 +5,7 @@
 
 # based on the debian 12 ("bookworm") go image
 # for now this only builds x86_64 images (TODO)
-FROM golang:1.22-bookworm
+FROM golang:1.23-bookworm
 
 # appearently this is not set by the go image
 ENV GOROOT="/usr/local/go"
