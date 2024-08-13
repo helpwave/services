@@ -1,6 +1,6 @@
 import * as jspb from 'google-protobuf'
 
-import * as proto_services_tasks_svc_v1_types_pb from '../../../../proto/services/tasks_svc/v1/types_pb'; // proto import: "proto/services/tasks_svc/v1/types.proto"
+import * as services_tasks_svc_v1_types_pb from '../../../services/tasks_svc/v1/types_pb'; // proto import: "services/tasks_svc/v1/types.proto"
 
 
 export class CreatePatientRequest extends jspb.Message {
@@ -568,8 +568,8 @@ export namespace GetPatientDetailsResponse {
     getDescription(): string;
     setDescription(value: string): Task;
 
-    getStatus(): proto_services_tasks_svc_v1_types_pb.TaskStatus;
-    setStatus(value: proto_services_tasks_svc_v1_types_pb.TaskStatus): Task;
+    getStatus(): services_tasks_svc_v1_types_pb.TaskStatus;
+    setStatus(value: services_tasks_svc_v1_types_pb.TaskStatus): Task;
 
     getAssignedUserId(): string;
     setAssignedUserId(value: string): Task;
@@ -600,7 +600,7 @@ export namespace GetPatientDetailsResponse {
       id: string,
       name: string,
       description: string,
-      status: proto_services_tasks_svc_v1_types_pb.TaskStatus,
+      status: services_tasks_svc_v1_types_pb.TaskStatus,
       assignedUserId?: string,
       patientId: string,
       pb_public: boolean,
@@ -813,8 +813,8 @@ export namespace GetPatientListResponse {
     getDescription(): string;
     setDescription(value: string): Task;
 
-    getStatus(): proto_services_tasks_svc_v1_types_pb.TaskStatus;
-    setStatus(value: proto_services_tasks_svc_v1_types_pb.TaskStatus): Task;
+    getStatus(): services_tasks_svc_v1_types_pb.TaskStatus;
+    setStatus(value: services_tasks_svc_v1_types_pb.TaskStatus): Task;
 
     getAssignedUserId(): string;
     setAssignedUserId(value: string): Task;
@@ -845,7 +845,7 @@ export namespace GetPatientListResponse {
       id: string,
       name: string,
       description: string,
-      status: proto_services_tasks_svc_v1_types_pb.TaskStatus,
+      status: services_tasks_svc_v1_types_pb.TaskStatus,
       assignedUserId?: string,
       patientId: string,
       pb_public: boolean,

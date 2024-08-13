@@ -30,23 +30,23 @@ class PatientServiceClient extends $grpc.Client {
       ($12.GetPatientRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $12.GetPatientResponse.fromBuffer(value));
   static final _$getPatientByBed = $grpc.ClientMethod<$12.GetPatientByBedRequest, $12.GetPatientByBedResponse>(
-      '/proto.services.tasks_svc.v1.PatientService/GetPatientByBed',
+      '/services.tasks_svc.v1.PatientService/GetPatientByBed',
       ($12.GetPatientByBedRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $12.GetPatientByBedResponse.fromBuffer(value));
   static final _$getPatientsByWard = $grpc.ClientMethod<$12.GetPatientsByWardRequest, $12.GetPatientsByWardResponse>(
-      '/proto.services.tasks_svc.v1.PatientService/GetPatientsByWard',
+      '/services.tasks_svc.v1.PatientService/GetPatientsByWard',
       ($12.GetPatientsByWardRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $12.GetPatientsByWardResponse.fromBuffer(value));
   static final _$getPatientAssignmentByWard = $grpc.ClientMethod<$12.GetPatientAssignmentByWardRequest, $12.GetPatientAssignmentByWardResponse>(
-      '/proto.services.tasks_svc.v1.PatientService/GetPatientAssignmentByWard',
+      '/services.tasks_svc.v1.PatientService/GetPatientAssignmentByWard',
       ($12.GetPatientAssignmentByWardRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $12.GetPatientAssignmentByWardResponse.fromBuffer(value));
   static final _$getPatientDetails = $grpc.ClientMethod<$12.GetPatientDetailsRequest, $12.GetPatientDetailsResponse>(
-      '/proto.services.tasks_svc.v1.PatientService/GetPatientDetails',
+      '/services.tasks_svc.v1.PatientService/GetPatientDetails',
       ($12.GetPatientDetailsRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $12.GetPatientDetailsResponse.fromBuffer(value));
   static final _$getPatientList = $grpc.ClientMethod<$12.GetPatientListRequest, $12.GetPatientListResponse>(
-      '/proto.services.tasks_svc.v1.PatientService/GetPatientList',
+      '/services.tasks_svc.v1.PatientService/GetPatientList',
       ($12.GetPatientListRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $12.GetPatientListResponse.fromBuffer(value));
   static final _$getRecentPatients = $grpc.ClientMethod<$12.GetRecentPatientsRequest, $12.GetRecentPatientsResponse>(

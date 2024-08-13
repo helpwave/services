@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: services/task_svc/v1/task_svc.proto
+//  source: services/tasks_svc/v1/types.proto
 //
 // @dart = 2.12
 

@@ -34,15 +34,15 @@ class TaskServiceClient extends $grpc.Client {
       ($13.GetTaskRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $13.GetTaskResponse.fromBuffer(value));
   static final _$getTasksByPatient = $grpc.ClientMethod<$13.GetTasksByPatientRequest, $13.GetTasksByPatientResponse>(
-      '/proto.services.tasks_svc.v1.TaskService/GetTasksByPatient',
+      '/services.tasks_svc.v1.TaskService/GetTasksByPatient',
       ($13.GetTasksByPatientRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $13.GetTasksByPatientResponse.fromBuffer(value));
   static final _$getTasksByPatientSortedByStatus = $grpc.ClientMethod<$13.GetTasksByPatientSortedByStatusRequest, $13.GetTasksByPatientSortedByStatusResponse>(
-      '/proto.services.tasks_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
+      '/services.tasks_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
       ($13.GetTasksByPatientSortedByStatusRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $13.GetTasksByPatientSortedByStatusResponse.fromBuffer(value));
   static final _$getAssignedTasks = $grpc.ClientMethod<$13.GetAssignedTasksRequest, $13.GetAssignedTasksResponse>(
-      '/proto.services.tasks_svc.v1.TaskService/GetAssignedTasks',
+      '/services.tasks_svc.v1.TaskService/GetAssignedTasks',
       ($13.GetAssignedTasksRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $13.GetAssignedTasksResponse.fromBuffer(value));
   static final _$assignTask = $grpc.ClientMethod<$13.AssignTaskRequest, $13.AssignTaskResponse>(
