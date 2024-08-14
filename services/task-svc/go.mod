@@ -1,6 +1,6 @@
 module task-svc
 
-go 1.22
+go 1.23
 
 replace (
 	common => ../../libs/common

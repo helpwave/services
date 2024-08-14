@@ -10,7 +10,7 @@ on:
 
 env:
   # renovate: datasource=docker depName=golang versioning=docker
-  GO_VERSION: '1.22'
+  GO_VERSION: '1.23'
 
 jobs:
 

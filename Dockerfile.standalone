@@ -32,7 +32,7 @@ ARG HIVEMIND_VERSION=1.1.0
 # renovate: datasource=github-releases depName=golang-migrate/migrate
 ARG MIGRATE_VERSION=4.17.1
 # renovate: datasource=github-releases depName=dapr/dapr
-ARG DAPR_VERSION=1.13.4
+ARG DAPR_VERSION=1.14.0
 
 RUN apt update && \
 	apt install -y wget

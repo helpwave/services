@@ -1,6 +1,6 @@
 module hwlocale
 
-go 1.22
+go 1.23
 
 replace hwutil => ../hwutil
 
