@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 15.6
--- Dumped by pg_dump version 15.6
+-- Dumped by pg_dump version 15.8
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -225,6 +225,14 @@ ALTER TABLE ONLY public.wards
 
 ALTER TABLE ONLY public.beds
     ADD CONSTRAINT beds_room_id_fkey FOREIGN KEY (room_id) REFERENCES public.rooms(id) ON DELETE CASCADE;
+
+
+--
+-- Name: patients patients_bed_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.patients
+    ADD CONSTRAINT patients_bed_id_fk FOREIGN KEY (bed_id) REFERENCES public.beds(id) ON DELETE SET NULL;
 
 
 --
