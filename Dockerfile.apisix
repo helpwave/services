@@ -3,7 +3,7 @@ FROM debian:bookworm AS deps
 # renovate: datasource=github-releases depName=DarthSim/hivemind
 ARG HIVEMIND_VERSION=1.1.0
 # renovate: datasource=github-releases depName=dapr/dapr
-ARG DAPR_VERSION=1.13.4
+ARG DAPR_VERSION=1.14.0
 
 RUN apt update && \
 	apt install -y wget
