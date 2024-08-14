@@ -77,6 +77,6 @@ jobs:
           version: ${{ env.FLY_CLI_VERSION }}
       - name: Deploy
         run: |
-          flyctl deploy --config services/${{ inputs.service }}/${{ needs.fly-toml.outputs.fly_toml }} --app ${{ inputs.app }} --build-arg VERSION=${{ inputs.version }} --remote-only
+          flyctl deploy --config services/${{ inputs.service }}/${{ needs.fly-toml.outputs.fly_toml }} --app ${{ inputs.app }} --build-arg VERSION=${{ inputs.version }} --remote-only --wait-timeout=2m
         env:
           DOCKER_BUILDKIT: 1
