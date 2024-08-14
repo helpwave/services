@@ -18,7 +18,7 @@ services:
       retries: 5
 
   eventstore:
-    image: eventstore/eventstore:23.10.1-jammy
+    image: eventstore/eventstore:23.10.2-jammy
     restart: unless-stopped
     environment:
       EVENTSTORE_TELEMETRY_OPTOUT: "true"
@@ -36,7 +36,7 @@ services:
       - "6379:6379"
 
   jaeger:
-    image: jaegertracing/all-in-one:1.57
+    image: jaegertracing/all-in-one:1.60
     environment:
       COLLECTOR_OTLP_ENABLED: "true"
     ports:
@@ -69,7 +69,7 @@ services:
 
   # dapr sidecar for apisix
   apisix-dapr:
-    image: "daprio/daprd:1.13.3"
+    image: "daprio/daprd:1.14.0"
     restart: unless-stopped
     depends_on:
       - apisix
