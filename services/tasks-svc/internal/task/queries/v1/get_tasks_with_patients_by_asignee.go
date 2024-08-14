@@ -2,7 +2,7 @@ package v1
 
 import (
 	"context"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwdb"
 	"tasks-svc/internal/task/models"

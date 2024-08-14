@@ -1,7 +1,7 @@
 package v1
 
 import (
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
 	"hwdb"
