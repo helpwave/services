@@ -3,12 +3,6 @@ package task_views_postgres
 import (
 	"bytes"
 	"context"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
-	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgconn"
-	"github.com/pashagolub/pgxmock/v3"
-	"github.com/stretchr/testify/assert"
 	"hwdb"
 	"hwes"
 	"property-svc/internal/property-view/aggregate"
@@ -17,6 +11,13 @@ import (
 	"testing"
 	"text/template"
 	"time"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/pashagolub/pgxmock/v4"
+	"github.com/stretchr/testify/assert"
 )
 
 type esClientStub struct{}
