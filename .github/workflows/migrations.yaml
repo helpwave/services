@@ -134,9 +134,12 @@ jobs:
       - name: Open tunnel to staging db
         run: |
           flyctl proxy 5431:5432 -a $FLY_DB_APP &
-          sleep 5
+          until pg_isready -h localhost -p 5431; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 3
+          done
         env:
-          FLY_API_TOKEN: ${{ secrets.STAGING_DB_TOKEN }}
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: Pull staging data
         run: |
           # service-name -> service_name
