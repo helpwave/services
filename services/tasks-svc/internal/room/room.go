@@ -10,7 +10,7 @@ import (
 	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/room_repo"
 
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	zlog "github.com/rs/zerolog/log"
 )
 
