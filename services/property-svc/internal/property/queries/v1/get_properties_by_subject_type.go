@@ -2,7 +2,7 @@ package v1
 
 import (
 	"context"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwdb"
 	"hwutil"
@@ -12,8 +12,10 @@ import (
 
 type GetPropertiesBySubjectTypeHandler func(ctx context.Context, subjectType pb.SubjectType) ([]*models.Property, error)
 
-func NewGetPropertiesBySubjectTypeQueryHandler(propertyRepo *property_repo.Queries) GetPropertiesBySubjectTypeHandler {
+func NewGetPropertiesBySubjectTypeQueryHandler() GetPropertiesBySubjectTypeHandler {
 	return func(ctx context.Context, subjectType pb.SubjectType) ([]*models.Property, error) {
+		propertyRepo := property_repo.New(hwdb.GetDB())
+
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx, property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
 			SubjectType: hwutil.PtrTo(int32(subjectType)),
 		})

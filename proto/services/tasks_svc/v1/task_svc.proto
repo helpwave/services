@@ -1,12 +1,13 @@
 syntax = "proto3";
 
-package proto.services.tasks_svc.v1;
+package services.tasks_svc.v1;
+
+import "services/tasks_svc/v1/types.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "gen/proto/services/tasks-svc";
 
-import "proto/services/tasks_svc/v1/types.proto";
 
-import "google/protobuf/timestamp.proto";
 //
 // CreateTask
 //
@@ -33,6 +34,7 @@ message UpdateTaskRequest {
   optional string name = 2;
   optional string description = 3;
   optional google.protobuf.Timestamp due_at = 4;
+  optional TaskStatus status = 5;
 }
 
 message UpdateTaskResponse {}

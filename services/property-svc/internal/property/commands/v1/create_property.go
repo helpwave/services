@@ -3,7 +3,7 @@ package v1
 import (
 	"context"
 	"errors"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
 	"property-svc/internal/property/aggregate"

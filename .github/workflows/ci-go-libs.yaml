@@ -10,7 +10,7 @@ on:
 
 env:
   # renovate: datasource=docker depName=golang versioning=docker
-  GO_VERSION: '1.22'
+  GO_VERSION: '1.23'
 
 jobs:
 
@@ -32,7 +32,7 @@ jobs:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/_go.sum') }}
 
-      - uses: golangci/golangci-lint-action@v4
+      - uses: golangci/golangci-lint-action@v6
         with:
           # Can this be a bug in golangci-lint? We already defined the working-directory for this step.
           working-directory: libs/${{ inputs.lib }}

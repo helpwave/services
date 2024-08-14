@@ -1,7 +1,7 @@
 package v1
 
 import (
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
 	"hwdb"
@@ -13,8 +13,7 @@ type GetTasksByPatientIDQueryHandler func(ctx context.Context, patientID uuid.UU
 
 func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) ([]*models.Task, error) {
-		db := hwdb.GetDB()
-		taskRepo := task_repo.New(db)
+		taskRepo := task_repo.New(hwdb.GetDB())
 
 		tasksWithSubtasks, err := taskRepo.GetTasksWithSubtasksByPatient(ctx, patientID)
 		if err := hwdb.Error(ctx, err); err != nil {

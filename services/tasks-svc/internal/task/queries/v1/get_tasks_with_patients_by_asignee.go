@@ -2,7 +2,7 @@ package v1
 
 import (
 	"context"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwdb"
 	"tasks-svc/internal/task/models"
@@ -13,8 +13,7 @@ type GetTasksWithPatientsByAssigneeQueryHandler func(ctx context.Context, assign
 
 func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssigneeQueryHandler {
 	return func(ctx context.Context, assigneeID uuid.UUID) ([]*models.TaskWithPatient, error) {
-		db := hwdb.GetDB()
-		taskRepo := task_repo.New(db)
+		taskRepo := task_repo.New(hwdb.GetDB())
 
 		rows, err := taskRepo.GetTasksWithPatientByAssignee(ctx, uuid.NullUUID{
 			UUID:  assigneeID,

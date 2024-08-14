@@ -3,7 +3,7 @@ package property_value_postgres_projection
 import (
 	"context"
 	"fmt"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -25,13 +25,13 @@ type Projection struct {
 	propertyValueRepo *property_value_repo.Queries
 }
 
-func NewProjection(es *esdb.Client, serviceName string) *Projection {
+func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-value-postgres-projection", serviceName)
 	p := &Projection{
 		CustomProjection:  custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PropertyValueAggregateType)}),
-		db:                hwdb.GetDB(),
-		propertyRepo:      property_repo.New(hwdb.GetDB()),
-		propertyValueRepo: property_value_repo.New(hwdb.GetDB())}
+		db:                db,
+		propertyRepo:      property_repo.New(db),
+		propertyValueRepo: property_value_repo.New(db)}
 	p.initEventListeners()
 	return p
 }

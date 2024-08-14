@@ -3,7 +3,7 @@ package task_postgres_projection
 import (
 	"context"
 	"fmt"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -32,6 +32,7 @@ func NewProjection(es *esdb.Client, serviceName string) *Projection {
 
 func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(taskEventsV1.TaskCreated, p.onTaskCreated)
+	p.RegisterEventListener(taskEventsV1.TaskStatusUpdated, p.onTaskStatusUpdated)
 	p.RegisterEventListener(taskEventsV1.TaskNameUpdated, p.onTaskNameUpdated)
 	p.RegisterEventListener(taskEventsV1.TaskDescriptionUpdated, p.onTaskDescriptionUpdated)
 	p.RegisterEventListener(taskEventsV1.TaskDueAtUpdated, p.onTaskDueAtUpdated)
@@ -86,6 +87,30 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 		CreatedBy: committerID,
 		CreatedAt: hwdb.TimeToTimestamp(payload.CreatedAt),
 	})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	}
+
+	return nil, nil
+}
+
+func (p *Projection) onTaskStatusUpdated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+	log := zlog.Ctx(ctx)
+
+	var payload taskEventsV1.TaskStatusUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		log.Error().Err(err).Msg("unmarshal failed")
+		return err, hwutil.PtrTo(esdb.NackActionPark)
+	}
+
+	value, found := pb.TaskStatus_value[payload.Status]
+	if !found {
+		return fmt.Errorf("invalid taskStatus: %s", payload.Status), hwutil.PtrTo(esdb.NackActionPark)
+	}
+	status := (pb.TaskStatus)(value)
+
+	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{Status: hwutil.PtrTo(int32(status))})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)

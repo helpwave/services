@@ -3,7 +3,7 @@ package v1
 import (
 	"context"
 	"errors"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwes"

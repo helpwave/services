@@ -3,14 +3,16 @@ package task_template
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"hwdb"
 	"hwutil"
 	"task-svc/repos/task_template_repo"
 
-	pb "gen/proto/services/task_svc/v1"
+	"github.com/google/uuid"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
+	pb "gen/services/task_svc/v1"
+
 	zlog "github.com/rs/zerolog/log"
 )
 
@@ -27,7 +29,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	db := hwdb.GetDB()
 	tx, err := db.Begin(ctx)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "could not start tx: "+err.Error())
+		return nil, status.Errorf(codes.Internal, "could not start tx: %s", err.Error())
 	}
 	defer func() {
 		_ = tx.Rollback(ctx)

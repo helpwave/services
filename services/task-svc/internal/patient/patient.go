@@ -3,7 +3,7 @@ package patient
 import (
 	"common"
 	"context"
-	pb "gen/proto/services/task_svc/v1"
+	pb "gen/services/task_svc/v1"
 	"hwdb"
 	"hwutil"
 	"task-svc/internal/tracking"

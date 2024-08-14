@@ -2,7 +2,7 @@ package aggregate
 
 import (
 	"context"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"time"
 
@@ -30,6 +30,14 @@ func (a *TaskAggregate) UpdateName(ctx context.Context, newName string) error {
 
 func (a *TaskAggregate) UpdateDescription(ctx context.Context, newDescription string) error {
 	event, err := taskEventsV1.NewTaskDescriptionUpdatedEvent(ctx, a, newDescription)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *TaskAggregate) UpdateStatus(ctx context.Context, status pb.TaskStatus) error {
+	event, err := taskEventsV1.NewTaskStatusUpdatedEvent(ctx, a, status)
 	if err != nil {
 		return err
 	}

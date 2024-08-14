@@ -3,7 +3,6 @@ package custom
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	zlog "github.com/rs/zerolog/log"
 	"hwes"
@@ -88,13 +87,14 @@ func (p *CustomProjection) RegisterEventListener(eventType string, eventHandler 
 	return p
 }
 
-func (p *CustomProjection) handleEvent(ctx context.Context, event hwes.Event) (error, *esdb.NackAction) {
-	ctx, span, _ := telemetry.StartSpan(ctx, "custom_projection.handleEvent")
+func (p *CustomProjection) HandleEvent(ctx context.Context, event hwes.Event) (error, *esdb.NackAction) {
+	ctx, span, log := telemetry.StartSpan(ctx, "custom_projection.handleEvent")
 	defer span.End()
 
 	eventHandler, found := p.eventHandlers[event.EventType]
 	if !found {
-		return fmt.Errorf("event type '%s' is invalid", event.EventType), hwutil.PtrTo(esdb.NackActionUnknown)
+		log.Debug().Dict("event", event.GetZerologDict()).Msg("event handler for event type not found, skip")
+		return nil, hwutil.PtrTo(esdb.NackActionUnknown)
 	}
 	return eventHandler(ctx, event)
 }
@@ -195,7 +195,7 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 
 	log.Debug().Dict("event", event.GetZerologDict()).Msg("process event")
 
-	err, nackAction := p.handleEvent(ctx, event)
+	err, nackAction := p.HandleEvent(ctx, event)
 	if err == nil && nackAction == nil {
 		// ack event
 		log.Debug().Dict("event", event.GetZerologDict()).Msg("ack event")

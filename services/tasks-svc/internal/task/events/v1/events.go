@@ -2,7 +2,7 @@ package v1
 
 import (
 	"context"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
 	"time"
@@ -22,6 +22,7 @@ const (
 	SubtaskCompleted       = "TASK_SUBTASK_COMPLETED_v1"
 	SubtaskUncompleted     = "TASK_SUBTASK_UNCOMPLETED_v1"
 	SubtaskDeleted         = "TASK_SUBTASK_DELETED_v1"
+	TaskStatusUpdated      = "TASK_STATUS_UPDATED_v1"
 )
 
 type TaskCreatedEvent struct {
@@ -78,6 +79,10 @@ type SubtaskDeletedEvent struct {
 	SubtaskID string `json:"subtask_id"`
 }
 
+type TaskStatusUpdatedEvent struct {
+	Status string `json:"subtask_id"`
+}
+
 type TaskPublishedEvent struct{}
 
 func NewTaskCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, name string, patientID uuid.UUID, status pb.TaskStatus) (hwes.Event, error) {
@@ -86,8 +91,16 @@ func NewTaskCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, na
 		Name:      name,
 		PatientID: patientID.String(),
 		Status:    status.String(),
+		CreatedAt: time.Now().UTC(),
 	}
 	return hwes.NewEvent(a, TaskCreated, hwes.WithContext(ctx), hwes.WithData(payload))
+}
+
+func NewTaskStatusUpdatedEvent(ctx context.Context, a hwes.Aggregate, status pb.TaskStatus) (hwes.Event, error) {
+	payload := TaskStatusUpdatedEvent{
+		Status: status.String(),
+	}
+	return hwes.NewEvent(a, TaskStatusUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewTaskNameUpdatedEvent(ctx context.Context, a hwes.Aggregate, name string) (hwes.Event, error) {

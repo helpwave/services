@@ -5,7 +5,7 @@
 
 # based on the debian 12 ("bookworm") go image
 # for now this only builds x86_64 images (TODO)
-FROM golang:1.22-bookworm
+FROM golang:1.23-bookworm
 
 # appearently this is not set by the go image
 ENV GOROOT="/usr/local/go"
@@ -33,7 +33,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
 # install buf
 #  https://buf.build/
 # renovate: datasource=github-releases depName=bufbuild/buf
-ENV BUF_VERSION=1.31.0
+ENV BUF_VERSION=1.36.0
 RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-Linux-x86_64 -O /usr/local/bin/buf \
     && chmod +x /usr/local/bin/buf
 
@@ -61,18 +61,18 @@ USER ${UID}:${GID}
 ENV HOME="/home/${UNAME}"
 
 # install air
-#  https://github.com/cosmtrek/air
-# renovate: datasource=github-releases depName=cosmtrek/air
-ENV AIR_VERSION=1.52.0
-RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v${AIR_VERSION}
+#  https://github.com/air-verse/air
+# renovate: datasource=github-releases depName=air-verse/air
+ENV AIR_VERSION=1.52.3
+RUN curl -sSfL https://raw.githubusercontent.com/air-verse/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v${AIR_VERSION}
 
 # install dapr-cli
 #  https://docs.dapr.io/
 
 # renovate: datasource=github-releases depName=dapr/cli
-ENV DAPR_CLI_VERSION=1.13.0
+ENV DAPR_CLI_VERSION=1.14.0
 # renovate: datasource=github-releases depName=dapr/dapr
-ENV DAPR_RT_VERSION=1.13.2
+ENV DAPR_RT_VERSION=1.14.0
 
 ENV PATH="$PATH:$HOME/dapr"
 RUN mkdir "$HOME/dapr" \
@@ -101,7 +101,7 @@ RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@v${GRPCURL_VERSION} \
 # install sqlc
 #  https://sqlc.dev/
 # renovate: datasource=github-releases depName=sqlc-dev/sqlc
-ENV SQLC_VERSION=1.26.0
+ENV SQLC_VERSION=1.27.0
 RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v${SQLC_VERSION}\
 	&& go clean -modcache
 
@@ -116,7 +116,7 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} 
 # install golangci-lint, the linter we also use in the CI
 #  https://golangci-lint.run/
 # renovate: datasource=github-releases depName=golangci/golangci-lint
-ENV GOLANGCI_LINT_VERSION=1.58.1
+ENV GOLANGCI_LINT_VERSION=1.60.1
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
 	| sh -s -- -b $(go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
 

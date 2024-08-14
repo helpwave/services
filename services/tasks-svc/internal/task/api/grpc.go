@@ -3,7 +3,7 @@ package api
 import (
 	"common"
 	"context"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -46,7 +46,7 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.UpdateTask(ctx, taskID, req.Name, req.Description); err != nil {
+	if err := s.handlers.Commands.V1.UpdateTask(ctx, taskID, req.Name, req.Description, req.Status); err != nil {
 		return nil, err
 	}
 
