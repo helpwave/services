@@ -32,7 +32,7 @@ func NewProjection(es *esdb.Client, serviceName string) *Projection {
 
 func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(taskEventsV1.TaskCreated, p.onTaskCreated)
-	p.RegisterEventListener(taskEventsV1.TaskStatusUpdated, p.onTaskNameUpdated)
+	p.RegisterEventListener(taskEventsV1.TaskStatusUpdated, p.onTaskStatusUpdated)
 	p.RegisterEventListener(taskEventsV1.TaskNameUpdated, p.onTaskNameUpdated)
 	p.RegisterEventListener(taskEventsV1.TaskDescriptionUpdated, p.onTaskDescriptionUpdated)
 	p.RegisterEventListener(taskEventsV1.TaskDueAtUpdated, p.onTaskDueAtUpdated)
