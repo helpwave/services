@@ -35,6 +35,44 @@ services:
     ports:
       - "6379:6379"
 
+  openfga:
+    image: openfga/openfga:v1.5.9
+    ports:
+      # http api
+     - 8080:8080
+      # grpc api
+     - 8081:8081
+     # playground
+     - 3000:3000
+    command: "run"
+    environment:
+      - OPENFGA_DATASTORE_ENGINE=postgres
+      - OPENFGA_DATASTORE_URI=postgres://postgres:password@postgres:5432/openfga?sslmode=disable
+      - OPENFGA_PLAYGROUND_ENABLED=true
+    depends_on:
+      openfga_migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "/usr/local/bin/grpc_health_probe",
+          "-addr=openfga:8081"
+        ]
+      interval: 5s
+      timeout: 30s
+      retries: 3
+
+  openfga_migrate:
+    image: openfga/openfga:v1.5.9
+    command: migrate
+    environment:
+      - OPENFGA_DATASTORE_ENGINE=postgres
+      - OPENFGA_DATASTORE_URI=postgres://postgres:password@postgres:5432/openfga?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   jaeger:
     image: jaegertracing/all-in-one:1.60
     environment:
@@ -93,7 +131,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '10'
+        TAG: '10-fga'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -126,7 +164,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '10'
+        TAG: '10-fga'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:

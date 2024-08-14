@@ -5,7 +5,7 @@ set -e
 
 # update this value, when you update the Dockerfile
 # renovate: dev-tag
-TAG='10'
+TAG='10-fga'
 
 # go to repo root
 cd $(git rev-parse --show-toplevel)

@@ -46,6 +46,14 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && apt install gh -y \
     && apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
+# install OpenFGA
+#  https://openfga.dev/
+# renovate: datasource=github-releases depName=openfga/cli
+ENV OPEN_FGA_CLI_VERSION=0.5.2
+RUN wget https://github.com/openfga/cli/releases/download/v${OPEN_FGA_CLI_VERSION}/fga_${OPEN_FGA_CLI_VERSION}_linux_amd64.deb -O /tmp/openfga.deb \
+	&& apt install /tmp/openfga.deb \
+	&& rm /tmp/openfga.deb
+
 # create user, reduces friction with mounted file permissions
 # 1000:1000 is a good guess (at least on linux)
 ARG UID=1000

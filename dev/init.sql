@@ -4,3 +4,4 @@ CREATE DATABASE "user-svc";
 CREATE DATABASE "impulse-svc";
 CREATE DATABASE "tasks-svc";
 CREATE DATABASE "property-svc";
+CREATE DATABASE "openfga";

@@ -143,6 +143,9 @@ grpcurl --plaintext \
 | postgres      | 5432  |                         |
 | redis         | 6379  |                         |
 | eventstore    | 2113  |                         |
+| OpenFGA       | 8080  | http                    |
+| OpenFGA       | 8081  | gRPC                    |
+| OpenFGA       | 3000  | http (playground)       |
 | jaeger (UI)   | 16686 | http                    |
 | jaeger (OTLP) | 4317  | grpc                    |
 
