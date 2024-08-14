@@ -81,7 +81,7 @@ jobs:
 
     env:
       svc: ${{ matrix.service }}
-      FLY_DB_APP: helpwave-staging-postgres-2
+      FLY_DB_APP: ${{ secrets.STAGING_DB_FLY_APP }}
       REMOTE_DB: ${{ vars.STAGING_DB_REMOTE_DB_PREFIX }}${{ matrix.service }}
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 5432
