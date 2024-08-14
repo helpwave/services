@@ -33,10 +33,10 @@ COPY --from=builder /build/app/app .
 COPY --from=builder /build/app/migrations ./migrations
 RUN chmod +x app
 
-ENV PORT 80
-ENV MODE production
-ENV LOG_LEVEL info
-ENV POSTGRES_PORT 5432
+ENV PORT=80
+ENV MODE=production
+ENV LOG_LEVEL=info
+ENV POSTGRES_PORT=5432
 
 EXPOSE 80
 
