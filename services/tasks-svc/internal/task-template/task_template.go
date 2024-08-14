@@ -27,7 +27,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	db := hwdb.GetDB()
 	tx, err := db.Begin(ctx)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "could not start tx: "+err.Error())
+		return nil, status.Errorf(codes.Internal, "could not start tx: %s", err.Error())
 	}
 	defer func() {
 		_ = tx.Rollback(ctx)
@@ -77,7 +77,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		return nil, status.Error(codes.Internal, "could not commit tx"+err.Error())
+		return nil, status.Errorf(codes.Internal, "could not commit tx %s", err.Error())
 	}
 
 	log.Info().
