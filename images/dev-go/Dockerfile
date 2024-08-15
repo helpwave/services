@@ -53,6 +53,7 @@ ENV OPEN_FGA_CLI_VERSION=0.5.2
 RUN wget https://github.com/openfga/cli/releases/download/v${OPEN_FGA_CLI_VERSION}/fga_${OPEN_FGA_CLI_VERSION}_linux_amd64.deb -O /tmp/openfga.deb \
 	&& apt install /tmp/openfga.deb \
 	&& rm /tmp/openfga.deb
+    && fga completion bash > /etc/bash_completion.d/fga
 
 # create user, reduces friction with mounted file permissions
 # 1000:1000 is a good guess (at least on linux)

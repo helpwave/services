@@ -1,0 +1,71 @@
+name: Team Tests
+
+model_file: ./fga.mod
+
+tuples:
+  # Team Tuples
+
+  # Alice leads the a_team
+  - user: user:alice
+    relation: lead
+    object: team:a_team
+  # Bob leads the b_team
+  - user: user:bob
+    relation: lead
+    object: team:b_team
+  # Charlie is a common member
+  - user: user:charlie
+    relation: member
+    object: team:a_team
+  - user: user:charlie
+    relation: member
+    object: team:b_team
+
+  # User eve is invited to the a_team
+  - user: user:eve
+    relation: user
+    object: team_invite:1
+  - user: team:a_team
+    relation: team
+    object: team_invite:1
+  
+  # Unrelated invite
+  - user: user:dome
+    relation: user
+    object: team_invite:2
+  - user: team:a_team
+    relation: team
+    object: team_invite:2
+
+tests:
+  - name: Only Eve (user) and Alice (lead) can view the invite
+    list_users:
+      - object: team_invite:1
+        user_filter:
+          - type: user
+        assertions:
+            can_view:
+              users:
+                - user:eve
+                - user:alice
+  - name: Only Eve (user) can accept and deny the invite
+    list_users:
+      - object: team_invite:1
+        user_filter:
+          - type: user
+        assertions:
+            can_accept:
+              users:
+                - user:eve
+            can_deny:
+              users:
+                - user:eve
+  - name: Only Alice (lead) can cancel the invite
+    list_users:
+      - object: team_invite:1
+        user_filter:
+          - type: user
+        assertions:
+            can_cancel:
+              users:
+                - user:alice

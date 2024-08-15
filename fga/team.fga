@@ -1,0 +1,27 @@
+module core
+
+type user
+
+type team
+  relations
+	define lead: [user] # any user can be a lead
+	define member: [user] or lead # any user can be a member, leads are members
+
+	define can_invite_member: lead # only leads of the team can invite new members to the team
+	define can_remove_member: lead # only leads of the team can remove members from the team
+
+type team_invite
+  relations
+	define user: [user] # invited user
+	define team: [team] # team the user is inveted to
+
+	# only the invited user can accept and deny the invitation
+	define can_accept: user
+	define can_deny: user
+
+	# only the leads of the team can cancel the invite
+	define can_cancel: lead from team
+
+	# both the invited user, and team leads can view the invite
+	define can_view: user or lead from team
+

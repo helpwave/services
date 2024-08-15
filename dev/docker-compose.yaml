@@ -40,14 +40,12 @@ services:
     ports:
       # http api
      - 8080:8080
-      # grpc api
-     - 8081:8081
      # playground
      - 3000:3000
     command: "run"
     environment:
       - OPENFGA_DATASTORE_ENGINE=postgres
-      - OPENFGA_DATASTORE_URI=postgres://postgres:password@postgres:5432/openfga?sslmode=disable
+      - OPENFGA_DATASTORE_URI=postgres://postgres:postgres@postgres:5432/openfga?sslmode=disable
       - OPENFGA_PLAYGROUND_ENABLED=true
     depends_on:
       openfga_migrate:
@@ -68,7 +66,7 @@ services:
     command: migrate
     environment:
       - OPENFGA_DATASTORE_ENGINE=postgres
-      - OPENFGA_DATASTORE_URI=postgres://postgres:password@postgres:5432/openfga?sslmode=disable
+      - OPENFGA_DATASTORE_URI=postgres://postgres:postgres@postgres:5432/openfga?sslmode=disable
     depends_on:
       postgres:
         condition: service_healthy
@@ -181,6 +179,7 @@ services:
       PGPASSWORD: postgres
       PGDATABASE: postgres
 
+      FGA_API_URL: http://openfga:8080 # point the OpenFGA cli to openfga
       COMPOSE_FILE: "/helpwave/dev/docker-compose.yaml" # allows us to use `docker compose` in any directory
     restart: unless-stopped
     command: sleep infinity

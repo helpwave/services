@@ -24,6 +24,8 @@ common:
     OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
     OTEL_EXPORTER_OTLP_INSECURE: true
 
+    FGA_API_URL: http://openfga:8080
+
 apps:
   - appID: task-svc
     appDirPath: ../services/task-svc

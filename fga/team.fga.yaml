@@ -1,0 +1,105 @@
+name: Team Tests
+
+model_file: ./fga.mod
+
+tuples:
+  # Alice leads the a_team
+  - user: user:alice
+    relation: lead
+    object: team:a_team
+  # Bob leads the b_team
+  - user: user:bob
+    relation: lead
+    object: team:b_team
+  # Bob is also, explicitly, a member of the b_team
+  - user: user:bob
+    relation: member
+    object: team:b_team
+  # Charlie is a common member
+  - user: user:charlie
+    relation: member
+    object: team:a_team
+  - user: user:charlie
+    relation: member
+    object: team:b_team
+  # Clara is a common member, and lead of the a_team
+  - user: user:clara
+    relation: lead
+    object: team:a_team
+  - user: user:clara
+    relation: member
+    object: team:b_team
+  # Oscar is only a member of one team (a_team)
+  - user: user:oscar
+    relation: member
+    object: team:a_team
+
+tests:
+  - name: leads are members
+    check:
+      - user: user:alice
+        object: team:a_team
+        assertions:
+          member: true # follows implicitly
+
+      - user: user:bob
+        object: team:b_team
+        assertions:
+          member: true # both explicit and implied
+  - name: leads only have permissions in their own team
+    check:
+      - user: user:alice
+        object: team:b_team
+        assertions:
+          lead: false
+          member: false
+      # clara is a lead of a
+      - user: user:clara
+        object: team:a_team
+        assertions:
+          lead: true
+          member: true
+      # but only a member in b
+      - user: user:clara
+        object: team:b_team
+        assertions:
+          lead: false
+          member: true
+  - name: members cant invite
+    check:
+      - user: user:charlie
+        object: team:a_team
+        assertions:
+          lead: false
+          can_invite_member: false
+      - user: user:charlie
+        object: team:b_team
+        assertions:
+          lead: false
+          can_invite_member: false
+  - name: members cant remove users
+    check:
+      - user: user:charlie
+        object: team:a_team
+        assertions:
+          lead: false
+          can_remove_member: false
+      - user: user:charlie
+        object: team:b_team
+        assertions:
+          lead: false
+          can_remove_member: false
+  - name: leads can invite users
+    check:
+      - user: user:alice
+        object: team:a_team
+        assertions:
+          lead: true
+          can_invite_member: true
+  - name: leads can remove users
+    check:
+      - user: user:alice
+        object: team:a_team
+        assertions:
+          lead: true
+          can_remove_member: true

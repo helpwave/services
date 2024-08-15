@@ -1,6 +1,7 @@
 package main
 
 import (
+	"authz"
 	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
@@ -28,6 +29,8 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	common.Setup(ServiceName, Version, common.WithAuth())
+
+	authz.Setup(ctx)
 
 	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
 	defer closeDBPool()
