@@ -1,6 +1,7 @@
 package organization
 
 import (
+	"authz"
 	"common"
 	"context"
 	"errors"
@@ -9,6 +10,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"hwdb"
 	"hwutil"
+	"user-svc/internal/fga"
 	"user-svc/repos/organization_repo"
 
 	daprc "github.com/dapr/go-sdk/client"
@@ -32,6 +34,7 @@ func NewServiceServer(daprClient *daprc.GRPCClient) *ServiceServer {
 }
 
 func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrganizationRequest) (*pb.CreateOrganizationResponse, error) {
+	// Get UserID
 	userID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -356,16 +359,35 @@ func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberReq
 }
 
 func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberRequest) (*pb.InviteMemberResponse, error) {
+	// Dependencies
 	organizationRepo := organization_repo.New(hwdb.GetDB())
-	invitation := organization_repo.Invitation{}
-
 	log := zlog.Ctx(ctx)
+
+	// Parse request
+	userId, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	organizationId, err := uuid.Parse(req.OrganizationId)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	// Permission Check
+	allowedToInvite, err := fga.TeamCanInviteMember.
+		Tuple(fga.User{userId}, fga.Team{organizationId}).
+		Check(ctx)
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, "FGA request failed")
+	}
+
+	if !allowedToInvite {
+		return nil, status.Error(codes.PermissionDenied, "Permission Denied")
+	}
+
+	// Check Pre-Conditions
 	conditions, err := organizationRepo.GetInvitationConditions(ctx, organization_repo.GetInvitationConditionsParams{
 		OrganizationID: organizationId,
 		Email:          req.Email,
@@ -382,22 +404,54 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		return nil, status.Error(codes.InvalidArgument, "cannot invite a user that is already a member")
 	} else if conditions.DoesInvitationExist {
 		return nil, status.Error(codes.InvalidArgument, "user already invited")
-	} else {
-		invitation, err = organizationRepo.InviteMember(ctx, organization_repo.InviteMemberParams{
+	}
+
+	// Start a TX
+	tx, err := hwdb.GetDB().Begin(ctx)
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = tx.Rollback(ctx)
+	}()
+
+	// Invite User
+	invitation, err := organizationRepo.
+		WithTx(tx).
+		InviteMember(ctx, organization_repo.InviteMemberParams{
 			Email:          req.Email,
 			OrganizationID: organizationId,
 			State:          int32(pb.InvitationState_INVITATION_STATE_PENDING.Number()),
 		})
-		err = hwdb.Error(ctx, err)
-		if err != nil {
-			return nil, err
-		}
-
-		log.Info().
-			Str("email", req.Email). // TODO: Revisited for privacy reasons
-			Str("organizationID", organizationId.String()).
-			Msg("user invited to organization")
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
 	}
+
+	// Update Permission Graph
+	err = authz.Tx().WriteTuples(
+		fga.TeamInviteIsUser.Tuple(fga.User{userId}, fga.TeamInvite{invitation.ID}),
+		fga.TeamInviteIsTeam.Tuple(fga.Team{organizationId}, fga.TeamInvite{invitation.ID}),
+	).Commit(ctx)
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, "could not commit fga tuple")
+	}
+
+	// Commit TX
+	err = tx.Commit(ctx)
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
+	}
+
+	// Return id
+
+	log.Info().
+		Str("email", req.Email). // TODO: Revisited for privacy reasons
+		Str("organizationID", organizationId.String()).
+		Msg("user invited to organization")
 
 	return &pb.InviteMemberResponse{
 		Id: invitation.ID.String(),
@@ -717,14 +771,15 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 }
 
 func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Organization, userID uuid.UUID) (*organization_repo.Organization, error) {
+	// Dependencies
 	db := hwdb.GetDB()
 	log := zlog.Ctx(ctx)
 
+	// Start TX
 	tx, err := db.Begin(ctx)
 	if err != nil {
 		return nil, err
 	}
-
 	defer func() {
 		err := tx.Rollback(ctx)
 		if !errors.Is(err, pgx.ErrTxClosed) {
@@ -734,6 +789,7 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 
 	organizationRepo := organization_repo.New(db).WithTx(tx)
 
+	// Create Org
 	organization, err := organizationRepo.CreateOrganization(ctx, organization_repo.CreateOrganizationParams{
 		LongName:        attr.LongName,
 		ShortName:       attr.ShortName,
@@ -747,6 +803,7 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 		return nil, err
 	}
 
+	// Add user
 	err = organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
 		UserID:         userID,
 		OrganizationID: organization.ID,
@@ -756,6 +813,7 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 		return nil, err
 	}
 
+	// Make user leader
 	err = organizationRepo.ChangeMembershipAdminStatus(ctx, organization_repo.ChangeMembershipAdminStatusParams{
 		UserID:         userID,
 		OrganizationID: organization.ID,
@@ -765,6 +823,22 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 		return nil, err
 	}
 
+	// Update Permission Graph
+	fgaUser := fga.User{userID}
+	fgaTeam := fga.Team{organization.ID}
+
+	// A lead is always a member, but we additionally add the user as a member,
+	// this way we can demote the user by simply removing the lead relation
+	err = authz.Tx().WriteTuples(
+		fga.TeamIsLead.Tuple(fgaUser, fgaTeam),
+		fga.TeamIsMember.Tuple(fgaUser, fgaTeam),
+	).Commit(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Notify other services
 	organizationCreatedEvent := &events.OrganizationCreatedEvent{
 		Id:     organization.ID.String(),
 		UserId: userID.String(),
@@ -774,6 +848,8 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 		return nil, err
 	}
 	// TODO: Dispatch UserJoinedOrganizationEvent
+
+	// Commit and Return
 	if err := tx.Commit(ctx); err != nil {
 		return nil, err
 	}

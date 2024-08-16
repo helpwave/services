@@ -3,6 +3,7 @@ module user-svc
 go 1.23
 
 replace (
+	authz => ../../libs/authz
 	common => ../../libs/common
 	gen => ../../gen/go
 	hwdb => ../../libs/hwdb
@@ -12,6 +13,7 @@ replace (
 )
 
 require (
+	authz v0.0.0
 	common v0.0.0
 	gen v0.0.0
 	github.com/dapr/go-sdk v1.10.1
@@ -48,6 +50,7 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.4.0 // indirect
+	github.com/openfga/go-sdk v0.5.0 // indirect
 	github.com/openzipkin/zipkin-go v0.4.3 // indirect
 	github.com/pquerna/cachecontrol v0.2.0 // indirect
 	github.com/vgarvardt/pgx-google-uuid/v5 v5.6.0 // indirect

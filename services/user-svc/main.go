@@ -1,6 +1,7 @@
 package main
 
 import (
+	"authz"
 	"common"
 	"context"
 	pb "gen/services/user_svc/v1"
@@ -25,6 +26,8 @@ func main() {
 
 	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
 	defer closeDBPool()
+
+	authz.Setup(context.Background())
 
 	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()

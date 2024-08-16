@@ -1,6 +1,6 @@
 name: Team Tests
 
-model_file: ./fga.mod
+model_file: ../fga.mod
 
 tuples:
   # Team Tuples

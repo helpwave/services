@@ -16,7 +16,7 @@ SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 cd "$SCRIPT_DIR" || { echo "Failed to change directory to $SCRIPT_DIR"; exit 1; }
 
 # Iterate over each .fga.yaml file in the script's directory
-for file in *.fga.yaml; do
+for file in **/*.fga.yaml; do
     # Check if there are any .fga.yaml files
     if [ -e "$file" ]; then
         echo "$file"

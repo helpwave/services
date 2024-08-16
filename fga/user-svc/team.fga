@@ -1,4 +1,4 @@
-module core
+module user-svc
 
 type user
 
@@ -9,11 +9,12 @@ type team
 
 	define can_invite_member: lead # only leads of the team can invite new members to the team
 	define can_remove_member: lead # only leads of the team can remove members from the team
+	define can_view: member
 
 type team_invite
   relations
 	define user: [user] # invited user
-	define team: [team] # team the user is inveted to
+	define team: [team] # team the user is invited to
 
 	# only the invited user can accept and deny the invitation
 	define can_accept: user
