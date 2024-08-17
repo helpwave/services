@@ -23,8 +23,8 @@ require (
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
-	github.com/dapr/dapr v1.14.0 // indirect
-	github.com/dapr/go-sdk v1.10.1 // indirect
+	github.com/dapr/dapr v1.14.1 // indirect
+	github.com/dapr/go-sdk v1.11.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
