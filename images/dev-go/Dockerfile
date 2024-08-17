@@ -33,7 +33,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
 # install buf
 #  https://buf.build/
 # renovate: datasource=github-releases depName=bufbuild/buf
-ENV BUF_VERSION=1.36.0
+ENV BUF_VERSION=1.37.0
 RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-Linux-x86_64 -O /usr/local/bin/buf \
     && chmod +x /usr/local/bin/buf
 
@@ -72,7 +72,7 @@ RUN curl -sSfL https://raw.githubusercontent.com/air-verse/air/master/install.sh
 # renovate: datasource=github-releases depName=dapr/cli
 ENV DAPR_CLI_VERSION=1.14.0
 # renovate: datasource=github-releases depName=dapr/dapr
-ENV DAPR_RT_VERSION=1.14.0
+ENV DAPR_RT_VERSION=1.14.1
 
 ENV PATH="$PATH:$HOME/dapr"
 RUN mkdir "$HOME/dapr" \
