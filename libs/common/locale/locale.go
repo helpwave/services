@@ -7,6 +7,9 @@ import (
 	"hwlocale"
 )
 
+// be demure with new locales here, and favor an individual service's locale .go,
+// as every change to common requires a re-build and re-deployment of ALL services
+
 //go:embed locale.*.toml
 var localeFS embed.FS
 var lazy = hwlocale.NewLazyLocaleBundle(&localeFS)

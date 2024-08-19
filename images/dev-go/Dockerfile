@@ -53,6 +53,8 @@ RUN wget https://github.com/authzed/zed/releases/download/v${ZED_VERSION}/zed_${
     && apt install -y ./zed.deb \
     && rm zed.deb
 
+# clean up apt artifacts,
+# dont use apt after this line
 RUN apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 # create user, reduces friction with mounted file permissions
