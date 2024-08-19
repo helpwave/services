@@ -103,15 +103,21 @@ func NewSpiceDBAuthZ() *SpiceDBAuthZ {
 	return &SpiceDBAuthZ{client: client}
 }
 
-func (s *SpiceDBAuthZ) Write(ctx context.Context, relations ...hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
+func (s *SpiceDBAuthZ) write(ctx context.Context, delete bool, relations ...hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Write")
 	defer span.End()
 
+	operation := v1.RelationshipUpdate_OPERATION_TOUCH // TOUCH = Create or Ignore existing
+	if delete {
+		operation = v1.RelationshipUpdate_OPERATION_DELETE // DELETE = Delete or Ignore if missing
+		span.SetName("hwauthz.SpiceDB.Delete")
+	}
+
 	req := &v1.WriteRelationshipsRequest{
 		Updates: hwutil.Map(relations, func(relation hwauthz.Relationship) *v1.RelationshipUpdate {
 			telemetry.SetSpanAttributes(ctx, relation.SpanAttributeKeyValue()...)
 			return &v1.RelationshipUpdate{
-				Operation:    v1.RelationshipUpdate_OPERATION_TOUCH, // TODO: TOUCH to be idempotent?
+				Operation:    operation,
 				Relationship: fromRelationship(relation),
 			}
 		}),
@@ -123,31 +129,16 @@ func (s *SpiceDBAuthZ) Write(ctx context.Context, relations ...hwauthz.Relations
 	}
 
 	return res.WrittenAt.Token, nil
+}
+
+func (s *SpiceDBAuthZ) Write(ctx context.Context, relations ...hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
+	return s.write(ctx, false, relations...)
 }
 
 func (s *SpiceDBAuthZ) Delete(ctx context.Context, relations ...hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
-	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Delete")
-	defer span.End()
-
-	req := &v1.WriteRelationshipsRequest{
-		Updates: hwutil.Map(relations, func(relation hwauthz.Relationship) *v1.RelationshipUpdate {
-			telemetry.SetSpanAttributes(ctx, relation.SpanAttributeKeyValue()...)
-			return &v1.RelationshipUpdate{
-				Operation:    v1.RelationshipUpdate_OPERATION_DELETE, // TOUCH to be idempotent?
-				Relationship: fromRelationship(relation),
-			}
-		}),
-	}
-
-	res, err := s.client.WriteRelationships(ctx, req)
-	if err != nil {
-		return "", err
-	}
-
-	return res.WrittenAt.Token, nil
+	return s.write(ctx, true, relations...)
 }
 
-// TODO: consistency token?
 func (s *SpiceDBAuthZ) Check(ctx context.Context, permissionCheck hwauthz.PermissionCheck) (bool, error) {
 	ctx, span, log := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Check")
 	defer span.End()
@@ -170,6 +161,7 @@ func (s *SpiceDBAuthZ) Check(ctx context.Context, permissionCheck hwauthz.Permis
 		return false, fmt.Errorf("spicedb: could not check permissionCheck: %w", err)
 	}
 
+	// parse result
 	hasPermission := res.Permissionship == v1.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION
 	telemetry.SetSpanBool(ctx, "hasPermission", hasPermission)
 	return hasPermission, nil

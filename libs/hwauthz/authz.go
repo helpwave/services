@@ -22,7 +22,8 @@ func StatusErrorPermissionDenied(ctx context.Context, check Relationship) error 
 	return common.NewStatusError(ctx, codes.PermissionDenied, msg, locale.PermissionDeniedError(ctx))
 }
 
-// TODO: explain ct
+// ConsistencyToken are currently unused
+// See https://authzed.com/docs/spicedb/concepts/consistency#zedtokens
 type ConsistencyToken = string
 
 // A Relation defines how two objects (or an object and subject) can relate to one another.
@@ -98,5 +99,6 @@ type AuthZ interface {
 	// Delete removes one or many Relationship Tuples to the Permissions Graph
 	Delete(ctx context.Context, relationships ...Relationship) (ConsistencyToken, error)
 	// Check queries the Permission Graph for the existence of a PermissionCheck (i.e., a Relationship)
+	// We do not support the use of ConsistencyToken yet
 	Check(ctx context.Context, check PermissionCheck) (permissionGranted bool, err error)
 }
