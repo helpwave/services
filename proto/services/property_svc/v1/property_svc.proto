@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package proto.services.property_svc.v1;
+package services.property_svc.v1;
 
-import "proto/services/property_svc/v1/types.proto";
+import "services/property_svc/v1/types.proto";
 
 option go_package = "gen/proto/services/property-svc";
 
@@ -93,7 +93,6 @@ message UpdatePropertyRequest {
   string id = 1;
 
   optional SubjectType subject_type = 2;
-  optional FieldType field_type = 3;
 
   optional string name = 4;
   optional string description = 5;

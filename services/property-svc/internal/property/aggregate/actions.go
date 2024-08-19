@@ -2,7 +2,7 @@ package aggregate
 
 import (
 	"context"
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"hwutil"
 	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/models"
@@ -47,14 +47,6 @@ func (a *PropertyAggregate) UpdateSetID(ctx context.Context, newSetID string) er
 }
 func (a *PropertyAggregate) UpdateSubjectType(ctx context.Context, subjectType pb.SubjectType) error {
 	event, err := propertyEventsV1.NewPropertySubjectTypeUpdatedEvent(ctx, a, subjectType)
-	if err != nil {
-		return err
-	}
-	return a.Apply(event)
-}
-
-func (a *PropertyAggregate) UpdateFieldType(ctx context.Context, fieldType pb.FieldType) error {
-	event, err := propertyEventsV1.NewPropertyFieldTypeUpdatedEvent(ctx, a, fieldType)
 	if err != nil {
 		return err
 	}

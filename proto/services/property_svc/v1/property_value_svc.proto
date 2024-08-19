@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package proto.services.property_svc.v1;
+package services.property_svc.v1;
 
-import "proto/services/property_svc/v1/types.proto";
+import "services/property_svc/v1/types.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "gen/proto/services/property-svc";
@@ -31,8 +31,16 @@ message AttachPropertyValueResponse {
 //
 // GetAttachedPropertyValue
 //
+
+message TaskPropertyMatcher {
+  optional string ward_id = 1; // @gotags: validate:"omitempty,omitnil,uuid4"
+  optional string task_id = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
+}
+
 message GetAttachedPropertyValuesRequest {
-  string subject_id = 1;
+  oneof matcher {
+    TaskPropertyMatcher task_matcher = 1;
+  }
 }
 
 message GetAttachedPropertyValuesResponse {

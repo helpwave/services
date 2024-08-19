@@ -3,7 +3,7 @@ package ward
 import (
 	"common"
 	"context"
-	pb "gen/proto/services/task_svc/v1"
+	pb "gen/services/task_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"

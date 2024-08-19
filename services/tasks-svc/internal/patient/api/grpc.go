@@ -4,7 +4,7 @@ import (
 	"common"
 	"context"
 	"fmt"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
@@ -13,26 +13,26 @@ import (
 	"hwdb/locale"
 	"hwes"
 	"hwutil"
-	commandsV1 "tasks-svc/internal/patient/commands/v1"
-	v1queries "tasks-svc/internal/patient/queries/v1"
+	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/bed_repo"
 )
 
 type PatientGrpcService struct {
 	pb.UnimplementedPatientServiceServer
-	as hwes.AggregateStore
+	as       hwes.AggregateStore
+	handlers *handlers.Handlers
 }
 
-func NewPatientGrpcService(aggregateStore hwes.AggregateStore) *PatientGrpcService {
-	return &PatientGrpcService{as: aggregateStore}
+func NewPatientGrpcService(aggregateStore hwes.AggregateStore, handlers *handlers.Handlers) *PatientGrpcService {
+	return &PatientGrpcService{as: aggregateStore, handlers: handlers}
 }
 
 func (s *PatientGrpcService) CreatePatient(ctx context.Context, req *pb.CreatePatientRequest) (*pb.CreatePatientResponse, error) {
 	log := zlog.Ctx(ctx)
 	patientID := uuid.New()
 
-	if err := commandsV1.NewCreatePatientCommandHandler(s.as)(ctx, patientID, req.GetHumanReadableIdentifier(), req.Notes); err != nil {
+	if err := s.handlers.Commands.V1.CreatePatient(ctx, patientID, req.GetHumanReadableIdentifier(), req.Notes); err != nil {
 		return nil, err
 	}
 
@@ -53,7 +53,7 @@ func (s *PatientGrpcService) GetPatient(ctx context.Context, req *pb.GetPatientR
 
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	patient, err := v1queries.NewGetPatientByIDQueryHandler(s.as)(ctx, patientID)
+	patient, err := s.handlers.Queries.V1.GetPatientByID(ctx, patientID)
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +121,7 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 			log.Warn().Str("uuid", id).Msg("GetRecentPatientsForUser returned invalid uuid")
 			return nil
 		}
-		patient, err := v1queries.NewGetPatientByIDQueryHandler(s.as)(ctx, parsedUUID)
+		patient, err := s.handlers.Queries.V1.GetPatientByID(ctx, parsedUUID)
 		if err != nil {
 			return nil
 		}
@@ -166,7 +166,7 @@ func (s *PatientGrpcService) UpdatePatient(ctx context.Context, req *pb.UpdatePa
 		return nil, err
 	}
 
-	if err := commandsV1.NewUpdatePatientCommandHandler(s.as)(ctx, patientID, req.HumanReadableIdentifier, req.Notes); err != nil {
+	if err := s.handlers.Commands.V1.UpdatePatient(ctx, patientID, req.HumanReadableIdentifier, req.Notes); err != nil {
 		return nil, err
 	}
 
@@ -190,7 +190,7 @@ func (s *PatientGrpcService) AssignBed(ctx context.Context, req *pb.AssignBedReq
 		return nil, err
 	}
 
-	if err := commandsV1.NewAssignBedCommandHandler(s.as)(ctx, patientID, bedID); err != nil {
+	if err := s.handlers.Commands.V1.AssignBed(ctx, patientID, bedID); err != nil {
 		return nil, err
 	}
 
@@ -211,7 +211,7 @@ func (s *PatientGrpcService) UnassignBed(ctx context.Context, req *pb.UnassignBe
 		return nil, err
 	}
 
-	if err := commandsV1.NewUnassignBedCommandHandler(s.as)(ctx, patientID); err != nil {
+	if err := s.handlers.Commands.V1.UnassignBed(ctx, patientID); err != nil {
 		return nil, err
 	}
 
@@ -232,7 +232,7 @@ func (s *PatientGrpcService) DischargePatient(ctx context.Context, req *pb.Disch
 		return nil, err
 	}
 
-	if err := commandsV1.NewDischargePatientCommandHandler(s.as)(ctx, patientID); err != nil {
+	if err := s.handlers.Commands.V1.DischargePatient(ctx, patientID); err != nil {
 		return nil, err
 	}
 
@@ -251,7 +251,7 @@ func (s *PatientGrpcService) ReadmitPatient(ctx context.Context, req *pb.Readmit
 
 	// TODO: admin check
 
-	if err := commandsV1.NewReadmitPatientCommandHandler(s.as)(ctx, patientID); err != nil {
+	if err := s.handlers.Commands.V1.ReadmitPatient(ctx, patientID); err != nil {
 		return nil, err
 	}
 

@@ -11,9 +11,9 @@ env:
   # renovate: datasource=github-releases depName=golang-migrate/migrate
   MIGRATE_VERSION: '4.17.1'
   # renovate: datasource=github-releases depName=superfly/flyctl versioning=semver
-  FLY_CLI_VERSION: '0.2.42'
+  FLY_CLI_VERSION: '0.2.112'
   # renovate: datasource=github-releases depName=sqlc-dev/sqlc
-  SQLC_VERSION: '1.26.0'
+  SQLC_VERSION: '1.27.0'
 
 jobs:
   detect-changes:
@@ -31,7 +31,7 @@ jobs:
       # as a json array (it's a string)
       - name: Detect changes in migrations
         id: changes
-        uses: tj-actions/changed-files@v42
+        uses: tj-actions/changed-files@v44
         with:
           json: "true"
           escape_json: "false"
@@ -57,7 +57,7 @@ jobs:
 
       - name: Detect modifications in migrations
         id: changes
-        uses: tj-actions/changed-files@v42
+        uses: tj-actions/changed-files@v44
         with:
           json: "true"
           escape_json: "false"
@@ -81,8 +81,8 @@ jobs:
 
     env:
       svc: ${{ matrix.service }}
-      FLY_DB_APP: helpwave-staging-postgres
-      REMOTE_DB: helpwave_staging_${{ matrix.service }}
+      FLY_DB_APP: ${{ secrets.STAGING_DB_FLY_DB_APP }}
+      REMOTE_DB: ${{ vars.STAGING_DB_REMOTE_DB_PREFIX }}${{ matrix.service }}
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 5432
       POSTGRES_USER: postgres
@@ -134,9 +134,22 @@ jobs:
       - name: Open tunnel to staging db
         run: |
           flyctl proxy 5431:5432 -a $FLY_DB_APP &
-          sleep 5
+          count=0
+          max_attempts=10
+
+          until pg_isready -h localhost -p 5431; do
+            if [ $count -ge $max_attempts ]; then
+              echo "PostgreSQL is not ready after $max_attempts attempts. Exiting..."
+              exit 1
+            fi
+
+            echo "Waiting for PostgreSQL to be ready... (Attempt $((count+1))/$max_attempts)"
+            sleep 3
+
+            count=$((count+1))
+          done
         env:
-          FLY_API_TOKEN: ${{ secrets.STAGING_DB_TOKEN }}
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: Pull staging data
         run: |
           # service-name -> service_name

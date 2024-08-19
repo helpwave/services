@@ -5,7 +5,7 @@ import (
 	common_test "common/test"
 	"context"
 	"decaying_lru"
-	pb "gen/proto/services/tasks_svc/v1"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/go-redis/redismock/v9"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -13,6 +13,7 @@ import (
 	"google.golang.org/grpc/codes"
 	hwes_test "hwes/test"
 	"tasks-svc/internal/patient/api"
+	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/tracking"
 	"testing"
 	"time"
@@ -21,7 +22,9 @@ import (
 func server(ctx context.Context) (pb.PatientServiceClient, func()) {
 	// Build gRPC service
 	aggregateStore := hwes_test.NewAggregateStore()
-	patientGrpcService := api.NewPatientGrpcService(aggregateStore)
+	patientHandlers := handlers.NewPatientHandlers(aggregateStore)
+
+	patientGrpcService := api.NewPatientGrpcService(aggregateStore, patientHandlers)
 
 	common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 

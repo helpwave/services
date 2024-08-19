@@ -6,6 +6,9 @@ VALUES ($1, $2, $3, $4);
 -- name: GetPropertyById :one
 SELECT * FROM properties WHERE id = $1;
 
+-- name: GetPropertySubjectType :one
+SELECT subject_type FROM properties WHERE id = $1;
+
 -- name: GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID :many
 SELECT
 	sqlc.embed(properties),

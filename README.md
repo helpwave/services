@@ -88,7 +88,7 @@ To see what compose actually starts, we recommend a look into the [docker-compos
 * `services`
 * `devcontainer`
 
-Of particular interest are the `services` and `devcontainer` containers. The former starts all go services using [air](https://github.com/cosmtrek/air), a tool that automatically recompiles and restarts the service on reload.
+Of particular interest are the `services` and `devcontainer` containers. The former starts all go services using [air](https://github.com/air-verse/air), a tool that automatically recompiles and restarts the service on reload.
 The latter gives you a playground for development with all the tools you need. As it is in the docker network you can use the names of the other (docker compose) services as hostnames (i.e., `postgres` will be resolved to the container in which the postgres instance is running on).
 **It also has access to docker.** This means you can, for example, read the services logs like this: `docker compose logs services -f`, and start / stop / restart containers.
 
@@ -122,7 +122,7 @@ grpcurl --plaintext \
 	-H "Authorization: Bearer <...>" \
 	-d '{}' \
 	localhost:3001 \
-	proto.services.task_svc.v1.WardService/GetWards
+	services.task_svc.v1.WardService/GetWards
 ```
 
 ## Ports
@@ -133,6 +133,7 @@ grpcurl --plaintext \
 | user-svc      | 3002  | gRPC                    |
 | ory-svc       | 3003  | gRPC                    |
 | tasks-svc     | 3004  | gRPC                    |
+| property-svc  | 3005  | gRPC                    |
 | APISIX (dapr) | 3500  | http                    |
 | APISIX (dapr) | 35001 | grpc                    |
 | APISIX        | 9080  | http  (mostly grcp-web) |

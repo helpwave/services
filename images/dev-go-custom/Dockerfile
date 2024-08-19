@@ -11,7 +11,7 @@ ARG TAG
 
 # we `COPY --chown` from this, instead of running `chown` below
 # using this trick we are faster and save space on your hard drive
-FROM ghcr.io/helpwave/dev-go:${TAG} as base
+FROM ghcr.io/helpwave/dev-go:${TAG} AS base
 
 FROM ghcr.io/helpwave/dev-go:${TAG}
 

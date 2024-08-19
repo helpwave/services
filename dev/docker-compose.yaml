@@ -18,7 +18,7 @@ services:
       retries: 5
 
   eventstore:
-    image: eventstore/eventstore:23.10.1-jammy
+    image: eventstore/eventstore:23.10.2-jammy
     restart: unless-stopped
     environment:
       EVENTSTORE_TELEMETRY_OPTOUT: "true"
@@ -49,7 +49,7 @@ services:
       - "6379:6379"
 
   jaeger:
-    image: jaegertracing/all-in-one:1.56
+    image: jaegertracing/all-in-one:1.60
     environment:
       COLLECTOR_OTLP_ENABLED: "true"
     ports:
@@ -82,7 +82,7 @@ services:
 
   # dapr sidecar for apisix
   apisix-dapr:
-    image: "daprio/daprd:1.13.2"
+    image: "daprio/daprd:1.14.1"
     restart: unless-stopped
     depends_on:
       - apisix
@@ -106,7 +106,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '6'
+        TAG: '12'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -142,7 +142,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '6'
+        TAG: '12'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -167,4 +167,5 @@ services:
       - "3001:3001" # task-svc
       - "3002:3002" # user-svc
       - "3003:3003" # ory-svc
-      - "3004:3004" # property-svc
+      - "3004:3004" # tasks-svc
+      - "3005:3005" # property-svc

@@ -1,7 +1,7 @@
 package models
 
 import (
-	pb "gen/proto/services/property_svc/v1"
+	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"time"
 )
@@ -29,4 +29,27 @@ type PropertyValueWithProperty struct {
 	SelectValue   uuid.NullUUID
 	DateTimeValue *time.Time
 	DateValue     *time.Time
+}
+
+type TypedValue struct {
+	TextValue     *string
+	BoolValue     *bool
+	NumberValue   *float64
+	SelectValue   uuid.NullUUID
+	DateTimeValue *time.Time
+	DateValue     *time.Time
+}
+
+type PropertyAndValue struct {
+	PropertyID  uuid.UUID
+	SubjectType pb.SubjectType
+	FieldType   pb.FieldType
+
+	Name        string
+	Description string
+	IsArchived  bool
+
+	SetID uuid.NullUUID
+
+	Value *TypedValue
 }
