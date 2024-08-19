@@ -18,8 +18,9 @@ func NewCreateSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 		if err != nil {
 			return err
 		}
-
-		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserCreateSubtaskOnTaskPermission(userID, taskID)); err != nil {
+		user := perm.User(userID)
+		task := perm.Task(taskID)
+		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserCreateSubtaskOnTaskPermission(user, task)); err != nil {
 			return err
 		}
 

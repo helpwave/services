@@ -18,9 +18,11 @@ func NewAssignTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) As
 		if err != nil {
 			return err
 		}
+		user := perm.User(requestUserID)
+		authzTask := perm.Task(taskID)
 
 		// TODO: We need to check both, target user and request user!. Right now, we are just checking the request user.
-		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserAssignTaskPermission(requestUserID, taskID)); err != nil {
+		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserAssignTaskPermission(user, authzTask)); err != nil {
 			return err
 		}
 

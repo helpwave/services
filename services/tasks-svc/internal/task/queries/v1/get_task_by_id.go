@@ -19,8 +19,9 @@ func NewGetTaskByIDQueryHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) Get
 		if err != nil {
 			return nil, err
 		}
-
-		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserViewTaskPermission(userID, taskID)); err != nil {
+		user := perm.User(userID)
+		task := perm.Task(taskID)
+		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserViewTaskPermission(user, task)); err != nil {
 			return nil, err
 		}
 

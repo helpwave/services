@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwauthz"
@@ -13,9 +14,15 @@ type DeleteSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uui
 
 func NewDeleteSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) DeleteSubtaskCommandHandler {
 	return func(ctx context.Context, taskID, subtaskID uuid.UUID) error {
-		// TODO: Use context
-		userID := uuid.MustParse("18159713-5d4e-4ad5-94ad-fbb6bb147984")
-		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserDeleteSubtaskOnTaskPermission(userID, taskID)); err != nil {
+		userID, err := common.GetUserID(ctx)
+		if err != nil {
+			return err
+		}
+
+		user := perm.User(userID)
+		task := perm.Task(taskID)
+
+		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserDeleteSubtaskOnTaskPermission(user, task)); err != nil {
 			return err
 		}
 

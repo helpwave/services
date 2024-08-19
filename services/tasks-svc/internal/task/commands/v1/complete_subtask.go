@@ -19,7 +19,10 @@ func NewCompleteSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.Auth
 			return err
 		}
 
-		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserCompleteSubtaskPermission(userID, taskID)); err != nil {
+		user := perm.User(userID)
+		task := perm.Task(taskID)
+
+		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserCompleteSubtaskPermission(user, task)); err != nil {
 			return err
 		}
 

@@ -7,6 +7,7 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	"hwauthz"
+	"hwauthz/perm"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
@@ -46,20 +47,23 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 	if committerID == nil {
 		return errors.New("no committerID found"), hwutil.PtrTo(esdb.NackActionRetry)
 	}
+	comitter := perm.User(*committerID)
 
 	taskID, err := uuid.Parse(payload.ID)
 	if err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
+	task := perm.Task(taskID)
 
 	patientID, err := uuid.Parse(payload.PatientID)
 	if err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
+	patient := perm.Patient(patientID)
 
 	if _, err := p.authz.Write(ctx,
-		hwauthz.NewRelation("task", taskID.String(), "assignee", "user", committerID.String()),
-		hwauthz.NewRelation("task", taskID.String(), "patient", "patient", patientID.String()),
+		hwauthz.NewRelationship(task, "assignee", comitter),
+		hwauthz.NewRelationship(task, "patient", patient),
 	); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
@@ -73,14 +77,15 @@ func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error,
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
+	task := perm.Task(evt.AggregateID)
+
 	userID, err := uuid.Parse(payload.UserID)
 	if err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
+	user := perm.User(userID)
 
-	if _, err := p.authz.Write(ctx,
-		hwauthz.NewRelation("task", evt.AggregateID.String(), "assignee", "user", userID.String()),
-	); err != nil {
+	if _, err := p.authz.Write(ctx, hwauthz.NewRelationship(task, "assignee", user)); err != nil {
 		return nil, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -92,15 +97,15 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (erro
 	if err := evt.GetJsonData(&payload); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
+	task := perm.Task(evt.AggregateID)
 
 	userID, err := uuid.Parse(payload.UserID)
 	if err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
+	user := perm.User(userID)
 
-	if _, err = p.authz.Delete(ctx,
-		hwauthz.NewRelation("task", evt.AggregateID.String(), "assignee", "user", userID.String()),
-	); err != nil {
+	if _, err = p.authz.Delete(ctx, hwauthz.NewRelationship(task, "assignee", user)); err != nil {
 		return nil, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 

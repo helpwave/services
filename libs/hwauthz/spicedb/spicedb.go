@@ -3,11 +3,12 @@ package spicedb
 import (
 	"context"
 	"errors"
+	"fmt"
 	v1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
 	"github.com/authzed/authzed-go/v1"
 	"github.com/authzed/grpcutil"
 	"github.com/google/uuid"
-	"github.com/rs/zerolog/log"
+	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"hwauthz"
@@ -23,6 +24,8 @@ func SetupSpiceDbByEnv() *authzed.Client {
 }
 
 func SetupSpiceDb(endpoint, token string) *authzed.Client {
+	log := zlog.Logger // global logger
+
 	client, err := authzed.NewClient(
 		endpoint,
 		grpcutil.WithInsecureBearerToken(token),
@@ -34,19 +37,22 @@ func SetupSpiceDb(endpoint, token string) *authzed.Client {
 	return client
 }
 
-func relationToSpiceDBRelation(relation hwauthz.Relation) *v1.Relationship {
+// fromObject buils a new v1.ObjectReference from a hwauthz.Object
+func fromObject(object hwauthz.Object) *v1.ObjectReference {
+	return &v1.ObjectReference{
+		ObjectType: object.Type(),
+		ObjectId:   object.ID(),
+	}
+}
+
+// fromRelationship builds a new v1.Relationship from a hwauthz.Relationship
+func fromRelationship(relationship hwauthz.Relationship) *v1.Relationship {
 	return &v1.Relationship{
-		Resource: &v1.ObjectReference{
-			ObjectType: relation.ResourceType,
-			ObjectId:   relation.ResourceID,
-		},
-		Relation: relation.Relation,
 		Subject: &v1.SubjectReference{
-			Object: &v1.ObjectReference{
-				ObjectType: relation.SubjectType,
-				ObjectId:   relation.SubjectID,
-			},
+			Object: fromObject(relationship.Subject),
 		},
+		Relation: relationship.Relation,
+		Resource: fromObject(relationship.Resource),
 	}
 }
 
@@ -87,24 +93,26 @@ func LookupResources(ctx context.Context, client *authzed.Client, resourceType, 
 	}
 }
 
+// TODO: explain that it implements AuthZ
 type SpiceDBAuthZ struct {
 	client *authzed.Client
 }
 
-func NewSpiceDBAuthZ(client *authzed.Client) *SpiceDBAuthZ {
+func NewSpiceDBAuthZ() *SpiceDBAuthZ {
+	client := SetupSpiceDbByEnv()
 	return &SpiceDBAuthZ{client: client}
 }
 
-func (s *SpiceDBAuthZ) Write(ctx context.Context, relations ...hwauthz.Relation) (hwauthz.ConsistencyToken, error) {
+func (s *SpiceDBAuthZ) Write(ctx context.Context, relations ...hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Write")
 	defer span.End()
 
 	req := &v1.WriteRelationshipsRequest{
-		Updates: hwutil.Map(relations, func(relation hwauthz.Relation) *v1.RelationshipUpdate {
-			telemetry.SetSpanAttributes(ctx, relation.ToSpanAttributeKeyValue()...)
+		Updates: hwutil.Map(relations, func(relation hwauthz.Relationship) *v1.RelationshipUpdate {
+			telemetry.SetSpanAttributes(ctx, relation.SpanAttributeKeyValue()...)
 			return &v1.RelationshipUpdate{
 				Operation:    v1.RelationshipUpdate_OPERATION_TOUCH, // TODO: TOUCH to be idempotent?
-				Relationship: relationToSpiceDBRelation(relation),
+				Relationship: fromRelationship(relation),
 			}
 		}),
 	}
@@ -117,16 +125,16 @@ func (s *SpiceDBAuthZ) Write(ctx context.Context, relations ...hwauthz.Relation)
 	return res.WrittenAt.Token, nil
 }
 
-func (s *SpiceDBAuthZ) Delete(ctx context.Context, relations ...hwauthz.Relation) (hwauthz.ConsistencyToken, error) {
+func (s *SpiceDBAuthZ) Delete(ctx context.Context, relations ...hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Delete")
 	defer span.End()
 
 	req := &v1.WriteRelationshipsRequest{
-		Updates: hwutil.Map(relations, func(relation hwauthz.Relation) *v1.RelationshipUpdate {
-			telemetry.SetSpanAttributes(ctx, relation.ToSpanAttributeKeyValue()...)
+		Updates: hwutil.Map(relations, func(relation hwauthz.Relationship) *v1.RelationshipUpdate {
+			telemetry.SetSpanAttributes(ctx, relation.SpanAttributeKeyValue()...)
 			return &v1.RelationshipUpdate{
 				Operation:    v1.RelationshipUpdate_OPERATION_DELETE, // TOUCH to be idempotent?
-				Relationship: relationToSpiceDBRelation(relation),
+				Relationship: fromRelationship(relation),
 			}
 		}),
 	}
@@ -139,29 +147,27 @@ func (s *SpiceDBAuthZ) Delete(ctx context.Context, relations ...hwauthz.Relation
 	return res.WrittenAt.Token, nil
 }
 
+// TODO: consistency token?
 func (s *SpiceDBAuthZ) Check(ctx context.Context, permission hwauthz.Permission) (bool, error) {
-	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Check")
+	ctx, span, log := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Check")
 	defer span.End()
 
-	telemetry.SetSpanAttributes(ctx, permission.ToSpanAttributeKeyValue()...)
+	telemetry.SetSpanAttributes(ctx, permission.SpanAttributeKeyValue()...)
 
+	// convert internal Representation to gRPC body
 	req := &v1.CheckPermissionRequest{
-		Resource: &v1.ObjectReference{
-			ObjectType: permission.ResourceType,
-			ObjectId:   permission.ResourceID,
-		},
-		Permission: permission.Permission,
 		Subject: &v1.SubjectReference{
-			Object: &v1.ObjectReference{
-				ObjectType: permission.SubjectType,
-				ObjectId:   permission.SubjectID,
-			},
+			Object: fromObject(permission.Subject),
 		},
+		Permission: permission.Relation,
+		Resource:   fromObject(permission.Resource),
 	}
 
+	// make request
 	res, err := s.client.CheckPermission(ctx, req)
 	if err != nil {
-		return false, err
+		log.Error().Err(err).Msg("spicedb: error while checking permissions")
+		return false, fmt.Errorf("spicedb: could not check permission: %w", err)
 	}
 
 	hasPermission := res.Permissionship == v1.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION

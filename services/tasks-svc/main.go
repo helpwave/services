@@ -37,8 +37,7 @@ func main() {
 
 	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
 
-	spiceDb := hwspicedb.SetupSpiceDbByEnv()
-	authz := hwspicedb.NewSpiceDBAuthZ(spiceDb)
+	authz := hwspicedb.NewSpiceDBAuthZ()
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
