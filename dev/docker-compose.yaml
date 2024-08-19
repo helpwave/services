@@ -126,12 +126,15 @@ services:
         condition: service_started
     environment:
       SECRETSTORE_REDIS_HOST: "redis:6379"
+      ZED_ENDPOINT: spicedb:50051
+      ZED_TOKEN: helpwave
+      ZED_INSECURE: true
     command:
       - /usr/bin/bash
       - -c
       - |
         bash migrate.sh
-        zed import --insecure --token helpwave --endpoint spicedb:50051 spicedb.yaml
+        zed import spicedb.yaml
         dapr run --run-file dev/dapr_run.yaml --config dev/dapr.yaml
     restart: unless-stopped
     network_mode: "service:devcontainer" # share ports with devcontainer
@@ -158,6 +161,11 @@ services:
       PGUSER: postgres
       PGPASSWORD: postgres
       PGDATABASE: postgres
+
+      # zed variables
+      ZED_ENDPOINT: spicedb:50051
+      ZED_TOKEN: helpwave
+      ZED_INSECURE: true
 
       COMPOSE_FILE: "/helpwave/dev/docker-compose.yaml" # allows us to use `docker compose` in any directory
     restart: unless-stopped
