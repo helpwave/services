@@ -20,7 +20,7 @@ func (*TrueAuthZ) Delete(ctx context.Context, relations ...hwauthz.Relationship)
 	return "", nil
 }
 
-func (*TrueAuthZ) Check(ctx context.Context, permissions hwauthz.Permission) (bool, error) {
+func (*TrueAuthZ) Check(ctx context.Context, check hwauthz.PermissionCheck) (bool, error) {
 	// Always returns true
 	return true, nil
 }

@@ -7,10 +7,10 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	"hwauthz"
-	"hwauthz/perm"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+	"tasks-svc/internal/perm"
 	"tasks-svc/internal/task/aggregate"
 	eventsV1 "tasks-svc/internal/task/events/v1"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
@@ -62,8 +62,8 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 	patient := perm.Patient(patientID)
 
 	if _, err := p.authz.Write(ctx,
-		hwauthz.NewRelationship(task, "assignee", comitter),
-		hwauthz.NewRelationship(task, "patient", patient),
+		hwauthz.NewRelationship(task, perm.TaskAssignee, comitter),
+		hwauthz.NewRelationship(task, perm.TaskPatient, patient),
 	); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}

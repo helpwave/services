@@ -25,13 +25,13 @@ func NewTaskHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Handlers {
 		Commands: &Commands{
 			V1: &commandsV1.TaskCommands{
 				CreateTask:        commandsV1.NewCreateTaskCommandHandler(as),
-				UpdateTask:        commandsV1.NewUpdateTaskCommandHandler(as),
+				UpdateTask:        commandsV1.NewUpdateTaskCommandHandler(as, authz),
 				AssignTask:        commandsV1.NewAssignTaskCommandHandler(as, authz),
-				UnnasignTask:      commandsV1.NewUnassignTaskCommandHandler(as),
+				UnnasignTask:      commandsV1.NewUnassignTaskCommandHandler(as, authz),
 				CreateSubtask:     commandsV1.NewCreateSubtaskCommandHandler(as, authz),
-				UpdateSubtask:     commandsV1.NewUpdateSubtaskCommandHandler(as),
+				UpdateSubtask:     commandsV1.NewUpdateSubtaskCommandHandler(as, authz),
 				CompleteSubtask:   commandsV1.NewCompleteSubtaskCommandHandler(as, authz),
-				UncompleteSubtask: commandsV1.NewUncompleteSubtaskCommandHandler(as),
+				UncompleteSubtask: commandsV1.NewUncompleteSubtaskCommandHandler(as, authz),
 				DeleteSubtask:     commandsV1.NewDeleteSubtaskCommandHandler(as, authz),
 			},
 		},

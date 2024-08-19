@@ -3,10 +3,11 @@ package v1
 import (
 	"common"
 	"context"
+	"fmt"
 	"github.com/google/uuid"
 	"hwauthz"
-	"hwauthz/perm"
 	"hwes"
+	"tasks-svc/internal/perm"
 	"tasks-svc/internal/task/aggregate"
 )
 
@@ -18,12 +19,17 @@ func NewAssignTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) As
 		if err != nil {
 			return err
 		}
-		user := perm.User(requestUserID)
+		authzUser := perm.User(requestUserID)
 		authzTask := perm.Task(taskID)
 
 		// TODO: We need to check both, target user and request user!. Right now, we are just checking the request user.
-		if err := hwauthz.CheckGrpcWrapper(ctx, authz, perm.NewCanUserAssignTaskPermission(user, authzTask)); err != nil {
-			return err
+		check := hwauthz.NewPermissionCheck(authzUser, perm.CanUserAssignTask, authzTask)
+		allowed, err := authz.Check(ctx, check)
+		if err != nil {
+			return fmt.Errorf("could not check permissions: %w", err)
+		}
+		if !allowed {
+			return hwauthz.StatusErrorPermissionDenied(ctx, check)
 		}
 
 		task, err := aggregate.LoadTaskAggregate(ctx, as, taskID)

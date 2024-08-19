@@ -148,26 +148,26 @@ func (s *SpiceDBAuthZ) Delete(ctx context.Context, relations ...hwauthz.Relation
 }
 
 // TODO: consistency token?
-func (s *SpiceDBAuthZ) Check(ctx context.Context, permission hwauthz.Permission) (bool, error) {
+func (s *SpiceDBAuthZ) Check(ctx context.Context, permissionCheck hwauthz.PermissionCheck) (bool, error) {
 	ctx, span, log := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Check")
 	defer span.End()
 
-	telemetry.SetSpanAttributes(ctx, permission.SpanAttributeKeyValue()...)
+	telemetry.SetSpanAttributes(ctx, permissionCheck.SpanAttributeKeyValue()...)
 
 	// convert internal Representation to gRPC body
 	req := &v1.CheckPermissionRequest{
 		Subject: &v1.SubjectReference{
-			Object: fromObject(permission.Subject),
+			Object: fromObject(permissionCheck.Subject),
 		},
-		Permission: permission.Relation,
-		Resource:   fromObject(permission.Resource),
+		Permission: permissionCheck.Relation,
+		Resource:   fromObject(permissionCheck.Resource),
 	}
 
 	// make request
 	res, err := s.client.CheckPermission(ctx, req)
 	if err != nil {
 		log.Error().Err(err).Msg("spicedb: error while checking permissions")
-		return false, fmt.Errorf("spicedb: could not check permission: %w", err)
+		return false, fmt.Errorf("spicedb: could not check permissionCheck: %w", err)
 	}
 
 	hasPermission := res.Permissionship == v1.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION
