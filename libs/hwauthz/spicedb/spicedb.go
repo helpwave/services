@@ -19,7 +19,7 @@ import (
 
 func SetupSpiceDbByEnv() *authzed.Client {
 	endpoint := hwutil.MustGetEnv("SPICEDB_ENDPOINT")
-	token := hwutil.MustGetEnv("SPICEDB_TOKEN")
+	token := hwutil.MustGetEnv("SPICEDB_GRPC_PRESHARED_KEY")
 	return SetupSpiceDb(endpoint, token)
 }
 

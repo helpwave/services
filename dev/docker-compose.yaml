@@ -134,7 +134,7 @@ services:
       - -c
       - |
         bash migrate.sh
-        zed import spicedb.yaml
+        bash migrate-spicedb.sh
         dapr run --run-file dev/dapr_run.yaml --config dev/dapr.yaml
     restart: unless-stopped
     network_mode: "service:devcontainer" # share ports with devcontainer
