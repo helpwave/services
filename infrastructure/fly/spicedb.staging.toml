@@ -11,11 +11,14 @@ primary_region = 'ams'
 
 [deploy]
   release_command = 'migrate head'
-  strategy = 'bluegreen'
+
+# TODO: healthchecks (figure out how how to use a secret in checks)
 
 [env]
   SPICEDB_DATASTORE_ENGINE = 'postgres'
   SPICEDB_SKIP_RELEASE_CHECK = 'true' # we know due to renovate on dev compose
+  SPICEDB_TELEMETRY_ENDPOINT = '' # prevent spicedb from talking home
+
   # record traces for all requests on staging
   # SPICEDB_OTEL_SAMPLE_RATIO=1
   # Secrets:
@@ -31,3 +34,6 @@ primary_region = 'ams'
 [[metrics]]
   port = 9090
   path = '/metrics'
+
+[experimental]
+  cmd = ["serve"]
