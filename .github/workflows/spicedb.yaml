@@ -1,0 +1,19 @@
+name: spicedb
+
+on:
+  pull_request:
+    paths:
+      - 'spicedb.yaml'
+  push:
+    branches: [ 'main' ]
+    tags: [ 'v*' ]
+    paths:
+      - 'spicedb.yaml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: "authzed/action-spicedb-validate@v1"
+        with:
+          validationfile: "spicedb.yaml"
