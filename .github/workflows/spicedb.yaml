@@ -14,6 +14,8 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
+      - name: Clone Repo
+        uses: actions/checkout@v4
       - uses: "authzed/action-spicedb-validate@v1"
         with:
           validationfile: "spicedb.yaml"
