@@ -1,32 +1,33 @@
-primary_region = "ams"
+# fly.toml app configuration file generated for helpwave-staging-spicedb on 2024-08-20T16:19:36+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'helpwave-staging-spicedb'
+primary_region = 'ams'
 
 [build]
-  image = "authzed/spicedb:v1.31.0" # TODO: renovate
+  image = 'authzed/spicedb:v1.31.0' # TODO: renovate
+
+[deploy]
+  release_command = 'migrate head'
+  strategy = 'bluegreen'
 
 [env]
-  SPICEDB_DATASTORE_ENGINE = "postgres"
-  SPICEDB_SKIP-RELEASE_CHECK = "true" # we know due to renovate on dev compose
-
+  SPICEDB_DATASTORE_ENGINE = 'postgres'
+  SPICEDB_SKIP_RELEASE_CHECK = 'true' # we know due to renovate on dev compose
   # record traces for all requests on staging
   # SPICEDB_OTEL_SAMPLE_RATIO=1
-
   # Secrets:
   #  SPICEDB_GRPC_PRESHARED_KEY=<string>
-  #  SPICEDB_DATASTORE_CONN_URI=postgres://<user>:<password>@<host>:<port>/spicedb?sslmode=disable"
+  #  SPICEDB_DATASTORE_CONN_URI=postgres://<user>:<password>@<host>:<port>/spicedb?sslmode=disable
   #  SPICEDB_OTEL_ENDPOINT= TODO
   #  SPICEDB_OTEL_INSECURE=
   #  SPICEDB_OTEL_PROVIDER=
 
-[deploy]
-  strategy = "bluegreen"
-  image = "authzed/spicedb:v1.31.0-debug" # TODO: renovate
-  release_command = "migrate head" # this does spicedb-internal migrations, not schema migrations!
-
-[metrics]
-  port = 9090
-  path = "/metrics"
-
 [[vm]]
-  memory = '256MB'
-  cpu_kind = 'shared'
-  cpus = 1
+  size = 'shared-cpu-1x'
+
+[[metrics]]
+  port = 9090
+  path = '/metrics'
