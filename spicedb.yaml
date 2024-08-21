@@ -1,5 +1,5 @@
 hw_schema_version: 1
-schema: |-
+schema: |
   definition spice_schema_migrations/version {}
 
   definition spice_schema_migrations/migration {
@@ -9,30 +9,32 @@ schema: |-
   definition user {}
 
   definition team {
-  	relation lead: user
+  	relation leader: user
   	relation member: user
-  	permission membership = lead + member
-  	permission invite_member = lead
-  	permission remove_member = lead
+
+  	permission leadership = leader
+  	permission membership = leader + member
+  	permission invite_member = leader
+  	permission remove_member = leader
   }
 
   definition team_invite {
   	relation user: user
   	relation team: team
   	
-  	permission view = user + team->lead
+  	permission view = user + team->leadership
   	permission accept = user
   	permission deny = user
-  	permission cancel = team->lead
+  	permission cancel = team->leadership
   }
 
   definition patient {
-  	relation doctor: user | team#membership
-  	
-  	permission view = doctor
-  	permission discharge = doctor
-  	permission schedule_gdpr_delete = doctor
-  }
+    	relation doctor: user | team#membership
+    	
+    	permission view = doctor
+    	permission discharge = doctor
+    	permission schedule_gdpr_delete = doctor
+    }
 
   definition task {
   	relation assignee: user
@@ -41,12 +43,49 @@ schema: |-
   	permission view = assignee + patient->view
   	permission delete = assignee + patient->view
   }
-relationships: ""
+relationships: |-
+  team:a#leader@user:alice
+  team:b#leader@user:bob
+  team:a#member@user:alice
+  team:b#member@user:bob
+  team:a#member@user:charlie
+  team:b#member@user:charlie
+  team:a#member@user:clara
+  team:b#member@user:clara
+  team:a#leader@user:clara
+  team_invite:1#user@user:eve
+  team_invite:1#team@team:a
 assertions:
   assertTrue:
-    - resource:someresource#view@user:somegal
-    - resource:someresource#view@user:anotherguy
-    - resource:someresource#write@user:anotherguy
+    - team:a#leadership@user:alice
+    - team:a#membership@user:alice
+    - team:a#leadership@user:clara
+    - team:a#membership@user:clara
+    - team:b#membership@user:clara
+    - team:a#invite_member@user:clara
+    - team_invite:1#view@user:eve
+    - team_invite:1#view@user:alice
+    - team_invite:1#cancel@user:alice
+    - team_invite:1#accept@user:eve
   assertFalse:
-    - resource:someresource#write@user:somegal
-validation: null
+    - team:b#leadership@user:alice
+    - team:b#leadership@user:clara
+    - team:a#invite_member@user:charlie
+    - team:b#invite_member@user:charlie
+    - team:b#invite_member@user:clara
+    - team_invite:1#view@user:bob
+    - team_invite:1#cancel@user:eve
+    - team_invite:1#cancel@user:bob
+    - team_invite:1#accept@user:alice
+validation:
+  team_invite:1#accept:
+    - "[user:eve] is <team_invite:1#user>"
+  team_invite:1#cancel:
+    - "[user:alice] is <team:a#leader>"
+    - "[user:clara] is <team:a#leader>"
+  team_invite:1#deny:
+    - "[user:eve] is <team_invite:1#user>"
+  team_invite:1#view:
+    - "[user:alice] is <team:a#leader>"
+    - "[user:clara] is <team:a#leader>"
+    - "[user:eve] is <team_invite:1#user>"
