@@ -93,34 +93,41 @@ func LookupResources(ctx context.Context, client *authzed.Client, resourceType, 
 	}
 }
 
-// TODO: explain that it implements AuthZ
+// SpiceDBAuthZ implements hwauthz.AuthZ, and can be used to create and query fine-grained permission relations
+// See hwauthz.AuthZ for more
 type SpiceDBAuthZ struct {
 	client *authzed.Client
 }
 
+// NewSpiceDBAuthZ constructs a new SpiceDBAuthZ instance
 func NewSpiceDBAuthZ() *SpiceDBAuthZ {
 	client := SetupSpiceDbByEnv()
 	return &SpiceDBAuthZ{client: client}
 }
 
-func (s *SpiceDBAuthZ) write(ctx context.Context, delete bool, relations ...hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
+// Write writes relationships, use Create and Delete instead!
+func (s *SpiceDBAuthZ) Write(ctx context.Context, writes []hwauthz.Relationship, deletes []hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Write")
 	defer span.End()
 
-	operation := v1.RelationshipUpdate_OPERATION_TOUCH // TOUCH = Create or Ignore existing
-	if delete {
-		operation = v1.RelationshipUpdate_OPERATION_DELETE // DELETE = Delete or Ignore if missing
-		span.SetName("hwauthz.SpiceDB.Delete")
-	}
+	// telemetry.SetSpanAttributes(ctx, relation.SpanAttributeKeyValue()...) TODO
+
+	writeUpdates := hwutil.Map(writes, func(relation hwauthz.Relationship) *v1.RelationshipUpdate {
+		return &v1.RelationshipUpdate{
+			Operation:    v1.RelationshipUpdate_OPERATION_TOUCH, // TOUCH = create or ignore existing
+			Relationship: fromRelationship(relation),
+		}
+	})
+
+	deleteUpdates := hwutil.Map(deletes, func(relation hwauthz.Relationship) *v1.RelationshipUpdate {
+		return &v1.RelationshipUpdate{
+			Operation:    v1.RelationshipUpdate_OPERATION_DELETE, // DELETE = delete or ignore missing
+			Relationship: fromRelationship(relation),
+		}
+	})
 
 	req := &v1.WriteRelationshipsRequest{
-		Updates: hwutil.Map(relations, func(relation hwauthz.Relationship) *v1.RelationshipUpdate {
-			telemetry.SetSpanAttributes(ctx, relation.SpanAttributeKeyValue()...)
-			return &v1.RelationshipUpdate{
-				Operation:    operation,
-				Relationship: fromRelationship(relation),
-			}
-		}),
+		Updates: append(writeUpdates, deleteUpdates...),
 	}
 
 	res, err := s.client.WriteRelationships(ctx, req)
@@ -131,12 +138,12 @@ func (s *SpiceDBAuthZ) write(ctx context.Context, delete bool, relations ...hwau
 	return res.WrittenAt.Token, nil
 }
 
-func (s *SpiceDBAuthZ) Write(ctx context.Context, relations ...hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
-	return s.write(ctx, false, relations...)
+func (s *SpiceDBAuthZ) Create(relations ...hwauthz.Relationship) *hwauthz.Tx {
+	return hwauthz.NewTx(s, relations, nil)
 }
 
-func (s *SpiceDBAuthZ) Delete(ctx context.Context, relations ...hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
-	return s.write(ctx, true, relations...)
+func (s *SpiceDBAuthZ) Delete(relations ...hwauthz.Relationship) *hwauthz.Tx {
+	return hwauthz.NewTx(s, nil, relations)
 }
 
 func (s *SpiceDBAuthZ) Check(ctx context.Context, permissionCheck hwauthz.PermissionCheck) (bool, error) {

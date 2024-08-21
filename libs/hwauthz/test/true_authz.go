@@ -12,15 +12,18 @@ func NewTrueAuthZ() *TrueAuthZ {
 	return &TrueAuthZ{}
 }
 
-func (*TrueAuthZ) Write(ctx context.Context, relations ...hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
+func (a *TrueAuthZ) Write(ctx context.Context, writes []hwauthz.Relationship, deletes []hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
 	return "", nil
 }
 
-func (*TrueAuthZ) Delete(ctx context.Context, relations ...hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
-	return "", nil
+func (a *TrueAuthZ) Create(relationships ...hwauthz.Relationship) *hwauthz.Tx {
+	return hwauthz.NewTx(a, nil, nil)
 }
 
-func (*TrueAuthZ) Check(ctx context.Context, check hwauthz.PermissionCheck) (bool, error) {
-	// Always returns true
+func (a *TrueAuthZ) Delete(relationships ...hwauthz.Relationship) *hwauthz.Tx {
+	return hwauthz.NewTx(a, nil, nil)
+}
+
+func (a *TrueAuthZ) Check(ctx context.Context, check hwauthz.PermissionCheck) (permissionGranted bool, err error) {
 	return true, nil
 }

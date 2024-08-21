@@ -61,10 +61,10 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 	}
 	patient := perm.Patient(patientID)
 
-	if _, err := p.authz.Write(ctx,
+	if _, err := p.authz.Create(
 		hwauthz.NewRelationship(task, perm.TaskAssignee, comitter),
 		hwauthz.NewRelationship(task, perm.TaskPatient, patient),
-	); err != nil {
+	).Commit(ctx); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -85,7 +85,7 @@ func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error,
 	}
 	user := perm.User(userID)
 
-	if _, err := p.authz.Write(ctx, hwauthz.NewRelationship(task, "assignee", user)); err != nil {
+	if _, err := p.authz.Create(hwauthz.NewRelationship(task, "assignee", user)).Commit(ctx); err != nil {
 		return nil, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -105,7 +105,7 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (erro
 	}
 	user := perm.User(userID)
 
-	if _, err = p.authz.Delete(ctx, hwauthz.NewRelationship(task, "assignee", user)); err != nil {
+	if _, err = p.authz.Delete(hwauthz.NewRelationship(task, "assignee", user)).Commit(ctx); err != nil {
 		return nil, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 

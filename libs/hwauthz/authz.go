@@ -91,13 +91,49 @@ func (r *Relationship) SpanAttributeKeyValue() []attribute.KeyValue {
 	}
 }
 
+// A Writer can write to the permission graph
+type Writer interface {
+	Write(ctx context.Context, writes []Relationship, deletes []Relationship) (ConsistencyToken, error)
+}
+
+// Tx represents a transaction for changes to the permission graph
+type Tx struct {
+	writer  Writer
+	writes  []Relationship
+	deletes []Relationship
+}
+
+// NewTx creates a new Tx object, also see AuthZ.Create and AuthZ.Delete
+func NewTx(writer Writer, writes []Relationship, deletes []Relationship) *Tx {
+	b := Tx{
+		writer:  writer,
+		writes:  writes,
+		deletes: deletes,
+	}
+	return &b
+}
+
+func (b *Tx) Create(relationships ...Relationship) *Tx {
+	b.writes = append(b.writes, relationships...)
+	return b
+}
+
+func (b *Tx) Delete(relationships ...Relationship) *Tx {
+	b.deletes = append(b.deletes, relationships...)
+	return b
+}
+
+func (b *Tx) Commit(ctx context.Context) (ConsistencyToken, error) {
+	return b.writer.Write(ctx, b.writes, b.deletes)
+}
+
 // AuthZ is a Zanzibar-like Fine-Grained Authorization Provider
 // Implemented by most notably spicedb.SpiceDBAuthZ, for testing use test.TrueAuthZ
 type AuthZ interface {
-	// Write writes one or many Relationship Tuples to the Permissions Graph
-	Write(ctx context.Context, relationships ...Relationship) (ConsistencyToken, error)
+	// Create adds one or many Relationship Tuples to the Permissions Graph
+	Create(relationships ...Relationship) *Tx
 	// Delete removes one or many Relationship Tuples to the Permissions Graph
-	Delete(ctx context.Context, relationships ...Relationship) (ConsistencyToken, error)
+	Delete(relationships ...Relationship) *Tx
 	// Check queries the Permission Graph for the existence of a PermissionCheck (i.e., a Relationship)
 	// We do not support the use of ConsistencyToken yet
 	Check(ctx context.Context, check PermissionCheck) (permissionGranted bool, err error)
