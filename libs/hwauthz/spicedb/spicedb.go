@@ -51,7 +51,7 @@ func fromRelationship(relationship hwauthz.Relationship) *v1.Relationship {
 		Subject: &v1.SubjectReference{
 			Object: fromObject(relationship.Subject),
 		},
-		Relation: relationship.Relation,
+		Relation: string(relationship.Relation),
 		Resource: fromObject(relationship.Resource),
 	}
 }
@@ -150,7 +150,7 @@ func (s *SpiceDBAuthZ) Check(ctx context.Context, permissionCheck hwauthz.Permis
 		Subject: &v1.SubjectReference{
 			Object: fromObject(permissionCheck.Subject),
 		},
-		Permission: permissionCheck.Relation,
+		Permission: string(permissionCheck.Relation),
 		Resource:   fromObject(permissionCheck.Resource),
 	}
 

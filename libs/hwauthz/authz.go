@@ -29,13 +29,13 @@ type ConsistencyToken = string
 // A Relation defines how two objects (or an object and subject) can relate to one another.
 // For example, a reader on a document, or a member of a group.
 // See https://authzed.com/docs/spicedb/concepts/schema#relations
-type Relation = string
+type Relation string
 
 // A Permission defines a computed set of subjects that have a permission of some kind on its object.
 // For example, is a user within the set of users that can edit a document.
 // For the most part Relation and Permission can be used interchangeably, however, you can not write to permissions!
 // See https://authzed.com/docs/spicedb/concepts/schema#permissions
-type Permission = Relation
+type Permission Relation
 
 // An Object must relate to an [Object Definition](https://authzed.com/docs/spicedb/concepts/schema#object-type-definitions) in the spicedb schema.
 // We use this to build a v1.ObjectReference used for a Relationship
@@ -77,15 +77,15 @@ type PermissionCheck = Relationship
 
 // NewPermissionCheck constructs a new PermissionCheck
 // Used to check if a Relationship exists, see AuthZ.Check
-func NewPermissionCheck(subject Object, relation Relation, resource Object) PermissionCheck {
-	return NewRelationship(subject, relation, resource)
+func NewPermissionCheck(subject Object, permission Permission, resource Object) PermissionCheck {
+	return NewRelationship(subject, Relation(permission), resource)
 }
 
 func (r *Relationship) SpanAttributeKeyValue() []attribute.KeyValue {
 	return []attribute.KeyValue{
 		attribute.String("spice.resource.type", r.Resource.Type()),
 		attribute.String("spice.resource.id", r.Resource.ID()),
-		attribute.String("spice.relation", r.Relation),
+		attribute.String("spice.relation", string(r.Relation)),
 		attribute.String("spice.subject.type", r.Subject.Type()),
 		attribute.String("spice.subject.id", r.Subject.ID()),
 	}
