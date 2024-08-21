@@ -22,7 +22,6 @@ func NewAssignTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) As
 		authzUser := perm.User(requestUserID)
 		authzTask := perm.Task(taskID)
 
-		// TODO: We need to check both, target user and request user!. Right now, we are just checking the request user.
 		check := hwauthz.NewPermissionCheck(authzUser, perm.CanUserAssignTask, authzTask)
 		allowed, err := authz.Check(ctx, check)
 		if err != nil {
