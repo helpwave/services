@@ -1,4 +1,4 @@
-hw_schema_version: 2
+hw_schema_version: 1
 schema: |
   definition spice_schema_migrations/version {}
 
@@ -28,6 +28,7 @@ schema: |
   	permission cancel = team->leadership
   }
 
+  // all of this is made up and needs to be replaced
   definition patient {
     	relation doctor: user | team#membership
     	
