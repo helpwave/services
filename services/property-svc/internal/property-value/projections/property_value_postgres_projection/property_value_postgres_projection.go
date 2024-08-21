@@ -15,7 +15,6 @@ import (
 	propertyValueEventsV1 "property-svc/internal/property-value/events/v1"
 	"property-svc/repos/property_repo"
 	"property-svc/repos/property_value_repo"
-	"time"
 )
 
 type Projection struct {
@@ -93,7 +92,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 			}
 			createPropertyValueParams.BoolValue = &val
 		case fieldType == pb.FieldType_FIELD_TYPE_DATE:
-			val, err := hwutil.AssertDate(payload.Value, time.UTC)
+			val, err := hwutil.AssertTimestampToTime(payload.Value)
 			if err != nil {
 				return err, hwutil.PtrTo(esdb.NackActionPark)
 			}
@@ -174,7 +173,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 			}
 			updatePropertyValueParams.BoolValue = &val
 		case fieldType == pb.FieldType_FIELD_TYPE_DATE:
-			val, err := hwutil.AssertDate(payload.Value, time.UTC)
+			val, err := hwutil.AssertTimestampToTime(payload.Value)
 			if err != nil {
 				return err, hwutil.PtrTo(esdb.NackActionPark)
 			}

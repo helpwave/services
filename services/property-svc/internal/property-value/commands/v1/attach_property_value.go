@@ -16,7 +16,6 @@ func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachProperty
 		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 		var a *aggregate.PropertyValueAggregate
 
-		// TODO: Do not use the data from the projection here, could be outdated
 		existingPropertyValueID, err := hwdb.Optional(propertyValueRepo.GetPropertyValueBySubjectIDAndPropertyID)(ctx, property_value_repo.GetPropertyValueBySubjectIDAndPropertyIDParams{
 			PropertyID: propertyID,
 			SubjectID:  subjectID,
