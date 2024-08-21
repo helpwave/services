@@ -2,18 +2,15 @@ package spicedb
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	v1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
 	"github.com/authzed/authzed-go/v1"
 	"github.com/authzed/grpcutil"
-	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"hwauthz"
 	"hwutil"
-	"io"
 	"telemetry"
 )
 
@@ -53,43 +50,6 @@ func fromRelationship(relationship hwauthz.Relationship) *v1.Relationship {
 		},
 		Relation: string(relationship.Relation),
 		Resource: fromObject(relationship.Resource),
-	}
-}
-
-func LookupResources(ctx context.Context, client *authzed.Client, resourceType, permission, subjectType, subjectId string) ([]uuid.UUID, error) {
-	req := &v1.LookupResourcesRequest{
-		ResourceObjectType: resourceType,
-		Permission:         permission,
-		Subject: &v1.SubjectReference{
-			Object: &v1.ObjectReference{
-				ObjectType: subjectType,
-				ObjectId:   subjectId,
-			},
-		},
-	}
-
-	lookupResourcesClient, err := client.LookupResources(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-
-	var resourceIds []uuid.UUID
-
-	for {
-		res, err := lookupResourcesClient.Recv()
-
-		switch {
-		case errors.Is(err, io.EOF):
-			return resourceIds, nil
-		case err != nil:
-			return nil, err
-		default:
-			resourceId, err := uuid.Parse(res.ResourceObjectId)
-			if err != nil {
-				return nil, err
-			}
-			resourceIds = append(resourceIds, resourceId)
-		}
 	}
 }
 
