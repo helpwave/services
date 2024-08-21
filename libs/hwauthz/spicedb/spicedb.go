@@ -37,7 +37,7 @@ func SetupSpiceDb(endpoint, token string) *authzed.Client {
 	return client
 }
 
-// fromObject buils a new v1.ObjectReference from a hwauthz.Object
+// fromObject builds a new v1.ObjectReference from a hwauthz.Object
 func fromObject(object hwauthz.Object) *v1.ObjectReference {
 	return &v1.ObjectReference{
 		ObjectType: object.Type(),
