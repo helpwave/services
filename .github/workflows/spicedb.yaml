@@ -19,3 +19,5 @@ jobs:
       - uses: "authzed/action-spicedb-validate@v1"
         with:
           validationfile: "spicedb.yaml"
+
+# TODO: pull staging data and smoke-test migration
