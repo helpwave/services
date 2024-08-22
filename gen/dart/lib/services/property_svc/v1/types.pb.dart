@@ -13,23 +13,17 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import '../../../google/protobuf/timestamp.pb.dart' as $16;
+
 export 'types.pbenum.dart';
 
 class Date extends $pb.GeneratedMessage {
   factory Date({
-    $core.int? day,
-    $core.int? month,
-    $core.int? year,
+    $16.Timestamp? date,
   }) {
     final $result = create();
-    if (day != null) {
-      $result.day = day;
-    }
-    if (month != null) {
-      $result.month = month;
-    }
-    if (year != null) {
-      $result.year = year;
+    if (date != null) {
+      $result.date = date;
     }
     return $result;
   }
@@ -38,9 +32,7 @@ class Date extends $pb.GeneratedMessage {
   factory Date.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Date', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
-    ..a<$core.int>(1, _omitFieldNames ? '' : 'day', $pb.PbFieldType.O3)
-    ..a<$core.int>(2, _omitFieldNames ? '' : 'month', $pb.PbFieldType.O3)
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'year', $pb.PbFieldType.O3)
+    ..aOM<$16.Timestamp>(1, _omitFieldNames ? '' : 'date', subBuilder: $16.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -65,32 +57,17 @@ class Date extends $pb.GeneratedMessage {
   static Date getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Date>(create);
   static Date? _defaultInstance;
 
+  /// information more precise than date information shall be disregarded by clients
   @$pb.TagNumber(1)
-  $core.int get day => $_getIZ(0);
+  $16.Timestamp get date => $_getN(0);
   @$pb.TagNumber(1)
-  set day($core.int v) { $_setSignedInt32(0, v); }
+  set date($16.Timestamp v) { setField(1, v); }
   @$pb.TagNumber(1)
-  $core.bool hasDay() => $_has(0);
+  $core.bool hasDate() => $_has(0);
   @$pb.TagNumber(1)
-  void clearDay() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.int get month => $_getIZ(1);
-  @$pb.TagNumber(2)
-  set month($core.int v) { $_setSignedInt32(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasMonth() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearMonth() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.int get year => $_getIZ(2);
-  @$pb.TagNumber(3)
-  set year($core.int v) { $_setSignedInt32(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasYear() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearYear() => clearField(3);
+  void clearDate() => clearField(1);
+  @$pb.TagNumber(1)
+  $16.Timestamp ensureDate() => $_ensure(0);
 }
 
 

@@ -23,25 +23,3 @@ func AssertTimestampToTime(i interface{}) (*time.Time, error) {
 	}
 	return PtrTo(time.Unix(int64(s), int64(n))), nil
 }
-
-// AsserDate takes an interface and returns a date
-func AssertDate(i interface{}, loc *time.Location) (*time.Time, error) {
-	var day float64
-	var month float64
-	var year float64
-	d, ok := i.(map[string]interface{})
-	if !ok {
-		return nil, fmt.Errorf("could not assert map")
-	}
-	if day, ok = d["day"].(float64); !ok {
-		return nil, fmt.Errorf("could not assert day")
-	}
-	if month, ok = d["month"].(float64); !ok {
-		return nil, fmt.Errorf("could not assert month")
-	}
-	if year, ok = d["year"].(float64); !ok {
-		return nil, fmt.Errorf("could not assert year")
-	}
-
-	return PtrTo(time.Date(int(year), time.Month(int(month)), int(day), 0, 0, 0, 0, loc)), nil
-}
