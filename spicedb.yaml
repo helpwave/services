@@ -1,4 +1,3 @@
-hw_schema_version: 1
 schema: |
   definition spice_schema_migrations/version {}
 
