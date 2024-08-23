@@ -3,15 +3,17 @@ package api
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwes"
 	"hwutil"
 	"tasks-svc/internal/task/handlers"
+
+	"github.com/google/uuid"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type TaskGrpcService struct {
 	pb.UnimplementedTaskServiceServer
+
 	as       hwes.AggregateStore
 	handlers *handlers.Handlers
 }

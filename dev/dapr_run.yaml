@@ -24,6 +24,9 @@ common:
     OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
     OTEL_EXPORTER_OTLP_INSECURE: true
 
+    SPICEDB_ENDPOINT: spicedb:50051
+    SPICEDB_GRPC_PRESHARED_KEY: helpwave
+
 apps:
   - appID: task-svc
     appDirPath: ../services/task-svc

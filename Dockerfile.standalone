@@ -6,6 +6,21 @@
 
 FROM golang:1.23-bookworm AS builder
 
+#
+# build spice helper (for migrations)
+#
+
+WORKDIR /build/spice
+
+COPY go.* ./
+RUN go mod download
+COPY spice.go spice.go
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o spice spice.go
+
+#
+# build service
+#
+
 ARG SERVICE
 ARG VERSION
 
@@ -25,7 +40,7 @@ RUN mkdir -p migrations
 
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-X main.Version=${VERSION}" -a -o app .
 
-FROM debian AS deps
+FROM debian:12.6 AS deps
 
 # renovate: datasource=github-releases depName=DarthSim/hivemind
 ARG HIVEMIND_VERSION=1.1.0
@@ -48,7 +63,9 @@ RUN wget -q https://github.com/golang-migrate/migrate/releases/download/v$MIGRAT
 # get daprd
 RUN wget -q https://github.com/dapr/dapr/releases/download/v$DAPR_VERSION/daprd_linux_amd64.tar.gz -O - | tar -xzvf - daprd
 
-FROM alpine AS production
+FROM alpine:3.20.2 AS production
+
+RUN apk update && apk add postgresql-client --no-cache
 
 ARG SERVICE
 # APP_PROTOCOL can be grpc or http
@@ -60,12 +77,14 @@ WORKDIR /app
 COPY --from=deps /hivemind /usr/bin/hivemind
 COPY --from=deps /migrate /usr/bin/migrate
 COPY --from=deps /daprd /usr/bin/daprd
+COPY --from=builder /build/spice/spice /usr/bin/spice
 COPY dapr dapr
 COPY Procfile.standalone Procfile
 
 # copy app
 COPY --from=builder /build/app/app .
 COPY --from=builder /build/app/migrations ./migrations
+COPY spicedb ./spicedb
 COPY docker-run-migrations.sh ./run-migrations.sh
 
 # fix permissions
@@ -80,4 +99,4 @@ ENV ADDR=127.0.0.1:80
 ENV MODE=development
 ENV LOG_LEVEL=debug
 
-CMD hivemind
+CMD ["hivemind"]
