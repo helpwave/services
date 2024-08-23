@@ -1,14 +1,20 @@
 name: spicedb
 
+env:
+  # renovate: datasource=github-releases depName=authzed/zed
+  ZED_VERSION: '0.20.0'
+
 on:
   pull_request:
     paths:
-      - 'spicedb.yaml'
+      - 'spicedb/*'
+      - 'spice.go'
   push:
     branches: [ 'main' ]
     tags: [ 'v*' ]
     paths:
-      - 'spicedb.yaml'
+      - 'spicedb/*'
+      - 'spice.go'
 
 jobs:
   validate:
@@ -16,8 +22,11 @@ jobs:
     steps:
       - name: Clone Repo
         uses: actions/checkout@v4
-      - uses: "authzed/action-spicedb-validate@v1"
-        with:
-          validationfile: "spicedb.yaml"
+      - name: Get zed
+        run: |
+          wget https://github.com/authzed/zed/releases/download/v${ZED_VERSION}/zed_${ZED_VERSION}_linux_amd64.deb -O zed.deb
+          apt install -y ./zed.deb
+      - run: |
+          go run spicedb.go test
 
 # TODO: pull staging data and smoke-test migration
