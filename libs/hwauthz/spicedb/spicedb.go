@@ -15,8 +15,8 @@ import (
 )
 
 func SetupSpiceDbByEnv() *authzed.Client {
-	endpoint := hwutil.MustGetEnv("SPICEDB_ENDPOINT")
-	token := hwutil.MustGetEnv("SPICEDB_GRPC_PRESHARED_KEY")
+	endpoint := hwutil.MustGetEnv("ZED_ENDPOINT")
+	token := hwutil.MustGetEnv("ZED_TOKEN")
 	return SetupSpiceDb(endpoint, token)
 }
 
