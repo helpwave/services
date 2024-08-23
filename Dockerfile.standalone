@@ -99,4 +99,4 @@ ENV ADDR=127.0.0.1:80
 ENV MODE=development
 ENV LOG_LEVEL=debug
 
-CMD hivemind
+CMD ["hivemind"]
