@@ -145,10 +145,26 @@ jobs:
             SERVICE=${{ inputs.service }}
             VERSION=${{ steps.commit.outputs.short }}
 
+      - name: Build Standalone
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.standalone
+          platforms: linux/amd64
+          push: false
+          tags: "standalone"
+          cache-from: type=local,src=/tmp/.buildx-cache-standalone
+          cache-to: type=local,dest=/tmp/.buildx-cache-new-standalone
+          build-args: |
+            SERVICE=${{ inputs.service }}
+            VERSION=${{ steps.commit.outputs.short }}
+
       - name: Move cache
         run: |
           rm -rf /tmp/.buildx-cache
+          rm -rf /tmp/.buildx-cache-standalone
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new-standalone /tmp/.buildx-cache-standalone
 
       - name: Check manifest
         if: inputs.deploy
