@@ -1,5 +1,10 @@
 #!/usr/bin/env sh
 
+# expects the following env variables:
+#  - POSTGRES_DSN
+#  - ZED_ENDPOINT
+#  - ZED_TOKEN
+
 set -e
 
 MAX_ATTEMPTS=30

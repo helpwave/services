@@ -13,6 +13,8 @@ FROM golang:1.23-bookworm AS builder
 WORKDIR /build/spice
 
 COPY go.* ./
+RUN go mod download
+COPY spice.go spice.go
 RUN CGO_ENABLED=0 GOOS=linux go build -a -o spice spice.go
 
 #
@@ -46,8 +48,6 @@ ARG HIVEMIND_VERSION=1.1.0
 ARG MIGRATE_VERSION=4.17.1
 # renovate: datasource=github-releases depName=dapr/dapr
 ARG DAPR_VERSION=1.14.1
-# renovate: datasource=github-releases depName=authzed/zed
-ENV ZED_VERSION=0.20.0
 
 RUN apt update && \
 	apt install -y wget
@@ -59,11 +59,6 @@ RUN wget -q -O hivemind.gz https://github.com/DarthSim/hivemind/releases/downloa
 
 # get migrate
 RUN wget -q https://github.com/golang-migrate/migrate/releases/download/v$MIGRATE_VERSION/migrate.linux-amd64.tar.gz -O - | tar -xzvf - migrate
-
-# get zed
-RUN wget https://github.com/authzed/zed/releases/download/v${ZED_VERSION}/zed_${ZED_VERSION}_linux_amd64.deb -O zed.deb \
-    && apt install -y ./zed.deb \
-    && rm zed.deb
 
 # get daprd
 RUN wget -q https://github.com/dapr/dapr/releases/download/v$DAPR_VERSION/daprd_linux_amd64.tar.gz -O - | tar -xzvf - daprd
@@ -82,7 +77,6 @@ WORKDIR /app
 COPY --from=deps /hivemind /usr/bin/hivemind
 COPY --from=deps /migrate /usr/bin/migrate
 COPY --from=deps /daprd /usr/bin/daprd
-COPY --from=deps /zed /usr/bin/zed
 COPY --from=builder /build/spice/spice /usr/bin/spice
 COPY dapr dapr
 COPY Procfile.standalone Procfile
