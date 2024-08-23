@@ -133,3 +133,9 @@ func (s *SpiceDBAuthZ) Check(ctx context.Context, permissionCheck hwauthz.Permis
 	telemetry.SetSpanBool(ctx, "hasPermission", hasPermission)
 	return hasPermission, nil
 }
+
+// Must implements hwauthz.AuthZ's Must
+func (s *SpiceDBAuthZ) Must(ctx context.Context, check hwauthz.PermissionCheck) error {
+	granted, err := s.Check(ctx, check)
+	return hwauthz.Error(ctx, check, granted, err)
+}

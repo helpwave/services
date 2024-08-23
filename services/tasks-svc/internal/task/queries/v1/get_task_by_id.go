@@ -3,7 +3,6 @@ package v1
 import (
 	"common"
 	"context"
-	"fmt"
 	"github.com/google/uuid"
 	"hwauthz"
 	"hwes"
@@ -24,12 +23,8 @@ func NewGetTaskByIDQueryHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) Get
 		task := perm.Task(taskID)
 
 		check := hwauthz.NewPermissionCheck(user, perm.CanUserViewTask, task)
-		allowed, err := authz.Check(ctx, check)
-		if err != nil {
-			return nil, fmt.Errorf("could not check permission: %w", err)
-		}
-		if !allowed {
-			return nil, hwauthz.StatusErrorPermissionDenied(ctx, check)
+		if err = authz.Must(ctx, check); err != nil {
+			return nil, err
 		}
 
 		taskAggregate, err := aggregate.LoadTaskAggregate(ctx, as, taskID)

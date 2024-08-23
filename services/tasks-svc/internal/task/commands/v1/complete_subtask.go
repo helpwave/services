@@ -3,7 +3,6 @@ package v1
 import (
 	"common"
 	"context"
-	"fmt"
 	"github.com/google/uuid"
 	"hwauthz"
 	"hwes"
@@ -24,12 +23,8 @@ func NewCompleteSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.Auth
 		task := perm.Task(taskID)
 
 		check := hwauthz.NewPermissionCheck(user, perm.CanUserCompleteSubtask, task)
-		allowed, err := authz.Check(ctx, check)
-		if err != nil {
-			return fmt.Errorf("could not check permission: %w", err)
-		}
-		if !allowed {
-			return hwauthz.StatusErrorPermissionDenied(ctx, check)
+		if err = authz.Must(ctx, check); err != nil {
+			return err
 		}
 
 		a, err := aggregate.LoadTaskAggregate(ctx, as, taskID)

@@ -3,7 +3,6 @@ package v1
 import (
 	"common"
 	"context"
-	"fmt"
 	"github.com/google/uuid"
 	"hwauthz"
 	"hwes"
@@ -24,12 +23,8 @@ func NewDeleteSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 		task := perm.Task(taskID)
 
 		check := hwauthz.NewPermissionCheck(user, perm.CanUserDeleteSubtaskOnTask, task)
-		allowed, err := authz.Check(ctx, check)
-		if err != nil {
-			return fmt.Errorf("could not check permissions: %w", err)
-		}
-		if !allowed {
-			return hwauthz.StatusErrorPermissionDenied(ctx, check)
+		if err = authz.Must(ctx, check); err != nil {
+			return err
 		}
 
 		taskAggregate, err := aggregate.LoadTaskAggregate(ctx, as, taskID)

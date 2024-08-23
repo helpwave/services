@@ -27,3 +27,7 @@ func (a *TrueAuthZ) Delete(relationships ...hwauthz.Relationship) *hwauthz.Tx {
 func (a *TrueAuthZ) Check(ctx context.Context, check hwauthz.PermissionCheck) (permissionGranted bool, err error) {
 	return true, nil
 }
+
+func (a *TrueAuthZ) Must(ctx context.Context, check hwauthz.PermissionCheck) error {
+	return nil
+}

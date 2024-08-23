@@ -136,5 +136,20 @@ type AuthZ interface {
 	Delete(relationships ...Relationship) *Tx
 	// Check queries the Permission Graph for the existence of a PermissionCheck (i.e., a Relationship)
 	// We do not support the use of ConsistencyToken yet
+	// Also see Must
 	Check(ctx context.Context, check PermissionCheck) (permissionGranted bool, err error)
+	// Must performs a Check, and yields StatusErrorPermissionDenied, if it fails
+	// Note: it is NOT guaranteed, that the resulting error is StatusErrorPermissionDenied
+	Must(ctx context.Context, check PermissionCheck) error
+}
+
+// Error returns err, if not nil or StatusErrorPermissionDenied, if permissionGranted is false
+func Error(ctx context.Context, check PermissionCheck, permissionGranted bool, err error) error {
+	if err != nil {
+		return err
+	}
+	if !permissionGranted {
+		return StatusErrorPermissionDenied(ctx, check)
+	}
+	return nil
 }

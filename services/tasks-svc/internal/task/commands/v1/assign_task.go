@@ -3,7 +3,6 @@ package v1
 import (
 	"common"
 	"context"
-	"fmt"
 	"github.com/google/uuid"
 	"hwauthz"
 	"hwes"
@@ -23,12 +22,8 @@ func NewAssignTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) As
 		authzTask := perm.Task(taskID)
 
 		check := hwauthz.NewPermissionCheck(authzUser, perm.CanUserAssignTask, authzTask)
-		allowed, err := authz.Check(ctx, check)
-		if err != nil {
-			return fmt.Errorf("could not check permissions: %w", err)
-		}
-		if !allowed {
-			return hwauthz.StatusErrorPermissionDenied(ctx, check)
+		if err = authz.Must(ctx, check); err != nil {
+			return err
 		}
 
 		task, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
