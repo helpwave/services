@@ -25,7 +25,7 @@ jobs:
       - name: Get zed
         run: |
           wget https://github.com/authzed/zed/releases/download/v${ZED_VERSION}/zed_${ZED_VERSION}_linux_amd64.deb -O zed.deb
-          apt install -y ./zed.deb
+          sudo apt install -y ./zed.deb
       - run: |
           go run spicedb.go test
 
