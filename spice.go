@@ -277,9 +277,15 @@ func (c *TestCheck) UnmarshalYAML(node *yaml.Node) error {
 	return nil
 }
 
+type TestValidate struct {
+	Relation   string   `yaml:"relation"`
+	Exhaustive []string `yaml:"exhaustive,omitempty"`
+}
+
 type TestBlock struct {
-	Name  string      `yaml:"name,omitempty"`
-	Check []TestCheck `yaml:"check,omitempty"`
+	Name     string         `yaml:"name,omitempty"`
+	Check    []TestCheck    `yaml:"check,omitempty"`
+	Validate []TestValidate `yaml:"validate,omitempty"`
 }
 
 type TestFile struct {
@@ -294,11 +300,10 @@ type SpiceDBAssertion struct {
 
 // SpiceDBValidationFile is the schema zed uses for `zed validate`
 type SpiceDBValidationFile struct {
-	Schema        string           `yaml:"schema"`
-	Relationships string           `yaml:"relationships,omitempty"`
-	Assertions    SpiceDBAssertion `yaml:"assertions,omitempty"`
-
-	// TODO: validation
+	Schema        string              `yaml:"schema"`
+	Relationships string              `yaml:"relationships,omitempty"`
+	Assertions    SpiceDBAssertion    `yaml:"assertions,omitempty"`
+	Validation    map[string][]string `yaml:"validation,omitempty"`
 }
 
 // execute runs a command with the same stdout and stdin as the current process
@@ -365,8 +370,10 @@ func testCmd(kctx *kong.Context) {
 	for _, file := range files {
 		parsed := readTestFile(file)
 
-		// re-format assertions
+		// re-format assertions and validations
 		assertions := SpiceDBAssertion{}
+		validation := make(map[string][]string)
+
 		for _, test := range parsed.Tests {
 			for _, check := range test.Check {
 				if check.Not {
@@ -374,6 +381,11 @@ func testCmd(kctx *kong.Context) {
 				} else {
 					assertions.AssertTrue = append(assertions.AssertTrue, check.Value)
 				}
+			}
+
+			for _, validate := range test.Validate {
+				// I wonder how zed deals with multiple occurrences of the same subject here
+				validation[validate.Relation] = append(validation[validate.Relation], validate.Exhaustive...)
 			}
 		}
 
@@ -383,6 +395,7 @@ func testCmd(kctx *kong.Context) {
 			Schema:        schema,
 			Relationships: strings.Join(parsed.Relationships, "\n"),
 			Assertions:    assertions,
+			Validation:    validation,
 		}, outFilepath)
 
 		// run zed validate

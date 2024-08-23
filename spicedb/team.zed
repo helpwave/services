@@ -4,8 +4,8 @@ definition team {
 
 	permission leadership = leader
 	permission membership = leader + member
-	permission invite_member = leader
-	permission remove_member = leader
+	permission invite_member = leadership
+	permission remove_member = leadership
 }
 
 definition team_invite {
