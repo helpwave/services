@@ -3,19 +3,22 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/alecthomas/kong"
-	v1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
-	"github.com/authzed/authzed-go/v1"
-	"github.com/authzed/grpcutil"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
-	"gopkg.in/yaml.v3"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/alecthomas/kong"
+	v1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
+	"github.com/authzed/authzed-go/v1"
+	"github.com/authzed/grpcutil"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
+	"gopkg.in/yaml.v3"
 )
 
 const MigrationResourceType = "spice_schema_migrations/migration"
@@ -135,7 +138,7 @@ func getCurrentVersion(ctx context.Context, client *authzed.Client) int {
 		OptionalLimit: 0,
 	})
 	if err != nil {
-		fmt.Println("could not read relationships")
+		fmt.Println("could not open relationship stream")
 		panic(err)
 	}
 
@@ -144,6 +147,11 @@ func getCurrentVersion(ctx context.Context, client *authzed.Client) int {
 	if err != nil {
 		if err == io.EOF {
 			return 0
+		}
+		if statusErr, ok := status.FromError(err); ok {
+			if statusErr.Code() == codes.FailedPrecondition && statusErr.Message() == "object definition `spice_schema_migrations/migration` not found" {
+				return 0
+			}
 		}
 		fmt.Println("could not read relationships")
 		panic(err)
