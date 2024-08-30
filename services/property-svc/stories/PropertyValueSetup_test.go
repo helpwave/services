@@ -30,7 +30,6 @@ const EsPassword = "changeit"
 func Setup(m *testing.M) {
 	zlog.Info().Msg("starting containers")
 	postgresEndpoint, eventstoreEndpoint, teardownContainers := startContainers()
-	defer teardownContainers()
 	zlog.Info().Str("postgresEndpoint", postgresEndpoint).Str("eventstoreEndpoint", eventstoreEndpoint).Msg("containers are up")
 
 	// Set POSTGRES_DSN
@@ -62,10 +61,17 @@ func Setup(m *testing.M) {
 	_ = os.Setenv("INSECURE_REDIS_NO_TLS", "true")
 	_ = os.Setenv("ORGANIZATION_ID", "3b25c6f5-4705-4074-9fc6-a50c28eba405")
 
+	// start service
 	ready := make(chan bool)
 	go Main.Main("story testing", func() { ready <- true })
 	<-ready
-	m.Run()
+
+	// Run tests
+	exitCode := m.Run()
+
+	// cleanup and exit
+	teardownContainers()
+	os.Exit(exitCode)
 }
 
 func startContainers() (postgresEndpoint, eventstoreEndpoint string, teardown func()) {
@@ -132,7 +138,7 @@ func startEventstore() (endpoint string, teardown func()) {
 	ctx := context.Background()
 	req := testcontainers.ContainerRequest{
 		Image:        ImageEventstore,
-		Env:          map[string]string{"EVENTSTORE_INSECURE": "true", "EVENTSTORE_RUN_PROJECTIONS": "All", "EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP": "true", "EVENTSTORE_NODE_IP": "127.0.0.1", "EVENTSTORE_CLUSTER_SIZE": "1"},
+		Env:          map[string]string{"EVENTSTORE_INSECURE": "true", "EVENTSTORE_RUN_PROJECTIONS": "All", "EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP": "true", "EVENTSTORE_NODE_IP": "0.0.0.0", "EVENTSTORE_CLUSTER_SIZE": "1"},
 		ExposedPorts: []string{"2113"},
 		WaitingFor:   wait.ForHealthCheck(),
 	}
@@ -143,6 +149,8 @@ func startEventstore() (endpoint string, teardown func()) {
 	if err != nil {
 		zlog.Fatal().Err(err).Msg("Could not start eventstore")
 	}
+
+	// FIXME: for some reason wait.ForExposedPort() does not work, this workaround does though?
 	initialAttempts := 20
 	attempts := initialAttempts
 	time.Sleep(time.Second * 3)
