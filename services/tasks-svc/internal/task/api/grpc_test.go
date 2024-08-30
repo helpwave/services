@@ -5,19 +5,21 @@ import (
 	common_test "common/test"
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
-	"google.golang.org/grpc"
+	hwauthz_test "hwauthz/test"
 	hwes_test "hwes/test"
 	"hwutil"
 	"tasks-svc/internal/task/api"
 	"tasks-svc/internal/task/handlers"
 	"testing"
+
+	"github.com/google/uuid"
+	"google.golang.org/grpc"
 )
 
 func server(ctx context.Context) (pb.TaskServiceClient, func()) {
 	aggregateStore := hwes_test.NewAggregateStore()
-	taskHandlers := handlers.NewTaskHandlers(aggregateStore)
-
+	authz := hwauthz_test.NewTrueAuthZ()
+	taskHandlers := handlers.NewTaskHandlers(aggregateStore, authz)
 	taskGrpcService := api.NewTaskGrpcService(aggregateStore, taskHandlers)
 
 	common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())

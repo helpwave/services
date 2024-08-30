@@ -21,6 +21,8 @@ var global =
     (function () { return this; }).call(null) ||
     Function('return this')();
 
+var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
+goog.object.extend(proto, google_protobuf_timestamp_pb);
 goog.exportSymbol('proto.services.property_svc.v1.Date', null, global);
 goog.exportSymbol('proto.services.property_svc.v1.FieldType', null, global);
 goog.exportSymbol('proto.services.property_svc.v1.SubjectType', null, global);
@@ -77,9 +79,7 @@ proto.services.property_svc.v1.Date.prototype.toObject = function(opt_includeIns
  */
 proto.services.property_svc.v1.Date.toObject = function(includeInstance, msg) {
   var f, obj = {
-    day: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    month: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    year: jspb.Message.getFieldWithDefault(msg, 3, 0)
+    date: (f = msg.getDate()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -117,16 +117,9 @@ proto.services.property_svc.v1.Date.deserializeBinaryFromReader = function(msg, 
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setDay(value);
-      break;
-    case 2:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setMonth(value);
-      break;
-    case 3:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setYear(value);
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setDate(value);
       break;
     default:
       reader.skipField();
@@ -157,81 +150,51 @@ proto.services.property_svc.v1.Date.prototype.serializeBinary = function() {
  */
 proto.services.property_svc.v1.Date.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getDay();
-  if (f !== 0) {
-    writer.writeInt32(
+  f = message.getDate();
+  if (f != null) {
+    writer.writeMessage(
       1,
-      f
-    );
-  }
-  f = message.getMonth();
-  if (f !== 0) {
-    writer.writeInt32(
-      2,
-      f
-    );
-  }
-  f = message.getYear();
-  if (f !== 0) {
-    writer.writeInt32(
-      3,
-      f
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
   }
 };
 
 
 /**
- * optional int32 day = 1;
- * @return {number}
+ * optional google.protobuf.Timestamp date = 1;
+ * @return {?proto.google.protobuf.Timestamp}
  */
-proto.services.property_svc.v1.Date.prototype.getDay = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+proto.services.property_svc.v1.Date.prototype.getDate = function() {
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 1));
 };
 
 
 /**
- * @param {number} value
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.services.property_svc.v1.Date} returns this
+*/
+proto.services.property_svc.v1.Date.prototype.setDate = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.services.property_svc.v1.Date} returns this
  */
-proto.services.property_svc.v1.Date.prototype.setDay = function(value) {
-  return jspb.Message.setProto3IntField(this, 1, value);
+proto.services.property_svc.v1.Date.prototype.clearDate = function() {
+  return this.setDate(undefined);
 };
 
 
 /**
- * optional int32 month = 2;
- * @return {number}
+ * Returns whether this field is set.
+ * @return {boolean}
  */
-proto.services.property_svc.v1.Date.prototype.getMonth = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/**
- * @param {number} value
- * @return {!proto.services.property_svc.v1.Date} returns this
- */
-proto.services.property_svc.v1.Date.prototype.setMonth = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
-};
-
-
-/**
- * optional int32 year = 3;
- * @return {number}
- */
-proto.services.property_svc.v1.Date.prototype.getYear = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
-};
-
-
-/**
- * @param {number} value
- * @return {!proto.services.property_svc.v1.Date} returns this
- */
-proto.services.property_svc.v1.Date.prototype.setYear = function(value) {
-  return jspb.Message.setProto3IntField(this, 3, value);
+proto.services.property_svc.v1.Date.prototype.hasDate = function() {
+  return jspb.Message.getField(this, 1) != null;
 };
 
 

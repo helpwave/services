@@ -6,10 +6,6 @@ import (
 	common_test "common/test"
 	"context"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
-	"github.com/pashagolub/pgxmock/v3"
-	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
 	"hwdb"
 	"hwes"
 	hwes_test "hwes/test"
@@ -22,6 +18,11 @@ import (
 	"testing"
 	"text/template"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/pashagolub/pgxmock/v4"
+	"github.com/stretchr/testify/assert"
+	"google.golang.org/grpc"
 )
 
 func server(ctx context.Context) (pb.PropertyViewsServiceClient, *hwes_test.AggregateStore, func()) {

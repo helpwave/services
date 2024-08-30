@@ -145,6 +145,7 @@ grpcurl --plaintext \
 | eventstore    | 2113  |                         |
 | jaeger (UI)   | 16686 | http                    |
 | jaeger (OTLP) | 4317  | grpc                    |
+| SpiceDB       | 50051 | grpc                    |
 
 ### Scripts
 

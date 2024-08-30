@@ -12,7 +12,7 @@ permissions:
 
 env:
   # renovate: dev-tag
-  DEV_TAG: '8'
+  DEV_TAG: '12'
 
 jobs:
 
@@ -37,7 +37,7 @@ jobs:
 
       - name: Detect changes in libs
         id: changes-in-libs
-        uses: tj-actions/changed-files@v42
+        uses: tj-actions/changed-files@v44
         with:
           files: |
             .github/**
@@ -47,14 +47,14 @@ jobs:
 
       - name: Detect changes in services
         id: changes-in-services
-        uses: tj-actions/changed-files@v42
+        uses: tj-actions/changed-files@v44
         with:
           files: |
             services/*-svc/**
 
       - name: Detect changes in images
         id: changes-in-images
-        uses: tj-actions/changed-files@v42
+        uses: tj-actions/changed-files@v44
         with:
           files: |
             images/**

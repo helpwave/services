@@ -10,3 +10,6 @@ other = "ist fehlerhaft"
 
 [RequiredError]
 other = "ist erforderlich"
+
+[PermissionDeniedError]
+other = "Fehlende Berechtigung"

@@ -5,7 +5,7 @@
 
 # based on the debian 12 ("bookworm") go image
 # for now this only builds x86_64 images (TODO)
-FROM golang:1.22-bookworm
+FROM golang:1.23-bookworm
 
 # appearently this is not set by the go image
 ENV GOROOT="/usr/local/go"
@@ -33,7 +33,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
 # install buf
 #  https://buf.build/
 # renovate: datasource=github-releases depName=bufbuild/buf
-ENV BUF_VERSION=1.32.2
+ENV BUF_VERSION=1.37.0
 RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-Linux-x86_64 -O /usr/local/bin/buf \
     && chmod +x /usr/local/bin/buf
 
@@ -43,8 +43,19 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
     && apt update \
-    && apt install gh -y \
-    && apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+    && apt install gh -y
+
+# install zed, CLI for SpiceDB
+#  https://github.com/authzed/zed
+# renovate: datasource=github-releases depName=authzed/zed
+ENV ZED_VERSION=0.20.0
+RUN wget https://github.com/authzed/zed/releases/download/v${ZED_VERSION}/zed_${ZED_VERSION}_linux_amd64.deb -O zed.deb \
+    && apt install -y ./zed.deb \
+    && rm zed.deb
+
+# clean up apt artifacts,
+# dont use apt after this line
+RUN apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 # create user, reduces friction with mounted file permissions
 # 1000:1000 is a good guess (at least on linux)
@@ -63,16 +74,16 @@ ENV HOME="/home/${UNAME}"
 # install air
 #  https://github.com/air-verse/air
 # renovate: datasource=github-releases depName=air-verse/air
-ENV AIR_VERSION=1.52.2
+ENV AIR_VERSION=1.52.3
 RUN curl -sSfL https://raw.githubusercontent.com/air-verse/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v${AIR_VERSION}
 
 # install dapr-cli
 #  https://docs.dapr.io/
 
 # renovate: datasource=github-releases depName=dapr/cli
-ENV DAPR_CLI_VERSION=1.13.0
+ENV DAPR_CLI_VERSION=1.14.0
 # renovate: datasource=github-releases depName=dapr/dapr
-ENV DAPR_RT_VERSION=1.13.4
+ENV DAPR_RT_VERSION=1.14.1
 
 ENV PATH="$PATH:$HOME/dapr"
 RUN mkdir "$HOME/dapr" \
@@ -101,7 +112,7 @@ RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@v${GRPCURL_VERSION} \
 # install sqlc
 #  https://sqlc.dev/
 # renovate: datasource=github-releases depName=sqlc-dev/sqlc
-ENV SQLC_VERSION=1.26.0
+ENV SQLC_VERSION=1.27.0
 RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@v${SQLC_VERSION}\
 	&& go clean -modcache
 
@@ -116,7 +127,7 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} 
 # install golangci-lint, the linter we also use in the CI
 #  https://golangci-lint.run/
 # renovate: datasource=github-releases depName=golangci/golangci-lint
-ENV GOLANGCI_LINT_VERSION=1.59.0
+ENV GOLANGCI_LINT_VERSION=1.60.1
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
 	| sh -s -- -b $(go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
 

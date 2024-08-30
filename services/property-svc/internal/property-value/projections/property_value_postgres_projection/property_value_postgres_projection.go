@@ -4,9 +4,6 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
@@ -16,7 +13,10 @@ import (
 	"property-svc/internal/property-value/models"
 	"property-svc/repos/property_repo"
 	"property-svc/repos/property_value_repo"
-	"time"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
 )
 
 type Projection struct {
@@ -156,7 +156,7 @@ func createBasicPropertyValue(ctx context.Context, repo *property_value_repo.Que
 		}
 		createPropertyValueParams.BoolValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_DATE:
-		val, err := hwutil.AssertDate(payload.Value, time.UTC)
+		val, err := hwutil.AssertTimestampToTime(payload.Value)
 		if err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionPark)
 		}
@@ -318,7 +318,7 @@ func updateBasicPropertyValue(ctx context.Context, repo *property_value_repo.Que
 		}
 		updatePropertyValueParams.BoolValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_DATE:
-		val, err := hwutil.AssertDate(payload.Value, time.UTC)
+		val, err := hwutil.AssertTimestampToTime(payload.Value)
 		if err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionPark)
 		}

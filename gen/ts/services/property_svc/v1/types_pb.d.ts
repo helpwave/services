@@ -1,16 +1,13 @@
 import * as jspb from 'google-protobuf'
 
+import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb'; // proto import: "google/protobuf/timestamp.proto"
 
 
 export class Date extends jspb.Message {
-  getDay(): number;
-  setDay(value: number): Date;
-
-  getMonth(): number;
-  setMonth(value: number): Date;
-
-  getYear(): number;
-  setYear(value: number): Date;
+  getDate(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setDate(value?: google_protobuf_timestamp_pb.Timestamp): Date;
+  hasDate(): boolean;
+  clearDate(): Date;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Date.AsObject;
@@ -22,9 +19,7 @@ export class Date extends jspb.Message {
 
 export namespace Date {
   export type AsObject = {
-    day: number,
-    month: number,
-    year: number,
+    date?: google_protobuf_timestamp_pb.Timestamp.AsObject,
   }
 }
 

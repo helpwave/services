@@ -9,14 +9,17 @@ import (
 	ph "tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/projections/patient_postgres_projection"
 	th "tasks-svc/internal/task/handlers"
+	"tasks-svc/internal/task/projections/spicedb"
 	"tasks-svc/internal/task/projections/task_postgres_projection"
 	"tasks-svc/internal/tracking"
 	"time"
 
-	daprd "github.com/dapr/go-sdk/service/grpc"
-	"github.com/rs/zerolog/log"
+	hwspicedb "hwauthz/spicedb"
 	patient "tasks-svc/internal/patient/api"
 	task "tasks-svc/internal/task/api"
+
+	daprd "github.com/dapr/go-sdk/service/grpc"
+	"github.com/rs/zerolog/log"
 )
 
 const ServiceName = "tasks-svc"
@@ -34,10 +37,20 @@ func main() {
 
 	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
 
+	authz := hwspicedb.NewSpiceDBAuthZ()
+
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
-	taskHandlers := th.NewTaskHandlers(aggregateStore)
+	taskHandlers := th.NewTaskHandlers(aggregateStore, authz)
 	patientHandlers := ph.NewPatientHandlers(aggregateStore)
+
+	go func() {
+		spicedbProjection := spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName)
+		if err := spicedbProjection.Subscribe(ctx); err != nil {
+			log.Err(err).Msg("error during spicedb subscription")
+			cancel()
+		}
+	}()
 
 	go func() {
 		postgresTaskProjection := task_postgres_projection.NewProjection(eventStore, ServiceName)
