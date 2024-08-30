@@ -70,12 +70,12 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		FieldType:   property.FieldType,
 
 		Name:        property.Name,
-		Description: &property.Description,
+		Description: hwutil.StrPtr(property.Description),
 		IsArchived:  property.IsArchived,
 
 		SetId:                      hwutil.NullUUIDToStringPtr(property.SetID),
-		AlwaysIncludeForViewSource: nil, //TODO
-		FieldTypeData:              nil,
+		AlwaysIncludeForViewSource: nil, // TODO
+		FieldTypeData:              nil, // set below
 	}
 
 	switch {

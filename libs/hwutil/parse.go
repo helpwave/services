@@ -98,6 +98,14 @@ func ParseNullUUID(ptr *string) (uuid.NullUUID, error) {
 	return id, err
 }
 
+// StrPtr returns nil for "", else s
+func StrPtr(s string) *string {
+	if s == "" {
+		return nil
+	}
+	return &s
+}
+
 // PtrTo returns the pointer to the passed value
 func PtrTo[T any](v T) *T {
 	return &v

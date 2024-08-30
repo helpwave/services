@@ -6,9 +6,13 @@ package stories
 import (
 	"context"
 	"fmt"
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	zlog "github.com/rs/zerolog/log"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
+
 	"os"
 	"property-svc/Main"
 	"strings"
@@ -37,12 +41,26 @@ func Setup(m *testing.M) {
 	postgresHost := postgresEnpointParts[0]
 	postgresPort := postgresEnpointParts[1]
 
-	err := os.Setenv("POSTGRES_DSN", fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s",
-		postgresHost, PostgresUser, PostgresPassword, PostgresDb, postgresPort,
-	))
+	postgresDSN := fmt.Sprintf(
+		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
+		PostgresUser, PostgresPassword, postgresHost, postgresPort, PostgresDb,
+	)
+
+	err := os.Setenv("POSTGRES_DSN", postgresDSN)
 	if err != nil {
 		zlog.Fatal().Err(err).Msg("Could not set POSTGRES_DSN")
+	}
+
+	// Run postgres migrations
+
+	// go test sets the wd to the directory of this file
+	migr, err := migrate.New("file://../migrations", postgresDSN)
+	if err != nil {
+		zlog.Fatal().Err(err).Msg("Could not create migrate instance")
+	}
+	err = migr.Up()
+	if err != nil {
+		zlog.Fatal().Err(err).Msg("Could not migrate")
 	}
 
 	// Set EVENTSTORE_CS
@@ -65,6 +83,9 @@ func Setup(m *testing.M) {
 	ready := make(chan bool)
 	go Main.Main("story testing", func() { ready <- true })
 	<-ready
+
+	// FIXME: actually wait for the projections instead of guessing
+	time.Sleep(time.Second * 10)
 
 	// Run tests
 	exitCode := m.Run()

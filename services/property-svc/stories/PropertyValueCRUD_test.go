@@ -13,6 +13,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"testing"
+	"time"
 )
 
 func TestMain(m *testing.M) {
@@ -57,14 +58,16 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	client := getClient()
 	ctx := context.Background()
 
-	createResponse, err := client.CreateProperty(ctx, &pb.CreatePropertyRequest{
+	createPropertyRequest := &pb.CreatePropertyRequest{
 		SubjectType:   pb.SubjectType_SUBJECT_TYPE_TASK,
 		FieldType:     pb.FieldType_FIELD_TYPE_TEXT,
 		Name:          t.Name(),
 		Description:   nil,
 		SetId:         nil,
 		FieldTypeData: nil,
-	})
+	}
+
+	createResponse, err := client.CreateProperty(ctx, createPropertyRequest)
 	if !assert.NoError(t, err, "could not create new property") {
 		return
 	}
@@ -73,5 +76,39 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		return
 	}
 
-	t.Log(propertyID)
+	// FIXME: I hate this
+	time.Sleep(time.Second * 5)
+
+	propertyResponse, err := client.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
+	if !assert.NoError(t, err, "could not get property after it was created") {
+		return
+	}
+
+	response := map[string]interface{}{
+		"Id":            propertyResponse.Id,
+		"SubjectType":   propertyResponse.SubjectType.String(),
+		"FieldType":     propertyResponse.FieldType.String(),
+		"Name":          propertyResponse.Name,
+		"Description":   propertyResponse.Description,
+		"IsArchived":    propertyResponse.IsArchived,
+		"SetId":         propertyResponse.SetId,
+		"FieldTypeData": propertyResponse.FieldTypeData,
+		// "AlwaysIncludeForViewSource": propertyResponse.AlwaysIncludeForViewSource, // TODO
+	}
+
+	expectedResponse := map[string]interface{}{
+		"Id":            propertyID.String(),
+		"SubjectType":   createPropertyRequest.SubjectType.String(),
+		"FieldType":     createPropertyRequest.FieldType.String(),
+		"Name":          createPropertyRequest.Name,
+		"Description":   createPropertyRequest.Description,
+		"IsArchived":    false,
+		"SetId":         createPropertyRequest.SetId,
+		"FieldTypeData": createPropertyRequest.FieldTypeData,
+		// "AlwaysIncludeForViewSource": nil, // TODO
+	}
+
+	if !assert.Equal(t, response, expectedResponse) {
+		return
+	}
 }
