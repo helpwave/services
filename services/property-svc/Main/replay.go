@@ -1,4 +1,4 @@
-package property_svc
+package Main
 
 import (
 	"context"

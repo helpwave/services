@@ -10,7 +10,7 @@ import (
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 	"os"
-	propertySvc "property-svc"
+	"property-svc/Main"
 	"strings"
 	"sync"
 	"testing"
@@ -63,7 +63,7 @@ func Setup(m *testing.M) {
 	_ = os.Setenv("ORGANIZATION_ID", "3b25c6f5-4705-4074-9fc6-a50c28eba405")
 
 	ready := make(chan bool)
-	go propertySvc.Main(func() { ready <- true })
+	go Main.Main("story testing", func() { ready <- true })
 	<-ready
 	m.Run()
 }
