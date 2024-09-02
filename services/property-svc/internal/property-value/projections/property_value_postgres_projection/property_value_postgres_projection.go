@@ -83,7 +83,9 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 		_ = tx.Rollback(ctx)
 	}()
 
-	err, ack := createBasicPropertyValue(ctx, p.propertyValueRepo.WithTx(tx), payload, propertyID, evt.AggregateID, subjectID, fieldType)
+	repo := p.propertyValueRepo.WithTx(tx)
+
+	err, ack := createBasicPropertyValue(ctx, repo, payload, propertyID, evt.AggregateID, subjectID, fieldType)
 	if err != nil {
 		return fmt.Errorf("onPropertyValueCreated: could not createbasicPropertyValue: %w", err), ack
 	}
@@ -119,7 +121,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 			})
 		}
 
-		err = hwdb.ExecBatch(p.propertyValueRepo.ConnectValueWithSelectOptions(ctx, selectsToAdd))
+		err = hwdb.ExecBatch(repo.ConnectValueWithSelectOptions(ctx, selectsToAdd))
 		if err != nil {
 			return fmt.Errorf("onPropertyValueCreated: could not connect value with select options: %w", err), hwutil.PtrTo(esdb.NackActionPark)
 		}
