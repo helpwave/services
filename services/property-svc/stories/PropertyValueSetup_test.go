@@ -1,6 +1,3 @@
-//go:build stories
-// +build stories
-
 package stories
 
 import (
