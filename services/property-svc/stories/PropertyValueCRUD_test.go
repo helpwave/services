@@ -31,7 +31,7 @@ func (t InsecureBearerToken) RequireTransportSecurity() bool {
 	return false
 }
 
-func getClient() pb.PropertyServiceClient {
+func getGrpcConn() *grpc.ClientConn {
 	// README's fake token
 	token := "eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19"
 
@@ -43,20 +43,28 @@ func getClient() pb.PropertyServiceClient {
 	if err != nil {
 		log.Fatal().Err(err).Msg("could not create grpc conn")
 	}
-	return pb.NewPropertyServiceClient(conn)
+	return conn
 }
 
-// TODO
+func propertyServiceClient() pb.PropertyServiceClient {
+	return pb.NewPropertyServiceClient(getGrpcConn())
+}
+
+func propertyValueServiceClient() pb.PropertyValueServiceClient {
+	return pb.NewPropertyValueServiceClient(getGrpcConn())
+}
 
 // TestCreateAttachUpdateDelete:
 //   - Create a Property,
 //   - Attach a Value
-//   - Get the Value
 //   - Update said value
-//   - Get the value
 func TestCreateAttachUpdateTextProperty(t *testing.T) {
-	client := getClient()
+	propertyClient := propertyServiceClient()
 	ctx := context.Background()
+
+	//
+	// Create new Property
+	//
 
 	createPropertyRequest := &pb.CreatePropertyRequest{
 		SubjectType:   pb.SubjectType_SUBJECT_TYPE_TASK,
@@ -67,7 +75,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		FieldTypeData: nil,
 	}
 
-	createResponse, err := client.CreateProperty(ctx, createPropertyRequest)
+	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
 	if !assert.NoError(t, err, "could not create new property") {
 		return
 	}
@@ -77,9 +85,13 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	}
 
 	// FIXME: I hate this
-	time.Sleep(time.Second * 5)
+	time.Sleep(time.Second * 1)
 
-	propertyResponse, err := client.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
+	//
+	// Get new Property
+	//
+
+	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
 	if !assert.NoError(t, err, "could not get property after it was created") {
 		return
 	}
@@ -111,4 +123,84 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	if !assert.Equal(t, response, expectedResponse) {
 		return
 	}
+
+	//
+	// Attach a value
+	//
+
+	subjectId := uuid.New().String()
+
+	valueClient := propertyValueServiceClient()
+	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+		SubjectId:  subjectId,
+		PropertyId: propertyID.String(),
+		Value: &pb.AttachPropertyValueRequest_TextValue{
+			TextValue: "Initial Text Value",
+		},
+	})
+
+	if !assert.NoError(t, err, "could not attach value") {
+		return
+	}
+
+	time.Sleep(time.Second * 1)
+
+	//
+	// Get Values
+	//
+
+	attachedValuesResponse, err := valueClient.GetAttachedPropertyValues(ctx, &pb.GetAttachedPropertyValuesRequest{
+		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
+			TaskMatcher: &pb.TaskPropertyMatcher{
+				WardId: nil,
+				TaskId: &subjectId,
+			},
+		}})
+
+	if !assert.NoError(t, err, "could not get values") {
+		return
+	}
+
+	assert.Equal(t, len(attachedValuesResponse.Values), 1)
+
+	assert.Equal(t, attachedValuesResponse.Values[0].GetTextValue(), "Initial Text Value")
+
+	//
+	// Update Value
+	//
+
+	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+		SubjectId:  subjectId,
+		PropertyId: propertyID.String(),
+		Value: &pb.AttachPropertyValueRequest_TextValue{
+			TextValue: "Updated Text Value",
+		},
+	})
+
+	if !assert.NoError(t, err, "could not update value") {
+		return
+	}
+
+	time.Sleep(time.Second * 1)
+
+	//
+	// Get Updated Values
+	//
+
+	attachedValuesResponse, err = valueClient.GetAttachedPropertyValues(ctx, &pb.GetAttachedPropertyValuesRequest{
+		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
+			TaskMatcher: &pb.TaskPropertyMatcher{
+				WardId: nil,
+				TaskId: &subjectId,
+			},
+		}})
+
+	if !assert.NoError(t, err, "could not get updated values") {
+		return
+	}
+
+	assert.Equal(t, len(attachedValuesResponse.Values), 1)
+
+	assert.Equal(t, attachedValuesResponse.Values[0].GetTextValue(), "Updated Text Value")
+
 }
