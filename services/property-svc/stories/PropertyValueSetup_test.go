@@ -9,6 +9,7 @@ import (
 	zlog "github.com/rs/zerolog/log"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
+	"os/signal"
 
 	"os"
 	"property-svc/Main"
@@ -88,6 +89,7 @@ func Setup(m *testing.M) {
 	exitCode := m.Run()
 
 	// cleanup and exit
+	signal.Notify(make(chan os.Signal, 1), os.Interrupt)
 	teardownContainers()
 	os.Exit(exitCode)
 }
