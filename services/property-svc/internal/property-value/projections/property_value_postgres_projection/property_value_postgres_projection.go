@@ -105,11 +105,16 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 			selectsToAdd = []property_value_repo.ConnectValueWithSelectOptionsParams{{ValueID: evt.AggregateID, SelectOption: id}}
 		} else {
 			// FieldType_FIELD_TYPE_MULTI_SELECT
-			val, ok := payload.Value.([]string)
-			if !ok {
-				return fmt.Errorf("could not assert []string"), hwutil.PtrTo(esdb.NackActionPark)
+			multiSelectChange, err := models.MultiSelectChangeFromInterface(payload.Value)
+			if err != nil {
+				log.Error().
+					Err(err).
+					Type("value_type", payload.Value).
+					Any("value", payload.Value).
+					Msg("onPropertyValueCreated: could not parse payload.Value as MultiSelectChange")
+				return fmt.Errorf("onPropertyValueCreated: could not parse payload.Value as MultiSelectChange: %w", err), hwutil.PtrTo(esdb.NackActionPark)
 			}
-			ids, err := hwutil.StringsToUUIDs(val)
+			ids, err := hwutil.StringsToUUIDs(multiSelectChange.SelectValues)
 			if err != nil {
 				return fmt.Errorf("onPropertyValueCreated: at least one select option uuid could not be parsed: %w", err), hwutil.PtrTo(esdb.NackActionPark)
 			}
@@ -244,10 +249,14 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 				return fmt.Errorf("onPropertyValueUpdated: could not disconnectvalue from all options: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
 			}
 		} else {
-			val, ok := payload.Value.(models.MultiSelectChange)
-			if !ok {
-				err = fmt.Errorf("onPropertyValueUpdated: could not get select value: type is %T, expected models.MultiSelectChange", payload.Value)
-				return err, hwutil.PtrTo(esdb.NackActionPark)
+			val, err := models.MultiSelectChangeFromInterface(payload.Value)
+			if err != nil {
+				log.Error().
+					Err(err).
+					Type("value_type", payload.Value).
+					Any("value", payload.Value).
+					Msg("onPropertyValueUpdated: could not parse payload.Value as MultiSelectChange")
+				return fmt.Errorf("onPropertyValueUpdated: could not parse payload.Value as MultiSelectChange: %w", err), hwutil.PtrTo(esdb.NackActionPark)
 			}
 
 			toAdd, err = hwutil.StringsToUUIDs(val.SelectValues)

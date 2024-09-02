@@ -44,6 +44,18 @@ func StringsToUUIDs(strings []string) ([]uuid.UUID, error) {
 	return ids, nil
 }
 
+func InterfacesToStrings(interfaces []interface{}) (strings []string, ok bool) {
+	strings = make([]string, 0, len(interfaces))
+	for _, inter := range interfaces {
+		s, ok := inter.(string)
+		if !ok {
+			return nil, false
+		}
+		strings = append(strings, s)
+	}
+	return strings, true
+}
+
 func UUIDToStringPtr(u *uuid.UUID) *string {
 	if u != nil {
 		s := u.String()
