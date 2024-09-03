@@ -28,8 +28,9 @@ type Event struct {
 
 type metadata struct {
 	// CommitterUserID represents an optional UUID that identifies the user that is directly responsible for this event
-	CommitterUserID string    `json:"committer_user_id"`
-	Timestamp       time.Time `json:"timestamp"`
+	CommitterUserID string `json:"committer_user_id"`
+	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is discouraged.
+	Timestamp time.Time `json:"timestamp"`
 }
 
 // EventOption used to apply configurations in hwes.NewEvent()
