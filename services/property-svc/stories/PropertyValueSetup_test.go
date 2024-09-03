@@ -19,8 +19,8 @@ import (
 	"time"
 )
 
-const ImagePostgres = "postgres:15.6"                         // TODO: renovate
-const ImageEventstore = "eventstore/eventstore:23.10.1-jammy" // TODO: renovate
+const ImagePostgres = "postgres:15.6"
+const ImageEventstore = "eventstore/eventstore:23.10.1-jammy"
 
 const PostgresUser = "postgres"
 const PostgresPassword = "postgres"
@@ -72,7 +72,7 @@ func Setup(m *testing.M) {
 
 	// Set common variables
 	_ = os.Setenv("MODE", "development")
-	_ = os.Setenv("LOG_LEVEL", "debug")
+	_ = os.Setenv("LOG_LEVEL", "trace")
 	_ = os.Setenv("INSECURE_FAKE_TOKEN_ENABLE", "true")
 	_ = os.Setenv("INSECURE_REDIS_NO_TLS", "true")
 	_ = os.Setenv("ORGANIZATION_ID", "3b25c6f5-4705-4074-9fc6-a50c28eba405")
@@ -83,13 +83,14 @@ func Setup(m *testing.M) {
 	<-ready
 
 	// FIXME: actually wait for the projections instead of guessing
-	time.Sleep(time.Second * 10)
+	time.Sleep(time.Second * 5)
 
 	// Run tests
 	exitCode := m.Run()
 
 	// cleanup and exit
 	signal.Notify(make(chan os.Signal, 1), os.Interrupt)
+	time.Sleep(time.Second)
 	teardownContainers()
 	os.Exit(exitCode)
 }

@@ -94,7 +94,7 @@ message GetPropertyResponse {
 //
 
 message UpdatePropertyRequest {
-  string id = 1;
+  string id = 1; // @gotags: validate:"uuid4"
 
   optional SubjectType subject_type = 2;
 

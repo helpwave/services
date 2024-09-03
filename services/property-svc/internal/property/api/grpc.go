@@ -113,9 +113,14 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 		removeOptions = ftData.SelectData.RemoveOptions
 		if ftData.SelectData.UpsertOptions != nil {
 			opt, err := hwutil.MapWithErr(ftData.SelectData.UpsertOptions, func(option *pb.UpdatePropertyRequest_SelectData_SelectOption) (models.UpdateSelectOption, error) {
-				id, err := uuid.Parse(option.Id)
-				if err != nil {
-					return models.UpdateSelectOption{}, err
+				var id uuid.UUID
+				if option.Id == "" {
+					id = uuid.New()
+				} else {
+					id, err = uuid.Parse(option.Id)
+					if err != nil {
+						return models.UpdateSelectOption{}, err
+					}
 				}
 				return models.UpdateSelectOption{
 					ID:          id,

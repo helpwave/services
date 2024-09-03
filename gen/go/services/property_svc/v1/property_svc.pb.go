@@ -362,7 +362,7 @@ type UpdatePropertyRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id          string       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 	SubjectType *SubjectType `protobuf:"varint,2,opt,name=subject_type,json=subjectType,proto3,enum=services.property_svc.v1.SubjectType,oneof" json:"subject_type,omitempty"`
 	Name        *string      `protobuf:"bytes,4,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Description *string      `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`
