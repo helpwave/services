@@ -128,7 +128,7 @@ CREATE TABLE public.tasks (
     name text NOT NULL,
     description text DEFAULT ''::text NOT NULL,
     status integer NOT NULL,
-    assigned_user_id uuid DEFAULT public.uuid_nil(),
+    assigned_user_id uuid,
     patient_id uuid NOT NULL,
     public boolean DEFAULT false NOT NULL,
     created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
