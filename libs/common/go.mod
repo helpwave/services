@@ -10,8 +10,8 @@ replace (
 
 require (
 	github.com/coreos/go-oidc v2.2.1+incompatible
-	github.com/dapr/dapr v1.14.0
-	github.com/dapr/go-sdk v1.10.1
+	github.com/dapr/dapr v1.14.1
+	github.com/dapr/go-sdk v1.11.0
 	github.com/go-playground/validator/v10 v10.22.0
 	github.com/golang/protobuf v1.5.4
 	github.com/google/uuid v1.6.0

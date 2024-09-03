@@ -1,0 +1,64 @@
+
+relationships:
+  # Alice leads the A team
+  - "team:a#leader@user:alice"
+  # Bob leads the B team
+  - "team:b#leader@user:bob"
+  # Bob is also, explicitly, a member of the B team
+  - "team:b#member@user:bob"
+  # Charlie is a common member
+  - "team:a#member@user:charlie"
+  - "team:b#member@user:charlie"
+  # Clara is a common member, and leader of the A team
+  - "team:a#leader@user:clara"
+  - "team:a#member@user:clara"
+  - "team:b#member@user:clara"
+  # Oscar is only a member of one team (A team)
+  - "team:a#member@user:oscar"
+
+
+tests:
+  - name: leads are members
+    check:
+      - "team:a#membership@user:alice" # follows from leader
+      - "team:b#membership@user:bob" # follows from both member and leader
+
+  - name: leads only have permissions in their own team
+    check:
+      - not: "team:b#leadership@user:alice"
+      - not: "team:b#membership@user:alice"
+
+      # clara is a lead of a
+      - "team:a#leadership@user:clara"
+      - "team:a#membership@user:clara"
+      # but only a member in b
+      - not: "team:b#leadership@user:clara"
+      - "team:b#membership@user:clara"
+
+  - name: leaders can invite users
+    check:
+      - "team:a#leadership@user:alice"
+      - "team:a#invite_member@user:alice"
+
+  - name: members cant invite
+    check:
+      - not: "team:a#leadership@user:charlie"
+      - not: "team:a#invite_member@user:charlie"
+
+      - not: "team:b#leadership@user:charlie"
+      - not: "team:b#invite_member@user:charlie"
+
+  - name: leaders can remove users
+    check:
+        - "team:a#leadership@user:alice"
+        - "team:a#remove_member@user:alice"
+
+
+  - name: members cant remove users
+    check:
+      - not: "team:a#leadership@user:charlie"
+      - not: "team:a#remove_member@user:charlie"
+
+      - not: "team:b#leadership@user:charlie"
+      - not: "team:b#remove_member@user:charlie"
+

@@ -15,10 +15,10 @@ github.com/cespare/xxhash/v2 v2.3.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XL
 github.com/coreos/go-oidc v2.2.1+incompatible h1:mh48q/BqXqgjVHpy2ZY7WnWAbenxRjsz9N1i1YxjHAk=
 github.com/coreos/go-oidc v2.2.1+incompatible/go.mod h1:CgnwVTmzoESiwO9qyAFEMiHoZ1nMCKZlZ9V6mm3/LKc=
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
-github.com/dapr/dapr v1.14.0 h1:SIQsNX1kH31JRDIS4k8IZ6eomM/BAcOP844PhQIT+BQ=
-github.com/dapr/dapr v1.14.0/go.mod h1:oDNgaPHQIDZ3G4n4g89TElXWgkluYwcar41DI/oF4gw=
-github.com/dapr/go-sdk v1.10.1 h1:g6mM2RXyGkrzsqWFfCy8rw+UAt1edQEgRaQXT+XP4PE=
-github.com/dapr/go-sdk v1.10.1/go.mod h1:lPjyF/xubh35fbdNdKkxBbFxFNCmta4zmvsk0JxuUG0=
+github.com/dapr/dapr v1.14.1 h1:n+FGF82caTsBjmnmKdBfrO94GRuLeuYs6qrAN5oG4ZM=
+github.com/dapr/dapr v1.14.1/go.mod h1:oDNgaPHQIDZ3G4n4g89TElXWgkluYwcar41DI/oF4gw=
+github.com/dapr/go-sdk v1.11.0 h1:clANpOQd6MsfvSa6snaX8MVk6eRx26Vsj5GxGdQ6mpE=
+github.com/dapr/go-sdk v1.11.0/go.mod h1:btZ/tX8eYnx0fg3HiJUku8J5QBRXHsp3kAB1BUiTxXY=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

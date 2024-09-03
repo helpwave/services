@@ -29,6 +29,19 @@ services:
     ports:
       - "2113:2113"
 
+  spicedb:
+    image: authzed/spicedb:v1.31.0
+    ports:
+      - "50051:50051"
+    command: [
+      "serve",
+      "--grpc-preshared-key", "helpwave",
+      "--otel-endpoint", "jaeger:4317",
+      "--otel-insecure",
+      "--otel-sample-ratio", "1",
+      "--otel-provider", "otlpgrpc"
+    ]
+
   redis:
     image: redis:6
     restart: unless-stopped
@@ -69,7 +82,7 @@ services:
 
   # dapr sidecar for apisix
   apisix-dapr:
-    image: "daprio/daprd:1.14.0"
+    image: "daprio/daprd:1.14.1"
     restart: unless-stopped
     depends_on:
       - apisix
@@ -93,7 +106,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '10'
+        TAG: '12'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -109,13 +122,19 @@ services:
         condition: service_healthy
       consul:
         condition: service_started
+      spicedb:
+        condition: service_started
     environment:
       SECRETSTORE_REDIS_HOST: "redis:6379"
+      ZED_ENDPOINT: spicedb:50051
+      ZED_TOKEN: helpwave
+      ZED_INSECURE: true
     command:
       - /usr/bin/bash
       - -c
       - |
         bash migrate.sh
+        go run spice.go migrate
         dapr run --run-file dev/dapr_run.yaml --config dev/dapr.yaml
     restart: unless-stopped
     network_mode: "service:devcontainer" # share ports with devcontainer
@@ -126,7 +145,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '10'
+        TAG: '12'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -142,6 +161,11 @@ services:
       PGUSER: postgres
       PGPASSWORD: postgres
       PGDATABASE: postgres
+
+      # zed variables
+      ZED_ENDPOINT: spicedb:50051
+      ZED_TOKEN: helpwave
+      ZED_INSECURE: true
 
       COMPOSE_FILE: "/helpwave/dev/docker-compose.yaml" # allows us to use `docker compose` in any directory
     restart: unless-stopped

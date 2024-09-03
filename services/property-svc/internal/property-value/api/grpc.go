@@ -73,7 +73,7 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 	case *pb.AttachPropertyValueRequest_BoolValue:
 		value = req.GetBoolValue()
 	case *pb.AttachPropertyValueRequest_DateValue:
-		value = req.GetDateValue()
+		value = req.GetDateValue().Date
 	case *pb.AttachPropertyValueRequest_DateTimeValue:
 		value = req.GetDateTimeValue()
 	case *pb.AttachPropertyValueRequest_SelectValue:
@@ -137,9 +137,7 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 			case pv.Value.DateValue != nil:
 				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateValue{
 					DateValue: &pb.Date{
-						Day:   int32(pv.Value.DateValue.Day()),
-						Month: int32(pv.Value.DateValue.Month()),
-						Year:  int32(pv.Value.DateValue.Year()),
+						Date: timestamppb.New(*pv.Value.DateValue),
 					},
 				}
 			default:

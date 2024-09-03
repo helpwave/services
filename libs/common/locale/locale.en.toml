@@ -14,3 +14,7 @@ other = "is invalid"
 [RequiredError]
 description = "error returned, when a field is missing"
 other = "is required"
+
+[PermissionDeniedError]
+description = "error, when the user as insufficient permissions for an action"
+other = "Permission denied"
