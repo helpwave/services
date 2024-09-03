@@ -110,15 +110,13 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 	}
 
 	return &pb.GetTaskResponse{
-		Id:          task.ID.String(),
-		Name:        task.Name,
-		Description: task.Description,
-		AssignedUsers: hwutil.Map(task.AssignedUsers, func(userID uuid.UUID) string {
-			return userID.String()
-		}),
-		Subtasks:  subtasksRes,
-		Status:    task.Status,
-		CreatedAt: timestamppb.New(task.CreatedAt),
+		Id:             task.ID.String(),
+		Name:           task.Name,
+		Description:    task.Description,
+		AssignedUserId: hwutil.NullUUIDToStringPtr(task.AssignedUser),
+		Subtasks:       subtasksRes,
+		Status:         task.Status,
+		CreatedAt:      timestamppb.New(task.CreatedAt),
 	}, nil
 }
 
@@ -146,7 +144,7 @@ func (s *TaskGrpcService) GetTasksByPatient(ctx context.Context, req *pb.GetTask
 			CreatedAt:      timestamppb.New(item.CreatedAt),
 			DueAt:          timestamppb.New(item.DueAt),
 			Subtasks:       make([]*pb.GetTasksByPatientResponse_Task_SubTask, len(item.Subtasks)),
-			AssignedUserId: hwutil.PtrTo(item.AssignedUsers[0].String()), // TODO: #760
+			AssignedUserId: hwutil.NullUUIDToStringPtr(item.AssignedUser), // TODO: #760
 		}
 
 		subtaskIdx := 0
@@ -209,7 +207,7 @@ func (s *TaskGrpcService) GetTasksByPatientSortedByStatus(ctx context.Context, r
 					CreatedAt:      timestamppb.New(task.CreatedAt),
 					DueAt:          timestamppb.New(task.DueAt),
 					Subtasks:       make([]*pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask, len(task.Subtasks)),
-					AssignedUserId: hwutil.PtrTo(task.AssignedUsers[0].String()), // TODO: #760
+					AssignedUserId: hwutil.NullUUIDToStringPtr(task.AssignedUser), // TODO: #760
 				}
 
 				subtaskIdx := 0
@@ -260,7 +258,7 @@ func (s *TaskGrpcService) GetAssignedTasks(ctx context.Context, _ *pb.GetAssigne
 			CreatedAt:      timestamppb.New(item.CreatedAt),
 			DueAt:          timestamppb.New(item.DueAt),
 			Subtasks:       make([]*pb.GetAssignedTasksResponse_Task_SubTask, len(item.Subtasks)),
-			AssignedUserId: item.AssignedUsers[0].String(), // TODO: #760
+			AssignedUserId: item.AssignedUser.UUID.String(), // Safe, assignedUserId has to be set. TODO: #760
 			Patient: &pb.GetAssignedTasksResponse_Task_Patient{
 				Id:   item.PatientID.String(),
 				Name: item.Patient.HumanReadableIdentifier,

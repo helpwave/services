@@ -1864,7 +1864,7 @@ proto.services.tasks_svc.v1.GetTaskRequest.prototype.setId = function(value) {
  * @private {!Array<number>}
  * @const
  */
-proto.services.tasks_svc.v1.GetTaskResponse.repeatedFields_ = [4,5];
+proto.services.tasks_svc.v1.GetTaskResponse.repeatedFields_ = [5];
 
 
 
@@ -1900,7 +1900,7 @@ proto.services.tasks_svc.v1.GetTaskResponse.toObject = function(includeInstance,
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    assignedUsersList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
+    assignedUserId: jspb.Message.getFieldWithDefault(msg, 4, ""),
     subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
     proto.services.tasks_svc.v1.GetTaskResponse.Subtask.toObject, includeInstance),
     status: jspb.Message.getFieldWithDefault(msg, 6, 0),
@@ -1955,7 +1955,7 @@ proto.services.tasks_svc.v1.GetTaskResponse.deserializeBinaryFromReader = functi
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
-      msg.addAssignedUsers(value);
+      msg.setAssignedUserId(value);
       break;
     case 5:
       var value = new proto.services.tasks_svc.v1.GetTaskResponse.Subtask;
@@ -2021,9 +2021,9 @@ proto.services.tasks_svc.v1.GetTaskResponse.serializeBinaryToWriter = function(m
       f
     );
   }
-  f = message.getAssignedUsersList();
-  if (f.length > 0) {
-    writer.writeRepeatedString(
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
+    writer.writeString(
       4,
       f
     );
@@ -2299,39 +2299,38 @@ proto.services.tasks_svc.v1.GetTaskResponse.prototype.setDescription = function(
 
 
 /**
- * repeated string assigned_users = 4;
- * @return {!Array<string>}
+ * optional string assigned_user_id = 4;
+ * @return {string}
  */
-proto.services.tasks_svc.v1.GetTaskResponse.prototype.getAssignedUsersList = function() {
-  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 4));
-};
-
-
-/**
- * @param {!Array<string>} value
- * @return {!proto.services.tasks_svc.v1.GetTaskResponse} returns this
- */
-proto.services.tasks_svc.v1.GetTaskResponse.prototype.setAssignedUsersList = function(value) {
-  return jspb.Message.setField(this, 4, value || []);
+proto.services.tasks_svc.v1.GetTaskResponse.prototype.getAssignedUserId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
 /**
  * @param {string} value
- * @param {number=} opt_index
  * @return {!proto.services.tasks_svc.v1.GetTaskResponse} returns this
  */
-proto.services.tasks_svc.v1.GetTaskResponse.prototype.addAssignedUsers = function(value, opt_index) {
-  return jspb.Message.addToRepeatedField(this, 4, value, opt_index);
+proto.services.tasks_svc.v1.GetTaskResponse.prototype.setAssignedUserId = function(value) {
+  return jspb.Message.setField(this, 4, value);
 };
 
 
 /**
- * Clears the list making it empty but non-null.
+ * Clears the field making it undefined.
  * @return {!proto.services.tasks_svc.v1.GetTaskResponse} returns this
  */
-proto.services.tasks_svc.v1.GetTaskResponse.prototype.clearAssignedUsersList = function() {
-  return this.setAssignedUsersList([]);
+proto.services.tasks_svc.v1.GetTaskResponse.prototype.clearAssignedUserId = function() {
+  return jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.GetTaskResponse.prototype.hasAssignedUserId = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 

@@ -461,7 +461,7 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    $core.Iterable<$core.String>? assignedUsers,
+    $core.String? assignedUserId,
     $core.Iterable<GetTaskResponse_Subtask>? subtasks,
     $18.TaskStatus? status,
     $17.Timestamp? createdAt,
@@ -476,8 +476,8 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     if (description != null) {
       $result.description = description;
     }
-    if (assignedUsers != null) {
-      $result.assignedUsers.addAll(assignedUsers);
+    if (assignedUserId != null) {
+      $result.assignedUserId = assignedUserId;
     }
     if (subtasks != null) {
       $result.subtasks.addAll(subtasks);
@@ -498,7 +498,7 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..pPS(4, _omitFieldNames ? '' : 'assignedUsers')
+    ..aOS(4, _omitFieldNames ? '' : 'assignedUserId')
     ..pc<GetTaskResponse_Subtask>(5, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTaskResponse_Subtask.create)
     ..e<$18.TaskStatus>(6, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $18.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $18.TaskStatus.valueOf, enumValues: $18.TaskStatus.values)
     ..aOM<$17.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $17.Timestamp.create)
@@ -554,7 +554,13 @@ class GetTaskResponse extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.List<$core.String> get assignedUsers => $_getList(3);
+  $core.String get assignedUserId => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set assignedUserId($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasAssignedUserId() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearAssignedUserId() => clearField(4);
 
   @$pb.TagNumber(5)
   $core.List<GetTaskResponse_Subtask> get subtasks => $_getList(4);

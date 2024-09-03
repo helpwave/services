@@ -173,7 +173,7 @@ func (s *PatientGrpcService) GetPatientDetails(ctx context.Context, req *pb.GetP
 			Status:         item.Status,
 			Public:         item.Public,
 			Subtasks:       make([]*pb.GetPatientDetailsResponse_Task_SubTask, len(item.Subtasks)),
-			AssignedUserId: hwutil.PtrTo(item.AssignedUsers[0].String()), // TODO: #760
+			AssignedUserId: hwutil.NullUUIDToStringPtr(item.AssignedUser), // TODO: #760
 		}
 
 		subtaskIdx := 0
@@ -254,7 +254,7 @@ func (s *PatientGrpcService) GetPatientList(ctx context.Context, req *pb.GetPati
 					Status:         item.Status,
 					Public:         item.Public,
 					Subtasks:       make([]*pb.GetPatientListResponse_Task_SubTask, len(item.Subtasks)),
-					AssignedUserId: hwutil.PtrTo(item.AssignedUsers[0].String()), // TODO: #760
+					AssignedUserId: hwutil.NullUUIDToStringPtr(item.AssignedUser), // TODO: #760
 				}
 
 				subtaskIdx := 0
