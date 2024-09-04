@@ -541,7 +541,7 @@ export namespace GetTasksByPatientSortedByStatusResponse {
 
     export enum AssignedUserIdCase { 
       _ASSIGNED_USER_ID_NOT_SET = 0,
-      ASSIGNED_USER_ID = 5,
+      ASSIGNED_USER_ID = 4,
     }
   }
 

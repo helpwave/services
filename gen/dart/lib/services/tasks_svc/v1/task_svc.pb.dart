@@ -1156,13 +1156,13 @@ class GetTasksByPatientSortedByStatusResponse_Task extends $pb.GeneratedMessage 
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
-    ..aOS(6, _omitFieldNames ? '' : 'patientId')
-    ..aOB(7, _omitFieldNames ? '' : 'public')
-    ..aOM<$16.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $16.Timestamp.create)
-    ..aOS(9, _omitFieldNames ? '' : 'createdBy')
-    ..pc<GetTasksByPatientSortedByStatusResponse_Task_SubTask>(10, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTasksByPatientSortedByStatusResponse_Task_SubTask.create)
-    ..aOM<$16.Timestamp>(11, _omitFieldNames ? '' : 'createdAt', subBuilder: $16.Timestamp.create)
+    ..aOS(4, _omitFieldNames ? '' : 'assignedUserId')
+    ..aOS(5, _omitFieldNames ? '' : 'patientId')
+    ..aOB(6, _omitFieldNames ? '' : 'public')
+    ..aOM<$16.Timestamp>(7, _omitFieldNames ? '' : 'dueAt', subBuilder: $16.Timestamp.create)
+    ..aOS(8, _omitFieldNames ? '' : 'createdBy')
+    ..pc<GetTasksByPatientSortedByStatusResponse_Task_SubTask>(9, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTasksByPatientSortedByStatusResponse_Task_SubTask.create)
+    ..aOM<$16.Timestamp>(10, _omitFieldNames ? '' : 'createdAt', subBuilder: $16.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -1214,65 +1214,65 @@ class GetTasksByPatientSortedByStatusResponse_Task extends $pb.GeneratedMessage 
   @$pb.TagNumber(3)
   void clearDescription() => clearField(3);
 
-  @$pb.TagNumber(5)
+  @$pb.TagNumber(4)
   $core.String get assignedUserId => $_getSZ(3);
-  @$pb.TagNumber(5)
+  @$pb.TagNumber(4)
   set assignedUserId($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(5)
+  @$pb.TagNumber(4)
   $core.bool hasAssignedUserId() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearAssignedUserId() => clearField(4);
+
   @$pb.TagNumber(5)
-  void clearAssignedUserId() => clearField(5);
-
-  @$pb.TagNumber(6)
   $core.String get patientId => $_getSZ(4);
-  @$pb.TagNumber(6)
+  @$pb.TagNumber(5)
   set patientId($core.String v) { $_setString(4, v); }
-  @$pb.TagNumber(6)
+  @$pb.TagNumber(5)
   $core.bool hasPatientId() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearPatientId() => clearField(5);
+
   @$pb.TagNumber(6)
-  void clearPatientId() => clearField(6);
-
-  @$pb.TagNumber(7)
   $core.bool get public => $_getBF(5);
-  @$pb.TagNumber(7)
+  @$pb.TagNumber(6)
   set public($core.bool v) { $_setBool(5, v); }
-  @$pb.TagNumber(7)
+  @$pb.TagNumber(6)
   $core.bool hasPublic() => $_has(5);
-  @$pb.TagNumber(7)
-  void clearPublic() => clearField(7);
+  @$pb.TagNumber(6)
+  void clearPublic() => clearField(6);
 
-  @$pb.TagNumber(8)
+  @$pb.TagNumber(7)
   $16.Timestamp get dueAt => $_getN(6);
-  @$pb.TagNumber(8)
-  set dueAt($16.Timestamp v) { setField(8, v); }
-  @$pb.TagNumber(8)
+  @$pb.TagNumber(7)
+  set dueAt($16.Timestamp v) { setField(7, v); }
+  @$pb.TagNumber(7)
   $core.bool hasDueAt() => $_has(6);
-  @$pb.TagNumber(8)
-  void clearDueAt() => clearField(8);
-  @$pb.TagNumber(8)
+  @$pb.TagNumber(7)
+  void clearDueAt() => clearField(7);
+  @$pb.TagNumber(7)
   $16.Timestamp ensureDueAt() => $_ensure(6);
 
-  @$pb.TagNumber(9)
+  @$pb.TagNumber(8)
   $core.String get createdBy => $_getSZ(7);
-  @$pb.TagNumber(9)
+  @$pb.TagNumber(8)
   set createdBy($core.String v) { $_setString(7, v); }
-  @$pb.TagNumber(9)
+  @$pb.TagNumber(8)
   $core.bool hasCreatedBy() => $_has(7);
-  @$pb.TagNumber(9)
-  void clearCreatedBy() => clearField(9);
+  @$pb.TagNumber(8)
+  void clearCreatedBy() => clearField(8);
 
-  @$pb.TagNumber(10)
+  @$pb.TagNumber(9)
   $core.List<GetTasksByPatientSortedByStatusResponse_Task_SubTask> get subtasks => $_getList(8);
 
-  @$pb.TagNumber(11)
+  @$pb.TagNumber(10)
   $16.Timestamp get createdAt => $_getN(9);
-  @$pb.TagNumber(11)
-  set createdAt($16.Timestamp v) { setField(11, v); }
-  @$pb.TagNumber(11)
+  @$pb.TagNumber(10)
+  set createdAt($16.Timestamp v) { setField(10, v); }
+  @$pb.TagNumber(10)
   $core.bool hasCreatedAt() => $_has(9);
-  @$pb.TagNumber(11)
-  void clearCreatedAt() => clearField(11);
-  @$pb.TagNumber(11)
+  @$pb.TagNumber(10)
+  void clearCreatedAt() => clearField(10);
+  @$pb.TagNumber(10)
   $16.Timestamp ensureCreatedAt() => $_ensure(9);
 }
 

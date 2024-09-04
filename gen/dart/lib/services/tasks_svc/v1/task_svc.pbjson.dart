@@ -240,13 +240,13 @@ const GetTasksByPatientSortedByStatusResponse_Task$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
-    {'1': 'assigned_user_id', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'assignedUserId', '17': true},
-    {'1': 'patient_id', '3': 6, '4': 1, '5': 9, '10': 'patientId'},
-    {'1': 'public', '3': 7, '4': 1, '5': 8, '10': 'public'},
-    {'1': 'due_at', '3': 8, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'dueAt'},
-    {'1': 'created_by', '3': 9, '4': 1, '5': 9, '10': 'createdBy'},
-    {'1': 'subtasks', '3': 10, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask', '10': 'subtasks'},
-    {'1': 'created_at', '3': 11, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
+    {'1': 'assigned_user_id', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'assignedUserId', '17': true},
+    {'1': 'patient_id', '3': 5, '4': 1, '5': 9, '10': 'patientId'},
+    {'1': 'public', '3': 6, '4': 1, '5': 8, '10': 'public'},
+    {'1': 'due_at', '3': 7, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'dueAt'},
+    {'1': 'created_by', '3': 8, '4': 1, '5': 9, '10': 'createdBy'},
+    {'1': 'subtasks', '3': 9, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask', '10': 'subtasks'},
+    {'1': 'created_at', '3': 10, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
   ],
   '3': [GetTasksByPatientSortedByStatusResponse_Task_SubTask$json],
   '8': [
@@ -274,12 +274,12 @@ final $typed_data.Uint8List getTasksByPatientSortedByStatusResponseDescriptor = 
     'aW5Qcm9ncmVzcxJXCgRkb25lGAMgAygLMkMuc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldFRhc2'
     'tzQnlQYXRpZW50U29ydGVkQnlTdGF0dXNSZXNwb25zZS5UYXNrUgRkb25lGp8ECgRUYXNrEg4K'
     'AmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW9uGAMgASgJUg'
-    'tkZXNjcmlwdGlvbhItChBhc3NpZ25lZF91c2VyX2lkGAUgASgJSABSDmFzc2lnbmVkVXNlcklk'
-    'iAEBEh0KCnBhdGllbnRfaWQYBiABKAlSCXBhdGllbnRJZBIWCgZwdWJsaWMYByABKAhSBnB1Ym'
-    'xpYxIxCgZkdWVfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgVkdWVBdBId'
-    'CgpjcmVhdGVkX2J5GAkgASgJUgljcmVhdGVkQnkSZwoIc3VidGFza3MYCiADKAsySy5zZXJ2aW'
+    'tkZXNjcmlwdGlvbhItChBhc3NpZ25lZF91c2VyX2lkGAQgASgJSABSDmFzc2lnbmVkVXNlcklk'
+    'iAEBEh0KCnBhdGllbnRfaWQYBSABKAlSCXBhdGllbnRJZBIWCgZwdWJsaWMYBiABKAhSBnB1Ym'
+    'xpYxIxCgZkdWVfYXQYByABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgVkdWVBdBId'
+    'CgpjcmVhdGVkX2J5GAggASgJUgljcmVhdGVkQnkSZwoIc3VidGFza3MYCSADKAsySy5zZXJ2aW'
     'Nlcy50YXNrc19zdmMudjEuR2V0VGFza3NCeVBhdGllbnRTb3J0ZWRCeVN0YXR1c1Jlc3BvbnNl'
-    'LlRhc2suU3ViVGFza1IIc3VidGFza3MSOQoKY3JlYXRlZF9hdBgLIAEoCzIaLmdvb2dsZS5wcm'
+    'LlRhc2suU3ViVGFza1IIc3VidGFza3MSOQoKY3JlYXRlZF9hdBgKIAEoCzIaLmdvb2dsZS5wcm'
     '90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBpgCgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBIS'
     'CgRuYW1lGAIgASgJUgRuYW1lEhIKBGRvbmUYAyABKAhSBGRvbmUSHQoKY3JlYXRlZF9ieRgEIA'
     'EoCVIJY3JlYXRlZEJ5QhMKEV9hc3NpZ25lZF91c2VyX2lk');
