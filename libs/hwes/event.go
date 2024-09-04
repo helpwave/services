@@ -232,7 +232,7 @@ func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 
 	userID, err := common.GetUserID(ctx)
 	if err != nil {
-		return nil // don't set user, if no user available
+		return nil // don't set a user, if no user is available
 	}
 
 	e.CommitterUserID = &userID
