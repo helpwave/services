@@ -53,14 +53,11 @@ final $typed_data.Uint8List fieldTypeDescriptor = $convert.base64Decode(
 const Date$json = {
   '1': 'Date',
   '2': [
-    {'1': 'day', '3': 1, '4': 1, '5': 5, '10': 'day'},
-    {'1': 'month', '3': 2, '4': 1, '5': 5, '10': 'month'},
-    {'1': 'year', '3': 3, '4': 1, '5': 5, '10': 'year'},
+    {'1': 'date', '3': 1, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'date'},
   ],
 };
 
 /// Descriptor for `Date`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List dateDescriptor = $convert.base64Decode(
-    'CgREYXRlEhAKA2RheRgBIAEoBVIDZGF5EhQKBW1vbnRoGAIgASgFUgVtb250aBISCgR5ZWFyGA'
-    'MgASgFUgR5ZWFy');
+    'CgREYXRlEi4KBGRhdGUYASABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgRkYXRl');
 

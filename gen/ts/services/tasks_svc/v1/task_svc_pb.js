@@ -1864,7 +1864,7 @@ proto.services.tasks_svc.v1.GetTaskRequest.prototype.setId = function(value) {
  * @private {!Array<number>}
  * @const
  */
-proto.services.tasks_svc.v1.GetTaskResponse.repeatedFields_ = [4,5];
+proto.services.tasks_svc.v1.GetTaskResponse.repeatedFields_ = [5];
 
 
 
@@ -1900,7 +1900,7 @@ proto.services.tasks_svc.v1.GetTaskResponse.toObject = function(includeInstance,
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    assignedUsersList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
+    assignedUserId: jspb.Message.getFieldWithDefault(msg, 4, ""),
     subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
     proto.services.tasks_svc.v1.GetTaskResponse.Subtask.toObject, includeInstance),
     status: jspb.Message.getFieldWithDefault(msg, 6, 0),
@@ -1955,7 +1955,7 @@ proto.services.tasks_svc.v1.GetTaskResponse.deserializeBinaryFromReader = functi
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
-      msg.addAssignedUsers(value);
+      msg.setAssignedUserId(value);
       break;
     case 5:
       var value = new proto.services.tasks_svc.v1.GetTaskResponse.Subtask;
@@ -2021,9 +2021,9 @@ proto.services.tasks_svc.v1.GetTaskResponse.serializeBinaryToWriter = function(m
       f
     );
   }
-  f = message.getAssignedUsersList();
-  if (f.length > 0) {
-    writer.writeRepeatedString(
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
+  if (f != null) {
+    writer.writeString(
       4,
       f
     );
@@ -2299,39 +2299,38 @@ proto.services.tasks_svc.v1.GetTaskResponse.prototype.setDescription = function(
 
 
 /**
- * repeated string assigned_users = 4;
- * @return {!Array<string>}
+ * optional string assigned_user_id = 4;
+ * @return {string}
  */
-proto.services.tasks_svc.v1.GetTaskResponse.prototype.getAssignedUsersList = function() {
-  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 4));
-};
-
-
-/**
- * @param {!Array<string>} value
- * @return {!proto.services.tasks_svc.v1.GetTaskResponse} returns this
- */
-proto.services.tasks_svc.v1.GetTaskResponse.prototype.setAssignedUsersList = function(value) {
-  return jspb.Message.setField(this, 4, value || []);
+proto.services.tasks_svc.v1.GetTaskResponse.prototype.getAssignedUserId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
 /**
  * @param {string} value
- * @param {number=} opt_index
  * @return {!proto.services.tasks_svc.v1.GetTaskResponse} returns this
  */
-proto.services.tasks_svc.v1.GetTaskResponse.prototype.addAssignedUsers = function(value, opt_index) {
-  return jspb.Message.addToRepeatedField(this, 4, value, opt_index);
+proto.services.tasks_svc.v1.GetTaskResponse.prototype.setAssignedUserId = function(value) {
+  return jspb.Message.setField(this, 4, value);
 };
 
 
 /**
- * Clears the list making it empty but non-null.
+ * Clears the field making it undefined.
  * @return {!proto.services.tasks_svc.v1.GetTaskResponse} returns this
  */
-proto.services.tasks_svc.v1.GetTaskResponse.prototype.clearAssignedUsersList = function() {
-  return this.setAssignedUsersList([]);
+proto.services.tasks_svc.v1.GetTaskResponse.prototype.clearAssignedUserId = function() {
+  return jspb.Message.setField(this, 4, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.GetTaskResponse.prototype.hasAssignedUserId = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -3746,7 +3745,7 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.serializeBin
  * @private {!Array<number>}
  * @const
  */
-proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.repeatedFields_ = [10];
+proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.repeatedFields_ = [9];
 
 
 
@@ -3782,11 +3781,11 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.toObjec
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    assignedUserId: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    patientId: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    pb_public: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
+    assignedUserId: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    patientId: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    pb_public: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
     dueAt: (f = msg.getDueAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
-    createdBy: jspb.Message.getFieldWithDefault(msg, 9, ""),
+    createdBy: jspb.Message.getFieldWithDefault(msg, 8, ""),
     subtasksList: jspb.Message.toObjectList(msg.getSubtasksList(),
     proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask.toObject, includeInstance),
     createdAt: (f = msg.getCreatedAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
@@ -3838,33 +3837,33 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.deseria
       var value = /** @type {string} */ (reader.readString());
       msg.setDescription(value);
       break;
-    case 5:
+    case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setAssignedUserId(value);
       break;
-    case 6:
+    case 5:
       var value = /** @type {string} */ (reader.readString());
       msg.setPatientId(value);
       break;
-    case 7:
+    case 6:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setPublic(value);
       break;
-    case 8:
+    case 7:
       var value = new google_protobuf_timestamp_pb.Timestamp;
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
       msg.setDueAt(value);
       break;
-    case 9:
+    case 8:
       var value = /** @type {string} */ (reader.readString());
       msg.setCreatedBy(value);
       break;
-    case 10:
+    case 9:
       var value = new proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask;
       reader.readMessage(value,proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask.deserializeBinaryFromReader);
       msg.addSubtasks(value);
       break;
-    case 11:
+    case 10:
       var value = new google_protobuf_timestamp_pb.Timestamp;
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
       msg.setCreatedAt(value);
@@ -3919,31 +3918,31 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.seriali
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(message, 5));
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
   if (f != null) {
     writer.writeString(
-      5,
+      4,
       f
     );
   }
   f = message.getPatientId();
   if (f.length > 0) {
     writer.writeString(
-      6,
+      5,
       f
     );
   }
   f = message.getPublic();
   if (f) {
     writer.writeBool(
-      7,
+      6,
       f
     );
   }
   f = message.getDueAt();
   if (f != null) {
     writer.writeMessage(
-      8,
+      7,
       f,
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
@@ -3951,14 +3950,14 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.seriali
   f = message.getCreatedBy();
   if (f.length > 0) {
     writer.writeString(
-      9,
+      8,
       f
     );
   }
   f = message.getSubtasksList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      10,
+      9,
       f,
       proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask.serializeBinaryToWriter
     );
@@ -3966,7 +3965,7 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.seriali
   f = message.getCreatedAt();
   if (f != null) {
     writer.writeMessage(
-      11,
+      10,
       f,
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
@@ -4249,11 +4248,11 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
 
 
 /**
- * optional string assigned_user_id = 5;
+ * optional string assigned_user_id = 4;
  * @return {string}
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.getAssignedUserId = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
@@ -4262,7 +4261,7 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
  * @return {!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task} returns this
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.setAssignedUserId = function(value) {
-  return jspb.Message.setField(this, 5, value);
+  return jspb.Message.setField(this, 4, value);
 };
 
 
@@ -4271,7 +4270,7 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
  * @return {!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task} returns this
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.clearAssignedUserId = function() {
-  return jspb.Message.setField(this, 5, undefined);
+  return jspb.Message.setField(this, 4, undefined);
 };
 
 
@@ -4280,16 +4279,16 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
  * @return {boolean}
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.hasAssignedUserId = function() {
-  return jspb.Message.getField(this, 5) != null;
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * optional string patient_id = 6;
+ * optional string patient_id = 5;
  * @return {string}
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.getPatientId = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
@@ -4298,16 +4297,16 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
  * @return {!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task} returns this
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.setPatientId = function(value) {
-  return jspb.Message.setProto3StringField(this, 6, value);
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
 /**
- * optional bool public = 7;
+ * optional bool public = 6;
  * @return {boolean}
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.getPublic = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 7, false));
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 6, false));
 };
 
 
@@ -4316,17 +4315,17 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
  * @return {!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task} returns this
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.setPublic = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 7, value);
+  return jspb.Message.setProto3BooleanField(this, 6, value);
 };
 
 
 /**
- * optional google.protobuf.Timestamp due_at = 8;
+ * optional google.protobuf.Timestamp due_at = 7;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.getDueAt = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 8));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 7));
 };
 
 
@@ -4335,7 +4334,7 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
  * @return {!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task} returns this
 */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.setDueAt = function(value) {
-  return jspb.Message.setWrapperField(this, 8, value);
+  return jspb.Message.setWrapperField(this, 7, value);
 };
 
 
@@ -4353,16 +4352,16 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
  * @return {boolean}
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.hasDueAt = function() {
-  return jspb.Message.getField(this, 8) != null;
+  return jspb.Message.getField(this, 7) != null;
 };
 
 
 /**
- * optional string created_by = 9;
+ * optional string created_by = 8;
  * @return {string}
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.getCreatedBy = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
 };
 
 
@@ -4371,17 +4370,17 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
  * @return {!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task} returns this
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.setCreatedBy = function(value) {
-  return jspb.Message.setProto3StringField(this, 9, value);
+  return jspb.Message.setProto3StringField(this, 8, value);
 };
 
 
 /**
- * repeated SubTask subtasks = 10;
+ * repeated SubTask subtasks = 9;
  * @return {!Array<!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask>}
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.getSubtasksList = function() {
   return /** @type{!Array<!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask, 10));
+    jspb.Message.getRepeatedWrapperField(this, proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask, 9));
 };
 
 
@@ -4390,7 +4389,7 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
  * @return {!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task} returns this
 */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.setSubtasksList = function(value) {
-  return jspb.Message.setRepeatedWrapperField(this, 10, value);
+  return jspb.Message.setRepeatedWrapperField(this, 9, value);
 };
 
 
@@ -4400,7 +4399,7 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
  * @return {!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask}
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.addSubtasks = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 10, opt_value, proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 9, opt_value, proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask, opt_index);
 };
 
 
@@ -4414,12 +4413,12 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
 
 
 /**
- * optional google.protobuf.Timestamp created_at = 11;
+ * optional google.protobuf.Timestamp created_at = 10;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.getCreatedAt = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 11));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 10));
 };
 
 
@@ -4428,7 +4427,7 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
  * @return {!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task} returns this
 */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.setCreatedAt = function(value) {
-  return jspb.Message.setWrapperField(this, 11, value);
+  return jspb.Message.setWrapperField(this, 10, value);
 };
 
 
@@ -4446,7 +4445,7 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototy
  * @return {boolean}
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.prototype.hasCreatedAt = function() {
-  return jspb.Message.getField(this, 11) != null;
+  return jspb.Message.getField(this, 10) != null;
 };
 
 

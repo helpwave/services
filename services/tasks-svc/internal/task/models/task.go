@@ -11,14 +11,14 @@ type Task struct {
 	CreatedBy uuid.UUID
 	CreatedAt time.Time
 
-	Name          string
-	Description   string
-	Status        pb.TaskStatus
-	Public        bool
-	DueAt         time.Time
-	PatientID     uuid.UUID
-	AssignedUsers []uuid.UUID
-	Subtasks      map[uuid.UUID]Subtask
+	Name         string
+	Description  string
+	Status       pb.TaskStatus
+	Public       bool
+	DueAt        time.Time
+	PatientID    uuid.UUID
+	AssignedUser uuid.NullUUID
+	Subtasks     map[uuid.UUID]Subtask
 }
 
 type Subtask struct {

@@ -187,10 +187,10 @@ export class GetTaskResponse extends jspb.Message {
   getDescription(): string;
   setDescription(value: string): GetTaskResponse;
 
-  getAssignedUsersList(): Array<string>;
-  setAssignedUsersList(value: Array<string>): GetTaskResponse;
-  clearAssignedUsersList(): GetTaskResponse;
-  addAssignedUsers(value: string, index?: number): GetTaskResponse;
+  getAssignedUserId(): string;
+  setAssignedUserId(value: string): GetTaskResponse;
+  hasAssignedUserId(): boolean;
+  clearAssignedUserId(): GetTaskResponse;
 
   getSubtasksList(): Array<GetTaskResponse.Subtask>;
   setSubtasksList(value: Array<GetTaskResponse.Subtask>): GetTaskResponse;
@@ -218,7 +218,7 @@ export namespace GetTaskResponse {
     id: string,
     name: string,
     description: string,
-    assignedUsersList: Array<string>,
+    assignedUserId?: string,
     subtasksList: Array<GetTaskResponse.Subtask.AsObject>,
     status: services_tasks_svc_v1_types_pb.TaskStatus,
     createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
@@ -250,6 +250,11 @@ export namespace GetTaskResponse {
     }
   }
 
+
+  export enum AssignedUserIdCase { 
+    _ASSIGNED_USER_ID_NOT_SET = 0,
+    ASSIGNED_USER_ID = 4,
+  }
 }
 
 export class GetTasksByPatientRequest extends jspb.Message {
@@ -536,7 +541,7 @@ export namespace GetTasksByPatientSortedByStatusResponse {
 
     export enum AssignedUserIdCase { 
       _ASSIGNED_USER_ID_NOT_SET = 0,
-      ASSIGNED_USER_ID = 5,
+      ASSIGNED_USER_ID = 4,
     }
   }
 

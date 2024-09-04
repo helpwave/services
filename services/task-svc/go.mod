@@ -17,7 +17,7 @@ require (
 	common v0.0.0
 	decaying_lru v0.0.0
 	gen v0.0.0
-	github.com/dapr/go-sdk v1.10.1
+	github.com/dapr/go-sdk v1.11.0
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.6.0
 	github.com/nicksnyder/go-i18n/v2 v2.4.0
@@ -35,7 +35,7 @@ require (
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
-	github.com/dapr/dapr v1.14.0 // indirect
+	github.com/dapr/dapr v1.14.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect

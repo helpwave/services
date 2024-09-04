@@ -34,24 +34,24 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 			} else {
 				task = &models.TaskWithPatient{
 					Task: models.Task{
-						ID:            row.Task.ID,
-						Name:          row.Task.Name,
-						Description:   row.Task.Description,
-						Status:        pb.TaskStatus(row.Task.Status),
-						AssignedUsers: []uuid.UUID{row.Task.AssignedUserID.UUID}, // TODO: #760
-						Public:        row.Task.Public,
-						DueAt:         row.Task.DueAt.Time,
-						PatientID:     row.Patient.ID,
-						CreatedBy:     row.Task.CreatedBy,
-						CreatedAt:     row.Task.CreatedAt.Time,
-						Subtasks:      make(map[uuid.UUID]models.Subtask),
+						ID:           row.Task.ID,
+						Name:         row.Task.Name,
+						Description:  row.Task.Description,
+						Status:       pb.TaskStatus(row.Task.Status),
+						AssignedUser: row.Task.AssignedUserID, // TODO: #760
+						Public:       row.Task.Public,
+						DueAt:        row.Task.DueAt.Time,
+						PatientID:    row.Patient.ID,
+						CreatedBy:    row.Task.CreatedBy,
+						CreatedAt:    row.Task.CreatedAt.Time,
+						Subtasks:     make(map[uuid.UUID]models.Subtask),
 					},
 					Patient: models.Patient{
 						ID:                      row.Patient.ID,
 						HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
 						Notes:                   row.Patient.Notes,
 						BedID:                   row.Patient.BedID,
-						IsDischarged:            row.Patient.IsDischarged != 0,
+						IsDischarged:            row.Patient.IsDischarged,
 					},
 				}
 				tasks = append(tasks, task)

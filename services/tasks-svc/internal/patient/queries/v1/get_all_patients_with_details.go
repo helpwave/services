@@ -54,7 +54,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 						HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
 						Notes:                   row.Patient.Notes,
 						BedID:                   row.Patient.BedID,
-						IsDischarged:            row.Patient.IsDischarged != 0,
+						IsDischarged:            row.Patient.IsDischarged,
 						CreatedAt:               row.Patient.CreatedAt.Time,
 						UpdatedAt:               row.Patient.UpdatedAt.Time,
 					},
@@ -73,14 +73,14 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 				task = patientDetail.Tasks[taskIx]
 			} else {
 				task = &tasksModels.Task{
-					ID:            row.TaskID.UUID,
-					Name:          *row.TaskName,
-					Description:   *row.TaskDescription,
-					Status:        pb.TaskStatus(*row.TaskStatus),
-					AssignedUsers: []uuid.UUID{row.TaskAssignedUserID.UUID}, // TODO: #760
-					PatientID:     row.Patient.ID,
-					Public:        *row.TaskPublic,
-					Subtasks:      make(map[uuid.UUID]tasksModels.Subtask),
+					ID:           row.TaskID.UUID,
+					Name:         *row.TaskName,
+					Description:  *row.TaskDescription,
+					Status:       pb.TaskStatus(*row.TaskStatus),
+					AssignedUser: row.TaskAssignedUserID, // TODO: #760
+					PatientID:    row.Patient.ID,
+					Public:       *row.TaskPublic,
+					Subtasks:     make(map[uuid.UUID]tasksModels.Subtask),
 				}
 				patientDetail.Tasks = append(patientDetail.Tasks, task)
 				tasksMap[row.TaskID.UUID] = len(patientDetail.Tasks) - 1

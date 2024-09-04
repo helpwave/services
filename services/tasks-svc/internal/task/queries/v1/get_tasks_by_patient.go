@@ -30,17 +30,17 @@ func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 				task = tasks[ix]
 			} else {
 				task = &models.Task{
-					ID:            row.Task.ID,
-					Name:          row.Task.Name,
-					Description:   row.Task.Description,
-					Status:        pb.TaskStatus(row.Task.Status),
-					AssignedUsers: []uuid.UUID{row.Task.AssignedUserID.UUID}, // TODO: #760
-					PatientID:     row.Task.PatientID,
-					Public:        row.Task.Public,
-					DueAt:         row.Task.DueAt.Time,
-					CreatedBy:     row.Task.CreatedBy,
-					CreatedAt:     row.Task.CreatedAt.Time,
-					Subtasks:      make(map[uuid.UUID]models.Subtask),
+					ID:           row.Task.ID,
+					Name:         row.Task.Name,
+					Description:  row.Task.Description,
+					Status:       pb.TaskStatus(row.Task.Status),
+					AssignedUser: row.Task.AssignedUserID, // TODO: #760
+					PatientID:    row.Task.PatientID,
+					Public:       row.Task.Public,
+					DueAt:        row.Task.DueAt.Time,
+					CreatedBy:    row.Task.CreatedBy,
+					CreatedAt:    row.Task.CreatedAt.Time,
+					Subtasks:     make(map[uuid.UUID]models.Subtask),
 				}
 				tasks = append(tasks, task)
 				tasksMap[row.Task.ID] = len(tasks) - 1
