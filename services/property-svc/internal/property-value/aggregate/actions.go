@@ -9,7 +9,7 @@ import (
 func (a *PropertyValueAggregate) CreatePropertyValue(ctx context.Context, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) error {
 	id := a.GetID()
 
-	event, err := propertyEventsV1.NewPropertyValueCreatedEvent(a, id, propertyID, value, subjectID)
+	event, err := propertyEventsV1.NewPropertyValueCreatedEvent(ctx, a, id, propertyID, value, subjectID)
 	if err != nil {
 		return err
 	}
@@ -17,7 +17,7 @@ func (a *PropertyValueAggregate) CreatePropertyValue(ctx context.Context, proper
 }
 
 func (a *PropertyValueAggregate) UpdatePropertyValue(ctx context.Context, value interface{}) error {
-	event, err := propertyEventsV1.NewPropertyValueUpdatedEvent(a, value)
+	event, err := propertyEventsV1.NewPropertyValueUpdatedEvent(ctx, a, value)
 	if err != nil {
 		return err
 	}

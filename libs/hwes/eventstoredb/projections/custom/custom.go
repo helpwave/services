@@ -165,7 +165,6 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 // and calls the according event handler based on the received event
 // This function blocks the thread until the passed context gets canceled
 func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, stream *esdb.PersistentSubscription, esdbEvent *esdb.PersistentSubscriptionEvent) error {
-	// TODO: Connect with source trace?
 	ctx, span, log := telemetry.StartSpan(ctx, "custom_projection.processReceivedEventFromStream")
 	defer span.End()
 
@@ -191,6 +190,27 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 			Str("EventType", esdbEvent.EventAppeared.Event.Event.EventType).
 			Msg("could not create new event from recorded event")
 		return nil
+	}
+
+	//
+	// change tracing spans
+	//
+	if event.TraceParent != "" {
+		ctx = telemetry.FromTraceParent(ctx, event.TraceParent)
+
+		// end old span, start new one
+		span.End()
+		ctx, span, log = telemetry.StartSpan(ctx, "custom_projection.processReceivedEventFromStream")
+		defer span.End()
+
+		// set attributes
+		log = log.With().
+			Str("subscription_group_name", p.subscriptionGroupName).
+			Str("esdbEventID", event.EventID.String()).
+			Logger()
+
+		telemetry.SetSpanStr(ctx, "subscription_group_name", p.subscriptionGroupName)
+		telemetry.SetSpanStr(ctx, "esdbEventID", event.EventID.String())
 	}
 
 	log.Debug().Dict("event", event.GetZerologDict()).Msg("process event")

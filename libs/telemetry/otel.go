@@ -7,6 +7,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
 	"reflect"
 )
@@ -54,6 +55,21 @@ func SetSpanStr(ctx context.Context, key, value string) {
 
 func SetSpanBool(ctx context.Context, key string, value bool) {
 	SetSpanAttributes(ctx, attribute.Bool(key, value))
+}
+
+// TraceParent returns the w3c Trace Context traceparent header for a SpanContext, and if the span context is valid
+func TraceParent(ctx context.Context) string {
+	propagator := propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{})
+	carrier := propagation.MapCarrier{}
+	propagator.Inject(ctx, carrier)
+	return carrier["traceparent"]
+}
+
+// FromTraceParent yields a new context using a propagated w3c traceparent header
+func FromTraceParent(ctx context.Context, traceparent string) context.Context {
+	propagator := propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{})
+	carrier := propagation.MapCarrier{"traceparent": traceparent}
+	return propagator.Extract(ctx, carrier)
 }
 
 // zerologTraceHook calls addSpanIdToLogEvent and TODO for log events

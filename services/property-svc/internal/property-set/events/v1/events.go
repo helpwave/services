@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"context"
 	"github.com/google/uuid"
 	"hwes"
 )
@@ -14,10 +15,10 @@ type PropertySetCreatedEvent struct {
 	Name string `json:"name"`
 }
 
-func NewPropertySetCreatedEvent(a hwes.Aggregate, id uuid.UUID, name string) (hwes.Event, error) {
+func NewPropertySetCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, name string) (hwes.Event, error) {
 	payload := PropertySetCreatedEvent{
 		ID:   id.String(),
 		Name: name,
 	}
-	return hwes.NewEvent(a, PropertySetCreated, hwes.WithData(payload))
+	return hwes.NewEvent(a, PropertySetCreated, hwes.WithData(payload), hwes.WithContext(ctx))
 }
