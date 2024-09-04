@@ -2,9 +2,9 @@ ALTER TABLE patients ADD COLUMN temp_is_discharged BOOLEAN DEFAULT FALSE NOT NUL
 
 UPDATE patients
 SET temp_is_discharged = CASE
-							WHEN is_discharged = 0 THEN FALSE
-							ELSE TRUE
-						 END;
+		WHEN is_discharged = 0 THEN FALSE
+		ELSE TRUE
+	END;
 
 ALTER TABLE patients DROP COLUMN is_discharged;
 
