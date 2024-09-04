@@ -51,7 +51,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 						HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
 						Notes:                   row.Patient.Notes,
 						BedID:                   row.Patient.BedID,
-						IsDischarged:            row.Patient.IsDischarged != 0,
+						IsDischarged:            row.Patient.IsDischarged,
 					},
 				}
 				tasks = append(tasks, task)

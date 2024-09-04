@@ -20,9 +20,9 @@ type Patient struct {
 	HumanReadableIdentifier string
 	Notes                   string
 	BedID                   uuid.NullUUID
-	IsDischarged            int32
 	CreatedAt               pgtype.Timestamp
 	UpdatedAt               pgtype.Timestamp
+	IsDischarged            bool
 }
 
 type Room struct {

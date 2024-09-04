@@ -30,7 +30,7 @@ func NewGetPatientByBedQueryHandler() GetPatientByBedQueryHandler {
 			HumanReadableIdentifier: patient.HumanReadableIdentifier,
 			Notes:                   patient.Notes,
 			BedID:                   patient.BedID,
-			IsDischarged:            patient.IsDischarged != 0,
+			IsDischarged:            patient.IsDischarged,
 			CreatedAt:               patient.CreatedAt.Time,
 			UpdatedAt:               patient.UpdatedAt.Time,
 		}, nil

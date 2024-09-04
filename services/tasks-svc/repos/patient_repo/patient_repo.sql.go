@@ -39,7 +39,7 @@ func (q *Queries) CreatePatient(ctx context.Context, arg CreatePatientParams) er
 
 const getAllPatientsWithTasksBedAndRoom = `-- name: GetAllPatientsWithTasksBedAndRoom :many
 SELECT
-	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at,
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged,
 	tasks.id as task_id,
 	tasks.name as task_name,
 	tasks.description as task_description,
@@ -93,9 +93,9 @@ func (q *Queries) GetAllPatientsWithTasksBedAndRoom(ctx context.Context) ([]GetA
 			&i.Patient.HumanReadableIdentifier,
 			&i.Patient.Notes,
 			&i.Patient.BedID,
-			&i.Patient.IsDischarged,
 			&i.Patient.CreatedAt,
 			&i.Patient.UpdatedAt,
+			&i.Patient.IsDischarged,
 			&i.TaskID,
 			&i.TaskName,
 			&i.TaskDescription,
@@ -122,7 +122,7 @@ func (q *Queries) GetAllPatientsWithTasksBedAndRoom(ctx context.Context) ([]GetA
 }
 
 const getPatientByBed = `-- name: GetPatientByBed :one
-SELECT patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at
+SELECT patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged
 FROM patients
 WHERE bed_id = $1
 	LIMIT 1
@@ -136,16 +136,16 @@ func (q *Queries) GetPatientByBed(ctx context.Context, bedID uuid.NullUUID) (Pat
 		&i.HumanReadableIdentifier,
 		&i.Notes,
 		&i.BedID,
-		&i.IsDischarged,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.IsDischarged,
 	)
 	return i, err
 }
 
 const getPatientWithBedAndRoom = `-- name: GetPatientWithBedAndRoom :one
 SELECT
-	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at,
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged,
 	beds.name as bed_name,
 	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
 FROM patients
@@ -160,9 +160,9 @@ type GetPatientWithBedAndRoomRow struct {
 	HumanReadableIdentifier string
 	Notes                   string
 	BedID                   uuid.NullUUID
-	IsDischarged            int32
 	CreatedAt               pgtype.Timestamp
 	UpdatedAt               pgtype.Timestamp
+	IsDischarged            bool
 	BedName                 *string
 	RoomID                  uuid.NullUUID
 	RoomName                *string
@@ -177,9 +177,9 @@ func (q *Queries) GetPatientWithBedAndRoom(ctx context.Context, patientID uuid.U
 		&i.HumanReadableIdentifier,
 		&i.Notes,
 		&i.BedID,
-		&i.IsDischarged,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.IsDischarged,
 		&i.BedName,
 		&i.RoomID,
 		&i.RoomName,
@@ -190,7 +190,7 @@ func (q *Queries) GetPatientWithBedAndRoom(ctx context.Context, patientID uuid.U
 
 const getPatientsByWard = `-- name: GetPatientsByWard :many
 SELECT
-	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.is_discharged, patients.created_at, patients.updated_at
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged
 FROM patients
 		 JOIN beds ON patients.bed_id = beds.id
 		 JOIN rooms ON beds.room_id = rooms.id
@@ -211,9 +211,9 @@ func (q *Queries) GetPatientsByWard(ctx context.Context, wardID uuid.UUID) ([]Pa
 			&i.HumanReadableIdentifier,
 			&i.Notes,
 			&i.BedID,
-			&i.IsDischarged,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.IsDischarged,
 		); err != nil {
 			return nil, err
 		}
@@ -239,7 +239,7 @@ type UpdatePatientParams struct {
 	HumanReadableIdentfier *string
 	Notes                  *string
 	UpdatedAt              pgtype.Timestamp
-	IsDischarged           *int32
+	IsDischarged           *bool
 }
 
 func (q *Queries) UpdatePatient(ctx context.Context, arg UpdatePatientParams) error {

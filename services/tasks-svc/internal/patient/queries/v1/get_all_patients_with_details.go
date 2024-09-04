@@ -54,7 +54,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 						HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
 						Notes:                   row.Patient.Notes,
 						BedID:                   row.Patient.BedID,
-						IsDischarged:            row.Patient.IsDischarged != 0,
+						IsDischarged:            row.Patient.IsDischarged,
 						CreatedAt:               row.Patient.CreatedAt.Time,
 						UpdatedAt:               row.Patient.UpdatedAt.Time,
 					},

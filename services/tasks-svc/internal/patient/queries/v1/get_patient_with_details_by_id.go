@@ -56,7 +56,7 @@ func NewGetPatientWithDetailsByIDQueryHandler(as hwes.AggregateStore) GetPatient
 				HumanReadableIdentifier: patientRes.HumanReadableIdentifier,
 				Notes:                   patientRes.Notes,
 				BedID:                   patientRes.BedID,
-				IsDischarged:            patientRes.IsDischarged != 0,
+				IsDischarged:            patientRes.IsDischarged,
 				CreatedAt:               patientRes.CreatedAt.Time,
 				UpdatedAt:               patientRes.UpdatedAt.Time,
 			},
