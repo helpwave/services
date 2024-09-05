@@ -74,9 +74,11 @@ func (m *PropertyRuleCreatedEvent) FromJSON(data []byte) error {
 		rule.Matchers = taskMatchers
 		m.PropertyViewRule = rule
 		return nil
+	} else if patientMatchers, ok := models.PatientPropertyMatchersFromMap(inter["Matchers"]); ok {
+		rule.Matchers = patientMatchers
+		m.PropertyViewRule = rule
+		return nil
 	}
-
-	// add other matchers once we have more
 
 	return errors.New("could not find matcher in event")
 }

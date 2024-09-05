@@ -10,6 +10,8 @@ import (
 	"github.com/google/uuid"
 )
 
+const TaskPropertyMatcherType = "task_property_matcher"
+
 // TaskPropertyMatchers implements PropertyMatchers
 type TaskPropertyMatchers struct {
 	WardID uuid.NullUUID `json:"ward_id,omitempty"`
@@ -38,6 +40,10 @@ func (r queryTaskPropertiesRow) GetDontAlwaysInclude() bool {
 
 func (r queryTaskPropertiesRow) GetSpecificity() int32 {
 	return r.Specificity
+}
+
+func (m TaskPropertyMatchers) GetType() string {
+	return TaskPropertyMatcherType
 }
 
 func (m TaskPropertyMatchers) QueryProperties(ctx context.Context) ([]PropertiesQueryRow, error) {
@@ -74,6 +80,9 @@ func (m TaskPropertyMatchers) ToMap() map[string]interface{} {
 	} else {
 		mp["TaskId"] = nil
 	}
+
+	mp["PropertyMatcherType"] = m.GetType()
+
 	return mp
 }
 
@@ -81,6 +90,11 @@ func TaskPropertyMatchersFromMap(m interface{}) (TaskPropertyMatchers, bool) {
 	mp, ok := m.(map[string]interface{})
 	if !ok {
 		// not even a map
+		return TaskPropertyMatchers{}, false
+	}
+
+	propertyMatcherType, ok := mp["PropertyMatcherType"]
+	if !ok || propertyMatcherType != TaskPropertyMatcherType {
 		return TaskPropertyMatchers{}, false
 	}
 

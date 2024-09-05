@@ -49,7 +49,7 @@ func DeMuxMatchers(req MatchersRequest) (viewModels.PropertyMatchers, error) {
 			return nil, err
 		}
 
-		matcher = viewModels.PatientPropertyMatcher{
+		matcher = viewModels.PatientPropertyMatchers{
 			WardID:    wardID,
 			PatientID: patientID,
 		}

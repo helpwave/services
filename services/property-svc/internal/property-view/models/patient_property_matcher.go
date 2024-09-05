@@ -9,12 +9,14 @@ import (
 	"property-svc/repos/patient_views_repo"
 )
 
-type PatientPropertyMatcher struct {
+const PatientPropertyMatcherType = "patient_property_matcher"
+
+type PatientPropertyMatchers struct {
 	WardID    uuid.NullUUID `json:"ward_id,omitempty"`
 	PatientID uuid.NullUUID `json:"patient_id,omitempty"`
 }
 
-func (m PatientPropertyMatcher) FindExactRuleId(ctx context.Context) (*uuid.UUID, error) {
+func (m PatientPropertyMatchers) FindExactRuleId(ctx context.Context) (*uuid.UUID, error) {
 	patientViews := patient_views_repo.New(hwdb.GetDB())
 	return hwdb.Optional(patientViews.GetPatientRuleIdUsingExactMatchers)(ctx, patient_views_repo.GetPatientRuleIdUsingExactMatchersParams{
 		WardID:    m.WardID,
@@ -38,7 +40,11 @@ func (r queryPatientPropertiesRow) GetSpecificity() int32 {
 	return r.Specificity
 }
 
-func (m PatientPropertyMatcher) QueryProperties(ctx context.Context) ([]PropertiesQueryRow, error) {
+func (m PatientPropertyMatchers) GetType() string {
+	return PatientPropertyMatcherType
+}
+
+func (m PatientPropertyMatchers) QueryProperties(ctx context.Context) ([]PropertiesQueryRow, error) {
 	patientViews := patient_views_repo.New(hwdb.GetDB())
 
 	rows, err := patientViews.GetPatientPropertiesUsingMatchers(ctx, patient_views_repo.GetPatientPropertiesUsingMatchersParams{
@@ -53,14 +59,14 @@ func (m PatientPropertyMatcher) QueryProperties(ctx context.Context) ([]Properti
 	return hwutil.Map(rows, cast), err
 }
 
-func (m PatientPropertyMatcher) GetSubjectId() (uuid.UUID, error) {
+func (m PatientPropertyMatchers) GetSubjectId() (uuid.UUID, error) {
 	if !m.PatientID.Valid {
 		return uuid.UUID{}, errors.New("PatientPropertyMatchers GetSubjectId: PatientID not valid")
 	}
 	return m.PatientID.UUID, nil
 }
 
-func (m PatientPropertyMatcher) ToMap() map[string]interface{} {
+func (m PatientPropertyMatchers) ToMap() map[string]interface{} {
 	mp := make(map[string]interface{})
 	if m.WardID.Valid {
 		mp["WardID"] = m.WardID.UUID.String()
@@ -72,5 +78,43 @@ func (m PatientPropertyMatcher) ToMap() map[string]interface{} {
 	} else {
 		mp["PatientID"] = nil
 	}
+
+	mp["PropertyMatcherType"] = m.GetType()
+
 	return mp
+}
+
+func PatientPropertyMatchersFromMap(m interface{}) (PatientPropertyMatchers, bool) {
+	mp, ok := m.(map[string]interface{})
+	if !ok {
+		return PatientPropertyMatchers{}, false
+	}
+
+	propertyMatcherType, ok := mp["PropertyMatcherType"]
+	if !ok || propertyMatcherType != PatientPropertyMatcherType {
+		return PatientPropertyMatchers{}, false
+	}
+
+	matcher := PatientPropertyMatchers{}
+
+	if wardIDRaw, ok := mp["WardID"].(string); ok {
+		parsed, err := hwutil.ParseNullUUID(&wardIDRaw)
+		if err != nil {
+			return PatientPropertyMatchers{}, false
+		}
+		matcher.WardID = parsed
+	} else {
+		matcher.WardID = uuid.NullUUID{Valid: false}
+	}
+	if patientIDRaw, ok := mp["PatientID"].(string); ok {
+		parsed, err := hwutil.ParseNullUUID(&patientIDRaw)
+		if err != nil {
+			return PatientPropertyMatchers{}, false
+		}
+		matcher.PatientID = parsed
+	} else {
+		matcher.PatientID = uuid.NullUUID{Valid: false}
+	}
+
+	return matcher, true
 }

@@ -23,6 +23,9 @@ type PropertyMatchers interface {
 	QueryProperties(context.Context) ([]PropertiesQueryRow, error)
 
 	GetSubjectId() (uuid.UUID, error)
+
+	// returns the respective type identifier of the property matcher
+	GetType() string
 }
 
 type PropertyViewRule struct {
