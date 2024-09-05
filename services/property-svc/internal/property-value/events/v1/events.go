@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"context"
 	"github.com/google/uuid"
 	"hwes"
 )
@@ -17,23 +18,23 @@ type PropertyValueCreatedEvent struct {
 	SubjectID  string      `json:"subject_id"`
 }
 
-func NewPropertyValueCreatedEvent(a hwes.Aggregate, id uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) (hwes.Event, error) {
+func NewPropertyValueCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) (hwes.Event, error) {
 	payload := PropertyValueCreatedEvent{
 		ID:         id.String(),
 		PropertyID: propertyID.String(),
 		Value:      value,
 		SubjectID:  subjectID.String(),
 	}
-	return hwes.NewEvent(a, PropertyValueCreated, hwes.WithData(payload))
+	return hwes.NewEvent(a, PropertyValueCreated, hwes.WithData(payload), hwes.WithContext(ctx))
 }
 
 type PropertyValueUpdatedEvent struct {
 	Value interface{} `json:"value"`
 }
 
-func NewPropertyValueUpdatedEvent(a hwes.Aggregate, value interface{}) (hwes.Event, error) {
+func NewPropertyValueUpdatedEvent(ctx context.Context, a hwes.Aggregate, value interface{}) (hwes.Event, error) {
 	payload := PropertyValueUpdatedEvent{
 		Value: value,
 	}
-	return hwes.NewEvent(a, PropertyValueUpdated, hwes.WithData(payload))
+	return hwes.NewEvent(a, PropertyValueUpdated, hwes.WithData(payload), hwes.WithContext(ctx))
 }

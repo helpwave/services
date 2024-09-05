@@ -16,19 +16,31 @@ import (
 )
 
 type Event struct {
-	EventID         uuid.UUID
-	EventType       string
-	AggregateID     uuid.UUID
-	AggregateType   AggregateType
-	Data            []byte
-	Timestamp       time.Time
-	Version         uint64
+	// identifier of this event
+	EventID uuid.UUID
+	// constant which can be used to route this event to its handler(s)
+	EventType string
+	// identifier of the aggregate that this event has an effect on
+	AggregateID uuid.UUID
+	// type of the aggregate that this event has an effect on
+	AggregateType AggregateType
+	// payload of the event, must be json
+	Data []byte
+	// time of event creation
+	Timestamp time.Time
+	// event's revision number (event's can, but should not be modified)
+	Version uint64
+	// user responsible for this event
 	CommitterUserID *uuid.UUID
+	// w3c trace context
+	TraceParent string
 }
 
 type metadata struct {
 	// CommitterUserID represents an optional UUID that identifies the user that is directly responsible for this event
 	CommitterUserID string `json:"committer_user_id"`
+	// w3c trace context
+	TraceParent string `json:"trace_parent"`
 	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is discouraged.
 	Timestamp time.Time `json:"timestamp"`
 }
@@ -39,6 +51,7 @@ type EventOption func(*Event) error
 // WithContext applies SetCommitterFromCtx after construction
 func WithContext(ctx context.Context) EventOption {
 	return func(event *Event) error {
+		event.SetTracingContextFromCtx(ctx)
 		return event.SetCommitterFromCtx(ctx)
 	}
 }
@@ -129,6 +142,7 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 		Timestamp:       md.Timestamp,
 		Version:         esdbEvent.EventNumber,
 		CommitterUserID: nil,
+		TraceParent:     md.TraceParent,
 	}
 
 	eventCommitterUserID, err := uuid.Parse(md.CommitterUserID)
@@ -163,6 +177,7 @@ func (e *Event) GetVersion() uint64 {
 
 func (e *Event) ToEventData() (esdb.EventData, error) {
 	md := metadata{
+    TraceParent: e.TraceParent,
 		Timestamp: e.Timestamp,
 	}
 	if e.CommitterUserID != nil {
@@ -221,8 +236,9 @@ func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 
 	userID, err := common.GetUserID(ctx)
 	if err != nil {
-		return err
+		return nil // don't set a user, if no user is available
 	}
+
 	e.CommitterUserID = &userID
 
 	// Just to make sure we are actually dealing with a valid UUID
@@ -234,16 +250,25 @@ func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 	return nil
 }
 
+// SetTracingContextFromCtx propagates the currently active span in the context
+func (e *Event) SetTracingContextFromCtx(ctx context.Context) {
+	ctx, span, _ := telemetry.StartSpan(ctx, "SetTracingContextFromCtx")
+	e.TraceParent = telemetry.TraceParent(ctx)
+	span.End()
+}
+
 // GetZerologDict to enrich some logs
 //
 // Example:
 //
 // zerolog.Ctx(ctx).Debug().Dict("event", event.GetZerologDict()).Msg("process event")
 func (e *Event) GetZerologDict() *zerolog.Event {
+
 	dict := zerolog.Dict().
 		Str("eventId", e.EventID.String()).
 		Str("eventType", e.EventType).
-		Uint64("eventVersion", e.Version)
+		Uint64("eventVersion", e.Version).
+		Str("traceParent", e.TraceParent)
 
 	if e.CommitterUserID != nil {
 		dict.Str("committerUserID", e.CommitterUserID.String())
