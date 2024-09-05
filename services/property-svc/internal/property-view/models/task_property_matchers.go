@@ -24,19 +24,19 @@ func (m TaskPropertyMatchers) FindExactRuleId(ctx context.Context) (*uuid.UUID, 
 	})
 }
 
-type queryPropertiesRow struct {
+type queryTaskPropertiesRow struct {
 	task_views_repo.GetTaskPropertiesUsingMatchersRow
 }
 
-func (r queryPropertiesRow) GetPropertyID() uuid.UUID {
+func (r queryTaskPropertiesRow) GetPropertyID() uuid.UUID {
 	return r.PropertyID
 }
 
-func (r queryPropertiesRow) GetDontAlwaysInclude() bool {
+func (r queryTaskPropertiesRow) GetDontAlwaysInclude() bool {
 	return r.DontAlwaysInclude
 }
 
-func (r queryPropertiesRow) GetSpecificity() int32 {
+func (r queryTaskPropertiesRow) GetSpecificity() int32 {
 	return r.Specificity
 }
 
@@ -49,7 +49,7 @@ func (m TaskPropertyMatchers) QueryProperties(ctx context.Context) ([]Properties
 	})
 
 	cast := func(row task_views_repo.GetTaskPropertiesUsingMatchersRow) PropertiesQueryRow {
-		return queryPropertiesRow{row}
+		return queryTaskPropertiesRow{row}
 	}
 
 	return hwutil.Map(rows, cast), err

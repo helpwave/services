@@ -37,9 +37,15 @@ message TaskPropertyMatcher {
   optional string task_id = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
 }
 
+message PatientPropertyMatcher {
+  optional string ward_id = 1; // @gotags: validate:"omitempty,omitnil,uuid4"
+  optional string patient_id = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
+}
+
 message GetAttachedPropertyValuesRequest {
   oneof matcher {
     TaskPropertyMatcher task_matcher = 1;
+    PatientPropertyMatcher patient_matcher = 2;
   }
 }
 

@@ -39,3 +39,10 @@ sql:
         <<: *repo-go
         package: "property_value_repo"
         out: "repos/property_value_repo"
+  - <<: *repo
+    queries: "./repos/patient_views_repo.sql"
+    gen:
+      go:
+        <<: *repo-go
+        package: "patient_views_repo"
+        out: "repos/patient_views_repo"

@@ -78,6 +78,26 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: property_view_rules; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.property_view_rules (
+    rule_id uuid DEFAULT public.uuid_generate_v4() NOT NULL
+);
+
+
+--
+-- Name: patient_property_view_rules; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.patient_property_view_rules (
+    ward_id uuid,
+    patient_id uuid
+)
+INHERITS (public.property_view_rules);
+
+
+--
 -- Name: properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -120,15 +140,6 @@ CREATE TABLE public.property_view_filter_always_include_items (
     dont_always_include boolean NOT NULL,
     rule_id uuid NOT NULL,
     property_id uuid NOT NULL
-);
-
-
---
--- Name: property_view_rules; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.property_view_rules (
-    rule_id uuid DEFAULT public.uuid_generate_v4() NOT NULL
 );
 
 
@@ -177,10 +188,25 @@ INHERITS (public.property_view_rules);
 
 
 --
+-- Name: patient_property_view_rules rule_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.patient_property_view_rules ALTER COLUMN rule_id SET DEFAULT public.uuid_generate_v4();
+
+
+--
 -- Name: task_property_view_rules rule_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.task_property_view_rules ALTER COLUMN rule_id SET DEFAULT public.uuid_generate_v4();
+
+
+--
+-- Name: patient_property_view_rules patient_property_view_rules_ward_id_patient_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.patient_property_view_rules
+    ADD CONSTRAINT patient_property_view_rules_ward_id_patient_id_key UNIQUE (ward_id, patient_id);
 
 
 --
