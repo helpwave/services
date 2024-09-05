@@ -9,6 +9,10 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
+const (
+	FeatureFlagHWAuthZSpiceDBChecksAlwaysTrue = "FEATURE_FLAG_HWAUTHZ_SPICEDB_CHECKS_ALWAYS_TRUE"
+)
+
 // StatusErrorPermissionDenied should be returned when a necessary permission check has failed
 func StatusErrorPermissionDenied(ctx context.Context, check Relationship) error {
 	msg := fmt.Sprintf(

@@ -7,6 +7,7 @@ import (
 	"github.com/authzed/authzed-go/v1"
 	"github.com/authzed/grpcutil"
 	zlog "github.com/rs/zerolog/log"
+	"go.opentelemetry.io/otel/attribute"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"hwauthz"
@@ -111,6 +112,11 @@ func (s *SpiceDBAuthZ) Check(ctx context.Context, permissionCheck hwauthz.Permis
 	defer span.End()
 
 	telemetry.SetSpanAttributes(ctx, permissionCheck.SpanAttributeKeyValue()...)
+
+	if hwutil.HasEnv(hwauthz.FeatureFlagHWAuthZSpiceDBChecksAlwaysTrue) {
+		span.SetAttributes(attribute.KeyValue{Key: hwauthz.FeatureFlagHWAuthZSpiceDBChecksAlwaysTrue, Value: attribute.BoolValue(true)})
+		return true, nil
+	}
 
 	// convert internal Representation to gRPC body
 	req := &v1.CheckPermissionRequest{
