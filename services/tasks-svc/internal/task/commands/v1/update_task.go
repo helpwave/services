@@ -3,6 +3,7 @@ package v1
 import (
 	"common"
 	"context"
+	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwauthz"
 	"hwes"
@@ -10,10 +11,10 @@ import (
 	"tasks-svc/internal/task/aggregate"
 )
 
-type UpdateTaskCommandHandler func(ctx context.Context, taskID uuid.UUID, name *string, description *string) error
+type UpdateTaskCommandHandler func(ctx context.Context, taskID uuid.UUID, name *string, description *string, status *pb.TaskStatus) error
 
 func NewUpdateTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) UpdateTaskCommandHandler {
-	return func(ctx context.Context, taskID uuid.UUID, name *string, description *string) error {
+	return func(ctx context.Context, taskID uuid.UUID, name *string, description *string, status *pb.TaskStatus) error {
 		userID, err := common.GetUserID(ctx)
 		if err != nil {
 			return err
@@ -39,6 +40,12 @@ func NewUpdateTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) Up
 
 		if description != nil {
 			if err := a.UpdateDescription(ctx, *description); err != nil {
+				return err
+			}
+		}
+
+		if status != nil {
+			if err := a.UpdateStatus(ctx, *status); err != nil {
 				return err
 			}
 		}

@@ -41,6 +41,8 @@ type metadata struct {
 	CommitterUserID string `json:"committer_user_id"`
 	// w3c trace context
 	TraceParent string `json:"trace_parent"`
+	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is discouraged.
+	Timestamp time.Time `json:"timestamp"`
 }
 
 // EventOption used to apply configurations in hwes.NewEvent()
@@ -137,7 +139,7 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 		AggregateID:     aggregateID,
 		AggregateType:   aggregateType,
 		Data:            esdbEvent.Data,
-		Timestamp:       esdbEvent.CreatedDate,
+		Timestamp:       md.Timestamp,
 		Version:         esdbEvent.EventNumber,
 		CommitterUserID: nil,
 		TraceParent:     md.TraceParent,
@@ -174,8 +176,10 @@ func (e *Event) GetVersion() uint64 {
 }
 
 func (e *Event) ToEventData() (esdb.EventData, error) {
-	md := metadata{}
-	md.TraceParent = e.TraceParent
+	md := metadata{
+    TraceParent: e.TraceParent,
+		Timestamp: e.Timestamp,
+	}
 	if e.CommitterUserID != nil {
 		md.CommitterUserID = e.CommitterUserID.String()
 	}

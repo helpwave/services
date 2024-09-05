@@ -37,6 +37,194 @@ func (q *Queries) CreatePatient(ctx context.Context, arg CreatePatientParams) er
 	return err
 }
 
+const getAllPatientsWithTasksBedAndRoom = `-- name: GetAllPatientsWithTasksBedAndRoom :many
+SELECT
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged,
+	tasks.id as task_id,
+	tasks.name as task_name,
+	tasks.description as task_description,
+	tasks.status as task_status,
+	tasks.assigned_user_id as task_assigned_user_id,
+	tasks.public as task_public,
+	subtasks.id as subtask_id,
+	subtasks.name as subtask_name,
+	subtasks.done as subtask_done,
+	beds.id as bed_id,
+	beds.name as bed_name,
+	rooms.id as room_id,
+	rooms.name as room_name,
+	rooms.ward_id as ward_id
+FROM patients
+		 LEFT JOIN tasks ON tasks.patient_id = patients.id
+		 LEFT JOIN subtasks ON subtasks.task_id = tasks.id
+		 LEFT JOIN beds ON beds.id = patients.bed_id
+		 LEFT JOIN rooms ON rooms.id = beds.room_id
+`
+
+type GetAllPatientsWithTasksBedAndRoomRow struct {
+	Patient            Patient
+	TaskID             uuid.NullUUID
+	TaskName           *string
+	TaskDescription    *string
+	TaskStatus         *int32
+	TaskAssignedUserID uuid.NullUUID
+	TaskPublic         *bool
+	SubtaskID          uuid.NullUUID
+	SubtaskName        *string
+	SubtaskDone        *bool
+	BedID              uuid.NullUUID
+	BedName            *string
+	RoomID             uuid.NullUUID
+	RoomName           *string
+	WardID             uuid.NullUUID
+}
+
+func (q *Queries) GetAllPatientsWithTasksBedAndRoom(ctx context.Context) ([]GetAllPatientsWithTasksBedAndRoomRow, error) {
+	rows, err := q.db.Query(ctx, getAllPatientsWithTasksBedAndRoom)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetAllPatientsWithTasksBedAndRoomRow{}
+	for rows.Next() {
+		var i GetAllPatientsWithTasksBedAndRoomRow
+		if err := rows.Scan(
+			&i.Patient.ID,
+			&i.Patient.HumanReadableIdentifier,
+			&i.Patient.Notes,
+			&i.Patient.BedID,
+			&i.Patient.CreatedAt,
+			&i.Patient.UpdatedAt,
+			&i.Patient.IsDischarged,
+			&i.TaskID,
+			&i.TaskName,
+			&i.TaskDescription,
+			&i.TaskStatus,
+			&i.TaskAssignedUserID,
+			&i.TaskPublic,
+			&i.SubtaskID,
+			&i.SubtaskName,
+			&i.SubtaskDone,
+			&i.BedID,
+			&i.BedName,
+			&i.RoomID,
+			&i.RoomName,
+			&i.WardID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPatientByBed = `-- name: GetPatientByBed :one
+SELECT patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged
+FROM patients
+WHERE bed_id = $1
+	LIMIT 1
+`
+
+func (q *Queries) GetPatientByBed(ctx context.Context, bedID uuid.NullUUID) (Patient, error) {
+	row := q.db.QueryRow(ctx, getPatientByBed, bedID)
+	var i Patient
+	err := row.Scan(
+		&i.ID,
+		&i.HumanReadableIdentifier,
+		&i.Notes,
+		&i.BedID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.IsDischarged,
+	)
+	return i, err
+}
+
+const getPatientWithBedAndRoom = `-- name: GetPatientWithBedAndRoom :one
+SELECT
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged,
+	beds.name as bed_name,
+	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+FROM patients
+		 LEFT JOIN beds ON patients.bed_id = beds.id
+		 LEFT JOIN rooms ON beds.room_id = rooms.id
+WHERE patients.id = $1
+LIMIT 1
+`
+
+type GetPatientWithBedAndRoomRow struct {
+	ID                      uuid.UUID
+	HumanReadableIdentifier string
+	Notes                   string
+	BedID                   uuid.NullUUID
+	CreatedAt               pgtype.Timestamp
+	UpdatedAt               pgtype.Timestamp
+	IsDischarged            bool
+	BedName                 *string
+	RoomID                  uuid.NullUUID
+	RoomName                *string
+	WardID                  uuid.NullUUID
+}
+
+func (q *Queries) GetPatientWithBedAndRoom(ctx context.Context, patientID uuid.UUID) (GetPatientWithBedAndRoomRow, error) {
+	row := q.db.QueryRow(ctx, getPatientWithBedAndRoom, patientID)
+	var i GetPatientWithBedAndRoomRow
+	err := row.Scan(
+		&i.ID,
+		&i.HumanReadableIdentifier,
+		&i.Notes,
+		&i.BedID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.IsDischarged,
+		&i.BedName,
+		&i.RoomID,
+		&i.RoomName,
+		&i.WardID,
+	)
+	return i, err
+}
+
+const getPatientsByWard = `-- name: GetPatientsByWard :many
+SELECT
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged
+FROM patients
+		 JOIN beds ON patients.bed_id = beds.id
+		 JOIN rooms ON beds.room_id = rooms.id
+WHERE rooms.ward_id = $1
+`
+
+func (q *Queries) GetPatientsByWard(ctx context.Context, wardID uuid.UUID) ([]Patient, error) {
+	rows, err := q.db.Query(ctx, getPatientsByWard, wardID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Patient{}
+	for rows.Next() {
+		var i Patient
+		if err := rows.Scan(
+			&i.ID,
+			&i.HumanReadableIdentifier,
+			&i.Notes,
+			&i.BedID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.IsDischarged,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updatePatient = `-- name: UpdatePatient :exec
 UPDATE patients
 SET human_readable_identifier = coalesce($2, human_readable_identifier),
@@ -51,7 +239,7 @@ type UpdatePatientParams struct {
 	HumanReadableIdentfier *string
 	Notes                  *string
 	UpdatedAt              pgtype.Timestamp
-	IsDischarged           *int32
+	IsDischarged           *bool
 }
 
 func (q *Queries) UpdatePatient(ctx context.Context, arg UpdatePatientParams) error {

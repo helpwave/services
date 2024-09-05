@@ -22,6 +22,41 @@ export class PatientServiceClient {
                response: services_tasks_svc_v1_patient_svc_pb.GetPatientResponse) => void
   ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_patient_svc_pb.GetPatientResponse>;
 
+  getPatientByBed(
+    request: services_tasks_svc_v1_patient_svc_pb.GetPatientByBedRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: services_tasks_svc_v1_patient_svc_pb.GetPatientByBedResponse) => void
+  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_patient_svc_pb.GetPatientByBedResponse>;
+
+  getPatientsByWard(
+    request: services_tasks_svc_v1_patient_svc_pb.GetPatientsByWardRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: services_tasks_svc_v1_patient_svc_pb.GetPatientsByWardResponse) => void
+  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_patient_svc_pb.GetPatientsByWardResponse>;
+
+  getPatientAssignmentByWard(
+    request: services_tasks_svc_v1_patient_svc_pb.GetPatientAssignmentByWardRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: services_tasks_svc_v1_patient_svc_pb.GetPatientAssignmentByWardResponse) => void
+  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_patient_svc_pb.GetPatientAssignmentByWardResponse>;
+
+  getPatientDetails(
+    request: services_tasks_svc_v1_patient_svc_pb.GetPatientDetailsRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: services_tasks_svc_v1_patient_svc_pb.GetPatientDetailsResponse) => void
+  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_patient_svc_pb.GetPatientDetailsResponse>;
+
+  getPatientList(
+    request: services_tasks_svc_v1_patient_svc_pb.GetPatientListRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: services_tasks_svc_v1_patient_svc_pb.GetPatientListResponse) => void
+  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_patient_svc_pb.GetPatientListResponse>;
+
   getRecentPatients(
     request: services_tasks_svc_v1_patient_svc_pb.GetRecentPatientsRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -80,6 +115,31 @@ export class PatientServicePromiseClient {
     request: services_tasks_svc_v1_patient_svc_pb.GetPatientRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<services_tasks_svc_v1_patient_svc_pb.GetPatientResponse>;
+
+  getPatientByBed(
+    request: services_tasks_svc_v1_patient_svc_pb.GetPatientByBedRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<services_tasks_svc_v1_patient_svc_pb.GetPatientByBedResponse>;
+
+  getPatientsByWard(
+    request: services_tasks_svc_v1_patient_svc_pb.GetPatientsByWardRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<services_tasks_svc_v1_patient_svc_pb.GetPatientsByWardResponse>;
+
+  getPatientAssignmentByWard(
+    request: services_tasks_svc_v1_patient_svc_pb.GetPatientAssignmentByWardRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<services_tasks_svc_v1_patient_svc_pb.GetPatientAssignmentByWardResponse>;
+
+  getPatientDetails(
+    request: services_tasks_svc_v1_patient_svc_pb.GetPatientDetailsRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<services_tasks_svc_v1_patient_svc_pb.GetPatientDetailsResponse>;
+
+  getPatientList(
+    request: services_tasks_svc_v1_patient_svc_pb.GetPatientListRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<services_tasks_svc_v1_patient_svc_pb.GetPatientListResponse>;
 
   getRecentPatients(
     request: services_tasks_svc_v1_patient_svc_pb.GetRecentPatientsRequest,
