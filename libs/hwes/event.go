@@ -29,6 +29,8 @@ type Event struct {
 type metadata struct {
 	// CommitterUserID represents an optional UUID that identifies the user that is directly responsible for this event
 	CommitterUserID string `json:"committer_user_id"`
+	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is discouraged.
+	Timestamp time.Time `json:"timestamp"`
 }
 
 // EventOption used to apply configurations in hwes.NewEvent()
@@ -124,7 +126,7 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 		AggregateID:     aggregateID,
 		AggregateType:   aggregateType,
 		Data:            esdbEvent.Data,
-		Timestamp:       esdbEvent.CreatedDate,
+		Timestamp:       md.Timestamp,
 		Version:         esdbEvent.EventNumber,
 		CommitterUserID: nil,
 	}
@@ -160,7 +162,9 @@ func (e *Event) GetVersion() uint64 {
 }
 
 func (e *Event) ToEventData() (esdb.EventData, error) {
-	md := metadata{}
+	md := metadata{
+		Timestamp: e.Timestamp,
+	}
 	if e.CommitterUserID != nil {
 		md.CommitterUserID = e.CommitterUserID.String()
 	}

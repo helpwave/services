@@ -33,6 +33,21 @@ class TaskServiceStub(object):
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTaskRequest.SerializeToString,
                 response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTaskResponse.FromString,
                 _registered_method=True)
+        self.GetTasksByPatient = channel.unary_unary(
+                '/services.tasks_svc.v1.TaskService/GetTasksByPatient',
+                request_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientRequest.SerializeToString,
+                response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientResponse.FromString,
+                _registered_method=True)
+        self.GetTasksByPatientSortedByStatus = channel.unary_unary(
+                '/services.tasks_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
+                request_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusRequest.SerializeToString,
+                response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusResponse.FromString,
+                _registered_method=True)
+        self.GetAssignedTasks = channel.unary_unary(
+                '/services.tasks_svc.v1.TaskService/GetAssignedTasks',
+                request_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetAssignedTasksRequest.SerializeToString,
+                response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetAssignedTasksResponse.FromString,
+                _registered_method=True)
         self.AssignTask = channel.unary_unary(
                 '/services.tasks_svc.v1.TaskService/AssignTask',
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.AssignTaskRequest.SerializeToString,
@@ -90,6 +105,24 @@ class TaskServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetTask(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetTasksByPatient(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetTasksByPatientSortedByStatus(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetAssignedTasks(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -154,6 +187,21 @@ def add_TaskServiceServicer_to_server(servicer, server):
                     servicer.GetTask,
                     request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTaskRequest.FromString,
                     response_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTaskResponse.SerializeToString,
+            ),
+            'GetTasksByPatient': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetTasksByPatient,
+                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientRequest.FromString,
+                    response_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientResponse.SerializeToString,
+            ),
+            'GetTasksByPatientSortedByStatus': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetTasksByPatientSortedByStatus,
+                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusRequest.FromString,
+                    response_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusResponse.SerializeToString,
+            ),
+            'GetAssignedTasks': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetAssignedTasks,
+                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetAssignedTasksRequest.FromString,
+                    response_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetAssignedTasksResponse.SerializeToString,
             ),
             'AssignTask': grpc.unary_unary_rpc_method_handler(
                     servicer.AssignTask,
@@ -276,6 +324,87 @@ class TaskService(object):
             '/services.tasks_svc.v1.TaskService/GetTask',
             services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTaskRequest.SerializeToString,
             services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTaskResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetTasksByPatient(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/services.tasks_svc.v1.TaskService/GetTasksByPatient',
+            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientRequest.SerializeToString,
+            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetTasksByPatientSortedByStatus(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/services.tasks_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
+            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusRequest.SerializeToString,
+            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetTasksByPatientSortedByStatusResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetAssignedTasks(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/services.tasks_svc.v1.TaskService/GetAssignedTasks',
+            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetAssignedTasksRequest.SerializeToString,
+            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.GetAssignedTasksResponse.FromString,
             options,
             channel_credentials,
             insecure,

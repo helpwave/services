@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package services.tasks_svc.v1;
 
+import "services/tasks_svc/v1/types.proto";
+
 option go_package = "gen/proto/services/tasks-svc";
 
 //
@@ -45,6 +47,168 @@ message GetPatientResponse {
     string id = 1;
     string name = 2;
   }
+}
+
+//
+// GetPatientByBed
+//
+
+message GetPatientByBedRequest {
+  string bed_id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetPatientByBedResponse {
+  string id = 1;
+  string human_readable_identifier = 2;
+  string notes = 3;
+  optional string bed_id = 4;
+}
+
+//
+// GetPatientsByWard
+//
+
+message GetPatientsByWardRequest {
+  string ward_id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetPatientsByWardResponse {
+  repeated Patient patients = 1;
+
+  message Patient {
+    string id = 1;
+    string human_readable_identifier = 2;
+    string notes = 3;
+    optional string bed_id = 4;
+  }
+}
+
+
+//
+// GetPatientAssignmentByWard
+//
+
+message GetPatientAssignmentByWardRequest {
+  string ward_id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetPatientAssignmentByWardResponse {
+  repeated Room rooms = 1;
+
+  message Room {
+    string id = 1;
+    string name = 2;
+    repeated Bed beds = 3;
+
+    message Bed {
+      string id = 1;
+      string name = 2;
+      optional Patient patient = 3;
+
+      message Patient {
+        string id = 1;
+        string name = 2;
+      }
+    }
+  }
+}
+
+//
+// GetPatientDetails
+//
+
+message GetPatientDetailsRequest {
+  string id = 1; // @gotags: validate:"uuid4"
+}
+
+message GetPatientDetailsResponse {
+  string id = 1;
+  string human_readable_identifier = 2;
+  string notes = 3;
+  repeated Task tasks = 4;
+  optional Room room = 5;
+  optional Bed bed = 6;
+  bool is_discharged = 7;
+
+  message Room {
+    string id = 1;
+    string name = 2;
+    string ward_id = 3;
+  }
+
+  message Bed {
+    string id = 1;
+    string name = 2;
+  }
+
+  message Task {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    TaskStatus status = 4;
+    optional string assigned_user_id = 5;
+    string patient_id = 6;
+    bool public = 7;
+    repeated SubTask subtasks = 8;
+
+    message SubTask {
+      string id = 1;
+      string name = 2;
+      bool done = 3;
+    }
+  }
+}
+
+//
+// GetPatientList
+//
+
+message GetPatientListRequest {
+  optional string ward_id = 1;
+}
+
+message GetPatientListResponse {
+  repeated Patient active = 1;
+  repeated Patient unassigned_patients = 2;
+  repeated Patient discharged_patients = 3;
+
+  message Bed {
+    string id = 1;
+    string name = 2;
+  }
+
+  message  Room {
+    string  id = 1;
+    string  name = 2;
+    string  ward_id = 3;
+  }
+
+  message Patient {
+    string id = 1;
+    string human_readable_identifier = 2;
+    Room room = 3;
+    Bed bed = 4;
+    string notes = 5;
+    repeated Task tasks = 6;
+  }
+
+  message Task {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    TaskStatus status = 4;
+    optional string assigned_user_id = 5;
+    string patient_id = 6;
+    bool public = 7;
+    repeated SubTask subtasks = 8;
+
+    message SubTask {
+      string id = 1;
+      string name = 2;
+      bool done = 3;
+    }
+  }
+
 }
 
 //
@@ -135,6 +299,11 @@ message ReadmitPatientResponse {}
 service PatientService {
   rpc CreatePatient(CreatePatientRequest) returns (CreatePatientResponse) {}
   rpc GetPatient(GetPatientRequest) returns (GetPatientResponse) {}
+  rpc GetPatientByBed(GetPatientByBedRequest) returns (GetPatientByBedResponse) {}
+  rpc GetPatientsByWard(GetPatientsByWardRequest) returns (GetPatientsByWardResponse) {}
+  rpc GetPatientAssignmentByWard(GetPatientAssignmentByWardRequest) returns (GetPatientAssignmentByWardResponse) {}
+  rpc GetPatientDetails(GetPatientDetailsRequest) returns (GetPatientDetailsResponse) {}
+  rpc GetPatientList(GetPatientListRequest) returns (GetPatientListResponse) {}
   rpc GetRecentPatients(GetRecentPatientsRequest) returns (GetRecentPatientsResponse) {}
   rpc UpdatePatient(UpdatePatientRequest) returns (UpdatePatientResponse) {}
   rpc AssignBed(AssignBedRequest) returns (AssignBedResponse) {}

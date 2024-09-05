@@ -159,13 +159,14 @@ func TestTaskGrpcService_AssignTask(t *testing.T) {
 		t.Error(err)
 	}
 
-	if len(getTaskResponse.AssignedUsers) != 1 {
-		t.Errorf("Invalid length of assigned users. Expected 1 got %d", len(getTaskResponse.AssignedUsers))
+	if getTaskResponse.AssignedUserId != nil {
+		if *getTaskResponse.AssignedUserId != userID.String() {
+			t.Errorf("Assigned UserID: expected '%s' got '%s'", userID.String(), *getTaskResponse.AssignedUserId)
+		}
+	} else {
+		t.Error("Assigned UserID should be set.")
 	}
 
-	if getTaskResponse.AssignedUsers[0] != userID.String() {
-		t.Errorf("Invalid user was assigned. Expected '%s' got '%s'.", userID, getTaskResponse.AssignedUsers[0])
-	}
 }
 
 func TestTaskGrpcService_UnassignTask(t *testing.T) {
@@ -173,20 +174,14 @@ func TestTaskGrpcService_UnassignTask(t *testing.T) {
 	defer teardown()
 
 	patientID := uuid.New()
-	userOneID := uuid.New()
-	userTwoID := uuid.New()
+	userID := uuid.New()
 
 	createTaskResponse, err := client.CreateTask(ctx, &pb.CreateTaskRequest{Name: "Test task", PatientId: patientID.String()})
 	if err != nil {
 		t.Error(err)
 	}
 
-	_, err = client.AssignTask(ctx, &pb.AssignTaskRequest{TaskId: createTaskResponse.GetId(), UserId: userOneID.String()})
-	if err != nil {
-		t.Error(err)
-	}
-
-	_, err = client.AssignTask(ctx, &pb.AssignTaskRequest{TaskId: createTaskResponse.GetId(), UserId: userTwoID.String()})
+	_, err = client.AssignTask(ctx, &pb.AssignTaskRequest{TaskId: createTaskResponse.GetId(), UserId: userID.String()})
 	if err != nil {
 		t.Error(err)
 	}
@@ -196,19 +191,15 @@ func TestTaskGrpcService_UnassignTask(t *testing.T) {
 		t.Error(err)
 	}
 
-	if len(getTaskResponse.AssignedUsers) != 2 {
-		t.Errorf("Invalid length of assigned users. Expected 2 got %d", len(getTaskResponse.AssignedUsers))
+	if getTaskResponse.AssignedUserId != nil {
+		if *getTaskResponse.AssignedUserId != userID.String() {
+			t.Errorf("Assigned UserID: expected '%s' got '%s'", userID.String(), *getTaskResponse.AssignedUserId)
+		}
+	} else {
+		t.Errorf("Assigned UserID should be set.")
 	}
 
-	if getTaskResponse.AssignedUsers[0] != userOneID.String() {
-		t.Errorf("Invalid user was assigned. Expected '%s' got '%s'.", userOneID, getTaskResponse.AssignedUsers[0])
-	}
-
-	if getTaskResponse.AssignedUsers[1] != userTwoID.String() {
-		t.Errorf("Invalid user was assigned. Expected '%s' got '%s'.", userTwoID, getTaskResponse.AssignedUsers[0])
-	}
-
-	_, err = client.UnassignTask(ctx, &pb.UnassignTaskRequest{TaskId: createTaskResponse.GetId(), UserId: userTwoID.String()})
+	_, err = client.UnassignTask(ctx, &pb.UnassignTaskRequest{TaskId: createTaskResponse.GetId(), UserId: userID.String()})
 	if err != nil {
 		t.Error(err)
 	}
@@ -218,13 +209,10 @@ func TestTaskGrpcService_UnassignTask(t *testing.T) {
 		t.Error(err)
 	}
 
-	if len(getTaskResponse.AssignedUsers) != 1 {
-		t.Errorf("Invalid length of assigned users. Expected 1 after unassignment got %d", len(getTaskResponse.AssignedUsers))
+	if getTaskResponse.AssignedUserId != nil {
+		t.Errorf("Expected UserID not to be set.")
 	}
 
-	if getTaskResponse.AssignedUsers[0] != userOneID.String() {
-		t.Errorf("Invalid user was assigned. Expected '%s' got '%s'.", userOneID, getTaskResponse.AssignedUsers[0])
-	}
 }
 
 func TestTaskGrpcService_Subtask(t *testing.T) {
