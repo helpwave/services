@@ -264,7 +264,7 @@ func (e *Event) GetZerologDict() *zerolog.Event {
 		Str("eventId", e.EventID.String()).
 		Str("eventType", e.EventType).
 		Uint64("eventVersion", e.Version).
-		Str("traceparent", e.TraceParent)
+		Str("traceParent", e.TraceParent)
 
 	if e.CommitterUserID != nil {
 		dict.Str("committerUserID", e.CommitterUserID.String())
