@@ -90,7 +90,7 @@ message GetWardDetailsRequest {
 }
 
 message GetWardDetailsResponse {
-  string id = 1; // @gotags: validate:"uuid4"
+  string id = 1;
   string name = 2;
   repeated Room rooms = 3;
   repeated TaskTemplate task_templates = 4;
