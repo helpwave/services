@@ -3,6 +3,7 @@ package eventstoredb
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	zlog "github.com/rs/zerolog/log"
 	"hwes"
@@ -27,8 +28,6 @@ func NewAggregateStore(es *esdb.Client) *AggregateStore {
 // This function resolves the version by returning the version of the last event in
 // the event stream of EventStore of our aggregate.
 // NOT FOR PRODUCTION
-//
-// nolint:unused
 func (a *AggregateStore) getExpectedRevisionByReadTEST(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
 	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.End{}}
 	stream, err := a.es.ReadStream(
@@ -38,13 +37,13 @@ func (a *AggregateStore) getExpectedRevisionByReadTEST(ctx context.Context, aggr
 		1,
 	)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("getExpectedRevisionByReadTEST: could not open read stream: %w", err)
 	}
 	defer stream.Close()
 
 	lastEvent, err := stream.Recv()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("getExpectedRevisionByReadTEST: could not read from stream: %w", err)
 	}
 
 	return esdb.Revision(lastEvent.OriginalEvent().EventNumber), nil
@@ -70,7 +69,7 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 		return event.ToEventData()
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("AggregateStore.doSave: could not convert one uncomitted event to event data: %w", err)
 	}
 
 	// If AppliedEvents are empty, we imply that this entity was not loaded from an event store and therefore non-existing.
@@ -85,7 +84,7 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 			eventsData...,
 		)
 		if err != nil {
-			return err
+			return fmt.Errorf("AggregateStore.doSave: could not append event to stream: %w", err)
 		}
 
 		return nil
@@ -94,7 +93,7 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 	// We resolve the expectedRevision by the passed strategy of the caller
 	expectedRevision, err := getExpectedRevision(ctx, aggregate)
 	if err != nil {
-		return err
+		return fmt.Errorf("AggregateStore.doSave: could not resolve expected revision: %w", err)
 	}
 
 	appendOpts := esdb.AppendToStreamOptions{ExpectedRevision: expectedRevision}
@@ -105,7 +104,7 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 		eventsData...,
 	)
 	if err != nil {
-		return err
+		return fmt.Errorf("AggregateStore.doSave: could not append event to stream: %w", err)
 	}
 
 	aggregate.ClearUncommittedEvents()
@@ -117,7 +116,7 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) error {
 	stream, err := a.es.ReadStream(ctx, aggregate.GetTypeID(), esdb.ReadStreamOptions{}, math.MaxUint64) // MaxUint64 for "all" events
 	if err != nil {
-		return err
+		return fmt.Errorf("AggregateStore.Load: could not open stream: %w", err)
 	}
 	defer stream.Close()
 
@@ -127,16 +126,16 @@ func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 			// exit condition for for-loop
 			break
 		} else if err != nil {
-			return err
+			return fmt.Errorf("AggregateStore.Load: could not read from stream: %w", err)
 		}
 
 		event, err := hwes.NewEventFromRecordedEvent(esdbEvent.Event)
 		if err != nil {
-			return err
+			return fmt.Errorf("AggregateStore.Load: %w", err)
 		}
 
 		if err := aggregate.Progress(event); err != nil {
-			return err
+			return fmt.Errorf("AggregateStore.Load: Progress failed: %w", err)
 		}
 	}
 
@@ -159,12 +158,12 @@ func (a *AggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (
 		var esErr *esdb.Error
 		if !errors.As(err, &esErr) {
 			log.Warn().Err(err).Msg("non esdb.Error returned")
-			return false, err
+			return false, fmt.Errorf("AggregateStore.Exists: ReadStream failed with unexpected error type: %w", err)
 		}
 		if esErr.IsErrorCode(esdb.ErrorCodeResourceNotFound) {
 			return false, nil
 		} else {
-			return false, err
+			return false, fmt.Errorf("AggregateStore.Exists: ReadStream failed: %w", err)
 		}
 	}
 	defer stream.Close()
@@ -174,12 +173,12 @@ func (a *AggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (
 		var esErr *esdb.Error
 		if !errors.As(err, &esErr) {
 			log.Warn().Err(err).Msg("non esdb.Error returned")
-			return false, err
+			return false, fmt.Errorf("AggregateStore.Exists: Recv failed with unexpected error type: %w", err)
 		}
 		if esErr.IsErrorCode(esdb.ErrorCodeResourceNotFound) {
 			return false, nil
 		} else {
-			return false, err
+			return false, fmt.Errorf("AggregateStore.Exists: Recv failed: %w", err)
 		}
 	}
 

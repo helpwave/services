@@ -3,6 +3,7 @@ package common
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/coreos/go-oidc"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -131,18 +132,18 @@ func VerifyIDToken(ctx context.Context, token string) (*IDTokenClaims, error) {
 	// and still exposes .Claims() for us to access non-standard ID token claims
 	idToken, err := getIDTokenVerifier(ctx).Verify(context.Background(), token)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("getIDTokenVerifier: verify failed: %w", err)
 	}
 
 	// now get the claims
 	claims := IDTokenClaims{}
 	if err = idToken.Claims(&claims); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("getIDTokenVerifier: could not get claims: %w", err)
 	}
 
 	// and check that they are in the expected format
 	if err = claims.AsExpected(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("getIDTokenVerifier: claims are not as expected: %w", err)
 	}
 
 	return &claims, nil
