@@ -24,31 +24,6 @@ func NewAggregateStore(es *esdb.Client) *AggregateStore {
 	return &AggregateStore{es: es}
 }
 
-// getExpectedRevisionByReadTEST implements a strategy for our getExpectedRevision strategy pattern.
-// This function resolves the version by returning the version of the last event in
-// the event stream of EventStore of our aggregate.
-// NOT FOR PRODUCTION
-func (a *AggregateStore) getExpectedRevisionByReadTEST(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
-	readOpts := esdb.ReadStreamOptions{Direction: esdb.Backwards, From: esdb.End{}}
-	stream, err := a.es.ReadStream(
-		ctx,
-		aggregate.GetTypeID(),
-		readOpts,
-		1,
-	)
-	if err != nil {
-		return nil, fmt.Errorf("getExpectedRevisionByReadTEST: could not open read stream: %w", err)
-	}
-	defer stream.Close()
-
-	lastEvent, err := stream.Recv()
-	if err != nil {
-		return nil, fmt.Errorf("getExpectedRevisionByReadTEST: could not read from stream: %w", err)
-	}
-
-	return esdb.Revision(lastEvent.OriginalEvent().EventNumber), nil
-}
-
 // getExpectedRevisionByPreviousRead implements a strategy for our getExpectedRevision strategy pattern.
 // This function resolves the version by returning the version of the last applied event of our aggregate.
 func (a *AggregateStore) getExpectedRevisionByPreviousRead(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
