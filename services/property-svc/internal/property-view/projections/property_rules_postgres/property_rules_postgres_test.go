@@ -1,4 +1,4 @@
-package task_views_postgres
+package property_rules_postgres
 
 import (
 	"bytes"
@@ -45,7 +45,7 @@ func setup() (ctx context.Context, projection *Projection, dbMock pgxmock.PgxPoo
 	return ctx, projection, dbMock, teardown
 }
 
-func TestPropertyViewTaskViewsProjection_Create_GreenPath(t *testing.T) {
+func TestPropertyViewPropertyRulesProjection_Create_TaskPropertyMatcher_GreenPath(t *testing.T) {
 	ctx, projection, dbMock, teardown := setup()
 	defer teardown()
 
@@ -65,7 +65,8 @@ func TestPropertyViewTaskViewsProjection_Create_GreenPath(t *testing.T) {
 	data := []byte(`{
 		"Matchers": {
 			"WardId": null,
-			"TaskId": "bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"
+			"TaskId": "bca23ec4-e8fd-407d-8e7d-0d0a52ba097f",
+			"PropertyMatcherType": "task_property_matcher"
 		},
 		"AlwaysInclude": ["a7ff7a87-7787-42b4-9aa8-037293ac9d90"],
 		"DontAlwaysInclude": [],
@@ -87,7 +88,7 @@ func TestPropertyViewTaskViewsProjection_Create_GreenPath(t *testing.T) {
 	assert.Nil(t, action)
 }
 
-func TestPropertyViewTaskViewsProjection_Update_GreenPath(t *testing.T) {
+func TestPropertyViewPropertyRulesProjection_Update_GreenPath(t *testing.T) {
 	ctx, projection, dbMock, teardown := setup()
 	defer teardown()
 
@@ -138,4 +139,78 @@ func TestPropertyViewTaskViewsProjection_Update_GreenPath(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Nil(t, action)
+}
+
+func TestPropertyViewPropertyRulesProjection_Create_PatientPropertyMatcher_GreenPath(t *testing.T) {
+	ctx, projection, dbMock, teardown := setup()
+	defer teardown()
+
+	dbMock.ExpectBeginTx(pgx.TxOptions{})
+	dbMock.ExpectExec(`.*INSERT INTO property_view_rules.*`).
+		WithArgs(uuid.MustParse("c976b4fa-ee37-4aff-b7f9-c88fe5c8d238")).
+		WillReturnResult(pgconn.NewCommandTag("INSERT 1"))
+	dbMock.ExpectExec(`.*INSERT INTO patient_property_view_rules.*`).
+		WithArgs(uuid.MustParse("c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"), uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("4342530b-6b0d-40b5-9d98-be5a14681969"), Valid: true}).
+		WillReturnResult(pgconn.NewCommandTag("INSERT 1"))
+
+	dbMock.ExpectCopyFrom(pgx.Identifier{"property_view_filter_always_include_items"}, []string{"rule_id", "property_id", "dont_always_include"}).WillReturnResult(1)
+	dbMock.ExpectCopyFrom(pgx.Identifier{"property_view_filter_always_include_items"}, []string{"rule_id", "property_id", "dont_always_include"}).WillReturnResult(0)
+
+	dbMock.ExpectCommit()
+
+	data := []byte(`{
+		"Matchers": {
+			"WardID": null,
+			"PatientID": "4342530b-6b0d-40b5-9d98-be5a14681969",
+			"PropertyMatcherType": "patient_property_matcher"
+		},
+		"AlwaysInclude": ["a7ff7a87-7787-42b4-9aa8-037293ac9d90"],
+		"DontAlwaysInclude": [],
+		"RuleId": "c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"
+	}`)
+
+	err, action := projection.onPropertyRuleCreated(ctx, hwes.Event{
+		EventID:         uuid.MustParse("227592bd-7aa0-4018-bcd4-c68fb06090ee"),
+		EventType:       v1.PropertyRuleCreated,
+		AggregateID:     uuid.MustParse("c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"),
+		AggregateType:   aggregate.PropertyViewRuleAggregateType,
+		Data:            data,
+		Timestamp:       time.Time{}, // warning: nonsensical default value, but not relevant for this test
+		Version:         0,           // warning: nonsensical default value, but not relevant for this test
+		CommitterUserID: nil,         // warning: nonsensical default value, but not relevant for this test
+	})
+
+	assert.NoError(t, err)
+	assert.Nil(t, action)
+}
+
+func TestPropertyViewPropertyRulesProjection_Create_InvalidPropertyMatcher(t *testing.T) {
+	ctx, projection, _, teardown := setup()
+	defer teardown()
+
+	data := []byte(`{
+		"Matchers": {
+			"WardID": null,
+			"PatientID": "4342530b-6b0d-40b5-9d98-be5a14681969",
+			"PropertyMatcherType": "invalid_property_matcher"
+		},
+		"AlwaysInclude": ["a7ff7a87-7787-42b4-9aa8-037293ac9d90"],
+		"DontAlwaysInclude": [],
+		"RuleId": "c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"
+	}`)
+
+	err, action := projection.onPropertyRuleCreated(ctx, hwes.Event{
+		EventID:         uuid.MustParse("227592bd-7aa0-4018-bcd4-c68fb06090ee"),
+		EventType:       v1.PropertyRuleCreated,
+		AggregateID:     uuid.MustParse("c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"),
+		AggregateType:   aggregate.PropertyViewRuleAggregateType,
+		Data:            data,
+		Timestamp:       time.Time{}, // warning: nonsensical default value, but not relevant for this test
+		Version:         0,           // warning: nonsensical default value, but not relevant for this test
+		CommitterUserID: nil,         // warning: nonsensical default value, but not relevant for this test
+	})
+
+	assert.Error(t, err)
+	assert.Equal(t, err.Error(), "could not find matcher in event")
+	assert.NotNil(t, action)
 }

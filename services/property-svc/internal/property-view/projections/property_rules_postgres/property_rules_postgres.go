@@ -1,4 +1,4 @@
-package task_views_postgres
+package property_rules_postgres
 
 import (
 	"context"
@@ -30,7 +30,7 @@ type Projection struct {
 }
 
 func NewProjection(es custom.EventStoreClient, serviceName string) *Projection {
-	subscriptionGroupName := fmt.Sprintf("%s-task-views-postgres-projection", serviceName)
+	subscriptionGroupName := fmt.Sprintf("%s-property-rules-postgres-projection", serviceName)
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PropertyViewRuleAggregateType)}),
 		db:               hwdb.GetDB(),
@@ -80,7 +80,6 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	}
 
 	// Decide on matchers
-	log.Debug().Msgf("Matchers type %T", payload.Matchers)
 	switch matchers := payload.Matchers.(type) {
 	case models.TaskPropertyMatchers:
 		taskViewsQuery := p.taskViewsRepo.WithTx(tx)
