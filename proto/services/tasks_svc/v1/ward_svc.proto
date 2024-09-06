@@ -49,6 +49,7 @@ message GetWardsResponse {
 //
 
 message GetRecentWardsRequest {}
+
 message GetRecentWardsResponse {
   repeated Ward wards = 1;
 
