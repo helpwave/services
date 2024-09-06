@@ -121,7 +121,7 @@ message CreateTaskTemplateSubTaskResponse {
 ///
 
 message GetAllTaskTemplatesByCreatorRequest {
-  string created_by = 1;
+  string created_by = 1; // @gotags: validate:"required"
   optional bool private_only = 2;
 }
 
