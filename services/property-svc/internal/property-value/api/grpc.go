@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -26,11 +27,11 @@ func DeMuxMatchers(req MatchersRequest) (viewModels.PropertyMatchers, error) {
 	if taskMatcher := req.GetTaskMatcher(); taskMatcher != nil {
 		wardID, err := hwutil.ParseNullUUID(taskMatcher.WardId)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("DeMuxMatchers: WardId invalid: %w", err)
 		}
 		taskID, err := hwutil.ParseNullUUID(taskMatcher.TaskId)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("DeMuxMatchers: TaskId invalid: %w", err)
 		}
 
 		matcher = viewModels.TaskPropertyMatchers{
@@ -54,15 +55,8 @@ func NewPropertyValueService(aggregateStore hwes.AggregateStore, handlers *handl
 func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req *pb.AttachPropertyValueRequest) (*pb.AttachPropertyValueResponse, error) {
 	propertyValueID := uuid.New()
 
-	propertyID, err := uuid.Parse(req.GetPropertyId())
-	if err != nil {
-		return nil, err
-	}
-
-	subjectID, err := uuid.Parse(req.GetSubjectId())
-	if err != nil {
-		return nil, err
-	}
+	propertyID := uuid.MustParse(req.GetPropertyId()) // guarded by validate
+	subjectID := uuid.MustParse(req.GetSubjectId())   // guarded by validate
 
 	var value interface{}
 	switch req.Value.(type) {
