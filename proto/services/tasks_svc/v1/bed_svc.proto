@@ -113,7 +113,7 @@ message GetBedsByRoomResponse {
 
 message UpdateBedRequest {
   string id = 1; // @gotags: validate:"uuid4"
-  optional string room_id = 2;
+  optional string room_id = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
   optional string name = 3;
 }
 
