@@ -11,7 +11,7 @@ option go_package = "gen/proto/services/tasks-svc";
 message CreateTaskTemplateRequest {
   string name = 1; // @gotags: validate:"required"
   optional string description = 2;
-  optional string ward_id = 4;
+  optional string ward_id = 4; // @gotags: validate:"omitempty,omitnil,uuid4"
   repeated SubTask subtasks = 5; // When passed, every subtask is a seperate entity
 
   message SubTask {
