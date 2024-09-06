@@ -45,14 +45,14 @@ class WardServiceClient extends $grpc.Client {
       '/services.tasks_svc.v1.WardService/DeleteWard',
       ($17.DeleteWardRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $17.DeleteWardResponse.fromBuffer(value));
-  static final _$getWardOverviews = $grpc.ClientMethod<$17.GetWardOverviewsRequest, $17.GetWardOverviewsResponse>(
-      '/services.tasks_svc.v1.WardService/GetWardOverviews',
-      ($17.GetWardOverviewsRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $17.GetWardOverviewsResponse.fromBuffer(value));
   static final _$getWardDetails = $grpc.ClientMethod<$17.GetWardDetailsRequest, $17.GetWardDetailsResponse>(
       '/services.tasks_svc.v1.WardService/GetWardDetails',
       ($17.GetWardDetailsRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $17.GetWardDetailsResponse.fromBuffer(value));
+  static final _$getWardOverviews = $grpc.ClientMethod<$17.GetWardOverviewsRequest, $17.GetWardOverviewsResponse>(
+      '/services.tasks_svc.v1.WardService/GetWardOverviews',
+      ($17.GetWardOverviewsRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $17.GetWardOverviewsResponse.fromBuffer(value));
 
   WardServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -84,12 +84,12 @@ class WardServiceClient extends $grpc.Client {
     return $createUnaryCall(_$deleteWard, request, options: options);
   }
 
-  $grpc.ResponseFuture<$17.GetWardOverviewsResponse> getWardOverviews($17.GetWardOverviewsRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getWardOverviews, request, options: options);
-  }
-
   $grpc.ResponseFuture<$17.GetWardDetailsResponse> getWardDetails($17.GetWardDetailsRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getWardDetails, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$17.GetWardOverviewsResponse> getWardOverviews($17.GetWardOverviewsRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getWardOverviews, request, options: options);
   }
 }
 
@@ -140,13 +140,6 @@ abstract class WardServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $17.DeleteWardRequest.fromBuffer(value),
         ($17.DeleteWardResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$17.GetWardOverviewsRequest, $17.GetWardOverviewsResponse>(
-        'GetWardOverviews',
-        getWardOverviews_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $17.GetWardOverviewsRequest.fromBuffer(value),
-        ($17.GetWardOverviewsResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$17.GetWardDetailsRequest, $17.GetWardDetailsResponse>(
         'GetWardDetails',
         getWardDetails_Pre,
@@ -154,6 +147,13 @@ abstract class WardServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $17.GetWardDetailsRequest.fromBuffer(value),
         ($17.GetWardDetailsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$17.GetWardOverviewsRequest, $17.GetWardOverviewsResponse>(
+        'GetWardOverviews',
+        getWardOverviews_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $17.GetWardOverviewsRequest.fromBuffer(value),
+        ($17.GetWardOverviewsResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$17.CreateWardResponse> createWard_Pre($grpc.ServiceCall call, $async.Future<$17.CreateWardRequest> request) async {
@@ -180,12 +180,12 @@ abstract class WardServiceBase extends $grpc.Service {
     return deleteWard(call, await request);
   }
 
-  $async.Future<$17.GetWardOverviewsResponse> getWardOverviews_Pre($grpc.ServiceCall call, $async.Future<$17.GetWardOverviewsRequest> request) async {
-    return getWardOverviews(call, await request);
-  }
-
   $async.Future<$17.GetWardDetailsResponse> getWardDetails_Pre($grpc.ServiceCall call, $async.Future<$17.GetWardDetailsRequest> request) async {
     return getWardDetails(call, await request);
+  }
+
+  $async.Future<$17.GetWardOverviewsResponse> getWardOverviews_Pre($grpc.ServiceCall call, $async.Future<$17.GetWardOverviewsRequest> request) async {
+    return getWardOverviews(call, await request);
   }
 
   $async.Future<$17.CreateWardResponse> createWard($grpc.ServiceCall call, $17.CreateWardRequest request);
@@ -194,6 +194,6 @@ abstract class WardServiceBase extends $grpc.Service {
   $async.Future<$17.GetRecentWardsResponse> getRecentWards($grpc.ServiceCall call, $17.GetRecentWardsRequest request);
   $async.Future<$17.UpdateWardResponse> updateWard($grpc.ServiceCall call, $17.UpdateWardRequest request);
   $async.Future<$17.DeleteWardResponse> deleteWard($grpc.ServiceCall call, $17.DeleteWardRequest request);
-  $async.Future<$17.GetWardOverviewsResponse> getWardOverviews($grpc.ServiceCall call, $17.GetWardOverviewsRequest request);
   $async.Future<$17.GetWardDetailsResponse> getWardDetails($grpc.ServiceCall call, $17.GetWardDetailsRequest request);
+  $async.Future<$17.GetWardOverviewsResponse> getWardOverviews($grpc.ServiceCall call, $17.GetWardOverviewsRequest request);
 }

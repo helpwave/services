@@ -27,8 +27,8 @@ type CreateTaskTemplateRequest struct {
 
 	Name        string                               `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" validate:"required"` // @gotags: validate:"required"
 	Description *string                              `protobuf:"bytes,2,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	WardId      *string                              `protobuf:"bytes,4,opt,name=ward_id,json=wardId,proto3,oneof" json:"ward_id,omitempty"`
-	Subtasks    []*CreateTaskTemplateRequest_SubTask `protobuf:"bytes,5,rep,name=subtasks,proto3" json:"subtasks,omitempty"` // When passed, every subtask is a seperate entity
+	WardId      *string                              `protobuf:"bytes,4,opt,name=ward_id,json=wardId,proto3,oneof" json:"ward_id,omitempty" validate:"omitempty,omitnil,uuid4"` // @gotags: validate:"omitempty,omitnil,uuid4"
+	Subtasks    []*CreateTaskTemplateRequest_SubTask `protobuf:"bytes,5,rep,name=subtasks,proto3" json:"subtasks,omitempty"`
 }
 
 func (x *CreateTaskTemplateRequest) Reset() {
@@ -694,7 +694,7 @@ type GetAllTaskTemplatesByCreatorRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	CreatedBy   string `protobuf:"bytes,1,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	CreatedBy   string `protobuf:"bytes,1,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty" validate:"required"` // @gotags: validate:"required"
 	PrivateOnly *bool  `protobuf:"varint,2,opt,name=private_only,json=privateOnly,proto3,oneof" json:"private_only,omitempty"`
 }
 

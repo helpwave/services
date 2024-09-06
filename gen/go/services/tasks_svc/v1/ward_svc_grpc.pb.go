@@ -25,8 +25,8 @@ const (
 	WardService_GetRecentWards_FullMethodName   = "/services.tasks_svc.v1.WardService/GetRecentWards"
 	WardService_UpdateWard_FullMethodName       = "/services.tasks_svc.v1.WardService/UpdateWard"
 	WardService_DeleteWard_FullMethodName       = "/services.tasks_svc.v1.WardService/DeleteWard"
-	WardService_GetWardOverviews_FullMethodName = "/services.tasks_svc.v1.WardService/GetWardOverviews"
 	WardService_GetWardDetails_FullMethodName   = "/services.tasks_svc.v1.WardService/GetWardDetails"
+	WardService_GetWardOverviews_FullMethodName = "/services.tasks_svc.v1.WardService/GetWardOverviews"
 )
 
 // WardServiceClient is the client API for WardService service.
@@ -39,8 +39,8 @@ type WardServiceClient interface {
 	GetRecentWards(ctx context.Context, in *GetRecentWardsRequest, opts ...grpc.CallOption) (*GetRecentWardsResponse, error)
 	UpdateWard(ctx context.Context, in *UpdateWardRequest, opts ...grpc.CallOption) (*UpdateWardResponse, error)
 	DeleteWard(ctx context.Context, in *DeleteWardRequest, opts ...grpc.CallOption) (*DeleteWardResponse, error)
-	GetWardOverviews(ctx context.Context, in *GetWardOverviewsRequest, opts ...grpc.CallOption) (*GetWardOverviewsResponse, error)
 	GetWardDetails(ctx context.Context, in *GetWardDetailsRequest, opts ...grpc.CallOption) (*GetWardDetailsResponse, error)
+	GetWardOverviews(ctx context.Context, in *GetWardOverviewsRequest, opts ...grpc.CallOption) (*GetWardOverviewsResponse, error)
 }
 
 type wardServiceClient struct {
@@ -111,20 +111,20 @@ func (c *wardServiceClient) DeleteWard(ctx context.Context, in *DeleteWardReques
 	return out, nil
 }
 
-func (c *wardServiceClient) GetWardOverviews(ctx context.Context, in *GetWardOverviewsRequest, opts ...grpc.CallOption) (*GetWardOverviewsResponse, error) {
+func (c *wardServiceClient) GetWardDetails(ctx context.Context, in *GetWardDetailsRequest, opts ...grpc.CallOption) (*GetWardDetailsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetWardOverviewsResponse)
-	err := c.cc.Invoke(ctx, WardService_GetWardOverviews_FullMethodName, in, out, cOpts...)
+	out := new(GetWardDetailsResponse)
+	err := c.cc.Invoke(ctx, WardService_GetWardDetails_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *wardServiceClient) GetWardDetails(ctx context.Context, in *GetWardDetailsRequest, opts ...grpc.CallOption) (*GetWardDetailsResponse, error) {
+func (c *wardServiceClient) GetWardOverviews(ctx context.Context, in *GetWardOverviewsRequest, opts ...grpc.CallOption) (*GetWardOverviewsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetWardDetailsResponse)
-	err := c.cc.Invoke(ctx, WardService_GetWardDetails_FullMethodName, in, out, cOpts...)
+	out := new(GetWardOverviewsResponse)
+	err := c.cc.Invoke(ctx, WardService_GetWardOverviews_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -141,8 +141,8 @@ type WardServiceServer interface {
 	GetRecentWards(context.Context, *GetRecentWardsRequest) (*GetRecentWardsResponse, error)
 	UpdateWard(context.Context, *UpdateWardRequest) (*UpdateWardResponse, error)
 	DeleteWard(context.Context, *DeleteWardRequest) (*DeleteWardResponse, error)
-	GetWardOverviews(context.Context, *GetWardOverviewsRequest) (*GetWardOverviewsResponse, error)
 	GetWardDetails(context.Context, *GetWardDetailsRequest) (*GetWardDetailsResponse, error)
+	GetWardOverviews(context.Context, *GetWardOverviewsRequest) (*GetWardOverviewsResponse, error)
 	mustEmbedUnimplementedWardServiceServer()
 }
 
@@ -168,11 +168,11 @@ func (UnimplementedWardServiceServer) UpdateWard(context.Context, *UpdateWardReq
 func (UnimplementedWardServiceServer) DeleteWard(context.Context, *DeleteWardRequest) (*DeleteWardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteWard not implemented")
 }
-func (UnimplementedWardServiceServer) GetWardOverviews(context.Context, *GetWardOverviewsRequest) (*GetWardOverviewsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetWardOverviews not implemented")
-}
 func (UnimplementedWardServiceServer) GetWardDetails(context.Context, *GetWardDetailsRequest) (*GetWardDetailsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWardDetails not implemented")
+}
+func (UnimplementedWardServiceServer) GetWardOverviews(context.Context, *GetWardOverviewsRequest) (*GetWardOverviewsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWardOverviews not implemented")
 }
 func (UnimplementedWardServiceServer) mustEmbedUnimplementedWardServiceServer() {}
 
@@ -295,24 +295,6 @@ func _WardService_DeleteWard_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _WardService_GetWardOverviews_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetWardOverviewsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(WardServiceServer).GetWardOverviews(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: WardService_GetWardOverviews_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WardServiceServer).GetWardOverviews(ctx, req.(*GetWardOverviewsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _WardService_GetWardDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetWardDetailsRequest)
 	if err := dec(in); err != nil {
@@ -327,6 +309,24 @@ func _WardService_GetWardDetails_Handler(srv interface{}, ctx context.Context, d
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(WardServiceServer).GetWardDetails(ctx, req.(*GetWardDetailsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WardService_GetWardOverviews_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWardOverviewsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WardServiceServer).GetWardOverviews(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WardService_GetWardOverviews_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WardServiceServer).GetWardOverviews(ctx, req.(*GetWardOverviewsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -363,12 +363,12 @@ var WardService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _WardService_DeleteWard_Handler,
 		},
 		{
-			MethodName: "GetWardOverviews",
-			Handler:    _WardService_GetWardOverviews_Handler,
-		},
-		{
 			MethodName: "GetWardDetails",
 			Handler:    _WardService_GetWardDetails_Handler,
+		},
+		{
+			MethodName: "GetWardOverviews",
+			Handler:    _WardService_GetWardOverviews_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

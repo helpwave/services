@@ -48,15 +48,15 @@ class WardServiceStub(object):
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.DeleteWardRequest.SerializeToString,
                 response_deserializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.DeleteWardResponse.FromString,
                 _registered_method=True)
-        self.GetWardOverviews = channel.unary_unary(
-                '/services.tasks_svc.v1.WardService/GetWardOverviews',
-                request_serializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardOverviewsRequest.SerializeToString,
-                response_deserializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardOverviewsResponse.FromString,
-                _registered_method=True)
         self.GetWardDetails = channel.unary_unary(
                 '/services.tasks_svc.v1.WardService/GetWardDetails',
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardDetailsRequest.SerializeToString,
                 response_deserializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardDetailsResponse.FromString,
+                _registered_method=True)
+        self.GetWardOverviews = channel.unary_unary(
+                '/services.tasks_svc.v1.WardService/GetWardOverviews',
+                request_serializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardOverviewsRequest.SerializeToString,
+                response_deserializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardOverviewsResponse.FromString,
                 _registered_method=True)
 
 
@@ -103,13 +103,13 @@ class WardServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetWardOverviews(self, request, context):
+    def GetWardDetails(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetWardDetails(self, request, context):
+    def GetWardOverviews(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -148,15 +148,15 @@ def add_WardServiceServicer_to_server(servicer, server):
                     request_deserializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.DeleteWardRequest.FromString,
                     response_serializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.DeleteWardResponse.SerializeToString,
             ),
-            'GetWardOverviews': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetWardOverviews,
-                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardOverviewsRequest.FromString,
-                    response_serializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardOverviewsResponse.SerializeToString,
-            ),
             'GetWardDetails': grpc.unary_unary_rpc_method_handler(
                     servicer.GetWardDetails,
                     request_deserializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardDetailsRequest.FromString,
                     response_serializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardDetailsResponse.SerializeToString,
+            ),
+            'GetWardOverviews': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetWardOverviews,
+                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardOverviewsRequest.FromString,
+                    response_serializer=services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardOverviewsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -336,33 +336,6 @@ class WardService(object):
             _registered_method=True)
 
     @staticmethod
-    def GetWardOverviews(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/services.tasks_svc.v1.WardService/GetWardOverviews',
-            services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardOverviewsRequest.SerializeToString,
-            services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardOverviewsResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
     def GetWardDetails(request,
             target,
             options=(),
@@ -379,6 +352,33 @@ class WardService(object):
             '/services.tasks_svc.v1.WardService/GetWardDetails',
             services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardDetailsRequest.SerializeToString,
             services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardDetailsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetWardOverviews(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/services.tasks_svc.v1.WardService/GetWardOverviews',
+            services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardOverviewsRequest.SerializeToString,
+            services_dot_tasks__svc_dot_v1_dot_ward__svc__pb2.GetWardOverviewsResponse.FromString,
             options,
             channel_credentials,
             insecure,

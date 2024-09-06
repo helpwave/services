@@ -50,19 +50,19 @@ export class WardServiceClient {
                response: services_tasks_svc_v1_ward_svc_pb.DeleteWardResponse) => void
   ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_ward_svc_pb.DeleteWardResponse>;
 
-  getWardOverviews(
-    request: services_tasks_svc_v1_ward_svc_pb.GetWardOverviewsRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: services_tasks_svc_v1_ward_svc_pb.GetWardOverviewsResponse) => void
-  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_ward_svc_pb.GetWardOverviewsResponse>;
-
   getWardDetails(
     request: services_tasks_svc_v1_ward_svc_pb.GetWardDetailsRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
                response: services_tasks_svc_v1_ward_svc_pb.GetWardDetailsResponse) => void
   ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_ward_svc_pb.GetWardDetailsResponse>;
+
+  getWardOverviews(
+    request: services_tasks_svc_v1_ward_svc_pb.GetWardOverviewsRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: services_tasks_svc_v1_ward_svc_pb.GetWardOverviewsResponse) => void
+  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_ward_svc_pb.GetWardOverviewsResponse>;
 
 }
 
@@ -101,15 +101,15 @@ export class WardServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<services_tasks_svc_v1_ward_svc_pb.DeleteWardResponse>;
 
-  getWardOverviews(
-    request: services_tasks_svc_v1_ward_svc_pb.GetWardOverviewsRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<services_tasks_svc_v1_ward_svc_pb.GetWardOverviewsResponse>;
-
   getWardDetails(
     request: services_tasks_svc_v1_ward_svc_pb.GetWardDetailsRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<services_tasks_svc_v1_ward_svc_pb.GetWardDetailsResponse>;
+
+  getWardOverviews(
+    request: services_tasks_svc_v1_ward_svc_pb.GetWardOverviewsRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<services_tasks_svc_v1_ward_svc_pb.GetWardOverviewsResponse>;
 
 }
 

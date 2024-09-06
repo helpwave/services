@@ -149,6 +149,6 @@ service WardService {
   rpc GetRecentWards(GetRecentWardsRequest) returns (GetRecentWardsResponse) {}
   rpc UpdateWard (UpdateWardRequest) returns (UpdateWardResponse) {}
   rpc DeleteWard (DeleteWardRequest) returns (DeleteWardResponse) {}
-  rpc GetWardOverviews (GetWardOverviewsRequest) returns (GetWardOverviewsResponse) {}
   rpc GetWardDetails (GetWardDetailsRequest) returns (GetWardDetailsResponse) {}
+  rpc GetWardOverviews (GetWardOverviewsRequest) returns (GetWardOverviewsResponse) {}
 }

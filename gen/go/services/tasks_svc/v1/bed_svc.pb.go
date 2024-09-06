@@ -620,8 +620,8 @@ type UpdateBedRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id     string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
-	RoomId *string `protobuf:"bytes,2,opt,name=room_id,json=roomId,proto3,oneof" json:"room_id,omitempty"`
+	Id     string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"`                                               // @gotags: validate:"uuid4"
+	RoomId *string `protobuf:"bytes,2,opt,name=room_id,json=roomId,proto3,oneof" json:"room_id,omitempty" validate:"omitempty,omitnil,uuid4"` // @gotags: validate:"omitempty,omitnil,uuid4"
 	Name   *string `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`
 }
 
