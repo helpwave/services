@@ -13,7 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'property_value_svc.pb.dart' as $4;
+import 'property_value_svc.pb.dart' as $3;
 
 class FilterUpdate extends $pb.GeneratedMessage {
   factory FilterUpdate({
@@ -97,7 +97,7 @@ enum UpdatePropertyViewRuleRequest_Matcher {
 class UpdatePropertyViewRuleRequest extends $pb.GeneratedMessage {
   factory UpdatePropertyViewRuleRequest({
     FilterUpdate? filterUpdate,
-    $4.TaskPropertyMatcher? taskMatcher,
+    $3.TaskPropertyMatcher? taskMatcher,
   }) {
     final $result = create();
     if (filterUpdate != null) {
@@ -119,7 +119,7 @@ class UpdatePropertyViewRuleRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePropertyViewRuleRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [2])
     ..aOM<FilterUpdate>(1, _omitFieldNames ? '' : 'filterUpdate', subBuilder: FilterUpdate.create)
-    ..aOM<$4.TaskPropertyMatcher>(2, _omitFieldNames ? '' : 'taskMatcher', subBuilder: $4.TaskPropertyMatcher.create)
+    ..aOM<$3.TaskPropertyMatcher>(2, _omitFieldNames ? '' : 'taskMatcher', subBuilder: $3.TaskPropertyMatcher.create)
     ..hasRequiredFields = false
   ;
 
@@ -159,15 +159,15 @@ class UpdatePropertyViewRuleRequest extends $pb.GeneratedMessage {
   FilterUpdate ensureFilterUpdate() => $_ensure(0);
 
   @$pb.TagNumber(2)
-  $4.TaskPropertyMatcher get taskMatcher => $_getN(1);
+  $3.TaskPropertyMatcher get taskMatcher => $_getN(1);
   @$pb.TagNumber(2)
-  set taskMatcher($4.TaskPropertyMatcher v) { setField(2, v); }
+  set taskMatcher($3.TaskPropertyMatcher v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasTaskMatcher() => $_has(1);
   @$pb.TagNumber(2)
   void clearTaskMatcher() => clearField(2);
   @$pb.TagNumber(2)
-  $4.TaskPropertyMatcher ensureTaskMatcher() => $_ensure(1);
+  $3.TaskPropertyMatcher ensureTaskMatcher() => $_ensure(1);
 }
 
 class UpdatePropertyViewRuleResponse extends $pb.GeneratedMessage {
