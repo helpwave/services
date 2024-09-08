@@ -44,7 +44,7 @@ func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shut
 			}
 		}
 		shutdownFuncs = nil
-		return err
+		return fmt.Errorf("setupOTelSDK: shutdown error: %w", err)
 	}
 
 	// in dev environments we might not need a tracing setup, so we allow to skip its setup

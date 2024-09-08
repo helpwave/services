@@ -151,7 +151,7 @@ func (a *AggregateBase) Load(events []Event) error {
 		}
 
 		if err := a.HandleEvent(event); err != nil {
-			return err
+			return fmt.Errorf("AggregateBase.Load: event handler failed: %w", err)
 		}
 
 		a.appliedEvents = append(a.appliedEvents, event)
@@ -169,7 +169,7 @@ func (a *AggregateBase) Apply(event Event) error {
 	}
 
 	if err := a.HandleEvent(event); err != nil {
-		return err
+		return fmt.Errorf("AggregateBase.Apply: event handler failed: %w", err)
 	}
 
 	a.version++
@@ -191,7 +191,7 @@ func (a *AggregateBase) Progress(event Event) error {
 	}
 
 	if err := a.HandleEvent(event); err != nil {
-		return err
+		return fmt.Errorf("AggregateBase.Progress: event handler failed: %w", err)
 	}
 
 	a.version = event.GetVersion()

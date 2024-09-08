@@ -92,7 +92,7 @@ func (s *SpiceDBAuthZ) Write(ctx context.Context, writes []hwauthz.Relationship,
 
 	res, err := s.client.WriteRelationships(ctx, req)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("SpiceDBAuthZ.Write: write relationship failed: %w", err)
 	}
 
 	return res.WrittenAt.Token, nil

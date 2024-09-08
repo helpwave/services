@@ -120,17 +120,17 @@ func resolveAggregateIDAndTypeFromStreamID(streamID string) (aggregateID uuid.UU
 func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 	id, err := uuid.Parse(esdbEvent.EventID.String())
 	if err != nil {
-		return Event{}, err
+		return Event{}, fmt.Errorf("NewEventFromRecordedEvent: event id is not a uuid: %w", err)
 	}
 
 	aggregateID, aggregateType, err := resolveAggregateIDAndTypeFromStreamID(esdbEvent.StreamID)
 	if err != nil {
-		return Event{}, err
+		return Event{}, fmt.Errorf("NewEventFromRecordedEvent: could not resove AggregateID and type: %w", err)
 	}
 
 	md := metadata{}
 	if err := json.Unmarshal(esdbEvent.UserMetadata, &md); err != nil {
-		return Event{}, err
+		return Event{}, fmt.Errorf("NewEventFromRecordedEvent: UserMetadata is not json: %w", err)
 	}
 
 	event := Event{
@@ -186,7 +186,7 @@ func (e *Event) ToEventData() (esdb.EventData, error) {
 
 	mdBytes, err := json.Marshal(md)
 	if err != nil {
-		return esdb.EventData{}, err
+		return esdb.EventData{}, fmt.Errorf("ToEventData: failed to encode md as json: %w", err)
 	}
 
 	return esdb.EventData{
@@ -213,7 +213,7 @@ func (e *Event) SetJsonData(data interface{}) error {
 	}
 
 	if err != nil {
-		return err
+		return fmt.Errorf("SetJsonData: %w", err)
 	}
 	e.Data = dataBytes
 	return nil
@@ -221,8 +221,7 @@ func (e *Event) SetJsonData(data interface{}) error {
 
 func (e *Event) GetJsonData(data interface{}) error {
 	if jsonable, ok := data.(hwutil.JSONAble); ok {
-		err := jsonable.FromJSON(e.Data)
-		return err
+		return jsonable.FromJSON(e.Data)
 	}
 	return json.Unmarshal(e.Data, data)
 }
@@ -243,7 +242,7 @@ func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 
 	// Just to make sure we are actually dealing with a valid UUID
 	if _, err := uuid.Parse(e.CommitterUserID.String()); err != nil {
-		return err
+		return fmt.Errorf("SetCommitterFromCtx: cant parse comitter uid: %w", err)
 	}
 
 	telemetry.SetSpanStr(ctx, "committerUserID", e.CommitterUserID.String())
