@@ -70,11 +70,16 @@ func (m *PropertyRuleCreatedEvent) FromJSON(data []byte) error {
 		DontAlwaysInclude: dontAlwaysIncludeUUIDs,
 	}
 
-	if taskMatchers, ok := models.TaskPropertyMatchersFromMap(inter["Matchers"]); ok {
+	matchers, ok := inter["Matchers"].(map[string]interface{})
+	if !ok {
+		return errors.New("Could not assert matchers to a map")
+	}
+
+	if taskMatchers, ok := models.TaskPropertyMatchersFromMap(matchers); ok {
 		rule.Matchers = taskMatchers
 		m.PropertyViewRule = rule
 		return nil
-	} else if patientMatchers, ok := models.PatientPropertyMatchersFromMap(inter["Matchers"]); ok {
+	} else if patientMatchers, ok := models.PatientPropertyMatchersFromMap(matchers); ok {
 		rule.Matchers = patientMatchers
 		m.PropertyViewRule = rule
 		return nil

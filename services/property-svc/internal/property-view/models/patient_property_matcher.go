@@ -84,20 +84,15 @@ func (m PatientPropertyMatchers) ToMap() map[string]interface{} {
 	return mp
 }
 
-func PatientPropertyMatchersFromMap(m interface{}) (PatientPropertyMatchers, bool) {
-	mp, ok := m.(map[string]interface{})
-	if !ok {
-		return PatientPropertyMatchers{}, false
-	}
-
-	propertyMatcherType, ok := mp["PropertyMatcherType"]
+func PatientPropertyMatchersFromMap(m map[string]interface{}) (PatientPropertyMatchers, bool) {
+	propertyMatcherType, ok := m["PropertyMatcherType"]
 	if !ok || propertyMatcherType != PatientPropertyMatcherType {
 		return PatientPropertyMatchers{}, false
 	}
 
 	matcher := PatientPropertyMatchers{}
 
-	if wardIDRaw, ok := mp["WardID"].(string); ok {
+	if wardIDRaw, ok := m["WardID"].(string); ok {
 		parsed, err := hwutil.ParseNullUUID(&wardIDRaw)
 		if err != nil {
 			return PatientPropertyMatchers{}, false
@@ -106,7 +101,7 @@ func PatientPropertyMatchersFromMap(m interface{}) (PatientPropertyMatchers, boo
 	} else {
 		matcher.WardID = uuid.NullUUID{Valid: false}
 	}
-	if patientIDRaw, ok := mp["PatientID"].(string); ok {
+	if patientIDRaw, ok := m["PatientID"].(string); ok {
 		parsed, err := hwutil.ParseNullUUID(&patientIDRaw)
 		if err != nil {
 			return PatientPropertyMatchers{}, false

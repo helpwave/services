@@ -86,21 +86,15 @@ func (m TaskPropertyMatchers) ToMap() map[string]interface{} {
 	return mp
 }
 
-func TaskPropertyMatchersFromMap(m interface{}) (TaskPropertyMatchers, bool) {
-	mp, ok := m.(map[string]interface{})
-	if !ok {
-		// not even a map
-		return TaskPropertyMatchers{}, false
-	}
-
-	propertyMatcherType, ok := mp["PropertyMatcherType"]
+func TaskPropertyMatchersFromMap(m map[string]interface{}) (TaskPropertyMatchers, bool) {
+	propertyMatcherType, ok := m["PropertyMatcherType"]
 	if !ok || propertyMatcherType != TaskPropertyMatcherType {
 		return TaskPropertyMatchers{}, false
 	}
 
 	matcher := TaskPropertyMatchers{}
 
-	if wardIdRaw, ok := mp["WardId"].(string); ok {
+	if wardIdRaw, ok := m["WardId"].(string); ok {
 		parsed, err := hwutil.ParseNullUUID(&wardIdRaw)
 		if err != nil {
 			return TaskPropertyMatchers{}, false
@@ -109,7 +103,7 @@ func TaskPropertyMatchersFromMap(m interface{}) (TaskPropertyMatchers, bool) {
 	} else {
 		matcher.WardID = uuid.NullUUID{Valid: false}
 	}
-	if taskIdRaw, ok := mp["TaskId"].(string); ok {
+	if taskIdRaw, ok := m["TaskId"].(string); ok {
 		parsed, err := hwutil.ParseNullUUID(&taskIdRaw)
 		if err != nil {
 			return TaskPropertyMatchers{}, false
