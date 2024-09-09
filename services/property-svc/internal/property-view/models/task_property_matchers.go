@@ -10,6 +10,8 @@ import (
 	"github.com/google/uuid"
 )
 
+const TaskPropertyMatcherType = "task_property_matcher"
+
 // TaskPropertyMatchers implements PropertyMatchers
 type TaskPropertyMatchers struct {
 	WardID uuid.NullUUID `json:"ward_id,omitempty"`
@@ -24,20 +26,24 @@ func (m TaskPropertyMatchers) FindExactRuleId(ctx context.Context) (*uuid.UUID, 
 	})
 }
 
-type queryPropertiesRow struct {
+type queryTaskPropertiesRow struct {
 	task_views_repo.GetTaskPropertiesUsingMatchersRow
 }
 
-func (r queryPropertiesRow) GetPropertyID() uuid.UUID {
+func (r queryTaskPropertiesRow) GetPropertyID() uuid.UUID {
 	return r.PropertyID
 }
 
-func (r queryPropertiesRow) GetDontAlwaysInclude() bool {
+func (r queryTaskPropertiesRow) GetDontAlwaysInclude() bool {
 	return r.DontAlwaysInclude
 }
 
-func (r queryPropertiesRow) GetSpecificity() int32 {
+func (r queryTaskPropertiesRow) GetSpecificity() int32 {
 	return r.Specificity
+}
+
+func (m TaskPropertyMatchers) GetType() string {
+	return TaskPropertyMatcherType
 }
 
 func (m TaskPropertyMatchers) QueryProperties(ctx context.Context) ([]PropertiesQueryRow, error) {
@@ -49,7 +55,7 @@ func (m TaskPropertyMatchers) QueryProperties(ctx context.Context) ([]Properties
 	})
 
 	cast := func(row task_views_repo.GetTaskPropertiesUsingMatchersRow) PropertiesQueryRow {
-		return queryPropertiesRow{row}
+		return queryTaskPropertiesRow{row}
 	}
 
 	return hwutil.Map(rows, cast), err
@@ -74,19 +80,21 @@ func (m TaskPropertyMatchers) ToMap() map[string]interface{} {
 	} else {
 		mp["TaskId"] = nil
 	}
+
+	mp["PropertyMatcherType"] = m.GetType()
+
 	return mp
 }
 
-func TaskPropertyMatchersFromMap(m interface{}) (TaskPropertyMatchers, bool) {
-	mp, ok := m.(map[string]interface{})
-	if !ok {
-		// not even a map
+func TaskPropertyMatchersFromMap(m map[string]interface{}) (TaskPropertyMatchers, bool) {
+	propertyMatcherType, ok := m["PropertyMatcherType"]
+	if !ok || propertyMatcherType != TaskPropertyMatcherType {
 		return TaskPropertyMatchers{}, false
 	}
 
 	matcher := TaskPropertyMatchers{}
 
-	if wardIdRaw, ok := mp["WardId"].(string); ok {
+	if wardIdRaw, ok := m["WardId"].(string); ok {
 		parsed, err := hwutil.ParseNullUUID(&wardIdRaw)
 		if err != nil {
 			return TaskPropertyMatchers{}, false
@@ -95,7 +103,7 @@ func TaskPropertyMatchersFromMap(m interface{}) (TaskPropertyMatchers, bool) {
 	} else {
 		matcher.WardID = uuid.NullUUID{Valid: false}
 	}
-	if taskIdRaw, ok := mp["TaskId"].(string); ok {
+	if taskIdRaw, ok := m["TaskId"].(string); ok {
 		parsed, err := hwutil.ParseNullUUID(&taskIdRaw)
 		if err != nil {
 			return TaskPropertyMatchers{}, false

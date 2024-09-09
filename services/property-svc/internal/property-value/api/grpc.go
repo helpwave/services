@@ -16,6 +16,7 @@ import (
 
 type MatchersRequest interface {
 	GetTaskMatcher() *pb.TaskPropertyMatcher
+	GetPatientMatcher() *pb.PatientPropertyMatcher
 }
 
 // DeMuxMatchers de-multiplexes the matchers in a grpc request
@@ -37,6 +38,20 @@ func DeMuxMatchers(req MatchersRequest) (viewModels.PropertyMatchers, error) {
 		matcher = viewModels.TaskPropertyMatchers{
 			WardID: wardID,
 			TaskID: taskID,
+		}
+	} else if patientMatcher := req.GetPatientMatcher(); patientMatcher != nil {
+		wardID, err := hwutil.ParseNullUUID(patientMatcher.WardId)
+		if err != nil {
+			return nil, fmt.Errorf("DeMuxMatchers: WardID invalid: %w", err)
+		}
+		patientID, err := hwutil.ParseNullUUID(patientMatcher.PatientId)
+		if err != nil {
+			return nil, fmt.Errorf("DeMuxMatchers: PatientID invalid: %w", err)
+		}
+
+		matcher = viewModels.PatientPropertyMatchers{
+			WardID:    wardID,
+			PatientID: patientID,
 		}
 	}
 	return matcher, nil

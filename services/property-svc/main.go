@@ -11,7 +11,7 @@ import (
 	propertyValue "property-svc/internal/property-value/api"
 	"property-svc/internal/property-value/projections/property_value_postgres_projection"
 	propertyViews "property-svc/internal/property-view/api"
-	"property-svc/internal/property-view/projections/task_views_postgres"
+	"property-svc/internal/property-view/projections/property_rules_postgres"
 	property "property-svc/internal/property/api"
 	"property-svc/internal/property/projections/property_postgres_projection"
 
@@ -73,7 +73,7 @@ func main() {
 	}()
 
 	go func() {
-		taskViewsPostgresProjection := task_views_postgres.NewProjection(eventStore, ServiceName)
+		taskViewsPostgresProjection := property_rules_postgres.NewProjection(eventStore, ServiceName)
 		if err := taskViewsPostgresProjection.Subscribe(ctx); err != nil {
 			log.Err(err).Msg("error during taskViewsPostgresProjection subscription")
 			cancel()

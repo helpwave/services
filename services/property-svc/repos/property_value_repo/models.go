@@ -9,6 +9,12 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type PatientPropertyViewRule struct {
+	RuleID    uuid.UUID
+	WardID    uuid.NullUUID
+	PatientID uuid.NullUUID
+}
+
 type Property struct {
 	ID           uuid.UUID
 	SubjectType  int32
