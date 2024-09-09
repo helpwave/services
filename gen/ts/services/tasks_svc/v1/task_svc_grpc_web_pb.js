@@ -20,6 +20,8 @@ const grpc = {};
 grpc.web = require('grpc-web');
 
 
+var services_tasks_svc_v1_types_pb = require('../../../services/tasks_svc/v1/types_pb.js')
+
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js')
 const proto = {};
 proto.services = {};
@@ -258,6 +260,189 @@ proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.getTask =
       request,
       metadata || {},
       methodDescriptor_TaskService_GetTask);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.services.tasks_svc.v1.GetTasksByPatientRequest,
+ *   !proto.services.tasks_svc.v1.GetTasksByPatientResponse>}
+ */
+const methodDescriptor_TaskService_GetTasksByPatient = new grpc.web.MethodDescriptor(
+  '/services.tasks_svc.v1.TaskService/GetTasksByPatient',
+  grpc.web.MethodType.UNARY,
+  proto.services.tasks_svc.v1.GetTasksByPatientRequest,
+  proto.services.tasks_svc.v1.GetTasksByPatientResponse,
+  /**
+   * @param {!proto.services.tasks_svc.v1.GetTasksByPatientRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.services.tasks_svc.v1.GetTasksByPatientResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.services.tasks_svc.v1.GetTasksByPatientRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.services.tasks_svc.v1.GetTasksByPatientResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.services.tasks_svc.v1.GetTasksByPatientResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.services.tasks_svc.v1.TaskServiceClient.prototype.getTasksByPatient =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/services.tasks_svc.v1.TaskService/GetTasksByPatient',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_GetTasksByPatient,
+      callback);
+};
+
+
+/**
+ * @param {!proto.services.tasks_svc.v1.GetTasksByPatientRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.services.tasks_svc.v1.GetTasksByPatientResponse>}
+ *     Promise that resolves to the response
+ */
+proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.getTasksByPatient =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/services.tasks_svc.v1.TaskService/GetTasksByPatient',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_GetTasksByPatient);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusRequest,
+ *   !proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse>}
+ */
+const methodDescriptor_TaskService_GetTasksByPatientSortedByStatus = new grpc.web.MethodDescriptor(
+  '/services.tasks_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
+  grpc.web.MethodType.UNARY,
+  proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusRequest,
+  proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse,
+  /**
+   * @param {!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.services.tasks_svc.v1.TaskServiceClient.prototype.getTasksByPatientSortedByStatus =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/services.tasks_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_GetTasksByPatientSortedByStatus,
+      callback);
+};
+
+
+/**
+ * @param {!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse>}
+ *     Promise that resolves to the response
+ */
+proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.getTasksByPatientSortedByStatus =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/services.tasks_svc.v1.TaskService/GetTasksByPatientSortedByStatus',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_GetTasksByPatientSortedByStatus);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.services.tasks_svc.v1.GetAssignedTasksRequest,
+ *   !proto.services.tasks_svc.v1.GetAssignedTasksResponse>}
+ */
+const methodDescriptor_TaskService_GetAssignedTasks = new grpc.web.MethodDescriptor(
+  '/services.tasks_svc.v1.TaskService/GetAssignedTasks',
+  grpc.web.MethodType.UNARY,
+  proto.services.tasks_svc.v1.GetAssignedTasksRequest,
+  proto.services.tasks_svc.v1.GetAssignedTasksResponse,
+  /**
+   * @param {!proto.services.tasks_svc.v1.GetAssignedTasksRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.services.tasks_svc.v1.GetAssignedTasksResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.services.tasks_svc.v1.GetAssignedTasksRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.services.tasks_svc.v1.GetAssignedTasksResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.services.tasks_svc.v1.GetAssignedTasksResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.services.tasks_svc.v1.TaskServiceClient.prototype.getAssignedTasks =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/services.tasks_svc.v1.TaskService/GetAssignedTasks',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_GetAssignedTasks,
+      callback);
+};
+
+
+/**
+ * @param {!proto.services.tasks_svc.v1.GetAssignedTasksRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.services.tasks_svc.v1.GetAssignedTasksResponse>}
+ *     Promise that resolves to the response
+ */
+proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.getAssignedTasks =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/services.tasks_svc.v1.TaskService/GetAssignedTasks',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_GetAssignedTasks);
 };
 
 

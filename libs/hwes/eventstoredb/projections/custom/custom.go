@@ -3,6 +3,7 @@ package custom
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	zlog "github.com/rs/zerolog/log"
 	"hwes"
@@ -130,14 +131,14 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 		if errors.As(err, &esErr) && esErr.IsErrorCode(esdb.ErrorCodeResourceAlreadyExists) {
 			log.Debug().Err(err).Msgf("ignoring subscription %s already exists error", p.subscriptionGroupName)
 		} else {
-			return err
+			return fmt.Errorf("CustomProjection.Subscribe: failed to create persistent subscription: %w", err)
 		}
 	}
 
 	// After a potential successful creation of a persistent subscription, we are trying to establish a connection to that subscription
 	stream, err := p.es.SubscribeToPersistentSubscriptionToAll(ctx, p.subscriptionGroupName, esdb.SubscribeToPersistentSubscriptionOptions{})
 	if err != nil {
-		return err
+		return fmt.Errorf("CustomProjection.Subscribe: failed to subscribe: %w", err)
 	}
 	defer stream.Close()
 
@@ -155,7 +156,7 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 		}
 
 		if err := p.processReceivedEventFromStream(ctx, stream, esdbEvent); err != nil {
-			return err
+			return fmt.Errorf("CustomProjection.Subscribe: failed to process event: %w", err)
 		}
 	}
 }
@@ -165,7 +166,6 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 // and calls the according event handler based on the received event
 // This function blocks the thread until the passed context gets canceled
 func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, stream *esdb.PersistentSubscription, esdbEvent *esdb.PersistentSubscriptionEvent) error {
-	// TODO: Connect with source trace?
 	ctx, span, log := telemetry.StartSpan(ctx, "custom_projection.processReceivedEventFromStream")
 	defer span.End()
 
@@ -191,6 +191,27 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 			Str("EventType", esdbEvent.EventAppeared.Event.Event.EventType).
 			Msg("could not create new event from recorded event")
 		return nil
+	}
+
+	//
+	// change tracing spans
+	//
+	if event.TraceParent != "" {
+		ctx = telemetry.FromTraceParent(ctx, event.TraceParent)
+
+		// end old span, start new one
+		span.End()
+		ctx, span, log = telemetry.StartSpan(ctx, "custom_projection.processReceivedEventFromStream")
+		defer span.End()
+
+		// set attributes
+		log = log.With().
+			Str("subscription_group_name", p.subscriptionGroupName).
+			Str("esdbEventID", event.EventID.String()).
+			Logger()
+
+		telemetry.SetSpanStr(ctx, "subscription_group_name", p.subscriptionGroupName)
+		telemetry.SetSpanStr(ctx, "esdbEventID", event.EventID.String())
 	}
 
 	log.Debug().Dict("event", event.GetZerologDict()).Msg("process event")

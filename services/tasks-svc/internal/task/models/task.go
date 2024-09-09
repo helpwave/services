@@ -7,19 +7,18 @@ import (
 )
 
 type Task struct {
-	ID             uuid.UUID
-	OrganizationID uuid.UUID
-	CreatedBy      uuid.UUID
-	CreatedAt      time.Time
+	ID        uuid.UUID
+	CreatedBy uuid.UUID
+	CreatedAt time.Time
 
-	Name          string
-	Description   string
-	Status        pb.TaskStatus
-	Public        bool
-	DueAt         time.Time
-	PatientID     uuid.UUID
-	AssignedUsers []uuid.UUID
-	Subtasks      map[uuid.UUID]Subtask
+	Name         string
+	Description  string
+	Status       pb.TaskStatus
+	Public       bool
+	DueAt        time.Time
+	PatientID    uuid.UUID
+	AssignedUser uuid.NullUUID
+	Subtasks     map[uuid.UUID]Subtask
 }
 
 type Subtask struct {
@@ -29,4 +28,17 @@ type Subtask struct {
 
 	Name string
 	Done bool
+}
+
+type Patient struct {
+	ID                      uuid.UUID
+	HumanReadableIdentifier string
+	Notes                   string
+	BedID                   uuid.NullUUID
+	IsDischarged            bool
+}
+
+type TaskWithPatient struct {
+	Task
+	Patient Patient
 }

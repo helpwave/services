@@ -113,7 +113,7 @@ func (a *Projection) onBedUnassigned(ctx context.Context, evt hwes.Event) (error
 func (a *Projection) onPatientDischarged(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:           evt.AggregateID,
-		IsDischarged: hwutil.PtrTo(int32(1)),
+		IsDischarged: hwutil.PtrTo(true),
 		UpdatedAt:    hwdb.TimeToTimestamp(evt.Timestamp),
 	})
 	err = hwdb.Error(ctx, err)
@@ -171,7 +171,7 @@ func (a *Projection) onHumanReadableIdentifierUpdated(ctx context.Context, evt h
 func (a *Projection) onPatientReadmitted(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	err := a.patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:           evt.AggregateID,
-		IsDischarged: hwutil.PtrTo(int32(0)),
+		IsDischarged: hwutil.PtrTo(false),
 		UpdatedAt:    hwdb.TimeToTimestamp(evt.Timestamp),
 	})
 	err = hwdb.Error(ctx, err)

@@ -2,6 +2,7 @@ package eventstoredb
 
 import (
 	"context"
+	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	zlog "github.com/rs/zerolog"
 	"hwes"
@@ -55,7 +56,7 @@ func Replay(ctx context.Context, es *esdb.Client, onEvent func(ctx context.Conte
 
 	stream, err := es.SubscribeToAll(ctx, subscribeToAllOptions)
 	if err != nil {
-		return err
+		return fmt.Errorf("Replay: failed to SubscribeToAll: %w", err)
 	}
 	defer stream.Close()
 
@@ -81,11 +82,11 @@ func Replay(ctx context.Context, es *esdb.Client, onEvent func(ctx context.Conte
 
 		event, err := hwesEventFromReceivedEventFromStream(ctx, esdbEvent)
 		if err != nil {
-			return err
+			return fmt.Errorf("Replay: could not parse event: %w", err)
 		}
 
 		if err := onEvent(ctx, event); err != nil {
-			return err
+			return fmt.Errorf("Replay: onEvent failed: %w", err)
 		}
 		log.Info().Dict("event", event.GetZerologDict()).Msg("handled event")
 	}

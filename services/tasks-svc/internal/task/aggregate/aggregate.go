@@ -6,7 +6,6 @@ import (
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
-	"hwutil"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"tasks-svc/internal/task/models"
 	"time"
@@ -21,10 +20,10 @@ type TaskAggregate struct {
 
 func NewTaskAggregate(id uuid.UUID) *TaskAggregate {
 	aggregate := &TaskAggregate{Task: &models.Task{
-		ID:            id,
-		CreatedAt:     time.Now().UTC(),
-		AssignedUsers: make([]uuid.UUID, 0),
-		Subtasks:      make(map[uuid.UUID]models.Subtask, 0),
+		ID:           id,
+		CreatedAt:    time.Now().UTC(),
+		AssignedUser: uuid.NullUUID{},
+		Subtasks:     make(map[uuid.UUID]models.Subtask, 0),
 	}}
 	aggregate.AggregateBase = hwes.NewAggregateBase(TaskAggregateType, id)
 	aggregate.initEventListeners()
@@ -53,7 +52,8 @@ func (a *TaskAggregate) initEventListeners() {
 		RegisterEventListener(taskEventsV1.SubtaskNameUpdated, a.onSubtaskNameUpdated).
 		RegisterEventListener(taskEventsV1.SubtaskCompleted, a.onSubtaskCompleted).
 		RegisterEventListener(taskEventsV1.SubtaskUncompleted, a.onSubtaskUncompleted).
-		RegisterEventListener(taskEventsV1.SubtaskDeleted, a.onSubtaskDeleted)
+		RegisterEventListener(taskEventsV1.SubtaskDeleted, a.onSubtaskDeleted).
+		RegisterEventListener(taskEventsV1.TaskStatusUpdated, a.onTaskStatusUpdated)
 }
 
 // Event handlers
@@ -79,6 +79,23 @@ func (a *TaskAggregate) onTaskCreated(evt hwes.Event) error {
 	a.Task.PatientID = patientID
 	a.Task.Status = status
 	a.Task.CreatedAt = evt.Timestamp
+
+	return nil
+}
+
+func (a *TaskAggregate) onTaskStatusUpdated(evt hwes.Event) error {
+	var payload taskEventsV1.TaskStatusUpdatedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	value, found := pb.TaskStatus_value[payload.Status]
+	if !found {
+		return fmt.Errorf("invalid taskStatus: %s", payload.Status)
+	}
+	status := (pb.TaskStatus)(value)
+
+	a.Task.Status = status
 
 	return nil
 }
@@ -139,11 +156,7 @@ func (a *TaskAggregate) onTaskAssigned(evt hwes.Event) error {
 		return err
 	}
 
-	if hwutil.Contains(a.Task.AssignedUsers, userID) {
-		return nil
-	}
-
-	a.Task.AssignedUsers = append(a.Task.AssignedUsers, userID)
+	a.Task.AssignedUser = uuid.NullUUID{UUID: userID, Valid: true}
 
 	return nil
 }
@@ -154,14 +167,7 @@ func (a *TaskAggregate) onTaskUnassigned(evt hwes.Event) error {
 		return err
 	}
 
-	userID, err := uuid.Parse(payload.UserID)
-	if err != nil {
-		return err
-	}
-
-	a.Task.AssignedUsers = hwutil.Filter(a.Task.AssignedUsers, func(assignedUserID uuid.UUID) bool {
-		return assignedUserID != userID
-	})
+	a.Task.AssignedUser = uuid.NullUUID{UUID: uuid.Nil, Valid: false}
 
 	return nil
 }

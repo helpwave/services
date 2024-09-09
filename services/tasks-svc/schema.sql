@@ -54,9 +54,9 @@ CREATE TABLE public.patients (
     human_readable_identifier text NOT NULL,
     notes text DEFAULT ''::text NOT NULL,
     bed_id uuid,
-    is_discharged integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    is_discharged boolean DEFAULT false NOT NULL
 );
 
 
@@ -90,7 +90,7 @@ CREATE TABLE public.subtasks (
     task_id uuid NOT NULL,
     name text NOT NULL,
     done boolean DEFAULT false NOT NULL,
-    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
+    created_by uuid NOT NULL,
     creation_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -128,11 +128,12 @@ CREATE TABLE public.tasks (
     name text NOT NULL,
     description text DEFAULT ''::text NOT NULL,
     status integer NOT NULL,
-    assigned_user_id uuid DEFAULT public.uuid_nil(),
+    assigned_user_id uuid,
     patient_id uuid NOT NULL,
     public boolean DEFAULT false NOT NULL,
-    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
-    due_at timestamp without time zone DEFAULT '1970-01-01 00:00:00'::timestamp without time zone NOT NULL
+    created_by uuid NOT NULL,
+    due_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -224,6 +225,14 @@ ALTER TABLE ONLY public.wards
 
 ALTER TABLE ONLY public.beds
     ADD CONSTRAINT beds_room_id_fkey FOREIGN KEY (room_id) REFERENCES public.rooms(id) ON DELETE CASCADE;
+
+
+--
+-- Name: patients patients_bed_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.patients
+    ADD CONSTRAINT patients_bed_id_fk FOREIGN KEY (bed_id) REFERENCES public.beds(id) ON DELETE SET NULL;
 
 
 --

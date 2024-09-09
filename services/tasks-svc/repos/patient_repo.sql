@@ -16,3 +16,51 @@ UPDATE patients
 SET bed_id = @bed_id,
     updated_at = @updated_at
 WHERE id = @id;
+
+-- name: GetPatientByBed :one
+SELECT patients.*
+FROM patients
+WHERE bed_id = @bed_id
+	LIMIT 1;
+
+-- name: GetPatientsByWard :many
+SELECT
+	patients.*
+FROM patients
+		 JOIN beds ON patients.bed_id = beds.id
+		 JOIN rooms ON beds.room_id = rooms.id
+WHERE rooms.ward_id = @ward_id;
+
+-- name: GetPatientWithBedAndRoom :one
+SELECT
+	patients.*,
+	beds.name as bed_name,
+	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+FROM patients
+		 LEFT JOIN beds ON patients.bed_id = beds.id
+		 LEFT JOIN rooms ON beds.room_id = rooms.id
+WHERE patients.id = @patient_id
+LIMIT 1;
+
+-- name: GetAllPatientsWithTasksBedAndRoom :many
+SELECT
+	sqlc.embed(patients),
+	tasks.id as task_id,
+	tasks.name as task_name,
+	tasks.description as task_description,
+	tasks.status as task_status,
+	tasks.assigned_user_id as task_assigned_user_id,
+	tasks.public as task_public,
+	subtasks.id as subtask_id,
+	subtasks.name as subtask_name,
+	subtasks.done as subtask_done,
+	beds.id as bed_id,
+	beds.name as bed_name,
+	rooms.id as room_id,
+	rooms.name as room_name,
+	rooms.ward_id as ward_id
+FROM patients
+		 LEFT JOIN tasks ON tasks.patient_id = patients.id
+		 LEFT JOIN subtasks ON subtasks.task_id = tasks.id
+		 LEFT JOIN beds ON beds.id = patients.bed_id
+		 LEFT JOIN rooms ON rooms.id = beds.room_id;

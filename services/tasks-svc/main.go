@@ -14,12 +14,16 @@ import (
 	"tasks-svc/internal/tracking"
 	"time"
 
-	hwspicedb "hwauthz/spicedb"
-	patient "tasks-svc/internal/patient/api"
-	task "tasks-svc/internal/task/api"
-
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
+	hwspicedb "hwauthz/spicedb"
+	"tasks-svc/internal/bed"
+	patient "tasks-svc/internal/patient/api"
+	"tasks-svc/internal/room"
+	"tasks-svc/internal/task-template"
+	task "tasks-svc/internal/task/api"
+
+	"tasks-svc/internal/ward"
 )
 
 const ServiceName = "tasks-svc"
@@ -73,6 +77,10 @@ func main() {
 
 		pb.RegisterTaskServiceServer(grpcServer, task.NewTaskGrpcService(aggregateStore, taskHandlers))
 		pb.RegisterPatientServiceServer(grpcServer, patient.NewPatientGrpcService(aggregateStore, patientHandlers))
+		pb.RegisterBedServiceServer(grpcServer, bed.NewServiceServer())
+		pb.RegisterRoomServiceServer(grpcServer, room.NewServiceServer())
+		pb.RegisterWardServiceServer(grpcServer, ward.NewServiceServer())
+		pb.RegisterTaskTemplateServiceServer(grpcServer, task_template.NewServiceServer())
 	})
 
 	// Close context

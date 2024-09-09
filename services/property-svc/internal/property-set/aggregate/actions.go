@@ -8,7 +8,7 @@ import (
 func (a *PropertySetAggregate) CreatePropertySet(ctx context.Context, name string) error {
 	id := a.GetID()
 
-	event, err := propertyEventsV1.NewPropertySetCreatedEvent(a, id, name)
+	event, err := propertyEventsV1.NewPropertySetCreatedEvent(ctx, a, id, name)
 	if err != nil {
 		return err
 	}

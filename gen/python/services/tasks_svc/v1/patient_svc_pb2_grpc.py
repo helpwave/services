@@ -28,6 +28,31 @@ class PatientServiceStub(object):
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientRequest.SerializeToString,
                 response_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientResponse.FromString,
                 _registered_method=True)
+        self.GetPatientByBed = channel.unary_unary(
+                '/services.tasks_svc.v1.PatientService/GetPatientByBed',
+                request_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientByBedRequest.SerializeToString,
+                response_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientByBedResponse.FromString,
+                _registered_method=True)
+        self.GetPatientsByWard = channel.unary_unary(
+                '/services.tasks_svc.v1.PatientService/GetPatientsByWard',
+                request_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientsByWardRequest.SerializeToString,
+                response_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientsByWardResponse.FromString,
+                _registered_method=True)
+        self.GetPatientAssignmentByWard = channel.unary_unary(
+                '/services.tasks_svc.v1.PatientService/GetPatientAssignmentByWard',
+                request_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientAssignmentByWardRequest.SerializeToString,
+                response_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientAssignmentByWardResponse.FromString,
+                _registered_method=True)
+        self.GetPatientDetails = channel.unary_unary(
+                '/services.tasks_svc.v1.PatientService/GetPatientDetails',
+                request_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientDetailsRequest.SerializeToString,
+                response_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientDetailsResponse.FromString,
+                _registered_method=True)
+        self.GetPatientList = channel.unary_unary(
+                '/services.tasks_svc.v1.PatientService/GetPatientList',
+                request_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientListRequest.SerializeToString,
+                response_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientListResponse.FromString,
+                _registered_method=True)
         self.GetRecentPatients = channel.unary_unary(
                 '/services.tasks_svc.v1.PatientService/GetRecentPatients',
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetRecentPatientsRequest.SerializeToString,
@@ -74,6 +99,36 @@ class PatientServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetPatient(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetPatientByBed(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetPatientsByWard(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetPatientAssignmentByWard(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetPatientDetails(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetPatientList(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -127,6 +182,31 @@ def add_PatientServiceServicer_to_server(servicer, server):
                     servicer.GetPatient,
                     request_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientRequest.FromString,
                     response_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientResponse.SerializeToString,
+            ),
+            'GetPatientByBed': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetPatientByBed,
+                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientByBedRequest.FromString,
+                    response_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientByBedResponse.SerializeToString,
+            ),
+            'GetPatientsByWard': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetPatientsByWard,
+                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientsByWardRequest.FromString,
+                    response_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientsByWardResponse.SerializeToString,
+            ),
+            'GetPatientAssignmentByWard': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetPatientAssignmentByWard,
+                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientAssignmentByWardRequest.FromString,
+                    response_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientAssignmentByWardResponse.SerializeToString,
+            ),
+            'GetPatientDetails': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetPatientDetails,
+                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientDetailsRequest.FromString,
+                    response_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientDetailsResponse.SerializeToString,
+            ),
+            'GetPatientList': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetPatientList,
+                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientListRequest.FromString,
+                    response_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientListResponse.SerializeToString,
             ),
             'GetRecentPatients': grpc.unary_unary_rpc_method_handler(
                     servicer.GetRecentPatients,
@@ -217,6 +297,141 @@ class PatientService(object):
             '/services.tasks_svc.v1.PatientService/GetPatient',
             services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientRequest.SerializeToString,
             services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetPatientByBed(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/services.tasks_svc.v1.PatientService/GetPatientByBed',
+            services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientByBedRequest.SerializeToString,
+            services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientByBedResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetPatientsByWard(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/services.tasks_svc.v1.PatientService/GetPatientsByWard',
+            services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientsByWardRequest.SerializeToString,
+            services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientsByWardResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetPatientAssignmentByWard(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/services.tasks_svc.v1.PatientService/GetPatientAssignmentByWard',
+            services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientAssignmentByWardRequest.SerializeToString,
+            services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientAssignmentByWardResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetPatientDetails(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/services.tasks_svc.v1.PatientService/GetPatientDetails',
+            services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientDetailsRequest.SerializeToString,
+            services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientDetailsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetPatientList(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/services.tasks_svc.v1.PatientService/GetPatientList',
+            services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientListRequest.SerializeToString,
+            services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.GetPatientListResponse.FromString,
             options,
             channel_credentials,
             insecure,

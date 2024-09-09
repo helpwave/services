@@ -2,6 +2,7 @@ package common
 
 import (
 	"context"
+	"fmt"
 	daprc "github.com/dapr/go-sdk/client"
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	"github.com/rs/zerolog/log"
@@ -31,7 +32,7 @@ func PublishMessage(ctx context.Context, client daprc.Client, pubsub string, top
 			Error().
 			Err(err).
 			Msgf("could not marshal message for topic %s", topic)
-		return err
+		return fmt.Errorf("PublishMessage: could not marshal message: %w", err)
 	}
 
 	err = client.PublishEvent(ctx, pubsub, topic, bytes)
@@ -40,7 +41,7 @@ func PublishMessage(ctx context.Context, client daprc.Client, pubsub string, top
 			Error().
 			Err(err).
 			Msgf("could not publish message for topic %s", topic)
-		return err
+		return fmt.Errorf("PublishMessage: could not publish message: %w", err)
 	}
 	return nil
 }

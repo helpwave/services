@@ -14,6 +14,7 @@ import (
 	"hwes"
 	"hwutil"
 	"tasks-svc/internal/patient/handlers"
+	"tasks-svc/internal/patient/models"
 	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/bed_repo"
 )
@@ -84,6 +85,206 @@ func (s *PatientGrpcService) GetPatient(ctx context.Context, req *pb.GetPatientR
 		Notes:                   patient.Notes,
 		Bed:                     bedRes,
 		Room:                    roomRes,
+	}, nil
+}
+
+func (s *PatientGrpcService) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBedRequest) (*pb.GetPatientByBedResponse, error) {
+	bedID, err := uuid.Parse(req.BedId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	patient, err := s.handlers.Queries.V1.GetPatientByBed(ctx, bedID)
+	if patient == nil {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.GetPatientByBedResponse{
+		Id:                      patient.ID.String(),
+		HumanReadableIdentifier: patient.HumanReadableIdentifier,
+		Notes:                   patient.Notes,
+		BedId:                   &req.BedId,
+	}, nil
+}
+
+func (s *PatientGrpcService) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsByWardRequest) (*pb.GetPatientsByWardResponse, error) {
+	wardID, err := uuid.Parse(req.WardId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	patients, err := s.handlers.Queries.V1.GetPatientsByWard(ctx, wardID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.GetPatientsByWardResponse{
+		Patients: hwutil.Map(patients, func(patient *models.Patient) *pb.GetPatientsByWardResponse_Patient {
+			return &pb.GetPatientsByWardResponse_Patient{
+				Id:                      patient.ID.String(),
+				HumanReadableIdentifier: patient.HumanReadableIdentifier,
+				Notes:                   patient.Notes,
+				BedId:                   hwutil.NullUUIDToStringPtr(patient.BedID),
+			}
+		}),
+	}, nil
+}
+
+func (s *PatientGrpcService) GetPatientDetails(ctx context.Context, req *pb.GetPatientDetailsRequest) (*pb.GetPatientDetailsResponse, error) {
+	patientID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	patientWithDetails, err := s.handlers.Queries.V1.GetPatientDetailsByID(ctx, patientID)
+	if patientWithDetails == nil {
+		return nil, status.Error(codes.InvalidArgument, "id not found")
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var roomResponse *pb.GetPatientDetailsResponse_Room
+	if patientWithDetails.Room != nil {
+		roomResponse = &pb.GetPatientDetailsResponse_Room{
+			Id:     patientWithDetails.Room.ID.String(),
+			Name:   patientWithDetails.Room.Name,
+			WardId: patientWithDetails.Room.WardID.String(),
+		}
+	}
+
+	var bedResponse *pb.GetPatientDetailsResponse_Bed
+	if patientWithDetails.Bed != nil {
+		bedResponse = &pb.GetPatientDetailsResponse_Bed{
+			Id:   patientWithDetails.Bed.ID.String(),
+			Name: patientWithDetails.Bed.Name,
+		}
+	}
+
+	taskResponse := make([]*pb.GetPatientDetailsResponse_Task, len(patientWithDetails.Tasks))
+	for ix, item := range patientWithDetails.Tasks {
+		taskResponse[ix] = &pb.GetPatientDetailsResponse_Task{
+			Id:             item.ID.String(),
+			Name:           item.Name,
+			Description:    item.Description,
+			Status:         item.Status,
+			Public:         item.Public,
+			Subtasks:       make([]*pb.GetPatientDetailsResponse_Task_SubTask, len(item.Subtasks)),
+			AssignedUserId: hwutil.NullUUIDToStringPtr(item.AssignedUser), // TODO: #760
+		}
+
+		subtaskIdx := 0
+		for _, subtask := range item.Subtasks {
+			taskResponse[ix].Subtasks[subtaskIdx] = &pb.GetPatientDetailsResponse_Task_SubTask{
+				Id:   subtask.ID.String(),
+				Name: subtask.Name,
+				Done: subtask.Done,
+			}
+			subtaskIdx++
+		}
+	}
+
+	// TODO: add patient to recent activity
+
+	return &pb.GetPatientDetailsResponse{
+		Id:                      patientWithDetails.ID.String(),
+		HumanReadableIdentifier: patientWithDetails.HumanReadableIdentifier,
+		Notes:                   patientWithDetails.Notes,
+		Tasks:                   taskResponse,
+		IsDischarged:            patientWithDetails.IsDischarged,
+		Room:                    roomResponse,
+		Bed:                     bedResponse,
+	}, nil
+}
+
+func (s *PatientGrpcService) GetPatientList(ctx context.Context, req *pb.GetPatientListRequest) (*pb.GetPatientListResponse, error) {
+	wardID, err := hwutil.ParseNullUUID(req.WardId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	patientsWithDetails, err := s.handlers.Queries.V1.GetAllPatientsWithDetails(ctx)
+	if err != nil {
+		return nil, err
+	}
+	discharged, charged := hwutil.Partition(patientsWithDetails, func(patient *models.PatientDetails) bool {
+		return patient.IsDischarged
+	})
+	active, unassigned := hwutil.Partition(charged, func(patient *models.PatientDetails) bool {
+		return patient.Bed != nil
+	})
+
+	// Scope active to ward
+	if wardID.Valid {
+		active = hwutil.Filter(active, func(patientDetails *models.PatientDetails) bool {
+			return patientDetails.Room.WardID == wardID.UUID
+		})
+	}
+
+	collectPatientsResponse := func(patientsWithDetails []*models.PatientDetails) []*pb.GetPatientListResponse_Patient {
+		res := make([]*pb.GetPatientListResponse_Patient, 0)
+
+		for _, patientDetails := range patientsWithDetails {
+			var roomResponse *pb.GetPatientListResponse_Room
+			if patientDetails.Room != nil {
+				roomResponse = &pb.GetPatientListResponse_Room{
+					Id:     patientDetails.Room.ID.String(),
+					Name:   patientDetails.Room.Name,
+					WardId: patientDetails.Room.WardID.String(),
+				}
+			}
+
+			var bedResponse *pb.GetPatientListResponse_Bed
+			if patientDetails.Bed != nil {
+				bedResponse = &pb.GetPatientListResponse_Bed{
+					Id:   patientDetails.Bed.ID.String(),
+					Name: patientDetails.Bed.Name,
+				}
+			}
+
+			taskResponse := make([]*pb.GetPatientListResponse_Task, len(patientDetails.Tasks))
+			for ix, item := range patientDetails.Tasks {
+				taskResponse[ix] = &pb.GetPatientListResponse_Task{
+					Id:             item.ID.String(),
+					Name:           item.Name,
+					Description:    item.Description,
+					Status:         item.Status,
+					Public:         item.Public,
+					Subtasks:       make([]*pb.GetPatientListResponse_Task_SubTask, len(item.Subtasks)),
+					AssignedUserId: hwutil.NullUUIDToStringPtr(item.AssignedUser), // TODO: #760
+				}
+
+				subtaskIdx := 0
+				for _, subtask := range item.Subtasks {
+					taskResponse[ix].Subtasks[subtaskIdx] = &pb.GetPatientListResponse_Task_SubTask{
+						Id:   subtask.ID.String(),
+						Name: subtask.Name,
+						Done: subtask.Done,
+					}
+					subtaskIdx++
+				}
+			}
+
+			res = append(res, &pb.GetPatientListResponse_Patient{
+				Id:                      patientDetails.ID.String(),
+				HumanReadableIdentifier: patientDetails.HumanReadableIdentifier,
+				Room:                    roomResponse,
+				Bed:                     bedResponse,
+				Notes:                   patientDetails.Notes,
+				Tasks:                   taskResponse,
+			})
+		}
+
+		return res
+	}
+
+	return &pb.GetPatientListResponse{
+		Active:             collectPatientsResponse(active),
+		UnassignedPatients: collectPatientsResponse(unassigned),
+		DischargedPatients: collectPatientsResponse(discharged),
 	}, nil
 }
 

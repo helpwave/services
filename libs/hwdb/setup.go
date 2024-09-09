@@ -85,7 +85,7 @@ func openDatabasePool(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
 	pgxConfig, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to parse database config")
-		return nil, err
+		return nil, fmt.Errorf("openDatabasePool: could not parse dsn: %w", err)
 	}
 
 	// google's uuid <-> pgtype.uuid interop
@@ -101,7 +101,7 @@ func openDatabasePool(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
 	dbpool, err := pgxpool.NewWithConfig(ctx, pgxConfig)
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to create connection pool")
-		return nil, err
+		return nil, fmt.Errorf("openDatabasePool: unable to create connection pool: %w", err)
 	}
 	return dbpool, nil
 }
