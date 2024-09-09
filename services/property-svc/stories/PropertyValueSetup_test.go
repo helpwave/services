@@ -10,9 +10,9 @@ import (
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 	"os/signal"
+	"property-svc/cmd/service"
 
 	"os"
-	"property-svc/Main"
 	"strings"
 	"sync"
 	"testing"
@@ -79,7 +79,7 @@ func Setup(m *testing.M) {
 
 	// start service
 	ready := make(chan bool)
-	go Main.Main("story testing", func() { ready <- true })
+	go service.Main("story testing", func() { ready <- true })
 	<-ready
 
 	// FIXME: actually wait for the projections instead of guessing

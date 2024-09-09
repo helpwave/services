@@ -1,10 +1,12 @@
 package main
 
-import "property-svc/Main"
+import (
+	"property-svc/cmd/service"
+)
 
 // Version is set at compile time
 var Version string
 
 func main() {
-	Main.Main(Version, nil)
+	service.Main(Version, nil)
 }

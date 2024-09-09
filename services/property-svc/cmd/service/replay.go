@@ -1,4 +1,4 @@
-package Main
+package service
 
 import (
 	"context"
