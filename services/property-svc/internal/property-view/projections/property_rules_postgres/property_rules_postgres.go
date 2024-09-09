@@ -90,7 +90,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 		})
 		if err != nil {
 			log.Error().Err(err).Msg("could not create task rule")
-			return fmt.Errorf("could not create patient rule:"), hwutil.PtrTo(esdb.NackActionRetry)
+			return fmt.Errorf("could not create patient rule: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
 		}
 	case models.PatientPropertyMatchers:
 		patientViewsQuery := p.patientViewsRepo.WithTx(tx)
@@ -101,7 +101,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 		})
 		if err != nil {
 			log.Error().Err(err).Msg("could not create patient rule")
-			return fmt.Errorf("could not create patient rule:", err), hwutil.PtrTo(esdb.NackActionRetry)
+			return fmt.Errorf("could not create patient rule: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
 		}
 	default:
 		return fmt.Errorf("unexpected matchers type, got %T", payload.Matchers), hwutil.PtrTo(esdb.NackActionSkip)
