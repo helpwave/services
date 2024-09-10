@@ -402,14 +402,15 @@ proto.services.property_svc.v1.FilterUpdate.prototype.clearRemoveFromDontAlwaysI
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.oneofGroups_ = [[2]];
+proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.oneofGroups_ = [[2,3]];
 
 /**
  * @enum {number}
  */
 proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.MatcherCase = {
   MATCHER_NOT_SET: 0,
-  TASK_MATCHER: 2
+  TASK_MATCHER: 2,
+  PATIENT_MATCHER: 3
 };
 
 /**
@@ -451,7 +452,8 @@ proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.prototype.toObject 
 proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     filterUpdate: (f = msg.getFilterUpdate()) && proto.services.property_svc.v1.FilterUpdate.toObject(includeInstance, f),
-    taskMatcher: (f = msg.getTaskMatcher()) && services_property_svc_v1_property_value_svc_pb.TaskPropertyMatcher.toObject(includeInstance, f)
+    taskMatcher: (f = msg.getTaskMatcher()) && services_property_svc_v1_property_value_svc_pb.TaskPropertyMatcher.toObject(includeInstance, f),
+    patientMatcher: (f = msg.getPatientMatcher()) && services_property_svc_v1_property_value_svc_pb.PatientPropertyMatcher.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -498,6 +500,11 @@ proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.deserializeBinaryFr
       reader.readMessage(value,services_property_svc_v1_property_value_svc_pb.TaskPropertyMatcher.deserializeBinaryFromReader);
       msg.setTaskMatcher(value);
       break;
+    case 3:
+      var value = new services_property_svc_v1_property_value_svc_pb.PatientPropertyMatcher;
+      reader.readMessage(value,services_property_svc_v1_property_value_svc_pb.PatientPropertyMatcher.deserializeBinaryFromReader);
+      msg.setPatientMatcher(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -541,6 +548,14 @@ proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.serializeBinaryToWr
       2,
       f,
       services_property_svc_v1_property_value_svc_pb.TaskPropertyMatcher.serializeBinaryToWriter
+    );
+  }
+  f = message.getPatientMatcher();
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      services_property_svc_v1_property_value_svc_pb.PatientPropertyMatcher.serializeBinaryToWriter
     );
   }
 };
@@ -617,6 +632,43 @@ proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.prototype.clearTask
  */
 proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.prototype.hasTaskMatcher = function() {
   return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional PatientPropertyMatcher patient_matcher = 3;
+ * @return {?proto.services.property_svc.v1.PatientPropertyMatcher}
+ */
+proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.prototype.getPatientMatcher = function() {
+  return /** @type{?proto.services.property_svc.v1.PatientPropertyMatcher} */ (
+    jspb.Message.getWrapperField(this, services_property_svc_v1_property_value_svc_pb.PatientPropertyMatcher, 3));
+};
+
+
+/**
+ * @param {?proto.services.property_svc.v1.PatientPropertyMatcher|undefined} value
+ * @return {!proto.services.property_svc.v1.UpdatePropertyViewRuleRequest} returns this
+*/
+proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.prototype.setPatientMatcher = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 3, proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.services.property_svc.v1.UpdatePropertyViewRuleRequest} returns this
+ */
+proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.prototype.clearPatientMatcher = function() {
+  return this.setPatientMatcher(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.property_svc.v1.UpdatePropertyViewRuleRequest.prototype.hasPatientMatcher = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 

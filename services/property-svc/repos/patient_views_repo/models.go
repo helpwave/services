@@ -2,7 +2,7 @@
 // versions:
 //   sqlc v1.27.0
 
-package task_views_repo
+package patient_views_repo
 
 import (
 	"github.com/google/uuid"

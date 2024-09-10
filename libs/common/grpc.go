@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"github.com/dapr/dapr/pkg/proto/runtime/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/go-playground/validator/v10"
@@ -136,12 +137,12 @@ func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 
 	ctx, err := authFunc(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("authUnaryInterceptor: authFn failed: %w", err)
 	}
 
 	ctx, err = handleOrganizationIDForAuthFunc(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("authUnaryInterceptor: cant handle organization: %w", err)
 	}
 
 	return next(ctx, req)
@@ -249,7 +250,7 @@ func handleOrganizationIDForAuthFunc(ctx context.Context) (context.Context, erro
 
 	claims, err := GetAuthClaims(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("handleOrganizationIDForAuthFunc: could not get auth claims: %w", err)
 	}
 
 	// If InsecureFakeTokenEnable is true,
@@ -273,16 +274,16 @@ func VerifyFakeToken(ctx context.Context, token string) (*IDTokenClaims, error) 
 
 	plainToken, err := base64.StdEncoding.DecodeString(token)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("VerifyFakeToken: cant decode fake token: %w", err)
 	}
 
 	claims := IDTokenClaims{}
 	if err := hwutil.ParseValidJson(plainToken, &claims); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("VerifyFakeToken: cant parse json: %w", err)
 	}
 
 	if err = claims.AsExpected(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("VerifyFakeToken: claims not as expected: %w", err)
 	}
 
 	log.Warn().Interface("claims", claims).Msg("fake token was verified")
@@ -449,7 +450,7 @@ func errorQualityControlInterceptor(ctx context.Context, req interface{}, info *
 			log.Error().
 				Err(err2).
 				Msg("there was an error while creating the generic fallback statusError")
-			return res, err
+			return res, err // respond with original error
 		}
 	}
 

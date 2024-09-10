@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"fmt"
 	"github.com/google/uuid"
 	"hwes"
 	"property-svc/internal/property-set/aggregate"
@@ -14,7 +15,7 @@ func NewGetPropertySetByIDQueryHandler(as hwes.AggregateStore) GetPropertySetByI
 	return func(ctx context.Context, propertySetID uuid.UUID) (*models.PropertySet, error) {
 		propertySetAggregate, err := aggregate.LoadPropertySetAggregate(ctx, as, propertySetID)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("GetPropertySetByIDQueryHandler: %w", err)
 		}
 		return propertySetAggregate.PropertySet, err
 	}

@@ -91,6 +91,7 @@ class FilterUpdate extends $pb.GeneratedMessage {
 
 enum UpdatePropertyViewRuleRequest_Matcher {
   taskMatcher, 
+  patientMatcher, 
   notSet
 }
 
@@ -98,6 +99,7 @@ class UpdatePropertyViewRuleRequest extends $pb.GeneratedMessage {
   factory UpdatePropertyViewRuleRequest({
     FilterUpdate? filterUpdate,
     $3.TaskPropertyMatcher? taskMatcher,
+    $3.PatientPropertyMatcher? patientMatcher,
   }) {
     final $result = create();
     if (filterUpdate != null) {
@@ -105,6 +107,9 @@ class UpdatePropertyViewRuleRequest extends $pb.GeneratedMessage {
     }
     if (taskMatcher != null) {
       $result.taskMatcher = taskMatcher;
+    }
+    if (patientMatcher != null) {
+      $result.patientMatcher = patientMatcher;
     }
     return $result;
   }
@@ -114,12 +119,14 @@ class UpdatePropertyViewRuleRequest extends $pb.GeneratedMessage {
 
   static const $core.Map<$core.int, UpdatePropertyViewRuleRequest_Matcher> _UpdatePropertyViewRuleRequest_MatcherByTag = {
     2 : UpdatePropertyViewRuleRequest_Matcher.taskMatcher,
+    3 : UpdatePropertyViewRuleRequest_Matcher.patientMatcher,
     0 : UpdatePropertyViewRuleRequest_Matcher.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePropertyViewRuleRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [2])
+    ..oo(0, [2, 3])
     ..aOM<FilterUpdate>(1, _omitFieldNames ? '' : 'filterUpdate', subBuilder: FilterUpdate.create)
     ..aOM<$3.TaskPropertyMatcher>(2, _omitFieldNames ? '' : 'taskMatcher', subBuilder: $3.TaskPropertyMatcher.create)
+    ..aOM<$3.PatientPropertyMatcher>(3, _omitFieldNames ? '' : 'patientMatcher', subBuilder: $3.PatientPropertyMatcher.create)
     ..hasRequiredFields = false
   ;
 
@@ -168,6 +175,17 @@ class UpdatePropertyViewRuleRequest extends $pb.GeneratedMessage {
   void clearTaskMatcher() => clearField(2);
   @$pb.TagNumber(2)
   $3.TaskPropertyMatcher ensureTaskMatcher() => $_ensure(1);
+
+  @$pb.TagNumber(3)
+  $3.PatientPropertyMatcher get patientMatcher => $_getN(2);
+  @$pb.TagNumber(3)
+  set patientMatcher($3.PatientPropertyMatcher v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasPatientMatcher() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearPatientMatcher() => clearField(3);
+  @$pb.TagNumber(3)
+  $3.PatientPropertyMatcher ensurePatientMatcher() => $_ensure(2);
 }
 
 class UpdatePropertyViewRuleResponse extends $pb.GeneratedMessage {

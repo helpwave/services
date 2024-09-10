@@ -27,6 +27,7 @@ message UpdatePropertyViewRuleRequest {
 
   oneof matcher {
     TaskPropertyMatcher task_matcher = 2;
+    PatientPropertyMatcher patient_matcher = 3;
   }
 }
 

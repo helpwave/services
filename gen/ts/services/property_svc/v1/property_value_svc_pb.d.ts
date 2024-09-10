@@ -120,11 +120,52 @@ export namespace TaskPropertyMatcher {
   }
 }
 
+export class PatientPropertyMatcher extends jspb.Message {
+  getWardId(): string;
+  setWardId(value: string): PatientPropertyMatcher;
+  hasWardId(): boolean;
+  clearWardId(): PatientPropertyMatcher;
+
+  getPatientId(): string;
+  setPatientId(value: string): PatientPropertyMatcher;
+  hasPatientId(): boolean;
+  clearPatientId(): PatientPropertyMatcher;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): PatientPropertyMatcher.AsObject;
+  static toObject(includeInstance: boolean, msg: PatientPropertyMatcher): PatientPropertyMatcher.AsObject;
+  static serializeBinaryToWriter(message: PatientPropertyMatcher, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): PatientPropertyMatcher;
+  static deserializeBinaryFromReader(message: PatientPropertyMatcher, reader: jspb.BinaryReader): PatientPropertyMatcher;
+}
+
+export namespace PatientPropertyMatcher {
+  export type AsObject = {
+    wardId?: string,
+    patientId?: string,
+  }
+
+  export enum WardIdCase { 
+    _WARD_ID_NOT_SET = 0,
+    WARD_ID = 1,
+  }
+
+  export enum PatientIdCase { 
+    _PATIENT_ID_NOT_SET = 0,
+    PATIENT_ID = 2,
+  }
+}
+
 export class GetAttachedPropertyValuesRequest extends jspb.Message {
   getTaskMatcher(): TaskPropertyMatcher | undefined;
   setTaskMatcher(value?: TaskPropertyMatcher): GetAttachedPropertyValuesRequest;
   hasTaskMatcher(): boolean;
   clearTaskMatcher(): GetAttachedPropertyValuesRequest;
+
+  getPatientMatcher(): PatientPropertyMatcher | undefined;
+  setPatientMatcher(value?: PatientPropertyMatcher): GetAttachedPropertyValuesRequest;
+  hasPatientMatcher(): boolean;
+  clearPatientMatcher(): GetAttachedPropertyValuesRequest;
 
   getMatcherCase(): GetAttachedPropertyValuesRequest.MatcherCase;
 
@@ -139,11 +180,13 @@ export class GetAttachedPropertyValuesRequest extends jspb.Message {
 export namespace GetAttachedPropertyValuesRequest {
   export type AsObject = {
     taskMatcher?: TaskPropertyMatcher.AsObject,
+    patientMatcher?: PatientPropertyMatcher.AsObject,
   }
 
   export enum MatcherCase { 
     MATCHER_NOT_SET = 0,
     TASK_MATCHER = 1,
+    PATIENT_MATCHER = 2,
   }
 }
 

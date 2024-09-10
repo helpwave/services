@@ -1,4 +1,4 @@
-package task_views_postgres
+package property_rules_postgres
 
 import (
 	"context"
@@ -15,6 +15,7 @@ import (
 	"property-svc/internal/property-view/aggregate"
 	eventsV1 "property-svc/internal/property-view/events/v1"
 	"property-svc/internal/property-view/models"
+	"property-svc/repos/patient_views_repo"
 	"property-svc/repos/task_views_repo"
 	"property-svc/repos/views_repo"
 	"slices"
@@ -22,13 +23,14 @@ import (
 
 type Projection struct {
 	*custom.CustomProjection
-	db            hwdb.DBTX
-	taskViewsRepo *task_views_repo.Queries
-	viewsRepo     *views_repo.Queries
+	db               hwdb.DBTX
+	taskViewsRepo    *task_views_repo.Queries
+	patientViewsRepo *patient_views_repo.Queries
+	viewsRepo        *views_repo.Queries
 }
 
 func NewProjection(es custom.EventStoreClient, serviceName string) *Projection {
-	subscriptionGroupName := fmt.Sprintf("%s-task-views-postgres-projection", serviceName)
+	subscriptionGroupName := fmt.Sprintf("%s-property-rules-postgres-projection", serviceName)
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PropertyViewRuleAggregateType)}),
 		db:               hwdb.GetDB(),
@@ -52,17 +54,8 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	log.Debug().Any("payload", payload).Msg("payload")
-
 	if payload.RuleId == uuid.Nil {
 		return fmt.Errorf("ruleID missing"), hwutil.PtrTo(esdb.NackActionSkip)
-	}
-
-	// TODO: add more matchers
-
-	matchers, ok := payload.Matchers.(models.TaskPropertyMatchers)
-	if !ok {
-		return fmt.Errorf("wrong type, expected TaskPropertyMatcher, got %T", payload.Matchers), hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
 	tx, err := p.db.Begin(ctx)
@@ -77,7 +70,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 		}
 	}()
 
-	taskViewsQuery := p.taskViewsRepo.WithTx(tx)
+	// Create Rule
 	viewsQuery := p.viewsRepo.WithTx(tx)
 
 	err = viewsQuery.CreateRule(ctx, payload.RuleId)
@@ -86,16 +79,35 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
-	err = taskViewsQuery.CreateTaskRule(ctx, task_views_repo.CreateTaskRuleParams{
-		RuleID: payload.RuleId,
-		WardID: matchers.WardID,
-		TaskID: matchers.TaskID,
-	})
-	if err != nil {
-		log.Error().Err(err).Msg("could not create task rule")
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	// Decide on matchers
+	switch matchers := payload.Matchers.(type) {
+	case models.TaskPropertyMatchers:
+		taskViewsQuery := p.taskViewsRepo.WithTx(tx)
+		err = taskViewsQuery.CreateTaskRule(ctx, task_views_repo.CreateTaskRuleParams{
+			RuleID: payload.RuleId,
+			WardID: matchers.WardID,
+			TaskID: matchers.TaskID,
+		})
+		if err != nil {
+			log.Error().Err(err).Msg("could not create task rule")
+			return fmt.Errorf("could not create patient rule: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
+		}
+	case models.PatientPropertyMatchers:
+		patientViewsQuery := p.patientViewsRepo.WithTx(tx)
+		err = patientViewsQuery.CreatePatientRule(ctx, patient_views_repo.CreatePatientRuleParams{
+			RuleID:    payload.RuleId,
+			WardID:    matchers.WardID,
+			PatientID: matchers.PatientID,
+		})
+		if err != nil {
+			log.Error().Err(err).Msg("could not create patient rule")
+			return fmt.Errorf("could not create patient rule: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
+		}
+	default:
+		return fmt.Errorf("unexpected matchers type, got %T", payload.Matchers), hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
+	// handle (dont)alwaysInclude logic
 	mapper := func(dontAlwaysInclude bool) func(uuid.UUID) views_repo.AddToAlwaysIncludeParams {
 		return func(propertyId uuid.UUID) views_repo.AddToAlwaysIncludeParams {
 			return views_repo.AddToAlwaysIncludeParams{

@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -15,6 +16,7 @@ import (
 
 type MatchersRequest interface {
 	GetTaskMatcher() *pb.TaskPropertyMatcher
+	GetPatientMatcher() *pb.PatientPropertyMatcher
 }
 
 // DeMuxMatchers de-multiplexes the matchers in a grpc request
@@ -26,16 +28,30 @@ func DeMuxMatchers(req MatchersRequest) (viewModels.PropertyMatchers, error) {
 	if taskMatcher := req.GetTaskMatcher(); taskMatcher != nil {
 		wardID, err := hwutil.ParseNullUUID(taskMatcher.WardId)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("DeMuxMatchers: WardId invalid: %w", err)
 		}
 		taskID, err := hwutil.ParseNullUUID(taskMatcher.TaskId)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("DeMuxMatchers: TaskId invalid: %w", err)
 		}
 
 		matcher = viewModels.TaskPropertyMatchers{
 			WardID: wardID,
 			TaskID: taskID,
+		}
+	} else if patientMatcher := req.GetPatientMatcher(); patientMatcher != nil {
+		wardID, err := hwutil.ParseNullUUID(patientMatcher.WardId)
+		if err != nil {
+			return nil, fmt.Errorf("DeMuxMatchers: WardID invalid: %w", err)
+		}
+		patientID, err := hwutil.ParseNullUUID(patientMatcher.PatientId)
+		if err != nil {
+			return nil, fmt.Errorf("DeMuxMatchers: PatientID invalid: %w", err)
+		}
+
+		matcher = viewModels.PatientPropertyMatchers{
+			WardID:    wardID,
+			PatientID: patientID,
 		}
 	}
 	return matcher, nil
@@ -54,15 +70,8 @@ func NewPropertyValueService(aggregateStore hwes.AggregateStore, handlers *handl
 func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req *pb.AttachPropertyValueRequest) (*pb.AttachPropertyValueResponse, error) {
 	propertyValueID := uuid.New()
 
-	propertyID, err := uuid.Parse(req.GetPropertyId())
-	if err != nil {
-		return nil, err
-	}
-
-	subjectID, err := uuid.Parse(req.GetSubjectId())
-	if err != nil {
-		return nil, err
-	}
+	propertyID := uuid.MustParse(req.GetPropertyId()) // guarded by validate
+	subjectID := uuid.MustParse(req.GetSubjectId())   // guarded by validate
 
 	var value interface{}
 	switch req.Value.(type) {
