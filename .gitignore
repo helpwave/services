@@ -499,19 +499,6 @@ devenv.local.nix
 # C extensions
 *.so
 
-# Translations
-*.mo
-*.pot
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
 tmp
 
 gen/dart/.dart_tool
