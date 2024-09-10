@@ -19,11 +19,6 @@ class TaskTemplateServiceStub(object):
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.CreateTaskTemplateRequest.SerializeToString,
                 response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.CreateTaskTemplateResponse.FromString,
                 _registered_method=True)
-        self.GetAllTaskTemplates = channel.unary_unary(
-                '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplates',
-                request_serializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesRequest.SerializeToString,
-                response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesResponse.FromString,
-                _registered_method=True)
         self.DeleteTaskTemplate = channel.unary_unary(
                 '/services.tasks_svc.v1.TaskTemplateService/DeleteTaskTemplate',
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.DeleteTaskTemplateRequest.SerializeToString,
@@ -49,15 +44,10 @@ class TaskTemplateServiceStub(object):
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.CreateTaskTemplateSubTaskRequest.SerializeToString,
                 response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.CreateTaskTemplateSubTaskResponse.FromString,
                 _registered_method=True)
-        self.GetAllTaskTemplatesByCreator = channel.unary_unary(
-                '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator',
-                request_serializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesByCreatorRequest.SerializeToString,
-                response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesByCreatorResponse.FromString,
-                _registered_method=True)
-        self.GetAllTaskTemplatesByWard = channel.unary_unary(
-                '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesByWard',
-                request_serializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesByWardRequest.SerializeToString,
-                response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesByWardResponse.FromString,
+        self.GetAllTaskTemplates = channel.unary_unary(
+                '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplates',
+                request_serializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesRequest.SerializeToString,
+                response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesResponse.FromString,
                 _registered_method=True)
 
 
@@ -65,12 +55,6 @@ class TaskTemplateServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def CreateTaskTemplate(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def GetAllTaskTemplates(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -106,13 +90,7 @@ class TaskTemplateServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetAllTaskTemplatesByCreator(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def GetAllTaskTemplatesByWard(self, request, context):
+    def GetAllTaskTemplates(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -125,11 +103,6 @@ def add_TaskTemplateServiceServicer_to_server(servicer, server):
                     servicer.CreateTaskTemplate,
                     request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.CreateTaskTemplateRequest.FromString,
                     response_serializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.CreateTaskTemplateResponse.SerializeToString,
-            ),
-            'GetAllTaskTemplates': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetAllTaskTemplates,
-                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesRequest.FromString,
-                    response_serializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesResponse.SerializeToString,
             ),
             'DeleteTaskTemplate': grpc.unary_unary_rpc_method_handler(
                     servicer.DeleteTaskTemplate,
@@ -156,15 +129,10 @@ def add_TaskTemplateServiceServicer_to_server(servicer, server):
                     request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.CreateTaskTemplateSubTaskRequest.FromString,
                     response_serializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.CreateTaskTemplateSubTaskResponse.SerializeToString,
             ),
-            'GetAllTaskTemplatesByCreator': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetAllTaskTemplatesByCreator,
-                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesByCreatorRequest.FromString,
-                    response_serializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesByCreatorResponse.SerializeToString,
-            ),
-            'GetAllTaskTemplatesByWard': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetAllTaskTemplatesByWard,
-                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesByWardRequest.FromString,
-                    response_serializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesByWardResponse.SerializeToString,
+            'GetAllTaskTemplates': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetAllTaskTemplates,
+                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesRequest.FromString,
+                    response_serializer=services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -194,33 +162,6 @@ class TaskTemplateService(object):
             '/services.tasks_svc.v1.TaskTemplateService/CreateTaskTemplate',
             services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.CreateTaskTemplateRequest.SerializeToString,
             services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.CreateTaskTemplateResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def GetAllTaskTemplates(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplates',
-            services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesRequest.SerializeToString,
-            services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -367,7 +308,7 @@ class TaskTemplateService(object):
             _registered_method=True)
 
     @staticmethod
-    def GetAllTaskTemplatesByCreator(request,
+    def GetAllTaskTemplates(request,
             target,
             options=(),
             channel_credentials=None,
@@ -380,36 +321,9 @@ class TaskTemplateService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator',
-            services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesByCreatorRequest.SerializeToString,
-            services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesByCreatorResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def GetAllTaskTemplatesByWard(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesByWard',
-            services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesByWardRequest.SerializeToString,
-            services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesByWardResponse.FromString,
+            '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplates',
+            services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesRequest.SerializeToString,
+            services_dot_tasks__svc_dot_v1_dot_task__template__svc__pb2.GetAllTaskTemplatesResponse.FromString,
             options,
             channel_credentials,
             insecure,

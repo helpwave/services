@@ -1192,3 +1192,35 @@ export namespace ReadmitPatientResponse {
   }
 }
 
+export class DeletePatientRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): DeletePatientRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeletePatientRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: DeletePatientRequest): DeletePatientRequest.AsObject;
+  static serializeBinaryToWriter(message: DeletePatientRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeletePatientRequest;
+  static deserializeBinaryFromReader(message: DeletePatientRequest, reader: jspb.BinaryReader): DeletePatientRequest;
+}
+
+export namespace DeletePatientRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class DeletePatientResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeletePatientResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: DeletePatientResponse): DeletePatientResponse.AsObject;
+  static serializeBinaryToWriter(message: DeletePatientResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeletePatientResponse;
+  static deserializeBinaryFromReader(message: DeletePatientResponse, reader: jspb.BinaryReader): DeletePatientResponse;
+}
+
+export namespace DeletePatientResponse {
+  export type AsObject = {
+  }
+}
+

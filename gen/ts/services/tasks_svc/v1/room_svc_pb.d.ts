@@ -116,6 +116,11 @@ export namespace GetRoomResponse {
 }
 
 export class GetRoomsRequest extends jspb.Message {
+  getWardId(): string;
+  setWardId(value: string): GetRoomsRequest;
+  hasWardId(): boolean;
+  clearWardId(): GetRoomsRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetRoomsRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetRoomsRequest): GetRoomsRequest.AsObject;
@@ -126,6 +131,12 @@ export class GetRoomsRequest extends jspb.Message {
 
 export namespace GetRoomsRequest {
   export type AsObject = {
+    wardId?: string,
+  }
+
+  export enum WardIdCase { 
+    _WARD_ID_NOT_SET = 0,
+    WARD_ID = 1,
   }
 }
 
@@ -176,100 +187,6 @@ export namespace GetRoomsResponse {
       id: string,
       name: string,
       bedsList: Array<GetRoomsResponse.Room.Bed.AsObject>,
-      wardId: string,
-    }
-
-    export class Bed extends jspb.Message {
-      getId(): string;
-      setId(value: string): Bed;
-
-      getName(): string;
-      setName(value: string): Bed;
-
-      serializeBinary(): Uint8Array;
-      toObject(includeInstance?: boolean): Bed.AsObject;
-      static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
-      static serializeBinaryToWriter(message: Bed, writer: jspb.BinaryWriter): void;
-      static deserializeBinary(bytes: Uint8Array): Bed;
-      static deserializeBinaryFromReader(message: Bed, reader: jspb.BinaryReader): Bed;
-    }
-
-    export namespace Bed {
-      export type AsObject = {
-        id: string,
-        name: string,
-      }
-    }
-
-  }
-
-}
-
-export class GetRoomsByWardRequest extends jspb.Message {
-  getWardId(): string;
-  setWardId(value: string): GetRoomsByWardRequest;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetRoomsByWardRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetRoomsByWardRequest): GetRoomsByWardRequest.AsObject;
-  static serializeBinaryToWriter(message: GetRoomsByWardRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetRoomsByWardRequest;
-  static deserializeBinaryFromReader(message: GetRoomsByWardRequest, reader: jspb.BinaryReader): GetRoomsByWardRequest;
-}
-
-export namespace GetRoomsByWardRequest {
-  export type AsObject = {
-    wardId: string,
-  }
-}
-
-export class GetRoomsByWardResponse extends jspb.Message {
-  getRoomsList(): Array<GetRoomsByWardResponse.Room>;
-  setRoomsList(value: Array<GetRoomsByWardResponse.Room>): GetRoomsByWardResponse;
-  clearRoomsList(): GetRoomsByWardResponse;
-  addRooms(value?: GetRoomsByWardResponse.Room, index?: number): GetRoomsByWardResponse.Room;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetRoomsByWardResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetRoomsByWardResponse): GetRoomsByWardResponse.AsObject;
-  static serializeBinaryToWriter(message: GetRoomsByWardResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetRoomsByWardResponse;
-  static deserializeBinaryFromReader(message: GetRoomsByWardResponse, reader: jspb.BinaryReader): GetRoomsByWardResponse;
-}
-
-export namespace GetRoomsByWardResponse {
-  export type AsObject = {
-    roomsList: Array<GetRoomsByWardResponse.Room.AsObject>,
-  }
-
-  export class Room extends jspb.Message {
-    getId(): string;
-    setId(value: string): Room;
-
-    getName(): string;
-    setName(value: string): Room;
-
-    getBedsList(): Array<GetRoomsByWardResponse.Room.Bed>;
-    setBedsList(value: Array<GetRoomsByWardResponse.Room.Bed>): Room;
-    clearBedsList(): Room;
-    addBeds(value?: GetRoomsByWardResponse.Room.Bed, index?: number): GetRoomsByWardResponse.Room.Bed;
-
-    getWardId(): string;
-    setWardId(value: string): Room;
-
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Room.AsObject;
-    static toObject(includeInstance: boolean, msg: Room): Room.AsObject;
-    static serializeBinaryToWriter(message: Room, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Room;
-    static deserializeBinaryFromReader(message: Room, reader: jspb.BinaryReader): Room;
-  }
-
-  export namespace Room {
-    export type AsObject = {
-      id: string,
-      name: string,
-      bedsList: Array<GetRoomsByWardResponse.Room.Bed.AsObject>,
       wardId: string,
     }
 

@@ -68,20 +68,20 @@ class TaskServiceStub(object):
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UpdateSubtaskRequest.SerializeToString,
                 response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UpdateSubtaskResponse.FromString,
                 _registered_method=True)
-        self.CompleteSubtask = channel.unary_unary(
-                '/services.tasks_svc.v1.TaskService/CompleteSubtask',
-                request_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.CompleteSubtaskRequest.SerializeToString,
-                response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.CompleteSubtaskResponse.FromString,
-                _registered_method=True)
-        self.UncompleteSubtask = channel.unary_unary(
-                '/services.tasks_svc.v1.TaskService/UncompleteSubtask',
-                request_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UncompleteSubtaskRequest.SerializeToString,
-                response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UncompleteSubtaskResponse.FromString,
-                _registered_method=True)
         self.DeleteSubtask = channel.unary_unary(
                 '/services.tasks_svc.v1.TaskService/DeleteSubtask',
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.DeleteSubtaskRequest.SerializeToString,
                 response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.DeleteSubtaskResponse.FromString,
+                _registered_method=True)
+        self.RemoveTaskDueDate = channel.unary_unary(
+                '/services.tasks_svc.v1.TaskService/RemoveTaskDueDate',
+                request_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.RemoveTaskDueDateRequest.SerializeToString,
+                response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.RemoveTaskDueDateResponse.FromString,
+                _registered_method=True)
+        self.DeleteTask = channel.unary_unary(
+                '/services.tasks_svc.v1.TaskService/DeleteTask',
+                request_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.DeleteTaskRequest.SerializeToString,
+                response_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.DeleteTaskResponse.FromString,
                 _registered_method=True)
 
 
@@ -152,19 +152,19 @@ class TaskServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def CompleteSubtask(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def UncompleteSubtask(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def DeleteSubtask(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def RemoveTaskDueDate(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeleteTask(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -223,20 +223,20 @@ def add_TaskServiceServicer_to_server(servicer, server):
                     request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UpdateSubtaskRequest.FromString,
                     response_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UpdateSubtaskResponse.SerializeToString,
             ),
-            'CompleteSubtask': grpc.unary_unary_rpc_method_handler(
-                    servicer.CompleteSubtask,
-                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.CompleteSubtaskRequest.FromString,
-                    response_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.CompleteSubtaskResponse.SerializeToString,
-            ),
-            'UncompleteSubtask': grpc.unary_unary_rpc_method_handler(
-                    servicer.UncompleteSubtask,
-                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UncompleteSubtaskRequest.FromString,
-                    response_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UncompleteSubtaskResponse.SerializeToString,
-            ),
             'DeleteSubtask': grpc.unary_unary_rpc_method_handler(
                     servicer.DeleteSubtask,
                     request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.DeleteSubtaskRequest.FromString,
                     response_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.DeleteSubtaskResponse.SerializeToString,
+            ),
+            'RemoveTaskDueDate': grpc.unary_unary_rpc_method_handler(
+                    servicer.RemoveTaskDueDate,
+                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.RemoveTaskDueDateRequest.FromString,
+                    response_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.RemoveTaskDueDateResponse.SerializeToString,
+            ),
+            'DeleteTask': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteTask,
+                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.DeleteTaskRequest.FromString,
+                    response_serializer=services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.DeleteTaskResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -524,60 +524,6 @@ class TaskService(object):
             _registered_method=True)
 
     @staticmethod
-    def CompleteSubtask(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/services.tasks_svc.v1.TaskService/CompleteSubtask',
-            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.CompleteSubtaskRequest.SerializeToString,
-            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.CompleteSubtaskResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def UncompleteSubtask(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/services.tasks_svc.v1.TaskService/UncompleteSubtask',
-            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UncompleteSubtaskRequest.SerializeToString,
-            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.UncompleteSubtaskResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
     def DeleteSubtask(request,
             target,
             options=(),
@@ -594,6 +540,60 @@ class TaskService(object):
             '/services.tasks_svc.v1.TaskService/DeleteSubtask',
             services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.DeleteSubtaskRequest.SerializeToString,
             services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.DeleteSubtaskResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def RemoveTaskDueDate(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/services.tasks_svc.v1.TaskService/RemoveTaskDueDate',
+            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.RemoveTaskDueDateRequest.SerializeToString,
+            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.RemoveTaskDueDateResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def DeleteTask(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/services.tasks_svc.v1.TaskService/DeleteTask',
+            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.DeleteTaskRequest.SerializeToString,
+            services_dot_tasks__svc_dot_v1_dot_task__svc__pb2.DeleteTaskResponse.FromString,
             options,
             channel_credentials,
             insecure,

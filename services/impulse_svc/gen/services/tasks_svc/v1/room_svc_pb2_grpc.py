@@ -33,11 +33,6 @@ class RoomServiceStub(object):
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_room__svc__pb2.GetRoomsRequest.SerializeToString,
                 response_deserializer=services_dot_tasks__svc_dot_v1_dot_room__svc__pb2.GetRoomsResponse.FromString,
                 _registered_method=True)
-        self.GetRoomsByWard = channel.unary_unary(
-                '/services.tasks_svc.v1.RoomService/GetRoomsByWard',
-                request_serializer=services_dot_tasks__svc_dot_v1_dot_room__svc__pb2.GetRoomsByWardRequest.SerializeToString,
-                response_deserializer=services_dot_tasks__svc_dot_v1_dot_room__svc__pb2.GetRoomsByWardResponse.FromString,
-                _registered_method=True)
         self.UpdateRoom = channel.unary_unary(
                 '/services.tasks_svc.v1.RoomService/UpdateRoom',
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_room__svc__pb2.UpdateRoomRequest.SerializeToString,
@@ -80,12 +75,6 @@ class RoomServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetRoomsByWard(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def UpdateRoom(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -121,11 +110,6 @@ def add_RoomServiceServicer_to_server(servicer, server):
                     servicer.GetRooms,
                     request_deserializer=services_dot_tasks__svc_dot_v1_dot_room__svc__pb2.GetRoomsRequest.FromString,
                     response_serializer=services_dot_tasks__svc_dot_v1_dot_room__svc__pb2.GetRoomsResponse.SerializeToString,
-            ),
-            'GetRoomsByWard': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetRoomsByWard,
-                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_room__svc__pb2.GetRoomsByWardRequest.FromString,
-                    response_serializer=services_dot_tasks__svc_dot_v1_dot_room__svc__pb2.GetRoomsByWardResponse.SerializeToString,
             ),
             'UpdateRoom': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateRoom,
@@ -228,33 +212,6 @@ class RoomService(object):
             '/services.tasks_svc.v1.RoomService/GetRooms',
             services_dot_tasks__svc_dot_v1_dot_room__svc__pb2.GetRoomsRequest.SerializeToString,
             services_dot_tasks__svc_dot_v1_dot_room__svc__pb2.GetRoomsResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def GetRoomsByWard(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/services.tasks_svc.v1.RoomService/GetRoomsByWard',
-            services_dot_tasks__svc_dot_v1_dot_room__svc__pb2.GetRoomsByWardRequest.SerializeToString,
-            services_dot_tasks__svc_dot_v1_dot_room__svc__pb2.GetRoomsByWardResponse.FromString,
             options,
             channel_credentials,
             insecure,

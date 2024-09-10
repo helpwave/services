@@ -78,26 +78,26 @@ export class TaskServiceClient {
                response: services_tasks_svc_v1_task_svc_pb.UpdateSubtaskResponse) => void
   ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_svc_pb.UpdateSubtaskResponse>;
 
-  completeSubtask(
-    request: services_tasks_svc_v1_task_svc_pb.CompleteSubtaskRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: services_tasks_svc_v1_task_svc_pb.CompleteSubtaskResponse) => void
-  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_svc_pb.CompleteSubtaskResponse>;
-
-  uncompleteSubtask(
-    request: services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskResponse) => void
-  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskResponse>;
-
   deleteSubtask(
     request: services_tasks_svc_v1_task_svc_pb.DeleteSubtaskRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
                response: services_tasks_svc_v1_task_svc_pb.DeleteSubtaskResponse) => void
   ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_svc_pb.DeleteSubtaskResponse>;
+
+  removeTaskDueDate(
+    request: services_tasks_svc_v1_task_svc_pb.RemoveTaskDueDateRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: services_tasks_svc_v1_task_svc_pb.RemoveTaskDueDateResponse) => void
+  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_svc_pb.RemoveTaskDueDateResponse>;
+
+  deleteTask(
+    request: services_tasks_svc_v1_task_svc_pb.DeleteTaskRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: services_tasks_svc_v1_task_svc_pb.DeleteTaskResponse) => void
+  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_svc_pb.DeleteTaskResponse>;
 
 }
 
@@ -156,20 +156,20 @@ export class TaskServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<services_tasks_svc_v1_task_svc_pb.UpdateSubtaskResponse>;
 
-  completeSubtask(
-    request: services_tasks_svc_v1_task_svc_pb.CompleteSubtaskRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<services_tasks_svc_v1_task_svc_pb.CompleteSubtaskResponse>;
-
-  uncompleteSubtask(
-    request: services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<services_tasks_svc_v1_task_svc_pb.UncompleteSubtaskResponse>;
-
   deleteSubtask(
     request: services_tasks_svc_v1_task_svc_pb.DeleteSubtaskRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<services_tasks_svc_v1_task_svc_pb.DeleteSubtaskResponse>;
+
+  removeTaskDueDate(
+    request: services_tasks_svc_v1_task_svc_pb.RemoveTaskDueDateRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<services_tasks_svc_v1_task_svc_pb.RemoveTaskDueDateResponse>;
+
+  deleteTask(
+    request: services_tasks_svc_v1_task_svc_pb.DeleteTaskRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<services_tasks_svc_v1_task_svc_pb.DeleteTaskResponse>;
 
 }
 

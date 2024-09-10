@@ -256,7 +256,7 @@ func TestTaskGrpcService_Subtask(t *testing.T) {
 		t.Error("subtasks should be 1")
 	}
 
-	subtasks := hwutil.Filter(getTaskResponse.Subtasks, func(value *pb.GetTaskResponse_Subtask) bool {
+	subtasks := hwutil.Filter(getTaskResponse.Subtasks, func(value *pb.GetTaskResponse_SubTask) bool {
 		return value.Id == createSubtaskResponse.GetSubtaskId()
 	})
 	subtask := subtasks[0]
@@ -279,7 +279,7 @@ func TestTaskGrpcService_Subtask(t *testing.T) {
 		t.Error(err)
 	}
 
-	subtasks = hwutil.Filter(getTaskResponse.Subtasks, func(value *pb.GetTaskResponse_Subtask) bool {
+	subtasks = hwutil.Filter(getTaskResponse.Subtasks, func(value *pb.GetTaskResponse_SubTask) bool {
 		return value.Id == createSubtaskResponse.GetSubtaskId()
 	})
 	subtask = subtasks[0]
@@ -308,7 +308,7 @@ func TestTaskGrpcService_Subtask(t *testing.T) {
 		t.Error(err)
 	}
 
-	subtasks = hwutil.Filter(getTaskResponse.Subtasks, func(value *pb.GetTaskResponse_Subtask) bool {
+	subtasks = hwutil.Filter(getTaskResponse.Subtasks, func(value *pb.GetTaskResponse_SubTask) bool {
 		return value.Id == createSubtaskResponse.GetSubtaskId()
 	})
 	subtask = subtasks[0]
@@ -317,49 +317,7 @@ func TestTaskGrpcService_Subtask(t *testing.T) {
 		t.Errorf("Invalid subtask name. Expected '%s' got '%s'", newSubtaskName, subtask.Name)
 	}
 
-	_, err = client.CompleteSubtask(ctx, &pb.CompleteSubtaskRequest{
-		TaskId:    createTaskResponse.GetId(),
-		SubtaskId: createSubtaskResponse.GetSubtaskId(),
-	})
-	if err != nil {
-		t.Error(err)
-	}
-
-	getTaskResponse, err = client.GetTask(ctx, &pb.GetTaskRequest{Id: createTaskResponse.GetId()})
-	if err != nil {
-		t.Error(err)
-	}
-
-	subtasks = hwutil.Filter(getTaskResponse.Subtasks, func(value *pb.GetTaskResponse_Subtask) bool {
-		return value.Id == createSubtaskResponse.GetSubtaskId()
-	})
-	subtask = subtasks[0]
-
-	if !subtask.Done {
-		t.Error("Subtask should be completed")
-	}
-
-	_, err = client.UncompleteSubtask(ctx, &pb.UncompleteSubtaskRequest{
-		TaskId:    createTaskResponse.GetId(),
-		SubtaskId: createSubtaskResponse.GetSubtaskId(),
-	})
-	if err != nil {
-		t.Error(err)
-	}
-
-	getTaskResponse, err = client.GetTask(ctx, &pb.GetTaskRequest{Id: createTaskResponse.GetId()})
-	if err != nil {
-		t.Error(err)
-	}
-
-	subtasks = hwutil.Filter(getTaskResponse.Subtasks, func(value *pb.GetTaskResponse_Subtask) bool {
-		return value.Id == createSubtaskResponse.GetSubtaskId()
-	})
-	subtask = subtasks[0]
-
-	if subtask.Done {
-		t.Error("Subtask should be uncompleted")
-	}
+	// TODO: test functionality of complete & uncomplete subtask which was moved to updateSubtask
 
 	_, err = client.DeleteSubtask(ctx, &pb.DeleteSubtaskRequest{
 		TaskId:    createTaskResponse.GetId(),
