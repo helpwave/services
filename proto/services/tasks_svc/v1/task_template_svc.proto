@@ -90,16 +90,15 @@ message CreateTaskTemplateSubTaskResponse {
 
 ///
 /// GetAllTaskTemplatesByWardAndCreatorFilter
-/// If no filter is set, all TaskTemplates will be returned
 ///
 
-message GetAllTaskTemplatesWithWardAndCreatorFilterRequest {
-  optional string ward_id = 1;
-  optional string created_by = 2;
+message GetAllTaskTemplatesRequest {
+  optional string ward_id = 1; // @gotags: validate:"omitempty,omitnil,uuid4"
+  optional string created_by = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
   bool private_only = 3;
 }
 
-message GetAllTaskTemplatesWithWardAndCreatorFilterResponse {
+message GetAllTaskTemplatesResponse {
   repeated TaskTemplate templates = 1;
 
   message TaskTemplate {
@@ -125,5 +124,5 @@ service TaskTemplateService {
   rpc UpdateTaskTemplate (UpdateTaskTemplateRequest) returns (UpdateTaskTemplateResponse) {}
   rpc UpdateTaskTemplateSubTask (UpdateTaskTemplateSubTaskRequest) returns (UpdateTaskTemplateSubTaskResponse) {}
   rpc CreateTaskTemplateSubTask (CreateTaskTemplateSubTaskRequest) returns (CreateTaskTemplateSubTaskResponse) {}
-  rpc GetAllTaskTemplatesWithWardAndCreatorFilter (GetAllTaskTemplatesWithWardAndCreatorFilterRequest) returns (GetAllTaskTemplatesWithWardAndCreatorFilterResponse) {}
+  rpc GetAllTaskTemplates (GetAllTaskTemplatesRequest) returns (GetAllTaskTemplatesResponse) {}
 }

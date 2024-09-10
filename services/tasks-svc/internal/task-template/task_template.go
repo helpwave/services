@@ -212,4 +212,4 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 	}, nil
 }
 
-// TODO: GetAllTaskTemplatesWithWardAndCreatorFilter
+// TODO: GetAllTaskTemplates

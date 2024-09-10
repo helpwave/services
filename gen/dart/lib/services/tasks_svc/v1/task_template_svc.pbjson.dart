@@ -180,9 +180,9 @@ const CreateTaskTemplateSubTaskResponse$json = {
 final $typed_data.Uint8List createTaskTemplateSubTaskResponseDescriptor = $convert.base64Decode(
     'CiFDcmVhdGVUYXNrVGVtcGxhdGVTdWJUYXNrUmVzcG9uc2USDgoCaWQYASABKAlSAmlk');
 
-@$core.Deprecated('Use getAllTaskTemplatesWithWardAndCreatorFilterRequestDescriptor instead')
-const GetAllTaskTemplatesWithWardAndCreatorFilterRequest$json = {
-  '1': 'GetAllTaskTemplatesWithWardAndCreatorFilterRequest',
+@$core.Deprecated('Use getAllTaskTemplatesRequestDescriptor instead')
+const GetAllTaskTemplatesRequest$json = {
+  '1': 'GetAllTaskTemplatesRequest',
   '2': [
     {'1': 'ward_id', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'wardId', '17': true},
     {'1': 'created_by', '3': 2, '4': 1, '5': 9, '9': 1, '10': 'createdBy', '17': true},
@@ -194,24 +194,23 @@ const GetAllTaskTemplatesWithWardAndCreatorFilterRequest$json = {
   ],
 };
 
-/// Descriptor for `GetAllTaskTemplatesWithWardAndCreatorFilterRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getAllTaskTemplatesWithWardAndCreatorFilterRequestDescriptor = $convert.base64Decode(
-    'CjJHZXRBbGxUYXNrVGVtcGxhdGVzV2l0aFdhcmRBbmRDcmVhdG9yRmlsdGVyUmVxdWVzdBIcCg'
-    'd3YXJkX2lkGAEgASgJSABSBndhcmRJZIgBARIiCgpjcmVhdGVkX2J5GAIgASgJSAFSCWNyZWF0'
-    'ZWRCeYgBARIhCgxwcml2YXRlX29ubHkYAyABKAhSC3ByaXZhdGVPbmx5QgoKCF93YXJkX2lkQg'
-    '0KC19jcmVhdGVkX2J5');
+/// Descriptor for `GetAllTaskTemplatesRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getAllTaskTemplatesRequestDescriptor = $convert.base64Decode(
+    'ChpHZXRBbGxUYXNrVGVtcGxhdGVzUmVxdWVzdBIcCgd3YXJkX2lkGAEgASgJSABSBndhcmRJZI'
+    'gBARIiCgpjcmVhdGVkX2J5GAIgASgJSAFSCWNyZWF0ZWRCeYgBARIhCgxwcml2YXRlX29ubHkY'
+    'AyABKAhSC3ByaXZhdGVPbmx5QgoKCF93YXJkX2lkQg0KC19jcmVhdGVkX2J5');
 
-@$core.Deprecated('Use getAllTaskTemplatesWithWardAndCreatorFilterResponseDescriptor instead')
-const GetAllTaskTemplatesWithWardAndCreatorFilterResponse$json = {
-  '1': 'GetAllTaskTemplatesWithWardAndCreatorFilterResponse',
+@$core.Deprecated('Use getAllTaskTemplatesResponseDescriptor instead')
+const GetAllTaskTemplatesResponse$json = {
+  '1': 'GetAllTaskTemplatesResponse',
   '2': [
-    {'1': 'templates', '3': 1, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate', '10': 'templates'},
+    {'1': 'templates', '3': 1, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetAllTaskTemplatesResponse.TaskTemplate', '10': 'templates'},
   ],
-  '3': [GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate$json],
+  '3': [GetAllTaskTemplatesResponse_TaskTemplate$json],
 };
 
-@$core.Deprecated('Use getAllTaskTemplatesWithWardAndCreatorFilterResponseDescriptor instead')
-const GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate$json = {
+@$core.Deprecated('Use getAllTaskTemplatesResponseDescriptor instead')
+const GetAllTaskTemplatesResponse_TaskTemplate$json = {
   '1': 'TaskTemplate',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
@@ -219,13 +218,13 @@ const GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate$json = {
     {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
     {'1': 'is_public', '3': 4, '4': 1, '5': 8, '10': 'isPublic'},
     {'1': 'created_by', '3': 6, '4': 1, '5': 9, '10': 'createdBy'},
-    {'1': 'subtasks', '3': 7, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate.SubTask', '10': 'subtasks'},
+    {'1': 'subtasks', '3': 7, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetAllTaskTemplatesResponse.TaskTemplate.SubTask', '10': 'subtasks'},
   ],
-  '3': [GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask$json],
+  '3': [GetAllTaskTemplatesResponse_TaskTemplate_SubTask$json],
 };
 
-@$core.Deprecated('Use getAllTaskTemplatesWithWardAndCreatorFilterResponseDescriptor instead')
-const GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask$json = {
+@$core.Deprecated('Use getAllTaskTemplatesResponseDescriptor instead')
+const GetAllTaskTemplatesResponse_TaskTemplate_SubTask$json = {
   '1': 'SubTask',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
@@ -234,16 +233,15 @@ const GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask$j
   ],
 };
 
-/// Descriptor for `GetAllTaskTemplatesWithWardAndCreatorFilterResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getAllTaskTemplatesWithWardAndCreatorFilterResponseDescriptor = $convert.base64Decode(
-    'CjNHZXRBbGxUYXNrVGVtcGxhdGVzV2l0aFdhcmRBbmRDcmVhdG9yRmlsdGVyUmVzcG9uc2USdQ'
-    'oJdGVtcGxhdGVzGAEgAygLMlcuc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldEFsbFRhc2tUZW1w'
-    'bGF0ZXNXaXRoV2FyZEFuZENyZWF0b3JGaWx0ZXJSZXNwb25zZS5UYXNrVGVtcGxhdGVSCXRlbX'
-    'BsYXRlcxrmAgoMVGFza1RlbXBsYXRlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRu'
-    'YW1lEiAKC2Rlc2NyaXB0aW9uGAMgASgJUgtkZXNjcmlwdGlvbhIbCglpc19wdWJsaWMYBCABKA'
-    'hSCGlzUHVibGljEh0KCmNyZWF0ZWRfYnkYBiABKAlSCWNyZWF0ZWRCeRJ7CghzdWJ0YXNrcxgH'
-    'IAMoCzJfLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRBbGxUYXNrVGVtcGxhdGVzV2l0aFdhcm'
-    'RBbmRDcmVhdG9yRmlsdGVyUmVzcG9uc2UuVGFza1RlbXBsYXRlLlN1YlRhc2tSCHN1YnRhc2tz'
-    'GlcKB1N1YlRhc2sSDgoCaWQYASABKAlSAmlkEigKEHRhc2tfdGVtcGxhdGVfaWQYAiABKAlSDn'
-    'Rhc2tUZW1wbGF0ZUlkEhIKBG5hbWUYAyABKAlSBG5hbWU=');
+/// Descriptor for `GetAllTaskTemplatesResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getAllTaskTemplatesResponseDescriptor = $convert.base64Decode(
+    'ChtHZXRBbGxUYXNrVGVtcGxhdGVzUmVzcG9uc2USXQoJdGVtcGxhdGVzGAEgAygLMj8uc2Vydm'
+    'ljZXMudGFza3Nfc3ZjLnYxLkdldEFsbFRhc2tUZW1wbGF0ZXNSZXNwb25zZS5UYXNrVGVtcGxh'
+    'dGVSCXRlbXBsYXRlcxrOAgoMVGFza1RlbXBsYXRlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGA'
+    'IgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW9uGAMgASgJUgtkZXNjcmlwdGlvbhIbCglpc19wdWJs'
+    'aWMYBCABKAhSCGlzUHVibGljEh0KCmNyZWF0ZWRfYnkYBiABKAlSCWNyZWF0ZWRCeRJjCghzdW'
+    'J0YXNrcxgHIAMoCzJHLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRBbGxUYXNrVGVtcGxhdGVz'
+    'UmVzcG9uc2UuVGFza1RlbXBsYXRlLlN1YlRhc2tSCHN1YnRhc2tzGlcKB1N1YlRhc2sSDgoCaW'
+    'QYASABKAlSAmlkEigKEHRhc2tfdGVtcGxhdGVfaWQYAiABKAlSDnRhc2tUZW1wbGF0ZUlkEhIK'
+    'BG5hbWUYAyABKAlSBG5hbWU=');
 
