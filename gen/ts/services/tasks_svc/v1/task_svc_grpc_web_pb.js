@@ -693,128 +693,6 @@ proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.updateSubtask =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.services.tasks_svc.v1.CompleteSubtaskRequest,
- *   !proto.services.tasks_svc.v1.CompleteSubtaskResponse>}
- */
-const methodDescriptor_TaskService_CompleteSubtask = new grpc.web.MethodDescriptor(
-  '/services.tasks_svc.v1.TaskService/CompleteSubtask',
-  grpc.web.MethodType.UNARY,
-  proto.services.tasks_svc.v1.CompleteSubtaskRequest,
-  proto.services.tasks_svc.v1.CompleteSubtaskResponse,
-  /**
-   * @param {!proto.services.tasks_svc.v1.CompleteSubtaskRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.services.tasks_svc.v1.CompleteSubtaskResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.services.tasks_svc.v1.CompleteSubtaskRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.services.tasks_svc.v1.CompleteSubtaskResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.services.tasks_svc.v1.CompleteSubtaskResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.services.tasks_svc.v1.TaskServiceClient.prototype.completeSubtask =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/services.tasks_svc.v1.TaskService/CompleteSubtask',
-      request,
-      metadata || {},
-      methodDescriptor_TaskService_CompleteSubtask,
-      callback);
-};
-
-
-/**
- * @param {!proto.services.tasks_svc.v1.CompleteSubtaskRequest} request The
- *     request proto
- * @param {?Object<string, string>=} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.services.tasks_svc.v1.CompleteSubtaskResponse>}
- *     Promise that resolves to the response
- */
-proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.completeSubtask =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/services.tasks_svc.v1.TaskService/CompleteSubtask',
-      request,
-      metadata || {},
-      methodDescriptor_TaskService_CompleteSubtask);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
- *   !proto.services.tasks_svc.v1.UncompleteSubtaskRequest,
- *   !proto.services.tasks_svc.v1.UncompleteSubtaskResponse>}
- */
-const methodDescriptor_TaskService_UncompleteSubtask = new grpc.web.MethodDescriptor(
-  '/services.tasks_svc.v1.TaskService/UncompleteSubtask',
-  grpc.web.MethodType.UNARY,
-  proto.services.tasks_svc.v1.UncompleteSubtaskRequest,
-  proto.services.tasks_svc.v1.UncompleteSubtaskResponse,
-  /**
-   * @param {!proto.services.tasks_svc.v1.UncompleteSubtaskRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.services.tasks_svc.v1.UncompleteSubtaskResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.services.tasks_svc.v1.UncompleteSubtaskRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.services.tasks_svc.v1.UncompleteSubtaskResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.services.tasks_svc.v1.UncompleteSubtaskResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.services.tasks_svc.v1.TaskServiceClient.prototype.uncompleteSubtask =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/services.tasks_svc.v1.TaskService/UncompleteSubtask',
-      request,
-      metadata || {},
-      methodDescriptor_TaskService_UncompleteSubtask,
-      callback);
-};
-
-
-/**
- * @param {!proto.services.tasks_svc.v1.UncompleteSubtaskRequest} request The
- *     request proto
- * @param {?Object<string, string>=} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.services.tasks_svc.v1.UncompleteSubtaskResponse>}
- *     Promise that resolves to the response
- */
-proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.uncompleteSubtask =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/services.tasks_svc.v1.TaskService/UncompleteSubtask',
-      request,
-      metadata || {},
-      methodDescriptor_TaskService_UncompleteSubtask);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
  *   !proto.services.tasks_svc.v1.DeleteSubtaskRequest,
  *   !proto.services.tasks_svc.v1.DeleteSubtaskResponse>}
  */
@@ -870,6 +748,128 @@ proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.deleteSubtask =
       request,
       metadata || {},
       methodDescriptor_TaskService_DeleteSubtask);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.services.tasks_svc.v1.RemoveTaskDueDateRequest,
+ *   !proto.services.tasks_svc.v1.RemoveTaskDueDateResponse>}
+ */
+const methodDescriptor_TaskService_RemoveTaskDueDate = new grpc.web.MethodDescriptor(
+  '/services.tasks_svc.v1.TaskService/RemoveTaskDueDate',
+  grpc.web.MethodType.UNARY,
+  proto.services.tasks_svc.v1.RemoveTaskDueDateRequest,
+  proto.services.tasks_svc.v1.RemoveTaskDueDateResponse,
+  /**
+   * @param {!proto.services.tasks_svc.v1.RemoveTaskDueDateRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.services.tasks_svc.v1.RemoveTaskDueDateResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.services.tasks_svc.v1.RemoveTaskDueDateRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.services.tasks_svc.v1.RemoveTaskDueDateResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.services.tasks_svc.v1.RemoveTaskDueDateResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.services.tasks_svc.v1.TaskServiceClient.prototype.removeTaskDueDate =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/services.tasks_svc.v1.TaskService/RemoveTaskDueDate',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_RemoveTaskDueDate,
+      callback);
+};
+
+
+/**
+ * @param {!proto.services.tasks_svc.v1.RemoveTaskDueDateRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.services.tasks_svc.v1.RemoveTaskDueDateResponse>}
+ *     Promise that resolves to the response
+ */
+proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.removeTaskDueDate =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/services.tasks_svc.v1.TaskService/RemoveTaskDueDate',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_RemoveTaskDueDate);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.services.tasks_svc.v1.DeleteTaskRequest,
+ *   !proto.services.tasks_svc.v1.DeleteTaskResponse>}
+ */
+const methodDescriptor_TaskService_DeleteTask = new grpc.web.MethodDescriptor(
+  '/services.tasks_svc.v1.TaskService/DeleteTask',
+  grpc.web.MethodType.UNARY,
+  proto.services.tasks_svc.v1.DeleteTaskRequest,
+  proto.services.tasks_svc.v1.DeleteTaskResponse,
+  /**
+   * @param {!proto.services.tasks_svc.v1.DeleteTaskRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.services.tasks_svc.v1.DeleteTaskResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.services.tasks_svc.v1.DeleteTaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.services.tasks_svc.v1.DeleteTaskResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.services.tasks_svc.v1.DeleteTaskResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.services.tasks_svc.v1.TaskServiceClient.prototype.deleteTask =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/services.tasks_svc.v1.TaskService/DeleteTask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_DeleteTask,
+      callback);
+};
+
+
+/**
+ * @param {!proto.services.tasks_svc.v1.DeleteTaskRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.services.tasks_svc.v1.DeleteTaskResponse>}
+ *     Promise that resolves to the response
+ */
+proto.services.tasks_svc.v1.TaskServicePromiseClient.prototype.deleteTask =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/services.tasks_svc.v1.TaskService/DeleteTask',
+      request,
+      metadata || {},
+      methodDescriptor_TaskService_DeleteTask);
 };
 
 

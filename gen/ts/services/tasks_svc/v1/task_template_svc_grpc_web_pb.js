@@ -140,67 +140,6 @@ proto.services.tasks_svc.v1.TaskTemplateServicePromiseClient.prototype.createTas
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.services.tasks_svc.v1.GetAllTaskTemplatesRequest,
- *   !proto.services.tasks_svc.v1.GetAllTaskTemplatesResponse>}
- */
-const methodDescriptor_TaskTemplateService_GetAllTaskTemplates = new grpc.web.MethodDescriptor(
-  '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplates',
-  grpc.web.MethodType.UNARY,
-  proto.services.tasks_svc.v1.GetAllTaskTemplatesRequest,
-  proto.services.tasks_svc.v1.GetAllTaskTemplatesResponse,
-  /**
-   * @param {!proto.services.tasks_svc.v1.GetAllTaskTemplatesRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.services.tasks_svc.v1.GetAllTaskTemplatesResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.services.tasks_svc.v1.GetAllTaskTemplatesRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.services.tasks_svc.v1.GetAllTaskTemplatesResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.services.tasks_svc.v1.GetAllTaskTemplatesResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.services.tasks_svc.v1.TaskTemplateServiceClient.prototype.getAllTaskTemplates =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplates',
-      request,
-      metadata || {},
-      methodDescriptor_TaskTemplateService_GetAllTaskTemplates,
-      callback);
-};
-
-
-/**
- * @param {!proto.services.tasks_svc.v1.GetAllTaskTemplatesRequest} request The
- *     request proto
- * @param {?Object<string, string>=} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.services.tasks_svc.v1.GetAllTaskTemplatesResponse>}
- *     Promise that resolves to the response
- */
-proto.services.tasks_svc.v1.TaskTemplateServicePromiseClient.prototype.getAllTaskTemplates =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplates',
-      request,
-      metadata || {},
-      methodDescriptor_TaskTemplateService_GetAllTaskTemplates);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
  *   !proto.services.tasks_svc.v1.DeleteTaskTemplateRequest,
  *   !proto.services.tasks_svc.v1.DeleteTaskTemplateResponse>}
  */
@@ -506,122 +445,61 @@ proto.services.tasks_svc.v1.TaskTemplateServicePromiseClient.prototype.createTas
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.services.tasks_svc.v1.GetAllTaskTemplatesByCreatorRequest,
- *   !proto.services.tasks_svc.v1.GetAllTaskTemplatesByCreatorResponse>}
+ *   !proto.services.tasks_svc.v1.GetAllTaskTemplatesWithWardAndCreatorFilterRequest,
+ *   !proto.services.tasks_svc.v1.GetAllTaskTemplatesWithWardAndCreatorFilterResponse>}
  */
-const methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByCreator = new grpc.web.MethodDescriptor(
-  '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator',
+const methodDescriptor_TaskTemplateService_GetAllTaskTemplatesWithWardAndCreatorFilter = new grpc.web.MethodDescriptor(
+  '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesWithWardAndCreatorFilter',
   grpc.web.MethodType.UNARY,
-  proto.services.tasks_svc.v1.GetAllTaskTemplatesByCreatorRequest,
-  proto.services.tasks_svc.v1.GetAllTaskTemplatesByCreatorResponse,
+  proto.services.tasks_svc.v1.GetAllTaskTemplatesWithWardAndCreatorFilterRequest,
+  proto.services.tasks_svc.v1.GetAllTaskTemplatesWithWardAndCreatorFilterResponse,
   /**
-   * @param {!proto.services.tasks_svc.v1.GetAllTaskTemplatesByCreatorRequest} request
+   * @param {!proto.services.tasks_svc.v1.GetAllTaskTemplatesWithWardAndCreatorFilterRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.services.tasks_svc.v1.GetAllTaskTemplatesByCreatorResponse.deserializeBinary
+  proto.services.tasks_svc.v1.GetAllTaskTemplatesWithWardAndCreatorFilterResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.services.tasks_svc.v1.GetAllTaskTemplatesByCreatorRequest} request The
+ * @param {!proto.services.tasks_svc.v1.GetAllTaskTemplatesWithWardAndCreatorFilterRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.services.tasks_svc.v1.GetAllTaskTemplatesByCreatorResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.services.tasks_svc.v1.GetAllTaskTemplatesWithWardAndCreatorFilterResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.services.tasks_svc.v1.GetAllTaskTemplatesByCreatorResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.services.tasks_svc.v1.GetAllTaskTemplatesWithWardAndCreatorFilterResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.services.tasks_svc.v1.TaskTemplateServiceClient.prototype.getAllTaskTemplatesByCreator =
+proto.services.tasks_svc.v1.TaskTemplateServiceClient.prototype.getAllTaskTemplatesWithWardAndCreatorFilter =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator',
+      '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesWithWardAndCreatorFilter',
       request,
       metadata || {},
-      methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByCreator,
+      methodDescriptor_TaskTemplateService_GetAllTaskTemplatesWithWardAndCreatorFilter,
       callback);
 };
 
 
 /**
- * @param {!proto.services.tasks_svc.v1.GetAllTaskTemplatesByCreatorRequest} request The
+ * @param {!proto.services.tasks_svc.v1.GetAllTaskTemplatesWithWardAndCreatorFilterRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.services.tasks_svc.v1.GetAllTaskTemplatesByCreatorResponse>}
+ * @return {!Promise<!proto.services.tasks_svc.v1.GetAllTaskTemplatesWithWardAndCreatorFilterResponse>}
  *     Promise that resolves to the response
  */
-proto.services.tasks_svc.v1.TaskTemplateServicePromiseClient.prototype.getAllTaskTemplatesByCreator =
+proto.services.tasks_svc.v1.TaskTemplateServicePromiseClient.prototype.getAllTaskTemplatesWithWardAndCreatorFilter =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator',
+      '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesWithWardAndCreatorFilter',
       request,
       metadata || {},
-      methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByCreator);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
- *   !proto.services.tasks_svc.v1.GetAllTaskTemplatesByWardRequest,
- *   !proto.services.tasks_svc.v1.GetAllTaskTemplatesByWardResponse>}
- */
-const methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByWard = new grpc.web.MethodDescriptor(
-  '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesByWard',
-  grpc.web.MethodType.UNARY,
-  proto.services.tasks_svc.v1.GetAllTaskTemplatesByWardRequest,
-  proto.services.tasks_svc.v1.GetAllTaskTemplatesByWardResponse,
-  /**
-   * @param {!proto.services.tasks_svc.v1.GetAllTaskTemplatesByWardRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.services.tasks_svc.v1.GetAllTaskTemplatesByWardResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.services.tasks_svc.v1.GetAllTaskTemplatesByWardRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.services.tasks_svc.v1.GetAllTaskTemplatesByWardResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.services.tasks_svc.v1.GetAllTaskTemplatesByWardResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.services.tasks_svc.v1.TaskTemplateServiceClient.prototype.getAllTaskTemplatesByWard =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesByWard',
-      request,
-      metadata || {},
-      methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByWard,
-      callback);
-};
-
-
-/**
- * @param {!proto.services.tasks_svc.v1.GetAllTaskTemplatesByWardRequest} request The
- *     request proto
- * @param {?Object<string, string>=} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.services.tasks_svc.v1.GetAllTaskTemplatesByWardResponse>}
- *     Promise that resolves to the response
- */
-proto.services.tasks_svc.v1.TaskTemplateServicePromiseClient.prototype.getAllTaskTemplatesByWard =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesByWard',
-      request,
-      metadata || {},
-      methodDescriptor_TaskTemplateService_GetAllTaskTemplatesByWard);
+      methodDescriptor_TaskTemplateService_GetAllTaskTemplatesWithWardAndCreatorFilter);
 };
 
 

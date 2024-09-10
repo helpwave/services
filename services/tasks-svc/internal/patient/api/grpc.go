@@ -460,3 +460,5 @@ func (s *PatientGrpcService) ReadmitPatient(ctx context.Context, req *pb.Readmit
 
 	return &pb.ReadmitPatientResponse{}, nil
 }
+
+// TODO: DeletePatientEndpoint

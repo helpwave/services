@@ -118,6 +118,7 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 	roomRepo := room_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
+	// TODO: implement filtering by ward_id contained in req
 
 	rows, err := roomRepo.GetRoomsWithBeds(ctx, uuid.NullUUID{UUID: uuid.Nil, Valid: false})
 	err = hwdb.Error(ctx, err)
@@ -153,54 +154,6 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 	})
 
 	return &pb.GetRoomsResponse{
-		Rooms: roomsResponse,
-	}, nil
-}
-
-func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardRequest) (*pb.GetRoomsByWardResponse, error) {
-	roomRepo := room_repo.New(hwdb.GetDB())
-
-	// TODO: Auth
-
-	wardId, err := uuid.Parse(req.WardId)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
-
-	rows, err := roomRepo.GetRoomsWithBeds(ctx, uuid.NullUUID{UUID: wardId, Valid: true})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
-		return nil, err
-	}
-
-	processedRooms := make(map[uuid.UUID]bool)
-
-	roomsResponse := hwutil.FlatMap(rows, func(roomRow room_repo.GetRoomsWithBedsRow) **pb.GetRoomsByWardResponse_Room {
-		room := roomRow.Room
-		if _, processed := processedRooms[room.ID]; processed {
-			return nil
-		}
-		processedRooms[room.ID] = true
-		beds := hwutil.FlatMap(rows, func(bedRow room_repo.GetRoomsWithBedsRow) **pb.GetRoomsByWardResponse_Room_Bed {
-			if !bedRow.BedID.Valid || bedRow.Room.ID != room.ID {
-				return nil
-			}
-			val := &pb.GetRoomsByWardResponse_Room_Bed{
-				Id:   bedRow.BedID.UUID.String(),
-				Name: *bedRow.BedName,
-			}
-			return &val
-		})
-		val := &pb.GetRoomsByWardResponse_Room{
-			Id:     room.ID.String(),
-			Name:   room.Name,
-			Beds:   beds,
-			WardId: room.WardID.String(),
-		}
-		return &val
-	})
-
-	return &pb.GetRoomsByWardResponse{
 		Rooms: roomsResponse,
 	}, nil
 }

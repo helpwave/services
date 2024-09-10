@@ -82,11 +82,18 @@ final $typed_data.Uint8List getRoomResponseDescriptor = $convert.base64Decode(
 @$core.Deprecated('Use getRoomsRequestDescriptor instead')
 const GetRoomsRequest$json = {
   '1': 'GetRoomsRequest',
+  '2': [
+    {'1': 'ward_id', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'wardId', '17': true},
+  ],
+  '8': [
+    {'1': '_ward_id'},
+  ],
 };
 
 /// Descriptor for `GetRoomsRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getRoomsRequestDescriptor = $convert.base64Decode(
-    'Cg9HZXRSb29tc1JlcXVlc3Q=');
+    'Cg9HZXRSb29tc1JlcXVlc3QSHAoHd2FyZF9pZBgBIAEoCUgAUgZ3YXJkSWSIAQFCCgoIX3dhcm'
+    'RfaWQ=');
 
 @$core.Deprecated('Use getRoomsResponseDescriptor instead')
 const GetRoomsResponse$json = {
@@ -125,57 +132,6 @@ final $typed_data.Uint8List getRoomsResponseDescriptor = $convert.base64Decode(
     'EhIKBG5hbWUYAiABKAlSBG5hbWUSRAoEYmVkcxgDIAMoCzIwLnNlcnZpY2VzLnRhc2tzX3N2Yy'
     '52MS5HZXRSb29tc1Jlc3BvbnNlLlJvb20uQmVkUgRiZWRzEhcKB3dhcmRfaWQYBSABKAlSBndh'
     'cmRJZBopCgNCZWQSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWU=');
-
-@$core.Deprecated('Use getRoomsByWardRequestDescriptor instead')
-const GetRoomsByWardRequest$json = {
-  '1': 'GetRoomsByWardRequest',
-  '2': [
-    {'1': 'ward_id', '3': 1, '4': 1, '5': 9, '10': 'wardId'},
-  ],
-};
-
-/// Descriptor for `GetRoomsByWardRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getRoomsByWardRequestDescriptor = $convert.base64Decode(
-    'ChVHZXRSb29tc0J5V2FyZFJlcXVlc3QSFwoHd2FyZF9pZBgBIAEoCVIGd2FyZElk');
-
-@$core.Deprecated('Use getRoomsByWardResponseDescriptor instead')
-const GetRoomsByWardResponse$json = {
-  '1': 'GetRoomsByWardResponse',
-  '2': [
-    {'1': 'rooms', '3': 1, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetRoomsByWardResponse.Room', '10': 'rooms'},
-  ],
-  '3': [GetRoomsByWardResponse_Room$json],
-};
-
-@$core.Deprecated('Use getRoomsByWardResponseDescriptor instead')
-const GetRoomsByWardResponse_Room$json = {
-  '1': 'Room',
-  '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'beds', '3': 3, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetRoomsByWardResponse.Room.Bed', '10': 'beds'},
-    {'1': 'ward_id', '3': 5, '4': 1, '5': 9, '10': 'wardId'},
-  ],
-  '3': [GetRoomsByWardResponse_Room_Bed$json],
-};
-
-@$core.Deprecated('Use getRoomsByWardResponseDescriptor instead')
-const GetRoomsByWardResponse_Room_Bed$json = {
-  '1': 'Bed',
-  '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-  ],
-};
-
-/// Descriptor for `GetRoomsByWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getRoomsByWardResponseDescriptor = $convert.base64Decode(
-    'ChZHZXRSb29tc0J5V2FyZFJlc3BvbnNlEkgKBXJvb21zGAEgAygLMjIuc2VydmljZXMudGFza3'
-    'Nfc3ZjLnYxLkdldFJvb21zQnlXYXJkUmVzcG9uc2UuUm9vbVIFcm9vbXMaugEKBFJvb20SDgoC'
-    'aWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSSgoEYmVkcxgDIAMoCzI2LnNlcnZpY2'
-    'VzLnRhc2tzX3N2Yy52MS5HZXRSb29tc0J5V2FyZFJlc3BvbnNlLlJvb20uQmVkUgRiZWRzEhcK'
-    'B3dhcmRfaWQYBSABKAlSBndhcmRJZBopCgNCZWQSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAi'
-    'ABKAlSBG5hbWU=');
 
 @$core.Deprecated('Use updateRoomRequestDescriptor instead')
 const UpdateRoomRequest$json = {

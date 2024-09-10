@@ -85,108 +85,6 @@ export namespace CreateTaskTemplateResponse {
   }
 }
 
-export class GetAllTaskTemplatesRequest extends jspb.Message {
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetAllTaskTemplatesRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesRequest): GetAllTaskTemplatesRequest.AsObject;
-  static serializeBinaryToWriter(message: GetAllTaskTemplatesRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetAllTaskTemplatesRequest;
-  static deserializeBinaryFromReader(message: GetAllTaskTemplatesRequest, reader: jspb.BinaryReader): GetAllTaskTemplatesRequest;
-}
-
-export namespace GetAllTaskTemplatesRequest {
-  export type AsObject = {
-  }
-}
-
-export class GetAllTaskTemplatesResponse extends jspb.Message {
-  getTemplatesList(): Array<GetAllTaskTemplatesResponse.TaskTemplate>;
-  setTemplatesList(value: Array<GetAllTaskTemplatesResponse.TaskTemplate>): GetAllTaskTemplatesResponse;
-  clearTemplatesList(): GetAllTaskTemplatesResponse;
-  addTemplates(value?: GetAllTaskTemplatesResponse.TaskTemplate, index?: number): GetAllTaskTemplatesResponse.TaskTemplate;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetAllTaskTemplatesResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesResponse): GetAllTaskTemplatesResponse.AsObject;
-  static serializeBinaryToWriter(message: GetAllTaskTemplatesResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetAllTaskTemplatesResponse;
-  static deserializeBinaryFromReader(message: GetAllTaskTemplatesResponse, reader: jspb.BinaryReader): GetAllTaskTemplatesResponse;
-}
-
-export namespace GetAllTaskTemplatesResponse {
-  export type AsObject = {
-    templatesList: Array<GetAllTaskTemplatesResponse.TaskTemplate.AsObject>,
-  }
-
-  export class TaskTemplate extends jspb.Message {
-    getId(): string;
-    setId(value: string): TaskTemplate;
-
-    getName(): string;
-    setName(value: string): TaskTemplate;
-
-    getDescription(): string;
-    setDescription(value: string): TaskTemplate;
-
-    getIsPublic(): boolean;
-    setIsPublic(value: boolean): TaskTemplate;
-
-    getCreatedBy(): string;
-    setCreatedBy(value: string): TaskTemplate;
-
-    getSubtasksList(): Array<GetAllTaskTemplatesResponse.TaskTemplate.SubTask>;
-    setSubtasksList(value: Array<GetAllTaskTemplatesResponse.TaskTemplate.SubTask>): TaskTemplate;
-    clearSubtasksList(): TaskTemplate;
-    addSubtasks(value?: GetAllTaskTemplatesResponse.TaskTemplate.SubTask, index?: number): GetAllTaskTemplatesResponse.TaskTemplate.SubTask;
-
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): TaskTemplate.AsObject;
-    static toObject(includeInstance: boolean, msg: TaskTemplate): TaskTemplate.AsObject;
-    static serializeBinaryToWriter(message: TaskTemplate, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): TaskTemplate;
-    static deserializeBinaryFromReader(message: TaskTemplate, reader: jspb.BinaryReader): TaskTemplate;
-  }
-
-  export namespace TaskTemplate {
-    export type AsObject = {
-      id: string,
-      name: string,
-      description: string,
-      isPublic: boolean,
-      createdBy: string,
-      subtasksList: Array<GetAllTaskTemplatesResponse.TaskTemplate.SubTask.AsObject>,
-    }
-
-    export class SubTask extends jspb.Message {
-      getId(): string;
-      setId(value: string): SubTask;
-
-      getTaskTemplateId(): string;
-      setTaskTemplateId(value: string): SubTask;
-
-      getName(): string;
-      setName(value: string): SubTask;
-
-      serializeBinary(): Uint8Array;
-      toObject(includeInstance?: boolean): SubTask.AsObject;
-      static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
-      static serializeBinaryToWriter(message: SubTask, writer: jspb.BinaryWriter): void;
-      static deserializeBinary(bytes: Uint8Array): SubTask;
-      static deserializeBinaryFromReader(message: SubTask, reader: jspb.BinaryReader): SubTask;
-    }
-
-    export namespace SubTask {
-      export type AsObject = {
-        id: string,
-        taskTemplateId: string,
-        name: string,
-      }
-    }
-
-  }
-
-}
-
 export class DeleteTaskTemplateRequest extends jspb.Message {
   getId(): string;
   setId(value: string): DeleteTaskTemplateRequest;
@@ -388,154 +286,63 @@ export namespace CreateTaskTemplateSubTaskResponse {
   }
 }
 
-export class GetAllTaskTemplatesByCreatorRequest extends jspb.Message {
+export class GetAllTaskTemplatesWithWardAndCreatorFilterRequest extends jspb.Message {
+  getWardId(): string;
+  setWardId(value: string): GetAllTaskTemplatesWithWardAndCreatorFilterRequest;
+  hasWardId(): boolean;
+  clearWardId(): GetAllTaskTemplatesWithWardAndCreatorFilterRequest;
+
   getCreatedBy(): string;
-  setCreatedBy(value: string): GetAllTaskTemplatesByCreatorRequest;
+  setCreatedBy(value: string): GetAllTaskTemplatesWithWardAndCreatorFilterRequest;
+  hasCreatedBy(): boolean;
+  clearCreatedBy(): GetAllTaskTemplatesWithWardAndCreatorFilterRequest;
 
   getPrivateOnly(): boolean;
-  setPrivateOnly(value: boolean): GetAllTaskTemplatesByCreatorRequest;
-  hasPrivateOnly(): boolean;
-  clearPrivateOnly(): GetAllTaskTemplatesByCreatorRequest;
+  setPrivateOnly(value: boolean): GetAllTaskTemplatesWithWardAndCreatorFilterRequest;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetAllTaskTemplatesByCreatorRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesByCreatorRequest): GetAllTaskTemplatesByCreatorRequest.AsObject;
-  static serializeBinaryToWriter(message: GetAllTaskTemplatesByCreatorRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetAllTaskTemplatesByCreatorRequest;
-  static deserializeBinaryFromReader(message: GetAllTaskTemplatesByCreatorRequest, reader: jspb.BinaryReader): GetAllTaskTemplatesByCreatorRequest;
+  toObject(includeInstance?: boolean): GetAllTaskTemplatesWithWardAndCreatorFilterRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesWithWardAndCreatorFilterRequest): GetAllTaskTemplatesWithWardAndCreatorFilterRequest.AsObject;
+  static serializeBinaryToWriter(message: GetAllTaskTemplatesWithWardAndCreatorFilterRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetAllTaskTemplatesWithWardAndCreatorFilterRequest;
+  static deserializeBinaryFromReader(message: GetAllTaskTemplatesWithWardAndCreatorFilterRequest, reader: jspb.BinaryReader): GetAllTaskTemplatesWithWardAndCreatorFilterRequest;
 }
 
-export namespace GetAllTaskTemplatesByCreatorRequest {
+export namespace GetAllTaskTemplatesWithWardAndCreatorFilterRequest {
   export type AsObject = {
-    createdBy: string,
-    privateOnly?: boolean,
+    wardId?: string,
+    createdBy?: string,
+    privateOnly: boolean,
   }
 
-  export enum PrivateOnlyCase { 
-    _PRIVATE_ONLY_NOT_SET = 0,
-    PRIVATE_ONLY = 2,
+  export enum WardIdCase { 
+    _WARD_ID_NOT_SET = 0,
+    WARD_ID = 1,
+  }
+
+  export enum CreatedByCase { 
+    _CREATED_BY_NOT_SET = 0,
+    CREATED_BY = 2,
   }
 }
 
-export class GetAllTaskTemplatesByCreatorResponse extends jspb.Message {
-  getTemplatesList(): Array<GetAllTaskTemplatesByCreatorResponse.TaskTemplate>;
-  setTemplatesList(value: Array<GetAllTaskTemplatesByCreatorResponse.TaskTemplate>): GetAllTaskTemplatesByCreatorResponse;
-  clearTemplatesList(): GetAllTaskTemplatesByCreatorResponse;
-  addTemplates(value?: GetAllTaskTemplatesByCreatorResponse.TaskTemplate, index?: number): GetAllTaskTemplatesByCreatorResponse.TaskTemplate;
+export class GetAllTaskTemplatesWithWardAndCreatorFilterResponse extends jspb.Message {
+  getTemplatesList(): Array<GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate>;
+  setTemplatesList(value: Array<GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate>): GetAllTaskTemplatesWithWardAndCreatorFilterResponse;
+  clearTemplatesList(): GetAllTaskTemplatesWithWardAndCreatorFilterResponse;
+  addTemplates(value?: GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate, index?: number): GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetAllTaskTemplatesByCreatorResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesByCreatorResponse): GetAllTaskTemplatesByCreatorResponse.AsObject;
-  static serializeBinaryToWriter(message: GetAllTaskTemplatesByCreatorResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetAllTaskTemplatesByCreatorResponse;
-  static deserializeBinaryFromReader(message: GetAllTaskTemplatesByCreatorResponse, reader: jspb.BinaryReader): GetAllTaskTemplatesByCreatorResponse;
+  toObject(includeInstance?: boolean): GetAllTaskTemplatesWithWardAndCreatorFilterResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesWithWardAndCreatorFilterResponse): GetAllTaskTemplatesWithWardAndCreatorFilterResponse.AsObject;
+  static serializeBinaryToWriter(message: GetAllTaskTemplatesWithWardAndCreatorFilterResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetAllTaskTemplatesWithWardAndCreatorFilterResponse;
+  static deserializeBinaryFromReader(message: GetAllTaskTemplatesWithWardAndCreatorFilterResponse, reader: jspb.BinaryReader): GetAllTaskTemplatesWithWardAndCreatorFilterResponse;
 }
 
-export namespace GetAllTaskTemplatesByCreatorResponse {
+export namespace GetAllTaskTemplatesWithWardAndCreatorFilterResponse {
   export type AsObject = {
-    templatesList: Array<GetAllTaskTemplatesByCreatorResponse.TaskTemplate.AsObject>,
-  }
-
-  export class TaskTemplate extends jspb.Message {
-    getId(): string;
-    setId(value: string): TaskTemplate;
-
-    getName(): string;
-    setName(value: string): TaskTemplate;
-
-    getDescription(): string;
-    setDescription(value: string): TaskTemplate;
-
-    getIsPublic(): boolean;
-    setIsPublic(value: boolean): TaskTemplate;
-
-    getSubtasksList(): Array<GetAllTaskTemplatesByCreatorResponse.TaskTemplate.SubTask>;
-    setSubtasksList(value: Array<GetAllTaskTemplatesByCreatorResponse.TaskTemplate.SubTask>): TaskTemplate;
-    clearSubtasksList(): TaskTemplate;
-    addSubtasks(value?: GetAllTaskTemplatesByCreatorResponse.TaskTemplate.SubTask, index?: number): GetAllTaskTemplatesByCreatorResponse.TaskTemplate.SubTask;
-
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): TaskTemplate.AsObject;
-    static toObject(includeInstance: boolean, msg: TaskTemplate): TaskTemplate.AsObject;
-    static serializeBinaryToWriter(message: TaskTemplate, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): TaskTemplate;
-    static deserializeBinaryFromReader(message: TaskTemplate, reader: jspb.BinaryReader): TaskTemplate;
-  }
-
-  export namespace TaskTemplate {
-    export type AsObject = {
-      id: string,
-      name: string,
-      description: string,
-      isPublic: boolean,
-      subtasksList: Array<GetAllTaskTemplatesByCreatorResponse.TaskTemplate.SubTask.AsObject>,
-    }
-
-    export class SubTask extends jspb.Message {
-      getId(): string;
-      setId(value: string): SubTask;
-
-      getTaskTemplateId(): string;
-      setTaskTemplateId(value: string): SubTask;
-
-      getName(): string;
-      setName(value: string): SubTask;
-
-      serializeBinary(): Uint8Array;
-      toObject(includeInstance?: boolean): SubTask.AsObject;
-      static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
-      static serializeBinaryToWriter(message: SubTask, writer: jspb.BinaryWriter): void;
-      static deserializeBinary(bytes: Uint8Array): SubTask;
-      static deserializeBinaryFromReader(message: SubTask, reader: jspb.BinaryReader): SubTask;
-    }
-
-    export namespace SubTask {
-      export type AsObject = {
-        id: string,
-        taskTemplateId: string,
-        name: string,
-      }
-    }
-
-  }
-
-}
-
-export class GetAllTaskTemplatesByWardRequest extends jspb.Message {
-  getWardId(): string;
-  setWardId(value: string): GetAllTaskTemplatesByWardRequest;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetAllTaskTemplatesByWardRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesByWardRequest): GetAllTaskTemplatesByWardRequest.AsObject;
-  static serializeBinaryToWriter(message: GetAllTaskTemplatesByWardRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetAllTaskTemplatesByWardRequest;
-  static deserializeBinaryFromReader(message: GetAllTaskTemplatesByWardRequest, reader: jspb.BinaryReader): GetAllTaskTemplatesByWardRequest;
-}
-
-export namespace GetAllTaskTemplatesByWardRequest {
-  export type AsObject = {
-    wardId: string,
-  }
-}
-
-export class GetAllTaskTemplatesByWardResponse extends jspb.Message {
-  getTemplatesList(): Array<GetAllTaskTemplatesByWardResponse.TaskTemplate>;
-  setTemplatesList(value: Array<GetAllTaskTemplatesByWardResponse.TaskTemplate>): GetAllTaskTemplatesByWardResponse;
-  clearTemplatesList(): GetAllTaskTemplatesByWardResponse;
-  addTemplates(value?: GetAllTaskTemplatesByWardResponse.TaskTemplate, index?: number): GetAllTaskTemplatesByWardResponse.TaskTemplate;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetAllTaskTemplatesByWardResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetAllTaskTemplatesByWardResponse): GetAllTaskTemplatesByWardResponse.AsObject;
-  static serializeBinaryToWriter(message: GetAllTaskTemplatesByWardResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetAllTaskTemplatesByWardResponse;
-  static deserializeBinaryFromReader(message: GetAllTaskTemplatesByWardResponse, reader: jspb.BinaryReader): GetAllTaskTemplatesByWardResponse;
-}
-
-export namespace GetAllTaskTemplatesByWardResponse {
-  export type AsObject = {
-    templatesList: Array<GetAllTaskTemplatesByWardResponse.TaskTemplate.AsObject>,
+    templatesList: Array<GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate.AsObject>,
   }
 
   export class TaskTemplate extends jspb.Message {
@@ -554,10 +361,10 @@ export namespace GetAllTaskTemplatesByWardResponse {
     getCreatedBy(): string;
     setCreatedBy(value: string): TaskTemplate;
 
-    getSubtasksList(): Array<GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask>;
-    setSubtasksList(value: Array<GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask>): TaskTemplate;
+    getSubtasksList(): Array<GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate.SubTask>;
+    setSubtasksList(value: Array<GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate.SubTask>): TaskTemplate;
     clearSubtasksList(): TaskTemplate;
-    addSubtasks(value?: GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask, index?: number): GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask;
+    addSubtasks(value?: GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate.SubTask, index?: number): GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate.SubTask;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): TaskTemplate.AsObject;
@@ -574,7 +381,7 @@ export namespace GetAllTaskTemplatesByWardResponse {
       description: string,
       isPublic: boolean,
       createdBy: string,
-      subtasksList: Array<GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask.AsObject>,
+      subtasksList: Array<GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate.SubTask.AsObject>,
     }
 
     export class SubTask extends jspb.Message {

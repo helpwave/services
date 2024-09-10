@@ -15,13 +15,6 @@ export class TaskTemplateServiceClient {
                response: services_tasks_svc_v1_task_template_svc_pb.CreateTaskTemplateResponse) => void
   ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_template_svc_pb.CreateTaskTemplateResponse>;
 
-  getAllTaskTemplates(
-    request: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesResponse) => void
-  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesResponse>;
-
   deleteTaskTemplate(
     request: services_tasks_svc_v1_task_template_svc_pb.DeleteTaskTemplateRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -57,19 +50,12 @@ export class TaskTemplateServiceClient {
                response: services_tasks_svc_v1_task_template_svc_pb.CreateTaskTemplateSubTaskResponse) => void
   ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_template_svc_pb.CreateTaskTemplateSubTaskResponse>;
 
-  getAllTaskTemplatesByCreator(
-    request: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByCreatorRequest,
+  getAllTaskTemplatesWithWardAndCreatorFilter(
+    request: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesWithWardAndCreatorFilterRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByCreatorResponse) => void
-  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByCreatorResponse>;
-
-  getAllTaskTemplatesByWard(
-    request: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByWardRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByWardResponse) => void
-  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByWardResponse>;
+               response: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesWithWardAndCreatorFilterResponse) => void
+  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesWithWardAndCreatorFilterResponse>;
 
 }
 
@@ -82,11 +68,6 @@ export class TaskTemplateServicePromiseClient {
     request: services_tasks_svc_v1_task_template_svc_pb.CreateTaskTemplateRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<services_tasks_svc_v1_task_template_svc_pb.CreateTaskTemplateResponse>;
-
-  getAllTaskTemplates(
-    request: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesResponse>;
 
   deleteTaskTemplate(
     request: services_tasks_svc_v1_task_template_svc_pb.DeleteTaskTemplateRequest,
@@ -113,15 +94,10 @@ export class TaskTemplateServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<services_tasks_svc_v1_task_template_svc_pb.CreateTaskTemplateSubTaskResponse>;
 
-  getAllTaskTemplatesByCreator(
-    request: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByCreatorRequest,
+  getAllTaskTemplatesWithWardAndCreatorFilter(
+    request: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesWithWardAndCreatorFilterRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByCreatorResponse>;
-
-  getAllTaskTemplatesByWard(
-    request: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByWardRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesByWardResponse>;
+  ): Promise<services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesWithWardAndCreatorFilterResponse>;
 
 }
 

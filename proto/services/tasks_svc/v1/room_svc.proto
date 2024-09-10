@@ -41,33 +41,11 @@ message GetRoomResponse {
 // GetRooms
 //
 
-message GetRoomsRequest {}
+message GetRoomsRequest {
+  optional string ward_id = 1; // @gotags: validate:"uuid4"
+}
 
 message GetRoomsResponse {
-  repeated Room rooms = 1;
-
-  message Room {
-    string id = 1;
-    string name = 2;
-    repeated Bed beds = 3;
-    string ward_id = 5;
-
-    message Bed {
-      string id = 1;
-      string name = 2;
-    }
-  }
-}
-
-//
-// GetRoomsByWard
-//
-
-message GetRoomsByWardRequest {
-  string ward_id = 1; // @gotags: validate:"uuid4"
-}
-
-message GetRoomsByWardResponse {
   repeated Room rooms = 1;
 
   message Room {
@@ -146,7 +124,6 @@ service RoomService {
   rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse) {}
   rpc GetRoom(GetRoomRequest) returns (GetRoomResponse) {}
   rpc GetRooms(GetRoomsRequest) returns (GetRoomsResponse) {}
-  rpc GetRoomsByWard(GetRoomsByWardRequest) returns (GetRoomsByWardResponse) {}
   rpc UpdateRoom(UpdateRoomRequest) returns (UpdateRoomResponse) {}
   rpc DeleteRoom(DeleteRoomRequest) returns (DeleteRoomResponse) {}
   rpc GetRoomOverviewsByWard(GetRoomOverviewsByWardRequest) returns (GetRoomOverviewsByWardResponse) {}

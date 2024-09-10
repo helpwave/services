@@ -199,274 +199,6 @@ class CreateTaskTemplateResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 }
 
-class GetAllTaskTemplatesRequest extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesRequest() => create();
-  GetAllTaskTemplatesRequest._() : super();
-  factory GetAllTaskTemplatesRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTaskTemplatesRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesRequest clone() => GetAllTaskTemplatesRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesRequest copyWith(void Function(GetAllTaskTemplatesRequest) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesRequest)) as GetAllTaskTemplatesRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesRequest create() => GetAllTaskTemplatesRequest._();
-  GetAllTaskTemplatesRequest createEmptyInstance() => create();
-  static $pb.PbList<GetAllTaskTemplatesRequest> createRepeated() => $pb.PbList<GetAllTaskTemplatesRequest>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesRequest>(create);
-  static GetAllTaskTemplatesRequest? _defaultInstance;
-}
-
-class GetAllTaskTemplatesResponse_TaskTemplate_SubTask extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesResponse_TaskTemplate_SubTask({
-    $core.String? id,
-    $core.String? taskTemplateId,
-    $core.String? name,
-  }) {
-    final $result = create();
-    if (id != null) {
-      $result.id = id;
-    }
-    if (taskTemplateId != null) {
-      $result.taskTemplateId = taskTemplateId;
-    }
-    if (name != null) {
-      $result.name = name;
-    }
-    return $result;
-  }
-  GetAllTaskTemplatesResponse_TaskTemplate_SubTask._() : super();
-  factory GetAllTaskTemplatesResponse_TaskTemplate_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTaskTemplatesResponse_TaskTemplate_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesResponse.TaskTemplate.SubTask', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'taskTemplateId')
-    ..aOS(3, _omitFieldNames ? '' : 'name')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesResponse_TaskTemplate_SubTask clone() => GetAllTaskTemplatesResponse_TaskTemplate_SubTask()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesResponse_TaskTemplate_SubTask copyWith(void Function(GetAllTaskTemplatesResponse_TaskTemplate_SubTask) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesResponse_TaskTemplate_SubTask)) as GetAllTaskTemplatesResponse_TaskTemplate_SubTask;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesResponse_TaskTemplate_SubTask create() => GetAllTaskTemplatesResponse_TaskTemplate_SubTask._();
-  GetAllTaskTemplatesResponse_TaskTemplate_SubTask createEmptyInstance() => create();
-  static $pb.PbList<GetAllTaskTemplatesResponse_TaskTemplate_SubTask> createRepeated() => $pb.PbList<GetAllTaskTemplatesResponse_TaskTemplate_SubTask>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesResponse_TaskTemplate_SubTask getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesResponse_TaskTemplate_SubTask>(create);
-  static GetAllTaskTemplatesResponse_TaskTemplate_SubTask? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get taskTemplateId => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set taskTemplateId($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasTaskTemplateId() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearTaskTemplateId() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get name => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set name($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasName() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearName() => clearField(3);
-}
-
-class GetAllTaskTemplatesResponse_TaskTemplate extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesResponse_TaskTemplate({
-    $core.String? id,
-    $core.String? name,
-    $core.String? description,
-    $core.bool? isPublic,
-    $core.String? createdBy,
-    $core.Iterable<GetAllTaskTemplatesResponse_TaskTemplate_SubTask>? subtasks,
-  }) {
-    final $result = create();
-    if (id != null) {
-      $result.id = id;
-    }
-    if (name != null) {
-      $result.name = name;
-    }
-    if (description != null) {
-      $result.description = description;
-    }
-    if (isPublic != null) {
-      $result.isPublic = isPublic;
-    }
-    if (createdBy != null) {
-      $result.createdBy = createdBy;
-    }
-    if (subtasks != null) {
-      $result.subtasks.addAll(subtasks);
-    }
-    return $result;
-  }
-  GetAllTaskTemplatesResponse_TaskTemplate._() : super();
-  factory GetAllTaskTemplatesResponse_TaskTemplate.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTaskTemplatesResponse_TaskTemplate.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesResponse.TaskTemplate', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..aOB(4, _omitFieldNames ? '' : 'isPublic')
-    ..aOS(6, _omitFieldNames ? '' : 'createdBy')
-    ..pc<GetAllTaskTemplatesResponse_TaskTemplate_SubTask>(7, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetAllTaskTemplatesResponse_TaskTemplate_SubTask.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesResponse_TaskTemplate clone() => GetAllTaskTemplatesResponse_TaskTemplate()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesResponse_TaskTemplate copyWith(void Function(GetAllTaskTemplatesResponse_TaskTemplate) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesResponse_TaskTemplate)) as GetAllTaskTemplatesResponse_TaskTemplate;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesResponse_TaskTemplate create() => GetAllTaskTemplatesResponse_TaskTemplate._();
-  GetAllTaskTemplatesResponse_TaskTemplate createEmptyInstance() => create();
-  static $pb.PbList<GetAllTaskTemplatesResponse_TaskTemplate> createRepeated() => $pb.PbList<GetAllTaskTemplatesResponse_TaskTemplate>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesResponse_TaskTemplate getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesResponse_TaskTemplate>(create);
-  static GetAllTaskTemplatesResponse_TaskTemplate? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get name => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set name($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasName() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearName() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get description => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set description($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasDescription() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearDescription() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.bool get isPublic => $_getBF(3);
-  @$pb.TagNumber(4)
-  set isPublic($core.bool v) { $_setBool(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasIsPublic() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearIsPublic() => clearField(4);
-
-  @$pb.TagNumber(6)
-  $core.String get createdBy => $_getSZ(4);
-  @$pb.TagNumber(6)
-  set createdBy($core.String v) { $_setString(4, v); }
-  @$pb.TagNumber(6)
-  $core.bool hasCreatedBy() => $_has(4);
-  @$pb.TagNumber(6)
-  void clearCreatedBy() => clearField(6);
-
-  @$pb.TagNumber(7)
-  $core.List<GetAllTaskTemplatesResponse_TaskTemplate_SubTask> get subtasks => $_getList(5);
-}
-
-class GetAllTaskTemplatesResponse extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesResponse({
-    $core.Iterable<GetAllTaskTemplatesResponse_TaskTemplate>? templates,
-  }) {
-    final $result = create();
-    if (templates != null) {
-      $result.templates.addAll(templates);
-    }
-    return $result;
-  }
-  GetAllTaskTemplatesResponse._() : super();
-  factory GetAllTaskTemplatesResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTaskTemplatesResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..pc<GetAllTaskTemplatesResponse_TaskTemplate>(1, _omitFieldNames ? '' : 'templates', $pb.PbFieldType.PM, subBuilder: GetAllTaskTemplatesResponse_TaskTemplate.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesResponse clone() => GetAllTaskTemplatesResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesResponse copyWith(void Function(GetAllTaskTemplatesResponse) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesResponse)) as GetAllTaskTemplatesResponse;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesResponse create() => GetAllTaskTemplatesResponse._();
-  GetAllTaskTemplatesResponse createEmptyInstance() => create();
-  static $pb.PbList<GetAllTaskTemplatesResponse> createRepeated() => $pb.PbList<GetAllTaskTemplatesResponse>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesResponse>(create);
-  static GetAllTaskTemplatesResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.List<GetAllTaskTemplatesResponse_TaskTemplate> get templates => $_getList(0);
-}
-
 class DeleteTaskTemplateRequest extends $pb.GeneratedMessage {
   factory DeleteTaskTemplateRequest({
     $core.String? id,
@@ -951,12 +683,16 @@ class CreateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 }
 
-class GetAllTaskTemplatesByCreatorRequest extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByCreatorRequest({
+class GetAllTaskTemplatesWithWardAndCreatorFilterRequest extends $pb.GeneratedMessage {
+  factory GetAllTaskTemplatesWithWardAndCreatorFilterRequest({
+    $core.String? wardId,
     $core.String? createdBy,
     $core.bool? privateOnly,
   }) {
     final $result = create();
+    if (wardId != null) {
+      $result.wardId = wardId;
+    }
     if (createdBy != null) {
       $result.createdBy = createdBy;
     }
@@ -965,294 +701,14 @@ class GetAllTaskTemplatesByCreatorRequest extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  GetAllTaskTemplatesByCreatorRequest._() : super();
-  factory GetAllTaskTemplatesByCreatorRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTaskTemplatesByCreatorRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetAllTaskTemplatesWithWardAndCreatorFilterRequest._() : super();
+  factory GetAllTaskTemplatesWithWardAndCreatorFilterRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAllTaskTemplatesWithWardAndCreatorFilterRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesByCreatorRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'createdBy')
-    ..aOB(2, _omitFieldNames ? '' : 'privateOnly')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesByCreatorRequest clone() => GetAllTaskTemplatesByCreatorRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesByCreatorRequest copyWith(void Function(GetAllTaskTemplatesByCreatorRequest) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesByCreatorRequest)) as GetAllTaskTemplatesByCreatorRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByCreatorRequest create() => GetAllTaskTemplatesByCreatorRequest._();
-  GetAllTaskTemplatesByCreatorRequest createEmptyInstance() => create();
-  static $pb.PbList<GetAllTaskTemplatesByCreatorRequest> createRepeated() => $pb.PbList<GetAllTaskTemplatesByCreatorRequest>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByCreatorRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesByCreatorRequest>(create);
-  static GetAllTaskTemplatesByCreatorRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get createdBy => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set createdBy($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasCreatedBy() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearCreatedBy() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.bool get privateOnly => $_getBF(1);
-  @$pb.TagNumber(2)
-  set privateOnly($core.bool v) { $_setBool(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasPrivateOnly() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearPrivateOnly() => clearField(2);
-}
-
-class GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask({
-    $core.String? id,
-    $core.String? taskTemplateId,
-    $core.String? name,
-  }) {
-    final $result = create();
-    if (id != null) {
-      $result.id = id;
-    }
-    if (taskTemplateId != null) {
-      $result.taskTemplateId = taskTemplateId;
-    }
-    if (name != null) {
-      $result.name = name;
-    }
-    return $result;
-  }
-  GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask._() : super();
-  factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesByCreatorResponse.TaskTemplate.SubTask', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'taskTemplateId')
-    ..aOS(3, _omitFieldNames ? '' : 'name')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask clone() => GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask copyWith(void Function(GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask)) as GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask create() => GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask._();
-  GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask createEmptyInstance() => create();
-  static $pb.PbList<GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask> createRepeated() => $pb.PbList<GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask>(create);
-  static GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get taskTemplateId => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set taskTemplateId($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasTaskTemplateId() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearTaskTemplateId() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get name => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set name($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasName() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearName() => clearField(3);
-}
-
-class GetAllTaskTemplatesByCreatorResponse_TaskTemplate extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate({
-    $core.String? id,
-    $core.String? name,
-    $core.String? description,
-    $core.bool? isPublic,
-    $core.Iterable<GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask>? subtasks,
-  }) {
-    final $result = create();
-    if (id != null) {
-      $result.id = id;
-    }
-    if (name != null) {
-      $result.name = name;
-    }
-    if (description != null) {
-      $result.description = description;
-    }
-    if (isPublic != null) {
-      $result.isPublic = isPublic;
-    }
-    if (subtasks != null) {
-      $result.subtasks.addAll(subtasks);
-    }
-    return $result;
-  }
-  GetAllTaskTemplatesByCreatorResponse_TaskTemplate._() : super();
-  factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTaskTemplatesByCreatorResponse_TaskTemplate.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesByCreatorResponse.TaskTemplate', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..aOB(4, _omitFieldNames ? '' : 'isPublic')
-    ..pc<GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask>(7, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesByCreatorResponse_TaskTemplate clone() => GetAllTaskTemplatesByCreatorResponse_TaskTemplate()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesByCreatorResponse_TaskTemplate copyWith(void Function(GetAllTaskTemplatesByCreatorResponse_TaskTemplate) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesByCreatorResponse_TaskTemplate)) as GetAllTaskTemplatesByCreatorResponse_TaskTemplate;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByCreatorResponse_TaskTemplate create() => GetAllTaskTemplatesByCreatorResponse_TaskTemplate._();
-  GetAllTaskTemplatesByCreatorResponse_TaskTemplate createEmptyInstance() => create();
-  static $pb.PbList<GetAllTaskTemplatesByCreatorResponse_TaskTemplate> createRepeated() => $pb.PbList<GetAllTaskTemplatesByCreatorResponse_TaskTemplate>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByCreatorResponse_TaskTemplate getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesByCreatorResponse_TaskTemplate>(create);
-  static GetAllTaskTemplatesByCreatorResponse_TaskTemplate? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get name => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set name($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasName() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearName() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get description => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set description($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasDescription() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearDescription() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.bool get isPublic => $_getBF(3);
-  @$pb.TagNumber(4)
-  set isPublic($core.bool v) { $_setBool(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasIsPublic() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearIsPublic() => clearField(4);
-
-  @$pb.TagNumber(7)
-  $core.List<GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask> get subtasks => $_getList(4);
-}
-
-class GetAllTaskTemplatesByCreatorResponse extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByCreatorResponse({
-    $core.Iterable<GetAllTaskTemplatesByCreatorResponse_TaskTemplate>? templates,
-  }) {
-    final $result = create();
-    if (templates != null) {
-      $result.templates.addAll(templates);
-    }
-    return $result;
-  }
-  GetAllTaskTemplatesByCreatorResponse._() : super();
-  factory GetAllTaskTemplatesByCreatorResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTaskTemplatesByCreatorResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesByCreatorResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..pc<GetAllTaskTemplatesByCreatorResponse_TaskTemplate>(1, _omitFieldNames ? '' : 'templates', $pb.PbFieldType.PM, subBuilder: GetAllTaskTemplatesByCreatorResponse_TaskTemplate.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesByCreatorResponse clone() => GetAllTaskTemplatesByCreatorResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetAllTaskTemplatesByCreatorResponse copyWith(void Function(GetAllTaskTemplatesByCreatorResponse) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesByCreatorResponse)) as GetAllTaskTemplatesByCreatorResponse;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByCreatorResponse create() => GetAllTaskTemplatesByCreatorResponse._();
-  GetAllTaskTemplatesByCreatorResponse createEmptyInstance() => create();
-  static $pb.PbList<GetAllTaskTemplatesByCreatorResponse> createRepeated() => $pb.PbList<GetAllTaskTemplatesByCreatorResponse>();
-  @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByCreatorResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesByCreatorResponse>(create);
-  static GetAllTaskTemplatesByCreatorResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.List<GetAllTaskTemplatesByCreatorResponse_TaskTemplate> get templates => $_getList(0);
-}
-
-class GetAllTaskTemplatesByWardRequest extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByWardRequest({
-    $core.String? wardId,
-  }) {
-    final $result = create();
-    if (wardId != null) {
-      $result.wardId = wardId;
-    }
-    return $result;
-  }
-  GetAllTaskTemplatesByWardRequest._() : super();
-  factory GetAllTaskTemplatesByWardRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTaskTemplatesByWardRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesByWardRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesWithWardAndCreatorFilterRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'wardId')
+    ..aOS(2, _omitFieldNames ? '' : 'createdBy')
+    ..aOB(3, _omitFieldNames ? '' : 'privateOnly')
     ..hasRequiredFields = false
   ;
 
@@ -1260,22 +716,22 @@ class GetAllTaskTemplatesByWardRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetAllTaskTemplatesByWardRequest clone() => GetAllTaskTemplatesByWardRequest()..mergeFromMessage(this);
+  GetAllTaskTemplatesWithWardAndCreatorFilterRequest clone() => GetAllTaskTemplatesWithWardAndCreatorFilterRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetAllTaskTemplatesByWardRequest copyWith(void Function(GetAllTaskTemplatesByWardRequest) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesByWardRequest)) as GetAllTaskTemplatesByWardRequest;
+  GetAllTaskTemplatesWithWardAndCreatorFilterRequest copyWith(void Function(GetAllTaskTemplatesWithWardAndCreatorFilterRequest) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesWithWardAndCreatorFilterRequest)) as GetAllTaskTemplatesWithWardAndCreatorFilterRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByWardRequest create() => GetAllTaskTemplatesByWardRequest._();
-  GetAllTaskTemplatesByWardRequest createEmptyInstance() => create();
-  static $pb.PbList<GetAllTaskTemplatesByWardRequest> createRepeated() => $pb.PbList<GetAllTaskTemplatesByWardRequest>();
+  static GetAllTaskTemplatesWithWardAndCreatorFilterRequest create() => GetAllTaskTemplatesWithWardAndCreatorFilterRequest._();
+  GetAllTaskTemplatesWithWardAndCreatorFilterRequest createEmptyInstance() => create();
+  static $pb.PbList<GetAllTaskTemplatesWithWardAndCreatorFilterRequest> createRepeated() => $pb.PbList<GetAllTaskTemplatesWithWardAndCreatorFilterRequest>();
   @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByWardRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesByWardRequest>(create);
-  static GetAllTaskTemplatesByWardRequest? _defaultInstance;
+  static GetAllTaskTemplatesWithWardAndCreatorFilterRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesWithWardAndCreatorFilterRequest>(create);
+  static GetAllTaskTemplatesWithWardAndCreatorFilterRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get wardId => $_getSZ(0);
@@ -1285,10 +741,28 @@ class GetAllTaskTemplatesByWardRequest extends $pb.GeneratedMessage {
   $core.bool hasWardId() => $_has(0);
   @$pb.TagNumber(1)
   void clearWardId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get createdBy => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set createdBy($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasCreatedBy() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCreatedBy() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get privateOnly => $_getBF(2);
+  @$pb.TagNumber(3)
+  set privateOnly($core.bool v) { $_setBool(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasPrivateOnly() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearPrivateOnly() => clearField(3);
 }
 
-class GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask({
+class GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask extends $pb.GeneratedMessage {
+  factory GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask({
     $core.String? id,
     $core.String? taskTemplateId,
     $core.String? name,
@@ -1305,11 +779,11 @@ class GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask extends $pb.Generat
     }
     return $result;
   }
-  GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask._() : super();
-  factory GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask._() : super();
+  factory GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesByWardResponse.TaskTemplate.SubTask', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate.SubTask', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'taskTemplateId')
     ..aOS(3, _omitFieldNames ? '' : 'name')
@@ -1320,22 +794,22 @@ class GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask extends $pb.Generat
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask clone() => GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask()..mergeFromMessage(this);
+  GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask clone() => GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask copyWith(void Function(GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask)) as GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask;
+  GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask copyWith(void Function(GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask)) as GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask create() => GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask._();
-  GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask createEmptyInstance() => create();
-  static $pb.PbList<GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask> createRepeated() => $pb.PbList<GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask>();
+  static GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask create() => GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask._();
+  GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask createEmptyInstance() => create();
+  static $pb.PbList<GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask> createRepeated() => $pb.PbList<GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask>();
   @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask>(create);
-  static GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask? _defaultInstance;
+  static GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask>(create);
+  static GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
@@ -1365,14 +839,14 @@ class GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask extends $pb.Generat
   void clearName() => clearField(3);
 }
 
-class GetAllTaskTemplatesByWardResponse_TaskTemplate extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByWardResponse_TaskTemplate({
+class GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate extends $pb.GeneratedMessage {
+  factory GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate({
     $core.String? id,
     $core.String? name,
     $core.String? description,
     $core.bool? isPublic,
     $core.String? createdBy,
-    $core.Iterable<GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask>? subtasks,
+    $core.Iterable<GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask>? subtasks,
   }) {
     final $result = create();
     if (id != null) {
@@ -1395,17 +869,17 @@ class GetAllTaskTemplatesByWardResponse_TaskTemplate extends $pb.GeneratedMessag
     }
     return $result;
   }
-  GetAllTaskTemplatesByWardResponse_TaskTemplate._() : super();
-  factory GetAllTaskTemplatesByWardResponse_TaskTemplate.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTaskTemplatesByWardResponse_TaskTemplate.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate._() : super();
+  factory GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesByWardResponse.TaskTemplate', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesWithWardAndCreatorFilterResponse.TaskTemplate', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOB(4, _omitFieldNames ? '' : 'isPublic')
     ..aOS(6, _omitFieldNames ? '' : 'createdBy')
-    ..pc<GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask>(7, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask.create)
+    ..pc<GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask>(7, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask.create)
     ..hasRequiredFields = false
   ;
 
@@ -1413,22 +887,22 @@ class GetAllTaskTemplatesByWardResponse_TaskTemplate extends $pb.GeneratedMessag
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetAllTaskTemplatesByWardResponse_TaskTemplate clone() => GetAllTaskTemplatesByWardResponse_TaskTemplate()..mergeFromMessage(this);
+  GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate clone() => GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetAllTaskTemplatesByWardResponse_TaskTemplate copyWith(void Function(GetAllTaskTemplatesByWardResponse_TaskTemplate) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesByWardResponse_TaskTemplate)) as GetAllTaskTemplatesByWardResponse_TaskTemplate;
+  GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate copyWith(void Function(GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate)) as GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByWardResponse_TaskTemplate create() => GetAllTaskTemplatesByWardResponse_TaskTemplate._();
-  GetAllTaskTemplatesByWardResponse_TaskTemplate createEmptyInstance() => create();
-  static $pb.PbList<GetAllTaskTemplatesByWardResponse_TaskTemplate> createRepeated() => $pb.PbList<GetAllTaskTemplatesByWardResponse_TaskTemplate>();
+  static GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate create() => GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate._();
+  GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate createEmptyInstance() => create();
+  static $pb.PbList<GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate> createRepeated() => $pb.PbList<GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate>();
   @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByWardResponse_TaskTemplate getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesByWardResponse_TaskTemplate>(create);
-  static GetAllTaskTemplatesByWardResponse_TaskTemplate? _defaultInstance;
+  static GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate>(create);
+  static GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
@@ -1476,12 +950,12 @@ class GetAllTaskTemplatesByWardResponse_TaskTemplate extends $pb.GeneratedMessag
   void clearCreatedBy() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.List<GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask> get subtasks => $_getList(5);
+  $core.List<GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate_SubTask> get subtasks => $_getList(5);
 }
 
-class GetAllTaskTemplatesByWardResponse extends $pb.GeneratedMessage {
-  factory GetAllTaskTemplatesByWardResponse({
-    $core.Iterable<GetAllTaskTemplatesByWardResponse_TaskTemplate>? templates,
+class GetAllTaskTemplatesWithWardAndCreatorFilterResponse extends $pb.GeneratedMessage {
+  factory GetAllTaskTemplatesWithWardAndCreatorFilterResponse({
+    $core.Iterable<GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate>? templates,
   }) {
     final $result = create();
     if (templates != null) {
@@ -1489,12 +963,12 @@ class GetAllTaskTemplatesByWardResponse extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  GetAllTaskTemplatesByWardResponse._() : super();
-  factory GetAllTaskTemplatesByWardResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetAllTaskTemplatesByWardResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetAllTaskTemplatesWithWardAndCreatorFilterResponse._() : super();
+  factory GetAllTaskTemplatesWithWardAndCreatorFilterResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetAllTaskTemplatesWithWardAndCreatorFilterResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesByWardResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..pc<GetAllTaskTemplatesByWardResponse_TaskTemplate>(1, _omitFieldNames ? '' : 'templates', $pb.PbFieldType.PM, subBuilder: GetAllTaskTemplatesByWardResponse_TaskTemplate.create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAllTaskTemplatesWithWardAndCreatorFilterResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..pc<GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate>(1, _omitFieldNames ? '' : 'templates', $pb.PbFieldType.PM, subBuilder: GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate.create)
     ..hasRequiredFields = false
   ;
 
@@ -1502,25 +976,25 @@ class GetAllTaskTemplatesByWardResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetAllTaskTemplatesByWardResponse clone() => GetAllTaskTemplatesByWardResponse()..mergeFromMessage(this);
+  GetAllTaskTemplatesWithWardAndCreatorFilterResponse clone() => GetAllTaskTemplatesWithWardAndCreatorFilterResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetAllTaskTemplatesByWardResponse copyWith(void Function(GetAllTaskTemplatesByWardResponse) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesByWardResponse)) as GetAllTaskTemplatesByWardResponse;
+  GetAllTaskTemplatesWithWardAndCreatorFilterResponse copyWith(void Function(GetAllTaskTemplatesWithWardAndCreatorFilterResponse) updates) => super.copyWith((message) => updates(message as GetAllTaskTemplatesWithWardAndCreatorFilterResponse)) as GetAllTaskTemplatesWithWardAndCreatorFilterResponse;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByWardResponse create() => GetAllTaskTemplatesByWardResponse._();
-  GetAllTaskTemplatesByWardResponse createEmptyInstance() => create();
-  static $pb.PbList<GetAllTaskTemplatesByWardResponse> createRepeated() => $pb.PbList<GetAllTaskTemplatesByWardResponse>();
+  static GetAllTaskTemplatesWithWardAndCreatorFilterResponse create() => GetAllTaskTemplatesWithWardAndCreatorFilterResponse._();
+  GetAllTaskTemplatesWithWardAndCreatorFilterResponse createEmptyInstance() => create();
+  static $pb.PbList<GetAllTaskTemplatesWithWardAndCreatorFilterResponse> createRepeated() => $pb.PbList<GetAllTaskTemplatesWithWardAndCreatorFilterResponse>();
   @$core.pragma('dart2js:noInline')
-  static GetAllTaskTemplatesByWardResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesByWardResponse>(create);
-  static GetAllTaskTemplatesByWardResponse? _defaultInstance;
+  static GetAllTaskTemplatesWithWardAndCreatorFilterResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetAllTaskTemplatesWithWardAndCreatorFilterResponse>(create);
+  static GetAllTaskTemplatesWithWardAndCreatorFilterResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<GetAllTaskTemplatesByWardResponse_TaskTemplate> get templates => $_getList(0);
+  $core.List<GetAllTaskTemplatesWithWardAndCreatorFilterResponse_TaskTemplate> get templates => $_getList(0);
 }
 
 
