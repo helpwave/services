@@ -110,5 +110,5 @@ func BeginTx(db DBTX, ctx context.Context) (pgx.Tx, func(), error) {
 		}
 	}
 
-	return nil, rollback, nil
+	return tx, rollback, nil
 }
