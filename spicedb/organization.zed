@@ -1,4 +1,4 @@
-definition team {
+definition organization {
 	relation leader: user
 	relation member: user
 
@@ -8,12 +8,12 @@ definition team {
 	permission remove_member = leadership
 }
 
-definition team_invite {
+definition organization_invite {
 	relation user: user
-	relation team: team
+	relation organization: organization
 
-	permission view = user + team->leadership
+	permission view = user + organization->leadership
 	permission accept = user
 	permission deny = user
-	permission cancel = team->leadership
+	permission cancel = organization->leadership
 }

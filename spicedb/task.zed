@@ -1,6 +1,6 @@
 // all of this is made up and needs to be replaced
 definition patient {
-	relation doctor: user | team#membership
+	relation doctor: user | organization#membership
 
 	permission view = doctor
 	permission discharge = doctor
