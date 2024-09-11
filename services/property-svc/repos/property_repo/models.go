@@ -9,16 +9,15 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-<<<<<<< HEAD
 type MultiSelectValue struct {
 	ValueID      uuid.UUID
 	SelectOption uuid.UUID
-=======
+}
+
 type PatientPropertyViewRule struct {
 	RuleID    uuid.UUID
 	WardID    uuid.NullUUID
 	PatientID uuid.NullUUID
->>>>>>> main
 }
 
 type Property struct {
