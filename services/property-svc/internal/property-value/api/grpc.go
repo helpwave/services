@@ -87,6 +87,12 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		value = req.GetDateTimeValue()
 	case *pb.AttachPropertyValueRequest_SelectValue:
 		value = req.GetSelectValue()
+	case *pb.AttachPropertyValueRequest_MultiSelectValue_:
+		msv := req.GetMultiSelectValue()
+		value = models.MultiSelectChange{
+			SelectValues:       msv.SelectValues,
+			RemoveSelectValues: msv.RemoveSelectValues,
+		}
 	default:
 		value = nil
 	}
@@ -139,8 +145,27 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_BoolValue{BoolValue: *pv.Value.BoolValue}
 			case pv.Value.NumberValue != nil:
 				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_NumberValue{NumberValue: *pv.Value.NumberValue}
-			case pv.Value.SelectValue.Valid:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{SelectValue: pv.Value.SelectValue.UUID.String()}
+			case len(pv.Value.MultiSelectValues) != 0 && pv.FieldType == pb.FieldType_FIELD_TYPE_SELECT:
+				v := pv.Value.MultiSelectValues[0]
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{
+					SelectValue: &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
+						Id:          v.Id.String(),
+						Name:        v.Name,
+						Description: v.Description,
+					},
+				}
+			case len(pv.Value.MultiSelectValues) != 0 && pv.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue_{
+					MultiSelectValue: &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
+						SelectValues: hwutil.Map(pv.Value.MultiSelectValues, func(o models.SelectValueOption) *pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption {
+							return &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
+								Id:          o.Id.String(),
+								Name:        o.Name,
+								Description: o.Description,
+							}
+						}),
+					},
+				}
 			case pv.Value.DateTimeValue != nil:
 				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateTimeValue{DateTimeValue: timestamppb.New(*pv.Value.DateTimeValue)}
 			case pv.Value.DateValue != nil:

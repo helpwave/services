@@ -1,6 +1,6 @@
--- name: CreatePropertyValue :exec
+-- name: CreateBasicPropertyValue :exec
 INSERT INTO property_values
-	(id, property_id, subject_id, text_value, number_value, bool_value, date_value, date_time_value, select_value)
+	(id, property_id, subject_id, text_value, number_value, bool_value, date_value, date_time_value)
 VALUES (
         @id,
         @property_id,
@@ -9,9 +9,17 @@ VALUES (
         sqlc.narg('number_value'),
         sqlc.narg('bool_value'),
         sqlc.narg('date_value'),
-        sqlc.narg('date_time_value'),
-        sqlc.narg('select_value')
+        sqlc.narg('date_time_value')
 );
+
+-- name: ConnectValueWithSelectOptions :batchexec
+INSERT INTO multi_select_values (value_id, select_option) VALUES (@value_id, @select_option) ON CONFLICT DO NOTHING;
+
+-- name: DisconnectValueFromSelectOptions :batchexec
+DELETE FROM multi_select_values WHERE value_id = $1 AND select_option = $2;
+
+-- name: DisconnectValueFromAllSelectOptions :exec
+DELETE FROM multi_select_values WHERE value_id = $1;
 
 -- name: GetPropertyValueBySubjectIDAndPropertyID :one
 SELECT id
@@ -24,8 +32,7 @@ SET text_value = sqlc.narg('text_value'),
 	number_value = sqlc.narg('number_value'),
 	bool_value = sqlc.narg('bool_value'),
 	date_value = sqlc.narg('date_value'),
-	date_time_value = sqlc.narg('date_time_value'),
-	select_value = sqlc.narg('select_value')
+	date_time_value = sqlc.narg('date_time_value')
 WHERE id = $1;
 
 -- name: GetPropertyValueByID :one
@@ -37,7 +44,6 @@ SELECT
 	property_values.text_value,
 	property_values.bool_value,
 	property_values.number_value,
-	property_values.select_value,
 	property_values.date_time_value,
 	property_values.date_value,
 	properties.id as property_id,
@@ -55,11 +61,15 @@ SELECT
 	values.text_value,
 	values.bool_value,
 	values.number_value,
-	values.select_value,
 	values.date_time_value,
-	values.date_value
+	values.date_value,
+	so.id as select_option_id,
+	so.name as select_option_name,
+	so.description as select_option_description
 FROM properties
 	LEFT JOIN property_values as values ON values.property_id = properties.id
+	LEFT JOIN multi_select_values as msv ON msv.value_id = values.id
+	LEFT JOIN select_options as so ON so.id = msv.select_option
 WHERE
 	properties.is_archived = false
 	AND (

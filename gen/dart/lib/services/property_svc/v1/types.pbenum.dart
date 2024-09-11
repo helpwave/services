@@ -38,6 +38,7 @@ class FieldType extends $pb.ProtobufEnum {
   static const FieldType FIELD_TYPE_DATE = FieldType._(4, _omitEnumNames ? '' : 'FIELD_TYPE_DATE');
   static const FieldType FIELD_TYPE_DATE_TIME = FieldType._(5, _omitEnumNames ? '' : 'FIELD_TYPE_DATE_TIME');
   static const FieldType FIELD_TYPE_SELECT = FieldType._(6, _omitEnumNames ? '' : 'FIELD_TYPE_SELECT');
+  static const FieldType FIELD_TYPE_MULTI_SELECT = FieldType._(7, _omitEnumNames ? '' : 'FIELD_TYPE_MULTI_SELECT');
 
   static const $core.List<FieldType> values = <FieldType> [
     FIELD_TYPE_UNSPECIFIED,
@@ -47,6 +48,7 @@ class FieldType extends $pb.ProtobufEnum {
     FIELD_TYPE_DATE,
     FIELD_TYPE_DATE_TIME,
     FIELD_TYPE_SELECT,
+    FIELD_TYPE_MULTI_SELECT,
   ];
 
   static final $core.Map<$core.int, FieldType> _byValue = $pb.ProtobufEnum.initByValue(values);

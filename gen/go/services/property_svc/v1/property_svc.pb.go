@@ -20,18 +20,20 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// CreateProperty
+// Creates a new Property
 type CreatePropertyRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	SubjectType SubjectType `protobuf:"varint,2,opt,name=subject_type,json=subjectType,proto3,enum=services.property_svc.v1.SubjectType" json:"subject_type,omitempty" validate:"required"` // @gotags: validate:"required"
-	FieldType   FieldType   `protobuf:"varint,3,opt,name=field_type,json=fieldType,proto3,enum=services.property_svc.v1.FieldType" json:"field_type,omitempty" validate:"required"`         // @gotags: validate:"required"
-	Name        string      `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" validate:"required"`                                                                             // @gotags: validate:"required"
-	Description *string     `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	SubjectType SubjectType `protobuf:"varint,2,opt,name=subject_type,json=subjectType,proto3,enum=services.property_svc.v1.SubjectType" json:"subject_type,omitempty" validate:"required"` // What kind of subject does this property belong to @gotags: validate:"required"
+	FieldType   FieldType   `protobuf:"varint,3,opt,name=field_type,json=fieldType,proto3,enum=services.property_svc.v1.FieldType" json:"field_type,omitempty" validate:"required"`         // What kind of data can be attached using this Property? @gotags: validate:"required"
+	Name        string      `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty" validate:"required"`                                                                             // readable identifier for this property (should, but does not have to be unique) @gotags: validate:"required"
+	Description *string     `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`                                                                             // Optional field for more context
 	// ID of set this Property should belong to
-	SetId *string `protobuf:"bytes,6,opt,name=set_id,json=setId,proto3,oneof" json:"set_id,omitempty"`
+	SetId *string `protobuf:"bytes,6,opt,name=set_id,json=setId,proto3,oneof" json:"set_id,omitempty"` // Not implemented yet
+	// some field types can be or must be configured further
+	//
 	// Types that are assignable to FieldTypeData:
 	//
 	//	*CreatePropertyRequest_SelectData_
@@ -134,7 +136,7 @@ type CreatePropertyResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PropertyId string `protobuf:"bytes,1,opt,name=property_id,json=propertyId,proto3" json:"property_id,omitempty"`
+	PropertyId string `protobuf:"bytes,1,opt,name=property_id,json=propertyId,proto3" json:"property_id,omitempty"` // uuid of the property
 }
 
 func (x *CreatePropertyResponse) Reset() {
@@ -360,7 +362,7 @@ type UpdatePropertyRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id          string       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 	SubjectType *SubjectType `protobuf:"varint,2,opt,name=subject_type,json=subjectType,proto3,enum=services.property_svc.v1.SubjectType,oneof" json:"subject_type,omitempty"`
 	Name        *string      `protobuf:"bytes,4,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Description *string      `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`
@@ -603,12 +605,13 @@ func (x *GetPropertiesBySubjectTypeResponse) GetProperties() []*GetPropertiesByS
 	return nil
 }
 
+// the select field type requires an (initial) set of options (possible values)
 type CreatePropertyRequest_SelectData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AllowFreetext *bool                                            `protobuf:"varint,1,opt,name=allow_freetext,json=allowFreetext,proto3,oneof" json:"allow_freetext,omitempty"`
+	AllowFreetext *bool                                            `protobuf:"varint,1,opt,name=allow_freetext,json=allowFreetext,proto3,oneof" json:"allow_freetext,omitempty"` // allows admins to allow or prevent users of using select fields like free-text fields, this means unknown options will be added to the option set when entered.
 	Options       []*CreatePropertyRequest_SelectData_SelectOption `protobuf:"bytes,2,rep,name=options,proto3" json:"options,omitempty"`
 }
 

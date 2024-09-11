@@ -48,6 +48,17 @@ func PbToTimestamp(src *timestamppb.Timestamp) pgtype.Timestamp {
 	return pgtype.Timestamp{Time: (*src).AsTime().UTC(), Valid: true}
 }
 
+// ExecBatch can be used as a wrapper around .Exec to obtain the last not-nil error.
+func ExecBatch(batchResults interface{ Exec(f func(int, error)) }) error {
+	var err error = nil
+	batchResults.Exec(func(_ int, e error) {
+		if e != nil {
+			err = e
+		}
+	})
+	return err
+}
+
 // DANGERTruncateAllTables truncates all tables of db
 func DANGERTruncateAllTables(ctx context.Context, db DBTX) error {
 	ctx, span, log := telemetry.StartSpan(ctx, "hwdb.DANGERTruncateAllTables")
