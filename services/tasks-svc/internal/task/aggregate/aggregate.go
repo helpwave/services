@@ -48,6 +48,7 @@ func (a *TaskAggregate) initEventListeners() {
 		RegisterEventListener(taskEventsV1.TaskSelfAssigned, a.onTaskAssigned).
 		RegisterEventListener(taskEventsV1.TaskUnassigned, a.onTaskUnassigned).
 		RegisterEventListener(taskEventsV1.TaskPublished, a.onTaskPublished).
+		RegisterEventListener(taskEventsV1.TaskUnpublished, a.onTaskUnpublished).
 		RegisterEventListener(taskEventsV1.SubtaskCreated, a.onSubtaskCreated).
 		RegisterEventListener(taskEventsV1.SubtaskNameUpdated, a.onSubtaskNameUpdated).
 		RegisterEventListener(taskEventsV1.SubtaskCompleted, a.onSubtaskCompleted).
@@ -179,6 +180,17 @@ func (a *TaskAggregate) onTaskPublished(evt hwes.Event) error {
 	}
 
 	a.Task.Public = true
+
+	return nil
+}
+
+func (a *TaskAggregate) onTaskUnpublished(evt hwes.Event) error {
+	var payload taskEventsV1.TaskUnpublishedEvent
+	if err := evt.GetJsonData(&payload); err != nil {
+		return err
+	}
+
+	a.Task.Public = false
 
 	return nil
 }

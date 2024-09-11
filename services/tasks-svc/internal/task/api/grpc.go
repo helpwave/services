@@ -48,9 +48,7 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 		return nil, err
 	}
 
-	// TODO: implement update task.public
-
-	if err := s.handlers.Commands.V1.UpdateTask(ctx, taskID, req.Name, req.Description, req.Status); err != nil {
+	if err := s.handlers.Commands.V1.UpdateTask(ctx, taskID, req.Name, req.Description, req.Status, req.Public); err != nil {
 		return nil, err
 	}
 
@@ -313,14 +311,14 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 		return nil, err
 	}
 
-	// TODO: implement complete and uncompleteSubtask functionality
+	// TODO: check if this functionality could be implemented more beautiful
 
 	subtaskID, err := uuid.Parse(req.GetSubtaskId())
 	if err != nil {
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.UpdateSubtask(ctx, taskID, subtaskID, req.Subtask.Name); err != nil {
+	if err := s.handlers.Commands.V1.UpdateSubtask(ctx, taskID, subtaskID, req.Subtask.Name, req.Subtask.Done); err != nil {
 		return nil, err
 	}
 

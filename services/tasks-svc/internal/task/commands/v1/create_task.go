@@ -48,7 +48,7 @@ func NewCreateTaskCommandHandler(as hwes.AggregateStore) CreateTaskCommandHandle
 		}
 
 		if public != nil && *public {
-			if err := a.PublishTask(ctx); err != nil {
+			if err := a.UpdateTaskPublic(ctx, *public); err != nil {
 				return err
 			}
 		}

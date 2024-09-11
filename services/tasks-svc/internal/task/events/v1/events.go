@@ -17,6 +17,7 @@ const (
 	TaskSelfAssigned       = "TASK_SELF_ASSIGNED_v1"
 	TaskUnassigned         = "TASK_UNASSIGNED_v1"
 	TaskPublished          = "TASK_PUBLISHED_v1"
+	TaskUnpublished        = "TASK_UNPUBLISHED_v1"
 	SubtaskCreated         = "TASK_SUBTASK_CREATED_v1"
 	SubtaskNameUpdated     = "TASK_SUBTASK_NAME_UPDATED_v1"
 	SubtaskCompleted       = "TASK_SUBTASK_COMPLETED_v1"
@@ -85,6 +86,8 @@ type TaskStatusUpdatedEvent struct {
 
 type TaskPublishedEvent struct{}
 
+type TaskUnpublishedEvent struct{}
+
 func NewTaskCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, name string, patientID uuid.UUID, status pb.TaskStatus) (hwes.Event, error) {
 	payload := TaskCreatedEvent{
 		ID:        id.String(),
@@ -148,6 +151,11 @@ func NewTaskUnassignedEvent(ctx context.Context, a hwes.Aggregate, userID uuid.U
 func NewTaskPublishedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
 	payload := TaskPublishedEvent{}
 	return hwes.NewEvent(a, TaskPublished, hwes.WithContext(ctx), hwes.WithData(payload))
+}
+
+func NewTaskUnpublishedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
+	payload := TaskUnpublishedEvent{}
+	return hwes.NewEvent(a, TaskUnpublished, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 func NewSubtaskCreatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
