@@ -328,12 +328,21 @@ class GetRoomResponse extends $pb.GeneratedMessage {
 }
 
 class GetRoomsRequest extends $pb.GeneratedMessage {
-  factory GetRoomsRequest() => create();
+  factory GetRoomsRequest({
+    $core.String? wardId,
+  }) {
+    final $result = create();
+    if (wardId != null) {
+      $result.wardId = wardId;
+    }
+    return $result;
+  }
   GetRoomsRequest._() : super();
   factory GetRoomsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetRoomsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRoomsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'wardId')
     ..hasRequiredFields = false
   ;
 
@@ -357,6 +366,15 @@ class GetRoomsRequest extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static GetRoomsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomsRequest>(create);
   static GetRoomsRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get wardId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set wardId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasWardId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWardId() => clearField(1);
 }
 
 class GetRoomsResponse_Room_Bed extends $pb.GeneratedMessage {
@@ -551,250 +569,6 @@ class GetRoomsResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<GetRoomsResponse_Room> get rooms => $_getList(0);
-}
-
-class GetRoomsByWardRequest extends $pb.GeneratedMessage {
-  factory GetRoomsByWardRequest({
-    $core.String? wardId,
-  }) {
-    final $result = create();
-    if (wardId != null) {
-      $result.wardId = wardId;
-    }
-    return $result;
-  }
-  GetRoomsByWardRequest._() : super();
-  factory GetRoomsByWardRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetRoomsByWardRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRoomsByWardRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'wardId')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetRoomsByWardRequest clone() => GetRoomsByWardRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetRoomsByWardRequest copyWith(void Function(GetRoomsByWardRequest) updates) => super.copyWith((message) => updates(message as GetRoomsByWardRequest)) as GetRoomsByWardRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetRoomsByWardRequest create() => GetRoomsByWardRequest._();
-  GetRoomsByWardRequest createEmptyInstance() => create();
-  static $pb.PbList<GetRoomsByWardRequest> createRepeated() => $pb.PbList<GetRoomsByWardRequest>();
-  @$core.pragma('dart2js:noInline')
-  static GetRoomsByWardRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomsByWardRequest>(create);
-  static GetRoomsByWardRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get wardId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set wardId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasWardId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearWardId() => clearField(1);
-}
-
-class GetRoomsByWardResponse_Room_Bed extends $pb.GeneratedMessage {
-  factory GetRoomsByWardResponse_Room_Bed({
-    $core.String? id,
-    $core.String? name,
-  }) {
-    final $result = create();
-    if (id != null) {
-      $result.id = id;
-    }
-    if (name != null) {
-      $result.name = name;
-    }
-    return $result;
-  }
-  GetRoomsByWardResponse_Room_Bed._() : super();
-  factory GetRoomsByWardResponse_Room_Bed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetRoomsByWardResponse_Room_Bed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRoomsByWardResponse.Room.Bed', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetRoomsByWardResponse_Room_Bed clone() => GetRoomsByWardResponse_Room_Bed()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetRoomsByWardResponse_Room_Bed copyWith(void Function(GetRoomsByWardResponse_Room_Bed) updates) => super.copyWith((message) => updates(message as GetRoomsByWardResponse_Room_Bed)) as GetRoomsByWardResponse_Room_Bed;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetRoomsByWardResponse_Room_Bed create() => GetRoomsByWardResponse_Room_Bed._();
-  GetRoomsByWardResponse_Room_Bed createEmptyInstance() => create();
-  static $pb.PbList<GetRoomsByWardResponse_Room_Bed> createRepeated() => $pb.PbList<GetRoomsByWardResponse_Room_Bed>();
-  @$core.pragma('dart2js:noInline')
-  static GetRoomsByWardResponse_Room_Bed getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomsByWardResponse_Room_Bed>(create);
-  static GetRoomsByWardResponse_Room_Bed? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get name => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set name($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasName() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearName() => clearField(2);
-}
-
-class GetRoomsByWardResponse_Room extends $pb.GeneratedMessage {
-  factory GetRoomsByWardResponse_Room({
-    $core.String? id,
-    $core.String? name,
-    $core.Iterable<GetRoomsByWardResponse_Room_Bed>? beds,
-    $core.String? wardId,
-  }) {
-    final $result = create();
-    if (id != null) {
-      $result.id = id;
-    }
-    if (name != null) {
-      $result.name = name;
-    }
-    if (beds != null) {
-      $result.beds.addAll(beds);
-    }
-    if (wardId != null) {
-      $result.wardId = wardId;
-    }
-    return $result;
-  }
-  GetRoomsByWardResponse_Room._() : super();
-  factory GetRoomsByWardResponse_Room.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetRoomsByWardResponse_Room.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRoomsByWardResponse.Room', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..pc<GetRoomsByWardResponse_Room_Bed>(3, _omitFieldNames ? '' : 'beds', $pb.PbFieldType.PM, subBuilder: GetRoomsByWardResponse_Room_Bed.create)
-    ..aOS(5, _omitFieldNames ? '' : 'wardId')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetRoomsByWardResponse_Room clone() => GetRoomsByWardResponse_Room()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetRoomsByWardResponse_Room copyWith(void Function(GetRoomsByWardResponse_Room) updates) => super.copyWith((message) => updates(message as GetRoomsByWardResponse_Room)) as GetRoomsByWardResponse_Room;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetRoomsByWardResponse_Room create() => GetRoomsByWardResponse_Room._();
-  GetRoomsByWardResponse_Room createEmptyInstance() => create();
-  static $pb.PbList<GetRoomsByWardResponse_Room> createRepeated() => $pb.PbList<GetRoomsByWardResponse_Room>();
-  @$core.pragma('dart2js:noInline')
-  static GetRoomsByWardResponse_Room getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomsByWardResponse_Room>(create);
-  static GetRoomsByWardResponse_Room? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get name => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set name($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasName() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearName() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.List<GetRoomsByWardResponse_Room_Bed> get beds => $_getList(2);
-
-  @$pb.TagNumber(5)
-  $core.String get wardId => $_getSZ(3);
-  @$pb.TagNumber(5)
-  set wardId($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasWardId() => $_has(3);
-  @$pb.TagNumber(5)
-  void clearWardId() => clearField(5);
-}
-
-class GetRoomsByWardResponse extends $pb.GeneratedMessage {
-  factory GetRoomsByWardResponse({
-    $core.Iterable<GetRoomsByWardResponse_Room>? rooms,
-  }) {
-    final $result = create();
-    if (rooms != null) {
-      $result.rooms.addAll(rooms);
-    }
-    return $result;
-  }
-  GetRoomsByWardResponse._() : super();
-  factory GetRoomsByWardResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetRoomsByWardResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRoomsByWardResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..pc<GetRoomsByWardResponse_Room>(1, _omitFieldNames ? '' : 'rooms', $pb.PbFieldType.PM, subBuilder: GetRoomsByWardResponse_Room.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetRoomsByWardResponse clone() => GetRoomsByWardResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetRoomsByWardResponse copyWith(void Function(GetRoomsByWardResponse) updates) => super.copyWith((message) => updates(message as GetRoomsByWardResponse)) as GetRoomsByWardResponse;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static GetRoomsByWardResponse create() => GetRoomsByWardResponse._();
-  GetRoomsByWardResponse createEmptyInstance() => create();
-  static $pb.PbList<GetRoomsByWardResponse> createRepeated() => $pb.PbList<GetRoomsByWardResponse>();
-  @$core.pragma('dart2js:noInline')
-  static GetRoomsByWardResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRoomsByWardResponse>(create);
-  static GetRoomsByWardResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.List<GetRoomsByWardResponse_Room> get rooms => $_getList(0);
 }
 
 class UpdateRoomRequest extends $pb.GeneratedMessage {

@@ -87,11 +87,31 @@ final $typed_data.Uint8List taskPropertyMatcherDescriptor = $convert.base64Decod
     'ChNUYXNrUHJvcGVydHlNYXRjaGVyEhwKB3dhcmRfaWQYASABKAlIAFIGd2FyZElkiAEBEhwKB3'
     'Rhc2tfaWQYAiABKAlIAVIGdGFza0lkiAEBQgoKCF93YXJkX2lkQgoKCF90YXNrX2lk');
 
+@$core.Deprecated('Use patientPropertyMatcherDescriptor instead')
+const PatientPropertyMatcher$json = {
+  '1': 'PatientPropertyMatcher',
+  '2': [
+    {'1': 'ward_id', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'wardId', '17': true},
+    {'1': 'patient_id', '3': 2, '4': 1, '5': 9, '9': 1, '10': 'patientId', '17': true},
+  ],
+  '8': [
+    {'1': '_ward_id'},
+    {'1': '_patient_id'},
+  ],
+};
+
+/// Descriptor for `PatientPropertyMatcher`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List patientPropertyMatcherDescriptor = $convert.base64Decode(
+    'ChZQYXRpZW50UHJvcGVydHlNYXRjaGVyEhwKB3dhcmRfaWQYASABKAlIAFIGd2FyZElkiAEBEi'
+    'IKCnBhdGllbnRfaWQYAiABKAlIAVIJcGF0aWVudElkiAEBQgoKCF93YXJkX2lkQg0KC19wYXRp'
+    'ZW50X2lk');
+
 @$core.Deprecated('Use getAttachedPropertyValuesRequestDescriptor instead')
 const GetAttachedPropertyValuesRequest$json = {
   '1': 'GetAttachedPropertyValuesRequest',
   '2': [
     {'1': 'task_matcher', '3': 1, '4': 1, '5': 11, '6': '.services.property_svc.v1.TaskPropertyMatcher', '9': 0, '10': 'taskMatcher'},
+    {'1': 'patient_matcher', '3': 2, '4': 1, '5': 11, '6': '.services.property_svc.v1.PatientPropertyMatcher', '9': 0, '10': 'patientMatcher'},
   ],
   '8': [
     {'1': 'matcher'},
@@ -102,7 +122,8 @@ const GetAttachedPropertyValuesRequest$json = {
 final $typed_data.Uint8List getAttachedPropertyValuesRequestDescriptor = $convert.base64Decode(
     'CiBHZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVxdWVzdBJSCgx0YXNrX21hdGNoZXIYASABKA'
     'syLS5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuVGFza1Byb3BlcnR5TWF0Y2hlckgAUgt0YXNr'
-    'TWF0Y2hlckIJCgdtYXRjaGVy');
+    'TWF0Y2hlchJbCg9wYXRpZW50X21hdGNoZXIYAiABKAsyMC5zZXJ2aWNlcy5wcm9wZXJ0eV9zdm'
+    'MudjEuUGF0aWVudFByb3BlcnR5TWF0Y2hlckgAUg5wYXRpZW50TWF0Y2hlckIJCgdtYXRjaGVy');
 
 @$core.Deprecated('Use getAttachedPropertyValuesResponseDescriptor instead')
 const GetAttachedPropertyValuesResponse$json = {

@@ -32,6 +32,7 @@ const (
 	PatientService_UnassignBed_FullMethodName                = "/services.tasks_svc.v1.PatientService/UnassignBed"
 	PatientService_DischargePatient_FullMethodName           = "/services.tasks_svc.v1.PatientService/DischargePatient"
 	PatientService_ReadmitPatient_FullMethodName             = "/services.tasks_svc.v1.PatientService/ReadmitPatient"
+	PatientService_DeletePatient_FullMethodName              = "/services.tasks_svc.v1.PatientService/DeletePatient"
 )
 
 // PatientServiceClient is the client API for PatientService service.
@@ -51,6 +52,7 @@ type PatientServiceClient interface {
 	UnassignBed(ctx context.Context, in *UnassignBedRequest, opts ...grpc.CallOption) (*UnassignBedResponse, error)
 	DischargePatient(ctx context.Context, in *DischargePatientRequest, opts ...grpc.CallOption) (*DischargePatientResponse, error)
 	ReadmitPatient(ctx context.Context, in *ReadmitPatientRequest, opts ...grpc.CallOption) (*ReadmitPatientResponse, error)
+	DeletePatient(ctx context.Context, in *DeletePatientRequest, opts ...grpc.CallOption) (*DeletePatientResponse, error)
 }
 
 type patientServiceClient struct {
@@ -191,6 +193,16 @@ func (c *patientServiceClient) ReadmitPatient(ctx context.Context, in *ReadmitPa
 	return out, nil
 }
 
+func (c *patientServiceClient) DeletePatient(ctx context.Context, in *DeletePatientRequest, opts ...grpc.CallOption) (*DeletePatientResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeletePatientResponse)
+	err := c.cc.Invoke(ctx, PatientService_DeletePatient_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PatientServiceServer is the server API for PatientService service.
 // All implementations must embed UnimplementedPatientServiceServer
 // for forward compatibility
@@ -208,6 +220,7 @@ type PatientServiceServer interface {
 	UnassignBed(context.Context, *UnassignBedRequest) (*UnassignBedResponse, error)
 	DischargePatient(context.Context, *DischargePatientRequest) (*DischargePatientResponse, error)
 	ReadmitPatient(context.Context, *ReadmitPatientRequest) (*ReadmitPatientResponse, error)
+	DeletePatient(context.Context, *DeletePatientRequest) (*DeletePatientResponse, error)
 	mustEmbedUnimplementedPatientServiceServer()
 }
 
@@ -253,6 +266,9 @@ func (UnimplementedPatientServiceServer) DischargePatient(context.Context, *Disc
 }
 func (UnimplementedPatientServiceServer) ReadmitPatient(context.Context, *ReadmitPatientRequest) (*ReadmitPatientResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReadmitPatient not implemented")
+}
+func (UnimplementedPatientServiceServer) DeletePatient(context.Context, *DeletePatientRequest) (*DeletePatientResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeletePatient not implemented")
 }
 func (UnimplementedPatientServiceServer) mustEmbedUnimplementedPatientServiceServer() {}
 
@@ -501,6 +517,24 @@ func _PatientService_ReadmitPatient_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PatientService_DeletePatient_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeletePatientRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PatientServiceServer).DeletePatient(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PatientService_DeletePatient_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PatientServiceServer).DeletePatient(ctx, req.(*DeletePatientRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PatientService_ServiceDesc is the grpc.ServiceDesc for PatientService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -559,6 +593,10 @@ var PatientService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ReadmitPatient",
 			Handler:    _PatientService_ReadmitPatient_Handler,
+		},
+		{
+			MethodName: "DeletePatient",
+			Handler:    _PatientService_DeletePatient_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

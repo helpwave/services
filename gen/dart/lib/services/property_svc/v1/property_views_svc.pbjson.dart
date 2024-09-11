@@ -38,6 +38,7 @@ const UpdatePropertyViewRuleRequest$json = {
   '2': [
     {'1': 'filter_update', '3': 1, '4': 1, '5': 11, '6': '.services.property_svc.v1.FilterUpdate', '10': 'filterUpdate'},
     {'1': 'task_matcher', '3': 2, '4': 1, '5': 11, '6': '.services.property_svc.v1.TaskPropertyMatcher', '9': 0, '10': 'taskMatcher'},
+    {'1': 'patient_matcher', '3': 3, '4': 1, '5': 11, '6': '.services.property_svc.v1.PatientPropertyMatcher', '9': 0, '10': 'patientMatcher'},
   ],
   '8': [
     {'1': 'matcher'},
@@ -49,7 +50,9 @@ final $typed_data.Uint8List updatePropertyViewRuleRequestDescriptor = $convert.b
     'Ch1VcGRhdGVQcm9wZXJ0eVZpZXdSdWxlUmVxdWVzdBJLCg1maWx0ZXJfdXBkYXRlGAEgASgLMi'
     'Yuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkZpbHRlclVwZGF0ZVIMZmlsdGVyVXBkYXRlElIK'
     'DHRhc2tfbWF0Y2hlchgCIAEoCzItLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5UYXNrUHJvcG'
-    'VydHlNYXRjaGVySABSC3Rhc2tNYXRjaGVyQgkKB21hdGNoZXI=');
+    'VydHlNYXRjaGVySABSC3Rhc2tNYXRjaGVyElsKD3BhdGllbnRfbWF0Y2hlchgDIAEoCzIwLnNl'
+    'cnZpY2VzLnByb3BlcnR5X3N2Yy52MS5QYXRpZW50UHJvcGVydHlNYXRjaGVySABSDnBhdGllbn'
+    'RNYXRjaGVyQgkKB21hdGNoZXI=');
 
 @$core.Deprecated('Use updatePropertyViewRuleResponseDescriptor instead')
 const UpdatePropertyViewRuleResponse$json = {

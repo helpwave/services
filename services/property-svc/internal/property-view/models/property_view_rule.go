@@ -23,6 +23,10 @@ type PropertyMatchers interface {
 	QueryProperties(context.Context) ([]PropertiesQueryRow, error)
 
 	GetSubjectId() (uuid.UUID, error)
+
+	// returns the respective type identifier of the property matcher
+	// should be used to identify the matcher when converting it from a map to the respective type
+	GetType() string
 }
 
 type PropertyViewRule struct {

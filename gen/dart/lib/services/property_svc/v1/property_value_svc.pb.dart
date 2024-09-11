@@ -378,18 +378,87 @@ class TaskPropertyMatcher extends $pb.GeneratedMessage {
   void clearTaskId() => clearField(2);
 }
 
+class PatientPropertyMatcher extends $pb.GeneratedMessage {
+  factory PatientPropertyMatcher({
+    $core.String? wardId,
+    $core.String? patientId,
+  }) {
+    final $result = create();
+    if (wardId != null) {
+      $result.wardId = wardId;
+    }
+    if (patientId != null) {
+      $result.patientId = patientId;
+    }
+    return $result;
+  }
+  PatientPropertyMatcher._() : super();
+  factory PatientPropertyMatcher.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PatientPropertyMatcher.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PatientPropertyMatcher', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'wardId')
+    ..aOS(2, _omitFieldNames ? '' : 'patientId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  PatientPropertyMatcher clone() => PatientPropertyMatcher()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  PatientPropertyMatcher copyWith(void Function(PatientPropertyMatcher) updates) => super.copyWith((message) => updates(message as PatientPropertyMatcher)) as PatientPropertyMatcher;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static PatientPropertyMatcher create() => PatientPropertyMatcher._();
+  PatientPropertyMatcher createEmptyInstance() => create();
+  static $pb.PbList<PatientPropertyMatcher> createRepeated() => $pb.PbList<PatientPropertyMatcher>();
+  @$core.pragma('dart2js:noInline')
+  static PatientPropertyMatcher getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PatientPropertyMatcher>(create);
+  static PatientPropertyMatcher? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get wardId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set wardId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasWardId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWardId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get patientId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set patientId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPatientId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPatientId() => clearField(2);
+}
+
 enum GetAttachedPropertyValuesRequest_Matcher {
   taskMatcher, 
+  patientMatcher, 
   notSet
 }
 
 class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
   factory GetAttachedPropertyValuesRequest({
     TaskPropertyMatcher? taskMatcher,
+    PatientPropertyMatcher? patientMatcher,
   }) {
     final $result = create();
     if (taskMatcher != null) {
       $result.taskMatcher = taskMatcher;
+    }
+    if (patientMatcher != null) {
+      $result.patientMatcher = patientMatcher;
     }
     return $result;
   }
@@ -399,11 +468,13 @@ class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
 
   static const $core.Map<$core.int, GetAttachedPropertyValuesRequest_Matcher> _GetAttachedPropertyValuesRequest_MatcherByTag = {
     1 : GetAttachedPropertyValuesRequest_Matcher.taskMatcher,
+    2 : GetAttachedPropertyValuesRequest_Matcher.patientMatcher,
     0 : GetAttachedPropertyValuesRequest_Matcher.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAttachedPropertyValuesRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
-    ..oo(0, [1])
+    ..oo(0, [1, 2])
     ..aOM<TaskPropertyMatcher>(1, _omitFieldNames ? '' : 'taskMatcher', subBuilder: TaskPropertyMatcher.create)
+    ..aOM<PatientPropertyMatcher>(2, _omitFieldNames ? '' : 'patientMatcher', subBuilder: PatientPropertyMatcher.create)
     ..hasRequiredFields = false
   ;
 
@@ -441,6 +512,17 @@ class GetAttachedPropertyValuesRequest extends $pb.GeneratedMessage {
   void clearTaskMatcher() => clearField(1);
   @$pb.TagNumber(1)
   TaskPropertyMatcher ensureTaskMatcher() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  PatientPropertyMatcher get patientMatcher => $_getN(1);
+  @$pb.TagNumber(2)
+  set patientMatcher(PatientPropertyMatcher v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPatientMatcher() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPatientMatcher() => clearField(2);
+  @$pb.TagNumber(2)
+  PatientPropertyMatcher ensurePatientMatcher() => $_ensure(1);
 }
 
 class GetAttachedPropertyValuesResponse_Value_SelectValueOption extends $pb.GeneratedMessage {

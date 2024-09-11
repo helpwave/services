@@ -31,6 +31,8 @@ func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequ
 		return nil, err
 	}
 
+	// TODO: implement task.assigned_user_id and task.subtasks
+
 	if err := s.handlers.Commands.V1.CreateTask(ctx, taskID, req.GetName(), req.Description, patientID, req.Public, req.InitialStatus, req.DueAt); err != nil {
 		return nil, err
 	}
@@ -45,6 +47,8 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 	if err != nil {
 		return nil, err
 	}
+
+	// TODO: implement update task.public
 
 	if err := s.handlers.Commands.V1.UpdateTask(ctx, taskID, req.Name, req.Description, req.Status); err != nil {
 		return nil, err
@@ -100,15 +104,17 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 		return nil, err
 	}
 
-	var subtasksRes []*pb.GetTaskResponse_Subtask
+	var subtasksRes []*pb.GetTaskResponse_SubTask
 	for _, subtask := range task.Subtasks {
-		subtasksRes = append(subtasksRes, &pb.GetTaskResponse_Subtask{
+		subtasksRes = append(subtasksRes, &pb.GetTaskResponse_SubTask{
 			Id:   subtask.ID.String(),
 			Name: subtask.Name,
 			Done: subtask.Done,
+			// TODO: created_by
 		})
 	}
 
+	// TODO: add missing fields
 	return &pb.GetTaskResponse{
 		Id:             task.ID.String(),
 		Name:           task.Name,
@@ -260,8 +266,8 @@ func (s *TaskGrpcService) GetAssignedTasks(ctx context.Context, _ *pb.GetAssigne
 			Subtasks:       make([]*pb.GetAssignedTasksResponse_Task_SubTask, len(item.Subtasks)),
 			AssignedUserId: item.AssignedUser.UUID.String(), // Safe, assignedUserId has to be set. TODO: #760
 			Patient: &pb.GetAssignedTasksResponse_Task_Patient{
-				Id:   item.PatientID.String(),
-				Name: item.Patient.HumanReadableIdentifier,
+				Id:                      item.PatientID.String(),
+				HumanReadableIdentifier: item.Patient.HumanReadableIdentifier,
 			},
 		}
 
@@ -290,6 +296,8 @@ func (s *TaskGrpcService) CreateSubtask(ctx context.Context, req *pb.CreateSubta
 
 	subtaskID := uuid.New()
 
+	// TODO: implement subtask.done functionality
+
 	if err := s.handlers.Commands.V1.CreateSubtask(ctx, taskID, subtaskID, req.GetSubtask().GetName()); err != nil {
 		return nil, err
 	}
@@ -305,6 +313,8 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 		return nil, err
 	}
 
+	// TODO: implement complete and uncompleteSubtask functionality
+
 	subtaskID, err := uuid.Parse(req.GetSubtaskId())
 	if err != nil {
 		return nil, err
@@ -315,42 +325,6 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 	}
 
 	return &pb.UpdateSubtaskResponse{}, nil
-}
-
-func (s *TaskGrpcService) CompleteSubtask(ctx context.Context, req *pb.CompleteSubtaskRequest) (*pb.CompleteSubtaskResponse, error) {
-	taskID, err := uuid.Parse(req.GetTaskId())
-	if err != nil {
-		return nil, err
-	}
-
-	subtaskID, err := uuid.Parse(req.GetSubtaskId())
-	if err != nil {
-		return nil, err
-	}
-
-	if err := s.handlers.Commands.V1.CompleteSubtask(ctx, taskID, subtaskID); err != nil {
-		return nil, err
-	}
-
-	return &pb.CompleteSubtaskResponse{}, nil
-}
-
-func (s *TaskGrpcService) UncompleteSubtask(ctx context.Context, req *pb.UncompleteSubtaskRequest) (*pb.UncompleteSubtaskResponse, error) {
-	taskID, err := uuid.Parse(req.GetTaskId())
-	if err != nil {
-		return nil, err
-	}
-
-	subtaskID, err := uuid.Parse(req.GetSubtaskId())
-	if err != nil {
-		return nil, err
-	}
-
-	if err := s.handlers.Commands.V1.UncompleteSubtask(ctx, taskID, subtaskID); err != nil {
-		return nil, err
-	}
-
-	return &pb.UncompleteSubtaskResponse{}, nil
 }
 
 func (s *TaskGrpcService) DeleteSubtask(ctx context.Context, req *pb.DeleteSubtaskRequest) (*pb.DeleteSubtaskResponse, error) {
@@ -370,3 +344,6 @@ func (s *TaskGrpcService) DeleteSubtask(ctx context.Context, req *pb.DeleteSubta
 
 	return &pb.DeleteSubtaskResponse{}, nil
 }
+
+// TODO: add removeTaskDueDate
+// TODO: add deleteTask

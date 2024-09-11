@@ -293,6 +293,16 @@ message ReadmitPatientRequest {
 message ReadmitPatientResponse {}
 
 //
+// DeletePatient
+//
+
+message DeletePatientRequest {
+  string id = 1;
+}
+
+message DeletePatientResponse {}
+
+//
 // PatientService
 //
 
@@ -310,4 +320,5 @@ service PatientService {
   rpc UnassignBed(UnassignBedRequest) returns (UnassignBedResponse) {}
   rpc DischargePatient(DischargePatientRequest) returns (DischargePatientResponse) {}
   rpc ReadmitPatient(ReadmitPatientRequest) returns (ReadmitPatientResponse) {}
+  rpc DeletePatient(DeletePatientRequest) returns (DeletePatientResponse) {}
 }

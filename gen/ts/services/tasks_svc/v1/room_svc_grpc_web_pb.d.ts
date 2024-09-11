@@ -29,13 +29,6 @@ export class RoomServiceClient {
                response: services_tasks_svc_v1_room_svc_pb.GetRoomsResponse) => void
   ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_room_svc_pb.GetRoomsResponse>;
 
-  getRoomsByWard(
-    request: services_tasks_svc_v1_room_svc_pb.GetRoomsByWardRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: services_tasks_svc_v1_room_svc_pb.GetRoomsByWardResponse) => void
-  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_room_svc_pb.GetRoomsByWardResponse>;
-
   updateRoom(
     request: services_tasks_svc_v1_room_svc_pb.UpdateRoomRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -78,11 +71,6 @@ export class RoomServicePromiseClient {
     request: services_tasks_svc_v1_room_svc_pb.GetRoomsRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<services_tasks_svc_v1_room_svc_pb.GetRoomsResponse>;
-
-  getRoomsByWard(
-    request: services_tasks_svc_v1_room_svc_pb.GetRoomsByWardRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<services_tasks_svc_v1_room_svc_pb.GetRoomsByWardResponse>;
 
   updateRoom(
     request: services_tasks_svc_v1_room_svc_pb.UpdateRoomRequest,

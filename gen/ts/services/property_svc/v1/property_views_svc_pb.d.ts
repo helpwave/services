@@ -52,6 +52,11 @@ export class UpdatePropertyViewRuleRequest extends jspb.Message {
   hasTaskMatcher(): boolean;
   clearTaskMatcher(): UpdatePropertyViewRuleRequest;
 
+  getPatientMatcher(): services_property_svc_v1_property_value_svc_pb.PatientPropertyMatcher | undefined;
+  setPatientMatcher(value?: services_property_svc_v1_property_value_svc_pb.PatientPropertyMatcher): UpdatePropertyViewRuleRequest;
+  hasPatientMatcher(): boolean;
+  clearPatientMatcher(): UpdatePropertyViewRuleRequest;
+
   getMatcherCase(): UpdatePropertyViewRuleRequest.MatcherCase;
 
   serializeBinary(): Uint8Array;
@@ -66,11 +71,13 @@ export namespace UpdatePropertyViewRuleRequest {
   export type AsObject = {
     filterUpdate?: FilterUpdate.AsObject,
     taskMatcher?: services_property_svc_v1_property_value_svc_pb.TaskPropertyMatcher.AsObject,
+    patientMatcher?: services_property_svc_v1_property_value_svc_pb.PatientPropertyMatcher.AsObject,
   }
 
   export enum MatcherCase { 
     MATCHER_NOT_SET = 0,
     TASK_MATCHER = 2,
+    PATIENT_MATCHER = 3,
   }
 }
 

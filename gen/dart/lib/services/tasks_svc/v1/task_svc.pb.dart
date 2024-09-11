@@ -16,6 +16,70 @@ import 'package:protobuf/protobuf.dart' as $pb;
 import '../../../google/protobuf/timestamp.pb.dart' as $20;
 import 'types.pbenum.dart' as $22;
 
+class CreateTaskRequest_SubTask extends $pb.GeneratedMessage {
+  factory CreateTaskRequest_SubTask({
+    $core.String? name,
+    $core.bool? done,
+  }) {
+    final $result = create();
+    if (name != null) {
+      $result.name = name;
+    }
+    if (done != null) {
+      $result.done = done;
+    }
+    return $result;
+  }
+  CreateTaskRequest_SubTask._() : super();
+  factory CreateTaskRequest_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateTaskRequest_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateTaskRequest.SubTask', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'name')
+    ..aOB(2, _omitFieldNames ? '' : 'done')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateTaskRequest_SubTask clone() => CreateTaskRequest_SubTask()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateTaskRequest_SubTask copyWith(void Function(CreateTaskRequest_SubTask) updates) => super.copyWith((message) => updates(message as CreateTaskRequest_SubTask)) as CreateTaskRequest_SubTask;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreateTaskRequest_SubTask create() => CreateTaskRequest_SubTask._();
+  CreateTaskRequest_SubTask createEmptyInstance() => create();
+  static $pb.PbList<CreateTaskRequest_SubTask> createRepeated() => $pb.PbList<CreateTaskRequest_SubTask>();
+  @$core.pragma('dart2js:noInline')
+  static CreateTaskRequest_SubTask getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateTaskRequest_SubTask>(create);
+  static CreateTaskRequest_SubTask? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get name => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set name($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasName() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get done => $_getBF(1);
+  @$pb.TagNumber(2)
+  set done($core.bool v) { $_setBool(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasDone() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDone() => clearField(2);
+}
+
 class CreateTaskRequest extends $pb.GeneratedMessage {
   factory CreateTaskRequest({
     $core.String? name,
@@ -24,6 +88,8 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     $core.bool? public,
     $20.Timestamp? dueAt,
     $22.TaskStatus? initialStatus,
+    $core.String? assignedUserId,
+    $core.Iterable<CreateTaskRequest_SubTask>? subtasks,
   }) {
     final $result = create();
     if (name != null) {
@@ -44,6 +110,12 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     if (initialStatus != null) {
       $result.initialStatus = initialStatus;
     }
+    if (assignedUserId != null) {
+      $result.assignedUserId = assignedUserId;
+    }
+    if (subtasks != null) {
+      $result.subtasks.addAll(subtasks);
+    }
     return $result;
   }
   CreateTaskRequest._() : super();
@@ -57,6 +129,8 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     ..aOB(4, _omitFieldNames ? '' : 'public')
     ..aOM<$20.Timestamp>(5, _omitFieldNames ? '' : 'dueAt', subBuilder: $20.Timestamp.create)
     ..e<$22.TaskStatus>(6, _omitFieldNames ? '' : 'initialStatus', $pb.PbFieldType.OE, defaultOrMaker: $22.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $22.TaskStatus.valueOf, enumValues: $22.TaskStatus.values)
+    ..aOS(7, _omitFieldNames ? '' : 'assignedUserId')
+    ..pc<CreateTaskRequest_SubTask>(8, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: CreateTaskRequest_SubTask.create)
     ..hasRequiredFields = false
   ;
 
@@ -136,6 +210,18 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
   $core.bool hasInitialStatus() => $_has(5);
   @$pb.TagNumber(6)
   void clearInitialStatus() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get assignedUserId => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set assignedUserId($core.String v) { $_setString(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasAssignedUserId() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearAssignedUserId() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.List<CreateTaskRequest_SubTask> get subtasks => $_getList(7);
 }
 
 class CreateTaskResponse extends $pb.GeneratedMessage {
@@ -195,6 +281,7 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
     $core.String? description,
     $20.Timestamp? dueAt,
     $22.TaskStatus? status,
+    $core.bool? public,
   }) {
     final $result = create();
     if (id != null) {
@@ -212,6 +299,9 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
     if (status != null) {
       $result.status = status;
     }
+    if (public != null) {
+      $result.public = public;
+    }
     return $result;
   }
   UpdateTaskRequest._() : super();
@@ -224,6 +314,7 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOM<$20.Timestamp>(4, _omitFieldNames ? '' : 'dueAt', subBuilder: $20.Timestamp.create)
     ..e<$22.TaskStatus>(5, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $22.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $22.TaskStatus.valueOf, enumValues: $22.TaskStatus.values)
+    ..aOB(6, _omitFieldNames ? '' : 'public')
     ..hasRequiredFields = false
   ;
 
@@ -294,6 +385,15 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
   $core.bool hasStatus() => $_has(4);
   @$pb.TagNumber(5)
   void clearStatus() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.bool get public => $_getBF(5);
+  @$pb.TagNumber(6)
+  set public($core.bool v) { $_setBool(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasPublic() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearPublic() => clearField(6);
 }
 
 class UpdateTaskResponse extends $pb.GeneratedMessage {
@@ -378,11 +478,76 @@ class GetTaskRequest extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 }
 
-class GetTaskResponse_Subtask extends $pb.GeneratedMessage {
-  factory GetTaskResponse_Subtask({
+class GetTaskResponse_Patient extends $pb.GeneratedMessage {
+  factory GetTaskResponse_Patient({
+    $core.String? id,
+    $core.String? humanReadableIdentifier,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (humanReadableIdentifier != null) {
+      $result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    return $result;
+  }
+  GetTaskResponse_Patient._() : super();
+  factory GetTaskResponse_Patient.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetTaskResponse_Patient.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTaskResponse.Patient', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetTaskResponse_Patient clone() => GetTaskResponse_Patient()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetTaskResponse_Patient copyWith(void Function(GetTaskResponse_Patient) updates) => super.copyWith((message) => updates(message as GetTaskResponse_Patient)) as GetTaskResponse_Patient;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetTaskResponse_Patient create() => GetTaskResponse_Patient._();
+  GetTaskResponse_Patient createEmptyInstance() => create();
+  static $pb.PbList<GetTaskResponse_Patient> createRepeated() => $pb.PbList<GetTaskResponse_Patient>();
+  @$core.pragma('dart2js:noInline')
+  static GetTaskResponse_Patient getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTaskResponse_Patient>(create);
+  static GetTaskResponse_Patient? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get humanReadableIdentifier => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set humanReadableIdentifier($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasHumanReadableIdentifier() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearHumanReadableIdentifier() => clearField(2);
+}
+
+class GetTaskResponse_SubTask extends $pb.GeneratedMessage {
+  factory GetTaskResponse_SubTask({
     $core.String? id,
     $core.String? name,
     $core.bool? done,
+    $core.String? createdBy,
   }) {
     final $result = create();
     if (id != null) {
@@ -394,16 +559,20 @@ class GetTaskResponse_Subtask extends $pb.GeneratedMessage {
     if (done != null) {
       $result.done = done;
     }
+    if (createdBy != null) {
+      $result.createdBy = createdBy;
+    }
     return $result;
   }
-  GetTaskResponse_Subtask._() : super();
-  factory GetTaskResponse_Subtask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetTaskResponse_Subtask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetTaskResponse_SubTask._() : super();
+  factory GetTaskResponse_SubTask.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetTaskResponse_SubTask.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTaskResponse.Subtask', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTaskResponse.SubTask', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOB(3, _omitFieldNames ? '' : 'done')
+    ..aOS(4, _omitFieldNames ? '' : 'createdBy')
     ..hasRequiredFields = false
   ;
 
@@ -411,22 +580,22 @@ class GetTaskResponse_Subtask extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetTaskResponse_Subtask clone() => GetTaskResponse_Subtask()..mergeFromMessage(this);
+  GetTaskResponse_SubTask clone() => GetTaskResponse_SubTask()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetTaskResponse_Subtask copyWith(void Function(GetTaskResponse_Subtask) updates) => super.copyWith((message) => updates(message as GetTaskResponse_Subtask)) as GetTaskResponse_Subtask;
+  GetTaskResponse_SubTask copyWith(void Function(GetTaskResponse_SubTask) updates) => super.copyWith((message) => updates(message as GetTaskResponse_SubTask)) as GetTaskResponse_SubTask;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetTaskResponse_Subtask create() => GetTaskResponse_Subtask._();
-  GetTaskResponse_Subtask createEmptyInstance() => create();
-  static $pb.PbList<GetTaskResponse_Subtask> createRepeated() => $pb.PbList<GetTaskResponse_Subtask>();
+  static GetTaskResponse_SubTask create() => GetTaskResponse_SubTask._();
+  GetTaskResponse_SubTask createEmptyInstance() => create();
+  static $pb.PbList<GetTaskResponse_SubTask> createRepeated() => $pb.PbList<GetTaskResponse_SubTask>();
   @$core.pragma('dart2js:noInline')
-  static GetTaskResponse_Subtask getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTaskResponse_Subtask>(create);
-  static GetTaskResponse_Subtask? _defaultInstance;
+  static GetTaskResponse_SubTask getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetTaskResponse_SubTask>(create);
+  static GetTaskResponse_SubTask? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
@@ -454,6 +623,15 @@ class GetTaskResponse_Subtask extends $pb.GeneratedMessage {
   $core.bool hasDone() => $_has(2);
   @$pb.TagNumber(3)
   void clearDone() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get createdBy => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set createdBy($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasCreatedBy() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearCreatedBy() => clearField(4);
 }
 
 class GetTaskResponse extends $pb.GeneratedMessage {
@@ -462,9 +640,13 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? description,
     $core.String? assignedUserId,
-    $core.Iterable<GetTaskResponse_Subtask>? subtasks,
+    $core.Iterable<GetTaskResponse_SubTask>? subtasks,
     $22.TaskStatus? status,
     $20.Timestamp? createdAt,
+    $core.bool? public,
+    $20.Timestamp? dueAt,
+    $core.String? createdBy,
+    GetTaskResponse_Patient? patient,
   }) {
     final $result = create();
     if (id != null) {
@@ -488,6 +670,18 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     if (createdAt != null) {
       $result.createdAt = createdAt;
     }
+    if (public != null) {
+      $result.public = public;
+    }
+    if (dueAt != null) {
+      $result.dueAt = dueAt;
+    }
+    if (createdBy != null) {
+      $result.createdBy = createdBy;
+    }
+    if (patient != null) {
+      $result.patient = patient;
+    }
     return $result;
   }
   GetTaskResponse._() : super();
@@ -499,9 +693,13 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOS(4, _omitFieldNames ? '' : 'assignedUserId')
-    ..pc<GetTaskResponse_Subtask>(5, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTaskResponse_Subtask.create)
+    ..pc<GetTaskResponse_SubTask>(5, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTaskResponse_SubTask.create)
     ..e<$22.TaskStatus>(6, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $22.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $22.TaskStatus.valueOf, enumValues: $22.TaskStatus.values)
     ..aOM<$20.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $20.Timestamp.create)
+    ..aOB(8, _omitFieldNames ? '' : 'public')
+    ..aOM<$20.Timestamp>(9, _omitFieldNames ? '' : 'dueAt', subBuilder: $20.Timestamp.create)
+    ..aOS(10, _omitFieldNames ? '' : 'createdBy')
+    ..aOM<GetTaskResponse_Patient>(11, _omitFieldNames ? '' : 'patient', subBuilder: GetTaskResponse_Patient.create)
     ..hasRequiredFields = false
   ;
 
@@ -563,7 +761,7 @@ class GetTaskResponse extends $pb.GeneratedMessage {
   void clearAssignedUserId() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.List<GetTaskResponse_Subtask> get subtasks => $_getList(4);
+  $core.List<GetTaskResponse_SubTask> get subtasks => $_getList(4);
 
   @$pb.TagNumber(6)
   $22.TaskStatus get status => $_getN(5);
@@ -584,6 +782,46 @@ class GetTaskResponse extends $pb.GeneratedMessage {
   void clearCreatedAt() => clearField(7);
   @$pb.TagNumber(7)
   $20.Timestamp ensureCreatedAt() => $_ensure(6);
+
+  @$pb.TagNumber(8)
+  $core.bool get public => $_getBF(7);
+  @$pb.TagNumber(8)
+  set public($core.bool v) { $_setBool(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasPublic() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearPublic() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $20.Timestamp get dueAt => $_getN(8);
+  @$pb.TagNumber(9)
+  set dueAt($20.Timestamp v) { setField(9, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasDueAt() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearDueAt() => clearField(9);
+  @$pb.TagNumber(9)
+  $20.Timestamp ensureDueAt() => $_ensure(8);
+
+  @$pb.TagNumber(10)
+  $core.String get createdBy => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set createdBy($core.String v) { $_setString(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasCreatedBy() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearCreatedBy() => clearField(10);
+
+  @$pb.TagNumber(11)
+  GetTaskResponse_Patient get patient => $_getN(10);
+  @$pb.TagNumber(11)
+  set patient(GetTaskResponse_Patient v) { setField(11, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasPatient() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearPatient() => clearField(11);
+  @$pb.TagNumber(11)
+  GetTaskResponse_Patient ensurePatient() => $_ensure(10);
 }
 
 class GetTasksByPatientRequest extends $pb.GeneratedMessage {
@@ -1371,14 +1609,14 @@ class GetAssignedTasksRequest extends $pb.GeneratedMessage {
 class GetAssignedTasksResponse_Task_Patient extends $pb.GeneratedMessage {
   factory GetAssignedTasksResponse_Task_Patient({
     $core.String? id,
-    $core.String? name,
+    $core.String? humanReadableIdentifier,
   }) {
     final $result = create();
     if (id != null) {
       $result.id = id;
     }
-    if (name != null) {
-      $result.name = name;
+    if (humanReadableIdentifier != null) {
+      $result.humanReadableIdentifier = humanReadableIdentifier;
     }
     return $result;
   }
@@ -1388,7 +1626,7 @@ class GetAssignedTasksResponse_Task_Patient extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAssignedTasksResponse.Task.Patient', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
     ..hasRequiredFields = false
   ;
 
@@ -1423,13 +1661,13 @@ class GetAssignedTasksResponse_Task_Patient extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get name => $_getSZ(1);
+  $core.String get humanReadableIdentifier => $_getSZ(1);
   @$pb.TagNumber(2)
-  set name($core.String v) { $_setString(1, v); }
+  set humanReadableIdentifier($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasName() => $_has(1);
+  $core.bool hasHumanReadableIdentifier() => $_has(1);
   @$pb.TagNumber(2)
-  void clearName() => clearField(2);
+  void clearHumanReadableIdentifier() => clearField(2);
 }
 
 class GetAssignedTasksResponse_Task_SubTask extends $pb.GeneratedMessage {
@@ -1953,10 +2191,14 @@ class UnassignTaskResponse extends $pb.GeneratedMessage {
 class CreateSubtaskRequest_Subtask extends $pb.GeneratedMessage {
   factory CreateSubtaskRequest_Subtask({
     $core.String? name,
+    $core.bool? done,
   }) {
     final $result = create();
     if (name != null) {
       $result.name = name;
+    }
+    if (done != null) {
+      $result.done = done;
     }
     return $result;
   }
@@ -1966,6 +2208,7 @@ class CreateSubtaskRequest_Subtask extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateSubtaskRequest.Subtask', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'name')
+    ..aOB(2, _omitFieldNames ? '' : 'done')
     ..hasRequiredFields = false
   ;
 
@@ -1998,6 +2241,15 @@ class CreateSubtaskRequest_Subtask extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
   void clearName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get done => $_getBF(1);
+  @$pb.TagNumber(2)
+  set done($core.bool v) { $_setBool(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasDone() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDone() => clearField(2);
 }
 
 class CreateSubtaskRequest extends $pb.GeneratedMessage {
@@ -2119,10 +2371,14 @@ class CreateSubtaskResponse extends $pb.GeneratedMessage {
 class UpdateSubtaskRequest_Subtask extends $pb.GeneratedMessage {
   factory UpdateSubtaskRequest_Subtask({
     $core.String? name,
+    $core.bool? done,
   }) {
     final $result = create();
     if (name != null) {
       $result.name = name;
+    }
+    if (done != null) {
+      $result.done = done;
     }
     return $result;
   }
@@ -2132,6 +2388,7 @@ class UpdateSubtaskRequest_Subtask extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateSubtaskRequest.Subtask', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'name')
+    ..aOB(2, _omitFieldNames ? '' : 'done')
     ..hasRequiredFields = false
   ;
 
@@ -2164,6 +2421,15 @@ class UpdateSubtaskRequest_Subtask extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
   void clearName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get done => $_getBF(1);
+  @$pb.TagNumber(2)
+  set done($core.bool v) { $_setBool(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasDone() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDone() => clearField(2);
 }
 
 class UpdateSubtaskRequest extends $pb.GeneratedMessage {
@@ -2278,198 +2544,6 @@ class UpdateSubtaskResponse extends $pb.GeneratedMessage {
   static UpdateSubtaskResponse? _defaultInstance;
 }
 
-class CompleteSubtaskRequest extends $pb.GeneratedMessage {
-  factory CompleteSubtaskRequest({
-    $core.String? taskId,
-    $core.String? subtaskId,
-  }) {
-    final $result = create();
-    if (taskId != null) {
-      $result.taskId = taskId;
-    }
-    if (subtaskId != null) {
-      $result.subtaskId = subtaskId;
-    }
-    return $result;
-  }
-  CompleteSubtaskRequest._() : super();
-  factory CompleteSubtaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CompleteSubtaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CompleteSubtaskRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'taskId')
-    ..aOS(2, _omitFieldNames ? '' : 'subtaskId')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  CompleteSubtaskRequest clone() => CompleteSubtaskRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  CompleteSubtaskRequest copyWith(void Function(CompleteSubtaskRequest) updates) => super.copyWith((message) => updates(message as CompleteSubtaskRequest)) as CompleteSubtaskRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static CompleteSubtaskRequest create() => CompleteSubtaskRequest._();
-  CompleteSubtaskRequest createEmptyInstance() => create();
-  static $pb.PbList<CompleteSubtaskRequest> createRepeated() => $pb.PbList<CompleteSubtaskRequest>();
-  @$core.pragma('dart2js:noInline')
-  static CompleteSubtaskRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CompleteSubtaskRequest>(create);
-  static CompleteSubtaskRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get taskId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set taskId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasTaskId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearTaskId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get subtaskId => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set subtaskId($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasSubtaskId() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearSubtaskId() => clearField(2);
-}
-
-class CompleteSubtaskResponse extends $pb.GeneratedMessage {
-  factory CompleteSubtaskResponse() => create();
-  CompleteSubtaskResponse._() : super();
-  factory CompleteSubtaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CompleteSubtaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CompleteSubtaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  CompleteSubtaskResponse clone() => CompleteSubtaskResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  CompleteSubtaskResponse copyWith(void Function(CompleteSubtaskResponse) updates) => super.copyWith((message) => updates(message as CompleteSubtaskResponse)) as CompleteSubtaskResponse;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static CompleteSubtaskResponse create() => CompleteSubtaskResponse._();
-  CompleteSubtaskResponse createEmptyInstance() => create();
-  static $pb.PbList<CompleteSubtaskResponse> createRepeated() => $pb.PbList<CompleteSubtaskResponse>();
-  @$core.pragma('dart2js:noInline')
-  static CompleteSubtaskResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CompleteSubtaskResponse>(create);
-  static CompleteSubtaskResponse? _defaultInstance;
-}
-
-class UncompleteSubtaskRequest extends $pb.GeneratedMessage {
-  factory UncompleteSubtaskRequest({
-    $core.String? taskId,
-    $core.String? subtaskId,
-  }) {
-    final $result = create();
-    if (taskId != null) {
-      $result.taskId = taskId;
-    }
-    if (subtaskId != null) {
-      $result.subtaskId = subtaskId;
-    }
-    return $result;
-  }
-  UncompleteSubtaskRequest._() : super();
-  factory UncompleteSubtaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UncompleteSubtaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UncompleteSubtaskRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'taskId')
-    ..aOS(2, _omitFieldNames ? '' : 'subtaskId')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  UncompleteSubtaskRequest clone() => UncompleteSubtaskRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  UncompleteSubtaskRequest copyWith(void Function(UncompleteSubtaskRequest) updates) => super.copyWith((message) => updates(message as UncompleteSubtaskRequest)) as UncompleteSubtaskRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static UncompleteSubtaskRequest create() => UncompleteSubtaskRequest._();
-  UncompleteSubtaskRequest createEmptyInstance() => create();
-  static $pb.PbList<UncompleteSubtaskRequest> createRepeated() => $pb.PbList<UncompleteSubtaskRequest>();
-  @$core.pragma('dart2js:noInline')
-  static UncompleteSubtaskRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UncompleteSubtaskRequest>(create);
-  static UncompleteSubtaskRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get taskId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set taskId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasTaskId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearTaskId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get subtaskId => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set subtaskId($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasSubtaskId() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearSubtaskId() => clearField(2);
-}
-
-class UncompleteSubtaskResponse extends $pb.GeneratedMessage {
-  factory UncompleteSubtaskResponse() => create();
-  UncompleteSubtaskResponse._() : super();
-  factory UncompleteSubtaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory UncompleteSubtaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UncompleteSubtaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  UncompleteSubtaskResponse clone() => UncompleteSubtaskResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  UncompleteSubtaskResponse copyWith(void Function(UncompleteSubtaskResponse) updates) => super.copyWith((message) => updates(message as UncompleteSubtaskResponse)) as UncompleteSubtaskResponse;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static UncompleteSubtaskResponse create() => UncompleteSubtaskResponse._();
-  UncompleteSubtaskResponse createEmptyInstance() => create();
-  static $pb.PbList<UncompleteSubtaskResponse> createRepeated() => $pb.PbList<UncompleteSubtaskResponse>();
-  @$core.pragma('dart2js:noInline')
-  static UncompleteSubtaskResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UncompleteSubtaskResponse>(create);
-  static UncompleteSubtaskResponse? _defaultInstance;
-}
-
 class DeleteSubtaskRequest extends $pb.GeneratedMessage {
   factory DeleteSubtaskRequest({
     $core.String? taskId,
@@ -2564,6 +2638,170 @@ class DeleteSubtaskResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static DeleteSubtaskResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteSubtaskResponse>(create);
   static DeleteSubtaskResponse? _defaultInstance;
+}
+
+class RemoveTaskDueDateRequest extends $pb.GeneratedMessage {
+  factory RemoveTaskDueDateRequest({
+    $core.String? taskId,
+  }) {
+    final $result = create();
+    if (taskId != null) {
+      $result.taskId = taskId;
+    }
+    return $result;
+  }
+  RemoveTaskDueDateRequest._() : super();
+  factory RemoveTaskDueDateRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RemoveTaskDueDateRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RemoveTaskDueDateRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'taskId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  RemoveTaskDueDateRequest clone() => RemoveTaskDueDateRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  RemoveTaskDueDateRequest copyWith(void Function(RemoveTaskDueDateRequest) updates) => super.copyWith((message) => updates(message as RemoveTaskDueDateRequest)) as RemoveTaskDueDateRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static RemoveTaskDueDateRequest create() => RemoveTaskDueDateRequest._();
+  RemoveTaskDueDateRequest createEmptyInstance() => create();
+  static $pb.PbList<RemoveTaskDueDateRequest> createRepeated() => $pb.PbList<RemoveTaskDueDateRequest>();
+  @$core.pragma('dart2js:noInline')
+  static RemoveTaskDueDateRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RemoveTaskDueDateRequest>(create);
+  static RemoveTaskDueDateRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get taskId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set taskId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasTaskId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTaskId() => clearField(1);
+}
+
+class RemoveTaskDueDateResponse extends $pb.GeneratedMessage {
+  factory RemoveTaskDueDateResponse() => create();
+  RemoveTaskDueDateResponse._() : super();
+  factory RemoveTaskDueDateResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RemoveTaskDueDateResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RemoveTaskDueDateResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  RemoveTaskDueDateResponse clone() => RemoveTaskDueDateResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  RemoveTaskDueDateResponse copyWith(void Function(RemoveTaskDueDateResponse) updates) => super.copyWith((message) => updates(message as RemoveTaskDueDateResponse)) as RemoveTaskDueDateResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static RemoveTaskDueDateResponse create() => RemoveTaskDueDateResponse._();
+  RemoveTaskDueDateResponse createEmptyInstance() => create();
+  static $pb.PbList<RemoveTaskDueDateResponse> createRepeated() => $pb.PbList<RemoveTaskDueDateResponse>();
+  @$core.pragma('dart2js:noInline')
+  static RemoveTaskDueDateResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RemoveTaskDueDateResponse>(create);
+  static RemoveTaskDueDateResponse? _defaultInstance;
+}
+
+class DeleteTaskRequest extends $pb.GeneratedMessage {
+  factory DeleteTaskRequest({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
+  DeleteTaskRequest._() : super();
+  factory DeleteTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteTaskRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DeleteTaskRequest clone() => DeleteTaskRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DeleteTaskRequest copyWith(void Function(DeleteTaskRequest) updates) => super.copyWith((message) => updates(message as DeleteTaskRequest)) as DeleteTaskRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DeleteTaskRequest create() => DeleteTaskRequest._();
+  DeleteTaskRequest createEmptyInstance() => create();
+  static $pb.PbList<DeleteTaskRequest> createRepeated() => $pb.PbList<DeleteTaskRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DeleteTaskRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteTaskRequest>(create);
+  static DeleteTaskRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
+class DeleteTaskResponse extends $pb.GeneratedMessage {
+  factory DeleteTaskResponse() => create();
+  DeleteTaskResponse._() : super();
+  factory DeleteTaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteTaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DeleteTaskResponse clone() => DeleteTaskResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DeleteTaskResponse copyWith(void Function(DeleteTaskResponse) updates) => super.copyWith((message) => updates(message as DeleteTaskResponse)) as DeleteTaskResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DeleteTaskResponse create() => DeleteTaskResponse._();
+  DeleteTaskResponse createEmptyInstance() => create();
+  static $pb.PbList<DeleteTaskResponse> createRepeated() => $pb.PbList<DeleteTaskResponse>();
+  @$core.pragma('dart2js:noInline')
+  static DeleteTaskResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteTaskResponse>(create);
+  static DeleteTaskResponse? _defaultInstance;
 }
 
 

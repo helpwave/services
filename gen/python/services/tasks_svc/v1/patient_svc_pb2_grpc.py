@@ -83,6 +83,11 @@ class PatientServiceStub(object):
                 request_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.ReadmitPatientRequest.SerializeToString,
                 response_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.ReadmitPatientResponse.FromString,
                 _registered_method=True)
+        self.DeletePatient = channel.unary_unary(
+                '/services.tasks_svc.v1.PatientService/DeletePatient',
+                request_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.DeletePatientRequest.SerializeToString,
+                response_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.DeletePatientResponse.FromString,
+                _registered_method=True)
 
 
 class PatientServiceServicer(object):
@@ -170,6 +175,12 @@ class PatientServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def DeletePatient(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_PatientServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -237,6 +248,11 @@ def add_PatientServiceServicer_to_server(servicer, server):
                     servicer.ReadmitPatient,
                     request_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.ReadmitPatientRequest.FromString,
                     response_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.ReadmitPatientResponse.SerializeToString,
+            ),
+            'DeletePatient': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeletePatient,
+                    request_deserializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.DeletePatientRequest.FromString,
+                    response_serializer=services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.DeletePatientResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -594,6 +610,33 @@ class PatientService(object):
             '/services.tasks_svc.v1.PatientService/ReadmitPatient',
             services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.ReadmitPatientRequest.SerializeToString,
             services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.ReadmitPatientResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def DeletePatient(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/services.tasks_svc.v1.PatientService/DeletePatient',
+            services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.DeletePatientRequest.SerializeToString,
+            services_dot_tasks__svc_dot_v1_dot_patient__svc__pb2.DeletePatientResponse.FromString,
             options,
             channel_credentials,
             insecure,
