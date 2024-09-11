@@ -173,6 +173,11 @@ $ ./shell.sh
 $ ./proto.sh
 ```
 
+From the shell, you can use go commands, like `go test ./...` in a service's directory.
+Go tests are used both for unit tests and more complex (and time-consuming) integration tests simulating a user story.
+These spin up fresh containers for external dependencies, like EventStore, using [testcontainers](https://github.com/testcontainers/testcontainers-go).
+It makes use of the same docker socket mounted to the development environment.
+
 ## Fake token
 
 When working with services that use auth, instead of dealing with JWTs, you can make use of fake tokens.

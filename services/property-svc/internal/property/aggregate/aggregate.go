@@ -154,7 +154,7 @@ func (a *PropertyAggregate) onAllowFreetextUpdated(evt hwes.Event) error {
 
 	if a.Property.FieldTypeData.SelectData != nil {
 		a.Property.FieldTypeData.SelectData.AllowFreetext = payload.NewAllowFreetext
-	} else if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT {
+	} else if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT || a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
 		a.Property.FieldTypeData.SelectData = &models.SelectData{
 			AllowFreetext: payload.NewAllowFreetext,
 		}

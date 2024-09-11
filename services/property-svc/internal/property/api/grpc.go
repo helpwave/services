@@ -70,12 +70,12 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		FieldType:   property.FieldType,
 
 		Name:        property.Name,
-		Description: &property.Description,
+		Description: hwutil.StrPtr(property.Description),
 		IsArchived:  property.IsArchived,
 
 		SetId:                      hwutil.NullUUIDToStringPtr(property.SetID),
-		AlwaysIncludeForViewSource: nil, //TODO
-		FieldTypeData:              nil,
+		AlwaysIncludeForViewSource: nil, // TODO
+		FieldTypeData:              nil, // set below
 	}
 
 	switch {
@@ -113,9 +113,14 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 		removeOptions = ftData.SelectData.RemoveOptions
 		if ftData.SelectData.UpsertOptions != nil {
 			opt, err := hwutil.MapWithErr(ftData.SelectData.UpsertOptions, func(option *pb.UpdatePropertyRequest_SelectData_SelectOption) (models.UpdateSelectOption, error) {
-				id, err := uuid.Parse(option.Id)
-				if err != nil {
-					return models.UpdateSelectOption{}, err
+				var id uuid.UUID
+				if option.Id == "" {
+					id = uuid.New()
+				} else {
+					id, err = uuid.Parse(option.Id)
+					if err != nil {
+						return models.UpdateSelectOption{}, err
+					}
 				}
 				return models.UpdateSelectOption{
 					ID:          id,
