@@ -89,6 +89,11 @@ func DANGERTruncateAllTables(ctx context.Context, db DBTX) error {
 	return rows.Err()
 }
 
+// BeginTx is a wrapper around DBTX.Begin, which does rich error handling for you
+//
+//	tx, rollback, err := BeginTx(db, ctx)
+//	if err != nil { return err }
+//	defer rollback()
 func BeginTx(db DBTX, ctx context.Context) (pgx.Tx, func(), error) {
 	log := zlog.Ctx(ctx)
 	tx, err := db.Begin(ctx)
