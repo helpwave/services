@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
+	zlog "github.com/rs/zerolog"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"telemetry"
 	"time"
@@ -86,4 +87,23 @@ func DANGERTruncateAllTables(ctx context.Context, db DBTX) error {
 	log.Debug().Msg("truncate finished")
 
 	return rows.Err()
+}
+
+func BeginTx(db DBTX, ctx context.Context) (pgx.Tx, func(), error) {
+	log := zlog.Ctx(ctx)
+	tx, err := db.Begin(ctx)
+	err = Error(ctx, err)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to begin transaction")
+		return nil, nil, err
+	}
+
+	rollback := func() {
+		err := tx.Rollback(ctx)
+		if !errors.Is(err, pgx.ErrTxClosed) {
+			log.Error().Err(err).Msg("rollback failed")
+		}
+	}
+
+	return nil, rollback, nil
 }
