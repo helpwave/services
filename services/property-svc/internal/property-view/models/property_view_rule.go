@@ -22,6 +22,8 @@ type PropertyMatchers interface {
 	// MUST be ordered in ascending order by specificity
 	QueryProperties(context.Context) ([]PropertiesQueryRow, error)
 
+	IsPropertyAlwaysIncluded(ctx context.Context, propertyID uuid.UUID) (bool, error)
+
 	GetSubjectId() (uuid.UUID, error)
 
 	// returns the respective type identifier of the property matcher

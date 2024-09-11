@@ -84,6 +84,16 @@ func (m PatientPropertyMatchers) ToMap() map[string]interface{} {
 	return mp
 }
 
+func (m PatientPropertyMatchers) IsPropertyAlwaysIncluded(ctx context.Context, propertyID uuid.UUID) (bool, error) {
+	return patient_views_repo.
+		New(hwdb.GetDB()).
+		IsPatientPropertyAlwaysIncluded(ctx, patient_views_repo.IsPatientPropertyAlwaysIncludedParams{
+			PropertyID: propertyID,
+			WardID:     m.WardID,
+			PatientID:  m.PatientID,
+		})
+}
+
 func PatientPropertyMatchersFromMap(m map[string]interface{}) (PatientPropertyMatchers, bool) {
 	propertyMatcherType, ok := m["PropertyMatcherType"]
 	if !ok || propertyMatcherType != PatientPropertyMatcherType {

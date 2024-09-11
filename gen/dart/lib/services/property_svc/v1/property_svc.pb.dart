@@ -331,8 +331,6 @@ enum GetPropertyRequest_ViewSource_Value {
   notSet
 }
 
-/// describes from which View (global, ward, ...) the property is accessed from
-/// The attribute "always_include_for_current_context" depends on this ViewSource
 class GetPropertyRequest_ViewSource extends $pb.GeneratedMessage {
   factory GetPropertyRequest_ViewSource({
     $core.bool? global,
@@ -409,10 +407,14 @@ class GetPropertyRequest_ViewSource extends $pb.GeneratedMessage {
 class GetPropertyRequest extends $pb.GeneratedMessage {
   factory GetPropertyRequest({
     $core.String? id,
+    GetPropertyRequest_ViewSource? viewSource,
   }) {
     final $result = create();
     if (id != null) {
       $result.id = id;
+    }
+    if (viewSource != null) {
+      $result.viewSource = viewSource;
     }
     return $result;
   }
@@ -422,6 +424,7 @@ class GetPropertyRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOM<GetPropertyRequest_ViewSource>(2, _omitFieldNames ? '' : 'viewSource', subBuilder: GetPropertyRequest_ViewSource.create)
     ..hasRequiredFields = false
   ;
 
@@ -454,6 +457,19 @@ class GetPropertyRequest extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
+
+  /// describes from which View (global, ward, ...) the property is accessed from
+  /// The attribute "always_include_for_current_context" depends on this ViewSource
+  @$pb.TagNumber(2)
+  GetPropertyRequest_ViewSource get viewSource => $_getN(1);
+  @$pb.TagNumber(2)
+  set viewSource(GetPropertyRequest_ViewSource v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasViewSource() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearViewSource() => clearField(2);
+  @$pb.TagNumber(2)
+  GetPropertyRequest_ViewSource ensureViewSource() => $_ensure(1);
 }
 
 class GetPropertyResponse_SelectData_SelectOption extends $pb.GeneratedMessage {
