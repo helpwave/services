@@ -4,15 +4,27 @@ import (
 	"context"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
+	"hwauthz"
 	"hwes"
 	"property-svc/internal/property/aggregate"
 	"property-svc/internal/property/models"
+	"property-svc/internal/property/perm"
 )
 
 type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) error
 
-func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyCommandHandler {
+func NewUpdatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) UpdatePropertyCommandHandler {
 	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) error {
+		user, err := perm.UserFromCtx(ctx)
+		if err != nil {
+			return err
+		}
+
+		check := hwauthz.NewPermissionCheck(user, perm.PropertyCanUserUpdate, perm.Property(propertyID))
+		if err = authz.Must(ctx, check); err != nil {
+			return err
+		}
+
 		a, err := aggregate.LoadPropertyAggregate(ctx, as, propertyID)
 		if err != nil {
 			return err

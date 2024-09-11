@@ -15,10 +15,8 @@ require (
 	common v0.0.0
 	github.com/authzed/authzed-go v0.10.1
 	github.com/authzed/grpcutil v0.0.0-20230908193239-4286bb1d6403
-	github.com/google/uuid v1.6.0
 	github.com/rs/zerolog v1.33.0
 	go.opentelemetry.io/otel v1.28.0
-	golang.org/x/sync v0.8.0
 	google.golang.org/grpc v1.65.0
 	hwutil v0.0.0
 	telemetry v0.0.0
@@ -41,6 +39,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.22.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.20.0 // indirect

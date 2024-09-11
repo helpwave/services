@@ -5,15 +5,31 @@ import (
 	"errors"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
+	"hwauthz"
 	"hwes"
 	"property-svc/internal/property/aggregate"
 	"property-svc/internal/property/models"
+	"property-svc/internal/property/perm"
 )
 
 type CreatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *string, fieldTypeData *models.FieldTypeData) error
 
-func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyCommandHandler {
+func NewCreatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) CreatePropertyCommandHandler {
 	return func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *string, fieldTypeData *models.FieldTypeData) error {
+		user, err := perm.UserFromCtx(ctx)
+		if err != nil {
+			return err
+		}
+		organization, err := perm.OrganizationFromCtx(ctx)
+		if err != nil {
+			return err
+		}
+
+		check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserCreateProperty, organization)
+		if err = authz.Must(ctx, check); err != nil {
+			return err
+		}
+
 		a := aggregate.NewPropertyAggregate(propertyID)
 
 		exists, err := as.Exists(ctx, a)

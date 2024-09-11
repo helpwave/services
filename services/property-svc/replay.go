@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/jackc/pgx/v5"
+	"hwauthz"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb"
@@ -18,7 +19,7 @@ import (
 
 // replay mechanism for projections of the property-svc
 // replay truncates the whole database and replays all events
-func replay(ctx context.Context, eventStore *esdb.Client) error {
+func replay(ctx context.Context, eventStore *esdb.Client, authz hwauthz.AuthZ) error {
 	ctx, span, log := telemetry.StartSpan(ctx, "property-svc.replay")
 	defer span.End()
 
@@ -48,7 +49,7 @@ func replay(ctx context.Context, eventStore *esdb.Client) error {
 
 	log.Info().Msg("starting event replay")
 
-	propertyPostgresProjection := property_postgres_projection.NewProjection(eventStore, ServiceName, tx)
+	propertyPostgresProjection := property_postgres_projection.NewProjection(eventStore, ServiceName, tx, authz)
 	propertyValuePostgresProjection := property_value_postgres_projection.NewProjection(eventStore, ServiceName, tx)
 
 	if errToRollback = eventstoredb.Replay(

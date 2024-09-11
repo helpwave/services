@@ -62,3 +62,7 @@ tests:
       - not: "organization:b#leadership@user:charlie"
       - not: "organization:b#remove_member@user:charlie"
 
+  - name: members can create new properties in their orgs
+    check:
+      - "organization:a#create_property@user:alice" # alice is a leader
+      - "organization:a#create_property@user:charlie" # charlie is a member

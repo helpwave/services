@@ -7,6 +7,7 @@ require (
 	github.com/authzed/authzed-go v0.15.0
 	github.com/authzed/grpcutil v0.0.0-20240123194739-2ea1e3d2d98b
 	google.golang.org/grpc v1.65.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -29,5 +30,4 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20240814211410-ddb44dafa142 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240814211410-ddb44dafa142 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

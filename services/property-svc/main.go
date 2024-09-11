@@ -5,6 +5,7 @@ import (
 	"context"
 	"flag"
 	pb "gen/services/property_svc/v1"
+	hwspicedb "hwauthz/spicedb"
 	"hwdb"
 	"hwes/eventstoredb"
 	propertySet "property-svc/internal/property-set/api"
@@ -39,17 +40,18 @@ func main() {
 	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()
 
+	authz := hwspicedb.NewSpiceDBAuthZ()
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
 
 	propertyPostgresProjection := property_postgres_projection.
-		NewProjection(eventStore, ServiceName, hwdb.GetDB())
+		NewProjection(eventStore, ServiceName, hwdb.GetDB(), authz)
 
 	propertyValuePostgresProjection := property_value_postgres_projection.
 		NewProjection(eventStore, ServiceName, hwdb.GetDB())
 
 	if *replayMode {
-		if err := replay(ctx, eventStore); err != nil {
+		if err := replay(ctx, eventStore, authz); err != nil {
 			log.Err(err).Msg("error during replay")
 			cancel()
 		}
@@ -80,7 +82,7 @@ func main() {
 		}
 	}()
 
-	propertyHandlers := ph.NewPropertyHandlers(aggregateStore)
+	propertyHandlers := ph.NewPropertyHandlers(aggregateStore, authz)
 	propertySetHandlers := psh.NewPropertySetHandlers(aggregateStore)
 	propertyViewHandlers := pvih.NewPropertyViewHandlers(aggregateStore)
 	propertyValueHandlers := pvh.NewPropertyValueHandlers(aggregateStore)
