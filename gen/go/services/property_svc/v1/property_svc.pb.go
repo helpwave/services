@@ -800,7 +800,7 @@ type GetPropertyRequest_ViewSource_Global struct {
 }
 
 type GetPropertyRequest_ViewSource_WardId struct {
-	WardId string `protobuf:"bytes,2,opt,name=ward_id,json=wardId,proto3,oneof" validate:"uuid4"` // @gotags: validate:"uuid4"
+	WardId string `protobuf:"bytes,2,opt,name=ward_id,json=wardId,proto3,oneof" validate:"omitempty,omitnil,uuid4"` // @gotags: validate:"omitempty,omitnil,uuid4"
 }
 
 func (*GetPropertyRequest_ViewSource_Global) isGetPropertyRequest_ViewSource_Value() {}
