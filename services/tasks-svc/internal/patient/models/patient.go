@@ -33,3 +33,13 @@ type Room struct {
 	Name   string
 	WardID uuid.UUID
 }
+
+type BedWithPatient struct {
+	Bed
+	Patient *Patient
+}
+
+type RoomWithBedsWithPatient struct {
+	Room
+	Beds []*BedWithPatient
+}

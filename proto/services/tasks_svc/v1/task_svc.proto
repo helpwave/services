@@ -100,7 +100,7 @@ message GetTasksByPatientResponse {
     optional string assigned_user_id = 5;
     string patient_id = 6;
     bool public = 7;
-    google.protobuf.Timestamp due_at = 8;
+    optional google.protobuf.Timestamp due_at = 8;
     string created_by = 9;
     repeated SubTask subtasks = 10;
     google.protobuf.Timestamp created_at = 11;
@@ -134,7 +134,7 @@ message GetTasksByPatientSortedByStatusResponse {
     optional string assigned_user_id = 4;
     string patient_id = 5;
     bool public = 6;
-    google.protobuf.Timestamp due_at = 7;
+    optional google.protobuf.Timestamp due_at = 7;
     string created_by = 8;
     repeated SubTask subtasks = 9;
     google.protobuf.Timestamp created_at = 10;
@@ -166,7 +166,7 @@ message GetAssignedTasksResponse {
     string assigned_user_id = 5;
     Patient patient = 6;
     bool public = 7;
-    google.protobuf.Timestamp due_at = 8;
+    optional google.protobuf.Timestamp due_at = 8;
     string created_by = 9;
     repeated SubTask subtasks = 10;
     google.protobuf.Timestamp created_at = 11;

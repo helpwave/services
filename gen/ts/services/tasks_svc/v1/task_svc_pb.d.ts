@@ -504,6 +504,11 @@ export namespace GetTasksByPatientResponse {
       _ASSIGNED_USER_ID_NOT_SET = 0,
       ASSIGNED_USER_ID = 5,
     }
+
+    export enum DueAtCase { 
+      _DUE_AT_NOT_SET = 0,
+      DUE_AT = 8,
+    }
   }
 
 }
@@ -652,6 +657,11 @@ export namespace GetTasksByPatientSortedByStatusResponse {
     export enum AssignedUserIdCase { 
       _ASSIGNED_USER_ID_NOT_SET = 0,
       ASSIGNED_USER_ID = 4,
+    }
+
+    export enum DueAtCase { 
+      _DUE_AT_NOT_SET = 0,
+      DUE_AT = 7,
     }
   }
 
@@ -808,6 +818,11 @@ export namespace GetAssignedTasksResponse {
       }
     }
 
+
+    export enum DueAtCase { 
+      _DUE_AT_NOT_SET = 0,
+      DUE_AT = 8,
+    }
   }
 
 }

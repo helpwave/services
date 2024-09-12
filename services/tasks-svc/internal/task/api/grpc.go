@@ -134,7 +134,7 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 		},
 	}
 
-	if task.Task.DueAt != nil {
+	if task.DueAt != nil {
 		res.DueAt = timestamppb.New(*task.Task.DueAt)
 	}
 
