@@ -11,6 +11,7 @@ import (
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
+	spiceMigrate "hwauthz/spicedb/migrate"
 	"os/signal"
 	"property-svc/cmd/service"
 
@@ -82,6 +83,7 @@ func Setup(m *testing.M) {
 	_ = os.Setenv("ZED_TOKEN", SpiceDBToken)
 
 	// Run SpiceDB migration
+	spiceMigrate.Migrate(ctx) // TODO
 
 	// Set common variables
 	_ = os.Setenv("MODE", "development")

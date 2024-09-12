@@ -3,28 +3,24 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"
+	"gopkg.in/yaml.v3"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"github.com/alecthomas/kong"
-	v1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
 	"github.com/authzed/authzed-go/v1"
 	"github.com/authzed/grpcutil"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/status"
-	"gopkg.in/yaml.v3"
+	"hwauthz/spicedb/migrate"
 )
 
-const MigrationResourceType = "spice_schema_migrations/migration"
-const MigrationResourceId = "current"
-const MigrationRelation = "version"
-const MigrationSubjectType = "spice_schema_migrations/version"
+const migrationResourceType = "spice_schema_migrations/migration"
+const migrationResourceId = "current"
+const migrationRelation = "version"
+const migrationSubjectType = "spice_schema_migrations/version"
 
 // CLI is filled by kong.Parse in main
 var CLI struct {
@@ -56,41 +52,7 @@ func main() {
 
 // collectSchema finds all .zed files and concats them
 func collectSchema() string {
-	pattern := filepath.Join(CLI.Directory, "./*.zed")
-	matches, err := filepath.Glob(pattern)
-	if err != nil {
-		fmt.Println("cant glob " + pattern)
-		panic(err)
-	}
-
-	var schema string
-
-	for _, file := range matches {
-		content, err := os.ReadFile(file)
-		if err != nil {
-			fmt.Println("could not read " + file)
-			panic(err)
-		}
-
-		head := "\n//\n// " + filepath.Base(file) + "\n//\n\n"
-		schema += head + string(content)
-	}
-	return schema
-}
-
-// getDiskVersion parses the _version file
-func getDiskVersion() int {
-	content, err := os.ReadFile(filepath.Join(CLI.Directory, "_version"))
-	if err != nil {
-		fmt.Println("could not read _version")
-		panic(err)
-	}
-	contentStr := strings.TrimSpace(string(content))
-	i, err := strconv.Atoi(contentStr)
-	if err != nil {
-		fmt.Println("_version content not a number")
-	}
-	return i
+	return migrate.CollectSchema(CLI.Directory)
 }
 
 // getClient yields an authed.Client using CLI arguments
@@ -126,122 +88,9 @@ func getClient() *authzed.Client {
 	return client
 }
 
-// getCurrentVersion queries existing relations to parse the currently deployed version of the schema
-func getCurrentVersion(ctx context.Context, client *authzed.Client) int {
-	// first, open a stream
-	stream, err := client.ReadRelationships(ctx, &v1.ReadRelationshipsRequest{
-		RelationshipFilter: &v1.RelationshipFilter{
-			ResourceType:       MigrationResourceType,
-			OptionalResourceId: MigrationResourceId,
-			OptionalRelation:   MigrationRelation,
-		},
-		OptionalLimit: 0,
-	})
-	if err != nil {
-		fmt.Println("could not open relationship stream")
-		panic(err)
-	}
-
-	// now collect the first element
-	response, err := stream.Recv()
-	if err != nil {
-		if err == io.EOF {
-			return 0
-		}
-		if statusErr, ok := status.FromError(err); ok {
-			if statusErr.Code() == codes.FailedPrecondition && statusErr.Message() == "object definition `spice_schema_migrations/migration` not found" {
-				return 0
-			}
-		}
-		fmt.Println("could not read relationships")
-		panic(err)
-	}
-
-	// parse id to int
-	versionStr := response.Relationship.Subject.Object.ObjectId
-	i, err := strconv.Atoi(versionStr)
-	if err != nil {
-		fmt.Println("current version is not a number")
-	}
-
-	// if more relations exist, the version is not clear, user must fix it
-	_, err = stream.Recv()
-	if err != io.EOF {
-		panic("more than one version relation exist")
-	}
-	return i
-}
-
-// writeSchema writes a whole schema to spicedb
-func writeSchema(ctx context.Context, client *authzed.Client, schema string) {
-	_, err := client.WriteSchema(ctx, &v1.WriteSchemaRequest{Schema: schema})
-	if err != nil {
-		fmt.Println("could not write new schema")
-		panic(err)
-	}
-}
-
-// relationshipOfVersion yields a Relationship object, helper for updateCurrentVersion
-func relationshipOfVersion(version int) *v1.Relationship {
-	return &v1.Relationship{
-		Resource: &v1.ObjectReference{
-			ObjectType: MigrationResourceType,
-			ObjectId:   MigrationResourceId,
-		},
-		Relation: MigrationRelation,
-		Subject: &v1.SubjectReference{
-			Object: &v1.ObjectReference{
-				ObjectType: MigrationSubjectType,
-				ObjectId:   strconv.Itoa(version),
-			},
-		},
-	}
-}
-
-// updateCurrentVersion removes the old relation and adds a new relation (atomically)
-func updateCurrentVersion(ctx context.Context, client *authzed.Client, oldVersion, newVersion int) {
-	_, err := client.WriteRelationships(ctx, &v1.WriteRelationshipsRequest{
-		Updates: []*v1.RelationshipUpdate{
-			{
-				Operation:    v1.RelationshipUpdate_OPERATION_TOUCH, // Create newVersion Relation
-				Relationship: relationshipOfVersion(newVersion),
-			},
-			{
-				Operation:    v1.RelationshipUpdate_OPERATION_DELETE, // Delete oldVersion Relation
-				Relationship: relationshipOfVersion(oldVersion),
-			},
-		},
-	})
-	if err != nil {
-		fmt.Println("could not update version")
-		panic(err)
-	}
-}
-
 // migrateCmd is the <migrate> command handler
 func migrateCmd(kctx *kong.Context) {
-	ctx := context.Background()
-
-	client := getClient()
-
-	diskVersion := getDiskVersion()
-	currentVersion := getCurrentVersion(ctx, client)
-
-	fmt.Printf("current: %d, expected: %d\n", currentVersion, diskVersion)
-	if diskVersion == currentVersion {
-		fmt.Println("no action needed")
-		return
-	} else if diskVersion < currentVersion {
-		fmt.Println("WARN: you are running an old schema version")
-		return
-	}
-
-	fmt.Println("migrating")
-
-	writeSchema(ctx, client, collectSchema())
-	updateCurrentVersion(ctx, client, currentVersion, diskVersion)
-
-	fmt.Println("done")
+	migrate.Migrate(context.Background(), CLI.Directory, getClient())
 }
 
 // schemaCmd is the <schema> command handler
