@@ -81,13 +81,13 @@ WHERE wards.id = $1
 type GetWardByIdWithRoomsBedsAndTaskTemplatesRow struct {
 	WardID                  uuid.UUID
 	WardName                string
-	RoomID                  uuid.NullUUID
+	RoomID                  *uuid.UUID
 	RoomName                *string
-	BedID                   uuid.NullUUID
+	BedID                   *uuid.UUID
 	BedName                 *string
-	TaskTemplateID          uuid.NullUUID
+	TaskTemplateID          *uuid.UUID
 	TaskTemplateName        *string
-	TaskTemplateSubtaskID   uuid.NullUUID
+	TaskTemplateSubtaskID   *uuid.UUID
 	TaskTemplateSubtaskName *string
 }
 

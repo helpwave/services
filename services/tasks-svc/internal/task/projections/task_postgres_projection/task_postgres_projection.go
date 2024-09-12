@@ -195,12 +195,12 @@ func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error,
 		userIDStr = payload.UserID
 	}
 
-	userID, err := hwutil.ParseNullUUID(&userIDStr)
+	userID, err := uuid.Parse(userIDStr)
 	if err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	err = p.taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{ID: evt.AggregateID, AssignedUserID: userID})
+	err = p.taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{ID: evt.AggregateID, AssignedUserID: &userID})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -218,7 +218,7 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (erro
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	err := p.taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{ID: evt.AggregateID, AssignedUserID: uuid.NullUUID{}})
+	err := p.taskRepo.UpdateTaskAssignedUser(ctx, task_repo.UpdateTaskAssignedUserParams{ID: evt.AggregateID, AssignedUserID: nil})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)

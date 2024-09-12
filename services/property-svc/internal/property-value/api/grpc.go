@@ -26,11 +26,11 @@ type MatchersRequest interface {
 func DeMuxMatchers(req MatchersRequest) (viewModels.PropertyMatchers, error) {
 	var matcher viewModels.PropertyMatchers = nil
 	if taskMatcher := req.GetTaskMatcher(); taskMatcher != nil {
-		wardID, err := hwutil.ParseNullUUID(taskMatcher.WardId)
+		wardID, err := hwutil.StringToUUIDPtr(taskMatcher.WardId)
 		if err != nil {
 			return nil, fmt.Errorf("DeMuxMatchers: WardId invalid: %w", err)
 		}
-		taskID, err := hwutil.ParseNullUUID(taskMatcher.TaskId)
+		taskID, err := hwutil.StringToUUIDPtr(taskMatcher.TaskId)
 		if err != nil {
 			return nil, fmt.Errorf("DeMuxMatchers: TaskId invalid: %w", err)
 		}
@@ -40,11 +40,11 @@ func DeMuxMatchers(req MatchersRequest) (viewModels.PropertyMatchers, error) {
 			TaskID: taskID,
 		}
 	} else if patientMatcher := req.GetPatientMatcher(); patientMatcher != nil {
-		wardID, err := hwutil.ParseNullUUID(patientMatcher.WardId)
+		wardID, err := hwutil.StringToUUIDPtr(patientMatcher.WardId)
 		if err != nil {
 			return nil, fmt.Errorf("DeMuxMatchers: WardID invalid: %w", err)
 		}
-		patientID, err := hwutil.ParseNullUUID(patientMatcher.PatientId)
+		patientID, err := hwutil.StringToUUIDPtr(patientMatcher.PatientId)
 		if err != nil {
 			return nil, fmt.Errorf("DeMuxMatchers: PatientID invalid: %w", err)
 		}

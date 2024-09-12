@@ -119,12 +119,12 @@ func (p *Projection) onPropertySetIDUpdated(ctx context.Context, evt hwes.Event)
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	setID := uuid.NullUUID{UUID: uuid.Nil, Valid: false}
+	var setID *uuid.UUID = nil
 	if payload.SetID != "" {
-		if parsedID, err := hwutil.ParseNullUUID(&payload.SetID); err != nil {
+		if parsedID, err := uuid.Parse(payload.SetID); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionPark)
 		} else {
-			setID = parsedID
+			setID = &parsedID
 		}
 	}
 
@@ -254,7 +254,7 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 		// Update Property SelectDataId
 		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
 			ID:           evt.AggregateID,
-			SelectDataID: uuid.NullUUID{UUID: selectDataID, Valid: true},
+			SelectDataID: &selectDataID,
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -310,7 +310,7 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 		}
 		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
 			ID:           evt.AggregateID,
-			SelectDataID: uuid.NullUUID{UUID: sdID, Valid: true},
+			SelectDataID: &sdID,
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -360,7 +360,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 		}
 		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
 			ID:           evt.AggregateID,
-			SelectDataID: uuid.NullUUID{UUID: sdID, Valid: true},
+			SelectDataID: &sdID,
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionRetry)

@@ -16,8 +16,8 @@ type MultiSelectValue struct {
 
 type PatientPropertyViewRule struct {
 	RuleID    uuid.UUID
-	WardID    uuid.NullUUID
-	PatientID uuid.NullUUID
+	WardID    *uuid.UUID
+	PatientID *uuid.UUID
 }
 
 type Property struct {
@@ -27,8 +27,8 @@ type Property struct {
 	Name         string
 	Description  string
 	IsArchived   bool
-	SetID        uuid.NullUUID
-	SelectDataID uuid.NullUUID
+	SetID        *uuid.UUID
+	SelectDataID *uuid.UUID
 }
 
 type PropertyValue struct {
@@ -72,6 +72,6 @@ type SelectOption struct {
 
 type TaskPropertyViewRule struct {
 	RuleID uuid.UUID
-	WardID uuid.NullUUID
-	TaskID uuid.NullUUID
+	WardID *uuid.UUID
+	TaskID *uuid.UUID
 }

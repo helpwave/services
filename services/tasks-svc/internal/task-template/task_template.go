@@ -37,7 +37,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		return nil, err
 	}
 
-	wardID, err := hwutil.ParseNullUUID(req.WardId)
+	wardID, err := hwutil.StringToUUIDPtr(req.WardId)
 	if err != nil {
 		return nil, err
 	}

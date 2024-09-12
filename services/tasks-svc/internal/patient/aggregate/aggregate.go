@@ -67,14 +67,14 @@ func (a *PatientAggregate) onBedAssigned(evt hwes.Event) error {
 		return err
 	}
 
-	a.Patient.BedID = uuid.NullUUID{UUID: bedID, Valid: true}
+	a.Patient.BedID = &bedID
 	a.Patient.UpdatedAt = evt.Timestamp
 
 	return nil
 }
 
 func (a *PatientAggregate) onBedUnassigned(evt hwes.Event) error {
-	a.Patient.BedID = uuid.NullUUID{UUID: uuid.Nil, Valid: false}
+	a.Patient.BedID = nil
 	a.Patient.UpdatedAt = evt.Timestamp
 	return nil
 }

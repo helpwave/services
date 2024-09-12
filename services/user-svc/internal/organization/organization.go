@@ -102,11 +102,11 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 
 	organization := rows[0].Organization
 	members := hwutil.FlatMap(rows, func(row organization_repo.GetOrganizationWithMemberByIdRow) **pb.GetOrganizationMember {
-		if !row.UserID.Valid {
+		if row.UserID == nil {
 			return nil
 		}
 		val := &pb.GetOrganizationMember{
-			UserId: row.UserID.UUID.String(),
+			UserId: row.UserID.String(),
 		}
 		return &val
 	})
@@ -437,7 +437,7 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 	}
 
 	invitations, err := organizationRepo.GetInvitations(ctx, organization_repo.GetInvitationsParams{
-		OrganizationID: uuid.NullUUID{UUID: organizationID, Valid: true},
+		OrganizationID: &organizationID,
 		State:          (*int32)(req.State),
 	})
 	err = hwdb.Error(ctx, err)
@@ -564,7 +564,7 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 
 	// Check if invite exists
 	rows, err := organizationRepo.GetInvitations(ctx, organization_repo.GetInvitationsParams{
-		ID:    uuid.NullUUID{UUID: invitationId, Valid: true},
+		ID:    &invitationId,
 		Email: &claims.Email,
 	})
 	err = hwdb.Error(ctx, err)
@@ -619,7 +619,7 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 
 	// Check if invite exists
 	rows, err := organizationRepo.GetInvitations(ctx, organization_repo.GetInvitationsParams{
-		ID:    uuid.NullUUID{UUID: invitationId, Valid: true},
+		ID:    &invitationId,
 		Email: &claims.Email,
 	})
 	err = hwdb.Error(ctx, err)
@@ -660,7 +660,7 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 	}
 
 	rows, err := organizationRepo.GetInvitations(ctx, organization_repo.GetInvitationsParams{
-		ID: uuid.NullUUID{UUID: invitationId, Valid: true},
+		ID: &invitationId,
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {

@@ -73,7 +73,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		Description: hwutil.StrPtr(property.Description),
 		IsArchived:  property.IsArchived,
 
-		SetId:                      hwutil.NullUUIDToStringPtr(property.SetID),
+		SetId:                      hwutil.UUIDToStringPtr(property.SetID),
 		AlwaysIncludeForViewSource: nil, // TODO
 		FieldTypeData:              nil, // set below
 	}
@@ -157,7 +157,7 @@ func (s *PropertyGrpcService) GetPropertiesBySubjectType(ctx context.Context, re
 			Name:          item.Name,
 			Description:   &item.Description,
 			IsArchived:    item.IsArchived,
-			SetId:         hwutil.NullUUIDToStringPtr(item.SetID),
+			SetId:         hwutil.UUIDToStringPtr(item.SetID),
 			FieldTypeData: nil,
 		}
 

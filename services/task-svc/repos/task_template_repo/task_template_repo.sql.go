@@ -43,7 +43,7 @@ type CreateTaskTemplateParams struct {
 	Description    string
 	OrganizationID uuid.UUID
 	CreatedBy      uuid.UUID
-	WardID         uuid.NullUUID
+	WardID         *uuid.UUID
 }
 
 func (q *Queries) CreateTaskTemplate(ctx context.Context, arg CreateTaskTemplateParams) (uuid.UUID, error) {
@@ -98,15 +98,15 @@ AND (task_templates.created_by = $4 OR $4 IS NULL)
 `
 
 type GetAllTaskTemplatesWithSubTasksParams struct {
-	OrganizationID uuid.NullUUID
-	WardID         uuid.NullUUID
+	OrganizationID *uuid.UUID
+	WardID         *uuid.UUID
 	PrivateOnly    bool
-	CreatorID      uuid.NullUUID
+	CreatorID      *uuid.UUID
 }
 
 type GetAllTaskTemplatesWithSubTasksRow struct {
 	TaskTemplate TaskTemplate
-	SubTaskID    uuid.NullUUID
+	SubTaskID    *uuid.UUID
 	SubTaskName  *string
 }
 

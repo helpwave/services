@@ -15,10 +15,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 	return func(ctx context.Context, assigneeID uuid.UUID) ([]*models.TaskWithPatient, error) {
 		taskRepo := task_repo.New(hwdb.GetDB())
 
-		rows, err := taskRepo.GetTasksWithPatientByAssignee(ctx, uuid.NullUUID{
-			UUID:  assigneeID,
-			Valid: true,
-		})
+		rows, err := taskRepo.GetTasksWithPatientByAssignee(ctx, &assigneeID)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, err
 		}
@@ -58,12 +55,12 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 				tasksMap[row.Task.ID] = len(tasks) - 1
 			}
 
-			if row.SubtaskID.Valid {
-				task.Subtasks[row.SubtaskID.UUID] = models.Subtask{
-					ID:        row.SubtaskID.UUID,
+			if row.SubtaskID != nil {
+				task.Subtasks[*row.SubtaskID] = models.Subtask{
+					ID:        *row.SubtaskID,
 					Name:      *row.SubtaskName,
 					Done:      *row.SubtaskDone,
-					CreatedBy: row.SubtaskCreatedBy.UUID,
+					CreatedBy: *row.SubtaskCreatedBy,
 				}
 			}
 		}

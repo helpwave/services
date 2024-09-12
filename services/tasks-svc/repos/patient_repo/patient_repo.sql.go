@@ -63,20 +63,20 @@ FROM patients
 
 type GetAllPatientsWithTasksBedAndRoomRow struct {
 	Patient            Patient
-	TaskID             uuid.NullUUID
+	TaskID             *uuid.UUID
 	TaskName           *string
 	TaskDescription    *string
 	TaskStatus         *int32
-	TaskAssignedUserID uuid.NullUUID
+	TaskAssignedUserID *uuid.UUID
 	TaskPublic         *bool
-	SubtaskID          uuid.NullUUID
+	SubtaskID          *uuid.UUID
 	SubtaskName        *string
 	SubtaskDone        *bool
-	BedID              uuid.NullUUID
+	BedID              *uuid.UUID
 	BedName            *string
-	RoomID             uuid.NullUUID
+	RoomID             *uuid.UUID
 	RoomName           *string
-	WardID             uuid.NullUUID
+	WardID             *uuid.UUID
 }
 
 func (q *Queries) GetAllPatientsWithTasksBedAndRoom(ctx context.Context) ([]GetAllPatientsWithTasksBedAndRoomRow, error) {
@@ -128,7 +128,7 @@ WHERE bed_id = $1
 	LIMIT 1
 `
 
-func (q *Queries) GetPatientByBed(ctx context.Context, bedID uuid.NullUUID) (Patient, error) {
+func (q *Queries) GetPatientByBed(ctx context.Context, bedID *uuid.UUID) (Patient, error) {
 	row := q.db.QueryRow(ctx, getPatientByBed, bedID)
 	var i Patient
 	err := row.Scan(
@@ -159,14 +159,14 @@ type GetPatientWithBedAndRoomRow struct {
 	ID                      uuid.UUID
 	HumanReadableIdentifier string
 	Notes                   string
-	BedID                   uuid.NullUUID
+	BedID                   *uuid.UUID
 	CreatedAt               pgtype.Timestamp
 	UpdatedAt               pgtype.Timestamp
 	IsDischarged            bool
 	BedName                 *string
-	RoomID                  uuid.NullUUID
+	RoomID                  *uuid.UUID
 	RoomName                *string
-	WardID                  uuid.NullUUID
+	WardID                  *uuid.UUID
 }
 
 func (q *Queries) GetPatientWithBedAndRoom(ctx context.Context, patientID uuid.UUID) (GetPatientWithBedAndRoomRow, error) {
@@ -261,7 +261,7 @@ WHERE id = $3
 `
 
 type UpdatePatientBedIdParams struct {
-	BedID     uuid.NullUUID
+	BedID     *uuid.UUID
 	UpdatedAt pgtype.Timestamp
 	ID        uuid.UUID
 }

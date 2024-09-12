@@ -21,7 +21,7 @@ type Patient struct {
 	HumanReadableIdentifier string
 	OrganizationID          uuid.UUID
 	Notes                   string
-	BedID                   uuid.NullUUID
+	BedID                   *uuid.UUID
 	IsDischarged            int32
 	CreatedAt               pgtype.Timestamp
 	UpdatedAt               pgtype.Timestamp
@@ -53,7 +53,7 @@ type Task struct {
 	Name           string
 	Description    string
 	Status         int32
-	AssignedUserID uuid.NullUUID
+	AssignedUserID *uuid.UUID
 	PatientID      uuid.UUID
 	Public         bool
 	OrganizationID uuid.UUID
@@ -65,7 +65,7 @@ type TaskTemplate struct {
 	ID             uuid.UUID
 	Name           string
 	Description    string
-	WardID         uuid.NullUUID
+	WardID         *uuid.UUID
 	CreatedBy      uuid.UUID
 	OrganizationID uuid.UUID
 }

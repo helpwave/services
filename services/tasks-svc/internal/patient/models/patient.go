@@ -10,7 +10,7 @@ type Patient struct {
 	ID                      uuid.UUID
 	HumanReadableIdentifier string
 	Notes                   string
-	BedID                   uuid.NullUUID
+	BedID                   *uuid.UUID
 	IsDischarged            bool
 	CreatedAt               time.Time
 	UpdatedAt               time.Time

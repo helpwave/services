@@ -174,10 +174,7 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 
 	beds, err := bedRepo.GetBedsForOrganization(ctx, bed_repo.GetBedsForOrganizationParams{
 		OrganizationID: organizationID,
-		RoomID: uuid.NullUUID{
-			UUID:  roomID,
-			Valid: true,
-		},
+		RoomID:         &roomID,
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -206,7 +203,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	roomId, err := hwutil.ParseNullUUID(req.RoomId)
+	roomId, err := hwutil.StringToUUIDPtr(req.RoomId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

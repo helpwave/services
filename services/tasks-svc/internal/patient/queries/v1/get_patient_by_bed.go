@@ -14,10 +14,7 @@ func NewGetPatientByBedQueryHandler() GetPatientByBedQueryHandler {
 	return func(ctx context.Context, bedID uuid.UUID) (*models.Patient, error) {
 		patientRepo := patient_repo.New(hwdb.GetDB())
 
-		patient, err := hwdb.Optional(patientRepo.GetPatientByBed)(ctx, uuid.NullUUID{
-			UUID:  bedID,
-			Valid: true,
-		})
+		patient, err := hwdb.Optional(patientRepo.GetPatientByBed)(ctx, &bedID)
 		if patient == nil {
 			return nil, nil
 		}

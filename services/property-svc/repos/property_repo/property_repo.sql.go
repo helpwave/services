@@ -104,16 +104,16 @@ SELECT
 
 type GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams struct {
 	SubjectType *int32
-	ID          uuid.NullUUID
+	ID          *uuid.UUID
 }
 
 type GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDRow struct {
 	Property                 Property
-	SelectOptionID           uuid.NullUUID
+	SelectOptionID           *uuid.UUID
 	SelectOptionName         *string
 	SelectOptionDescription  *string
 	SelectOptionIsCustom     *bool
-	SelectDatasID            uuid.NullUUID
+	SelectDatasID            *uuid.UUID
 	SelectDatasAllowFreetext *bool
 }
 
@@ -222,7 +222,7 @@ WHERE id = $1
 
 type UpdatePropertySelectDataIDParams struct {
 	ID           uuid.UUID
-	SelectDataID uuid.NullUUID
+	SelectDataID *uuid.UUID
 }
 
 func (q *Queries) UpdatePropertySelectDataID(ctx context.Context, arg UpdatePropertySelectDataIDParams) error {
@@ -237,7 +237,7 @@ WHERE id = $2
 `
 
 type UpdatePropertySetIDParams struct {
-	SetID uuid.NullUUID
+	SetID *uuid.UUID
 	ID    uuid.UUID
 }
 

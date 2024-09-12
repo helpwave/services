@@ -109,7 +109,7 @@ SELECT patients.id, patients.human_readable_identifier, patients.organization_id
 	LIMIT 1
 `
 
-func (q *Queries) GetPatientByBed(ctx context.Context, bedID uuid.NullUUID) (Patient, error) {
+func (q *Queries) GetPatientByBed(ctx context.Context, bedID *uuid.UUID) (Patient, error) {
 	row := q.db.QueryRow(ctx, getPatientByBed, bedID)
 	var i Patient
 	err := row.Scan(
@@ -142,14 +142,14 @@ type GetPatientWithBedAndRoomRow struct {
 	HumanReadableIdentifier string
 	OrganizationID          uuid.UUID
 	Notes                   string
-	BedID                   uuid.NullUUID
+	BedID                   *uuid.UUID
 	IsDischarged            int32
 	CreatedAt               pgtype.Timestamp
 	UpdatedAt               pgtype.Timestamp
 	BedName                 *string
-	RoomID                  uuid.NullUUID
+	RoomID                  *uuid.UUID
 	RoomName                *string
-	WardID                  uuid.NullUUID
+	WardID                  *uuid.UUID
 }
 
 func (q *Queries) GetPatientWithBedAndRoom(ctx context.Context, patientID uuid.UUID) (GetPatientWithBedAndRoomRow, error) {
@@ -233,14 +233,14 @@ type GetPatientsWithBedAndRoomRow struct {
 	HumanReadableIdentifier string
 	OrganizationID          uuid.UUID
 	Notes                   string
-	BedID                   uuid.NullUUID
+	BedID                   *uuid.UUID
 	IsDischarged            int32
 	CreatedAt               pgtype.Timestamp
 	UpdatedAt               pgtype.Timestamp
 	BedName                 *string
-	RoomID                  uuid.NullUUID
+	RoomID                  *uuid.UUID
 	RoomName                *string
-	WardID                  uuid.NullUUID
+	WardID                  *uuid.UUID
 }
 
 func (q *Queries) GetPatientsWithBedAndRoom(ctx context.Context, patientIds []uuid.UUID) ([]GetPatientsWithBedAndRoomRow, error) {
@@ -303,20 +303,20 @@ SELECT
 
 type GetPatientsWithTasksBedAndRoomForOrganizationRow struct {
 	Patient            Patient
-	TaskID             uuid.NullUUID
+	TaskID             *uuid.UUID
 	TaskName           *string
 	TaskDescription    *string
 	TaskStatus         *int32
-	TaskAssignedUserID uuid.NullUUID
+	TaskAssignedUserID *uuid.UUID
 	TaskPublic         *bool
-	SubtaskID          uuid.NullUUID
+	SubtaskID          *uuid.UUID
 	SubtaskName        *string
 	SubtaskDone        *bool
-	BedID              uuid.NullUUID
+	BedID              *uuid.UUID
 	BedName            *string
-	RoomID             uuid.NullUUID
+	RoomID             *uuid.UUID
 	RoomName           *string
-	WardID             uuid.NullUUID
+	WardID             *uuid.UUID
 }
 
 func (q *Queries) GetPatientsWithTasksBedAndRoomForOrganization(ctx context.Context, organizationID uuid.UUID) ([]GetPatientsWithTasksBedAndRoomForOrganizationRow, error) {
@@ -394,7 +394,7 @@ WHERE id = $4
 type UpdatePatientParams struct {
 	HumanReadableIdentifier *string
 	Notes                   *string
-	BedID                   uuid.NullUUID
+	BedID                   *uuid.UUID
 	ID                      uuid.UUID
 }
 

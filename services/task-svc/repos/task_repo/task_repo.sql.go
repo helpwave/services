@@ -128,10 +128,10 @@ ORDER BY subtasks.creation_date ASC
 
 type GetTaskWithSubTasksAndPatientNameRow struct {
 	Task             Task
-	SubtaskID        uuid.NullUUID
+	SubtaskID        *uuid.UUID
 	SubtaskDone      *bool
 	SubtaskName      *string
-	SubtaskCreatedBy uuid.NullUUID
+	SubtaskCreatedBy *uuid.UUID
 	PatientName      string
 }
 
@@ -190,13 +190,13 @@ type GetTasksWithPatientsByAssigneeRow struct {
 	Task             Task
 	PatientID        uuid.UUID
 	PatientName      string
-	SubtaskID        uuid.NullUUID
+	SubtaskID        *uuid.UUID
 	SubtaskName      *string
 	SubtaskDone      *bool
-	SubtaskCreatedBy uuid.NullUUID
+	SubtaskCreatedBy *uuid.UUID
 }
 
-func (q *Queries) GetTasksWithPatientsByAssignee(ctx context.Context, assignedUserID uuid.NullUUID) ([]GetTasksWithPatientsByAssigneeRow, error) {
+func (q *Queries) GetTasksWithPatientsByAssignee(ctx context.Context, assignedUserID *uuid.UUID) ([]GetTasksWithPatientsByAssigneeRow, error) {
 	rows, err := q.db.Query(ctx, getTasksWithPatientsByAssignee, assignedUserID)
 	if err != nil {
 		return nil, err
@@ -254,10 +254,10 @@ type GetTasksWithSubTasksByPatientParams struct {
 
 type GetTasksWithSubTasksByPatientRow struct {
 	Task             Task
-	SubtaskID        uuid.NullUUID
+	SubtaskID        *uuid.UUID
 	SubtaskName      *string
 	SubtaskDone      *bool
-	SubtaskCreatedBy uuid.NullUUID
+	SubtaskCreatedBy *uuid.UUID
 }
 
 func (q *Queries) GetTasksWithSubTasksByPatient(ctx context.Context, arg GetTasksWithSubTasksByPatientParams) ([]GetTasksWithSubTasksByPatientRow, error) {
@@ -351,7 +351,7 @@ WHERE id = $2
 `
 
 type UpdateTaskUserParams struct {
-	AssignedUserID uuid.NullUUID
+	AssignedUserID *uuid.UUID
 	ID             uuid.UUID
 }
 

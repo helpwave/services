@@ -130,7 +130,7 @@ WHERE (room_id = $1 OR $1 IS NULL)
 ORDER BY name ASC
 `
 
-func (q *Queries) GetBeds(ctx context.Context, roomID uuid.NullUUID) ([]Bed, error) {
+func (q *Queries) GetBeds(ctx context.Context, roomID *uuid.UUID) ([]Bed, error) {
 	rows, err := q.db.Query(ctx, getBeds, roomID)
 	if err != nil {
 		return nil, err
@@ -160,7 +160,7 @@ WHERE id = $3
 
 type UpdateBedParams struct {
 	Name   *string
-	RoomID uuid.NullUUID
+	RoomID *uuid.UUID
 	ID     uuid.UUID
 }
 

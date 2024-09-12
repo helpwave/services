@@ -17,7 +17,7 @@ func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
 		propertyRepo := property_repo.New(hwdb.GetDB())
 
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx, property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
-			ID: uuid.NullUUID{UUID: propertyID, Valid: true},
+			ID: &propertyID,
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, err

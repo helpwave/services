@@ -199,7 +199,7 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 				Name:           row.Task.Name,
 				Description:    row.Task.Description,
 				Status:         pb.TaskStatus(row.Task.Status),
-				AssignedUserId: hwutil.NullUUIDToStringPtr(row.Task.AssignedUserID),
+				AssignedUserId: hwutil.UUIDToStringPtr(row.Task.AssignedUserID),
 				PatientId:      row.Task.PatientID.String(),
 				Public:         row.Task.Public,
 				DueAt:          timestamppb.New(row.Task.DueAt.Time),
@@ -266,7 +266,7 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 				Id:             row.Task.ID.String(),
 				Name:           row.Task.Name,
 				Description:    row.Task.Description,
-				AssignedUserId: hwutil.NullUUIDToStringPtr(row.Task.AssignedUserID),
+				AssignedUserId: hwutil.UUIDToStringPtr(row.Task.AssignedUserID),
 				PatientId:      row.Task.PatientID.String(),
 				Public:         row.Task.Public,
 				DueAt:          timestamppb.New(row.Task.DueAt.Time),
@@ -323,10 +323,7 @@ func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTask
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	rows, err := taskRepo.GetTasksWithPatientsByAssignee(ctx, uuid.NullUUID{
-		UUID:  assigneeID,
-		Valid: true,
-	})
+	rows, err := taskRepo.GetTasksWithPatientsByAssignee(ctx, &assigneeID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
@@ -645,11 +642,8 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 	// TODO: Check if user exists
 
 	err = taskRepo.UpdateTaskUser(ctx, task_repo.UpdateTaskUserParams{
-		ID: id,
-		AssignedUserID: uuid.NullUUID{
-			UUID:  userId,
-			Valid: true,
-		},
+		ID:             id,
+		AssignedUserID: &userId,
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -675,7 +669,7 @@ func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	err = taskRepo.UpdateTaskUser(ctx, task_repo.UpdateTaskUserParams{ID: id, AssignedUserID: uuid.NullUUID{}})
+	err = taskRepo.UpdateTaskUser(ctx, task_repo.UpdateTaskUserParams{ID: id, AssignedUserID: nil})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err

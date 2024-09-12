@@ -14,8 +14,8 @@ const TaskPropertyMatcherType = "task_property_matcher"
 
 // TaskPropertyMatchers implements PropertyMatchers
 type TaskPropertyMatchers struct {
-	WardID uuid.NullUUID `json:"ward_id,omitempty"`
-	TaskID uuid.NullUUID `json:"task_id,omitempty"`
+	WardID *uuid.UUID `json:"ward_id,omitempty"`
+	TaskID *uuid.UUID `json:"task_id,omitempty"`
 }
 
 func (m TaskPropertyMatchers) FindExactRuleId(ctx context.Context) (*uuid.UUID, error) {
@@ -62,21 +62,21 @@ func (m TaskPropertyMatchers) QueryProperties(ctx context.Context) ([]Properties
 }
 
 func (m TaskPropertyMatchers) GetSubjectId() (uuid.UUID, error) {
-	if !m.TaskID.Valid {
+	if m.TaskID == nil {
 		return uuid.UUID{}, errors.New("TaskPropertyMatchers GetSubjectId: TaskID not valid")
 	}
-	return m.TaskID.UUID, nil
+	return *m.TaskID, nil
 }
 
 func (m TaskPropertyMatchers) ToMap() map[string]interface{} {
 	mp := make(map[string]interface{})
-	if m.WardID.Valid {
-		mp["WardId"] = m.WardID.UUID.String()
+	if m.WardID != nil {
+		mp["WardId"] = m.WardID.String()
 	} else {
 		mp["WardId"] = nil
 	}
-	if m.TaskID.Valid {
-		mp["TaskId"] = m.TaskID.UUID.String()
+	if m.TaskID != nil {
+		mp["TaskId"] = m.TaskID.String()
 	} else {
 		mp["TaskId"] = nil
 	}
@@ -95,22 +95,18 @@ func TaskPropertyMatchersFromMap(m map[string]interface{}) (TaskPropertyMatchers
 	matcher := TaskPropertyMatchers{}
 
 	if wardIdRaw, ok := m["WardId"].(string); ok {
-		parsed, err := hwutil.ParseNullUUID(&wardIdRaw)
+		parsed, err := uuid.Parse(wardIdRaw)
 		if err != nil {
 			return TaskPropertyMatchers{}, false
 		}
-		matcher.WardID = parsed
-	} else {
-		matcher.WardID = uuid.NullUUID{Valid: false}
+		matcher.WardID = &parsed
 	}
 	if taskIdRaw, ok := m["TaskId"].(string); ok {
-		parsed, err := hwutil.ParseNullUUID(&taskIdRaw)
+		parsed, err := uuid.Parse(taskIdRaw)
 		if err != nil {
 			return TaskPropertyMatchers{}, false
 		}
-		matcher.TaskID = parsed
-	} else {
-		matcher.TaskID = uuid.NullUUID{Valid: false}
+		matcher.TaskID = &parsed
 	}
 
 	return matcher, true

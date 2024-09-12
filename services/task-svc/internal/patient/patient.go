@@ -82,19 +82,19 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 		Id:                      res.ID.String(),
 		HumanReadableIdentifier: res.HumanReadableIdentifier,
 		Notes:                   res.Notes,
-		BedId:                   hwutil.NullUUIDToStringPtr(res.BedID),
-		WardId:                  hwutil.NullUUIDToStringPtr(res.WardID),
-		Room: hwutil.MapIf(res.RoomID.Valid, *res, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientResponse_Room {
+		BedId:                   hwutil.UUIDToStringPtr(res.BedID),
+		WardId:                  hwutil.UUIDToStringPtr(res.WardID),
+		Room: hwutil.MapIf(res.RoomID != nil, *res, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientResponse_Room {
 			return pb.GetPatientResponse_Room{
-				Id:     res.RoomID.UUID.String(), // has to be Valid, we just checked
-				Name:   *res.RoomName,            // RoomName must exist (NOT NULL) when room exists
-				WardId: res.WardID.UUID.String(), // WardId must exist (NOT NULL) when room exists
+				Id:     res.RoomID.String(), // has to be Valid, we just checked
+				Name:   *res.RoomName,       // RoomName must exist (NOT NULL) when room exists
+				WardId: res.WardID.String(), // WardId must exist (NOT NULL) when room exists
 			}
 		}),
-		Bed: hwutil.MapIf(res.BedID.Valid, *res, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientResponse_Bed {
+		Bed: hwutil.MapIf(res.BedID != nil, *res, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientResponse_Bed {
 			return pb.GetPatientResponse_Bed{
-				Id:   res.BedID.UUID.String(), // has to be Valid as per MapIf condition
-				Name: *res.BedName,            // BedName must exist (NOT NULL) when Bed exists
+				Id:   res.BedID.String(), // has to be Valid as per MapIf condition
+				Name: *res.BedName,       // BedName must exist (NOT NULL) when Bed exists
 			}
 		}),
 	}, nil
@@ -110,10 +110,7 @@ func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBe
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patient, err := hwdb.Optional(patientRepo.GetPatientByBed)(ctx, uuid.NullUUID{
-		UUID:  bedID,
-		Valid: true,
-	})
+	patient, err := hwdb.Optional(patientRepo.GetPatientByBed)(ctx, &bedID)
 	if patient == nil {
 		return nil, status.Error(codes.InvalidArgument, "id not found")
 	}
@@ -160,7 +157,7 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 				Id:                      patient.ID.String(),
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
 				Notes:                   patient.Notes,
-				BedId:                   hwutil.NullUUIDToStringPtr(patient.BedID),
+				BedId:                   hwutil.UUIDToStringPtr(patient.BedID),
 			}
 		}),
 	}, nil
@@ -192,16 +189,16 @@ func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.Get
 			processedRooms[roomRow.RoomID] = true
 
 			beds := hwutil.FlatMap(rows, func(bedRow room_repo.GetRoomsWithBedsWithPatientsByWardRow) **pb.GetPatientAssignmentByWardResponse_Room_Bed {
-				if bedRow.RoomID != roomRow.RoomID || !bedRow.BedID.Valid {
+				if bedRow.RoomID != roomRow.RoomID || bedRow.BedID == nil {
 					return nil
 				}
 				val := &pb.GetPatientAssignmentByWardResponse_Room_Bed{
-					Id:   bedRow.BedID.UUID.String(), // valid because of if above
-					Name: *bedRow.BedName,            // exists, because NOT-NULL
-					Patient: hwutil.MapIf(bedRow.PatientID.Valid, bedRow,
+					Id:   bedRow.BedID.String(), // valid because of if above
+					Name: *bedRow.BedName,       // exists, because NOT-NULL
+					Patient: hwutil.MapIf(bedRow.PatientID != nil, bedRow,
 						func(bedRow room_repo.GetRoomsWithBedsWithPatientsByWardRow) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
 							return pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
-								Id:   bedRow.PatientID.UUID.String(),
+								Id:   bedRow.PatientID.String(),
 								Name: *bedRow.PatientHumanReadableIdentifier,
 							}
 						}),
@@ -267,16 +264,16 @@ func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPat
 		var bed *pb.GetRecentPatientsResponse_Bed = nil
 		var room *pb.GetRecentPatientsResponse_Room = nil
 
-		if res.BedID.Valid {
+		if res.BedID != nil {
 			bed = &pb.GetRecentPatientsResponse_Bed{
-				Id:   res.BedID.UUID.String(),
+				Id:   res.BedID.String(),
 				Name: *res.BedName, // NOT-NULL, must exist
 			}
-			if res.RoomID.Valid {
+			if res.RoomID != nil {
 				room = &pb.GetRecentPatientsResponse_Room{
-					Id:     res.RoomID.UUID.String(), // checked validity already
-					Name:   *res.RoomName,            // must exist, as NOT-NULL
-					WardId: res.WardID.UUID.String(), // must be valid, as NOT-NULL
+					Id:     res.RoomID.String(), // checked validity already
+					Name:   *res.RoomName,       // must exist, as NOT-NULL
+					WardId: res.WardID.String(), // must be valid, as NOT-NULL
 				}
 			}
 		}
@@ -353,7 +350,7 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 
 	err = patientRepo.UpdatePatient(ctx, patient_repo.UpdatePatientParams{
 		ID:    patientID,
-		BedID: uuid.NullUUID{UUID: bedID, Valid: true},
+		BedID: &bedID,
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -469,7 +466,7 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 				Name:           row.Task.Name,
 				Description:    row.Task.Description,
 				Status:         pb.GetPatientDetailsResponse_TaskStatus(row.Task.Status),
-				AssignedUserId: hwutil.NullUUIDToStringPtr(row.Task.AssignedUserID),
+				AssignedUserId: hwutil.UUIDToStringPtr(row.Task.AssignedUserID),
 				PatientId:      row.Task.PatientID.String(),
 				Public:         row.Task.Public,
 				Subtasks:       make([]*pb.GetPatientDetailsResponse_Task_SubTask, 0),
@@ -478,11 +475,11 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 			taskMap[row.Task.ID] = len(tasks) - 1
 		}
 
-		if !row.SubtaskID.Valid {
+		if row.SubtaskID == nil {
 			continue
 		}
 		task.Subtasks = append(task.Subtasks, &pb.GetPatientDetailsResponse_Task_SubTask{
-			Id:   row.SubtaskID.UUID.String(),
+			Id:   row.SubtaskID.String(),
 			Name: *row.SubtaskName,
 			Done: *row.SubtaskDone,
 		})
@@ -498,18 +495,18 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		Name:                    patientRes.HumanReadableIdentifier, // TODO replace later
 		Tasks:                   tasks,
 		IsDischarged:            patientRes.IsDischarged != 0,
-		WardId:                  hwutil.NullUUIDToStringPtr(patientRes.WardID),
-		Room: hwutil.MapIf(patientRes.RoomID.Valid, *patientRes, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientDetailsResponse_Room {
+		WardId:                  hwutil.UUIDToStringPtr(patientRes.WardID),
+		Room: hwutil.MapIf(patientRes.RoomID != nil, *patientRes, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientDetailsResponse_Room {
 			return pb.GetPatientDetailsResponse_Room{
-				Id:     res.RoomID.UUID.String(), // we just checked
-				Name:   *res.RoomName,            // RoomName is NOT-NULL, so must exist
-				WardId: res.WardID.UUID.String(), // WardID is NOT-NULL, so must be valid
+				Id:     res.RoomID.String(), // we just checked
+				Name:   *res.RoomName,       // RoomName is NOT-NULL, so must exist
+				WardId: res.WardID.String(), // WardID is NOT-NULL, so must be valid
 			}
 		}),
-		Bed: hwutil.MapIf(patientRes.BedID.Valid, *patientRes, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientDetailsResponse_Bed {
+		Bed: hwutil.MapIf(patientRes.BedID != nil, *patientRes, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientDetailsResponse_Bed {
 			return pb.GetPatientDetailsResponse_Bed{
-				Id:   res.BedID.UUID.String(), // valid as per MapIf condition
-				Name: *res.BedName,            // BedName is NOT-NULL, so must exist
+				Id:   res.BedID.String(), // valid as per MapIf condition
+				Name: *res.BedName,       // BedName is NOT-NULL, so must exist
 			}
 		}),
 	}, nil
@@ -520,7 +517,7 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 
 	// TODO: Auth
 
-	wardID, err := hwutil.ParseNullUUID(req.WardId)
+	wardID, err := hwutil.StringToUUIDPtr(req.WardId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -541,13 +538,13 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 	})
 
 	withBedRows, unassignedRows := hwutil.Partition(chargedRows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
-		return row.BedID.Valid
+		return row.BedID != nil
 	})
 
-	if wardID.Valid {
+	if wardID != nil {
 		// scope active patients to wardID
 		withBedRows = hwutil.Filter(withBedRows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
-			return row.WardID.UUID == wardID.UUID // equality implies validity
+			return row.WardID != nil && *row.WardID == *wardID
 		})
 	}
 
@@ -569,12 +566,12 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 					Id:                      row.Patient.ID.String(),
 					HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
 					Room: &pb.GetPatientListResponse_Room{
-						Id:     row.RoomID.UUID.String(),
+						Id:     row.RoomID.String(), // this func is only called with withBedRows, which guards nil uuids
 						Name:   *row.RoomName,
-						WardId: row.WardID.UUID.String(),
+						WardId: row.WardID.String(), // this func is only called with withBedRows, which guards nil uuids
 					},
 					Bed: &pb.GetPatientListResponse_Bed{
-						Id:   row.BedID.UUID.String(),
+						Id:   row.BedID.String(), // this func is only called with withBedRows, which guards nil uuids
 						Name: *row.BedName,
 					},
 					Notes: row.Patient.Notes,
@@ -585,41 +582,41 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 			}
 
 			// a patient may not have any tasks
-			if !row.TaskID.Valid {
+			if row.TaskID == nil {
 				continue
 			}
 
 			var task *pb.GetPatientListResponse_Task
-			if taskIx, existed := tasksMap[row.TaskID.UUID]; existed {
+			if taskIx, existed := tasksMap[*row.TaskID]; existed {
 				task = patient.Tasks[taskIx]
 			} else {
 
 				task = &pb.GetPatientListResponse_Task{
-					Id:             row.TaskID.UUID.String(),
+					Id:             row.TaskID.String(),
 					Name:           *row.TaskName,
 					Description:    *row.TaskDescription,
 					Status:         pb.GetPatientListResponse_TaskStatus(*row.TaskStatus),
-					AssignedUserId: hwutil.NullUUIDToStringPtr(row.TaskAssignedUserID),
+					AssignedUserId: hwutil.UUIDToStringPtr(row.TaskAssignedUserID),
 					PatientId:      row.Patient.ID.String(),
 					Public:         *row.TaskPublic,
 					Subtasks:       make([]*pb.GetPatientListResponse_Task_SubTask, 0),
 				}
 				patient.Tasks = append(patient.Tasks, task)
-				tasksMap[row.TaskID.UUID] = len(patient.Tasks) - 1
+				tasksMap[*row.TaskID] = len(patient.Tasks) - 1
 			}
 
 			// task may not have any subtasks
-			if !row.SubtaskID.Valid {
+			if row.SubtaskID == nil {
 				continue
 			}
 
-			if _, exists := subTasksSet[row.SubtaskID.UUID]; !exists {
+			if _, exists := subTasksSet[*row.SubtaskID]; !exists {
 				task.Subtasks = append(task.Subtasks, &pb.GetPatientListResponse_Task_SubTask{
-					Id:   row.SubtaskID.UUID.String(),
+					Id:   row.SubtaskID.String(),
 					Name: *row.SubtaskName,
 					Done: *row.SubtaskDone,
 				})
-				subTasksSet[row.SubtaskID.UUID] = true
+				subTasksSet[*row.SubtaskID] = true
 			}
 		}
 
@@ -650,40 +647,40 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 			}
 
 			// a patient may not have any tasks
-			if !row.TaskID.Valid {
+			if row.TaskID == nil {
 				continue
 			}
 
 			var task *pb.GetPatientListResponse_Task
-			if taskIx, existed := tasksMap[row.TaskID.UUID]; existed {
+			if taskIx, existed := tasksMap[*row.TaskID]; existed {
 				task = patient.Tasks[taskIx]
 			} else {
 				task = &pb.GetPatientListResponse_Task{
-					Id:             row.TaskID.UUID.String(),
+					Id:             row.TaskID.String(),
 					Name:           *row.TaskName,
 					Description:    *row.TaskDescription,
 					Status:         pb.GetPatientListResponse_TaskStatus(*row.TaskStatus),
-					AssignedUserId: hwutil.NullUUIDToStringPtr(row.TaskAssignedUserID),
+					AssignedUserId: hwutil.UUIDToStringPtr(row.TaskAssignedUserID),
 					PatientId:      row.Patient.ID.String(),
 					Public:         *row.TaskPublic,
 					Subtasks:       make([]*pb.GetPatientListResponse_Task_SubTask, 0),
 				}
 				patient.Tasks = append(patient.Tasks, task)
-				tasksMap[row.TaskID.UUID] = len(patient.Tasks) - 1
+				tasksMap[*row.TaskID] = len(patient.Tasks) - 1
 			}
 
 			// task may not have any subtasks
-			if !row.SubtaskID.Valid {
+			if row.SubtaskID == nil {
 				continue
 			}
 
-			if _, exists := subTasksSet[row.SubtaskID.UUID]; !exists {
+			if _, exists := subTasksSet[*row.SubtaskID]; !exists {
 				task.Subtasks = append(task.Subtasks, &pb.GetPatientListResponse_Task_SubTask{
-					Id:   row.SubtaskID.UUID.String(),
+					Id:   row.SubtaskID.String(),
 					Name: *row.SubtaskName,
 					Done: *row.SubtaskDone,
 				})
-				subTasksSet[row.SubtaskID.UUID] = true
+				subTasksSet[*row.SubtaskID] = true
 			}
 		}
 

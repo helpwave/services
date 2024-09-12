@@ -17,7 +17,7 @@ type Task struct {
 	Public       bool
 	DueAt        time.Time
 	PatientID    uuid.UUID
-	AssignedUser uuid.NullUUID
+	AssignedUser *uuid.UUID
 	Subtasks     map[uuid.UUID]Subtask
 }
 
@@ -34,7 +34,7 @@ type Patient struct {
 	ID                      uuid.UUID
 	HumanReadableIdentifier string
 	Notes                   string
-	BedID                   uuid.NullUUID
+	BedID                   *uuid.UUID
 	IsDischarged            bool
 }
 

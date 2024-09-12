@@ -88,13 +88,13 @@ WHERE tasks.assigned_user_id = $1
 type GetTasksWithPatientByAssigneeRow struct {
 	Task             Task
 	Patient          Patient
-	SubtaskID        uuid.NullUUID
+	SubtaskID        *uuid.UUID
 	SubtaskName      *string
 	SubtaskDone      *bool
-	SubtaskCreatedBy uuid.NullUUID
+	SubtaskCreatedBy *uuid.UUID
 }
 
-func (q *Queries) GetTasksWithPatientByAssignee(ctx context.Context, assignedUserID uuid.NullUUID) ([]GetTasksWithPatientByAssigneeRow, error) {
+func (q *Queries) GetTasksWithPatientByAssignee(ctx context.Context, assignedUserID *uuid.UUID) ([]GetTasksWithPatientByAssigneeRow, error) {
 	rows, err := q.db.Query(ctx, getTasksWithPatientByAssignee, assignedUserID)
 	if err != nil {
 		return nil, err
@@ -151,10 +151,10 @@ WHERE tasks.patient_id = $1
 
 type GetTasksWithSubtasksByPatientRow struct {
 	Task             Task
-	SubtaskID        uuid.NullUUID
+	SubtaskID        *uuid.UUID
 	SubtaskName      *string
 	SubtaskDone      *bool
-	SubtaskCreatedBy uuid.NullUUID
+	SubtaskCreatedBy *uuid.UUID
 }
 
 func (q *Queries) GetTasksWithSubtasksByPatient(ctx context.Context, patientID uuid.UUID) ([]GetTasksWithSubtasksByPatientRow, error) {
@@ -227,7 +227,7 @@ type UpdateTaskParams struct {
 	Description *string
 	Status      *int32
 	Public      *bool
-	CreatedBy   uuid.NullUUID
+	CreatedBy   *uuid.UUID
 	DueAt       pgtype.Timestamp
 }
 
@@ -251,7 +251,7 @@ WHERE id = $2
 `
 
 type UpdateTaskAssignedUserParams struct {
-	AssignedUserID uuid.NullUUID
+	AssignedUserID *uuid.UUID
 	ID             uuid.UUID
 }
 

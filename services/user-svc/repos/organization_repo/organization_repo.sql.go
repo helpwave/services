@@ -160,9 +160,9 @@ SELECT id, email, organization_id, state
 `
 
 type GetInvitationsParams struct {
-	OrganizationID uuid.NullUUID
+	OrganizationID *uuid.UUID
 	State          *int32
-	ID             uuid.NullUUID
+	ID             *uuid.UUID
 	Email          *string
 }
 
@@ -318,7 +318,7 @@ SELECT
 
 type GetOrganizationWithMemberByIdRow struct {
 	Organization Organization
-	UserID       uuid.NullUUID
+	UserID       *uuid.UUID
 }
 
 func (q *Queries) GetOrganizationWithMemberById(ctx context.Context, id uuid.UUID) ([]GetOrganizationWithMemberByIdRow, error) {

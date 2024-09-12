@@ -119,7 +119,7 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 		Id:             task.ID.String(),
 		Name:           task.Name,
 		Description:    task.Description,
-		AssignedUserId: hwutil.NullUUIDToStringPtr(task.AssignedUser),
+		AssignedUserId: hwutil.UUIDToStringPtr(task.AssignedUser),
 		Subtasks:       subtasksRes,
 		Status:         task.Status,
 		CreatedAt:      timestamppb.New(task.CreatedAt),
@@ -150,7 +150,7 @@ func (s *TaskGrpcService) GetTasksByPatient(ctx context.Context, req *pb.GetTask
 			CreatedAt:      timestamppb.New(item.CreatedAt),
 			DueAt:          timestamppb.New(item.DueAt),
 			Subtasks:       make([]*pb.GetTasksByPatientResponse_Task_SubTask, len(item.Subtasks)),
-			AssignedUserId: hwutil.NullUUIDToStringPtr(item.AssignedUser), // TODO: #760
+			AssignedUserId: hwutil.UUIDToStringPtr(item.AssignedUser), // TODO: #760
 		}
 
 		subtaskIdx := 0
@@ -213,7 +213,7 @@ func (s *TaskGrpcService) GetTasksByPatientSortedByStatus(ctx context.Context, r
 					CreatedAt:      timestamppb.New(task.CreatedAt),
 					DueAt:          timestamppb.New(task.DueAt),
 					Subtasks:       make([]*pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask, len(task.Subtasks)),
-					AssignedUserId: hwutil.NullUUIDToStringPtr(task.AssignedUser), // TODO: #760
+					AssignedUserId: hwutil.UUIDToStringPtr(task.AssignedUser), // TODO: #760
 				}
 
 				subtaskIdx := 0

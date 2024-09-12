@@ -22,7 +22,7 @@ func NewTaskAggregate(id uuid.UUID) *TaskAggregate {
 	aggregate := &TaskAggregate{Task: &models.Task{
 		ID:           id,
 		CreatedAt:    time.Now().UTC(),
-		AssignedUser: uuid.NullUUID{},
+		AssignedUser: nil,
 		Subtasks:     make(map[uuid.UUID]models.Subtask, 0),
 	}}
 	aggregate.AggregateBase = hwes.NewAggregateBase(TaskAggregateType, id)
@@ -156,7 +156,7 @@ func (a *TaskAggregate) onTaskAssigned(evt hwes.Event) error {
 		return err
 	}
 
-	a.Task.AssignedUser = uuid.NullUUID{UUID: userID, Valid: true}
+	a.Task.AssignedUser = &userID
 
 	return nil
 }
@@ -167,7 +167,7 @@ func (a *TaskAggregate) onTaskUnassigned(evt hwes.Event) error {
 		return err
 	}
 
-	a.Task.AssignedUser = uuid.NullUUID{UUID: uuid.Nil, Valid: false}
+	a.Task.AssignedUser = nil
 
 	return nil
 }

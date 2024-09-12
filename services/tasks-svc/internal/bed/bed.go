@@ -122,7 +122,7 @@ func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatien
 func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.GetBedsResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	beds, err := bedRepo.GetBeds(ctx, uuid.NullUUID{UUID: uuid.Nil, Valid: false})
+	beds, err := bedRepo.GetBeds(ctx, nil)
 	if err != nil {
 		return nil, hwdb.Error(ctx, err)
 	}
@@ -146,12 +146,7 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	beds, err := bedRepo.GetBeds(ctx,
-		uuid.NullUUID{
-			UUID:  roomID,
-			Valid: true,
-		},
-	)
+	beds, err := bedRepo.GetBeds(ctx, &roomID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
@@ -179,7 +174,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	roomId, err := hwutil.ParseNullUUID(req.RoomId)
+	roomId, err := hwutil.StringToUUIDPtr(req.RoomId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

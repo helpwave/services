@@ -178,7 +178,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T)
 	// Fully valid request
 
 	dbMock.ExpectQuery(".*").
-		WithArgs(uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
+		WithArgs(nil, uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f")).
 		WillReturnRows(pgxmock.NewRows([]string{}))
 
 	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
@@ -227,7 +227,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 
 	// Mock Empty Row response from database
 	dbMock.ExpectQuery(".*").
-		WithArgs(uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
+		WithArgs(nil, uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f")).
 		WillReturnRows(pgxmock.NewRows([]string{}))
 
 	_, _ = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
@@ -282,7 +282,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_G
 
 	// Mock Empty Row response from database
 	dbMock.ExpectQuery(".*").
-		WithArgs(uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
+		WithArgs(nil, uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f")).
 		WillReturnRows(pgxmock.NewRows([]string{}))
 
 	_, _ = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
@@ -337,7 +337,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 
 	// Mock Existing Row response from database
 	dbMock.ExpectQuery(".*").
-		WithArgs(uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
+		WithArgs(nil, uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f")).
 		WillReturnRows(pgxmock.NewRows([]string{"property_view_rules"}).AddRow("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"))
 
 	streamsPrior := make(map[string][]hwes.Event)
@@ -417,7 +417,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_G
 
 	// Mock Existing Row response from database
 	dbMock.ExpectQuery(".*").
-		WithArgs(uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
+		WithArgs(nil, uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f")).
 		WillReturnRows(pgxmock.NewRows([]string{"property_view_rules"}).AddRow("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"))
 
 	streamsPrior := make(map[string][]hwes.Event)

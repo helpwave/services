@@ -18,8 +18,8 @@ VALUES ($1, $2, $3)
 
 type CreatePatientRuleParams struct {
 	RuleID    uuid.UUID
-	WardID    uuid.NullUUID
-	PatientID uuid.NullUUID
+	WardID    *uuid.UUID
+	PatientID *uuid.UUID
 }
 
 func (q *Queries) CreatePatientRule(ctx context.Context, arg CreatePatientRuleParams) error {
@@ -41,8 +41,8 @@ ORDER BY specificity
 `
 
 type GetPatientPropertiesUsingMatchersParams struct {
-	WardID    uuid.NullUUID
-	PatientID uuid.NullUUID
+	WardID    *uuid.UUID
+	PatientID *uuid.UUID
 }
 
 type GetPatientPropertiesUsingMatchersRow struct {
@@ -81,8 +81,8 @@ SELECT
 `
 
 type GetPatientRuleIdUsingExactMatchersParams struct {
-	WardID    uuid.NullUUID
-	PatientID uuid.NullUUID
+	WardID    *uuid.UUID
+	PatientID *uuid.UUID
 }
 
 func (q *Queries) GetPatientRuleIdUsingExactMatchers(ctx context.Context, arg GetPatientRuleIdUsingExactMatchersParams) (uuid.UUID, error) {

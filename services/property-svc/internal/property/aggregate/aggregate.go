@@ -107,13 +107,13 @@ func (a *PropertyAggregate) onSetIDUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	setID := uuid.NullUUID{UUID: uuid.Nil, Valid: false}
-	if len(payload.SetID) > 0 {
-		parsedID, err := hwutil.ParseNullUUID(&payload.SetID)
+	var setID *uuid.UUID = nil
+	if payload.SetID != "" {
+		parsedID, err := uuid.Parse(payload.SetID)
 		if err != nil {
 			return err
 		}
-		setID = parsedID
+		setID = &parsedID
 	}
 
 	a.Property.SetID = setID

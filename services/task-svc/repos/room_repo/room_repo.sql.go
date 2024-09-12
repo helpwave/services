@@ -50,7 +50,7 @@ SELECT
 
 type GetRoomWithBedsByIdRow struct {
 	Room    Room
-	BedID   uuid.NullUUID
+	BedID   *uuid.UUID
 	BedName *string
 }
 
@@ -126,9 +126,9 @@ type GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganizationParams struct 
 type GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganizationRow struct {
 	RoomID                         uuid.UUID
 	RoomName                       string
-	BedID                          uuid.NullUUID
+	BedID                          *uuid.UUID
 	BedName                        *string
-	PatientID                      uuid.NullUUID
+	PatientID                      *uuid.UUID
 	PatientHumanReadableIdentifier *string
 	TodoTasksCount                 int64
 	InProgressTasksCount           int64
@@ -185,12 +185,12 @@ SELECT
 
 type GetRoomsWithBedsForOrganizationParams struct {
 	OrganizationID uuid.UUID
-	WardID         uuid.NullUUID
+	WardID         *uuid.UUID
 }
 
 type GetRoomsWithBedsForOrganizationRow struct {
 	Room    Room
-	BedID   uuid.NullUUID
+	BedID   *uuid.UUID
 	BedName *string
 }
 
@@ -239,9 +239,9 @@ SELECT
 type GetRoomsWithBedsWithPatientsByWardRow struct {
 	RoomID                         uuid.UUID
 	RoomName                       string
-	BedID                          uuid.NullUUID
+	BedID                          *uuid.UUID
 	BedName                        *string
-	PatientID                      uuid.NullUUID
+	PatientID                      *uuid.UUID
 	PatientHumanReadableIdentifier *string
 }
 

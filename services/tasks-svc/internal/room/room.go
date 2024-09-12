@@ -120,7 +120,7 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 	// TODO: Auth
 	// TODO: implement filtering by ward_id contained in req
 
-	rows, err := roomRepo.GetRoomsWithBeds(ctx, uuid.NullUUID{UUID: uuid.Nil, Valid: false})
+	rows, err := roomRepo.GetRoomsWithBeds(ctx, nil)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err

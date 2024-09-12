@@ -78,7 +78,7 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	bedId, err := hwutil.ParseNullUUID(&payload.BedID)
+	bedId, err := hwutil.StringToUUIDPtr(&payload.BedID)
 	if err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
@@ -99,7 +99,7 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 func (a *Projection) onBedUnassigned(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	err := a.patientRepo.UpdatePatientBedId(ctx, patient_repo.UpdatePatientBedIdParams{
 		ID:        evt.AggregateID,
-		BedID:     uuid.NullUUID{},
+		BedID:     nil,
 		UpdatedAt: hwdb.TimeToTimestamp(evt.Timestamp),
 	})
 	err = hwdb.Error(ctx, err)

@@ -127,7 +127,7 @@ func (s *PatientGrpcService) GetPatientsByWard(ctx context.Context, req *pb.GetP
 				Id:                      patient.ID.String(),
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
 				Notes:                   patient.Notes,
-				BedId:                   hwutil.NullUUIDToStringPtr(patient.BedID),
+				BedId:                   hwutil.UUIDToStringPtr(patient.BedID),
 			}
 		}),
 	}, nil
@@ -173,7 +173,7 @@ func (s *PatientGrpcService) GetPatientDetails(ctx context.Context, req *pb.GetP
 			Status:         item.Status,
 			Public:         item.Public,
 			Subtasks:       make([]*pb.GetPatientDetailsResponse_Task_SubTask, len(item.Subtasks)),
-			AssignedUserId: hwutil.NullUUIDToStringPtr(item.AssignedUser), // TODO: #760
+			AssignedUserId: hwutil.UUIDToStringPtr(item.AssignedUser), // TODO: #760
 		}
 
 		subtaskIdx := 0
@@ -201,7 +201,7 @@ func (s *PatientGrpcService) GetPatientDetails(ctx context.Context, req *pb.GetP
 }
 
 func (s *PatientGrpcService) GetPatientList(ctx context.Context, req *pb.GetPatientListRequest) (*pb.GetPatientListResponse, error) {
-	wardID, err := hwutil.ParseNullUUID(req.WardId)
+	wardID, err := hwutil.StringToUUIDPtr(req.WardId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -254,7 +254,7 @@ func (s *PatientGrpcService) GetPatientList(ctx context.Context, req *pb.GetPati
 					Status:         item.Status,
 					Public:         item.Public,
 					Subtasks:       make([]*pb.GetPatientListResponse_Task_SubTask, len(item.Subtasks)),
-					AssignedUserId: hwutil.NullUUIDToStringPtr(item.AssignedUser), // TODO: #760
+					AssignedUserId: hwutil.UUIDToStringPtr(item.AssignedUser), // TODO: #760
 				}
 
 				subtaskIdx := 0

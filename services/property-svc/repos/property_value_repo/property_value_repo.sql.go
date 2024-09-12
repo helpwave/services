@@ -201,13 +201,13 @@ type GetRelevantPropertyViewsParams struct {
 
 type GetRelevantPropertyViewsRow struct {
 	Property                Property
-	ValueID                 uuid.NullUUID
+	ValueID                 *uuid.UUID
 	TextValue               *string
 	BoolValue               *bool
 	NumberValue             *float64
 	DateTimeValue           pgtype.Timestamp
 	DateValue               pgtype.Date
-	SelectOptionID          uuid.NullUUID
+	SelectOptionID          *uuid.UUID
 	SelectOptionName        *string
 	SelectOptionDescription *string
 }

@@ -49,7 +49,7 @@ ORDER BY beds.name ASC
 
 type GetRoomWithBedsByIdRow struct {
 	Room    Room
-	BedID   uuid.NullUUID
+	BedID   *uuid.UUID
 	BedName *string
 }
 
@@ -92,11 +92,11 @@ ORDER BY rooms.id ASC, beds.name ASC
 
 type GetRoomsWithBedsRow struct {
 	Room    Room
-	BedID   uuid.NullUUID
+	BedID   *uuid.UUID
 	BedName *string
 }
 
-func (q *Queries) GetRoomsWithBeds(ctx context.Context, wardID uuid.NullUUID) ([]GetRoomsWithBedsRow, error) {
+func (q *Queries) GetRoomsWithBeds(ctx context.Context, wardID *uuid.UUID) ([]GetRoomsWithBedsRow, error) {
 	rows, err := q.db.Query(ctx, getRoomsWithBeds, wardID)
 	if err != nil {
 		return nil, err
@@ -165,9 +165,9 @@ type GetRoomsWithBedsAndPatientsAndTasksCountByWardParams struct {
 type GetRoomsWithBedsAndPatientsAndTasksCountByWardRow struct {
 	RoomID                         uuid.UUID
 	RoomName                       string
-	BedID                          uuid.NullUUID
+	BedID                          *uuid.UUID
 	BedName                        *string
-	PatientID                      uuid.NullUUID
+	PatientID                      *uuid.UUID
 	PatientHumanReadableIdentifier *string
 	TodoTasksCount                 int64
 	InProgressTasksCount           int64
@@ -227,9 +227,9 @@ ORDER BY rooms.id ASC, beds.name ASC
 type GetRoomsWithBedsWithPatientsByWardRow struct {
 	RoomID                         uuid.UUID
 	RoomName                       string
-	BedID                          uuid.NullUUID
+	BedID                          *uuid.UUID
 	BedName                        *string
-	PatientID                      uuid.NullUUID
+	PatientID                      *uuid.UUID
 	PatientHumanReadableIdentifier *string
 }
 

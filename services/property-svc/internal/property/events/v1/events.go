@@ -68,10 +68,10 @@ type PropertySetIDUpdatedEvent struct {
 	SetID string `json:"set_id"`
 }
 
-func NewPropertySetIDUpdatedEvent(ctx context.Context, a hwes.Aggregate, setID uuid.NullUUID) (hwes.Event, error) {
+func NewPropertySetIDUpdatedEvent(ctx context.Context, a hwes.Aggregate, setID *uuid.UUID) (hwes.Event, error) {
 	sids := ""
-	if setID.Valid {
-		sids = setID.UUID.String()
+	if setID != nil {
+		sids = setID.String()
 	}
 	payload := PropertySetIDUpdatedEvent{
 		SetID: sids,

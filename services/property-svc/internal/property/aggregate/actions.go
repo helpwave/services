@@ -3,7 +3,7 @@ package aggregate
 import (
 	"context"
 	pb "gen/services/property_svc/v1"
-	"hwutil"
+	"github.com/google/uuid"
 	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/models"
 )
@@ -35,11 +35,11 @@ func (a *PropertyAggregate) UpdateDescription(ctx context.Context, newDescriptio
 }
 
 func (a *PropertyAggregate) UpdateSetID(ctx context.Context, newSetID string) error {
-	id, err := hwutil.ParseNullUUID(&newSetID)
+	id, err := uuid.Parse(newSetID)
 	if len(newSetID) > 0 && err != nil {
 		return err
 	}
-	event, err := propertyEventsV1.NewPropertySetIDUpdatedEvent(ctx, a, id)
+	event, err := propertyEventsV1.NewPropertySetIDUpdatedEvent(ctx, a, &id)
 	if err != nil {
 		return err
 	}

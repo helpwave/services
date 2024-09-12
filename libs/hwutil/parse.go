@@ -64,14 +64,6 @@ func UUIDToStringPtr(u *uuid.UUID) *string {
 	return nil
 }
 
-func NullUUIDToStringPtr(u uuid.NullUUID) *string {
-	if u.Valid {
-		s := u.UUID.String()
-		return &s
-	}
-	return nil
-}
-
 func StringToUUIDPtr(s *string) (*uuid.UUID, error) {
 	var uPtr *uuid.UUID
 	if s != nil {
@@ -91,23 +83,6 @@ func MustParseInt(s string) int {
 	}
 
 	return int(i)
-}
-
-// ParseNullUUID maps
-//   - valid uuids to their parsed counterparts (valid = true),
-//   - invalid uuids to invalid NullUUIDs and returns the parsing error
-//   - nil-pointers to invalid NullUUIDs without returning an error
-//
-// Great for parsing optional uuid
-func ParseNullUUID(ptr *string) (uuid.NullUUID, error) {
-	id := uuid.NullUUID{} // invalid uuid
-	if ptr == nil {
-		return id, nil
-	}
-	parsedID, err := uuid.Parse(*ptr)
-	id.UUID = parsedID
-	id.Valid = err == nil
-	return id, err
 }
 
 // StrPtr returns nil for "", else s

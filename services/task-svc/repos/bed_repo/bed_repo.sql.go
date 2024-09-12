@@ -128,7 +128,7 @@ SELECT id, room_id, organization_id, name FROM beds
 
 type GetBedsForOrganizationParams struct {
 	OrganizationID uuid.UUID
-	RoomID         uuid.NullUUID
+	RoomID         *uuid.UUID
 }
 
 func (q *Queries) GetBedsForOrganization(ctx context.Context, arg GetBedsForOrganizationParams) ([]Bed, error) {
@@ -166,7 +166,7 @@ WHERE id = $3
 
 type UpdateBedParams struct {
 	Name   *string
-	RoomID uuid.NullUUID
+	RoomID *uuid.UUID
 	ID     uuid.UUID
 }
 

@@ -12,8 +12,8 @@ import (
 const PatientPropertyMatcherType = "patient_property_matcher"
 
 type PatientPropertyMatchers struct {
-	WardID    uuid.NullUUID `json:"ward_id,omitempty"`
-	PatientID uuid.NullUUID `json:"patient_id,omitempty"`
+	WardID    *uuid.UUID `json:"ward_id,omitempty"`
+	PatientID *uuid.UUID `json:"patient_id,omitempty"`
 }
 
 func (m PatientPropertyMatchers) FindExactRuleId(ctx context.Context) (*uuid.UUID, error) {
@@ -60,21 +60,21 @@ func (m PatientPropertyMatchers) QueryProperties(ctx context.Context) ([]Propert
 }
 
 func (m PatientPropertyMatchers) GetSubjectId() (uuid.UUID, error) {
-	if !m.PatientID.Valid {
+	if m.PatientID == nil {
 		return uuid.UUID{}, errors.New("PatientPropertyMatchers GetSubjectId: PatientID not valid")
 	}
-	return m.PatientID.UUID, nil
+	return *m.PatientID, nil
 }
 
 func (m PatientPropertyMatchers) ToMap() map[string]interface{} {
 	mp := make(map[string]interface{})
-	if m.WardID.Valid {
-		mp["WardID"] = m.WardID.UUID.String()
+	if m.WardID != nil {
+		mp["WardID"] = m.WardID.String()
 	} else {
 		mp["WardID"] = nil
 	}
-	if m.PatientID.Valid {
-		mp["PatientID"] = m.PatientID.UUID.String()
+	if m.PatientID != nil {
+		mp["PatientID"] = m.PatientID.String()
 	} else {
 		mp["PatientID"] = nil
 	}
@@ -93,22 +93,18 @@ func PatientPropertyMatchersFromMap(m map[string]interface{}) (PatientPropertyMa
 	matcher := PatientPropertyMatchers{}
 
 	if wardIDRaw, ok := m["WardID"].(string); ok {
-		parsed, err := hwutil.ParseNullUUID(&wardIDRaw)
+		parsed, err := uuid.Parse(wardIDRaw)
 		if err != nil {
 			return PatientPropertyMatchers{}, false
 		}
-		matcher.WardID = parsed
-	} else {
-		matcher.WardID = uuid.NullUUID{Valid: false}
+		matcher.WardID = &parsed
 	}
 	if patientIDRaw, ok := m["PatientID"].(string); ok {
-		parsed, err := hwutil.ParseNullUUID(&patientIDRaw)
+		parsed, err := uuid.Parse(patientIDRaw)
 		if err != nil {
 			return PatientPropertyMatchers{}, false
 		}
-		matcher.PatientID = parsed
-	} else {
-		matcher.PatientID = uuid.NullUUID{Valid: false}
+		matcher.PatientID = &parsed
 	}
 
 	return matcher, true

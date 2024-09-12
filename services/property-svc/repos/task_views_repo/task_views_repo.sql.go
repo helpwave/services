@@ -18,8 +18,8 @@ VALUES ($1, $2, $3)
 
 type CreateTaskRuleParams struct {
 	RuleID uuid.UUID
-	WardID uuid.NullUUID
-	TaskID uuid.NullUUID
+	WardID *uuid.UUID
+	TaskID *uuid.UUID
 }
 
 func (q *Queries) CreateTaskRule(ctx context.Context, arg CreateTaskRuleParams) error {
@@ -41,8 +41,8 @@ ORDER BY specificity
 `
 
 type GetTaskPropertiesUsingMatchersParams struct {
-	WardID uuid.NullUUID
-	TaskID uuid.NullUUID
+	WardID *uuid.UUID
+	TaskID *uuid.UUID
 }
 
 type GetTaskPropertiesUsingMatchersRow struct {
@@ -83,8 +83,8 @@ SELECT
 `
 
 type GetTaskRuleIdUsingExactMatchersParams struct {
-	WardID uuid.NullUUID
-	TaskID uuid.NullUUID
+	WardID *uuid.UUID
+	TaskID *uuid.UUID
 }
 
 // NOTE: views_repo.CreateRule MUST be invoked with the same id in the same transaction!!

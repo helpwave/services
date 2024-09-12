@@ -28,7 +28,7 @@ type PropertyValueWithProperty struct {
 	TextValue     *string
 	BoolValue     *bool
 	NumberValue   *float64
-	SelectValue   uuid.NullUUID
+	SelectValue   *uuid.UUID
 	DateTimeValue *time.Time
 	DateValue     *time.Time
 }
@@ -57,7 +57,7 @@ type PropertyAndValue struct {
 	Description string
 	IsArchived  bool
 
-	SetID uuid.NullUUID
+	SetID *uuid.UUID
 
 	Value *TypedValue
 }

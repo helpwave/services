@@ -54,7 +54,7 @@ func TestPropertyViewPropertyRulesProjection_Create_TaskPropertyMatcher_GreenPat
 		WithArgs(uuid.MustParse("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273")).
 		WillReturnResult(pgconn.NewCommandTag("INSERT 1"))
 	dbMock.ExpectExec(`.*INSERT INTO task_property_view_rules.*`).
-		WithArgs(uuid.MustParse("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"), uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
+		WithArgs(uuid.MustParse("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"), nil, uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f")).
 		WillReturnResult(pgconn.NewCommandTag("INSERT 1"))
 
 	dbMock.ExpectCopyFrom(pgx.Identifier{"property_view_filter_always_include_items"}, []string{"rule_id", "property_id", "dont_always_include"}).WillReturnResult(1)
@@ -150,7 +150,7 @@ func TestPropertyViewPropertyRulesProjection_Create_PatientPropertyMatcher_Green
 		WithArgs(uuid.MustParse("c976b4fa-ee37-4aff-b7f9-c88fe5c8d238")).
 		WillReturnResult(pgconn.NewCommandTag("INSERT 1"))
 	dbMock.ExpectExec(`.*INSERT INTO patient_property_view_rules.*`).
-		WithArgs(uuid.MustParse("c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"), uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("4342530b-6b0d-40b5-9d98-be5a14681969"), Valid: true}).
+		WithArgs(uuid.MustParse("c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"), nil, uuid.MustParse("4342530b-6b0d-40b5-9d98-be5a14681969")).
 		WillReturnResult(pgconn.NewCommandTag("INSERT 1"))
 
 	dbMock.ExpectCopyFrom(pgx.Identifier{"property_view_filter_always_include_items"}, []string{"rule_id", "property_id", "dont_always_include"}).WillReturnResult(1)
