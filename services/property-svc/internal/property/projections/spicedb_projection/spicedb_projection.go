@@ -1,4 +1,4 @@
-package property_postgres_projection
+package spicedb_projection
 
 import (
 	"context"
