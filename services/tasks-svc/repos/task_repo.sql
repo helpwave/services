@@ -69,3 +69,8 @@ FROM tasks
 	JOIN patients ON tasks.patient_id = patients.id
 	LEFT JOIN subtasks ON subtasks.task_id = tasks.id
 WHERE tasks.id = $1;
+
+-- name: RemoveTaskDueAt :exec
+UPDATE tasks
+SET due_at = NULL
+WHERE id=$1;

@@ -134,3 +134,11 @@ func (a *TaskAggregate) DeleteSubtask(ctx context.Context, subtaskID uuid.UUID) 
 	}
 	return a.Apply(event)
 }
+
+func (a *TaskAggregate) RemoveTaskDueAt(ctx context.Context) error {
+	event, err := taskEventsV1.NewTaskDueAtRemovedEvent(ctx, a)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}

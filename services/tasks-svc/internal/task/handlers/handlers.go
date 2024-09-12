@@ -24,13 +24,14 @@ func NewTaskHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Handlers {
 	return &Handlers{
 		Commands: &Commands{
 			V1: &commandsV1.TaskCommands{
-				CreateTask:    commandsV1.NewCreateTaskCommandHandler(as),
-				UpdateTask:    commandsV1.NewUpdateTaskCommandHandler(as, authz),
-				AssignTask:    commandsV1.NewAssignTaskCommandHandler(as, authz),
-				UnnasignTask:  commandsV1.NewUnassignTaskCommandHandler(as, authz),
-				CreateSubtask: commandsV1.NewCreateSubtaskCommandHandler(as),
-				UpdateSubtask: commandsV1.NewUpdateSubtaskCommandHandler(as),
-				DeleteSubtask: commandsV1.NewDeleteSubtaskCommandHandler(as, authz),
+				CreateTask:      commandsV1.NewCreateTaskCommandHandler(as),
+				UpdateTask:      commandsV1.NewUpdateTaskCommandHandler(as),
+				AssignTask:      commandsV1.NewAssignTaskCommandHandler(as, authz),
+				UnnasignTask:    commandsV1.NewUnassignTaskCommandHandler(as, authz),
+				CreateSubtask:   commandsV1.NewCreateSubtaskCommandHandler(as),
+				UpdateSubtask:   commandsV1.NewUpdateSubtaskCommandHandler(as),
+				DeleteSubtask:   commandsV1.NewDeleteSubtaskCommandHandler(as),
+				RemoveTaskDueAt: commandsV1.NewRemoveTaskDueAtCommandHandler(as),
 			},
 		},
 		Queries: &Queries{

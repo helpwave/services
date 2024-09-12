@@ -53,9 +53,7 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 		return nil, err
 	}
 
-	// TODO: implement update task.due_at
-
-	if err := s.handlers.Commands.V1.UpdateTask(ctx, taskID, req.Name, req.Description, req.Status, req.Public); err != nil {
+	if err := s.handlers.Commands.V1.UpdateTask(ctx, taskID, req.Name, req.Description, req.Status, req.Public, req.DueAt); err != nil {
 		return nil, err
 	}
 
@@ -378,5 +376,17 @@ func (s *TaskGrpcService) DeleteSubtask(ctx context.Context, req *pb.DeleteSubta
 	return &pb.DeleteSubtaskResponse{}, nil
 }
 
-// TODO: add removeTaskDueDate
+func (s *TaskGrpcService) RemoveTaskDueDate(ctx context.Context, req *pb.RemoveTaskDueDateRequest) (*pb.RemoveTaskDueDateResponse, error) {
+	taskID, err := uuid.Parse(req.GetTaskId())
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.handlers.Commands.V1.RemoveTaskDueAt(ctx, taskID); err != nil {
+		return nil, err
+	}
+
+	return &pb.RemoveTaskDueDateResponse{}, nil
+}
+
 // TODO: add deleteTask

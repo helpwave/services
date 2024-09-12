@@ -54,7 +54,8 @@ func (a *TaskAggregate) initEventListeners() {
 		RegisterEventListener(taskEventsV1.SubtaskCompleted, a.onSubtaskCompleted).
 		RegisterEventListener(taskEventsV1.SubtaskUncompleted, a.onSubtaskUncompleted).
 		RegisterEventListener(taskEventsV1.SubtaskDeleted, a.onSubtaskDeleted).
-		RegisterEventListener(taskEventsV1.TaskStatusUpdated, a.onTaskStatusUpdated)
+		RegisterEventListener(taskEventsV1.TaskStatusUpdated, a.onTaskStatusUpdated).
+		RegisterEventListener(taskEventsV1.TaskDueAtRemoved, a.onTaskDueAtRemoved)
 }
 
 // Event handlers
@@ -173,25 +174,13 @@ func (a *TaskAggregate) onTaskUnassigned(evt hwes.Event) error {
 	return nil
 }
 
-func (a *TaskAggregate) onTaskPublished(evt hwes.Event) error {
-	var payload taskEventsV1.TaskPublishedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
-		return err
-	}
-
+func (a *TaskAggregate) onTaskPublished(_ hwes.Event) error {
 	a.Task.Public = true
-
 	return nil
 }
 
-func (a *TaskAggregate) onTaskUnpublished(evt hwes.Event) error {
-	var payload taskEventsV1.TaskUnpublishedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
-		return err
-	}
-
+func (a *TaskAggregate) onTaskUnpublished(_ hwes.Event) error {
 	a.Task.Public = false
-
 	return nil
 }
 
@@ -289,5 +278,10 @@ func (a *TaskAggregate) onSubtaskDeleted(evt hwes.Event) error {
 
 	delete(a.Task.Subtasks, subtaskID)
 
+	return nil
+}
+
+func (a *TaskAggregate) onTaskDueAtRemoved(_ hwes.Event) error {
+	a.Task.DueAt = nil
 	return nil
 }

@@ -45,6 +45,7 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(taskEventsV1.SubtaskCompleted, p.onSubtaskCompleted)
 	p.RegisterEventListener(taskEventsV1.SubtaskUncompleted, p.onSubtaskUncompleted)
 	p.RegisterEventListener(taskEventsV1.SubtaskDeleted, p.onSubtaskDeleted)
+	p.RegisterEventListener(taskEventsV1.TaskDueAtRemoved, p.onTaskDueAtRemoved)
 }
 
 func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
@@ -373,5 +374,14 @@ func (p *Projection) onSubtaskDeleted(ctx context.Context, evt hwes.Event) (erro
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
+	return nil, nil
+}
+
+func (p *Projection) onTaskDueAtRemoved(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+	err := p.taskRepo.RemoveTaskDueAt(ctx, evt.AggregateID)
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	}
 	return nil, nil
 }

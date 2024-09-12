@@ -259,6 +259,17 @@ func (q *Queries) GetTasksWithSubtasksByPatient(ctx context.Context, patientID u
 	return items, nil
 }
 
+const removeTaskDueAt = `-- name: RemoveTaskDueAt :exec
+UPDATE tasks
+SET due_at = NULL
+WHERE id=$1
+`
+
+func (q *Queries) RemoveTaskDueAt(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, removeTaskDueAt, id)
+	return err
+}
+
 const updateSubtask = `-- name: UpdateSubtask :exec
 UPDATE subtasks
 SET name = coalesce($2, name),

@@ -24,6 +24,7 @@ const (
 	SubtaskUncompleted     = "TASK_SUBTASK_UNCOMPLETED_v1"
 	SubtaskDeleted         = "TASK_SUBTASK_DELETED_v1"
 	TaskStatusUpdated      = "TASK_STATUS_UPDATED_v1"
+	TaskDueAtRemoved       = "TASK_DUE_AT_REMOVED_v1"
 )
 
 type TaskCreatedEvent struct {
@@ -88,6 +89,8 @@ type TaskStatusUpdatedEvent struct {
 type TaskPublishedEvent struct{}
 
 type TaskUnpublishedEvent struct{}
+
+type TaskDueAtRemovedEvent struct{}
 
 func NewTaskCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, name string, patientID uuid.UUID, status pb.TaskStatus) (hwes.Event, error) {
 	payload := TaskCreatedEvent{
@@ -195,4 +198,9 @@ func NewSubtaskDeletedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uui
 		SubtaskID: subtaskID.String(),
 	}
 	return hwes.NewEvent(a, SubtaskDeleted, hwes.WithContext(ctx), hwes.WithData(payload))
+}
+
+func NewTaskDueAtRemovedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
+	payload := TaskDueAtRemovedEvent{}
+	return hwes.NewEvent(a, TaskDueAtRemoved, hwes.WithContext(ctx), hwes.WithData(payload))
 }

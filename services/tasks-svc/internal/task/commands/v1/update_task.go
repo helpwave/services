@@ -4,15 +4,15 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
-	"hwauthz"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"
 )
 
-type UpdateTaskCommandHandler func(ctx context.Context, taskID uuid.UUID, name *string, description *string, status *pb.TaskStatus, public *bool) error
+type UpdateTaskCommandHandler func(ctx context.Context, taskID uuid.UUID, name *string, description *string, status *pb.TaskStatus, public *bool, dueAt *timestamppb.Timestamp) error
 
-func NewUpdateTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) UpdateTaskCommandHandler {
-	return func(ctx context.Context, taskID uuid.UUID, name *string, description *string, status *pb.TaskStatus, public *bool) error {
+func NewUpdateTaskCommandHandler(as hwes.AggregateStore) UpdateTaskCommandHandler {
+	return func(ctx context.Context, taskID uuid.UUID, name *string, description *string, status *pb.TaskStatus, public *bool, dueAt *timestamppb.Timestamp) error {
 		a, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
 		if err != nil {
 			return err
@@ -38,6 +38,12 @@ func NewUpdateTaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) Up
 
 		if public != nil && a.Task.Public != *public {
 			if err := a.UpdateTaskPublic(ctx, *public); err != nil {
+				return err
+			}
+		}
+
+		if dueAt != nil {
+			if err := a.UpdateDueAt(ctx, dueAt.AsTime()); err != nil {
 				return err
 			}
 		}
