@@ -71,6 +71,71 @@ func (q *Queries) DeleteSubtask(ctx context.Context, id uuid.UUID) error {
 	return err
 }
 
+const getTaskWithPatientById = `-- name: GetTaskWithPatientById :many
+SELECT
+	tasks.id, tasks.name, tasks.description, tasks.status, tasks.assigned_user_id, tasks.patient_id, tasks.public, tasks.created_by, tasks.due_at, tasks.created_at,
+	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged,
+	subtasks.id as subtask_id,
+	subtasks.name as subtask_name,
+	subtasks.done as subtask_done,
+	subtasks.created_by as subtask_created_by
+FROM tasks
+	JOIN patients ON tasks.patient_id = patients.id
+	LEFT JOIN subtasks ON subtasks.task_id = tasks.id
+WHERE tasks.id = $1
+`
+
+type GetTaskWithPatientByIdRow struct {
+	Task             Task
+	Patient          Patient
+	SubtaskID        uuid.NullUUID
+	SubtaskName      *string
+	SubtaskDone      *bool
+	SubtaskCreatedBy uuid.NullUUID
+}
+
+func (q *Queries) GetTaskWithPatientById(ctx context.Context, id uuid.UUID) ([]GetTaskWithPatientByIdRow, error) {
+	rows, err := q.db.Query(ctx, getTaskWithPatientById, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetTaskWithPatientByIdRow{}
+	for rows.Next() {
+		var i GetTaskWithPatientByIdRow
+		if err := rows.Scan(
+			&i.Task.ID,
+			&i.Task.Name,
+			&i.Task.Description,
+			&i.Task.Status,
+			&i.Task.AssignedUserID,
+			&i.Task.PatientID,
+			&i.Task.Public,
+			&i.Task.CreatedBy,
+			&i.Task.DueAt,
+			&i.Task.CreatedAt,
+			&i.Patient.ID,
+			&i.Patient.HumanReadableIdentifier,
+			&i.Patient.Notes,
+			&i.Patient.BedID,
+			&i.Patient.CreatedAt,
+			&i.Patient.UpdatedAt,
+			&i.Patient.IsDischarged,
+			&i.SubtaskID,
+			&i.SubtaskName,
+			&i.SubtaskDone,
+			&i.SubtaskCreatedBy,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getTasksWithPatientByAssignee = `-- name: GetTasksWithPatientByAssignee :many
 SELECT
 	tasks.id, tasks.name, tasks.description, tasks.status, tasks.assigned_user_id, tasks.patient_id, tasks.public, tasks.created_by, tasks.due_at, tasks.created_at,

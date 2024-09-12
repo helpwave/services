@@ -56,3 +56,16 @@ FROM patients
 		 JOIN tasks ON tasks.patient_id = patients.id
 		 LEFT JOIN subtasks ON subtasks.task_id = tasks.id
 WHERE tasks.assigned_user_id = $1;
+
+-- name: GetTaskWithPatientById :many
+SELECT
+	sqlc.embed(tasks),
+	sqlc.embed(patients),
+	subtasks.id as subtask_id,
+	subtasks.name as subtask_name,
+	subtasks.done as subtask_done,
+	subtasks.created_by as subtask_created_by
+FROM tasks
+	JOIN patients ON tasks.patient_id = patients.id
+	LEFT JOIN subtasks ON subtasks.task_id = tasks.id
+WHERE tasks.id = $1;

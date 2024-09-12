@@ -129,7 +129,7 @@ func (a *TaskAggregate) onTaskDueAtUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	a.Task.DueAt = payload.DueAt
+	a.Task.DueAt = &payload.DueAt
 
 	return nil
 }

@@ -64,7 +64,7 @@ message GetTaskResponse {
   TaskStatus status = 6;
   google.protobuf.Timestamp created_at = 7;
   bool public = 8;
-  google.protobuf.Timestamp due_at = 9;
+  optional google.protobuf.Timestamp due_at = 9;
   string created_by = 10;
   Patient patient = 11;
 

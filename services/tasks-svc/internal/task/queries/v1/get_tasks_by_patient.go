@@ -37,11 +37,16 @@ func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 					AssignedUser: row.Task.AssignedUserID, // TODO: #760
 					PatientID:    row.Task.PatientID,
 					Public:       row.Task.Public,
-					DueAt:        row.Task.DueAt.Time,
+					DueAt:        nil, // will be set below
 					CreatedBy:    row.Task.CreatedBy,
 					CreatedAt:    row.Task.CreatedAt.Time,
 					Subtasks:     make(map[uuid.UUID]models.Subtask),
 				}
+
+				if row.Task.DueAt.Valid {
+					task.DueAt = &row.Task.DueAt.Time
+				}
+
 				tasks = append(tasks, task)
 				tasksMap[row.Task.ID] = len(tasks) - 1
 			}

@@ -15,7 +15,7 @@ type Task struct {
 	Description  string
 	Status       pb.TaskStatus
 	Public       bool
-	DueAt        time.Time
+	DueAt        *time.Time
 	PatientID    uuid.UUID
 	AssignedUser uuid.NullUUID
 	Subtasks     map[uuid.UUID]Subtask

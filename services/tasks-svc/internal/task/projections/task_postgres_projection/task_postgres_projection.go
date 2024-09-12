@@ -39,6 +39,7 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(taskEventsV1.TaskAssigned, p.onTaskAssigned)
 	p.RegisterEventListener(taskEventsV1.TaskUnassigned, p.onTaskUnassigned)
 	p.RegisterEventListener(taskEventsV1.TaskPublished, p.onTaskPublished)
+	p.RegisterEventListener(taskEventsV1.TaskUnpublished, p.onTaskUnpublished)
 	p.RegisterEventListener(taskEventsV1.SubtaskCreated, p.onSubtaskCreated)
 	p.RegisterEventListener(taskEventsV1.SubtaskNameUpdated, p.onSubtaskNameUpdated)
 	p.RegisterEventListener(taskEventsV1.SubtaskCompleted, p.onSubtaskCompleted)
@@ -229,6 +230,16 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (erro
 
 func (p *Projection) onTaskPublished(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, Public: hwutil.PtrTo(true)})
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	}
+
+	return nil, nil
+}
+
+func (p *Projection) onTaskUnpublished(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{ID: evt.AggregateID, Public: hwutil.PtrTo(false)})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)

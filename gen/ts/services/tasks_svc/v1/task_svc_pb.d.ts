@@ -353,6 +353,11 @@ export namespace GetTaskResponse {
     _ASSIGNED_USER_ID_NOT_SET = 0,
     ASSIGNED_USER_ID = 4,
   }
+
+  export enum DueAtCase { 
+    _DUE_AT_NOT_SET = 0,
+    DUE_AT = 9,
+  }
 }
 
 export class GetTasksByPatientRequest extends jspb.Message {
