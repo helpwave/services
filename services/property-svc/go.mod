@@ -18,6 +18,8 @@ require (
 	gen v0.0.0
 	github.com/EventStore/EventStore-Client-Go/v4 v4.1.0
 	github.com/Mariscal6/testcontainers-spicedb-go v0.1.0
+	github.com/authzed/authzed-go v0.15.0
+	github.com/authzed/grpcutil v0.0.0-20240123194739-2ea1e3d2d98b
 	github.com/dapr/go-sdk v1.11.0
 	github.com/fatih/structs v1.1.0
 	github.com/golang-migrate/migrate/v4 v4.17.1
@@ -28,6 +30,7 @@ require (
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.9.0
 	github.com/testcontainers/testcontainers-go v0.33.0
+	github.com/testcontainers/testcontainers-go/modules/postgres v0.33.0
 	google.golang.org/grpc v1.66.1
 	google.golang.org/protobuf v1.34.2
 	hwauthz v0.0.0
@@ -42,8 +45,6 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
 	github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
-	github.com/authzed/authzed-go v0.15.0 // indirect
-	github.com/authzed/grpcutil v0.0.0-20240123194739-2ea1e3d2d98b // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d // indirect
 	github.com/containerd/containerd v1.7.18 // indirect
@@ -104,7 +105,6 @@ require (
 	github.com/shirou/gopsutil/v3 v3.23.12 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
-	github.com/testcontainers/testcontainers-go/modules/postgres v0.33.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
 	github.com/tklauser/numcpus v0.6.1 // indirect
 	github.com/vgarvardt/pgx-google-uuid/v5 v5.6.0 // indirect
