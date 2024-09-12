@@ -1,4 +1,4 @@
-package property_postgres_projection
+package postgres_projection
 
 import (
 	"context"
@@ -9,7 +9,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	zlog "github.com/rs/zerolog/log"
-	"hwauthz"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
@@ -17,23 +16,20 @@ import (
 	"property-svc/internal/property/aggregate"
 	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/models"
-	"property-svc/internal/property/perm"
 	"property-svc/repos/property_repo"
 )
 
 type Projection struct {
 	*custom.CustomProjection
 	db           hwdb.DBTX
-	authz        hwauthz.AuthZ
 	propertyRepo *property_repo.Queries
 }
 
-func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX, authz hwauthz.AuthZ) *Projection {
+func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-postgres-projection", serviceName)
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)}),
 		db:               db,
-		authz:            authz,
 		propertyRepo:     property_repo.New(db)}
 	p.initEventListeners()
 	return p
@@ -68,11 +64,6 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	if evt.CommitterOrganizationID == nil {
-		return fmt.Errorf("organization is missing from event"), hwutil.PtrTo(esdb.NackActionPark)
-	}
-	organizationID := *evt.CommitterOrganizationID
-
 	value, found := pb.SubjectType_value[payload.SubjectType]
 	if !found {
 		return fmt.Errorf("subject_type %s invalid", payload.SubjectType), hwutil.PtrTo(esdb.NackActionPark)
@@ -85,22 +76,8 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	}
 	fieldType := (pb.FieldType)(value)
 
-	// start tx
-	tx, err := p.db.Begin(ctx)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to begin transaction")
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
-	}
-	defer func() {
-		err := tx.Rollback(ctx)
-		if !errors.Is(err, pgx.ErrTxClosed) {
-			log.Error().Err(err).Msg("rollback failed")
-		}
-	}()
-	repo := p.propertyRepo.WithTx(tx)
-
 	// create query
-	err = repo.CreateProperty(ctx, property_repo.CreatePropertyParams{
+	err = p.propertyRepo.CreateProperty(ctx, property_repo.CreatePropertyParams{
 		ID:          propertyID,
 		SubjectType: int32(subjectType),
 		FieldType:   int32(fieldType),
@@ -110,20 +87,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
-	// add to permission graph
-	_, err = p.authz.
-		Create(hwauthz.NewRelationship(
-			perm.Organization(organizationID),
-			perm.PropertyOrganization,
-			perm.Property(propertyID))).
-		Commit(ctx)
-
 	if err != nil {
-		return err, hwutil.PtrTo(esdb.NackActionRetry)
-	}
-
-	// commit db
-	if err := tx.Commit(ctx); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 

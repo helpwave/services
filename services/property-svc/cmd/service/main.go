@@ -15,7 +15,8 @@ import (
 	propertyViews "property-svc/internal/property-view/api"
 	"property-svc/internal/property-view/projections/property_rules_postgres"
 	property "property-svc/internal/property/api"
-	"property-svc/internal/property/projections/property_postgres_projection"
+	propertypostgresprojection "property-svc/internal/property/projections/postgres_projection"
+	propertyspicedbprojection "property-svc/internal/property/projections/spicedb_projection"
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	psh "property-svc/internal/property-set/handlers"
@@ -41,9 +42,14 @@ func Main(version string, ready func()) {
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
 
-	propertyPostgresProjection := property_postgres_projection.
-		NewProjection(eventStore, ServiceName, hwdb.GetDB(), authz)
+	// property projections
+	propertyPostgresProjection := propertypostgresprojection.
+		NewProjection(eventStore, ServiceName, hwdb.GetDB())
 
+	propertySpiceDBProjection := propertyspicedbprojection.
+		NewProjection(eventStore, ServiceName, authz)
+
+	// property-value projections
 	propertyValuePostgresProjection := property_value_postgres_projection.
 		NewProjection(eventStore, ServiceName, hwdb.GetDB())
 
@@ -61,6 +67,13 @@ func Main(version string, ready func()) {
 	go func() {
 		if err := propertyPostgresProjection.Subscribe(ctx); err != nil {
 			log.Err(err).Msg("error during property-postgres projection subscription")
+			cancel()
+		}
+	}()
+
+	go func() {
+		if err := propertySpiceDBProjection.Subscribe(ctx); err != nil {
+			log.Err(err).Msg("error during property-spicedb projection subscription")
 			cancel()
 		}
 	}()

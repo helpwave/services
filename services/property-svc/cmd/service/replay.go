@@ -11,7 +11,7 @@ import (
 	propertyValueAggregate "property-svc/internal/property-value/aggregate"
 	"property-svc/internal/property-value/projections/property_value_postgres_projection"
 	propertyAggregate "property-svc/internal/property/aggregate"
-	"property-svc/internal/property/projections/property_postgres_projection"
+	"property-svc/internal/property/projections/postgres_projection"
 	"telemetry"
 )
 
@@ -38,7 +38,7 @@ func replay(ctx context.Context, eventStore *esdb.Client, authz hwauthz.AuthZ) e
 
 	log.Info().Msg("starting event replay")
 
-	propertyPostgresProjection := property_postgres_projection.NewProjection(eventStore, ServiceName, tx, authz)
+	propertyPostgresProjection := postgres_projection.NewProjection(eventStore, ServiceName, tx, authz)
 	propertyValuePostgresProjection := property_value_postgres_projection.NewProjection(eventStore, ServiceName, tx)
 
 	err = eventstoredb.Replay(
