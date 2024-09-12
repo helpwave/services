@@ -14,6 +14,10 @@ import (
 	"strings"
 )
 
+//
+// This module is intended for CLIs, and thus panics, instead of returning errors
+//
+
 const migrationResourceType = "spice_schema_migrations/migration"
 const migrationResourceId = "current"
 const migrationRelation = "version"
@@ -151,7 +155,6 @@ func GetDiskVersion(schemaDir string) int {
 }
 
 func Migrate(ctx context.Context, schemaDir string, client *authzed.Client) {
-
 	diskVersion := GetDiskVersion(schemaDir)
 	currentVersion := GetCurrentVersion(ctx, client)
 

@@ -17,11 +17,6 @@ import (
 	"hwauthz/spicedb/migrate"
 )
 
-const migrationResourceType = "spice_schema_migrations/migration"
-const migrationResourceId = "current"
-const migrationRelation = "version"
-const migrationSubjectType = "spice_schema_migrations/version"
-
 // CLI is filled by kong.Parse in main
 var CLI struct {
 	Migrate struct {

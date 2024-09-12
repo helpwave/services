@@ -1,13 +1,13 @@
-module spice
+module devtools
 
 go 1.23.0
 
 replace (
-	common => ../../libs/common
-	hwauthz => ../../libs/hwauthz
-	hwlocale => ../../libs/hwlocale
-	hwutil => ../../libs/hwutil
-	telemetry => ../../libs/telemetry
+	common => ./libs/common
+	hwauthz => ./libs/hwauthz
+	hwlocale => ./libs/hwlocale
+	hwutil => ./libs/hwutil
+	telemetry => ./libs/telemetry
 )
 
 require (
