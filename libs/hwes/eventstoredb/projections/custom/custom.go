@@ -169,7 +169,7 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 	ctx, span, log := telemetry.StartSpan(ctx, "custom_projection.processReceivedEventFromStream")
 	defer span.End()
 
-	telemetry.SetSpanStr(ctx, "subscription_group_name", p.subscriptionGroupName)
+	log = log.With().Str("subscription_group_name", p.subscriptionGroupName).Logger()
 
 	if esdbEvent.SubscriptionDropped != nil {
 		log.Error().Err(esdbEvent.SubscriptionDropped.Error).Msg("Subscription dropped")

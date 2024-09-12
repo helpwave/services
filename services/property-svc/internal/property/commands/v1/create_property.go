@@ -46,7 +46,7 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 		}
 
 		if fieldTypeData != nil {
-			if fieldTypeData.SelectData != nil && fieldType == pb.FieldType_FIELD_TYPE_SELECT {
+			if fieldTypeData.SelectData != nil && (fieldType == pb.FieldType_FIELD_TYPE_SELECT || fieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT) {
 				if err := a.CreateFieldTypeData(ctx, *fieldTypeData); err != nil {
 					return err
 				}

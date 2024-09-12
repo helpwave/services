@@ -343,7 +343,7 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionRetry)
 		}
-	} else if property.FieldType == int32(pb.FieldType_FIELD_TYPE_SELECT) {
+	} else if property.FieldType == int32(pb.FieldType_FIELD_TYPE_SELECT) || property.FieldType == int32(pb.FieldType_FIELD_TYPE_MULTI_SELECT) {
 		// if the property was created with field_type_select but selectData wasn't created initially we have to do it here
 		sdID, err := propertyRepo.CreateSelectData(ctx, payload.NewAllowFreetext)
 		if err := hwdb.Error(ctx, err); err != nil {

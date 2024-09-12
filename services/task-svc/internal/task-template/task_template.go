@@ -27,13 +27,11 @@ func NewServiceServer() *ServiceServer {
 func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskTemplateRequest) (*pb.CreateTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwdb.GetDB()
-	tx, err := db.Begin(ctx)
+	tx, rollback, err := hwdb.BeginTx(db, ctx)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "could not start tx: %s", err.Error())
+		return nil, err
 	}
-	defer func() {
-		_ = tx.Rollback(ctx)
-	}()
+	defer rollback()
 	templateRepo := task_template_repo.New(db).WithTx(tx)
 
 	organizationID, err := common.GetOrganizationID(ctx)

@@ -55,7 +55,7 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 		}
 
 		if allowFreetext != nil {
-			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT {
+			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT || a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
 				if err := a.UpdateAllowFreetext(ctx, *allowFreetext); err != nil {
 					return err
 				}
@@ -63,7 +63,7 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 		}
 
 		if upsertOptions != nil {
-			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT {
+			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT || a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
 				if err := a.FieldTypeDataUpsertOptions(ctx, *upsertOptions); err != nil {
 					return err
 				}
@@ -73,7 +73,7 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ
 
 		if len(removeOptions) > 0 {
 			// TODO: check if remove options exist in aggregate SelectOptions?
-			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT {
+			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT || a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
 				if err := a.FieldTypeDataRemoveOptions(ctx, removeOptions); err != nil {
 					return err
 				}
