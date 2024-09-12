@@ -245,8 +245,6 @@ func startEventstore(ctx context.Context) (endpoint string, teardown func()) {
 	if err != nil {
 		zlog.Fatal().Err(err).Msg("could not start eventstore")
 	}
-	info, err := container.Inspect(ctx)
-	zlog.Info().Interface("info", info).Err(err).Msg("INFO")
 	endpoint, err = container.PortEndpoint(ctx, "2113", "")
 	if err != nil {
 		zlog.Fatal().Err(err).Msg("could not get access to eventstore endpoint")
