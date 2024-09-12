@@ -3,11 +3,13 @@ package stories
 import (
 	"context"
 	"fmt"
+	spicedb "github.com/Mariscal6/testcontainers-spicedb-go"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	zlog "github.com/rs/zerolog/log"
 	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
 	"os/signal"
 	"property-svc/cmd/service"
@@ -21,6 +23,7 @@ import (
 
 const ImagePostgres = "postgres:15.6"
 const ImageEventstore = "eventstore/eventstore:23.10.1-jammy"
+const ImageSpiceDB = "authzed/spicedb:v1.31.0"
 
 const PostgresUser = "postgres"
 const PostgresPassword = "postgres"
@@ -29,9 +32,12 @@ const PostgresDb = "postgres"
 const EsUser = "admin"
 const EsPassword = "changeit"
 
+const SpiceDBToken = "helpwave"
+
 func Setup(m *testing.M) {
+	ctx, cancel := context.WithCancel(context.Background())
 	zlog.Info().Msg("starting containers")
-	postgresEndpoint, eventstoreEndpoint, teardownContainers := startContainers()
+	postgresEndpoint, eventstoreEndpoint, spicedbEndpoint, teardownContainers := startContainers(ctx)
 	zlog.Info().Str("postgresEndpoint", postgresEndpoint).Str("eventstoreEndpoint", eventstoreEndpoint).Msg("containers are up")
 
 	// Set POSTGRES_DSN
@@ -70,6 +76,13 @@ func Setup(m *testing.M) {
 		zlog.Fatal().Err(err).Msg("Could not set EVENTSTORE_CS")
 	}
 
+	// Set SpiceDB
+	_ = os.Setenv("ZED_ENDPOINT", spicedbEndpoint)
+	_ = os.Setenv("ZED_INSECURE", "true")
+	_ = os.Setenv("ZED_TOKEN", SpiceDBToken)
+
+	// Run SpiceDB migration
+
 	// Set common variables
 	_ = os.Setenv("MODE", "development")
 	_ = os.Setenv("LOG_LEVEL", "trace")
@@ -92,34 +105,48 @@ func Setup(m *testing.M) {
 	signal.Notify(make(chan os.Signal, 1), os.Interrupt)
 	time.Sleep(time.Second)
 	teardownContainers()
+	cancel()
 	os.Exit(exitCode)
 }
 
-func startContainers() (postgresEndpoint, eventstoreEndpoint string, teardown func()) {
+func startContainers(ctx context.Context) (postgresEndpoint, eventstoreEndpoint, spiceDbEndpoint string, teardown func()) {
 	var wg sync.WaitGroup
 	var postgresTeardown func()
 	var eventstoreTeardown func()
+	var spiceDbTeardown func()
 
-	wg.Add(2)
+	wg.Add(1)
 	go func() {
-		postgresEndpoint, postgresTeardown = startPostgres()
+		postgresEndpoint, postgresTeardown = startPostgres(ctx)
 		wg.Done()
 	}()
+	wg.Add(1)
 	go func() {
-		eventstoreEndpoint, eventstoreTeardown = startEventstore()
+		eventstoreEndpoint, eventstoreTeardown = startEventstore(ctx)
+		wg.Done()
+	}()
+	wg.Add(1)
+	go func() {
+		spiceDbEndpoint, spiceDbTeardown = startSpiceDB(ctx)
 		wg.Done()
 	}()
 
 	wg.Wait()
 	teardown = func() {
 		var wg sync.WaitGroup
-		wg.Add(2)
+		wg.Add(1)
 		go func() {
 			postgresTeardown()
 			wg.Done()
 		}()
+		wg.Add(1)
 		go func() {
 			eventstoreTeardown()
+			wg.Done()
+		}()
+		wg.Add(1)
+		go func() {
+			spiceDbTeardown()
 			wg.Done()
 		}()
 		wg.Wait()
@@ -129,22 +156,17 @@ func startContainers() (postgresEndpoint, eventstoreEndpoint string, teardown fu
 	return
 }
 
-func startPostgres() (endpoint string, teardown func()) {
-	ctx := context.Background()
-	req := testcontainers.ContainerRequest{
-		Image:        ImagePostgres,
-		Env:          map[string]string{"POSTGRES_PASSWORD": PostgresPassword},
-		ExposedPorts: []string{"5432"},
-		WaitingFor:   wait.ForExec([]string{"pg_isready", "-U", PostgresUser, "-d", PostgresDb, "-q"}),
-	}
-	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
-		ContainerRequest: req,
-		Started:          true,
-	})
+func startPostgres(ctx context.Context) (endpoint string, teardown func()) {
+	container, err := postgres.Run(ctx,
+		ImagePostgres,
+		postgres.WithDatabase(PostgresDb),
+		postgres.WithUsername(PostgresUser),
+		postgres.WithPassword(PostgresPassword),
+	)
 	if err != nil {
 		zlog.Fatal().Err(err).Msg("Could not start postgres")
 	}
-	endpoint, err = container.Endpoint(context.Background(), "")
+	endpoint, err = container.Endpoint(ctx, "")
 	if err != nil {
 		zlog.Fatal().Err(err).Msg("Could not get access to postgres endpoint")
 	}
@@ -155,43 +177,50 @@ func startPostgres() (endpoint string, teardown func()) {
 	}
 }
 
-func startEventstore() (endpoint string, teardown func()) {
-	ctx := context.Background()
+func startEventstore(ctx context.Context) (endpoint string, teardown func()) {
 	req := testcontainers.ContainerRequest{
-		Image:        ImageEventstore,
-		Env:          map[string]string{"EVENTSTORE_INSECURE": "true", "EVENTSTORE_RUN_PROJECTIONS": "All", "EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP": "true", "EVENTSTORE_NODE_IP": "0.0.0.0", "EVENTSTORE_CLUSTER_SIZE": "1"},
-		ExposedPorts: []string{"2113"},
-		WaitingFor:   wait.ForHealthCheck(),
+		Image: ImageEventstore,
+		Env: map[string]string{
+			"EVENTSTORE_INSECURE":                  "true",
+			"EVENTSTORE_RUN_PROJECTIONS":           "All",
+			"EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP": "true",
+			"EVENTSTORE_NODE_IP":                   "0.0.0.0",
+			"EVENTSTORE_CLUSTER_SIZE":              "1",
+		},
+		WaitingFor: wait.ForHealthCheck(),
 	}
 	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		ContainerRequest: req,
 		Started:          true,
 	})
 	if err != nil {
-		zlog.Fatal().Err(err).Msg("Could not start eventstore")
+		zlog.Fatal().Err(err).Msg("could not start eventstore")
 	}
-
-	// FIXME: for some reason wait.ForExposedPort() does not work, this workaround does though?
-	initialAttempts := 20
-	attempts := initialAttempts
-	time.Sleep(time.Second * 3)
-
-	for attempts > 0 {
-		attempts--
-		endpoint, err = container.Endpoint(context.Background(), "")
-		if err == nil {
-			break
-		}
-		time.Sleep(time.Second)
-	}
+	info, err := container.Inspect(ctx)
+	zlog.Info().Interface("info", info).Err(err).Msg("INFO")
+	endpoint, err = container.PortEndpoint(ctx, "2113", "")
 	if err != nil {
-		zlog.Fatal().Err(err).Msg("Could not get access to eventstore endpoint")
-	} else {
-		zlog.Info().Msgf("eventstore took %d attempts", initialAttempts-attempts)
+		zlog.Fatal().Err(err).Msg("could not get access to eventstore endpoint")
 	}
 	return endpoint, func() {
 		if err := container.Terminate(ctx); err != nil {
-			zlog.Fatal().Err(err).Msg("Could not stop eventstore")
+			zlog.Fatal().Err(err).Msg("could not stop eventstore")
+		}
+	}
+}
+
+func startSpiceDB(ctx context.Context) (endpoint string, teardown func()) {
+	container, err := spicedb.Run(ctx, ImageSpiceDB, spicedb.SecretKeyCustomizer{SecretKey: SpiceDBToken})
+	if err != nil {
+		zlog.Fatal().Err(err).Msg("could not start spicedb")
+	}
+	endpoint = container.GetEndpoint(ctx)
+	if err != nil {
+		zlog.Fatal().Err(err).Msg("could not get access to spicedb endpoint")
+	}
+	return endpoint, func() {
+		if err := container.Terminate(ctx); err != nil {
+			zlog.Fatal().Err(err).Msg("could not stop endpoint")
 		}
 	}
 }
