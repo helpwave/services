@@ -75,13 +75,11 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 	}
 	fieldType := (pb.FieldType)(property.FieldType)
 
-	tx, err := p.db.Begin(ctx)
+	tx, rollback, err := hwdb.BeginTx(p.db, ctx)
 	if err != nil {
 		return fmt.Errorf("could not start tx: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
 	}
-	defer func() {
-		_ = tx.Rollback(ctx)
-	}()
+	defer rollback()
 
 	repo := p.propertyValueRepo.WithTx(tx)
 
@@ -219,13 +217,11 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 			return err, hwutil.PtrTo(esdb.NackActionRetry)
 		}
 	} else if fieldType == pb.FieldType_FIELD_TYPE_SELECT || fieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
-		tx, err := p.db.Begin(ctx)
+		tx, rollback, err := hwdb.BeginTx(p.db, ctx)
 		if err != nil {
 			return fmt.Errorf("could not start tx: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
 		}
-		defer func() {
-			_ = tx.Rollback(ctx)
-		}()
+		defer rollback()
 
 		propertyValueRepo := p.propertyValueRepo.WithTx(tx)
 
