@@ -87,13 +87,18 @@ func (m TaskPropertyMatchers) ToMap() map[string]interface{} {
 }
 
 func (m TaskPropertyMatchers) IsPropertyAlwaysIncluded(ctx context.Context, propertyID uuid.UUID) (bool, error) {
-	return task_views_repo.
-		New(hwdb.GetDB()).
-		IsTaskPropertyAlwaysIncluded(ctx, task_views_repo.IsTaskPropertyAlwaysIncludedParams{
-			PropertyID: propertyID,
-			WardID:     m.WardID,
-			TaskID:     m.TaskID,
-		})
+	repo := task_views_repo.New(hwdb.GetDB())
+	query := hwdb.Optional(repo.IsTaskPropertyAlwaysIncluded)
+	alwaysInclude, err := query(ctx, task_views_repo.IsTaskPropertyAlwaysIncludedParams{
+		PropertyID: propertyID,
+		WardID:     m.WardID,
+		TaskID:     m.TaskID,
+	})
+	err = hwdb.Error(ctx, err)
+	if alwaysInclude == nil || *alwaysInclude == nil {
+		return false, err
+	}
+	return **alwaysInclude, err
 }
 
 func TaskPropertyMatchersFromMap(m map[string]interface{}) (TaskPropertyMatchers, bool) {

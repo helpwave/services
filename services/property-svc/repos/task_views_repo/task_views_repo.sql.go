@@ -97,26 +97,16 @@ func (q *Queries) GetTaskRuleIdUsingExactMatchers(ctx context.Context, arg GetTa
 
 const isTaskPropertyAlwaysIncluded = `-- name: IsTaskPropertyAlwaysIncluded :one
 SELECT
-	CASE
-		-- No result exists or dont_always_include is TRUE, return false
-		WHEN result.property_id IS NULL OR result.dont_always_include = TRUE THEN FALSE
-		-- Otherwise, return true
-		ELSE TRUE
-		END as should_include
-FROM (
-	 SELECT
-		 list_items.property_id,
-		 list_items.dont_always_include
-	 FROM task_property_view_rules as rules
-			  JOIN property_view_filter_always_include_items as list_items ON list_items.rule_id = rules.rule_id
-	 WHERE
-		 list_items.property_id = $1
-	   AND (rules.ward_id = $2 OR rules.ward_id IS NULL)
-	   AND (rules.task_id = $3 OR rules.task_id IS NULL)
-	 ORDER BY
-		 calc_rule_specificity(rules.task_id IS NOT NULL, rules.ward_id IS NOT NULL) DESC
-	 LIMIT 1
- ) as result
+	NOT list_items.dont_always_include
+FROM task_property_view_rules as rules
+JOIN property_view_filter_always_include_items as list_items ON list_items.rule_id = rules.rule_id
+WHERE
+	list_items.property_id = $1
+	AND (rules.ward_id = $2 OR rules.ward_id IS NULL)
+	AND (rules.task_id = $3 OR rules.task_id IS NULL)
+ORDER BY
+	calc_rule_specificity(rules.task_id IS NOT NULL, rules.ward_id IS NOT NULL) DESC
+LIMIT 1
 `
 
 type IsTaskPropertyAlwaysIncludedParams struct {
@@ -125,9 +115,9 @@ type IsTaskPropertyAlwaysIncludedParams struct {
 	TaskID     uuid.NullUUID
 }
 
-func (q *Queries) IsTaskPropertyAlwaysIncluded(ctx context.Context, arg IsTaskPropertyAlwaysIncludedParams) (bool, error) {
+func (q *Queries) IsTaskPropertyAlwaysIncluded(ctx context.Context, arg IsTaskPropertyAlwaysIncludedParams) (*bool, error) {
 	row := q.db.QueryRow(ctx, isTaskPropertyAlwaysIncluded, arg.PropertyID, arg.WardID, arg.TaskID)
-	var should_include bool
-	err := row.Scan(&should_include)
-	return should_include, err
+	var column_1 *bool
+	err := row.Scan(&column_1)
+	return column_1, err
 }

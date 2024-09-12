@@ -25,23 +25,13 @@ ORDER BY specificity;
 
 -- name: IsPatientPropertyAlwaysIncluded :one
 SELECT
-	CASE
-		-- No result exists or dont_always_include is TRUE, return false
-		WHEN result.property_id IS NULL OR result.dont_always_include = TRUE THEN FALSE
-		-- Otherwise, return true
-		ELSE TRUE
-		END as should_include
-FROM (
-	 SELECT
-		 list_items.property_id,
-		 list_items.dont_always_include
-	 FROM patient_property_view_rules as rules
-			  JOIN property_view_filter_always_include_items as list_items ON list_items.rule_id = rules.rule_id
-	 WHERE
-		 list_items.property_id = @property_id
-	   AND (rules.ward_id = @ward_id OR rules.ward_id IS NULL)
-	   AND (rules.patient_id = @patient_id OR rules.patient_id IS NULL)
-	 ORDER BY
-		 calc_rule_specificity(rules.patient_id IS NOT NULL, rules.ward_id IS NOT NULL) DESC
-	 LIMIT 1
- ) as result;
+	NOT list_items.dont_always_include
+FROM patient_property_view_rules as rules
+JOIN property_view_filter_always_include_items as list_items ON list_items.rule_id = rules.rule_id
+WHERE
+	list_items.property_id = @property_id
+	AND (rules.ward_id = @ward_id OR rules.ward_id IS NULL)
+	AND (rules.patient_id = @patient_id OR rules.patient_id IS NULL)
+ORDER BY
+	calc_rule_specificity(rules.patient_id IS NOT NULL, rules.ward_id IS NOT NULL) DESC
+LIMIT 1;
