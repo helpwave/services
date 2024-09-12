@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"fmt"
 	"github.com/google/uuid"
 	"hwes"
 	"property-svc/internal/property-view/aggregate"
@@ -15,21 +16,20 @@ func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePrope
 
 		ruleID, err := matchers.FindExactRuleId(ctx)
 		if err != nil {
-			return err
+			return fmt.Errorf("updatePropertyViewRuleCommandHandler: cant find exact rule id: %w", err)
 		}
 
 		// upsert
 		var ruleAgg *aggregate.PropertyViewRuleAggregate
 		if ruleID != nil {
 			// update
-			
+
 			if ruleAgg, err = aggregate.LoadPropertyViewRuleAggregate(ctx, as, *ruleID); err != nil {
 				return err
 			}
-			
 
 			if err := ruleAgg.UpdateLists(ctx, *ruleID, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude); err != nil {
-				return err
+				return fmt.Errorf("updatePropertyViewRuleCommandHandler: cant update lists: %w", err)
 			}
 		} else {
 			// create
@@ -43,7 +43,7 @@ func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePrope
 				// remove makes no sense, ignoring
 			}
 			if err := ruleAgg.Create(ctx, rule); err != nil {
-				return err
+				return fmt.Errorf("updatePropertyViewRuleCommandHandler: cant create: %w", err)
 			}
 		}
 
