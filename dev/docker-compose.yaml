@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
     environment:
       EVENTSTORE_TELEMETRY_OPTOUT: "true"
-      # EVENTSTORE_LOG_LEVEL: "Warning"
+      EVENTSTORE_LOG_LEVEL: "Warning"
       EVENTSTORE_INSECURE: "true"
       EVENTSTORE_RUN_PROJECTIONS: "All"
       EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP: "true"
