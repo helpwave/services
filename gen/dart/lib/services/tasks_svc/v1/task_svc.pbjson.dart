@@ -40,7 +40,10 @@ const CreateTaskRequest_SubTask$json = {
   '1': 'SubTask',
   '2': [
     {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'done', '3': 2, '4': 1, '5': 8, '10': 'done'},
+    {'1': 'done', '3': 2, '4': 1, '5': 8, '9': 0, '10': 'done', '17': true},
+  ],
+  '8': [
+    {'1': '_done'},
   ],
 };
 
@@ -53,9 +56,9 @@ final $typed_data.Uint8List createTaskRequestDescriptor = $convert.base64Decode(
     'ZXMudGFza3Nfc3ZjLnYxLlRhc2tTdGF0dXNIAlINaW5pdGlhbFN0YXR1c4gBARItChBhc3NpZ2'
     '5lZF91c2VyX2lkGAcgASgJSANSDmFzc2lnbmVkVXNlcklkiAEBEkwKCHN1YnRhc2tzGAggAygL'
     'MjAuc2VydmljZXMudGFza3Nfc3ZjLnYxLkNyZWF0ZVRhc2tSZXF1ZXN0LlN1YlRhc2tSCHN1Yn'
-    'Rhc2tzGjEKB1N1YlRhc2sSEgoEbmFtZRgBIAEoCVIEbmFtZRISCgRkb25lGAIgASgIUgRkb25l'
-    'Qg4KDF9kZXNjcmlwdGlvbkIJCgdfcHVibGljQhEKD19pbml0aWFsX3N0YXR1c0ITChFfYXNzaW'
-    'duZWRfdXNlcl9pZA==');
+    'Rhc2tzGj8KB1N1YlRhc2sSEgoEbmFtZRgBIAEoCVIEbmFtZRIXCgRkb25lGAIgASgISABSBGRv'
+    'bmWIAQFCBwoFX2RvbmVCDgoMX2Rlc2NyaXB0aW9uQgkKB19wdWJsaWNCEQoPX2luaXRpYWxfc3'
+    'RhdHVzQhMKEV9hc3NpZ25lZF91c2VyX2lk');
 
 @$core.Deprecated('Use createTaskResponseDescriptor instead')
 const CreateTaskResponse$json = {
@@ -461,7 +464,10 @@ const CreateSubtaskRequest_Subtask$json = {
   '1': 'Subtask',
   '2': [
     {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'done', '3': 2, '4': 1, '5': 8, '10': 'done'},
+    {'1': 'done', '3': 2, '4': 1, '5': 8, '9': 0, '10': 'done', '17': true},
+  ],
+  '8': [
+    {'1': '_done'},
   ],
 };
 
@@ -469,8 +475,8 @@ const CreateSubtaskRequest_Subtask$json = {
 final $typed_data.Uint8List createSubtaskRequestDescriptor = $convert.base64Decode(
     'ChRDcmVhdGVTdWJ0YXNrUmVxdWVzdBIXCgd0YXNrX2lkGAEgASgJUgZ0YXNrSWQSTQoHc3VidG'
     'FzaxgCIAEoCzIzLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5DcmVhdGVTdWJ0YXNrUmVxdWVzdC5T'
-    'dWJ0YXNrUgdzdWJ0YXNrGjEKB1N1YnRhc2sSEgoEbmFtZRgBIAEoCVIEbmFtZRISCgRkb25lGA'
-    'IgASgIUgRkb25l');
+    'dWJ0YXNrUgdzdWJ0YXNrGj8KB1N1YnRhc2sSEgoEbmFtZRgBIAEoCVIEbmFtZRIXCgRkb25lGA'
+    'IgASgISABSBGRvbmWIAQFCBwoFX2RvbmU=');
 
 @$core.Deprecated('Use createSubtaskResponseDescriptor instead')
 const CreateSubtaskResponse$json = {

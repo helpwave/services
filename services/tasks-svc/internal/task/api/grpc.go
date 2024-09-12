@@ -31,9 +31,14 @@ func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequ
 		return nil, err
 	}
 
-	// TODO: implement task.assigned_user_id and task.subtasks
+	assignedUserID, err := hwutil.ParseNullUUID(req.AssignedUserId)
+	if err != nil {
+		return nil, err
+	}
 
-	if err := s.handlers.Commands.V1.CreateTask(ctx, taskID, req.GetName(), req.Description, patientID, req.Public, req.InitialStatus, req.DueAt); err != nil {
+	subtasks := hwutil.OrEmptySlice(req.Subtasks)
+
+	if err := s.handlers.Commands.V1.CreateTask(ctx, taskID, req.GetName(), req.Description, patientID, req.Public, req.InitialStatus, req.DueAt, assignedUserID, subtasks); err != nil {
 		return nil, err
 	}
 

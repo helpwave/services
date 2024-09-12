@@ -67,6 +67,8 @@ export namespace CreateTaskRequest {
 
     getDone(): boolean;
     setDone(value: boolean): SubTask;
+    hasDone(): boolean;
+    clearDone(): SubTask;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SubTask.AsObject;
@@ -79,7 +81,12 @@ export namespace CreateTaskRequest {
   export namespace SubTask {
     export type AsObject = {
       name: string,
-      done: boolean,
+      done?: boolean,
+    }
+
+    export enum DoneCase { 
+      _DONE_NOT_SET = 0,
+      DONE = 2,
     }
   }
 
@@ -906,6 +913,8 @@ export namespace CreateSubtaskRequest {
 
     getDone(): boolean;
     setDone(value: boolean): Subtask;
+    hasDone(): boolean;
+    clearDone(): Subtask;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Subtask.AsObject;
@@ -918,7 +927,12 @@ export namespace CreateSubtaskRequest {
   export namespace Subtask {
     export type AsObject = {
       name: string,
-      done: boolean,
+      done?: boolean,
+    }
+
+    export enum DoneCase { 
+      _DONE_NOT_SET = 0,
+      DONE = 2,
     }
   }
 
