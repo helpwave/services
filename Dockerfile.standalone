@@ -14,8 +14,8 @@ WORKDIR /build/spice
 
 COPY go.* ./
 RUN go mod download
-COPY spice.go spice.go
-RUN CGO_ENABLED=0 GOOS=linux go build -a -o spice spice.go
+COPY cmd/spice cmd/spice
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o spice cmd/spice/spice.go
 
 #
 # build service
