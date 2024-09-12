@@ -167,7 +167,7 @@ func TestTaskAggregate_AssignTask(t *testing.T) {
 		t.Error(err)
 	}
 
-	if taskAggregate.Task.AssignedUser.Valid {
+	if taskAggregate.Task.AssignedUser != nil {
 		t.Errorf("AssignedUser should not be set")
 	}
 
@@ -175,8 +175,8 @@ func TestTaskAggregate_AssignTask(t *testing.T) {
 		t.Error(err)
 	}
 
-	if taskAggregate.Task.AssignedUser.Valid {
-		if taskAggregate.Task.AssignedUser.UUID != patientID {
+	if taskAggregate.Task.AssignedUser != nil {
+		if *taskAggregate.Task.AssignedUser != patientID {
 			t.Errorf("Invalid AssignedUserId, expected %s got %s", patientID.String(), taskAggregate.Task.AssignedUser.UUID.String())
 		}
 	}

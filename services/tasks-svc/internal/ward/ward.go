@@ -232,32 +232,32 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 	bedSet := make(map[uuid.UUID]bool)
 
 	for _, row := range rows {
-		if !row.RoomID.Valid {
+		if row.RoomID == nil {
 			continue
 		}
 		var room *pb.GetWardDetailsResponse_Room
-		if roomIx, processed := roomsIndexMap[row.RoomID.UUID]; processed {
+		if roomIx, processed := roomsIndexMap[*row.RoomID]; processed {
 			room = rooms[roomIx]
 		} else {
 			room = &pb.GetWardDetailsResponse_Room{
-				Id:   row.RoomID.UUID.String(),
+				Id:   row.RoomID.String(),
 				Name: *row.RoomName,
 				Beds: make([]*pb.GetWardDetailsResponse_Bed, 0),
 			}
 			rooms = append(rooms, room)
-			roomsIndexMap[row.RoomID.UUID] = len(rooms) - 1
+			roomsIndexMap[*row.RoomID] = len(rooms) - 1
 		}
 
-		if !row.BedID.Valid {
+		if row.BedID == nil {
 			continue
 		}
-		if _, processed := bedSet[row.BedID.UUID]; !processed {
+		if _, processed := bedSet[*row.BedID]; !processed {
 			bed := &pb.GetWardDetailsResponse_Bed{
-				Id:   row.BedID.UUID.String(),
+				Id:   row.BedID.String(),
 				Name: *row.BedName,
 			}
 			room.Beds = append(room.Beds, bed)
-			bedSet[row.BedID.UUID] = true
+			bedSet[*row.BedID] = true
 		}
 	}
 
@@ -270,32 +270,32 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 	stSet := make(map[uuid.UUID]bool)
 
 	for _, row := range rows {
-		if !row.TaskTemplateID.Valid {
+		if row.TaskTemplateID == nil {
 			continue
 		}
 		var taskTemplate *pb.GetWardDetailsResponse_TaskTemplate
-		if ttIx, processed := ttIndexMap[row.TaskTemplateID.UUID]; processed {
+		if ttIx, processed := ttIndexMap[*row.TaskTemplateID]; processed {
 			taskTemplate = taskTemplates[ttIx]
 		} else {
 			taskTemplate = &pb.GetWardDetailsResponse_TaskTemplate{
-				Id:       row.TaskTemplateID.UUID.String(),
+				Id:       row.TaskTemplateID.String(),
 				Name:     *row.TaskTemplateName,
 				Subtasks: make([]*pb.GetWardDetailsResponse_Subtask, 0),
 			}
 			taskTemplates = append(taskTemplates, taskTemplate)
-			ttIndexMap[row.TaskTemplateID.UUID] = len(taskTemplates) - 1
+			ttIndexMap[*row.TaskTemplateID] = len(taskTemplates) - 1
 		}
 
-		if !row.TaskTemplateSubtaskID.Valid {
+		if row.TaskTemplateSubtaskID == nil {
 			continue
 		}
-		if _, processed := stSet[row.TaskTemplateSubtaskID.UUID]; !processed {
+		if _, processed := stSet[*row.TaskTemplateSubtaskID]; !processed {
 			subTask := &pb.GetWardDetailsResponse_Subtask{
-				Id:   row.TaskTemplateSubtaskID.UUID.String(),
+				Id:   row.TaskTemplateSubtaskID.String(),
 				Name: *row.TaskTemplateSubtaskName,
 			}
 			taskTemplate.Subtasks = append(taskTemplate.Subtasks, subTask)
-			stSet[row.TaskTemplateSubtaskID.UUID] = true
+			stSet[*row.TaskTemplateSubtaskID] = true
 		}
 	}
 

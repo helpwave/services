@@ -121,20 +121,20 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 	patientName := rows[0].PatientName
 
 	// TODO: replace with optional response field
-	assignedUserId := task.AssignedUserID.UUID.String()
-	if !task.AssignedUserID.Valid {
-		assignedUserId = ""
+	assignedUserId := ""
+	if task.AssignedUserID != nil {
+		assignedUserId = task.AssignedUserID.String()
 	}
 
 	subtasks := hwutil.FlatMap(rows, func(row task_repo.GetTaskWithSubTasksAndPatientNameRow) **pb.GetTaskResponse_SubTask {
-		if !row.SubtaskID.Valid {
+		if row.SubtaskID == nil {
 			return nil
 		}
 		val := &pb.GetTaskResponse_SubTask{
-			Id:        row.SubtaskID.UUID.String(),
+			Id:        row.SubtaskID.String(),
 			Done:      *row.SubtaskDone,
 			Name:      *row.SubtaskName,
-			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
+			CreatedBy: row.SubtaskCreatedBy.String(),
 		}
 		return &val
 	})
@@ -210,14 +210,14 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 			taskMap[row.Task.ID] = len(tasks) - 1
 		}
 
-		if !row.SubtaskID.Valid {
+		if row.SubtaskID == nil {
 			continue
 		}
 		task.Subtasks = append(task.Subtasks, &pb.GetTasksByPatientResponse_Task_SubTask{
-			Id:        row.SubtaskID.UUID.String(),
+			Id:        row.SubtaskID.String(),
 			Name:      *row.SubtaskName,
 			Done:      *row.SubtaskDone,
-			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
+			CreatedBy: row.SubtaskCreatedBy.String(),
 		})
 	}
 
@@ -286,14 +286,14 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 			}
 		}
 
-		if !row.SubtaskID.Valid {
+		if row.SubtaskID == nil {
 			continue
 		}
 		task.Subtasks = append(task.Subtasks, &pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask{
-			Id:        row.SubtaskID.UUID.String(),
+			Id:        row.SubtaskID.String(),
 			Name:      *row.SubtaskName,
 			Done:      *row.SubtaskDone,
-			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
+			CreatedBy: row.SubtaskCreatedBy.String(),
 		})
 	}
 
@@ -342,7 +342,7 @@ func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTask
 				Name:           row.Task.Name,
 				Description:    row.Task.Description,
 				Status:         pb.TaskStatus(row.Task.Status),
-				AssignedUserId: row.Task.AssignedUserID.UUID.String(),
+				AssignedUserId: row.Task.AssignedUserID.String(),
 				Patient: &pb.GetAssignedTasksResponse_Task_Patient{
 					Id:   row.PatientID.String(),
 					Name: row.PatientName,
@@ -356,15 +356,15 @@ func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTask
 			taskMap[row.Task.ID] = len(tasks) - 1
 		}
 
-		if !row.SubtaskID.Valid {
+		if row.SubtaskID == nil {
 			continue
 		}
 
 		task.Subtasks = append(task.Subtasks, &pb.GetAssignedTasksResponse_Task_SubTask{
-			Id:        row.SubtaskID.UUID.String(),
+			Id:        row.SubtaskID.String(),
 			Name:      *row.SubtaskName,
 			Done:      *row.SubtaskDone,
-			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
+			CreatedBy: row.SubtaskCreatedBy.String(),
 		})
 	}
 

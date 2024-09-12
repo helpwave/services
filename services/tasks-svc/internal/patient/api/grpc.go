@@ -62,8 +62,8 @@ func (s *PatientGrpcService) GetPatient(ctx context.Context, req *pb.GetPatientR
 	var bedRes *pb.GetPatientResponse_Bed = nil
 	var roomRes *pb.GetPatientResponse_Room = nil
 
-	if patient.BedID.Valid {
-		result, err := hwdb.Optional(bedRepo.GetBedAndRoomByBedId)(ctx, patient.BedID.UUID)
+	if patient.BedID != nil {
+		result, err := hwdb.Optional(bedRepo.GetBedAndRoomByBedId)(ctx, *patient.BedID)
 		if err != nil {
 			return nil, status.Error(codes.Internal, err.Error())
 		} else if result != nil {
@@ -218,9 +218,9 @@ func (s *PatientGrpcService) GetPatientList(ctx context.Context, req *pb.GetPati
 	})
 
 	// Scope active to ward
-	if wardID.Valid {
+	if wardID != nil {
 		active = hwutil.Filter(active, func(patientDetails *models.PatientDetails) bool {
-			return patientDetails.Room.WardID == wardID.UUID
+			return patientDetails.Room.WardID == *wardID
 		})
 	}
 
@@ -330,10 +330,10 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 		var bedRes *pb.GetRecentPatientsResponse_Bed = nil
 		var roomRes *pb.GetRecentPatientsResponse_Room = nil
 
-		if patient.BedID.Valid {
-			result, err := hwdb.Optional(bedRepo.GetBedAndRoomByBedId)(ctx, patient.BedID.UUID)
+		if patient.BedID != nil {
+			result, err := hwdb.Optional(bedRepo.GetBedAndRoomByBedId)(ctx, *patient.BedID)
 			if err != nil {
-				log.Warn().Str("bedID", patient.BedID.UUID.String()).Msg("error querying getBedAndRoomByBed")
+				log.Warn().Str("bedID", patient.BedID.String()).Msg("error querying getBedAndRoomByBed")
 			} else if result != nil {
 				bedRes = &pb.GetRecentPatientsResponse_Bed{
 					Id:   result.Bed.ID.String(),

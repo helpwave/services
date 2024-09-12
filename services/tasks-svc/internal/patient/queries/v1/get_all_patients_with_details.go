@@ -33,17 +33,17 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 			} else {
 				var room *models.Room
 				var bed *models.Bed
-				if row.RoomID.Valid {
+				if row.RoomID != nil {
 					room = &models.Room{
-						ID:     row.RoomID.UUID,
+						ID:     *row.RoomID,
 						Name:   *row.RoomName,
-						WardID: row.WardID.UUID,
+						WardID: *row.WardID,
 					}
 				}
 
-				if row.BedID.Valid {
+				if row.BedID != nil {
 					bed = &models.Bed{
-						ID:   row.BedID.UUID,
+						ID:   *row.BedID,
 						Name: *row.BedName,
 					}
 				}
@@ -64,16 +64,16 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 				}
 			}
 
-			if !row.TaskID.Valid {
+			if row.TaskID == nil {
 				continue
 			}
 
 			var task *tasksModels.Task
-			if taskIx, existed := tasksMap[row.TaskID.UUID]; existed {
+			if taskIx, existed := tasksMap[*row.TaskID]; existed {
 				task = patientDetail.Tasks[taskIx]
 			} else {
 				task = &tasksModels.Task{
-					ID:           row.TaskID.UUID,
+					ID:           *row.TaskID,
 					Name:         *row.TaskName,
 					Description:  *row.TaskDescription,
 					Status:       pb.TaskStatus(*row.TaskStatus),
@@ -83,12 +83,12 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 					Subtasks:     make(map[uuid.UUID]tasksModels.Subtask),
 				}
 				patientDetail.Tasks = append(patientDetail.Tasks, task)
-				tasksMap[row.TaskID.UUID] = len(patientDetail.Tasks) - 1
+				tasksMap[*row.TaskID] = len(patientDetail.Tasks) - 1
 			}
 
-			if row.SubtaskID.Valid {
-				task.Subtasks[row.SubtaskID.UUID] = tasksModels.Subtask{
-					ID:   row.SubtaskID.UUID,
+			if row.SubtaskID != nil {
+				task.Subtasks[*row.SubtaskID] = tasksModels.Subtask{
+					ID:   *row.SubtaskID,
 					Name: *row.SubtaskName,
 					Done: *row.SubtaskDone,
 				}

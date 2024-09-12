@@ -46,7 +46,7 @@ func NewGetPropertiesBySubjectTypeQueryHandler() GetPropertiesBySubjectTypeHandl
 				properties = append(properties, property)
 			}
 
-			if row.SelectDatasID.Valid {
+			if row.SelectDatasID != nil {
 				if property.FieldTypeData.SelectData == nil {
 					property.FieldTypeData.SelectData = &models.SelectData{
 						AllowFreetext: *row.SelectDatasAllowFreetext, // if selectDatasID exists, allowFreetext also exists
@@ -55,9 +55,9 @@ func NewGetPropertiesBySubjectTypeQueryHandler() GetPropertiesBySubjectTypeHandl
 				}
 			}
 
-			if row.SelectOptionID.Valid && property.FieldTypeData.SelectData != nil {
+			if row.SelectOptionID != nil && property.FieldTypeData.SelectData != nil {
 				property.FieldTypeData.SelectData.SelectOptions = append(property.FieldTypeData.SelectData.SelectOptions, models.SelectOption{
-					ID:          row.SelectOptionID.UUID,
+					ID:          *row.SelectOptionID,
 					Name:        *row.SelectOptionName, // NOT NULL
 					Description: row.SelectOptionDescription,
 					IsCustom:    *row.SelectOptionIsCustom, // NOT NULL

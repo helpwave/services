@@ -35,18 +35,18 @@ func NewGetPatientWithDetailsByIDQueryHandler(as hwes.AggregateStore) GetPatient
 			return nil, err
 		}
 
-		if patientRes.BedID.Valid {
+		if patientRes.BedID != nil {
 			bed = &models.Bed{
-				ID:   patientRes.BedID.UUID,
+				ID:   *patientRes.BedID,
 				Name: *patientRes.BedName,
 			}
 		}
 
-		if patientRes.RoomID.Valid {
+		if patientRes.RoomID != nil {
 			room = &models.Room{
-				ID:     patientRes.RoomID.UUID,
+				ID:     *patientRes.RoomID,
 				Name:   *patientRes.RoomName,
-				WardID: patientRes.WardID.UUID,
+				WardID: *patientRes.WardID,
 			}
 		}
 

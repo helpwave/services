@@ -73,12 +73,12 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 	room := rows[0].Room
 
 	beds := hwutil.FlatMap(rows, func(row room_repo.GetRoomWithBedsByIdRow) **pb.GetRoomResponse_Bed {
-		if !row.BedID.Valid {
+		if row.BedID == nil {
 			return nil
 		}
 
 		val := &pb.GetRoomResponse_Bed{
-			Id:   row.BedID.UUID.String(),
+			Id:   row.BedID.String(),
 			Name: *row.BedName,
 		}
 		return &val
@@ -135,11 +135,11 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 		}
 		processedRooms[room.ID] = true
 		beds := hwutil.FlatMap(rows, func(bedRow room_repo.GetRoomsWithBedsRow) **pb.GetRoomsResponse_Room_Bed {
-			if !bedRow.BedID.Valid || bedRow.Room.ID != room.ID {
+			if bedRow.BedID == nil || bedRow.Room.ID != room.ID {
 				return nil
 			}
 			val := &pb.GetRoomsResponse_Room_Bed{
-				Id:   bedRow.BedID.UUID.String(),
+				Id:   bedRow.BedID.String(),
 				Name: *bedRow.BedName,
 			}
 			return &val
@@ -209,14 +209,14 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 			processedRooms[roomRow.RoomID] = true
 			beds := hwutil.FlatMap(rows,
 				func(bedRow room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardRow) **pb.GetRoomOverviewsByWardResponse_Room_Bed {
-					if !bedRow.BedID.Valid || bedRow.RoomID != roomRow.RoomID {
+					if bedRow.BedID == nil || bedRow.RoomID != roomRow.RoomID {
 						return nil
 					}
 
-					patient := hwutil.MapIf(bedRow.PatientID.Valid, bedRow,
+					patient := hwutil.MapIf(bedRow.PatientID != nil, bedRow,
 						func(bedRow room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardRow) pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient {
 							return pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient{
-								Id:                      bedRow.PatientID.UUID.String(),
+								Id:                      bedRow.PatientID.String(),
 								HumanReadableIdentifier: *bedRow.PatientHumanReadableIdentifier,
 								TasksUnscheduled:        uint32(bedRow.TodoTasksCount),
 								TasksInProgress:         uint32(bedRow.InProgressTasksCount),
@@ -225,7 +225,7 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 						})
 
 					val := &pb.GetRoomOverviewsByWardResponse_Room_Bed{
-						Id:      bedRow.BedID.UUID.String(),
+						Id:      bedRow.BedID.String(),
 						Name:    *bedRow.BedName,
 						Patient: patient,
 					}

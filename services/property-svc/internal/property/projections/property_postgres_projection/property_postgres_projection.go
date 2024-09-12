@@ -294,9 +294,9 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
-	if property.SelectDataID.Valid {
+	if property.SelectDataID != nil {
 		err := propertyRepo.UpdateSelectData(ctx, property_repo.UpdateSelectDataParams{
-			ID:            property.SelectDataID.UUID,
+			ID:            *property.SelectDataID,
 			AllowFreetext: payload.NewAllowFreetext,
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
@@ -352,7 +352,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 	}
 
 	var selectDataID uuid.UUID
-	if !property.SelectDataID.Valid {
+	if property.SelectDataID == nil {
 		// Create SelectData and reference from property
 		sdID, err := propertyRepo.CreateSelectData(ctx, false)
 		if err := hwdb.Error(ctx, err); err != nil {
@@ -367,7 +367,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 		}
 		selectDataID = sdID
 	} else {
-		selectDataID = property.SelectDataID.UUID
+		selectDataID = *property.SelectDataID
 	}
 
 	selectOptions := make(map[uuid.UUID]models.UpdateSelectOption)

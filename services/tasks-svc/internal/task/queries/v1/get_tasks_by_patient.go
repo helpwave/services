@@ -46,12 +46,12 @@ func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 				tasksMap[row.Task.ID] = len(tasks) - 1
 			}
 
-			if row.SubtaskID.Valid {
-				task.Subtasks[row.SubtaskID.UUID] = models.Subtask{
-					ID:        row.SubtaskID.UUID,
+			if row.SubtaskID != nil {
+				task.Subtasks[*row.SubtaskID] = models.Subtask{
+					ID:        *row.SubtaskID,
 					Name:      *row.SubtaskName,
 					Done:      *row.SubtaskDone,
-					CreatedBy: row.SubtaskCreatedBy.UUID,
+					CreatedBy: *row.SubtaskCreatedBy,
 				}
 			}
 		}

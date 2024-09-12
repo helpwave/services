@@ -37,7 +37,7 @@ func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
 			FieldTypeData: models.FieldTypeData{},
 		}
 		for _, row := range rows {
-			if row.SelectDatasID.Valid {
+			if row.SelectDatasID != nil {
 				if property.FieldTypeData.SelectData == nil {
 					property.FieldTypeData.SelectData = &models.SelectData{
 						AllowFreetext: *row.SelectDatasAllowFreetext, // if selectDatasID exists, allowFreetext also exists
@@ -46,9 +46,9 @@ func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
 				}
 			}
 
-			if row.SelectOptionID.Valid && property.FieldTypeData.SelectData != nil {
+			if row.SelectOptionID != nil && property.FieldTypeData.SelectData != nil {
 				property.FieldTypeData.SelectData.SelectOptions = append(property.FieldTypeData.SelectData.SelectOptions, models.SelectOption{
-					ID:          row.SelectOptionID.UUID,
+					ID:          *row.SelectOptionID,
 					Name:        *row.SelectOptionName, // NOT NULL
 					Description: row.SelectOptionDescription,
 					IsCustom:    *row.SelectOptionIsCustom, // NOT NULL

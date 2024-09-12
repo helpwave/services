@@ -124,7 +124,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 				Id:          row.TaskTemplate.ID.String(),
 				Name:        row.TaskTemplate.Name,
 				Description: row.TaskTemplate.Description,
-				IsPublic:    row.TaskTemplate.WardID.Valid,
+				IsPublic:    row.TaskTemplate.WardID != nil,
 				CreatedBy:   row.TaskTemplate.CreatedBy.String(),
 				Subtasks:    make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask, 0),
 			}
@@ -136,7 +136,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 			template.Subtasks = append(template.Subtasks, &pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask{
 				Name:           *row.SubTaskName,
 				TaskTemplateId: row.TaskTemplate.ID.String(),
-				Id:             row.SubTaskID.UUID.String(), // must exist by constraint
+				Id:             row.SubTaskID.String(), // must exist by constraint
 			})
 		}
 	}
@@ -358,7 +358,7 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 				Id:          row.TaskTemplate.ID.String(),
 				Name:        row.TaskTemplate.Name,
 				Description: row.TaskTemplate.Description,
-				IsPublic:    row.TaskTemplate.WardID.Valid,
+				IsPublic:    row.TaskTemplate.WardID != nil,
 				CreatedBy:   row.TaskTemplate.CreatedBy.String(),
 				Subtasks:    make([]*pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask, 0),
 			}

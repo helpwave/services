@@ -59,12 +59,12 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 			}
 
 			// we don't want to return empty values, so we skip empty rows (all LEFT JOINS have failed)
-			if row.TextValue == nil && row.BoolValue == nil && row.NumberValue == nil && !row.SelectOptionID.Valid && !row.DateTimeValue.Valid && !row.DateValue.Valid {
+			if row.TextValue == nil && row.BoolValue == nil && row.NumberValue == nil && row.SelectOptionID == nil && !row.DateTimeValue.Valid && !row.DateValue.Valid {
 				continue
 			}
 
 			// If row has SelectOptionID, the LEFT JOIN yielded a value
-			if row.SelectOptionID.Valid {
+			if row.SelectOptionID != nil {
 
 				// make sure MultiSelectValues is an array
 				if properties[row.Property.ID].Value == nil {
@@ -79,7 +79,7 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 
 				// add multiselectvalue to array
 				properties[row.Property.ID].Value.MultiSelectValues = append(properties[row.Property.ID].Value.MultiSelectValues, models.SelectValueOption{
-					Id:          row.SelectOptionID.UUID,      // known to be valid by if
+					Id:          *row.SelectOptionID,          // known to be valid by if
 					Name:        *row.SelectOptionName,        // known to be set due to NOT NULL and successful LEFT JOIN
 					Description: *row.SelectOptionDescription, // known to be set due to NOT NULL and successful LEFT JOIN
 				})
