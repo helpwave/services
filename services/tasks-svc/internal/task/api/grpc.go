@@ -264,7 +264,7 @@ func (s *TaskGrpcService) GetAssignedTasks(ctx context.Context, _ *pb.GetAssigne
 			CreatedAt:      timestamppb.New(item.CreatedAt),
 			DueAt:          timestamppb.New(item.DueAt),
 			Subtasks:       make([]*pb.GetAssignedTasksResponse_Task_SubTask, len(item.Subtasks)),
-			AssignedUserId: item.AssignedUser.UUID.String(), // Safe, assignedUserId has to be set. TODO: #760
+			AssignedUserId: item.AssignedUser.String(), // Safe, assignedUserId has to be set. TODO: #760
 			Patient: &pb.GetAssignedTasksResponse_Task_Patient{
 				Id:                      item.PatientID.String(),
 				HumanReadableIdentifier: item.Patient.HumanReadableIdentifier,
