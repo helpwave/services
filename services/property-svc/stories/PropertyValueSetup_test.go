@@ -269,7 +269,7 @@ func startSpiceDB(ctx context.Context) (endpoint string, teardown func()) {
 	}
 	return endpoint, func() {
 		if err := container.Terminate(ctx); err != nil {
-			zlog.Fatal().Err(err).Msg("could not stop endpoint")
+			zlog.Fatal().Err(err).Msg("could not stop spicedb")
 		}
 	}
 }
