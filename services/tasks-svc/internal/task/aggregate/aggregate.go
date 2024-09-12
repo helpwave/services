@@ -210,7 +210,7 @@ func (a *TaskAggregate) onSubtaskCreated(evt hwes.Event) error {
 		ID:        subtaskID,
 		Name:      payload.Name,
 		CreatedAt: time.Now().UTC(),
-		Done:      false,
+		Done:      payload.Done,
 	}
 
 	a.Task.Subtasks[subtaskID] = *subtask

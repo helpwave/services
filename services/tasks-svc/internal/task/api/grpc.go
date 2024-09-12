@@ -320,9 +320,7 @@ func (s *TaskGrpcService) CreateSubtask(ctx context.Context, req *pb.CreateSubta
 
 	subtaskID := uuid.New()
 
-	// TODO: implement subtask.done functionality
-
-	if err := s.handlers.Commands.V1.CreateSubtask(ctx, taskID, subtaskID, req.GetSubtask().GetName()); err != nil {
+	if err := s.handlers.Commands.V1.CreateSubtask(ctx, taskID, subtaskID, req.GetSubtask().GetName(), req.GetSubtask().GetDone()); err != nil {
 		return nil, err
 	}
 
@@ -337,14 +335,20 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 		return nil, err
 	}
 
-	// TODO: implement complete and uncompleteSubtask functionality
-
 	subtaskID, err := uuid.Parse(req.GetSubtaskId())
 	if err != nil {
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.UpdateSubtask(ctx, taskID, subtaskID, req.Subtask.Name, req.Subtask.Done); err != nil {
+	// req.Subtask could be nil
+	var newName *string
+	var newDone *bool
+	if req.Subtask != nil {
+		newName = req.Subtask.Name
+		newDone = req.Subtask.Done
+	}
+
+	if err := s.handlers.Commands.V1.UpdateSubtask(ctx, taskID, subtaskID, newName, newDone); err != nil {
 		return nil, err
 	}
 

@@ -14,8 +14,8 @@ import (
 
 const createSubtask = `-- name: CreateSubtask :exec
 INSERT INTO subtasks
-	(id, task_id, name, created_by)
-VALUES ($1, $2, $3, $4)
+	(id, task_id, name, created_by, done)
+VALUES ($1, $2, $3, $4, $5)
 `
 
 type CreateSubtaskParams struct {
@@ -23,6 +23,7 @@ type CreateSubtaskParams struct {
 	TaskID    uuid.UUID
 	Name      string
 	CreatedBy uuid.UUID
+	Done      bool
 }
 
 func (q *Queries) CreateSubtask(ctx context.Context, arg CreateSubtaskParams) error {
@@ -31,6 +32,7 @@ func (q *Queries) CreateSubtask(ctx context.Context, arg CreateSubtaskParams) er
 		arg.TaskID,
 		arg.Name,
 		arg.CreatedBy,
+		arg.Done,
 	)
 	return err
 }

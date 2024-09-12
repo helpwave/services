@@ -94,8 +94,8 @@ func (a *TaskAggregate) UpdateTaskPublic(ctx context.Context, newTaskStatus bool
 	return a.Apply(event)
 }
 
-func (a *TaskAggregate) CreateSubtask(ctx context.Context, subtaskID uuid.UUID, name string) error {
-	event, err := taskEventsV1.NewSubtaskCreatedEvent(ctx, a, subtaskID, name)
+func (a *TaskAggregate) CreateSubtask(ctx context.Context, subtaskID uuid.UUID, name string, done bool) error {
+	event, err := taskEventsV1.NewSubtaskCreatedEvent(ctx, a, subtaskID, name, done)
 	if err != nil {
 		return err
 	}

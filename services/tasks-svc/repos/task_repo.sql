@@ -20,8 +20,8 @@ WHERE id = @id;
 
 -- name: CreateSubtask :exec
 INSERT INTO subtasks
-	(id, task_id, name, created_by)
-VALUES ($1, $2, $3, $4);
+	(id, task_id, name, created_by, done)
+VALUES ($1, $2, $3, $4, $5);
 
 -- name: UpdateSubtask :exec
 UPDATE subtasks

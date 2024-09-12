@@ -61,6 +61,7 @@ type TaskUnassignedEvent struct {
 type SubtaskCreatedEvent struct {
 	SubtaskID string `json:"subtask_id"`
 	Name      string `json:"name"`
+	Done      bool   `json:"done"`
 }
 
 type SubtaskNameUpdatedEvent struct {
@@ -158,10 +159,11 @@ func NewTaskUnpublishedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event,
 	return hwes.NewEvent(a, TaskUnpublished, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewSubtaskCreatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
+func NewSubtaskCreatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID, name string, done bool) (hwes.Event, error) {
 	payload := SubtaskCreatedEvent{
 		SubtaskID: subtaskID.String(),
 		Name:      name,
+		Done:      done,
 	}
 	return hwes.NewEvent(a, SubtaskCreated, hwes.WithContext(ctx), hwes.WithData(payload))
 }

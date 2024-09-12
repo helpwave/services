@@ -274,6 +274,7 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (erro
 		TaskID:    evt.AggregateID,
 		Name:      payload.Name,
 		CreatedBy: committerID,
+		Done:      payload.Done,
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {

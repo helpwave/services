@@ -41,8 +41,7 @@ func NewCreateTaskCommandHandler(as hwes.AggregateStore) CreateTaskCommandHandle
 		}
 
 		if dueAt != nil {
-			time := dueAt.AsTime()
-			if err := a.UpdateDueAt(ctx, time); err != nil {
+			if err := a.UpdateDueAt(ctx, dueAt.AsTime()); err != nil {
 				return err
 			}
 		}
