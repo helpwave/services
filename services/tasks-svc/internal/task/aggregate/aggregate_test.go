@@ -177,7 +177,7 @@ func TestTaskAggregate_AssignTask(t *testing.T) {
 
 	if taskAggregate.Task.AssignedUser != nil {
 		if *taskAggregate.Task.AssignedUser != patientID {
-			t.Errorf("Invalid AssignedUserId, expected %s got %s", patientID.String(), taskAggregate.Task.AssignedUser.UUID.String())
+			t.Errorf("Invalid AssignedUserId, expected %s got %s", patientID.String(), taskAggregate.Task.AssignedUser.String())
 		}
 	}
 }

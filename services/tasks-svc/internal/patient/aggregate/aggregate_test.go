@@ -152,15 +152,15 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 		return patientEventsV1.NewBedAssignedEvent(ctx, patientAggregate, newBedID)
 	})
 
-	if patientAggregate.Patient.BedID.UUID != newBedID {
-		t.Errorf("Patient BedID: expected '%s' got '%s'", newBedID.String(), patientAggregate.Patient.BedID.UUID.String())
+	if *patientAggregate.Patient.BedID != newBedID {
+		t.Errorf("Patient BedID: expected '%s' got '%s'", newBedID.String(), patientAggregate.Patient.BedID.String())
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
 		return patientEventsV1.NewBedUnassignedEvent(ctx, patientAggregate)
 	})
 
-	if patientAggregate.Patient.BedID.UUID != uuid.Nil {
-		t.Errorf("Patient BedID: expected '%s' got '%s'", uuid.Nil.String(), patientAggregate.Patient.BedID.UUID.String())
+	if patientAggregate.Patient.BedID != nil {
+		t.Errorf("Patient BedID: expected 'nil' got '%s'", patientAggregate.Patient.BedID.String())
 	}
 }
