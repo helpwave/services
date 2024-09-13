@@ -131,6 +131,10 @@ class PatientServiceClient extends $grpc.Client {
   $grpc.ResponseFuture<$12.ReadmitPatientResponse> readmitPatient($12.ReadmitPatientRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$readmitPatient, request, options: options);
   }
+
+  $grpc.ResponseFuture<$13.DeletePatientResponse> deletePatient($13.DeletePatientRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$deletePatient, request, options: options);
+  }
 }
 
 @$pb.GrpcServiceName('services.tasks_svc.v1.PatientService')

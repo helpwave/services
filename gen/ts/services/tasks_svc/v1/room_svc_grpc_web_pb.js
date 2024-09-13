@@ -262,67 +262,6 @@ proto.services.tasks_svc.v1.RoomServicePromiseClient.prototype.getRooms =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.services.tasks_svc.v1.GetRoomsByWardRequest,
- *   !proto.services.tasks_svc.v1.GetRoomsByWardResponse>}
- */
-const methodDescriptor_RoomService_GetRoomsByWard = new grpc.web.MethodDescriptor(
-  '/services.tasks_svc.v1.RoomService/GetRoomsByWard',
-  grpc.web.MethodType.UNARY,
-  proto.services.tasks_svc.v1.GetRoomsByWardRequest,
-  proto.services.tasks_svc.v1.GetRoomsByWardResponse,
-  /**
-   * @param {!proto.services.tasks_svc.v1.GetRoomsByWardRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.services.tasks_svc.v1.GetRoomsByWardResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.services.tasks_svc.v1.GetRoomsByWardRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.services.tasks_svc.v1.GetRoomsByWardResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.services.tasks_svc.v1.GetRoomsByWardResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.services.tasks_svc.v1.RoomServiceClient.prototype.getRoomsByWard =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/services.tasks_svc.v1.RoomService/GetRoomsByWard',
-      request,
-      metadata || {},
-      methodDescriptor_RoomService_GetRoomsByWard,
-      callback);
-};
-
-
-/**
- * @param {!proto.services.tasks_svc.v1.GetRoomsByWardRequest} request The
- *     request proto
- * @param {?Object<string, string>=} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.services.tasks_svc.v1.GetRoomsByWardResponse>}
- *     Promise that resolves to the response
- */
-proto.services.tasks_svc.v1.RoomServicePromiseClient.prototype.getRoomsByWard =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/services.tasks_svc.v1.RoomService/GetRoomsByWard',
-      request,
-      metadata || {},
-      methodDescriptor_RoomService_GetRoomsByWard);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
  *   !proto.services.tasks_svc.v1.UpdateRoomRequest,
  *   !proto.services.tasks_svc.v1.UpdateRoomResponse>}
  */

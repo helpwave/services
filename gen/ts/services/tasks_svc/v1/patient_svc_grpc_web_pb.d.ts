@@ -99,6 +99,13 @@ export class PatientServiceClient {
                response: services_tasks_svc_v1_patient_svc_pb.ReadmitPatientResponse) => void
   ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_patient_svc_pb.ReadmitPatientResponse>;
 
+  deletePatient(
+    request: services_tasks_svc_v1_patient_svc_pb.DeletePatientRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: services_tasks_svc_v1_patient_svc_pb.DeletePatientResponse) => void
+  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_patient_svc_pb.DeletePatientResponse>;
+
 }
 
 export class PatientServicePromiseClient {
@@ -170,6 +177,11 @@ export class PatientServicePromiseClient {
     request: services_tasks_svc_v1_patient_svc_pb.ReadmitPatientRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<services_tasks_svc_v1_patient_svc_pb.ReadmitPatientResponse>;
+
+  deletePatient(
+    request: services_tasks_svc_v1_patient_svc_pb.DeletePatientRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<services_tasks_svc_v1_patient_svc_pb.DeletePatientResponse>;
 
 }
 

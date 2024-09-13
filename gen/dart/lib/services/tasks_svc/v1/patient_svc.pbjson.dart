@@ -639,3 +639,24 @@ const ReadmitPatientResponse$json = {
 final $typed_data.Uint8List readmitPatientResponseDescriptor = $convert.base64Decode(
     'ChZSZWFkbWl0UGF0aWVudFJlc3BvbnNl');
 
+@$core.Deprecated('Use deletePatientRequestDescriptor instead')
+const DeletePatientRequest$json = {
+  '1': 'DeletePatientRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `DeletePatientRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deletePatientRequestDescriptor = $convert.base64Decode(
+    'ChREZWxldGVQYXRpZW50UmVxdWVzdBIOCgJpZBgBIAEoCVICaWQ=');
+
+@$core.Deprecated('Use deletePatientResponseDescriptor instead')
+const DeletePatientResponse$json = {
+  '1': 'DeletePatientResponse',
+};
+
+/// Descriptor for `DeletePatientResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deletePatientResponseDescriptor = $convert.base64Decode(
+    'ChVEZWxldGVQYXRpZW50UmVzcG9uc2U=');
+

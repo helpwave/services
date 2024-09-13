@@ -25,13 +25,11 @@ func NewServiceServer() *ServiceServer {
 func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskTemplateRequest) (*pb.CreateTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwdb.GetDB()
-	tx, err := db.Begin(ctx)
+	tx, rollback, err := hwdb.BeginTx(db, ctx)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "could not start tx: %s", err.Error())
+		return nil, err
 	}
-	defer func() {
-		_ = tx.Rollback(ctx)
-	}()
+	defer rollback()
 	templateRepo := task_template_repo.New(db).WithTx(tx)
 
 	userID, err := common.GetUserID(ctx)
@@ -86,50 +84,6 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 
 	return &pb.CreateTaskTemplateResponse{
 		Id: templateID.String(),
-	}, nil
-}
-
-func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTemplatesRequest) (*pb.GetAllTaskTemplatesResponse, error) {
-	templateRepo := task_template_repo.New(hwdb.GetDB())
-
-	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx, task_template_repo.GetAllTaskTemplatesWithSubTasksParams{})
-
-	err = hwdb.Error(ctx, err)
-	if err != nil {
-		return nil, err
-	}
-
-	templates := make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate, 0)
-	templateMap := make(map[uuid.UUID]int)
-
-	for _, row := range rows {
-		var template *pb.GetAllTaskTemplatesResponse_TaskTemplate
-		if ix, found := templateMap[row.TaskTemplate.ID]; found {
-			template = templates[ix]
-		} else {
-			template = &pb.GetAllTaskTemplatesResponse_TaskTemplate{
-				Id:          row.TaskTemplate.ID.String(),
-				Name:        row.TaskTemplate.Name,
-				Description: row.TaskTemplate.Description,
-				IsPublic:    row.TaskTemplate.WardID.Valid,
-				CreatedBy:   row.TaskTemplate.CreatedBy.String(),
-				Subtasks:    make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask, 0),
-			}
-			templates = append(templates, template)
-			templateMap[row.TaskTemplate.ID] = len(templates) - 1
-		}
-
-		if row.SubTaskName != nil {
-			template.Subtasks = append(template.Subtasks, &pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask{
-				Name:           *row.SubTaskName,
-				TaskTemplateId: row.TaskTemplate.ID.String(),
-				Id:             row.SubTaskID.UUID.String(), // must exist by constraint
-			})
-		}
-	}
-
-	return &pb.GetAllTaskTemplatesResponse{
-		Templates: templates,
 	}, nil
 }
 
@@ -256,113 +210,4 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 	}, nil
 }
 
-func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.GetAllTaskTemplatesByCreatorRequest) (*pb.GetAllTaskTemplatesByCreatorResponse, error) {
-	templateRepo := task_template_repo.New(hwdb.GetDB())
-
-	// TODO: Auth
-
-	createdBy, err := uuid.Parse(req.CreatedBy)
-	err = hwdb.Error(ctx, err)
-	if err != nil {
-		return nil, err
-	}
-
-	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx, task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
-		CreatorID: uuid.NullUUID{
-			UUID:  createdBy,
-			Valid: true,
-		},
-		PrivateOnly: req.GetPrivateOnly(),
-	})
-
-	err = hwdb.Error(ctx, err)
-	if err != nil {
-		return nil, err
-	}
-
-	templates := make([]*pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate, 0)
-	templateMap := make(map[uuid.UUID]int)
-
-	for _, row := range rows {
-		var template *pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate
-		if ix, found := templateMap[row.TaskTemplate.ID]; found {
-			template = templates[ix]
-		} else {
-			template = &pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate{
-				Id:          row.TaskTemplate.ID.String(),
-				Name:        row.TaskTemplate.Name,
-				Description: row.TaskTemplate.Description,
-				IsPublic:    row.TaskTemplate.WardID.Valid,
-				Subtasks:    make([]*pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask, 0),
-			}
-			templates = append(templates, template)
-			templateMap[row.TaskTemplate.ID] = len(templates) - 1
-		}
-
-		if row.SubTaskName != nil {
-			template.Subtasks = append(template.Subtasks, &pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask{
-				Name:           *row.SubTaskName,
-				TaskTemplateId: row.TaskTemplate.ID.String(),
-				Id:             row.SubTaskID.UUID.String(), // must exist by constraint
-			})
-		}
-	}
-
-	return &pb.GetAllTaskTemplatesByCreatorResponse{
-		Templates: templates,
-	}, nil
-}
-
-func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetAllTaskTemplatesByWardRequest) (*pb.GetAllTaskTemplatesByWardResponse, error) {
-	templateRepo := task_template_repo.New(hwdb.GetDB())
-
-	wardId, err := uuid.Parse(req.WardId)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
-
-	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx, task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
-		WardID: uuid.NullUUID{
-			UUID:  wardId,
-			Valid: true,
-		},
-	})
-
-	err = hwdb.Error(ctx, err)
-	if err != nil {
-		return nil, err
-	}
-
-	templates := make([]*pb.GetAllTaskTemplatesByWardResponse_TaskTemplate, 0)
-	templateMap := make(map[uuid.UUID]int)
-
-	for _, row := range rows {
-		var template *pb.GetAllTaskTemplatesByWardResponse_TaskTemplate
-		if ix, found := templateMap[row.TaskTemplate.ID]; found {
-			template = templates[ix]
-		} else {
-			template = &pb.GetAllTaskTemplatesByWardResponse_TaskTemplate{
-				Id:          row.TaskTemplate.ID.String(),
-				Name:        row.TaskTemplate.Name,
-				Description: row.TaskTemplate.Description,
-				IsPublic:    row.TaskTemplate.WardID.Valid,
-				CreatedBy:   row.TaskTemplate.CreatedBy.String(),
-				Subtasks:    make([]*pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask, 0),
-			}
-			templates = append(templates, template)
-			templateMap[row.TaskTemplate.ID] = len(templates) - 1
-		}
-
-		if row.SubTaskName != nil {
-			template.Subtasks = append(template.Subtasks, &pb.GetAllTaskTemplatesByWardResponse_TaskTemplate_SubTask{
-				Name:           *row.SubTaskName,
-				TaskTemplateId: row.TaskTemplate.ID.String(),
-				Id:             row.SubTaskID.UUID.String(), // must exist by constraint
-			})
-		}
-	}
-
-	return &pb.GetAllTaskTemplatesByWardResponse{
-		Templates: templates,
-	}, nil
-}
+// TODO: GetAllTaskTemplates

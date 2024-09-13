@@ -23,35 +23,6 @@ message CreateTaskTemplateResponse {
   string id = 1;
 }
 
-
-///
-/// GetAllTaskTemplates
-///
-
-message GetAllTaskTemplatesRequest {
-}
-
-message GetAllTaskTemplatesResponse {
-  repeated TaskTemplate templates = 1;
-
-  message TaskTemplate {
-    string id = 1;
-    string name = 2;
-    string description = 3;
-    bool is_public = 4;
-    string created_by = 6;
-    repeated SubTask subtasks = 7;
-
-    message SubTask {
-      string id = 1;
-      string task_template_id = 2;
-      string name = 3;
-    }
-  }
-}
-
-
-
 ///
 /// DeleteTaskTemplate
 ///
@@ -116,43 +87,18 @@ message CreateTaskTemplateSubTaskResponse {
   string id = 1;
 }
 
+
 ///
-/// GetAllTaskTemplatesByCreator
+/// GetAllTaskTemplatesByWardAndCreatorFilter
 ///
 
-message GetAllTaskTemplatesByCreatorRequest {
-  string created_by = 1; // @gotags: validate:"required"
-  optional bool private_only = 2;
+message GetAllTaskTemplatesRequest {
+  optional string ward_id = 1; // @gotags: validate:"omitempty,omitnil,uuid4"
+  optional string created_by = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
+  bool private_only = 3;
 }
 
-message GetAllTaskTemplatesByCreatorResponse {
-  repeated TaskTemplate templates = 1;
-
-  message TaskTemplate {
-    string id = 1;
-    string name = 2;
-    string description = 3;
-    bool is_public = 4;
-    repeated SubTask subtasks = 7;
-
-    message SubTask {
-      string id = 1;
-      string task_template_id = 2;
-      string name = 3;
-    }
-  }
-}
-
-
-///
-/// GetAllTaskTemplatesByWard
-///
-
-message GetAllTaskTemplatesByWardRequest {
-  string ward_id = 1;
-}
-
-message GetAllTaskTemplatesByWardResponse {
+message GetAllTaskTemplatesResponse {
   repeated TaskTemplate templates = 1;
 
   message TaskTemplate {
@@ -173,12 +119,10 @@ message GetAllTaskTemplatesByWardResponse {
 
 service TaskTemplateService {
   rpc CreateTaskTemplate (CreateTaskTemplateRequest) returns (CreateTaskTemplateResponse) {}
-  rpc GetAllTaskTemplates (GetAllTaskTemplatesRequest) returns (GetAllTaskTemplatesResponse) {}
   rpc DeleteTaskTemplate (DeleteTaskTemplateRequest) returns (DeleteTaskTemplateResponse) {}
   rpc DeleteTaskTemplateSubTask (DeleteTaskTemplateSubTaskRequest) returns (DeleteTaskTemplateSubTaskResponse) {}
   rpc UpdateTaskTemplate (UpdateTaskTemplateRequest) returns (UpdateTaskTemplateResponse) {}
   rpc UpdateTaskTemplateSubTask (UpdateTaskTemplateSubTaskRequest) returns (UpdateTaskTemplateSubTaskResponse) {}
   rpc CreateTaskTemplateSubTask (CreateTaskTemplateSubTaskRequest) returns (CreateTaskTemplateSubTaskResponse) {}
-  rpc GetAllTaskTemplatesByCreator (GetAllTaskTemplatesByCreatorRequest) returns (GetAllTaskTemplatesByCreatorResponse) {}
-  rpc GetAllTaskTemplatesByWard (GetAllTaskTemplatesByWardRequest) returns (GetAllTaskTemplatesByWardResponse) {}
+  rpc GetAllTaskTemplates (GetAllTaskTemplatesRequest) returns (GetAllTaskTemplatesResponse) {}
 }

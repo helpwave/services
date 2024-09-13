@@ -131,6 +131,14 @@ class TaskServiceClient extends $grpc.Client {
   $grpc.ResponseFuture<$14.DeleteSubtaskResponse> deleteSubtask($14.DeleteSubtaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$deleteSubtask, request, options: options);
   }
+
+  $grpc.ResponseFuture<$15.RemoveTaskDueDateResponse> removeTaskDueDate($15.RemoveTaskDueDateRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$removeTaskDueDate, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$15.DeleteTaskResponse> deleteTask($15.DeleteTaskRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$deleteTask, request, options: options);
+  }
 }
 
 @$pb.GrpcServiceName('services.tasks_svc.v1.TaskService')

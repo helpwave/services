@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"hwutil"
 	"testing"
 )
@@ -79,5 +80,35 @@ func TestStringsToUUIDs(t *testing.T) {
 		if len(actual) != 0 {
 			t.Errorf("expected: [], got: %v", actual)
 		}
+	})
+}
+
+func TestInterfacesToStrings(t *testing.T) {
+
+	t.Run("ok path", func(t *testing.T) {
+		expected := []string{
+			"48441b57-a92a-4022-bfd9-9ded5acdb693",
+			"Unit Test",
+		}
+		interfaces := []interface{}{
+			"48441b57-a92a-4022-bfd9-9ded5acdb693",
+			"Unit Test",
+		}
+
+		strings, ok := hwutil.InterfacesToStrings(interfaces)
+
+		assert.True(t, ok)
+		assert.Equal(t, expected, strings)
+	})
+
+	t.Run("not ok path", func(t *testing.T) {
+		interfaces := []interface{}{
+			"48441b57-a92a-4022-bfd9-9ded5acdb693",
+			123,
+			[]string{"Test"},
+		}
+
+		_, ok := hwutil.InterfacesToStrings(interfaces)
+		assert.False(t, ok)
 	})
 }

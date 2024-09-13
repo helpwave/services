@@ -79,6 +79,7 @@ class CreatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage
   void clearDescription() => clearField(2);
 }
 
+/// the select field type requires an (initial) set of options (possible values)
 class CreatePropertyRequest_SelectData extends $pb.GeneratedMessage {
   factory CreatePropertyRequest_SelectData({
     $core.bool? allowFreetext,
@@ -142,8 +143,7 @@ enum CreatePropertyRequest_FieldTypeData {
   notSet
 }
 
-///
-///  CreateProperty
+/// Creates a new Property
 class CreatePropertyRequest extends $pb.GeneratedMessage {
   factory CreatePropertyRequest({
     $20.SubjectType? subjectType,

@@ -1,11 +1,9 @@
-package main
+package service
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
-	"github.com/jackc/pgx/v5"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb"
@@ -25,24 +23,15 @@ func replay(ctx context.Context, eventStore *esdb.Client) error {
 	log.Info().Msg("starting in replay mode")
 
 	db := hwdb.GetDB()
-	tx, err := db.Begin(ctx)
+	tx, rollback, err := hwdb.BeginTx(db, ctx)
 	if err != nil {
 		return fmt.Errorf("cannot begin transaction: %w", err)
 	}
-
-	var errToRollback error
-	defer func() {
-		if errToRollback != nil {
-			err = tx.Rollback(ctx)
-			if err != nil && !errors.Is(err, pgx.ErrTxClosed) {
-				log.Err(err).Msg("failed to rollback transaction")
-			}
-		}
-	}()
+	defer rollback()
 
 	log.Info().Msg("truncating all tables...")
 
-	if errToRollback = hwdb.DANGERTruncateAllTables(ctx, tx); errToRollback != nil {
+	if err = hwdb.DANGERTruncateAllTables(ctx, tx); err != nil {
 		return fmt.Errorf("cannot truncate all tables: %w", err)
 	}
 
@@ -51,7 +40,7 @@ func replay(ctx context.Context, eventStore *esdb.Client) error {
 	propertyPostgresProjection := property_postgres_projection.NewProjection(eventStore, ServiceName, tx)
 	propertyValuePostgresProjection := property_value_postgres_projection.NewProjection(eventStore, ServiceName, tx)
 
-	if errToRollback = eventstoredb.Replay(
+	err = eventstoredb.Replay(
 		ctx,
 		eventStore,
 		func(ctx context.Context, event hwes.Event) (err error) {
@@ -67,8 +56,10 @@ func replay(ctx context.Context, eventStore *esdb.Client) error {
 			fmt.Sprintf("%s-", propertyAggregate.PropertyAggregateType),
 			fmt.Sprintf("%s-", propertyValueAggregate.PropertyValueAggregateType),
 		},
-	); errToRollback != nil {
-		return errToRollback
+	)
+
+	if err != nil {
+		return err
 	}
 
 	if err := tx.Commit(ctx); err != nil {
