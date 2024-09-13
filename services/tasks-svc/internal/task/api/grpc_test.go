@@ -16,13 +16,13 @@ import (
 	"google.golang.org/grpc"
 )
 
-func server(ctx context.Context) (pb.TaskServiceClient, func()) {
+func server() (context.Context, pb.TaskServiceClient, func()) {
 	aggregateStore := hwes_test.NewAggregateStore()
 	authz := hwauthz_test.NewTrueAuthZ()
 	taskHandlers := handlers.NewTaskHandlers(aggregateStore, authz)
 	taskGrpcService := api.NewTaskGrpcService(aggregateStore, taskHandlers)
 
-	common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
+	ctx := common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 
 	// Start Server
 	grpcServer := grpc.NewServer(common.DefaultInterceptorChain())
@@ -30,12 +30,11 @@ func server(ctx context.Context) (pb.TaskServiceClient, func()) {
 	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
 
 	client := pb.NewTaskServiceClient(conn)
-	return client, closer
+	return ctx, client, closer
 }
 
 func setup() (ctx context.Context, client pb.TaskServiceClient, teardown func()) {
-	ctx = context.Background()
-	client, teardown = server(ctx)
+	ctx, client, teardown = server()
 	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
 	return ctx, client, teardown
 }

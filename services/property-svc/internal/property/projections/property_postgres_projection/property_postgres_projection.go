@@ -30,7 +30,8 @@ func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projectio
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)}),
 		db:               db,
-		propertyRepo:     property_repo.New(db)}
+		propertyRepo:     property_repo.New(db),
+	}
 	p.initEventListeners()
 	return p
 }

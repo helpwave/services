@@ -32,9 +32,7 @@ const ServiceName = "tasks-svc"
 var Version string
 
 func main() {
-	ctx, cancel := context.WithCancel(context.Background())
-
-	common.Setup(ServiceName, Version, common.WithAuth())
+	ctx := common.Setup(ServiceName, Version, common.WithAuth())
 
 	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
 	defer closeDBPool()
@@ -52,7 +50,7 @@ func main() {
 		spicedbProjection := spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName)
 		if err := spicedbProjection.Subscribe(ctx); err != nil {
 			log.Err(err).Msg("error during spicedb subscription")
-			cancel()
+			common.Shutdown(err)
 		}
 	}()
 
@@ -60,7 +58,7 @@ func main() {
 		postgresTaskProjection := task_postgres_projection.NewProjection(eventStore, ServiceName)
 		if err := postgresTaskProjection.Subscribe(ctx); err != nil {
 			log.Err(err).Msg("error during task-postgres subscription")
-			cancel()
+			common.Shutdown(err)
 		}
 	}()
 
@@ -68,7 +66,7 @@ func main() {
 		postgresPatientProjection := patient_postgres_projection.NewProjection(eventStore, ServiceName)
 		if err := postgresPatientProjection.Subscribe(ctx); err != nil {
 			log.Err(err).Msg("error during patient-postgres subscription")
-			cancel()
+			common.Shutdown(err)
 		}
 	}()
 
@@ -83,6 +81,6 @@ func main() {
 		pb.RegisterTaskTemplateServiceServer(grpcServer, task_template.NewServiceServer())
 	})
 
-	// Close context
-	cancel()
+	// Shutdown cleanly
+	common.Shutdown(nil)
 }
