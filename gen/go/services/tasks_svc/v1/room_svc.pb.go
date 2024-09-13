@@ -245,7 +245,7 @@ type GetRoomsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WardId *string `protobuf:"bytes,1,opt,name=ward_id,json=wardId,proto3,oneof" json:"ward_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
+	WardId *string `protobuf:"bytes,1,opt,name=ward_id,json=wardId,proto3,oneof" json:"ward_id,omitempty" validate:"omitempty,uuid4"` // @gotags: validate:"omitempty,uuid4"
 }
 
 func (x *GetRoomsRequest) Reset() {
