@@ -2,7 +2,6 @@ package main
 
 import (
 	"common"
-	"context"
 	pb "gen/services/task_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwdb"
@@ -22,14 +21,14 @@ const ServiceName = "task-svc"
 var Version string
 
 func main() {
-	common.Setup(ServiceName, Version, common.WithAuth())
+	ctx := common.Setup(ServiceName, Version, common.WithAuth())
 
-	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
+	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()
 
 	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
 
-	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
+	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 		pb.RegisterTaskServiceServer(grpcServer, task.NewServiceServer())
 		pb.RegisterPatientServiceServer(grpcServer, patient.NewServiceServer())

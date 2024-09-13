@@ -15,20 +15,20 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'property_value_svc.pb.dart' as $4;
+import 'property_value_svc.pb.dart' as $3;
 
 export 'property_value_svc.pb.dart';
 
 @$pb.GrpcServiceName('services.property_svc.v1.PropertyValueService')
 class PropertyValueServiceClient extends $grpc.Client {
-  static final _$attachPropertyValue = $grpc.ClientMethod<$4.AttachPropertyValueRequest, $4.AttachPropertyValueResponse>(
+  static final _$attachPropertyValue = $grpc.ClientMethod<$3.AttachPropertyValueRequest, $3.AttachPropertyValueResponse>(
       '/services.property_svc.v1.PropertyValueService/AttachPropertyValue',
-      ($4.AttachPropertyValueRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $4.AttachPropertyValueResponse.fromBuffer(value));
-  static final _$getAttachedPropertyValues = $grpc.ClientMethod<$4.GetAttachedPropertyValuesRequest, $4.GetAttachedPropertyValuesResponse>(
+      ($3.AttachPropertyValueRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $3.AttachPropertyValueResponse.fromBuffer(value));
+  static final _$getAttachedPropertyValues = $grpc.ClientMethod<$3.GetAttachedPropertyValuesRequest, $3.GetAttachedPropertyValuesResponse>(
       '/services.property_svc.v1.PropertyValueService/GetAttachedPropertyValues',
-      ($4.GetAttachedPropertyValuesRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $4.GetAttachedPropertyValuesResponse.fromBuffer(value));
+      ($3.GetAttachedPropertyValuesRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $3.GetAttachedPropertyValuesResponse.fromBuffer(value));
 
   PropertyValueServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -36,11 +36,11 @@ class PropertyValueServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$4.AttachPropertyValueResponse> attachPropertyValue($4.AttachPropertyValueRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$3.AttachPropertyValueResponse> attachPropertyValue($3.AttachPropertyValueRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$attachPropertyValue, request, options: options);
   }
 
-  $grpc.ResponseFuture<$4.GetAttachedPropertyValuesResponse> getAttachedPropertyValues($4.GetAttachedPropertyValuesRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$3.GetAttachedPropertyValuesResponse> getAttachedPropertyValues($3.GetAttachedPropertyValuesRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getAttachedPropertyValues, request, options: options);
   }
 }
@@ -50,30 +50,30 @@ abstract class PropertyValueServiceBase extends $grpc.Service {
   $core.String get $name => 'services.property_svc.v1.PropertyValueService';
 
   PropertyValueServiceBase() {
-    $addMethod($grpc.ServiceMethod<$4.AttachPropertyValueRequest, $4.AttachPropertyValueResponse>(
+    $addMethod($grpc.ServiceMethod<$3.AttachPropertyValueRequest, $3.AttachPropertyValueResponse>(
         'AttachPropertyValue',
         attachPropertyValue_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $4.AttachPropertyValueRequest.fromBuffer(value),
-        ($4.AttachPropertyValueResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$4.GetAttachedPropertyValuesRequest, $4.GetAttachedPropertyValuesResponse>(
+        ($core.List<$core.int> value) => $3.AttachPropertyValueRequest.fromBuffer(value),
+        ($3.AttachPropertyValueResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.GetAttachedPropertyValuesRequest, $3.GetAttachedPropertyValuesResponse>(
         'GetAttachedPropertyValues',
         getAttachedPropertyValues_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $4.GetAttachedPropertyValuesRequest.fromBuffer(value),
-        ($4.GetAttachedPropertyValuesResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $3.GetAttachedPropertyValuesRequest.fromBuffer(value),
+        ($3.GetAttachedPropertyValuesResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$4.AttachPropertyValueResponse> attachPropertyValue_Pre($grpc.ServiceCall call, $async.Future<$4.AttachPropertyValueRequest> request) async {
+  $async.Future<$3.AttachPropertyValueResponse> attachPropertyValue_Pre($grpc.ServiceCall call, $async.Future<$3.AttachPropertyValueRequest> request) async {
     return attachPropertyValue(call, await request);
   }
 
-  $async.Future<$4.GetAttachedPropertyValuesResponse> getAttachedPropertyValues_Pre($grpc.ServiceCall call, $async.Future<$4.GetAttachedPropertyValuesRequest> request) async {
+  $async.Future<$3.GetAttachedPropertyValuesResponse> getAttachedPropertyValues_Pre($grpc.ServiceCall call, $async.Future<$3.GetAttachedPropertyValuesRequest> request) async {
     return getAttachedPropertyValues(call, await request);
   }
 
-  $async.Future<$4.AttachPropertyValueResponse> attachPropertyValue($grpc.ServiceCall call, $4.AttachPropertyValueRequest request);
-  $async.Future<$4.GetAttachedPropertyValuesResponse> getAttachedPropertyValues($grpc.ServiceCall call, $4.GetAttachedPropertyValuesRequest request);
+  $async.Future<$3.AttachPropertyValueResponse> attachPropertyValue($grpc.ServiceCall call, $3.AttachPropertyValueRequest request);
+  $async.Future<$3.GetAttachedPropertyValuesResponse> getAttachedPropertyValues($grpc.ServiceCall call, $3.GetAttachedPropertyValuesRequest request);
 }

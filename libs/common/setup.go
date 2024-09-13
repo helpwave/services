@@ -9,8 +9,10 @@ import (
 	"github.com/rs/zerolog/log"
 	"hwutil"
 	"net/http"
+	"os"
 	"strings"
 	"telemetry"
+	"time"
 )
 
 var (
@@ -18,6 +20,7 @@ var (
 	InsecureFakeTokenEnable = false
 	InstanceOrganizationID  *uuid.UUID
 	shutdownOpenTelemetryFn func() // cleanup function
+	contextCancel           func() // Setup() yields the "root" context, which can be canceled using this function
 )
 
 const DevelopmentMode = "development"
@@ -57,8 +60,9 @@ var skipAuthForMethods []string
 
 // Setup loads the .env file and sets up logging,
 // also sets up tokens when the service requires auth.
-func Setup(serviceName, version string, opts ...SetupOption) {
-	ctx := context.Background()
+func Setup(serviceName, version string, opts ...SetupOption) context.Context {
+	ctx, cancel := context.WithCancel(context.Background())
+	contextCancel = cancel
 
 	// Collect options
 	options := SetupOptions{}
@@ -130,6 +134,8 @@ func Setup(serviceName, version string, opts ...SetupOption) {
 
 		setupAuth(ctx, options.fakeAuthOnly)
 	}
+
+	return ctx
 }
 
 // ResolveAddrFromEnv uses the "APP_PORT", "PORT" and "ADDR" env variables to
@@ -150,7 +156,22 @@ func ResolveAddrFromEnv() string {
 // It should only ever be called after Setup() or SetupWithUnauthenticatedMethods()!
 // StartNewGRPCServer() already calls this function, so there is usually not need to call Shutdown() at all!
 // Keep in mind, that this shuts down the otel exporter, new traces won't be processed!
-func Shutdown() {
-	log.Info().Msg("shutting down otel")
-	shutdownOpenTelemetryFn()
+func Shutdown(err error) {
+	if shutdownOpenTelemetryFn != nil {
+		log.Info().Msg("shutting down otel")
+		shutdownOpenTelemetryFn()
+	}
+
+	if contextCancel != nil {
+		log.Info().Msg("canceling main context")
+		contextCancel()
+	}
+
+	time.Sleep(time.Second * 2) // give other resources some time to react to closed context (not sure if needed)
+
+	exitCode := 0
+	if err != nil {
+		exitCode = 1
+	}
+	os.Exit(exitCode)
 }
