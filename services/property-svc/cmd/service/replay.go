@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
-	"hwauthz"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb"
@@ -17,7 +16,7 @@ import (
 
 // replay mechanism for projections of the property-svc
 // replay truncates the whole database and replays all events
-func replay(ctx context.Context, eventStore *esdb.Client, authz hwauthz.AuthZ) error {
+func replay(ctx context.Context, eventStore *esdb.Client) error {
 	ctx, span, log := telemetry.StartSpan(ctx, "property-svc.replay")
 	defer span.End()
 
