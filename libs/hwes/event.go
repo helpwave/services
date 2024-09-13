@@ -32,6 +32,8 @@ type Event struct {
 	Version uint64
 	// user responsible for this event
 	CommitterUserID *uuid.UUID
+	// organization of user responsible for this event
+	CommitterOrganizationID *uuid.UUID
 	// w3c trace context
 	TraceParent string
 }
@@ -39,6 +41,8 @@ type Event struct {
 type metadata struct {
 	// CommitterUserID represents an optional UUID that identifies the user that is directly responsible for this event
 	CommitterUserID string `json:"committer_user_id"`
+	// CommitterOrganizationID is required, if CommitterUserID is set, represents user's organization at the time of creation
+	CommitterOrganizationID string `json:"committer_organization_id"`
 	// w3c trace context
 	TraceParent string `json:"trace_parent"`
 	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is discouraged.
@@ -148,6 +152,11 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 	eventCommitterUserID, err := uuid.Parse(md.CommitterUserID)
 	if err == nil {
 		event.CommitterUserID = &eventCommitterUserID
+		eventCommitterOrgID, err := uuid.Parse(md.CommitterOrganizationID)
+		if err != nil {
+			return Event{}, fmt.Errorf("event's committer org could not be parsed: %w", err)
+		}
+		event.CommitterOrganizationID = &eventCommitterOrgID
 	}
 
 	return event, nil
@@ -177,11 +186,12 @@ func (e *Event) GetVersion() uint64 {
 
 func (e *Event) ToEventData() (esdb.EventData, error) {
 	md := metadata{
-    TraceParent: e.TraceParent,
-		Timestamp: e.Timestamp,
+		TraceParent: e.TraceParent,
+		Timestamp:   e.Timestamp,
 	}
 	if e.CommitterUserID != nil {
 		md.CommitterUserID = e.CommitterUserID.String()
+		md.CommitterOrganizationID = e.CommitterOrganizationID.String()
 	}
 
 	mdBytes, err := json.Marshal(md)
@@ -239,6 +249,13 @@ func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 	}
 
 	e.CommitterUserID = &userID
+
+	orgID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return fmt.Errorf("could not set comitter org from ctx: %w", err)
+	}
+
+	e.CommitterOrganizationID = &orgID
 
 	// Just to make sure we are actually dealing with a valid UUID
 	if _, err := uuid.Parse(e.CommitterUserID.String()); err != nil {

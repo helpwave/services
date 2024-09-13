@@ -1,0 +1,26 @@
+definition organization {
+	relation leader: user
+	relation member: user
+
+	// foreign types, when traversing, should use permissions, not relations
+	// this is a best practice to maintain a more stable "API" between types
+	permission leadership = leader
+	permission membership = leader + member
+
+	// (only) leaders can invite and remove members
+	permission invite_member = leadership
+	permission remove_member = leadership
+
+	// all members can create new properties
+	permission create_property = membership;
+}
+
+definition organization_invite {
+	relation user: user
+	relation organization: organization
+
+	permission view = user + organization->leadership
+	permission accept = user
+	permission deny = user
+	permission cancel = organization->leadership
+}

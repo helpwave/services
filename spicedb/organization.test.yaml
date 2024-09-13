@@ -1,0 +1,68 @@
+
+relationships:
+  # Alice leads the A organization
+  - "organization:a#leader@user:alice"
+  # Bob leads the B organization
+  - "organization:b#leader@user:bob"
+  # Bob is also, explicitly, a member of the B organization
+  - "organization:b#member@user:bob"
+  # Charlie is a common member
+  - "organization:a#member@user:charlie"
+  - "organization:b#member@user:charlie"
+  # Clara is a common member, and leader of the A organization
+  - "organization:a#leader@user:clara"
+  - "organization:a#member@user:clara"
+  - "organization:b#member@user:clara"
+  # Oscar is only a member of one organization (A organization)
+  - "organization:a#member@user:oscar"
+
+
+tests:
+  - name: leads are members
+    check:
+      - "organization:a#membership@user:alice" # follows from leader
+      - "organization:b#membership@user:bob" # follows from both member and leader
+
+  - name: leads only have permissions in their own organization
+    check:
+      - not: "organization:b#leadership@user:alice"
+      - not: "organization:b#membership@user:alice"
+
+      # clara is a lead of a
+      - "organization:a#leadership@user:clara"
+      - "organization:a#membership@user:clara"
+      # but only a member in b
+      - not: "organization:b#leadership@user:clara"
+      - "organization:b#membership@user:clara"
+
+  - name: leaders can invite users
+    check:
+      - "organization:a#leadership@user:alice"
+      - "organization:a#invite_member@user:alice"
+
+  - name: members cant invite
+    check:
+      - not: "organization:a#leadership@user:charlie"
+      - not: "organization:a#invite_member@user:charlie"
+
+      - not: "organization:b#leadership@user:charlie"
+      - not: "organization:b#invite_member@user:charlie"
+
+  - name: leaders can remove users
+    check:
+        - "organization:a#leadership@user:alice"
+        - "organization:a#remove_member@user:alice"
+
+
+  - name: members cant remove users
+    check:
+      - not: "organization:a#leadership@user:charlie"
+      - not: "organization:a#remove_member@user:charlie"
+
+      - not: "organization:b#leadership@user:charlie"
+      - not: "organization:b#remove_member@user:charlie"
+
+  - name: members can create new properties in their orgs
+    check:
+      - "organization:a#create_property@user:alice" # alice is a leader
+      - "organization:a#create_property@user:charlie" # charlie is a member

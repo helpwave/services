@@ -1,4 +1,4 @@
-package property_postgres_projection
+package postgres_projection
 
 import (
 	"context"
@@ -77,6 +77,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	}
 	fieldType := (pb.FieldType)(value)
 
+	// create query
 	err = p.propertyRepo.CreateProperty(ctx, property_repo.CreatePropertyParams{
 		ID:          propertyID,
 		SubjectType: int32(subjectType),
@@ -84,6 +85,10 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 		Name:        payload.Name,
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	}
+
+	if err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
