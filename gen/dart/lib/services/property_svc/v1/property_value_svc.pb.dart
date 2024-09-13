@@ -670,7 +670,8 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     $core.bool? boolValue,
     $20.Date? dateValue,
     $19.Timestamp? dateTimeValue,
-    $core.String? selectValue,
+    GetAttachedPropertyValuesResponse_Value_SelectValueOption? selectValue,
+    GetAttachedPropertyValuesResponse_Value_MultiSelectValue? multiSelectValue,
   }) {
     final $result = create();
     if (propertyId != null) {
@@ -737,7 +738,8 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     ..aOB(8, _omitFieldNames ? '' : 'boolValue')
     ..aOM<$20.Date>(9, _omitFieldNames ? '' : 'dateValue', subBuilder: $20.Date.create)
     ..aOM<$19.Timestamp>(10, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $19.Timestamp.create)
-    ..aOS(11, _omitFieldNames ? '' : 'selectValue')
+    ..aOM<GetAttachedPropertyValuesResponse_Value_SelectValueOption>(11, _omitFieldNames ? '' : 'selectValue', subBuilder: GetAttachedPropertyValuesResponse_Value_SelectValueOption.create)
+    ..aOM<GetAttachedPropertyValuesResponse_Value_MultiSelectValue>(12, _omitFieldNames ? '' : 'multiSelectValue', subBuilder: GetAttachedPropertyValuesResponse_Value_MultiSelectValue.create)
     ..hasRequiredFields = false
   ;
 

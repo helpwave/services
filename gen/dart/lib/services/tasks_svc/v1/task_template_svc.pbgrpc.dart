@@ -25,10 +25,6 @@ class TaskTemplateServiceClient extends $grpc.Client {
       '/services.tasks_svc.v1.TaskTemplateService/CreateTaskTemplate',
       ($15.CreateTaskTemplateRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $15.CreateTaskTemplateResponse.fromBuffer(value));
-  static final _$getAllTaskTemplates = $grpc.ClientMethod<$15.GetAllTaskTemplatesRequest, $15.GetAllTaskTemplatesResponse>(
-      '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplates',
-      ($15.GetAllTaskTemplatesRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.GetAllTaskTemplatesResponse.fromBuffer(value));
   static final _$deleteTaskTemplate = $grpc.ClientMethod<$15.DeleteTaskTemplateRequest, $15.DeleteTaskTemplateResponse>(
       '/services.tasks_svc.v1.TaskTemplateService/DeleteTaskTemplate',
       ($15.DeleteTaskTemplateRequest value) => value.writeToBuffer(),
@@ -49,14 +45,10 @@ class TaskTemplateServiceClient extends $grpc.Client {
       '/services.tasks_svc.v1.TaskTemplateService/CreateTaskTemplateSubTask',
       ($15.CreateTaskTemplateSubTaskRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $15.CreateTaskTemplateSubTaskResponse.fromBuffer(value));
-  static final _$getAllTaskTemplatesByCreator = $grpc.ClientMethod<$15.GetAllTaskTemplatesByCreatorRequest, $15.GetAllTaskTemplatesByCreatorResponse>(
-      '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesByCreator',
-      ($15.GetAllTaskTemplatesByCreatorRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.GetAllTaskTemplatesByCreatorResponse.fromBuffer(value));
-  static final _$getAllTaskTemplatesByWard = $grpc.ClientMethod<$15.GetAllTaskTemplatesByWardRequest, $15.GetAllTaskTemplatesByWardResponse>(
-      '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplatesByWard',
-      ($15.GetAllTaskTemplatesByWardRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $15.GetAllTaskTemplatesByWardResponse.fromBuffer(value));
+  static final _$getAllTaskTemplates = $grpc.ClientMethod<$15.GetAllTaskTemplatesRequest, $15.GetAllTaskTemplatesResponse>(
+      '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplates',
+      ($15.GetAllTaskTemplatesRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $15.GetAllTaskTemplatesResponse.fromBuffer(value));
 
   TaskTemplateServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -66,10 +58,6 @@ class TaskTemplateServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$15.CreateTaskTemplateResponse> createTaskTemplate($15.CreateTaskTemplateRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createTaskTemplate, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$15.GetAllTaskTemplatesResponse> getAllTaskTemplates($15.GetAllTaskTemplatesRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getAllTaskTemplates, request, options: options);
   }
 
   $grpc.ResponseFuture<$15.DeleteTaskTemplateResponse> deleteTaskTemplate($15.DeleteTaskTemplateRequest request, {$grpc.CallOptions? options}) {
@@ -92,12 +80,8 @@ class TaskTemplateServiceClient extends $grpc.Client {
     return $createUnaryCall(_$createTaskTemplateSubTask, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.GetAllTaskTemplatesByCreatorResponse> getAllTaskTemplatesByCreator($15.GetAllTaskTemplatesByCreatorRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getAllTaskTemplatesByCreator, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$15.GetAllTaskTemplatesByWardResponse> getAllTaskTemplatesByWard($15.GetAllTaskTemplatesByWardRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getAllTaskTemplatesByWard, request, options: options);
+  $grpc.ResponseFuture<$15.GetAllTaskTemplatesResponse> getAllTaskTemplates($15.GetAllTaskTemplatesRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getAllTaskTemplates, request, options: options);
   }
 }
 
@@ -113,13 +97,6 @@ abstract class TaskTemplateServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $15.CreateTaskTemplateRequest.fromBuffer(value),
         ($15.CreateTaskTemplateResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.GetAllTaskTemplatesRequest, $15.GetAllTaskTemplatesResponse>(
-        'GetAllTaskTemplates',
-        getAllTaskTemplates_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $15.GetAllTaskTemplatesRequest.fromBuffer(value),
-        ($15.GetAllTaskTemplatesResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$15.DeleteTaskTemplateRequest, $15.DeleteTaskTemplateResponse>(
         'DeleteTaskTemplate',
         deleteTaskTemplate_Pre,
@@ -155,28 +132,17 @@ abstract class TaskTemplateServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $15.CreateTaskTemplateSubTaskRequest.fromBuffer(value),
         ($15.CreateTaskTemplateSubTaskResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.GetAllTaskTemplatesByCreatorRequest, $15.GetAllTaskTemplatesByCreatorResponse>(
-        'GetAllTaskTemplatesByCreator',
-        getAllTaskTemplatesByCreator_Pre,
+    $addMethod($grpc.ServiceMethod<$15.GetAllTaskTemplatesRequest, $15.GetAllTaskTemplatesResponse>(
+        'GetAllTaskTemplates',
+        getAllTaskTemplates_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $15.GetAllTaskTemplatesByCreatorRequest.fromBuffer(value),
-        ($15.GetAllTaskTemplatesByCreatorResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$15.GetAllTaskTemplatesByWardRequest, $15.GetAllTaskTemplatesByWardResponse>(
-        'GetAllTaskTemplatesByWard',
-        getAllTaskTemplatesByWard_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $15.GetAllTaskTemplatesByWardRequest.fromBuffer(value),
-        ($15.GetAllTaskTemplatesByWardResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $15.GetAllTaskTemplatesRequest.fromBuffer(value),
+        ($15.GetAllTaskTemplatesResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$15.CreateTaskTemplateResponse> createTaskTemplate_Pre($grpc.ServiceCall call, $async.Future<$15.CreateTaskTemplateRequest> request) async {
     return createTaskTemplate(call, await request);
-  }
-
-  $async.Future<$15.GetAllTaskTemplatesResponse> getAllTaskTemplates_Pre($grpc.ServiceCall call, $async.Future<$15.GetAllTaskTemplatesRequest> request) async {
-    return getAllTaskTemplates(call, await request);
   }
 
   $async.Future<$15.DeleteTaskTemplateResponse> deleteTaskTemplate_Pre($grpc.ServiceCall call, $async.Future<$15.DeleteTaskTemplateRequest> request) async {
@@ -199,21 +165,15 @@ abstract class TaskTemplateServiceBase extends $grpc.Service {
     return createTaskTemplateSubTask(call, await request);
   }
 
-  $async.Future<$15.GetAllTaskTemplatesByCreatorResponse> getAllTaskTemplatesByCreator_Pre($grpc.ServiceCall call, $async.Future<$15.GetAllTaskTemplatesByCreatorRequest> request) async {
-    return getAllTaskTemplatesByCreator(call, await request);
-  }
-
-  $async.Future<$15.GetAllTaskTemplatesByWardResponse> getAllTaskTemplatesByWard_Pre($grpc.ServiceCall call, $async.Future<$15.GetAllTaskTemplatesByWardRequest> request) async {
-    return getAllTaskTemplatesByWard(call, await request);
+  $async.Future<$15.GetAllTaskTemplatesResponse> getAllTaskTemplates_Pre($grpc.ServiceCall call, $async.Future<$15.GetAllTaskTemplatesRequest> request) async {
+    return getAllTaskTemplates(call, await request);
   }
 
   $async.Future<$15.CreateTaskTemplateResponse> createTaskTemplate($grpc.ServiceCall call, $15.CreateTaskTemplateRequest request);
-  $async.Future<$15.GetAllTaskTemplatesResponse> getAllTaskTemplates($grpc.ServiceCall call, $15.GetAllTaskTemplatesRequest request);
   $async.Future<$15.DeleteTaskTemplateResponse> deleteTaskTemplate($grpc.ServiceCall call, $15.DeleteTaskTemplateRequest request);
   $async.Future<$15.DeleteTaskTemplateSubTaskResponse> deleteTaskTemplateSubTask($grpc.ServiceCall call, $15.DeleteTaskTemplateSubTaskRequest request);
   $async.Future<$15.UpdateTaskTemplateResponse> updateTaskTemplate($grpc.ServiceCall call, $15.UpdateTaskTemplateRequest request);
   $async.Future<$15.UpdateTaskTemplateSubTaskResponse> updateTaskTemplateSubTask($grpc.ServiceCall call, $15.UpdateTaskTemplateSubTaskRequest request);
   $async.Future<$15.CreateTaskTemplateSubTaskResponse> createTaskTemplateSubTask($grpc.ServiceCall call, $15.CreateTaskTemplateSubTaskRequest request);
-  $async.Future<$15.GetAllTaskTemplatesByCreatorResponse> getAllTaskTemplatesByCreator($grpc.ServiceCall call, $15.GetAllTaskTemplatesByCreatorRequest request);
-  $async.Future<$15.GetAllTaskTemplatesByWardResponse> getAllTaskTemplatesByWard($grpc.ServiceCall call, $15.GetAllTaskTemplatesByWardRequest request);
+  $async.Future<$15.GetAllTaskTemplatesResponse> getAllTaskTemplates($grpc.ServiceCall call, $15.GetAllTaskTemplatesRequest request);
 }

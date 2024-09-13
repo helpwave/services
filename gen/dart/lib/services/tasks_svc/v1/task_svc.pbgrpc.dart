@@ -61,18 +61,18 @@ class TaskServiceClient extends $grpc.Client {
       '/services.tasks_svc.v1.TaskService/UpdateSubtask',
       ($14.UpdateSubtaskRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $14.UpdateSubtaskResponse.fromBuffer(value));
-  static final _$completeSubtask = $grpc.ClientMethod<$14.CompleteSubtaskRequest, $14.CompleteSubtaskResponse>(
-      '/services.tasks_svc.v1.TaskService/CompleteSubtask',
-      ($14.CompleteSubtaskRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $14.CompleteSubtaskResponse.fromBuffer(value));
-  static final _$uncompleteSubtask = $grpc.ClientMethod<$14.UncompleteSubtaskRequest, $14.UncompleteSubtaskResponse>(
-      '/services.tasks_svc.v1.TaskService/UncompleteSubtask',
-      ($14.UncompleteSubtaskRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $14.UncompleteSubtaskResponse.fromBuffer(value));
   static final _$deleteSubtask = $grpc.ClientMethod<$14.DeleteSubtaskRequest, $14.DeleteSubtaskResponse>(
       '/services.tasks_svc.v1.TaskService/DeleteSubtask',
       ($14.DeleteSubtaskRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $14.DeleteSubtaskResponse.fromBuffer(value));
+  static final _$removeTaskDueDate = $grpc.ClientMethod<$14.RemoveTaskDueDateRequest, $14.RemoveTaskDueDateResponse>(
+      '/services.tasks_svc.v1.TaskService/RemoveTaskDueDate',
+      ($14.RemoveTaskDueDateRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $14.RemoveTaskDueDateResponse.fromBuffer(value));
+  static final _$deleteTask = $grpc.ClientMethod<$14.DeleteTaskRequest, $14.DeleteTaskResponse>(
+      '/services.tasks_svc.v1.TaskService/DeleteTask',
+      ($14.DeleteTaskRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $14.DeleteTaskResponse.fromBuffer(value));
 
   TaskServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -120,23 +120,15 @@ class TaskServiceClient extends $grpc.Client {
     return $createUnaryCall(_$updateSubtask, request, options: options);
   }
 
-  $grpc.ResponseFuture<$14.CompleteSubtaskResponse> completeSubtask($14.CompleteSubtaskRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$completeSubtask, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$14.UncompleteSubtaskResponse> uncompleteSubtask($14.UncompleteSubtaskRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$uncompleteSubtask, request, options: options);
-  }
-
   $grpc.ResponseFuture<$14.DeleteSubtaskResponse> deleteSubtask($14.DeleteSubtaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$deleteSubtask, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.RemoveTaskDueDateResponse> removeTaskDueDate($15.RemoveTaskDueDateRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$14.RemoveTaskDueDateResponse> removeTaskDueDate($14.RemoveTaskDueDateRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$removeTaskDueDate, request, options: options);
   }
 
-  $grpc.ResponseFuture<$15.DeleteTaskResponse> deleteTask($15.DeleteTaskRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$14.DeleteTaskResponse> deleteTask($14.DeleteTaskRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$deleteTask, request, options: options);
   }
 }
@@ -216,20 +208,6 @@ abstract class TaskServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $14.UpdateSubtaskRequest.fromBuffer(value),
         ($14.UpdateSubtaskResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$14.CompleteSubtaskRequest, $14.CompleteSubtaskResponse>(
-        'CompleteSubtask',
-        completeSubtask_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $14.CompleteSubtaskRequest.fromBuffer(value),
-        ($14.CompleteSubtaskResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$14.UncompleteSubtaskRequest, $14.UncompleteSubtaskResponse>(
-        'UncompleteSubtask',
-        uncompleteSubtask_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $14.UncompleteSubtaskRequest.fromBuffer(value),
-        ($14.UncompleteSubtaskResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$14.DeleteSubtaskRequest, $14.DeleteSubtaskResponse>(
         'DeleteSubtask',
         deleteSubtask_Pre,
@@ -237,6 +215,20 @@ abstract class TaskServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $14.DeleteSubtaskRequest.fromBuffer(value),
         ($14.DeleteSubtaskResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$14.RemoveTaskDueDateRequest, $14.RemoveTaskDueDateResponse>(
+        'RemoveTaskDueDate',
+        removeTaskDueDate_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $14.RemoveTaskDueDateRequest.fromBuffer(value),
+        ($14.RemoveTaskDueDateResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$14.DeleteTaskRequest, $14.DeleteTaskResponse>(
+        'DeleteTask',
+        deleteTask_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $14.DeleteTaskRequest.fromBuffer(value),
+        ($14.DeleteTaskResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$14.CreateTaskResponse> createTask_Pre($grpc.ServiceCall call, $async.Future<$14.CreateTaskRequest> request) async {
@@ -279,16 +271,16 @@ abstract class TaskServiceBase extends $grpc.Service {
     return updateSubtask(call, await request);
   }
 
-  $async.Future<$14.CompleteSubtaskResponse> completeSubtask_Pre($grpc.ServiceCall call, $async.Future<$14.CompleteSubtaskRequest> request) async {
-    return completeSubtask(call, await request);
-  }
-
-  $async.Future<$14.UncompleteSubtaskResponse> uncompleteSubtask_Pre($grpc.ServiceCall call, $async.Future<$14.UncompleteSubtaskRequest> request) async {
-    return uncompleteSubtask(call, await request);
-  }
-
   $async.Future<$14.DeleteSubtaskResponse> deleteSubtask_Pre($grpc.ServiceCall call, $async.Future<$14.DeleteSubtaskRequest> request) async {
     return deleteSubtask(call, await request);
+  }
+
+  $async.Future<$14.RemoveTaskDueDateResponse> removeTaskDueDate_Pre($grpc.ServiceCall call, $async.Future<$14.RemoveTaskDueDateRequest> request) async {
+    return removeTaskDueDate(call, await request);
+  }
+
+  $async.Future<$14.DeleteTaskResponse> deleteTask_Pre($grpc.ServiceCall call, $async.Future<$14.DeleteTaskRequest> request) async {
+    return deleteTask(call, await request);
   }
 
   $async.Future<$14.CreateTaskResponse> createTask($grpc.ServiceCall call, $14.CreateTaskRequest request);
@@ -301,7 +293,7 @@ abstract class TaskServiceBase extends $grpc.Service {
   $async.Future<$14.UnassignTaskResponse> unassignTask($grpc.ServiceCall call, $14.UnassignTaskRequest request);
   $async.Future<$14.CreateSubtaskResponse> createSubtask($grpc.ServiceCall call, $14.CreateSubtaskRequest request);
   $async.Future<$14.UpdateSubtaskResponse> updateSubtask($grpc.ServiceCall call, $14.UpdateSubtaskRequest request);
-  $async.Future<$14.CompleteSubtaskResponse> completeSubtask($grpc.ServiceCall call, $14.CompleteSubtaskRequest request);
-  $async.Future<$14.UncompleteSubtaskResponse> uncompleteSubtask($grpc.ServiceCall call, $14.UncompleteSubtaskRequest request);
   $async.Future<$14.DeleteSubtaskResponse> deleteSubtask($grpc.ServiceCall call, $14.DeleteSubtaskRequest request);
+  $async.Future<$14.RemoveTaskDueDateResponse> removeTaskDueDate($grpc.ServiceCall call, $14.RemoveTaskDueDateRequest request);
+  $async.Future<$14.DeleteTaskResponse> deleteTask($grpc.ServiceCall call, $14.DeleteTaskRequest request);
 }

@@ -33,10 +33,6 @@ class RoomServiceClient extends $grpc.Client {
       '/services.tasks_svc.v1.RoomService/GetRooms',
       ($13.GetRoomsRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $13.GetRoomsResponse.fromBuffer(value));
-  static final _$getRoomsByWard = $grpc.ClientMethod<$13.GetRoomsByWardRequest, $13.GetRoomsByWardResponse>(
-      '/services.tasks_svc.v1.RoomService/GetRoomsByWard',
-      ($13.GetRoomsByWardRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $13.GetRoomsByWardResponse.fromBuffer(value));
   static final _$updateRoom = $grpc.ClientMethod<$13.UpdateRoomRequest, $13.UpdateRoomResponse>(
       '/services.tasks_svc.v1.RoomService/UpdateRoom',
       ($13.UpdateRoomRequest value) => value.writeToBuffer(),
@@ -66,10 +62,6 @@ class RoomServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$13.GetRoomsResponse> getRooms($13.GetRoomsRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getRooms, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$13.GetRoomsByWardResponse> getRoomsByWard($13.GetRoomsByWardRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getRoomsByWard, request, options: options);
   }
 
   $grpc.ResponseFuture<$13.UpdateRoomResponse> updateRoom($13.UpdateRoomRequest request, {$grpc.CallOptions? options}) {
@@ -111,13 +103,6 @@ abstract class RoomServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $13.GetRoomsRequest.fromBuffer(value),
         ($13.GetRoomsResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$13.GetRoomsByWardRequest, $13.GetRoomsByWardResponse>(
-        'GetRoomsByWard',
-        getRoomsByWard_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $13.GetRoomsByWardRequest.fromBuffer(value),
-        ($13.GetRoomsByWardResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$13.UpdateRoomRequest, $13.UpdateRoomResponse>(
         'UpdateRoom',
         updateRoom_Pre,
@@ -153,10 +138,6 @@ abstract class RoomServiceBase extends $grpc.Service {
     return getRooms(call, await request);
   }
 
-  $async.Future<$13.GetRoomsByWardResponse> getRoomsByWard_Pre($grpc.ServiceCall call, $async.Future<$13.GetRoomsByWardRequest> request) async {
-    return getRoomsByWard(call, await request);
-  }
-
   $async.Future<$13.UpdateRoomResponse> updateRoom_Pre($grpc.ServiceCall call, $async.Future<$13.UpdateRoomRequest> request) async {
     return updateRoom(call, await request);
   }
@@ -172,7 +153,6 @@ abstract class RoomServiceBase extends $grpc.Service {
   $async.Future<$13.CreateRoomResponse> createRoom($grpc.ServiceCall call, $13.CreateRoomRequest request);
   $async.Future<$13.GetRoomResponse> getRoom($grpc.ServiceCall call, $13.GetRoomRequest request);
   $async.Future<$13.GetRoomsResponse> getRooms($grpc.ServiceCall call, $13.GetRoomsRequest request);
-  $async.Future<$13.GetRoomsByWardResponse> getRoomsByWard($grpc.ServiceCall call, $13.GetRoomsByWardRequest request);
   $async.Future<$13.UpdateRoomResponse> updateRoom($grpc.ServiceCall call, $13.UpdateRoomRequest request);
   $async.Future<$13.DeleteRoomResponse> deleteRoom($grpc.ServiceCall call, $13.DeleteRoomRequest request);
   $async.Future<$13.GetRoomOverviewsByWardResponse> getRoomOverviewsByWard($grpc.ServiceCall call, $13.GetRoomOverviewsByWardRequest request);
