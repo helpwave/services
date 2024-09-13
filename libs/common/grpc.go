@@ -101,7 +101,7 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 	}
 
 	// Shut down Setup()'s resources
-	Shutdown()
+	Shutdown(nil)
 }
 
 // DefaultInterceptors returns the slice of default Interceptors for the GRPC service
