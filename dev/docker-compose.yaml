@@ -115,6 +115,10 @@ services:
 
       # mounts the whole repo
       - ../:/helpwave
+
+      # shared go module cache with devcontainer
+      - gomodcache:/go/pkg
+
     working_dir: /helpwave
     user: "helpwave"
     depends_on:
@@ -149,9 +153,15 @@ services:
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
+      # mounts the whole repo
       - ../:/helpwave
+
+      # shared go module cache with services
+      - gomodcache:/go/pkg
+
       # mounts the docker socket (allows DooD)
       - ${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock
+
     working_dir: /helpwave
     user: "helpwave"
     environment:
@@ -177,3 +187,6 @@ services:
       - "3003:3003" # ory-svc
       - "3004:3004" # tasks-svc
       - "3005:3005" # property-svc
+
+volumes:
+  gomodcache: {}

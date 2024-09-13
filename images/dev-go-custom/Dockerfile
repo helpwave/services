@@ -33,6 +33,7 @@ RUN groupmod -g ${GID} -o helpwave \
 	&& usermod -u ${UID} -o helpwave
 
 USER helpwave
+RUN mkdir -p /go/pkg
 
 ##############################################
 
