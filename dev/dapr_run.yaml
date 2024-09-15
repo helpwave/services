@@ -44,15 +44,6 @@ apps:
       POSTGRES_DB: user-svc
     command: ["air"]
 
-  - appID: ory-svc
-    appDirPath: ../services/ory-svc
-    appPort: 3003
-    appProtocol: http
-    env:
-      SERVICE: ory-svc
-      ORY_APIKEY: 2341
-    command: ["air"]
-
   - appID: tasks-svc
     appDirPath: ../services/tasks-svc
     appPort: 3004
