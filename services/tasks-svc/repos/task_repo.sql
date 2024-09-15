@@ -74,3 +74,6 @@ WHERE tasks.id = $1;
 UPDATE tasks
 SET due_at = NULL
 WHERE id=$1;
+
+-- name: DeleteTask :exec
+DELETE FROM tasks WHERE id=$1;

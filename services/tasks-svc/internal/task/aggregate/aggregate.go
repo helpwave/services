@@ -31,11 +31,12 @@ func NewTaskAggregate(id uuid.UUID) *TaskAggregate {
 }
 
 func LoadTaskAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID) (*TaskAggregate, error) {
-	task := NewTaskAggregate(id)
-	if err := as.Load(ctx, task); err != nil {
+	taskAggregate := NewTaskAggregate(id)
+	if err := as.Load(ctx, taskAggregate); err != nil {
 		return nil, err
 	}
-	return task, nil
+
+	return taskAggregate, nil
 }
 
 func (a *TaskAggregate) initEventListeners() {
@@ -55,7 +56,8 @@ func (a *TaskAggregate) initEventListeners() {
 		RegisterEventListener(taskEventsV1.SubtaskUncompleted, a.onSubtaskUncompleted).
 		RegisterEventListener(taskEventsV1.SubtaskDeleted, a.onSubtaskDeleted).
 		RegisterEventListener(taskEventsV1.TaskStatusUpdated, a.onTaskStatusUpdated).
-		RegisterEventListener(taskEventsV1.TaskDueAtRemoved, a.onTaskDueAtRemoved)
+		RegisterEventListener(taskEventsV1.TaskDueAtRemoved, a.onTaskDueAtRemoved).
+		RegisterEventListener(taskEventsV1.TaskDeleted, a.onTaskDeleted)
 }
 
 // Event handlers
@@ -283,5 +285,10 @@ func (a *TaskAggregate) onSubtaskDeleted(evt hwes.Event) error {
 
 func (a *TaskAggregate) onTaskDueAtRemoved(_ hwes.Event) error {
 	a.Task.DueAt = nil
+	return nil
+}
+
+func (a *TaskAggregate) onTaskDeleted(_ hwes.Event) error {
+	a.MarkAsDeleted()
 	return nil
 }

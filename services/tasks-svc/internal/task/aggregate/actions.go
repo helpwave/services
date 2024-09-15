@@ -142,3 +142,11 @@ func (a *TaskAggregate) RemoveTaskDueAt(ctx context.Context) error {
 	}
 	return a.Apply(event)
 }
+
+func (a *TaskAggregate) DeleteTask(ctx context.Context) error {
+	event, err := taskEventsV1.NewTaskDeletedEvent(ctx, a)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"hwauthz"
 	"hwes"
 	commandsV1 "tasks-svc/internal/task/commands/v1"
 	queriesV1 "tasks-svc/internal/task/queries/v1"
@@ -20,18 +19,19 @@ type Handlers struct {
 	Queries  *Queries
 }
 
-func NewTaskHandlers(as hwes.AggregateStore, authz hwauthz.AuthZ) *Handlers {
+func NewTaskHandlers(as hwes.AggregateStore) *Handlers {
 	return &Handlers{
 		Commands: &Commands{
 			V1: &commandsV1.TaskCommands{
 				CreateTask:      commandsV1.NewCreateTaskCommandHandler(as),
 				UpdateTask:      commandsV1.NewUpdateTaskCommandHandler(as),
-				AssignTask:      commandsV1.NewAssignTaskCommandHandler(as, authz),
-				UnnasignTask:    commandsV1.NewUnassignTaskCommandHandler(as, authz),
+				AssignTask:      commandsV1.NewAssignTaskCommandHandler(as),
+				UnnasignTask:    commandsV1.NewUnassignTaskCommandHandler(as),
 				CreateSubtask:   commandsV1.NewCreateSubtaskCommandHandler(as),
 				UpdateSubtask:   commandsV1.NewUpdateSubtaskCommandHandler(as),
 				DeleteSubtask:   commandsV1.NewDeleteSubtaskCommandHandler(as),
 				RemoveTaskDueAt: commandsV1.NewRemoveTaskDueAtCommandHandler(as),
+				DeleteTask:      commandsV1.NewDeleteTaskCommandHandler(as),
 			},
 		},
 		Queries: &Queries{

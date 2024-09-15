@@ -20,6 +20,8 @@ type Aggregate interface {
 	GetTypeID() string
 	GetType() AggregateType
 	GetVersion() uint64
+	IsDeleted() bool
+	MarkAsDeleted()
 
 	RegisterEventListener(eventType string, eventHandler eventHandler) *AggregateBase
 	HandleEvent(event Event) error
@@ -36,6 +38,7 @@ type AggregateBase struct {
 	id      uuid.UUID
 	atype   AggregateType
 	version uint64
+	deleted bool
 
 	eventHandlers map[string]eventHandler
 
@@ -64,6 +67,7 @@ func NewAggregateBase(atype AggregateType, id uuid.UUID) *AggregateBase {
 		id:      id,
 		version: 0,
 		atype:   atype,
+		deleted: false,
 
 		eventHandlers: make(map[string]eventHandler, 0),
 
@@ -93,6 +97,11 @@ func (a *AggregateBase) GetType() AggregateType {
 func (a *AggregateBase) GetVersion() uint64 {
 	return a.version
 }
+
+// Aggregates can not be deleted but they can be marked as deleted.
+func (a *AggregateBase) MarkAsDeleted() { a.deleted = true }
+
+func (a *AggregateBase) IsDeleted() bool { return a.deleted }
 
 // RegisterEventListener registers the callback function for a specific event type
 // If you call RegisterEventListener multiple times for the same eventType, only the last eventHandler gets registered.

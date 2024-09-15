@@ -496,4 +496,15 @@ func (s *PatientGrpcService) GetPatientAssignmentByWard(ctx context.Context, req
 	}, nil
 }
 
-// TODO: DeletePatientEndpoint
+func (s *PatientGrpcService) DeletePatient(ctx context.Context, req *pb.DeletePatientRequest) (*pb.DeletePatientResponse, error) {
+	patientID, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.handlers.Commands.V1.DeletePatient(ctx, patientID); err != nil {
+		return nil, err
+	}
+
+	return &pb.DeletePatientResponse{}, nil
+}

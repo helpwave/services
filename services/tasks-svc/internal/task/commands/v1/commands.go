@@ -9,4 +9,5 @@ type TaskCommands struct {
 	UpdateSubtask   UpdateSubtaskCommandHandler
 	DeleteSubtask   DeleteSubtaskCommandHandler
 	RemoveTaskDueAt RemoveTaskDueAtCommandHandler
+	DeleteTask      DeleteTaskCommandHandler
 }

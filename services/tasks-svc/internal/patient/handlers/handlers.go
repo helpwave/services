@@ -29,6 +29,7 @@ func NewPatientHandlers(as hwes.AggregateStore) *Handlers {
 				ReadmitPatient:   commandsV1.NewReadmitPatientCommandHandler(as),
 				UnassignBed:      commandsV1.NewUnassignBedCommandHandler(as),
 				UpdatePatient:    commandsV1.NewUpdatePatientCommandHandler(as),
+				DeletePatient:    commandsV1.NewDeletePatientCommandHandler(as),
 			},
 		},
 		Queries: &Queries{

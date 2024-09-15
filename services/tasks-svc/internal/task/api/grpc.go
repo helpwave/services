@@ -389,4 +389,15 @@ func (s *TaskGrpcService) RemoveTaskDueDate(ctx context.Context, req *pb.RemoveT
 	return &pb.RemoveTaskDueDateResponse{}, nil
 }
 
-// TODO: add deleteTask
+func (s *TaskGrpcService) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) (*pb.DeleteTaskResponse, error) {
+	taskID, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.handlers.Commands.V1.DeleteTask(ctx, taskID); err != nil {
+		return nil, err
+	}
+
+	return &pb.DeleteTaskResponse{}, nil
+}

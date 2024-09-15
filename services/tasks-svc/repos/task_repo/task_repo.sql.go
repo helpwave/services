@@ -73,6 +73,15 @@ func (q *Queries) DeleteSubtask(ctx context.Context, id uuid.UUID) error {
 	return err
 }
 
+const deleteTask = `-- name: DeleteTask :exec
+DELETE FROM tasks WHERE id=$1
+`
+
+func (q *Queries) DeleteTask(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteTask, id)
+	return err
+}
+
 const getTaskWithPatientById = `-- name: GetTaskWithPatientById :many
 SELECT
 	tasks.id, tasks.name, tasks.description, tasks.status, tasks.assigned_user_id, tasks.patient_id, tasks.public, tasks.created_by, tasks.due_at, tasks.created_at,

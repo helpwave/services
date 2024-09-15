@@ -14,6 +14,7 @@ const (
 	BedUnsassigned                 = "BED_UNASSIGNED_v1"
 	PatientDischarged              = "PATIENT_DISCHARGED_v1"
 	PatientReadmitted              = "PATIENT_READMITTED_v1"
+	PatientDeleted                 = "PATIENT_DELETED_v1"
 )
 
 type PatientCreatedEvent struct {
@@ -40,9 +41,9 @@ type PatientDischargedEvent struct {
 	PatientID string `json:"patient_id"`
 }
 
-type PatientDeletedEvent struct {
-	PatientID string `json:"patient_id"`
-}
+type PatientReadmittedEvent struct{}
+
+type PatientDeletedEvent struct{}
 
 func NewPatientCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, humanReadableIdentifier string, notes string) (hwes.Event, error) {
 	payload := PatientCreatedEvent{
@@ -87,5 +88,11 @@ func NewPatientDischargedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Even
 }
 
 func NewPatientReadmittedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
-	return hwes.NewEvent(a, PatientReadmitted, hwes.WithContext(ctx))
+	payload := PatientReadmittedEvent{}
+	return hwes.NewEvent(a, PatientReadmitted, hwes.WithContext(ctx), hwes.WithData(payload))
+}
+
+func NewPatientDeletedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
+	payload := PatientDeletedEvent{}
+	return hwes.NewEvent(a, PatientDeleted, hwes.WithContext(ctx), hwes.WithData(payload))
 }
