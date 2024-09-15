@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 	"hwutil"
@@ -18,7 +17,6 @@ import (
 var (
 	Mode                    string // Mode is set in Setup()
 	InsecureFakeTokenEnable = false
-	InstanceOrganizationID  *uuid.UUID
 	shutdownOpenTelemetryFn func() // cleanup function
 	contextCancel           func() // Setup() yields the "root" context, which can be canceled using this function
 )
@@ -115,18 +113,6 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 		if strings.ToLower(hwutil.GetEnvOr("INSECURE_FAKE_TOKEN_ENABLE", "false")) == "true" {
 			InsecureFakeTokenEnable = true
 			log.Error().Msg("INSECURE_FAKE_TOKEN_ENABLE is set to true, accepting fake tokens")
-		}
-
-		// organizationIdStr, later InstanceOrganizationID is used as a fallback when a client does not send the organization header
-		// For code consistency purposes, we are parsing organizationIdStr from a string into a UUID
-		organizationIdStr := hwutil.GetEnvOr("ORGANIZATION_ID", "")
-		if organizationIdStr != "" {
-			organizationID, err := uuid.Parse(organizationIdStr)
-			if err != nil {
-				log.Fatal().Err(err).Msg("invalid uuid for environment variable ORGANIZATION_ID")
-			}
-			log.Info().Str("organizationID", organizationID.String()).Msg("specified fallback organizationID for requests without organization header")
-			InstanceOrganizationID = &organizationID
 		}
 
 		// Only modify skipAuthForMethods once on startup

@@ -5,11 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/coreos/go-oidc"
-	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"hwutil"
-	"os"
 	"telemetry"
 )
 
@@ -17,7 +15,8 @@ var (
 	onlyFakeAuthEnabled      bool
 	oauthConfig              *oauth2.Config
 	verifier                 *oidc.IDTokenVerifier
-	DEFAULT_OAUTH_ISSUER_URL = "https://auth.helpwave.de"
+	DEFAULT_OAUTH_ISSUER_URL = "https://accounts.helpwave.de/realms/helpwave"
+	DEFAULT_OAUTH_CLIENT_ID  = "helpwave-services"
 )
 
 func getOAuthConfig(ctx context.Context) *oauth2.Config {
@@ -52,11 +51,15 @@ type IDTokenClaims struct {
 	// Subject: name
 	Name string `json:"name"`
 
-	// Subject: nickname
-	Nickname string `json:"nickname"`
+	// Subject: preferred_username
+	PreferredUsername string `json:"preferred_username"`
 
-	// Claim: organizations
-	Organizations []uuid.UUID `json:"organizations"`
+	// Subject: organization
+	Organization *OrganizationTokenClaim `json:"organization"`
+}
+
+type OrganizationTokenClaim struct {
+	Id string `json:"id"`
 }
 
 func (t IDTokenClaims) AsExpected() error {
@@ -72,11 +75,17 @@ func (t IDTokenClaims) AsExpected() error {
 		return errors.New("name missing in id token")
 	}
 
-	if len(t.Nickname) == 0 {
-		return errors.New("nickname missing in id token")
+	if len(t.PreferredUsername) == 0 {
+		return errors.New("preferred_username missing in id token")
 	}
 
-	// TODO: Validate Organizations
+	if t.Organization == nil {
+		return errors.New("organization missing in id token")
+	}
+
+	if len(t.Organization.Id) == 0 {
+		return errors.New("organization.id missing in id token")
+	}
 
 	return nil
 }
@@ -108,10 +117,9 @@ func setupAuth(ctx context.Context, fakeOnly bool) {
 		log.Fatal().Err(err).Send()
 	}
 
-	clientId, clientIdSet := os.LookupEnv("OAUTH_CLIENT_ID")
-
-	if !clientIdSet && !InsecureFakeTokenEnable {
-		log.Fatal().Msg("OAUTH_CLIENT_ID env variable missing")
+	clientId := hwutil.GetEnvOr("OAUTH_CLIENT_ID", DEFAULT_OAUTH_CLIENT_ID)
+	if clientId != DEFAULT_OAUTH_CLIENT_ID {
+		log.Warn().Str("OAUTH_CLIENT_ID", clientId).Msg("using custom OAuth client id")
 	}
 
 	oauthConfig = &oauth2.Config{
