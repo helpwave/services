@@ -343,15 +343,7 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 		return nil, err
 	}
 
-	// req.Subtask could be nil
-	var newName *string
-	var newDone *bool
-	if req.Subtask != nil {
-		newName = req.Subtask.Name
-		newDone = req.Subtask.Done
-	}
-
-	if err := s.handlers.Commands.V1.UpdateSubtask(ctx, taskID, subtaskID, newName, newDone); err != nil {
+	if err := s.handlers.Commands.V1.UpdateSubtask(ctx, taskID, subtaskID, req.Subtask.Name, req.Subtask.Done); err != nil {
 		return nil, err
 	}
 

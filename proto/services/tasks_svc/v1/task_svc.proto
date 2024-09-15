@@ -232,7 +232,7 @@ message CreateSubtaskResponse {
 message UpdateSubtaskRequest {
   string task_id = 1; // @gotags: validate:"uuid4"
   string subtask_id = 2; // @gotags: validate:"uuid4"
-  Subtask subtask = 3;
+  Subtask subtask = 3; // @gotags: validate:"required"
 
   message Subtask {
     optional string name = 1;

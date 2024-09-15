@@ -1054,7 +1054,7 @@ type UpdateSubtaskRequest struct {
 
 	TaskId    string                        `protobuf:"bytes,1,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty" validate:"uuid4"`          // @gotags: validate:"uuid4"
 	SubtaskId string                        `protobuf:"bytes,2,opt,name=subtask_id,json=subtaskId,proto3" json:"subtask_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
-	Subtask   *UpdateSubtaskRequest_Subtask `protobuf:"bytes,3,opt,name=subtask,proto3" json:"subtask,omitempty"`
+	Subtask   *UpdateSubtaskRequest_Subtask `protobuf:"bytes,3,opt,name=subtask,proto3" json:"subtask,omitempty" validate:"required"`                   // @gotags: validate:"required"
 }
 
 func (x *UpdateSubtaskRequest) Reset() {
