@@ -66,22 +66,18 @@ func startMetricsServer(ctx context.Context, addr string, shutdown func(error)) 
 	// close if context dies,
 	// yes, this keeps this go routine open, even if the server stops,
 	// but as we call common.Shutdown in that case, the context is closed right after anyway
-	for {
-		select {
-		case <-ctx.Done():
-			// server.Shutdown will wait for all connections to close first,
-			// unless the provided context closes first, as the existing ctx is already closed
-			// we do not re-use it
-			// instead we give it one second
-			ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-			err := server.Shutdown(ctx)
-			if err != nil {
-				log.Ctx(ctx).Warn().Err(err).Msg("error while shutting down")
-			}
-			cancel() // prevent mem leak
-			return
-		}
+	<-ctx.Done()
+
+	// server.Shutdown will wait for all connections to close first,
+	// unless the provided context closes first, as the existing ctx is already closed
+	// we do not re-use it
+	// instead we give it one second
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	err := server.Shutdown(ctx)
+	if err != nil {
+		log.Ctx(ctx).Warn().Err(err).Msg("error while shutting down")
 	}
+	cancel() // prevent mem leak
 }
 
 // SetupMetrics will start a new http server for prometheus to scrape from
