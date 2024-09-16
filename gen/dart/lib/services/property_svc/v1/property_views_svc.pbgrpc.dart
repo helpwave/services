@@ -15,16 +15,16 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'property_views_svc.pb.dart' as $5;
+import 'property_views_svc.pb.dart' as $4;
 
 export 'property_views_svc.pb.dart';
 
 @$pb.GrpcServiceName('services.property_svc.v1.PropertyViewsService')
 class PropertyViewsServiceClient extends $grpc.Client {
-  static final _$updatePropertyViewRule = $grpc.ClientMethod<$5.UpdatePropertyViewRuleRequest, $5.UpdatePropertyViewRuleResponse>(
+  static final _$updatePropertyViewRule = $grpc.ClientMethod<$4.UpdatePropertyViewRuleRequest, $4.UpdatePropertyViewRuleResponse>(
       '/services.property_svc.v1.PropertyViewsService/UpdatePropertyViewRule',
-      ($5.UpdatePropertyViewRuleRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $5.UpdatePropertyViewRuleResponse.fromBuffer(value));
+      ($4.UpdatePropertyViewRuleRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $4.UpdatePropertyViewRuleResponse.fromBuffer(value));
 
   PropertyViewsServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -32,7 +32,7 @@ class PropertyViewsServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$5.UpdatePropertyViewRuleResponse> updatePropertyViewRule($5.UpdatePropertyViewRuleRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$4.UpdatePropertyViewRuleResponse> updatePropertyViewRule($4.UpdatePropertyViewRuleRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$updatePropertyViewRule, request, options: options);
   }
 }
@@ -42,18 +42,18 @@ abstract class PropertyViewsServiceBase extends $grpc.Service {
   $core.String get $name => 'services.property_svc.v1.PropertyViewsService';
 
   PropertyViewsServiceBase() {
-    $addMethod($grpc.ServiceMethod<$5.UpdatePropertyViewRuleRequest, $5.UpdatePropertyViewRuleResponse>(
+    $addMethod($grpc.ServiceMethod<$4.UpdatePropertyViewRuleRequest, $4.UpdatePropertyViewRuleResponse>(
         'UpdatePropertyViewRule',
         updatePropertyViewRule_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $5.UpdatePropertyViewRuleRequest.fromBuffer(value),
-        ($5.UpdatePropertyViewRuleResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $4.UpdatePropertyViewRuleRequest.fromBuffer(value),
+        ($4.UpdatePropertyViewRuleResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$5.UpdatePropertyViewRuleResponse> updatePropertyViewRule_Pre($grpc.ServiceCall call, $async.Future<$5.UpdatePropertyViewRuleRequest> request) async {
+  $async.Future<$4.UpdatePropertyViewRuleResponse> updatePropertyViewRule_Pre($grpc.ServiceCall call, $async.Future<$4.UpdatePropertyViewRuleRequest> request) async {
     return updatePropertyViewRule(call, await request);
   }
 
-  $async.Future<$5.UpdatePropertyViewRuleResponse> updatePropertyViewRule($grpc.ServiceCall call, $5.UpdatePropertyViewRuleRequest request);
+  $async.Future<$4.UpdatePropertyViewRuleResponse> updatePropertyViewRule($grpc.ServiceCall call, $4.UpdatePropertyViewRuleRequest request);
 }

@@ -21,11 +21,3 @@ plugins:
   - remote: buf.build/protocolbuffers/dart:v21.1.2
     out: gen/dart/lib
     opt: grpc
-  - remote: buf.build/grpc/python:v1.64.1
-    out: gen/python
-  - remote: buf.build/protocolbuffers/python:v25.2
-    out: gen/python
-  - remote: buf.build/grpc/python:v1.64.1
-    out: services/impulse_svc/gen
-  - remote: buf.build/protocolbuffers/python:v25.2
-    out: services/impulse_svc/gen

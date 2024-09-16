@@ -43,9 +43,8 @@ func newErrAndLog(ctx context.Context, msg string) error {
 }
 
 func main() {
-	common.Setup(ServiceName, Version)
+	ctx := common.Setup(ServiceName, Version)
 
-	ctx := context.Background()
 	log := zlog.Ctx(ctx)
 
 	DaprPubsub = hwutil.GetEnvOr("DAPR_PUBSUB", "pubsub")
@@ -83,7 +82,7 @@ func main() {
 
 	// we don't use common.StartNewGRPCServer,
 	// so we have to call Shutdown manually
-	common.Shutdown()
+	common.Shutdown(nil)
 }
 
 func prepCtxForSvcToSvcCall(parentCtx context.Context, targetDaprAppId string) (context.Context, context.CancelFunc, error) {

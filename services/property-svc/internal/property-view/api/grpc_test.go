@@ -25,13 +25,13 @@ import (
 	"google.golang.org/grpc"
 )
 
-func server(ctx context.Context) (pb.PropertyViewsServiceClient, *hwes_test.AggregateStore, func()) {
+func server() (context.Context, pb.PropertyViewsServiceClient, *hwes_test.AggregateStore, func()) {
 	// Build gRPC service
 	aggregateStore := hwes_test.NewAggregateStore()
 	propertyViewHandlers := handlers.NewPropertyViewHandlers(aggregateStore)
 	grpcService := api.NewPropertyViewService(aggregateStore, propertyViewHandlers)
 
-	common.Setup("property-svc", "test", common.WithFakeAuthOnly())
+	ctx := common.Setup("property-svc", "test", common.WithFakeAuthOnly())
 
 	// Start Server
 	grpcServer := grpc.NewServer(common.DefaultInterceptorChain())
@@ -40,12 +40,11 @@ func server(ctx context.Context) (pb.PropertyViewsServiceClient, *hwes_test.Aggr
 
 	client := pb.NewPropertyViewsServiceClient(conn)
 
-	return client, aggregateStore, closer
+	return ctx, client, aggregateStore, closer
 }
 
 func setup(t *testing.T) (ctx context.Context, client pb.PropertyViewsServiceClient, as *hwes_test.AggregateStore, dbMock pgxmock.PgxPoolIface, teardown func()) {
-	ctx = context.Background()
-	client, as, closer := server(ctx)
+	ctx, client, as, closer := server()
 	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
 
 	dbMock, err := pgxmock.NewPool()
