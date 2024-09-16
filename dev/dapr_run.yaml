@@ -68,5 +68,4 @@ apps:
     env:
       SERVICE: property-svc
       POSTGRES_DB: property-svc
-      METRICS_ADDR: 0.0.0.0:2112
     command: ["air"]
