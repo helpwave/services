@@ -9,9 +9,14 @@ primary_region = "ams"
 [env]
   INSECURE_FAKE_TOKEN_ENABLE=true
   OTEL_DISABLE=true
+  METRICS_ADDR=:9091
 
 [deploy]
   strategy = "bluegreen"
+
+[metrics]
+  port = 9091
+  path = "/metrics"
 
 [checks]
   [checks.dapr_sidecar]
