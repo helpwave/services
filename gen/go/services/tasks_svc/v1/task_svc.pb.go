@@ -32,8 +32,8 @@ type CreateTaskRequest struct {
 	Public         *bool                        `protobuf:"varint,4,opt,name=public,proto3,oneof" json:"public,omitempty"`
 	DueAt          *timestamppb.Timestamp       `protobuf:"bytes,5,opt,name=due_at,json=dueAt,proto3" json:"due_at,omitempty"`
 	InitialStatus  *TaskStatus                  `protobuf:"varint,6,opt,name=initial_status,json=initialStatus,proto3,enum=services.tasks_svc.v1.TaskStatus,oneof" json:"initial_status,omitempty"`
-	AssignedUserId *string                      `protobuf:"bytes,7,opt,name=assigned_user_id,json=assignedUserId,proto3,oneof" json:"assigned_user_id,omitempty"`
-	Subtasks       []*CreateTaskRequest_SubTask `protobuf:"bytes,8,rep,name=subtasks,proto3" json:"subtasks,omitempty" validate:"dive"` // @gotags: validate:"dive"
+	AssignedUserId *string                      `protobuf:"bytes,7,opt,name=assigned_user_id,json=assignedUserId,proto3,oneof" json:"assigned_user_id,omitempty" validate:"omitempty,uuid4"` // @gotags: validate:"omitempty,uuid4"
+	Subtasks       []*CreateTaskRequest_SubTask `protobuf:"bytes,8,rep,name=subtasks,proto3" json:"subtasks,omitempty" validate:"dive"`                                                      // @gotags: validate:"dive"
 }
 
 func (x *CreateTaskRequest) Reset() {
@@ -1246,7 +1246,7 @@ type RemoveTaskDueDateRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	TaskId string `protobuf:"bytes,1,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
+	TaskId string `protobuf:"bytes,1,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *RemoveTaskDueDateRequest) Reset() {
@@ -1331,7 +1331,7 @@ type DeleteTaskRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 }
 
 func (x *DeleteTaskRequest) Reset() {
@@ -2293,7 +2293,7 @@ type UpdateSubtaskRequest_Subtask struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name *string `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Name *string `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty" validate:"required"` // @gotags: validate:"required"
 	Done *bool   `protobuf:"varint,2,opt,name=done,proto3,oneof" json:"done,omitempty"`
 }
 
