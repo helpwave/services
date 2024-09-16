@@ -116,8 +116,9 @@ services:
       # mounts the whole repo
       - ../:/helpwave
 
-      # shared go module cache with devcontainer
-      - gomodcache:/go/pkg
+      # shared go cache with devcontainer
+      - gomodcache:/go/pkg # $GOMODCACHE
+      - gocache:/home/helpwave/.cache/go-build # $GOCACHE
 
     working_dir: /helpwave
     user: "helpwave"
@@ -156,8 +157,9 @@ services:
       # mounts the whole repo
       - ../:/helpwave
 
-      # shared go module cache with services
-      - gomodcache:/go/pkg
+      # shared go cache with services
+      - gomodcache:/go/pkg # $GOMODCACHE
+      - gocache:/home/helpwave/.cache/go-build # $GOCACHE
 
       # mounts the docker socket (allows DooD)
       - ${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock
@@ -189,4 +191,5 @@ services:
       - "3005:3005" # property-svc
 
 volumes:
+  gocache: {}
   gomodcache: {}
