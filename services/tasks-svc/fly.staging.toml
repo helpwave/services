@@ -29,10 +29,6 @@ primary_region = "ams"
     timeout = "2s"
     type = "http"
 
-[metrics]
-  port = 9090
-  path = "/metrics"
-
 [[vm]]
   memory = '256MB'
   cpu_kind = 'shared'
