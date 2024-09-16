@@ -14,10 +14,6 @@ primary_region = "ams"
 [deploy]
   strategy = "bluegreen"
 
-[metrics]
-  port = 9091
-  path = "/metrics"
-
 [checks]
   [checks.dapr_sidecar]
     grace_period = "15s"
@@ -29,5 +25,5 @@ primary_region = "ams"
     type = "http"
 
 [metrics]
-  port = 9090
+  port = 9091
   path = "/metrics"
