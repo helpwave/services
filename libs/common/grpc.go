@@ -11,8 +11,10 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/golang/protobuf/proto" //nolint:staticcheck
 	"github.com/google/uuid"
+	prometheusGrpcProvider "github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/metadata"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/rs/zerolog"
 	zlog "github.com/rs/zerolog/log"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
@@ -109,7 +111,13 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 //
 //	chain := grpc.ChainUnaryInterceptor(common.DefaultInterceptors()...)
 func DefaultInterceptors() []grpc.UnaryServerInterceptor {
+
+	// register new metrics collector with prometheus
+	metrics := prometheusGrpcProvider.NewServerMetrics()
+	prometheus.MustRegister(metrics)
+
 	interceptors := []grpc.UnaryServerInterceptor{
+		metrics.UnaryServerInterceptor(),
 		loggingUnaryInterceptor,
 		errorQualityControlInterceptor,
 		localeInterceptor,
