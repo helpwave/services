@@ -342,6 +342,11 @@ LOG_LEVEL=debug
 # The port on which the the service will listen on (default: 8080)
 PORT=8080
 
+# The address, where a metrics (prometheus) server will be started on,
+# if missing, no metrics server will be started!
+#   e.g: "0.0.0.0:2112", ":8080"
+METRICS_ADDR=
+
 # Database related configurations
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432

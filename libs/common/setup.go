@@ -102,6 +102,8 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 		}
 	}
 
+	telemetry.SetupMetrics(ctx, Shutdown)
+
 	if len(version) == 0 && Mode == ProductionMode {
 		log.Warn().Msg("Version is empty in production build! Recompile using ldflag '-X main.Version=<version>'")
 	}
