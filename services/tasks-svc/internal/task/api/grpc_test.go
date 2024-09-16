@@ -6,11 +6,9 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
-	"github.com/pashagolub/pgxmock/v4"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"hwdb"
 	hwes_test "hwes/test"
 	"hwutil"
 	"tasks-svc/internal/task/api"
@@ -18,7 +16,7 @@ import (
 	"testing"
 )
 
-func server(ctx context.Context) (pb.TaskServiceClient, *hwes_test.AggregateStore, func()) {
+func server(ctx context.Context) (pb.TaskServiceClient, func()) {
 	aggregateStore := hwes_test.NewAggregateStore()
 	taskHandlers := handlers.NewTaskHandlers(aggregateStore)
 	taskGrpcService := api.NewTaskGrpcService(aggregateStore, taskHandlers)
@@ -31,30 +29,19 @@ func server(ctx context.Context) (pb.TaskServiceClient, *hwes_test.AggregateStor
 	conn, closer := common_test.StartGRPCServer(ctx, grpcServer)
 
 	client := pb.NewTaskServiceClient(conn)
-	return client, aggregateStore, closer
+	return client, closer
 }
 
-func setup() (ctx context.Context, client pb.TaskServiceClient, aggregateStore *hwes_test.AggregateStore, dbMock pgxmock.PgxPoolIface, teardown func()) {
+func setup() (ctx context.Context, client pb.TaskServiceClient, teardown func()) {
 	ctx = context.Background()
-	client, as, closer := server(ctx)
+	client, teardown = server(ctx)
 	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
 
-	dbMock, err := pgxmock.NewPool()
-	if err != nil {
-		panic(err)
-	}
-	hwdb.TestingSetDB(dbMock)
-
-	teardown = func() {
-		closer()
-		dbMock.Close()
-	}
-
-	return ctx, client, as, dbMock, teardown
+	return ctx, client, teardown
 }
 
 func TestTaskGrpcService_CreateTask_Validation(t *testing.T) {
-	ctx, client, _, _, teardown := setup()
+	ctx, client, teardown := setup()
 	defer teardown()
 
 	taskName := "Test task"
@@ -132,7 +119,7 @@ func TestTaskGrpcService_CreateTask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_UpdateTask_Validation(t *testing.T) {
-	ctx, client, _, _, teardown := setup()
+	ctx, client, teardown := setup()
 	defer teardown()
 
 	// ID missing
@@ -155,7 +142,7 @@ func TestTaskGrpcService_UpdateTask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_AssignTask_Validation(t *testing.T) {
-	ctx, client, _, _, teardown := setup()
+	ctx, client, teardown := setup()
 	defer teardown()
 
 	// IDs empty
@@ -181,7 +168,7 @@ func TestTaskGrpcService_AssignTask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_UnassignTask_Validation(t *testing.T) {
-	ctx, client, _, _, teardown := setup()
+	ctx, client, teardown := setup()
 	defer teardown()
 
 	// IDs empty
@@ -207,7 +194,7 @@ func TestTaskGrpcService_UnassignTask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_CreateSubtask_Validation(t *testing.T) {
-	ctx, client, _, _, teardown := setup()
+	ctx, client, teardown := setup()
 	defer teardown()
 
 	// taskid empty
@@ -255,7 +242,7 @@ func TestTaskGrpcService_CreateSubtask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_UpdateSubtask_Validation(t *testing.T) {
-	ctx, client, _, _, teardown := setup()
+	ctx, client, teardown := setup()
 	defer teardown()
 
 	// ids empty
@@ -288,7 +275,7 @@ func TestTaskGrpcService_UpdateSubtask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_DeleteSubtask_Validation(t *testing.T) {
-	ctx, client, _, _, teardown := setup()
+	ctx, client, teardown := setup()
 	defer teardown()
 
 	// ids empty
@@ -314,7 +301,7 @@ func TestTaskGrpcService_DeleteSubtask_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_RemoveTaskDueDate_Validation(t *testing.T) {
-	ctx, client, _, _, teardown := setup()
+	ctx, client, teardown := setup()
 	defer teardown()
 
 	// id empty
@@ -337,7 +324,7 @@ func TestTaskGrpcService_RemoveTaskDueDate_Validation(t *testing.T) {
 }
 
 func TestTaskGrpcService_DeleteTask_Validation(t *testing.T) {
-	ctx, client, _, _, teardown := setup()
+	ctx, client, teardown := setup()
 	defer teardown()
 
 	// id empty
