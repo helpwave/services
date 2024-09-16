@@ -166,6 +166,10 @@ func (a *AggregateBase) Load(events []Event) error {
 		a.appliedEvents = append(a.appliedEvents, event)
 		a.version++
 	}
+	if a.IsDeleted() {
+		return fmt.Errorf("AggregateBase.Load: aggregate has been marked as deleted")
+	}
+
 	return nil
 }
 
