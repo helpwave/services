@@ -3,10 +3,8 @@ package organization
 import (
 	"common"
 	"context"
-	"errors"
 	"gen/libs/events/v1"
 	pb "gen/services/user_svc/v1"
-	"github.com/jackc/pgx/v5"
 	"hwdb"
 	"hwutil"
 	"user-svc/repos/organization_repo"
@@ -718,19 +716,12 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 
 func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Organization, userID uuid.UUID) (*organization_repo.Organization, error) {
 	db := hwdb.GetDB()
-	log := zlog.Ctx(ctx)
 
-	tx, err := db.Begin(ctx)
+	tx, rollback, err := hwdb.BeginTx(db, ctx)
 	if err != nil {
 		return nil, err
 	}
-
-	defer func() {
-		err := tx.Rollback(ctx)
-		if !errors.Is(err, pgx.ErrTxClosed) {
-			log.Error().Err(err).Msg("rollback failed.")
-		}
-	}()
+	defer rollback()
 
 	organizationRepo := organization_repo.New(db).WithTx(tx)
 

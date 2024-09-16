@@ -19,14 +19,14 @@ import (
 	"time"
 )
 
-func server(ctx context.Context) (pb.PatientServiceClient, func()) {
+func server() (context.Context, pb.PatientServiceClient, func()) {
 	// Build gRPC service
 	aggregateStore := hwes_test.NewAggregateStore()
 	patientHandlers := handlers.NewPatientHandlers(aggregateStore)
 
 	patientGrpcService := api.NewPatientGrpcService(aggregateStore, patientHandlers)
 
-	common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
+	ctx := common.Setup("tasks-svc", "test", common.WithFakeAuthOnly())
 
 	// Start Server
 	grpcServer := grpc.NewServer(common.DefaultInterceptorChain())
@@ -35,12 +35,11 @@ func server(ctx context.Context) (pb.PatientServiceClient, func()) {
 
 	client := pb.NewPatientServiceClient(conn)
 
-	return client, closer
+	return ctx, client, closer
 }
 
 func setup(t *testing.T) (ctx context.Context, client pb.PatientServiceClient, redisMock redismock.ClientMock, teardown func()) {
-	ctx = context.Background()
-	client, teardown = server(ctx)
+	ctx, client, teardown = server()
 	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
 
 	redisClient, redisMock := redismock.NewClientMock()

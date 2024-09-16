@@ -173,6 +173,11 @@ $ ./shell.sh
 $ ./proto.sh
 ```
 
+From the shell, you can use go commands, like `go test ./...` in a service's directory.
+Go tests are used both for unit tests and more complex (and time-consuming) integration tests simulating a user story.
+These spin up fresh containers for external dependencies, like EventStore, using [testcontainers](https://github.com/testcontainers/testcontainers-go).
+It makes use of the same docker socket mounted to the development environment.
+
 ## Fake token
 
 When working with services that use auth, instead of dealing with JWTs, you can make use of fake tokens.
@@ -337,6 +342,11 @@ LOG_LEVEL=debug
 # The port on which the the service will listen on (default: 8080)
 PORT=8080
 
+# The address, where a metrics (prometheus) server will be started on,
+# if missing, no metrics server will be started!
+#   e.g: "0.0.0.0:2112", ":8080"
+METRICS_ADDR=
+
 # Database related configurations
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
@@ -408,3 +418,8 @@ To arm the versioning, search for "arm-versioning" in the codebase.
 ## Deployment
 
 [See infrastructure/README.md](infrastructure/README.md)
+
+## Archived Services
+
+- impulse-svc ([9bbe537](https://github.com/helpwave/services/commit/9bbe53744dc2650bc99b21e0894c1a9bc42f6f12))
+

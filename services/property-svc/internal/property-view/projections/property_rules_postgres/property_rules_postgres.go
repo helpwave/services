@@ -2,11 +2,9 @@ package property_rules_postgres
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5"
 	zlog "github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes"
@@ -58,17 +56,11 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 		return fmt.Errorf("ruleID missing"), hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
-	tx, err := p.db.Begin(ctx)
+	tx, rollback, err := hwdb.BeginTx(p.db, ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to begin transaction")
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
-	defer func() {
-		err := tx.Rollback(ctx)
-		if !errors.Is(err, pgx.ErrTxClosed) {
-			log.Error().Err(err).Msg("rollback failed")
-		}
-	}()
+	defer rollback()
 
 	// Create Rule
 	viewsQuery := p.viewsRepo.WithTx(tx)
@@ -147,17 +139,11 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 		return err, hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
-	tx, err := p.db.Begin(ctx)
+	tx, rollback, err := hwdb.BeginTx(p.db, ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to begin transaction")
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
-	defer func() {
-		err := tx.Rollback(ctx)
-		if !errors.Is(err, pgx.ErrTxClosed) {
-			log.Error().Err(err).Msg("rollback failed")
-		}
-	}()
+	defer rollback()
 
 	viewsQuery := p.viewsRepo.WithTx(tx)
 

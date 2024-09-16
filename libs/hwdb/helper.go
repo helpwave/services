@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
+	zlog "github.com/rs/zerolog"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"telemetry"
 	"time"
@@ -47,6 +48,17 @@ func PbToTimestamp(src *timestamppb.Timestamp) pgtype.Timestamp {
 	return pgtype.Timestamp{Time: (*src).AsTime().UTC(), Valid: true}
 }
 
+// ExecBatch can be used as a wrapper around .Exec to obtain the last not-nil error.
+func ExecBatch(batchResults interface{ Exec(f func(int, error)) }) error {
+	var err error = nil
+	batchResults.Exec(func(_ int, e error) {
+		if e != nil {
+			err = e
+		}
+	})
+	return err
+}
+
 // DANGERTruncateAllTables truncates all tables of db
 func DANGERTruncateAllTables(ctx context.Context, db DBTX) error {
 	ctx, span, log := telemetry.StartSpan(ctx, "hwdb.DANGERTruncateAllTables")
@@ -86,4 +98,28 @@ func DANGERTruncateAllTables(ctx context.Context, db DBTX) error {
 	log.Debug().Msg("truncate finished")
 
 	return rows.Err()
+}
+
+// BeginTx is a wrapper around DBTX.Begin, which does rich error handling for you
+//
+//	tx, rollback, err := BeginTx(db, ctx)
+//	if err != nil { return err }
+//	defer rollback()
+func BeginTx(db DBTX, ctx context.Context) (pgx.Tx, func(), error) {
+	log := zlog.Ctx(ctx)
+	tx, err := db.Begin(ctx)
+	err = Error(ctx, err)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to begin transaction")
+		return nil, nil, err
+	}
+
+	rollback := func() {
+		err := tx.Rollback(ctx)
+		if !errors.Is(err, pgx.ErrTxClosed) {
+			log.Error().Err(err).Msg("rollback failed")
+		}
+	}
+
+	return tx, rollback, nil
 }

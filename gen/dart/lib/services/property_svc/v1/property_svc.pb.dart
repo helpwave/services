@@ -13,7 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'types.pbenum.dart' as $21;
+import 'types.pbenum.dart' as $20;
 
 class CreatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage {
   factory CreatePropertyRequest_SelectData_SelectOption({
@@ -79,6 +79,7 @@ class CreatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage
   void clearDescription() => clearField(2);
 }
 
+/// the select field type requires an (initial) set of options (possible values)
 class CreatePropertyRequest_SelectData extends $pb.GeneratedMessage {
   factory CreatePropertyRequest_SelectData({
     $core.bool? allowFreetext,
@@ -142,12 +143,11 @@ enum CreatePropertyRequest_FieldTypeData {
   notSet
 }
 
-///
-///  CreateProperty
+/// Creates a new Property
 class CreatePropertyRequest extends $pb.GeneratedMessage {
   factory CreatePropertyRequest({
-    $21.SubjectType? subjectType,
-    $21.FieldType? fieldType,
+    $20.SubjectType? subjectType,
+    $20.FieldType? fieldType,
     $core.String? name,
     $core.String? description,
     $core.String? setId,
@@ -184,8 +184,8 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [9])
-    ..e<$21.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $21.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $21.SubjectType.valueOf, enumValues: $21.SubjectType.values)
-    ..e<$21.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $21.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $21.FieldType.valueOf, enumValues: $21.FieldType.values)
+    ..e<$20.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $20.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $20.SubjectType.valueOf, enumValues: $20.SubjectType.values)
+    ..e<$20.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $20.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $20.FieldType.valueOf, enumValues: $20.FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOS(6, _omitFieldNames ? '' : 'setId')
@@ -218,18 +218,18 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   void clearFieldTypeData() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(2)
-  $21.SubjectType get subjectType => $_getN(0);
+  $20.SubjectType get subjectType => $_getN(0);
   @$pb.TagNumber(2)
-  set subjectType($21.SubjectType v) { setField(2, v); }
+  set subjectType($20.SubjectType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasSubjectType() => $_has(0);
   @$pb.TagNumber(2)
   void clearSubjectType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $21.FieldType get fieldType => $_getN(1);
+  $20.FieldType get fieldType => $_getN(1);
   @$pb.TagNumber(3)
-  set fieldType($21.FieldType v) { setField(3, v); }
+  set fieldType($20.FieldType v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasFieldType() => $_has(1);
   @$pb.TagNumber(3)
@@ -614,8 +614,8 @@ enum GetPropertyResponse_FieldTypeData {
 class GetPropertyResponse extends $pb.GeneratedMessage {
   factory GetPropertyResponse({
     $core.String? id,
-    $21.SubjectType? subjectType,
-    $21.FieldType? fieldType,
+    $20.SubjectType? subjectType,
+    $20.FieldType? fieldType,
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
@@ -664,8 +664,8 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [10])
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..e<$21.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $21.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $21.SubjectType.valueOf, enumValues: $21.SubjectType.values)
-    ..e<$21.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $21.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $21.FieldType.valueOf, enumValues: $21.FieldType.values)
+    ..e<$20.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $20.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $20.SubjectType.valueOf, enumValues: $20.SubjectType.values)
+    ..e<$20.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $20.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $20.FieldType.valueOf, enumValues: $20.FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
@@ -709,18 +709,18 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $21.SubjectType get subjectType => $_getN(1);
+  $20.SubjectType get subjectType => $_getN(1);
   @$pb.TagNumber(2)
-  set subjectType($21.SubjectType v) { setField(2, v); }
+  set subjectType($20.SubjectType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasSubjectType() => $_has(1);
   @$pb.TagNumber(2)
   void clearSubjectType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $21.FieldType get fieldType => $_getN(2);
+  $20.FieldType get fieldType => $_getN(2);
   @$pb.TagNumber(3)
-  set fieldType($21.FieldType v) { setField(3, v); }
+  set fieldType($20.FieldType v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasFieldType() => $_has(2);
   @$pb.TagNumber(3)
@@ -950,7 +950,7 @@ enum UpdatePropertyRequest_FieldTypeData {
 class UpdatePropertyRequest extends $pb.GeneratedMessage {
   factory UpdatePropertyRequest({
     $core.String? id,
-    $21.SubjectType? subjectType,
+    $20.SubjectType? subjectType,
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
@@ -992,7 +992,7 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [10])
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..e<$21.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $21.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $21.SubjectType.valueOf, enumValues: $21.SubjectType.values)
+    ..e<$20.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $20.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $20.SubjectType.valueOf, enumValues: $20.SubjectType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
@@ -1035,9 +1035,9 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $21.SubjectType get subjectType => $_getN(1);
+  $20.SubjectType get subjectType => $_getN(1);
   @$pb.TagNumber(2)
-  set subjectType($21.SubjectType v) { setField(2, v); }
+  set subjectType($20.SubjectType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasSubjectType() => $_has(1);
   @$pb.TagNumber(2)
@@ -1126,7 +1126,7 @@ class UpdatePropertyResponse extends $pb.GeneratedMessage {
 
 class GetPropertiesBySubjectTypeRequest extends $pb.GeneratedMessage {
   factory GetPropertiesBySubjectTypeRequest({
-    $21.SubjectType? subjectType,
+    $20.SubjectType? subjectType,
   }) {
     final $result = create();
     if (subjectType != null) {
@@ -1139,7 +1139,7 @@ class GetPropertiesBySubjectTypeRequest extends $pb.GeneratedMessage {
   factory GetPropertiesBySubjectTypeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertiesBySubjectTypeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
-    ..e<$21.SubjectType>(1, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $21.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $21.SubjectType.valueOf, enumValues: $21.SubjectType.values)
+    ..e<$20.SubjectType>(1, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $20.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $20.SubjectType.valueOf, enumValues: $20.SubjectType.values)
     ..hasRequiredFields = false
   ;
 
@@ -1165,9 +1165,9 @@ class GetPropertiesBySubjectTypeRequest extends $pb.GeneratedMessage {
   static GetPropertiesBySubjectTypeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $21.SubjectType get subjectType => $_getN(0);
+  $20.SubjectType get subjectType => $_getN(0);
   @$pb.TagNumber(1)
-  set subjectType($21.SubjectType v) { setField(1, v); }
+  set subjectType($20.SubjectType v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasSubjectType() => $_has(0);
   @$pb.TagNumber(1)
@@ -1332,8 +1332,8 @@ enum GetPropertiesBySubjectTypeResponse_Property_FieldTypeData {
 class GetPropertiesBySubjectTypeResponse_Property extends $pb.GeneratedMessage {
   factory GetPropertiesBySubjectTypeResponse_Property({
     $core.String? id,
-    $21.SubjectType? subjectType,
-    $21.FieldType? fieldType,
+    $20.SubjectType? subjectType,
+    $20.FieldType? fieldType,
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
@@ -1378,8 +1378,8 @@ class GetPropertiesBySubjectTypeResponse_Property extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertiesBySubjectTypeResponse.Property', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [10])
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..e<$21.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $21.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $21.SubjectType.valueOf, enumValues: $21.SubjectType.values)
-    ..e<$21.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $21.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $21.FieldType.valueOf, enumValues: $21.FieldType.values)
+    ..e<$20.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $20.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $20.SubjectType.valueOf, enumValues: $20.SubjectType.values)
+    ..e<$20.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $20.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $20.FieldType.valueOf, enumValues: $20.FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
@@ -1422,18 +1422,18 @@ class GetPropertiesBySubjectTypeResponse_Property extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $21.SubjectType get subjectType => $_getN(1);
+  $20.SubjectType get subjectType => $_getN(1);
   @$pb.TagNumber(2)
-  set subjectType($21.SubjectType v) { setField(2, v); }
+  set subjectType($20.SubjectType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasSubjectType() => $_has(1);
   @$pb.TagNumber(2)
   void clearSubjectType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $21.FieldType get fieldType => $_getN(2);
+  $20.FieldType get fieldType => $_getN(2);
   @$pb.TagNumber(3)
-  set fieldType($21.FieldType v) { setField(3, v); }
+  set fieldType($20.FieldType v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasFieldType() => $_has(2);
   @$pb.TagNumber(3)

@@ -1,5 +1,3 @@
-version: '3'
-
 services:
 
   postgres:
@@ -115,6 +113,11 @@ services:
 
       # mounts the whole repo
       - ../:/helpwave
+
+      # shared go cache with devcontainer
+      - gomodcache:/go/pkg # $GOMODCACHE
+      - gocache:/home/helpwave/.cache/go-build # $GOCACHE
+
     working_dir: /helpwave
     user: "helpwave"
     depends_on:
@@ -149,9 +152,16 @@ services:
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
+      # mounts the whole repo
       - ../:/helpwave
+
+      # shared go cache with services
+      - gomodcache:/go/pkg # $GOMODCACHE
+      - gocache:/home/helpwave/.cache/go-build # $GOCACHE
+
       # mounts the docker socket (allows DooD)
       - ${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock
+
     working_dir: /helpwave
     user: "helpwave"
     environment:
@@ -177,3 +187,7 @@ services:
       - "3003:3003" # ory-svc
       - "3004:3004" # tasks-svc
       - "3005:3005" # property-svc
+
+volumes:
+  gocache: {}
+  gomodcache: {}

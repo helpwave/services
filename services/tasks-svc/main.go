@@ -6,6 +6,7 @@ import (
 	pb "gen/services/tasks_svc/v1"
 	"hwdb"
 	"hwes/eventstoredb"
+	"hwes/eventstoredb/projections"
 	ph "tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/projections/patient_postgres_projection"
 	th "tasks-svc/internal/task/handlers"
@@ -15,7 +16,6 @@ import (
 	"time"
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
-	"github.com/rs/zerolog/log"
 	hwspicedb "hwauthz/spicedb"
 	"tasks-svc/internal/bed"
 	patient "tasks-svc/internal/patient/api"
@@ -32,9 +32,7 @@ const ServiceName = "tasks-svc"
 var Version string
 
 func main() {
-	ctx, cancel := context.WithCancel(context.Background())
-
-	common.Setup(ServiceName, Version, common.WithAuth())
+	ctx := common.Setup(ServiceName, Version, common.WithAuth())
 
 	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
 	defer closeDBPool()
@@ -48,29 +46,13 @@ func main() {
 	taskHandlers := th.NewTaskHandlers(aggregateStore)
 	patientHandlers := ph.NewPatientHandlers(aggregateStore)
 
-	go func() {
-		spicedbProjection := spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName)
-		if err := spicedbProjection.Subscribe(ctx); err != nil {
-			log.Err(err).Msg("error during spicedb subscription")
-			cancel()
-		}
-	}()
-
-	go func() {
-		postgresTaskProjection := task_postgres_projection.NewProjection(eventStore, ServiceName)
-		if err := postgresTaskProjection.Subscribe(ctx); err != nil {
-			log.Err(err).Msg("error during task-postgres subscription")
-			cancel()
-		}
-	}()
-
-	go func() {
-		postgresPatientProjection := patient_postgres_projection.NewProjection(eventStore, ServiceName)
-		if err := postgresPatientProjection.Subscribe(ctx); err != nil {
-			log.Err(err).Msg("error during patient-postgres subscription")
-			cancel()
-		}
-	}()
+	go projections.StartProjections(
+		ctx,
+		common.Shutdown,
+		spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName),
+		task_postgres_projection.NewProjection(eventStore, ServiceName),
+		patient_postgres_projection.NewProjection(eventStore, ServiceName),
+	)
 
 	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
@@ -83,6 +65,6 @@ func main() {
 		pb.RegisterTaskTemplateServiceServer(grpcServer, task_template.NewServiceServer())
 	})
 
-	// Close context
-	cancel()
+	// Shutdown cleanly
+	common.Shutdown(nil)
 }

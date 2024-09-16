@@ -2,7 +2,6 @@ package main
 
 import (
 	"common"
-	"context"
 	pb "gen/services/user_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"hwdb"
@@ -16,17 +15,17 @@ const ServiceName = "user-svc"
 var Version string
 
 func main() {
-	common.Setup(ServiceName, Version, common.WithAuth(), common.WithUnauthenticatedMethods([]string{
+	ctx := common.Setup(ServiceName, Version, common.WithAuth(), common.WithUnauthenticatedMethods([]string{
 		"/services.user_svc.v1.UserService/CreateUser",
 		"/services.user_svc.v1.OrganizationService/CreateOrganizationForUser",
 		"/services.user_svc.v1.OrganizationService/AddMember",
 		"/services.user_svc.v1.OrganizationService/GetOrganizationsByUser",
 	}))
 
-	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
+	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()
 
-	common.StartNewGRPCServer(context.Background(), common.ResolveAddrFromEnv(), func(server *daprd.Server) {
+	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
 		daprClient := common.MustNewDaprGRPCClient()

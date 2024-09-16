@@ -28,6 +28,17 @@ type EventStoreClient interface {
 
 type eventHandler func(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction)
 
+// ICustomProjection is an interface, implemented by CustomProjection,
+// and thus also implemented by all types that struct-embed CustomProjection
+type ICustomProjection interface {
+	// Subscribe creates and subscribes to a persistent subscription in EventStoreDB
+	// A persistent subscription is a type of subscription where the state is saved on the server-side
+	// This function blocks the thread until the passed context gets canceled
+	// https://developers.eventstore.com/server/v23.10/persistent-subscriptions.html
+	Subscribe(ctx context.Context) error
+	GetSubscriptionGroupName() string
+}
+
 // CustomProjection can be used to develop own projections
 // A projection is an event sourcing pattern to build up
 // a read model based on the underlying event data.
@@ -77,6 +88,14 @@ func NewCustomProjection(esdbClient EventStoreClient, subscriptionGroupName stri
 	}
 }
 
+func (p *CustomProjection) GetSubscriptionGroupName() string {
+	return p.subscriptionGroupName
+}
+
+func (p *CustomProjection) CustomProjection() *CustomProjection {
+	return p
+}
+
 func (p *CustomProjection) RegisterEventListener(eventType string, eventHandler eventHandler) *CustomProjection {
 	if _, found := p.eventHandlers[eventType]; found {
 		zlog.Error().
@@ -100,10 +119,6 @@ func (p *CustomProjection) HandleEvent(ctx context.Context, event hwes.Event) (e
 	return eventHandler(ctx, event)
 }
 
-// Subscribe creates and subscribes to a persistent subscription in EventStoreDB
-// A persistent subscription is a type of subscription where the state is saved on the server-side
-// This function blocks the thread until the passed context gets canceled
-// https://developers.eventstore.com/server/v23.10/persistent-subscriptions.html
 func (p *CustomProjection) Subscribe(ctx context.Context) error {
 	log := zlog.Ctx(ctx)
 
@@ -169,7 +184,7 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 	ctx, span, log := telemetry.StartSpan(ctx, "custom_projection.processReceivedEventFromStream")
 	defer span.End()
 
-	telemetry.SetSpanStr(ctx, "subscription_group_name", p.subscriptionGroupName)
+	log = log.With().Str("subscription_group_name", p.subscriptionGroupName).Logger()
 
 	if esdbEvent.SubscriptionDropped != nil {
 		log.Error().Err(esdbEvent.SubscriptionDropped.Error).Msg("Subscription dropped")
