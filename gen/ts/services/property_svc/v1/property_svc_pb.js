@@ -23,6 +23,8 @@ var global =
 
 var services_property_svc_v1_types_pb = require('../../../services/property_svc/v1/types_pb.js');
 goog.object.extend(proto, services_property_svc_v1_types_pb);
+var libs_common_v1_conflict_pb = require('../../../libs/common/v1/conflict_pb.js');
+goog.object.extend(proto, libs_common_v1_conflict_pb);
 goog.exportSymbol('proto.services.property_svc.v1.CreatePropertyRequest', null, global);
 goog.exportSymbol('proto.services.property_svc.v1.CreatePropertyRequest.FieldTypeDataCase', null, global);
 goog.exportSymbol('proto.services.property_svc.v1.CreatePropertyRequest.SelectData', null, global);
@@ -1204,7 +1206,8 @@ proto.services.property_svc.v1.CreatePropertyResponse.prototype.toObject = funct
  */
 proto.services.property_svc.v1.CreatePropertyResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    propertyId: jspb.Message.getFieldWithDefault(msg, 1, "")
+    propertyId: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    consistency: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -1245,6 +1248,10 @@ proto.services.property_svc.v1.CreatePropertyResponse.deserializeBinaryFromReade
       var value = /** @type {string} */ (reader.readString());
       msg.setPropertyId(value);
       break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1281,6 +1288,13 @@ proto.services.property_svc.v1.CreatePropertyResponse.serializeBinaryToWriter = 
       f
     );
   }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -1299,6 +1313,24 @@ proto.services.property_svc.v1.CreatePropertyResponse.prototype.getPropertyId = 
  */
 proto.services.property_svc.v1.CreatePropertyResponse.prototype.setPropertyId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string consistency = 2;
+ * @return {string}
+ */
+proto.services.property_svc.v1.CreatePropertyResponse.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.property_svc.v1.CreatePropertyResponse} returns this
+ */
+proto.services.property_svc.v1.CreatePropertyResponse.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -1719,7 +1751,8 @@ proto.services.property_svc.v1.GetPropertyResponse.toObject = function(includeIn
     isArchived: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
     setId: jspb.Message.getFieldWithDefault(msg, 8, ""),
     selectData: (f = msg.getSelectData()) && proto.services.property_svc.v1.GetPropertyResponse.SelectData.toObject(includeInstance, f),
-    alwaysIncludeForViewSource: jspb.Message.getBooleanFieldWithDefault(msg, 11, false)
+    alwaysIncludeForViewSource: jspb.Message.getBooleanFieldWithDefault(msg, 11, false),
+    consistency: jspb.Message.getFieldWithDefault(msg, 12, "")
   };
 
   if (includeInstance) {
@@ -1792,6 +1825,10 @@ proto.services.property_svc.v1.GetPropertyResponse.deserializeBinaryFromReader =
     case 11:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setAlwaysIncludeForViewSource(value);
+      break;
+    case 12:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -1883,6 +1920,13 @@ proto.services.property_svc.v1.GetPropertyResponse.serializeBinaryToWriter = fun
   if (f != null) {
     writer.writeBool(
       11,
+      f
+    );
+  }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      12,
       f
     );
   }
@@ -2058,7 +2102,8 @@ proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.toObj
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    isCustom: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
+    isCustom: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
+    consistency: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
 
   if (includeInstance) {
@@ -2110,6 +2155,10 @@ proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.deser
     case 4:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsCustom(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -2165,6 +2214,13 @@ proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.seria
   if (f) {
     writer.writeBool(
       4,
+      f
+    );
+  }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
       f
     );
   }
@@ -2258,6 +2314,24 @@ proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.proto
  */
 proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.setIsCustom = function(value) {
   return jspb.Message.setProto3BooleanField(this, 4, value);
+};
+
+
+/**
+ * optional string consistency = 5;
+ * @return {string}
+ */
+proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption} returns this
+ */
+proto.services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -2570,6 +2644,24 @@ proto.services.property_svc.v1.GetPropertyResponse.prototype.hasAlwaysIncludeFor
 };
 
 
+/**
+ * optional string consistency = 12;
+ * @return {string}
+ */
+proto.services.property_svc.v1.GetPropertyResponse.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 12, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.property_svc.v1.GetPropertyResponse} returns this
+ */
+proto.services.property_svc.v1.GetPropertyResponse.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 12, value);
+};
+
+
 
 /**
  * Oneof group definitions for this message. Each group defines the field
@@ -2633,7 +2725,8 @@ proto.services.property_svc.v1.UpdatePropertyRequest.toObject = function(include
     description: jspb.Message.getFieldWithDefault(msg, 5, ""),
     isArchived: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
     setId: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    selectData: (f = msg.getSelectData()) && proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.toObject(includeInstance, f)
+    selectData: (f = msg.getSelectData()) && proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.toObject(includeInstance, f),
+    consistency: jspb.Message.getFieldWithDefault(msg, 11, "")
   };
 
   if (includeInstance) {
@@ -2698,6 +2791,10 @@ proto.services.property_svc.v1.UpdatePropertyRequest.deserializeBinaryFromReader
       var value = new proto.services.property_svc.v1.UpdatePropertyRequest.SelectData;
       reader.readMessage(value,proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.deserializeBinaryFromReader);
       msg.setSelectData(value);
+      break;
+    case 11:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -2776,6 +2873,13 @@ proto.services.property_svc.v1.UpdatePropertyRequest.serializeBinaryToWriter = f
       10,
       f,
       proto.services.property_svc.v1.UpdatePropertyRequest.SelectData.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 11));
+  if (f != null) {
+    writer.writeString(
+      11,
+      f
     );
   }
 };
@@ -3547,6 +3651,42 @@ proto.services.property_svc.v1.UpdatePropertyRequest.prototype.hasSelectData = f
 };
 
 
+/**
+ * optional string consistency = 11;
+ * @return {string}
+ */
+proto.services.property_svc.v1.UpdatePropertyRequest.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 11, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.property_svc.v1.UpdatePropertyRequest} returns this
+ */
+proto.services.property_svc.v1.UpdatePropertyRequest.prototype.setConsistency = function(value) {
+  return jspb.Message.setField(this, 11, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.services.property_svc.v1.UpdatePropertyRequest} returns this
+ */
+proto.services.property_svc.v1.UpdatePropertyRequest.prototype.clearConsistency = function() {
+  return jspb.Message.setField(this, 11, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.property_svc.v1.UpdatePropertyRequest.prototype.hasConsistency = function() {
+  return jspb.Message.getField(this, 11) != null;
+};
+
+
 
 
 
@@ -3579,7 +3719,8 @@ proto.services.property_svc.v1.UpdatePropertyResponse.prototype.toObject = funct
  */
 proto.services.property_svc.v1.UpdatePropertyResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+    conflict: (f = msg.getConflict()) && libs_common_v1_conflict_pb.Conflict.toObject(includeInstance, f),
+    consistency: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -3616,6 +3757,15 @@ proto.services.property_svc.v1.UpdatePropertyResponse.deserializeBinaryFromReade
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = new libs_common_v1_conflict_pb.Conflict;
+      reader.readMessage(value,libs_common_v1_conflict_pb.Conflict.deserializeBinaryFromReader);
+      msg.setConflict(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -3645,6 +3795,76 @@ proto.services.property_svc.v1.UpdatePropertyResponse.prototype.serializeBinary 
  */
 proto.services.property_svc.v1.UpdatePropertyResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getConflict();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      libs_common_v1_conflict_pb.Conflict.serializeBinaryToWriter
+    );
+  }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional libs.common.v1.Conflict conflict = 1;
+ * @return {?proto.libs.common.v1.Conflict}
+ */
+proto.services.property_svc.v1.UpdatePropertyResponse.prototype.getConflict = function() {
+  return /** @type{?proto.libs.common.v1.Conflict} */ (
+    jspb.Message.getWrapperField(this, libs_common_v1_conflict_pb.Conflict, 1));
+};
+
+
+/**
+ * @param {?proto.libs.common.v1.Conflict|undefined} value
+ * @return {!proto.services.property_svc.v1.UpdatePropertyResponse} returns this
+*/
+proto.services.property_svc.v1.UpdatePropertyResponse.prototype.setConflict = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.services.property_svc.v1.UpdatePropertyResponse} returns this
+ */
+proto.services.property_svc.v1.UpdatePropertyResponse.prototype.clearConflict = function() {
+  return this.setConflict(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.property_svc.v1.UpdatePropertyResponse.prototype.hasConflict = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional string consistency = 2;
+ * @return {string}
+ */
+proto.services.property_svc.v1.UpdatePropertyResponse.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.property_svc.v1.UpdatePropertyResponse} returns this
+ */
+proto.services.property_svc.v1.UpdatePropertyResponse.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -3964,7 +4184,8 @@ proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.toObj
     description: jspb.Message.getFieldWithDefault(msg, 5, ""),
     isArchived: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
     setId: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    selectData: (f = msg.getSelectData()) && proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.toObject(includeInstance, f)
+    selectData: (f = msg.getSelectData()) && proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.toObject(includeInstance, f),
+    consistency: jspb.Message.getFieldWithDefault(msg, 9, "")
   };
 
   if (includeInstance) {
@@ -4033,6 +4254,10 @@ proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.deser
       var value = new proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData;
       reader.readMessage(value,proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.deserializeBinaryFromReader);
       msg.setSelectData(value);
+      break;
+    case 9:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -4118,6 +4343,13 @@ proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.seria
       10,
       f,
       proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.serializeBinaryToWriter
+    );
+  }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      9,
+      f
     );
   }
 };
@@ -4292,7 +4524,8 @@ proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.Selec
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    isCustom: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
+    isCustom: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
+    consistency: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
 
   if (includeInstance) {
@@ -4344,6 +4577,10 @@ proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.Selec
     case 4:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsCustom(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -4399,6 +4636,13 @@ proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.Selec
   if (f) {
     writer.writeBool(
       4,
+      f
+    );
+  }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
       f
     );
   }
@@ -4492,6 +4736,24 @@ proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.Selec
  */
 proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption.prototype.setIsCustom = function(value) {
   return jspb.Message.setProto3BooleanField(this, 4, value);
+};
+
+
+/**
+ * optional string consistency = 5;
+ * @return {string}
+ */
+proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption} returns this
+ */
+proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -4765,6 +5027,24 @@ proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.proto
  */
 proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.prototype.hasSelectData = function() {
   return jspb.Message.getField(this, 10) != null;
+};
+
+
+/**
+ * optional string consistency = 9;
+ * @return {string}
+ */
+proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property} returns this
+ */
+proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 9, value);
 };
 
 

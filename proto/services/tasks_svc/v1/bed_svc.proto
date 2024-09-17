@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package services.tasks_svc.v1;
 
+import "libs/common/v1/conflict.proto";
+
 option go_package = "gen/proto/services/tasks-svc";
 
 //
@@ -15,6 +17,7 @@ message CreateBedRequest {
 
 message CreateBedResponse {
   string id = 1;
+  string consistency = 2;
 }
 
 //
@@ -32,6 +35,7 @@ message BulkCreateBedsResponse {
   message Bed {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 }
 
@@ -47,6 +51,7 @@ message GetBedResponse {
   string id = 1;
   string room_id = 2;
   string name = 3;
+  string consistency = 4;
 }
 
 
@@ -66,11 +71,13 @@ message GetBedByPatientResponse {
     string id = 1;
     string name = 2;
     string ward_id = 3;
+    string consistency = 4;
   }
 
   message Bed {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 }
 
@@ -87,6 +94,7 @@ message GetBedsResponse {
     string id = 1;
     string room_id = 2;
     string name = 3;
+    string consistency = 4;
   }
 }
 
@@ -104,6 +112,7 @@ message GetBedsByRoomResponse {
   message Bed {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 }
 
@@ -115,9 +124,13 @@ message UpdateBedRequest {
   string id = 1; // @gotags: validate:"uuid4"
   optional string room_id = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
   optional string name = 3;
+  optional string consistency = 4; // no conflict detection, if not provided
 }
 
-message UpdateBedResponse {}
+message UpdateBedResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string consistency = 2;
+}
 
 //
 // DeleteBed

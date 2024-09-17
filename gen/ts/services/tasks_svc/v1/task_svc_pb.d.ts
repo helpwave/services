@@ -2,6 +2,7 @@ import * as jspb from 'google-protobuf'
 
 import * as services_tasks_svc_v1_types_pb from '../../../services/tasks_svc/v1/types_pb'; // proto import: "services/tasks_svc/v1/types.proto"
 import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb'; // proto import: "google/protobuf/timestamp.proto"
+import * as libs_common_v1_conflict_pb from '../../../libs/common/v1/conflict_pb'; // proto import: "libs/common/v1/conflict.proto"
 
 
 export class CreateTaskRequest extends jspb.Message {
@@ -109,6 +110,9 @@ export class CreateTaskResponse extends jspb.Message {
   getId(): string;
   setId(value: string): CreateTaskResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): CreateTaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateTaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreateTaskResponse): CreateTaskResponse.AsObject;
@@ -120,6 +124,7 @@ export class CreateTaskResponse extends jspb.Message {
 export namespace CreateTaskResponse {
   export type AsObject = {
     id: string,
+    consistency: string,
   }
 }
 
@@ -152,6 +157,11 @@ export class UpdateTaskRequest extends jspb.Message {
   hasPublic(): boolean;
   clearPublic(): UpdateTaskRequest;
 
+  getConsistency(): string;
+  setConsistency(value: string): UpdateTaskRequest;
+  hasConsistency(): boolean;
+  clearConsistency(): UpdateTaskRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateTaskRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateTaskRequest): UpdateTaskRequest.AsObject;
@@ -168,6 +178,7 @@ export namespace UpdateTaskRequest {
     dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     status?: services_tasks_svc_v1_types_pb.TaskStatus,
     pb_public?: boolean,
+    consistency?: string,
   }
 
   export enum NameCase { 
@@ -194,9 +205,22 @@ export namespace UpdateTaskRequest {
     _PUBLIC_NOT_SET = 0,
     PUBLIC = 6,
   }
+
+  export enum ConsistencyCase { 
+    _CONSISTENCY_NOT_SET = 0,
+    CONSISTENCY = 7,
+  }
 }
 
 export class UpdateTaskResponse extends jspb.Message {
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): UpdateTaskResponse;
+  hasConflict(): boolean;
+  clearConflict(): UpdateTaskResponse;
+
+  getConsistency(): string;
+  setConsistency(value: string): UpdateTaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateTaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateTaskResponse): UpdateTaskResponse.AsObject;
@@ -207,6 +231,13 @@ export class UpdateTaskResponse extends jspb.Message {
 
 export namespace UpdateTaskResponse {
   export type AsObject = {
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    consistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 1,
   }
 }
 
@@ -272,6 +303,9 @@ export class GetTaskResponse extends jspb.Message {
   hasPatient(): boolean;
   clearPatient(): GetTaskResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): GetTaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetTaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetTaskResponse): GetTaskResponse.AsObject;
@@ -293,6 +327,7 @@ export namespace GetTaskResponse {
     dueAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     createdBy: string,
     patient?: GetTaskResponse.Patient.AsObject,
+    consistency: string,
   }
 
   export class Patient extends jspb.Message {
@@ -301,6 +336,9 @@ export namespace GetTaskResponse {
 
     getHumanReadableIdentifier(): string;
     setHumanReadableIdentifier(value: string): Patient;
+
+    getConsistency(): string;
+    setConsistency(value: string): Patient;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Patient.AsObject;
@@ -314,6 +352,7 @@ export namespace GetTaskResponse {
     export type AsObject = {
       id: string,
       humanReadableIdentifier: string,
+      consistency: string,
     }
   }
 
@@ -331,6 +370,9 @@ export namespace GetTaskResponse {
     getCreatedBy(): string;
     setCreatedBy(value: string): SubTask;
 
+    getConsistency(): string;
+    setConsistency(value: string): SubTask;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SubTask.AsObject;
     static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
@@ -345,6 +387,7 @@ export namespace GetTaskResponse {
       name: string,
       done: boolean,
       createdBy: string,
+      consistency: string,
     }
   }
 
@@ -434,6 +477,9 @@ export namespace GetTasksByPatientResponse {
     hasCreatedAt(): boolean;
     clearCreatedAt(): Task;
 
+    getConsistency(): string;
+    setConsistency(value: string): Task;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Task.AsObject;
     static toObject(includeInstance: boolean, msg: Task): Task.AsObject;
@@ -455,6 +501,7 @@ export namespace GetTasksByPatientResponse {
       createdBy: string,
       subtasksList: Array<GetTasksByPatientResponse.Task.SubTask.AsObject>,
       createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+      consistency: string,
     }
 
     export class SubTask extends jspb.Message {
@@ -470,6 +517,9 @@ export namespace GetTasksByPatientResponse {
       getCreatedBy(): string;
       setCreatedBy(value: string): SubTask;
 
+      getConsistency(): string;
+      setConsistency(value: string): SubTask;
+
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SubTask.AsObject;
       static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
@@ -484,6 +534,7 @@ export namespace GetTasksByPatientResponse {
         name: string,
         done: boolean,
         createdBy: string,
+        consistency: string,
       }
     }
 
@@ -584,6 +635,9 @@ export namespace GetTasksByPatientSortedByStatusResponse {
     hasCreatedAt(): boolean;
     clearCreatedAt(): Task;
 
+    getConsistency(): string;
+    setConsistency(value: string): Task;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Task.AsObject;
     static toObject(includeInstance: boolean, msg: Task): Task.AsObject;
@@ -604,6 +658,7 @@ export namespace GetTasksByPatientSortedByStatusResponse {
       createdBy: string,
       subtasksList: Array<GetTasksByPatientSortedByStatusResponse.Task.SubTask.AsObject>,
       createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+      consistency: string,
     }
 
     export class SubTask extends jspb.Message {
@@ -619,6 +674,9 @@ export namespace GetTasksByPatientSortedByStatusResponse {
       getCreatedBy(): string;
       setCreatedBy(value: string): SubTask;
 
+      getConsistency(): string;
+      setConsistency(value: string): SubTask;
+
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SubTask.AsObject;
       static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
@@ -633,6 +691,7 @@ export namespace GetTasksByPatientSortedByStatusResponse {
         name: string,
         done: boolean,
         createdBy: string,
+        consistency: string,
       }
     }
 
@@ -720,6 +779,9 @@ export namespace GetAssignedTasksResponse {
     hasCreatedAt(): boolean;
     clearCreatedAt(): Task;
 
+    getConsistency(): string;
+    setConsistency(value: string): Task;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Task.AsObject;
     static toObject(includeInstance: boolean, msg: Task): Task.AsObject;
@@ -741,6 +803,7 @@ export namespace GetAssignedTasksResponse {
       createdBy: string,
       subtasksList: Array<GetAssignedTasksResponse.Task.SubTask.AsObject>,
       createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+      consistency: string,
     }
 
     export class Patient extends jspb.Message {
@@ -749,6 +812,9 @@ export namespace GetAssignedTasksResponse {
 
       getHumanReadableIdentifier(): string;
       setHumanReadableIdentifier(value: string): Patient;
+
+      getConsistency(): string;
+      setConsistency(value: string): Patient;
 
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): Patient.AsObject;
@@ -762,6 +828,7 @@ export namespace GetAssignedTasksResponse {
       export type AsObject = {
         id: string,
         humanReadableIdentifier: string,
+        consistency: string,
       }
     }
 
@@ -779,6 +846,9 @@ export namespace GetAssignedTasksResponse {
       getCreatedBy(): string;
       setCreatedBy(value: string): SubTask;
 
+      getConsistency(): string;
+      setConsistency(value: string): SubTask;
+
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SubTask.AsObject;
       static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
@@ -793,6 +863,7 @@ export namespace GetAssignedTasksResponse {
         name: string,
         done: boolean,
         createdBy: string,
+        consistency: string,
       }
     }
 
@@ -807,6 +878,11 @@ export class AssignTaskRequest extends jspb.Message {
   getUserId(): string;
   setUserId(value: string): AssignTaskRequest;
 
+  getConsistency(): string;
+  setConsistency(value: string): AssignTaskRequest;
+  hasConsistency(): boolean;
+  clearConsistency(): AssignTaskRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): AssignTaskRequest.AsObject;
   static toObject(includeInstance: boolean, msg: AssignTaskRequest): AssignTaskRequest.AsObject;
@@ -819,10 +895,24 @@ export namespace AssignTaskRequest {
   export type AsObject = {
     taskId: string,
     userId: string,
+    consistency?: string,
+  }
+
+  export enum ConsistencyCase { 
+    _CONSISTENCY_NOT_SET = 0,
+    CONSISTENCY = 3,
   }
 }
 
 export class AssignTaskResponse extends jspb.Message {
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): AssignTaskResponse;
+  hasConflict(): boolean;
+  clearConflict(): AssignTaskResponse;
+
+  getConsistency(): string;
+  setConsistency(value: string): AssignTaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): AssignTaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: AssignTaskResponse): AssignTaskResponse.AsObject;
@@ -833,6 +923,13 @@ export class AssignTaskResponse extends jspb.Message {
 
 export namespace AssignTaskResponse {
   export type AsObject = {
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    consistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 1,
   }
 }
 
@@ -842,6 +939,11 @@ export class UnassignTaskRequest extends jspb.Message {
 
   getUserId(): string;
   setUserId(value: string): UnassignTaskRequest;
+
+  getConsistency(): string;
+  setConsistency(value: string): UnassignTaskRequest;
+  hasConsistency(): boolean;
+  clearConsistency(): UnassignTaskRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UnassignTaskRequest.AsObject;
@@ -855,10 +957,24 @@ export namespace UnassignTaskRequest {
   export type AsObject = {
     taskId: string,
     userId: string,
+    consistency?: string,
+  }
+
+  export enum ConsistencyCase { 
+    _CONSISTENCY_NOT_SET = 0,
+    CONSISTENCY = 3,
   }
 }
 
 export class UnassignTaskResponse extends jspb.Message {
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): UnassignTaskResponse;
+  hasConflict(): boolean;
+  clearConflict(): UnassignTaskResponse;
+
+  getConsistency(): string;
+  setConsistency(value: string): UnassignTaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UnassignTaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UnassignTaskResponse): UnassignTaskResponse.AsObject;
@@ -869,6 +985,13 @@ export class UnassignTaskResponse extends jspb.Message {
 
 export namespace UnassignTaskResponse {
   export type AsObject = {
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    consistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 1,
   }
 }
 
@@ -923,6 +1046,9 @@ export class CreateSubtaskResponse extends jspb.Message {
   getSubtaskId(): string;
   setSubtaskId(value: string): CreateSubtaskResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): CreateSubtaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateSubtaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreateSubtaskResponse): CreateSubtaskResponse.AsObject;
@@ -934,6 +1060,7 @@ export class CreateSubtaskResponse extends jspb.Message {
 export namespace CreateSubtaskResponse {
   export type AsObject = {
     subtaskId: string,
+    consistency: string,
   }
 }
 
@@ -949,6 +1076,11 @@ export class UpdateSubtaskRequest extends jspb.Message {
   hasSubtask(): boolean;
   clearSubtask(): UpdateSubtaskRequest;
 
+  getConsistency(): string;
+  setConsistency(value: string): UpdateSubtaskRequest;
+  hasConsistency(): boolean;
+  clearConsistency(): UpdateSubtaskRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateSubtaskRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateSubtaskRequest): UpdateSubtaskRequest.AsObject;
@@ -962,6 +1094,7 @@ export namespace UpdateSubtaskRequest {
     taskId: string,
     subtaskId: string,
     subtask?: UpdateSubtaskRequest.Subtask.AsObject,
+    consistency?: string,
   }
 
   export class Subtask extends jspb.Message {
@@ -1000,9 +1133,22 @@ export namespace UpdateSubtaskRequest {
     }
   }
 
+
+  export enum ConsistencyCase { 
+    _CONSISTENCY_NOT_SET = 0,
+    CONSISTENCY = 4,
+  }
 }
 
 export class UpdateSubtaskResponse extends jspb.Message {
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): UpdateSubtaskResponse;
+  hasConflict(): boolean;
+  clearConflict(): UpdateSubtaskResponse;
+
+  getConsistency(): string;
+  setConsistency(value: string): UpdateSubtaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateSubtaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateSubtaskResponse): UpdateSubtaskResponse.AsObject;
@@ -1013,6 +1159,13 @@ export class UpdateSubtaskResponse extends jspb.Message {
 
 export namespace UpdateSubtaskResponse {
   export type AsObject = {
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    consistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 1,
   }
 }
 
@@ -1071,6 +1224,9 @@ export namespace RemoveTaskDueDateRequest {
 }
 
 export class RemoveTaskDueDateResponse extends jspb.Message {
+  getConsistency(): string;
+  setConsistency(value: string): RemoveTaskDueDateResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): RemoveTaskDueDateResponse.AsObject;
   static toObject(includeInstance: boolean, msg: RemoveTaskDueDateResponse): RemoveTaskDueDateResponse.AsObject;
@@ -1081,6 +1237,7 @@ export class RemoveTaskDueDateResponse extends jspb.Message {
 
 export namespace RemoveTaskDueDateResponse {
   export type AsObject = {
+    consistency: string,
   }
 }
 

@@ -1,0 +1,75 @@
+//
+//  Generated code. Do not modify.
+//  source: libs/common/v1/conflict.proto
+//
+// @dart = 2.12
+
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: constant_identifier_names, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+
+import 'dart:core' as $core;
+
+import 'package:protobuf/protobuf.dart' as $pb;
+
+/// Conflicts are returned, if a request was made with a consistency token, and a conflict to the requested action was caused.
+/// There are three states:
+///  - WAS - the state expected to be the newest by the frontend as identified by the consistency token,
+///  - WANT - the state resulting from applying the changes requested)
+///  - IS - the true current state, which only differs from WAS if another action was performed since the client retrieved the WAS state
+/// If WAS == IS, or WANT and IS are merge-able (e.g., requested action changes "name", and another action has changed "age"), no conflict arises.
+class Conflict extends $pb.GeneratedMessage {
+  factory Conflict({
+    $core.bool? subjectDeleted,
+  }) {
+    final $result = create();
+    if (subjectDeleted != null) {
+      $result.subjectDeleted = subjectDeleted;
+    }
+    return $result;
+  }
+  Conflict._() : super();
+  factory Conflict.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Conflict.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Conflict', package: const $pb.PackageName(_omitMessageNames ? '' : 'libs.common.v1'), createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'subjectDeleted')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Conflict clone() => Conflict()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Conflict copyWith(void Function(Conflict) updates) => super.copyWith((message) => updates(message as Conflict)) as Conflict;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Conflict create() => Conflict._();
+  Conflict createEmptyInstance() => create();
+  static $pb.PbList<Conflict> createRepeated() => $pb.PbList<Conflict>();
+  @$core.pragma('dart2js:noInline')
+  static Conflict getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Conflict>(create);
+  static Conflict? _defaultInstance;
+
+  /// indicates, if a subject where an action was requested upon was deleted since
+  @$pb.TagNumber(1)
+  $core.bool get subjectDeleted => $_getBF(0);
+  @$pb.TagNumber(1)
+  set subjectDeleted($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasSubjectDeleted() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSubjectDeleted() => clearField(1);
+}
+
+
+const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
+const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

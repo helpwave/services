@@ -1,5 +1,6 @@
 import * as jspb from 'google-protobuf'
 
+import * as libs_common_v1_conflict_pb from '../../../libs/common/v1/conflict_pb'; // proto import: "libs/common/v1/conflict.proto"
 
 
 export class CreateWardRequest extends jspb.Message {
@@ -63,6 +64,9 @@ export class GetWardResponse extends jspb.Message {
   getName(): string;
   setName(value: string): GetWardResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): GetWardResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetWardResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetWardResponse): GetWardResponse.AsObject;
@@ -75,6 +79,7 @@ export namespace GetWardResponse {
   export type AsObject = {
     id: string,
     name: string,
+    consistency: string,
   }
 }
 
@@ -118,6 +123,9 @@ export namespace GetWardsResponse {
     getName(): string;
     setName(value: string): Ward;
 
+    getConsistency(): string;
+    setConsistency(value: string): Ward;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Ward.AsObject;
     static toObject(includeInstance: boolean, msg: Ward): Ward.AsObject;
@@ -130,6 +138,7 @@ export namespace GetWardsResponse {
     export type AsObject = {
       id: string,
       name: string,
+      consistency: string,
     }
   }
 
@@ -187,6 +196,9 @@ export namespace GetRecentWardsResponse {
     getTasksDone(): number;
     setTasksDone(value: number): Ward;
 
+    getConsistency(): string;
+    setConsistency(value: string): Ward;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Ward.AsObject;
     static toObject(includeInstance: boolean, msg: Ward): Ward.AsObject;
@@ -203,6 +215,7 @@ export namespace GetRecentWardsResponse {
       tasksTodo: number,
       tasksInProgress: number,
       tasksDone: number,
+      consistency: string,
     }
   }
 
@@ -217,6 +230,11 @@ export class UpdateWardRequest extends jspb.Message {
   hasName(): boolean;
   clearName(): UpdateWardRequest;
 
+  getConsistency(): string;
+  setConsistency(value: string): UpdateWardRequest;
+  hasConsistency(): boolean;
+  clearConsistency(): UpdateWardRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateWardRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateWardRequest): UpdateWardRequest.AsObject;
@@ -229,15 +247,29 @@ export namespace UpdateWardRequest {
   export type AsObject = {
     id: string,
     name?: string,
+    consistency?: string,
   }
 
   export enum NameCase { 
     _NAME_NOT_SET = 0,
     NAME = 2,
   }
+
+  export enum ConsistencyCase { 
+    _CONSISTENCY_NOT_SET = 0,
+    CONSISTENCY = 3,
+  }
 }
 
 export class UpdateWardResponse extends jspb.Message {
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): UpdateWardResponse;
+  hasConflict(): boolean;
+  clearConflict(): UpdateWardResponse;
+
+  getConsistency(): string;
+  setConsistency(value: string): UpdateWardResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateWardResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateWardResponse): UpdateWardResponse.AsObject;
@@ -248,6 +280,13 @@ export class UpdateWardResponse extends jspb.Message {
 
 export namespace UpdateWardResponse {
   export type AsObject = {
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    consistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 1,
   }
 }
 
@@ -318,6 +357,9 @@ export class GetWardDetailsResponse extends jspb.Message {
   clearTaskTemplatesList(): GetWardDetailsResponse;
   addTaskTemplates(value?: GetWardDetailsResponse.TaskTemplate, index?: number): GetWardDetailsResponse.TaskTemplate;
 
+  getConsistency(): string;
+  setConsistency(value: string): GetWardDetailsResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetWardDetailsResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetWardDetailsResponse): GetWardDetailsResponse.AsObject;
@@ -332,6 +374,7 @@ export namespace GetWardDetailsResponse {
     name: string,
     roomsList: Array<GetWardDetailsResponse.Room.AsObject>,
     taskTemplatesList: Array<GetWardDetailsResponse.TaskTemplate.AsObject>,
+    consistency: string,
   }
 
   export class Bed extends jspb.Message {
@@ -340,6 +383,9 @@ export namespace GetWardDetailsResponse {
 
     getName(): string;
     setName(value: string): Bed;
+
+    getConsistency(): string;
+    setConsistency(value: string): Bed;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
@@ -353,6 +399,7 @@ export namespace GetWardDetailsResponse {
     export type AsObject = {
       id: string,
       name: string,
+      consistency: string,
     }
   }
 
@@ -363,6 +410,9 @@ export namespace GetWardDetailsResponse {
 
     getName(): string;
     setName(value: string): Subtask;
+
+    getConsistency(): string;
+    setConsistency(value: string): Subtask;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Subtask.AsObject;
@@ -376,6 +426,7 @@ export namespace GetWardDetailsResponse {
     export type AsObject = {
       id: string,
       name: string,
+      consistency: string,
     }
   }
 
@@ -392,6 +443,9 @@ export namespace GetWardDetailsResponse {
     clearBedsList(): Room;
     addBeds(value?: GetWardDetailsResponse.Bed, index?: number): GetWardDetailsResponse.Bed;
 
+    getConsistency(): string;
+    setConsistency(value: string): Room;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Room.AsObject;
     static toObject(includeInstance: boolean, msg: Room): Room.AsObject;
@@ -405,6 +459,7 @@ export namespace GetWardDetailsResponse {
       id: string,
       name: string,
       bedsList: Array<GetWardDetailsResponse.Bed.AsObject>,
+      consistency: string,
     }
   }
 
@@ -421,6 +476,9 @@ export namespace GetWardDetailsResponse {
     clearSubtasksList(): TaskTemplate;
     addSubtasks(value?: GetWardDetailsResponse.Subtask, index?: number): GetWardDetailsResponse.Subtask;
 
+    getConsistency(): string;
+    setConsistency(value: string): TaskTemplate;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): TaskTemplate.AsObject;
     static toObject(includeInstance: boolean, msg: TaskTemplate): TaskTemplate.AsObject;
@@ -434,6 +492,7 @@ export namespace GetWardDetailsResponse {
       id: string,
       name: string,
       subtasksList: Array<GetWardDetailsResponse.Subtask.AsObject>,
+      consistency: string,
     }
   }
 
@@ -491,6 +550,9 @@ export namespace GetWardOverviewsResponse {
     getTasksDone(): number;
     setTasksDone(value: number): Ward;
 
+    getConsistency(): string;
+    setConsistency(value: string): Ward;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Ward.AsObject;
     static toObject(includeInstance: boolean, msg: Ward): Ward.AsObject;
@@ -507,6 +569,7 @@ export namespace GetWardOverviewsResponse {
       tasksTodo: number,
       tasksInProgress: number,
       tasksDone: number,
+      consistency: string,
     }
   }
 

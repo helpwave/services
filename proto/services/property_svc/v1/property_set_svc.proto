@@ -15,6 +15,7 @@ message CreatePropertySetRequest{
 
 message CreatePropertySetResponse{
   string id = 1;
+  string consistency = 2;
 }
 
 message GetPropertySetRequest{
@@ -24,6 +25,7 @@ message GetPropertySetRequest{
 message GetPropertySetResponse{
   string id = 1;
   string name = 2;
+  string consistency = 3;
 }
 
 //

@@ -3,6 +3,7 @@ syntax = "proto3";
 package services.property_svc.v1;
 
 import "services/property_svc/v1/types.proto";
+import "libs/common/v1/conflict.proto";
 
 option go_package = "gen/proto/services/property-svc";
 
@@ -39,6 +40,7 @@ message CreatePropertyRequest {
 
 message CreatePropertyResponse {
   string property_id = 1; // uuid of the property
+  string consistency = 2;
 }
 
 //
@@ -83,10 +85,13 @@ message GetPropertyResponse {
       string name = 2;
       optional string description = 3;
       bool is_custom = 4;
+      string consistency = 5;
     }
   }
 
   optional bool always_include_for_view_source = 11; // This value is dependend on the ViewSource
+
+  string consistency = 12;
 }
 
 //
@@ -110,6 +115,8 @@ message UpdatePropertyRequest {
     SelectData select_data = 10;
   }
 
+  optional string consistency = 11; // no conflict detection, if not provided
+
   message SelectData {
     optional bool allow_freetext = 1;
     repeated string remove_options = 2; // @gotags: validate:"dive,uuid4"
@@ -124,7 +131,10 @@ message UpdatePropertyRequest {
   }
 }
 
-message UpdatePropertyResponse {}
+message UpdatePropertyResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string consistency = 2;
+}
 
 //
 // GetPropertiesBySubjectType
@@ -152,6 +162,8 @@ message GetPropertiesBySubjectTypeResponse {
       SelectData select_data = 10;
     }
 
+    string consistency = 9;
+
     message SelectData {
       optional bool allow_freetext = 1;
       repeated SelectOption options = 2;
@@ -161,6 +173,7 @@ message GetPropertiesBySubjectTypeResponse {
         string name = 2;
         optional string description = 3;
         bool is_custom = 4;
+        string consistency = 5;
       }
     }
   }

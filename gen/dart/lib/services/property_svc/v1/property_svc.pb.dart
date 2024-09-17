@@ -13,7 +13,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'types.pbenum.dart' as $20;
+import '../../../libs/common/v1/conflict.pb.dart' as $20;
+import 'types.pbenum.dart' as $21;
 
 class CreatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage {
   factory CreatePropertyRequest_SelectData_SelectOption({
@@ -146,8 +147,8 @@ enum CreatePropertyRequest_FieldTypeData {
 /// Creates a new Property
 class CreatePropertyRequest extends $pb.GeneratedMessage {
   factory CreatePropertyRequest({
-    $20.SubjectType? subjectType,
-    $20.FieldType? fieldType,
+    $21.SubjectType? subjectType,
+    $21.FieldType? fieldType,
     $core.String? name,
     $core.String? description,
     $core.String? setId,
@@ -184,8 +185,8 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [9])
-    ..e<$20.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $20.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $20.SubjectType.valueOf, enumValues: $20.SubjectType.values)
-    ..e<$20.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $20.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $20.FieldType.valueOf, enumValues: $20.FieldType.values)
+    ..e<$21.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $21.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $21.SubjectType.valueOf, enumValues: $21.SubjectType.values)
+    ..e<$21.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $21.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $21.FieldType.valueOf, enumValues: $21.FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOS(6, _omitFieldNames ? '' : 'setId')
@@ -218,18 +219,18 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
   void clearFieldTypeData() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(2)
-  $20.SubjectType get subjectType => $_getN(0);
+  $21.SubjectType get subjectType => $_getN(0);
   @$pb.TagNumber(2)
-  set subjectType($20.SubjectType v) { setField(2, v); }
+  set subjectType($21.SubjectType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasSubjectType() => $_has(0);
   @$pb.TagNumber(2)
   void clearSubjectType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $20.FieldType get fieldType => $_getN(1);
+  $21.FieldType get fieldType => $_getN(1);
   @$pb.TagNumber(3)
-  set fieldType($20.FieldType v) { setField(3, v); }
+  set fieldType($21.FieldType v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasFieldType() => $_has(1);
   @$pb.TagNumber(3)
@@ -278,10 +279,14 @@ class CreatePropertyRequest extends $pb.GeneratedMessage {
 class CreatePropertyResponse extends $pb.GeneratedMessage {
   factory CreatePropertyResponse({
     $core.String? propertyId,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (propertyId != null) {
       $result.propertyId = propertyId;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
     }
     return $result;
   }
@@ -291,6 +296,7 @@ class CreatePropertyResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'propertyId')
+    ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -323,6 +329,15 @@ class CreatePropertyResponse extends $pb.GeneratedMessage {
   $core.bool hasPropertyId() => $_has(0);
   @$pb.TagNumber(1)
   void clearPropertyId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get consistency => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set consistency($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasConsistency() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearConsistency() => clearField(2);
 }
 
 enum GetPropertyRequest_ViewSource_Value {
@@ -462,6 +477,7 @@ class GetPropertyResponse_SelectData_SelectOption extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? description,
     $core.bool? isCustom,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -476,6 +492,9 @@ class GetPropertyResponse_SelectData_SelectOption extends $pb.GeneratedMessage {
     if (isCustom != null) {
       $result.isCustom = isCustom;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   GetPropertyResponse_SelectData_SelectOption._() : super();
@@ -487,6 +506,7 @@ class GetPropertyResponse_SelectData_SelectOption extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOB(4, _omitFieldNames ? '' : 'isCustom')
+    ..aOS(5, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -546,6 +566,15 @@ class GetPropertyResponse_SelectData_SelectOption extends $pb.GeneratedMessage {
   $core.bool hasIsCustom() => $_has(3);
   @$pb.TagNumber(4)
   void clearIsCustom() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get consistency => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set consistency($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasConsistency() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearConsistency() => clearField(5);
 }
 
 class GetPropertyResponse_SelectData extends $pb.GeneratedMessage {
@@ -614,14 +643,15 @@ enum GetPropertyResponse_FieldTypeData {
 class GetPropertyResponse extends $pb.GeneratedMessage {
   factory GetPropertyResponse({
     $core.String? id,
-    $20.SubjectType? subjectType,
-    $20.FieldType? fieldType,
+    $21.SubjectType? subjectType,
+    $21.FieldType? fieldType,
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
     $core.String? setId,
     GetPropertyResponse_SelectData? selectData,
     $core.bool? alwaysIncludeForViewSource,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -651,6 +681,9 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
     if (alwaysIncludeForViewSource != null) {
       $result.alwaysIncludeForViewSource = alwaysIncludeForViewSource;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   GetPropertyResponse._() : super();
@@ -664,14 +697,15 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [10])
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..e<$20.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $20.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $20.SubjectType.valueOf, enumValues: $20.SubjectType.values)
-    ..e<$20.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $20.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $20.FieldType.valueOf, enumValues: $20.FieldType.values)
+    ..e<$21.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $21.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $21.SubjectType.valueOf, enumValues: $21.SubjectType.values)
+    ..e<$21.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $21.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $21.FieldType.valueOf, enumValues: $21.FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
     ..aOS(8, _omitFieldNames ? '' : 'setId')
     ..aOM<GetPropertyResponse_SelectData>(10, _omitFieldNames ? '' : 'selectData', subBuilder: GetPropertyResponse_SelectData.create)
     ..aOB(11, _omitFieldNames ? '' : 'alwaysIncludeForViewSource')
+    ..aOS(12, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -709,18 +743,18 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $20.SubjectType get subjectType => $_getN(1);
+  $21.SubjectType get subjectType => $_getN(1);
   @$pb.TagNumber(2)
-  set subjectType($20.SubjectType v) { setField(2, v); }
+  set subjectType($21.SubjectType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasSubjectType() => $_has(1);
   @$pb.TagNumber(2)
   void clearSubjectType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $20.FieldType get fieldType => $_getN(2);
+  $21.FieldType get fieldType => $_getN(2);
   @$pb.TagNumber(3)
-  set fieldType($20.FieldType v) { setField(3, v); }
+  set fieldType($21.FieldType v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasFieldType() => $_has(2);
   @$pb.TagNumber(3)
@@ -782,6 +816,15 @@ class GetPropertyResponse extends $pb.GeneratedMessage {
   $core.bool hasAlwaysIncludeForViewSource() => $_has(8);
   @$pb.TagNumber(11)
   void clearAlwaysIncludeForViewSource() => clearField(11);
+
+  @$pb.TagNumber(12)
+  $core.String get consistency => $_getSZ(9);
+  @$pb.TagNumber(12)
+  set consistency($core.String v) { $_setString(9, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasConsistency() => $_has(9);
+  @$pb.TagNumber(12)
+  void clearConsistency() => clearField(12);
 }
 
 class UpdatePropertyRequest_SelectData_SelectOption extends $pb.GeneratedMessage {
@@ -950,12 +993,13 @@ enum UpdatePropertyRequest_FieldTypeData {
 class UpdatePropertyRequest extends $pb.GeneratedMessage {
   factory UpdatePropertyRequest({
     $core.String? id,
-    $20.SubjectType? subjectType,
+    $21.SubjectType? subjectType,
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
     $core.String? setId,
     UpdatePropertyRequest_SelectData? selectData,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -979,6 +1023,9 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
     if (selectData != null) {
       $result.selectData = selectData;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   UpdatePropertyRequest._() : super();
@@ -992,12 +1039,13 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePropertyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [10])
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..e<$20.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $20.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $20.SubjectType.valueOf, enumValues: $20.SubjectType.values)
+    ..e<$21.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $21.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $21.SubjectType.valueOf, enumValues: $21.SubjectType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
     ..aOS(8, _omitFieldNames ? '' : 'setId')
     ..aOM<UpdatePropertyRequest_SelectData>(10, _omitFieldNames ? '' : 'selectData', subBuilder: UpdatePropertyRequest_SelectData.create)
+    ..aOS(11, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -1035,9 +1083,9 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $20.SubjectType get subjectType => $_getN(1);
+  $21.SubjectType get subjectType => $_getN(1);
   @$pb.TagNumber(2)
-  set subjectType($20.SubjectType v) { setField(2, v); }
+  set subjectType($21.SubjectType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasSubjectType() => $_has(1);
   @$pb.TagNumber(2)
@@ -1090,15 +1138,38 @@ class UpdatePropertyRequest extends $pb.GeneratedMessage {
   void clearSelectData() => clearField(10);
   @$pb.TagNumber(10)
   UpdatePropertyRequest_SelectData ensureSelectData() => $_ensure(6);
+
+  @$pb.TagNumber(11)
+  $core.String get consistency => $_getSZ(7);
+  @$pb.TagNumber(11)
+  set consistency($core.String v) { $_setString(7, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasConsistency() => $_has(7);
+  @$pb.TagNumber(11)
+  void clearConsistency() => clearField(11);
 }
 
 class UpdatePropertyResponse extends $pb.GeneratedMessage {
-  factory UpdatePropertyResponse() => create();
+  factory UpdatePropertyResponse({
+    $20.Conflict? conflict,
+    $core.String? consistency,
+  }) {
+    final $result = create();
+    if (conflict != null) {
+      $result.conflict = conflict;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
+    return $result;
+  }
   UpdatePropertyResponse._() : super();
   factory UpdatePropertyResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdatePropertyResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePropertyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
+    ..aOM<$20.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $20.Conflict.create)
+    ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -1122,11 +1193,31 @@ class UpdatePropertyResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static UpdatePropertyResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdatePropertyResponse>(create);
   static UpdatePropertyResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $20.Conflict get conflict => $_getN(0);
+  @$pb.TagNumber(1)
+  set conflict($20.Conflict v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasConflict() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConflict() => clearField(1);
+  @$pb.TagNumber(1)
+  $20.Conflict ensureConflict() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $core.String get consistency => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set consistency($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasConsistency() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearConsistency() => clearField(2);
 }
 
 class GetPropertiesBySubjectTypeRequest extends $pb.GeneratedMessage {
   factory GetPropertiesBySubjectTypeRequest({
-    $20.SubjectType? subjectType,
+    $21.SubjectType? subjectType,
   }) {
     final $result = create();
     if (subjectType != null) {
@@ -1139,7 +1230,7 @@ class GetPropertiesBySubjectTypeRequest extends $pb.GeneratedMessage {
   factory GetPropertiesBySubjectTypeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertiesBySubjectTypeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
-    ..e<$20.SubjectType>(1, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $20.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $20.SubjectType.valueOf, enumValues: $20.SubjectType.values)
+    ..e<$21.SubjectType>(1, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $21.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $21.SubjectType.valueOf, enumValues: $21.SubjectType.values)
     ..hasRequiredFields = false
   ;
 
@@ -1165,9 +1256,9 @@ class GetPropertiesBySubjectTypeRequest extends $pb.GeneratedMessage {
   static GetPropertiesBySubjectTypeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $20.SubjectType get subjectType => $_getN(0);
+  $21.SubjectType get subjectType => $_getN(0);
   @$pb.TagNumber(1)
-  set subjectType($20.SubjectType v) { setField(1, v); }
+  set subjectType($21.SubjectType v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasSubjectType() => $_has(0);
   @$pb.TagNumber(1)
@@ -1180,6 +1271,7 @@ class GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption extend
     $core.String? name,
     $core.String? description,
     $core.bool? isCustom,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -1194,6 +1286,9 @@ class GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption extend
     if (isCustom != null) {
       $result.isCustom = isCustom;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption._() : super();
@@ -1205,6 +1300,7 @@ class GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption extend
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOB(4, _omitFieldNames ? '' : 'isCustom')
+    ..aOS(5, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -1264,6 +1360,15 @@ class GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption extend
   $core.bool hasIsCustom() => $_has(3);
   @$pb.TagNumber(4)
   void clearIsCustom() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get consistency => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set consistency($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasConsistency() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearConsistency() => clearField(5);
 }
 
 class GetPropertiesBySubjectTypeResponse_Property_SelectData extends $pb.GeneratedMessage {
@@ -1332,12 +1437,13 @@ enum GetPropertiesBySubjectTypeResponse_Property_FieldTypeData {
 class GetPropertiesBySubjectTypeResponse_Property extends $pb.GeneratedMessage {
   factory GetPropertiesBySubjectTypeResponse_Property({
     $core.String? id,
-    $20.SubjectType? subjectType,
-    $20.FieldType? fieldType,
+    $21.SubjectType? subjectType,
+    $21.FieldType? fieldType,
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
     $core.String? setId,
+    $core.String? consistency,
     GetPropertiesBySubjectTypeResponse_Property_SelectData? selectData,
   }) {
     final $result = create();
@@ -1362,6 +1468,9 @@ class GetPropertiesBySubjectTypeResponse_Property extends $pb.GeneratedMessage {
     if (setId != null) {
       $result.setId = setId;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     if (selectData != null) {
       $result.selectData = selectData;
     }
@@ -1378,12 +1487,13 @@ class GetPropertiesBySubjectTypeResponse_Property extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertiesBySubjectTypeResponse.Property', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [10])
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..e<$20.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $20.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $20.SubjectType.valueOf, enumValues: $20.SubjectType.values)
-    ..e<$20.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $20.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $20.FieldType.valueOf, enumValues: $20.FieldType.values)
+    ..e<$21.SubjectType>(2, _omitFieldNames ? '' : 'subjectType', $pb.PbFieldType.OE, defaultOrMaker: $21.SubjectType.SUBJECT_TYPE_UNSPECIFIED, valueOf: $21.SubjectType.valueOf, enumValues: $21.SubjectType.values)
+    ..e<$21.FieldType>(3, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $21.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $21.FieldType.valueOf, enumValues: $21.FieldType.values)
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOB(6, _omitFieldNames ? '' : 'isArchived')
     ..aOS(8, _omitFieldNames ? '' : 'setId')
+    ..aOS(9, _omitFieldNames ? '' : 'consistency')
     ..aOM<GetPropertiesBySubjectTypeResponse_Property_SelectData>(10, _omitFieldNames ? '' : 'selectData', subBuilder: GetPropertiesBySubjectTypeResponse_Property_SelectData.create)
     ..hasRequiredFields = false
   ;
@@ -1422,18 +1532,18 @@ class GetPropertiesBySubjectTypeResponse_Property extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $20.SubjectType get subjectType => $_getN(1);
+  $21.SubjectType get subjectType => $_getN(1);
   @$pb.TagNumber(2)
-  set subjectType($20.SubjectType v) { setField(2, v); }
+  set subjectType($21.SubjectType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasSubjectType() => $_has(1);
   @$pb.TagNumber(2)
   void clearSubjectType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $20.FieldType get fieldType => $_getN(2);
+  $21.FieldType get fieldType => $_getN(2);
   @$pb.TagNumber(3)
-  set fieldType($20.FieldType v) { setField(3, v); }
+  set fieldType($21.FieldType v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasFieldType() => $_has(2);
   @$pb.TagNumber(3)
@@ -1476,16 +1586,25 @@ class GetPropertiesBySubjectTypeResponse_Property extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   void clearSetId() => clearField(8);
 
+  @$pb.TagNumber(9)
+  $core.String get consistency => $_getSZ(7);
+  @$pb.TagNumber(9)
+  set consistency($core.String v) { $_setString(7, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasConsistency() => $_has(7);
+  @$pb.TagNumber(9)
+  void clearConsistency() => clearField(9);
+
   @$pb.TagNumber(10)
-  GetPropertiesBySubjectTypeResponse_Property_SelectData get selectData => $_getN(7);
+  GetPropertiesBySubjectTypeResponse_Property_SelectData get selectData => $_getN(8);
   @$pb.TagNumber(10)
   set selectData(GetPropertiesBySubjectTypeResponse_Property_SelectData v) { setField(10, v); }
   @$pb.TagNumber(10)
-  $core.bool hasSelectData() => $_has(7);
+  $core.bool hasSelectData() => $_has(8);
   @$pb.TagNumber(10)
   void clearSelectData() => clearField(10);
   @$pb.TagNumber(10)
-  GetPropertiesBySubjectTypeResponse_Property_SelectData ensureSelectData() => $_ensure(7);
+  GetPropertiesBySubjectTypeResponse_Property_SelectData ensureSelectData() => $_ensure(8);
 }
 
 class GetPropertiesBySubjectTypeResponse extends $pb.GeneratedMessage {

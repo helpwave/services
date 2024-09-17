@@ -26,10 +26,12 @@ const AttachPropertyValueRequest$json = {
     {'1': 'date_time_value', '3': 7, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'dateTimeValue'},
     {'1': 'select_value', '3': 8, '4': 1, '5': 9, '9': 0, '10': 'selectValue'},
     {'1': 'multi_select_value', '3': 9, '4': 1, '5': 11, '6': '.services.property_svc.v1.AttachPropertyValueRequest.MultiSelectValue', '9': 0, '10': 'multiSelectValue'},
+    {'1': 'consistency', '3': 10, '4': 1, '5': 9, '9': 1, '10': 'consistency', '17': true},
   ],
   '3': [AttachPropertyValueRequest_MultiSelectValue$json],
   '8': [
     {'1': 'value'},
+    {'1': '_consistency'},
   ],
 };
 
@@ -52,22 +54,30 @@ final $typed_data.Uint8List attachPropertyValueRequestDescriptor = $convert.base
     'VlGAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEgAUg1kYXRlVGltZVZhbHVlEiMK'
     'DHNlbGVjdF92YWx1ZRgIIAEoCUgAUgtzZWxlY3RWYWx1ZRJ1ChJtdWx0aV9zZWxlY3RfdmFsdW'
     'UYCSABKAsyRS5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuQXR0YWNoUHJvcGVydHlWYWx1ZVJl'
-    'cXVlc3QuTXVsdGlTZWxlY3RWYWx1ZUgAUhBtdWx0aVNlbGVjdFZhbHVlGmkKEE11bHRpU2VsZW'
-    'N0VmFsdWUSIwoNc2VsZWN0X3ZhbHVlcxgBIAMoCVIMc2VsZWN0VmFsdWVzEjAKFHJlbW92ZV9z'
-    'ZWxlY3RfdmFsdWVzGAIgAygJUhJyZW1vdmVTZWxlY3RWYWx1ZXNCBwoFdmFsdWU=');
+    'cXVlc3QuTXVsdGlTZWxlY3RWYWx1ZUgAUhBtdWx0aVNlbGVjdFZhbHVlEiUKC2NvbnNpc3Rlbm'
+    'N5GAogASgJSAFSC2NvbnNpc3RlbmN5iAEBGmkKEE11bHRpU2VsZWN0VmFsdWUSIwoNc2VsZWN0'
+    'X3ZhbHVlcxgBIAMoCVIMc2VsZWN0VmFsdWVzEjAKFHJlbW92ZV9zZWxlY3RfdmFsdWVzGAIgAy'
+    'gJUhJyZW1vdmVTZWxlY3RWYWx1ZXNCBwoFdmFsdWVCDgoMX2NvbnNpc3RlbmN5');
 
 @$core.Deprecated('Use attachPropertyValueResponseDescriptor instead')
 const AttachPropertyValueResponse$json = {
   '1': 'AttachPropertyValueResponse',
   '2': [
     {'1': 'property_value_id', '3': 1, '4': 1, '5': 9, '10': 'propertyValueId'},
+    {'1': 'conflict', '3': 2, '4': 1, '5': 11, '6': '.libs.common.v1.Conflict', '9': 0, '10': 'conflict', '17': true},
+    {'1': 'consistency', '3': 3, '4': 1, '5': 9, '10': 'consistency'},
+  ],
+  '8': [
+    {'1': '_conflict'},
   ],
 };
 
 /// Descriptor for `AttachPropertyValueResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List attachPropertyValueResponseDescriptor = $convert.base64Decode(
     'ChtBdHRhY2hQcm9wZXJ0eVZhbHVlUmVzcG9uc2USKgoRcHJvcGVydHlfdmFsdWVfaWQYASABKA'
-    'lSD3Byb3BlcnR5VmFsdWVJZA==');
+    'lSD3Byb3BlcnR5VmFsdWVJZBI5Cghjb25mbGljdBgCIAEoCzIYLmxpYnMuY29tbW9uLnYxLkNv'
+    'bmZsaWN0SABSCGNvbmZsaWN0iAEBEiAKC2NvbnNpc3RlbmN5GAMgASgJUgtjb25zaXN0ZW5jeU'
+    'ILCglfY29uZmxpY3Q=');
 
 @$core.Deprecated('Use taskPropertyMatcherDescriptor instead')
 const TaskPropertyMatcher$json = {
@@ -150,6 +160,7 @@ const GetAttachedPropertyValuesResponse_Value$json = {
     {'1': 'date_time_value', '3': 10, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'dateTimeValue'},
     {'1': 'select_value', '3': 11, '4': 1, '5': 11, '6': '.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.SelectValueOption', '9': 0, '10': 'selectValue'},
     {'1': 'multi_select_value', '3': 12, '4': 1, '5': 11, '6': '.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue', '9': 0, '10': 'multiSelectValue'},
+    {'1': 'consistency', '3': 13, '4': 1, '5': 9, '10': 'consistency'},
   ],
   '3': [GetAttachedPropertyValuesResponse_Value_SelectValueOption$json, GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json],
   '8': [
@@ -180,7 +191,7 @@ const GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json = {
 final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $convert.base64Decode(
     'CiFHZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2USWQoGdmFsdWVzGAEgAygLMkEuc2'
     'VydmljZXMucHJvcGVydHlfc3ZjLnYxLkdldEF0dGFjaGVkUHJvcGVydHlWYWx1ZXNSZXNwb25z'
-    'ZS5WYWx1ZVIGdmFsdWVzGrgHCgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcHJvcGVydH'
+    'ZS5WYWx1ZVIGdmFsdWVzGtoHCgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcHJvcGVydH'
     'lJZBJCCgpmaWVsZF90eXBlGAIgASgOMiMuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkZpZWxk'
     'VHlwZVIJZmllbGRUeXBlEhIKBG5hbWUYAyABKAlSBG5hbWUSJQoLZGVzY3JpcHRpb24YBCABKA'
     'lIAVILZGVzY3JpcHRpb26IAQESHwoLaXNfYXJjaGl2ZWQYBSABKAhSCmlzQXJjaGl2ZWQSHwoK'
@@ -192,10 +203,11 @@ final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $conve
     'N2Yy52MS5HZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2UuVmFsdWUuU2VsZWN0VmFs'
     'dWVPcHRpb25IAFILc2VsZWN0VmFsdWUSggEKEm11bHRpX3NlbGVjdF92YWx1ZRgMIAEoCzJSLn'
     'NlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5HZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9u'
-    'c2UuVmFsdWUuTXVsdGlTZWxlY3RWYWx1ZUgAUhBtdWx0aVNlbGVjdFZhbHVlGlkKEVNlbGVjdF'
-    'ZhbHVlT3B0aW9uEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2Rlc2Ny'
-    'aXB0aW9uGAMgASgJUgtkZXNjcmlwdGlvbhqMAQoQTXVsdGlTZWxlY3RWYWx1ZRJ4Cg1zZWxlY3'
-    'RfdmFsdWVzGAEgAygLMlMuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkdldEF0dGFjaGVkUHJv'
-    'cGVydHlWYWx1ZXNSZXNwb25zZS5WYWx1ZS5TZWxlY3RWYWx1ZU9wdGlvblIMc2VsZWN0VmFsdW'
-    'VzQgcKBXZhbHVlQg4KDF9kZXNjcmlwdGlvbg==');
+    'c2UuVmFsdWUuTXVsdGlTZWxlY3RWYWx1ZUgAUhBtdWx0aVNlbGVjdFZhbHVlEiAKC2NvbnNpc3'
+    'RlbmN5GA0gASgJUgtjb25zaXN0ZW5jeRpZChFTZWxlY3RWYWx1ZU9wdGlvbhIOCgJpZBgBIAEo'
+    'CVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCgtkZXNjcmlwdGlvbhgDIAEoCVILZGVzY3JpcH'
+    'Rpb24ajAEKEE11bHRpU2VsZWN0VmFsdWUSeAoNc2VsZWN0X3ZhbHVlcxgBIAMoCzJTLnNlcnZp'
+    'Y2VzLnByb3BlcnR5X3N2Yy52MS5HZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2UuVm'
+    'FsdWUuU2VsZWN0VmFsdWVPcHRpb25SDHNlbGVjdFZhbHVlc0IHCgV2YWx1ZUIOCgxfZGVzY3Jp'
+    'cHRpb24=');
 

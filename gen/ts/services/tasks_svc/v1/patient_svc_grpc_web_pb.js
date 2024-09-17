@@ -21,6 +21,8 @@ grpc.web = require('grpc-web');
 
 
 var services_tasks_svc_v1_types_pb = require('../../../services/tasks_svc/v1/types_pb.js')
+
+var libs_common_v1_conflict_pb = require('../../../libs/common/v1/conflict_pb.js')
 const proto = {};
 proto.services = {};
 proto.services.tasks_svc = {};

@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package services.tasks_svc.v1;
 
+import "libs/common/v1/conflict.proto";
+
 option go_package = "gen/proto/services/tasks-svc";
 
 //
@@ -27,6 +29,7 @@ message GetWardRequest {
 message GetWardResponse {
   string id = 1;
   string name = 2;
+  string consistency = 3;
 }
 
 //
@@ -41,6 +44,7 @@ message GetWardsResponse {
   message Ward {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 }
 
@@ -60,6 +64,7 @@ message GetRecentWardsResponse {
     uint32 tasks_todo = 4;
     uint32 tasks_in_progress = 5;
     uint32 tasks_done = 6;
+    string consistency = 7;
   }
 }
 
@@ -70,9 +75,13 @@ message GetRecentWardsResponse {
 message UpdateWardRequest {
   string id = 1; // @gotags: validate:"uuid4"
   optional string name = 2;
+  optional string consistency = 3; // no conflict detection, if not provided
 }
 
-message UpdateWardResponse {}
+message UpdateWardResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string consistency = 2;
+}
 
 //
 // DeleteWard
@@ -94,27 +103,32 @@ message GetWardDetailsResponse {
   string name = 2;
   repeated Room rooms = 3;
   repeated TaskTemplate task_templates = 4;
+  string consistency = 5;
 
   message Bed {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 
   message Subtask {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 
   message Room {
     string id = 1;
     string name = 2;
     repeated Bed beds = 3;
+    string consistency = 4;
   }
 
   message TaskTemplate {
     string id = 1;
     string name = 2;
     repeated Subtask subtasks = 3;
+    string consistency = 4;
   }
 }
 
@@ -135,6 +149,7 @@ message GetWardOverviewsResponse {
     uint32 tasks_todo = 4;
     uint32 tasks_in_progress = 5;
     uint32 tasks_done = 6;
+    string consistency = 7;
   }
 }
 

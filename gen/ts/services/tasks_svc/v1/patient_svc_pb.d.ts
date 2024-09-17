@@ -1,6 +1,7 @@
 import * as jspb from 'google-protobuf'
 
 import * as services_tasks_svc_v1_types_pb from '../../../services/tasks_svc/v1/types_pb'; // proto import: "services/tasks_svc/v1/types.proto"
+import * as libs_common_v1_conflict_pb from '../../../libs/common/v1/conflict_pb'; // proto import: "libs/common/v1/conflict.proto"
 
 
 export class CreatePatientRequest extends jspb.Message {
@@ -36,6 +37,9 @@ export class CreatePatientResponse extends jspb.Message {
   getId(): string;
   setId(value: string): CreatePatientResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): CreatePatientResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreatePatientResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreatePatientResponse): CreatePatientResponse.AsObject;
@@ -47,6 +51,7 @@ export class CreatePatientResponse extends jspb.Message {
 export namespace CreatePatientResponse {
   export type AsObject = {
     id: string,
+    consistency: string,
   }
 }
 
@@ -98,6 +103,9 @@ export class GetPatientResponse extends jspb.Message {
   hasBed(): boolean;
   clearBed(): GetPatientResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): GetPatientResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPatientResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetPatientResponse): GetPatientResponse.AsObject;
@@ -115,6 +123,7 @@ export namespace GetPatientResponse {
     wardId?: string,
     room?: GetPatientResponse.Room.AsObject,
     bed?: GetPatientResponse.Bed.AsObject,
+    consistency: string,
   }
 
   export class Room extends jspb.Message {
@@ -126,6 +135,9 @@ export namespace GetPatientResponse {
 
     getWardId(): string;
     setWardId(value: string): Room;
+
+    getConsistency(): string;
+    setConsistency(value: string): Room;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Room.AsObject;
@@ -140,6 +152,7 @@ export namespace GetPatientResponse {
       id: string,
       name: string,
       wardId: string,
+      consistency: string,
     }
   }
 
@@ -150,6 +163,9 @@ export namespace GetPatientResponse {
 
     getName(): string;
     setName(value: string): Bed;
+
+    getConsistency(): string;
+    setConsistency(value: string): Bed;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
@@ -163,6 +179,7 @@ export namespace GetPatientResponse {
     export type AsObject = {
       id: string,
       name: string,
+      consistency: string,
     }
   }
 
@@ -221,6 +238,9 @@ export class GetPatientByBedResponse extends jspb.Message {
   hasBedId(): boolean;
   clearBedId(): GetPatientByBedResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): GetPatientByBedResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPatientByBedResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetPatientByBedResponse): GetPatientByBedResponse.AsObject;
@@ -235,6 +255,7 @@ export namespace GetPatientByBedResponse {
     humanReadableIdentifier: string,
     notes: string,
     bedId?: string,
+    consistency: string,
   }
 
   export enum BedIdCase { 
@@ -295,6 +316,9 @@ export namespace GetPatientsByWardResponse {
     hasBedId(): boolean;
     clearBedId(): Patient;
 
+    getConsistency(): string;
+    setConsistency(value: string): Patient;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Patient.AsObject;
     static toObject(includeInstance: boolean, msg: Patient): Patient.AsObject;
@@ -309,6 +333,7 @@ export namespace GetPatientsByWardResponse {
       humanReadableIdentifier: string,
       notes: string,
       bedId?: string,
+      consistency: string,
     }
 
     export enum BedIdCase { 
@@ -368,6 +393,9 @@ export namespace GetPatientAssignmentByWardResponse {
     clearBedsList(): Room;
     addBeds(value?: GetPatientAssignmentByWardResponse.Room.Bed, index?: number): GetPatientAssignmentByWardResponse.Room.Bed;
 
+    getConsistency(): string;
+    setConsistency(value: string): Room;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Room.AsObject;
     static toObject(includeInstance: boolean, msg: Room): Room.AsObject;
@@ -381,6 +409,7 @@ export namespace GetPatientAssignmentByWardResponse {
       id: string,
       name: string,
       bedsList: Array<GetPatientAssignmentByWardResponse.Room.Bed.AsObject>,
+      consistency: string,
     }
 
     export class Bed extends jspb.Message {
@@ -395,6 +424,9 @@ export namespace GetPatientAssignmentByWardResponse {
       hasPatient(): boolean;
       clearPatient(): Bed;
 
+      getConsistency(): string;
+      setConsistency(value: string): Bed;
+
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): Bed.AsObject;
       static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
@@ -408,6 +440,7 @@ export namespace GetPatientAssignmentByWardResponse {
         id: string,
         name: string,
         patient?: GetPatientAssignmentByWardResponse.Room.Bed.Patient.AsObject,
+        consistency: string,
       }
 
       export class Patient extends jspb.Message {
@@ -416,6 +449,9 @@ export namespace GetPatientAssignmentByWardResponse {
 
         getName(): string;
         setName(value: string): Patient;
+
+        getConsistency(): string;
+        setConsistency(value: string): Patient;
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Patient.AsObject;
@@ -429,6 +465,7 @@ export namespace GetPatientAssignmentByWardResponse {
         export type AsObject = {
           id: string,
           name: string,
+          consistency: string,
         }
       }
 
@@ -489,6 +526,9 @@ export class GetPatientDetailsResponse extends jspb.Message {
   getIsDischarged(): boolean;
   setIsDischarged(value: boolean): GetPatientDetailsResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): GetPatientDetailsResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPatientDetailsResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetPatientDetailsResponse): GetPatientDetailsResponse.AsObject;
@@ -506,6 +546,7 @@ export namespace GetPatientDetailsResponse {
     room?: GetPatientDetailsResponse.Room.AsObject,
     bed?: GetPatientDetailsResponse.Bed.AsObject,
     isDischarged: boolean,
+    consistency: string,
   }
 
   export class Room extends jspb.Message {
@@ -517,6 +558,9 @@ export namespace GetPatientDetailsResponse {
 
     getWardId(): string;
     setWardId(value: string): Room;
+
+    getConsistency(): string;
+    setConsistency(value: string): Room;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Room.AsObject;
@@ -531,6 +575,7 @@ export namespace GetPatientDetailsResponse {
       id: string,
       name: string,
       wardId: string,
+      consistency: string,
     }
   }
 
@@ -541,6 +586,9 @@ export namespace GetPatientDetailsResponse {
 
     getName(): string;
     setName(value: string): Bed;
+
+    getConsistency(): string;
+    setConsistency(value: string): Bed;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
@@ -554,6 +602,7 @@ export namespace GetPatientDetailsResponse {
     export type AsObject = {
       id: string,
       name: string,
+      consistency: string,
     }
   }
 
@@ -587,6 +636,9 @@ export namespace GetPatientDetailsResponse {
     clearSubtasksList(): Task;
     addSubtasks(value?: GetPatientDetailsResponse.Task.SubTask, index?: number): GetPatientDetailsResponse.Task.SubTask;
 
+    getConsistency(): string;
+    setConsistency(value: string): Task;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Task.AsObject;
     static toObject(includeInstance: boolean, msg: Task): Task.AsObject;
@@ -605,6 +657,7 @@ export namespace GetPatientDetailsResponse {
       patientId: string,
       pb_public: boolean,
       subtasksList: Array<GetPatientDetailsResponse.Task.SubTask.AsObject>,
+      consistency: string,
     }
 
     export class SubTask extends jspb.Message {
@@ -616,6 +669,9 @@ export namespace GetPatientDetailsResponse {
 
       getDone(): boolean;
       setDone(value: boolean): SubTask;
+
+      getConsistency(): string;
+      setConsistency(value: string): SubTask;
 
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SubTask.AsObject;
@@ -630,6 +686,7 @@ export namespace GetPatientDetailsResponse {
         id: string,
         name: string,
         done: boolean,
+        consistency: string,
       }
     }
 
@@ -715,6 +772,9 @@ export namespace GetPatientListResponse {
     getName(): string;
     setName(value: string): Bed;
 
+    getConsistency(): string;
+    setConsistency(value: string): Bed;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
     static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
@@ -727,6 +787,7 @@ export namespace GetPatientListResponse {
     export type AsObject = {
       id: string,
       name: string,
+      consistency: string,
     }
   }
 
@@ -741,6 +802,9 @@ export namespace GetPatientListResponse {
     getWardId(): string;
     setWardId(value: string): Room;
 
+    getConsistency(): string;
+    setConsistency(value: string): Room;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Room.AsObject;
     static toObject(includeInstance: boolean, msg: Room): Room.AsObject;
@@ -754,6 +818,7 @@ export namespace GetPatientListResponse {
       id: string,
       name: string,
       wardId: string,
+      consistency: string,
     }
   }
 
@@ -783,6 +848,9 @@ export namespace GetPatientListResponse {
     clearTasksList(): Patient;
     addTasks(value?: GetPatientListResponse.Task, index?: number): GetPatientListResponse.Task;
 
+    getConsistency(): string;
+    setConsistency(value: string): Patient;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Patient.AsObject;
     static toObject(includeInstance: boolean, msg: Patient): Patient.AsObject;
@@ -799,6 +867,7 @@ export namespace GetPatientListResponse {
       bed?: GetPatientListResponse.Bed.AsObject,
       notes: string,
       tasksList: Array<GetPatientListResponse.Task.AsObject>,
+      consistency: string,
     }
   }
 
@@ -832,6 +901,9 @@ export namespace GetPatientListResponse {
     clearSubtasksList(): Task;
     addSubtasks(value?: GetPatientListResponse.Task.SubTask, index?: number): GetPatientListResponse.Task.SubTask;
 
+    getConsistency(): string;
+    setConsistency(value: string): Task;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Task.AsObject;
     static toObject(includeInstance: boolean, msg: Task): Task.AsObject;
@@ -850,6 +922,7 @@ export namespace GetPatientListResponse {
       patientId: string,
       pb_public: boolean,
       subtasksList: Array<GetPatientListResponse.Task.SubTask.AsObject>,
+      consistency: string,
     }
 
     export class SubTask extends jspb.Message {
@@ -861,6 +934,9 @@ export namespace GetPatientListResponse {
 
       getDone(): boolean;
       setDone(value: boolean): SubTask;
+
+      getConsistency(): string;
+      setConsistency(value: string): SubTask;
 
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SubTask.AsObject;
@@ -875,6 +951,7 @@ export namespace GetPatientListResponse {
         id: string,
         name: string,
         done: boolean,
+        consistency: string,
       }
     }
 
@@ -927,6 +1004,9 @@ export namespace GetRecentPatientsResponse {
     getName(): string;
     setName(value: string): Bed;
 
+    getConsistency(): string;
+    setConsistency(value: string): Bed;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
     static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
@@ -939,6 +1019,7 @@ export namespace GetRecentPatientsResponse {
     export type AsObject = {
       id: string,
       name: string,
+      consistency: string,
     }
   }
 
@@ -953,6 +1034,9 @@ export namespace GetRecentPatientsResponse {
     getWardId(): string;
     setWardId(value: string): Room;
 
+    getConsistency(): string;
+    setConsistency(value: string): Room;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Room.AsObject;
     static toObject(includeInstance: boolean, msg: Room): Room.AsObject;
@@ -966,6 +1050,7 @@ export namespace GetRecentPatientsResponse {
       id: string,
       name: string,
       wardId: string,
+      consistency: string,
     }
   }
 
@@ -987,6 +1072,9 @@ export namespace GetRecentPatientsResponse {
     hasBed(): boolean;
     clearBed(): PatientWithRoomAndBed;
 
+    getConsistency(): string;
+    setConsistency(value: string): PatientWithRoomAndBed;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): PatientWithRoomAndBed.AsObject;
     static toObject(includeInstance: boolean, msg: PatientWithRoomAndBed): PatientWithRoomAndBed.AsObject;
@@ -1001,6 +1089,7 @@ export namespace GetRecentPatientsResponse {
       humanReadableIdentifier: string,
       room?: GetRecentPatientsResponse.Room.AsObject,
       bed?: GetRecentPatientsResponse.Bed.AsObject,
+      consistency: string,
     }
   }
 
@@ -1020,6 +1109,11 @@ export class UpdatePatientRequest extends jspb.Message {
   hasNotes(): boolean;
   clearNotes(): UpdatePatientRequest;
 
+  getConsistency(): string;
+  setConsistency(value: string): UpdatePatientRequest;
+  hasConsistency(): boolean;
+  clearConsistency(): UpdatePatientRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdatePatientRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdatePatientRequest): UpdatePatientRequest.AsObject;
@@ -1033,6 +1127,7 @@ export namespace UpdatePatientRequest {
     id: string,
     humanReadableIdentifier?: string,
     notes?: string,
+    consistency?: string,
   }
 
   export enum HumanReadableIdentifierCase { 
@@ -1044,9 +1139,22 @@ export namespace UpdatePatientRequest {
     _NOTES_NOT_SET = 0,
     NOTES = 3,
   }
+
+  export enum ConsistencyCase { 
+    _CONSISTENCY_NOT_SET = 0,
+    CONSISTENCY = 4,
+  }
 }
 
 export class UpdatePatientResponse extends jspb.Message {
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): UpdatePatientResponse;
+  hasConflict(): boolean;
+  clearConflict(): UpdatePatientResponse;
+
+  getConsistency(): string;
+  setConsistency(value: string): UpdatePatientResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdatePatientResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UpdatePatientResponse): UpdatePatientResponse.AsObject;
@@ -1057,6 +1165,13 @@ export class UpdatePatientResponse extends jspb.Message {
 
 export namespace UpdatePatientResponse {
   export type AsObject = {
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    consistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 1,
   }
 }
 
@@ -1066,6 +1181,11 @@ export class AssignBedRequest extends jspb.Message {
 
   getBedId(): string;
   setBedId(value: string): AssignBedRequest;
+
+  getConsistency(): string;
+  setConsistency(value: string): AssignBedRequest;
+  hasConsistency(): boolean;
+  clearConsistency(): AssignBedRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): AssignBedRequest.AsObject;
@@ -1079,10 +1199,24 @@ export namespace AssignBedRequest {
   export type AsObject = {
     id: string,
     bedId: string,
+    consistency?: string,
+  }
+
+  export enum ConsistencyCase { 
+    _CONSISTENCY_NOT_SET = 0,
+    CONSISTENCY = 3,
   }
 }
 
 export class AssignBedResponse extends jspb.Message {
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): AssignBedResponse;
+  hasConflict(): boolean;
+  clearConflict(): AssignBedResponse;
+
+  getConsistency(): string;
+  setConsistency(value: string): AssignBedResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): AssignBedResponse.AsObject;
   static toObject(includeInstance: boolean, msg: AssignBedResponse): AssignBedResponse.AsObject;
@@ -1093,12 +1227,24 @@ export class AssignBedResponse extends jspb.Message {
 
 export namespace AssignBedResponse {
   export type AsObject = {
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    consistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 1,
   }
 }
 
 export class UnassignBedRequest extends jspb.Message {
   getId(): string;
   setId(value: string): UnassignBedRequest;
+
+  getConsistency(): string;
+  setConsistency(value: string): UnassignBedRequest;
+  hasConsistency(): boolean;
+  clearConsistency(): UnassignBedRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UnassignBedRequest.AsObject;
@@ -1111,10 +1257,24 @@ export class UnassignBedRequest extends jspb.Message {
 export namespace UnassignBedRequest {
   export type AsObject = {
     id: string,
+    consistency?: string,
+  }
+
+  export enum ConsistencyCase { 
+    _CONSISTENCY_NOT_SET = 0,
+    CONSISTENCY = 2,
   }
 }
 
 export class UnassignBedResponse extends jspb.Message {
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): UnassignBedResponse;
+  hasConflict(): boolean;
+  clearConflict(): UnassignBedResponse;
+
+  getConsistency(): string;
+  setConsistency(value: string): UnassignBedResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UnassignBedResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UnassignBedResponse): UnassignBedResponse.AsObject;
@@ -1125,6 +1285,13 @@ export class UnassignBedResponse extends jspb.Message {
 
 export namespace UnassignBedResponse {
   export type AsObject = {
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    consistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 1,
   }
 }
 
@@ -1147,6 +1314,9 @@ export namespace DischargePatientRequest {
 }
 
 export class DischargePatientResponse extends jspb.Message {
+  getConsistency(): string;
+  setConsistency(value: string): DischargePatientResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DischargePatientResponse.AsObject;
   static toObject(includeInstance: boolean, msg: DischargePatientResponse): DischargePatientResponse.AsObject;
@@ -1157,6 +1327,7 @@ export class DischargePatientResponse extends jspb.Message {
 
 export namespace DischargePatientResponse {
   export type AsObject = {
+    consistency: string,
   }
 }
 
@@ -1179,6 +1350,9 @@ export namespace ReadmitPatientRequest {
 }
 
 export class ReadmitPatientResponse extends jspb.Message {
+  getConsistency(): string;
+  setConsistency(value: string): ReadmitPatientResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ReadmitPatientResponse.AsObject;
   static toObject(includeInstance: boolean, msg: ReadmitPatientResponse): ReadmitPatientResponse.AsObject;
@@ -1189,6 +1363,7 @@ export class ReadmitPatientResponse extends jspb.Message {
 
 export namespace ReadmitPatientResponse {
   export type AsObject = {
+    consistency: string,
   }
 }
 
