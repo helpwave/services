@@ -148,6 +148,11 @@ export class GetPropertyRequest extends jspb.Message {
   getId(): string;
   setId(value: string): GetPropertyRequest;
 
+  getViewSource(): GetPropertyRequest.ViewSource | undefined;
+  setViewSource(value?: GetPropertyRequest.ViewSource): GetPropertyRequest;
+  hasViewSource(): boolean;
+  clearViewSource(): GetPropertyRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPropertyRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetPropertyRequest): GetPropertyRequest.AsObject;
@@ -159,6 +164,7 @@ export class GetPropertyRequest extends jspb.Message {
 export namespace GetPropertyRequest {
   export type AsObject = {
     id: string,
+    viewSource?: GetPropertyRequest.ViewSource.AsObject,
   }
 
   export class ViewSource extends jspb.Message {
@@ -191,6 +197,11 @@ export namespace GetPropertyRequest {
     }
   }
 
+
+  export enum ViewSourceCase { 
+    _VIEW_SOURCE_NOT_SET = 0,
+    VIEW_SOURCE = 2,
+  }
 }
 
 export class GetPropertyResponse extends jspb.Message {

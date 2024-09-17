@@ -184,6 +184,9 @@ type GetPropertyRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
+	// describes from which View (global, ward, ...) the property is accessed from
+	// The attribute "always_include_for_current_context" depends on this ViewSource
+	ViewSource *GetPropertyRequest_ViewSource `protobuf:"bytes,2,opt,name=view_source,json=viewSource,proto3,oneof" json:"view_source,omitempty"`
 }
 
 func (x *GetPropertyRequest) Reset() {
@@ -223,6 +226,13 @@ func (x *GetPropertyRequest) GetId() string {
 		return x.Id
 	}
 	return ""
+}
+
+func (x *GetPropertyRequest) GetViewSource() *GetPropertyRequest_ViewSource {
+	if x != nil {
+		return x.ViewSource
+	}
+	return nil
 }
 
 type GetPropertyResponse struct {
@@ -716,8 +726,6 @@ func (x *CreatePropertyRequest_SelectData_SelectOption) GetDescription() string 
 	return ""
 }
 
-// describes from which View (global, ward, ...) the property is accessed from
-// The attribute "always_include_for_current_context" depends on this ViewSource
 type GetPropertyRequest_ViewSource struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -792,7 +800,7 @@ type GetPropertyRequest_ViewSource_Global struct {
 }
 
 type GetPropertyRequest_ViewSource_WardId struct {
-	WardId string `protobuf:"bytes,2,opt,name=ward_id,json=wardId,proto3,oneof" validate:"uuid4"` // @gotags: validate:"uuid4"
+	WardId string `protobuf:"bytes,2,opt,name=ward_id,json=wardId,proto3,oneof" validate:"omitempty,omitnil,uuid4"` // @gotags: validate:"omitempty,omitnil,uuid4"
 }
 
 func (*GetPropertyRequest_ViewSource_Global) isGetPropertyRequest_ViewSource_Value() {}
@@ -1365,14 +1373,21 @@ var file_services_property_svc_v1_property_svc_proto_rawDesc = []byte{
 	0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
 	0x1f, 0x0a, 0x0b, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x49, 0x64,
-	0x22, 0x70, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x1a, 0x4a, 0x0a, 0x0a, 0x56, 0x69, 0x65, 0x77, 0x53, 0x6f,
+	0x22, 0xdf, 0x01, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x5d, 0x0a, 0x0b, 0x76, 0x69, 0x65, 0x77, 0x5f,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x37, 0x2e, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x79,
+	0x5f, 0x73, 0x76, 0x63, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x70, 0x65,
+	0x72, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2e, 0x56, 0x69, 0x65, 0x77, 0x53,
+	0x6f, 0x75, 0x72, 0x63, 0x65, 0x48, 0x00, 0x52, 0x0a, 0x76, 0x69, 0x65, 0x77, 0x53, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x88, 0x01, 0x01, 0x1a, 0x4a, 0x0a, 0x0a, 0x56, 0x69, 0x65, 0x77, 0x53, 0x6f,
 	0x75, 0x72, 0x63, 0x65, 0x12, 0x18, 0x0a, 0x06, 0x67, 0x6c, 0x6f, 0x62, 0x61, 0x6c, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x08, 0x48, 0x00, 0x52, 0x06, 0x67, 0x6c, 0x6f, 0x62, 0x61, 0x6c, 0x12, 0x19,
 	0x0a, 0x07, 0x77, 0x61, 0x72, 0x64, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x48,
 	0x00, 0x52, 0x06, 0x77, 0x61, 0x72, 0x64, 0x49, 0x64, 0x42, 0x07, 0x0a, 0x05, 0x76, 0x61, 0x6c,
-	0x75, 0x65, 0x22, 0xda, 0x06, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72,
+	0x75, 0x65, 0x42, 0x0e, 0x0a, 0x0c, 0x5f, 0x76, 0x69, 0x65, 0x77, 0x5f, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x22, 0xda, 0x06, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x70, 0x65, 0x72,
 	0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x48, 0x0a, 0x0c, 0x73, 0x75,
 	0x62, 0x6a, 0x65, 0x63, 0x74, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e,
@@ -1633,33 +1648,34 @@ var file_services_property_svc_v1_property_svc_proto_depIdxs = []int32{
 	18, // 0: services.property_svc.v1.CreatePropertyRequest.subject_type:type_name -> services.property_svc.v1.SubjectType
 	19, // 1: services.property_svc.v1.CreatePropertyRequest.field_type:type_name -> services.property_svc.v1.FieldType
 	8,  // 2: services.property_svc.v1.CreatePropertyRequest.select_data:type_name -> services.property_svc.v1.CreatePropertyRequest.SelectData
-	18, // 3: services.property_svc.v1.GetPropertyResponse.subject_type:type_name -> services.property_svc.v1.SubjectType
-	19, // 4: services.property_svc.v1.GetPropertyResponse.field_type:type_name -> services.property_svc.v1.FieldType
-	11, // 5: services.property_svc.v1.GetPropertyResponse.select_data:type_name -> services.property_svc.v1.GetPropertyResponse.SelectData
-	18, // 6: services.property_svc.v1.UpdatePropertyRequest.subject_type:type_name -> services.property_svc.v1.SubjectType
-	13, // 7: services.property_svc.v1.UpdatePropertyRequest.select_data:type_name -> services.property_svc.v1.UpdatePropertyRequest.SelectData
-	18, // 8: services.property_svc.v1.GetPropertiesBySubjectTypeRequest.subject_type:type_name -> services.property_svc.v1.SubjectType
-	15, // 9: services.property_svc.v1.GetPropertiesBySubjectTypeResponse.properties:type_name -> services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property
-	9,  // 10: services.property_svc.v1.CreatePropertyRequest.SelectData.options:type_name -> services.property_svc.v1.CreatePropertyRequest.SelectData.SelectOption
-	12, // 11: services.property_svc.v1.GetPropertyResponse.SelectData.options:type_name -> services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
-	14, // 12: services.property_svc.v1.UpdatePropertyRequest.SelectData.upsert_options:type_name -> services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption
-	18, // 13: services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.subject_type:type_name -> services.property_svc.v1.SubjectType
-	19, // 14: services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.field_type:type_name -> services.property_svc.v1.FieldType
-	16, // 15: services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.select_data:type_name -> services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData
-	17, // 16: services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.options:type_name -> services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption
-	0,  // 17: services.property_svc.v1.PropertyService.CreateProperty:input_type -> services.property_svc.v1.CreatePropertyRequest
-	2,  // 18: services.property_svc.v1.PropertyService.GetProperty:input_type -> services.property_svc.v1.GetPropertyRequest
-	4,  // 19: services.property_svc.v1.PropertyService.UpdateProperty:input_type -> services.property_svc.v1.UpdatePropertyRequest
-	6,  // 20: services.property_svc.v1.PropertyService.GetPropertiesBySubjectType:input_type -> services.property_svc.v1.GetPropertiesBySubjectTypeRequest
-	1,  // 21: services.property_svc.v1.PropertyService.CreateProperty:output_type -> services.property_svc.v1.CreatePropertyResponse
-	3,  // 22: services.property_svc.v1.PropertyService.GetProperty:output_type -> services.property_svc.v1.GetPropertyResponse
-	5,  // 23: services.property_svc.v1.PropertyService.UpdateProperty:output_type -> services.property_svc.v1.UpdatePropertyResponse
-	7,  // 24: services.property_svc.v1.PropertyService.GetPropertiesBySubjectType:output_type -> services.property_svc.v1.GetPropertiesBySubjectTypeResponse
-	21, // [21:25] is the sub-list for method output_type
-	17, // [17:21] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	10, // 3: services.property_svc.v1.GetPropertyRequest.view_source:type_name -> services.property_svc.v1.GetPropertyRequest.ViewSource
+	18, // 4: services.property_svc.v1.GetPropertyResponse.subject_type:type_name -> services.property_svc.v1.SubjectType
+	19, // 5: services.property_svc.v1.GetPropertyResponse.field_type:type_name -> services.property_svc.v1.FieldType
+	11, // 6: services.property_svc.v1.GetPropertyResponse.select_data:type_name -> services.property_svc.v1.GetPropertyResponse.SelectData
+	18, // 7: services.property_svc.v1.UpdatePropertyRequest.subject_type:type_name -> services.property_svc.v1.SubjectType
+	13, // 8: services.property_svc.v1.UpdatePropertyRequest.select_data:type_name -> services.property_svc.v1.UpdatePropertyRequest.SelectData
+	18, // 9: services.property_svc.v1.GetPropertiesBySubjectTypeRequest.subject_type:type_name -> services.property_svc.v1.SubjectType
+	15, // 10: services.property_svc.v1.GetPropertiesBySubjectTypeResponse.properties:type_name -> services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property
+	9,  // 11: services.property_svc.v1.CreatePropertyRequest.SelectData.options:type_name -> services.property_svc.v1.CreatePropertyRequest.SelectData.SelectOption
+	12, // 12: services.property_svc.v1.GetPropertyResponse.SelectData.options:type_name -> services.property_svc.v1.GetPropertyResponse.SelectData.SelectOption
+	14, // 13: services.property_svc.v1.UpdatePropertyRequest.SelectData.upsert_options:type_name -> services.property_svc.v1.UpdatePropertyRequest.SelectData.SelectOption
+	18, // 14: services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.subject_type:type_name -> services.property_svc.v1.SubjectType
+	19, // 15: services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.field_type:type_name -> services.property_svc.v1.FieldType
+	16, // 16: services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.select_data:type_name -> services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData
+	17, // 17: services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.options:type_name -> services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption
+	0,  // 18: services.property_svc.v1.PropertyService.CreateProperty:input_type -> services.property_svc.v1.CreatePropertyRequest
+	2,  // 19: services.property_svc.v1.PropertyService.GetProperty:input_type -> services.property_svc.v1.GetPropertyRequest
+	4,  // 20: services.property_svc.v1.PropertyService.UpdateProperty:input_type -> services.property_svc.v1.UpdatePropertyRequest
+	6,  // 21: services.property_svc.v1.PropertyService.GetPropertiesBySubjectType:input_type -> services.property_svc.v1.GetPropertiesBySubjectTypeRequest
+	1,  // 22: services.property_svc.v1.PropertyService.CreateProperty:output_type -> services.property_svc.v1.CreatePropertyResponse
+	3,  // 23: services.property_svc.v1.PropertyService.GetProperty:output_type -> services.property_svc.v1.GetPropertyResponse
+	5,  // 24: services.property_svc.v1.PropertyService.UpdateProperty:output_type -> services.property_svc.v1.UpdatePropertyResponse
+	7,  // 25: services.property_svc.v1.PropertyService.GetPropertiesBySubjectType:output_type -> services.property_svc.v1.GetPropertiesBySubjectTypeResponse
+	22, // [22:26] is the sub-list for method output_type
+	18, // [18:22] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_services_property_svc_v1_property_svc_proto_init() }
@@ -1889,6 +1905,7 @@ func file_services_property_svc_v1_property_svc_proto_init() {
 	file_services_property_svc_v1_property_svc_proto_msgTypes[0].OneofWrappers = []interface{}{
 		(*CreatePropertyRequest_SelectData_)(nil),
 	}
+	file_services_property_svc_v1_property_svc_proto_msgTypes[2].OneofWrappers = []interface{}{}
 	file_services_property_svc_v1_property_svc_proto_msgTypes[3].OneofWrappers = []interface{}{
 		(*GetPropertyResponse_SelectData_)(nil),
 	}

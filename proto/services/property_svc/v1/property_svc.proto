@@ -47,12 +47,15 @@ message CreatePropertyResponse {
 
 message GetPropertyRequest {
   string id = 1; // @gotags: validate:"uuid4"
+
   // describes from which View (global, ward, ...) the property is accessed from
   // The attribute "always_include_for_current_context" depends on this ViewSource
+  optional ViewSource view_source = 2;
+
   message ViewSource {
     oneof value {
       bool global = 1;
-      string ward_id = 2; // @gotags: validate:"uuid4"
+      string ward_id = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
     }
   }
 }
