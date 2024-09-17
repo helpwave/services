@@ -9,10 +9,15 @@ primary_region = "ams"
 [env]
   INSECURE_FAKE_TOKEN_ENABLE=true
   OTEL_DISABLE=true
+  METRICS_ADDR=":9091"
 
 [deploy]
   strategy = "bluegreen"
   release_command = "./run-migrations.sh"
+
+[metrics]
+  port = 9091
+  path = "/metrics"
 
 [checks]
   [checks.dapr_sidecar]
@@ -24,6 +29,3 @@ primary_region = "ams"
     timeout = "2s"
     type = "http"
 
-[metrics]
-  port = 9090
-  path = "/metrics"
