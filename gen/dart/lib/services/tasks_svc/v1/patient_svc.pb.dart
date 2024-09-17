@@ -13,8 +13,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../libs/common/v1/conflict.pb.dart' as $20;
-import 'types.pbenum.dart' as $22;
+import '../../../libs/common/v1/conflict.pb.dart' as $21;
+import 'types.pbenum.dart' as $23;
 
 class CreatePatientRequest extends $pb.GeneratedMessage {
   factory CreatePatientRequest({
@@ -1541,7 +1541,7 @@ class GetPatientDetailsResponse_Task extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    $22.TaskStatus? status,
+    $23.TaskStatus? status,
     $core.String? assignedUserId,
     $core.String? patientId,
     $core.bool? public,
@@ -1586,7 +1586,7 @@ class GetPatientDetailsResponse_Task extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..e<$22.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $22.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $22.TaskStatus.valueOf, enumValues: $22.TaskStatus.values)
+    ..e<$23.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $23.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $23.TaskStatus.valueOf, enumValues: $23.TaskStatus.values)
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOS(6, _omitFieldNames ? '' : 'patientId')
     ..aOB(7, _omitFieldNames ? '' : 'public')
@@ -1644,9 +1644,9 @@ class GetPatientDetailsResponse_Task extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $22.TaskStatus get status => $_getN(3);
+  $23.TaskStatus get status => $_getN(3);
   @$pb.TagNumber(4)
-  set status($22.TaskStatus v) { setField(4, v); }
+  set status($23.TaskStatus v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)
@@ -2287,7 +2287,7 @@ class GetPatientListResponse_Task extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    $22.TaskStatus? status,
+    $23.TaskStatus? status,
     $core.String? assignedUserId,
     $core.String? patientId,
     $core.bool? public,
@@ -2332,7 +2332,7 @@ class GetPatientListResponse_Task extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..e<$22.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $22.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $22.TaskStatus.valueOf, enumValues: $22.TaskStatus.values)
+    ..e<$23.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $23.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $23.TaskStatus.valueOf, enumValues: $23.TaskStatus.values)
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOS(6, _omitFieldNames ? '' : 'patientId')
     ..aOB(7, _omitFieldNames ? '' : 'public')
@@ -2390,9 +2390,9 @@ class GetPatientListResponse_Task extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $22.TaskStatus get status => $_getN(3);
+  $23.TaskStatus get status => $_getN(3);
   @$pb.TagNumber(4)
-  set status($22.TaskStatus v) { setField(4, v); }
+  set status($23.TaskStatus v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)
@@ -2948,7 +2948,7 @@ class UpdatePatientRequest extends $pb.GeneratedMessage {
 
 class UpdatePatientResponse extends $pb.GeneratedMessage {
   factory UpdatePatientResponse({
-    $20.Conflict? conflict,
+    $21.Conflict? conflict,
     $core.String? consistency,
   }) {
     final $result = create();
@@ -2965,7 +2965,7 @@ class UpdatePatientResponse extends $pb.GeneratedMessage {
   factory UpdatePatientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePatientResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOM<$20.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $20.Conflict.create)
+    ..aOM<$21.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $21.Conflict.create)
     ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
@@ -2992,15 +2992,15 @@ class UpdatePatientResponse extends $pb.GeneratedMessage {
   static UpdatePatientResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $20.Conflict get conflict => $_getN(0);
+  $21.Conflict get conflict => $_getN(0);
   @$pb.TagNumber(1)
-  set conflict($20.Conflict v) { setField(1, v); }
+  set conflict($21.Conflict v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasConflict() => $_has(0);
   @$pb.TagNumber(1)
   void clearConflict() => clearField(1);
   @$pb.TagNumber(1)
-  $20.Conflict ensureConflict() => $_ensure(0);
+  $21.Conflict ensureConflict() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $core.String get consistency => $_getSZ(1);
@@ -3092,7 +3092,7 @@ class AssignBedRequest extends $pb.GeneratedMessage {
 
 class AssignBedResponse extends $pb.GeneratedMessage {
   factory AssignBedResponse({
-    $20.Conflict? conflict,
+    $21.Conflict? conflict,
     $core.String? consistency,
   }) {
     final $result = create();
@@ -3109,7 +3109,7 @@ class AssignBedResponse extends $pb.GeneratedMessage {
   factory AssignBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AssignBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOM<$20.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $20.Conflict.create)
+    ..aOM<$21.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $21.Conflict.create)
     ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
@@ -3136,15 +3136,15 @@ class AssignBedResponse extends $pb.GeneratedMessage {
   static AssignBedResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $20.Conflict get conflict => $_getN(0);
+  $21.Conflict get conflict => $_getN(0);
   @$pb.TagNumber(1)
-  set conflict($20.Conflict v) { setField(1, v); }
+  set conflict($21.Conflict v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasConflict() => $_has(0);
   @$pb.TagNumber(1)
   void clearConflict() => clearField(1);
   @$pb.TagNumber(1)
-  $20.Conflict ensureConflict() => $_ensure(0);
+  $21.Conflict ensureConflict() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $core.String get consistency => $_getSZ(1);
@@ -3222,7 +3222,7 @@ class UnassignBedRequest extends $pb.GeneratedMessage {
 
 class UnassignBedResponse extends $pb.GeneratedMessage {
   factory UnassignBedResponse({
-    $20.Conflict? conflict,
+    $21.Conflict? conflict,
     $core.String? consistency,
   }) {
     final $result = create();
@@ -3239,7 +3239,7 @@ class UnassignBedResponse extends $pb.GeneratedMessage {
   factory UnassignBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UnassignBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOM<$20.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $20.Conflict.create)
+    ..aOM<$21.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $21.Conflict.create)
     ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
@@ -3266,15 +3266,15 @@ class UnassignBedResponse extends $pb.GeneratedMessage {
   static UnassignBedResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $20.Conflict get conflict => $_getN(0);
+  $21.Conflict get conflict => $_getN(0);
   @$pb.TagNumber(1)
-  set conflict($20.Conflict v) { setField(1, v); }
+  set conflict($21.Conflict v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasConflict() => $_has(0);
   @$pb.TagNumber(1)
   void clearConflict() => clearField(1);
   @$pb.TagNumber(1)
-  $20.Conflict ensureConflict() => $_ensure(0);
+  $21.Conflict ensureConflict() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $core.String get consistency => $_getSZ(1);

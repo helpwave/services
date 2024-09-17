@@ -13,7 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../libs/common/v1/conflict.pb.dart' as $20;
+import '../../../libs/common/v1/conflict.pb.dart' as $21;
 
 class CreateTaskTemplateRequest_SubTask extends $pb.GeneratedMessage {
   factory CreateTaskTemplateRequest_SubTask({
@@ -473,7 +473,7 @@ class UpdateTaskTemplateRequest extends $pb.GeneratedMessage {
 
 class UpdateTaskTemplateResponse extends $pb.GeneratedMessage {
   factory UpdateTaskTemplateResponse({
-    $20.Conflict? conflict,
+    $21.Conflict? conflict,
     $core.String? consistency,
   }) {
     final $result = create();
@@ -490,7 +490,7 @@ class UpdateTaskTemplateResponse extends $pb.GeneratedMessage {
   factory UpdateTaskTemplateResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateTaskTemplateResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOM<$20.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $20.Conflict.create)
+    ..aOM<$21.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $21.Conflict.create)
     ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
@@ -517,15 +517,15 @@ class UpdateTaskTemplateResponse extends $pb.GeneratedMessage {
   static UpdateTaskTemplateResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $20.Conflict get conflict => $_getN(0);
+  $21.Conflict get conflict => $_getN(0);
   @$pb.TagNumber(1)
-  set conflict($20.Conflict v) { setField(1, v); }
+  set conflict($21.Conflict v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasConflict() => $_has(0);
   @$pb.TagNumber(1)
   void clearConflict() => clearField(1);
   @$pb.TagNumber(1)
-  $20.Conflict ensureConflict() => $_ensure(0);
+  $21.Conflict ensureConflict() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $core.String get consistency => $_getSZ(1);
@@ -617,7 +617,7 @@ class UpdateTaskTemplateSubTaskRequest extends $pb.GeneratedMessage {
 
 class UpdateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
   factory UpdateTaskTemplateSubTaskResponse({
-    $20.Conflict? conflict,
+    $21.Conflict? conflict,
     $core.String? consistency,
   }) {
     final $result = create();
@@ -634,7 +634,7 @@ class UpdateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
   factory UpdateTaskTemplateSubTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateTaskTemplateSubTaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOM<$20.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $20.Conflict.create)
+    ..aOM<$21.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $21.Conflict.create)
     ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
@@ -661,15 +661,15 @@ class UpdateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
   static UpdateTaskTemplateSubTaskResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $20.Conflict get conflict => $_getN(0);
+  $21.Conflict get conflict => $_getN(0);
   @$pb.TagNumber(1)
-  set conflict($20.Conflict v) { setField(1, v); }
+  set conflict($21.Conflict v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasConflict() => $_has(0);
   @$pb.TagNumber(1)
   void clearConflict() => clearField(1);
   @$pb.TagNumber(1)
-  $20.Conflict ensureConflict() => $_ensure(0);
+  $21.Conflict ensureConflict() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $core.String get consistency => $_getSZ(1);

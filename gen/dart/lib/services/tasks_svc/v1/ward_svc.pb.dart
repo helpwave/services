@@ -13,7 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../libs/common/v1/conflict.pb.dart' as $20;
+import '../../../libs/common/v1/conflict.pb.dart' as $21;
 
 class CreateWardRequest extends $pb.GeneratedMessage {
   factory CreateWardRequest({
@@ -687,7 +687,7 @@ class UpdateWardRequest extends $pb.GeneratedMessage {
 
 class UpdateWardResponse extends $pb.GeneratedMessage {
   factory UpdateWardResponse({
-    $20.Conflict? conflict,
+    $21.Conflict? conflict,
     $core.String? consistency,
   }) {
     final $result = create();
@@ -704,7 +704,7 @@ class UpdateWardResponse extends $pb.GeneratedMessage {
   factory UpdateWardResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateWardResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..aOM<$20.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $20.Conflict.create)
+    ..aOM<$21.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $21.Conflict.create)
     ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
@@ -731,15 +731,15 @@ class UpdateWardResponse extends $pb.GeneratedMessage {
   static UpdateWardResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $20.Conflict get conflict => $_getN(0);
+  $21.Conflict get conflict => $_getN(0);
   @$pb.TagNumber(1)
-  set conflict($20.Conflict v) { setField(1, v); }
+  set conflict($21.Conflict v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasConflict() => $_has(0);
   @$pb.TagNumber(1)
   void clearConflict() => clearField(1);
   @$pb.TagNumber(1)
-  $20.Conflict ensureConflict() => $_ensure(0);
+  $21.Conflict ensureConflict() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $core.String get consistency => $_getSZ(1);

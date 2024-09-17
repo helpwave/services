@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package libs.common.v1;
 
+import "google/protobuf/any.proto";
+
 option go_package = "gen/proto/common";
 
 // Conflicts are returned, if a request was made with a consistency token, and a conflict to the requested action was caused.
@@ -11,7 +13,12 @@ option go_package = "gen/proto/common";
 //  - IS - the true current state, which only differs from WAS if another action was performed since the client retrieved the WAS state
 // If WAS == IS, or WANT and IS are merge-able (e.g., requested action changes "name", and another action has changed "age"), no conflict arises.
 message Conflict {
-  // indicates, if a subject where an action was requested upon was deleted since
+  // indicates, if the subject, where an action was requested upon, was deleted since
   bool subject_deleted = 1;
-  // TODO
+  map<string, AttributeConflict> conflicting_attributes = 2; // empty, if subject was deleted
+}
+
+message AttributeConflict {
+  google.protobuf.Any is = 1;
+  google.protobuf.Any want = 2;
 }

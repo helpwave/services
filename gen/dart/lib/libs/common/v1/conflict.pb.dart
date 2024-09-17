@@ -13,6 +13,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import '../../../google/protobuf/any.pb.dart' as $19;
+
 /// Conflicts are returned, if a request was made with a consistency token, and a conflict to the requested action was caused.
 /// There are three states:
 ///  - WAS - the state expected to be the newest by the frontend as identified by the consistency token,
@@ -22,10 +24,14 @@ import 'package:protobuf/protobuf.dart' as $pb;
 class Conflict extends $pb.GeneratedMessage {
   factory Conflict({
     $core.bool? subjectDeleted,
+    $core.Map<$core.String, AttributeConflict>? conflictingAttributes,
   }) {
     final $result = create();
     if (subjectDeleted != null) {
       $result.subjectDeleted = subjectDeleted;
+    }
+    if (conflictingAttributes != null) {
+      $result.conflictingAttributes.addAll(conflictingAttributes);
     }
     return $result;
   }
@@ -35,6 +41,7 @@ class Conflict extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Conflict', package: const $pb.PackageName(_omitMessageNames ? '' : 'libs.common.v1'), createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'subjectDeleted')
+    ..m<$core.String, AttributeConflict>(2, _omitFieldNames ? '' : 'conflictingAttributes', entryClassName: 'Conflict.ConflictingAttributesEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: AttributeConflict.create, valueDefaultOrMaker: AttributeConflict.getDefault, packageName: const $pb.PackageName('libs.common.v1'))
     ..hasRequiredFields = false
   ;
 
@@ -59,7 +66,7 @@ class Conflict extends $pb.GeneratedMessage {
   static Conflict getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Conflict>(create);
   static Conflict? _defaultInstance;
 
-  /// indicates, if a subject where an action was requested upon was deleted since
+  /// indicates, if the subject, where an action was requested upon, was deleted since
   @$pb.TagNumber(1)
   $core.bool get subjectDeleted => $_getBF(0);
   @$pb.TagNumber(1)
@@ -68,6 +75,77 @@ class Conflict extends $pb.GeneratedMessage {
   $core.bool hasSubjectDeleted() => $_has(0);
   @$pb.TagNumber(1)
   void clearSubjectDeleted() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.Map<$core.String, AttributeConflict> get conflictingAttributes => $_getMap(1);
+}
+
+class AttributeConflict extends $pb.GeneratedMessage {
+  factory AttributeConflict({
+    $19.Any? is_1,
+    $19.Any? want,
+  }) {
+    final $result = create();
+    if (is_1 != null) {
+      $result.is_1 = is_1;
+    }
+    if (want != null) {
+      $result.want = want;
+    }
+    return $result;
+  }
+  AttributeConflict._() : super();
+  factory AttributeConflict.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AttributeConflict.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttributeConflict', package: const $pb.PackageName(_omitMessageNames ? '' : 'libs.common.v1'), createEmptyInstance: create)
+    ..aOM<$19.Any>(1, _omitFieldNames ? '' : 'is', subBuilder: $19.Any.create)
+    ..aOM<$19.Any>(2, _omitFieldNames ? '' : 'want', subBuilder: $19.Any.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AttributeConflict clone() => AttributeConflict()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AttributeConflict copyWith(void Function(AttributeConflict) updates) => super.copyWith((message) => updates(message as AttributeConflict)) as AttributeConflict;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static AttributeConflict create() => AttributeConflict._();
+  AttributeConflict createEmptyInstance() => create();
+  static $pb.PbList<AttributeConflict> createRepeated() => $pb.PbList<AttributeConflict>();
+  @$core.pragma('dart2js:noInline')
+  static AttributeConflict getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AttributeConflict>(create);
+  static AttributeConflict? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $19.Any get is_1 => $_getN(0);
+  @$pb.TagNumber(1)
+  set is_1($19.Any v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasIs_1() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearIs_1() => clearField(1);
+  @$pb.TagNumber(1)
+  $19.Any ensureIs_1() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $19.Any get want => $_getN(1);
+  @$pb.TagNumber(2)
+  set want($19.Any v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasWant() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearWant() => clearField(2);
+  @$pb.TagNumber(2)
+  $19.Any ensureWant() => $_ensure(1);
 }
 
 
