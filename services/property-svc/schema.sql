@@ -96,7 +96,8 @@ CREATE TABLE public.properties (
     description text DEFAULT ''::text NOT NULL,
     is_archived boolean DEFAULT false NOT NULL,
     set_id uuid,
-    select_data_id uuid
+    select_data_id uuid,
+    consistency bigint DEFAULT '-1'::integer NOT NULL
 );
 
 

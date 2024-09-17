@@ -8,6 +8,7 @@ import (
 	"hwutil"
 	"property-svc/internal/property/handlers"
 	"property-svc/internal/property/models"
+	"strconv"
 )
 
 type PropertyGrpcService struct {
@@ -44,12 +45,24 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 		}
 	}
 
-	if err := s.handlers.Commands.V1.CreateProperty(ctx, propertyID, req.GetSubjectType(), req.GetFieldType(), req.GetName(), req.Description, req.SetId, fieldTypeData); err != nil {
+	version, err := s.handlers.Commands.V1.CreateProperty(
+		ctx,
+		propertyID,
+		req.GetSubjectType(),
+		req.GetFieldType(),
+		req.GetName(),
+		req.Description,
+		req.SetId,
+		fieldTypeData,
+	)
+
+	if err != nil {
 		return nil, err
 	}
 
 	return &pb.CreatePropertyResponse{
-		PropertyId: propertyID.String(),
+		PropertyId:  propertyID.String(),
+		Consistency: strconv.FormatUint(version, 10),
 	}, nil
 }
 
@@ -76,6 +89,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		SetId:                      hwutil.NullUUIDToStringPtr(property.SetID),
 		AlwaysIncludeForViewSource: nil, // TODO
 		FieldTypeData:              nil, // set below
+		Consistency:                strconv.FormatUint(version, 10),
 	}
 
 	switch {

@@ -13,8 +13,8 @@ import (
 
 const createProperty = `-- name: CreateProperty :exec
 INSERT INTO properties
-	(id, subject_type, field_type, name)
-VALUES ($1, $2, $3, $4)
+	(id, subject_type, field_type, name, consistency)
+VALUES ($1, $2, $3, $4, $5)
 `
 
 type CreatePropertyParams struct {
@@ -22,6 +22,7 @@ type CreatePropertyParams struct {
 	SubjectType int32
 	FieldType   int32
 	Name        string
+	Consistency int64
 }
 
 func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) error {
@@ -30,6 +31,7 @@ func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) 
 		arg.SubjectType,
 		arg.FieldType,
 		arg.Name,
+		arg.Consistency,
 	)
 	return err
 }
@@ -89,7 +91,7 @@ func (q *Queries) DeleteSelectDataByPropertyID(ctx context.Context, id uuid.UUID
 
 const getPropertiesWithSelectDataAndOptionsBySubjectTypeOrID = `-- name: GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID :many
 SELECT
-	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.select_data_id,
+	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.select_data_id, properties.consistency,
 	select_options.id as select_option_id,
 	select_options.name as select_option_name,
 	select_options.description as select_option_description,
@@ -135,6 +137,7 @@ func (q *Queries) GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx con
 			&i.Property.IsArchived,
 			&i.Property.SetID,
 			&i.Property.SelectDataID,
+			&i.Property.Consistency,
 			&i.SelectOptionID,
 			&i.SelectOptionName,
 			&i.SelectOptionDescription,
@@ -153,7 +156,7 @@ func (q *Queries) GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx con
 }
 
 const getPropertyById = `-- name: GetPropertyById :one
-SELECT id, subject_type, field_type, name, description, is_archived, set_id, select_data_id FROM properties WHERE id = $1
+SELECT id, subject_type, field_type, name, description, is_archived, set_id, select_data_id, consistency FROM properties WHERE id = $1
 `
 
 func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, error) {
@@ -168,6 +171,7 @@ func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, 
 		&i.IsArchived,
 		&i.SetID,
 		&i.SelectDataID,
+		&i.Consistency,
 	)
 	return i, err
 }

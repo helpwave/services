@@ -29,6 +29,7 @@ type Property struct {
 	IsArchived   bool
 	SetID        uuid.NullUUID
 	SelectDataID uuid.NullUUID
+	Consistency  int64
 }
 
 type PropertyValue struct {

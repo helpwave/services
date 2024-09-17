@@ -28,8 +28,7 @@ type Event struct {
 	Data []byte
 	// time of event creation
 	Timestamp time.Time
-	// event's revision number (event's can, but should not be modified)
-	Version uint64
+	Version   uint64
 	// user responsible for this event
 	CommitterUserID *uuid.UUID
 	// w3c trace context
@@ -177,8 +176,8 @@ func (e *Event) GetVersion() uint64 {
 
 func (e *Event) ToEventData() (esdb.EventData, error) {
 	md := metadata{
-    TraceParent: e.TraceParent,
-		Timestamp: e.Timestamp,
+		TraceParent: e.TraceParent,
+		Timestamp:   e.Timestamp,
 	}
 	if e.CommitterUserID != nil {
 		md.CommitterUserID = e.CommitterUserID.String()

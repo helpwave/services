@@ -82,6 +82,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 		SubjectType: int32(subjectType),
 		FieldType:   int32(fieldType),
 		Name:        payload.Name,
+		Consistency: hwutil.PtrTo(int64(evt.GetVersion())),
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)

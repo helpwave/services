@@ -35,16 +35,16 @@ func (a *AggregateStore) getExpectedRevisionByPreviousRead(ctx context.Context, 
 	return esdb.Revision(eventNumber), nil
 }
 
-func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, getExpectedRevision getExpectedRevision) error {
+func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, getExpectedRevision getExpectedRevision) (uint64, error) {
 	if len(aggregate.GetUncommittedEvents()) == 0 {
-		return nil
+		return aggregate.GetVersion(), nil
 	}
 
 	eventsData, err := hwutil.MapWithErr(aggregate.GetUncommittedEvents(), func(event hwes.Event) (esdb.EventData, error) {
 		return event.ToEventData()
 	})
 	if err != nil {
-		return fmt.Errorf("AggregateStore.doSave: could not convert one uncomitted event to event data: %w", err)
+		return 0, fmt.Errorf("AggregateStore.doSave: could not convert one uncomitted event to event data: %w", err)
 	}
 
 	// If AppliedEvents are empty, we imply that this entity was not loaded from an event store and therefore non-existing.
@@ -52,38 +52,38 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 		// Create aggregate stream
 		expectedRevision := esdb.NoStream{}
 
-		_, err := a.es.AppendToStream(
+		r, err := a.es.AppendToStream(
 			ctx,
 			aggregate.GetTypeID(),
 			esdb.AppendToStreamOptions{ExpectedRevision: expectedRevision},
 			eventsData...,
 		)
 		if err != nil {
-			return fmt.Errorf("AggregateStore.doSave: could not append event to stream: %w", err)
+			return 0, fmt.Errorf("AggregateStore.doSave: could not append event to stream: %w", err)
 		}
 
-		return nil
+		return r.NextExpectedVersion, nil
 	}
 
 	// We resolve the expectedRevision by the passed strategy of the caller
 	expectedRevision, err := getExpectedRevision(ctx, aggregate)
 	if err != nil {
-		return fmt.Errorf("AggregateStore.doSave: could not resolve expected revision: %w", err)
+		return 0, fmt.Errorf("AggregateStore.doSave: could not resolve expected revision: %w", err)
 	}
 
 	appendOpts := esdb.AppendToStreamOptions{ExpectedRevision: expectedRevision}
-	_, err = a.es.AppendToStream(
+	r, err := a.es.AppendToStream(
 		ctx,
 		aggregate.GetTypeID(),
 		appendOpts,
 		eventsData...,
 	)
 	if err != nil {
-		return fmt.Errorf("AggregateStore.doSave: could not append event to stream: %w", err)
+		return 0, fmt.Errorf("AggregateStore.doSave: could not append event to stream: %w", err)
 	}
 
 	aggregate.ClearUncommittedEvents()
-	return nil
+	return r.NextExpectedVersion, nil
 }
 
 // Implements AggregateStore interface
@@ -117,7 +117,7 @@ func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 	return nil
 }
 
-func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) error {
+func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) (uint64, error) {
 	// We can switch out the getExpectedRevision strategy for testing optimistic concurrency.
 	// It is not intended to switch the strategy in production.
 	// To ensure consistency and correctly applied events during another read,
