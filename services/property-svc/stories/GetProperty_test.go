@@ -185,3 +185,66 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 	}
 
 }
+
+// TestTaskGetPropertyConsistency:
+//   - Create a Property,
+//   - Read it
+//   - TODO
+func TestTaskGetPropertyConsistency(t *testing.T) {
+	wardID := uuid.New()
+
+	propertyClient := propertyServiceClient()
+
+	ctx := context.Background()
+
+	//
+	// Create new Property
+	//
+
+	createPropertyRequest := &pb.CreatePropertyRequest{
+		SubjectType:   pb.SubjectType_SUBJECT_TYPE_TASK,
+		FieldType:     pb.FieldType_FIELD_TYPE_TEXT,
+		Name:          t.Name(),
+		Description:   nil,
+		SetId:         nil,
+		FieldTypeData: nil,
+	}
+
+	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
+	if !assert.NoError(t, err, "could not create new property") {
+		return
+	}
+	propertyID, err := uuid.Parse(createResponse.PropertyId)
+	if !assert.NoError(t, err, "propertyID is not a uuid") {
+		return
+	}
+
+	createVersion := createResponse.Consistency
+
+	time.Sleep(time.Second * 1)
+
+	//
+	// Get new Property
+	//
+
+	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{
+		Id: propertyID.String(),
+		ViewSource: &pb.GetPropertyRequest_ViewSource{
+			Value: &pb.GetPropertyRequest_ViewSource_WardId{WardId: wardID.String()},
+		},
+	})
+	if !assert.NoError(t, err, "could not get property after it was created") {
+		return
+	}
+
+	if !assert.Equal(t, hwutil.PtrTo(false), propertyResponse.AlwaysIncludeForViewSource) {
+		return
+	}
+
+	readVersion := propertyResponse.Consistency
+
+	assert.Equal(t, createVersion, readVersion, "create and read consistencies differ")
+
+	// TODO
+
+}

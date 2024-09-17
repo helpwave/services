@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: services/property_svc/v1/property_set_svc.proto
 
-package property_svc
+package v1
 
 import (
 	context "context"

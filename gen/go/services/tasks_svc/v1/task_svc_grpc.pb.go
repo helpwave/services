@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: services/tasks_svc/v1/task_svc.proto
 
-package tasks_svc
+package v1
 
 import (
 	context "context"

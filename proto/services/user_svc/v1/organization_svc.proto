@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package services.user_svc.v1;
 
-option go_package = "gen/proto/services/user-svc";
+option go_package = "gen/services/user-svc/v1";
 
 enum InvitationState {
   INVITATION_STATE_UNSPECIFIED = 0;
