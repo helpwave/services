@@ -1366,7 +1366,8 @@ proto.services.property_svc.v1.GetPropertyRequest.prototype.toObject = function(
  */
 proto.services.property_svc.v1.GetPropertyRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, "")
+    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    viewSource: (f = msg.getViewSource()) && proto.services.property_svc.v1.GetPropertyRequest.ViewSource.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1407,6 +1408,11 @@ proto.services.property_svc.v1.GetPropertyRequest.deserializeBinaryFromReader = 
       var value = /** @type {string} */ (reader.readString());
       msg.setId(value);
       break;
+    case 2:
+      var value = new proto.services.property_svc.v1.GetPropertyRequest.ViewSource;
+      reader.readMessage(value,proto.services.property_svc.v1.GetPropertyRequest.ViewSource.deserializeBinaryFromReader);
+      msg.setViewSource(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1441,6 +1447,14 @@ proto.services.property_svc.v1.GetPropertyRequest.serializeBinaryToWriter = func
     writer.writeString(
       1,
       f
+    );
+  }
+  f = message.getViewSource();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      proto.services.property_svc.v1.GetPropertyRequest.ViewSource.serializeBinaryToWriter
     );
   }
 };
@@ -1683,6 +1697,43 @@ proto.services.property_svc.v1.GetPropertyRequest.prototype.getId = function() {
  */
 proto.services.property_svc.v1.GetPropertyRequest.prototype.setId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional ViewSource view_source = 2;
+ * @return {?proto.services.property_svc.v1.GetPropertyRequest.ViewSource}
+ */
+proto.services.property_svc.v1.GetPropertyRequest.prototype.getViewSource = function() {
+  return /** @type{?proto.services.property_svc.v1.GetPropertyRequest.ViewSource} */ (
+    jspb.Message.getWrapperField(this, proto.services.property_svc.v1.GetPropertyRequest.ViewSource, 2));
+};
+
+
+/**
+ * @param {?proto.services.property_svc.v1.GetPropertyRequest.ViewSource|undefined} value
+ * @return {!proto.services.property_svc.v1.GetPropertyRequest} returns this
+*/
+proto.services.property_svc.v1.GetPropertyRequest.prototype.setViewSource = function(value) {
+  return jspb.Message.setWrapperField(this, 2, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.services.property_svc.v1.GetPropertyRequest} returns this
+ */
+proto.services.property_svc.v1.GetPropertyRequest.prototype.clearViewSource = function() {
+  return this.setViewSource(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.property_svc.v1.GetPropertyRequest.prototype.hasViewSource = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 

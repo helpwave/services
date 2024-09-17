@@ -91,8 +91,12 @@ const GetPropertyRequest$json = {
   '1': 'GetPropertyRequest',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'view_source', '3': 2, '4': 1, '5': 11, '6': '.services.property_svc.v1.GetPropertyRequest.ViewSource', '9': 0, '10': 'viewSource', '17': true},
   ],
   '3': [GetPropertyRequest_ViewSource$json],
+  '8': [
+    {'1': '_view_source'},
+  ],
 };
 
 @$core.Deprecated('Use getPropertyRequestDescriptor instead')
@@ -109,8 +113,10 @@ const GetPropertyRequest_ViewSource$json = {
 
 /// Descriptor for `GetPropertyRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getPropertyRequestDescriptor = $convert.base64Decode(
-    'ChJHZXRQcm9wZXJ0eVJlcXVlc3QSDgoCaWQYASABKAlSAmlkGkoKClZpZXdTb3VyY2USGAoGZ2'
-    'xvYmFsGAEgASgISABSBmdsb2JhbBIZCgd3YXJkX2lkGAIgASgJSABSBndhcmRJZEIHCgV2YWx1'
+    'ChJHZXRQcm9wZXJ0eVJlcXVlc3QSDgoCaWQYASABKAlSAmlkEl0KC3ZpZXdfc291cmNlGAIgAS'
+    'gLMjcuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkdldFByb3BlcnR5UmVxdWVzdC5WaWV3U291'
+    'cmNlSABSCnZpZXdTb3VyY2WIAQEaSgoKVmlld1NvdXJjZRIYCgZnbG9iYWwYASABKAhIAFIGZ2'
+    'xvYmFsEhkKB3dhcmRfaWQYAiABKAlIAFIGd2FyZElkQgcKBXZhbHVlQg4KDF92aWV3X3NvdXJj'
     'ZQ==');
 
 @$core.Deprecated('Use getPropertyResponseDescriptor instead')

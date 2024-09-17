@@ -84,6 +84,21 @@ func (m PatientPropertyMatchers) ToMap() map[string]interface{} {
 	return mp
 }
 
+func (m PatientPropertyMatchers) IsPropertyAlwaysIncluded(ctx context.Context, propertyID uuid.UUID) (bool, error) {
+	repo := patient_views_repo.New(hwdb.GetDB())
+	query := hwdb.Optional(repo.IsPatientPropertyAlwaysIncluded)
+	alwaysInclude, err := query(ctx, patient_views_repo.IsPatientPropertyAlwaysIncludedParams{
+		PropertyID: propertyID,
+		WardID:     m.WardID,
+		PatientID:  m.PatientID,
+	})
+	err = hwdb.Error(ctx, err)
+	if alwaysInclude == nil || *alwaysInclude == nil {
+		return false, err
+	}
+	return **alwaysInclude, err
+}
+
 func PatientPropertyMatchersFromMap(m map[string]interface{}) (PatientPropertyMatchers, bool) {
 	propertyMatcherType, ok := m["PropertyMatcherType"]
 	if !ok || propertyMatcherType != PatientPropertyMatcherType {
