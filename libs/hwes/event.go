@@ -189,6 +189,7 @@ func (e *Event) ToEventData() (esdb.EventData, error) {
 	}
 
 	return esdb.EventData{
+		EventID:     e.EventID,
 		EventType:   e.EventType,
 		ContentType: esdb.ContentTypeJson,
 		Data:        e.Data,

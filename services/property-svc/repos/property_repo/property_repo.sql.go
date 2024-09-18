@@ -189,64 +189,71 @@ func (q *Queries) GetPropertySubjectType(ctx context.Context, id uuid.UUID) (int
 
 const updateProperty = `-- name: UpdateProperty :exec
 UPDATE properties
-SET subject_type = coalesce($2, subject_type),
-    field_type = coalesce($3, field_type),
-    name = coalesce($4, name),
-    description = coalesce($5, description),
-    is_archived = coalesce($6, is_archived)
-WHERE id = $1
+SET subject_type = coalesce($1, subject_type),
+    field_type = coalesce($2, field_type),
+    name = coalesce($3, name),
+    description = coalesce($4, description),
+    is_archived = coalesce($5, is_archived),
+    consistency = $6
+WHERE id = $7
 `
 
 type UpdatePropertyParams struct {
-	ID          uuid.UUID
 	SubjectType *int32
 	FieldType   *int32
 	Name        *string
 	Description *string
 	IsArchived  *bool
+	Consistency int64
+	ID          uuid.UUID
 }
 
 func (q *Queries) UpdateProperty(ctx context.Context, arg UpdatePropertyParams) error {
 	_, err := q.db.Exec(ctx, updateProperty,
-		arg.ID,
 		arg.SubjectType,
 		arg.FieldType,
 		arg.Name,
 		arg.Description,
 		arg.IsArchived,
+		arg.Consistency,
+		arg.ID,
 	)
 	return err
 }
 
 const updatePropertySelectDataID = `-- name: UpdatePropertySelectDataID :exec
 UPDATE properties
-SET select_data_id = $2
+SET select_data_id = $2,
+	consistency = $3
 WHERE id = $1
 `
 
 type UpdatePropertySelectDataIDParams struct {
 	ID           uuid.UUID
 	SelectDataID uuid.NullUUID
+	Consistency  int64
 }
 
 func (q *Queries) UpdatePropertySelectDataID(ctx context.Context, arg UpdatePropertySelectDataIDParams) error {
-	_, err := q.db.Exec(ctx, updatePropertySelectDataID, arg.ID, arg.SelectDataID)
+	_, err := q.db.Exec(ctx, updatePropertySelectDataID, arg.ID, arg.SelectDataID, arg.Consistency)
 	return err
 }
 
 const updatePropertySetID = `-- name: UpdatePropertySetID :exec
 UPDATE properties
-SET set_id = $1
-WHERE id = $2
+SET set_id = $1,
+	consistency = $2
+WHERE id = $3
 `
 
 type UpdatePropertySetIDParams struct {
-	SetID uuid.NullUUID
-	ID    uuid.UUID
+	SetID       uuid.NullUUID
+	Consistency int64
+	ID          uuid.UUID
 }
 
 func (q *Queries) UpdatePropertySetID(ctx context.Context, arg UpdatePropertySetIDParams) error {
-	_, err := q.db.Exec(ctx, updatePropertySetID, arg.SetID, arg.ID)
+	_, err := q.db.Exec(ctx, updatePropertySetID, arg.SetID, arg.Consistency, arg.ID)
 	return err
 }
 

@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"hwes"
 	"property-svc/internal/property-set/handlers"
+	"strconv"
 )
 
 type PropertySetGrpcService struct {
@@ -20,13 +21,14 @@ func NewPropertySetService(aggregateStore hwes.AggregateStore, handlers *handler
 
 func (s *PropertySetGrpcService) CreatePropertySet(ctx context.Context, req *pb.CreatePropertySetRequest) (*pb.CreatePropertySetResponse, error) {
 	propertySetID := uuid.New()
-
-	if err := s.handlers.Commands.V1.CreatePropertySet(ctx, propertySetID, req.Name); err != nil {
+	consistency, err := s.handlers.Commands.V1.CreatePropertySet(ctx, propertySetID, req.Name)
+	if err != nil {
 		return nil, err
 	}
 
 	return &pb.CreatePropertySetResponse{
-		Id: propertySetID.String(),
+		Id:          propertySetID.String(),
+		Consistency: strconv.FormatUint(consistency, 10),
 	}, nil
 }
 

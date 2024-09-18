@@ -82,7 +82,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 		SubjectType: int32(subjectType),
 		FieldType:   int32(fieldType),
 		Name:        payload.Name,
-		Consistency: hwutil.PtrTo(int64(evt.GetVersion())),
+		Consistency: int64(evt.GetVersion()),
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -103,6 +103,7 @@ func (p *Projection) onPropertyDescriptionUpdated(ctx context.Context, evt hwes.
 	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
 		ID:          evt.AggregateID,
 		Description: &payload.Description,
+		Consistency: int64(evt.GetVersion()),
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -131,8 +132,9 @@ func (p *Projection) onPropertySetIDUpdated(ctx context.Context, evt hwes.Event)
 	}
 
 	err := p.propertyRepo.UpdatePropertySetID(ctx, property_repo.UpdatePropertySetIDParams{
-		ID:    evt.AggregateID,
-		SetID: setID,
+		ID:          evt.AggregateID,
+		SetID:       setID,
+		Consistency: int64(evt.GetVersion()),
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -160,6 +162,7 @@ func (p *Projection) onSubjectTypeUpdated(ctx context.Context, evt hwes.Event) (
 	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
 		ID:          evt.AggregateID,
 		SubjectType: hwutil.PtrTo(int32(subjectType)),
+		Consistency: int64(evt.GetVersion()),
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -179,8 +182,9 @@ func (p *Projection) onNameUpdated(ctx context.Context, evt hwes.Event) (error, 
 	}
 
 	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
-		ID:   evt.AggregateID,
-		Name: &payload.Name,
+		ID:          evt.AggregateID,
+		Name:        &payload.Name,
+		Consistency: int64(evt.GetVersion()),
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -192,8 +196,9 @@ func (p *Projection) onNameUpdated(ctx context.Context, evt hwes.Event) (error, 
 
 func (p *Projection) onPropertyArchived(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
-		ID:         evt.GetAggregateID(),
-		IsArchived: hwutil.PtrTo(true),
+		ID:          evt.GetAggregateID(),
+		IsArchived:  hwutil.PtrTo(true),
+		Consistency: int64(evt.GetVersion()),
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -204,8 +209,9 @@ func (p *Projection) onPropertyArchived(ctx context.Context, evt hwes.Event) (er
 
 func (p *Projection) onPropertyRetrieved(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
 	err := p.propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
-		ID:         evt.GetAggregateID(),
-		IsArchived: hwutil.PtrTo(false),
+		ID:          evt.GetAggregateID(),
+		IsArchived:  hwutil.PtrTo(false),
+		Consistency: int64(evt.GetVersion()),
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -251,6 +257,7 @@ func (p *Projection) onPropertyFieldTypeDataCreated(ctx context.Context, evt hwe
 		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
 			ID:           evt.AggregateID,
 			SelectDataID: uuid.NullUUID{UUID: selectDataID, Valid: true},
+			Consistency:  int64(evt.GetVersion()),
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -301,6 +308,7 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
 			ID:           evt.AggregateID,
 			SelectDataID: uuid.NullUUID{UUID: sdID, Valid: true},
+			Consistency:  int64(evt.GetVersion()),
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -345,6 +353,7 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 		err = propertyRepo.UpdatePropertySelectDataID(ctx, property_repo.UpdatePropertySelectDataIDParams{
 			ID:           evt.AggregateID,
 			SelectDataID: uuid.NullUUID{UUID: sdID, Valid: true},
+			Consistency:  int64(evt.GetVersion()),
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionRetry)

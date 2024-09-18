@@ -12,6 +12,7 @@ import (
 	"property-svc/internal/property-value/handlers"
 	"property-svc/internal/property-value/models"
 	viewModels "property-svc/internal/property-view/models"
+	"strconv"
 )
 
 type MatchersRequest interface {
@@ -97,12 +98,14 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		value = nil
 	}
 
-	if err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID); err != nil {
+	consistency, err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID)
+	if err != nil {
 		return nil, err
 	}
 
 	return &pb.AttachPropertyValueResponse{
 		PropertyValueId: propertyValueID.String(),
+		Consistency:     strconv.FormatUint(consistency, 10),
 	}, nil
 }
 

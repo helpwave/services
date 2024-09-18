@@ -31,7 +31,9 @@ message UpdatePropertyViewRuleRequest {
   }
 }
 
-message UpdatePropertyViewRuleResponse {}
+message UpdatePropertyViewRuleResponse {
+  string consistency = 1;
+}
 
 service PropertyViewsService {
   rpc UpdatePropertyViewRule (UpdatePropertyViewRuleRequest) returns (UpdatePropertyViewRuleResponse) {}

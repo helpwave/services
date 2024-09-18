@@ -29,12 +29,14 @@ SET subject_type = coalesce(sqlc.narg('subject_type'), subject_type),
     field_type = coalesce(sqlc.narg('field_type'), field_type),
     name = coalesce(sqlc.narg('name'), name),
     description = coalesce(sqlc.narg('description'), description),
-    is_archived = coalesce(sqlc.narg('is_archived'), is_archived)
-WHERE id = $1;
+    is_archived = coalesce(sqlc.narg('is_archived'), is_archived),
+    consistency = @consistency
+WHERE id = @id;
 
 -- name: UpdatePropertySetID :exec
 UPDATE properties
-SET set_id = @set_id
+SET set_id = @set_id,
+	consistency = @consistency
 WHERE id = @id;
 
 -- name: UpdateSelectData :exec
@@ -44,7 +46,8 @@ WHERE id = @id;
 
 -- name: UpdatePropertySelectDataID :exec
 UPDATE properties
-SET select_data_id = @select_data_id
+SET select_data_id = @select_data_id,
+	consistency = @consistency
 WHERE id = $1;
 
 -- name: CreateSelectData :one

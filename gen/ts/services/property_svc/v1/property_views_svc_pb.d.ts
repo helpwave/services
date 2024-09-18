@@ -82,6 +82,9 @@ export namespace UpdatePropertyViewRuleRequest {
 }
 
 export class UpdatePropertyViewRuleResponse extends jspb.Message {
+  getConsistency(): string;
+  setConsistency(value: string): UpdatePropertyViewRuleResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdatePropertyViewRuleResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UpdatePropertyViewRuleResponse): UpdatePropertyViewRuleResponse.AsObject;
@@ -92,6 +95,7 @@ export class UpdatePropertyViewRuleResponse extends jspb.Message {
 
 export namespace UpdatePropertyViewRuleResponse {
   export type AsObject = {
+    consistency: string,
   }
 }
 

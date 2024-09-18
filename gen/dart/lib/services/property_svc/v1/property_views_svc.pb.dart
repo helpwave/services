@@ -189,12 +189,21 @@ class UpdatePropertyViewRuleRequest extends $pb.GeneratedMessage {
 }
 
 class UpdatePropertyViewRuleResponse extends $pb.GeneratedMessage {
-  factory UpdatePropertyViewRuleResponse() => create();
+  factory UpdatePropertyViewRuleResponse({
+    $core.String? consistency,
+  }) {
+    final $result = create();
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
+    return $result;
+  }
   UpdatePropertyViewRuleResponse._() : super();
   factory UpdatePropertyViewRuleResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdatePropertyViewRuleResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePropertyViewRuleResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -218,6 +227,15 @@ class UpdatePropertyViewRuleResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static UpdatePropertyViewRuleResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdatePropertyViewRuleResponse>(create);
   static UpdatePropertyViewRuleResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get consistency => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set consistency($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasConsistency() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConsistency() => clearField(1);
 }
 
 

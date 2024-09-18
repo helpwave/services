@@ -189,10 +189,10 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 // TestTaskGetPropertyConsistency:
 //   - Create a Property,
 //   - Read it
+//   - Update name
+//   - Read it
 //   - TODO
 func TestTaskGetPropertyConsistency(t *testing.T) {
-	wardID := uuid.New()
-
 	propertyClient := propertyServiceClient()
 
 	ctx := context.Background()
@@ -229,15 +229,8 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{
 		Id: propertyID.String(),
-		ViewSource: &pb.GetPropertyRequest_ViewSource{
-			Value: &pb.GetPropertyRequest_ViewSource_WardId{WardId: wardID.String()},
-		},
 	})
 	if !assert.NoError(t, err, "could not get property after it was created") {
-		return
-	}
-
-	if !assert.Equal(t, hwutil.PtrTo(false), propertyResponse.AlwaysIncludeForViewSource) {
 		return
 	}
 
@@ -245,6 +238,40 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 
 	assert.Equal(t, createVersion, readVersion, "create and read consistencies differ")
 
-	// TODO
+	//
+	// Update Property
+	//
+
+	updateResponse, err := propertyClient.UpdateProperty(ctx, &pb.UpdatePropertyRequest{
+		Id:          propertyID.String(),
+		Name:        hwutil.PtrTo(t.Name() + " updated"),
+		Description: nil,
+		Consistency: &readVersion,
+	})
+
+	if !assert.NoError(t, err, "could not update property") {
+		return
+	}
+
+	updatedVersion := updateResponse.GetConsistency()
+
+	assert.NotEqual(t, readVersion, updatedVersion, "update does not change consistency")
+
+	time.Sleep(time.Second * 1)
+
+	//
+	// Get updated Property
+	//
+
+	propertyResponse, err = propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{
+		Id: propertyID.String(),
+	})
+	if !assert.NoError(t, err, "could not get property after it was updated") {
+		return
+	}
+
+	readVersionAfterUpdate := propertyResponse.Consistency
+
+	assert.Equal(t, updatedVersion, readVersionAfterUpdate, "updatedVersion and readVersionAfterUpdate consistencies differ")
 
 }

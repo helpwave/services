@@ -57,9 +57,13 @@ final $typed_data.Uint8List updatePropertyViewRuleRequestDescriptor = $convert.b
 @$core.Deprecated('Use updatePropertyViewRuleResponseDescriptor instead')
 const UpdatePropertyViewRuleResponse$json = {
   '1': 'UpdatePropertyViewRuleResponse',
+  '2': [
+    {'1': 'consistency', '3': 1, '4': 1, '5': 9, '10': 'consistency'},
+  ],
 };
 
 /// Descriptor for `UpdatePropertyViewRuleResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updatePropertyViewRuleResponseDescriptor = $convert.base64Decode(
-    'Ch5VcGRhdGVQcm9wZXJ0eVZpZXdSdWxlUmVzcG9uc2U=');
+    'Ch5VcGRhdGVQcm9wZXJ0eVZpZXdSdWxlUmVzcG9uc2USIAoLY29uc2lzdGVuY3kYASABKAlSC2'
+    'NvbnNpc3RlbmN5');
 

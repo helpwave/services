@@ -704,7 +704,7 @@ proto.services.property_svc.v1.UpdatePropertyViewRuleResponse.prototype.toObject
  */
 proto.services.property_svc.v1.UpdatePropertyViewRuleResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+    consistency: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -741,6 +741,10 @@ proto.services.property_svc.v1.UpdatePropertyViewRuleResponse.deserializeBinaryF
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -770,6 +774,31 @@ proto.services.property_svc.v1.UpdatePropertyViewRuleResponse.prototype.serializ
  */
 proto.services.property_svc.v1.UpdatePropertyViewRuleResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string consistency = 1;
+ * @return {string}
+ */
+proto.services.property_svc.v1.UpdatePropertyViewRuleResponse.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.property_svc.v1.UpdatePropertyViewRuleResponse} returns this
+ */
+proto.services.property_svc.v1.UpdatePropertyViewRuleResponse.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
