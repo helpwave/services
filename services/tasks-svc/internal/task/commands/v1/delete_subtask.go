@@ -10,13 +10,13 @@ import (
 	"tasks-svc/internal/task/aggregate"
 )
 
-type DeleteSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID) error
+type DeleteSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID) (uint64, error)
 
 func NewDeleteSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) DeleteSubtaskCommandHandler {
-	return func(ctx context.Context, taskID, subtaskID uuid.UUID) error {
+	return func(ctx context.Context, taskID, subtaskID uuid.UUID) (uint64, error) {
 		userID, err := common.GetUserID(ctx)
 		if err != nil {
-			return err
+			return 0, err
 		}
 
 		user := perm.User(userID)
@@ -24,16 +24,16 @@ func NewDeleteSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ)
 
 		check := hwauthz.NewPermissionCheck(user, perm.CanUserDeleteSubtaskOnTask, task)
 		if err = authz.Must(ctx, check); err != nil {
-			return err
+			return 0, err
 		}
 
 		taskAggregate, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
 		if err != nil {
-			return err
+			return 0, err
 		}
 
 		if err := taskAggregate.DeleteSubtask(ctx, subtaskID); err != nil {
-			return err
+			return 0, err
 		}
 
 		return as.Save(ctx, taskAggregate)

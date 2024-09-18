@@ -66,7 +66,8 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		Msg("bed created")
 
 	return &pb.CreateBedResponse{
-		Id: bed.ID.String(),
+		Id:          bed.ID.String(),
+		Consistency: strconv.FormatUint(uint64(bed.Consistency), 10),
 	}, nil
 }
 

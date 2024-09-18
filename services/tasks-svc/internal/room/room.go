@@ -47,7 +47,8 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 		Msg("room created")
 
 	return &pb.CreateRoomResponse{
-		Id: roomID.String(),
+		Id:          roomID.String(),
+		Consistency: "0", // DEFAULT value
 	}, nil
 }
 
