@@ -73,7 +73,7 @@ WHERE tasks.id = $1;
 -- name: RemoveTaskDueAt :exec
 UPDATE tasks
 SET due_at = NULL
-WHERE id=$1;
+WHERE id = $1;
 
 -- name: DeleteTask :exec
-DELETE FROM tasks WHERE id=$1;
+DELETE FROM tasks WHERE id = $1;

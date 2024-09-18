@@ -40,7 +40,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 						Status:       pb.TaskStatus(row.Task.Status),
 						AssignedUser: row.Task.AssignedUserID, // TODO: #760
 						Public:       row.Task.Public,
-						DueAt:        nil, // Will be set below
+						DueAt:        nil, // may be set below
 						PatientID:    row.Patient.ID,
 						CreatedBy:    row.Task.CreatedBy,
 						CreatedAt:    row.Task.CreatedAt.Time,

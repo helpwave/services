@@ -126,7 +126,7 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 		Status:         task.Status,
 		CreatedAt:      timestamppb.New(task.CreatedAt),
 		Public:         task.Public,
-		DueAt:          nil, // will be set below
+		DueAt:          nil, // may be set below
 		CreatedBy:      task.CreatedBy.String(),
 		Patient: &pb.GetTaskResponse_Patient{
 			Id:                      task.Patient.ID.String(),
@@ -163,7 +163,7 @@ func (s *TaskGrpcService) GetTasksByPatient(ctx context.Context, req *pb.GetTask
 			Public:         item.Public,
 			CreatedBy:      item.CreatedBy.String(),
 			CreatedAt:      timestamppb.New(item.CreatedAt),
-			DueAt:          nil, // will be set below
+			DueAt:          nil, // may be set below
 			Subtasks:       make([]*pb.GetTasksByPatientResponse_Task_SubTask, len(item.Subtasks)),
 			AssignedUserId: hwutil.NullUUIDToStringPtr(item.AssignedUser), // TODO: #760
 		}
@@ -230,7 +230,7 @@ func (s *TaskGrpcService) GetTasksByPatientSortedByStatus(ctx context.Context, r
 					Public:         task.Public,
 					CreatedBy:      task.CreatedBy.String(),
 					CreatedAt:      timestamppb.New(task.CreatedAt),
-					DueAt:          nil, // will be set below
+					DueAt:          nil, // may be set below
 					Subtasks:       make([]*pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask, len(task.Subtasks)),
 					AssignedUserId: hwutil.NullUUIDToStringPtr(task.AssignedUser), // TODO: #760
 				}
@@ -285,7 +285,7 @@ func (s *TaskGrpcService) GetAssignedTasks(ctx context.Context, _ *pb.GetAssigne
 			Public:         item.Public,
 			CreatedBy:      item.CreatedBy.String(),
 			CreatedAt:      timestamppb.New(item.CreatedAt),
-			DueAt:          nil, // will be set below
+			DueAt:          nil, // may be set below
 			Subtasks:       make([]*pb.GetAssignedTasksResponse_Task_SubTask, len(item.Subtasks)),
 			AssignedUserId: item.AssignedUser.UUID.String(), // Safe, assignedUserId has to be set. TODO: #760
 			Patient: &pb.GetAssignedTasksResponse_Task_Patient{

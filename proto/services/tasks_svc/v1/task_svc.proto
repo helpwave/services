@@ -24,7 +24,7 @@ message CreateTaskRequest {
 
   message SubTask {
     string name = 1; // @gotags: validate:"required"
-    optional bool done = 2; //default: false
+    optional bool done = 2; // default: false
   }
 }
 

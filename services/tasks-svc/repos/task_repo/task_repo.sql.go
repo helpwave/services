@@ -74,7 +74,7 @@ func (q *Queries) DeleteSubtask(ctx context.Context, id uuid.UUID) error {
 }
 
 const deleteTask = `-- name: DeleteTask :exec
-DELETE FROM tasks WHERE id=$1
+DELETE FROM tasks WHERE id = $1
 `
 
 func (q *Queries) DeleteTask(ctx context.Context, id uuid.UUID) error {
@@ -271,7 +271,7 @@ func (q *Queries) GetTasksWithSubtasksByPatient(ctx context.Context, patientID u
 const removeTaskDueAt = `-- name: RemoveTaskDueAt :exec
 UPDATE tasks
 SET due_at = NULL
-WHERE id=$1
+WHERE id = $1
 `
 
 func (q *Queries) RemoveTaskDueAt(ctx context.Context, id uuid.UUID) error {

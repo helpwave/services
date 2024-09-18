@@ -37,7 +37,7 @@ func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 					AssignedUser: row.Task.AssignedUserID, // TODO: #760
 					PatientID:    row.Task.PatientID,
 					Public:       row.Task.Public,
-					DueAt:        nil, // will be set below
+					DueAt:        nil, // may be set below
 					CreatedBy:    row.Task.CreatedBy,
 					CreatedAt:    row.Task.CreatedAt.Time,
 					Subtasks:     make(map[uuid.UUID]models.Subtask),

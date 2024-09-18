@@ -1417,7 +1417,7 @@ type CreateTaskRequest_SubTask struct {
 	unknownFields protoimpl.UnknownFields
 
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" validate:"required"` // @gotags: validate:"required"
-	Done *bool  `protobuf:"varint,2,opt,name=done,proto3,oneof" json:"done,omitempty"`              //default: false
+	Done *bool  `protobuf:"varint,2,opt,name=done,proto3,oneof" json:"done,omitempty"`              // default: false
 }
 
 func (x *CreateTaskRequest_SubTask) Reset() {
