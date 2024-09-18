@@ -134,10 +134,13 @@ const getRoomsWithBedsAndPatientsAndTasksCountByWard = `-- name: GetRoomsWithBed
 SELECT
 	rooms.id as room_id,
 	rooms.name as room_name,
+	rooms.consistency as room_consistency,
 	beds.id as bed_id,
 	beds.name as bed_name,
+	beds.consistency as bed_consistency,
 	patients.id as patient_id,
 	patients.human_readable_identifier as patient_human_readable_identifier,
+	patients.consistency as patient_consistency,
 	(
 		SELECT COUNT(id)
 		FROM tasks
@@ -173,10 +176,13 @@ type GetRoomsWithBedsAndPatientsAndTasksCountByWardParams struct {
 type GetRoomsWithBedsAndPatientsAndTasksCountByWardRow struct {
 	RoomID                         uuid.UUID
 	RoomName                       string
+	RoomConsistency                int64
 	BedID                          uuid.NullUUID
 	BedName                        *string
+	BedConsistency                 *int64
 	PatientID                      uuid.NullUUID
 	PatientHumanReadableIdentifier *string
+	PatientConsistency             *int64
 	TodoTasksCount                 int64
 	InProgressTasksCount           int64
 	DoneTasksCount                 int64
@@ -199,10 +205,13 @@ func (q *Queries) GetRoomsWithBedsAndPatientsAndTasksCountByWard(ctx context.Con
 		if err := rows.Scan(
 			&i.RoomID,
 			&i.RoomName,
+			&i.RoomConsistency,
 			&i.BedID,
 			&i.BedName,
+			&i.BedConsistency,
 			&i.PatientID,
 			&i.PatientHumanReadableIdentifier,
+			&i.PatientConsistency,
 			&i.TodoTasksCount,
 			&i.InProgressTasksCount,
 			&i.DoneTasksCount,

@@ -226,20 +226,23 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 								TasksUnscheduled:        uint32(bedRow.TodoTasksCount),
 								TasksInProgress:         uint32(bedRow.InProgressTasksCount),
 								TasksDone:               uint32(bedRow.DoneTasksCount),
+								Consistency:             strconv.FormatUint(uint64(*bedRow.PatientConsistency), 10),
 							}
 						})
 
 					val := &pb.GetRoomOverviewsByWardResponse_Room_Bed{
-						Id:      bedRow.BedID.UUID.String(),
-						Name:    *bedRow.BedName,
-						Patient: patient,
+						Id:          bedRow.BedID.UUID.String(),
+						Name:        *bedRow.BedName,
+						Patient:     patient,
+						Consistency: strconv.FormatUint(uint64(*bedRow.BedConsistency), 10),
 					}
 					return &val
 				})
 			val := &pb.GetRoomOverviewsByWardResponse_Room{
-				Id:   roomRow.RoomID.String(),
-				Name: roomRow.RoomName,
-				Beds: beds,
+				Id:          roomRow.RoomID.String(),
+				Name:        roomRow.RoomName,
+				Beds:        beds,
+				Consistency: strconv.FormatUint(uint64(roomRow.RoomConsistency), 10),
 			}
 			return &val
 		})
