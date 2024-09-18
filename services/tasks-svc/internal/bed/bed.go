@@ -141,9 +141,10 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 	return &pb.GetBedsResponse{
 		Beds: hwutil.Map(beds, func(bed bed_repo.Bed) *pb.GetBedsResponse_Bed {
 			return &pb.GetBedsResponse_Bed{
-				Id:     bed.ID.String(),
-				RoomId: bed.RoomID.String(),
-				Name:   bed.Name,
+				Id:          bed.ID.String(),
+				RoomId:      bed.RoomID.String(),
+				Name:        bed.Name,
+				Consistency: strconv.FormatUint(uint64(bed.Consistency), 10),
 			}
 		}),
 	}, nil
@@ -174,8 +175,9 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 
 	for _, bed := range beds {
 		res.Beds = append(res.Beds, &pb.GetBedsByRoomResponse_Bed{
-			Id:   bed.ID.String(),
-			Name: bed.Name,
+			Id:          bed.ID.String(),
+			Name:        bed.Name,
+			Consistency: strconv.FormatUint(uint64(bed.Consistency), 10),
 		})
 	}
 
