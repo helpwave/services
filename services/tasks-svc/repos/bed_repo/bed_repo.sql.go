@@ -59,7 +59,7 @@ func (q *Queries) ExistsBed(ctx context.Context, id uuid.UUID) (bool, error) {
 const getBedAndRoomByBedId = `-- name: GetBedAndRoomByBedId :one
 SELECT
 	beds.id, beds.room_id, beds.name, beds.consistency,
-	rooms.id, rooms.name, rooms.ward_id
+	rooms.id, rooms.name, rooms.ward_id, rooms.consistency
 	FROM beds
 	JOIN rooms on beds.room_id = rooms.id
 	WHERE beds.id = $1
@@ -81,6 +81,7 @@ func (q *Queries) GetBedAndRoomByBedId(ctx context.Context, id uuid.UUID) (GetBe
 		&i.Room.ID,
 		&i.Room.Name,
 		&i.Room.WardID,
+		&i.Room.Consistency,
 	)
 	return i, err
 }
@@ -105,8 +106,13 @@ func (q *Queries) GetBedById(ctx context.Context, id uuid.UUID) (Bed, error) {
 
 const getBedWithRoomByPatient = `-- name: GetBedWithRoomByPatient :one
 SELECT
-	beds.id as bed_id, beds.name as bed_name,
-	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+	beds.id as bed_id,
+	beds.name as bed_name,
+	beds.consistency as bed_consistency,
+	rooms.id as room_id,
+	rooms.name as room_name,
+	rooms.ward_id as ward_id,
+	rooms.consistency as room_consistency
 FROM patients
 		 JOIN beds ON patients.bed_id = beds.id
 		 JOIN rooms ON beds.room_id = rooms.id
@@ -115,11 +121,13 @@ LIMIT 1
 `
 
 type GetBedWithRoomByPatientRow struct {
-	BedID    uuid.UUID
-	BedName  string
-	RoomID   uuid.UUID
-	RoomName string
-	WardID   uuid.UUID
+	BedID           uuid.UUID
+	BedName         string
+	BedConsistency  int64
+	RoomID          uuid.UUID
+	RoomName        string
+	WardID          uuid.UUID
+	RoomConsistency int64
 }
 
 func (q *Queries) GetBedWithRoomByPatient(ctx context.Context, patientID uuid.UUID) (GetBedWithRoomByPatientRow, error) {
@@ -128,9 +136,11 @@ func (q *Queries) GetBedWithRoomByPatient(ctx context.Context, patientID uuid.UU
 	err := row.Scan(
 		&i.BedID,
 		&i.BedName,
+		&i.BedConsistency,
 		&i.RoomID,
 		&i.RoomName,
 		&i.WardID,
+		&i.RoomConsistency,
 	)
 	return i, err
 }

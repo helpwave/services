@@ -38,7 +38,7 @@ func (q *Queries) DeleteRoom(ctx context.Context, id uuid.UUID) error {
 
 const getRoomWithBedsById = `-- name: GetRoomWithBedsById :many
 SELECT
-	rooms.id, rooms.name, rooms.ward_id,
+	rooms.id, rooms.name, rooms.ward_id, rooms.consistency,
 	beds.id as bed_id,
 	beds.name as bed_name
 FROM rooms
@@ -66,6 +66,7 @@ func (q *Queries) GetRoomWithBedsById(ctx context.Context, roomID uuid.UUID) ([]
 			&i.Room.ID,
 			&i.Room.Name,
 			&i.Room.WardID,
+			&i.Room.Consistency,
 			&i.BedID,
 			&i.BedName,
 		); err != nil {
@@ -81,7 +82,7 @@ func (q *Queries) GetRoomWithBedsById(ctx context.Context, roomID uuid.UUID) ([]
 
 const getRoomsWithBeds = `-- name: GetRoomsWithBeds :many
 SELECT
-	rooms.id, rooms.name, rooms.ward_id,
+	rooms.id, rooms.name, rooms.ward_id, rooms.consistency,
 	beds.id as bed_id,
 	beds.name as bed_name
 FROM rooms
@@ -109,6 +110,7 @@ func (q *Queries) GetRoomsWithBeds(ctx context.Context, wardID uuid.NullUUID) ([
 			&i.Room.ID,
 			&i.Room.Name,
 			&i.Room.WardID,
+			&i.Room.Consistency,
 			&i.BedID,
 			&i.BedName,
 		); err != nil {

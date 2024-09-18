@@ -27,9 +27,10 @@ type Patient struct {
 }
 
 type Room struct {
-	ID     uuid.UUID
-	Name   string
-	WardID uuid.UUID
+	ID          uuid.UUID
+	Name        string
+	WardID      uuid.UUID
+	Consistency int64
 }
 
 type SchemaMigration struct {

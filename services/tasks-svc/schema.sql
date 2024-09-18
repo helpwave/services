@@ -68,7 +68,8 @@ CREATE TABLE public.patients (
 CREATE TABLE public.rooms (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     name text NOT NULL,
-    ward_id uuid NOT NULL
+    ward_id uuid NOT NULL,
+    consistency bigint DEFAULT 0 NOT NULL
 );
 
 

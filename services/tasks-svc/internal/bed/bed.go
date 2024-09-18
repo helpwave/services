@@ -113,10 +113,19 @@ func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatien
 
 	return &pb.GetBedByPatientResponse{
 		Room: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientRow) pb.GetBedByPatientResponse_Room {
-			return pb.GetBedByPatientResponse_Room{Id: res.RoomID.String(), Name: res.RoomName, WardId: res.WardID.String()}
+			return pb.GetBedByPatientResponse_Room{
+				Id:          res.RoomID.String(),
+				Name:        res.RoomName,
+				WardId:      res.WardID.String(),
+				Consistency: strconv.FormatUint(uint64(res.RoomConsistency), 10),
+			}
 		}),
 		Bed: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientRow) pb.GetBedByPatientResponse_Bed {
-			return pb.GetBedByPatientResponse_Bed{Id: res.BedID.String(), Name: res.BedName}
+			return pb.GetBedByPatientResponse_Bed{
+				Id:          res.BedID.String(),
+				Name:        res.BedName,
+				Consistency: strconv.FormatUint(uint64(res.BedConsistency), 10),
+			}
 		}),
 	}, nil
 }

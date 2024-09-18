@@ -1,2 +1,3 @@
+ALTER TABLE rooms DROP COLUMN IF EXISTS consistency;
 ALTER TABLE beds DROP COLUMN IF EXISTS consistency;
 

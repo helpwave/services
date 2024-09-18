@@ -8,8 +8,13 @@ LIMIT 1;
 
 -- name: GetBedWithRoomByPatient :one
 SELECT
-	beds.id as bed_id, beds.name as bed_name,
-	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+	beds.id as bed_id,
+	beds.name as bed_name,
+	beds.consistency as bed_consistency,
+	rooms.id as room_id,
+	rooms.name as room_name,
+	rooms.ward_id as ward_id,
+	rooms.consistency as room_consistency
 FROM patients
 		 JOIN beds ON patients.bed_id = beds.id
 		 JOIN rooms ON beds.room_id = rooms.id
