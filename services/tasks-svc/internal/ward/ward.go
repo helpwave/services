@@ -79,8 +79,9 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 	return &pb.GetWardsResponse{
 		Wards: hwutil.Map(wards, func(ward ward_repo.Ward) *pb.GetWardsResponse_Ward {
 			return &pb.GetWardsResponse_Ward{
-				Id:   ward.ID.String(),
-				Name: ward.Name,
+				Id:          ward.ID.String(),
+				Name:        ward.Name,
+				Consistency: strconv.FormatUint(uint64(ward.Consistency), 10),
 			}
 		}),
 	}, nil
