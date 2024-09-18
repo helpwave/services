@@ -352,13 +352,15 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 				log.Warn().Str("bedID", patient.BedID.UUID.String()).Msg("error querying getBedAndRoomByBed")
 			} else if result != nil {
 				bedRes = &pb.GetRecentPatientsResponse_Bed{
-					Id:   result.Bed.ID.String(),
-					Name: result.Bed.Name,
+					Id:          result.Bed.ID.String(),
+					Name:        result.Bed.Name,
+					Consistency: strconv.FormatUint(uint64(result.Bed.Consistency), 10),
 				}
 				roomRes = &pb.GetRecentPatientsResponse_Room{
-					Id:     result.Room.ID.String(),
-					Name:   result.Room.Name,
-					WardId: result.Room.WardID.String(),
+					Id:          result.Room.ID.String(),
+					Name:        result.Room.Name,
+					WardId:      result.Room.WardID.String(),
+					Consistency: strconv.FormatUint(uint64(result.Room.Consistency), 10),
 				}
 			}
 		}
@@ -368,6 +370,7 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 			HumanReadableIdentifier: patient.HumanReadableIdentifier,
 			Room:                    roomRes,
 			Bed:                     bedRes,
+			Consistency:             patient.Consistency,
 		}
 	})
 
