@@ -1287,7 +1287,6 @@ class GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption extend
     $core.String? name,
     $core.String? description,
     $core.bool? isCustom,
-    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -1302,9 +1301,6 @@ class GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption extend
     if (isCustom != null) {
       $result.isCustom = isCustom;
     }
-    if (consistency != null) {
-      $result.consistency = consistency;
-    }
     return $result;
   }
   GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption._() : super();
@@ -1316,7 +1312,6 @@ class GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption extend
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOB(4, _omitFieldNames ? '' : 'isCustom')
-    ..aOS(5, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -1376,15 +1371,6 @@ class GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption extend
   $core.bool hasIsCustom() => $_has(3);
   @$pb.TagNumber(4)
   void clearIsCustom() => clearField(4);
-
-  @$pb.TagNumber(5)
-  $core.String get consistency => $_getSZ(4);
-  @$pb.TagNumber(5)
-  set consistency($core.String v) { $_setString(4, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasConsistency() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearConsistency() => clearField(5);
 }
 
 class GetPropertiesBySubjectTypeResponse_Property_SelectData extends $pb.GeneratedMessage {

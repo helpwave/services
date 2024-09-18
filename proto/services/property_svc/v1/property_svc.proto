@@ -176,7 +176,6 @@ message GetPropertiesBySubjectTypeResponse {
         string name = 2;
         optional string description = 3;
         bool is_custom = 4;
-        string consistency = 5;
       }
     }
   }

@@ -18,6 +18,11 @@ type Property struct {
 	FieldTypeData FieldTypeData
 }
 
+type PropertyWithConsistency struct {
+	Property
+	Consistency string
+}
+
 type FieldTypeData struct {
 	SelectData *SelectData `json:"select_data,omitempty"`
 }

@@ -197,6 +197,7 @@ func (s *PropertyGrpcService) GetPropertiesBySubjectType(ctx context.Context, re
 			IsArchived:    item.IsArchived,
 			SetId:         hwutil.NullUUIDToStringPtr(item.SetID),
 			FieldTypeData: nil,
+			Consistency:   item.Consistency,
 		}
 
 		if item.FieldTypeData.SelectData != nil {

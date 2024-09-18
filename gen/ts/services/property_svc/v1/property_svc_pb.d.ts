@@ -717,9 +717,6 @@ export namespace GetPropertiesBySubjectTypeResponse {
         getIsCustom(): boolean;
         setIsCustom(value: boolean): SelectOption;
 
-        getConsistency(): string;
-        setConsistency(value: string): SelectOption;
-
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): SelectOption.AsObject;
         static toObject(includeInstance: boolean, msg: SelectOption): SelectOption.AsObject;
@@ -734,7 +731,6 @@ export namespace GetPropertiesBySubjectTypeResponse {
           name: string,
           description?: string,
           isCustom: boolean,
-          consistency: string,
         }
 
         export enum DescriptionCase { 

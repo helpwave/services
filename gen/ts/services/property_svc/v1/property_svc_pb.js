@@ -4575,8 +4575,7 @@ proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.Selec
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    isCustom: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
-    consistency: jspb.Message.getFieldWithDefault(msg, 5, "")
+    isCustom: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
   };
 
   if (includeInstance) {
@@ -4628,10 +4627,6 @@ proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.Selec
     case 4:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsCustom(value);
-      break;
-    case 5:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -4687,13 +4682,6 @@ proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.Selec
   if (f) {
     writer.writeBool(
       4,
-      f
-    );
-  }
-  f = message.getConsistency();
-  if (f.length > 0) {
-    writer.writeString(
-      5,
       f
     );
   }
@@ -4787,24 +4775,6 @@ proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.Selec
  */
 proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption.prototype.setIsCustom = function(value) {
   return jspb.Message.setProto3BooleanField(this, 4, value);
-};
-
-
-/**
- * optional string consistency = 5;
- * @return {string}
- */
-proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption.prototype.getConsistency = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption} returns this
- */
-proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption.prototype.setConsistency = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
