@@ -30,7 +30,8 @@ ORDER BY name ASC;
 UPDATE beds
 SET
 	name = coalesce(sqlc.narg('name'), name),
-	room_id = coalesce(sqlc.narg('room_id'), room_id)
+	room_id = coalesce(sqlc.narg('room_id'), room_id),
+	consistency = consistency + 1
 WHERE id = @id;
 
 -- name: DeleteBed :exec

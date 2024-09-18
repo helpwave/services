@@ -180,7 +180,8 @@ const updateBed = `-- name: UpdateBed :exec
 UPDATE beds
 SET
 	name = coalesce($1, name),
-	room_id = coalesce($2, room_id)
+	room_id = coalesce($2, room_id),
+	consistency = consistency + 1
 WHERE id = $3
 `
 
