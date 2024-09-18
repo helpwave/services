@@ -965,7 +965,6 @@ class GetWardDetailsResponse_Subtask extends $pb.GeneratedMessage {
   factory GetWardDetailsResponse_Subtask({
     $core.String? id,
     $core.String? name,
-    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -973,9 +972,6 @@ class GetWardDetailsResponse_Subtask extends $pb.GeneratedMessage {
     }
     if (name != null) {
       $result.name = name;
-    }
-    if (consistency != null) {
-      $result.consistency = consistency;
     }
     return $result;
   }
@@ -986,7 +982,6 @@ class GetWardDetailsResponse_Subtask extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetWardDetailsResponse.Subtask', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..aOS(3, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -1028,15 +1023,6 @@ class GetWardDetailsResponse_Subtask extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
   void clearName() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get consistency => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set consistency($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasConsistency() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearConsistency() => clearField(3);
 }
 
 class GetWardDetailsResponse_Room extends $pb.GeneratedMessage {

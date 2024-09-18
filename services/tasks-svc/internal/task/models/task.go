@@ -23,8 +23,7 @@ type Task struct {
 
 type TaskWithConsistency struct {
 	Task
-	Consistency          string
-	SubtaskConsistencies map[uuid.UUID]string
+	Consistency string
 }
 
 type Subtask struct {

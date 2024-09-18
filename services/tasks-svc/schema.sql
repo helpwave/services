@@ -94,8 +94,7 @@ CREATE TABLE public.subtasks (
     name text NOT NULL,
     done boolean DEFAULT false NOT NULL,
     created_by uuid NOT NULL,
-    creation_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    consistency bigint DEFAULT 0 NOT NULL
+    creation_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 

@@ -148,26 +148,27 @@ const UpdateTaskTemplateSubTaskRequest$json = {
   '2': [
     {'1': 'subtask_id', '3': 1, '4': 1, '5': 9, '10': 'subtaskId'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'name', '17': true},
-    {'1': 'consistency', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'consistency', '17': true},
+    {'1': 'task_consistency', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'taskConsistency', '17': true},
   ],
   '8': [
     {'1': '_name'},
-    {'1': '_consistency'},
+    {'1': '_task_consistency'},
   ],
 };
 
 /// Descriptor for `UpdateTaskTemplateSubTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateTaskTemplateSubTaskRequestDescriptor = $convert.base64Decode(
     'CiBVcGRhdGVUYXNrVGVtcGxhdGVTdWJUYXNrUmVxdWVzdBIdCgpzdWJ0YXNrX2lkGAEgASgJUg'
-    'lzdWJ0YXNrSWQSFwoEbmFtZRgCIAEoCUgAUgRuYW1liAEBEiUKC2NvbnNpc3RlbmN5GAMgASgJ'
-    'SAFSC2NvbnNpc3RlbmN5iAEBQgcKBV9uYW1lQg4KDF9jb25zaXN0ZW5jeQ==');
+    'lzdWJ0YXNrSWQSFwoEbmFtZRgCIAEoCUgAUgRuYW1liAEBEi4KEHRhc2tfY29uc2lzdGVuY3kY'
+    'AyABKAlIAVIPdGFza0NvbnNpc3RlbmN5iAEBQgcKBV9uYW1lQhMKEV90YXNrX2NvbnNpc3Rlbm'
+    'N5');
 
 @$core.Deprecated('Use updateTaskTemplateSubTaskResponseDescriptor instead')
 const UpdateTaskTemplateSubTaskResponse$json = {
   '1': 'UpdateTaskTemplateSubTaskResponse',
   '2': [
     {'1': 'conflict', '3': 1, '4': 1, '5': 11, '6': '.libs.common.v1.Conflict', '9': 0, '10': 'conflict', '17': true},
-    {'1': 'consistency', '3': 2, '4': 1, '5': 9, '10': 'consistency'},
+    {'1': 'task_consistency', '3': 2, '4': 1, '5': 9, '10': 'taskConsistency'},
   ],
   '8': [
     {'1': '_conflict'},
@@ -177,8 +178,8 @@ const UpdateTaskTemplateSubTaskResponse$json = {
 /// Descriptor for `UpdateTaskTemplateSubTaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateTaskTemplateSubTaskResponseDescriptor = $convert.base64Decode(
     'CiFVcGRhdGVUYXNrVGVtcGxhdGVTdWJUYXNrUmVzcG9uc2USOQoIY29uZmxpY3QYASABKAsyGC'
-    '5saWJzLmNvbW1vbi52MS5Db25mbGljdEgAUghjb25mbGljdIgBARIgCgtjb25zaXN0ZW5jeRgC'
-    'IAEoCVILY29uc2lzdGVuY3lCCwoJX2NvbmZsaWN0');
+    '5saWJzLmNvbW1vbi52MS5Db25mbGljdEgAUghjb25mbGljdIgBARIpChB0YXNrX2NvbnNpc3Rl'
+    'bmN5GAIgASgJUg90YXNrQ29uc2lzdGVuY3lCCwoJX2NvbmZsaWN0');
 
 @$core.Deprecated('Use createTaskTemplateSubTaskRequestDescriptor instead')
 const CreateTaskTemplateSubTaskRequest$json = {
@@ -199,14 +200,14 @@ const CreateTaskTemplateSubTaskResponse$json = {
   '1': 'CreateTaskTemplateSubTaskResponse',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'consistency', '3': 2, '4': 1, '5': 9, '10': 'consistency'},
+    {'1': 'task_consistency', '3': 2, '4': 1, '5': 9, '10': 'taskConsistency'},
   ],
 };
 
 /// Descriptor for `CreateTaskTemplateSubTaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createTaskTemplateSubTaskResponseDescriptor = $convert.base64Decode(
-    'CiFDcmVhdGVUYXNrVGVtcGxhdGVTdWJUYXNrUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEiAKC2'
-    'NvbnNpc3RlbmN5GAIgASgJUgtjb25zaXN0ZW5jeQ==');
+    'CiFDcmVhdGVUYXNrVGVtcGxhdGVTdWJUYXNrUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEikKEH'
+    'Rhc2tfY29uc2lzdGVuY3kYAiABKAlSD3Rhc2tDb25zaXN0ZW5jeQ==');
 
 @$core.Deprecated('Use getAllTaskTemplatesRequestDescriptor instead')
 const GetAllTaskTemplatesRequest$json = {
@@ -259,7 +260,6 @@ const GetAllTaskTemplatesResponse_TaskTemplate_SubTask$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'task_template_id', '3': 2, '4': 1, '5': 9, '10': 'taskTemplateId'},
     {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'consistency', '3': 4, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
@@ -267,12 +267,11 @@ const GetAllTaskTemplatesResponse_TaskTemplate_SubTask$json = {
 final $typed_data.Uint8List getAllTaskTemplatesResponseDescriptor = $convert.base64Decode(
     'ChtHZXRBbGxUYXNrVGVtcGxhdGVzUmVzcG9uc2USXQoJdGVtcGxhdGVzGAEgAygLMj8uc2Vydm'
     'ljZXMudGFza3Nfc3ZjLnYxLkdldEFsbFRhc2tUZW1wbGF0ZXNSZXNwb25zZS5UYXNrVGVtcGxh'
-    'dGVSCXRlbXBsYXRlcxqSAwoMVGFza1RlbXBsYXRlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGA'
+    'dGVSCXRlbXBsYXRlcxrwAgoMVGFza1RlbXBsYXRlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGA'
     'IgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW9uGAMgASgJUgtkZXNjcmlwdGlvbhIbCglpc19wdWJs'
     'aWMYBCABKAhSCGlzUHVibGljEh0KCmNyZWF0ZWRfYnkYBiABKAlSCWNyZWF0ZWRCeRJjCghzdW'
     'J0YXNrcxgHIAMoCzJHLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRBbGxUYXNrVGVtcGxhdGVz'
     'UmVzcG9uc2UuVGFza1RlbXBsYXRlLlN1YlRhc2tSCHN1YnRhc2tzEiAKC2NvbnNpc3RlbmN5GA'
-    'ggASgJUgtjb25zaXN0ZW5jeRp5CgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBIoChB0YXNrX3Rl'
-    'bXBsYXRlX2lkGAIgASgJUg50YXNrVGVtcGxhdGVJZBISCgRuYW1lGAMgASgJUgRuYW1lEiAKC2'
-    'NvbnNpc3RlbmN5GAQgASgJUgtjb25zaXN0ZW5jeQ==');
+    'ggASgJUgtjb25zaXN0ZW5jeRpXCgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBIoChB0YXNrX3Rl'
+    'bXBsYXRlX2lkGAIgASgJUg50YXNrVGVtcGxhdGVJZBISCgRuYW1lGAMgASgJUgRuYW1l');
 

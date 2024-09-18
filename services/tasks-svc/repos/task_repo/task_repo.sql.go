@@ -78,8 +78,7 @@ SELECT
 	subtasks.id as subtask_id,
 	subtasks.name as subtask_name,
 	subtasks.done as subtask_done,
-	subtasks.created_by as subtask_created_by,
-	subtasks.consistency as subtask_consistency
+	subtasks.created_by as subtask_created_by
 FROM patients
 		 JOIN tasks ON tasks.patient_id = patients.id
 		 LEFT JOIN subtasks ON subtasks.task_id = tasks.id
@@ -87,13 +86,12 @@ WHERE tasks.assigned_user_id = $1
 `
 
 type GetTasksWithPatientByAssigneeRow struct {
-	Task               Task
-	Patient            Patient
-	SubtaskID          uuid.NullUUID
-	SubtaskName        *string
-	SubtaskDone        *bool
-	SubtaskCreatedBy   uuid.NullUUID
-	SubtaskConsistency *int64
+	Task             Task
+	Patient          Patient
+	SubtaskID        uuid.NullUUID
+	SubtaskName      *string
+	SubtaskDone      *bool
+	SubtaskCreatedBy uuid.NullUUID
 }
 
 func (q *Queries) GetTasksWithPatientByAssignee(ctx context.Context, assignedUserID uuid.NullUUID) ([]GetTasksWithPatientByAssigneeRow, error) {
@@ -129,7 +127,6 @@ func (q *Queries) GetTasksWithPatientByAssignee(ctx context.Context, assignedUse
 			&i.SubtaskName,
 			&i.SubtaskDone,
 			&i.SubtaskCreatedBy,
-			&i.SubtaskConsistency,
 		); err != nil {
 			return nil, err
 		}
@@ -147,8 +144,7 @@ SELECT
 	subtasks.id as subtask_id,
 	subtasks.name as subtask_name,
 	subtasks.done as subtask_done,
-	subtasks.created_by as subtask_created_by,
-	subtasks.consistency as subtask_consistency
+	subtasks.created_by as subtask_created_by
 FROM tasks
 JOIN patients ON patients.id = tasks.patient_id
 LEFT JOIN subtasks ON subtasks.task_id = tasks.id
@@ -156,12 +152,11 @@ WHERE tasks.patient_id = $1
 `
 
 type GetTasksWithSubtasksByPatientRow struct {
-	Task               Task
-	SubtaskID          uuid.NullUUID
-	SubtaskName        *string
-	SubtaskDone        *bool
-	SubtaskCreatedBy   uuid.NullUUID
-	SubtaskConsistency *int64
+	Task             Task
+	SubtaskID        uuid.NullUUID
+	SubtaskName      *string
+	SubtaskDone      *bool
+	SubtaskCreatedBy uuid.NullUUID
 }
 
 func (q *Queries) GetTasksWithSubtasksByPatient(ctx context.Context, patientID uuid.UUID) ([]GetTasksWithSubtasksByPatientRow, error) {
@@ -189,7 +184,6 @@ func (q *Queries) GetTasksWithSubtasksByPatient(ctx context.Context, patientID u
 			&i.SubtaskName,
 			&i.SubtaskDone,
 			&i.SubtaskCreatedBy,
-			&i.SubtaskConsistency,
 		); err != nil {
 			return nil, err
 		}

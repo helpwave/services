@@ -346,7 +346,6 @@ const GetPatientDetailsResponse_Task_SubTask$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
-    {'1': 'consistency', '3': 4, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
@@ -363,16 +362,15 @@ final $typed_data.Uint8List getPatientDetailsResponseDescriptor = $convert.base6
     'GAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhcKB3dhcmRfaWQYAyABKAlSBndhcmRJZB'
     'IgCgtjb25zaXN0ZW5jeRgEIAEoCVILY29uc2lzdGVuY3kaSwoDQmVkEg4KAmlkGAEgASgJUgJp'
     'ZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2NvbnNpc3RlbmN5GAMgASgJUgtjb25zaXN0ZW5jeR'
-    'rkAwoEVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCgtkZXNjcmlw'
+    'rCAwoEVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCgtkZXNjcmlw'
     'dGlvbhgDIAEoCVILZGVzY3JpcHRpb24SOQoGc3RhdHVzGAQgASgOMiEuc2VydmljZXMudGFza3'
     'Nfc3ZjLnYxLlRhc2tTdGF0dXNSBnN0YXR1cxItChBhc3NpZ25lZF91c2VyX2lkGAUgASgJSABS'
     'DmFzc2lnbmVkVXNlcklkiAEBEh0KCnBhdGllbnRfaWQYBiABKAlSCXBhdGllbnRJZBIWCgZwdW'
     'JsaWMYByABKAhSBnB1YmxpYxJZCghzdWJ0YXNrcxgIIAMoCzI9LnNlcnZpY2VzLnRhc2tzX3N2'
     'Yy52MS5HZXRQYXRpZW50RGV0YWlsc1Jlc3BvbnNlLlRhc2suU3ViVGFza1IIc3VidGFza3MSIA'
-    'oLY29uc2lzdGVuY3kYCSABKAlSC2NvbnNpc3RlbmN5GmMKB1N1YlRhc2sSDgoCaWQYASABKAlS'
-    'AmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSEgoEZG9uZRgDIAEoCFIEZG9uZRIgCgtjb25zaXN0ZW'
-    '5jeRgEIAEoCVILY29uc2lzdGVuY3lCEwoRX2Fzc2lnbmVkX3VzZXJfaWRCBwoFX3Jvb21CBgoE'
-    'X2JlZA==');
+    'oLY29uc2lzdGVuY3kYCSABKAlSC2NvbnNpc3RlbmN5GkEKB1N1YlRhc2sSDgoCaWQYASABKAlS'
+    'AmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSEgoEZG9uZRgDIAEoCFIEZG9uZUITChFfYXNzaWduZW'
+    'RfdXNlcl9pZEIHCgVfcm9vbUIGCgRfYmVk');
 
 @$core.Deprecated('Use getPatientListRequestDescriptor instead')
 const GetPatientListRequest$json = {
@@ -463,7 +461,6 @@ const GetPatientListResponse_Task_SubTask$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
-    {'1': 'consistency', '3': 4, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
@@ -484,16 +481,15 @@ final $typed_data.Uint8List getPatientListResponseDescriptor = $convert.base64De
     'LnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRQYXRpZW50TGlzdFJlc3BvbnNlLkJlZFIDYmVkEh'
     'QKBW5vdGVzGAUgASgJUgVub3RlcxJICgV0YXNrcxgGIAMoCzIyLnNlcnZpY2VzLnRhc2tzX3N2'
     'Yy52MS5HZXRQYXRpZW50TGlzdFJlc3BvbnNlLlRhc2tSBXRhc2tzEiAKC2NvbnNpc3RlbmN5GA'
-    'cgASgJUgtjb25zaXN0ZW5jeRrhAwoEVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEo'
+    'cgASgJUgtjb25zaXN0ZW5jeRq/AwoEVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEo'
     'CVIEbmFtZRIgCgtkZXNjcmlwdGlvbhgDIAEoCVILZGVzY3JpcHRpb24SOQoGc3RhdHVzGAQgAS'
     'gOMiEuc2VydmljZXMudGFza3Nfc3ZjLnYxLlRhc2tTdGF0dXNSBnN0YXR1cxItChBhc3NpZ25l'
     'ZF91c2VyX2lkGAUgASgJSABSDmFzc2lnbmVkVXNlcklkiAEBEh0KCnBhdGllbnRfaWQYBiABKA'
     'lSCXBhdGllbnRJZBIWCgZwdWJsaWMYByABKAhSBnB1YmxpYxJWCghzdWJ0YXNrcxgIIAMoCzI6'
     'LnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRQYXRpZW50TGlzdFJlc3BvbnNlLlRhc2suU3ViVG'
-    'Fza1IIc3VidGFza3MSIAoLY29uc2lzdGVuY3kYCSABKAlSC2NvbnNpc3RlbmN5GmMKB1N1YlRh'
+    'Fza1IIc3VidGFza3MSIAoLY29uc2lzdGVuY3kYCSABKAlSC2NvbnNpc3RlbmN5GkEKB1N1YlRh'
     'c2sSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSEgoEZG9uZRgDIAEoCFIEZG'
-    '9uZRIgCgtjb25zaXN0ZW5jeRgEIAEoCVILY29uc2lzdGVuY3lCEwoRX2Fzc2lnbmVkX3VzZXJf'
-    'aWQ=');
+    '9uZUITChFfYXNzaWduZWRfdXNlcl9pZA==');
 
 @$core.Deprecated('Use getRecentPatientsRequestDescriptor instead')
 const GetRecentPatientsRequest$json = {

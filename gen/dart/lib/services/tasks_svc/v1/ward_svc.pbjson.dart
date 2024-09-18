@@ -239,7 +239,6 @@ const GetWardDetailsResponse_Subtask$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'consistency', '3': 3, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
@@ -273,14 +272,13 @@ final $typed_data.Uint8List getWardDetailsResponseDescriptor = $convert.base64De
     'Nlcy50YXNrc19zdmMudjEuR2V0V2FyZERldGFpbHNSZXNwb25zZS5UYXNrVGVtcGxhdGVSDXRh'
     'c2tUZW1wbGF0ZXMSIAoLY29uc2lzdGVuY3kYBSABKAlSC2NvbnNpc3RlbmN5GksKA0JlZBIOCg'
     'JpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCgtjb25zaXN0ZW5jeRgDIAEoCVIL'
-    'Y29uc2lzdGVuY3kaTwoHU3VidGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbm'
-    'FtZRIgCgtjb25zaXN0ZW5jeRgDIAEoCVILY29uc2lzdGVuY3kakwEKBFJvb20SDgoCaWQYASAB'
-    'KAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSRQoEYmVkcxgDIAMoCzIxLnNlcnZpY2VzLnRhc2'
-    'tzX3N2Yy52MS5HZXRXYXJkRGV0YWlsc1Jlc3BvbnNlLkJlZFIEYmVkcxIgCgtjb25zaXN0ZW5j'
-    'eRgEIAEoCVILY29uc2lzdGVuY3kapwEKDFRhc2tUZW1wbGF0ZRIOCgJpZBgBIAEoCVICaWQSEg'
-    'oEbmFtZRgCIAEoCVIEbmFtZRJRCghzdWJ0YXNrcxgDIAMoCzI1LnNlcnZpY2VzLnRhc2tzX3N2'
-    'Yy52MS5HZXRXYXJkRGV0YWlsc1Jlc3BvbnNlLlN1YnRhc2tSCHN1YnRhc2tzEiAKC2NvbnNpc3'
-    'RlbmN5GAQgASgJUgtjb25zaXN0ZW5jeQ==');
+    'Y29uc2lzdGVuY3kaLQoHU3VidGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbm'
+    'FtZRqTAQoEUm9vbRIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRJFCgRiZWRz'
+    'GAMgAygLMjEuc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldFdhcmREZXRhaWxzUmVzcG9uc2UuQm'
+    'VkUgRiZWRzEiAKC2NvbnNpc3RlbmN5GAQgASgJUgtjb25zaXN0ZW5jeRqnAQoMVGFza1RlbXBs'
+    'YXRlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lElEKCHN1YnRhc2tzGAMgAy'
+    'gLMjUuc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldFdhcmREZXRhaWxzUmVzcG9uc2UuU3VidGFz'
+    'a1IIc3VidGFza3MSIAoLY29uc2lzdGVuY3kYBCABKAlSC2NvbnNpc3RlbmN5');
 
 @$core.Deprecated('Use getWardOverviewsRequestDescriptor instead')
 const GetWardOverviewsRequest$json = {

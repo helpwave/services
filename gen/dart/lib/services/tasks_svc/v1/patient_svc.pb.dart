@@ -1449,7 +1449,6 @@ class GetPatientDetailsResponse_Task_SubTask extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.bool? done,
-    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -1461,9 +1460,6 @@ class GetPatientDetailsResponse_Task_SubTask extends $pb.GeneratedMessage {
     if (done != null) {
       $result.done = done;
     }
-    if (consistency != null) {
-      $result.consistency = consistency;
-    }
     return $result;
   }
   GetPatientDetailsResponse_Task_SubTask._() : super();
@@ -1474,7 +1470,6 @@ class GetPatientDetailsResponse_Task_SubTask extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOB(3, _omitFieldNames ? '' : 'done')
-    ..aOS(4, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -1525,15 +1520,6 @@ class GetPatientDetailsResponse_Task_SubTask extends $pb.GeneratedMessage {
   $core.bool hasDone() => $_has(2);
   @$pb.TagNumber(3)
   void clearDone() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.String get consistency => $_getSZ(3);
-  @$pb.TagNumber(4)
-  set consistency($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasConsistency() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearConsistency() => clearField(4);
 }
 
 class GetPatientDetailsResponse_Task extends $pb.GeneratedMessage {
@@ -2195,7 +2181,6 @@ class GetPatientListResponse_Task_SubTask extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.bool? done,
-    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -2207,9 +2192,6 @@ class GetPatientListResponse_Task_SubTask extends $pb.GeneratedMessage {
     if (done != null) {
       $result.done = done;
     }
-    if (consistency != null) {
-      $result.consistency = consistency;
-    }
     return $result;
   }
   GetPatientListResponse_Task_SubTask._() : super();
@@ -2220,7 +2202,6 @@ class GetPatientListResponse_Task_SubTask extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOB(3, _omitFieldNames ? '' : 'done')
-    ..aOS(4, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -2271,15 +2252,6 @@ class GetPatientListResponse_Task_SubTask extends $pb.GeneratedMessage {
   $core.bool hasDone() => $_has(2);
   @$pb.TagNumber(3)
   void clearDone() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.String get consistency => $_getSZ(3);
-  @$pb.TagNumber(4)
-  set consistency($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasConsistency() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearConsistency() => clearField(4);
 }
 
 class GetPatientListResponse_Task extends $pb.GeneratedMessage {

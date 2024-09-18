@@ -46,7 +46,6 @@ type Subtask struct {
 	Done         bool
 	CreatedBy    uuid.UUID
 	CreationDate pgtype.Timestamp
-	Consistency  int64
 }
 
 type Task struct {

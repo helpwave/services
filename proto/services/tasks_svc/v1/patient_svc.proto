@@ -170,7 +170,6 @@ message GetPatientDetailsResponse {
       string id = 1;
       string name = 2;
       bool done = 3;
-      string consistency = 4;
     }
   }
 }
@@ -226,7 +225,6 @@ message GetPatientListResponse {
       string id = 1;
       string name = 2;
       bool done = 3;
-      string consistency = 4;
     }
   }
 

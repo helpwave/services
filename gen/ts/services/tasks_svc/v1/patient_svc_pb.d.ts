@@ -670,9 +670,6 @@ export namespace GetPatientDetailsResponse {
       getDone(): boolean;
       setDone(value: boolean): SubTask;
 
-      getConsistency(): string;
-      setConsistency(value: string): SubTask;
-
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SubTask.AsObject;
       static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
@@ -686,7 +683,6 @@ export namespace GetPatientDetailsResponse {
         id: string,
         name: string,
         done: boolean,
-        consistency: string,
       }
     }
 
@@ -935,9 +931,6 @@ export namespace GetPatientListResponse {
       getDone(): boolean;
       setDone(value: boolean): SubTask;
 
-      getConsistency(): string;
-      setConsistency(value: string): SubTask;
-
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SubTask.AsObject;
       static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
@@ -951,7 +944,6 @@ export namespace GetPatientListResponse {
         id: string,
         name: string,
         done: boolean,
-        consistency: string,
       }
     }
 

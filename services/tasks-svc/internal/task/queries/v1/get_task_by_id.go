@@ -6,15 +6,16 @@ import (
 	"github.com/google/uuid"
 	"hwauthz"
 	"hwes"
+	"strconv"
 	"tasks-svc/internal/perm"
 	"tasks-svc/internal/task/aggregate"
 	"tasks-svc/internal/task/models"
 )
 
-type GetTaskByIDQueryHandler func(ctx context.Context, taskID uuid.UUID) (*models.Task, error)
+type GetTaskByIDQueryHandler func(ctx context.Context, taskID uuid.UUID) (*models.TaskWithConsistency, error)
 
 func NewGetTaskByIDQueryHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) GetTaskByIDQueryHandler {
-	return func(ctx context.Context, taskID uuid.UUID) (*models.Task, error) {
+	return func(ctx context.Context, taskID uuid.UUID) (*models.TaskWithConsistency, error) {
 		userID, err := common.GetUserID(ctx)
 		if err != nil {
 			return nil, err
@@ -31,6 +32,10 @@ func NewGetTaskByIDQueryHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) Get
 		if err != nil {
 			return nil, err
 		}
-		return taskAggregate.Task, err
+
+		return &models.TaskWithConsistency{
+			Task:        *taskAggregate.Task,
+			Consistency: strconv.FormatUint(taskAggregate.GetVersion(), 10),
+		}, nil
 	}
 }

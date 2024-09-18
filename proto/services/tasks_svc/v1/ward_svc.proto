@@ -114,7 +114,6 @@ message GetWardDetailsResponse {
   message Subtask {
     string id = 1;
     string name = 2;
-    string consistency = 3;
   }
 
   message Room {

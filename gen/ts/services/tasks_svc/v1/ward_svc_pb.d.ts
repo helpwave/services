@@ -411,9 +411,6 @@ export namespace GetWardDetailsResponse {
     getName(): string;
     setName(value: string): Subtask;
 
-    getConsistency(): string;
-    setConsistency(value: string): Subtask;
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Subtask.AsObject;
     static toObject(includeInstance: boolean, msg: Subtask): Subtask.AsObject;
@@ -426,7 +423,6 @@ export namespace GetWardDetailsResponse {
     export type AsObject = {
       id: string,
       name: string,
-      consistency: string,
     }
   }
 

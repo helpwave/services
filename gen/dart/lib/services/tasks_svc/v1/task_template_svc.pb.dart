@@ -541,7 +541,7 @@ class UpdateTaskTemplateSubTaskRequest extends $pb.GeneratedMessage {
   factory UpdateTaskTemplateSubTaskRequest({
     $core.String? subtaskId,
     $core.String? name,
-    $core.String? consistency,
+    $core.String? taskConsistency,
   }) {
     final $result = create();
     if (subtaskId != null) {
@@ -550,8 +550,8 @@ class UpdateTaskTemplateSubTaskRequest extends $pb.GeneratedMessage {
     if (name != null) {
       $result.name = name;
     }
-    if (consistency != null) {
-      $result.consistency = consistency;
+    if (taskConsistency != null) {
+      $result.taskConsistency = taskConsistency;
     }
     return $result;
   }
@@ -562,7 +562,7 @@ class UpdateTaskTemplateSubTaskRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateTaskTemplateSubTaskRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'subtaskId')
     ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..aOS(3, _omitFieldNames ? '' : 'consistency')
+    ..aOS(3, _omitFieldNames ? '' : 'taskConsistency')
     ..hasRequiredFields = false
   ;
 
@@ -606,26 +606,26 @@ class UpdateTaskTemplateSubTaskRequest extends $pb.GeneratedMessage {
   void clearName() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get consistency => $_getSZ(2);
+  $core.String get taskConsistency => $_getSZ(2);
   @$pb.TagNumber(3)
-  set consistency($core.String v) { $_setString(2, v); }
+  set taskConsistency($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasConsistency() => $_has(2);
+  $core.bool hasTaskConsistency() => $_has(2);
   @$pb.TagNumber(3)
-  void clearConsistency() => clearField(3);
+  void clearTaskConsistency() => clearField(3);
 }
 
 class UpdateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
   factory UpdateTaskTemplateSubTaskResponse({
     $21.Conflict? conflict,
-    $core.String? consistency,
+    $core.String? taskConsistency,
   }) {
     final $result = create();
     if (conflict != null) {
       $result.conflict = conflict;
     }
-    if (consistency != null) {
-      $result.consistency = consistency;
+    if (taskConsistency != null) {
+      $result.taskConsistency = taskConsistency;
     }
     return $result;
   }
@@ -635,7 +635,7 @@ class UpdateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateTaskTemplateSubTaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOM<$21.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $21.Conflict.create)
-    ..aOS(2, _omitFieldNames ? '' : 'consistency')
+    ..aOS(2, _omitFieldNames ? '' : 'taskConsistency')
     ..hasRequiredFields = false
   ;
 
@@ -672,13 +672,13 @@ class UpdateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
   $21.Conflict ensureConflict() => $_ensure(0);
 
   @$pb.TagNumber(2)
-  $core.String get consistency => $_getSZ(1);
+  $core.String get taskConsistency => $_getSZ(1);
   @$pb.TagNumber(2)
-  set consistency($core.String v) { $_setString(1, v); }
+  set taskConsistency($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasConsistency() => $_has(1);
+  $core.bool hasTaskConsistency() => $_has(1);
   @$pb.TagNumber(2)
-  void clearConsistency() => clearField(2);
+  void clearTaskConsistency() => clearField(2);
 }
 
 class CreateTaskTemplateSubTaskRequest extends $pb.GeneratedMessage {
@@ -748,14 +748,14 @@ class CreateTaskTemplateSubTaskRequest extends $pb.GeneratedMessage {
 class CreateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
   factory CreateTaskTemplateSubTaskResponse({
     $core.String? id,
-    $core.String? consistency,
+    $core.String? taskConsistency,
   }) {
     final $result = create();
     if (id != null) {
       $result.id = id;
     }
-    if (consistency != null) {
-      $result.consistency = consistency;
+    if (taskConsistency != null) {
+      $result.taskConsistency = taskConsistency;
     }
     return $result;
   }
@@ -765,7 +765,7 @@ class CreateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateTaskTemplateSubTaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'consistency')
+    ..aOS(2, _omitFieldNames ? '' : 'taskConsistency')
     ..hasRequiredFields = false
   ;
 
@@ -800,13 +800,13 @@ class CreateTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get consistency => $_getSZ(1);
+  $core.String get taskConsistency => $_getSZ(1);
   @$pb.TagNumber(2)
-  set consistency($core.String v) { $_setString(1, v); }
+  set taskConsistency($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasConsistency() => $_has(1);
+  $core.bool hasTaskConsistency() => $_has(1);
   @$pb.TagNumber(2)
-  void clearConsistency() => clearField(2);
+  void clearTaskConsistency() => clearField(2);
 }
 
 class GetAllTaskTemplatesRequest extends $pb.GeneratedMessage {
@@ -892,7 +892,6 @@ class GetAllTaskTemplatesResponse_TaskTemplate_SubTask extends $pb.GeneratedMess
     $core.String? id,
     $core.String? taskTemplateId,
     $core.String? name,
-    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -904,9 +903,6 @@ class GetAllTaskTemplatesResponse_TaskTemplate_SubTask extends $pb.GeneratedMess
     if (name != null) {
       $result.name = name;
     }
-    if (consistency != null) {
-      $result.consistency = consistency;
-    }
     return $result;
   }
   GetAllTaskTemplatesResponse_TaskTemplate_SubTask._() : super();
@@ -917,7 +913,6 @@ class GetAllTaskTemplatesResponse_TaskTemplate_SubTask extends $pb.GeneratedMess
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'taskTemplateId')
     ..aOS(3, _omitFieldNames ? '' : 'name')
-    ..aOS(4, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -968,15 +963,6 @@ class GetAllTaskTemplatesResponse_TaskTemplate_SubTask extends $pb.GeneratedMess
   $core.bool hasName() => $_has(2);
   @$pb.TagNumber(3)
   void clearName() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.String get consistency => $_getSZ(3);
-  @$pb.TagNumber(4)
-  set consistency($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasConsistency() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearConsistency() => clearField(4);
 }
 
 class GetAllTaskTemplatesResponse_TaskTemplate extends $pb.GeneratedMessage {

@@ -59,7 +59,6 @@ SELECT
 	subtasks.id as subtask_id,
 	subtasks.name as subtask_name,
 	subtasks.done as subtask_done,
-	subtasks.consistency as subtasks_consistency,
 	beds.id as bed_id,
 	beds.name as bed_name,
 	beds.consistency as beds_consistency,

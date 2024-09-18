@@ -86,7 +86,6 @@ message GetTaskResponse {
     string name = 2;
     bool done = 3;
     string created_by = 4;
-    string consistency = 5;
   }
 }
 
@@ -120,7 +119,6 @@ message GetTasksByPatientResponse {
       string name = 2;
       bool done = 3;
       string created_by = 4;
-      string consistency = 5;
     }
   }
 }
@@ -156,7 +154,6 @@ message GetTasksByPatientSortedByStatusResponse {
       string name = 2;
       bool done = 3;
       string created_by = 4;
-      string consistency = 5;
     }
   }
 }
@@ -196,7 +193,6 @@ message GetAssignedTasksResponse {
       string name = 2;
       bool done = 3;
       string created_by = 4;
-      string consistency = 5;
     }
   }
 }
@@ -247,7 +243,7 @@ message CreateSubtaskRequest {
 
 message CreateSubtaskResponse {
   string subtask_id = 1;
-  string consistency = 2;
+  string task_consistency = 2;
 }
 
 //
@@ -258,7 +254,7 @@ message UpdateSubtaskRequest {
   string task_id = 1; // @gotags: validate:"uuid4"
   string subtask_id = 2; // @gotags: validate:"uuid4"
   Subtask subtask = 3;
-  optional string consistency = 4; // no conflict detection, if not provided
+  optional string task_consistency = 4; // no conflict detection, if not provided
 
   message Subtask {
     optional string name = 1;
@@ -268,7 +264,7 @@ message UpdateSubtaskRequest {
 
 message UpdateSubtaskResponse {
   optional libs.common.v1.Conflict conflict = 1;
-  string consistency = 2;
+  string task_consistency = 2;
 }
 
 //

@@ -174,7 +174,6 @@ const GetTaskResponse_SubTask$json = {
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
     {'1': 'created_by', '3': 4, '4': 1, '5': 9, '10': 'createdBy'},
-    {'1': 'consistency', '3': 5, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
@@ -191,10 +190,10 @@ final $typed_data.Uint8List getTaskResponseDescriptor = $convert.base64Decode(
     'dBgLIAEoCzIuLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRUYXNrUmVzcG9uc2UuUGF0aWVudF'
     'IHcGF0aWVudBIgCgtjb25zaXN0ZW5jeRgMIAEoCVILY29uc2lzdGVuY3kadwoHUGF0aWVudBIO'
     'CgJpZBgBIAEoCVICaWQSOgoZaHVtYW5fcmVhZGFibGVfaWRlbnRpZmllchgCIAEoCVIXaHVtYW'
-    '5SZWFkYWJsZUlkZW50aWZpZXISIAoLY29uc2lzdGVuY3kYAyABKAlSC2NvbnNpc3RlbmN5GoIB'
-    'CgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhIKBGRvbmUYAy'
-    'ABKAhSBGRvbmUSHQoKY3JlYXRlZF9ieRgEIAEoCVIJY3JlYXRlZEJ5EiAKC2NvbnNpc3RlbmN5'
-    'GAUgASgJUgtjb25zaXN0ZW5jeUITChFfYXNzaWduZWRfdXNlcl9pZA==');
+    '5SZWFkYWJsZUlkZW50aWZpZXISIAoLY29uc2lzdGVuY3kYAyABKAlSC2NvbnNpc3RlbmN5GmAK'
+    'B1N1YlRhc2sSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSEgoEZG9uZRgDIA'
+    'EoCFIEZG9uZRIdCgpjcmVhdGVkX2J5GAQgASgJUgljcmVhdGVkQnlCEwoRX2Fzc2lnbmVkX3Vz'
+    'ZXJfaWQ=');
 
 @$core.Deprecated('Use getTasksByPatientRequestDescriptor instead')
 const GetTasksByPatientRequest$json = {
@@ -249,14 +248,13 @@ const GetTasksByPatientResponse_Task_SubTask$json = {
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
     {'1': 'created_by', '3': 4, '4': 1, '5': 9, '10': 'createdBy'},
-    {'1': 'consistency', '3': 5, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `GetTasksByPatientResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getTasksByPatientResponseDescriptor = $convert.base64Decode(
     'ChlHZXRUYXNrc0J5UGF0aWVudFJlc3BvbnNlEksKBXRhc2tzGAEgAygLMjUuc2VydmljZXMudG'
-    'Fza3Nfc3ZjLnYxLkdldFRhc2tzQnlQYXRpZW50UmVzcG9uc2UuVGFza1IFdGFza3MakQUKBFRh'
+    'Fza3Nfc3ZjLnYxLkdldFRhc2tzQnlQYXRpZW50UmVzcG9uc2UuVGFza1IFdGFza3Ma7gQKBFRh'
     'c2sSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIAoLZGVzY3JpcHRpb24YAy'
     'ABKAlSC2Rlc2NyaXB0aW9uEjkKBnN0YXR1cxgEIAEoDjIhLnNlcnZpY2VzLnRhc2tzX3N2Yy52'
     'MS5UYXNrU3RhdHVzUgZzdGF0dXMSLQoQYXNzaWduZWRfdXNlcl9pZBgFIAEoCUgAUg5hc3NpZ2'
@@ -266,9 +264,9 @@ final $typed_data.Uint8List getTasksByPatientResponseDescriptor = $convert.base6
     'Mj0uc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldFRhc2tzQnlQYXRpZW50UmVzcG9uc2UuVGFzay'
     '5TdWJUYXNrUghzdWJ0YXNrcxI5CgpjcmVhdGVkX2F0GAsgASgLMhouZ29vZ2xlLnByb3RvYnVm'
     'LlRpbWVzdGFtcFIJY3JlYXRlZEF0EiAKC2NvbnNpc3RlbmN5GAwgASgJUgtjb25zaXN0ZW5jeR'
-    'qCAQoHU3ViVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRISCgRkb25l'
-    'GAMgASgIUgRkb25lEh0KCmNyZWF0ZWRfYnkYBCABKAlSCWNyZWF0ZWRCeRIgCgtjb25zaXN0ZW'
-    '5jeRgFIAEoCVILY29uc2lzdGVuY3lCEwoRX2Fzc2lnbmVkX3VzZXJfaWQ=');
+    'pgCgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhIKBGRvbmUY'
+    'AyABKAhSBGRvbmUSHQoKY3JlYXRlZF9ieRgEIAEoCVIJY3JlYXRlZEJ5QhMKEV9hc3NpZ25lZF'
+    '91c2VyX2lk');
 
 @$core.Deprecated('Use getTasksByPatientSortedByStatusRequestDescriptor instead')
 const GetTasksByPatientSortedByStatusRequest$json = {
@@ -324,7 +322,6 @@ const GetTasksByPatientSortedByStatusResponse_Task_SubTask$json = {
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
     {'1': 'created_by', '3': 4, '4': 1, '5': 9, '10': 'createdBy'},
-    {'1': 'consistency', '3': 5, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
@@ -335,7 +332,7 @@ final $typed_data.Uint8List getTasksByPatientSortedByStatusResponseDescriptor = 
     'UmVzcG9uc2UuVGFza1IEdG9kbxJkCgtpbl9wcm9ncmVzcxgCIAMoCzJDLnNlcnZpY2VzLnRhc2'
     'tzX3N2Yy52MS5HZXRUYXNrc0J5UGF0aWVudFNvcnRlZEJ5U3RhdHVzUmVzcG9uc2UuVGFza1IK'
     'aW5Qcm9ncmVzcxJXCgRkb25lGAMgAygLMkMuc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldFRhc2'
-    'tzQnlQYXRpZW50U29ydGVkQnlTdGF0dXNSZXNwb25zZS5UYXNrUgRkb25lGuQECgRUYXNrEg4K'
+    'tzQnlQYXRpZW50U29ydGVkQnlTdGF0dXNSZXNwb25zZS5UYXNrUgRkb25lGsEECgRUYXNrEg4K'
     'AmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW9uGAMgASgJUg'
     'tkZXNjcmlwdGlvbhItChBhc3NpZ25lZF91c2VyX2lkGAQgASgJSABSDmFzc2lnbmVkVXNlcklk'
     'iAEBEh0KCnBhdGllbnRfaWQYBSABKAlSCXBhdGllbnRJZBIWCgZwdWJsaWMYBiABKAhSBnB1Ym'
@@ -344,9 +341,9 @@ final $typed_data.Uint8List getTasksByPatientSortedByStatusResponseDescriptor = 
     'Nlcy50YXNrc19zdmMudjEuR2V0VGFza3NCeVBhdGllbnRTb3J0ZWRCeVN0YXR1c1Jlc3BvbnNl'
     'LlRhc2suU3ViVGFza1IIc3VidGFza3MSOQoKY3JlYXRlZF9hdBgKIAEoCzIaLmdvb2dsZS5wcm'
     '90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBIgCgtjb25zaXN0ZW5jeRgLIAEoCVILY29uc2lz'
-    'dGVuY3kaggEKB1N1YlRhc2sSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSEg'
-    'oEZG9uZRgDIAEoCFIEZG9uZRIdCgpjcmVhdGVkX2J5GAQgASgJUgljcmVhdGVkQnkSIAoLY29u'
-    'c2lzdGVuY3kYBSABKAlSC2NvbnNpc3RlbmN5QhMKEV9hc3NpZ25lZF91c2VyX2lk');
+    'dGVuY3kaYAoHU3ViVGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRISCg'
+    'Rkb25lGAMgASgIUgRkb25lEh0KCmNyZWF0ZWRfYnkYBCABKAlSCWNyZWF0ZWRCeUITChFfYXNz'
+    'aWduZWRfdXNlcl9pZA==');
 
 @$core.Deprecated('Use getAssignedTasksRequestDescriptor instead')
 const GetAssignedTasksRequest$json = {
@@ -404,14 +401,13 @@ const GetAssignedTasksResponse_Task_SubTask$json = {
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'done', '3': 3, '4': 1, '5': 8, '10': 'done'},
     {'1': 'created_by', '3': 4, '4': 1, '5': 9, '10': 'createdBy'},
-    {'1': 'consistency', '3': 5, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `GetAssignedTasksResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getAssignedTasksResponseDescriptor = $convert.base64Decode(
     'ChhHZXRBc3NpZ25lZFRhc2tzUmVzcG9uc2USSgoFdGFza3MYASADKAsyNC5zZXJ2aWNlcy50YX'
-    'Nrc19zdmMudjEuR2V0QXNzaWduZWRUYXNrc1Jlc3BvbnNlLlRhc2tSBXRhc2tzGqgGCgRUYXNr'
+    'Nrc19zdmMudjEuR2V0QXNzaWduZWRUYXNrc1Jlc3BvbnNlLlRhc2tSBXRhc2tzGoUGCgRUYXNr'
     'Eg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW9uGAMgAS'
     'gJUgtkZXNjcmlwdGlvbhI5CgZzdGF0dXMYBCABKA4yIS5zZXJ2aWNlcy50YXNrc19zdmMudjEu'
     'VGFza1N0YXR1c1IGc3RhdHVzEigKEGFzc2lnbmVkX3VzZXJfaWQYBSABKAlSDmFzc2lnbmVkVX'
@@ -424,9 +420,8 @@ final $typed_data.Uint8List getAssignedTasksResponseDescriptor = $convert.base64
     'RhbXBSCWNyZWF0ZWRBdBIgCgtjb25zaXN0ZW5jeRgMIAEoCVILY29uc2lzdGVuY3kadwoHUGF0'
     'aWVudBIOCgJpZBgBIAEoCVICaWQSOgoZaHVtYW5fcmVhZGFibGVfaWRlbnRpZmllchgCIAEoCV'
     'IXaHVtYW5SZWFkYWJsZUlkZW50aWZpZXISIAoLY29uc2lzdGVuY3kYAyABKAlSC2NvbnNpc3Rl'
-    'bmN5GoIBCgdTdWJUYXNrEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhIKBG'
-    'RvbmUYAyABKAhSBGRvbmUSHQoKY3JlYXRlZF9ieRgEIAEoCVIJY3JlYXRlZEJ5EiAKC2NvbnNp'
-    'c3RlbmN5GAUgASgJUgtjb25zaXN0ZW5jeQ==');
+    'bmN5GmAKB1N1YlRhc2sSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSEgoEZG'
+    '9uZRgDIAEoCFIEZG9uZRIdCgpjcmVhdGVkX2J5GAQgASgJUgljcmVhdGVkQnk=');
 
 @$core.Deprecated('Use assignTaskRequestDescriptor instead')
 const AssignTaskRequest$json = {
@@ -533,14 +528,14 @@ const CreateSubtaskResponse$json = {
   '1': 'CreateSubtaskResponse',
   '2': [
     {'1': 'subtask_id', '3': 1, '4': 1, '5': 9, '10': 'subtaskId'},
-    {'1': 'consistency', '3': 2, '4': 1, '5': 9, '10': 'consistency'},
+    {'1': 'task_consistency', '3': 2, '4': 1, '5': 9, '10': 'taskConsistency'},
   ],
 };
 
 /// Descriptor for `CreateSubtaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createSubtaskResponseDescriptor = $convert.base64Decode(
     'ChVDcmVhdGVTdWJ0YXNrUmVzcG9uc2USHQoKc3VidGFza19pZBgBIAEoCVIJc3VidGFza0lkEi'
-    'AKC2NvbnNpc3RlbmN5GAIgASgJUgtjb25zaXN0ZW5jeQ==');
+    'kKEHRhc2tfY29uc2lzdGVuY3kYAiABKAlSD3Rhc2tDb25zaXN0ZW5jeQ==');
 
 @$core.Deprecated('Use updateSubtaskRequestDescriptor instead')
 const UpdateSubtaskRequest$json = {
@@ -549,11 +544,11 @@ const UpdateSubtaskRequest$json = {
     {'1': 'task_id', '3': 1, '4': 1, '5': 9, '10': 'taskId'},
     {'1': 'subtask_id', '3': 2, '4': 1, '5': 9, '10': 'subtaskId'},
     {'1': 'subtask', '3': 3, '4': 1, '5': 11, '6': '.services.tasks_svc.v1.UpdateSubtaskRequest.Subtask', '10': 'subtask'},
-    {'1': 'consistency', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'consistency', '17': true},
+    {'1': 'task_consistency', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'taskConsistency', '17': true},
   ],
   '3': [UpdateSubtaskRequest_Subtask$json],
   '8': [
-    {'1': '_consistency'},
+    {'1': '_task_consistency'},
   ],
 };
 
@@ -574,17 +569,17 @@ const UpdateSubtaskRequest_Subtask$json = {
 final $typed_data.Uint8List updateSubtaskRequestDescriptor = $convert.base64Decode(
     'ChRVcGRhdGVTdWJ0YXNrUmVxdWVzdBIXCgd0YXNrX2lkGAEgASgJUgZ0YXNrSWQSHQoKc3VidG'
     'Fza19pZBgCIAEoCVIJc3VidGFza0lkEk0KB3N1YnRhc2sYAyABKAsyMy5zZXJ2aWNlcy50YXNr'
-    'c19zdmMudjEuVXBkYXRlU3VidGFza1JlcXVlc3QuU3VidGFza1IHc3VidGFzaxIlCgtjb25zaX'
-    'N0ZW5jeRgEIAEoCUgAUgtjb25zaXN0ZW5jeYgBARpNCgdTdWJ0YXNrEhcKBG5hbWUYASABKAlI'
-    'AFIEbmFtZYgBARIXCgRkb25lGAIgASgISAFSBGRvbmWIAQFCBwoFX25hbWVCBwoFX2RvbmVCDg'
-    'oMX2NvbnNpc3RlbmN5');
+    'c19zdmMudjEuVXBkYXRlU3VidGFza1JlcXVlc3QuU3VidGFza1IHc3VidGFzaxIuChB0YXNrX2'
+    'NvbnNpc3RlbmN5GAQgASgJSABSD3Rhc2tDb25zaXN0ZW5jeYgBARpNCgdTdWJ0YXNrEhcKBG5h'
+    'bWUYASABKAlIAFIEbmFtZYgBARIXCgRkb25lGAIgASgISAFSBGRvbmWIAQFCBwoFX25hbWVCBw'
+    'oFX2RvbmVCEwoRX3Rhc2tfY29uc2lzdGVuY3k=');
 
 @$core.Deprecated('Use updateSubtaskResponseDescriptor instead')
 const UpdateSubtaskResponse$json = {
   '1': 'UpdateSubtaskResponse',
   '2': [
     {'1': 'conflict', '3': 1, '4': 1, '5': 11, '6': '.libs.common.v1.Conflict', '9': 0, '10': 'conflict', '17': true},
-    {'1': 'consistency', '3': 2, '4': 1, '5': 9, '10': 'consistency'},
+    {'1': 'task_consistency', '3': 2, '4': 1, '5': 9, '10': 'taskConsistency'},
   ],
   '8': [
     {'1': '_conflict'},
@@ -594,8 +589,8 @@ const UpdateSubtaskResponse$json = {
 /// Descriptor for `UpdateSubtaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateSubtaskResponseDescriptor = $convert.base64Decode(
     'ChVVcGRhdGVTdWJ0YXNrUmVzcG9uc2USOQoIY29uZmxpY3QYASABKAsyGC5saWJzLmNvbW1vbi'
-    '52MS5Db25mbGljdEgAUghjb25mbGljdIgBARIgCgtjb25zaXN0ZW5jeRgCIAEoCVILY29uc2lz'
-    'dGVuY3lCCwoJX2NvbmZsaWN0');
+    '52MS5Db25mbGljdEgAUghjb25mbGljdIgBARIpChB0YXNrX2NvbnNpc3RlbmN5GAIgASgJUg90'
+    'YXNrQ29uc2lzdGVuY3lCCwoJX2NvbmZsaWN0');
 
 @$core.Deprecated('Use deleteSubtaskRequestDescriptor instead')
 const DeleteSubtaskRequest$json = {

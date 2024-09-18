@@ -5262,8 +5262,7 @@ proto.services.tasks_svc.v1.GetPatientDetailsResponse.Task.SubTask.toObject = fu
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    done: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
-    consistency: jspb.Message.getFieldWithDefault(msg, 4, "")
+    done: jspb.Message.getBooleanFieldWithDefault(msg, 3, false)
   };
 
   if (includeInstance) {
@@ -5312,10 +5311,6 @@ proto.services.tasks_svc.v1.GetPatientDetailsResponse.Task.SubTask.deserializeBi
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setDone(value);
       break;
-    case 4:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setConsistency(value);
-      break;
     default:
       reader.skipField();
       break;
@@ -5363,13 +5358,6 @@ proto.services.tasks_svc.v1.GetPatientDetailsResponse.Task.SubTask.serializeBina
   if (f) {
     writer.writeBool(
       3,
-      f
-    );
-  }
-  f = message.getConsistency();
-  if (f.length > 0) {
-    writer.writeString(
-      4,
       f
     );
   }
@@ -5427,24 +5415,6 @@ proto.services.tasks_svc.v1.GetPatientDetailsResponse.Task.SubTask.prototype.get
  */
 proto.services.tasks_svc.v1.GetPatientDetailsResponse.Task.SubTask.prototype.setDone = function(value) {
   return jspb.Message.setProto3BooleanField(this, 3, value);
-};
-
-
-/**
- * optional string consistency = 4;
- * @return {string}
- */
-proto.services.tasks_svc.v1.GetPatientDetailsResponse.Task.SubTask.prototype.getConsistency = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.services.tasks_svc.v1.GetPatientDetailsResponse.Task.SubTask} returns this
- */
-proto.services.tasks_svc.v1.GetPatientDetailsResponse.Task.SubTask.prototype.setConsistency = function(value) {
-  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -7194,8 +7164,7 @@ proto.services.tasks_svc.v1.GetPatientListResponse.Task.SubTask.toObject = funct
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    done: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
-    consistency: jspb.Message.getFieldWithDefault(msg, 4, "")
+    done: jspb.Message.getBooleanFieldWithDefault(msg, 3, false)
   };
 
   if (includeInstance) {
@@ -7244,10 +7213,6 @@ proto.services.tasks_svc.v1.GetPatientListResponse.Task.SubTask.deserializeBinar
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setDone(value);
       break;
-    case 4:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setConsistency(value);
-      break;
     default:
       reader.skipField();
       break;
@@ -7295,13 +7260,6 @@ proto.services.tasks_svc.v1.GetPatientListResponse.Task.SubTask.serializeBinaryT
   if (f) {
     writer.writeBool(
       3,
-      f
-    );
-  }
-  f = message.getConsistency();
-  if (f.length > 0) {
-    writer.writeString(
-      4,
       f
     );
   }
@@ -7359,24 +7317,6 @@ proto.services.tasks_svc.v1.GetPatientListResponse.Task.SubTask.prototype.getDon
  */
 proto.services.tasks_svc.v1.GetPatientListResponse.Task.SubTask.prototype.setDone = function(value) {
   return jspb.Message.setProto3BooleanField(this, 3, value);
-};
-
-
-/**
- * optional string consistency = 4;
- * @return {string}
- */
-proto.services.tasks_svc.v1.GetPatientListResponse.Task.SubTask.prototype.getConsistency = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.services.tasks_svc.v1.GetPatientListResponse.Task.SubTask} returns this
- */
-proto.services.tasks_svc.v1.GetPatientListResponse.Task.SubTask.prototype.setConsistency = function(value) {
-  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 

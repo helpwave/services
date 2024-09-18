@@ -107,14 +107,13 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 	var subtasksRes []*pb.GetTaskResponse_SubTask
 	for _, subtask := range task.Subtasks {
 		subtasksRes = append(subtasksRes, &pb.GetTaskResponse_SubTask{
-			Id:   subtask.ID.String(),
-			Name: subtask.Name,
-			Done: subtask.Done,
-			// TODO: created_by
+			Id:        subtask.ID.String(),
+			Name:      subtask.Name,
+			Done:      subtask.Done,
+			CreatedBy: subtask.CreatedBy.String(),
 		})
 	}
 
-	// TODO: add missing fields
 	return &pb.GetTaskResponse{
 		Id:             task.ID.String(),
 		Name:           task.Name,
@@ -123,6 +122,11 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 		Subtasks:       subtasksRes,
 		Status:         task.Status,
 		CreatedAt:      timestamppb.New(task.CreatedAt),
+		Public:         task.Public,
+		DueAt:          timestamppb.New(task.DueAt),
+		CreatedBy:      task.CreatedBy.String(),
+		Patient:        nil, // TODO
+		Consistency:    task.Consistency,
 	}, nil
 }
 

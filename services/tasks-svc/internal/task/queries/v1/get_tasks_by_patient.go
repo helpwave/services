@@ -44,8 +44,7 @@ func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 						CreatedAt:    row.Task.CreatedAt.Time,
 						Subtasks:     make(map[uuid.UUID]models.Subtask),
 					},
-					Consistency:          strconv.FormatUint(uint64(row.Task.Consistency), 10),
-					SubtaskConsistencies: make(map[uuid.UUID]string),
+					Consistency: strconv.FormatUint(uint64(row.Task.Consistency), 10),
 				}
 				tasks = append(tasks, task)
 				tasksMap[row.Task.ID] = len(tasks) - 1
@@ -58,7 +57,6 @@ func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 					Done:      *row.SubtaskDone,
 					CreatedBy: row.SubtaskCreatedBy.UUID,
 				}
-				task.SubtaskConsistencies[row.SubtaskID.UUID] = strconv.FormatUint(uint64(*row.SubtaskConsistency), 10)
 			}
 		}
 

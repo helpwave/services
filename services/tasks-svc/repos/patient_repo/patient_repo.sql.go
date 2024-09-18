@@ -50,7 +50,6 @@ SELECT
 	subtasks.id as subtask_id,
 	subtasks.name as subtask_name,
 	subtasks.done as subtask_done,
-	subtasks.consistency as subtasks_consistency,
 	beds.id as bed_id,
 	beds.name as bed_name,
 	beds.consistency as beds_consistency,
@@ -66,25 +65,24 @@ FROM patients
 `
 
 type GetAllPatientsWithTasksBedAndRoomRow struct {
-	Patient             Patient
-	TaskID              uuid.NullUUID
-	TaskName            *string
-	TaskDescription     *string
-	TaskStatus          *int32
-	TaskAssignedUserID  uuid.NullUUID
-	TaskPublic          *bool
-	TaskConsistency     *int64
-	SubtaskID           uuid.NullUUID
-	SubtaskName         *string
-	SubtaskDone         *bool
-	SubtasksConsistency *int64
-	BedID               uuid.NullUUID
-	BedName             *string
-	BedsConsistency     *int64
-	RoomID              uuid.NullUUID
-	RoomName            *string
-	WardID              uuid.NullUUID
-	RoomConsistency     *int64
+	Patient            Patient
+	TaskID             uuid.NullUUID
+	TaskName           *string
+	TaskDescription    *string
+	TaskStatus         *int32
+	TaskAssignedUserID uuid.NullUUID
+	TaskPublic         *bool
+	TaskConsistency    *int64
+	SubtaskID          uuid.NullUUID
+	SubtaskName        *string
+	SubtaskDone        *bool
+	BedID              uuid.NullUUID
+	BedName            *string
+	BedsConsistency    *int64
+	RoomID             uuid.NullUUID
+	RoomName           *string
+	WardID             uuid.NullUUID
+	RoomConsistency    *int64
 }
 
 func (q *Queries) GetAllPatientsWithTasksBedAndRoom(ctx context.Context) ([]GetAllPatientsWithTasksBedAndRoomRow, error) {
@@ -115,7 +113,6 @@ func (q *Queries) GetAllPatientsWithTasksBedAndRoom(ctx context.Context) ([]GetA
 			&i.SubtaskID,
 			&i.SubtaskName,
 			&i.SubtaskDone,
-			&i.SubtasksConsistency,
 			&i.BedID,
 			&i.BedName,
 			&i.BedsConsistency,

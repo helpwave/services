@@ -2863,8 +2863,7 @@ proto.services.tasks_svc.v1.GetTaskResponse.SubTask.toObject = function(includeI
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     done: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
-    createdBy: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    consistency: jspb.Message.getFieldWithDefault(msg, 5, "")
+    createdBy: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -2916,10 +2915,6 @@ proto.services.tasks_svc.v1.GetTaskResponse.SubTask.deserializeBinaryFromReader 
     case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setCreatedBy(value);
-      break;
-    case 5:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -2975,13 +2970,6 @@ proto.services.tasks_svc.v1.GetTaskResponse.SubTask.serializeBinaryToWriter = fu
   if (f.length > 0) {
     writer.writeString(
       4,
-      f
-    );
-  }
-  f = message.getConsistency();
-  if (f.length > 0) {
-    writer.writeString(
-      5,
       f
     );
   }
@@ -3057,24 +3045,6 @@ proto.services.tasks_svc.v1.GetTaskResponse.SubTask.prototype.getCreatedBy = fun
  */
 proto.services.tasks_svc.v1.GetTaskResponse.SubTask.prototype.setCreatedBy = function(value) {
   return jspb.Message.setProto3StringField(this, 4, value);
-};
-
-
-/**
- * optional string consistency = 5;
- * @return {string}
- */
-proto.services.tasks_svc.v1.GetTaskResponse.SubTask.prototype.getConsistency = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.services.tasks_svc.v1.GetTaskResponse.SubTask} returns this
- */
-proto.services.tasks_svc.v1.GetTaskResponse.SubTask.prototype.setConsistency = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -3934,8 +3904,7 @@ proto.services.tasks_svc.v1.GetTasksByPatientResponse.Task.SubTask.toObject = fu
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     done: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
-    createdBy: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    consistency: jspb.Message.getFieldWithDefault(msg, 5, "")
+    createdBy: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -3987,10 +3956,6 @@ proto.services.tasks_svc.v1.GetTasksByPatientResponse.Task.SubTask.deserializeBi
     case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setCreatedBy(value);
-      break;
-    case 5:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -4046,13 +4011,6 @@ proto.services.tasks_svc.v1.GetTasksByPatientResponse.Task.SubTask.serializeBina
   if (f.length > 0) {
     writer.writeString(
       4,
-      f
-    );
-  }
-  f = message.getConsistency();
-  if (f.length > 0) {
-    writer.writeString(
-      5,
       f
     );
   }
@@ -4128,24 +4086,6 @@ proto.services.tasks_svc.v1.GetTasksByPatientResponse.Task.SubTask.prototype.get
  */
 proto.services.tasks_svc.v1.GetTasksByPatientResponse.Task.SubTask.prototype.setCreatedBy = function(value) {
   return jspb.Message.setProto3StringField(this, 4, value);
-};
-
-
-/**
- * optional string consistency = 5;
- * @return {string}
- */
-proto.services.tasks_svc.v1.GetTasksByPatientResponse.Task.SubTask.prototype.getConsistency = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.services.tasks_svc.v1.GetTasksByPatientResponse.Task.SubTask} returns this
- */
-proto.services.tasks_svc.v1.GetTasksByPatientResponse.Task.SubTask.prototype.setConsistency = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -5042,8 +4982,7 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     done: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
-    createdBy: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    consistency: jspb.Message.getFieldWithDefault(msg, 5, "")
+    createdBy: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -5095,10 +5034,6 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask
     case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setCreatedBy(value);
-      break;
-    case 5:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -5154,13 +5089,6 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask
   if (f.length > 0) {
     writer.writeString(
       4,
-      f
-    );
-  }
-  f = message.getConsistency();
-  if (f.length > 0) {
-    writer.writeString(
-      5,
       f
     );
   }
@@ -5236,24 +5164,6 @@ proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask
  */
 proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask.prototype.setCreatedBy = function(value) {
   return jspb.Message.setProto3StringField(this, 4, value);
-};
-
-
-/**
- * optional string consistency = 5;
- * @return {string}
- */
-proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask.prototype.getConsistency = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask} returns this
- */
-proto.services.tasks_svc.v1.GetTasksByPatientSortedByStatusResponse.Task.SubTask.prototype.setConsistency = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -6353,8 +6263,7 @@ proto.services.tasks_svc.v1.GetAssignedTasksResponse.Task.SubTask.toObject = fun
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     done: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
-    createdBy: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    consistency: jspb.Message.getFieldWithDefault(msg, 5, "")
+    createdBy: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -6406,10 +6315,6 @@ proto.services.tasks_svc.v1.GetAssignedTasksResponse.Task.SubTask.deserializeBin
     case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setCreatedBy(value);
-      break;
-    case 5:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -6465,13 +6370,6 @@ proto.services.tasks_svc.v1.GetAssignedTasksResponse.Task.SubTask.serializeBinar
   if (f.length > 0) {
     writer.writeString(
       4,
-      f
-    );
-  }
-  f = message.getConsistency();
-  if (f.length > 0) {
-    writer.writeString(
-      5,
       f
     );
   }
@@ -6547,24 +6445,6 @@ proto.services.tasks_svc.v1.GetAssignedTasksResponse.Task.SubTask.prototype.getC
  */
 proto.services.tasks_svc.v1.GetAssignedTasksResponse.Task.SubTask.prototype.setCreatedBy = function(value) {
   return jspb.Message.setProto3StringField(this, 4, value);
-};
-
-
-/**
- * optional string consistency = 5;
- * @return {string}
- */
-proto.services.tasks_svc.v1.GetAssignedTasksResponse.Task.SubTask.prototype.getConsistency = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.services.tasks_svc.v1.GetAssignedTasksResponse.Task.SubTask} returns this
- */
-proto.services.tasks_svc.v1.GetAssignedTasksResponse.Task.SubTask.prototype.setConsistency = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -8051,7 +7931,7 @@ proto.services.tasks_svc.v1.CreateSubtaskResponse.prototype.toObject = function(
 proto.services.tasks_svc.v1.CreateSubtaskResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     subtaskId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    consistency: jspb.Message.getFieldWithDefault(msg, 2, "")
+    taskConsistency: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -8094,7 +7974,7 @@ proto.services.tasks_svc.v1.CreateSubtaskResponse.deserializeBinaryFromReader = 
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setConsistency(value);
+      msg.setTaskConsistency(value);
       break;
     default:
       reader.skipField();
@@ -8132,7 +8012,7 @@ proto.services.tasks_svc.v1.CreateSubtaskResponse.serializeBinaryToWriter = func
       f
     );
   }
-  f = message.getConsistency();
+  f = message.getTaskConsistency();
   if (f.length > 0) {
     writer.writeString(
       2,
@@ -8161,10 +8041,10 @@ proto.services.tasks_svc.v1.CreateSubtaskResponse.prototype.setSubtaskId = funct
 
 
 /**
- * optional string consistency = 2;
+ * optional string task_consistency = 2;
  * @return {string}
  */
-proto.services.tasks_svc.v1.CreateSubtaskResponse.prototype.getConsistency = function() {
+proto.services.tasks_svc.v1.CreateSubtaskResponse.prototype.getTaskConsistency = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
@@ -8173,7 +8053,7 @@ proto.services.tasks_svc.v1.CreateSubtaskResponse.prototype.getConsistency = fun
  * @param {string} value
  * @return {!proto.services.tasks_svc.v1.CreateSubtaskResponse} returns this
  */
-proto.services.tasks_svc.v1.CreateSubtaskResponse.prototype.setConsistency = function(value) {
+proto.services.tasks_svc.v1.CreateSubtaskResponse.prototype.setTaskConsistency = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
 };
 
@@ -8213,7 +8093,7 @@ proto.services.tasks_svc.v1.UpdateSubtaskRequest.toObject = function(includeInst
     taskId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     subtaskId: jspb.Message.getFieldWithDefault(msg, 2, ""),
     subtask: (f = msg.getSubtask()) && proto.services.tasks_svc.v1.UpdateSubtaskRequest.Subtask.toObject(includeInstance, f),
-    consistency: jspb.Message.getFieldWithDefault(msg, 4, "")
+    taskConsistency: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -8265,7 +8145,7 @@ proto.services.tasks_svc.v1.UpdateSubtaskRequest.deserializeBinaryFromReader = f
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
-      msg.setConsistency(value);
+      msg.setTaskConsistency(value);
       break;
     default:
       reader.skipField();
@@ -8598,10 +8478,10 @@ proto.services.tasks_svc.v1.UpdateSubtaskRequest.prototype.hasSubtask = function
 
 
 /**
- * optional string consistency = 4;
+ * optional string task_consistency = 4;
  * @return {string}
  */
-proto.services.tasks_svc.v1.UpdateSubtaskRequest.prototype.getConsistency = function() {
+proto.services.tasks_svc.v1.UpdateSubtaskRequest.prototype.getTaskConsistency = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
@@ -8610,7 +8490,7 @@ proto.services.tasks_svc.v1.UpdateSubtaskRequest.prototype.getConsistency = func
  * @param {string} value
  * @return {!proto.services.tasks_svc.v1.UpdateSubtaskRequest} returns this
  */
-proto.services.tasks_svc.v1.UpdateSubtaskRequest.prototype.setConsistency = function(value) {
+proto.services.tasks_svc.v1.UpdateSubtaskRequest.prototype.setTaskConsistency = function(value) {
   return jspb.Message.setField(this, 4, value);
 };
 
@@ -8619,7 +8499,7 @@ proto.services.tasks_svc.v1.UpdateSubtaskRequest.prototype.setConsistency = func
  * Clears the field making it undefined.
  * @return {!proto.services.tasks_svc.v1.UpdateSubtaskRequest} returns this
  */
-proto.services.tasks_svc.v1.UpdateSubtaskRequest.prototype.clearConsistency = function() {
+proto.services.tasks_svc.v1.UpdateSubtaskRequest.prototype.clearTaskConsistency = function() {
   return jspb.Message.setField(this, 4, undefined);
 };
 
@@ -8628,7 +8508,7 @@ proto.services.tasks_svc.v1.UpdateSubtaskRequest.prototype.clearConsistency = fu
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.services.tasks_svc.v1.UpdateSubtaskRequest.prototype.hasConsistency = function() {
+proto.services.tasks_svc.v1.UpdateSubtaskRequest.prototype.hasTaskConsistency = function() {
   return jspb.Message.getField(this, 4) != null;
 };
 
@@ -8666,7 +8546,7 @@ proto.services.tasks_svc.v1.UpdateSubtaskResponse.prototype.toObject = function(
 proto.services.tasks_svc.v1.UpdateSubtaskResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     conflict: (f = msg.getConflict()) && libs_common_v1_conflict_pb.Conflict.toObject(includeInstance, f),
-    consistency: jspb.Message.getFieldWithDefault(msg, 2, "")
+    taskConsistency: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -8710,7 +8590,7 @@ proto.services.tasks_svc.v1.UpdateSubtaskResponse.deserializeBinaryFromReader = 
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setConsistency(value);
+      msg.setTaskConsistency(value);
       break;
     default:
       reader.skipField();
@@ -8749,7 +8629,7 @@ proto.services.tasks_svc.v1.UpdateSubtaskResponse.serializeBinaryToWriter = func
       libs_common_v1_conflict_pb.Conflict.serializeBinaryToWriter
     );
   }
-  f = message.getConsistency();
+  f = message.getTaskConsistency();
   if (f.length > 0) {
     writer.writeString(
       2,
@@ -8797,10 +8677,10 @@ proto.services.tasks_svc.v1.UpdateSubtaskResponse.prototype.hasConflict = functi
 
 
 /**
- * optional string consistency = 2;
+ * optional string task_consistency = 2;
  * @return {string}
  */
-proto.services.tasks_svc.v1.UpdateSubtaskResponse.prototype.getConsistency = function() {
+proto.services.tasks_svc.v1.UpdateSubtaskResponse.prototype.getTaskConsistency = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
@@ -8809,7 +8689,7 @@ proto.services.tasks_svc.v1.UpdateSubtaskResponse.prototype.getConsistency = fun
  * @param {string} value
  * @return {!proto.services.tasks_svc.v1.UpdateSubtaskResponse} returns this
  */
-proto.services.tasks_svc.v1.UpdateSubtaskResponse.prototype.setConsistency = function(value) {
+proto.services.tasks_svc.v1.UpdateSubtaskResponse.prototype.setTaskConsistency = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
 };
 

@@ -3295,8 +3295,7 @@ proto.services.tasks_svc.v1.GetWardDetailsResponse.Subtask.prototype.toObject = 
 proto.services.tasks_svc.v1.GetWardDetailsResponse.Subtask.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    consistency: jspb.Message.getFieldWithDefault(msg, 3, "")
+    name: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -3341,10 +3340,6 @@ proto.services.tasks_svc.v1.GetWardDetailsResponse.Subtask.deserializeBinaryFrom
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
-    case 3:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setConsistency(value);
-      break;
     default:
       reader.skipField();
       break;
@@ -3388,13 +3383,6 @@ proto.services.tasks_svc.v1.GetWardDetailsResponse.Subtask.serializeBinaryToWrit
       f
     );
   }
-  f = message.getConsistency();
-  if (f.length > 0) {
-    writer.writeString(
-      3,
-      f
-    );
-  }
 };
 
 
@@ -3431,24 +3419,6 @@ proto.services.tasks_svc.v1.GetWardDetailsResponse.Subtask.prototype.getName = f
  */
 proto.services.tasks_svc.v1.GetWardDetailsResponse.Subtask.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
-};
-
-
-/**
- * optional string consistency = 3;
- * @return {string}
- */
-proto.services.tasks_svc.v1.GetWardDetailsResponse.Subtask.prototype.getConsistency = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.services.tasks_svc.v1.GetWardDetailsResponse.Subtask} returns this
- */
-proto.services.tasks_svc.v1.GetWardDetailsResponse.Subtask.prototype.setConsistency = function(value) {
-  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 

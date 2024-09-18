@@ -89,8 +89,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 						Public:       *row.TaskPublic,
 						Subtasks:     make(map[uuid.UUID]tasksModels.Subtask),
 					},
-					Consistency:          strconv.FormatUint(uint64(*row.TaskConsistency), 10),
-					SubtaskConsistencies: make(map[uuid.UUID]string),
+					Consistency: strconv.FormatUint(uint64(*row.TaskConsistency), 10),
 				}
 				patientDetail.Tasks = append(patientDetail.Tasks, task)
 				tasksMap[row.TaskID.UUID] = len(patientDetail.Tasks) - 1
@@ -102,7 +101,6 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 					Name: *row.SubtaskName,
 					Done: *row.SubtaskDone,
 				}
-				task.SubtaskConsistencies[row.SubtaskID.UUID] = strconv.FormatUint(uint64(*row.SubtasksConsistency), 10)
 			}
 
 			patientDetails = append(patientDetails, patientDetail)

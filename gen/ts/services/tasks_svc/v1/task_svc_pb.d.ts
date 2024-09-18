@@ -370,9 +370,6 @@ export namespace GetTaskResponse {
     getCreatedBy(): string;
     setCreatedBy(value: string): SubTask;
 
-    getConsistency(): string;
-    setConsistency(value: string): SubTask;
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SubTask.AsObject;
     static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
@@ -387,7 +384,6 @@ export namespace GetTaskResponse {
       name: string,
       done: boolean,
       createdBy: string,
-      consistency: string,
     }
   }
 
@@ -517,9 +513,6 @@ export namespace GetTasksByPatientResponse {
       getCreatedBy(): string;
       setCreatedBy(value: string): SubTask;
 
-      getConsistency(): string;
-      setConsistency(value: string): SubTask;
-
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SubTask.AsObject;
       static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
@@ -534,7 +527,6 @@ export namespace GetTasksByPatientResponse {
         name: string,
         done: boolean,
         createdBy: string,
-        consistency: string,
       }
     }
 
@@ -674,9 +666,6 @@ export namespace GetTasksByPatientSortedByStatusResponse {
       getCreatedBy(): string;
       setCreatedBy(value: string): SubTask;
 
-      getConsistency(): string;
-      setConsistency(value: string): SubTask;
-
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SubTask.AsObject;
       static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
@@ -691,7 +680,6 @@ export namespace GetTasksByPatientSortedByStatusResponse {
         name: string,
         done: boolean,
         createdBy: string,
-        consistency: string,
       }
     }
 
@@ -846,9 +834,6 @@ export namespace GetAssignedTasksResponse {
       getCreatedBy(): string;
       setCreatedBy(value: string): SubTask;
 
-      getConsistency(): string;
-      setConsistency(value: string): SubTask;
-
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SubTask.AsObject;
       static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
@@ -863,7 +848,6 @@ export namespace GetAssignedTasksResponse {
         name: string,
         done: boolean,
         createdBy: string,
-        consistency: string,
       }
     }
 
@@ -1046,8 +1030,8 @@ export class CreateSubtaskResponse extends jspb.Message {
   getSubtaskId(): string;
   setSubtaskId(value: string): CreateSubtaskResponse;
 
-  getConsistency(): string;
-  setConsistency(value: string): CreateSubtaskResponse;
+  getTaskConsistency(): string;
+  setTaskConsistency(value: string): CreateSubtaskResponse;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateSubtaskResponse.AsObject;
@@ -1060,7 +1044,7 @@ export class CreateSubtaskResponse extends jspb.Message {
 export namespace CreateSubtaskResponse {
   export type AsObject = {
     subtaskId: string,
-    consistency: string,
+    taskConsistency: string,
   }
 }
 
@@ -1076,10 +1060,10 @@ export class UpdateSubtaskRequest extends jspb.Message {
   hasSubtask(): boolean;
   clearSubtask(): UpdateSubtaskRequest;
 
-  getConsistency(): string;
-  setConsistency(value: string): UpdateSubtaskRequest;
-  hasConsistency(): boolean;
-  clearConsistency(): UpdateSubtaskRequest;
+  getTaskConsistency(): string;
+  setTaskConsistency(value: string): UpdateSubtaskRequest;
+  hasTaskConsistency(): boolean;
+  clearTaskConsistency(): UpdateSubtaskRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateSubtaskRequest.AsObject;
@@ -1094,7 +1078,7 @@ export namespace UpdateSubtaskRequest {
     taskId: string,
     subtaskId: string,
     subtask?: UpdateSubtaskRequest.Subtask.AsObject,
-    consistency?: string,
+    taskConsistency?: string,
   }
 
   export class Subtask extends jspb.Message {
@@ -1134,9 +1118,9 @@ export namespace UpdateSubtaskRequest {
   }
 
 
-  export enum ConsistencyCase { 
-    _CONSISTENCY_NOT_SET = 0,
-    CONSISTENCY = 4,
+  export enum TaskConsistencyCase { 
+    _TASK_CONSISTENCY_NOT_SET = 0,
+    TASK_CONSISTENCY = 4,
   }
 }
 
@@ -1146,8 +1130,8 @@ export class UpdateSubtaskResponse extends jspb.Message {
   hasConflict(): boolean;
   clearConflict(): UpdateSubtaskResponse;
 
-  getConsistency(): string;
-  setConsistency(value: string): UpdateSubtaskResponse;
+  getTaskConsistency(): string;
+  setTaskConsistency(value: string): UpdateSubtaskResponse;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateSubtaskResponse.AsObject;
@@ -1160,7 +1144,7 @@ export class UpdateSubtaskResponse extends jspb.Message {
 export namespace UpdateSubtaskResponse {
   export type AsObject = {
     conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
-    consistency: string,
+    taskConsistency: string,
   }
 
   export enum ConflictCase { 
