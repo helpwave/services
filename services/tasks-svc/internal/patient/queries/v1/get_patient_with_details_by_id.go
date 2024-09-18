@@ -6,6 +6,7 @@ import (
 	hwspicedb "hwauthz/spicedb"
 	"hwdb"
 	"hwes"
+	"strconv"
 	"tasks-svc/internal/patient/models"
 	th "tasks-svc/internal/task/handlers"
 	"tasks-svc/repos/patient_repo"
@@ -37,28 +38,33 @@ func NewGetPatientWithDetailsByIDQueryHandler(as hwes.AggregateStore) GetPatient
 
 		if patientRes.BedID.Valid {
 			bed = &models.Bed{
-				ID:   patientRes.BedID.UUID,
-				Name: *patientRes.BedName,
+				ID:          patientRes.BedID.UUID,
+				Name:        *patientRes.BedName,
+				Consistency: strconv.FormatUint(uint64(*patientRes.BedConsistency), 10),
 			}
 		}
 
 		if patientRes.RoomID.Valid {
 			room = &models.Room{
-				ID:     patientRes.RoomID.UUID,
-				Name:   *patientRes.RoomName,
-				WardID: patientRes.WardID.UUID,
+				ID:          patientRes.RoomID.UUID,
+				Name:        *patientRes.RoomName,
+				WardID:      patientRes.WardID.UUID,
+				Consistency: strconv.FormatUint(uint64(*patientRes.RoomConsistency), 10),
 			}
 		}
 
 		return &models.PatientDetails{
-			Patient: models.Patient{
-				ID:                      patientRes.ID,
-				HumanReadableIdentifier: patientRes.HumanReadableIdentifier,
-				Notes:                   patientRes.Notes,
-				BedID:                   patientRes.BedID,
-				IsDischarged:            patientRes.IsDischarged,
-				CreatedAt:               patientRes.CreatedAt.Time,
-				UpdatedAt:               patientRes.UpdatedAt.Time,
+			PatientWithConsistency: models.PatientWithConsistency{
+				Patient: models.Patient{
+					ID:                      patientRes.ID,
+					HumanReadableIdentifier: patientRes.HumanReadableIdentifier,
+					Notes:                   patientRes.Notes,
+					BedID:                   patientRes.BedID,
+					IsDischarged:            patientRes.IsDischarged,
+					CreatedAt:               patientRes.CreatedAt.Time,
+					UpdatedAt:               patientRes.UpdatedAt.Time,
+				},
+				Consistency: strconv.FormatUint(uint64(patientRes.Consistency), 10),
 			},
 			Tasks: tasks,
 			Bed:   bed,

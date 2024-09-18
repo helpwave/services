@@ -5,14 +5,15 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
 	"hwdb"
+	"strconv"
 	"tasks-svc/internal/task/models"
 	"tasks-svc/repos/task_repo"
 )
 
-type GetTasksByPatientIDQueryHandler func(ctx context.Context, patientID uuid.UUID) ([]*models.Task, error)
+type GetTasksByPatientIDQueryHandler func(ctx context.Context, patientID uuid.UUID) ([]*models.TaskWithConsistency, error)
 
 func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
-	return func(ctx context.Context, patientID uuid.UUID) ([]*models.Task, error) {
+	return func(ctx context.Context, patientID uuid.UUID) ([]*models.TaskWithConsistency, error) {
 		taskRepo := task_repo.New(hwdb.GetDB())
 
 		tasksWithSubtasks, err := taskRepo.GetTasksWithSubtasksByPatient(ctx, patientID)
@@ -20,27 +21,31 @@ func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 			return nil, err
 		}
 
-		tasks := make([]*models.Task, 0)
+		tasks := make([]*models.TaskWithConsistency, 0)
 		tasksMap := make(map[uuid.UUID]int)
 
 		for _, row := range tasksWithSubtasks {
-			var task *models.Task
+			var task *models.TaskWithConsistency
 
 			if ix, exists := tasksMap[row.Task.ID]; exists {
 				task = tasks[ix]
 			} else {
-				task = &models.Task{
-					ID:           row.Task.ID,
-					Name:         row.Task.Name,
-					Description:  row.Task.Description,
-					Status:       pb.TaskStatus(row.Task.Status),
-					AssignedUser: row.Task.AssignedUserID, // TODO: #760
-					PatientID:    row.Task.PatientID,
-					Public:       row.Task.Public,
-					DueAt:        row.Task.DueAt.Time,
-					CreatedBy:    row.Task.CreatedBy,
-					CreatedAt:    row.Task.CreatedAt.Time,
-					Subtasks:     make(map[uuid.UUID]models.Subtask),
+				task = &models.TaskWithConsistency{
+					Task: models.Task{
+						ID:           row.Task.ID,
+						Name:         row.Task.Name,
+						Description:  row.Task.Description,
+						Status:       pb.TaskStatus(row.Task.Status),
+						AssignedUser: row.Task.AssignedUserID, // TODO: #760
+						PatientID:    row.Task.PatientID,
+						Public:       row.Task.Public,
+						DueAt:        row.Task.DueAt.Time,
+						CreatedBy:    row.Task.CreatedBy,
+						CreatedAt:    row.Task.CreatedAt.Time,
+						Subtasks:     make(map[uuid.UUID]models.Subtask),
+					},
+					Consistency:          strconv.FormatUint(uint64(row.Task.Consistency), 10),
+					SubtaskConsistencies: make(map[uuid.UUID]string),
 				}
 				tasks = append(tasks, task)
 				tasksMap[row.Task.ID] = len(tasks) - 1
@@ -53,6 +58,7 @@ func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 					Done:      *row.SubtaskDone,
 					CreatedBy: row.SubtaskCreatedBy.UUID,
 				}
+				task.SubtaskConsistencies[row.SubtaskID.UUID] = strconv.FormatUint(uint64(*row.SubtaskConsistency), 10)
 			}
 		}
 

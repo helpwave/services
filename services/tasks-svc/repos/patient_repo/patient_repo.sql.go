@@ -161,7 +161,11 @@ const getPatientWithBedAndRoom = `-- name: GetPatientWithBedAndRoom :one
 SELECT
 	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency,
 	beds.name as bed_name,
-	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+	beds.consistency as bed_consistency,
+	rooms.id as room_id,
+	rooms.name as room_name,
+	rooms.ward_id as ward_id,
+	rooms.consistency as room_consistency
 FROM patients
 		 LEFT JOIN beds ON patients.bed_id = beds.id
 		 LEFT JOIN rooms ON beds.room_id = rooms.id
@@ -179,9 +183,11 @@ type GetPatientWithBedAndRoomRow struct {
 	IsDischarged            bool
 	Consistency             int64
 	BedName                 *string
+	BedConsistency          *int64
 	RoomID                  uuid.NullUUID
 	RoomName                *string
 	WardID                  uuid.NullUUID
+	RoomConsistency         *int64
 }
 
 func (q *Queries) GetPatientWithBedAndRoom(ctx context.Context, patientID uuid.UUID) (GetPatientWithBedAndRoomRow, error) {
@@ -197,9 +203,11 @@ func (q *Queries) GetPatientWithBedAndRoom(ctx context.Context, patientID uuid.U
 		&i.IsDischarged,
 		&i.Consistency,
 		&i.BedName,
+		&i.BedConsistency,
 		&i.RoomID,
 		&i.RoomName,
 		&i.WardID,
+		&i.RoomConsistency,
 	)
 	return i, err
 }

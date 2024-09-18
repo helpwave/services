@@ -242,17 +242,19 @@ func (s *PatientGrpcService) GetPatientList(ctx context.Context, req *pb.GetPati
 			var roomResponse *pb.GetPatientListResponse_Room
 			if patientDetails.Room != nil {
 				roomResponse = &pb.GetPatientListResponse_Room{
-					Id:     patientDetails.Room.ID.String(),
-					Name:   patientDetails.Room.Name,
-					WardId: patientDetails.Room.WardID.String(),
+					Id:          patientDetails.Room.ID.String(),
+					Name:        patientDetails.Room.Name,
+					WardId:      patientDetails.Room.WardID.String(),
+					Consistency: patientDetails.Room.Consistency,
 				}
 			}
 
 			var bedResponse *pb.GetPatientListResponse_Bed
 			if patientDetails.Bed != nil {
 				bedResponse = &pb.GetPatientListResponse_Bed{
-					Id:   patientDetails.Bed.ID.String(),
-					Name: patientDetails.Bed.Name,
+					Id:          patientDetails.Bed.ID.String(),
+					Name:        patientDetails.Bed.Name,
+					Consistency: patientDetails.Bed.Consistency,
 				}
 			}
 
@@ -266,14 +268,16 @@ func (s *PatientGrpcService) GetPatientList(ctx context.Context, req *pb.GetPati
 					Public:         item.Public,
 					Subtasks:       make([]*pb.GetPatientListResponse_Task_SubTask, len(item.Subtasks)),
 					AssignedUserId: hwutil.NullUUIDToStringPtr(item.AssignedUser), // TODO: #760
+					Consistency:    item.Consistency,
 				}
 
 				subtaskIdx := 0
 				for _, subtask := range item.Subtasks {
 					taskResponse[ix].Subtasks[subtaskIdx] = &pb.GetPatientListResponse_Task_SubTask{
-						Id:   subtask.ID.String(),
-						Name: subtask.Name,
-						Done: subtask.Done,
+						Id:          subtask.ID.String(),
+						Name:        subtask.Name,
+						Done:        subtask.Done,
+						Consistency: item.SubtaskConsistencies[subtask.ID],
 					}
 					subtaskIdx++
 				}
@@ -286,6 +290,7 @@ func (s *PatientGrpcService) GetPatientList(ctx context.Context, req *pb.GetPati
 				Bed:                     bedResponse,
 				Notes:                   patientDetails.Notes,
 				Tasks:                   taskResponse,
+				Consistency:             patientDetails.Consistency,
 			})
 		}
 

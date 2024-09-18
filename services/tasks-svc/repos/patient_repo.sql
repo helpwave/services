@@ -35,7 +35,11 @@ WHERE rooms.ward_id = @ward_id;
 SELECT
 	patients.*,
 	beds.name as bed_name,
-	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+	beds.consistency as bed_consistency,
+	rooms.id as room_id,
+	rooms.name as room_name,
+	rooms.ward_id as ward_id,
+	rooms.consistency as room_consistency
 FROM patients
 		 LEFT JOIN beds ON patients.bed_id = beds.id
 		 LEFT JOIN rooms ON beds.room_id = rooms.id

@@ -38,7 +38,8 @@ SELECT
 	subtasks.id as subtask_id,
 	subtasks.name as subtask_name,
 	subtasks.done as subtask_done,
-	subtasks.created_by as subtask_created_by
+	subtasks.created_by as subtask_created_by,
+	subtasks.consistency as subtask_consistency
 FROM tasks
 JOIN patients ON patients.id = tasks.patient_id
 LEFT JOIN subtasks ON subtasks.task_id = tasks.id
@@ -51,7 +52,8 @@ SELECT
 	subtasks.id as subtask_id,
 	subtasks.name as subtask_name,
 	subtasks.done as subtask_done,
-	subtasks.created_by as subtask_created_by
+	subtasks.created_by as subtask_created_by,
+	subtasks.consistency as subtask_consistency
 FROM patients
 		 JOIN tasks ON tasks.patient_id = patients.id
 		 LEFT JOIN subtasks ON subtasks.task_id = tasks.id
