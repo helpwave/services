@@ -209,6 +209,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 			TasksTodo:       uint32(row.TodoCount),
 			TasksInProgress: uint32(row.InProgressCount),
 			TasksDone:       uint32(row.DoneCount),
+			Consistency:     strconv.FormatUint(uint64(row.Ward.Consistency), 10),
 		}
 	})
 
