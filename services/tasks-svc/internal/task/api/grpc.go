@@ -274,7 +274,9 @@ func (s *TaskGrpcService) GetAssignedTasks(ctx context.Context, _ *pb.GetAssigne
 			Patient: &pb.GetAssignedTasksResponse_Task_Patient{
 				Id:                      item.PatientID.String(),
 				HumanReadableIdentifier: item.Patient.HumanReadableIdentifier,
+				Consistency:             item.Consistency,
 			},
+			Consistency: item.Consistency,
 		}
 
 		subtaskIdx := 0

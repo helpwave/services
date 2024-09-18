@@ -41,9 +41,10 @@ type Patient struct {
 	Notes                   string
 	BedID                   uuid.NullUUID
 	IsDischarged            bool
+	Consistency             string
 }
 
 type TaskWithPatient struct {
-	Task
+	TaskWithConsistency
 	Patient Patient
 }

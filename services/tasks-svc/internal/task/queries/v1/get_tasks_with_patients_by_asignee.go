@@ -5,6 +5,7 @@ import (
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwdb"
+	"strconv"
 	"tasks-svc/internal/task/models"
 	"tasks-svc/repos/task_repo"
 )
@@ -33,18 +34,21 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 				task = tasks[ix]
 			} else {
 				task = &models.TaskWithPatient{
-					Task: models.Task{
-						ID:           row.Task.ID,
-						Name:         row.Task.Name,
-						Description:  row.Task.Description,
-						Status:       pb.TaskStatus(row.Task.Status),
-						AssignedUser: row.Task.AssignedUserID, // TODO: #760
-						Public:       row.Task.Public,
-						DueAt:        row.Task.DueAt.Time,
-						PatientID:    row.Patient.ID,
-						CreatedBy:    row.Task.CreatedBy,
-						CreatedAt:    row.Task.CreatedAt.Time,
-						Subtasks:     make(map[uuid.UUID]models.Subtask),
+					TaskWithConsistency: models.TaskWithConsistency{
+						Task: models.Task{
+							ID:           row.Task.ID,
+							Name:         row.Task.Name,
+							Description:  row.Task.Description,
+							Status:       pb.TaskStatus(row.Task.Status),
+							AssignedUser: row.Task.AssignedUserID, // TODO: #760
+							Public:       row.Task.Public,
+							DueAt:        row.Task.DueAt.Time,
+							PatientID:    row.Patient.ID,
+							CreatedBy:    row.Task.CreatedBy,
+							CreatedAt:    row.Task.CreatedAt.Time,
+							Subtasks:     make(map[uuid.UUID]models.Subtask),
+						},
+						Consistency: strconv.FormatUint(uint64(row.Task.Consistency), 10),
 					},
 					Patient: models.Patient{
 						ID:                      row.Patient.ID,
@@ -52,6 +56,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 						Notes:                   row.Patient.Notes,
 						BedID:                   row.Patient.BedID,
 						IsDischarged:            row.Patient.IsDischarged,
+						Consistency:             strconv.FormatUint(uint64(row.Patient.Consistency), 10),
 					},
 				}
 				tasks = append(tasks, task)
