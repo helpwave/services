@@ -13,6 +13,7 @@ import (
 	vh "property-svc/internal/property-view/handlers"
 	viewModels "property-svc/internal/property-view/models"
 	"property-svc/repos/property_value_repo"
+	"strconv"
 	"time"
 )
 
@@ -55,6 +56,7 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 					IsArchived:  row.Property.IsArchived,
 					SetID:       row.Property.SetID,
 					Value:       nil,
+					Consistency: strconv.FormatUint(uint64(row.Property.Consistency), 10),
 				}
 			}
 

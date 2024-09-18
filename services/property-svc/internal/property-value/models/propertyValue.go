@@ -59,6 +59,8 @@ type PropertyAndValue struct {
 
 	SetID uuid.NullUUID
 
+	Consistency string
+
 	Value *TypedValue
 }
 

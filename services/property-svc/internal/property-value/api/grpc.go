@@ -138,6 +138,7 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 				Description: hwutil.MapIf(pv.Description != "", pv.Description, func(s string) string { return s }),
 				IsArchived:  pv.IsArchived,
 				Value:       nil,
+				Consistency: pv.Consistency,
 			}
 			switch {
 			case pv.Value == nil:
