@@ -72,12 +72,12 @@ message UpdateTaskTemplateResponse {
 message UpdateTaskTemplateSubTaskRequest {
   string subtask_id = 1; // @gotags: validate:"required"
   optional string name = 2;
-  optional string task_consistency = 3; // no conflict detection, if not provided
+  optional string task_template_consistency = 3; // no conflict detection, if not provided
 }
 
 message UpdateTaskTemplateSubTaskResponse {
   optional libs.common.v1.Conflict conflict = 1;
-  string task_consistency = 2;
+  string task_template_consistency = 2;
 }
 
 
@@ -92,7 +92,7 @@ message CreateTaskTemplateSubTaskRequest {
 
 message CreateTaskTemplateSubTaskResponse {
   string id = 1;
-  string task_consistency = 2;
+  string task_template_consistency = 2;
 }
 
 

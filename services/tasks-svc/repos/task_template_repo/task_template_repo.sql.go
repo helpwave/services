@@ -17,19 +17,32 @@ type AppendSubTasksParams struct {
 }
 
 const createSubTask = `-- name: CreateSubTask :one
-INSERT INTO task_template_subtasks (name, task_template_id) VALUES ($1, $2) RETURNING id
+WITH inserted_subtask AS (
+	INSERT INTO task_template_subtasks (name, task_template_id)
+		VALUES ($2, $1)
+		RETURNING id
+)
+UPDATE task_templates
+SET consistency = consistency + 1
+WHERE task_templates.id = $1
+RETURNING (SELECT id FROM inserted_subtask), consistency
 `
 
 type CreateSubTaskParams struct {
-	Name           string
 	TaskTemplateID uuid.UUID
+	Name           string
 }
 
-func (q *Queries) CreateSubTask(ctx context.Context, arg CreateSubTaskParams) (uuid.UUID, error) {
-	row := q.db.QueryRow(ctx, createSubTask, arg.Name, arg.TaskTemplateID)
-	var id uuid.UUID
-	err := row.Scan(&id)
-	return id, err
+type CreateSubTaskRow struct {
+	ID          uuid.UUID
+	Consistency int64
+}
+
+func (q *Queries) CreateSubTask(ctx context.Context, arg CreateSubTaskParams) (CreateSubTaskRow, error) {
+	row := q.db.QueryRow(ctx, createSubTask, arg.TaskTemplateID, arg.Name)
+	var i CreateSubTaskRow
+	err := row.Scan(&i.ID, &i.Consistency)
+	return i, err
 }
 
 const createTaskTemplate = `-- name: CreateTaskTemplate :one

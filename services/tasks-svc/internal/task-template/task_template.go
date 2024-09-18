@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 	"hwdb"
 	"hwutil"
+	"strconv"
 	"tasks-svc/repos/task_template_repo"
 
 	pb "gen/services/tasks_svc/v1"
@@ -83,7 +84,8 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		Msg("taskTemplate created")
 
 	return &pb.CreateTaskTemplateResponse{
-		Id: templateID.String(),
+		Id:          templateID.String(),
+		Consistency: "0", // DEFAULT value
 	}, nil
 }
 
@@ -190,10 +192,13 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 		return nil, err
 	}
 
-	subtaskID, err := templateRepo.CreateSubTask(ctx, task_template_repo.CreateSubTaskParams{
+	row, err := templateRepo.CreateSubTask(ctx, task_template_repo.CreateSubTaskParams{
 		TaskTemplateID: taskTemplateID,
 		Name:           req.Name,
 	})
+
+	subtaskID := row.ID
+	consistency := row.Consistency
 
 	// implicitly checks the existence of the ward through the foreign key constraint
 	if err != nil {
@@ -206,7 +211,8 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 		Msg("subtaskID created")
 
 	return &pb.CreateTaskTemplateSubTaskResponse{
-		Id: subtaskID.String(),
+		Id:              subtaskID.String(),
+		TaskConsistency: strconv.FormatUint(uint64(consistency), 10),
 	}, nil
 }
 

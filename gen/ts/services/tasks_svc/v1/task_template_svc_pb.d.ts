@@ -243,10 +243,10 @@ export class UpdateTaskTemplateSubTaskRequest extends jspb.Message {
   hasName(): boolean;
   clearName(): UpdateTaskTemplateSubTaskRequest;
 
-  getTaskConsistency(): string;
-  setTaskConsistency(value: string): UpdateTaskTemplateSubTaskRequest;
-  hasTaskConsistency(): boolean;
-  clearTaskConsistency(): UpdateTaskTemplateSubTaskRequest;
+  getTaskTemplateConsistency(): string;
+  setTaskTemplateConsistency(value: string): UpdateTaskTemplateSubTaskRequest;
+  hasTaskTemplateConsistency(): boolean;
+  clearTaskTemplateConsistency(): UpdateTaskTemplateSubTaskRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateTaskTemplateSubTaskRequest.AsObject;
@@ -260,7 +260,7 @@ export namespace UpdateTaskTemplateSubTaskRequest {
   export type AsObject = {
     subtaskId: string,
     name?: string,
-    taskConsistency?: string,
+    taskTemplateConsistency?: string,
   }
 
   export enum NameCase { 
@@ -268,9 +268,9 @@ export namespace UpdateTaskTemplateSubTaskRequest {
     NAME = 2,
   }
 
-  export enum TaskConsistencyCase { 
-    _TASK_CONSISTENCY_NOT_SET = 0,
-    TASK_CONSISTENCY = 3,
+  export enum TaskTemplateConsistencyCase { 
+    _TASK_TEMPLATE_CONSISTENCY_NOT_SET = 0,
+    TASK_TEMPLATE_CONSISTENCY = 3,
   }
 }
 
@@ -280,8 +280,8 @@ export class UpdateTaskTemplateSubTaskResponse extends jspb.Message {
   hasConflict(): boolean;
   clearConflict(): UpdateTaskTemplateSubTaskResponse;
 
-  getTaskConsistency(): string;
-  setTaskConsistency(value: string): UpdateTaskTemplateSubTaskResponse;
+  getTaskTemplateConsistency(): string;
+  setTaskTemplateConsistency(value: string): UpdateTaskTemplateSubTaskResponse;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateTaskTemplateSubTaskResponse.AsObject;
@@ -294,7 +294,7 @@ export class UpdateTaskTemplateSubTaskResponse extends jspb.Message {
 export namespace UpdateTaskTemplateSubTaskResponse {
   export type AsObject = {
     conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
-    taskConsistency: string,
+    taskTemplateConsistency: string,
   }
 
   export enum ConflictCase { 
@@ -329,8 +329,8 @@ export class CreateTaskTemplateSubTaskResponse extends jspb.Message {
   getId(): string;
   setId(value: string): CreateTaskTemplateSubTaskResponse;
 
-  getTaskConsistency(): string;
-  setTaskConsistency(value: string): CreateTaskTemplateSubTaskResponse;
+  getTaskTemplateConsistency(): string;
+  setTaskTemplateConsistency(value: string): CreateTaskTemplateSubTaskResponse;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateTaskTemplateSubTaskResponse.AsObject;
@@ -343,7 +343,7 @@ export class CreateTaskTemplateSubTaskResponse extends jspb.Message {
 export namespace CreateTaskTemplateSubTaskResponse {
   export type AsObject = {
     id: string,
-    taskConsistency: string,
+    taskTemplateConsistency: string,
   }
 }
 

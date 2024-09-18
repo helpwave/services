@@ -7,7 +7,15 @@ INSERT INTO task_templates
 INSERT INTO task_template_subtasks (name, task_template_id) VALUES ($1, $2);
 
 -- name: CreateSubTask :one
-INSERT INTO task_template_subtasks (name, task_template_id) VALUES ($1, $2) RETURNING id;
+WITH inserted_subtask AS (
+	INSERT INTO task_template_subtasks (name, task_template_id)
+		VALUES (@name, @task_template_id)
+		RETURNING id
+)
+UPDATE task_templates
+SET consistency = consistency + 1
+WHERE task_templates.id = @task_template_id
+RETURNING (SELECT id FROM inserted_subtask), consistency;
 
 -- name: GetAllTaskTemplatesWithSubTasks :many
 SELECT
