@@ -8,6 +8,7 @@ import (
 	"hwdb"
 	"hwlocale"
 	"hwutil"
+	"strconv"
 	"tasks-svc/locale"
 	"tasks-svc/repos/bed_repo"
 
@@ -87,9 +88,10 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 	}
 
 	return &pb.GetBedResponse{
-		Id:     bed.ID.String(),
-		RoomId: bed.RoomID.String(),
-		Name:   bed.Name,
+		Id:          bed.ID.String(),
+		RoomId:      bed.RoomID.String(),
+		Name:        bed.Name,
+		Consistency: strconv.FormatUint(uint64(bed.Consistency), 10),
 	}, nil
 }
 

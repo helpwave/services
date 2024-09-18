@@ -10,9 +10,10 @@ import (
 )
 
 type Bed struct {
-	ID     uuid.UUID
-	RoomID uuid.UUID
-	Name   string
+	ID          uuid.UUID
+	RoomID      uuid.UUID
+	Name        string
+	Consistency int64
 }
 
 type Patient struct {

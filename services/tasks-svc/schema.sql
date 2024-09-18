@@ -41,7 +41,8 @@ SET default_table_access_method = heap;
 CREATE TABLE public.beds (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     room_id uuid NOT NULL,
-    name text DEFAULT 'Unnamed Bed'::text NOT NULL
+    name text DEFAULT 'Unnamed Bed'::text NOT NULL,
+    consistency bigint DEFAULT 0 NOT NULL
 );
 
 

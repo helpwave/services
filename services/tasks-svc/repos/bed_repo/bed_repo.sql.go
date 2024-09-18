@@ -12,7 +12,7 @@ import (
 )
 
 const createBed = `-- name: CreateBed :one
-INSERT INTO beds (room_id, name) VALUES ($1, $2) RETURNING id, room_id, name
+INSERT INTO beds (room_id, name) VALUES ($1, $2) RETURNING id, room_id, name, consistency
 `
 
 type CreateBedParams struct {
@@ -23,7 +23,12 @@ type CreateBedParams struct {
 func (q *Queries) CreateBed(ctx context.Context, arg CreateBedParams) (Bed, error) {
 	row := q.db.QueryRow(ctx, createBed, arg.RoomID, arg.Name)
 	var i Bed
-	err := row.Scan(&i.ID, &i.RoomID, &i.Name)
+	err := row.Scan(
+		&i.ID,
+		&i.RoomID,
+		&i.Name,
+		&i.Consistency,
+	)
 	return i, err
 }
 
@@ -53,7 +58,7 @@ func (q *Queries) ExistsBed(ctx context.Context, id uuid.UUID) (bool, error) {
 
 const getBedAndRoomByBedId = `-- name: GetBedAndRoomByBedId :one
 SELECT
-	beds.id, beds.room_id, beds.name,
+	beds.id, beds.room_id, beds.name, beds.consistency,
 	rooms.id, rooms.name, rooms.ward_id
 	FROM beds
 	JOIN rooms on beds.room_id = rooms.id
@@ -72,6 +77,7 @@ func (q *Queries) GetBedAndRoomByBedId(ctx context.Context, id uuid.UUID) (GetBe
 		&i.Bed.ID,
 		&i.Bed.RoomID,
 		&i.Bed.Name,
+		&i.Bed.Consistency,
 		&i.Room.ID,
 		&i.Room.Name,
 		&i.Room.WardID,
@@ -80,7 +86,7 @@ func (q *Queries) GetBedAndRoomByBedId(ctx context.Context, id uuid.UUID) (GetBe
 }
 
 const getBedById = `-- name: GetBedById :one
-SELECT id, room_id, name FROM beds
+SELECT id, room_id, name, consistency FROM beds
 WHERE id = $1
 LIMIT 1
 `
@@ -88,7 +94,12 @@ LIMIT 1
 func (q *Queries) GetBedById(ctx context.Context, id uuid.UUID) (Bed, error) {
 	row := q.db.QueryRow(ctx, getBedById, id)
 	var i Bed
-	err := row.Scan(&i.ID, &i.RoomID, &i.Name)
+	err := row.Scan(
+		&i.ID,
+		&i.RoomID,
+		&i.Name,
+		&i.Consistency,
+	)
 	return i, err
 }
 
@@ -125,7 +136,7 @@ func (q *Queries) GetBedWithRoomByPatient(ctx context.Context, patientID uuid.UU
 }
 
 const getBeds = `-- name: GetBeds :many
-SELECT id, room_id, name FROM beds
+SELECT id, room_id, name, consistency FROM beds
 WHERE (room_id = $1 OR $1 IS NULL)
 ORDER BY name ASC
 `
@@ -139,7 +150,12 @@ func (q *Queries) GetBeds(ctx context.Context, roomID uuid.NullUUID) ([]Bed, err
 	items := []Bed{}
 	for rows.Next() {
 		var i Bed
-		if err := rows.Scan(&i.ID, &i.RoomID, &i.Name); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.RoomID,
+			&i.Name,
+			&i.Consistency,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
