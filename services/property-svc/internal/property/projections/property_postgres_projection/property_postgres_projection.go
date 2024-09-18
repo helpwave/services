@@ -457,6 +457,15 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
+	// update property consistency
+	err = propertyRepo.UpdateProperty(ctx, property_repo.UpdatePropertyParams{
+		ID:          evt.AggregateID,
+		Consistency: int64(evt.GetVersion()),
+	})
+	if err := hwdb.Error(ctx, err); err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	}
+
 	if err := tx.Commit(ctx); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
