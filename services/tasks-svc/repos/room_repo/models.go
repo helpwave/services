@@ -24,6 +24,7 @@ type Patient struct {
 	CreatedAt               pgtype.Timestamp
 	UpdatedAt               pgtype.Timestamp
 	IsDischarged            bool
+	Consistency             int64
 }
 
 type Room struct {
@@ -45,6 +46,7 @@ type Subtask struct {
 	Done         bool
 	CreatedBy    uuid.UUID
 	CreationDate pgtype.Timestamp
+	Consistency  int64
 }
 
 type Task struct {
@@ -58,6 +60,7 @@ type Task struct {
 	CreatedBy      uuid.UUID
 	DueAt          pgtype.Timestamp
 	CreatedAt      pgtype.Timestamp
+	Consistency    int64
 }
 
 type TaskTemplate struct {

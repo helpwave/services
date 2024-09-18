@@ -15,7 +15,7 @@ import (
 	zlog "github.com/rs/zerolog/log"
 )
 
-type ServiceServer struct {
+type GetPatientResponseServiceServer struct {
 	pb.UnimplementedRoomServiceServer
 }
 

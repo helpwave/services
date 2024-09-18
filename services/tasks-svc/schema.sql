@@ -57,7 +57,8 @@ CREATE TABLE public.patients (
     bed_id uuid,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    is_discharged boolean DEFAULT false NOT NULL
+    is_discharged boolean DEFAULT false NOT NULL,
+    consistency bigint DEFAULT 0 NOT NULL
 );
 
 
@@ -93,7 +94,8 @@ CREATE TABLE public.subtasks (
     name text NOT NULL,
     done boolean DEFAULT false NOT NULL,
     created_by uuid NOT NULL,
-    creation_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+    creation_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    consistency bigint DEFAULT 0 NOT NULL
 );
 
 
@@ -135,7 +137,8 @@ CREATE TABLE public.tasks (
     public boolean DEFAULT false NOT NULL,
     created_by uuid NOT NULL,
     due_at timestamp without time zone,
-    created_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    consistency bigint DEFAULT 0 NOT NULL
 );
 
 

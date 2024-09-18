@@ -13,6 +13,7 @@ import (
 	"hwdb/locale"
 	"hwes"
 	"hwutil"
+	"strconv"
 	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/models"
 	"tasks-svc/internal/tracking"
@@ -68,13 +69,15 @@ func (s *PatientGrpcService) GetPatient(ctx context.Context, req *pb.GetPatientR
 			return nil, status.Error(codes.Internal, err.Error())
 		} else if result != nil {
 			bedRes = &pb.GetPatientResponse_Bed{
-				Id:   result.Bed.ID.String(),
-				Name: result.Bed.Name,
+				Id:          result.Bed.ID.String(),
+				Name:        result.Bed.Name,
+				Consistency: strconv.FormatUint(uint64(result.Bed.Consistency), 10),
 			}
 			roomRes = &pb.GetPatientResponse_Room{
-				Id:     result.Room.ID.String(),
-				Name:   result.Room.Name,
-				WardId: result.Room.WardID.String(),
+				Id:          result.Room.ID.String(),
+				Name:        result.Room.Name,
+				WardId:      result.Room.WardID.String(),
+				Consistency: strconv.FormatUint(uint64(result.Room.Consistency), 10),
 			}
 		}
 	}
@@ -85,6 +88,7 @@ func (s *PatientGrpcService) GetPatient(ctx context.Context, req *pb.GetPatientR
 		Notes:                   patient.Notes,
 		Bed:                     bedRes,
 		Room:                    roomRes,
+		Consistency:             patient.Consistency,
 	}, nil
 }
 
@@ -107,6 +111,7 @@ func (s *PatientGrpcService) GetPatientByBed(ctx context.Context, req *pb.GetPat
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
 		BedId:                   &req.BedId,
+		Consistency:             patient.Consistency,
 	}, nil
 }
 
@@ -122,12 +127,13 @@ func (s *PatientGrpcService) GetPatientsByWard(ctx context.Context, req *pb.GetP
 	}
 
 	return &pb.GetPatientsByWardResponse{
-		Patients: hwutil.Map(patients, func(patient *models.Patient) *pb.GetPatientsByWardResponse_Patient {
+		Patients: hwutil.Map(patients, func(patient *models.PatientWithConsistency) *pb.GetPatientsByWardResponse_Patient {
 			return &pb.GetPatientsByWardResponse_Patient{
 				Id:                      patient.ID.String(),
 				HumanReadableIdentifier: patient.HumanReadableIdentifier,
 				Notes:                   patient.Notes,
 				BedId:                   hwutil.NullUUIDToStringPtr(patient.BedID),
+				Consistency:             patient.Consistency,
 			}
 		}),
 	}, nil
@@ -150,17 +156,19 @@ func (s *PatientGrpcService) GetPatientDetails(ctx context.Context, req *pb.GetP
 	var roomResponse *pb.GetPatientDetailsResponse_Room
 	if patientWithDetails.Room != nil {
 		roomResponse = &pb.GetPatientDetailsResponse_Room{
-			Id:     patientWithDetails.Room.ID.String(),
-			Name:   patientWithDetails.Room.Name,
-			WardId: patientWithDetails.Room.WardID.String(),
+			Id:          patientWithDetails.Room.ID.String(),
+			Name:        patientWithDetails.Room.Name,
+			WardId:      patientWithDetails.Room.WardID.String(),
+			Consistency: patientWithDetails.Room.Consistency,
 		}
 	}
 
 	var bedResponse *pb.GetPatientDetailsResponse_Bed
 	if patientWithDetails.Bed != nil {
 		bedResponse = &pb.GetPatientDetailsResponse_Bed{
-			Id:   patientWithDetails.Bed.ID.String(),
-			Name: patientWithDetails.Bed.Name,
+			Id:          patientWithDetails.Bed.ID.String(),
+			Name:        patientWithDetails.Bed.Name,
+			Consistency: patientWithDetails.Bed.Consistency,
 		}
 	}
 
@@ -174,14 +182,16 @@ func (s *PatientGrpcService) GetPatientDetails(ctx context.Context, req *pb.GetP
 			Public:         item.Public,
 			Subtasks:       make([]*pb.GetPatientDetailsResponse_Task_SubTask, len(item.Subtasks)),
 			AssignedUserId: hwutil.NullUUIDToStringPtr(item.AssignedUser), // TODO: #760
+			Consistency:    item.Consistency,
 		}
 
 		subtaskIdx := 0
 		for _, subtask := range item.Subtasks {
 			taskResponse[ix].Subtasks[subtaskIdx] = &pb.GetPatientDetailsResponse_Task_SubTask{
-				Id:   subtask.ID.String(),
-				Name: subtask.Name,
-				Done: subtask.Done,
+				Id:          subtask.ID.String(),
+				Name:        subtask.Name,
+				Done:        subtask.Done,
+				Consistency: item.SubtaskConsistencies[subtask.ID],
 			}
 			subtaskIdx++
 		}
@@ -197,6 +207,7 @@ func (s *PatientGrpcService) GetPatientDetails(ctx context.Context, req *pb.GetP
 		IsDischarged:            patientWithDetails.IsDischarged,
 		Room:                    roomResponse,
 		Bed:                     bedResponse,
+		Consistency:             patientWithDetails.Consistency,
 	}, nil
 }
 

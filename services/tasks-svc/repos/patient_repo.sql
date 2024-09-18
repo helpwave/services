@@ -51,14 +51,18 @@ SELECT
 	tasks.status as task_status,
 	tasks.assigned_user_id as task_assigned_user_id,
 	tasks.public as task_public,
+	tasks.consistency as task_consistency,
 	subtasks.id as subtask_id,
 	subtasks.name as subtask_name,
 	subtasks.done as subtask_done,
+	subtasks.consistency as subtasks_consistency,
 	beds.id as bed_id,
 	beds.name as bed_name,
+	beds.consistency as beds_consistency,
 	rooms.id as room_id,
 	rooms.name as room_name,
-	rooms.ward_id as ward_id
+	rooms.ward_id as ward_id,
+	rooms.consistency as room_consistency
 FROM patients
 		 LEFT JOIN tasks ON tasks.patient_id = patients.id
 		 LEFT JOIN subtasks ON subtasks.task_id = tasks.id

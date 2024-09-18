@@ -5,6 +5,7 @@ import (
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwdb"
+	"strconv"
 	"tasks-svc/internal/patient/models"
 	tasksModels "tasks-svc/internal/task/models"
 	"tasks-svc/repos/patient_repo"
@@ -35,32 +36,37 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 				var bed *models.Bed
 				if row.RoomID.Valid {
 					room = &models.Room{
-						ID:     row.RoomID.UUID,
-						Name:   *row.RoomName,
-						WardID: row.WardID.UUID,
+						ID:          row.RoomID.UUID,
+						Name:        *row.RoomName,
+						WardID:      row.WardID.UUID,
+						Consistency: strconv.FormatUint(uint64(*row.RoomConsistency), 10),
 					}
 				}
 
 				if row.BedID.Valid {
 					bed = &models.Bed{
-						ID:   row.BedID.UUID,
-						Name: *row.BedName,
+						ID:          row.BedID.UUID,
+						Name:        *row.BedName,
+						Consistency: strconv.FormatUint(uint64(*row.BedsConsistency), 10),
 					}
 				}
 
 				patientDetail = &models.PatientDetails{
-					Patient: models.Patient{
-						ID:                      row.Patient.ID,
-						HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
-						Notes:                   row.Patient.Notes,
-						BedID:                   row.Patient.BedID,
-						IsDischarged:            row.Patient.IsDischarged,
-						CreatedAt:               row.Patient.CreatedAt.Time,
-						UpdatedAt:               row.Patient.UpdatedAt.Time,
+					PatientWithConsistency: models.PatientWithConsistency{
+						Patient: models.Patient{
+							ID:                      row.Patient.ID,
+							HumanReadableIdentifier: row.Patient.HumanReadableIdentifier,
+							Notes:                   row.Patient.Notes,
+							BedID:                   row.Patient.BedID,
+							IsDischarged:            row.Patient.IsDischarged,
+							CreatedAt:               row.Patient.CreatedAt.Time,
+							UpdatedAt:               row.Patient.UpdatedAt.Time,
+						},
+						Consistency: strconv.FormatUint(uint64(row.Patient.Consistency), 10),
 					},
 					Room:  room,
 					Bed:   bed,
-					Tasks: make([]*tasksModels.Task, 0),
+					Tasks: make([]*tasksModels.TaskWithConsistency, 0),
 				}
 			}
 
@@ -68,19 +74,23 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 				continue
 			}
 
-			var task *tasksModels.Task
+			var task *tasksModels.TaskWithConsistency
 			if taskIx, existed := tasksMap[row.TaskID.UUID]; existed {
 				task = patientDetail.Tasks[taskIx]
 			} else {
-				task = &tasksModels.Task{
-					ID:           row.TaskID.UUID,
-					Name:         *row.TaskName,
-					Description:  *row.TaskDescription,
-					Status:       pb.TaskStatus(*row.TaskStatus),
-					AssignedUser: row.TaskAssignedUserID, // TODO: #760
-					PatientID:    row.Patient.ID,
-					Public:       *row.TaskPublic,
-					Subtasks:     make(map[uuid.UUID]tasksModels.Subtask),
+				task = &tasksModels.TaskWithConsistency{
+					Task: tasksModels.Task{
+						ID:           row.TaskID.UUID,
+						Name:         *row.TaskName,
+						Description:  *row.TaskDescription,
+						Status:       pb.TaskStatus(*row.TaskStatus),
+						AssignedUser: row.TaskAssignedUserID, // TODO: #760
+						PatientID:    row.Patient.ID,
+						Public:       *row.TaskPublic,
+						Subtasks:     make(map[uuid.UUID]tasksModels.Subtask),
+					},
+					Consistency:          strconv.FormatUint(uint64(*row.TaskConsistency), 10),
+					SubtaskConsistencies: make(map[uuid.UUID]string),
 				}
 				patientDetail.Tasks = append(patientDetail.Tasks, task)
 				tasksMap[row.TaskID.UUID] = len(patientDetail.Tasks) - 1
@@ -92,6 +102,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 					Name: *row.SubtaskName,
 					Done: *row.SubtaskDone,
 				}
+				task.SubtaskConsistencies[row.SubtaskID.UUID] = strconv.FormatUint(uint64(*row.SubtasksConsistency), 10)
 			}
 
 			patientDetails = append(patientDetails, patientDetail)

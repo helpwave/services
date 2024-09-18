@@ -21,6 +21,12 @@ type Task struct {
 	Subtasks     map[uuid.UUID]Subtask
 }
 
+type TaskWithConsistency struct {
+	Task
+	Consistency          string
+	SubtaskConsistencies map[uuid.UUID]string
+}
+
 type Subtask struct {
 	ID        uuid.UUID
 	CreatedBy uuid.UUID
