@@ -5,7 +5,8 @@ INSERT INTO rooms (name, ward_id) VALUES ($1, $2) RETURNING id;
 SELECT
 	sqlc.embed(rooms),
 	beds.id as bed_id,
-	beds.name as bed_name
+	beds.name as bed_name,
+	beds.consistency as bed_consistency
 FROM rooms
 		 LEFT JOIN beds ON beds.room_id = rooms.id
 WHERE rooms.id = @room_id
@@ -15,7 +16,8 @@ ORDER BY beds.name ASC;
 SELECT
 	sqlc.embed(rooms),
 	beds.id as bed_id,
-	beds.name as bed_name
+	beds.name as bed_name,
+	beds.consistency as bed_consistency
 FROM rooms
 		 LEFT JOIN beds ON beds.room_id = rooms.id
 WHERE (rooms.ward_id = sqlc.narg('ward_id') OR sqlc.narg('ward_id') IS NULL)

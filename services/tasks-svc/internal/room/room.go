@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc/status"
 	"hwdb"
 	"hwutil"
+	"strconv"
 	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/room_repo"
 
@@ -78,17 +79,19 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 		}
 
 		val := &pb.GetRoomResponse_Bed{
-			Id:   row.BedID.UUID.String(),
-			Name: *row.BedName,
+			Id:          row.BedID.UUID.String(),
+			Name:        *row.BedName,
+			Consistency: strconv.FormatUint(uint64(*row.BedConsistency), 10),
 		}
 		return &val
 	})
 
 	return &pb.GetRoomResponse{
-		Id:     room.ID.String(),
-		Name:   room.Name,
-		Beds:   beds,
-		WardId: room.WardID.String(),
+		Id:          room.ID.String(),
+		Name:        room.Name,
+		Beds:        beds,
+		WardId:      room.WardID.String(),
+		Consistency: strconv.FormatUint(uint64(room.Consistency), 10),
 	}, nil
 }
 

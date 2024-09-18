@@ -40,7 +40,8 @@ const getRoomWithBedsById = `-- name: GetRoomWithBedsById :many
 SELECT
 	rooms.id, rooms.name, rooms.ward_id, rooms.consistency,
 	beds.id as bed_id,
-	beds.name as bed_name
+	beds.name as bed_name,
+	beds.consistency as bed_consistency
 FROM rooms
 		 LEFT JOIN beds ON beds.room_id = rooms.id
 WHERE rooms.id = $1
@@ -48,9 +49,10 @@ ORDER BY beds.name ASC
 `
 
 type GetRoomWithBedsByIdRow struct {
-	Room    Room
-	BedID   uuid.NullUUID
-	BedName *string
+	Room           Room
+	BedID          uuid.NullUUID
+	BedName        *string
+	BedConsistency *int64
 }
 
 func (q *Queries) GetRoomWithBedsById(ctx context.Context, roomID uuid.UUID) ([]GetRoomWithBedsByIdRow, error) {
@@ -69,6 +71,7 @@ func (q *Queries) GetRoomWithBedsById(ctx context.Context, roomID uuid.UUID) ([]
 			&i.Room.Consistency,
 			&i.BedID,
 			&i.BedName,
+			&i.BedConsistency,
 		); err != nil {
 			return nil, err
 		}
@@ -84,7 +87,8 @@ const getRoomsWithBeds = `-- name: GetRoomsWithBeds :many
 SELECT
 	rooms.id, rooms.name, rooms.ward_id, rooms.consistency,
 	beds.id as bed_id,
-	beds.name as bed_name
+	beds.name as bed_name,
+	beds.consistency as bed_consistency
 FROM rooms
 		 LEFT JOIN beds ON beds.room_id = rooms.id
 WHERE (rooms.ward_id = $1 OR $1 IS NULL)
@@ -92,9 +96,10 @@ ORDER BY rooms.id ASC, beds.name ASC
 `
 
 type GetRoomsWithBedsRow struct {
-	Room    Room
-	BedID   uuid.NullUUID
-	BedName *string
+	Room           Room
+	BedID          uuid.NullUUID
+	BedName        *string
+	BedConsistency *int64
 }
 
 func (q *Queries) GetRoomsWithBeds(ctx context.Context, wardID uuid.NullUUID) ([]GetRoomsWithBedsRow, error) {
@@ -113,6 +118,7 @@ func (q *Queries) GetRoomsWithBeds(ctx context.Context, wardID uuid.NullUUID) ([
 			&i.Room.Consistency,
 			&i.BedID,
 			&i.BedName,
+			&i.BedConsistency,
 		); err != nil {
 			return nil, err
 		}
