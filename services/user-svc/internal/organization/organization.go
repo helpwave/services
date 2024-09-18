@@ -3,7 +3,7 @@ package organization
 import (
 	"common"
 	"context"
-	"gen/libs/events/v1"
+	events "gen/libs/events/v1"
 	pb "gen/services/user_svc/v1"
 	"hwdb"
 	"hwutil"

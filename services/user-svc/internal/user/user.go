@@ -6,7 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	"gen/libs/events/v1"
+	events "gen/libs/events/v1"
 	pb "gen/services/user_svc/v1"
 	"hwdb"
 	"user-svc/repos/user_repo"
