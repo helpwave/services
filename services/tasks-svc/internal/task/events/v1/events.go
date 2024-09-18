@@ -87,14 +87,6 @@ type TaskStatusUpdatedEvent struct {
 	Status string `json:"subtask_id"`
 }
 
-type TaskPublishedEvent struct{}
-
-type TaskUnpublishedEvent struct{}
-
-type TaskDueAtRemovedEvent struct{}
-
-type TaskDeletedEvent struct{}
-
 func NewTaskCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, name string, patientID uuid.UUID, status pb.TaskStatus) (hwes.Event, error) {
 	payload := TaskCreatedEvent{
 		ID:        id.String(),
@@ -156,13 +148,11 @@ func NewTaskUnassignedEvent(ctx context.Context, a hwes.Aggregate, userID uuid.U
 }
 
 func NewTaskPublishedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
-	payload := TaskPublishedEvent{}
-	return hwes.NewEvent(a, TaskPublished, hwes.WithContext(ctx), hwes.WithData(payload))
+	return hwes.NewEvent(a, TaskPublished, hwes.WithContext(ctx))
 }
 
 func NewTaskUnpublishedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
-	payload := TaskUnpublishedEvent{}
-	return hwes.NewEvent(a, TaskUnpublished, hwes.WithContext(ctx), hwes.WithData(payload))
+	return hwes.NewEvent(a, TaskUnpublished, hwes.WithContext(ctx))
 }
 
 func NewSubtaskCreatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID, name string, done bool) (hwes.Event, error) {
@@ -204,11 +194,9 @@ func NewSubtaskDeletedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uui
 }
 
 func NewTaskDueAtRemovedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
-	payload := TaskDueAtRemovedEvent{}
-	return hwes.NewEvent(a, TaskDueAtRemoved, hwes.WithContext(ctx), hwes.WithData(payload))
+	return hwes.NewEvent(a, TaskDueAtRemoved, hwes.WithContext(ctx))
 }
 
 func NewTaskDeletedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
-	payload := TaskDeletedEvent{}
-	return hwes.NewEvent(a, TaskDeleted, hwes.WithContext(ctx), hwes.WithData(payload))
+	return hwes.NewEvent(a, TaskDeleted, hwes.WithContext(ctx))
 }
