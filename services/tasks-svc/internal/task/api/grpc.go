@@ -219,6 +219,7 @@ func (s *TaskGrpcService) GetTasksByPatientSortedByStatus(ctx context.Context, r
 					DueAt:          timestamppb.New(task.DueAt),
 					Subtasks:       make([]*pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask, len(task.Subtasks)),
 					AssignedUserId: hwutil.NullUUIDToStringPtr(task.AssignedUser), // TODO: #760
+					Consistency:    task.Consistency,
 				}
 
 				subtaskIdx := 0
