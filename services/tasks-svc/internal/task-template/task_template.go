@@ -197,22 +197,23 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 		Name:           req.Name,
 	})
 
-	subtaskID := row.ID
-	consistency := row.Consistency
-
 	// implicitly checks the existence of the ward through the foreign key constraint
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	subtaskID := row.ID
+	consistency := row.Consistency
+
 	log.Info().
 		Str("taskTemplateID", taskTemplateID.String()).
 		Str("taskTemplateSubTaskID", subtaskID.String()).
+		Int64("consistencyInt64", consistency).
 		Msg("subtaskID created")
 
 	return &pb.CreateTaskTemplateSubTaskResponse{
-		Id:              subtaskID.String(),
-		TaskConsistency: strconv.FormatUint(uint64(consistency), 10),
+		Id:                      subtaskID.String(),
+		TaskTemplateConsistency: strconv.FormatUint(uint64(consistency), 10),
 	}, nil
 }
 
