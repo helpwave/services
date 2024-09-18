@@ -147,7 +147,8 @@ CREATE TABLE public.tasks (
 
 CREATE TABLE public.wards (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    name text NOT NULL
+    name text NOT NULL,
+    consistency bigint DEFAULT 0 NOT NULL
 );
 
 

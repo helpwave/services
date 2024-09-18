@@ -77,6 +77,7 @@ type TaskTemplateSubtask struct {
 }
 
 type Ward struct {
-	ID   uuid.UUID
-	Name string
+	ID          uuid.UUID
+	Name        string
+	Consistency int64
 }

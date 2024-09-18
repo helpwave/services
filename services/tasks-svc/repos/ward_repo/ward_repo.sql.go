@@ -47,14 +47,14 @@ func (q *Queries) ExistsWard(ctx context.Context, id uuid.UUID) (bool, error) {
 }
 
 const getWardById = `-- name: GetWardById :one
-SELECT id, name FROM wards
+SELECT id, name, consistency FROM wards
 WHERE id = $1
 `
 
 func (q *Queries) GetWardById(ctx context.Context, wardID uuid.UUID) (Ward, error) {
 	row := q.db.QueryRow(ctx, getWardById, wardID)
 	var i Ward
-	err := row.Scan(&i.ID, &i.Name)
+	err := row.Scan(&i.ID, &i.Name, &i.Consistency)
 	return i, err
 }
 
@@ -123,7 +123,7 @@ func (q *Queries) GetWardByIdWithRoomsBedsAndTaskTemplates(ctx context.Context, 
 }
 
 const getWards = `-- name: GetWards :many
-SELECT id, name FROM wards
+SELECT id, name, consistency FROM wards
 `
 
 func (q *Queries) GetWards(ctx context.Context) ([]Ward, error) {
@@ -135,7 +135,7 @@ func (q *Queries) GetWards(ctx context.Context) ([]Ward, error) {
 	items := []Ward{}
 	for rows.Next() {
 		var i Ward
-		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+		if err := rows.Scan(&i.ID, &i.Name, &i.Consistency); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -148,7 +148,7 @@ func (q *Queries) GetWards(ctx context.Context) ([]Ward, error) {
 
 const getWardsWithCounts = `-- name: GetWardsWithCounts :many
 SELECT
-	wards.id, wards.name,
+	wards.id, wards.name, wards.consistency,
 	COUNT(DISTINCT beds.id) AS bed_count,
 	COUNT(DISTINCT CASE WHEN tasks.status = $1 THEN tasks.id ELSE NULL END) AS todo_count,
 	COUNT(DISTINCT CASE WHEN tasks.status = $2 THEN tasks.id ELSE NULL END) AS in_progress_count,
@@ -194,6 +194,7 @@ func (q *Queries) GetWardsWithCounts(ctx context.Context, arg GetWardsWithCounts
 		if err := rows.Scan(
 			&i.Ward.ID,
 			&i.Ward.Name,
+			&i.Ward.Consistency,
 			&i.BedCount,
 			&i.TodoCount,
 			&i.InProgressCount,
