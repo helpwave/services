@@ -63,14 +63,6 @@ INSERT INTO select_datas
 VALUES ($1)
 RETURNING id;
 
--- name: DeleteSelectDataByPropertyID :exec
-DELETE FROM select_datas
-    WHERE id IN (
-        SELECT properties.select_data_id
-        FROM properties
-        WHERE properties.id = @id
-	);
-
 -- name: CreateSelectOption :exec
 INSERT INTO select_options
 	(id, name, description, is_custom, select_data_id)

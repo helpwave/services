@@ -75,20 +75,6 @@ func (q *Queries) CreateSelectOption(ctx context.Context, arg CreateSelectOption
 	return err
 }
 
-const deleteSelectDataByPropertyID = `-- name: DeleteSelectDataByPropertyID :exec
-DELETE FROM select_datas
-    WHERE id IN (
-        SELECT properties.select_data_id
-        FROM properties
-        WHERE properties.id = $1
-	)
-`
-
-func (q *Queries) DeleteSelectDataByPropertyID(ctx context.Context, id uuid.UUID) error {
-	_, err := q.db.Exec(ctx, deleteSelectDataByPropertyID, id)
-	return err
-}
-
 const getPropertiesWithSelectDataAndOptionsBySubjectTypeOrID = `-- name: GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID :many
 SELECT
 	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.select_data_id, properties.consistency,
