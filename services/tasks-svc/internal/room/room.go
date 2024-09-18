@@ -15,7 +15,7 @@ import (
 	zlog "github.com/rs/zerolog/log"
 )
 
-type GetPatientResponseServiceServer struct {
+type ServiceServer struct {
 	pb.UnimplementedRoomServiceServer
 }
 
@@ -142,16 +142,18 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 				return nil
 			}
 			val := &pb.GetRoomsResponse_Room_Bed{
-				Id:   bedRow.BedID.UUID.String(),
-				Name: *bedRow.BedName,
+				Id:          bedRow.BedID.UUID.String(),
+				Name:        *bedRow.BedName,
+				Consistency: strconv.FormatUint(uint64(*bedRow.BedConsistency), 10),
 			}
 			return &val
 		})
 		val := &pb.GetRoomsResponse_Room{
-			Id:     room.ID.String(),
-			Name:   room.Name,
-			Beds:   beds,
-			WardId: room.WardID.String(),
+			Id:          room.ID.String(),
+			Name:        room.Name,
+			Beds:        beds,
+			WardId:      room.WardID.String(),
+			Consistency: strconv.FormatUint(uint64(room.Consistency), 10),
 		}
 		return &val
 	})
