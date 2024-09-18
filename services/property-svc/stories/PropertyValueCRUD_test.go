@@ -1,64 +1,17 @@
 package stories
 
 import (
-	"common"
 	"context"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
-	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"hwutil"
-	"sort"
 	"testing"
 	"time"
 )
 
 func TestMain(m *testing.M) {
 	Setup(m)
-}
-
-type InsecureBearerToken string
-
-func (t InsecureBearerToken) GetRequestMetadata(_ context.Context, _ ...string) (map[string]string, error) {
-	return map[string]string{
-		"authorization": "Bearer " + string(t),
-	}, nil
-}
-func (t InsecureBearerToken) RequireTransportSecurity() bool {
-	return false
-}
-
-func getGrpcConn() *grpc.ClientConn {
-	// README's fake token
-	token := "eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19"
-
-	conn, err := grpc.NewClient(
-		common.ResolveAddrFromEnv(),
-		grpc.WithPerRPCCredentials(InsecureBearerToken(token)),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-	if err != nil {
-		log.Fatal().Err(err).Msg("could not create grpc conn")
-	}
-	return conn
-}
-
-func propertyServiceClient() pb.PropertyServiceClient {
-	return pb.NewPropertyServiceClient(getGrpcConn())
-}
-
-func propertyValueServiceClient() pb.PropertyValueServiceClient {
-	return pb.NewPropertyValueServiceClient(getGrpcConn())
-}
-
-func NamesOf(arr []*pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption) []string {
-	strs := hwutil.Map(arr, func(v *pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption) string {
-		return v.Name
-	})
-	sort.Strings(strs)
-	return strs
 }
 
 // TestCreateAttachUpdateTextProperty:
@@ -103,27 +56,27 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	}
 
 	response := map[string]interface{}{
-		"Id":            propertyResponse.Id,
-		"SubjectType":   propertyResponse.SubjectType.String(),
-		"FieldType":     propertyResponse.FieldType.String(),
-		"Name":          propertyResponse.Name,
-		"Description":   propertyResponse.Description,
-		"IsArchived":    propertyResponse.IsArchived,
-		"SetId":         propertyResponse.SetId,
-		"FieldTypeData": propertyResponse.FieldTypeData,
-		// "AlwaysIncludeForViewSource": propertyResponse.AlwaysIncludeForViewSource, // TODO
+		"Id":                         propertyResponse.Id,
+		"SubjectType":                propertyResponse.SubjectType.String(),
+		"FieldType":                  propertyResponse.FieldType.String(),
+		"Name":                       propertyResponse.Name,
+		"Description":                propertyResponse.Description,
+		"IsArchived":                 propertyResponse.IsArchived,
+		"SetId":                      propertyResponse.SetId,
+		"FieldTypeData":              propertyResponse.FieldTypeData,
+		"AlwaysIncludeForViewSource": nil,
 	}
 
 	expectedResponse := map[string]interface{}{
-		"Id":            propertyID.String(),
-		"SubjectType":   createPropertyRequest.SubjectType.String(),
-		"FieldType":     createPropertyRequest.FieldType.String(),
-		"Name":          createPropertyRequest.Name,
-		"Description":   createPropertyRequest.Description,
-		"IsArchived":    false,
-		"SetId":         createPropertyRequest.SetId,
-		"FieldTypeData": createPropertyRequest.FieldTypeData,
-		// "AlwaysIncludeForViewSource": nil, // TODO
+		"Id":                         propertyID.String(),
+		"SubjectType":                createPropertyRequest.SubjectType.String(),
+		"FieldType":                  createPropertyRequest.FieldType.String(),
+		"Name":                       createPropertyRequest.Name,
+		"Description":                createPropertyRequest.Description,
+		"IsArchived":                 false,
+		"SetId":                      createPropertyRequest.SetId,
+		"FieldTypeData":              createPropertyRequest.FieldTypeData,
+		"AlwaysIncludeForViewSource": nil,
 	}
 
 	if !assert.Equal(t, expectedResponse, response) {
@@ -276,7 +229,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		"IsArchived":  propertyResponse.IsArchived,
 		"SetId":       propertyResponse.SetId,
 		// "FieldTypeData": propertyResponse.FieldTypeData, // TODO
-		// "AlwaysIncludeForViewSource": propertyResponse.AlwaysIncludeForViewSource, // TODO
+		"AlwaysIncludeForViewSource": nil,
 	}
 
 	expectedResponse := map[string]interface{}{
@@ -288,7 +241,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		"IsArchived":  false,
 		"SetId":       createPropertyRequest.SetId,
 		// "FieldTypeData": createPropertyRequest.FieldTypeData, // TODO
-		// "AlwaysIncludeForViewSource": nil, // TODO
+		"AlwaysIncludeForViewSource": nil,
 	}
 
 	if !assert.Equal(t, expectedResponse, response) {
@@ -448,7 +401,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		"IsArchived":  propertyResponse.IsArchived,
 		"SetId":       propertyResponse.SetId,
 		// "FieldTypeData": propertyResponse.FieldTypeData, // TODO
-		// "AlwaysIncludeForViewSource": propertyResponse.AlwaysIncludeForViewSource, // TODO
+		"AlwaysIncludeForViewSource": nil,
 	}
 
 	expectedResponse := map[string]interface{}{
@@ -460,7 +413,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		"IsArchived":  false,
 		"SetId":       createPropertyRequest.SetId,
 		// "FieldTypeData": createPropertyRequest.FieldTypeData, // TODO
-		// "AlwaysIncludeForViewSource": nil, // TODO
+		"AlwaysIncludeForViewSource": nil,
 	}
 
 	if !assert.Equal(t, expectedResponse, response) {

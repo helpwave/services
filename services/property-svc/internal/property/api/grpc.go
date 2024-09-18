@@ -64,6 +64,16 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		return nil, err
 	}
 
+	var alwaysIncludeForViewSource *bool = nil
+
+	if req.ViewSource != nil {
+		isAlwaysIncluded, err := s.handlers.Queries.V1.IsPropertyAlwaysIncludedForViewSource(ctx, req.ViewSource, property.SubjectType, property.ID)
+		if err != nil {
+			return nil, err
+		}
+		alwaysIncludeForViewSource = &isAlwaysIncluded
+	}
+
 	response := &pb.GetPropertyResponse{
 		Id:          property.ID.String(),
 		SubjectType: property.SubjectType,
@@ -74,7 +84,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		IsArchived:  property.IsArchived,
 
 		SetId:                      hwutil.NullUUIDToStringPtr(property.SetID),
-		AlwaysIncludeForViewSource: nil, // TODO
+		AlwaysIncludeForViewSource: alwaysIncludeForViewSource,
 		FieldTypeData:              nil, // set below
 	}
 
