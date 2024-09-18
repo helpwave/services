@@ -118,7 +118,8 @@ CREATE TABLE public.task_templates (
     name text NOT NULL,
     description text NOT NULL,
     ward_id uuid,
-    created_by uuid NOT NULL
+    created_by uuid NOT NULL,
+    consistency bigint DEFAULT 0 NOT NULL
 );
 
 

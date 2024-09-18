@@ -62,12 +62,16 @@ const getWardByIdWithRoomsBedsAndTaskTemplates = `-- name: GetWardByIdWithRoomsB
 SELECT
 	wards.id as ward_id,
 	wards.name as ward_name,
+	wards.consistency as ward_consistency,
 	rooms.id as room_id,
 	rooms.name as room_name,
+	rooms.consistency as room_consistency,
 	beds.id as bed_id,
 	beds.name as bed_name,
+	beds.consistency as bed_consistency,
 	task_templates.id as task_template_id,
 	task_templates.name as task_template_name,
+	task_templates.consistency as task_template_consistency,
 	task_template_subtasks.id as task_template_subtask_id,
 	task_template_subtasks.name as task_template_subtask_name
 FROM wards
@@ -81,12 +85,16 @@ WHERE wards.id = $1
 type GetWardByIdWithRoomsBedsAndTaskTemplatesRow struct {
 	WardID                  uuid.UUID
 	WardName                string
+	WardConsistency         int64
 	RoomID                  uuid.NullUUID
 	RoomName                *string
+	RoomConsistency         *int64
 	BedID                   uuid.NullUUID
 	BedName                 *string
+	BedConsistency          *int64
 	TaskTemplateID          uuid.NullUUID
 	TaskTemplateName        *string
+	TaskTemplateConsistency *int64
 	TaskTemplateSubtaskID   uuid.NullUUID
 	TaskTemplateSubtaskName *string
 }
@@ -103,12 +111,16 @@ func (q *Queries) GetWardByIdWithRoomsBedsAndTaskTemplates(ctx context.Context, 
 		if err := rows.Scan(
 			&i.WardID,
 			&i.WardName,
+			&i.WardConsistency,
 			&i.RoomID,
 			&i.RoomName,
+			&i.RoomConsistency,
 			&i.BedID,
 			&i.BedName,
+			&i.BedConsistency,
 			&i.TaskTemplateID,
 			&i.TaskTemplateName,
+			&i.TaskTemplateConsistency,
 			&i.TaskTemplateSubtaskID,
 			&i.TaskTemplateSubtaskName,
 		); err != nil {

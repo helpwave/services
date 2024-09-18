@@ -79,7 +79,7 @@ func (q *Queries) DeleteTaskTemplate(ctx context.Context, id uuid.UUID) error {
 
 const getAllTaskTemplatesWithSubTasks = `-- name: GetAllTaskTemplatesWithSubTasks :many
 SELECT
-	task_templates.id, task_templates.name, task_templates.description, task_templates.ward_id, task_templates.created_by,
+	task_templates.id, task_templates.name, task_templates.description, task_templates.ward_id, task_templates.created_by, task_templates.consistency,
 	task_template_subtasks.id as sub_task_id,
 	task_template_subtasks.name as sub_task_name
 FROM
@@ -121,6 +121,7 @@ func (q *Queries) GetAllTaskTemplatesWithSubTasks(ctx context.Context, arg GetAl
 			&i.TaskTemplate.Description,
 			&i.TaskTemplate.WardID,
 			&i.TaskTemplate.CreatedBy,
+			&i.TaskTemplate.Consistency,
 			&i.SubTaskID,
 			&i.SubTaskName,
 		); err != nil {

@@ -244,9 +244,10 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 			room = rooms[roomIx]
 		} else {
 			room = &pb.GetWardDetailsResponse_Room{
-				Id:   row.RoomID.UUID.String(),
-				Name: *row.RoomName,
-				Beds: make([]*pb.GetWardDetailsResponse_Bed, 0),
+				Id:          row.RoomID.UUID.String(),
+				Name:        *row.RoomName,
+				Beds:        make([]*pb.GetWardDetailsResponse_Bed, 0),
+				Consistency: strconv.FormatUint(uint64(*row.RoomConsistency), 10),
 			}
 			rooms = append(rooms, room)
 			roomsIndexMap[row.RoomID.UUID] = len(rooms) - 1
@@ -257,8 +258,9 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		}
 		if _, processed := bedSet[row.BedID.UUID]; !processed {
 			bed := &pb.GetWardDetailsResponse_Bed{
-				Id:   row.BedID.UUID.String(),
-				Name: *row.BedName,
+				Id:          row.BedID.UUID.String(),
+				Name:        *row.BedName,
+				Consistency: strconv.FormatUint(uint64(*row.BedConsistency), 10),
 			}
 			room.Beds = append(room.Beds, bed)
 			bedSet[row.BedID.UUID] = true
@@ -282,9 +284,10 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 			taskTemplate = taskTemplates[ttIx]
 		} else {
 			taskTemplate = &pb.GetWardDetailsResponse_TaskTemplate{
-				Id:       row.TaskTemplateID.UUID.String(),
-				Name:     *row.TaskTemplateName,
-				Subtasks: make([]*pb.GetWardDetailsResponse_Subtask, 0),
+				Id:          row.TaskTemplateID.UUID.String(),
+				Name:        *row.TaskTemplateName,
+				Subtasks:    make([]*pb.GetWardDetailsResponse_Subtask, 0),
+				Consistency: strconv.FormatUint(uint64(*row.TaskTemplateConsistency), 10),
 			}
 			taskTemplates = append(taskTemplates, taskTemplate)
 			ttIndexMap[row.TaskTemplateID.UUID] = len(taskTemplates) - 1
@@ -308,6 +311,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		Name:          rows[0].WardName,
 		Rooms:         rooms,
 		TaskTemplates: taskTemplates,
+		Consistency:   strconv.FormatUint(uint64(rows[0].WardConsistency), 10),
 	}
 
 	return ward, nil

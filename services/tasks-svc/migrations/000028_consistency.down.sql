@@ -1,3 +1,4 @@
+ALTER TABLE task_templates DROP COLUMN IF EXISTS consistency;
 ALTER TABLE wards DROP COLUMN IF EXISTS consistency;
 ALTER TABLE tasks DROP COLUMN IF EXISTS consistency;
 ALTER TABLE patients DROP COLUMN IF EXISTS consistency;

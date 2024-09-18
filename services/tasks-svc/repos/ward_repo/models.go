@@ -68,6 +68,7 @@ type TaskTemplate struct {
 	Description string
 	WardID      uuid.NullUUID
 	CreatedBy   uuid.UUID
+	Consistency int64
 }
 
 type TaskTemplateSubtask struct {
