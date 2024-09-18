@@ -295,6 +295,7 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 		err := propertyRepo.UpdateSelectData(ctx, property_repo.UpdateSelectDataParams{
 			ID:            property.SelectDataID.UUID,
 			AllowFreetext: payload.NewAllowFreetext,
+			Consistency:   int64(evt.GetVersion()),
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionRetry)

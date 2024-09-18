@@ -258,17 +258,24 @@ func (q *Queries) UpdatePropertySetID(ctx context.Context, arg UpdatePropertySet
 }
 
 const updateSelectData = `-- name: UpdateSelectData :exec
-UPDATE select_datas
-SET allow_freetext = $1
-WHERE id = $2
+WITH updated_select_datas AS (
+	UPDATE select_datas
+		SET allow_freetext = $2
+		WHERE select_datas.id = $3
+		RETURNING select_datas.id
+)
+UPDATE properties
+SET consistency = $1
+WHERE select_data_id = (SELECT id FROM updated_select_datas)
 `
 
 type UpdateSelectDataParams struct {
+	Consistency   int64
 	AllowFreetext bool
 	ID            uuid.UUID
 }
 
 func (q *Queries) UpdateSelectData(ctx context.Context, arg UpdateSelectDataParams) error {
-	_, err := q.db.Exec(ctx, updateSelectData, arg.AllowFreetext, arg.ID)
+	_, err := q.db.Exec(ctx, updateSelectData, arg.Consistency, arg.AllowFreetext, arg.ID)
 	return err
 }

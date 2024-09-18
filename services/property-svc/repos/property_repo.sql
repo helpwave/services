@@ -40,9 +40,16 @@ SET set_id = @set_id,
 WHERE id = @id;
 
 -- name: UpdateSelectData :exec
-UPDATE select_datas
-SET allow_freetext = @allow_freetext
-WHERE id = @id;
+WITH updated_select_datas AS (
+	UPDATE select_datas
+		SET allow_freetext = @allow_freetext
+		WHERE select_datas.id = @id
+		RETURNING select_datas.id
+)
+UPDATE properties
+SET consistency = @consistency
+WHERE select_data_id = (SELECT id FROM updated_select_datas);
+
 
 -- name: UpdatePropertySelectDataID :exec
 UPDATE properties
