@@ -48,7 +48,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		description = *req.Description
 	}
 
-	templateID, err := templateRepo.CreateTaskTemplate(ctx, task_template_repo.CreateTaskTemplateParams{
+	row, err := templateRepo.CreateTaskTemplate(ctx, task_template_repo.CreateTaskTemplateParams{
 		Name:        req.Name,
 		Description: description,
 		CreatedBy:   userID,
@@ -59,6 +59,9 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	if err != nil {
 		return nil, err
 	}
+
+	templateID := row.ID
+	consistency := row.Consistency
 
 	if req.Subtasks != nil {
 		subtaskNames := hwutil.Map(req.Subtasks, func(subtask *pb.CreateTaskTemplateRequest_SubTask) task_template_repo.AppendSubTasksParams {
@@ -85,7 +88,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 
 	return &pb.CreateTaskTemplateResponse{
 		Id:          templateID.String(),
-		Consistency: "0", // DEFAULT value
+		Consistency: strconv.FormatUint(uint64(consistency), 10),
 	}, nil
 }
 
@@ -115,7 +118,14 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 
 func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.DeleteTaskTemplateSubTaskRequest) (*pb.DeleteTaskTemplateSubTaskResponse, error) {
 	log := zlog.Ctx(ctx)
-	templateRepo := task_template_repo.New(hwdb.GetDB())
+
+	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(), ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer rollback()
+
+	templateRepo := task_template_repo.New(tx)
 
 	// TODO: Auth
 
@@ -130,12 +140,27 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 		return nil, err
 	}
 
+	// increase consistency of taskTemplate
+	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+		ID: subtask.TaskTemplateID,
+	})
+	if err := hwdb.Error(ctx, err); err != nil {
+		return nil, err
+	}
+
+	// commit
+	if err := hwdb.Error(ctx, tx.Commit(ctx)); err != nil {
+		return nil, err
+	}
+
 	log.Info().
 		Str("taskTemplateSubtaskID", subtask.ID.String()).
 		Str("taskTemplateID", subtask.TaskTemplateID.String()).
 		Msg("taskTemplateSubtask deleted")
 
-	return &pb.DeleteTaskTemplateSubTaskResponse{}, nil
+	return &pb.DeleteTaskTemplateSubTaskResponse{
+		TaskTemplateConsistency: strconv.FormatUint(uint64(consistency), 10),
+	}, nil
 }
 
 func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskTemplateRequest) (*pb.UpdateTaskTemplateResponse, error) {

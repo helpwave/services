@@ -95,11 +95,15 @@ final $typed_data.Uint8List deleteTaskTemplateSubTaskRequestDescriptor = $conver
 @$core.Deprecated('Use deleteTaskTemplateSubTaskResponseDescriptor instead')
 const DeleteTaskTemplateSubTaskResponse$json = {
   '1': 'DeleteTaskTemplateSubTaskResponse',
+  '2': [
+    {'1': 'task_template_consistency', '3': 1, '4': 1, '5': 9, '10': 'taskTemplateConsistency'},
+  ],
 };
 
 /// Descriptor for `DeleteTaskTemplateSubTaskResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List deleteTaskTemplateSubTaskResponseDescriptor = $convert.base64Decode(
-    'CiFEZWxldGVUYXNrVGVtcGxhdGVTdWJUYXNrUmVzcG9uc2U=');
+    'CiFEZWxldGVUYXNrVGVtcGxhdGVTdWJUYXNrUmVzcG9uc2USOgoZdGFza190ZW1wbGF0ZV9jb2'
+    '5zaXN0ZW5jeRgBIAEoCVIXdGFza1RlbXBsYXRlQ29uc2lzdGVuY3k=');
 
 @$core.Deprecated('Use updateTaskTemplateRequestDescriptor instead')
 const UpdateTaskTemplateRequest$json = {

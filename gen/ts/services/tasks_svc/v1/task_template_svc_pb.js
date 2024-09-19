@@ -1366,7 +1366,7 @@ proto.services.tasks_svc.v1.DeleteTaskTemplateSubTaskResponse.prototype.toObject
  */
 proto.services.tasks_svc.v1.DeleteTaskTemplateSubTaskResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+    taskTemplateConsistency: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -1403,6 +1403,10 @@ proto.services.tasks_svc.v1.DeleteTaskTemplateSubTaskResponse.deserializeBinaryF
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setTaskTemplateConsistency(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1432,6 +1436,31 @@ proto.services.tasks_svc.v1.DeleteTaskTemplateSubTaskResponse.prototype.serializ
  */
 proto.services.tasks_svc.v1.DeleteTaskTemplateSubTaskResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getTaskTemplateConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string task_template_consistency = 1;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.DeleteTaskTemplateSubTaskResponse.prototype.getTaskTemplateConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.DeleteTaskTemplateSubTaskResponse} returns this
+ */
+proto.services.tasks_svc.v1.DeleteTaskTemplateSubTaskResponse.prototype.setTaskTemplateConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 

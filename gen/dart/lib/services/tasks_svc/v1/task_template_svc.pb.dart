@@ -348,12 +348,21 @@ class DeleteTaskTemplateSubTaskRequest extends $pb.GeneratedMessage {
 }
 
 class DeleteTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
-  factory DeleteTaskTemplateSubTaskResponse() => create();
+  factory DeleteTaskTemplateSubTaskResponse({
+    $core.String? taskTemplateConsistency,
+  }) {
+    final $result = create();
+    if (taskTemplateConsistency != null) {
+      $result.taskTemplateConsistency = taskTemplateConsistency;
+    }
+    return $result;
+  }
   DeleteTaskTemplateSubTaskResponse._() : super();
   factory DeleteTaskTemplateSubTaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DeleteTaskTemplateSubTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteTaskTemplateSubTaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'taskTemplateConsistency')
     ..hasRequiredFields = false
   ;
 
@@ -377,6 +386,15 @@ class DeleteTaskTemplateSubTaskResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static DeleteTaskTemplateSubTaskResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteTaskTemplateSubTaskResponse>(create);
   static DeleteTaskTemplateSubTaskResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get taskTemplateConsistency => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set taskTemplateConsistency($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasTaskTemplateConsistency() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTaskTemplateConsistency() => clearField(1);
 }
 
 class UpdateTaskTemplateRequest extends $pb.GeneratedMessage {

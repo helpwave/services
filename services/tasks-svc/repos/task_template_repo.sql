@@ -1,7 +1,7 @@
 -- name: CreateTaskTemplate :one
 INSERT INTO task_templates
 	(name, description, created_by, ward_id) VALUES ($1, $2, $3, $4)
-    RETURNING id;
+    RETURNING id, consistency;
 
 -- name: AppendSubTasks :copyfrom
 INSERT INTO task_template_subtasks (name, task_template_id) VALUES ($1, $2);

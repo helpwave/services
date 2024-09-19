@@ -141,6 +141,9 @@ export namespace DeleteTaskTemplateSubTaskRequest {
 }
 
 export class DeleteTaskTemplateSubTaskResponse extends jspb.Message {
+  getTaskTemplateConsistency(): string;
+  setTaskTemplateConsistency(value: string): DeleteTaskTemplateSubTaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DeleteTaskTemplateSubTaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: DeleteTaskTemplateSubTaskResponse): DeleteTaskTemplateSubTaskResponse.AsObject;
@@ -151,6 +154,7 @@ export class DeleteTaskTemplateSubTaskResponse extends jspb.Message {
 
 export namespace DeleteTaskTemplateSubTaskResponse {
   export type AsObject = {
+    taskTemplateConsistency: string,
   }
 }
 

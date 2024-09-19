@@ -48,7 +48,7 @@ func (q *Queries) CreateSubTask(ctx context.Context, arg CreateSubTaskParams) (C
 const createTaskTemplate = `-- name: CreateTaskTemplate :one
 INSERT INTO task_templates
 	(name, description, created_by, ward_id) VALUES ($1, $2, $3, $4)
-    RETURNING id
+    RETURNING id, consistency
 `
 
 type CreateTaskTemplateParams struct {
@@ -58,16 +58,21 @@ type CreateTaskTemplateParams struct {
 	WardID      uuid.NullUUID
 }
 
-func (q *Queries) CreateTaskTemplate(ctx context.Context, arg CreateTaskTemplateParams) (uuid.UUID, error) {
+type CreateTaskTemplateRow struct {
+	ID          uuid.UUID
+	Consistency int64
+}
+
+func (q *Queries) CreateTaskTemplate(ctx context.Context, arg CreateTaskTemplateParams) (CreateTaskTemplateRow, error) {
 	row := q.db.QueryRow(ctx, createTaskTemplate,
 		arg.Name,
 		arg.Description,
 		arg.CreatedBy,
 		arg.WardID,
 	)
-	var id uuid.UUID
-	err := row.Scan(&id)
-	return id, err
+	var i CreateTaskTemplateRow
+	err := row.Scan(&i.ID, &i.Consistency)
+	return i, err
 }
 
 const deleteSubtask = `-- name: DeleteSubtask :one

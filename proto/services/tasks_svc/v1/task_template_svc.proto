@@ -45,7 +45,9 @@ message DeleteTaskTemplateSubTaskRequest {
   string id = 1; // @gotags: validate:"uuid4"
 }
 
-message DeleteTaskTemplateSubTaskResponse {}
+message DeleteTaskTemplateSubTaskResponse {
+  string task_template_consistency = 1;
+}
 
 
 ///
