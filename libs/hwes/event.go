@@ -28,7 +28,8 @@ type Event struct {
 	Data []byte
 	// time of event creation
 	Timestamp time.Time
-	Version   uint64
+	// event's number in its stream
+	Version uint64
 	// user responsible for this event
 	CommitterUserID *uuid.UUID
 	// w3c trace context
