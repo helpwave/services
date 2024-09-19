@@ -113,7 +113,8 @@ CREATE TABLE public.property_values (
     number_value double precision,
     bool_value boolean,
     date_value date,
-    date_time_value timestamp without time zone
+    date_time_value timestamp without time zone,
+    consistency bigint DEFAULT 0 NOT NULL
 );
 
 

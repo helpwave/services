@@ -14,7 +14,7 @@ import (
 
 const createBasicPropertyValue = `-- name: CreateBasicPropertyValue :exec
 INSERT INTO property_values
-	(id, property_id, subject_id, text_value, number_value, bool_value, date_value, date_time_value)
+	(id, property_id, subject_id, consistency, text_value, number_value, bool_value, date_value, date_time_value)
 VALUES (
         $1,
         $2,
@@ -23,7 +23,8 @@ VALUES (
         $5,
         $6,
         $7,
-        $8
+        $8,
+        $9
 )
 `
 
@@ -31,6 +32,7 @@ type CreateBasicPropertyValueParams struct {
 	ID            uuid.UUID
 	PropertyID    uuid.UUID
 	SubjectID     uuid.UUID
+	Consistency   int64
 	TextValue     *string
 	NumberValue   *float64
 	BoolValue     *bool
@@ -43,6 +45,7 @@ func (q *Queries) CreateBasicPropertyValue(ctx context.Context, arg CreateBasicP
 		arg.ID,
 		arg.PropertyID,
 		arg.SubjectID,
+		arg.Consistency,
 		arg.TextValue,
 		arg.NumberValue,
 		arg.BoolValue,
@@ -71,7 +74,7 @@ func (q *Queries) DisconnectValueFromAllSelectOptions(ctx context.Context, value
 }
 
 const getPropertyValueByID = `-- name: GetPropertyValueByID :one
-SELECT id, property_id, subject_id, text_value, number_value, bool_value, date_value, date_time_value FROM property_values WHERE id = $1
+SELECT id, property_id, subject_id, text_value, number_value, bool_value, date_value, date_time_value, consistency FROM property_values WHERE id = $1
 `
 
 func (q *Queries) GetPropertyValueByID(ctx context.Context, id uuid.UUID) (PropertyValue, error) {
@@ -86,6 +89,7 @@ func (q *Queries) GetPropertyValueByID(ctx context.Context, id uuid.UUID) (Prope
 		&i.BoolValue,
 		&i.DateValue,
 		&i.DateTimeValue,
+		&i.Consistency,
 	)
 	return i, err
 }
@@ -257,7 +261,8 @@ SET text_value = $2,
 	number_value = $3,
 	bool_value = $4,
 	date_value = $5,
-	date_time_value = $6
+	date_time_value = $6,
+	consistency = $7
 WHERE id = $1
 `
 
@@ -268,6 +273,7 @@ type UpdatePropertyValueByIDParams struct {
 	BoolValue     *bool
 	DateValue     pgtype.Date
 	DateTimeValue pgtype.Timestamp
+	Consistency   int64
 }
 
 func (q *Queries) UpdatePropertyValueByID(ctx context.Context, arg UpdatePropertyValueByIDParams) error {
@@ -278,6 +284,7 @@ func (q *Queries) UpdatePropertyValueByID(ctx context.Context, arg UpdatePropert
 		arg.BoolValue,
 		arg.DateValue,
 		arg.DateTimeValue,
+		arg.Consistency,
 	)
 	return err
 }

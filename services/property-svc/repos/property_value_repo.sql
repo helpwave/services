@@ -1,10 +1,11 @@
 -- name: CreateBasicPropertyValue :exec
 INSERT INTO property_values
-	(id, property_id, subject_id, text_value, number_value, bool_value, date_value, date_time_value)
+	(id, property_id, subject_id, consistency, text_value, number_value, bool_value, date_value, date_time_value)
 VALUES (
         @id,
         @property_id,
         @subject_id,
+        @consistency,
         sqlc.narg('text_value'),
         sqlc.narg('number_value'),
         sqlc.narg('bool_value'),
@@ -32,7 +33,8 @@ SET text_value = sqlc.narg('text_value'),
 	number_value = sqlc.narg('number_value'),
 	bool_value = sqlc.narg('bool_value'),
 	date_value = sqlc.narg('date_value'),
-	date_time_value = sqlc.narg('date_time_value')
+	date_time_value = sqlc.narg('date_time_value'),
+	consistency = @consistency
 WHERE id = $1;
 
 -- name: GetPropertyValueByID :one

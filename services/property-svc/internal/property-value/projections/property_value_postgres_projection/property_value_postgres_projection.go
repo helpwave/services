@@ -83,7 +83,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 
 	repo := p.propertyValueRepo.WithTx(tx)
 
-	err, ack := createBasicPropertyValue(ctx, repo, payload, propertyID, evt.AggregateID, subjectID, fieldType)
+	err, ack := createBasicPropertyValue(ctx, evt, repo, payload, propertyID, evt.AggregateID, subjectID, fieldType)
 	if err != nil {
 		return fmt.Errorf("onPropertyValueCreated: could not createbasicPropertyValue: %w", err), ack
 	}
@@ -138,11 +138,12 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 }
 
 // createBasicPropertyValue is meant to be called only in onPropertyValueCreated
-func createBasicPropertyValue(ctx context.Context, repo *property_value_repo.Queries, payload propertyValueEventsV1.PropertyValueCreatedEvent, propertyID, aggregateID, subjectID uuid.UUID, fieldType pb.FieldType) (error, *esdb.NackAction) {
+func createBasicPropertyValue(ctx context.Context, evt hwes.Event, repo *property_value_repo.Queries, payload propertyValueEventsV1.PropertyValueCreatedEvent, propertyID, aggregateID, subjectID uuid.UUID, fieldType pb.FieldType) (error, *esdb.NackAction) {
 	createPropertyValueParams := property_value_repo.CreateBasicPropertyValueParams{
-		ID:         aggregateID,
-		PropertyID: propertyID,
-		SubjectID:  subjectID,
+		ID:          aggregateID,
+		PropertyID:  propertyID,
+		SubjectID:   subjectID,
+		Consistency: int64(evt.GetVersion()),
 	}
 
 	switch {
@@ -293,20 +294,30 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 			return fmt.Errorf("onPropertyValueUpdated: could not connect select options: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
 		}
 
+		// update consistency
+		err = propertyValueRepo.UpdatePropertyValueByID(ctx, property_value_repo.UpdatePropertyValueByIDParams{
+			ID:          evt.AggregateID,
+			Consistency: int64(evt.GetVersion()),
+		})
+		if err := hwdb.Error(ctx, err); err != nil {
+			return fmt.Errorf("onPropertyValueUpdated: could not update consistency of value: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
+		}
+
 		if err := tx.Commit(ctx); err != nil {
 			return fmt.Errorf("onPropertyValueUpdated: could not commit tx: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
 		}
 	} else {
-		return updateBasicPropertyValue(ctx, p.propertyValueRepo, fieldType, evt.AggregateID, payload)
+		return updateBasicPropertyValue(ctx, evt, p.propertyValueRepo, fieldType, evt.AggregateID, payload)
 	}
 
 	return nil, nil
 }
 
 // updateBasicPropertyValue is meant to be called in onPropertyValueUpdated
-func updateBasicPropertyValue(ctx context.Context, repo *property_value_repo.Queries, fieldType pb.FieldType, aggregateID uuid.UUID, payload propertyValueEventsV1.PropertyValueUpdatedEvent) (error, *esdb.NackAction) {
+func updateBasicPropertyValue(ctx context.Context, evt hwes.Event, repo *property_value_repo.Queries, fieldType pb.FieldType, aggregateID uuid.UUID, payload propertyValueEventsV1.PropertyValueUpdatedEvent) (error, *esdb.NackAction) {
 	updatePropertyValueParams := property_value_repo.UpdatePropertyValueByIDParams{
-		ID: aggregateID,
+		ID:          aggregateID,
+		Consistency: int64(evt.GetVersion()),
 	}
 
 	switch {

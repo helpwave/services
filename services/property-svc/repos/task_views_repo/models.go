@@ -41,6 +41,7 @@ type PropertyValue struct {
 	BoolValue     *bool
 	DateValue     pgtype.Date
 	DateTimeValue pgtype.Timestamp
+	Consistency   int64
 }
 
 type PropertyViewFilterAlwaysIncludeItem struct {
