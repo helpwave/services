@@ -14,8 +14,8 @@ import (
 
 const createPatient = `-- name: CreatePatient :exec
 INSERT INTO patients
-	(id, human_readable_identifier, notes, created_at, updated_at)
-VALUES ($1, $2, $3, $4, $5)
+	(id, human_readable_identifier, notes, created_at, updated_at, consistency)
+VALUES ($1, $2, $3, $4, $5, $6)
 `
 
 type CreatePatientParams struct {
@@ -24,6 +24,7 @@ type CreatePatientParams struct {
 	Notes                   string
 	CreatedAt               pgtype.Timestamp
 	UpdatedAt               pgtype.Timestamp
+	Consistency             int64
 }
 
 func (q *Queries) CreatePatient(ctx context.Context, arg CreatePatientParams) error {
@@ -33,6 +34,7 @@ func (q *Queries) CreatePatient(ctx context.Context, arg CreatePatientParams) er
 		arg.Notes,
 		arg.CreatedAt,
 		arg.UpdatedAt,
+		arg.Consistency,
 	)
 	return err
 }
@@ -252,7 +254,8 @@ UPDATE patients
 SET human_readable_identifier = coalesce($2, human_readable_identifier),
     notes = coalesce($3, notes),
     updated_at = coalesce($4, updated_at),
-    is_discharged = coalesce($5, is_discharged)
+    is_discharged = coalesce($5, is_discharged),
+	consistency = $6
 WHERE id = $1
 `
 
@@ -262,6 +265,7 @@ type UpdatePatientParams struct {
 	Notes                  *string
 	UpdatedAt              pgtype.Timestamp
 	IsDischarged           *bool
+	Consistency            int64
 }
 
 func (q *Queries) UpdatePatient(ctx context.Context, arg UpdatePatientParams) error {
@@ -271,6 +275,7 @@ func (q *Queries) UpdatePatient(ctx context.Context, arg UpdatePatientParams) er
 		arg.Notes,
 		arg.UpdatedAt,
 		arg.IsDischarged,
+		arg.Consistency,
 	)
 	return err
 }
@@ -278,17 +283,24 @@ func (q *Queries) UpdatePatient(ctx context.Context, arg UpdatePatientParams) er
 const updatePatientBedId = `-- name: UpdatePatientBedId :exec
 UPDATE patients
 SET bed_id = $1,
-    updated_at = $2
-WHERE id = $3
+    updated_at = $2,
+	consistency = $3
+WHERE id = $4
 `
 
 type UpdatePatientBedIdParams struct {
-	BedID     uuid.NullUUID
-	UpdatedAt pgtype.Timestamp
-	ID        uuid.UUID
+	BedID       uuid.NullUUID
+	UpdatedAt   pgtype.Timestamp
+	Consistency int64
+	ID          uuid.UUID
 }
 
 func (q *Queries) UpdatePatientBedId(ctx context.Context, arg UpdatePatientBedIdParams) error {
-	_, err := q.db.Exec(ctx, updatePatientBedId, arg.BedID, arg.UpdatedAt, arg.ID)
+	_, err := q.db.Exec(ctx, updatePatientBedId,
+		arg.BedID,
+		arg.UpdatedAt,
+		arg.Consistency,
+		arg.ID,
+	)
 	return err
 }
