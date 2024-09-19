@@ -17,8 +17,7 @@ import 'dart:typed_data' as $typed_data;
 const Conflict$json = {
   '1': 'Conflict',
   '2': [
-    {'1': 'subject_deleted', '3': 1, '4': 1, '5': 8, '10': 'subjectDeleted'},
-    {'1': 'conflicting_attributes', '3': 2, '4': 3, '5': 11, '6': '.libs.common.v1.Conflict.ConflictingAttributesEntry', '10': 'conflictingAttributes'},
+    {'1': 'conflicting_attributes', '3': 1, '4': 3, '5': 11, '6': '.libs.common.v1.Conflict.ConflictingAttributesEntry', '10': 'conflictingAttributes'},
   ],
   '3': [Conflict_ConflictingAttributesEntry$json],
 };
@@ -35,11 +34,11 @@ const Conflict_ConflictingAttributesEntry$json = {
 
 /// Descriptor for `Conflict`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List conflictDescriptor = $convert.base64Decode(
-    'CghDb25mbGljdBInCg9zdWJqZWN0X2RlbGV0ZWQYASABKAhSDnN1YmplY3REZWxldGVkEmoKFm'
-    'NvbmZsaWN0aW5nX2F0dHJpYnV0ZXMYAiADKAsyMy5saWJzLmNvbW1vbi52MS5Db25mbGljdC5D'
-    'b25mbGljdGluZ0F0dHJpYnV0ZXNFbnRyeVIVY29uZmxpY3RpbmdBdHRyaWJ1dGVzGmsKGkNvbm'
-    'ZsaWN0aW5nQXR0cmlidXRlc0VudHJ5EhAKA2tleRgBIAEoCVIDa2V5EjcKBXZhbHVlGAIgASgL'
-    'MiEubGlicy5jb21tb24udjEuQXR0cmlidXRlQ29uZmxpY3RSBXZhbHVlOgI4AQ==');
+    'CghDb25mbGljdBJqChZjb25mbGljdGluZ19hdHRyaWJ1dGVzGAEgAygLMjMubGlicy5jb21tb2'
+    '4udjEuQ29uZmxpY3QuQ29uZmxpY3RpbmdBdHRyaWJ1dGVzRW50cnlSFWNvbmZsaWN0aW5nQXR0'
+    'cmlidXRlcxprChpDb25mbGljdGluZ0F0dHJpYnV0ZXNFbnRyeRIQCgNrZXkYASABKAlSA2tleR'
+    'I3CgV2YWx1ZRgCIAEoCzIhLmxpYnMuY29tbW9uLnYxLkF0dHJpYnV0ZUNvbmZsaWN0UgV2YWx1'
+    'ZToCOAE=');
 
 @$core.Deprecated('Use attributeConflictDescriptor instead')
 const AttributeConflict$json = {

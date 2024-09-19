@@ -99,7 +99,6 @@ proto.libs.common.v1.Conflict.prototype.toObject = function(opt_includeInstance)
  */
 proto.libs.common.v1.Conflict.toObject = function(includeInstance, msg) {
   var f, obj = {
-    subjectDeleted: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
     conflictingAttributesMap: (f = msg.getConflictingAttributesMap()) ? f.toObject(includeInstance, proto.libs.common.v1.AttributeConflict.toObject) : []
   };
 
@@ -138,10 +137,6 @@ proto.libs.common.v1.Conflict.deserializeBinaryFromReader = function(msg, reader
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setSubjectDeleted(value);
-      break;
-    case 2:
       var value = msg.getConflictingAttributesMap();
       reader.readMessage(value, function(message, reader) {
         jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readMessage, proto.libs.common.v1.AttributeConflict.deserializeBinaryFromReader, "", new proto.libs.common.v1.AttributeConflict());
@@ -176,47 +171,22 @@ proto.libs.common.v1.Conflict.prototype.serializeBinary = function() {
  */
 proto.libs.common.v1.Conflict.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getSubjectDeleted();
-  if (f) {
-    writer.writeBool(
-      1,
-      f
-    );
-  }
   f = message.getConflictingAttributesMap(true);
   if (f && f.getLength() > 0) {
-    f.serializeBinary(2, writer, jspb.BinaryWriter.prototype.writeString, jspb.BinaryWriter.prototype.writeMessage, proto.libs.common.v1.AttributeConflict.serializeBinaryToWriter);
+    f.serializeBinary(1, writer, jspb.BinaryWriter.prototype.writeString, jspb.BinaryWriter.prototype.writeMessage, proto.libs.common.v1.AttributeConflict.serializeBinaryToWriter);
   }
 };
 
 
 /**
- * optional bool subject_deleted = 1;
- * @return {boolean}
- */
-proto.libs.common.v1.Conflict.prototype.getSubjectDeleted = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 1, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.libs.common.v1.Conflict} returns this
- */
-proto.libs.common.v1.Conflict.prototype.setSubjectDeleted = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 1, value);
-};
-
-
-/**
- * map<string, AttributeConflict> conflicting_attributes = 2;
+ * map<string, AttributeConflict> conflicting_attributes = 1;
  * @param {boolean=} opt_noLazyCreate Do not create the map if
  * empty, instead returning `undefined`
  * @return {!jspb.Map<string,!proto.libs.common.v1.AttributeConflict>}
  */
 proto.libs.common.v1.Conflict.prototype.getConflictingAttributesMap = function(opt_noLazyCreate) {
   return /** @type {!jspb.Map<string,!proto.libs.common.v1.AttributeConflict>} */ (
-      jspb.Message.getMapField(this, 2, opt_noLazyCreate,
+      jspb.Message.getMapField(this, 1, opt_noLazyCreate,
       proto.libs.common.v1.AttributeConflict));
 };
 

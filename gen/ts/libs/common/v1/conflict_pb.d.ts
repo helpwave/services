@@ -4,9 +4,6 @@ import * as google_protobuf_any_pb from 'google-protobuf/google/protobuf/any_pb'
 
 
 export class Conflict extends jspb.Message {
-  getSubjectDeleted(): boolean;
-  setSubjectDeleted(value: boolean): Conflict;
-
   getConflictingAttributesMap(): jspb.Map<string, AttributeConflict>;
   clearConflictingAttributesMap(): Conflict;
 
@@ -20,7 +17,6 @@ export class Conflict extends jspb.Message {
 
 export namespace Conflict {
   export type AsObject = {
-    subjectDeleted: boolean,
     conflictingAttributesMap: Array<[string, AttributeConflict.AsObject]>,
   }
 }

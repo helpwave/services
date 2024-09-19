@@ -21,15 +21,12 @@ import '../../../google/protobuf/any.pb.dart' as $19;
 ///  - WANT - the state resulting from applying the changes requested)
 ///  - IS - the true current state, which only differs from WAS if another action was performed since the client retrieved the WAS state
 /// If WAS == IS, or WANT and IS are merge-able (e.g., requested action changes "name", and another action has changed "age"), no conflict arises.
+/// Warning: If a previous action has deleted the resource, an error is raised, and no conflict returned.
 class Conflict extends $pb.GeneratedMessage {
   factory Conflict({
-    $core.bool? subjectDeleted,
     $core.Map<$core.String, AttributeConflict>? conflictingAttributes,
   }) {
     final $result = create();
-    if (subjectDeleted != null) {
-      $result.subjectDeleted = subjectDeleted;
-    }
     if (conflictingAttributes != null) {
       $result.conflictingAttributes.addAll(conflictingAttributes);
     }
@@ -40,8 +37,7 @@ class Conflict extends $pb.GeneratedMessage {
   factory Conflict.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Conflict', package: const $pb.PackageName(_omitMessageNames ? '' : 'libs.common.v1'), createEmptyInstance: create)
-    ..aOB(1, _omitFieldNames ? '' : 'subjectDeleted')
-    ..m<$core.String, AttributeConflict>(2, _omitFieldNames ? '' : 'conflictingAttributes', entryClassName: 'Conflict.ConflictingAttributesEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: AttributeConflict.create, valueDefaultOrMaker: AttributeConflict.getDefault, packageName: const $pb.PackageName('libs.common.v1'))
+    ..m<$core.String, AttributeConflict>(1, _omitFieldNames ? '' : 'conflictingAttributes', entryClassName: 'Conflict.ConflictingAttributesEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: AttributeConflict.create, valueDefaultOrMaker: AttributeConflict.getDefault, packageName: const $pb.PackageName('libs.common.v1'))
     ..hasRequiredFields = false
   ;
 
@@ -66,18 +62,9 @@ class Conflict extends $pb.GeneratedMessage {
   static Conflict getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Conflict>(create);
   static Conflict? _defaultInstance;
 
-  /// indicates, if the subject, where an action was requested upon, was deleted since
+  /// might be empty, in that case we don't have the history to calculate the conflicting attributes
   @$pb.TagNumber(1)
-  $core.bool get subjectDeleted => $_getBF(0);
-  @$pb.TagNumber(1)
-  set subjectDeleted($core.bool v) { $_setBool(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasSubjectDeleted() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearSubjectDeleted() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.Map<$core.String, AttributeConflict> get conflictingAttributes => $_getMap(1);
+  $core.Map<$core.String, AttributeConflict> get conflictingAttributes => $_getMap(0);
 }
 
 class AttributeConflict extends $pb.GeneratedMessage {
