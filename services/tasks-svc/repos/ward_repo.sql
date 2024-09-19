@@ -1,5 +1,5 @@
 -- name: CreateWard :one
-INSERT INTO wards (name) VALUES ($1) RETURNING id;
+INSERT INTO wards (name) VALUES ($1) RETURNING id, consistency;
 
 -- name: GetWardById :one
 SELECT * FROM wards
@@ -54,10 +54,12 @@ SELECT EXISTS (
 	WHERE id = $1
 ) ward_exists;
 
--- name: UpdateWard :exec
+-- name: UpdateWard :one
 UPDATE wards
-SET	name = coalesce(sqlc.narg('name'), name)
-WHERE id = @id;
+SET	name = coalesce(sqlc.narg('name'), name),
+	consistency = consistency + 1
+WHERE id = @id
+RETURNING consistency;
 
 
 -- name: DeleteWard :exec

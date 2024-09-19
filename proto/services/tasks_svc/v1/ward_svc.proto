@@ -16,6 +16,7 @@ message CreateWardRequest {
 
 message CreateWardResponse {
   string id = 1;
+  string consistency = 2;
 }
 
 //

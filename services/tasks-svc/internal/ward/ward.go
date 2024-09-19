@@ -26,11 +26,14 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 	log := zlog.Ctx(ctx)
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	wardID, err := wardRepo.CreateWard(ctx, req.Name)
+	row, err := wardRepo.CreateWard(ctx, req.Name)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
 	}
+
+	wardID := row.ID
+	consistency := row.Consistency
 
 	log.Info().
 		Str("wardID", wardID.String()).
@@ -39,7 +42,8 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 	tracking.AddWardToRecentActivity(ctx, wardID.String())
 
 	return &pb.CreateWardResponse{
-		Id: wardID.String(),
+		Id:          wardID.String(),
+		Consistency: strconv.FormatUint(uint64(consistency), 10),
 	}, nil
 }
 
@@ -145,7 +149,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	err = wardRepo.UpdateWard(ctx, ward_repo.UpdateWardParams{
+	consistency, err := wardRepo.UpdateWard(ctx, ward_repo.UpdateWardParams{
 		ID:   id,
 		Name: req.Name,
 	})
@@ -156,7 +160,10 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 
 	tracking.AddWardToRecentActivity(ctx, id.String())
 
-	return &pb.UpdateWardResponse{}, nil
+	return &pb.UpdateWardResponse{
+		Conflict:    nil, // TODO
+		Consistency: strconv.FormatUint(uint64(consistency), 10),
+	}, nil
 }
 
 func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {

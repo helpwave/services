@@ -691,7 +691,8 @@ proto.services.tasks_svc.v1.CreateWardResponse.prototype.toObject = function(opt
  */
 proto.services.tasks_svc.v1.CreateWardResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, "")
+    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    consistency: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -732,6 +733,10 @@ proto.services.tasks_svc.v1.CreateWardResponse.deserializeBinaryFromReader = fun
       var value = /** @type {string} */ (reader.readString());
       msg.setId(value);
       break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -768,6 +773,13 @@ proto.services.tasks_svc.v1.CreateWardResponse.serializeBinaryToWriter = functio
       f
     );
   }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -786,6 +798,24 @@ proto.services.tasks_svc.v1.CreateWardResponse.prototype.getId = function() {
  */
 proto.services.tasks_svc.v1.CreateWardResponse.prototype.setId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string consistency = 2;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.CreateWardResponse.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.CreateWardResponse} returns this
+ */
+proto.services.tasks_svc.v1.CreateWardResponse.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

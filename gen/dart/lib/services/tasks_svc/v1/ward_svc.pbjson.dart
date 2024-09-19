@@ -30,12 +30,14 @@ const CreateWardResponse$json = {
   '1': 'CreateWardResponse',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'consistency', '3': 2, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `CreateWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createWardResponseDescriptor = $convert.base64Decode(
-    'ChJDcmVhdGVXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlk');
+    'ChJDcmVhdGVXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEiAKC2NvbnNpc3RlbmN5GAIgAS'
+    'gJUgtjb25zaXN0ZW5jeQ==');
 
 @$core.Deprecated('Use getWardRequestDescriptor instead')
 const GetWardRequest$json = {

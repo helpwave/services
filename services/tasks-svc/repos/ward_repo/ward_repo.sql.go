@@ -12,14 +12,19 @@ import (
 )
 
 const createWard = `-- name: CreateWard :one
-INSERT INTO wards (name) VALUES ($1) RETURNING id
+INSERT INTO wards (name) VALUES ($1) RETURNING id, consistency
 `
 
-func (q *Queries) CreateWard(ctx context.Context, name string) (uuid.UUID, error) {
+type CreateWardRow struct {
+	ID          uuid.UUID
+	Consistency int64
+}
+
+func (q *Queries) CreateWard(ctx context.Context, name string) (CreateWardRow, error) {
 	row := q.db.QueryRow(ctx, createWard, name)
-	var id uuid.UUID
-	err := row.Scan(&id)
-	return id, err
+	var i CreateWardRow
+	err := row.Scan(&i.ID, &i.Consistency)
+	return i, err
 }
 
 const deleteWard = `-- name: DeleteWard :exec
@@ -222,10 +227,12 @@ func (q *Queries) GetWardsWithCounts(ctx context.Context, arg GetWardsWithCounts
 	return items, nil
 }
 
-const updateWard = `-- name: UpdateWard :exec
+const updateWard = `-- name: UpdateWard :one
 UPDATE wards
-SET	name = coalesce($1, name)
+SET	name = coalesce($1, name),
+	consistency = consistency + 1
 WHERE id = $2
+RETURNING consistency
 `
 
 type UpdateWardParams struct {
@@ -233,7 +240,9 @@ type UpdateWardParams struct {
 	ID   uuid.UUID
 }
 
-func (q *Queries) UpdateWard(ctx context.Context, arg UpdateWardParams) error {
-	_, err := q.db.Exec(ctx, updateWard, arg.Name, arg.ID)
-	return err
+func (q *Queries) UpdateWard(ctx context.Context, arg UpdateWardParams) (int64, error) {
+	row := q.db.QueryRow(ctx, updateWard, arg.Name, arg.ID)
+	var consistency int64
+	err := row.Scan(&consistency)
+	return consistency, err
 }

@@ -25,6 +25,9 @@ export class CreateWardResponse extends jspb.Message {
   getId(): string;
   setId(value: string): CreateWardResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): CreateWardResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateWardResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreateWardResponse): CreateWardResponse.AsObject;
@@ -36,6 +39,7 @@ export class CreateWardResponse extends jspb.Message {
 export namespace CreateWardResponse {
   export type AsObject = {
     id: string,
+    consistency: string,
   }
 }
 
