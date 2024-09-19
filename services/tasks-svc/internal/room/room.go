@@ -106,7 +106,7 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	err = roomRepo.UpdateRoom(ctx, room_repo.UpdateRoomParams{
+	consistency, err := roomRepo.UpdateRoom(ctx, room_repo.UpdateRoomParams{
 		ID:   patientID,
 		Name: req.Name,
 	})
@@ -115,7 +115,10 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 		return nil, err
 	}
 
-	return &pb.UpdateRoomResponse{}, nil
+	return &pb.UpdateRoomResponse{
+		Conflict:    nil, // TODO
+		Consistency: strconv.FormatUint(uint64(consistency), 10),
+	}, nil
 }
 
 func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.GetRoomsResponse, error) {

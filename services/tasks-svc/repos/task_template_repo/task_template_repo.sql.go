@@ -148,10 +148,15 @@ func (q *Queries) GetAllTaskTemplatesWithSubTasks(ctx context.Context, arg GetAl
 	return items, nil
 }
 
-const updateSubtask = `-- name: UpdateSubtask :exec
-UPDATE task_template_subtasks
+const updateSubtask = `-- name: UpdateSubtask :one
+UPDATE task_template_subtasks ttst
 SET	name = coalesce($1, name)
-WHERE id = $2
+WHERE ttst.id = $2
+RETURNING (
+	SELECT tt.id
+	FROM task_templates tt
+	WHERE tt.id = ttst.task_template_id
+)
 `
 
 type UpdateSubtaskParams struct {
@@ -159,16 +164,20 @@ type UpdateSubtaskParams struct {
 	ID   uuid.UUID
 }
 
-func (q *Queries) UpdateSubtask(ctx context.Context, arg UpdateSubtaskParams) error {
-	_, err := q.db.Exec(ctx, updateSubtask, arg.Name, arg.ID)
-	return err
+func (q *Queries) UpdateSubtask(ctx context.Context, arg UpdateSubtaskParams) (uuid.UUID, error) {
+	row := q.db.QueryRow(ctx, updateSubtask, arg.Name, arg.ID)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
 }
 
-const updateTaskTemplate = `-- name: UpdateTaskTemplate :exec
+const updateTaskTemplate = `-- name: UpdateTaskTemplate :one
 UPDATE task_templates
 SET	name = coalesce($1, name),
-	description = coalesce($2, description)
+	description = coalesce($2, description),
+	consistency = consistency + 1
 WHERE id = $3
+RETURNING consistency
 `
 
 type UpdateTaskTemplateParams struct {
@@ -177,7 +186,9 @@ type UpdateTaskTemplateParams struct {
 	ID          uuid.UUID
 }
 
-func (q *Queries) UpdateTaskTemplate(ctx context.Context, arg UpdateTaskTemplateParams) error {
-	_, err := q.db.Exec(ctx, updateTaskTemplate, arg.Name, arg.Description, arg.ID)
-	return err
+func (q *Queries) UpdateTaskTemplate(ctx context.Context, arg UpdateTaskTemplateParams) (int64, error) {
+	row := q.db.QueryRow(ctx, updateTaskTemplate, arg.Name, arg.Description, arg.ID)
+	var consistency int64
+	err := row.Scan(&consistency)
+	return consistency, err
 }

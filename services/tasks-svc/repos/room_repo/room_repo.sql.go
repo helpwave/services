@@ -277,10 +277,12 @@ func (q *Queries) GetRoomsWithBedsWithPatientsByWard(ctx context.Context, wardID
 	return items, nil
 }
 
-const updateRoom = `-- name: UpdateRoom :exec
+const updateRoom = `-- name: UpdateRoom :one
 UPDATE rooms
-SET	name = coalesce($1, name)
+SET	name = coalesce($1, name),
+	consistency = consistency + 1
 WHERE id = $2
+RETURNING consistency
 `
 
 type UpdateRoomParams struct {
@@ -288,7 +290,9 @@ type UpdateRoomParams struct {
 	ID   uuid.UUID
 }
 
-func (q *Queries) UpdateRoom(ctx context.Context, arg UpdateRoomParams) error {
-	_, err := q.db.Exec(ctx, updateRoom, arg.Name, arg.ID)
-	return err
+func (q *Queries) UpdateRoom(ctx context.Context, arg UpdateRoomParams) (int64, error) {
+	row := q.db.QueryRow(ctx, updateRoom, arg.Name, arg.ID)
+	var consistency int64
+	err := row.Scan(&consistency)
+	return consistency, err
 }

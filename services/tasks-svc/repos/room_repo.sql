@@ -72,10 +72,12 @@ FROM rooms
 WHERE rooms.ward_id = @ward_id
 ORDER BY rooms.id ASC, beds.name ASC;
 
--- name: UpdateRoom :exec
+-- name: UpdateRoom :one
 UPDATE rooms
-SET	name = coalesce(sqlc.narg('name'), name)
-WHERE id = @id;
+SET	name = coalesce(sqlc.narg('name'), name),
+	consistency = consistency + 1
+WHERE id = @id
+RETURNING consistency;
 
 -- name: DeleteRoom :exec
 DELETE FROM rooms WHERE id = @id;

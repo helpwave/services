@@ -148,7 +148,7 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	err = templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
 		Name:        req.Name,
 		Description: req.Description,
 		ID:          id,
@@ -158,11 +158,20 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 		return nil, err
 	}
 
-	return &pb.UpdateTaskTemplateResponse{}, nil
+	return &pb.UpdateTaskTemplateResponse{
+		Conflict:    nil, // TODO
+		Consistency: strconv.FormatUint(uint64(consistency), 10),
+	}, nil
 }
 
 func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.UpdateTaskTemplateSubTaskRequest) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
-	templateRepo := task_template_repo.New(hwdb.GetDB())
+	// TX
+	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(), ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer rollback()
+	templateRepo := task_template_repo.New(tx)
 
 	// TODO: Auth
 
@@ -171,7 +180,8 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	err = templateRepo.UpdateSubtask(ctx, task_template_repo.UpdateSubtaskParams{
+	// update subtask and get related taskTemplate
+	taskTemplateID, err := templateRepo.UpdateSubtask(ctx, task_template_repo.UpdateSubtaskParams{
 		Name: req.Name,
 		ID:   id,
 	})
@@ -180,7 +190,20 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 		return nil, err
 	}
 
-	return &pb.UpdateTaskTemplateSubTaskResponse{}, nil
+	// increase consistency of taskTemplate
+	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+		ID: taskTemplateID,
+	})
+
+	// commit
+	if err := hwdb.Error(ctx, tx.Commit(ctx)); err != nil {
+		return nil, err
+	}
+
+	return &pb.UpdateTaskTemplateSubTaskResponse{
+		Conflict:                nil, // TODO
+		TaskTemplateConsistency: strconv.FormatUint(uint64(consistency), 10),
+	}, nil
 }
 
 func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.CreateTaskTemplateSubTaskRequest) (*pb.CreateTaskTemplateSubTaskResponse, error) {
