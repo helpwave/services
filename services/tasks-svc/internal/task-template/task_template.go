@@ -194,6 +194,9 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
 		ID: taskTemplateID,
 	})
+	if err := hwdb.Error(ctx, err); err != nil {
+		return nil, err
+	}
 
 	// commit
 	if err := hwdb.Error(ctx, tx.Commit(ctx)); err != nil {
