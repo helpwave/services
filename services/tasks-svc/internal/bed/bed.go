@@ -198,7 +198,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	err = bedRepo.UpdateBed(ctx, bed_repo.UpdateBedParams{
+	consistency, err := bedRepo.UpdateBed(ctx, bed_repo.UpdateBedParams{
 		ID:     bedID,
 		Name:   req.Name,
 		RoomID: roomId,
@@ -208,7 +208,10 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, err
 	}
 
-	return &pb.UpdateBedResponse{}, nil
+	return &pb.UpdateBedResponse{
+		Conflict:    nil, // TODO
+		Consistency: strconv.FormatUint(uint64(consistency), 10),
+	}, nil
 }
 
 func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*pb.DeleteBedResponse, error) {

@@ -26,13 +26,14 @@ SELECT * FROM beds
 WHERE (room_id = sqlc.narg('room_id') OR sqlc.narg('room_id') IS NULL)
 ORDER BY name ASC;
 
--- name: UpdateBed :exec
+-- name: UpdateBed :one
 UPDATE beds
 SET
 	name = coalesce(sqlc.narg('name'), name),
 	room_id = coalesce(sqlc.narg('room_id'), room_id),
 	consistency = consistency + 1
-WHERE id = @id;
+WHERE id = @id
+RETURNING consistency;
 
 -- name: DeleteBed :exec
 DELETE FROM beds WHERE id = $1;
