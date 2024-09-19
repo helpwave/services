@@ -13,16 +13,22 @@ import (
 )
 
 const createSubtask = `-- name: CreateSubtask :exec
+WITH cet AS (
+	UPDATE tasks
+	SET consistency = $5
+	WHERE id = $1
+)
 INSERT INTO subtasks
 	(id, task_id, name, created_by)
 VALUES ($1, $2, $3, $4)
 `
 
 type CreateSubtaskParams struct {
-	ID        uuid.UUID
-	TaskID    uuid.UUID
-	Name      string
-	CreatedBy uuid.UUID
+	ID          uuid.UUID
+	TaskID      uuid.UUID
+	Name        string
+	CreatedBy   uuid.UUID
+	Consistency int64
 }
 
 func (q *Queries) CreateSubtask(ctx context.Context, arg CreateSubtaskParams) error {
@@ -31,23 +37,25 @@ func (q *Queries) CreateSubtask(ctx context.Context, arg CreateSubtaskParams) er
 		arg.TaskID,
 		arg.Name,
 		arg.CreatedBy,
+		arg.Consistency,
 	)
 	return err
 }
 
 const createTask = `-- name: CreateTask :exec
 INSERT INTO tasks
-	(id, name, patient_id, status, created_by, created_at)
-VALUES ($1, $2, $3, $4, $5, $6)
+	(id, name, patient_id, status, created_by, created_at, consistency)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
 `
 
 type CreateTaskParams struct {
-	ID        uuid.UUID
-	Name      string
-	PatientID uuid.UUID
-	Status    int32
-	CreatedBy uuid.UUID
-	CreatedAt pgtype.Timestamp
+	ID          uuid.UUID
+	Name        string
+	PatientID   uuid.UUID
+	Status      int32
+	CreatedBy   uuid.UUID
+	CreatedAt   pgtype.Timestamp
+	Consistency int64
 }
 
 func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) error {
@@ -58,16 +66,31 @@ func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) error {
 		arg.Status,
 		arg.CreatedBy,
 		arg.CreatedAt,
+		arg.Consistency,
 	)
 	return err
 }
 
 const deleteSubtask = `-- name: DeleteSubtask :exec
-DELETE FROM subtasks WHERE id = $1
+WITH cet AS (
+	UPDATE tasks AS t
+		SET consistency = $2
+		WHERE t.id IN (
+			SELECT task_id
+			FROM subtasks AS st
+			WHERE st.id = $1
+		)
+)
+DELETE FROM subtasks AS st WHERE st.id = $1
 `
 
-func (q *Queries) DeleteSubtask(ctx context.Context, id uuid.UUID) error {
-	_, err := q.db.Exec(ctx, deleteSubtask, id)
+type DeleteSubtaskParams struct {
+	ID          uuid.UUID
+	Consistency int64
+}
+
+func (q *Queries) DeleteSubtask(ctx context.Context, arg DeleteSubtaskParams) error {
+	_, err := q.db.Exec(ctx, deleteSubtask, arg.ID, arg.Consistency)
 	return err
 }
 
@@ -196,20 +219,35 @@ func (q *Queries) GetTasksWithSubtasksByPatient(ctx context.Context, patientID u
 }
 
 const updateSubtask = `-- name: UpdateSubtask :exec
-UPDATE subtasks
-SET name = coalesce($2, name),
-    done = coalesce($3, done)
-WHERE id = $1
+WITH cet AS (
+	UPDATE tasks AS t
+		SET consistency = $4
+		WHERE t.id IN (
+			SELECT task_id
+			FROM subtasks AS st
+			WHERE st.id = $3
+		)
+)
+UPDATE subtasks AS st
+SET name = coalesce($1, name),
+    done = coalesce($2, done)
+WHERE st.id = $3
 `
 
 type UpdateSubtaskParams struct {
-	ID   uuid.UUID
-	Name *string
-	Done *bool
+	Name        *string
+	Done        *bool
+	ID          uuid.UUID
+	Consistency int64
 }
 
 func (q *Queries) UpdateSubtask(ctx context.Context, arg UpdateSubtaskParams) error {
-	_, err := q.db.Exec(ctx, updateSubtask, arg.ID, arg.Name, arg.Done)
+	_, err := q.db.Exec(ctx, updateSubtask,
+		arg.Name,
+		arg.Done,
+		arg.ID,
+		arg.Consistency,
+	)
 	return err
 }
 
@@ -220,7 +258,8 @@ SET name = coalesce($2, name),
 	status = coalesce($4, status),
 	public = coalesce($5, public),
 	created_by = coalesce($6, created_by),
-	due_at = coalesce($7, due_at)
+	due_at = coalesce($7, due_at),
+	consistency = $8
 WHERE id = $1
 `
 
@@ -232,6 +271,7 @@ type UpdateTaskParams struct {
 	Public      *bool
 	CreatedBy   uuid.NullUUID
 	DueAt       pgtype.Timestamp
+	Consistency int64
 }
 
 func (q *Queries) UpdateTask(ctx context.Context, arg UpdateTaskParams) error {
@@ -243,22 +283,25 @@ func (q *Queries) UpdateTask(ctx context.Context, arg UpdateTaskParams) error {
 		arg.Public,
 		arg.CreatedBy,
 		arg.DueAt,
+		arg.Consistency,
 	)
 	return err
 }
 
 const updateTaskAssignedUser = `-- name: UpdateTaskAssignedUser :exec
 UPDATE tasks
-SET assigned_user_id = $1
-WHERE id = $2
+SET assigned_user_id = $1,
+	consistency = $2
+WHERE id = $3
 `
 
 type UpdateTaskAssignedUserParams struct {
 	AssignedUserID uuid.NullUUID
+	Consistency    int64
 	ID             uuid.UUID
 }
 
 func (q *Queries) UpdateTaskAssignedUser(ctx context.Context, arg UpdateTaskAssignedUserParams) error {
-	_, err := q.db.Exec(ctx, updateTaskAssignedUser, arg.AssignedUserID, arg.ID)
+	_, err := q.db.Exec(ctx, updateTaskAssignedUser, arg.AssignedUserID, arg.Consistency, arg.ID)
 	return err
 }
