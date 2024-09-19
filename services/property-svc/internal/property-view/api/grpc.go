@@ -9,7 +9,6 @@ import (
 	"hwutil"
 	valuesApi "property-svc/internal/property-value/api"
 	"property-svc/internal/property-view/handlers"
-	"strconv"
 )
 
 type PropertyViewGrpcService struct {
@@ -62,7 +61,7 @@ func (s PropertyViewGrpcService) UpdatePropertyViewRule(ctx context.Context, req
 		return &pb.UpdatePropertyViewRuleResponse{}, nil
 	}
 
-	consistency, err := s.handlers.Commands.V1.UpdatePropertyViewRule(ctx, matcher,
+	_, err = s.handlers.Commands.V1.UpdatePropertyViewRule(ctx, matcher,
 		appendToAlwaysInclude,
 		removeFromAlwaysInclude,
 		appendToDontAlwaysInclude,
@@ -72,7 +71,5 @@ func (s PropertyViewGrpcService) UpdatePropertyViewRule(ctx context.Context, req
 		return nil, err
 	}
 
-	return &pb.UpdatePropertyViewRuleResponse{
-		Consistency: strconv.FormatUint(consistency, 10),
-	}, nil
+	return &pb.UpdatePropertyViewRuleResponse{}, nil
 }
