@@ -12,7 +12,7 @@ import (
 )
 
 const createRoom = `-- name: CreateRoom :one
-INSERT INTO rooms (name, ward_id) VALUES ($1, $2) RETURNING id
+INSERT INTO rooms (name, ward_id) VALUES ($1, $2) RETURNING id, consistency
 `
 
 type CreateRoomParams struct {
@@ -20,11 +20,16 @@ type CreateRoomParams struct {
 	WardID uuid.UUID
 }
 
-func (q *Queries) CreateRoom(ctx context.Context, arg CreateRoomParams) (uuid.UUID, error) {
+type CreateRoomRow struct {
+	ID          uuid.UUID
+	Consistency int64
+}
+
+func (q *Queries) CreateRoom(ctx context.Context, arg CreateRoomParams) (CreateRoomRow, error) {
 	row := q.db.QueryRow(ctx, createRoom, arg.Name, arg.WardID)
-	var id uuid.UUID
-	err := row.Scan(&id)
-	return id, err
+	var i CreateRoomRow
+	err := row.Scan(&i.ID, &i.Consistency)
+	return i, err
 }
 
 const deleteRoom = `-- name: DeleteRoom :exec

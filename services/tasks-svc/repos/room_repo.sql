@@ -1,5 +1,5 @@
 -- name: CreateRoom :one
-INSERT INTO rooms (name, ward_id) VALUES ($1, $2) RETURNING id;
+INSERT INTO rooms (name, ward_id) VALUES ($1, $2) RETURNING id, consistency;
 
 -- name: GetRoomWithBedsById :many
 SELECT

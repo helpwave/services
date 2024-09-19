@@ -33,7 +33,7 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	roomID, err := roomRepo.CreateRoom(ctx, room_repo.CreateRoomParams{
+	row, err := roomRepo.CreateRoom(ctx, room_repo.CreateRoomParams{
 		Name:   req.Name,
 		WardID: wardId,
 	})
@@ -42,13 +42,16 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 		return nil, err
 	}
 
+	roomID := row.ID
+	consistency := row.Consistency
+
 	log.Info().
 		Str("roomID", roomID.String()).
 		Msg("room created")
 
 	return &pb.CreateRoomResponse{
 		Id:          roomID.String(),
-		Consistency: "0", // DEFAULT value
+		Consistency: strconv.FormatUint(uint64(consistency), 10),
 	}, nil
 }
 
