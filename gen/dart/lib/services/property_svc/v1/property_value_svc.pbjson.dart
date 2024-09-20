@@ -160,12 +160,14 @@ const GetAttachedPropertyValuesResponse_Value$json = {
     {'1': 'date_time_value', '3': 10, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'dateTimeValue'},
     {'1': 'select_value', '3': 11, '4': 1, '5': 11, '6': '.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.SelectValueOption', '9': 0, '10': 'selectValue'},
     {'1': 'multi_select_value', '3': 12, '4': 1, '5': 11, '6': '.services.property_svc.v1.GetAttachedPropertyValuesResponse.Value.MultiSelectValue', '9': 0, '10': 'multiSelectValue'},
-    {'1': 'consistency', '3': 13, '4': 1, '5': 9, '10': 'consistency'},
+    {'1': 'property_consistency', '3': 13, '4': 1, '5': 9, '10': 'propertyConsistency'},
+    {'1': 'value_consistency', '3': 14, '4': 1, '5': 9, '9': 2, '10': 'valueConsistency', '17': true},
   ],
   '3': [GetAttachedPropertyValuesResponse_Value_SelectValueOption$json, GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json],
   '8': [
     {'1': 'value'},
     {'1': '_description'},
+    {'1': '_value_consistency'},
   ],
 };
 
@@ -191,7 +193,7 @@ const GetAttachedPropertyValuesResponse_Value_MultiSelectValue$json = {
 final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $convert.base64Decode(
     'CiFHZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2USWQoGdmFsdWVzGAEgAygLMkEuc2'
     'VydmljZXMucHJvcGVydHlfc3ZjLnYxLkdldEF0dGFjaGVkUHJvcGVydHlWYWx1ZXNSZXNwb25z'
-    'ZS5WYWx1ZVIGdmFsdWVzGtoHCgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcHJvcGVydH'
+    'ZS5WYWx1ZVIGdmFsdWVzGrMICgVWYWx1ZRIfCgtwcm9wZXJ0eV9pZBgBIAEoCVIKcHJvcGVydH'
     'lJZBJCCgpmaWVsZF90eXBlGAIgASgOMiMuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkZpZWxk'
     'VHlwZVIJZmllbGRUeXBlEhIKBG5hbWUYAyABKAlSBG5hbWUSJQoLZGVzY3JpcHRpb24YBCABKA'
     'lIAVILZGVzY3JpcHRpb26IAQESHwoLaXNfYXJjaGl2ZWQYBSABKAhSCmlzQXJjaGl2ZWQSHwoK'
@@ -203,11 +205,12 @@ final $typed_data.Uint8List getAttachedPropertyValuesResponseDescriptor = $conve
     'N2Yy52MS5HZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2UuVmFsdWUuU2VsZWN0VmFs'
     'dWVPcHRpb25IAFILc2VsZWN0VmFsdWUSggEKEm11bHRpX3NlbGVjdF92YWx1ZRgMIAEoCzJSLn'
     'NlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5HZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9u'
-    'c2UuVmFsdWUuTXVsdGlTZWxlY3RWYWx1ZUgAUhBtdWx0aVNlbGVjdFZhbHVlEiAKC2NvbnNpc3'
-    'RlbmN5GA0gASgJUgtjb25zaXN0ZW5jeRpZChFTZWxlY3RWYWx1ZU9wdGlvbhIOCgJpZBgBIAEo'
-    'CVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCgtkZXNjcmlwdGlvbhgDIAEoCVILZGVzY3JpcH'
-    'Rpb24ajAEKEE11bHRpU2VsZWN0VmFsdWUSeAoNc2VsZWN0X3ZhbHVlcxgBIAMoCzJTLnNlcnZp'
-    'Y2VzLnByb3BlcnR5X3N2Yy52MS5HZXRBdHRhY2hlZFByb3BlcnR5VmFsdWVzUmVzcG9uc2UuVm'
-    'FsdWUuU2VsZWN0VmFsdWVPcHRpb25SDHNlbGVjdFZhbHVlc0IHCgV2YWx1ZUIOCgxfZGVzY3Jp'
-    'cHRpb24=');
+    'c2UuVmFsdWUuTXVsdGlTZWxlY3RWYWx1ZUgAUhBtdWx0aVNlbGVjdFZhbHVlEjEKFHByb3Blcn'
+    'R5X2NvbnNpc3RlbmN5GA0gASgJUhNwcm9wZXJ0eUNvbnNpc3RlbmN5EjAKEXZhbHVlX2NvbnNp'
+    'c3RlbmN5GA4gASgJSAJSEHZhbHVlQ29uc2lzdGVuY3mIAQEaWQoRU2VsZWN0VmFsdWVPcHRpb2'
+    '4SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIAoLZGVzY3JpcHRpb24YAyAB'
+    'KAlSC2Rlc2NyaXB0aW9uGowBChBNdWx0aVNlbGVjdFZhbHVlEngKDXNlbGVjdF92YWx1ZXMYAS'
+    'ADKAsyUy5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuR2V0QXR0YWNoZWRQcm9wZXJ0eVZhbHVl'
+    'c1Jlc3BvbnNlLlZhbHVlLlNlbGVjdFZhbHVlT3B0aW9uUgxzZWxlY3RWYWx1ZXNCBwoFdmFsdW'
+    'VCDgoMX2Rlc2NyaXB0aW9uQhQKEl92YWx1ZV9jb25zaXN0ZW5jeQ==');
 

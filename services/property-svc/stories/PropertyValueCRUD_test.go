@@ -65,6 +65,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		"SetId":                      propertyResponse.SetId,
 		"FieldTypeData":              propertyResponse.FieldTypeData,
 		"AlwaysIncludeForViewSource": nil,
+		"PropertyConsistency":        propertyResponse.Consistency,
 	}
 
 	expectedResponse := map[string]interface{}{
@@ -77,6 +78,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		"SetId":                      createPropertyRequest.SetId,
 		"FieldTypeData":              createPropertyRequest.FieldTypeData,
 		"AlwaysIncludeForViewSource": nil,
+		"PropertyConsistency":        createResponse.Consistency,
 	}
 
 	if !assert.Equal(t, expectedResponse, response) {
@@ -90,7 +92,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	subjectId := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
-	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+	attachResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_TextValue{
@@ -124,11 +126,13 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 
 	assert.Equal(t, "Initial Text Value", attachedValuesResponse.Values[0].GetTextValue())
 
+	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
+
 	//
 	// Update Value
 	//
 
-	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_TextValue{
@@ -139,6 +143,8 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	if !assert.NoError(t, err, "could not update value") {
 		return
 	}
+
+	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
 	time.Sleep(time.Second * 1)
 
@@ -162,6 +168,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 
 	assert.Equal(t, "Updated Text Value", attachedValuesResponse.Values[0].GetTextValue())
 
+	assert.Equal(t, &updateResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency, "ValueConsistency was not updated")
 }
 
 // TestCreateAttachUpdateSelectProperty:

@@ -48,15 +48,15 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 
 			if _, ok := properties[row.Property.ID]; !ok {
 				properties[row.Property.ID] = &models.PropertyAndValue{
-					PropertyID:  row.Property.ID,
-					SubjectType: pb.SubjectType(row.Property.SubjectType),
-					FieldType:   pb.FieldType(row.Property.FieldType),
-					Name:        row.Property.Name,
-					Description: row.Property.Description,
-					IsArchived:  row.Property.IsArchived,
-					SetID:       row.Property.SetID,
-					Value:       nil,
-					Consistency: strconv.FormatUint(uint64(row.Property.Consistency), 10),
+					PropertyID:          row.Property.ID,
+					SubjectType:         pb.SubjectType(row.Property.SubjectType),
+					FieldType:           pb.FieldType(row.Property.FieldType),
+					Name:                row.Property.Name,
+					Description:         row.Property.Description,
+					IsArchived:          row.Property.IsArchived,
+					SetID:               row.Property.SetID,
+					Value:               nil,
+					PropertyConsistency: strconv.FormatUint(uint64(row.Property.Consistency), 10),
 				}
 			}
 
@@ -64,6 +64,8 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 			if row.TextValue == nil && row.BoolValue == nil && row.NumberValue == nil && !row.SelectOptionID.Valid && !row.DateTimeValue.Valid && !row.DateValue.Valid {
 				continue
 			}
+
+			properties[row.Property.ID].ValueConsistency = hwutil.PtrTo(strconv.FormatUint(uint64(*row.ValueConsistency), 10))
 
 			// If row has SelectOptionID, the LEFT JOIN yielded a value
 			if row.SelectOptionID.Valid {

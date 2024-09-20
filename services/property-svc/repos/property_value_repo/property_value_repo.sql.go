@@ -183,6 +183,7 @@ SELECT
 	values.number_value,
 	values.date_time_value,
 	values.date_value,
+	values.consistency as value_consistency,
 	so.id as select_option_id,
 	so.name as select_option_name,
 	so.description as select_option_description
@@ -211,6 +212,7 @@ type GetRelevantPropertyViewsRow struct {
 	NumberValue             *float64
 	DateTimeValue           pgtype.Timestamp
 	DateValue               pgtype.Date
+	ValueConsistency        *int64
 	SelectOptionID          uuid.NullUUID
 	SelectOptionName        *string
 	SelectOptionDescription *string
@@ -241,6 +243,7 @@ func (q *Queries) GetRelevantPropertyViews(ctx context.Context, arg GetRelevantP
 			&i.NumberValue,
 			&i.DateTimeValue,
 			&i.DateValue,
+			&i.ValueConsistency,
 			&i.SelectOptionID,
 			&i.SelectOptionName,
 			&i.SelectOptionDescription,

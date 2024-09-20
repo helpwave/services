@@ -65,6 +65,7 @@ SELECT
 	values.number_value,
 	values.date_time_value,
 	values.date_value,
+	values.consistency as value_consistency,
 	so.id as select_option_id,
 	so.name as select_option_name,
 	so.description as select_option_description

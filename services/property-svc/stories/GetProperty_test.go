@@ -188,10 +188,8 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 
 // TestTaskGetPropertyConsistency:
 //   - Create a Property,
-//   - Read it
 //   - Update name
-//   - Read it
-//   - TODO
+//   - TODO: conflict detection
 func TestTaskGetPropertyConsistency(t *testing.T) {
 	propertyClient := propertyServiceClient()
 

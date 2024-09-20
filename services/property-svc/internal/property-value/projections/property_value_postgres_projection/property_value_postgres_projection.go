@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
@@ -13,10 +16,6 @@ import (
 	"property-svc/internal/property-value/models"
 	"property-svc/repos/property_repo"
 	"property-svc/repos/property_value_repo"
-
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 )
 
 type Projection struct {

@@ -30,7 +30,8 @@ message AttachPropertyValueRequest{
     repeated string remove_select_values = 2; // @gotags: validate:"dive,uuid4" // in case a PV is already attached with multiple select values, you can remove them here
   }
 
-  optional string consistency = 10; // no conflict detection, if not provided
+  // optional consistency of existing value (not of the property!), no conflict detection, if not provided
+  optional string consistency = 10;
 
 }
 
@@ -89,7 +90,8 @@ message GetAttachedPropertyValuesResponse {
       MultiSelectValue multi_select_value = 12;
     }
 
-    string consistency = 13;
+    string property_consistency = 13;
+    optional string value_consistency = 14; // missing, if no value available
 
     message SelectValueOption {
       string id = 1;

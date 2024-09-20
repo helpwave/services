@@ -317,8 +317,13 @@ export namespace GetAttachedPropertyValuesResponse {
     hasMultiSelectValue(): boolean;
     clearMultiSelectValue(): Value;
 
-    getConsistency(): string;
-    setConsistency(value: string): Value;
+    getPropertyConsistency(): string;
+    setPropertyConsistency(value: string): Value;
+
+    getValueConsistency(): string;
+    setValueConsistency(value: string): Value;
+    hasValueConsistency(): boolean;
+    clearValueConsistency(): Value;
 
     getValueCase(): Value.ValueCase;
 
@@ -344,7 +349,8 @@ export namespace GetAttachedPropertyValuesResponse {
       dateTimeValue?: google_protobuf_timestamp_pb.Timestamp.AsObject,
       selectValue?: GetAttachedPropertyValuesResponse.Value.SelectValueOption.AsObject,
       multiSelectValue?: GetAttachedPropertyValuesResponse.Value.MultiSelectValue.AsObject,
-      consistency: string,
+      propertyConsistency: string,
+      valueConsistency?: string,
     }
 
     export class SelectValueOption extends jspb.Message {
@@ -409,6 +415,11 @@ export namespace GetAttachedPropertyValuesResponse {
     export enum DescriptionCase { 
       _DESCRIPTION_NOT_SET = 0,
       DESCRIPTION = 4,
+    }
+
+    export enum ValueConsistencyCase { 
+      _VALUE_CONSISTENCY_NOT_SET = 0,
+      VALUE_CONSISTENCY = 14,
     }
   }
 

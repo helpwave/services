@@ -269,6 +269,7 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   AttachPropertyValueRequest_MultiSelectValue ensureMultiSelectValue() => $_ensure(8);
 
+  /// optional consistency of existing value (not of the property!), no conflict detection, if not provided
   @$pb.TagNumber(10)
   $core.String get consistency => $_getSZ(9);
   @$pb.TagNumber(10)
@@ -717,7 +718,8 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     $20.Timestamp? dateTimeValue,
     GetAttachedPropertyValuesResponse_Value_SelectValueOption? selectValue,
     GetAttachedPropertyValuesResponse_Value_MultiSelectValue? multiSelectValue,
-    $core.String? consistency,
+    $core.String? propertyConsistency,
+    $core.String? valueConsistency,
   }) {
     final $result = create();
     if (propertyId != null) {
@@ -756,8 +758,11 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     if (multiSelectValue != null) {
       $result.multiSelectValue = multiSelectValue;
     }
-    if (consistency != null) {
-      $result.consistency = consistency;
+    if (propertyConsistency != null) {
+      $result.propertyConsistency = propertyConsistency;
+    }
+    if (valueConsistency != null) {
+      $result.valueConsistency = valueConsistency;
     }
     return $result;
   }
@@ -789,7 +794,8 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     ..aOM<$20.Timestamp>(10, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $20.Timestamp.create)
     ..aOM<GetAttachedPropertyValuesResponse_Value_SelectValueOption>(11, _omitFieldNames ? '' : 'selectValue', subBuilder: GetAttachedPropertyValuesResponse_Value_SelectValueOption.create)
     ..aOM<GetAttachedPropertyValuesResponse_Value_MultiSelectValue>(12, _omitFieldNames ? '' : 'multiSelectValue', subBuilder: GetAttachedPropertyValuesResponse_Value_MultiSelectValue.create)
-    ..aOS(13, _omitFieldNames ? '' : 'consistency')
+    ..aOS(13, _omitFieldNames ? '' : 'propertyConsistency')
+    ..aOS(14, _omitFieldNames ? '' : 'valueConsistency')
     ..hasRequiredFields = false
   ;
 
@@ -934,13 +940,22 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
   GetAttachedPropertyValuesResponse_Value_MultiSelectValue ensureMultiSelectValue() => $_ensure(11);
 
   @$pb.TagNumber(13)
-  $core.String get consistency => $_getSZ(12);
+  $core.String get propertyConsistency => $_getSZ(12);
   @$pb.TagNumber(13)
-  set consistency($core.String v) { $_setString(12, v); }
+  set propertyConsistency($core.String v) { $_setString(12, v); }
   @$pb.TagNumber(13)
-  $core.bool hasConsistency() => $_has(12);
+  $core.bool hasPropertyConsistency() => $_has(12);
   @$pb.TagNumber(13)
-  void clearConsistency() => clearField(13);
+  void clearPropertyConsistency() => clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.String get valueConsistency => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set valueConsistency($core.String v) { $_setString(13, v); }
+  @$pb.TagNumber(14)
+  $core.bool hasValueConsistency() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearValueConsistency() => clearField(14);
 }
 
 class GetAttachedPropertyValuesResponse extends $pb.GeneratedMessage {
