@@ -237,6 +237,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		"SetId":       propertyResponse.SetId,
 		// "FieldTypeData": propertyResponse.FieldTypeData, // TODO
 		"AlwaysIncludeForViewSource": nil,
+		"Consistency":                propertyResponse.Consistency,
 	}
 
 	expectedResponse := map[string]interface{}{
@@ -249,6 +250,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		"SetId":       createPropertyRequest.SetId,
 		// "FieldTypeData": createPropertyRequest.FieldTypeData, // TODO
 		"AlwaysIncludeForViewSource": nil,
+		"Consistency":                createResponse.Consistency,
 	}
 
 	if !assert.Equal(t, expectedResponse, response) {
@@ -266,7 +268,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	subjectId := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
-	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+	attachResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_SelectValue{
@@ -300,11 +302,13 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 
 	assert.Equal(t, "Option 1", attachedValuesResponse.Values[0].GetSelectValue().GetName())
 
+	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
+
 	//
 	// Update Value
 	//
 
-	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_SelectValue{
@@ -315,6 +319,8 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	if !assert.NoError(t, err, "could not update value") {
 		return
 	}
+
+	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
 	time.Sleep(time.Second * 1)
 
@@ -338,6 +344,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 
 	assert.Equal(t, "Option 2", attachedValuesResponse.Values[0].GetSelectValue().GetName())
 
+	assert.Equal(t, &updateResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency, "ValueConsistency was not updated")
 }
 
 // TestCreateAttachUpdateMultiSelectProperty:
@@ -409,6 +416,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		"SetId":       propertyResponse.SetId,
 		// "FieldTypeData": propertyResponse.FieldTypeData, // TODO
 		"AlwaysIncludeForViewSource": nil,
+		"PropertyConsistency":        propertyResponse.Consistency,
 	}
 
 	expectedResponse := map[string]interface{}{
@@ -421,6 +429,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		"SetId":       createPropertyRequest.SetId,
 		// "FieldTypeData": createPropertyRequest.FieldTypeData, // TODO
 		"AlwaysIncludeForViewSource": nil,
+		"PropertyConsistency":        createResponse.Consistency,
 	}
 
 	if !assert.Equal(t, expectedResponse, response) {
@@ -439,7 +448,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	subjectId := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
-	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+	attachResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_MultiSelectValue_{
@@ -476,11 +485,13 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 
 	assert.Equal(t, []string{"Option 1", "Option 2"}, NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()))
 
+	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
+
 	//
 	// Update Value
 	//
 
-	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_MultiSelectValue_{
@@ -494,6 +505,8 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	if !assert.NoError(t, err, "could not update value") {
 		return
 	}
+
+	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
 	time.Sleep(time.Second * 1)
 
@@ -517,6 +530,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 
 	assert.Equal(t, []string{"Option 2", "Option 3"}, NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()))
 
+	assert.Equal(t, &updateResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency, "ValueConsistency was not updated")
 }
 
 // TestCreateAttachAddOptionAttachSelectProperty:
