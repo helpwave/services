@@ -76,7 +76,7 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 	// TODO: We have to default to empty eventData as the eventstoredb-ui does not allow querying events without data
 	var empty struct{}
 	if err := evt.SetJsonData(empty); err != nil {
-		return Event{}, err
+		return Event{}, fmt.Errorf("NewEvent: could not set empty data: %w", err)
 	}
 
 	for _, opt := range opts {
