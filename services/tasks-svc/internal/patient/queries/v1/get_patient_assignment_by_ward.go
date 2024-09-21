@@ -30,18 +30,16 @@ func NewGetPatientAssignmentByWardQueryHandler() GetPatientAssignmentByWardQuery
 				if bedRow.RoomID != roomRow.RoomID || !bedRow.BedID.Valid {
 					return nil
 				}
+				var patient *models.Patient
+				if bedRow.PatientID.Valid {
+					patient = &models.Patient{ID: bedRow.PatientID.UUID, HumanReadableIdentifier: *bedRow.PatientHumanReadableIdentifier}
+				}
 				val := &models.BedWithPatient{
 					Bed: models.Bed{
 						ID:   bedRow.BedID.UUID,
 						Name: *bedRow.BedName, // safe, bed is NOT NULL
 					},
-					Patient: hwutil.MapIf(bedRow.PatientID.Valid, bedRow,
-						func(bedRow room_repo.GetRoomsWithBedsWithPatientsByWardRow) models.Patient {
-							return models.Patient{
-								ID:                      bedRow.PatientID.UUID,
-								HumanReadableIdentifier: *bedRow.PatientHumanReadableIdentifier, // safe, is NOT NULL
-							}
-						}),
+					Patient: patient,
 				}
 				return &val
 			})

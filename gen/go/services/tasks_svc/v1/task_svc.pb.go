@@ -2293,7 +2293,7 @@ type UpdateSubtaskRequest_Subtask struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name *string `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty" validate:"required"` // @gotags: validate:"required"
+	Name *string `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty" validate:"omitnil,min=1"` // @gotags: validate:"omitnil,min=1"
 	Done *bool   `protobuf:"varint,2,opt,name=done,proto3,oneof" json:"done,omitempty"`
 }
 

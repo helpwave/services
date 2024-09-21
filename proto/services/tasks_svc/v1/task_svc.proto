@@ -235,7 +235,7 @@ message UpdateSubtaskRequest {
   Subtask subtask = 3; // @gotags: validate:"required"
 
   message Subtask {
-    optional string name = 1; // @gotags: validate:"required"
+    optional string name = 1; // @gotags: validate:"omitnil,min=1"
     optional bool done = 2;
   }
 }
