@@ -2,17 +2,17 @@ package stories
 
 import (
 	"context"
-	"fmt"
-	"github.com/golang-migrate/migrate/v4"
+	pb "gen/services/property_svc/v1"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	zlog "github.com/rs/zerolog/log"
 	"hwtesting"
+	"hwutil"
 	"os/signal"
 	"property-svc/cmd/service"
+	"sort"
 
 	"os"
-	"strings"
 	"testing"
 	"time"
 )
@@ -30,56 +30,21 @@ func Setup(m *testing.M) {
 		Str("eventstoreEndpoint", eventstoreEndpoint).
 		Msg("containers are up")
 
-	// Set POSTGRES_DSN
-	postgresEnpointParts := strings.SplitN(postgresEndpoint, ":", 2)
-	postgresHost := postgresEnpointParts[0]
-	postgresPort := postgresEnpointParts[1]
+	// prepare env
+	hwtesting.SetCommonEnv()
+	hwtesting.SetEventstoreEnv(eventstoreEndpoint)
+	postgresDSN := hwtesting.SetPostgresEnv(postgresEndpoint)
 
-	postgresDSN := fmt.Sprintf(
-		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
-		hwtesting.PostgresUser, hwtesting.PostgresPassword, postgresHost, postgresPort, hwtesting.PostgresDb,
-	)
-
-	err := os.Setenv("POSTGRES_DSN", postgresDSN)
-	if err != nil {
-		zlog.Fatal().Err(err).Msg("Could not set POSTGRES_DSN")
-	}
-
-	// Run postgres migrations
-
-	// go test sets the wd to the directory of this file
-	migr, err := migrate.New("file://../migrations", postgresDSN)
-	if err != nil {
-		zlog.Fatal().Err(err).Msg("Could not create migrate instance")
-	}
-	err = migr.Up()
-	if err != nil {
-		zlog.Fatal().Err(err).Msg("Could not migrate")
-	}
-
-	// Set EVENTSTORE_CS
-	err = os.Setenv("EVENTSTORE_CS", fmt.Sprintf(
-		"esdb://%s:%s@%s?tls=false",
-		hwtesting.EsUser, hwtesting.EsPassword, eventstoreEndpoint,
-	))
-	if err != nil {
-		zlog.Fatal().Err(err).Msg("Could not set EVENTSTORE_CS")
-	}
-
-	// Set common variables
-	_ = os.Setenv("MODE", "development")
-	_ = os.Setenv("LOG_LEVEL", "trace")
-	_ = os.Setenv("INSECURE_FAKE_TOKEN_ENABLE", "true")
-	_ = os.Setenv("INSECURE_REDIS_NO_TLS", "true")
-	_ = os.Setenv("ORGANIZATION_ID", "3b25c6f5-4705-4074-9fc6-a50c28eba405")
+	// `go test` sets the wd to the directory of this file
+	hwtesting.MigratePostgres("file://../migrations", postgresDSN)
 
 	// start service
 	ready := make(chan bool)
 	go service.Main("story hwtesting", func() { ready <- true })
 	<-ready
 
-	// FIXME: actually wait for the projections instead of guessing
-	time.Sleep(time.Second * 5)
+	// wait for projections to be ready
+	time.Sleep(time.Second * 2)
 
 	// Run tests
 	exitCode := m.Run()
@@ -90,4 +55,24 @@ func Setup(m *testing.M) {
 	teardownContainers()
 	cancel()
 	os.Exit(exitCode)
+}
+
+func propertyServiceClient() pb.PropertyServiceClient {
+	return pb.NewPropertyServiceClient(hwtesting.GetGrpcConn())
+}
+
+func propertyViewServiceClient() pb.PropertyViewsServiceClient {
+	return pb.NewPropertyViewsServiceClient(hwtesting.GetGrpcConn())
+}
+
+func propertyValueServiceClient() pb.PropertyValueServiceClient {
+	return pb.NewPropertyValueServiceClient(hwtesting.GetGrpcConn())
+}
+
+func NamesOf(arr []*pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption) []string {
+	strs := hwutil.Map(arr, func(v *pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption) string {
+		return v.Name
+	})
+	sort.Strings(strs)
+	return strs
 }
