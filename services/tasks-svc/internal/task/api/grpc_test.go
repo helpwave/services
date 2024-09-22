@@ -264,11 +264,10 @@ func TestTaskGrpcService_UpdateSubtask_Validation(t *testing.T) {
 	})
 	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts invalid ids")
 
-	// empty subtask
+	// no subtask
 	_, err = client.UpdateSubtask(ctx, &pb.UpdateSubtaskRequest{
 		TaskId:    uuid.NewString(),
 		SubtaskId: uuid.NewString(),
-		Subtask:   &pb.UpdateSubtaskRequest_Subtask{},
 	})
 	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts empty subtask")
 }
