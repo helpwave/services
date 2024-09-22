@@ -119,7 +119,7 @@ func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 }
 
 func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) (uint64, error) {
-	// We can switch out the getExpectedRevision strategy for testing optimistic concurrency.
+	// We can switch out the getExpectedRevision strategy for hwtesting optimistic concurrency.
 	// It is not intended to switch the strategy in production.
 	// To ensure consistency and correctly applied events during another read,
 	// getExpectedRevisionByPreviousRead is the prefered method for production use.

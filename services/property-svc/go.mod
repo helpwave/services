@@ -8,6 +8,7 @@ replace (
 	hwdb => ../../libs/hwdb
 	hwes => ../../libs/hwes
 	hwlocale => ../../libs/hwlocale
+	hwtesting => ../../libs/hwtesting
 	hwutil => ../../libs/hwutil
 	telemetry => ../../libs/telemetry
 )
@@ -18,7 +19,7 @@ require (
 	github.com/EventStore/EventStore-Client-Go/v4 v4.1.0
 	github.com/dapr/go-sdk v1.11.0
 	github.com/fatih/structs v1.1.0
-	github.com/golang-migrate/migrate/v4 v4.17.1
+	github.com/golang-migrate/migrate/v4 v4.18.1
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.7.1
 	github.com/pashagolub/pgxmock/v4 v4.3.0
@@ -31,6 +32,7 @@ require (
 	google.golang.org/protobuf v1.34.2
 	hwdb v0.0.0
 	hwes v0.0.0
+	hwtesting v0.0.0
 	hwutil v0.0.0
 	telemetry v0.0.0
 )
@@ -43,7 +45,6 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/containerd/containerd v1.7.18 // indirect
 	github.com/containerd/log v0.1.0 // indirect
 	github.com/containerd/platforms v0.2.1 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
@@ -51,7 +52,7 @@ require (
 	github.com/dapr/dapr v1.14.2 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/distribution/reference v0.6.0 // indirect
-	github.com/docker/docker v27.1.1+incompatible // indirect
+	github.com/docker/docker v27.2.0+incompatible // indirect
 	github.com/docker/go-connections v0.5.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
@@ -85,6 +86,7 @@ require (
 	github.com/moby/patternmatcher v0.6.0 // indirect
 	github.com/moby/sys/sequential v0.5.0 // indirect
 	github.com/moby/sys/user v0.1.0 // indirect
+	github.com/moby/sys/userns v0.1.0 // indirect
 	github.com/moby/term v0.5.0 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
@@ -107,7 +109,7 @@ require (
 	github.com/vgarvardt/pgx-google-uuid/v5 v5.6.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.3 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.54.0 // indirect
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.49.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.54.0 // indirect
 	go.opentelemetry.io/otel v1.30.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.30.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.30.0 // indirect

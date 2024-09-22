@@ -128,7 +128,7 @@ func (b *Tx) Commit(ctx context.Context) (ConsistencyToken, error) {
 }
 
 // AuthZ is a Zanzibar-like Fine-Grained Authorization Provider
-// Implemented by most notably spicedb.SpiceDBAuthZ, for testing use test.TrueAuthZ
+// Implemented by most notably spicedb.SpiceDBAuthZ, for hwtesting use test.TrueAuthZ
 type AuthZ interface {
 	// Create adds one or many Relationship Tuples to the Permissions Graph
 	Create(relationships ...Relationship) *Tx

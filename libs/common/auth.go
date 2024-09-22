@@ -87,7 +87,7 @@ func isAuthSetUp() bool {
 }
 
 // setupAuth sets up auth, such that getIDTokenVerifier and getOAuthConfig work
-// optionally, this can be skipped by enabling only fake tokens (for testing)
+// optionally, this can be skipped by enabling only fake tokens (for hwtesting)
 func setupAuth(ctx context.Context, fakeOnly bool) {
 	log := zlog.Ctx(ctx)
 
