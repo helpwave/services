@@ -20,12 +20,12 @@ message CreateTaskRequest {
   optional bool public = 4;
   google.protobuf.Timestamp due_at = 5;
   optional TaskStatus initial_status = 6;
-  optional string assigned_user_id = 7;
-  repeated SubTask subtasks = 8;
+  optional string assigned_user_id = 7; // @gotags: validate:"omitempty,uuid4"
+  repeated SubTask subtasks = 8; // @gotags: validate:"dive"
 
   message SubTask {
-    string name = 1;
-    bool done = 2;
+    string name = 1; // @gotags: validate:"required"
+    optional bool done = 2; // default: false
   }
 }
 
@@ -70,7 +70,7 @@ message GetTaskResponse {
   TaskStatus status = 6;
   google.protobuf.Timestamp created_at = 7;
   bool public = 8;
-  google.protobuf.Timestamp due_at = 9;
+  optional google.protobuf.Timestamp due_at = 9;
   string created_by = 10;
   Patient patient = 11;
   string consistency = 12;
@@ -108,7 +108,7 @@ message GetTasksByPatientResponse {
     optional string assigned_user_id = 5;
     string patient_id = 6;
     bool public = 7;
-    google.protobuf.Timestamp due_at = 8;
+    optional google.protobuf.Timestamp due_at = 8;
     string created_by = 9;
     repeated SubTask subtasks = 10;
     google.protobuf.Timestamp created_at = 11;
@@ -143,7 +143,7 @@ message GetTasksByPatientSortedByStatusResponse {
     optional string assigned_user_id = 4;
     string patient_id = 5;
     bool public = 6;
-    google.protobuf.Timestamp due_at = 7;
+    optional google.protobuf.Timestamp due_at = 7;
     string created_by = 8;
     repeated SubTask subtasks = 9;
     google.protobuf.Timestamp created_at = 10;
@@ -176,7 +176,7 @@ message GetAssignedTasksResponse {
     string assigned_user_id = 5;
     Patient patient = 6;
     bool public = 7;
-    google.protobuf.Timestamp due_at = 8;
+    optional google.protobuf.Timestamp due_at = 8;
     string created_by = 9;
     repeated SubTask subtasks = 10;
     google.protobuf.Timestamp created_at = 11;
@@ -233,11 +233,11 @@ message UnassignTaskResponse {
 
 message CreateSubtaskRequest {
   string task_id = 1; // @gotags: validate:"uuid4"
-  Subtask subtask = 2;
+  Subtask subtask = 2; // @gotags: validate:"required"
 
   message Subtask {
-    string name = 1;
-    bool done = 2;
+    string name = 1; // @gotags: validate:"required"
+    optional bool done = 2; // default: false
   }
 }
 
@@ -253,11 +253,11 @@ message CreateSubtaskResponse {
 message UpdateSubtaskRequest {
   string task_id = 1; // @gotags: validate:"uuid4"
   string subtask_id = 2; // @gotags: validate:"uuid4"
-  Subtask subtask = 3;
+  Subtask subtask = 3; // @gotags: validate:"required"
   optional string task_consistency = 4; // no conflict detection, if not provided
 
   message Subtask {
-    optional string name = 1;
+    optional string name = 1; // @gotags: validate:"omitnil,min=1"
     optional bool done = 2;
   }
 }
@@ -283,7 +283,7 @@ message DeleteSubtaskResponse {}
 //
 
 message RemoveTaskDueDateRequest {
-  string task_id = 1;
+  string task_id = 1; // @gotags: validate:"uuid4"
 }
 
 message RemoveTaskDueDateResponse {
@@ -295,7 +295,7 @@ message RemoveTaskDueDateResponse {
 //
 
 message DeleteTaskRequest {
-  string id = 1;
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message DeleteTaskResponse {}

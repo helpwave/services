@@ -24,11 +24,11 @@ func NewPatientAggregate(id uuid.UUID) *PatientAggregate {
 }
 
 func LoadPatientAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID) (*PatientAggregate, error) {
-	patient := NewPatientAggregate(id)
-	if err := as.Load(ctx, patient); err != nil {
+	patientAggregate := NewPatientAggregate(id)
+	if err := as.Load(ctx, patientAggregate); err != nil {
 		return nil, err
 	}
-	return patient, nil
+	return patientAggregate, nil
 }
 
 func (a *PatientAggregate) initEventListeners() {
@@ -39,6 +39,7 @@ func (a *PatientAggregate) initEventListeners() {
 	a.RegisterEventListener(patientEventsV1.NotesUpdated, a.onNotesUpdated)
 	a.RegisterEventListener(patientEventsV1.HumanReadableIdentifierUpdated, a.onHumanReadableIdentifierUpdated)
 	a.RegisterEventListener(patientEventsV1.PatientReadmitted, a.onPatientReadmitted)
+	a.RegisterEventListener(patientEventsV1.PatientDeleted, a.onPatientDeleted)
 }
 
 // Event handlers
@@ -110,5 +111,10 @@ func (a *PatientAggregate) onHumanReadableIdentifierUpdated(evt hwes.Event) erro
 func (a *PatientAggregate) onPatientReadmitted(evt hwes.Event) error {
 	a.Patient.IsDischarged = false
 	a.Patient.UpdatedAt = evt.Timestamp
+	return nil
+}
+
+func (a *PatientAggregate) onPatientDeleted(_ hwes.Event) error {
+	a.MarkAsDeleted()
 	return nil
 }

@@ -68,6 +68,8 @@ export namespace CreateTaskRequest {
 
     getDone(): boolean;
     setDone(value: boolean): SubTask;
+    hasDone(): boolean;
+    clearDone(): SubTask;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SubTask.AsObject;
@@ -80,7 +82,12 @@ export namespace CreateTaskRequest {
   export namespace SubTask {
     export type AsObject = {
       name: string,
-      done: boolean,
+      done?: boolean,
+    }
+
+    export enum DoneCase { 
+      _DONE_NOT_SET = 0,
+      DONE = 2,
     }
   }
 
@@ -392,6 +399,11 @@ export namespace GetTaskResponse {
     _ASSIGNED_USER_ID_NOT_SET = 0,
     ASSIGNED_USER_ID = 4,
   }
+
+  export enum DueAtCase { 
+    _DUE_AT_NOT_SET = 0,
+    DUE_AT = 9,
+  }
 }
 
 export class GetTasksByPatientRequest extends jspb.Message {
@@ -534,6 +546,11 @@ export namespace GetTasksByPatientResponse {
     export enum AssignedUserIdCase { 
       _ASSIGNED_USER_ID_NOT_SET = 0,
       ASSIGNED_USER_ID = 5,
+    }
+
+    export enum DueAtCase { 
+      _DUE_AT_NOT_SET = 0,
+      DUE_AT = 8,
     }
   }
 
@@ -687,6 +704,11 @@ export namespace GetTasksByPatientSortedByStatusResponse {
     export enum AssignedUserIdCase { 
       _ASSIGNED_USER_ID_NOT_SET = 0,
       ASSIGNED_USER_ID = 4,
+    }
+
+    export enum DueAtCase { 
+      _DUE_AT_NOT_SET = 0,
+      DUE_AT = 7,
     }
   }
 
@@ -851,6 +873,11 @@ export namespace GetAssignedTasksResponse {
       }
     }
 
+
+    export enum DueAtCase { 
+      _DUE_AT_NOT_SET = 0,
+      DUE_AT = 8,
+    }
   }
 
 }
@@ -1008,6 +1035,8 @@ export namespace CreateSubtaskRequest {
 
     getDone(): boolean;
     setDone(value: boolean): Subtask;
+    hasDone(): boolean;
+    clearDone(): Subtask;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Subtask.AsObject;
@@ -1020,7 +1049,12 @@ export namespace CreateSubtaskRequest {
   export namespace Subtask {
     export type AsObject = {
       name: string,
-      done: boolean,
+      done?: boolean,
+    }
+
+    export enum DoneCase { 
+      _DONE_NOT_SET = 0,
+      DONE = 2,
     }
   }
 

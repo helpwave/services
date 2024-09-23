@@ -39,11 +39,14 @@ func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(taskEventsV1.TaskAssigned, p.onTaskAssigned)
 	p.RegisterEventListener(taskEventsV1.TaskUnassigned, p.onTaskUnassigned)
 	p.RegisterEventListener(taskEventsV1.TaskPublished, p.onTaskPublished)
+	p.RegisterEventListener(taskEventsV1.TaskUnpublished, p.onTaskUnpublished)
 	p.RegisterEventListener(taskEventsV1.SubtaskCreated, p.onSubtaskCreated)
 	p.RegisterEventListener(taskEventsV1.SubtaskNameUpdated, p.onSubtaskNameUpdated)
 	p.RegisterEventListener(taskEventsV1.SubtaskCompleted, p.onSubtaskCompleted)
 	p.RegisterEventListener(taskEventsV1.SubtaskUncompleted, p.onSubtaskUncompleted)
 	p.RegisterEventListener(taskEventsV1.SubtaskDeleted, p.onSubtaskDeleted)
+	p.RegisterEventListener(taskEventsV1.TaskDueAtRemoved, p.onTaskDueAtRemoved)
+	p.RegisterEventListener(taskEventsV1.TaskDeleted, p.onTaskDeleted)
 }
 
 func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
@@ -88,8 +91,7 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 		CreatedAt:   hwdb.TimeToTimestamp(payload.CreatedAt),
 		Consistency: int64(evt.GetVersion()),
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -115,8 +117,7 @@ func (p *Projection) onTaskStatusUpdated(ctx context.Context, evt hwes.Event) (e
 		Status:      hwutil.PtrTo(int32(status)),
 		Consistency: int64(evt.GetVersion()),
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err = hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -137,8 +138,7 @@ func (p *Projection) onTaskNameUpdated(ctx context.Context, evt hwes.Event) (err
 		Name:        &payload.Name,
 		Consistency: int64(evt.GetVersion()),
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err = hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -159,8 +159,7 @@ func (p *Projection) onTaskDescriptionUpdated(ctx context.Context, evt hwes.Even
 		Description: &payload.Description,
 		Consistency: int64(evt.GetVersion()),
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err = hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -181,8 +180,7 @@ func (p *Projection) onTaskDueAtUpdated(ctx context.Context, evt hwes.Event) (er
 		DueAt:       hwdb.TimeToTimestamp(payload.DueAt),
 		Consistency: int64(evt.GetVersion()),
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err = hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -221,8 +219,7 @@ func (p *Projection) onTaskAssigned(ctx context.Context, evt hwes.Event) (error,
 		AssignedUserID: userID,
 		Consistency:    int64(evt.GetVersion()),
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err = hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -243,8 +240,7 @@ func (p *Projection) onTaskUnassigned(ctx context.Context, evt hwes.Event) (erro
 		AssignedUserID: uuid.NullUUID{},
 		Consistency:    int64(evt.GetVersion()),
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err = hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -257,8 +253,20 @@ func (p *Projection) onTaskPublished(ctx context.Context, evt hwes.Event) (error
 		Public:      hwutil.PtrTo(true),
 		Consistency: int64(evt.GetVersion()),
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err = hwdb.Error(ctx, err); err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	}
+
+	return nil, nil
+}
+
+func (p *Projection) onTaskUnpublished(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+		ID:          evt.AggregateID,
+		Public:      hwutil.PtrTo(false),
+		Consistency: int64(evt.GetVersion()),
+	})
+	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -292,9 +300,9 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (erro
 		Name:        payload.Name,
 		CreatedBy:   committerID,
 		Consistency: int64(evt.GetVersion()),
+		Done:        payload.Done,
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -320,8 +328,7 @@ func (p *Projection) onSubtaskNameUpdated(ctx context.Context, evt hwes.Event) (
 		Name:        &payload.Name,
 		Consistency: int64(evt.GetVersion()),
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err = hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -347,8 +354,7 @@ func (p *Projection) onSubtaskCompleted(ctx context.Context, evt hwes.Event) (er
 		Done:        hwutil.PtrTo(true),
 		Consistency: int64(evt.GetVersion()),
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -374,8 +380,7 @@ func (p *Projection) onSubtaskUncompleted(ctx context.Context, evt hwes.Event) (
 		Done:        hwutil.PtrTo(false),
 		Consistency: int64(evt.GetVersion()),
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
 
@@ -400,10 +405,27 @@ func (p *Projection) onSubtaskDeleted(ctx context.Context, evt hwes.Event) (erro
 		ID:          subtaskID,
 		Consistency: int64(evt.GetVersion()),
 	})
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
 	}
+	return nil, nil
+}
 
+func (p *Projection) onTaskDueAtRemoved(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+	err := p.taskRepo.RemoveTaskDueAt(ctx, task_repo.RemoveTaskDueAtParams{
+		ID:          evt.AggregateID,
+		Consistency: int64(evt.GetVersion()),
+	})
+	if err := hwdb.Error(ctx, err); err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	}
+	return nil, nil
+}
+
+func (p *Projection) onTaskDeleted(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+	err := p.taskRepo.DeleteTask(ctx, evt.AggregateID)
+	if err := hwdb.Error(ctx, err); err != nil {
+		return err, hwutil.PtrTo(esdb.NackActionRetry)
+	}
 	return nil, nil
 }

@@ -3,6 +3,7 @@ package aggregate
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwes"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"time"
 
@@ -76,16 +77,25 @@ func (a *TaskAggregate) UnassignTask(ctx context.Context, userID uuid.UUID) erro
 	return a.Apply(event)
 }
 
-func (a *TaskAggregate) PublishTask(ctx context.Context) error {
-	event, err := taskEventsV1.NewTaskPublishedEvent(ctx, a)
+func (a *TaskAggregate) UpdateTaskPublic(ctx context.Context, newTaskStatus bool) error {
+	var event hwes.Event
+	var err error
+
+	if newTaskStatus {
+		event, err = taskEventsV1.NewTaskPublishedEvent(ctx, a)
+	} else {
+		event, err = taskEventsV1.NewTaskUnpublishedEvent(ctx, a)
+	}
+
 	if err != nil {
 		return err
 	}
+
 	return a.Apply(event)
 }
 
-func (a *TaskAggregate) CreateSubtask(ctx context.Context, subtaskID uuid.UUID, name string) error {
-	event, err := taskEventsV1.NewSubtaskCreatedEvent(ctx, a, subtaskID, name)
+func (a *TaskAggregate) CreateSubtask(ctx context.Context, subtaskID uuid.UUID, name string, done bool) error {
+	event, err := taskEventsV1.NewSubtaskCreatedEvent(ctx, a, subtaskID, name, done)
 	if err != nil {
 		return err
 	}
@@ -100,24 +110,41 @@ func (a *TaskAggregate) UpdateSubtaskName(ctx context.Context, subtaskID uuid.UU
 	return a.Apply(event)
 }
 
-func (a *TaskAggregate) CompleteSubtask(ctx context.Context, subtaskID uuid.UUID) error {
-	event, err := taskEventsV1.NewSubtaskCompletedEvent(ctx, a, subtaskID)
-	if err != nil {
-		return err
-	}
-	return a.Apply(event)
-}
+func (a *TaskAggregate) UpdateSubtaskDone(ctx context.Context, subtaskID uuid.UUID, newDone bool) error {
+	var event hwes.Event
+	var err error
 
-func (a *TaskAggregate) UncompleteSubtask(ctx context.Context, subtaskID uuid.UUID) error {
-	event, err := taskEventsV1.NewSubtaskUncompletedEvent(ctx, a, subtaskID)
+	if newDone {
+		event, err = taskEventsV1.NewSubtaskCompletedEvent(ctx, a, subtaskID)
+	} else {
+		event, err = taskEventsV1.NewSubtaskUncompletedEvent(ctx, a, subtaskID)
+	}
+
 	if err != nil {
 		return err
 	}
+
 	return a.Apply(event)
 }
 
 func (a *TaskAggregate) DeleteSubtask(ctx context.Context, subtaskID uuid.UUID) error {
 	event, err := taskEventsV1.NewSubtaskDeletedEvent(ctx, a, subtaskID)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *TaskAggregate) RemoveTaskDueAt(ctx context.Context) error {
+	event, err := taskEventsV1.NewTaskDueAtRemovedEvent(ctx, a)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
+
+func (a *TaskAggregate) DeleteTask(ctx context.Context) error {
+	event, err := taskEventsV1.NewTaskDeletedEvent(ctx, a)
 	if err != nil {
 		return err
 	}

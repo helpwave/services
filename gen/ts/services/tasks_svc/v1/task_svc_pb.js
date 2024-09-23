@@ -1185,8 +1185,8 @@ proto.services.tasks_svc.v1.CreateTaskRequest.SubTask.serializeBinaryToWriter = 
       f
     );
   }
-  f = message.getDone();
-  if (f) {
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
     writer.writeBool(
       2,
       f
@@ -1227,7 +1227,25 @@ proto.services.tasks_svc.v1.CreateTaskRequest.SubTask.prototype.getDone = functi
  * @return {!proto.services.tasks_svc.v1.CreateTaskRequest.SubTask} returns this
  */
 proto.services.tasks_svc.v1.CreateTaskRequest.SubTask.prototype.setDone = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 2, value);
+  return jspb.Message.setField(this, 2, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.CreateTaskRequest.SubTask} returns this
+ */
+proto.services.tasks_svc.v1.CreateTaskRequest.SubTask.prototype.clearDone = function() {
+  return jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.CreateTaskRequest.SubTask.prototype.hasDone = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
@@ -7797,8 +7815,8 @@ proto.services.tasks_svc.v1.CreateSubtaskRequest.Subtask.serializeBinaryToWriter
       f
     );
   }
-  f = message.getDone();
-  if (f) {
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
     writer.writeBool(
       2,
       f
@@ -7839,7 +7857,25 @@ proto.services.tasks_svc.v1.CreateSubtaskRequest.Subtask.prototype.getDone = fun
  * @return {!proto.services.tasks_svc.v1.CreateSubtaskRequest.Subtask} returns this
  */
 proto.services.tasks_svc.v1.CreateSubtaskRequest.Subtask.prototype.setDone = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 2, value);
+  return jspb.Message.setField(this, 2, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.CreateSubtaskRequest.Subtask} returns this
+ */
+proto.services.tasks_svc.v1.CreateSubtaskRequest.Subtask.prototype.clearDone = function() {
+  return jspb.Message.setField(this, 2, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.CreateSubtaskRequest.Subtask.prototype.hasDone = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 

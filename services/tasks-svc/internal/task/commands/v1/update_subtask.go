@@ -1,38 +1,35 @@
 package v1
 
 import (
-	"common"
 	"context"
+	"fmt"
 	"github.com/google/uuid"
-	"hwauthz"
 	"hwes"
-	"tasks-svc/internal/perm"
 	"tasks-svc/internal/task/aggregate"
 )
 
-type UpdateSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string) (uint64, error)
+type UpdateSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool) (uint64, error)
 
-func NewUpdateSubtaskCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) UpdateSubtaskCommandHandler {
-	return func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string) (uint64, error) {
-		userID, err := common.GetUserID(ctx)
-		if err != nil {
-			return 0, err
-		}
+func NewUpdateSubtaskCommandHandler(as hwes.AggregateStore) UpdateSubtaskCommandHandler {
+	return func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool) (uint64, error) {
 		a, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
 		if err != nil {
 			return 0, err
 		}
 
-		user := perm.User(userID)
-		task := perm.Task(taskID)
-
-		check := hwauthz.NewPermissionCheck(user, perm.CanUserUpdateSubtaskOnTask, task)
-		if err = authz.Must(ctx, check); err != nil {
-			return 0, err
+		currentSubtask, found := a.Task.Subtasks[subtaskID]
+		if !found {
+			return 0, fmt.Errorf("subtask with ID: %s not found on Task with ID: %s", subtaskID, taskID)
 		}
 
-		if name != nil {
+		if name != nil && *name != currentSubtask.Name {
 			if err := a.UpdateSubtaskName(ctx, subtaskID, *name); err != nil {
+				return 0, err
+			}
+		}
+
+		if done != nil && *done != currentSubtask.Done {
+			if err := a.UpdateSubtaskDone(ctx, subtaskID, *done); err != nil {
 				return 0, err
 			}
 		}

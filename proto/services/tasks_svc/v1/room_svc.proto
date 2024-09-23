@@ -47,7 +47,7 @@ message GetRoomResponse {
 //
 
 message GetRoomsRequest {
-  optional string ward_id = 1; // @gotags: validate:"omitnil,omitempty,uuid4"
+  optional string ward_id = 1; // @gotags: validate:"omitempty,uuid4"
 }
 
 message GetRoomsResponse {

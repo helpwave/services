@@ -131,4 +131,89 @@ func TestPatientGrpcService_UpdatePatient(t *testing.T) {
 	assert.Equal(t, notes2, getPatientResponse.Notes)
 }
 
+func TestPatientGrpcService_AssignBed_Validation(t *testing.T) {
+	ctx, client, _, teardown := setup(t)
+	defer teardown()
+
+	// id empty
+	_, err := client.AssignBed(ctx, &pb.AssignBedRequest{Id: "", BedId: ""})
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts empty id")
+
+	// id invalid
+	_, err = client.AssignBed(ctx, &pb.AssignBedRequest{Id: "asdasdasdasd", BedId: "sdfs"})
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts invalid id")
+
+	// valid
+	_, err = client.AssignBed(ctx, &pb.AssignBedRequest{Id: uuid.NewString(), BedId: uuid.NewString()})
+	assert.NoError(t, err, "rejects valid request")
+}
+
+func TestPatientGrpcService_UnassignBed_Validation(t *testing.T) {
+	ctx, client, _, teardown := setup(t)
+	defer teardown()
+
+	// id empty
+	_, err := client.UnassignBed(ctx, &pb.UnassignBedRequest{Id: ""})
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts empty id")
+
+	// id invalid
+	_, err = client.UnassignBed(ctx, &pb.UnassignBedRequest{Id: "asdasdasdasd"})
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts invalid id")
+
+	// valid
+	_, err = client.UnassignBed(ctx, &pb.UnassignBedRequest{Id: uuid.NewString()})
+	assert.NoError(t, err, "rejects valid request")
+}
+
+func TestPatientGrpcService_DischargePatient_Validation(t *testing.T) {
+	ctx, client, _, teardown := setup(t)
+	defer teardown()
+
+	// id empty
+	_, err := client.DischargePatient(ctx, &pb.DischargePatientRequest{Id: ""})
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts empty id")
+
+	// id invalid
+	_, err = client.DischargePatient(ctx, &pb.DischargePatientRequest{Id: "asdasdasdasd"})
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts invalid id")
+
+	// valid
+	_, err = client.DischargePatient(ctx, &pb.DischargePatientRequest{Id: uuid.NewString()})
+	assert.NoError(t, err, "rejects valid request")
+}
+
+func TestPatientGrpcService_ReadmitPatient_Validation(t *testing.T) {
+	ctx, client, _, teardown := setup(t)
+	defer teardown()
+
+	// id empty
+	_, err := client.ReadmitPatient(ctx, &pb.ReadmitPatientRequest{PatientId: ""})
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts empty id")
+
+	// id invalid
+	_, err = client.ReadmitPatient(ctx, &pb.ReadmitPatientRequest{PatientId: "asdasdasdasd"})
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts invalid id")
+
+	// valid
+	_, err = client.ReadmitPatient(ctx, &pb.ReadmitPatientRequest{PatientId: uuid.NewString()})
+	assert.NoError(t, err, "rejects valid request")
+}
+
+func TestPatientGrpcService_DeletePatient(t *testing.T) {
+	ctx, client, _, teardown := setup(t)
+	defer teardown()
+
+	// id empty
+	_, err := client.DeletePatient(ctx, &pb.DeletePatientRequest{Id: ""})
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts empty id")
+
+	// id invalid
+	_, err = client.DeletePatient(ctx, &pb.DeletePatientRequest{Id: "asdasdasdasd"})
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts invalid id")
+
+	// valid
+	_, err = client.DeletePatient(ctx, &pb.DeletePatientRequest{Id: uuid.NewString()})
+	assert.NoError(t, err, "rejects valid request")
+}
+
 // TODO: test GetRecentPatients, once we have a running redis instance (#458)

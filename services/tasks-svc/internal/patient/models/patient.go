@@ -40,3 +40,13 @@ type Room struct {
 	WardID      uuid.UUID
 	Consistency string
 }
+
+type BedWithPatient struct {
+	Bed
+	Patient *Patient
+}
+
+type RoomWithBedsWithPatient struct {
+	Room
+	Beds []*BedWithPatient
+}

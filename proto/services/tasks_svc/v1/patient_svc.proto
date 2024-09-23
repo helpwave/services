@@ -335,7 +335,7 @@ message ReadmitPatientResponse {
 //
 
 message DeletePatientRequest {
-  string id = 1;
+  string id = 1; // @gotags: validate:"uuid4"
 }
 
 message DeletePatientResponse {}

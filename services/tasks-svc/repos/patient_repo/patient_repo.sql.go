@@ -39,6 +39,15 @@ func (q *Queries) CreatePatient(ctx context.Context, arg CreatePatientParams) er
 	return err
 }
 
+const deletePatient = `-- name: DeletePatient :exec
+DELETE FROM patients WHERE id = $1
+`
+
+func (q *Queries) DeletePatient(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deletePatient, id)
+	return err
+}
+
 const getAllPatientsWithTasksBedAndRoom = `-- name: GetAllPatientsWithTasksBedAndRoom :many
 SELECT
 	patients.id, patients.human_readable_identifier, patients.notes, patients.bed_id, patients.created_at, patients.updated_at, patients.is_discharged, patients.consistency,

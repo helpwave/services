@@ -42,7 +42,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 							Status:       pb.TaskStatus(row.Task.Status),
 							AssignedUser: row.Task.AssignedUserID, // TODO: #760
 							Public:       row.Task.Public,
-							DueAt:        row.Task.DueAt.Time,
+							DueAt:        nil, // may be set below
 							PatientID:    row.Patient.ID,
 							CreatedBy:    row.Task.CreatedBy,
 							CreatedAt:    row.Task.CreatedAt.Time,
@@ -59,6 +59,11 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 						Consistency:             strconv.FormatUint(uint64(row.Patient.Consistency), 10),
 					},
 				}
+
+				if row.Task.DueAt.Valid {
+					task.Task.DueAt = &row.Task.DueAt.Time
+				}
+
 				tasks = append(tasks, task)
 				tasksMap[row.Task.ID] = len(tasks) - 1
 			}

@@ -40,7 +40,7 @@ func Main(version string, ready func()) {
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
-	taskHandlers := th.NewTaskHandlers(aggregateStore, authz)
+	taskHandlers := th.NewTaskHandlers(aggregateStore)
 	patientHandlers := ph.NewPatientHandlers(aggregateStore)
 
 	go projections.StartProjections(

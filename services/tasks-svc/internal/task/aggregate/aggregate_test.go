@@ -95,7 +95,7 @@ func TestTaskAggregate_UpdateSubtaskName(t *testing.T) {
 	})
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewSubtaskCreatedEvent(ctx, taskAggregate, subtaskID, subtaskName)
+		return taskEventsV1.NewSubtaskCreatedEvent(ctx, taskAggregate, subtaskID, subtaskName, false)
 	})
 
 	if taskAggregate.Task.Subtasks[subtaskID].Name != subtaskName {
@@ -132,7 +132,7 @@ func TestTaskAggregate_CompleteSubtask(t *testing.T) {
 	}
 
 	MustApplyEvent(t, taskAggregate, func() (hwes.Event, error) {
-		return taskEventsV1.NewSubtaskCreatedEvent(ctx, taskAggregate, subtaskID, subtaskName)
+		return taskEventsV1.NewSubtaskCreatedEvent(ctx, taskAggregate, subtaskID, subtaskName, false)
 	})
 
 	if taskAggregate.Task.Name != taskName {
@@ -179,5 +179,28 @@ func TestTaskAggregate_AssignTask(t *testing.T) {
 		if taskAggregate.Task.AssignedUser.UUID != patientID {
 			t.Errorf("Invalid AssignedUserId, expected %s got %s", patientID.String(), taskAggregate.Task.AssignedUser.UUID.String())
 		}
+	}
+}
+
+func TestTaskAggregate_DeleteTask(t *testing.T) {
+	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+
+	taskID := uuid.New()
+	patientID := uuid.New()
+
+	taskName := "Test Task"
+
+	taskAggregate := aggregate.NewTaskAggregate(taskID)
+
+	if err := taskAggregate.CreateTask(ctx, taskName, patientID, pb.TaskStatus_TASK_STATUS_TODO); err != nil {
+		t.Error(err)
+	}
+
+	if err := taskAggregate.DeleteTask(ctx); err != nil {
+		t.Error(err)
+	}
+
+	if !taskAggregate.IsDeleted() {
+		t.Errorf("Expected task to be deleted")
 	}
 }

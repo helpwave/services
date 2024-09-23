@@ -65,3 +65,11 @@ func (a *PatientAggregate) ReadmitPatient(ctx context.Context) error {
 	}
 	return a.Apply(event)
 }
+
+func (a *PatientAggregate) DeletePatient(ctx context.Context) error {
+	event, err := patientEventsV1.NewPatientDeletedEvent(ctx, a)
+	if err != nil {
+		return err
+	}
+	return a.Apply(event)
+}
