@@ -506,7 +506,7 @@ type AttachPropertyValueRequest_MultiSelectValue struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	SelectValues       []string `protobuf:"bytes,1,rep,name=select_values,json=selectValues,proto3" json:"select_values,omitempty" validate:"dive,uuid4"`                     // @gotags: validate:"dive,uuid4" // ids of options
+	SelectValues       []string `protobuf:"bytes,1,rep,name=select_values,json=selectValues,proto3" json:"select_values,omitempty" validate:"dive,uuid4"`                     // @gotags: validate:"dive,uuid4" // ids of options to add
 	RemoveSelectValues []string `protobuf:"bytes,2,rep,name=remove_select_values,json=removeSelectValues,proto3" json:"remove_select_values,omitempty" validate:"dive,uuid4"` // @gotags: validate:"dive,uuid4" // in case a PV is already attached with multiple select values, you can remove them here
 }
 
