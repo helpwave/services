@@ -539,7 +539,7 @@ func (s *PatientGrpcService) DeletePatient(ctx context.Context, req *pb.DeletePa
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.DeletePatient(ctx, patientID); err != nil {
+	if _, err := s.handlers.Commands.V1.DeletePatient(ctx, patientID); err != nil {
 		return nil, err
 	}
 

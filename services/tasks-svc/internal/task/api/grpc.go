@@ -408,11 +408,14 @@ func (s *TaskGrpcService) RemoveTaskDueDate(ctx context.Context, req *pb.RemoveT
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.RemoveTaskDueAt(ctx, taskID); err != nil {
+	consistency, err := s.handlers.Commands.V1.RemoveTaskDueAt(ctx, taskID)
+	if err != nil {
 		return nil, err
 	}
 
-	return &pb.RemoveTaskDueDateResponse{}, nil
+	return &pb.RemoveTaskDueDateResponse{
+		Consistency: strconv.FormatUint(consistency, 10),
+	}, nil
 }
 
 func (s *TaskGrpcService) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) (*pb.DeleteTaskResponse, error) {
@@ -421,7 +424,7 @@ func (s *TaskGrpcService) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequ
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.DeleteTask(ctx, taskID); err != nil {
+	if _, err := s.handlers.Commands.V1.DeleteTask(ctx, taskID); err != nil {
 		return nil, err
 	}
 
