@@ -12,6 +12,7 @@ replace (
 	hwlocale => ../../libs/hwlocale
 	hwutil => ../../libs/hwutil
 	telemetry => ../../libs/telemetry
+	hwtesting => ../../libs/hwtesting
 )
 
 require (
@@ -35,6 +36,7 @@ require (
 	hwes v0.0.0
 	hwlocale v0.0.0
 	hwutil v0.0.0
+	hwtesting v0.0.0
 )
 
 require (
