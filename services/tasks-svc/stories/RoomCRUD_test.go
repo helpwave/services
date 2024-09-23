@@ -134,6 +134,7 @@ func TestGetRooms(t *testing.T) {
 
 func TestGetRoomOverviewsByWard(t *testing.T) {
 	patientClient := patientServiceClient()
+	taskClient := taskServiceClient()
 	ctx := context.Background()
 
 	// prepare all resources
@@ -169,25 +170,25 @@ func TestGetRoomOverviewsByWard(t *testing.T) {
 	patientIDs = append(patientIDs, patient4Id)
 
 	// create tasks for patient 1
-	_, err := taskServiceClient().CreateTask(ctx, &pb.CreateTaskRequest{
+	_, err := taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 		Name:          t.Name() + " Patient 1 Task 1",
 		PatientId:     patient1Id,
 		InitialStatus: hwutil.PtrTo(pb.TaskStatus_TASK_STATUS_TODO),
 	})
 	assert.NoError(t, err, "could create task for patient 1")
-	_, err = taskServiceClient().CreateTask(ctx, &pb.CreateTaskRequest{
+	_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 		Name:          t.Name() + " Patient 1 Task 2",
 		PatientId:     patient1Id,
 		InitialStatus: hwutil.PtrTo(pb.TaskStatus_TASK_STATUS_IN_PROGRESS),
 	})
 	assert.NoError(t, err, "could create task for patient 1")
-	_, err = taskServiceClient().CreateTask(ctx, &pb.CreateTaskRequest{
+	_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 		Name:          t.Name() + " Patient 1 Task 3",
 		PatientId:     patient1Id,
 		InitialStatus: hwutil.PtrTo(pb.TaskStatus_TASK_STATUS_DONE),
 	})
 	assert.NoError(t, err, "could create task for patient 1")
-	_, err = taskServiceClient().CreateTask(ctx, &pb.CreateTaskRequest{
+	_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 		Name:          t.Name() + " Patient 1 Task 4",
 		PatientId:     patient1Id,
 		InitialStatus: hwutil.PtrTo(pb.TaskStatus_TASK_STATUS_DONE),
