@@ -8,6 +8,7 @@ import (
 	"hwutil"
 	"strconv"
 	"testing"
+	"time"
 )
 
 // TestCreateUpdateGetRoom:
@@ -167,6 +168,34 @@ func TestGetRoomOverviewsByWard(t *testing.T) {
 	patient4Id := preparePatient(t, ctx, "unassigned")
 	patientIDs = append(patientIDs, patient4Id)
 
+	// create tasks for patient 1
+	_, err := taskServiceClient().CreateTask(ctx, &pb.CreateTaskRequest{
+		Name:          t.Name() + " Patient 1 Task 1",
+		PatientId:     patient1Id,
+		InitialStatus: hwutil.PtrTo(pb.TaskStatus_TASK_STATUS_TODO),
+	})
+	assert.NoError(t, err, "could create task for patient 1")
+	_, err = taskServiceClient().CreateTask(ctx, &pb.CreateTaskRequest{
+		Name:          t.Name() + " Patient 1 Task 2",
+		PatientId:     patient1Id,
+		InitialStatus: hwutil.PtrTo(pb.TaskStatus_TASK_STATUS_IN_PROGRESS),
+	})
+	assert.NoError(t, err, "could create task for patient 1")
+	_, err = taskServiceClient().CreateTask(ctx, &pb.CreateTaskRequest{
+		Name:          t.Name() + " Patient 1 Task 3",
+		PatientId:     patient1Id,
+		InitialStatus: hwutil.PtrTo(pb.TaskStatus_TASK_STATUS_DONE),
+	})
+	assert.NoError(t, err, "could create task for patient 1")
+	_, err = taskServiceClient().CreateTask(ctx, &pb.CreateTaskRequest{
+		Name:          t.Name() + " Patient 1 Task 4",
+		PatientId:     patient1Id,
+		InitialStatus: hwutil.PtrTo(pb.TaskStatus_TASK_STATUS_DONE),
+	})
+	assert.NoError(t, err, "could create task for patient 1")
+
+	time.Sleep(time.Second * 3)
+
 	res, err := roomServiceClient().GetRoomOverviewsByWard(ctx, &pb.GetRoomOverviewsByWardRequest{
 		Id: wardId,
 	})
@@ -196,9 +225,9 @@ func TestGetRoomOverviewsByWard(t *testing.T) {
 				Patient: &pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient{
 					Id:                      patient1Id,
 					HumanReadableIdentifier: t.Name() + " Patient 1",
-					TasksUnscheduled:        0,
-					TasksInProgress:         0,
-					TasksDone:               0,
+					TasksUnscheduled:        1,
+					TasksInProgress:         1,
+					TasksDone:               2,
 					Consistency:             "1",
 				},
 				Consistency: "0",
