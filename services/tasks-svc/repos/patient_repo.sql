@@ -64,3 +64,6 @@ FROM patients
 		 LEFT JOIN subtasks ON subtasks.task_id = tasks.id
 		 LEFT JOIN beds ON beds.id = patients.bed_id
 		 LEFT JOIN rooms ON rooms.id = beds.room_id;
+
+-- name: DeletePatient :exec
+DELETE FROM patients WHERE id = $1;

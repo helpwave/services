@@ -461,5 +461,50 @@ func (s *PatientGrpcService) ReadmitPatient(ctx context.Context, req *pb.Readmit
 	return &pb.ReadmitPatientResponse{}, nil
 }
 
-// TODO: GetPatientAssignmentByWard
-// TODO: DeletePatientEndpoint
+func (s *PatientGrpcService) GetPatientAssignmentByWard(ctx context.Context, req *pb.GetPatientAssignmentByWardRequest) (*pb.GetPatientAssignmentByWardResponse, error) {
+	wardID, err := uuid.Parse(req.WardId)
+	if err != nil {
+		return nil, err
+	}
+
+	roomsWithBedsWithPatients, err := s.handlers.Queries.V1.GetPatientAssignmentByWard(ctx, wardID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.GetPatientAssignmentByWardResponse{
+		Rooms: hwutil.Map(roomsWithBedsWithPatients, func(room *models.RoomWithBedsWithPatient) *pb.GetPatientAssignmentByWardResponse_Room {
+			return &pb.GetPatientAssignmentByWardResponse_Room{
+				Id:   room.ID.String(),
+				Name: room.Name,
+				Beds: hwutil.Map(room.Beds, func(bedWithPatient *models.BedWithPatient) *pb.GetPatientAssignmentByWardResponse_Room_Bed {
+					res := &pb.GetPatientAssignmentByWardResponse_Room_Bed{
+						Id:   bedWithPatient.ID.String(),
+						Name: bedWithPatient.Name,
+						Patient: hwutil.MapIf(bedWithPatient.Patient != nil, bedWithPatient.Patient,
+							func(row *models.Patient) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
+								return pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
+									Id:   bedWithPatient.Patient.ID.String(),
+									Name: bedWithPatient.Patient.HumanReadableIdentifier,
+								}
+							}),
+					}
+					return res
+				}),
+			}
+		}),
+	}, nil
+}
+
+func (s *PatientGrpcService) DeletePatient(ctx context.Context, req *pb.DeletePatientRequest) (*pb.DeletePatientResponse, error) {
+	patientID, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.handlers.Commands.V1.DeletePatient(ctx, patientID); err != nil {
+		return nil, err
+	}
+
+	return &pb.DeletePatientResponse{}, nil
+}

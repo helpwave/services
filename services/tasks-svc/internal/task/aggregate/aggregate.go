@@ -31,11 +31,12 @@ func NewTaskAggregate(id uuid.UUID) *TaskAggregate {
 }
 
 func LoadTaskAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID) (*TaskAggregate, error) {
-	task := NewTaskAggregate(id)
-	if err := as.Load(ctx, task); err != nil {
+	taskAggregate := NewTaskAggregate(id)
+	if err := as.Load(ctx, taskAggregate); err != nil {
 		return nil, err
 	}
-	return task, nil
+
+	return taskAggregate, nil
 }
 
 func (a *TaskAggregate) initEventListeners() {
@@ -48,12 +49,15 @@ func (a *TaskAggregate) initEventListeners() {
 		RegisterEventListener(taskEventsV1.TaskSelfAssigned, a.onTaskAssigned).
 		RegisterEventListener(taskEventsV1.TaskUnassigned, a.onTaskUnassigned).
 		RegisterEventListener(taskEventsV1.TaskPublished, a.onTaskPublished).
+		RegisterEventListener(taskEventsV1.TaskUnpublished, a.onTaskUnpublished).
 		RegisterEventListener(taskEventsV1.SubtaskCreated, a.onSubtaskCreated).
 		RegisterEventListener(taskEventsV1.SubtaskNameUpdated, a.onSubtaskNameUpdated).
 		RegisterEventListener(taskEventsV1.SubtaskCompleted, a.onSubtaskCompleted).
 		RegisterEventListener(taskEventsV1.SubtaskUncompleted, a.onSubtaskUncompleted).
 		RegisterEventListener(taskEventsV1.SubtaskDeleted, a.onSubtaskDeleted).
-		RegisterEventListener(taskEventsV1.TaskStatusUpdated, a.onTaskStatusUpdated)
+		RegisterEventListener(taskEventsV1.TaskStatusUpdated, a.onTaskStatusUpdated).
+		RegisterEventListener(taskEventsV1.TaskDueAtRemoved, a.onTaskDueAtRemoved).
+		RegisterEventListener(taskEventsV1.TaskDeleted, a.onTaskDeleted)
 }
 
 // Event handlers
@@ -128,7 +132,7 @@ func (a *TaskAggregate) onTaskDueAtUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	a.Task.DueAt = payload.DueAt
+	a.Task.DueAt = &payload.DueAt
 
 	return nil
 }
@@ -172,14 +176,13 @@ func (a *TaskAggregate) onTaskUnassigned(evt hwes.Event) error {
 	return nil
 }
 
-func (a *TaskAggregate) onTaskPublished(evt hwes.Event) error {
-	var payload taskEventsV1.TaskPublishedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
-		return err
-	}
-
+func (a *TaskAggregate) onTaskPublished(_ hwes.Event) error {
 	a.Task.Public = true
+	return nil
+}
 
+func (a *TaskAggregate) onTaskUnpublished(_ hwes.Event) error {
+	a.Task.Public = false
 	return nil
 }
 
@@ -198,7 +201,7 @@ func (a *TaskAggregate) onSubtaskCreated(evt hwes.Event) error {
 		ID:        subtaskID,
 		Name:      payload.Name,
 		CreatedAt: time.Now().UTC(),
-		Done:      false,
+		Done:      payload.Done,
 	}
 
 	a.Task.Subtasks[subtaskID] = *subtask
@@ -277,5 +280,15 @@ func (a *TaskAggregate) onSubtaskDeleted(evt hwes.Event) error {
 
 	delete(a.Task.Subtasks, subtaskID)
 
+	return nil
+}
+
+func (a *TaskAggregate) onTaskDueAtRemoved(_ hwes.Event) error {
+	a.Task.DueAt = nil
+	return nil
+}
+
+func (a *TaskAggregate) onTaskDeleted(_ hwes.Event) error {
+	a.MarkAsDeleted()
 	return nil
 }

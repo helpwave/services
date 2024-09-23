@@ -114,13 +114,16 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 	return &pb.UpdateRoomResponse{}, nil
 }
 
-func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.GetRoomsResponse, error) {
+func (ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*pb.GetRoomsResponse, error) {
 	roomRepo := room_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
-	// TODO: implement filtering by ward_id contained in req
+	wardID, err := hwutil.ParseNullUUID(req.WardId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
 
-	rows, err := roomRepo.GetRoomsWithBeds(ctx, uuid.NullUUID{UUID: uuid.Nil, Valid: false})
+	rows, err := roomRepo.GetRoomsWithBeds(ctx, wardID)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err

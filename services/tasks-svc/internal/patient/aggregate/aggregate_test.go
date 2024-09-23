@@ -164,3 +164,26 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 		t.Errorf("Patient BedID: expected '%s' got '%s'", uuid.Nil.String(), patientAggregate.Patient.BedID.UUID.String())
 	}
 }
+
+func TestPatientAggregate_DeletePatient(t *testing.T) {
+	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+
+	patientID := uuid.New()
+
+	humanRI := "Test Patient"
+	notes := ""
+
+	patientAggregate := aggregate.NewPatientAggregate(patientID)
+
+	if err := patientAggregate.CreatePatient(ctx, humanRI, notes); err != nil {
+		t.Error(err)
+	}
+
+	if err := patientAggregate.DeletePatient(ctx); err != nil {
+		t.Error(err)
+	}
+
+	if !patientAggregate.IsDeleted() {
+		t.Errorf("Expected task to be deleted")
+	}
+}

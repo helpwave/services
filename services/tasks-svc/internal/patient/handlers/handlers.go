@@ -29,15 +29,17 @@ func NewPatientHandlers(as hwes.AggregateStore) *Handlers {
 				ReadmitPatient:   commandsV1.NewReadmitPatientCommandHandler(as),
 				UnassignBed:      commandsV1.NewUnassignBedCommandHandler(as),
 				UpdatePatient:    commandsV1.NewUpdatePatientCommandHandler(as),
+				DeletePatient:    commandsV1.NewDeletePatientCommandHandler(as),
 			},
 		},
 		Queries: &Queries{
 			V1: &queriesV1.PatientQueries{
-				GetPatientByID:            queriesV1.NewGetPatientByIDQueryHandler(as),
-				GetPatientByBed:           queriesV1.NewGetPatientByBedQueryHandler(),
-				GetPatientsByWard:         queriesV1.NewGetPatientsByWardQueryHandler(),
-				GetPatientDetailsByID:     queriesV1.NewGetPatientWithDetailsByIDQueryHandler(as),
-				GetAllPatientsWithDetails: queriesV1.NewGetAllPatientsWithDetailsQueryHandler(),
+				GetPatientByID:             queriesV1.NewGetPatientByIDQueryHandler(as),
+				GetPatientByBed:            queriesV1.NewGetPatientByBedQueryHandler(),
+				GetPatientsByWard:          queriesV1.NewGetPatientsByWardQueryHandler(),
+				GetPatientDetailsByID:      queriesV1.NewGetPatientWithDetailsByIDQueryHandler(as),
+				GetAllPatientsWithDetails:  queriesV1.NewGetAllPatientsWithDetailsQueryHandler(),
+				GetPatientAssignmentByWard: queriesV1.NewGetPatientAssignmentByWardQueryHandler(),
 			},
 		},
 	}

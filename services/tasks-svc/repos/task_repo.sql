@@ -20,8 +20,8 @@ WHERE id = @id;
 
 -- name: CreateSubtask :exec
 INSERT INTO subtasks
-	(id, task_id, name, created_by)
-VALUES ($1, $2, $3, $4);
+	(id, task_id, name, created_by, done)
+VALUES ($1, $2, $3, $4, $5);
 
 -- name: UpdateSubtask :exec
 UPDATE subtasks
@@ -56,3 +56,24 @@ FROM patients
 		 JOIN tasks ON tasks.patient_id = patients.id
 		 LEFT JOIN subtasks ON subtasks.task_id = tasks.id
 WHERE tasks.assigned_user_id = $1;
+
+-- name: GetTaskWithPatientById :many
+SELECT
+	sqlc.embed(tasks),
+	sqlc.embed(patients),
+	subtasks.id as subtask_id,
+	subtasks.name as subtask_name,
+	subtasks.done as subtask_done,
+	subtasks.created_by as subtask_created_by
+FROM tasks
+	JOIN patients ON tasks.patient_id = patients.id
+	LEFT JOIN subtasks ON subtasks.task_id = tasks.id
+WHERE tasks.id = $1;
+
+-- name: RemoveTaskDueAt :exec
+UPDATE tasks
+SET due_at = NULL
+WHERE id = $1;
+
+-- name: DeleteTask :exec
+DELETE FROM tasks WHERE id = $1;

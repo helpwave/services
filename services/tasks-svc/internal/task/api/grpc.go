@@ -31,9 +31,14 @@ func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequ
 		return nil, err
 	}
 
-	// TODO: implement task.assigned_user_id and task.subtasks
+	assignedUserID, err := hwutil.ParseNullUUID(req.AssignedUserId)
+	if err != nil {
+		return nil, err
+	}
 
-	if err := s.handlers.Commands.V1.CreateTask(ctx, taskID, req.GetName(), req.Description, patientID, req.Public, req.InitialStatus, req.DueAt); err != nil {
+	subtasks := hwutil.OrEmptySlice(req.Subtasks)
+
+	if err := s.handlers.Commands.V1.CreateTask(ctx, taskID, req.GetName(), req.Description, patientID, req.Public, req.InitialStatus, req.DueAt, assignedUserID, subtasks); err != nil {
 		return nil, err
 	}
 
@@ -48,9 +53,7 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 		return nil, err
 	}
 
-	// TODO: implement update task.public
-
-	if err := s.handlers.Commands.V1.UpdateTask(ctx, taskID, req.Name, req.Description, req.Status); err != nil {
+	if err := s.handlers.Commands.V1.UpdateTask(ctx, taskID, req.Name, req.Description, req.Status, req.Public, req.DueAt); err != nil {
 		return nil, err
 	}
 
@@ -99,7 +102,7 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 		return nil, err
 	}
 
-	task, err := s.handlers.Queries.V1.GetTaskByID(ctx, id)
+	task, err := s.handlers.Queries.V1.GetTaskWithPatientByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -107,15 +110,14 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 	var subtasksRes []*pb.GetTaskResponse_SubTask
 	for _, subtask := range task.Subtasks {
 		subtasksRes = append(subtasksRes, &pb.GetTaskResponse_SubTask{
-			Id:   subtask.ID.String(),
-			Name: subtask.Name,
-			Done: subtask.Done,
-			// TODO: created_by
+			Id:        subtask.ID.String(),
+			Name:      subtask.Name,
+			Done:      subtask.Done,
+			CreatedBy: subtask.CreatedBy.String(),
 		})
 	}
 
-	// TODO: add missing fields
-	return &pb.GetTaskResponse{
+	res := &pb.GetTaskResponse{
 		Id:             task.ID.String(),
 		Name:           task.Name,
 		Description:    task.Description,
@@ -123,7 +125,20 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 		Subtasks:       subtasksRes,
 		Status:         task.Status,
 		CreatedAt:      timestamppb.New(task.CreatedAt),
-	}, nil
+		Public:         task.Public,
+		DueAt:          nil, // may be set below
+		CreatedBy:      task.CreatedBy.String(),
+		Patient: &pb.GetTaskResponse_Patient{
+			Id:                      task.Patient.ID.String(),
+			HumanReadableIdentifier: task.Patient.HumanReadableIdentifier,
+		},
+	}
+
+	if task.DueAt != nil {
+		res.DueAt = timestamppb.New(*task.Task.DueAt)
+	}
+
+	return res, nil
 }
 
 func (s *TaskGrpcService) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPatientRequest) (*pb.GetTasksByPatientResponse, error) {
@@ -148,9 +163,13 @@ func (s *TaskGrpcService) GetTasksByPatient(ctx context.Context, req *pb.GetTask
 			Public:         item.Public,
 			CreatedBy:      item.CreatedBy.String(),
 			CreatedAt:      timestamppb.New(item.CreatedAt),
-			DueAt:          timestamppb.New(item.DueAt),
+			DueAt:          nil, // may be set below
 			Subtasks:       make([]*pb.GetTasksByPatientResponse_Task_SubTask, len(item.Subtasks)),
 			AssignedUserId: hwutil.NullUUIDToStringPtr(item.AssignedUser), // TODO: #760
+		}
+
+		if item.DueAt != nil {
+			taskResponse[ix].DueAt = timestamppb.New(*item.DueAt)
 		}
 
 		subtaskIdx := 0
@@ -211,9 +230,13 @@ func (s *TaskGrpcService) GetTasksByPatientSortedByStatus(ctx context.Context, r
 					Public:         task.Public,
 					CreatedBy:      task.CreatedBy.String(),
 					CreatedAt:      timestamppb.New(task.CreatedAt),
-					DueAt:          timestamppb.New(task.DueAt),
+					DueAt:          nil, // may be set below
 					Subtasks:       make([]*pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask, len(task.Subtasks)),
 					AssignedUserId: hwutil.NullUUIDToStringPtr(task.AssignedUser), // TODO: #760
+				}
+
+				if task.DueAt != nil {
+					taskWithSub.DueAt = timestamppb.New(*task.DueAt)
 				}
 
 				subtaskIdx := 0
@@ -262,13 +285,17 @@ func (s *TaskGrpcService) GetAssignedTasks(ctx context.Context, _ *pb.GetAssigne
 			Public:         item.Public,
 			CreatedBy:      item.CreatedBy.String(),
 			CreatedAt:      timestamppb.New(item.CreatedAt),
-			DueAt:          timestamppb.New(item.DueAt),
+			DueAt:          nil, // may be set below
 			Subtasks:       make([]*pb.GetAssignedTasksResponse_Task_SubTask, len(item.Subtasks)),
 			AssignedUserId: item.AssignedUser.UUID.String(), // Safe, assignedUserId has to be set. TODO: #760
 			Patient: &pb.GetAssignedTasksResponse_Task_Patient{
 				Id:                      item.PatientID.String(),
 				HumanReadableIdentifier: item.Patient.HumanReadableIdentifier,
 			},
+		}
+
+		if item.DueAt != nil {
+			taskResponse[ix].DueAt = timestamppb.New(*item.DueAt)
 		}
 
 		subtaskIdx := 0
@@ -296,9 +323,7 @@ func (s *TaskGrpcService) CreateSubtask(ctx context.Context, req *pb.CreateSubta
 
 	subtaskID := uuid.New()
 
-	// TODO: implement subtask.done functionality
-
-	if err := s.handlers.Commands.V1.CreateSubtask(ctx, taskID, subtaskID, req.GetSubtask().GetName()); err != nil {
+	if err := s.handlers.Commands.V1.CreateSubtask(ctx, taskID, subtaskID, req.GetSubtask().GetName(), req.GetSubtask().GetDone()); err != nil {
 		return nil, err
 	}
 
@@ -313,14 +338,12 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 		return nil, err
 	}
 
-	// TODO: implement complete and uncompleteSubtask functionality
-
 	subtaskID, err := uuid.Parse(req.GetSubtaskId())
 	if err != nil {
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.UpdateSubtask(ctx, taskID, subtaskID, req.Subtask.Name); err != nil {
+	if err := s.handlers.Commands.V1.UpdateSubtask(ctx, taskID, subtaskID, req.Subtask.Name, req.Subtask.Done); err != nil {
 		return nil, err
 	}
 
@@ -345,5 +368,28 @@ func (s *TaskGrpcService) DeleteSubtask(ctx context.Context, req *pb.DeleteSubta
 	return &pb.DeleteSubtaskResponse{}, nil
 }
 
-// TODO: add removeTaskDueDate
-// TODO: add deleteTask
+func (s *TaskGrpcService) RemoveTaskDueDate(ctx context.Context, req *pb.RemoveTaskDueDateRequest) (*pb.RemoveTaskDueDateResponse, error) {
+	taskID, err := uuid.Parse(req.GetTaskId())
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.handlers.Commands.V1.RemoveTaskDueAt(ctx, taskID); err != nil {
+		return nil, err
+	}
+
+	return &pb.RemoveTaskDueDateResponse{}, nil
+}
+
+func (s *TaskGrpcService) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) (*pb.DeleteTaskResponse, error) {
+	taskID, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.handlers.Commands.V1.DeleteTask(ctx, taskID); err != nil {
+		return nil, err
+	}
+
+	return &pb.DeleteTaskResponse{}, nil
+}

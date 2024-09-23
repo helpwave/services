@@ -10,10 +10,10 @@ import (
 	"tasks-svc/internal/task/aggregate"
 )
 
-type CreateTaskCommandHandler func(ctx context.Context, taskID uuid.UUID, name string, description *string, patientID uuid.UUID, public *bool, status *pb.TaskStatus, dueAt *timestamppb.Timestamp) error
+type CreateTaskCommandHandler func(ctx context.Context, taskID uuid.UUID, name string, description *string, patientID uuid.UUID, public *bool, status *pb.TaskStatus, dueAt *timestamppb.Timestamp, assignedUserID uuid.NullUUID, subtasks []*pb.CreateTaskRequest_SubTask) error
 
 func NewCreateTaskCommandHandler(as hwes.AggregateStore) CreateTaskCommandHandler {
-	return func(ctx context.Context, taskID uuid.UUID, name string, description *string, patientID uuid.UUID, public *bool, status *pb.TaskStatus, dueAt *timestamppb.Timestamp) error {
+	return func(ctx context.Context, taskID uuid.UUID, name string, description *string, patientID uuid.UUID, public *bool, status *pb.TaskStatus, dueAt *timestamppb.Timestamp, assignedUserID uuid.NullUUID, subtasks []*pb.CreateTaskRequest_SubTask) error {
 		a := aggregate.NewTaskAggregate(taskID)
 
 		exists, err := as.Exists(ctx, a)
@@ -41,14 +41,25 @@ func NewCreateTaskCommandHandler(as hwes.AggregateStore) CreateTaskCommandHandle
 		}
 
 		if dueAt != nil {
-			time := dueAt.AsTime()
-			if err := a.UpdateDueAt(ctx, time); err != nil {
+			if err := a.UpdateDueAt(ctx, dueAt.AsTime()); err != nil {
 				return err
 			}
 		}
 
 		if public != nil && *public {
-			if err := a.PublishTask(ctx); err != nil {
+			if err := a.UpdateTaskPublic(ctx, *public); err != nil {
+				return err
+			}
+		}
+
+		if assignedUserID.Valid {
+			if err := a.AssignTask(ctx, assignedUserID.UUID); err != nil {
+				return err
+			}
+		}
+
+		for _, subtask := range subtasks {
+			if err := a.CreateSubtask(ctx, uuid.New(), subtask.Name, subtask.GetDone()); err != nil {
 				return err
 			}
 		}

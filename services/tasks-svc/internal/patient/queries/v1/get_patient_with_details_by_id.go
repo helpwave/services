@@ -3,7 +3,6 @@ package v1
 import (
 	"context"
 	"github.com/google/uuid"
-	hwspicedb "hwauthz/spicedb"
 	"hwdb"
 	"hwes"
 	"tasks-svc/internal/patient/models"
@@ -16,8 +15,7 @@ type GetPatientDetailsByIDQueryHandler func(ctx context.Context, patientID uuid.
 func NewGetPatientWithDetailsByIDQueryHandler(as hwes.AggregateStore) GetPatientDetailsByIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) (*models.PatientDetails, error) {
 		patientRepo := patient_repo.New(hwdb.GetDB())
-		authz := hwspicedb.NewSpiceDBAuthZ()
-		taskHandlers := th.NewTaskHandlers(as, authz)
+		taskHandlers := th.NewTaskHandlers(as)
 
 		patientRes, err := hwdb.Optional(patientRepo.GetPatientWithBedAndRoom)(ctx, patientID)
 		if patientRes == nil {
