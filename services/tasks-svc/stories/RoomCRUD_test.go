@@ -5,16 +5,9 @@ import (
 	pb "gen/services/tasks_svc/v1"
 	"github.com/stretchr/testify/assert"
 	"hwutil"
+	"strconv"
 	"testing"
 )
-
-func prepareWard(t *testing.T, ctx context.Context, suffix string) (wardID string) {
-	wardRes, err := wardServiceClient().CreateWard(ctx, &pb.CreateWardRequest{
-		Name: t.Name() + " ward " + suffix,
-	})
-	assert.NoError(t, err, "prepareWard failed: could not create ward", suffix)
-	return wardRes.Id
-}
 
 // TestCreateUpdateGetRoom:
 //   - Create a new room
@@ -24,7 +17,7 @@ func TestCreateUpdateGetRoom(t *testing.T) {
 	roomClient := roomServiceClient()
 
 	// first, prepare ward
-	wardId := prepareWard(t, ctx, "1")
+	wardId, _ := prepareWard(t, ctx, "1")
 
 	//
 	// create new room
@@ -76,4 +69,63 @@ func TestCreateUpdateGetRoom(t *testing.T) {
 	assert.Equal(t, *updateReq.Name, getRoomRes.Name)
 	assert.Equal(t, updateRes.Consistency, getRoomRes.Consistency)
 
+}
+
+func TestGetRooms(t *testing.T) {
+	roomClient := roomServiceClient()
+	ctx := context.Background()
+
+	suffixMatrix := [][]string{
+		{"1 A", "1 B"}, // Ward 1
+		{"2 A"},        // Ward 2
+		{},             // Ward 3
+	}
+
+	roomWardMap := make(map[string]string)        // map roomID to its wardID
+	wardRoomsMap := make(map[string][]string)     // map wardID to its roomIDs
+	roomConsistencyMap := make(map[string]string) // map roomID to its consistency
+
+	for i, roomSfxs := range suffixMatrix {
+		wardSuffix := strconv.Itoa(i + 1)
+		wardId, _ := prepareWard(t, ctx, wardSuffix)
+		wardRoomsMap[wardId] = make([]string, 0)
+		for _, bedSuffix := range roomSfxs {
+			roomId, roomConsistency := prepareRoom(t, ctx, wardId, bedSuffix)
+			roomWardMap[roomId] = wardId
+			roomConsistencyMap[roomId] = roomConsistency
+			wardRoomsMap[wardId] = append(wardRoomsMap[wardId], roomId)
+		}
+	}
+
+	allRooms, err := roomClient.GetRooms(ctx, &pb.GetRoomsRequest{
+		WardId: nil,
+	})
+	assert.NoError(t, err, "could not get all rooms")
+
+	assert.GreaterOrEqual(t, len(allRooms.Rooms), 3) // other rooms might exist from other tests
+
+	found := 0
+	for _, room := range allRooms.Rooms {
+		assert.NotEqual(t, "", room.Id)
+		if roomWardMap[room.Id] == "" {
+			continue
+		}
+		found++
+		assert.Equal(t, roomWardMap[room.Id], room.WardId)
+		assert.Equal(t, roomConsistencyMap[room.Id], room.Consistency)
+	}
+
+	assert.Equal(t, 3, found)
+
+	// Part 2: GetRooms with ward
+
+	for wardId, roomIDs := range wardRoomsMap {
+		res, err := roomClient.GetRooms(ctx, &pb.GetRoomsRequest{WardId: &wardId})
+		assert.NoError(t, err, "could not get all rooms for ward %s", wardId)
+		assert.Len(t, res.Rooms, len(roomIDs))
+		actualRoomIDs := hwutil.Map(res.Rooms, func(room *pb.GetRoomsResponse_Room) string {
+			return room.Id
+		})
+		assert.Subset(t, roomIDs, actualRoomIDs, "actualRoomIDs not a subset for ward %s", wardId)
+	}
 }

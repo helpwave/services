@@ -10,38 +10,6 @@ import (
 	"time"
 )
 
-func prepareRoom(t *testing.T, ctx context.Context, suffix string) (wardID, roomID, roomConsistency string) {
-	wardRes, err := wardServiceClient().CreateWard(ctx, &pb.CreateWardRequest{
-		Name: t.Name() + " ward " + suffix,
-	})
-	assert.NoError(t, err, "prepareRoom failed: could not create ward", suffix)
-	roomRes, err := roomServiceClient().CreateRoom(ctx, &pb.CreateRoomRequest{
-		Name:   t.Name() + " room " + suffix,
-		WardId: wardRes.Id,
-	})
-	assert.NoError(t, err, "prepareRoom failed: could not create room", suffix)
-	return wardRes.Id, roomRes.Id, roomRes.Consistency
-}
-
-func prepareBed(t *testing.T, ctx context.Context, roomId, suffix string) (bedID, consistency string) {
-	createRes, err := bedServiceClient().CreateBed(ctx, &pb.CreateBedRequest{
-		RoomId: roomId,
-		Name:   t.Name() + " bed " + suffix,
-	})
-	assert.NoError(t, err, "prepareBed: could not create bed", suffix)
-	return createRes.Id, createRes.Consistency
-}
-
-func preparePatient(t *testing.T, ctx context.Context) (patientID string) {
-	res, err := patientServiceClient().CreatePatient(ctx, &pb.CreatePatientRequest{
-		HumanReadableIdentifier: t.Name() + " Patient",
-		Notes:                   hwutil.PtrTo("A patient for test " + t.Name()),
-	})
-	assert.NoError(t, err, "preparePatient: could not create patient")
-	time.Sleep(time.Second)
-	return res.Id
-}
-
 // TestCreateUpdateGetBed:
 //   - Create a new bed
 //   - Update it
@@ -50,7 +18,8 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	bedClient := bedServiceClient()
 
 	// first, prepare room
-	_, roomId, _ := prepareRoom(t, ctx, "1")
+	wardId, _ := prepareWard(t, ctx, "1")
+	roomId, _ := prepareRoom(t, ctx, wardId, "1")
 
 	//
 	// create new bed
@@ -81,12 +50,12 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	//
 
 	// prepare new room
-	_, roomID2, _ := prepareRoom(t, ctx, "2")
+	roomID2, _ := prepareRoom(t, ctx, wardId, "2")
 
 	updateReq := &pb.UpdateBedRequest{
 		Id:          bedID,
 		RoomId:      &roomID2,
-		Name:        hwutil.PtrTo(t.Name() + " room 2"),
+		Name:        hwutil.PtrTo(t.Name() + " bed 2"),
 		Consistency: &getBedRes.Consistency,
 	}
 	updateRes, err := bedClient.UpdateBed(ctx, updateReq)
@@ -111,7 +80,8 @@ func TestGetBedByPatient(t *testing.T) {
 	ctx := context.Background()
 
 	// first, prepare room
-	_, roomId, roomConsistency := prepareRoom(t, ctx, "")
+	wardId, _ := prepareWard(t, ctx, "1")
+	roomId, roomConsistency := prepareRoom(t, ctx, wardId, "")
 
 	// creating two beds
 	unrelatedBedID, _ := prepareBed(t, ctx, roomId, "unrelated")
@@ -160,14 +130,11 @@ func TestGetBeds(t *testing.T) {
 	roomBedsMap := make(map[string][]string)     // map roomID to its bedIDs
 	bedConsistencyMap := make(map[string]string) // map bedID to its consistency
 
-	var room1Id string // for part 2
+	wardId, _ := prepareWard(t, ctx, "1")
 
 	for i, bedSfxs := range suffixMatrix {
 		roomSuffix := strconv.Itoa(i + 1)
-		_, roomId, _ := prepareRoom(t, ctx, roomSuffix)
-		if i == 0 {
-			room1Id = roomId
-		}
+		roomId, _ := prepareRoom(t, ctx, wardId, roomSuffix)
 		roomBedsMap[roomId] = make([]string, 0)
 		for _, bedSuffix := range bedSfxs {
 			bedId, bedConsistency := prepareBed(t, ctx, roomId, bedSuffix)
@@ -197,14 +164,16 @@ func TestGetBeds(t *testing.T) {
 
 	// Part 2: GetBedsByRoom
 
-	res, err := bedClient.GetBedsByRoom(ctx, &pb.GetBedsByRoomRequest{RoomId: room1Id})
-	assert.NoError(t, err, "could not get beds for room 1")
+	for roomId, expectedBedIDs := range roomBedsMap {
+		res, err := bedClient.GetBedsByRoom(ctx, &pb.GetBedsByRoomRequest{RoomId: roomId})
+		assert.NoError(t, err, "could not get beds for room 1")
 
-	assert.Len(t, res.Beds, 2)
+		assert.Len(t, res.Beds, 2)
 
-	bedIds := hwutil.Map(res.Beds, func(bed *pb.GetBedsByRoomResponse_Bed) string {
-		return bed.Id
-	})
+		bedIds := hwutil.Map(res.Beds, func(bed *pb.GetBedsByRoomResponse_Bed) string {
+			return bed.Id
+		})
+		assert.Subset(t, expectedBedIDs, bedIds, "actual bedIDs are not a subset of expected for room %s", roomId)
 
-	assert.Subset(t, roomBedsMap[room1Id], bedIds)
+	}
 }

@@ -6,7 +6,9 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	zlog "github.com/rs/zerolog/log"
+	"github.com/stretchr/testify/assert"
 	"hwtesting"
+	"hwutil"
 	"os/signal"
 	"tasks-svc/cmd/service"
 
@@ -76,4 +78,40 @@ func taskTemplateServiceClient() pb.TaskTemplateServiceClient {
 }
 func wardServiceClient() pb.WardServiceClient {
 	return pb.NewWardServiceClient(hwtesting.GetGrpcConn())
+}
+
+func prepareWard(t *testing.T, ctx context.Context, suffix string) (wardID, wardConsistency string) {
+	wardRes, err := wardServiceClient().CreateWard(ctx, &pb.CreateWardRequest{
+		Name: t.Name() + " ward " + suffix,
+	})
+	assert.NoError(t, err, "prepareWard failed: could not create ward", suffix)
+	return wardRes.Id, wardRes.Consistency
+}
+
+func prepareRoom(t *testing.T, ctx context.Context, wardId, suffix string) (roomID, roomConsistency string) {
+	roomRes, err := roomServiceClient().CreateRoom(ctx, &pb.CreateRoomRequest{
+		Name:   t.Name() + " room " + suffix,
+		WardId: wardId,
+	})
+	assert.NoError(t, err, "prepareRoom failed: could not create room", suffix)
+	return roomRes.Id, roomRes.Consistency
+}
+
+func prepareBed(t *testing.T, ctx context.Context, roomId, suffix string) (bedID, consistency string) {
+	createRes, err := bedServiceClient().CreateBed(ctx, &pb.CreateBedRequest{
+		RoomId: roomId,
+		Name:   t.Name() + " bed " + suffix,
+	})
+	assert.NoError(t, err, "prepareBed: could not create bed", suffix)
+	return createRes.Id, createRes.Consistency
+}
+
+func preparePatient(t *testing.T, ctx context.Context) (patientID string) {
+	res, err := patientServiceClient().CreatePatient(ctx, &pb.CreatePatientRequest{
+		HumanReadableIdentifier: t.Name() + " Patient",
+		Notes:                   hwutil.PtrTo("A patient for test " + t.Name()),
+	})
+	assert.NoError(t, err, "preparePatient: could not create patient")
+	time.Sleep(time.Second)
+	return res.Id
 }
