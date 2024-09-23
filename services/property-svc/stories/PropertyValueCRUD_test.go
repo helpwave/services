@@ -10,10 +10,6 @@ import (
 	"time"
 )
 
-func TestMain(m *testing.M) {
-	Setup(m)
-}
-
 // TestCreateAttachUpdateTextProperty:
 //   - Create a Property,
 //   - Attach a Value

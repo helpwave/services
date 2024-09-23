@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-func Setup(m *testing.M) {
+func TestMain(m *testing.M) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	zlog.Info().Msg("starting containers")
