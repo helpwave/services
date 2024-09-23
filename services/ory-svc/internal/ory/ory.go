@@ -9,7 +9,7 @@ import (
 	"hwutil"
 )
 
-// TODO: Remove later on. Just for hwtesting on production with example data.
+// TODO: Remove later on. Just for testing on production with example data.
 var exampleOrganizationID = uuid.MustParse("3b25c6f5-4705-4074-9fc6-a50c28eba406")
 
 func getConsentRequestForConsentChallenge(ctx context.Context, client *ory.APIClient, consentChallenge string) (*ory.OAuth2ConsentRequest, error) {

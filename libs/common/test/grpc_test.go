@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// yes, we are hwtesting a test library
+// yes, we are testing a test library
 
 // TestAuthenticatedUserMetadataDoesNotCrash may fail if:
 // - AuthenticatedUserMetadata accesses the AuthenticatedUserClaim map incorrectly

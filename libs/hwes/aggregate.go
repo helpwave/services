@@ -152,7 +152,7 @@ func (a *AggregateBase) ClearUncommittedEvents() {
 }
 
 // Load applies events to an aggregate by utilizing the registered event listeners
-// Currently not in use. Could be helpful for hwtesting.
+// Currently not in use. Could be helpful for testing.
 func (a *AggregateBase) Load(events []Event) error {
 	for _, event := range events {
 		if event.GetAggregateID() != a.GetID() {

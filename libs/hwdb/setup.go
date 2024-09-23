@@ -113,7 +113,7 @@ func GetDB() DBTX {
 	return connectionPool
 }
 
-// TestingSetDB should only be called by hwtesting code
+// TestingSetDB should only be called by testing code
 func TestingSetDB(pool DBTX) {
 	connectionPool = pool
 }

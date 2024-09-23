@@ -12,7 +12,7 @@ type AggregateStore struct {
 }
 
 // NewAggregateStore returns an in-memory Aggregate store
-// Very handy for hwtesting
+// Very handy for testing
 func NewAggregateStore() *AggregateStore {
 	return &AggregateStore{streams: make(map[string][]hwes.Event)}
 }

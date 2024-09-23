@@ -118,7 +118,7 @@ func GetRecentWardsForUser(ctx context.Context) ([]string, error) {
 	return lru.GetItemsForUser(WardKey, userID)
 }
 
-// SetLRU overwrites the lru, to use a custom setup, instead of SetupTracking (e.g., for hwtesting)
+// SetLRU overwrites the lru, to use a custom setup, instead of SetupTracking (e.g., for testing)
 func SetLRU(dlru decaying_lru.DecayingLRU) {
 	lru = dlru
 }
