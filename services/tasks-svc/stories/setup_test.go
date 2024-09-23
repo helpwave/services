@@ -106,9 +106,9 @@ func prepareBed(t *testing.T, ctx context.Context, roomId, suffix string) (bedID
 	return createRes.Id, createRes.Consistency
 }
 
-func preparePatient(t *testing.T, ctx context.Context) (patientID string) {
+func preparePatient(t *testing.T, ctx context.Context, suffix string) (patientID string) {
 	res, err := patientServiceClient().CreatePatient(ctx, &pb.CreatePatientRequest{
-		HumanReadableIdentifier: t.Name() + " Patient",
+		HumanReadableIdentifier: t.Name() + " Patient " + suffix,
 		Notes:                   hwutil.PtrTo("A patient for test " + t.Name()),
 	})
 	assert.NoError(t, err, "preparePatient: could not create patient")

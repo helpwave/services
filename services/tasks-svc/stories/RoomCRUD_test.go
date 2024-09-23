@@ -2,6 +2,7 @@ package stories
 
 import (
 	"context"
+	"encoding/json"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/stretchr/testify/assert"
 	"hwutil"
@@ -128,4 +129,133 @@ func TestGetRooms(t *testing.T) {
 		})
 		assert.Subset(t, roomIDs, actualRoomIDs, "actualRoomIDs not a subset for ward %s", wardId)
 	}
+}
+
+func TestGetRoomOverviewsByWard(t *testing.T) {
+	patientClient := patientServiceClient()
+	ctx := context.Background()
+
+	// prepare all resources
+
+	wardId, _ := prepareWard(t, ctx, "")
+	roomIDA, _ := prepareRoom(t, ctx, wardId, "A")
+	roomIDB, _ := prepareRoom(t, ctx, wardId, "B")
+
+	bed1Id, _ := prepareBed(t, ctx, roomIDA, "1")
+	bed2Id, _ := prepareBed(t, ctx, roomIDA, "2")
+	bed3Id, _ := prepareBed(t, ctx, roomIDB, "3")
+	bedIDs := []string{bed1Id, bed2Id, bed3Id}
+
+	patient1Id := preparePatient(t, ctx, "1")
+	patient2Id := preparePatient(t, ctx, "2")
+	patient3Id := preparePatient(t, ctx, "3")
+	patientIDs := []string{patient1Id, patient2Id, patient3Id}
+
+	// assign beds 1-3 to patients 1-3
+	for i, bedID := range bedIDs {
+		_, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
+			Id:          patientIDs[i],
+			BedId:       bedID,
+			Consistency: nil,
+		})
+		assert.NoError(t, err, "could not assign bed to patient", i)
+	}
+
+	// additionally, add unassigned bed and patient
+	bed4Id, _ := prepareBed(t, ctx, roomIDB, "unassigned")
+	bedIDs = append(bedIDs, bed4Id)
+	patient4Id := preparePatient(t, ctx, "unassigned")
+	patientIDs = append(patientIDs, patient4Id)
+
+	res, err := roomServiceClient().GetRoomOverviewsByWard(ctx, &pb.GetRoomOverviewsByWardRequest{
+		Id: wardId,
+	})
+	assert.NoError(t, err, "could not GetRoomOverviewsByWard")
+
+	assert.Len(t, res.Rooms, 2)
+
+	resRoomA := res.Rooms[0]
+	resRoomB := res.Rooms[1]
+
+	// switch, if order is wrong
+	if resRoomA.Id != roomIDA {
+		resRoomA = res.Rooms[1]
+		resRoomB = res.Rooms[0]
+	}
+
+	assert.Equal(t, roomIDA, resRoomA.Id)
+	assert.Equal(t, roomIDB, resRoomB.Id)
+
+	expectedRoomA := &pb.GetRoomOverviewsByWardResponse_Room{
+		Id:   roomIDA,
+		Name: t.Name() + " room A",
+		Beds: []*pb.GetRoomOverviewsByWardResponse_Room_Bed{
+			{
+				Id:   bed1Id,
+				Name: t.Name() + " bed 1",
+				Patient: &pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient{
+					Id:                      patient1Id,
+					HumanReadableIdentifier: t.Name() + " Patient 1",
+					TasksUnscheduled:        0,
+					TasksInProgress:         0,
+					TasksDone:               0,
+					Consistency:             "1",
+				},
+				Consistency: "0",
+			},
+			{
+				Id:   bed2Id,
+				Name: t.Name() + " bed 2",
+				Patient: &pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient{
+					Id:                      patient2Id,
+					HumanReadableIdentifier: t.Name() + " Patient 2",
+					TasksUnscheduled:        0,
+					TasksInProgress:         0,
+					TasksDone:               0,
+					Consistency:             "1",
+				},
+				Consistency: "0",
+			},
+		},
+		Consistency: "0",
+	}
+
+	expectedRoomB := &pb.GetRoomOverviewsByWardResponse_Room{
+		Id:   roomIDB,
+		Name: t.Name() + " room B",
+		Beds: []*pb.GetRoomOverviewsByWardResponse_Room_Bed{
+			{
+				Id:   bed3Id,
+				Name: t.Name() + " bed 3",
+				Patient: &pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient{
+					Id:                      patient3Id,
+					HumanReadableIdentifier: t.Name() + " Patient 3",
+					TasksUnscheduled:        0,
+					TasksInProgress:         0,
+					TasksDone:               0,
+					Consistency:             "1",
+				},
+				Consistency: "0",
+			},
+			{
+				Id:          bed4Id,
+				Name:        t.Name() + " bed unassigned",
+				Patient:     nil,
+				Consistency: "0",
+			},
+		},
+		Consistency: "0",
+	}
+
+	expectedRoomAJson, err := json.Marshal(expectedRoomA)
+	assert.NoError(t, err)
+	expectedRoomBJson, err := json.Marshal(expectedRoomB)
+	assert.NoError(t, err)
+	resRoomAJson, err := json.Marshal(resRoomA)
+	assert.NoError(t, err)
+	resRoomBJson, err := json.Marshal(resRoomB)
+	assert.NoError(t, err)
+
+	assert.JSONEq(t, string(expectedRoomAJson), string(resRoomAJson))
+	assert.JSONEq(t, string(expectedRoomBJson), string(resRoomBJson))
 }

@@ -88,7 +88,7 @@ func TestGetBedByPatient(t *testing.T) {
 	patientsBedID, bedConsistency := prepareBed(t, ctx, roomId, "patient")
 
 	// create a patient
-	patientID := preparePatient(t, ctx)
+	patientID := preparePatient(t, ctx, "")
 
 	// assign bed to patient
 	_, err := patientServiceClient().AssignBed(ctx, &pb.AssignBedRequest{
@@ -168,7 +168,7 @@ func TestGetBeds(t *testing.T) {
 		res, err := bedClient.GetBedsByRoom(ctx, &pb.GetBedsByRoomRequest{RoomId: roomId})
 		assert.NoError(t, err, "could not get beds for room 1")
 
-		assert.Len(t, res.Beds, 2)
+		assert.Len(t, res.Beds, len(expectedBedIDs))
 
 		bedIds := hwutil.Map(res.Beds, func(bed *pb.GetBedsByRoomResponse_Bed) string {
 			return bed.Id

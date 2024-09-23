@@ -18,24 +18,6 @@ message CreateBedResponse {
 }
 
 //
-// BulkCreateBeds
-//
-
-message BulkCreateBedsRequest {
-  string room_id = 1; // @gotags: validate:"uuid4"
-  uint32 amount_of_beds = 2; // @gotags: validate:"required"
-}
-
-message BulkCreateBedsResponse {
-  repeated Bed beds = 1;
-
-  message Bed {
-    string id = 1;
-    string name = 2;
-  }
-}
-
-//
 // GetBed
 //
 
@@ -135,7 +117,6 @@ message DeleteBedResponse {}
 
 service BedService {
   rpc CreateBed(CreateBedRequest) returns (CreateBedResponse) {}
-  rpc BulkCreateBeds(BulkCreateBedsRequest) returns (BulkCreateBedsResponse) {}
   rpc GetBed(GetBedRequest) returns (GetBedResponse) {}
   rpc GetBedByPatient(GetBedByPatientRequest) returns (GetBedByPatientResponse) {}
   rpc GetBeds(GetBedsRequest) returns (GetBedsResponse) {}
