@@ -32,10 +32,12 @@ func (t InsecureBearerToken) RequireTransportSecurity() bool {
 	return false
 }
 
+const FakeTokenUser = "18159713-5d4e-4ad5-94ad-fbb6bb147984"
+
 func GetFakeTokenCredentials(subOverride string) InsecureBearerToken {
 	// README's fake token
 	m := map[string]interface{}{
-		"sub":      "18159713-5d4e-4ad5-94ad-fbb6bb147984",
+		"sub":      FakeTokenUser,
 		"email":    "testine.test@helpwave.de",
 		"name":     "Testine Test",
 		"nickname": "testine.test",
