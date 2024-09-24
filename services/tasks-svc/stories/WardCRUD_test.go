@@ -257,3 +257,121 @@ func TestGetWardOverviews(t *testing.T) {
 
 	assert.True(t, found)
 }
+
+func TestGetWardDetails(t *testing.T) {
+	wardClient := wardServiceClient()
+	taskTemplateClient := taskTemplateServiceClient()
+	ctx := context.Background()
+	wardId, consistency := prepareWard(t, ctx, "")
+
+	expected := map[string]interface{}{
+		"id":          wardId,
+		"name":        t.Name() + " ward ",
+		"consistency": consistency,
+	}
+
+	// create task-template and subtask
+
+	ttres, err := taskTemplateClient.CreateTaskTemplate(ctx, &pb.CreateTaskTemplateRequest{
+		Name:        t.Name() + " task template",
+		Description: nil,
+		WardId:      &wardId,
+	})
+	assert.NoError(t, err, "could not CreateTaskTemplate")
+
+	st, err := taskTemplateClient.CreateTaskTemplateSubTask(ctx, &pb.CreateTaskTemplateSubTaskRequest{
+		TaskTemplateId: ttres.Id,
+		Name:           t.Name() + " substask",
+	})
+	assert.NoError(t, err, "could not CreateTaskTemplateSubTask")
+
+	expected["task_templates"] = []map[string]interface{}{
+		{
+			"id":          ttres.Id,
+			"name":        t.Name() + " task template",
+			"consistency": st.TaskTemplateConsistency,
+			"subtasks": []map[string]interface{}{
+				{
+					"id":   st.Id,
+					"name": t.Name() + " substask",
+				},
+			},
+		},
+	}
+
+	// create rooms and beds
+
+	suffixMatrix := [][]string{
+		{"1 A", "1 B"}, // Room 1
+		{"2 A"},        // Room 2
+		{},             // Room 3
+	}
+
+	rooms := make([]map[string]interface{}, 0)
+	for i, bedSfxs := range suffixMatrix {
+		roomSuffix := strconv.Itoa(i + 1)
+		roomId, roomConsistency := prepareRoom(t, ctx, wardId, roomSuffix)
+		expectedRoom := map[string]interface{}{
+			"id":          roomId,
+			"name":        t.Name() + " room " + roomSuffix,
+			"consistency": roomConsistency,
+		}
+		beds := make([]map[string]interface{}, 0)
+		for _, bedSuffix := range bedSfxs {
+			bedId, bedConsistency := prepareBed(t, ctx, roomId, bedSuffix)
+			beds = append(beds, map[string]interface{}{
+				"id":          bedId,
+				"name":        t.Name() + " bed " + bedSuffix,
+				"consistency": bedConsistency,
+			})
+		}
+		expectedRoom["beds"] = beds
+		rooms = append(rooms, expectedRoom)
+	}
+	expected["rooms"] = rooms
+
+	// get GetWardDetails
+
+	ward, err := wardClient.GetWardDetails(ctx, &pb.GetWardDetailsRequest{
+		Id: wardId,
+	})
+	assert.NoError(t, err, "could GetWardDetailsRequest")
+
+	// assertions
+
+	actual := map[string]interface{}{
+		"id":          ward.Id,
+		"name":        ward.Name,
+		"consistency": ward.Consistency,
+		"rooms": hwutil.Map(ward.Rooms, func(r *pb.GetWardDetailsResponse_Room) map[string]interface{} {
+			return map[string]interface{}{
+				"id":          r.Id,
+				"name":        r.Name,
+				"consistency": r.Consistency,
+				"beds": hwutil.Map(r.Beds, func(b *pb.GetWardDetailsResponse_Bed) map[string]interface{} {
+					return map[string]interface{}{
+						"id":          b.Id,
+						"name":        b.Name,
+						"consistency": b.Consistency,
+					}
+				}),
+			}
+		}),
+		"task_templates": hwutil.Map(ward.TaskTemplates, func(tt *pb.GetWardDetailsResponse_TaskTemplate) map[string]interface{} {
+			return map[string]interface{}{
+				"id":          tt.Id,
+				"name":        tt.Name,
+				"consistency": tt.Consistency,
+				"subtasks": hwutil.Map(tt.Subtasks, func(st *pb.GetWardDetailsResponse_Subtask) map[string]interface{} {
+					return map[string]interface{}{
+						"id":   st.Id,
+						"name": st.Name,
+					}
+				}),
+			}
+		}),
+	}
+
+	assert.Equal(t, expected, actual)
+
+}
