@@ -235,8 +235,6 @@ export class GetPatientByBedResponse extends jspb.Message {
 
   getBedId(): string;
   setBedId(value: string): GetPatientByBedResponse;
-  hasBedId(): boolean;
-  clearBedId(): GetPatientByBedResponse;
 
   getConsistency(): string;
   setConsistency(value: string): GetPatientByBedResponse;
@@ -254,13 +252,8 @@ export namespace GetPatientByBedResponse {
     id: string,
     humanReadableIdentifier: string,
     notes: string,
-    bedId?: string,
+    bedId: string,
     consistency: string,
-  }
-
-  export enum BedIdCase { 
-    _BED_ID_NOT_SET = 0,
-    BED_ID = 4,
   }
 }
 

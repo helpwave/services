@@ -23,7 +23,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 		Notes:                   hwutil.PtrTo("A " + t.Name() + " patient"),
 	}
 	createRes, err := patientClient.CreatePatient(ctx, createReq)
-	assert.NoError(t, err, "could not create ward")
+	assert.NoError(t, err, "could not create patient")
 
 	patientId := createRes.GetId()
 
@@ -161,4 +161,49 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	assert.Nil(t, getPatientRes.WardId)
 
 	assert.Equal(t, unassignRes.Consistency, getPatientRes.Consistency)
+}
+
+func TestGetPatientByBedResponse(t *testing.T) {
+	ctx := context.Background()
+
+	patientClient := patientServiceClient()
+
+	//
+	// create patient and bed
+	//
+
+	wardId, _ := prepareWard(t, ctx, "")
+	roomId, _ := prepareRoom(t, ctx, wardId, "")
+	bedId, _ := prepareBed(t, ctx, roomId, "")
+
+	createReq := &pb.CreatePatientRequest{
+		HumanReadableIdentifier: t.Name() + " patient",
+		Notes:                   hwutil.PtrTo("A " + t.Name() + " patient"),
+	}
+	createRes, err := patientClient.CreatePatient(ctx, createReq)
+	assert.NoError(t, err, "could not create patient")
+
+	patientId := createRes.GetId()
+
+	assRes, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
+		Id:          patientId,
+		BedId:       bedId,
+		Consistency: &createRes.Consistency,
+	})
+	assert.NoError(t, err)
+
+	//
+	// GetPatientByBedResponse
+	//
+
+	getRes, err := patientClient.GetPatientByBed(ctx, &pb.GetPatientByBedRequest{
+		BedId: bedId,
+	})
+	assert.NoError(t, err)
+
+	assert.Equal(t, createRes.Id, getRes.Id)
+	assert.Equal(t, bedId, getRes.BedId)
+	assert.Equal(t, createReq.HumanReadableIdentifier, getRes.HumanReadableIdentifier)
+	assert.Equal(t, *createReq.Notes, getRes.Notes)
+	assert.Equal(t, assRes.Consistency, getRes.Consistency)
 }

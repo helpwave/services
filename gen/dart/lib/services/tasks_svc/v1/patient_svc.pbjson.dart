@@ -151,11 +151,8 @@ const GetPatientByBedResponse$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
     {'1': 'notes', '3': 3, '4': 1, '5': 9, '10': 'notes'},
-    {'1': 'bed_id', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'bedId', '17': true},
+    {'1': 'bed_id', '3': 4, '4': 1, '5': 9, '10': 'bedId'},
     {'1': 'consistency', '3': 5, '4': 1, '5': 9, '10': 'consistency'},
-  ],
-  '8': [
-    {'1': '_bed_id'},
   ],
 };
 
@@ -163,8 +160,8 @@ const GetPatientByBedResponse$json = {
 final $typed_data.Uint8List getPatientByBedResponseDescriptor = $convert.base64Decode(
     'ChdHZXRQYXRpZW50QnlCZWRSZXNwb25zZRIOCgJpZBgBIAEoCVICaWQSOgoZaHVtYW5fcmVhZG'
     'FibGVfaWRlbnRpZmllchgCIAEoCVIXaHVtYW5SZWFkYWJsZUlkZW50aWZpZXISFAoFbm90ZXMY'
-    'AyABKAlSBW5vdGVzEhoKBmJlZF9pZBgEIAEoCUgAUgViZWRJZIgBARIgCgtjb25zaXN0ZW5jeR'
-    'gFIAEoCVILY29uc2lzdGVuY3lCCQoHX2JlZF9pZA==');
+    'AyABKAlSBW5vdGVzEhUKBmJlZF9pZBgEIAEoCVIFYmVkSWQSIAoLY29uc2lzdGVuY3kYBSABKA'
+    'lSC2NvbnNpc3RlbmN5');
 
 @$core.Deprecated('Use getPatientsByWardRequestDescriptor instead')
 const GetPatientsByWardRequest$json = {

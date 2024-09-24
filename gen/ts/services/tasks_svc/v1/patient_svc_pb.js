@@ -2606,8 +2606,8 @@ proto.services.tasks_svc.v1.GetPatientByBedResponse.serializeBinaryToWriter = fu
       f
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(message, 4));
-  if (f != null) {
+  f = message.getBedId();
+  if (f.length > 0) {
     writer.writeString(
       4,
       f
@@ -2691,25 +2691,7 @@ proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.getBedId = functio
  * @return {!proto.services.tasks_svc.v1.GetPatientByBedResponse} returns this
  */
 proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.setBedId = function(value) {
-  return jspb.Message.setField(this, 4, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.services.tasks_svc.v1.GetPatientByBedResponse} returns this
- */
-proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.clearBedId = function() {
-  return jspb.Message.setField(this, 4, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.services.tasks_svc.v1.GetPatientByBedResponse.prototype.hasBedId = function() {
-  return jspb.Message.getField(this, 4) != null;
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 

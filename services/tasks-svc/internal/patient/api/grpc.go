@@ -124,7 +124,7 @@ func (s *PatientGrpcService) GetPatientByBed(ctx context.Context, req *pb.GetPat
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
-		BedId:                   &req.BedId,
+		BedId:                   req.BedId,
 		Consistency:             patient.Consistency,
 	}, nil
 }

@@ -67,7 +67,7 @@ message GetPatientByBedResponse {
   string id = 1;
   string human_readable_identifier = 2;
   string notes = 3;
-  optional string bed_id = 4;
+  string bed_id = 4;
   string consistency = 5;
 }
 
