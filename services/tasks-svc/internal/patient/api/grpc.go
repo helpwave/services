@@ -524,17 +524,20 @@ func (s *PatientGrpcService) GetPatientAssignmentByWard(ctx context.Context, req
 	return &pb.GetPatientAssignmentByWardResponse{
 		Rooms: hwutil.Map(roomsWithBedsWithPatients, func(room *models.RoomWithBedsWithPatient) *pb.GetPatientAssignmentByWardResponse_Room {
 			return &pb.GetPatientAssignmentByWardResponse_Room{
-				Id:   room.ID.String(),
-				Name: room.Name,
+				Id:          room.ID.String(),
+				Name:        room.Name,
+				Consistency: room.Consistency,
 				Beds: hwutil.Map(room.Beds, func(bedWithPatient *models.BedWithPatient) *pb.GetPatientAssignmentByWardResponse_Room_Bed {
 					res := &pb.GetPatientAssignmentByWardResponse_Room_Bed{
-						Id:   bedWithPatient.ID.String(),
-						Name: bedWithPatient.Name,
+						Id:          bedWithPatient.ID.String(),
+						Name:        bedWithPatient.Name,
+						Consistency: bedWithPatient.Consistency,
 						Patient: hwutil.MapIf(bedWithPatient.Patient != nil, bedWithPatient.Patient,
-							func(row *models.Patient) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
+							func(row *models.PatientWithConsistency) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
 								return pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
-									Id:   bedWithPatient.Patient.ID.String(),
-									Name: bedWithPatient.Patient.HumanReadableIdentifier,
+									Id:          bedWithPatient.Patient.ID.String(),
+									Name:        bedWithPatient.Patient.HumanReadableIdentifier,
+									Consistency: bedWithPatient.Patient.Consistency,
 								}
 							}),
 					}

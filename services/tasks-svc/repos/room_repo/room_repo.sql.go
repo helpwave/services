@@ -235,10 +235,13 @@ const getRoomsWithBedsWithPatientsByWard = `-- name: GetRoomsWithBedsWithPatient
 SELECT
 	rooms.id as room_id,
 	rooms.name as room_name,
+	rooms.consistency as room_consistency,
 	beds.id as bed_id,
 	beds.name as bed_name,
+	beds.consistency as bed_consistency,
 	patients.id as patient_id,
-	patients.human_readable_identifier as patient_human_readable_identifier
+	patients.human_readable_identifier as patient_human_readable_identifier,
+	patients.consistency as patient_consistency
 FROM rooms
 		 LEFT JOIN beds ON beds.room_id = rooms.id
 		 LEFT JOIN patients ON patients.bed_id = beds.id
@@ -249,10 +252,13 @@ ORDER BY rooms.id ASC, beds.name ASC
 type GetRoomsWithBedsWithPatientsByWardRow struct {
 	RoomID                         uuid.UUID
 	RoomName                       string
+	RoomConsistency                int64
 	BedID                          uuid.NullUUID
 	BedName                        *string
+	BedConsistency                 *int64
 	PatientID                      uuid.NullUUID
 	PatientHumanReadableIdentifier *string
+	PatientConsistency             *int64
 }
 
 func (q *Queries) GetRoomsWithBedsWithPatientsByWard(ctx context.Context, wardID uuid.UUID) ([]GetRoomsWithBedsWithPatientsByWardRow, error) {
@@ -267,10 +273,13 @@ func (q *Queries) GetRoomsWithBedsWithPatientsByWard(ctx context.Context, wardID
 		if err := rows.Scan(
 			&i.RoomID,
 			&i.RoomName,
+			&i.RoomConsistency,
 			&i.BedID,
 			&i.BedName,
+			&i.BedConsistency,
 			&i.PatientID,
 			&i.PatientHumanReadableIdentifier,
+			&i.PatientConsistency,
 		); err != nil {
 			return nil, err
 		}

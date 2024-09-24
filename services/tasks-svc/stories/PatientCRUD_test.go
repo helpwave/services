@@ -6,6 +6,7 @@ import (
 	zlog "github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 	"hwutil"
+	"strconv"
 	"testing"
 )
 
@@ -284,4 +285,72 @@ func TestGetPatientsByWard(t *testing.T) {
 	assert.Equal(t, createReq2.HumanReadableIdentifier, patient2.HumanReadableIdentifier)
 	assert.Equal(t, *createReq2.Notes, patient2.Notes)
 	assert.Equal(t, assRes2.Consistency, patient2.Consistency)
+}
+
+func TestGetPatientAssignmentByWard(t *testing.T) {
+	ctx := context.Background()
+	patientClient := patientServiceClient()
+
+	wardId, _ := prepareWard(t, ctx, "")
+
+	suffixMatrix := [][]string{
+		{"1 A", "1 B"}, // Room 1
+		{"2 A"},        // Room 2
+		{},             // Room 3
+	}
+
+	roomIds := make([]string, 0, len(suffixMatrix))
+
+	roomConsistencies := make(map[string]string)
+	bedConsistencies := make(map[string]string)
+	patientConsistencies := make(map[string]string)
+
+	bedsForRoom := make(map[string][]string)
+	patientForBed := make(map[string]string)
+
+	for i, bedSfxs := range suffixMatrix {
+		roomSuffix := strconv.Itoa(i + 1)
+		roomId, roomConsistency := prepareRoom(t, ctx, wardId, roomSuffix)
+		roomIds = append(roomIds, roomId)
+		roomConsistencies[roomId] = roomConsistency
+		bedsForRoom[roomId] = make([]string, 0)
+
+		for _, bedSuffix := range bedSfxs {
+			bedId, bedConsistency := prepareBed(t, ctx, roomId, bedSuffix)
+			bedConsistencies[bedId] = bedConsistency
+			bedsForRoom[roomId] = append(bedsForRoom[roomId], bedId)
+
+			patientId := preparePatient(t, ctx, bedSuffix)
+			res, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
+				Id:    patientId,
+				BedId: bedId,
+			})
+			assert.NoError(t, err)
+			patientConsistencies[patientId] = res.Consistency
+			patientForBed[bedId] = patientId
+		}
+	}
+
+	res, err := patientClient.GetPatientAssignmentByWard(ctx, &pb.GetPatientAssignmentByWardRequest{WardId: wardId})
+	assert.NoError(t, err)
+
+	assert.Len(t, res.Rooms, len(suffixMatrix))
+
+	zlog.Debug().Interface("res", res).Msg("res")
+
+	for _, room := range res.Rooms {
+		assert.Contains(t, roomIds, room.Id)
+		assert.Equal(t, roomConsistencies[room.Id], room.Consistency)
+
+		for _, bed := range room.Beds {
+			assert.Contains(t, bedsForRoom[room.Id], bed.Id)
+			assert.Equal(t, bedConsistencies[bed.Id], bed.Consistency)
+
+			if bed.Patient == nil {
+				assert.Nil(t, patientForBed[bed.Id])
+				continue
+			}
+			assert.Equal(t, patientForBed[bed.Id], bed.Patient.Id)
+		}
+	}
 }

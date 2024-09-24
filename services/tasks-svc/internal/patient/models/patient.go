@@ -43,7 +43,7 @@ type Room struct {
 
 type BedWithPatient struct {
 	Bed
-	Patient *Patient
+	Patient *PatientWithConsistency
 }
 
 type RoomWithBedsWithPatient struct {

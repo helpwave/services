@@ -27,10 +27,13 @@ ORDER BY rooms.id ASC, beds.name ASC;
 SELECT
 	rooms.id as room_id,
 	rooms.name as room_name,
+	rooms.consistency as room_consistency,
 	beds.id as bed_id,
 	beds.name as bed_name,
+	beds.consistency as bed_consistency,
 	patients.id as patient_id,
-	patients.human_readable_identifier as patient_human_readable_identifier
+	patients.human_readable_identifier as patient_human_readable_identifier,
+	patients.consistency as patient_consistency
 FROM rooms
 		 LEFT JOIN beds ON beds.room_id = rooms.id
 		 LEFT JOIN patients ON patients.bed_id = beds.id
