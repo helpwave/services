@@ -148,3 +148,73 @@ func TestGetRecentWardsResponse(t *testing.T) {
 	assert.Subset(t, wardIds, actualWardIds)
 	assert.NotContains(t, actualWardIds, wardIds[0]) // first element was thrown out
 }
+
+func TestGetWardOverviews(t *testing.T) {
+	wardClient := wardServiceClient()
+	patientClient := patientServiceClient()
+	taskClient := taskServiceClient()
+	ctx := context.Background()
+
+	suffixMatrix := [][]string{
+		{"1 A", "1 B"}, // Room 1
+		{"2 A"},        // Room 2
+		{},             // Room 3
+	}
+
+	wardId, consistency := prepareWard(t, ctx, "")
+
+	for i, bedSfxs := range suffixMatrix {
+		roomSuffix := strconv.Itoa(i + 1)
+		roomId, _ := prepareRoom(t, ctx, wardId, roomSuffix)
+		for j, bedSuffix := range bedSfxs {
+			bedId, _ := prepareBed(t, ctx, roomId, bedSuffix)
+			patientID := preparePatient(t, ctx, bedSuffix)
+			_, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
+				Id:    patientID,
+				BedId: bedId,
+			})
+			assert.NoError(t, err, "could not assign bed to patient")
+			_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
+				Name:          t.Name() + " Patient " + bedSuffix + " Task ",
+				PatientId:     patientID,
+				InitialStatus: hwutil.PtrTo(pb.TaskStatus(j + 1)), // this is dirty, lol
+			})
+			assert.NoError(t, err, "could create task for patient")
+		}
+	}
+
+	res, err := wardClient.GetWardOverviews(ctx, &pb.GetWardOverviewsRequest{})
+	assert.NoError(t, err, "could GetWardOverviews")
+
+	found := false
+	for _, ward := range res.Wards {
+		if ward.Id != wardId {
+			continue
+		}
+		found = true
+
+		expected := map[string]interface{}{
+			"id":                wardId,
+			"name":              t.Name() + " ward ",
+			"bed_count":         uint32(3),
+			"tasks_todo":        uint32(2),
+			"tasks_in_progress": uint32(1),
+			"tasks_done":        uint32(0),
+			"consistency":       consistency,
+		}
+
+		actual := map[string]interface{}{
+			"id":                ward.Id,
+			"name":              ward.Name,
+			"bed_count":         ward.BedCount,
+			"tasks_todo":        ward.TasksTodo,
+			"tasks_in_progress": ward.TasksInProgress,
+			"tasks_done":        ward.TasksDone,
+			"consistency":       ward.Consistency,
+		}
+
+		assert.Equal(t, expected, actual)
+	}
+
+	assert.True(t, found)
+}
