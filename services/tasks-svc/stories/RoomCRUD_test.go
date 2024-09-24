@@ -165,9 +165,7 @@ func TestGetRoomOverviewsByWard(t *testing.T) {
 
 	// additionally, add unassigned bed and patient
 	bed4Id, _ := prepareBed(t, ctx, roomIDB, "unassigned")
-	bedIDs = append(bedIDs, bed4Id)
-	patient4Id := preparePatient(t, ctx, "unassigned")
-	patientIDs = append(patientIDs, patient4Id)
+	_ = preparePatient(t, ctx, "unassigned")
 
 	// create tasks for patient 1
 	_, err := taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
