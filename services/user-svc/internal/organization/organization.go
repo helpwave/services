@@ -3,13 +3,16 @@ package organization
 import (
 	"common"
 	"context"
-	"gen/libs/events/v1"
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
 	pb "gen/services/user_svc/v1"
 	"hwdb"
 	"hwutil"
+	"user-svc/internal/hwkc"
 	"user-svc/repos/organization_repo"
+	"user-svc/repos/user_repo"
 
-	daprc "github.com/dapr/go-sdk/client"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
@@ -20,12 +23,12 @@ type InvitationState = string
 
 type ServiceServer struct {
 	pb.UnimplementedOrganizationServiceServer
-	daprClient *daprc.GRPCClient
+	kc *hwkc.Client
 }
 
-func NewServiceServer(daprClient *daprc.GRPCClient) *ServiceServer {
+func NewServiceServer(kc *hwkc.Client) *ServiceServer {
 	return &ServiceServer{
-		daprClient: daprClient,
+		kc: kc,
 	}
 }
 
@@ -50,34 +53,6 @@ func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrg
 	}
 
 	return &pb.CreateOrganizationResponse{
-		Id: organization.ID.String(),
-	}, nil
-}
-
-// CreateOrganizationForUser internal method for other services
-// TODO: Make sure that internal methods are not exposed via API gateway
-func (s ServiceServer) CreateOrganizationForUser(ctx context.Context, req *pb.CreateOrganizationForUserRequest) (*pb.CreateOrganizationForUserResponse, error) {
-	userID, err := uuid.Parse(req.UserId)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
-
-	organization, err := CreateOrganizationAndAddUser(
-		ctx,
-		organization_repo.Organization{
-			LongName:     req.LongName,
-			ShortName:    req.ShortName,
-			ContactEmail: req.ContactEmail,
-			IsPersonal:   req.IsPersonal,
-		},
-		userID,
-	)
-
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	return &pb.CreateOrganizationForUserResponse{
 		Id: organization.ID.String(),
 	}, nil
 }
@@ -250,6 +225,15 @@ func (s ServiceServer) UpdateOrganization(ctx context.Context, req *pb.UpdateOrg
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
+	/*
+		if err := s.kc.UpdateOrganization(organizationID, hwkc.Organization{
+			Name:        req.LongName,
+			DisplayName: req.LongName,
+		}); err != nil {
+			return nil, err
+		}
+	*/
+
 	err = organizationRepo.UpdateOrganization(ctx, organization_repo.UpdateOrganizationParams{
 		ID:           organizationID,
 		ContactEmail: req.ContactEmail,
@@ -274,17 +258,13 @@ func (s ServiceServer) DeleteOrganization(ctx context.Context, req *pb.DeleteOrg
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	err = organizationRepo.DeleteOrganization(ctx, organizationID)
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err := s.kc.DeleteOrganization(organizationID); err != nil {
 		return nil, err
 	}
 
-	organizationDeletedEvent := &events.OrganizationDeletedEvent{
-		Id: organizationID.String(),
-	}
-	daprClient := common.MustNewDaprGRPCClient()
-	if err := common.PublishMessage(ctx, daprClient, "pubsub", "ORGANIZATION_DELETED", organizationDeletedEvent); err != nil {
+	err = organizationRepo.DeleteOrganization(ctx, organizationID)
+	err = hwdb.Error(ctx, err)
+	if err != nil {
 		return nil, err
 	}
 
@@ -303,6 +283,10 @@ func (s ServiceServer) AddMember(ctx context.Context, req *pb.AddMemberRequest) 
 	organizationID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	if err := s.kc.AddUserToOrganization(userID, organizationID); err != nil {
+		return nil, err
 	}
 
 	err = organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
@@ -334,6 +318,10 @@ func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberReq
 	organizationID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	if err := s.kc.RemoveUserFromOrganization(userID, organizationID); err != nil {
+		return nil, err
 	}
 
 	err = organizationRepo.RemoveMember(ctx, organization_repo.RemoveMemberParams{
@@ -597,7 +585,7 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 	}
 
 	// Add user to organization
-	if err := AddUserToOrganization(ctx, userID, currentInvitation.OrganizationID); err != nil {
+	if err := AddUserToOrganization(ctx, s.kc, userID, currentInvitation.OrganizationID); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
@@ -715,7 +703,26 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 }
 
 func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Organization, userID uuid.UUID) (*organization_repo.Organization, error) {
+	kc, err := hwkc.NewClientFromEnv(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	db := hwdb.GetDB()
+
+	keycloakOrganization, err := kc.CreateOrganization(attr.LongName, attr.LongName, *attr.IsPersonal)
+	if err != nil {
+		return nil, err
+	}
+
+	organizationID, err := uuid.Parse(*keycloakOrganization.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := kc.AddUserToOrganization(userID, organizationID); err != nil {
+		return nil, err
+	}
 
 	tx, rollback, err := hwdb.BeginTx(db, ctx)
 	if err != nil {
@@ -726,6 +733,7 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 	organizationRepo := organization_repo.New(db).WithTx(tx)
 
 	organization, err := organizationRepo.CreateOrganization(ctx, organization_repo.CreateOrganizationParams{
+		ID:              organizationID,
 		LongName:        attr.LongName,
 		ShortName:       attr.ShortName,
 		ContactEmail:    attr.ContactEmail,
@@ -756,15 +764,6 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 		return nil, err
 	}
 
-	organizationCreatedEvent := &events.OrganizationCreatedEvent{
-		Id:     organization.ID.String(),
-		UserId: userID.String(),
-	}
-	daprClient := common.MustNewDaprGRPCClient()
-	if err := common.PublishMessage(ctx, daprClient, "pubsub", "ORGANIZATION_CREATED", organizationCreatedEvent); err != nil {
-		return nil, err
-	}
-	// TODO: Dispatch UserJoinedOrganizationEvent
 	if err := tx.Commit(ctx); err != nil {
 		return nil, err
 	}
@@ -772,9 +771,13 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 	return &organization, nil
 }
 
-func AddUserToOrganization(ctx context.Context, userId uuid.UUID, organizationId uuid.UUID) error {
+func AddUserToOrganization(ctx context.Context, kc *hwkc.Client, userId uuid.UUID, organizationId uuid.UUID) error {
 	log := zlog.Ctx(ctx)
 	organizationRepo := organization_repo.New(hwdb.GetDB())
+
+	if err := kc.AddUserToOrganization(userId, organizationId); err != nil {
+		return err
+	}
 
 	err := organizationRepo.AddUserToOrganization(ctx, organization_repo.AddUserToOrganizationParams{
 		UserID:         userId,
@@ -793,4 +796,101 @@ func AddUserToOrganization(ctx context.Context, userId uuid.UUID, organizationId
 	// TODO: Dispatch UserJoinedOrganizationEvent
 
 	return nil
+}
+
+func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.CreatePersonalOrganizationRequest) (*pb.CreatePersonalOrganizationResponse, error) {
+	kc, err := hwkc.NewClientFromEnv(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	userID, err := common.GetUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	userClaims, err := common.GetAuthClaims(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	organisations, err := kc.GetOrganizationsForUserById(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	personalOrganizations := hwutil.Filter(organisations, func(organization *hwkc.Organization) bool {
+		return organization.Attributes.IsPersonal
+	})
+
+	if len(personalOrganizations) > 0 {
+		organizationID, err := uuid.Parse(*personalOrganizations[0].ID)
+		if err != nil {
+			return nil, fmt.Errorf("cannot parse id from keycloak for organization: %w", err)
+		}
+
+		return &pb.CreatePersonalOrganizationResponse{
+			Id: organizationID.String(),
+		}, nil
+	}
+
+	organizationName := fmt.Sprintf("Personal organization of %s", userClaims.Name)
+
+	/*
+		organization, err := kc.CreateOrganization(userID.String(), organizationName, true)
+		if err != nil {
+			return nil, err
+		}
+
+		organizationID, err := uuid.Parse(*organization.ID)
+		if err != nil {
+			return nil, fmt.Errorf("cannot parse id from keycloak for organization: %w", err)
+		}
+
+		if err := kc.AddUserToOrganization(userID, organizationID); err != nil {
+			return nil, err
+		}
+	*/
+
+	//
+
+	userRepo := user_repo.New(hwdb.GetDB())
+
+	userResult, err := hwdb.Optional(userRepo.GetUserById)(ctx, userID)
+	err = hwdb.Error(ctx, err)
+	if err != nil {
+		return nil, err
+	} else if userResult == nil {
+		hash := sha256.Sum256([]byte(userID.String()))
+		avatarUrl := fmt.Sprintf("%s%s", "https://source.boringavatars.com/marble/128/", hex.EncodeToString(hash[:]))
+
+		_, err = userRepo.CreateUser(ctx, user_repo.CreateUserParams{
+			ID:        userID,
+			Email:     userClaims.Email,
+			Nickname:  userClaims.PreferredUsername,
+			Name:      userClaims.Name,
+			AvatarUrl: &avatarUrl,
+		})
+		err = hwdb.Error(ctx, err)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	//
+
+	organization, err := CreateOrganizationAndAddUser(
+		ctx,
+		organization_repo.Organization{
+			LongName:     organizationName,
+			ShortName:    organizationName,
+			ContactEmail: userClaims.Email,
+			IsPersonal:   hwutil.PtrTo(true),
+		},
+		userID,
+	)
+
+	return &pb.CreatePersonalOrganizationResponse{
+		Id: organization.ID.String(),
+	}, nil
 }

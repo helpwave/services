@@ -140,6 +140,13 @@ func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 		return nil, fmt.Errorf("authUnaryInterceptor: authFn failed: %w", err)
 	}
 
+	if !hwutil.Contains(skipOrganizationAuthForMethods, info.FullMethod) {
+		ctx, err = authFuncOrganization(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("authUnaryInterceptor: authFn failed: %w", err)
+		}
+	}
+
 	return next(ctx, req)
 }
 
@@ -191,6 +198,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 		return nil, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err)
 	}
 
+	// attach claims to the context, so we can get it in a handler using GetAuthClaims()
 	ctx = context.WithValue(ctx, claimsKey{}, claims)
 
 	// parse userID
@@ -199,26 +207,49 @@ func authFunc(ctx context.Context) (context.Context, error) {
 		return nil, status.Errorf(codes.Internal, "invalid userID")
 	}
 
+	// attach userID to the context, so we can get it in a handler using GetUserID()
+	ctx = ContextWithUserID(ctx, userID)
+
+	// attach userID to the current span (should be the auth interceptor span)
+	telemetry.SetSpanStr(ctx, "user.id", userID.String())
+
+	// Append userID to the logger and attach it to the context
+	ctx = log.With().
+		Ctx(ctx).
+		Str("userID", userID.String()).
+		Logger().
+		WithContext(ctx)
+
+	return ctx, nil
+}
+
+func authFuncOrganization(ctx context.Context) (context.Context, error) {
+	log := zlog.Ctx(ctx)
+
+	claims, err := GetAuthClaims(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(claims.Organization.Id) == 0 {
+		return ctx, errors.New("organization.id missing in id token")
+	}
+
 	// parse organizationID
 	organizationID, err := uuid.Parse(claims.Organization.Id)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "invalid organizationID")
 	}
 
-	// attach userID to context, so we can get it in a handler using GetUserID()
-	ctx = ContextWithUserID(ctx, userID)
-
-	// attach organizationID to context, so we can get it in a handler using GetOrganizationID()
+	// attach organizationID to the context, so we can get it in a handler using GetOrganizationID()
 	ctx = ContextWithOrganizationID(ctx, organizationID)
 
-	// attach userID and organizationID to current span (should be the auth interceptor span)
-	telemetry.SetSpanStr(ctx, "user.id", userID.String())
+	// attach organizationID to the current span
 	telemetry.SetSpanStr(ctx, "user.organization.id", organizationID.String())
 
-	// Append userID and organizationID to the logger and attach it to the context
+	// Append organizationID to the logger and attach it to the context
 	ctx = log.With().
 		Ctx(ctx).
-		Str("userID", userID.String()).
 		Str("organizationID", organizationID.String()).
 		Logger().
 		WithContext(ctx)

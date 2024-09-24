@@ -92,6 +92,7 @@ services:
       "--config", "/dapr.yaml",
       "--log-level", "debug",
       "--app-port", "9080",
+      "--metrics-port", "9099",
       "--dapr-internal-grpc-port", "35001"
     ]
     network_mode: "service:apisix"

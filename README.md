@@ -104,7 +104,7 @@ We provide one unified entrypoint for clients in form of the API-gateway [APISIX
 
 ##### Using helpwave/web
 
-The frontend is a great way to test regressions. Hop over to [the web repo](https://github.com/helpwave/web) to find out how to set it up and point it to APISIX.
+The frontend is a great way to test regressions. Hop over to [the web repo](https://github.com/helpwave/web) to find out how to set it up and point it to APISIX (HTTP).
 
 ##### Using APISIX over grpc-web
 
@@ -118,7 +118,6 @@ TODO: We are still looking for a tool that works well for this :/
 
 ```bash
 grpcurl --plaintext \
-	-H "X-Organization: 3b25c6f5-4705-4074-9fc6-a50c28eba406" \
 	-H "Authorization: Bearer <...>" \
 	-d '{}' \
 	localhost:3001 \

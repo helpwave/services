@@ -28,6 +28,7 @@ type SetupOptions struct {
 	auth                   bool
 	fakeAuthOnly           bool
 	unauthenticatedMethods []string
+	nonOrganizationMethods []string
 }
 
 type SetupOption func(*SetupOptions)
@@ -54,7 +55,14 @@ func WithUnauthenticatedMethods(unauthenticatedMethods []string) SetupOption {
 	}
 }
 
+func WithNonOrganizationMethods(nonOrganizationMethods []string) SetupOption {
+	return func(options *SetupOptions) {
+		options.nonOrganizationMethods = nonOrganizationMethods
+	}
+}
+
 var skipAuthForMethods []string
+var skipOrganizationAuthForMethods []string
 
 // Setup loads the .env file and sets up logging,
 // also sets up tokens when the service requires auth.
@@ -115,8 +123,9 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 			log.Error().Msg("INSECURE_FAKE_TOKEN_ENABLE is set to true, accepting fake tokens")
 		}
 
-		// Only modify skipAuthForMethods once on startup
+		// Only modify skipAuthForMethods and skipOrganizationAuthForMethods once on startup
 		skipAuthForMethods = options.unauthenticatedMethods
+		skipOrganizationAuthForMethods = options.nonOrganizationMethods
 
 		setupAuth(ctx, options.fakeAuthOnly)
 	}

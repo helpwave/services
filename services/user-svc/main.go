@@ -4,7 +4,9 @@ import (
 	"common"
 	pb "gen/services/user_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
+	zlog "github.com/rs/zerolog/log"
 	"hwdb"
+	"user-svc/internal/hwkc"
 	"user-svc/internal/organization"
 	"user-svc/internal/user"
 )
@@ -20,6 +22,8 @@ func main() {
 		"/services.user_svc.v1.OrganizationService/CreateOrganizationForUser",
 		"/services.user_svc.v1.OrganizationService/AddMember",
 		"/services.user_svc.v1.OrganizationService/GetOrganizationsByUser",
+	}), common.WithNonOrganizationMethods([]string{
+		"/services.user_svc.v1.OrganizationService/CreatePersonalOrganization",
 	}))
 
 	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
@@ -28,11 +32,14 @@ func main() {
 	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
-		daprClient := common.MustNewDaprGRPCClient()
+		kc, err := hwkc.NewClientFromEnv(ctx)
+		if err != nil {
+			zlog.Fatal().Err(err).Msg("cannot create Keycloak client")
+		}
 
 		common.MustAddTopicEventHandler(server, user.UserUpdatedEventSubscription, user.HandleUserUpdatedEvent)
 		pb.RegisterUserServiceServer(grpcServer, user.NewServiceServer())
 
-		pb.RegisterOrganizationServiceServer(grpcServer, organization.NewServiceServer(daprClient))
+		pb.RegisterOrganizationServiceServer(grpcServer, organization.NewServiceServer(kc))
 	})
 }

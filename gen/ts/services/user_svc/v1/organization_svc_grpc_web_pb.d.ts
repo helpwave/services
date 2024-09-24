@@ -15,13 +15,6 @@ export class OrganizationServiceClient {
                response: services_user_svc_v1_organization_svc_pb.CreateOrganizationResponse) => void
   ): grpcWeb.ClientReadableStream<services_user_svc_v1_organization_svc_pb.CreateOrganizationResponse>;
 
-  createOrganizationForUser(
-    request: services_user_svc_v1_organization_svc_pb.CreateOrganizationForUserRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: services_user_svc_v1_organization_svc_pb.CreateOrganizationForUserResponse) => void
-  ): grpcWeb.ClientReadableStream<services_user_svc_v1_organization_svc_pb.CreateOrganizationForUserResponse>;
-
   getOrganization(
     request: services_user_svc_v1_organization_svc_pb.GetOrganizationRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -120,6 +113,13 @@ export class OrganizationServiceClient {
                response: services_user_svc_v1_organization_svc_pb.RevokeInvitationResponse) => void
   ): grpcWeb.ClientReadableStream<services_user_svc_v1_organization_svc_pb.RevokeInvitationResponse>;
 
+  createPersonalOrganization(
+    request: services_user_svc_v1_organization_svc_pb.CreatePersonalOrganizationRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: services_user_svc_v1_organization_svc_pb.CreatePersonalOrganizationResponse) => void
+  ): grpcWeb.ClientReadableStream<services_user_svc_v1_organization_svc_pb.CreatePersonalOrganizationResponse>;
+
 }
 
 export class OrganizationServicePromiseClient {
@@ -131,11 +131,6 @@ export class OrganizationServicePromiseClient {
     request: services_user_svc_v1_organization_svc_pb.CreateOrganizationRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<services_user_svc_v1_organization_svc_pb.CreateOrganizationResponse>;
-
-  createOrganizationForUser(
-    request: services_user_svc_v1_organization_svc_pb.CreateOrganizationForUserRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<services_user_svc_v1_organization_svc_pb.CreateOrganizationForUserResponse>;
 
   getOrganization(
     request: services_user_svc_v1_organization_svc_pb.GetOrganizationRequest,
@@ -206,6 +201,11 @@ export class OrganizationServicePromiseClient {
     request: services_user_svc_v1_organization_svc_pb.RevokeInvitationRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<services_user_svc_v1_organization_svc_pb.RevokeInvitationResponse>;
+
+  createPersonalOrganization(
+    request: services_user_svc_v1_organization_svc_pb.CreatePersonalOrganizationRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<services_user_svc_v1_organization_svc_pb.CreatePersonalOrganizationResponse>;
 
 }
 

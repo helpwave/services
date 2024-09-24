@@ -19,6 +19,22 @@ var (
 	DEFAULT_OAUTH_CLIENT_ID  = "helpwave-services"
 )
 
+func GetOAuthIssuerUrl() string {
+	issuerUrl := hwutil.GetEnvOr("OAUTH_ISSUER_URL", DEFAULT_OAUTH_ISSUER_URL)
+	if issuerUrl != DEFAULT_OAUTH_ISSUER_URL {
+		zlog.Warn().Str("OAUTH_ISSUER_URL", issuerUrl).Msg("using custom OAuth issuer url")
+	}
+	return issuerUrl
+}
+
+func GetOAuthClientId() string {
+	clientId := hwutil.GetEnvOr("OAUTH_CLIENT_ID", DEFAULT_OAUTH_CLIENT_ID)
+	if clientId != DEFAULT_OAUTH_CLIENT_ID {
+		zlog.Warn().Str("OAUTH_CLIENT_ID", clientId).Msg("using custom OAuth client id")
+	}
+	return clientId
+}
+
 func getOAuthConfig(ctx context.Context) *oauth2.Config {
 	log := zlog.Ctx(ctx)
 
@@ -83,10 +99,6 @@ func (t IDTokenClaims) AsExpected() error {
 		return errors.New("organization missing in id token")
 	}
 
-	if len(t.Organization.Id) == 0 {
-		return errors.New("organization.id missing in id token")
-	}
-
 	return nil
 }
 
@@ -106,24 +118,13 @@ func setupAuth(ctx context.Context, fakeOnly bool) {
 		return
 	}
 
-	issuerUrl := hwutil.GetEnvOr("OAUTH_ISSUER_URL", DEFAULT_OAUTH_ISSUER_URL)
-	if issuerUrl != DEFAULT_OAUTH_ISSUER_URL {
-		log.Warn().Str("OAUTH_ISSUER_URL", issuerUrl).Msg("using custom OAuth issuer url")
-	}
-
-	provider, err := oidc.NewProvider(context.Background(), issuerUrl)
-
+	provider, err := oidc.NewProvider(context.Background(), GetOAuthIssuerUrl())
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}
 
-	clientId := hwutil.GetEnvOr("OAUTH_CLIENT_ID", DEFAULT_OAUTH_CLIENT_ID)
-	if clientId != DEFAULT_OAUTH_CLIENT_ID {
-		log.Warn().Str("OAUTH_CLIENT_ID", clientId).Msg("using custom OAuth client id")
-	}
-
 	oauthConfig = &oauth2.Config{
-		ClientID: clientId,
+		ClientID: GetOAuthClientId(),
 		Endpoint: provider.Endpoint(),
 	}
 
