@@ -10,17 +10,30 @@ import (
 	"time"
 )
 
-func TestCreateUpdateGetTaskTemplateWithWard(t *testing.T) {
+func getTaskTemplate(t *testing.T, ctx context.Context, id string) *pb.GetAllTaskTemplatesResponse_TaskTemplate {
+	getAll, err := taskTemplateServiceClient().GetAllTaskTemplates(ctx, &pb.GetAllTaskTemplatesRequest{})
+	assert.NoError(t, err, "could not get all tt after creation")
+
+	var template *pb.GetAllTaskTemplatesResponse_TaskTemplate
+	for _, templ := range getAll.Templates {
+		if templ.Id == id {
+			template = templ
+			break
+		}
+	}
+	assert.NotNil(t, template)
+	return template
+}
+
+func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	ctx := context.Background()
 	taskTemplateClient := taskTemplateServiceClient()
-
-	wardId, _ := prepareWard(t, ctx, "")
 
 	//
 	// create new template
 	//
 	createReq := &pb.CreateTaskTemplateRequest{
-		WardId:      &wardId,
+		WardId:      nil,
 		Description: hwutil.PtrTo("Some Description"),
 		Subtasks:    make([]*pb.CreateTaskTemplateRequest_SubTask, 0),
 		Name:        t.Name() + " tt",
@@ -37,25 +50,12 @@ func TestCreateUpdateGetTaskTemplateWithWard(t *testing.T) {
 	// get new template
 	//
 
-	getAll, err := taskTemplateClient.GetAllTaskTemplates(ctx, &pb.GetAllTaskTemplatesRequest{})
-	assert.NoError(t, err, "could not get all tt after creation")
-
-	var template *pb.GetAllTaskTemplatesResponse_TaskTemplate
-	for _, templ := range getAll.Templates {
-		if templ.Id == createRes.Id {
-			template = templ
-			break
-		}
-	}
-	assert.NotNil(t, template)
-	if template == nil {
-		panic("template is nil")
-	}
+	template := getTaskTemplate(t, ctx, templateId)
 
 	assert.Equal(t, createReq.Name, template.Name)
 	assert.Equal(t, *createReq.Description, template.Description)
 	assert.Equal(t, hwtesting.FakeTokenUser, template.CreatedBy)
-	assert.Equal(t, true, template.IsPublic)
+	assert.Equal(t, false, template.IsPublic)
 	assert.Equal(t, createRes.Consistency, template.Consistency)
 
 	//
@@ -79,22 +79,28 @@ func TestCreateUpdateGetTaskTemplateWithWard(t *testing.T) {
 	// get updated template
 	//
 
-	getAll, err = taskTemplateClient.GetAllTaskTemplates(ctx, &pb.GetAllTaskTemplatesRequest{})
-	assert.NoError(t, err, "could not get all tt after creation")
-
-	template = nil
-	for _, templ := range getAll.Templates {
-		if templ.Id == createRes.Id {
-			template = templ
-			break
-		}
-	}
-	assert.NotNil(t, template)
-	if template == nil {
-		panic("template is nil")
-	}
+	template = getTaskTemplate(t, ctx, templateId)
 
 	assert.Equal(t, *updateReq.Name, template.Name)
 	assert.Equal(t, updateRes.Consistency, template.Consistency)
+
+	//
+	// add subtask
+	//
+
+	res, err := taskTemplateClient.CreateTaskTemplateSubTask(ctx, &pb.CreateTaskTemplateSubTaskRequest{
+		TaskTemplateId: templateId,
+		Name:           t.Name() + " ST 1",
+	})
+	assert.NoError(t, err)
+	assert.NotEqual(t, template.Consistency, res.TaskTemplateConsistency, "consitency was not updated")
+
+	//
+	// get updated template
+	//
+
+	template = getTaskTemplate(t, ctx, templateId)
+
+	assert.Equal(t, res.TaskTemplateConsistency, template.Consistency)
 
 }
