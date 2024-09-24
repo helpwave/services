@@ -306,6 +306,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, req *pb.GetAllTask
 				IsPublic:    row.TaskTemplate.WardID.Valid,
 				Subtasks:    make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask, 0),
 				CreatedBy:   row.TaskTemplate.CreatedBy.String(),
+				Consistency: strconv.FormatUint(uint64(row.TaskTemplate.Consistency), 10),
 			}
 			templates = append(templates, template)
 			templateMap[row.TaskTemplate.ID] = len(templates) - 1
