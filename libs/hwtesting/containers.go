@@ -12,6 +12,7 @@ type ContainerOpt int
 const (
 	Postgres   ContainerOpt = iota
 	Eventstore ContainerOpt = iota
+	Redis      ContainerOpt = iota
 )
 
 type Endpoints []string
@@ -41,6 +42,8 @@ func StartContainers(ctx context.Context, opts ...ContainerOpt) (endpoints Endpo
 			f = startPostgres
 		} else if opt == Eventstore {
 			f = startEventstore
+		} else if opt == Redis {
+			f = startRedis
 		} else {
 			panic("unknown ContainerOpt provided")
 		}

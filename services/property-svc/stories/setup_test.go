@@ -58,15 +58,15 @@ func TestMain(m *testing.M) {
 }
 
 func propertyServiceClient() pb.PropertyServiceClient {
-	return pb.NewPropertyServiceClient(hwtesting.GetGrpcConn())
+	return pb.NewPropertyServiceClient(hwtesting.GetGrpcConn(""))
 }
 
 func propertyViewServiceClient() pb.PropertyViewsServiceClient {
-	return pb.NewPropertyViewsServiceClient(hwtesting.GetGrpcConn())
+	return pb.NewPropertyViewsServiceClient(hwtesting.GetGrpcConn(""))
 }
 
 func propertyValueServiceClient() pb.PropertyValueServiceClient {
-	return pb.NewPropertyValueServiceClient(hwtesting.GetGrpcConn())
+	return pb.NewPropertyValueServiceClient(hwtesting.GetGrpcConn(""))
 }
 
 func NamesOf(arr []*pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption) []string {

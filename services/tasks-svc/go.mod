@@ -120,6 +120,7 @@ require (
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/testcontainers/testcontainers-go v0.33.0 // indirect
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.33.0 // indirect
+	github.com/testcontainers/testcontainers-go/modules/redis v0.33.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
 	github.com/tklauser/numcpus v0.6.1 // indirect
 	github.com/vgarvardt/pgx-google-uuid/v5 v5.6.0 // indirect

@@ -3,6 +3,9 @@ package hwtesting
 import (
 	"common"
 	"context"
+	"encoding/base64"
+	"encoding/json"
+	"fmt"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -29,18 +32,35 @@ func (t InsecureBearerToken) RequireTransportSecurity() bool {
 	return false
 }
 
-// FakeToken is README's fake token
-// it should be used for all tests where possible
-const FakeToken = "eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19"
+func GetFakeTokenCredentials(subOverride string) InsecureBearerToken {
+	// README's fake token
+	m := map[string]interface{}{
+		"sub":      "18159713-5d4e-4ad5-94ad-fbb6bb147984",
+		"email":    "testine.test@helpwave.de",
+		"name":     "Testine Test",
+		"nickname": "testine.test",
+		"organizations": []string{
+			"3b25c6f5-4705-4074-9fc6-a50c28eba406",
+		},
+	}
 
-func GetFakeTokenCredentials() InsecureBearerToken {
-	return FakeToken
+	if subOverride != "" {
+		m["sub"] = subOverride
+	}
+
+	bytes, err := json.Marshal(m)
+	if err != nil {
+		panic(fmt.Errorf("GetFakeTokenCredentials failed: %w", err))
+	}
+	dist := make([]byte, base64.StdEncoding.EncodedLen(len(bytes)))
+	base64.StdEncoding.Encode(dist, bytes)
+	return InsecureBearerToken(dist)
 }
 
-func GetGrpcConn() *grpc.ClientConn {
+func GetGrpcConn(subOverride string) *grpc.ClientConn {
 	conn, err := grpc.NewClient(
 		common.ResolveAddrFromEnv(),
-		grpc.WithPerRPCCredentials(GetFakeTokenCredentials()),
+		grpc.WithPerRPCCredentials(GetFakeTokenCredentials(subOverride)),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {

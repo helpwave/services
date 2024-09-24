@@ -15,6 +15,7 @@ require (
 	github.com/rs/zerolog v1.33.0
 	github.com/testcontainers/testcontainers-go v0.33.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.33.0
+	github.com/testcontainers/testcontainers-go/modules/redis v0.33.0
 	google.golang.org/grpc v1.66.1
 )
 
