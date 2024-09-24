@@ -88,12 +88,12 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	// add subtask
 	//
 
-	res, err := taskTemplateClient.CreateTaskTemplateSubTask(ctx, &pb.CreateTaskTemplateSubTaskRequest{
+	createStRes, err := taskTemplateClient.CreateTaskTemplateSubTask(ctx, &pb.CreateTaskTemplateSubTaskRequest{
 		TaskTemplateId: templateId,
 		Name:           t.Name() + " ST 1",
 	})
 	assert.NoError(t, err)
-	assert.NotEqual(t, template.Consistency, res.TaskTemplateConsistency, "consitency was not updated")
+	assert.NotEqual(t, template.Consistency, createStRes.TaskTemplateConsistency, "consitency was not updated")
 
 	//
 	// get updated template
@@ -101,6 +101,30 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 
 	template = getTaskTemplate(t, ctx, templateId)
 
-	assert.Equal(t, res.TaskTemplateConsistency, template.Consistency)
+	assert.Len(t, template.Subtasks, 1)
+	assert.Equal(t, createStRes.Id, template.Subtasks[0].Id)
+	assert.Equal(t, t.Name()+" ST 1", template.Subtasks[0].Name)
+	assert.Equal(t, createStRes.TaskTemplateConsistency, template.Consistency)
+
+	//
+	// update subtask
+	//
+
+	updateStRes, err := taskTemplateClient.UpdateTaskTemplateSubTask(ctx, &pb.UpdateTaskTemplateSubTaskRequest{
+		SubtaskId: createStRes.Id,
+		Name:      hwutil.PtrTo(t.Name() + " ST 2"),
+	})
+	assert.NoError(t, err)
+
+	//
+	// get updated template
+	//
+
+	template = getTaskTemplate(t, ctx, templateId)
+
+	assert.Len(t, template.Subtasks, 1)
+	assert.Equal(t, createStRes.Id, template.Subtasks[0].Id)
+	assert.Equal(t, t.Name()+" ST 2", template.Subtasks[0].Name)
+	assert.Equal(t, updateStRes.TaskTemplateConsistency, template.Consistency)
 
 }
