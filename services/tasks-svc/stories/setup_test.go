@@ -21,25 +21,31 @@ func TestMain(m *testing.M) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	zlog.Info().Msg("starting containers")
-	endpoints, teardownContainers := hwtesting.StartContainers(ctx, hwtesting.Postgres, hwtesting.Eventstore, hwtesting.Redis)
+	endpoints, teardownContainers := hwtesting.StartContainers(ctx,
+		hwtesting.Postgres, hwtesting.Eventstore, hwtesting.Redis, hwtesting.Spice)
 	postgresEndpoint := endpoints.Get(hwtesting.Postgres)
 	eventstoreEndpoint := endpoints.Get(hwtesting.Eventstore)
 	redisEndpoint := endpoints.Get(hwtesting.Redis)
+	spiceEndpoint := endpoints.Get(hwtesting.Spice)
 
 	zlog.Info().
 		Str("postgresEndpoint", postgresEndpoint).
 		Str("eventstoreEndpoint", eventstoreEndpoint).
 		Str("redisEndpoint", redisEndpoint).
+		Str("spiceEndpoint", spiceEndpoint).
 		Msg("containers are up")
 
 	// prepare env
 	hwtesting.SetCommonEnv()
 	hwtesting.SetEventstoreEnv(eventstoreEndpoint)
 	hwtesting.SetRedisEnv(redisEndpoint)
+	hwtesting.SetSpiceEnv(spiceEndpoint)
 	postgresDSN := hwtesting.SetPostgresEnv(postgresEndpoint)
 
 	// `go test` sets the wd to the directory of this file
 	hwtesting.MigratePostgres("file://../migrations", postgresDSN)
+
+	// TODO: spice migrations (PR #812)
 
 	// start service
 	ready := make(chan bool)

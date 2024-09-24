@@ -7,10 +7,10 @@ import (
 	"os"
 )
 
-const RedisImage = "redis:6"
+const ImageRedis = "redis:6"
 
 func startRedis(ctx context.Context) (endpoint string, teardown func()) {
-	container, err := redis.Run(ctx, RedisImage)
+	container, err := redis.Run(ctx, ImageRedis)
 	if err != nil {
 		zlog.Fatal().Err(err).Msg("could not start redis")
 	}

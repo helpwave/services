@@ -13,6 +13,7 @@ const (
 	Postgres   ContainerOpt = iota
 	Eventstore ContainerOpt = iota
 	Redis      ContainerOpt = iota
+	Spice      ContainerOpt = iota
 )
 
 type Endpoints []string
@@ -44,6 +45,8 @@ func StartContainers(ctx context.Context, opts ...ContainerOpt) (endpoints Endpo
 			f = startEventstore
 		} else if opt == Redis {
 			f = startRedis
+		} else if opt == Spice {
+			f = startSpiceDB
 		} else {
 			panic("unknown ContainerOpt provided")
 		}

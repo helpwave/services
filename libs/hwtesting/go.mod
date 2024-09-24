@@ -11,6 +11,7 @@ replace (
 
 require (
 	common v0.0.0
+	github.com/Mariscal6/testcontainers-spicedb-go v0.1.0
 	github.com/golang-migrate/migrate/v4 v4.18.1
 	github.com/rs/zerolog v1.33.0
 	github.com/testcontainers/testcontainers-go v0.33.0
