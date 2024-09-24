@@ -149,6 +149,45 @@ func TestGetRecentWardsResponse(t *testing.T) {
 	assert.NotContains(t, actualWardIds, wardIds[0]) // first element was thrown out
 }
 
+func TestGetWards(t *testing.T) {
+	wardClient := wardServiceClient()
+	ctx := context.Background()
+
+	createReq := &pb.CreateWardRequest{
+		Name: t.Name() + " ward",
+	}
+
+	wardRes, err := wardClient.CreateWard(ctx, createReq)
+	assert.NoError(t, err, "could not create ward")
+
+	res, err := wardClient.GetWards(ctx, &pb.GetWardsRequest{})
+	assert.NoError(t, err, "could GetWardOverviews")
+
+	found := false
+	for _, ward := range res.Wards {
+		if ward.Id != wardRes.Id {
+			continue
+		}
+		found = true
+
+		expected := map[string]interface{}{
+			"id":          wardRes.Id,
+			"name":        createReq.Name,
+			"consistency": wardRes.Consistency,
+		}
+
+		actual := map[string]interface{}{
+			"id":          ward.Id,
+			"name":        ward.Name,
+			"consistency": ward.Consistency,
+		}
+
+		assert.Equal(t, expected, actual)
+	}
+
+	assert.True(t, found)
+}
+
 func TestGetWardOverviews(t *testing.T) {
 	wardClient := wardServiceClient()
 	patientClient := patientServiceClient()
