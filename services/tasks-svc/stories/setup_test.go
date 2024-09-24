@@ -58,6 +58,10 @@ func TestMain(m *testing.M) {
 	// Run tests
 	exitCode := m.Run()
 
+	// Note: in case of a panic, we won't clean up, because we can't
+	// due to poor language design
+	// https://github.com/golang/go/issues/13149#issuecomment-153897851
+
 	// cleanup and exit
 	signal.Notify(make(chan os.Signal, 1), os.Interrupt)
 	time.Sleep(time.Second)
