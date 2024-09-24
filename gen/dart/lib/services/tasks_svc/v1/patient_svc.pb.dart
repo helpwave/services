@@ -369,7 +369,9 @@ class GetPatientResponse extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? humanReadableIdentifier,
     $core.String? notes,
+  @$core.Deprecated('This field is deprecated.')
     $core.String? bedId,
+  @$core.Deprecated('This field is deprecated.')
     $core.String? wardId,
     GetPatientResponse_Room? room,
     GetPatientResponse_Bed? bed,
@@ -386,9 +388,11 @@ class GetPatientResponse extends $pb.GeneratedMessage {
       $result.notes = notes;
     }
     if (bedId != null) {
+      // ignore: deprecated_member_use_from_same_package
       $result.bedId = bedId;
     }
     if (wardId != null) {
+      // ignore: deprecated_member_use_from_same_package
       $result.wardId = wardId;
     }
     if (room != null) {
@@ -466,21 +470,29 @@ class GetPatientResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   void clearNotes() => clearField(3);
 
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(4)
   $core.String get bedId => $_getSZ(3);
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(4)
   set bedId($core.String v) { $_setString(3, v); }
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(4)
   $core.bool hasBedId() => $_has(3);
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(4)
   void clearBedId() => clearField(4);
 
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(5)
   $core.String get wardId => $_getSZ(4);
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(5)
   set wardId($core.String v) { $_setString(4, v); }
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(5)
   $core.bool hasWardId() => $_has(4);
+  @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(5)
   void clearWardId() => clearField(5);
 

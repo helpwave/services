@@ -84,12 +84,24 @@ func (s *PatientGrpcService) GetPatient(ctx context.Context, req *pb.GetPatientR
 		}
 	}
 
+	var bedId *string
+	if bedRes != nil {
+		bedId = &bedRes.Id
+	}
+
+	var wardId *string
+	if roomRes != nil {
+		wardId = &roomRes.WardId
+	}
+
 	return &pb.GetPatientResponse{
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
-		Bed:                     bedRes,
+		BedId:                   bedId,
+		WardId:                  wardId,
 		Room:                    roomRes,
+		Bed:                     bedRes,
 		Consistency:             patient.Consistency,
 	}, nil
 }
