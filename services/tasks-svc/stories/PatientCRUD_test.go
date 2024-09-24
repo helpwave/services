@@ -163,7 +163,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	assert.Equal(t, unassignRes.Consistency, getPatientRes.Consistency)
 }
 
-func TestGetPatientByBedResponse(t *testing.T) {
+func TestGetPatientByBed(t *testing.T) {
 	ctx := context.Background()
 
 	patientClient := patientServiceClient()
@@ -206,4 +206,82 @@ func TestGetPatientByBedResponse(t *testing.T) {
 	assert.Equal(t, createReq.HumanReadableIdentifier, getRes.HumanReadableIdentifier)
 	assert.Equal(t, *createReq.Notes, getRes.Notes)
 	assert.Equal(t, assRes.Consistency, getRes.Consistency)
+}
+
+func TestGetPatientsByWard(t *testing.T) {
+	ctx := context.Background()
+
+	patientClient := patientServiceClient()
+
+	//
+	// create patients and beds
+	//
+
+	wardId, _ := prepareWard(t, ctx, "")
+	roomId, _ := prepareRoom(t, ctx, wardId, "")
+	bedId1, _ := prepareBed(t, ctx, roomId, "1")
+	bedId2, _ := prepareBed(t, ctx, roomId, "2")
+
+	createReq1 := &pb.CreatePatientRequest{
+		HumanReadableIdentifier: t.Name() + " patient 1",
+		Notes:                   hwutil.PtrTo("A " + t.Name() + " patient"),
+	}
+	createRes1, err := patientClient.CreatePatient(ctx, createReq1)
+	assert.NoError(t, err, "could not create patient")
+
+	patientId1 := createRes1.GetId()
+
+	assRes1, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
+		Id:          patientId1,
+		BedId:       bedId1,
+		Consistency: &createRes1.Consistency,
+	})
+	assert.NoError(t, err)
+
+	createReq2 := &pb.CreatePatientRequest{
+		HumanReadableIdentifier: t.Name() + " patient 2",
+		Notes:                   hwutil.PtrTo("A " + t.Name() + " patient"),
+	}
+	createRes2, err := patientClient.CreatePatient(ctx, createReq2)
+	assert.NoError(t, err, "could not create patient")
+
+	patientId2 := createRes2.GetId()
+
+	assRes2, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
+		Id:          patientId2,
+		BedId:       bedId2,
+		Consistency: &createRes2.Consistency,
+	})
+	assert.NoError(t, err)
+
+	//
+	// GetPatientsByWard
+	//
+
+	getRes, err := patientClient.GetPatientsByWard(ctx, &pb.GetPatientsByWardRequest{
+		WardId: wardId,
+	})
+	assert.NoError(t, err)
+
+	assert.Len(t, getRes.Patients, 2)
+
+	patient1 := getRes.Patients[0]
+	patient2 := getRes.Patients[1]
+
+	if patient1.Id != createRes1.Id {
+		patient1 = getRes.Patients[1]
+		patient2 = getRes.Patients[0]
+	}
+
+	assert.Equal(t, createRes1.Id, patient1.Id)
+	assert.Equal(t, &bedId1, patient1.BedId)
+	assert.Equal(t, createReq1.HumanReadableIdentifier, patient1.HumanReadableIdentifier)
+	assert.Equal(t, *createReq1.Notes, patient1.Notes)
+	assert.Equal(t, assRes1.Consistency, patient1.Consistency)
+
+	assert.Equal(t, createRes2.Id, patient2.Id)
+	assert.Equal(t, &bedId2, patient2.BedId)
+	assert.Equal(t, createReq2.HumanReadableIdentifier, patient2.HumanReadableIdentifier)
+	assert.Equal(t, *createReq2.Notes, patient2.Notes)
+	assert.Equal(t, assRes2.Consistency, patient2.Consistency)
 }
