@@ -365,6 +365,8 @@ func TestGetAssignedTasks(t *testing.T) {
 		subtaskMap[taskRes.Id] = sts
 	}
 
+	time.Sleep(time.Millisecond * 100)
+
 	// client for userid
 	customTaskClient := pb.NewTaskServiceClient(hwtesting.GetGrpcConn(userID.String()))
 
