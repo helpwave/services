@@ -76,11 +76,11 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	// get discharged patient
 	//
 
-	getPatientRes, err = patientClient.GetPatient(ctx, &pb.GetPatientRequest{Id: patientId})
+	getPatientDetailsRes, err := patientClient.GetPatientDetails(ctx, &pb.GetPatientDetailsRequest{Id: patientId})
 	assert.NoError(t, err, "could not get after discharge")
 
-	// TODO: we we ever expose the discharged-state?
-	assert.Equal(t, dischargeRes.Consistency, getPatientRes.Consistency)
+	assert.Equal(t, true, getPatientDetailsRes.IsDischarged)
+	assert.Equal(t, dischargeRes.Consistency, getPatientDetailsRes.Consistency)
 
 	//
 	// re-admit patient
@@ -94,11 +94,11 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	// get re-admitted patient
 	//
 
-	getPatientRes, err = patientClient.GetPatient(ctx, &pb.GetPatientRequest{Id: patientId})
+	getPatientDetailsRes, err = patientClient.GetPatientDetails(ctx, &pb.GetPatientDetailsRequest{Id: patientId})
 	assert.NoError(t, err, "could not get after re-admit")
 
-	// TODO: we we ever expose the discharged-state?
-	assert.Equal(t, readmitRes.Consistency, getPatientRes.Consistency)
+	assert.Equal(t, false, getPatientDetailsRes.IsDischarged)
+	assert.Equal(t, readmitRes.Consistency, getPatientDetailsRes.Consistency)
 
 	//
 	// assign patient to bed
@@ -511,4 +511,105 @@ func TestGetPatientList(t *testing.T) {
 		return p.Id
 	})
 	assert.Contains(t, unassignedIds, patient4Id)
+}
+
+func TestGetPatientDetails(t *testing.T) {
+	ctx := context.Background()
+
+	patientClient := patientServiceClient()
+	taskClient := taskServiceClient()
+
+	//
+	// create patient and bed
+	//
+
+	wardId, _ := prepareWard(t, ctx, "")
+	roomId, _ := prepareRoom(t, ctx, wardId, "")
+	bedId, _ := prepareBed(t, ctx, roomId, "")
+
+	createReq := &pb.CreatePatientRequest{
+		HumanReadableIdentifier: t.Name() + " patient",
+		Notes:                   hwutil.PtrTo("A " + t.Name() + " patient"),
+	}
+	createRes, err := patientClient.CreatePatient(ctx, createReq)
+	assert.NoError(t, err, "could not create patient")
+
+	patientId := createRes.GetId()
+
+	assRes, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
+		Id:          patientId,
+		BedId:       bedId,
+		Consistency: &createRes.Consistency,
+	})
+	assert.NoError(t, err)
+
+	//
+	// Create Tasks
+	//
+	suffixMap := [][]string{
+		{"1 A", "1 B", "1 C"}, // Task 1
+		{"2 A", "2 B"},        // Task 2
+		{},                    // Task 3
+	}
+
+	taskIds := make([]string, 0, len(suffixMap))
+	taskConsistencies := make(map[string]string)
+	subtaskMap := make(map[string][]*pb.CreateTaskRequest_SubTask)
+
+	for i, stSuffixes := range suffixMap {
+		taskSuffix := strconv.Itoa(i + 1)
+
+		sts := hwutil.Map(stSuffixes, func(s string) *pb.CreateTaskRequest_SubTask {
+			return &pb.CreateTaskRequest_SubTask{
+				Name: t.Name() + " ST " + s,
+			}
+		})
+
+		taskRes, err := taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
+			Name:           t.Name() + " task " + taskSuffix,
+			Description:    nil,
+			PatientId:      patientId,
+			Public:         hwutil.PtrTo(true),
+			DueAt:          nil,
+			InitialStatus:  hwutil.PtrTo(pb.TaskStatus(i + 1)), // this is dirty, lol
+			AssignedUserId: nil,
+			Subtasks:       sts,
+		})
+		assert.NoError(t, err)
+		taskIds = append(taskIds, taskRes.Id)
+		taskConsistencies[taskRes.Id] = taskRes.Consistency
+		subtaskMap[taskRes.Id] = sts
+	}
+
+	//
+	// GetPatientDetails
+	//
+
+	getRes, err := patientClient.GetPatientDetails(ctx, &pb.GetPatientDetailsRequest{
+		Id: patientId,
+	})
+	assert.NoError(t, err)
+
+	assert.Equal(t, createRes.Id, getRes.Id)
+	assert.Equal(t, createReq.HumanReadableIdentifier, getRes.HumanReadableIdentifier)
+	assert.Equal(t, *createReq.Notes, getRes.Notes)
+	assert.Len(t, getRes.Tasks, len(suffixMap))
+
+	assert.Subset(t, taskIds, hwutil.Map(getRes.Tasks, func(tsk *pb.GetPatientDetailsResponse_Task) string {
+		assert.Equal(t, taskConsistencies[tsk.Id], tsk.Consistency)
+		assert.Len(t, tsk.Subtasks, len(subtaskMap[tsk.Id]))
+		exp := hwutil.Map(subtaskMap[tsk.Id], func(st *pb.CreateTaskRequest_SubTask) string {
+			return st.GetName()
+		})
+		have := hwutil.Map(tsk.Subtasks, func(st *pb.GetPatientDetailsResponse_Task_SubTask) string {
+			return st.GetName()
+		})
+		assert.Subset(t, exp, have)
+		return tsk.Id
+	}))
+
+	assert.Equal(t, roomId, getRes.Room.Id)
+	assert.Equal(t, bedId, getRes.Bed.Id)
+	assert.Equal(t, false, getRes.IsDischarged)
+	assert.Equal(t, assRes.Consistency, getRes.Consistency)
 }

@@ -208,7 +208,6 @@ message GetPatientDetailsResponse {
   string name = 2;
   string human_readable_identifier = 3;
   string notes = 4;
-  // "bed_index": number,
   repeated Task tasks = 5;
   optional string ward_id = 6 [deprecated=true];
   optional Room room = 7;
