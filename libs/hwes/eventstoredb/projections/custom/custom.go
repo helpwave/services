@@ -113,7 +113,10 @@ func (p *CustomProjection) HandleEvent(ctx context.Context, event hwes.Event) (e
 
 	eventHandler, found := p.eventHandlers[event.EventType]
 	if !found {
-		log.Debug().Dict("event", event.GetZerologDict()).Msg("event handler for event type not found, skip")
+		log.Debug().
+			Str("subscriptionGroupName", p.subscriptionGroupName).
+			Dict("event", event.GetZerologDict()).
+			Msg("event handler for event type not found, skip")
 		return nil, hwutil.PtrTo(esdb.NackActionUnknown)
 	}
 	return eventHandler(ctx, event)

@@ -104,6 +104,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 			}
 
 			patientDetails = append(patientDetails, patientDetail)
+			patientDetailsMap[row.Patient.ID] = len(patientDetails) - 1
 		}
 
 		return patientDetails, nil

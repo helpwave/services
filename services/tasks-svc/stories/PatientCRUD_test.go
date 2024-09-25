@@ -8,6 +8,7 @@ import (
 	"hwutil"
 	"strconv"
 	"testing"
+	"time"
 )
 
 func TestCreateUpdateGetPatient(t *testing.T) {
@@ -353,4 +354,155 @@ func TestGetPatientAssignmentByWard(t *testing.T) {
 			assert.Equal(t, patientForBed[bed.Id], bed.Patient.Id)
 		}
 	}
+}
+
+func TestGetPatientList(t *testing.T) {
+	ctx := context.Background()
+	patientClient := patientServiceClient()
+	taskClient := taskServiceClient()
+
+	//
+	// Prepare ward, rooms, beds
+	//
+
+	wardId, _ := prepareWard(t, ctx, "")
+	room1Id, room1Consistency := prepareRoom(t, ctx, wardId, "1")
+	room2Id, room2Consistency := prepareRoom(t, ctx, wardId, "2")
+	bed1Id, bed1Consistency := prepareBed(t, ctx, room1Id, "1")
+	bed2Id, bed2Consistency := prepareBed(t, ctx, room2Id, "2")
+
+	//
+	// Create and assign Patients 1-2
+	//
+
+	patient1Id := preparePatient(t, ctx, "1")
+	patient2Id := preparePatient(t, ctx, "2")
+
+	ass1, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
+		Id:    patient1Id,
+		BedId: bed1Id,
+	})
+	assert.NoError(t, err)
+
+	ass2, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
+		Id:    patient2Id,
+		BedId: bed2Id,
+	})
+	assert.NoError(t, err)
+
+	//
+	// Create and discharge Patient 3
+	//
+
+	patient3Id := preparePatient(t, ctx, "3")
+
+	_, err = patientClient.DischargePatient(ctx, &pb.DischargePatientRequest{Id: patient3Id})
+	assert.NoError(t, err)
+
+	//
+	// Create unassigned Patient 4
+	//
+
+	patient4Id := preparePatient(t, ctx, "4")
+
+	//
+	// Create tasks
+	//
+
+	task1Res, err := taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
+		Name:      t.Name() + " task 1",
+		PatientId: patient1Id,
+		Public:    hwutil.PtrTo(true),
+		Subtasks: []*pb.CreateTaskRequest_SubTask{
+			{
+				Name: "ST 1",
+				Done: hwutil.PtrTo(true),
+			},
+			{
+				Name: "ST 2",
+			},
+		},
+	})
+	assert.NoError(t, err)
+
+	_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
+		Name:      t.Name() + " task 2",
+		PatientId: patient3Id,
+		Public:    hwutil.PtrTo(true),
+	})
+	assert.NoError(t, err)
+
+	time.Sleep(time.Second)
+
+	//
+	// GetPatientList
+	//
+
+	patientListRes, err := patientClient.GetPatientList(ctx, &pb.GetPatientListRequest{})
+	assert.NoError(t, err)
+
+	//
+	// Assertions
+	//
+
+	activeFound := 0
+	for _, patient := range patientListRes.Active {
+		if patient.Id == patient1Id {
+			activeFound++
+			assert.NoError(t, err)
+			assert.Equal(t, t.Name()+" Patient 1", patient.HumanReadableIdentifier)
+			assert.Equal(t, "A patient for test "+t.Name(), patient.Notes)
+			assert.Equal(t, ass1.Consistency, patient.Consistency)
+
+			assert.NotNil(t, patient.Bed)
+			assert.Equal(t, bed1Id, patient.Bed.Id)
+			assert.Equal(t, t.Name()+" bed 1", patient.Bed.Name)
+			assert.Equal(t, bed1Consistency, patient.Bed.Consistency)
+
+			assert.NotNil(t, patient.Room)
+			assert.Equal(t, room1Id, patient.Room.Id)
+			assert.Equal(t, room1Consistency, patient.Room.Consistency)
+			assert.Equal(t, t.Name()+" room 1", patient.Room.Name)
+			assert.Equal(t, wardId, patient.Room.WardId)
+
+			assert.Len(t, patient.Tasks, 1)
+			assert.Equal(t, task1Res.Id, patient.Tasks[0].Id)
+			assert.Equal(t, task1Res.Consistency, patient.Tasks[0].Consistency)
+
+			assert.Len(t, patient.Tasks[0].Subtasks, 2)
+			assert.Equal(t, "ST 1", patient.Tasks[0].Subtasks[0].Name)
+			assert.Equal(t, true, patient.Tasks[0].Subtasks[0].Done)
+			assert.Equal(t, "ST 2", patient.Tasks[0].Subtasks[1].Name)
+			assert.Equal(t, false, patient.Tasks[0].Subtasks[1].Done)
+		}
+		if patient.Id == patient2Id {
+			activeFound++
+			assert.NoError(t, err)
+			assert.Equal(t, t.Name()+" Patient 2", patient.HumanReadableIdentifier)
+			assert.Equal(t, "A patient for test "+t.Name(), patient.Notes)
+			assert.Equal(t, ass2.Consistency, patient.Consistency)
+
+			assert.NotNil(t, patient.Bed)
+			assert.Equal(t, bed2Id, patient.Bed.Id)
+			assert.Equal(t, t.Name()+" bed 2", patient.Bed.Name)
+			assert.Equal(t, bed2Consistency, patient.Bed.Consistency)
+
+			assert.NotNil(t, patient.Room)
+			assert.Equal(t, room2Id, patient.Room.Id)
+			assert.Equal(t, room2Consistency, patient.Room.Consistency)
+			assert.Equal(t, t.Name()+" room 2", patient.Room.Name)
+			assert.Equal(t, wardId, patient.Room.WardId)
+		}
+	}
+	assert.Equal(t, 2, activeFound)
+
+	dischargedIds := hwutil.Map(patientListRes.DischargedPatients, func(p *pb.GetPatientListResponse_Patient) string {
+		return p.Id
+	})
+	assert.Contains(t, dischargedIds, patient3Id)
+
+	unassignedIds := hwutil.Map(patientListRes.UnassignedPatients, func(p *pb.GetPatientListResponse_Patient) string {
+		return p.Id
+	})
+	assert.Contains(t, unassignedIds, patient4Id)
 }
