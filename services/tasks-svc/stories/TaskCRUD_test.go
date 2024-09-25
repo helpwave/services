@@ -8,6 +8,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwtesting"
 	"hwutil"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -233,5 +234,66 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	assert.Nil(t, task.DueAt)
 	assert.Equal(t, rmDueRes.Consistency, task.Consistency)
+
+}
+
+func TestGetTasksByPatientResponse(t *testing.T) {
+	taskClient := taskServiceClient()
+	ctx := context.Background()
+
+	patientId := preparePatient(t, ctx, "")
+
+	suffixMap := [][]string{
+		{"1 A", "1 B", "1 C"}, // Task 1
+		{"2 A", "2 B"},        // Task 2
+		{},                    // Task 3
+	}
+
+	taskIds := make([]string, 0, len(suffixMap))
+	taskConsistencies := make(map[string]string)
+	subtaskMap := make(map[string][]*pb.CreateTaskRequest_SubTask)
+
+	for i, stSuffixes := range suffixMap {
+		taskSuffix := strconv.Itoa(i + 1)
+
+		sts := hwutil.Map(stSuffixes, func(s string) *pb.CreateTaskRequest_SubTask {
+			return &pb.CreateTaskRequest_SubTask{
+				Name: t.Name() + " ST " + s,
+			}
+		})
+
+		taskRes, err := taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
+			Name:           t.Name() + " task " + taskSuffix,
+			Description:    nil,
+			PatientId:      patientId,
+			Public:         hwutil.PtrTo(true),
+			DueAt:          nil,
+			InitialStatus:  nil,
+			AssignedUserId: nil,
+			Subtasks:       sts,
+		})
+		assert.NoError(t, err)
+		taskIds = append(taskIds, taskRes.Id)
+		taskConsistencies[taskRes.Id] = taskRes.Consistency
+		subtaskMap[taskRes.Id] = sts
+	}
+
+	res, err := taskClient.GetTasksByPatient(ctx, &pb.GetTasksByPatientRequest{PatientId: patientId})
+	assert.NoError(t, err)
+
+	assert.Len(t, res.Tasks, len(suffixMap))
+	assert.Subset(t, taskIds, hwutil.Map(res.Tasks, func(tsk *pb.GetTasksByPatientResponse_Task) string {
+		assert.Equal(t, taskConsistencies[tsk.Id], tsk.Consistency)
+		assert.Equal(t, hwtesting.FakeTokenUser, tsk.CreatedBy)
+		assert.Len(t, tsk.Subtasks, len(subtaskMap[tsk.Id]))
+		exp := hwutil.Map(subtaskMap[tsk.Id], func(st *pb.CreateTaskRequest_SubTask) string {
+			return st.GetName()
+		})
+		have := hwutil.Map(tsk.Subtasks, func(st *pb.GetTasksByPatientResponse_Task_SubTask) string {
+			return st.GetName()
+		})
+		assert.Subset(t, exp, have)
+		return tsk.Id
+	}))
 
 }
