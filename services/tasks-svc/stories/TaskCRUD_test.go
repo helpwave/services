@@ -186,6 +186,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.NotEqual(t, task.Consistency, assignRes.Consistency, "consistency was not updated")
+	time.Sleep(time.Millisecond * 100)
 
 	// get updated task
 
@@ -207,6 +208,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.NotEqual(t, task.Consistency, unassignRes.Consistency, "consistency was not updated")
+	time.Sleep(time.Millisecond * 100)
 
 	// get updated task
 
@@ -226,6 +228,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.NotEqual(t, task.Consistency, rmDueRes.Consistency, "consistency was not updated")
+	time.Sleep(time.Millisecond * 100)
 
 	// get updated task
 
