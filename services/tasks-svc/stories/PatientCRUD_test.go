@@ -540,6 +540,8 @@ func TestGetPatientDetails(t *testing.T) {
 	createRes, err := patientClient.CreatePatient(ctx, createReq)
 	assert.NoError(t, err, "could not create patient")
 
+	time.Sleep(time.Millisecond * 100)
+
 	patientId := createRes.GetId()
 
 	assRes, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
@@ -587,6 +589,8 @@ func TestGetPatientDetails(t *testing.T) {
 		subtaskMap[taskRes.Id] = sts
 	}
 
+	time.Sleep(time.Millisecond * 100)
+	
 	//
 	// GetPatientDetails
 	//
