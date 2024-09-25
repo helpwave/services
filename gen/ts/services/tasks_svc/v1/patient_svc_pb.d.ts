@@ -83,16 +83,6 @@ export class GetPatientResponse extends jspb.Message {
   getNotes(): string;
   setNotes(value: string): GetPatientResponse;
 
-  getBedId(): string;
-  setBedId(value: string): GetPatientResponse;
-  hasBedId(): boolean;
-  clearBedId(): GetPatientResponse;
-
-  getWardId(): string;
-  setWardId(value: string): GetPatientResponse;
-  hasWardId(): boolean;
-  clearWardId(): GetPatientResponse;
-
   getRoom(): GetPatientResponse.Room | undefined;
   setRoom(value?: GetPatientResponse.Room): GetPatientResponse;
   hasRoom(): boolean;
@@ -119,8 +109,6 @@ export namespace GetPatientResponse {
     id: string,
     humanReadableIdentifier: string,
     notes: string,
-    bedId?: string,
-    wardId?: string,
     room?: GetPatientResponse.Room.AsObject,
     bed?: GetPatientResponse.Bed.AsObject,
     consistency: string,
@@ -183,16 +171,6 @@ export namespace GetPatientResponse {
     }
   }
 
-
-  export enum BedIdCase { 
-    _BED_ID_NOT_SET = 0,
-    BED_ID = 4,
-  }
-
-  export enum WardIdCase { 
-    _WARD_ID_NOT_SET = 0,
-    WARD_ID = 5,
-  }
 
   export enum RoomCase { 
     _ROOM_NOT_SET = 0,

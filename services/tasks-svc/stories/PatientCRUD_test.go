@@ -134,9 +134,6 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	assert.Equal(t, roomId, getPatientRes.Room.Id)
 	assert.Equal(t, wardId, getPatientRes.Room.WardId)
 
-	assert.Equal(t, &getPatientRes.Bed.Id, getPatientRes.BedId)
-	assert.Equal(t, &getPatientRes.Room.WardId, getPatientRes.WardId)
-
 	assert.Equal(t, assignRes.Consistency, getPatientRes.Consistency)
 
 	//
@@ -161,8 +158,6 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 
 	assert.Nil(t, getPatientRes.Bed)
 	assert.Nil(t, getPatientRes.Room)
-	assert.Nil(t, getPatientRes.BedId)
-	assert.Nil(t, getPatientRes.WardId)
 
 	assert.Equal(t, unassignRes.Consistency, getPatientRes.Consistency)
 }

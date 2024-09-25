@@ -16,7 +16,7 @@ func SetCommonEnv() {
 
 	for _, err := range errs {
 		if err != nil {
-			zlog.Fatal().Err(err).Msg("could not set common envRES_DSN")
+			zlog.Fatal().Err(err).Msg("could not set common env")
 		}
 	}
 }

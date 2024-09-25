@@ -81,7 +81,7 @@ func prepareWards(t *testing.T, ctx context.Context, client pb.WardServiceClient
 	return ids
 }
 
-func TestGetRecentWardsResponse(t *testing.T) {
+func TestGetRecentWards(t *testing.T) {
 	userID := uuid.New() // new user for this test, to prevent interference with other tests
 	wardClient := pb.NewWardServiceClient(hwtesting.GetGrpcConn(userID.String()))
 	taskClient := pb.NewTaskServiceClient(hwtesting.GetGrpcConn(userID.String()))

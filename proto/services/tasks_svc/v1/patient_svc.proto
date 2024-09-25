@@ -33,8 +33,6 @@ message GetPatientResponse {
   string id = 1;
   string human_readable_identifier = 2;
   string notes = 3;
-  optional string bed_id = 4 [deprecated=true]; // use bed.id instead
-  optional string ward_id = 5 [deprecated=true]; // use room.ward_id instread
 
   optional Room room = 7;
   optional Bed bed = 8;

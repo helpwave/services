@@ -38,7 +38,7 @@ func setup() (ctx context.Context, projection *Projection, dbMock pgxmock.PgxPoo
 	hwdb.TestingSetDB(dbMock)
 	teardown = dbMock.Close
 
-	projection = NewProjection(esClientStub{}, "hwtesting")
+	projection = NewProjection(esClientStub{}, "testing")
 
 	ctx = context.Background()
 
