@@ -425,7 +425,7 @@ func TestGetPatientList(t *testing.T) {
 	})
 	assert.NoError(t, err)
 
-	_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
+	task2Res, err := taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 		Name:      t.Name() + " task 2",
 		PatientId: patient3Id,
 		Public:    hwutil.PtrTo(true),
@@ -502,6 +502,12 @@ func TestGetPatientList(t *testing.T) {
 	assert.Contains(t, dischargedIds, patient3Id)
 
 	unassignedIds := hwutil.Map(patientListRes.UnassignedPatients, func(p *pb.GetPatientListResponse_Patient) string {
+		if p.Id == patient3Id {
+			assert.Len(t, p.Tasks, 1)
+			assert.Equal(t, task2Res.Id, p.Tasks[0].Id)
+			assert.Equal(t, task2Res.Consistency, p.Tasks[0].Consistency)
+			assert.Len(t, p.Tasks[0].Subtasks, 0)
+		}
 		return p.Id
 	})
 	assert.Contains(t, unassignedIds, patient4Id)

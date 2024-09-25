@@ -68,6 +68,9 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 					Bed:   bed,
 					Tasks: make([]*tasksModels.TaskWithConsistency, 0),
 				}
+
+				patientDetails = append(patientDetails, patientDetail)
+				patientDetailsMap[row.Patient.ID] = len(patientDetails) - 1
 			}
 
 			if !row.TaskID.Valid {
@@ -103,8 +106,6 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 				}
 			}
 
-			patientDetails = append(patientDetails, patientDetail)
-			patientDetailsMap[row.Patient.ID] = len(patientDetails) - 1
 		}
 
 		return patientDetails, nil
