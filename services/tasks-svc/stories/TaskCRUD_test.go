@@ -268,7 +268,7 @@ func TestGetTasksByPatientResponse(t *testing.T) {
 			PatientId:      patientId,
 			Public:         hwutil.PtrTo(true),
 			DueAt:          nil,
-			InitialStatus:  nil,
+			InitialStatus:  hwutil.PtrTo(pb.TaskStatus(i + 1)), // this is dirty, lol
 			AssignedUserId: nil,
 			Subtasks:       sts,
 		})
@@ -295,5 +295,27 @@ func TestGetTasksByPatientResponse(t *testing.T) {
 		assert.Subset(t, exp, have)
 		return tsk.Id
 	}))
+
+	// GetTasksByPatientSortedByStatus
+
+	resByStatus, err := taskClient.GetTasksByPatientSortedByStatus(ctx, &pb.GetTasksByPatientSortedByStatusRequest{
+		PatientId: patientId,
+	})
+	assert.NoError(t, err)
+
+	assert.Len(t, resByStatus.Todo, 1)
+	assert.Equal(t, taskConsistencies[resByStatus.Todo[0].Id], resByStatus.Todo[0].Consistency)
+	assert.Equal(t, hwtesting.FakeTokenUser, resByStatus.Todo[0].CreatedBy)
+	assert.Len(t, resByStatus.Todo[0].Subtasks, len(subtaskMap[resByStatus.Todo[0].Id]))
+
+	assert.Len(t, resByStatus.InProgress, 1)
+	assert.Equal(t, taskConsistencies[resByStatus.InProgress[0].Id], resByStatus.InProgress[0].Consistency)
+	assert.Equal(t, hwtesting.FakeTokenUser, resByStatus.InProgress[0].CreatedBy)
+	assert.Len(t, resByStatus.InProgress[0].Subtasks, len(subtaskMap[resByStatus.InProgress[0].Id]))
+
+	assert.Len(t, resByStatus.Done, 1)
+	assert.Equal(t, taskConsistencies[resByStatus.Done[0].Id], resByStatus.Done[0].Consistency)
+	assert.Equal(t, hwtesting.FakeTokenUser, resByStatus.Done[0].CreatedBy)
+	assert.Len(t, resByStatus.Done[0].Subtasks, len(subtaskMap[resByStatus.Done[0].Id]))
 
 }
