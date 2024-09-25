@@ -964,10 +964,10 @@ export namespace GetRecentPatientsRequest {
 }
 
 export class GetRecentPatientsResponse extends jspb.Message {
-  getRecentPatientsList(): Array<GetRecentPatientsResponse.PatientWithRoomAndBed>;
-  setRecentPatientsList(value: Array<GetRecentPatientsResponse.PatientWithRoomAndBed>): GetRecentPatientsResponse;
+  getRecentPatientsList(): Array<GetRecentPatientsResponse.Patient>;
+  setRecentPatientsList(value: Array<GetRecentPatientsResponse.Patient>): GetRecentPatientsResponse;
   clearRecentPatientsList(): GetRecentPatientsResponse;
-  addRecentPatients(value?: GetRecentPatientsResponse.PatientWithRoomAndBed, index?: number): GetRecentPatientsResponse.PatientWithRoomAndBed;
+  addRecentPatients(value?: GetRecentPatientsResponse.Patient, index?: number): GetRecentPatientsResponse.Patient;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetRecentPatientsResponse.AsObject;
@@ -979,7 +979,7 @@ export class GetRecentPatientsResponse extends jspb.Message {
 
 export namespace GetRecentPatientsResponse {
   export type AsObject = {
-    recentPatientsList: Array<GetRecentPatientsResponse.PatientWithRoomAndBed.AsObject>,
+    recentPatientsList: Array<GetRecentPatientsResponse.Patient.AsObject>,
   }
 
   export class Bed extends jspb.Message {
@@ -1040,41 +1040,51 @@ export namespace GetRecentPatientsResponse {
   }
 
 
-  export class PatientWithRoomAndBed extends jspb.Message {
+  export class Patient extends jspb.Message {
     getId(): string;
-    setId(value: string): PatientWithRoomAndBed;
+    setId(value: string): Patient;
 
     getHumanReadableIdentifier(): string;
-    setHumanReadableIdentifier(value: string): PatientWithRoomAndBed;
+    setHumanReadableIdentifier(value: string): Patient;
 
     getRoom(): GetRecentPatientsResponse.Room | undefined;
-    setRoom(value?: GetRecentPatientsResponse.Room): PatientWithRoomAndBed;
+    setRoom(value?: GetRecentPatientsResponse.Room): Patient;
     hasRoom(): boolean;
-    clearRoom(): PatientWithRoomAndBed;
+    clearRoom(): Patient;
 
     getBed(): GetRecentPatientsResponse.Bed | undefined;
-    setBed(value?: GetRecentPatientsResponse.Bed): PatientWithRoomAndBed;
+    setBed(value?: GetRecentPatientsResponse.Bed): Patient;
     hasBed(): boolean;
-    clearBed(): PatientWithRoomAndBed;
+    clearBed(): Patient;
 
     getConsistency(): string;
-    setConsistency(value: string): PatientWithRoomAndBed;
+    setConsistency(value: string): Patient;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): PatientWithRoomAndBed.AsObject;
-    static toObject(includeInstance: boolean, msg: PatientWithRoomAndBed): PatientWithRoomAndBed.AsObject;
-    static serializeBinaryToWriter(message: PatientWithRoomAndBed, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): PatientWithRoomAndBed;
-    static deserializeBinaryFromReader(message: PatientWithRoomAndBed, reader: jspb.BinaryReader): PatientWithRoomAndBed;
+    toObject(includeInstance?: boolean): Patient.AsObject;
+    static toObject(includeInstance: boolean, msg: Patient): Patient.AsObject;
+    static serializeBinaryToWriter(message: Patient, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Patient;
+    static deserializeBinaryFromReader(message: Patient, reader: jspb.BinaryReader): Patient;
   }
 
-  export namespace PatientWithRoomAndBed {
+  export namespace Patient {
     export type AsObject = {
       id: string,
       humanReadableIdentifier: string,
       room?: GetRecentPatientsResponse.Room.AsObject,
       bed?: GetRecentPatientsResponse.Bed.AsObject,
       consistency: string,
+    }
+
+    export enum RoomCase { 
+      _ROOM_NOT_SET = 0,
+      ROOM = 3,
+    }
+
+    export enum BedCase { 
+      _BED_NOT_SET = 0,
+      BED = 4,
     }
   }
 

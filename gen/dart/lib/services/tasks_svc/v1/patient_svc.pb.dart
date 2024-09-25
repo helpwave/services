@@ -2684,8 +2684,8 @@ class GetRecentPatientsResponse_Room extends $pb.GeneratedMessage {
   void clearConsistency() => clearField(4);
 }
 
-class GetRecentPatientsResponse_PatientWithRoomAndBed extends $pb.GeneratedMessage {
-  factory GetRecentPatientsResponse_PatientWithRoomAndBed({
+class GetRecentPatientsResponse_Patient extends $pb.GeneratedMessage {
+  factory GetRecentPatientsResponse_Patient({
     $core.String? id,
     $core.String? humanReadableIdentifier,
     GetRecentPatientsResponse_Room? room,
@@ -2710,11 +2710,11 @@ class GetRecentPatientsResponse_PatientWithRoomAndBed extends $pb.GeneratedMessa
     }
     return $result;
   }
-  GetRecentPatientsResponse_PatientWithRoomAndBed._() : super();
-  factory GetRecentPatientsResponse_PatientWithRoomAndBed.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetRecentPatientsResponse_PatientWithRoomAndBed.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetRecentPatientsResponse_Patient._() : super();
+  factory GetRecentPatientsResponse_Patient.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRecentPatientsResponse_Patient.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRecentPatientsResponse.PatientWithRoomAndBed', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRecentPatientsResponse.Patient', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
     ..aOM<GetRecentPatientsResponse_Room>(3, _omitFieldNames ? '' : 'room', subBuilder: GetRecentPatientsResponse_Room.create)
@@ -2727,22 +2727,22 @@ class GetRecentPatientsResponse_PatientWithRoomAndBed extends $pb.GeneratedMessa
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetRecentPatientsResponse_PatientWithRoomAndBed clone() => GetRecentPatientsResponse_PatientWithRoomAndBed()..mergeFromMessage(this);
+  GetRecentPatientsResponse_Patient clone() => GetRecentPatientsResponse_Patient()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetRecentPatientsResponse_PatientWithRoomAndBed copyWith(void Function(GetRecentPatientsResponse_PatientWithRoomAndBed) updates) => super.copyWith((message) => updates(message as GetRecentPatientsResponse_PatientWithRoomAndBed)) as GetRecentPatientsResponse_PatientWithRoomAndBed;
+  GetRecentPatientsResponse_Patient copyWith(void Function(GetRecentPatientsResponse_Patient) updates) => super.copyWith((message) => updates(message as GetRecentPatientsResponse_Patient)) as GetRecentPatientsResponse_Patient;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetRecentPatientsResponse_PatientWithRoomAndBed create() => GetRecentPatientsResponse_PatientWithRoomAndBed._();
-  GetRecentPatientsResponse_PatientWithRoomAndBed createEmptyInstance() => create();
-  static $pb.PbList<GetRecentPatientsResponse_PatientWithRoomAndBed> createRepeated() => $pb.PbList<GetRecentPatientsResponse_PatientWithRoomAndBed>();
+  static GetRecentPatientsResponse_Patient create() => GetRecentPatientsResponse_Patient._();
+  GetRecentPatientsResponse_Patient createEmptyInstance() => create();
+  static $pb.PbList<GetRecentPatientsResponse_Patient> createRepeated() => $pb.PbList<GetRecentPatientsResponse_Patient>();
   @$core.pragma('dart2js:noInline')
-  static GetRecentPatientsResponse_PatientWithRoomAndBed getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRecentPatientsResponse_PatientWithRoomAndBed>(create);
-  static GetRecentPatientsResponse_PatientWithRoomAndBed? _defaultInstance;
+  static GetRecentPatientsResponse_Patient getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRecentPatientsResponse_Patient>(create);
+  static GetRecentPatientsResponse_Patient? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
@@ -2796,7 +2796,7 @@ class GetRecentPatientsResponse_PatientWithRoomAndBed extends $pb.GeneratedMessa
 
 class GetRecentPatientsResponse extends $pb.GeneratedMessage {
   factory GetRecentPatientsResponse({
-    $core.Iterable<GetRecentPatientsResponse_PatientWithRoomAndBed>? recentPatients,
+    $core.Iterable<GetRecentPatientsResponse_Patient>? recentPatients,
   }) {
     final $result = create();
     if (recentPatients != null) {
@@ -2809,7 +2809,7 @@ class GetRecentPatientsResponse extends $pb.GeneratedMessage {
   factory GetRecentPatientsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRecentPatientsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
-    ..pc<GetRecentPatientsResponse_PatientWithRoomAndBed>(1, _omitFieldNames ? '' : 'recentPatients', $pb.PbFieldType.PM, subBuilder: GetRecentPatientsResponse_PatientWithRoomAndBed.create)
+    ..pc<GetRecentPatientsResponse_Patient>(1, _omitFieldNames ? '' : 'recentPatients', $pb.PbFieldType.PM, subBuilder: GetRecentPatientsResponse_Patient.create)
     ..hasRequiredFields = false
   ;
 
@@ -2835,7 +2835,7 @@ class GetRecentPatientsResponse extends $pb.GeneratedMessage {
   static GetRecentPatientsResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<GetRecentPatientsResponse_PatientWithRoomAndBed> get recentPatients => $_getList(0);
+  $core.List<GetRecentPatientsResponse_Patient> get recentPatients => $_getList(0);
 }
 
 class UpdatePatientRequest extends $pb.GeneratedMessage {

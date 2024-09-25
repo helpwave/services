@@ -3,8 +3,10 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
+	"hwtesting"
 	"hwutil"
 	"strconv"
 	"testing"
@@ -621,4 +623,63 @@ func TestGetPatientDetails(t *testing.T) {
 	assert.Equal(t, bedId, getRes.Bed.Id)
 	assert.Equal(t, false, getRes.IsDischarged)
 	assert.Equal(t, assRes.Consistency, getRes.Consistency)
+}
+
+func TestGetRecentPatients(t *testing.T) {
+	userID := uuid.New() // new user for this test, to prevent interference with other tests
+	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String()))
+	ctx := context.Background()
+
+	wardId, _ := prepareWard(t, ctx, "")
+	roomId, roomConsistency := prepareRoom(t, ctx, wardId, "")
+	bedId, bedConsitency := prepareBed(t, ctx, roomId, "")
+	patientWithBedId := ""
+
+	N := 11 // cap is ten
+
+	consistencies := make(map[string]string)
+
+	ids := make([]string, N)
+	for i := 1; i <= N; i++ {
+		patientRes, err := patientClient.CreatePatient(ctx, &pb.CreatePatientRequest{
+			HumanReadableIdentifier: t.Name() + " patient " + strconv.Itoa(i),
+			Notes:                   nil,
+		})
+		assert.NoError(t, err)
+		ids = append(ids, patientRes.Id)
+		consistencies[patientRes.Id] = patientRes.Consistency
+
+		if i == N {
+			assRes, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
+				Id:          patientRes.Id,
+				BedId:       bedId,
+				Consistency: &patientRes.Consistency,
+			})
+			assert.NoError(t, err)
+			patientWithBedId = patientRes.Id
+			consistencies[patientRes.Id] = assRes.Consistency
+		}
+	}
+
+	time.Sleep(time.Millisecond * 500)
+
+	recent, err := patientClient.GetRecentPatients(ctx, &pb.GetRecentPatientsRequest{})
+	assert.NoError(t, err)
+
+	assert.Len(t, recent.RecentPatients, 10)
+	foundIds := hwutil.Map(recent.RecentPatients, func(p *pb.GetRecentPatientsResponse_Patient) string {
+		id := p.Id
+		if id == patientWithBedId {
+			assert.Equal(t, bedId, p.Bed.Id)
+			assert.Equal(t, bedConsitency, p.Bed.Consistency)
+			assert.Equal(t, roomId, p.Room.Id)
+			assert.Equal(t, roomConsistency, p.Room.Consistency)
+		}
+		assert.Equal(t, consistencies[p.Id], p.Consistency)
+		return id
+	})
+
+	assert.Subset(t, ids, foundIds)
+	assert.NotContains(t, foundIds, ids[0]) // thrown out
+
 }

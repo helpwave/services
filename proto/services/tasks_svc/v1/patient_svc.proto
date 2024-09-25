@@ -237,7 +237,7 @@ message GetPatientListResponse {
 message GetRecentPatientsRequest {}
 
 message GetRecentPatientsResponse {
-  repeated PatientWithRoomAndBed recent_patients = 1;
+  repeated Patient recent_patients = 1;
 
   message Bed {
     string id = 1;
@@ -245,18 +245,18 @@ message GetRecentPatientsResponse {
     string consistency = 3;
   }
 
-  message  Room {
+  message Room {
     string id = 1;
     string name = 2;
     string ward_id = 3;
     string consistency = 4;
   }
 
-  message PatientWithRoomAndBed {
+  message Patient {
     string id = 1;
     string human_readable_identifier = 2;
-    Room room = 3;
-    Bed bed = 4;
+    optional Room room = 3;
+    optional Bed bed = 4;
     string consistency = 5;
   }
 }

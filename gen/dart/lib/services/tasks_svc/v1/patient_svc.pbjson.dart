@@ -519,9 +519,9 @@ final $typed_data.Uint8List getRecentPatientsRequestDescriptor = $convert.base64
 const GetRecentPatientsResponse$json = {
   '1': 'GetRecentPatientsResponse',
   '2': [
-    {'1': 'recent_patients', '3': 1, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetRecentPatientsResponse.PatientWithRoomAndBed', '10': 'recentPatients'},
+    {'1': 'recent_patients', '3': 1, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetRecentPatientsResponse.Patient', '10': 'recentPatients'},
   ],
-  '3': [GetRecentPatientsResponse_Bed$json, GetRecentPatientsResponse_Room$json, GetRecentPatientsResponse_PatientWithRoomAndBed$json],
+  '3': [GetRecentPatientsResponse_Bed$json, GetRecentPatientsResponse_Room$json, GetRecentPatientsResponse_Patient$json],
 };
 
 @$core.Deprecated('Use getRecentPatientsResponseDescriptor instead')
@@ -546,30 +546,34 @@ const GetRecentPatientsResponse_Room$json = {
 };
 
 @$core.Deprecated('Use getRecentPatientsResponseDescriptor instead')
-const GetRecentPatientsResponse_PatientWithRoomAndBed$json = {
-  '1': 'PatientWithRoomAndBed',
+const GetRecentPatientsResponse_Patient$json = {
+  '1': 'Patient',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'human_readable_identifier', '3': 2, '4': 1, '5': 9, '10': 'humanReadableIdentifier'},
-    {'1': 'room', '3': 3, '4': 1, '5': 11, '6': '.services.tasks_svc.v1.GetRecentPatientsResponse.Room', '10': 'room'},
-    {'1': 'bed', '3': 4, '4': 1, '5': 11, '6': '.services.tasks_svc.v1.GetRecentPatientsResponse.Bed', '10': 'bed'},
+    {'1': 'room', '3': 3, '4': 1, '5': 11, '6': '.services.tasks_svc.v1.GetRecentPatientsResponse.Room', '9': 0, '10': 'room', '17': true},
+    {'1': 'bed', '3': 4, '4': 1, '5': 11, '6': '.services.tasks_svc.v1.GetRecentPatientsResponse.Bed', '9': 1, '10': 'bed', '17': true},
     {'1': 'consistency', '3': 5, '4': 1, '5': 9, '10': 'consistency'},
+  ],
+  '8': [
+    {'1': '_room'},
+    {'1': '_bed'},
   ],
 };
 
 /// Descriptor for `GetRecentPatientsResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getRecentPatientsResponseDescriptor = $convert.base64Decode(
-    'ChlHZXRSZWNlbnRQYXRpZW50c1Jlc3BvbnNlEm8KD3JlY2VudF9wYXRpZW50cxgBIAMoCzJGLn'
-    'NlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRSZWNlbnRQYXRpZW50c1Jlc3BvbnNlLlBhdGllbnRX'
-    'aXRoUm9vbUFuZEJlZFIOcmVjZW50UGF0aWVudHMaSwoDQmVkEg4KAmlkGAEgASgJUgJpZBISCg'
-    'RuYW1lGAIgASgJUgRuYW1lEiAKC2NvbnNpc3RlbmN5GAMgASgJUgtjb25zaXN0ZW5jeRplCgRS'
-    'b29tEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhcKB3dhcmRfaWQYAyABKA'
-    'lSBndhcmRJZBIgCgtjb25zaXN0ZW5jeRgEIAEoCVILY29uc2lzdGVuY3kamAIKFVBhdGllbnRX'
-    'aXRoUm9vbUFuZEJlZBIOCgJpZBgBIAEoCVICaWQSOgoZaHVtYW5fcmVhZGFibGVfaWRlbnRpZm'
-    'llchgCIAEoCVIXaHVtYW5SZWFkYWJsZUlkZW50aWZpZXISSQoEcm9vbRgDIAEoCzI1LnNlcnZp'
-    'Y2VzLnRhc2tzX3N2Yy52MS5HZXRSZWNlbnRQYXRpZW50c1Jlc3BvbnNlLlJvb21SBHJvb20SRg'
-    'oDYmVkGAQgASgLMjQuc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldFJlY2VudFBhdGllbnRzUmVz'
-    'cG9uc2UuQmVkUgNiZWQSIAoLY29uc2lzdGVuY3kYBSABKAlSC2NvbnNpc3RlbmN5');
+    'ChlHZXRSZWNlbnRQYXRpZW50c1Jlc3BvbnNlEmEKD3JlY2VudF9wYXRpZW50cxgBIAMoCzI4Ln'
+    'NlcnZpY2VzLnRhc2tzX3N2Yy52MS5HZXRSZWNlbnRQYXRpZW50c1Jlc3BvbnNlLlBhdGllbnRS'
+    'DnJlY2VudFBhdGllbnRzGksKA0JlZBIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbm'
+    'FtZRIgCgtjb25zaXN0ZW5jeRgDIAEoCVILY29uc2lzdGVuY3kaZQoEUm9vbRIOCgJpZBgBIAEo'
+    'CVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIXCgd3YXJkX2lkGAMgASgJUgZ3YXJkSWQSIAoLY2'
+    '9uc2lzdGVuY3kYBCABKAlSC2NvbnNpc3RlbmN5GqUCCgdQYXRpZW50Eg4KAmlkGAEgASgJUgJp'
+    'ZBI6ChlodW1hbl9yZWFkYWJsZV9pZGVudGlmaWVyGAIgASgJUhdodW1hblJlYWRhYmxlSWRlbn'
+    'RpZmllchJOCgRyb29tGAMgASgLMjUuc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldFJlY2VudFBh'
+    'dGllbnRzUmVzcG9uc2UuUm9vbUgAUgRyb29tiAEBEksKA2JlZBgEIAEoCzI0LnNlcnZpY2VzLn'
+    'Rhc2tzX3N2Yy52MS5HZXRSZWNlbnRQYXRpZW50c1Jlc3BvbnNlLkJlZEgBUgNiZWSIAQESIAoL'
+    'Y29uc2lzdGVuY3kYBSABKAlSC2NvbnNpc3RlbmN5QgcKBV9yb29tQgYKBF9iZWQ=');
 
 @$core.Deprecated('Use updatePatientRequestDescriptor instead')
 const UpdatePatientRequest$json = {

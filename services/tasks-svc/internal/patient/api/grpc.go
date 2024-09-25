@@ -343,7 +343,7 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 	*/
 
 	// get all Patients for valid uuids
-	recentPatients := hwutil.Map(recentPatientIdsStrs, func(id string) *pb.GetRecentPatientsResponse_PatientWithRoomAndBed {
+	recentPatients := hwutil.Map(recentPatientIdsStrs, func(id string) *pb.GetRecentPatientsResponse_Patient {
 		parsedUUID, err := uuid.Parse(id)
 		fmt.Println(parsedUUID)
 		if err != nil {
@@ -377,7 +377,7 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 			}
 		}
 
-		return &pb.GetRecentPatientsResponse_PatientWithRoomAndBed{
+		return &pb.GetRecentPatientsResponse_Patient{
 			Id:                      patient.ID.String(),
 			HumanReadableIdentifier: patient.HumanReadableIdentifier,
 			Room:                    roomRes,
