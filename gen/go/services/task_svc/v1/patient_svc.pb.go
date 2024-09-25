@@ -1265,12 +1265,11 @@ type GetPatientDetailsResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                      string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name                    string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	HumanReadableIdentifier string `protobuf:"bytes,3,opt,name=human_readable_identifier,json=humanReadableIdentifier,proto3" json:"human_readable_identifier,omitempty"`
-	Notes                   string `protobuf:"bytes,4,opt,name=notes,proto3" json:"notes,omitempty"`
-	// "bed_index": number,
-	Tasks []*GetPatientDetailsResponse_Task `protobuf:"bytes,5,rep,name=tasks,proto3" json:"tasks,omitempty"`
+	Id                      string                            `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name                    string                            `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	HumanReadableIdentifier string                            `protobuf:"bytes,3,opt,name=human_readable_identifier,json=humanReadableIdentifier,proto3" json:"human_readable_identifier,omitempty"`
+	Notes                   string                            `protobuf:"bytes,4,opt,name=notes,proto3" json:"notes,omitempty"`
+	Tasks                   []*GetPatientDetailsResponse_Task `protobuf:"bytes,5,rep,name=tasks,proto3" json:"tasks,omitempty"`
 	// Deprecated: Marked as deprecated in services/task_svc/v1/patient_svc.proto.
 	WardId       *string                         `protobuf:"bytes,6,opt,name=ward_id,json=wardId,proto3,oneof" json:"ward_id,omitempty"`
 	Room         *GetPatientDetailsResponse_Room `protobuf:"bytes,7,opt,name=room,proto3,oneof" json:"room,omitempty"`
