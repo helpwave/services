@@ -3,8 +3,9 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	zlog "github.com/rs/zerolog/log"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwtesting"
 	"hwutil"
 	"testing"
@@ -18,6 +19,8 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	// prepare patient
 	patientId := preparePatient(t, ctx, "")
 
+	dueDate := time.Now().Add(time.Hour).UTC()
+
 	//
 	// create new task
 	//
@@ -26,7 +29,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 		Description:    hwutil.PtrTo("Some Description"),
 		PatientId:      patientId,
 		Public:         hwutil.PtrTo(true),
-		DueAt:          nil,
+		DueAt:          timestamppb.New(dueDate),
 		InitialStatus:  nil,
 		AssignedUserId: nil,
 		Subtasks: []*pb.CreateTaskRequest_SubTask{
@@ -42,9 +45,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	time.Sleep(time.Millisecond * 100)
 
-	//
 	// get new task
-	//
 
 	task, err := taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
 	assert.NoError(t, err)
@@ -55,6 +56,8 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	assert.Equal(t, hwtesting.FakeTokenUser, task.CreatedBy)
 	assert.Equal(t, true, task.Public)
 	assert.Equal(t, pb.TaskStatus_TASK_STATUS_TODO, task.Status)
+	assert.WithinDuration(t, dueDate, task.DueAt.AsTime(), time.Second) // actually we differ by some microseconds
+	assert.Nil(t, task.AssignedUserId)
 
 	assert.Equal(t, patientId, task.Patient.Id)
 
@@ -96,9 +99,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	time.Sleep(time.Millisecond * 100)
 
-	//
 	// get updated task
-	//
 
 	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
 	assert.NoError(t, err)
@@ -122,9 +123,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	time.Sleep(time.Millisecond * 100)
 
-	//
 	// get updated task
-	//
 
 	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
 	assert.NoError(t, err)
@@ -145,9 +144,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	assert.Equal(t, createStRes.TaskConsistency, task.Consistency)
 
-	//
 	// update subtask
-	//
 
 	updateStRes, err := taskClient.UpdateSubtask(ctx, &pb.UpdateSubtaskRequest{
 		TaskId:    taskId,
@@ -161,17 +158,80 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	time.Sleep(time.Millisecond * 100)
 
-	//
 	// get updated task
-	//
 
 	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
 	assert.NoError(t, err)
 
-	zlog.Trace().Interface("subtasts", task.Subtasks).Msg("remeremereme")
-
-	assert.Equal(t, createStRes.SubtaskId, task.Subtasks[2].Id)
-	assert.Equal(t, true, task.Subtasks[2].Done)
+	assert.Contains(t, hwutil.Map(task.Subtasks, func(st *pb.GetTaskResponse_SubTask) string {
+		if st.Id == createStRes.SubtaskId {
+			assert.True(t, st.Done)
+		}
+		return st.Id
+	}), createStRes.SubtaskId)
 	assert.Equal(t, updateStRes.TaskConsistency, task.Consistency)
+
+	//
+	// AssignTask
+	//
+
+	assignedUser := uuid.New()
+
+	assignRes, err := taskClient.AssignTask(ctx, &pb.AssignTaskRequest{
+		TaskId:      taskId,
+		UserId:      assignedUser.String(),
+		Consistency: &task.Consistency,
+	})
+	assert.NoError(t, err)
+
+	assert.NotEqual(t, task.Consistency, assignRes.Consistency, "consistency was not updated")
+
+	// get updated task
+
+	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
+	assert.NoError(t, err)
+
+	assert.Equal(t, assignedUser.String(), *task.AssignedUserId)
+	assert.Equal(t, assignRes.Consistency, task.Consistency)
+
+	//
+	// UnassignTask
+	//
+
+	unassignRes, err := taskClient.UnassignTask(ctx, &pb.UnassignTaskRequest{
+		TaskId:      taskId,
+		UserId:      assignedUser.String(),
+		Consistency: &task.Consistency,
+	})
+	assert.NoError(t, err)
+
+	assert.NotEqual(t, task.Consistency, unassignRes.Consistency, "consistency was not updated")
+
+	// get updated task
+
+	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
+	assert.NoError(t, err)
+
+	assert.Nil(t, task.AssignedUserId)
+	assert.Equal(t, unassignRes.Consistency, task.Consistency)
+
+	//
+	// RemoveTaskDueDate
+	//
+
+	rmDueRes, err := taskClient.RemoveTaskDueDate(ctx, &pb.RemoveTaskDueDateRequest{
+		TaskId: taskId,
+	})
+	assert.NoError(t, err)
+
+	assert.NotEqual(t, task.Consistency, rmDueRes.Consistency, "consistency was not updated")
+
+	// get updated task
+
+	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
+	assert.NoError(t, err)
+
+	assert.Nil(t, task.DueAt)
+	assert.Equal(t, rmDueRes.Consistency, task.Consistency)
 
 }
