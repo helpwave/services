@@ -590,7 +590,7 @@ func TestGetPatientDetails(t *testing.T) {
 	}
 
 	time.Sleep(time.Millisecond * 100)
-	
+
 	//
 	// GetPatientDetails
 	//

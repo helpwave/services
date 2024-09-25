@@ -118,7 +118,7 @@ func TestGetRecentWards(t *testing.T) {
 		}
 	}
 
-	time.Sleep(time.Second)
+	time.Sleep(time.Millisecond * 100)
 
 	// touch each ward, to push it into RecentWards
 	for _, wardId := range wardIds {
@@ -127,6 +127,8 @@ func TestGetRecentWards(t *testing.T) {
 		consistencies[wardId] = res.Consistency
 		time.Sleep(time.Millisecond * 500)
 	}
+
+	time.Sleep(time.Second)
 
 	// GetRecentWards
 	res, err := wardClient.GetRecentWards(ctx, &pb.GetRecentWardsRequest{})
