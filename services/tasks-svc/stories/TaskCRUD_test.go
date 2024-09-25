@@ -278,6 +278,8 @@ func TestGetTasksByPatient(t *testing.T) {
 		subtaskMap[taskRes.Id] = sts
 	}
 
+	time.Sleep(time.Millisecond * 100)
+
 	res, err := taskClient.GetTasksByPatient(ctx, &pb.GetTasksByPatientRequest{PatientId: patientId})
 	assert.NoError(t, err)
 

@@ -470,10 +470,19 @@ func TestGetPatientList(t *testing.T) {
 			assert.Equal(t, task1Res.Consistency, patient.Tasks[0].Consistency)
 
 			assert.Len(t, patient.Tasks[0].Subtasks, 2)
-			assert.Equal(t, "ST 1", patient.Tasks[0].Subtasks[0].Name)
-			assert.Equal(t, true, patient.Tasks[0].Subtasks[0].Done)
-			assert.Equal(t, "ST 2", patient.Tasks[0].Subtasks[1].Name)
-			assert.Equal(t, false, patient.Tasks[0].Subtasks[1].Done)
+			f := 0
+			for _, st := range patient.Tasks[0].Subtasks {
+				if st.Name == "ST 1" {
+					f++
+					assert.Equal(t, true, st.Done)
+				}
+				if st.Name == "ST 2" {
+					f++
+					assert.Equal(t, false, st.Done)
+
+				}
+			}
+			assert.Equal(t, 2, f)
 		}
 		if patient.Id == patient2Id {
 			activeFound++
