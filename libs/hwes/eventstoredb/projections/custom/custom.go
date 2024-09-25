@@ -108,7 +108,7 @@ func (p *CustomProjection) RegisterEventListener(eventType string, eventHandler 
 }
 
 func (p *CustomProjection) HandleEvent(ctx context.Context, event hwes.Event) (error, *esdb.NackAction) {
-	ctx, span, log := telemetry.StartSpan(ctx, "custom_projection.handleEvent")
+	ctx, span, log := telemetry.StartSpan(ctx, "custom_projection."+p.subscriptionGroupName+".handleEvent."+event.EventType)
 	defer span.End()
 
 	eventHandler, found := p.eventHandlers[event.EventType]
@@ -184,10 +184,8 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 // and calls the according event handler based on the received event
 // This function blocks the thread until the passed context gets canceled
 func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, stream *esdb.PersistentSubscription, esdbEvent *esdb.PersistentSubscriptionEvent) error {
-	ctx, span, log := telemetry.StartSpan(ctx, "custom_projection.processReceivedEventFromStream")
+	ctx, span, log := telemetry.StartSpan(ctx, "custom_projection."+p.subscriptionGroupName+".processReceivedEventFromStream")
 	defer span.End()
-
-	log = log.With().Str("subscription_group_name", p.subscriptionGroupName).Logger()
 
 	if esdbEvent.SubscriptionDropped != nil {
 		log.Error().Err(esdbEvent.SubscriptionDropped.Error).Msg("Subscription dropped")
@@ -199,6 +197,7 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 		return nil
 	}
 
+	telemetry.SetSpanStr(ctx, "streamID", esdbEvent.EventAppeared.Event.Event.StreamID)
 	telemetry.SetSpanStr(ctx, "esdbEventID", esdbEvent.EventAppeared.Event.Event.EventID.String())
 
 	event, err := hwes.NewEventFromRecordedEvent(esdbEvent.EventAppeared.Event.Event)
@@ -219,7 +218,7 @@ func (p *CustomProjection) processReceivedEventFromStream(ctx context.Context, s
 
 		// end old span, start new one
 		span.End()
-		ctx, span, log = telemetry.StartSpan(ctx, "custom_projection.processReceivedEventFromStream")
+		ctx, span, log = telemetry.StartSpan(ctx, "custom_projection"+p.subscriptionGroupName+".processReceivedEventFromStream")
 		defer span.End()
 
 		// set attributes

@@ -114,6 +114,7 @@ func (p *Projection) onTaskStatusUpdated(ctx context.Context, evt hwes.Event) (e
 	status := (pb.TaskStatus)(value)
 
 	err := p.taskRepo.UpdateTask(ctx, task_repo.UpdateTaskParams{
+		ID:          evt.AggregateID,
 		Status:      hwutil.PtrTo(int32(status)),
 		Consistency: int64(evt.GetVersion()),
 	})

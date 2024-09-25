@@ -24,7 +24,7 @@ WHERE id = @id;
 WITH cet AS (
 	UPDATE tasks
 	SET consistency = @consistency
-	WHERE id = @id
+	WHERE id = @task_id
 )
 INSERT INTO subtasks
 	(id, task_id, name, created_by, done)

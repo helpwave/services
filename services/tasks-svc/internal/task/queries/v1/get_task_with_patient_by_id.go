@@ -22,7 +22,7 @@ func NewGetTaskWithPatientByIDQueryHandler() GetTaskWithPatientByIDQueryHandler 
 			return nil, err
 		}
 		if len(rows) == 0 {
-			return nil, fmt.Errorf("could not find record with ID %s.", taskID.String())
+			return nil, fmt.Errorf("could not find record with ID %s", taskID.String())
 		}
 
 		task := &models.TaskWithPatient{

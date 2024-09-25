@@ -10,13 +10,11 @@ import (
 	ph "tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/projections/patient_postgres_projection"
 	th "tasks-svc/internal/task/handlers"
-	"tasks-svc/internal/task/projections/spicedb"
 	"tasks-svc/internal/task/projections/task_postgres_projection"
 	"tasks-svc/internal/tracking"
 	"time"
 
 	daprd "github.com/dapr/go-sdk/service/grpc"
-	hwspicedb "hwauthz/spicedb"
 	"tasks-svc/internal/bed"
 	patient "tasks-svc/internal/patient/api"
 	"tasks-svc/internal/room"
@@ -36,7 +34,7 @@ func Main(version string, ready func()) {
 
 	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
 
-	authz := hwspicedb.NewSpiceDBAuthZ()
+	// authz := hwspicedb.NewSpiceDBAuthZ()
 
 	eventStore := eventstoredb.SetupEventStoreByEnv()
 	aggregateStore := eventstoredb.NewAggregateStore(eventStore)
@@ -46,7 +44,7 @@ func Main(version string, ready func()) {
 	go projections.StartProjections(
 		ctx,
 		common.Shutdown,
-		spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName),
+		// spicedb.NewSpiceDBProjection(eventStore, authz, ServiceName),
 		task_postgres_projection.NewProjection(eventStore, ServiceName),
 		patient_postgres_projection.NewProjection(eventStore, ServiceName),
 	)

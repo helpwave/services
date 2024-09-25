@@ -16,7 +16,7 @@ const createSubtask = `-- name: CreateSubtask :exec
 WITH cet AS (
 	UPDATE tasks
 	SET consistency = $6
-	WHERE id = $1
+	WHERE id = $2
 )
 INSERT INTO subtasks
 	(id, task_id, name, created_by, done)
