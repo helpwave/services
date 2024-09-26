@@ -225,15 +225,6 @@ func (s ServiceServer) UpdateOrganization(ctx context.Context, req *pb.UpdateOrg
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	/*
-		if err := s.kc.UpdateOrganization(organizationID, hwkc.Organization{
-			Name:        req.LongName,
-			DisplayName: req.LongName,
-		}); err != nil {
-			return nil, err
-		}
-	*/
-
 	err = organizationRepo.UpdateOrganization(ctx, organization_repo.UpdateOrganizationParams{
 		ID:           organizationID,
 		ContactEmail: req.ContactEmail,
@@ -836,24 +827,6 @@ func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.Cre
 
 	organizationName := fmt.Sprintf("Personal organization of %s", userClaims.Name)
 
-	/*
-		organization, err := kc.CreateOrganization(userID.String(), organizationName, true)
-		if err != nil {
-			return nil, err
-		}
-
-		organizationID, err := uuid.Parse(*organization.ID)
-		if err != nil {
-			return nil, fmt.Errorf("cannot parse id from keycloak for organization: %w", err)
-		}
-
-		if err := kc.AddUserToOrganization(userID, organizationID); err != nil {
-			return nil, err
-		}
-	*/
-
-	//
-
 	userRepo := user_repo.New(hwdb.GetDB())
 
 	userResult, err := hwdb.Optional(userRepo.GetUserById)(ctx, userID)
@@ -876,8 +849,6 @@ func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.Cre
 			return nil, err
 		}
 	}
-
-	//
 
 	organization, err := CreateOrganizationAndAddUser(
 		ctx,

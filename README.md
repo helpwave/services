@@ -188,17 +188,22 @@ Only do this in development environments!
 Fake tokens are used just like JWTs: As bearer tokens in the Authorization header of your gRPC requests.
 
 Here is an example fake-token that can be used as the bearer authorization token.
-
 ```text
-eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19
+eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6Im1heC5tdXN0ZXJtYW5uQGhlbHB3YXZlLmRlIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJNYXggTXVzdGVybWFubiIsInByZWZlcnJlZF91c2VybmFtZSI6Im1heC5tdXN0ZXJtYW5uIiwiZ2l2ZW5fbmFtZSI6Ik1heCIsImZhbWlseV9uYW1lIjoiTXVzdGVybWFubiIsIm9yZ2FuaXphdGlvbiI6eyJpZCI6IjNiMjVjNmY1LTQ3MDUtNDA3NC05ZmM2LWE1MGMyOGViYTQwNiIsIm5hbWUiOiJoZWxwd2F2ZSB0ZXN0In19
 ---
 # decoded
 {
-	"sub":"18159713-5d4e-4ad5-94ad-fbb6bb147984",
-	"email":"testine.test@helpwave.de",
-	"name":"Testine Test",
-	"nickname":"testine.test",
-	"organizations":["3b25c6f5-4705-4074-9fc6-a50c28eba406"]
+  "sub": "18159713-5d4e-4ad5-94ad-fbb6bb147984",
+  "email": "max.mustermann@helpwave.de",
+  "email_verified": true,
+  "name": "Max Mustermann",
+  "preferred_username": "max.mustermann",
+  "given_name": "Max",
+  "family_name": "Mustermann",
+  "organization": {
+    "id": "3b25c6f5-4705-4074-9fc6-a50c28eba406",
+    "name": "helpwave test"
+  }
 }
 ````
 
