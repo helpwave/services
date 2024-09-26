@@ -861,6 +861,10 @@ func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.Cre
 		userID,
 	)
 
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.CreatePersonalOrganizationResponse{
 		Id: organization.ID.String(),
 	}, nil
