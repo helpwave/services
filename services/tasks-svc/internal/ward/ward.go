@@ -177,9 +177,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 	if expConsistency != nil && *expConsistency != uint64(result.OldConsistency) {
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
-		// wards are not event-sourced, we thus don't have information on what has changed since
-		// however, wards (currently) only have one field: Name, thus it must have been changed
-		if req.Name != nil {
+		if req.Name != nil && *req.Name != result.OldName {
 			conflicts["name"], err = util.AttributeConflict(
 				wrapperspb.String(result.OldName),
 				wrapperspb.String(*req.Name),
