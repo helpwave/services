@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwtesting"
 	"hwutil"
 	"strconv"
@@ -286,4 +287,49 @@ func TestGetRoomOverviewsByWard(t *testing.T) {
 
 	assert.JSONEq(t, string(expectedRoomAJson), string(resRoomAJson))
 	assert.JSONEq(t, string(expectedRoomBJson), string(resRoomBJson))
+}
+
+func TestUpdateRoomConflict(t *testing.T) {
+	ctx := context.Background()
+	roomClient := roomServiceClient()
+
+	// prepare
+	wardId, _ := prepareWard(t, ctx, "")
+	roomId, initialConsistency := prepareRoom(t, ctx, wardId, "")
+
+	name1 := "This came first"
+
+	// update 1
+	update1Res, err := roomClient.UpdateRoom(ctx, &pb.UpdateRoomRequest{
+		Id:          roomId,
+		Name:        &name1,
+		Consistency: &initialConsistency,
+	})
+	assert.NoError(t, err)
+	assert.Nil(t, update1Res.Conflict)
+	assert.NotEqual(t, initialConsistency, update1Res.Consistency)
+
+	name2 := "This came second"
+
+	// racing update 2
+	update2Res, err := roomClient.UpdateRoom(ctx, &pb.UpdateRoomRequest{
+		Id:          roomId,
+		Name:        &name2,
+		Consistency: &initialConsistency,
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, update1Res.Consistency, update2Res.Consistency)
+	assert.NotNil(t, update2Res.Conflict)
+
+	nameRes := update2Res.Conflict.ConflictingAttributes["name"]
+	assert.NotNil(t, nameRes)
+
+	nameIs := &wrapperspb.StringValue{}
+	assert.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
+	assert.Equal(t, name1, nameIs.Value)
+
+	nameWant := &wrapperspb.StringValue{}
+	assert.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
+	assert.Equal(t, name2, nameWant.Value)
+
 }
