@@ -233,7 +233,10 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 
 			// return conflict
 			return &pb.UpdateTaskTemplateResponse{
-				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
+				Conflict: &commonpb.Conflict{
+					ConflictingAttributes: conflicts,
+					HistoryMissing:        true,
+				},
 				Consistency: common.ConsistencyToken(result.OldConsistency).String(),
 			}, nil
 		}
@@ -312,7 +315,10 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 
 			// return conflict
 			return &pb.UpdateTaskTemplateSubTaskResponse{
-				Conflict:                &commonpb.Conflict{ConflictingAttributes: conflicts},
+				Conflict: &commonpb.Conflict{
+					ConflictingAttributes: conflicts,
+					HistoryMissing:        true,
+				},
 				TaskTemplateConsistency: common.ConsistencyToken(result.OldConsistency).String(),
 			}, nil
 		}
