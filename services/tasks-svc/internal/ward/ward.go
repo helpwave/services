@@ -3,14 +3,17 @@ package ward
 import (
 	"common"
 	"context"
+	commonpb "gen/libs/common/v1"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwdb"
 	"hwutil"
 	"tasks-svc/internal/tracking"
+	"tasks-svc/internal/util"
 	"tasks-svc/repos/ward_repo"
 )
 
@@ -140,8 +143,6 @@ func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsR
 }
 
 func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) (*pb.UpdateWardResponse, error) {
-	wardRepo := ward_repo.New(hwdb.GetDB())
-
 	// TODO: Auth
 
 	id, err := uuid.Parse(req.Id)
@@ -149,7 +150,21 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	consistency, err := wardRepo.UpdateWard(ctx, ward_repo.UpdateWardParams{
+	expConsistency, ok := hwutil.ParseConsistency(req.Consistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "consistency")
+	}
+
+	// Start TX
+	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(), ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer rollback()
+	wardRepo := ward_repo.New(tx)
+
+	// Do Update
+	result, err := wardRepo.UpdateWard(ctx, ward_repo.UpdateWardParams{
 		ID:   id,
 		Name: req.Name,
 	})
@@ -158,11 +173,46 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 		return nil, err
 	}
 
+	// conflict detection
+	if expConsistency != nil && *expConsistency != uint64(result.OldConsistency) {
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		// wards are not event-sourced, we thus don't have information on what has changed since
+		// however, wards (currently) only have one field: Name, thus it must have been changed
+		if req.Name != nil {
+			conflicts["name"], err = util.AttributeConflict(
+				wrapperspb.String(result.OldName),
+				wrapperspb.String(*req.Name),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if len(conflicts) != 0 {
+			// prevent the update
+			if err := hwdb.Error(ctx, tx.Rollback(ctx)); err != nil {
+				return nil, err
+			}
+
+			// return conflict
+			return &pb.UpdateWardResponse{
+				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
+				Consistency: common.ConsistencyToken(result.OldConsistency).String(),
+			}, nil
+		}
+	}
+
+	// Commit Update
+	if err := hwdb.Error(ctx, tx.Commit(ctx)); err != nil {
+		return nil, err
+	}
+
 	tracking.AddWardToRecentActivity(ctx, id.String())
 
 	return &pb.UpdateWardResponse{
-		Conflict:    nil, // TODO
-		Consistency: common.ConsistencyToken(consistency).String(),
+		Conflict:    nil,
+		Consistency: common.ConsistencyToken(result.Consistency).String(),
 	}, nil
 }
 
