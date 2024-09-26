@@ -25,10 +25,14 @@ import '../../../google/protobuf/any.pb.dart' as $19;
 class Conflict extends $pb.GeneratedMessage {
   factory Conflict({
     $core.Map<$core.String, AttributeConflict>? conflictingAttributes,
+    $core.bool? historyMissing,
   }) {
     final $result = create();
     if (conflictingAttributes != null) {
       $result.conflictingAttributes.addAll(conflictingAttributes);
+    }
+    if (historyMissing != null) {
+      $result.historyMissing = historyMissing;
     }
     return $result;
   }
@@ -38,6 +42,7 @@ class Conflict extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Conflict', package: const $pb.PackageName(_omitMessageNames ? '' : 'libs.common.v1'), createEmptyInstance: create)
     ..m<$core.String, AttributeConflict>(1, _omitFieldNames ? '' : 'conflictingAttributes', entryClassName: 'Conflict.ConflictingAttributesEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: AttributeConflict.create, valueDefaultOrMaker: AttributeConflict.getDefault, packageName: const $pb.PackageName('libs.common.v1'))
+    ..aOB(2, _omitFieldNames ? '' : 'historyMissing')
     ..hasRequiredFields = false
   ;
 
@@ -62,9 +67,19 @@ class Conflict extends $pb.GeneratedMessage {
   static Conflict getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Conflict>(create);
   static Conflict? _defaultInstance;
 
-  /// might be empty, in that case we don't have the history to calculate the conflicting attributes
+  /// when history_missing is true, this map will contain elements, that might not have been updated since you have seen them last.
+  /// it is then on you to compare these against your view of the world
   @$pb.TagNumber(1)
   $core.Map<$core.String, AttributeConflict> get conflictingAttributes => $_getMap(0);
+
+  @$pb.TagNumber(2)
+  $core.bool get historyMissing => $_getBF(1);
+  @$pb.TagNumber(2)
+  set historyMissing($core.bool v) { $_setBool(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasHistoryMissing() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearHistoryMissing() => clearField(2);
 }
 
 class AttributeConflict extends $pb.GeneratedMessage {

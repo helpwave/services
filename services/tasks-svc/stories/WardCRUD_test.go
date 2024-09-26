@@ -53,6 +53,7 @@ func TestCreateUpdateGetWard(t *testing.T) {
 	}
 	updateRes, err := wardClient.UpdateWard(ctx, updateReq)
 	assert.NoError(t, err, "could not update ward after creation")
+	assert.Nil(t, updateRes.Conflict)
 
 	assert.NotEqual(t, getWardRes.Consistency, updateRes.Consistency, "consistency has not changed in update")
 

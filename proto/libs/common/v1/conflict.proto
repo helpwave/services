@@ -14,8 +14,10 @@ option go_package = "gen/libs/common/v1";
 // If WAS == IS, or WANT and IS are merge-able (e.g., requested action changes "name", and another action has changed "age"), no conflict arises.
 // Warning: If a previous action has deleted the resource, an error is raised, and no conflict returned.
 message Conflict {
-  // might be empty, in that case we don't have the history to calculate the conflicting attributes
+  // when history_missing is true, this map will contain elements, that might not have been updated since you have seen them last.
+  // it is then on you to compare these against your view of the world
   map<string, AttributeConflict> conflicting_attributes = 1;
+  bool history_missing = 2;
 }
 
 message AttributeConflict {

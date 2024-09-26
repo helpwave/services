@@ -61,6 +61,7 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	}
 	updateRes, err := bedClient.UpdateBed(ctx, updateReq)
 	assert.NoError(t, err, "could not update bed after creation")
+	assert.Nil(t, updateRes.Conflict)
 
 	assert.NotEqual(t, getBedRes.Consistency, updateRes.Consistency, "consistency has not changed in update")
 

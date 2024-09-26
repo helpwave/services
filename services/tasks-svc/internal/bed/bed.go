@@ -230,6 +230,10 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 
 	// conflict detection
 	if expConsistency != nil && *expConsistency != uint64(result.OldConsistency) {
+		// bed is not event sourced yet and has more than one field,
+		// thus we are not able to pinpoint conflicts to a field, we only know *some* update has happened since
+		// for convenience we are filtering out obvious non-conflicts, where the update is the same as the is state, or the field was not changed
+
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
 		if req.Name != nil && *req.Name != result.OldName {
@@ -260,13 +264,15 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 
 			// return conflict
 			return &pb.UpdateBedResponse{
-				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
+				Conflict: &commonpb.Conflict{
+					ConflictingAttributes: conflicts,
+					HistoryMissing:        true,
+				},
 				Consistency: common.ConsistencyToken(result.OldConsistency).String(),
 			}, nil
 		}
 	}
 
-	// commit update
 	if err := hwdb.Error(ctx, tx.Commit(ctx)); err != nil {
 		return nil, err
 	}

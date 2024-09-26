@@ -7,6 +7,9 @@ export class Conflict extends jspb.Message {
   getConflictingAttributesMap(): jspb.Map<string, AttributeConflict>;
   clearConflictingAttributesMap(): Conflict;
 
+  getHistoryMissing(): boolean;
+  setHistoryMissing(value: boolean): Conflict;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Conflict.AsObject;
   static toObject(includeInstance: boolean, msg: Conflict): Conflict.AsObject;
@@ -18,6 +21,7 @@ export class Conflict extends jspb.Message {
 export namespace Conflict {
   export type AsObject = {
     conflictingAttributesMap: Array<[string, AttributeConflict.AsObject]>,
+    historyMissing: boolean,
   }
 }
 

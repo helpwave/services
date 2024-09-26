@@ -99,7 +99,8 @@ proto.libs.common.v1.Conflict.prototype.toObject = function(opt_includeInstance)
  */
 proto.libs.common.v1.Conflict.toObject = function(includeInstance, msg) {
   var f, obj = {
-    conflictingAttributesMap: (f = msg.getConflictingAttributesMap()) ? f.toObject(includeInstance, proto.libs.common.v1.AttributeConflict.toObject) : []
+    conflictingAttributesMap: (f = msg.getConflictingAttributesMap()) ? f.toObject(includeInstance, proto.libs.common.v1.AttributeConflict.toObject) : [],
+    historyMissing: jspb.Message.getBooleanFieldWithDefault(msg, 2, false)
   };
 
   if (includeInstance) {
@@ -142,6 +143,10 @@ proto.libs.common.v1.Conflict.deserializeBinaryFromReader = function(msg, reader
         jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readMessage, proto.libs.common.v1.AttributeConflict.deserializeBinaryFromReader, "", new proto.libs.common.v1.AttributeConflict());
          });
       break;
+    case 2:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setHistoryMissing(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -175,6 +180,13 @@ proto.libs.common.v1.Conflict.serializeBinaryToWriter = function(message, writer
   if (f && f.getLength() > 0) {
     f.serializeBinary(1, writer, jspb.BinaryWriter.prototype.writeString, jspb.BinaryWriter.prototype.writeMessage, proto.libs.common.v1.AttributeConflict.serializeBinaryToWriter);
   }
+  f = message.getHistoryMissing();
+  if (f) {
+    writer.writeBool(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -198,6 +210,24 @@ proto.libs.common.v1.Conflict.prototype.getConflictingAttributesMap = function(o
 proto.libs.common.v1.Conflict.prototype.clearConflictingAttributesMap = function() {
   this.getConflictingAttributesMap().clear();
   return this;
+};
+
+
+/**
+ * optional bool history_missing = 2;
+ * @return {boolean}
+ */
+proto.libs.common.v1.Conflict.prototype.getHistoryMissing = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 2, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.libs.common.v1.Conflict} returns this
+ */
+proto.libs.common.v1.Conflict.prototype.setHistoryMissing = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 2, value);
 };
 
 

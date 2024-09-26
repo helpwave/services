@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwtesting"
 	"hwutil"
 	"testing"
@@ -125,5 +126,128 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	assert.Equal(t, createStRes.Id, template.Subtasks[0].Id)
 	assert.Equal(t, t.Name()+" ST 2", template.Subtasks[0].Name)
 	assert.Equal(t, updateStRes.TaskTemplateConsistency, template.Consistency)
+
+}
+
+func TestUpdateTaskTemplateConflict(t *testing.T) {
+	ctx := context.Background()
+	taskTemplateClient := taskTemplateServiceClient()
+
+	ttRes, err := taskTemplateClient.CreateTaskTemplate(ctx, &pb.CreateTaskTemplateRequest{
+		Name:        t.Name(),
+		Description: nil,
+		WardId:      nil,
+		Subtasks:    nil,
+	})
+	assert.NoError(t, err)
+
+	ttId := ttRes.Id
+	initialConsistency := ttRes.Consistency
+
+	name1 := "This came first"
+
+	// update 1
+	update1Res, err := taskTemplateClient.UpdateTaskTemplate(ctx, &pb.UpdateTaskTemplateRequest{
+		Id:          ttId,
+		Name:        &name1,
+		Description: &name1,
+		Consistency: &initialConsistency,
+	})
+	assert.NoError(t, err)
+	assert.Nil(t, update1Res.Conflict)
+	assert.NotEqual(t, initialConsistency, update1Res.Consistency)
+
+	name2 := "This came second"
+
+	// racing update 2
+	update2Res, err := taskTemplateClient.UpdateTaskTemplate(ctx, &pb.UpdateTaskTemplateRequest{
+		Id:          ttId,
+		Name:        &name2,
+		Description: &name2,
+		Consistency: &initialConsistency,
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, update1Res.Consistency, update2Res.Consistency)
+	assert.NotNil(t, update2Res.Conflict)
+
+	nameRes := update2Res.Conflict.ConflictingAttributes["name"]
+	assert.NotNil(t, nameRes)
+
+	nameIs := &wrapperspb.StringValue{}
+	assert.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
+	assert.Equal(t, name1, nameIs.Value)
+
+	nameWant := &wrapperspb.StringValue{}
+	assert.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
+	assert.Equal(t, name2, nameWant.Value)
+
+	descrRes := update2Res.Conflict.ConflictingAttributes["description"]
+	assert.NotNil(t, descrRes)
+
+	descrIs := &wrapperspb.StringValue{}
+	assert.NoError(t, descrRes.Is.UnmarshalTo(descrIs))
+	assert.Equal(t, name1, descrIs.Value)
+
+	descrWant := &wrapperspb.StringValue{}
+	assert.NoError(t, descrRes.Want.UnmarshalTo(descrWant))
+	assert.Equal(t, name2, descrWant.Value)
+
+}
+
+func TestUpdateTaskTemplateSubTaskConflict(t *testing.T) {
+	ctx := context.Background()
+	taskTemplateClient := taskTemplateServiceClient()
+
+	ttRes, err := taskTemplateClient.CreateTaskTemplate(ctx, &pb.CreateTaskTemplateRequest{
+		Name:        t.Name(),
+		Description: nil,
+		WardId:      nil,
+		Subtasks:    nil,
+	})
+	assert.NoError(t, err)
+
+	stRes, err := taskTemplateClient.CreateTaskTemplateSubTask(ctx, &pb.CreateTaskTemplateSubTaskRequest{
+		TaskTemplateId: ttRes.Id,
+		Name:           t.Name(),
+	})
+	assert.NoError(t, err)
+
+	stId := stRes.Id
+	initialConsistency := stRes.TaskTemplateConsistency
+
+	name1 := "This came first"
+
+	// update 1
+	update1Res, err := taskTemplateClient.UpdateTaskTemplateSubTask(ctx, &pb.UpdateTaskTemplateSubTaskRequest{
+		SubtaskId:               stId,
+		Name:                    &name1,
+		TaskTemplateConsistency: &initialConsistency,
+	})
+	assert.NoError(t, err)
+	assert.Nil(t, update1Res.Conflict)
+	assert.NotEqual(t, initialConsistency, update1Res.TaskTemplateConsistency)
+
+	name2 := "This came second"
+
+	// racing update 2
+	update2Res, err := taskTemplateClient.UpdateTaskTemplateSubTask(ctx, &pb.UpdateTaskTemplateSubTaskRequest{
+		SubtaskId:               stId,
+		Name:                    &name2,
+		TaskTemplateConsistency: &initialConsistency,
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, update1Res.TaskTemplateConsistency, update2Res.TaskTemplateConsistency)
+	assert.NotNil(t, update2Res.Conflict)
+
+	nameRes := update2Res.Conflict.ConflictingAttributes["name"]
+	assert.NotNil(t, nameRes)
+
+	nameIs := &wrapperspb.StringValue{}
+	assert.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
+	assert.Equal(t, name1, nameIs.Value)
+
+	nameWant := &wrapperspb.StringValue{}
+	assert.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
+	assert.Equal(t, name2, nameWant.Value)
 
 }
