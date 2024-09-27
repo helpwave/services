@@ -22,5 +22,5 @@ message Conflict {
 
 message AttributeConflict {
   google.protobuf.Any is = 1; // CAUTION: may be missing, if the is underlying value is missing (e.g., unassigned beds)
-  google.protobuf.Any want = 2;
+  google.protobuf.Any want = 2; // CAUTION: may be missing, if the requested value is missing (e.g., unassignment of a bed)
 }

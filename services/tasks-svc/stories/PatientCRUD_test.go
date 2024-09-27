@@ -837,3 +837,87 @@ func TestAssignBedConflict(t *testing.T) {
 		})
 	}
 }
+
+func TestUnassignBedConflict(t *testing.T) {
+	ctx := context.Background()
+	patientClient := patientServiceClient()
+
+	wardId, _ := prepareWard(t, ctx, "")
+	roomId, _ := prepareRoom(t, ctx, wardId, "")
+
+	A, _ := prepareBed(t, ctx, roomId, "A")
+	B, _ := prepareBed(t, ctx, roomId, "B")
+
+	testMatrix := []struct {
+		was            string
+		is             *string
+		expectConflict bool
+	}{
+		{A, &B, true},
+		{A, &A, false},
+		{A, nil, false},
+	}
+
+	for i, o := range testMatrix {
+		t.Run(t.Name()+"_"+strconv.Itoa(i), func(t *testing.T) {
+			// WAS
+			patientRes, err := patientClient.CreatePatient(ctx, &pb.CreatePatientRequest{
+				HumanReadableIdentifier: t.Name(),
+				Notes:                   hwutil.PtrTo("A patient for test " + t.Name()),
+			})
+			assert.NoError(t, err)
+			time.Sleep(time.Millisecond * 100)
+
+			initialAssignment, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
+				Id:          patientRes.Id,
+				BedId:       o.was,
+				Consistency: &patientRes.Consistency,
+			})
+			assert.NoError(t, err)
+			assert.Nil(t, initialAssignment.Conflict)
+
+			id := patientRes.Id
+			initialConsistency := initialAssignment.Consistency
+
+			time.Sleep(time.Millisecond * 100)
+
+			// IS
+			if o.is != nil {
+				a, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
+					Id:          id,
+					BedId:       *o.is,
+					Consistency: &initialConsistency,
+				})
+				assert.NoError(t, err)
+				assert.Nil(t, a.Conflict)
+			} else {
+				u, err := patientClient.UnassignBed(ctx, &pb.UnassignBedRequest{
+					Id:          id,
+					Consistency: &initialConsistency,
+				})
+				assert.NoError(t, err)
+				assert.Nil(t, u.Conflict)
+			}
+			time.Sleep(time.Millisecond * 100)
+
+			// WANT
+			updateRes, err := patientClient.UnassignBed(ctx, &pb.UnassignBedRequest{
+				Id:          id,
+				Consistency: &initialConsistency,
+			})
+			assert.NoError(t, err)
+
+			// EXPECT
+			assert.Equal(t, o.expectConflict, updateRes.Conflict != nil)
+			if o.expectConflict {
+				conflict := updateRes.Conflict.ConflictingAttributes["bed_id"]
+				assert.NotNil(t, conflict)
+				exp := ""
+				if o.is != nil {
+					exp = "is:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"" + *o.is + "\"}}"
+				}
+				assert.Equal(t, exp, conflict.String())
+			}
+		})
+	}
+}

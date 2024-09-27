@@ -91,8 +91,8 @@ type AttributeConflict struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Is   *anypb.Any `protobuf:"bytes,1,opt,name=is,proto3" json:"is,omitempty"`
-	Want *anypb.Any `protobuf:"bytes,2,opt,name=want,proto3" json:"want,omitempty"`
+	Is   *anypb.Any `protobuf:"bytes,1,opt,name=is,proto3" json:"is,omitempty"`     // CAUTION: may be missing, if the is underlying value is missing (e.g., unassigned beds)
+	Want *anypb.Any `protobuf:"bytes,2,opt,name=want,proto3" json:"want,omitempty"` // CAUTION: may be missing, if the requested value is missing (e.g., unassignment of a bed)
 }
 
 func (x *AttributeConflict) Reset() {

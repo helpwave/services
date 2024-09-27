@@ -544,9 +544,49 @@ func (s *PatientGrpcService) UnassignBed(ctx context.Context, req *pb.UnassignBe
 		return nil, err
 	}
 
-	consistency, err := s.handlers.Commands.V1.UnassignBed(ctx, patientID)
-	if err != nil {
-		return nil, err
+	expConsistency, ok := hwutil.ParseConsistency(req.Consistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "consistency")
+	}
+
+	var consistency uint64
+
+	for i := 0; true; i++ {
+		if i > 10 {
+			log.Warn().Msg("AssignBed: conflict circuit breaker triggered")
+			return nil, fmt.Errorf("failed conflict resolution")
+		}
+
+		c, conflict, err := s.handlers.Commands.V1.UnassignBed(ctx, patientID, expConsistency)
+		if err != nil {
+			return nil, err
+		}
+		consistency = c
+		if conflict == nil {
+			break
+		}
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		// TODO: find a generic approach
+		if conflict.Is.BedID.Valid && conflict.Was.BedID != conflict.Is.BedID {
+			conflicts["bed_id"], err = util.AttributeConflict(
+				wrapperspb.String(conflict.Is.BedID.UUID.String()),
+				nil,
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if len(conflicts) != 0 {
+			return &pb.UnassignBedResponse{
+				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
+				Consistency: strconv.FormatUint(conflict.Consistency, 10),
+			}, nil
+		}
+
+		// no conflict? retry with new consistency
+		expConsistency = &conflict.Consistency
 	}
 
 	log.Info().Str("patientID", patientID.String()).Msg("unassigned bed from patient")
