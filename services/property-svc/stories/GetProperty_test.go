@@ -5,9 +5,9 @@ import (
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"hwtesting"
 	"hwutil"
 	"testing"
-	"time"
 )
 
 // TestTaskGetPropertyAlwaysIncluded:
@@ -46,7 +46,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get new Property
@@ -85,7 +85,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Property Again
@@ -124,7 +124,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Property Again
@@ -164,7 +164,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Property Again
@@ -219,7 +219,7 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 
 	createVersion := createResponse.Consistency
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get new Property
@@ -255,7 +255,7 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 
 	assert.NotEqual(t, readVersion, updatedVersion, "update does not change consistency")
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get updated Property

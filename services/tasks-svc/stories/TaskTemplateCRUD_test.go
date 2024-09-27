@@ -7,7 +7,6 @@ import (
 	"hwtesting"
 	"hwutil"
 	"testing"
-	"time"
 )
 
 func getTaskTemplate(t *testing.T, ctx context.Context, id string) *pb.GetAllTaskTemplatesResponse_TaskTemplate {
@@ -44,7 +43,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 
 	templateId := createRes.GetId()
 
-	time.Sleep(time.Millisecond * 200)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// get new template
@@ -73,7 +72,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 
 	assert.NotEqual(t, template.Consistency, updateRes.Consistency, "consistency has not changed in update")
 
-	time.Sleep(time.Second)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// get updated template

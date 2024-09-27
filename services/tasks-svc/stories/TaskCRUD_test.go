@@ -44,7 +44,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	taskId := createRes.GetId()
 
-	time.Sleep(time.Millisecond * 100)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// get new task
 
@@ -98,7 +98,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	assert.NotEqual(t, task.Consistency, updateRes.Consistency, "consistency has not changed in update")
 
-	time.Sleep(time.Millisecond * 100)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// get updated task
 
@@ -122,7 +122,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEqual(t, task.Consistency, createStRes.TaskConsistency, "consistency was not updated")
 
-	time.Sleep(time.Millisecond * 100)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// get updated task
 
@@ -157,7 +157,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	})
 	assert.NoError(t, err)
 
-	time.Sleep(time.Millisecond * 100)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// get updated task
 
@@ -186,7 +186,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.NotEqual(t, task.Consistency, assignRes.Consistency, "consistency was not updated")
-	time.Sleep(time.Millisecond * 100)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// get updated task
 
@@ -208,7 +208,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.NotEqual(t, task.Consistency, unassignRes.Consistency, "consistency was not updated")
-	time.Sleep(time.Millisecond * 100)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// get updated task
 
@@ -228,7 +228,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.NotEqual(t, task.Consistency, rmDueRes.Consistency, "consistency was not updated")
-	time.Sleep(time.Millisecond * 100)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// get updated task
 
@@ -281,7 +281,7 @@ func TestGetTasksByPatient(t *testing.T) {
 		subtaskMap[taskRes.Id] = sts
 	}
 
-	time.Sleep(time.Millisecond * 100)
+	hwtesting.WaitForProjectionsToSettle()
 
 	res, err := taskClient.GetTasksByPatient(ctx, &pb.GetTasksByPatientRequest{PatientId: patientId})
 	assert.NoError(t, err)
@@ -368,7 +368,7 @@ func TestGetAssignedTasks(t *testing.T) {
 		subtaskMap[taskRes.Id] = sts
 	}
 
-	time.Sleep(time.Millisecond * 100)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// client for userid
 	customTaskClient := pb.NewTaskServiceClient(hwtesting.GetGrpcConn(userID.String()))

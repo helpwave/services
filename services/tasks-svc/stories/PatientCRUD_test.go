@@ -10,7 +10,6 @@ import (
 	"hwutil"
 	"strconv"
 	"testing"
-	"time"
 )
 
 func TestCreateUpdateGetPatient(t *testing.T) {
@@ -429,7 +428,7 @@ func TestGetPatientList(t *testing.T) {
 	})
 	assert.NoError(t, err)
 
-	time.Sleep(time.Second)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// GetPatientList
@@ -540,7 +539,7 @@ func TestGetPatientDetails(t *testing.T) {
 	createRes, err := patientClient.CreatePatient(ctx, createReq)
 	assert.NoError(t, err, "could not create patient")
 
-	time.Sleep(time.Millisecond * 100)
+	hwtesting.WaitForProjectionsToSettle()
 
 	patientId := createRes.GetId()
 
@@ -589,7 +588,7 @@ func TestGetPatientDetails(t *testing.T) {
 		subtaskMap[taskRes.Id] = sts
 	}
 
-	time.Sleep(time.Millisecond * 100)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// GetPatientDetails
@@ -660,7 +659,7 @@ func TestGetRecentPatients(t *testing.T) {
 		}
 	}
 
-	time.Sleep(time.Millisecond * 500)
+	hwtesting.WaitForProjectionsToSettle()
 
 	recent, err := patientClient.GetRecentPatients(ctx, &pb.GetRecentPatientsRequest{})
 	assert.NoError(t, err)

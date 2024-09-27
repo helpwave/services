@@ -9,7 +9,6 @@ import (
 	"hwutil"
 	"strconv"
 	"testing"
-	"time"
 )
 
 // TestCreateUpdateGetWard:
@@ -118,17 +117,17 @@ func TestGetRecentWards(t *testing.T) {
 		}
 	}
 
-	time.Sleep(time.Millisecond * 100)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// touch each ward, to push it into RecentWards
 	for _, wardId := range wardIds {
 		res, err := wardClient.UpdateWard(ctx, &pb.UpdateWardRequest{Id: wardId})
 		assert.NoError(t, err, "could not update ward %s", wardId)
 		consistencies[wardId] = res.Consistency
-		time.Sleep(time.Millisecond * 500)
+		hwtesting.WaitForProjectionsToSettle()
 	}
 
-	time.Sleep(time.Second)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// GetRecentWards
 	res, err := wardClient.GetRecentWards(ctx, &pb.GetRecentWardsRequest{})

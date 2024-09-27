@@ -6,10 +6,10 @@ import (
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"hwtesting"
 	"hwutil"
 	"regexp"
 	"testing"
-	"time"
 )
 
 // TestGetPropertiesBySubjectType:
@@ -92,7 +92,7 @@ func TestGetPropertiesBySubjectType(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Properties

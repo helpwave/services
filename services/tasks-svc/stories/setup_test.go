@@ -52,8 +52,7 @@ func TestMain(m *testing.M) {
 	go service.Main("story hwtesting", func() { ready <- true })
 	<-ready
 
-	// wait for projections to be ready
-	time.Sleep(time.Second * 2)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// Run tests
 	exitCode := m.Run()
@@ -125,6 +124,6 @@ func preparePatient(t *testing.T, ctx context.Context, suffix string) (patientID
 		Notes:                   hwutil.PtrTo("A patient for test " + t.Name()),
 	})
 	assert.NoError(t, err, "preparePatient: could not create patient")
-	time.Sleep(time.Second)
+	hwtesting.WaitForProjectionsToSettle()
 	return res.Id
 }

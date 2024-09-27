@@ -4,10 +4,10 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/stretchr/testify/assert"
+	"hwtesting"
 	"hwutil"
 	"strconv"
 	"testing"
-	"time"
 )
 
 // TestCreateUpdateGetBed:
@@ -97,7 +97,7 @@ func TestGetBedByPatient(t *testing.T) {
 		Consistency: nil,
 	})
 	assert.NoError(t, err, "could not assign bed to patient")
-	time.Sleep(time.Second)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// GetBedByPatient
 	res, err := bedServiceClient().GetBedByPatient(ctx, &pb.GetBedByPatientRequest{

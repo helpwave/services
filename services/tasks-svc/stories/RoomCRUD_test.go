@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/stretchr/testify/assert"
+	"hwtesting"
 	"hwutil"
 	"strconv"
 	"testing"
-	"time"
 )
 
 // TestCreateUpdateGetRoom:
@@ -193,7 +193,7 @@ func TestGetRoomOverviewsByWard(t *testing.T) {
 	})
 	assert.NoError(t, err, "could create task for patient 1")
 
-	time.Sleep(time.Second * 3)
+	hwtesting.WaitForProjectionsToSettle()
 
 	res, err := roomServiceClient().GetRoomOverviewsByWard(ctx, &pb.GetRoomOverviewsByWardRequest{
 		Id: wardId,

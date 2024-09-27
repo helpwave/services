@@ -5,9 +5,9 @@ import (
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"hwtesting"
 	"hwutil"
 	"testing"
-	"time"
 )
 
 // TestCreateAttachUpdateTextProperty:
@@ -40,7 +40,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get new Property
@@ -100,7 +100,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Values
@@ -142,7 +142,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Values
@@ -211,8 +211,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		return
 	}
 
-	// FIXME: I hate this
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get new Property
@@ -276,7 +275,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Values
@@ -318,7 +317,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Values
@@ -391,7 +390,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get new Property
@@ -459,7 +458,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Values
@@ -504,7 +503,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Values
@@ -570,7 +569,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get new Property
@@ -602,7 +601,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Values
@@ -650,7 +649,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Property
@@ -681,7 +680,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Values
@@ -745,7 +744,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get new Property
@@ -780,7 +779,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Values
@@ -829,7 +828,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Property
@@ -863,7 +862,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Values

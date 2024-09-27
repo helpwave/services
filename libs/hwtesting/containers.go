@@ -5,6 +5,7 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"sync"
+	"time"
 )
 
 type ContainerOpt int
@@ -39,15 +40,16 @@ func StartContainers(ctx context.Context, opts ...ContainerOpt) (endpoints Endpo
 	for _, opt := range opts {
 		wg.Add(1)
 		var f func(ctx context.Context) (string, func())
-		if opt == Postgres {
+		switch opt {
+		case Postgres:
 			f = startPostgres
-		} else if opt == Eventstore {
+		case Eventstore:
 			f = startEventstore
-		} else if opt == Redis {
+		case Redis:
 			f = startRedis
-		} else if opt == Spice {
+		case Spice:
 			f = startSpiceDB
-		} else {
+		default:
 			panic("unknown ContainerOpt provided")
 		}
 
@@ -74,4 +76,9 @@ func StartContainers(ctx context.Context, opts ...ContainerOpt) (endpoints Endpo
 	}
 
 	return endpoints, teardown
+}
+
+func WaitForProjectionsToSettle() {
+	// might be worth improving this in the future
+	time.Sleep(time.Millisecond * 200)
 }

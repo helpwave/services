@@ -43,8 +43,7 @@ func TestMain(m *testing.M) {
 	go service.Main("story hwtesting", func() { ready <- true })
 	<-ready
 
-	// wait for projections to be ready
-	time.Sleep(time.Second * 2)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// Run tests
 	exitCode := m.Run()
