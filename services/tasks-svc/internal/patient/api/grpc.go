@@ -4,11 +4,13 @@ import (
 	"common"
 	"context"
 	"fmt"
+	commonpb "gen/libs/common/v1"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwdb"
 	"hwdb/locale"
 	"hwes"
@@ -16,6 +18,7 @@ import (
 	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/models"
 	"tasks-svc/internal/tracking"
+	"tasks-svc/internal/util"
 	"tasks-svc/repos/bed_repo"
 )
 
@@ -385,15 +388,55 @@ func (s *PatientGrpcService) UpdatePatient(ctx context.Context, req *pb.UpdatePa
 		return nil, err
 	}
 
-	consistency, err := s.handlers.Commands.V1.UpdatePatient(ctx, patientID, req.HumanReadableIdentifier, req.Notes)
+	expConsistency, ok := hwutil.ParseConsistency(req.Consistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "consistency")
+	}
+
+	consistency, conflict, err := s.handlers.Commands.V1.UpdatePatient(ctx, patientID, expConsistency, req.HumanReadableIdentifier, req.Notes)
 	if err != nil {
 		return nil, err
+	}
+	if conflict != nil {
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		// TODO: find a generic approach
+		hriUpdateRequested := req.HumanReadableIdentifier != nil && *req.HumanReadableIdentifier != conflict.Is.HumanReadableIdentifier
+		hriAlreadyUpdated := conflict.Was.HumanReadableIdentifier != conflict.Is.HumanReadableIdentifier
+		if hriUpdateRequested && hriAlreadyUpdated {
+			conflicts["human_readable_identifier"], err = util.AttributeConflict(
+				wrapperspb.String(conflict.Is.HumanReadableIdentifier),
+				wrapperspb.String(*req.HumanReadableIdentifier),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		notesUpdateRequested := req.Notes != nil && *req.Notes != conflict.Is.Notes
+		notesAlreadyUpdated := conflict.Was.Notes != conflict.Is.Notes
+		if notesUpdateRequested && notesAlreadyUpdated {
+			conflicts["notes"], err = util.AttributeConflict(
+				wrapperspb.String(conflict.Is.Notes),
+				wrapperspb.String(*req.Notes),
+			)
+			if err != nil {
+				return nil, fmt.Errorf("could not marshall notes conflict: %w", err)
+			}
+		}
+
+		if len(conflicts) != 0 {
+			return &pb.UpdatePatientResponse{
+				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
+				Consistency: common.ConsistencyToken(conflict.Consistency).String(),
+			}, nil
+		}
 	}
 
 	tracking.AddPatientToRecentActivity(ctx, patientID.String())
 
 	return &pb.UpdatePatientResponse{
-		Conflict:    nil, // TODO
+		Conflict:    nil,
 		Consistency: consistency.String(),
 	}, nil
 }

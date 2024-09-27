@@ -90,6 +90,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	readmitRes, err := patientClient.ReadmitPatient(ctx, &pb.ReadmitPatientRequest{PatientId: patientId})
 	assert.NoError(t, err)
 	assert.NotEqual(t, getPatientRes.Consistency, readmitRes.Consistency)
+	time.Sleep(time.Millisecond * 100)
 
 	//
 	// get re-admitted patient
@@ -680,4 +681,62 @@ func TestGetRecentPatients(t *testing.T) {
 	assert.Subset(t, ids, foundIds)
 	assert.NotContains(t, foundIds, ids[0]) // thrown out
 
+}
+
+func TestUpdatePatientConflict(t *testing.T) {
+	ctx := context.Background()
+	patientClient := patientServiceClient()
+
+	A := "A"
+	B := "B"
+	C := "C"
+
+	testMatrix := []struct {
+		was            string
+		is             string
+		want           *string
+		expectConflict bool
+	}{
+		{A, B, nil, false},
+		{A, B, &B, false},
+		{A, B, &C, true},
+		{A, A, &C, false},
+	}
+
+	for i, o := range testMatrix {
+		t.Run(t.Name()+" "+strconv.Itoa(i), func(t *testing.T) {
+			// WAS
+			patientRes, err := patientClient.CreatePatient(ctx, &pb.CreatePatientRequest{
+				HumanReadableIdentifier: o.was,
+				Notes:                   hwutil.PtrTo("A patient for test " + t.Name()),
+			})
+			assert.NoError(t, err)
+
+			id := patientRes.Id
+			initialConsistency := patientRes.Consistency
+			time.Sleep(time.Millisecond * 100)
+
+			// IS
+			_, err = patientClient.UpdatePatient(ctx, &pb.UpdatePatientRequest{
+				Id:                      id,
+				HumanReadableIdentifier: &o.is,
+				Notes:                   hwutil.PtrTo("Update"),
+				Consistency:             &initialConsistency,
+			})
+			assert.NoError(t, err)
+			time.Sleep(time.Millisecond * 100)
+
+			// WANT
+			updateRes, err := patientClient.UpdatePatient(ctx, &pb.UpdatePatientRequest{
+				Id:                      id,
+				HumanReadableIdentifier: o.want,
+				Notes:                   hwutil.PtrTo("Update"),
+				Consistency:             &initialConsistency,
+			})
+			assert.NoError(t, err)
+
+			// EXPECT
+			assert.Equal(t, o.expectConflict, updateRes.Conflict != nil)
+		})
+	}
 }

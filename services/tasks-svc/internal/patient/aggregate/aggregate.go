@@ -31,6 +31,28 @@ func LoadPatientAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.U
 	return patientAggregate, nil
 }
 
+func LoadPatientAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore, id uuid.UUID, pauseAt *uint64) (*PatientAggregate, *models.Patient, error) {
+	patientAggregate := NewPatientAggregate(id)
+	var snapshot *models.Patient
+
+	if pauseAt != nil {
+		//  load pauseAt+1-many events (version is 0-indexed)
+		if err := as.LoadN(ctx, patientAggregate, *pauseAt+1); err != nil {
+			return nil, nil, err
+		}
+
+		patientCopy := *patientAggregate.Patient // deref copies model
+		snapshot = &patientCopy
+	}
+
+	// continue loading all other events
+	if err := as.Load(ctx, patientAggregate); err != nil {
+		return nil, nil, err
+	}
+
+	return patientAggregate, snapshot, nil
+}
+
 func (a *PatientAggregate) initEventListeners() {
 	a.RegisterEventListener(patientEventsV1.PatientCreated, a.onPatientCreated)
 	a.RegisterEventListener(patientEventsV1.BedAssigned, a.onBedAssigned)

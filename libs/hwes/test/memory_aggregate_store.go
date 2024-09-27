@@ -5,6 +5,7 @@ import (
 	"context"
 	"github.com/stretchr/testify/assert"
 	"hwes"
+	"math"
 	"testing"
 )
 
@@ -18,16 +19,33 @@ func NewAggregateStore() *AggregateStore {
 	return &AggregateStore{streams: make(map[string][]hwes.Event)}
 }
 
-func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) error {
+func (a *AggregateStore) LoadN(_ context.Context, aggregate hwes.Aggregate, N uint64) error {
 	events := a.streams[aggregate.GetTypeID()]
 
-	for _, event := range events {
+	skipUpTo := uint64(0)
+	aE := aggregate.GetAppliedEvents()
+	if len(aE) != 0 {
+		skipUpTo = aE[len(aE)-1].Version + 1
+	}
+
+	for i, event := range events {
+		if uint64(i) < skipUpTo {
+			continue
+		}
+
+		if uint64(i) >= N {
+			break
+		}
 		if err := aggregate.Progress(event); err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
+
+func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) error {
+	return a.LoadN(ctx, aggregate, math.MaxUint64)
 }
 
 func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) (common.ConsistencyToken, error) {
