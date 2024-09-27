@@ -39,6 +39,28 @@ func LoadTaskAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID
 	return taskAggregate, nil
 }
 
+func LoadTaskAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore, id uuid.UUID, pauseAt *uint64) (*TaskAggregate, *models.Task, error) {
+	taskAggregate := NewTaskAggregate(id)
+	var snapshot *models.Task
+
+	if pauseAt != nil {
+		//  load pauseAt+1-many events (version is 0-indexed)
+		if err := as.LoadN(ctx, taskAggregate, *pauseAt+1); err != nil {
+			return nil, nil, err
+		}
+
+		task := *taskAggregate.Task // deref copies model
+		snapshot = &task
+	}
+
+	// continue loading all other events
+	if err := as.Load(ctx, taskAggregate); err != nil {
+		return nil, nil, err
+	}
+
+	return taskAggregate, snapshot, nil
+}
+
 func (a *TaskAggregate) initEventListeners() {
 	a.
 		RegisterEventListener(taskEventsV1.TaskCreated, a.onTaskCreated).

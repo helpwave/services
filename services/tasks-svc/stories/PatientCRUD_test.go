@@ -9,6 +9,7 @@ import (
 	"hwtesting"
 	"hwutil"
 	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -691,6 +692,7 @@ func TestUpdatePatientConflict(t *testing.T) {
 	B := "B"
 	C := "C"
 
+	// Only testing HumanReadableIdentifier
 	testMatrix := []struct {
 		was            string
 		is             string
@@ -740,9 +742,9 @@ func TestUpdatePatientConflict(t *testing.T) {
 			if o.expectConflict {
 				conflict := updateRes.Conflict.ConflictingAttributes["human_readable_identifier"]
 				assert.NotNil(t, conflict)
-				exp := "is:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"B\"}}  " +
+				exp := "is:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"B\"}} " +
 					"want:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"C\"}}"
-				assert.Equal(t, exp, conflict.String())
+				assert.Equal(t, exp, strings.Replace(conflict.String(), "  ", " ", 1))
 			}
 		})
 	}
@@ -829,10 +831,10 @@ func TestAssignBedConflict(t *testing.T) {
 
 				exp := "want:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"" + o.want + "\"}}"
 				if o.is != nil {
-					exp = "is:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"" + *o.is + "\"}}  " +
+					exp = "is:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"" + *o.is + "\"}} " +
 						"want:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"" + o.want + "\"}}"
 				}
-				assert.Equal(t, exp, conflict.String())
+				assert.Equal(t, exp, strings.Replace(conflict.String(), "  ", " ", 1))
 			}
 		})
 	}
