@@ -8,6 +8,7 @@ import (
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
@@ -193,9 +194,55 @@ func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequ
 		return nil, err
 	}
 
-	consistency, err := s.handlers.Commands.V1.AssignTask(ctx, taskID, userID)
-	if err != nil {
-		return nil, err
+	expConsistency, ok := hwutil.ParseConsistency(req.Consistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "consistency")
+	}
+
+	var consistency uint64
+
+	for i := 0; true; i++ {
+		if i > 10 {
+			log.Warn().Msg("UpdatePatient: conflict circuit breaker triggered")
+			return nil, fmt.Errorf("failed conflict resolution")
+		}
+
+		c, conflict, err := s.handlers.Commands.V1.AssignTask(ctx, taskID, userID, expConsistency)
+		if err != nil {
+			return nil, err
+		}
+		consistency = c
+		if conflict == nil {
+			break
+		}
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		// TODO: find a generic approach
+		userUpdateRequested := req.UserId != conflict.Is.AssignedUser.UUID.String()
+		userAlreadyUpdated := conflict.Was.AssignedUser != conflict.Is.AssignedUser
+		if userUpdateRequested && userAlreadyUpdated {
+			var is proto.Message = nil
+			if conflict.Is.AssignedUser.Valid {
+				is = wrapperspb.String(conflict.Is.AssignedUser.UUID.String())
+			}
+			conflicts["user_id"], err = util.AttributeConflict(
+				is,
+				wrapperspb.String(req.UserId),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if len(conflicts) != 0 {
+			return &pb.AssignTaskResponse{
+				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
+				Consistency: strconv.FormatUint(conflict.Consistency, 10),
+			}, nil
+		}
+
+		// no conflict? retry with new consistency
+		expConsistency = &conflict.Consistency
 	}
 
 	return &pb.AssignTaskResponse{

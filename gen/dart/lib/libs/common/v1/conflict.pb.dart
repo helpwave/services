@@ -127,6 +127,8 @@ class AttributeConflict extends $pb.GeneratedMessage {
   static AttributeConflict getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AttributeConflict>(create);
   static AttributeConflict? _defaultInstance;
 
+  /// CAUTION: may be missing, if the is underlying value is missing (e.g., unassigned beds)
+  /// Enums are returned as Int32s
   @$pb.TagNumber(1)
   $19.Any get is_1 => $_getN(0);
   @$pb.TagNumber(1)
@@ -138,6 +140,8 @@ class AttributeConflict extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $19.Any ensureIs_1() => $_ensure(0);
 
+  /// CAUTION: may be missing, if the requested value is missing (e.g., unassignment of a bed)
+  /// Enums are returned as Int32s
   @$pb.TagNumber(2)
   $19.Any get want => $_getN(1);
   @$pb.TagNumber(2)
