@@ -79,7 +79,7 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 	}
 
 	log.Debug().
-		Uint64("r.NextExpectedVersion", r.NextExpectedVersion).
+		Uint64("nextExpectedVersion", r.NextExpectedVersion).
 		Interface("events", eventsData).
 		Msg("saved events to stream")
 
