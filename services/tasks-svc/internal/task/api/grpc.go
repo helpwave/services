@@ -8,7 +8,6 @@ import (
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
@@ -17,6 +16,7 @@ import (
 	"hwes"
 	"hwutil"
 	"tasks-svc/internal/task/handlers"
+	"tasks-svc/internal/task/models"
 	"tasks-svc/internal/util"
 	"time"
 )
@@ -203,7 +203,7 @@ func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequ
 
 	for i := 0; true; i++ {
 		if i > 10 {
-			log.Warn().Msg("UpdatePatient: conflict circuit breaker triggered")
+			zlog.Ctx(ctx).Warn().Msg("UpdatePatient: conflict circuit breaker triggered")
 			return nil, fmt.Errorf("failed conflict resolution")
 		}
 
@@ -525,9 +525,66 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 		return nil, err
 	}
 
-	consistency, err := s.handlers.Commands.V1.UpdateSubtask(ctx, taskID, subtaskID, req.Subtask.Name, req.Subtask.Done)
-	if err != nil {
-		return nil, err
+	expConsistency, ok := hwutil.ParseConsistency(req.TaskConsistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "task_consistency")
+	}
+
+	var consistency uint64
+
+	for i := 0; true; i++ {
+		if i > 10 {
+			zlog.Ctx(ctx).Warn().Msg("UpdateSubtask: conflict circuit breaker triggered")
+			return nil, fmt.Errorf("failed conflict resolution")
+		}
+
+		c, conflict, err := s.handlers.Commands.V1.UpdateSubtask(ctx, taskID, subtaskID, req.Subtask.Name, req.Subtask.Done, expConsistency)
+		if err != nil {
+			return nil, err
+		}
+		consistency = c
+
+		if conflict == nil {
+			break
+		}
+
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		var was models.Subtask
+		if w, ok := conflict.Was.Subtasks[subtaskID]; ok {
+			was = w
+		} else {
+			return nil, fmt.Errorf("subtask did not exist at expConsistency")
+		}
+
+		is := conflict.Is.Subtasks[subtaskID] // handler would have failed if non-existent
+
+		// TODO: find a generic approach
+		nameUpdateRequested := req.Subtask.Name != nil && *req.Subtask.Name != is.Name
+		nameAlreadyUpdated := was.Name != is.Name
+		if nameUpdateRequested && nameAlreadyUpdated {
+			conflicts["name"], err = util.AttributeConflict(
+				wrapperspb.String(is.Name),
+				wrapperspb.String(*req.Subtask.Name),
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if len(conflicts) != 0 {
+			return &pb.UpdateSubtaskResponse{
+				Conflict:        &commonpb.Conflict{ConflictingAttributes: conflicts},
+				TaskConsistency: strconv.FormatUint(conflict.Consistency, 10),
+			}, nil
+		}
+
+		// bool done can never cause a problem
+		// the user expects done = B, and sets it to \neg B
+		// so either that is the case still, or the update will do nothing anyway
+
+		// no conflict? retry with new consistency
+		expConsistency = &conflict.Consistency
 	}
 
 	return &pb.UpdateSubtaskResponse{

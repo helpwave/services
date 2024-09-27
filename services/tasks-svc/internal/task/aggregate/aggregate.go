@@ -6,6 +6,7 @@ import (
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
+	"hwutil"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"tasks-svc/internal/task/models"
 	"time"
@@ -50,6 +51,17 @@ func LoadTaskAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore
 		}
 
 		task := *taskAggregate.Task // deref copies model
+
+		// also copy pointer values
+		if task.DueAt != nil {
+			task.DueAt = hwutil.PtrTo(*task.DueAt)
+		}
+		subtasks := make(map[uuid.UUID]models.Subtask)
+		for key, value := range task.Subtasks {
+			subtasks[key] = value
+		}
+		task.Subtasks = subtasks
+
 		snapshot = &task
 	}
 

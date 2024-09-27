@@ -15,17 +15,17 @@ type AssignTaskConflict struct {
 	Is          *models.Task
 }
 
-type AssignTaskCommandHandler func(ctx context.Context, taskID, userID uuid.UUID, expConsistency *uint64) (common.ConsistencyToken, *AssignTaskConflict, error)
+type AssignTaskCommandHandler func(ctx context.Context, taskID, userID uuid.UUID, expConsistency *uint64) (common.ConsistencyToken, *UpdateTaskConflict, error)
 
 func NewAssignTaskCommandHandler(as hwes.AggregateStore) AssignTaskCommandHandler {
-	return func(ctx context.Context, taskID, userID uuid.UUID, expConsistency *uint64) (common.ConsistencyToken, *AssignTaskConflict, error) {
+	return func(ctx context.Context, taskID, userID uuid.UUID, expConsistency *uint64) (common.ConsistencyToken, *UpdateTaskConflict, error) {
 		task, oldState, err := aggregate.LoadTaskAggregateWithSnapshotAt(ctx, as, taskID, expConsistency)
 		if err != nil {
 			return 0, nil, err
 		}
 
 		if expConsistency != nil && *expConsistency != task.GetVersion() {
-			return 0, &AssignTaskConflict{
+			return 0, &UpdateTaskConflict{
 				Consistency: task.GetVersion(),
 				Was:         oldState,
 				Is:          task.Task,

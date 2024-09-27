@@ -9,32 +9,41 @@ import (
 	"tasks-svc/internal/task/aggregate"
 )
 
-type UpdateSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool) (common.ConsistencyToken, error)
+type UpdateSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool, expConsistency *uint64) (common.ConsistencyToken, *UpdateTaskConflict, error)
 
 func NewUpdateSubtaskCommandHandler(as hwes.AggregateStore) UpdateSubtaskCommandHandler {
-	return func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool) (common.ConsistencyToken, error) {
-		a, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
+	return func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool, expConsistency *uint64) (common.ConsistencyToken, *UpdateTaskConflict, error) {
+		a, oldState, err := aggregate.LoadTaskAggregateWithSnapshotAt(ctx, as, taskID, expConsistency)
 		if err != nil {
-			return 0, err
+			return 0, nil, err
 		}
 
 		currentSubtask, found := a.Task.Subtasks[subtaskID]
 		if !found {
-			return 0, fmt.Errorf("subtask with ID: %s not found on Task with ID: %s", subtaskID, taskID)
+			return 0, nil, fmt.Errorf("subtask with ID: %s not found on Task with ID: %s", subtaskID, taskID)
+		}
+
+		if expConsistency != nil && *expConsistency != a.GetVersion() {
+			return 0, &UpdateTaskConflict{
+				Consistency: a.GetVersion(),
+				Was:         oldState,
+				Is:          a.Task,
+			}, err
 		}
 
 		if name != nil && *name != currentSubtask.Name {
 			if err := a.UpdateSubtaskName(ctx, subtaskID, *name); err != nil {
-				return 0, err
+				return 0, nil, err
 			}
 		}
 
 		if done != nil && *done != currentSubtask.Done {
 			if err := a.UpdateSubtaskDone(ctx, subtaskID, *done); err != nil {
-				return 0, err
+				return 0, nil, err
 			}
 		}
 
-		return as.Save(ctx, a)
+		consistency, err := as.Save(ctx, a)
+		return consistency, nil, err
 	}
 }

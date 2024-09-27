@@ -350,9 +350,8 @@ func TestAssignTaskConflict(t *testing.T) {
 				assert.Nil(t, a.Conflict)
 			} else {
 				a, err := taskClient.UnassignTask(ctx, &pb.UnassignTaskRequest{
-					TaskId:      id,
-					UserId:      *o.was,
-					Consistency: &initialConsistency,
+					TaskId: id,
+					UserId: *o.was,
 				})
 				assert.NoError(t, err)
 				assert.Nil(t, a.Conflict)
@@ -376,6 +375,92 @@ func TestAssignTaskConflict(t *testing.T) {
 					exp = "is:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"" + *o.is + "\"}} " +
 						"want:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"" + o.want + "\"}}"
 				}
+				assert.Equal(t, exp, strings.Replace(conflict.String(), "  ", " ", 1))
+			}
+		})
+	}
+}
+
+func TestUpdateSubtaskConflict(t *testing.T) {
+	ctx := context.Background()
+	taskClient := taskServiceClient()
+
+	patientId := preparePatient(t, ctx, "")
+
+	A := "A"
+	B := "B"
+	C := "C"
+
+	testMatrix := []struct {
+		was            string
+		is             string
+		want           string
+		expectConflict bool
+	}{
+		{A, B, B, false},
+		{A, B, C, true},
+		{A, A, C, false},
+	}
+
+	for i, o := range testMatrix {
+		t.Run(t.Name()+"_"+strconv.Itoa(i), func(t *testing.T) {
+			// WAS
+			task, err := taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
+				Name:           t.Name(),
+				Description:    nil,
+				PatientId:      patientId,
+				Public:         nil,
+				DueAt:          nil,
+				InitialStatus:  nil,
+				AssignedUserId: nil,
+				Subtasks:       nil,
+			})
+			assert.NoError(t, err)
+
+			subTask, err := taskClient.CreateSubtask(ctx, &pb.CreateSubtaskRequest{
+				TaskId: task.Id,
+				Subtask: &pb.CreateSubtaskRequest_Subtask{
+					Name: o.was,
+					Done: nil,
+				},
+			})
+			assert.NoError(t, err)
+
+			taskId := task.Id
+			id := subTask.SubtaskId
+			initialConsistency := subTask.TaskConsistency
+
+			// IS
+			a, err := taskClient.UpdateSubtask(ctx, &pb.UpdateSubtaskRequest{
+				TaskId:    taskId,
+				SubtaskId: id,
+				Subtask: &pb.UpdateSubtaskRequest_Subtask{
+					Name: &o.is,
+				},
+				TaskConsistency: &initialConsistency,
+			})
+			assert.NoError(t, err)
+			assert.Nil(t, a.Conflict)
+
+			// WANT
+			updateRes, err := taskClient.UpdateSubtask(ctx, &pb.UpdateSubtaskRequest{
+				TaskId:    taskId,
+				SubtaskId: id,
+				Subtask: &pb.UpdateSubtaskRequest_Subtask{
+					Name: &o.want,
+				},
+				TaskConsistency: &initialConsistency,
+			})
+			assert.NoError(t, err)
+
+			// EXPECT
+			assert.Equal(t, o.expectConflict, updateRes.Conflict != nil)
+			if o.expectConflict {
+				conflict := updateRes.Conflict.ConflictingAttributes["name"]
+				assert.NotNil(t, conflict)
+
+				exp := "is:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"" + o.is + "\"}} " +
+					"want:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"" + o.want + "\"}}"
 				assert.Equal(t, exp, strings.Replace(conflict.String(), "  ", " ", 1))
 			}
 		})
