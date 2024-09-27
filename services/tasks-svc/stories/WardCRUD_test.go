@@ -9,6 +9,7 @@ import (
 	"hwutil"
 	"strconv"
 	"testing"
+	"time"
 )
 
 // TestCreateUpdateGetWard:
@@ -128,6 +129,7 @@ func TestGetRecentWards(t *testing.T) {
 	}
 
 	hwtesting.WaitForProjectionsToSettle()
+	time.Sleep(time.Second * 5) // this one needs a bit for some reason
 
 	// GetRecentWards
 	res, err := wardClient.GetRecentWards(ctx, &pb.GetRecentWardsRequest{})
