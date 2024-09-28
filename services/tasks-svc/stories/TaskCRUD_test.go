@@ -94,7 +94,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 		Consistency: &createRes.Consistency,
 	}
 	updateRes, err := taskClient.UpdateTask(ctx, updateReq)
-	assert.NoError(t, err, "could not update tt after creation")
+	assert.NoError(t, err, "could not update task after creation")
 
 	assert.NotEqual(t, task.Consistency, updateRes.Consistency, "consistency has not changed in update")
 
