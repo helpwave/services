@@ -21,6 +21,11 @@ type Task struct {
 	Subtasks     map[uuid.UUID]Subtask
 }
 
+type TaskWithConsistency struct {
+	Task
+	Consistency string
+}
+
 type Subtask struct {
 	ID        uuid.UUID
 	CreatedBy uuid.UUID
@@ -36,9 +41,10 @@ type Patient struct {
 	Notes                   string
 	BedID                   uuid.NullUUID
 	IsDischarged            bool
+	Consistency             string
 }
 
 type TaskWithPatient struct {
-	Task
+	TaskWithConsistency
 	Patient Patient
 }

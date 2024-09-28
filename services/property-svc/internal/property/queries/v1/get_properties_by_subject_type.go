@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
@@ -10,10 +11,10 @@ import (
 	"property-svc/repos/property_repo"
 )
 
-type GetPropertiesBySubjectTypeHandler func(ctx context.Context, subjectType pb.SubjectType) ([]*models.Property, error)
+type GetPropertiesBySubjectTypeHandler func(ctx context.Context, subjectType pb.SubjectType) ([]*models.PropertyWithConsistency, error)
 
 func NewGetPropertiesBySubjectTypeQueryHandler() GetPropertiesBySubjectTypeHandler {
-	return func(ctx context.Context, subjectType pb.SubjectType) ([]*models.Property, error) {
+	return func(ctx context.Context, subjectType pb.SubjectType) ([]*models.PropertyWithConsistency, error) {
 		propertyRepo := property_repo.New(hwdb.GetDB())
 
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx, property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
@@ -23,24 +24,27 @@ func NewGetPropertiesBySubjectTypeQueryHandler() GetPropertiesBySubjectTypeHandl
 			return nil, err
 		}
 
-		properties := make([]*models.Property, 0)
-		propertyMap := make(map[uuid.UUID]*models.Property)
+		properties := make([]*models.PropertyWithConsistency, 0)
+		propertyMap := make(map[uuid.UUID]*models.PropertyWithConsistency)
 
 		for _, row := range rows {
-			var property *models.Property
+			var property *models.PropertyWithConsistency
 
 			if prop, exists := propertyMap[row.Property.ID]; exists {
 				property = prop
 			} else {
-				property = &models.Property{
-					ID:            row.Property.ID,
-					Name:          row.Property.Name,
-					IsArchived:    row.Property.IsArchived,
-					Description:   row.Property.Description,
-					SetID:         row.Property.SetID,
-					FieldTypeData: models.FieldTypeData{},
-					FieldType:     pb.FieldType(row.Property.FieldType),
-					SubjectType:   pb.SubjectType(row.Property.SubjectType),
+				property = &models.PropertyWithConsistency{
+					Property: models.Property{
+						ID:            row.Property.ID,
+						Name:          row.Property.Name,
+						IsArchived:    row.Property.IsArchived,
+						Description:   row.Property.Description,
+						SetID:         row.Property.SetID,
+						FieldTypeData: models.FieldTypeData{},
+						FieldType:     pb.FieldType(row.Property.FieldType),
+						SubjectType:   pb.SubjectType(row.Property.SubjectType),
+					},
+					Consistency: common.ConsistencyToken(row.Property.Consistency).String(),
 				}
 				propertyMap[row.Property.ID] = property
 				properties = append(properties, property)

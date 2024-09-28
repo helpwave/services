@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: services/task_svc/v1/room_svc.proto
 
-package task_svc
+package v1
 
 import (
 	context "context"

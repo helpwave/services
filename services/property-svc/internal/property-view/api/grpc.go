@@ -61,12 +61,13 @@ func (s PropertyViewGrpcService) UpdatePropertyViewRule(ctx context.Context, req
 		return &pb.UpdatePropertyViewRuleResponse{}, nil
 	}
 
-	if err := s.handlers.Commands.V1.UpdatePropertyViewRule(ctx, matcher,
+	_, err = s.handlers.Commands.V1.UpdatePropertyViewRule(ctx, matcher,
 		appendToAlwaysInclude,
 		removeFromAlwaysInclude,
 		appendToDontAlwaysInclude,
 		removeFromDontAlwaysInclude,
-	); err != nil {
+	)
+	if err != nil {
 		return nil, err
 	}
 

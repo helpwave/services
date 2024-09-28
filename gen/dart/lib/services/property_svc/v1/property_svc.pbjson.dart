@@ -77,13 +77,14 @@ const CreatePropertyResponse$json = {
   '1': 'CreatePropertyResponse',
   '2': [
     {'1': 'property_id', '3': 1, '4': 1, '5': 9, '10': 'propertyId'},
+    {'1': 'consistency', '3': 2, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `CreatePropertyResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createPropertyResponseDescriptor = $convert.base64Decode(
     'ChZDcmVhdGVQcm9wZXJ0eVJlc3BvbnNlEh8KC3Byb3BlcnR5X2lkGAEgASgJUgpwcm9wZXJ0eU'
-    'lk');
+    'lkEiAKC2NvbnNpc3RlbmN5GAIgASgJUgtjb25zaXN0ZW5jeQ==');
 
 @$core.Deprecated('Use getPropertyRequestDescriptor instead')
 const GetPropertyRequest$json = {
@@ -131,6 +132,7 @@ const GetPropertyResponse$json = {
     {'1': 'set_id', '3': 8, '4': 1, '5': 9, '9': 2, '10': 'setId', '17': true},
     {'1': 'select_data', '3': 10, '4': 1, '5': 11, '6': '.services.property_svc.v1.GetPropertyResponse.SelectData', '9': 0, '10': 'selectData'},
     {'1': 'always_include_for_view_source', '3': 11, '4': 1, '5': 8, '9': 3, '10': 'alwaysIncludeForViewSource', '17': true},
+    {'1': 'consistency', '3': 12, '4': 1, '5': 9, '10': 'consistency'},
   ],
   '3': [GetPropertyResponse_SelectData$json],
   '8': [
@@ -162,6 +164,7 @@ const GetPropertyResponse_SelectData_SelectOption$json = {
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'description', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
     {'1': 'is_custom', '3': 4, '4': 1, '5': 8, '10': 'isCustom'},
+    {'1': 'consistency', '3': 5, '4': 1, '5': 9, '10': 'consistency'},
   ],
   '8': [
     {'1': '_description'},
@@ -178,14 +181,15 @@ final $typed_data.Uint8List getPropertyResponseDescriptor = $convert.base64Decod
     'RfaWQYCCABKAlIAlIFc2V0SWSIAQESWwoLc2VsZWN0X2RhdGEYCiABKAsyOC5zZXJ2aWNlcy5w'
     'cm9wZXJ0eV9zdmMudjEuR2V0UHJvcGVydHlSZXNwb25zZS5TZWxlY3REYXRhSABSCnNlbGVjdE'
     'RhdGESRwoeYWx3YXlzX2luY2x1ZGVfZm9yX3ZpZXdfc291cmNlGAsgASgISANSGmFsd2F5c0lu'
-    'Y2x1ZGVGb3JWaWV3U291cmNliAEBGrUCCgpTZWxlY3REYXRhEioKDmFsbG93X2ZyZWV0ZXh0GA'
-    'EgASgISABSDWFsbG93RnJlZXRleHSIAQESXwoHb3B0aW9ucxgCIAMoCzJFLnNlcnZpY2VzLnBy'
-    'b3BlcnR5X3N2Yy52MS5HZXRQcm9wZXJ0eVJlc3BvbnNlLlNlbGVjdERhdGEuU2VsZWN0T3B0aW'
-    '9uUgdvcHRpb25zGoYBCgxTZWxlY3RPcHRpb24SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiAB'
-    'KAlSBG5hbWUSJQoLZGVzY3JpcHRpb24YAyABKAlIAFILZGVzY3JpcHRpb26IAQESGwoJaXNfY3'
-    'VzdG9tGAQgASgIUghpc0N1c3RvbUIOCgxfZGVzY3JpcHRpb25CEQoPX2FsbG93X2ZyZWV0ZXh0'
-    'QhEKD2ZpZWxkX3R5cGVfZGF0YUIOCgxfZGVzY3JpcHRpb25CCQoHX3NldF9pZEIhCh9fYWx3YX'
-    'lzX2luY2x1ZGVfZm9yX3ZpZXdfc291cmNl');
+    'Y2x1ZGVGb3JWaWV3U291cmNliAEBEiAKC2NvbnNpc3RlbmN5GAwgASgJUgtjb25zaXN0ZW5jeR'
+    'rXAgoKU2VsZWN0RGF0YRIqCg5hbGxvd19mcmVldGV4dBgBIAEoCEgAUg1hbGxvd0ZyZWV0ZXh0'
+    'iAEBEl8KB29wdGlvbnMYAiADKAsyRS5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuR2V0UHJvcG'
+    'VydHlSZXNwb25zZS5TZWxlY3REYXRhLlNlbGVjdE9wdGlvblIHb3B0aW9ucxqoAQoMU2VsZWN0'
+    'T3B0aW9uEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiUKC2Rlc2NyaXB0aW'
+    '9uGAMgASgJSABSC2Rlc2NyaXB0aW9uiAEBEhsKCWlzX2N1c3RvbRgEIAEoCFIIaXNDdXN0b20S'
+    'IAoLY29uc2lzdGVuY3kYBSABKAlSC2NvbnNpc3RlbmN5Qg4KDF9kZXNjcmlwdGlvbkIRCg9fYW'
+    'xsb3dfZnJlZXRleHRCEQoPZmllbGRfdHlwZV9kYXRhQg4KDF9kZXNjcmlwdGlvbkIJCgdfc2V0'
+    'X2lkQiEKH19hbHdheXNfaW5jbHVkZV9mb3Jfdmlld19zb3VyY2U=');
 
 @$core.Deprecated('Use updatePropertyRequestDescriptor instead')
 const UpdatePropertyRequest$json = {
@@ -198,6 +202,7 @@ const UpdatePropertyRequest$json = {
     {'1': 'is_archived', '3': 6, '4': 1, '5': 8, '9': 4, '10': 'isArchived', '17': true},
     {'1': 'set_id', '3': 8, '4': 1, '5': 9, '9': 5, '10': 'setId', '17': true},
     {'1': 'select_data', '3': 10, '4': 1, '5': 11, '6': '.services.property_svc.v1.UpdatePropertyRequest.SelectData', '9': 0, '10': 'selectData'},
+    {'1': 'consistency', '3': 11, '4': 1, '5': 9, '9': 6, '10': 'consistency', '17': true},
   ],
   '3': [UpdatePropertyRequest_SelectData$json],
   '8': [
@@ -207,6 +212,7 @@ const UpdatePropertyRequest$json = {
     {'1': '_description'},
     {'1': '_is_archived'},
     {'1': '_set_id'},
+    {'1': '_consistency'},
   ],
 };
 
@@ -248,24 +254,34 @@ final $typed_data.Uint8List updatePropertyRequestDescriptor = $convert.base64Dec
     'ILZGVzY3JpcHRpb26IAQESJAoLaXNfYXJjaGl2ZWQYBiABKAhIBFIKaXNBcmNoaXZlZIgBARIa'
     'CgZzZXRfaWQYCCABKAlIBVIFc2V0SWSIAQESXQoLc2VsZWN0X2RhdGEYCiABKAsyOi5zZXJ2aW'
     'Nlcy5wcm9wZXJ0eV9zdmMudjEuVXBkYXRlUHJvcGVydHlSZXF1ZXN0LlNlbGVjdERhdGFIAFIK'
-    'c2VsZWN0RGF0YRqMAwoKU2VsZWN0RGF0YRIqCg5hbGxvd19mcmVldGV4dBgBIAEoCEgAUg1hbG'
-    'xvd0ZyZWV0ZXh0iAEBEiUKDnJlbW92ZV9vcHRpb25zGAIgAygJUg1yZW1vdmVPcHRpb25zEm4K'
-    'DnVwc2VydF9vcHRpb25zGAMgAygLMkcuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLlVwZGF0ZV'
-    'Byb3BlcnR5UmVxdWVzdC5TZWxlY3REYXRhLlNlbGVjdE9wdGlvblINdXBzZXJ0T3B0aW9ucxqn'
-    'AQoMU2VsZWN0T3B0aW9uEg4KAmlkGAEgASgJUgJpZBIXCgRuYW1lGAIgASgJSABSBG5hbWWIAQ'
-    'ESJQoLZGVzY3JpcHRpb24YAyABKAlIAVILZGVzY3JpcHRpb26IAQESIAoJaXNfY3VzdG9tGAQg'
-    'ASgISAJSCGlzQ3VzdG9tiAEBQgcKBV9uYW1lQg4KDF9kZXNjcmlwdGlvbkIMCgpfaXNfY3VzdG'
-    '9tQhEKD19hbGxvd19mcmVldGV4dEIRCg9maWVsZF90eXBlX2RhdGFCDwoNX3N1YmplY3RfdHlw'
-    'ZUIHCgVfbmFtZUIOCgxfZGVzY3JpcHRpb25CDgoMX2lzX2FyY2hpdmVkQgkKB19zZXRfaWQ=');
+    'c2VsZWN0RGF0YRIlCgtjb25zaXN0ZW5jeRgLIAEoCUgGUgtjb25zaXN0ZW5jeYgBARqMAwoKU2'
+    'VsZWN0RGF0YRIqCg5hbGxvd19mcmVldGV4dBgBIAEoCEgAUg1hbGxvd0ZyZWV0ZXh0iAEBEiUK'
+    'DnJlbW92ZV9vcHRpb25zGAIgAygJUg1yZW1vdmVPcHRpb25zEm4KDnVwc2VydF9vcHRpb25zGA'
+    'MgAygLMkcuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLlVwZGF0ZVByb3BlcnR5UmVxdWVzdC5T'
+    'ZWxlY3REYXRhLlNlbGVjdE9wdGlvblINdXBzZXJ0T3B0aW9ucxqnAQoMU2VsZWN0T3B0aW9uEg'
+    '4KAmlkGAEgASgJUgJpZBIXCgRuYW1lGAIgASgJSABSBG5hbWWIAQESJQoLZGVzY3JpcHRpb24Y'
+    'AyABKAlIAVILZGVzY3JpcHRpb26IAQESIAoJaXNfY3VzdG9tGAQgASgISAJSCGlzQ3VzdG9tiA'
+    'EBQgcKBV9uYW1lQg4KDF9kZXNjcmlwdGlvbkIMCgpfaXNfY3VzdG9tQhEKD19hbGxvd19mcmVl'
+    'dGV4dEIRCg9maWVsZF90eXBlX2RhdGFCDwoNX3N1YmplY3RfdHlwZUIHCgVfbmFtZUIOCgxfZG'
+    'VzY3JpcHRpb25CDgoMX2lzX2FyY2hpdmVkQgkKB19zZXRfaWRCDgoMX2NvbnNpc3RlbmN5');
 
 @$core.Deprecated('Use updatePropertyResponseDescriptor instead')
 const UpdatePropertyResponse$json = {
   '1': 'UpdatePropertyResponse',
+  '2': [
+    {'1': 'conflict', '3': 1, '4': 1, '5': 11, '6': '.libs.common.v1.Conflict', '9': 0, '10': 'conflict', '17': true},
+    {'1': 'consistency', '3': 2, '4': 1, '5': 9, '10': 'consistency'},
+  ],
+  '8': [
+    {'1': '_conflict'},
+  ],
 };
 
 /// Descriptor for `UpdatePropertyResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updatePropertyResponseDescriptor = $convert.base64Decode(
-    'ChZVcGRhdGVQcm9wZXJ0eVJlc3BvbnNl');
+    'ChZVcGRhdGVQcm9wZXJ0eVJlc3BvbnNlEjkKCGNvbmZsaWN0GAEgASgLMhgubGlicy5jb21tb2'
+    '4udjEuQ29uZmxpY3RIAFIIY29uZmxpY3SIAQESIAoLY29uc2lzdGVuY3kYAiABKAlSC2NvbnNp'
+    'c3RlbmN5QgsKCV9jb25mbGljdA==');
 
 @$core.Deprecated('Use getPropertiesBySubjectTypeRequestDescriptor instead')
 const GetPropertiesBySubjectTypeRequest$json = {
@@ -301,6 +317,7 @@ const GetPropertiesBySubjectTypeResponse_Property$json = {
     {'1': 'is_archived', '3': 6, '4': 1, '5': 8, '10': 'isArchived'},
     {'1': 'set_id', '3': 8, '4': 1, '5': 9, '9': 2, '10': 'setId', '17': true},
     {'1': 'select_data', '3': 10, '4': 1, '5': 11, '6': '.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData', '9': 0, '10': 'selectData'},
+    {'1': 'consistency', '3': 9, '4': 1, '5': 9, '10': 'consistency'},
   ],
   '3': [GetPropertiesBySubjectTypeResponse_Property_SelectData$json],
   '8': [
@@ -341,19 +358,20 @@ const GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption$json =
 final $typed_data.Uint8List getPropertiesBySubjectTypeResponseDescriptor = $convert.base64Decode(
     'CiJHZXRQcm9wZXJ0aWVzQnlTdWJqZWN0VHlwZVJlc3BvbnNlEmUKCnByb3BlcnRpZXMYASADKA'
     'syRS5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuR2V0UHJvcGVydGllc0J5U3ViamVjdFR5cGVS'
-    'ZXNwb25zZS5Qcm9wZXJ0eVIKcHJvcGVydGllcxqTBgoIUHJvcGVydHkSDgoCaWQYASABKAlSAm'
+    'ZXNwb25zZS5Qcm9wZXJ0eVIKcHJvcGVydGllcxq1BgoIUHJvcGVydHkSDgoCaWQYASABKAlSAm'
     'lkEkgKDHN1YmplY3RfdHlwZRgCIAEoDjIlLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5TdWJq'
     'ZWN0VHlwZVILc3ViamVjdFR5cGUSQgoKZmllbGRfdHlwZRgDIAEoDjIjLnNlcnZpY2VzLnByb3'
     'BlcnR5X3N2Yy52MS5GaWVsZFR5cGVSCWZpZWxkVHlwZRISCgRuYW1lGAQgASgJUgRuYW1lEiUK'
     'C2Rlc2NyaXB0aW9uGAUgASgJSAFSC2Rlc2NyaXB0aW9uiAEBEh8KC2lzX2FyY2hpdmVkGAYgAS'
     'gIUgppc0FyY2hpdmVkEhoKBnNldF9pZBgIIAEoCUgCUgVzZXRJZIgBARJzCgtzZWxlY3RfZGF0'
     'YRgKIAEoCzJQLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5HZXRQcm9wZXJ0aWVzQnlTdWJqZW'
-    'N0VHlwZVJlc3BvbnNlLlByb3BlcnR5LlNlbGVjdERhdGFIAFIKc2VsZWN0RGF0YRrNAgoKU2Vs'
-    'ZWN0RGF0YRIqCg5hbGxvd19mcmVldGV4dBgBIAEoCEgAUg1hbGxvd0ZyZWV0ZXh0iAEBEncKB2'
-    '9wdGlvbnMYAiADKAsyXS5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuR2V0UHJvcGVydGllc0J5'
-    'U3ViamVjdFR5cGVSZXNwb25zZS5Qcm9wZXJ0eS5TZWxlY3REYXRhLlNlbGVjdE9wdGlvblIHb3'
-    'B0aW9ucxqGAQoMU2VsZWN0T3B0aW9uEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRu'
-    'YW1lEiUKC2Rlc2NyaXB0aW9uGAMgASgJSABSC2Rlc2NyaXB0aW9uiAEBEhsKCWlzX2N1c3RvbR'
-    'gEIAEoCFIIaXNDdXN0b21CDgoMX2Rlc2NyaXB0aW9uQhEKD19hbGxvd19mcmVldGV4dEIRCg9m'
-    'aWVsZF90eXBlX2RhdGFCDgoMX2Rlc2NyaXB0aW9uQgkKB19zZXRfaWQ=');
+    'N0VHlwZVJlc3BvbnNlLlByb3BlcnR5LlNlbGVjdERhdGFIAFIKc2VsZWN0RGF0YRIgCgtjb25z'
+    'aXN0ZW5jeRgJIAEoCVILY29uc2lzdGVuY3kazQIKClNlbGVjdERhdGESKgoOYWxsb3dfZnJlZX'
+    'RleHQYASABKAhIAFINYWxsb3dGcmVldGV4dIgBARJ3CgdvcHRpb25zGAIgAygLMl0uc2Vydmlj'
+    'ZXMucHJvcGVydHlfc3ZjLnYxLkdldFByb3BlcnRpZXNCeVN1YmplY3RUeXBlUmVzcG9uc2UuUH'
+    'JvcGVydHkuU2VsZWN0RGF0YS5TZWxlY3RPcHRpb25SB29wdGlvbnMahgEKDFNlbGVjdE9wdGlv'
+    'bhIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIlCgtkZXNjcmlwdGlvbhgDIA'
+    'EoCUgAUgtkZXNjcmlwdGlvbogBARIbCglpc19jdXN0b20YBCABKAhSCGlzQ3VzdG9tQg4KDF9k'
+    'ZXNjcmlwdGlvbkIRCg9fYWxsb3dfZnJlZXRleHRCEQoPZmllbGRfdHlwZV9kYXRhQg4KDF9kZX'
+    'NjcmlwdGlvbkIJCgdfc2V0X2lk');
 

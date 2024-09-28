@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: services/auth_svc/v1/auth_svc.proto
 
-package auth_svc
+package v1
 
 import (
 	context "context"

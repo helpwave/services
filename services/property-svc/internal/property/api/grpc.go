@@ -44,12 +44,24 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 		}
 	}
 
-	if err := s.handlers.Commands.V1.CreateProperty(ctx, propertyID, req.GetSubjectType(), req.GetFieldType(), req.GetName(), req.Description, req.SetId, fieldTypeData); err != nil {
+	consistency, err := s.handlers.Commands.V1.CreateProperty(
+		ctx,
+		propertyID,
+		req.GetSubjectType(),
+		req.GetFieldType(),
+		req.GetName(),
+		req.Description,
+		req.SetId,
+		fieldTypeData,
+	)
+
+	if err != nil {
 		return nil, err
 	}
 
 	return &pb.CreatePropertyResponse{
-		PropertyId: propertyID.String(),
+		PropertyId:  propertyID.String(),
+		Consistency: consistency.String(),
 	}, nil
 }
 
@@ -59,7 +71,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		return nil, err
 	}
 
-	property, err := s.handlers.Queries.V1.GetPropertyByID(ctx, id)
+	property, consistency, err := s.handlers.Queries.V1.GetPropertyByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -86,6 +98,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		SetId:                      hwutil.NullUUIDToStringPtr(property.SetID),
 		AlwaysIncludeForViewSource: alwaysIncludeForViewSource,
 		FieldTypeData:              nil, // set below
+		Consistency:                consistency.String(),
 	}
 
 	switch {
@@ -145,11 +158,25 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 			upsertOptions = &opt
 		}
 	}
-	if err := s.handlers.Commands.V1.UpdateProperty(ctx, propertyID, req.SubjectType, req.Name, req.Description, req.SetId, allowFreetext, upsertOptions, removeOptions, req.IsArchived); err != nil {
+	consistency, err := s.handlers.Commands.V1.UpdateProperty(
+		ctx,
+		propertyID,
+		req.SubjectType,
+		req.Name,
+		req.Description,
+		req.SetId,
+		allowFreetext,
+		upsertOptions,
+		removeOptions,
+		req.IsArchived,
+	)
+	if err != nil {
 		return nil, err
 	}
 
-	return &pb.UpdatePropertyResponse{}, nil
+	return &pb.UpdatePropertyResponse{
+		Consistency: consistency.String(),
+	}, nil
 }
 
 func (s *PropertyGrpcService) GetPropertiesBySubjectType(ctx context.Context, req *pb.GetPropertiesBySubjectTypeRequest) (*pb.GetPropertiesBySubjectTypeResponse, error) {
@@ -169,6 +196,7 @@ func (s *PropertyGrpcService) GetPropertiesBySubjectType(ctx context.Context, re
 			IsArchived:    item.IsArchived,
 			SetId:         hwutil.NullUUIDToStringPtr(item.SetID),
 			FieldTypeData: nil,
+			Consistency:   item.Consistency,
 		}
 
 		if item.FieldTypeData.SelectData != nil {

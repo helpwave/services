@@ -38,12 +38,25 @@ func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequ
 
 	subtasks := hwutil.OrEmptySlice(req.Subtasks)
 
-	if err := s.handlers.Commands.V1.CreateTask(ctx, taskID, req.GetName(), req.Description, patientID, req.Public, req.InitialStatus, req.DueAt, assignedUserID, subtasks); err != nil {
+	consistency, err := s.handlers.Commands.V1.CreateTask(
+		ctx,
+		taskID,
+		req.GetName(),
+		req.Description,
+		patientID,
+		req.Public,
+		req.InitialStatus,
+		req.DueAt,
+		assignedUserID,
+		subtasks,
+	)
+	if err != nil {
 		return nil, err
 	}
 
 	return &pb.CreateTaskResponse{
-		Id: taskID.String(),
+		Id:          taskID.String(),
+		Consistency: consistency.String(),
 	}, nil
 }
 
@@ -53,11 +66,14 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.UpdateTask(ctx, taskID, req.Name, req.Description, req.Status, req.Public, req.DueAt); err != nil {
+	consistency, err := s.handlers.Commands.V1.UpdateTask(ctx, taskID, req.Name, req.Description, req.Status, req.Public, req.DueAt)
+	if err != nil {
 		return nil, err
 	}
 
-	return &pb.UpdateTaskResponse{}, nil
+	return &pb.UpdateTaskResponse{
+		Consistency: consistency.String(),
+	}, nil
 }
 
 func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequest) (*pb.AssignTaskResponse, error) {
@@ -71,11 +87,14 @@ func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequ
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.AssignTask(ctx, taskID, userID); err != nil {
+	consistency, err := s.handlers.Commands.V1.AssignTask(ctx, taskID, userID)
+	if err != nil {
 		return nil, err
 	}
 
-	return &pb.AssignTaskResponse{}, nil
+	return &pb.AssignTaskResponse{
+		Consistency: consistency.String(),
+	}, nil
 }
 
 func (s *TaskGrpcService) UnassignTask(ctx context.Context, req *pb.UnassignTaskRequest) (*pb.UnassignTaskResponse, error) {
@@ -89,11 +108,14 @@ func (s *TaskGrpcService) UnassignTask(ctx context.Context, req *pb.UnassignTask
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.UnnasignTask(ctx, taskID, userID); err != nil {
+	consistency, err := s.handlers.Commands.V1.UnnasignTask(ctx, taskID, userID)
+	if err != nil {
 		return nil, err
 	}
 
-	return &pb.UnassignTaskResponse{}, nil
+	return &pb.UnassignTaskResponse{
+		Consistency: consistency.String(),
+	}, nil
 }
 
 func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.GetTaskResponse, error) {
@@ -132,6 +154,7 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 			Id:                      task.Patient.ID.String(),
 			HumanReadableIdentifier: task.Patient.HumanReadableIdentifier,
 		},
+		Consistency: task.Consistency,
 	}
 
 	if task.DueAt != nil {
@@ -166,6 +189,7 @@ func (s *TaskGrpcService) GetTasksByPatient(ctx context.Context, req *pb.GetTask
 			DueAt:          nil, // may be set below
 			Subtasks:       make([]*pb.GetTasksByPatientResponse_Task_SubTask, len(item.Subtasks)),
 			AssignedUserId: hwutil.NullUUIDToStringPtr(item.AssignedUser), // TODO: #760
+			Consistency:    item.Consistency,
 		}
 
 		if item.DueAt != nil {
@@ -233,6 +257,7 @@ func (s *TaskGrpcService) GetTasksByPatientSortedByStatus(ctx context.Context, r
 					DueAt:          nil, // may be set below
 					Subtasks:       make([]*pb.GetTasksByPatientSortedByStatusResponse_Task_SubTask, len(task.Subtasks)),
 					AssignedUserId: hwutil.NullUUIDToStringPtr(task.AssignedUser), // TODO: #760
+					Consistency:    task.Consistency,
 				}
 
 				if task.DueAt != nil {
@@ -291,7 +316,9 @@ func (s *TaskGrpcService) GetAssignedTasks(ctx context.Context, _ *pb.GetAssigne
 			Patient: &pb.GetAssignedTasksResponse_Task_Patient{
 				Id:                      item.PatientID.String(),
 				HumanReadableIdentifier: item.Patient.HumanReadableIdentifier,
+				Consistency:             item.Consistency,
 			},
+			Consistency: item.Consistency,
 		}
 
 		if item.DueAt != nil {
@@ -323,12 +350,14 @@ func (s *TaskGrpcService) CreateSubtask(ctx context.Context, req *pb.CreateSubta
 
 	subtaskID := uuid.New()
 
-	if err := s.handlers.Commands.V1.CreateSubtask(ctx, taskID, subtaskID, req.GetSubtask().GetName(), req.GetSubtask().GetDone()); err != nil {
+	consistency, err := s.handlers.Commands.V1.CreateSubtask(ctx, taskID, subtaskID, req.GetSubtask().GetName(), req.GetSubtask().GetDone())
+	if err != nil {
 		return nil, err
 	}
 
 	return &pb.CreateSubtaskResponse{
-		SubtaskId: subtaskID.String(),
+		SubtaskId:       subtaskID.String(),
+		TaskConsistency: consistency.String(),
 	}, nil
 }
 
@@ -343,11 +372,14 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.UpdateSubtask(ctx, taskID, subtaskID, req.Subtask.Name, req.Subtask.Done); err != nil {
+	consistency, err := s.handlers.Commands.V1.UpdateSubtask(ctx, taskID, subtaskID, req.Subtask.Name, req.Subtask.Done)
+	if err != nil {
 		return nil, err
 	}
 
-	return &pb.UpdateSubtaskResponse{}, nil
+	return &pb.UpdateSubtaskResponse{
+		TaskConsistency: consistency.String(),
+	}, nil
 }
 
 func (s *TaskGrpcService) DeleteSubtask(ctx context.Context, req *pb.DeleteSubtaskRequest) (*pb.DeleteSubtaskResponse, error) {
@@ -361,7 +393,8 @@ func (s *TaskGrpcService) DeleteSubtask(ctx context.Context, req *pb.DeleteSubta
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.DeleteSubtask(ctx, taskID, subtaskID); err != nil {
+	_, err = s.handlers.Commands.V1.DeleteSubtask(ctx, taskID, subtaskID)
+	if err != nil {
 		return nil, err
 	}
 
@@ -374,11 +407,14 @@ func (s *TaskGrpcService) RemoveTaskDueDate(ctx context.Context, req *pb.RemoveT
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.RemoveTaskDueAt(ctx, taskID); err != nil {
+	consistency, err := s.handlers.Commands.V1.RemoveTaskDueAt(ctx, taskID)
+	if err != nil {
 		return nil, err
 	}
 
-	return &pb.RemoveTaskDueDateResponse{}, nil
+	return &pb.RemoveTaskDueDateResponse{
+		Consistency: consistency.String(),
+	}, nil
 }
 
 func (s *TaskGrpcService) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) (*pb.DeleteTaskResponse, error) {
@@ -387,7 +423,7 @@ func (s *TaskGrpcService) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequ
 		return nil, err
 	}
 
-	if err := s.handlers.Commands.V1.DeleteTask(ctx, taskID); err != nil {
+	if _, err := s.handlers.Commands.V1.DeleteTask(ctx, taskID); err != nil {
 		return nil, err
 	}
 

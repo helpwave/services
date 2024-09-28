@@ -16,27 +16,34 @@ type Patient struct {
 	UpdatedAt               time.Time
 }
 
-type PatientDetails struct {
+type PatientWithConsistency struct {
 	Patient
-	Tasks []*models.Task
+	Consistency string
+}
+
+type PatientDetails struct {
+	PatientWithConsistency
+	Tasks []*models.TaskWithConsistency
 	Bed   *Bed
 	Room  *Room
 }
 
 type Bed struct {
-	ID   uuid.UUID
-	Name string
+	ID          uuid.UUID
+	Name        string
+	Consistency string
 }
 
 type Room struct {
-	ID     uuid.UUID
-	Name   string
-	WardID uuid.UUID
+	ID          uuid.UUID
+	Name        string
+	WardID      uuid.UUID
+	Consistency string
 }
 
 type BedWithPatient struct {
 	Bed
-	Patient *Patient
+	Patient *PatientWithConsistency
 }
 
 type RoomWithBedsWithPatient struct {

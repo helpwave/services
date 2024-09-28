@@ -4,8 +4,9 @@ package services.tasks_svc.v1;
 
 import "services/tasks_svc/v1/types.proto";
 import "google/protobuf/timestamp.proto";
+import "libs/common/v1/conflict.proto";
 
-option go_package = "gen/proto/services/tasks-svc";
+option go_package = "gen/services/tasks-svc/v1";
 
 
 //
@@ -30,6 +31,7 @@ message CreateTaskRequest {
 
 message CreateTaskResponse {
   string id = 1;
+  string consistency = 2;
 }
 
 //
@@ -43,9 +45,13 @@ message UpdateTaskRequest {
   optional google.protobuf.Timestamp due_at = 4;
   optional TaskStatus status = 5;
   optional bool public = 6;
+  optional string consistency = 7; // no conflict detection, if not provided
 }
 
-message UpdateTaskResponse {}
+message UpdateTaskResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string consistency = 2;
+}
 
 //
 // GetTask
@@ -67,10 +73,12 @@ message GetTaskResponse {
   optional google.protobuf.Timestamp due_at = 9;
   string created_by = 10;
   Patient patient = 11;
+  string consistency = 12;
 
   message Patient {
     string id = 1;
     string human_readable_identifier = 2;
+    string consistency = 3;
   }
 
   message SubTask {
@@ -104,6 +112,7 @@ message GetTasksByPatientResponse {
     string created_by = 9;
     repeated SubTask subtasks = 10;
     google.protobuf.Timestamp created_at = 11;
+    string consistency = 12;
 
     message SubTask {
       string id = 1;
@@ -138,6 +147,7 @@ message GetTasksByPatientSortedByStatusResponse {
     string created_by = 8;
     repeated SubTask subtasks = 9;
     google.protobuf.Timestamp created_at = 10;
+    string consistency = 11;
 
     message SubTask {
       string id = 1;
@@ -170,10 +180,12 @@ message GetAssignedTasksResponse {
     string created_by = 9;
     repeated SubTask subtasks = 10;
     google.protobuf.Timestamp created_at = 11;
+    string consistency = 12;
 
     message Patient {
       string id = 1;
       string human_readable_identifier = 2;
+      string consistency = 3;
     }
 
     message SubTask {
@@ -192,9 +204,13 @@ message GetAssignedTasksResponse {
 message AssignTaskRequest {
   string task_id = 1; // @gotags: validate:"uuid4"
   string user_id = 2; // @gotags: validate:"uuid4"
+  optional string consistency = 3; // no conflict detection, if not provided
 }
 
-message AssignTaskResponse {}
+message AssignTaskResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string consistency = 2;
+}
 
 //
 // UnassignTask
@@ -203,9 +219,13 @@ message AssignTaskResponse {}
 message UnassignTaskRequest {
   string task_id = 1; // @gotags: validate:"uuid4"
   string user_id = 2; // @gotags: validate:"uuid4"
+  optional string consistency = 3; // no conflict detection, if not provided
 }
 
-message UnassignTaskResponse {}
+message UnassignTaskResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string consistency = 2;
+}
 
 //
 // CreateSubtask
@@ -223,6 +243,7 @@ message CreateSubtaskRequest {
 
 message CreateSubtaskResponse {
   string subtask_id = 1;
+  string task_consistency = 2;
 }
 
 //
@@ -233,6 +254,7 @@ message UpdateSubtaskRequest {
   string task_id = 1; // @gotags: validate:"uuid4"
   string subtask_id = 2; // @gotags: validate:"uuid4"
   Subtask subtask = 3; // @gotags: validate:"required"
+  optional string task_consistency = 4; // no conflict detection, if not provided
 
   message Subtask {
     optional string name = 1; // @gotags: validate:"omitnil,min=1"
@@ -240,7 +262,10 @@ message UpdateSubtaskRequest {
   }
 }
 
-message UpdateSubtaskResponse {}
+message UpdateSubtaskResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string task_consistency = 2;
+}
 
 //
 // DeleteSubtask
@@ -261,7 +286,9 @@ message RemoveTaskDueDateRequest {
   string task_id = 1; // @gotags: validate:"uuid4"
 }
 
-message RemoveTaskDueDateResponse {}
+message RemoveTaskDueDateResponse {
+  string consistency = 1;
+}
 
 //
 // DeleteTask

@@ -15,13 +15,6 @@ export class BedServiceClient {
                response: services_task_svc_v1_bed_svc_pb.CreateBedResponse) => void
   ): grpcWeb.ClientReadableStream<services_task_svc_v1_bed_svc_pb.CreateBedResponse>;
 
-  bulkCreateBeds(
-    request: services_task_svc_v1_bed_svc_pb.BulkCreateBedsRequest,
-    metadata: grpcWeb.Metadata | undefined,
-    callback: (err: grpcWeb.RpcError,
-               response: services_task_svc_v1_bed_svc_pb.BulkCreateBedsResponse) => void
-  ): grpcWeb.ClientReadableStream<services_task_svc_v1_bed_svc_pb.BulkCreateBedsResponse>;
-
   getBed(
     request: services_task_svc_v1_bed_svc_pb.GetBedRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -75,11 +68,6 @@ export class BedServicePromiseClient {
     request: services_task_svc_v1_bed_svc_pb.CreateBedRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<services_task_svc_v1_bed_svc_pb.CreateBedResponse>;
-
-  bulkCreateBeds(
-    request: services_task_svc_v1_bed_svc_pb.BulkCreateBedsRequest,
-    metadata?: grpcWeb.Metadata
-  ): Promise<services_task_svc_v1_bed_svc_pb.BulkCreateBedsResponse>;
 
   getBed(
     request: services_task_svc_v1_bed_svc_pb.GetBedRequest,

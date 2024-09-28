@@ -1,6 +1,7 @@
 package room
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
@@ -32,7 +33,7 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	roomID, err := roomRepo.CreateRoom(ctx, room_repo.CreateRoomParams{
+	row, err := roomRepo.CreateRoom(ctx, room_repo.CreateRoomParams{
 		Name:   req.Name,
 		WardID: wardId,
 	})
@@ -41,12 +42,16 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 		return nil, err
 	}
 
+	roomID := row.ID
+	consistency := row.Consistency
+
 	log.Info().
 		Str("roomID", roomID.String()).
 		Msg("room created")
 
 	return &pb.CreateRoomResponse{
-		Id: roomID.String(),
+		Id:          roomID.String(),
+		Consistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 
@@ -78,17 +83,19 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 		}
 
 		val := &pb.GetRoomResponse_Bed{
-			Id:   row.BedID.UUID.String(),
-			Name: *row.BedName,
+			Id:          row.BedID.UUID.String(),
+			Name:        *row.BedName,
+			Consistency: common.ConsistencyToken(*row.BedConsistency).String(),
 		}
 		return &val
 	})
 
 	return &pb.GetRoomResponse{
-		Id:     room.ID.String(),
-		Name:   room.Name,
-		Beds:   beds,
-		WardId: room.WardID.String(),
+		Id:          room.ID.String(),
+		Name:        room.Name,
+		Beds:        beds,
+		WardId:      room.WardID.String(),
+		Consistency: common.ConsistencyToken(room.Consistency).String(),
 	}, nil
 }
 
@@ -102,7 +109,7 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	err = roomRepo.UpdateRoom(ctx, room_repo.UpdateRoomParams{
+	consistency, err := roomRepo.UpdateRoom(ctx, room_repo.UpdateRoomParams{
 		ID:   patientID,
 		Name: req.Name,
 	})
@@ -111,7 +118,10 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 		return nil, err
 	}
 
-	return &pb.UpdateRoomResponse{}, nil
+	return &pb.UpdateRoomResponse{
+		Conflict:    nil, // TODO
+		Consistency: common.ConsistencyToken(consistency).String(),
+	}, nil
 }
 
 func (ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*pb.GetRoomsResponse, error) {
@@ -142,16 +152,18 @@ func (ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*pb
 				return nil
 			}
 			val := &pb.GetRoomsResponse_Room_Bed{
-				Id:   bedRow.BedID.UUID.String(),
-				Name: *bedRow.BedName,
+				Id:          bedRow.BedID.UUID.String(),
+				Name:        *bedRow.BedName,
+				Consistency: common.ConsistencyToken(*bedRow.BedConsistency).String(),
 			}
 			return &val
 		})
 		val := &pb.GetRoomsResponse_Room{
-			Id:     room.ID.String(),
-			Name:   room.Name,
-			Beds:   beds,
-			WardId: room.WardID.String(),
+			Id:          room.ID.String(),
+			Name:        room.Name,
+			Beds:        beds,
+			WardId:      room.WardID.String(),
+			Consistency: common.ConsistencyToken(room.Consistency).String(),
 		}
 		return &val
 	})
@@ -224,20 +236,23 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 								TasksUnscheduled:        uint32(bedRow.TodoTasksCount),
 								TasksInProgress:         uint32(bedRow.InProgressTasksCount),
 								TasksDone:               uint32(bedRow.DoneTasksCount),
+								Consistency:             common.ConsistencyToken(*bedRow.PatientConsistency).String(),
 							}
 						})
 
 					val := &pb.GetRoomOverviewsByWardResponse_Room_Bed{
-						Id:      bedRow.BedID.UUID.String(),
-						Name:    *bedRow.BedName,
-						Patient: patient,
+						Id:          bedRow.BedID.UUID.String(),
+						Name:        *bedRow.BedName,
+						Patient:     patient,
+						Consistency: common.ConsistencyToken(*bedRow.BedConsistency).String(),
 					}
 					return &val
 				})
 			val := &pb.GetRoomOverviewsByWardResponse_Room{
-				Id:   roomRow.RoomID.String(),
-				Name: roomRow.RoomName,
-				Beds: beds,
+				Id:          roomRow.RoomID.String(),
+				Name:        roomRow.RoomName,
+				Beds:        beds,
+				Consistency: common.ConsistencyToken(roomRow.RoomConsistency).String(),
 			}
 			return &val
 		})

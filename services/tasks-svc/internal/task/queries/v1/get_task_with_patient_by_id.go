@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
@@ -21,22 +22,25 @@ func NewGetTaskWithPatientByIDQueryHandler() GetTaskWithPatientByIDQueryHandler 
 			return nil, err
 		}
 		if len(rows) == 0 {
-			return nil, fmt.Errorf("could not find record with ID %s.", taskID.String())
+			return nil, fmt.Errorf("could not find record with ID %s", taskID.String())
 		}
 
 		task := &models.TaskWithPatient{
-			Task: models.Task{
-				ID:           rows[0].Task.ID,
-				Name:         rows[0].Task.Name,
-				Description:  rows[0].Task.Description,
-				Status:       pb.TaskStatus(rows[0].Task.Status),
-				AssignedUser: rows[0].Task.AssignedUserID, // TODO: #760
-				Public:       rows[0].Task.Public,
-				DueAt:        nil, // Will be set below
-				PatientID:    rows[0].Patient.ID,
-				CreatedBy:    rows[0].Task.CreatedBy,
-				CreatedAt:    rows[0].Task.CreatedAt.Time,
-				Subtasks:     make(map[uuid.UUID]models.Subtask),
+			TaskWithConsistency: models.TaskWithConsistency{
+				Task: models.Task{
+					ID:           rows[0].Task.ID,
+					Name:         rows[0].Task.Name,
+					Description:  rows[0].Task.Description,
+					Status:       pb.TaskStatus(rows[0].Task.Status),
+					AssignedUser: rows[0].Task.AssignedUserID, // TODO: #760
+					Public:       rows[0].Task.Public,
+					DueAt:        nil, // Will be set below
+					PatientID:    rows[0].Patient.ID,
+					CreatedBy:    rows[0].Task.CreatedBy,
+					CreatedAt:    rows[0].Task.CreatedAt.Time,
+					Subtasks:     make(map[uuid.UUID]models.Subtask),
+				},
+				Consistency: common.ConsistencyToken(rows[0].Task.Consistency).String(),
 			},
 			Patient: models.Patient{
 				ID:                      rows[0].Patient.ID,

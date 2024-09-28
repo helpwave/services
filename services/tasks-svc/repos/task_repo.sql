@@ -1,7 +1,7 @@
 -- name: CreateTask :exec
 INSERT INTO tasks
-	(id, name, patient_id, status, created_by, created_at)
-VALUES ($1, $2, $3, $4, $5, $6);
+	(id, name, patient_id, status, created_by, created_at, consistency)
+VALUES ($1, $2, $3, $4, $5, $6, $7);
 
 -- name: UpdateTask :exec
 UPDATE tasks
@@ -10,27 +10,52 @@ SET name = coalesce(sqlc.narg('name'), name),
 	status = coalesce(sqlc.narg('status'), status),
 	public = coalesce(sqlc.narg('public'), public),
 	created_by = coalesce(sqlc.narg('created_by'), created_by),
-	due_at = coalesce(sqlc.narg('due_at'), due_at)
+	due_at = coalesce(sqlc.narg('due_at'), due_at),
+	consistency = @consistency
 WHERE id = $1;
 
 -- name: UpdateTaskAssignedUser :exec
 UPDATE tasks
-SET assigned_user_id = @assigned_user_id
+SET assigned_user_id = @assigned_user_id,
+	consistency = @consistency
 WHERE id = @id;
 
 -- name: CreateSubtask :exec
+WITH cet AS (
+	UPDATE tasks
+	SET consistency = @consistency
+	WHERE id = @task_id
+)
 INSERT INTO subtasks
 	(id, task_id, name, created_by, done)
-VALUES ($1, $2, $3, $4, $5);
+VALUES (@id, @task_id, @name, @created_by, @done);
 
 -- name: UpdateSubtask :exec
-UPDATE subtasks
+WITH cet AS (
+	UPDATE tasks AS t
+		SET consistency = @consistency
+		WHERE t.id IN (
+			SELECT task_id
+			FROM subtasks AS st
+			WHERE st.id = @id
+		)
+)
+UPDATE subtasks AS st
 SET name = coalesce(sqlc.narg('name'), name),
     done = coalesce(sqlc.narg('done'), done)
-WHERE id = $1;
+WHERE st.id = @id;
 
 -- name: DeleteSubtask :exec
-DELETE FROM subtasks WHERE id = $1;
+WITH cet AS (
+	UPDATE tasks AS t
+		SET consistency = @consistency
+		WHERE t.id IN (
+			SELECT task_id
+			FROM subtasks AS st
+			WHERE st.id = @id
+		)
+)
+DELETE FROM subtasks AS st WHERE st.id = @id;
 
 -- name: GetTasksWithSubtasksByPatient :many
 SELECT
@@ -72,8 +97,9 @@ WHERE tasks.id = $1;
 
 -- name: RemoveTaskDueAt :exec
 UPDATE tasks
-SET due_at = NULL
-WHERE id = $1;
+SET due_at = NULL,
+	consistency = @consistency
+WHERE id = @id;
 
 -- name: DeleteTask :exec
 DELETE FROM tasks WHERE id = $1;

@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwdb"
@@ -35,28 +36,33 @@ func NewGetPatientWithDetailsByIDQueryHandler(as hwes.AggregateStore) GetPatient
 
 		if patientRes.BedID.Valid {
 			bed = &models.Bed{
-				ID:   patientRes.BedID.UUID,
-				Name: *patientRes.BedName,
+				ID:          patientRes.BedID.UUID,
+				Name:        *patientRes.BedName,
+				Consistency: common.ConsistencyToken(*patientRes.BedConsistency).String(),
 			}
 		}
 
 		if patientRes.RoomID.Valid {
 			room = &models.Room{
-				ID:     patientRes.RoomID.UUID,
-				Name:   *patientRes.RoomName,
-				WardID: patientRes.WardID.UUID,
+				ID:          patientRes.RoomID.UUID,
+				Name:        *patientRes.RoomName,
+				WardID:      patientRes.WardID.UUID,
+				Consistency: common.ConsistencyToken(*patientRes.RoomConsistency).String(),
 			}
 		}
 
 		return &models.PatientDetails{
-			Patient: models.Patient{
-				ID:                      patientRes.ID,
-				HumanReadableIdentifier: patientRes.HumanReadableIdentifier,
-				Notes:                   patientRes.Notes,
-				BedID:                   patientRes.BedID,
-				IsDischarged:            patientRes.IsDischarged,
-				CreatedAt:               patientRes.CreatedAt.Time,
-				UpdatedAt:               patientRes.UpdatedAt.Time,
+			PatientWithConsistency: models.PatientWithConsistency{
+				Patient: models.Patient{
+					ID:                      patientRes.ID,
+					HumanReadableIdentifier: patientRes.HumanReadableIdentifier,
+					Notes:                   patientRes.Notes,
+					BedID:                   patientRes.BedID,
+					IsDischarged:            patientRes.IsDischarged,
+					CreatedAt:               patientRes.CreatedAt.Time,
+					UpdatedAt:               patientRes.UpdatedAt.Time,
+				},
+				Consistency: common.ConsistencyToken(patientRes.Consistency).String(),
 			},
 			Tasks: tasks,
 			Bed:   bed,

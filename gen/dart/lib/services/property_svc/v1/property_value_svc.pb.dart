@@ -13,9 +13,10 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../google/protobuf/timestamp.pb.dart' as $19;
-import 'types.pb.dart' as $20;
-import 'types.pbenum.dart' as $20;
+import '../../../google/protobuf/timestamp.pb.dart' as $20;
+import '../../../libs/common/v1/conflict.pb.dart' as $21;
+import 'types.pb.dart' as $22;
+import 'types.pbenum.dart' as $22;
 
 class AttachPropertyValueRequest_MultiSelectValue extends $pb.GeneratedMessage {
   factory AttachPropertyValueRequest_MultiSelectValue({
@@ -89,10 +90,11 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     $core.String? textValue,
     $core.double? numberValue,
     $core.bool? boolValue,
-    $20.Date? dateValue,
-    $19.Timestamp? dateTimeValue,
+    $22.Date? dateValue,
+    $20.Timestamp? dateTimeValue,
     $core.String? selectValue,
     AttachPropertyValueRequest_MultiSelectValue? multiSelectValue,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (subjectId != null) {
@@ -122,6 +124,9 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     if (multiSelectValue != null) {
       $result.multiSelectValue = multiSelectValue;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   AttachPropertyValueRequest._() : super();
@@ -145,10 +150,11 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'textValue')
     ..a<$core.double>(4, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OD)
     ..aOB(5, _omitFieldNames ? '' : 'boolValue')
-    ..aOM<$20.Date>(6, _omitFieldNames ? '' : 'dateValue', subBuilder: $20.Date.create)
-    ..aOM<$19.Timestamp>(7, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $19.Timestamp.create)
+    ..aOM<$22.Date>(6, _omitFieldNames ? '' : 'dateValue', subBuilder: $22.Date.create)
+    ..aOM<$20.Timestamp>(7, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $20.Timestamp.create)
     ..aOS(8, _omitFieldNames ? '' : 'selectValue')
     ..aOM<AttachPropertyValueRequest_MultiSelectValue>(9, _omitFieldNames ? '' : 'multiSelectValue', subBuilder: AttachPropertyValueRequest_MultiSelectValue.create)
+    ..aOS(10, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -222,26 +228,26 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   void clearBoolValue() => clearField(5);
 
   @$pb.TagNumber(6)
-  $20.Date get dateValue => $_getN(5);
+  $22.Date get dateValue => $_getN(5);
   @$pb.TagNumber(6)
-  set dateValue($20.Date v) { setField(6, v); }
+  set dateValue($22.Date v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasDateValue() => $_has(5);
   @$pb.TagNumber(6)
   void clearDateValue() => clearField(6);
   @$pb.TagNumber(6)
-  $20.Date ensureDateValue() => $_ensure(5);
+  $22.Date ensureDateValue() => $_ensure(5);
 
   @$pb.TagNumber(7)
-  $19.Timestamp get dateTimeValue => $_getN(6);
+  $20.Timestamp get dateTimeValue => $_getN(6);
   @$pb.TagNumber(7)
-  set dateTimeValue($19.Timestamp v) { setField(7, v); }
+  set dateTimeValue($20.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasDateTimeValue() => $_has(6);
   @$pb.TagNumber(7)
   void clearDateTimeValue() => clearField(7);
   @$pb.TagNumber(7)
-  $19.Timestamp ensureDateTimeValue() => $_ensure(6);
+  $20.Timestamp ensureDateTimeValue() => $_ensure(6);
 
   @$pb.TagNumber(8)
   $core.String get selectValue => $_getSZ(7);
@@ -262,15 +268,33 @@ class AttachPropertyValueRequest extends $pb.GeneratedMessage {
   void clearMultiSelectValue() => clearField(9);
   @$pb.TagNumber(9)
   AttachPropertyValueRequest_MultiSelectValue ensureMultiSelectValue() => $_ensure(8);
+
+  /// optional consistency of existing value (not of the property!), no conflict detection, if not provided
+  @$pb.TagNumber(10)
+  $core.String get consistency => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set consistency($core.String v) { $_setString(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasConsistency() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearConsistency() => clearField(10);
 }
 
 class AttachPropertyValueResponse extends $pb.GeneratedMessage {
   factory AttachPropertyValueResponse({
     $core.String? propertyValueId,
+    $21.Conflict? conflict,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (propertyValueId != null) {
       $result.propertyValueId = propertyValueId;
+    }
+    if (conflict != null) {
+      $result.conflict = conflict;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
     }
     return $result;
   }
@@ -280,6 +304,8 @@ class AttachPropertyValueResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AttachPropertyValueResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'propertyValueId')
+    ..aOM<$21.Conflict>(2, _omitFieldNames ? '' : 'conflict', subBuilder: $21.Conflict.create)
+    ..aOS(3, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -312,6 +338,26 @@ class AttachPropertyValueResponse extends $pb.GeneratedMessage {
   $core.bool hasPropertyValueId() => $_has(0);
   @$pb.TagNumber(1)
   void clearPropertyValueId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $21.Conflict get conflict => $_getN(1);
+  @$pb.TagNumber(2)
+  set conflict($21.Conflict v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasConflict() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearConflict() => clearField(2);
+  @$pb.TagNumber(2)
+  $21.Conflict ensureConflict() => $_ensure(1);
+
+  @$pb.TagNumber(3)
+  $core.String get consistency => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set consistency($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasConsistency() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearConsistency() => clearField(3);
 }
 
 class TaskPropertyMatcher extends $pb.GeneratedMessage {
@@ -661,17 +707,19 @@ enum GetAttachedPropertyValuesResponse_Value_Value {
 class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
   factory GetAttachedPropertyValuesResponse_Value({
     $core.String? propertyId,
-    $20.FieldType? fieldType,
+    $22.FieldType? fieldType,
     $core.String? name,
     $core.String? description,
     $core.bool? isArchived,
     $core.String? textValue,
     $core.double? numberValue,
     $core.bool? boolValue,
-    $20.Date? dateValue,
-    $19.Timestamp? dateTimeValue,
+    $22.Date? dateValue,
+    $20.Timestamp? dateTimeValue,
     GetAttachedPropertyValuesResponse_Value_SelectValueOption? selectValue,
     GetAttachedPropertyValuesResponse_Value_MultiSelectValue? multiSelectValue,
+    $core.String? propertyConsistency,
+    $core.String? valueConsistency,
   }) {
     final $result = create();
     if (propertyId != null) {
@@ -710,6 +758,12 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
     if (multiSelectValue != null) {
       $result.multiSelectValue = multiSelectValue;
     }
+    if (propertyConsistency != null) {
+      $result.propertyConsistency = propertyConsistency;
+    }
+    if (valueConsistency != null) {
+      $result.valueConsistency = valueConsistency;
+    }
     return $result;
   }
   GetAttachedPropertyValuesResponse_Value._() : super();
@@ -729,17 +783,19 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAttachedPropertyValuesResponse.Value', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..oo(0, [6, 7, 8, 9, 10, 11, 12])
     ..aOS(1, _omitFieldNames ? '' : 'propertyId')
-    ..e<$20.FieldType>(2, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $20.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $20.FieldType.valueOf, enumValues: $20.FieldType.values)
+    ..e<$22.FieldType>(2, _omitFieldNames ? '' : 'fieldType', $pb.PbFieldType.OE, defaultOrMaker: $22.FieldType.FIELD_TYPE_UNSPECIFIED, valueOf: $22.FieldType.valueOf, enumValues: $22.FieldType.values)
     ..aOS(3, _omitFieldNames ? '' : 'name')
     ..aOS(4, _omitFieldNames ? '' : 'description')
     ..aOB(5, _omitFieldNames ? '' : 'isArchived')
     ..aOS(6, _omitFieldNames ? '' : 'textValue')
     ..a<$core.double>(7, _omitFieldNames ? '' : 'numberValue', $pb.PbFieldType.OD)
     ..aOB(8, _omitFieldNames ? '' : 'boolValue')
-    ..aOM<$20.Date>(9, _omitFieldNames ? '' : 'dateValue', subBuilder: $20.Date.create)
-    ..aOM<$19.Timestamp>(10, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $19.Timestamp.create)
+    ..aOM<$22.Date>(9, _omitFieldNames ? '' : 'dateValue', subBuilder: $22.Date.create)
+    ..aOM<$20.Timestamp>(10, _omitFieldNames ? '' : 'dateTimeValue', subBuilder: $20.Timestamp.create)
     ..aOM<GetAttachedPropertyValuesResponse_Value_SelectValueOption>(11, _omitFieldNames ? '' : 'selectValue', subBuilder: GetAttachedPropertyValuesResponse_Value_SelectValueOption.create)
     ..aOM<GetAttachedPropertyValuesResponse_Value_MultiSelectValue>(12, _omitFieldNames ? '' : 'multiSelectValue', subBuilder: GetAttachedPropertyValuesResponse_Value_MultiSelectValue.create)
+    ..aOS(13, _omitFieldNames ? '' : 'propertyConsistency')
+    ..aOS(14, _omitFieldNames ? '' : 'valueConsistency')
     ..hasRequiredFields = false
   ;
 
@@ -777,9 +833,9 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
   void clearPropertyId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $20.FieldType get fieldType => $_getN(1);
+  $22.FieldType get fieldType => $_getN(1);
   @$pb.TagNumber(2)
-  set fieldType($20.FieldType v) { setField(2, v); }
+  set fieldType($22.FieldType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasFieldType() => $_has(1);
   @$pb.TagNumber(2)
@@ -840,26 +896,26 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
   void clearBoolValue() => clearField(8);
 
   @$pb.TagNumber(9)
-  $20.Date get dateValue => $_getN(8);
+  $22.Date get dateValue => $_getN(8);
   @$pb.TagNumber(9)
-  set dateValue($20.Date v) { setField(9, v); }
+  set dateValue($22.Date v) { setField(9, v); }
   @$pb.TagNumber(9)
   $core.bool hasDateValue() => $_has(8);
   @$pb.TagNumber(9)
   void clearDateValue() => clearField(9);
   @$pb.TagNumber(9)
-  $20.Date ensureDateValue() => $_ensure(8);
+  $22.Date ensureDateValue() => $_ensure(8);
 
   @$pb.TagNumber(10)
-  $19.Timestamp get dateTimeValue => $_getN(9);
+  $20.Timestamp get dateTimeValue => $_getN(9);
   @$pb.TagNumber(10)
-  set dateTimeValue($19.Timestamp v) { setField(10, v); }
+  set dateTimeValue($20.Timestamp v) { setField(10, v); }
   @$pb.TagNumber(10)
   $core.bool hasDateTimeValue() => $_has(9);
   @$pb.TagNumber(10)
   void clearDateTimeValue() => clearField(10);
   @$pb.TagNumber(10)
-  $19.Timestamp ensureDateTimeValue() => $_ensure(9);
+  $20.Timestamp ensureDateTimeValue() => $_ensure(9);
 
   @$pb.TagNumber(11)
   GetAttachedPropertyValuesResponse_Value_SelectValueOption get selectValue => $_getN(10);
@@ -882,6 +938,24 @@ class GetAttachedPropertyValuesResponse_Value extends $pb.GeneratedMessage {
   void clearMultiSelectValue() => clearField(12);
   @$pb.TagNumber(12)
   GetAttachedPropertyValuesResponse_Value_MultiSelectValue ensureMultiSelectValue() => $_ensure(11);
+
+  @$pb.TagNumber(13)
+  $core.String get propertyConsistency => $_getSZ(12);
+  @$pb.TagNumber(13)
+  set propertyConsistency($core.String v) { $_setString(12, v); }
+  @$pb.TagNumber(13)
+  $core.bool hasPropertyConsistency() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearPropertyConsistency() => clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.String get valueConsistency => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set valueConsistency($core.String v) { $_setString(13, v); }
+  @$pb.TagNumber(14)
+  $core.bool hasValueConsistency() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearValueConsistency() => clearField(14);
 }
 
 class GetAttachedPropertyValuesResponse extends $pb.GeneratedMessage {

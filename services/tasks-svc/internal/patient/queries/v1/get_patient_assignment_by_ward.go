@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwdb"
@@ -30,14 +31,21 @@ func NewGetPatientAssignmentByWardQueryHandler() GetPatientAssignmentByWardQuery
 				if bedRow.RoomID != roomRow.RoomID || !bedRow.BedID.Valid {
 					return nil
 				}
-				var patient *models.Patient
+				var patient *models.PatientWithConsistency
 				if bedRow.PatientID.Valid {
-					patient = &models.Patient{ID: bedRow.PatientID.UUID, HumanReadableIdentifier: *bedRow.PatientHumanReadableIdentifier}
+					patient = &models.PatientWithConsistency{
+						Patient: models.Patient{
+							ID:                      bedRow.PatientID.UUID,
+							HumanReadableIdentifier: *bedRow.PatientHumanReadableIdentifier,
+						},
+						Consistency: common.ConsistencyToken(roomRow.RoomConsistency).String(),
+					}
 				}
 				val := &models.BedWithPatient{
 					Bed: models.Bed{
-						ID:   bedRow.BedID.UUID,
-						Name: *bedRow.BedName, // safe, bed is NOT NULL
+						ID:          bedRow.BedID.UUID,
+						Name:        *bedRow.BedName, // safe, bed is NOT NULL
+						Consistency: common.ConsistencyToken(*bedRow.BedConsistency).String(),
 					},
 					Patient: patient,
 				}
@@ -45,8 +53,9 @@ func NewGetPatientAssignmentByWardQueryHandler() GetPatientAssignmentByWardQuery
 			})
 			val := &models.RoomWithBedsWithPatient{
 				Room: models.Room{
-					ID:   roomRow.RoomID,
-					Name: roomRow.RoomName,
+					ID:          roomRow.RoomID,
+					Name:        roomRow.RoomName,
+					Consistency: common.ConsistencyToken(roomRow.RoomConsistency).String(),
 				},
 				Beds: beds,
 			}

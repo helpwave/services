@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
@@ -9,10 +10,10 @@ import (
 	"tasks-svc/repos/task_repo"
 )
 
-type GetTasksByPatientIDQueryHandler func(ctx context.Context, patientID uuid.UUID) ([]*models.Task, error)
+type GetTasksByPatientIDQueryHandler func(ctx context.Context, patientID uuid.UUID) ([]*models.TaskWithConsistency, error)
 
 func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
-	return func(ctx context.Context, patientID uuid.UUID) ([]*models.Task, error) {
+	return func(ctx context.Context, patientID uuid.UUID) ([]*models.TaskWithConsistency, error) {
 		taskRepo := task_repo.New(hwdb.GetDB())
 
 		tasksWithSubtasks, err := taskRepo.GetTasksWithSubtasksByPatient(ctx, patientID)
@@ -20,27 +21,30 @@ func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 			return nil, err
 		}
 
-		tasks := make([]*models.Task, 0)
+		tasks := make([]*models.TaskWithConsistency, 0)
 		tasksMap := make(map[uuid.UUID]int)
 
 		for _, row := range tasksWithSubtasks {
-			var task *models.Task
+			var task *models.TaskWithConsistency
 
 			if ix, exists := tasksMap[row.Task.ID]; exists {
 				task = tasks[ix]
 			} else {
-				task = &models.Task{
-					ID:           row.Task.ID,
-					Name:         row.Task.Name,
-					Description:  row.Task.Description,
-					Status:       pb.TaskStatus(row.Task.Status),
-					AssignedUser: row.Task.AssignedUserID, // TODO: #760
-					PatientID:    row.Task.PatientID,
-					Public:       row.Task.Public,
-					DueAt:        nil, // may be set below
-					CreatedBy:    row.Task.CreatedBy,
-					CreatedAt:    row.Task.CreatedAt.Time,
-					Subtasks:     make(map[uuid.UUID]models.Subtask),
+				task = &models.TaskWithConsistency{
+					Task: models.Task{
+						ID:           row.Task.ID,
+						Name:         row.Task.Name,
+						Description:  row.Task.Description,
+						Status:       pb.TaskStatus(row.Task.Status),
+						AssignedUser: row.Task.AssignedUserID, // TODO: #760
+						PatientID:    row.Task.PatientID,
+						Public:       row.Task.Public,
+						DueAt:        nil, // may be set below
+						CreatedBy:    row.Task.CreatedBy,
+						CreatedAt:    row.Task.CreatedAt.Time,
+						Subtasks:     make(map[uuid.UUID]models.Subtask),
+					},
+					Consistency: common.ConsistencyToken(row.Task.Consistency).String(),
 				}
 
 				if row.Task.DueAt.Valid {

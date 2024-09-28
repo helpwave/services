@@ -28,7 +28,7 @@ type Event struct {
 	Data []byte
 	// time of event creation
 	Timestamp time.Time
-	// event's revision number (event's can, but should not be modified)
+	// event's number in its stream
 	Version uint64
 	// user responsible for this event
 	CommitterUserID *uuid.UUID
@@ -196,6 +196,7 @@ func (e *Event) ToEventData() (esdb.EventData, error) {
 	}
 
 	return esdb.EventData{
+		EventID:     e.EventID,
 		EventType:   e.EventType,
 		ContentType: esdb.ContentTypeJson,
 		Data:        e.Data,

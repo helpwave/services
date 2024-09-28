@@ -29,6 +29,7 @@ type Property struct {
 	IsArchived   bool
 	SetID        uuid.NullUUID
 	SelectDataID uuid.NullUUID
+	Consistency  int64
 }
 
 type PropertyValue struct {
@@ -40,6 +41,7 @@ type PropertyValue struct {
 	BoolValue     *bool
 	DateValue     pgtype.Date
 	DateTimeValue pgtype.Timestamp
+	Consistency   int64
 }
 
 type PropertyViewFilterAlwaysIncludeItem struct {

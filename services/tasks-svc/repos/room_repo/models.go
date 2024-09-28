@@ -10,9 +10,10 @@ import (
 )
 
 type Bed struct {
-	ID     uuid.UUID
-	RoomID uuid.UUID
-	Name   string
+	ID          uuid.UUID
+	RoomID      uuid.UUID
+	Name        string
+	Consistency int64
 }
 
 type Patient struct {
@@ -23,12 +24,14 @@ type Patient struct {
 	CreatedAt               pgtype.Timestamp
 	UpdatedAt               pgtype.Timestamp
 	IsDischarged            bool
+	Consistency             int64
 }
 
 type Room struct {
-	ID     uuid.UUID
-	Name   string
-	WardID uuid.UUID
+	ID          uuid.UUID
+	Name        string
+	WardID      uuid.UUID
+	Consistency int64
 }
 
 type SchemaMigration struct {
@@ -56,6 +59,7 @@ type Task struct {
 	CreatedBy      uuid.UUID
 	DueAt          pgtype.Timestamp
 	CreatedAt      pgtype.Timestamp
+	Consistency    int64
 }
 
 type TaskTemplate struct {
@@ -64,6 +68,7 @@ type TaskTemplate struct {
 	Description string
 	WardID      uuid.NullUUID
 	CreatedBy   uuid.UUID
+	Consistency int64
 }
 
 type TaskTemplateSubtask struct {
@@ -73,6 +78,7 @@ type TaskTemplateSubtask struct {
 }
 
 type Ward struct {
-	ID   uuid.UUID
-	Name string
+	ID          uuid.UUID
+	Name        string
+	Consistency int64
 }

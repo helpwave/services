@@ -5,9 +5,9 @@ import (
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"hwtesting"
 	"hwutil"
 	"testing"
-	"time"
 )
 
 // TestTaskGetPropertyAlwaysIncluded:
@@ -46,7 +46,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get new Property
@@ -85,7 +85,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Property Again
@@ -124,7 +124,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Property Again
@@ -164,7 +164,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Property Again
@@ -183,5 +183,93 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 	if !assert.Equal(t, hwutil.PtrTo(false), propertyResponse.AlwaysIncludeForViewSource) {
 		return
 	}
+
+}
+
+// TestTaskGetPropertyConsistency:
+//   - Create a Property,
+//   - Update name
+//   - TODO: conflict detection
+func TestTaskGetPropertyConsistency(t *testing.T) {
+	propertyClient := propertyServiceClient()
+
+	ctx := context.Background()
+
+	//
+	// Create new Property
+	//
+
+	createPropertyRequest := &pb.CreatePropertyRequest{
+		SubjectType:   pb.SubjectType_SUBJECT_TYPE_TASK,
+		FieldType:     pb.FieldType_FIELD_TYPE_TEXT,
+		Name:          t.Name(),
+		Description:   nil,
+		SetId:         nil,
+		FieldTypeData: nil,
+	}
+
+	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
+	if !assert.NoError(t, err, "could not create new property") {
+		return
+	}
+	propertyID, err := uuid.Parse(createResponse.PropertyId)
+	if !assert.NoError(t, err, "propertyID is not a uuid") {
+		return
+	}
+
+	createVersion := createResponse.Consistency
+
+	hwtesting.WaitForProjectionsToSettle()
+
+	//
+	// Get new Property
+	//
+
+	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{
+		Id: propertyID.String(),
+	})
+	if !assert.NoError(t, err, "could not get property after it was created") {
+		return
+	}
+
+	readVersion := propertyResponse.Consistency
+
+	assert.Equal(t, createVersion, readVersion, "create and read consistencies differ")
+
+	//
+	// Update Property
+	//
+
+	updateResponse, err := propertyClient.UpdateProperty(ctx, &pb.UpdatePropertyRequest{
+		Id:          propertyID.String(),
+		Name:        hwutil.PtrTo(t.Name() + " updated"),
+		Description: nil,
+		Consistency: &readVersion,
+	})
+
+	if !assert.NoError(t, err, "could not update property") {
+		return
+	}
+
+	updatedVersion := updateResponse.GetConsistency()
+
+	assert.NotEqual(t, readVersion, updatedVersion, "update does not change consistency")
+
+	hwtesting.WaitForProjectionsToSettle()
+
+	//
+	// Get updated Property
+	//
+
+	propertyResponse, err = propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{
+		Id: propertyID.String(),
+	})
+	if !assert.NoError(t, err, "could not get property after it was updated") {
+		return
+	}
+
+	readVersionAfterUpdate := propertyResponse.Consistency
+
+	assert.Equal(t, updatedVersion, readVersionAfterUpdate, "updatedVersion and readVersionAfterUpdate consistencies differ")
 
 }

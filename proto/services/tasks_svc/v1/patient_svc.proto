@@ -3,8 +3,9 @@ syntax = "proto3";
 package services.tasks_svc.v1;
 
 import "services/tasks_svc/v1/types.proto";
+import "libs/common/v1/conflict.proto";
 
-option go_package = "gen/proto/services/tasks-svc";
+option go_package = "gen/services/tasks-svc/v1";
 
 //
 // CreatePatient
@@ -17,6 +18,7 @@ message CreatePatientRequest {
 
 message CreatePatientResponse {
   string id = 1;
+  string consistency = 2;
 }
 
 //
@@ -31,21 +33,23 @@ message GetPatientResponse {
   string id = 1;
   string human_readable_identifier = 2;
   string notes = 3;
-  optional string bed_id = 4;
-  optional string ward_id = 5;
 
   optional Room room = 7;
   optional Bed bed = 8;
+
+  string consistency = 9;
 
   message Room {
     string id = 1;
     string name = 2;
     string ward_id = 3;
+    string consistency = 4;
   }
 
   message Bed {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 }
 
@@ -61,7 +65,8 @@ message GetPatientByBedResponse {
   string id = 1;
   string human_readable_identifier = 2;
   string notes = 3;
-  optional string bed_id = 4;
+  string bed_id = 4;
+  string consistency = 5;
 }
 
 //
@@ -80,6 +85,7 @@ message GetPatientsByWardResponse {
     string human_readable_identifier = 2;
     string notes = 3;
     optional string bed_id = 4;
+    string consistency = 5;
   }
 }
 
@@ -99,15 +105,18 @@ message GetPatientAssignmentByWardResponse {
     string id = 1;
     string name = 2;
     repeated Bed beds = 3;
+    string consistency = 4;
 
     message Bed {
       string id = 1;
       string name = 2;
       optional Patient patient = 3;
+      string consistency = 4;
 
       message Patient {
         string id = 1;
         string name = 2;
+        string consistency = 3;
       }
     }
   }
@@ -129,16 +138,19 @@ message GetPatientDetailsResponse {
   optional Room room = 5;
   optional Bed bed = 6;
   bool is_discharged = 7;
+  string consistency = 8;
 
   message Room {
     string id = 1;
     string name = 2;
     string ward_id = 3;
+    string consistency = 4;
   }
 
   message Bed {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 
   message Task {
@@ -150,6 +162,7 @@ message GetPatientDetailsResponse {
     string patient_id = 6;
     bool public = 7;
     repeated SubTask subtasks = 8;
+    string consistency = 9;
 
     message SubTask {
       string id = 1;
@@ -175,12 +188,14 @@ message GetPatientListResponse {
   message Bed {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 
-  message  Room {
-    string  id = 1;
-    string  name = 2;
-    string  ward_id = 3;
+  message Room {
+    string id = 1;
+    string name = 2;
+    string ward_id = 3;
+    string consistency = 4;
   }
 
   message Patient {
@@ -190,6 +205,7 @@ message GetPatientListResponse {
     Bed bed = 4;
     string notes = 5;
     repeated Task tasks = 6;
+    string consistency = 7;
   }
 
   message Task {
@@ -201,6 +217,7 @@ message GetPatientListResponse {
     string patient_id = 6;
     bool public = 7;
     repeated SubTask subtasks = 8;
+    string consistency = 9;
 
     message SubTask {
       string id = 1;
@@ -218,24 +235,27 @@ message GetPatientListResponse {
 message GetRecentPatientsRequest {}
 
 message GetRecentPatientsResponse {
-  repeated PatientWithRoomAndBed recent_patients = 1;
+  repeated Patient recent_patients = 1;
 
   message Bed {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 
-  message  Room {
-    string  id = 1;
-    string  name = 2;
-    string  ward_id = 3;
+  message Room {
+    string id = 1;
+    string name = 2;
+    string ward_id = 3;
+    string consistency = 4;
   }
 
-  message PatientWithRoomAndBed {
+  message Patient {
     string id = 1;
     string human_readable_identifier = 2;
-    Room room = 3;
-    Bed bed = 4;
+    optional Room room = 3;
+    optional Bed bed = 4;
+    string consistency = 5;
   }
 }
 
@@ -248,9 +268,13 @@ message UpdatePatientRequest {
   string id = 1; // @gotags: validate:"uuid4"
   optional string human_readable_identifier = 2;
   optional string notes = 3;
+  optional string consistency = 4; // no conflict detection, if not provided
 }
 
-message UpdatePatientResponse {}
+message UpdatePatientResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string consistency = 2;
+}
 
 //
 // AssignBed
@@ -259,9 +283,13 @@ message UpdatePatientResponse {}
 message AssignBedRequest {
   string id = 1; // @gotags: validate:"uuid4"
   string bed_id = 2; // @gotags: validate:"uuid4"
+  optional string consistency = 3; // no conflict detection, if not provided
 }
 
-message AssignBedResponse {}
+message AssignBedResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string consistency = 2;
+}
 
 //
 // UnassignBed
@@ -269,9 +297,13 @@ message AssignBedResponse {}
 
 message UnassignBedRequest {
   string id = 1; // @gotags: validate:"uuid4"
+  optional string consistency = 2; // no conflict detection, if not provided
 }
 
-message UnassignBedResponse {}
+message UnassignBedResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string consistency = 2;
+}
 
 //
 // DischargePatient
@@ -281,7 +313,9 @@ message DischargePatientRequest {
   string id = 1; // @gotags: validate:"uuid4"
 }
 
-message DischargePatientResponse {}
+message DischargePatientResponse {
+  string consistency = 1;
+}
 //
 // ReadmitPatient
 //
@@ -290,7 +324,9 @@ message ReadmitPatientRequest {
   string patient_id = 1; // @gotags: validate:"uuid4"
 }
 
-message ReadmitPatientResponse {}
+message ReadmitPatientResponse {
+  string consistency = 1;
+}
 
 //
 // DeletePatient

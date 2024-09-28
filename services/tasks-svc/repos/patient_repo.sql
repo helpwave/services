@@ -1,20 +1,22 @@
 -- name: CreatePatient :exec
 INSERT INTO patients
-	(id, human_readable_identifier, notes, created_at, updated_at)
-VALUES ($1, $2, $3, $4, $5);
+	(id, human_readable_identifier, notes, created_at, updated_at, consistency)
+VALUES ($1, $2, $3, $4, $5, $6);
 
 -- name: UpdatePatient :exec
 UPDATE patients
 SET human_readable_identifier = coalesce(sqlc.narg('human_readable_identfier'), human_readable_identifier),
     notes = coalesce(sqlc.narg('notes'), notes),
     updated_at = coalesce(sqlc.narg('updated_at'), updated_at),
-    is_discharged = coalesce(sqlc.narg('is_discharged'), is_discharged)
+    is_discharged = coalesce(sqlc.narg('is_discharged'), is_discharged),
+	consistency = @consistency
 WHERE id = $1;
 
 -- name: UpdatePatientBedId :exec
 UPDATE patients
 SET bed_id = @bed_id,
-    updated_at = @updated_at
+    updated_at = @updated_at,
+	consistency = @consistency
 WHERE id = @id;
 
 -- name: GetPatientByBed :one
@@ -35,7 +37,11 @@ WHERE rooms.ward_id = @ward_id;
 SELECT
 	patients.*,
 	beds.name as bed_name,
-	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+	beds.consistency as bed_consistency,
+	rooms.id as room_id,
+	rooms.name as room_name,
+	rooms.ward_id as ward_id,
+	rooms.consistency as room_consistency
 FROM patients
 		 LEFT JOIN beds ON patients.bed_id = beds.id
 		 LEFT JOIN rooms ON beds.room_id = rooms.id
@@ -51,14 +57,17 @@ SELECT
 	tasks.status as task_status,
 	tasks.assigned_user_id as task_assigned_user_id,
 	tasks.public as task_public,
+	tasks.consistency as task_consistency,
 	subtasks.id as subtask_id,
 	subtasks.name as subtask_name,
 	subtasks.done as subtask_done,
 	beds.id as bed_id,
 	beds.name as bed_name,
+	beds.consistency as beds_consistency,
 	rooms.id as room_id,
 	rooms.name as room_name,
-	rooms.ward_id as ward_id
+	rooms.ward_id as ward_id,
+	rooms.consistency as room_consistency
 FROM patients
 		 LEFT JOIN tasks ON tasks.patient_id = patients.id
 		 LEFT JOIN subtasks ON subtasks.task_id = tasks.id

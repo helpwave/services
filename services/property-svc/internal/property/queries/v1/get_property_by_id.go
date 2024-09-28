@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
@@ -10,20 +11,20 @@ import (
 	"property-svc/repos/property_repo"
 )
 
-type GetPropertyByIDQueryHandler func(ctx context.Context, propertyID uuid.UUID) (*models.Property, error)
+type GetPropertyByIDQueryHandler func(ctx context.Context, propertyID uuid.UUID) (*models.Property, common.ConsistencyToken, error)
 
 func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
-	return func(ctx context.Context, propertyID uuid.UUID) (*models.Property, error) {
+	return func(ctx context.Context, propertyID uuid.UUID) (*models.Property, common.ConsistencyToken, error) {
 		propertyRepo := property_repo.New(hwdb.GetDB())
 
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx, property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
 			ID: uuid.NullUUID{UUID: propertyID, Valid: true},
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
-			return nil, err
+			return nil, 0, err
 		}
 		if len(rows) == 0 {
-			return nil, fmt.Errorf("record with id %s not found.", propertyID.String())
+			return nil, 0, fmt.Errorf("record with id %s not found.", propertyID.String())
 		}
 
 		property := &models.Property{
@@ -56,6 +57,6 @@ func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
 			}
 		}
 
-		return property, nil
+		return property, common.ConsistencyToken(rows[0].Property.Consistency), nil
 	}
 }

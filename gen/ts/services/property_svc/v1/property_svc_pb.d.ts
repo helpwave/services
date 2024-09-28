@@ -1,6 +1,7 @@
 import * as jspb from 'google-protobuf'
 
 import * as services_property_svc_v1_types_pb from '../../../services/property_svc/v1/types_pb'; // proto import: "services/property_svc/v1/types.proto"
+import * as libs_common_v1_conflict_pb from '../../../libs/common/v1/conflict_pb'; // proto import: "libs/common/v1/conflict.proto"
 
 
 export class CreatePropertyRequest extends jspb.Message {
@@ -130,6 +131,9 @@ export class CreatePropertyResponse extends jspb.Message {
   getPropertyId(): string;
   setPropertyId(value: string): CreatePropertyResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): CreatePropertyResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreatePropertyResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreatePropertyResponse): CreatePropertyResponse.AsObject;
@@ -141,6 +145,7 @@ export class CreatePropertyResponse extends jspb.Message {
 export namespace CreatePropertyResponse {
   export type AsObject = {
     propertyId: string,
+    consistency: string,
   }
 }
 
@@ -240,6 +245,9 @@ export class GetPropertyResponse extends jspb.Message {
   hasAlwaysIncludeForViewSource(): boolean;
   clearAlwaysIncludeForViewSource(): GetPropertyResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): GetPropertyResponse;
+
   getFieldTypeDataCase(): GetPropertyResponse.FieldTypeDataCase;
 
   serializeBinary(): Uint8Array;
@@ -261,6 +269,7 @@ export namespace GetPropertyResponse {
     setId?: string,
     selectData?: GetPropertyResponse.SelectData.AsObject,
     alwaysIncludeForViewSource?: boolean,
+    consistency: string,
   }
 
   export class SelectData extends jspb.Message {
@@ -303,6 +312,9 @@ export namespace GetPropertyResponse {
       getIsCustom(): boolean;
       setIsCustom(value: boolean): SelectOption;
 
+      getConsistency(): string;
+      setConsistency(value: string): SelectOption;
+
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SelectOption.AsObject;
       static toObject(includeInstance: boolean, msg: SelectOption): SelectOption.AsObject;
@@ -317,6 +329,7 @@ export namespace GetPropertyResponse {
         name: string,
         description?: string,
         isCustom: boolean,
+        consistency: string,
       }
 
       export enum DescriptionCase { 
@@ -388,6 +401,11 @@ export class UpdatePropertyRequest extends jspb.Message {
   hasSelectData(): boolean;
   clearSelectData(): UpdatePropertyRequest;
 
+  getConsistency(): string;
+  setConsistency(value: string): UpdatePropertyRequest;
+  hasConsistency(): boolean;
+  clearConsistency(): UpdatePropertyRequest;
+
   getFieldTypeDataCase(): UpdatePropertyRequest.FieldTypeDataCase;
 
   serializeBinary(): Uint8Array;
@@ -407,6 +425,7 @@ export namespace UpdatePropertyRequest {
     isArchived?: boolean,
     setId?: string,
     selectData?: UpdatePropertyRequest.SelectData.AsObject,
+    consistency?: string,
   }
 
   export class SelectData extends jspb.Message {
@@ -528,9 +547,22 @@ export namespace UpdatePropertyRequest {
     _SET_ID_NOT_SET = 0,
     SET_ID = 8,
   }
+
+  export enum ConsistencyCase { 
+    _CONSISTENCY_NOT_SET = 0,
+    CONSISTENCY = 11,
+  }
 }
 
 export class UpdatePropertyResponse extends jspb.Message {
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): UpdatePropertyResponse;
+  hasConflict(): boolean;
+  clearConflict(): UpdatePropertyResponse;
+
+  getConsistency(): string;
+  setConsistency(value: string): UpdatePropertyResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdatePropertyResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UpdatePropertyResponse): UpdatePropertyResponse.AsObject;
@@ -541,6 +573,13 @@ export class UpdatePropertyResponse extends jspb.Message {
 
 export namespace UpdatePropertyResponse {
   export type AsObject = {
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    consistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 1,
   }
 }
 
@@ -612,6 +651,9 @@ export namespace GetPropertiesBySubjectTypeResponse {
     hasSelectData(): boolean;
     clearSelectData(): Property;
 
+    getConsistency(): string;
+    setConsistency(value: string): Property;
+
     getFieldTypeDataCase(): Property.FieldTypeDataCase;
 
     serializeBinary(): Uint8Array;
@@ -632,6 +674,7 @@ export namespace GetPropertiesBySubjectTypeResponse {
       isArchived: boolean,
       setId?: string,
       selectData?: GetPropertiesBySubjectTypeResponse.Property.SelectData.AsObject,
+      consistency: string,
     }
 
     export class SelectData extends jspb.Message {

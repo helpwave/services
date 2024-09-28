@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
@@ -33,18 +34,21 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 				task = tasks[ix]
 			} else {
 				task = &models.TaskWithPatient{
-					Task: models.Task{
-						ID:           row.Task.ID,
-						Name:         row.Task.Name,
-						Description:  row.Task.Description,
-						Status:       pb.TaskStatus(row.Task.Status),
-						AssignedUser: row.Task.AssignedUserID, // TODO: #760
-						Public:       row.Task.Public,
-						DueAt:        nil, // may be set below
-						PatientID:    row.Patient.ID,
-						CreatedBy:    row.Task.CreatedBy,
-						CreatedAt:    row.Task.CreatedAt.Time,
-						Subtasks:     make(map[uuid.UUID]models.Subtask),
+					TaskWithConsistency: models.TaskWithConsistency{
+						Task: models.Task{
+							ID:           row.Task.ID,
+							Name:         row.Task.Name,
+							Description:  row.Task.Description,
+							Status:       pb.TaskStatus(row.Task.Status),
+							AssignedUser: row.Task.AssignedUserID, // TODO: #760
+							Public:       row.Task.Public,
+							DueAt:        nil, // may be set below
+							PatientID:    row.Patient.ID,
+							CreatedBy:    row.Task.CreatedBy,
+							CreatedAt:    row.Task.CreatedAt.Time,
+							Subtasks:     make(map[uuid.UUID]models.Subtask),
+						},
+						Consistency: common.ConsistencyToken(row.Task.Consistency).String(),
 					},
 					Patient: models.Patient{
 						ID:                      row.Patient.ID,
@@ -52,6 +56,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 						Notes:                   row.Patient.Notes,
 						BedID:                   row.Patient.BedID,
 						IsDischarged:            row.Patient.IsDischarged,
+						Consistency:             common.ConsistencyToken(row.Patient.Consistency).String(),
 					},
 				}
 

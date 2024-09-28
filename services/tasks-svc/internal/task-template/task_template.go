@@ -47,7 +47,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		description = *req.Description
 	}
 
-	templateID, err := templateRepo.CreateTaskTemplate(ctx, task_template_repo.CreateTaskTemplateParams{
+	row, err := templateRepo.CreateTaskTemplate(ctx, task_template_repo.CreateTaskTemplateParams{
 		Name:        req.Name,
 		Description: description,
 		CreatedBy:   userID,
@@ -58,6 +58,9 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	if err != nil {
 		return nil, err
 	}
+
+	templateID := row.ID
+	consistency := row.Consistency
 
 	if req.Subtasks != nil {
 		subtaskNames := hwutil.Map(req.Subtasks, func(subtask *pb.CreateTaskTemplateRequest_SubTask) task_template_repo.AppendSubTasksParams {
@@ -83,7 +86,8 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 		Msg("taskTemplate created")
 
 	return &pb.CreateTaskTemplateResponse{
-		Id: templateID.String(),
+		Id:          templateID.String(),
+		Consistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 
@@ -113,7 +117,14 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 
 func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.DeleteTaskTemplateSubTaskRequest) (*pb.DeleteTaskTemplateSubTaskResponse, error) {
 	log := zlog.Ctx(ctx)
-	templateRepo := task_template_repo.New(hwdb.GetDB())
+
+	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(), ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer rollback()
+
+	templateRepo := task_template_repo.New(tx)
 
 	// TODO: Auth
 
@@ -128,12 +139,27 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 		return nil, err
 	}
 
+	// increase consistency of taskTemplate
+	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+		ID: subtask.TaskTemplateID,
+	})
+	if err := hwdb.Error(ctx, err); err != nil {
+		return nil, err
+	}
+
+	// commit
+	if err := hwdb.Error(ctx, tx.Commit(ctx)); err != nil {
+		return nil, err
+	}
+
 	log.Info().
 		Str("taskTemplateSubtaskID", subtask.ID.String()).
 		Str("taskTemplateID", subtask.TaskTemplateID.String()).
 		Msg("taskTemplateSubtask deleted")
 
-	return &pb.DeleteTaskTemplateSubTaskResponse{}, nil
+	return &pb.DeleteTaskTemplateSubTaskResponse{
+		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(),
+	}, nil
 }
 
 func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskTemplateRequest) (*pb.UpdateTaskTemplateResponse, error) {
@@ -146,7 +172,7 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	err = templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
 		Name:        req.Name,
 		Description: req.Description,
 		ID:          id,
@@ -156,11 +182,20 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 		return nil, err
 	}
 
-	return &pb.UpdateTaskTemplateResponse{}, nil
+	return &pb.UpdateTaskTemplateResponse{
+		Conflict:    nil, // TODO
+		Consistency: common.ConsistencyToken(consistency).String(),
+	}, nil
 }
 
 func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.UpdateTaskTemplateSubTaskRequest) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
-	templateRepo := task_template_repo.New(hwdb.GetDB())
+	// TX
+	tx, rollback, err := hwdb.BeginTx(hwdb.GetDB(), ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer rollback()
+	templateRepo := task_template_repo.New(tx)
 
 	// TODO: Auth
 
@@ -169,7 +204,8 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	err = templateRepo.UpdateSubtask(ctx, task_template_repo.UpdateSubtaskParams{
+	// update subtask and get related taskTemplate
+	taskTemplateID, err := templateRepo.UpdateSubtask(ctx, task_template_repo.UpdateSubtaskParams{
 		Name: req.Name,
 		ID:   id,
 	})
@@ -178,7 +214,23 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 		return nil, err
 	}
 
-	return &pb.UpdateTaskTemplateSubTaskResponse{}, nil
+	// increase consistency of taskTemplate
+	consistency, err := templateRepo.UpdateTaskTemplate(ctx, task_template_repo.UpdateTaskTemplateParams{
+		ID: taskTemplateID,
+	})
+	if err := hwdb.Error(ctx, err); err != nil {
+		return nil, err
+	}
+
+	// commit
+	if err := hwdb.Error(ctx, tx.Commit(ctx)); err != nil {
+		return nil, err
+	}
+
+	return &pb.UpdateTaskTemplateSubTaskResponse{
+		Conflict:                nil, // TODO
+		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(),
+	}, nil
 }
 
 func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.CreateTaskTemplateSubTaskRequest) (*pb.CreateTaskTemplateSubTaskResponse, error) {
@@ -190,7 +242,7 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 		return nil, err
 	}
 
-	subtaskID, err := templateRepo.CreateSubTask(ctx, task_template_repo.CreateSubTaskParams{
+	row, err := templateRepo.CreateSubTask(ctx, task_template_repo.CreateSubTaskParams{
 		TaskTemplateID: taskTemplateID,
 		Name:           req.Name,
 	})
@@ -200,13 +252,18 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	subtaskID := row.ID
+	consistency := row.Consistency
+
 	log.Info().
 		Str("taskTemplateID", taskTemplateID.String()).
 		Str("taskTemplateSubTaskID", subtaskID.String()).
+		Int64("consistencyInt64", consistency).
 		Msg("subtaskID created")
 
 	return &pb.CreateTaskTemplateSubTaskResponse{
-		Id: subtaskID.String(),
+		Id:                      subtaskID.String(),
+		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 
@@ -248,6 +305,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, req *pb.GetAllTask
 				IsPublic:    row.TaskTemplate.WardID.Valid,
 				Subtasks:    make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask, 0),
 				CreatedBy:   row.TaskTemplate.CreatedBy.String(),
+				Consistency: common.ConsistencyToken(row.TaskTemplate.Consistency).String(),
 			}
 			templates = append(templates, template)
 			templateMap[row.TaskTemplate.ID] = len(templates) - 1

@@ -30,12 +30,14 @@ const CreatePropertySetResponse$json = {
   '1': 'CreatePropertySetResponse',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'consistency', '3': 2, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `CreatePropertySetResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createPropertySetResponseDescriptor = $convert.base64Decode(
-    'ChlDcmVhdGVQcm9wZXJ0eVNldFJlc3BvbnNlEg4KAmlkGAEgASgJUgJpZA==');
+    'ChlDcmVhdGVQcm9wZXJ0eVNldFJlc3BvbnNlEg4KAmlkGAEgASgJUgJpZBIgCgtjb25zaXN0ZW'
+    '5jeRgCIAEoCVILY29uc2lzdGVuY3k=');
 
 @$core.Deprecated('Use getPropertySetRequestDescriptor instead')
 const GetPropertySetRequest$json = {
@@ -55,11 +57,12 @@ const GetPropertySetResponse$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'consistency', '3': 3, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `GetPropertySetResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getPropertySetResponseDescriptor = $convert.base64Decode(
     'ChZHZXRQcm9wZXJ0eVNldFJlc3BvbnNlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUg'
-    'RuYW1l');
+    'RuYW1lEiAKC2NvbnNpc3RlbmN5GAMgASgJUgtjb25zaXN0ZW5jeQ==');
 

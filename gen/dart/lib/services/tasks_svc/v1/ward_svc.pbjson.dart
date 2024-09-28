@@ -30,12 +30,14 @@ const CreateWardResponse$json = {
   '1': 'CreateWardResponse',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'consistency', '3': 2, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `CreateWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createWardResponseDescriptor = $convert.base64Decode(
-    'ChJDcmVhdGVXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlk');
+    'ChJDcmVhdGVXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEiAKC2NvbnNpc3RlbmN5GAIgAS'
+    'gJUgtjb25zaXN0ZW5jeQ==');
 
 @$core.Deprecated('Use getWardRequestDescriptor instead')
 const GetWardRequest$json = {
@@ -55,12 +57,14 @@ const GetWardResponse$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'consistency', '3': 3, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `GetWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getWardResponseDescriptor = $convert.base64Decode(
-    'Cg9HZXRXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWU=');
+    'Cg9HZXRXYXJkUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSIA'
+    'oLY29uc2lzdGVuY3kYAyABKAlSC2NvbnNpc3RlbmN5');
 
 @$core.Deprecated('Use getWardsRequestDescriptor instead')
 const GetWardsRequest$json = {
@@ -86,14 +90,15 @@ const GetWardsResponse_Ward$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'consistency', '3': 3, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `GetWardsResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getWardsResponseDescriptor = $convert.base64Decode(
     'ChBHZXRXYXJkc1Jlc3BvbnNlEkIKBXdhcmRzGAEgAygLMiwuc2VydmljZXMudGFza3Nfc3ZjLn'
-    'YxLkdldFdhcmRzUmVzcG9uc2UuV2FyZFIFd2FyZHMaKgoEV2FyZBIOCgJpZBgBIAEoCVICaWQS'
-    'EgoEbmFtZRgCIAEoCVIEbmFtZQ==');
+    'YxLkdldFdhcmRzUmVzcG9uc2UuV2FyZFIFd2FyZHMaTAoEV2FyZBIOCgJpZBgBIAEoCVICaWQS'
+    'EgoEbmFtZRgCIAEoCVIEbmFtZRIgCgtjb25zaXN0ZW5jeRgDIAEoCVILY29uc2lzdGVuY3k=');
 
 @$core.Deprecated('Use getRecentWardsRequestDescriptor instead')
 const GetRecentWardsRequest$json = {
@@ -123,17 +128,18 @@ const GetRecentWardsResponse_Ward$json = {
     {'1': 'tasks_todo', '3': 4, '4': 1, '5': 13, '10': 'tasksTodo'},
     {'1': 'tasks_in_progress', '3': 5, '4': 1, '5': 13, '10': 'tasksInProgress'},
     {'1': 'tasks_done', '3': 6, '4': 1, '5': 13, '10': 'tasksDone'},
+    {'1': 'consistency', '3': 7, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `GetRecentWardsResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getRecentWardsResponseDescriptor = $convert.base64Decode(
     'ChZHZXRSZWNlbnRXYXJkc1Jlc3BvbnNlEkgKBXdhcmRzGAEgAygLMjIuc2VydmljZXMudGFza3'
-    'Nfc3ZjLnYxLkdldFJlY2VudFdhcmRzUmVzcG9uc2UuV2FyZFIFd2FyZHMasQEKBFdhcmQSDgoC'
+    'Nfc3ZjLnYxLkdldFJlY2VudFdhcmRzUmVzcG9uc2UuV2FyZFIFd2FyZHMa0wEKBFdhcmQSDgoC'
     'aWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSGwoJYmVkX2NvdW50GAMgASgNUghiZW'
     'RDb3VudBIdCgp0YXNrc190b2RvGAQgASgNUgl0YXNrc1RvZG8SKgoRdGFza3NfaW5fcHJvZ3Jl'
     'c3MYBSABKA1SD3Rhc2tzSW5Qcm9ncmVzcxIdCgp0YXNrc19kb25lGAYgASgNUgl0YXNrc0Rvbm'
-    'U=');
+    'USIAoLY29uc2lzdGVuY3kYByABKAlSC2NvbnNpc3RlbmN5');
 
 @$core.Deprecated('Use updateWardRequestDescriptor instead')
 const UpdateWardRequest$json = {
@@ -141,25 +147,37 @@ const UpdateWardRequest$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'name', '17': true},
+    {'1': 'consistency', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'consistency', '17': true},
   ],
   '8': [
     {'1': '_name'},
+    {'1': '_consistency'},
   ],
 };
 
 /// Descriptor for `UpdateWardRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateWardRequestDescriptor = $convert.base64Decode(
     'ChFVcGRhdGVXYXJkUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSFwoEbmFtZRgCIAEoCUgAUgRuYW'
-    '1liAEBQgcKBV9uYW1l');
+    '1liAEBEiUKC2NvbnNpc3RlbmN5GAMgASgJSAFSC2NvbnNpc3RlbmN5iAEBQgcKBV9uYW1lQg4K'
+    'DF9jb25zaXN0ZW5jeQ==');
 
 @$core.Deprecated('Use updateWardResponseDescriptor instead')
 const UpdateWardResponse$json = {
   '1': 'UpdateWardResponse',
+  '2': [
+    {'1': 'conflict', '3': 1, '4': 1, '5': 11, '6': '.libs.common.v1.Conflict', '9': 0, '10': 'conflict', '17': true},
+    {'1': 'consistency', '3': 2, '4': 1, '5': 9, '10': 'consistency'},
+  ],
+  '8': [
+    {'1': '_conflict'},
+  ],
 };
 
 /// Descriptor for `UpdateWardResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateWardResponseDescriptor = $convert.base64Decode(
-    'ChJVcGRhdGVXYXJkUmVzcG9uc2U=');
+    'ChJVcGRhdGVXYXJkUmVzcG9uc2USOQoIY29uZmxpY3QYASABKAsyGC5saWJzLmNvbW1vbi52MS'
+    '5Db25mbGljdEgAUghjb25mbGljdIgBARIgCgtjb25zaXN0ZW5jeRgCIAEoCVILY29uc2lzdGVu'
+    'Y3lCCwoJX2NvbmZsaWN0');
 
 @$core.Deprecated('Use deleteWardRequestDescriptor instead')
 const DeleteWardRequest$json = {
@@ -202,6 +220,7 @@ const GetWardDetailsResponse$json = {
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'rooms', '3': 3, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetWardDetailsResponse.Room', '10': 'rooms'},
     {'1': 'task_templates', '3': 4, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetWardDetailsResponse.TaskTemplate', '10': 'taskTemplates'},
+    {'1': 'consistency', '3': 5, '4': 1, '5': 9, '10': 'consistency'},
   ],
   '3': [GetWardDetailsResponse_Bed$json, GetWardDetailsResponse_Subtask$json, GetWardDetailsResponse_Room$json, GetWardDetailsResponse_TaskTemplate$json],
 };
@@ -212,6 +231,7 @@ const GetWardDetailsResponse_Bed$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'consistency', '3': 3, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
@@ -231,6 +251,7 @@ const GetWardDetailsResponse_Room$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'beds', '3': 3, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetWardDetailsResponse.Bed', '10': 'beds'},
+    {'1': 'consistency', '3': 4, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
@@ -241,6 +262,7 @@ const GetWardDetailsResponse_TaskTemplate$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'subtasks', '3': 3, '4': 3, '5': 11, '6': '.services.tasks_svc.v1.GetWardDetailsResponse.Subtask', '10': 'subtasks'},
+    {'1': 'consistency', '3': 4, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
@@ -250,13 +272,15 @@ final $typed_data.Uint8List getWardDetailsResponseDescriptor = $convert.base64De
     'RuYW1lEkgKBXJvb21zGAMgAygLMjIuc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldFdhcmREZXRh'
     'aWxzUmVzcG9uc2UuUm9vbVIFcm9vbXMSYQoOdGFza190ZW1wbGF0ZXMYBCADKAsyOi5zZXJ2aW'
     'Nlcy50YXNrc19zdmMudjEuR2V0V2FyZERldGFpbHNSZXNwb25zZS5UYXNrVGVtcGxhdGVSDXRh'
-    'c2tUZW1wbGF0ZXMaKQoDQmVkEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lGi'
-    '0KB1N1YnRhc2sSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUacQoEUm9vbRIO'
-    'CgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRJFCgRiZWRzGAMgAygLMjEuc2Vydm'
-    'ljZXMudGFza3Nfc3ZjLnYxLkdldFdhcmREZXRhaWxzUmVzcG9uc2UuQmVkUgRiZWRzGoUBCgxU'
-    'YXNrVGVtcGxhdGUSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSUQoIc3VidG'
-    'Fza3MYAyADKAsyNS5zZXJ2aWNlcy50YXNrc19zdmMudjEuR2V0V2FyZERldGFpbHNSZXNwb25z'
-    'ZS5TdWJ0YXNrUghzdWJ0YXNrcw==');
+    'c2tUZW1wbGF0ZXMSIAoLY29uc2lzdGVuY3kYBSABKAlSC2NvbnNpc3RlbmN5GksKA0JlZBIOCg'
+    'JpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCgtjb25zaXN0ZW5jeRgDIAEoCVIL'
+    'Y29uc2lzdGVuY3kaLQoHU3VidGFzaxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbm'
+    'FtZRqTAQoEUm9vbRIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRJFCgRiZWRz'
+    'GAMgAygLMjEuc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldFdhcmREZXRhaWxzUmVzcG9uc2UuQm'
+    'VkUgRiZWRzEiAKC2NvbnNpc3RlbmN5GAQgASgJUgtjb25zaXN0ZW5jeRqnAQoMVGFza1RlbXBs'
+    'YXRlEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lElEKCHN1YnRhc2tzGAMgAy'
+    'gLMjUuc2VydmljZXMudGFza3Nfc3ZjLnYxLkdldFdhcmREZXRhaWxzUmVzcG9uc2UuU3VidGFz'
+    'a1IIc3VidGFza3MSIAoLY29uc2lzdGVuY3kYBCABKAlSC2NvbnNpc3RlbmN5');
 
 @$core.Deprecated('Use getWardOverviewsRequestDescriptor instead')
 const GetWardOverviewsRequest$json = {
@@ -286,15 +310,16 @@ const GetWardOverviewsResponse_Ward$json = {
     {'1': 'tasks_todo', '3': 4, '4': 1, '5': 13, '10': 'tasksTodo'},
     {'1': 'tasks_in_progress', '3': 5, '4': 1, '5': 13, '10': 'tasksInProgress'},
     {'1': 'tasks_done', '3': 6, '4': 1, '5': 13, '10': 'tasksDone'},
+    {'1': 'consistency', '3': 7, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `GetWardOverviewsResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getWardOverviewsResponseDescriptor = $convert.base64Decode(
     'ChhHZXRXYXJkT3ZlcnZpZXdzUmVzcG9uc2USSgoFd2FyZHMYASADKAsyNC5zZXJ2aWNlcy50YX'
-    'Nrc19zdmMudjEuR2V0V2FyZE92ZXJ2aWV3c1Jlc3BvbnNlLldhcmRSBXdhcmRzGrEBCgRXYXJk'
+    'Nrc19zdmMudjEuR2V0V2FyZE92ZXJ2aWV3c1Jlc3BvbnNlLldhcmRSBXdhcmRzGtMBCgRXYXJk'
     'Eg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhsKCWJlZF9jb3VudBgDIAEoDV'
     'IIYmVkQ291bnQSHQoKdGFza3NfdG9kbxgEIAEoDVIJdGFza3NUb2RvEioKEXRhc2tzX2luX3By'
     'b2dyZXNzGAUgASgNUg90YXNrc0luUHJvZ3Jlc3MSHQoKdGFza3NfZG9uZRgGIAEoDVIJdGFza3'
-    'NEb25l');
+    'NEb25lEiAKC2NvbnNpc3RlbmN5GAcgASgJUgtjb25zaXN0ZW5jeQ==');
 
