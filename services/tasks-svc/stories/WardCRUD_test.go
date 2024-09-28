@@ -114,7 +114,7 @@ func TestGetRecentWards(t *testing.T) {
 				PatientId:     patientID,
 				InitialStatus: hwutil.PtrTo(pb.TaskStatus(j + 1)), // this is dirty, lol
 			})
-			assert.NoError(t, err, "could create task for patient")
+			assert.NoError(t, err, "could not create task for patient")
 		}
 	}
 
