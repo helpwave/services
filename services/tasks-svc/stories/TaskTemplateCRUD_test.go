@@ -11,7 +11,7 @@ import (
 
 func getTaskTemplate(t *testing.T, ctx context.Context, id string) *pb.GetAllTaskTemplatesResponse_TaskTemplate {
 	getAll, err := taskTemplateServiceClient().GetAllTaskTemplates(ctx, &pb.GetAllTaskTemplatesRequest{})
-	assert.NoError(t, err, "could not get all tt after creation")
+	assert.NoError(t, err, "could not get all task templates")
 
 	var template *pb.GetAllTaskTemplatesResponse_TaskTemplate
 	for _, templ := range getAll.Templates {
