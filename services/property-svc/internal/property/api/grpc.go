@@ -44,7 +44,7 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 		}
 	}
 
-	version, err := s.handlers.Commands.V1.CreateProperty(
+	consistency, err := s.handlers.Commands.V1.CreateProperty(
 		ctx,
 		propertyID,
 		req.GetSubjectType(),
