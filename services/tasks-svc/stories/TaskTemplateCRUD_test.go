@@ -39,7 +39,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	}
 	createRes, err := taskTemplateClient.CreateTaskTemplate(ctx, createReq)
 
-	assert.NoError(t, err, "could not create tt")
+	assert.NoError(t, err, "could not create task template")
 
 	templateId := createRes.GetId()
 
