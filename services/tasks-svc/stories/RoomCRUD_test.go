@@ -179,7 +179,7 @@ func TestGetRoomOverviewsByWard(t *testing.T) {
 		PatientId:     patient1Id,
 		InitialStatus: hwutil.PtrTo(pb.TaskStatus_TASK_STATUS_IN_PROGRESS),
 	})
-	assert.NoError(t, err, "could create task for patient 1")
+	assert.NoError(t, err, "could not create task for patient 1")
 	_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 		Name:          t.Name() + " Patient 1 Task 3",
 		PatientId:     patient1Id,
