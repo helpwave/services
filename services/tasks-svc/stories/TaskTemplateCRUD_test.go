@@ -68,7 +68,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		Consistency: &createRes.Consistency,
 	}
 	updateRes, err := taskTemplateClient.UpdateTaskTemplate(ctx, updateReq)
-	assert.NoError(t, err, "could not update tt after creation")
+	assert.NoError(t, err, "could not update task template after creation")
 
 	assert.NotEqual(t, template.Consistency, updateRes.Consistency, "consistency has not changed in update")
 
