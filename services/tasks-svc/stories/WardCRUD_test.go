@@ -164,7 +164,7 @@ func TestGetWards(t *testing.T) {
 	assert.NoError(t, err, "could not create ward")
 
 	res, err := wardClient.GetWards(ctx, &pb.GetWardsRequest{})
-	assert.NoError(t, err, "could GetWardOverviews")
+	assert.NoError(t, err, "could not GetWardOverviews")
 
 	found := false
 	for _, ward := range res.Wards {
