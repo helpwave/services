@@ -1,16 +1,17 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"
 )
 
-type DeleteTaskCommandHandler func(ctx context.Context, taskID uuid.UUID) (uint64, error)
+type DeleteTaskCommandHandler func(ctx context.Context, taskID uuid.UUID) (common.ConsistencyToken, error)
 
 func NewDeleteTaskCommandHandler(as hwes.AggregateStore) DeleteTaskCommandHandler {
-	return func(ctx context.Context, taskID uuid.UUID) (uint64, error) {
+	return func(ctx context.Context, taskID uuid.UUID) (common.ConsistencyToken, error) {
 		taskAggregate, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
 		if err != nil {
 			return 0, err

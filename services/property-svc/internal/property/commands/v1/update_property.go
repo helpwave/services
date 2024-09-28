@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
@@ -9,10 +10,10 @@ import (
 	"property-svc/internal/property/models"
 )
 
-type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) (uint64, error)
+type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) (common.ConsistencyToken, error)
 
 func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) (uint64, error) {
+	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) (common.ConsistencyToken, error) {
 		a, err := aggregate.LoadPropertyAggregate(ctx, as, propertyID)
 		if err != nil {
 			return 0, err

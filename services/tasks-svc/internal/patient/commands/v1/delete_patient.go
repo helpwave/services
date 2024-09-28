@@ -1,16 +1,17 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwes"
 	"tasks-svc/internal/patient/aggregate"
 )
 
-type DeletePatientCommandHandler func(ctx context.Context, patientID uuid.UUID) (uint64, error)
+type DeletePatientCommandHandler func(ctx context.Context, patientID uuid.UUID) (common.ConsistencyToken, error)
 
 func NewDeletePatientCommandHandler(as hwes.AggregateStore) DeletePatientCommandHandler {
-	return func(ctx context.Context, patientID uuid.UUID) (uint64, error) {
+	return func(ctx context.Context, patientID uuid.UUID) (common.ConsistencyToken, error) {
 		patientAggregate, err := aggregate.LoadPatientAggregate(ctx, as, patientID)
 		if err != nil {
 			return 0, err

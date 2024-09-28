@@ -1,11 +1,11 @@
 package v1
 
 import (
+	"common"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
 	"hwdb"
-	"strconv"
 	"tasks-svc/internal/task/models"
 	"tasks-svc/repos/task_repo"
 )
@@ -44,7 +44,7 @@ func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 						CreatedAt:    row.Task.CreatedAt.Time,
 						Subtasks:     make(map[uuid.UUID]models.Subtask),
 					},
-					Consistency: strconv.FormatUint(uint64(row.Task.Consistency), 10),
+					Consistency: common.ConsistencyToken(row.Task.Consistency).String(),
 				}
 
 				if row.Task.DueAt.Valid {

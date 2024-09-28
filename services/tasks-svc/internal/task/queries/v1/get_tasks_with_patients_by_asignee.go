@@ -1,11 +1,11 @@
 package v1
 
 import (
+	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwdb"
-	"strconv"
 	"tasks-svc/internal/task/models"
 	"tasks-svc/repos/task_repo"
 )
@@ -48,7 +48,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 							CreatedAt:    row.Task.CreatedAt.Time,
 							Subtasks:     make(map[uuid.UUID]models.Subtask),
 						},
-						Consistency: strconv.FormatUint(uint64(row.Task.Consistency), 10),
+						Consistency: common.ConsistencyToken(row.Task.Consistency).String(),
 					},
 					Patient: models.Patient{
 						ID:                      row.Patient.ID,
@@ -56,7 +56,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 						Notes:                   row.Patient.Notes,
 						BedID:                   row.Patient.BedID,
 						IsDischarged:            row.Patient.IsDischarged,
-						Consistency:             strconv.FormatUint(uint64(row.Patient.Consistency), 10),
+						Consistency:             common.ConsistencyToken(row.Patient.Consistency).String(),
 					},
 				}
 

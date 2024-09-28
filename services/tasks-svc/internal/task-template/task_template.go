@@ -8,7 +8,6 @@ import (
 	"google.golang.org/grpc/status"
 	"hwdb"
 	"hwutil"
-	"strconv"
 	"tasks-svc/repos/task_template_repo"
 
 	pb "gen/services/tasks_svc/v1"
@@ -88,7 +87,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 
 	return &pb.CreateTaskTemplateResponse{
 		Id:          templateID.String(),
-		Consistency: strconv.FormatUint(uint64(consistency), 10),
+		Consistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 
@@ -159,7 +158,7 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 		Msg("taskTemplateSubtask deleted")
 
 	return &pb.DeleteTaskTemplateSubTaskResponse{
-		TaskTemplateConsistency: strconv.FormatUint(uint64(consistency), 10),
+		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 
@@ -185,7 +184,7 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 
 	return &pb.UpdateTaskTemplateResponse{
 		Conflict:    nil, // TODO
-		Consistency: strconv.FormatUint(uint64(consistency), 10),
+		Consistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 
@@ -230,7 +229,7 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 
 	return &pb.UpdateTaskTemplateSubTaskResponse{
 		Conflict:                nil, // TODO
-		TaskTemplateConsistency: strconv.FormatUint(uint64(consistency), 10),
+		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 
@@ -264,7 +263,7 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 
 	return &pb.CreateTaskTemplateSubTaskResponse{
 		Id:                      subtaskID.String(),
-		TaskTemplateConsistency: strconv.FormatUint(uint64(consistency), 10),
+		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 
@@ -306,7 +305,7 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, req *pb.GetAllTask
 				IsPublic:    row.TaskTemplate.WardID.Valid,
 				Subtasks:    make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask, 0),
 				CreatedBy:   row.TaskTemplate.CreatedBy.String(),
-				Consistency: strconv.FormatUint(uint64(row.TaskTemplate.Consistency), 10),
+				Consistency: common.ConsistencyToken(row.TaskTemplate.Consistency).String(),
 			}
 			templates = append(templates, template)
 			templateMap[row.TaskTemplate.ID] = len(templates) - 1

@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"errors"
 	pb "gen/services/property_svc/v1"
@@ -18,10 +19,10 @@ type CreatePropertyCommandHandler func(ctx context.Context,
 	description *string,
 	setID *string,
 	fieldTypeData *models.FieldTypeData,
-) (version uint64, err error)
+) (version common.ConsistencyToken, err error)
 
 func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *string, fieldTypeData *models.FieldTypeData) (version uint64, err error) {
+	return func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *string, fieldTypeData *models.FieldTypeData) (version common.ConsistencyToken, err error) {
 		a := aggregate.NewPropertyAggregate(propertyID)
 
 		exists, err := as.Exists(ctx, a)

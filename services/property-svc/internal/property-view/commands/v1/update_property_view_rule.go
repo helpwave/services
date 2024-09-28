@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwes"
@@ -8,10 +9,10 @@ import (
 	"property-svc/internal/property-view/models"
 )
 
-type UpdatePropertyViewRuleCommandHandler func(context.Context, models.PropertyMatchers, []uuid.UUID, []uuid.UUID, []uuid.UUID, []uuid.UUID) (uint64, error)
+type UpdatePropertyViewRuleCommandHandler func(context.Context, models.PropertyMatchers, []uuid.UUID, []uuid.UUID, []uuid.UUID, []uuid.UUID) (common.ConsistencyToken, error)
 
 func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePropertyViewRuleCommandHandler {
-	return func(ctx context.Context, matchers models.PropertyMatchers, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude []uuid.UUID) (uint64, error) {
+	return func(ctx context.Context, matchers models.PropertyMatchers, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude []uuid.UUID) (common.ConsistencyToken, error) {
 
 		ruleID, err := matchers.FindExactRuleId(ctx)
 		if err != nil {

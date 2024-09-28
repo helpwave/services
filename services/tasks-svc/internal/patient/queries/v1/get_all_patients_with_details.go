@@ -1,11 +1,11 @@
 package v1
 
 import (
+	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwdb"
-	"strconv"
 	"tasks-svc/internal/patient/models"
 	tasksModels "tasks-svc/internal/task/models"
 	"tasks-svc/repos/patient_repo"
@@ -39,7 +39,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 						ID:          row.RoomID.UUID,
 						Name:        *row.RoomName,
 						WardID:      row.WardID.UUID,
-						Consistency: strconv.FormatUint(uint64(*row.RoomConsistency), 10),
+						Consistency: common.ConsistencyToken(*row.RoomConsistency).String(),
 					}
 				}
 
@@ -47,7 +47,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 					bed = &models.Bed{
 						ID:          row.BedID.UUID,
 						Name:        *row.BedName,
-						Consistency: strconv.FormatUint(uint64(*row.BedsConsistency), 10),
+						Consistency: common.ConsistencyToken(*row.BedsConsistency).String(),
 					}
 				}
 
@@ -62,7 +62,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 							CreatedAt:               row.Patient.CreatedAt.Time,
 							UpdatedAt:               row.Patient.UpdatedAt.Time,
 						},
-						Consistency: strconv.FormatUint(uint64(row.Patient.Consistency), 10),
+						Consistency: common.ConsistencyToken(row.Patient.Consistency).String(),
 					},
 					Room:  room,
 					Bed:   bed,
@@ -92,7 +92,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 						Public:       *row.TaskPublic,
 						Subtasks:     make(map[uuid.UUID]tasksModels.Subtask),
 					},
-					Consistency: strconv.FormatUint(uint64(*row.TaskConsistency), 10),
+					Consistency: common.ConsistencyToken(*row.TaskConsistency).String(),
 				}
 				patientDetail.Tasks = append(patientDetail.Tasks, task)
 				tasksMap[row.TaskID.UUID] = len(patientDetail.Tasks) - 1

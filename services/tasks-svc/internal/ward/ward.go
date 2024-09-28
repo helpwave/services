@@ -1,6 +1,7 @@
 package ward
 
 import (
+	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
@@ -9,7 +10,6 @@ import (
 	"google.golang.org/grpc/status"
 	"hwdb"
 	"hwutil"
-	"strconv"
 	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/ward_repo"
 )
@@ -43,7 +43,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 
 	return &pb.CreateWardResponse{
 		Id:          wardID.String(),
-		Consistency: strconv.FormatUint(uint64(consistency), 10),
+		Consistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 
@@ -67,7 +67,7 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 	return &pb.GetWardResponse{
 		Id:          ward.ID.String(),
 		Name:        ward.Name,
-		Consistency: strconv.FormatUint(uint64(ward.Consistency), 10),
+		Consistency: common.ConsistencyToken(ward.Consistency).String(),
 	}, nil
 }
 
@@ -85,7 +85,7 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 			return &pb.GetWardsResponse_Ward{
 				Id:          ward.ID.String(),
 				Name:        ward.Name,
-				Consistency: strconv.FormatUint(uint64(ward.Consistency), 10),
+				Consistency: common.ConsistencyToken(ward.Consistency).String(),
 			}
 		}),
 	}, nil
@@ -132,7 +132,7 @@ func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsR
 			TasksTodo:       uint32(row.TodoCount),
 			TasksInProgress: uint32(row.InProgressCount),
 			TasksDone:       uint32(row.DoneCount),
-			Consistency:     strconv.FormatUint(uint64(row.Ward.Consistency), 10),
+			Consistency:     common.ConsistencyToken(row.Ward.Consistency).String(),
 		}
 	})
 
@@ -162,7 +162,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 
 	return &pb.UpdateWardResponse{
 		Conflict:    nil, // TODO
-		Consistency: strconv.FormatUint(uint64(consistency), 10),
+		Consistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 
@@ -216,7 +216,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 			TasksTodo:       uint32(row.TodoCount),
 			TasksInProgress: uint32(row.InProgressCount),
 			TasksDone:       uint32(row.DoneCount),
-			Consistency:     strconv.FormatUint(uint64(row.Ward.Consistency), 10),
+			Consistency:     common.ConsistencyToken(row.Ward.Consistency).String(),
 		}
 	})
 
@@ -255,7 +255,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 				Id:          row.RoomID.UUID.String(),
 				Name:        *row.RoomName,
 				Beds:        make([]*pb.GetWardDetailsResponse_Bed, 0),
-				Consistency: strconv.FormatUint(uint64(*row.RoomConsistency), 10),
+				Consistency: common.ConsistencyToken(*row.RoomConsistency).String(),
 			}
 			rooms = append(rooms, room)
 			roomsIndexMap[row.RoomID.UUID] = len(rooms) - 1
@@ -268,7 +268,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 			bed := &pb.GetWardDetailsResponse_Bed{
 				Id:          row.BedID.UUID.String(),
 				Name:        *row.BedName,
-				Consistency: strconv.FormatUint(uint64(*row.BedConsistency), 10),
+				Consistency: common.ConsistencyToken(*row.BedConsistency).String(),
 			}
 			room.Beds = append(room.Beds, bed)
 			bedSet[row.BedID.UUID] = true
@@ -295,7 +295,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 				Id:          row.TaskTemplateID.UUID.String(),
 				Name:        *row.TaskTemplateName,
 				Subtasks:    make([]*pb.GetWardDetailsResponse_Subtask, 0),
-				Consistency: strconv.FormatUint(uint64(*row.TaskTemplateConsistency), 10),
+				Consistency: common.ConsistencyToken(*row.TaskTemplateConsistency).String(),
 			}
 			taskTemplates = append(taskTemplates, taskTemplate)
 			ttIndexMap[row.TaskTemplateID.UUID] = len(taskTemplates) - 1
@@ -319,7 +319,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		Name:          rows[0].WardName,
 		Rooms:         rooms,
 		TaskTemplates: taskTemplates,
-		Consistency:   strconv.FormatUint(uint64(rows[0].WardConsistency), 10),
+		Consistency:   common.ConsistencyToken(rows[0].WardConsistency).String(),
 	}
 
 	return ward, nil

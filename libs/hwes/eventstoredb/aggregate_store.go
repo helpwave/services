@@ -1,6 +1,7 @@
 package eventstoredb
 
 import (
+	"common"
 	"context"
 	"errors"
 	"fmt"
@@ -36,7 +37,7 @@ func (a *AggregateStore) getExpectedRevisionByPreviousRead(ctx context.Context, 
 	return esdb.Revision(eventNumber), nil
 }
 
-func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, getExpectedRevision getExpectedRevision) (uint64, error) {
+func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, getExpectedRevision getExpectedRevision) (common.ConsistencyToken, error) {
 	ctx, span, log := telemetry.StartSpan(ctx, "AggregateStore.doSave")
 	defer span.End()
 
@@ -44,7 +45,7 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 
 	// do nothing, if nothing to commit
 	if len(uncomittedEvents) == 0 {
-		return aggregate.GetVersion(), nil
+		return common.ConsistencyToken(aggregate.GetVersion()), nil
 	}
 
 	eventsData, err := hwutil.MapWithErr(uncomittedEvents, func(event hwes.Event) (esdb.EventData, error) {
@@ -84,7 +85,7 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 		Msg("saved events to stream")
 
 	aggregate.ClearUncommittedEvents()
-	return r.NextExpectedVersion, nil
+	return common.ConsistencyToken(r.NextExpectedVersion), nil
 }
 
 // Implements AggregateStore interface
@@ -122,7 +123,7 @@ func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 	return nil
 }
 
-func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) (uint64, error) {
+func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) (common.ConsistencyToken, error) {
 	// We can switch out the getExpectedRevision strategy for testing optimistic concurrency.
 	// It is not intended to switch the strategy in production.
 	// To ensure consistency and correctly applied events during another read,

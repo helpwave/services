@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
@@ -17,10 +18,10 @@ type UpdateTaskCommandHandler func(
 	status *pb.TaskStatus,
 	public *bool,
 	dueAt *timestamppb.Timestamp,
-) (uint64, error)
+) (common.ConsistencyToken, error)
 
 func NewUpdateTaskCommandHandler(as hwes.AggregateStore) UpdateTaskCommandHandler {
-	return func(ctx context.Context, taskID uuid.UUID, name *string, description *string, status *pb.TaskStatus, public *bool, dueAt *timestamppb.Timestamp) (uint64, error) {
+	return func(ctx context.Context, taskID uuid.UUID, name *string, description *string, status *pb.TaskStatus, public *bool, dueAt *timestamppb.Timestamp) (common.ConsistencyToken, error) {
 		a, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
 		if err != nil {
 			return 0, err

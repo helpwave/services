@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
@@ -13,7 +14,6 @@ import (
 	vh "property-svc/internal/property-view/handlers"
 	viewModels "property-svc/internal/property-view/models"
 	"property-svc/repos/property_value_repo"
-	"strconv"
 	"time"
 )
 
@@ -56,7 +56,7 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 					IsArchived:          row.Property.IsArchived,
 					SetID:               row.Property.SetID,
 					Value:               nil,
-					PropertyConsistency: strconv.FormatUint(uint64(row.Property.Consistency), 10),
+					PropertyConsistency: common.ConsistencyToken(row.Property.Consistency).String(),
 				}
 			}
 
@@ -65,7 +65,7 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 				continue
 			}
 
-			properties[row.Property.ID].ValueConsistency = hwutil.PtrTo(strconv.FormatUint(uint64(*row.ValueConsistency), 10))
+			properties[row.Property.ID].ValueConsistency = hwutil.PtrTo(common.ConsistencyToken(*row.ValueConsistency).String())
 
 			// If row has SelectOptionID, the LEFT JOIN yielded a value
 			if row.SelectOptionID.Valid {

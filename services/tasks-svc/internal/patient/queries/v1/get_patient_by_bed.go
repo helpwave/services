@@ -1,10 +1,10 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwdb"
-	"strconv"
 	"tasks-svc/internal/patient/models"
 	"tasks-svc/repos/patient_repo"
 )
@@ -36,7 +36,7 @@ func NewGetPatientByBedQueryHandler() GetPatientByBedQueryHandler {
 				CreatedAt:               patient.CreatedAt.Time,
 				UpdatedAt:               patient.UpdatedAt.Time,
 			},
-			Consistency: strconv.FormatUint(uint64(patient.Consistency), 10),
+			Consistency: common.ConsistencyToken(patient.Consistency).String(),
 		}, nil
 	}
 }

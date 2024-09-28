@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
@@ -8,7 +9,6 @@ import (
 	"hwutil"
 	"property-svc/internal/property/models"
 	"property-svc/repos/property_repo"
-	"strconv"
 )
 
 type GetPropertiesBySubjectTypeHandler func(ctx context.Context, subjectType pb.SubjectType) ([]*models.PropertyWithConsistency, error)
@@ -44,7 +44,7 @@ func NewGetPropertiesBySubjectTypeQueryHandler() GetPropertiesBySubjectTypeHandl
 						FieldType:     pb.FieldType(row.Property.FieldType),
 						SubjectType:   pb.SubjectType(row.Property.SubjectType),
 					},
-					Consistency: strconv.FormatUint(uint64(row.Property.Consistency), 10),
+					Consistency: common.ConsistencyToken(row.Property.Consistency).String(),
 				}
 				propertyMap[row.Property.ID] = property
 				properties = append(properties, property)

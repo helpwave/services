@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
@@ -10,10 +11,10 @@ import (
 	"property-svc/repos/property_repo"
 )
 
-type GetPropertyByIDQueryHandler func(ctx context.Context, propertyID uuid.UUID) (*models.Property, uint64, error)
+type GetPropertyByIDQueryHandler func(ctx context.Context, propertyID uuid.UUID) (*models.Property, common.ConsistencyToken, error)
 
 func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
-	return func(ctx context.Context, propertyID uuid.UUID) (*models.Property, uint64, error) {
+	return func(ctx context.Context, propertyID uuid.UUID) (*models.Property, common.ConsistencyToken, error) {
 		propertyRepo := property_repo.New(hwdb.GetDB())
 
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx, property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
@@ -56,6 +57,6 @@ func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
 			}
 		}
 
-		return property, uint64(rows[0].Property.Consistency), nil
+		return property, common.ConsistencyToken(rows[0].Property.Consistency), nil
 	}
 }

@@ -1,16 +1,17 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"
 )
 
-type CreateSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID, name string, done bool) (uint64, error)
+type CreateSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID, name string, done bool) (common.ConsistencyToken, error)
 
 func NewCreateSubtaskCommandHandler(as hwes.AggregateStore) CreateSubtaskCommandHandler {
-	return func(ctx context.Context, taskID, subtaskID uuid.UUID, name string, done bool) (uint64, error) {
+	return func(ctx context.Context, taskID, subtaskID uuid.UUID, name string, done bool) (common.ConsistencyToken, error) {
 		a, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
 		if err != nil {
 			return 0, err

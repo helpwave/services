@@ -8,7 +8,6 @@ import (
 	"hwdb"
 	"hwlocale"
 	"hwutil"
-	"strconv"
 	"tasks-svc/locale"
 	"tasks-svc/repos/bed_repo"
 
@@ -67,7 +66,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 
 	return &pb.CreateBedResponse{
 		Id:          bed.ID.String(),
-		Consistency: strconv.FormatUint(uint64(bed.Consistency), 10),
+		Consistency: common.ConsistencyToken(bed.Consistency).String(),
 	}, nil
 }
 
@@ -92,7 +91,7 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		Id:          bed.ID.String(),
 		RoomId:      bed.RoomID.String(),
 		Name:        bed.Name,
-		Consistency: strconv.FormatUint(uint64(bed.Consistency), 10),
+		Consistency: common.ConsistencyToken(bed.Consistency).String(),
 	}, nil
 }
 
@@ -118,14 +117,14 @@ func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatien
 				Id:          res.RoomID.String(),
 				Name:        res.RoomName,
 				WardId:      res.WardID.String(),
-				Consistency: strconv.FormatUint(uint64(res.RoomConsistency), 10),
+				Consistency: common.ConsistencyToken(res.RoomConsistency).String(),
 			}
 		}),
 		Bed: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientRow) pb.GetBedByPatientResponse_Bed {
 			return pb.GetBedByPatientResponse_Bed{
 				Id:          res.BedID.String(),
 				Name:        res.BedName,
-				Consistency: strconv.FormatUint(uint64(res.BedConsistency), 10),
+				Consistency: common.ConsistencyToken(res.BedConsistency).String(),
 			}
 		}),
 	}, nil
@@ -145,7 +144,7 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 				Id:          bed.ID.String(),
 				RoomId:      bed.RoomID.String(),
 				Name:        bed.Name,
-				Consistency: strconv.FormatUint(uint64(bed.Consistency), 10),
+				Consistency: common.ConsistencyToken(bed.Consistency).String(),
 			}
 		}),
 	}, nil
@@ -178,7 +177,7 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 		res.Beds = append(res.Beds, &pb.GetBedsByRoomResponse_Bed{
 			Id:          bed.ID.String(),
 			Name:        bed.Name,
-			Consistency: strconv.FormatUint(uint64(bed.Consistency), 10),
+			Consistency: common.ConsistencyToken(bed.Consistency).String(),
 		})
 	}
 
@@ -210,7 +209,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 
 	return &pb.UpdateBedResponse{
 		Conflict:    nil, // TODO
-		Consistency: strconv.FormatUint(uint64(consistency), 10),
+		Consistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 

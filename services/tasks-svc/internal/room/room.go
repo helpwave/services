@@ -1,13 +1,13 @@
 package room
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwdb"
 	"hwutil"
-	"strconv"
 	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/room_repo"
 
@@ -51,7 +51,7 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 
 	return &pb.CreateRoomResponse{
 		Id:          roomID.String(),
-		Consistency: strconv.FormatUint(uint64(consistency), 10),
+		Consistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 
@@ -85,7 +85,7 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 		val := &pb.GetRoomResponse_Bed{
 			Id:          row.BedID.UUID.String(),
 			Name:        *row.BedName,
-			Consistency: strconv.FormatUint(uint64(*row.BedConsistency), 10),
+			Consistency: common.ConsistencyToken(*row.BedConsistency).String(),
 		}
 		return &val
 	})
@@ -95,7 +95,7 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 		Name:        room.Name,
 		Beds:        beds,
 		WardId:      room.WardID.String(),
-		Consistency: strconv.FormatUint(uint64(room.Consistency), 10),
+		Consistency: common.ConsistencyToken(room.Consistency).String(),
 	}, nil
 }
 
@@ -120,7 +120,7 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 
 	return &pb.UpdateRoomResponse{
 		Conflict:    nil, // TODO
-		Consistency: strconv.FormatUint(uint64(consistency), 10),
+		Consistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 
@@ -154,7 +154,7 @@ func (ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*pb
 			val := &pb.GetRoomsResponse_Room_Bed{
 				Id:          bedRow.BedID.UUID.String(),
 				Name:        *bedRow.BedName,
-				Consistency: strconv.FormatUint(uint64(*bedRow.BedConsistency), 10),
+				Consistency: common.ConsistencyToken(*bedRow.BedConsistency).String(),
 			}
 			return &val
 		})
@@ -163,7 +163,7 @@ func (ServiceServer) GetRooms(ctx context.Context, req *pb.GetRoomsRequest) (*pb
 			Name:        room.Name,
 			Beds:        beds,
 			WardId:      room.WardID.String(),
-			Consistency: strconv.FormatUint(uint64(room.Consistency), 10),
+			Consistency: common.ConsistencyToken(room.Consistency).String(),
 		}
 		return &val
 	})
@@ -236,7 +236,7 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 								TasksUnscheduled:        uint32(bedRow.TodoTasksCount),
 								TasksInProgress:         uint32(bedRow.InProgressTasksCount),
 								TasksDone:               uint32(bedRow.DoneTasksCount),
-								Consistency:             strconv.FormatUint(uint64(*bedRow.PatientConsistency), 10),
+								Consistency:             common.ConsistencyToken(*bedRow.PatientConsistency).String(),
 							}
 						})
 
@@ -244,7 +244,7 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 						Id:          bedRow.BedID.UUID.String(),
 						Name:        *bedRow.BedName,
 						Patient:     patient,
-						Consistency: strconv.FormatUint(uint64(*bedRow.BedConsistency), 10),
+						Consistency: common.ConsistencyToken(*bedRow.BedConsistency).String(),
 					}
 					return &val
 				})
@@ -252,7 +252,7 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 				Id:          roomRow.RoomID.String(),
 				Name:        roomRow.RoomName,
 				Beds:        beds,
-				Consistency: strconv.FormatUint(uint64(roomRow.RoomConsistency), 10),
+				Consistency: common.ConsistencyToken(roomRow.RoomConsistency).String(),
 			}
 			return &val
 		})
