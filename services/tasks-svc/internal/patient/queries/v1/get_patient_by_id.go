@@ -1,10 +1,10 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwes"
-	"strconv"
 	"tasks-svc/internal/patient/aggregate"
 	"tasks-svc/internal/patient/models"
 )
@@ -19,7 +19,7 @@ func NewGetPatientByIDQueryHandler(as hwes.AggregateStore) GetPatientByIDQueryHa
 		}
 		return &models.PatientWithConsistency{
 			Patient:     *patientAggregate.Patient,
-			Consistency: strconv.FormatUint(patientAggregate.GetVersion(), 10),
+			Consistency: common.ConsistencyToken(patientAggregate.GetVersion()).String(),
 		}, nil
 	}
 }

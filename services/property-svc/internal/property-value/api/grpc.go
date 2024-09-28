@@ -12,7 +12,6 @@ import (
 	"property-svc/internal/property-value/handlers"
 	"property-svc/internal/property-value/models"
 	viewModels "property-svc/internal/property-view/models"
-	"strconv"
 )
 
 type MatchersRequest interface {
@@ -105,7 +104,7 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 
 	return &pb.AttachPropertyValueResponse{
 		PropertyValueId: propertyValueID.String(),
-		Consistency:     strconv.FormatUint(consistency, 10),
+		Consistency:     consistency.String(),
 	}, nil
 }
 

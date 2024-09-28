@@ -10,7 +10,6 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwes"
 	"hwutil"
-	"strconv"
 	"tasks-svc/internal/task/handlers"
 )
 
@@ -57,7 +56,7 @@ func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequ
 
 	return &pb.CreateTaskResponse{
 		Id:          taskID.String(),
-		Consistency: strconv.FormatUint(consistency, 10),
+		Consistency: consistency.String(),
 	}, nil
 }
 
@@ -73,7 +72,7 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 	}
 
 	return &pb.UpdateTaskResponse{
-		Consistency: strconv.FormatUint(consistency, 10),
+		Consistency: consistency.String(),
 	}, nil
 }
 
@@ -94,7 +93,7 @@ func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequ
 	}
 
 	return &pb.AssignTaskResponse{
-		Consistency: strconv.FormatUint(consistency, 10),
+		Consistency: consistency.String(),
 	}, nil
 }
 
@@ -115,7 +114,7 @@ func (s *TaskGrpcService) UnassignTask(ctx context.Context, req *pb.UnassignTask
 	}
 
 	return &pb.UnassignTaskResponse{
-		Consistency: strconv.FormatUint(consistency, 10),
+		Consistency: consistency.String(),
 	}, nil
 }
 
@@ -358,7 +357,7 @@ func (s *TaskGrpcService) CreateSubtask(ctx context.Context, req *pb.CreateSubta
 
 	return &pb.CreateSubtaskResponse{
 		SubtaskId:       subtaskID.String(),
-		TaskConsistency: strconv.FormatUint(consistency, 10),
+		TaskConsistency: consistency.String(),
 	}, nil
 }
 
@@ -379,7 +378,7 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 	}
 
 	return &pb.UpdateSubtaskResponse{
-		TaskConsistency: strconv.FormatUint(consistency, 10),
+		TaskConsistency: consistency.String(),
 	}, nil
 }
 
@@ -414,7 +413,7 @@ func (s *TaskGrpcService) RemoveTaskDueDate(ctx context.Context, req *pb.RemoveT
 	}
 
 	return &pb.RemoveTaskDueDateResponse{
-		Consistency: strconv.FormatUint(consistency, 10),
+		Consistency: consistency.String(),
 	}, nil
 }
 

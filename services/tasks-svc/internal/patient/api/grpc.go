@@ -13,7 +13,6 @@ import (
 	"hwdb/locale"
 	"hwes"
 	"hwutil"
-	"strconv"
 	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/models"
 	"tasks-svc/internal/tracking"
@@ -45,7 +44,7 @@ func (s *PatientGrpcService) CreatePatient(ctx context.Context, req *pb.CreatePa
 
 	return &pb.CreatePatientResponse{
 		Id:          patientID.String(),
-		Consistency: strconv.FormatUint(consistency, 10),
+		Consistency: consistency.String(),
 	}, nil
 }
 
@@ -395,7 +394,7 @@ func (s *PatientGrpcService) UpdatePatient(ctx context.Context, req *pb.UpdatePa
 
 	return &pb.UpdatePatientResponse{
 		Conflict:    nil, // TODO
-		Consistency: strconv.FormatUint(consistency, 10),
+		Consistency: consistency.String(),
 	}, nil
 }
 
@@ -425,7 +424,7 @@ func (s *PatientGrpcService) AssignBed(ctx context.Context, req *pb.AssignBedReq
 
 	return &pb.AssignBedResponse{
 		Conflict:    nil, // TODO
-		Consistency: strconv.FormatUint(consistency, 10),
+		Consistency: consistency.String(),
 	}, nil
 }
 
@@ -450,7 +449,7 @@ func (s *PatientGrpcService) UnassignBed(ctx context.Context, req *pb.UnassignBe
 
 	return &pb.UnassignBedResponse{
 		Conflict:    nil, // TODO
-		Consistency: strconv.FormatUint(consistency, 10),
+		Consistency: consistency.String(),
 	}, nil
 }
 
@@ -474,7 +473,7 @@ func (s *PatientGrpcService) DischargePatient(ctx context.Context, req *pb.Disch
 	tracking.RemovePatientFromRecentActivity(ctx, patientID.String())
 
 	return &pb.DischargePatientResponse{
-		Consistency: strconv.FormatUint(consistency, 10),
+		Consistency: consistency.String(),
 	}, nil
 }
 
@@ -494,7 +493,7 @@ func (s *PatientGrpcService) ReadmitPatient(ctx context.Context, req *pb.Readmit
 	tracking.AddPatientToRecentActivity(ctx, patientID.String())
 
 	return &pb.ReadmitPatientResponse{
-		Consistency: strconv.FormatUint(consistency, 10),
+		Consistency: consistency.String(),
 	}, nil
 }
 

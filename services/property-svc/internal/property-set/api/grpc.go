@@ -6,7 +6,6 @@ import (
 	"github.com/google/uuid"
 	"hwes"
 	"property-svc/internal/property-set/handlers"
-	"strconv"
 )
 
 type PropertySetGrpcService struct {
@@ -28,7 +27,7 @@ func (s *PropertySetGrpcService) CreatePropertySet(ctx context.Context, req *pb.
 
 	return &pb.CreatePropertySetResponse{
 		Id:          propertySetID.String(),
-		Consistency: strconv.FormatUint(consistency, 10),
+		Consistency: consistency.String(),
 	}, nil
 }
 
