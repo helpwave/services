@@ -664,7 +664,7 @@ type CreatePropertyRequest_SelectData struct {
 	unknownFields protoimpl.UnknownFields
 
 	AllowFreetext *bool                                            `protobuf:"varint,1,opt,name=allow_freetext,json=allowFreetext,proto3,oneof" json:"allow_freetext,omitempty"` // allows admins to allow or prevent users of using select fields like free-text fields, this means unknown options will be added to the option set when entered.
-	Options       []*CreatePropertyRequest_SelectData_SelectOption `protobuf:"bytes,2,rep,name=options,proto3" json:"options,omitempty"`
+	Options       []*CreatePropertyRequest_SelectData_SelectOption `protobuf:"bytes,2,rep,name=options,proto3" json:"options,omitempty" validate:"dive"`                         // @gotags: validate:"dive"
 }
 
 func (x *CreatePropertyRequest_SelectData) Reset() {
@@ -990,7 +990,7 @@ type UpdatePropertyRequest_SelectData struct {
 
 	AllowFreetext *bool                                            `protobuf:"varint,1,opt,name=allow_freetext,json=allowFreetext,proto3,oneof" json:"allow_freetext,omitempty"`
 	RemoveOptions []string                                         `protobuf:"bytes,2,rep,name=remove_options,json=removeOptions,proto3" json:"remove_options,omitempty" validate:"dive,uuid4"` // @gotags: validate:"dive,uuid4"
-	UpsertOptions []*UpdatePropertyRequest_SelectData_SelectOption `protobuf:"bytes,3,rep,name=upsert_options,json=upsertOptions,proto3" json:"upsert_options,omitempty"`
+	UpsertOptions []*UpdatePropertyRequest_SelectData_SelectOption `protobuf:"bytes,3,rep,name=upsert_options,json=upsertOptions,proto3" json:"upsert_options,omitempty" validate:"dive"`       // @gotags: validate:"dive"
 }
 
 func (x *UpdatePropertyRequest_SelectData) Reset() {
@@ -1051,7 +1051,7 @@ type UpdatePropertyRequest_SelectData_SelectOption struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id          string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
 	Name        *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Description *string `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	IsCustom    *bool   `protobuf:"varint,4,opt,name=is_custom,json=isCustom,proto3,oneof" json:"is_custom,omitempty"`

@@ -30,7 +30,7 @@ message CreatePropertyRequest {
   // the select field type requires an (initial) set of options (possible values)
   message SelectData {
     optional bool allow_freetext = 1; // allows admins to allow or prevent users of using select fields like free-text fields, this means unknown options will be added to the option set when entered.
-    repeated SelectOption options = 2;
+    repeated SelectOption options = 2; // @gotags: validate:"dive"
     message SelectOption {
       string name = 1; // @gotags: validate:"required"
       optional string description = 2;
@@ -123,10 +123,10 @@ message UpdatePropertyRequest {
   message SelectData {
     optional bool allow_freetext = 1;
     repeated string remove_options = 2; // @gotags: validate:"dive,uuid4"
-    repeated SelectOption upsert_options = 3;
+    repeated SelectOption upsert_options = 3; // @gotags: validate:"dive"
 
     message SelectOption {
-      string id = 1;
+      string id = 1; // @gotags: validate:"uuid4"
       optional string name = 2;
       optional string description = 3;
       optional bool is_custom = 4;
