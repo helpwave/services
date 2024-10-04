@@ -143,11 +143,11 @@ message UpdatePropertyResponse {
 // GetPropertiesBySubjectType
 //
 
-message GetPropertiesBySubjectTypeRequest {
-  SubjectType subject_type = 1;
+message GetPropertiesRequest {
+  optional SubjectType subject_type = 1;
 }
 
-message GetPropertiesBySubjectTypeResponse {
+message GetPropertiesResponse {
   message Property {
     string id = 1;
     SubjectType subject_type = 2;
@@ -190,5 +190,5 @@ service PropertyService {
   rpc CreateProperty(CreatePropertyRequest) returns (CreatePropertyResponse) {}
   rpc GetProperty(GetPropertyRequest) returns (GetPropertyResponse) {}
   rpc UpdateProperty(UpdatePropertyRequest) returns (UpdatePropertyResponse) {}
-  rpc GetPropertiesBySubjectType(GetPropertiesBySubjectTypeRequest) returns (GetPropertiesBySubjectTypeResponse) {}
+  rpc GetProperties(GetPropertiesRequest) returns (GetPropertiesResponse) {}
 }

@@ -583,41 +583,48 @@ export namespace UpdatePropertyResponse {
   }
 }
 
-export class GetPropertiesBySubjectTypeRequest extends jspb.Message {
+export class GetPropertiesRequest extends jspb.Message {
   getSubjectType(): services_property_svc_v1_types_pb.SubjectType;
-  setSubjectType(value: services_property_svc_v1_types_pb.SubjectType): GetPropertiesBySubjectTypeRequest;
+  setSubjectType(value: services_property_svc_v1_types_pb.SubjectType): GetPropertiesRequest;
+  hasSubjectType(): boolean;
+  clearSubjectType(): GetPropertiesRequest;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetPropertiesBySubjectTypeRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetPropertiesBySubjectTypeRequest): GetPropertiesBySubjectTypeRequest.AsObject;
-  static serializeBinaryToWriter(message: GetPropertiesBySubjectTypeRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetPropertiesBySubjectTypeRequest;
-  static deserializeBinaryFromReader(message: GetPropertiesBySubjectTypeRequest, reader: jspb.BinaryReader): GetPropertiesBySubjectTypeRequest;
+  toObject(includeInstance?: boolean): GetPropertiesRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPropertiesRequest): GetPropertiesRequest.AsObject;
+  static serializeBinaryToWriter(message: GetPropertiesRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPropertiesRequest;
+  static deserializeBinaryFromReader(message: GetPropertiesRequest, reader: jspb.BinaryReader): GetPropertiesRequest;
 }
 
-export namespace GetPropertiesBySubjectTypeRequest {
+export namespace GetPropertiesRequest {
   export type AsObject = {
-    subjectType: services_property_svc_v1_types_pb.SubjectType,
+    subjectType?: services_property_svc_v1_types_pb.SubjectType,
+  }
+
+  export enum SubjectTypeCase { 
+    _SUBJECT_TYPE_NOT_SET = 0,
+    SUBJECT_TYPE = 1,
   }
 }
 
-export class GetPropertiesBySubjectTypeResponse extends jspb.Message {
-  getPropertiesList(): Array<GetPropertiesBySubjectTypeResponse.Property>;
-  setPropertiesList(value: Array<GetPropertiesBySubjectTypeResponse.Property>): GetPropertiesBySubjectTypeResponse;
-  clearPropertiesList(): GetPropertiesBySubjectTypeResponse;
-  addProperties(value?: GetPropertiesBySubjectTypeResponse.Property, index?: number): GetPropertiesBySubjectTypeResponse.Property;
+export class GetPropertiesResponse extends jspb.Message {
+  getPropertiesList(): Array<GetPropertiesResponse.Property>;
+  setPropertiesList(value: Array<GetPropertiesResponse.Property>): GetPropertiesResponse;
+  clearPropertiesList(): GetPropertiesResponse;
+  addProperties(value?: GetPropertiesResponse.Property, index?: number): GetPropertiesResponse.Property;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetPropertiesBySubjectTypeResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetPropertiesBySubjectTypeResponse): GetPropertiesBySubjectTypeResponse.AsObject;
-  static serializeBinaryToWriter(message: GetPropertiesBySubjectTypeResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetPropertiesBySubjectTypeResponse;
-  static deserializeBinaryFromReader(message: GetPropertiesBySubjectTypeResponse, reader: jspb.BinaryReader): GetPropertiesBySubjectTypeResponse;
+  toObject(includeInstance?: boolean): GetPropertiesResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPropertiesResponse): GetPropertiesResponse.AsObject;
+  static serializeBinaryToWriter(message: GetPropertiesResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPropertiesResponse;
+  static deserializeBinaryFromReader(message: GetPropertiesResponse, reader: jspb.BinaryReader): GetPropertiesResponse;
 }
 
-export namespace GetPropertiesBySubjectTypeResponse {
+export namespace GetPropertiesResponse {
   export type AsObject = {
-    propertiesList: Array<GetPropertiesBySubjectTypeResponse.Property.AsObject>,
+    propertiesList: Array<GetPropertiesResponse.Property.AsObject>,
   }
 
   export class Property extends jspb.Message {
@@ -646,8 +653,8 @@ export namespace GetPropertiesBySubjectTypeResponse {
     hasSetId(): boolean;
     clearSetId(): Property;
 
-    getSelectData(): GetPropertiesBySubjectTypeResponse.Property.SelectData | undefined;
-    setSelectData(value?: GetPropertiesBySubjectTypeResponse.Property.SelectData): Property;
+    getSelectData(): GetPropertiesResponse.Property.SelectData | undefined;
+    setSelectData(value?: GetPropertiesResponse.Property.SelectData): Property;
     hasSelectData(): boolean;
     clearSelectData(): Property;
 
@@ -673,7 +680,7 @@ export namespace GetPropertiesBySubjectTypeResponse {
       description?: string,
       isArchived: boolean,
       setId?: string,
-      selectData?: GetPropertiesBySubjectTypeResponse.Property.SelectData.AsObject,
+      selectData?: GetPropertiesResponse.Property.SelectData.AsObject,
       consistency: string,
     }
 
@@ -683,10 +690,10 @@ export namespace GetPropertiesBySubjectTypeResponse {
       hasAllowFreetext(): boolean;
       clearAllowFreetext(): SelectData;
 
-      getOptionsList(): Array<GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption>;
-      setOptionsList(value: Array<GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption>): SelectData;
+      getOptionsList(): Array<GetPropertiesResponse.Property.SelectData.SelectOption>;
+      setOptionsList(value: Array<GetPropertiesResponse.Property.SelectData.SelectOption>): SelectData;
       clearOptionsList(): SelectData;
-      addOptions(value?: GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption, index?: number): GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption;
+      addOptions(value?: GetPropertiesResponse.Property.SelectData.SelectOption, index?: number): GetPropertiesResponse.Property.SelectData.SelectOption;
 
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SelectData.AsObject;
@@ -699,7 +706,7 @@ export namespace GetPropertiesBySubjectTypeResponse {
     export namespace SelectData {
       export type AsObject = {
         allowFreetext?: boolean,
-        optionsList: Array<GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption.AsObject>,
+        optionsList: Array<GetPropertiesResponse.Property.SelectData.SelectOption.AsObject>,
       }
 
       export class SelectOption extends jspb.Message {

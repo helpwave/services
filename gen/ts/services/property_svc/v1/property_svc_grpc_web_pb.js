@@ -266,61 +266,61 @@ proto.services.property_svc.v1.PropertyServicePromiseClient.prototype.updateProp
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.services.property_svc.v1.GetPropertiesBySubjectTypeRequest,
- *   !proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse>}
+ *   !proto.services.property_svc.v1.GetPropertiesRequest,
+ *   !proto.services.property_svc.v1.GetPropertiesResponse>}
  */
-const methodDescriptor_PropertyService_GetPropertiesBySubjectType = new grpc.web.MethodDescriptor(
-  '/services.property_svc.v1.PropertyService/GetPropertiesBySubjectType',
+const methodDescriptor_PropertyService_GetProperties = new grpc.web.MethodDescriptor(
+  '/services.property_svc.v1.PropertyService/GetProperties',
   grpc.web.MethodType.UNARY,
-  proto.services.property_svc.v1.GetPropertiesBySubjectTypeRequest,
-  proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse,
+  proto.services.property_svc.v1.GetPropertiesRequest,
+  proto.services.property_svc.v1.GetPropertiesResponse,
   /**
-   * @param {!proto.services.property_svc.v1.GetPropertiesBySubjectTypeRequest} request
+   * @param {!proto.services.property_svc.v1.GetPropertiesRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.deserializeBinary
+  proto.services.property_svc.v1.GetPropertiesResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.services.property_svc.v1.GetPropertiesBySubjectTypeRequest} request The
+ * @param {!proto.services.property_svc.v1.GetPropertiesRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.services.property_svc.v1.GetPropertiesResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.services.property_svc.v1.GetPropertiesResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.services.property_svc.v1.PropertyServiceClient.prototype.getPropertiesBySubjectType =
+proto.services.property_svc.v1.PropertyServiceClient.prototype.getProperties =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/services.property_svc.v1.PropertyService/GetPropertiesBySubjectType',
+      '/services.property_svc.v1.PropertyService/GetProperties',
       request,
       metadata || {},
-      methodDescriptor_PropertyService_GetPropertiesBySubjectType,
+      methodDescriptor_PropertyService_GetProperties,
       callback);
 };
 
 
 /**
- * @param {!proto.services.property_svc.v1.GetPropertiesBySubjectTypeRequest} request The
+ * @param {!proto.services.property_svc.v1.GetPropertiesRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.services.property_svc.v1.GetPropertiesBySubjectTypeResponse>}
+ * @return {!Promise<!proto.services.property_svc.v1.GetPropertiesResponse>}
  *     Promise that resolves to the response
  */
-proto.services.property_svc.v1.PropertyServicePromiseClient.prototype.getPropertiesBySubjectType =
+proto.services.property_svc.v1.PropertyServicePromiseClient.prototype.getProperties =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/services.property_svc.v1.PropertyService/GetPropertiesBySubjectType',
+      '/services.property_svc.v1.PropertyService/GetProperties',
       request,
       metadata || {},
-      methodDescriptor_PropertyService_GetPropertiesBySubjectType);
+      methodDescriptor_PropertyService_GetProperties);
 };
 
 

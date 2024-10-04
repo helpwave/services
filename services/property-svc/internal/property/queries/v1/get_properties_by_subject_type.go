@@ -11,14 +11,19 @@ import (
 	"property-svc/repos/property_repo"
 )
 
-type GetPropertiesBySubjectTypeHandler func(ctx context.Context, subjectType pb.SubjectType) ([]*models.PropertyWithConsistency, error)
+type GetPropertiesQueryHandler func(ctx context.Context, subjectType *pb.SubjectType) ([]*models.PropertyWithConsistency, error)
 
-func NewGetPropertiesBySubjectTypeQueryHandler() GetPropertiesBySubjectTypeHandler {
-	return func(ctx context.Context, subjectType pb.SubjectType) ([]*models.PropertyWithConsistency, error) {
+func NewGetPropertiesQueryHandler() GetPropertiesQueryHandler {
+	return func(ctx context.Context, subjectType *pb.SubjectType) ([]*models.PropertyWithConsistency, error) {
 		propertyRepo := property_repo.New(hwdb.GetDB())
 
+		var subjectTypeID *int32
+		if subjectType != nil {
+			subjectTypeID = hwutil.PtrTo(int32(*subjectType))
+		}
+
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx, property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
-			SubjectType: hwutil.PtrTo(int32(subjectType)),
+			SubjectType: subjectTypeID,
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, err

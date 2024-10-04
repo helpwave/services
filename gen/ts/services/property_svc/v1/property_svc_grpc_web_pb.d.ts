@@ -29,12 +29,12 @@ export class PropertyServiceClient {
                response: services_property_svc_v1_property_svc_pb.UpdatePropertyResponse) => void
   ): grpcWeb.ClientReadableStream<services_property_svc_v1_property_svc_pb.UpdatePropertyResponse>;
 
-  getPropertiesBySubjectType(
-    request: services_property_svc_v1_property_svc_pb.GetPropertiesBySubjectTypeRequest,
+  getProperties(
+    request: services_property_svc_v1_property_svc_pb.GetPropertiesRequest,
     metadata: grpcWeb.Metadata | undefined,
     callback: (err: grpcWeb.RpcError,
-               response: services_property_svc_v1_property_svc_pb.GetPropertiesBySubjectTypeResponse) => void
-  ): grpcWeb.ClientReadableStream<services_property_svc_v1_property_svc_pb.GetPropertiesBySubjectTypeResponse>;
+               response: services_property_svc_v1_property_svc_pb.GetPropertiesResponse) => void
+  ): grpcWeb.ClientReadableStream<services_property_svc_v1_property_svc_pb.GetPropertiesResponse>;
 
 }
 
@@ -58,10 +58,10 @@ export class PropertyServicePromiseClient {
     metadata?: grpcWeb.Metadata
   ): Promise<services_property_svc_v1_property_svc_pb.UpdatePropertyResponse>;
 
-  getPropertiesBySubjectType(
-    request: services_property_svc_v1_property_svc_pb.GetPropertiesBySubjectTypeRequest,
+  getProperties(
+    request: services_property_svc_v1_property_svc_pb.GetPropertiesRequest,
     metadata?: grpcWeb.Metadata
-  ): Promise<services_property_svc_v1_property_svc_pb.GetPropertiesBySubjectTypeResponse>;
+  ): Promise<services_property_svc_v1_property_svc_pb.GetPropertiesResponse>;
 
 }
 

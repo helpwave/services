@@ -21,7 +21,10 @@ SELECT
 	FROM properties
 	LEFT JOIN select_datas ON properties.select_data_id = select_datas.id
 	LEFT JOIN select_options ON select_options.select_data_id = select_datas.id
- 	WHERE subject_type = sqlc.narg('subject_type') OR properties.id = sqlc.narg('id');
+ 	WHERE
+ 		(subject_type = sqlc.narg('subject_type') OR sqlc.narg('subject_type') IS NULL )
+ 	   	AND
+ 	    (properties.id = sqlc.narg('id') OR sqlc.narg('id') IS NULL);
 
 -- name: UpdateProperty :exec
 UPDATE properties
