@@ -17,7 +17,7 @@ func NewUnassignBedCommandHandler(as hwes.AggregateStore) UnassignBedCommandHand
 			return 0, err
 		}
 
-		if err := a.UnassignBed(ctx); err != nil {
+		if err := a.UnassignBed(ctx, a.Patient.BedID); err != nil {
 			return 0, err
 		}
 		return as.Save(ctx, a)
