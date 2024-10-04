@@ -130,10 +130,15 @@ func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatien
 	}, nil
 }
 
-func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.GetBedsResponse, error) {
+func (ServiceServer) GetBeds(ctx context.Context, req *pb.GetBedsRequest) (*pb.GetBedsResponse, error) {
+	roomID, err := hwutil.ParseNullUUID(req.RoomId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	beds, err := bedRepo.GetBeds(ctx, uuid.NullUUID{UUID: uuid.Nil, Valid: false})
+	beds, err := bedRepo.GetBeds(ctx, roomID)
 	if err != nil {
 		return nil, hwdb.Error(ctx, err)
 	}
