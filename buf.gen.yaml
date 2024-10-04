@@ -19,5 +19,5 @@ plugins:
     out: gen/ts
     opt: import_style=commonjs,binary
   - remote: buf.build/protocolbuffers/dart:v21.1.2
-    out: gen/dart/lib
+    out: gen/dart
     opt: grpc
