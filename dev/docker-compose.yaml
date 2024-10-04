@@ -27,6 +27,16 @@ services:
     ports:
       - "2113:2113"
 
+  neo4j:
+    image: neo4j:5.23.0-community-bullseye
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: "none"
+    volumes:
+      - neo4j:/data
+
   spicedb:
     image: authzed/spicedb:v1.31.0
     ports:
@@ -191,3 +201,4 @@ services:
 volumes:
   gocache: {}
   gomodcache: {}
+  neo4j: {}

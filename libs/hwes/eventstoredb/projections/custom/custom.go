@@ -74,16 +74,18 @@ type ICustomProjection interface {
 //	}
 type CustomProjection struct {
 	es                    EventStoreClient
-	eventHandlers         map[string]eventHandler
+	explicitEventHandlers map[string]eventHandler // explicit event handlers are defined by their eventType
 	subscriptionGroupName string
+	fallbackEventHandler  *eventHandler // if set, this handler will be called when no explicitEventHandler for the given event type is defined
 	streamPrefixFilters   *[]string
 }
 
 func NewCustomProjection(esdbClient EventStoreClient, subscriptionGroupName string, streamPrefixFilters *[]string) *CustomProjection {
 	return &CustomProjection{
 		es:                    esdbClient,
-		eventHandlers:         make(map[string]eventHandler),
+		explicitEventHandlers: make(map[string]eventHandler),
 		subscriptionGroupName: subscriptionGroupName,
+		fallbackEventHandler:  nil,
 		streamPrefixFilters:   streamPrefixFilters,
 	}
 }
@@ -96,14 +98,20 @@ func (p *CustomProjection) CustomProjection() *CustomProjection {
 	return p
 }
 
+// TODO: Rename: RegisterExplicitEventHandlers
 func (p *CustomProjection) RegisterEventListener(eventType string, eventHandler eventHandler) *CustomProjection {
-	if _, found := p.eventHandlers[eventType]; found {
+	if _, found := p.explicitEventHandlers[eventType]; found {
 		zlog.Error().
 			Str("eventType", eventType).
 			Msg("override existing event handler")
 	}
 
-	p.eventHandlers[eventType] = eventHandler
+	p.explicitEventHandlers[eventType] = eventHandler
+	return p
+}
+
+func (p *CustomProjection) RegisterFallbackEventHandler(eventHandler eventHandler) *CustomProjection {
+	p.fallbackEventHandler = &eventHandler
 	return p
 }
 
@@ -111,15 +119,20 @@ func (p *CustomProjection) HandleEvent(ctx context.Context, event hwes.Event) (e
 	ctx, span, log := telemetry.StartSpan(ctx, "custom_projection."+p.subscriptionGroupName+".handleEvent."+event.EventType)
 	defer span.End()
 
-	eventHandler, found := p.eventHandlers[event.EventType]
-	if !found {
+	eventHandler, found := p.explicitEventHandlers[event.EventType]
+	if !found && p.fallbackEventHandler != nil {
 		log.Debug().
 			Str("subscriptionGroupName", p.subscriptionGroupName).
 			Dict("event", event.GetZerologDict()).
-			Msg("event handler for event type not found, skip")
+			Msg("explicit event handler not found and fallbackEventHandler not set, skip")
 		return nil, hwutil.PtrTo(esdb.NackActionUnknown)
 	}
-	return eventHandler(ctx, event)
+	if found {
+		return eventHandler(ctx, event)
+	}
+
+	// Use the fallback event handler if explicitEventHandler has not been found
+	return (*p.fallbackEventHandler)(ctx, event)
 }
 
 func (p *CustomProjection) Subscribe(ctx context.Context) error {
