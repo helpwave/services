@@ -39,6 +39,7 @@ type BedServiceClient interface {
 	GetBedByPatient(ctx context.Context, in *GetBedByPatientRequest, opts ...grpc.CallOption) (*GetBedByPatientResponse, error)
 	GetBeds(ctx context.Context, in *GetBedsRequest, opts ...grpc.CallOption) (*GetBedsResponse, error)
 	// Deprecated: Do not use.
+	// Deprecated: Use GetBeds with optional room_id instead
 	GetBedsByRoom(ctx context.Context, in *GetBedsByRoomRequest, opts ...grpc.CallOption) (*GetBedsByRoomResponse, error)
 	UpdateBed(ctx context.Context, in *UpdateBedRequest, opts ...grpc.CallOption) (*UpdateBedResponse, error)
 	DeleteBed(ctx context.Context, in *DeleteBedRequest, opts ...grpc.CallOption) (*DeleteBedResponse, error)
@@ -143,6 +144,7 @@ type BedServiceServer interface {
 	GetBedByPatient(context.Context, *GetBedByPatientRequest) (*GetBedByPatientResponse, error)
 	GetBeds(context.Context, *GetBedsRequest) (*GetBedsResponse, error)
 	// Deprecated: Do not use.
+	// Deprecated: Use GetBeds with optional room_id instead
 	GetBedsByRoom(context.Context, *GetBedsByRoomRequest) (*GetBedsByRoomResponse, error)
 	UpdateBed(context.Context, *UpdateBedRequest) (*UpdateBedResponse, error)
 	DeleteBed(context.Context, *DeleteBedRequest) (*DeleteBedResponse, error)

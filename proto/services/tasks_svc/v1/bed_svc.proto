@@ -154,6 +154,7 @@ service BedService {
   rpc GetBed(GetBedRequest) returns (GetBedResponse) {}
   rpc GetBedByPatient(GetBedByPatientRequest) returns (GetBedByPatientResponse) {}
   rpc GetBeds(GetBedsRequest) returns (GetBedsResponse) {}
+  // Deprecated: Use GetBeds with optional room_id instead
   rpc GetBedsByRoom(GetBedsByRoomRequest) returns (GetBedsByRoomResponse) {
    option deprecated = true;
   }
