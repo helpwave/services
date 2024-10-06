@@ -1051,7 +1051,7 @@ type UpdatePropertyRequest_SelectData_SelectOption struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"uuid4"` // @gotags: validate:"uuid4"
+	Id          string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" validate:"omitempty,uuid4"` // @gotags: validate:"omitempty,uuid4"
 	Name        *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Description *string `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	IsCustom    *bool   `protobuf:"varint,4,opt,name=is_custom,json=isCustom,proto3,oneof" json:"is_custom,omitempty"`

@@ -635,7 +635,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 				RemoveOptions: nil,
 				UpsertOptions: []*pb.UpdatePropertyRequest_SelectData_SelectOption{
 					{
-						Id:          uuid.NewString(),
+						Id:          "",
 						Name:        hwutil.PtrTo("Option 2"),
 						Description: nil,
 						IsCustom:    hwutil.PtrTo(false),
@@ -814,7 +814,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 				RemoveOptions: nil,
 				UpsertOptions: []*pb.UpdatePropertyRequest_SelectData_SelectOption{
 					{
-						Id:          uuid.NewString(),
+						Id:          "",
 						Name:        hwutil.PtrTo("Option 2"),
 						Description: nil,
 						IsCustom:    hwutil.PtrTo(false),
