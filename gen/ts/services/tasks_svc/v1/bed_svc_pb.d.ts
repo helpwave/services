@@ -277,6 +277,11 @@ export namespace GetBedByPatientResponse {
 }
 
 export class GetBedsRequest extends jspb.Message {
+  getRoomId(): string;
+  setRoomId(value: string): GetBedsRequest;
+  hasRoomId(): boolean;
+  clearRoomId(): GetBedsRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetBedsRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetBedsRequest): GetBedsRequest.AsObject;
@@ -287,6 +292,12 @@ export class GetBedsRequest extends jspb.Message {
 
 export namespace GetBedsRequest {
   export type AsObject = {
+    roomId?: string,
+  }
+
+  export enum RoomIdCase { 
+    _ROOM_ID_NOT_SET = 0,
+    ROOM_ID = 1,
   }
 }
 

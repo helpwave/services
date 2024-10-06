@@ -85,7 +85,9 @@ message GetBedByPatientResponse {
 // GetBeds
 //
 
-message GetBedsRequest {}
+message GetBedsRequest {
+  optional string room_id = 1; // @gotags: validate:"omitnil,uuid4"
+}
 
 message GetBedsResponse {
   repeated Bed beds = 1;
@@ -152,7 +154,10 @@ service BedService {
   rpc GetBed(GetBedRequest) returns (GetBedResponse) {}
   rpc GetBedByPatient(GetBedByPatientRequest) returns (GetBedByPatientResponse) {}
   rpc GetBeds(GetBedsRequest) returns (GetBedsResponse) {}
-  rpc GetBedsByRoom(GetBedsByRoomRequest) returns (GetBedsByRoomResponse) {}
+  // Deprecated: Use GetBeds with optional room_id instead
+  rpc GetBedsByRoom(GetBedsByRoomRequest) returns (GetBedsByRoomResponse) {
+   option deprecated = true;
+  }
   rpc UpdateBed(UpdateBedRequest) returns (UpdateBedResponse) {}
   rpc DeleteBed(DeleteBedRequest) returns (DeleteBedResponse) {}
 }
