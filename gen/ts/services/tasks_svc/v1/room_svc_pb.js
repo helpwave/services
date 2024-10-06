@@ -21,6 +21,8 @@ var global =
     (function () { return this; }).call(null) ||
     Function('return this')();
 
+var libs_common_v1_conflict_pb = require('../../../libs/common/v1/conflict_pb.js');
+goog.object.extend(proto, libs_common_v1_conflict_pb);
 goog.exportSymbol('proto.services.tasks_svc.v1.CreateRoomRequest', null, global);
 goog.exportSymbol('proto.services.tasks_svc.v1.CreateRoomResponse', null, global);
 goog.exportSymbol('proto.services.tasks_svc.v1.DeleteRoomRequest', null, global);
@@ -609,7 +611,8 @@ proto.services.tasks_svc.v1.CreateRoomResponse.prototype.toObject = function(opt
  */
 proto.services.tasks_svc.v1.CreateRoomResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, "")
+    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    consistency: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -650,6 +653,10 @@ proto.services.tasks_svc.v1.CreateRoomResponse.deserializeBinaryFromReader = fun
       var value = /** @type {string} */ (reader.readString());
       msg.setId(value);
       break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -686,6 +693,13 @@ proto.services.tasks_svc.v1.CreateRoomResponse.serializeBinaryToWriter = functio
       f
     );
   }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -704,6 +718,24 @@ proto.services.tasks_svc.v1.CreateRoomResponse.prototype.getId = function() {
  */
 proto.services.tasks_svc.v1.CreateRoomResponse.prototype.setId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string consistency = 2;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.CreateRoomResponse.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.CreateRoomResponse} returns this
+ */
+proto.services.tasks_svc.v1.CreateRoomResponse.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -880,7 +912,8 @@ proto.services.tasks_svc.v1.GetRoomResponse.toObject = function(includeInstance,
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     bedsList: jspb.Message.toObjectList(msg.getBedsList(),
     proto.services.tasks_svc.v1.GetRoomResponse.Bed.toObject, includeInstance),
-    wardId: jspb.Message.getFieldWithDefault(msg, 5, "")
+    wardId: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    consistency: jspb.Message.getFieldWithDefault(msg, 6, "")
   };
 
   if (includeInstance) {
@@ -933,6 +966,10 @@ proto.services.tasks_svc.v1.GetRoomResponse.deserializeBinaryFromReader = functi
     case 5:
       var value = /** @type {string} */ (reader.readString());
       msg.setWardId(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -992,6 +1029,13 @@ proto.services.tasks_svc.v1.GetRoomResponse.serializeBinaryToWriter = function(m
       f
     );
   }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      6,
+      f
+    );
+  }
 };
 
 
@@ -1028,7 +1072,8 @@ proto.services.tasks_svc.v1.GetRoomResponse.Bed.prototype.toObject = function(op
 proto.services.tasks_svc.v1.GetRoomResponse.Bed.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 2, "")
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    consistency: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -1073,6 +1118,10 @@ proto.services.tasks_svc.v1.GetRoomResponse.Bed.deserializeBinaryFromReader = fu
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1116,6 +1165,13 @@ proto.services.tasks_svc.v1.GetRoomResponse.Bed.serializeBinaryToWriter = functi
       f
     );
   }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
 };
 
 
@@ -1152,6 +1208,24 @@ proto.services.tasks_svc.v1.GetRoomResponse.Bed.prototype.getName = function() {
  */
 proto.services.tasks_svc.v1.GetRoomResponse.Bed.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string consistency = 3;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.GetRoomResponse.Bed.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.GetRoomResponse.Bed} returns this
+ */
+proto.services.tasks_svc.v1.GetRoomResponse.Bed.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -1244,6 +1318,24 @@ proto.services.tasks_svc.v1.GetRoomResponse.prototype.getWardId = function() {
  */
 proto.services.tasks_svc.v1.GetRoomResponse.prototype.setWardId = function(value) {
   return jspb.Message.setProto3StringField(this, 5, value);
+};
+
+
+/**
+ * optional string consistency = 6;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.GetRoomResponse.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.GetRoomResponse} returns this
+ */
+proto.services.tasks_svc.v1.GetRoomResponse.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 6, value);
 };
 
 
@@ -1560,7 +1652,8 @@ proto.services.tasks_svc.v1.GetRoomsResponse.Room.toObject = function(includeIns
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     bedsList: jspb.Message.toObjectList(msg.getBedsList(),
     proto.services.tasks_svc.v1.GetRoomsResponse.Room.Bed.toObject, includeInstance),
-    wardId: jspb.Message.getFieldWithDefault(msg, 5, "")
+    wardId: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    consistency: jspb.Message.getFieldWithDefault(msg, 6, "")
   };
 
   if (includeInstance) {
@@ -1613,6 +1706,10 @@ proto.services.tasks_svc.v1.GetRoomsResponse.Room.deserializeBinaryFromReader = 
     case 5:
       var value = /** @type {string} */ (reader.readString());
       msg.setWardId(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -1672,6 +1769,13 @@ proto.services.tasks_svc.v1.GetRoomsResponse.Room.serializeBinaryToWriter = func
       f
     );
   }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      6,
+      f
+    );
+  }
 };
 
 
@@ -1708,7 +1812,8 @@ proto.services.tasks_svc.v1.GetRoomsResponse.Room.Bed.prototype.toObject = funct
 proto.services.tasks_svc.v1.GetRoomsResponse.Room.Bed.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 2, "")
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    consistency: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -1753,6 +1858,10 @@ proto.services.tasks_svc.v1.GetRoomsResponse.Room.Bed.deserializeBinaryFromReade
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1796,6 +1905,13 @@ proto.services.tasks_svc.v1.GetRoomsResponse.Room.Bed.serializeBinaryToWriter = 
       f
     );
   }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
 };
 
 
@@ -1832,6 +1948,24 @@ proto.services.tasks_svc.v1.GetRoomsResponse.Room.Bed.prototype.getName = functi
  */
 proto.services.tasks_svc.v1.GetRoomsResponse.Room.Bed.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string consistency = 3;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.GetRoomsResponse.Room.Bed.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.GetRoomsResponse.Room.Bed} returns this
+ */
+proto.services.tasks_svc.v1.GetRoomsResponse.Room.Bed.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
@@ -1928,6 +2062,24 @@ proto.services.tasks_svc.v1.GetRoomsResponse.Room.prototype.setWardId = function
 
 
 /**
+ * optional string consistency = 6;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.GetRoomsResponse.Room.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.GetRoomsResponse.Room} returns this
+ */
+proto.services.tasks_svc.v1.GetRoomsResponse.Room.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 6, value);
+};
+
+
+/**
  * repeated Room rooms = 1;
  * @return {!Array<!proto.services.tasks_svc.v1.GetRoomsResponse.Room>}
  */
@@ -1998,7 +2150,8 @@ proto.services.tasks_svc.v1.UpdateRoomRequest.prototype.toObject = function(opt_
 proto.services.tasks_svc.v1.UpdateRoomRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 2, "")
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    consistency: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -2043,6 +2196,10 @@ proto.services.tasks_svc.v1.UpdateRoomRequest.deserializeBinaryFromReader = func
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -2083,6 +2240,13 @@ proto.services.tasks_svc.v1.UpdateRoomRequest.serializeBinaryToWriter = function
   if (f != null) {
     writer.writeString(
       2,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 3));
+  if (f != null) {
+    writer.writeString(
+      3,
       f
     );
   }
@@ -2143,6 +2307,42 @@ proto.services.tasks_svc.v1.UpdateRoomRequest.prototype.hasName = function() {
 };
 
 
+/**
+ * optional string consistency = 3;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.UpdateRoomRequest.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.UpdateRoomRequest} returns this
+ */
+proto.services.tasks_svc.v1.UpdateRoomRequest.prototype.setConsistency = function(value) {
+  return jspb.Message.setField(this, 3, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.UpdateRoomRequest} returns this
+ */
+proto.services.tasks_svc.v1.UpdateRoomRequest.prototype.clearConsistency = function() {
+  return jspb.Message.setField(this, 3, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.UpdateRoomRequest.prototype.hasConsistency = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
 
 
 
@@ -2175,7 +2375,8 @@ proto.services.tasks_svc.v1.UpdateRoomResponse.prototype.toObject = function(opt
  */
 proto.services.tasks_svc.v1.UpdateRoomResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+    conflict: (f = msg.getConflict()) && libs_common_v1_conflict_pb.Conflict.toObject(includeInstance, f),
+    consistency: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -2212,6 +2413,15 @@ proto.services.tasks_svc.v1.UpdateRoomResponse.deserializeBinaryFromReader = fun
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = new libs_common_v1_conflict_pb.Conflict;
+      reader.readMessage(value,libs_common_v1_conflict_pb.Conflict.deserializeBinaryFromReader);
+      msg.setConflict(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -2241,6 +2451,76 @@ proto.services.tasks_svc.v1.UpdateRoomResponse.prototype.serializeBinary = funct
  */
 proto.services.tasks_svc.v1.UpdateRoomResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getConflict();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      libs_common_v1_conflict_pb.Conflict.serializeBinaryToWriter
+    );
+  }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional libs.common.v1.Conflict conflict = 1;
+ * @return {?proto.libs.common.v1.Conflict}
+ */
+proto.services.tasks_svc.v1.UpdateRoomResponse.prototype.getConflict = function() {
+  return /** @type{?proto.libs.common.v1.Conflict} */ (
+    jspb.Message.getWrapperField(this, libs_common_v1_conflict_pb.Conflict, 1));
+};
+
+
+/**
+ * @param {?proto.libs.common.v1.Conflict|undefined} value
+ * @return {!proto.services.tasks_svc.v1.UpdateRoomResponse} returns this
+*/
+proto.services.tasks_svc.v1.UpdateRoomResponse.prototype.setConflict = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.UpdateRoomResponse} returns this
+ */
+proto.services.tasks_svc.v1.UpdateRoomResponse.prototype.clearConflict = function() {
+  return this.setConflict(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.UpdateRoomResponse.prototype.hasConflict = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional string consistency = 2;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.UpdateRoomResponse.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.UpdateRoomResponse} returns this
+ */
+proto.services.tasks_svc.v1.UpdateRoomResponse.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -2769,7 +3049,8 @@ proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.toObject = funct
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     bedsList: jspb.Message.toObjectList(msg.getBedsList(),
-    proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.toObject, includeInstance)
+    proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.toObject, includeInstance),
+    consistency: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -2818,6 +3099,10 @@ proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.deserializeBinar
       var value = new proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed;
       reader.readMessage(value,proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.deserializeBinaryFromReader);
       msg.addBeds(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -2870,6 +3155,13 @@ proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.serializeBinaryT
       proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.serializeBinaryToWriter
     );
   }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
 };
 
 
@@ -2907,7 +3199,8 @@ proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.toObject = f
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
     name: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    patient: (f = msg.getPatient()) && proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.toObject(includeInstance, f)
+    patient: (f = msg.getPatient()) && proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.toObject(includeInstance, f),
+    consistency: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -2956,6 +3249,10 @@ proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.deserializeB
       var value = new proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient;
       reader.readMessage(value,proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.deserializeBinaryFromReader);
       msg.setPatient(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -3008,6 +3305,13 @@ proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.serializeBin
       proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.serializeBinaryToWriter
     );
   }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
 };
 
 
@@ -3047,7 +3351,8 @@ proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.toOb
     humanReadableIdentifier: jspb.Message.getFieldWithDefault(msg, 2, ""),
     tasksUnscheduled: jspb.Message.getFieldWithDefault(msg, 3, 0),
     tasksInProgress: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    tasksDone: jspb.Message.getFieldWithDefault(msg, 5, 0)
+    tasksDone: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    consistency: jspb.Message.getFieldWithDefault(msg, 6, "")
   };
 
   if (includeInstance) {
@@ -3103,6 +3408,10 @@ proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.dese
     case 5:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setTasksDone(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
       break;
     default:
       reader.skipField();
@@ -3165,6 +3474,13 @@ proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.seri
   if (f !== 0) {
     writer.writeUint32(
       5,
+      f
+    );
+  }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      6,
       f
     );
   }
@@ -3262,6 +3578,24 @@ proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prot
 
 
 /**
+ * optional string consistency = 6;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient} returns this
+ */
+proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.Patient.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 6, value);
+};
+
+
+/**
  * optional string id = 1;
  * @return {string}
  */
@@ -3331,6 +3665,24 @@ proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.prototype.cl
  */
 proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.prototype.hasPatient = function() {
   return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional string consistency = 4;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed} returns this
+ */
+proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.Bed.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -3405,6 +3757,24 @@ proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.prototype.addBed
  */
 proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.prototype.clearBedsList = function() {
   return this.setBedsList([]);
+};
+
+
+/**
+ * optional string consistency = 4;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room} returns this
+ */
+proto.services.tasks_svc.v1.GetRoomOverviewsByWardResponse.Room.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 

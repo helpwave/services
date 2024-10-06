@@ -1,6 +1,7 @@
 package ward
 
 import (
+	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
@@ -25,11 +26,14 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 	log := zlog.Ctx(ctx)
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	wardID, err := wardRepo.CreateWard(ctx, req.Name)
+	row, err := wardRepo.CreateWard(ctx, req.Name)
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
 	}
+
+	wardID := row.ID
+	consistency := row.Consistency
 
 	log.Info().
 		Str("wardID", wardID.String()).
@@ -38,7 +42,8 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 	tracking.AddWardToRecentActivity(ctx, wardID.String())
 
 	return &pb.CreateWardResponse{
-		Id: wardID.String(),
+		Id:          wardID.String(),
+		Consistency: common.ConsistencyToken(consistency).String(),
 	}, nil
 }
 
@@ -60,8 +65,9 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 	}
 
 	return &pb.GetWardResponse{
-		Id:   ward.ID.String(),
-		Name: ward.Name,
+		Id:          ward.ID.String(),
+		Name:        ward.Name,
+		Consistency: common.ConsistencyToken(ward.Consistency).String(),
 	}, nil
 }
 
@@ -77,8 +83,9 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 	return &pb.GetWardsResponse{
 		Wards: hwutil.Map(wards, func(ward ward_repo.Ward) *pb.GetWardsResponse_Ward {
 			return &pb.GetWardsResponse_Ward{
-				Id:   ward.ID.String(),
-				Name: ward.Name,
+				Id:          ward.ID.String(),
+				Name:        ward.Name,
+				Consistency: common.ConsistencyToken(ward.Consistency).String(),
 			}
 		}),
 	}, nil
@@ -125,6 +132,7 @@ func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsR
 			TasksTodo:       uint32(row.TodoCount),
 			TasksInProgress: uint32(row.InProgressCount),
 			TasksDone:       uint32(row.DoneCount),
+			Consistency:     common.ConsistencyToken(row.Ward.Consistency).String(),
 		}
 	})
 
@@ -141,7 +149,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	err = wardRepo.UpdateWard(ctx, ward_repo.UpdateWardParams{
+	consistency, err := wardRepo.UpdateWard(ctx, ward_repo.UpdateWardParams{
 		ID:   id,
 		Name: req.Name,
 	})
@@ -152,7 +160,10 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 
 	tracking.AddWardToRecentActivity(ctx, id.String())
 
-	return &pb.UpdateWardResponse{}, nil
+	return &pb.UpdateWardResponse{
+		Conflict:    nil, // TODO
+		Consistency: common.ConsistencyToken(consistency).String(),
+	}, nil
 }
 
 func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {
@@ -205,6 +216,7 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 			TasksTodo:       uint32(row.TodoCount),
 			TasksInProgress: uint32(row.InProgressCount),
 			TasksDone:       uint32(row.DoneCount),
+			Consistency:     common.ConsistencyToken(row.Ward.Consistency).String(),
 		}
 	})
 
@@ -240,9 +252,10 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 			room = rooms[roomIx]
 		} else {
 			room = &pb.GetWardDetailsResponse_Room{
-				Id:   row.RoomID.UUID.String(),
-				Name: *row.RoomName,
-				Beds: make([]*pb.GetWardDetailsResponse_Bed, 0),
+				Id:          row.RoomID.UUID.String(),
+				Name:        *row.RoomName,
+				Beds:        make([]*pb.GetWardDetailsResponse_Bed, 0),
+				Consistency: common.ConsistencyToken(*row.RoomConsistency).String(),
 			}
 			rooms = append(rooms, room)
 			roomsIndexMap[row.RoomID.UUID] = len(rooms) - 1
@@ -253,8 +266,9 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		}
 		if _, processed := bedSet[row.BedID.UUID]; !processed {
 			bed := &pb.GetWardDetailsResponse_Bed{
-				Id:   row.BedID.UUID.String(),
-				Name: *row.BedName,
+				Id:          row.BedID.UUID.String(),
+				Name:        *row.BedName,
+				Consistency: common.ConsistencyToken(*row.BedConsistency).String(),
 			}
 			room.Beds = append(room.Beds, bed)
 			bedSet[row.BedID.UUID] = true
@@ -278,9 +292,10 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 			taskTemplate = taskTemplates[ttIx]
 		} else {
 			taskTemplate = &pb.GetWardDetailsResponse_TaskTemplate{
-				Id:       row.TaskTemplateID.UUID.String(),
-				Name:     *row.TaskTemplateName,
-				Subtasks: make([]*pb.GetWardDetailsResponse_Subtask, 0),
+				Id:          row.TaskTemplateID.UUID.String(),
+				Name:        *row.TaskTemplateName,
+				Subtasks:    make([]*pb.GetWardDetailsResponse_Subtask, 0),
+				Consistency: common.ConsistencyToken(*row.TaskTemplateConsistency).String(),
 			}
 			taskTemplates = append(taskTemplates, taskTemplate)
 			ttIndexMap[row.TaskTemplateID.UUID] = len(taskTemplates) - 1
@@ -304,6 +319,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		Name:          rows[0].WardName,
 		Rooms:         rooms,
 		TaskTemplates: taskTemplates,
+		Consistency:   common.ConsistencyToken(rows[0].WardConsistency).String(),
 	}
 
 	return ward, nil

@@ -7,4 +7,5 @@ type PatientCommands struct {
 	ReadmitPatient   ReadmitPatientCommandHandler
 	UnassignBed      UnassignBedCommandHandler
 	UpdatePatient    UpdatePatientCommandHandler
+	DeletePatient    DeletePatientCommandHandler
 }

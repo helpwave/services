@@ -1,6 +1,7 @@
 import * as jspb from 'google-protobuf'
 
 import * as services_property_svc_v1_types_pb from '../../../services/property_svc/v1/types_pb'; // proto import: "services/property_svc/v1/types.proto"
+import * as libs_common_v1_conflict_pb from '../../../libs/common/v1/conflict_pb'; // proto import: "libs/common/v1/conflict.proto"
 
 
 export class CreatePropertyRequest extends jspb.Message {
@@ -130,6 +131,9 @@ export class CreatePropertyResponse extends jspb.Message {
   getPropertyId(): string;
   setPropertyId(value: string): CreatePropertyResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): CreatePropertyResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreatePropertyResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreatePropertyResponse): CreatePropertyResponse.AsObject;
@@ -141,12 +145,18 @@ export class CreatePropertyResponse extends jspb.Message {
 export namespace CreatePropertyResponse {
   export type AsObject = {
     propertyId: string,
+    consistency: string,
   }
 }
 
 export class GetPropertyRequest extends jspb.Message {
   getId(): string;
   setId(value: string): GetPropertyRequest;
+
+  getViewSource(): GetPropertyRequest.ViewSource | undefined;
+  setViewSource(value?: GetPropertyRequest.ViewSource): GetPropertyRequest;
+  hasViewSource(): boolean;
+  clearViewSource(): GetPropertyRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPropertyRequest.AsObject;
@@ -159,6 +169,7 @@ export class GetPropertyRequest extends jspb.Message {
 export namespace GetPropertyRequest {
   export type AsObject = {
     id: string,
+    viewSource?: GetPropertyRequest.ViewSource.AsObject,
   }
 
   export class ViewSource extends jspb.Message {
@@ -191,6 +202,11 @@ export namespace GetPropertyRequest {
     }
   }
 
+
+  export enum ViewSourceCase { 
+    _VIEW_SOURCE_NOT_SET = 0,
+    VIEW_SOURCE = 2,
+  }
 }
 
 export class GetPropertyResponse extends jspb.Message {
@@ -229,6 +245,9 @@ export class GetPropertyResponse extends jspb.Message {
   hasAlwaysIncludeForViewSource(): boolean;
   clearAlwaysIncludeForViewSource(): GetPropertyResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): GetPropertyResponse;
+
   getFieldTypeDataCase(): GetPropertyResponse.FieldTypeDataCase;
 
   serializeBinary(): Uint8Array;
@@ -250,6 +269,7 @@ export namespace GetPropertyResponse {
     setId?: string,
     selectData?: GetPropertyResponse.SelectData.AsObject,
     alwaysIncludeForViewSource?: boolean,
+    consistency: string,
   }
 
   export class SelectData extends jspb.Message {
@@ -292,6 +312,9 @@ export namespace GetPropertyResponse {
       getIsCustom(): boolean;
       setIsCustom(value: boolean): SelectOption;
 
+      getConsistency(): string;
+      setConsistency(value: string): SelectOption;
+
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SelectOption.AsObject;
       static toObject(includeInstance: boolean, msg: SelectOption): SelectOption.AsObject;
@@ -306,6 +329,7 @@ export namespace GetPropertyResponse {
         name: string,
         description?: string,
         isCustom: boolean,
+        consistency: string,
       }
 
       export enum DescriptionCase { 
@@ -377,6 +401,11 @@ export class UpdatePropertyRequest extends jspb.Message {
   hasSelectData(): boolean;
   clearSelectData(): UpdatePropertyRequest;
 
+  getConsistency(): string;
+  setConsistency(value: string): UpdatePropertyRequest;
+  hasConsistency(): boolean;
+  clearConsistency(): UpdatePropertyRequest;
+
   getFieldTypeDataCase(): UpdatePropertyRequest.FieldTypeDataCase;
 
   serializeBinary(): Uint8Array;
@@ -396,6 +425,7 @@ export namespace UpdatePropertyRequest {
     isArchived?: boolean,
     setId?: string,
     selectData?: UpdatePropertyRequest.SelectData.AsObject,
+    consistency?: string,
   }
 
   export class SelectData extends jspb.Message {
@@ -517,9 +547,22 @@ export namespace UpdatePropertyRequest {
     _SET_ID_NOT_SET = 0,
     SET_ID = 8,
   }
+
+  export enum ConsistencyCase { 
+    _CONSISTENCY_NOT_SET = 0,
+    CONSISTENCY = 11,
+  }
 }
 
 export class UpdatePropertyResponse extends jspb.Message {
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): UpdatePropertyResponse;
+  hasConflict(): boolean;
+  clearConflict(): UpdatePropertyResponse;
+
+  getConsistency(): string;
+  setConsistency(value: string): UpdatePropertyResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdatePropertyResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UpdatePropertyResponse): UpdatePropertyResponse.AsObject;
@@ -530,44 +573,58 @@ export class UpdatePropertyResponse extends jspb.Message {
 
 export namespace UpdatePropertyResponse {
   export type AsObject = {
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    consistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 1,
   }
 }
 
-export class GetPropertiesBySubjectTypeRequest extends jspb.Message {
+export class GetPropertiesRequest extends jspb.Message {
   getSubjectType(): services_property_svc_v1_types_pb.SubjectType;
-  setSubjectType(value: services_property_svc_v1_types_pb.SubjectType): GetPropertiesBySubjectTypeRequest;
+  setSubjectType(value: services_property_svc_v1_types_pb.SubjectType): GetPropertiesRequest;
+  hasSubjectType(): boolean;
+  clearSubjectType(): GetPropertiesRequest;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetPropertiesBySubjectTypeRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetPropertiesBySubjectTypeRequest): GetPropertiesBySubjectTypeRequest.AsObject;
-  static serializeBinaryToWriter(message: GetPropertiesBySubjectTypeRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetPropertiesBySubjectTypeRequest;
-  static deserializeBinaryFromReader(message: GetPropertiesBySubjectTypeRequest, reader: jspb.BinaryReader): GetPropertiesBySubjectTypeRequest;
+  toObject(includeInstance?: boolean): GetPropertiesRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPropertiesRequest): GetPropertiesRequest.AsObject;
+  static serializeBinaryToWriter(message: GetPropertiesRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPropertiesRequest;
+  static deserializeBinaryFromReader(message: GetPropertiesRequest, reader: jspb.BinaryReader): GetPropertiesRequest;
 }
 
-export namespace GetPropertiesBySubjectTypeRequest {
+export namespace GetPropertiesRequest {
   export type AsObject = {
-    subjectType: services_property_svc_v1_types_pb.SubjectType,
+    subjectType?: services_property_svc_v1_types_pb.SubjectType,
+  }
+
+  export enum SubjectTypeCase { 
+    _SUBJECT_TYPE_NOT_SET = 0,
+    SUBJECT_TYPE = 1,
   }
 }
 
-export class GetPropertiesBySubjectTypeResponse extends jspb.Message {
-  getPropertiesList(): Array<GetPropertiesBySubjectTypeResponse.Property>;
-  setPropertiesList(value: Array<GetPropertiesBySubjectTypeResponse.Property>): GetPropertiesBySubjectTypeResponse;
-  clearPropertiesList(): GetPropertiesBySubjectTypeResponse;
-  addProperties(value?: GetPropertiesBySubjectTypeResponse.Property, index?: number): GetPropertiesBySubjectTypeResponse.Property;
+export class GetPropertiesResponse extends jspb.Message {
+  getPropertiesList(): Array<GetPropertiesResponse.Property>;
+  setPropertiesList(value: Array<GetPropertiesResponse.Property>): GetPropertiesResponse;
+  clearPropertiesList(): GetPropertiesResponse;
+  addProperties(value?: GetPropertiesResponse.Property, index?: number): GetPropertiesResponse.Property;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetPropertiesBySubjectTypeResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetPropertiesBySubjectTypeResponse): GetPropertiesBySubjectTypeResponse.AsObject;
-  static serializeBinaryToWriter(message: GetPropertiesBySubjectTypeResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetPropertiesBySubjectTypeResponse;
-  static deserializeBinaryFromReader(message: GetPropertiesBySubjectTypeResponse, reader: jspb.BinaryReader): GetPropertiesBySubjectTypeResponse;
+  toObject(includeInstance?: boolean): GetPropertiesResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPropertiesResponse): GetPropertiesResponse.AsObject;
+  static serializeBinaryToWriter(message: GetPropertiesResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPropertiesResponse;
+  static deserializeBinaryFromReader(message: GetPropertiesResponse, reader: jspb.BinaryReader): GetPropertiesResponse;
 }
 
-export namespace GetPropertiesBySubjectTypeResponse {
+export namespace GetPropertiesResponse {
   export type AsObject = {
-    propertiesList: Array<GetPropertiesBySubjectTypeResponse.Property.AsObject>,
+    propertiesList: Array<GetPropertiesResponse.Property.AsObject>,
   }
 
   export class Property extends jspb.Message {
@@ -596,10 +653,13 @@ export namespace GetPropertiesBySubjectTypeResponse {
     hasSetId(): boolean;
     clearSetId(): Property;
 
-    getSelectData(): GetPropertiesBySubjectTypeResponse.Property.SelectData | undefined;
-    setSelectData(value?: GetPropertiesBySubjectTypeResponse.Property.SelectData): Property;
+    getSelectData(): GetPropertiesResponse.Property.SelectData | undefined;
+    setSelectData(value?: GetPropertiesResponse.Property.SelectData): Property;
     hasSelectData(): boolean;
     clearSelectData(): Property;
+
+    getConsistency(): string;
+    setConsistency(value: string): Property;
 
     getFieldTypeDataCase(): Property.FieldTypeDataCase;
 
@@ -620,7 +680,8 @@ export namespace GetPropertiesBySubjectTypeResponse {
       description?: string,
       isArchived: boolean,
       setId?: string,
-      selectData?: GetPropertiesBySubjectTypeResponse.Property.SelectData.AsObject,
+      selectData?: GetPropertiesResponse.Property.SelectData.AsObject,
+      consistency: string,
     }
 
     export class SelectData extends jspb.Message {
@@ -629,10 +690,10 @@ export namespace GetPropertiesBySubjectTypeResponse {
       hasAllowFreetext(): boolean;
       clearAllowFreetext(): SelectData;
 
-      getOptionsList(): Array<GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption>;
-      setOptionsList(value: Array<GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption>): SelectData;
+      getOptionsList(): Array<GetPropertiesResponse.Property.SelectData.SelectOption>;
+      setOptionsList(value: Array<GetPropertiesResponse.Property.SelectData.SelectOption>): SelectData;
       clearOptionsList(): SelectData;
-      addOptions(value?: GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption, index?: number): GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption;
+      addOptions(value?: GetPropertiesResponse.Property.SelectData.SelectOption, index?: number): GetPropertiesResponse.Property.SelectData.SelectOption;
 
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): SelectData.AsObject;
@@ -645,7 +706,7 @@ export namespace GetPropertiesBySubjectTypeResponse {
     export namespace SelectData {
       export type AsObject = {
         allowFreetext?: boolean,
-        optionsList: Array<GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption.AsObject>,
+        optionsList: Array<GetPropertiesResponse.Property.SelectData.SelectOption.AsObject>,
       }
 
       export class SelectOption extends jspb.Message {

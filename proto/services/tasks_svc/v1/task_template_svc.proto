@@ -2,7 +2,9 @@ syntax = "proto3";
 
 package services.tasks_svc.v1;
 
-option go_package = "gen/proto/services/tasks-svc";
+import "libs/common/v1/conflict.proto";
+
+option go_package = "gen/services/tasks-svc/v1";
 
 ///
 /// CreateTaskTemplate
@@ -21,6 +23,7 @@ message CreateTaskTemplateRequest {
 
 message CreateTaskTemplateResponse {
   string id = 1;
+  string consistency = 2;
 }
 
 ///
@@ -31,8 +34,7 @@ message DeleteTaskTemplateRequest {
   string id = 1; // @gotags: validate:"uuid4"
 }
 
-message DeleteTaskTemplateResponse {
-}
+message DeleteTaskTemplateResponse {}
 
 
 ///
@@ -44,6 +46,7 @@ message DeleteTaskTemplateSubTaskRequest {
 }
 
 message DeleteTaskTemplateSubTaskResponse {
+  string task_template_consistency = 1;
 }
 
 
@@ -55,9 +58,12 @@ message UpdateTaskTemplateRequest {
   string id = 1; // @gotags: validate:"required"
   optional string name = 2;
   optional string description = 3;
+  optional string consistency = 4; // no conflict detection, if not provided
 }
 
 message UpdateTaskTemplateResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string consistency = 2;
 }
 
 
@@ -68,9 +74,12 @@ message UpdateTaskTemplateResponse {
 message UpdateTaskTemplateSubTaskRequest {
   string subtask_id = 1; // @gotags: validate:"required"
   optional string name = 2;
+  optional string task_template_consistency = 3; // no conflict detection, if not provided
 }
 
 message UpdateTaskTemplateSubTaskResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string task_template_consistency = 2;
 }
 
 
@@ -85,6 +94,7 @@ message CreateTaskTemplateSubTaskRequest {
 
 message CreateTaskTemplateSubTaskResponse {
   string id = 1;
+  string task_template_consistency = 2;
 }
 
 
@@ -108,6 +118,7 @@ message GetAllTaskTemplatesResponse {
     bool is_public = 4;
     string created_by = 6;
     repeated SubTask subtasks = 7;
+    string consistency = 8;
 
     message SubTask {
       string id = 1;

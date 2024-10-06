@@ -12,7 +12,7 @@ import (
 )
 
 const createBed = `-- name: CreateBed :one
-INSERT INTO beds (room_id, name) VALUES ($1, $2) RETURNING id, room_id, name
+INSERT INTO beds (room_id, name) VALUES ($1, $2) RETURNING id, room_id, name, consistency
 `
 
 type CreateBedParams struct {
@@ -23,7 +23,12 @@ type CreateBedParams struct {
 func (q *Queries) CreateBed(ctx context.Context, arg CreateBedParams) (Bed, error) {
 	row := q.db.QueryRow(ctx, createBed, arg.RoomID, arg.Name)
 	var i Bed
-	err := row.Scan(&i.ID, &i.RoomID, &i.Name)
+	err := row.Scan(
+		&i.ID,
+		&i.RoomID,
+		&i.Name,
+		&i.Consistency,
+	)
 	return i, err
 }
 
@@ -53,8 +58,8 @@ func (q *Queries) ExistsBed(ctx context.Context, id uuid.UUID) (bool, error) {
 
 const getBedAndRoomByBedId = `-- name: GetBedAndRoomByBedId :one
 SELECT
-	beds.id, beds.room_id, beds.name,
-	rooms.id, rooms.name, rooms.ward_id
+	beds.id, beds.room_id, beds.name, beds.consistency,
+	rooms.id, rooms.name, rooms.ward_id, rooms.consistency
 	FROM beds
 	JOIN rooms on beds.room_id = rooms.id
 	WHERE beds.id = $1
@@ -72,15 +77,17 @@ func (q *Queries) GetBedAndRoomByBedId(ctx context.Context, id uuid.UUID) (GetBe
 		&i.Bed.ID,
 		&i.Bed.RoomID,
 		&i.Bed.Name,
+		&i.Bed.Consistency,
 		&i.Room.ID,
 		&i.Room.Name,
 		&i.Room.WardID,
+		&i.Room.Consistency,
 	)
 	return i, err
 }
 
 const getBedById = `-- name: GetBedById :one
-SELECT id, room_id, name FROM beds
+SELECT id, room_id, name, consistency FROM beds
 WHERE id = $1
 LIMIT 1
 `
@@ -88,14 +95,24 @@ LIMIT 1
 func (q *Queries) GetBedById(ctx context.Context, id uuid.UUID) (Bed, error) {
 	row := q.db.QueryRow(ctx, getBedById, id)
 	var i Bed
-	err := row.Scan(&i.ID, &i.RoomID, &i.Name)
+	err := row.Scan(
+		&i.ID,
+		&i.RoomID,
+		&i.Name,
+		&i.Consistency,
+	)
 	return i, err
 }
 
 const getBedWithRoomByPatient = `-- name: GetBedWithRoomByPatient :one
 SELECT
-	beds.id as bed_id, beds.name as bed_name,
-	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+	beds.id as bed_id,
+	beds.name as bed_name,
+	beds.consistency as bed_consistency,
+	rooms.id as room_id,
+	rooms.name as room_name,
+	rooms.ward_id as ward_id,
+	rooms.consistency as room_consistency
 FROM patients
 		 JOIN beds ON patients.bed_id = beds.id
 		 JOIN rooms ON beds.room_id = rooms.id
@@ -104,11 +121,13 @@ LIMIT 1
 `
 
 type GetBedWithRoomByPatientRow struct {
-	BedID    uuid.UUID
-	BedName  string
-	RoomID   uuid.UUID
-	RoomName string
-	WardID   uuid.UUID
+	BedID           uuid.UUID
+	BedName         string
+	BedConsistency  int64
+	RoomID          uuid.UUID
+	RoomName        string
+	WardID          uuid.UUID
+	RoomConsistency int64
 }
 
 func (q *Queries) GetBedWithRoomByPatient(ctx context.Context, patientID uuid.UUID) (GetBedWithRoomByPatientRow, error) {
@@ -117,15 +136,17 @@ func (q *Queries) GetBedWithRoomByPatient(ctx context.Context, patientID uuid.UU
 	err := row.Scan(
 		&i.BedID,
 		&i.BedName,
+		&i.BedConsistency,
 		&i.RoomID,
 		&i.RoomName,
 		&i.WardID,
+		&i.RoomConsistency,
 	)
 	return i, err
 }
 
 const getBeds = `-- name: GetBeds :many
-SELECT id, room_id, name FROM beds
+SELECT id, room_id, name, consistency FROM beds
 WHERE (room_id = $1 OR $1 IS NULL)
 ORDER BY name ASC
 `
@@ -139,7 +160,12 @@ func (q *Queries) GetBeds(ctx context.Context, roomID uuid.NullUUID) ([]Bed, err
 	items := []Bed{}
 	for rows.Next() {
 		var i Bed
-		if err := rows.Scan(&i.ID, &i.RoomID, &i.Name); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.RoomID,
+			&i.Name,
+			&i.Consistency,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -150,12 +176,14 @@ func (q *Queries) GetBeds(ctx context.Context, roomID uuid.NullUUID) ([]Bed, err
 	return items, nil
 }
 
-const updateBed = `-- name: UpdateBed :exec
+const updateBed = `-- name: UpdateBed :one
 UPDATE beds
 SET
 	name = coalesce($1, name),
-	room_id = coalesce($2, room_id)
+	room_id = coalesce($2, room_id),
+	consistency = consistency + 1
 WHERE id = $3
+RETURNING consistency
 `
 
 type UpdateBedParams struct {
@@ -164,7 +192,9 @@ type UpdateBedParams struct {
 	ID     uuid.UUID
 }
 
-func (q *Queries) UpdateBed(ctx context.Context, arg UpdateBedParams) error {
-	_, err := q.db.Exec(ctx, updateBed, arg.Name, arg.RoomID, arg.ID)
-	return err
+func (q *Queries) UpdateBed(ctx context.Context, arg UpdateBedParams) (int64, error) {
+	row := q.db.QueryRow(ctx, updateBed, arg.Name, arg.RoomID, arg.ID)
+	var consistency int64
+	err := row.Scan(&consistency)
+	return consistency, err
 }

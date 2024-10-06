@@ -65,7 +65,8 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		Msg("bed created")
 
 	return &pb.CreateBedResponse{
-		Id: bed.ID.String(),
+		Id:          bed.ID.String(),
+		Consistency: common.ConsistencyToken(bed.Consistency).String(),
 	}, nil
 }
 
@@ -87,9 +88,10 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 	}
 
 	return &pb.GetBedResponse{
-		Id:     bed.ID.String(),
-		RoomId: bed.RoomID.String(),
-		Name:   bed.Name,
+		Id:          bed.ID.String(),
+		RoomId:      bed.RoomID.String(),
+		Name:        bed.Name,
+		Consistency: common.ConsistencyToken(bed.Consistency).String(),
 	}, nil
 }
 
@@ -111,10 +113,19 @@ func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatien
 
 	return &pb.GetBedByPatientResponse{
 		Room: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientRow) pb.GetBedByPatientResponse_Room {
-			return pb.GetBedByPatientResponse_Room{Id: res.RoomID.String(), Name: res.RoomName, WardId: res.WardID.String()}
+			return pb.GetBedByPatientResponse_Room{
+				Id:          res.RoomID.String(),
+				Name:        res.RoomName,
+				WardId:      res.WardID.String(),
+				Consistency: common.ConsistencyToken(res.RoomConsistency).String(),
+			}
 		}),
 		Bed: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientRow) pb.GetBedByPatientResponse_Bed {
-			return pb.GetBedByPatientResponse_Bed{Id: res.BedID.String(), Name: res.BedName}
+			return pb.GetBedByPatientResponse_Bed{
+				Id:          res.BedID.String(),
+				Name:        res.BedName,
+				Consistency: common.ConsistencyToken(res.BedConsistency).String(),
+			}
 		}),
 	}, nil
 }
@@ -130,9 +141,10 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 	return &pb.GetBedsResponse{
 		Beds: hwutil.Map(beds, func(bed bed_repo.Bed) *pb.GetBedsResponse_Bed {
 			return &pb.GetBedsResponse_Bed{
-				Id:     bed.ID.String(),
-				RoomId: bed.RoomID.String(),
-				Name:   bed.Name,
+				Id:          bed.ID.String(),
+				RoomId:      bed.RoomID.String(),
+				Name:        bed.Name,
+				Consistency: common.ConsistencyToken(bed.Consistency).String(),
 			}
 		}),
 	}, nil
@@ -163,8 +175,9 @@ func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomReq
 
 	for _, bed := range beds {
 		res.Beds = append(res.Beds, &pb.GetBedsByRoomResponse_Bed{
-			Id:   bed.ID.String(),
-			Name: bed.Name,
+			Id:          bed.ID.String(),
+			Name:        bed.Name,
+			Consistency: common.ConsistencyToken(bed.Consistency).String(),
 		})
 	}
 
@@ -184,7 +197,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	err = bedRepo.UpdateBed(ctx, bed_repo.UpdateBedParams{
+	consistency, err := bedRepo.UpdateBed(ctx, bed_repo.UpdateBedParams{
 		ID:     bedID,
 		Name:   req.Name,
 		RoomID: roomId,
@@ -194,7 +207,10 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, err
 	}
 
-	return &pb.UpdateBedResponse{}, nil
+	return &pb.UpdateBedResponse{
+		Conflict:    nil, // TODO
+		Consistency: common.ConsistencyToken(consistency).String(),
+	}, nil
 }
 
 func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*pb.DeleteBedResponse, error) {

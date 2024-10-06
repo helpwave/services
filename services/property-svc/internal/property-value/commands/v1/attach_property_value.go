@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwdb"
@@ -9,10 +10,10 @@ import (
 	"property-svc/repos/property_value_repo"
 )
 
-type AttachPropertyValueCommandHandler func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) error
+type AttachPropertyValueCommandHandler func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) (common.ConsistencyToken, error)
 
 func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachPropertyValueCommandHandler {
-	return func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) error {
+	return func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) (common.ConsistencyToken, error) {
 		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 		var a *aggregate.PropertyValueAggregate
 
@@ -21,21 +22,21 @@ func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachProperty
 			SubjectID:  subjectID,
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
-			return err
+			return 0, err
 		}
 
 		if existingPropertyValueID != nil {
 			if a, err = aggregate.LoadPropertyValueAggregate(ctx, as, *existingPropertyValueID); err != nil {
-				return err
+				return 0, err
 			}
 			// TODO: update value will be triggered, even if the value is not the type the property defines
 			if err := a.UpdatePropertyValue(ctx, value); err != nil {
-				return err
+				return 0, err
 			}
 		} else {
 			a = aggregate.NewPropertyValueAggregate(propertyValueID)
 			if err := a.CreatePropertyValue(ctx, propertyID, value, subjectID); err != nil {
-				return err
+				return 0, err
 			}
 		}
 

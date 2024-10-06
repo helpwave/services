@@ -28,7 +28,7 @@ type Event struct {
 	Data []byte
 	// time of event creation
 	Timestamp time.Time
-	// event's revision number (event's can, but should not be modified)
+	// event's number in its stream
 	Version uint64
 	// user responsible for this event
 	CommitterUserID *uuid.UUID
@@ -71,6 +71,12 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 		AggregateType:   aggregate.GetType(),
 		Timestamp:       time.Now().UTC(),
 		CommitterUserID: nil,
+	}
+
+	// TODO: We have to default to empty eventData as the eventstoredb-ui does not allow querying events without data
+	var empty struct{}
+	if err := evt.SetJsonData(empty); err != nil {
+		return Event{}, fmt.Errorf("NewEvent: could not set empty data: %w", err)
 	}
 
 	for _, opt := range opts {
@@ -177,8 +183,8 @@ func (e *Event) GetVersion() uint64 {
 
 func (e *Event) ToEventData() (esdb.EventData, error) {
 	md := metadata{
-    TraceParent: e.TraceParent,
-		Timestamp: e.Timestamp,
+		TraceParent: e.TraceParent,
+		Timestamp:   e.Timestamp,
 	}
 	if e.CommitterUserID != nil {
 		md.CommitterUserID = e.CommitterUserID.String()
@@ -190,6 +196,7 @@ func (e *Event) ToEventData() (esdb.EventData, error) {
 	}
 
 	return esdb.EventData{
+		EventID:     e.EventID,
 		EventType:   e.EventType,
 		ContentType: esdb.ContentTypeJson,
 		Data:        e.Data,

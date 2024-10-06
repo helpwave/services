@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"errors"
 	"github.com/google/uuid"
@@ -8,19 +9,19 @@ import (
 	"tasks-svc/internal/patient/aggregate"
 )
 
-type CreatePatientCommandHandler func(ctx context.Context, patientID uuid.UUID, humanReadableIdentifier string, notes *string) error
+type CreatePatientCommandHandler func(ctx context.Context, patientID uuid.UUID, humanReadableIdentifier string, notes *string) (common.ConsistencyToken, error)
 
 func NewCreatePatientCommandHandler(as hwes.AggregateStore) CreatePatientCommandHandler {
-	return func(ctx context.Context, patientID uuid.UUID, humanReadableIdentifier string, notes *string) error {
+	return func(ctx context.Context, patientID uuid.UUID, humanReadableIdentifier string, notes *string) (common.ConsistencyToken, error) {
 		a := aggregate.NewPatientAggregate(patientID)
 
 		exists, err := as.Exists(ctx, a)
 		if err != nil {
-			return err
+			return 0, err
 		}
 
 		if exists {
-			return errors.New("cannot create an already existing aggregate")
+			return 0, errors.New("cannot create an already existing aggregate")
 		}
 
 		var finalNotes = ""
@@ -29,7 +30,7 @@ func NewCreatePatientCommandHandler(as hwes.AggregateStore) CreatePatientCommand
 		}
 
 		if err := a.CreatePatient(ctx, humanReadableIdentifier, finalNotes); err != nil {
-			return err
+			return 0, err
 		}
 
 		return as.Save(ctx, a)

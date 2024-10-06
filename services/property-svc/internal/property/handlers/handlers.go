@@ -29,8 +29,9 @@ func NewPropertyHandlers(as hwes.AggregateStore) *Handlers {
 		},
 		Queries: &Queries{
 			V1: &queriesV1.PropertyQueries{
-				GetPropertyByID:            queriesV1.NewGetPropertyByIDQueryHandler(),
-				GetPropertiesBySubjectType: queriesV1.NewGetPropertiesBySubjectTypeQueryHandler(),
+				GetPropertyByID:                       queriesV1.NewGetPropertyByIDQueryHandler(),
+				GetProperties:                         queriesV1.NewGetPropertiesQueryHandler(),
+				IsPropertyAlwaysIncludedForViewSource: queriesV1.NewIsPropertyAlwaysIncludedForViewSourceHandler(),
 			},
 		},
 	}

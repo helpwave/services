@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: services/task_svc/v1/bed_svc.proto
 
-package task_svc
+package v1
 
 import (
 	context "context"
@@ -20,7 +20,6 @@ const _ = grpc.SupportPackageIsVersion8
 
 const (
 	BedService_CreateBed_FullMethodName       = "/services.task_svc.v1.BedService/CreateBed"
-	BedService_BulkCreateBeds_FullMethodName  = "/services.task_svc.v1.BedService/BulkCreateBeds"
 	BedService_GetBed_FullMethodName          = "/services.task_svc.v1.BedService/GetBed"
 	BedService_GetBedByPatient_FullMethodName = "/services.task_svc.v1.BedService/GetBedByPatient"
 	BedService_GetBeds_FullMethodName         = "/services.task_svc.v1.BedService/GetBeds"
@@ -34,7 +33,6 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BedServiceClient interface {
 	CreateBed(ctx context.Context, in *CreateBedRequest, opts ...grpc.CallOption) (*CreateBedResponse, error)
-	BulkCreateBeds(ctx context.Context, in *BulkCreateBedsRequest, opts ...grpc.CallOption) (*BulkCreateBedsResponse, error)
 	GetBed(ctx context.Context, in *GetBedRequest, opts ...grpc.CallOption) (*GetBedResponse, error)
 	GetBedByPatient(ctx context.Context, in *GetBedByPatientRequest, opts ...grpc.CallOption) (*GetBedByPatientResponse, error)
 	GetBeds(ctx context.Context, in *GetBedsRequest, opts ...grpc.CallOption) (*GetBedsResponse, error)
@@ -55,16 +53,6 @@ func (c *bedServiceClient) CreateBed(ctx context.Context, in *CreateBedRequest, 
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateBedResponse)
 	err := c.cc.Invoke(ctx, BedService_CreateBed_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bedServiceClient) BulkCreateBeds(ctx context.Context, in *BulkCreateBedsRequest, opts ...grpc.CallOption) (*BulkCreateBedsResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(BulkCreateBedsResponse)
-	err := c.cc.Invoke(ctx, BedService_BulkCreateBeds_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +124,6 @@ func (c *bedServiceClient) DeleteBed(ctx context.Context, in *DeleteBedRequest, 
 // for forward compatibility
 type BedServiceServer interface {
 	CreateBed(context.Context, *CreateBedRequest) (*CreateBedResponse, error)
-	BulkCreateBeds(context.Context, *BulkCreateBedsRequest) (*BulkCreateBedsResponse, error)
 	GetBed(context.Context, *GetBedRequest) (*GetBedResponse, error)
 	GetBedByPatient(context.Context, *GetBedByPatientRequest) (*GetBedByPatientResponse, error)
 	GetBeds(context.Context, *GetBedsRequest) (*GetBedsResponse, error)
@@ -152,9 +139,6 @@ type UnimplementedBedServiceServer struct {
 
 func (UnimplementedBedServiceServer) CreateBed(context.Context, *CreateBedRequest) (*CreateBedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateBed not implemented")
-}
-func (UnimplementedBedServiceServer) BulkCreateBeds(context.Context, *BulkCreateBedsRequest) (*BulkCreateBedsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BulkCreateBeds not implemented")
 }
 func (UnimplementedBedServiceServer) GetBed(context.Context, *GetBedRequest) (*GetBedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBed not implemented")
@@ -201,24 +185,6 @@ func _BedService_CreateBed_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BedServiceServer).CreateBed(ctx, req.(*CreateBedRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _BedService_BulkCreateBeds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BulkCreateBedsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BedServiceServer).BulkCreateBeds(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: BedService_BulkCreateBeds_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BedServiceServer).BulkCreateBeds(ctx, req.(*BulkCreateBedsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -341,10 +307,6 @@ var BedService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateBed",
 			Handler:    _BedService_CreateBed_Handler,
-		},
-		{
-			MethodName: "BulkCreateBeds",
-			Handler:    _BedService_BulkCreateBeds_Handler,
 		},
 		{
 			MethodName: "GetBed",

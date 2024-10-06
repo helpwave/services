@@ -1,7 +1,7 @@
 -- name: CreateProperty :exec
 INSERT INTO properties
-	(id, subject_type, field_type, name)
-VALUES ($1, $2, $3, $4);
+	(id, subject_type, field_type, name, consistency)
+VALUES ($1, $2, $3, $4, $5);
 
 -- name: GetPropertyById :one
 SELECT * FROM properties WHERE id = $1;
@@ -21,7 +21,10 @@ SELECT
 	FROM properties
 	LEFT JOIN select_datas ON properties.select_data_id = select_datas.id
 	LEFT JOIN select_options ON select_options.select_data_id = select_datas.id
- 	WHERE subject_type = sqlc.narg('subject_type') OR properties.id = sqlc.narg('id');
+ 	WHERE
+ 		(subject_type = sqlc.narg('subject_type') OR sqlc.narg('subject_type') IS NULL )
+ 	   	AND
+ 	    (properties.id = sqlc.narg('id') OR sqlc.narg('id') IS NULL);
 
 -- name: UpdateProperty :exec
 UPDATE properties
@@ -29,22 +32,32 @@ SET subject_type = coalesce(sqlc.narg('subject_type'), subject_type),
     field_type = coalesce(sqlc.narg('field_type'), field_type),
     name = coalesce(sqlc.narg('name'), name),
     description = coalesce(sqlc.narg('description'), description),
-    is_archived = coalesce(sqlc.narg('is_archived'), is_archived)
-WHERE id = $1;
+    is_archived = coalesce(sqlc.narg('is_archived'), is_archived),
+    consistency = @consistency
+WHERE id = @id;
 
 -- name: UpdatePropertySetID :exec
 UPDATE properties
-SET set_id = @set_id
+SET set_id = @set_id,
+	consistency = @consistency
 WHERE id = @id;
 
 -- name: UpdateSelectData :exec
-UPDATE select_datas
-SET allow_freetext = @allow_freetext
-WHERE id = @id;
+WITH updated_select_datas AS (
+	UPDATE select_datas
+		SET allow_freetext = @allow_freetext
+		WHERE select_datas.id = @id
+		RETURNING select_datas.id
+)
+UPDATE properties
+SET consistency = @consistency
+WHERE select_data_id = (SELECT id FROM updated_select_datas);
+
 
 -- name: UpdatePropertySelectDataID :exec
 UPDATE properties
-SET select_data_id = @select_data_id
+SET select_data_id = @select_data_id,
+	consistency = @consistency
 WHERE id = $1;
 
 -- name: CreateSelectData :one
@@ -52,14 +65,6 @@ INSERT INTO select_datas
 	(allow_freetext)
 VALUES ($1)
 RETURNING id;
-
--- name: DeleteSelectDataByPropertyID :exec
-DELETE FROM select_datas
-    WHERE id IN (
-        SELECT properties.select_data_id
-        FROM properties
-        WHERE properties.id = @id
-	);
 
 -- name: CreateSelectOption :exec
 INSERT INTO select_options

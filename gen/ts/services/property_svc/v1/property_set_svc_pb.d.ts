@@ -24,6 +24,9 @@ export class CreatePropertySetResponse extends jspb.Message {
   getId(): string;
   setId(value: string): CreatePropertySetResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): CreatePropertySetResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreatePropertySetResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreatePropertySetResponse): CreatePropertySetResponse.AsObject;
@@ -35,6 +38,7 @@ export class CreatePropertySetResponse extends jspb.Message {
 export namespace CreatePropertySetResponse {
   export type AsObject = {
     id: string,
+    consistency: string,
   }
 }
 
@@ -63,6 +67,9 @@ export class GetPropertySetResponse extends jspb.Message {
   getName(): string;
   setName(value: string): GetPropertySetResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): GetPropertySetResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPropertySetResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetPropertySetResponse): GetPropertySetResponse.AsObject;
@@ -75,6 +82,7 @@ export namespace GetPropertySetResponse {
   export type AsObject = {
     id: string,
     name: string,
+    consistency: string,
   }
 }
 

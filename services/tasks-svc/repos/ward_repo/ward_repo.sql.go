@@ -12,14 +12,19 @@ import (
 )
 
 const createWard = `-- name: CreateWard :one
-INSERT INTO wards (name) VALUES ($1) RETURNING id
+INSERT INTO wards (name) VALUES ($1) RETURNING id, consistency
 `
 
-func (q *Queries) CreateWard(ctx context.Context, name string) (uuid.UUID, error) {
+type CreateWardRow struct {
+	ID          uuid.UUID
+	Consistency int64
+}
+
+func (q *Queries) CreateWard(ctx context.Context, name string) (CreateWardRow, error) {
 	row := q.db.QueryRow(ctx, createWard, name)
-	var id uuid.UUID
-	err := row.Scan(&id)
-	return id, err
+	var i CreateWardRow
+	err := row.Scan(&i.ID, &i.Consistency)
+	return i, err
 }
 
 const deleteWard = `-- name: DeleteWard :exec
@@ -47,14 +52,14 @@ func (q *Queries) ExistsWard(ctx context.Context, id uuid.UUID) (bool, error) {
 }
 
 const getWardById = `-- name: GetWardById :one
-SELECT id, name FROM wards
+SELECT id, name, consistency FROM wards
 WHERE id = $1
 `
 
 func (q *Queries) GetWardById(ctx context.Context, wardID uuid.UUID) (Ward, error) {
 	row := q.db.QueryRow(ctx, getWardById, wardID)
 	var i Ward
-	err := row.Scan(&i.ID, &i.Name)
+	err := row.Scan(&i.ID, &i.Name, &i.Consistency)
 	return i, err
 }
 
@@ -62,12 +67,16 @@ const getWardByIdWithRoomsBedsAndTaskTemplates = `-- name: GetWardByIdWithRoomsB
 SELECT
 	wards.id as ward_id,
 	wards.name as ward_name,
+	wards.consistency as ward_consistency,
 	rooms.id as room_id,
 	rooms.name as room_name,
+	rooms.consistency as room_consistency,
 	beds.id as bed_id,
 	beds.name as bed_name,
+	beds.consistency as bed_consistency,
 	task_templates.id as task_template_id,
 	task_templates.name as task_template_name,
+	task_templates.consistency as task_template_consistency,
 	task_template_subtasks.id as task_template_subtask_id,
 	task_template_subtasks.name as task_template_subtask_name
 FROM wards
@@ -81,12 +90,16 @@ WHERE wards.id = $1
 type GetWardByIdWithRoomsBedsAndTaskTemplatesRow struct {
 	WardID                  uuid.UUID
 	WardName                string
+	WardConsistency         int64
 	RoomID                  uuid.NullUUID
 	RoomName                *string
+	RoomConsistency         *int64
 	BedID                   uuid.NullUUID
 	BedName                 *string
+	BedConsistency          *int64
 	TaskTemplateID          uuid.NullUUID
 	TaskTemplateName        *string
+	TaskTemplateConsistency *int64
 	TaskTemplateSubtaskID   uuid.NullUUID
 	TaskTemplateSubtaskName *string
 }
@@ -103,12 +116,16 @@ func (q *Queries) GetWardByIdWithRoomsBedsAndTaskTemplates(ctx context.Context, 
 		if err := rows.Scan(
 			&i.WardID,
 			&i.WardName,
+			&i.WardConsistency,
 			&i.RoomID,
 			&i.RoomName,
+			&i.RoomConsistency,
 			&i.BedID,
 			&i.BedName,
+			&i.BedConsistency,
 			&i.TaskTemplateID,
 			&i.TaskTemplateName,
+			&i.TaskTemplateConsistency,
 			&i.TaskTemplateSubtaskID,
 			&i.TaskTemplateSubtaskName,
 		); err != nil {
@@ -123,7 +140,7 @@ func (q *Queries) GetWardByIdWithRoomsBedsAndTaskTemplates(ctx context.Context, 
 }
 
 const getWards = `-- name: GetWards :many
-SELECT id, name FROM wards
+SELECT id, name, consistency FROM wards
 `
 
 func (q *Queries) GetWards(ctx context.Context) ([]Ward, error) {
@@ -135,7 +152,7 @@ func (q *Queries) GetWards(ctx context.Context) ([]Ward, error) {
 	items := []Ward{}
 	for rows.Next() {
 		var i Ward
-		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+		if err := rows.Scan(&i.ID, &i.Name, &i.Consistency); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -148,7 +165,7 @@ func (q *Queries) GetWards(ctx context.Context) ([]Ward, error) {
 
 const getWardsWithCounts = `-- name: GetWardsWithCounts :many
 SELECT
-	wards.id, wards.name,
+	wards.id, wards.name, wards.consistency,
 	COUNT(DISTINCT beds.id) AS bed_count,
 	COUNT(DISTINCT CASE WHEN tasks.status = $1 THEN tasks.id ELSE NULL END) AS todo_count,
 	COUNT(DISTINCT CASE WHEN tasks.status = $2 THEN tasks.id ELSE NULL END) AS in_progress_count,
@@ -194,6 +211,7 @@ func (q *Queries) GetWardsWithCounts(ctx context.Context, arg GetWardsWithCounts
 		if err := rows.Scan(
 			&i.Ward.ID,
 			&i.Ward.Name,
+			&i.Ward.Consistency,
 			&i.BedCount,
 			&i.TodoCount,
 			&i.InProgressCount,
@@ -209,10 +227,12 @@ func (q *Queries) GetWardsWithCounts(ctx context.Context, arg GetWardsWithCounts
 	return items, nil
 }
 
-const updateWard = `-- name: UpdateWard :exec
+const updateWard = `-- name: UpdateWard :one
 UPDATE wards
-SET	name = coalesce($1, name)
+SET	name = coalesce($1, name),
+	consistency = consistency + 1
 WHERE id = $2
+RETURNING consistency
 `
 
 type UpdateWardParams struct {
@@ -220,7 +240,9 @@ type UpdateWardParams struct {
 	ID   uuid.UUID
 }
 
-func (q *Queries) UpdateWard(ctx context.Context, arg UpdateWardParams) error {
-	_, err := q.db.Exec(ctx, updateWard, arg.Name, arg.ID)
-	return err
+func (q *Queries) UpdateWard(ctx context.Context, arg UpdateWardParams) (int64, error) {
+	row := q.db.QueryRow(ctx, updateWard, arg.Name, arg.ID)
+	var consistency int64
+	err := row.Scan(&consistency)
+	return consistency, err
 }

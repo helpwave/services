@@ -2,7 +2,9 @@ syntax = "proto3";
 
 package services.tasks_svc.v1;
 
-option go_package = "gen/proto/services/tasks-svc";
+import "libs/common/v1/conflict.proto";
+
+option go_package = "gen/services/tasks-svc/v1";
 
 //
 // CreateRoom
@@ -15,6 +17,7 @@ message CreateRoomRequest {
 
 message CreateRoomResponse {
   string id = 1;
+  string consistency = 2;
 }
 
 //
@@ -30,10 +33,12 @@ message GetRoomResponse {
   string name = 2;
   repeated Bed beds = 3;
   string ward_id = 5;
+  string consistency = 6;
 
   message Bed {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 }
 
@@ -42,7 +47,7 @@ message GetRoomResponse {
 //
 
 message GetRoomsRequest {
-  optional string ward_id = 1; // @gotags: validate:"uuid4"
+  optional string ward_id = 1; // @gotags: validate:"omitempty,uuid4"
 }
 
 message GetRoomsResponse {
@@ -53,10 +58,12 @@ message GetRoomsResponse {
     string name = 2;
     repeated Bed beds = 3;
     string ward_id = 5;
+    string consistency = 6;
 
     message Bed {
       string id = 1;
       string name = 2;
+      string consistency = 3;
     }
   }
 }
@@ -68,9 +75,13 @@ message GetRoomsResponse {
 message UpdateRoomRequest {
   string id = 1; // @gotags: validate:"uuid4"
   optional string name = 2;
+  optional string consistency = 3; // no conflict detection, if not provided
 }
 
-message UpdateRoomResponse {}
+message UpdateRoomResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string consistency = 2;
+}
 
 //
 // DeleteRoom
@@ -98,11 +109,13 @@ message GetRoomOverviewsByWardResponse {
     string id = 1;
     string  name = 2;
     repeated Bed beds = 3;
+    string consistency = 4;
 
     message Bed {
       string id = 1;
       string name = 3;
       optional Patient patient = 2;
+      string consistency = 4;
 
       message Patient{
         string id = 1;
@@ -110,6 +123,7 @@ message GetRoomOverviewsByWardResponse {
         uint32 tasks_unscheduled = 3;
         uint32 tasks_in_progress = 4;
         uint32 tasks_done = 5;
+        string consistency = 6;
       }
     }
   }

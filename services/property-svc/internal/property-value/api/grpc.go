@@ -97,12 +97,14 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		value = nil
 	}
 
-	if err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID); err != nil {
+	consistency, err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID)
+	if err != nil {
 		return nil, err
 	}
 
 	return &pb.AttachPropertyValueResponse{
 		PropertyValueId: propertyValueID.String(),
+		Consistency:     consistency.String(),
 	}, nil
 }
 
@@ -127,26 +129,28 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 	}
 
 	return &pb.GetAttachedPropertyValuesResponse{
-		Values: hwutil.Map(propertiesWithValues, func(pv models.PropertyAndValue) *pb.GetAttachedPropertyValuesResponse_Value {
+		Values: hwutil.Map(propertiesWithValues, func(pnv models.PropertyAndValue) *pb.GetAttachedPropertyValuesResponse_Value {
 			res := &pb.GetAttachedPropertyValuesResponse_Value{
-				PropertyId:  pv.PropertyID.String(),
-				FieldType:   pv.FieldType,
-				Name:        pv.Name,
-				Description: hwutil.MapIf(pv.Description != "", pv.Description, func(s string) string { return s }),
-				IsArchived:  pv.IsArchived,
-				Value:       nil,
+				PropertyId:          pnv.PropertyID.String(),
+				FieldType:           pnv.FieldType,
+				Name:                pnv.Name,
+				Description:         hwutil.MapIf(pnv.Description != "", pnv.Description, func(s string) string { return s }),
+				IsArchived:          pnv.IsArchived,
+				Value:               nil,
+				PropertyConsistency: pnv.PropertyConsistency,
+				ValueConsistency:    pnv.ValueConsistency,
 			}
 			switch {
-			case pv.Value == nil:
+			case pnv.Value == nil:
 				return res
-			case pv.Value.TextValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_TextValue{TextValue: *pv.Value.TextValue}
-			case pv.Value.BoolValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_BoolValue{BoolValue: *pv.Value.BoolValue}
-			case pv.Value.NumberValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_NumberValue{NumberValue: *pv.Value.NumberValue}
-			case len(pv.Value.MultiSelectValues) != 0 && pv.FieldType == pb.FieldType_FIELD_TYPE_SELECT:
-				v := pv.Value.MultiSelectValues[0]
+			case pnv.Value.TextValue != nil:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_TextValue{TextValue: *pnv.Value.TextValue}
+			case pnv.Value.BoolValue != nil:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_BoolValue{BoolValue: *pnv.Value.BoolValue}
+			case pnv.Value.NumberValue != nil:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_NumberValue{NumberValue: *pnv.Value.NumberValue}
+			case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_SELECT:
+				v := pnv.Value.MultiSelectValues[0]
 				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{
 					SelectValue: &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
 						Id:          v.Id.String(),
@@ -154,10 +158,10 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 						Description: v.Description,
 					},
 				}
-			case len(pv.Value.MultiSelectValues) != 0 && pv.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT:
+			case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT:
 				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue_{
 					MultiSelectValue: &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
-						SelectValues: hwutil.Map(pv.Value.MultiSelectValues, func(o models.SelectValueOption) *pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption {
+						SelectValues: hwutil.Map(pnv.Value.MultiSelectValues, func(o models.SelectValueOption) *pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption {
 							return &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
 								Id:          o.Id.String(),
 								Name:        o.Name,
@@ -166,16 +170,16 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 						}),
 					},
 				}
-			case pv.Value.DateTimeValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateTimeValue{DateTimeValue: timestamppb.New(*pv.Value.DateTimeValue)}
-			case pv.Value.DateValue != nil:
+			case pnv.Value.DateTimeValue != nil:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateTimeValue{DateTimeValue: timestamppb.New(*pnv.Value.DateTimeValue)}
+			case pnv.Value.DateValue != nil:
 				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateValue{
 					DateValue: &pb.Date{
-						Date: timestamppb.New(*pv.Value.DateValue),
+						Date: timestamppb.New(*pnv.Value.DateValue),
 					},
 				}
 			default:
-				log.Error().Any("pv", pv).Msg("pv.Value is in an invalid state!")
+				log.Error().Any("pnv", pnv).Msg("pnv.Value is in an invalid state!")
 			}
 			return res
 		}),

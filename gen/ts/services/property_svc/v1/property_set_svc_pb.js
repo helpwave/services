@@ -271,7 +271,8 @@ proto.services.property_svc.v1.CreatePropertySetResponse.prototype.toObject = fu
  */
 proto.services.property_svc.v1.CreatePropertySetResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, "")
+    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    consistency: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -312,6 +313,10 @@ proto.services.property_svc.v1.CreatePropertySetResponse.deserializeBinaryFromRe
       var value = /** @type {string} */ (reader.readString());
       msg.setId(value);
       break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -348,6 +353,13 @@ proto.services.property_svc.v1.CreatePropertySetResponse.serializeBinaryToWriter
       f
     );
   }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -366,6 +378,24 @@ proto.services.property_svc.v1.CreatePropertySetResponse.prototype.getId = funct
  */
 proto.services.property_svc.v1.CreatePropertySetResponse.prototype.setId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string consistency = 2;
+ * @return {string}
+ */
+proto.services.property_svc.v1.CreatePropertySetResponse.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.property_svc.v1.CreatePropertySetResponse} returns this
+ */
+proto.services.property_svc.v1.CreatePropertySetResponse.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -532,7 +562,8 @@ proto.services.property_svc.v1.GetPropertySetResponse.prototype.toObject = funct
 proto.services.property_svc.v1.GetPropertySetResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 2, "")
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    consistency: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -577,6 +608,10 @@ proto.services.property_svc.v1.GetPropertySetResponse.deserializeBinaryFromReade
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConsistency(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -620,6 +655,13 @@ proto.services.property_svc.v1.GetPropertySetResponse.serializeBinaryToWriter = 
       f
     );
   }
+  f = message.getConsistency();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
 };
 
 
@@ -656,6 +698,24 @@ proto.services.property_svc.v1.GetPropertySetResponse.prototype.getName = functi
  */
 proto.services.property_svc.v1.GetPropertySetResponse.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string consistency = 3;
+ * @return {string}
+ */
+proto.services.property_svc.v1.GetPropertySetResponse.prototype.getConsistency = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.property_svc.v1.GetPropertySetResponse} returns this
+ */
+proto.services.property_svc.v1.GetPropertySetResponse.prototype.setConsistency = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 

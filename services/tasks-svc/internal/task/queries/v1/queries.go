@@ -1,7 +1,7 @@
 package v1
 
 type TaskQueries struct {
-	GetTaskByID                    GetTaskByIDQueryHandler
+	GetTaskWithPatientByID         GetTaskWithPatientByIDQueryHandler
 	GetTasksByPatient              GetTasksByPatientIDQueryHandler
 	GetTasksWithPatientsByAssignee GetTasksWithPatientsByAssigneeQueryHandler
 }

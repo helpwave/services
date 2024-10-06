@@ -17,12 +17,15 @@ const (
 	TaskSelfAssigned       = "TASK_SELF_ASSIGNED_v1"
 	TaskUnassigned         = "TASK_UNASSIGNED_v1"
 	TaskPublished          = "TASK_PUBLISHED_v1"
+	TaskUnpublished        = "TASK_UNPUBLISHED_v1"
 	SubtaskCreated         = "TASK_SUBTASK_CREATED_v1"
 	SubtaskNameUpdated     = "TASK_SUBTASK_NAME_UPDATED_v1"
 	SubtaskCompleted       = "TASK_SUBTASK_COMPLETED_v1"
 	SubtaskUncompleted     = "TASK_SUBTASK_UNCOMPLETED_v1"
 	SubtaskDeleted         = "TASK_SUBTASK_DELETED_v1"
 	TaskStatusUpdated      = "TASK_STATUS_UPDATED_v1"
+	TaskDueAtRemoved       = "TASK_DUE_AT_REMOVED_v1"
+	TaskDeleted            = "TASK_DELETED_v1"
 )
 
 type TaskCreatedEvent struct {
@@ -60,6 +63,7 @@ type TaskUnassignedEvent struct {
 type SubtaskCreatedEvent struct {
 	SubtaskID string `json:"subtask_id"`
 	Name      string `json:"name"`
+	Done      bool   `json:"done"`
 }
 
 type SubtaskNameUpdatedEvent struct {
@@ -82,8 +86,6 @@ type SubtaskDeletedEvent struct {
 type TaskStatusUpdatedEvent struct {
 	Status string `json:"subtask_id"`
 }
-
-type TaskPublishedEvent struct{}
 
 func NewTaskCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, name string, patientID uuid.UUID, status pb.TaskStatus) (hwes.Event, error) {
 	payload := TaskCreatedEvent{
@@ -146,14 +148,18 @@ func NewTaskUnassignedEvent(ctx context.Context, a hwes.Aggregate, userID uuid.U
 }
 
 func NewTaskPublishedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
-	payload := TaskPublishedEvent{}
-	return hwes.NewEvent(a, TaskPublished, hwes.WithContext(ctx), hwes.WithData(payload))
+	return hwes.NewEvent(a, TaskPublished, hwes.WithContext(ctx))
 }
 
-func NewSubtaskCreatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
+func NewTaskUnpublishedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
+	return hwes.NewEvent(a, TaskUnpublished, hwes.WithContext(ctx))
+}
+
+func NewSubtaskCreatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID, name string, done bool) (hwes.Event, error) {
 	payload := SubtaskCreatedEvent{
 		SubtaskID: subtaskID.String(),
 		Name:      name,
+		Done:      done,
 	}
 	return hwes.NewEvent(a, SubtaskCreated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
@@ -185,4 +191,12 @@ func NewSubtaskDeletedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uui
 		SubtaskID: subtaskID.String(),
 	}
 	return hwes.NewEvent(a, SubtaskDeleted, hwes.WithContext(ctx), hwes.WithData(payload))
+}
+
+func NewTaskDueAtRemovedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
+	return hwes.NewEvent(a, TaskDueAtRemoved, hwes.WithContext(ctx))
+}
+
+func NewTaskDeletedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event, error) {
+	return hwes.NewEvent(a, TaskDeleted, hwes.WithContext(ctx))
 }

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package libs.common.v1;
+
+import "google/protobuf/any.proto";
+
+option go_package = "gen/libs/common/v1";
+
+// Conflicts are returned, if a request was made with a consistency token, and a conflict to the requested action was caused.
+// There are three states:
+//  - WAS - the state expected to be the newest by the frontend as identified by the consistency token,
+//  - WANT - the state resulting from applying the changes requested)
+//  - IS - the true current state, which only differs from WAS if another action was performed since the client retrieved the WAS state
+// If WAS == IS, or WANT and IS are merge-able (e.g., requested action changes "name", and another action has changed "age"), no conflict arises.
+// Warning: If a previous action has deleted the resource, an error is raised, and no conflict returned.
+message Conflict {
+  // might be empty, in that case we don't have the history to calculate the conflicting attributes
+  map<string, AttributeConflict> conflicting_attributes = 1;
+}
+
+message AttributeConflict {
+  google.protobuf.Any is = 1;
+  google.protobuf.Any want = 2;
+}

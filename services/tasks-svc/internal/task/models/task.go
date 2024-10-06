@@ -15,10 +15,15 @@ type Task struct {
 	Description  string
 	Status       pb.TaskStatus
 	Public       bool
-	DueAt        time.Time
+	DueAt        *time.Time
 	PatientID    uuid.UUID
 	AssignedUser uuid.NullUUID
 	Subtasks     map[uuid.UUID]Subtask
+}
+
+type TaskWithConsistency struct {
+	Task
+	Consistency string
 }
 
 type Subtask struct {
@@ -36,9 +41,10 @@ type Patient struct {
 	Notes                   string
 	BedID                   uuid.NullUUID
 	IsDischarged            bool
+	Consistency             string
 }
 
 type TaskWithPatient struct {
-	Task
+	TaskWithConsistency
 	Patient Patient
 }
