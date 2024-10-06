@@ -15,7 +15,7 @@ import (
 // TestGetPropertiesBySubjectType:
 //   - Create Properties
 //   - Check GetPropertiesBySubjectType
-func TestGetPropertiesBySubjectType(t *testing.T) {
+func TestGetProperties(t *testing.T) {
 	propertyClient := propertyServiceClient()
 
 	ctx := context.Background()
@@ -95,11 +95,11 @@ func TestGetPropertiesBySubjectType(t *testing.T) {
 	hwtesting.WaitForProjectionsToSettle()
 
 	//
-	// Get Properties
+	// Get Properties with SubjectType filter
 	//
 
-	propertiesResponse, err := propertyClient.GetPropertiesBySubjectType(ctx, &pb.GetPropertiesBySubjectTypeRequest{
-		SubjectType: pb.SubjectType_SUBJECT_TYPE_PATIENT,
+	propertiesResponse, err := propertyClient.GetProperties(ctx, &pb.GetPropertiesRequest{
+		SubjectType: hwutil.PtrTo(pb.SubjectType_SUBJECT_TYPE_PATIENT),
 	})
 	if !assert.NoError(t, err, "could not get properties after they were created") {
 		return
@@ -160,4 +160,14 @@ func TestGetPropertiesBySubjectType(t *testing.T) {
 
 	assert.Equal(t, expectedB, propertyMap[createResponseB.PropertyId])
 	assert.Equal(t, expectedC, propertyMap[createResponseC.PropertyId])
+
+	//
+	// GetPropertiesWithoutFilter
+	//
+
+	propertiesResponse, err = propertyClient.GetProperties(ctx, &pb.GetPropertiesRequest{})
+	if !assert.NoError(t, err, "could not get properties after they were created") {
+		return
+	}
+	assert.Len(t, propertiesResponse.Properties, 3)
 }

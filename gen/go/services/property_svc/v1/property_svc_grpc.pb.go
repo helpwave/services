@@ -19,10 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	PropertyService_CreateProperty_FullMethodName             = "/services.property_svc.v1.PropertyService/CreateProperty"
-	PropertyService_GetProperty_FullMethodName                = "/services.property_svc.v1.PropertyService/GetProperty"
-	PropertyService_UpdateProperty_FullMethodName             = "/services.property_svc.v1.PropertyService/UpdateProperty"
-	PropertyService_GetPropertiesBySubjectType_FullMethodName = "/services.property_svc.v1.PropertyService/GetPropertiesBySubjectType"
+	PropertyService_CreateProperty_FullMethodName = "/services.property_svc.v1.PropertyService/CreateProperty"
+	PropertyService_GetProperty_FullMethodName    = "/services.property_svc.v1.PropertyService/GetProperty"
+	PropertyService_UpdateProperty_FullMethodName = "/services.property_svc.v1.PropertyService/UpdateProperty"
+	PropertyService_GetProperties_FullMethodName  = "/services.property_svc.v1.PropertyService/GetProperties"
 )
 
 // PropertyServiceClient is the client API for PropertyService service.
@@ -32,7 +32,7 @@ type PropertyServiceClient interface {
 	CreateProperty(ctx context.Context, in *CreatePropertyRequest, opts ...grpc.CallOption) (*CreatePropertyResponse, error)
 	GetProperty(ctx context.Context, in *GetPropertyRequest, opts ...grpc.CallOption) (*GetPropertyResponse, error)
 	UpdateProperty(ctx context.Context, in *UpdatePropertyRequest, opts ...grpc.CallOption) (*UpdatePropertyResponse, error)
-	GetPropertiesBySubjectType(ctx context.Context, in *GetPropertiesBySubjectTypeRequest, opts ...grpc.CallOption) (*GetPropertiesBySubjectTypeResponse, error)
+	GetProperties(ctx context.Context, in *GetPropertiesRequest, opts ...grpc.CallOption) (*GetPropertiesResponse, error)
 }
 
 type propertyServiceClient struct {
@@ -73,10 +73,10 @@ func (c *propertyServiceClient) UpdateProperty(ctx context.Context, in *UpdatePr
 	return out, nil
 }
 
-func (c *propertyServiceClient) GetPropertiesBySubjectType(ctx context.Context, in *GetPropertiesBySubjectTypeRequest, opts ...grpc.CallOption) (*GetPropertiesBySubjectTypeResponse, error) {
+func (c *propertyServiceClient) GetProperties(ctx context.Context, in *GetPropertiesRequest, opts ...grpc.CallOption) (*GetPropertiesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetPropertiesBySubjectTypeResponse)
-	err := c.cc.Invoke(ctx, PropertyService_GetPropertiesBySubjectType_FullMethodName, in, out, cOpts...)
+	out := new(GetPropertiesResponse)
+	err := c.cc.Invoke(ctx, PropertyService_GetProperties_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ type PropertyServiceServer interface {
 	CreateProperty(context.Context, *CreatePropertyRequest) (*CreatePropertyResponse, error)
 	GetProperty(context.Context, *GetPropertyRequest) (*GetPropertyResponse, error)
 	UpdateProperty(context.Context, *UpdatePropertyRequest) (*UpdatePropertyResponse, error)
-	GetPropertiesBySubjectType(context.Context, *GetPropertiesBySubjectTypeRequest) (*GetPropertiesBySubjectTypeResponse, error)
+	GetProperties(context.Context, *GetPropertiesRequest) (*GetPropertiesResponse, error)
 	mustEmbedUnimplementedPropertyServiceServer()
 }
 
@@ -107,8 +107,8 @@ func (UnimplementedPropertyServiceServer) GetProperty(context.Context, *GetPrope
 func (UnimplementedPropertyServiceServer) UpdateProperty(context.Context, *UpdatePropertyRequest) (*UpdatePropertyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateProperty not implemented")
 }
-func (UnimplementedPropertyServiceServer) GetPropertiesBySubjectType(context.Context, *GetPropertiesBySubjectTypeRequest) (*GetPropertiesBySubjectTypeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPropertiesBySubjectType not implemented")
+func (UnimplementedPropertyServiceServer) GetProperties(context.Context, *GetPropertiesRequest) (*GetPropertiesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProperties not implemented")
 }
 func (UnimplementedPropertyServiceServer) mustEmbedUnimplementedPropertyServiceServer() {}
 
@@ -177,20 +177,20 @@ func _PropertyService_UpdateProperty_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PropertyService_GetPropertiesBySubjectType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPropertiesBySubjectTypeRequest)
+func _PropertyService_GetProperties_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPropertiesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PropertyServiceServer).GetPropertiesBySubjectType(ctx, in)
+		return srv.(PropertyServiceServer).GetProperties(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PropertyService_GetPropertiesBySubjectType_FullMethodName,
+		FullMethod: PropertyService_GetProperties_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PropertyServiceServer).GetPropertiesBySubjectType(ctx, req.(*GetPropertiesBySubjectTypeRequest))
+		return srv.(PropertyServiceServer).GetProperties(ctx, req.(*GetPropertiesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -215,8 +215,8 @@ var PropertyService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PropertyService_UpdateProperty_Handler,
 		},
 		{
-			MethodName: "GetPropertiesBySubjectType",
-			Handler:    _PropertyService_GetPropertiesBySubjectType_Handler,
+			MethodName: "GetProperties",
+			Handler:    _PropertyService_GetProperties_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

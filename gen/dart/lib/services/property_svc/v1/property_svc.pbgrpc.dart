@@ -33,10 +33,10 @@ class PropertyServiceClient extends $grpc.Client {
       '/services.property_svc.v1.PropertyService/UpdateProperty',
       ($2.UpdatePropertyRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $2.UpdatePropertyResponse.fromBuffer(value));
-  static final _$getPropertiesBySubjectType = $grpc.ClientMethod<$2.GetPropertiesBySubjectTypeRequest, $2.GetPropertiesBySubjectTypeResponse>(
-      '/services.property_svc.v1.PropertyService/GetPropertiesBySubjectType',
-      ($2.GetPropertiesBySubjectTypeRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.GetPropertiesBySubjectTypeResponse.fromBuffer(value));
+  static final _$getProperties = $grpc.ClientMethod<$2.GetPropertiesRequest, $2.GetPropertiesResponse>(
+      '/services.property_svc.v1.PropertyService/GetProperties',
+      ($2.GetPropertiesRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.GetPropertiesResponse.fromBuffer(value));
 
   PropertyServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -56,8 +56,8 @@ class PropertyServiceClient extends $grpc.Client {
     return $createUnaryCall(_$updateProperty, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.GetPropertiesBySubjectTypeResponse> getPropertiesBySubjectType($2.GetPropertiesBySubjectTypeRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getPropertiesBySubjectType, request, options: options);
+  $grpc.ResponseFuture<$2.GetPropertiesResponse> getProperties($2.GetPropertiesRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getProperties, request, options: options);
   }
 }
 
@@ -87,13 +87,13 @@ abstract class PropertyServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $2.UpdatePropertyRequest.fromBuffer(value),
         ($2.UpdatePropertyResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.GetPropertiesBySubjectTypeRequest, $2.GetPropertiesBySubjectTypeResponse>(
-        'GetPropertiesBySubjectType',
-        getPropertiesBySubjectType_Pre,
+    $addMethod($grpc.ServiceMethod<$2.GetPropertiesRequest, $2.GetPropertiesResponse>(
+        'GetProperties',
+        getProperties_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.GetPropertiesBySubjectTypeRequest.fromBuffer(value),
-        ($2.GetPropertiesBySubjectTypeResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $2.GetPropertiesRequest.fromBuffer(value),
+        ($2.GetPropertiesResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$2.CreatePropertyResponse> createProperty_Pre($grpc.ServiceCall call, $async.Future<$2.CreatePropertyRequest> request) async {
@@ -108,12 +108,12 @@ abstract class PropertyServiceBase extends $grpc.Service {
     return updateProperty(call, await request);
   }
 
-  $async.Future<$2.GetPropertiesBySubjectTypeResponse> getPropertiesBySubjectType_Pre($grpc.ServiceCall call, $async.Future<$2.GetPropertiesBySubjectTypeRequest> request) async {
-    return getPropertiesBySubjectType(call, await request);
+  $async.Future<$2.GetPropertiesResponse> getProperties_Pre($grpc.ServiceCall call, $async.Future<$2.GetPropertiesRequest> request) async {
+    return getProperties(call, await request);
   }
 
   $async.Future<$2.CreatePropertyResponse> createProperty($grpc.ServiceCall call, $2.CreatePropertyRequest request);
   $async.Future<$2.GetPropertyResponse> getProperty($grpc.ServiceCall call, $2.GetPropertyRequest request);
   $async.Future<$2.UpdatePropertyResponse> updateProperty($grpc.ServiceCall call, $2.UpdatePropertyRequest request);
-  $async.Future<$2.GetPropertiesBySubjectTypeResponse> getPropertiesBySubjectType($grpc.ServiceCall call, $2.GetPropertiesBySubjectTypeRequest request);
+  $async.Future<$2.GetPropertiesResponse> getProperties($grpc.ServiceCall call, $2.GetPropertiesRequest request);
 }

@@ -87,7 +87,10 @@ SELECT
 	FROM properties
 	LEFT JOIN select_datas ON properties.select_data_id = select_datas.id
 	LEFT JOIN select_options ON select_options.select_data_id = select_datas.id
- 	WHERE subject_type = $1 OR properties.id = $2
+ 	WHERE
+ 		(subject_type = $1 OR $1 IS NULL )
+ 	   	AND
+ 	    (properties.id = $2 OR $2 IS NULL)
 `
 
 type GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams struct {

@@ -283,30 +283,34 @@ final $typed_data.Uint8List updatePropertyResponseDescriptor = $convert.base64De
     '4udjEuQ29uZmxpY3RIAFIIY29uZmxpY3SIAQESIAoLY29uc2lzdGVuY3kYAiABKAlSC2NvbnNp'
     'c3RlbmN5QgsKCV9jb25mbGljdA==');
 
-@$core.Deprecated('Use getPropertiesBySubjectTypeRequestDescriptor instead')
-const GetPropertiesBySubjectTypeRequest$json = {
-  '1': 'GetPropertiesBySubjectTypeRequest',
+@$core.Deprecated('Use getPropertiesRequestDescriptor instead')
+const GetPropertiesRequest$json = {
+  '1': 'GetPropertiesRequest',
   '2': [
-    {'1': 'subject_type', '3': 1, '4': 1, '5': 14, '6': '.services.property_svc.v1.SubjectType', '10': 'subjectType'},
+    {'1': 'subject_type', '3': 1, '4': 1, '5': 14, '6': '.services.property_svc.v1.SubjectType', '9': 0, '10': 'subjectType', '17': true},
+  ],
+  '8': [
+    {'1': '_subject_type'},
   ],
 };
 
-/// Descriptor for `GetPropertiesBySubjectTypeRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getPropertiesBySubjectTypeRequestDescriptor = $convert.base64Decode(
-    'CiFHZXRQcm9wZXJ0aWVzQnlTdWJqZWN0VHlwZVJlcXVlc3QSSAoMc3ViamVjdF90eXBlGAEgAS'
-    'gOMiUuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLlN1YmplY3RUeXBlUgtzdWJqZWN0VHlwZQ==');
+/// Descriptor for `GetPropertiesRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPropertiesRequestDescriptor = $convert.base64Decode(
+    'ChRHZXRQcm9wZXJ0aWVzUmVxdWVzdBJNCgxzdWJqZWN0X3R5cGUYASABKA4yJS5zZXJ2aWNlcy'
+    '5wcm9wZXJ0eV9zdmMudjEuU3ViamVjdFR5cGVIAFILc3ViamVjdFR5cGWIAQFCDwoNX3N1Ympl'
+    'Y3RfdHlwZQ==');
 
-@$core.Deprecated('Use getPropertiesBySubjectTypeResponseDescriptor instead')
-const GetPropertiesBySubjectTypeResponse$json = {
-  '1': 'GetPropertiesBySubjectTypeResponse',
+@$core.Deprecated('Use getPropertiesResponseDescriptor instead')
+const GetPropertiesResponse$json = {
+  '1': 'GetPropertiesResponse',
   '2': [
-    {'1': 'properties', '3': 1, '4': 3, '5': 11, '6': '.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property', '10': 'properties'},
+    {'1': 'properties', '3': 1, '4': 3, '5': 11, '6': '.services.property_svc.v1.GetPropertiesResponse.Property', '10': 'properties'},
   ],
-  '3': [GetPropertiesBySubjectTypeResponse_Property$json],
+  '3': [GetPropertiesResponse_Property$json],
 };
 
-@$core.Deprecated('Use getPropertiesBySubjectTypeResponseDescriptor instead')
-const GetPropertiesBySubjectTypeResponse_Property$json = {
+@$core.Deprecated('Use getPropertiesResponseDescriptor instead')
+const GetPropertiesResponse_Property$json = {
   '1': 'Property',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
@@ -316,10 +320,10 @@ const GetPropertiesBySubjectTypeResponse_Property$json = {
     {'1': 'description', '3': 5, '4': 1, '5': 9, '9': 1, '10': 'description', '17': true},
     {'1': 'is_archived', '3': 6, '4': 1, '5': 8, '10': 'isArchived'},
     {'1': 'set_id', '3': 8, '4': 1, '5': 9, '9': 2, '10': 'setId', '17': true},
-    {'1': 'select_data', '3': 10, '4': 1, '5': 11, '6': '.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData', '9': 0, '10': 'selectData'},
+    {'1': 'select_data', '3': 10, '4': 1, '5': 11, '6': '.services.property_svc.v1.GetPropertiesResponse.Property.SelectData', '9': 0, '10': 'selectData'},
     {'1': 'consistency', '3': 9, '4': 1, '5': 9, '10': 'consistency'},
   ],
-  '3': [GetPropertiesBySubjectTypeResponse_Property_SelectData$json],
+  '3': [GetPropertiesResponse_Property_SelectData$json],
   '8': [
     {'1': 'field_type_data'},
     {'1': '_description'},
@@ -327,21 +331,21 @@ const GetPropertiesBySubjectTypeResponse_Property$json = {
   ],
 };
 
-@$core.Deprecated('Use getPropertiesBySubjectTypeResponseDescriptor instead')
-const GetPropertiesBySubjectTypeResponse_Property_SelectData$json = {
+@$core.Deprecated('Use getPropertiesResponseDescriptor instead')
+const GetPropertiesResponse_Property_SelectData$json = {
   '1': 'SelectData',
   '2': [
     {'1': 'allow_freetext', '3': 1, '4': 1, '5': 8, '9': 0, '10': 'allowFreetext', '17': true},
-    {'1': 'options', '3': 2, '4': 3, '5': 11, '6': '.services.property_svc.v1.GetPropertiesBySubjectTypeResponse.Property.SelectData.SelectOption', '10': 'options'},
+    {'1': 'options', '3': 2, '4': 3, '5': 11, '6': '.services.property_svc.v1.GetPropertiesResponse.Property.SelectData.SelectOption', '10': 'options'},
   ],
-  '3': [GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption$json],
+  '3': [GetPropertiesResponse_Property_SelectData_SelectOption$json],
   '8': [
     {'1': '_allow_freetext'},
   ],
 };
 
-@$core.Deprecated('Use getPropertiesBySubjectTypeResponseDescriptor instead')
-const GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption$json = {
+@$core.Deprecated('Use getPropertiesResponseDescriptor instead')
+const GetPropertiesResponse_Property_SelectData_SelectOption$json = {
   '1': 'SelectOption',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
@@ -354,24 +358,23 @@ const GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption$json =
   ],
 };
 
-/// Descriptor for `GetPropertiesBySubjectTypeResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getPropertiesBySubjectTypeResponseDescriptor = $convert.base64Decode(
-    'CiJHZXRQcm9wZXJ0aWVzQnlTdWJqZWN0VHlwZVJlc3BvbnNlEmUKCnByb3BlcnRpZXMYASADKA'
-    'syRS5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuR2V0UHJvcGVydGllc0J5U3ViamVjdFR5cGVS'
-    'ZXNwb25zZS5Qcm9wZXJ0eVIKcHJvcGVydGllcxq1BgoIUHJvcGVydHkSDgoCaWQYASABKAlSAm'
-    'lkEkgKDHN1YmplY3RfdHlwZRgCIAEoDjIlLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5TdWJq'
-    'ZWN0VHlwZVILc3ViamVjdFR5cGUSQgoKZmllbGRfdHlwZRgDIAEoDjIjLnNlcnZpY2VzLnByb3'
-    'BlcnR5X3N2Yy52MS5GaWVsZFR5cGVSCWZpZWxkVHlwZRISCgRuYW1lGAQgASgJUgRuYW1lEiUK'
-    'C2Rlc2NyaXB0aW9uGAUgASgJSAFSC2Rlc2NyaXB0aW9uiAEBEh8KC2lzX2FyY2hpdmVkGAYgAS'
-    'gIUgppc0FyY2hpdmVkEhoKBnNldF9pZBgIIAEoCUgCUgVzZXRJZIgBARJzCgtzZWxlY3RfZGF0'
-    'YRgKIAEoCzJQLnNlcnZpY2VzLnByb3BlcnR5X3N2Yy52MS5HZXRQcm9wZXJ0aWVzQnlTdWJqZW'
-    'N0VHlwZVJlc3BvbnNlLlByb3BlcnR5LlNlbGVjdERhdGFIAFIKc2VsZWN0RGF0YRIgCgtjb25z'
-    'aXN0ZW5jeRgJIAEoCVILY29uc2lzdGVuY3kazQIKClNlbGVjdERhdGESKgoOYWxsb3dfZnJlZX'
-    'RleHQYASABKAhIAFINYWxsb3dGcmVldGV4dIgBARJ3CgdvcHRpb25zGAIgAygLMl0uc2Vydmlj'
-    'ZXMucHJvcGVydHlfc3ZjLnYxLkdldFByb3BlcnRpZXNCeVN1YmplY3RUeXBlUmVzcG9uc2UuUH'
-    'JvcGVydHkuU2VsZWN0RGF0YS5TZWxlY3RPcHRpb25SB29wdGlvbnMahgEKDFNlbGVjdE9wdGlv'
-    'bhIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIlCgtkZXNjcmlwdGlvbhgDIA'
-    'EoCUgAUgtkZXNjcmlwdGlvbogBARIbCglpc19jdXN0b20YBCABKAhSCGlzQ3VzdG9tQg4KDF9k'
-    'ZXNjcmlwdGlvbkIRCg9fYWxsb3dfZnJlZXRleHRCEQoPZmllbGRfdHlwZV9kYXRhQg4KDF9kZX'
-    'NjcmlwdGlvbkIJCgdfc2V0X2lk');
+/// Descriptor for `GetPropertiesResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPropertiesResponseDescriptor = $convert.base64Decode(
+    'ChVHZXRQcm9wZXJ0aWVzUmVzcG9uc2USWAoKcHJvcGVydGllcxgBIAMoCzI4LnNlcnZpY2VzLn'
+    'Byb3BlcnR5X3N2Yy52MS5HZXRQcm9wZXJ0aWVzUmVzcG9uc2UuUHJvcGVydHlSCnByb3BlcnRp'
+    'ZXMamwYKCFByb3BlcnR5Eg4KAmlkGAEgASgJUgJpZBJICgxzdWJqZWN0X3R5cGUYAiABKA4yJS'
+    '5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuU3ViamVjdFR5cGVSC3N1YmplY3RUeXBlEkIKCmZp'
+    'ZWxkX3R5cGUYAyABKA4yIy5zZXJ2aWNlcy5wcm9wZXJ0eV9zdmMudjEuRmllbGRUeXBlUglmaW'
+    'VsZFR5cGUSEgoEbmFtZRgEIAEoCVIEbmFtZRIlCgtkZXNjcmlwdGlvbhgFIAEoCUgBUgtkZXNj'
+    'cmlwdGlvbogBARIfCgtpc19hcmNoaXZlZBgGIAEoCFIKaXNBcmNoaXZlZBIaCgZzZXRfaWQYCC'
+    'ABKAlIAlIFc2V0SWSIAQESZgoLc2VsZWN0X2RhdGEYCiABKAsyQy5zZXJ2aWNlcy5wcm9wZXJ0'
+    'eV9zdmMudjEuR2V0UHJvcGVydGllc1Jlc3BvbnNlLlByb3BlcnR5LlNlbGVjdERhdGFIAFIKc2'
+    'VsZWN0RGF0YRIgCgtjb25zaXN0ZW5jeRgJIAEoCVILY29uc2lzdGVuY3kawAIKClNlbGVjdERh'
+    'dGESKgoOYWxsb3dfZnJlZXRleHQYASABKAhIAFINYWxsb3dGcmVldGV4dIgBARJqCgdvcHRpb2'
+    '5zGAIgAygLMlAuc2VydmljZXMucHJvcGVydHlfc3ZjLnYxLkdldFByb3BlcnRpZXNSZXNwb25z'
+    'ZS5Qcm9wZXJ0eS5TZWxlY3REYXRhLlNlbGVjdE9wdGlvblIHb3B0aW9ucxqGAQoMU2VsZWN0T3'
+    'B0aW9uEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiUKC2Rlc2NyaXB0aW9u'
+    'GAMgASgJSABSC2Rlc2NyaXB0aW9uiAEBEhsKCWlzX2N1c3RvbRgEIAEoCFIIaXNDdXN0b21CDg'
+    'oMX2Rlc2NyaXB0aW9uQhEKD19hbGxvd19mcmVldGV4dEIRCg9maWVsZF90eXBlX2RhdGFCDgoM'
+    'X2Rlc2NyaXB0aW9uQgkKB19zZXRfaWQ=');
 

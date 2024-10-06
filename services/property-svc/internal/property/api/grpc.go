@@ -179,15 +179,15 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 	}, nil
 }
 
-func (s *PropertyGrpcService) GetPropertiesBySubjectType(ctx context.Context, req *pb.GetPropertiesBySubjectTypeRequest) (*pb.GetPropertiesBySubjectTypeResponse, error) {
-	properties, err := s.handlers.Queries.V1.GetPropertiesBySubjectType(ctx, req.SubjectType)
+func (s *PropertyGrpcService) GetProperties(ctx context.Context, req *pb.GetPropertiesRequest) (*pb.GetPropertiesResponse, error) {
+	properties, err := s.handlers.Queries.V1.GetProperties(ctx, req.SubjectType)
 	if err != nil {
 		return nil, err
 	}
 
-	propertyResponse := make([]*pb.GetPropertiesBySubjectTypeResponse_Property, len(properties))
+	propertyResponse := make([]*pb.GetPropertiesResponse_Property, len(properties))
 	for ix, item := range properties {
-		propertyResponse[ix] = &pb.GetPropertiesBySubjectTypeResponse_Property{
+		propertyResponse[ix] = &pb.GetPropertiesResponse_Property{
 			Id:            item.ID.String(),
 			SubjectType:   item.SubjectType,
 			FieldType:     item.FieldType,
@@ -200,11 +200,11 @@ func (s *PropertyGrpcService) GetPropertiesBySubjectType(ctx context.Context, re
 		}
 
 		if item.FieldTypeData.SelectData != nil {
-			propertyResponse[ix].FieldTypeData = &pb.GetPropertiesBySubjectTypeResponse_Property_SelectData_{
-				SelectData: &pb.GetPropertiesBySubjectTypeResponse_Property_SelectData{
+			propertyResponse[ix].FieldTypeData = &pb.GetPropertiesResponse_Property_SelectData_{
+				SelectData: &pb.GetPropertiesResponse_Property_SelectData{
 					AllowFreetext: &item.FieldTypeData.SelectData.AllowFreetext,
-					Options: hwutil.Map(item.FieldTypeData.SelectData.SelectOptions, func(option models.SelectOption) *pb.GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption {
-						return &pb.GetPropertiesBySubjectTypeResponse_Property_SelectData_SelectOption{
+					Options: hwutil.Map(item.FieldTypeData.SelectData.SelectOptions, func(option models.SelectOption) *pb.GetPropertiesResponse_Property_SelectData_SelectOption {
+						return &pb.GetPropertiesResponse_Property_SelectData_SelectOption{
 							Id:          option.ID.String(),
 							Name:        option.Name,
 							Description: option.Description,
@@ -216,7 +216,7 @@ func (s *PropertyGrpcService) GetPropertiesBySubjectType(ctx context.Context, re
 		}
 	}
 
-	return &pb.GetPropertiesBySubjectTypeResponse{
+	return &pb.GetPropertiesResponse{
 		Properties: propertyResponse,
 	}, nil
 }
