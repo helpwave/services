@@ -1,7 +1,7 @@
 {
  	"name": "@helpwave/proto-ts",
  	"version": "0.0.0",
- 	"description": "https://proto.helpwave.de",
+ 	"description": "https://buf.build/helpwave/services",
  	"author": "contact@helpwave.de",
  	"license": "MPL 2.0",
  	"repository": {
