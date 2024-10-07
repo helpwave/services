@@ -75,7 +75,8 @@ type IDTokenClaims struct {
 }
 
 type OrganizationTokenClaim struct {
-	Id string `json:"id"`
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 func (t IDTokenClaims) AsExpected() error {
@@ -97,6 +98,14 @@ func (t IDTokenClaims) AsExpected() error {
 
 	if t.Organization == nil {
 		return errors.New("organization missing in id token")
+	}
+
+	if len(t.Organization.Id) == 0 {
+		return errors.New("organization.id missing in id token")
+	}
+
+	if len(t.Organization.Name) == 0 {
+		return errors.New("organization.name missing in id token")
 	}
 
 	return nil

@@ -164,6 +164,8 @@ func isUnaryRPCForDaprInternal(info *grpc.UnaryServerInfo) bool {
 	return isAppCallbackServer || isAppCallbackHealthCheckServer
 }
 
+// authFunc is the main authentication middleware. It validates the OIDC token
+// Parsed and injects the OIDC claims for later usage
 func authFunc(ctx context.Context) (context.Context, error) {
 	log := zlog.Ctx(ctx)
 
@@ -230,6 +232,8 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	return ctx, nil
 }
 
+// authFuncOrganization parses and injects the organization id of the OIDC claims into the current context
+// This is a separate function to allow endpoints to not fail when an organization id is not provided
 func authFuncOrganization(ctx context.Context) (context.Context, error) {
 	log := zlog.Ctx(ctx)
 

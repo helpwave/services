@@ -815,6 +815,8 @@ func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.Cre
 		return organization.Attributes.IsPersonal
 	})
 
+	// We allow only one personal organization per account,
+	// therefore we early return here with the previously found organization ID
 	if len(personalOrganizations) > 0 {
 		organizationID, err := uuid.Parse(*personalOrganizations[0].ID)
 		if err != nil {
