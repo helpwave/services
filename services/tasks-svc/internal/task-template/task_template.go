@@ -347,12 +347,12 @@ func (ServiceServer) GetTaskTemplate(ctx context.Context, req *pb.GetTaskTemplat
 		if !row.SubTaskID.Valid {
 			return nil
 		}
-		st := &pb.GetTaskTemplateResponse_SubTask{
-			Id:             row.SubTaskID.UUID.String(),
-			TaskTemplateId: row.TaskTemplate.ID.String(),
-			Name:           row.TaskTemplate.Name,
-		}
-		return &st
+		return hwutil.PtrTo(
+			&pb.GetTaskTemplateResponse_SubTask{
+				Id:             row.SubTaskID.UUID.String(),
+				TaskTemplateId: row.TaskTemplate.ID.String(),
+				Name:           *row.SubTaskName, // NOT NULL
+			})
 	})
 
 	return &pb.GetTaskTemplateResponse{
