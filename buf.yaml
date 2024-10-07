@@ -1,6 +1,7 @@
 version: v2
 modules:
   - path: proto
+    name: buf.build/helpwave/services
 lint:
   use:
     - DEFAULT

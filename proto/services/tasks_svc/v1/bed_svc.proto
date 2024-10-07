@@ -66,7 +66,7 @@ message GetBedByPatientRequest {
 message GetBedByPatientResponse {
   optional Room room = 1;
   optional Bed bed = 2;
-  
+
   message Room {
     string id = 1;
     string name = 2;
