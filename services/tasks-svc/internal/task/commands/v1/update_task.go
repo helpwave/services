@@ -12,7 +12,7 @@ import (
 )
 
 type UpdateTaskConflict struct {
-	Consistency uint64
+	Consistency common.ConsistencyToken
 	Was         *models.Task
 	Is          *models.Task
 }
@@ -25,7 +25,7 @@ type UpdateTaskCommandHandler func(
 	status *pb.TaskStatus,
 	public *bool,
 	dueAt *timestamppb.Timestamp,
-	expConsistency *uint64,
+	expConsistency *common.ConsistencyToken,
 ) (common.ConsistencyToken, *UpdateTaskConflict, error)
 
 func NewUpdateTaskCommandHandler(as hwes.AggregateStore) UpdateTaskCommandHandler {
@@ -36,16 +36,17 @@ func NewUpdateTaskCommandHandler(as hwes.AggregateStore) UpdateTaskCommandHandle
 		status *pb.TaskStatus,
 		public *bool,
 		dueAt *timestamppb.Timestamp,
-		expConsistency *uint64,
+		expConsistency *common.ConsistencyToken,
 	) (common.ConsistencyToken, *UpdateTaskConflict, error) {
 		a, oldState, err := aggregate.LoadTaskAggregateWithSnapshotAt(ctx, as, taskID, expConsistency)
 		if err != nil {
 			return 0, nil, err
 		}
 
-		if expConsistency != nil && *expConsistency != a.GetVersion() {
+		newToken := common.ConsistencyToken(a.GetVersion())
+		if expConsistency != nil && *expConsistency != newToken {
 			return 0, &UpdateTaskConflict{
-				Consistency: a.GetVersion(),
+				Consistency: newToken,
 				Was:         oldState,
 				Is:          a.Task,
 			}, nil

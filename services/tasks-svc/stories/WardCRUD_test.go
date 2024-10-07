@@ -110,7 +110,7 @@ func TestGetRecentWards(t *testing.T) {
 				Id:    patientID,
 				BedId: bedId,
 			})
-			time.Sleep(time.Millisecond * 100)
+			hwtesting.WaitForProjectionsToSettle()
 
 			assert.NoError(t, err, "could not assign bed to patient")
 			_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{

@@ -150,7 +150,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	expConsistency, ok := hwutil.ParseConsistency(req.Consistency)
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
 	if !ok {
 		return nil, common.UnparsableConsistencyError(ctx, "consistency")
 	}
@@ -174,7 +174,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 	}
 
 	// conflict detection
-	if expConsistency != nil && *expConsistency != uint64(result.OldConsistency) {
+	if expConsistency != nil && *expConsistency != common.ConsistencyToken(result.OldConsistency) {
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
 		if req.Name != nil && *req.Name != result.OldName {

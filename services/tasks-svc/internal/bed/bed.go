@@ -204,7 +204,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	expConsistency, ok := hwutil.ParseConsistency(req.Consistency)
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
 	if !ok {
 		return nil, common.UnparsableConsistencyError(ctx, "consistency")
 	}
@@ -229,7 +229,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 	}
 
 	// conflict detection
-	if expConsistency != nil && *expConsistency != uint64(result.OldConsistency) {
+	if expConsistency != nil && *expConsistency != common.ConsistencyToken(result.OldConsistency) {
 		// bed is not event sourced yet and has more than one field,
 		// thus we are not able to pinpoint conflicts to a field, we only know *some* update has happened since
 		// for convenience we are filtering out obvious non-conflicts, where the update is the same as the is state, or the field was not changed

@@ -1,6 +1,7 @@
 package aggregate
 
 import (
+	"common"
 	"context"
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
@@ -40,13 +41,13 @@ func LoadTaskAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID
 	return taskAggregate, nil
 }
 
-func LoadTaskAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore, id uuid.UUID, pauseAt *uint64) (*TaskAggregate, *models.Task, error) {
+func LoadTaskAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore, id uuid.UUID, pauseAt *common.ConsistencyToken) (*TaskAggregate, *models.Task, error) {
 	taskAggregate := NewTaskAggregate(id)
 	var snapshot *models.Task
 
 	if pauseAt != nil {
 		//  load pauseAt+1-many events (version is 0-indexed)
-		if err := as.LoadN(ctx, taskAggregate, *pauseAt+1); err != nil {
+		if err := as.LoadN(ctx, taskAggregate, uint64(*pauseAt)+1); err != nil {
 			return nil, nil, err
 		}
 

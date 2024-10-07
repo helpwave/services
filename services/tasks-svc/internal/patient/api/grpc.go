@@ -389,7 +389,7 @@ func (s *PatientGrpcService) UpdatePatient(ctx context.Context, req *pb.UpdatePa
 		return nil, err
 	}
 
-	expConsistency, ok := hwutil.ParseConsistency(req.Consistency)
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
 	if !ok {
 		return nil, common.UnparsableConsistencyError(ctx, "consistency")
 	}
@@ -472,7 +472,7 @@ func (s *PatientGrpcService) AssignBed(ctx context.Context, req *pb.AssignBedReq
 		return nil, err
 	}
 
-	expConsistency, ok := hwutil.ParseConsistency(req.Consistency)
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
 	if !ok {
 		return nil, common.UnparsableConsistencyError(ctx, "consistency")
 	}
@@ -544,12 +544,12 @@ func (s *PatientGrpcService) UnassignBed(ctx context.Context, req *pb.UnassignBe
 		return nil, err
 	}
 
-	expConsistency, ok := hwutil.ParseConsistency(req.Consistency)
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
 	if !ok {
 		return nil, common.UnparsableConsistencyError(ctx, "consistency")
 	}
 
-	var consistency uint64
+	var consistency common.ConsistencyToken
 
 	for i := 0; true; i++ {
 		if i > 10 {
@@ -581,7 +581,7 @@ func (s *PatientGrpcService) UnassignBed(ctx context.Context, req *pb.UnassignBe
 		if len(conflicts) != 0 {
 			return &pb.UnassignBedResponse{
 				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
-				Consistency: strconv.FormatUint(conflict.Consistency, 10),
+				Consistency: conflict.Consistency.String(),
 			}, nil
 		}
 

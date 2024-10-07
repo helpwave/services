@@ -91,7 +91,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	readmitRes, err := patientClient.ReadmitPatient(ctx, &pb.ReadmitPatientRequest{PatientId: patientId})
 	assert.NoError(t, err)
 	assert.NotEqual(t, getPatientRes.Consistency, readmitRes.Consistency)
-	time.Sleep(time.Millisecond * 100)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// get re-admitted patient
@@ -716,7 +716,7 @@ func TestUpdatePatientConflict(t *testing.T) {
 
 			id := patientRes.Id
 			initialConsistency := patientRes.Consistency
-			time.Sleep(time.Millisecond * 100)
+			hwtesting.WaitForProjectionsToSettle()
 
 			// IS
 			_, err = patientClient.UpdatePatient(ctx, &pb.UpdatePatientRequest{
@@ -726,7 +726,7 @@ func TestUpdatePatientConflict(t *testing.T) {
 				Consistency:             &initialConsistency,
 			})
 			assert.NoError(t, err)
-			time.Sleep(time.Millisecond * 100)
+			hwtesting.WaitForProjectionsToSettle()
 
 			// WANT
 			updateRes, err := patientClient.UpdatePatient(ctx, &pb.UpdatePatientRequest{
@@ -781,7 +781,7 @@ func TestAssignBedConflict(t *testing.T) {
 				Notes:                   hwutil.PtrTo("A patient for test " + t.Name()),
 			})
 			assert.NoError(t, err)
-			time.Sleep(time.Millisecond * 100)
+			hwtesting.WaitForProjectionsToSettle()
 
 			initialAssignment, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
 				Id:          patientRes.Id,
@@ -794,7 +794,7 @@ func TestAssignBedConflict(t *testing.T) {
 			id := patientRes.Id
 			initialConsistency := initialAssignment.Consistency
 
-			time.Sleep(time.Millisecond * 100)
+			hwtesting.WaitForProjectionsToSettle()
 
 			// IS
 			if o.is != nil {
@@ -813,7 +813,7 @@ func TestAssignBedConflict(t *testing.T) {
 				assert.NoError(t, err)
 				assert.Nil(t, u.Conflict)
 			}
-			time.Sleep(time.Millisecond * 100)
+			hwtesting.WaitForProjectionsToSettle()
 
 			// WANT
 			updateRes, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
@@ -868,7 +868,7 @@ func TestUnassignBedConflict(t *testing.T) {
 				Notes:                   hwutil.PtrTo("A patient for test " + t.Name()),
 			})
 			assert.NoError(t, err)
-			time.Sleep(time.Millisecond * 100)
+			hwtesting.WaitForProjectionsToSettle()
 
 			initialAssignment, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
 				Id:          patientRes.Id,
@@ -881,7 +881,7 @@ func TestUnassignBedConflict(t *testing.T) {
 			id := patientRes.Id
 			initialConsistency := initialAssignment.Consistency
 
-			time.Sleep(time.Millisecond * 100)
+			hwtesting.WaitForProjectionsToSettle()
 
 			// IS
 			if o.is != nil {
@@ -900,7 +900,7 @@ func TestUnassignBedConflict(t *testing.T) {
 				assert.NoError(t, err)
 				assert.Nil(t, u.Conflict)
 			}
-			time.Sleep(time.Millisecond * 100)
+			hwtesting.WaitForProjectionsToSettle()
 
 			// WANT
 			updateRes, err := patientClient.UnassignBed(ctx, &pb.UnassignBedRequest{

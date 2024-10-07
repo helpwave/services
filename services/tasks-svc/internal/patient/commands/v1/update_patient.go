@@ -10,24 +10,25 @@ import (
 )
 
 type UpdatePatientConflict struct {
-	Consistency uint64
+	Consistency common.ConsistencyToken
 	Was         *models.Patient
 	Is          *models.Patient
 }
 
-type UpdatePatientCommandHandler func(ctx context.Context, patientID uuid.UUID, expConsistency *uint64, humanReadableIdentifier, notes *string) (common.ConsistencyToken, *UpdatePatientConflict, error)
+type UpdatePatientCommandHandler func(ctx context.Context, patientID uuid.UUID, expConsistency *common.ConsistencyToken, humanReadableIdentifier, notes *string) (common.ConsistencyToken, *UpdatePatientConflict, error)
 
 func NewUpdatePatientCommandHandler(as hwes.AggregateStore) UpdatePatientCommandHandler {
-	return func(ctx context.Context, patientID uuid.UUID, expConsistency *uint64, humanReadableIdentifier, notes *string) (common.ConsistencyToken, *UpdatePatientConflict, error) {
+	return func(ctx context.Context, patientID uuid.UUID, expConsistency *common.ConsistencyToken, humanReadableIdentifier, notes *string) (common.ConsistencyToken, *UpdatePatientConflict, error) {
 		a, oldState, err := aggregate.LoadPatientAggregateWithSnapshotAt(ctx, as, patientID, expConsistency)
 		if err != nil {
 			return 0, nil, err
 		}
 
-		// an update was performed since expConsistency
-		if expConsistency != nil && *expConsistency != a.GetVersion() {
+		// was an update performed since expConsistency?
+		newToken := common.ConsistencyToken(a.GetVersion())
+		if expConsistency != nil && *expConsistency != newToken {
 			return 0, &UpdatePatientConflict{
-				Consistency: a.GetVersion(),
+				Consistency: newToken,
 				Was:         oldState,
 				Is:          a.Patient,
 			}, nil

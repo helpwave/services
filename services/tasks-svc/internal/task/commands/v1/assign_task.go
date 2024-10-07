@@ -6,27 +6,21 @@ import (
 	"github.com/google/uuid"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"
-	"tasks-svc/internal/task/models"
 )
 
-type AssignTaskConflict struct {
-	Consistency uint64
-	Was         *models.Task
-	Is          *models.Task
-}
-
-type AssignTaskCommandHandler func(ctx context.Context, taskID, userID uuid.UUID, expConsistency *uint64) (common.ConsistencyToken, *UpdateTaskConflict, error)
+type AssignTaskCommandHandler func(ctx context.Context, taskID, userID uuid.UUID, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *UpdateTaskConflict, error)
 
 func NewAssignTaskCommandHandler(as hwes.AggregateStore) AssignTaskCommandHandler {
-	return func(ctx context.Context, taskID, userID uuid.UUID, expConsistency *uint64) (common.ConsistencyToken, *UpdateTaskConflict, error) {
+	return func(ctx context.Context, taskID, userID uuid.UUID, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *UpdateTaskConflict, error) {
 		task, oldState, err := aggregate.LoadTaskAggregateWithSnapshotAt(ctx, as, taskID, expConsistency)
 		if err != nil {
 			return 0, nil, err
 		}
 
-		if expConsistency != nil && *expConsistency != task.GetVersion() {
+		newToken := common.ConsistencyToken(task.GetVersion())
+		if expConsistency != nil && *expConsistency != newToken {
 			return 0, &UpdateTaskConflict{
-				Consistency: task.GetVersion(),
+				Consistency: newToken,
 				Was:         oldState,
 				Is:          task.Task,
 			}, nil

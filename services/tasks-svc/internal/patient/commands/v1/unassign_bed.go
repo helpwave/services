@@ -10,24 +10,25 @@ import (
 )
 
 type UnassignBedConflict struct {
-	Consistency uint64
+	Consistency common.ConsistencyToken
 	Was         *models.Patient
 	Is          *models.Patient
 }
 
-type UnassignBedCommandHandler func(ctx context.Context, patientID uuid.UUID, expectedConsistency *uint64) (common.ConsistencyToken, *UnassignBedConflict, error)
+type UnassignBedCommandHandler func(ctx context.Context, patientID uuid.UUID, expectedConsistency *common.ConsistencyToken) (common.ConsistencyToken, *UnassignBedConflict, error)
 
 func NewUnassignBedCommandHandler(as hwes.AggregateStore) UnassignBedCommandHandler {
-	return func(ctx context.Context, patientID uuid.UUID, expectedConsistency *uint64) (common.ConsistencyToken, *UnassignBedConflict, error) {
+	return func(ctx context.Context, patientID uuid.UUID, expectedConsistency *common.ConsistencyToken) (common.ConsistencyToken, *UnassignBedConflict, error) {
 		a, oldState, err := aggregate.LoadPatientAggregateWithSnapshotAt(ctx, as, patientID, expectedConsistency)
 		if err != nil {
 			return 0, nil, err
 		}
 
-		// update has happened since
-		if expectedConsistency != nil && *expectedConsistency != a.GetVersion() {
+		// update has happened since?
+		newToken := common.ConsistencyToken(a.GetVersion())
+		if expectedConsistency != nil && *expectedConsistency != newToken {
 			return 0, &UnassignBedConflict{
-				Consistency: a.GetVersion(),
+				Consistency: newToken,
 				Was:         oldState,
 				Is:          a.Patient,
 			}, nil

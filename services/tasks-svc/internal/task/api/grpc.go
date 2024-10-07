@@ -84,12 +84,12 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 		return nil, err
 	}
 
-	expConsistency, ok := hwutil.ParseConsistency(req.Consistency)
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
 	if !ok {
 		return nil, common.UnparsableConsistencyError(ctx, "consistency")
 	}
 
-	var consistency uint64
+	var consistency common.ConsistencyToken
 
 	for i := 0; true; i++ {
 		if i > 10 {
@@ -170,7 +170,7 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 		if len(conflicts) != 0 {
 			return &pb.UpdateTaskResponse{
 				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
-				Consistency: strconv.FormatUint(conflict.Consistency, 10),
+				Consistency: conflict.Consistency.String(),
 			}, nil
 		}
 
@@ -194,12 +194,12 @@ func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequ
 		return nil, err
 	}
 
-	expConsistency, ok := hwutil.ParseConsistency(req.Consistency)
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
 	if !ok {
 		return nil, common.UnparsableConsistencyError(ctx, "consistency")
 	}
 
-	var consistency uint64
+	var consistency common.ConsistencyToken
 
 	for i := 0; true; i++ {
 		if i > 10 {
@@ -237,7 +237,7 @@ func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequ
 		if len(conflicts) != 0 {
 			return &pb.AssignTaskResponse{
 				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
-				Consistency: strconv.FormatUint(conflict.Consistency, 10),
+				Consistency: conflict.Consistency.String(),
 			}, nil
 		}
 
@@ -525,12 +525,12 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 		return nil, err
 	}
 
-	expConsistency, ok := hwutil.ParseConsistency(req.TaskConsistency)
+	expConsistency, ok := common.ParseConsistency(req.TaskConsistency)
 	if !ok {
 		return nil, common.UnparsableConsistencyError(ctx, "task_consistency")
 	}
 
-	var consistency uint64
+	var consistency common.ConsistencyToken
 
 	for i := 0; true; i++ {
 		if i > 10 {
@@ -575,7 +575,7 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 		if len(conflicts) != 0 {
 			return &pb.UpdateSubtaskResponse{
 				Conflict:        &commonpb.Conflict{ConflictingAttributes: conflicts},
-				TaskConsistency: strconv.FormatUint(conflict.Consistency, 10),
+				TaskConsistency: conflict.Consistency.String(),
 			}, nil
 		}
 

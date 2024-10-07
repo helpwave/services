@@ -131,14 +131,3 @@ type JSONAble interface {
 type MapAble interface {
 	ToMap() map[string]interface{}
 }
-
-func ParseConsistency(consistencyStr *string) (consistency *uint64, success bool) {
-	if consistencyStr == nil {
-		return nil, true
-	}
-	if c, err := strconv.ParseUint(*consistencyStr, 10, 64); err != nil {
-		return nil, false
-	} else {
-		return &c, true
-	}
-}
