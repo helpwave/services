@@ -56,6 +56,8 @@ type OrganizationServiceClient interface {
 	AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*AcceptInvitationResponse, error)
 	DeclineInvitation(ctx context.Context, in *DeclineInvitationRequest, opts ...grpc.CallOption) (*DeclineInvitationResponse, error)
 	RevokeInvitation(ctx context.Context, in *RevokeInvitationRequest, opts ...grpc.CallOption) (*RevokeInvitationResponse, error)
+	// CreatePersonalOrganization creates or returns the personal organization of the user
+	// Based on the "Accept-Language" metadata, the localized prefix "Personal organization ..." gets selected
 	CreatePersonalOrganization(ctx context.Context, in *CreatePersonalOrganizationRequest, opts ...grpc.CallOption) (*CreatePersonalOrganizationResponse, error)
 }
 
@@ -246,6 +248,8 @@ type OrganizationServiceServer interface {
 	AcceptInvitation(context.Context, *AcceptInvitationRequest) (*AcceptInvitationResponse, error)
 	DeclineInvitation(context.Context, *DeclineInvitationRequest) (*DeclineInvitationResponse, error)
 	RevokeInvitation(context.Context, *RevokeInvitationRequest) (*RevokeInvitationResponse, error)
+	// CreatePersonalOrganization creates or returns the personal organization of the user
+	// Based on the "Accept-Language" metadata, the localized prefix "Personal organization ..." gets selected
 	CreatePersonalOrganization(context.Context, *CreatePersonalOrganizationRequest) (*CreatePersonalOrganizationResponse, error)
 	mustEmbedUnimplementedOrganizationServiceServer()
 }

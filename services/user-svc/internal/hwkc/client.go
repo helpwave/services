@@ -24,13 +24,14 @@ type Client struct {
 
 func NewClientFromEnv(ctx context.Context) (*Client, error) {
 	clientSecret := hwutil.MustGetEnv("OAUTH_KC_CLIENT_SECRET")
-	return NewClient(ctx, "helpwave", common.GetOAuthIssuerUrl(), common.GetOAuthClientId(), clientSecret)
+	realm := hwutil.GetEnvOr("OAUTH_KC_REALM", "helpwave")
+	return NewClient(ctx, realm, common.GetOAuthIssuerUrl(), common.GetOAuthClientId(), clientSecret)
 }
 
 func NewClient(ctx context.Context, realm, issuerUrl, clientId, clientSecret string) (*Client, error) {
 	provider, err := oidc.NewProvider(context.Background(), issuerUrl)
 	if err != nil {
-		return nil, fmt.Errorf("cannot lookup provider: %w", err)
+		return nil, fmt.Errorf("cannot lookup oidc provider: %w", err)
 	}
 
 	config := clientcredentials.Config{
@@ -40,22 +41,22 @@ func NewClient(ctx context.Context, realm, issuerUrl, clientId, clientSecret str
 	}
 
 	if _, err := config.Token(ctx); err != nil {
-		return nil, fmt.Errorf("testint token exchange failed: %w", err)
+		return nil, fmt.Errorf("token exchange failed: %w", err)
 	}
 
 	parsedIssuerUrl, err := url.Parse(issuerUrl)
 	if err != nil {
-		return nil, fmt.Errorf("cannot parse issuer url: %w", err)
+		return nil, fmt.Errorf("cannot parse issuer url ('%s'): %w", issuerUrl, err)
 	}
 
 	adminApiBaseUrl, err := url.Parse(fmt.Sprintf("%s://%s/admin/realms/%s", parsedIssuerUrl.Scheme, parsedIssuerUrl.Host, realm))
 	if err != nil {
-		return nil, fmt.Errorf("cannot parse newly created admin api base url from issuer url: %w", err)
+		return nil, fmt.Errorf("cannot parse newly created admin api base url from issuer url ('%s'): %w", issuerUrl, err)
 	}
 
 	realmBaseUrl, err := url.Parse(fmt.Sprintf("%s://%s/realms/%s", parsedIssuerUrl.Scheme, parsedIssuerUrl.Host, realm))
 	if err != nil {
-		return nil, fmt.Errorf("cannot parse newly created admin api base url from issuer url: %w", err)
+		return nil, fmt.Errorf("cannot parse newly created admin api base url from issuer url ('%s'): %w", issuerUrl, err)
 	}
 
 	client := &Client{
@@ -67,7 +68,9 @@ func NewClient(ctx context.Context, realm, issuerUrl, clientId, clientSecret str
 	return client, err
 }
 
-func (c *Client) validateResponse(res *http.Response) error {
+// ensureSuccessfulResponse checks the status code of a Keycloak response
+// This function returns an error when the status code is not one of 2xx
+func (c *Client) ensureSuccessfulResponse(res *http.Response) error {
 	if res.StatusCode >= 200 && res.StatusCode <= 299 {
 		return nil
 	}
@@ -79,6 +82,7 @@ func (c *Client) validateResponse(res *http.Response) error {
 }
 
 func (c *Client) GetUserById(userID uuid.UUID) (*User, error) {
+	// https://www.keycloak.org/docs-api/26.0.0/rest-api/index.html#_get_adminrealmsrealmusersuser_id
 	u := c.adminApiBaseUrl.JoinPath("users", userID.String())
 
 	res, err := c.http.Get(u.String())
@@ -87,8 +91,8 @@ func (c *Client) GetUserById(userID uuid.UUID) (*User, error) {
 	}
 	defer res.Body.Close()
 
-	if err := c.validateResponse(res); err != nil {
-		return nil, err
+	if err := c.ensureSuccessfulResponse(res); err != nil {
+		return nil, fmt.Errorf("cannot get user, invalid response: %w", err)
 	}
 
 	var user *User
@@ -99,7 +103,8 @@ func (c *Client) GetUserById(userID uuid.UUID) (*User, error) {
 	return user, nil
 }
 
-func (c *Client) GetOrganizationsForUserById(userID uuid.UUID) ([]*Organization, error) {
+func (c *Client) GetOrganizationsOfUserById(userID uuid.UUID) ([]*Organization, error) {
+	// Users -> GET /{realm}/users/{userId}/orgs https://editor-next.swagger.io/?url=https://raw.githubusercontent.com/p2-inc/phasetwo-docs/5e785dfed39348f07e9ec6e834e4ba19979bce57/openapi.yaml
 	u := c.realmBaseUrl.JoinPath("users", userID.String(), "orgs")
 
 	res, err := c.http.Get(u.String())
@@ -108,8 +113,8 @@ func (c *Client) GetOrganizationsForUserById(userID uuid.UUID) ([]*Organization,
 	}
 	defer res.Body.Close()
 
-	if err := c.validateResponse(res); err != nil {
-		return nil, err
+	if err := c.ensureSuccessfulResponse(res); err != nil {
+		return nil, fmt.Errorf("cannot get organizations of user, invalid response: %w", err)
 	}
 
 	var organizations []*Organization
@@ -117,21 +122,26 @@ func (c *Client) GetOrganizationsForUserById(userID uuid.UUID) ([]*Organization,
 		return nil, err
 	}
 
-	for _, organization := range organizations {
-		organization.ParseRawAttributes()
+	if len(organizations) > 0 {
+		fmt.Println("=======================")
+		fmt.Println(*organizations[0].ID)
+		fmt.Println(*organizations[0].Name)
+		fmt.Println(*organizations[0].DisplayName)
+		fmt.Println(organizations[0].IsPersonal())
 	}
 
 	return organizations, nil
 }
 
 func (c *Client) CreateOrganization(name, displayName string, isPersonal bool) (*Organization, error) {
+	// Organizations -> POST /{realm}/orgs https://editor-next.swagger.io/?url=https://raw.githubusercontent.com/p2-inc/phasetwo-docs/5e785dfed39348f07e9ec6e834e4ba19979bce57/openapi.yaml
 	u := c.realmBaseUrl.JoinPath("orgs")
 
 	payload := Organization{
 		Name:        hwutil.StrPtr(name),
 		DisplayName: hwutil.StrPtr(displayName),
-		RawAttributes: &map[string][]string{
-			"isPersonal": {strconv.FormatBool(isPersonal)},
+		Attributes: OrganizationAttributes{
+			IsPersonal: []string{strconv.FormatBool(isPersonal)},
 		},
 	}
 
@@ -142,21 +152,21 @@ func (c *Client) CreateOrganization(name, displayName string, isPersonal bool) (
 
 	res, err := c.http.Post(u.String(), "application/json", bytes.NewBuffer(jsonPayload))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("request for CreateOrganization failed: %w", err)
 	}
 	defer res.Body.Close()
 
-	if err := c.validateResponse(res); err != nil {
-		return nil, fmt.Errorf("cannot create, invalid response: %w", err)
+	if err := c.ensureSuccessfulResponse(res); err != nil {
+		return nil, fmt.Errorf("CreateOrganization failed, invalid response: %w", err)
 	}
 
 	res, err = c.http.Get(res.Header.Get("Location"))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("request for retrieving created organization failed: %w", err)
 	}
 	defer res.Body.Close()
 
-	if err := c.validateResponse(res); err != nil {
+	if err := c.ensureSuccessfulResponse(res); err != nil {
 		return nil, fmt.Errorf("cannot get created organization, invalid response: %w", err)
 	}
 
@@ -164,12 +174,12 @@ func (c *Client) CreateOrganization(name, displayName string, isPersonal bool) (
 	if err := json.NewDecoder(res.Body).Decode(&organization); err != nil {
 		return nil, fmt.Errorf("cannot parse organization: %w", err)
 	}
-	organization.ParseRawAttributes()
 
 	return &organization, nil
 }
 
 func (c *Client) UpdateOrganization(organizationID uuid.UUID, organization Organization) error {
+	// Organizations -> PUT /{realm}/orgs/{orgId} https://editor-next.swagger.io/?url=https://raw.githubusercontent.com/p2-inc/phasetwo-docs/5e785dfed39348f07e9ec6e834e4ba19979bce57/openapi.yaml
 	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String())
 
 	jsonPayload, err := json.Marshal(organizationID)
@@ -184,14 +194,19 @@ func (c *Client) UpdateOrganization(organizationID uuid.UUID, organization Organ
 
 	res, err := c.http.Do(req)
 	if err != nil {
-		return err
+		return fmt.Errorf("request for UpdateOrganization failed: %w", err)
 	}
 	defer res.Body.Close()
 
-	return c.validateResponse(res)
+	if err = c.ensureSuccessfulResponse(res); err != nil {
+		return fmt.Errorf("cannot update organization, invalid response: %w", err)
+	}
+
+	return nil
 }
 
 func (c *Client) DeleteOrganization(organizationID uuid.UUID) error {
+	// Organizations -> DELETE /{realm}/orgs/{orgId} https://editor-next.swagger.io/?url=https://raw.githubusercontent.com/p2-inc/phasetwo-docs/5e785dfed39348f07e9ec6e834e4ba19979bce57/openapi.yaml
 	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String())
 
 	req, err := http.NewRequest(http.MethodDelete, u.String(), nil)
@@ -201,14 +216,19 @@ func (c *Client) DeleteOrganization(organizationID uuid.UUID) error {
 
 	res, err := c.http.Do(req)
 	if err != nil {
-		return err
+		return fmt.Errorf("request for DeleteOrganization failed: %w", err)
 	}
 	defer res.Body.Close()
 
-	return c.validateResponse(res)
+	if err = c.ensureSuccessfulResponse(res); err != nil {
+		return fmt.Errorf("cannot delete organization, invalid response: %w", err)
+	}
+
+	return nil
 }
 
 func (c *Client) AddUserToOrganization(userID, organizationID uuid.UUID) error {
+	// Organization Memberships -> PUT /{realm}/orgs/{orgId}/members/{userId} https://editor-next.swagger.io/?url=https://raw.githubusercontent.com/p2-inc/phasetwo-docs/5e785dfed39348f07e9ec6e834e4ba19979bce57/openapi.yaml
 	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String(), "members", userID.String())
 
 	req, err := http.NewRequest(http.MethodPut, u.String(), nil)
@@ -222,10 +242,15 @@ func (c *Client) AddUserToOrganization(userID, organizationID uuid.UUID) error {
 	}
 	defer res.Body.Close()
 
-	return c.validateResponse(res)
+	if err = c.ensureSuccessfulResponse(res); err != nil {
+		return fmt.Errorf("cannot add user to organization, invalid response: %w", err)
+	}
+
+	return nil
 }
 
 func (c *Client) RemoveUserFromOrganization(userID, organizationID uuid.UUID) error {
+	// Organization Memberships -> DELETE /{realm}/orgs/{orgId}/members/{userId} https://editor-next.swagger.io/?url=https://raw.githubusercontent.com/p2-inc/phasetwo-docs/5e785dfed39348f07e9ec6e834e4ba19979bce57/openapi.yaml
 	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String(), "members", userID.String())
 
 	req, err := http.NewRequest(http.MethodDelete, u.String(), nil)
@@ -239,5 +264,9 @@ func (c *Client) RemoveUserFromOrganization(userID, organizationID uuid.UUID) er
 	}
 	defer res.Body.Close()
 
-	return c.validateResponse(res)
+	if err = c.ensureSuccessfulResponse(res); err != nil {
+		return fmt.Errorf("cannot remove user from organization, invalid response: %w", err)
+	}
+
+	return nil
 }

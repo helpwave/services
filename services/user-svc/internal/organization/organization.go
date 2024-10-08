@@ -7,10 +7,11 @@ import (
 	"encoding/hex"
 	"fmt"
 	pb "gen/services/user_svc/v1"
-
 	"hwdb"
+	"hwlocale"
 	"hwutil"
 	"user-svc/internal/hwkc"
+	"user-svc/locale"
 	"user-svc/repos/organization_repo"
 	"user-svc/repos/user_repo"
 
@@ -702,7 +703,12 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 
 	db := hwdb.GetDB()
 
-	keycloakOrganization, err := kc.CreateOrganization(attr.LongName, attr.LongName, *attr.IsPersonal)
+	isPersonal := false
+	if attr.IsPersonal == nil {
+		isPersonal = *attr.IsPersonal
+	}
+
+	keycloakOrganization, err := kc.CreateOrganization(attr.LongName, attr.ShortName, isPersonal)
 	if err != nil {
 		return nil, err
 	}
@@ -806,13 +812,13 @@ func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.Cre
 		return nil, err
 	}
 
-	organisations, err := kc.GetOrganizationsForUserById(userID)
+	organisations, err := kc.GetOrganizationsOfUserById(userID)
 	if err != nil {
 		return nil, err
 	}
 
 	personalOrganizations := hwutil.Filter(organisations, func(organization *hwkc.Organization) bool {
-		return organization.Attributes.IsPersonal
+		return organization.IsPersonal()
 	})
 
 	// We allow only one personal organization per account,
@@ -828,13 +834,14 @@ func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.Cre
 		}, nil
 	}
 
-	organizationName := fmt.Sprintf("Personal organization of %s", userClaims.Name)
+	personalOrganizationLocale := hwlocale.Localize(ctx, locale.PersonalOrganization(ctx))
+	organizationName := fmt.Sprintf("%s %s", personalOrganizationLocale, userClaims.Name)
 
 	userRepo := user_repo.New(hwdb.GetDB())
 
+	// create user, if it does not exist yet
 	userResult, err := hwdb.Optional(userRepo.GetUserById)(ctx, userID)
-	err = hwdb.Error(ctx, err)
-	if err != nil {
+	if err = hwdb.Error(ctx, err); err != nil {
 		return nil, err
 	} else if userResult == nil {
 		hash := sha256.Sum256([]byte(userID.String()))
@@ -847,8 +854,7 @@ func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.Cre
 			Name:      userClaims.Name,
 			AvatarUrl: &avatarUrl,
 		})
-		err = hwdb.Error(ctx, err)
-		if err != nil {
+		if err = hwdb.Error(ctx, err); err != nil {
 			return nil, err
 		}
 	}
@@ -857,7 +863,7 @@ func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.Cre
 		ctx,
 		organization_repo.Organization{
 			LongName:     organizationName,
-			ShortName:    organizationName,
+			ShortName:    hwlocale.Localize(ctx, locale.Personal(ctx)),
 			ContactEmail: userClaims.Email,
 			IsPersonal:   hwutil.PtrTo(true),
 		},

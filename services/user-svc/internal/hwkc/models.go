@@ -1,28 +1,22 @@
 package hwkc
 
+import "strings"
+
 type User struct {
 	ID *string `json:"id,omitempty"`
 }
 
 type Organization struct {
-	ID            *string              `json:"id,omitempty"`
-	Name          *string              `json:"name,omitempty"`
-	DisplayName   *string              `json:"displayName,omitempty"`
-	RawAttributes *map[string][]string `json:"attributes,omitempty"`
-
-	Attributes struct {
-		IsPersonal bool
-	} `json:"-"`
+	ID          *string                `json:"id,omitempty"`
+	Name        *string                `json:"name,omitempty"`
+	DisplayName *string                `json:"displayName,omitempty"`
+	Attributes  OrganizationAttributes `json:"attributes,omitempty"`
 }
 
-func (o *Organization) ParseRawAttributes() {
-	o.Attributes = struct {
-		IsPersonal bool
-	}{
-		IsPersonal: false,
-	}
+type OrganizationAttributes struct {
+	IsPersonal []string `json:"isPersonal"`
+}
 
-	if rawAttrs, ok := (*o.RawAttributes)["isPersonal"]; ok && len(rawAttrs) > 0 {
-		o.Attributes.IsPersonal = rawAttrs[0] == "true"
-	}
+func (o *Organization) IsPersonal() bool {
+	return len(o.Attributes.IsPersonal) > 0 && strings.ToLower(o.Attributes.IsPersonal[0]) == "true"
 }

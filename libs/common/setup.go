@@ -49,15 +49,19 @@ func WithFakeAuthOnly() SetupOption {
 	}
 }
 
-func WithUnauthenticatedMethods(unauthenticatedMethods []string) SetupOption {
+// WithUnauthenticatedMethod accept the FullMethod of a gRPC method to disable authentication on this explicit method
+// https://github.com/grpc/grpc-go/blob/f17ea7d68c0942d8160e77329cc3814b0dd2b64f/interceptor.go#L71
+func WithUnauthenticatedMethod(unauthenticatedMethod string) SetupOption {
 	return func(options *SetupOptions) {
-		options.unauthenticatedMethods = unauthenticatedMethods
+		options.unauthenticatedMethods = append(options.unauthenticatedMethods, unauthenticatedMethod)
 	}
 }
 
-func WithNonOrganizationMethods(nonOrganizationMethods []string) SetupOption {
+// WithNonOrganizationMethod accept the FullMethod of a gRPC method to disable our organization logic on this explicit method
+// https://github.com/grpc/grpc-go/blob/f17ea7d68c0942d8160e77329cc3814b0dd2b64f/interceptor.go#L71
+func WithNonOrganizationMethod(nonOrganizationMethod string) SetupOption {
 	return func(options *SetupOptions) {
-		options.nonOrganizationMethods = nonOrganizationMethods
+		options.nonOrganizationMethods = append(options.nonOrganizationMethods, nonOrganizationMethod)
 	}
 }
 

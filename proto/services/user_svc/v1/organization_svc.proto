@@ -296,5 +296,9 @@ service OrganizationService {
   rpc AcceptInvitation (AcceptInvitationRequest) returns (AcceptInvitationResponse) {}
   rpc DeclineInvitation(DeclineInvitationRequest) returns (DeclineInvitationResponse) {}
   rpc RevokeInvitation(RevokeInvitationRequest) returns (RevokeInvitationResponse) {}
-  rpc CreatePersonalOrganization(CreatePersonalOrganizationRequest) returns (CreatePersonalOrganizationResponse) {}
+  // CreatePersonalOrganization creates or returns the personal organization of the user
+  // Based on the "Accept-Language" metadata, the localized prefix "Personal organization ..." gets selected
+  rpc CreatePersonalOrganization(CreatePersonalOrganizationRequest) returns (CreatePersonalOrganizationResponse) {
+    option idempotency_level = IDEMPOTENT;
+  }
 }
