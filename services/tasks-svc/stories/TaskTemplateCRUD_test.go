@@ -9,19 +9,13 @@ import (
 	"testing"
 )
 
-func getTaskTemplate(t *testing.T, ctx context.Context, id string) *pb.GetAllTaskTemplatesResponse_TaskTemplate {
-	getAll, err := taskTemplateServiceClient().GetAllTaskTemplates(ctx, &pb.GetAllTaskTemplatesRequest{})
+func getTaskTemplate(t *testing.T, ctx context.Context, id string) *pb.GetTaskTemplateResponse {
+	taskTemplate, err := taskTemplateServiceClient().GetTaskTemplate(ctx, &pb.GetTaskTemplateRequest{
+		Id: id,
+	})
 	assert.NoError(t, err, "could not get all task templates")
-
-	var template *pb.GetAllTaskTemplatesResponse_TaskTemplate
-	for _, templ := range getAll.Templates {
-		if templ.Id == id {
-			template = templ
-			break
-		}
-	}
-	assert.NotNil(t, template)
-	return template
+	assert.NotNil(t, taskTemplate)
+	return taskTemplate
 }
 
 func TestCreateUpdateGetTaskTemplate(t *testing.T) {
@@ -92,7 +86,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		Name:           t.Name() + " ST 1",
 	})
 	assert.NoError(t, err)
-	assert.NotEqual(t, template.Consistency, createStRes.TaskTemplateConsistency, "consitency was not updated")
+	assert.NotEqual(t, template.Consistency, createStRes.TaskTemplateConsistency, "consistency was not updated")
 
 	//
 	// get updated template
@@ -126,4 +120,25 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	assert.Equal(t, t.Name()+" ST 2", template.Subtasks[0].Name)
 	assert.Equal(t, updateStRes.TaskTemplateConsistency, template.Consistency)
 
+	//
+	// create another template
+	//
+	createReq = &pb.CreateTaskTemplateRequest{
+		WardId:      nil,
+		Description: hwutil.PtrTo("Some Description"),
+		Subtasks:    make([]*pb.CreateTaskTemplateRequest_SubTask, 0),
+		Name:        t.Name() + " tt",
+	}
+	_, err = taskTemplateClient.CreateTaskTemplate(ctx, createReq)
+	assert.NoError(t, err, "could not create task template")
+	hwtesting.WaitForProjectionsToSettle()
+
+	//
+	// get all templates
+	//
+
+	templates, err := taskTemplateClient.GetAllTaskTemplates(ctx, &pb.GetAllTaskTemplatesRequest{})
+
+	assert.NoError(t, err)
+	assert.Len(t, templates.Templates, 2)
 }

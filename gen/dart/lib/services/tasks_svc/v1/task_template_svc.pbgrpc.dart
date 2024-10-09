@@ -49,6 +49,10 @@ class TaskTemplateServiceClient extends $grpc.Client {
       '/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplates',
       ($15.GetAllTaskTemplatesRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $15.GetAllTaskTemplatesResponse.fromBuffer(value));
+  static final _$getTaskTemplate = $grpc.ClientMethod<$15.GetTaskTemplateRequest, $15.GetTaskTemplateResponse>(
+      '/services.tasks_svc.v1.TaskTemplateService/GetTaskTemplate',
+      ($15.GetTaskTemplateRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $15.GetTaskTemplateResponse.fromBuffer(value));
 
   TaskTemplateServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -82,6 +86,10 @@ class TaskTemplateServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$15.GetAllTaskTemplatesResponse> getAllTaskTemplates($15.GetAllTaskTemplatesRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getAllTaskTemplates, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$15.GetTaskTemplateResponse> getTaskTemplate($15.GetTaskTemplateRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getTaskTemplate, request, options: options);
   }
 }
 
@@ -139,6 +147,13 @@ abstract class TaskTemplateServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $15.GetAllTaskTemplatesRequest.fromBuffer(value),
         ($15.GetAllTaskTemplatesResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$15.GetTaskTemplateRequest, $15.GetTaskTemplateResponse>(
+        'GetTaskTemplate',
+        getTaskTemplate_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $15.GetTaskTemplateRequest.fromBuffer(value),
+        ($15.GetTaskTemplateResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$15.CreateTaskTemplateResponse> createTaskTemplate_Pre($grpc.ServiceCall call, $async.Future<$15.CreateTaskTemplateRequest> request) async {
@@ -169,6 +184,10 @@ abstract class TaskTemplateServiceBase extends $grpc.Service {
     return getAllTaskTemplates(call, await request);
   }
 
+  $async.Future<$15.GetTaskTemplateResponse> getTaskTemplate_Pre($grpc.ServiceCall call, $async.Future<$15.GetTaskTemplateRequest> request) async {
+    return getTaskTemplate(call, await request);
+  }
+
   $async.Future<$15.CreateTaskTemplateResponse> createTaskTemplate($grpc.ServiceCall call, $15.CreateTaskTemplateRequest request);
   $async.Future<$15.DeleteTaskTemplateResponse> deleteTaskTemplate($grpc.ServiceCall call, $15.DeleteTaskTemplateRequest request);
   $async.Future<$15.DeleteTaskTemplateSubTaskResponse> deleteTaskTemplateSubTask($grpc.ServiceCall call, $15.DeleteTaskTemplateSubTaskRequest request);
@@ -176,4 +195,5 @@ abstract class TaskTemplateServiceBase extends $grpc.Service {
   $async.Future<$15.UpdateTaskTemplateSubTaskResponse> updateTaskTemplateSubTask($grpc.ServiceCall call, $15.UpdateTaskTemplateSubTaskRequest request);
   $async.Future<$15.CreateTaskTemplateSubTaskResponse> createTaskTemplateSubTask($grpc.ServiceCall call, $15.CreateTaskTemplateSubTaskRequest request);
   $async.Future<$15.GetAllTaskTemplatesResponse> getAllTaskTemplates($grpc.ServiceCall call, $15.GetAllTaskTemplatesRequest request);
+  $async.Future<$15.GetTaskTemplateResponse> getTaskTemplate($grpc.ServiceCall call, $15.GetTaskTemplateRequest request);
 }

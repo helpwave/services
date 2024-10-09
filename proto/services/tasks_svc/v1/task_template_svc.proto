@@ -128,6 +128,30 @@ message GetAllTaskTemplatesResponse {
   }
 }
 
+//
+// GetTaskTemplate
+//
+
+message GetTaskTemplateRequest {
+  string id = 1; // @gotags: validate:"required,uuid4"
+}
+
+message GetTaskTemplateResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  bool is_public = 4;
+  string created_by = 6;
+  repeated SubTask subtasks = 7;
+  string consistency = 8;
+
+  message SubTask {
+    string id = 1;
+    string task_template_id = 2;
+    string name = 3;
+  }
+}
+
 service TaskTemplateService {
   rpc CreateTaskTemplate (CreateTaskTemplateRequest) returns (CreateTaskTemplateResponse) {}
   rpc DeleteTaskTemplate (DeleteTaskTemplateRequest) returns (DeleteTaskTemplateResponse) {}
@@ -136,4 +160,5 @@ service TaskTemplateService {
   rpc UpdateTaskTemplateSubTask (UpdateTaskTemplateSubTaskRequest) returns (UpdateTaskTemplateSubTaskResponse) {}
   rpc CreateTaskTemplateSubTask (CreateTaskTemplateSubTaskRequest) returns (CreateTaskTemplateSubTaskResponse) {}
   rpc GetAllTaskTemplates (GetAllTaskTemplatesRequest) returns (GetAllTaskTemplatesResponse) {}
+  rpc GetTaskTemplate (GetTaskTemplateRequest) returns (GetTaskTemplateResponse) {}
 }

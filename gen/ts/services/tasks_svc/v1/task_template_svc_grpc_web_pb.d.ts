@@ -57,6 +57,13 @@ export class TaskTemplateServiceClient {
                response: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesResponse) => void
   ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesResponse>;
 
+  getTaskTemplate(
+    request: services_tasks_svc_v1_task_template_svc_pb.GetTaskTemplateRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: services_tasks_svc_v1_task_template_svc_pb.GetTaskTemplateResponse) => void
+  ): grpcWeb.ClientReadableStream<services_tasks_svc_v1_task_template_svc_pb.GetTaskTemplateResponse>;
+
 }
 
 export class TaskTemplateServicePromiseClient {
@@ -98,6 +105,11 @@ export class TaskTemplateServicePromiseClient {
     request: services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesRequest,
     metadata?: grpcWeb.Metadata
   ): Promise<services_tasks_svc_v1_task_template_svc_pb.GetAllTaskTemplatesResponse>;
+
+  getTaskTemplate(
+    request: services_tasks_svc_v1_task_template_svc_pb.GetTaskTemplateRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<services_tasks_svc_v1_task_template_svc_pb.GetTaskTemplateResponse>;
 
 }
 
