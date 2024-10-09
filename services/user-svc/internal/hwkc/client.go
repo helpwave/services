@@ -16,6 +16,16 @@ import (
 	"strconv"
 )
 
+type IClient interface {
+	GetUserById(userID uuid.UUID) (*User, error)
+	GetOrganizationsOfUserById(userID uuid.UUID) ([]*Organization, error)
+	CreateOrganization(name, displayName string, isPersonal bool) (*Organization, error)
+	UpdateOrganization(organizationID uuid.UUID, organization Organization) error
+	DeleteOrganization(organizationID uuid.UUID) error
+	AddUserToOrganization(userID, organizationID uuid.UUID) error
+	RemoveUserFromOrganization(userID, organizationID uuid.UUID) error
+}
+
 type Client struct {
 	adminApiBaseUrl *url.URL
 	realmBaseUrl    *url.URL
@@ -120,14 +130,6 @@ func (c *Client) GetOrganizationsOfUserById(userID uuid.UUID) ([]*Organization, 
 	var organizations []*Organization
 	if err := json.NewDecoder(res.Body).Decode(&organizations); err != nil {
 		return nil, err
-	}
-
-	if len(organizations) > 0 {
-		fmt.Println("=======================")
-		fmt.Println(*organizations[0].ID)
-		fmt.Println(*organizations[0].Name)
-		fmt.Println(*organizations[0].DisplayName)
-		fmt.Println(organizations[0].IsPersonal())
 	}
 
 	return organizations, nil

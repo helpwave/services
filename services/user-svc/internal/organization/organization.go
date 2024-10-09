@@ -25,10 +25,10 @@ type InvitationState = string
 
 type ServiceServer struct {
 	pb.UnimplementedOrganizationServiceServer
-	kc *hwkc.Client
+	kc hwkc.IClient
 }
 
-func NewServiceServer(kc *hwkc.Client) *ServiceServer {
+func NewServiceServer(kc hwkc.IClient) *ServiceServer {
 	return &ServiceServer{
 		kc: kc,
 	}
@@ -769,7 +769,7 @@ func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Or
 	return &organization, nil
 }
 
-func AddUserToOrganization(ctx context.Context, kc *hwkc.Client, userId uuid.UUID, organizationId uuid.UUID) error {
+func AddUserToOrganization(ctx context.Context, kc hwkc.IClient, userId uuid.UUID, organizationId uuid.UUID) error {
 	log := zlog.Ctx(ctx)
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 

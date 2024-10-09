@@ -28,13 +28,19 @@ func main() {
 	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()
 
-	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
-		grpcServer := server.GrpcServer()
-
-		kc, err := hwkc.NewClientFromEnv(ctx)
+	var kc hwkc.IClient
+	if common.Mode == common.DevelopmentMode {
+		kc = hwkc.NewFakeClient()
+	} else {
+		realKc, err := hwkc.NewClientFromEnv(ctx)
 		if err != nil {
 			zlog.Fatal().Err(err).Msg("cannot create Keycloak client")
 		}
+		kc = realKc
+	}
+
+	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
+		grpcServer := server.GrpcServer()
 
 		common.MustAddTopicEventHandler(server, user.UserUpdatedEventSubscription, user.HandleUserUpdatedEvent)
 		pb.RegisterUserServiceServer(grpcServer, user.NewServiceServer())
