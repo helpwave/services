@@ -2,7 +2,7 @@ module hwauthz
 
 go 1.23
 
-toolchain go1.23.1
+toolchain go1.23.2
 
 replace (
 	common => ../common
@@ -13,11 +13,11 @@ replace (
 
 require (
 	common v0.0.0
-	github.com/authzed/authzed-go v0.15.0
+	github.com/authzed/authzed-go v0.16.0
 	github.com/authzed/grpcutil v0.0.0-20230908193239-4286bb1d6403
 	github.com/rs/zerolog v1.33.0
 	go.opentelemetry.io/otel v1.30.0
-	google.golang.org/grpc v1.66.1
+	google.golang.org/grpc v1.67.1
 	hwutil v0.0.0
 	telemetry v0.0.0
 )
@@ -29,7 +29,7 @@ require (
 	github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
-	github.com/dapr/dapr v1.14.2 // indirect
+	github.com/dapr/dapr v1.14.4 // indirect
 	github.com/dapr/go-sdk v1.11.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.1.0 // indirect
@@ -64,7 +64,7 @@ require (
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/samber/lo v1.47.0 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.54.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.55.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.30.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.30.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.30.0 // indirect
@@ -77,10 +77,10 @@ require (
 	golang.org/x/net v0.29.0 // indirect
 	golang.org/x/oauth2 v0.23.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
-	golang.org/x/text v0.18.0 // indirect
+	golang.org/x/text v0.19.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240903143218-8af14fe29dc1 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240903143218-8af14fe29dc1 // indirect
-	google.golang.org/protobuf v1.34.2 // indirect
+	google.golang.org/protobuf v1.35.1 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	hwlocale v0.0.0 // indirect

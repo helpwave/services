@@ -10,7 +10,7 @@ replace (
 
 require (
 	github.com/coreos/go-oidc v2.2.1+incompatible
-	github.com/dapr/dapr v1.14.2
+	github.com/dapr/dapr v1.14.4
 	github.com/dapr/go-sdk v1.11.0
 	github.com/go-playground/validator/v10 v10.22.1
 	github.com/golang/protobuf v1.5.4
@@ -21,17 +21,17 @@ require (
 	github.com/nicksnyder/go-i18n/v2 v2.4.0
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.9.0
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.54.0
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.55.0
 	go.opentelemetry.io/otel v1.30.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.30.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.30.0
 	go.opentelemetry.io/otel/exporters/zipkin v1.30.0
 	go.opentelemetry.io/otel/sdk v1.30.0
 	golang.org/x/oauth2 v0.23.0
-	golang.org/x/text v0.18.0
+	golang.org/x/text v0.19.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240903143218-8af14fe29dc1
-	google.golang.org/grpc v1.66.1
-	google.golang.org/protobuf v1.34.2
+	google.golang.org/grpc v1.67.1
+	google.golang.org/protobuf v1.35.1
 	hwlocale v0.0.0
 	hwutil v0.0.0
 	telemetry v0.0.0
