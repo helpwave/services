@@ -38,6 +38,8 @@ type BedServiceClient interface {
 	GetBed(ctx context.Context, in *GetBedRequest, opts ...grpc.CallOption) (*GetBedResponse, error)
 	GetBedByPatient(ctx context.Context, in *GetBedByPatientRequest, opts ...grpc.CallOption) (*GetBedByPatientResponse, error)
 	GetBeds(ctx context.Context, in *GetBedsRequest, opts ...grpc.CallOption) (*GetBedsResponse, error)
+	// Deprecated: Do not use.
+	// Deprecated: Use GetBeds with optional room_id instead
 	GetBedsByRoom(ctx context.Context, in *GetBedsByRoomRequest, opts ...grpc.CallOption) (*GetBedsByRoomResponse, error)
 	UpdateBed(ctx context.Context, in *UpdateBedRequest, opts ...grpc.CallOption) (*UpdateBedResponse, error)
 	DeleteBed(ctx context.Context, in *DeleteBedRequest, opts ...grpc.CallOption) (*DeleteBedResponse, error)
@@ -101,6 +103,7 @@ func (c *bedServiceClient) GetBeds(ctx context.Context, in *GetBedsRequest, opts
 	return out, nil
 }
 
+// Deprecated: Do not use.
 func (c *bedServiceClient) GetBedsByRoom(ctx context.Context, in *GetBedsByRoomRequest, opts ...grpc.CallOption) (*GetBedsByRoomResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetBedsByRoomResponse)
@@ -140,6 +143,8 @@ type BedServiceServer interface {
 	GetBed(context.Context, *GetBedRequest) (*GetBedResponse, error)
 	GetBedByPatient(context.Context, *GetBedByPatientRequest) (*GetBedByPatientResponse, error)
 	GetBeds(context.Context, *GetBedsRequest) (*GetBedsResponse, error)
+	// Deprecated: Do not use.
+	// Deprecated: Use GetBeds with optional room_id instead
 	GetBedsByRoom(context.Context, *GetBedsByRoomRequest) (*GetBedsByRoomResponse, error)
 	UpdateBed(context.Context, *UpdateBedRequest) (*UpdateBedResponse, error)
 	DeleteBed(context.Context, *DeleteBedRequest) (*DeleteBedResponse, error)

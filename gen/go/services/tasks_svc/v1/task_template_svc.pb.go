@@ -29,7 +29,7 @@ type CreateTaskTemplateRequest struct {
 	Name        string                               `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" validate:"required"` // @gotags: validate:"required"
 	Description *string                              `protobuf:"bytes,2,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	WardId      *string                              `protobuf:"bytes,4,opt,name=ward_id,json=wardId,proto3,oneof" json:"ward_id,omitempty" validate:"omitempty,omitnil,uuid4"` // @gotags: validate:"omitempty,omitnil,uuid4"
-	Subtasks    []*CreateTaskTemplateRequest_SubTask `protobuf:"bytes,5,rep,name=subtasks,proto3" json:"subtasks,omitempty"`
+	Subtasks    []*CreateTaskTemplateRequest_SubTask `protobuf:"bytes,5,rep,name=subtasks,proto3" json:"subtasks,omitempty" validate:"dive"`                                    // @gotags: validate:"dive"
 }
 
 func (x *CreateTaskTemplateRequest) Reset() {
@@ -795,7 +795,7 @@ type CreateTaskTemplateRequest_SubTask struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" validate:"required"` // @gotags: validate:"required"
 }
 
 func (x *CreateTaskTemplateRequest_SubTask) Reset() {

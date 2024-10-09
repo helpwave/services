@@ -170,11 +170,18 @@ final $typed_data.Uint8List getBedByPatientResponseDescriptor = $convert.base64D
 @$core.Deprecated('Use getBedsRequestDescriptor instead')
 const GetBedsRequest$json = {
   '1': 'GetBedsRequest',
+  '2': [
+    {'1': 'room_id', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'roomId', '17': true},
+  ],
+  '8': [
+    {'1': '_room_id'},
+  ],
 };
 
 /// Descriptor for `GetBedsRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getBedsRequestDescriptor = $convert.base64Decode(
-    'Cg5HZXRCZWRzUmVxdWVzdA==');
+    'Cg5HZXRCZWRzUmVxdWVzdBIcCgdyb29tX2lkGAEgASgJSABSBnJvb21JZIgBAUIKCghfcm9vbV'
+    '9pZA==');
 
 @$core.Deprecated('Use getBedsResponseDescriptor instead')
 const GetBedsResponse$json = {

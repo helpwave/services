@@ -96,7 +96,8 @@ A lot of ports will be allocated on your host system for additional debugging. H
 
 ### Networking
 
-The microservices are tied together using [dapr](https://dapr.io/). Most services provide a grpc API, as defined by the protobufs in `/proto`.
+The microservices are tied together using [dapr](https://dapr.io/). Most services provide a grpc API, as defined by the Protobufs in `/proto`.
+[Here](https://buf.build/helpwave/services) you can find the proto's documentation.
 
 We provide one unified entrypoint for clients in form of the API-gateway [APISIX](https://apisix.apache.org/). It exposes a [grpc-web](https://github.com/grpc/grpc-web) api for http-only clients (i.e., web), but falls back to a grpc proxy for those clients that support it (i.e., mobile).
 

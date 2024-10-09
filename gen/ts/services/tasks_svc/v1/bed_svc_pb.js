@@ -2439,7 +2439,7 @@ proto.services.tasks_svc.v1.GetBedsRequest.prototype.toObject = function(opt_inc
  */
 proto.services.tasks_svc.v1.GetBedsRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+    roomId: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -2476,6 +2476,10 @@ proto.services.tasks_svc.v1.GetBedsRequest.deserializeBinaryFromReader = functio
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setRoomId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -2505,6 +2509,49 @@ proto.services.tasks_svc.v1.GetBedsRequest.prototype.serializeBinary = function(
  */
 proto.services.tasks_svc.v1.GetBedsRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = /** @type {string} */ (jspb.Message.getField(message, 1));
+  if (f != null) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string room_id = 1;
+ * @return {string}
+ */
+proto.services.tasks_svc.v1.GetBedsRequest.prototype.getRoomId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.services.tasks_svc.v1.GetBedsRequest} returns this
+ */
+proto.services.tasks_svc.v1.GetBedsRequest.prototype.setRoomId = function(value) {
+  return jspb.Message.setField(this, 1, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.services.tasks_svc.v1.GetBedsRequest} returns this
+ */
+proto.services.tasks_svc.v1.GetBedsRequest.prototype.clearRoomId = function() {
+  return jspb.Message.setField(this, 1, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.services.tasks_svc.v1.GetBedsRequest.prototype.hasRoomId = function() {
+  return jspb.Message.getField(this, 1) != null;
 };
 
 

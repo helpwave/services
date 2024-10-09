@@ -760,12 +760,21 @@ class GetBedByPatientResponse extends $pb.GeneratedMessage {
 }
 
 class GetBedsRequest extends $pb.GeneratedMessage {
-  factory GetBedsRequest() => create();
+  factory GetBedsRequest({
+    $core.String? roomId,
+  }) {
+    final $result = create();
+    if (roomId != null) {
+      $result.roomId = roomId;
+    }
+    return $result;
+  }
   GetBedsRequest._() : super();
   factory GetBedsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetBedsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'roomId')
     ..hasRequiredFields = false
   ;
 
@@ -789,6 +798,15 @@ class GetBedsRequest extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static GetBedsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetBedsRequest>(create);
   static GetBedsRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get roomId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set roomId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasRoomId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearRoomId() => clearField(1);
 }
 
 class GetBedsResponse_Bed extends $pb.GeneratedMessage {

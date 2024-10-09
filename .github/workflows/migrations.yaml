@@ -9,9 +9,9 @@ permissions:
 
 env:
   # renovate: datasource=github-releases depName=golang-migrate/migrate
-  MIGRATE_VERSION: '4.17.1'
+  MIGRATE_VERSION: '4.18.1'
   # renovate: datasource=github-releases depName=superfly/flyctl versioning=semver
-  FLY_CLI_VERSION: '0.2.112'
+  FLY_CLI_VERSION: '0.3.17'
   # renovate: datasource=github-releases depName=sqlc-dev/sqlc
   SQLC_VERSION: '1.27.0'
 
