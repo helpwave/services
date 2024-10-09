@@ -182,7 +182,7 @@ func (c *Client) UpdateOrganization(organizationID uuid.UUID, organization Organ
 	// Organizations -> PUT /{realm}/orgs/{orgId} https://editor-next.swagger.io/?url=https://raw.githubusercontent.com/p2-inc/phasetwo-docs/5e785dfed39348f07e9ec6e834e4ba19979bce57/openapi.yaml
 	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String())
 
-	jsonPayload, err := json.Marshal(organizationID)
+	jsonPayload, err := json.Marshal(organization)
 	if err != nil {
 		return err
 	}
