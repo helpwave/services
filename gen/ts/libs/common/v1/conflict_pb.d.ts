@@ -51,3 +51,23 @@ export namespace AttributeConflict {
   }
 }
 
+export class AnyArray extends jspb.Message {
+  getElementsList(): Array<google_protobuf_any_pb.Any>;
+  setElementsList(value: Array<google_protobuf_any_pb.Any>): AnyArray;
+  clearElementsList(): AnyArray;
+  addElements(value?: google_protobuf_any_pb.Any, index?: number): google_protobuf_any_pb.Any;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AnyArray.AsObject;
+  static toObject(includeInstance: boolean, msg: AnyArray): AnyArray.AsObject;
+  static serializeBinaryToWriter(message: AnyArray, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AnyArray;
+  static deserializeBinaryFromReader(message: AnyArray, reader: jspb.BinaryReader): AnyArray;
+}
+
+export namespace AnyArray {
+  export type AsObject = {
+    elementsList: Array<google_protobuf_any_pb.Any.AsObject>,
+  }
+}
+

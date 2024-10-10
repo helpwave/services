@@ -94,23 +94,65 @@ func (q *Queries) GetPropertyValueByID(ctx context.Context, id uuid.UUID) (Prope
 	return i, err
 }
 
-const getPropertyValueBySubjectIDAndPropertyID = `-- name: GetPropertyValueBySubjectIDAndPropertyID :one
-SELECT id
-FROM property_values
-WHERE (subject_id = $1 AND property_id = $2) OR id = $3
+const getPropertyValueBySubjectIDAndPropertyID = `-- name: GetPropertyValueBySubjectIDAndPropertyID :many
+SELECT
+	values.id, values.property_id, values.subject_id, values.text_value, values.number_value, values.bool_value, values.date_value, values.date_time_value, values.consistency,
+	so.id as select_option_id,
+	so.name as select_option_name,
+	so.description as select_option_description,
+	properties.field_type as field_type
+FROM property_values as values
+	JOIN properties ON properties.id = values.property_id
+	LEFT JOIN multi_select_values as msv ON msv.value_id = values.id
+	LEFT JOIN select_options as so ON so.id = msv.select_option
+WHERE (subject_id = $1 AND property_id = $2)
 `
 
 type GetPropertyValueBySubjectIDAndPropertyIDParams struct {
 	SubjectID  uuid.UUID
 	PropertyID uuid.UUID
-	ID         uuid.UUID
 }
 
-func (q *Queries) GetPropertyValueBySubjectIDAndPropertyID(ctx context.Context, arg GetPropertyValueBySubjectIDAndPropertyIDParams) (uuid.UUID, error) {
-	row := q.db.QueryRow(ctx, getPropertyValueBySubjectIDAndPropertyID, arg.SubjectID, arg.PropertyID, arg.ID)
-	var id uuid.UUID
-	err := row.Scan(&id)
-	return id, err
+type GetPropertyValueBySubjectIDAndPropertyIDRow struct {
+	PropertyValue           PropertyValue
+	SelectOptionID          uuid.NullUUID
+	SelectOptionName        *string
+	SelectOptionDescription *string
+	FieldType               int32
+}
+
+func (q *Queries) GetPropertyValueBySubjectIDAndPropertyID(ctx context.Context, arg GetPropertyValueBySubjectIDAndPropertyIDParams) ([]GetPropertyValueBySubjectIDAndPropertyIDRow, error) {
+	rows, err := q.db.Query(ctx, getPropertyValueBySubjectIDAndPropertyID, arg.SubjectID, arg.PropertyID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetPropertyValueBySubjectIDAndPropertyIDRow{}
+	for rows.Next() {
+		var i GetPropertyValueBySubjectIDAndPropertyIDRow
+		if err := rows.Scan(
+			&i.PropertyValue.ID,
+			&i.PropertyValue.PropertyID,
+			&i.PropertyValue.SubjectID,
+			&i.PropertyValue.TextValue,
+			&i.PropertyValue.NumberValue,
+			&i.PropertyValue.BoolValue,
+			&i.PropertyValue.DateValue,
+			&i.PropertyValue.DateTimeValue,
+			&i.PropertyValue.Consistency,
+			&i.SelectOptionID,
+			&i.SelectOptionName,
+			&i.SelectOptionDescription,
+			&i.FieldType,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getPropertyValuesWithPropertyBySubjectID = `-- name: GetPropertyValuesWithPropertyBySubjectID :many

@@ -133,6 +133,7 @@ class AttributeConflict extends $pb.GeneratedMessage {
 
   /// CAUTION: may be missing, if the is underlying value is missing (e.g., unassigned beds)
   /// Enums are returned as Int32s
+  /// Arrays are encoded as AnyArrays
   @$pb.TagNumber(1)
   $19.Any get is_1 => $_getN(0);
   @$pb.TagNumber(1)
@@ -146,6 +147,7 @@ class AttributeConflict extends $pb.GeneratedMessage {
 
   /// CAUTION: may be missing, if the requested value is missing (e.g., unassignment of a bed)
   /// Enums are returned as Int32s
+  /// Arrays are encoded as AnyArrays
   @$pb.TagNumber(2)
   $19.Any get want => $_getN(1);
   @$pb.TagNumber(2)
@@ -156,6 +158,52 @@ class AttributeConflict extends $pb.GeneratedMessage {
   void clearWant() => clearField(2);
   @$pb.TagNumber(2)
   $19.Any ensureWant() => $_ensure(1);
+}
+
+/// there is no native Any-compatible wrapper for arrays,
+/// so here is one
+class AnyArray extends $pb.GeneratedMessage {
+  factory AnyArray({
+    $core.Iterable<$19.Any>? elements,
+  }) {
+    final $result = create();
+    if (elements != null) {
+      $result.elements.addAll(elements);
+    }
+    return $result;
+  }
+  AnyArray._() : super();
+  factory AnyArray.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AnyArray.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AnyArray', package: const $pb.PackageName(_omitMessageNames ? '' : 'libs.common.v1'), createEmptyInstance: create)
+    ..pc<$19.Any>(1, _omitFieldNames ? '' : 'elements', $pb.PbFieldType.PM, subBuilder: $19.Any.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AnyArray clone() => AnyArray()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AnyArray copyWith(void Function(AnyArray) updates) => super.copyWith((message) => updates(message as AnyArray)) as AnyArray;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static AnyArray create() => AnyArray._();
+  AnyArray createEmptyInstance() => create();
+  static $pb.PbList<AnyArray> createRepeated() => $pb.PbList<AnyArray>();
+  @$core.pragma('dart2js:noInline')
+  static AnyArray getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AnyArray>(create);
+  static AnyArray? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$19.Any> get elements => $_getList(0);
 }
 
 

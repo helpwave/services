@@ -1,8 +1,10 @@
 package api
 
 import (
+	"common"
 	"context"
 	"fmt"
+	commonpb "gen/libs/common/v1"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -12,6 +14,7 @@ import (
 	"property-svc/internal/property-value/handlers"
 	"property-svc/internal/property-value/models"
 	viewModels "property-svc/internal/property-view/models"
+	"property-svc/util"
 )
 
 type MatchersRequest interface {
@@ -97,9 +100,34 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		value = nil
 	}
 
-	consistency, err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID)
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "consistency")
+	}
+
+	consistency, conflictIs, err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID, expConsistency)
 	if err != nil {
 		return nil, err
+	}
+
+	if conflictIs != nil {
+		value, err := util.AttributeConflict(
+			conflictIs,
+			nil, // TODO
+		)
+		if err != nil {
+			return nil, err
+		}
+		return &pb.AttachPropertyValueResponse{
+			PropertyValueId: "",
+			Conflict: &commonpb.Conflict{
+				ConflictingAttributes: map[string]*commonpb.AttributeConflict{
+					"value": value,
+				},
+				HistoryMissing: true,
+			},
+			Consistency: consistency.String(),
+		}, nil
 	}
 
 	return &pb.AttachPropertyValueResponse{

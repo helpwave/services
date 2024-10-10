@@ -27,8 +27,16 @@ message Conflict {
 message AttributeConflict {
   // CAUTION: may be missing, if the is underlying value is missing (e.g., unassigned beds)
   // Enums are returned as Int32s
+  // Arrays are encoded as AnyArrays
   google.protobuf.Any is = 1;
   // CAUTION: may be missing, if the requested value is missing (e.g., unassignment of a bed)
   // Enums are returned as Int32s
+  // Arrays are encoded as AnyArrays
   google.protobuf.Any want = 2;
+}
+
+// there is no native Any-compatible wrapper for arrays,
+// so here is one
+message AnyArray {
+  repeated google.protobuf.Any elements = 1;
 }

@@ -55,3 +55,16 @@ final $typed_data.Uint8List attributeConflictDescriptor = $convert.base64Decode(
     'ChFBdHRyaWJ1dGVDb25mbGljdBIkCgJpcxgBIAEoCzIULmdvb2dsZS5wcm90b2J1Zi5BbnlSAm'
     'lzEigKBHdhbnQYAiABKAsyFC5nb29nbGUucHJvdG9idWYuQW55UgR3YW50');
 
+@$core.Deprecated('Use anyArrayDescriptor instead')
+const AnyArray$json = {
+  '1': 'AnyArray',
+  '2': [
+    {'1': 'elements', '3': 1, '4': 3, '5': 11, '6': '.google.protobuf.Any', '10': 'elements'},
+  ],
+};
+
+/// Descriptor for `AnyArray`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List anyArrayDescriptor = $convert.base64Decode(
+    'CghBbnlBcnJheRIwCghlbGVtZW50cxgBIAMoCzIULmdvb2dsZS5wcm90b2J1Zi5BbnlSCGVsZW'
+    '1lbnRz');
+
