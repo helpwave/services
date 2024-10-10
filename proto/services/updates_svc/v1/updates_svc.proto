@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package services.updates_svc.v1;
+
+option go_package = "gen/services/updates-svc/v1";
+
+message EntityEvent {
+  string entity_id = 1;
+}
+
+message DomainEvent {
+  string event_id = 1;
+  string event_type = 2;
+  string aggregate_id = 3;
+  string aggregate_type = 4;
+}
+
+//
+// ReceiveUpdatesRequest
+//
+
+message ReceiveUpdatesRequest {
+
+}
+
+//
+// ReceiveUpdatesResponse
+//
+
+message ReceiveUpdatesResponse {
+  oneof event {
+    EntityEvent entity_event = 1;
+    DomainEvent domain_event = 2;
+  }
+}
+
+//
+// UpdateService
+//
+
+service UpdatesService {
+  rpc ReceiveUpdates(ReceiveUpdatesRequest) returns (stream ReceiveUpdatesResponse) {}
+}
