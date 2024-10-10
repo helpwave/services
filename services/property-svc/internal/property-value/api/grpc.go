@@ -8,7 +8,9 @@ import (
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwes"
 	"hwutil"
 	"property-svc/internal/property-value/handlers"
@@ -76,26 +78,34 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 	propertyID := uuid.MustParse(req.GetPropertyId()) // guarded by validate
 	subjectID := uuid.MustParse(req.GetSubjectId())   // guarded by validate
 
+	var want proto.Message
 	var value interface{}
 	switch req.Value.(type) {
 	case *pb.AttachPropertyValueRequest_TextValue:
 		value = req.GetTextValue()
+		want = wrapperspb.String(req.GetTextValue())
 	case *pb.AttachPropertyValueRequest_NumberValue:
 		value = req.GetNumberValue()
+		want = wrapperspb.Double(req.GetNumberValue())
 	case *pb.AttachPropertyValueRequest_BoolValue:
 		value = req.GetBoolValue()
+		want = wrapperspb.Bool(req.GetBoolValue())
 	case *pb.AttachPropertyValueRequest_DateValue:
 		value = req.GetDateValue().Date
+		want = &pb.Date{Date: req.GetDateTimeValue()}
 	case *pb.AttachPropertyValueRequest_DateTimeValue:
 		value = req.GetDateTimeValue()
+		want = req.GetDateTimeValue()
 	case *pb.AttachPropertyValueRequest_SelectValue:
 		value = req.GetSelectValue()
+		want = wrapperspb.String(req.GetSelectValue()) // IS will be a pb.SelectValueOption, not a str, might be confusing for the frontend, but I'm not going to query the db for this
 	case *pb.AttachPropertyValueRequest_MultiSelectValue_:
 		msv := req.GetMultiSelectValue()
 		value = models.MultiSelectChange{
 			SelectValues:       msv.SelectValues,
 			RemoveSelectValues: msv.RemoveSelectValues,
 		}
+		want = req.GetMultiSelectValue()
 	default:
 		value = nil
 	}
@@ -113,7 +123,7 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 	if conflictIs != nil {
 		value, err := util.AttributeConflict(
 			conflictIs,
-			nil, // TODO
+			want,
 		)
 		if err != nil {
 			return nil, err
