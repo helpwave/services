@@ -201,9 +201,8 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	//
 
 	unassignRes, err := taskClient.UnassignTask(ctx, &pb.UnassignTaskRequest{
-		TaskId:      taskId,
-		UserId:      assignedUser.String(),
-		Consistency: &task.Consistency,
+		TaskId: taskId,
+		UserId: assignedUser.String(),
 	})
 	assert.NoError(t, err)
 

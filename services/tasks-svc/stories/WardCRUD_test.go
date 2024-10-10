@@ -5,6 +5,7 @@ import (
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwtesting"
 	"hwutil"
 	"strconv"
@@ -52,6 +53,7 @@ func TestCreateUpdateGetWard(t *testing.T) {
 	}
 	updateRes, err := wardClient.UpdateWard(ctx, updateReq)
 	assert.NoError(t, err, "could not update ward after creation")
+	assert.Nil(t, updateRes.Conflict)
 
 	assert.NotEqual(t, getWardRes.Consistency, updateRes.Consistency, "consistency has not changed in update")
 
@@ -108,6 +110,8 @@ func TestGetRecentWards(t *testing.T) {
 				Id:    patientID,
 				BedId: bedId,
 			})
+			hwtesting.WaitForProjectionsToSettle()
+
 			assert.NoError(t, err, "could not assign bed to patient")
 			_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 				Name:          t.Name() + " Patient " + bedSuffix + " Task ",
@@ -376,5 +380,49 @@ func TestGetWardDetails(t *testing.T) {
 	}
 
 	assert.Equal(t, expected, actual)
+
+}
+
+func TestUpdateWardConflict(t *testing.T) {
+	ctx := context.Background()
+	wardClient := wardServiceClient()
+
+	// prepare
+	wardId, initialConsistency := prepareWard(t, ctx, "")
+
+	name1 := "This came first"
+
+	// update 1
+	update1Res, err := wardClient.UpdateWard(ctx, &pb.UpdateWardRequest{
+		Id:          wardId,
+		Name:        &name1,
+		Consistency: &initialConsistency,
+	})
+	assert.NoError(t, err)
+	assert.Nil(t, update1Res.Conflict)
+	assert.NotEqual(t, initialConsistency, update1Res.Consistency)
+
+	name2 := "This came second"
+
+	// racing update 2
+	update2Res, err := wardClient.UpdateWard(ctx, &pb.UpdateWardRequest{
+		Id:          wardId,
+		Name:        &name2,
+		Consistency: &initialConsistency,
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, update1Res.Consistency, update2Res.Consistency)
+	assert.NotNil(t, update2Res.Conflict)
+
+	nameRes := update2Res.Conflict.ConflictingAttributes["name"]
+	assert.NotNil(t, nameRes)
+
+	nameIs := &wrapperspb.StringValue{}
+	assert.NoError(t, nameRes.Is.UnmarshalTo(nameIs))
+	assert.Equal(t, name1, nameIs.Value)
+
+	nameWant := &wrapperspb.StringValue{}
+	assert.NoError(t, nameRes.Want.UnmarshalTo(nameWant))
+	assert.Equal(t, name2, nameWant.Value)
 
 }

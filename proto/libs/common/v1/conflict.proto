@@ -14,11 +14,29 @@ option go_package = "gen/libs/common/v1";
 // If WAS == IS, or WANT and IS are merge-able (e.g., requested action changes "name", and another action has changed "age"), no conflict arises.
 // Warning: If a previous action has deleted the resource, an error is raised, and no conflict returned.
 message Conflict {
-  // might be empty, in that case we don't have the history to calculate the conflicting attributes
+  // when history_missing is true, this map will contain elements, that might not have been updated since you have seen them last.
+  // it is then on you to compare these against your view of the world
+  //
+  // The key is the json-name of the field you tried to change, subkeys are split by dots ('.'), array elements are represented by the resources id:
+  // e.g.: for the request: `{"description": "Conflict", "select_data": {"upsert_options": [{"id": "123", "name": "Conflict"}]}}`
+  // this might be the conflict: `{"conflicting_attributes": {"description": ..., "select_data.upsert_options.123.name": ...}}`
   map<string, AttributeConflict> conflicting_attributes = 1;
+  bool history_missing = 2;
 }
 
 message AttributeConflict {
+  // CAUTION: may be missing, if the is underlying value is missing (e.g., unassigned beds)
+  // Enums are returned as Int32s
+  // Arrays are encoded as AnyArrays
   google.protobuf.Any is = 1;
+  // CAUTION: may be missing, if the requested value is missing (e.g., unassignment of a bed)
+  // Enums are returned as Int32s
+  // Arrays are encoded as AnyArrays
   google.protobuf.Any want = 2;
+}
+
+// there is no native Any-compatible wrapper for arrays,
+// so here is one
+message AnyArray {
+  repeated google.protobuf.Any elements = 1;
 }

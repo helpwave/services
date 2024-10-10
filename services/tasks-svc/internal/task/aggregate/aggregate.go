@@ -1,11 +1,13 @@
 package aggregate
 
 import (
+	"common"
 	"context"
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
+	"hwutil"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"tasks-svc/internal/task/models"
 	"time"
@@ -37,6 +39,39 @@ func LoadTaskAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID
 	}
 
 	return taskAggregate, nil
+}
+
+func LoadTaskAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore, id uuid.UUID, pauseAt *common.ConsistencyToken) (*TaskAggregate, *models.Task, error) {
+	taskAggregate := NewTaskAggregate(id)
+	var snapshot *models.Task
+
+	if pauseAt != nil {
+		//  load pauseAt+1-many events (version is 0-indexed)
+		if err := as.LoadN(ctx, taskAggregate, uint64(*pauseAt)+1); err != nil {
+			return nil, nil, err
+		}
+
+		task := *taskAggregate.Task // deref copies model
+
+		// also copy pointer values
+		if task.DueAt != nil {
+			task.DueAt = hwutil.PtrTo(*task.DueAt)
+		}
+		subtasks := make(map[uuid.UUID]models.Subtask)
+		for key, value := range task.Subtasks {
+			subtasks[key] = value
+		}
+		task.Subtasks = subtasks
+
+		snapshot = &task
+	}
+
+	// continue loading all other events
+	if err := as.Load(ctx, taskAggregate); err != nil {
+		return nil, nil, err
+	}
+
+	return taskAggregate, snapshot, nil
 }
 
 func (a *TaskAggregate) initEventListeners() {

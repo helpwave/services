@@ -34,22 +34,41 @@ AND (task_templates.ward_id IS NULL OR NOT @private_only::bool)
 AND (task_templates.created_by = sqlc.narg('creator_id') OR sqlc.narg('creator_id') IS NULL);
 
 -- name: UpdateTaskTemplate :one
+WITH old_table AS (
+	SELECT
+		name as old_name,
+		description as old_description,
+		consistency as old_consistency
+	FROM task_templates
+	WHERE task_templates.id = @id
+)
 UPDATE task_templates
 SET	name = coalesce(sqlc.narg('name'), name),
 	description = coalesce(sqlc.narg('description'), description),
 	consistency = consistency + 1
-WHERE id = @id
-RETURNING consistency;
+WHERE task_templates.id = @id
+RETURNING
+	consistency,
+	(SELECT old_name FROM old_table),
+	(SELECT old_description FROM old_table),
+	(SELECT old_consistency FROM old_table);
 
 -- name: UpdateSubtask :one
+WITH old_table AS (
+	SELECT name as old_name
+	FROM task_template_subtasks
+	WHERE task_template_subtasks.id = @id
+)
 UPDATE task_template_subtasks ttst
 SET	name = coalesce(sqlc.narg('name'), name)
 WHERE ttst.id = @id
-RETURNING (
-	SELECT tt.id
-	FROM task_templates tt
-	WHERE tt.id = ttst.task_template_id
-);
+RETURNING
+	(
+		SELECT tt.id as task_template_id
+		FROM task_templates tt
+		WHERE tt.id = ttst.task_template_id
+	),
+	(SELECT old_name FROM old_table);
 
 -- name: DeleteSubtask :one
 DELETE FROM task_template_subtasks WHERE id = @id RETURNING *;

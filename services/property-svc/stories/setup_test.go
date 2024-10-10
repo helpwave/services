@@ -68,8 +68,8 @@ func propertyValueServiceClient() pb.PropertyValueServiceClient {
 	return pb.NewPropertyValueServiceClient(hwtesting.GetGrpcConn(""))
 }
 
-func NamesOf(arr []*pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption) []string {
-	strs := hwutil.Map(arr, func(v *pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption) string {
+func NamesOf(arr []*pb.SelectValueOption) []string {
+	strs := hwutil.Map(arr, func(v *pb.SelectValueOption) string {
 		return v.Name
 	})
 	sort.Strings(strs)

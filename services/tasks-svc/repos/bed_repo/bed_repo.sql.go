@@ -177,13 +177,25 @@ func (q *Queries) GetBeds(ctx context.Context, roomID uuid.NullUUID) ([]Bed, err
 }
 
 const updateBed = `-- name: UpdateBed :one
+WITH old_table AS (
+	SELECT
+		name as old_name,
+		room_id as old_room_id,
+		consistency	as old_consistency
+	FROM beds
+	WHERE beds.id = $3
+)
 UPDATE beds
 SET
 	name = coalesce($1, name),
 	room_id = coalesce($2, room_id),
 	consistency = consistency + 1
-WHERE id = $3
-RETURNING consistency
+WHERE beds.id = $3
+RETURNING
+	consistency,
+	(SELECT old_name FROM old_table),
+	(SELECT old_room_id FROM old_table),
+	(SELECT old_consistency FROM old_table)
 `
 
 type UpdateBedParams struct {
@@ -192,9 +204,21 @@ type UpdateBedParams struct {
 	ID     uuid.UUID
 }
 
-func (q *Queries) UpdateBed(ctx context.Context, arg UpdateBedParams) (int64, error) {
+type UpdateBedRow struct {
+	Consistency    int64
+	OldName        string
+	OldRoomID      uuid.UUID
+	OldConsistency int64
+}
+
+func (q *Queries) UpdateBed(ctx context.Context, arg UpdateBedParams) (UpdateBedRow, error) {
 	row := q.db.QueryRow(ctx, updateBed, arg.Name, arg.RoomID, arg.ID)
-	var consistency int64
-	err := row.Scan(&consistency)
-	return consistency, err
+	var i UpdateBedRow
+	err := row.Scan(
+		&i.Consistency,
+		&i.OldName,
+		&i.OldRoomID,
+		&i.OldConsistency,
+	)
+	return i, err
 }

@@ -154,14 +154,21 @@ func (q *Queries) GetAllTaskTemplatesWithSubTasks(ctx context.Context, arg GetAl
 }
 
 const updateSubtask = `-- name: UpdateSubtask :one
+WITH old_table AS (
+	SELECT name as old_name
+	FROM task_template_subtasks
+	WHERE task_template_subtasks.id = $2
+)
 UPDATE task_template_subtasks ttst
 SET	name = coalesce($1, name)
 WHERE ttst.id = $2
-RETURNING (
-	SELECT tt.id
-	FROM task_templates tt
-	WHERE tt.id = ttst.task_template_id
-)
+RETURNING
+	(
+		SELECT tt.id as task_template_id
+		FROM task_templates tt
+		WHERE tt.id = ttst.task_template_id
+	),
+	(SELECT old_name FROM old_table)
 `
 
 type UpdateSubtaskParams struct {
@@ -169,20 +176,37 @@ type UpdateSubtaskParams struct {
 	ID   uuid.UUID
 }
 
-func (q *Queries) UpdateSubtask(ctx context.Context, arg UpdateSubtaskParams) (uuid.UUID, error) {
+type UpdateSubtaskRow struct {
+	TaskTemplateID uuid.UUID
+	OldName        string
+}
+
+func (q *Queries) UpdateSubtask(ctx context.Context, arg UpdateSubtaskParams) (UpdateSubtaskRow, error) {
 	row := q.db.QueryRow(ctx, updateSubtask, arg.Name, arg.ID)
-	var id uuid.UUID
-	err := row.Scan(&id)
-	return id, err
+	var i UpdateSubtaskRow
+	err := row.Scan(&i.TaskTemplateID, &i.OldName)
+	return i, err
 }
 
 const updateTaskTemplate = `-- name: UpdateTaskTemplate :one
+WITH old_table AS (
+	SELECT
+		name as old_name,
+		description as old_description,
+		consistency as old_consistency
+	FROM task_templates
+	WHERE task_templates.id = $3
+)
 UPDATE task_templates
 SET	name = coalesce($1, name),
 	description = coalesce($2, description),
 	consistency = consistency + 1
-WHERE id = $3
-RETURNING consistency
+WHERE task_templates.id = $3
+RETURNING
+	consistency,
+	(SELECT old_name FROM old_table),
+	(SELECT old_description FROM old_table),
+	(SELECT old_consistency FROM old_table)
 `
 
 type UpdateTaskTemplateParams struct {
@@ -191,9 +215,21 @@ type UpdateTaskTemplateParams struct {
 	ID          uuid.UUID
 }
 
-func (q *Queries) UpdateTaskTemplate(ctx context.Context, arg UpdateTaskTemplateParams) (int64, error) {
+type UpdateTaskTemplateRow struct {
+	Consistency    int64
+	OldName        string
+	OldDescription string
+	OldConsistency int64
+}
+
+func (q *Queries) UpdateTaskTemplate(ctx context.Context, arg UpdateTaskTemplateParams) (UpdateTaskTemplateRow, error) {
 	row := q.db.QueryRow(ctx, updateTaskTemplate, arg.Name, arg.Description, arg.ID)
-	var consistency int64
-	err := row.Scan(&consistency)
-	return consistency, err
+	var i UpdateTaskTemplateRow
+	err := row.Scan(
+		&i.Consistency,
+		&i.OldName,
+		&i.OldDescription,
+		&i.OldConsistency,
+	)
+	return i, err
 }

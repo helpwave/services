@@ -7,6 +7,9 @@ export class Conflict extends jspb.Message {
   getConflictingAttributesMap(): jspb.Map<string, AttributeConflict>;
   clearConflictingAttributesMap(): Conflict;
 
+  getHistoryMissing(): boolean;
+  setHistoryMissing(value: boolean): Conflict;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Conflict.AsObject;
   static toObject(includeInstance: boolean, msg: Conflict): Conflict.AsObject;
@@ -18,6 +21,7 @@ export class Conflict extends jspb.Message {
 export namespace Conflict {
   export type AsObject = {
     conflictingAttributesMap: Array<[string, AttributeConflict.AsObject]>,
+    historyMissing: boolean,
   }
 }
 
@@ -44,6 +48,26 @@ export namespace AttributeConflict {
   export type AsObject = {
     is?: google_protobuf_any_pb.Any.AsObject,
     want?: google_protobuf_any_pb.Any.AsObject,
+  }
+}
+
+export class AnyArray extends jspb.Message {
+  getElementsList(): Array<google_protobuf_any_pb.Any>;
+  setElementsList(value: Array<google_protobuf_any_pb.Any>): AnyArray;
+  clearElementsList(): AnyArray;
+  addElements(value?: google_protobuf_any_pb.Any, index?: number): google_protobuf_any_pb.Any;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AnyArray.AsObject;
+  static toObject(includeInstance: boolean, msg: AnyArray): AnyArray.AsObject;
+  static serializeBinaryToWriter(message: AnyArray, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AnyArray;
+  static deserializeBinaryFromReader(message: AnyArray, reader: jspb.BinaryReader): AnyArray;
+}
+
+export namespace AnyArray {
+  export type AsObject = {
+    elementsList: Array<google_protobuf_any_pb.Any.AsObject>,
   }
 }
 

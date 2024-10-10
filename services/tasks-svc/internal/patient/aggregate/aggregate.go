@@ -1,6 +1,7 @@
 package aggregate
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwes"
@@ -29,6 +30,28 @@ func LoadPatientAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.U
 		return nil, err
 	}
 	return patientAggregate, nil
+}
+
+func LoadPatientAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore, id uuid.UUID, pauseAt *common.ConsistencyToken) (*PatientAggregate, *models.Patient, error) {
+	patientAggregate := NewPatientAggregate(id)
+	var snapshot *models.Patient
+
+	if pauseAt != nil {
+		//  load pauseAt+1-many events (version is 0-indexed)
+		if err := as.LoadN(ctx, patientAggregate, uint64(*pauseAt)+1); err != nil {
+			return nil, nil, err
+		}
+
+		patientCopy := *patientAggregate.Patient // deref copies model
+		snapshot = &patientCopy
+	}
+
+	// continue loading all other events
+	if err := as.Load(ctx, patientAggregate); err != nil {
+		return nil, nil, err
+	}
+
+	return patientAggregate, snapshot, nil
 }
 
 func (a *PatientAggregate) initEventListeners() {

@@ -219,7 +219,6 @@ message AssignTaskResponse {
 message UnassignTaskRequest {
   string task_id = 1; // @gotags: validate:"uuid4"
   string user_id = 2; // @gotags: validate:"uuid4"
-  optional string consistency = 3; // no conflict detection, if not provided
 }
 
 message UnassignTaskResponse {

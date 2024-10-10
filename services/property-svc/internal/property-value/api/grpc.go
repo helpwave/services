@@ -1,17 +1,22 @@
 package api
 
 import (
+	"common"
 	"context"
 	"fmt"
+	commonpb "gen/libs/common/v1"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwes"
 	"hwutil"
 	"property-svc/internal/property-value/handlers"
 	"property-svc/internal/property-value/models"
 	viewModels "property-svc/internal/property-view/models"
+	"property-svc/util"
 )
 
 type MatchersRequest interface {
@@ -73,33 +78,66 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 	propertyID := uuid.MustParse(req.GetPropertyId()) // guarded by validate
 	subjectID := uuid.MustParse(req.GetSubjectId())   // guarded by validate
 
+	var want proto.Message
 	var value interface{}
 	switch req.Value.(type) {
 	case *pb.AttachPropertyValueRequest_TextValue:
 		value = req.GetTextValue()
+		want = wrapperspb.String(req.GetTextValue())
 	case *pb.AttachPropertyValueRequest_NumberValue:
 		value = req.GetNumberValue()
+		want = wrapperspb.Double(req.GetNumberValue())
 	case *pb.AttachPropertyValueRequest_BoolValue:
 		value = req.GetBoolValue()
+		want = wrapperspb.Bool(req.GetBoolValue())
 	case *pb.AttachPropertyValueRequest_DateValue:
 		value = req.GetDateValue().Date
+		want = &pb.Date{Date: req.GetDateTimeValue()}
 	case *pb.AttachPropertyValueRequest_DateTimeValue:
 		value = req.GetDateTimeValue()
+		want = req.GetDateTimeValue()
 	case *pb.AttachPropertyValueRequest_SelectValue:
 		value = req.GetSelectValue()
+		want = wrapperspb.String(req.GetSelectValue()) // IS will be a pb.SelectValueOption, not a str, might be confusing for the frontend, but I'm not going to query the db for this
 	case *pb.AttachPropertyValueRequest_MultiSelectValue_:
 		msv := req.GetMultiSelectValue()
 		value = models.MultiSelectChange{
 			SelectValues:       msv.SelectValues,
 			RemoveSelectValues: msv.RemoveSelectValues,
 		}
+		want = req.GetMultiSelectValue()
 	default:
 		value = nil
 	}
 
-	consistency, err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID)
+	expConsistency, ok := common.ParseConsistency(req.Consistency)
+	if !ok {
+		return nil, common.UnparsableConsistencyError(ctx, "consistency")
+	}
+
+	consistency, conflictIs, err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID, expConsistency)
 	if err != nil {
 		return nil, err
+	}
+
+	if conflictIs != nil {
+		value, err := util.AttributeConflict(
+			conflictIs,
+			want,
+		)
+		if err != nil {
+			return nil, err
+		}
+		return &pb.AttachPropertyValueResponse{
+			PropertyValueId: "",
+			Conflict: &commonpb.Conflict{
+				ConflictingAttributes: map[string]*commonpb.AttributeConflict{
+					"value": value,
+				},
+				HistoryMissing: true,
+			},
+			Consistency: consistency.String(),
+		}, nil
 	}
 
 	return &pb.AttachPropertyValueResponse{
@@ -152,17 +190,17 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 			case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_SELECT:
 				v := pnv.Value.MultiSelectValues[0]
 				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{
-					SelectValue: &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
+					SelectValue: &pb.SelectValueOption{
 						Id:          v.Id.String(),
 						Name:        v.Name,
 						Description: v.Description,
 					},
 				}
 			case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue_{
-					MultiSelectValue: &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
-						SelectValues: hwutil.Map(pnv.Value.MultiSelectValues, func(o models.SelectValueOption) *pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption {
-							return &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
+					MultiSelectValue: &pb.MultiSelectValue{
+						SelectValues: hwutil.Map(pnv.Value.MultiSelectValues, func(o models.SelectValueOption) *pb.SelectValueOption {
+							return &pb.SelectValueOption{
 								Id:          o.Id.String(),
 								Name:        o.Name,
 								Description: o.Description,

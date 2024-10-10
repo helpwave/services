@@ -2291,7 +2291,6 @@ class UnassignTaskRequest extends $pb.GeneratedMessage {
   factory UnassignTaskRequest({
     $core.String? taskId,
     $core.String? userId,
-    $core.String? consistency,
   }) {
     final $result = create();
     if (taskId != null) {
@@ -2299,9 +2298,6 @@ class UnassignTaskRequest extends $pb.GeneratedMessage {
     }
     if (userId != null) {
       $result.userId = userId;
-    }
-    if (consistency != null) {
-      $result.consistency = consistency;
     }
     return $result;
   }
@@ -2312,7 +2308,6 @@ class UnassignTaskRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UnassignTaskRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'taskId')
     ..aOS(2, _omitFieldNames ? '' : 'userId')
-    ..aOS(3, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -2354,15 +2349,6 @@ class UnassignTaskRequest extends $pb.GeneratedMessage {
   $core.bool hasUserId() => $_has(1);
   @$pb.TagNumber(2)
   void clearUserId() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get consistency => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set consistency($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasConsistency() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearConsistency() => clearField(3);
 }
 
 class UnassignTaskResponse extends $pb.GeneratedMessage {

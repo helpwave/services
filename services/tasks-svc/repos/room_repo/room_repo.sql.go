@@ -292,11 +292,21 @@ func (q *Queries) GetRoomsWithBedsWithPatientsByWard(ctx context.Context, wardID
 }
 
 const updateRoom = `-- name: UpdateRoom :one
+WITH old_table AS (
+	SELECT
+		name as old_name,
+		consistency	as old_consistency
+	FROM rooms
+	WHERE rooms.id = $2
+)
 UPDATE rooms
 SET	name = coalesce($1, name),
 	consistency = consistency + 1
-WHERE id = $2
-RETURNING consistency
+WHERE rooms.id = $2
+RETURNING
+	consistency,
+	(SELECT old_name FROM old_table),
+	(SELECT old_consistency FROM old_table)
 `
 
 type UpdateRoomParams struct {
@@ -304,9 +314,15 @@ type UpdateRoomParams struct {
 	ID   uuid.UUID
 }
 
-func (q *Queries) UpdateRoom(ctx context.Context, arg UpdateRoomParams) (int64, error) {
+type UpdateRoomRow struct {
+	Consistency    int64
+	OldName        string
+	OldConsistency int64
+}
+
+func (q *Queries) UpdateRoom(ctx context.Context, arg UpdateRoomParams) (UpdateRoomRow, error) {
 	row := q.db.QueryRow(ctx, updateRoom, arg.Name, arg.ID)
-	var consistency int64
-	err := row.Scan(&consistency)
-	return consistency, err
+	var i UpdateRoomRow
+	err := row.Scan(&i.Consistency, &i.OldName, &i.OldConsistency)
+	return i, err
 }
