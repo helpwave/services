@@ -37,12 +37,13 @@ const FakeTokenUser = "18159713-5d4e-4ad5-94ad-fbb6bb147984"
 func GetFakeTokenCredentials(subOverride string) InsecureBearerToken {
 	// README's fake token
 	m := map[string]interface{}{
-		"sub":      FakeTokenUser,
-		"email":    "testine.test@helpwave.de",
-		"name":     "Testine Test",
-		"nickname": "testine.test",
-		"organizations": []string{
-			"3b25c6f5-4705-4074-9fc6-a50c28eba406",
+		"sub":                FakeTokenUser,
+		"email":              "testine.test@helpwave.de",
+		"name":               "Testine Test",
+		"preferred_username": "testine.test",
+		"organization": map[string]interface{}{
+			"id":   "3b25c6f5-4705-4074-9fc6-a50c28eba406",
+			"name": "helpwave test",
 		},
 	}
 

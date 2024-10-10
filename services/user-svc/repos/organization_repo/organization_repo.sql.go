@@ -44,12 +44,13 @@ func (q *Queries) ChangeMembershipAdminStatus(ctx context.Context, arg ChangeMem
 }
 
 const createOrganization = `-- name: CreateOrganization :one
-INSERT INTO organizations (long_name, short_name, contact_email, avatar_url, is_personal, created_by_user_id)
-VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO organizations (id, long_name, short_name, contact_email, avatar_url, is_personal, created_by_user_id)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
 RETURNING id, long_name, short_name, contact_email, avatar_url, is_personal, created_by_user_id
 `
 
 type CreateOrganizationParams struct {
+	ID              uuid.UUID
 	LongName        string
 	ShortName       string
 	ContactEmail    string
@@ -60,6 +61,7 @@ type CreateOrganizationParams struct {
 
 func (q *Queries) CreateOrganization(ctx context.Context, arg CreateOrganizationParams) (Organization, error) {
 	row := q.db.QueryRow(ctx, createOrganization,
+		arg.ID,
 		arg.LongName,
 		arg.ShortName,
 		arg.ContactEmail,

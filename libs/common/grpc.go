@@ -147,9 +147,11 @@ func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 		return nil, fmt.Errorf("authUnaryInterceptor: authFn failed: %w", err)
 	}
 
-	ctx, err = handleOrganizationIDForAuthFunc(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("authUnaryInterceptor: cant handle organization: %w", err)
+	if !hwutil.Contains(skipOrganizationAuthForMethods, info.FullMethod) {
+		ctx, err = authFuncOrganization(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("authUnaryInterceptor: authFn failed: %w", err)
+		}
 	}
 
 	return next(ctx, req)
@@ -162,6 +164,8 @@ func isUnaryRPCForDaprInternal(info *grpc.UnaryServerInfo) bool {
 	return isAppCallbackServer || isAppCallbackHealthCheckServer
 }
 
+// authFunc is the main authentication middleware. It validates the OIDC token
+// parsed and injects the OIDC claims for later usage
 func authFunc(ctx context.Context) (context.Context, error) {
 	log := zlog.Ctx(ctx)
 
@@ -203,6 +207,7 @@ func authFunc(ctx context.Context) (context.Context, error) {
 		return nil, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err)
 	}
 
+	// attach claims to the context, so we can get it in a handler using GetAuthClaims()
 	ctx = context.WithValue(ctx, claimsKey{}, claims)
 
 	// parse userID
@@ -211,10 +216,10 @@ func authFunc(ctx context.Context) (context.Context, error) {
 		return nil, status.Errorf(codes.Internal, "invalid userID")
 	}
 
-	// attach userID to context, so we can get it in a handler using GetUserID()
+	// attach userID to the context, so we can get it in a handler using GetUserID()
 	ctx = ContextWithUserID(ctx, userID)
 
-	// attach userID to current span (should be the auth interceptor span)
+	// attach userID to the current span (should be the auth interceptor span)
 	telemetry.SetSpanStr(ctx, "user.id", userID.String())
 
 	// Append userID to the logger and attach it to the context
@@ -227,52 +232,48 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	return ctx, nil
 }
 
+// authFuncOrganization parses and injects the organization id of the OIDC claims into the current context
+// This is a separate function to allow endpoints to not fail when an organization id is not provided
+func authFuncOrganization(ctx context.Context) (context.Context, error) {
+	log := zlog.Ctx(ctx)
+
+	claims, err := GetAuthClaims(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(claims.Organization.Id) == 0 {
+		return ctx, errors.New("organization.id missing in id token")
+	}
+
+	// parse organizationID
+	organizationID, err := uuid.Parse(claims.Organization.Id)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "invalid organizationID")
+	}
+
+	// attach organizationID to the context, so we can get it in a handler using GetOrganizationID()
+	ctx = ContextWithOrganizationID(ctx, organizationID)
+
+	// attach organizationID to the current span
+	telemetry.SetSpanStr(ctx, "user.organization.id", organizationID.String())
+
+	// Append organizationID to the logger and attach it to the context
+	ctx = log.With().
+		Ctx(ctx).
+		Str("organizationID", organizationID.String()).
+		Logger().
+		WithContext(ctx)
+
+	return ctx, nil
+}
+
 func ContextWithUserID(ctx context.Context, userID uuid.UUID) context.Context {
 	return context.WithValue(ctx, userIDKey{}, userID)
 }
 
-// handleOrganizationIDForAuthFunc is a part of our auth middleware.
-// The claims are signed. Therefore, we can match the user provided
-// organizationID from the headers against the organizationIDs inside the claim.
-func handleOrganizationIDForAuthFunc(ctx context.Context) (context.Context, error) {
-	log := zlog.Ctx(ctx)
-	organizationIDStr, err := OrganizationIDFromMD(ctx)
-
-	var organizationID uuid.UUID
-	if err == nil {
-		// organizationID in header, using header
-		organizationID, err = uuid.Parse(organizationIDStr)
-		if err != nil {
-			return nil, status.Errorf(codes.Internal, "invalid organizationID")
-		}
-	} else if InstanceOrganizationID != nil {
-		// no organizationID in header but in envs, using env
-		log.Trace().Msg("no valid organization header found, falling back to environment organization id")
-		organizationID = *InstanceOrganizationID
-	} else {
-		// no organizationID in header or env, error
-		log.Trace().Err(err).Msg("no valid organization header found")
-		return nil, err
-	}
-
-	claims, err := GetAuthClaims(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("handleOrganizationIDForAuthFunc: could not get auth claims: %w", err)
-	}
-
-	// If InsecureFakeTokenEnable is true,
-	// we accept all organizations that the fake id token presents to us.
-	// ONLY FOR NON-PUBLIC DEVELOPMENT AND STAGING ENVIRONMENTS
-	if !hwutil.Contains(claims.Organizations, organizationID) && !InsecureFakeTokenEnable {
-		log.Info().Str("organizationID", organizationID.String()).Msg("organization in header was not part of claims")
-		return nil, status.Errorf(codes.Unauthenticated, "no access to this organization")
-	}
-
-	ctx = context.WithValue(ctx, organizationIDKey{}, organizationID)
-
-	// Append organizationID to the logger
-	loggerWithOrganizationID := log.With().Str("organizationID", organizationID.String()).Logger()
-	return loggerWithOrganizationID.WithContext(ctx), nil
+func ContextWithOrganizationID(ctx context.Context, organizationID uuid.UUID) context.Context {
+	return context.WithValue(ctx, organizationIDKey{}, organizationID)
 }
 
 // VerifyFakeToken accepts a Base64 encoded json structure with the schema of IDTokenClaims
@@ -666,16 +667,6 @@ func redactMetadata(m metadata.MD) metadata.MD {
 		}
 	}
 	return m
-}
-
-// OrganizationIDFromMD retrieves the user defined organizationID
-// from the metadata of the request
-func OrganizationIDFromMD(ctx context.Context) (string, error) {
-	val := metadata.ExtractIncoming(ctx).Get("X-Organization")
-	if val == "" {
-		return "", status.Errorf(codes.Unauthenticated, "organization header missing")
-	}
-	return val, nil
 }
 
 // NewStatusError builds a new Status Error

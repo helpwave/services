@@ -57,65 +57,6 @@ export namespace CreateOrganizationResponse {
   }
 }
 
-export class CreateOrganizationForUserRequest extends jspb.Message {
-  getLongName(): string;
-  setLongName(value: string): CreateOrganizationForUserRequest;
-
-  getShortName(): string;
-  setShortName(value: string): CreateOrganizationForUserRequest;
-
-  getContactEmail(): string;
-  setContactEmail(value: string): CreateOrganizationForUserRequest;
-
-  getIsPersonal(): boolean;
-  setIsPersonal(value: boolean): CreateOrganizationForUserRequest;
-  hasIsPersonal(): boolean;
-  clearIsPersonal(): CreateOrganizationForUserRequest;
-
-  getUserId(): string;
-  setUserId(value: string): CreateOrganizationForUserRequest;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CreateOrganizationForUserRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: CreateOrganizationForUserRequest): CreateOrganizationForUserRequest.AsObject;
-  static serializeBinaryToWriter(message: CreateOrganizationForUserRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CreateOrganizationForUserRequest;
-  static deserializeBinaryFromReader(message: CreateOrganizationForUserRequest, reader: jspb.BinaryReader): CreateOrganizationForUserRequest;
-}
-
-export namespace CreateOrganizationForUserRequest {
-  export type AsObject = {
-    longName: string,
-    shortName: string,
-    contactEmail: string,
-    isPersonal?: boolean,
-    userId: string,
-  }
-
-  export enum IsPersonalCase { 
-    _IS_PERSONAL_NOT_SET = 0,
-    IS_PERSONAL = 4,
-  }
-}
-
-export class CreateOrganizationForUserResponse extends jspb.Message {
-  getId(): string;
-  setId(value: string): CreateOrganizationForUserResponse;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CreateOrganizationForUserResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: CreateOrganizationForUserResponse): CreateOrganizationForUserResponse.AsObject;
-  static serializeBinaryToWriter(message: CreateOrganizationForUserResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CreateOrganizationForUserResponse;
-  static deserializeBinaryFromReader(message: CreateOrganizationForUserResponse, reader: jspb.BinaryReader): CreateOrganizationForUserResponse;
-}
-
-export namespace CreateOrganizationForUserResponse {
-  export type AsObject = {
-    id: string,
-  }
-}
-
 export class GetOrganizationMember extends jspb.Message {
   getUserId(): string;
   setUserId(value: string): GetOrganizationMember;
@@ -1047,6 +988,38 @@ export class RevokeInvitationResponse extends jspb.Message {
 
 export namespace RevokeInvitationResponse {
   export type AsObject = {
+  }
+}
+
+export class CreatePersonalOrganizationRequest extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CreatePersonalOrganizationRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: CreatePersonalOrganizationRequest): CreatePersonalOrganizationRequest.AsObject;
+  static serializeBinaryToWriter(message: CreatePersonalOrganizationRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CreatePersonalOrganizationRequest;
+  static deserializeBinaryFromReader(message: CreatePersonalOrganizationRequest, reader: jspb.BinaryReader): CreatePersonalOrganizationRequest;
+}
+
+export namespace CreatePersonalOrganizationRequest {
+  export type AsObject = {
+  }
+}
+
+export class CreatePersonalOrganizationResponse extends jspb.Message {
+  getId(): string;
+  setId(value: string): CreatePersonalOrganizationResponse;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CreatePersonalOrganizationResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: CreatePersonalOrganizationResponse): CreatePersonalOrganizationResponse.AsObject;
+  static serializeBinaryToWriter(message: CreatePersonalOrganizationResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CreatePersonalOrganizationResponse;
+  static deserializeBinaryFromReader(message: CreatePersonalOrganizationResponse, reader: jspb.BinaryReader): CreatePersonalOrganizationResponse;
+}
+
+export namespace CreatePersonalOrganizationResponse {
+  export type AsObject = {
+    id: string,
   }
 }
 

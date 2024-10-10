@@ -1,6 +1,6 @@
 -- name: CreateOrganization :one
-INSERT INTO organizations (long_name, short_name, contact_email, avatar_url, is_personal, created_by_user_id)
-VALUES (@long_name, @short_name, @contact_email, @avatar_url, @is_personal, @created_by_user_id)
+INSERT INTO organizations (id, long_name, short_name, contact_email, avatar_url, is_personal, created_by_user_id)
+VALUES (@id, @long_name, @short_name, @contact_email, @avatar_url, @is_personal, @created_by_user_id)
 RETURNING *;
 
 -- name: GetOrganizationById :one
