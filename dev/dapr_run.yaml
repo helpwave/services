@@ -43,6 +43,7 @@ apps:
     env:
       SERVICE: user-svc
       POSTGRES_DB: user-svc
+      INSECURE_HWKC_USE_NOOP_CLIENT: true
     command: ["air"]
 
   - appID: tasks-svc
