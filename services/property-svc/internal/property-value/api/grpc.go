@@ -190,17 +190,17 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 			case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_SELECT:
 				v := pnv.Value.MultiSelectValues[0]
 				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{
-					SelectValue: &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
+					SelectValue: &pb.SelectValueOption{
 						Id:          v.Id.String(),
 						Name:        v.Name,
 						Description: v.Description,
 					},
 				}
 			case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue_{
-					MultiSelectValue: &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
-						SelectValues: hwutil.Map(pnv.Value.MultiSelectValues, func(o models.SelectValueOption) *pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption {
-							return &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
+					MultiSelectValue: &pb.MultiSelectValue{
+						SelectValues: hwutil.Map(pnv.Value.MultiSelectValues, func(o models.SelectValueOption) *pb.SelectValueOption {
+							return &pb.SelectValueOption{
 								Id:          o.Id.String(),
 								Name:        o.Name,
 								Description: o.Description,
