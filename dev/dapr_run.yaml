@@ -7,6 +7,8 @@ common:
   appProtocol: grpc
   configFilePath: "./dapr.yaml"
   env:
+    GOFLAGS: "-buildvcs=false"
+
     SECRETSTORE_REDIS_HOST: "redis:6379"
 
     MODE: development
@@ -68,4 +70,11 @@ apps:
     env:
       SERVICE: property-svc
       POSTGRES_DB: property-svc
+    command: ["air"]
+
+  - appID: updates-svc
+    appDirPath: ../services/updates-svc
+    appPort: 3006
+    env:
+      SERVICE: updates-svc
     command: ["air"]

@@ -93,6 +93,7 @@ services:
       "--config", "/dapr.yaml",
       "--log-level", "debug",
       "--app-port", "9080",
+      "--metrics-port", "9099",
       "--dapr-internal-grpc-port", "35001"
     ]
     network_mode: "service:apisix"
@@ -187,6 +188,7 @@ services:
       - "3003:3003" # ory-svc
       - "3004:3004" # tasks-svc
       - "3005:3005" # property-svc
+      - "3006:3006" # updates-svc
 
 volumes:
   gocache: {}
