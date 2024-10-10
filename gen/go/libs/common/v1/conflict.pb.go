@@ -36,6 +36,10 @@ type Conflict struct {
 
 	// when history_missing is true, this map will contain elements, that might not have been updated since you have seen them last.
 	// it is then on you to compare these against your view of the world
+	//
+	// The key is the json-name of the field you tried to change, subkeys are split by dots ('.'), array elements are represented by the resources id:
+	// e.g.: for the request: `{"description": "Conflict", "select_data": {"upsert_options": [{"id": "123", "name": "Conflict"}]}}`
+	// this might be the conflict: `{"conflicting_attributes": {"description": ..., "select_data.upsert_options.123.name": ...}}`
 	ConflictingAttributes map[string]*AttributeConflict `protobuf:"bytes,1,rep,name=conflicting_attributes,json=conflictingAttributes,proto3" json:"conflicting_attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	HistoryMissing        bool                          `protobuf:"varint,2,opt,name=history_missing,json=historyMissing,proto3" json:"history_missing,omitempty"`
 }

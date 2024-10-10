@@ -67,8 +67,12 @@ class Conflict extends $pb.GeneratedMessage {
   static Conflict getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Conflict>(create);
   static Conflict? _defaultInstance;
 
-  /// when history_missing is true, this map will contain elements, that might not have been updated since you have seen them last.
-  /// it is then on you to compare these against your view of the world
+  ///  when history_missing is true, this map will contain elements, that might not have been updated since you have seen them last.
+  ///  it is then on you to compare these against your view of the world
+  ///
+  ///  The key is the json-name of the field you tried to change, subkeys are split by dots ('.'), array elements are represented by the resources id:
+  ///  e.g.: for the request: `{"description": "Conflict", "select_data": {"upsert_options": [{"id": "123", "name": "Conflict"}]}}`
+  ///  this might be the conflict: `{"conflicting_attributes": {"description": ..., "select_data.upsert_options.123.name": ...}}`
   @$pb.TagNumber(1)
   $core.Map<$core.String, AttributeConflict> get conflictingAttributes => $_getMap(0);
 
