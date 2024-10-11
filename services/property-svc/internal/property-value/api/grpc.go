@@ -73,6 +73,7 @@ func NewPropertyValueService(aggregateStore hwes.AggregateStore, handlers *handl
 }
 
 func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req *pb.AttachPropertyValueRequest) (*pb.AttachPropertyValueResponse, error) {
+	log := zlog.Ctx(ctx)
 	propertyValueID := uuid.New()
 
 	propertyID := uuid.MustParse(req.GetPropertyId()) // guarded by validate
@@ -115,29 +116,48 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		return nil, common.UnparsableConsistencyError(ctx, "consistency")
 	}
 
-	consistency, conflictIs, err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID, expConsistency)
-	if err != nil {
-		return nil, err
-	}
+	var consistency common.ConsistencyToken
 
-	if conflictIs != nil {
-		value, err := util.AttributeConflict(
-			conflictIs,
-			want,
-		)
+	for i := 0; true; i++ {
+		if i > 10 {
+			log.Warn().Msg("AttachPropertyValue: conflict circuit breaker triggered")
+			return nil, fmt.Errorf("failed conflict resolution")
+		}
+
+		c, conflict, err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID, expConsistency)
 		if err != nil {
 			return nil, err
 		}
-		return &pb.AttachPropertyValueResponse{
-			PropertyValueId: "",
-			Conflict: &commonpb.Conflict{
-				ConflictingAttributes: map[string]*commonpb.AttributeConflict{
-					"value": value,
-				},
-				HistoryMissing: true,
-			},
-			Consistency: consistency.String(),
-		}, nil
+		consistency = c
+
+		if conflict == nil {
+			break
+		}
+		conflicts := make(map[string]*commonpb.AttributeConflict)
+
+		// TODO: find a generic approach
+		valueUpdateRequested := req.Value != conflict.Is.Value         // TODO
+		valueAlreadyUpdated := conflict.Was.Value != conflict.Is.Value // same TODO
+		if valueUpdateRequested && valueAlreadyUpdated {
+			var is proto.Message = nil // TODO
+			conflicts["value"], err = util.AttributeConflict(
+				is,
+				want,
+			)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if len(conflicts) != 0 {
+			return &pb.AttachPropertyValueResponse{
+				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
+				Consistency: consistency.String(),
+			}, nil
+		}
+
+		// no conflict? retry with new consistency
+		expConsistency = &consistency
 	}
 
 	return &pb.AttachPropertyValueResponse{

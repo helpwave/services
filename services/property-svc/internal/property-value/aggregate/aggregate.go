@@ -1,6 +1,7 @@
 package aggregate
 
 import (
+	"common"
 	"context"
 	"fmt"
 	"github.com/google/uuid"
@@ -30,6 +31,30 @@ func LoadPropertyValueAggregate(ctx context.Context, as hwes.AggregateStore, id 
 		return nil, fmt.Errorf("LoadPropertyValueAggregate: %w", err)
 	}
 	return property, nil
+}
+
+func LoadPropertyValueAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore, id uuid.UUID, pauseAt *common.ConsistencyToken) (*PropertyValueAggregate, *models.PropertyValue, error) {
+	property := NewPropertyValueAggregate(id)
+
+	var snapshot *models.PropertyValue
+
+	if pauseAt != nil {
+		//  load pauseAt+1-many events (version is 0-indexed)
+		if err := as.LoadN(ctx, property, uint64(*pauseAt)+1); err != nil {
+			return nil, nil, err
+		}
+
+		cpy := *property.PropertyValue // deref does a top-level copy
+		// well see how it deals with .Value, of type interface (TODO)
+
+		snapshot = &cpy
+	}
+
+	// load the rest
+	if err := as.Load(ctx, property); err != nil {
+		return nil, nil, fmt.Errorf("LoadPropertyValueAggregateWithSnapshotAt: %w", err)
+	}
+	return property, snapshot, nil
 }
 
 func (a *PropertyValueAggregate) initEventListeners() {
