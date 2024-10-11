@@ -7,6 +7,9 @@ common:
   appProtocol: grpc
   configFilePath: "./dapr.yaml"
   env:
+    # If true, building of services will fail
+    # when the local Git repository is in an unexpected state
+    # to gather information about Git.
     GOFLAGS: "-buildvcs=false"
 
     SECRETSTORE_REDIS_HOST: "redis:6379"

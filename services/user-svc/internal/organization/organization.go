@@ -834,7 +834,7 @@ func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.Cre
 		}, nil
 	}
 
-	personalOrganizationLocale := hwlocale.Localize(ctx, locale.PersonalOrganization(ctx))
+	personalOrganizationLocale := hwlocale.Localize(ctx, locale.PersonalOrganizationName(ctx))
 	organizationName := fmt.Sprintf("%s %s", personalOrganizationLocale, userClaims.Name)
 
 	userRepo := user_repo.New(hwdb.GetDB())
@@ -863,7 +863,7 @@ func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.Cre
 		ctx,
 		organization_repo.Organization{
 			LongName:     organizationName,
-			ShortName:    hwlocale.Localize(ctx, locale.Personal(ctx)),
+			ShortName:    hwlocale.Localize(ctx, locale.PersonalOrganizationShortName(ctx)),
 			ContactEmail: userClaims.Email,
 			IsPersonal:   hwutil.PtrTo(true),
 		},

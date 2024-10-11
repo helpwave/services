@@ -6,7 +6,7 @@ import (
 	"hwutil"
 )
 
-// BuildClient is builder for hwkc.IClient
+// BuildClient is a builder for hwkc.IClient
 // Based on the environment variable INSECURE_HWKC_USE_NOOP_CLIENT,
 // either hwkc.Client or hwkc.NoOpClient gets returned.
 func BuildClient(ctx context.Context) (IClient, error) {

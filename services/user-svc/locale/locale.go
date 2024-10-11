@@ -11,16 +11,16 @@ import (
 var localeFS embed.FS
 var lazy = hwlocale.NewLazyLocaleBundle(&localeFS)
 
-func PersonalOrganization(ctx context.Context) hwlocale.Locale {
+func PersonalOrganizationName(ctx context.Context) hwlocale.Locale {
 	return hwlocale.Locale{
 		Bundle: lazy.Bundle(ctx),
-		Config: &i18n.LocalizeConfig{MessageID: "PersonalOrganization"},
+		Config: &i18n.LocalizeConfig{MessageID: "PersonalOrganizationName"},
 	}
 }
 
-func Personal(ctx context.Context) hwlocale.Locale {
+func PersonalOrganizationShortName(ctx context.Context) hwlocale.Locale {
 	return hwlocale.Locale{
 		Bundle: lazy.Bundle(ctx),
-		Config: &i18n.LocalizeConfig{MessageID: "Personal"},
+		Config: &i18n.LocalizeConfig{MessageID: "PersonalOrganizationShortName"},
 	}
 }
