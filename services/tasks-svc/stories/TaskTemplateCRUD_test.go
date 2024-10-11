@@ -21,12 +21,25 @@ func getTaskTemplate(t *testing.T, ctx context.Context, id string) *pb.GetTaskTe
 func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	ctx := context.Background()
 	taskTemplateClient := taskTemplateServiceClient()
+	wardServiceClient := wardServiceClient()
+
+	//
+	// Create Ward for scoping
+	//
+	createWardReq := &pb.CreateWardRequest{
+		Name: "occupy",
+	}
+	wardRes, err := wardServiceClient.CreateWard(ctx, createWardReq)
+	assert.NoError(t, err, "could not create ward")
+
+	// wardId will be used for scoping
+	wardId := wardRes.GetId()
 
 	//
 	// create new template
 	//
 	createReq := &pb.CreateTaskTemplateRequest{
-		WardId:      nil,
+		WardId:      &wardId,
 		Description: hwutil.PtrTo("Some Description"),
 		Subtasks:    make([]*pb.CreateTaskTemplateRequest_SubTask, 0),
 		Name:        t.Name() + " tt",
@@ -48,7 +61,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	assert.Equal(t, createReq.Name, template.Name)
 	assert.Equal(t, *createReq.Description, template.Description)
 	assert.Equal(t, hwtesting.FakeTokenUser, template.CreatedBy)
-	assert.Equal(t, false, template.IsPublic)
+	assert.Equal(t, true, template.IsPublic)
 	assert.Equal(t, createRes.Consistency, template.Consistency)
 
 	//
@@ -124,7 +137,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	// create another template
 	//
 	createReq = &pb.CreateTaskTemplateRequest{
-		WardId:      nil,
+		WardId:      &wardId,
 		Description: hwutil.PtrTo("Some Description"),
 		Subtasks:    make([]*pb.CreateTaskTemplateRequest_SubTask, 0),
 		Name:        t.Name() + " tt",
@@ -137,7 +150,9 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	// get all templates
 	//
 
-	templates, err := taskTemplateClient.GetAllTaskTemplates(ctx, &pb.GetAllTaskTemplatesRequest{})
+	templates, err := taskTemplateClient.GetAllTaskTemplates(ctx, &pb.GetAllTaskTemplatesRequest{
+		WardId: &wardId,
+	})
 
 	assert.NoError(t, err)
 	assert.Len(t, templates.Templates, 2)

@@ -333,7 +333,7 @@ func (ServiceServer) GetTaskTemplate(ctx context.Context, req *pb.GetTaskTemplat
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	rows, err := templateRepo.GetTaskTemplateWithSubtaskByID(ctx, taskTemplateID)
+	rows, err := templateRepo.GetTaskTemplateWithSubtasksByID(ctx, taskTemplateID)
 	if err := hwdb.Error(ctx, err); err != nil {
 		return nil, err
 	}
@@ -343,7 +343,7 @@ func (ServiceServer) GetTaskTemplate(ctx context.Context, req *pb.GetTaskTemplat
 	}
 	taskTemplate := rows[0].TaskTemplate
 
-	taskTemplateSubtasks := hwutil.FlatMap(rows, func(row task_template_repo.GetTaskTemplateWithSubtaskByIDRow) **pb.GetTaskTemplateResponse_SubTask {
+	taskTemplateSubtasks := hwutil.FlatMap(rows, func(row task_template_repo.GetTaskTemplateWithSubtasksByIDRow) **pb.GetTaskTemplateResponse_SubTask {
 		if !row.SubTaskID.Valid {
 			return nil
 		}

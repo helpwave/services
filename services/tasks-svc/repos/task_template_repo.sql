@@ -3,7 +3,7 @@ INSERT INTO task_templates
 	(name, description, created_by, ward_id) VALUES ($1, $2, $3, $4)
     RETURNING id, consistency;
 
--- name: GetTaskTemplateWithSubtaskByID :many
+-- name: GetTaskTemplateWithSubtasksByID :many
 SELECT
 	sqlc.embed(task_templates),
 	task_template_subtasks.id as sub_task_id,

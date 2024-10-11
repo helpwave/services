@@ -153,7 +153,7 @@ func (q *Queries) GetAllTaskTemplatesWithSubTasks(ctx context.Context, arg GetAl
 	return items, nil
 }
 
-const getTaskTemplateWithSubtaskByID = `-- name: GetTaskTemplateWithSubtaskByID :many
+const getTaskTemplateWithSubtasksByID = `-- name: GetTaskTemplateWithSubtasksByID :many
 SELECT
 	task_templates.id, task_templates.name, task_templates.description, task_templates.ward_id, task_templates.created_by, task_templates.consistency,
 	task_template_subtasks.id as sub_task_id,
@@ -167,21 +167,21 @@ ON
 WHERE task_templates.id = $1
 `
 
-type GetTaskTemplateWithSubtaskByIDRow struct {
+type GetTaskTemplateWithSubtasksByIDRow struct {
 	TaskTemplate TaskTemplate
 	SubTaskID    uuid.NullUUID
 	SubTaskName  *string
 }
 
-func (q *Queries) GetTaskTemplateWithSubtaskByID(ctx context.Context, id uuid.UUID) ([]GetTaskTemplateWithSubtaskByIDRow, error) {
-	rows, err := q.db.Query(ctx, getTaskTemplateWithSubtaskByID, id)
+func (q *Queries) GetTaskTemplateWithSubtasksByID(ctx context.Context, id uuid.UUID) ([]GetTaskTemplateWithSubtasksByIDRow, error) {
+	rows, err := q.db.Query(ctx, getTaskTemplateWithSubtasksByID, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []GetTaskTemplateWithSubtaskByIDRow{}
+	items := []GetTaskTemplateWithSubtasksByIDRow{}
 	for rows.Next() {
-		var i GetTaskTemplateWithSubtaskByIDRow
+		var i GetTaskTemplateWithSubtasksByIDRow
 		if err := rows.Scan(
 			&i.TaskTemplate.ID,
 			&i.TaskTemplate.Name,
