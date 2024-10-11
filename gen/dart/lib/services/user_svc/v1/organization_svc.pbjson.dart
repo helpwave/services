@@ -65,40 +65,6 @@ const CreateOrganizationResponse$json = {
 final $typed_data.Uint8List createOrganizationResponseDescriptor = $convert.base64Decode(
     'ChpDcmVhdGVPcmdhbml6YXRpb25SZXNwb25zZRIOCgJpZBgBIAEoCVICaWQ=');
 
-@$core.Deprecated('Use createOrganizationForUserRequestDescriptor instead')
-const CreateOrganizationForUserRequest$json = {
-  '1': 'CreateOrganizationForUserRequest',
-  '2': [
-    {'1': 'long_name', '3': 1, '4': 1, '5': 9, '10': 'longName'},
-    {'1': 'short_name', '3': 2, '4': 1, '5': 9, '10': 'shortName'},
-    {'1': 'contact_email', '3': 3, '4': 1, '5': 9, '10': 'contactEmail'},
-    {'1': 'is_personal', '3': 4, '4': 1, '5': 8, '9': 0, '10': 'isPersonal', '17': true},
-    {'1': 'user_id', '3': 5, '4': 1, '5': 9, '10': 'userId'},
-  ],
-  '8': [
-    {'1': '_is_personal'},
-  ],
-};
-
-/// Descriptor for `CreateOrganizationForUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createOrganizationForUserRequestDescriptor = $convert.base64Decode(
-    'CiBDcmVhdGVPcmdhbml6YXRpb25Gb3JVc2VyUmVxdWVzdBIbCglsb25nX25hbWUYASABKAlSCG'
-    'xvbmdOYW1lEh0KCnNob3J0X25hbWUYAiABKAlSCXNob3J0TmFtZRIjCg1jb250YWN0X2VtYWls'
-    'GAMgASgJUgxjb250YWN0RW1haWwSJAoLaXNfcGVyc29uYWwYBCABKAhIAFIKaXNQZXJzb25hbI'
-    'gBARIXCgd1c2VyX2lkGAUgASgJUgZ1c2VySWRCDgoMX2lzX3BlcnNvbmFs');
-
-@$core.Deprecated('Use createOrganizationForUserResponseDescriptor instead')
-const CreateOrganizationForUserResponse$json = {
-  '1': 'CreateOrganizationForUserResponse',
-  '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-  ],
-};
-
-/// Descriptor for `CreateOrganizationForUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createOrganizationForUserResponseDescriptor = $convert.base64Decode(
-    'CiFDcmVhdGVPcmdhbml6YXRpb25Gb3JVc2VyUmVzcG9uc2USDgoCaWQYASABKAlSAmlk');
-
 @$core.Deprecated('Use getOrganizationMemberDescriptor instead')
 const GetOrganizationMember$json = {
   '1': 'GetOrganizationMember',
@@ -629,4 +595,25 @@ const RevokeInvitationResponse$json = {
 /// Descriptor for `RevokeInvitationResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List revokeInvitationResponseDescriptor = $convert.base64Decode(
     'ChhSZXZva2VJbnZpdGF0aW9uUmVzcG9uc2U=');
+
+@$core.Deprecated('Use createPersonalOrganizationRequestDescriptor instead')
+const CreatePersonalOrganizationRequest$json = {
+  '1': 'CreatePersonalOrganizationRequest',
+};
+
+/// Descriptor for `CreatePersonalOrganizationRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createPersonalOrganizationRequestDescriptor = $convert.base64Decode(
+    'CiFDcmVhdGVQZXJzb25hbE9yZ2FuaXphdGlvblJlcXVlc3Q=');
+
+@$core.Deprecated('Use createPersonalOrganizationResponseDescriptor instead')
+const CreatePersonalOrganizationResponse$json = {
+  '1': 'CreatePersonalOrganizationResponse',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `CreatePersonalOrganizationResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createPersonalOrganizationResponseDescriptor = $convert.base64Decode(
+    'CiJDcmVhdGVQZXJzb25hbE9yZ2FuaXphdGlvblJlc3BvbnNlEg4KAmlkGAEgASgJUgJpZA==');
 
