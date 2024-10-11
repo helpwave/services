@@ -12,7 +12,7 @@ import (
 
 // TestCreateAttachUpdateTextProperty:
 //   - Create a Property,
-//   - Attach a Value
+//   - Attach a ValueChange
 //   - Update said value
 func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	propertyClient := propertyServiceClient()
@@ -92,7 +92,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_TextValue{
-			TextValue: "Initial Text Value",
+			TextValue: "Initial Text ValueChange",
 		},
 	})
 
@@ -122,19 +122,19 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 
 	assert.Equal(t, 1, len(attachedValuesResponse.Values))
 
-	assert.Equal(t, "Initial Text Value", attachedValuesResponse.Values[0].GetTextValue())
+	assert.Equal(t, "Initial Text ValueChange", attachedValuesResponse.Values[0].GetTextValue())
 
 	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
 
 	//
-	// Update Value
+	// Update ValueChange
 	//
 
 	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_TextValue{
-			TextValue: "Updated Text Value",
+			TextValue: "Updated Text ValueChange",
 		},
 	})
 
@@ -165,14 +165,14 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 
 	assert.Equal(t, 1, len(attachedValuesResponse.Values))
 
-	assert.Equal(t, "Updated Text Value", attachedValuesResponse.Values[0].GetTextValue())
+	assert.Equal(t, "Updated Text ValueChange", attachedValuesResponse.Values[0].GetTextValue())
 
 	assert.Equal(t, &updateResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency, "ValueConsistency was not updated")
 }
 
 // TestCreateAttachUpdateSelectProperty:
 //   - Create a Property,
-//   - Attach a Value
+//   - Attach a ValueChange
 //   - Update said value
 func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	propertyClient := propertyServiceClient()
@@ -304,7 +304,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
 
 	//
-	// Update Value
+	// Update ValueChange
 	//
 
 	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
@@ -348,7 +348,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 
 // TestCreateAttachUpdateMultiSelectProperty:
 //   - Create a Property,
-//   - Attach a Value
+//   - Attach a ValueChange
 //   - Update said value
 func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	propertyClient := propertyServiceClient()
@@ -488,7 +488,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
 
 	//
-	// Update Value
+	// Update ValueChange
 	//
 
 	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
@@ -536,9 +536,9 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 
 // TestCreateAttachAddOptionAttachSelectProperty:
 //   - Create a Property,
-//   - Attach a Value
+//   - Attach a ValueChange
 //   - Upsert an Option
-//   - Attach another Value
+//   - Attach another ValueChange
 func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	propertyClient := propertyServiceClient()
 	ctx := context.Background()
@@ -671,7 +671,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	option2 := propertyResponse.GetSelectData().Options[1].GetId() // not guaranteed tbf
 
 	//
-	// Update Value
+	// Update ValueChange
 	//
 
 	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
@@ -711,9 +711,9 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 
 // TestCreateAttachAddOptionAttachMultiSelectProperty:
 //   - Create a Property,
-//   - Attach a Value
+//   - Attach a ValueChange
 //   - Upsert an Option
-//   - Attach another Value
+//   - Attach another ValueChange
 func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	propertyClient := propertyServiceClient()
 	ctx := context.Background()
@@ -850,7 +850,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	option2 := propertyResponse.GetSelectData().Options[1].GetId() // order not guaranteed
 
 	//
-	// Update Value
+	// Update ValueChange
 	//
 
 	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{

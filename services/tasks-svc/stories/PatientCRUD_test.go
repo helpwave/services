@@ -627,7 +627,7 @@ func TestGetPatientDetails(t *testing.T) {
 
 func TestGetRecentPatients(t *testing.T) {
 	userID := uuid.New() // new user for this test, to prevent interference with other tests
-	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String()))
+	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String(), ""))
 	ctx := context.Background()
 
 	wardId, _ := prepareWard(t, ctx, "")

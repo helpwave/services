@@ -18,9 +18,15 @@ type PropertyValueAggregate struct {
 }
 
 func NewPropertyValueAggregate(id uuid.UUID) *PropertyValueAggregate {
-	aggregate := &PropertyValueAggregate{PropertyValue: models.NewPropertyValue()}
-	aggregate.AggregateBase = hwes.NewAggregateBase(PropertyValueAggregateType, id)
-	aggregate.PropertyValue.ID = id
+	aggregate := &PropertyValueAggregate{
+		PropertyValue: &models.PropertyValue{
+			ID:         id,
+			PropertyID: uuid.UUID{},
+			SubjectID:  uuid.UUID{},
+			Value:      nil,
+		},
+		AggregateBase: hwes.NewAggregateBase(PropertyValueAggregateType, id),
+	}
 	aggregate.initEventListeners()
 	return aggregate
 }
@@ -45,7 +51,7 @@ func LoadPropertyValueAggregateWithSnapshotAt(ctx context.Context, as hwes.Aggre
 		}
 
 		cpy := *property.PropertyValue // deref does a top-level copy
-		// well see how it deals with .Value, of type interface (TODO)
+		// well see how it deals with .ValueChange, of type interface (TODO)
 
 		snapshot = &cpy
 	}
@@ -79,8 +85,11 @@ func (a *PropertyValueAggregate) onPropertyValueCreated(evt hwes.Event) error {
 	}
 
 	a.PropertyValue.PropertyID = propertyID
-	a.PropertyValue.Value = payload.Value
 	a.PropertyValue.SubjectID = subjectID
+
+	value := &models.SimpleTypedValue{}
+	payload.ValueChange.Apply(value)
+	a.PropertyValue.Value = value
 
 	return nil
 }
@@ -91,7 +100,12 @@ func (a *PropertyValueAggregate) onPropertyValueUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	a.PropertyValue.Value = payload.Value
+	if payload.ValueChange.ValueRemoved {
+		a.PropertyValue.Value = nil
+		return nil
+	}
+
+	payload.ValueChange.Apply(a.PropertyValue.Value)
 
 	return nil
 }

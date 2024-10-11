@@ -22,18 +22,10 @@ DELETE FROM multi_select_values WHERE value_id = $1 AND select_option = $2;
 -- name: DisconnectValueFromAllSelectOptions :exec
 DELETE FROM multi_select_values WHERE value_id = $1;
 
--- name: GetPropertyValueBySubjectIDAndPropertyID :many
-SELECT
-	sqlc.embed(values),
-	so.id as select_option_id,
-	so.name as select_option_name,
-	so.description as select_option_description,
-	properties.field_type as field_type
-FROM property_values as values
-	JOIN properties ON properties.id = values.property_id
-	LEFT JOIN multi_select_values as msv ON msv.value_id = values.id
-	LEFT JOIN select_options as so ON so.id = msv.select_option
-WHERE (subject_id = @subject_id AND property_id = @property_id);
+-- name: GetPropertyValueBySubjectIDAndPropertyID :one
+SELECT id
+FROM property_values
+WHERE (subject_id = @subject_id AND property_id = @property_id) OR id = @id;
 
 -- name: UpdatePropertyValueByID :exec
 UPDATE property_values

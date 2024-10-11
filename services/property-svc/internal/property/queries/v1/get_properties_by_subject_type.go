@@ -3,6 +3,7 @@ package v1
 import (
 	"common"
 	"context"
+	"fmt"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwdb"
@@ -17,13 +18,19 @@ func NewGetPropertiesQueryHandler() GetPropertiesQueryHandler {
 	return func(ctx context.Context, subjectType *pb.SubjectType) ([]*models.PropertyWithConsistency, error) {
 		propertyRepo := property_repo.New(hwdb.GetDB())
 
+		organizationID, err := common.GetOrganizationID(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("GetPropertiesQueryHandler called without organization in context")
+		}
+
 		var subjectTypeID *int32
 		if subjectType != nil {
 			subjectTypeID = hwutil.PtrTo(int32(*subjectType))
 		}
 
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx, property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
-			SubjectType: subjectTypeID,
+			SubjectType:    subjectTypeID,
+			OrganizationID: organizationID,
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, err

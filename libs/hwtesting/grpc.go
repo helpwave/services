@@ -21,12 +21,19 @@ import (
 //	)
 //
 // Also see GetFakeTokenCredentials
-type InsecureBearerToken string
+type InsecureBearerToken struct {
+	bearer string
+	orgMD  string
+}
 
 func (t InsecureBearerToken) GetRequestMetadata(_ context.Context, _ ...string) (map[string]string, error) {
-	return map[string]string{
-		"authorization": "Bearer " + string(t),
-	}, nil
+	m := map[string]string{
+		"authorization": "Bearer " + t.bearer,
+	}
+	if t.orgMD != "" {
+		m["X-Organization"] = t.orgMD
+	}
+	return m, nil
 }
 func (t InsecureBearerToken) RequireTransportSecurity() bool {
 	return false
@@ -34,7 +41,7 @@ func (t InsecureBearerToken) RequireTransportSecurity() bool {
 
 const FakeTokenUser = "18159713-5d4e-4ad5-94ad-fbb6bb147984"
 
-func GetFakeTokenCredentials(subOverride string) InsecureBearerToken {
+func GetFakeTokenCredentials(subOverride, orgOverride string) InsecureBearerToken {
 	// README's fake token
 	m := map[string]interface{}{
 		"sub":      FakeTokenUser,
@@ -50,19 +57,26 @@ func GetFakeTokenCredentials(subOverride string) InsecureBearerToken {
 		m["sub"] = subOverride
 	}
 
+	if orgOverride != "" {
+		m["organizations"] = []string{orgOverride}
+	}
+
 	bytes, err := json.Marshal(m)
 	if err != nil {
 		panic(fmt.Errorf("GetFakeTokenCredentials failed: %w", err))
 	}
 	dist := make([]byte, base64.StdEncoding.EncodedLen(len(bytes)))
 	base64.StdEncoding.Encode(dist, bytes)
-	return InsecureBearerToken(dist)
+	return InsecureBearerToken{
+		bearer: string(dist),
+		orgMD:  orgOverride,
+	}
 }
 
-func GetGrpcConn(subOverride string) *grpc.ClientConn {
+func GetGrpcConn(subOverride, orgOverride string) *grpc.ClientConn {
 	conn, err := grpc.NewClient(
 		common.ResolveAddrFromEnv(),
-		grpc.WithPerRPCCredentials(GetFakeTokenCredentials(subOverride)),
+		grpc.WithPerRPCCredentials(GetFakeTokenCredentials(subOverride, orgOverride)),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {

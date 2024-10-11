@@ -14,7 +14,7 @@ import (
 type AttachPropertyValueCommandHandler func(ctx context.Context,
 	propertyValueID uuid.UUID,
 	propertyID uuid.UUID,
-	value interface{},
+	valueChange models.TypedValueChange,
 	subjectID uuid.UUID,
 	expConsistency *common.ConsistencyToken,
 ) (common.ConsistencyToken, *AttachPropertyValueConflict, error)
@@ -25,11 +25,13 @@ type AttachPropertyValueConflict struct {
 }
 
 func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachPropertyValueCommandHandler {
-	return func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *AttachPropertyValueConflict, error) {
+	return func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, valueChange models.TypedValueChange, subjectID uuid.UUID, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *AttachPropertyValueConflict, error) {
 		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 		var a *aggregate.PropertyValueAggregate
 
-		rows, err := propertyValueRepo.GetPropertyValueBySubjectIDAndPropertyID(ctx, property_value_repo.GetPropertyValueBySubjectIDAndPropertyIDParams{
+		// first check if a value is already attached to the subject for this property
+		query := hwdb.Optional(propertyValueRepo.GetPropertyValueBySubjectIDAndPropertyID)
+		existingPropertyValueID, err := query(ctx, property_value_repo.GetPropertyValueBySubjectIDAndPropertyIDParams{
 			PropertyID: propertyID,
 			SubjectID:  subjectID,
 		})
@@ -37,10 +39,15 @@ func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachProperty
 			return 0, nil, err
 		}
 
-		if len(rows) != 0 {
-			existingPropertyValueID := rows[0].PropertyValue.ID
+		// if no value exists yet, create one
+		if existingPropertyValueID == nil {
+			a = aggregate.NewPropertyValueAggregate(propertyValueID)
+			if err := a.CreatePropertyValue(ctx, propertyID, valueChange, subjectID); err != nil {
+				return 0, nil, err
+			}
+		} else { // else, update the existing value
 			var snapshot *models.PropertyValue
-			a, snapshot, err = aggregate.LoadPropertyValueAggregateWithSnapshotAt(ctx, as, existingPropertyValueID, expConsistency)
+			a, snapshot, err = aggregate.LoadPropertyValueAggregateWithSnapshotAt(ctx, as, *existingPropertyValueID, expConsistency)
 			if err != nil {
 				return 0, nil, err
 			}
@@ -56,12 +63,7 @@ func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachProperty
 
 			// TODO: update value will be triggered, even if the value is not the type the property defines
 
-			if err := a.UpdatePropertyValue(ctx, value); err != nil {
-				return 0, nil, err
-			}
-		} else {
-			a = aggregate.NewPropertyValueAggregate(propertyValueID)
-			if err := a.CreatePropertyValue(ctx, propertyID, value, subjectID); err != nil {
+			if err := a.UpdatePropertyValue(ctx, valueChange); err != nil {
 				return 0, nil, err
 			}
 		}

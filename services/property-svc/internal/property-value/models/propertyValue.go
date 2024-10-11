@@ -1,9 +1,10 @@
 package models
 
 import (
-	"fmt"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
+	"hwdb"
 	"hwutil"
 	"time"
 )
@@ -12,11 +13,7 @@ type PropertyValue struct {
 	ID         uuid.UUID
 	PropertyID uuid.UUID
 	SubjectID  uuid.UUID
-	Value      interface{}
-}
-
-func NewPropertyValue() *PropertyValue {
-	return &PropertyValue{}
+	Value      *SimpleTypedValue
 }
 
 type PropertyValueWithProperty struct {
@@ -34,18 +31,35 @@ type PropertyValueWithProperty struct {
 }
 
 type SelectValueOption struct {
-	Id          uuid.UUID
-	Name        string
-	Description string
+	Id          uuid.UUID `json:"id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description,omitempty"`
+}
+
+// TODO
+type SimpleTypedValue struct {
+	TextValue         *string
+	BoolValue         *bool
+	NumberValue       *float64
+	DateTimeValue     *time.Time
+	DateValue         *time.Time
+	SingleSelectValue *string
+	MultiSelectValues []string
 }
 
 type TypedValue struct {
 	TextValue         *string
 	BoolValue         *bool
 	NumberValue       *float64
-	MultiSelectValues []SelectValueOption
 	DateTimeValue     *time.Time
 	DateValue         *time.Time
+	SingleSelectValue *SelectValueOption
+	MultiSelectValues []SelectValueOption
+}
+
+type MultiSelectChange struct {
+	SelectValues       []string `json:"select_values,omitempty"`
+	RemoveSelectValues []string `json:"remove_select_values,omitempty"`
 }
 
 type PropertyAndValue struct {
@@ -65,54 +79,66 @@ type PropertyAndValue struct {
 	Value *TypedValue
 }
 
-type MultiSelectChange struct {
-	SelectValues       []string
-	RemoveSelectValues []string
+type TypedValueChange struct {
+	ValueRemoved      bool               `json:"value_removed,omitempty"`
+	TextValue         *string            `json:"text_value,omitempty"`
+	BoolValue         *bool              `json:"bool_value,omitempty"`
+	NumberValue       *float64           `json:"number_value,omitempty"`
+	DateTimeValue     *time.Time         `json:"date_time_value,omitempty"`
+	DateValue         *time.Time         `json:"date_value,omitempty"`
+	SingleSelectValue *string            `json:"single_select_value,omitempty"`
+	MultiSelectValues *MultiSelectChange `json:"multi_select_values,omitempty"`
 }
 
-func interfaceToStringSlice(interf interface{}) ([]string, error) {
-	slice, ok := interf.([]interface{})
-	if !ok {
-		return nil, fmt.Errorf("value is not a slice")
+// Apply applies a TypedValueChange to a TypedValue (except removal)
+func (c TypedValueChange) Apply(value *SimpleTypedValue) bool {
+	switch {
+	case c.TextValue != nil:
+		value.TextValue = c.TextValue
+	case c.NumberValue != nil:
+		value.NumberValue = c.NumberValue
+	case c.BoolValue != nil:
+		value.BoolValue = c.BoolValue
+	case c.DateValue != nil:
+		value.DateValue = c.DateValue
+	case c.DateTimeValue != nil:
+		value.DateTimeValue = c.DateTimeValue
+	case c.SingleSelectValue != nil:
+		value.SingleSelectValue = c.SingleSelectValue
+	case c.MultiSelectValues != nil:
+		value.MultiSelectValues = hwutil.Without(value.MultiSelectValues, c.MultiSelectValues.RemoveSelectValues)
+		value.MultiSelectValues = append(value.MultiSelectValues, c.MultiSelectValues.SelectValues...)
+
+	default:
+		return false
 	}
 
-	strings, ok := hwutil.InterfacesToStrings(slice)
-	if !ok {
-		return nil, fmt.Errorf("value is not a []string")
-	}
-	return strings, nil
+	return true
 }
 
-func MultiSelectChangeFromMap(m map[string]interface{}) (MultiSelectChange, error) {
-	self := MultiSelectChange{}
-	if m["SelectValues"] == nil {
-		self.SelectValues = []string{}
-	} else {
-		selectValues, err := interfaceToStringSlice(m["SelectValues"])
-		if err != nil {
-			return MultiSelectChange{}, fmt.Errorf("MultiSelectChangeFromMap: could not parse \"SelectValues\": %w", err)
-		}
-		self.SelectValues = selectValues
-	}
-
-	if m["RemoveSelectValues"] == nil {
-		self.RemoveSelectValues = []string{}
-	} else {
-		removeSelectValues, err := interfaceToStringSlice(m["RemoveSelectValues"])
-		if err != nil {
-			return MultiSelectChange{}, fmt.Errorf("MultiSelectChangeFromMap: could not parse \"RemoveSelectValues\": %w", err)
-		}
-		self.RemoveSelectValues = removeSelectValues
-	}
-
-	return self, nil
+type BasicChangeSettable interface {
+	SetTextValue(*string)
+	SetNumberValue(*float64)
+	SetBoolValue(*bool)
+	SetDateValue(pgtype.Date)
+	SetDateTimeValue(pgtype.Timestamp)
 }
 
-func MultiSelectChangeFromInterface(value interface{}) (MultiSelectChange, error) {
-	m, ok := value.(map[string]interface{})
-	if !ok {
-		return MultiSelectChange{}, fmt.Errorf("MultiSelectChangeFromInterface: value is not a map")
+func (c TypedValueChange) SetBasicValues(settable BasicChangeSettable) bool {
+	switch {
+	case c.TextValue != nil:
+		settable.SetTextValue(c.TextValue)
+	case c.NumberValue != nil:
+		settable.SetNumberValue(c.NumberValue)
+	case c.BoolValue != nil:
+		settable.SetBoolValue(c.BoolValue)
+	case c.DateValue != nil:
+		settable.SetDateValue(hwdb.TimeToDate(*c.DateValue))
+	case c.DateTimeValue != nil:
+		settable.SetDateTimeValue(hwdb.TimeToTimestamp(*c.DateTimeValue))
+	default:
+		return false
 	}
 
-	return MultiSelectChangeFromMap(m)
+	return true
 }

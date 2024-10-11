@@ -32,6 +32,8 @@ type Event struct {
 	Version uint64
 	// user responsible for this event
 	CommitterUserID *uuid.UUID
+	// org of user responsible for this event
+	CommitterOrganizationID *uuid.UUID
 	// w3c trace context
 	TraceParent string
 }
@@ -39,6 +41,8 @@ type Event struct {
 type metadata struct {
 	// CommitterUserID represents an optional UUID that identifies the user that is directly responsible for this event
 	CommitterUserID string `json:"committer_user_id"`
+	// CommitterOrganizationID represents an optional UUID that identifies the user that is directly responsible for this event
+	CommitterOrganizationID string `json:"committer_org"`
 	// w3c trace context
 	TraceParent string `json:"trace_parent"`
 	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is discouraged.
@@ -65,12 +69,13 @@ func WithData(data interface{}) EventOption {
 
 func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event, error) {
 	evt := Event{
-		EventID:         uuid.New(),
-		EventType:       eventType,
-		AggregateID:     aggregate.GetID(),
-		AggregateType:   aggregate.GetType(),
-		Timestamp:       time.Now().UTC(),
-		CommitterUserID: nil,
+		EventID:                 uuid.New(),
+		EventType:               eventType,
+		AggregateID:             aggregate.GetID(),
+		AggregateType:           aggregate.GetType(),
+		Timestamp:               time.Now().UTC(),
+		CommitterUserID:         nil,
+		CommitterOrganizationID: nil,
 	}
 
 	// TODO: We have to default to empty eventData as the eventstoredb-ui does not allow querying events without data
@@ -140,20 +145,25 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 	}
 
 	event := Event{
-		EventID:         id,
-		EventType:       esdbEvent.EventType,
-		AggregateID:     aggregateID,
-		AggregateType:   aggregateType,
-		Data:            esdbEvent.Data,
-		Timestamp:       md.Timestamp,
-		Version:         esdbEvent.EventNumber,
-		CommitterUserID: nil,
-		TraceParent:     md.TraceParent,
+		EventID:                 id,
+		EventType:               esdbEvent.EventType,
+		AggregateID:             aggregateID,
+		AggregateType:           aggregateType,
+		Data:                    esdbEvent.Data,
+		Timestamp:               md.Timestamp,
+		Version:                 esdbEvent.EventNumber,
+		CommitterUserID:         nil,
+		CommitterOrganizationID: nil,
+		TraceParent:             md.TraceParent,
 	}
 
 	eventCommitterUserID, err := uuid.Parse(md.CommitterUserID)
 	if err == nil {
 		event.CommitterUserID = &eventCommitterUserID
+	}
+	eventCommitterOrgID, err := uuid.Parse(md.CommitterOrganizationID)
+	if err == nil {
+		event.CommitterOrganizationID = &eventCommitterOrgID
 	}
 
 	return event, nil
@@ -188,6 +198,7 @@ func (e *Event) ToEventData() (esdb.EventData, error) {
 	}
 	if e.CommitterUserID != nil {
 		md.CommitterUserID = e.CommitterUserID.String()
+		md.CommitterOrganizationID = e.CommitterOrganizationID.String()
 	}
 
 	mdBytes, err := json.Marshal(md)
@@ -245,14 +256,16 @@ func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 		return nil // don't set a user, if no user is available
 	}
 
-	e.CommitterUserID = &userID
-
-	// Just to make sure we are actually dealing with a valid UUID
-	if _, err := uuid.Parse(e.CommitterUserID.String()); err != nil {
-		return fmt.Errorf("SetCommitterFromCtx: cant parse comitter uid: %w", err)
+	orgID, err := common.GetOrganizationID(ctx)
+	if err != nil {
+		return nil // don't set a user, if no user is available
 	}
 
+	e.CommitterUserID = &userID
+	e.CommitterOrganizationID = &orgID
+
 	telemetry.SetSpanStr(ctx, "committerUserID", e.CommitterUserID.String())
+	telemetry.SetSpanStr(ctx, "committerOrganizationID", e.CommitterOrganizationID.String())
 	return nil
 }
 
@@ -278,6 +291,9 @@ func (e *Event) GetZerologDict() *zerolog.Event {
 
 	if e.CommitterUserID != nil {
 		dict.Str("committerUserID", e.CommitterUserID.String())
+	}
+	if e.CommitterOrganizationID != nil {
+		dict.Str("committerOrganizaionID", e.CommitterOrganizationID.String())
 	}
 
 	return dict

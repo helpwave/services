@@ -8,9 +8,10 @@ import (
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwes"
 	"hwutil"
 	"property-svc/internal/property-value/handlers"
@@ -72,6 +73,50 @@ func NewPropertyValueService(aggregateStore hwes.AggregateStore, handlers *handl
 	return &PropertyValueGrpcService{as: aggregateStore, handlers: handlers}
 }
 
+func toTypedValueChange(value pb.IsAttachPropertyValueRequest_Value) (typedValue *models.TypedValueChange) {
+	if value == nil {
+		return &models.TypedValueChange{
+			ValueRemoved: true,
+		}
+	}
+	switch value.(type) {
+	case *pb.AttachPropertyValueRequest_TextValue:
+		return &models.TypedValueChange{
+			TextValue: &value.(*pb.AttachPropertyValueRequest_TextValue).TextValue,
+		}
+	case *pb.AttachPropertyValueRequest_NumberValue:
+		return &models.TypedValueChange{
+			NumberValue: &value.(*pb.AttachPropertyValueRequest_NumberValue).NumberValue,
+		}
+	case *pb.AttachPropertyValueRequest_BoolValue:
+		return &models.TypedValueChange{
+			BoolValue: &value.(*pb.AttachPropertyValueRequest_BoolValue).BoolValue,
+		}
+	case *pb.AttachPropertyValueRequest_DateValue:
+		return &models.TypedValueChange{
+			DateValue: hwutil.PtrTo(value.(*pb.AttachPropertyValueRequest_DateValue).DateValue.Date.AsTime()),
+		}
+	case *pb.AttachPropertyValueRequest_DateTimeValue:
+		return &models.TypedValueChange{
+			DateTimeValue: hwutil.PtrTo(value.(*pb.AttachPropertyValueRequest_DateTimeValue).DateTimeValue.AsTime()),
+		}
+	case *pb.AttachPropertyValueRequest_SelectValue:
+		return &models.TypedValueChange{
+			SingleSelectValue: &value.(*pb.AttachPropertyValueRequest_SelectValue).SelectValue,
+		}
+	case *pb.AttachPropertyValueRequest_MultiSelectValue_:
+		msv := value.(*pb.AttachPropertyValueRequest_MultiSelectValue_).MultiSelectValue
+		return &models.TypedValueChange{
+			MultiSelectValues: &models.MultiSelectChange{
+				SelectValues:       msv.SelectValues,
+				RemoveSelectValues: msv.RemoveSelectValues,
+			},
+		}
+	default:
+		return nil
+	}
+}
+
 func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req *pb.AttachPropertyValueRequest) (*pb.AttachPropertyValueResponse, error) {
 	log := zlog.Ctx(ctx)
 	propertyValueID := uuid.New()
@@ -79,36 +124,10 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 	propertyID := uuid.MustParse(req.GetPropertyId()) // guarded by validate
 	subjectID := uuid.MustParse(req.GetSubjectId())   // guarded by validate
 
-	var want proto.Message
-	var value interface{}
-	switch req.Value.(type) {
-	case *pb.AttachPropertyValueRequest_TextValue:
-		value = req.GetTextValue()
-		want = wrapperspb.String(req.GetTextValue())
-	case *pb.AttachPropertyValueRequest_NumberValue:
-		value = req.GetNumberValue()
-		want = wrapperspb.Double(req.GetNumberValue())
-	case *pb.AttachPropertyValueRequest_BoolValue:
-		value = req.GetBoolValue()
-		want = wrapperspb.Bool(req.GetBoolValue())
-	case *pb.AttachPropertyValueRequest_DateValue:
-		value = req.GetDateValue().Date
-		want = &pb.Date{Date: req.GetDateTimeValue()}
-	case *pb.AttachPropertyValueRequest_DateTimeValue:
-		value = req.GetDateTimeValue()
-		want = req.GetDateTimeValue()
-	case *pb.AttachPropertyValueRequest_SelectValue:
-		value = req.GetSelectValue()
-		want = wrapperspb.String(req.GetSelectValue()) // IS will be a pb.SelectValueOption, not a str, might be confusing for the frontend, but I'm not going to query the db for this
-	case *pb.AttachPropertyValueRequest_MultiSelectValue_:
-		msv := req.GetMultiSelectValue()
-		value = models.MultiSelectChange{
-			SelectValues:       msv.SelectValues,
-			RemoveSelectValues: msv.RemoveSelectValues,
-		}
-		want = req.GetMultiSelectValue()
-	default:
-		value = nil
+	valueChange := toTypedValueChange(req.Value)
+	if valueChange == nil {
+		log.Error().Type("valueType", req.Value).Msg("req.ValueChange type is not known")
+		return nil, status.Error(codes.Internal, "failed to parse value")
 	}
 
 	expConsistency, ok := common.ParseConsistency(req.Consistency)
@@ -124,7 +143,7 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 			return nil, fmt.Errorf("failed conflict resolution")
 		}
 
-		c, conflict, err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, value, subjectID, expConsistency)
+		c, conflict, err := s.handlers.Commands.V1.AttachPropertyValue(ctx, propertyValueID, propertyID, *valueChange, subjectID, expConsistency)
 		if err != nil {
 			return nil, err
 		}
@@ -136,11 +155,12 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
 		// TODO: find a generic approach
-		valueUpdateRequested := value != conflict.Is.Value
+		valueUpdateRequested := false // TODO valueChange != conflict.Is.Value
 		valueAlreadyUpdated := conflict.Was.Value != conflict.Is.Value
 		if valueUpdateRequested && valueAlreadyUpdated {
 			var is proto.Message
-			isValue := conflict.Is.Value
+			var want proto.Message
+			// TODO: isValue := conflict.Is.Value
 
 			// TODO
 
@@ -241,7 +261,7 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 					},
 				}
 			default:
-				log.Error().Any("pnv", pnv).Msg("pnv.Value is in an invalid state!")
+				log.Error().Any("pnv", pnv).Msg("pnv.ValueChange is in an invalid state!")
 			}
 			return res
 		}),

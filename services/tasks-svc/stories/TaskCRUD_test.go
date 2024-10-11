@@ -370,7 +370,7 @@ func TestGetAssignedTasks(t *testing.T) {
 	hwtesting.WaitForProjectionsToSettle()
 
 	// client for userid
-	customTaskClient := pb.NewTaskServiceClient(hwtesting.GetGrpcConn(userID.String()))
+	customTaskClient := pb.NewTaskServiceClient(hwtesting.GetGrpcConn(userID.String(), ""))
 
 	res, err := customTaskClient.GetAssignedTasks(ctx, &pb.GetAssignedTasksRequest{})
 	assert.NoError(t, err)

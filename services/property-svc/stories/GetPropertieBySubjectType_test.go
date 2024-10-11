@@ -16,7 +16,8 @@ import (
 //   - Create Properties
 //   - Check GetPropertiesBySubjectType
 func TestGetProperties(t *testing.T) {
-	propertyClient := propertyServiceClient()
+	orgID := uuid.New().String()
+	propertyClient := pb.NewPropertyServiceClient(hwtesting.GetGrpcConn("", orgID))
 
 	ctx := context.Background()
 

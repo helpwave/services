@@ -169,3 +169,20 @@ func OrEmptySlice[T any](as []T) []T {
 	}
 	return make([]T, 0)
 }
+
+func Without[T comparable](original, itemsToRemove []T) []T {
+	// Create a map for quick lookup of items to remove
+	toRemove := make(map[T]bool)
+	for _, item := range itemsToRemove {
+		toRemove[item] = true
+	}
+
+	var result []T
+	for _, item := range original {
+		if _, exists := toRemove[item]; !exists {
+			result = append(result, item)
+		}
+	}
+
+	return result
+}

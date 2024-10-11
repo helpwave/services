@@ -13,16 +13,17 @@ import (
 
 const createProperty = `-- name: CreateProperty :exec
 INSERT INTO properties
-	(id, subject_type, field_type, name, consistency)
-VALUES ($1, $2, $3, $4, $5)
+	(id, subject_type, field_type, name, consistency, organization_id)
+VALUES ($1, $2, $3, $4, $5, $6)
 `
 
 type CreatePropertyParams struct {
-	ID          uuid.UUID
-	SubjectType int32
-	FieldType   int32
-	Name        string
-	Consistency int64
+	ID             uuid.UUID
+	SubjectType    int32
+	FieldType      int32
+	Name           string
+	Consistency    int64
+	OrganizationID uuid.UUID
 }
 
 func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) error {
@@ -32,6 +33,7 @@ func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) 
 		arg.FieldType,
 		arg.Name,
 		arg.Consistency,
+		arg.OrganizationID,
 	)
 	return err
 }
@@ -77,7 +79,7 @@ func (q *Queries) CreateSelectOption(ctx context.Context, arg CreateSelectOption
 
 const getPropertiesWithSelectDataAndOptionsBySubjectTypeOrID = `-- name: GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID :many
 SELECT
-	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.select_data_id, properties.consistency,
+	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.select_data_id, properties.consistency, properties.organization_id,
 	select_options.id as select_option_id,
 	select_options.name as select_option_name,
 	select_options.description as select_option_description,
@@ -91,11 +93,14 @@ SELECT
  		(subject_type = $1 OR $1 IS NULL )
  	   	AND
  	    (properties.id = $2 OR $2 IS NULL)
+ 	    AND
+		properties.organization_id = $3
 `
 
 type GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams struct {
-	SubjectType *int32
-	ID          uuid.NullUUID
+	SubjectType    *int32
+	ID             uuid.NullUUID
+	OrganizationID uuid.UUID
 }
 
 type GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDRow struct {
@@ -109,7 +114,7 @@ type GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDRow struct {
 }
 
 func (q *Queries) GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx context.Context, arg GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams) ([]GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDRow, error) {
-	rows, err := q.db.Query(ctx, getPropertiesWithSelectDataAndOptionsBySubjectTypeOrID, arg.SubjectType, arg.ID)
+	rows, err := q.db.Query(ctx, getPropertiesWithSelectDataAndOptionsBySubjectTypeOrID, arg.SubjectType, arg.ID, arg.OrganizationID)
 	if err != nil {
 		return nil, err
 	}
@@ -127,6 +132,7 @@ func (q *Queries) GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx con
 			&i.Property.SetID,
 			&i.Property.SelectDataID,
 			&i.Property.Consistency,
+			&i.Property.OrganizationID,
 			&i.SelectOptionID,
 			&i.SelectOptionName,
 			&i.SelectOptionDescription,
@@ -145,7 +151,7 @@ func (q *Queries) GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx con
 }
 
 const getPropertyById = `-- name: GetPropertyById :one
-SELECT id, subject_type, field_type, name, description, is_archived, set_id, select_data_id, consistency FROM properties WHERE id = $1
+SELECT id, subject_type, field_type, name, description, is_archived, set_id, select_data_id, consistency, organization_id FROM properties WHERE id = $1
 `
 
 func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, error) {
@@ -161,6 +167,7 @@ func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, 
 		&i.SetID,
 		&i.SelectDataID,
 		&i.Consistency,
+		&i.OrganizationID,
 	)
 	return i, err
 }
