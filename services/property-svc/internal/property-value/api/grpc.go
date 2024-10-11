@@ -136,10 +136,14 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
 		// TODO: find a generic approach
-		valueUpdateRequested := req.Value != conflict.Is.Value         // TODO
-		valueAlreadyUpdated := conflict.Was.Value != conflict.Is.Value // same TODO
+		valueUpdateRequested := value != conflict.Is.Value
+		valueAlreadyUpdated := conflict.Was.Value != conflict.Is.Value
 		if valueUpdateRequested && valueAlreadyUpdated {
-			var is proto.Message = nil // TODO
+			var is proto.Message
+			isValue := conflict.Is.Value
+
+			// TODO
+
 			conflicts["value"], err = util.AttributeConflict(
 				is,
 				want,

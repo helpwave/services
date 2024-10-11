@@ -100,6 +100,8 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		return
 	}
 
+	assert.Nil(t, attachResponse.Conflict)
+
 	hwtesting.WaitForProjectionsToSettle()
 
 	//
@@ -140,6 +142,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		return
 	}
 
+	assert.Nil(t, updateResponse.Conflict)
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
 	hwtesting.WaitForProjectionsToSettle()
@@ -274,6 +277,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	if !assert.NoError(t, err, "could not attach value") {
 		return
 	}
+	assert.Nil(t, attachResponse.Conflict)
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -314,7 +318,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	if !assert.NoError(t, err, "could not update value") {
 		return
 	}
-
+	assert.Nil(t, updateResponse.Conflict)
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
 	hwtesting.WaitForProjectionsToSettle()
@@ -457,6 +461,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	if !assert.NoError(t, err, "could not attach value") {
 		return
 	}
+	assert.Nil(t, attachResponse.Conflict)
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -500,6 +505,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	if !assert.NoError(t, err, "could not update value") {
 		return
 	}
+	assert.Nil(t, updateResponse.Conflict)
 
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
