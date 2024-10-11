@@ -95,7 +95,7 @@ func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachProperty
 
 		if len(rows) != 0 {
 			propertyValue := rows[0].PropertyValue
-			existingPropertyValueID := propertyValue.PropertyID
+			existingPropertyValueID := propertyValue.ID
 			consistency := common.ConsistencyToken(propertyValue.Consistency)
 
 			// conflict detection
