@@ -132,5 +132,4 @@ func TestUpdatePropertyConflict(t *testing.T) {
 		)
 	}
 
-	// TODO
 }
