@@ -2,6 +2,7 @@ package bed
 
 import (
 	"common"
+	"common/hwerr"
 	"context"
 	"github.com/jackc/pgx/v5/pgconn"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
@@ -48,7 +49,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 	})
 	err = hwdb.Error(ctx, err,
 		hwdb.WithOnFKViolation("beds_room_id_fkey", func(pgErr *pgconn.PgError) error {
-			return common.NewStatusError(ctx,
+			return hwerr.NewStatusError(ctx,
 				codes.InvalidArgument,
 				pgErr.Error(),
 				locale.InvalidRoomIdError(ctx),

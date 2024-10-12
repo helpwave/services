@@ -1,7 +1,7 @@
 package hwauthz
 
 import (
-	"common"
+	"common/hwerr"
 	"common/locale"
 	"context"
 	"fmt"
@@ -19,7 +19,7 @@ func StatusErrorPermissionDenied(ctx context.Context, check Relationship) error 
 		check.Resource.Type(),
 		check.Resource.ID(),
 	)
-	return common.NewStatusError(ctx, codes.PermissionDenied, msg, locale.PermissionDeniedError(ctx))
+	return hwerr.NewStatusError(ctx, codes.PermissionDenied, msg, locale.PermissionDeniedError(ctx))
 }
 
 // ConsistencyToken are currently unused
