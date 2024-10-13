@@ -74,7 +74,6 @@ services:
       - ../apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro
     environment:
       NO_DAPR: true
-      ORY_WEBHOOK_BASIC_AUTH: '{"username":"ory","password":"2341"}'
     ports:
       - "9080:9080"
 
@@ -93,6 +92,7 @@ services:
       "--config", "/dapr.yaml",
       "--log-level", "debug",
       "--app-port", "9080",
+      "--metrics-port", "9099",
       "--dapr-internal-grpc-port", "35001"
     ]
     network_mode: "service:apisix"
@@ -104,7 +104,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '12'
+        TAG: '13'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -148,7 +148,7 @@ services:
       context: ../images/dev-go-custom
       args:
         # renovate: dev-tag
-        TAG: '12'
+        TAG: '13'
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     volumes:
@@ -184,7 +184,6 @@ services:
       # all of these ports are bound to in services
       - "3001:3001" # task-svc
       - "3002:3002" # user-svc
-      - "3003:3003" # ory-svc
       - "3004:3004" # tasks-svc
       - "3005:3005" # property-svc
 

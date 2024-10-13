@@ -20,7 +20,6 @@ const _ = grpc.SupportPackageIsVersion8
 
 const (
 	OrganizationService_CreateOrganization_FullMethodName           = "/services.user_svc.v1.OrganizationService/CreateOrganization"
-	OrganizationService_CreateOrganizationForUser_FullMethodName    = "/services.user_svc.v1.OrganizationService/CreateOrganizationForUser"
 	OrganizationService_GetOrganization_FullMethodName              = "/services.user_svc.v1.OrganizationService/GetOrganization"
 	OrganizationService_GetOrganizationsByUser_FullMethodName       = "/services.user_svc.v1.OrganizationService/GetOrganizationsByUser"
 	OrganizationService_GetOrganizationsForUser_FullMethodName      = "/services.user_svc.v1.OrganizationService/GetOrganizationsForUser"
@@ -35,6 +34,7 @@ const (
 	OrganizationService_AcceptInvitation_FullMethodName             = "/services.user_svc.v1.OrganizationService/AcceptInvitation"
 	OrganizationService_DeclineInvitation_FullMethodName            = "/services.user_svc.v1.OrganizationService/DeclineInvitation"
 	OrganizationService_RevokeInvitation_FullMethodName             = "/services.user_svc.v1.OrganizationService/RevokeInvitation"
+	OrganizationService_CreatePersonalOrganization_FullMethodName   = "/services.user_svc.v1.OrganizationService/CreatePersonalOrganization"
 )
 
 // OrganizationServiceClient is the client API for OrganizationService service.
@@ -42,7 +42,6 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OrganizationServiceClient interface {
 	CreateOrganization(ctx context.Context, in *CreateOrganizationRequest, opts ...grpc.CallOption) (*CreateOrganizationResponse, error)
-	CreateOrganizationForUser(ctx context.Context, in *CreateOrganizationForUserRequest, opts ...grpc.CallOption) (*CreateOrganizationForUserResponse, error)
 	GetOrganization(ctx context.Context, in *GetOrganizationRequest, opts ...grpc.CallOption) (*GetOrganizationResponse, error)
 	GetOrganizationsByUser(ctx context.Context, in *GetOrganizationsByUserRequest, opts ...grpc.CallOption) (*GetOrganizationsByUserResponse, error)
 	GetOrganizationsForUser(ctx context.Context, in *GetOrganizationsForUserRequest, opts ...grpc.CallOption) (*GetOrganizationsForUserResponse, error)
@@ -57,6 +56,9 @@ type OrganizationServiceClient interface {
 	AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*AcceptInvitationResponse, error)
 	DeclineInvitation(ctx context.Context, in *DeclineInvitationRequest, opts ...grpc.CallOption) (*DeclineInvitationResponse, error)
 	RevokeInvitation(ctx context.Context, in *RevokeInvitationRequest, opts ...grpc.CallOption) (*RevokeInvitationResponse, error)
+	// CreatePersonalOrganization creates or returns the personal organization of the user
+	// Based on the "Accept-Language" metadata, the localized prefix "Personal organization ..." gets selected
+	CreatePersonalOrganization(ctx context.Context, in *CreatePersonalOrganizationRequest, opts ...grpc.CallOption) (*CreatePersonalOrganizationResponse, error)
 }
 
 type organizationServiceClient struct {
@@ -71,16 +73,6 @@ func (c *organizationServiceClient) CreateOrganization(ctx context.Context, in *
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateOrganizationResponse)
 	err := c.cc.Invoke(ctx, OrganizationService_CreateOrganization_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *organizationServiceClient) CreateOrganizationForUser(ctx context.Context, in *CreateOrganizationForUserRequest, opts ...grpc.CallOption) (*CreateOrganizationForUserResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreateOrganizationForUserResponse)
-	err := c.cc.Invoke(ctx, OrganizationService_CreateOrganizationForUser_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -227,12 +219,21 @@ func (c *organizationServiceClient) RevokeInvitation(ctx context.Context, in *Re
 	return out, nil
 }
 
+func (c *organizationServiceClient) CreatePersonalOrganization(ctx context.Context, in *CreatePersonalOrganizationRequest, opts ...grpc.CallOption) (*CreatePersonalOrganizationResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreatePersonalOrganizationResponse)
+	err := c.cc.Invoke(ctx, OrganizationService_CreatePersonalOrganization_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrganizationServiceServer is the server API for OrganizationService service.
 // All implementations must embed UnimplementedOrganizationServiceServer
 // for forward compatibility
 type OrganizationServiceServer interface {
 	CreateOrganization(context.Context, *CreateOrganizationRequest) (*CreateOrganizationResponse, error)
-	CreateOrganizationForUser(context.Context, *CreateOrganizationForUserRequest) (*CreateOrganizationForUserResponse, error)
 	GetOrganization(context.Context, *GetOrganizationRequest) (*GetOrganizationResponse, error)
 	GetOrganizationsByUser(context.Context, *GetOrganizationsByUserRequest) (*GetOrganizationsByUserResponse, error)
 	GetOrganizationsForUser(context.Context, *GetOrganizationsForUserRequest) (*GetOrganizationsForUserResponse, error)
@@ -247,6 +248,9 @@ type OrganizationServiceServer interface {
 	AcceptInvitation(context.Context, *AcceptInvitationRequest) (*AcceptInvitationResponse, error)
 	DeclineInvitation(context.Context, *DeclineInvitationRequest) (*DeclineInvitationResponse, error)
 	RevokeInvitation(context.Context, *RevokeInvitationRequest) (*RevokeInvitationResponse, error)
+	// CreatePersonalOrganization creates or returns the personal organization of the user
+	// Based on the "Accept-Language" metadata, the localized prefix "Personal organization ..." gets selected
+	CreatePersonalOrganization(context.Context, *CreatePersonalOrganizationRequest) (*CreatePersonalOrganizationResponse, error)
 	mustEmbedUnimplementedOrganizationServiceServer()
 }
 
@@ -256,9 +260,6 @@ type UnimplementedOrganizationServiceServer struct {
 
 func (UnimplementedOrganizationServiceServer) CreateOrganization(context.Context, *CreateOrganizationRequest) (*CreateOrganizationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateOrganization not implemented")
-}
-func (UnimplementedOrganizationServiceServer) CreateOrganizationForUser(context.Context, *CreateOrganizationForUserRequest) (*CreateOrganizationForUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateOrganizationForUser not implemented")
 }
 func (UnimplementedOrganizationServiceServer) GetOrganization(context.Context, *GetOrganizationRequest) (*GetOrganizationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOrganization not implemented")
@@ -302,6 +303,9 @@ func (UnimplementedOrganizationServiceServer) DeclineInvitation(context.Context,
 func (UnimplementedOrganizationServiceServer) RevokeInvitation(context.Context, *RevokeInvitationRequest) (*RevokeInvitationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RevokeInvitation not implemented")
 }
+func (UnimplementedOrganizationServiceServer) CreatePersonalOrganization(context.Context, *CreatePersonalOrganizationRequest) (*CreatePersonalOrganizationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreatePersonalOrganization not implemented")
+}
 func (UnimplementedOrganizationServiceServer) mustEmbedUnimplementedOrganizationServiceServer() {}
 
 // UnsafeOrganizationServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -329,24 +333,6 @@ func _OrganizationService_CreateOrganization_Handler(srv interface{}, ctx contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OrganizationServiceServer).CreateOrganization(ctx, req.(*CreateOrganizationRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _OrganizationService_CreateOrganizationForUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateOrganizationForUserRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OrganizationServiceServer).CreateOrganizationForUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: OrganizationService_CreateOrganizationForUser_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrganizationServiceServer).CreateOrganizationForUser(ctx, req.(*CreateOrganizationForUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -603,6 +589,24 @@ func _OrganizationService_RevokeInvitation_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OrganizationService_CreatePersonalOrganization_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreatePersonalOrganizationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrganizationServiceServer).CreatePersonalOrganization(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OrganizationService_CreatePersonalOrganization_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrganizationServiceServer).CreatePersonalOrganization(ctx, req.(*CreatePersonalOrganizationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OrganizationService_ServiceDesc is the grpc.ServiceDesc for OrganizationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -613,10 +617,6 @@ var OrganizationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateOrganization",
 			Handler:    _OrganizationService_CreateOrganization_Handler,
-		},
-		{
-			MethodName: "CreateOrganizationForUser",
-			Handler:    _OrganizationService_CreateOrganizationForUser_Handler,
 		},
 		{
 			MethodName: "GetOrganization",
@@ -673,6 +673,10 @@ var OrganizationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RevokeInvitation",
 			Handler:    _OrganizationService_RevokeInvitation_Handler,
+		},
+		{
+			MethodName: "CreatePersonalOrganization",
+			Handler:    _OrganizationService_CreatePersonalOrganization_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

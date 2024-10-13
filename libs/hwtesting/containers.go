@@ -4,6 +4,7 @@ import (
 	"context"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"hwutil"
 	"sync"
 	"time"
 )
@@ -80,5 +81,12 @@ func StartContainers(ctx context.Context, opts ...ContainerOpt) (endpoints Endpo
 
 func WaitForProjectionsToSettle() {
 	// might be worth improving this in the future
-	time.Sleep(time.Millisecond * 200)
+
+	settleDuration := time.Millisecond * 400
+	// To decrease the possibility of flaky tests in our CI, we increase the settle duration
+	if hwutil.HasEnv("CI") {
+		settleDuration = time.Second
+	}
+
+	time.Sleep(settleDuration)
 }

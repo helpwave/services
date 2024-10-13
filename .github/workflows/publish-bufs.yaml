@@ -9,10 +9,10 @@ on:
 
 env:
   # renovate: datasource=github-releases depName=bufbuild/buf
-  BUF_CLI_VERSION: '1.37.0'
+  BUF_CLI_VERSION: '1.45.0'
   NODE_VERSION: '18.x'
   # renovate: datasource=dart-version depName=dart
-  DART_VERSION: '3.5.1'
+  DART_VERSION: '3.5.3'
 
 jobs:
   check-preconditions:
@@ -50,7 +50,7 @@ jobs:
       run: |
         last_tree=$(git ls-tree -d -r --name-only HEAD^ proto | sort) # directory tree of proto in old commit
         current_tree=$(find proto -type d | sort) # directory tree of proto right now
-        new_dirs=$(comm -13 <(echo "$last_tree") <(echo "$current_tree")) # filter out lines, which are "-3": common (i.e. unchanged) or "-1": only in the last tree (i.e. removed) 
+        new_dirs=$(comm -13 <(echo "$last_tree") <(echo "$current_tree")) # filter out lines, which are "-3": common (i.e. unchanged) or "-1": only in the last tree (i.e. removed)
         echo $new_dirs
         if [ -z "$new_dirs" ]; then
           echo "new-package=false" >> $GITHUB_OUTPUT
@@ -144,3 +144,17 @@ jobs:
     - name: Publish to pub.dev
       working-directory: gen/dart
       run: dart pub publish -f
+
+  buf:
+    needs: check-preconditions
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Clone Repo
+        uses: actions/checkout@v4
+      - uses: bufbuild/buf-setup-action@v1.40.1
+        with:
+          version: ${{ env.BUF_CLI_VERSION }}
+          buf_user: ${{ secrets.BUF_USER }}
+          buf_api_token: ${{ secrets.BUF_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - run: buf push
