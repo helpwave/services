@@ -155,14 +155,27 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
 		// TODO: find a generic approach
-		valueUpdateRequested := false // TODO valueChange != conflict.Is.Value
-		valueAlreadyUpdated := conflict.Was.Value != conflict.Is.Value
-		if valueUpdateRequested && valueAlreadyUpdated {
+		valueUpdateRequested := valueChange.DoesChange(conflict.Was.Value)
+		valueAlreadyUpdated := func() bool {
+			if conflict.Is == nil && conflict.Was == nil {
+				return false
+			}
+			if conflict.Is == nil || conflict.Was == nil {
+				return true
+			}
+			return !conflict.Is.Value.Equals(*conflict.Was.Value)
+		}
+		if valueUpdateRequested && valueAlreadyUpdated() {
 			var is proto.Message
+			if conflict.Is.Value != nil {
+				is = conflict.Is.Value.ToProtoMessage()
+			}
 			var want proto.Message
-			// TODO: isValue := conflict.Is.Value
-
-			// TODO
+			if conflict.Was.Value != nil {
+				val := *conflict.Was.Value
+				valueChange.Apply(&val) // we modify values also pointed to by WAS here, which will be thrown away after this anyway, so it's fine
+				want = conflict.Was.Value.ToProtoMessage()
+			}
 
 			conflicts["value"], err = util.AttributeConflict(
 				is,

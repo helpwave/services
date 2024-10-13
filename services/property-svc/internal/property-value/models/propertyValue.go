@@ -1,9 +1,15 @@
 package models
 
 import (
+	"fmt"
+	commonpb "gen/libs/common/v1"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwdb"
 	"hwutil"
 	"time"
@@ -45,6 +51,54 @@ type SimpleTypedValue struct {
 	DateValue         *time.Time
 	SingleSelectValue *string
 	MultiSelectValues []string
+}
+
+func (v SimpleTypedValue) Equals(o SimpleTypedValue) bool {
+	switch {
+	case v.TextValue != nil && o.TextValue != nil:
+		return *v.TextValue == *o.TextValue
+	case v.BoolValue != nil && o.BoolValue != nil:
+		return *v.BoolValue == *o.BoolValue
+	case v.NumberValue != nil && o.NumberValue != nil:
+		return *v.NumberValue == *o.NumberValue
+	case v.DateTimeValue != nil && o.DateTimeValue != nil:
+		return *v.DateTimeValue == *o.DateTimeValue
+	case v.DateValue != nil && o.DateValue != nil:
+		return *v.DateValue == *o.DateValue
+	case v.SingleSelectValue != nil && o.SingleSelectValue != nil:
+		return *v.SingleSelectValue == *o.SingleSelectValue
+	case v.MultiSelectValues != nil && o.MultiSelectValues != nil:
+		return hwutil.SameItems(v.MultiSelectValues, o.MultiSelectValues)
+	default:
+		return false
+	}
+}
+
+func (v SimpleTypedValue) ToProtoMessage() proto.Message {
+	switch {
+	case v.TextValue != nil:
+		return wrapperspb.String(*v.TextValue)
+	case v.BoolValue != nil:
+		return wrapperspb.Bool(*v.BoolValue)
+	case v.NumberValue != nil:
+		return wrapperspb.Double(*v.NumberValue)
+	case v.DateTimeValue != nil:
+		return timestamppb.New(*v.DateTimeValue)
+	case v.DateValue != nil:
+		return &pb.Date{Date: timestamppb.New(*v.DateValue)}
+	case v.SingleSelectValue != nil:
+		return wrapperspb.String(*v.SingleSelectValue)
+	case v.MultiSelectValues != nil:
+		els, err := hwutil.MapWithErr(v.MultiSelectValues, func(o string) (*anypb.Any, error) {
+			return anypb.New(wrapperspb.String(o))
+		})
+		if err != nil {
+			panic("SimpleTypedValue.ToProtoMessage: could not create anypb of string")
+		}
+		return &commonpb.AnyArray{Elements: els}
+	default:
+		panic(fmt.Sprintf("SimpleTypedValue.ToProtoMessage: unhandled state: %v", v))
+	}
 }
 
 type TypedValue struct {
@@ -90,6 +144,13 @@ type TypedValueChange struct {
 	MultiSelectValues *MultiSelectChange `json:"multi_select_values,omitempty"`
 }
 
+func applyMultiSelectValueChange(options []string, change MultiSelectChange) []string {
+	return append(
+		hwutil.Without(options, change.RemoveSelectValues), // remove first
+		change.SelectValues..., // add new options second
+	)
+}
+
 // Apply applies a TypedValueChange to a TypedValue (except removal)
 func (c TypedValueChange) Apply(value *SimpleTypedValue) bool {
 	switch {
@@ -106,8 +167,7 @@ func (c TypedValueChange) Apply(value *SimpleTypedValue) bool {
 	case c.SingleSelectValue != nil:
 		value.SingleSelectValue = c.SingleSelectValue
 	case c.MultiSelectValues != nil:
-		value.MultiSelectValues = hwutil.Without(value.MultiSelectValues, c.MultiSelectValues.RemoveSelectValues)
-		value.MultiSelectValues = append(value.MultiSelectValues, c.MultiSelectValues.SelectValues...)
+		value.MultiSelectValues = applyMultiSelectValueChange(value.MultiSelectValues, *c.MultiSelectValues)
 
 	default:
 		return false
@@ -141,4 +201,35 @@ func (c TypedValueChange) SetBasicValues(settable BasicChangeSettable) bool {
 	}
 
 	return true
+}
+
+func (c TypedValueChange) DoesChange(value *SimpleTypedValue) bool {
+	if value == nil {
+		return !c.ValueRemoved
+	}
+
+	switch {
+	case c.ValueRemoved:
+		return false // no conflict possible
+	case c.TextValue != nil:
+		return value.TextValue != nil && *c.TextValue != *value.TextValue
+	case c.BoolValue != nil:
+		return value.BoolValue != nil && *c.BoolValue != *value.BoolValue
+	case c.NumberValue != nil:
+		return value.NumberValue != nil && *c.NumberValue != *value.NumberValue
+	case c.DateValue != nil:
+		return value.DateValue != nil && *c.DateValue != *value.DateValue
+	case c.DateTimeValue != nil:
+		return value.DateTimeValue != nil && *c.DateTimeValue != *value.DateTimeValue
+	case c.SingleSelectValue != nil:
+		return value.SingleSelectValue != nil && *c.SingleSelectValue != *value.SingleSelectValue
+	case c.MultiSelectValues != nil:
+		if value.MultiSelectValues == nil {
+			return false
+		}
+		applied := applyMultiSelectValueChange(value.MultiSelectValues, *c.MultiSelectValues)
+		return !hwutil.SameItems(value.MultiSelectValues, applied)
+	default:
+		panic(fmt.Sprintf("TypedValueChange.DoesChange: value unknown:  %v", c))
+	}
 }
