@@ -121,6 +121,7 @@ func TestAttachPropertyValueConflict_Number(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Nil(t, wasRes.Conflict)
+	hwtesting.WaitForProjectionsToSettle()
 
 	initialConsistency := wasRes.Consistency
 
