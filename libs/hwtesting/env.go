@@ -12,7 +12,6 @@ func SetCommonEnv() {
 	errs = append(errs, os.Setenv("LOG_LEVEL", "trace"))
 	errs = append(errs, os.Setenv("INSECURE_FAKE_TOKEN_ENABLE", "true"))
 	errs = append(errs, os.Setenv("INSECURE_REDIS_NO_TLS", "true"))
-	errs = append(errs, os.Setenv("ORGANIZATION_ID", "3b25c6f5-4705-4074-9fc6-a50c28eba406"))
 
 	for _, err := range errs {
 		if err != nil {

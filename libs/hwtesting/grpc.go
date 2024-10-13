@@ -42,24 +42,29 @@ func (t InsecureBearerToken) RequireTransportSecurity() bool {
 const FakeTokenUser = "18159713-5d4e-4ad5-94ad-fbb6bb147984"
 
 func GetFakeTokenCredentials(subOverride, orgOverride string) InsecureBearerToken {
+	sub := FakeTokenUser
+	if subOverride != "" {
+		sub = subOverride
+	}
+
+	org := "3b25c6f5-4705-4074-9fc6-a50c28eba406"
+	if orgOverride != "" {
+		org = orgOverride
+	}
+
 	// README's fake token
 	m := map[string]interface{}{
-		"sub":                FakeTokenUser,
-		"email":              "testine.test@helpwave.de",
-		"name":               "Testine Test",
-		"preferred_username": "testine.test",
+		"sub":                sub,
+		"email":              "max.mustermann@helpwave.de",
+		"email_verified":     true,
+		"name":               "Max Mustermann",
+		"preferred_username": "max.mustermann",
+		"given_name":         "Max",
+		"family_name":        "Mustermann",
 		"organization": map[string]interface{}{
-			"id":   "3b25c6f5-4705-4074-9fc6-a50c28eba406",
+			"id":   org,
 			"name": "helpwave test",
 		},
-	}
-
-	if subOverride != "" {
-		m["sub"] = subOverride
-	}
-
-	if orgOverride != "" {
-		m["organizations"] = []string{orgOverride}
 	}
 
 	bytes, err := json.Marshal(m)
