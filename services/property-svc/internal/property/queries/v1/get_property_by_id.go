@@ -17,8 +17,14 @@ func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
 	return func(ctx context.Context, propertyID uuid.UUID) (*models.Property, common.ConsistencyToken, error) {
 		propertyRepo := property_repo.New(hwdb.GetDB())
 
+		organizationID, err := common.GetOrganizationID(ctx)
+		if err != nil {
+			return nil, 0, err
+		}
+
 		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx, property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
-			ID: uuid.NullUUID{UUID: propertyID, Valid: true},
+			ID:             uuid.NullUUID{UUID: propertyID, Valid: true},
+			OrganizationID: organizationID,
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, 0, err
