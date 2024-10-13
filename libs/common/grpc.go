@@ -231,6 +231,10 @@ func ContextWithUserID(ctx context.Context, userID uuid.UUID) context.Context {
 	return context.WithValue(ctx, userIDKey{}, userID)
 }
 
+func ContextWithOrganizationID(ctx context.Context, organizationID uuid.UUID) context.Context {
+	return context.WithValue(ctx, organizationIDKey{}, organizationID)
+}
+
 // handleOrganizationIDForAuthFunc is a part of our auth middleware.
 // The claims are signed. Therefore, we can match the user provided
 // organizationID from the headers against the organizationIDs inside the claim.
@@ -268,7 +272,7 @@ func handleOrganizationIDForAuthFunc(ctx context.Context) (context.Context, erro
 		return nil, status.Errorf(codes.Unauthenticated, "no access to this organization")
 	}
 
-	ctx = context.WithValue(ctx, organizationIDKey{}, organizationID)
+	ctx = ContextWithOrganizationID(ctx, organizationID)
 
 	// Append organizationID to the logger
 	loggerWithOrganizationID := log.With().Str("organizationID", organizationID.String()).Logger()
