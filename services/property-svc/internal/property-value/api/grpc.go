@@ -80,33 +80,33 @@ func toTypedValueChange(value pb.IsAttachPropertyValueRequest_Value) (typedValue
 			ValueRemoved: true,
 		}
 	}
-	switch value.(type) {
+	switch value := value.(type) {
 	case *pb.AttachPropertyValueRequest_TextValue:
 		return &models.TypedValueChange{
-			TextValue: &value.(*pb.AttachPropertyValueRequest_TextValue).TextValue,
+			TextValue: &value.TextValue,
 		}
 	case *pb.AttachPropertyValueRequest_NumberValue:
 		return &models.TypedValueChange{
-			NumberValue: &value.(*pb.AttachPropertyValueRequest_NumberValue).NumberValue,
+			NumberValue: &value.NumberValue,
 		}
 	case *pb.AttachPropertyValueRequest_BoolValue:
 		return &models.TypedValueChange{
-			BoolValue: &value.(*pb.AttachPropertyValueRequest_BoolValue).BoolValue,
+			BoolValue: &value.BoolValue,
 		}
 	case *pb.AttachPropertyValueRequest_DateValue:
 		return &models.TypedValueChange{
-			DateValue: hwutil.PtrTo(value.(*pb.AttachPropertyValueRequest_DateValue).DateValue.Date.AsTime()),
+			DateValue: hwutil.PtrTo(value.DateValue.Date.AsTime()),
 		}
 	case *pb.AttachPropertyValueRequest_DateTimeValue:
 		return &models.TypedValueChange{
-			DateTimeValue: hwutil.PtrTo(value.(*pb.AttachPropertyValueRequest_DateTimeValue).DateTimeValue.AsTime()),
+			DateTimeValue: hwutil.PtrTo(value.DateTimeValue.AsTime()),
 		}
 	case *pb.AttachPropertyValueRequest_SelectValue:
 		return &models.TypedValueChange{
-			SingleSelectValue: &value.(*pb.AttachPropertyValueRequest_SelectValue).SelectValue,
+			SingleSelectValue: &value.SelectValue,
 		}
 	case *pb.AttachPropertyValueRequest_MultiSelectValue_:
-		msv := value.(*pb.AttachPropertyValueRequest_MultiSelectValue_).MultiSelectValue
+		msv := value.MultiSelectValue
 		return &models.TypedValueChange{
 			MultiSelectValues: &models.MultiSelectChange{
 				SelectValues:       msv.SelectValues,
