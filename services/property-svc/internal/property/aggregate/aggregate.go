@@ -6,6 +6,7 @@ import (
 	"fmt"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 	"hwes"
 	"hwutil"
 	propertyEventsV1 "property-svc/internal/property/events/v1"
@@ -43,26 +44,11 @@ func LoadPropertyAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateS
 			return nil, nil, err
 		}
 
-		propertyCopy := *property.Property // deref copies model
-
-		// copy pointer values
-		propertyCopy.FieldTypeData = models.FieldTypeData{}
-
-		sd := property.Property.FieldTypeData.SelectData
-		if sd != nil {
-			propertyCopy.FieldTypeData.SelectData = &models.SelectData{
-				AllowFreetext: sd.AllowFreetext,
-				SelectOptions: make([]models.SelectOption, 0),
-			}
-
-			for _, option := range sd.SelectOptions {
-				if option.Description != nil {
-					option.Description = hwutil.PtrTo(*option.Description)
-				}
-				propertyCopy.FieldTypeData.SelectData.SelectOptions = append(propertyCopy.FieldTypeData.SelectData.SelectOptions, option)
-			}
+		var cpy models.Property
+		if err := copier.CopyWithOption(&cpy, property.Property, copier.Option{DeepCopy: true}); err != nil {
+			return nil, nil, fmt.Errorf("LoadPropertyAggregateWithSnapshotAt: could not copy snapshot: %w", err)
 		}
-		snapshot = &propertyCopy
+		snapshot = &cpy
 	}
 
 	// continue loading all other events

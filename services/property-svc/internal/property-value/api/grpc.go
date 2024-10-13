@@ -174,7 +174,7 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 			var want proto.Message
 			if conflict.Was.Value != nil {
 				var val models.SimpleTypedValue
-				if err := copier.Copy(&val, conflict.Was.Value); err != nil {
+				if err := copier.CopyWithOption(&val, conflict.Was.Value, copier.Option{DeepCopy: true}); err != nil {
 					return nil, fmt.Errorf("could not copy was to want: %w", err)
 				}
 				valueChange.Apply(&val)

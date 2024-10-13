@@ -3,7 +3,9 @@ package aggregate
 import (
 	"common"
 	"context"
+	"fmt"
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 	"hwes"
 	patientEventsV1 "tasks-svc/internal/patient/events/v1"
 	"tasks-svc/internal/patient/models"
@@ -42,8 +44,11 @@ func LoadPatientAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateSt
 			return nil, nil, err
 		}
 
-		patientCopy := *patientAggregate.Patient // deref copies model
-		snapshot = &patientCopy
+		var cpy models.Patient
+		if err := copier.CopyWithOption(&cpy, patientAggregate.Patient, copier.Option{DeepCopy: true}); err != nil {
+			return nil, nil, fmt.Errorf("LoadPatientAggregateWithSnapshotAt: could not copy snapshot: %w", err)
+		}
+		snapshot = &cpy
 	}
 
 	// continue loading all other events

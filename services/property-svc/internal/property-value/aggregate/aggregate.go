@@ -52,7 +52,7 @@ func LoadPropertyValueAggregateWithSnapshotAt(ctx context.Context, as hwes.Aggre
 		}
 
 		var cpy models.PropertyValue
-		if err := copier.Copy(&cpy, property.PropertyValue); err != nil {
+		if err := copier.CopyWithOption(&cpy, property.PropertyValue, copier.Option{DeepCopy: true}); err != nil {
 			return nil, nil, fmt.Errorf("LoadPropertyValueAggregateWithSnapshotAt: could not copy snapshot: %w", err)
 		}
 		snapshot = &cpy

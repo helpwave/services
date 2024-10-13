@@ -6,8 +6,8 @@ import (
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 	"hwes"
-	"hwutil"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"tasks-svc/internal/task/models"
 	"time"
@@ -51,19 +51,11 @@ func LoadTaskAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore
 			return nil, nil, err
 		}
 
-		task := *taskAggregate.Task // deref copies model
-
-		// also copy pointer values
-		if task.DueAt != nil {
-			task.DueAt = hwutil.PtrTo(*task.DueAt)
+		var cpy models.Task
+		if err := copier.CopyWithOption(&cpy, taskAggregate.Task, copier.Option{DeepCopy: true}); err != nil {
+			return nil, nil, fmt.Errorf("LoadTaskAggregateWithSnapshotAt: could not copy snapshot: %w", err)
 		}
-		subtasks := make(map[uuid.UUID]models.Subtask)
-		for key, value := range task.Subtasks {
-			subtasks[key] = value
-		}
-		task.Subtasks = subtasks
-
-		snapshot = &task
+		snapshot = &cpy
 	}
 
 	// continue loading all other events
