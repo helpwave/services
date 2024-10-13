@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 	"hwes"
 	propertyEventsV1 "property-svc/internal/property-value/events/v1"
 	"property-svc/internal/property-value/models"
@@ -50,9 +51,10 @@ func LoadPropertyValueAggregateWithSnapshotAt(ctx context.Context, as hwes.Aggre
 			return nil, nil, err
 		}
 
-		cpy := *property.PropertyValue // deref does a top-level copy
-		// well see how it deals with .ValueChange, of type interface (TODO)
-
+		var cpy models.PropertyValue
+		if err := copier.Copy(&cpy, property.PropertyValue); err != nil {
+			return nil, nil, fmt.Errorf("LoadPropertyValueAggregateWithSnapshotAt: could not copy snapshot: %w", err)
+		}
 		snapshot = &cpy
 	}
 

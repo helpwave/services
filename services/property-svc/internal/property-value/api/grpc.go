@@ -7,6 +7,7 @@ import (
 	commonpb "gen/libs/common/v1"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -172,9 +173,12 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 			}
 			var want proto.Message
 			if conflict.Was.Value != nil {
-				val := *conflict.Was.Value
-				valueChange.Apply(&val) // we modify values also pointed to by WAS here, which will be thrown away after this anyway, so it's fine
-				want = conflict.Was.Value.ToProtoMessage()
+				var val models.SimpleTypedValue
+				if err := copier.Copy(&val, conflict.Was.Value); err != nil {
+					return nil, fmt.Errorf("could not copy was to want: %w", err)
+				}
+				valueChange.Apply(&val)
+				want = val.ToProtoMessage()
 			}
 
 			conflicts["value"], err = util.AttributeConflict(

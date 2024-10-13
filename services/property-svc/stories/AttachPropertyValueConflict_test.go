@@ -75,7 +75,9 @@ func TestAttachPropertyValueConflict(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, wantRes.Conflict)
 
-	// TODO
-	assert.Equal(t, "TODO", strings.ReplaceAll(wantRes.Conflict.String(), "  ", " "))
+	s := "conflicting_attributes:{key:\"value\" value:{is:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"TestAttachPropertyValueConflict IS\"}} " +
+		"want:{[type.googleapis.com/google.protobuf.StringValue]:{value:\"TestAttachPropertyValueConflict WANT\"}}}}"
+
+	assert.Equal(t, s, strings.ReplaceAll(wantRes.Conflict.String(), "  ", " "))
 
 }
