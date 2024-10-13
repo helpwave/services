@@ -170,12 +170,12 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 		if len(conflicts) != 0 {
 			return &pb.UpdateTaskResponse{
 				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
-				Consistency: conflict.Consistency.String(),
+				Consistency: c.String(),
 			}, nil
 		}
 
 		// no conflict? retry with new consistency
-		expConsistency = &conflict.Consistency
+		expConsistency = &c
 	}
 
 	return &pb.UpdateTaskResponse{
@@ -237,12 +237,12 @@ func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequ
 		if len(conflicts) != 0 {
 			return &pb.AssignTaskResponse{
 				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
-				Consistency: conflict.Consistency.String(),
+				Consistency: c.String(),
 			}, nil
 		}
 
 		// no conflict? retry with new consistency
-		expConsistency = &conflict.Consistency
+		expConsistency = &c
 	}
 
 	return &pb.AssignTaskResponse{
@@ -575,7 +575,7 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 		if len(conflicts) != 0 {
 			return &pb.UpdateSubtaskResponse{
 				Conflict:        &commonpb.Conflict{ConflictingAttributes: conflicts},
-				TaskConsistency: conflict.Consistency.String(),
+				TaskConsistency: c.String(),
 			}, nil
 		}
 
@@ -584,7 +584,7 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 		// so either that is the case still, or the update will do nothing anyway
 
 		// no conflict? retry with new consistency
-		expConsistency = &conflict.Consistency
+		expConsistency = &c
 	}
 
 	return &pb.UpdateSubtaskResponse{

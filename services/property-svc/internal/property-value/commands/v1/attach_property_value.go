@@ -17,15 +17,10 @@ type AttachPropertyValueCommandHandler func(ctx context.Context,
 	valueChange models.TypedValueChange,
 	subjectID uuid.UUID,
 	expConsistency *common.ConsistencyToken,
-) (common.ConsistencyToken, *AttachPropertyValueConflict, error)
-
-type AttachPropertyValueConflict struct {
-	Was *models.PropertyValue
-	Is  *models.PropertyValue
-}
+) (common.ConsistencyToken, *common.Conflict[*models.PropertyValue], error)
 
 func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachPropertyValueCommandHandler {
-	return func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, valueChange models.TypedValueChange, subjectID uuid.UUID, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *AttachPropertyValueConflict, error) {
+	return func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, valueChange models.TypedValueChange, subjectID uuid.UUID, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.PropertyValue], error) {
 		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 		var a *aggregate.PropertyValueAggregate
 
@@ -55,7 +50,7 @@ func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachProperty
 			// conflict detection
 			consistency := common.ConsistencyToken(a.GetVersion())
 			if expConsistency != nil && consistency != *expConsistency {
-				return consistency, &AttachPropertyValueConflict{
+				return consistency, &common.Conflict[*models.PropertyValue]{
 					Was: snapshot,
 					Is:  a.PropertyValue,
 				}, err

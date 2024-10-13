@@ -337,12 +337,12 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 		if len(conflicts) != 0 {
 			return &pb.UpdatePropertyResponse{
 				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
-				Consistency: conflict.Consistency.String(),
+				Consistency: c.String(),
 			}, nil
 		}
 
 		// no conflict? retry with new consistency
-		expConsistency = &conflict.Consistency
+		expConsistency = &c
 	}
 
 	return &pb.UpdatePropertyResponse{

@@ -7,12 +7,13 @@ import (
 	"github.com/google/uuid"
 	"hwes"
 	"tasks-svc/internal/task/aggregate"
+	"tasks-svc/internal/task/models"
 )
 
-type UpdateSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *UpdateTaskConflict, error)
+type UpdateSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.Task], error)
 
 func NewUpdateSubtaskCommandHandler(as hwes.AggregateStore) UpdateSubtaskCommandHandler {
-	return func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *UpdateTaskConflict, error) {
+	return func(ctx context.Context, taskID, subtaskID uuid.UUID, name *string, done *bool, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.Task], error) {
 		a, oldState, err := aggregate.LoadTaskAggregateWithSnapshotAt(ctx, as, taskID, expConsistency)
 		if err != nil {
 			return 0, nil, err
@@ -25,10 +26,9 @@ func NewUpdateSubtaskCommandHandler(as hwes.AggregateStore) UpdateSubtaskCommand
 
 		newToken := common.ConsistencyToken(a.GetVersion())
 		if expConsistency != nil && *expConsistency != newToken {
-			return 0, &UpdateTaskConflict{
-				Consistency: newToken,
-				Was:         oldState,
-				Is:          a.Task,
+			return newToken, &common.Conflict[*models.Task]{
+				Was: oldState,
+				Is:  a.Task,
 			}, err
 		}
 

@@ -136,6 +136,7 @@ func TestAttachPropertyValueConflict_Number(t *testing.T) {
 	})
 	assert.NoError(t, err)
 	assert.Nil(t, isRes.Conflict)
+	hwtesting.WaitForProjectionsToSettle()
 
 	// WANT
 

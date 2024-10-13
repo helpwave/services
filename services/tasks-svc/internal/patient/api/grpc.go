@@ -441,12 +441,12 @@ func (s *PatientGrpcService) UpdatePatient(ctx context.Context, req *pb.UpdatePa
 		if len(conflicts) != 0 {
 			return &pb.UpdatePatientResponse{
 				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
-				Consistency: common.ConsistencyToken(conflict.Consistency).String(),
+				Consistency: c.String(),
 			}, nil
 		}
 
 		// no conflict? retry with new consistency
-		expConsistency = &conflict.Consistency
+		expConsistency = &c
 	}
 
 	tracking.AddPatientToRecentActivity(ctx, patientID.String())
@@ -516,12 +516,12 @@ func (s *PatientGrpcService) AssignBed(ctx context.Context, req *pb.AssignBedReq
 		if len(conflicts) != 0 {
 			return &pb.AssignBedResponse{
 				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
-				Consistency: common.ConsistencyToken(conflict.Consistency).String(),
+				Consistency: common.ConsistencyToken(consistency).String(),
 			}, nil
 		}
 
 		// no conflict? retry with new consistency
-		expConsistency = &conflict.Consistency
+		expConsistency = &c
 	}
 
 	log.Info().Str("patientID", patientID.String()).Str("bedID", bedID.String()).Msg("assigned bed to patient")
@@ -581,12 +581,12 @@ func (s *PatientGrpcService) UnassignBed(ctx context.Context, req *pb.UnassignBe
 		if len(conflicts) != 0 {
 			return &pb.UnassignBedResponse{
 				Conflict:    &commonpb.Conflict{ConflictingAttributes: conflicts},
-				Consistency: conflict.Consistency.String(),
+				Consistency: c.String(),
 			}, nil
 		}
 
 		// no conflict? retry with new consistency
-		expConsistency = &conflict.Consistency
+		expConsistency = &c
 	}
 
 	log.Info().Str("patientID", patientID.String()).Msg("unassigned bed from patient")

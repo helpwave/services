@@ -11,12 +11,6 @@ import (
 	"tasks-svc/internal/task/models"
 )
 
-type UpdateTaskConflict struct {
-	Consistency common.ConsistencyToken
-	Was         *models.Task
-	Is          *models.Task
-}
-
 type UpdateTaskCommandHandler func(
 	ctx context.Context,
 	taskID uuid.UUID,
@@ -26,7 +20,7 @@ type UpdateTaskCommandHandler func(
 	public *bool,
 	dueAt *timestamppb.Timestamp,
 	expConsistency *common.ConsistencyToken,
-) (common.ConsistencyToken, *UpdateTaskConflict, error)
+) (common.ConsistencyToken, *common.Conflict[*models.Task], error)
 
 func NewUpdateTaskCommandHandler(as hwes.AggregateStore) UpdateTaskCommandHandler {
 	return func(ctx context.Context,
@@ -37,7 +31,7 @@ func NewUpdateTaskCommandHandler(as hwes.AggregateStore) UpdateTaskCommandHandle
 		public *bool,
 		dueAt *timestamppb.Timestamp,
 		expConsistency *common.ConsistencyToken,
-	) (common.ConsistencyToken, *UpdateTaskConflict, error) {
+	) (common.ConsistencyToken, *common.Conflict[*models.Task], error) {
 		a, oldState, err := aggregate.LoadTaskAggregateWithSnapshotAt(ctx, as, taskID, expConsistency)
 		if err != nil {
 			return 0, nil, err
@@ -45,10 +39,9 @@ func NewUpdateTaskCommandHandler(as hwes.AggregateStore) UpdateTaskCommandHandle
 
 		newToken := common.ConsistencyToken(a.GetVersion())
 		if expConsistency != nil && *expConsistency != newToken {
-			return 0, &UpdateTaskConflict{
-				Consistency: newToken,
-				Was:         oldState,
-				Is:          a.Task,
+			return newToken, &common.Conflict[*models.Task]{
+				Was: oldState,
+				Is:  a.Task,
 			}, nil
 		}
 

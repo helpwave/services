@@ -9,16 +9,10 @@ import (
 	"tasks-svc/internal/patient/models"
 )
 
-type UnassignBedConflict struct {
-	Consistency common.ConsistencyToken
-	Was         *models.Patient
-	Is          *models.Patient
-}
-
-type UnassignBedCommandHandler func(ctx context.Context, patientID uuid.UUID, expectedConsistency *common.ConsistencyToken) (common.ConsistencyToken, *UnassignBedConflict, error)
+type UnassignBedCommandHandler func(ctx context.Context, patientID uuid.UUID, expectedConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.Patient], error)
 
 func NewUnassignBedCommandHandler(as hwes.AggregateStore) UnassignBedCommandHandler {
-	return func(ctx context.Context, patientID uuid.UUID, expectedConsistency *common.ConsistencyToken) (common.ConsistencyToken, *UnassignBedConflict, error) {
+	return func(ctx context.Context, patientID uuid.UUID, expectedConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.Patient], error) {
 		a, oldState, err := aggregate.LoadPatientAggregateWithSnapshotAt(ctx, as, patientID, expectedConsistency)
 		if err != nil {
 			return 0, nil, err
@@ -27,10 +21,9 @@ func NewUnassignBedCommandHandler(as hwes.AggregateStore) UnassignBedCommandHand
 		// update has happened since?
 		newToken := common.ConsistencyToken(a.GetVersion())
 		if expectedConsistency != nil && *expectedConsistency != newToken {
-			return 0, &UnassignBedConflict{
-				Consistency: newToken,
-				Was:         oldState,
-				Is:          a.Patient,
+			return newToken, &common.Conflict[*models.Patient]{
+				Was: oldState,
+				Is:  a.Patient,
 			}, nil
 		}
 

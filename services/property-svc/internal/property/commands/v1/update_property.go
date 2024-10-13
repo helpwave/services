@@ -10,16 +10,10 @@ import (
 	"property-svc/internal/property/models"
 )
 
-type UpdatePropertyConflict struct {
-	Consistency common.ConsistencyToken
-	Was         *models.Property
-	Is          *models.Property
-}
-
-type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *UpdatePropertyConflict, error)
+type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.Property], error)
 
 func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *UpdatePropertyConflict, error) {
+	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool, expConsistency *common.ConsistencyToken) (common.ConsistencyToken, *common.Conflict[*models.Property], error) {
 		a, oldState, err := aggregate.LoadPropertyAggregateWithSnapshotAt(ctx, as, propertyID, expConsistency)
 		if err != nil {
 			return 0, nil, err
@@ -28,10 +22,9 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyComma
 		// update happened since?
 		newToken := common.ConsistencyToken(a.GetVersion())
 		if expConsistency != nil && *expConsistency != newToken {
-			return 0, &UpdatePropertyConflict{
-				Consistency: newToken,
-				Was:         oldState,
-				Is:          a.Property,
+			return newToken, &common.Conflict[*models.Property]{
+				Was: oldState,
+				Is:  a.Property,
 			}, nil
 		}
 
