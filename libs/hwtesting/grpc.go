@@ -27,13 +27,9 @@ type InsecureBearerToken struct {
 }
 
 func (t InsecureBearerToken) GetRequestMetadata(_ context.Context, _ ...string) (map[string]string, error) {
-	m := map[string]string{
+	return map[string]string{
 		"authorization": "Bearer " + t.bearer,
-	}
-	if t.orgMD != "" {
-		m["X-Organization"] = t.orgMD
-	}
-	return m, nil
+	}, nil
 }
 func (t InsecureBearerToken) RequireTransportSecurity() bool {
 	return false
