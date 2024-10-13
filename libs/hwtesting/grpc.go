@@ -21,16 +21,14 @@ import (
 //	)
 //
 // Also see GetFakeTokenCredentials
-type InsecureBearerToken struct {
-	bearer string
-	orgMD  string
-}
+type InsecureBearerToken string
 
 func (t InsecureBearerToken) GetRequestMetadata(_ context.Context, _ ...string) (map[string]string, error) {
 	return map[string]string{
-		"authorization": "Bearer " + t.bearer,
+		"authorization": "Bearer " + string(t),
 	}, nil
 }
+
 func (t InsecureBearerToken) RequireTransportSecurity() bool {
 	return false
 }
@@ -69,10 +67,7 @@ func GetFakeTokenCredentials(subOverride, orgOverride string) InsecureBearerToke
 	}
 	dist := make([]byte, base64.StdEncoding.EncodedLen(len(bytes)))
 	base64.StdEncoding.Encode(dist, bytes)
-	return InsecureBearerToken{
-		bearer: string(dist),
-		orgMD:  orgOverride,
-	}
+	return InsecureBearerToken(dist)
 }
 
 func GetGrpcConn(subOverride, orgOverride string) *grpc.ClientConn {
