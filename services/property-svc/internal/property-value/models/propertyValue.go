@@ -203,7 +203,7 @@ func (c TypedValueChange) SetBasicValues(settable BasicChangeSettable) bool {
 	return true
 }
 
-func (c TypedValueChange) DoesChange(value *SimpleTypedValue) bool {
+func (c TypedValueChange) ConflictPossible(value *SimpleTypedValue) bool {
 	if value == nil {
 		return !c.ValueRemoved
 	}
@@ -224,12 +224,8 @@ func (c TypedValueChange) DoesChange(value *SimpleTypedValue) bool {
 	case c.SingleSelectValue != nil:
 		return value.SingleSelectValue != nil && *c.SingleSelectValue != *value.SingleSelectValue
 	case c.MultiSelectValues != nil:
-		if value.MultiSelectValues == nil {
-			return false
-		}
-		applied := applyMultiSelectValueChange(value.MultiSelectValues, *c.MultiSelectValues)
-		return !hwutil.SameItems(value.MultiSelectValues, applied)
+		return false // no conflict possible
 	default:
-		panic(fmt.Sprintf("TypedValueChange.DoesChange: value unknown:  %v", c))
+		panic(fmt.Sprintf("TypedValueChange.ConflictPossible: value unknown:  %v", c))
 	}
 }
