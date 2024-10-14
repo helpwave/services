@@ -324,3 +324,45 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, req *pb.GetAllTask
 		Templates: templates,
 	}, nil
 }
+
+func (ServiceServer) GetTaskTemplate(ctx context.Context, req *pb.GetTaskTemplateRequest) (*pb.GetTaskTemplateResponse, error) {
+	templateRepo := task_template_repo.New(hwdb.GetDB())
+
+	taskTemplateID, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	rows, err := templateRepo.GetTaskTemplateWithSubtasksByID(ctx, taskTemplateID)
+	if err := hwdb.Error(ctx, err); err != nil {
+		return nil, err
+	}
+
+	if len(rows) == 0 {
+		return nil, status.Error(codes.NotFound, "task template not found")
+	}
+	taskTemplate := rows[0].TaskTemplate
+
+	taskTemplateSubtasks := hwutil.FlatMap(rows, func(row task_template_repo.GetTaskTemplateWithSubtasksByIDRow) **pb.GetTaskTemplateResponse_SubTask {
+		if !row.SubTaskID.Valid {
+			return nil
+		}
+		return hwutil.PtrTo(
+			&pb.GetTaskTemplateResponse_SubTask{
+				Id:             row.SubTaskID.UUID.String(),
+				TaskTemplateId: row.TaskTemplate.ID.String(),
+				Name:           *row.SubTaskName, // NOT NULL
+			})
+	})
+
+	return &pb.GetTaskTemplateResponse{
+		Id:          taskTemplate.ID.String(),
+		Name:        taskTemplate.Name,
+		Description: taskTemplate.Description,
+		IsPublic:    taskTemplate.WardID.Valid,
+		CreatedBy:   taskTemplate.CreatedBy.String(),
+		Consistency: common.ConsistencyToken(taskTemplate.Consistency).String(),
+		Subtasks:    taskTemplateSubtasks,
+	}, nil
+
+}

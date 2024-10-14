@@ -483,3 +483,92 @@ export namespace GetAllTaskTemplatesResponse {
 
 }
 
+export class GetTaskTemplateRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): GetTaskTemplateRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetTaskTemplateRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetTaskTemplateRequest): GetTaskTemplateRequest.AsObject;
+  static serializeBinaryToWriter(message: GetTaskTemplateRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetTaskTemplateRequest;
+  static deserializeBinaryFromReader(message: GetTaskTemplateRequest, reader: jspb.BinaryReader): GetTaskTemplateRequest;
+}
+
+export namespace GetTaskTemplateRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class GetTaskTemplateResponse extends jspb.Message {
+  getId(): string;
+  setId(value: string): GetTaskTemplateResponse;
+
+  getName(): string;
+  setName(value: string): GetTaskTemplateResponse;
+
+  getDescription(): string;
+  setDescription(value: string): GetTaskTemplateResponse;
+
+  getIsPublic(): boolean;
+  setIsPublic(value: boolean): GetTaskTemplateResponse;
+
+  getCreatedBy(): string;
+  setCreatedBy(value: string): GetTaskTemplateResponse;
+
+  getSubtasksList(): Array<GetTaskTemplateResponse.SubTask>;
+  setSubtasksList(value: Array<GetTaskTemplateResponse.SubTask>): GetTaskTemplateResponse;
+  clearSubtasksList(): GetTaskTemplateResponse;
+  addSubtasks(value?: GetTaskTemplateResponse.SubTask, index?: number): GetTaskTemplateResponse.SubTask;
+
+  getConsistency(): string;
+  setConsistency(value: string): GetTaskTemplateResponse;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetTaskTemplateResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetTaskTemplateResponse): GetTaskTemplateResponse.AsObject;
+  static serializeBinaryToWriter(message: GetTaskTemplateResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetTaskTemplateResponse;
+  static deserializeBinaryFromReader(message: GetTaskTemplateResponse, reader: jspb.BinaryReader): GetTaskTemplateResponse;
+}
+
+export namespace GetTaskTemplateResponse {
+  export type AsObject = {
+    id: string,
+    name: string,
+    description: string,
+    isPublic: boolean,
+    createdBy: string,
+    subtasksList: Array<GetTaskTemplateResponse.SubTask.AsObject>,
+    consistency: string,
+  }
+
+  export class SubTask extends jspb.Message {
+    getId(): string;
+    setId(value: string): SubTask;
+
+    getTaskTemplateId(): string;
+    setTaskTemplateId(value: string): SubTask;
+
+    getName(): string;
+    setName(value: string): SubTask;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SubTask.AsObject;
+    static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
+    static serializeBinaryToWriter(message: SubTask, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SubTask;
+    static deserializeBinaryFromReader(message: SubTask, reader: jspb.BinaryReader): SubTask;
+  }
+
+  export namespace SubTask {
+    export type AsObject = {
+      id: string,
+      taskTemplateId: string,
+      name: string,
+    }
+  }
+
+}
+
