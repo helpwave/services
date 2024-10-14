@@ -53,8 +53,8 @@ func replay(ctx context.Context, eventStore *esdb.Client) error {
 			return
 		},
 		&[]string{
-			fmt.Sprintf("%s-", propertyAggregate.PropertyAggregateType),
-			fmt.Sprintf("%s-", propertyValueAggregate.PropertyValueAggregateType),
+			propertyAggregate.PropertyAggregateType + "-",
+			propertyValueAggregate.PropertyValueAggregateType + "-",
 		},
 	)
 

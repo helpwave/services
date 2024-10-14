@@ -1,7 +1,6 @@
 package spicedb
 
 import (
-	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"hwauthz"
 	"hwes/eventstoredb/projections/custom"
@@ -14,12 +13,12 @@ type Projection struct {
 }
 
 func NewSpiceDBProjection(es *esdb.Client, authz hwauthz.AuthZ, serviceName string) *Projection {
-	subscriptionGroupName := fmt.Sprintf("%s-spicedb-projection", serviceName)
+	subscriptionGroupName := serviceName + "-spicedb-projection"
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(
 			es,
 			subscriptionGroupName,
-			&[]string{fmt.Sprintf("%s-", aggregate.TaskAggregateType)},
+			&[]string{aggregate.TaskAggregateType + "-"},
 		),
 		authz: authz,
 	}

@@ -2,6 +2,7 @@ package property_rules_postgres
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
@@ -28,12 +29,12 @@ type Projection struct {
 }
 
 func NewProjection(es custom.EventStoreClient, serviceName string) *Projection {
-	subscriptionGroupName := fmt.Sprintf("%s-property-rules-postgres-projection", serviceName)
+	subscriptionGroupName := serviceName + "-property-rules-postgres-projection"
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(
 			es,
 			subscriptionGroupName,
-			&[]string{fmt.Sprintf("%s-", aggregate.PropertyViewRuleAggregateType)},
+			&[]string{aggregate.PropertyViewRuleAggregateType + "-"},
 		),
 		db:            hwdb.GetDB(),
 		taskViewsRepo: task_views_repo.New(hwdb.GetDB()),
@@ -57,7 +58,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	}
 
 	if payload.RuleId == uuid.Nil {
-		return fmt.Errorf("ruleID missing"), hwutil.PtrTo(esdb.NackActionSkip)
+		return errors.New("ruleID missing"), hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
 	tx, rollback, err := hwdb.BeginTx(p.db, ctx)

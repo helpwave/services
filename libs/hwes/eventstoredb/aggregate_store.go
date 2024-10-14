@@ -130,7 +130,7 @@ func (as *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) er
 	}
 
 	if aggregate.IsDeleted() {
-		return fmt.Errorf("AggregateStore.Load: aggregate has been marked as deleted")
+		return errors.New("AggregateStore.Load: aggregate has been marked as deleted")
 	}
 
 	return nil

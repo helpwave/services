@@ -2,6 +2,7 @@ package task_postgres_projection
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
@@ -22,12 +23,12 @@ type Projection struct {
 }
 
 func NewProjection(es *esdb.Client, serviceName string) *Projection {
-	subscriptionGroupName := fmt.Sprintf("%s-task-postgres-projection", serviceName)
+	subscriptionGroupName := serviceName + "-task-postgres-projection"
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(
 			es,
 			subscriptionGroupName,
-			&[]string{fmt.Sprintf("%s-", aggregate.TaskAggregateType)},
+			&[]string{aggregate.TaskAggregateType + "-"},
 		),
 		taskRepo: task_repo.New(hwdb.GetDB())}
 	p.initEventListeners()
@@ -82,7 +83,7 @@ func (p *Projection) onTaskCreated(ctx context.Context, evt hwes.Event) (error, 
 	if evt.CommitterUserID != nil {
 		committerID = *evt.CommitterUserID
 	} else {
-		return fmt.Errorf("commiterId is not set"), hwutil.PtrTo(esdb.NackActionPark)
+		return errors.New("commiterId is not set"), hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	// Add to db
@@ -291,7 +292,7 @@ func (p *Projection) onSubtaskCreated(ctx context.Context, evt hwes.Event) (erro
 	if evt.CommitterUserID != nil {
 		committerID = *evt.CommitterUserID
 	} else {
-		return fmt.Errorf("committerID not set"), hwutil.PtrTo(esdb.NackActionPark)
+		return errors.New("committerID not set"), hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	subtaskID, err := uuid.Parse(payload.SubtaskID)

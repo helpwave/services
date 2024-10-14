@@ -1,6 +1,7 @@
 package hwes
 
 import (
+	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
@@ -170,7 +171,7 @@ func (a *AggregateBase) Load(events []Event) error {
 		a.version++
 	}
 	if a.IsDeleted() {
-		return fmt.Errorf("AggregateBase.Load: aggregate has been marked as deleted")
+		return errors.New("AggregateBase.Load: aggregate has been marked as deleted")
 	}
 
 	return nil

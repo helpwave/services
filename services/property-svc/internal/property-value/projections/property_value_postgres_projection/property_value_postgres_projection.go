@@ -2,6 +2,7 @@ package property_value_postgres_projection
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	pb "gen/services/property_svc/v1"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
@@ -26,12 +27,12 @@ type Projection struct {
 }
 
 func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projection {
-	subscriptionGroupName := fmt.Sprintf("%s-value-postgres-projection", serviceName)
+	subscriptionGroupName := serviceName + "-value-postgres-projection"
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(
 			es,
 			subscriptionGroupName,
-			&[]string{fmt.Sprintf("%s-", aggregate.PropertyValueAggregateType)},
+			&[]string{aggregate.PropertyValueAggregateType + "-"},
 		),
 		db:                db,
 		propertyRepo:      property_repo.New(db),
@@ -55,7 +56,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 	}
 
 	if payload.Value == nil {
-		return fmt.Errorf("onPropertyValueCreated: payload is empty"), hwutil.PtrTo(esdb.NackActionPark)
+		return errors.New("onPropertyValueCreated: payload is empty"), hwutil.PtrTo(esdb.NackActionPark)
 	}
 
 	propertyID, err := uuid.Parse(payload.PropertyID)
@@ -98,7 +99,7 @@ func (p *Projection) onPropertyValueCreated(ctx context.Context, evt hwes.Event)
 		if fieldType == pb.FieldType_FIELD_TYPE_SELECT {
 			val, ok := payload.Value.(string)
 			if !ok {
-				return fmt.Errorf("could not assert string"), hwutil.PtrTo(esdb.NackActionPark)
+				return errors.New("could not assert string"), hwutil.PtrTo(esdb.NackActionPark)
 			}
 			id, err := uuid.Parse(val)
 			if err != nil {
@@ -170,13 +171,13 @@ func createBasicPropertyValue(
 	case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
 		val, ok := payload.Value.(float64)
 		if !ok {
-			return fmt.Errorf("could not assert number"), hwutil.PtrTo(esdb.NackActionPark)
+			return errors.New("could not assert number"), hwutil.PtrTo(esdb.NackActionPark)
 		}
 		createPropertyValueParams.NumberValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
 		val, ok := payload.Value.(bool)
 		if !ok {
-			return fmt.Errorf("could not assert bool"), hwutil.PtrTo(esdb.NackActionPark)
+			return errors.New("could not assert bool"), hwutil.PtrTo(esdb.NackActionPark)
 		}
 		createPropertyValueParams.BoolValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_DATE:
@@ -365,13 +366,13 @@ func updateBasicPropertyValue(
 	case fieldType == pb.FieldType_FIELD_TYPE_NUMBER:
 		val, ok := payload.Value.(float64)
 		if !ok {
-			return fmt.Errorf("could not assert number"), hwutil.PtrTo(esdb.NackActionPark)
+			return errors.New("could not assert number"), hwutil.PtrTo(esdb.NackActionPark)
 		}
 		updatePropertyValueParams.NumberValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_CHECKBOX:
 		val, ok := payload.Value.(bool)
 		if !ok {
-			return fmt.Errorf("could not assert bool"), hwutil.PtrTo(esdb.NackActionPark)
+			return errors.New("could not assert bool"), hwutil.PtrTo(esdb.NackActionPark)
 		}
 		updatePropertyValueParams.BoolValue = &val
 	case fieldType == pb.FieldType_FIELD_TYPE_DATE:

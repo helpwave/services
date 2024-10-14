@@ -133,7 +133,7 @@ func (s *TaskGrpcService) GetTask(ctx context.Context, req *pb.GetTaskRequest) (
 		return nil, err
 	}
 
-	var subtasksRes []*pb.GetTaskResponse_SubTask
+	subtasksRes := make([]*pb.GetTaskResponse_SubTask, 0, len(task.Subtasks))
 	for _, subtask := range task.Subtasks {
 		subtasksRes = append(subtasksRes, &pb.GetTaskResponse_SubTask{
 			Id:        subtask.ID.String(),

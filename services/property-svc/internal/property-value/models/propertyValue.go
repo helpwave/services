@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
@@ -73,12 +74,12 @@ type MultiSelectChange struct {
 func interfaceToStringSlice(interf interface{}) ([]string, error) {
 	slice, ok := interf.([]interface{})
 	if !ok {
-		return nil, fmt.Errorf("value is not a slice")
+		return nil, errors.New("value is not a slice")
 	}
 
 	strings, ok := hwutil.InterfacesToStrings(slice)
 	if !ok {
-		return nil, fmt.Errorf("value is not a []string")
+		return nil, errors.New("value is not a []string")
 	}
 	return strings, nil
 }
@@ -111,7 +112,7 @@ func MultiSelectChangeFromMap(m map[string]interface{}) (MultiSelectChange, erro
 func MultiSelectChangeFromInterface(value interface{}) (MultiSelectChange, error) {
 	m, ok := value.(map[string]interface{})
 	if !ok {
-		return MultiSelectChange{}, fmt.Errorf("MultiSelectChangeFromInterface: value is not a map")
+		return MultiSelectChange{}, errors.New("MultiSelectChangeFromInterface: value is not a map")
 	}
 
 	return MultiSelectChangeFromMap(m)

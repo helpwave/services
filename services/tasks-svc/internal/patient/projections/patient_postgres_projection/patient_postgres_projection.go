@@ -2,7 +2,6 @@ package patient_postgres_projection
 
 import (
 	"context"
-	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -21,12 +20,12 @@ type Projection struct {
 }
 
 func NewProjection(es *esdb.Client, serviceName string) *Projection {
-	subscriptionGroupName := fmt.Sprintf("%s-patient-postgres-projection", serviceName)
+	subscriptionGroupName := serviceName + "-patient-postgres-projection"
 	p := &Projection{
 		CustomProjection: custom.NewCustomProjection(
 			es,
 			subscriptionGroupName,
-			&[]string{fmt.Sprintf("%s-", aggregate.PatientAggregateType)},
+			&[]string{aggregate.PatientAggregateType + "-"},
 		),
 		patientRepo: patient_repo.New(hwdb.GetDB())}
 	p.initEventListeners()

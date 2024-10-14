@@ -3,7 +3,6 @@ package common
 import (
 	"context"
 	"crypto/tls"
-	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 	"hwutil"
@@ -156,7 +155,7 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 // - ":8080" will be returned
 func ResolveAddrFromEnv() string {
 	port := hwutil.GetEnvOr("APP_PORT", hwutil.GetEnvOr("PORT", "8080"))
-	fallbackAddr := fmt.Sprintf(":%s", port)
+	fallbackAddr := ":" + port
 	return hwutil.GetEnvOr("ADDR", fallbackAddr)
 }
 

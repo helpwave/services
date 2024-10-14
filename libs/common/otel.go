@@ -2,6 +2,7 @@ package common
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"hwutil"
 	"strings"
@@ -144,6 +145,6 @@ func newTraceExporter(ctx context.Context) (trace.SpanExporter, error) {
 		// more info: https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.21.0
 		return otlptracehttp.New(ctx)
 	default:
-		return nil, fmt.Errorf("OTEL_TRACE_EXPORTER invalid")
+		return nil, errors.New("OTEL_TRACE_EXPORTER invalid")
 	}
 }

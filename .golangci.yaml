@@ -68,11 +68,11 @@ linters:
     # - nlreturn # TODO
     - noctx
     - nolintlint
-    #- paralleltest
-    #- perfsprint
-    #- prealloc
-    #- predeclared
-    #- promlinter
+    # - paralleltest # TODO
+    - perfsprint
+    - prealloc
+    - predeclared
+    - promlinter
     #- protogetter
     #- reassign
     #- revive
