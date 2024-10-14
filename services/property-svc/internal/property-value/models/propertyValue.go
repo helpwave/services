@@ -101,15 +101,38 @@ func (v SimpleTypedValue) ToProtoMessage() proto.Message {
 	}
 }
 
-type TypedValue struct {
-	TextValue         *string
-	BoolValue         *bool
-	NumberValue       *float64
-	DateTimeValue     *time.Time
-	DateValue         *time.Time
-	SingleSelectValue *SelectValueOption
-	MultiSelectValues []SelectValueOption
+// TypedValue is a poor man's enum
+type TypedValue interface {
+	isTypedValue()
 }
+
+type TextValue string
+
+func (v TextValue) isTypedValue() {}
+
+type BoolValue bool
+
+func (v BoolValue) isTypedValue() {}
+
+type NumberValue float64
+
+func (v NumberValue) isTypedValue() {}
+
+type DateTimeValue time.Time
+
+func (v DateTimeValue) isTypedValue() {}
+
+type DateValue time.Time
+
+func (v DateValue) isTypedValue() {}
+
+type SingleSelectValue SelectValueOption
+
+func (v SingleSelectValue) isTypedValue() {}
+
+type MultiSelectValues []SelectValueOption
+
+func (v MultiSelectValues) isTypedValue() {}
 
 type MultiSelectChange struct {
 	SelectValues       []string `json:"select_values,omitempty"`
@@ -130,7 +153,7 @@ type PropertyAndValue struct {
 	PropertyConsistency string
 	ValueConsistency    *string
 
-	Value *TypedValue
+	Value TypedValue
 }
 
 type TypedValueChange struct {

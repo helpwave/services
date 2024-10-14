@@ -19,6 +19,7 @@ import (
 	"property-svc/internal/property-value/handlers"
 	"property-svc/internal/property-value/models"
 	viewModels "property-svc/internal/property-view/models"
+	"time"
 )
 
 type MatchersRequest interface {
@@ -239,42 +240,49 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 				PropertyConsistency: pnv.PropertyConsistency,
 				ValueConsistency:    pnv.ValueConsistency,
 			}
-			switch {
-			case pnv.Value == nil:
+
+			if pnv.Value == nil {
 				return res
-			case pnv.Value.TextValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_TextValue{TextValue: *pnv.Value.TextValue}
-			case pnv.Value.BoolValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_BoolValue{BoolValue: *pnv.Value.BoolValue}
-			case pnv.Value.NumberValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_NumberValue{NumberValue: *pnv.Value.NumberValue}
-			case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_SELECT:
-				v := pnv.Value.MultiSelectValues[0]
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{
-					SelectValue: &pb.SelectValueOption{
-						Id:          v.Id.String(),
-						Name:        v.Name,
-						Description: v.Description,
-					},
+			}
+
+			switch val := pnv.Value.(type) {
+
+			case models.TextValue:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_TextValue{TextValue: string(val)}
+			case models.BoolValue:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_BoolValue{BoolValue: bool(val)}
+			case models.NumberValue:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_NumberValue{NumberValue: float64(val)}
+			case models.MultiSelectValues:
+				// TODO: use value encoding
+				if pnv.FieldType == pb.FieldType_FIELD_TYPE_SELECT {
+					v := val[0]
+					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{
+						SelectValue: &pb.SelectValueOption{
+							Id:          v.Id.String(),
+							Name:        v.Name,
+							Description: v.Description,
+						},
+					}
+				} else if pnv.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
+					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
+						MultiSelectValue: &pb.MultiSelectValue{
+							SelectValues: hwutil.Map(val, func(o models.SelectValueOption) *pb.SelectValueOption {
+								return &pb.SelectValueOption{
+									Id:          o.Id.String(),
+									Name:        o.Name,
+									Description: o.Description,
+								}
+							}),
+						},
+					}
 				}
-			case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
-					MultiSelectValue: &pb.MultiSelectValue{
-						SelectValues: hwutil.Map(pnv.Value.MultiSelectValues, func(o models.SelectValueOption) *pb.SelectValueOption {
-							return &pb.SelectValueOption{
-								Id:          o.Id.String(),
-								Name:        o.Name,
-								Description: o.Description,
-							}
-						}),
-					},
-				}
-			case pnv.Value.DateTimeValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateTimeValue{DateTimeValue: timestamppb.New(*pnv.Value.DateTimeValue)}
-			case pnv.Value.DateValue != nil:
+			case models.DateTimeValue:
+				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateTimeValue{DateTimeValue: timestamppb.New(time.Time(val))}
+			case models.DateValue:
 				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateValue{
 					DateValue: &pb.Date{
-						Date: timestamppb.New(*pnv.Value.DateValue),
+						Date: timestamppb.New(time.Time(val)),
 					},
 				}
 			default:
