@@ -230,13 +230,14 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 
 	fieldType := (pb.FieldType)(property.FieldType)
 
-	if payload.Value == nil {
+	switch {
+	case payload.Value == nil:
 		// Delete PropertyValue
 		err := p.propertyValueRepo.DeletePropertyValue(ctx, evt.AggregateID)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionRetry)
 		}
-	} else if fieldType == pb.FieldType_FIELD_TYPE_SELECT || fieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
+	case fieldType == pb.FieldType_FIELD_TYPE_SELECT || fieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT:
 		tx, rollback, err := hwdb.BeginTx(p.db, ctx)
 		if err != nil {
 			return fmt.Errorf("could not start tx: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
@@ -338,10 +339,9 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 			return fmt.Errorf("onPropertyValueUpdated: could not commit tx: %w", err),
 				hwutil.PtrTo(esdb.NackActionRetry)
 		}
-	} else {
+	default:
 		return updateBasicPropertyValue(ctx, evt, p.propertyValueRepo, fieldType, evt.AggregateID, payload)
 	}
-
 	return nil, nil
 }
 
