@@ -5,7 +5,6 @@ import (
 	"github.com/dapr/dapr/pkg/proto/runtime/v1"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/metadata"
 	"github.com/rs/zerolog"
-	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -28,7 +27,7 @@ func StreamLoggingInterceptor(req any, stream grpc.ServerStream, info *grpc.Stre
 }
 
 func loggingInterceptorPreNext(ctx context.Context, req any, grpcFullMethod string) context.Context {
-	ctx, span, log := telemetry.StartSpan(ctx, "logging_interceptor")
+	ctx, span, log := telemetry.StartSpan(ctx, "hwgrpc.loggingInterceptorPreNext")
 	defer span.End()
 
 	metaData := metadata.ExtractIncoming(ctx)
@@ -75,7 +74,8 @@ func loggingInterceptorPreNext(ctx context.Context, req any, grpcFullMethod stri
 }
 
 func loggingInterceptorPostNext(ctx context.Context, err error) {
-	log := zlog.Ctx(ctx)
+	_, span, log := telemetry.StartSpan(ctx, "hwgrpc.loggingInterceptorPostNext")
+	defer span.End()
 
 	if err != nil {
 		statusError := status.Convert(err)

@@ -5,7 +5,6 @@ import (
 	"context"
 	"github.com/google/uuid"
 	grpcAuth "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
-	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -34,7 +33,8 @@ func StreamAuthInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamS
 // authInterceptor is the main authentication middleware. It validates the OIDC token
 // parsed and injects the OIDC claims for later usage
 func authInterceptor(ctx context.Context) (context.Context, error) {
-	log := zlog.Ctx(ctx)
+	_, span, log := telemetry.StartSpan(ctx, "hwgrpc.authInterceptor")
+	defer span.End()
 
 	// get token from gRPC metadata
 	token, err := grpcAuth.AuthFromMD(ctx, "bearer")

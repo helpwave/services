@@ -4,32 +4,33 @@ import (
 	"common/hwerr"
 	"common/locale"
 	"context"
-	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"reflect"
+	"telemetry"
 )
 
 func UnaryErrorQualityControlInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
 	res, err := next(ctx, req)
-	return res, checkErrorQuality(ctx, err)
+	return res, checkErrorQualityInterceptor(ctx, err)
 }
 
 func StreamErrorQualityControlInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
 	err := next(req, stream)
-	return checkErrorQuality(stream.Context(), err)
+	return checkErrorQualityInterceptor(stream.Context(), err)
 }
 
 // ErrorQualityControlInterceptor logs violations to https://cloud.google.com/apis/design/errors#error_payloads
-func checkErrorQuality(ctx context.Context, err error) error {
+func checkErrorQualityInterceptor(ctx context.Context, err error) error {
+	_, span, log := telemetry.StartSpan(ctx, "hwgrpc.checkErrorQualityInterceptor")
+	defer span.End()
+
 	// no error, no error quality to control
 	if err == nil {
 		return err
 	}
-
-	log := zlog.Ctx(ctx)
 
 	statusError, ok := status.FromError(err)
 	if !ok {

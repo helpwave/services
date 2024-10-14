@@ -35,7 +35,7 @@ func StreamValidateInterceptor(req any, stream grpc.ServerStream, info *grpc.Str
 }
 
 func validateInterceptor(passedCtx context.Context, req any) (ctx context.Context, err error) {
-	ctx, span, _ := telemetry.StartSpan(passedCtx, "validate_interceptor")
+	ctx, span, _ := telemetry.StartSpan(passedCtx, "hwgrpc.validateInterceptor")
 	defer func() {
 		if err != nil {
 			span.SetStatus(otelCodes.Error, err.Error())

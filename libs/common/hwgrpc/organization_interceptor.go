@@ -5,7 +5,6 @@ import (
 	"context"
 	"errors"
 	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -34,7 +33,8 @@ func StreamOrganizationInterceptor(req any, stream grpc.ServerStream, info *grpc
 // organizationInterceptor parses and injects the organization id of the OIDC claims into the current context
 // This is a separate function to allow endpoints to not fail when an organization id is not provided
 func organizationInterceptor(ctx context.Context) (context.Context, error) {
-	log := zlog.Ctx(ctx)
+	ctx, span, log := telemetry.StartSpan(ctx, "hwgrpc.organizationInterceptor")
+	defer span.End()
 
 	claims, err := auth.GetAuthClaims(ctx)
 	if err != nil {
