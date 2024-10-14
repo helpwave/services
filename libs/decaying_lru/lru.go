@@ -15,7 +15,7 @@ type DecayingLRU struct {
 	decay time.Duration
 	// size is the amount of items held in the LRU
 	size int64
-	// invP is the inverse of P
+	// invP is the inverse of P.
 	// P is the probability of triggering a garbage collection
 	// We expect a gc for a key to run every invP add calls to this key
 	invP int

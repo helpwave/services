@@ -40,7 +40,7 @@ func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shut
 		var err error
 		for _, fn := range shutdownFuncs {
 			if fnerr := fn(ctx); fnerr != nil {
-				err = fmt.Errorf("%v\n%v", err, fnerr)
+				err = fmt.Errorf("%w\n%w", err, fnerr)
 			}
 		}
 		shutdownFuncs = nil
@@ -60,7 +60,7 @@ func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shut
 	handleErr := func(inErr error) {
 		err = inErr
 		if sderr := shutdown(ctx); sderr != nil {
-			err = fmt.Errorf("%v\n%v", err, sderr)
+			err = fmt.Errorf("%w\n%w", err, sderr)
 		}
 	}
 
