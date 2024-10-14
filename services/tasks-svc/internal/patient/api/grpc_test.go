@@ -43,7 +43,7 @@ func setup(t *testing.T) (ctx context.Context, client pb.PatientServiceClient, r
 	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
 
 	redisClient, redisMock := redismock.NewClientMock()
-	tracking.SetLRU(decaying_lru.CustomSetup("tasks-svc-test-"+t.Name(), 10, time.Second, 20, nil, redisClient))
+	tracking.SetLRU(decaying_lru.CustomSetup(ctx, "tasks-svc-test-"+t.Name(), 10, time.Second, 20, nil, redisClient))
 
 	return ctx, client, redisMock, teardown
 }

@@ -26,7 +26,7 @@ func main() {
 	closeDBPool := hwdb.SetupDatabaseFromEnv(ctx)
 	defer closeDBPool()
 
-	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
+	tracking.SetupTracking(ctx, ServiceName, 10, 24*time.Hour, 20)
 
 	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()

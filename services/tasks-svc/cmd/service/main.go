@@ -34,7 +34,7 @@ func Main(version string, ready func()) {
 	closeDBPool := hwdb.SetupDatabaseFromEnv(context.Background())
 	defer closeDBPool()
 
-	tracking.SetupTracking(ServiceName, 10, 24*time.Hour, 20)
+	tracking.SetupTracking(ctx, ServiceName, 10, 24*time.Hour, 20)
 
 	authz := hwspicedb.NewSpiceDBAuthZ()
 
