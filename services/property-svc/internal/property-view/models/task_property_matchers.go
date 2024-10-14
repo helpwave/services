@@ -20,10 +20,11 @@ type TaskPropertyMatchers struct {
 
 func (m TaskPropertyMatchers) FindExactRuleId(ctx context.Context) (*uuid.UUID, error) {
 	taskViews := task_views_repo.New(hwdb.GetDB())
-	return hwdb.Optional(taskViews.GetTaskRuleIdUsingExactMatchers)(ctx, task_views_repo.GetTaskRuleIdUsingExactMatchersParams{
-		WardID: m.WardID,
-		TaskID: m.TaskID,
-	})
+	return hwdb.Optional(taskViews.GetTaskRuleIdUsingExactMatchers)(ctx,
+		task_views_repo.GetTaskRuleIdUsingExactMatchersParams{
+			WardID: m.WardID,
+			TaskID: m.TaskID,
+		})
 }
 
 type queryTaskPropertiesRow struct {

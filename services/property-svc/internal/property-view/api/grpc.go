@@ -21,7 +21,10 @@ func NewPropertyViewService(aggregateStore hwes.AggregateStore, handlers *handle
 	return &PropertyViewGrpcService{as: aggregateStore, handlers: handlers}
 }
 
-func (s PropertyViewGrpcService) UpdatePropertyViewRule(ctx context.Context, req *pb.UpdatePropertyViewRuleRequest) (*pb.UpdatePropertyViewRuleResponse, error) {
+func (s PropertyViewGrpcService) UpdatePropertyViewRule(
+	ctx context.Context,
+	req *pb.UpdatePropertyViewRuleRequest,
+) (*pb.UpdatePropertyViewRuleResponse, error) {
 	if req.FilterUpdate == nil {
 		// nothing to update
 		return &pb.UpdatePropertyViewRuleResponse{}, nil
@@ -46,17 +49,24 @@ func (s PropertyViewGrpcService) UpdatePropertyViewRule(ctx context.Context, req
 		return nil, err
 	}
 
-	appendToDontAlwaysInclude, err := hwutil.StringsToUUIDs(hwutil.OrEmptySlice(req.FilterUpdate.AppendToDontAlwaysInclude))
+	appendToDontAlwaysInclude, err := hwutil.StringsToUUIDs(
+		hwutil.OrEmptySlice(req.FilterUpdate.AppendToDontAlwaysInclude),
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	removeFromDontAlwaysInclude, err := hwutil.StringsToUUIDs(hwutil.OrEmptySlice(req.FilterUpdate.RemoveFromDontAlwaysInclude))
+	removeFromDontAlwaysInclude, err := hwutil.StringsToUUIDs(
+		hwutil.OrEmptySlice(req.FilterUpdate.RemoveFromDontAlwaysInclude),
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(appendToAlwaysInclude) == 0 && len(removeFromAlwaysInclude) == 0 && len(appendToDontAlwaysInclude) == 0 && len(removeFromDontAlwaysInclude) == 0 {
+	if len(appendToAlwaysInclude) == 0 &&
+		len(removeFromAlwaysInclude) == 0 &&
+		len(appendToDontAlwaysInclude) == 0 &&
+		len(removeFromDontAlwaysInclude) == 0 {
 		// nothing to update
 		return &pb.UpdatePropertyViewRuleResponse{}, nil
 	}

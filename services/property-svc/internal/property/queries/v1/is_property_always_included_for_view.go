@@ -14,10 +14,20 @@ type ViewSource interface {
 	GetWardId() string
 }
 
-type IsPropertyAlwaysIncludedForViewSource func(ctx context.Context, viewSource ViewSource, subjectType pb.SubjectType, propertyId uuid.UUID) (bool, error)
+type IsPropertyAlwaysIncludedForViewSource func(
+	ctx context.Context,
+	viewSource ViewSource,
+	subjectType pb.SubjectType,
+	propertyId uuid.UUID,
+) (bool, error)
 
 func NewIsPropertyAlwaysIncludedForViewSourceHandler() IsPropertyAlwaysIncludedForViewSource {
-	return func(ctx context.Context, viewSource ViewSource, subjectType pb.SubjectType, propertyId uuid.UUID) (bool, error) {
+	return func(
+		ctx context.Context,
+		viewSource ViewSource,
+		subjectType pb.SubjectType,
+		propertyId uuid.UUID,
+	) (bool, error) {
 		wardId := uuid.NullUUID{}
 		wardIdP := viewSource.GetWardId()
 		if wardIdP != "" {

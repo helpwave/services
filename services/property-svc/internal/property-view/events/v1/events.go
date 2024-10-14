@@ -88,7 +88,11 @@ func (m *PropertyRuleCreatedEvent) FromJSON(data []byte) error {
 	return errors.New("could not find matcher in event")
 }
 
-func NewPropertyRuleCreatedEvent(ctx context.Context, a hwes.Aggregate, rule models.PropertyViewRule) (hwes.Event, error) {
+func NewPropertyRuleCreatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	rule models.PropertyViewRule,
+) (hwes.Event, error) {
 	payload := PropertyRuleCreatedEvent{
 		rule,
 	}
@@ -103,7 +107,14 @@ type PropertyRuleListsUpdatedEvent struct {
 	RemoveFromDontAlwaysInclude []uuid.UUID
 }
 
-func NewPropertyRuleListsUpdatedEvent(ctx context.Context, a hwes.Aggregate, ruleId uuid.UUID, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude []uuid.UUID) (hwes.Event, error) {
+func NewPropertyRuleListsUpdatedEvent(ctx context.Context,
+	a hwes.Aggregate,
+	ruleId uuid.UUID,
+	appendToAlwaysInclude,
+	removeFromAlwaysInclude,
+	appendToDontAlwaysInclude,
+	removeFromDontAlwaysInclude []uuid.UUID,
+) (hwes.Event, error) {
 	payload := PropertyRuleListsUpdatedEvent{
 		RuleId:                      ruleId,
 		AppendToAlwaysInclude:       appendToAlwaysInclude,

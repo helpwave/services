@@ -164,7 +164,12 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 
 	assert.Equal(t, "Updated Text Value", attachedValuesResponse.Values[0].GetTextValue())
 
-	assert.Equal(t, &updateResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency, "ValueConsistency was not updated")
+	assert.Equal(
+		t,
+		&updateResponse.Consistency,
+		attachedValuesResponse.Values[0].ValueConsistency,
+		"ValueConsistency was not updated",
+	)
 }
 
 // TestCreateAttachUpdateSelectProperty:
@@ -339,7 +344,12 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 
 	assert.Equal(t, "Option 2", attachedValuesResponse.Values[0].GetSelectValue().GetName())
 
-	assert.Equal(t, &updateResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency, "ValueConsistency was not updated")
+	assert.Equal(
+		t,
+		&updateResponse.Consistency,
+		attachedValuesResponse.Values[0].ValueConsistency,
+		"ValueConsistency was not updated",
+	)
 }
 
 // TestCreateAttachUpdateMultiSelectProperty:
@@ -478,7 +488,11 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 
 	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no initial values")
 
-	assert.Equal(t, []string{"Option 1", "Option 2"}, NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()))
+	assert.Equal(
+		t,
+		[]string{"Option 1", "Option 2"},
+		NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()),
+	)
 
 	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
 
@@ -523,9 +537,18 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 
 	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no updated values")
 
-	assert.Equal(t, []string{"Option 2", "Option 3"}, NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()))
+	assert.Equal(
+		t,
+		[]string{"Option 2", "Option 3"},
+		NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()),
+	)
 
-	assert.Equal(t, &updateResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency, "ValueConsistency was not updated")
+	assert.Equal(
+		t,
+		&updateResponse.Consistency,
+		attachedValuesResponse.Values[0].ValueConsistency,
+		"ValueConsistency was not updated",
+	)
 }
 
 // TestCreateAttachAddOptionAttachSelectProperty:
@@ -800,7 +823,11 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 
 	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no initial values")
 
-	assert.Equal(t, []string{"Option 1"}, NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()))
+	assert.Equal(
+		t,
+		[]string{"Option 1"},
+		NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()),
+	)
 
 	//
 	// Add new Option
@@ -882,5 +909,9 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 
 	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no updated values")
 
-	assert.Equal(t, []string{"Option 1", "Option 2"}, NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()))
+	assert.Equal(
+		t,
+		[]string{"Option 1", "Option 2"},
+		NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()),
+	)
 }

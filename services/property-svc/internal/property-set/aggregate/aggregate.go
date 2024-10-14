@@ -23,7 +23,11 @@ func NewPropertySetAggregate(id uuid.UUID) *PropertySetAggregate {
 	return aggregate
 }
 
-func LoadPropertySetAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID) (*PropertySetAggregate, error) {
+func LoadPropertySetAggregate(
+	ctx context.Context,
+	as hwes.AggregateStore,
+	id uuid.UUID,
+) (*PropertySetAggregate, error) {
 	propertySet := NewPropertySetAggregate(id)
 	if err := as.Load(ctx, propertySet); err != nil {
 		return nil, err

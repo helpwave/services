@@ -63,11 +63,14 @@ type PropertyValueGrpcService struct {
 	handlers *handlers.Handlers
 }
 
-func NewPropertyValueService(aggregateStore hwes.AggregateStore, handlers *handlers.Handlers) *PropertyValueGrpcService {
-	return &PropertyValueGrpcService{as: aggregateStore, handlers: handlers}
+func NewPropertyValueService(as hwes.AggregateStore, handlers *handlers.Handlers) *PropertyValueGrpcService {
+	return &PropertyValueGrpcService{as: as, handlers: handlers}
 }
 
-func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req *pb.AttachPropertyValueRequest) (*pb.AttachPropertyValueResponse, error) {
+func (s *PropertyValueGrpcService) AttachPropertyValue(
+	ctx context.Context,
+	req *pb.AttachPropertyValueRequest,
+) (*pb.AttachPropertyValueResponse, error) {
 	propertyValueID := uuid.New()
 
 	propertyID := uuid.MustParse(req.GetPropertyId()) // guarded by validate
@@ -108,7 +111,10 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 	}, nil
 }
 
-func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context, req *pb.GetAttachedPropertyValuesRequest) (*pb.GetAttachedPropertyValuesResponse, error) {
+func (s *PropertyValueGrpcService) GetAttachedPropertyValues(
+	ctx context.Context,
+	req *pb.GetAttachedPropertyValuesRequest,
+) (*pb.GetAttachedPropertyValuesResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	// de-mux matchers
@@ -129,59 +135,65 @@ func (s *PropertyValueGrpcService) GetAttachedPropertyValues(ctx context.Context
 	}
 
 	return &pb.GetAttachedPropertyValuesResponse{
-		Values: hwutil.Map(propertiesWithValues, func(pnv models.PropertyAndValue) *pb.GetAttachedPropertyValuesResponse_Value {
-			res := &pb.GetAttachedPropertyValuesResponse_Value{
-				PropertyId:          pnv.PropertyID.String(),
-				FieldType:           pnv.FieldType,
-				Name:                pnv.Name,
-				Description:         hwutil.MapIf(pnv.Description != "", pnv.Description, func(s string) string { return s }),
-				IsArchived:          pnv.IsArchived,
-				Value:               nil,
-				PropertyConsistency: pnv.PropertyConsistency,
-				ValueConsistency:    pnv.ValueConsistency,
-			}
-			switch {
-			case pnv.Value == nil:
+		Values: hwutil.Map(
+			propertiesWithValues,
+			func(pnv models.PropertyAndValue) *pb.GetAttachedPropertyValuesResponse_Value {
+				res := &pb.GetAttachedPropertyValuesResponse_Value{
+					PropertyId:          pnv.PropertyID.String(),
+					FieldType:           pnv.FieldType,
+					Name:                pnv.Name,
+					Description:         hwutil.MapIf(pnv.Description != "", pnv.Description, func(s string) string { return s }),
+					IsArchived:          pnv.IsArchived,
+					Value:               nil,
+					PropertyConsistency: pnv.PropertyConsistency,
+					ValueConsistency:    pnv.ValueConsistency,
+				}
+				switch {
+				case pnv.Value == nil:
+					return res
+				case pnv.Value.TextValue != nil:
+					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_TextValue{TextValue: *pnv.Value.TextValue}
+				case pnv.Value.BoolValue != nil:
+					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_BoolValue{BoolValue: *pnv.Value.BoolValue}
+				case pnv.Value.NumberValue != nil:
+					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_NumberValue{NumberValue: *pnv.Value.NumberValue}
+				case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_SELECT:
+					v := pnv.Value.MultiSelectValues[0]
+					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{
+						SelectValue: &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
+							Id:          v.Id.String(),
+							Name:        v.Name,
+							Description: v.Description,
+						},
+					}
+				case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT:
+					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue_{
+						MultiSelectValue: &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
+							SelectValues: hwutil.Map(
+								pnv.Value.MultiSelectValues,
+								func(o models.SelectValueOption) *pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption {
+									return &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
+										Id:          o.Id.String(),
+										Name:        o.Name,
+										Description: o.Description,
+									}
+								}),
+						},
+					}
+				case pnv.Value.DateTimeValue != nil:
+					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateTimeValue{
+						DateTimeValue: timestamppb.New(*pnv.Value.DateTimeValue),
+					}
+				case pnv.Value.DateValue != nil:
+					res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateValue{
+						DateValue: &pb.Date{
+							Date: timestamppb.New(*pnv.Value.DateValue),
+						},
+					}
+				default:
+					log.Error().Any("pnv", pnv).Msg("pnv.Value is in an invalid state!")
+				}
 				return res
-			case pnv.Value.TextValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_TextValue{TextValue: *pnv.Value.TextValue}
-			case pnv.Value.BoolValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_BoolValue{BoolValue: *pnv.Value.BoolValue}
-			case pnv.Value.NumberValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_NumberValue{NumberValue: *pnv.Value.NumberValue}
-			case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_SELECT:
-				v := pnv.Value.MultiSelectValues[0]
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_SelectValue{
-					SelectValue: &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
-						Id:          v.Id.String(),
-						Name:        v.Name,
-						Description: v.Description,
-					},
-				}
-			case len(pnv.Value.MultiSelectValues) != 0 && pnv.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue_{
-					MultiSelectValue: &pb.GetAttachedPropertyValuesResponse_Value_MultiSelectValue{
-						SelectValues: hwutil.Map(pnv.Value.MultiSelectValues, func(o models.SelectValueOption) *pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption {
-							return &pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption{
-								Id:          o.Id.String(),
-								Name:        o.Name,
-								Description: o.Description,
-							}
-						}),
-					},
-				}
-			case pnv.Value.DateTimeValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateTimeValue{DateTimeValue: timestamppb.New(*pnv.Value.DateTimeValue)}
-			case pnv.Value.DateValue != nil:
-				res.Value = &pb.GetAttachedPropertyValuesResponse_Value_DateValue{
-					DateValue: &pb.Date{
-						Date: timestamppb.New(*pnv.Value.DateValue),
-					},
-				}
-			default:
-				log.Error().Any("pnv", pnv).Msg("pnv.Value is in an invalid state!")
-			}
-			return res
-		}),
+			}),
 	}, nil
 }

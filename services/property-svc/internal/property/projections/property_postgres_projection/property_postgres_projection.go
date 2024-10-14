@@ -28,26 +28,43 @@ type Projection struct {
 func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-postgres-projection", serviceName)
 	p := &Projection{
-		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)}),
-		db:               db,
-		propertyRepo:     property_repo.New(db),
+		CustomProjection: custom.NewCustomProjection(
+			es,
+			subscriptionGroupName,
+			&[]string{fmt.Sprintf("%s-", aggregate.PropertyAggregateType)},
+		),
+		db:           db,
+		propertyRepo: property_repo.New(db),
 	}
 	p.initEventListeners()
 	return p
 }
 
 func (p *Projection) initEventListeners() {
-	p.RegisterEventListener(propertyEventsV1.PropertyCreated, p.onPropertyCreated)
-	p.RegisterEventListener(propertyEventsV1.PropertyDescriptionUpdated, p.onPropertyDescriptionUpdated)
-	p.RegisterEventListener(propertyEventsV1.PropertySetIDUpdated, p.onPropertySetIDUpdated)
-	p.RegisterEventListener(propertyEventsV1.PropertySubjectTypeUpdated, p.onSubjectTypeUpdated)
-	p.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, p.onNameUpdated)
-	p.RegisterEventListener(propertyEventsV1.PropertyArchived, p.onPropertyArchived)
-	p.RegisterEventListener(propertyEventsV1.PropertyRetrieved, p.onPropertyRetrieved)
-	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataCreated, p.onPropertyFieldTypeDataCreated)
-	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, p.onAllowFreetextUpdated)
-	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsRemoved, p.onFieldTypeDataSelectOptionsRemoved)
-	p.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsUpserted, p.onFieldTypeDataSelectOptionsUpserted)
+	p.RegisterEventListener(
+		propertyEventsV1.PropertyCreated, p.onPropertyCreated)
+	p.RegisterEventListener(
+		propertyEventsV1.PropertyDescriptionUpdated, p.onPropertyDescriptionUpdated)
+	p.RegisterEventListener(
+		propertyEventsV1.PropertySetIDUpdated, p.onPropertySetIDUpdated)
+	p.RegisterEventListener(
+		propertyEventsV1.PropertySubjectTypeUpdated, p.onSubjectTypeUpdated)
+	p.RegisterEventListener(
+		propertyEventsV1.PropertyNameUpdated, p.onNameUpdated)
+	p.RegisterEventListener(
+		propertyEventsV1.PropertyArchived, p.onPropertyArchived)
+	p.RegisterEventListener(
+		propertyEventsV1.PropertyRetrieved, p.onPropertyRetrieved)
+	p.RegisterEventListener(
+		propertyEventsV1.PropertyFieldTypeDataCreated, p.onPropertyFieldTypeDataCreated)
+	p.RegisterEventListener(
+		propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, p.onAllowFreetextUpdated)
+	p.RegisterEventListener(
+		propertyEventsV1.PropertyFieldTypeDataSelectOptionsRemoved,
+		p.onFieldTypeDataSelectOptionsRemoved)
+	p.RegisterEventListener(
+		propertyEventsV1.PropertyFieldTypeDataSelectOptionsUpserted,
+		p.onFieldTypeDataSelectOptionsUpserted)
 }
 
 func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
@@ -300,7 +317,8 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 		if err := hwdb.Error(ctx, err); err != nil {
 			return err, hwutil.PtrTo(esdb.NackActionRetry)
 		}
-	} else if property.FieldType == int32(pb.FieldType_FIELD_TYPE_SELECT) || property.FieldType == int32(pb.FieldType_FIELD_TYPE_MULTI_SELECT) {
+	} else if property.FieldType == int32(pb.FieldType_FIELD_TYPE_SELECT) ||
+		property.FieldType == int32(pb.FieldType_FIELD_TYPE_MULTI_SELECT) {
 		// if the property was created with field_type_select but selectData wasn't created initially we have to do it here
 		sdID, err := propertyRepo.CreateSelectData(ctx, payload.NewAllowFreetext)
 		if err := hwdb.Error(ctx, err); err != nil {
@@ -323,7 +341,10 @@ func (p *Projection) onAllowFreetextUpdated(ctx context.Context, evt hwes.Event)
 	return nil, nil
 }
 
-func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onFieldTypeDataSelectOptionsUpserted(
+	ctx context.Context,
+	evt hwes.Event,
+) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 	tx, rollback, err := hwdb.BeginTx(p.db, ctx)
 	if err != nil {
@@ -473,7 +494,10 @@ func (p *Projection) onFieldTypeDataSelectOptionsUpserted(ctx context.Context, e
 	return nil, nil
 }
 
-func (p *Projection) onFieldTypeDataSelectOptionsRemoved(ctx context.Context, evt hwes.Event) (error, *esdb.NackAction) {
+func (p *Projection) onFieldTypeDataSelectOptionsRemoved(
+	ctx context.Context,
+	evt hwes.Event,
+) (error, *esdb.NackAction) {
 	log := zlog.Ctx(ctx)
 	tx, rollback, err := hwdb.BeginTx(p.db, ctx)
 	if err != nil {

@@ -270,6 +270,11 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 
 	readVersionAfterUpdate := propertyResponse.Consistency
 
-	assert.Equal(t, updatedVersion, readVersionAfterUpdate, "updatedVersion and readVersionAfterUpdate consistencies differ")
+	assert.Equal(
+		t,
+		updatedVersion,
+		readVersionAfterUpdate,
+		"updatedVersion and readVersionAfterUpdate consistencies differ",
+	)
 
 }

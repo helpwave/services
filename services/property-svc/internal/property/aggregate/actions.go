@@ -8,7 +8,12 @@ import (
 	"property-svc/internal/property/models"
 )
 
-func (a *PropertyAggregate) CreateProperty(ctx context.Context, subjectType pb.SubjectType, fieldType pb.FieldType, name string) error {
+func (a *PropertyAggregate) CreateProperty(
+	ctx context.Context,
+	subjectType pb.SubjectType,
+	fieldType pb.FieldType,
+	name string,
+) error {
 	id := a.GetID()
 
 	event, err := propertyEventsV1.NewPropertyCreatedEvent(ctx, a, id, subjectType, fieldType, name)
@@ -69,7 +74,10 @@ func (a *PropertyAggregate) UpdateAllowFreetext(ctx context.Context, allowFreete
 	return a.Apply(event)
 }
 
-func (a *PropertyAggregate) FieldTypeDataUpsertOptions(ctx context.Context, upsertOptions []models.UpdateSelectOption) error {
+func (a *PropertyAggregate) FieldTypeDataUpsertOptions(
+	ctx context.Context,
+	upsertOptions []models.UpdateSelectOption,
+) error {
 	event, err := propertyEventsV1.NewFieldTypeDataSelectOptionsUpsertedEvent(ctx, a, upsertOptions)
 	if err != nil {
 		return err

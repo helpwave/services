@@ -24,7 +24,10 @@ func NewServiceServer() *ServiceServer {
 	return &ServiceServer{}
 }
 
-func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskTemplateRequest) (*pb.CreateTaskTemplateResponse, error) {
+func (ServiceServer) CreateTaskTemplate(
+	ctx context.Context,
+	req *pb.CreateTaskTemplateRequest,
+) (*pb.CreateTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
 	db := hwdb.GetDB()
 	tx, rollback, err := hwdb.BeginTx(db, ctx)
@@ -68,12 +71,13 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	}
 
 	if req.Subtasks != nil {
-		subtaskNames := hwutil.Map(req.Subtasks, func(subtask *pb.CreateTaskTemplateRequest_SubTask) task_template_repo.AppendSubTasksParams {
-			return task_template_repo.AppendSubTasksParams{
-				Name:           subtask.Name,
-				TaskTemplateID: templateID,
-			}
-		})
+		subtaskNames := hwutil.Map(req.Subtasks,
+			func(subtask *pb.CreateTaskTemplateRequest_SubTask) task_template_repo.AppendSubTasksParams {
+				return task_template_repo.AppendSubTasksParams{
+					Name:           subtask.Name,
+					TaskTemplateID: templateID,
+				}
+			})
 
 		_, err = templateRepo.AppendSubTasks(ctx, subtaskNames)
 		err = hwdb.Error(ctx, err)
@@ -95,7 +99,10 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	}, nil
 }
 
-func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTemplatesRequest) (*pb.GetAllTaskTemplatesResponse, error) {
+func (ServiceServer) GetAllTaskTemplates(
+	ctx context.Context,
+	_ *pb.GetAllTaskTemplatesRequest,
+) (*pb.GetAllTaskTemplatesResponse, error) {
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
@@ -103,12 +110,13 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 		return nil, err
 	}
 
-	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx, task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
-		OrganizationID: uuid.NullUUID{
-			UUID:  organizationID,
-			Valid: true,
-		},
-	})
+	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx,
+		task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
+			OrganizationID: uuid.NullUUID{
+				UUID:  organizationID,
+				Valid: true,
+			},
+		})
 
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -149,7 +157,10 @@ func (ServiceServer) GetAllTaskTemplates(ctx context.Context, _ *pb.GetAllTaskTe
 	}, nil
 }
 
-func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskTemplateRequest) (*pb.DeleteTaskTemplateResponse, error) {
+func (ServiceServer) DeleteTaskTemplate(
+	ctx context.Context,
+	req *pb.DeleteTaskTemplateRequest,
+) (*pb.DeleteTaskTemplateResponse, error) {
 	log := zlog.Ctx(ctx)
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
@@ -173,7 +184,10 @@ func (ServiceServer) DeleteTaskTemplate(ctx context.Context, req *pb.DeleteTaskT
 	return &pb.DeleteTaskTemplateResponse{}, nil
 }
 
-func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.DeleteTaskTemplateSubTaskRequest) (*pb.DeleteTaskTemplateSubTaskResponse, error) {
+func (ServiceServer) DeleteTaskTemplateSubTask(
+	ctx context.Context,
+	req *pb.DeleteTaskTemplateSubTaskRequest,
+) (*pb.DeleteTaskTemplateSubTaskResponse, error) {
 	log := zlog.Ctx(ctx)
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
@@ -198,7 +212,10 @@ func (ServiceServer) DeleteTaskTemplateSubTask(ctx context.Context, req *pb.Dele
 	return &pb.DeleteTaskTemplateSubTaskResponse{}, nil
 }
 
-func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskTemplateRequest) (*pb.UpdateTaskTemplateResponse, error) {
+func (ServiceServer) UpdateTaskTemplate(
+	ctx context.Context,
+	req *pb.UpdateTaskTemplateRequest,
+) (*pb.UpdateTaskTemplateResponse, error) {
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -221,7 +238,10 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 	return &pb.UpdateTaskTemplateResponse{}, nil
 }
 
-func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.UpdateTaskTemplateSubTaskRequest) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
+func (ServiceServer) UpdateTaskTemplateSubTask(
+	ctx context.Context,
+	req *pb.UpdateTaskTemplateSubTaskRequest,
+) (*pb.UpdateTaskTemplateSubTaskResponse, error) {
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -243,7 +263,10 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 	return &pb.UpdateTaskTemplateSubTaskResponse{}, nil
 }
 
-func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.CreateTaskTemplateSubTaskRequest) (*pb.CreateTaskTemplateSubTaskResponse, error) {
+func (ServiceServer) CreateTaskTemplateSubTask(
+	ctx context.Context,
+	req *pb.CreateTaskTemplateSubTaskRequest,
+) (*pb.CreateTaskTemplateSubTaskResponse, error) {
 	log := zlog.Ctx(ctx)
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
@@ -272,7 +295,10 @@ func (ServiceServer) CreateTaskTemplateSubTask(ctx context.Context, req *pb.Crea
 	}, nil
 }
 
-func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.GetAllTaskTemplatesByCreatorRequest) (*pb.GetAllTaskTemplatesByCreatorResponse, error) {
+func (ServiceServer) GetAllTaskTemplatesByCreator(
+	ctx context.Context,
+	req *pb.GetAllTaskTemplatesByCreatorRequest,
+) (*pb.GetAllTaskTemplatesByCreatorResponse, error) {
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -288,17 +314,18 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.G
 		return nil, err
 	}
 
-	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx, task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
-		OrganizationID: uuid.NullUUID{
-			UUID:  organizationID,
-			Valid: true,
-		},
-		CreatorID: uuid.NullUUID{
-			UUID:  createdBy,
-			Valid: true,
-		},
-		PrivateOnly: req.GetPrivateOnly(),
-	})
+	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx,
+		task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
+			OrganizationID: uuid.NullUUID{
+				UUID:  organizationID,
+				Valid: true,
+			},
+			CreatorID: uuid.NullUUID{
+				UUID:  createdBy,
+				Valid: true,
+			},
+			PrivateOnly: req.GetPrivateOnly(),
+		})
 
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -338,7 +365,10 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(ctx context.Context, req *pb.G
 	}, nil
 }
 
-func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetAllTaskTemplatesByWardRequest) (*pb.GetAllTaskTemplatesByWardResponse, error) {
+func (ServiceServer) GetAllTaskTemplatesByWard(
+	ctx context.Context,
+	req *pb.GetAllTaskTemplatesByWardRequest,
+) (*pb.GetAllTaskTemplatesByWardResponse, error) {
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
 	wardId, err := uuid.Parse(req.WardId)
@@ -346,12 +376,13 @@ func (ServiceServer) GetAllTaskTemplatesByWard(ctx context.Context, req *pb.GetA
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx, task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
-		WardID: uuid.NullUUID{
-			UUID:  wardId,
-			Valid: true,
-		},
-	})
+	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx,
+		task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
+			WardID: uuid.NullUUID{
+				UUID:  wardId,
+				Valid: true,
+			},
+		})
 
 	err = hwdb.Error(ctx, err)
 	if err != nil {

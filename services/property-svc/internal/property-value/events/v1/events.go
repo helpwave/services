@@ -18,7 +18,14 @@ type PropertyValueCreatedEvent struct {
 	SubjectID  string      `json:"subject_id"`
 }
 
-func NewPropertyValueCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) (hwes.Event, error) {
+func NewPropertyValueCreatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	id uuid.UUID,
+	propertyID uuid.UUID,
+	value interface{},
+	subjectID uuid.UUID,
+) (hwes.Event, error) {
 	payload := PropertyValueCreatedEvent{
 		ID:         id.String(),
 		PropertyID: propertyID.String(),

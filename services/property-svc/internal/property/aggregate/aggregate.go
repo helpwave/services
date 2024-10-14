@@ -40,17 +40,28 @@ func LoadPropertyAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.
 }
 
 func (a *PropertyAggregate) initEventListeners() {
-	a.RegisterEventListener(propertyEventsV1.PropertyCreated, a.onPropertyCreated)
-	a.RegisterEventListener(propertyEventsV1.PropertyDescriptionUpdated, a.onDescriptionUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertySetIDUpdated, a.onSetIDUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertySubjectTypeUpdated, a.onSubjectTypeUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, a.onNameUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataCreated, a.onFieldTypeDataCreated)
-	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, a.onAllowFreetextUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsUpserted, a.onFieldTypeDataSelectOptionsUpserted)
-	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsRemoved, a.onFieldTypeDataSelectOptionsRemoved)
-	a.RegisterEventListener(propertyEventsV1.PropertyArchived, a.onPropertyArchived)
-	a.RegisterEventListener(propertyEventsV1.PropertyRetrieved, a.onPropertyRetrieved)
+	a.RegisterEventListener(
+		propertyEventsV1.PropertyCreated, a.onPropertyCreated)
+	a.RegisterEventListener(
+		propertyEventsV1.PropertyDescriptionUpdated, a.onDescriptionUpdated)
+	a.RegisterEventListener(
+		propertyEventsV1.PropertySetIDUpdated, a.onSetIDUpdated)
+	a.RegisterEventListener(
+		propertyEventsV1.PropertySubjectTypeUpdated, a.onSubjectTypeUpdated)
+	a.RegisterEventListener(
+		propertyEventsV1.PropertyNameUpdated, a.onNameUpdated)
+	a.RegisterEventListener(
+		propertyEventsV1.PropertyFieldTypeDataCreated, a.onFieldTypeDataCreated)
+	a.RegisterEventListener(
+		propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, a.onAllowFreetextUpdated)
+	a.RegisterEventListener(
+		propertyEventsV1.PropertyFieldTypeDataSelectOptionsUpserted, a.onFieldTypeDataSelectOptionsUpserted)
+	a.RegisterEventListener(
+		propertyEventsV1.PropertyFieldTypeDataSelectOptionsRemoved, a.onFieldTypeDataSelectOptionsRemoved)
+	a.RegisterEventListener(
+		propertyEventsV1.PropertyArchived, a.onPropertyArchived)
+	a.RegisterEventListener(
+		propertyEventsV1.PropertyRetrieved, a.onPropertyRetrieved)
 }
 
 // Event handlers
@@ -154,7 +165,8 @@ func (a *PropertyAggregate) onAllowFreetextUpdated(evt hwes.Event) error {
 
 	if a.Property.FieldTypeData.SelectData != nil {
 		a.Property.FieldTypeData.SelectData.AllowFreetext = payload.NewAllowFreetext
-	} else if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT || a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
+	} else if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT ||
+		a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
 		a.Property.FieldTypeData.SelectData = &models.SelectData{
 			AllowFreetext: payload.NewAllowFreetext,
 		}
@@ -229,14 +241,16 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsRemoved(evt hwes.Event) 
 	}
 
 	if a.Property.FieldTypeData.SelectData != nil {
-		a.Property.FieldTypeData.SelectData.SelectOptions = hwutil.Filter(a.Property.FieldTypeData.SelectData.SelectOptions, func(selectOption models.SelectOption) bool {
-			for _, id := range payload.RemovedSelectOptions {
-				if selectOption.ID.String() == id {
-					return false
+		a.Property.FieldTypeData.SelectData.SelectOptions = hwutil.Filter(
+			a.Property.FieldTypeData.SelectData.SelectOptions,
+			func(selectOption models.SelectOption) bool {
+				for _, id := range payload.RemovedSelectOptions {
+					if selectOption.ID.String() == id {
+						return false
+					}
 				}
-			}
-			return true
-		})
+				return true
+			})
 	}
 
 	return nil

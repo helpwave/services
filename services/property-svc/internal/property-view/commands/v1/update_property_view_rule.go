@@ -9,10 +9,24 @@ import (
 	"property-svc/internal/property-view/models"
 )
 
-type UpdatePropertyViewRuleCommandHandler func(context.Context, models.PropertyMatchers, []uuid.UUID, []uuid.UUID, []uuid.UUID, []uuid.UUID) (common.ConsistencyToken, error)
+type UpdatePropertyViewRuleCommandHandler func(
+	ctx context.Context,
+	matchers models.PropertyMatchers,
+	appendToAlwaysInclude,
+	removeFromAlwaysInclude,
+	appendToDontAlwaysInclude,
+	removeFromDontAlwaysInclude []uuid.UUID,
+) (common.ConsistencyToken, error)
 
 func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePropertyViewRuleCommandHandler {
-	return func(ctx context.Context, matchers models.PropertyMatchers, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude []uuid.UUID) (common.ConsistencyToken, error) {
+	return func(
+		ctx context.Context,
+		matchers models.PropertyMatchers,
+		appendToAlwaysInclude,
+		removeFromAlwaysInclude,
+		appendToDontAlwaysInclude,
+		removeFromDontAlwaysInclude []uuid.UUID,
+	) (common.ConsistencyToken, error) {
 
 		ruleID, err := matchers.FindExactRuleId(ctx)
 		if err != nil {
@@ -28,7 +42,14 @@ func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePrope
 				return 0, err
 			}
 
-			if err := ruleAgg.UpdateLists(ctx, *ruleID, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude); err != nil {
+			if err := ruleAgg.UpdateLists(
+				ctx,
+				*ruleID,
+				appendToAlwaysInclude,
+				removeFromAlwaysInclude,
+				appendToDontAlwaysInclude,
+				removeFromDontAlwaysInclude,
+			); err != nil {
 				return 0, err
 			}
 		} else {

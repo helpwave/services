@@ -11,7 +11,10 @@ import (
 	"property-svc/repos/property_repo"
 )
 
-type GetPropertiesQueryHandler func(ctx context.Context, subjectType *pb.SubjectType) ([]*models.PropertyWithConsistency, error)
+type GetPropertiesQueryHandler func(
+	ctx context.Context,
+	subjectType *pb.SubjectType,
+) ([]*models.PropertyWithConsistency, error)
 
 func NewGetPropertiesQueryHandler() GetPropertiesQueryHandler {
 	return func(ctx context.Context, subjectType *pb.SubjectType) ([]*models.PropertyWithConsistency, error) {
@@ -22,9 +25,11 @@ func NewGetPropertiesQueryHandler() GetPropertiesQueryHandler {
 			subjectTypeID = hwutil.PtrTo(int32(*subjectType))
 		}
 
-		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx, property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
-			SubjectType: subjectTypeID,
-		})
+		rows, err := propertyRepo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(
+			ctx,
+			property_repo.GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams{
+				SubjectType: subjectTypeID,
+			})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return nil, err
 		}
@@ -65,12 +70,15 @@ func NewGetPropertiesQueryHandler() GetPropertiesQueryHandler {
 			}
 
 			if row.SelectOptionID.Valid && property.FieldTypeData.SelectData != nil {
-				property.FieldTypeData.SelectData.SelectOptions = append(property.FieldTypeData.SelectData.SelectOptions, models.SelectOption{
-					ID:          row.SelectOptionID.UUID,
-					Name:        *row.SelectOptionName, // NOT NULL
-					Description: row.SelectOptionDescription,
-					IsCustom:    *row.SelectOptionIsCustom, // NOT NULL
-				})
+				property.FieldTypeData.SelectData.SelectOptions = append(
+					property.FieldTypeData.SelectData.SelectOptions,
+					models.SelectOption{
+						ID:          row.SelectOptionID.UUID,
+						Name:        *row.SelectOptionName, // NOT NULL
+						Description: row.SelectOptionDescription,
+						IsCustom:    *row.SelectOptionIsCustom, // NOT NULL
+					},
+				)
 			}
 		}
 

@@ -43,7 +43,13 @@ func server() (context.Context, pb.PropertyViewsServiceClient, *hwes_test.Aggreg
 	return ctx, client, aggregateStore, closer
 }
 
-func setup(t *testing.T) (ctx context.Context, client pb.PropertyViewsServiceClient, as *hwes_test.AggregateStore, dbMock pgxmock.PgxPoolIface, teardown func()) {
+func setup(t *testing.T) (
+	ctx context.Context,
+	client pb.PropertyViewsServiceClient,
+	as *hwes_test.AggregateStore,
+	dbMock pgxmock.PgxPoolIface,
+	teardown func(),
+) {
 	ctx, client, as, closer := server()
 	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
 
@@ -177,7 +183,10 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T)
 	// Fully valid request
 
 	dbMock.ExpectQuery(".*").
-		WithArgs(uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
+		WithArgs(
+			uuid.NullUUID{},
+			uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true},
+		).
 		WillReturnRows(pgxmock.NewRows([]string{}))
 
 	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
@@ -188,9 +197,15 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T)
 			},
 		},
 		FilterUpdate: &pb.FilterUpdate{
-			AppendToAlwaysInclude:       nil,
-			RemoveFromAlwaysInclude:     []string{"a7ff7a87-7787-42b4-9aa8-037293ac9d90", "08b23992-9489-41d2-b80d-d7d49c4c9168"},
-			AppendToDontAlwaysInclude:   []string{"08b23992-9489-41d2-b80d-d7d49c4c9168", "db59dd1b-fd1c-488e-a73c-6926abe68c34"},
+			AppendToAlwaysInclude: nil,
+			RemoveFromAlwaysInclude: []string{
+				"a7ff7a87-7787-42b4-9aa8-037293ac9d90",
+				"08b23992-9489-41d2-b80d-d7d49c4c9168",
+			},
+			AppendToDontAlwaysInclude: []string{
+				"08b23992-9489-41d2-b80d-d7d49c4c9168",
+				"db59dd1b-fd1c-488e-a73c-6926abe68c34",
+			},
 			RemoveFromDontAlwaysInclude: []string{"08b23992-9489-41d2-b80d-d7d49c4c9168"},
 		},
 	})
@@ -226,7 +241,10 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 
 	// Mock Empty Row response from database
 	dbMock.ExpectQuery(".*").
-		WithArgs(uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
+		WithArgs(
+			uuid.NullUUID{},
+			uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true},
+		).
 		WillReturnRows(pgxmock.NewRows([]string{}))
 
 	_, _ = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
@@ -237,9 +255,15 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 			},
 		},
 		FilterUpdate: &pb.FilterUpdate{
-			AppendToAlwaysInclude:       nil,
-			RemoveFromAlwaysInclude:     []string{"a7ff7a87-7787-42b4-9aa8-037293ac9d90", "08b23992-9489-41d2-b80d-d7d49c4c9168"},
-			AppendToDontAlwaysInclude:   []string{"08b23992-9489-41d2-b80d-d7d49c4c9168", "db59dd1b-fd1c-488e-a73c-6926abe68c34"},
+			AppendToAlwaysInclude: nil,
+			RemoveFromAlwaysInclude: []string{
+				"a7ff7a87-7787-42b4-9aa8-037293ac9d90",
+				"08b23992-9489-41d2-b80d-d7d49c4c9168",
+			},
+			AppendToDontAlwaysInclude: []string{
+				"08b23992-9489-41d2-b80d-d7d49c4c9168",
+				"db59dd1b-fd1c-488e-a73c-6926abe68c34",
+			},
 			RemoveFromDontAlwaysInclude: []string{"08b23992-9489-41d2-b80d-d7d49c4c9168"},
 		},
 	})
@@ -266,7 +290,11 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 		s := ""
 		buf := bytes.NewBufferString(s)
 		tmplt, _ := template.New("").Parse(expData)
-		_ = tmplt.ExecuteTemplate(buf, "", strings.Split(streamName, aggregate.PropertyViewRuleAggregateType+"-")[1])
+		_ = tmplt.ExecuteTemplate(
+			buf,
+			"",
+			strings.Split(streamName, aggregate.PropertyViewRuleAggregateType+"-")[1],
+		)
 		s = buf.String()
 
 		return assert.Equal(t, v1.PropertyRuleCreated, event.EventType) &&
@@ -281,7 +309,10 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_G
 
 	// Mock Empty Row response from database
 	dbMock.ExpectQuery(".*").
-		WithArgs(uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
+		WithArgs(
+			uuid.NullUUID{},
+			uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true},
+		).
 		WillReturnRows(pgxmock.NewRows([]string{}))
 
 	_, _ = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
@@ -292,9 +323,15 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_G
 			},
 		},
 		FilterUpdate: &pb.FilterUpdate{
-			AppendToAlwaysInclude:       nil,
-			RemoveFromAlwaysInclude:     []string{"a7ff7a87-7787-42b4-9aa8-037293ac9d90", "08b23992-9489-41d2-b80d-d7d49c4c9168"},
-			AppendToDontAlwaysInclude:   []string{"08b23992-9489-41d2-b80d-d7d49c4c9168", "db59dd1b-fd1c-488e-a73c-6926abe68c34"},
+			AppendToAlwaysInclude: nil,
+			RemoveFromAlwaysInclude: []string{
+				"a7ff7a87-7787-42b4-9aa8-037293ac9d90",
+				"08b23992-9489-41d2-b80d-d7d49c4c9168",
+			},
+			AppendToDontAlwaysInclude: []string{
+				"08b23992-9489-41d2-b80d-d7d49c4c9168",
+				"db59dd1b-fd1c-488e-a73c-6926abe68c34",
+			},
 			RemoveFromDontAlwaysInclude: []string{"08b23992-9489-41d2-b80d-d7d49c4c9168"},
 		},
 	})
@@ -321,7 +358,11 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_G
 		s := ""
 		buf := bytes.NewBufferString(s)
 		tmplt, _ := template.New("").Parse(expData)
-		_ = tmplt.ExecuteTemplate(buf, "", strings.Split(streamName, aggregate.PropertyViewRuleAggregateType+"-")[1])
+		_ = tmplt.ExecuteTemplate(
+			buf,
+			"",
+			strings.Split(streamName, aggregate.PropertyViewRuleAggregateType+"-")[1],
+		)
 		s = buf.String()
 
 		return assert.Equal(t, v1.PropertyRuleCreated, event.EventType) &&
@@ -336,8 +377,15 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 
 	// Mock Existing Row response from database
 	dbMock.ExpectQuery(".*").
-		WithArgs(uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
-		WillReturnRows(pgxmock.NewRows([]string{"property_view_rules"}).AddRow("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"))
+		WithArgs(
+			uuid.NullUUID{},
+			uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true},
+		).
+		WillReturnRows(
+			pgxmock.
+				NewRows([]string{"property_view_rules"}).
+				AddRow("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"),
+		)
 
 	streamsPrior := make(map[string][]hwes.Event)
 
@@ -375,9 +423,15 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 			},
 		},
 		FilterUpdate: &pb.FilterUpdate{
-			AppendToAlwaysInclude:       nil,
-			RemoveFromAlwaysInclude:     []string{"a7ff7a87-7787-42b4-9aa8-037293ac9d90", "08b23992-9489-41d2-b80d-d7d49c4c9168"},
-			AppendToDontAlwaysInclude:   []string{"08b23992-9489-41d2-b80d-d7d49c4c9168", "db59dd1b-fd1c-488e-a73c-6926abe68c34"},
+			AppendToAlwaysInclude: nil,
+			RemoveFromAlwaysInclude: []string{
+				"a7ff7a87-7787-42b4-9aa8-037293ac9d90",
+				"08b23992-9489-41d2-b80d-d7d49c4c9168",
+			},
+			AppendToDontAlwaysInclude: []string{
+				"08b23992-9489-41d2-b80d-d7d49c4c9168",
+				"db59dd1b-fd1c-488e-a73c-6926abe68c34",
+			},
 			RemoveFromDontAlwaysInclude: []string{"08b23992-9489-41d2-b80d-d7d49c4c9168"},
 		},
 	})
@@ -401,7 +455,11 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 		s := ""
 		buf := bytes.NewBufferString(s)
 		tmplt, _ := template.New("").Parse(expData)
-		_ = tmplt.ExecuteTemplate(buf, "", strings.Split(streamName, aggregate.PropertyViewRuleAggregateType+"-")[1])
+		_ = tmplt.ExecuteTemplate(
+			buf,
+			"",
+			strings.Split(streamName, aggregate.PropertyViewRuleAggregateType+"-")[1],
+		)
 		s = buf.String()
 
 		return assert.Equal(t, v1.PropertyRuleListsUpdated, event.EventType) &&
@@ -416,8 +474,15 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_G
 
 	// Mock Existing Row response from database
 	dbMock.ExpectQuery(".*").
-		WithArgs(uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
-		WillReturnRows(pgxmock.NewRows([]string{"property_view_rules"}).AddRow("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"))
+		WithArgs(
+			uuid.NullUUID{},
+			uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true},
+		).
+		WillReturnRows(
+			pgxmock.
+				NewRows([]string{"property_view_rules"}).
+				AddRow("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"),
+		)
 
 	streamsPrior := make(map[string][]hwes.Event)
 
@@ -455,9 +520,15 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_G
 			},
 		},
 		FilterUpdate: &pb.FilterUpdate{
-			AppendToAlwaysInclude:       nil,
-			RemoveFromAlwaysInclude:     []string{"a7ff7a87-7787-42b4-9aa8-037293ac9d90", "08b23992-9489-41d2-b80d-d7d49c4c9168"},
-			AppendToDontAlwaysInclude:   []string{"08b23992-9489-41d2-b80d-d7d49c4c9168", "db59dd1b-fd1c-488e-a73c-6926abe68c34"},
+			AppendToAlwaysInclude: nil,
+			RemoveFromAlwaysInclude: []string{
+				"a7ff7a87-7787-42b4-9aa8-037293ac9d90",
+				"08b23992-9489-41d2-b80d-d7d49c4c9168",
+			},
+			AppendToDontAlwaysInclude: []string{
+				"08b23992-9489-41d2-b80d-d7d49c4c9168",
+				"db59dd1b-fd1c-488e-a73c-6926abe68c34",
+			},
 			RemoveFromDontAlwaysInclude: []string{"08b23992-9489-41d2-b80d-d7d49c4c9168"},
 		},
 	})
@@ -481,7 +552,11 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_G
 		s := ""
 		buf := bytes.NewBufferString(s)
 		tmplt, _ := template.New("").Parse(expData)
-		_ = tmplt.ExecuteTemplate(buf, "", strings.Split(streamName, aggregate.PropertyViewRuleAggregateType+"-")[1])
+		_ = tmplt.ExecuteTemplate(
+			buf,
+			"",
+			strings.Split(streamName, aggregate.PropertyViewRuleAggregateType+"-")[1],
+		)
 		s = buf.String()
 
 		return assert.Equal(t, v1.PropertyRuleListsUpdated, event.EventType) &&

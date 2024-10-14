@@ -18,10 +18,11 @@ type PatientPropertyMatchers struct {
 
 func (m PatientPropertyMatchers) FindExactRuleId(ctx context.Context) (*uuid.UUID, error) {
 	patientViews := patient_views_repo.New(hwdb.GetDB())
-	return hwdb.Optional(patientViews.GetPatientRuleIdUsingExactMatchers)(ctx, patient_views_repo.GetPatientRuleIdUsingExactMatchersParams{
-		WardID:    m.WardID,
-		PatientID: m.PatientID,
-	})
+	return hwdb.Optional(patientViews.GetPatientRuleIdUsingExactMatchers)(ctx,
+		patient_views_repo.GetPatientRuleIdUsingExactMatchersParams{
+			WardID:    m.WardID,
+			PatientID: m.PatientID,
+		})
 }
 
 type queryPatientPropertiesRow struct {
@@ -47,10 +48,12 @@ func (m PatientPropertyMatchers) GetType() string {
 func (m PatientPropertyMatchers) QueryProperties(ctx context.Context) ([]PropertiesQueryRow, error) {
 	patientViews := patient_views_repo.New(hwdb.GetDB())
 
-	rows, err := patientViews.GetPatientPropertiesUsingMatchers(ctx, patient_views_repo.GetPatientPropertiesUsingMatchersParams{
-		WardID:    m.WardID,
-		PatientID: m.PatientID,
-	})
+	rows, err := patientViews.GetPatientPropertiesUsingMatchers(
+		ctx,
+		patient_views_repo.GetPatientPropertiesUsingMatchersParams{
+			WardID:    m.WardID,
+			PatientID: m.PatientID,
+		})
 
 	cast := func(row patient_views_repo.GetPatientPropertiesUsingMatchersRow) PropertiesQueryRow {
 		return queryPatientPropertiesRow{row}

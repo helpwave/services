@@ -16,9 +16,23 @@ func (a *PropertyViewRuleAggregate) Create(ctx context.Context, rule models.Prop
 	return a.Apply(event)
 }
 
-func (a *PropertyViewRuleAggregate) UpdateLists(ctx context.Context, ruleId uuid.UUID, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude []uuid.UUID) error {
+func (a *PropertyViewRuleAggregate) UpdateLists(
+	ctx context.Context,
+	ruleId uuid.UUID,
+	appendToAlwaysInclude,
+	removeFromAlwaysInclude,
+	appendToDontAlwaysInclude,
+	removeFromDontAlwaysInclude []uuid.UUID,
+) error {
 
-	event, err := events.NewPropertyRuleListsUpdatedEvent(ctx, a, ruleId, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude)
+	event, err := events.NewPropertyRuleListsUpdatedEvent(ctx,
+		a,
+		ruleId,
+		appendToAlwaysInclude,
+		removeFromAlwaysInclude,
+		appendToDontAlwaysInclude,
+		removeFromDontAlwaysInclude,
+	)
 	if err != nil {
 		return err
 	}

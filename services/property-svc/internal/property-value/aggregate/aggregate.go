@@ -24,7 +24,11 @@ func NewPropertyValueAggregate(id uuid.UUID) *PropertyValueAggregate {
 	return aggregate
 }
 
-func LoadPropertyValueAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID) (*PropertyValueAggregate, error) {
+func LoadPropertyValueAggregate(
+	ctx context.Context,
+	as hwes.AggregateStore,
+	id uuid.UUID,
+) (*PropertyValueAggregate, error) {
 	property := NewPropertyValueAggregate(id)
 	if err := as.Load(ctx, property); err != nil {
 		return nil, fmt.Errorf("LoadPropertyValueAggregate: %w", err)

@@ -18,7 +18,10 @@ func NewPropertySetService(aggregateStore hwes.AggregateStore, handlers *handler
 	return &PropertySetGrpcService{as: aggregateStore, handlers: handlers}
 }
 
-func (s *PropertySetGrpcService) CreatePropertySet(ctx context.Context, req *pb.CreatePropertySetRequest) (*pb.CreatePropertySetResponse, error) {
+func (s *PropertySetGrpcService) CreatePropertySet(
+	ctx context.Context,
+	req *pb.CreatePropertySetRequest,
+) (*pb.CreatePropertySetResponse, error) {
 	propertySetID := uuid.New()
 	consistency, err := s.handlers.Commands.V1.CreatePropertySet(ctx, propertySetID, req.Name)
 	if err != nil {
@@ -31,7 +34,10 @@ func (s *PropertySetGrpcService) CreatePropertySet(ctx context.Context, req *pb.
 	}, nil
 }
 
-func (s *PropertySetGrpcService) GetPropertySet(ctx context.Context, req *pb.GetPropertySetRequest) (*pb.GetPropertySetResponse, error) {
+func (s *PropertySetGrpcService) GetPropertySet(
+	ctx context.Context,
+	req *pb.GetPropertySetRequest,
+) (*pb.GetPropertySetResponse, error) {
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err

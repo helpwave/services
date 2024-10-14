@@ -12,7 +12,11 @@ import (
 
 var ErrAlreadyExists = errors.New("cannot create an already existing aggregate")
 
-type CreatePropertySetCommandHandler func(ctx context.Context, propertySetID uuid.UUID, name string) (common.ConsistencyToken, error)
+type CreatePropertySetCommandHandler func(
+	ctx context.Context,
+	propertySetID uuid.UUID,
+	name string,
+) (common.ConsistencyToken, error)
 
 func NewCreatePropertySetCommandHandler(as hwes.AggregateStore) CreatePropertySetCommandHandler {
 	return func(ctx context.Context, propertySetID uuid.UUID, name string) (common.ConsistencyToken, error) {

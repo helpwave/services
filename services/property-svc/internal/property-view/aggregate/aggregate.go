@@ -26,7 +26,11 @@ func NewPropertyViewRuleAggregate(id uuid.UUID) *PropertyViewRuleAggregate {
 	return aggregate
 }
 
-func LoadPropertyViewRuleAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID) (*PropertyViewRuleAggregate, error) {
+func LoadPropertyViewRuleAggregate(
+	ctx context.Context,
+	as hwes.AggregateStore,
+	id uuid.UUID,
+) (*PropertyViewRuleAggregate, error) {
 	propertyView := NewPropertyViewRuleAggregate(id)
 	if err := as.Load(ctx, propertyView); err != nil {
 		return nil, err
@@ -64,7 +68,10 @@ func (a *PropertyViewRuleAggregate) onPropertyRuleListsUpdated(event hwes.Event)
 	}
 
 	mergedInclude := hwutil.MergeSlices(payload.AppendToAlwaysInclude, a.PropertyViewRule.AlwaysInclude)
-	mergedDontInclude, dontIncludeSet := hwutil.MergeSlicesWithSet(payload.AppendToDontAlwaysInclude, a.PropertyViewRule.DontAlwaysInclude)
+	mergedDontInclude, dontIncludeSet := hwutil.MergeSlicesWithSet(
+		payload.AppendToDontAlwaysInclude,
+		a.PropertyViewRule.DontAlwaysInclude,
+	)
 
 	removeFromAlwaysInclude := hwutil.SliceToSet(payload.RemoveFromAlwaysInclude)
 	removeFromDontAlwaysInclude := hwutil.SliceToSet(payload.RemoveFromDontAlwaysInclude)

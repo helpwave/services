@@ -64,10 +64,22 @@ func Main(version string, ready func()) {
 	common.StartNewGRPCServer(ctx, common.ResolveAddrFromEnv(), func(server *daprd.Server) {
 		grpcServer := server.GrpcServer()
 
-		pb.RegisterPropertyServiceServer(grpcServer, property.NewPropertyService(aggregateStore, propertyHandlers))
-		pb.RegisterPropertySetServiceServer(grpcServer, propertySet.NewPropertySetService(aggregateStore, propertySetHandlers))
-		pb.RegisterPropertyValueServiceServer(grpcServer, propertyValue.NewPropertyValueService(aggregateStore, propertyValueHandlers))
-		pb.RegisterPropertyViewsServiceServer(grpcServer, propertyViews.NewPropertyViewService(aggregateStore, propertyViewHandlers))
+		pb.RegisterPropertyServiceServer(
+			grpcServer,
+			property.NewPropertyService(aggregateStore, propertyHandlers),
+		)
+		pb.RegisterPropertySetServiceServer(
+			grpcServer,
+			propertySet.NewPropertySetService(aggregateStore, propertySetHandlers),
+		)
+		pb.RegisterPropertyValueServiceServer(
+			grpcServer,
+			propertyValue.NewPropertyValueService(aggregateStore, propertyValueHandlers),
+		)
+		pb.RegisterPropertyViewsServiceServer(
+			grpcServer,
+			propertyViews.NewPropertyViewService(aggregateStore, propertyViewHandlers),
+		)
 
 		if ready != nil {
 			ready()

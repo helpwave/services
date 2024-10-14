@@ -30,10 +30,14 @@ type Projection struct {
 func NewProjection(es custom.EventStoreClient, serviceName string) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-property-rules-postgres-projection", serviceName)
 	p := &Projection{
-		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PropertyViewRuleAggregateType)}),
-		db:               hwdb.GetDB(),
-		taskViewsRepo:    task_views_repo.New(hwdb.GetDB()),
-		viewsRepo:        views_repo.New(hwdb.GetDB()),
+		CustomProjection: custom.NewCustomProjection(
+			es,
+			subscriptionGroupName,
+			&[]string{fmt.Sprintf("%s-", aggregate.PropertyViewRuleAggregateType)},
+		),
+		db:            hwdb.GetDB(),
+		taskViewsRepo: task_views_repo.New(hwdb.GetDB()),
+		viewsRepo:     views_repo.New(hwdb.GetDB()),
 	}
 	p.initEventListeners()
 	return p
@@ -96,7 +100,8 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 			return fmt.Errorf("could not create patient rule: %w", err), hwutil.PtrTo(esdb.NackActionRetry)
 		}
 	default:
-		return fmt.Errorf("unexpected matchers type, got %T", payload.Matchers), hwutil.PtrTo(esdb.NackActionSkip)
+		return fmt.Errorf("unexpected matchers type, got %T", payload.Matchers),
+			hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
 	// handle (dont)alwaysInclude logic
