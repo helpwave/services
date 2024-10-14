@@ -59,14 +59,18 @@ func NewClient(ctx context.Context, realm, issuerUrl, clientId, clientSecret str
 		return nil, fmt.Errorf("cannot parse issuer url ('%s'): %w", issuerUrl, err)
 	}
 
-	adminApiBaseUrl, err := url.Parse(fmt.Sprintf("%s://%s/admin/realms/%s", parsedIssuerUrl.Scheme, parsedIssuerUrl.Host, realm))
+	adminApiBaseUrl, err := url.Parse(
+		fmt.Sprintf("%s://%s/admin/realms/%s", parsedIssuerUrl.Scheme, parsedIssuerUrl.Host, realm))
 	if err != nil {
-		return nil, fmt.Errorf("cannot parse newly created admin api base url from issuer url ('%s'): %w", issuerUrl, err)
+		return nil, fmt.Errorf(
+			"cannot parse newly created admin api base url from issuer url ('%s'): %w", issuerUrl, err)
 	}
 
-	realmBaseUrl, err := url.Parse(fmt.Sprintf("%s://%s/realms/%s", parsedIssuerUrl.Scheme, parsedIssuerUrl.Host, realm))
+	realmBaseUrl, err := url.Parse(
+		fmt.Sprintf("%s://%s/realms/%s", parsedIssuerUrl.Scheme, parsedIssuerUrl.Host, realm))
 	if err != nil {
-		return nil, fmt.Errorf("cannot parse newly created admin api base url from issuer url ('%s'): %w", issuerUrl, err)
+		return nil, fmt.Errorf(
+			"cannot parse newly created admin api base url from issuer url ('%s'): %w", issuerUrl, err)
 	}
 
 	client := &Client{
@@ -88,7 +92,10 @@ func (c *Client) ensureSuccessfulResponse(res *http.Response) error {
 	if err != nil {
 		return fmt.Errorf("response status code not 2xx, cannot read response body for error message: %w", err)
 	}
-	return fmt.Errorf("response status for %s - %s is %d: %s", res.Request.Method, res.Request.URL.String(), res.StatusCode, string(body))
+	return fmt.Errorf(
+		"response status for %s - %s is %d: %s",
+		res.Request.Method, res.Request.URL.String(), res.StatusCode, string(body),
+	)
 }
 
 func (c *Client) GetUserById(userID uuid.UUID) (*User, error) {
@@ -114,7 +121,7 @@ func (c *Client) GetUserById(userID uuid.UUID) (*User, error) {
 }
 
 func (c *Client) GetOrganizationsOfUserById(userID uuid.UUID) ([]*Organization, error) {
-	// Users -> GET /{realm}/users/{userId}/orgs https://editor-next.swagger.io/?url=https://raw.githubusercontent.com/p2-inc/phasetwo-docs/5e785dfed39348f07e9ec6e834e4ba19979bce57/openapi.yaml
+	// Users -> GET /{realm}/users/{userId}/orgs https://t.ly/cgwOO
 	u := c.realmBaseUrl.JoinPath("users", userID.String(), "orgs")
 
 	res, err := c.http.Get(u.String())
@@ -136,7 +143,7 @@ func (c *Client) GetOrganizationsOfUserById(userID uuid.UUID) ([]*Organization, 
 }
 
 func (c *Client) CreateOrganization(name, displayName string, isPersonal bool) (*Organization, error) {
-	// Organizations -> POST /{realm}/orgs https://editor-next.swagger.io/?url=https://raw.githubusercontent.com/p2-inc/phasetwo-docs/5e785dfed39348f07e9ec6e834e4ba19979bce57/openapi.yaml
+	// Organizations -> POST /{realm}/orgs https://t.ly/cgwOO
 	u := c.realmBaseUrl.JoinPath("orgs")
 
 	payload := Organization{
@@ -181,7 +188,7 @@ func (c *Client) CreateOrganization(name, displayName string, isPersonal bool) (
 }
 
 func (c *Client) UpdateOrganization(organizationID uuid.UUID, organization Organization) error {
-	// Organizations -> PUT /{realm}/orgs/{orgId} https://editor-next.swagger.io/?url=https://raw.githubusercontent.com/p2-inc/phasetwo-docs/5e785dfed39348f07e9ec6e834e4ba19979bce57/openapi.yaml
+	// Organizations -> PUT /{realm}/orgs/{orgId} https://t.ly/cgwOO
 	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String())
 
 	jsonPayload, err := json.Marshal(organization)
@@ -208,7 +215,7 @@ func (c *Client) UpdateOrganization(organizationID uuid.UUID, organization Organ
 }
 
 func (c *Client) DeleteOrganization(organizationID uuid.UUID) error {
-	// Organizations -> DELETE /{realm}/orgs/{orgId} https://editor-next.swagger.io/?url=https://raw.githubusercontent.com/p2-inc/phasetwo-docs/5e785dfed39348f07e9ec6e834e4ba19979bce57/openapi.yaml
+	// Organizations -> DELETE /{realm}/orgs/{orgId} https://t.ly/cgwOO
 	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String())
 
 	req, err := http.NewRequest(http.MethodDelete, u.String(), nil)
@@ -230,7 +237,7 @@ func (c *Client) DeleteOrganization(organizationID uuid.UUID) error {
 }
 
 func (c *Client) AddUserToOrganization(userID, organizationID uuid.UUID) error {
-	// Organization Memberships -> PUT /{realm}/orgs/{orgId}/members/{userId} https://editor-next.swagger.io/?url=https://raw.githubusercontent.com/p2-inc/phasetwo-docs/5e785dfed39348f07e9ec6e834e4ba19979bce57/openapi.yaml
+	// Organization Memberships -> PUT /{realm}/orgs/{orgId}/members/{userId} https://t.ly/cgwOO
 	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String(), "members", userID.String())
 
 	req, err := http.NewRequest(http.MethodPut, u.String(), nil)
@@ -252,7 +259,7 @@ func (c *Client) AddUserToOrganization(userID, organizationID uuid.UUID) error {
 }
 
 func (c *Client) RemoveUserFromOrganization(userID, organizationID uuid.UUID) error {
-	// Organization Memberships -> DELETE /{realm}/orgs/{orgId}/members/{userId} https://editor-next.swagger.io/?url=https://raw.githubusercontent.com/p2-inc/phasetwo-docs/5e785dfed39348f07e9ec6e834e4ba19979bce57/openapi.yaml
+	// Organization Memberships -> DELETE /{realm}/orgs/{orgId}/members/{userId} https://t.ly/R0Suf
 	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String(), "members", userID.String())
 
 	req, err := http.NewRequest(http.MethodDelete, u.String(), nil)

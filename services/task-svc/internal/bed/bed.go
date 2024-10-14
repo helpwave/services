@@ -168,7 +168,10 @@ func (ServiceServer) GetBeds(ctx context.Context, _ *pb.GetBedsRequest) (*pb.Get
 	}, nil
 }
 
-func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomRequest) (*pb.GetBedsByRoomResponse, error) {
+func (ServiceServer) GetBedsByRoom(
+	ctx context.Context,
+	req *pb.GetBedsByRoomRequest,
+) (*pb.GetBedsByRoomResponse, error) {
 	roomID, err := uuid.Parse(req.RoomId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())

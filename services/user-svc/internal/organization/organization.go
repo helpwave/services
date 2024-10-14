@@ -34,7 +34,10 @@ func NewServiceServer(kc hwkc.IClient) *ServiceServer {
 	}
 }
 
-func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrganizationRequest) (*pb.CreateOrganizationResponse, error) {
+func (s ServiceServer) CreateOrganization(
+	ctx context.Context,
+	req *pb.CreateOrganizationRequest,
+) (*pb.CreateOrganizationResponse, error) {
 	userID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -59,7 +62,10 @@ func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrg
 	}, nil
 }
 
-func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizationRequest) (*pb.GetOrganizationResponse, error) {
+func (s ServiceServer) GetOrganization(
+	ctx context.Context,
+	req *pb.GetOrganizationRequest,
+) (*pb.GetOrganizationResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 	// TODO: Auth
 
@@ -78,15 +84,16 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 	}
 
 	organization := rows[0].Organization
-	members := hwutil.FlatMap(rows, func(row organization_repo.GetOrganizationWithMemberByIdRow) **pb.GetOrganizationMember {
-		if !row.UserID.Valid {
-			return nil
-		}
-		val := &pb.GetOrganizationMember{
-			UserId: row.UserID.UUID.String(),
-		}
-		return &val
-	})
+	members := hwutil.FlatMap(rows,
+		func(row organization_repo.GetOrganizationWithMemberByIdRow) **pb.GetOrganizationMember {
+			if !row.UserID.Valid {
+				return nil
+			}
+			val := &pb.GetOrganizationMember{
+				UserId: row.UserID.UUID.String(),
+			}
+			return &val
+		})
 
 	// TODO: Move members out of GetOrganizationResponse into GetMembers with pagination
 	return &pb.GetOrganizationResponse{
@@ -100,7 +107,10 @@ func (s ServiceServer) GetOrganization(ctx context.Context, req *pb.GetOrganizat
 	}, nil
 }
 
-func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOrganizationsByUserRequest) (*pb.GetOrganizationsByUserResponse, error) {
+func (s ServiceServer) GetOrganizationsByUser(
+	ctx context.Context,
+	req *pb.GetOrganizationsByUserRequest,
+) (*pb.GetOrganizationsByUserResponse, error) {
 	userID, err := uuid.Parse(req.UserId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -111,24 +121,26 @@ func (s ServiceServer) GetOrganizationsByUser(ctx context.Context, req *pb.GetOr
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	mappedOrganizations := hwutil.Map(organizations, func(obj OrganizationWithMembers) *pb.GetOrganizationsByUserResponse_Organization {
-		return &pb.GetOrganizationsByUserResponse_Organization{
-			Id:           obj.Organization.ID.String(),
-			LongName:     obj.Organization.LongName,
-			ShortName:    obj.Organization.ShortName,
-			ContactEmail: obj.Organization.ContactEmail,
-			AvatarUrl:    obj.Organization.AvatarUrl,
-			IsPersonal:   false,
-			Members: hwutil.Map(obj.Members, func(membership organization_repo.User) *pb.GetOrganizationsByUserResponse_Organization_Member {
-				return &pb.GetOrganizationsByUserResponse_Organization_Member{
-					UserId:    membership.ID.String(),
-					AvatarUrl: membership.AvatarUrl, // can be nil, if inserted intentionally
-					Email:     membership.Email,
-					Nickname:  membership.Nickname,
-				}
-			}),
-		}
-	})
+	mappedOrganizations := hwutil.Map(organizations,
+		func(obj OrganizationWithMembers) *pb.GetOrganizationsByUserResponse_Organization {
+			return &pb.GetOrganizationsByUserResponse_Organization{
+				Id:           obj.Organization.ID.String(),
+				LongName:     obj.Organization.LongName,
+				ShortName:    obj.Organization.ShortName,
+				ContactEmail: obj.Organization.ContactEmail,
+				AvatarUrl:    obj.Organization.AvatarUrl,
+				IsPersonal:   false,
+				Members: hwutil.Map(obj.Members,
+					func(membership organization_repo.User) *pb.GetOrganizationsByUserResponse_Organization_Member {
+						return &pb.GetOrganizationsByUserResponse_Organization_Member{
+							UserId:    membership.ID.String(),
+							AvatarUrl: membership.AvatarUrl, // can be nil, if inserted intentionally
+							Email:     membership.Email,
+							Nickname:  membership.Nickname,
+						}
+					}),
+			}
+		})
 
 	return &pb.GetOrganizationsByUserResponse{
 		Organizations: mappedOrganizations,
@@ -154,37 +166,42 @@ func GetOrganizationsByUserId(ctx context.Context, userId uuid.UUID) ([]Organiza
 	}
 
 	processedOrganizations := make(map[uuid.UUID]bool)
-	organizationsResponse := hwutil.FlatMap(rows, func(organizationRow organization_repo.GetOrganizationsWithMembersByUserRow) *OrganizationWithMembers {
-		organization := organizationRow.Organization
-		if _, processed := processedOrganizations[organization.ID]; processed {
-			return nil
-		}
-		processedOrganizations[organization.ID] = true
-		members := hwutil.FlatMap(rows, func(memberRow organization_repo.GetOrganizationsWithMembersByUserRow) *organization_repo.User {
-			if memberRow.Organization.ID != organization.ID {
+	organizationsResponse := hwutil.FlatMap(rows,
+		func(organizationRow organization_repo.GetOrganizationsWithMembersByUserRow) *OrganizationWithMembers {
+			organization := organizationRow.Organization
+			if _, processed := processedOrganizations[organization.ID]; processed {
 				return nil
 			}
-			val := &organization_repo.User{
-				ID:        memberRow.ID,
-				Email:     memberRow.Email,
-				Nickname:  memberRow.Nickname,
-				AvatarUrl: memberRow.AvatarUrl,
+			processedOrganizations[organization.ID] = true
+			members := hwutil.FlatMap(rows,
+				func(memberRow organization_repo.GetOrganizationsWithMembersByUserRow) *organization_repo.User {
+					if memberRow.Organization.ID != organization.ID {
+						return nil
+					}
+					val := &organization_repo.User{
+						ID:        memberRow.ID,
+						Email:     memberRow.Email,
+						Nickname:  memberRow.Nickname,
+						AvatarUrl: memberRow.AvatarUrl,
+					}
+					return val
+				})
+
+			val := &OrganizationWithMembers{
+				Organization: organization,
+				Members:      members,
 			}
 			return val
 		})
-
-		val := &OrganizationWithMembers{
-			Organization: organization,
-			Members:      members,
-		}
-		return val
-	})
 
 	return organizationsResponse, nil
 
 }
 
-func (s ServiceServer) GetOrganizationsForUser(ctx context.Context, _ *pb.GetOrganizationsForUserRequest) (*pb.GetOrganizationsForUserResponse, error) {
+func (s ServiceServer) GetOrganizationsForUser(
+	ctx context.Context,
+	_ *pb.GetOrganizationsForUserRequest,
+) (*pb.GetOrganizationsForUserResponse, error) {
 	userID, err := common.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -195,31 +212,36 @@ func (s ServiceServer) GetOrganizationsForUser(ctx context.Context, _ *pb.GetOrg
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	mappedOrganizations := hwutil.Map(organizations, func(obj OrganizationWithMembers) *pb.GetOrganizationsForUserResponse_Organization {
-		return &pb.GetOrganizationsForUserResponse_Organization{
-			Id:           obj.Organization.ID.String(),
-			LongName:     obj.Organization.LongName,
-			ShortName:    obj.Organization.ShortName,
-			ContactEmail: obj.Organization.ContactEmail,
-			AvatarUrl:    obj.Organization.AvatarUrl,
-			IsPersonal:   false,
-			Members: hwutil.Map(obj.Members, func(membership organization_repo.User) *pb.GetOrganizationsForUserResponse_Organization_Member {
-				return &pb.GetOrganizationsForUserResponse_Organization_Member{
-					UserId:    membership.ID.String(),
-					AvatarUrl: membership.AvatarUrl, // can be nil, if inserted intentionally
-					Email:     membership.Email,
-					Nickname:  membership.Nickname,
-				}
-			}),
-		}
-	})
+	mappedOrganizations := hwutil.Map(organizations,
+		func(obj OrganizationWithMembers) *pb.GetOrganizationsForUserResponse_Organization {
+			return &pb.GetOrganizationsForUserResponse_Organization{
+				Id:           obj.Organization.ID.String(),
+				LongName:     obj.Organization.LongName,
+				ShortName:    obj.Organization.ShortName,
+				ContactEmail: obj.Organization.ContactEmail,
+				AvatarUrl:    obj.Organization.AvatarUrl,
+				IsPersonal:   false,
+				Members: hwutil.Map(obj.Members,
+					func(membership organization_repo.User) *pb.GetOrganizationsForUserResponse_Organization_Member {
+						return &pb.GetOrganizationsForUserResponse_Organization_Member{
+							UserId:    membership.ID.String(),
+							AvatarUrl: membership.AvatarUrl, // can be nil, if inserted intentionally
+							Email:     membership.Email,
+							Nickname:  membership.Nickname,
+						}
+					}),
+			}
+		})
 
 	return &pb.GetOrganizationsForUserResponse{
 		Organizations: mappedOrganizations,
 	}, nil
 }
 
-func (s ServiceServer) UpdateOrganization(ctx context.Context, req *pb.UpdateOrganizationRequest) (*pb.UpdateOrganizationResponse, error) {
+func (s ServiceServer) UpdateOrganization(
+	ctx context.Context,
+	req *pb.UpdateOrganizationRequest,
+) (*pb.UpdateOrganizationResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	organizationID, err := uuid.Parse(req.Id)
@@ -243,7 +265,10 @@ func (s ServiceServer) UpdateOrganization(ctx context.Context, req *pb.UpdateOrg
 	return &pb.UpdateOrganizationResponse{}, nil
 }
 
-func (s ServiceServer) DeleteOrganization(ctx context.Context, req *pb.DeleteOrganizationRequest) (*pb.DeleteOrganizationResponse, error) {
+func (s ServiceServer) DeleteOrganization(
+	ctx context.Context,
+	req *pb.DeleteOrganizationRequest,
+) (*pb.DeleteOrganizationResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	organizationID, err := uuid.Parse(req.Id)
@@ -264,7 +289,10 @@ func (s ServiceServer) DeleteOrganization(ctx context.Context, req *pb.DeleteOrg
 	return &pb.DeleteOrganizationResponse{}, nil
 }
 
-func (s ServiceServer) AddMember(ctx context.Context, req *pb.AddMemberRequest) (*pb.AddMemberResponse, error) {
+func (s ServiceServer) AddMember(
+	ctx context.Context,
+	req *pb.AddMemberRequest,
+) (*pb.AddMemberResponse, error) {
 	log := zlog.Ctx(ctx)
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
@@ -299,7 +327,10 @@ func (s ServiceServer) AddMember(ctx context.Context, req *pb.AddMemberRequest) 
 	return &pb.AddMemberResponse{}, nil
 }
 
-func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberRequest) (*pb.RemoveMemberResponse, error) {
+func (s ServiceServer) RemoveMember(
+	ctx context.Context,
+	req *pb.RemoveMemberRequest,
+) (*pb.RemoveMemberResponse, error) {
 	log := zlog.Ctx(ctx)
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
@@ -334,7 +365,10 @@ func (s ServiceServer) RemoveMember(ctx context.Context, req *pb.RemoveMemberReq
 	return &pb.RemoveMemberResponse{}, nil
 }
 
-func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberRequest) (*pb.InviteMemberResponse, error) {
+func (s ServiceServer) InviteMember(
+	ctx context.Context,
+	req *pb.InviteMemberRequest,
+) (*pb.InviteMemberResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 	invitation := organization_repo.Invitation{}
 
@@ -348,7 +382,10 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	conditions, err := organizationRepo.GetInvitationConditions(ctx, organization_repo.GetInvitationConditionsParams{
 		OrganizationID: organizationId,
 		Email:          req.Email,
-		States:         []int32{int32(pb.InvitationState_INVITATION_STATE_ACCEPTED.Number()), int32(pb.InvitationState_INVITATION_STATE_PENDING.Number())},
+		States: []int32{
+			int32(pb.InvitationState_INVITATION_STATE_ACCEPTED.Number()),
+			int32(pb.InvitationState_INVITATION_STATE_PENDING.Number()),
+		},
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -384,7 +421,10 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 	}, nil
 }
 
-func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb.GetInvitationsByOrganizationRequest) (*pb.GetInvitationsByOrganizationResponse, error) {
+func (s ServiceServer) GetInvitationsByOrganization(
+	ctx context.Context,
+	req *pb.GetInvitationsByOrganizationRequest,
+) (*pb.GetInvitationsByOrganizationResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	organizationID, err := uuid.Parse(req.OrganizationId)
@@ -427,21 +467,25 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 		return nil, err
 	}
 
-	invitationsResponse := hwutil.Map(invitations, func(invitation organization_repo.Invitation) *pb.GetInvitationsByOrganizationResponse_Invitation {
-		return &pb.GetInvitationsByOrganizationResponse_Invitation{
-			Id:             invitation.ID.String(),
-			Email:          invitation.Email,
-			OrganizationId: invitation.OrganizationID.String(),
-			State:          pb.InvitationState(invitation.State),
-		}
-	})
+	invitationsResponse := hwutil.Map(invitations,
+		func(invitation organization_repo.Invitation) *pb.GetInvitationsByOrganizationResponse_Invitation {
+			return &pb.GetInvitationsByOrganizationResponse_Invitation{
+				Id:             invitation.ID.String(),
+				Email:          invitation.Email,
+				OrganizationId: invitation.OrganizationID.String(),
+				State:          pb.InvitationState(invitation.State),
+			}
+		})
 
 	return &pb.GetInvitationsByOrganizationResponse{
 		Invitations: invitationsResponse,
 	}, nil
 }
 
-func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvitationsByUserRequest) (*pb.GetInvitationsByUserResponse, error) {
+func (s ServiceServer) GetInvitationsByUser(
+	ctx context.Context,
+	req *pb.GetInvitationsByUserRequest,
+) (*pb.GetInvitationsByUserResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	claims, err := common.GetAuthClaims(ctx)
@@ -449,35 +493,43 @@ func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvi
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	invitations, err := organizationRepo.GetInvitationsWithOrganizationByUser(ctx, organization_repo.GetInvitationsWithOrganizationByUserParams{
-		Email: claims.Email,
-		State: (*int32)(req.State),
-	})
+	invitations, err := organizationRepo.GetInvitationsWithOrganizationByUser(
+		ctx,
+		organization_repo.GetInvitationsWithOrganizationByUserParams{
+			Email: claims.Email,
+			State: (*int32)(req.State),
+		})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
 	}
 
-	invitationResponse := hwutil.Map(invitations, func(invitation organization_repo.GetInvitationsWithOrganizationByUserRow) *pb.GetInvitationsByUserResponse_Invitation {
-		organization := &pb.GetInvitationsByUserResponse_Invitation_Organization{
-			Id:        invitation.Organization.ID.String(),
-			LongName:  invitation.Organization.LongName,
-			AvatarUrl: invitation.Organization.AvatarUrl, // can be null
-		}
-		return &pb.GetInvitationsByUserResponse_Invitation{
-			Id:           invitation.ID.String(),
-			Email:        invitation.Email,
-			Organization: organization,
-			State:        pb.InvitationState(invitation.State),
-		}
-	})
+	type rowType = organization_repo.GetInvitationsWithOrganizationByUserRow
+
+	invitationResponse := hwutil.Map(invitations,
+		func(invitation rowType) *pb.GetInvitationsByUserResponse_Invitation {
+			organization := &pb.GetInvitationsByUserResponse_Invitation_Organization{
+				Id:        invitation.Organization.ID.String(),
+				LongName:  invitation.Organization.LongName,
+				AvatarUrl: invitation.Organization.AvatarUrl, // can be null
+			}
+			return &pb.GetInvitationsByUserResponse_Invitation{
+				Id:           invitation.ID.String(),
+				Email:        invitation.Email,
+				Organization: organization,
+				State:        pb.InvitationState(invitation.State),
+			}
+		})
 
 	return &pb.GetInvitationsByUserResponse{
 		Invitations: invitationResponse,
 	}, nil
 }
 
-func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.GetMembersByOrganizationRequest) (*pb.GetMembersByOrganizationResponse, error) {
+func (s ServiceServer) GetMembersByOrganization(
+	ctx context.Context,
+	req *pb.GetMembersByOrganizationRequest,
+) (*pb.GetMembersByOrganizationResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	organizationID, err := uuid.Parse(req.Id)
@@ -517,21 +569,25 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 		return nil, err
 	}
 
-	mappedMembers := hwutil.Map(members, func(member organization_repo.User) *pb.GetMembersByOrganizationResponse_Member {
-		return &pb.GetMembersByOrganizationResponse_Member{
-			UserId:    member.ID.String(),
-			AvatarUrl: member.AvatarUrl, // can be nil, if inserted intentionally
-			Email:     member.Email,
-			Nickname:  member.Nickname,
-		}
-	})
+	mappedMembers := hwutil.Map(members,
+		func(member organization_repo.User) *pb.GetMembersByOrganizationResponse_Member {
+			return &pb.GetMembersByOrganizationResponse_Member{
+				UserId:    member.ID.String(),
+				AvatarUrl: member.AvatarUrl, // can be nil, if inserted intentionally
+				Email:     member.Email,
+				Nickname:  member.Nickname,
+			}
+		})
 
 	return &pb.GetMembersByOrganizationResponse{
 		Members: mappedMembers,
 	}, nil
 }
 
-func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvitationRequest) (*pb.AcceptInvitationResponse, error) {
+func (s ServiceServer) AcceptInvitation(
+	ctx context.Context,
+	req *pb.AcceptInvitationRequest,
+) (*pb.AcceptInvitationResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	invitationId, err := uuid.Parse(req.InvitationId)
@@ -586,7 +642,10 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 	return &pb.AcceptInvitationResponse{}, nil
 }
 
-func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInvitationRequest) (*pb.DeclineInvitationResponse, error) {
+func (s ServiceServer) DeclineInvitation(
+	ctx context.Context,
+	req *pb.DeclineInvitationRequest,
+) (*pb.DeclineInvitationResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	invitationId, err := uuid.Parse(req.InvitationId)
@@ -631,7 +690,10 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 	return &pb.DeclineInvitationResponse{}, nil
 }
 
-func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvitationRequest) (*pb.RevokeInvitationResponse, error) {
+func (s ServiceServer) RevokeInvitation(
+	ctx context.Context,
+	req *pb.RevokeInvitationRequest,
+) (*pb.RevokeInvitationResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
 	log := zlog.Ctx(ctx)
@@ -696,7 +758,11 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 	return &pb.RevokeInvitationResponse{}, nil
 }
 
-func CreateOrganizationAndAddUser(ctx context.Context, attr organization_repo.Organization, userID uuid.UUID) (*organization_repo.Organization, error) {
+func CreateOrganizationAndAddUser(
+	ctx context.Context,
+	attr organization_repo.Organization,
+	userID uuid.UUID,
+) (*organization_repo.Organization, error) {
 	kc, err := hwkc.NewClientFromEnv(ctx)
 	if err != nil {
 		return nil, err
@@ -797,7 +863,10 @@ func AddUserToOrganization(ctx context.Context, kc hwkc.IClient, userId uuid.UUI
 	return nil
 }
 
-func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.CreatePersonalOrganizationRequest) (*pb.CreatePersonalOrganizationResponse, error) {
+func (s ServiceServer) CreatePersonalOrganization(
+	ctx context.Context,
+	_ *pb.CreatePersonalOrganizationRequest,
+) (*pb.CreatePersonalOrganizationResponse, error) {
 	kc, err := hwkc.NewClientFromEnv(ctx)
 	if err != nil {
 		return nil, err
@@ -846,7 +915,11 @@ func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.Cre
 		return nil, err
 	} else if userResult == nil {
 		hash := sha256.Sum256([]byte(userID.String()))
-		avatarUrl := fmt.Sprintf("%s%s", "https://source.boringavatars.com/marble/128/", hex.EncodeToString(hash[:]))
+		avatarUrl := fmt.Sprintf(
+			"%s%s",
+			"https://source.boringavatars.com/marble/128/",
+			hex.EncodeToString(hash[:]),
+		)
 
 		_, err = userRepo.CreateUser(ctx, user_repo.CreateUserParams{
 			ID:        userID,

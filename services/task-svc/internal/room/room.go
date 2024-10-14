@@ -150,16 +150,17 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 				return nil
 			}
 			processedRooms[room.ID] = true
-			beds := hwutil.FlatMap(rows, func(bedRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsResponse_Room_Bed {
-				if !bedRow.BedID.Valid || bedRow.Room.ID != room.ID {
-					return nil
-				}
-				val := &pb.GetRoomsResponse_Room_Bed{
-					Id:   bedRow.BedID.UUID.String(),
-					Name: *bedRow.BedName,
-				}
-				return &val
-			})
+			beds := hwutil.FlatMap(rows,
+				func(bedRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsResponse_Room_Bed {
+					if !bedRow.BedID.Valid || bedRow.Room.ID != room.ID {
+						return nil
+					}
+					val := &pb.GetRoomsResponse_Room_Bed{
+						Id:   bedRow.BedID.UUID.String(),
+						Name: *bedRow.BedName,
+					}
+					return &val
+				})
 			val := &pb.GetRoomsResponse_Room{
 				Id:             room.ID.String(),
 				Name:           room.Name,

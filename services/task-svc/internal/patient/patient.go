@@ -26,7 +26,10 @@ func NewServiceServer() *ServiceServer {
 	return &ServiceServer{}
 }
 
-func (ServiceServer) CreatePatient(ctx context.Context, req *pb.CreatePatientRequest) (*pb.CreatePatientResponse, error) {
+func (ServiceServer) CreatePatient(
+	ctx context.Context,
+	req *pb.CreatePatientRequest,
+) (*pb.CreatePatientResponse, error) {
 	log := zlog.Ctx(ctx)
 	patientRepo := patient_repo.New(hwdb.GetDB())
 
