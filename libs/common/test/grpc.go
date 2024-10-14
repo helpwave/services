@@ -98,7 +98,12 @@ func AuthenticatedUserContext(ctx context.Context, userId string) context.Contex
 // AuthenticatedUserInterceptor overwrites the incoming metadata, such that AuthenticatedUserMetadata is used.
 // It can be used to test authenticated endpoints
 func AuthenticatedUserInterceptor(userID string) grpc.UnaryServerInterceptor {
-	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+	return func(
+		ctx context.Context,
+		req interface{},
+		info *grpc.UnaryServerInfo,
+		next grpc.UnaryHandler,
+	) (interface{}, error) {
 		md := AuthenticatedUserMetadata(userID)
 		if existing, existed := metadata.FromIncomingContext(ctx); existed {
 			md = metadata.Join(md, existing)

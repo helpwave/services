@@ -8,10 +8,22 @@ import (
 	"tasks-svc/internal/task/aggregate"
 )
 
-type CreateSubtaskCommandHandler func(ctx context.Context, taskID, subtaskID uuid.UUID, name string, done bool) (common.ConsistencyToken, error)
+type CreateSubtaskCommandHandler func(
+	ctx context.Context,
+	taskID,
+	subtaskID uuid.UUID,
+	name string,
+	done bool,
+) (common.ConsistencyToken, error)
 
 func NewCreateSubtaskCommandHandler(as hwes.AggregateStore) CreateSubtaskCommandHandler {
-	return func(ctx context.Context, taskID, subtaskID uuid.UUID, name string, done bool) (common.ConsistencyToken, error) {
+	return func(
+		ctx context.Context,
+		taskID,
+		subtaskID uuid.UUID,
+		name string,
+		done bool,
+	) (common.ConsistencyToken, error) {
 		a, err := aggregate.LoadTaskAggregate(ctx, as, taskID)
 		if err != nil {
 			return 0, err

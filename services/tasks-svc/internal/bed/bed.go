@@ -95,7 +95,10 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 	}, nil
 }
 
-func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatientRequest) (*pb.GetBedByPatientResponse, error) {
+func (ServiceServer) GetBedByPatient(
+	ctx context.Context,
+	req *pb.GetBedByPatientRequest,
+) (*pb.GetBedByPatientResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -155,7 +158,10 @@ func (ServiceServer) GetBeds(ctx context.Context, req *pb.GetBedsRequest) (*pb.G
 	}, nil
 }
 
-func (ServiceServer) GetBedsByRoom(ctx context.Context, req *pb.GetBedsByRoomRequest) (*pb.GetBedsByRoomResponse, error) {
+func (ServiceServer) GetBedsByRoom(
+	ctx context.Context,
+	req *pb.GetBedsByRoomRequest,
+) (*pb.GetBedsByRoomResponse, error) {
 	roomID, err := uuid.Parse(req.RoomId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())

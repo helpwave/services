@@ -17,7 +17,11 @@ type tracer struct {
 
 // impl CopyFromTracer interface
 
-func (t tracer) TraceCopyFromStart(ctx context.Context, conn *pgx.Conn, data pgx.TraceCopyFromStartData) context.Context {
+func (t tracer) TraceCopyFromStart(
+	ctx context.Context,
+	conn *pgx.Conn,
+	data pgx.TraceCopyFromStartData,
+) context.Context {
 	return t.inner.TraceCopyFromStart(ctx, conn, data)
 }
 

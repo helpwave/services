@@ -13,8 +13,8 @@ import (
 	"time"
 )
 
-func MustAddTopicEventHandler(service daprcmn.Service, sub *daprcmn.Subscription, eventHandler daprcmn.TopicEventHandler) {
-	if err := service.AddTopicEventHandler(sub, eventHandler); err != nil {
+func MustAddTopicEventHandler(svc daprcmn.Service, sub *daprcmn.Subscription, handler daprcmn.TopicEventHandler) {
+	if err := svc.AddTopicEventHandler(sub, handler); err != nil {
 		log.Fatal().
 			Err(err).
 			Interface("sub", sub).
@@ -24,7 +24,7 @@ func MustAddTopicEventHandler(service daprcmn.Service, sub *daprcmn.Subscription
 
 // PublishMessage encodes a proto message and publishes it to the topic
 // It already takes care of logging, so you may ignore the returned error
-func PublishMessage(ctx context.Context, client daprc.Client, pubsub string, topic string, message proto.Message) error {
+func PublishMessage(ctx context.Context, c daprc.Client, pubsub string, topic string, message proto.Message) error {
 	bytes, err := proto.Marshal(message)
 	if err != nil {
 		log.Ctx(ctx).
@@ -34,7 +34,7 @@ func PublishMessage(ctx context.Context, client daprc.Client, pubsub string, top
 		return fmt.Errorf("PublishMessage: could not marshal message: %w", err)
 	}
 
-	err = client.PublishEvent(ctx, pubsub, topic, bytes)
+	err = c.PublishEvent(ctx, pubsub, topic, bytes)
 	if err != nil {
 		log.Ctx(ctx).
 			Error().
@@ -62,12 +62,12 @@ func MustNewDaprGRPCClient() *daprc.GRPCClient {
 }
 
 // PrepCtxForSvcToSvcCall returns a context that can be used with Dapr specific service to service gRPC calls
-func PrepCtxForSvcToSvcCall(parentCtx context.Context, targetDaprAppId string) (context.Context, context.CancelFunc, error) {
-	md, ok := metadata.FromIncomingContext(parentCtx)
+func PrepCtxForSvcToSvcCall(ctx context.Context, targetDaprAppId string) (context.Context, context.CancelFunc, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, nil, status.Errorf(codes.Internal, "No incoming metadata in context")
 	}
-	outgoingCtx := metadata.NewOutgoingContext(parentCtx, md)
+	outgoingCtx := metadata.NewOutgoingContext(ctx, md)
 
 	timeout := time.Second * 3
 	ctx, cancel := context.WithTimeout(outgoingCtx, timeout)

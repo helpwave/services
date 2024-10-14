@@ -41,7 +41,13 @@ type PatientDischargedEvent struct {
 	PatientID string `json:"patient_id"`
 }
 
-func NewPatientCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, humanReadableIdentifier string, notes string) (hwes.Event, error) {
+func NewPatientCreatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	id uuid.UUID,
+	humanReadableIdentifier string,
+	notes string,
+) (hwes.Event, error) {
 	payload := PatientCreatedEvent{
 		ID:                      id.String(),
 		HumanReadableIdentifier: humanReadableIdentifier,
@@ -50,7 +56,11 @@ func NewPatientCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID,
 	return hwes.NewEvent(a, PatientCreated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewHumanReadableIdentifierUpdatedEvent(ctx context.Context, a hwes.Aggregate, humanReadableIdentifier string) (hwes.Event, error) {
+func NewHumanReadableIdentifierUpdatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	humanReadableIdentifier string,
+) (hwes.Event, error) {
 	payload := HumanReadableIdentifierUpdatedEvent{
 		HumanReadableIdentifier: humanReadableIdentifier,
 	}

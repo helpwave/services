@@ -23,8 +23,12 @@ type Projection struct {
 func NewProjection(es *esdb.Client, serviceName string) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-patient-postgres-projection", serviceName)
 	p := &Projection{
-		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PatientAggregateType)}),
-		patientRepo:      patient_repo.New(hwdb.GetDB())}
+		CustomProjection: custom.NewCustomProjection(
+			es,
+			subscriptionGroupName,
+			&[]string{fmt.Sprintf("%s-", aggregate.PatientAggregateType)},
+		),
+		patientRepo: patient_repo.New(hwdb.GetDB())}
 	p.initEventListeners()
 	return p
 }

@@ -16,8 +16,12 @@ type Projection struct {
 func NewSpiceDBProjection(es *esdb.Client, authz hwauthz.AuthZ, serviceName string) *Projection {
 	subscriptionGroupName := fmt.Sprintf("%s-spicedb-projection", serviceName)
 	p := &Projection{
-		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.TaskAggregateType)}),
-		authz:            authz,
+		CustomProjection: custom.NewCustomProjection(
+			es,
+			subscriptionGroupName,
+			&[]string{fmt.Sprintf("%s-", aggregate.TaskAggregateType)},
+		),
+		authz: authz,
 	}
 	p.initEventListeners()
 	return p

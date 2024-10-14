@@ -24,9 +24,11 @@ import (
 //
 // [DICE]: https://github.com/open-telemetry/opentelemetry-go/blob/main/example/dice/otel.go
 
+type ShutdownFn = func(context.Context) error
+
 // setupOTelSDK bootstraps the OpenTelemetry pipeline.
 // If it does not return an error, make sure to call shutdown for proper cleanup.
-func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shutdown func(context.Context) error, err error) {
+func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shutdown ShutdownFn, err error) {
 	log := zlog.Ctx(ctx)
 
 	log.Debug().Msg("setting up otel")

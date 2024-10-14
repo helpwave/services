@@ -11,10 +11,32 @@ import (
 	"tasks-svc/internal/task/aggregate"
 )
 
-type CreateTaskCommandHandler func(ctx context.Context, taskID uuid.UUID, name string, description *string, patientID uuid.UUID, public *bool, status *pb.TaskStatus, dueAt *timestamppb.Timestamp, assignedUserID uuid.NullUUID, subtasks []*pb.CreateTaskRequest_SubTask) (common.ConsistencyToken, error)
+type CreateTaskCommandHandler func(
+	ctx context.Context,
+	taskID uuid.UUID,
+	name string,
+	description *string,
+	patientID uuid.UUID,
+	public *bool,
+	status *pb.TaskStatus,
+	dueAt *timestamppb.Timestamp,
+	assignedUserID uuid.NullUUID,
+	subtasks []*pb.CreateTaskRequest_SubTask,
+) (common.ConsistencyToken, error)
 
 func NewCreateTaskCommandHandler(as hwes.AggregateStore) CreateTaskCommandHandler {
-	return func(ctx context.Context, taskID uuid.UUID, name string, description *string, patientID uuid.UUID, public *bool, status *pb.TaskStatus, dueAt *timestamppb.Timestamp, assignedUserID uuid.NullUUID, subtasks []*pb.CreateTaskRequest_SubTask) (common.ConsistencyToken, error) {
+	return func(
+		ctx context.Context,
+		taskID uuid.UUID,
+		name string,
+		description *string,
+		patientID uuid.UUID,
+		public *bool,
+		status *pb.TaskStatus,
+		dueAt *timestamppb.Timestamp,
+		assignedUserID uuid.NullUUID,
+		subtasks []*pb.CreateTaskRequest_SubTask,
+	) (common.ConsistencyToken, error) {
 		a := aggregate.NewTaskAggregate(taskID)
 
 		exists, err := as.Exists(ctx, a)

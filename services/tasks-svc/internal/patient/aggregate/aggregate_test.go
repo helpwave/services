@@ -32,11 +32,18 @@ func TestPatientAggregate_CreatePatient(t *testing.T) {
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, patientHumanReadableIdentifier, patientNotes)
+		return patientEventsV1.NewPatientCreatedEvent(
+			ctx,
+			patientAggregate,
+			patientID,
+			patientHumanReadableIdentifier,
+			patientNotes,
+		)
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != patientHumanReadableIdentifier {
-		t.Errorf("Patient humanReadableIdentifier: expected '%s' got '%s'", patientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
+		t.Errorf("Patient humanReadableIdentifier: expected '%s' got '%s'",
+			patientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
 	}
 
 	if patientAggregate.Patient.Notes != patientNotes {
@@ -56,7 +63,13 @@ func TestPatientAggregate_UpdateNotes(t *testing.T) {
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, patientHumanReadableIdentifier, initialPatientNotes)
+		return patientEventsV1.NewPatientCreatedEvent(
+			ctx,
+			patientAggregate,
+			patientID,
+			patientHumanReadableIdentifier,
+			initialPatientNotes,
+		)
 	})
 
 	if patientAggregate.Patient.Notes != initialPatientNotes {
@@ -83,19 +96,31 @@ func TestPatientAggregate_UpdateHumanReadableIdentifier(t *testing.T) {
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, initialPatientHumanReadableIdentifier, "")
+		return patientEventsV1.NewPatientCreatedEvent(
+			ctx,
+			patientAggregate,
+			patientID,
+			initialPatientHumanReadableIdentifier,
+			"",
+		)
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != initialPatientHumanReadableIdentifier {
-		t.Errorf("Patient Notes: expected '%s' got '%s'", initialPatientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
+		t.Errorf("Patient Notes: expected '%s' got '%s'",
+			initialPatientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewHumanReadableIdentifierUpdatedEvent(ctx, patientAggregate, updatedPatientHumanReadableIdentifier)
+		return patientEventsV1.NewHumanReadableIdentifierUpdatedEvent(
+			ctx,
+			patientAggregate,
+			updatedPatientHumanReadableIdentifier,
+		)
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != updatedPatientHumanReadableIdentifier {
-		t.Errorf("Patient Notes: expected '%s' got '%s'", updatedPatientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
+		t.Errorf("Patient Notes: expected '%s' got '%s'",
+			updatedPatientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
 	}
 }
 
@@ -107,11 +132,18 @@ func TestPatientAggregate_DischargeReadmitPatient(t *testing.T) {
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, patientHumanReadableIdentifier, "")
+		return patientEventsV1.NewPatientCreatedEvent(
+			ctx,
+			patientAggregate,
+			patientID,
+			patientHumanReadableIdentifier,
+			"",
+		)
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != patientHumanReadableIdentifier {
-		t.Errorf("Patient humanReadableIdentifier: expected '%s' got '%s'", patientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
+		t.Errorf("Patient humanReadableIdentifier: expected '%s' got '%s'",
+			patientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
@@ -141,11 +173,18 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 	patientAggregate := aggregate.NewPatientAggregate(patientID)
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
-		return patientEventsV1.NewPatientCreatedEvent(ctx, patientAggregate, patientID, patientHumanReadableIdentifier, "")
+		return patientEventsV1.NewPatientCreatedEvent(
+			ctx,
+			patientAggregate,
+			patientID,
+			patientHumanReadableIdentifier,
+			"",
+		)
 	})
 
 	if patientAggregate.Patient.HumanReadableIdentifier != patientHumanReadableIdentifier {
-		t.Errorf("Patient humanReadableIdentifier: expected '%s' got '%s'", patientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
+		t.Errorf("Patient humanReadableIdentifier: expected '%s' got '%s'",
+			patientHumanReadableIdentifier, patientAggregate.Patient.HumanReadableIdentifier)
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
@@ -153,7 +192,8 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 	})
 
 	if patientAggregate.Patient.BedID.UUID != newBedID {
-		t.Errorf("Patient BedID: expected '%s' got '%s'", newBedID.String(), patientAggregate.Patient.BedID.UUID.String())
+		t.Errorf("Patient BedID: expected '%s' got '%s'",
+			newBedID.String(), patientAggregate.Patient.BedID.UUID.String())
 	}
 
 	MustApplyEvent(t, patientAggregate, func() (hwes.Event, error) {
@@ -161,7 +201,8 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 	})
 
 	if patientAggregate.Patient.BedID.UUID != uuid.Nil {
-		t.Errorf("Patient BedID: expected '%s' got '%s'", uuid.Nil.String(), patientAggregate.Patient.BedID.UUID.String())
+		t.Errorf("Patient BedID: expected '%s' got '%s'",
+			uuid.Nil.String(), patientAggregate.Patient.BedID.UUID.String())
 	}
 }
 

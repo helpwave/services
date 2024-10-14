@@ -66,7 +66,11 @@ func NewSpiceDBAuthZ() *SpiceDBAuthZ {
 }
 
 // Write writes relationships, use Create and Delete instead!
-func (s *SpiceDBAuthZ) Write(ctx context.Context, writes []hwauthz.Relationship, deletes []hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
+func (s *SpiceDBAuthZ) Write(
+	ctx context.Context,
+	writes []hwauthz.Relationship,
+	deletes []hwauthz.Relationship,
+) (hwauthz.ConsistencyToken, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwauthz.SpiceDB.Write")
 	defer span.End()
 

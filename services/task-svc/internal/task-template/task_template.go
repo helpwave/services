@@ -352,11 +352,12 @@ func (ServiceServer) GetAllTaskTemplatesByCreator(
 		}
 
 		if row.SubTaskName != nil {
-			template.Subtasks = append(template.Subtasks, &pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask{
-				Name:           *row.SubTaskName,
-				TaskTemplateId: row.TaskTemplate.ID.String(),
-				Id:             row.SubTaskID.UUID.String(), // must exist by constraint
-			})
+			template.Subtasks = append(template.Subtasks,
+				&pb.GetAllTaskTemplatesByCreatorResponse_TaskTemplate_SubTask{
+					Name:           *row.SubTaskName,
+					TaskTemplateId: row.TaskTemplate.ID.String(),
+					Id:             row.SubTaskID.UUID.String(), // must exist by constraint
+				})
 		}
 	}
 

@@ -134,7 +134,12 @@ func DefaultInterceptorChain() grpc.ServerOption {
 	return grpc.ChainUnaryInterceptor(DefaultInterceptors()...)
 }
 
-func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+func authUnaryInterceptor(
+	ctx context.Context,
+	req interface{},
+	info *grpc.UnaryServerInfo,
+	next grpc.UnaryHandler,
+) (interface{}, error) {
 	ctx, span, log := telemetry.StartSpan(ctx, "auth_interceptor")
 	defer span.End()
 
@@ -336,7 +341,12 @@ func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
 
 // localeInterceptor parses the Accept-Language header.
 // Also see hwlocale.WithLocales, hwlocale.GetLocalesTags and hwlocale.GetLocalesStrings
-func localeInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+func localeInterceptor(
+	ctx context.Context,
+	req interface{},
+	_ *grpc.UnaryServerInfo,
+	next grpc.UnaryHandler,
+) (interface{}, error) {
 	log := zlog.Ctx(ctx)
 
 	metaData := metadata.ExtractIncoming(ctx)
@@ -393,7 +403,12 @@ func parseLocales(langHeader string) ([]language.Tag, bool) {
 
 // handlerSpanInterceptor opens and closes a span around the next in the chain
 // it should only be used as the last element in the interceptor chain before the handler
-func handlerSpanInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+func handlerSpanInterceptor(
+	ctx context.Context,
+	req interface{},
+	_ *grpc.UnaryServerInfo,
+	next grpc.UnaryHandler,
+) (interface{}, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "handler")
 	res, err := next(ctx, req)
 	if err != nil {
@@ -404,7 +419,12 @@ func handlerSpanInterceptor(ctx context.Context, req interface{}, info *grpc.Una
 }
 
 // errorQualityControlInterceptor logs violations to https://cloud.google.com/apis/design/errors#error_payloads
-func errorQualityControlInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+func errorQualityControlInterceptor(
+	ctx context.Context,
+	req interface{},
+	_ *grpc.UnaryServerInfo,
+	next grpc.UnaryHandler,
+) (interface{}, error) {
 	res, err := next(ctx, req)
 
 	// no error, no error quality to control
@@ -510,7 +530,12 @@ func errorQualityControlInterceptor(ctx context.Context, req interface{}, info *
 	return res, err
 }
 
-func validateUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (res interface{}, err error) {
+func validateUnaryInterceptor(
+	ctx context.Context,
+	req interface{},
+	_ *grpc.UnaryServerInfo,
+	next grpc.UnaryHandler,
+) (res interface{}, err error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "validate_interceptor")
 	defer func() {
 		if err != nil {
@@ -575,14 +600,21 @@ func validateFieldErrDescription(ctx context.Context, fieldErr validator.FieldEr
 		l = locale.RequiredError(ctx)
 	// TODO: add more tags
 	default:
-		log.Warn().Str("tag", fieldErr.Tag()).Msg("tag unhandled, falling back to InvalidFieldError description")
+		log.Warn().
+			Str("tag", fieldErr.Tag()).
+			Msg("tag unhandled, falling back to InvalidFieldError description")
 		l = locale.InvalidFieldError(ctx)
 	}
 
 	return hwlocale.Localize(ctx, l)
 }
 
-func loggingUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (interface{}, error) {
+func loggingUnaryInterceptor(
+	ctx context.Context,
+	req interface{},
+	info *grpc.UnaryServerInfo,
+	next grpc.UnaryHandler,
+) (interface{}, error) {
 	ctx, span, log := telemetry.StartSpan(ctx, "logging_interceptor")
 	defer span.End()
 
@@ -680,7 +712,13 @@ func redactMetadata(m metadata.MD) metadata.MD {
 // - additional details can be added
 // For more information on details see: https://cloud.google.com/apis/design/errors#error_details
 // and https://cloud.google.com/apis/design/errors#error_payloads
-func NewStatusError(ctx context.Context, code codes.Code, msg string, locale hwlocale.Locale, details ...proto.Message) error {
+func NewStatusError(
+	ctx context.Context,
+	code codes.Code,
+	msg string,
+	locale hwlocale.Locale,
+	details ...proto.Message,
+) error {
 	log := zlog.Ctx(ctx)
 	statusNoDetails := status.New(code, msg)
 
@@ -703,7 +741,10 @@ func NewStatusError(ctx context.Context, code codes.Code, msg string, locale hwl
 // LocalizedMessage returns a LocalizedMessage Error Detail as per
 // https://cloud.google.com/apis/design/errors#error_details
 // Also see NewStatusError, which constructs a LocalizedMessage for you
-func LocalizedMessage(ctx context.Context, locale hwlocale.Locale) *errdetails.LocalizedMessage {
+func LocalizedMessage(
+	ctx context.Context,
+	locale hwlocale.Locale,
+) *errdetails.LocalizedMessage {
 	str, tag := hwlocale.LocalizeWithTag(ctx, locale)
 	return &errdetails.LocalizedMessage{
 		Locale:  tag.String(),

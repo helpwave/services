@@ -156,7 +156,8 @@ func (a *AggregateBase) ClearUncommittedEvents() {
 func (a *AggregateBase) Load(events []Event) error {
 	for _, event := range events {
 		if event.GetAggregateID() != a.GetID() {
-			return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'", a.GetID(), event.GetAggregateID())
+			return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'",
+				a.GetID(), event.GetAggregateID())
 		}
 
 		if err := a.HandleEvent(event); err != nil {
@@ -178,7 +179,8 @@ func (a *AggregateBase) Load(events []Event) error {
 // Apply -> You apply a *new* event to the aggregate that could be persisted
 func (a *AggregateBase) Apply(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
-		return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'", a.GetID(), event.GetAggregateID())
+		return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'",
+			a.GetID(), event.GetAggregateID())
 	}
 
 	if err := a.HandleEvent(event); err != nil {
@@ -196,11 +198,13 @@ func (a *AggregateBase) Apply(event Event) error {
 // Progress -> You progress the state of an aggregate
 func (a *AggregateBase) Progress(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
-		return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'", a.GetID(), event.GetAggregateID())
+		return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'",
+			a.GetID(), event.GetAggregateID())
 	}
 
 	if event.GetVersion() < a.GetVersion() {
-		return fmt.Errorf("event version of %d is lower then aggregate version of %d", event.GetVersion(), a.GetVersion())
+		return fmt.Errorf("event version of %d is lower then aggregate version of %d",
+			event.GetVersion(), a.GetVersion())
 	}
 
 	if err := a.HandleEvent(event); err != nil {

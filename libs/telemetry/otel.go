@@ -17,7 +17,11 @@ import (
 //
 //	ctx, span, log := common.StartSpan(ctx, "some name")
 //	defer span.End()
-func StartSpan(ctx context.Context, spanName string, opts ...trace.SpanStartOption) (context.Context, trace.Span, zerolog.Logger) {
+func StartSpan(
+	ctx context.Context,
+	spanName string,
+	opts ...trace.SpanStartOption,
+) (context.Context, trace.Span, zerolog.Logger) {
 	tracer := otel.Tracer("") // tracer with default name
 	ctx, span := tracer.Start(ctx, spanName, opts...)
 

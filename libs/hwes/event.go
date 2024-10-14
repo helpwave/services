@@ -97,7 +97,7 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 // StreamID:		task-d9027be3-d00f-4eec-b50e-5f489df20433
 // AggregateID: 	d9027be3-d00f-4eec-b50e-5f489df20433
 // AggregateType: 	task
-func resolveAggregateIDAndTypeFromStreamID(streamID string) (aggregateID uuid.UUID, aggregateType AggregateType, err error) {
+func resolveAggregateIDAndTypeFromStreamID(streamID string) (aID uuid.UUID, aggregateType AggregateType, err error) {
 	streamIDParts := strings.SplitN(streamID, "-", 2)
 
 	var aggregateTypeStr, aggregateIDStr string
@@ -116,7 +116,7 @@ func resolveAggregateIDAndTypeFromStreamID(streamID string) (aggregateID uuid.UU
 		return
 	}
 
-	aggregateID, err = uuid.Parse(aggregateIDStr)
+	aID, err = uuid.Parse(aggregateIDStr)
 
 	return
 }

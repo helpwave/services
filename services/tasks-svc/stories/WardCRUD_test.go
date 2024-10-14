@@ -53,7 +53,12 @@ func TestCreateUpdateGetWard(t *testing.T) {
 	updateRes, err := wardClient.UpdateWard(ctx, updateReq)
 	assert.NoError(t, err, "could not update ward after creation")
 
-	assert.NotEqual(t, getWardRes.Consistency, updateRes.Consistency, "consistency has not changed in update")
+	assert.NotEqual(
+		t,
+		getWardRes.Consistency,
+		updateRes.Consistency,
+		"consistency has not changed in update",
+	)
 
 	//
 	// get updated ward
@@ -360,19 +365,21 @@ func TestGetWardDetails(t *testing.T) {
 				}),
 			}
 		}),
-		"task_templates": hwutil.Map(ward.TaskTemplates, func(tt *pb.GetWardDetailsResponse_TaskTemplate) map[string]interface{} {
-			return map[string]interface{}{
-				"id":          tt.Id,
-				"name":        tt.Name,
-				"consistency": tt.Consistency,
-				"subtasks": hwutil.Map(tt.Subtasks, func(st *pb.GetWardDetailsResponse_Subtask) map[string]interface{} {
-					return map[string]interface{}{
-						"id":   st.Id,
-						"name": st.Name,
-					}
-				}),
-			}
-		}),
+		"task_templates": hwutil.Map(ward.TaskTemplates,
+			func(tt *pb.GetWardDetailsResponse_TaskTemplate) map[string]interface{} {
+				return map[string]interface{}{
+					"id":          tt.Id,
+					"name":        tt.Name,
+					"consistency": tt.Consistency,
+					"subtasks": hwutil.Map(tt.Subtasks,
+						func(st *pb.GetWardDetailsResponse_Subtask) map[string]interface{} {
+							return map[string]interface{}{
+								"id":   st.Id,
+								"name": st.Name,
+							}
+						}),
+				}
+			}),
 	}
 
 	assert.Equal(t, expected, actual)

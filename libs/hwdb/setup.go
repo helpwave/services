@@ -14,11 +14,11 @@ import (
 )
 
 type DBTX interface {
-	Exec(context.Context, string, ...interface{}) (pgconn.CommandTag, error)
-	Query(context.Context, string, ...interface{}) (pgx.Rows, error)
-	QueryRow(context.Context, string, ...interface{}) pgx.Row
+	Exec(ctx context.Context, query string, args ...interface{}) (pgconn.CommandTag, error)
+	Query(ctx context.Context, query string, args ...interface{}) (pgx.Rows, error)
+	QueryRow(ctx context.Context, query string, args ...interface{}) pgx.Row
 	CopyFrom(ctx context.Context, tableName pgx.Identifier, columnNames []string, rowSrc pgx.CopyFromSource) (int64, error)
-	SendBatch(context.Context, *pgx.Batch) pgx.BatchResults
+	SendBatch(ctx context.Context, batch *pgx.Batch) pgx.BatchResults
 
 	Begin(ctx context.Context) (pgx.Tx, error)
 }
@@ -108,7 +108,9 @@ func openDatabasePool(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
 
 func GetDB() DBTX {
 	if connectionPool == nil {
-		log.Error().Msg("GetDB called without set-up database, you will run into nil-pointers. Make sure to call SetupDatabaseFromEnv()!")
+		log.Error().
+			Msg("GetDB called without set-up database, you will run into nil-pointers. " +
+				"Make sure to call SetupDatabaseFromEnv()!")
 	}
 	return connectionPool
 }

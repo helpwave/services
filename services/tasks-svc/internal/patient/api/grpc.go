@@ -28,11 +28,15 @@ func NewPatientGrpcService(aggregateStore hwes.AggregateStore, handlers *handler
 	return &PatientGrpcService{as: aggregateStore, handlers: handlers}
 }
 
-func (s *PatientGrpcService) CreatePatient(ctx context.Context, req *pb.CreatePatientRequest) (*pb.CreatePatientResponse, error) {
+func (s *PatientGrpcService) CreatePatient(
+	ctx context.Context,
+	req *pb.CreatePatientRequest,
+) (*pb.CreatePatientResponse, error) {
 	log := zlog.Ctx(ctx)
 	patientID := uuid.New()
 
-	consistency, err := s.handlers.Commands.V1.CreatePatient(ctx, patientID, req.GetHumanReadableIdentifier(), req.Notes)
+	consistency, err := s.handlers.Commands.V1.CreatePatient(
+		ctx, patientID, req.GetHumanReadableIdentifier(), req.Notes)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +51,10 @@ func (s *PatientGrpcService) CreatePatient(ctx context.Context, req *pb.CreatePa
 	}, nil
 }
 
-func (s *PatientGrpcService) GetPatient(ctx context.Context, req *pb.GetPatientRequest) (*pb.GetPatientResponse, error) {
+func (s *PatientGrpcService) GetPatient(
+	ctx context.Context,
+	req *pb.GetPatientRequest,
+) (*pb.GetPatientResponse, error) {
 	patientID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, err
@@ -92,7 +99,10 @@ func (s *PatientGrpcService) GetPatient(ctx context.Context, req *pb.GetPatientR
 	}, nil
 }
 
-func (s *PatientGrpcService) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBedRequest) (*pb.GetPatientByBedResponse, error) {
+func (s *PatientGrpcService) GetPatientByBed(
+	ctx context.Context,
+	req *pb.GetPatientByBedRequest,
+) (*pb.GetPatientByBedResponse, error) {
 	bedID, err := uuid.Parse(req.BedId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -115,7 +125,10 @@ func (s *PatientGrpcService) GetPatientByBed(ctx context.Context, req *pb.GetPat
 	}, nil
 }
 
-func (s *PatientGrpcService) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsByWardRequest) (*pb.GetPatientsByWardResponse, error) {
+func (s *PatientGrpcService) GetPatientsByWard(
+	ctx context.Context,
+	req *pb.GetPatientsByWardRequest,
+) (*pb.GetPatientsByWardResponse, error) {
 	wardID, err := uuid.Parse(req.WardId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -127,19 +140,23 @@ func (s *PatientGrpcService) GetPatientsByWard(ctx context.Context, req *pb.GetP
 	}
 
 	return &pb.GetPatientsByWardResponse{
-		Patients: hwutil.Map(patients, func(patient *models.PatientWithConsistency) *pb.GetPatientsByWardResponse_Patient {
-			return &pb.GetPatientsByWardResponse_Patient{
-				Id:                      patient.ID.String(),
-				HumanReadableIdentifier: patient.HumanReadableIdentifier,
-				Notes:                   patient.Notes,
-				BedId:                   hwutil.NullUUIDToStringPtr(patient.BedID),
-				Consistency:             patient.Consistency,
-			}
-		}),
+		Patients: hwutil.Map(patients,
+			func(patient *models.PatientWithConsistency) *pb.GetPatientsByWardResponse_Patient {
+				return &pb.GetPatientsByWardResponse_Patient{
+					Id:                      patient.ID.String(),
+					HumanReadableIdentifier: patient.HumanReadableIdentifier,
+					Notes:                   patient.Notes,
+					BedId:                   hwutil.NullUUIDToStringPtr(patient.BedID),
+					Consistency:             patient.Consistency,
+				}
+			}),
 	}, nil
 }
 
-func (s *PatientGrpcService) GetPatientDetails(ctx context.Context, req *pb.GetPatientDetailsRequest) (*pb.GetPatientDetailsResponse, error) {
+func (s *PatientGrpcService) GetPatientDetails(
+	ctx context.Context,
+	req *pb.GetPatientDetailsRequest,
+) (*pb.GetPatientDetailsResponse, error) {
 	patientID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, err
@@ -210,7 +227,10 @@ func (s *PatientGrpcService) GetPatientDetails(ctx context.Context, req *pb.GetP
 	}, nil
 }
 
-func (s *PatientGrpcService) GetPatientList(ctx context.Context, req *pb.GetPatientListRequest) (*pb.GetPatientListResponse, error) {
+func (s *PatientGrpcService) GetPatientList(
+	ctx context.Context,
+	req *pb.GetPatientListRequest,
+) (*pb.GetPatientListResponse, error) {
 	wardID, err := hwutil.ParseNullUUID(req.WardId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -302,7 +322,10 @@ func (s *PatientGrpcService) GetPatientList(ctx context.Context, req *pb.GetPati
 	}, nil
 }
 
-func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetRecentPatientsRequest) (*pb.GetRecentPatientsResponse, error) {
+func (s *PatientGrpcService) GetRecentPatients(
+	ctx context.Context,
+	_ *pb.GetRecentPatientsRequest,
+) (*pb.GetRecentPatientsResponse, error) {
 	log := zlog.Ctx(ctx)
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
@@ -375,7 +398,10 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 
 }
 
-func (s *PatientGrpcService) UpdatePatient(ctx context.Context, req *pb.UpdatePatientRequest) (*pb.UpdatePatientResponse, error) {
+func (s *PatientGrpcService) UpdatePatient(
+	ctx context.Context,
+	req *pb.UpdatePatientRequest,
+) (*pb.UpdatePatientResponse, error) {
 	// TODO: Auth
 
 	patientID, err := uuid.Parse(req.GetId())
@@ -426,7 +452,10 @@ func (s *PatientGrpcService) AssignBed(ctx context.Context, req *pb.AssignBedReq
 	}, nil
 }
 
-func (s *PatientGrpcService) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest) (*pb.UnassignBedResponse, error) {
+func (s *PatientGrpcService) UnassignBed(
+	ctx context.Context,
+	req *pb.UnassignBedRequest,
+) (*pb.UnassignBedResponse, error) {
 	log := zlog.Ctx(ctx)
 
 	// TODO: Auth
@@ -451,7 +480,10 @@ func (s *PatientGrpcService) UnassignBed(ctx context.Context, req *pb.UnassignBe
 	}, nil
 }
 
-func (s *PatientGrpcService) DischargePatient(ctx context.Context, req *pb.DischargePatientRequest) (*pb.DischargePatientResponse, error) {
+func (s *PatientGrpcService) DischargePatient(
+	ctx context.Context,
+	req *pb.DischargePatientRequest,
+) (*pb.DischargePatientResponse, error) {
 	log := zlog.Ctx(ctx)
 	patientID, err := uuid.Parse(req.Id)
 
@@ -475,7 +507,10 @@ func (s *PatientGrpcService) DischargePatient(ctx context.Context, req *pb.Disch
 	}, nil
 }
 
-func (s *PatientGrpcService) ReadmitPatient(ctx context.Context, req *pb.ReadmitPatientRequest) (*pb.ReadmitPatientResponse, error) {
+func (s *PatientGrpcService) ReadmitPatient(
+	ctx context.Context,
+	req *pb.ReadmitPatientRequest,
+) (*pb.ReadmitPatientResponse, error) {
 	patientID, err := uuid.Parse(req.PatientId)
 	if err != nil {
 		return nil, err
@@ -495,7 +530,10 @@ func (s *PatientGrpcService) ReadmitPatient(ctx context.Context, req *pb.Readmit
 	}, nil
 }
 
-func (s *PatientGrpcService) GetPatientAssignmentByWard(ctx context.Context, req *pb.GetPatientAssignmentByWardRequest) (*pb.GetPatientAssignmentByWardResponse, error) {
+func (s *PatientGrpcService) GetPatientAssignmentByWard(
+	ctx context.Context,
+	req *pb.GetPatientAssignmentByWardRequest,
+) (*pb.GetPatientAssignmentByWardResponse, error) {
 	wardID, err := uuid.Parse(req.WardId)
 	if err != nil {
 		return nil, err
@@ -507,33 +545,41 @@ func (s *PatientGrpcService) GetPatientAssignmentByWard(ctx context.Context, req
 	}
 
 	return &pb.GetPatientAssignmentByWardResponse{
-		Rooms: hwutil.Map(roomsWithBedsWithPatients, func(room *models.RoomWithBedsWithPatient) *pb.GetPatientAssignmentByWardResponse_Room {
-			return &pb.GetPatientAssignmentByWardResponse_Room{
-				Id:          room.ID.String(),
-				Name:        room.Name,
-				Consistency: room.Consistency,
-				Beds: hwutil.Map(room.Beds, func(bedWithPatient *models.BedWithPatient) *pb.GetPatientAssignmentByWardResponse_Room_Bed {
-					res := &pb.GetPatientAssignmentByWardResponse_Room_Bed{
-						Id:          bedWithPatient.ID.String(),
-						Name:        bedWithPatient.Name,
-						Consistency: bedWithPatient.Consistency,
-						Patient: hwutil.MapIf(bedWithPatient.Patient != nil, bedWithPatient.Patient,
-							func(row *models.PatientWithConsistency) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
-								return pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
-									Id:          bedWithPatient.Patient.ID.String(),
-									Name:        bedWithPatient.Patient.HumanReadableIdentifier,
-									Consistency: bedWithPatient.Patient.Consistency,
-								}
-							}),
-					}
-					return res
-				}),
-			}
-		}),
+		Rooms: hwutil.Map(roomsWithBedsWithPatients,
+			func(room *models.RoomWithBedsWithPatient) *pb.GetPatientAssignmentByWardResponse_Room {
+				return &pb.GetPatientAssignmentByWardResponse_Room{
+					Id:          room.ID.String(),
+					Name:        room.Name,
+					Consistency: room.Consistency,
+					Beds: hwutil.Map(room.Beds,
+						func(bedWithPatient *models.BedWithPatient) *pb.GetPatientAssignmentByWardResponse_Room_Bed {
+							res := &pb.GetPatientAssignmentByWardResponse_Room_Bed{
+								Id:          bedWithPatient.ID.String(),
+								Name:        bedWithPatient.Name,
+								Consistency: bedWithPatient.Consistency,
+								Patient: hwutil.MapIf(
+									bedWithPatient.Patient != nil,
+									bedWithPatient.Patient,
+									// nolint:lll
+									func(row *models.PatientWithConsistency) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
+										return pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
+											Id:          bedWithPatient.Patient.ID.String(),
+											Name:        bedWithPatient.Patient.HumanReadableIdentifier,
+											Consistency: bedWithPatient.Patient.Consistency,
+										}
+									}),
+							}
+							return res
+						}),
+				}
+			}),
 	}, nil
 }
 
-func (s *PatientGrpcService) DeletePatient(ctx context.Context, req *pb.DeletePatientRequest) (*pb.DeletePatientResponse, error) {
+func (s *PatientGrpcService) DeletePatient(
+	ctx context.Context,
+	req *pb.DeletePatientRequest,
+) (*pb.DeletePatientResponse, error) {
 	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err

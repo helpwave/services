@@ -79,7 +79,10 @@ func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest
 	return &pb.CreateUserResponse{Id: createdUser.ID.String()}, nil
 }
 
-func (s ServiceServer) ReadPublicProfile(ctx context.Context, req *pb.ReadPublicProfileRequest) (*pb.ReadPublicProfileResponse, error) {
+func (s ServiceServer) ReadPublicProfile(
+	ctx context.Context,
+	req *pb.ReadPublicProfileRequest,
+) (*pb.ReadPublicProfileResponse, error) {
 	userRepo := user_repo.New(hwdb.GetDB())
 
 	userID, err := uuid.Parse(req.Id)

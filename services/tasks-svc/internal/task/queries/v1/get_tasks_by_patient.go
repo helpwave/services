@@ -10,7 +10,10 @@ import (
 	"tasks-svc/repos/task_repo"
 )
 
-type GetTasksByPatientIDQueryHandler func(ctx context.Context, patientID uuid.UUID) ([]*models.TaskWithConsistency, error)
+type GetTasksByPatientIDQueryHandler func(
+	ctx context.Context,
+	patientID uuid.UUID,
+) ([]*models.TaskWithConsistency, error)
 
 func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) ([]*models.TaskWithConsistency, error) {

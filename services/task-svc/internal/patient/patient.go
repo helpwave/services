@@ -422,7 +422,10 @@ func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest
 	return &pb.UnassignBedResponse{}, nil
 }
 
-func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePatientRequest) (*pb.DischargePatientResponse, error) {
+func (ServiceServer) DischargePatient(
+	ctx context.Context,
+	req *pb.DischargePatientRequest,
+) (*pb.DischargePatientResponse, error) {
 	log := zlog.Ctx(ctx)
 	patientRepo := patient_repo.New(hwdb.GetDB())
 
@@ -590,9 +593,14 @@ func (ServiceServer) GetPatientList(
 	// collectActivePatients assumes row.BedID exists
 	// by constraints then row.BedName and row.Room* must also exist
 	collectActivePatients := func(rows []rowType) []*pb.GetPatientListResponse_PatientWithRoomAndBed {
-		patients := make([]*pb.GetPatientListResponse_PatientWithRoomAndBed, 0) // List of Patients to be returned
-		patientsMap := make(map[uuid.UUID]int)                                  // maps id to index of patient in patients list
-		tasksMap := make(map[uuid.UUID]int)                                     // maps tasks id to index of task in its patient's Task list
+		// List of Patients to be returned
+		patients := make([]*pb.GetPatientListResponse_PatientWithRoomAndBed, 0)
+
+		// maps id to index of patient in patients list
+		patientsMap := make(map[uuid.UUID]int)
+
+		// maps tasks id to index of task in its patient's Task list
+		tasksMap := make(map[uuid.UUID]int)
 		subTasksSet := make(map[uuid.UUID]bool)
 
 		for _, row := range rows {

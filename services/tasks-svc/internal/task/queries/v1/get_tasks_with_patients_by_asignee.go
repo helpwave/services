@@ -10,7 +10,10 @@ import (
 	"tasks-svc/repos/task_repo"
 )
 
-type GetTasksWithPatientsByAssigneeQueryHandler func(ctx context.Context, assigneeID uuid.UUID) ([]*models.TaskWithPatient, error)
+type GetTasksWithPatientsByAssigneeQueryHandler func(
+	ctx context.Context,
+	assigneeID uuid.UUID,
+) ([]*models.TaskWithPatient, error)
 
 func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssigneeQueryHandler {
 	return func(ctx context.Context, assigneeID uuid.UUID) ([]*models.TaskWithPatient, error) {

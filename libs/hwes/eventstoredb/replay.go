@@ -38,7 +38,12 @@ func hwesEventFromReceivedEventFromStream(ctx context.Context, esdbEvent *esdb.S
 // Replay provides the ability to re-run existing events from an event stream
 // from the first to the latest event. Run will call the passed .OnEvent() handler for every event
 // in a filtered $all stream up to the event which was the latest when Replay() was called.
-func Replay(ctx context.Context, es *esdb.Client, onEvent func(ctx context.Context, event hwes.Event) error, streamPrefixFilters *[]string) error {
+func Replay(
+	ctx context.Context,
+	es *esdb.Client,
+	onEvent func(ctx context.Context, event hwes.Event) error,
+	streamPrefixFilters *[]string,
+) error {
 	ctx, span, log := telemetry.StartSpan(ctx, "hwes.Replay.Run")
 	defer span.End()
 

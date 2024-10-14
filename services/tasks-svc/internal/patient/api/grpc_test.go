@@ -38,12 +38,25 @@ func server() (context.Context, pb.PatientServiceClient, func()) {
 	return ctx, client, closer
 }
 
-func setup(t *testing.T) (ctx context.Context, client pb.PatientServiceClient, redisMock redismock.ClientMock, teardown func()) {
+func setup(t *testing.T) (
+	ctx context.Context,
+	client pb.PatientServiceClient,
+	redisMock redismock.ClientMock,
+	teardown func(),
+) {
 	ctx, client, teardown = server()
 	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
 
 	redisClient, redisMock := redismock.NewClientMock()
-	tracking.SetLRU(decaying_lru.CustomSetup(ctx, "tasks-svc-test-"+t.Name(), 10, time.Second, 20, nil, redisClient))
+	tracking.SetLRU(decaying_lru.CustomSetup(
+		ctx,
+		"tasks-svc-test-"+t.Name(),
+		10,
+		time.Second,
+		20,
+		nil,
+		redisClient,
+	))
 
 	return ctx, client, redisMock, teardown
 }
@@ -74,7 +87,10 @@ func TestPatientGrpcService_CreatePatient(t *testing.T) {
 	humanReadableIdentifier := "Test patient"
 	notes := "notes"
 
-	createPatientResponse, err := client.CreatePatient(ctx, &pb.CreatePatientRequest{HumanReadableIdentifier: humanReadableIdentifier, Notes: &notes})
+	createPatientResponse, err := client.CreatePatient(ctx, &pb.CreatePatientRequest{
+		HumanReadableIdentifier: humanReadableIdentifier,
+		Notes:                   &notes,
+	})
 	if !assert.NoError(t, err, "could not create patient") {
 		return
 	}
@@ -103,7 +119,9 @@ func TestPatientGrpcService_UpdatePatient(t *testing.T) {
 	notes1 := "notes"
 
 	// First, create a new patient
-	createPatientResponse, err := client.CreatePatient(ctx, &pb.CreatePatientRequest{HumanReadableIdentifier: humanReadableIdentifier1, Notes: &notes1})
+	createPatientResponse, err := client.CreatePatient(ctx,
+		&pb.CreatePatientRequest{HumanReadableIdentifier: humanReadableIdentifier1, Notes: &notes1},
+	)
 	if !assert.NoError(t, err, "could not create patient") {
 		return
 	}

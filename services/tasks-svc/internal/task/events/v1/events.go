@@ -87,7 +87,14 @@ type TaskStatusUpdatedEvent struct {
 	Status string `json:"subtask_id"`
 }
 
-func NewTaskCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, name string, patientID uuid.UUID, status pb.TaskStatus) (hwes.Event, error) {
+func NewTaskCreatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	id uuid.UUID,
+	name string,
+	patientID uuid.UUID,
+	status pb.TaskStatus,
+) (hwes.Event, error) {
 	payload := TaskCreatedEvent{
 		ID:        id.String(),
 		Name:      name,
@@ -155,7 +162,13 @@ func NewTaskUnpublishedEvent(ctx context.Context, a hwes.Aggregate) (hwes.Event,
 	return hwes.NewEvent(a, TaskUnpublished, hwes.WithContext(ctx))
 }
 
-func NewSubtaskCreatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID, name string, done bool) (hwes.Event, error) {
+func NewSubtaskCreatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	subtaskID uuid.UUID,
+	name string,
+	done bool,
+) (hwes.Event, error) {
 	payload := SubtaskCreatedEvent{
 		SubtaskID: subtaskID.String(),
 		Name:      name,
@@ -164,7 +177,12 @@ func NewSubtaskCreatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uui
 	return hwes.NewEvent(a, SubtaskCreated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
-func NewSubtaskNameUpdatedEvent(ctx context.Context, a hwes.Aggregate, subtaskID uuid.UUID, name string) (hwes.Event, error) {
+func NewSubtaskNameUpdatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	subtaskID uuid.UUID,
+	name string,
+) (hwes.Event, error) {
 	payload := SubtaskNameUpdatedEvent{
 		SubtaskID: subtaskID.String(),
 		Name:      name,

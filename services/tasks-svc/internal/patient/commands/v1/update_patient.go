@@ -8,10 +8,20 @@ import (
 	"tasks-svc/internal/patient/aggregate"
 )
 
-type UpdatePatientCommandHandler func(ctx context.Context, patientID uuid.UUID, humanReadableIdentifier *string, notes *string) (common.ConsistencyToken, error)
+type UpdatePatientCommandHandler func(
+	ctx context.Context,
+	patientID uuid.UUID,
+	humanReadableIdentifier *string,
+	notes *string,
+) (common.ConsistencyToken, error)
 
 func NewUpdatePatientCommandHandler(as hwes.AggregateStore) UpdatePatientCommandHandler {
-	return func(ctx context.Context, patientID uuid.UUID, humanReadableIdentifier *string, notes *string) (common.ConsistencyToken, error) {
+	return func(
+		ctx context.Context,
+		patientID uuid.UUID,
+		humanReadableIdentifier *string,
+		notes *string,
+	) (common.ConsistencyToken, error) {
 		a, err := aggregate.LoadPatientAggregate(ctx, as, patientID)
 		if err != nil {
 			return 0, err

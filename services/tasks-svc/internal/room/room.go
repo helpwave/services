@@ -194,7 +194,10 @@ func (ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest) 
 	return &pb.DeleteRoomResponse{}, nil
 }
 
-func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoomOverviewsByWardRequest) (*pb.GetRoomOverviewsByWardResponse, error) {
+func (ServiceServer) GetRoomOverviewsByWard(
+	ctx context.Context,
+	req *pb.GetRoomOverviewsByWardRequest,
+) (*pb.GetRoomOverviewsByWardResponse, error) {
 	roomRepo := room_repo.New(hwdb.GetDB())
 
 	wardId, err := uuid.Parse(req.Id)
@@ -216,20 +219,22 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 
 	processedRooms := make(map[uuid.UUID]bool)
 
+	type rowType = room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardRow
+
 	roomsResponse := hwutil.FlatMap(rows,
-		func(roomRow room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardRow) **pb.GetRoomOverviewsByWardResponse_Room {
+		func(roomRow rowType) **pb.GetRoomOverviewsByWardResponse_Room {
 			if _, roomProcessed := processedRooms[roomRow.RoomID]; roomProcessed {
 				return nil
 			}
 			processedRooms[roomRow.RoomID] = true
 			beds := hwutil.FlatMap(rows,
-				func(bedRow room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardRow) **pb.GetRoomOverviewsByWardResponse_Room_Bed {
+				func(bedRow rowType) **pb.GetRoomOverviewsByWardResponse_Room_Bed {
 					if !bedRow.BedID.Valid || bedRow.RoomID != roomRow.RoomID {
 						return nil
 					}
 
 					patient := hwutil.MapIf(bedRow.PatientID.Valid, bedRow,
-						func(bedRow room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardRow) pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient {
+						func(bedRow rowType) pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient {
 							return pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient{
 								Id:                      bedRow.PatientID.UUID.String(),
 								HumanReadableIdentifier: *bedRow.PatientHumanReadableIdentifier,
