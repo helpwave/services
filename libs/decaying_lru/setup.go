@@ -48,7 +48,14 @@ func redisOptionsOrDefault(serviceName string, redisOptions *redis.Options) *red
 	return DefaultRedisOptions(serviceName)
 }
 
-func CustomSetup(ctx context.Context, serviceName string, size int64, decay time.Duration, invP int, redisOptions *redis.Options, redisClient *redis.Client) DecayingLRU {
+func CustomSetup(ctx context.Context,
+	serviceName string,
+	size int64,
+	decay time.Duration,
+	invP int,
+	redisOptions *redis.Options,
+	redisClient *redis.Client,
+) DecayingLRU {
 	if redisClient == nil {
 		redisClient = redis.NewClient(redisOptionsOrDefault(serviceName, redisOptions))
 	}

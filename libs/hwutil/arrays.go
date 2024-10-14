@@ -111,7 +111,8 @@ func MapValuesPtrToSlice[K comparable, V any](set map[K]*V) []V {
 	return slice
 }
 
-// MergeSlicesWithSet merges two slices, only keeping unique elements once, not stable the resulting order may be arbitrary
+// MergeSlicesWithSet merges two slices, only keeping unique elements once,
+// not stable the resulting order may be arbitrary
 // unlike MergeSlices, also returns the set of unique values
 func MergeSlicesWithSet[T comparable](as, bs []T) ([]T, map[T]bool) {
 	unique := make(map[T]bool, len(as)+len(bs))

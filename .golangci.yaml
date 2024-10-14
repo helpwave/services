@@ -50,14 +50,14 @@ linters:
     - govet
     - grouper
     - importas
-    #- inamedparam
-    #- ineffassign
-    #- interfacebloat
-    #- intrange
-    #- ireturn
-    #- lll
-    #- loggercheck
-    #- maintidx
+    - inamedparam
+    - ineffassign
+    - interfacebloat
+    - intrange
+    # - ireturn # TODO
+    - lll
+    - loggercheck
+    - maintidx
     #- makezero
     #- mirror
     #- misspell

@@ -32,5 +32,7 @@ func main() {
 	values, err := lru.GetItemsForUser(ctx, "test", "1")
 	must(err)
 
-	fmt.Println(values) // [jkl] due to the fact that the whole key (with values [ghi,def,abc]) are expired and [mno] was removed
+	// expecting: [jkl]
+	// due to the fact that the whole key (with values [ghi,def,abc]) are expired and [mno] was removed
+	fmt.Println(values)
 }
