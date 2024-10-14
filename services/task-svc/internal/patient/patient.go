@@ -84,23 +84,28 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 		Notes:                   res.Notes,
 		BedId:                   hwutil.NullUUIDToStringPtr(res.BedID),
 		WardId:                  hwutil.NullUUIDToStringPtr(res.WardID),
-		Room: hwutil.MapIf(res.RoomID.Valid, *res, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientResponse_Room {
-			return pb.GetPatientResponse_Room{
-				Id:     res.RoomID.UUID.String(), // has to be Valid, we just checked
-				Name:   *res.RoomName,            // RoomName must exist (NOT NULL) when room exists
-				WardId: res.WardID.UUID.String(), // WardId must exist (NOT NULL) when room exists
-			}
-		}),
-		Bed: hwutil.MapIf(res.BedID.Valid, *res, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientResponse_Bed {
-			return pb.GetPatientResponse_Bed{
-				Id:   res.BedID.UUID.String(), // has to be Valid as per MapIf condition
-				Name: *res.BedName,            // BedName must exist (NOT NULL) when Bed exists
-			}
-		}),
+		Room: hwutil.MapIf(res.RoomID.Valid, *res,
+			func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientResponse_Room {
+				return pb.GetPatientResponse_Room{
+					Id:     res.RoomID.UUID.String(), // has to be Valid, we just checked
+					Name:   *res.RoomName,            // RoomName must exist (NOT NULL) when room exists
+					WardId: res.WardID.UUID.String(), // WardId must exist (NOT NULL) when room exists
+				}
+			}),
+		Bed: hwutil.MapIf(res.BedID.Valid, *res,
+			func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientResponse_Bed {
+				return pb.GetPatientResponse_Bed{
+					Id:   res.BedID.UUID.String(), // has to be Valid as per MapIf condition
+					Name: *res.BedName,            // BedName must exist (NOT NULL) when Bed exists
+				}
+			}),
 	}, nil
 }
 
-func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBedRequest) (*pb.GetPatientByBedResponse, error) {
+func (ServiceServer) GetPatientByBed(
+	ctx context.Context,
+	req *pb.GetPatientByBedRequest,
+) (*pb.GetPatientByBedResponse, error) {
 	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -130,7 +135,10 @@ func (ServiceServer) GetPatientByBed(ctx context.Context, req *pb.GetPatientByBe
 	}, nil
 }
 
-func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsByWardRequest) (*pb.GetPatientsByWardResponse, error) {
+func (ServiceServer) GetPatientsByWard(
+	ctx context.Context,
+	req *pb.GetPatientsByWardRequest,
+) (*pb.GetPatientsByWardResponse, error) {
 	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -145,10 +153,11 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patients, err := patientRepo.GetPatientsByWardForOrganization(ctx, patient_repo.GetPatientsByWardForOrganizationParams{
-		WardID:         wardID,
-		OrganizationID: organizationID,
-	})
+	patients, err := patientRepo.GetPatientsByWardForOrganization(ctx,
+		patient_repo.GetPatientsByWardForOrganizationParams{
+			WardID:         wardID,
+			OrganizationID: organizationID,
+		})
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -166,7 +175,10 @@ func (ServiceServer) GetPatientsByWard(ctx context.Context, req *pb.GetPatientsB
 	}, nil
 }
 
-func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.GetPatientAssignmentByWardRequest) (*pb.GetPatientAssignmentByWardResponse, error) {
+func (ServiceServer) GetPatientAssignmentByWard(
+	ctx context.Context,
+	req *pb.GetPatientAssignmentByWardRequest,
+) (*pb.GetPatientAssignmentByWardResponse, error) {
 	roomRepo := room_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -184,41 +196,48 @@ func (ServiceServer) GetPatientAssignmentByWard(ctx context.Context, req *pb.Get
 
 	processedRooms := make(map[uuid.UUID]bool)
 
-	return &pb.GetPatientAssignmentByWardResponse{
-		Rooms: hwutil.FlatMap(rows, func(roomRow room_repo.GetRoomsWithBedsWithPatientsByWardRow) **pb.GetPatientAssignmentByWardResponse_Room {
-			if _, processed := processedRooms[roomRow.RoomID]; processed {
-				return nil
-			}
-			processedRooms[roomRow.RoomID] = true
+	type rowType = room_repo.GetRoomsWithBedsWithPatientsByWardRow
 
-			beds := hwutil.FlatMap(rows, func(bedRow room_repo.GetRoomsWithBedsWithPatientsByWardRow) **pb.GetPatientAssignmentByWardResponse_Room_Bed {
-				if bedRow.RoomID != roomRow.RoomID || !bedRow.BedID.Valid {
+	return &pb.GetPatientAssignmentByWardResponse{
+		Rooms: hwutil.FlatMap(rows,
+			func(roomRow rowType) **pb.GetPatientAssignmentByWardResponse_Room {
+				if _, processed := processedRooms[roomRow.RoomID]; processed {
 					return nil
 				}
-				val := &pb.GetPatientAssignmentByWardResponse_Room_Bed{
-					Id:   bedRow.BedID.UUID.String(), // valid because of if above
-					Name: *bedRow.BedName,            // exists, because NOT-NULL
-					Patient: hwutil.MapIf(bedRow.PatientID.Valid, bedRow,
-						func(bedRow room_repo.GetRoomsWithBedsWithPatientsByWardRow) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
-							return pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
-								Id:   bedRow.PatientID.UUID.String(),
-								Name: *bedRow.PatientHumanReadableIdentifier,
-							}
-						}),
+				processedRooms[roomRow.RoomID] = true
+
+				beds := hwutil.FlatMap(rows,
+					func(bedRow rowType) **pb.GetPatientAssignmentByWardResponse_Room_Bed {
+						if bedRow.RoomID != roomRow.RoomID || !bedRow.BedID.Valid {
+							return nil
+						}
+						val := &pb.GetPatientAssignmentByWardResponse_Room_Bed{
+							Id:   bedRow.BedID.UUID.String(), // valid because of if above
+							Name: *bedRow.BedName,            // exists, because NOT-NULL
+							Patient: hwutil.MapIf(bedRow.PatientID.Valid, bedRow,
+								func(bedRow rowType) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
+									return pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
+										Id:   bedRow.PatientID.UUID.String(),
+										Name: *bedRow.PatientHumanReadableIdentifier,
+									}
+								}),
+						}
+						return &val
+					})
+				val := &pb.GetPatientAssignmentByWardResponse_Room{
+					Id:   roomRow.RoomID.String(),
+					Name: roomRow.RoomName,
+					Beds: beds,
 				}
 				return &val
-			})
-			val := &pb.GetPatientAssignmentByWardResponse_Room{
-				Id:   roomRow.RoomID.String(),
-				Name: roomRow.RoomName,
-				Beds: beds,
-			}
-			return &val
-		}),
+			}),
 	}, nil
 }
 
-func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPatientsRequest) (*pb.GetRecentPatientsResponse, error) {
+func (ServiceServer) GetRecentPatients(
+	ctx context.Context,
+	_ *pb.GetRecentPatientsRequest,
+) (*pb.GetRecentPatientsResponse, error) {
 	patientRepo := patient_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
@@ -263,36 +282,40 @@ func (ServiceServer) GetRecentPatients(ctx context.Context, req *pb.GetRecentPat
 		return nil, err
 	}
 
-	recentPatients := hwutil.Map(patientsRes, func(res patient_repo.GetPatientsWithBedAndRoomRow) *pb.GetRecentPatientsResponse_PatientWithRoomAndBed {
-		var bed *pb.GetRecentPatientsResponse_Bed = nil
-		var room *pb.GetRecentPatientsResponse_Room = nil
+	recentPatients := hwutil.Map(patientsRes,
+		func(res patient_repo.GetPatientsWithBedAndRoomRow) *pb.GetRecentPatientsResponse_PatientWithRoomAndBed {
+			var bed *pb.GetRecentPatientsResponse_Bed = nil
+			var room *pb.GetRecentPatientsResponse_Room = nil
 
-		if res.BedID.Valid {
-			bed = &pb.GetRecentPatientsResponse_Bed{
-				Id:   res.BedID.UUID.String(),
-				Name: *res.BedName, // NOT-NULL, must exist
-			}
-			if res.RoomID.Valid {
-				room = &pb.GetRecentPatientsResponse_Room{
-					Id:     res.RoomID.UUID.String(), // checked validity already
-					Name:   *res.RoomName,            // must exist, as NOT-NULL
-					WardId: res.WardID.UUID.String(), // must be valid, as NOT-NULL
+			if res.BedID.Valid {
+				bed = &pb.GetRecentPatientsResponse_Bed{
+					Id:   res.BedID.UUID.String(),
+					Name: *res.BedName, // NOT-NULL, must exist
+				}
+				if res.RoomID.Valid {
+					room = &pb.GetRecentPatientsResponse_Room{
+						Id:     res.RoomID.UUID.String(), // checked validity already
+						Name:   *res.RoomName,            // must exist, as NOT-NULL
+						WardId: res.WardID.UUID.String(), // must be valid, as NOT-NULL
+					}
 				}
 			}
-		}
 
-		return &pb.GetRecentPatientsResponse_PatientWithRoomAndBed{
-			Id:                      res.ID.String(),
-			HumanReadableIdentifier: res.HumanReadableIdentifier,
-			Room:                    room,
-			Bed:                     bed,
-		}
-	})
+			return &pb.GetRecentPatientsResponse_PatientWithRoomAndBed{
+				Id:                      res.ID.String(),
+				HumanReadableIdentifier: res.HumanReadableIdentifier,
+				Room:                    room,
+				Bed:                     bed,
+			}
+		})
 
 	return &pb.GetRecentPatientsResponse{RecentPatients: recentPatients}, nil
 }
 
-func (ServiceServer) UpdatePatient(ctx context.Context, req *pb.UpdatePatientRequest) (*pb.UpdatePatientResponse, error) {
+func (ServiceServer) UpdatePatient(
+	ctx context.Context,
+	req *pb.UpdatePatientRequest,
+) (*pb.UpdatePatientResponse, error) {
 	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -422,7 +445,10 @@ func (ServiceServer) DischargePatient(ctx context.Context, req *pb.DischargePati
 	return &pb.DischargePatientResponse{}, nil
 }
 
-func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDetailsRequest) (*pb.GetPatientDetailsResponse, error) {
+func (ServiceServer) GetPatientDetails(
+	ctx context.Context,
+	req *pb.GetPatientDetailsRequest,
+) (*pb.GetPatientDetailsResponse, error) {
 	patientRepo := patient_repo.New(hwdb.GetDB())
 	taskRepo := task_repo.New(hwdb.GetDB())
 
@@ -499,23 +525,28 @@ func (ServiceServer) GetPatientDetails(ctx context.Context, req *pb.GetPatientDe
 		Tasks:                   tasks,
 		IsDischarged:            patientRes.IsDischarged != 0,
 		WardId:                  hwutil.NullUUIDToStringPtr(patientRes.WardID),
-		Room: hwutil.MapIf(patientRes.RoomID.Valid, *patientRes, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientDetailsResponse_Room {
-			return pb.GetPatientDetailsResponse_Room{
-				Id:     res.RoomID.UUID.String(), // we just checked
-				Name:   *res.RoomName,            // RoomName is NOT-NULL, so must exist
-				WardId: res.WardID.UUID.String(), // WardID is NOT-NULL, so must be valid
-			}
-		}),
-		Bed: hwutil.MapIf(patientRes.BedID.Valid, *patientRes, func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientDetailsResponse_Bed {
-			return pb.GetPatientDetailsResponse_Bed{
-				Id:   res.BedID.UUID.String(), // valid as per MapIf condition
-				Name: *res.BedName,            // BedName is NOT-NULL, so must exist
-			}
-		}),
+		Room: hwutil.MapIf(patientRes.RoomID.Valid, *patientRes,
+			func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientDetailsResponse_Room {
+				return pb.GetPatientDetailsResponse_Room{
+					Id:     res.RoomID.UUID.String(), // we just checked
+					Name:   *res.RoomName,            // RoomName is NOT-NULL, so must exist
+					WardId: res.WardID.UUID.String(), // WardID is NOT-NULL, so must be valid
+				}
+			}),
+		Bed: hwutil.MapIf(patientRes.BedID.Valid, *patientRes,
+			func(res patient_repo.GetPatientWithBedAndRoomRow) pb.GetPatientDetailsResponse_Bed {
+				return pb.GetPatientDetailsResponse_Bed{
+					Id:   res.BedID.UUID.String(), // valid as per MapIf condition
+					Name: *res.BedName,            // BedName is NOT-NULL, so must exist
+				}
+			}),
 	}, nil
 }
 
-func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListRequest) (*pb.GetPatientListResponse, error) {
+func (ServiceServer) GetPatientList(
+	ctx context.Context,
+	req *pb.GetPatientListRequest,
+) (*pb.GetPatientListResponse, error) {
 	patientRepo := patient_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -536,24 +567,26 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 		return nil, err
 	}
 
-	dischargedRows, chargedRows := hwutil.Partition(rows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
+	type rowType = patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow
+
+	dischargedRows, chargedRows := hwutil.Partition(rows, func(row rowType) bool {
 		return row.Patient.IsDischarged != 0
 	})
 
-	withBedRows, unassignedRows := hwutil.Partition(chargedRows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
+	withBedRows, unassignedRows := hwutil.Partition(chargedRows, func(row rowType) bool {
 		return row.BedID.Valid
 	})
 
 	if wardID.Valid {
 		// scope active patients to wardID
-		withBedRows = hwutil.Filter(withBedRows, func(row patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) bool {
+		withBedRows = hwutil.Filter(withBedRows, func(row rowType) bool {
 			return row.WardID.UUID == wardID.UUID // equality implies validity
 		})
 	}
 
 	// collectActivePatients assumes row.BedID exists
 	// by constraints then row.BedName and row.Room* must also exist
-	collectActivePatients := func(rows []patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) []*pb.GetPatientListResponse_PatientWithRoomAndBed {
+	collectActivePatients := func(rows []rowType) []*pb.GetPatientListResponse_PatientWithRoomAndBed {
 		patients := make([]*pb.GetPatientListResponse_PatientWithRoomAndBed, 0) // List of Patients to be returned
 		patientsMap := make(map[uuid.UUID]int)                                  // maps id to index of patient in patients list
 		tasksMap := make(map[uuid.UUID]int)                                     // maps tasks id to index of task in its patient's Task list
@@ -627,7 +660,7 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 	}
 
 	// not ideal that we have to repeat ourselves here
-	collectPatients := func(rows []patient_repo.GetPatientsWithTasksBedAndRoomForOrganizationRow) []*pb.GetPatientListResponse_Patient {
+	collectPatients := func(rows []rowType) []*pb.GetPatientListResponse_Patient {
 		patients := make([]*pb.GetPatientListResponse_Patient, 0) // List of Patients to be returned
 		patientsMap := make(map[uuid.UUID]int)                    // maps id to index of patient in patients list
 		tasksMap := make(map[uuid.UUID]int)                       // maps tasks id to index of task in its patient's Task list
@@ -697,7 +730,10 @@ func (ServiceServer) GetPatientList(ctx context.Context, req *pb.GetPatientListR
 	}, nil
 }
 
-func (ServiceServer) DeletePatient(ctx context.Context, req *pb.DeletePatientRequest) (*pb.DeletePatientResponse, error) {
+func (ServiceServer) DeletePatient(
+	ctx context.Context,
+	req *pb.DeletePatientRequest,
+) (*pb.DeletePatientResponse, error) {
 	patientID, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -717,7 +753,10 @@ func (ServiceServer) DeletePatient(ctx context.Context, req *pb.DeletePatientReq
 	return &pb.DeletePatientResponse{}, nil
 }
 
-func (ServiceServer) ReadmitPatient(ctx context.Context, req *pb.ReadmitPatientRequest) (*pb.ReadmitPatientResponse, error) {
+func (ServiceServer) ReadmitPatient(
+	ctx context.Context,
+	req *pb.ReadmitPatientRequest,
+) (*pb.ReadmitPatientResponse, error) {
 	patientID, err := uuid.Parse(req.PatientId)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())

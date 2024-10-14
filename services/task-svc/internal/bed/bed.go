@@ -107,7 +107,10 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 	}, nil
 }
 
-func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatientRequest) (*pb.GetBedByPatientResponse, error) {
+func (ServiceServer) GetBedByPatient(
+	ctx context.Context,
+	req *pb.GetBedByPatientRequest,
+) (*pb.GetBedByPatientResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -124,12 +127,18 @@ func (ServiceServer) GetBedByPatient(ctx context.Context, req *pb.GetBedByPatien
 	}
 
 	return &pb.GetBedByPatientResponse{
-		Room: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientForOrganizationRow) pb.GetBedByPatientResponse_Room {
-			return pb.GetBedByPatientResponse_Room{Id: res.RoomID.String(), Name: res.RoomName, WardId: res.WardID.String()}
-		}),
-		Bed: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientForOrganizationRow) pb.GetBedByPatientResponse_Bed {
-			return pb.GetBedByPatientResponse_Bed{Id: res.BedID.String(), Name: res.BedName}
-		}),
+		Room: hwutil.MapNillable(result,
+			func(res bed_repo.GetBedWithRoomByPatientForOrganizationRow) pb.GetBedByPatientResponse_Room {
+				return pb.GetBedByPatientResponse_Room{
+					Id:     res.RoomID.String(),
+					Name:   res.RoomName,
+					WardId: res.WardID.String(),
+				}
+			}),
+		Bed: hwutil.MapNillable(result,
+			func(res bed_repo.GetBedWithRoomByPatientForOrganizationRow) pb.GetBedByPatientResponse_Bed {
+				return pb.GetBedByPatientResponse_Bed{Id: res.BedID.String(), Name: res.BedName}
+			}),
 	}, nil
 }
 

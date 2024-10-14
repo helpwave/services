@@ -69,7 +69,10 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		if hwutil.Contains(allowedInitialStatuses, *req.InitialStatus) {
 			initialStatus = *req.InitialStatus
 		} else {
-			return nil, status.Error(codes.InvalidArgument, "only todo and in progress are allowed as an initial TaskStatus")
+			return nil, status.Error(
+				codes.InvalidArgument,
+				"only todo and in progress are allowed as an initial TaskStatus",
+			)
 		}
 	}
 
@@ -126,18 +129,19 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 		assignedUserId = ""
 	}
 
-	subtasks := hwutil.FlatMap(rows, func(row task_repo.GetTaskWithSubTasksAndPatientNameRow) **pb.GetTaskResponse_SubTask {
-		if !row.SubtaskID.Valid {
-			return nil
-		}
-		val := &pb.GetTaskResponse_SubTask{
-			Id:        row.SubtaskID.UUID.String(),
-			Done:      *row.SubtaskDone,
-			Name:      *row.SubtaskName,
-			CreatedBy: row.SubtaskCreatedBy.UUID.String(),
-		}
-		return &val
-	})
+	subtasks := hwutil.FlatMap(rows,
+		func(row task_repo.GetTaskWithSubTasksAndPatientNameRow) **pb.GetTaskResponse_SubTask {
+			if !row.SubtaskID.Valid {
+				return nil
+			}
+			val := &pb.GetTaskResponse_SubTask{
+				Id:        row.SubtaskID.UUID.String(),
+				Done:      *row.SubtaskDone,
+				Name:      *row.SubtaskName,
+				CreatedBy: row.SubtaskCreatedBy.UUID.String(),
+			}
+			return &val
+		})
 
 	patient := &pb.GetTaskResponse_Patient{
 		Id:   task.PatientID.String(),
@@ -159,7 +163,10 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 	}, nil
 }
 
-func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPatientRequest) (*pb.GetTasksByPatientResponse, error) {
+func (ServiceServer) GetTasksByPatient(
+	ctx context.Context,
+	req *pb.GetTasksByPatientRequest,
+) (*pb.GetTasksByPatientResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -226,7 +233,10 @@ func (ServiceServer) GetTasksByPatient(ctx context.Context, req *pb.GetTasksByPa
 	}, nil
 }
 
-func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *pb.GetTasksByPatientSortedByStatusRequest) (*pb.GetTasksByPatientSortedByStatusResponse, error) {
+func (ServiceServer) GetTasksByPatientSortedByStatus(
+	ctx context.Context,
+	req *pb.GetTasksByPatientSortedByStatusRequest,
+) (*pb.GetTasksByPatientSortedByStatusResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -317,7 +327,10 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 	}, nil
 }
 
-func (ServiceServer) GetAssignedTasks(ctx context.Context, _ *pb.GetAssignedTasksRequest) (*pb.GetAssignedTasksResponse, error) {
+func (ServiceServer) GetAssignedTasks(
+	ctx context.Context,
+	_ *pb.GetAssignedTasksRequest,
+) (*pb.GetAssignedTasksResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 	assigneeID, err := common.GetUserID(ctx)
 	if err != nil {
@@ -471,7 +484,10 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 	return &pb.AddSubTaskResponse{Id: subtaskID.String()}, nil
 }
 
-func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskRequest) (*pb.RemoveSubTaskResponse, error) {
+func (ServiceServer) RemoveSubTask(
+	ctx context.Context,
+	req *pb.RemoveSubTaskRequest,
+) (*pb.RemoveSubTaskResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -490,7 +506,10 @@ func (ServiceServer) RemoveSubTask(ctx context.Context, req *pb.RemoveSubTaskReq
 	return &pb.RemoveSubTaskResponse{}, nil
 }
 
-func (ServiceServer) UpdateSubTask(ctx context.Context, req *pb.UpdateSubTaskRequest) (*pb.UpdateSubTaskResponse, error) {
+func (ServiceServer) UpdateSubTask(
+	ctx context.Context,
+	req *pb.UpdateSubTaskRequest,
+) (*pb.UpdateSubTaskResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	subtaskID, err := uuid.Parse(req.Id)
@@ -511,7 +530,10 @@ func (ServiceServer) UpdateSubTask(ctx context.Context, req *pb.UpdateSubTaskReq
 	return &pb.UpdateSubTaskResponse{}, nil
 }
 
-func (ServiceServer) SubTaskToToDo(ctx context.Context, req *pb.SubTaskToToDoRequest) (*pb.SubTaskToToDoResponse, error) {
+func (ServiceServer) SubTaskToToDo(
+	ctx context.Context,
+	req *pb.SubTaskToToDoRequest,
+) (*pb.SubTaskToToDoResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -533,7 +555,10 @@ func (ServiceServer) SubTaskToToDo(ctx context.Context, req *pb.SubTaskToToDoReq
 	return &pb.SubTaskToToDoResponse{}, nil
 }
 
-func (ServiceServer) SubTaskToDone(ctx context.Context, req *pb.SubTaskToDoneRequest) (*pb.SubTaskToDoneResponse, error) {
+func (ServiceServer) SubTaskToDone(
+	ctx context.Context,
+	req *pb.SubTaskToDoneRequest,
+) (*pb.SubTaskToDoneResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -577,7 +602,10 @@ func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) 
 	return &pb.TaskToToDoResponse{}, nil
 }
 
-func (ServiceServer) TaskToInProgress(ctx context.Context, req *pb.TaskToInProgressRequest) (*pb.TaskToInProgressResponse, error) {
+func (ServiceServer) TaskToInProgress(
+	ctx context.Context,
+	req *pb.TaskToInProgressRequest,
+) (*pb.TaskToInProgressResponse, error) {
 	log := zlog.Ctx(ctx)
 	taskRepo := task_repo.New(hwdb.GetDB())
 
@@ -627,7 +655,10 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) 
 	return &pb.TaskToDoneResponse{}, nil
 }
 
-func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToUserRequest) (*pb.AssignTaskToUserResponse, error) {
+func (ServiceServer) AssignTaskToUser(
+	ctx context.Context,
+	req *pb.AssignTaskToUserRequest,
+) (*pb.AssignTaskToUserResponse, error) {
 	log := zlog.Ctx(ctx)
 	taskRepo := task_repo.New(hwdb.GetDB())
 
@@ -665,7 +696,10 @@ func (ServiceServer) AssignTaskToUser(ctx context.Context, req *pb.AssignTaskToU
 	return &pb.AssignTaskToUserResponse{}, nil
 }
 
-func (ServiceServer) UnassignTaskFromUser(ctx context.Context, req *pb.UnassignTaskFromUserRequest) (*pb.UnassignTaskFromUserResponse, error) {
+func (ServiceServer) UnassignTaskFromUser(
+	ctx context.Context,
+	req *pb.UnassignTaskFromUserRequest,
+) (*pb.UnassignTaskFromUserResponse, error) {
 	log := zlog.Ctx(ctx)
 	taskRepo := task_repo.New(hwdb.GetDB())
 
@@ -713,7 +747,10 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 	return &pb.PublishTaskResponse{}, nil
 }
 
-func (ServiceServer) UnpublishTask(ctx context.Context, req *pb.UnpublishTaskRequest) (*pb.UnpublishTaskResponse, error) {
+func (ServiceServer) UnpublishTask(
+	ctx context.Context,
+	req *pb.UnpublishTaskRequest,
+) (*pb.UnpublishTaskResponse, error) {
 	log := zlog.Ctx(ctx)
 	taskRepo := task_repo.New(hwdb.GetDB())
 

@@ -143,38 +143,42 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 
 	processedRooms := make(map[uuid.UUID]bool)
 
-	roomsResponse := hwutil.FlatMap(rows, func(roomRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsResponse_Room {
-		room := roomRow.Room
-		if _, processed := processedRooms[room.ID]; processed {
-			return nil
-		}
-		processedRooms[room.ID] = true
-		beds := hwutil.FlatMap(rows, func(bedRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsResponse_Room_Bed {
-			if !bedRow.BedID.Valid || bedRow.Room.ID != room.ID {
+	roomsResponse := hwutil.FlatMap(rows,
+		func(roomRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsResponse_Room {
+			room := roomRow.Room
+			if _, processed := processedRooms[room.ID]; processed {
 				return nil
 			}
-			val := &pb.GetRoomsResponse_Room_Bed{
-				Id:   bedRow.BedID.UUID.String(),
-				Name: *bedRow.BedName,
+			processedRooms[room.ID] = true
+			beds := hwutil.FlatMap(rows, func(bedRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsResponse_Room_Bed {
+				if !bedRow.BedID.Valid || bedRow.Room.ID != room.ID {
+					return nil
+				}
+				val := &pb.GetRoomsResponse_Room_Bed{
+					Id:   bedRow.BedID.UUID.String(),
+					Name: *bedRow.BedName,
+				}
+				return &val
+			})
+			val := &pb.GetRoomsResponse_Room{
+				Id:             room.ID.String(),
+				Name:           room.Name,
+				Beds:           beds,
+				OrganizationId: room.OrganizationID.String(),
+				WardId:         room.WardID.String(),
 			}
 			return &val
 		})
-		val := &pb.GetRoomsResponse_Room{
-			Id:             room.ID.String(),
-			Name:           room.Name,
-			Beds:           beds,
-			OrganizationId: room.OrganizationID.String(),
-			WardId:         room.WardID.String(),
-		}
-		return &val
-	})
 
 	return &pb.GetRoomsResponse{
 		Rooms: roomsResponse,
 	}, nil
 }
 
-func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardRequest) (*pb.GetRoomsByWardResponse, error) {
+func (ServiceServer) GetRoomsByWard(
+	ctx context.Context,
+	req *pb.GetRoomsByWardRequest,
+) (*pb.GetRoomsByWardResponse, error) {
 	roomRepo := room_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
@@ -200,31 +204,33 @@ func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardR
 
 	processedRooms := make(map[uuid.UUID]bool)
 
-	roomsResponse := hwutil.FlatMap(rows, func(roomRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsByWardResponse_Room {
-		room := roomRow.Room
-		if _, processed := processedRooms[room.ID]; processed {
-			return nil
-		}
-		processedRooms[room.ID] = true
-		beds := hwutil.FlatMap(rows, func(bedRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsByWardResponse_Room_Bed {
-			if !bedRow.BedID.Valid || bedRow.Room.ID != room.ID {
+	roomsResponse := hwutil.FlatMap(rows,
+		func(roomRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsByWardResponse_Room {
+			room := roomRow.Room
+			if _, processed := processedRooms[room.ID]; processed {
 				return nil
 			}
-			val := &pb.GetRoomsByWardResponse_Room_Bed{
-				Id:   bedRow.BedID.UUID.String(),
-				Name: *bedRow.BedName,
+			processedRooms[room.ID] = true
+			beds := hwutil.FlatMap(rows,
+				func(bedRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsByWardResponse_Room_Bed {
+					if !bedRow.BedID.Valid || bedRow.Room.ID != room.ID {
+						return nil
+					}
+					val := &pb.GetRoomsByWardResponse_Room_Bed{
+						Id:   bedRow.BedID.UUID.String(),
+						Name: *bedRow.BedName,
+					}
+					return &val
+				})
+			val := &pb.GetRoomsByWardResponse_Room{
+				Id:             room.ID.String(),
+				Name:           room.Name,
+				Beds:           beds,
+				OrganizationId: room.OrganizationID.String(),
+				WardId:         room.WardID.String(),
 			}
 			return &val
 		})
-		val := &pb.GetRoomsByWardResponse_Room{
-			Id:             room.ID.String(),
-			Name:           room.Name,
-			Beds:           beds,
-			OrganizationId: room.OrganizationID.String(),
-			WardId:         room.WardID.String(),
-		}
-		return &val
-	})
 
 	return &pb.GetRoomsByWardResponse{
 		Rooms: roomsResponse,
@@ -252,7 +258,10 @@ func (ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest) 
 	return &pb.DeleteRoomResponse{}, nil
 }
 
-func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoomOverviewsByWardRequest) (*pb.GetRoomOverviewsByWardResponse, error) {
+func (ServiceServer) GetRoomOverviewsByWard(
+	ctx context.Context,
+	req *pb.GetRoomOverviewsByWardRequest,
+) (*pb.GetRoomOverviewsByWardResponse, error) {
 	roomRepo := room_repo.New(hwdb.GetDB())
 
 	wardId, err := uuid.Parse(req.Id)
@@ -280,20 +289,22 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 
 	processedRooms := make(map[uuid.UUID]bool)
 
+	type rowType = room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganizationRow
+
 	roomsResponse := hwutil.FlatMap(rows,
-		func(roomRow room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganizationRow) **pb.GetRoomOverviewsByWardResponse_Room {
+		func(roomRow rowType) **pb.GetRoomOverviewsByWardResponse_Room {
 			if _, roomProcessed := processedRooms[roomRow.RoomID]; roomProcessed {
 				return nil
 			}
 			processedRooms[roomRow.RoomID] = true
 			beds := hwutil.FlatMap(rows,
-				func(bedRow room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganizationRow) **pb.GetRoomOverviewsByWardResponse_Room_Bed {
+				func(bedRow rowType) **pb.GetRoomOverviewsByWardResponse_Room_Bed {
 					if !bedRow.BedID.Valid || bedRow.RoomID != roomRow.RoomID {
 						return nil
 					}
 
 					patient := hwutil.MapIf(bedRow.PatientID.Valid, bedRow,
-						func(bedRow room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganizationRow) pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient {
+						func(bedRow rowType) pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient {
 							return pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient{
 								Id:                      bedRow.PatientID.UUID.String(),
 								HumanReadableIdentifier: *bedRow.PatientHumanReadableIdentifier,

@@ -107,7 +107,10 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 	}, nil
 }
 
-func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsRequest) (*pb.GetRecentWardsResponse, error) {
+func (ServiceServer) GetRecentWards(
+	ctx context.Context,
+	_ *pb.GetRecentWardsRequest,
+) (*pb.GetRecentWardsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
@@ -220,7 +223,10 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 	return &pb.DeleteWardResponse{}, nil
 }
 
-func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOverviewsRequest) (*pb.GetWardOverviewsResponse, error) {
+func (s ServiceServer) GetWardOverviews(
+	ctx context.Context,
+	_ *pb.GetWardOverviewsRequest,
+) (*pb.GetWardOverviewsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	organizationID, err := common.GetOrganizationID(ctx)
@@ -254,7 +260,10 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 	return &pb.GetWardOverviewsResponse{Wards: resWards}, err
 }
 
-func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsRequest) (*pb.GetWardDetailsResponse, error) {
+func (ServiceServer) GetWardDetails(
+	ctx context.Context,
+	req *pb.GetWardDetailsRequest,
+) (*pb.GetWardDetailsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	wardID, err := uuid.Parse(req.Id)
@@ -267,10 +276,11 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		return nil, err
 	}
 
-	rows, err := wardRepo.GetWardByIdWithRoomsBedsAndTaskTemplates(ctx, ward_repo.GetWardByIdWithRoomsBedsAndTaskTemplatesParams{
-		OrganizationID: organizationID,
-		WardID:         wardID,
-	})
+	rows, err := wardRepo.GetWardByIdWithRoomsBedsAndTaskTemplates(ctx,
+		ward_repo.GetWardByIdWithRoomsBedsAndTaskTemplatesParams{
+			OrganizationID: organizationID,
+			WardID:         wardID,
+		})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
