@@ -153,7 +153,8 @@ func (p *CustomProjection) Subscribe(ctx context.Context) error {
 		}
 	}
 
-	// After a potential successful creation of a persistent subscription, we are trying to establish a connection to that subscription
+	// After a potential successful creation of a persistent subscription, we are trying to establish a connection to
+	// that subscription
 	stream, err := p.es.SubscribeToPersistentSubscriptionToAll(ctx, p.subscriptionGroupName, esdb.SubscribeToPersistentSubscriptionOptions{})
 	if err != nil {
 		return fmt.Errorf("CustomProjection.Subscribe: failed to subscribe: %w", err)

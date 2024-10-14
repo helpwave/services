@@ -173,7 +173,8 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 	appendToDontAlwaysInclude := hwutil.Map(payload.AppendToDontAlwaysInclude, mapper(true))
 	toAppend := slices.Concat(appendToAlwaysInclude, appendToDontAlwaysInclude)
 
-	// before we can add new items, we have to make sure they don't already exist, or the whole copy operation will be canceled
+	// before we can add new items, we have to make sure they don't already exist, or the whole copy operation will be
+	// canceled
 	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
 		RuleID: payload.RuleId,
 		PropertyIds: hwutil.Map(toAppend, func(p views_repo.AddToAlwaysIncludeParams) uuid.UUID {

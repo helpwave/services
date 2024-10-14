@@ -41,7 +41,8 @@ type metadata struct {
 	CommitterUserID string `json:"committer_user_id"`
 	// w3c trace context
 	TraceParent string `json:"trace_parent"`
-	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is discouraged.
+	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is
+	// discouraged.
 	Timestamp time.Time `json:"timestamp"`
 }
 

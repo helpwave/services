@@ -24,7 +24,8 @@ func SetupLogging(mode, rawLevel, service, version string) {
 		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
 	}
 
-	// base logger, all kinds of other data may be attached for more specific loggers (e.g. as done in common.loggingUnaryInterceptor)
+	// base logger, all kinds of other data may be attached for more specific loggers
+	// (e.g. as done in common.loggingUnaryInterceptor)
 	log.Logger = log.With().
 		Caller().
 		Str("version", version).

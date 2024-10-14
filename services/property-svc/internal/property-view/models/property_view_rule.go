@@ -38,7 +38,8 @@ type PropertyViewRule struct {
 	Matchers PropertyMatchers
 
 	/* filters */
-	// TODO: softRequired      *bool       /* show all softRequired, don't show all softRequired, no-rule (parent might have one) */
+	// TODO: /* show all softRequired, don't show all softRequired, no-rule (parent might have one) */
+	// TODO: softRequired      *bool
 	AlwaysInclude     []uuid.UUID /* add properties to always show */
 	DontAlwaysInclude []uuid.UUID /* remove property from include list, which got added by a parent to it */
 }

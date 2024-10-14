@@ -160,7 +160,8 @@ func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 	return next(ctx, req)
 }
 
-// isUnaryRPCForDaprInternal will resolve to true when the incoming RPC is targeted to some Dapr internal "sidecar -> app" gRPC service
+// isUnaryRPCForDaprInternal will resolve to true when the incoming RPC is targeted to
+// some Dapr internal "sidecar -> app" gRPC service
 func isUnaryRPCForDaprInternal(info *grpc.UnaryServerInfo) bool {
 	_, isAppCallbackServer := info.Server.(runtime.AppCallbackServer)
 	_, isAppCallbackHealthCheckServer := info.Server.(runtime.AppCallbackHealthCheckServer)
@@ -699,7 +700,8 @@ func NewStatusError(ctx context.Context, code codes.Code, msg string, locale hwl
 	return s.Err()
 }
 
-// LocalizedMessage returns a LocalizedMessage Error Detail as per https://cloud.google.com/apis/design/errors#error_details
+// LocalizedMessage returns a LocalizedMessage Error Detail as per
+// https://cloud.google.com/apis/design/errors#error_details
 // Also see NewStatusError, which constructs a LocalizedMessage for you
 func LocalizedMessage(ctx context.Context, locale hwlocale.Locale) *errdetails.LocalizedMessage {
 	str, tag := hwlocale.LocalizeWithTag(ctx, locale)
