@@ -1,7 +1,7 @@
 package hwes_test
 
 import (
-	"common"
+	"common/auth"
 	"context"
 	"github.com/google/uuid"
 	"hwes"
@@ -13,7 +13,7 @@ func TestEventWithUserID(t *testing.T) {
 	u := uuid.New()
 	e := hwes.Event{}
 
-	ctx = common.ContextWithUserID(ctx, u)
+	ctx = auth.ContextWithUserID(ctx, u)
 
 	if err := e.SetCommitterFromCtx(ctx); err != nil {
 		t.Error(err)
@@ -29,7 +29,7 @@ func TestEventWithOrganizationID(t *testing.T) {
 	u := uuid.New()
 	e := hwes.Event{}
 
-	ctx = common.ContextWithOrganizationID(ctx, u)
+	ctx = auth.ContextWithOrganizationID(ctx, u)
 
 	if err := e.SetOrganizationFromCtx(ctx); err != nil {
 		t.Error(err)

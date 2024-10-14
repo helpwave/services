@@ -1,7 +1,7 @@
 package hwes
 
 import (
-	"common"
+	"common/auth"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -263,7 +263,7 @@ func (e *Event) SetCommitterFromCtx(ctx context.Context) error {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwes.Event.SetCommitterFromCtx")
 	defer span.End()
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil // don't set a user, if no user is available
 	}
@@ -284,7 +284,7 @@ func (e *Event) SetOrganizationFromCtx(ctx context.Context) error {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwes.Event.SetOrganizationFromCtx")
 	defer span.End()
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil // don't set a user, if no user is available
 	}

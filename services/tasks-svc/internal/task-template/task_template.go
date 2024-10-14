@@ -2,6 +2,7 @@ package task_template
 
 import (
 	"common"
+	"common/auth"
 	"context"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
@@ -32,7 +33,7 @@ func (ServiceServer) CreateTaskTemplate(ctx context.Context, req *pb.CreateTaskT
 	defer rollback()
 	templateRepo := task_template_repo.New(db).WithTx(tx)
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
