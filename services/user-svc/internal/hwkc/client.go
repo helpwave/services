@@ -17,13 +17,13 @@ import (
 )
 
 type IClient interface {
-	GetUserById(userID uuid.UUID) (*User, error)
-	GetOrganizationsOfUserById(userID uuid.UUID) ([]*Organization, error)
-	CreateOrganization(name, displayName string, isPersonal bool) (*Organization, error)
-	UpdateOrganization(organizationID uuid.UUID, organization Organization) error
-	DeleteOrganization(organizationID uuid.UUID) error
-	AddUserToOrganization(userID, organizationID uuid.UUID) error
-	RemoveUserFromOrganization(userID, organizationID uuid.UUID) error
+	GetUserById(ctx context.Context, userID uuid.UUID) (*User, error)
+	GetOrganizationsOfUserById(ctx context.Context, userID uuid.UUID) ([]*Organization, error)
+	CreateOrganization(ctx context.Context, name, displayName string, isPersonal bool) (*Organization, error)
+	UpdateOrganization(ctx context.Context, organizationID uuid.UUID, organization Organization) error
+	DeleteOrganization(ctx context.Context, organizationID uuid.UUID) error
+	AddUserToOrganization(ctx context.Context, userID, organizationID uuid.UUID) error
+	RemoveUserFromOrganization(ctx context.Context, userID, organizationID uuid.UUID) error
 }
 
 type Client struct {
@@ -98,11 +98,16 @@ func (c *Client) ensureSuccessfulResponse(res *http.Response) error {
 	)
 }
 
-func (c *Client) GetUserById(userID uuid.UUID) (*User, error) {
+func (c *Client) GetUserById(ctx context.Context, userID uuid.UUID) (*User, error) {
 	// https://www.keycloak.org/docs-api/26.0.0/rest-api/index.html#_get_adminrealmsrealmusersuser_id
 	u := c.adminApiBaseUrl.JoinPath("users", userID.String())
 
-	res, err := c.http.Get(u.String())
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := c.http.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -120,11 +125,16 @@ func (c *Client) GetUserById(userID uuid.UUID) (*User, error) {
 	return user, nil
 }
 
-func (c *Client) GetOrganizationsOfUserById(userID uuid.UUID) ([]*Organization, error) {
+func (c *Client) GetOrganizationsOfUserById(ctx context.Context, userID uuid.UUID) ([]*Organization, error) {
 	// Users -> GET /{realm}/users/{userId}/orgs https://t.ly/cgwOO
 	u := c.realmBaseUrl.JoinPath("users", userID.String(), "orgs")
 
-	res, err := c.http.Get(u.String())
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := c.http.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +152,12 @@ func (c *Client) GetOrganizationsOfUserById(userID uuid.UUID) ([]*Organization, 
 	return organizations, nil
 }
 
-func (c *Client) CreateOrganization(name, displayName string, isPersonal bool) (*Organization, error) {
+func (c *Client) CreateOrganization(
+	ctx context.Context,
+	name,
+	displayName string,
+	isPersonal bool,
+) (*Organization, error) {
 	// Organizations -> POST /{realm}/orgs https://t.ly/cgwOO
 	u := c.realmBaseUrl.JoinPath("orgs")
 
@@ -159,7 +174,13 @@ func (c *Client) CreateOrganization(name, displayName string, isPersonal bool) (
 		return nil, err
 	}
 
-	res, err := c.http.Post(u.String(), "application/json", bytes.NewBuffer(jsonPayload))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, u.String(), bytes.NewBuffer(jsonPayload))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	res, err := c.http.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("request for CreateOrganization failed: %w", err)
 	}
@@ -169,7 +190,12 @@ func (c *Client) CreateOrganization(name, displayName string, isPersonal bool) (
 		return nil, fmt.Errorf("CreateOrganization failed, invalid response: %w", err)
 	}
 
-	res, err = c.http.Get(res.Header.Get("Location"))
+	req, err = http.NewRequestWithContext(ctx, http.MethodGet, res.Header.Get("Location"), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err = c.http.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("request for retrieving created organization failed: %w", err)
 	}
@@ -187,7 +213,7 @@ func (c *Client) CreateOrganization(name, displayName string, isPersonal bool) (
 	return &organization, nil
 }
 
-func (c *Client) UpdateOrganization(organizationID uuid.UUID, organization Organization) error {
+func (c *Client) UpdateOrganization(ctx context.Context, organizationID uuid.UUID, organization Organization) error {
 	// Organizations -> PUT /{realm}/orgs/{orgId} https://t.ly/cgwOO
 	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String())
 
@@ -196,7 +222,7 @@ func (c *Client) UpdateOrganization(organizationID uuid.UUID, organization Organ
 		return err
 	}
 
-	req, err := http.NewRequest(http.MethodPut, u.String(), bytes.NewBuffer(jsonPayload))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPut, u.String(), bytes.NewBuffer(jsonPayload))
 	if err != nil {
 		return err
 	}
@@ -214,11 +240,11 @@ func (c *Client) UpdateOrganization(organizationID uuid.UUID, organization Organ
 	return nil
 }
 
-func (c *Client) DeleteOrganization(organizationID uuid.UUID) error {
+func (c *Client) DeleteOrganization(ctx context.Context, organizationID uuid.UUID) error {
 	// Organizations -> DELETE /{realm}/orgs/{orgId} https://t.ly/cgwOO
 	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String())
 
-	req, err := http.NewRequest(http.MethodDelete, u.String(), nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, u.String(), nil)
 	if err != nil {
 		return err
 	}
@@ -236,11 +262,11 @@ func (c *Client) DeleteOrganization(organizationID uuid.UUID) error {
 	return nil
 }
 
-func (c *Client) AddUserToOrganization(userID, organizationID uuid.UUID) error {
+func (c *Client) AddUserToOrganization(ctx context.Context, userID, organizationID uuid.UUID) error {
 	// Organization Memberships -> PUT /{realm}/orgs/{orgId}/members/{userId} https://t.ly/cgwOO
 	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String(), "members", userID.String())
 
-	req, err := http.NewRequest(http.MethodPut, u.String(), nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPut, u.String(), nil)
 	if err != nil {
 		return err
 	}
@@ -258,11 +284,11 @@ func (c *Client) AddUserToOrganization(userID, organizationID uuid.UUID) error {
 	return nil
 }
 
-func (c *Client) RemoveUserFromOrganization(userID, organizationID uuid.UUID) error {
+func (c *Client) RemoveUserFromOrganization(ctx context.Context, userID, organizationID uuid.UUID) error {
 	// Organization Memberships -> DELETE /{realm}/orgs/{orgId}/members/{userId} https://t.ly/R0Suf
 	u := c.realmBaseUrl.JoinPath("orgs", organizationID.String(), "members", userID.String())
 
-	req, err := http.NewRequest(http.MethodDelete, u.String(), nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, u.String(), nil)
 	if err != nil {
 		return err
 	}

@@ -12,5 +12,6 @@ func (a *PropertySetAggregate) CreatePropertySet(ctx context.Context, name strin
 	if err != nil {
 		return err
 	}
+
 	return a.Apply(event)
 }

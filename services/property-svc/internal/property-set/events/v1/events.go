@@ -20,5 +20,6 @@ func NewPropertySetCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.U
 		ID:   id.String(),
 		Name: name,
 	}
+
 	return hwes.NewEvent(a, PropertySetCreated, hwes.WithData(payload), hwes.WithContext(ctx))
 }

@@ -20,6 +20,7 @@ func NewPropertySetAggregate(id uuid.UUID) *PropertySetAggregate {
 	aggregate.AggregateBase = hwes.NewAggregateBase(PropertySetAggregateType, id)
 	aggregate.PropertySet.ID = id
 	aggregate.initEventListeners()
+
 	return aggregate
 }
 
@@ -32,6 +33,7 @@ func LoadPropertySetAggregate(
 	if err := as.Load(ctx, propertySet); err != nil {
 		return nil, err
 	}
+
 	return propertySet, nil
 }
 

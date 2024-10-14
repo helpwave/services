@@ -276,7 +276,7 @@ func (s ServiceServer) DeleteOrganization(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := s.kc.DeleteOrganization(organizationID); err != nil {
+	if err := s.kc.DeleteOrganization(ctx, organizationID); err != nil {
 		return nil, err
 	}
 
@@ -306,7 +306,7 @@ func (s ServiceServer) AddMember(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := s.kc.AddUserToOrganization(userID, organizationID); err != nil {
+	if err := s.kc.AddUserToOrganization(ctx, userID, organizationID); err != nil {
 		return nil, err
 	}
 
@@ -344,7 +344,7 @@ func (s ServiceServer) RemoveMember(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if err := s.kc.RemoveUserFromOrganization(userID, organizationID); err != nil {
+	if err := s.kc.RemoveUserFromOrganization(ctx, userID, organizationID); err != nil {
 		return nil, err
 	}
 
@@ -775,7 +775,7 @@ func CreateOrganizationAndAddUser(
 		isPersonal = *attr.IsPersonal
 	}
 
-	keycloakOrganization, err := kc.CreateOrganization(attr.LongName, attr.ShortName, isPersonal)
+	keycloakOrganization, err := kc.CreateOrganization(ctx, attr.LongName, attr.ShortName, isPersonal)
 	if err != nil {
 		return nil, err
 	}
@@ -785,7 +785,7 @@ func CreateOrganizationAndAddUser(
 		return nil, err
 	}
 
-	if err := kc.AddUserToOrganization(userID, organizationID); err != nil {
+	if err := kc.AddUserToOrganization(ctx, userID, organizationID); err != nil {
 		return nil, err
 	}
 
@@ -840,7 +840,7 @@ func AddUserToOrganization(ctx context.Context, kc hwkc.IClient, userId uuid.UUI
 	log := zlog.Ctx(ctx)
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
-	if err := kc.AddUserToOrganization(userId, organizationId); err != nil {
+	if err := kc.AddUserToOrganization(ctx, userId, organizationId); err != nil {
 		return err
 	}
 
@@ -882,7 +882,7 @@ func (s ServiceServer) CreatePersonalOrganization(
 		return nil, err
 	}
 
-	organisations, err := kc.GetOrganizationsOfUserById(userID)
+	organisations, err := kc.GetOrganizationsOfUserById(ctx, userID)
 	if err != nil {
 		return nil, err
 	}

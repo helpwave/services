@@ -55,7 +55,7 @@ func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shut
 	// in dev environments we might not need a tracing setup, so we allow to skip its setup
 	if strings.ToLower(hwutil.GetEnvOr("OTEL_DISABLE", "false")) == "true" {
 		log.Info().Msg("skipping otel setup")
-		return
+		return shutdown, err
 	}
 
 	// handleErr calls shutdown for cleanup and makes sure that all errors are returned.
@@ -71,7 +71,7 @@ func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shut
 	res, err := serviceResource(serviceName, serviceVersion)
 	if err != nil {
 		handleErr(err)
-		return
+		return shutdown, err
 	}
 
 	// Set up propagator.
@@ -84,13 +84,13 @@ func setupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shut
 	tracerProvider, err := newTraceProvider(ctx, res)
 	if err != nil {
 		handleErr(fmt.Errorf("could not get new trace provider: %w", err))
-		return
+		return shutdown, err
 	}
 	shutdownFuncs = append(shutdownFuncs, tracerProvider.Shutdown)
 	otel.SetTracerProvider(tracerProvider)
 
 	log.Info().Msg("otel is set up")
-	return
+	return shutdown, err
 }
 
 // serviceResource returns the otel version of "name-version" identification of the service,

@@ -1,6 +1,7 @@
 package hwkc
 
 import (
+	"context"
 	"github.com/google/uuid"
 	"hwutil"
 	"strconv"
@@ -17,13 +18,13 @@ func NewNoOpClient() *NoOpClient {
 	return &NoOpClient{}
 }
 
-func (c *NoOpClient) GetUserById(userID uuid.UUID) (*User, error) {
+func (c *NoOpClient) GetUserById(_ context.Context, userID uuid.UUID) (*User, error) {
 	return &User{
 		ID: hwutil.PtrTo(userID.String()),
 	}, nil
 }
 
-func (c *NoOpClient) GetOrganizationsOfUserById(userID uuid.UUID) ([]*Organization, error) {
+func (c *NoOpClient) GetOrganizationsOfUserById(_ context.Context, userID uuid.UUID) ([]*Organization, error) {
 	return []*Organization{
 		{
 			ID:          hwutil.PtrTo(uuid.NewString()),
@@ -36,7 +37,12 @@ func (c *NoOpClient) GetOrganizationsOfUserById(userID uuid.UUID) ([]*Organizati
 	}, nil
 }
 
-func (c *NoOpClient) CreateOrganization(name, displayName string, isPersonal bool) (*Organization, error) {
+func (c *NoOpClient) CreateOrganization(
+	_ context.Context,
+	name,
+	displayName string,
+	isPersonal bool,
+) (*Organization, error) {
 	return &Organization{
 		ID:          hwutil.PtrTo(uuid.NewString()),
 		Name:        hwutil.PtrTo(name),
@@ -47,18 +53,18 @@ func (c *NoOpClient) CreateOrganization(name, displayName string, isPersonal boo
 	}, nil
 }
 
-func (c *NoOpClient) UpdateOrganization(organizationID uuid.UUID, organization Organization) error {
+func (c *NoOpClient) UpdateOrganization(_ context.Context, organizationID uuid.UUID, organization Organization) error {
 	return nil
 }
 
-func (c *NoOpClient) DeleteOrganization(organizationID uuid.UUID) error {
+func (c *NoOpClient) DeleteOrganization(_ context.Context, organizationID uuid.UUID) error {
 	return nil
 }
 
-func (c *NoOpClient) AddUserToOrganization(userID, organizationID uuid.UUID) error {
+func (c *NoOpClient) AddUserToOrganization(_ context.Context, userID, organizationID uuid.UUID) error {
 	return nil
 }
 
-func (c *NoOpClient) RemoveUserFromOrganization(userID, organizationID uuid.UUID) error {
+func (c *NoOpClient) RemoveUserFromOrganization(_ context.Context, userID, organizationID uuid.UUID) error {
 	return nil
 }

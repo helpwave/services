@@ -92,7 +92,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		Name:           t.Name() + " ST 1",
 	})
 	assert.NoError(t, err)
-	assert.NotEqual(t, template.Consistency, createStRes.TaskTemplateConsistency, "consitency was not updated")
+	assert.NotEqual(t, template.Consistency, createStRes.TaskTemplateConsistency, "consistency was not updated")
 
 	//
 	// get updated template

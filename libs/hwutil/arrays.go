@@ -33,6 +33,7 @@ func Map[K any, V any](vs []K, f func(K) V) []V {
 	for i, v := range vs {
 		vsm[i] = f(v)
 	}
+
 	return vsm
 }
 
@@ -43,6 +44,7 @@ func FlatMap[K any, V any](vs []K, f func(K) *V) []V {
 			vsm = append(vsm, *vPtr)
 		}
 	}
+
 	return vsm
 }
 
@@ -55,6 +57,7 @@ func MapWithErr[K any, V any](vs []K, f func(K) (V, error)) ([]V, error) {
 		}
 		vsm[i] = v
 	}
+
 	return vsm, nil
 }
 
@@ -64,6 +67,7 @@ func Contains[K comparable](vs []K, f K) bool {
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -74,6 +78,7 @@ func CountElements[K any](values []K, condition func(K) bool) int {
 			count++
 		}
 	}
+
 	return count
 }
 
@@ -88,6 +93,7 @@ func SliceToSet[T comparable](ts []T) map[T]bool {
 	for _, t := range ts {
 		unique[t] = true
 	}
+
 	return unique
 }
 
@@ -98,6 +104,7 @@ func SetToSlice[T comparable](set map[T]bool) []T {
 			slice = append(slice, key)
 		}
 	}
+
 	return slice
 }
 
@@ -108,6 +115,7 @@ func MapValuesPtrToSlice[K comparable, V any](set map[K]*V) []V {
 			slice = append(slice, *p)
 		}
 	}
+
 	return slice
 }
 
@@ -137,6 +145,7 @@ func MergeSlicesWithSet[T comparable](as, bs []T) ([]T, map[T]bool) {
 // MergeSlices merges two slices, only keeping unique elements once, not stable the resulting order may be arbitrary
 func MergeSlices[T comparable](as, bs []T) []T {
 	r, _ := MergeSlicesWithSet(as, bs)
+
 	return r
 }
 
@@ -149,6 +158,7 @@ func SliceAsStringSlice(as []interface{}) ([]string, bool) {
 		}
 		bs[i] = s
 	}
+
 	return bs, true
 }
 
@@ -168,5 +178,6 @@ func OrEmptySlice[T any](as []T) []T {
 	if as != nil {
 		return as
 	}
+
 	return make([]T, 0)
 }

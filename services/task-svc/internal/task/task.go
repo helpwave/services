@@ -140,6 +140,7 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 				Name:      *row.SubtaskName,
 				CreatedBy: row.SubtaskCreatedBy.UUID.String(),
 			}
+
 			return &val
 		})
 

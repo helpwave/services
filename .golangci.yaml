@@ -58,20 +58,16 @@ linters:
     - lll
     - loggercheck
     - maintidx
-    #- makezero
-    #- mirror
-    #- misspell
-    #- mnd
-    #- musttag
-    #- nakedret
-    #- nestif
-    #- nilerr
-    #- nilnil
-    #- nlreturn
-    #- noctx
-    #- nolintlint
-    #- nonamedreturns
-    #- nosprintfhostport
+    - makezero
+    - mirror
+    - misspell
+    - musttag
+    - nakedret
+    # - nestif # TODO
+    - nilerr
+    # - nlreturn # TODO
+    - noctx
+    - nolintlint
     #- paralleltest
     #- perfsprint
     #- prealloc
@@ -111,3 +107,8 @@ linters:
     - execinquery
     - gochecknoglobals
     - godot
+    - mnd
+    - nonamedreturns
+    - nilnil
+    - nosprintfhostport
+

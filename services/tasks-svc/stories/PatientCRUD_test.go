@@ -637,7 +637,7 @@ func TestGetRecentPatients(t *testing.T) {
 
 	consistencies := make(map[string]string)
 
-	ids := make([]string, N)
+	ids := make([]string, 0, N)
 	for i := 1; i <= N; i++ {
 		patientRes, err := patientClient.CreatePatient(ctx, &pb.CreatePatientRequest{
 			HumanReadableIdentifier: t.Name() + " patient " + strconv.Itoa(i),
@@ -677,6 +677,7 @@ func TestGetRecentPatients(t *testing.T) {
 		return id
 	})
 
+	assert.Len(t, ids, N)
 	assert.Subset(t, ids, foundIds)
 	assert.NotContains(t, foundIds, ids[0]) // thrown out
 

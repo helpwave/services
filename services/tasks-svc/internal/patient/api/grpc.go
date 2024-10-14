@@ -560,7 +560,6 @@ func (s *PatientGrpcService) GetPatientAssignmentByWard(
 								Patient: hwutil.MapIf(
 									bedWithPatient.Patient != nil,
 									bedWithPatient.Patient,
-									// nolint:lll
 									func(row *models.PatientWithConsistency) pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient {
 										return pb.GetPatientAssignmentByWardResponse_Room_Bed_Patient{
 											Id:          bedWithPatient.Patient.ID.String(),

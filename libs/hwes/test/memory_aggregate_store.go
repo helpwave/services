@@ -31,15 +31,15 @@ func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 }
 
 func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) (common.ConsistencyToken, error) {
-	uncomittedEventsLen := len(aggregate.GetUncommittedEvents())
-	if uncomittedEventsLen == 0 {
+	uncommittedEventsLen := len(aggregate.GetUncommittedEvents())
+	if uncommittedEventsLen == 0 {
 		return common.ConsistencyToken(aggregate.GetVersion()), nil
 	}
 
 	a.streams[aggregate.GetTypeID()] = append(a.streams[aggregate.GetTypeID()], aggregate.GetUncommittedEvents()...)
 
 	aggregate.ClearUncommittedEvents()
-	return common.ConsistencyToken(aggregate.GetVersion() + uint64(uncomittedEventsLen)), nil
+	return common.ConsistencyToken(aggregate.GetVersion() + uint64(uncommittedEventsLen)), nil
 }
 
 func (a *AggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (bool, error) {

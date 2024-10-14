@@ -44,9 +44,11 @@ func getUserID(ctx context.Context) string {
 
 	if err != nil {
 		log.Error().Err(err).Msg("could not get userID from context, can't add item to LRU")
+
 		return ""
 	}
 	log.Trace().Str("userID", userID.String()).Msg("getUserID: got userid")
+
 	return userID.String()
 }
 
@@ -81,6 +83,7 @@ func GetRecentPatientsForUser(ctx context.Context) ([]string, error) {
 	if userID == "" {
 		return nil, errors.New("GetRecentPatientsForUser called, but context has no userID")
 	}
+
 	return lru.GetItemsForUser(ctx, PatientKey, userID)
 }
 
@@ -115,5 +118,6 @@ func GetRecentWardsForUser(ctx context.Context) ([]string, error) {
 	if userID == "" {
 		return nil, errors.New("GetRecentWardsForUser called, but context has no userID")
 	}
+
 	return lru.GetItemsForUser(ctx, WardKey, userID)
 }

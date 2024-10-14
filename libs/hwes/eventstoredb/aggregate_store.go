@@ -48,19 +48,19 @@ func (as *AggregateStore) doSave(
 	ctx, span, log := telemetry.StartSpan(ctx, "AggregateStore.doSave")
 	defer span.End()
 
-	uncomittedEvents := a.GetUncommittedEvents()
+	uncommittedEvents := a.GetUncommittedEvents()
 
 	// do nothing, if nothing to commit
-	if len(uncomittedEvents) == 0 {
+	if len(uncommittedEvents) == 0 {
 		return common.ConsistencyToken(a.GetVersion()), nil
 	}
 
-	eventsData, err := hwutil.MapWithErr(uncomittedEvents, func(event hwes.Event) (esdb.EventData, error) {
+	eventsData, err := hwutil.MapWithErr(uncommittedEvents, func(event hwes.Event) (esdb.EventData, error) {
 		return event.ToEventData()
 	})
 	if err != nil {
 		return 0,
-			fmt.Errorf("AggregateStore.doSave: could not convert one uncomitted event to event data: %w", err)
+			fmt.Errorf("AggregateStore.doSave: could not convert one uncommitted event to event data: %w", err)
 	}
 
 	var expectedRevision esdb.ExpectedRevision
@@ -140,7 +140,7 @@ func (as *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) (c
 	// We can switch out the getExpectedRevision strategy for testing optimistic concurrency.
 	// It is not intended to switch the strategy in production.
 	// To ensure consistency and correctly applied events during another read,
-	// getExpectedRevisionByPreviousRead is the prefered method for production use.
+	// getExpectedRevisionByPreviousRead is the preferred method for production use.
 	return as.doSave(ctx, aggregate, as.getExpectedRevisionByPreviousRead)
 }
 

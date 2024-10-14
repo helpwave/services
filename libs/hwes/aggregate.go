@@ -15,7 +15,8 @@ type AggregateType string
 // by an AggregateStore to persists this aggregate in an
 // event-sourcing manner
 // Also see AggregateBase and NewAggregateBase, you probably don't want to implement this interface by hand
-// nolint:interfacebloat
+//
+//nolint:interfacebloat
 type Aggregate interface {
 	GetID() uuid.UUID
 	GetTypeID() string

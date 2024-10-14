@@ -37,6 +37,7 @@ func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projectio
 		propertyRepo: property_repo.New(db),
 	}
 	p.initEventListeners()
+
 	return p
 }
 
@@ -73,6 +74,7 @@ func (p *Projection) onPropertyCreated(ctx context.Context, evt hwes.Event) (err
 	var payload propertyEventsV1.PropertyCreatedEvent
 	if err := evt.GetJsonData(&payload); err != nil {
 		log.Error().Err(err).Msg("unmarshal failed")
+
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 

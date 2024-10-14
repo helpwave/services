@@ -232,6 +232,7 @@ func (ServiceServer) GetPatientAssignmentByWard(
 					Name: roomRow.RoomName,
 					Beds: beds,
 				}
+
 				return &val
 			}),
 	}, nil

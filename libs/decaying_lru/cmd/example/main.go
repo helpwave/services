@@ -14,9 +14,12 @@ func must(err error) {
 	}
 }
 
+const size int64 = 10
+const inverseP int = 1
+
 func main() {
 	ctx := context.Background()
-	lru := decaying_lru.Setup(ctx, "example", 10, 3, 1)
+	lru := decaying_lru.Setup(ctx, "example", size, time.Second, inverseP)
 
 	must(lru.AddItemForUser(ctx, "test", "1", "abc"))
 	must(lru.AddItemForUser(ctx, "test", "1", "def"))

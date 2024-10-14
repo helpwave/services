@@ -50,7 +50,7 @@ func TestTaskGrpcService_CreateTask_Validation(t *testing.T) {
 		Name:      taskName,
 		PatientId: "",
 	})
-	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts emtpy patientID")
+	common_test.AssertStatusError(t, err, codes.InvalidArgument, "accepts empty patientID")
 
 	// patientID invalid -> error
 	_, err = client.CreateTask(ctx, &pb.CreateTaskRequest{

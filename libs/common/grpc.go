@@ -429,7 +429,7 @@ func errorQualityControlInterceptor(
 
 	// no error, no error quality to control
 	if err == nil {
-		return res, err
+		return res, nil
 	}
 
 	log := zlog.Ctx(ctx)

@@ -32,7 +32,7 @@ func (t InsecureBearerToken) RequireTransportSecurity() bool {
 	return false
 }
 
-const FakeTokenUser = "18159713-5d4e-4ad5-94ad-fbb6bb147984" // nolint:gosec
+const FakeTokenUser = "18159713-5d4e-4ad5-94ad-fbb6bb147984" //nolint:gosec
 
 func GetFakeTokenCredentials(subOverride string) InsecureBearerToken {
 	// README's fake token
