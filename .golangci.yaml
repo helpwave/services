@@ -43,13 +43,13 @@ linters:
     # - goimports # TODO: install in dev container
     # - gomoddirectives # TODO: evaluate
     - gomodguard
-    #- goprintffuncname
-    #- gosec
-    #- gosimple
-    #- gosmopolitan
-    #- govet
-    #- grouper
-    #- importas
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - gosmopolitan
+    - govet
+    - grouper
+    - importas
     #- inamedparam
     #- ineffassign
     #- interfacebloat

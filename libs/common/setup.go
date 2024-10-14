@@ -125,7 +125,7 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 				Type("http.DefaultTransport.(type)", http.DefaultTransport).
 				Msg("http.DefaultTransport is not a *http.Transport")
 		}
-		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true} // nolint:gosec
 		log.Warn().Msg("InsecureSkipVerify enabled, not verifying certificates!")
 	}
 

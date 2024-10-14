@@ -52,6 +52,7 @@ func startMetricsServer(ctx context.Context, addr string, shutdown func(error)) 
 			PrometheusRegistry(),
 			promhttp.HandlerFor(PrometheusRegistry(), promhttp.HandlerOpts{}),
 		),
+		ReadHeaderTimeout: time.Second * 30, // prevent potential slowloris attack
 	}
 	go func() {
 		err := server.ListenAndServe()
