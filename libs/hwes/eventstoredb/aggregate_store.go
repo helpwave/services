@@ -29,7 +29,7 @@ func NewAggregateStore(es *esdb.Client) *AggregateStore {
 // getExpectedRevisionByPreviousRead implements a strategy for our getExpectedRevision strategy pattern.
 // This function resolves the version by returning the version of the last applied event of our aggregate.
 func (a *AggregateStore) getExpectedRevisionByPreviousRead(ctx context.Context, aggregate hwes.Aggregate) (esdb.ExpectedRevision, error) {
-	if len(aggregate.GetAppliedEvents()) <= 0 {
+	if len(aggregate.GetAppliedEvents()) == 0 {
 		return nil, errors.New("aggregate has no applied events. Consider to persist and load the aggregate first")
 	}
 	lastAppliedEvent := aggregate.GetAppliedEvents()[len(aggregate.GetAppliedEvents())-1]

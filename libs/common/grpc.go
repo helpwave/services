@@ -65,7 +65,10 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 	}
 
 	// dapr/grpc service
-	service := daprd.NewServiceWithListener(listener, chain, statsHandler).(*daprd.Server)
+	service, ok := daprd.NewServiceWithListener(listener, chain, statsHandler).(*daprd.Server)
+	if !ok {
+		log.Fatal().Msg("dapr service listener is not a *daprd.Server")
+	}
 	server := service.GrpcServer()
 
 	if err := service.AddHealthCheckHandler("", func(ctx context.Context) error {

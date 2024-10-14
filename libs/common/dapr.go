@@ -10,7 +10,6 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
-	"reflect"
 	"time"
 )
 
@@ -54,11 +53,12 @@ func MustNewDaprGRPCClient() *daprc.GRPCClient {
 		log.Fatal().Err(err).Msg("could not create Dapr client")
 	}
 
-	if reflect.TypeOf(client) != reflect.TypeOf(&daprc.GRPCClient{}) {
+	daprClient, ok := client.(*daprc.GRPCClient)
+	if !ok {
 		log.Fatal().Msg("Dapr client does not implement GRPCClient")
 	}
 
-	return client.(*daprc.GRPCClient)
+	return daprClient
 }
 
 // PrepCtxForSvcToSvcCall returns a context that can be used with Dapr specific service to service gRPC calls

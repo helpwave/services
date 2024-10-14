@@ -67,9 +67,9 @@ func TestCreateUpdateGetWard(t *testing.T) {
 
 }
 
-func prepareWards(t *testing.T, ctx context.Context, client pb.WardServiceClient, N int) []string {
-	ids := make([]string, 0, N)
-	for i := 1; i <= N; i++ {
+func prepareWards(t *testing.T, ctx context.Context, client pb.WardServiceClient, amount int) []string {
+	ids := make([]string, 0, amount)
+	for i := 1; i <= amount; i++ {
 		wardRes, err := client.CreateWard(ctx, &pb.CreateWardRequest{
 			Name: t.Name() + " ward " + strconv.Itoa(i),
 		})

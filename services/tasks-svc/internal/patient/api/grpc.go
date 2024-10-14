@@ -3,7 +3,6 @@ package api
 import (
 	"common"
 	"context"
-	"fmt"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -332,7 +331,6 @@ func (s *PatientGrpcService) GetRecentPatients(ctx context.Context, req *pb.GetR
 	// get all Patients for valid uuids
 	recentPatients := hwutil.Map(recentPatientIdsStrs, func(id string) *pb.GetRecentPatientsResponse_Patient {
 		parsedUUID, err := uuid.Parse(id)
-		fmt.Println(parsedUUID)
 		if err != nil {
 			log.Warn().Str("uuid", id).Msg("GetRecentPatientsForUser returned invalid uuid")
 			return nil

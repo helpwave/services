@@ -230,11 +230,13 @@ func (s *TaskGrpcService) GetTasksByPatientSortedByStatus(ctx context.Context, r
 
 	// sort
 	for ix, task := range tasksWithSubtasks {
-		if task.Status == pb.TaskStatus_TASK_STATUS_TODO {
+		switch task.Status {
+		case pb.TaskStatus_TASK_STATUS_TODO:
 			todo[ix] = true
-		} else if task.Status == pb.TaskStatus_TASK_STATUS_IN_PROGRESS {
+
+		case pb.TaskStatus_TASK_STATUS_IN_PROGRESS:
 			inprogress[ix] = true
-		} else if task.Status == pb.TaskStatus_TASK_STATUS_DONE {
+		case pb.TaskStatus_TASK_STATUS_DONE:
 			done[ix] = true
 		}
 	}

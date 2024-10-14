@@ -355,13 +355,14 @@ func (s ServiceServer) InviteMember(ctx context.Context, req *pb.InviteMemberReq
 		return nil, err
 	}
 
-	if !conditions.DoesOrganizationExist {
+	switch {
+	case !conditions.DoesOrganizationExist:
 		return nil, status.Error(codes.InvalidArgument, "organization not found")
-	} else if conditions.IsInOrganizationByEmail {
+	case conditions.IsInOrganizationByEmail:
 		return nil, status.Error(codes.InvalidArgument, "cannot invite a user that is already a member")
-	} else if conditions.DoesInvitationExist {
+	case conditions.DoesInvitationExist:
 		return nil, status.Error(codes.InvalidArgument, "user already invited")
-	} else {
+	default:
 		invitation, err = organizationRepo.InviteMember(ctx, organization_repo.InviteMemberParams{
 			Email:          req.Email,
 			OrganizationID: organizationId,

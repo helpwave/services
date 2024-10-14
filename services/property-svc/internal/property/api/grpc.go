@@ -24,8 +24,7 @@ func (s *PropertyGrpcService) CreateProperty(ctx context.Context, req *pb.Create
 	propertyID := uuid.New()
 
 	var fieldTypeData *models.FieldTypeData
-	switch ftData := req.FieldTypeData.(type) {
-	case *pb.CreatePropertyRequest_SelectData_:
+	if ftData, ok := req.FieldTypeData.(*pb.CreatePropertyRequest_SelectData_); ok {
 		fieldTypeData = &models.FieldTypeData{
 			SelectData: &models.SelectData{
 				AllowFreetext: ftData.SelectData.GetAllowFreetext(),
@@ -101,8 +100,7 @@ func (s *PropertyGrpcService) GetProperty(ctx context.Context, req *pb.GetProper
 		Consistency:                consistency.String(),
 	}
 
-	switch {
-	case property.FieldTypeData.SelectData != nil:
+	if property.FieldTypeData.SelectData != nil {
 		response.FieldTypeData = &pb.GetPropertyResponse_SelectData_{
 			SelectData: &pb.GetPropertyResponse_SelectData{
 				AllowFreetext: &property.FieldTypeData.SelectData.AllowFreetext,
@@ -130,8 +128,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 	var removeOptions []string
 	var upsertOptions *[]models.UpdateSelectOption
 
-	switch ftData := req.FieldTypeData.(type) {
-	case *pb.UpdatePropertyRequest_SelectData_:
+	if ftData, ok := req.FieldTypeData.(*pb.UpdatePropertyRequest_SelectData_); ok {
 		allowFreetext = ftData.SelectData.AllowFreetext
 		removeOptions = ftData.SelectData.RemoveOptions
 		if ftData.SelectData.UpsertOptions != nil {
@@ -158,6 +155,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 			upsertOptions = &opt
 		}
 	}
+
 	consistency, err := s.handlers.Commands.V1.UpdateProperty(
 		ctx,
 		propertyID,

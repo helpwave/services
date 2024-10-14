@@ -119,7 +119,13 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 	}
 
 	if strings.ToLower(hwutil.GetEnvOr("INSECURE_DISABLE_TLS_VERIFY", "false")) == "true" {
-		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+		transport, ok := http.DefaultTransport.(*http.Transport)
+		if !ok {
+			log.Fatal().
+				Type("http.DefaultTransport.(type)", http.DefaultTransport).
+				Msg("http.DefaultTransport is not a *http.Transport")
+		}
+		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 		log.Warn().Msg("InsecureSkipVerify enabled, not verifying certificates!")
 	}
 

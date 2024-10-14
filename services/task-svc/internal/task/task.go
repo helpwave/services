@@ -277,11 +277,12 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(ctx context.Context, req *p
 			ix := len(tasks) - 1
 			taskMap[row.Task.ID] = ix
 			taskStatus := pb.TaskStatus(row.Task.Status)
-			if taskStatus == pb.TaskStatus_TASK_STATUS_TODO {
+			switch taskStatus {
+			case pb.TaskStatus_TASK_STATUS_TODO:
 				todo[ix] = true
-			} else if taskStatus == pb.TaskStatus_TASK_STATUS_IN_PROGRESS {
+			case pb.TaskStatus_TASK_STATUS_IN_PROGRESS:
 				inprogress[ix] = true
-			} else if taskStatus == pb.TaskStatus_TASK_STATUS_DONE {
+			case pb.TaskStatus_TASK_STATUS_DONE:
 				done[ix] = true
 			}
 		}
