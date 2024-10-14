@@ -9,9 +9,9 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwdb"
+	"hwgrpc"
 	"hwutil"
 	"tasks-svc/internal/tracking"
-	"tasks-svc/internal/util"
 	"tasks-svc/repos/room_repo"
 
 	pb "gen/services/tasks_svc/v1"
@@ -138,7 +138,7 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
 		if req.Name != nil && *req.Name != result.OldName {
-			conflicts["name"], err = util.AttributeConflict(
+			conflicts["name"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(result.OldName),
 				wrapperspb.String(*req.Name),
 			)

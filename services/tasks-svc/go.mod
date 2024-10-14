@@ -7,6 +7,7 @@ replace (
 	decaying_lru => ../../libs/decaying_lru
 	gen => ../../gen/go
 	hwauthz => ../../libs/hwauthz
+	hwgrpc => ../../libs/hwgrpc
 	hwdb => ../../libs/hwdb
 	hwes => ../../libs/hwes
 	hwlocale => ../../libs/hwlocale
@@ -38,6 +39,7 @@ require (
 	hwlocale v0.0.0
 	hwtesting v0.0.0
 	hwutil v0.0.0
+	hwgrpc v0.0.0
 )
 
 require (

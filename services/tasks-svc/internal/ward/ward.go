@@ -11,9 +11,9 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwdb"
+	"hwgrpc"
 	"hwutil"
 	"tasks-svc/internal/tracking"
-	"tasks-svc/internal/util"
 	"tasks-svc/repos/ward_repo"
 )
 
@@ -178,7 +178,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
 		if req.Name != nil && *req.Name != result.OldName {
-			conflicts["name"], err = util.AttributeConflict(
+			conflicts["name"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(result.OldName),
 				wrapperspb.String(*req.Name),
 			)

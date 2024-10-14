@@ -13,10 +13,10 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwes"
+	"hwgrpc"
 	"hwutil"
 	"property-svc/internal/property/handlers"
 	"property-svc/internal/property/models"
-	"property-svc/util"
 	"slices"
 )
 
@@ -209,7 +209,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 		subjTypeUpdateRequested := req.SubjectType != nil && *req.SubjectType != conflict.Is.SubjectType
 		subjTypeAlreadyUpdated := conflict.Was.SubjectType != conflict.Is.SubjectType
 		if subjTypeUpdateRequested && subjTypeAlreadyUpdated {
-			conflicts["subject_type"], err = util.AttributeConflict(
+			conflicts["subject_type"], err = hwgrpc.AttributeConflict(
 				wrapperspb.Int32(int32(conflict.Is.SubjectType.Number())),
 				wrapperspb.Int32(int32(req.SubjectType.Number())),
 			)
@@ -221,7 +221,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 		nameUpdateRequested := req.Name != nil && *req.Name != conflict.Is.Name
 		nameAlreadyUpdated := conflict.Was.Name != conflict.Is.Name
 		if nameUpdateRequested && nameAlreadyUpdated {
-			conflicts["name"], err = util.AttributeConflict(
+			conflicts["name"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(conflict.Is.Name),
 				wrapperspb.String(*req.Name),
 			)
@@ -232,7 +232,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 		descrUpdateRequested := req.Description != nil && *req.Description != conflict.Is.Description
 		descrAlreadyUpdated := conflict.Was.Description != conflict.Is.Description
 		if descrUpdateRequested && descrAlreadyUpdated {
-			conflicts["description"], err = util.AttributeConflict(
+			conflicts["description"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(conflict.Is.Description),
 				wrapperspb.String(*req.Description),
 			)
@@ -248,7 +248,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 				is = wrapperspb.String(conflict.Is.SetID.UUID.String())
 			}
 
-			conflicts["set_id"], err = util.AttributeConflict(
+			conflicts["set_id"], err = hwgrpc.AttributeConflict(
 				is,
 				wrapperspb.String(*req.SetId),
 			)
@@ -304,7 +304,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 				optNameUpdateRequested := upsertedOption.Name != nil && *upsertedOption.Name != isOpt.Name
 				optnameAlreadyUpdated := wasOpt.Name != isOpt.Name
 				if optNameUpdateRequested && optnameAlreadyUpdated {
-					conflicts["select_data.upsert_options."+upsertedOption.Id+".name"], err = util.AttributeConflict(
+					conflicts["select_data.upsert_options."+upsertedOption.Id+".name"], err = hwgrpc.AttributeConflict(
 						wrapperspb.String(isOpt.Name),
 						wrapperspb.String(*upsertedOption.Name),
 					)
@@ -323,7 +323,7 @@ func (s *PropertyGrpcService) UpdateProperty(ctx context.Context, req *pb.Update
 				}
 
 				if optDescUpdateRequested && optDescAlreadyUpdated() {
-					conflicts["select_data.upsert_options."+upsertedOption.Id+".description"], err = util.AttributeConflict(
+					conflicts["select_data.upsert_options."+upsertedOption.Id+".description"], err = hwgrpc.AttributeConflict(
 						wrapperspb.String(*isOpt.Description),
 						wrapperspb.String(*upsertedOption.Description),
 					)

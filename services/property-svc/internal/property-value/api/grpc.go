@@ -14,11 +14,11 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwes"
+	"hwgrpc"
 	"hwutil"
 	"property-svc/internal/property-value/handlers"
 	"property-svc/internal/property-value/models"
 	viewModels "property-svc/internal/property-view/models"
-	"property-svc/util"
 )
 
 type MatchersRequest interface {
@@ -181,7 +181,7 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(ctx context.Context, req 
 				want = val.ToProtoMessage()
 			}
 
-			conflicts["value"], err = util.AttributeConflict(
+			conflicts["value"], err = hwgrpc.AttributeConflict(
 				is,
 				want,
 			)

@@ -8,9 +8,9 @@ import (
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwdb"
+	"hwgrpc"
 	"hwlocale"
 	"hwutil"
-	"tasks-svc/internal/util"
 	"tasks-svc/locale"
 	"tasks-svc/repos/bed_repo"
 
@@ -237,7 +237,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
 		if req.Name != nil && *req.Name != result.OldName {
-			conflicts["name"], err = util.AttributeConflict(
+			conflicts["name"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(result.OldName),
 				wrapperspb.String(*req.Name),
 			)
@@ -247,7 +247,7 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 		}
 
 		if req.RoomId != nil && *req.RoomId != result.OldRoomID.String() {
-			conflicts["room_id"], err = util.AttributeConflict(
+			conflicts["room_id"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(result.OldRoomID.String()),
 				wrapperspb.String(*req.RoomId),
 			)

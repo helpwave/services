@@ -9,8 +9,8 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwdb"
+	"hwgrpc"
 	"hwutil"
-	"tasks-svc/internal/util"
 	"tasks-svc/repos/task_template_repo"
 
 	pb "gen/services/tasks_svc/v1"
@@ -207,7 +207,7 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
 		if req.Name != nil && *req.Name != result.OldName {
-			conflicts["name"], err = util.AttributeConflict(
+			conflicts["name"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(result.OldName),
 				wrapperspb.String(*req.Name),
 			)
@@ -216,7 +216,7 @@ func (ServiceServer) UpdateTaskTemplate(ctx context.Context, req *pb.UpdateTaskT
 			}
 		}
 		if req.Description != nil && *req.Description != result.OldDescription {
-			conflicts["description"], err = util.AttributeConflict(
+			conflicts["description"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(result.OldDescription),
 				wrapperspb.String(*req.Description),
 			)
@@ -298,7 +298,7 @@ func (ServiceServer) UpdateTaskTemplateSubTask(ctx context.Context, req *pb.Upda
 		conflicts := make(map[string]*commonpb.AttributeConflict)
 
 		if req.Name != nil && *req.Name != subTaskResult.OldName {
-			conflicts["name"], err = util.AttributeConflict(
+			conflicts["name"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(subTaskResult.OldName),
 				wrapperspb.String(*req.Name),
 			)

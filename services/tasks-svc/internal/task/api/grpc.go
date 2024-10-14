@@ -14,10 +14,10 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	"hwes"
+	"hwgrpc"
 	"hwutil"
 	"tasks-svc/internal/task/handlers"
 	"tasks-svc/internal/task/models"
-	"tasks-svc/internal/util"
 	"time"
 )
 
@@ -113,7 +113,7 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 		nameUpdateRequested := req.Name != nil && *req.Name != conflict.Is.Name
 		nameAlreadyUpdated := conflict.Was.Name != conflict.Is.Name
 		if nameUpdateRequested && nameAlreadyUpdated {
-			conflicts["name"], err = util.AttributeConflict(
+			conflicts["name"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(conflict.Is.Name),
 				wrapperspb.String(*req.Name),
 			)
@@ -125,7 +125,7 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 		descrUpdateRequested := req.Description != nil && *req.Description != conflict.Is.Description
 		descrAlreadyUpdated := conflict.Was.Description != conflict.Is.Description
 		if descrUpdateRequested && descrAlreadyUpdated {
-			conflicts["description"], err = util.AttributeConflict(
+			conflicts["description"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(conflict.Is.Description),
 				wrapperspb.String(*req.Description),
 			)
@@ -142,7 +142,7 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 			if conflict.Is.DueAt != nil {
 				is = timestamppb.New(*conflict.Is.DueAt)
 			}
-			conflicts["due_at"], err = util.AttributeConflict(
+			conflicts["due_at"], err = hwgrpc.AttributeConflict(
 				is,
 				req.DueAt,
 			)
@@ -154,7 +154,7 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 		statusUpdateRequested := req.Status != nil && *req.Status != conflict.Is.Status
 		statusAlreadyUpdated := conflict.Was.Status != conflict.Is.Status
 		if statusUpdateRequested && statusAlreadyUpdated {
-			conflicts["status"], err = util.AttributeConflict(
+			conflicts["status"], err = hwgrpc.AttributeConflict(
 				wrapperspb.Int32(int32(conflict.Is.Status)),
 				wrapperspb.Int32(int32(*req.Status)),
 			)
@@ -225,7 +225,7 @@ func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequ
 			if conflict.Is.AssignedUser.Valid {
 				is = wrapperspb.String(conflict.Is.AssignedUser.UUID.String())
 			}
-			conflicts["user_id"], err = util.AttributeConflict(
+			conflicts["user_id"], err = hwgrpc.AttributeConflict(
 				is,
 				wrapperspb.String(req.UserId),
 			)
@@ -563,7 +563,7 @@ func (s *TaskGrpcService) UpdateSubtask(ctx context.Context, req *pb.UpdateSubta
 		nameUpdateRequested := req.Subtask.Name != nil && *req.Subtask.Name != is.Name
 		nameAlreadyUpdated := was.Name != is.Name
 		if nameUpdateRequested && nameAlreadyUpdated {
-			conflicts["name"], err = util.AttributeConflict(
+			conflicts["name"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(is.Name),
 				wrapperspb.String(*req.Subtask.Name),
 			)

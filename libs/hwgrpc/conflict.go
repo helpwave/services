@@ -1,14 +1,14 @@
-package util
+package hwgrpc
 
 import (
 	"fmt"
-	commonpb "gen/libs/common/v1"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 )
 
+import commonpb "gen/libs/common/v1"
+
 // AttributeConflict is a constructor for commonpb.AttributeConflicts
-// I'd love to move this somewhere else, but I also don't want common to depend on gen (and thus hwdb, hwes, ...)
 func AttributeConflict(is, want proto.Message) (*commonpb.AttributeConflict, error) {
 	var err error
 

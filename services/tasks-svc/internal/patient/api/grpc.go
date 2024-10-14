@@ -15,11 +15,11 @@ import (
 	"hwdb"
 	"hwdb/locale"
 	"hwes"
+	"hwgrpc"
 	"hwutil"
 	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/models"
 	"tasks-svc/internal/tracking"
-	"tasks-svc/internal/util"
 	"tasks-svc/repos/bed_repo"
 )
 
@@ -417,7 +417,7 @@ func (s *PatientGrpcService) UpdatePatient(ctx context.Context, req *pb.UpdatePa
 		hriUpdateRequested := req.HumanReadableIdentifier != nil && *req.HumanReadableIdentifier != conflict.Is.HumanReadableIdentifier
 		hriAlreadyUpdated := conflict.Was.HumanReadableIdentifier != conflict.Is.HumanReadableIdentifier
 		if hriUpdateRequested && hriAlreadyUpdated {
-			conflicts["human_readable_identifier"], err = util.AttributeConflict(
+			conflicts["human_readable_identifier"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(conflict.Is.HumanReadableIdentifier),
 				wrapperspb.String(*req.HumanReadableIdentifier),
 			)
@@ -429,7 +429,7 @@ func (s *PatientGrpcService) UpdatePatient(ctx context.Context, req *pb.UpdatePa
 		notesUpdateRequested := req.Notes != nil && *req.Notes != conflict.Is.Notes
 		notesAlreadyUpdated := conflict.Was.Notes != conflict.Is.Notes
 		if notesUpdateRequested && notesAlreadyUpdated {
-			conflicts["notes"], err = util.AttributeConflict(
+			conflicts["notes"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(conflict.Is.Notes),
 				wrapperspb.String(*req.Notes),
 			)
@@ -504,7 +504,7 @@ func (s *PatientGrpcService) AssignBed(ctx context.Context, req *pb.AssignBedReq
 			if conflict.Is.BedID.Valid {
 				is = wrapperspb.String(conflict.Is.BedID.UUID.String())
 			}
-			conflicts["bed_id"], err = util.AttributeConflict(
+			conflicts["bed_id"], err = hwgrpc.AttributeConflict(
 				is,
 				wrapperspb.String(req.BedId),
 			)
@@ -569,7 +569,7 @@ func (s *PatientGrpcService) UnassignBed(ctx context.Context, req *pb.UnassignBe
 
 		// TODO: find a generic approach
 		if conflict.Is.BedID.Valid && conflict.Was.BedID != conflict.Is.BedID {
-			conflicts["bed_id"], err = util.AttributeConflict(
+			conflicts["bed_id"], err = hwgrpc.AttributeConflict(
 				wrapperspb.String(conflict.Is.BedID.UUID.String()),
 				nil,
 			)
