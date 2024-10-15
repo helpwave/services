@@ -14,12 +14,13 @@ import (
 	"strings"
 	"telemetry"
 
+	"google.golang.org/protobuf/protoadapt"
+
 	"common/locale"
 
 	"github.com/dapr/dapr/pkg/proto/runtime/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/go-playground/validator/v10"
-	"github.com/golang/protobuf/proto" //nolint:staticcheck
 	"github.com/google/uuid"
 	prometheusGrpcProvider "github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
@@ -719,7 +720,7 @@ func NewStatusError(
 	code codes.Code,
 	msg string,
 	locale hwlocale.Locale,
-	details ...proto.Message,
+	details ...protoadapt.MessageV1,
 ) error {
 	log := zlog.Ctx(ctx)
 	statusNoDetails := status.New(code, msg)
