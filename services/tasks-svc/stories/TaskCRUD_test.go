@@ -60,7 +60,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	assert.True(t, task.GetPublic())
 	assert.Equal(t, pb.TaskStatus_TASK_STATUS_TODO, task.GetStatus())
 	assert.WithinDuration(t, dueDate, task.GetDueAt().AsTime(), time.Second) // actually we differ by some microseconds
-	assert.Nil(t, task.GetAssignedUserId())
+	assert.Equal(t, "", task.GetAssignedUserId())
 
 	assert.Equal(t, patientId, task.GetPatient().GetId())
 
@@ -217,7 +217,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
 	require.NoError(t, err)
 
-	assert.Nil(t, task.GetAssignedUserId())
+	assert.Equal(t, "", task.GetAssignedUserId())
 	assert.Equal(t, unassignRes.GetConsistency(), task.GetConsistency())
 
 	//
