@@ -67,8 +67,8 @@ func (s *PatientGrpcService) GetPatient(
 		return nil, err
 	}
 
-	var bedRes *pb.GetPatientResponse_Bed = nil
-	var roomRes *pb.GetPatientResponse_Room = nil
+	var bedRes *pb.GetPatientResponse_Bed
+	var roomRes *pb.GetPatientResponse_Room
 
 	if patient.BedID.Valid {
 		result, err := hwdb.Optional(bedRepo.GetBedAndRoomByBedId)(ctx, patient.BedID.UUID)
@@ -363,8 +363,8 @@ func (s *PatientGrpcService) GetRecentPatients(
 			return nil
 		}
 
-		var bedRes *pb.GetRecentPatientsResponse_Bed = nil
-		var roomRes *pb.GetRecentPatientsResponse_Room = nil
+		var bedRes *pb.GetRecentPatientsResponse_Bed
+		var roomRes *pb.GetRecentPatientsResponse_Room
 
 		if patient.BedID.Valid {
 			result, err := hwdb.Optional(bedRepo.GetBedAndRoomByBedId)(ctx, patient.BedID.UUID)

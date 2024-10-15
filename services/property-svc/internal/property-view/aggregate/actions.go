@@ -18,7 +18,7 @@ func (a *PropertyViewRuleAggregate) Create(ctx context.Context, rule models.Prop
 
 func (a *PropertyViewRuleAggregate) UpdateLists(
 	ctx context.Context,
-	ruleId uuid.UUID,
+	ruleID uuid.UUID,
 	appendToAlwaysInclude,
 	removeFromAlwaysInclude,
 	appendToDontAlwaysInclude,
@@ -27,7 +27,7 @@ func (a *PropertyViewRuleAggregate) UpdateLists(
 
 	event, err := events.NewPropertyRuleListsUpdatedEvent(ctx,
 		a,
-		ruleId,
+		ruleID,
 		appendToAlwaysInclude,
 		removeFromAlwaysInclude,
 		appendToDontAlwaysInclude,

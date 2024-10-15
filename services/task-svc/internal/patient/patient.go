@@ -288,8 +288,8 @@ func (ServiceServer) GetRecentPatients(
 
 	recentPatients := hwutil.Map(patientsRes,
 		func(res patient_repo.GetPatientsWithBedAndRoomRow) *pb.GetRecentPatientsResponse_PatientWithRoomAndBed {
-			var bed *pb.GetRecentPatientsResponse_Bed = nil
-			var room *pb.GetRecentPatientsResponse_Room = nil
+			var bed *pb.GetRecentPatientsResponse_Bed
+			var room *pb.GetRecentPatientsResponse_Room
 
 			if res.BedID.Valid {
 				bed = &pb.GetRecentPatientsResponse_Bed{

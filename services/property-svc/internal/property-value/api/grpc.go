@@ -24,7 +24,7 @@ type MatchersRequest interface {
 // - parsing might fail (i.e., invalid uuids)
 // - a request may also carry no matchers at all, in that case (nil, nil) is returned
 func DeMuxMatchers(req MatchersRequest) (viewModels.PropertyMatchers, error) {
-	var matcher viewModels.PropertyMatchers = nil
+	var matcher viewModels.PropertyMatchers
 	if taskMatcher := req.GetTaskMatcher(); taskMatcher != nil {
 		wardID, err := hwutil.ParseNullUUID(taskMatcher.WardId)
 		if err != nil {

@@ -52,7 +52,7 @@ func PbToTimestamp(src *timestamppb.Timestamp) pgtype.Timestamp {
 
 // ExecBatch can be used as a wrapper around .Exec to obtain the last not-nil error.
 func ExecBatch(batchResults interface{ Exec(f func(int, error)) }) error {
-	var err error = nil
+	var err error
 	batchResults.Exec(func(_ int, e error) {
 		if e != nil {
 			err = e
