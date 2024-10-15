@@ -351,7 +351,7 @@ func writeSpiceDBYaml(file SpiceDBValidationFile, path string) {
 		fmt.Println("could not marshal spicedb yaml for " + path)
 		panic(err)
 	}
-	err = os.WriteFile(path, marshalled, 0o644)
+	err = os.WriteFile(path, marshalled, 0o600)
 	if err != nil {
 		fmt.Println("could not write spicedb yaml for " + path)
 		panic(err)
