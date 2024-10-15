@@ -1,113 +1,44 @@
 linters:
   # Enable specific linter
   # https://golangci-lint.run/usage/linters/#enabled-by-default
-  enable:
-    - asasalint
-    - asciicheck
-    - bidichk
-    - bodyclose
-    - canonicalheader
-    - containedctx
-    # - contextcheck # TODO
-    - copyloopvar
-    # - cyclop # TODO
-    - decorder
-    - dogsled
-    # - dupl # TODO
-    - dupword
-    - durationcheck
-    # - err113 # TODO
-    - errcheck
-    - errchkjson
-    - errname
-    - errorlint
-    # - exhaustive # TODO
-    # - exhaustruct # TODO
-    - exportloopref
-    - fatcontext
-    - forbidigo
-    - forcetypeassert
-    # - gci # TODO
-    - ginkgolinter
-    - gocheckcompilerdirectives
-    - gochecknoinits
-    - gochecksumtype
-    # - gocognit # TODO
-    # - goconst # TODO
-    - gocritic
-    # - gocyclo # TODO
-    # - godox # TODO: what does this do?
-    - gofmt
-    # - gofumpt # TODO: what is this?
-    - goheader
-    # - goimports # TODO: install in dev container
-    # - gomoddirectives # TODO: evaluate
-    - gomodguard
-    - goprintffuncname
-    - gosec
-    - gosimple
-    - gosmopolitan
-    - govet
-    - grouper
-    - importas
-    - inamedparam
-    - ineffassign
-    - interfacebloat
-    - intrange
-    # - ireturn # TODO
-    - lll
-    - loggercheck
-    - maintidx
-    - makezero
-    - mirror
-    - misspell
-    - musttag
-    - nakedret
-    # - nestif # TODO
-    - nilerr
-    # - nlreturn # TODO
-    - noctx
-    - nolintlint
-    # - paralleltest # TODO
-    - perfsprint
-    - prealloc
-    - predeclared
-    - promlinter
-    # - protogetter # TODO
-    - reassign
-    # - revive # TODO
-    - rowserrcheck
-    - sloglint
-    - spancheck
-    - sqlclosecheck
-    - staticcheck
-    # - stylecheck # TODO
-    - tagalign
-    # - tagliatelle # TODO
-    - tenv
-    - testableexamples
-    - testifylint
-    # - testpackage # TODO
-    - thelper
-    - tparallel
-    - unconvert
-    - unparam
-    - unused
-    - usestdlibvars
-    - wastedassign
-    - whitespace
-    - zerologlint
+  enable-all: true
 
   disable:
-    - depguard
-    - funlen
-    - execinquery
-    - gochecknoglobals
-    - godot
-    - mnd
-    - nonamedreturns
-    - nilnil
-    - nosprintfhostport
-    - varnamelen
-    - wrapcheck
-    - wsl
+    - contextcheck # too many false-positives
+    - depguard # no need
+    - funlen # we tend to have long funlens, who cares?
+    - execinquery # deprecated
+    - gochecknoglobals # we currently make use of globals
+    - godot # petty linter
+    - gomnd # deprecated
+    - mnd # too many false-positives
+    - nonamedreturns # we like named returns
+    - nilnil # we like (nil, nil) sometimes
+    - nosprintfhostport # little benefits
+    - varnamelen # we accept this
+    - wrapcheck # does not matter to us
+    - wsl # too aggressive
+
+    # TODOs:
+    - cyclop # TODO
+    - dupl # TODO
+    - err113 # TODO
+    - exhaustive # TODO
+    - exhaustruct # TODO
+    - gci # TODO
+    - gocognit # TODO
+    - goconst # TODO
+    - gocyclo # TODO
+    - godox # TODO: what does this do?
+    - gofumpt # TODO: what is this?
+    - goimports # TODO: install in dev container
+    - gomoddirectives # TODO: evaluate
+    - ireturn # TODO
+    - nestif # TODO
+    - nlreturn # TODO
+    - paralleltest # TODO
+    - protogetter # TODO
+    - revive # TODO
+    - stylecheck # TODO
+    - tagliatelle # TODO
+    - testpackage # TODO
