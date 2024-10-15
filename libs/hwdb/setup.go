@@ -24,7 +24,7 @@ type DBTX interface {
 }
 
 // connectionPool is set in OpenDatabase() and allows for concurrent access to the database
-var connectionPool DBTX = nil
+var connectionPool DBTX
 
 // SetupDatabaseFromEnv prefers the env POSTGRES_DSN and will be configured the database connection accordingly.
 // When this env does not exist, a fallback to the following envs with proper default values will take place.

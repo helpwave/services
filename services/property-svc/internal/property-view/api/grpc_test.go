@@ -43,7 +43,7 @@ func server() (context.Context, pb.PropertyViewsServiceClient, *hwes_test.Aggreg
 	return ctx, client, aggregateStore, closer
 }
 
-func setup(t *testing.T) (
+func setup() (
 	ctx context.Context,
 	client pb.PropertyViewsServiceClient,
 	as *hwes_test.AggregateStore,
@@ -68,7 +68,7 @@ func setup(t *testing.T) (
 }
 
 func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T) {
-	ctx, client, _, dbMock, teardown := setup(t)
+	ctx, client, _, dbMock, teardown := setup()
 	defer teardown()
 
 	// Empty Request
@@ -213,7 +213,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T)
 }
 
 func TestPropertyViewGrpcService_UpdatePropertyViewRule_AllEmptyNoEffect(t *testing.T) {
-	ctx, client, as, _, teardown := setup(t)
+	ctx, client, as, _, teardown := setup()
 	defer teardown()
 
 	// Valid IDs
@@ -236,7 +236,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_AllEmptyNoEffect(t *test
 }
 
 func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_GreenPath_Created(t *testing.T) {
-	ctx, client, as, dbMock, teardown := setup(t)
+	ctx, client, as, dbMock, teardown := setup()
 	defer teardown()
 
 	// Mock Empty Row response from database
@@ -304,7 +304,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 }
 
 func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_GreenPath_Created(t *testing.T) {
-	ctx, client, as, dbMock, teardown := setup(t)
+	ctx, client, as, dbMock, teardown := setup()
 	defer teardown()
 
 	// Mock Empty Row response from database
@@ -372,7 +372,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_G
 }
 
 func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_GreenPath_Updated(t *testing.T) {
-	ctx, client, as, dbMock, teardown := setup(t)
+	ctx, client, as, dbMock, teardown := setup()
 	defer teardown()
 
 	// Mock Existing Row response from database
@@ -469,7 +469,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 }
 
 func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_GreenPath_Updated(t *testing.T) {
-	ctx, client, as, dbMock, teardown := setup(t)
+	ctx, client, as, dbMock, teardown := setup()
 	defer teardown()
 
 	// Mock Existing Row response from database

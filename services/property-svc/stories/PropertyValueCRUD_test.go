@@ -85,11 +85,11 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	// Attach a value
 	//
 
-	subjectId := uuid.New().String()
+	subjectID := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
 	attachResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_TextValue{
 			TextValue: "Initial Text Value",
@@ -110,7 +110,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
 		}})
 
@@ -129,7 +129,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	//
 
 	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_TextValue{
 			TextValue: "Updated Text Value",
@@ -152,7 +152,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
 		}})
 
@@ -265,11 +265,11 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	// Attach a value
 	//
 
-	subjectId := uuid.New().String()
+	subjectID := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
 	attachResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_SelectValue{
 			SelectValue: option1,
@@ -290,7 +290,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
 		}})
 
@@ -309,7 +309,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	//
 
 	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_SelectValue{
 			SelectValue: option2,
@@ -332,7 +332,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
 		}})
 
@@ -450,11 +450,11 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	// Attach a value
 	//
 
-	subjectId := uuid.New().String()
+	subjectID := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
 	attachResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_MultiSelectValue_{
 			MultiSelectValue: &pb.AttachPropertyValueRequest_MultiSelectValue{
@@ -478,7 +478,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
 		}})
 
@@ -501,7 +501,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	//
 
 	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_MultiSelectValue_{
 			MultiSelectValue: &pb.AttachPropertyValueRequest_MultiSelectValue{
@@ -527,7 +527,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
 		}})
 
@@ -609,11 +609,11 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	// Attach a value
 	//
 
-	subjectId := uuid.New().String()
+	subjectID := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
 	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_SelectValue{
 			SelectValue: option1,
@@ -634,7 +634,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
 		}})
 
@@ -692,7 +692,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	//
 
 	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_SelectValue{
 			SelectValue: option2,
@@ -713,7 +713,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
 		}})
 
@@ -784,11 +784,11 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	// Attach a value
 	//
 
-	subjectId := uuid.New().String()
+	subjectID := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
 	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_MultiSelectValue_{
 			MultiSelectValue: &pb.AttachPropertyValueRequest_MultiSelectValue{
@@ -812,7 +812,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
 		},
 	})
@@ -875,7 +875,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	//
 
 	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
-		SubjectId:  subjectId,
+		SubjectId:  subjectID,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_MultiSelectValue_{
 			MultiSelectValue: &pb.AttachPropertyValueRequest_MultiSelectValue{
@@ -899,7 +899,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		Matcher: &pb.GetAttachedPropertyValuesRequest_TaskMatcher{
 			TaskMatcher: &pb.TaskPropertyMatcher{
 				WardId: nil,
-				TaskId: &subjectId,
+				TaskId: &subjectID,
 			},
 		}})
 

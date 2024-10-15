@@ -75,7 +75,7 @@ linters:
     - promlinter
     # - protogetter # TODO
     - reassign
-    #- revive
+    - revive
     #- rowserrcheck
     #- sloglint
     #- spancheck
