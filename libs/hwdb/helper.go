@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"telemetry"
+	"time"
+
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	zlog "github.com/rs/zerolog"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"telemetry"
-	"time"
 )
 
 // Optional wraps a database query function and returns (nil, nil) in case of ErrNoRows
@@ -71,7 +72,6 @@ func DANGERTruncateAllTables(ctx context.Context, db DBTX) error {
 		FROM information_schema.tables
 		WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
 	`)
-
 	if err != nil {
 		return fmt.Errorf("DANGERTruncateAllTables: failed to query table names: %w", err)
 	}

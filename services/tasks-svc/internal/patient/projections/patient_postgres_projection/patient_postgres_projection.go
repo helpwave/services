@@ -2,13 +2,15 @@ package patient_postgres_projection
 
 import (
 	"context"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+
 	"tasks-svc/internal/patient/aggregate"
 	patientEventsV1 "tasks-svc/internal/patient/events/v1"
 	"tasks-svc/repos/patient_repo"
@@ -27,7 +29,8 @@ func NewProjection(es *esdb.Client, serviceName string) *Projection {
 			subscriptionGroupName,
 			&[]string{aggregate.PatientAggregateType + "-"},
 		),
-		patientRepo: patient_repo.New(hwdb.GetDB())}
+		patientRepo: patient_repo.New(hwdb.GetDB()),
+	}
 	p.initEventListeners()
 	return p
 }

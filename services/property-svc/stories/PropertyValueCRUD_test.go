@@ -3,12 +3,13 @@ package stories
 import (
 	"context"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"hwtesting"
 	"hwutil"
 	"testing"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // TestCreateAttachUpdateTextProperty:
@@ -103,7 +104,8 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 				WardId: nil,
 				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
 	require.NoError(t, err, "could not get values")
 
@@ -141,7 +143,8 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 				WardId: nil,
 				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
 	require.NoError(t, err, "could not get updated values")
 
@@ -269,7 +272,8 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 				WardId: nil,
 				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
 	require.NoError(t, err, "could not get values")
 
@@ -307,7 +311,8 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 				WardId: nil,
 				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
 	require.NoError(t, err, "could not get updated values")
 
@@ -443,7 +448,8 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 				WardId: nil,
 				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
 	require.NoError(t, err, "could not get values")
 
@@ -488,7 +494,8 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 				WardId: nil,
 				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
 	require.NoError(t, err, "could not get updated values")
 
@@ -584,7 +591,8 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 				WardId: nil,
 				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
 	require.NoError(t, err, "could not get values")
 
@@ -655,7 +663,8 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 				WardId: nil,
 				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
 	require.NoError(t, err, "could not get updated values")
 
@@ -823,7 +832,8 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 				WardId: nil,
 				TaskId: &subjectID,
 			},
-		}})
+		},
+	})
 
 	require.NoError(t, err, "could not get updated values")
 

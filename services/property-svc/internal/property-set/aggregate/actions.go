@@ -2,6 +2,7 @@ package aggregate
 
 import (
 	"context"
+
 	propertyEventsV1 "property-svc/internal/property-set/events/v1"
 )
 

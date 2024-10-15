@@ -3,8 +3,10 @@ package v1
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
 	"hwdb"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/patient/models"
 	"tasks-svc/repos/patient_repo"
 )

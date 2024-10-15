@@ -3,9 +3,10 @@ package v1
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
 	"hwes"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const (

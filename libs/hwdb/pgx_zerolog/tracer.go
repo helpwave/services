@@ -3,12 +3,13 @@ package pgx_zerolog
 import (
 	"context"
 	"fmt"
+	"telemetry"
+
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/tracelog"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/trace"
-	"telemetry"
 )
 
 type tracer struct {

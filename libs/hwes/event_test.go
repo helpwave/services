@@ -3,9 +3,10 @@ package hwes_test
 import (
 	"common"
 	"context"
+	"testing"
+
 	"github.com/google/uuid"
 	"hwes"
-	"testing"
 )
 
 func TestEventWithUserID(t *testing.T) {

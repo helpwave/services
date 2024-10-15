@@ -5,9 +5,10 @@ import (
 	"context"
 	"decaying_lru"
 	"errors"
-	zlog "github.com/rs/zerolog/log"
 	"hwutil"
 	"time"
+
+	zlog "github.com/rs/zerolog/log"
 )
 
 const (
@@ -41,7 +42,6 @@ func getUserID(ctx context.Context) string {
 	log := zlog.Ctx(ctx)
 
 	userID, err := common.GetUserID(ctx)
-
 	if err != nil {
 		log.Error().Err(err).Msg("could not get userID from context, can't add item to LRU")
 

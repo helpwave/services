@@ -5,8 +5,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property-set/aggregate"
 )
 

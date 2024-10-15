@@ -21,18 +21,19 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const MigrationResourceType = "spice_schema_migrations/migration"
-const MigrationResourceId = "current"
-const MigrationRelation = "version"
-const MigrationSubjectType = "spice_schema_migrations/version"
+const (
+	MigrationResourceType = "spice_schema_migrations/migration"
+	MigrationResourceId   = "current"
+	MigrationRelation     = "version"
+	MigrationSubjectType  = "spice_schema_migrations/version"
+)
 
 // CLI is filled by kong.Parse in main
 var CLI struct {
 	Migrate struct {
 		Force bool `help:"Skip schema version check."`
 	} `cmd:"" help:"Migrate SpiceDB schema"`
-	Schema struct {
-	} `cmd:"" help:"Print SpiceDB schema"`
+	Schema    struct{} `cmd:"" help:"Print SpiceDB schema"`
 	Test      struct{} `cmd:"" help:"Runs SpiceDB tests using zed"`
 	Directory string   `flag:"" short:"d" type:"path" default:"./spicedb" help:"SpiceDB directory"`
 	Endpoint  string   `flag:"" short:"e" env:"ZED_ENDPOINT" help:"e.g., 'spicedb:50051'"`
@@ -347,7 +348,7 @@ func writeSpiceDBYaml(file SpiceDBValidationFile, path string) {
 		fmt.Println("could not marshal spicedb yaml for " + path)
 		panic(err)
 	}
-	err = os.WriteFile(path, marshalled, 0644)
+	err = os.WriteFile(path, marshalled, 0o644)
 	if err != nil {
 		fmt.Println("could not write spicedb yaml for " + path)
 		panic(err)

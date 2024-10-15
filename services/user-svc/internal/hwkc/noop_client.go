@@ -2,9 +2,10 @@ package hwkc
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"hwutil"
 	"strconv"
+
+	"github.com/google/uuid"
 )
 
 // NoOpClient implements IClient for testing and development.

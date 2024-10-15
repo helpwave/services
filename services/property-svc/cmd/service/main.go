@@ -3,13 +3,13 @@ package service
 import (
 	"common"
 	"flag"
+	"hwdb"
+	"hwes/eventstoredb"
+	"hwes/eventstoredb/projections"
 
 	pb "gen/services/property_svc/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/rs/zerolog/log"
-	"hwdb"
-	"hwes/eventstoredb"
-	"hwes/eventstoredb/projections"
 
 	propertySet "property-svc/internal/property-set/api"
 	psh "property-svc/internal/property-set/handlers"

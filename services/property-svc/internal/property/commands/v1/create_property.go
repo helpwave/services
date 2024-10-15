@@ -5,8 +5,10 @@ import (
 	"context"
 	"errors"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property/aggregate"
 	"property-svc/internal/property/models"
 )

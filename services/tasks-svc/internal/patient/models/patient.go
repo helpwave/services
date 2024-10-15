@@ -1,9 +1,10 @@
 package models
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"tasks-svc/internal/task/models"
-	"time"
 )
 
 type Patient struct {

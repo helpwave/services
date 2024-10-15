@@ -124,6 +124,14 @@ ENV GO_INJECT_TAG_VERSION=1.4.0
 RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} \
 	&& go clean -modcache
 
+
+# install gofumpt, a stricter gofmt
+#  https://github.com/mvdan/gofumpt
+# renovate: datasource=github-releases depName=mvdan/gofumpt
+ENV GOFUMPT_VERSION=0.7.0
+RUN go install github.com/mvdan/gofumpt@v${GOFUMPT_VERSION} \
+	&& go clean -modcach
+
 # install golangci-lint, the linter we also use in the CI
 #  https://golangci-lint.run/
 # renovate: datasource=github-releases depName=golangci/golangci-lint

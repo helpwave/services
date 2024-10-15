@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
 	"hwes"
 	"hwutil"
+
+	"github.com/google/uuid"
+
 	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/models"
 )
@@ -214,7 +216,7 @@ func (a *PropertyAggregate) onFieldTypeDataSelectOptionsUpserted(evt hwes.Event)
 		}
 	}
 
-	var updatedSelectOptions = make([]models.SelectOption, len(selectOptions))
+	updatedSelectOptions := make([]models.SelectOption, len(selectOptions))
 	var idx uint8 = 0
 	for _, opt := range selectOptions {
 		updatedSelectOptions[idx] = opt

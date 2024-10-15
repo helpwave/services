@@ -3,11 +3,13 @@ package aggregate_test
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
 	"hwes"
+	"testing"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/patient/aggregate"
 	patientEventsV1 "tasks-svc/internal/patient/events/v1"
-	"testing"
 )
 
 func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwes.Event, error)) {

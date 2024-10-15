@@ -3,9 +3,11 @@ package v1
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
 	"hwdb"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property-value/aggregate"
 	"property-svc/repos/property_value_repo"
 )

@@ -4,11 +4,12 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
-	"github.com/redis/go-redis/v9"
-	"github.com/rs/zerolog/log"
 	"hwutil"
 	"strings"
 	"time"
+
+	"github.com/redis/go-redis/v9"
+	"github.com/rs/zerolog/log"
 )
 
 // Setup creates a DecayingLRU and sets it up from env

@@ -4,11 +4,13 @@ import (
 	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
 	"hwes"
+	"testing"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/task/aggregate"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
-	"testing"
 )
 
 func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwes.Event, error)) {

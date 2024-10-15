@@ -3,8 +3,10 @@ package aggregate
 import (
 	"context"
 	"fmt"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	propertyEventsV1 "property-svc/internal/property-value/events/v1"
 	"property-svc/internal/property-value/models"
 )

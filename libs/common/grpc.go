@@ -1,11 +1,21 @@
 package common
 
 import (
-	"common/locale"
 	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"hwlocale"
+	"hwutil"
+	"net"
+	"reflect"
+	"sort"
+	"strconv"
+	"strings"
+	"telemetry"
+
+	"common/locale"
+
 	"github.com/dapr/dapr/pkg/proto/runtime/v1"
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	"github.com/go-playground/validator/v10"
@@ -24,20 +34,14 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
-	"hwlocale"
-	"hwutil"
-	"net"
-	"reflect"
-	"sort"
-	"strconv"
-	"strings"
-	"telemetry"
 )
 
 type claimsKey struct{}
 
-type userIDKey struct{}
-type organizationIDKey struct{}
+type (
+	userIDKey         struct{}
+	organizationIDKey struct{}
+)
 
 // StartNewGRPCServer creates and starts a new GRPC server on addr or panics.
 // Using registerServerHook you are able to register your
@@ -185,7 +189,6 @@ func authFunc(ctx context.Context) (context.Context, error) {
 
 	// get token from gRPC metadata
 	token, err := auth.AuthFromMD(ctx, "bearer")
-
 	if err != nil {
 		log.Trace().Err(err).Msg("no valid auth header found")
 		return nil, status.Errorf(codes.Unauthenticated, "no auth token: %v", err)

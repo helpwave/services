@@ -3,10 +3,11 @@ package eventstoredb
 import (
 	"context"
 	"fmt"
+	"telemetry"
+
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	zlog "github.com/rs/zerolog"
 	"hwes"
-	"telemetry"
 )
 
 func hwesEventFromReceivedEventFromStream(ctx context.Context, esdbEvent *esdb.SubscriptionEvent) (hwes.Event, error) {
@@ -23,7 +24,6 @@ func hwesEventFromReceivedEventFromStream(ctx context.Context, esdbEvent *esdb.S
 	}
 
 	event, err := hwes.NewEventFromRecordedEvent(esdbEvent.EventAppeared.Event)
-
 	if err != nil {
 		log.Error().
 			Err(err).

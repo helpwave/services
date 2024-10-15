@@ -4,13 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"hwtesting"
 	"hwutil"
 	"regexp"
 	"testing"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // TestGetPropertiesBySubjectType:
@@ -120,11 +121,12 @@ func TestGetProperties(t *testing.T) {
 		"FieldTypeData": map[string]interface{}{
 			"SelectData": map[string]interface{}{
 				"allow_freetext": false,
-				"options": []interface{}{map[string]interface{}{
-					"id":          "<id>",
-					"name":        "Option 1",
-					"description": "",
-				},
+				"options": []interface{}{
+					map[string]interface{}{
+						"id":          "<id>",
+						"name":        "Option 1",
+						"description": "",
+					},
 					map[string]interface{}{
 						"id":          "<id>",
 						"name":        "Option 2",

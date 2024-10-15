@@ -28,7 +28,7 @@ linters:
     - gocognit # TODO
     - goconst # TODO
     - gocyclo # TODO
-    - godox # TODO: what does this do?
+    - godox # TODO
     - gofumpt # TODO: what is this?
     - goimports # TODO: install in dev container
     - gomoddirectives # TODO: evaluate

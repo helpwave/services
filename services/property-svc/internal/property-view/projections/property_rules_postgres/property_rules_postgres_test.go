@@ -3,15 +3,17 @@ package property_rules_postgres
 import (
 	"bytes"
 	"context"
-	"github.com/stretchr/testify/require"
 	"hwdb"
 	"hwes"
-	"property-svc/internal/property-view/aggregate"
-	v1 "property-svc/internal/property-view/events/v1"
 	"strings"
 	"testing"
 	"text/template"
 	"time"
+
+	"github.com/stretchr/testify/require"
+
+	"property-svc/internal/property-view/aggregate"
+	v1 "property-svc/internal/property-view/events/v1"
 
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"

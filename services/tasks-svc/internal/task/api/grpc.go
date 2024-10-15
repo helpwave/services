@@ -4,13 +4,15 @@ import (
 	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwes"
+	"hwutil"
+
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"hwes"
-	"hwutil"
+
 	"tasks-svc/internal/task/handlers"
 )
 

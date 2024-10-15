@@ -4,12 +4,14 @@ import (
 	"common"
 	"context"
 	pb "gen/services/task_svc/v1"
+	"hwdb"
+	"hwutil"
+
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"hwdb"
-	"hwutil"
+
 	"task-svc/internal/tracking"
 	"task-svc/repos/ward_repo"
 )
@@ -122,7 +124,6 @@ func (ServiceServer) GetRecentWards(
 	// TODO: Auth
 
 	recentWardIDsStr, err := tracking.GetRecentWardsForUser(ctx)
-
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

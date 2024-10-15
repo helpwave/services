@@ -5,9 +5,10 @@ package pgx_zerolog
 
 import (
 	"context"
+	"math"
+
 	"github.com/jackc/pgx/v5/tracelog"
 	"github.com/rs/zerolog"
-	"math"
 )
 
 type Logger struct {

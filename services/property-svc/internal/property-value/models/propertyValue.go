@@ -4,9 +4,10 @@ import (
 	"errors"
 	"fmt"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
 	"hwutil"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type PropertyValue struct {

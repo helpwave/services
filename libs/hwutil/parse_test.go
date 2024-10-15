@@ -3,10 +3,11 @@ package hwutil_test
 import (
 	"errors"
 	"fmt"
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"hwutil"
-	"testing"
 )
 
 func runPtrToTest[T comparable](t *testing.T, v T) {
@@ -31,6 +32,7 @@ func TestPtrTo(t *testing.T) {
 		age:  20,
 	})
 }
+
 func TestStringsToUUIDs(t *testing.T) {
 	t.Run("valid uuids", func(t *testing.T) {
 		uuidStrings := []string{

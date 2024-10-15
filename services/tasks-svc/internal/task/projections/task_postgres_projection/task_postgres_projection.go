@@ -5,13 +5,15 @@ import (
 	"errors"
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+
 	"tasks-svc/internal/task/aggregate"
 	taskEventsV1 "tasks-svc/internal/task/events/v1"
 	"tasks-svc/repos/task_repo"
@@ -30,7 +32,8 @@ func NewProjection(es *esdb.Client, serviceName string) *Projection {
 			subscriptionGroupName,
 			&[]string{aggregate.TaskAggregateType + "-"},
 		),
-		taskRepo: task_repo.New(hwdb.GetDB())}
+		taskRepo: task_repo.New(hwdb.GetDB()),
+	}
 	p.initEventListeners()
 	return p
 }

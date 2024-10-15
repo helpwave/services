@@ -5,6 +5,7 @@ import (
 	"context"
 	"hwdb"
 	"hwutil"
+
 	"task-svc/repos/task_template_repo"
 
 	"github.com/google/uuid"
@@ -276,7 +277,6 @@ func (ServiceServer) CreateTaskTemplateSubTask(
 		TaskTemplateID: taskTemplateID,
 		Name:           req.GetName(),
 	})
-
 	// implicitly checks the existence of the ward through the foreign key constraint
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())

@@ -2,8 +2,9 @@ package v1
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
 )
 
 const (

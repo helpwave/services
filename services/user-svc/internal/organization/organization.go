@@ -10,6 +10,7 @@ import (
 	"hwdb"
 	"hwlocale"
 	"hwutil"
+
 	"user-svc/internal/hwkc"
 	"user-svc/locale"
 	"user-svc/repos/organization_repo"
@@ -941,7 +942,6 @@ func (s ServiceServer) CreatePersonalOrganization(
 		},
 		userID,
 	)
-
 	if err != nil {
 		return nil, err
 	}

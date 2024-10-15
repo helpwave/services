@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
-	"github.com/pkg/errors"
 	"hwes"
 	"hwutil"
+
+	"github.com/pkg/errors"
+
 	valuesApi "property-svc/internal/property-value/api"
 	"property-svc/internal/property-view/handlers"
 )

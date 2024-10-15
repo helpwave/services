@@ -3,9 +3,11 @@ package v1
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
 	"hwdb"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/patient/models"
 	th "tasks-svc/internal/task/handlers"
 	"tasks-svc/repos/patient_repo"

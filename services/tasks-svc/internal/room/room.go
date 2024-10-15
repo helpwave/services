@@ -3,11 +3,13 @@ package room
 import (
 	"common"
 	"context"
+	"hwdb"
+	"hwutil"
+
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"hwdb"
-	"hwutil"
+
 	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/room_repo"
 

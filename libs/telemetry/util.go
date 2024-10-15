@@ -2,8 +2,9 @@ package telemetry
 
 import (
 	"fmt"
-	"github.com/fatih/structs"
 	"strings"
+
+	"github.com/fatih/structs"
 )
 
 type Loggable interface {

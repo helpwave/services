@@ -3,9 +3,11 @@ package v1
 import (
 	"common"
 	pb "gen/services/tasks_svc/v1"
+	"hwdb"
+
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
-	"hwdb"
+
 	"tasks-svc/internal/task/models"
 	"tasks-svc/repos/task_repo"
 )

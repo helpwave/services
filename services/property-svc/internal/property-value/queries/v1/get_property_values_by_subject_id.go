@@ -5,16 +5,18 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 	"hwdb"
 	"hwes"
 	"hwutil"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
+
 	"property-svc/internal/property-value/models"
 	vh "property-svc/internal/property-view/handlers"
 	viewModels "property-svc/internal/property-view/models"
 	"property-svc/repos/property_value_repo"
-	"time"
 )
 
 type GetRelevantPropertyValuesQueryHandler func(

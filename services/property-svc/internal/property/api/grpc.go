@@ -3,9 +3,11 @@ package api
 import (
 	"context"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
 	"hwes"
 	"hwutil"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property/handlers"
 	"property-svc/internal/property/models"
 )
@@ -58,7 +60,6 @@ func (s *PropertyGrpcService) CreateProperty(
 		req.SetId,
 		fieldTypeData,
 	)
-
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +124,8 @@ func (s *PropertyGrpcService) GetProperty(
 							IsCustom:    option.IsCustom,
 						}
 					}),
-			}}
+			},
+		}
 	}
 
 	return response, nil

@@ -3,6 +3,7 @@ package hwes
 import (
 	"errors"
 	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 )

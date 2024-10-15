@@ -4,13 +4,15 @@ import (
 	"common"
 	"context"
 	pb "gen/services/task_svc/v1"
+	"hwdb"
+	"hwutil"
+
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"hwdb"
-	"hwutil"
+
 	"task-svc/repos/patient_repo"
 	"task-svc/repos/task_repo"
 )

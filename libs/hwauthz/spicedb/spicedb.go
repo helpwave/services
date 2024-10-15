@@ -3,6 +3,9 @@ package spicedb
 import (
 	"context"
 	"fmt"
+	"hwutil"
+	"telemetry"
+
 	v1 "github.com/authzed/authzed-go/proto/authzed/api/v1"
 	"github.com/authzed/authzed-go/v1"
 	"github.com/authzed/grpcutil"
@@ -10,8 +13,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"hwauthz"
-	"hwutil"
-	"telemetry"
 )
 
 func SetupSpiceDbByEnv() *authzed.Client {

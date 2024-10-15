@@ -4,20 +4,22 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+	"slices"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+
 	"property-svc/internal/property-view/aggregate"
 	eventsV1 "property-svc/internal/property-view/events/v1"
 	"property-svc/internal/property-view/models"
 	"property-svc/repos/patient_views_repo"
 	"property-svc/repos/task_views_repo"
 	"property-svc/repos/views_repo"
-	"slices"
 )
 
 type Projection struct {
@@ -43,6 +45,7 @@ func NewProjection(es custom.EventStoreClient, serviceName string) *Projection {
 	p.initEventListeners()
 	return p
 }
+
 func (p *Projection) initEventListeners() {
 	p.RegisterEventListener(eventsV1.PropertyRuleCreated, p.onPropertyRuleCreated)
 	p.RegisterEventListener(eventsV1.PropertyRuleListsUpdated, p.onPropertyRuleListsUpdated)
@@ -205,7 +208,6 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 		RuleID:      payload.RuleID,
 		PropertyIds: append(payload.RemoveFromAlwaysInclude, payload.RemoveFromDontAlwaysInclude...),
 	})
-
 	if err != nil {
 		log.Error().Err(err).Msg("failed to delete from always include list")
 		return err, hwutil.PtrTo(esdb.NackActionRetry)

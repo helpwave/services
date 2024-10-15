@@ -3,6 +3,8 @@ package common
 import (
 	"context"
 	"fmt"
+	"time"
+
 	daprc "github.com/dapr/go-sdk/client"
 	daprcmn "github.com/dapr/go-sdk/service/common"
 	"github.com/rs/zerolog/log"
@@ -10,7 +12,6 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
-	"time"
 )
 
 func MustAddTopicEventHandler(svc daprcmn.Service, sub *daprcmn.Subscription, handler daprcmn.TopicEventHandler) {

@@ -5,9 +5,11 @@ import (
 	"context"
 	"errors"
 	pb "gen/services/tasks_svc/v1"
+	"hwes"
+
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"hwes"
+
 	"tasks-svc/internal/task/aggregate"
 )
 

@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"hwutil"
+	"telemetry"
+
 	"github.com/coreos/go-oidc"
 	zlog "github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
-	"hwutil"
-	"telemetry"
 )
 
 var (

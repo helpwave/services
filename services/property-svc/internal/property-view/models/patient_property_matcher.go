@@ -3,9 +3,11 @@ package models
 import (
 	"context"
 	"errors"
-	"github.com/google/uuid"
 	"hwdb"
 	"hwutil"
+
+	"github.com/google/uuid"
+
 	"property-svc/repos/patient_views_repo"
 )
 

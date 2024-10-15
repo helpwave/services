@@ -4,14 +4,16 @@ import (
 	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"hwdb"
 	"hwdb/locale"
 	"hwes"
 	"hwutil"
+
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/patient/models"
 	"tasks-svc/internal/tracking"
@@ -485,9 +487,7 @@ func (s *PatientGrpcService) DischargePatient(
 ) (*pb.DischargePatientResponse, error) {
 	log := zlog.Ctx(ctx)
 	patientID, err := uuid.Parse(req.GetId())
-
 	// TODO: Auth
-
 	if err != nil {
 		return nil, err
 	}

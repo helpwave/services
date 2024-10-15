@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -28,6 +29,7 @@ func (t InsecureBearerToken) GetRequestMetadata(_ context.Context, _ ...string) 
 		"authorization": "Bearer " + string(t),
 	}, nil
 }
+
 func (t InsecureBearerToken) RequireTransportSecurity() bool {
 	return false
 }

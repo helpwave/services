@@ -5,8 +5,10 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
 	"hwdb"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/task/models"
 	"tasks-svc/repos/task_repo"
 )

@@ -3,14 +3,15 @@ package common
 import (
 	"context"
 	"crypto/tls"
-	"github.com/joho/godotenv"
-	"github.com/rs/zerolog/log"
 	"hwutil"
 	"net/http"
 	"os"
 	"strings"
 	"telemetry"
 	"time"
+
+	"github.com/joho/godotenv"
+	"github.com/rs/zerolog/log"
 )
 
 var (
@@ -20,8 +21,10 @@ var (
 	contextCancel           func() // Setup() yields the "root" context, which can be canceled using this function
 )
 
-const DevelopmentMode = "development"
-const ProductionMode = "production"
+const (
+	DevelopmentMode = "development"
+	ProductionMode  = "production"
+)
 
 type SetupOptions struct {
 	auth                   bool
@@ -65,8 +68,10 @@ func WithNonOrganizationMethod(nonOrganizationMethod string) SetupOption {
 	}
 }
 
-var skipAuthForMethods []string
-var skipOrganizationAuthForMethods []string
+var (
+	skipAuthForMethods             []string
+	skipOrganizationAuthForMethods []string
+)
 
 // Setup loads the .env file and sets up logging,
 // also sets up tokens when the service requires auth.

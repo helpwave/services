@@ -2,8 +2,9 @@ package hwkc
 
 import (
 	"context"
-	zlog "github.com/rs/zerolog/log"
 	"hwutil"
+
+	zlog "github.com/rs/zerolog/log"
 )
 
 // BuildClient is a builder for hwkc.IClient

@@ -4,8 +4,10 @@ import (
 	"common"
 	"context"
 	"fmt"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/task/aggregate"
 )
 

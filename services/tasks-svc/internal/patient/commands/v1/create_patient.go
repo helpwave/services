@@ -4,8 +4,10 @@ import (
 	"common"
 	"context"
 	"errors"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/patient/aggregate"
 )
 
@@ -34,7 +36,7 @@ func NewCreatePatientCommandHandler(as hwes.AggregateStore) CreatePatientCommand
 			return 0, errors.New("cannot create an already existing aggregate")
 		}
 
-		var finalNotes = ""
+		finalNotes := ""
 		if notes != nil {
 			finalNotes = *notes
 		}

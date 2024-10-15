@@ -4,6 +4,10 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"log"
+	"net"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -11,9 +15,6 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/test/bufconn"
-	"log"
-	"net"
-	"testing"
 )
 
 // StartGRPCServer starts an existing grpc server on an in-memory interface.

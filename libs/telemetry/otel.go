@@ -3,13 +3,14 @@ package telemetry
 import (
 	"context"
 	"fmt"
+	"reflect"
+
 	"github.com/rs/zerolog"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
-	"reflect"
 )
 
 // StartSpan starts a new span and returns a context with both span information and a new span-aware logger attached.

@@ -3,11 +3,13 @@ package task_template
 import (
 	"common"
 	"context"
+	"hwdb"
+	"hwutil"
+
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"hwdb"
-	"hwutil"
+
 	"tasks-svc/repos/task_template_repo"
 
 	pb "gen/services/tasks_svc/v1"
@@ -262,7 +264,6 @@ func (ServiceServer) CreateTaskTemplateSubTask(
 		TaskTemplateID: taskTemplateID,
 		Name:           req.GetName(),
 	})
-
 	// implicitly checks the existence of the ward through the foreign key constraint
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())

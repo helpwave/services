@@ -2,6 +2,7 @@ package aggregate
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	events "property-svc/internal/property-view/events/v1"
 	"property-svc/internal/property-view/models"

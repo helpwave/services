@@ -2,8 +2,9 @@ package models
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"hwutil"
+
+	"github.com/google/uuid"
 )
 
 type PropertiesQueryRow interface {

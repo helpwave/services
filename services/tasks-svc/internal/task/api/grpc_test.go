@@ -5,15 +5,17 @@ import (
 	common_test "common/test"
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	hwes_test "hwes/test"
+	"hwutil"
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	hwes_test "hwes/test"
-	"hwutil"
+
 	"tasks-svc/internal/task/api"
 	"tasks-svc/internal/task/handlers"
-	"testing"
 )
 
 func server() (context.Context, pb.TaskServiceClient, func()) {

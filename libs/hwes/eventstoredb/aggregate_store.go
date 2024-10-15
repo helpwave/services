@@ -5,13 +5,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
-	zlog "github.com/rs/zerolog/log"
-	"hwes"
 	"hwutil"
 	"io"
 	"math"
 	"telemetry"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	zlog "github.com/rs/zerolog/log"
+	"hwes"
 )
 
 type AggregateStore struct {

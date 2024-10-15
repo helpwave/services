@@ -4,11 +4,13 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
+	"hwes"
+	"hwutil"
+
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"hwes"
-	"hwutil"
+
 	"property-svc/internal/property-value/handlers"
 	"property-svc/internal/property-value/models"
 	viewModels "property-svc/internal/property-view/models"

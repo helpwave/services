@@ -3,11 +3,13 @@ package bed
 import (
 	"common"
 	"context"
-	"github.com/jackc/pgx/v5/pgconn"
-	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"hwdb"
 	"hwlocale"
 	"hwutil"
+
+	"github.com/jackc/pgx/v5/pgconn"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
+
 	"task-svc/locale"
 	"task-svc/repos/bed_repo"
 
@@ -58,7 +60,8 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 							Field:       "room_id",
 							Description: hwlocale.Localize(ctx, locale.InvalidRoomIdError(ctx)),
 						},
-					}})
+					},
+				})
 		}))
 	if err != nil {
 		return nil, err

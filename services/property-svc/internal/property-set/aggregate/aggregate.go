@@ -2,8 +2,10 @@ package aggregate
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	propertySetEventsV1 "property-svc/internal/property-set/events/v1"
 	"property-svc/internal/property-set/models"
 )

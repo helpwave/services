@@ -2,9 +2,10 @@ package decaying_lru
 
 import (
 	"context"
+	"time"
+
 	"github.com/redis/go-redis/v9"
 	zlog "github.com/rs/zerolog/log"
-	"time"
 
 	_ "embed"
 )

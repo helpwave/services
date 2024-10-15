@@ -6,6 +6,7 @@ import (
 	pb "gen/services/task_svc/v1"
 	"hwdb"
 	"hwutil"
+
 	"task-svc/internal/tracking"
 	"task-svc/repos/bed_repo"
 	"task-svc/repos/patient_repo"
@@ -161,7 +162,6 @@ func (ServiceServer) GetPatientsByWard(
 			WardID:         wardID,
 			OrganizationID: organizationID,
 		})
-
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -253,7 +253,6 @@ func (ServiceServer) GetRecentPatients(
 	// TODO: Auth
 
 	recentPatientIdsStrs, err := tracking.GetRecentPatientsForUser(ctx)
-
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

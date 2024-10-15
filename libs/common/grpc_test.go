@@ -1,9 +1,10 @@
 package common_test
 
 import (
+	"testing"
+
 	"common"
 	"golang.org/x/text/language"
-	"testing"
 )
 
 func arrayEq(t *testing.T, expected []language.Tag, parsed []language.Tag) {

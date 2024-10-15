@@ -1,9 +1,11 @@
 package spicedb
 
 import (
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"hwauthz"
 	"hwes/eventstoredb/projections/custom"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+
 	"tasks-svc/internal/task/aggregate"
 )
 

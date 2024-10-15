@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "gen/services/property_svc/v1"
 	"hwutil"
+
 	propertyEventsV1 "property-svc/internal/property/events/v1"
 	"property-svc/internal/property/models"
 )
@@ -50,6 +51,7 @@ func (a *PropertyAggregate) UpdateSetID(ctx context.Context, newSetID string) er
 	}
 	return a.Apply(event)
 }
+
 func (a *PropertyAggregate) UpdateSubjectType(ctx context.Context, subjectType pb.SubjectType) error {
 	event, err := propertyEventsV1.NewPropertySubjectTypeUpdatedEvent(ctx, a, subjectType)
 	if err != nil {

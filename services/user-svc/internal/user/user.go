@@ -9,6 +9,7 @@ import (
 	events "gen/libs/events/v1"
 	pb "gen/services/user_svc/v1"
 	"hwdb"
+
 	"user-svc/repos/user_repo"
 
 	daprcmn "github.com/dapr/go-sdk/service/common"

@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"hwutil"
+	"telemetry"
+
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	zlog "github.com/rs/zerolog/log"
 	"hwes"
-	"hwutil"
-	"telemetry"
 )
 
 // EventStoreClient is an interface that describes all methods of esdb.Client that are used by CustomProjection
@@ -216,7 +217,6 @@ func (p *CustomProjection) processReceivedEventFromStream(
 	telemetry.SetSpanStr(ctx, "esdbEventID", esdbEvent.EventAppeared.Event.Event.EventID.String())
 
 	event, err := hwes.NewEventFromRecordedEvent(esdbEvent.EventAppeared.Event.Event)
-
 	if err != nil {
 		log.Error().
 			Err(err).

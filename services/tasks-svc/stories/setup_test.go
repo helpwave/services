@@ -3,18 +3,19 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwtesting"
+	"hwutil"
+	"os"
+	"os/signal"
+	"testing"
+	"time"
+
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	zlog "github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
-	"hwtesting"
-	"hwutil"
-	"os/signal"
-	"tasks-svc/cmd/service"
 
-	"os"
-	"testing"
-	"time"
+	"tasks-svc/cmd/service"
 )
 
 func TestMain(m *testing.M) {
@@ -88,6 +89,7 @@ func taskServiceClient() pb.TaskServiceClient {
 func taskTemplateServiceClient() pb.TaskTemplateServiceClient {
 	return pb.NewTaskTemplateServiceClient(hwtesting.GetGrpcConn(""))
 }
+
 func wardServiceClient() pb.WardServiceClient {
 	return pb.NewWardServiceClient(hwtesting.GetGrpcConn(""))
 }

@@ -3,12 +3,13 @@ package hwdb
 import (
 	"context"
 	"fmt"
+	"hwutil"
+
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog/log"
 	"hwdb/pgx_zerolog"
-	"hwutil"
 
 	pgxUUID "github.com/vgarvardt/pgx-google-uuid/v5"
 )
@@ -66,8 +67,7 @@ func buildDsnFromEnvs() string {
 		user,
 		password,
 		databaseName,
-		port :=
-		hwutil.GetEnvOr("POSTGRES_HOST", "localhost"),
+		port := hwutil.GetEnvOr("POSTGRES_HOST", "localhost"),
 		hwutil.GetEnvOr("POSTGRES_USER", "postgres"),
 		hwutil.GetEnvOr("POSTGRES_PASSWORD", "postgres"),
 		hwutil.GetEnvOr("POSTGRES_DB", "postgres"),

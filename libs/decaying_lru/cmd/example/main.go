@@ -3,9 +3,10 @@ package main
 
 import (
 	"context"
-	"decaying_lru"
 	"fmt"
 	"time"
+
+	"decaying_lru"
 )
 
 func must(err error) {
@@ -14,8 +15,10 @@ func must(err error) {
 	}
 }
 
-const size int64 = 10
-const inverseP int = 1
+const (
+	size     int64 = 10
+	inverseP int   = 1
+)
 
 func main() {
 	ctx := context.Background()

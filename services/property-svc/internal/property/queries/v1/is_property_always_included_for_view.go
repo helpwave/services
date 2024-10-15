@@ -3,10 +3,12 @@ package v1
 import (
 	"context"
 	pb "gen/services/property_svc/v1"
+	"hwutil"
+
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"hwutil"
+
 	viewModels "property-svc/internal/property-view/models"
 )
 

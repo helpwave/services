@@ -6,14 +6,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/coreos/go-oidc"
-	"github.com/google/uuid"
-	"golang.org/x/oauth2/clientcredentials"
 	"hwutil"
 	"io"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	"github.com/coreos/go-oidc"
+	"github.com/google/uuid"
+	"golang.org/x/oauth2/clientcredentials"
 )
 
 type IClient interface {

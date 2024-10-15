@@ -6,6 +6,7 @@ import (
 	"errors"
 	"hwes"
 	"hwutil"
+
 	"property-svc/internal/property-view/models"
 
 	"github.com/fatih/structs"

@@ -3,9 +3,11 @@ package aggregate
 import (
 	"context"
 	"errors"
-	"github.com/google/uuid"
 	"hwes"
 	"hwutil"
+
+	"github.com/google/uuid"
+
 	propertyViewEventsV1 "property-svc/internal/property-view/events/v1"
 	"property-svc/internal/property-view/models"
 )

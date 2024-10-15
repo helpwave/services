@@ -6,18 +6,20 @@ import (
 	"context"
 	"decaying_lru"
 	pb "gen/services/tasks_svc/v1"
+	hwes_test "hwes/test"
+	"testing"
+	"time"
+
 	"github.com/go-redis/redismock/v9"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	hwes_test "hwes/test"
+
 	"tasks-svc/internal/patient/api"
 	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/tracking"
-	"testing"
-	"time"
 )
 
 func server() (context.Context, pb.PatientServiceClient, func()) {

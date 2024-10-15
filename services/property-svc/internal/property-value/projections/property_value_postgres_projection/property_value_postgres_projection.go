@@ -5,13 +5,15 @@ import (
 	"errors"
 	"fmt"
 	pb "gen/services/property_svc/v1"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+
 	"property-svc/internal/property-value/aggregate"
 	propertyValueEventsV1 "property-svc/internal/property-value/events/v1"
 	"property-svc/internal/property-value/models"
@@ -36,7 +38,8 @@ func NewProjection(es *esdb.Client, serviceName string, db hwdb.DBTX) *Projectio
 		),
 		db:                db,
 		propertyRepo:      property_repo.New(db),
-		propertyValueRepo: property_value_repo.New(db)}
+		propertyValueRepo: property_value_repo.New(db),
+	}
 	p.initEventListeners()
 	return p
 }

@@ -2,8 +2,9 @@ package hwutil_test
 
 import (
 	"fmt"
-	"hwutil"
 	"testing"
+
+	"hwutil"
 )
 
 type testCase[T comparable] struct {
