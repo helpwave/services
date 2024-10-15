@@ -40,7 +40,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	}
 	createRes, err := taskClient.CreateTask(ctx, createReq)
 
-	assert.NoError(t, err, "could not create")
+	require.NoError(t, err, "could not create")
 
 	taskId := createRes.GetId()
 
@@ -49,7 +49,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	// get new task
 
 	task, err := taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Equal(t, createReq.GetName(), task.GetName())
 	assert.Equal(t, createReq.GetDescription(), task.GetDescription())
@@ -94,7 +94,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 		Consistency: &createRes.Consistency,
 	}
 	updateRes, err := taskClient.UpdateTask(ctx, updateReq)
-	assert.NoError(t, err, "could not update task after creation")
+	require.NoError(t, err, "could not update task after creation")
 
 	assert.NotEqual(t, task.GetConsistency(), updateRes.GetConsistency(), "consistency has not changed in update")
 
@@ -103,7 +103,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	// get updated task
 
 	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Equal(t, updateReq.GetName(), task.GetName())
 	assert.Equal(t, pb.TaskStatus_TASK_STATUS_DONE, task.GetStatus())
@@ -119,7 +119,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 			Name: "ST 3",
 		},
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.NotEqual(t, task.Consistency, createStRes.TaskConsistency, "consistency was not updated")
 
 	hwtesting.WaitForProjectionsToSettle()
@@ -127,7 +127,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	// get updated task
 
 	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Len(t, task.GetSubtasks(), 3)
 
@@ -155,14 +155,14 @@ func TestCreateUpdateGetTask(t *testing.T) {
 		},
 		TaskConsistency: &task.Consistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	hwtesting.WaitForProjectionsToSettle()
 
 	// get updated task
 
 	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Contains(t, hwutil.Map(task.Subtasks, func(st *pb.GetTaskResponse_SubTask) string {
 		if st.GetId() == createStRes.GetSubtaskId() {
@@ -183,7 +183,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 		UserId:      assignedUser.String(),
 		Consistency: &task.Consistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.NotEqual(t, task.GetConsistency(), assignRes.GetConsistency(), "consistency was not updated")
 	hwtesting.WaitForProjectionsToSettle()
@@ -191,7 +191,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	// get updated task
 
 	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Equal(t, assignedUser.String(), task.GetAssignedUserId())
 	assert.Equal(t, assignRes.GetConsistency(), task.GetConsistency())
@@ -205,7 +205,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 		UserId:      assignedUser.String(),
 		Consistency: &task.Consistency,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.NotEqual(t, task.GetConsistency(), unassignRes.GetConsistency(), "consistency was not updated")
 	hwtesting.WaitForProjectionsToSettle()
@@ -213,7 +213,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	// get updated task
 
 	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Nil(t, task.GetAssignedUserId())
 	assert.Equal(t, unassignRes.GetConsistency(), task.GetConsistency())
@@ -225,7 +225,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	rmDueRes, err := taskClient.RemoveTaskDueDate(ctx, &pb.RemoveTaskDueDateRequest{
 		TaskId: taskId,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.NotEqual(t, task.GetConsistency(), rmDueRes.GetConsistency(), "consistency was not updated")
 	hwtesting.WaitForProjectionsToSettle()
@@ -233,7 +233,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	// get updated task
 
 	task, err = taskClient.GetTask(ctx, &pb.GetTaskRequest{Id: taskId})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Nil(t, task.GetDueAt())
 	assert.Equal(t, rmDueRes.GetConsistency(), task.GetConsistency())
@@ -275,7 +275,7 @@ func TestGetTasksByPatient(t *testing.T) {
 			AssignedUserId: nil,
 			Subtasks:       sts,
 		})
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		taskIds = append(taskIds, taskRes.Id)
 		taskConsistencies[taskRes.Id] = taskRes.Consistency
 		subtaskMap[taskRes.Id] = sts
@@ -284,7 +284,7 @@ func TestGetTasksByPatient(t *testing.T) {
 	hwtesting.WaitForProjectionsToSettle()
 
 	res, err := taskClient.GetTasksByPatient(ctx, &pb.GetTasksByPatientRequest{PatientId: patientId})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Len(t, res.Tasks, len(suffixMap))
 	assert.Subset(t, taskIds, hwutil.Map(res.Tasks, func(tsk *pb.GetTasksByPatientResponse_Task) string {
@@ -306,7 +306,7 @@ func TestGetTasksByPatient(t *testing.T) {
 	resByStatus, err := taskClient.GetTasksByPatientSortedByStatus(ctx, &pb.GetTasksByPatientSortedByStatusRequest{
 		PatientId: patientId,
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Len(t, resByStatus.Todo, 1)
 	assert.Equal(t, taskConsistencies[resByStatus.Todo[0].Id], resByStatus.Todo[0].Consistency)
@@ -362,7 +362,7 @@ func TestGetAssignedTasks(t *testing.T) {
 			AssignedUserId: hwutil.PtrTo(userID.String()),
 			Subtasks:       sts,
 		})
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		taskIds = append(taskIds, taskRes.Id)
 		taskConsistencies[taskRes.Id] = taskRes.Consistency
 		subtaskMap[taskRes.Id] = sts
@@ -374,7 +374,7 @@ func TestGetAssignedTasks(t *testing.T) {
 	customTaskClient := pb.NewTaskServiceClient(hwtesting.GetGrpcConn(userID.String()))
 
 	res, err := customTaskClient.GetAssignedTasks(ctx, &pb.GetAssignedTasksRequest{})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Len(t, res.Tasks, len(suffixMap))
 	assert.Subset(t, taskIds, hwutil.Map(res.Tasks, func(tsk *pb.GetAssignedTasksResponse_Task) string {

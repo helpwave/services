@@ -38,11 +38,11 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !assert.NoError(t, err, "could not create new property") {
+	if !require.NoError(t, err, "could not create new property") {
 		return
 	}
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !assert.NoError(t, err, "propertyID is not a uuid") {
+	if !require.NoError(t, err, "propertyID is not a uuid") {
 		return
 	}
 
@@ -58,7 +58,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 			Value: &pb.GetPropertyRequest_ViewSource_WardId{WardId: wardID.String()},
 		},
 	})
-	if !assert.NoError(t, err, "could not get property after it was created") {
+	if !require.NoError(t, err, "could not get property after it was created") {
 		return
 	}
 
@@ -81,7 +81,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not update property view") {
+	if !require.NoError(t, err, "could not update property view") {
 		return
 	}
 
@@ -97,7 +97,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 			Value: &pb.GetPropertyRequest_ViewSource_WardId{WardId: wardID.String()},
 		},
 	})
-	if !assert.NoError(t, err, "could not get property after view was updated") {
+	if !require.NoError(t, err, "could not get property after view was updated") {
 		return
 	}
 
@@ -120,7 +120,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not update property view the second time") {
+	if !require.NoError(t, err, "could not update property view the second time") {
 		return
 	}
 
@@ -136,7 +136,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 			Value: &pb.GetPropertyRequest_ViewSource_WardId{WardId: wardID.String()},
 		},
 	})
-	if !assert.NoError(t, err, "could not get property after view was updated the second time") {
+	if !require.NoError(t, err, "could not get property after view was updated the second time") {
 		return
 	}
 
@@ -160,7 +160,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not update property view the third time") {
+	if !require.NoError(t, err, "could not update property view the third time") {
 		return
 	}
 
@@ -176,7 +176,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 			Value: &pb.GetPropertyRequest_ViewSource_WardId{WardId: wardID.String()},
 		},
 	})
-	if !assert.NoError(t, err, "could not get property after view was updated the third time") {
+	if !require.NoError(t, err, "could not get property after view was updated the third time") {
 		return
 	}
 
@@ -209,11 +209,11 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !assert.NoError(t, err, "could not create new property") {
+	if !require.NoError(t, err, "could not create new property") {
 		return
 	}
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !assert.NoError(t, err, "propertyID is not a uuid") {
+	if !require.NoError(t, err, "propertyID is not a uuid") {
 		return
 	}
 
@@ -228,7 +228,7 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{
 		Id: propertyID.String(),
 	})
-	if !assert.NoError(t, err, "could not get property after it was created") {
+	if !require.NoError(t, err, "could not get property after it was created") {
 		return
 	}
 
@@ -247,7 +247,7 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 		Consistency: &readVersion,
 	})
 
-	if !assert.NoError(t, err, "could not update property") {
+	if !require.NoError(t, err, "could not update property") {
 		return
 	}
 
@@ -264,7 +264,7 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 	propertyResponse, err = propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{
 		Id: propertyID.String(),
 	})
-	if !assert.NoError(t, err, "could not get property after it was updated") {
+	if !require.NoError(t, err, "could not get property after it was updated") {
 		return
 	}
 

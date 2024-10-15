@@ -7,6 +7,7 @@ import (
 )
 
 func arrayEq(t *testing.T, expected []language.Tag, parsed []language.Tag) {
+	t.Helper()
 	if len(expected) != len(parsed) {
 		t.Errorf("expected len %d, got %d", len(expected), len(parsed))
 		return

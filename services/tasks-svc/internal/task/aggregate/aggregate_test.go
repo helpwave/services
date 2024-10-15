@@ -12,6 +12,8 @@ import (
 )
 
 func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwes.Event, error)) {
+	t.Helper()
+
 	event, err := newEvent()
 	if err != nil {
 		t.Error(err)

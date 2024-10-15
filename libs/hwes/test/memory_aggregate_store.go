@@ -48,10 +48,12 @@ func (a *AggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (
 }
 
 func (a *AggregateStore) ExpectToBeEmpty(t *testing.T) bool {
+	t.Helper()
 	return assert.Empty(t, a.streams)
 }
 
 func (a *AggregateStore) ExpectStream(t *testing.T, expectedStream string, expectedFn func([]hwes.Event) bool) bool {
+	t.Helper()
 	stream, ok := a.streams[expectedStream]
 	if !ok {
 		t.Errorf("stream %v does not exist on aggregate store", expectedStream)
@@ -67,6 +69,8 @@ func (a *AggregateStore) ExpectAnyStream(
 	t *testing.T,
 	expectedFn func(streamName string, events []hwes.Event) bool,
 ) bool {
+	t.Helper()
+
 	for name, stream := range a.streams {
 		if expectedFn(name, stream) {
 			return true

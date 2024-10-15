@@ -6,6 +6,7 @@ import (
 	common_test "common/test"
 	"context"
 	pb "gen/services/property_svc/v1"
+	"github.com/stretchr/testify/require"
 	"hwdb"
 	"hwes"
 	hwes_test "hwes/test"
@@ -76,7 +77,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T)
 		FilterUpdate: nil,
 		Matcher:      nil,
 	})
-	assert.Error(t, err, "accepts empty requests")
+	require.Error(t, err, "accepts empty requests")
 
 	// Semi-Empty Request
 	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
@@ -93,7 +94,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T)
 			RemoveFromDontAlwaysInclude: nil,
 		},
 	})
-	assert.NoError(t, err, "rejects semi-empty requests")
+	require.NoError(t, err, "rejects semi-empty requests")
 
 	// Array-based Semi-Empty Request
 	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
@@ -110,7 +111,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T)
 			RemoveFromDontAlwaysInclude: make([]string, 0),
 		},
 	})
-	assert.NoError(t, err, "rejects array based semi-empty requests")
+	require.NoError(t, err, "rejects array based semi-empty requests")
 
 	// Invalid WardID
 	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
@@ -127,7 +128,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T)
 			RemoveFromDontAlwaysInclude: nil,
 		},
 	})
-	assert.Error(t, err, "accepts invalid ward_id")
+	require.Error(t, err, "accepts invalid ward_id")
 
 	// Invalid TaskID
 	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
@@ -144,7 +145,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T)
 			RemoveFromDontAlwaysInclude: nil,
 		},
 	})
-	assert.Error(t, err, "accepts invalid task_id")
+	require.Error(t, err, "accepts invalid task_id")
 
 	// Valid IDs
 	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
@@ -161,7 +162,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T)
 			RemoveFromDontAlwaysInclude: nil,
 		},
 	})
-	assert.NoError(t, err, "rejects valid matchers")
+	require.NoError(t, err, "rejects valid matchers")
 
 	// Invalid updates
 	_, err = client.UpdatePropertyViewRule(ctx, &pb.UpdatePropertyViewRuleRequest{
@@ -178,7 +179,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T)
 			RemoveFromDontAlwaysInclude: nil,
 		},
 	})
-	assert.Error(t, err, "accepts invalid updates")
+	require.Error(t, err, "accepts invalid updates")
 
 	// Fully valid request
 
@@ -209,7 +210,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_Validation(t *testing.T)
 			RemoveFromDontAlwaysInclude: []string{"08b23992-9489-41d2-b80d-d7d49c4c9168"},
 		},
 	})
-	assert.NoError(t, err, "rejects fully valid request")
+	require.NoError(t, err, "rejects fully valid request")
 }
 
 func TestPropertyViewGrpcService_UpdatePropertyViewRule_AllEmptyNoEffect(t *testing.T) {

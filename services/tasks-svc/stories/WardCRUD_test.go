@@ -27,7 +27,7 @@ func TestCreateUpdateGetWard(t *testing.T) {
 		Name: t.Name() + " ward",
 	}
 	createRes, err := wardServiceClient().CreateWard(ctx, createReq)
-	assert.NoError(t, err, "could not create ward")
+	require.NoError(t, err, "could not create ward")
 
 	wardID := createRes.GetId()
 
@@ -36,7 +36,7 @@ func TestCreateUpdateGetWard(t *testing.T) {
 	//
 
 	getWardRes, err := wardClient.GetWard(ctx, &pb.GetWardRequest{Id: wardID})
-	assert.NoError(t, err, "could not get ward after creation")
+	require.NoError(t, err, "could not get ward after creation")
 
 	assert.Equal(t, createReq.Name, getWardRes.Name)
 	assert.Equal(t, createRes.Consistency, getWardRes.Consistency)
@@ -51,7 +51,7 @@ func TestCreateUpdateGetWard(t *testing.T) {
 		Consistency: &getWardRes.Consistency,
 	}
 	updateRes, err := wardClient.UpdateWard(ctx, updateReq)
-	assert.NoError(t, err, "could not update ward after creation")
+	require.NoError(t, err, "could not update ward after creation")
 
 	assert.NotEqual(
 		t,
@@ -65,7 +65,7 @@ func TestCreateUpdateGetWard(t *testing.T) {
 	//
 
 	getWardRes, err = wardClient.GetWard(ctx, &pb.GetWardRequest{Id: wardID})
-	assert.NoError(t, err, "could not get room after update")
+	require.NoError(t, err, "could not get room after update")
 
 	assert.Equal(t, *updateReq.Name, getWardRes.Name)
 	assert.Equal(t, updateRes.Consistency, getWardRes.Consistency)
@@ -78,7 +78,7 @@ func prepareWards(t *testing.T, ctx context.Context, client pb.WardServiceClient
 		wardRes, err := client.CreateWard(ctx, &pb.CreateWardRequest{
 			Name: t.Name() + " ward " + strconv.Itoa(i),
 		})
-		if !assert.NoError(t, err, "prepareWard failed: could not create ward", i) {
+		if !require.NoError(t, err, "prepareWard failed: could not create ward", i) {
 			return nil
 		}
 		ids = append(ids, wardRes.Id)
@@ -113,13 +113,13 @@ func TestGetRecentWards(t *testing.T) {
 				Id:    patientID,
 				BedId: bedId,
 			})
-			assert.NoError(t, err, "could not assign bed to patient")
+			require.NoError(t, err, "could not assign bed to patient")
 			_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 				Name:          t.Name() + " Patient " + bedSuffix + " Task ",
 				PatientId:     patientID,
 				InitialStatus: hwutil.PtrTo(pb.TaskStatus(j + 1)), // this is dirty, lol
 			})
-			assert.NoError(t, err, "could not create task for patient")
+			require.NoError(t, err, "could not create task for patient")
 		}
 	}
 
@@ -128,7 +128,7 @@ func TestGetRecentWards(t *testing.T) {
 	// touch each ward, to push it into RecentWards
 	for _, wardID := range wardIds {
 		res, err := wardClient.UpdateWard(ctx, &pb.UpdateWardRequest{Id: wardID})
-		assert.NoError(t, err, "could not update ward %s", wardID)
+		require.NoError(t, err, "could not update ward %s", wardID)
 		consistencies[wardID] = res.Consistency
 		hwtesting.WaitForProjectionsToSettle()
 	}
@@ -138,7 +138,7 @@ func TestGetRecentWards(t *testing.T) {
 
 	// GetRecentWards
 	res, err := wardClient.GetRecentWards(ctx, &pb.GetRecentWardsRequest{})
-	assert.NoError(t, err, "could not GetRecentWards")
+	require.NoError(t, err, "could not GetRecentWards")
 
 	// assertions
 	actualWardIds := hwutil.Map(res.Wards, func(ward *pb.GetRecentWardsResponse_Ward) string {
@@ -166,10 +166,10 @@ func TestGetWards(t *testing.T) {
 	}
 
 	wardRes, err := wardClient.CreateWard(ctx, createReq)
-	assert.NoError(t, err, "could not create ward")
+	require.NoError(t, err, "could not create ward")
 
 	res, err := wardClient.GetWards(ctx, &pb.GetWardsRequest{})
-	assert.NoError(t, err, "could not GetWardOverviews")
+	require.NoError(t, err, "could not GetWardOverviews")
 
 	found := false
 	for _, ward := range res.Wards {
@@ -220,18 +220,18 @@ func TestGetWardOverviews(t *testing.T) {
 				Id:    patientID,
 				BedId: bedId,
 			})
-			assert.NoError(t, err, "could not assign bed to patient")
+			require.NoError(t, err, "could not assign bed to patient")
 			_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
 				Name:          t.Name() + " Patient " + bedSuffix + " Task ",
 				PatientId:     patientID,
 				InitialStatus: hwutil.PtrTo(pb.TaskStatus(j + 1)), // this is dirty, lol
 			})
-			assert.NoError(t, err, "could not create task for patient")
+			require.NoError(t, err, "could not create task for patient")
 		}
 	}
 
 	res, err := wardClient.GetWardOverviews(ctx, &pb.GetWardOverviewsRequest{})
-	assert.NoError(t, err, "could not GetWardOverviews")
+	require.NoError(t, err, "could not GetWardOverviews")
 
 	found := false
 	for _, ward := range res.Wards {
@@ -285,13 +285,13 @@ func TestGetWardDetails(t *testing.T) {
 		Description: nil,
 		WardId:      &wardID,
 	})
-	assert.NoError(t, err, "could not CreateTaskTemplate")
+	require.NoError(t, err, "could not CreateTaskTemplate")
 
 	st, err := taskTemplateClient.CreateTaskTemplateSubTask(ctx, &pb.CreateTaskTemplateSubTaskRequest{
 		TaskTemplateId: ttres.Id,
 		Name:           t.Name() + " substask",
 	})
-	assert.NoError(t, err, "could not CreateTaskTemplateSubTask")
+	require.NoError(t, err, "could not CreateTaskTemplateSubTask")
 
 	expected["task_templates"] = []map[string]interface{}{
 		{
@@ -343,7 +343,7 @@ func TestGetWardDetails(t *testing.T) {
 	ward, err := wardClient.GetWardDetails(ctx, &pb.GetWardDetailsRequest{
 		Id: wardID,
 	})
-	assert.NoError(t, err, "could GetWardDetailsRequest")
+	require.NoError(t, err, "could GetWardDetailsRequest")
 
 	// assertions
 

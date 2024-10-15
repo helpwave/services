@@ -32,11 +32,11 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !assert.NoError(t, err, "could not create new property") {
+	if !require.NoError(t, err, "could not create new property") {
 		return
 	}
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !assert.NoError(t, err, "propertyID is not a uuid") {
+	if !require.NoError(t, err, "propertyID is not a uuid") {
 		return
 	}
 
@@ -47,7 +47,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was created") {
+	if !require.NoError(t, err, "could not get property after it was created") {
 		return
 	}
 
@@ -96,7 +96,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not attach value") {
+	if !require.NoError(t, err, "could not attach value") {
 		return
 	}
 
@@ -114,11 +114,11 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 			},
 		}})
 
-	if !assert.NoError(t, err, "could not get values") {
+	if !require.NoError(t, err, "could not get values") {
 		return
 	}
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values))
+	assert.Len(t, attachedValuesResponse.Values, 1)
 
 	assert.Equal(t, "Initial Text Value", attachedValuesResponse.Values[0].GetTextValue())
 
@@ -136,7 +136,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not update value") {
+	if !require.NoError(t, err, "could not update value") {
 		return
 	}
 
@@ -156,11 +156,11 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 			},
 		}})
 
-	if !assert.NoError(t, err, "could not get updated values") {
+	if !require.NoError(t, err, "could not get updated values") {
 		return
 	}
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values))
+	assert.Len(t, attachedValuesResponse.Values, 1)
 
 	assert.Equal(t, "Updated Text Value", attachedValuesResponse.Values[0].GetTextValue())
 
@@ -208,11 +208,11 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !assert.NoError(t, err, "could not create new property") {
+	if !require.NoError(t, err, "could not create new property") {
 		return
 	}
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !assert.NoError(t, err, "propertyID is not a uuid") {
+	if !require.NoError(t, err, "propertyID is not a uuid") {
 		return
 	}
 
@@ -223,7 +223,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was created") {
+	if !require.NoError(t, err, "could not get property after it was created") {
 		return
 	}
 
@@ -276,7 +276,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not attach value") {
+	if !require.NoError(t, err, "could not attach value") {
 		return
 	}
 
@@ -294,11 +294,11 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !assert.NoError(t, err, "could not get values") {
+	if !require.NoError(t, err, "could not get values") {
 		return
 	}
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no initial values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no initial values")
 
 	assert.Equal(t, "Option 1", attachedValuesResponse.Values[0].GetSelectValue().GetName())
 
@@ -316,7 +316,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not update value") {
+	if !require.NoError(t, err, "could not update value") {
 		return
 	}
 
@@ -336,11 +336,11 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !assert.NoError(t, err, "could not get updated values") {
+	if !require.NoError(t, err, "could not get updated values") {
 		return
 	}
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no updated values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no updated values")
 
 	assert.Equal(t, "Option 2", attachedValuesResponse.Values[0].GetSelectValue().GetName())
 
@@ -392,11 +392,11 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !assert.NoError(t, err, "could not create new property") {
+	if !require.NoError(t, err, "could not create new property") {
 		return
 	}
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !assert.NoError(t, err, "propertyID is not a uuid") {
+	if !require.NoError(t, err, "propertyID is not a uuid") {
 		return
 	}
 
@@ -407,7 +407,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was created") {
+	if !require.NoError(t, err, "could not get property after it was created") {
 		return
 	}
 
@@ -464,7 +464,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not attach value") {
+	if !require.NoError(t, err, "could not attach value") {
 		return
 	}
 
@@ -482,11 +482,11 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !assert.NoError(t, err, "could not get values") {
+	if !require.NoError(t, err, "could not get values") {
 		return
 	}
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no initial values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no initial values")
 
 	assert.Equal(
 		t,
@@ -511,7 +511,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not update value") {
+	if !require.NoError(t, err, "could not update value") {
 		return
 	}
 
@@ -531,11 +531,11 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !assert.NoError(t, err, "could not get updated values") {
+	if !require.NoError(t, err, "could not get updated values") {
 		return
 	}
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no updated values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no updated values")
 
 	assert.Equal(
 		t,
@@ -584,11 +584,11 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !assert.NoError(t, err, "could not create new property") {
+	if !require.NoError(t, err, "could not create new property") {
 		return
 	}
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !assert.NoError(t, err, "propertyID is not a uuid") {
+	if !require.NoError(t, err, "propertyID is not a uuid") {
 		return
 	}
 
@@ -599,7 +599,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was created") {
+	if !require.NoError(t, err, "could not get property after it was created") {
 		return
 	}
 
@@ -620,7 +620,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not attach value") {
+	if !require.NoError(t, err, "could not attach value") {
 		return
 	}
 
@@ -638,11 +638,11 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !assert.NoError(t, err, "could not get values") {
+	if !require.NoError(t, err, "could not get values") {
 		return
 	}
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no initial values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no initial values")
 
 	assert.Equal(t, "Option 1", attachedValuesResponse.Values[0].GetSelectValue().GetName())
 
@@ -668,7 +668,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not add new option") {
+	if !require.NoError(t, err, "could not add new option") {
 		return
 	}
 
@@ -679,11 +679,11 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err = propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was updated") {
+	if !require.NoError(t, err, "could not get property after it was updated") {
 		return
 	}
 
-	assert.Equal(t, 2, len(propertyResponse.GetSelectData().Options))
+	assert.Len(t, propertyResponse.GetSelectData().Options, 2)
 
 	option2 := propertyResponse.GetSelectData().Options[1].GetId() // not guaranteed tbf
 
@@ -699,7 +699,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not update value") {
+	if !require.NoError(t, err, "could not update value") {
 		return
 	}
 
@@ -717,11 +717,11 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !assert.NoError(t, err, "could not get updated values") {
+	if !require.NoError(t, err, "could not get updated values") {
 		return
 	}
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no updated values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no updated values")
 
 	assert.Equal(t, "Option 2", attachedValuesResponse.Values[0].GetSelectValue().GetName())
 }
@@ -759,11 +759,11 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !assert.NoError(t, err, "could not create new property") {
+	if !require.NoError(t, err, "could not create new property") {
 		return
 	}
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !assert.NoError(t, err, "propertyID is not a uuid") {
+	if !require.NoError(t, err, "propertyID is not a uuid") {
 		return
 	}
 
@@ -774,7 +774,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was created") {
+	if !require.NoError(t, err, "could not get property after it was created") {
 		return
 	}
 
@@ -798,7 +798,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not attach value") {
+	if !require.NoError(t, err, "could not attach value") {
 		return
 	}
 
@@ -817,11 +817,11 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not get values") {
+	if !require.NoError(t, err, "could not get values") {
 		return
 	}
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no initial values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no initial values")
 
 	assert.Equal(
 		t,
@@ -851,7 +851,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not add new option") {
+	if !require.NoError(t, err, "could not add new option") {
 		return
 	}
 
@@ -862,11 +862,11 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err = propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !assert.NoError(t, err, "could not get property after it was updated") {
+	if !require.NoError(t, err, "could not get property after it was updated") {
 		return
 	}
 
-	assert.Equal(t, 2, len(propertyResponse.GetSelectData().Options))
+	assert.Len(t, propertyResponse.GetSelectData().Options, 2)
 
 	option2 := propertyResponse.GetSelectData().Options[1].GetId() // order not guaranteed
 
@@ -885,7 +885,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !assert.NoError(t, err, "could not update value") {
+	if !require.NoError(t, err, "could not update value") {
 		return
 	}
 
@@ -903,11 +903,11 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !assert.NoError(t, err, "could not get updated values") {
+	if !require.NoError(t, err, "could not get updated values") {
 		return
 	}
 
-	assert.Equal(t, 1, len(attachedValuesResponse.Values), "no updated values")
+	assert.Len(t, attachedValuesResponse.Values, 1, "no updated values")
 
 	assert.Equal(
 		t,

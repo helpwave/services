@@ -13,6 +13,7 @@ type testCase[T comparable] struct {
 }
 
 func runTestContains[T comparable](t *testing.T, testCase testCase[T]) {
+	t.Helper()
 	t.Run(fmt.Sprintf("contains %v the value %v", testCase.haystack, testCase.needle), func(t *testing.T) {
 		got := hwutil.Contains(testCase.haystack, testCase.needle)
 		if testCase.expected != got {

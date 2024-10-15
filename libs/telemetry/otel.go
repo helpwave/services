@@ -17,6 +17,8 @@ import (
 //
 //	ctx, span, log := common.StartSpan(ctx, "some name")
 //	defer span.End()
+//
+//nolint:spancheck
 func StartSpan(
 	ctx context.Context,
 	spanName string,

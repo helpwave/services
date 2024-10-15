@@ -11,7 +11,7 @@ import (
 
 func getTaskTemplate(t *testing.T, ctx context.Context, id string) *pb.GetAllTaskTemplatesResponse_TaskTemplate {
 	getAll, err := taskTemplateServiceClient().GetAllTaskTemplates(ctx, &pb.GetAllTaskTemplatesRequest{})
-	assert.NoError(t, err, "could not get all task templates")
+	require.NoError(t, err, "could not get all task templates")
 
 	var template *pb.GetAllTaskTemplatesResponse_TaskTemplate
 	for _, templ := range getAll.Templates {
@@ -39,7 +39,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	}
 	createRes, err := taskTemplateClient.CreateTaskTemplate(ctx, createReq)
 
-	assert.NoError(t, err, "could not create task template")
+	require.NoError(t, err, "could not create task template")
 
 	templateId := createRes.GetId()
 
@@ -68,7 +68,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		Consistency: &createRes.Consistency,
 	}
 	updateRes, err := taskTemplateClient.UpdateTaskTemplate(ctx, updateReq)
-	assert.NoError(t, err, "could not update task template after creation")
+	require.NoError(t, err, "could not update task template after creation")
 
 	assert.NotEqual(t, template.Consistency, updateRes.Consistency, "consistency has not changed in update")
 
@@ -91,7 +91,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		TaskTemplateId: templateId,
 		Name:           t.Name() + " ST 1",
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.NotEqual(t, template.Consistency, createStRes.TaskTemplateConsistency, "consistency was not updated")
 
 	//
@@ -113,7 +113,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		SubtaskId: createStRes.Id,
 		Name:      hwutil.PtrTo(t.Name() + " ST 2"),
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	//
 	// get updated template

@@ -75,24 +75,24 @@ linters:
     - promlinter
     # - protogetter # TODO
     - reassign
-    - revive
-    #- rowserrcheck
-    #- sloglint
-    #- spancheck
-    #- sqlclosecheck
-    #- staticcheck
-    #- stylecheck
-    #- tagalign
-    #- tagliatelle
-    #- tenv
-    #- testableexamples
-    #- testifylint
-    #- testpackage
-    #- thelper
-    #- tparallel
-    #- unconvert
-    #- unparam
-    #- unused
+    # - revive # TODO
+    - rowserrcheck
+    - sloglint
+    - spancheck
+    - sqlclosecheck
+    - staticcheck
+    # - stylecheck # TODO
+    - tagalign
+    # - tagliatelle # TODO
+    - tenv
+    - testableexamples
+    - testifylint
+    # - testpackage # TODO
+    - thelper
+    - tparallel
+    - unconvert
+    - unparam
+    - unused
     #- usestdlibvars
     #- varnamelen
     #- wastedassign

@@ -29,7 +29,7 @@ type FieldTypeData struct {
 
 type SelectData struct {
 	AllowFreetext bool           `json:"allow_freetext"`
-	SelectOptions []SelectOption ` json:"select_options"`
+	SelectOptions []SelectOption `json:"select_options"`
 }
 
 type SelectOption struct {

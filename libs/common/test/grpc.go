@@ -52,6 +52,7 @@ func StartGRPCServer(ctx context.Context, grpcServer *grpc.Server) (conn *grpc.C
 
 // AssertStatusError asserts, that the error, is a status error with the provided code.
 func AssertStatusError(t *testing.T, err error, code codes.Code, msg string) {
+	t.Helper()
 	if assert.Error(t, err, msg) {
 		sE, ok := status.FromError(err)
 		assert.True(t, ok, "not a status error")

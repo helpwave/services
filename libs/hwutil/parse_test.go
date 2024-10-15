@@ -10,6 +10,7 @@ import (
 )
 
 func runPtrToTest[T comparable](t *testing.T, v T) {
+	t.Helper()
 	t.Run(fmt.Sprintf("test value %v as %T", v, v), func(t *testing.T) {
 		vPtr := hwutil.PtrTo(v)
 		if v != *vPtr {

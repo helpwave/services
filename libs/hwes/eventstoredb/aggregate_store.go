@@ -36,7 +36,7 @@ func (as *AggregateStore) getExpectedRevisionByPreviousRead(
 		return nil, errors.New("aggregate has no applied events. Consider to persist and load the aggregate first")
 	}
 	lastAppliedEvent := a.GetAppliedEvents()[len(a.GetAppliedEvents())-1]
-	eventNumber := uint64(lastAppliedEvent.GetVersion())
+	eventNumber := lastAppliedEvent.GetVersion()
 	return esdb.Revision(eventNumber), nil
 }
 

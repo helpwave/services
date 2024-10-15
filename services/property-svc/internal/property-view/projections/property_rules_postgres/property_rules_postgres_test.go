@@ -3,6 +3,7 @@ package property_rules_postgres
 import (
 	"bytes"
 	"context"
+	"github.com/stretchr/testify/require"
 	"hwdb"
 	"hwes"
 	"property-svc/internal/property-view/aggregate"
@@ -97,7 +98,7 @@ func TestPropertyViewPropertyRulesProjection_Create_TaskPropertyMatcher_GreenPat
 		CommitterUserID: nil,         // warning: nonsensical default value, but not relevant for this test
 	})
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, action)
 }
 
@@ -163,7 +164,7 @@ func TestPropertyViewPropertyRulesProjection_Update_GreenPath(t *testing.T) {
 		CommitterUserID: nil,         // warning: nonsensical default value, but not relevant for this test
 	})
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, action)
 }
 
@@ -215,7 +216,7 @@ func TestPropertyViewPropertyRulesProjection_Create_PatientPropertyMatcher_Green
 		CommitterUserID: nil,         // warning: nonsensical default value, but not relevant for this test
 	})
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, action)
 }
 
@@ -245,7 +246,7 @@ func TestPropertyViewPropertyRulesProjection_Create_InvalidPropertyMatcher(t *te
 		CommitterUserID: nil,         // warning: nonsensical default value, but not relevant for this test
 	})
 
-	assert.Error(t, err)
-	assert.Equal(t, err.Error(), "could not find matcher in event")
+	require.Error(t, err)
+	assert.Equal(t, "could not find matcher in event", err.Error())
 	assert.NotNil(t, action)
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"hwtesting"
 	"hwutil"
 	"strconv"
@@ -30,7 +31,7 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	}
 	createRes, err := bedClient.CreateBed(ctx, createReq)
 
-	assert.NoError(t, err, "could not create bed")
+	require.NoError(t, err, "could not create bed")
 
 	bedID := createRes.GetId()
 
@@ -39,7 +40,7 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	//
 
 	getBedRes, err := bedClient.GetBed(ctx, &pb.GetBedRequest{Id: bedID})
-	assert.NoError(t, err, "could not get bed after creation")
+	require.NoError(t, err, "could not get bed after creation")
 
 	assert.Equal(t, createReq.GetName(), getBedRes.GetName())
 	assert.Equal(t, createReq.GetRoomId(), getBedRes.GetRoomId())
@@ -59,7 +60,7 @@ func TestCreateUpdateGetBed(t *testing.T) {
 		Consistency: &getBedRes.Consistency,
 	}
 	updateRes, err := bedClient.UpdateBed(ctx, updateReq)
-	assert.NoError(t, err, "could not update bed after creation")
+	require.NoError(t, err, "could not update bed after creation")
 
 	assert.NotEqual(t, getBedRes.Consistency, updateRes.Consistency, "consistency has not changed in update")
 
@@ -68,7 +69,7 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	//
 
 	getBedRes, err = bedClient.GetBed(ctx, &pb.GetBedRequest{Id: bedID})
-	assert.NoError(t, err, "could not get bed after update")
+	require.NoError(t, err, "could not get bed after update")
 
 	assert.Equal(t, *updateReq.RoomId, getBedRes.RoomId)
 	assert.Equal(t, *updateReq.Name, getBedRes.Name)
@@ -96,14 +97,14 @@ func TestGetBedByPatient(t *testing.T) {
 		BedId:       patientsBedID,
 		Consistency: nil,
 	})
-	assert.NoError(t, err, "could not assign bed to patient")
+	require.NoError(t, err, "could not assign bed to patient")
 	hwtesting.WaitForProjectionsToSettle()
 
 	// GetBedByPatient
 	res, err := bedServiceClient().GetBedByPatient(ctx, &pb.GetBedByPatientRequest{
 		PatientId: patientID,
 	})
-	assert.NoError(t, err, "could not GetBedByPatient")
+	require.NoError(t, err, "could not GetBedByPatient")
 
 	assert.NotNil(t, res.Bed)
 	assert.NotNil(t, res.Room)
@@ -145,7 +146,7 @@ func TestGetBeds(t *testing.T) {
 	}
 
 	allBeds, err := bedClient.GetBeds(ctx, &pb.GetBedsRequest{})
-	assert.NoError(t, err, "could not get all beds")
+	require.NoError(t, err, "could not get all beds")
 
 	assert.GreaterOrEqual(t, len(allBeds.Beds), 3) // other beds might exist from other tests
 
@@ -166,7 +167,7 @@ func TestGetBeds(t *testing.T) {
 
 	for roomId, expectedBedIDs := range roomBedsMap {
 		res, err := bedClient.GetBedsByRoom(ctx, &pb.GetBedsByRoomRequest{RoomId: roomId})
-		assert.NoError(t, err, "could not get beds for room 1")
+		require.NoError(t, err, "could not get beds for room 1")
 
 		assert.Len(t, res.Beds, len(expectedBedIDs))
 
