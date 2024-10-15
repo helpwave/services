@@ -37,9 +37,9 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	getPatientRes, err := patientClient.GetPatient(ctx, &pb.GetPatientRequest{Id: patientId})
 	assert.NoError(t, err, "could not get after creation")
 
-	assert.Equal(t, createReq.HumanReadableIdentifier, getPatientRes.HumanReadableIdentifier)
-	assert.Equal(t, *createReq.Notes, getPatientRes.Notes)
-	assert.Equal(t, createRes.Consistency, getPatientRes.Consistency)
+	assert.Equal(t, createReq.GetHumanReadableIdentifier(), getPatientRes.GetHumanReadableIdentifier())
+	assert.Equal(t, createReq.GetNotes(), getPatientRes.GetNotes())
+	assert.Equal(t, createRes.GetConsistency(), getPatientRes.GetConsistency())
 
 	//
 	// update patient
@@ -62,8 +62,8 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	getPatientRes, err = patientClient.GetPatient(ctx, &pb.GetPatientRequest{Id: patientId})
 	assert.NoError(t, err, "could not get after update")
 
-	assert.Equal(t, *updateReq.HumanReadableIdentifier, getPatientRes.HumanReadableIdentifier)
-	assert.Equal(t, updateRes.Consistency, getPatientRes.Consistency)
+	assert.Equal(t, updateReq.GetHumanReadableIdentifier(), getPatientRes.GetHumanReadableIdentifier())
+	assert.Equal(t, updateRes.GetConsistency(), getPatientRes.GetConsistency())
 
 	//
 	// discharge patient
@@ -201,9 +201,9 @@ func TestGetPatientByBed(t *testing.T) {
 
 	assert.Equal(t, createRes.Id, getRes.Id)
 	assert.Equal(t, bedId, getRes.BedId)
-	assert.Equal(t, createReq.HumanReadableIdentifier, getRes.HumanReadableIdentifier)
-	assert.Equal(t, *createReq.Notes, getRes.Notes)
-	assert.Equal(t, assRes.Consistency, getRes.Consistency)
+	assert.Equal(t, createReq.GetHumanReadableIdentifier(), getRes.GetHumanReadableIdentifier())
+	assert.Equal(t, createReq.GetNotes(), getRes.GetNotes())
+	assert.Equal(t, assRes.GetConsistency(), getRes.GetConsistency())
 }
 
 func TestGetPatientsByWard(t *testing.T) {
@@ -600,27 +600,27 @@ func TestGetPatientDetails(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, createRes.Id, getRes.Id)
-	assert.Equal(t, createReq.HumanReadableIdentifier, getRes.HumanReadableIdentifier)
-	assert.Equal(t, *createReq.Notes, getRes.Notes)
-	assert.Len(t, getRes.Tasks, len(suffixMap))
+	assert.Equal(t, createReq.GetHumanReadableIdentifier(), getRes.GetHumanReadableIdentifier())
+	assert.Equal(t, createReq.GetNotes(), getRes.GetNotes())
+	assert.Len(t, getRes.GetTasks(), len(suffixMap))
 
-	assert.Subset(t, taskIds, hwutil.Map(getRes.Tasks, func(tsk *pb.GetPatientDetailsResponse_Task) string {
+	assert.Subset(t, taskIds, hwutil.Map(getRes.GetTasks(), func(tsk *pb.GetPatientDetailsResponse_Task) string {
 		assert.Equal(t, taskConsistencies[tsk.Id], tsk.Consistency)
-		assert.Len(t, tsk.Subtasks, len(subtaskMap[tsk.Id]))
+		assert.Len(t, tsk.GetSubtasks(), len(subtaskMap[tsk.Id]))
 		exp := hwutil.Map(subtaskMap[tsk.Id], func(st *pb.CreateTaskRequest_SubTask) string {
 			return st.GetName()
 		})
-		have := hwutil.Map(tsk.Subtasks, func(st *pb.GetPatientDetailsResponse_Task_SubTask) string {
+		have := hwutil.Map(tsk.GetSubtasks(), func(st *pb.GetPatientDetailsResponse_Task_SubTask) string {
 			return st.GetName()
 		})
 		assert.Subset(t, exp, have)
 		return tsk.Id
 	}))
 
-	assert.Equal(t, roomId, getRes.Room.Id)
-	assert.Equal(t, bedId, getRes.Bed.Id)
-	assert.Equal(t, false, getRes.IsDischarged)
-	assert.Equal(t, assRes.Consistency, getRes.Consistency)
+	assert.Equal(t, roomId, getRes.GetRoom().GetId())
+	assert.Equal(t, bedId, getRes.GetBed().GetId())
+	assert.Equal(t, false, getRes.GetIsDischarged())
+	assert.Equal(t, assRes.GetConsistency(), getRes.GetConsistency())
 }
 
 func TestGetRecentPatients(t *testing.T) {

@@ -36,7 +36,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 		return nil, err
 	}
 
-	roomId, err := uuid.Parse(req.RoomId)
+	roomId, err := uuid.Parse(req.GetRoomId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -44,7 +44,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 	bed, err := bedRepo.CreateBed(ctx, bed_repo.CreateBedParams{
 		RoomID:         roomId,
 		OrganizationID: organizationID,
-		Name:           req.Name,
+		Name:           req.GetName(),
 	})
 	err = hwdb.Error(ctx, err,
 		hwdb.WithOnFKViolation("beds_room_id_fkey", func(pgErr *pgconn.PgError) error {
@@ -66,7 +66,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 
 	log.Info().
 		Str("bedID", bed.ID.String()).
-		Str("roomID", req.RoomId).
+		Str("roomID", req.GetRoomId()).
 		Str("name", bed.Name).
 		Msg("bed created")
 
@@ -83,7 +83,7 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		return nil, err
 	}
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -115,7 +115,7 @@ func (ServiceServer) GetBedByPatient(
 
 	// TODO: Auth
 
-	patientId, err := uuid.Parse(req.PatientId)
+	patientId, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -172,7 +172,7 @@ func (ServiceServer) GetBedsByRoom(
 	ctx context.Context,
 	req *pb.GetBedsByRoomRequest,
 ) (*pb.GetBedsByRoomResponse, error) {
-	roomID, err := uuid.Parse(req.RoomId)
+	roomID, err := uuid.Parse(req.GetRoomId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -213,7 +213,7 @@ func (ServiceServer) GetBedsByRoom(
 func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*pb.UpdateBedResponse, error) {
 	bedRepo := bed_repo.New(hwdb.GetDB())
 
-	bedID, err := uuid.Parse(req.Id)
+	bedID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -245,7 +245,7 @@ func (ServiceServer) DeleteBed(ctx context.Context, req *pb.DeleteBedRequest) (*
 		return nil, err
 	}
 
-	bedID, err := uuid.Parse(req.Id)
+	bedID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

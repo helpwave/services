@@ -28,13 +28,13 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 	roomRepo := room_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
-	wardId, err := uuid.Parse(req.WardId)
+	wardId, err := uuid.Parse(req.GetWardId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	row, err := roomRepo.CreateRoom(ctx, room_repo.CreateRoomParams{
-		Name:   req.Name,
+		Name:   req.GetName(),
 		WardID: wardId,
 	})
 	err = hwdb.Error(ctx, err)
@@ -60,7 +60,7 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -104,7 +104,7 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 
 	// TODO: Auth
 
-	patientID, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -178,7 +178,7 @@ func (ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -200,7 +200,7 @@ func (ServiceServer) GetRoomOverviewsByWard(
 ) (*pb.GetRoomOverviewsByWardResponse, error) {
 	roomRepo := room_repo.New(hwdb.GetDB())
 
-	wardId, err := uuid.Parse(req.Id)
+	wardId, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

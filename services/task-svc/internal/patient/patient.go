@@ -42,8 +42,8 @@ func (ServiceServer) CreatePatient(
 
 	patient_id, err := patientRepo.CreatePatient(ctx, patient_repo.CreatePatientParams{
 		OrganizationID:          organizationID,
-		HumanReadableIdentifier: req.HumanReadableIdentifier,
-		Notes:                   req.Notes,
+		HumanReadableIdentifier: req.GetHumanReadableIdentifier(),
+		Notes:                   req.GetNotes(),
 	})
 
 	err = hwdb.Error(ctx, err)
@@ -67,7 +67,7 @@ func (ServiceServer) GetPatient(ctx context.Context, req *pb.GetPatientRequest) 
 
 	// TODO: Auth
 
-	patientId, err := uuid.Parse(req.Id)
+	patientId, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -113,7 +113,7 @@ func (ServiceServer) GetPatientByBed(
 
 	// TODO: Auth
 
-	bedID, err := uuid.Parse(req.BedId)
+	bedID, err := uuid.Parse(req.GetBedId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -151,7 +151,7 @@ func (ServiceServer) GetPatientsByWard(
 		return nil, err
 	}
 
-	wardID, err := uuid.Parse(req.WardId)
+	wardID, err := uuid.Parse(req.GetWardId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -186,7 +186,7 @@ func (ServiceServer) GetPatientAssignmentByWard(
 
 	// TODO: Auth
 
-	wardID, err := uuid.Parse(req.WardId)
+	wardID, err := uuid.Parse(req.GetWardId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -324,7 +324,7 @@ func (ServiceServer) UpdatePatient(
 
 	// TODO: Auth
 
-	patientID, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -356,12 +356,12 @@ func (ServiceServer) AssignBed(ctx context.Context, req *pb.AssignBedRequest) (*
 		return nil, err
 	}
 
-	bedID, err := uuid.Parse(req.BedId)
+	bedID, err := uuid.Parse(req.GetBedId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	patientID, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -403,7 +403,7 @@ func (ServiceServer) UnassignBed(ctx context.Context, req *pb.UnassignBedRequest
 
 	// TODO: Auth
 
-	patientId, err := uuid.Parse(req.Id)
+	patientId, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -432,7 +432,7 @@ func (ServiceServer) DischargePatient(
 
 	// TODO: Auth
 
-	patientId, err := uuid.Parse(req.Id)
+	patientId, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -466,7 +466,7 @@ func (ServiceServer) GetPatientDetails(
 		return nil, err
 	}
 
-	patientID, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -746,7 +746,7 @@ func (ServiceServer) DeletePatient(
 	ctx context.Context,
 	req *pb.DeletePatientRequest,
 ) (*pb.DeletePatientResponse, error) {
-	patientID, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -769,7 +769,7 @@ func (ServiceServer) ReadmitPatient(
 	ctx context.Context,
 	req *pb.ReadmitPatientRequest,
 ) (*pb.ReadmitPatientResponse, error) {
-	patientID, err := uuid.Parse(req.PatientId)
+	patientID, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

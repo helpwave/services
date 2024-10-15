@@ -39,25 +39,25 @@ func (s PropertyViewGrpcService) UpdatePropertyViewRule(
 		return nil, errors.New("UpdatePropertyViewRule: no matcher provided")
 	}
 
-	appendToAlwaysInclude, err := hwutil.StringsToUUIDs(hwutil.OrEmptySlice(req.FilterUpdate.AppendToAlwaysInclude))
+	appendToAlwaysInclude, err := hwutil.StringsToUUIDs(hwutil.OrEmptySlice(req.GetFilterUpdate().GetAppendToAlwaysInclude()))
 	if err != nil {
 		return nil, err
 	}
 
-	removeFromAlwaysInclude, err := hwutil.StringsToUUIDs(hwutil.OrEmptySlice(req.FilterUpdate.RemoveFromAlwaysInclude))
+	removeFromAlwaysInclude, err := hwutil.StringsToUUIDs(hwutil.OrEmptySlice(req.GetFilterUpdate().GetRemoveFromAlwaysInclude()))
 	if err != nil {
 		return nil, err
 	}
 
 	appendToDontAlwaysInclude, err := hwutil.StringsToUUIDs(
-		hwutil.OrEmptySlice(req.FilterUpdate.AppendToDontAlwaysInclude),
+		hwutil.OrEmptySlice(req.GetFilterUpdate().GetAppendToDontAlwaysInclude()),
 	)
 	if err != nil {
 		return nil, err
 	}
 
 	removeFromDontAlwaysInclude, err := hwutil.StringsToUUIDs(
-		hwutil.OrEmptySlice(req.FilterUpdate.RemoveFromDontAlwaysInclude),
+		hwutil.OrEmptySlice(req.GetFilterUpdate().GetRemoveFromDontAlwaysInclude()),
 	)
 	if err != nil {
 		return nil, err

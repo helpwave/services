@@ -73,8 +73,8 @@ linters:
     - prealloc
     - predeclared
     - promlinter
-    #- protogetter
-    #- reassign
+    # - protogetter # TODO
+    - reassign
     #- revive
     #- rowserrcheck
     #- sloglint

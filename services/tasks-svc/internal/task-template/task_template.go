@@ -45,13 +45,10 @@ func (ServiceServer) CreateTaskTemplate(
 		return nil, err
 	}
 
-	description := ""
-	if req.Description != nil {
-		description = *req.Description
-	}
+	description := req.GetDescription()
 
 	row, err := templateRepo.CreateTaskTemplate(ctx, task_template_repo.CreateTaskTemplateParams{
-		Name:        req.Name,
+		Name:        req.GetName(),
 		Description: description,
 		CreatedBy:   userID,
 		WardID:      wardID,
@@ -66,10 +63,10 @@ func (ServiceServer) CreateTaskTemplate(
 	consistency := row.Consistency
 
 	if req.Subtasks != nil {
-		subtaskNames := hwutil.Map(req.Subtasks,
+		subtaskNames := hwutil.Map(req.GetSubtasks(),
 			func(subtask *pb.CreateTaskTemplateRequest_SubTask) task_template_repo.AppendSubTasksParams {
 				return task_template_repo.AppendSubTasksParams{
-					Name:           subtask.Name,
+					Name:           subtask.GetName(),
 					TaskTemplateID: templateID,
 				}
 			})
@@ -104,7 +101,7 @@ func (ServiceServer) DeleteTaskTemplate(
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -138,7 +135,7 @@ func (ServiceServer) DeleteTaskTemplateSubTask(
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -180,7 +177,7 @@ func (ServiceServer) UpdateTaskTemplate(
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -215,7 +212,7 @@ func (ServiceServer) UpdateTaskTemplateSubTask(
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.SubtaskId)
+	id, err := uuid.Parse(req.GetSubtaskId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -256,14 +253,14 @@ func (ServiceServer) CreateTaskTemplateSubTask(
 	log := zlog.Ctx(ctx)
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
-	taskTemplateID, err := uuid.Parse(req.TaskTemplateId)
+	taskTemplateID, err := uuid.Parse(req.GetTaskTemplateId())
 	if err != nil {
 		return nil, err
 	}
 
 	row, err := templateRepo.CreateSubTask(ctx, task_template_repo.CreateSubTaskParams{
 		TaskTemplateID: taskTemplateID,
-		Name:           req.Name,
+		Name:           req.GetName(),
 	})
 
 	// implicitly checks the existence of the ward through the foreign key constraint
@@ -305,7 +302,7 @@ func (ServiceServer) GetAllTaskTemplates(
 	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx,
 		task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
 			CreatorID:   createdBy,
-			PrivateOnly: req.PrivateOnly,
+			PrivateOnly: req.GetPrivateOnly(),
 			WardID:      wardID,
 		})
 	err = hwdb.Error(ctx, err)

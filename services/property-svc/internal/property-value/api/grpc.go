@@ -85,7 +85,7 @@ func (s *PropertyValueGrpcService) AttachPropertyValue(
 	case *pb.AttachPropertyValueRequest_BoolValue:
 		value = req.GetBoolValue()
 	case *pb.AttachPropertyValueRequest_DateValue:
-		value = req.GetDateValue().Date
+		value = req.GetDateValue().GetDate()
 	case *pb.AttachPropertyValueRequest_DateTimeValue:
 		value = req.GetDateTimeValue()
 	case *pb.AttachPropertyValueRequest_SelectValue:

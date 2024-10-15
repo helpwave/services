@@ -630,10 +630,10 @@ func loggingUnaryInterceptor(
 	// additional information for pub/sub events
 	// TODO: make sure this is picked up in otel propagation
 	if req, ok := req.(*runtime.TopicEventRequest); ok {
-		if traceparent, ok := req.GetExtensions().Fields["traceparent"]; ok {
+		if traceparent, ok := req.GetExtensions().GetFields()["traceparent"]; ok {
 			builder = builder.Str("traceparent", traceparent.GetStringValue())
 		}
-		builder = builder.Str("eventID", req.Id)
+		builder = builder.Str("eventID", req.GetId())
 
 		// at this point in the chain we have no control about what data may be logged for events,
 		// so we can't log anything for privacy and/or legal reasons, the event handler can log though

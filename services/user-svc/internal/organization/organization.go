@@ -69,7 +69,7 @@ func (s ServiceServer) GetOrganization(
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -244,7 +244,7 @@ func (s ServiceServer) UpdateOrganization(
 ) (*pb.UpdateOrganizationResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
-	organizationID, err := uuid.Parse(req.Id)
+	organizationID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -271,7 +271,7 @@ func (s ServiceServer) DeleteOrganization(
 ) (*pb.DeleteOrganizationResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
-	organizationID, err := uuid.Parse(req.Id)
+	organizationID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -301,7 +301,7 @@ func (s ServiceServer) AddMember(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizationID, err := uuid.Parse(req.Id)
+	organizationID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -339,7 +339,7 @@ func (s ServiceServer) RemoveMember(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizationID, err := uuid.Parse(req.Id)
+	organizationID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -532,7 +532,7 @@ func (s ServiceServer) GetMembersByOrganization(
 ) (*pb.GetMembersByOrganizationResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
-	organizationID, err := uuid.Parse(req.Id)
+	organizationID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

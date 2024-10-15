@@ -36,7 +36,7 @@ func (s ServiceServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest
 	log := zlog.Ctx(ctx)
 	userRepo := user_repo.New(hwdb.GetDB())
 
-	userID, err := uuid.Parse(req.Id)
+	userID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -85,7 +85,7 @@ func (s ServiceServer) ReadPublicProfile(
 ) (*pb.ReadPublicProfileResponse, error) {
 	userRepo := user_repo.New(hwdb.GetDB())
 
-	userID, err := uuid.Parse(req.Id)
+	userID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

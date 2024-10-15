@@ -85,9 +85,9 @@ func (s *PropertyGrpcService) GetProperty(
 
 	var alwaysIncludeForViewSource *bool = nil
 
-	if req.ViewSource != nil {
+	if req.GetViewSource() != nil {
 		isAlwaysIncluded, err := s.handlers.Queries.V1.
-			IsPropertyAlwaysIncludedForViewSource(ctx, req.ViewSource, property.SubjectType, property.ID)
+			IsPropertyAlwaysIncludedForViewSource(ctx, req.GetViewSource(), property.SubjectType, property.ID)
 		if err != nil {
 			return nil, err
 		}

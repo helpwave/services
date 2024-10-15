@@ -23,7 +23,7 @@ func (s *PropertySetGrpcService) CreatePropertySet(
 	req *pb.CreatePropertySetRequest,
 ) (*pb.CreatePropertySetResponse, error) {
 	propertySetID := uuid.New()
-	consistency, err := s.handlers.Commands.V1.CreatePropertySet(ctx, propertySetID, req.Name)
+	consistency, err := s.handlers.Commands.V1.CreatePropertySet(ctx, propertySetID, req.GetName())
 	if err != nil {
 		return nil, err
 	}

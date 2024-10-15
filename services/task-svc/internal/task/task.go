@@ -40,7 +40,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		return nil, err
 	}
 
-	patientId, err := uuid.Parse(req.PatientId)
+	patientId, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -57,10 +57,7 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 		return nil, status.Error(codes.InvalidArgument, "patientId not found")
 	}
 
-	description := ""
-	if req.Description != nil {
-		description = *req.Description
-	}
+	description := req.GetDescription()
 
 	// When changing this array also adjust the error message below
 	allowedInitialStatuses := []pb.TaskStatus{pb.TaskStatus_TASK_STATUS_TODO, pb.TaskStatus_TASK_STATUS_IN_PROGRESS}
@@ -77,11 +74,11 @@ func (s ServiceServer) CreateTask(ctx context.Context, req *pb.CreateTaskRequest
 	}
 
 	taskId, err := taskRepo.CreateTask(ctx, task_repo.CreateTaskParams{
-		Name:           req.Name,
+		Name:           req.GetName(),
 		Description:    description,
 		Status:         int32(initialStatus),
 		PatientID:      patientId,
-		Public:         req.Public,
+		Public:         req.GetPublic(),
 		OrganizationID: organizationID,
 		CreatedBy:      userID,
 		DueAt:          hwdb.TimeToTimestamp(req.DueAt.AsTime()),
@@ -106,7 +103,7 @@ func (ServiceServer) GetTask(ctx context.Context, req *pb.GetTaskRequest) (*pb.G
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -177,7 +174,7 @@ func (ServiceServer) GetTasksByPatient(
 		return nil, err
 	}
 
-	patientID, err := uuid.Parse(req.PatientId)
+	patientID, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -247,7 +244,7 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(
 		return nil, err
 	}
 
-	patientID, err := uuid.Parse(req.PatientId)
+	patientID, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -396,7 +393,7 @@ func (ServiceServer) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -421,7 +418,7 @@ func (ServiceServer) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -448,7 +445,7 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 		return nil, err
 	}
 
-	taskId, err := uuid.Parse(req.TaskId)
+	taskId, err := uuid.Parse(req.GetTaskId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -466,13 +463,10 @@ func (ServiceServer) AddSubTask(ctx context.Context, req *pb.AddSubTaskRequest) 
 		return nil, status.Error(codes.InvalidArgument, "taskId not found")
 	}
 
-	done := false
-	if req.Done != nil {
-		done = *req.Done
-	}
+	done := req.GetDone()
 
 	subtaskID, err := taskRepo.CreateSubTask(ctx, task_repo.CreateSubTaskParams{
-		Name:      req.Name,
+		Name:      req.GetName(),
 		TaskID:    taskId,
 		Done:      done,
 		CreatedBy: userID,
@@ -493,7 +487,7 @@ func (ServiceServer) RemoveSubTask(
 
 	// TODO: Auth
 
-	subtaskID, err := uuid.Parse(req.Id)
+	subtaskID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -513,7 +507,7 @@ func (ServiceServer) UpdateSubTask(
 ) (*pb.UpdateSubTaskResponse, error) {
 	taskRepo := task_repo.New(hwdb.GetDB())
 
-	subtaskID, err := uuid.Parse(req.Id)
+	subtaskID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -539,7 +533,7 @@ func (ServiceServer) SubTaskToToDo(
 
 	// TODO: Auth
 
-	subtaskID, err := uuid.Parse(req.Id)
+	subtaskID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -564,7 +558,7 @@ func (ServiceServer) SubTaskToDone(
 
 	// TODO: Auth
 
-	subtaskID, err := uuid.Parse(req.Id)
+	subtaskID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -584,7 +578,7 @@ func (ServiceServer) TaskToToDo(ctx context.Context, req *pb.TaskToToDoRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -612,7 +606,7 @@ func (ServiceServer) TaskToInProgress(
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -637,7 +631,7 @@ func (ServiceServer) TaskToDone(ctx context.Context, req *pb.TaskToDoneRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -665,12 +659,12 @@ func (ServiceServer) AssignTaskToUser(
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	userId, err := uuid.Parse(req.UserId)
+	userId, err := uuid.Parse(req.GetUserId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -706,7 +700,7 @@ func (ServiceServer) UnassignTaskFromUser(
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -730,7 +724,7 @@ func (ServiceServer) PublishTask(ctx context.Context, req *pb.PublishTaskRequest
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -757,7 +751,7 @@ func (ServiceServer) UnpublishTask(
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

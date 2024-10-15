@@ -99,7 +99,7 @@ func (s *SpiceDBAuthZ) Write(
 		return "", fmt.Errorf("SpiceDBAuthZ.Write: write relationship failed: %w", err)
 	}
 
-	return res.WrittenAt.Token, nil
+	return res.GetWrittenAt().GetToken(), nil
 }
 
 func (s *SpiceDBAuthZ) Create(relations ...hwauthz.Relationship) *hwauthz.Tx {
@@ -133,7 +133,7 @@ func (s *SpiceDBAuthZ) Check(ctx context.Context, permissionCheck hwauthz.Permis
 	}
 
 	// parse result
-	hasPermission := res.Permissionship == v1.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION
+	hasPermission := res.GetPermissionship() == v1.CheckPermissionResponse_PERMISSIONSHIP_HAS_PERMISSION
 	telemetry.SetSpanBool(ctx, "hasPermission", hasPermission)
 	return hasPermission, nil
 }

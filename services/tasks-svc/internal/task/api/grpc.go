@@ -36,7 +36,7 @@ func (s *TaskGrpcService) CreateTask(ctx context.Context, req *pb.CreateTaskRequ
 		return nil, err
 	}
 
-	subtasks := hwutil.OrEmptySlice(req.Subtasks)
+	subtasks := hwutil.OrEmptySlice(req.GetSubtasks())
 
 	consistency, err := s.handlers.Commands.V1.CreateTask(
 		ctx,
@@ -78,12 +78,12 @@ func (s *TaskGrpcService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequ
 }
 
 func (s *TaskGrpcService) AssignTask(ctx context.Context, req *pb.AssignTaskRequest) (*pb.AssignTaskResponse, error) {
-	taskID, err := uuid.Parse(req.TaskId)
+	taskID, err := uuid.Parse(req.GetTaskId())
 	if err != nil {
 		return nil, err
 	}
 
-	userID, err := uuid.Parse(req.UserId)
+	userID, err := uuid.Parse(req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
@@ -102,12 +102,12 @@ func (s *TaskGrpcService) UnassignTask(
 	ctx context.Context,
 	req *pb.UnassignTaskRequest,
 ) (*pb.UnassignTaskResponse, error) {
-	taskID, err := uuid.Parse(req.TaskId)
+	taskID, err := uuid.Parse(req.GetTaskId())
 	if err != nil {
 		return nil, err
 	}
 
-	userID, err := uuid.Parse(req.UserId)
+	userID, err := uuid.Parse(req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
@@ -172,7 +172,7 @@ func (s *TaskGrpcService) GetTasksByPatient(
 	ctx context.Context,
 	req *pb.GetTasksByPatientRequest,
 ) (*pb.GetTasksByPatientResponse, error) {
-	patientID, err := uuid.Parse(req.PatientId)
+	patientID, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, err
 	}
@@ -224,7 +224,7 @@ func (s *TaskGrpcService) GetTasksByPatientSortedByStatus(
 	ctx context.Context,
 	req *pb.GetTasksByPatientSortedByStatusRequest,
 ) (*pb.GetTasksByPatientSortedByStatusResponse, error) {
-	patientID, err := uuid.Parse(req.PatientId)
+	patientID, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, err
 	}

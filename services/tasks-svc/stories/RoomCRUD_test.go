@@ -41,9 +41,9 @@ func TestCreateUpdateGetRoom(t *testing.T) {
 	getRoomRes, err := roomClient.GetRoom(ctx, &pb.GetRoomRequest{Id: roomID})
 	assert.NoError(t, err, "could not get room after creation")
 
-	assert.Equal(t, createReq.Name, getRoomRes.Name)
-	assert.Equal(t, createReq.WardId, getRoomRes.WardId)
-	assert.Equal(t, createRes.Consistency, getRoomRes.Consistency)
+	assert.Equal(t, createReq.GetName(), getRoomRes.GetName())
+	assert.Equal(t, createReq.GetWardId(), getRoomRes.GetWardId())
+	assert.Equal(t, createRes.GetConsistency(), getRoomRes.GetConsistency())
 
 	//
 	// update room
@@ -68,8 +68,8 @@ func TestCreateUpdateGetRoom(t *testing.T) {
 	getRoomRes, err = roomClient.GetRoom(ctx, &pb.GetRoomRequest{Id: roomID})
 	assert.NoError(t, err, "could not get room after update")
 
-	assert.Equal(t, *updateReq.Name, getRoomRes.Name)
-	assert.Equal(t, updateRes.Consistency, getRoomRes.Consistency)
+	assert.Equal(t, updateReq.GetName(), getRoomRes.GetName())
+	assert.Equal(t, updateRes.GetConsistency(), getRoomRes.GetConsistency())
 
 }
 

@@ -26,7 +26,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 	log := zlog.Ctx(ctx)
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	row, err := wardRepo.CreateWard(ctx, req.Name)
+	row, err := wardRepo.CreateWard(ctx, req.GetName())
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.GetWardResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -147,7 +147,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -172,7 +172,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -235,7 +235,7 @@ func (ServiceServer) GetWardDetails(
 ) (*pb.GetWardDetailsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	wardID, err := uuid.Parse(req.Id)
+	wardID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

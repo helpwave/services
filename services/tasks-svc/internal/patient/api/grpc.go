@@ -55,7 +55,7 @@ func (s *PatientGrpcService) GetPatient(
 	ctx context.Context,
 	req *pb.GetPatientRequest,
 ) (*pb.GetPatientResponse, error) {
-	patientID, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func (s *PatientGrpcService) GetPatientByBed(
 	ctx context.Context,
 	req *pb.GetPatientByBedRequest,
 ) (*pb.GetPatientByBedResponse, error) {
-	bedID, err := uuid.Parse(req.BedId)
+	bedID, err := uuid.Parse(req.GetBedId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -120,7 +120,7 @@ func (s *PatientGrpcService) GetPatientByBed(
 		Id:                      patient.ID.String(),
 		HumanReadableIdentifier: patient.HumanReadableIdentifier,
 		Notes:                   patient.Notes,
-		BedId:                   req.BedId,
+		BedId:                   req.GetBedId(),
 		Consistency:             patient.Consistency,
 	}, nil
 }
@@ -129,7 +129,7 @@ func (s *PatientGrpcService) GetPatientsByWard(
 	ctx context.Context,
 	req *pb.GetPatientsByWardRequest,
 ) (*pb.GetPatientsByWardResponse, error) {
-	wardID, err := uuid.Parse(req.WardId)
+	wardID, err := uuid.Parse(req.GetWardId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -157,7 +157,7 @@ func (s *PatientGrpcService) GetPatientDetails(
 	ctx context.Context,
 	req *pb.GetPatientDetailsRequest,
 ) (*pb.GetPatientDetailsResponse, error) {
-	patientID, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -427,12 +427,12 @@ func (s *PatientGrpcService) AssignBed(ctx context.Context, req *pb.AssignBedReq
 
 	// TODO: Auth
 
-	patientID, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err
 	}
 
-	bedID, err := uuid.Parse(req.BedId)
+	bedID, err := uuid.Parse(req.GetBedId())
 	if err != nil {
 		return nil, err
 	}
@@ -460,7 +460,7 @@ func (s *PatientGrpcService) UnassignBed(
 
 	// TODO: Auth
 
-	patientID, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -485,7 +485,7 @@ func (s *PatientGrpcService) DischargePatient(
 	req *pb.DischargePatientRequest,
 ) (*pb.DischargePatientResponse, error) {
 	log := zlog.Ctx(ctx)
-	patientID, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.GetId())
 
 	// TODO: Auth
 
@@ -511,7 +511,7 @@ func (s *PatientGrpcService) ReadmitPatient(
 	ctx context.Context,
 	req *pb.ReadmitPatientRequest,
 ) (*pb.ReadmitPatientResponse, error) {
-	patientID, err := uuid.Parse(req.PatientId)
+	patientID, err := uuid.Parse(req.GetPatientId())
 	if err != nil {
 		return nil, err
 	}
@@ -534,7 +534,7 @@ func (s *PatientGrpcService) GetPatientAssignmentByWard(
 	ctx context.Context,
 	req *pb.GetPatientAssignmentByWardRequest,
 ) (*pb.GetPatientAssignmentByWardResponse, error) {
-	wardID, err := uuid.Parse(req.WardId)
+	wardID, err := uuid.Parse(req.GetWardId())
 	if err != nil {
 		return nil, err
 	}

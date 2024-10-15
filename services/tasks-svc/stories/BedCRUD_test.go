@@ -41,9 +41,9 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	getBedRes, err := bedClient.GetBed(ctx, &pb.GetBedRequest{Id: bedID})
 	assert.NoError(t, err, "could not get bed after creation")
 
-	assert.Equal(t, createReq.Name, getBedRes.Name)
-	assert.Equal(t, createReq.RoomId, getBedRes.RoomId)
-	assert.Equal(t, createRes.Consistency, getBedRes.Consistency)
+	assert.Equal(t, createReq.GetName(), getBedRes.GetName())
+	assert.Equal(t, createReq.GetRoomId(), getBedRes.GetRoomId())
+	assert.Equal(t, createRes.GetConsistency(), getBedRes.GetConsistency())
 
 	//
 	// update bed

@@ -32,7 +32,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 	}
 
 	wardID, err := wardRepo.CreateWard(ctx, ward_repo.CreateWardParams{
-		Name:           req.Name,
+		Name:           req.GetName(),
 		OrganizationID: organizationID,
 	})
 	err = hwdb.Error(ctx, err)
@@ -54,7 +54,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.GetWardResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -168,7 +168,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -195,7 +195,7 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 		return nil, err
 	}
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -266,7 +266,7 @@ func (ServiceServer) GetWardDetails(
 ) (*pb.GetWardDetailsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	wardID, err := uuid.Parse(req.Id)
+	wardID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
