@@ -5,6 +5,7 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -243,11 +244,12 @@ func (s *TaskGrpcService) GetTasksByPatientSortedByStatus(
 		switch task.Status {
 		case pb.TaskStatus_TASK_STATUS_TODO:
 			todo[ix] = true
-
 		case pb.TaskStatus_TASK_STATUS_IN_PROGRESS:
 			inprogress[ix] = true
 		case pb.TaskStatus_TASK_STATUS_DONE:
 			done[ix] = true
+		case pb.TaskStatus_TASK_STATUS_UNSPECIFIED:
+			log.Warn().Str("taskID", task.ID.String()).Msg("task status is UNSPECIFIED")
 		}
 	}
 

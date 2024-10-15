@@ -485,7 +485,7 @@ func errorQualityControlInterceptor(
 		}
 	}
 
-	switch statusError.Code() {
+	switch statusError.Code() { //nolint:exhaustive
 	case codes.InvalidArgument:
 		fallthrough
 	case codes.OutOfRange:

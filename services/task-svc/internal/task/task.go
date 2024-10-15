@@ -235,6 +235,7 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(
 	ctx context.Context,
 	req *pb.GetTasksByPatientSortedByStatusRequest,
 ) (*pb.GetTasksByPatientSortedByStatusResponse, error) {
+	log := zlog.Ctx(ctx)
 	taskRepo := task_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
@@ -292,6 +293,8 @@ func (ServiceServer) GetTasksByPatientSortedByStatus(
 				inprogress[ix] = true
 			case pb.TaskStatus_TASK_STATUS_DONE:
 				done[ix] = true
+			case pb.TaskStatus_TASK_STATUS_UNSPECIFIED:
+				log.Warn().Str("taskID", row.Task.ID.String()).Msg("task status is UNSPECIFIED")
 			}
 		}
 

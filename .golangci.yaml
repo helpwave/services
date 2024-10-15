@@ -23,7 +23,6 @@ linters:
     - cyclop # TODO
     - dupl # TODO
     - err113 # TODO
-    - exhaustive # TODO
     - exhaustruct # TODO
     - gci # TODO
     - gocognit # TODO

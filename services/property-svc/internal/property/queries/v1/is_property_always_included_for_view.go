@@ -49,6 +49,8 @@ func NewIsPropertyAlwaysIncludedForViewSourceHandler() IsPropertyAlwaysIncludedF
 			matcher = viewModels.TaskPropertyMatchers{
 				WardID: wardID,
 			}
+		case pb.SubjectType_SUBJECT_TYPE_UNSPECIFIED:
+			fallthrough
 		default:
 			return false, status.Errorf(codes.Internal, "no matcher for subject type %s", subjectType.String())
 		}
