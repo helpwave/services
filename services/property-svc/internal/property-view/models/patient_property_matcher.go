@@ -16,7 +16,7 @@ type PatientPropertyMatchers struct {
 	PatientID uuid.NullUUID `json:"patient_id,omitempty"`
 }
 
-func (m PatientPropertyMatchers) FindExactRuleId(ctx context.Context) (*uuid.UUID, error) {
+func (m PatientPropertyMatchers) FindExactRuleID(ctx context.Context) (*uuid.UUID, error) {
 	patientViews := patient_views_repo.New(hwdb.GetDB())
 	return hwdb.Optional(patientViews.GetPatientRuleIdUsingExactMatchers)(ctx,
 		patient_views_repo.GetPatientRuleIdUsingExactMatchersParams{

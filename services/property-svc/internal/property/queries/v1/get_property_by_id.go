@@ -29,7 +29,7 @@ func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
 			return nil, 0, err
 		}
 		if len(rows) == 0 {
-			return nil, 0, fmt.Errorf("record with id %s not found.", propertyID.String())
+			return nil, 0, fmt.Errorf("record with id %s not found", propertyID.String())
 		}
 
 		property := &models.Property{

@@ -29,10 +29,10 @@ func NewIsPropertyAlwaysIncludedForViewSourceHandler() IsPropertyAlwaysIncludedF
 		propertyId uuid.UUID,
 	) (bool, error) {
 		wardID := uuid.NullUUID{}
-		wardIdP := viewSource.GetWardId()
-		if wardIdP != "" {
+		wardIDP := viewSource.GetWardId()
+		if wardIDP != "" {
 			var err error
-			wardID, err = hwutil.ParseNullUUID(&wardIdP)
+			wardID, err = hwutil.ParseNullUUID(&wardIDP)
 			if err != nil {
 				return false, err
 			}

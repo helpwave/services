@@ -18,7 +18,7 @@ type TaskPropertyMatchers struct {
 	TaskID uuid.NullUUID `json:"task_id,omitempty"`
 }
 
-func (m TaskPropertyMatchers) FindExactRuleId(ctx context.Context) (*uuid.UUID, error) {
+func (m TaskPropertyMatchers) FindExactRuleID(ctx context.Context) (*uuid.UUID, error) {
 	taskViews := task_views_repo.New(hwdb.GetDB())
 	return hwdb.Optional(taskViews.GetTaskRuleIdUsingExactMatchers)(ctx,
 		task_views_repo.GetTaskRuleIdUsingExactMatchersParams{
