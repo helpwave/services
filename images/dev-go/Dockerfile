@@ -130,7 +130,7 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} 
 # renovate: datasource=github-releases depName=mvdan/gofumpt
 ENV GOFUMPT_VERSION=0.7.0
 RUN go install mvdan.cc/gofumpt@v${GOFUMPT_VERSION} \
-	&& go clean -modcach
+	&& go clean -modcache
 
 # install golangci-lint, the linter we also use in the CI
 #  https://golangci-lint.run/
