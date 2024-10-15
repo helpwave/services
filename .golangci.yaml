@@ -96,7 +96,6 @@ linters:
     - usestdlibvars
     - wastedassign
     - whitespace
-    # - wsl # TODO
     - zerologlint
 
   disable:
@@ -111,4 +110,4 @@ linters:
     - nosprintfhostport
     - varnamelen
     - wrapcheck
-
+    - wsl

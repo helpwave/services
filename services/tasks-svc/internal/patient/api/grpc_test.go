@@ -42,7 +42,7 @@ func server() (context.Context, pb.PatientServiceClient, func()) {
 func setup(t *testing.T) (
 	ctx context.Context,
 	client pb.PatientServiceClient,
-	redisMock redismock.ClientMock,
+	redisMock redismock.ClientMock, //nolint:unparam
 	teardown func(),
 ) {
 	t.Helper()
