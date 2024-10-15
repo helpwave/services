@@ -658,6 +658,7 @@ func TestGetRecentPatients(t *testing.T) {
 			require.NoError(t, err)
 			patientWithBedId = patientRes.Id
 			consistencies[patientRes.Id] = assRes.Consistency
+			hwtesting.WaitForProjectionsToSettle()
 		}
 	}
 
