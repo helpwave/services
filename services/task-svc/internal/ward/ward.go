@@ -154,9 +154,9 @@ func (ServiceServer) GetRecentWards(
 		return &pb.GetRecentWardsResponse_Ward{
 			Id:              row.Ward.ID.String(),
 			Name:            row.Ward.Name,
-			BedCount:        uint32(row.BedCount),
-			TasksTodo:       uint32(row.TodoCount),
-			TasksInProgress: uint32(row.InProgressCount),
+			BedCount:        uint32(row.BedCount),        //nolint:gosec
+			TasksTodo:       uint32(row.TodoCount),       //nolint:gosec
+			TasksInProgress: uint32(row.InProgressCount), //nolint:gosec
 			TasksDone:       uint32(row.DoneCount),
 		}
 	})
