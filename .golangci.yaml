@@ -6,11 +6,15 @@ linters:
   disable:
     - contextcheck # too many false-positives
     - depguard # no need
+    - ireturn # no need
     - funlen # we tend to have long funlens, who cares?
     - execinquery # deprecated
+    - goimports # unused
     - gochecknoglobals # we currently make use of globals
     - godot # petty linter
     - gomnd # deprecated
+    - gomoddirectives # not needed
+    - gofumpt # false positives
     - mnd # too many false-positives
     - nonamedreturns # we like named returns
     - nilnil # we like (nil, nil) sometimes
@@ -19,7 +23,7 @@ linters:
     - wrapcheck # does not matter to us
     - wsl # too aggressive
 
-    # TODOs:
+    # TODOs: #865
     - cyclop # TODO
     - dupl # TODO
     - err113 # TODO
@@ -29,10 +33,6 @@ linters:
     - goconst # TODO
     - gocyclo # TODO
     - godox # TODO
-    - gofumpt # TODO: what is this?
-    - goimports # TODO: install in dev container
-    - gomoddirectives # TODO: evaluate
-    - ireturn # TODO
     - nestif # TODO
     - nlreturn # TODO
     - paralleltest # TODO
