@@ -53,7 +53,6 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 		properties := make(map[uuid.UUID]*models.PropertyAndValue)
 
 		for _, row := range propertyValuesWithProperties {
-
 			if _, ok := properties[row.Property.ID]; !ok {
 				properties[row.Property.ID] = &models.PropertyAndValue{
 					PropertyID:          row.Property.ID,
@@ -84,7 +83,6 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 
 			// If row has SelectOptionID, the LEFT JOIN yielded a value
 			if row.SelectOptionID.Valid {
-
 				// make sure MultiSelectValues is an array
 				if properties[row.Property.ID].Value == nil {
 					properties[row.Property.ID].Value = &models.TypedValue{
@@ -104,7 +102,6 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 						Description: *row.SelectOptionDescription, // known to be set due to NOT NULL and successful LEFT JOIN
 					})
 			} else {
-
 				// basic values can just be set, we expect only one of them to be not null,
 				// but at least one has to due to ifs
 				properties[row.Property.ID].Value = &models.TypedValue{

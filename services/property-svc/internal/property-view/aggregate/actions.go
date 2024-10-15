@@ -24,7 +24,6 @@ func (a *PropertyViewRuleAggregate) UpdateLists(
 	appendToDontAlwaysInclude,
 	removeFromDontAlwaysInclude []uuid.UUID,
 ) error {
-
 	event, err := events.NewPropertyRuleListsUpdatedEvent(ctx,
 		a,
 		ruleID,

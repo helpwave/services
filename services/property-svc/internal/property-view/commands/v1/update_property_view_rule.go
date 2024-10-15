@@ -27,7 +27,6 @@ func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePrope
 		appendToDontAlwaysInclude,
 		removeFromDontAlwaysInclude []uuid.UUID,
 	) (common.ConsistencyToken, error) {
-
 		ruleID, err := matchers.FindExactRuleID(ctx)
 		if err != nil {
 			return 0, err

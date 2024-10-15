@@ -476,7 +476,6 @@ func TestGetPatientList(t *testing.T) {
 				if st.Name == "ST 2" {
 					f++
 					assert.False(t, st.Done)
-
 				}
 			}
 			assert.Equal(t, 2, f)
@@ -681,5 +680,4 @@ func TestGetRecentPatients(t *testing.T) {
 	assert.Len(t, ids, N)
 	assert.Subset(t, ids, foundIds)
 	assert.NotContains(t, foundIds, ids[0]) // thrown out
-
 }

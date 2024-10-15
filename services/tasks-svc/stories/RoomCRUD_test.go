@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"hwtesting"
 	"hwutil"
 	"strconv"
@@ -70,7 +71,6 @@ func TestCreateUpdateGetRoom(t *testing.T) {
 
 	assert.Equal(t, updateReq.GetName(), getRoomRes.GetName())
 	assert.Equal(t, updateRes.GetConsistency(), getRoomRes.GetConsistency())
-
 }
 
 func TestGetRooms(t *testing.T) {

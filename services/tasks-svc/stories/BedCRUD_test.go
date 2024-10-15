@@ -74,7 +74,6 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	assert.Equal(t, *updateReq.RoomId, getBedRes.RoomId)
 	assert.Equal(t, *updateReq.Name, getBedRes.Name)
 	assert.Equal(t, updateRes.Consistency, getBedRes.Consistency)
-
 }
 
 func TestGetBedByPatient(t *testing.T) {
@@ -175,6 +174,5 @@ func TestGetBeds(t *testing.T) {
 			return bed.Id
 		})
 		assert.Subset(t, expectedBedIDs, bedIds, "actual bedIDs are not a subset of expected for room %s", roomId)
-
 	}
 }

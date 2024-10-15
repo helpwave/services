@@ -4,12 +4,15 @@ import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"hwtesting"
 	"hwutil"
 	"testing"
 )
 
 func getTaskTemplate(t *testing.T, ctx context.Context, id string) *pb.GetAllTaskTemplatesResponse_TaskTemplate {
+	t.Helper()
+
 	getAll, err := taskTemplateServiceClient().GetAllTaskTemplates(ctx, &pb.GetAllTaskTemplatesRequest{})
 	require.NoError(t, err, "could not get all task templates")
 
@@ -54,7 +57,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	assert.Equal(t, createReq.Name, template.Name)
 	assert.Equal(t, *createReq.Description, template.Description)
 	assert.Equal(t, hwtesting.FakeTokenUser, template.CreatedBy)
-	assert.Equal(t, false, template.IsPublic)
+	assert.False(t, template.IsPublic)
 	assert.Equal(t, createRes.Consistency, template.Consistency)
 
 	//
@@ -125,5 +128,4 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	assert.Equal(t, createStRes.Id, template.Subtasks[0].Id)
 	assert.Equal(t, t.Name()+" ST 2", template.Subtasks[0].Name)
 	assert.Equal(t, updateStRes.TaskTemplateConsistency, template.Consistency)
-
 }

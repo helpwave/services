@@ -114,7 +114,6 @@ func TestTaskGrpcService_CreateTask_Validation(t *testing.T) {
 		},
 	})
 	require.NoError(t, err, codes.InvalidArgument, "rejects fully valid request")
-
 }
 
 func TestTaskGrpcService_UpdateTask_Validation(t *testing.T) {

@@ -5,6 +5,7 @@ import (
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwtesting"
 	"hwutil"
@@ -53,9 +54,9 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	assert.Equal(t, createReq.GetName(), task.GetName())
 	assert.Equal(t, createReq.GetDescription(), task.GetDescription())
-	assert.Equal(t, true, task.GetPublic())
+	assert.True(t, task.GetPublic())
 	assert.Equal(t, hwtesting.FakeTokenUser, task.GetCreatedBy())
-	assert.Equal(t, true, task.GetPublic())
+	assert.True(t, task.GetPublic())
 	assert.Equal(t, pb.TaskStatus_TASK_STATUS_TODO, task.GetStatus())
 	assert.WithinDuration(t, dueDate, task.GetDueAt().AsTime(), time.Second) // actually we differ by some microseconds
 	assert.Nil(t, task.GetAssignedUserId())
@@ -67,12 +68,12 @@ func TestCreateUpdateGetTask(t *testing.T) {
 	for _, st := range task.GetSubtasks() {
 		if st.Name == "ST 1" {
 			found++
-			assert.Equal(t, false, st.GetDone())
+			assert.False(t, st.GetDone())
 			assert.Equal(t, hwtesting.FakeTokenUser, st.GetCreatedBy())
 		}
 		if st.Name == "ST 2" {
 			found++
-			assert.Equal(t, true, st.GetDone())
+			assert.True(t, st.GetDone())
 			assert.Equal(t, hwtesting.FakeTokenUser, st.GetCreatedBy())
 		}
 	}
@@ -136,7 +137,7 @@ func TestCreateUpdateGetTask(t *testing.T) {
 		if st.GetName() == "ST 3" {
 			found++
 			assert.Equal(t, createStRes.GetSubtaskId(), st.GetId())
-			assert.Equal(t, false, st.GetDone())
+			assert.False(t, st.GetDone())
 			assert.Equal(t, hwtesting.FakeTokenUser, st.GetCreatedBy())
 			break
 		}
@@ -237,7 +238,6 @@ func TestCreateUpdateGetTask(t *testing.T) {
 
 	assert.Nil(t, task.GetDueAt())
 	assert.Equal(t, rmDueRes.GetConsistency(), task.GetConsistency())
-
 }
 
 func TestGetTasksByPatient(t *testing.T) {
@@ -322,7 +322,6 @@ func TestGetTasksByPatient(t *testing.T) {
 	assert.Equal(t, taskConsistencies[resByStatus.Done[0].Id], resByStatus.Done[0].Consistency)
 	assert.Equal(t, hwtesting.FakeTokenUser, resByStatus.Done[0].CreatedBy)
 	assert.Len(t, resByStatus.Done[0].Subtasks, len(subtaskMap[resByStatus.Done[0].Id]))
-
 }
 
 func TestGetAssignedTasks(t *testing.T) {
@@ -389,5 +388,4 @@ func TestGetAssignedTasks(t *testing.T) {
 		assert.Subset(t, exp, have)
 		return tsk.Id
 	}))
-
 }

@@ -395,7 +395,6 @@ func (s *PatientGrpcService) GetRecentPatients(
 	})
 
 	return &pb.GetRecentPatientsResponse{RecentPatients: recentPatients}, nil
-
 }
 
 func (s *PatientGrpcService) UpdatePatient(

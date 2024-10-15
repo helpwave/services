@@ -93,13 +93,11 @@ linters:
     - unconvert
     - unparam
     - unused
-    #- usestdlibvars
-    #- varnamelen
-    #- wastedassign
-    #- whitespace
-    #- wrapcheck
-    #- wsl
-    #- zerologlint
+    - usestdlibvars
+    - wastedassign
+    - whitespace
+    # - wsl # TODO
+    - zerologlint
 
   disable:
     - depguard
@@ -111,4 +109,6 @@ linters:
     - nonamedreturns
     - nilnil
     - nosprintfhostport
+    - varnamelen
+    - wrapcheck
 

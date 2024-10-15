@@ -45,6 +45,8 @@ func setup(t *testing.T) (
 	redisMock redismock.ClientMock,
 	teardown func(),
 ) {
+	t.Helper()
+
 	ctx, client, teardown = server()
 	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
 

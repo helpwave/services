@@ -6,6 +6,7 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	zlog "github.com/rs/zerolog/log"
+	"github.com/stretchr/testify/require"
 	"hwtesting"
 	"hwutil"
 	"os/signal"
@@ -92,6 +93,8 @@ func wardServiceClient() pb.WardServiceClient {
 }
 
 func prepareWard(t *testing.T, ctx context.Context, suffix string) (wardID, wardConsistency string) {
+	t.Helper()
+
 	wardRes, err := wardServiceClient().CreateWard(ctx, &pb.CreateWardRequest{
 		Name: t.Name() + " ward " + suffix,
 	})
@@ -100,6 +103,8 @@ func prepareWard(t *testing.T, ctx context.Context, suffix string) (wardID, ward
 }
 
 func prepareRoom(t *testing.T, ctx context.Context, wardID, suffix string) (roomID, roomConsistency string) {
+	t.Helper()
+
 	roomRes, err := roomServiceClient().CreateRoom(ctx, &pb.CreateRoomRequest{
 		Name:   t.Name() + " room " + suffix,
 		WardId: wardID,
@@ -109,6 +114,8 @@ func prepareRoom(t *testing.T, ctx context.Context, wardID, suffix string) (room
 }
 
 func prepareBed(t *testing.T, ctx context.Context, roomId, suffix string) (bedID, consistency string) {
+	t.Helper()
+
 	createRes, err := bedServiceClient().CreateBed(ctx, &pb.CreateBedRequest{
 		RoomId: roomId,
 		Name:   t.Name() + " bed " + suffix,
@@ -118,6 +125,8 @@ func prepareBed(t *testing.T, ctx context.Context, roomId, suffix string) (bedID
 }
 
 func preparePatient(t *testing.T, ctx context.Context, suffix string) (patientID string) {
+	t.Helper()
+
 	res, err := patientServiceClient().CreatePatient(ctx, &pb.CreatePatientRequest{
 		HumanReadableIdentifier: t.Name() + " Patient " + suffix,
 		Notes:                   hwutil.PtrTo("A patient for test " + t.Name()),

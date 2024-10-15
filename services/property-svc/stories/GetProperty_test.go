@@ -5,6 +5,7 @@ import (
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"hwtesting"
 	"hwutil"
 	"testing"
@@ -38,13 +39,9 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !require.NoError(t, err, "could not create new property") {
-		return
-	}
+	require.NoError(t, err, "could not create new property")
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !require.NoError(t, err, "propertyID is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "propertyID is not a uuid")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -58,9 +55,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 			Value: &pb.GetPropertyRequest_ViewSource_WardId{WardId: wardID.String()},
 		},
 	})
-	if !require.NoError(t, err, "could not get property after it was created") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was created")
 
 	if !assert.Equal(t, hwutil.PtrTo(false), propertyResponse.AlwaysIncludeForViewSource) {
 		return
@@ -81,9 +76,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not update property view") {
-		return
-	}
+	require.NoError(t, err, "could not update property view")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -97,13 +90,9 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 			Value: &pb.GetPropertyRequest_ViewSource_WardId{WardId: wardID.String()},
 		},
 	})
-	if !require.NoError(t, err, "could not get property after view was updated") {
-		return
-	}
+	require.NoError(t, err, "could not get property after view was updated")
 
-	if !assert.Equal(t, hwutil.PtrTo(true), propertyResponse.AlwaysIncludeForViewSource) {
-		return
-	}
+	assert.Equal(t, hwutil.PtrTo(true), propertyResponse.AlwaysIncludeForViewSource)
 
 	//
 	// Add to don't always include list for ward
@@ -120,9 +109,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not update property view the second time") {
-		return
-	}
+	require.NoError(t, err, "could not update property view the second time")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -136,13 +123,9 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 			Value: &pb.GetPropertyRequest_ViewSource_WardId{WardId: wardID.String()},
 		},
 	})
-	if !require.NoError(t, err, "could not get property after view was updated the second time") {
-		return
-	}
+	require.NoError(t, err, "could not get property after view was updated the second time")
 
-	if !assert.Equal(t, hwutil.PtrTo(false), propertyResponse.AlwaysIncludeForViewSource) {
-		return
-	}
+	assert.Equal(t, hwutil.PtrTo(false), propertyResponse.AlwaysIncludeForViewSource)
 
 	//
 	// Add to always include list for ward and id (too specific)
@@ -160,9 +143,7 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not update property view the third time") {
-		return
-	}
+	require.NoError(t, err, "could not update property view the third time")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -176,14 +157,11 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 			Value: &pb.GetPropertyRequest_ViewSource_WardId{WardId: wardID.String()},
 		},
 	})
-	if !require.NoError(t, err, "could not get property after view was updated the third time") {
-		return
-	}
+	require.NoError(t, err, "could not get property after view was updated the third time")
 
 	if !assert.Equal(t, hwutil.PtrTo(false), propertyResponse.AlwaysIncludeForViewSource) {
 		return
 	}
-
 }
 
 // TestTaskGetPropertyConsistency:
@@ -209,13 +187,9 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !require.NoError(t, err, "could not create new property") {
-		return
-	}
+	require.NoError(t, err, "could not create new property")
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !require.NoError(t, err, "propertyID is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "propertyID is not a uuid")
 
 	createVersion := createResponse.Consistency
 
@@ -228,9 +202,7 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{
 		Id: propertyID.String(),
 	})
-	if !require.NoError(t, err, "could not get property after it was created") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was created")
 
 	readVersion := propertyResponse.Consistency
 
@@ -247,9 +219,7 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 		Consistency: &readVersion,
 	})
 
-	if !require.NoError(t, err, "could not update property") {
-		return
-	}
+	require.NoError(t, err, "could not update property")
 
 	updatedVersion := updateResponse.GetConsistency()
 
@@ -264,9 +234,7 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 	propertyResponse, err = propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{
 		Id: propertyID.String(),
 	})
-	if !require.NoError(t, err, "could not get property after it was updated") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was updated")
 
 	readVersionAfterUpdate := propertyResponse.Consistency
 
@@ -276,5 +244,4 @@ func TestTaskGetPropertyConsistency(t *testing.T) {
 		readVersionAfterUpdate,
 		"updatedVersion and readVersionAfterUpdate consistencies differ",
 	)
-
 }

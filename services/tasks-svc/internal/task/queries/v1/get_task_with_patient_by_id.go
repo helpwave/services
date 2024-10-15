@@ -64,7 +64,6 @@ func NewGetTaskWithPatientByIDQueryHandler() GetTaskWithPatientByIDQueryHandler 
 					CreatedBy: row.SubtaskCreatedBy.UUID,
 				}
 			}
-
 		}
 
 		return task, nil

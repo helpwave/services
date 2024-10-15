@@ -311,7 +311,6 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 						hwutil.PtrTo(esdb.NackActionRetry)
 				}
 			}
-
 		}
 
 		// add new connection

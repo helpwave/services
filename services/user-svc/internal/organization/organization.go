@@ -145,7 +145,6 @@ func (s ServiceServer) GetOrganizationsByUser(
 	return &pb.GetOrganizationsByUserResponse{
 		Organizations: mappedOrganizations,
 	}, nil
-
 }
 
 type OrganizationWithMembers struct {
@@ -195,7 +194,6 @@ func GetOrganizationsByUserId(ctx context.Context, userId uuid.UUID) ([]Organiza
 		})
 
 	return organizationsResponse, nil
-
 }
 
 func (s ServiceServer) GetOrganizationsForUser(

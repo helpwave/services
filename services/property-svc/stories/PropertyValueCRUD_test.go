@@ -5,6 +5,7 @@ import (
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"hwtesting"
 	"hwutil"
 	"testing"
@@ -32,13 +33,9 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !require.NoError(t, err, "could not create new property") {
-		return
-	}
+	require.NoError(t, err, "could not create new property")
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !require.NoError(t, err, "propertyID is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "propertyID is not a uuid")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -47,9 +44,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !require.NoError(t, err, "could not get property after it was created") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was created")
 
 	response := map[string]interface{}{
 		"Id":                         propertyResponse.Id,
@@ -77,9 +72,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		"PropertyConsistency":        createResponse.Consistency,
 	}
 
-	if !assert.Equal(t, expectedResponse, response) {
-		return
-	}
+	require.Equal(t, expectedResponse, response)
 
 	//
 	// Attach a value
@@ -96,9 +89,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not attach value") {
-		return
-	}
+	require.NoError(t, err, "could not attach value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -114,9 +105,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 			},
 		}})
 
-	if !require.NoError(t, err, "could not get values") {
-		return
-	}
+	require.NoError(t, err, "could not get values")
 
 	assert.Len(t, attachedValuesResponse.Values, 1)
 
@@ -136,9 +125,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not update value") {
-		return
-	}
+	require.NoError(t, err, "could not update value")
 
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
@@ -156,9 +143,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 			},
 		}})
 
-	if !require.NoError(t, err, "could not get updated values") {
-		return
-	}
+	require.NoError(t, err, "could not get updated values")
 
 	assert.Len(t, attachedValuesResponse.Values, 1)
 
@@ -208,13 +193,9 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !require.NoError(t, err, "could not create new property") {
-		return
-	}
+	require.NoError(t, err, "could not create new property")
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !require.NoError(t, err, "propertyID is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "propertyID is not a uuid")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -223,9 +204,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !require.NoError(t, err, "could not get property after it was created") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was created")
 
 	response := map[string]interface{}{
 		"Id":          propertyResponse.Id,
@@ -276,9 +255,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not attach value") {
-		return
-	}
+	require.NoError(t, err, "could not attach value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -294,9 +271,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !require.NoError(t, err, "could not get values") {
-		return
-	}
+	require.NoError(t, err, "could not get values")
 
 	assert.Len(t, attachedValuesResponse.Values, 1, "no initial values")
 
@@ -316,9 +291,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not update value") {
-		return
-	}
+	require.NoError(t, err, "could not update value")
 
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
@@ -336,9 +309,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !require.NoError(t, err, "could not get updated values") {
-		return
-	}
+	require.NoError(t, err, "could not get updated values")
 
 	assert.Len(t, attachedValuesResponse.Values, 1, "no updated values")
 
@@ -392,13 +363,9 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !require.NoError(t, err, "could not create new property") {
-		return
-	}
+	require.NoError(t, err, "could not create new property")
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !require.NoError(t, err, "propertyID is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "propertyID is not a uuid")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -407,9 +374,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !require.NoError(t, err, "could not get property after it was created") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was created")
 
 	response := map[string]interface{}{
 		"Id":          propertyResponse.Id,
@@ -464,9 +429,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not attach value") {
-		return
-	}
+	require.NoError(t, err, "could not attach value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -482,9 +445,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !require.NoError(t, err, "could not get values") {
-		return
-	}
+	require.NoError(t, err, "could not get values")
 
 	assert.Len(t, attachedValuesResponse.Values, 1, "no initial values")
 
@@ -511,9 +472,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not update value") {
-		return
-	}
+	require.NoError(t, err, "could not update value")
 
 	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
 
@@ -531,9 +490,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !require.NoError(t, err, "could not get updated values") {
-		return
-	}
+	require.NoError(t, err, "could not get updated values")
 
 	assert.Len(t, attachedValuesResponse.Values, 1, "no updated values")
 
@@ -584,14 +541,9 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !require.NoError(t, err, "could not create new property") {
-		return
-	}
+	require.NoError(t, err, "could not create new property")
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !require.NoError(t, err, "propertyID is not a uuid") {
-		return
-	}
-
+	require.NoError(t, err, "propertyID is not a uuid")
 	hwtesting.WaitForProjectionsToSettle()
 
 	//
@@ -599,9 +551,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !require.NoError(t, err, "could not get property after it was created") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was created")
 
 	option1 := propertyResponse.GetSelectData().Options[0].GetId()
 
@@ -620,9 +570,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not attach value") {
-		return
-	}
+	require.NoError(t, err, "could not attach value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -638,9 +586,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !require.NoError(t, err, "could not get values") {
-		return
-	}
+	require.NoError(t, err, "could not get values")
 
 	assert.Len(t, attachedValuesResponse.Values, 1, "no initial values")
 
@@ -668,9 +614,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not add new option") {
-		return
-	}
+	require.NoError(t, err, "could not add new option")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -679,9 +623,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err = propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !require.NoError(t, err, "could not get property after it was updated") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was updated")
 
 	assert.Len(t, propertyResponse.GetSelectData().Options, 2)
 
@@ -699,9 +641,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not update value") {
-		return
-	}
+	require.NoError(t, err, "could not update value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -717,9 +657,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !require.NoError(t, err, "could not get updated values") {
-		return
-	}
+	require.NoError(t, err, "could not get updated values")
 
 	assert.Len(t, attachedValuesResponse.Values, 1, "no updated values")
 
@@ -759,13 +697,9 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	}
 
 	createResponse, err := propertyClient.CreateProperty(ctx, createPropertyRequest)
-	if !require.NoError(t, err, "could not create new property") {
-		return
-	}
+	require.NoError(t, err, "could not create new property")
 	propertyID, err := uuid.Parse(createResponse.PropertyId)
-	if !require.NoError(t, err, "propertyID is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "propertyID is not a uuid")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -774,9 +708,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err := propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !require.NoError(t, err, "could not get property after it was created") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was created")
 
 	option1 := propertyResponse.GetSelectData().Options[0].GetId()
 
@@ -798,9 +730,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not attach value") {
-		return
-	}
+	require.NoError(t, err, "could not attach value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -817,9 +747,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not get values") {
-		return
-	}
+	require.NoError(t, err, "could not get values")
 
 	assert.Len(t, attachedValuesResponse.Values, 1, "no initial values")
 
@@ -851,9 +779,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not add new option") {
-		return
-	}
+	require.NoError(t, err, "could not add new option")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -862,9 +788,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 	//
 
 	propertyResponse, err = propertyClient.GetProperty(ctx, &pb.GetPropertyRequest{Id: propertyID.String()})
-	if !require.NoError(t, err, "could not get property after it was updated") {
-		return
-	}
+	require.NoError(t, err, "could not get property after it was updated")
 
 	assert.Len(t, propertyResponse.GetSelectData().Options, 2)
 
@@ -885,9 +809,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		},
 	})
 
-	if !require.NoError(t, err, "could not update value") {
-		return
-	}
+	require.NoError(t, err, "could not update value")
 
 	hwtesting.WaitForProjectionsToSettle()
 
@@ -903,9 +825,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 			},
 		}})
 
-	if !require.NoError(t, err, "could not get updated values") {
-		return
-	}
+	require.NoError(t, err, "could not get updated values")
 
 	assert.Len(t, attachedValuesResponse.Values, 1, "no updated values")
 

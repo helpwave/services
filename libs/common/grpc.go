@@ -113,7 +113,6 @@ func StartNewGRPCServer(ctx context.Context, addr string, registerServerHook fun
 //
 //	chain := grpc.ChainUnaryInterceptor(common.DefaultInterceptors()...)
 func DefaultInterceptors() []grpc.UnaryServerInterceptor {
-
 	// register new metrics collector with prometheus
 	metrics := prometheusGrpcProvider.NewServerMetrics()
 	telemetry.PrometheusRegistry().MustRegister(metrics)

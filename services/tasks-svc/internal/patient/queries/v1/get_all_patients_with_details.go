@@ -105,7 +105,6 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 					Done: *row.SubtaskDone,
 				}
 			}
-
 		}
 
 		return patientDetails, nil

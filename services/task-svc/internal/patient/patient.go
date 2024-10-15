@@ -638,7 +638,6 @@ func (ServiceServer) GetPatientList(
 			if taskIx, existed := tasksMap[row.TaskID.UUID]; existed {
 				task = patient.Tasks[taskIx]
 			} else {
-
 				task = &pb.GetPatientListResponse_Task{
 					Id:             row.TaskID.UUID.String(),
 					Name:           *row.TaskName,

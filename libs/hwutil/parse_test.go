@@ -85,7 +85,6 @@ func TestStringsToUUIDs(t *testing.T) {
 }
 
 func TestInterfacesToStrings(t *testing.T) {
-
 	t.Run("ok path", func(t *testing.T) {
 		expected := []string{
 			"48441b57-a92a-4022-bfd9-9ded5acdb693",

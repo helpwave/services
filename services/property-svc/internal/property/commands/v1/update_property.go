@@ -81,7 +81,6 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyComma
 					return 0, err
 				}
 			}
-
 		}
 
 		if len(removeOptions) > 0 {

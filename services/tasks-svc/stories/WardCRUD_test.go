@@ -5,6 +5,7 @@ import (
 	pb "gen/services/tasks_svc/v1"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"hwtesting"
 	"hwutil"
 	"strconv"
@@ -69,18 +70,17 @@ func TestCreateUpdateGetWard(t *testing.T) {
 
 	assert.Equal(t, *updateReq.Name, getWardRes.Name)
 	assert.Equal(t, updateRes.Consistency, getWardRes.Consistency)
-
 }
 
 func prepareWards(t *testing.T, ctx context.Context, client pb.WardServiceClient, amount int) []string {
+	t.Helper()
+
 	ids := make([]string, 0, amount)
 	for i := 1; i <= amount; i++ {
 		wardRes, err := client.CreateWard(ctx, &pb.CreateWardRequest{
 			Name: t.Name() + " ward " + strconv.Itoa(i),
 		})
-		if !require.NoError(t, err, "prepareWard failed: could not create ward", i) {
-			return nil
-		}
+		require.NoError(t, err, "prepareWard failed: could not create ward", i)
 		ids = append(ids, wardRes.Id)
 	}
 	return ids
@@ -383,5 +383,4 @@ func TestGetWardDetails(t *testing.T) {
 	}
 
 	assert.Equal(t, expected, actual)
-
 }
