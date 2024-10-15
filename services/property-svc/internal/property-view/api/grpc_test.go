@@ -285,7 +285,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 				"WardId":null,
 				"PropertyMatcherType":"task_property_matcher"
 			},
-			"RuleId": "{{ . }}"
+			"RuleID": "{{ . }}"
 		}`
 		s := ""
 		buf := bytes.NewBufferString(s)
@@ -353,7 +353,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_G
 				"WardID":null,
 				"PropertyMatcherType":"patient_property_matcher"
 			},
-			"RuleId": "{{ . }}"
+			"RuleID": "{{ . }}"
 		}`
 		s := ""
 		buf := bytes.NewBufferString(s)
@@ -397,7 +397,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 		},
 		"AlwaysInclude": ["a7ff7a87-7787-42b4-9aa8-037293ac9d90"],
 		"DontAlwaysInclude": [],
-		"RuleId": "96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"
+		"RuleID": "96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"
 	}`)
 
 	nameOfRelevantStream := aggregate.PropertyViewRuleAggregateType + "-96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"
@@ -450,7 +450,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_TaskPropertyMatcher_Gree
 			"RemoveFromAlwaysInclude":["a7ff7a87-7787-42b4-9aa8-037293ac9d90", "08b23992-9489-41d2-b80d-d7d49c4c9168"],
 			"AppendToDontAlwaysInclude":["08b23992-9489-41d2-b80d-d7d49c4c9168", "db59dd1b-fd1c-488e-a73c-6926abe68c34"],
 			"RemoveFromDontAlwaysInclude": ["08b23992-9489-41d2-b80d-d7d49c4c9168"],
-			"RuleId": "{{ . }}"
+			"RuleID": "{{ . }}"
 		}`
 		s := ""
 		buf := bytes.NewBufferString(s)
@@ -494,7 +494,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_G
 		},
 		"AlwaysInclude": ["a7ff7a87-7787-42b4-9aa8-037293ac9d90"],
 		"DontAlwaysInclude": [],
-		"RuleId": "96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"
+		"RuleID": "96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"
 	}`)
 
 	nameOfRelevantStream := aggregate.PropertyViewRuleAggregateType + "-96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"
@@ -547,7 +547,7 @@ func TestPropertyViewGrpcService_UpdatePropertyViewRule_PatientPropertyMatcher_G
 			"RemoveFromAlwaysInclude":["a7ff7a87-7787-42b4-9aa8-037293ac9d90", "08b23992-9489-41d2-b80d-d7d49c4c9168"],
 			"AppendToDontAlwaysInclude":["08b23992-9489-41d2-b80d-d7d49c4c9168", "db59dd1b-fd1c-488e-a73c-6926abe68c34"],
 			"RemoveFromDontAlwaysInclude": ["08b23992-9489-41d2-b80d-d7d49c4c9168"],
-			"RuleId": "{{ . }}"
+			"RuleID": "{{ . }}"
 		}`
 		s := ""
 		buf := bytes.NewBufferString(s)

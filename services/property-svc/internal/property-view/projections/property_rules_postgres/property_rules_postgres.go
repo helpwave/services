@@ -57,7 +57,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 		return err, hwutil.PtrTo(esdb.NackActionPark)
 	}
 
-	if payload.RuleId == uuid.Nil {
+	if payload.RuleID == uuid.Nil {
 		return errors.New("ruleID missing"), hwutil.PtrTo(esdb.NackActionSkip)
 	}
 
@@ -70,7 +70,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	// Create Rule
 	viewsQuery := p.viewsRepo.WithTx(tx)
 
-	err = viewsQuery.CreateRule(ctx, payload.RuleId)
+	err = viewsQuery.CreateRule(ctx, payload.RuleID)
 	if err != nil {
 		log.Error().Err(err).Msg("could not create view rule")
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -81,7 +81,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	case models.TaskPropertyMatchers:
 		taskViewsQuery := p.taskViewsRepo.WithTx(tx)
 		err = taskViewsQuery.CreateTaskRule(ctx, task_views_repo.CreateTaskRuleParams{
-			RuleID: payload.RuleId,
+			RuleID: payload.RuleID,
 			WardID: matchers.WardID,
 			TaskID: matchers.TaskID,
 		})
@@ -92,7 +92,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	case models.PatientPropertyMatchers:
 		patientViewsQuery := p.patientViewsRepo.WithTx(tx)
 		err = patientViewsQuery.CreatePatientRule(ctx, patient_views_repo.CreatePatientRuleParams{
-			RuleID:    payload.RuleId,
+			RuleID:    payload.RuleID,
 			WardID:    matchers.WardID,
 			PatientID: matchers.PatientID,
 		})
@@ -109,7 +109,7 @@ func (p *Projection) onPropertyRuleCreated(ctx context.Context, evt hwes.Event) 
 	mapper := func(dontAlwaysInclude bool) func(uuid.UUID) views_repo.AddToAlwaysIncludeParams {
 		return func(propertyId uuid.UUID) views_repo.AddToAlwaysIncludeParams {
 			return views_repo.AddToAlwaysIncludeParams{
-				RuleID:            payload.RuleId,
+				RuleID:            payload.RuleID,
 				PropertyID:        propertyId,
 				DontAlwaysInclude: dontAlwaysInclude,
 			}
@@ -168,7 +168,7 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 	mapper := func(dontAlwaysInclude bool) func(uuid.UUID) views_repo.AddToAlwaysIncludeParams {
 		return func(propertyId uuid.UUID) views_repo.AddToAlwaysIncludeParams {
 			return views_repo.AddToAlwaysIncludeParams{
-				RuleID:            payload.RuleId,
+				RuleID:            payload.RuleID,
 				PropertyID:        propertyId,
 				DontAlwaysInclude: dontAlwaysInclude,
 			}
@@ -182,7 +182,7 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 	// before we can add new items, we have to make sure they don't already exist, or the whole copy operation will be
 	// canceled
 	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
-		RuleID: payload.RuleId,
+		RuleID: payload.RuleID,
 		PropertyIds: hwutil.Map(toAppend, func(p views_repo.AddToAlwaysIncludeParams) uuid.UUID {
 			return p.PropertyID
 		}),
@@ -202,7 +202,7 @@ func (p *Projection) onPropertyRuleListsUpdated(ctx context.Context, evt hwes.Ev
 	// finally, remove things from the lists
 	// we can not merge this with above queries, as we might have to remove things we just added
 	err = viewsQuery.DeleteFromAlwaysInclude(ctx, views_repo.DeleteFromAlwaysIncludeParams{
-		RuleID:      payload.RuleId,
+		RuleID:      payload.RuleID,
 		PropertyIds: append(payload.RemoveFromAlwaysInclude, payload.RemoveFromDontAlwaysInclude...),
 	})
 

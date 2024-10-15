@@ -20,7 +20,7 @@ type PropertyViewRuleAggregate struct {
 func NewPropertyViewRuleAggregate(id uuid.UUID) *PropertyViewRuleAggregate {
 	aggregate := &PropertyViewRuleAggregate{
 		AggregateBase:    hwes.NewAggregateBase(PropertyViewRuleAggregateType, id),
-		PropertyViewRule: &models.PropertyViewRule{RuleId: id},
+		PropertyViewRule: &models.PropertyViewRule{RuleID: id},
 	}
 	aggregate.initEventListeners()
 	return aggregate
@@ -51,10 +51,10 @@ func (a *PropertyViewRuleAggregate) onPropertyRuleCreated(event hwes.Event) erro
 
 	// json unmarshaller sets uuid.Nil for missing uuids
 	// if they are set, they have to be valid
-	if payload.RuleId == uuid.Nil {
+	if payload.RuleID == uuid.Nil {
 		return errors.New("RuleID missing")
 	}
-	if a.GetID() != payload.RuleId {
+	if a.GetID() != payload.RuleID {
 		return errors.New("RuleID not AggregateID")
 	}
 	a.PropertyViewRule = &payload.PropertyViewRule

@@ -28,11 +28,11 @@ func NewIsPropertyAlwaysIncludedForViewSourceHandler() IsPropertyAlwaysIncludedF
 		subjectType pb.SubjectType,
 		propertyId uuid.UUID,
 	) (bool, error) {
-		wardId := uuid.NullUUID{}
+		wardID := uuid.NullUUID{}
 		wardIdP := viewSource.GetWardId()
 		if wardIdP != "" {
 			var err error
-			wardId, err = hwutil.ParseNullUUID(&wardIdP)
+			wardID, err = hwutil.ParseNullUUID(&wardIdP)
 			if err != nil {
 				return false, err
 			}
@@ -43,11 +43,11 @@ func NewIsPropertyAlwaysIncludedForViewSourceHandler() IsPropertyAlwaysIncludedF
 		switch subjectType {
 		case pb.SubjectType_SUBJECT_TYPE_PATIENT:
 			matcher = viewModels.PatientPropertyMatchers{
-				WardID: wardId,
+				WardID: wardID,
 			}
 		case pb.SubjectType_SUBJECT_TYPE_TASK:
 			matcher = viewModels.TaskPropertyMatchers{
-				WardID: wardId,
+				WardID: wardID,
 			}
 		default:
 			return false, status.Errorf(codes.Internal, "no matcher for subject type %s", subjectType.String())

@@ -23,17 +23,13 @@ import (
 type esClientStub struct{}
 
 func (e esClientStub) SubscribeToPersistentSubscriptionToAll(
-	ctx context.Context,
-	groupName string,
-	options esdb.SubscribeToPersistentSubscriptionOptions,
+	_ context.Context, _ string, _ esdb.SubscribeToPersistentSubscriptionOptions,
 ) (*esdb.PersistentSubscription, error) {
 	return nil, nil
 }
 
 func (e esClientStub) CreatePersistentSubscriptionToAll(
-	ctx context.Context,
-	groupName string,
-	options esdb.PersistentAllSubscriptionOptions,
+	_ context.Context, _ string, _ esdb.PersistentAllSubscriptionOptions,
 ) error {
 	return nil
 }
@@ -87,7 +83,7 @@ func TestPropertyViewPropertyRulesProjection_Create_TaskPropertyMatcher_GreenPat
 		},
 		"AlwaysInclude": ["a7ff7a87-7787-42b4-9aa8-037293ac9d90"],
 		"DontAlwaysInclude": [],
-		"RuleId": "96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"
+		"RuleID": "96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"
 	}`)
 
 	err, action := projection.onPropertyRuleCreated(ctx, hwes.Event{
@@ -141,7 +137,7 @@ func TestPropertyViewPropertyRulesProjection_Update_GreenPath(t *testing.T) {
 			"RemoveFromAlwaysInclude":["a7ff7a87-7787-42b4-9aa8-037293ac9d90", "08b23992-9489-41d2-b80d-d7d49c4c9168"],
 			"AppendToDontAlwaysInclude":["08b23992-9489-41d2-b80d-d7d49c4c9168", "db59dd1b-fd1c-488e-a73c-6926abe68c34"],
 			"RemoveFromDontAlwaysInclude": ["08b23992-9489-41d2-b80d-d7d49c4c9168"],
-			"RuleId": "{{ . }}"
+			"RuleID": "{{ . }}"
 		}`
 	s := ""
 	buf := bytes.NewBufferString(s)
@@ -205,7 +201,7 @@ func TestPropertyViewPropertyRulesProjection_Create_PatientPropertyMatcher_Green
 		},
 		"AlwaysInclude": ["a7ff7a87-7787-42b4-9aa8-037293ac9d90"],
 		"DontAlwaysInclude": [],
-		"RuleId": "c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"
+		"RuleID": "c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"
 	}`)
 
 	err, action := projection.onPropertyRuleCreated(ctx, hwes.Event{
@@ -235,7 +231,7 @@ func TestPropertyViewPropertyRulesProjection_Create_InvalidPropertyMatcher(t *te
 		},
 		"AlwaysInclude": ["a7ff7a87-7787-42b4-9aa8-037293ac9d90"],
 		"DontAlwaysInclude": [],
-		"RuleId": "c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"
+		"RuleID": "c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"
 	}`)
 
 	err, action := projection.onPropertyRuleCreated(ctx, hwes.Event{

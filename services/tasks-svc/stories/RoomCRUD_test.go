@@ -19,13 +19,13 @@ func TestCreateUpdateGetRoom(t *testing.T) {
 	roomClient := roomServiceClient()
 
 	// first, prepare ward
-	wardId, _ := prepareWard(t, ctx, "1")
+	wardID, _ := prepareWard(t, ctx, "1")
 
 	//
 	// create new room
 	//
 	createReq := &pb.CreateRoomRequest{
-		WardId: wardId,
+		WardId: wardID,
 		Name:   t.Name() + " room",
 	}
 	createRes, err := roomClient.CreateRoom(ctx, createReq)
@@ -89,13 +89,13 @@ func TestGetRooms(t *testing.T) {
 
 	for i, roomSfxs := range suffixMatrix {
 		wardSuffix := strconv.Itoa(i + 1)
-		wardId, _ := prepareWard(t, ctx, wardSuffix)
-		wardRoomsMap[wardId] = make([]string, 0)
+		wardID, _ := prepareWard(t, ctx, wardSuffix)
+		wardRoomsMap[wardID] = make([]string, 0)
 		for _, bedSuffix := range roomSfxs {
-			roomId, roomConsistency := prepareRoom(t, ctx, wardId, bedSuffix)
-			roomWardMap[roomId] = wardId
+			roomId, roomConsistency := prepareRoom(t, ctx, wardID, bedSuffix)
+			roomWardMap[roomId] = wardID
 			roomConsistencyMap[roomId] = roomConsistency
-			wardRoomsMap[wardId] = append(wardRoomsMap[wardId], roomId)
+			wardRoomsMap[wardID] = append(wardRoomsMap[wardID], roomId)
 		}
 	}
 
@@ -121,14 +121,14 @@ func TestGetRooms(t *testing.T) {
 
 	// Part 2: GetRooms with ward
 
-	for wardId, roomIDs := range wardRoomsMap {
-		res, err := roomClient.GetRooms(ctx, &pb.GetRoomsRequest{WardId: &wardId})
-		assert.NoError(t, err, "could not get all rooms for ward %s", wardId)
+	for wardID, roomIDs := range wardRoomsMap {
+		res, err := roomClient.GetRooms(ctx, &pb.GetRoomsRequest{WardId: &wardID})
+		assert.NoError(t, err, "could not get all rooms for ward %s", wardID)
 		assert.Len(t, res.Rooms, len(roomIDs))
 		actualRoomIDs := hwutil.Map(res.Rooms, func(room *pb.GetRoomsResponse_Room) string {
 			return room.Id
 		})
-		assert.Subset(t, roomIDs, actualRoomIDs, "actualRoomIDs not a subset for ward %s", wardId)
+		assert.Subset(t, roomIDs, actualRoomIDs, "actualRoomIDs not a subset for ward %s", wardID)
 	}
 }
 
@@ -139,9 +139,9 @@ func TestGetRoomOverviewsByWard(t *testing.T) {
 
 	// prepare all resources
 
-	wardId, _ := prepareWard(t, ctx, "")
-	roomIDA, _ := prepareRoom(t, ctx, wardId, "A")
-	roomIDB, _ := prepareRoom(t, ctx, wardId, "B")
+	wardID, _ := prepareWard(t, ctx, "")
+	roomIDA, _ := prepareRoom(t, ctx, wardID, "A")
+	roomIDB, _ := prepareRoom(t, ctx, wardID, "B")
 
 	bed1Id, _ := prepareBed(t, ctx, roomIDA, "1")
 	bed2Id, _ := prepareBed(t, ctx, roomIDA, "2")
@@ -196,7 +196,7 @@ func TestGetRoomOverviewsByWard(t *testing.T) {
 	hwtesting.WaitForProjectionsToSettle()
 
 	res, err := roomServiceClient().GetRoomOverviewsByWard(ctx, &pb.GetRoomOverviewsByWardRequest{
-		Id: wardId,
+		Id: wardID,
 	})
 	assert.NoError(t, err, "could not GetRoomOverviewsByWard")
 

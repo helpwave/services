@@ -18,8 +18,8 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	bedClient := bedServiceClient()
 
 	// first, prepare room
-	wardId, _ := prepareWard(t, ctx, "1")
-	roomId, _ := prepareRoom(t, ctx, wardId, "1")
+	wardID, _ := prepareWard(t, ctx, "1")
+	roomId, _ := prepareRoom(t, ctx, wardID, "1")
 
 	//
 	// create new bed
@@ -50,7 +50,7 @@ func TestCreateUpdateGetBed(t *testing.T) {
 	//
 
 	// prepare new room
-	roomID2, _ := prepareRoom(t, ctx, wardId, "2")
+	roomID2, _ := prepareRoom(t, ctx, wardID, "2")
 
 	updateReq := &pb.UpdateBedRequest{
 		Id:          bedID,
@@ -80,8 +80,8 @@ func TestGetBedByPatient(t *testing.T) {
 	ctx := context.Background()
 
 	// first, prepare room
-	wardId, _ := prepareWard(t, ctx, "1")
-	roomId, roomConsistency := prepareRoom(t, ctx, wardId, "")
+	wardID, _ := prepareWard(t, ctx, "1")
+	roomId, roomConsistency := prepareRoom(t, ctx, wardID, "")
 
 	// creating two beds
 	unrelatedBedID, _ := prepareBed(t, ctx, roomId, "unrelated")
@@ -130,11 +130,11 @@ func TestGetBeds(t *testing.T) {
 	roomBedsMap := make(map[string][]string)     // map roomID to its bedIDs
 	bedConsistencyMap := make(map[string]string) // map bedID to its consistency
 
-	wardId, _ := prepareWard(t, ctx, "1")
+	wardID, _ := prepareWard(t, ctx, "1")
 
 	for i, bedSfxs := range suffixMatrix {
 		roomSuffix := strconv.Itoa(i + 1)
-		roomId, _ := prepareRoom(t, ctx, wardId, roomSuffix)
+		roomId, _ := prepareRoom(t, ctx, wardID, roomSuffix)
 		roomBedsMap[roomId] = make([]string, 0)
 		for _, bedSuffix := range bedSfxs {
 			bedId, bedConsistency := prepareBed(t, ctx, roomId, bedSuffix)

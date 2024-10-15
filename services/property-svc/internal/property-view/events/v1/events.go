@@ -33,12 +33,12 @@ func (m *PropertyRuleCreatedEvent) FromJSON(data []byte) error {
 		return err
 	}
 
-	ruleIdRaw, ok := inter["RuleId"].(string)
+	ruleIDRaw, ok := inter["RuleID"].(string)
 	if !ok {
 		return errors.New("rule_id is not a string")
 	}
 
-	ruleID, err := uuid.Parse(ruleIdRaw)
+	ruleID, err := uuid.Parse(ruleIDRaw)
 	if err != nil {
 		return err
 	}
@@ -64,7 +64,7 @@ func (m *PropertyRuleCreatedEvent) FromJSON(data []byte) error {
 	}
 
 	rule := models.PropertyViewRule{
-		RuleId:            ruleID,
+		RuleID:            ruleID,
 		Matchers:          nil, // will be set below
 		AlwaysInclude:     alwaysIncludeUUIDs,
 		DontAlwaysInclude: dontAlwaysIncludeUUIDs,
@@ -100,7 +100,7 @@ func NewPropertyRuleCreatedEvent(
 }
 
 type PropertyRuleListsUpdatedEvent struct {
-	RuleId                      uuid.UUID
+	RuleID                      uuid.UUID
 	AppendToAlwaysInclude       []uuid.UUID
 	RemoveFromAlwaysInclude     []uuid.UUID
 	AppendToDontAlwaysInclude   []uuid.UUID
@@ -116,7 +116,7 @@ func NewPropertyRuleListsUpdatedEvent(ctx context.Context,
 	removeFromDontAlwaysInclude []uuid.UUID,
 ) (hwes.Event, error) {
 	payload := PropertyRuleListsUpdatedEvent{
-		RuleId:                      ruleID,
+		RuleID:                      ruleID,
 		AppendToAlwaysInclude:       appendToAlwaysInclude,
 		RemoveFromAlwaysInclude:     removeFromAlwaysInclude,
 		AppendToDontAlwaysInclude:   appendToDontAlwaysInclude,

@@ -126,10 +126,10 @@ func TestGetRecentWards(t *testing.T) {
 	hwtesting.WaitForProjectionsToSettle()
 
 	// touch each ward, to push it into RecentWards
-	for _, wardId := range wardIds {
-		res, err := wardClient.UpdateWard(ctx, &pb.UpdateWardRequest{Id: wardId})
-		assert.NoError(t, err, "could not update ward %s", wardId)
-		consistencies[wardId] = res.Consistency
+	for _, wardID := range wardIds {
+		res, err := wardClient.UpdateWard(ctx, &pb.UpdateWardRequest{Id: wardID})
+		assert.NoError(t, err, "could not update ward %s", wardID)
+		consistencies[wardID] = res.Consistency
 		hwtesting.WaitForProjectionsToSettle()
 	}
 
@@ -208,11 +208,11 @@ func TestGetWardOverviews(t *testing.T) {
 		{},             // Room 3
 	}
 
-	wardId, consistency := prepareWard(t, ctx, "")
+	wardID, consistency := prepareWard(t, ctx, "")
 
 	for i, bedSfxs := range suffixMatrix {
 		roomSuffix := strconv.Itoa(i + 1)
-		roomId, _ := prepareRoom(t, ctx, wardId, roomSuffix)
+		roomId, _ := prepareRoom(t, ctx, wardID, roomSuffix)
 		for j, bedSuffix := range bedSfxs {
 			bedId, _ := prepareBed(t, ctx, roomId, bedSuffix)
 			patientID := preparePatient(t, ctx, bedSuffix)
@@ -235,13 +235,13 @@ func TestGetWardOverviews(t *testing.T) {
 
 	found := false
 	for _, ward := range res.Wards {
-		if ward.Id != wardId {
+		if ward.Id != wardID {
 			continue
 		}
 		found = true
 
 		expected := map[string]interface{}{
-			"id":                wardId,
+			"id":                wardID,
 			"name":              t.Name() + " ward ",
 			"bed_count":         uint32(3),
 			"tasks_todo":        uint32(2),
@@ -270,10 +270,10 @@ func TestGetWardDetails(t *testing.T) {
 	wardClient := wardServiceClient()
 	taskTemplateClient := taskTemplateServiceClient()
 	ctx := context.Background()
-	wardId, consistency := prepareWard(t, ctx, "")
+	wardID, consistency := prepareWard(t, ctx, "")
 
 	expected := map[string]interface{}{
-		"id":          wardId,
+		"id":          wardID,
 		"name":        t.Name() + " ward ",
 		"consistency": consistency,
 	}
@@ -283,7 +283,7 @@ func TestGetWardDetails(t *testing.T) {
 	ttres, err := taskTemplateClient.CreateTaskTemplate(ctx, &pb.CreateTaskTemplateRequest{
 		Name:        t.Name() + " task template",
 		Description: nil,
-		WardId:      &wardId,
+		WardId:      &wardID,
 	})
 	assert.NoError(t, err, "could not CreateTaskTemplate")
 
@@ -318,7 +318,7 @@ func TestGetWardDetails(t *testing.T) {
 	rooms := make([]map[string]interface{}, 0)
 	for i, bedSfxs := range suffixMatrix {
 		roomSuffix := strconv.Itoa(i + 1)
-		roomId, roomConsistency := prepareRoom(t, ctx, wardId, roomSuffix)
+		roomId, roomConsistency := prepareRoom(t, ctx, wardID, roomSuffix)
 		expectedRoom := map[string]interface{}{
 			"id":          roomId,
 			"name":        t.Name() + " room " + roomSuffix,
@@ -341,7 +341,7 @@ func TestGetWardDetails(t *testing.T) {
 	// get GetWardDetails
 
 	ward, err := wardClient.GetWardDetails(ctx, &pb.GetWardDetailsRequest{
-		Id: wardId,
+		Id: wardID,
 	})
 	assert.NoError(t, err, "could GetWardDetailsRequest")
 

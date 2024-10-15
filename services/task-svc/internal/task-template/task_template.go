@@ -369,7 +369,7 @@ func (ServiceServer) GetAllTaskTemplatesByWard(
 ) (*pb.GetAllTaskTemplatesByWardResponse, error) {
 	templateRepo := task_template_repo.New(hwdb.GetDB())
 
-	wardId, err := uuid.Parse(req.GetWardId())
+	wardID, err := uuid.Parse(req.GetWardId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -377,7 +377,7 @@ func (ServiceServer) GetAllTaskTemplatesByWard(
 	rows, err := templateRepo.GetAllTaskTemplatesWithSubTasks(ctx,
 		task_template_repo.GetAllTaskTemplatesWithSubTasksParams{
 			WardID: uuid.NullUUID{
-				UUID:  wardId,
+				UUID:  wardID,
 				Valid: true,
 			},
 		})

@@ -27,7 +27,7 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 		viewHandlers := vh.NewPropertyViewHandlers(as)
 		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 
-		subjectID, err := matcher.GetSubjectId()
+		subjectID, err := matcher.GetSubjectID()
 		if err != nil {
 			return nil, fmt.Errorf(
 				"GetRelevantPropertyValuesQueryHandler: matcher error when getting subjectID: %w",

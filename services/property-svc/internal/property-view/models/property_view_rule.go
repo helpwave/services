@@ -24,7 +24,7 @@ type PropertyMatchers interface {
 
 	IsPropertyAlwaysIncluded(ctx context.Context, propertyID uuid.UUID) (bool, error)
 
-	GetSubjectId() (uuid.UUID, error)
+	GetSubjectID() (uuid.UUID, error)
 
 	// GetType returns the respective type identifier of the property matcher
 	// should be used to identify the matcher when converting it from a map to the respective type
@@ -32,7 +32,7 @@ type PropertyMatchers interface {
 }
 
 type PropertyViewRule struct {
-	RuleId uuid.UUID
+	RuleID uuid.UUID
 
 	/* matchers */
 	Matchers PropertyMatchers

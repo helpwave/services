@@ -28,14 +28,14 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 	roomRepo := room_repo.New(hwdb.GetDB())
 
 	// TODO: Auth
-	wardId, err := uuid.Parse(req.GetWardId())
+	wardID, err := uuid.Parse(req.GetWardId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	row, err := roomRepo.CreateRoom(ctx, room_repo.CreateRoomParams{
 		Name:   req.GetName(),
-		WardID: wardId,
+		WardID: wardID,
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -200,7 +200,7 @@ func (ServiceServer) GetRoomOverviewsByWard(
 ) (*pb.GetRoomOverviewsByWardResponse, error) {
 	roomRepo := room_repo.New(hwdb.GetDB())
 
-	wardId, err := uuid.Parse(req.GetId())
+	wardID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -210,7 +210,7 @@ func (ServiceServer) GetRoomOverviewsByWard(
 			TodoStatus:       int32(pb.TaskStatus_TASK_STATUS_TODO),
 			InProgressStatus: int32(pb.TaskStatus_TASK_STATUS_IN_PROGRESS),
 			DoneStatus:       int32(pb.TaskStatus_TASK_STATUS_DONE),
-			WardID:           wardId,
+			WardID:           wardID,
 		})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -262,7 +262,7 @@ func (ServiceServer) GetRoomOverviewsByWard(
 			return &val
 		})
 
-	tracking.AddWardToRecentActivity(ctx, wardId.String())
+	tracking.AddWardToRecentActivity(ctx, wardID.String())
 
 	return &pb.GetRoomOverviewsByWardResponse{
 		Rooms: roomsResponse,

@@ -105,8 +105,8 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 	// assign patient to bed
 	//
 
-	wardId, _ := prepareWard(t, ctx, "")
-	roomId, _ := prepareRoom(t, ctx, wardId, "")
+	wardID, _ := prepareWard(t, ctx, "")
+	roomId, _ := prepareRoom(t, ctx, wardID, "")
 	bedId, _ := prepareBed(t, ctx, roomId, "")
 
 	assignRes, err := patientClient.AssignBed(ctx, &pb.AssignBedRequest{
@@ -131,7 +131,7 @@ func TestCreateUpdateGetPatient(t *testing.T) {
 
 	assert.NotNil(t, getPatientRes.Room)
 	assert.Equal(t, roomId, getPatientRes.Room.Id)
-	assert.Equal(t, wardId, getPatientRes.Room.WardId)
+	assert.Equal(t, wardID, getPatientRes.Room.WardId)
 
 	assert.Equal(t, assignRes.Consistency, getPatientRes.Consistency)
 
@@ -170,8 +170,8 @@ func TestGetPatientByBed(t *testing.T) {
 	// create patient and bed
 	//
 
-	wardId, _ := prepareWard(t, ctx, "")
-	roomId, _ := prepareRoom(t, ctx, wardId, "")
+	wardID, _ := prepareWard(t, ctx, "")
+	roomId, _ := prepareRoom(t, ctx, wardID, "")
 	bedId, _ := prepareBed(t, ctx, roomId, "")
 
 	createReq := &pb.CreatePatientRequest{
@@ -215,8 +215,8 @@ func TestGetPatientsByWard(t *testing.T) {
 	// create patients and beds
 	//
 
-	wardId, _ := prepareWard(t, ctx, "")
-	roomId, _ := prepareRoom(t, ctx, wardId, "")
+	wardID, _ := prepareWard(t, ctx, "")
+	roomId, _ := prepareRoom(t, ctx, wardID, "")
 	bedId1, _ := prepareBed(t, ctx, roomId, "1")
 	bedId2, _ := prepareBed(t, ctx, roomId, "2")
 
@@ -257,7 +257,7 @@ func TestGetPatientsByWard(t *testing.T) {
 	//
 
 	getRes, err := patientClient.GetPatientsByWard(ctx, &pb.GetPatientsByWardRequest{
-		WardId: wardId,
+		WardId: wardID,
 	})
 	assert.NoError(t, err)
 
@@ -288,7 +288,7 @@ func TestGetPatientAssignmentByWard(t *testing.T) {
 	ctx := context.Background()
 	patientClient := patientServiceClient()
 
-	wardId, _ := prepareWard(t, ctx, "")
+	wardID, _ := prepareWard(t, ctx, "")
 
 	suffixMatrix := [][]string{
 		{"1 A", "1 B"}, // Room 1
@@ -307,7 +307,7 @@ func TestGetPatientAssignmentByWard(t *testing.T) {
 
 	for i, bedSfxs := range suffixMatrix {
 		roomSuffix := strconv.Itoa(i + 1)
-		roomId, roomConsistency := prepareRoom(t, ctx, wardId, roomSuffix)
+		roomId, roomConsistency := prepareRoom(t, ctx, wardID, roomSuffix)
 		roomIds = append(roomIds, roomId)
 		roomConsistencies[roomId] = roomConsistency
 		bedsForRoom[roomId] = make([]string, 0)
@@ -328,7 +328,7 @@ func TestGetPatientAssignmentByWard(t *testing.T) {
 		}
 	}
 
-	res, err := patientClient.GetPatientAssignmentByWard(ctx, &pb.GetPatientAssignmentByWardRequest{WardId: wardId})
+	res, err := patientClient.GetPatientAssignmentByWard(ctx, &pb.GetPatientAssignmentByWardRequest{WardId: wardID})
 	assert.NoError(t, err)
 
 	assert.Len(t, res.Rooms, len(suffixMatrix))
@@ -361,9 +361,9 @@ func TestGetPatientList(t *testing.T) {
 	// Prepare ward, rooms, beds
 	//
 
-	wardId, _ := prepareWard(t, ctx, "")
-	room1Id, room1Consistency := prepareRoom(t, ctx, wardId, "1")
-	room2Id, room2Consistency := prepareRoom(t, ctx, wardId, "2")
+	wardID, _ := prepareWard(t, ctx, "")
+	room1Id, room1Consistency := prepareRoom(t, ctx, wardID, "1")
+	room2Id, room2Consistency := prepareRoom(t, ctx, wardID, "2")
 	bed1Id, bed1Consistency := prepareBed(t, ctx, room1Id, "1")
 	bed2Id, bed2Consistency := prepareBed(t, ctx, room2Id, "2")
 
@@ -459,7 +459,7 @@ func TestGetPatientList(t *testing.T) {
 			assert.Equal(t, room1Id, patient.Room.Id)
 			assert.Equal(t, room1Consistency, patient.Room.Consistency)
 			assert.Equal(t, t.Name()+" room 1", patient.Room.Name)
-			assert.Equal(t, wardId, patient.Room.WardId)
+			assert.Equal(t, wardID, patient.Room.WardId)
 
 			assert.Len(t, patient.Tasks, 1)
 			assert.Equal(t, task1Res.Id, patient.Tasks[0].Id)
@@ -496,7 +496,7 @@ func TestGetPatientList(t *testing.T) {
 			assert.Equal(t, room2Id, patient.Room.Id)
 			assert.Equal(t, room2Consistency, patient.Room.Consistency)
 			assert.Equal(t, t.Name()+" room 2", patient.Room.Name)
-			assert.Equal(t, wardId, patient.Room.WardId)
+			assert.Equal(t, wardID, patient.Room.WardId)
 		}
 	}
 	assert.Equal(t, 2, activeFound)
@@ -528,8 +528,8 @@ func TestGetPatientDetails(t *testing.T) {
 	// create patient and bed
 	//
 
-	wardId, _ := prepareWard(t, ctx, "")
-	roomId, _ := prepareRoom(t, ctx, wardId, "")
+	wardID, _ := prepareWard(t, ctx, "")
+	roomId, _ := prepareRoom(t, ctx, wardID, "")
 	bedId, _ := prepareBed(t, ctx, roomId, "")
 
 	createReq := &pb.CreatePatientRequest{
@@ -628,8 +628,8 @@ func TestGetRecentPatients(t *testing.T) {
 	patientClient := pb.NewPatientServiceClient(hwtesting.GetGrpcConn(userID.String()))
 	ctx := context.Background()
 
-	wardId, _ := prepareWard(t, ctx, "")
-	roomId, roomConsistency := prepareRoom(t, ctx, wardId, "")
+	wardID, _ := prepareWard(t, ctx, "")
+	roomId, roomConsistency := prepareRoom(t, ctx, wardID, "")
 	bedId, bedConsitency := prepareBed(t, ctx, roomId, "")
 	patientWithBedId := ""
 

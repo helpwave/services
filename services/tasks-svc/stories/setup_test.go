@@ -100,10 +100,10 @@ func prepareWard(t *testing.T, ctx context.Context, suffix string) (wardID, ward
 	return wardRes.Id, wardRes.Consistency
 }
 
-func prepareRoom(t *testing.T, ctx context.Context, wardId, suffix string) (roomID, roomConsistency string) {
+func prepareRoom(t *testing.T, ctx context.Context, wardID, suffix string) (roomID, roomConsistency string) {
 	roomRes, err := roomServiceClient().CreateRoom(ctx, &pb.CreateRoomRequest{
 		Name:   t.Name() + " room " + suffix,
-		WardId: wardId,
+		WardId: wardID,
 	})
 	assert.NoError(t, err, "prepareRoom failed: could not create room", suffix)
 	return roomRes.Id, roomRes.Consistency
