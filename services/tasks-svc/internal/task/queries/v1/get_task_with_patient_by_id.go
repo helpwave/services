@@ -42,7 +42,7 @@ func NewGetTaskWithPatientByIDQueryHandler() GetTaskWithPatientByIDQueryHandler 
 					CreatedAt:    rows[0].Task.CreatedAt.Time,
 					Subtasks:     make(map[uuid.UUID]models.Subtask),
 				},
-				Consistency: common.ConsistencyToken(rows[0].Task.Consistency).String(),
+				Consistency: common.ConsistencyToken(rows[0].Task.Consistency).String(), //nolint:gosec
 			},
 			Patient: models.Patient{
 				ID:                      rows[0].Patient.ID,

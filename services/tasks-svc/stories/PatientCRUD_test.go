@@ -574,12 +574,13 @@ func TestGetPatientDetails(t *testing.T) {
 		})
 
 		taskRes, err := taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
-			Name:           t.Name() + " task " + taskSuffix,
-			Description:    nil,
-			PatientId:      patientId,
-			Public:         hwutil.PtrTo(true),
-			DueAt:          nil,
-			InitialStatus:  hwutil.PtrTo(pb.TaskStatus(i + 1)), // this is dirty, lol
+			Name:        t.Name() + " task " + taskSuffix,
+			Description: nil,
+			PatientId:   patientId,
+			Public:      hwutil.PtrTo(true),
+			DueAt:       nil,
+			// behold: peak enginering:
+			InitialStatus:  hwutil.PtrTo(pb.TaskStatus(i + 1)), //nolint:gosec
 			AssignedUserId: nil,
 			Subtasks:       sts,
 		})

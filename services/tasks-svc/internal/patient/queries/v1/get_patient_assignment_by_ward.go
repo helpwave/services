@@ -45,14 +45,14 @@ func NewGetPatientAssignmentByWardQueryHandler() GetPatientAssignmentByWardQuery
 									ID:                      bedRow.PatientID.UUID,
 									HumanReadableIdentifier: *bedRow.PatientHumanReadableIdentifier,
 								},
-								Consistency: common.ConsistencyToken(roomRow.RoomConsistency).String(),
+								Consistency: common.ConsistencyToken(roomRow.RoomConsistency).String(), //nolint:gosec
 							}
 						}
 						val := &models.BedWithPatient{
 							Bed: models.Bed{
 								ID:          bedRow.BedID.UUID,
-								Name:        *bedRow.BedName, // safe, bed is NOT NULL
-								Consistency: common.ConsistencyToken(*bedRow.BedConsistency).String(),
+								Name:        *bedRow.BedName,                                          // safe, bed is NOT NULL
+								Consistency: common.ConsistencyToken(*bedRow.BedConsistency).String(), //nolint:gosec
 							},
 							Patient: patient,
 						}
@@ -62,7 +62,7 @@ func NewGetPatientAssignmentByWardQueryHandler() GetPatientAssignmentByWardQuery
 					Room: models.Room{
 						ID:          roomRow.RoomID,
 						Name:        roomRow.RoomName,
-						Consistency: common.ConsistencyToken(roomRow.RoomConsistency).String(),
+						Consistency: common.ConsistencyToken(roomRow.RoomConsistency).String(), //nolint:gosec
 					},
 					Beds: beds,
 				}

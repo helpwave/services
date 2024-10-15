@@ -69,7 +69,7 @@ func (ServiceServer) CreateBed(ctx context.Context, req *pb.CreateBedRequest) (*
 
 	return &pb.CreateBedResponse{
 		Id:          bed.ID.String(),
-		Consistency: common.ConsistencyToken(bed.Consistency).String(),
+		Consistency: common.ConsistencyToken(bed.Consistency).String(), //nolint:gosec
 	}, nil
 }
 
@@ -94,7 +94,7 @@ func (ServiceServer) GetBed(ctx context.Context, req *pb.GetBedRequest) (*pb.Get
 		Id:          bed.ID.String(),
 		RoomId:      bed.RoomID.String(),
 		Name:        bed.Name,
-		Consistency: common.ConsistencyToken(bed.Consistency).String(),
+		Consistency: common.ConsistencyToken(bed.Consistency).String(), //nolint:gosec
 	}, nil
 }
 
@@ -123,14 +123,14 @@ func (ServiceServer) GetBedByPatient(
 				Id:          res.RoomID.String(),
 				Name:        res.RoomName,
 				WardId:      res.WardID.String(),
-				Consistency: common.ConsistencyToken(res.RoomConsistency).String(),
+				Consistency: common.ConsistencyToken(res.RoomConsistency).String(), //nolint:gosec
 			}
 		}),
 		Bed: hwutil.MapNillable(result, func(res bed_repo.GetBedWithRoomByPatientRow) pb.GetBedByPatientResponse_Bed {
 			return pb.GetBedByPatientResponse_Bed{
 				Id:          res.BedID.String(),
 				Name:        res.BedName,
-				Consistency: common.ConsistencyToken(res.BedConsistency).String(),
+				Consistency: common.ConsistencyToken(res.BedConsistency).String(), //nolint:gosec
 			}
 		}),
 	}, nil
@@ -155,7 +155,7 @@ func (ServiceServer) GetBeds(ctx context.Context, req *pb.GetBedsRequest) (*pb.G
 				Id:          bed.ID.String(),
 				RoomId:      bed.RoomID.String(),
 				Name:        bed.Name,
-				Consistency: common.ConsistencyToken(bed.Consistency).String(),
+				Consistency: common.ConsistencyToken(bed.Consistency).String(), //nolint:gosec
 			}
 		}),
 	}, nil
@@ -191,7 +191,7 @@ func (ServiceServer) GetBedsByRoom(
 		res.Beds = append(res.Beds, &pb.GetBedsByRoomResponse_Bed{
 			Id:          bed.ID.String(),
 			Name:        bed.Name,
-			Consistency: common.ConsistencyToken(bed.Consistency).String(),
+			Consistency: common.ConsistencyToken(bed.Consistency).String(), //nolint:gosec
 		})
 	}
 
@@ -222,8 +222,8 @@ func (ServiceServer) UpdateBed(ctx context.Context, req *pb.UpdateBedRequest) (*
 	}
 
 	return &pb.UpdateBedResponse{
-		Conflict:    nil, // TODO
-		Consistency: common.ConsistencyToken(consistency).String(),
+		Conflict:    nil,                                           // TODO
+		Consistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 

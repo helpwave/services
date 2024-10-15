@@ -116,9 +116,10 @@ func TestGetRecentWards(t *testing.T) {
 			})
 			require.NoError(t, err, "could not assign bed to patient")
 			_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
-				Name:          t.Name() + " Patient " + bedSuffix + " Task ",
-				PatientId:     patientID,
-				InitialStatus: hwutil.PtrTo(pb.TaskStatus(j + 1)), // this is dirty, lol
+				Name:      t.Name() + " Patient " + bedSuffix + " Task ",
+				PatientId: patientID,
+				// behold: peak enginering:
+				InitialStatus: hwutil.PtrTo(pb.TaskStatus(j + 1)), //nolint:gosec
 			})
 			require.NoError(t, err, "could not create task for patient")
 		}
@@ -223,9 +224,10 @@ func TestGetWardOverviews(t *testing.T) {
 			})
 			require.NoError(t, err, "could not assign bed to patient")
 			_, err = taskClient.CreateTask(ctx, &pb.CreateTaskRequest{
-				Name:          t.Name() + " Patient " + bedSuffix + " Task ",
-				PatientId:     patientID,
-				InitialStatus: hwutil.PtrTo(pb.TaskStatus(j + 1)), // this is dirty, lol
+				Name:      t.Name() + " Patient " + bedSuffix + " Task ",
+				PatientId: patientID,
+				// behold: peak enginering:
+				InitialStatus: hwutil.PtrTo(pb.TaskStatus(j + 1)), //nolint:gosec
 			})
 			require.NoError(t, err, "could not create task for patient")
 		}

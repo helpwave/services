@@ -65,7 +65,7 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 					IsArchived:          row.Property.IsArchived,
 					SetID:               row.Property.SetID,
 					Value:               nil,
-					PropertyConsistency: common.ConsistencyToken(row.Property.Consistency).String(),
+					PropertyConsistency: common.ConsistencyToken(row.Property.Consistency).String(), //nolint:gosec
 				}
 			}
 
@@ -80,7 +80,7 @@ func NewGetRelevantPropertyValuesQueryHandler(as hwes.AggregateStore) GetRelevan
 			}
 
 			properties[row.Property.ID].ValueConsistency = hwutil.PtrTo(
-				common.ConsistencyToken(*row.ValueConsistency).String(),
+				common.ConsistencyToken(*row.ValueConsistency).String(), //nolint:gosec
 			)
 
 			// If row has SelectOptionID, the LEFT JOIN yielded a value

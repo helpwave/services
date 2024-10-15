@@ -90,7 +90,7 @@ func (ServiceServer) CreateTaskTemplate(
 
 	return &pb.CreateTaskTemplateResponse{
 		Id:          templateID.String(),
-		Consistency: common.ConsistencyToken(consistency).String(),
+		Consistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
@@ -167,7 +167,7 @@ func (ServiceServer) DeleteTaskTemplateSubTask(
 		Msg("taskTemplateSubtask deleted")
 
 	return &pb.DeleteTaskTemplateSubTaskResponse{
-		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(),
+		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
@@ -195,8 +195,8 @@ func (ServiceServer) UpdateTaskTemplate(
 	}
 
 	return &pb.UpdateTaskTemplateResponse{
-		Conflict:    nil, // TODO
-		Consistency: common.ConsistencyToken(consistency).String(),
+		Conflict:    nil,                                           // TODO
+		Consistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
@@ -243,8 +243,8 @@ func (ServiceServer) UpdateTaskTemplateSubTask(
 	}
 
 	return &pb.UpdateTaskTemplateSubTaskResponse{
-		Conflict:                nil, // TODO
-		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(),
+		Conflict:                nil,                                           // TODO
+		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
@@ -280,7 +280,7 @@ func (ServiceServer) CreateTaskTemplateSubTask(
 
 	return &pb.CreateTaskTemplateSubTaskResponse{
 		Id:                      subtaskID.String(),
-		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(),
+		TaskTemplateConsistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
@@ -326,7 +326,7 @@ func (ServiceServer) GetAllTaskTemplates(
 				IsPublic:    row.TaskTemplate.WardID.Valid,
 				Subtasks:    make([]*pb.GetAllTaskTemplatesResponse_TaskTemplate_SubTask, 0),
 				CreatedBy:   row.TaskTemplate.CreatedBy.String(),
-				Consistency: common.ConsistencyToken(row.TaskTemplate.Consistency).String(),
+				Consistency: common.ConsistencyToken(row.TaskTemplate.Consistency).String(), //nolint:gosec
 			}
 			templates = append(templates, template)
 			templateMap[row.TaskTemplate.ID] = len(templates) - 1
@@ -386,7 +386,7 @@ func (ServiceServer) GetTaskTemplate(
 		Description: taskTemplate.Description,
 		IsPublic:    taskTemplate.WardID.Valid,
 		CreatedBy:   taskTemplate.CreatedBy.String(),
-		Consistency: common.ConsistencyToken(taskTemplate.Consistency).String(),
+		Consistency: common.ConsistencyToken(taskTemplate.Consistency).String(), //nolint:gosec
 		Subtasks:    taskTemplateSubtasks,
 	}, nil
 }

@@ -66,6 +66,6 @@ func NewGetPropertyByIDQueryHandler() GetPropertyByIDQueryHandler {
 			}
 		}
 
-		return property, common.ConsistencyToken(rows[0].Property.Consistency), nil
+		return property, common.ConsistencyToken(rows[0].Property.Consistency), nil //nolint:gosec
 	}
 }

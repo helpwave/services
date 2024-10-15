@@ -56,7 +56,7 @@ func NewGetPropertiesQueryHandler() GetPropertiesQueryHandler {
 						FieldType:     pb.FieldType(row.Property.FieldType),
 						SubjectType:   pb.SubjectType(row.Property.SubjectType),
 					},
-					Consistency: common.ConsistencyToken(row.Property.Consistency).String(),
+					Consistency: common.ConsistencyToken(row.Property.Consistency).String(), //nolint:gosec
 				}
 				propertyMap[row.Property.ID] = property
 				properties = append(properties, property)

@@ -41,7 +41,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 						ID:          row.RoomID.UUID,
 						Name:        *row.RoomName,
 						WardID:      row.WardID.UUID,
-						Consistency: common.ConsistencyToken(*row.RoomConsistency).String(),
+						Consistency: common.ConsistencyToken(*row.RoomConsistency).String(), //nolint:gosec
 					}
 				}
 
@@ -49,7 +49,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 					bed = &models.Bed{
 						ID:          row.BedID.UUID,
 						Name:        *row.BedName,
-						Consistency: common.ConsistencyToken(*row.BedsConsistency).String(),
+						Consistency: common.ConsistencyToken(*row.BedsConsistency).String(), //nolint:gosec
 					}
 				}
 
@@ -64,7 +64,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 							CreatedAt:               row.Patient.CreatedAt.Time,
 							UpdatedAt:               row.Patient.UpdatedAt.Time,
 						},
-						Consistency: common.ConsistencyToken(row.Patient.Consistency).String(),
+						Consistency: common.ConsistencyToken(row.Patient.Consistency).String(), //nolint:gosec
 					},
 					Room:  room,
 					Bed:   bed,
@@ -94,7 +94,7 @@ func NewGetAllPatientsWithDetailsQueryHandler() GetAllPatientsWithDetailsQueryHa
 						Public:       *row.TaskPublic,
 						Subtasks:     make(map[uuid.UUID]tasksModels.Subtask),
 					},
-					Consistency: common.ConsistencyToken(*row.TaskConsistency).String(),
+					Consistency: common.ConsistencyToken(*row.TaskConsistency).String(), //nolint:gosec
 				}
 				patientDetail.Tasks = append(patientDetail.Tasks, task)
 				tasksMap[row.TaskID.UUID] = len(patientDetail.Tasks) - 1

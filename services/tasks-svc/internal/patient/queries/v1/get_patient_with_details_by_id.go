@@ -40,7 +40,7 @@ func NewGetPatientWithDetailsByIDQueryHandler(as hwes.AggregateStore) GetPatient
 			bed = &models.Bed{
 				ID:          patientRes.BedID.UUID,
 				Name:        *patientRes.BedName,
-				Consistency: common.ConsistencyToken(*patientRes.BedConsistency).String(),
+				Consistency: common.ConsistencyToken(*patientRes.BedConsistency).String(), //nolint:gosec
 			}
 		}
 
@@ -49,7 +49,7 @@ func NewGetPatientWithDetailsByIDQueryHandler(as hwes.AggregateStore) GetPatient
 				ID:          patientRes.RoomID.UUID,
 				Name:        *patientRes.RoomName,
 				WardID:      patientRes.WardID.UUID,
-				Consistency: common.ConsistencyToken(*patientRes.RoomConsistency).String(),
+				Consistency: common.ConsistencyToken(*patientRes.RoomConsistency).String(), //nolint:gosec
 			}
 		}
 
@@ -64,7 +64,7 @@ func NewGetPatientWithDetailsByIDQueryHandler(as hwes.AggregateStore) GetPatient
 					CreatedAt:               patientRes.CreatedAt.Time,
 					UpdatedAt:               patientRes.UpdatedAt.Time,
 				},
-				Consistency: common.ConsistencyToken(patientRes.Consistency).String(),
+				Consistency: common.ConsistencyToken(patientRes.Consistency).String(), //nolint:gosec
 			},
 			Tasks: tasks,
 			Bed:   bed,

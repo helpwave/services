@@ -53,7 +53,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 							CreatedAt:    row.Task.CreatedAt.Time,
 							Subtasks:     make(map[uuid.UUID]models.Subtask),
 						},
-						Consistency: common.ConsistencyToken(row.Task.Consistency).String(),
+						Consistency: common.ConsistencyToken(row.Task.Consistency).String(), //nolint:gosec
 					},
 					Patient: models.Patient{
 						ID:                      row.Patient.ID,
@@ -61,7 +61,7 @@ func NewGetTasksWithPatientsByAssigneeQueryHandler() GetTasksWithPatientsByAssig
 						Notes:                   row.Patient.Notes,
 						BedID:                   row.Patient.BedID,
 						IsDischarged:            row.Patient.IsDischarged,
-						Consistency:             common.ConsistencyToken(row.Patient.Consistency).String(),
+						Consistency:             common.ConsistencyToken(row.Patient.Consistency).String(), //nolint:gosec
 					},
 				}
 

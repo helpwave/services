@@ -49,7 +49,7 @@ func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 						CreatedAt:    row.Task.CreatedAt.Time,
 						Subtasks:     make(map[uuid.UUID]models.Subtask),
 					},
-					Consistency: common.ConsistencyToken(row.Task.Consistency).String(),
+					Consistency: common.ConsistencyToken(row.Task.Consistency).String(), //nolint:gosec
 				}
 
 				if row.Task.DueAt.Valid {

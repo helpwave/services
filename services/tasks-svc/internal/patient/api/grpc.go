@@ -80,13 +80,13 @@ func (s *PatientGrpcService) GetPatient(
 			bedRes = &pb.GetPatientResponse_Bed{
 				Id:          result.Bed.ID.String(),
 				Name:        result.Bed.Name,
-				Consistency: common.ConsistencyToken(result.Bed.Consistency).String(),
+				Consistency: common.ConsistencyToken(result.Bed.Consistency).String(), //nolint:gosec
 			}
 			roomRes = &pb.GetPatientResponse_Room{
 				Id:          result.Room.ID.String(),
 				Name:        result.Room.Name,
 				WardId:      result.Room.WardID.String(),
-				Consistency: common.ConsistencyToken(result.Room.Consistency).String(),
+				Consistency: common.ConsistencyToken(result.Room.Consistency).String(), //nolint:gosec
 			}
 		}
 	}
@@ -376,13 +376,13 @@ func (s *PatientGrpcService) GetRecentPatients(
 				bedRes = &pb.GetRecentPatientsResponse_Bed{
 					Id:          result.Bed.ID.String(),
 					Name:        result.Bed.Name,
-					Consistency: common.ConsistencyToken(result.Bed.Consistency).String(),
+					Consistency: common.ConsistencyToken(result.Bed.Consistency).String(), //nolint:gosec
 				}
 				roomRes = &pb.GetRecentPatientsResponse_Room{
 					Id:          result.Room.ID.String(),
 					Name:        result.Room.Name,
 					WardId:      result.Room.WardID.String(),
-					Consistency: common.ConsistencyToken(result.Room.Consistency).String(),
+					Consistency: common.ConsistencyToken(result.Room.Consistency).String(), //nolint:gosec
 				}
 			}
 		}

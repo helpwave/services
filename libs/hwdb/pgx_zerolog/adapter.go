@@ -63,7 +63,7 @@ func (pl *Logger) Log(ctx context.Context, level tracelog.LogLevel, msg string, 
 	}
 
 	// pgx thinks it's more important than it is
-	zlevel = zerolog.Level(int(math.Max(float64(zlevel-2), -1)))
+	zlevel = zerolog.Level(int(math.Max(float64(zlevel-2), -1))) //nolint:gosec
 
 	var zctx zerolog.Context
 	if pl.fromContext {

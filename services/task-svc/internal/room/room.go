@@ -311,9 +311,9 @@ func (ServiceServer) GetRoomOverviewsByWard(
 							return pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient{
 								Id:                      bedRow.PatientID.UUID.String(),
 								HumanReadableIdentifier: *bedRow.PatientHumanReadableIdentifier,
-								TasksUnscheduled:        uint32(bedRow.TodoTasksCount),
-								TasksInProgress:         uint32(bedRow.InProgressTasksCount),
-								TasksDone:               uint32(bedRow.DoneTasksCount),
+								TasksUnscheduled:        uint32(bedRow.TodoTasksCount),       //nolint:gosec
+								TasksInProgress:         uint32(bedRow.InProgressTasksCount), //nolint:gosec
+								TasksDone:               uint32(bedRow.DoneTasksCount),       //nolint:gosec
 							}
 						})
 

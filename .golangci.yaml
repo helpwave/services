@@ -23,6 +23,7 @@ linters:
     - wrapcheck # does not matter to us
     - wsl # too aggressive
     - exportloopref # deprecated
+    - tagalign # too many false-positives
 
     # TODOs: #865
     - cyclop # TODO

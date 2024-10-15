@@ -38,7 +38,7 @@ func NewGetPatientByBedQueryHandler() GetPatientByBedQueryHandler {
 				CreatedAt:               patient.CreatedAt.Time,
 				UpdatedAt:               patient.UpdatedAt.Time,
 			},
-			Consistency: common.ConsistencyToken(patient.Consistency).String(),
+			Consistency: common.ConsistencyToken(patient.Consistency).String(), //nolint:gosec
 		}, nil
 	}
 }

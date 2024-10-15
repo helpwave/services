@@ -165,7 +165,7 @@ func createBasicPropertyValue(
 		ID:          aggregateID,
 		PropertyID:  propertyID,
 		SubjectID:   subjectID,
-		Consistency: int64(evt.GetVersion()),
+		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	}
 
 	switch {
@@ -331,7 +331,7 @@ func (p *Projection) onPropertyValueUpdated(ctx context.Context, evt hwes.Event)
 		// update consistency
 		err = propertyValueRepo.UpdatePropertyValueByID(ctx, property_value_repo.UpdatePropertyValueByIDParams{
 			ID:          evt.AggregateID,
-			Consistency: int64(evt.GetVersion()),
+			Consistency: int64(evt.GetVersion()), //nolint:gosec
 		})
 		if err := hwdb.Error(ctx, err); err != nil {
 			return fmt.Errorf("onPropertyValueUpdated: could not update consistency of value: %w", err),
@@ -359,7 +359,7 @@ func updateBasicPropertyValue(
 ) (error, *esdb.NackAction) {
 	updatePropertyValueParams := property_value_repo.UpdatePropertyValueByIDParams{
 		ID:          aggregateID,
-		Consistency: int64(evt.GetVersion()),
+		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	}
 
 	switch {

@@ -67,7 +67,7 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 		Notes:                   payload.Notes,
 		CreatedAt:               hwdb.TimeToTimestamp(evt.Timestamp),
 		UpdatedAt:               hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency:             int64(evt.GetVersion()),
+		Consistency:             int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -94,7 +94,7 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 		ID:          evt.AggregateID,
 		BedID:       bedId,
 		UpdatedAt:   hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency: int64(evt.GetVersion()),
+		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -108,7 +108,7 @@ func (a *Projection) onBedUnassigned(ctx context.Context, evt hwes.Event) (error
 		ID:          evt.AggregateID,
 		BedID:       uuid.NullUUID{},
 		UpdatedAt:   hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency: int64(evt.GetVersion()),
+		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -122,7 +122,7 @@ func (a *Projection) onPatientDischarged(ctx context.Context, evt hwes.Event) (e
 		ID:           evt.AggregateID,
 		IsDischarged: hwutil.PtrTo(true),
 		UpdatedAt:    hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency:  int64(evt.GetVersion()),
+		Consistency:  int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -144,7 +144,7 @@ func (a *Projection) onNotesUpdated(ctx context.Context, evt hwes.Event) (error,
 		ID:          evt.AggregateID,
 		Notes:       &payload.Notes,
 		UpdatedAt:   hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency: int64(evt.GetVersion()),
+		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -166,7 +166,7 @@ func (a *Projection) onHumanReadableIdentifierUpdated(ctx context.Context, evt h
 		ID:                     evt.AggregateID,
 		HumanReadableIdentfier: &payload.HumanReadableIdentifier,
 		UpdatedAt:              hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency:            int64(evt.GetVersion()),
+		Consistency:            int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -180,7 +180,7 @@ func (a *Projection) onPatientReadmitted(ctx context.Context, evt hwes.Event) (e
 		ID:           evt.AggregateID,
 		IsDischarged: hwutil.PtrTo(false),
 		UpdatedAt:    hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency:  int64(evt.GetVersion()),
+		Consistency:  int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
