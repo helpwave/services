@@ -45,7 +45,6 @@ func TestTaskGetPropertyAlwaysIncluded(t *testing.T) {
 	if !assert.NoError(t, err, "propertyID is not a uuid") {
 		return
 	}
-
 	hwtesting.WaitForProjectionsToSettle()
 
 	//

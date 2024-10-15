@@ -1,7 +1,7 @@
 -- name: CreateProperty :exec
 INSERT INTO properties
-	(id, subject_type, field_type, name, consistency)
-VALUES ($1, $2, $3, $4, $5);
+	(id, subject_type, field_type, name, consistency, organization_id)
+VALUES ($1, $2, $3, $4, $5, $6);
 
 -- name: GetPropertyById :one
 SELECT * FROM properties WHERE id = $1;
@@ -24,7 +24,9 @@ SELECT
  	WHERE
  		(subject_type = sqlc.narg('subject_type') OR sqlc.narg('subject_type') IS NULL )
  	   	AND
- 	    (properties.id = sqlc.narg('id') OR sqlc.narg('id') IS NULL);
+ 	    (properties.id = sqlc.narg('id') OR sqlc.narg('id') IS NULL)
+ 	    AND
+		properties.organization_id = @organization_id;
 
 -- name: UpdateProperty :exec
 UPDATE properties

@@ -951,11 +951,6 @@ export class UnassignTaskRequest extends jspb.Message {
   getUserId(): string;
   setUserId(value: string): UnassignTaskRequest;
 
-  getConsistency(): string;
-  setConsistency(value: string): UnassignTaskRequest;
-  hasConsistency(): boolean;
-  clearConsistency(): UnassignTaskRequest;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UnassignTaskRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UnassignTaskRequest): UnassignTaskRequest.AsObject;
@@ -968,12 +963,6 @@ export namespace UnassignTaskRequest {
   export type AsObject = {
     taskId: string,
     userId: string,
-    consistency?: string,
-  }
-
-  export enum ConsistencyCase { 
-    _CONSISTENCY_NOT_SET = 0,
-    CONSISTENCY = 3,
   }
 }
 

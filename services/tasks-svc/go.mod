@@ -7,6 +7,7 @@ replace (
 	decaying_lru => ../../libs/decaying_lru
 	gen => ../../gen/go
 	hwauthz => ../../libs/hwauthz
+	hwgrpc => ../../libs/hwgrpc
 	hwdb => ../../libs/hwdb
 	hwes => ../../libs/hwes
 	hwlocale => ../../libs/hwlocale
@@ -38,6 +39,7 @@ require (
 	hwlocale v0.0.0
 	hwtesting v0.0.0
 	hwutil v0.0.0
+	hwgrpc v0.0.0
 )
 
 require (
@@ -85,6 +87,7 @@ require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
+	github.com/jinzhu/copier v0.4.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/jzelinskie/stringz v0.0.3 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect

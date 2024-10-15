@@ -21,15 +21,16 @@ type PatientPropertyViewRule struct {
 }
 
 type Property struct {
-	ID           uuid.UUID
-	SubjectType  int32
-	FieldType    int32
-	Name         string
-	Description  string
-	IsArchived   bool
-	SetID        uuid.NullUUID
-	SelectDataID uuid.NullUUID
-	Consistency  int64
+	ID             uuid.UUID
+	SubjectType    int32
+	FieldType      int32
+	Name           string
+	Description    string
+	IsArchived     bool
+	SetID          uuid.NullUUID
+	SelectDataID   uuid.NullUUID
+	Consistency    int64
+	OrganizationID uuid.UUID
 }
 
 type PropertyValue struct {

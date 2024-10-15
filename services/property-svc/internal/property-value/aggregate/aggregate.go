@@ -1,9 +1,11 @@
 package aggregate
 
 import (
+	"common"
 	"context"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 	"hwes"
 	propertyEventsV1 "property-svc/internal/property-value/events/v1"
 	"property-svc/internal/property-value/models"
@@ -17,9 +19,15 @@ type PropertyValueAggregate struct {
 }
 
 func NewPropertyValueAggregate(id uuid.UUID) *PropertyValueAggregate {
-	aggregate := &PropertyValueAggregate{PropertyValue: models.NewPropertyValue()}
-	aggregate.AggregateBase = hwes.NewAggregateBase(PropertyValueAggregateType, id)
-	aggregate.PropertyValue.ID = id
+	aggregate := &PropertyValueAggregate{
+		PropertyValue: &models.PropertyValue{
+			ID:         id,
+			PropertyID: uuid.UUID{},
+			SubjectID:  uuid.UUID{},
+			Value:      nil,
+		},
+		AggregateBase: hwes.NewAggregateBase(PropertyValueAggregateType, id),
+	}
 	aggregate.initEventListeners()
 	return aggregate
 }
@@ -30,6 +38,31 @@ func LoadPropertyValueAggregate(ctx context.Context, as hwes.AggregateStore, id 
 		return nil, fmt.Errorf("LoadPropertyValueAggregate: %w", err)
 	}
 	return property, nil
+}
+
+func LoadPropertyValueAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore, id uuid.UUID, pauseAt *common.ConsistencyToken) (*PropertyValueAggregate, *models.PropertyValue, error) {
+	property := NewPropertyValueAggregate(id)
+
+	var snapshot *models.PropertyValue
+
+	if pauseAt != nil {
+		//  load pauseAt+1-many events (version is 0-indexed)
+		if err := as.LoadN(ctx, property, uint64(*pauseAt)+1); err != nil {
+			return nil, nil, err
+		}
+
+		var cpy models.PropertyValue
+		if err := copier.CopyWithOption(&cpy, property.PropertyValue, copier.Option{DeepCopy: true}); err != nil {
+			return nil, nil, fmt.Errorf("LoadPropertyValueAggregateWithSnapshotAt: could not copy snapshot: %w", err)
+		}
+		snapshot = &cpy
+	}
+
+	// load the rest
+	if err := as.Load(ctx, property); err != nil {
+		return nil, nil, fmt.Errorf("LoadPropertyValueAggregateWithSnapshotAt: %w", err)
+	}
+	return property, snapshot, nil
 }
 
 func (a *PropertyValueAggregate) initEventListeners() {
@@ -54,8 +87,11 @@ func (a *PropertyValueAggregate) onPropertyValueCreated(evt hwes.Event) error {
 	}
 
 	a.PropertyValue.PropertyID = propertyID
-	a.PropertyValue.Value = payload.Value
 	a.PropertyValue.SubjectID = subjectID
+
+	value := &models.SimpleTypedValue{}
+	payload.ValueChange.Apply(value)
+	a.PropertyValue.Value = value
 
 	return nil
 }
@@ -66,7 +102,12 @@ func (a *PropertyValueAggregate) onPropertyValueUpdated(evt hwes.Event) error {
 		return err
 	}
 
-	a.PropertyValue.Value = payload.Value
+	if payload.ValueChange.ValueRemoved {
+		a.PropertyValue.Value = nil
+		return nil
+	}
+
+	payload.ValueChange.Apply(a.PropertyValue.Value)
 
 	return nil
 }

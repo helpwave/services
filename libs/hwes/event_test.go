@@ -4,6 +4,7 @@ import (
 	"common"
 	"context"
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"hwes"
 	"testing"
 )
@@ -11,15 +12,16 @@ import (
 func TestEventWithUserID(t *testing.T) {
 	ctx := context.Background()
 	u := uuid.New()
+	o := uuid.New()
 	e := hwes.Event{}
 
 	ctx = common.ContextWithUserID(ctx, u)
+	ctx = common.ContextWithOrganizationID(ctx, o)
 
 	if err := e.SetCommitterFromCtx(ctx); err != nil {
 		t.Error(err)
 	}
 
-	if *e.CommitterUserID != u {
-		t.Error("event does not have the correct CommitterUserID")
-	}
+	assert.Equal(t, u, *e.CommitterUserID)
+	assert.Equal(t, o, *e.CommitterOrganizationID)
 }

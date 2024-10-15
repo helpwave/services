@@ -476,18 +476,13 @@ const UnassignTaskRequest$json = {
   '2': [
     {'1': 'task_id', '3': 1, '4': 1, '5': 9, '10': 'taskId'},
     {'1': 'user_id', '3': 2, '4': 1, '5': 9, '10': 'userId'},
-    {'1': 'consistency', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'consistency', '17': true},
-  ],
-  '8': [
-    {'1': '_consistency'},
   ],
 };
 
 /// Descriptor for `UnassignTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List unassignTaskRequestDescriptor = $convert.base64Decode(
     'ChNVbmFzc2lnblRhc2tSZXF1ZXN0EhcKB3Rhc2tfaWQYASABKAlSBnRhc2tJZBIXCgd1c2VyX2'
-    'lkGAIgASgJUgZ1c2VySWQSJQoLY29uc2lzdGVuY3kYAyABKAlIAFILY29uc2lzdGVuY3mIAQFC'
-    'DgoMX2NvbnNpc3RlbmN5');
+    'lkGAIgASgJUgZ1c2VySWQ=');
 
 @$core.Deprecated('Use unassignTaskResponseDescriptor instead')
 const UnassignTaskResponse$json = {

@@ -97,7 +97,8 @@ CREATE TABLE public.properties (
     is_archived boolean DEFAULT false NOT NULL,
     set_id uuid,
     select_data_id uuid,
-    consistency bigint DEFAULT 0 NOT NULL
+    consistency bigint DEFAULT 0 NOT NULL,
+    organization_id uuid NOT NULL
 );
 
 

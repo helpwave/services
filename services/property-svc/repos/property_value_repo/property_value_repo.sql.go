@@ -176,7 +176,7 @@ func (q *Queries) GetPropertyValuesWithPropertyBySubjectID(ctx context.Context, 
 
 const getRelevantPropertyViews = `-- name: GetRelevantPropertyViews :many
 SELECT
-	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.select_data_id, properties.consistency,
+	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.select_data_id, properties.consistency, properties.organization_id,
 	values.id as value_id,
 	values.text_value,
 	values.bool_value,
@@ -237,6 +237,7 @@ func (q *Queries) GetRelevantPropertyViews(ctx context.Context, arg GetRelevantP
 			&i.Property.SetID,
 			&i.Property.SelectDataID,
 			&i.Property.Consistency,
+			&i.Property.OrganizationID,
 			&i.ValueID,
 			&i.TextValue,
 			&i.BoolValue,

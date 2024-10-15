@@ -28,27 +28,37 @@ func (t InsecureBearerToken) GetRequestMetadata(_ context.Context, _ ...string) 
 		"authorization": "Bearer " + string(t),
 	}, nil
 }
+
 func (t InsecureBearerToken) RequireTransportSecurity() bool {
 	return false
 }
 
 const FakeTokenUser = "18159713-5d4e-4ad5-94ad-fbb6bb147984"
 
-func GetFakeTokenCredentials(subOverride string) InsecureBearerToken {
-	// README's fake token
-	m := map[string]interface{}{
-		"sub":                FakeTokenUser,
-		"email":              "testine.test@helpwave.de",
-		"name":               "Testine Test",
-		"preferred_username": "testine.test",
-		"organization": map[string]interface{}{
-			"id":   "3b25c6f5-4705-4074-9fc6-a50c28eba406",
-			"name": "helpwave test",
-		},
+func GetFakeTokenCredentials(subOverride, orgOverride string) InsecureBearerToken {
+	sub := FakeTokenUser
+	if subOverride != "" {
+		sub = subOverride
 	}
 
-	if subOverride != "" {
-		m["sub"] = subOverride
+	org := "3b25c6f5-4705-4074-9fc6-a50c28eba406"
+	if orgOverride != "" {
+		org = orgOverride
+	}
+
+	// README's fake token
+	m := map[string]interface{}{
+		"sub":                sub,
+		"email":              "max.mustermann@helpwave.de",
+		"email_verified":     true,
+		"name":               "Max Mustermann",
+		"preferred_username": "max.mustermann",
+		"given_name":         "Max",
+		"family_name":        "Mustermann",
+		"organization": map[string]interface{}{
+			"id":   org,
+			"name": "helpwave test",
+		},
 	}
 
 	bytes, err := json.Marshal(m)
@@ -60,10 +70,10 @@ func GetFakeTokenCredentials(subOverride string) InsecureBearerToken {
 	return InsecureBearerToken(dist)
 }
 
-func GetGrpcConn(subOverride string) *grpc.ClientConn {
+func GetGrpcConn(subOverride, orgOverride string) *grpc.ClientConn {
 	conn, err := grpc.NewClient(
 		common.ResolveAddrFromEnv(),
-		grpc.WithPerRPCCredentials(GetFakeTokenCredentials(subOverride)),
+		grpc.WithPerRPCCredentials(GetFakeTokenCredentials(subOverride, orgOverride)),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {

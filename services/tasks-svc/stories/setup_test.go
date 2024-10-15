@@ -70,26 +70,26 @@ func TestMain(m *testing.M) {
 }
 
 func bedServiceClient() pb.BedServiceClient {
-	return pb.NewBedServiceClient(hwtesting.GetGrpcConn(""))
+	return pb.NewBedServiceClient(hwtesting.GetGrpcConn("", ""))
 }
 
 func roomServiceClient() pb.RoomServiceClient {
-	return pb.NewRoomServiceClient(hwtesting.GetGrpcConn(""))
+	return pb.NewRoomServiceClient(hwtesting.GetGrpcConn("", ""))
 }
 
 func patientServiceClient() pb.PatientServiceClient {
-	return pb.NewPatientServiceClient(hwtesting.GetGrpcConn(""))
+	return pb.NewPatientServiceClient(hwtesting.GetGrpcConn("", ""))
 }
 
 func taskServiceClient() pb.TaskServiceClient {
-	return pb.NewTaskServiceClient(hwtesting.GetGrpcConn(""))
+	return pb.NewTaskServiceClient(hwtesting.GetGrpcConn("", ""))
 }
 
 func taskTemplateServiceClient() pb.TaskTemplateServiceClient {
-	return pb.NewTaskTemplateServiceClient(hwtesting.GetGrpcConn(""))
+	return pb.NewTaskTemplateServiceClient(hwtesting.GetGrpcConn("", ""))
 }
 func wardServiceClient() pb.WardServiceClient {
-	return pb.NewWardServiceClient(hwtesting.GetGrpcConn(""))
+	return pb.NewWardServiceClient(hwtesting.GetGrpcConn("", ""))
 }
 
 func prepareWard(t *testing.T, ctx context.Context, suffix string) (wardID, wardConsistency string) {

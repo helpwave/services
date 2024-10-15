@@ -1,10 +1,12 @@
 package aggregate
 
 import (
+	"common"
 	"context"
 	"fmt"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 	"hwes"
 	"hwutil"
 	propertyEventsV1 "property-svc/internal/property/events/v1"
@@ -31,12 +33,29 @@ func NewPropertyAggregate(id uuid.UUID) *PropertyAggregate {
 	return aggregate
 }
 
-func LoadPropertyAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.UUID) (*PropertyAggregate, error) {
+func LoadPropertyAggregateWithSnapshotAt(ctx context.Context, as hwes.AggregateStore, id uuid.UUID, pauseAt *common.ConsistencyToken) (*PropertyAggregate, *models.Property, error) {
 	property := NewPropertyAggregate(id)
-	if err := as.Load(ctx, property); err != nil {
-		return nil, err
+
+	var snapshot *models.Property
+
+	if pauseAt != nil {
+		//  load pauseAt+1-many events (version is 0-indexed)
+		if err := as.LoadN(ctx, property, uint64(*pauseAt)+1); err != nil {
+			return nil, nil, err
+		}
+
+		var cpy models.Property
+		if err := copier.CopyWithOption(&cpy, property.Property, copier.Option{DeepCopy: true}); err != nil {
+			return nil, nil, fmt.Errorf("LoadPropertyAggregateWithSnapshotAt: could not copy snapshot: %w", err)
+		}
+		snapshot = &cpy
 	}
-	return property, nil
+
+	// continue loading all other events
+	if err := as.Load(ctx, property); err != nil {
+		return nil, nil, err
+	}
+	return property, snapshot, nil
 }
 
 func (a *PropertyAggregate) initEventListeners() {

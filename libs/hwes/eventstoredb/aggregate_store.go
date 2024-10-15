@@ -90,37 +90,60 @@ func (a *AggregateStore) doSave(ctx context.Context, aggregate hwes.Aggregate, g
 
 // Implements AggregateStore interface
 
-func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) error {
-	stream, err := a.es.ReadStream(ctx, aggregate.GetTypeID(), esdb.ReadStreamOptions{}, math.MaxUint64) // MaxUint64 for "all" events
+func (a *AggregateStore) LoadN(ctx context.Context, aggregate hwes.Aggregate, N uint64) error {
+	if N == 0 {
+		return nil
+	}
+
+	// start from the beginning, unless we have already processed events
+	var from esdb.StreamPosition = esdb.Start{}
+	aE := aggregate.GetAppliedEvents()
+	if len(aE) != 0 {
+		// We cant just use the aggreagate's Version here, as we are unable to
+		// discriminate aggregates where the first event was processed already (version = 0)
+		// from those aggregates where no event was processed yet (version = 0 by default)
+		from = esdb.Revision(aE[len(aE)-1].Version + 1)
+	}
+
+	// open a read stream
+	stream, err := a.es.ReadStream(ctx, aggregate.GetTypeID(), esdb.ReadStreamOptions{
+		Direction: esdb.Forwards,
+		From:      from,
+	}, N)
 	if err != nil {
-		return fmt.Errorf("AggregateStore.Load: could not open stream: %w", err)
+		return fmt.Errorf("AggregateStore.LoadN: could not open stream: %w", err)
 	}
 	defer stream.Close()
 
+	// stream events in
 	for {
 		esdbEvent, err := stream.Recv()
 		if errors.Is(err, io.EOF) {
-			// exit condition for for-loop
+			// all events were handled!
 			break
 		} else if err != nil {
-			return fmt.Errorf("AggregateStore.Load: could not read from stream: %w", err)
+			return fmt.Errorf("AggregateStore.LoadN: could not read from stream: %w", err)
 		}
 
 		event, err := hwes.NewEventFromRecordedEvent(esdbEvent.Event)
 		if err != nil {
-			return fmt.Errorf("AggregateStore.Load: %w", err)
+			return fmt.Errorf("AggregateStore.LoadN: %w", err)
 		}
 
 		if err := aggregate.Progress(event); err != nil {
-			return fmt.Errorf("AggregateStore.Load: Progress failed: %w", err)
+			return fmt.Errorf("AggregateStore.LoadN: Progress failed: %w", err)
 		}
 	}
 
 	if aggregate.IsDeleted() {
-		return fmt.Errorf("AggregateStore.Load: aggregate has been marked as deleted")
+		return fmt.Errorf("AggregateStore.LoadN: aggregate has been marked as deleted")
 	}
 
 	return nil
+}
+
+func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) error {
+	return a.LoadN(ctx, aggregate, math.MaxUint64) // MaxUint64 -> all events
 }
 
 func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) (common.ConsistencyToken, error) {
