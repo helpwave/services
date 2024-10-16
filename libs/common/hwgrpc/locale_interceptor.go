@@ -3,6 +3,7 @@ package hwgrpc
 import (
 	"context"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/metadata"
+	"github.com/rs/zerolog/log"
 	"golang.org/x/text/language"
 	"google.golang.org/grpc"
 	"hwlocale"
@@ -14,11 +15,18 @@ import (
 )
 
 func UnaryLocaleInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
+	ctx, span, _ := telemetry.StartSpan(ctx, "hwgrpc.UnaryLocaleInterceptor")
+	defer span.End()
+
 	return next(localeInterceptor(ctx), req)
 }
 
 func StreamLocaleInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
-	ctx := localeInterceptor(stream.Context())
+	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamLocaleInterceptor")
+	defer span.End()
+	stream = NewWrapperStream(stream, WithContext(ctx))
+
+	ctx = localeInterceptor(stream.Context())
 	stream = NewWrapperStream(stream, WithContext(ctx))
 	return next(req, stream)
 }
@@ -26,9 +34,6 @@ func StreamLocaleInterceptor(req any, stream grpc.ServerStream, info *grpc.Strea
 // localeInterceptor parses the Accept-Language header.
 // Also see hwlocale.WithLocales, hwlocale.GetLocalesTags and hwlocale.GetLocalesStrings
 func localeInterceptor(ctx context.Context) context.Context {
-	_, span, log := telemetry.StartSpan(ctx, "hwgrpc.localeInterceptor")
-	defer span.End()
-
 	metaData := metadata.ExtractIncoming(ctx)
 
 	langHeader := metaData.Get("accept-language")

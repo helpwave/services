@@ -146,7 +146,7 @@ func defaultUnaryAuthInterceptor(ctx context.Context, req any, info *grpc.UnaryS
 	if !auth.IsAuthSetUp() && !auth.OnlyFakeAuthEnabled {
 		log.Trace().Msg("skipping auth middleware, as auth is not set up")
 		// skip injecting claims into context
-		return ctx, nil
+		return next(ctx, req)
 	}
 
 	return hwgrpc.UnaryAuthInterceptor(ctx, req, info, next)
@@ -160,7 +160,7 @@ func defaultStreamAuthInterceptor(req any, stream grpc.ServerStream, info *grpc.
 	if !auth.IsAuthSetUp() && !auth.OnlyFakeAuthEnabled {
 		log.Trace().Msg("skipping auth middleware, as auth is not set up")
 		// skip injecting claims into context
-		return nil
+		return next(req, stream)
 	}
 
 	return hwgrpc.StreamAuthInterceptor(req, stream, info, next)
@@ -178,22 +178,22 @@ func defaultUnaryOrganizationInterceptor(ctx context.Context, req any, info *grp
 	if !auth.IsAuthSetUp() && !auth.OnlyFakeAuthEnabled {
 		log.Trace().Msg("skipping auth middleware, as auth is not set up")
 		// skip injecting claims into context
-		return ctx, nil
+		return next(ctx, req)
 	}
 
 	return hwgrpc.UnaryOrganizationInterceptor(ctx, req, info, next)
 }
 
 func defaultStreamOrganizationInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
-	ctx, span, log := telemetry.StartSpan(stream.Context(), "common.defaultStreamOrganizationInterceptor")
+	_, span, log := telemetry.StartSpan(stream.Context(), "common.defaultStreamOrganizationInterceptor")
 	defer span.End()
 
 	// TODO: Only add authInterceptor when required
 	if !auth.IsAuthSetUp() && !auth.OnlyFakeAuthEnabled {
 		log.Trace().Msg("skipping auth middleware, as auth is not set up")
 		// skip injecting claims into context
-		return nil
+		return next(req, stream)
 	}
 
-	return hwgrpc.StreamOrganizationInterceptor(ctx, stream, info, next)
+	return hwgrpc.StreamOrganizationInterceptor(req, stream, info, next)
 }

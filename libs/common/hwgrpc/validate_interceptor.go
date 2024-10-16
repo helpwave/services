@@ -8,6 +8,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	zlog "github.com/rs/zerolog/log"
 	otelCodes "go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/trace"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -18,6 +19,9 @@ import (
 )
 
 func UnaryValidateInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (res any, err error) {
+	ctx, span, _ := telemetry.StartSpan(ctx, "hwgrpc.UnaryValidateInterceptor")
+	defer span.End()
+
 	ctx, err = validateInterceptor(ctx, req)
 	if err != nil {
 		return nil, err
@@ -26,6 +30,10 @@ func UnaryValidateInterceptor(ctx context.Context, req any, info *grpc.UnaryServ
 }
 
 func StreamValidateInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
+	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamValidateInterceptor")
+	defer span.End()
+	stream = NewWrapperStream(stream, WithContext(ctx))
+
 	ctx, err := validateInterceptor(stream.Context(), req)
 	if err != nil {
 		return err
@@ -35,12 +43,13 @@ func StreamValidateInterceptor(req any, stream grpc.ServerStream, info *grpc.Str
 }
 
 func validateInterceptor(passedCtx context.Context, req any) (ctx context.Context, err error) {
-	ctx, span, _ := telemetry.StartSpan(passedCtx, "hwgrpc.validateInterceptor")
+	ctx = passedCtx
+
+	span := trace.SpanFromContext(ctx)
 	defer func() {
 		if err != nil {
 			span.SetStatus(otelCodes.Error, err.Error())
 		}
-		span.End()
 	}()
 
 	log := zlog.Ctx(ctx)

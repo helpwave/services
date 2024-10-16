@@ -12,6 +12,9 @@ import (
 )
 
 func UnaryOrganizationInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
+	ctx, span, _ := telemetry.StartSpan(ctx, "hwgrpc.UnaryOrganizationInterceptor")
+	defer span.End()
+
 	ctx, err := organizationInterceptor(ctx)
 	if err != nil {
 		return nil, err
@@ -21,6 +24,10 @@ func UnaryOrganizationInterceptor(ctx context.Context, req any, info *grpc.Unary
 }
 
 func StreamOrganizationInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
+	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamOrganizationInterceptor")
+	defer span.End()
+	stream = NewWrapperStream(stream, WithContext(ctx))
+
 	ctx, err := organizationInterceptor(stream.Context())
 	if err != nil {
 		return err
@@ -42,7 +49,7 @@ func organizationInterceptor(ctx context.Context) (context.Context, error) {
 	}
 
 	if len(claims.Organization.Id) == 0 {
-		return ctx, errors.New("organization.id missing in id token")
+		return nil, errors.New("organization.id missing in id token")
 	}
 
 	// parse organizationID

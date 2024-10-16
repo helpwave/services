@@ -12,6 +12,9 @@ import (
 )
 
 func UnaryAuthInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
+	ctx, span, _ := telemetry.StartSpan(ctx, "hwgrpc.UnaryAuthInterceptor")
+	defer span.End()
+
 	ctx, err := authInterceptor(ctx)
 	if err != nil {
 		return nil, err
@@ -21,6 +24,10 @@ func UnaryAuthInterceptor(ctx context.Context, req any, info *grpc.UnaryServerIn
 }
 
 func StreamAuthInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
+	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamAuthInterceptor")
+	defer span.End()
+	stream = NewWrapperStream(stream, WithContext(ctx))
+
 	ctx, err := authInterceptor(stream.Context())
 	if err != nil {
 		return err
