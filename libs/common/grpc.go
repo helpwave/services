@@ -142,7 +142,7 @@ func defaultUnaryAuthInterceptor(ctx context.Context, req any, info *grpc.UnaryS
 	}
 
 	// TODO: Only add authInterceptor when required
-	if !auth.IsAuthSetUp() && !auth.OnlyFakeAuthEnabled {
+	if !auth.IsAuthSetUp() && !auth.IsOnlyFakeAuthEnabled() {
 		log.Trace().Msg("skipping auth middleware, as auth is not set up")
 		// skip injecting claims into context
 		return next(ctx, req)
@@ -156,7 +156,7 @@ func defaultStreamAuthInterceptor(req any, stream grpc.ServerStream, info *grpc.
 	defer span.End()
 
 	// TODO: Only add authInterceptor when required
-	if !auth.IsAuthSetUp() && !auth.OnlyFakeAuthEnabled {
+	if !auth.IsAuthSetUp() && !auth.IsOnlyFakeAuthEnabled() {
 		log.Trace().Msg("skipping auth middleware, as auth is not set up")
 		// skip injecting claims into context
 		return next(req, stream)
@@ -174,7 +174,7 @@ func defaultUnaryOrganizationInterceptor(ctx context.Context, req any, info *grp
 	}
 
 	// TODO: Only add authInterceptor when required
-	if !auth.IsAuthSetUp() && !auth.OnlyFakeAuthEnabled {
+	if !auth.IsAuthSetUp() && !auth.IsOnlyFakeAuthEnabled() {
 		log.Trace().Msg("skipping auth middleware, as auth is not set up")
 		// skip injecting claims into context
 		return next(ctx, req)
@@ -188,7 +188,7 @@ func defaultStreamOrganizationInterceptor(req any, stream grpc.ServerStream, inf
 	defer span.End()
 
 	// TODO: Only add authInterceptor when required
-	if !auth.IsAuthSetUp() && !auth.OnlyFakeAuthEnabled {
+	if !auth.IsAuthSetUp() && !auth.IsOnlyFakeAuthEnabled() {
 		log.Trace().Msg("skipping auth middleware, as auth is not set up")
 		// skip injecting claims into context
 		return next(req, stream)

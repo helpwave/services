@@ -134,7 +134,7 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 		skipAuthForMethods = options.unauthenticatedMethods
 		skipOrganizationAuthForMethods = options.nonOrganizationMethods
 
-		setupAuth(ctx, options.fakeAuthOnly)
+		auth.SetupAuth(ctx, options.fakeAuthOnly)
 	}
 
 	return ctx

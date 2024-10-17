@@ -53,7 +53,7 @@ func authInterceptor(ctx context.Context) (context.Context, error) {
 
 	var claims *auth.IDTokenClaims
 
-	if auth.OnlyFakeAuthEnabled {
+	if auth.IsOnlyFakeAuthEnabled() {
 		log.Warn().
 			Msg("only fake auth is enabled! no attempt verifying token. falling back to fake token instead")
 		claims, err = auth.VerifyFakeToken(ctx, token)

@@ -12,13 +12,16 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hwutil"
+	"telemetry"
 )
+
+// to avoid ambiguity please read: https://wiki.helpwave.de/doc/keycloak-jedzCcERwF
 
 var (
 	DEFAULT_OAUTH_ISSUER_URL = "https://accounts.helpwave.de/realms/helpwave"
 
 	DEFAULT_OAUTH_CLIENT_ID = "helpwave-services"
-	OnlyFakeAuthEnabled     bool
+	onlyFakeAuthEnabled     bool
 	InsecureFakeTokenEnable = false
 	OauthConfig             *oauth2.Config
 	Verifier                *oidc.IDTokenVerifier
@@ -31,7 +34,9 @@ type OrganizationIDKey struct{}
 func GetOAuthIssuerUrl() string {
 	issuerUrl := hwutil.GetEnvOr("OAUTH_ISSUER_URL", DEFAULT_OAUTH_ISSUER_URL)
 	if issuerUrl != DEFAULT_OAUTH_ISSUER_URL {
-		zlog.Warn().Str("OAUTH_ISSUER_URL", issuerUrl).Msg("using custom OAuth issuer url")
+		zlog.Warn().
+			Str("OAUTH_ISSUER_URL", issuerUrl).
+			Msg("using custom OAuth issuer url")
 	}
 	return issuerUrl
 }
@@ -42,6 +47,10 @@ func GetOAuthClientId() string {
 		zlog.Warn().Str("OAUTH_CLIENT_ID", clientId).Msg("using custom OAuth client id")
 	}
 	return clientId
+}
+
+func IsOnlyFakeAuthEnabled() bool {
+	return onlyFakeAuthEnabled
 }
 
 // IsAuthSetUp is true, GetOAuthConfig and GetIDTokenVerifier can be accessed safely
@@ -208,4 +217,30 @@ func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
 	} else {
 		return res, nil
 	}
+}
+
+// SetupAuth sets up auth, such that GetIDTokenVerifier and GetOAuthConfig work
+// optionally, this can be skipped by enabling only fake tokens (for testing)
+func SetupAuth(ctx context.Context, fakeOnly bool) {
+	log := zlog.Ctx(ctx)
+
+	if fakeOnly {
+		log.Error().Msg("only setting up auth for fake tokens. Never do this in production!")
+		onlyFakeAuthEnabled = true
+		return
+	}
+
+	provider, err := oidc.NewProvider(context.Background(), GetOAuthIssuerUrl())
+	if err != nil {
+		log.Fatal().Err(err).Send()
+	}
+
+	OauthConfig = &oauth2.Config{
+		ClientID: GetOAuthClientId(),
+		Endpoint: provider.Endpoint(),
+	}
+
+	log.Debug().Msg(telemetry.Formatted(OauthConfig))
+
+	Verifier = provider.Verifier(&oidc.Config{ClientID: OauthConfig.ClientID})
 }
