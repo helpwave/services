@@ -5,6 +5,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 	"hwutil"
 	"strings"
 	"telemetry"
@@ -34,6 +36,7 @@ type Event struct {
 	CommitterUserID *uuid.UUID
 	// w3c trace context
 	TraceParent string
+	DataIsProto bool
 }
 
 type metadata struct {
@@ -42,7 +45,23 @@ type metadata struct {
 	// w3c trace context
 	TraceParent string `json:"trace_parent"`
 	// The Timestamp represents the time when the event was created. Using the built-in eventstoreDB timestamp is discouraged.
-	Timestamp time.Time `json:"timestamp"`
+	Timestamp   time.Time `json:"timestamp"`
+	DataIsProto bool      `json:"data_is_proto"`
+}
+
+func MessageToEventName(protoMessage proto.Message) (string, error) {
+	protoPath := proto.MessageName(protoMessage)
+
+	messageName := string(protoPath.Name())
+	probablyVersion := string(protoPath.Parent().Name())
+
+	if !strings.HasPrefix(probablyVersion, "v") {
+		return "", fmt.Errorf("%s does not look like a version for proto %s", probablyVersion, protoPath)
+	}
+
+	eventName := fmt.Sprintf("%s_%s", messageName, probablyVersion)
+
+	return eventName, nil
 }
 
 // EventOption used to apply configurations in hwes.NewEvent()
@@ -63,6 +82,12 @@ func WithData(data interface{}) EventOption {
 	}
 }
 
+func WithProtoMessage(message proto.Message) EventOption {
+	return func(event *Event) error {
+		return event.SetProtoData(message)
+	}
+}
+
 func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event, error) {
 	evt := Event{
 		EventID:         uuid.New(),
@@ -71,6 +96,7 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 		AggregateType:   aggregate.GetType(),
 		Timestamp:       time.Now().UTC(),
 		CommitterUserID: nil,
+		DataIsProto:     false,
 	}
 
 	// TODO: We have to default to empty eventData as the eventstoredb-ui does not allow querying events without data
@@ -86,6 +112,24 @@ func NewEvent(aggregate Aggregate, eventType string, opts ...EventOption) (Event
 	}
 
 	return evt, nil
+}
+
+func NewEventFromProto(aggregate Aggregate, message proto.Message, opts ...EventOption) (Event, error) {
+	eventType, err := MessageToEventName(message)
+	if err != nil {
+		return Event{}, err
+	}
+
+	event, err := NewEvent(aggregate, eventType, opts...)
+	if err != nil {
+		return Event{}, err
+	}
+
+	if err := event.SetProtoData(message); err != nil {
+		return Event{}, err
+	}
+
+	return event, nil
 }
 
 // resolveAggregateIDAndTypeFromStreamID extracts the aggregateID and aggregateType of a given streamID
@@ -149,6 +193,7 @@ func NewEventFromRecordedEvent(esdbEvent *esdb.RecordedEvent) (Event, error) {
 		Version:         esdbEvent.EventNumber,
 		CommitterUserID: nil,
 		TraceParent:     md.TraceParent,
+		DataIsProto:     md.DataIsProto,
 	}
 
 	eventCommitterUserID, err := uuid.Parse(md.CommitterUserID)
@@ -185,6 +230,7 @@ func (e *Event) ToEventData() (esdb.EventData, error) {
 	md := metadata{
 		TraceParent: e.TraceParent,
 		Timestamp:   e.Timestamp,
+		DataIsProto: e.DataIsProto,
 	}
 	if e.CommitterUserID != nil {
 		md.CommitterUserID = e.CommitterUserID.String()
@@ -222,15 +268,38 @@ func (e *Event) SetJsonData(data interface{}) error {
 	if err != nil {
 		return fmt.Errorf("SetJsonData: %w", err)
 	}
+	e.DataIsProto = false
+	e.Data = dataBytes
+	return nil
+}
+
+func (e *Event) SetProtoData(message proto.Message) error {
+	dataBytes, err := protojson.Marshal(message)
+	if err != nil {
+		return fmt.Errorf("SetProtoData: %w", err)
+	}
+	e.DataIsProto = true
 	e.Data = dataBytes
 	return nil
 }
 
 func (e *Event) GetJsonData(data interface{}) error {
+	if e.DataIsProto {
+		return fmt.Errorf("data of this event is marked as proto, use GetProtoData instead")
+	}
+
 	if jsonable, ok := data.(hwutil.JSONAble); ok {
 		return jsonable.FromJSON(e.Data)
 	}
 	return json.Unmarshal(e.Data, data)
+}
+
+func (e *Event) GetProtoData(message proto.Message) error {
+	if !e.DataIsProto {
+		return fmt.Errorf("data of this event is not marked as proto, use GetJsonData instead")
+	}
+
+	return protojson.Unmarshal(e.Data, message)
 }
 
 // SetCommitterFromCtx injects the UserID from the passed context via common.GetUserID().

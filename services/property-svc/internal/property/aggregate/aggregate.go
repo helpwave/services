@@ -3,6 +3,7 @@ package aggregate
 import (
 	"context"
 	"fmt"
+	pbTechnicalEventsV1 "gen/libs/technical_events/property_svc/v1"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
@@ -40,11 +41,19 @@ func LoadPropertyAggregate(ctx context.Context, as hwes.AggregateStore, id uuid.
 }
 
 func (a *PropertyAggregate) initEventListeners() {
+
+	// TODO: Resolve name not in such a way ...
+	updateNameEvent := &pbTechnicalEventsV1.UpdateNameEvent{}
+	updateNameEventName, err := hwes.MessageToEventName(updateNameEvent)
+	if err != nil {
+		panic(err)
+	}
+
 	a.RegisterEventListener(propertyEventsV1.PropertyCreated, a.onPropertyCreated)
 	a.RegisterEventListener(propertyEventsV1.PropertyDescriptionUpdated, a.onDescriptionUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertySetIDUpdated, a.onSetIDUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertySubjectTypeUpdated, a.onSubjectTypeUpdated)
-	a.RegisterEventListener(propertyEventsV1.PropertyNameUpdated, a.onNameUpdated)
+	a.RegisterEventListener(updateNameEventName, a.onNameUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataCreated, a.onFieldTypeDataCreated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataAllowFreetextUpdated, a.onAllowFreetextUpdated)
 	a.RegisterEventListener(propertyEventsV1.PropertyFieldTypeDataSelectOptionsUpserted, a.onFieldTypeDataSelectOptionsUpserted)
@@ -137,8 +146,8 @@ func (a *PropertyAggregate) onSubjectTypeUpdated(evt hwes.Event) error {
 }
 
 func (a *PropertyAggregate) onNameUpdated(evt hwes.Event) error {
-	var payload propertyEventsV1.PropertyNameUpdatedEvent
-	if err := evt.GetJsonData(&payload); err != nil {
+	var payload pbTechnicalEventsV1.UpdateNameEvent
+	if err := evt.GetProtoData(&payload); err != nil {
 		return err
 	}
 

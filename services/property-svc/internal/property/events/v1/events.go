@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	pbTechnicalEventsV1 "gen/libs/technical_events/property_svc/v1"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
 	"hwes"
@@ -106,10 +107,10 @@ type PropertyNameUpdatedEvent struct {
 }
 
 func NewPropertyNameUpdatedEvent(ctx context.Context, a hwes.Aggregate, name string) (hwes.Event, error) {
-	payload := PropertyNameUpdatedEvent{
+	payload := &pbTechnicalEventsV1.UpdateNameEvent{
 		Name: name,
 	}
-	return hwes.NewEvent(a, PropertyNameUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
+	return hwes.NewEventFromProto(a, payload, hwes.WithContext(ctx))
 }
 
 type FieldTypeDataAllowFreetextUpdatedEvent struct {
