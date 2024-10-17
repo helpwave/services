@@ -3,9 +3,11 @@ package main
 import (
 	"common"
 	pb "gen/services/user_svc/v1"
+	"hwdb"
+
 	daprd "github.com/dapr/go-sdk/service/grpc"
 	zlog "github.com/rs/zerolog/log"
-	"hwdb"
+
 	"user-svc/internal/hwkc"
 	"user-svc/internal/organization"
 	"user-svc/internal/user"

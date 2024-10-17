@@ -3,11 +3,13 @@ package room
 import (
 	"common/auth"
 	"context"
+	"hwdb"
+	"hwutil"
+
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"hwdb"
-	"hwutil"
+
 	"task-svc/internal/tracking"
 	"task-svc/repos/room_repo"
 
@@ -34,15 +36,15 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 		return nil, err
 	}
 
-	wardId, err := uuid.Parse(req.WardId)
+	wardID, err := uuid.Parse(req.GetWardId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	roomID, err := roomRepo.CreateRoom(ctx, room_repo.CreateRoomParams{
-		Name:           req.Name,
+		Name:           req.GetName(),
 		OrganizationID: organizationID,
-		WardID:         wardId,
+		WardID:         wardID,
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -63,7 +65,7 @@ func (ServiceServer) GetRoom(ctx context.Context, req *pb.GetRoomRequest) (*pb.G
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -106,7 +108,7 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 
 	// TODO: Auth
 
-	patientID, err := uuid.Parse(req.Id)
+	patientID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -143,38 +145,43 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 
 	processedRooms := make(map[uuid.UUID]bool)
 
-	roomsResponse := hwutil.FlatMap(rows, func(roomRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsResponse_Room {
-		room := roomRow.Room
-		if _, processed := processedRooms[room.ID]; processed {
-			return nil
-		}
-		processedRooms[room.ID] = true
-		beds := hwutil.FlatMap(rows, func(bedRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsResponse_Room_Bed {
-			if !bedRow.BedID.Valid || bedRow.Room.ID != room.ID {
+	roomsResponse := hwutil.FlatMap(rows,
+		func(roomRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsResponse_Room {
+			room := roomRow.Room
+			if _, processed := processedRooms[room.ID]; processed {
 				return nil
 			}
-			val := &pb.GetRoomsResponse_Room_Bed{
-				Id:   bedRow.BedID.UUID.String(),
-				Name: *bedRow.BedName,
+			processedRooms[room.ID] = true
+			beds := hwutil.FlatMap(rows,
+				func(bedRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsResponse_Room_Bed {
+					if !bedRow.BedID.Valid || bedRow.Room.ID != room.ID {
+						return nil
+					}
+					val := &pb.GetRoomsResponse_Room_Bed{
+						Id:   bedRow.BedID.UUID.String(),
+						Name: *bedRow.BedName,
+					}
+					return &val
+				})
+			val := &pb.GetRoomsResponse_Room{
+				Id:             room.ID.String(),
+				Name:           room.Name,
+				Beds:           beds,
+				OrganizationId: room.OrganizationID.String(),
+				WardId:         room.WardID.String(),
 			}
 			return &val
 		})
-		val := &pb.GetRoomsResponse_Room{
-			Id:             room.ID.String(),
-			Name:           room.Name,
-			Beds:           beds,
-			OrganizationId: room.OrganizationID.String(),
-			WardId:         room.WardID.String(),
-		}
-		return &val
-	})
 
 	return &pb.GetRoomsResponse{
 		Rooms: roomsResponse,
 	}, nil
 }
 
-func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardRequest) (*pb.GetRoomsByWardResponse, error) {
+func (ServiceServer) GetRoomsByWard(
+	ctx context.Context,
+	req *pb.GetRoomsByWardRequest,
+) (*pb.GetRoomsByWardResponse, error) {
 	roomRepo := room_repo.New(hwdb.GetDB())
 
 	organizationID, err := auth.GetOrganizationID(ctx)
@@ -184,14 +191,14 @@ func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardR
 
 	// TODO: Auth
 
-	wardId, err := uuid.Parse(req.WardId)
+	wardID, err := uuid.Parse(req.GetWardId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	rows, err := roomRepo.GetRoomsWithBedsForOrganization(ctx, room_repo.GetRoomsWithBedsForOrganizationParams{
 		OrganizationID: organizationID,
-		WardID:         uuid.NullUUID{UUID: wardId, Valid: true},
+		WardID:         uuid.NullUUID{UUID: wardID, Valid: true},
 	})
 	err = hwdb.Error(ctx, err)
 	if err != nil {
@@ -200,31 +207,33 @@ func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardR
 
 	processedRooms := make(map[uuid.UUID]bool)
 
-	roomsResponse := hwutil.FlatMap(rows, func(roomRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsByWardResponse_Room {
-		room := roomRow.Room
-		if _, processed := processedRooms[room.ID]; processed {
-			return nil
-		}
-		processedRooms[room.ID] = true
-		beds := hwutil.FlatMap(rows, func(bedRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsByWardResponse_Room_Bed {
-			if !bedRow.BedID.Valid || bedRow.Room.ID != room.ID {
+	roomsResponse := hwutil.FlatMap(rows,
+		func(roomRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsByWardResponse_Room {
+			room := roomRow.Room
+			if _, processed := processedRooms[room.ID]; processed {
 				return nil
 			}
-			val := &pb.GetRoomsByWardResponse_Room_Bed{
-				Id:   bedRow.BedID.UUID.String(),
-				Name: *bedRow.BedName,
+			processedRooms[room.ID] = true
+			beds := hwutil.FlatMap(rows,
+				func(bedRow room_repo.GetRoomsWithBedsForOrganizationRow) **pb.GetRoomsByWardResponse_Room_Bed {
+					if !bedRow.BedID.Valid || bedRow.Room.ID != room.ID {
+						return nil
+					}
+					val := &pb.GetRoomsByWardResponse_Room_Bed{
+						Id:   bedRow.BedID.UUID.String(),
+						Name: *bedRow.BedName,
+					}
+					return &val
+				})
+			val := &pb.GetRoomsByWardResponse_Room{
+				Id:             room.ID.String(),
+				Name:           room.Name,
+				Beds:           beds,
+				OrganizationId: room.OrganizationID.String(),
+				WardId:         room.WardID.String(),
 			}
 			return &val
 		})
-		val := &pb.GetRoomsByWardResponse_Room{
-			Id:             room.ID.String(),
-			Name:           room.Name,
-			Beds:           beds,
-			OrganizationId: room.OrganizationID.String(),
-			WardId:         room.WardID.String(),
-		}
-		return &val
-	})
 
 	return &pb.GetRoomsByWardResponse{
 		Rooms: roomsResponse,
@@ -236,7 +245,7 @@ func (ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -252,10 +261,13 @@ func (ServiceServer) DeleteRoom(ctx context.Context, req *pb.DeleteRoomRequest) 
 	return &pb.DeleteRoomResponse{}, nil
 }
 
-func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoomOverviewsByWardRequest) (*pb.GetRoomOverviewsByWardResponse, error) {
+func (ServiceServer) GetRoomOverviewsByWard(
+	ctx context.Context,
+	req *pb.GetRoomOverviewsByWardRequest,
+) (*pb.GetRoomOverviewsByWardResponse, error) {
 	roomRepo := room_repo.New(hwdb.GetDB())
 
-	wardId, err := uuid.Parse(req.Id)
+	wardID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -270,7 +282,7 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 			TodoStatus:       int32(pb.TaskStatus_TASK_STATUS_TODO),
 			InProgressStatus: int32(pb.TaskStatus_TASK_STATUS_IN_PROGRESS),
 			DoneStatus:       int32(pb.TaskStatus_TASK_STATUS_DONE),
-			WardID:           wardId,
+			WardID:           wardID,
 			OrganizationID:   organizationID,
 		})
 	err = hwdb.Error(ctx, err)
@@ -280,26 +292,28 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 
 	processedRooms := make(map[uuid.UUID]bool)
 
+	type rowType = room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganizationRow
+
 	roomsResponse := hwutil.FlatMap(rows,
-		func(roomRow room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganizationRow) **pb.GetRoomOverviewsByWardResponse_Room {
+		func(roomRow rowType) **pb.GetRoomOverviewsByWardResponse_Room {
 			if _, roomProcessed := processedRooms[roomRow.RoomID]; roomProcessed {
 				return nil
 			}
 			processedRooms[roomRow.RoomID] = true
 			beds := hwutil.FlatMap(rows,
-				func(bedRow room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganizationRow) **pb.GetRoomOverviewsByWardResponse_Room_Bed {
+				func(bedRow rowType) **pb.GetRoomOverviewsByWardResponse_Room_Bed {
 					if !bedRow.BedID.Valid || bedRow.RoomID != roomRow.RoomID {
 						return nil
 					}
 
 					patient := hwutil.MapIf(bedRow.PatientID.Valid, bedRow,
-						func(bedRow room_repo.GetRoomsWithBedsAndPatientsAndTasksCountByWardForOrganizationRow) pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient {
+						func(bedRow rowType) pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient {
 							return pb.GetRoomOverviewsByWardResponse_Room_Bed_Patient{
 								Id:                      bedRow.PatientID.UUID.String(),
 								HumanReadableIdentifier: *bedRow.PatientHumanReadableIdentifier,
-								TasksUnscheduled:        uint32(bedRow.TodoTasksCount),
-								TasksInProgress:         uint32(bedRow.InProgressTasksCount),
-								TasksDone:               uint32(bedRow.DoneTasksCount),
+								TasksUnscheduled:        uint32(bedRow.TodoTasksCount),       //nolint:gosec
+								TasksInProgress:         uint32(bedRow.InProgressTasksCount), //nolint:gosec
+								TasksDone:               uint32(bedRow.DoneTasksCount),       //nolint:gosec
 							}
 						})
 
@@ -318,7 +332,7 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 			return &val
 		})
 
-	tracking.AddWardToRecentActivity(ctx, wardId.String())
+	tracking.AddWardToRecentActivity(ctx, wardID.String())
 
 	return &pb.GetRoomOverviewsByWardResponse{
 		Rooms: roomsResponse,

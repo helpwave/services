@@ -3,21 +3,36 @@ package v1
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
 	"hwdb"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property-value/aggregate"
 	"property-svc/repos/property_value_repo"
 )
 
-type AttachPropertyValueCommandHandler func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) (common.ConsistencyToken, error)
+type AttachPropertyValueCommandHandler func(
+	ctx context.Context,
+	propertyValueID uuid.UUID,
+	propertyID uuid.UUID,
+	value interface{},
+	subjectID uuid.UUID,
+) (common.ConsistencyToken, error)
 
 func NewAttachPropertyValueCommandHandler(as hwes.AggregateStore) AttachPropertyValueCommandHandler {
-	return func(ctx context.Context, propertyValueID uuid.UUID, propertyID uuid.UUID, value interface{}, subjectID uuid.UUID) (common.ConsistencyToken, error) {
+	return func(
+		ctx context.Context,
+		propertyValueID uuid.UUID,
+		propertyID uuid.UUID,
+		value interface{},
+		subjectID uuid.UUID,
+	) (common.ConsistencyToken, error) {
 		propertyValueRepo := property_value_repo.New(hwdb.GetDB())
 		var a *aggregate.PropertyValueAggregate
 
-		existingPropertyValueID, err := hwdb.Optional(propertyValueRepo.GetPropertyValueBySubjectIDAndPropertyID)(ctx, property_value_repo.GetPropertyValueBySubjectIDAndPropertyIDParams{
+		query := hwdb.Optional(propertyValueRepo.GetPropertyValueBySubjectIDAndPropertyID)
+		existingPropertyValueID, err := query(ctx, property_value_repo.GetPropertyValueBySubjectIDAndPropertyIDParams{
 			PropertyID: propertyID,
 			SubjectID:  subjectID,
 		})

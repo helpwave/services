@@ -1,12 +1,14 @@
 package hwgrpc_test
 
 import (
-	"common/hwgrpc"
 	"context"
 	"fmt"
-	"google.golang.org/grpc/metadata"
 	"hwlocale"
 	"testing"
+
+	"common/hwgrpc"
+
+	"google.golang.org/grpc/metadata"
 )
 
 func TestLocaleInterceptor(t *testing.T) {
@@ -20,23 +22,24 @@ func TestLocaleInterceptor(t *testing.T) {
 	}
 
 	for acceptLanguageHeader, expectedLocalesStrings := range testCases {
-		t.Run(fmt.Sprintf("Test localeInterceptor with accept-language header of '%s'", acceptLanguageHeader), func(t *testing.T) {
-			ctx := context.Background()
+		t.Run(fmt.Sprintf("Test localeInterceptor with accept-language header of '%s'", acceptLanguageHeader),
+			func(t *testing.T) {
+				ctx := context.Background()
 
-			md := metadata.New(map[string]string{
-				"accept-language": acceptLanguageHeader,
-			})
-			ctx = metadata.NewIncomingContext(ctx, md)
+				md := metadata.New(map[string]string{
+					"accept-language": acceptLanguageHeader,
+				})
+				ctx = metadata.NewIncomingContext(ctx, md)
 
-			ctx = hwgrpc.LocaleInterceptor(ctx)
+				ctx = hwgrpc.LocaleInterceptor(ctx)
 
-			localesStrings := hwlocale.GetLocalesStrings(ctx)
+				localesStrings := hwlocale.GetLocalesStrings(ctx)
 
-			for i, localeString := range localesStrings {
-				if localeString != expectedLocalesStrings[i] {
-					t.Errorf("expected %s got %s", expectedLocalesStrings, localesStrings)
+				for i, localeString := range localesStrings {
+					if localeString != expectedLocalesStrings[i] {
+						t.Errorf("expected %s got %s", expectedLocalesStrings, localesStrings)
+					}
 				}
-			}
-		})
+			})
 	}
 }

@@ -2,6 +2,7 @@ package test
 
 import (
 	"context"
+
 	"hwauthz"
 )
 
@@ -12,7 +13,11 @@ func NewTrueAuthZ() *TrueAuthZ {
 	return &TrueAuthZ{}
 }
 
-func (a *TrueAuthZ) Write(ctx context.Context, writes []hwauthz.Relationship, deletes []hwauthz.Relationship) (hwauthz.ConsistencyToken, error) {
+func (a *TrueAuthZ) Write(
+	ctx context.Context,
+	writes []hwauthz.Relationship,
+	deletes []hwauthz.Relationship,
+) (hwauthz.ConsistencyToken, error) {
 	return "", nil
 }
 

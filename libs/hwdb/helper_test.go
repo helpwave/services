@@ -1,9 +1,10 @@
 package hwdb_test
 
 import (
+	"testing"
+
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"hwdb"
-	"testing"
 )
 
 func TestPbToTimestamp(t *testing.T) {

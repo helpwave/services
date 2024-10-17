@@ -3,10 +3,11 @@ package hwes_test
 import (
 	"context"
 	"errors"
+	"testing"
+
 	"github.com/google/uuid"
 	"hwes"
 	"hwes/test"
-	"testing"
 )
 
 type UserModel struct {

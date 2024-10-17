@@ -2,14 +2,15 @@ package patient_postgres_projection
 
 import (
 	"context"
-	"fmt"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
-	"github.com/google/uuid"
-	zlog "github.com/rs/zerolog/log"
 	"hwdb"
 	"hwes"
 	"hwes/eventstoredb/projections/custom"
 	"hwutil"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+	"github.com/google/uuid"
+	zlog "github.com/rs/zerolog/log"
+
 	"tasks-svc/internal/patient/aggregate"
 	patientEventsV1 "tasks-svc/internal/patient/events/v1"
 	"tasks-svc/repos/patient_repo"
@@ -21,10 +22,15 @@ type Projection struct {
 }
 
 func NewProjection(es *esdb.Client, serviceName string) *Projection {
-	subscriptionGroupName := fmt.Sprintf("%s-patient-postgres-projection", serviceName)
+	subscriptionGroupName := serviceName + "-patient-postgres-projection"
 	p := &Projection{
-		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.PatientAggregateType)}),
-		patientRepo:      patient_repo.New(hwdb.GetDB())}
+		CustomProjection: custom.NewCustomProjection(
+			es,
+			subscriptionGroupName,
+			&[]string{aggregate.PatientAggregateType + "-"},
+		),
+		patientRepo: patient_repo.New(hwdb.GetDB()),
+	}
 	p.initEventListeners()
 	return p
 }
@@ -61,7 +67,7 @@ func (a *Projection) onPatientCreated(ctx context.Context, evt hwes.Event) (erro
 		Notes:                   payload.Notes,
 		CreatedAt:               hwdb.TimeToTimestamp(evt.Timestamp),
 		UpdatedAt:               hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency:             int64(evt.GetVersion()),
+		Consistency:             int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -88,7 +94,7 @@ func (a *Projection) onBedAssigned(ctx context.Context, evt hwes.Event) (error, 
 		ID:          evt.AggregateID,
 		BedID:       bedId,
 		UpdatedAt:   hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency: int64(evt.GetVersion()),
+		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -102,7 +108,7 @@ func (a *Projection) onBedUnassigned(ctx context.Context, evt hwes.Event) (error
 		ID:          evt.AggregateID,
 		BedID:       uuid.NullUUID{},
 		UpdatedAt:   hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency: int64(evt.GetVersion()),
+		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -116,7 +122,7 @@ func (a *Projection) onPatientDischarged(ctx context.Context, evt hwes.Event) (e
 		ID:           evt.AggregateID,
 		IsDischarged: hwutil.PtrTo(true),
 		UpdatedAt:    hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency:  int64(evt.GetVersion()),
+		Consistency:  int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -138,7 +144,7 @@ func (a *Projection) onNotesUpdated(ctx context.Context, evt hwes.Event) (error,
 		ID:          evt.AggregateID,
 		Notes:       &payload.Notes,
 		UpdatedAt:   hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency: int64(evt.GetVersion()),
+		Consistency: int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -160,7 +166,7 @@ func (a *Projection) onHumanReadableIdentifierUpdated(ctx context.Context, evt h
 		ID:                     evt.AggregateID,
 		HumanReadableIdentfier: &payload.HumanReadableIdentifier,
 		UpdatedAt:              hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency:            int64(evt.GetVersion()),
+		Consistency:            int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)
@@ -174,7 +180,7 @@ func (a *Projection) onPatientReadmitted(ctx context.Context, evt hwes.Event) (e
 		ID:           evt.AggregateID,
 		IsDischarged: hwutil.PtrTo(false),
 		UpdatedAt:    hwdb.TimeToTimestamp(evt.Timestamp),
-		Consistency:  int64(evt.GetVersion()),
+		Consistency:  int64(evt.GetVersion()), //nolint:gosec
 	})
 	if err := hwdb.Error(ctx, err); err != nil {
 		return err, hwutil.PtrTo(esdb.NackActionRetry)

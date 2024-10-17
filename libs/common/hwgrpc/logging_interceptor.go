@@ -2,16 +2,22 @@ package hwgrpc
 
 import (
 	"context"
+	"telemetry"
+
 	"github.com/dapr/dapr/pkg/proto/runtime/v1"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/metadata"
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"telemetry"
 )
 
-func UnaryLoggingInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
+func UnaryLoggingInterceptor(
+	ctx context.Context,
+	req any,
+	info *grpc.UnaryServerInfo,
+	next grpc.UnaryHandler,
+) (any, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwgrpc.UnaryLoggingInterceptor")
 	defer span.End()
 
@@ -21,7 +27,12 @@ func UnaryLoggingInterceptor(ctx context.Context, req any, info *grpc.UnaryServe
 	return res, err
 }
 
-func StreamLoggingInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
+func StreamLoggingInterceptor(
+	req any,
+	stream grpc.ServerStream,
+	info *grpc.StreamServerInfo,
+	next grpc.StreamHandler,
+) error {
 	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamLoggingInterceptor")
 	defer span.End()
 	stream = WrapServerStream(stream, ctx)

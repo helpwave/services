@@ -1,7 +1,7 @@
 package hwutil
 
 import (
-	"fmt"
+	"errors"
 	"time"
 )
 
@@ -11,15 +11,15 @@ func AssertTimestampToTime(i interface{}) (*time.Time, error) {
 	var n float64
 	d, ok := i.(map[string]interface{})
 	if !ok {
-		return nil, fmt.Errorf("could not assert map")
+		return nil, errors.New("could not assert map")
 	}
 	s, ok = d["seconds"].(float64)
 	if !ok {
-		return nil, fmt.Errorf("could not assert seconds")
+		return nil, errors.New("could not assert seconds")
 	}
 	n, ok = d["nanos"].(float64)
 	if !ok {
-		return nil, fmt.Errorf("could not assert nanos")
+		return nil, errors.New("could not assert nanos")
 	}
 	return PtrTo(time.Unix(int64(s), int64(n))), nil
 }

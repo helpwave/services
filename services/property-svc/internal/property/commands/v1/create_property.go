@@ -5,8 +5,10 @@ import (
 	"context"
 	"errors"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property/aggregate"
 	"property-svc/internal/property/models"
 )
@@ -22,7 +24,15 @@ type CreatePropertyCommandHandler func(ctx context.Context,
 ) (version common.ConsistencyToken, err error)
 
 func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *string, fieldTypeData *models.FieldTypeData) (version common.ConsistencyToken, err error) {
+	return func(ctx context.Context,
+		propertyID uuid.UUID,
+		subjectType pb.SubjectType,
+		fieldType pb.FieldType,
+		name string,
+		description *string,
+		setID *string,
+		fieldTypeData *models.FieldTypeData,
+	) (version common.ConsistencyToken, err error) {
 		a := aggregate.NewPropertyAggregate(propertyID)
 
 		exists, err := as.Exists(ctx, a)
@@ -39,7 +49,8 @@ func NewCreatePropertyCommandHandler(as hwes.AggregateStore) CreatePropertyComma
 		}
 
 		if fieldTypeData != nil {
-			if fieldTypeData.SelectData != nil && (fieldType == pb.FieldType_FIELD_TYPE_SELECT || fieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT) {
+			if fieldTypeData.SelectData != nil &&
+				(fieldType == pb.FieldType_FIELD_TYPE_SELECT || fieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT) {
 				if err := a.CreateFieldTypeData(ctx, *fieldTypeData); err != nil {
 					return 0, err
 				}

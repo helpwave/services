@@ -3,15 +3,18 @@ package hwtesting
 import (
 	"context"
 	"fmt"
+	"os"
+
 	zlog "github.com/rs/zerolog/log"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
-	"os"
 )
 
-const ImageEventstore = "eventstore/eventstore:23.10.1-jammy"
-const EsUser = "admin"
-const EsPassword = "changeit"
+const (
+	ImageEventstore = "eventstore/eventstore:23.10.1-jammy"
+	EsUser          = "admin"
+	EsPassword      = "changeit"
+)
 
 func startEventstore(ctx context.Context) (endpoint string, teardown func()) {
 	req := testcontainers.ContainerRequest{

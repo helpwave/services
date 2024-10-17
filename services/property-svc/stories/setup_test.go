@@ -3,18 +3,19 @@ package stories
 import (
 	"context"
 	pb "gen/services/property_svc/v1"
+	"hwtesting"
+	"hwutil"
+	"os"
+	"os/signal"
+	"sort"
+	"testing"
+	"time"
+
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	zlog "github.com/rs/zerolog/log"
-	"hwtesting"
-	"hwutil"
-	"os/signal"
-	"property-svc/cmd/service"
-	"sort"
 
-	"os"
-	"testing"
-	"time"
+	"property-svc/cmd/service"
 )
 
 func TestMain(m *testing.M) {

@@ -2,20 +2,21 @@ package hwgrpc
 
 import (
 	"context"
+	"telemetry"
+
 	otelCodes "go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/trace"
 	"google.golang.org/grpc"
-	"telemetry"
 )
 
-func UnarySpanInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
+func UnarySpanInterceptor(ctx context.Context, req any, _ *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
 	ctx = spanInterceptorPreNext(ctx)
 	res, err := next(ctx, req)
 	spanInterceptorPostNext(ctx, err)
 	return res, err
 }
 
-func StreamSpanInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
+func StreamSpanInterceptor(req any, stream grpc.ServerStream, _ *grpc.StreamServerInfo, next grpc.StreamHandler) error {
 	ctx := spanInterceptorPreNext(stream.Context())
 	stream = WrapServerStream(stream, ctx)
 	err := next(req, stream)

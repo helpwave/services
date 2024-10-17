@@ -2,8 +2,9 @@ package hwkc
 
 import (
 	"context"
-	zlog "github.com/rs/zerolog/log"
 	"hwutil"
+
+	zlog "github.com/rs/zerolog/log"
 )
 
 // BuildClient is a builder for hwkc.IClient
@@ -17,8 +18,11 @@ func BuildClient(ctx context.Context) (IClient, error) {
 
 	hasClientSecretEnv := hwutil.HasEnv("OAUTH_KC_CLIENT_SECRET")
 	if !hasClientSecretEnv {
-		zlog.Warn().Msg(`Creation of hwkc.NewClientFromEnv() will fail due to an empty OAUTH_KC_CLIENT_SECRET. Please check your environment variables for 'OAUTH_KC_...'
-or maybe you want to use a non-production implementation of hwkc.IClient via INSECURE_HWKC_USE_NOOP_CLIENT=true.`)
+		zlog.Warn().Msg("Creation of hwkc.NewClientFromEnv() will fail due to an empty OAUTH_KC_CLIENT_SECRET. " +
+			"Please check your environment variables for 'OAUTH_KC_...'\n" +
+			"or maybe you want to use a non-production implementation of hwkc.IClient via " +
+			"INSECURE_HWKC_USE_NOOP_CLIENT=true.",
+		)
 	}
 
 	return NewClientFromEnv(ctx)

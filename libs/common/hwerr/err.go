@@ -2,12 +2,13 @@ package hwerr
 
 import (
 	"context"
+	"hwlocale"
+
 	zlog "github.com/rs/zerolog"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/protoadapt"
-	"hwlocale"
 )
 
 // NewStatusError builds a new Status Error
@@ -17,7 +18,13 @@ import (
 // - additional details can be added
 // For more information on details see: https://cloud.google.com/apis/design/errors#error_details
 // and https://cloud.google.com/apis/design/errors#error_payloads
-func NewStatusError(ctx context.Context, code codes.Code, msg string, locale hwlocale.Locale, details ...protoadapt.MessageV1) error {
+func NewStatusError(
+	ctx context.Context,
+	code codes.Code,
+	msg string,
+	locale hwlocale.Locale,
+	details ...protoadapt.MessageV1,
+) error {
 	log := zlog.Ctx(ctx)
 	statusNoDetails := status.New(code, msg)
 
@@ -37,7 +44,8 @@ func NewStatusError(ctx context.Context, code codes.Code, msg string, locale hwl
 	return s.Err()
 }
 
-// LocalizedMessage returns a LocalizedMessage Error Detail as per https://cloud.google.com/apis/design/errors#error_details
+// LocalizedMessage returns a LocalizedMessage Error Detail as per
+// https://cloud.google.com/apis/design/errors#error_details
 // Also see NewStatusError, which constructs a LocalizedMessage for you
 func LocalizedMessage(ctx context.Context, locale hwlocale.Locale) *errdetails.LocalizedMessage {
 	str, tag := hwlocale.LocalizeWithTag(ctx, locale)

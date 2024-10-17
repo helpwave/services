@@ -2,26 +2,37 @@ package hwgrpc
 
 import (
 	"context"
-	"github.com/grpc-ecosystem/go-grpc-middleware/v2/metadata"
-	"github.com/rs/zerolog/log"
-	"golang.org/x/text/language"
-	"google.golang.org/grpc"
 	"hwlocale"
 	"hwutil"
 	"sort"
 	"strconv"
 	"strings"
 	"telemetry"
+
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/metadata"
+	"github.com/rs/zerolog/log"
+	"golang.org/x/text/language"
+	"google.golang.org/grpc"
 )
 
-func UnaryLocaleInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
+func UnaryLocaleInterceptor(
+	ctx context.Context,
+	req any,
+	_ *grpc.UnaryServerInfo,
+	next grpc.UnaryHandler,
+) (any, error) {
 	ctx, span, _ := telemetry.StartSpan(ctx, "hwgrpc.UnaryLocaleInterceptor")
 	defer span.End()
 
 	return next(localeInterceptor(ctx), req)
 }
 
-func StreamLocaleInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
+func StreamLocaleInterceptor(
+	req any,
+	stream grpc.ServerStream,
+	_ *grpc.StreamServerInfo,
+	next grpc.StreamHandler,
+) error {
 	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamLocaleInterceptor")
 	defer span.End()
 	stream = WrapServerStream(stream, ctx)

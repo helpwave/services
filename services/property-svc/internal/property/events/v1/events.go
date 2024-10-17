@@ -3,8 +3,10 @@ package v1
 import (
 	"context"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property/models"
 )
 
@@ -32,7 +34,14 @@ type PropertyCreatedEvent struct {
 	Name string `json:"name"`
 }
 
-func NewPropertyCreatedEvent(ctx context.Context, a hwes.Aggregate, id uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string) (hwes.Event, error) {
+func NewPropertyCreatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	id uuid.UUID,
+	subjectType pb.SubjectType,
+	fieldType pb.FieldType,
+	name string,
+) (hwes.Event, error) {
 	payload := PropertyCreatedEvent{
 		ID:          id.String(),
 		SubjectType: subjectType.String(),
@@ -46,7 +55,11 @@ type FieldTypeDataCreatedEvent struct {
 	FieldTypeData models.FieldTypeData
 }
 
-func NewFieldTypeDataCreatedEvent(ctx context.Context, a hwes.Aggregate, fieldTypeData models.FieldTypeData) (hwes.Event, error) {
+func NewFieldTypeDataCreatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	fieldTypeData models.FieldTypeData,
+) (hwes.Event, error) {
 	payload := FieldTypeDataCreatedEvent{
 		FieldTypeData: fieldTypeData,
 	}
@@ -83,7 +96,11 @@ type PropertySubjectTypeUpdatedEvent struct {
 	SubjectType string `json:"subject_type"`
 }
 
-func NewPropertySubjectTypeUpdatedEvent(ctx context.Context, a hwes.Aggregate, subjectType pb.SubjectType) (hwes.Event, error) {
+func NewPropertySubjectTypeUpdatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	subjectType pb.SubjectType,
+) (hwes.Event, error) {
 	payload := PropertySubjectTypeUpdatedEvent{
 		SubjectType: subjectType.String(),
 	}
@@ -92,13 +109,6 @@ func NewPropertySubjectTypeUpdatedEvent(ctx context.Context, a hwes.Aggregate, s
 
 type PropertyFieldTypeUpdatedEvent struct {
 	FieldType string `json:"field_type"`
-}
-
-func NewPropertyFieldTypeUpdatedEvent(ctx context.Context, a hwes.Aggregate, fieldType pb.FieldType) (hwes.Event, error) {
-	payload := PropertyFieldTypeUpdatedEvent{
-		FieldType: fieldType.String(),
-	}
-	return hwes.NewEvent(a, PropertyFieldTypeUpdated, hwes.WithContext(ctx), hwes.WithData(payload))
 }
 
 type PropertyNameUpdatedEvent struct {
@@ -116,7 +126,11 @@ type FieldTypeDataAllowFreetextUpdatedEvent struct {
 	NewAllowFreetext bool `json:"new_allow_freetext"`
 }
 
-func NewFieldTypeDataAllowFreetextUpdatedEvent(ctx context.Context, a hwes.Aggregate, newAllowFreetext bool) (hwes.Event, error) {
+func NewFieldTypeDataAllowFreetextUpdatedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	newAllowFreetext bool,
+) (hwes.Event, error) {
 	payload := FieldTypeDataAllowFreetextUpdatedEvent{
 		NewAllowFreetext: newAllowFreetext,
 	}
@@ -127,7 +141,11 @@ type FieldTypeDataSelectOptionsRemovedEvent struct {
 	RemovedSelectOptions []string `json:"removed_select_options"`
 }
 
-func NewFieldTypeDataSelectOptionsRemovedEvent(ctx context.Context, a hwes.Aggregate, toBeRemoved []string) (hwes.Event, error) {
+func NewFieldTypeDataSelectOptionsRemovedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	toBeRemoved []string,
+) (hwes.Event, error) {
 	payload := FieldTypeDataSelectOptionsRemovedEvent{
 		RemovedSelectOptions: toBeRemoved,
 	}
@@ -138,7 +156,11 @@ type FieldTypeDataSelectOptionsUpsertedEvent struct {
 	UpsertedSelectOptions []models.UpdateSelectOption `json:"UpsertedSelectOptions"`
 }
 
-func NewFieldTypeDataSelectOptionsUpsertedEvent(ctx context.Context, a hwes.Aggregate, upsertOptions []models.UpdateSelectOption) (hwes.Event, error) {
+func NewFieldTypeDataSelectOptionsUpsertedEvent(
+	ctx context.Context,
+	a hwes.Aggregate,
+	upsertOptions []models.UpdateSelectOption,
+) (hwes.Event, error) {
 	payload := FieldTypeDataSelectOptionsUpsertedEvent{
 		UpsertedSelectOptions: upsertOptions,
 	}

@@ -5,14 +5,20 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property-set/aggregate"
 )
 
 var ErrAlreadyExists = errors.New("cannot create an already existing aggregate")
 
-type CreatePropertySetCommandHandler func(ctx context.Context, propertySetID uuid.UUID, name string) (common.ConsistencyToken, error)
+type CreatePropertySetCommandHandler func(
+	ctx context.Context,
+	propertySetID uuid.UUID,
+	name string,
+) (common.ConsistencyToken, error)
 
 func NewCreatePropertySetCommandHandler(as hwes.AggregateStore) CreatePropertySetCommandHandler {
 	return func(ctx context.Context, propertySetID uuid.UUID, name string) (common.ConsistencyToken, error) {

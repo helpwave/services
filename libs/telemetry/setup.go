@@ -3,14 +3,15 @@ package telemetry
 import (
 	"context"
 	"errors"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"hwutil"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 var prometheusRegistry *prometheus.Registry
@@ -24,7 +25,8 @@ func SetupLogging(mode, rawLevel, service, version string) {
 		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
 	}
 
-	// base logger, all kinds of other data may be attached for more specific loggers (e.g. as done in common.loggingUnaryInterceptor)
+	// base logger, all kinds of other data may be attached for more specific loggers
+	// (e.g. as done in common.loggingUnaryInterceptor)
 	log.Logger = log.With().
 		Caller().
 		Str("version", version).
@@ -52,6 +54,7 @@ func startMetricsServer(ctx context.Context, addr string, shutdown func(error)) 
 			PrometheusRegistry(),
 			promhttp.HandlerFor(PrometheusRegistry(), promhttp.HandlerOpts{}),
 		),
+		ReadHeaderTimeout: time.Second * 30, // prevent potential slowloris attack
 	}
 	go func() {
 		err := server.ListenAndServe()

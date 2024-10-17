@@ -4,16 +4,40 @@ import (
 	"common"
 	"context"
 	pb "gen/services/property_svc/v1"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property/aggregate"
 	"property-svc/internal/property/models"
 )
 
-type UpdatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) (common.ConsistencyToken, error)
+type UpdatePropertyCommandHandler func(
+	ctx context.Context,
+	propertyID uuid.UUID,
+	subjectType *pb.SubjectType,
+	name *string,
+	description *string,
+	setID *string,
+	allowFreetext *bool,
+	upsertOptions *[]models.UpdateSelectOption,
+	removeOptions []string,
+	isArchived *bool,
+) (common.ConsistencyToken, error)
 
 func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType *pb.SubjectType, name *string, description *string, setID *string, allowFreetext *bool, upsertOptions *[]models.UpdateSelectOption, removeOptions []string, isArchived *bool) (common.ConsistencyToken, error) {
+	return func(
+		ctx context.Context,
+		propertyID uuid.UUID,
+		subjectType *pb.SubjectType,
+		name *string,
+		description *string,
+		setID *string,
+		allowFreetext *bool,
+		upsertOptions *[]models.UpdateSelectOption,
+		removeOptions []string,
+		isArchived *bool,
+	) (common.ConsistencyToken, error) {
 		a, err := aggregate.LoadPropertyAggregate(ctx, as, propertyID)
 		if err != nil {
 			return 0, err
@@ -44,7 +68,8 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyComma
 		}
 
 		if allowFreetext != nil {
-			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT || a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
+			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT ||
+				a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
 				if err := a.UpdateAllowFreetext(ctx, *allowFreetext); err != nil {
 					return 0, err
 				}
@@ -52,17 +77,18 @@ func NewUpdatePropertyCommandHandler(as hwes.AggregateStore) UpdatePropertyComma
 		}
 
 		if upsertOptions != nil {
-			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT || a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
+			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT ||
+				a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
 				if err := a.FieldTypeDataUpsertOptions(ctx, *upsertOptions); err != nil {
 					return 0, err
 				}
 			}
-
 		}
 
 		if len(removeOptions) > 0 {
 			// TODO: check if remove options exist in aggregate SelectOptions?
-			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT || a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
+			if a.Property.FieldType == pb.FieldType_FIELD_TYPE_SELECT ||
+				a.Property.FieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT {
 				if err := a.FieldTypeDataRemoveOptions(ctx, removeOptions); err != nil {
 					return 0, err
 				}

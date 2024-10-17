@@ -1,10 +1,11 @@
 package spicedb
 
 import (
-	"fmt"
-	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"hwauthz"
 	"hwes/eventstoredb/projections/custom"
+
+	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
+
 	"tasks-svc/internal/task/aggregate"
 )
 
@@ -14,10 +15,14 @@ type Projection struct {
 }
 
 func NewSpiceDBProjection(es *esdb.Client, authz hwauthz.AuthZ, serviceName string) *Projection {
-	subscriptionGroupName := fmt.Sprintf("%s-spicedb-projection", serviceName)
+	subscriptionGroupName := serviceName + "-spicedb-projection"
 	p := &Projection{
-		CustomProjection: custom.NewCustomProjection(es, subscriptionGroupName, &[]string{fmt.Sprintf("%s-", aggregate.TaskAggregateType)}),
-		authz:            authz,
+		CustomProjection: custom.NewCustomProjection(
+			es,
+			subscriptionGroupName,
+			&[]string{aggregate.TaskAggregateType + "-"},
+		),
+		authz: authz,
 	}
 	p.initEventListeners()
 	return p

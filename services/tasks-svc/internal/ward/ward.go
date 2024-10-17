@@ -4,12 +4,14 @@ import (
 	"common"
 	"context"
 	pb "gen/services/tasks_svc/v1"
+	"hwdb"
+	"hwutil"
+
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"hwdb"
-	"hwutil"
+
 	"tasks-svc/internal/tracking"
 	"tasks-svc/repos/ward_repo"
 )
@@ -26,7 +28,7 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 	log := zlog.Ctx(ctx)
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	row, err := wardRepo.CreateWard(ctx, req.Name)
+	row, err := wardRepo.CreateWard(ctx, req.GetName())
 	err = hwdb.Error(ctx, err)
 	if err != nil {
 		return nil, err
@@ -43,14 +45,14 @@ func (ServiceServer) CreateWard(ctx context.Context, req *pb.CreateWardRequest) 
 
 	return &pb.CreateWardResponse{
 		Id:          wardID.String(),
-		Consistency: common.ConsistencyToken(consistency).String(),
+		Consistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
 func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.GetWardResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -67,7 +69,7 @@ func (ServiceServer) GetWard(ctx context.Context, req *pb.GetWardRequest) (*pb.G
 	return &pb.GetWardResponse{
 		Id:          ward.ID.String(),
 		Name:        ward.Name,
-		Consistency: common.ConsistencyToken(ward.Consistency).String(),
+		Consistency: common.ConsistencyToken(ward.Consistency).String(), //nolint:gosec
 	}, nil
 }
 
@@ -85,20 +87,22 @@ func (ServiceServer) GetWards(ctx context.Context, req *pb.GetWardsRequest) (*pb
 			return &pb.GetWardsResponse_Ward{
 				Id:          ward.ID.String(),
 				Name:        ward.Name,
-				Consistency: common.ConsistencyToken(ward.Consistency).String(),
+				Consistency: common.ConsistencyToken(ward.Consistency).String(), //nolint:gosec
 			}
 		}),
 	}, nil
 }
 
-func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsRequest) (*pb.GetRecentWardsResponse, error) {
+func (ServiceServer) GetRecentWards(
+	ctx context.Context,
+	_ *pb.GetRecentWardsRequest,
+) (*pb.GetRecentWardsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 	log := zlog.Ctx(ctx)
 
 	// TODO: Auth
 
 	recentWardIDsStr, err := tracking.GetRecentWardsForUser(ctx)
-
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -128,11 +132,11 @@ func (ServiceServer) GetRecentWards(ctx context.Context, req *pb.GetRecentWardsR
 		return &pb.GetRecentWardsResponse_Ward{
 			Id:              row.Ward.ID.String(),
 			Name:            row.Ward.Name,
-			BedCount:        uint32(row.BedCount),
-			TasksTodo:       uint32(row.TodoCount),
-			TasksInProgress: uint32(row.InProgressCount),
-			TasksDone:       uint32(row.DoneCount),
-			Consistency:     common.ConsistencyToken(row.Ward.Consistency).String(),
+			BedCount:        uint32(row.BedCount),                                   //nolint:gosec
+			TasksTodo:       uint32(row.TodoCount),                                  //nolint:gosec
+			TasksInProgress: uint32(row.InProgressCount),                            //nolint:gosec
+			TasksDone:       uint32(row.DoneCount),                                  //nolint:gosec
+			Consistency:     common.ConsistencyToken(row.Ward.Consistency).String(), //nolint:gosec
 		}
 	})
 
@@ -144,7 +148,7 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 
 	// TODO: Auth
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -161,15 +165,15 @@ func (ServiceServer) UpdateWard(ctx context.Context, req *pb.UpdateWardRequest) 
 	tracking.AddWardToRecentActivity(ctx, id.String())
 
 	return &pb.UpdateWardResponse{
-		Conflict:    nil, // TODO
-		Consistency: common.ConsistencyToken(consistency).String(),
+		Conflict:    nil,                                           // TODO
+		Consistency: common.ConsistencyToken(consistency).String(), //nolint:gosec
 	}, nil
 }
 
 func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) (*pb.DeleteWardResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	id, err := uuid.Parse(req.Id)
+	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -194,7 +198,10 @@ func (ServiceServer) DeleteWard(ctx context.Context, req *pb.DeleteWardRequest) 
 	return &pb.DeleteWardResponse{}, nil
 }
 
-func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOverviewsRequest) (*pb.GetWardOverviewsResponse, error) {
+func (s ServiceServer) GetWardOverviews(
+	ctx context.Context,
+	_ *pb.GetWardOverviewsRequest,
+) (*pb.GetWardOverviewsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
 	rows, err := wardRepo.GetWardsWithCounts(ctx, ward_repo.GetWardsWithCountsParams{
@@ -212,21 +219,24 @@ func (s ServiceServer) GetWardOverviews(ctx context.Context, _ *pb.GetWardOvervi
 		return &pb.GetWardOverviewsResponse_Ward{
 			Id:              row.Ward.ID.String(),
 			Name:            row.Ward.Name,
-			BedCount:        uint32(row.BedCount),
-			TasksTodo:       uint32(row.TodoCount),
-			TasksInProgress: uint32(row.InProgressCount),
-			TasksDone:       uint32(row.DoneCount),
-			Consistency:     common.ConsistencyToken(row.Ward.Consistency).String(),
+			BedCount:        uint32(row.BedCount),                                   //nolint:gosec
+			TasksTodo:       uint32(row.TodoCount),                                  //nolint:gosec
+			TasksInProgress: uint32(row.InProgressCount),                            //nolint:gosec
+			TasksDone:       uint32(row.DoneCount),                                  //nolint:gosec
+			Consistency:     common.ConsistencyToken(row.Ward.Consistency).String(), //nolint:gosec
 		}
 	})
 
 	return &pb.GetWardOverviewsResponse{Wards: resWards}, err
 }
 
-func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsRequest) (*pb.GetWardDetailsResponse, error) {
+func (ServiceServer) GetWardDetails(
+	ctx context.Context,
+	req *pb.GetWardDetailsRequest,
+) (*pb.GetWardDetailsResponse, error) {
 	wardRepo := ward_repo.New(hwdb.GetDB())
 
-	wardID, err := uuid.Parse(req.Id)
+	wardID, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -255,7 +265,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 				Id:          row.RoomID.UUID.String(),
 				Name:        *row.RoomName,
 				Beds:        make([]*pb.GetWardDetailsResponse_Bed, 0),
-				Consistency: common.ConsistencyToken(*row.RoomConsistency).String(),
+				Consistency: common.ConsistencyToken(*row.RoomConsistency).String(), //nolint:gosec
 			}
 			rooms = append(rooms, room)
 			roomsIndexMap[row.RoomID.UUID] = len(rooms) - 1
@@ -268,7 +278,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 			bed := &pb.GetWardDetailsResponse_Bed{
 				Id:          row.BedID.UUID.String(),
 				Name:        *row.BedName,
-				Consistency: common.ConsistencyToken(*row.BedConsistency).String(),
+				Consistency: common.ConsistencyToken(*row.BedConsistency).String(), //nolint:gosec
 			}
 			room.Beds = append(room.Beds, bed)
 			bedSet[row.BedID.UUID] = true
@@ -295,7 +305,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 				Id:          row.TaskTemplateID.UUID.String(),
 				Name:        *row.TaskTemplateName,
 				Subtasks:    make([]*pb.GetWardDetailsResponse_Subtask, 0),
-				Consistency: common.ConsistencyToken(*row.TaskTemplateConsistency).String(),
+				Consistency: common.ConsistencyToken(*row.TaskTemplateConsistency).String(), //nolint:gosec
 			}
 			taskTemplates = append(taskTemplates, taskTemplate)
 			ttIndexMap[row.TaskTemplateID.UUID] = len(taskTemplates) - 1
@@ -319,7 +329,7 @@ func (ServiceServer) GetWardDetails(ctx context.Context, req *pb.GetWardDetailsR
 		Name:          rows[0].WardName,
 		Rooms:         rooms,
 		TaskTemplates: taskTemplates,
-		Consistency:   common.ConsistencyToken(rows[0].WardConsistency).String(),
+		Consistency:   common.ConsistencyToken(rows[0].WardConsistency).String(), //nolint:gosec
 	}
 
 	return ward, nil

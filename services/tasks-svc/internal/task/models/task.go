@@ -2,8 +2,9 @@ package models
 
 import (
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Task struct {

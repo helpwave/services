@@ -3,14 +3,19 @@ package v1
 import (
 	"common"
 	pb "gen/services/tasks_svc/v1"
+	"hwdb"
+
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
-	"hwdb"
+
 	"tasks-svc/internal/task/models"
 	"tasks-svc/repos/task_repo"
 )
 
-type GetTasksByPatientIDQueryHandler func(ctx context.Context, patientID uuid.UUID) ([]*models.TaskWithConsistency, error)
+type GetTasksByPatientIDQueryHandler func(
+	ctx context.Context,
+	patientID uuid.UUID,
+) ([]*models.TaskWithConsistency, error)
 
 func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 	return func(ctx context.Context, patientID uuid.UUID) ([]*models.TaskWithConsistency, error) {
@@ -44,7 +49,7 @@ func NewGetTasksByPatientIDQueryHandler() GetTasksByPatientIDQueryHandler {
 						CreatedAt:    row.Task.CreatedAt.Time,
 						Subtasks:     make(map[uuid.UUID]models.Subtask),
 					},
-					Consistency: common.ConsistencyToken(row.Task.Consistency).String(),
+					Consistency: common.ConsistencyToken(row.Task.Consistency).String(), //nolint:gosec
 				}
 
 				if row.Task.DueAt.Valid {

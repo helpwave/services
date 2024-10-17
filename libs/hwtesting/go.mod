@@ -18,6 +18,7 @@ require (
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.33.0
 	github.com/testcontainers/testcontainers-go/modules/redis v0.33.0
 	google.golang.org/grpc v1.66.1
+	hwutil v0.0.0
 )
 
 require (
@@ -112,6 +113,5 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	hwlocale v0.0.0 // indirect
-	hwutil v0.0.0 // indirect
 	telemetry v0.0.0 // indirect
 )

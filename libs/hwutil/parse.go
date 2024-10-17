@@ -125,7 +125,7 @@ func PtrTo[T any](v T) *T {
 
 type JSONAble interface {
 	ToJSON() ([]byte, error)
-	FromJSON([]byte) error
+	FromJSON(bytes []byte) error
 }
 
 type MapAble interface {

@@ -5,8 +5,10 @@ import (
 	"context"
 	"fmt"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/google/uuid"
 	"hwdb"
+
+	"github.com/google/uuid"
+
 	"tasks-svc/internal/task/models"
 	"tasks-svc/repos/task_repo"
 )
@@ -40,7 +42,7 @@ func NewGetTaskWithPatientByIDQueryHandler() GetTaskWithPatientByIDQueryHandler 
 					CreatedAt:    rows[0].Task.CreatedAt.Time,
 					Subtasks:     make(map[uuid.UUID]models.Subtask),
 				},
-				Consistency: common.ConsistencyToken(rows[0].Task.Consistency).String(),
+				Consistency: common.ConsistencyToken(rows[0].Task.Consistency).String(), //nolint:gosec
 			},
 			Patient: models.Patient{
 				ID:                      rows[0].Patient.ID,
@@ -64,7 +66,6 @@ func NewGetTaskWithPatientByIDQueryHandler() GetTaskWithPatientByIDQueryHandler 
 					CreatedBy: row.SubtaskCreatedBy.UUID,
 				}
 			}
-
 		}
 
 		return task, nil

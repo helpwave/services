@@ -5,12 +5,15 @@ import (
 	"context"
 	"hwdb"
 	"hwes"
-	"property-svc/internal/property-view/aggregate"
-	v1 "property-svc/internal/property-view/events/v1"
 	"strings"
 	"testing"
 	"text/template"
 	"time"
+
+	"github.com/stretchr/testify/require"
+
+	"property-svc/internal/property-view/aggregate"
+	v1 "property-svc/internal/property-view/events/v1"
 
 	"github.com/EventStore/EventStore-Client-Go/v4/esdb"
 	"github.com/google/uuid"
@@ -22,11 +25,15 @@ import (
 
 type esClientStub struct{}
 
-func (e esClientStub) SubscribeToPersistentSubscriptionToAll(ctx context.Context, groupName string, options esdb.SubscribeToPersistentSubscriptionOptions) (*esdb.PersistentSubscription, error) {
+func (e esClientStub) SubscribeToPersistentSubscriptionToAll(
+	_ context.Context, _ string, _ esdb.SubscribeToPersistentSubscriptionOptions,
+) (*esdb.PersistentSubscription, error) {
 	return nil, nil
 }
 
-func (e esClientStub) CreatePersistentSubscriptionToAll(ctx context.Context, groupName string, options esdb.PersistentAllSubscriptionOptions) error {
+func (e esClientStub) CreatePersistentSubscriptionToAll(
+	_ context.Context, _ string, _ esdb.PersistentAllSubscriptionOptions,
+) error {
 	return nil
 }
 
@@ -54,11 +61,20 @@ func TestPropertyViewPropertyRulesProjection_Create_TaskPropertyMatcher_GreenPat
 		WithArgs(uuid.MustParse("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273")).
 		WillReturnResult(pgconn.NewCommandTag("INSERT 1"))
 	dbMock.ExpectExec(`.*INSERT INTO task_property_view_rules.*`).
-		WithArgs(uuid.MustParse("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"), uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true}).
-		WillReturnResult(pgconn.NewCommandTag("INSERT 1"))
+		WithArgs(
+			uuid.MustParse("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"),
+			uuid.NullUUID{},
+			uuid.NullUUID{UUID: uuid.MustParse("bca23ec4-e8fd-407d-8e7d-0d0a52ba097f"), Valid: true},
+		).WillReturnResult(pgconn.NewCommandTag("INSERT 1"))
 
-	dbMock.ExpectCopyFrom(pgx.Identifier{"property_view_filter_always_include_items"}, []string{"rule_id", "property_id", "dont_always_include"}).WillReturnResult(1)
-	dbMock.ExpectCopyFrom(pgx.Identifier{"property_view_filter_always_include_items"}, []string{"rule_id", "property_id", "dont_always_include"}).WillReturnResult(0)
+	dbMock.ExpectCopyFrom(
+		pgx.Identifier{"property_view_filter_always_include_items"},
+		[]string{"rule_id", "property_id", "dont_always_include"},
+	).WillReturnResult(1)
+	dbMock.ExpectCopyFrom(
+		pgx.Identifier{"property_view_filter_always_include_items"},
+		[]string{"rule_id", "property_id", "dont_always_include"},
+	).WillReturnResult(0)
 
 	dbMock.ExpectCommit()
 
@@ -70,7 +86,7 @@ func TestPropertyViewPropertyRulesProjection_Create_TaskPropertyMatcher_GreenPat
 		},
 		"AlwaysInclude": ["a7ff7a87-7787-42b4-9aa8-037293ac9d90"],
 		"DontAlwaysInclude": [],
-		"RuleId": "96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"
+		"RuleID": "96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"
 	}`)
 
 	err, action := projection.onPropertyRuleCreated(ctx, hwes.Event{
@@ -84,7 +100,7 @@ func TestPropertyViewPropertyRulesProjection_Create_TaskPropertyMatcher_GreenPat
 		CommitterUserID: nil,         // warning: nonsensical default value, but not relevant for this test
 	})
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, action)
 }
 
@@ -96,11 +112,17 @@ func TestPropertyViewPropertyRulesProjection_Update_GreenPath(t *testing.T) {
 	dbMock.ExpectExec("DELETE FROM property_view_filter_always_include_items.*").
 		WithArgs(
 			uuid.MustParse("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"),
-			[]uuid.UUID{uuid.MustParse("08b23992-9489-41d2-b80d-d7d49c4c9168"), uuid.MustParse("db59dd1b-fd1c-488e-a73c-6926abe68c34")},
+			[]uuid.UUID{
+				uuid.MustParse("08b23992-9489-41d2-b80d-d7d49c4c9168"),
+				uuid.MustParse("db59dd1b-fd1c-488e-a73c-6926abe68c34"),
+			},
 		).
 		WillReturnResult(pgconn.NewCommandTag("DELETE 1"))
 
-	dbMock.ExpectCopyFrom(pgx.Identifier{"property_view_filter_always_include_items"}, []string{"rule_id", "property_id", "dont_always_include"})
+	dbMock.ExpectCopyFrom(
+		pgx.Identifier{"property_view_filter_always_include_items"},
+		[]string{"rule_id", "property_id", "dont_always_include"},
+	)
 	dbMock.ExpectExec("DELETE FROM property_view_filter_always_include_items.*").
 		WithArgs(
 			uuid.MustParse("96e7ffe9-8b18-4e58-b2e1-a756fdbe1273"),
@@ -118,12 +140,19 @@ func TestPropertyViewPropertyRulesProjection_Update_GreenPath(t *testing.T) {
 			"RemoveFromAlwaysInclude":["a7ff7a87-7787-42b4-9aa8-037293ac9d90", "08b23992-9489-41d2-b80d-d7d49c4c9168"],
 			"AppendToDontAlwaysInclude":["08b23992-9489-41d2-b80d-d7d49c4c9168", "db59dd1b-fd1c-488e-a73c-6926abe68c34"],
 			"RemoveFromDontAlwaysInclude": ["08b23992-9489-41d2-b80d-d7d49c4c9168"],
-			"RuleId": "{{ . }}"
+			"RuleID": "{{ . }}"
 		}`
 	s := ""
 	buf := bytes.NewBufferString(s)
 	tmplt, _ := template.New("").Parse(expData)
-	_ = tmplt.ExecuteTemplate(buf, "", strings.Split(aggregate.PropertyViewRuleAggregateType+"-96e7ffe9-8b18-4e58-b2e1-a756fdbe1273", aggregate.PropertyViewRuleAggregateType+"-")[1])
+	_ = tmplt.ExecuteTemplate(
+		buf,
+		"",
+		strings.Split(
+			aggregate.PropertyViewRuleAggregateType+"-96e7ffe9-8b18-4e58-b2e1-a756fdbe1273",
+			aggregate.PropertyViewRuleAggregateType+"-",
+		)[1],
+	)
 	data := buf.Bytes()
 
 	err, action := projection.onPropertyRuleListsUpdated(ctx, hwes.Event{
@@ -137,7 +166,7 @@ func TestPropertyViewPropertyRulesProjection_Update_GreenPath(t *testing.T) {
 		CommitterUserID: nil,         // warning: nonsensical default value, but not relevant for this test
 	})
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, action)
 }
 
@@ -150,11 +179,20 @@ func TestPropertyViewPropertyRulesProjection_Create_PatientPropertyMatcher_Green
 		WithArgs(uuid.MustParse("c976b4fa-ee37-4aff-b7f9-c88fe5c8d238")).
 		WillReturnResult(pgconn.NewCommandTag("INSERT 1"))
 	dbMock.ExpectExec(`.*INSERT INTO patient_property_view_rules.*`).
-		WithArgs(uuid.MustParse("c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"), uuid.NullUUID{}, uuid.NullUUID{UUID: uuid.MustParse("4342530b-6b0d-40b5-9d98-be5a14681969"), Valid: true}).
-		WillReturnResult(pgconn.NewCommandTag("INSERT 1"))
+		WithArgs(
+			uuid.MustParse("c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"),
+			uuid.NullUUID{},
+			uuid.NullUUID{UUID: uuid.MustParse("4342530b-6b0d-40b5-9d98-be5a14681969"), Valid: true},
+		).WillReturnResult(pgconn.NewCommandTag("INSERT 1"))
 
-	dbMock.ExpectCopyFrom(pgx.Identifier{"property_view_filter_always_include_items"}, []string{"rule_id", "property_id", "dont_always_include"}).WillReturnResult(1)
-	dbMock.ExpectCopyFrom(pgx.Identifier{"property_view_filter_always_include_items"}, []string{"rule_id", "property_id", "dont_always_include"}).WillReturnResult(0)
+	dbMock.ExpectCopyFrom(
+		pgx.Identifier{"property_view_filter_always_include_items"},
+		[]string{"rule_id", "property_id", "dont_always_include"},
+	).WillReturnResult(1)
+	dbMock.ExpectCopyFrom(
+		pgx.Identifier{"property_view_filter_always_include_items"},
+		[]string{"rule_id", "property_id", "dont_always_include"},
+	).WillReturnResult(0)
 
 	dbMock.ExpectCommit()
 
@@ -166,7 +204,7 @@ func TestPropertyViewPropertyRulesProjection_Create_PatientPropertyMatcher_Green
 		},
 		"AlwaysInclude": ["a7ff7a87-7787-42b4-9aa8-037293ac9d90"],
 		"DontAlwaysInclude": [],
-		"RuleId": "c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"
+		"RuleID": "c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"
 	}`)
 
 	err, action := projection.onPropertyRuleCreated(ctx, hwes.Event{
@@ -180,7 +218,7 @@ func TestPropertyViewPropertyRulesProjection_Create_PatientPropertyMatcher_Green
 		CommitterUserID: nil,         // warning: nonsensical default value, but not relevant for this test
 	})
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, action)
 }
 
@@ -196,7 +234,7 @@ func TestPropertyViewPropertyRulesProjection_Create_InvalidPropertyMatcher(t *te
 		},
 		"AlwaysInclude": ["a7ff7a87-7787-42b4-9aa8-037293ac9d90"],
 		"DontAlwaysInclude": [],
-		"RuleId": "c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"
+		"RuleID": "c976b4fa-ee37-4aff-b7f9-c88fe5c8d238"
 	}`)
 
 	err, action := projection.onPropertyRuleCreated(ctx, hwes.Event{
@@ -210,7 +248,7 @@ func TestPropertyViewPropertyRulesProjection_Create_InvalidPropertyMatcher(t *te
 		CommitterUserID: nil,         // warning: nonsensical default value, but not relevant for this test
 	})
 
-	assert.Error(t, err)
-	assert.Equal(t, err.Error(), "could not find matcher in event")
+	require.Error(t, err)
+	assert.Equal(t, "could not find matcher in event", err.Error())
 	assert.NotNil(t, action)
 }

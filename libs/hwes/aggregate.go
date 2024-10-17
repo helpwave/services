@@ -1,7 +1,9 @@
 package hwes
 
 import (
+	"errors"
 	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 )
@@ -15,6 +17,8 @@ type AggregateType string
 // by an AggregateStore to persists this aggregate in an
 // event-sourcing manner
 // Also see AggregateBase and NewAggregateBase, you probably don't want to implement this interface by hand
+//
+//nolint:interfacebloat
 type Aggregate interface {
 	GetID() uuid.UUID
 	GetTypeID() string
@@ -156,7 +160,8 @@ func (a *AggregateBase) ClearUncommittedEvents() {
 func (a *AggregateBase) Load(events []Event) error {
 	for _, event := range events {
 		if event.GetAggregateID() != a.GetID() {
-			return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'", a.GetID(), event.GetAggregateID())
+			return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'",
+				a.GetID(), event.GetAggregateID())
 		}
 
 		if err := a.HandleEvent(event); err != nil {
@@ -167,7 +172,7 @@ func (a *AggregateBase) Load(events []Event) error {
 		a.version++
 	}
 	if a.IsDeleted() {
-		return fmt.Errorf("AggregateBase.Load: aggregate has been marked as deleted")
+		return errors.New("AggregateBase.Load: aggregate has been marked as deleted")
 	}
 
 	return nil
@@ -178,7 +183,8 @@ func (a *AggregateBase) Load(events []Event) error {
 // Apply -> You apply a *new* event to the aggregate that could be persisted
 func (a *AggregateBase) Apply(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
-		return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'", a.GetID(), event.GetAggregateID())
+		return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'",
+			a.GetID(), event.GetAggregateID())
 	}
 
 	if err := a.HandleEvent(event); err != nil {
@@ -196,11 +202,13 @@ func (a *AggregateBase) Apply(event Event) error {
 // Progress -> You progress the state of an aggregate
 func (a *AggregateBase) Progress(event Event) error {
 	if event.GetAggregateID() != a.GetID() {
-		return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'", a.GetID(), event.GetAggregateID())
+		return fmt.Errorf("event applied to aggregate '%s' but was targeted at aggregate '%s'",
+			a.GetID(), event.GetAggregateID())
 	}
 
 	if event.GetVersion() < a.GetVersion() {
-		return fmt.Errorf("event version of %d is lower then aggregate version of %d", event.GetVersion(), a.GetVersion())
+		return fmt.Errorf("event version of %d is lower then aggregate version of %d",
+			event.GetVersion(), a.GetVersion())
 	}
 
 	if err := a.HandleEvent(event); err != nil {

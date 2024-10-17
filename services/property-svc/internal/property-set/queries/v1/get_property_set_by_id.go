@@ -3,8 +3,10 @@ package v1
 import (
 	"context"
 	"fmt"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property-set/aggregate"
 	"property-svc/internal/property-set/models"
 )

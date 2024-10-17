@@ -2,9 +2,10 @@ package hwtesting
 
 import (
 	"context"
+	"os"
+
 	zlog "github.com/rs/zerolog/log"
 	"github.com/testcontainers/testcontainers-go/modules/redis"
-	"os"
 )
 
 const ImageRedis = "redis:6"

@@ -3,17 +3,21 @@ package stories
 import (
 	"context"
 	pb "gen/services/tasks_svc/v1"
-	"github.com/stretchr/testify/assert"
 	"hwtesting"
 	"hwutil"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func getTaskTemplate(t *testing.T, ctx context.Context, id string) *pb.GetTaskTemplateResponse {
+	t.Helper()
+
 	taskTemplate, err := taskTemplateServiceClient().GetTaskTemplate(ctx, &pb.GetTaskTemplateRequest{
 		Id: id,
 	})
-	assert.NoError(t, err, "could not get all task templates")
+	require.NoError(t, err, "could not get all task templates")
 	assert.NotNil(t, taskTemplate)
 	return taskTemplate
 }
@@ -30,7 +34,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		Name: "occupy",
 	}
 	wardRes, err := wardServiceClient.CreateWard(ctx, createWardReq)
-	assert.NoError(t, err, "could not create ward")
+	require.NoError(t, err, "could not create ward")
 
 	// wardId will be used for scoping
 	wardId := wardRes.GetId()
@@ -46,7 +50,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	}
 	createRes, err := taskTemplateClient.CreateTaskTemplate(ctx, createReq)
 
-	assert.NoError(t, err, "could not create task template")
+	require.NoError(t, err, "could not create task template")
 
 	templateId := createRes.GetId()
 
@@ -61,7 +65,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 	assert.Equal(t, createReq.Name, template.Name)
 	assert.Equal(t, *createReq.Description, template.Description)
 	assert.Equal(t, hwtesting.FakeTokenUser, template.CreatedBy)
-	assert.Equal(t, true, template.IsPublic)
+	assert.True(t, template.IsPublic)
 	assert.Equal(t, createRes.Consistency, template.Consistency)
 
 	//
@@ -75,7 +79,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		Consistency: &createRes.Consistency,
 	}
 	updateRes, err := taskTemplateClient.UpdateTaskTemplate(ctx, updateReq)
-	assert.NoError(t, err, "could not update task template after creation")
+	require.NoError(t, err, "could not update task template after creation")
 
 	assert.NotEqual(t, template.Consistency, updateRes.Consistency, "consistency has not changed in update")
 
@@ -98,7 +102,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		TaskTemplateId: templateId,
 		Name:           t.Name() + " ST 1",
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.NotEqual(t, template.Consistency, createStRes.TaskTemplateConsistency, "consistency was not updated")
 
 	//
@@ -120,7 +124,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		SubtaskId: createStRes.Id,
 		Name:      hwutil.PtrTo(t.Name() + " ST 2"),
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	//
 	// get updated template
@@ -143,7 +147,7 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		Name:        t.Name() + " tt",
 	}
 	_, err = taskTemplateClient.CreateTaskTemplate(ctx, createReq)
-	assert.NoError(t, err, "could not create task template")
+	require.NoError(t, err, "could not create task template")
 	hwtesting.WaitForProjectionsToSettle()
 
 	//
@@ -154,6 +158,6 @@ func TestCreateUpdateGetTaskTemplate(t *testing.T) {
 		WardId: &wardId,
 	})
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Len(t, templates.Templates, 2)
 }

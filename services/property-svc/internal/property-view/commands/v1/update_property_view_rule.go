@@ -3,18 +3,33 @@ package v1
 import (
 	"common"
 	"context"
-	"github.com/google/uuid"
 	"hwes"
+
+	"github.com/google/uuid"
+
 	"property-svc/internal/property-view/aggregate"
 	"property-svc/internal/property-view/models"
 )
 
-type UpdatePropertyViewRuleCommandHandler func(context.Context, models.PropertyMatchers, []uuid.UUID, []uuid.UUID, []uuid.UUID, []uuid.UUID) (common.ConsistencyToken, error)
+type UpdatePropertyViewRuleCommandHandler func(
+	ctx context.Context,
+	matchers models.PropertyMatchers,
+	appendToAlwaysInclude,
+	removeFromAlwaysInclude,
+	appendToDontAlwaysInclude,
+	removeFromDontAlwaysInclude []uuid.UUID,
+) (common.ConsistencyToken, error)
 
 func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePropertyViewRuleCommandHandler {
-	return func(ctx context.Context, matchers models.PropertyMatchers, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude []uuid.UUID) (common.ConsistencyToken, error) {
-
-		ruleID, err := matchers.FindExactRuleId(ctx)
+	return func(
+		ctx context.Context,
+		matchers models.PropertyMatchers,
+		appendToAlwaysInclude,
+		removeFromAlwaysInclude,
+		appendToDontAlwaysInclude,
+		removeFromDontAlwaysInclude []uuid.UUID,
+	) (common.ConsistencyToken, error) {
+		ruleID, err := matchers.FindExactRuleID(ctx)
 		if err != nil {
 			return 0, err
 		}
@@ -28,7 +43,14 @@ func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePrope
 				return 0, err
 			}
 
-			if err := ruleAgg.UpdateLists(ctx, *ruleID, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude); err != nil {
+			if err := ruleAgg.UpdateLists(
+				ctx,
+				*ruleID,
+				appendToAlwaysInclude,
+				removeFromAlwaysInclude,
+				appendToDontAlwaysInclude,
+				removeFromDontAlwaysInclude,
+			); err != nil {
 				return 0, err
 			}
 		} else {
@@ -37,7 +59,7 @@ func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePrope
 			ruleAgg = aggregate.NewPropertyViewRuleAggregate(ruleID)
 			rule := models.PropertyViewRule{
 				Matchers:          matchers,
-				RuleId:            ruleID,
+				RuleID:            ruleID,
 				AlwaysInclude:     appendToAlwaysInclude,
 				DontAlwaysInclude: appendToDontAlwaysInclude,
 				// remove makes no sense, ignoring

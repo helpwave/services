@@ -2,8 +2,9 @@
 package hwes
 
 import (
-	"github.com/google/uuid"
 	"testing"
+
+	"github.com/google/uuid"
 )
 
 func TestResolveAggregateIDAndTypeFromStreamID(t *testing.T) {

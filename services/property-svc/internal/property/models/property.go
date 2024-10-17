@@ -2,6 +2,7 @@ package models
 
 import (
 	pb "gen/services/property_svc/v1"
+
 	"github.com/google/uuid"
 )
 
@@ -29,7 +30,7 @@ type FieldTypeData struct {
 
 type SelectData struct {
 	AllowFreetext bool           `json:"allow_freetext"`
-	SelectOptions []SelectOption ` json:"select_options"`
+	SelectOptions []SelectOption `json:"select_options"`
 }
 
 type SelectOption struct {

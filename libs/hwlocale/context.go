@@ -2,8 +2,9 @@ package hwlocale
 
 import (
 	"context"
-	"golang.org/x/text/language"
 	"hwutil"
+
+	"golang.org/x/text/language"
 )
 
 type key struct{}

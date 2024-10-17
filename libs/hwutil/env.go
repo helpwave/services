@@ -1,8 +1,9 @@
 package hwutil
 
 import (
-	"github.com/rs/zerolog/log"
 	"os"
+
+	"github.com/rs/zerolog/log"
 )
 
 // GetEnvOr returns the environment variable named `key` or returns a default value

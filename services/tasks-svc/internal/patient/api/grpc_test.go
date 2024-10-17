@@ -6,17 +6,20 @@ import (
 	"context"
 	"decaying_lru"
 	pb "gen/services/tasks_svc/v1"
+	hwes_test "hwes/test"
+	"testing"
+	"time"
+
 	"github.com/go-redis/redismock/v9"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	hwes_test "hwes/test"
+
 	"tasks-svc/internal/patient/api"
 	"tasks-svc/internal/patient/handlers"
 	"tasks-svc/internal/tracking"
-	"testing"
-	"time"
 )
 
 func server() (context.Context, pb.PatientServiceClient, func()) {
@@ -38,12 +41,27 @@ func server() (context.Context, pb.PatientServiceClient, func()) {
 	return ctx, client, closer
 }
 
-func setup(t *testing.T) (ctx context.Context, client pb.PatientServiceClient, redisMock redismock.ClientMock, teardown func()) {
+func setup(t *testing.T) (
+	ctx context.Context,
+	client pb.PatientServiceClient,
+	redisMock redismock.ClientMock, //nolint:unparam
+	teardown func(),
+) {
+	t.Helper()
+
 	ctx, client, teardown = server()
 	ctx = common_test.AuthenticatedUserContext(ctx, uuid.NewString())
 
 	redisClient, redisMock := redismock.NewClientMock()
-	tracking.SetLRU(decaying_lru.CustomSetup("tasks-svc-test-"+t.Name(), 10, time.Second, 20, nil, redisClient))
+	tracking.SetLRU(decaying_lru.CustomSetup(
+		ctx,
+		"tasks-svc-test-"+t.Name(),
+		10,
+		time.Second,
+		20,
+		nil,
+		redisClient,
+	))
 
 	return ctx, client, redisMock, teardown
 }
@@ -62,7 +80,7 @@ func TestPatientGrpcService_GetPatientValidation(t *testing.T) {
 
 	// ID Valid -> No Error
 	_, err = client.GetPatient(ctx, &pb.GetPatientRequest{Id: uuid.NewString()})
-	assert.NoError(t, err, "rejects valid ids")
+	require.NoError(t, err, "rejects valid ids")
 }
 
 func TestPatientGrpcService_CreatePatient(t *testing.T) {
@@ -74,22 +92,19 @@ func TestPatientGrpcService_CreatePatient(t *testing.T) {
 	humanReadableIdentifier := "Test patient"
 	notes := "notes"
 
-	createPatientResponse, err := client.CreatePatient(ctx, &pb.CreatePatientRequest{HumanReadableIdentifier: humanReadableIdentifier, Notes: &notes})
-	if !assert.NoError(t, err, "could not create patient") {
-		return
-	}
+	createPatientResponse, err := client.CreatePatient(ctx, &pb.CreatePatientRequest{
+		HumanReadableIdentifier: humanReadableIdentifier,
+		Notes:                   &notes,
+	})
+	require.NoError(t, err, "could not create patient")
 
 	// new patient's id must be a uuid
 	_, err = uuid.Parse(createPatientResponse.Id)
-	if !assert.NoError(t, err, "created patient's id is not a uuid") {
-		return
-	}
+	require.NoError(t, err, "created patient's id is not a uuid")
 
 	// Now, fetch newly created patient
 	getPatientResponse, err := client.GetPatient(ctx, &pb.GetPatientRequest{Id: createPatientResponse.Id})
-	if !assert.NoError(t, err, "could not get after create") {
-		return
-	}
+	require.NoError(t, err, "could not get after create")
 	assert.Equal(t, humanReadableIdentifier, getPatientResponse.HumanReadableIdentifier)
 	assert.Equal(t, notes, getPatientResponse.Notes)
 }
@@ -103,10 +118,10 @@ func TestPatientGrpcService_UpdatePatient(t *testing.T) {
 	notes1 := "notes"
 
 	// First, create a new patient
-	createPatientResponse, err := client.CreatePatient(ctx, &pb.CreatePatientRequest{HumanReadableIdentifier: humanReadableIdentifier1, Notes: &notes1})
-	if !assert.NoError(t, err, "could not create patient") {
-		return
-	}
+	createPatientResponse, err := client.CreatePatient(ctx,
+		&pb.CreatePatientRequest{HumanReadableIdentifier: humanReadableIdentifier1, Notes: &notes1},
+	)
+	require.NoError(t, err, "could not create patient")
 
 	// Then, update the values
 	humanReadableIdentifier2 := "update"
@@ -117,15 +132,11 @@ func TestPatientGrpcService_UpdatePatient(t *testing.T) {
 		HumanReadableIdentifier: &humanReadableIdentifier2,
 		Notes:                   &notes2,
 	})
-	if !assert.NoError(t, err, "update failed") {
-		return
-	}
+	require.NoError(t, err, "update failed")
 
 	// Finally, fetch new state
 	getPatientResponse, err := client.GetPatient(ctx, &pb.GetPatientRequest{Id: createPatientResponse.Id})
-	if !assert.NoError(t, err, "could not get updated patient") {
-		return
-	}
+	require.NoError(t, err, "could not get updated patient")
 
 	assert.Equal(t, humanReadableIdentifier2, getPatientResponse.HumanReadableIdentifier)
 	assert.Equal(t, notes2, getPatientResponse.Notes)
@@ -145,7 +156,7 @@ func TestPatientGrpcService_AssignBed_Validation(t *testing.T) {
 
 	// valid
 	_, err = client.AssignBed(ctx, &pb.AssignBedRequest{Id: uuid.NewString(), BedId: uuid.NewString()})
-	assert.NoError(t, err, "rejects valid request")
+	require.NoError(t, err, "rejects valid request")
 }
 
 func TestPatientGrpcService_UnassignBed_Validation(t *testing.T) {
@@ -162,7 +173,7 @@ func TestPatientGrpcService_UnassignBed_Validation(t *testing.T) {
 
 	// valid
 	_, err = client.UnassignBed(ctx, &pb.UnassignBedRequest{Id: uuid.NewString()})
-	assert.NoError(t, err, "rejects valid request")
+	require.NoError(t, err, "rejects valid request")
 }
 
 func TestPatientGrpcService_DischargePatient_Validation(t *testing.T) {
@@ -179,7 +190,7 @@ func TestPatientGrpcService_DischargePatient_Validation(t *testing.T) {
 
 	// valid
 	_, err = client.DischargePatient(ctx, &pb.DischargePatientRequest{Id: uuid.NewString()})
-	assert.NoError(t, err, "rejects valid request")
+	require.NoError(t, err, "rejects valid request")
 }
 
 func TestPatientGrpcService_ReadmitPatient_Validation(t *testing.T) {
@@ -196,7 +207,7 @@ func TestPatientGrpcService_ReadmitPatient_Validation(t *testing.T) {
 
 	// valid
 	_, err = client.ReadmitPatient(ctx, &pb.ReadmitPatientRequest{PatientId: uuid.NewString()})
-	assert.NoError(t, err, "rejects valid request")
+	require.NoError(t, err, "rejects valid request")
 }
 
 func TestPatientGrpcService_DeletePatient(t *testing.T) {
@@ -213,7 +224,7 @@ func TestPatientGrpcService_DeletePatient(t *testing.T) {
 
 	// valid
 	_, err = client.DeletePatient(ctx, &pb.DeletePatientRequest{Id: uuid.NewString()})
-	assert.NoError(t, err, "rejects valid request")
+	require.NoError(t, err, "rejects valid request")
 }
 
 // TODO: test GetRecentPatients, once we have a running redis instance (#458)

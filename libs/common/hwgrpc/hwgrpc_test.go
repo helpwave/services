@@ -1,12 +1,14 @@
 package hwgrpc_test
 
 import (
+	"testing"
+
 	"common/hwgrpc"
 	"golang.org/x/text/language"
-	"testing"
 )
 
 func arrayEq(t *testing.T, expected []language.Tag, parsed []language.Tag) {
+	t.Helper()
 	if len(expected) != len(parsed) {
 		t.Errorf("expected len %d, got %d", len(expected), len(parsed))
 		return

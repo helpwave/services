@@ -3,28 +3,29 @@ package hwdb
 import (
 	"context"
 	"fmt"
+	"hwutil"
+
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog/log"
 	"hwdb/pgx_zerolog"
-	"hwutil"
 
 	pgxUUID "github.com/vgarvardt/pgx-google-uuid/v5"
 )
 
 type DBTX interface {
-	Exec(context.Context, string, ...interface{}) (pgconn.CommandTag, error)
-	Query(context.Context, string, ...interface{}) (pgx.Rows, error)
-	QueryRow(context.Context, string, ...interface{}) pgx.Row
+	Exec(ctx context.Context, query string, args ...interface{}) (pgconn.CommandTag, error)
+	Query(ctx context.Context, query string, args ...interface{}) (pgx.Rows, error)
+	QueryRow(ctx context.Context, query string, args ...interface{}) pgx.Row
 	CopyFrom(ctx context.Context, tableName pgx.Identifier, columnNames []string, rowSrc pgx.CopyFromSource) (int64, error)
-	SendBatch(context.Context, *pgx.Batch) pgx.BatchResults
+	SendBatch(ctx context.Context, batch *pgx.Batch) pgx.BatchResults
 
 	Begin(ctx context.Context) (pgx.Tx, error)
 }
 
 // connectionPool is set in OpenDatabase() and allows for concurrent access to the database
-var connectionPool DBTX = nil
+var connectionPool DBTX
 
 // SetupDatabaseFromEnv prefers the env POSTGRES_DSN and will be configured the database connection accordingly.
 // When this env does not exist, a fallback to the following envs with proper default values will take place.
@@ -66,8 +67,7 @@ func buildDsnFromEnvs() string {
 		user,
 		password,
 		databaseName,
-		port :=
-		hwutil.GetEnvOr("POSTGRES_HOST", "localhost"),
+		port := hwutil.GetEnvOr("POSTGRES_HOST", "localhost"),
 		hwutil.GetEnvOr("POSTGRES_USER", "postgres"),
 		hwutil.GetEnvOr("POSTGRES_PASSWORD", "postgres"),
 		hwutil.GetEnvOr("POSTGRES_DB", "postgres"),
@@ -108,7 +108,9 @@ func openDatabasePool(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
 
 func GetDB() DBTX {
 	if connectionPool == nil {
-		log.Error().Msg("GetDB called without set-up database, you will run into nil-pointers. Make sure to call SetupDatabaseFromEnv()!")
+		log.Error().
+			Msg("GetDB called without set-up database, you will run into nil-pointers. " +
+				"Make sure to call SetupDatabaseFromEnv()!")
 	}
 	return connectionPool
 }

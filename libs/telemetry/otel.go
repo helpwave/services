@@ -3,13 +3,14 @@ package telemetry
 import (
 	"context"
 	"fmt"
+	"reflect"
+
 	"github.com/rs/zerolog"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
-	"reflect"
 )
 
 // StartSpan starts a new span and returns a context with both span information and a new span-aware logger attached.
@@ -17,7 +18,13 @@ import (
 //
 //	ctx, span, log := common.StartSpan(ctx, "some name")
 //	defer span.End()
-func StartSpan(ctx context.Context, spanName string, opts ...trace.SpanStartOption) (context.Context, trace.Span, zerolog.Logger) {
+//
+//nolint:spancheck
+func StartSpan(
+	ctx context.Context,
+	spanName string,
+	opts ...trace.SpanStartOption,
+) (context.Context, trace.Span, zerolog.Logger) {
 	tracer := otel.Tracer("") // tracer with default name
 	ctx, span := tracer.Start(ctx, spanName, opts...)
 

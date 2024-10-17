@@ -1,10 +1,11 @@
 package hwutil
 
 import (
-	zlog "github.com/rs/zerolog/log"
-	"golang.org/x/net/context"
 	"os"
 	"os/signal"
+
+	zlog "github.com/rs/zerolog/log"
+	"golang.org/x/net/context"
 )
 
 // ReadFileOrEmpty will return the contents of a file or "" in case of error

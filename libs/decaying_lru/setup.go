@@ -4,19 +4,20 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
-	"github.com/redis/go-redis/v9"
-	"github.com/rs/zerolog/log"
 	"hwutil"
 	"strings"
 	"time"
+
+	"github.com/redis/go-redis/v9"
+	"github.com/rs/zerolog/log"
 )
 
 // Setup creates a DecayingLRU and sets it up from env
 // Size is the max size of the LRU
 // decay is the time in seconds after which a key is evicted, reset with every write
 // We expect a garbage collection for a key to run every invP add calls
-func Setup(serviceName string, size int64, decay time.Duration, invP int) DecayingLRU {
-	return CustomSetup(serviceName, size, decay, invP, nil, nil)
+func Setup(ctx context.Context, serviceName string, size int64, decay time.Duration, invP int) DecayingLRU {
+	return CustomSetup(ctx, serviceName, size, decay, invP, nil, nil)
 }
 
 // DefaultRedisOptions collects values from env (read the README so see which vars are respected)
@@ -48,20 +49,26 @@ func redisOptionsOrDefault(serviceName string, redisOptions *redis.Options) *red
 	return DefaultRedisOptions(serviceName)
 }
 
-func CustomSetup(serviceName string, size int64, decay time.Duration, invP int, redisOptions *redis.Options, redisClient *redis.Client) DecayingLRU {
+func CustomSetup(ctx context.Context,
+	serviceName string,
+	size int64,
+	decay time.Duration,
+	invP int,
+	redisOptions *redis.Options,
+	redisClient *redis.Client,
+) DecayingLRU {
 	if redisClient == nil {
 		redisClient = redis.NewClient(redisOptionsOrDefault(serviceName, redisOptions))
 	}
 
 	lru := DecayingLRU{
-		ctx:         context.Background(),
 		redisClient: redisClient,
 		decay:       decay,
 		size:        size,
 		invP:        invP,
 	}
 
-	if err := lru.redisClient.Get(lru.ctx, "connectiontest").Err(); err != nil && !errors.Is(err, redis.Nil) {
+	if err := lru.redisClient.Get(ctx, "connectiontest").Err(); err != nil && !errors.Is(err, redis.Nil) {
 		log.Error().Err(err).Msg("error during redis connection test")
 	} else {
 		log.Info().Msg("redis connection test ok")

@@ -4,18 +4,21 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"telemetry"
+	"time"
+
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	zlog "github.com/rs/zerolog"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"telemetry"
-	"time"
 )
 
 // Optional wraps a database query function and returns (nil, nil) in case of ErrNoRows
 //
 //	hwdb.Optional(repo.GetOptionalElement)(ctx, param)
-func Optional[P any, R any](fn func(ctx context.Context, param P) (R, error)) func(ctx context.Context, param P) (*R, error) {
+func Optional[P any, R any](
+	fn func(ctx context.Context, param P) (R, error),
+) func(ctx context.Context, param P) (*R, error) {
 	return func(ctx context.Context, param P) (*R, error) {
 		res, err := fn(ctx, param)
 		if err != nil && errors.Is(err, pgx.ErrNoRows) {
@@ -50,7 +53,7 @@ func PbToTimestamp(src *timestamppb.Timestamp) pgtype.Timestamp {
 
 // ExecBatch can be used as a wrapper around .Exec to obtain the last not-nil error.
 func ExecBatch(batchResults interface{ Exec(f func(int, error)) }) error {
-	var err error = nil
+	var err error
 	batchResults.Exec(func(_ int, e error) {
 		if e != nil {
 			err = e
@@ -69,7 +72,6 @@ func DANGERTruncateAllTables(ctx context.Context, db DBTX) error {
 		FROM information_schema.tables
 		WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
 	`)
-
 	if err != nil {
 		return fmt.Errorf("DANGERTruncateAllTables: failed to query table names: %w", err)
 	}

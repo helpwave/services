@@ -3,9 +3,10 @@ package test
 import (
 	"common"
 	"context"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"hwes"
-	"testing"
 )
 
 type AggregateStore struct {
@@ -31,15 +32,15 @@ func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 }
 
 func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) (common.ConsistencyToken, error) {
-	uncomittedEventsLen := len(aggregate.GetUncommittedEvents())
-	if uncomittedEventsLen == 0 {
+	uncommittedEventsLen := len(aggregate.GetUncommittedEvents())
+	if uncommittedEventsLen == 0 {
 		return common.ConsistencyToken(aggregate.GetVersion()), nil
 	}
 
 	a.streams[aggregate.GetTypeID()] = append(a.streams[aggregate.GetTypeID()], aggregate.GetUncommittedEvents()...)
 
 	aggregate.ClearUncommittedEvents()
-	return common.ConsistencyToken(aggregate.GetVersion() + uint64(uncomittedEventsLen)), nil
+	return common.ConsistencyToken(aggregate.GetVersion() + uint64(uncommittedEventsLen)), nil
 }
 
 func (a *AggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (bool, error) {
@@ -48,10 +49,12 @@ func (a *AggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (
 }
 
 func (a *AggregateStore) ExpectToBeEmpty(t *testing.T) bool {
+	t.Helper()
 	return assert.Empty(t, a.streams)
 }
 
 func (a *AggregateStore) ExpectStream(t *testing.T, expectedStream string, expectedFn func([]hwes.Event) bool) bool {
+	t.Helper()
 	stream, ok := a.streams[expectedStream]
 	if !ok {
 		t.Errorf("stream %v does not exist on aggregate store", expectedStream)
@@ -63,7 +66,12 @@ func (a *AggregateStore) ExpectStream(t *testing.T, expectedStream string, expec
 }
 
 // ExpectAnyStream returns true, if at least one stream fulfills the expector function
-func (a *AggregateStore) ExpectAnyStream(t *testing.T, expectedFn func(streamName string, events []hwes.Event) bool) bool {
+func (a *AggregateStore) ExpectAnyStream(
+	t *testing.T,
+	expectedFn func(streamName string, events []hwes.Event) bool,
+) bool {
+	t.Helper()
+
 	for name, stream := range a.streams {
 		if expectedFn(name, stream) {
 			return true
