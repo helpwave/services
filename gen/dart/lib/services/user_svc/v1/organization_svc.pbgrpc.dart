@@ -25,10 +25,6 @@ class OrganizationServiceClient extends $grpc.Client {
       '/services.user_svc.v1.OrganizationService/CreateOrganization',
       ($18.CreateOrganizationRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $18.CreateOrganizationResponse.fromBuffer(value));
-  static final _$createOrganizationForUser = $grpc.ClientMethod<$18.CreateOrganizationForUserRequest, $18.CreateOrganizationForUserResponse>(
-      '/services.user_svc.v1.OrganizationService/CreateOrganizationForUser',
-      ($18.CreateOrganizationForUserRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $18.CreateOrganizationForUserResponse.fromBuffer(value));
   static final _$getOrganization = $grpc.ClientMethod<$18.GetOrganizationRequest, $18.GetOrganizationResponse>(
       '/services.user_svc.v1.OrganizationService/GetOrganization',
       ($18.GetOrganizationRequest value) => value.writeToBuffer(),
@@ -85,6 +81,10 @@ class OrganizationServiceClient extends $grpc.Client {
       '/services.user_svc.v1.OrganizationService/RevokeInvitation',
       ($18.RevokeInvitationRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $18.RevokeInvitationResponse.fromBuffer(value));
+  static final _$createPersonalOrganization = $grpc.ClientMethod<$18.CreatePersonalOrganizationRequest, $18.CreatePersonalOrganizationResponse>(
+      '/services.user_svc.v1.OrganizationService/CreatePersonalOrganization',
+      ($18.CreatePersonalOrganizationRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $18.CreatePersonalOrganizationResponse.fromBuffer(value));
 
   OrganizationServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -94,10 +94,6 @@ class OrganizationServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$18.CreateOrganizationResponse> createOrganization($18.CreateOrganizationRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createOrganization, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$18.CreateOrganizationForUserResponse> createOrganizationForUser($18.CreateOrganizationForUserRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$createOrganizationForUser, request, options: options);
   }
 
   $grpc.ResponseFuture<$18.GetOrganizationResponse> getOrganization($18.GetOrganizationRequest request, {$grpc.CallOptions? options}) {
@@ -155,6 +151,10 @@ class OrganizationServiceClient extends $grpc.Client {
   $grpc.ResponseFuture<$18.RevokeInvitationResponse> revokeInvitation($18.RevokeInvitationRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$revokeInvitation, request, options: options);
   }
+
+  $grpc.ResponseFuture<$18.CreatePersonalOrganizationResponse> createPersonalOrganization($18.CreatePersonalOrganizationRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$createPersonalOrganization, request, options: options);
+  }
 }
 
 @$pb.GrpcServiceName('services.user_svc.v1.OrganizationService')
@@ -169,13 +169,6 @@ abstract class OrganizationServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $18.CreateOrganizationRequest.fromBuffer(value),
         ($18.CreateOrganizationResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$18.CreateOrganizationForUserRequest, $18.CreateOrganizationForUserResponse>(
-        'CreateOrganizationForUser',
-        createOrganizationForUser_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $18.CreateOrganizationForUserRequest.fromBuffer(value),
-        ($18.CreateOrganizationForUserResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$18.GetOrganizationRequest, $18.GetOrganizationResponse>(
         'GetOrganization',
         getOrganization_Pre,
@@ -274,14 +267,17 @@ abstract class OrganizationServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $18.RevokeInvitationRequest.fromBuffer(value),
         ($18.RevokeInvitationResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$18.CreatePersonalOrganizationRequest, $18.CreatePersonalOrganizationResponse>(
+        'CreatePersonalOrganization',
+        createPersonalOrganization_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $18.CreatePersonalOrganizationRequest.fromBuffer(value),
+        ($18.CreatePersonalOrganizationResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$18.CreateOrganizationResponse> createOrganization_Pre($grpc.ServiceCall call, $async.Future<$18.CreateOrganizationRequest> request) async {
     return createOrganization(call, await request);
-  }
-
-  $async.Future<$18.CreateOrganizationForUserResponse> createOrganizationForUser_Pre($grpc.ServiceCall call, $async.Future<$18.CreateOrganizationForUserRequest> request) async {
-    return createOrganizationForUser(call, await request);
   }
 
   $async.Future<$18.GetOrganizationResponse> getOrganization_Pre($grpc.ServiceCall call, $async.Future<$18.GetOrganizationRequest> request) async {
@@ -340,8 +336,11 @@ abstract class OrganizationServiceBase extends $grpc.Service {
     return revokeInvitation(call, await request);
   }
 
+  $async.Future<$18.CreatePersonalOrganizationResponse> createPersonalOrganization_Pre($grpc.ServiceCall call, $async.Future<$18.CreatePersonalOrganizationRequest> request) async {
+    return createPersonalOrganization(call, await request);
+  }
+
   $async.Future<$18.CreateOrganizationResponse> createOrganization($grpc.ServiceCall call, $18.CreateOrganizationRequest request);
-  $async.Future<$18.CreateOrganizationForUserResponse> createOrganizationForUser($grpc.ServiceCall call, $18.CreateOrganizationForUserRequest request);
   $async.Future<$18.GetOrganizationResponse> getOrganization($grpc.ServiceCall call, $18.GetOrganizationRequest request);
   $async.Future<$18.GetOrganizationsByUserResponse> getOrganizationsByUser($grpc.ServiceCall call, $18.GetOrganizationsByUserRequest request);
   $async.Future<$18.GetOrganizationsForUserResponse> getOrganizationsForUser($grpc.ServiceCall call, $18.GetOrganizationsForUserRequest request);
@@ -356,4 +355,5 @@ abstract class OrganizationServiceBase extends $grpc.Service {
   $async.Future<$18.AcceptInvitationResponse> acceptInvitation($grpc.ServiceCall call, $18.AcceptInvitationRequest request);
   $async.Future<$18.DeclineInvitationResponse> declineInvitation($grpc.ServiceCall call, $18.DeclineInvitationRequest request);
   $async.Future<$18.RevokeInvitationResponse> revokeInvitation($grpc.ServiceCall call, $18.RevokeInvitationRequest request);
+  $async.Future<$18.CreatePersonalOrganizationResponse> createPersonalOrganization($grpc.ServiceCall call, $18.CreatePersonalOrganizationRequest request);
 }

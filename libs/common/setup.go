@@ -1,10 +1,10 @@
 package common
 
 import (
+	"common/auth"
 	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 	"hwutil"
@@ -16,9 +16,8 @@ import (
 )
 
 var (
-	Mode                    string // Mode is set in Setup()
-	InsecureFakeTokenEnable = false
-	InstanceOrganizationID  *uuid.UUID
+	Mode string // Mode is set in Setup()
+
 	shutdownOpenTelemetryFn func() // cleanup function
 	contextCancel           func() // Setup() yields the "root" context, which can be canceled using this function
 )
@@ -30,6 +29,7 @@ type SetupOptions struct {
 	auth                   bool
 	fakeAuthOnly           bool
 	unauthenticatedMethods []string
+	nonOrganizationMethods []string
 }
 
 type SetupOption func(*SetupOptions)
@@ -50,13 +50,24 @@ func WithFakeAuthOnly() SetupOption {
 	}
 }
 
-func WithUnauthenticatedMethods(unauthenticatedMethods []string) SetupOption {
+// WithUnauthenticatedMethod accept the FullMethod of a gRPC method to disable authentication on this explicit method
+// https://github.com/grpc/grpc-go/blob/f17ea7d68c0942d8160e77329cc3814b0dd2b64f/interceptor.go#L71
+func WithUnauthenticatedMethod(unauthenticatedMethod string) SetupOption {
 	return func(options *SetupOptions) {
-		options.unauthenticatedMethods = unauthenticatedMethods
+		options.unauthenticatedMethods = append(options.unauthenticatedMethods, unauthenticatedMethod)
+	}
+}
+
+// WithNonOrganizationMethod accept the FullMethod of a gRPC method to disable our organization logic on this explicit method
+// https://github.com/grpc/grpc-go/blob/f17ea7d68c0942d8160e77329cc3814b0dd2b64f/interceptor.go#L71
+func WithNonOrganizationMethod(nonOrganizationMethod string) SetupOption {
+	return func(options *SetupOptions) {
+		options.nonOrganizationMethods = append(options.nonOrganizationMethods, nonOrganizationMethod)
 	}
 }
 
 var skipAuthForMethods []string
+var skipOrganizationAuthForMethods []string
 
 // Setup loads the .env file and sets up logging,
 // also sets up tokens when the service requires auth.
@@ -114,27 +125,17 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 	}
 
 	if options.auth {
+		insecureFakeTokenEnable := false
 		if strings.ToLower(hwutil.GetEnvOr("INSECURE_FAKE_TOKEN_ENABLE", "false")) == "true" {
-			InsecureFakeTokenEnable = true
+			insecureFakeTokenEnable = true
 			log.Error().Msg("INSECURE_FAKE_TOKEN_ENABLE is set to true, accepting fake tokens")
 		}
 
-		// organizationIdStr, later InstanceOrganizationID is used as a fallback when a client does not send the organization header
-		// For code consistency purposes, we are parsing organizationIdStr from a string into a UUID
-		organizationIdStr := hwutil.GetEnvOr("ORGANIZATION_ID", "")
-		if organizationIdStr != "" {
-			organizationID, err := uuid.Parse(organizationIdStr)
-			if err != nil {
-				log.Fatal().Err(err).Msg("invalid uuid for environment variable ORGANIZATION_ID")
-			}
-			log.Info().Str("organizationID", organizationID.String()).Msg("specified fallback organizationID for requests without organization header")
-			InstanceOrganizationID = &organizationID
-		}
-
-		// Only modify skipAuthForMethods once on startup
+		// Only modify skipAuthForMethods and skipOrganizationAuthForMethods once on startup
 		skipAuthForMethods = options.unauthenticatedMethods
+		skipOrganizationAuthForMethods = options.nonOrganizationMethods
 
-		setupAuth(ctx, options.fakeAuthOnly)
+		auth.SetupAuth(ctx, options.fakeAuthOnly, insecureFakeTokenEnable)
 	}
 
 	return ctx

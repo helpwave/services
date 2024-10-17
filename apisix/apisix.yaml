@@ -85,19 +85,6 @@ services:
         headers:
           add:
             dapr-app-id: user-svc
-  # ory-svc is the only service (for now) that exposes a http API
-  - id: ory-svc
-    upstream_id: dapr-http
-    plugins:
-      cors:
-        allow_origins: "**"
-        allow_methods: "**"
-        allow_headers: "**"
-        expose_headers: "**"
-        max_age: 5
-        allow_credential: true
-        _meta:
-          priority: -1
 
 global_rules:
   - id: 1
@@ -200,43 +187,10 @@ routes:
         _meta:
           priority: -1
 
-  # ory-svc webhook routes (authenticated using basic-auth)
-  - id: ory-svc-after-registration
-    uri: /ory-svc/webhooks/after-registration
-    service_id: ory-svc
-    plugins:
-      basic-auth: {}
-      proxy-rewrite:
-        uri: /v1.0/invoke/ory-svc/method/after_registration_webhook
-  - id: ory-svc-after-settings
-    uri: /ory-svc/webhooks/after-settings
-    service_id: ory-svc
-    plugins:
-      basic-auth: {}
-      proxy-rewrite:
-        uri: /v1.0/invoke/ory-svc/method/after_settings_webhook
-
-  # ory-svc's auth wall route
-  - id: ory-svc-oauth2-consent
-    uri: /ory-svc/v1.0/oauth2/consent
-    service_id: ory-svc
-    plugins:
-      proxy-rewrite:
-        uri: /v1.0/invoke/ory-svc/method/oauth2_consent
-
   # Catch-all: route grpc traffic to dapr-grpc (without grpc-web!)
   # used by mobile, which talks grpc
   - id: grpc
     uri: /*
     upstream_id: dapr-grpc
-
-# The consumers section defines sources for user authentication that APISIX can rely on
-# We currently only use this to authenticate the ory webhook service using HTTP Basic Auth
-consumers:
-  - username: ory
-    plugins:
-      basic-auth:
-        username: "$ENV://ORY_WEBHOOK_BASIC_AUTH/username"
-        password: "$ENV://ORY_WEBHOOK_BASIC_AUTH/password"
 
 #END
