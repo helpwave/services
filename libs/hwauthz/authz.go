@@ -19,7 +19,13 @@ func StatusErrorPermissionDenied(ctx context.Context, check Relationship) error 
 		check.Resource.Type(),
 		check.Resource.ID(),
 	)
-	return common.NewStatusError(ctx, codes.PermissionDenied, msg, locale.PermissionDeniedError(ctx))
+	return common.NewStatusError(
+		ctx,
+		codes.PermissionDenied,
+		msg,
+		locale.PermissionDeniedError(ctx),
+		// TODO: ErrorInfo
+	)
 }
 
 // ConsistencyToken are currently unused

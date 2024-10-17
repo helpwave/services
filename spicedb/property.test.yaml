@@ -1,0 +1,35 @@
+
+relationships:
+  # Alice leads the A organization
+  - "organization:a#leader@user:alice"
+  # Bob leads the B organization
+  - "organization:b#leader@user:bob"
+  # Bob is also, explicitly, a member of the B organization
+  - "organization:b#member@user:bob"
+  # Charlie is a common member
+  - "organization:a#member@user:charlie"
+  - "organization:b#member@user:charlie"
+  # Clara is a common member, and leader of the A organization
+  - "organization:a#leader@user:clara"
+  - "organization:a#member@user:clara"
+  - "organization:b#member@user:clara"
+  # Oscar is only a member of one organization (A organization)
+  - "organization:a#member@user:oscar"
+
+  # property A belongs to org A, and B to B
+  - "property:a#organization@organization:a"
+  - "property:b#organization@organization:b"
+
+tests:
+  - name: all members can get any prop in their org
+    check:
+      - "property:a#get@user:alice"
+      - "property:a#get@user:charlie"
+      - "property:b#get@user:charlie"
+      - not: "property:b#get@user:alice"
+  - name: all members can update any prop in their org
+    check:
+      - "property:a#update@user:alice"
+      - "property:a#update@user:charlie"
+      - "property:b#update@user:charlie"
+      - not: "property:b#update@user:alice"

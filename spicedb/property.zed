@@ -1,0 +1,8 @@
+definition property {
+	// properties belong to an organization
+	relation organization: organization;
+
+	// any member of the org can get and update the property
+	permission get = organization->membership;
+	permission update = organization->membership;
+}

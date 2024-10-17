@@ -1,0 +1,40 @@
+
+relationships:
+  # Alice leads the A organization
+  - "organization:a#leader@user:alice"
+  # Bob leads the B organization
+  - "organization:b#leader@user:bob"
+  # Bob is also, explicitly, a member of the B organization
+  - "organization:b#member@user:bob"
+  # Charlie is a common member
+  - "organization:a#member@user:charlie"
+  - "organization:b#member@user:charlie"
+
+  # User eve is invited to the a_organization
+  - "organization_invite:1#user@user:eve"
+  - "organization_invite:1#organization@organization:a"
+
+  # Unrelated invite
+  - "organization_invite:2#user@user:dome"
+  - "organization_invite:2#organization@organization:a"
+
+tests:
+  - name: Only Eve (user) and Alice (leader) can view the invite
+    validate:
+      - relation: "organization_invite:1#view"
+        exhaustive:
+          - "[user:eve] is <organization_invite:1#user>"
+          - "[user:alice] is <organization:a#leader>"
+  - name: Only Eve (user) can accept and deny the invite
+    validate:
+      - relation: "organization_invite:1#accept"
+        exhaustive:
+          - "[user:eve] is <organization_invite:1#user>"
+      - relation: "organization_invite:1#deny"
+        exhaustive:
+          - "[user:eve] is <organization_invite:1#user>"
+  - name: Only Alice (lead) can cancel the invite
+    validate:
+      - relation: "organization_invite:1#cancel"
+        exhaustive:
+          - "[user:alice] is <organization:a#leader>"
