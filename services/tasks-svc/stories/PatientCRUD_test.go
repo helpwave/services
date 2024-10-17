@@ -7,6 +7,7 @@ import (
 	"hwutil"
 	"strconv"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 	zlog "github.com/rs/zerolog/log"
@@ -658,8 +659,11 @@ func TestGetRecentPatients(t *testing.T) {
 			require.NoError(t, err)
 			patientWithBedId = patientRes.Id
 			consistencies[patientRes.Id] = assRes.Consistency
-			hwtesting.WaitForProjectionsToSettle()
 		}
+
+		// items are ordered by the result of redis TIME command, which is accurate to the second,
+		// thus we have to wait for at least one to have a deterministic test
+		time.Sleep(time.Second)
 	}
 
 	hwtesting.WaitForProjectionsToSettle()
