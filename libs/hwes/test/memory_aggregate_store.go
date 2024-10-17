@@ -1,6 +1,7 @@
 package test
 
 import (
+	"common"
 	"context"
 	"github.com/stretchr/testify/assert"
 	"hwes"
@@ -29,15 +30,16 @@ func (a *AggregateStore) Load(ctx context.Context, aggregate hwes.Aggregate) err
 	return nil
 }
 
-func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) error {
-	if len(aggregate.GetUncommittedEvents()) == 0 {
-		return nil
+func (a *AggregateStore) Save(ctx context.Context, aggregate hwes.Aggregate) (common.ConsistencyToken, error) {
+	uncomittedEventsLen := len(aggregate.GetUncommittedEvents())
+	if uncomittedEventsLen == 0 {
+		return common.ConsistencyToken(aggregate.GetVersion()), nil
 	}
 
 	a.streams[aggregate.GetTypeID()] = append(a.streams[aggregate.GetTypeID()], aggregate.GetUncommittedEvents()...)
 
 	aggregate.ClearUncommittedEvents()
-	return nil
+	return common.ConsistencyToken(aggregate.GetVersion() + uint64(uncomittedEventsLen)), nil
 }
 
 func (a *AggregateStore) Exists(ctx context.Context, aggregate hwes.Aggregate) (bool, error) {

@@ -13,8 +13,8 @@ import (
 
 const createProperty = `-- name: CreateProperty :exec
 INSERT INTO properties
-	(id, subject_type, field_type, name)
-VALUES ($1, $2, $3, $4)
+	(id, subject_type, field_type, name, consistency)
+VALUES ($1, $2, $3, $4, $5)
 `
 
 type CreatePropertyParams struct {
@@ -22,6 +22,7 @@ type CreatePropertyParams struct {
 	SubjectType int32
 	FieldType   int32
 	Name        string
+	Consistency int64
 }
 
 func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) error {
@@ -30,6 +31,7 @@ func (q *Queries) CreateProperty(ctx context.Context, arg CreatePropertyParams) 
 		arg.SubjectType,
 		arg.FieldType,
 		arg.Name,
+		arg.Consistency,
 	)
 	return err
 }
@@ -73,23 +75,9 @@ func (q *Queries) CreateSelectOption(ctx context.Context, arg CreateSelectOption
 	return err
 }
 
-const deleteSelectDataByPropertyID = `-- name: DeleteSelectDataByPropertyID :exec
-DELETE FROM select_datas
-    WHERE id IN (
-        SELECT properties.select_data_id
-        FROM properties
-        WHERE properties.id = $1
-	)
-`
-
-func (q *Queries) DeleteSelectDataByPropertyID(ctx context.Context, id uuid.UUID) error {
-	_, err := q.db.Exec(ctx, deleteSelectDataByPropertyID, id)
-	return err
-}
-
 const getPropertiesWithSelectDataAndOptionsBySubjectTypeOrID = `-- name: GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID :many
 SELECT
-	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.select_data_id,
+	properties.id, properties.subject_type, properties.field_type, properties.name, properties.description, properties.is_archived, properties.set_id, properties.select_data_id, properties.consistency,
 	select_options.id as select_option_id,
 	select_options.name as select_option_name,
 	select_options.description as select_option_description,
@@ -99,7 +87,10 @@ SELECT
 	FROM properties
 	LEFT JOIN select_datas ON properties.select_data_id = select_datas.id
 	LEFT JOIN select_options ON select_options.select_data_id = select_datas.id
- 	WHERE subject_type = $1 OR properties.id = $2
+ 	WHERE
+ 		(subject_type = $1 OR $1 IS NULL )
+ 	   	AND
+ 	    (properties.id = $2 OR $2 IS NULL)
 `
 
 type GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrIDParams struct {
@@ -135,6 +126,7 @@ func (q *Queries) GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx con
 			&i.Property.IsArchived,
 			&i.Property.SetID,
 			&i.Property.SelectDataID,
+			&i.Property.Consistency,
 			&i.SelectOptionID,
 			&i.SelectOptionName,
 			&i.SelectOptionDescription,
@@ -153,7 +145,7 @@ func (q *Queries) GetPropertiesWithSelectDataAndOptionsBySubjectTypeOrID(ctx con
 }
 
 const getPropertyById = `-- name: GetPropertyById :one
-SELECT id, subject_type, field_type, name, description, is_archived, set_id, select_data_id FROM properties WHERE id = $1
+SELECT id, subject_type, field_type, name, description, is_archived, set_id, select_data_id, consistency FROM properties WHERE id = $1
 `
 
 func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, error) {
@@ -168,6 +160,7 @@ func (q *Queries) GetPropertyById(ctx context.Context, id uuid.UUID) (Property, 
 		&i.IsArchived,
 		&i.SetID,
 		&i.SelectDataID,
+		&i.Consistency,
 	)
 	return i, err
 }
@@ -185,79 +178,93 @@ func (q *Queries) GetPropertySubjectType(ctx context.Context, id uuid.UUID) (int
 
 const updateProperty = `-- name: UpdateProperty :exec
 UPDATE properties
-SET subject_type = coalesce($2, subject_type),
-    field_type = coalesce($3, field_type),
-    name = coalesce($4, name),
-    description = coalesce($5, description),
-    is_archived = coalesce($6, is_archived)
-WHERE id = $1
+SET subject_type = coalesce($1, subject_type),
+    field_type = coalesce($2, field_type),
+    name = coalesce($3, name),
+    description = coalesce($4, description),
+    is_archived = coalesce($5, is_archived),
+    consistency = $6
+WHERE id = $7
 `
 
 type UpdatePropertyParams struct {
-	ID          uuid.UUID
 	SubjectType *int32
 	FieldType   *int32
 	Name        *string
 	Description *string
 	IsArchived  *bool
+	Consistency int64
+	ID          uuid.UUID
 }
 
 func (q *Queries) UpdateProperty(ctx context.Context, arg UpdatePropertyParams) error {
 	_, err := q.db.Exec(ctx, updateProperty,
-		arg.ID,
 		arg.SubjectType,
 		arg.FieldType,
 		arg.Name,
 		arg.Description,
 		arg.IsArchived,
+		arg.Consistency,
+		arg.ID,
 	)
 	return err
 }
 
 const updatePropertySelectDataID = `-- name: UpdatePropertySelectDataID :exec
 UPDATE properties
-SET select_data_id = $2
+SET select_data_id = $2,
+	consistency = $3
 WHERE id = $1
 `
 
 type UpdatePropertySelectDataIDParams struct {
 	ID           uuid.UUID
 	SelectDataID uuid.NullUUID
+	Consistency  int64
 }
 
 func (q *Queries) UpdatePropertySelectDataID(ctx context.Context, arg UpdatePropertySelectDataIDParams) error {
-	_, err := q.db.Exec(ctx, updatePropertySelectDataID, arg.ID, arg.SelectDataID)
+	_, err := q.db.Exec(ctx, updatePropertySelectDataID, arg.ID, arg.SelectDataID, arg.Consistency)
 	return err
 }
 
 const updatePropertySetID = `-- name: UpdatePropertySetID :exec
 UPDATE properties
-SET set_id = $1
-WHERE id = $2
+SET set_id = $1,
+	consistency = $2
+WHERE id = $3
 `
 
 type UpdatePropertySetIDParams struct {
-	SetID uuid.NullUUID
-	ID    uuid.UUID
+	SetID       uuid.NullUUID
+	Consistency int64
+	ID          uuid.UUID
 }
 
 func (q *Queries) UpdatePropertySetID(ctx context.Context, arg UpdatePropertySetIDParams) error {
-	_, err := q.db.Exec(ctx, updatePropertySetID, arg.SetID, arg.ID)
+	_, err := q.db.Exec(ctx, updatePropertySetID, arg.SetID, arg.Consistency, arg.ID)
 	return err
 }
 
 const updateSelectData = `-- name: UpdateSelectData :exec
-UPDATE select_datas
-SET allow_freetext = $1
-WHERE id = $2
+WITH updated_select_datas AS (
+	UPDATE select_datas
+		SET allow_freetext = $2
+		WHERE select_datas.id = $3
+		RETURNING select_datas.id
+)
+UPDATE properties
+SET consistency = $1
+WHERE select_data_id = (SELECT id FROM updated_select_datas)
 `
 
 type UpdateSelectDataParams struct {
+	Consistency   int64
 	AllowFreetext bool
 	ID            uuid.UUID
 }
 
 func (q *Queries) UpdateSelectData(ctx context.Context, arg UpdateSelectDataParams) error {
-	_, err := q.db.Exec(ctx, updateSelectData, arg.AllowFreetext, arg.ID)
+	_, err := q.db.Exec(ctx, updateSelectData, arg.Consistency, arg.AllowFreetext, arg.ID)
 	return err
 }

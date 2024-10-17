@@ -1,6 +1,7 @@
 package v1
 
 type PropertyQueries struct {
-	GetPropertyByID            GetPropertyByIDQueryHandler
-	GetPropertiesBySubjectType GetPropertiesBySubjectTypeHandler
+	GetPropertyByID                       GetPropertyByIDQueryHandler
+	GetProperties                         GetPropertiesQueryHandler
+	IsPropertyAlwaysIncludedForViewSource IsPropertyAlwaysIncludedForViewSource
 }

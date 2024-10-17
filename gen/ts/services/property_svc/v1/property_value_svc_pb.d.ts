@@ -2,6 +2,7 @@ import * as jspb from 'google-protobuf'
 
 import * as services_property_svc_v1_types_pb from '../../../services/property_svc/v1/types_pb'; // proto import: "services/property_svc/v1/types.proto"
 import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb'; // proto import: "google/protobuf/timestamp.proto"
+import * as libs_common_v1_conflict_pb from '../../../libs/common/v1/conflict_pb'; // proto import: "libs/common/v1/conflict.proto"
 
 
 export class AttachPropertyValueRequest extends jspb.Message {
@@ -38,6 +39,11 @@ export class AttachPropertyValueRequest extends jspb.Message {
   hasMultiSelectValue(): boolean;
   clearMultiSelectValue(): AttachPropertyValueRequest;
 
+  getConsistency(): string;
+  setConsistency(value: string): AttachPropertyValueRequest;
+  hasConsistency(): boolean;
+  clearConsistency(): AttachPropertyValueRequest;
+
   getValueCase(): AttachPropertyValueRequest.ValueCase;
 
   serializeBinary(): Uint8Array;
@@ -59,6 +65,7 @@ export namespace AttachPropertyValueRequest {
     dateTimeValue?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     selectValue: string,
     multiSelectValue?: AttachPropertyValueRequest.MultiSelectValue.AsObject,
+    consistency?: string,
   }
 
   export class MultiSelectValue extends jspb.Message {
@@ -98,11 +105,24 @@ export namespace AttachPropertyValueRequest {
     SELECT_VALUE = 8,
     MULTI_SELECT_VALUE = 9,
   }
+
+  export enum ConsistencyCase { 
+    _CONSISTENCY_NOT_SET = 0,
+    CONSISTENCY = 10,
+  }
 }
 
 export class AttachPropertyValueResponse extends jspb.Message {
   getPropertyValueId(): string;
   setPropertyValueId(value: string): AttachPropertyValueResponse;
+
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): AttachPropertyValueResponse;
+  hasConflict(): boolean;
+  clearConflict(): AttachPropertyValueResponse;
+
+  getConsistency(): string;
+  setConsistency(value: string): AttachPropertyValueResponse;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): AttachPropertyValueResponse.AsObject;
@@ -115,6 +135,13 @@ export class AttachPropertyValueResponse extends jspb.Message {
 export namespace AttachPropertyValueResponse {
   export type AsObject = {
     propertyValueId: string,
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    consistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 2,
   }
 }
 
@@ -290,6 +317,14 @@ export namespace GetAttachedPropertyValuesResponse {
     hasMultiSelectValue(): boolean;
     clearMultiSelectValue(): Value;
 
+    getPropertyConsistency(): string;
+    setPropertyConsistency(value: string): Value;
+
+    getValueConsistency(): string;
+    setValueConsistency(value: string): Value;
+    hasValueConsistency(): boolean;
+    clearValueConsistency(): Value;
+
     getValueCase(): Value.ValueCase;
 
     serializeBinary(): Uint8Array;
@@ -314,6 +349,8 @@ export namespace GetAttachedPropertyValuesResponse {
       dateTimeValue?: google_protobuf_timestamp_pb.Timestamp.AsObject,
       selectValue?: GetAttachedPropertyValuesResponse.Value.SelectValueOption.AsObject,
       multiSelectValue?: GetAttachedPropertyValuesResponse.Value.MultiSelectValue.AsObject,
+      propertyConsistency: string,
+      valueConsistency?: string,
     }
 
     export class SelectValueOption extends jspb.Message {
@@ -378,6 +415,11 @@ export namespace GetAttachedPropertyValuesResponse {
     export enum DescriptionCase { 
       _DESCRIPTION_NOT_SET = 0,
       DESCRIPTION = 4,
+    }
+
+    export enum ValueConsistencyCase { 
+      _VALUE_CONSISTENCY_NOT_SET = 0,
+      VALUE_CONSISTENCY = 14,
     }
   }
 

@@ -68,10 +68,14 @@ class CreatePropertySetRequest extends $pb.GeneratedMessage {
 class CreatePropertySetResponse extends $pb.GeneratedMessage {
   factory CreatePropertySetResponse({
     $core.String? id,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
       $result.id = id;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
     }
     return $result;
   }
@@ -81,6 +85,7 @@ class CreatePropertySetResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePropertySetResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -113,6 +118,15 @@ class CreatePropertySetResponse extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get consistency => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set consistency($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasConsistency() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearConsistency() => clearField(2);
 }
 
 class GetPropertySetRequest extends $pb.GeneratedMessage {
@@ -169,6 +183,7 @@ class GetPropertySetResponse extends $pb.GeneratedMessage {
   factory GetPropertySetResponse({
     $core.String? id,
     $core.String? name,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -176,6 +191,9 @@ class GetPropertySetResponse extends $pb.GeneratedMessage {
     }
     if (name != null) {
       $result.name = name;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
     }
     return $result;
   }
@@ -186,6 +204,7 @@ class GetPropertySetResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPropertySetResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.property_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -227,6 +246,15 @@ class GetPropertySetResponse extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
   void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get consistency => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set consistency($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasConsistency() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearConsistency() => clearField(3);
 }
 
 

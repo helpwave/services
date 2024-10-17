@@ -1,5 +1,6 @@
 import * as jspb from 'google-protobuf'
 
+import * as libs_common_v1_conflict_pb from '../../../libs/common/v1/conflict_pb'; // proto import: "libs/common/v1/conflict.proto"
 
 
 export class CreateBedRequest extends jspb.Message {
@@ -28,6 +29,9 @@ export class CreateBedResponse extends jspb.Message {
   getId(): string;
   setId(value: string): CreateBedResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): CreateBedResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateBedResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreateBedResponse): CreateBedResponse.AsObject;
@@ -39,6 +43,7 @@ export class CreateBedResponse extends jspb.Message {
 export namespace CreateBedResponse {
   export type AsObject = {
     id: string,
+    consistency: string,
   }
 }
 
@@ -90,6 +95,9 @@ export namespace BulkCreateBedsResponse {
     getName(): string;
     setName(value: string): Bed;
 
+    getConsistency(): string;
+    setConsistency(value: string): Bed;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
     static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
@@ -102,6 +110,7 @@ export namespace BulkCreateBedsResponse {
     export type AsObject = {
       id: string,
       name: string,
+      consistency: string,
     }
   }
 
@@ -135,6 +144,9 @@ export class GetBedResponse extends jspb.Message {
   getName(): string;
   setName(value: string): GetBedResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): GetBedResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetBedResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetBedResponse): GetBedResponse.AsObject;
@@ -148,6 +160,7 @@ export namespace GetBedResponse {
     id: string,
     roomId: string,
     name: string,
+    consistency: string,
   }
 }
 
@@ -204,6 +217,9 @@ export namespace GetBedByPatientResponse {
     getWardId(): string;
     setWardId(value: string): Room;
 
+    getConsistency(): string;
+    setConsistency(value: string): Room;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Room.AsObject;
     static toObject(includeInstance: boolean, msg: Room): Room.AsObject;
@@ -217,6 +233,7 @@ export namespace GetBedByPatientResponse {
       id: string,
       name: string,
       wardId: string,
+      consistency: string,
     }
   }
 
@@ -227,6 +244,9 @@ export namespace GetBedByPatientResponse {
 
     getName(): string;
     setName(value: string): Bed;
+
+    getConsistency(): string;
+    setConsistency(value: string): Bed;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
@@ -240,6 +260,7 @@ export namespace GetBedByPatientResponse {
     export type AsObject = {
       id: string,
       name: string,
+      consistency: string,
     }
   }
 
@@ -256,6 +277,11 @@ export namespace GetBedByPatientResponse {
 }
 
 export class GetBedsRequest extends jspb.Message {
+  getRoomId(): string;
+  setRoomId(value: string): GetBedsRequest;
+  hasRoomId(): boolean;
+  clearRoomId(): GetBedsRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetBedsRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetBedsRequest): GetBedsRequest.AsObject;
@@ -266,6 +292,12 @@ export class GetBedsRequest extends jspb.Message {
 
 export namespace GetBedsRequest {
   export type AsObject = {
+    roomId?: string,
+  }
+
+  export enum RoomIdCase { 
+    _ROOM_ID_NOT_SET = 0,
+    ROOM_ID = 1,
   }
 }
 
@@ -298,6 +330,9 @@ export namespace GetBedsResponse {
     getName(): string;
     setName(value: string): Bed;
 
+    getConsistency(): string;
+    setConsistency(value: string): Bed;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
     static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
@@ -311,6 +346,7 @@ export namespace GetBedsResponse {
       id: string,
       roomId: string,
       name: string,
+      consistency: string,
     }
   }
 
@@ -360,6 +396,9 @@ export namespace GetBedsByRoomResponse {
     getName(): string;
     setName(value: string): Bed;
 
+    getConsistency(): string;
+    setConsistency(value: string): Bed;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Bed.AsObject;
     static toObject(includeInstance: boolean, msg: Bed): Bed.AsObject;
@@ -372,6 +411,7 @@ export namespace GetBedsByRoomResponse {
     export type AsObject = {
       id: string,
       name: string,
+      consistency: string,
     }
   }
 
@@ -391,6 +431,11 @@ export class UpdateBedRequest extends jspb.Message {
   hasName(): boolean;
   clearName(): UpdateBedRequest;
 
+  getConsistency(): string;
+  setConsistency(value: string): UpdateBedRequest;
+  hasConsistency(): boolean;
+  clearConsistency(): UpdateBedRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateBedRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateBedRequest): UpdateBedRequest.AsObject;
@@ -404,6 +449,7 @@ export namespace UpdateBedRequest {
     id: string,
     roomId?: string,
     name?: string,
+    consistency?: string,
   }
 
   export enum RoomIdCase { 
@@ -415,9 +461,22 @@ export namespace UpdateBedRequest {
     _NAME_NOT_SET = 0,
     NAME = 3,
   }
+
+  export enum ConsistencyCase { 
+    _CONSISTENCY_NOT_SET = 0,
+    CONSISTENCY = 4,
+  }
 }
 
 export class UpdateBedResponse extends jspb.Message {
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): UpdateBedResponse;
+  hasConflict(): boolean;
+  clearConflict(): UpdateBedResponse;
+
+  getConsistency(): string;
+  setConsistency(value: string): UpdateBedResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateBedResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateBedResponse): UpdateBedResponse.AsObject;
@@ -428,6 +487,13 @@ export class UpdateBedResponse extends jspb.Message {
 
 export namespace UpdateBedResponse {
   export type AsObject = {
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    consistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 1,
   }
 }
 

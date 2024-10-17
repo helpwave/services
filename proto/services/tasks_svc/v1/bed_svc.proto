@@ -2,7 +2,9 @@ syntax = "proto3";
 
 package services.tasks_svc.v1;
 
-option go_package = "gen/proto/services/tasks-svc";
+import "libs/common/v1/conflict.proto";
+
+option go_package = "gen/services/tasks-svc/v1";
 
 //
 // CreateBed
@@ -15,6 +17,7 @@ message CreateBedRequest {
 
 message CreateBedResponse {
   string id = 1;
+  string consistency = 2;
 }
 
 //
@@ -32,6 +35,7 @@ message BulkCreateBedsResponse {
   message Bed {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 }
 
@@ -47,6 +51,7 @@ message GetBedResponse {
   string id = 1;
   string room_id = 2;
   string name = 3;
+  string consistency = 4;
 }
 
 
@@ -61,16 +66,18 @@ message GetBedByPatientRequest {
 message GetBedByPatientResponse {
   optional Room room = 1;
   optional Bed bed = 2;
-  
+
   message Room {
     string id = 1;
     string name = 2;
     string ward_id = 3;
+    string consistency = 4;
   }
 
   message Bed {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 }
 
@@ -78,7 +85,9 @@ message GetBedByPatientResponse {
 // GetBeds
 //
 
-message GetBedsRequest {}
+message GetBedsRequest {
+  optional string room_id = 1; // @gotags: validate:"omitnil,uuid4"
+}
 
 message GetBedsResponse {
   repeated Bed beds = 1;
@@ -87,6 +96,7 @@ message GetBedsResponse {
     string id = 1;
     string room_id = 2;
     string name = 3;
+    string consistency = 4;
   }
 }
 
@@ -104,6 +114,7 @@ message GetBedsByRoomResponse {
   message Bed {
     string id = 1;
     string name = 2;
+    string consistency = 3;
   }
 }
 
@@ -115,9 +126,13 @@ message UpdateBedRequest {
   string id = 1; // @gotags: validate:"uuid4"
   optional string room_id = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
   optional string name = 3;
+  optional string consistency = 4; // no conflict detection, if not provided
 }
 
-message UpdateBedResponse {}
+message UpdateBedResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string consistency = 2;
+}
 
 //
 // DeleteBed
@@ -139,7 +154,10 @@ service BedService {
   rpc GetBed(GetBedRequest) returns (GetBedResponse) {}
   rpc GetBedByPatient(GetBedByPatientRequest) returns (GetBedByPatientResponse) {}
   rpc GetBeds(GetBedsRequest) returns (GetBedsResponse) {}
-  rpc GetBedsByRoom(GetBedsByRoomRequest) returns (GetBedsByRoomResponse) {}
+  // Deprecated: Use GetBeds with optional room_id instead
+  rpc GetBedsByRoom(GetBedsByRoomRequest) returns (GetBedsByRoomResponse) {
+   option deprecated = true;
+  }
   rpc UpdateBed(UpdateBedRequest) returns (UpdateBedResponse) {}
   rpc DeleteBed(DeleteBedRequest) returns (DeleteBedResponse) {}
 }

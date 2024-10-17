@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package services.tasks_svc.v1;
 
-option go_package = "gen/proto/services/tasks-svc";
+option go_package = "gen/services/tasks-svc/v1";
 
 enum TaskStatus {
   TASK_STATUS_UNSPECIFIED = 0;

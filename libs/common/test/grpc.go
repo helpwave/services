@@ -29,7 +29,7 @@ func StartGRPCServer(ctx context.Context, grpcServer *grpc.Server) (conn *grpc.C
 	}()
 
 	// Start Connection
-	conn, err := grpc.NewClient("passthrough://" + listener.Addr().String(),
+	conn, err := grpc.NewClient("passthrough://"+listener.Addr().String(),
 		grpc.WithContextDialer(func(ctx context.Context, s string) (net.Conn, error) {
 			return listener.Dial()
 		}),
@@ -62,11 +62,14 @@ func AssertStatusError(t *testing.T, err error, code codes.Code, msg string) {
 // AuthenticatedUserClaim is a basic claim, can be used to construct a fake-token
 func AuthenticatedUserClaim(userID string) map[string]interface{} {
 	return map[string]interface{}{
-		"sub":           userID,
-		"email":         "testine.test@helpwave.de",
-		"name":          "Testine Test",
-		"nickname":      "testine.test",
-		"organizations": []string{"3b25c6f5-4705-4074-9fc6-a50c28eba406"},
+		"sub":                userID,
+		"email":              "testine.test@helpwave.de",
+		"name":               "Testine Test",
+		"preferred_username": "testine.test",
+		"organization": map[string]interface{}{
+			"id":   "3b25c6f5-4705-4074-9fc6-a50c28eba406",
+			"name": "helpwave test",
+		},
 	}
 }
 
@@ -79,11 +82,8 @@ func AuthenticatedUserMetadata(userID string) metadata.MD {
 	}
 	fakeToken := base64.StdEncoding.EncodeToString(claimsJson)
 
-	org := claims["organizations"].([]string)[0]
-
 	return metadata.New(map[string]string{
-		"X-Organization": org,
-		"Authorization":  "Bearer " + fakeToken,
+		"Authorization": "Bearer " + fakeToken,
 	})
 }
 

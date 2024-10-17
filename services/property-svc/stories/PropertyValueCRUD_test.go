@@ -1,65 +1,14 @@
 package stories
 
 import (
-	"common"
 	"context"
 	pb "gen/services/property_svc/v1"
 	"github.com/google/uuid"
-	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"hwtesting"
 	"hwutil"
-	"sort"
 	"testing"
-	"time"
 )
-
-func TestMain(m *testing.M) {
-	Setup(m)
-}
-
-type InsecureBearerToken string
-
-func (t InsecureBearerToken) GetRequestMetadata(_ context.Context, _ ...string) (map[string]string, error) {
-	return map[string]string{
-		"authorization": "Bearer " + string(t),
-	}, nil
-}
-func (t InsecureBearerToken) RequireTransportSecurity() bool {
-	return false
-}
-
-func getGrpcConn() *grpc.ClientConn {
-	// README's fake token
-	token := "eyJzdWIiOiIxODE1OTcxMy01ZDRlLTRhZDUtOTRhZC1mYmI2YmIxNDc5ODQiLCJlbWFpbCI6InRlc3RpbmUudGVzdEBoZWxwd2F2ZS5kZSIsIm5hbWUiOiJUZXN0aW5lIFRlc3QiLCJuaWNrbmFtZSI6InRlc3RpbmUudGVzdCIsIm9yZ2FuaXphdGlvbnMiOlsiM2IyNWM2ZjUtNDcwNS00MDc0LTlmYzYtYTUwYzI4ZWJhNDA2Il19"
-
-	conn, err := grpc.NewClient(
-		common.ResolveAddrFromEnv(),
-		grpc.WithPerRPCCredentials(InsecureBearerToken(token)),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-	if err != nil {
-		log.Fatal().Err(err).Msg("could not create grpc conn")
-	}
-	return conn
-}
-
-func propertyServiceClient() pb.PropertyServiceClient {
-	return pb.NewPropertyServiceClient(getGrpcConn())
-}
-
-func propertyValueServiceClient() pb.PropertyValueServiceClient {
-	return pb.NewPropertyValueServiceClient(getGrpcConn())
-}
-
-func NamesOf(arr []*pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption) []string {
-	strs := hwutil.Map(arr, func(v *pb.GetAttachedPropertyValuesResponse_Value_SelectValueOption) string {
-		return v.Name
-	})
-	sort.Strings(strs)
-	return strs
-}
 
 // TestCreateAttachUpdateTextProperty:
 //   - Create a Property,
@@ -91,7 +40,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get new Property
@@ -103,27 +52,29 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	}
 
 	response := map[string]interface{}{
-		"Id":            propertyResponse.Id,
-		"SubjectType":   propertyResponse.SubjectType.String(),
-		"FieldType":     propertyResponse.FieldType.String(),
-		"Name":          propertyResponse.Name,
-		"Description":   propertyResponse.Description,
-		"IsArchived":    propertyResponse.IsArchived,
-		"SetId":         propertyResponse.SetId,
-		"FieldTypeData": propertyResponse.FieldTypeData,
-		// "AlwaysIncludeForViewSource": propertyResponse.AlwaysIncludeForViewSource, // TODO
+		"Id":                         propertyResponse.Id,
+		"SubjectType":                propertyResponse.SubjectType.String(),
+		"FieldType":                  propertyResponse.FieldType.String(),
+		"Name":                       propertyResponse.Name,
+		"Description":                propertyResponse.Description,
+		"IsArchived":                 propertyResponse.IsArchived,
+		"SetId":                      propertyResponse.SetId,
+		"FieldTypeData":              propertyResponse.FieldTypeData,
+		"AlwaysIncludeForViewSource": nil,
+		"PropertyConsistency":        propertyResponse.Consistency,
 	}
 
 	expectedResponse := map[string]interface{}{
-		"Id":            propertyID.String(),
-		"SubjectType":   createPropertyRequest.SubjectType.String(),
-		"FieldType":     createPropertyRequest.FieldType.String(),
-		"Name":          createPropertyRequest.Name,
-		"Description":   createPropertyRequest.Description,
-		"IsArchived":    false,
-		"SetId":         createPropertyRequest.SetId,
-		"FieldTypeData": createPropertyRequest.FieldTypeData,
-		// "AlwaysIncludeForViewSource": nil, // TODO
+		"Id":                         propertyID.String(),
+		"SubjectType":                createPropertyRequest.SubjectType.String(),
+		"FieldType":                  createPropertyRequest.FieldType.String(),
+		"Name":                       createPropertyRequest.Name,
+		"Description":                createPropertyRequest.Description,
+		"IsArchived":                 false,
+		"SetId":                      createPropertyRequest.SetId,
+		"FieldTypeData":              createPropertyRequest.FieldTypeData,
+		"AlwaysIncludeForViewSource": nil,
+		"PropertyConsistency":        createResponse.Consistency,
 	}
 
 	if !assert.Equal(t, expectedResponse, response) {
@@ -137,7 +88,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 	subjectId := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
-	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+	attachResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_TextValue{
@@ -149,7 +100,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Values
@@ -171,11 +122,13 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 
 	assert.Equal(t, "Initial Text Value", attachedValuesResponse.Values[0].GetTextValue())
 
+	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
+
 	//
 	// Update Value
 	//
 
-	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_TextValue{
@@ -187,7 +140,9 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
+
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Values
@@ -209,6 +164,7 @@ func TestCreateAttachUpdateTextProperty(t *testing.T) {
 
 	assert.Equal(t, "Updated Text Value", attachedValuesResponse.Values[0].GetTextValue())
 
+	assert.Equal(t, &updateResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency, "ValueConsistency was not updated")
 }
 
 // TestCreateAttachUpdateSelectProperty:
@@ -255,8 +211,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		return
 	}
 
-	// FIXME: I hate this
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get new Property
@@ -276,7 +231,8 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		"IsArchived":  propertyResponse.IsArchived,
 		"SetId":       propertyResponse.SetId,
 		// "FieldTypeData": propertyResponse.FieldTypeData, // TODO
-		// "AlwaysIncludeForViewSource": propertyResponse.AlwaysIncludeForViewSource, // TODO
+		"AlwaysIncludeForViewSource": nil,
+		"Consistency":                propertyResponse.Consistency,
 	}
 
 	expectedResponse := map[string]interface{}{
@@ -288,7 +244,8 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		"IsArchived":  false,
 		"SetId":       createPropertyRequest.SetId,
 		// "FieldTypeData": createPropertyRequest.FieldTypeData, // TODO
-		// "AlwaysIncludeForViewSource": nil, // TODO
+		"AlwaysIncludeForViewSource": nil,
+		"Consistency":                createResponse.Consistency,
 	}
 
 	if !assert.Equal(t, expectedResponse, response) {
@@ -306,7 +263,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 	subjectId := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
-	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+	attachResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_SelectValue{
@@ -318,7 +275,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Values
@@ -340,11 +297,13 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 
 	assert.Equal(t, "Option 1", attachedValuesResponse.Values[0].GetSelectValue().GetName())
 
+	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
+
 	//
 	// Update Value
 	//
 
-	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_SelectValue{
@@ -356,7 +315,9 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
+
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Values
@@ -378,6 +339,7 @@ func TestCreateAttachUpdateSelectProperty(t *testing.T) {
 
 	assert.Equal(t, "Option 2", attachedValuesResponse.Values[0].GetSelectValue().GetName())
 
+	assert.Equal(t, &updateResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency, "ValueConsistency was not updated")
 }
 
 // TestCreateAttachUpdateMultiSelectProperty:
@@ -428,7 +390,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get new Property
@@ -448,7 +410,8 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		"IsArchived":  propertyResponse.IsArchived,
 		"SetId":       propertyResponse.SetId,
 		// "FieldTypeData": propertyResponse.FieldTypeData, // TODO
-		// "AlwaysIncludeForViewSource": propertyResponse.AlwaysIncludeForViewSource, // TODO
+		"AlwaysIncludeForViewSource": nil,
+		"PropertyConsistency":        propertyResponse.Consistency,
 	}
 
 	expectedResponse := map[string]interface{}{
@@ -460,7 +423,8 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		"IsArchived":  false,
 		"SetId":       createPropertyRequest.SetId,
 		// "FieldTypeData": createPropertyRequest.FieldTypeData, // TODO
-		// "AlwaysIncludeForViewSource": nil, // TODO
+		"AlwaysIncludeForViewSource": nil,
+		"PropertyConsistency":        createResponse.Consistency,
 	}
 
 	if !assert.Equal(t, expectedResponse, response) {
@@ -479,7 +443,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 	subjectId := uuid.New().String()
 
 	valueClient := propertyValueServiceClient()
-	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+	attachResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_MultiSelectValue_{
@@ -494,7 +458,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Values
@@ -516,11 +480,13 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 
 	assert.Equal(t, []string{"Option 1", "Option 2"}, NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()))
 
+	assert.Equal(t, &attachResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency)
+
 	//
 	// Update Value
 	//
 
-	_, err = valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
+	updateResponse, err := valueClient.AttachPropertyValue(ctx, &pb.AttachPropertyValueRequest{
 		SubjectId:  subjectId,
 		PropertyId: propertyID.String(),
 		Value: &pb.AttachPropertyValueRequest_MultiSelectValue_{
@@ -535,7 +501,9 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	assert.NotEqual(t, attachedValuesResponse.Values[0].ValueConsistency, &updateResponse.Consistency)
+
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Values
@@ -557,6 +525,7 @@ func TestCreateAttachUpdateMultiSelectProperty(t *testing.T) {
 
 	assert.Equal(t, []string{"Option 2", "Option 3"}, NamesOf(attachedValuesResponse.Values[0].GetMultiSelectValue().GetSelectValues()))
 
+	assert.Equal(t, &updateResponse.Consistency, attachedValuesResponse.Values[0].ValueConsistency, "ValueConsistency was not updated")
 }
 
 // TestCreateAttachAddOptionAttachSelectProperty:
@@ -600,7 +569,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get new Property
@@ -632,7 +601,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Values
@@ -680,7 +649,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Property
@@ -711,7 +680,7 @@ func TestCreateAttachAddOptionAttachSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Values
@@ -775,7 +744,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get new Property
@@ -810,7 +779,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Values
@@ -859,7 +828,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Property
@@ -893,7 +862,7 @@ func TestCreateAttachAddOptionAttachMultiSelectProperty(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
+	hwtesting.WaitForProjectionsToSettle()
 
 	//
 	// Get Updated Values

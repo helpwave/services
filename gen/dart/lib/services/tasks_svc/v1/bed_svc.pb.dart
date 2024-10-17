@@ -13,6 +13,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import '../../../libs/common/v1/conflict.pb.dart' as $21;
+
 class CreateBedRequest extends $pb.GeneratedMessage {
   factory CreateBedRequest({
     $core.String? roomId,
@@ -80,10 +82,14 @@ class CreateBedRequest extends $pb.GeneratedMessage {
 class CreateBedResponse extends $pb.GeneratedMessage {
   factory CreateBedResponse({
     $core.String? id,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
       $result.id = id;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
     }
     return $result;
   }
@@ -93,6 +99,7 @@ class CreateBedResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -125,6 +132,15 @@ class CreateBedResponse extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get consistency => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set consistency($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasConsistency() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearConsistency() => clearField(2);
 }
 
 class BulkCreateBedsRequest extends $pb.GeneratedMessage {
@@ -195,6 +211,7 @@ class BulkCreateBedsResponse_Bed extends $pb.GeneratedMessage {
   factory BulkCreateBedsResponse_Bed({
     $core.String? id,
     $core.String? name,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -202,6 +219,9 @@ class BulkCreateBedsResponse_Bed extends $pb.GeneratedMessage {
     }
     if (name != null) {
       $result.name = name;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
     }
     return $result;
   }
@@ -212,6 +232,7 @@ class BulkCreateBedsResponse_Bed extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BulkCreateBedsResponse.Bed', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -253,6 +274,15 @@ class BulkCreateBedsResponse_Bed extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
   void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get consistency => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set consistency($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasConsistency() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearConsistency() => clearField(3);
 }
 
 class BulkCreateBedsResponse extends $pb.GeneratedMessage {
@@ -354,6 +384,7 @@ class GetBedResponse extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? roomId,
     $core.String? name,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -365,6 +396,9 @@ class GetBedResponse extends $pb.GeneratedMessage {
     if (name != null) {
       $result.name = name;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   GetBedResponse._() : super();
@@ -375,6 +409,7 @@ class GetBedResponse extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'roomId')
     ..aOS(3, _omitFieldNames ? '' : 'name')
+    ..aOS(4, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -425,6 +460,15 @@ class GetBedResponse extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(2);
   @$pb.TagNumber(3)
   void clearName() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get consistency => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set consistency($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasConsistency() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearConsistency() => clearField(4);
 }
 
 class GetBedByPatientRequest extends $pb.GeneratedMessage {
@@ -482,6 +526,7 @@ class GetBedByPatientResponse_Room extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? wardId,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -493,6 +538,9 @@ class GetBedByPatientResponse_Room extends $pb.GeneratedMessage {
     if (wardId != null) {
       $result.wardId = wardId;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   GetBedByPatientResponse_Room._() : super();
@@ -503,6 +551,7 @@ class GetBedByPatientResponse_Room extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'wardId')
+    ..aOS(4, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -553,12 +602,22 @@ class GetBedByPatientResponse_Room extends $pb.GeneratedMessage {
   $core.bool hasWardId() => $_has(2);
   @$pb.TagNumber(3)
   void clearWardId() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get consistency => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set consistency($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasConsistency() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearConsistency() => clearField(4);
 }
 
 class GetBedByPatientResponse_Bed extends $pb.GeneratedMessage {
   factory GetBedByPatientResponse_Bed({
     $core.String? id,
     $core.String? name,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -566,6 +625,9 @@ class GetBedByPatientResponse_Bed extends $pb.GeneratedMessage {
     }
     if (name != null) {
       $result.name = name;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
     }
     return $result;
   }
@@ -576,6 +638,7 @@ class GetBedByPatientResponse_Bed extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedByPatientResponse.Bed', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -617,6 +680,15 @@ class GetBedByPatientResponse_Bed extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
   void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get consistency => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set consistency($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasConsistency() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearConsistency() => clearField(3);
 }
 
 class GetBedByPatientResponse extends $pb.GeneratedMessage {
@@ -688,12 +760,21 @@ class GetBedByPatientResponse extends $pb.GeneratedMessage {
 }
 
 class GetBedsRequest extends $pb.GeneratedMessage {
-  factory GetBedsRequest() => create();
+  factory GetBedsRequest({
+    $core.String? roomId,
+  }) {
+    final $result = create();
+    if (roomId != null) {
+      $result.roomId = roomId;
+    }
+    return $result;
+  }
   GetBedsRequest._() : super();
   factory GetBedsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetBedsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'roomId')
     ..hasRequiredFields = false
   ;
 
@@ -717,6 +798,15 @@ class GetBedsRequest extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static GetBedsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetBedsRequest>(create);
   static GetBedsRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get roomId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set roomId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasRoomId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearRoomId() => clearField(1);
 }
 
 class GetBedsResponse_Bed extends $pb.GeneratedMessage {
@@ -724,6 +814,7 @@ class GetBedsResponse_Bed extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? roomId,
     $core.String? name,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -735,6 +826,9 @@ class GetBedsResponse_Bed extends $pb.GeneratedMessage {
     if (name != null) {
       $result.name = name;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   GetBedsResponse_Bed._() : super();
@@ -745,6 +839,7 @@ class GetBedsResponse_Bed extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'roomId')
     ..aOS(3, _omitFieldNames ? '' : 'name')
+    ..aOS(4, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -795,6 +890,15 @@ class GetBedsResponse_Bed extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(2);
   @$pb.TagNumber(3)
   void clearName() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get consistency => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set consistency($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasConsistency() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearConsistency() => clearField(4);
 }
 
 class GetBedsResponse extends $pb.GeneratedMessage {
@@ -895,6 +999,7 @@ class GetBedsByRoomResponse_Bed extends $pb.GeneratedMessage {
   factory GetBedsByRoomResponse_Bed({
     $core.String? id,
     $core.String? name,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -902,6 +1007,9 @@ class GetBedsByRoomResponse_Bed extends $pb.GeneratedMessage {
     }
     if (name != null) {
       $result.name = name;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
     }
     return $result;
   }
@@ -912,6 +1020,7 @@ class GetBedsByRoomResponse_Bed extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBedsByRoomResponse.Bed', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -953,6 +1062,15 @@ class GetBedsByRoomResponse_Bed extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
   void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get consistency => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set consistency($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasConsistency() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearConsistency() => clearField(3);
 }
 
 class GetBedsByRoomResponse extends $pb.GeneratedMessage {
@@ -1004,6 +1122,7 @@ class UpdateBedRequest extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? roomId,
     $core.String? name,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -1015,6 +1134,9 @@ class UpdateBedRequest extends $pb.GeneratedMessage {
     if (name != null) {
       $result.name = name;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   UpdateBedRequest._() : super();
@@ -1025,6 +1147,7 @@ class UpdateBedRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'roomId')
     ..aOS(3, _omitFieldNames ? '' : 'name')
+    ..aOS(4, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -1075,15 +1198,38 @@ class UpdateBedRequest extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(2);
   @$pb.TagNumber(3)
   void clearName() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get consistency => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set consistency($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasConsistency() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearConsistency() => clearField(4);
 }
 
 class UpdateBedResponse extends $pb.GeneratedMessage {
-  factory UpdateBedResponse() => create();
+  factory UpdateBedResponse({
+    $21.Conflict? conflict,
+    $core.String? consistency,
+  }) {
+    final $result = create();
+    if (conflict != null) {
+      $result.conflict = conflict;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
+    return $result;
+  }
   UpdateBedResponse._() : super();
   factory UpdateBedResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdateBedResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateBedResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOM<$21.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $21.Conflict.create)
+    ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -1107,6 +1253,26 @@ class UpdateBedResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static UpdateBedResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateBedResponse>(create);
   static UpdateBedResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $21.Conflict get conflict => $_getN(0);
+  @$pb.TagNumber(1)
+  set conflict($21.Conflict v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasConflict() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConflict() => clearField(1);
+  @$pb.TagNumber(1)
+  $21.Conflict ensureConflict() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $core.String get consistency => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set consistency($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasConsistency() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearConsistency() => clearField(2);
 }
 
 class DeleteBedRequest extends $pb.GeneratedMessage {

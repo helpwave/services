@@ -46,9 +46,9 @@ FROM debian:12.6 AS deps
 # renovate: datasource=github-releases depName=DarthSim/hivemind
 ARG HIVEMIND_VERSION=1.1.0
 # renovate: datasource=github-releases depName=golang-migrate/migrate
-ARG MIGRATE_VERSION=4.17.1
+ARG MIGRATE_VERSION=4.18.1
 # renovate: datasource=github-releases depName=dapr/dapr
-ARG DAPR_VERSION=1.14.1
+ARG DAPR_VERSION=1.14.4
 
 RUN apt update && \
 	apt install -y wget
@@ -96,7 +96,7 @@ ENV DAPR_APP_ID=$SERVICE
 ENV DAPR_HTTP_READ_BUFFER_SIZE=8
 ENV DAPR_LOG_LEVEL=info
 ENV APP_PROTOCOL=$APP_PROTOCOL
-ENV ADDR=127.0.0.1:80
+ENV ADDR=":80"
 ENV MODE=development
 ENV LOG_LEVEL=debug
 

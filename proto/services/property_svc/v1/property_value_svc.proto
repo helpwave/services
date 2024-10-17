@@ -4,8 +4,9 @@ package services.property_svc.v1;
 
 import "services/property_svc/v1/types.proto";
 import "google/protobuf/timestamp.proto";
+import "libs/common/v1/conflict.proto";
 
-option go_package = "gen/proto/services/property-svc";
+option go_package = "gen/services/property-svc/v1";
 
 //
 // AttachPropertyValueRequest
@@ -25,14 +26,19 @@ message AttachPropertyValueRequest{
   }
 
   message MultiSelectValue {
-    repeated string select_values = 1; // @gotags: validate:"dive,uuid4" // ids of options
+    repeated string select_values = 1; // @gotags: validate:"dive,uuid4" // ids of options to add
     repeated string remove_select_values = 2; // @gotags: validate:"dive,uuid4" // in case a PV is already attached with multiple select values, you can remove them here
   }
+
+  // optional consistency of existing value (not of the property!), no conflict detection, if not provided
+  optional string consistency = 10;
 
 }
 
 message AttachPropertyValueResponse {
   string property_value_id = 1;
+  optional libs.common.v1.Conflict conflict = 2;
+  string consistency = 3;
 }
 
 //
@@ -83,6 +89,9 @@ message GetAttachedPropertyValuesResponse {
       SelectValueOption select_value = 11; // FIELD_TYPE_SELECT, id of option
       MultiSelectValue multi_select_value = 12;
     }
+
+    string property_consistency = 13;
+    optional string value_consistency = 14; // missing, if no value available
 
     message SelectValueOption {
       string id = 1;

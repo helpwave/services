@@ -159,162 +159,6 @@ class CreateOrganizationResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 }
 
-class CreateOrganizationForUserRequest extends $pb.GeneratedMessage {
-  factory CreateOrganizationForUserRequest({
-    $core.String? longName,
-    $core.String? shortName,
-    $core.String? contactEmail,
-    $core.bool? isPersonal,
-    $core.String? userId,
-  }) {
-    final $result = create();
-    if (longName != null) {
-      $result.longName = longName;
-    }
-    if (shortName != null) {
-      $result.shortName = shortName;
-    }
-    if (contactEmail != null) {
-      $result.contactEmail = contactEmail;
-    }
-    if (isPersonal != null) {
-      $result.isPersonal = isPersonal;
-    }
-    if (userId != null) {
-      $result.userId = userId;
-    }
-    return $result;
-  }
-  CreateOrganizationForUserRequest._() : super();
-  factory CreateOrganizationForUserRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreateOrganizationForUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateOrganizationForUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.user_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'longName')
-    ..aOS(2, _omitFieldNames ? '' : 'shortName')
-    ..aOS(3, _omitFieldNames ? '' : 'contactEmail')
-    ..aOB(4, _omitFieldNames ? '' : 'isPersonal')
-    ..aOS(5, _omitFieldNames ? '' : 'userId')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  CreateOrganizationForUserRequest clone() => CreateOrganizationForUserRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  CreateOrganizationForUserRequest copyWith(void Function(CreateOrganizationForUserRequest) updates) => super.copyWith((message) => updates(message as CreateOrganizationForUserRequest)) as CreateOrganizationForUserRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static CreateOrganizationForUserRequest create() => CreateOrganizationForUserRequest._();
-  CreateOrganizationForUserRequest createEmptyInstance() => create();
-  static $pb.PbList<CreateOrganizationForUserRequest> createRepeated() => $pb.PbList<CreateOrganizationForUserRequest>();
-  @$core.pragma('dart2js:noInline')
-  static CreateOrganizationForUserRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateOrganizationForUserRequest>(create);
-  static CreateOrganizationForUserRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get longName => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set longName($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasLongName() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearLongName() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get shortName => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set shortName($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasShortName() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearShortName() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get contactEmail => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set contactEmail($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasContactEmail() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearContactEmail() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.bool get isPersonal => $_getBF(3);
-  @$pb.TagNumber(4)
-  set isPersonal($core.bool v) { $_setBool(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasIsPersonal() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearIsPersonal() => clearField(4);
-
-  @$pb.TagNumber(5)
-  $core.String get userId => $_getSZ(4);
-  @$pb.TagNumber(5)
-  set userId($core.String v) { $_setString(4, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasUserId() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearUserId() => clearField(5);
-}
-
-class CreateOrganizationForUserResponse extends $pb.GeneratedMessage {
-  factory CreateOrganizationForUserResponse({
-    $core.String? id,
-  }) {
-    final $result = create();
-    if (id != null) {
-      $result.id = id;
-    }
-    return $result;
-  }
-  CreateOrganizationForUserResponse._() : super();
-  factory CreateOrganizationForUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreateOrganizationForUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateOrganizationForUserResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.user_svc.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  CreateOrganizationForUserResponse clone() => CreateOrganizationForUserResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  CreateOrganizationForUserResponse copyWith(void Function(CreateOrganizationForUserResponse) updates) => super.copyWith((message) => updates(message as CreateOrganizationForUserResponse)) as CreateOrganizationForUserResponse;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static CreateOrganizationForUserResponse create() => CreateOrganizationForUserResponse._();
-  CreateOrganizationForUserResponse createEmptyInstance() => create();
-  static $pb.PbList<CreateOrganizationForUserResponse> createRepeated() => $pb.PbList<CreateOrganizationForUserResponse>();
-  @$core.pragma('dart2js:noInline')
-  static CreateOrganizationForUserResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateOrganizationForUserResponse>(create);
-  static CreateOrganizationForUserResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearId() => clearField(1);
-}
-
 class GetOrganizationMember extends $pb.GeneratedMessage {
   factory GetOrganizationMember({
     $core.String? userId,
@@ -2591,6 +2435,88 @@ class RevokeInvitationResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static RevokeInvitationResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RevokeInvitationResponse>(create);
   static RevokeInvitationResponse? _defaultInstance;
+}
+
+class CreatePersonalOrganizationRequest extends $pb.GeneratedMessage {
+  factory CreatePersonalOrganizationRequest() => create();
+  CreatePersonalOrganizationRequest._() : super();
+  factory CreatePersonalOrganizationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreatePersonalOrganizationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePersonalOrganizationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.user_svc.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreatePersonalOrganizationRequest clone() => CreatePersonalOrganizationRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreatePersonalOrganizationRequest copyWith(void Function(CreatePersonalOrganizationRequest) updates) => super.copyWith((message) => updates(message as CreatePersonalOrganizationRequest)) as CreatePersonalOrganizationRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreatePersonalOrganizationRequest create() => CreatePersonalOrganizationRequest._();
+  CreatePersonalOrganizationRequest createEmptyInstance() => create();
+  static $pb.PbList<CreatePersonalOrganizationRequest> createRepeated() => $pb.PbList<CreatePersonalOrganizationRequest>();
+  @$core.pragma('dart2js:noInline')
+  static CreatePersonalOrganizationRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreatePersonalOrganizationRequest>(create);
+  static CreatePersonalOrganizationRequest? _defaultInstance;
+}
+
+class CreatePersonalOrganizationResponse extends $pb.GeneratedMessage {
+  factory CreatePersonalOrganizationResponse({
+    $core.String? id,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    return $result;
+  }
+  CreatePersonalOrganizationResponse._() : super();
+  factory CreatePersonalOrganizationResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreatePersonalOrganizationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePersonalOrganizationResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.user_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreatePersonalOrganizationResponse clone() => CreatePersonalOrganizationResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreatePersonalOrganizationResponse copyWith(void Function(CreatePersonalOrganizationResponse) updates) => super.copyWith((message) => updates(message as CreatePersonalOrganizationResponse)) as CreatePersonalOrganizationResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreatePersonalOrganizationResponse create() => CreatePersonalOrganizationResponse._();
+  CreatePersonalOrganizationResponse createEmptyInstance() => create();
+  static $pb.PbList<CreatePersonalOrganizationResponse> createRepeated() => $pb.PbList<CreatePersonalOrganizationResponse>();
+  @$core.pragma('dart2js:noInline')
+  static CreatePersonalOrganizationResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreatePersonalOrganizationResponse>(create);
+  static CreatePersonalOrganizationResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
 }
 
 

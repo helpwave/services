@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: services/tasks_svc/v1/task_template_svc.proto
 
-package tasks_svc
+package v1
 
 import (
 	context "context"
@@ -26,6 +26,7 @@ const (
 	TaskTemplateService_UpdateTaskTemplateSubTask_FullMethodName = "/services.tasks_svc.v1.TaskTemplateService/UpdateTaskTemplateSubTask"
 	TaskTemplateService_CreateTaskTemplateSubTask_FullMethodName = "/services.tasks_svc.v1.TaskTemplateService/CreateTaskTemplateSubTask"
 	TaskTemplateService_GetAllTaskTemplates_FullMethodName       = "/services.tasks_svc.v1.TaskTemplateService/GetAllTaskTemplates"
+	TaskTemplateService_GetTaskTemplate_FullMethodName           = "/services.tasks_svc.v1.TaskTemplateService/GetTaskTemplate"
 )
 
 // TaskTemplateServiceClient is the client API for TaskTemplateService service.
@@ -39,6 +40,7 @@ type TaskTemplateServiceClient interface {
 	UpdateTaskTemplateSubTask(ctx context.Context, in *UpdateTaskTemplateSubTaskRequest, opts ...grpc.CallOption) (*UpdateTaskTemplateSubTaskResponse, error)
 	CreateTaskTemplateSubTask(ctx context.Context, in *CreateTaskTemplateSubTaskRequest, opts ...grpc.CallOption) (*CreateTaskTemplateSubTaskResponse, error)
 	GetAllTaskTemplates(ctx context.Context, in *GetAllTaskTemplatesRequest, opts ...grpc.CallOption) (*GetAllTaskTemplatesResponse, error)
+	GetTaskTemplate(ctx context.Context, in *GetTaskTemplateRequest, opts ...grpc.CallOption) (*GetTaskTemplateResponse, error)
 }
 
 type taskTemplateServiceClient struct {
@@ -119,6 +121,16 @@ func (c *taskTemplateServiceClient) GetAllTaskTemplates(ctx context.Context, in 
 	return out, nil
 }
 
+func (c *taskTemplateServiceClient) GetTaskTemplate(ctx context.Context, in *GetTaskTemplateRequest, opts ...grpc.CallOption) (*GetTaskTemplateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetTaskTemplateResponse)
+	err := c.cc.Invoke(ctx, TaskTemplateService_GetTaskTemplate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TaskTemplateServiceServer is the server API for TaskTemplateService service.
 // All implementations must embed UnimplementedTaskTemplateServiceServer
 // for forward compatibility
@@ -130,6 +142,7 @@ type TaskTemplateServiceServer interface {
 	UpdateTaskTemplateSubTask(context.Context, *UpdateTaskTemplateSubTaskRequest) (*UpdateTaskTemplateSubTaskResponse, error)
 	CreateTaskTemplateSubTask(context.Context, *CreateTaskTemplateSubTaskRequest) (*CreateTaskTemplateSubTaskResponse, error)
 	GetAllTaskTemplates(context.Context, *GetAllTaskTemplatesRequest) (*GetAllTaskTemplatesResponse, error)
+	GetTaskTemplate(context.Context, *GetTaskTemplateRequest) (*GetTaskTemplateResponse, error)
 	mustEmbedUnimplementedTaskTemplateServiceServer()
 }
 
@@ -157,6 +170,9 @@ func (UnimplementedTaskTemplateServiceServer) CreateTaskTemplateSubTask(context.
 }
 func (UnimplementedTaskTemplateServiceServer) GetAllTaskTemplates(context.Context, *GetAllTaskTemplatesRequest) (*GetAllTaskTemplatesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllTaskTemplates not implemented")
+}
+func (UnimplementedTaskTemplateServiceServer) GetTaskTemplate(context.Context, *GetTaskTemplateRequest) (*GetTaskTemplateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTaskTemplate not implemented")
 }
 func (UnimplementedTaskTemplateServiceServer) mustEmbedUnimplementedTaskTemplateServiceServer() {}
 
@@ -297,6 +313,24 @@ func _TaskTemplateService_GetAllTaskTemplates_Handler(srv interface{}, ctx conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TaskTemplateService_GetTaskTemplate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTaskTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskTemplateServiceServer).GetTaskTemplate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskTemplateService_GetTaskTemplate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskTemplateServiceServer).GetTaskTemplate(ctx, req.(*GetTaskTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TaskTemplateService_ServiceDesc is the grpc.ServiceDesc for TaskTemplateService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -331,6 +365,10 @@ var TaskTemplateService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllTaskTemplates",
 			Handler:    _TaskTemplateService_GetAllTaskTemplates_Handler,
+		},
+		{
+			MethodName: "GetTaskTemplate",
+			Handler:    _TaskTemplateService_GetTaskTemplate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

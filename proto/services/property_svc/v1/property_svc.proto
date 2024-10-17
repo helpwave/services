@@ -3,8 +3,9 @@ syntax = "proto3";
 package services.property_svc.v1;
 
 import "services/property_svc/v1/types.proto";
+import "libs/common/v1/conflict.proto";
 
-option go_package = "gen/proto/services/property-svc";
+option go_package = "gen/services/property-svc/v1";
 
 //
 // CreateProperty
@@ -29,7 +30,7 @@ message CreatePropertyRequest {
   // the select field type requires an (initial) set of options (possible values)
   message SelectData {
     optional bool allow_freetext = 1; // allows admins to allow or prevent users of using select fields like free-text fields, this means unknown options will be added to the option set when entered.
-    repeated SelectOption options = 2;
+    repeated SelectOption options = 2; // @gotags: validate:"dive"
     message SelectOption {
       string name = 1; // @gotags: validate:"required"
       optional string description = 2;
@@ -39,6 +40,7 @@ message CreatePropertyRequest {
 
 message CreatePropertyResponse {
   string property_id = 1; // uuid of the property
+  string consistency = 2;
 }
 
 //
@@ -47,12 +49,15 @@ message CreatePropertyResponse {
 
 message GetPropertyRequest {
   string id = 1; // @gotags: validate:"uuid4"
+
   // describes from which View (global, ward, ...) the property is accessed from
   // The attribute "always_include_for_current_context" depends on this ViewSource
+  optional ViewSource view_source = 2;
+
   message ViewSource {
     oneof value {
       bool global = 1;
-      string ward_id = 2; // @gotags: validate:"uuid4"
+      string ward_id = 2; // @gotags: validate:"omitempty,omitnil,uuid4"
     }
   }
 }
@@ -83,10 +88,13 @@ message GetPropertyResponse {
       string name = 2;
       optional string description = 3;
       bool is_custom = 4;
+      string consistency = 5;
     }
   }
 
   optional bool always_include_for_view_source = 11; // This value is dependend on the ViewSource
+
+  string consistency = 12;
 }
 
 //
@@ -110,13 +118,15 @@ message UpdatePropertyRequest {
     SelectData select_data = 10;
   }
 
+  optional string consistency = 11; // no conflict detection, if not provided
+
   message SelectData {
     optional bool allow_freetext = 1;
     repeated string remove_options = 2; // @gotags: validate:"dive,uuid4"
-    repeated SelectOption upsert_options = 3;
+    repeated SelectOption upsert_options = 3; // @gotags: validate:"dive"
 
     message SelectOption {
-      string id = 1;
+      string id = 1; // @gotags: validate:"omitempty,uuid4"
       optional string name = 2;
       optional string description = 3;
       optional bool is_custom = 4;
@@ -124,17 +134,20 @@ message UpdatePropertyRequest {
   }
 }
 
-message UpdatePropertyResponse {}
+message UpdatePropertyResponse {
+  optional libs.common.v1.Conflict conflict = 1;
+  string consistency = 2;
+}
 
 //
 // GetPropertiesBySubjectType
 //
 
-message GetPropertiesBySubjectTypeRequest {
-  SubjectType subject_type = 1;
+message GetPropertiesRequest {
+  optional SubjectType subject_type = 1;
 }
 
-message GetPropertiesBySubjectTypeResponse {
+message GetPropertiesResponse {
   message Property {
     string id = 1;
     SubjectType subject_type = 2;
@@ -151,6 +164,8 @@ message GetPropertiesBySubjectTypeResponse {
     oneof field_type_data {
       SelectData select_data = 10;
     }
+
+    string consistency = 9;
 
     message SelectData {
       optional bool allow_freetext = 1;
@@ -175,5 +190,5 @@ service PropertyService {
   rpc CreateProperty(CreatePropertyRequest) returns (CreatePropertyResponse) {}
   rpc GetProperty(GetPropertyRequest) returns (GetPropertyResponse) {}
   rpc UpdateProperty(UpdatePropertyRequest) returns (UpdatePropertyResponse) {}
-  rpc GetPropertiesBySubjectType(GetPropertiesBySubjectTypeRequest) returns (GetPropertiesBySubjectTypeResponse) {}
+  rpc GetProperties(GetPropertiesRequest) returns (GetPropertiesResponse) {}
 }

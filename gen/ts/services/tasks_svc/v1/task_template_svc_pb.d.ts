@@ -1,5 +1,6 @@
 import * as jspb from 'google-protobuf'
 
+import * as libs_common_v1_conflict_pb from '../../../libs/common/v1/conflict_pb'; // proto import: "libs/common/v1/conflict.proto"
 
 
 export class CreateTaskTemplateRequest extends jspb.Message {
@@ -71,6 +72,9 @@ export class CreateTaskTemplateResponse extends jspb.Message {
   getId(): string;
   setId(value: string): CreateTaskTemplateResponse;
 
+  getConsistency(): string;
+  setConsistency(value: string): CreateTaskTemplateResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateTaskTemplateResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreateTaskTemplateResponse): CreateTaskTemplateResponse.AsObject;
@@ -82,6 +86,7 @@ export class CreateTaskTemplateResponse extends jspb.Message {
 export namespace CreateTaskTemplateResponse {
   export type AsObject = {
     id: string,
+    consistency: string,
   }
 }
 
@@ -136,6 +141,9 @@ export namespace DeleteTaskTemplateSubTaskRequest {
 }
 
 export class DeleteTaskTemplateSubTaskResponse extends jspb.Message {
+  getTaskTemplateConsistency(): string;
+  setTaskTemplateConsistency(value: string): DeleteTaskTemplateSubTaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DeleteTaskTemplateSubTaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: DeleteTaskTemplateSubTaskResponse): DeleteTaskTemplateSubTaskResponse.AsObject;
@@ -146,6 +154,7 @@ export class DeleteTaskTemplateSubTaskResponse extends jspb.Message {
 
 export namespace DeleteTaskTemplateSubTaskResponse {
   export type AsObject = {
+    taskTemplateConsistency: string,
   }
 }
 
@@ -163,6 +172,11 @@ export class UpdateTaskTemplateRequest extends jspb.Message {
   hasDescription(): boolean;
   clearDescription(): UpdateTaskTemplateRequest;
 
+  getConsistency(): string;
+  setConsistency(value: string): UpdateTaskTemplateRequest;
+  hasConsistency(): boolean;
+  clearConsistency(): UpdateTaskTemplateRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateTaskTemplateRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateTaskTemplateRequest): UpdateTaskTemplateRequest.AsObject;
@@ -176,6 +190,7 @@ export namespace UpdateTaskTemplateRequest {
     id: string,
     name?: string,
     description?: string,
+    consistency?: string,
   }
 
   export enum NameCase { 
@@ -187,9 +202,22 @@ export namespace UpdateTaskTemplateRequest {
     _DESCRIPTION_NOT_SET = 0,
     DESCRIPTION = 3,
   }
+
+  export enum ConsistencyCase { 
+    _CONSISTENCY_NOT_SET = 0,
+    CONSISTENCY = 4,
+  }
 }
 
 export class UpdateTaskTemplateResponse extends jspb.Message {
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): UpdateTaskTemplateResponse;
+  hasConflict(): boolean;
+  clearConflict(): UpdateTaskTemplateResponse;
+
+  getConsistency(): string;
+  setConsistency(value: string): UpdateTaskTemplateResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateTaskTemplateResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateTaskTemplateResponse): UpdateTaskTemplateResponse.AsObject;
@@ -200,6 +228,13 @@ export class UpdateTaskTemplateResponse extends jspb.Message {
 
 export namespace UpdateTaskTemplateResponse {
   export type AsObject = {
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    consistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 1,
   }
 }
 
@@ -211,6 +246,11 @@ export class UpdateTaskTemplateSubTaskRequest extends jspb.Message {
   setName(value: string): UpdateTaskTemplateSubTaskRequest;
   hasName(): boolean;
   clearName(): UpdateTaskTemplateSubTaskRequest;
+
+  getTaskTemplateConsistency(): string;
+  setTaskTemplateConsistency(value: string): UpdateTaskTemplateSubTaskRequest;
+  hasTaskTemplateConsistency(): boolean;
+  clearTaskTemplateConsistency(): UpdateTaskTemplateSubTaskRequest;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateTaskTemplateSubTaskRequest.AsObject;
@@ -224,15 +264,29 @@ export namespace UpdateTaskTemplateSubTaskRequest {
   export type AsObject = {
     subtaskId: string,
     name?: string,
+    taskTemplateConsistency?: string,
   }
 
   export enum NameCase { 
     _NAME_NOT_SET = 0,
     NAME = 2,
   }
+
+  export enum TaskTemplateConsistencyCase { 
+    _TASK_TEMPLATE_CONSISTENCY_NOT_SET = 0,
+    TASK_TEMPLATE_CONSISTENCY = 3,
+  }
 }
 
 export class UpdateTaskTemplateSubTaskResponse extends jspb.Message {
+  getConflict(): libs_common_v1_conflict_pb.Conflict | undefined;
+  setConflict(value?: libs_common_v1_conflict_pb.Conflict): UpdateTaskTemplateSubTaskResponse;
+  hasConflict(): boolean;
+  clearConflict(): UpdateTaskTemplateSubTaskResponse;
+
+  getTaskTemplateConsistency(): string;
+  setTaskTemplateConsistency(value: string): UpdateTaskTemplateSubTaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateTaskTemplateSubTaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateTaskTemplateSubTaskResponse): UpdateTaskTemplateSubTaskResponse.AsObject;
@@ -243,6 +297,13 @@ export class UpdateTaskTemplateSubTaskResponse extends jspb.Message {
 
 export namespace UpdateTaskTemplateSubTaskResponse {
   export type AsObject = {
+    conflict?: libs_common_v1_conflict_pb.Conflict.AsObject,
+    taskTemplateConsistency: string,
+  }
+
+  export enum ConflictCase { 
+    _CONFLICT_NOT_SET = 0,
+    CONFLICT = 1,
   }
 }
 
@@ -272,6 +333,9 @@ export class CreateTaskTemplateSubTaskResponse extends jspb.Message {
   getId(): string;
   setId(value: string): CreateTaskTemplateSubTaskResponse;
 
+  getTaskTemplateConsistency(): string;
+  setTaskTemplateConsistency(value: string): CreateTaskTemplateSubTaskResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateTaskTemplateSubTaskResponse.AsObject;
   static toObject(includeInstance: boolean, msg: CreateTaskTemplateSubTaskResponse): CreateTaskTemplateSubTaskResponse.AsObject;
@@ -283,6 +347,7 @@ export class CreateTaskTemplateSubTaskResponse extends jspb.Message {
 export namespace CreateTaskTemplateSubTaskResponse {
   export type AsObject = {
     id: string,
+    taskTemplateConsistency: string,
   }
 }
 
@@ -366,6 +431,9 @@ export namespace GetAllTaskTemplatesResponse {
     clearSubtasksList(): TaskTemplate;
     addSubtasks(value?: GetAllTaskTemplatesResponse.TaskTemplate.SubTask, index?: number): GetAllTaskTemplatesResponse.TaskTemplate.SubTask;
 
+    getConsistency(): string;
+    setConsistency(value: string): TaskTemplate;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): TaskTemplate.AsObject;
     static toObject(includeInstance: boolean, msg: TaskTemplate): TaskTemplate.AsObject;
@@ -382,6 +450,7 @@ export namespace GetAllTaskTemplatesResponse {
       isPublic: boolean,
       createdBy: string,
       subtasksList: Array<GetAllTaskTemplatesResponse.TaskTemplate.SubTask.AsObject>,
+      consistency: string,
     }
 
     export class SubTask extends jspb.Message {
@@ -410,6 +479,95 @@ export namespace GetAllTaskTemplatesResponse {
       }
     }
 
+  }
+
+}
+
+export class GetTaskTemplateRequest extends jspb.Message {
+  getId(): string;
+  setId(value: string): GetTaskTemplateRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetTaskTemplateRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetTaskTemplateRequest): GetTaskTemplateRequest.AsObject;
+  static serializeBinaryToWriter(message: GetTaskTemplateRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetTaskTemplateRequest;
+  static deserializeBinaryFromReader(message: GetTaskTemplateRequest, reader: jspb.BinaryReader): GetTaskTemplateRequest;
+}
+
+export namespace GetTaskTemplateRequest {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class GetTaskTemplateResponse extends jspb.Message {
+  getId(): string;
+  setId(value: string): GetTaskTemplateResponse;
+
+  getName(): string;
+  setName(value: string): GetTaskTemplateResponse;
+
+  getDescription(): string;
+  setDescription(value: string): GetTaskTemplateResponse;
+
+  getIsPublic(): boolean;
+  setIsPublic(value: boolean): GetTaskTemplateResponse;
+
+  getCreatedBy(): string;
+  setCreatedBy(value: string): GetTaskTemplateResponse;
+
+  getSubtasksList(): Array<GetTaskTemplateResponse.SubTask>;
+  setSubtasksList(value: Array<GetTaskTemplateResponse.SubTask>): GetTaskTemplateResponse;
+  clearSubtasksList(): GetTaskTemplateResponse;
+  addSubtasks(value?: GetTaskTemplateResponse.SubTask, index?: number): GetTaskTemplateResponse.SubTask;
+
+  getConsistency(): string;
+  setConsistency(value: string): GetTaskTemplateResponse;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetTaskTemplateResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetTaskTemplateResponse): GetTaskTemplateResponse.AsObject;
+  static serializeBinaryToWriter(message: GetTaskTemplateResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetTaskTemplateResponse;
+  static deserializeBinaryFromReader(message: GetTaskTemplateResponse, reader: jspb.BinaryReader): GetTaskTemplateResponse;
+}
+
+export namespace GetTaskTemplateResponse {
+  export type AsObject = {
+    id: string,
+    name: string,
+    description: string,
+    isPublic: boolean,
+    createdBy: string,
+    subtasksList: Array<GetTaskTemplateResponse.SubTask.AsObject>,
+    consistency: string,
+  }
+
+  export class SubTask extends jspb.Message {
+    getId(): string;
+    setId(value: string): SubTask;
+
+    getTaskTemplateId(): string;
+    setTaskTemplateId(value: string): SubTask;
+
+    getName(): string;
+    setName(value: string): SubTask;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SubTask.AsObject;
+    static toObject(includeInstance: boolean, msg: SubTask): SubTask.AsObject;
+    static serializeBinaryToWriter(message: SubTask, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SubTask;
+    static deserializeBinaryFromReader(message: SubTask, reader: jspb.BinaryReader): SubTask;
+  }
+
+  export namespace SubTask {
+    export type AsObject = {
+      id: string,
+      taskTemplateId: string,
+      name: string,
+    }
   }
 
 }

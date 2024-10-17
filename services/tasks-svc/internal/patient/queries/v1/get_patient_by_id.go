@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwes"
@@ -8,14 +9,17 @@ import (
 	"tasks-svc/internal/patient/models"
 )
 
-type GetPatientByIDQueryHandler func(ctx context.Context, patientID uuid.UUID) (*models.Patient, error)
+type GetPatientByIDQueryHandler func(ctx context.Context, patientID uuid.UUID) (*models.PatientWithConsistency, error)
 
 func NewGetPatientByIDQueryHandler(as hwes.AggregateStore) GetPatientByIDQueryHandler {
-	return func(ctx context.Context, patientID uuid.UUID) (*models.Patient, error) {
+	return func(ctx context.Context, patientID uuid.UUID) (*models.PatientWithConsistency, error) {
 		patientAggregate, err := aggregate.LoadPatientAggregate(ctx, as, patientID)
 		if err != nil {
 			return nil, err
 		}
-		return patientAggregate.Patient, err
+		return &models.PatientWithConsistency{
+			Patient:     *patientAggregate.Patient,
+			Consistency: common.ConsistencyToken(patientAggregate.GetVersion()).String(),
+		}, nil
 	}
 }

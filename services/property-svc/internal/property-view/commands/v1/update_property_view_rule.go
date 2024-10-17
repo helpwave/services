@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"github.com/google/uuid"
 	"hwes"
@@ -8,28 +9,27 @@ import (
 	"property-svc/internal/property-view/models"
 )
 
-type UpdatePropertyViewRuleCommandHandler func(context.Context, models.PropertyMatchers, []uuid.UUID, []uuid.UUID, []uuid.UUID, []uuid.UUID) error
+type UpdatePropertyViewRuleCommandHandler func(context.Context, models.PropertyMatchers, []uuid.UUID, []uuid.UUID, []uuid.UUID, []uuid.UUID) (common.ConsistencyToken, error)
 
 func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePropertyViewRuleCommandHandler {
-	return func(ctx context.Context, matchers models.PropertyMatchers, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude []uuid.UUID) error {
+	return func(ctx context.Context, matchers models.PropertyMatchers, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude []uuid.UUID) (common.ConsistencyToken, error) {
 
 		ruleID, err := matchers.FindExactRuleId(ctx)
 		if err != nil {
-			return err
+			return 0, err
 		}
 
 		// upsert
 		var ruleAgg *aggregate.PropertyViewRuleAggregate
 		if ruleID != nil {
 			// update
-			
+
 			if ruleAgg, err = aggregate.LoadPropertyViewRuleAggregate(ctx, as, *ruleID); err != nil {
-				return err
+				return 0, err
 			}
-			
 
 			if err := ruleAgg.UpdateLists(ctx, *ruleID, appendToAlwaysInclude, removeFromAlwaysInclude, appendToDontAlwaysInclude, removeFromDontAlwaysInclude); err != nil {
-				return err
+				return 0, err
 			}
 		} else {
 			// create
@@ -43,7 +43,7 @@ func NewUpdatePropertyViewRuleCommandHandler(as hwes.AggregateStore) UpdatePrope
 				// remove makes no sense, ignoring
 			}
 			if err := ruleAgg.Create(ctx, rule); err != nil {
-				return err
+				return 0, err
 			}
 		}
 

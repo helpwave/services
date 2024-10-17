@@ -2409,7 +2409,6 @@ class GetPatientDetailsResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   void clearNotes() => clearField(4);
 
-  /// "bed_index": number,
   @$pb.TagNumber(5)
   $core.List<GetPatientDetailsResponse_Task> get tasks => $_getList(4);
 

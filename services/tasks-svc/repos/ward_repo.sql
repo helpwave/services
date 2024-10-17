@@ -1,5 +1,5 @@
 -- name: CreateWard :one
-INSERT INTO wards (name) VALUES ($1) RETURNING id;
+INSERT INTO wards (name) VALUES ($1) RETURNING id, consistency;
 
 -- name: GetWardById :one
 SELECT * FROM wards
@@ -28,12 +28,16 @@ GROUP BY wards.id;
 SELECT
 	wards.id as ward_id,
 	wards.name as ward_name,
+	wards.consistency as ward_consistency,
 	rooms.id as room_id,
 	rooms.name as room_name,
+	rooms.consistency as room_consistency,
 	beds.id as bed_id,
 	beds.name as bed_name,
+	beds.consistency as bed_consistency,
 	task_templates.id as task_template_id,
 	task_templates.name as task_template_name,
+	task_templates.consistency as task_template_consistency,
 	task_template_subtasks.id as task_template_subtask_id,
 	task_template_subtasks.name as task_template_subtask_name
 FROM wards
@@ -50,10 +54,12 @@ SELECT EXISTS (
 	WHERE id = $1
 ) ward_exists;
 
--- name: UpdateWard :exec
+-- name: UpdateWard :one
 UPDATE wards
-SET	name = coalesce(sqlc.narg('name'), name)
-WHERE id = @id;
+SET	name = coalesce(sqlc.narg('name'), name),
+	consistency = consistency + 1
+WHERE id = @id
+RETURNING consistency;
 
 
 -- name: DeleteWard :exec

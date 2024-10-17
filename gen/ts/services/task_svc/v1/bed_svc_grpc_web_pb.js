@@ -140,67 +140,6 @@ proto.services.task_svc.v1.BedServicePromiseClient.prototype.createBed =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.services.task_svc.v1.BulkCreateBedsRequest,
- *   !proto.services.task_svc.v1.BulkCreateBedsResponse>}
- */
-const methodDescriptor_BedService_BulkCreateBeds = new grpc.web.MethodDescriptor(
-  '/services.task_svc.v1.BedService/BulkCreateBeds',
-  grpc.web.MethodType.UNARY,
-  proto.services.task_svc.v1.BulkCreateBedsRequest,
-  proto.services.task_svc.v1.BulkCreateBedsResponse,
-  /**
-   * @param {!proto.services.task_svc.v1.BulkCreateBedsRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.services.task_svc.v1.BulkCreateBedsResponse.deserializeBinary
-);
-
-
-/**
- * @param {!proto.services.task_svc.v1.BulkCreateBedsRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.services.task_svc.v1.BulkCreateBedsResponse)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.services.task_svc.v1.BulkCreateBedsResponse>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.services.task_svc.v1.BedServiceClient.prototype.bulkCreateBeds =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/services.task_svc.v1.BedService/BulkCreateBeds',
-      request,
-      metadata || {},
-      methodDescriptor_BedService_BulkCreateBeds,
-      callback);
-};
-
-
-/**
- * @param {!proto.services.task_svc.v1.BulkCreateBedsRequest} request The
- *     request proto
- * @param {?Object<string, string>=} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.services.task_svc.v1.BulkCreateBedsResponse>}
- *     Promise that resolves to the response
- */
-proto.services.task_svc.v1.BedServicePromiseClient.prototype.bulkCreateBeds =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/services.task_svc.v1.BedService/BulkCreateBeds',
-      request,
-      metadata || {},
-      methodDescriptor_BedService_BulkCreateBeds);
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
  *   !proto.services.task_svc.v1.GetBedRequest,
  *   !proto.services.task_svc.v1.GetBedResponse>}
  */

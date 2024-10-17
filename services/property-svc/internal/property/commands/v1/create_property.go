@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"common"
 	"context"
 	"errors"
 	pb "gen/services/property_svc/v1"
@@ -12,56 +13,64 @@ import (
 	"property-svc/internal/property/perm"
 )
 
-type CreatePropertyCommandHandler func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *string, fieldTypeData *models.FieldTypeData) error
+type CreatePropertyCommandHandler func(ctx context.Context,
+	propertyID uuid.UUID,
+	subjectType pb.SubjectType,
+	fieldType pb.FieldType,
+	name string,
+	description *string,
+	setID *string,
+	fieldTypeData *models.FieldTypeData,
+) (version common.ConsistencyToken, err error)
 
 func NewCreatePropertyCommandHandler(as hwes.AggregateStore, authz hwauthz.AuthZ) CreatePropertyCommandHandler {
-	return func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *string, fieldTypeData *models.FieldTypeData) error {
+	return func(ctx context.Context, propertyID uuid.UUID, subjectType pb.SubjectType, fieldType pb.FieldType, name string, description *string, setID *string, fieldTypeData *models.FieldTypeData) (version common.ConsistencyToken, err error) {
 		user, err := perm.UserFromCtx(ctx)
 		if err != nil {
-			return err
+			return 0, err
 		}
 		organization, err := perm.OrganizationFromCtx(ctx)
 		if err != nil {
-			return err
+			return 0, err
 		}
 
 		check := hwauthz.NewPermissionCheck(user, perm.OrganizationCanUserCreateProperty, organization)
 		if err = authz.Must(ctx, check); err != nil {
-			return err
+			return 0, err
 		}
 
 		a := aggregate.NewPropertyAggregate(propertyID)
 
 		exists, err := as.Exists(ctx, a)
 		if err != nil {
-			return err
+			return 0, err
 		}
 
 		if exists {
-			return errors.New("cannot create an already existing aggregate")
+			return 0, errors.New("cannot create an already existing aggregate")
 		}
 
 		if err := a.CreateProperty(ctx, subjectType, fieldType, name); err != nil {
-			return err
+			return 0, err
 		}
 
 		if fieldTypeData != nil {
 			if fieldTypeData.SelectData != nil && (fieldType == pb.FieldType_FIELD_TYPE_SELECT || fieldType == pb.FieldType_FIELD_TYPE_MULTI_SELECT) {
 				if err := a.CreateFieldTypeData(ctx, *fieldTypeData); err != nil {
-					return err
+					return 0, err
 				}
 			}
 		}
 
 		if description != nil {
 			if err := a.UpdateDescription(ctx, *description); err != nil {
-				return err
+				return 0, err
 			}
 		}
 
 		if setID != nil {
 			if err := a.UpdateSetID(ctx, *setID); err != nil {
-				return err
+				return 0, err
 			}
 		}
 

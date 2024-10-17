@@ -13,8 +13,9 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../google/protobuf/timestamp.pb.dart' as $19;
-import 'types.pbenum.dart' as $21;
+import '../../../google/protobuf/timestamp.pb.dart' as $20;
+import '../../../libs/common/v1/conflict.pb.dart' as $21;
+import 'types.pbenum.dart' as $23;
 
 class CreateTaskRequest_SubTask extends $pb.GeneratedMessage {
   factory CreateTaskRequest_SubTask({
@@ -86,8 +87,8 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     $core.String? description,
     $core.String? patientId,
     $core.bool? public,
-    $19.Timestamp? dueAt,
-    $21.TaskStatus? initialStatus,
+    $20.Timestamp? dueAt,
+    $23.TaskStatus? initialStatus,
     $core.String? assignedUserId,
     $core.Iterable<CreateTaskRequest_SubTask>? subtasks,
   }) {
@@ -127,8 +128,8 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'description')
     ..aOS(3, _omitFieldNames ? '' : 'patientId')
     ..aOB(4, _omitFieldNames ? '' : 'public')
-    ..aOM<$19.Timestamp>(5, _omitFieldNames ? '' : 'dueAt', subBuilder: $19.Timestamp.create)
-    ..e<$21.TaskStatus>(6, _omitFieldNames ? '' : 'initialStatus', $pb.PbFieldType.OE, defaultOrMaker: $21.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $21.TaskStatus.valueOf, enumValues: $21.TaskStatus.values)
+    ..aOM<$20.Timestamp>(5, _omitFieldNames ? '' : 'dueAt', subBuilder: $20.Timestamp.create)
+    ..e<$23.TaskStatus>(6, _omitFieldNames ? '' : 'initialStatus', $pb.PbFieldType.OE, defaultOrMaker: $23.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $23.TaskStatus.valueOf, enumValues: $23.TaskStatus.values)
     ..aOS(7, _omitFieldNames ? '' : 'assignedUserId')
     ..pc<CreateTaskRequest_SubTask>(8, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: CreateTaskRequest_SubTask.create)
     ..hasRequiredFields = false
@@ -192,20 +193,20 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
   void clearPublic() => clearField(4);
 
   @$pb.TagNumber(5)
-  $19.Timestamp get dueAt => $_getN(4);
+  $20.Timestamp get dueAt => $_getN(4);
   @$pb.TagNumber(5)
-  set dueAt($19.Timestamp v) { setField(5, v); }
+  set dueAt($20.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasDueAt() => $_has(4);
   @$pb.TagNumber(5)
   void clearDueAt() => clearField(5);
   @$pb.TagNumber(5)
-  $19.Timestamp ensureDueAt() => $_ensure(4);
+  $20.Timestamp ensureDueAt() => $_ensure(4);
 
   @$pb.TagNumber(6)
-  $21.TaskStatus get initialStatus => $_getN(5);
+  $23.TaskStatus get initialStatus => $_getN(5);
   @$pb.TagNumber(6)
-  set initialStatus($21.TaskStatus v) { setField(6, v); }
+  set initialStatus($23.TaskStatus v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasInitialStatus() => $_has(5);
   @$pb.TagNumber(6)
@@ -227,10 +228,14 @@ class CreateTaskRequest extends $pb.GeneratedMessage {
 class CreateTaskResponse extends $pb.GeneratedMessage {
   factory CreateTaskResponse({
     $core.String? id,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
       $result.id = id;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
     }
     return $result;
   }
@@ -240,6 +245,7 @@ class CreateTaskResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateTaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -272,6 +278,15 @@ class CreateTaskResponse extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get consistency => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set consistency($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasConsistency() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearConsistency() => clearField(2);
 }
 
 class UpdateTaskRequest extends $pb.GeneratedMessage {
@@ -279,9 +294,10 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    $19.Timestamp? dueAt,
-    $21.TaskStatus? status,
+    $20.Timestamp? dueAt,
+    $23.TaskStatus? status,
     $core.bool? public,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -302,6 +318,9 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
     if (public != null) {
       $result.public = public;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   UpdateTaskRequest._() : super();
@@ -312,9 +331,10 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..aOM<$19.Timestamp>(4, _omitFieldNames ? '' : 'dueAt', subBuilder: $19.Timestamp.create)
-    ..e<$21.TaskStatus>(5, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $21.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $21.TaskStatus.valueOf, enumValues: $21.TaskStatus.values)
+    ..aOM<$20.Timestamp>(4, _omitFieldNames ? '' : 'dueAt', subBuilder: $20.Timestamp.create)
+    ..e<$23.TaskStatus>(5, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $23.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $23.TaskStatus.valueOf, enumValues: $23.TaskStatus.values)
     ..aOB(6, _omitFieldNames ? '' : 'public')
+    ..aOS(7, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -367,20 +387,20 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $19.Timestamp get dueAt => $_getN(3);
+  $20.Timestamp get dueAt => $_getN(3);
   @$pb.TagNumber(4)
-  set dueAt($19.Timestamp v) { setField(4, v); }
+  set dueAt($20.Timestamp v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasDueAt() => $_has(3);
   @$pb.TagNumber(4)
   void clearDueAt() => clearField(4);
   @$pb.TagNumber(4)
-  $19.Timestamp ensureDueAt() => $_ensure(3);
+  $20.Timestamp ensureDueAt() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $21.TaskStatus get status => $_getN(4);
+  $23.TaskStatus get status => $_getN(4);
   @$pb.TagNumber(5)
-  set status($21.TaskStatus v) { setField(5, v); }
+  set status($23.TaskStatus v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasStatus() => $_has(4);
   @$pb.TagNumber(5)
@@ -394,15 +414,38 @@ class UpdateTaskRequest extends $pb.GeneratedMessage {
   $core.bool hasPublic() => $_has(5);
   @$pb.TagNumber(6)
   void clearPublic() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get consistency => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set consistency($core.String v) { $_setString(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasConsistency() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearConsistency() => clearField(7);
 }
 
 class UpdateTaskResponse extends $pb.GeneratedMessage {
-  factory UpdateTaskResponse() => create();
+  factory UpdateTaskResponse({
+    $21.Conflict? conflict,
+    $core.String? consistency,
+  }) {
+    final $result = create();
+    if (conflict != null) {
+      $result.conflict = conflict;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
+    return $result;
+  }
   UpdateTaskResponse._() : super();
   factory UpdateTaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdateTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateTaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOM<$21.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $21.Conflict.create)
+    ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -426,6 +469,26 @@ class UpdateTaskResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static UpdateTaskResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateTaskResponse>(create);
   static UpdateTaskResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $21.Conflict get conflict => $_getN(0);
+  @$pb.TagNumber(1)
+  set conflict($21.Conflict v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasConflict() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConflict() => clearField(1);
+  @$pb.TagNumber(1)
+  $21.Conflict ensureConflict() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $core.String get consistency => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set consistency($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasConsistency() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearConsistency() => clearField(2);
 }
 
 class GetTaskRequest extends $pb.GeneratedMessage {
@@ -482,6 +545,7 @@ class GetTaskResponse_Patient extends $pb.GeneratedMessage {
   factory GetTaskResponse_Patient({
     $core.String? id,
     $core.String? humanReadableIdentifier,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -489,6 +553,9 @@ class GetTaskResponse_Patient extends $pb.GeneratedMessage {
     }
     if (humanReadableIdentifier != null) {
       $result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
     }
     return $result;
   }
@@ -499,6 +566,7 @@ class GetTaskResponse_Patient extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTaskResponse.Patient', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
+    ..aOS(3, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -540,6 +608,15 @@ class GetTaskResponse_Patient extends $pb.GeneratedMessage {
   $core.bool hasHumanReadableIdentifier() => $_has(1);
   @$pb.TagNumber(2)
   void clearHumanReadableIdentifier() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get consistency => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set consistency($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasConsistency() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearConsistency() => clearField(3);
 }
 
 class GetTaskResponse_SubTask extends $pb.GeneratedMessage {
@@ -641,12 +718,13 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     $core.String? description,
     $core.String? assignedUserId,
     $core.Iterable<GetTaskResponse_SubTask>? subtasks,
-    $21.TaskStatus? status,
-    $19.Timestamp? createdAt,
+    $23.TaskStatus? status,
+    $20.Timestamp? createdAt,
     $core.bool? public,
-    $19.Timestamp? dueAt,
+    $20.Timestamp? dueAt,
     $core.String? createdBy,
     GetTaskResponse_Patient? patient,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -682,6 +760,9 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     if (patient != null) {
       $result.patient = patient;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   GetTaskResponse._() : super();
@@ -694,12 +775,13 @@ class GetTaskResponse extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOS(4, _omitFieldNames ? '' : 'assignedUserId')
     ..pc<GetTaskResponse_SubTask>(5, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTaskResponse_SubTask.create)
-    ..e<$21.TaskStatus>(6, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $21.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $21.TaskStatus.valueOf, enumValues: $21.TaskStatus.values)
-    ..aOM<$19.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $19.Timestamp.create)
+    ..e<$23.TaskStatus>(6, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $23.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $23.TaskStatus.valueOf, enumValues: $23.TaskStatus.values)
+    ..aOM<$20.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $20.Timestamp.create)
     ..aOB(8, _omitFieldNames ? '' : 'public')
-    ..aOM<$19.Timestamp>(9, _omitFieldNames ? '' : 'dueAt', subBuilder: $19.Timestamp.create)
+    ..aOM<$20.Timestamp>(9, _omitFieldNames ? '' : 'dueAt', subBuilder: $20.Timestamp.create)
     ..aOS(10, _omitFieldNames ? '' : 'createdBy')
     ..aOM<GetTaskResponse_Patient>(11, _omitFieldNames ? '' : 'patient', subBuilder: GetTaskResponse_Patient.create)
+    ..aOS(12, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -764,24 +846,24 @@ class GetTaskResponse extends $pb.GeneratedMessage {
   $core.List<GetTaskResponse_SubTask> get subtasks => $_getList(4);
 
   @$pb.TagNumber(6)
-  $21.TaskStatus get status => $_getN(5);
+  $23.TaskStatus get status => $_getN(5);
   @$pb.TagNumber(6)
-  set status($21.TaskStatus v) { setField(6, v); }
+  set status($23.TaskStatus v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasStatus() => $_has(5);
   @$pb.TagNumber(6)
   void clearStatus() => clearField(6);
 
   @$pb.TagNumber(7)
-  $19.Timestamp get createdAt => $_getN(6);
+  $20.Timestamp get createdAt => $_getN(6);
   @$pb.TagNumber(7)
-  set createdAt($19.Timestamp v) { setField(7, v); }
+  set createdAt($20.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasCreatedAt() => $_has(6);
   @$pb.TagNumber(7)
   void clearCreatedAt() => clearField(7);
   @$pb.TagNumber(7)
-  $19.Timestamp ensureCreatedAt() => $_ensure(6);
+  $20.Timestamp ensureCreatedAt() => $_ensure(6);
 
   @$pb.TagNumber(8)
   $core.bool get public => $_getBF(7);
@@ -793,15 +875,15 @@ class GetTaskResponse extends $pb.GeneratedMessage {
   void clearPublic() => clearField(8);
 
   @$pb.TagNumber(9)
-  $19.Timestamp get dueAt => $_getN(8);
+  $20.Timestamp get dueAt => $_getN(8);
   @$pb.TagNumber(9)
-  set dueAt($19.Timestamp v) { setField(9, v); }
+  set dueAt($20.Timestamp v) { setField(9, v); }
   @$pb.TagNumber(9)
   $core.bool hasDueAt() => $_has(8);
   @$pb.TagNumber(9)
   void clearDueAt() => clearField(9);
   @$pb.TagNumber(9)
-  $19.Timestamp ensureDueAt() => $_ensure(8);
+  $20.Timestamp ensureDueAt() => $_ensure(8);
 
   @$pb.TagNumber(10)
   $core.String get createdBy => $_getSZ(9);
@@ -822,6 +904,15 @@ class GetTaskResponse extends $pb.GeneratedMessage {
   void clearPatient() => clearField(11);
   @$pb.TagNumber(11)
   GetTaskResponse_Patient ensurePatient() => $_ensure(10);
+
+  @$pb.TagNumber(12)
+  $core.String get consistency => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set consistency($core.String v) { $_setString(11, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasConsistency() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearConsistency() => clearField(12);
 }
 
 class GetTasksByPatientRequest extends $pb.GeneratedMessage {
@@ -971,14 +1062,15 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    $21.TaskStatus? status,
+    $23.TaskStatus? status,
     $core.String? assignedUserId,
     $core.String? patientId,
     $core.bool? public,
-    $19.Timestamp? dueAt,
+    $20.Timestamp? dueAt,
     $core.String? createdBy,
     $core.Iterable<GetTasksByPatientResponse_Task_SubTask>? subtasks,
-    $19.Timestamp? createdAt,
+    $20.Timestamp? createdAt,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -1014,6 +1106,9 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
     if (createdAt != null) {
       $result.createdAt = createdAt;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   GetTasksByPatientResponse_Task._() : super();
@@ -1024,14 +1119,15 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..e<$21.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $21.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $21.TaskStatus.valueOf, enumValues: $21.TaskStatus.values)
+    ..e<$23.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $23.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $23.TaskStatus.valueOf, enumValues: $23.TaskStatus.values)
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOS(6, _omitFieldNames ? '' : 'patientId')
     ..aOB(7, _omitFieldNames ? '' : 'public')
-    ..aOM<$19.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $19.Timestamp.create)
+    ..aOM<$20.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $20.Timestamp.create)
     ..aOS(9, _omitFieldNames ? '' : 'createdBy')
     ..pc<GetTasksByPatientResponse_Task_SubTask>(10, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTasksByPatientResponse_Task_SubTask.create)
-    ..aOM<$19.Timestamp>(11, _omitFieldNames ? '' : 'createdAt', subBuilder: $19.Timestamp.create)
+    ..aOM<$20.Timestamp>(11, _omitFieldNames ? '' : 'createdAt', subBuilder: $20.Timestamp.create)
+    ..aOS(12, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -1084,9 +1180,9 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $21.TaskStatus get status => $_getN(3);
+  $23.TaskStatus get status => $_getN(3);
   @$pb.TagNumber(4)
-  set status($21.TaskStatus v) { setField(4, v); }
+  set status($23.TaskStatus v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)
@@ -1120,15 +1216,15 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
   void clearPublic() => clearField(7);
 
   @$pb.TagNumber(8)
-  $19.Timestamp get dueAt => $_getN(7);
+  $20.Timestamp get dueAt => $_getN(7);
   @$pb.TagNumber(8)
-  set dueAt($19.Timestamp v) { setField(8, v); }
+  set dueAt($20.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasDueAt() => $_has(7);
   @$pb.TagNumber(8)
   void clearDueAt() => clearField(8);
   @$pb.TagNumber(8)
-  $19.Timestamp ensureDueAt() => $_ensure(7);
+  $20.Timestamp ensureDueAt() => $_ensure(7);
 
   @$pb.TagNumber(9)
   $core.String get createdBy => $_getSZ(8);
@@ -1143,15 +1239,24 @@ class GetTasksByPatientResponse_Task extends $pb.GeneratedMessage {
   $core.List<GetTasksByPatientResponse_Task_SubTask> get subtasks => $_getList(9);
 
   @$pb.TagNumber(11)
-  $19.Timestamp get createdAt => $_getN(10);
+  $20.Timestamp get createdAt => $_getN(10);
   @$pb.TagNumber(11)
-  set createdAt($19.Timestamp v) { setField(11, v); }
+  set createdAt($20.Timestamp v) { setField(11, v); }
   @$pb.TagNumber(11)
   $core.bool hasCreatedAt() => $_has(10);
   @$pb.TagNumber(11)
   void clearCreatedAt() => clearField(11);
   @$pb.TagNumber(11)
-  $19.Timestamp ensureCreatedAt() => $_ensure(10);
+  $20.Timestamp ensureCreatedAt() => $_ensure(10);
+
+  @$pb.TagNumber(12)
+  $core.String get consistency => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set consistency($core.String v) { $_setString(11, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasConsistency() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearConsistency() => clearField(12);
 }
 
 class GetTasksByPatientResponse extends $pb.GeneratedMessage {
@@ -1348,10 +1453,11 @@ class GetTasksByPatientSortedByStatusResponse_Task extends $pb.GeneratedMessage 
     $core.String? assignedUserId,
     $core.String? patientId,
     $core.bool? public,
-    $19.Timestamp? dueAt,
+    $20.Timestamp? dueAt,
     $core.String? createdBy,
     $core.Iterable<GetTasksByPatientSortedByStatusResponse_Task_SubTask>? subtasks,
-    $19.Timestamp? createdAt,
+    $20.Timestamp? createdAt,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -1384,6 +1490,9 @@ class GetTasksByPatientSortedByStatusResponse_Task extends $pb.GeneratedMessage 
     if (createdAt != null) {
       $result.createdAt = createdAt;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   GetTasksByPatientSortedByStatusResponse_Task._() : super();
@@ -1397,10 +1506,11 @@ class GetTasksByPatientSortedByStatusResponse_Task extends $pb.GeneratedMessage 
     ..aOS(4, _omitFieldNames ? '' : 'assignedUserId')
     ..aOS(5, _omitFieldNames ? '' : 'patientId')
     ..aOB(6, _omitFieldNames ? '' : 'public')
-    ..aOM<$19.Timestamp>(7, _omitFieldNames ? '' : 'dueAt', subBuilder: $19.Timestamp.create)
+    ..aOM<$20.Timestamp>(7, _omitFieldNames ? '' : 'dueAt', subBuilder: $20.Timestamp.create)
     ..aOS(8, _omitFieldNames ? '' : 'createdBy')
     ..pc<GetTasksByPatientSortedByStatusResponse_Task_SubTask>(9, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetTasksByPatientSortedByStatusResponse_Task_SubTask.create)
-    ..aOM<$19.Timestamp>(10, _omitFieldNames ? '' : 'createdAt', subBuilder: $19.Timestamp.create)
+    ..aOM<$20.Timestamp>(10, _omitFieldNames ? '' : 'createdAt', subBuilder: $20.Timestamp.create)
+    ..aOS(11, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -1480,15 +1590,15 @@ class GetTasksByPatientSortedByStatusResponse_Task extends $pb.GeneratedMessage 
   void clearPublic() => clearField(6);
 
   @$pb.TagNumber(7)
-  $19.Timestamp get dueAt => $_getN(6);
+  $20.Timestamp get dueAt => $_getN(6);
   @$pb.TagNumber(7)
-  set dueAt($19.Timestamp v) { setField(7, v); }
+  set dueAt($20.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasDueAt() => $_has(6);
   @$pb.TagNumber(7)
   void clearDueAt() => clearField(7);
   @$pb.TagNumber(7)
-  $19.Timestamp ensureDueAt() => $_ensure(6);
+  $20.Timestamp ensureDueAt() => $_ensure(6);
 
   @$pb.TagNumber(8)
   $core.String get createdBy => $_getSZ(7);
@@ -1503,15 +1613,24 @@ class GetTasksByPatientSortedByStatusResponse_Task extends $pb.GeneratedMessage 
   $core.List<GetTasksByPatientSortedByStatusResponse_Task_SubTask> get subtasks => $_getList(8);
 
   @$pb.TagNumber(10)
-  $19.Timestamp get createdAt => $_getN(9);
+  $20.Timestamp get createdAt => $_getN(9);
   @$pb.TagNumber(10)
-  set createdAt($19.Timestamp v) { setField(10, v); }
+  set createdAt($20.Timestamp v) { setField(10, v); }
   @$pb.TagNumber(10)
   $core.bool hasCreatedAt() => $_has(9);
   @$pb.TagNumber(10)
   void clearCreatedAt() => clearField(10);
   @$pb.TagNumber(10)
-  $19.Timestamp ensureCreatedAt() => $_ensure(9);
+  $20.Timestamp ensureCreatedAt() => $_ensure(9);
+
+  @$pb.TagNumber(11)
+  $core.String get consistency => $_getSZ(10);
+  @$pb.TagNumber(11)
+  set consistency($core.String v) { $_setString(10, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasConsistency() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearConsistency() => clearField(11);
 }
 
 class GetTasksByPatientSortedByStatusResponse extends $pb.GeneratedMessage {
@@ -1610,6 +1729,7 @@ class GetAssignedTasksResponse_Task_Patient extends $pb.GeneratedMessage {
   factory GetAssignedTasksResponse_Task_Patient({
     $core.String? id,
     $core.String? humanReadableIdentifier,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -1617,6 +1737,9 @@ class GetAssignedTasksResponse_Task_Patient extends $pb.GeneratedMessage {
     }
     if (humanReadableIdentifier != null) {
       $result.humanReadableIdentifier = humanReadableIdentifier;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
     }
     return $result;
   }
@@ -1627,6 +1750,7 @@ class GetAssignedTasksResponse_Task_Patient extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAssignedTasksResponse.Task.Patient', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'humanReadableIdentifier')
+    ..aOS(3, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -1668,6 +1792,15 @@ class GetAssignedTasksResponse_Task_Patient extends $pb.GeneratedMessage {
   $core.bool hasHumanReadableIdentifier() => $_has(1);
   @$pb.TagNumber(2)
   void clearHumanReadableIdentifier() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get consistency => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set consistency($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasConsistency() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearConsistency() => clearField(3);
 }
 
 class GetAssignedTasksResponse_Task_SubTask extends $pb.GeneratedMessage {
@@ -1767,14 +1900,15 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? name,
     $core.String? description,
-    $21.TaskStatus? status,
+    $23.TaskStatus? status,
     $core.String? assignedUserId,
     GetAssignedTasksResponse_Task_Patient? patient,
     $core.bool? public,
-    $19.Timestamp? dueAt,
+    $20.Timestamp? dueAt,
     $core.String? createdBy,
     $core.Iterable<GetAssignedTasksResponse_Task_SubTask>? subtasks,
-    $19.Timestamp? createdAt,
+    $20.Timestamp? createdAt,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (id != null) {
@@ -1810,6 +1944,9 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
     if (createdAt != null) {
       $result.createdAt = createdAt;
     }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
     return $result;
   }
   GetAssignedTasksResponse_Task._() : super();
@@ -1820,14 +1957,15 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
-    ..e<$21.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $21.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $21.TaskStatus.valueOf, enumValues: $21.TaskStatus.values)
+    ..e<$23.TaskStatus>(4, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $23.TaskStatus.TASK_STATUS_UNSPECIFIED, valueOf: $23.TaskStatus.valueOf, enumValues: $23.TaskStatus.values)
     ..aOS(5, _omitFieldNames ? '' : 'assignedUserId')
     ..aOM<GetAssignedTasksResponse_Task_Patient>(6, _omitFieldNames ? '' : 'patient', subBuilder: GetAssignedTasksResponse_Task_Patient.create)
     ..aOB(7, _omitFieldNames ? '' : 'public')
-    ..aOM<$19.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $19.Timestamp.create)
+    ..aOM<$20.Timestamp>(8, _omitFieldNames ? '' : 'dueAt', subBuilder: $20.Timestamp.create)
     ..aOS(9, _omitFieldNames ? '' : 'createdBy')
     ..pc<GetAssignedTasksResponse_Task_SubTask>(10, _omitFieldNames ? '' : 'subtasks', $pb.PbFieldType.PM, subBuilder: GetAssignedTasksResponse_Task_SubTask.create)
-    ..aOM<$19.Timestamp>(11, _omitFieldNames ? '' : 'createdAt', subBuilder: $19.Timestamp.create)
+    ..aOM<$20.Timestamp>(11, _omitFieldNames ? '' : 'createdAt', subBuilder: $20.Timestamp.create)
+    ..aOS(12, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -1880,9 +2018,9 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
   void clearDescription() => clearField(3);
 
   @$pb.TagNumber(4)
-  $21.TaskStatus get status => $_getN(3);
+  $23.TaskStatus get status => $_getN(3);
   @$pb.TagNumber(4)
-  set status($21.TaskStatus v) { setField(4, v); }
+  set status($23.TaskStatus v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)
@@ -1918,15 +2056,15 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
   void clearPublic() => clearField(7);
 
   @$pb.TagNumber(8)
-  $19.Timestamp get dueAt => $_getN(7);
+  $20.Timestamp get dueAt => $_getN(7);
   @$pb.TagNumber(8)
-  set dueAt($19.Timestamp v) { setField(8, v); }
+  set dueAt($20.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasDueAt() => $_has(7);
   @$pb.TagNumber(8)
   void clearDueAt() => clearField(8);
   @$pb.TagNumber(8)
-  $19.Timestamp ensureDueAt() => $_ensure(7);
+  $20.Timestamp ensureDueAt() => $_ensure(7);
 
   @$pb.TagNumber(9)
   $core.String get createdBy => $_getSZ(8);
@@ -1941,15 +2079,24 @@ class GetAssignedTasksResponse_Task extends $pb.GeneratedMessage {
   $core.List<GetAssignedTasksResponse_Task_SubTask> get subtasks => $_getList(9);
 
   @$pb.TagNumber(11)
-  $19.Timestamp get createdAt => $_getN(10);
+  $20.Timestamp get createdAt => $_getN(10);
   @$pb.TagNumber(11)
-  set createdAt($19.Timestamp v) { setField(11, v); }
+  set createdAt($20.Timestamp v) { setField(11, v); }
   @$pb.TagNumber(11)
   $core.bool hasCreatedAt() => $_has(10);
   @$pb.TagNumber(11)
   void clearCreatedAt() => clearField(11);
   @$pb.TagNumber(11)
-  $19.Timestamp ensureCreatedAt() => $_ensure(10);
+  $20.Timestamp ensureCreatedAt() => $_ensure(10);
+
+  @$pb.TagNumber(12)
+  $core.String get consistency => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set consistency($core.String v) { $_setString(11, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasConsistency() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearConsistency() => clearField(12);
 }
 
 class GetAssignedTasksResponse extends $pb.GeneratedMessage {
@@ -2000,6 +2147,7 @@ class AssignTaskRequest extends $pb.GeneratedMessage {
   factory AssignTaskRequest({
     $core.String? taskId,
     $core.String? userId,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (taskId != null) {
@@ -2007,6 +2155,9 @@ class AssignTaskRequest extends $pb.GeneratedMessage {
     }
     if (userId != null) {
       $result.userId = userId;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
     }
     return $result;
   }
@@ -2017,6 +2168,7 @@ class AssignTaskRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AssignTaskRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'taskId')
     ..aOS(2, _omitFieldNames ? '' : 'userId')
+    ..aOS(3, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -2058,15 +2210,38 @@ class AssignTaskRequest extends $pb.GeneratedMessage {
   $core.bool hasUserId() => $_has(1);
   @$pb.TagNumber(2)
   void clearUserId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get consistency => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set consistency($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasConsistency() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearConsistency() => clearField(3);
 }
 
 class AssignTaskResponse extends $pb.GeneratedMessage {
-  factory AssignTaskResponse() => create();
+  factory AssignTaskResponse({
+    $21.Conflict? conflict,
+    $core.String? consistency,
+  }) {
+    final $result = create();
+    if (conflict != null) {
+      $result.conflict = conflict;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
+    return $result;
+  }
   AssignTaskResponse._() : super();
   factory AssignTaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory AssignTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AssignTaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOM<$21.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $21.Conflict.create)
+    ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -2090,12 +2265,33 @@ class AssignTaskResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static AssignTaskResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AssignTaskResponse>(create);
   static AssignTaskResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $21.Conflict get conflict => $_getN(0);
+  @$pb.TagNumber(1)
+  set conflict($21.Conflict v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasConflict() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConflict() => clearField(1);
+  @$pb.TagNumber(1)
+  $21.Conflict ensureConflict() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $core.String get consistency => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set consistency($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasConsistency() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearConsistency() => clearField(2);
 }
 
 class UnassignTaskRequest extends $pb.GeneratedMessage {
   factory UnassignTaskRequest({
     $core.String? taskId,
     $core.String? userId,
+    $core.String? consistency,
   }) {
     final $result = create();
     if (taskId != null) {
@@ -2103,6 +2299,9 @@ class UnassignTaskRequest extends $pb.GeneratedMessage {
     }
     if (userId != null) {
       $result.userId = userId;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
     }
     return $result;
   }
@@ -2113,6 +2312,7 @@ class UnassignTaskRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UnassignTaskRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'taskId')
     ..aOS(2, _omitFieldNames ? '' : 'userId')
+    ..aOS(3, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -2154,15 +2354,38 @@ class UnassignTaskRequest extends $pb.GeneratedMessage {
   $core.bool hasUserId() => $_has(1);
   @$pb.TagNumber(2)
   void clearUserId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get consistency => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set consistency($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasConsistency() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearConsistency() => clearField(3);
 }
 
 class UnassignTaskResponse extends $pb.GeneratedMessage {
-  factory UnassignTaskResponse() => create();
+  factory UnassignTaskResponse({
+    $21.Conflict? conflict,
+    $core.String? consistency,
+  }) {
+    final $result = create();
+    if (conflict != null) {
+      $result.conflict = conflict;
+    }
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
+    return $result;
+  }
   UnassignTaskResponse._() : super();
   factory UnassignTaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UnassignTaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UnassignTaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOM<$21.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $21.Conflict.create)
+    ..aOS(2, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -2186,6 +2409,26 @@ class UnassignTaskResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static UnassignTaskResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UnassignTaskResponse>(create);
   static UnassignTaskResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $21.Conflict get conflict => $_getN(0);
+  @$pb.TagNumber(1)
+  set conflict($21.Conflict v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasConflict() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConflict() => clearField(1);
+  @$pb.TagNumber(1)
+  $21.Conflict ensureConflict() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $core.String get consistency => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set consistency($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasConsistency() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearConsistency() => clearField(2);
 }
 
 class CreateSubtaskRequest_Subtask extends $pb.GeneratedMessage {
@@ -2321,10 +2564,14 @@ class CreateSubtaskRequest extends $pb.GeneratedMessage {
 class CreateSubtaskResponse extends $pb.GeneratedMessage {
   factory CreateSubtaskResponse({
     $core.String? subtaskId,
+    $core.String? taskConsistency,
   }) {
     final $result = create();
     if (subtaskId != null) {
       $result.subtaskId = subtaskId;
+    }
+    if (taskConsistency != null) {
+      $result.taskConsistency = taskConsistency;
     }
     return $result;
   }
@@ -2334,6 +2581,7 @@ class CreateSubtaskResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateSubtaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'subtaskId')
+    ..aOS(2, _omitFieldNames ? '' : 'taskConsistency')
     ..hasRequiredFields = false
   ;
 
@@ -2366,6 +2614,15 @@ class CreateSubtaskResponse extends $pb.GeneratedMessage {
   $core.bool hasSubtaskId() => $_has(0);
   @$pb.TagNumber(1)
   void clearSubtaskId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get taskConsistency => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set taskConsistency($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasTaskConsistency() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTaskConsistency() => clearField(2);
 }
 
 class UpdateSubtaskRequest_Subtask extends $pb.GeneratedMessage {
@@ -2437,6 +2694,7 @@ class UpdateSubtaskRequest extends $pb.GeneratedMessage {
     $core.String? taskId,
     $core.String? subtaskId,
     UpdateSubtaskRequest_Subtask? subtask,
+    $core.String? taskConsistency,
   }) {
     final $result = create();
     if (taskId != null) {
@@ -2448,6 +2706,9 @@ class UpdateSubtaskRequest extends $pb.GeneratedMessage {
     if (subtask != null) {
       $result.subtask = subtask;
     }
+    if (taskConsistency != null) {
+      $result.taskConsistency = taskConsistency;
+    }
     return $result;
   }
   UpdateSubtaskRequest._() : super();
@@ -2458,6 +2719,7 @@ class UpdateSubtaskRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'taskId')
     ..aOS(2, _omitFieldNames ? '' : 'subtaskId')
     ..aOM<UpdateSubtaskRequest_Subtask>(3, _omitFieldNames ? '' : 'subtask', subBuilder: UpdateSubtaskRequest_Subtask.create)
+    ..aOS(4, _omitFieldNames ? '' : 'taskConsistency')
     ..hasRequiredFields = false
   ;
 
@@ -2510,15 +2772,38 @@ class UpdateSubtaskRequest extends $pb.GeneratedMessage {
   void clearSubtask() => clearField(3);
   @$pb.TagNumber(3)
   UpdateSubtaskRequest_Subtask ensureSubtask() => $_ensure(2);
+
+  @$pb.TagNumber(4)
+  $core.String get taskConsistency => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set taskConsistency($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasTaskConsistency() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearTaskConsistency() => clearField(4);
 }
 
 class UpdateSubtaskResponse extends $pb.GeneratedMessage {
-  factory UpdateSubtaskResponse() => create();
+  factory UpdateSubtaskResponse({
+    $21.Conflict? conflict,
+    $core.String? taskConsistency,
+  }) {
+    final $result = create();
+    if (conflict != null) {
+      $result.conflict = conflict;
+    }
+    if (taskConsistency != null) {
+      $result.taskConsistency = taskConsistency;
+    }
+    return $result;
+  }
   UpdateSubtaskResponse._() : super();
   factory UpdateSubtaskResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdateSubtaskResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateSubtaskResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOM<$21.Conflict>(1, _omitFieldNames ? '' : 'conflict', subBuilder: $21.Conflict.create)
+    ..aOS(2, _omitFieldNames ? '' : 'taskConsistency')
     ..hasRequiredFields = false
   ;
 
@@ -2542,6 +2827,26 @@ class UpdateSubtaskResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static UpdateSubtaskResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateSubtaskResponse>(create);
   static UpdateSubtaskResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $21.Conflict get conflict => $_getN(0);
+  @$pb.TagNumber(1)
+  set conflict($21.Conflict v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasConflict() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConflict() => clearField(1);
+  @$pb.TagNumber(1)
+  $21.Conflict ensureConflict() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $core.String get taskConsistency => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set taskConsistency($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasTaskConsistency() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTaskConsistency() => clearField(2);
 }
 
 class DeleteSubtaskRequest extends $pb.GeneratedMessage {
@@ -2691,12 +2996,21 @@ class RemoveTaskDueDateRequest extends $pb.GeneratedMessage {
 }
 
 class RemoveTaskDueDateResponse extends $pb.GeneratedMessage {
-  factory RemoveTaskDueDateResponse() => create();
+  factory RemoveTaskDueDateResponse({
+    $core.String? consistency,
+  }) {
+    final $result = create();
+    if (consistency != null) {
+      $result.consistency = consistency;
+    }
+    return $result;
+  }
   RemoveTaskDueDateResponse._() : super();
   factory RemoveTaskDueDateResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory RemoveTaskDueDateResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RemoveTaskDueDateResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'services.tasks_svc.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'consistency')
     ..hasRequiredFields = false
   ;
 
@@ -2720,6 +3034,15 @@ class RemoveTaskDueDateResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static RemoveTaskDueDateResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RemoveTaskDueDateResponse>(create);
   static RemoveTaskDueDateResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get consistency => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set consistency($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasConsistency() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConsistency() => clearField(1);
 }
 
 class DeleteTaskRequest extends $pb.GeneratedMessage {

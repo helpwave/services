@@ -33,7 +33,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
 # install buf
 #  https://buf.build/
 # renovate: datasource=github-releases depName=bufbuild/buf
-ENV BUF_VERSION=1.37.0
+ENV BUF_VERSION=1.45.0
 RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-Linux-x86_64 -O /usr/local/bin/buf \
     && chmod +x /usr/local/bin/buf
 
@@ -48,7 +48,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
 # install zed, CLI for SpiceDB
 #  https://github.com/authzed/zed
 # renovate: datasource=github-releases depName=authzed/zed
-ENV ZED_VERSION=0.20.0
+ENV ZED_VERSION=0.21.5
 RUN wget https://github.com/authzed/zed/releases/download/v${ZED_VERSION}/zed_${ZED_VERSION}_linux_amd64.deb -O zed.deb \
     && apt install -y ./zed.deb \
     && rm zed.deb
@@ -74,16 +74,16 @@ ENV HOME="/home/${UNAME}"
 # install air
 #  https://github.com/air-verse/air
 # renovate: datasource=github-releases depName=air-verse/air
-ENV AIR_VERSION=1.52.3
+ENV AIR_VERSION=1.60.0
 RUN curl -sSfL https://raw.githubusercontent.com/air-verse/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v${AIR_VERSION}
 
 # install dapr-cli
 #  https://docs.dapr.io/
 
 # renovate: datasource=github-releases depName=dapr/cli
-ENV DAPR_CLI_VERSION=1.14.0
+ENV DAPR_CLI_VERSION=1.14.1
 # renovate: datasource=github-releases depName=dapr/dapr
-ENV DAPR_RT_VERSION=1.14.1
+ENV DAPR_RT_VERSION=1.14.4
 
 ENV PATH="$PATH:$HOME/dapr"
 RUN mkdir "$HOME/dapr" \
@@ -98,7 +98,7 @@ ENV PATH="$PATH:$HOME/.fly/bin"
 # install go-migrate
 #  https://github.com/golang-migrate/migrate
 # renovate: datasource=github-releases depName=golang-migrate/migrate
-ENV MIGRATE_VERSION=4.17.1
+ENV MIGRATE_VERSION=4.18.1
 RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v${MIGRATE_VERSION} \
 	&& go clean -modcache
 
@@ -127,7 +127,7 @@ RUN go install github.com/favadi/protoc-go-inject-tag@v${GO_INJECT_TAG_VERSION} 
 # install golangci-lint, the linter we also use in the CI
 #  https://golangci-lint.run/
 # renovate: datasource=github-releases depName=golangci/golangci-lint
-ENV GOLANGCI_LINT_VERSION=1.60.1
+ENV GOLANGCI_LINT_VERSION=1.61.0
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
 	| sh -s -- -b $(go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
 

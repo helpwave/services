@@ -17,25 +17,38 @@ type AppendSubTasksParams struct {
 }
 
 const createSubTask = `-- name: CreateSubTask :one
-INSERT INTO task_template_subtasks (name, task_template_id) VALUES ($1, $2) RETURNING id
+WITH inserted_subtask AS (
+	INSERT INTO task_template_subtasks (name, task_template_id)
+		VALUES ($2, $1)
+		RETURNING id
+)
+UPDATE task_templates
+SET consistency = consistency + 1
+WHERE task_templates.id = $1
+RETURNING (SELECT id FROM inserted_subtask), consistency
 `
 
 type CreateSubTaskParams struct {
-	Name           string
 	TaskTemplateID uuid.UUID
+	Name           string
 }
 
-func (q *Queries) CreateSubTask(ctx context.Context, arg CreateSubTaskParams) (uuid.UUID, error) {
-	row := q.db.QueryRow(ctx, createSubTask, arg.Name, arg.TaskTemplateID)
-	var id uuid.UUID
-	err := row.Scan(&id)
-	return id, err
+type CreateSubTaskRow struct {
+	ID          uuid.UUID
+	Consistency int64
+}
+
+func (q *Queries) CreateSubTask(ctx context.Context, arg CreateSubTaskParams) (CreateSubTaskRow, error) {
+	row := q.db.QueryRow(ctx, createSubTask, arg.TaskTemplateID, arg.Name)
+	var i CreateSubTaskRow
+	err := row.Scan(&i.ID, &i.Consistency)
+	return i, err
 }
 
 const createTaskTemplate = `-- name: CreateTaskTemplate :one
 INSERT INTO task_templates
 	(name, description, created_by, ward_id) VALUES ($1, $2, $3, $4)
-    RETURNING id
+    RETURNING id, consistency
 `
 
 type CreateTaskTemplateParams struct {
@@ -45,16 +58,21 @@ type CreateTaskTemplateParams struct {
 	WardID      uuid.NullUUID
 }
 
-func (q *Queries) CreateTaskTemplate(ctx context.Context, arg CreateTaskTemplateParams) (uuid.UUID, error) {
+type CreateTaskTemplateRow struct {
+	ID          uuid.UUID
+	Consistency int64
+}
+
+func (q *Queries) CreateTaskTemplate(ctx context.Context, arg CreateTaskTemplateParams) (CreateTaskTemplateRow, error) {
 	row := q.db.QueryRow(ctx, createTaskTemplate,
 		arg.Name,
 		arg.Description,
 		arg.CreatedBy,
 		arg.WardID,
 	)
-	var id uuid.UUID
-	err := row.Scan(&id)
-	return id, err
+	var i CreateTaskTemplateRow
+	err := row.Scan(&i.ID, &i.Consistency)
+	return i, err
 }
 
 const deleteSubtask = `-- name: DeleteSubtask :one
@@ -79,7 +97,7 @@ func (q *Queries) DeleteTaskTemplate(ctx context.Context, id uuid.UUID) error {
 
 const getAllTaskTemplatesWithSubTasks = `-- name: GetAllTaskTemplatesWithSubTasks :many
 SELECT
-	task_templates.id, task_templates.name, task_templates.description, task_templates.ward_id, task_templates.created_by,
+	task_templates.id, task_templates.name, task_templates.description, task_templates.ward_id, task_templates.created_by, task_templates.consistency,
 	task_template_subtasks.id as sub_task_id,
 	task_template_subtasks.name as sub_task_name
 FROM
@@ -121,6 +139,7 @@ func (q *Queries) GetAllTaskTemplatesWithSubTasks(ctx context.Context, arg GetAl
 			&i.TaskTemplate.Description,
 			&i.TaskTemplate.WardID,
 			&i.TaskTemplate.CreatedBy,
+			&i.TaskTemplate.Consistency,
 			&i.SubTaskID,
 			&i.SubTaskName,
 		); err != nil {
@@ -134,10 +153,64 @@ func (q *Queries) GetAllTaskTemplatesWithSubTasks(ctx context.Context, arg GetAl
 	return items, nil
 }
 
-const updateSubtask = `-- name: UpdateSubtask :exec
-UPDATE task_template_subtasks
+const getTaskTemplateWithSubtasksByID = `-- name: GetTaskTemplateWithSubtasksByID :many
+SELECT
+	task_templates.id, task_templates.name, task_templates.description, task_templates.ward_id, task_templates.created_by, task_templates.consistency,
+	task_template_subtasks.id as sub_task_id,
+	task_template_subtasks.name as sub_task_name
+FROM
+	task_templates
+LEFT JOIN
+	task_template_subtasks
+ON
+	task_template_subtasks.task_template_id = task_templates.id
+WHERE task_templates.id = $1
+`
+
+type GetTaskTemplateWithSubtasksByIDRow struct {
+	TaskTemplate TaskTemplate
+	SubTaskID    uuid.NullUUID
+	SubTaskName  *string
+}
+
+func (q *Queries) GetTaskTemplateWithSubtasksByID(ctx context.Context, id uuid.UUID) ([]GetTaskTemplateWithSubtasksByIDRow, error) {
+	rows, err := q.db.Query(ctx, getTaskTemplateWithSubtasksByID, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetTaskTemplateWithSubtasksByIDRow{}
+	for rows.Next() {
+		var i GetTaskTemplateWithSubtasksByIDRow
+		if err := rows.Scan(
+			&i.TaskTemplate.ID,
+			&i.TaskTemplate.Name,
+			&i.TaskTemplate.Description,
+			&i.TaskTemplate.WardID,
+			&i.TaskTemplate.CreatedBy,
+			&i.TaskTemplate.Consistency,
+			&i.SubTaskID,
+			&i.SubTaskName,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateSubtask = `-- name: UpdateSubtask :one
+UPDATE task_template_subtasks ttst
 SET	name = coalesce($1, name)
-WHERE id = $2
+WHERE ttst.id = $2
+RETURNING (
+	SELECT tt.id
+	FROM task_templates tt
+	WHERE tt.id = ttst.task_template_id
+)
 `
 
 type UpdateSubtaskParams struct {
@@ -145,16 +218,20 @@ type UpdateSubtaskParams struct {
 	ID   uuid.UUID
 }
 
-func (q *Queries) UpdateSubtask(ctx context.Context, arg UpdateSubtaskParams) error {
-	_, err := q.db.Exec(ctx, updateSubtask, arg.Name, arg.ID)
-	return err
+func (q *Queries) UpdateSubtask(ctx context.Context, arg UpdateSubtaskParams) (uuid.UUID, error) {
+	row := q.db.QueryRow(ctx, updateSubtask, arg.Name, arg.ID)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
 }
 
-const updateTaskTemplate = `-- name: UpdateTaskTemplate :exec
+const updateTaskTemplate = `-- name: UpdateTaskTemplate :one
 UPDATE task_templates
 SET	name = coalesce($1, name),
-	description = coalesce($2, description)
+	description = coalesce($2, description),
+	consistency = consistency + 1
 WHERE id = $3
+RETURNING consistency
 `
 
 type UpdateTaskTemplateParams struct {
@@ -163,7 +240,9 @@ type UpdateTaskTemplateParams struct {
 	ID          uuid.UUID
 }
 
-func (q *Queries) UpdateTaskTemplate(ctx context.Context, arg UpdateTaskTemplateParams) error {
-	_, err := q.db.Exec(ctx, updateTaskTemplate, arg.Name, arg.Description, arg.ID)
-	return err
+func (q *Queries) UpdateTaskTemplate(ctx context.Context, arg UpdateTaskTemplateParams) (int64, error) {
+	row := q.db.QueryRow(ctx, updateTaskTemplate, arg.Name, arg.Description, arg.ID)
+	var consistency int64
+	err := row.Scan(&consistency)
+	return consistency, err
 }

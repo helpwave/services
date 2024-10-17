@@ -21,3 +21,17 @@ WHERE
 	(rules.ward_id = @ward_id OR rules.ward_id IS NULL)
 AND (rules.patient_id = @patient_id OR rules.patient_id IS NULL)
 ORDER BY specificity;
+
+
+-- name: IsPatientPropertyAlwaysIncluded :one
+SELECT
+	NOT list_items.dont_always_include
+FROM patient_property_view_rules as rules
+JOIN property_view_filter_always_include_items as list_items ON list_items.rule_id = rules.rule_id
+WHERE
+	list_items.property_id = @property_id
+	AND (rules.ward_id = @ward_id OR rules.ward_id IS NULL)
+	AND (rules.patient_id = @patient_id OR rules.patient_id IS NULL)
+ORDER BY
+	calc_rule_specificity(rules.patient_id IS NOT NULL, rules.ward_id IS NOT NULL) DESC
+LIMIT 1;

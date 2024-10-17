@@ -25,10 +25,6 @@ class BedServiceClient extends $grpc.Client {
       '/services.task_svc.v1.BedService/CreateBed',
       ($5.CreateBedRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $5.CreateBedResponse.fromBuffer(value));
-  static final _$bulkCreateBeds = $grpc.ClientMethod<$5.BulkCreateBedsRequest, $5.BulkCreateBedsResponse>(
-      '/services.task_svc.v1.BedService/BulkCreateBeds',
-      ($5.BulkCreateBedsRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $5.BulkCreateBedsResponse.fromBuffer(value));
   static final _$getBed = $grpc.ClientMethod<$5.GetBedRequest, $5.GetBedResponse>(
       '/services.task_svc.v1.BedService/GetBed',
       ($5.GetBedRequest value) => value.writeToBuffer(),
@@ -62,10 +58,6 @@ class BedServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$5.CreateBedResponse> createBed($5.CreateBedRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createBed, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$5.BulkCreateBedsResponse> bulkCreateBeds($5.BulkCreateBedsRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$bulkCreateBeds, request, options: options);
   }
 
   $grpc.ResponseFuture<$5.GetBedResponse> getBed($5.GetBedRequest request, {$grpc.CallOptions? options}) {
@@ -105,13 +97,6 @@ abstract class BedServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $5.CreateBedRequest.fromBuffer(value),
         ($5.CreateBedResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$5.BulkCreateBedsRequest, $5.BulkCreateBedsResponse>(
-        'BulkCreateBeds',
-        bulkCreateBeds_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $5.BulkCreateBedsRequest.fromBuffer(value),
-        ($5.BulkCreateBedsResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$5.GetBedRequest, $5.GetBedResponse>(
         'GetBed',
         getBed_Pre,
@@ -160,10 +145,6 @@ abstract class BedServiceBase extends $grpc.Service {
     return createBed(call, await request);
   }
 
-  $async.Future<$5.BulkCreateBedsResponse> bulkCreateBeds_Pre($grpc.ServiceCall call, $async.Future<$5.BulkCreateBedsRequest> request) async {
-    return bulkCreateBeds(call, await request);
-  }
-
   $async.Future<$5.GetBedResponse> getBed_Pre($grpc.ServiceCall call, $async.Future<$5.GetBedRequest> request) async {
     return getBed(call, await request);
   }
@@ -189,7 +170,6 @@ abstract class BedServiceBase extends $grpc.Service {
   }
 
   $async.Future<$5.CreateBedResponse> createBed($grpc.ServiceCall call, $5.CreateBedRequest request);
-  $async.Future<$5.BulkCreateBedsResponse> bulkCreateBeds($grpc.ServiceCall call, $5.BulkCreateBedsRequest request);
   $async.Future<$5.GetBedResponse> getBed($grpc.ServiceCall call, $5.GetBedRequest request);
   $async.Future<$5.GetBedByPatientResponse> getBedByPatient($grpc.ServiceCall call, $5.GetBedByPatientRequest request);
   $async.Future<$5.GetBedsResponse> getBeds($grpc.ServiceCall call, $5.GetBedsRequest request);

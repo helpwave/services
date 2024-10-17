@@ -91,3 +91,30 @@ func (q *Queries) GetPatientRuleIdUsingExactMatchers(ctx context.Context, arg Ge
 	err := row.Scan(&rule_id)
 	return rule_id, err
 }
+
+const isPatientPropertyAlwaysIncluded = `-- name: IsPatientPropertyAlwaysIncluded :one
+SELECT
+	NOT list_items.dont_always_include
+FROM patient_property_view_rules as rules
+JOIN property_view_filter_always_include_items as list_items ON list_items.rule_id = rules.rule_id
+WHERE
+	list_items.property_id = $1
+	AND (rules.ward_id = $2 OR rules.ward_id IS NULL)
+	AND (rules.patient_id = $3 OR rules.patient_id IS NULL)
+ORDER BY
+	calc_rule_specificity(rules.patient_id IS NOT NULL, rules.ward_id IS NOT NULL) DESC
+LIMIT 1
+`
+
+type IsPatientPropertyAlwaysIncludedParams struct {
+	PropertyID uuid.UUID
+	WardID     uuid.NullUUID
+	PatientID  uuid.NullUUID
+}
+
+func (q *Queries) IsPatientPropertyAlwaysIncluded(ctx context.Context, arg IsPatientPropertyAlwaysIncludedParams) (*bool, error) {
+	row := q.db.QueryRow(ctx, isPatientPropertyAlwaysIncluded, arg.PropertyID, arg.WardID, arg.PatientID)
+	var column_1 *bool
+	err := row.Scan(&column_1)
+	return column_1, err
+}

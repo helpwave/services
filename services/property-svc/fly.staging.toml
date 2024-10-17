@@ -7,11 +7,17 @@ primary_region = "ams"
   SERVICE = "property-svc"
 
 [env]
-  INSECURE_FAKE_TOKEN_ENABLE=true
-  OTEL_DISABLE=true
+  INSECURE_FAKE_TOKEN_ENABLE = true
+  OTEL_EXPORTER_OTLP_ENDPOINT = "http://helpwave-staging-jaeger.internal:4317"
+  OTEL_EXPORTER_OTLP_INSECURE = true
+  METRICS_ADDR = ":9091"
 
 [deploy]
   strategy = "bluegreen"
+
+[metrics]
+  port = 9091
+  path = "/metrics"
 
 [checks]
   [checks.dapr_sidecar]
@@ -22,10 +28,6 @@ primary_region = "ams"
     port = 3500
     timeout = "2s"
     type = "http"
-
-[metrics]
-  port = 9090
-  path = "/metrics"
 
 [[vm]]
   memory = '256MB'

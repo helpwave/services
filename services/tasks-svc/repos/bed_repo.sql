@@ -8,8 +8,13 @@ LIMIT 1;
 
 -- name: GetBedWithRoomByPatient :one
 SELECT
-	beds.id as bed_id, beds.name as bed_name,
-	rooms.id as room_id, rooms.name as room_name, rooms.ward_id as ward_id
+	beds.id as bed_id,
+	beds.name as bed_name,
+	beds.consistency as bed_consistency,
+	rooms.id as room_id,
+	rooms.name as room_name,
+	rooms.ward_id as ward_id,
+	rooms.consistency as room_consistency
 FROM patients
 		 JOIN beds ON patients.bed_id = beds.id
 		 JOIN rooms ON beds.room_id = rooms.id
@@ -21,12 +26,14 @@ SELECT * FROM beds
 WHERE (room_id = sqlc.narg('room_id') OR sqlc.narg('room_id') IS NULL)
 ORDER BY name ASC;
 
--- name: UpdateBed :exec
+-- name: UpdateBed :one
 UPDATE beds
 SET
 	name = coalesce(sqlc.narg('name'), name),
-	room_id = coalesce(sqlc.narg('room_id'), room_id)
-WHERE id = @id;
+	room_id = coalesce(sqlc.narg('room_id'), room_id),
+	consistency = consistency + 1
+WHERE id = @id
+RETURNING consistency;
 
 -- name: DeleteBed :exec
 DELETE FROM beds WHERE id = $1;

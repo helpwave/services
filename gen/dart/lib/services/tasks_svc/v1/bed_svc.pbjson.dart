@@ -32,12 +32,14 @@ const CreateBedResponse$json = {
   '1': 'CreateBedResponse',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'consistency', '3': 2, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `CreateBedResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createBedResponseDescriptor = $convert.base64Decode(
-    'ChFDcmVhdGVCZWRSZXNwb25zZRIOCgJpZBgBIAEoCVICaWQ=');
+    'ChFDcmVhdGVCZWRSZXNwb25zZRIOCgJpZBgBIAEoCVICaWQSIAoLY29uc2lzdGVuY3kYAiABKA'
+    'lSC2NvbnNpc3RlbmN5');
 
 @$core.Deprecated('Use bulkCreateBedsRequestDescriptor instead')
 const BulkCreateBedsRequest$json = {
@@ -68,14 +70,16 @@ const BulkCreateBedsResponse_Bed$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'consistency', '3': 3, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `BulkCreateBedsResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List bulkCreateBedsResponseDescriptor = $convert.base64Decode(
     'ChZCdWxrQ3JlYXRlQmVkc1Jlc3BvbnNlEkUKBGJlZHMYASADKAsyMS5zZXJ2aWNlcy50YXNrc1'
-    '9zdmMudjEuQnVsa0NyZWF0ZUJlZHNSZXNwb25zZS5CZWRSBGJlZHMaKQoDQmVkEg4KAmlkGAEg'
-    'ASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1l');
+    '9zdmMudjEuQnVsa0NyZWF0ZUJlZHNSZXNwb25zZS5CZWRSBGJlZHMaSwoDQmVkEg4KAmlkGAEg'
+    'ASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2NvbnNpc3RlbmN5GAMgASgJUgtjb25zaX'
+    'N0ZW5jeQ==');
 
 @$core.Deprecated('Use getBedRequestDescriptor instead')
 const GetBedRequest$json = {
@@ -96,13 +100,14 @@ const GetBedResponse$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'room_id', '3': 2, '4': 1, '5': 9, '10': 'roomId'},
     {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'consistency', '3': 4, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `GetBedResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getBedResponseDescriptor = $convert.base64Decode(
     'Cg5HZXRCZWRSZXNwb25zZRIOCgJpZBgBIAEoCVICaWQSFwoHcm9vbV9pZBgCIAEoCVIGcm9vbU'
-    'lkEhIKBG5hbWUYAyABKAlSBG5hbWU=');
+    'lkEhIKBG5hbWUYAyABKAlSBG5hbWUSIAoLY29uc2lzdGVuY3kYBCABKAlSC2NvbnNpc3RlbmN5');
 
 @$core.Deprecated('Use getBedByPatientRequestDescriptor instead')
 const GetBedByPatientRequest$json = {
@@ -138,6 +143,7 @@ const GetBedByPatientResponse_Room$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'ward_id', '3': 3, '4': 1, '5': 9, '10': 'wardId'},
+    {'1': 'consistency', '3': 4, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
@@ -147,6 +153,7 @@ const GetBedByPatientResponse_Bed$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'consistency', '3': 3, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
@@ -155,18 +162,26 @@ final $typed_data.Uint8List getBedByPatientResponseDescriptor = $convert.base64D
     'ChdHZXRCZWRCeVBhdGllbnRSZXNwb25zZRJMCgRyb29tGAEgASgLMjMuc2VydmljZXMudGFza3'
     'Nfc3ZjLnYxLkdldEJlZEJ5UGF0aWVudFJlc3BvbnNlLlJvb21IAFIEcm9vbYgBARJJCgNiZWQY'
     'AiABKAsyMi5zZXJ2aWNlcy50YXNrc19zdmMudjEuR2V0QmVkQnlQYXRpZW50UmVzcG9uc2UuQm'
-    'VkSAFSA2JlZIgBARpDCgRSb29tEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1l'
-    'EhcKB3dhcmRfaWQYAyABKAlSBndhcmRJZBopCgNCZWQSDgoCaWQYASABKAlSAmlkEhIKBG5hbW'
-    'UYAiABKAlSBG5hbWVCBwoFX3Jvb21CBgoEX2JlZA==');
+    'VkSAFSA2JlZIgBARplCgRSb29tEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1l'
+    'EhcKB3dhcmRfaWQYAyABKAlSBndhcmRJZBIgCgtjb25zaXN0ZW5jeRgEIAEoCVILY29uc2lzdG'
+    'VuY3kaSwoDQmVkEg4KAmlkGAEgASgJUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiAKC2NvbnNp'
+    'c3RlbmN5GAMgASgJUgtjb25zaXN0ZW5jeUIHCgVfcm9vbUIGCgRfYmVk');
 
 @$core.Deprecated('Use getBedsRequestDescriptor instead')
 const GetBedsRequest$json = {
   '1': 'GetBedsRequest',
+  '2': [
+    {'1': 'room_id', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'roomId', '17': true},
+  ],
+  '8': [
+    {'1': '_room_id'},
+  ],
 };
 
 /// Descriptor for `GetBedsRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getBedsRequestDescriptor = $convert.base64Decode(
-    'Cg5HZXRCZWRzUmVxdWVzdA==');
+    'Cg5HZXRCZWRzUmVxdWVzdBIcCgdyb29tX2lkGAEgASgJSABSBnJvb21JZIgBAUIKCghfcm9vbV'
+    '9pZA==');
 
 @$core.Deprecated('Use getBedsResponseDescriptor instead')
 const GetBedsResponse$json = {
@@ -184,14 +199,16 @@ const GetBedsResponse_Bed$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'room_id', '3': 2, '4': 1, '5': 9, '10': 'roomId'},
     {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'consistency', '3': 4, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `GetBedsResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getBedsResponseDescriptor = $convert.base64Decode(
     'Cg9HZXRCZWRzUmVzcG9uc2USPgoEYmVkcxgBIAMoCzIqLnNlcnZpY2VzLnRhc2tzX3N2Yy52MS'
-    '5HZXRCZWRzUmVzcG9uc2UuQmVkUgRiZWRzGkIKA0JlZBIOCgJpZBgBIAEoCVICaWQSFwoHcm9v'
-    'bV9pZBgCIAEoCVIGcm9vbUlkEhIKBG5hbWUYAyABKAlSBG5hbWU=');
+    '5HZXRCZWRzUmVzcG9uc2UuQmVkUgRiZWRzGmQKA0JlZBIOCgJpZBgBIAEoCVICaWQSFwoHcm9v'
+    'bV9pZBgCIAEoCVIGcm9vbUlkEhIKBG5hbWUYAyABKAlSBG5hbWUSIAoLY29uc2lzdGVuY3kYBC'
+    'ABKAlSC2NvbnNpc3RlbmN5');
 
 @$core.Deprecated('Use getBedsByRoomRequestDescriptor instead')
 const GetBedsByRoomRequest$json = {
@@ -220,14 +237,16 @@ const GetBedsByRoomResponse_Bed$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'consistency', '3': 3, '4': 1, '5': 9, '10': 'consistency'},
   ],
 };
 
 /// Descriptor for `GetBedsByRoomResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getBedsByRoomResponseDescriptor = $convert.base64Decode(
     'ChVHZXRCZWRzQnlSb29tUmVzcG9uc2USRAoEYmVkcxgBIAMoCzIwLnNlcnZpY2VzLnRhc2tzX3'
-    'N2Yy52MS5HZXRCZWRzQnlSb29tUmVzcG9uc2UuQmVkUgRiZWRzGikKA0JlZBIOCgJpZBgBIAEo'
-    'CVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZQ==');
+    'N2Yy52MS5HZXRCZWRzQnlSb29tUmVzcG9uc2UuQmVkUgRiZWRzGksKA0JlZBIOCgJpZBgBIAEo'
+    'CVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZRIgCgtjb25zaXN0ZW5jeRgDIAEoCVILY29uc2lzdG'
+    'VuY3k=');
 
 @$core.Deprecated('Use updateBedRequestDescriptor instead')
 const UpdateBedRequest$json = {
@@ -236,26 +255,38 @@ const UpdateBedRequest$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'room_id', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'roomId', '17': true},
     {'1': 'name', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'name', '17': true},
+    {'1': 'consistency', '3': 4, '4': 1, '5': 9, '9': 2, '10': 'consistency', '17': true},
   ],
   '8': [
     {'1': '_room_id'},
     {'1': '_name'},
+    {'1': '_consistency'},
   ],
 };
 
 /// Descriptor for `UpdateBedRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateBedRequestDescriptor = $convert.base64Decode(
     'ChBVcGRhdGVCZWRSZXF1ZXN0Eg4KAmlkGAEgASgJUgJpZBIcCgdyb29tX2lkGAIgASgJSABSBn'
-    'Jvb21JZIgBARIXCgRuYW1lGAMgASgJSAFSBG5hbWWIAQFCCgoIX3Jvb21faWRCBwoFX25hbWU=');
+    'Jvb21JZIgBARIXCgRuYW1lGAMgASgJSAFSBG5hbWWIAQESJQoLY29uc2lzdGVuY3kYBCABKAlI'
+    'AlILY29uc2lzdGVuY3mIAQFCCgoIX3Jvb21faWRCBwoFX25hbWVCDgoMX2NvbnNpc3RlbmN5');
 
 @$core.Deprecated('Use updateBedResponseDescriptor instead')
 const UpdateBedResponse$json = {
   '1': 'UpdateBedResponse',
+  '2': [
+    {'1': 'conflict', '3': 1, '4': 1, '5': 11, '6': '.libs.common.v1.Conflict', '9': 0, '10': 'conflict', '17': true},
+    {'1': 'consistency', '3': 2, '4': 1, '5': 9, '10': 'consistency'},
+  ],
+  '8': [
+    {'1': '_conflict'},
+  ],
 };
 
 /// Descriptor for `UpdateBedResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateBedResponseDescriptor = $convert.base64Decode(
-    'ChFVcGRhdGVCZWRSZXNwb25zZQ==');
+    'ChFVcGRhdGVCZWRSZXNwb25zZRI5Cghjb25mbGljdBgBIAEoCzIYLmxpYnMuY29tbW9uLnYxLk'
+    'NvbmZsaWN0SABSCGNvbmZsaWN0iAEBEiAKC2NvbnNpc3RlbmN5GAIgASgJUgtjb25zaXN0ZW5j'
+    'eUILCglfY29uZmxpY3Q=');
 
 @$core.Deprecated('Use deleteBedRequestDescriptor instead')
 const DeleteBedRequest$json = {
