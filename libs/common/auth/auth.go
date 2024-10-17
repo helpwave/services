@@ -22,9 +22,10 @@ var (
 
 	DEFAULT_OAUTH_CLIENT_ID = "helpwave-services"
 	onlyFakeAuthEnabled     bool
-	InsecureFakeTokenEnable = false
-	OauthConfig             *oauth2.Config
+	insecureFakeTokenEnable = false
+	oauthConfig             *oauth2.Config
 	Verifier                *oidc.IDTokenVerifier
+	authSetupDone           bool
 )
 
 type ClaimsKey struct{}
@@ -53,18 +54,22 @@ func IsOnlyFakeAuthEnabled() bool {
 	return onlyFakeAuthEnabled
 }
 
+func IsInsecureFakeTokenEnabled() bool {
+	return insecureFakeTokenEnable
+}
+
 // IsAuthSetUp is true, GetOAuthConfig and GetIDTokenVerifier can be accessed safely
 func IsAuthSetUp() bool {
-	return OauthConfig != nil && Verifier != nil
+	return oauthConfig != nil && Verifier != nil
 }
 
 func GetOAuthConfig(ctx context.Context) *oauth2.Config {
 	log := zlog.Ctx(ctx)
 
-	if OauthConfig == nil {
+	if oauthConfig == nil {
 		log.Fatal().Msg("GetOAuthConfig called but auth is not set up, please enable auth for this service")
 	}
-	return OauthConfig
+	return oauthConfig
 }
 
 func GetIDTokenVerifier(ctx context.Context) *oidc.IDTokenVerifier {
@@ -221,8 +226,13 @@ func GetOrganizationID(ctx context.Context) (uuid.UUID, error) {
 
 // SetupAuth sets up auth, such that GetIDTokenVerifier and GetOAuthConfig work
 // optionally, this can be skipped by enabling only fake tokens (for testing)
-func SetupAuth(ctx context.Context, fakeOnly bool) {
+func SetupAuth(ctx context.Context, fakeOnly bool, passedInsecureFakeTokenEnable bool) {
 	log := zlog.Ctx(ctx)
+
+	if authSetupDone {
+		log.Warn().Msg("SetupAuth was called more then once, early return")
+		return
+	}
 
 	if fakeOnly {
 		log.Error().Msg("only setting up auth for fake tokens. Never do this in production!")
@@ -230,17 +240,21 @@ func SetupAuth(ctx context.Context, fakeOnly bool) {
 		return
 	}
 
+	insecureFakeTokenEnable = passedInsecureFakeTokenEnable
+
 	provider, err := oidc.NewProvider(context.Background(), GetOAuthIssuerUrl())
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}
 
-	OauthConfig = &oauth2.Config{
+	oauthConfig = &oauth2.Config{
 		ClientID: GetOAuthClientId(),
 		Endpoint: provider.Endpoint(),
 	}
 
-	log.Debug().Msg(telemetry.Formatted(OauthConfig))
+	log.Debug().Msg(telemetry.Formatted(oauthConfig))
 
-	Verifier = provider.Verifier(&oidc.Config{ClientID: OauthConfig.ClientID})
+	Verifier = provider.Verifier(&oidc.Config{ClientID: oauthConfig.ClientID})
+
+	authSetupDone = true
 }

@@ -125,8 +125,9 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 	}
 
 	if options.auth {
+		insecureFakeTokenEnable := false
 		if strings.ToLower(hwutil.GetEnvOr("INSECURE_FAKE_TOKEN_ENABLE", "false")) == "true" {
-			auth.InsecureFakeTokenEnable = true
+			insecureFakeTokenEnable = true
 			log.Error().Msg("INSECURE_FAKE_TOKEN_ENABLE is set to true, accepting fake tokens")
 		}
 
@@ -134,7 +135,7 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 		skipAuthForMethods = options.unauthenticatedMethods
 		skipOrganizationAuthForMethods = options.nonOrganizationMethods
 
-		auth.SetupAuth(ctx, options.fakeAuthOnly)
+		auth.SetupAuth(ctx, options.fakeAuthOnly, insecureFakeTokenEnable)
 	}
 
 	return ctx

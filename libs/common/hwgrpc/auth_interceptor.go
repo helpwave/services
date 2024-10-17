@@ -62,11 +62,11 @@ func authInterceptor(ctx context.Context) (context.Context, error) {
 		claims, err = auth.VerifyIDToken(ctx, token)
 	}
 
-	// If InsecureFakeTokenEnable is true and Mode is development,
+	// If auth.IsInsecureFakeTokenEnabled() is true and Mode is development,
 	// we accept unverified Base64 encoded json structure in the schema of IDTokenClaims as well.
 	// This allows the client to pass self-defined "Fake ID Token Claims" without going through our auth provider.
 	// ONLY FOR NON-PUBLIC DEVELOPMENT AND STAGING ENVIRONMENTS
-	if claims == nil && err != nil && auth.InsecureFakeTokenEnable {
+	if claims == nil && err != nil && auth.IsInsecureFakeTokenEnabled() {
 		log.Warn().Msg("could not verify token, falling back to fake token instead")
 		claims, err = auth.VerifyFakeToken(ctx, token)
 	}
