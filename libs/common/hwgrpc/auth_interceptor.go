@@ -26,14 +26,14 @@ func UnaryAuthInterceptor(ctx context.Context, req any, info *grpc.UnaryServerIn
 func StreamAuthInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
 	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamAuthInterceptor")
 	defer span.End()
-	stream = NewWrapperStream(stream, WithContext(ctx))
+	stream = WrapServerStream(stream, ctx)
 
 	ctx, err := authInterceptor(stream.Context())
 	if err != nil {
 		return err
 	}
 
-	stream = NewWrapperStream(stream, WithContext(ctx))
+	stream = WrapServerStream(stream, ctx)
 	return next(req, stream)
 }
 

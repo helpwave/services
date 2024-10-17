@@ -17,7 +17,7 @@ func UnarySpanInterceptor(ctx context.Context, req any, info *grpc.UnaryServerIn
 
 func StreamSpanInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
 	ctx := spanInterceptorPreNext(stream.Context())
-	stream = NewWrapperStream(stream, WithContext(ctx))
+	stream = WrapServerStream(stream, ctx)
 	err := next(req, stream)
 	spanInterceptorPostNext(ctx, err)
 	return err

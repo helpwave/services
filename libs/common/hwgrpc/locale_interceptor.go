@@ -24,10 +24,10 @@ func UnaryLocaleInterceptor(ctx context.Context, req any, info *grpc.UnaryServer
 func StreamLocaleInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
 	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamLocaleInterceptor")
 	defer span.End()
-	stream = NewWrapperStream(stream, WithContext(ctx))
+	stream = WrapServerStream(stream, ctx)
 
 	ctx = localeInterceptor(stream.Context())
-	stream = NewWrapperStream(stream, WithContext(ctx))
+	stream = WrapServerStream(stream, ctx)
 	return next(req, stream)
 }
 

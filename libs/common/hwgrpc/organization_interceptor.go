@@ -26,14 +26,14 @@ func UnaryOrganizationInterceptor(ctx context.Context, req any, info *grpc.Unary
 func StreamOrganizationInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
 	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamOrganizationInterceptor")
 	defer span.End()
-	stream = NewWrapperStream(stream, WithContext(ctx))
+	stream = WrapServerStream(stream, ctx)
 
 	ctx, err := organizationInterceptor(stream.Context())
 	if err != nil {
 		return err
 	}
 
-	stream = NewWrapperStream(stream, WithContext(ctx))
+	stream = WrapServerStream(stream, ctx)
 	return next(req, stream)
 }
 

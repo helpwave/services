@@ -24,10 +24,10 @@ func UnaryLoggingInterceptor(ctx context.Context, req any, info *grpc.UnaryServe
 func StreamLoggingInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
 	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamLoggingInterceptor")
 	defer span.End()
-	stream = NewWrapperStream(stream, WithContext(ctx))
+	stream = WrapServerStream(stream, ctx)
 
 	ctx = loggingInterceptorPreNext(stream.Context(), req, info.FullMethod)
-	stream = NewWrapperStream(stream, WithContext(ctx))
+	stream = WrapServerStream(stream, ctx)
 	err := next(req, stream)
 	loggingInterceptorPostNext(ctx, err)
 	return err

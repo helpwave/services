@@ -32,13 +32,13 @@ func UnaryValidateInterceptor(ctx context.Context, req any, info *grpc.UnaryServ
 func StreamValidateInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
 	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamValidateInterceptor")
 	defer span.End()
-	stream = NewWrapperStream(stream, WithContext(ctx))
+	stream = WrapServerStream(stream, ctx)
 
 	ctx, err := validateInterceptor(stream.Context(), req)
 	if err != nil {
 		return err
 	}
-	stream = NewWrapperStream(stream, WithContext(ctx))
+	stream = WrapServerStream(stream, ctx)
 	return next(req, stream)
 }
 

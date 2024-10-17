@@ -24,7 +24,7 @@ func UnaryErrorQualityControlInterceptor(ctx context.Context, req any, info *grp
 func StreamErrorQualityControlInterceptor(req any, stream grpc.ServerStream, info *grpc.StreamServerInfo, next grpc.StreamHandler) error {
 	ctx, span, _ := telemetry.StartSpan(stream.Context(), "hwgrpc.StreamErrorQualityControlInterceptor")
 	defer span.End()
-	stream = NewWrapperStream(stream, WithContext(ctx))
+	stream = WrapServerStream(stream, ctx)
 
 	err := next(req, stream)
 	return checkErrorQualityInterceptor(ctx, err)
