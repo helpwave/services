@@ -73,13 +73,13 @@ func MigrateSpiceDB(ctx context.Context, endpoint string) {
 			Relationship: &spicev1.Relationship{
 				Resource: &spicev1.ObjectReference{
 					ObjectType: "organization",
-					ObjectId:   "3b25c6f5-4705-4074-9fc6-a50c28eba405",
+					ObjectId:   FakeTokenOrganization,
 				},
 				Relation: "member",
 				Subject: &spicev1.SubjectReference{
 					Object: &spicev1.ObjectReference{
 						ObjectType: "user",
-						ObjectId:   "18159713-5d4e-4ad5-94ad-fbb6bb147984",
+						ObjectId:   FakeTokenUser,
 					},
 				},
 			},
