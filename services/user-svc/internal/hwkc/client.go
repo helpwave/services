@@ -2,7 +2,7 @@ package hwkc
 
 import (
 	"bytes"
-	"common"
+	"common/auth"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -35,7 +35,7 @@ type Client struct {
 func NewClientFromEnv(ctx context.Context) (*Client, error) {
 	clientSecret := hwutil.MustGetEnv("OAUTH_KC_CLIENT_SECRET")
 	realm := hwutil.GetEnvOr("OAUTH_KC_REALM", "helpwave")
-	return NewClient(ctx, realm, common.GetOAuthIssuerUrl(), common.GetOAuthClientId(), clientSecret)
+	return NewClient(ctx, realm, auth.GetOAuthIssuerUrl(), auth.GetOAuthClientId(), clientSecret)
 }
 
 func NewClient(ctx context.Context, realm, issuerUrl, clientId, clientSecret string) (*Client, error) {

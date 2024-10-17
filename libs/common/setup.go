@@ -1,6 +1,7 @@
 package common
 
 import (
+	"common/auth"
 	"context"
 	"crypto/tls"
 	"fmt"
@@ -15,8 +16,8 @@ import (
 )
 
 var (
-	Mode                    string // Mode is set in Setup()
-	InsecureFakeTokenEnable = false
+	Mode string // Mode is set in Setup()
+
 	shutdownOpenTelemetryFn func() // cleanup function
 	contextCancel           func() // Setup() yields the "root" context, which can be canceled using this function
 )
@@ -124,8 +125,9 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 	}
 
 	if options.auth {
+		insecureFakeTokenEnable := false
 		if strings.ToLower(hwutil.GetEnvOr("INSECURE_FAKE_TOKEN_ENABLE", "false")) == "true" {
-			InsecureFakeTokenEnable = true
+			insecureFakeTokenEnable = true
 			log.Error().Msg("INSECURE_FAKE_TOKEN_ENABLE is set to true, accepting fake tokens")
 		}
 
@@ -133,7 +135,7 @@ func Setup(serviceName, version string, opts ...SetupOption) context.Context {
 		skipAuthForMethods = options.unauthenticatedMethods
 		skipOrganizationAuthForMethods = options.nonOrganizationMethods
 
-		setupAuth(ctx, options.fakeAuthOnly)
+		auth.SetupAuth(ctx, options.fakeAuthOnly, insecureFakeTokenEnable)
 	}
 
 	return ctx

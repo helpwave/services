@@ -1,7 +1,7 @@
 package room
 
 import (
-	"common"
+	"common/auth"
 	"context"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
@@ -29,7 +29,7 @@ func (ServiceServer) CreateRoom(ctx context.Context, req *pb.CreateRoomRequest) 
 
 	// TODO: Auth
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -126,7 +126,7 @@ func (ServiceServer) UpdateRoom(ctx context.Context, req *pb.UpdateRoomRequest) 
 func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.GetRoomsResponse, error) {
 	roomRepo := room_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -177,7 +177,7 @@ func (ServiceServer) GetRooms(ctx context.Context, _ *pb.GetRoomsRequest) (*pb.G
 func (ServiceServer) GetRoomsByWard(ctx context.Context, req *pb.GetRoomsByWardRequest) (*pb.GetRoomsByWardResponse, error) {
 	roomRepo := room_repo.New(hwdb.GetDB())
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -260,7 +260,7 @@ func (ServiceServer) GetRoomOverviewsByWard(ctx context.Context, req *pb.GetRoom
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	organizationID, err := common.GetOrganizationID(ctx)
+	organizationID, err := auth.GetOrganizationID(ctx)
 	if err != nil {
 		return nil, err
 	}

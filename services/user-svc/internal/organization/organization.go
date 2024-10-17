@@ -1,7 +1,7 @@
 package organization
 
 import (
-	"common"
+	"common/auth"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -35,7 +35,7 @@ func NewServiceServer(kc hwkc.IClient) *ServiceServer {
 }
 
 func (s ServiceServer) CreateOrganization(ctx context.Context, req *pb.CreateOrganizationRequest) (*pb.CreateOrganizationResponse, error) {
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -185,7 +185,7 @@ func GetOrganizationsByUserId(ctx context.Context, userId uuid.UUID) ([]Organiza
 }
 
 func (s ServiceServer) GetOrganizationsForUser(ctx context.Context, _ *pb.GetOrganizationsForUserRequest) (*pb.GetOrganizationsForUserResponse, error) {
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -391,7 +391,7 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -443,7 +443,7 @@ func (s ServiceServer) GetInvitationsByOrganization(ctx context.Context, req *pb
 func (s ServiceServer) GetInvitationsByUser(ctx context.Context, req *pb.GetInvitationsByUserRequest) (*pb.GetInvitationsByUserResponse, error) {
 	organizationRepo := organization_repo.New(hwdb.GetDB())
 
-	claims, err := common.GetAuthClaims(ctx)
+	claims, err := auth.GetAuthClaims(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -484,7 +484,7 @@ func (s ServiceServer) GetMembersByOrganization(ctx context.Context, req *pb.Get
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -538,7 +538,7 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	claims, err := common.GetAuthClaims(ctx)
+	claims, err := auth.GetAuthClaims(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -572,7 +572,7 @@ func (s ServiceServer) AcceptInvitation(ctx context.Context, req *pb.AcceptInvit
 		return nil, err
 	}
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -593,7 +593,7 @@ func (s ServiceServer) DeclineInvitation(ctx context.Context, req *pb.DeclineInv
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	claims, err := common.GetAuthClaims(ctx)
+	claims, err := auth.GetAuthClaims(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -654,7 +654,7 @@ func (s ServiceServer) RevokeInvitation(ctx context.Context, req *pb.RevokeInvit
 	organizationID := currentInvitation.OrganizationID
 	inviteeEmail := currentInvitation.Email
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -802,12 +802,12 @@ func (s ServiceServer) CreatePersonalOrganization(ctx context.Context, _ *pb.Cre
 		return nil, err
 	}
 
-	userID, err := common.GetUserID(ctx)
+	userID, err := auth.GetUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	userClaims, err := common.GetAuthClaims(ctx)
+	userClaims, err := auth.GetAuthClaims(ctx)
 	if err != nil {
 		return nil, err
 	}

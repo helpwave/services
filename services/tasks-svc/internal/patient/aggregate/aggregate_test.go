@@ -1,7 +1,7 @@
 package aggregate_test
 
 import (
-	"common"
+	"common/auth"
 	"context"
 	"github.com/google/uuid"
 	"hwes"
@@ -22,7 +22,7 @@ func MustApplyEvent(t *testing.T, aggregate hwes.Aggregate, newEvent func() (hwe
 }
 
 func TestPatientAggregate_CreatePatient(t *testing.T) {
-	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+	ctx := auth.ContextWithUserID(context.Background(), uuid.New())
 
 	patientID := uuid.New()
 
@@ -45,7 +45,7 @@ func TestPatientAggregate_CreatePatient(t *testing.T) {
 }
 
 func TestPatientAggregate_UpdateNotes(t *testing.T) {
-	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+	ctx := auth.ContextWithUserID(context.Background(), uuid.New())
 
 	patientID := uuid.New()
 
@@ -73,7 +73,7 @@ func TestPatientAggregate_UpdateNotes(t *testing.T) {
 }
 
 func TestPatientAggregate_UpdateHumanReadableIdentifier(t *testing.T) {
-	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+	ctx := auth.ContextWithUserID(context.Background(), uuid.New())
 
 	patientID := uuid.New()
 
@@ -100,7 +100,7 @@ func TestPatientAggregate_UpdateHumanReadableIdentifier(t *testing.T) {
 }
 
 func TestPatientAggregate_DischargeReadmitPatient(t *testing.T) {
-	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+	ctx := auth.ContextWithUserID(context.Background(), uuid.New())
 
 	patientID := uuid.New()
 	patientHumanReadableIdentifier := "tester"
@@ -132,7 +132,7 @@ func TestPatientAggregate_DischargeReadmitPatient(t *testing.T) {
 }
 
 func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
-	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+	ctx := auth.ContextWithUserID(context.Background(), uuid.New())
 
 	patientID := uuid.New()
 
@@ -166,7 +166,7 @@ func TestPatientAggregate_AssignUnassignBed(t *testing.T) {
 }
 
 func TestPatientAggregate_DeletePatient(t *testing.T) {
-	ctx := common.ContextWithUserID(context.Background(), uuid.New())
+	ctx := auth.ContextWithUserID(context.Background(), uuid.New())
 
 	patientID := uuid.New()
 
